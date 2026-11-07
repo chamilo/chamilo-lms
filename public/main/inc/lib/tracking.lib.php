@@ -2919,7 +2919,7 @@ class Tracking
 
         // prepare filter on users
         if (is_array($student_id)) {
-            array_walk($student_id, 'intval');
+            $student_id = array_map('intval', $student_id);
             $condition_user1 = " AND user_id IN (".implode(',', $student_id).") ";
         } else {
             $condition_user1 = " AND user_id = $student_id ";
@@ -3259,7 +3259,7 @@ class Tracking
         }
 
         if (is_array($student_id)) {
-            array_walk($student_id, 'intval');
+            $student_id = array_map('intval', $student_id);
             $conditions[] = " lp_view.user_id IN (".implode(',', $student_id).") ";
         } else {
             $student_id = (int) $student_id;

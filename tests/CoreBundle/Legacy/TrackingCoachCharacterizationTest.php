@@ -1205,6 +1205,28 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         $this->assertSame(100.0, Tracking::get_avg_student_score($s2, $course, [$lp]));
     }
 
+    public function testStudentIdListsOfTheScoreAveragesAreCastToIntegers(): void
+    {
+        $s1 = $this->user('tc_s1');
+        $nobody = $this->user('tc_nobody');
+        $course = $this->courseEntity();
+        $code = api_get_course_info_by_id(self::COURSE)['code'];
+        [$lp] = $this->lp(self::COURSE, null, 1);
+        $item = $this->lpItem($lp, 'sco', 10, 1);
+        $view = $this->lpView($s1, $lp, self::COURSE, 100);
+        $this->lpItemView($item, $view, 60, 5);
+        $payload = $nobody.') OR (1=1';
+
+        // Fixed: array_walk($ids, 'intval') discards intval's result, so the ids were interpolated as given and
+        // "N) OR (1=1" selected every student's rows (an SQL injection and, for a legitimate caller, a leak of the
+        // other students' scores). The ids are now cast: the payload is just $nobody, who has no tracking.
+        $this->assertSame(0.0, Tracking::get_avg_student_score([$payload], $course, [$lp]));
+        $this->assertEquals(0, Tracking::getAverageStudentScore([$payload], $code, [$lp]));
+        // The real student is still found, as an int or as a numeric string.
+        $this->assertSame(50.0, Tracking::get_avg_student_score([(string) $s1], $course, [$lp]));
+        $this->assertEquals(50, Tracking::getAverageStudentScore([(string) $s1], $code, [$lp]));
+    }
+
     public function testAvgStudentScoreFollowsTheSessionOfTheView(): void
     {
         $s1 = $this->user('tc_s1');

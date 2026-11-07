@@ -441,6 +441,34 @@ final class EventCharacterizationTest extends KernelTestCase
         $this->assertNowish($last[0]['access_date']);
     }
 
+    public function testAccessToolDoesNotDuplicateLastAccessWhenTheDateIsUnchanged(): void
+    {
+        // Fixed: MySQL reports 0 affected rows when the UPDATE writes the same date (same second), which made
+        // the function insert a second row. To be deterministic the row is seeded with the current second and the
+        // call retried until it runs within that same second.
+        $user = $this->makeUser('ev_acc5');
+        $course = $this->makeCourse('ev_course_acc5');
+        $this->setContext($user, $course, 0);
+        $sameSecond = false;
+        for ($i = 0; $i < 20 && !$sameSecond; $i++) {
+            $this->conn->executeStatement('DELETE FROM track_e_lastaccess WHERE access_user_id = ?', [$user->getId()]);
+            $now = $this->utc();
+            $this->conn->insert('track_e_lastaccess', [
+                'access_user_id' => $user->getId(),
+                'access_date' => $now,
+                'c_id' => $course->getId(),
+                'access_tool' => 'ev_tool5',
+                'session_id' => 0,
+            ]);
+            Event::event_access_tool('ev_tool5');
+            $sameSecond = $this->utc() === $now;
+        }
+        $this->assertTrue($sameSecond, 'could not run the call inside one second');
+        $last = $this->rows('track_e_lastaccess', 'access_user_id = ?', [$user->getId()]);
+        $this->assertCount(1, $last);
+        $this->assertSame($now, $last[0]['access_date']);
+    }
+
     public function testAccessToolIsIgnoredWithoutToolWithoutCourseOrWhenLoggedInAs(): void
     {
         $user = $this->makeUser('ev_acc5');

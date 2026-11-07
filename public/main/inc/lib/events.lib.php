@@ -193,15 +193,26 @@ class Event
                     session_id = $sessionId";
         $result = Database::query($sql);
 
+        // MySQL reports 0 affected rows when the date is unchanged (same second), so check the row exists
+        // before inserting, or a duplicate lastaccess row would be created.
         if (0 == Database::affected_rows($result)) {
-            $params = [
-                'access_user_id' => $userId,
-                'c_id' => $courseId,
-                'access_tool' => $tool,
-                'access_date' => $reallyNow,
-                'session_id' => $sessionId,
-            ];
-            Database::insert($tableLastAccess, $params);
+            $sql = "SELECT 1 FROM $tableLastAccess
+                    WHERE
+                        access_user_id = $userId AND
+                        c_id = $courseId AND
+                        access_tool = '$tool' AND
+                        session_id = $sessionId
+                    LIMIT 1";
+            if (0 == Database::num_rows(Database::query($sql))) {
+                $params = [
+                    'access_user_id' => $userId,
+                    'c_id' => $courseId,
+                    'access_tool' => $tool,
+                    'access_date' => $reallyNow,
+                    'session_id' => $sessionId,
+                ];
+                Database::insert($tableLastAccess, $params);
+            }
         }
 
         return true;

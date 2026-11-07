@@ -378,7 +378,7 @@ class Statistics
                     $table_user as user,
                     $access_url_rel_user_table as url
                     WHERE
-                        user.active <> -1 AND
+                        user.active <> ".USER_SOFT_DELETED." AND
                         track_default.default_user_id = user.id AND
                         url.user_id = user.id AND
                         access_url_id= $urlId";

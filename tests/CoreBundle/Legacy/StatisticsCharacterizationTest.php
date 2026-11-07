@@ -620,7 +620,7 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $this->assertSame('not serialized at all', $rows[1][2], 'unserialize failure keeps the original text');
     }
 
-    public function testActivitiesCountAndDataDisagreeOnSoftDeletedUsersInMultiUrl(): void
+    public function testActivitiesCountAndDataAgreeOnSoftDeletedUsersInMultiUrl(): void
     {
         $this->enableMultiUrl();
         $live = $this->rawUser('mact');
@@ -631,9 +631,9 @@ class StatisticsCharacterizationTest extends AbstractApiTest
 
         // The count query excludes active = -2 (soft-deleted) in multi-URL like in single-URL ...
         $this->assertSame(1, Statistics::getNumberOfActivities());
-        // PINNED QUIRK: ... but the data query only excludes active = -1 in multi-URL, so the soft-deleted user's
-        // row is listed: the pager shows 1 item while the page holds 2.
-        $this->assertSame(['st_val_gone', 'st_val_live'], array_column(Statistics::getActivitiesData(0, 10, 0, 'DESC'), 2));
+        // ... and so must the data query (it used to exclude active = -1 only in multi-URL, listing the
+        // soft-deleted user's row: the pager showed 1 item while the page held 2).
+        $this->assertSame(['st_val_live'], array_column(Statistics::getActivitiesData(0, 10, 0, 'DESC'), 2));
     }
 
     // ------------------------------------------------------------- login stats

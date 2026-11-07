@@ -14,7 +14,6 @@ use Database;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
 use GroupManager;
-use PHPUnit\Framework\Error\Warning;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -456,16 +455,11 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
         $this->assertSame(GroupManager::INFINITE, GroupManager::maximum_number_of_students($unlimited));
     }
 
-    public function testMaximumNumberOfStudentsUnknownGroupRaisesAWarning(): void
+    public function testMaximumNumberOfStudentsUnknownGroupHasNoCapacity(): void
     {
-        // PINNED QUIRK: fetch_object() gives null for an unknown group and "->max_student" is read on null:
-        // a PHP warning (an exception under PHPUnit) instead of a clean "unknown group" answer.
-        try {
-            GroupManager::maximum_number_of_students(999999999);
-            $this->fail('A warning was expected');
-        } catch (Warning $e) {
-            $this->assertStringContainsString('max_student', $e->getMessage());
-        }
+        // Fixed: ->max_student was read on null (PHP warning). An unknown group answers 0, not INFINITE, so the
+        // only caller (canUserSubscribe(): count < max) fails closed and nobody can join a missing group.
+        $this->assertSame(0, GroupManager::maximum_number_of_students(999999999));
     }
 
     public function testUserInNumberOfGroups(): void

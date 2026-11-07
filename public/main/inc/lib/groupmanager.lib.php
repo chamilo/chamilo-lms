@@ -1757,6 +1757,10 @@ class GroupManager
                 WHERE iid = $group_id";
         $db_result = Database::query($sql);
         $db_object = Database::fetch_object($db_result);
+        if (empty($db_object)) {
+            // Unknown group: no capacity (callers compare "members < maximum", so nobody can join it).
+            return 0;
+        }
         if (0 == $db_object->max_student) {
             return self::INFINITE;
         }

@@ -1250,11 +1250,10 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         $code = api_get_course_info_by_id(self::COURSE)['code'];
         $this->exercise($s1, self::COURSE, null, $quiz, '2001-02-01 10:00:00', 5, 10);
 
-        // PINNED QUIRK: with no quiz id the quiz list is read through c_quiz.c_id and c_quiz.active, columns that
-        // no longer exist (quizzes reach their course through resource_link): the query fails, which the
-        // legacy database layer turns into the generic "unknown error".
-        $this->expectException(NotAllowedException::class);
-        Tracking::get_avg_student_exercise_score($s1, $code);
+        // Fixed: with no quiz id the quiz list was read through c_quiz.c_id and c_quiz.active, columns that no
+        // longer exist (quizzes reach their course through resource_link), so the query failed. The quizzes of
+        // the course (and session) are now listed through the quiz repository, like the count above it.
+        $this->assertSame(50.0, Tracking::get_avg_student_exercise_score($s1, $code));
     }
 
     // ------------------------------------------------------------------

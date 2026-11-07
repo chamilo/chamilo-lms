@@ -2465,16 +2465,11 @@ class Tracking
                 }
 
                 if (empty($exercise_id)) {
-                    $sql = "SELECT iid FROM $tbl_course_quiz
-                            WHERE c_id = {$course_info['real_id']} $condition_active $condition_quiz";
-                    $result = Database::query($sql);
-                    $exercise_list = [];
+                    // c_quiz has neither c_id nor active any more: the quizzes of the course come from resource_link.
+                    $qbIds = $quizRepo->getResourcesByCourse($course, $session, null, null, false);
+                    $qbIds->select('resource.iid');
+                    $exercise_list = array_unique(array_map('intval', array_column($qbIds->getQuery()->getScalarResult(), 'iid')));
                     $exercise_id = null;
-                    if (!empty($result) && Database::num_rows($result)) {
-                        while ($row = Database::fetch_array($result)) {
-                            $exercise_list[] = $row['iid'];
-                        }
-                    }
                     if (!empty($exercise_list)) {
                         $exercise_id = implode("','", $exercise_list);
                     }

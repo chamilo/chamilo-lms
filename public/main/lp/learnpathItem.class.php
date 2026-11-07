@@ -2623,7 +2623,7 @@ class learnpathItem
                 }
             }
         } else {
-            $list = explode('\\|', $prereqs_string);
+            $list = explode('|', $prereqs_string);
             if (count($list) > 1) {
                 if (self::DEBUG > 1) {
                     error_log('New LP - Found OR, looking into it', 0);

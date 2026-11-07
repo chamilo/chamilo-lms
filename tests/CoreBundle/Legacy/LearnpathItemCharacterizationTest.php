@@ -1322,16 +1322,17 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertNotSame('', $this->alert($p));
     }
 
-    public function testParsePrereqOrIsNeverSplitSoTheExpressionIsLookedUpAsAnItemReference(): void
+    public function testParsePrereqOrNeedsOneConditionAndStopsAtTheFirstTrueOne(): void
     {
-        $p = $this->prereqScene(['completed', 'incomplete', 'not attempted']);
-        [$done, $open] = $p['ids'];
+        $p = $this->prereqScene(['completed', 'incomplete', 'passed', 'not attempted']);
+        [$done, $open, $passed] = $p['ids'];
 
-        // PINNED QUIRK: the string is split on the two characters '\|' (single-quoted '\\|') while the operator is
-        // a bare '|', so "A|B" is never split and, looked up as one reference, always blocks, even when A is done.
-        // (the unguarded $refs_list lookup of the unsplit string also raises an "Undefined array key" warning)
-        $this->assertFalse(@$this->check($p, $done.'|'.$open));
-        $this->assertFalse(@$this->check($p, $open.'|'.$done));
+        $this->assertTrue($this->check($p, $done.'|'.$open));
+        $this->assertTrue($this->check($p, $open.'|'.$done));
+        $this->assertTrue($this->check($p, $open.'|'.$open.'|'.$passed));
+        $this->assertFalse($this->check($p, $open.'|'.$open));
+        $this->assertNotSame('', $this->alert($p));
+        $this->assertTrue($this->check($p, $open.'|'.$done.'&'.$passed), 'OR has the lowest priority: A | (B & C)');
     }
 
     public function testParsePrereqEqualityAndInequalityCompareTheDatabaseStatusLiterally(): void

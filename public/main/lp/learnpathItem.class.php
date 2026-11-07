@@ -3291,7 +3291,7 @@ class learnpathItem
         global $charset;
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $a_terms = preg_split('/,/', $terms);
-        $i_terms = preg_split('/,/', $this->get_terms());
+        $i_terms = array_filter(preg_split('/,/', (string) $this->get_terms()), static fn ($term) => '' !== $term);
         foreach ($i_terms as $term) {
             if (!in_array($term, $a_terms)) {
                 $a_terms[] = $term;

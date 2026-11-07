@@ -1160,7 +1160,7 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertSame(130, (int) $this->ivRow($s['view'], $s['item'])['total_time'], 'an unfinished one still accumulates');
     }
 
-    public function testSetTermsMergesTheNewTermsWithTheStoredOnesAndAppendsAnEmptyTerm(): void
+    public function testSetTermsMergesTheNewTermsWithTheStoredOnes(): void
     {
         $lp = $this->newLpRow('li_terms');
         $a = $this->addItem($lp, 'li_a');
@@ -1168,14 +1168,13 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertNull($item->get_terms());
 
         $this->assertTrue($item->set_terms('b,a'));
-        // PINNED QUIRK: a never-set (NULL) terms column is split into [''] and that empty term is appended.
-        $this->assertSame('b,a,', $item->get_terms());
+        $this->assertSame('b,a', $item->get_terms(), 'a never-set (NULL) column adds no empty term');
 
         $item->set_terms('c,b');
-        $this->assertSame('c,b,a,', $item->get_terms(), 'new terms first, then the stored ones that are not in the new list');
+        $this->assertSame('c,b,a', $item->get_terms(), 'new terms first, then the stored ones that are not in the new list');
 
         $item->set_terms("o'k");
-        $this->assertSame('o&#039;k,c,b,a,', $item->get_terms(), 'the string is stored HTML-encoded (quotes included)');
+        $this->assertSame('o&#039;k,c,b,a', $item->get_terms(), 'the string is stored HTML-encoded (quotes included)');
     }
 
     public function testDeleteRemovesTheItemAndEveryAttemptOfItsViews(): void

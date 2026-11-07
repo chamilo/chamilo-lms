@@ -2021,6 +2021,8 @@ class GroupManager
      * @param mixed $userList  Can be an array with user-id's or a single user-id
      * @param CGroup $group
      * @param int   $course_id
+     *
+     * @return bool
      */
     public static function subscribeTutors($userList, CGroup $group = null, $course_id = 0)
     {
@@ -2028,7 +2030,6 @@ class GroupManager
             return false;
         }
         $userList = is_array($userList) ? $userList : [$userList];
-        $result = true;
         $course_id = !empty($course_id) ? intval($course_id) : api_get_course_int_id();
         $table_group_tutor = Database::get_course_table(TABLE_GROUP_TUTOR);
         $groupId = (int) $group->getIid();
@@ -2038,11 +2039,11 @@ class GroupManager
             if (self::canUserSubscribe($user_id, $group, false)) {
                 $sql = 'INSERT INTO '.$table_group_tutor." (c_id, user_id, group_id)
                         VALUES ('$course_id', '".$user_id."', '".$groupId."')";
-                $result = Database::query($sql);
+                Database::query($sql);
             }
         }
 
-        return $result;
+        return true;
     }
 
     /**

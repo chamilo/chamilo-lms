@@ -12,7 +12,6 @@ use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use Database;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Result;
 use GroupManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -840,13 +839,13 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
         $this->member($member, $g);
         $group = $this->entity($g);
 
-        // PINNED QUIRK: returns the last Database::query() Result object (truthy), not a bool.
-        $this->assertInstanceOf(Result::class, GroupManager::subscribeTutors([$t1, $member, $t1], $group));
+        // Fixed: used to return the last Database::query() Result object; now a bool like subscribeUsers().
+        $this->assertTrue(GroupManager::subscribeTutors([$t1, $member, $t1], $group));
 
         $this->assertSame([$t1], $this->tutorIds($g), 'capacity ignored (group is full), member refused, duplicate refused');
         $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT c_id FROM c_group_rel_tutor WHERE group_id = ?', [$g]));
 
-        GroupManager::subscribeTutors($t2, $group, 2);
+        $this->assertTrue(GroupManager::subscribeTutors($t2, $group, 2));
         $this->assertSame([$t1, $t2], $this->tutorIds($g));
         $this->assertSame(2, (int) $this->conn()->fetchOne('SELECT c_id FROM c_group_rel_tutor WHERE user_id = ?', [$t2]));
         $this->assertFalse(GroupManager::subscribeTutors([$t2], null));

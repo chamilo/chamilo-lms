@@ -885,10 +885,10 @@ final class ForumCharacterizationTest extends KernelTestCase
         $forum1 = $this->getEntityManager()->find(CForum::class, $f1);
 
         $this->assertSame(1, (int) getCountPostsWithStatus($w, $forum1, $t1));
-        // PINNED QUIRK: the $forum argument is ignored, so a thread of another forum is still counted, and without
-        // a thread this counts the waiting posts of every forum of the platform.
-        $this->assertSame(1, (int) getCountPostsWithStatus($w, $forum1, $t2));
-        $this->assertGreaterThanOrEqual(2, (int) getCountPostsWithStatus($w, $forum1));
+        // The $forum argument used to be ignored: a thread of another forum was counted, and without a thread
+        // the waiting posts of every forum of the platform were.
+        $this->assertSame(0, (int) getCountPostsWithStatus($w, $forum1, $t2));
+        $this->assertSame(1, (int) getCountPostsWithStatus($w, $forum1));
     }
 
     public function testGetForumsOfGroupReturnsOnlyTheForumsLinkedToTheGroup(): void

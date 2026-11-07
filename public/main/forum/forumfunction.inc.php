@@ -5130,7 +5130,7 @@ function getCountPostsWithStatus($status, $forum, $threadId = null)
     $criteria = Criteria::create();
     $criteria
         ->where(Criteria::expr()->eq('status', $status))
-        //->andWhere(Criteria::expr()->eq('cId', $forum->getCId()))
+        ->andWhere(Criteria::expr()->eq('forum', $forum))
         ->andWhere(Criteria::expr()->eq('visible', 1))
     ;
 

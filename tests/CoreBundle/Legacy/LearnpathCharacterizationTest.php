@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
-use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -865,28 +864,71 @@ final class LearnpathCharacterizationTest extends KernelTestCase
         $this->assertStringContainsString("child_name[$first] = new Array();", $js);
     }
 
-    // ---------------------------------------------------------------- SQL that cannot run on the current schema
+    // ---------------------------------------------------------------- queries repaired for the current schema
 
-    public function testQueriesReferencingMissingColumnsFailTodayExplicitly(): void
+    /**
+     * Links a learning path to a course the way the platform does it: c_lp -> resource_node -> resource_link.c_id
+     * (c_lp and c_lp_item have no c_id column any more).
+     */
+    private function linkLpToCourse(int $lpId, int $courseId, ?string $deletedAt = null): void
     {
-        $lpId = $this->newLpRow('lp_badsql');
-        $this->addItem($lpId, 'lp_a');
-        $lp = $this->lp($lpId);
-
-        // PINNED QUIRK (source bugs, not fixed here): c_lp has no c_id column and c_lp_item neither, so these
-        // legacy queries are invalid SQL. Whatever Database::handleError() does with it is today's behaviour.
-        foreach ([
-            'select_previous_item_id' => static fn () => $lp->select_previous_item_id(),
-            'getAccumulateWorkTimeTotal' => static fn () => learnpath::getAccumulateWorkTimeTotal(self::COURSE_ID),
-            'getAccumulateWorkTimeTotalCourse' => static fn () => $lp->getAccumulateWorkTimeTotalCourse(),
-        ] as $name => $call) {
-            $failed = false;
-            try {
-                $call();
-            } catch (NotAllowedException) {
-                $failed = true;
-            }
-            $this->assertTrue($failed, $name.' is expected to fail on the missing c_id column');
+        $nodeId = (int) $this->conn()->fetchOne('SELECT resource_node_id FROM c_lp WHERE iid = ?', [$lpId]);
+        if (0 === $nodeId) {
+            $this->conn()->executeStatement(
+                "INSERT INTO resource_node (resource_type_id, title, slug, created_at, updated_at, public, uuid)
+                 VALUES ((SELECT MIN(id) FROM resource_type), ?, ?, NOW(), NOW(), 0, UNHEX(REPLACE(UUID(), '-', '')))",
+                ['lp_node_'.$lpId, 'lp-node-'.$lpId.'-'.uniqid()]
+            );
+            $nodeId = (int) $this->conn()->lastInsertId();
+            $this->conn()->executeStatement('UPDATE c_lp SET resource_node_id = ? WHERE iid = ?', [$nodeId, $lpId]);
         }
+        $this->conn()->executeStatement(
+            'INSERT INTO resource_link (resource_node_id, c_id, visibility, display_order, resource_type_group, deleted_at, created_at, updated_at)
+             VALUES (?, ?, 1, 0, 0, ?, NOW(), NOW())',
+            [$nodeId, $courseId, $deletedAt]
+        );
+    }
+
+    public function testSelectPreviousItemIdIsTheItemWithTheHighestDisplayOrder(): void
+    {
+        $lpId = $this->newLpRow('lp_prev');
+        $lp = $this->lp($lpId);
+        // Fixed: the query filtered on c_lp_item.c_id, a column that no longer exists, and threw.
+        $this->assertSame($this->rootId($lpId), (int) $lp->select_previous_item_id(), 'only the root item (order 0) exists: it is the last one');
+
+        $this->addItem($lpId, 'lp_a', 'document', 1);
+        $last = $this->addItem($lpId, 'lp_last', 'document', 7);
+        $this->addItem($lpId, 'lp_b', 'document', 3);
+        $other = $this->newLpRow('lp_prev_other');
+        $this->addItem($other, 'lp_foreign', 'document', 99);
+
+        $this->assertSame($last, (int) $this->lp($lpId)->select_previous_item_id(), 'items of other learning paths do not count');
+    }
+
+    public function testAccumulateWorkTimeTotalsSumTheLearningPathsLinkedToTheCourse(): void
+    {
+        $before = learnpath::getAccumulateWorkTimeTotal(self::COURSE_ID);
+        $lpId = $this->newLpRow('lp_work_a');
+        $both = $this->newLpRow('lp_work_b');
+        $unlinked = $this->newLpRow('lp_work_unlinked');
+        $elsewhere = $this->newLpRow('lp_work_elsewhere');
+        $removed = $this->newLpRow('lp_work_removed');
+        $this->conn()->executeStatement('UPDATE c_lp SET accumulate_work_time = 30 WHERE iid = ?', [$lpId]);
+        $this->conn()->executeStatement('UPDATE c_lp SET accumulate_work_time = 12 WHERE iid = ?', [$both]);
+        $this->conn()->executeStatement('UPDATE c_lp SET accumulate_work_time = 1000 WHERE iid IN (?, ?, ?)', [$unlinked, $elsewhere, $removed]);
+        $this->linkLpToCourse($lpId, self::COURSE_ID);
+        // A base link plus a session link must not be counted twice.
+        $this->linkLpToCourse($both, self::COURSE_ID);
+        $this->linkLpToCourse($both, self::COURSE_ID);
+        $otherCourse = (int) $this->conn()->fetchOne('SELECT MIN(id) FROM course WHERE id <> ?', [self::COURSE_ID]);
+        if ($otherCourse > 0) {
+            $this->linkLpToCourse($elsewhere, $otherCourse);
+        }
+        $this->linkLpToCourse($removed, self::COURSE_ID, '2030-01-01 00:00:00');
+
+        // Fixed: both queries filtered on c_lp.c_id, a column that no longer exists, and threw.
+        $this->assertSame($before + 42, learnpath::getAccumulateWorkTimeTotal(self::COURSE_ID));
+        $this->assertSame($before + 42, $this->lp($lpId)->getAccumulateWorkTimeTotalCourse());
+        $this->assertSame(0, learnpath::getAccumulateWorkTimeTotal(0), 'a missing course matches nothing');
     }
 }

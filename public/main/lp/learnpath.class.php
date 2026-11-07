@@ -7521,26 +7521,19 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     public function select_previous_item_id()
     {
-        $course_id = api_get_course_int_id();
         $table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
-        // Get the max order of the items
-        $sql = "SELECT max(display_order) AS display_order FROM $table_lp_item
-                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
-        $rs_max_order = Database::query($sql);
-        $row_max_order = Database::fetch_object($rs_max_order);
-        $max_order = $row_max_order->display_order;
-        // Get the previous item ID
-        $sql = "SELECT iid as previous FROM $table_lp_item
-                WHERE
-                    c_id = $course_id AND
-                    lp_id = ".$this->lp_id." AND
-                    display_order = '$max_order' ";
+        // c_lp_item has no c_id column: the items belong to the course through their learning path. The last item
+        // is the one with the highest display order (the most recently created one on a tie).
+        $sql = "SELECT iid AS previous FROM $table_lp_item
+                WHERE lp_id = ".(int) $this->lp_id."
+                ORDER BY display_order DESC, iid DESC
+                LIMIT 1";
         $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);
 
         // Return the previous item ID
-        return $row_max->previous;
+        return $row_max ? $row_max->previous : 0;
     }
 
     /**
@@ -9425,14 +9418,7 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     public function getAccumulateWorkTimeTotalCourse()
     {
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT SUM(accumulate_work_time) AS total
-                FROM $table
-                WHERE c_id = ".$this->course_int_id;
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
-        return (int) $row['total'];
+        return self::getAccumulateWorkTimeTotal($this->course_int_id);
     }
 
     /**
@@ -9463,9 +9449,15 @@ document.addEventListener("DOMContentLoaded", function () {
     {
         $table = Database::get_course_table(TABLE_LP_MAIN);
         $courseId = (int) $courseId;
+        // c_lp has no c_id column: a learning path belongs to a course through the link of its resource node.
         $sql = "SELECT SUM(accumulate_work_time) AS total
                 FROM $table
-                WHERE c_id = $courseId";
+                WHERE EXISTS (
+                    SELECT 1 FROM resource_link rl
+                    WHERE rl.resource_node_id = $table.resource_node_id
+                        AND rl.c_id = $courseId
+                        AND rl.deleted_at IS NULL
+                )";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 

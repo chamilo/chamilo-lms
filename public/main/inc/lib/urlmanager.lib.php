@@ -288,12 +288,12 @@ class UrlManager
             $where = "WHERE $table_url_rel_session.access_url_id = ".$urlId;
         }
 
-        $sql = "SELECT id, name, access_url_id
+        $sql = "SELECT u.id, u.title AS name, access_url_id
                 FROM $tbl_session u
                 INNER JOIN $table_url_rel_session
-                ON $table_url_rel_session.session_id = id
+                ON $table_url_rel_session.session_id = u.id
                 $where
-                ORDER BY name, id";
+                ORDER BY u.title, u.id";
 
         $result = Database::query($sql);
         $sessions = Database::store_result($result);

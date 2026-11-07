@@ -207,10 +207,12 @@ final class UrlManagerCharacterizationTest extends KernelTestCase
         $this->link('access_url_rel_session', 'session_id', $s1, $a);
         $this->link('access_url_rel_session', 'session_id', $s1, $b);
 
-        // PINNED QUIRK: the query selects an unqualified "id" while both session and
-        // access_url_rel_session have one, so MySQL rejects it and the method always throws.
-        $this->expectException(\Throwable::class);
-        UrlManager::get_url_rel_session_data($a);
+        $rows = UrlManager::get_url_rel_session_data($a);
+
+        $this->assertSame([$s1, $s2], array_map(static fn (array $r): int => (int) $r['id'], $rows));
+        $this->assertSame(['um2_s_a', 'um2_s_b'], array_column($rows, 'name'));
+        $this->assertSame([$a, $a], array_map(static fn (array $r): int => (int) $r['access_url_id'], $rows));
+        $this->assertCount(1, UrlManager::get_url_rel_session_data($b));
     }
 
     public function testGetUrlRelUsergroupDataIsScopedAndOrderedByTitle(): void

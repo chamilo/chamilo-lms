@@ -196,7 +196,7 @@ class UrlManager
         $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         if (!empty($urlId)) {
-            $where = " AND $table_url_rel_user.access_url_id = ".$urlId;
+            $where .= " AND $table_url_rel_user.access_url_id = ".$urlId;
         }
         if (empty($order_by)) {
             $order_clause = api_sort_by_first_name(

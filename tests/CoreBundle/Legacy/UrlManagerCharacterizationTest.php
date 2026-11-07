@@ -151,7 +151,7 @@ final class UrlManagerCharacterizationTest extends KernelTestCase
         $this->assertSame('admin', $rows[0]['username']);
     }
 
-    public function testGetUrlRelUserDataWithAUrlStillListsSoftDeletedUsers(): void
+    public function testGetUrlRelUserDataWithAUrlHidesSoftDeletedUsers(): void
     {
         $a = $this->url('a');
         $this->link('access_url_rel_user', 'user_id', 1, $a);
@@ -159,10 +159,8 @@ final class UrlManagerCharacterizationTest extends KernelTestCase
 
         $ids = array_map(static fn (array $r): int => (int) $r['user_id'], UrlManager::get_url_rel_user_data($a));
 
-        // PINNED QUIRK: with a url id the WHERE clause is replaced by an "AND" glued to the JOIN, so
-        // the soft-deleted filter (u.active <> -2) is lost: user 3 (fallback_user) is listed.
-        sort($ids);
-        $this->assertSame([1, 3], $ids);
+        // User 3 (fallback_user) is soft-deleted: hidden with or without a url id.
+        $this->assertSame([1], $ids);
     }
 
     public function testGetUrlRelUserDataWithoutUrlListsEveryLinkExceptSoftDeletedUsers(): void

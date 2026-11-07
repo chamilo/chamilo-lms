@@ -911,8 +911,11 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         // Session filter is exact on the link's session.
         $this->assertSame(['tc_insession'], array_column(Tracking::get_documents_most_downloaded_by_course($code, $a, 10), 'ntitle'));
         $this->assertCount(1, Tracking::get_documents_most_downloaded_by_course($code, 0, 1));
-        // PINNED QUIRK: limit 0 (the default) is "LIMIT 0, 0": nothing is returned, not "no limit".
-        $this->assertSame([], Tracking::get_documents_most_downloaded_by_course($code));
+        // Fixed: limit 0 (the default, documented as "without limit") was sent as "LIMIT 0, 0" and returned nothing.
+        $this->assertSame(
+            ['tc_popular', 'tc_rare', 'tc_insession'],
+            array_column(Tracking::get_documents_most_downloaded_by_course($code), 'ntitle')
+        );
     }
 
     // ------------------------------------------------------------------

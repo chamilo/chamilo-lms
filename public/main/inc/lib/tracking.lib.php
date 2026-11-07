@@ -4605,6 +4605,8 @@ class Tracking
         if (!empty($session_id)) {
             $condition_session = ' AND l.session_id = '.$session_id;
         }
+        // A limit of 0 (the default) means "without limit".
+        $limitCondition = (int) $limit > 0 ? ' LIMIT 0, '.(int) $limit : '';
         $sql = "SELECT t.resource_link_id as lid,
                        n.path as npath,
                        n.title as ntitle,
@@ -4620,7 +4622,7 @@ class Tracking
                     $condition_session
                 GROUP BY nid
                 ORDER BY count_down DESC
-                LIMIT 0,  $limit";
+                $limitCondition";
         $rs = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {

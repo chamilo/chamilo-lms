@@ -218,7 +218,10 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
             [['user_id' => $this->getAdmin()->getId(), 'relation_type' => Session::SESSION_ADMIN]],
             $rows
         );
-        // Surprising but current: the creating admin is counted in session.nbr_users.
+        // Kept on purpose, not a bug: session.nbr_users counts every session_rel_user row of every relation type
+        // (Session::addUserSubscription() increments it, subscribeUsersToSession() recomputes it as
+        // COUNT(user_id), unsubscribe_user_from_session() decrements it), so the session admin row counts too.
+        // The admin session list shows the students only, from its own count (SessionListController).
         $this->assertSame(1, (int) $this->counters($id)['nbr_users']);
     }
 
@@ -780,6 +783,8 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
 
     public function testNonTeacherCannotBeMadeCoach(): void
     {
+        // An unknown user id used to fatal on isTeacher() of null; it is refused like a non-teacher.
+        $this->assertFalse($this->legacy('set_coach_to_course_session', 987654321, 1, 1));
         // createUser() sets status 1 (teacher status) but no ROLE_TEACHER: coaching is role-based.
         $student = $this->createUser('sm_notteacher');
         [$c1] = $this->newCourse('sm_nt_course');

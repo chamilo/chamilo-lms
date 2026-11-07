@@ -3961,7 +3961,7 @@ class SessionManager
 
         $user = api_get_user_entity($userId);
 
-        if (!$user->isTeacher()) {
+        if (null === $user || !$user->isTeacher()) {
             return false;
         }
 

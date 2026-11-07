@@ -525,6 +525,27 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame(1, (int) $this->conn->fetchOne('SELECT is_required FROM c_survey_question WHERE iid = ?', [$q]));
     }
 
+    public function testSaveQuestionStoresTheConditionOfADependentQuestion(): void
+    {
+        $s = $this->insertSurvey();
+        $parent = $this->insertQuestion($s, 'sv parent', 'multiplechoice');
+        $option = $this->insertOption($s, $parent, 'sv trigger', 1);
+
+        \SurveyManager::saveQuestion($this->survey($s), [
+            'question' => 'sv dependent question',
+            'type' => 'open',
+            'horizontalvertical' => 'vertical',
+            'shared_question_id' => 0,
+            'survey_id' => $s,
+            'question_id' => 0,
+            'parent_id' => $parent,
+            'parent_option_id' => $option,
+        ], false);
+
+        $row = $this->conn->fetchAssociative('SELECT parent_id, parent_option_id FROM c_survey_question WHERE survey_question = ?', ['sv dependent question']);
+        $this->assertSame([$parent, $option], [(int) $row['parent_id'], (int) $row['parent_option_id']]);
+    }
+
     public function testSaveQuestionOnPercentageGeneratesOneToHundredOptions(): void
     {
         $s = $this->insertSurvey();

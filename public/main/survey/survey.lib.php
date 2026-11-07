@@ -941,15 +941,11 @@ class SurveyManager
 
                     $question->setIsMandatory(isset($form_content['is_required']));
 
-                    $params['parent_id'] = 0;
-                    $params['parent_option_id'] = 0;
-                    if (isset($form_content['parent_id']) &&
-                        isset($form_content['parent_option_id']) &&
-                        !empty($form_content['parent_id']) &&
-                        !empty($form_content['parent_option_id'])
-                    ) {
-                        $params['parent_id'] = $form_content['parent_id'];
-                        $params['parent_option_id'] = $form_content['parent_option_id'];
+                    if (!empty($form_content['parent_id']) && !empty($form_content['parent_option_id'])) {
+                        $question->setParent($em->getRepository(CSurveyQuestion::class)->find($form_content['parent_id']));
+                        $question->setParentOption(
+                            $em->getRepository(CSurveyQuestionOption::class)->find($form_content['parent_option_id'])
+                        );
                     }
 
                     $em->persist($question);

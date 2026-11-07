@@ -626,7 +626,8 @@ final class AttendanceCharacterizationTest extends KernelTestCase
         $lib->attendance_sheet_add($c1, [self::ANON], $this->entity($att));
         $before = (int) $this->row('SELECT COUNT(*) c FROM c_attendance_sheet WHERE attendance_calendar_id = ?', [$c1])['c'];
 
-        // Same data again: MySQL reports 0 changed rows, so nothing is logged.
+        // Same data again: MySQL reports 0 changed rows, so nothing is logged. Not a bug: the log records changes,
+        // and an unchanged re-save would only add noise to the sheet history (decided intended, kept).
         $same = $lib->attendance_sheet_add($c1, [self::ANON], $this->entity($att));
         $this->assertSame(0, $same, 'identical presence data changes no row');
         $this->assertSame([Attendance::DONE_ATTENDANCE_LOG_TYPE], $this->logTypes($att), 'no extra log when nothing changed');

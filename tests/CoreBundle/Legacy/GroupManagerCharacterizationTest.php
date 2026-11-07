@@ -1011,10 +1011,37 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
         $this->assertSame(['user_id', 'firstname', 'lastname', 'email', 'username'], array_keys($list[$u1]));
         $this->assertSame('Fzed', $list[$u1]['firstname']);
         $this->assertSame('Lzed', $list[$u1]['lastname']);
+        // api_sort_by_first_name() cannot be driven from a test: it is not a setting, and its per-language lookup
+        // (_api_get_person_name_convention) ends up reading the LAST language of LanguageFixtures whatever the locale
+        // (the $iso parameter is overwritten by its own loop), so only one of the two orders can ever be exercised
+        // here. Assert the order the function currently selects; the official-code order below is fully
+        // deterministic through its setting.
         $this->assertSame(
             api_sort_by_first_name() ? [$u2, $u1] : [$u1, $u2],
             array_keys($list),
-            'order follows api_sort_by_first_name(); lastname is DESC in the last-name-first mode'
+            'first name ASC when sorting by first name; lastname DESC in the last-name-first mode'
+        );
+    }
+
+    public function testGetSubscribedUsersOrdersByOfficialCodeWhenTheSettingIsOn(): void
+    {
+        $g = $this->makeGroup('subscribed_oc');
+        // Official codes are the reverse of both the first-name and the last-name orders.
+        $u1 = $this->makeUser('abe');
+        $u2 = $this->makeUser('zed');
+        $this->member($u1, $g);
+        $this->member($u2, $g);
+        $this->conn()->executeStatement('UPDATE user SET official_code = ? WHERE id = ?', ['gm_oc_2', $u1]);
+        $this->conn()->executeStatement('UPDATE user SET official_code = ? WHERE id = ?', ['gm_oc_1', $u2]);
+
+        $this->setSetting('display.order_user_list_by_official_code', 'true');
+        $this->assertSame([$u2, $u1], array_keys(GroupManager::get_subscribed_users($this->entity($g))), 'official code ASC wins');
+
+        $this->setSetting('display.order_user_list_by_official_code', 'false');
+        $this->assertSame(
+            api_sort_by_first_name() ? [$u1, $u2] : [$u2, $u1],
+            array_keys(GroupManager::get_subscribed_users($this->entity($g))),
+            'setting off: back to the name order'
         );
     }
 

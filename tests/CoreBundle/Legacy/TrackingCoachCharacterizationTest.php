@@ -409,10 +409,10 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         // (start = 0) is never limited.
         $this->assertCount(3, Tracking::get_sessions_coached_by_user($coach, 0, 2));
         $this->assertCount(2, Tracking::get_sessions_coached_by_user($coach, 1, 2));
-        // PINNED QUIRK: the query puts LIMIT before ORDER BY, which is a syntax error: sorting a page makes
-        // the whole call fail with the generic "unknown error".
-        $this->expectException(NotAllowedException::class);
-        Tracking::get_sessions_coached_by_user($coach, 1, 2, false, '', '', 'title', 'asc');
+        // Fixed: the query put LIMIT before ORDER BY (a syntax error), so sorting a page failed with the generic
+        // "unknown error". The page is now cut from the sorted list.
+        $this->assertSame([$three, $one], array_keys(Tracking::get_sessions_coached_by_user($coach, 1, 2, false, '', '', 'title', 'asc')));
+        $this->assertSame([$three, $two], array_keys(Tracking::get_sessions_coached_by_user($coach, 1, 2, false, '', '', 'title', 'desc')));
     }
 
     public function testSessionsCoachedByUserIgnoresSessionsOfOtherUrls(): void

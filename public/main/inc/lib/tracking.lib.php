@@ -4076,7 +4076,7 @@ class Tracking
                     $keywordCondition
                     $extraFieldsConditions
                     $sqlInjectWhere
-            ) as sessions $limitCondition $orderBy
+            ) as sessions $orderBy $limitCondition
             ";
 
         $rs = Database::query($sql);

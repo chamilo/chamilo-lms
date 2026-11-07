@@ -2437,76 +2437,58 @@ class TicketManager
     /**
      * Deletes the user from all the ticket system.
      *
+     * Nullable references (assignee, last editor, assignment log user) are set to NULL and the category assignments
+     * are removed. The NOT NULL "sys_insert_user_id" author columns cannot be emptied: the rows are kept for the
+     * audit trail and handed to the platform's fallback user, like UserManager::delete_user() does for other tools.
+     * Everything runs in one transaction: it is applied completely or not at all.
+     *
      * @param int $userId
+     *
+     * @throws RuntimeException when there is no fallback user to take over the authored rows
      */
     public static function deleteUserFromTicketSystem($userId)
     {
         $userId = (int) $userId;
-        $schema = Database::getManager()->getConnection()->createSchemaManager();
-
-        if ($schema->tablesExist('ticket_assigned_log')) {
-            $sql = "UPDATE ticket_assigned_log SET user_id = NULL WHERE user_id = $userId";
-            Database::query($sql);
-
-            $sql = "UPDATE ticket_assigned_log SET sys_insert_user_id = NULL WHERE sys_insert_user_id = $userId";
-            Database::query($sql);
+        $fallbackUser = Container::getUserRepository()->getFallbackUser();
+        if (null === $fallbackUser) {
+            throw new RuntimeException('Cannot remove a user from the ticket system without a fallback user');
+        }
+        $fallbackId = (int) $fallbackUser->getId();
+        if ($fallbackId === $userId) {
+            return;
         }
 
-        if ($schema->tablesExist('ticket_ticket')) {
-            $sql = "UPDATE ticket_ticket SET assigned_last_user = NULL WHERE assigned_last_user = $userId";
-            Database::query($sql);
+        $connection = Database::getManager()->getConnection();
+        $schema = $connection->createSchemaManager();
 
-            $sql = "UPDATE ticket_ticket SET sys_insert_user_id = NULL WHERE sys_insert_user_id = $userId";
-            Database::query($sql);
+        // table => [columns set to NULL, columns handed to the fallback user]
+        $references = [
+            'ticket_assigned_log' => [['user_id'], ['sys_insert_user_id']],
+            'ticket_ticket' => [['assigned_last_user', 'sys_lastedit_user_id'], ['sys_insert_user_id']],
+            'ticket_category' => [['sys_lastedit_user_id'], ['sys_insert_user_id']],
+            'ticket_message' => [['sys_lastedit_user_id'], ['sys_insert_user_id']],
+            'ticket_message_attachments' => [['sys_lastedit_user_id'], ['sys_insert_user_id']],
+            'ticket_priority' => [['sys_lastedit_user_id'], ['sys_insert_user_id']],
+            'ticket_project' => [['sys_lastedit_user_id'], ['sys_insert_user_id']],
+        ];
 
-            $sql = "UPDATE ticket_ticket SET sys_lastedit_user_id = NULL WHERE sys_lastedit_user_id = $userId";
-            Database::query($sql);
-        }
+        $connection->transactional(function () use ($connection, $schema, $references, $userId, $fallbackId): void {
+            foreach ($references as $table => [$nullable, $authored]) {
+                if (!$schema->tablesExist($table)) {
+                    continue;
+                }
+                foreach ($nullable as $column) {
+                    $connection->executeStatement("UPDATE $table SET $column = NULL WHERE $column = ?", [$userId]);
+                }
+                foreach ($authored as $column) {
+                    $connection->executeStatement("UPDATE $table SET $column = ? WHERE $column = ?", [$fallbackId, $userId]);
+                }
+            }
 
-        if ($schema->tablesExist('ticket_category')) {
-            $sql = "UPDATE ticket_category SET sys_insert_user_id = NULL WHERE sys_insert_user_id = $userId";
-            Database::query($sql);
-
-            $sql = "UPDATE ticket_category SET sys_lastedit_user_id = NULL WHERE sys_lastedit_user_id = $userId";
-            Database::query($sql);
-        }
-
-        if ($schema->tablesExist('ticket_category_rel_user')) {
-            $sql = "DELETE FROM ticket_category_rel_user WHERE user_id = $userId";
-            Database::query($sql);
-        }
-
-        if ($schema->tablesExist('ticket_message')) {
-            $sql = "UPDATE ticket_message SET sys_insert_user_id = NULL WHERE sys_insert_user_id = $userId";
-            Database::query($sql);
-
-            $sql = "UPDATE ticket_message SET sys_lastedit_user_id = NULL WHERE sys_lastedit_user_id = $userId";
-            Database::query($sql);
-        }
-
-        if ($schema->tablesExist('ticket_message_attachments')) {
-            $sql = "UPDATE ticket_message_attachments SET sys_insert_user_id = NULL WHERE sys_insert_user_id = $userId";
-            Database::query($sql);
-
-            $sql = "UPDATE ticket_message_attachments SET sys_lastedit_user_id = NULL WHERE sys_lastedit_user_id = $userId";
-            Database::query($sql);
-        }
-
-        if ($schema->tablesExist('ticket_priority')) {
-            $sql = "UPDATE ticket_priority SET sys_insert_user_id = NULL WHERE sys_insert_user_id = $userId";
-            Database::query($sql);
-
-            $sql = "UPDATE ticket_priority SET sys_lastedit_user_id = NULL WHERE sys_lastedit_user_id = $userId";
-            Database::query($sql);
-        }
-
-        if ($schema->tablesExist('ticket_project')) {
-            $sql = "UPDATE ticket_project SET sys_insert_user_id = NULL WHERE sys_insert_user_id = $userId";
-            Database::query($sql);
-
-            $sql = "UPDATE ticket_project SET sys_lastedit_user_id = NULL WHERE sys_lastedit_user_id = $userId";
-            Database::query($sql);
-        }
+            if ($schema->tablesExist('ticket_category_rel_user')) {
+                $connection->executeStatement('DELETE FROM ticket_category_rel_user WHERE user_id = ?', [$userId]);
+            }
+        });
     }
 
     /**

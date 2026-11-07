@@ -1160,35 +1160,60 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
     {
         $p = $this->project('tm_proj_gdpr');
         $cat = $this->category($p, 'tm_cat_gdpr');
-        $t = $this->ticket($p, $cat, ['assigned_last_user' => 3, 'sys_lastedit_user_id' => 3]);
-        TicketManager::addUsersToCategory($cat, [3, 2]);
-        $this->conn->insert('ticket_assigned_log', ['ticket_id' => $t, 'user_id' => 3, 'sys_insert_user_id' => 1, 'assigned_date' => '2021-01-01 00:00:00']);
+        $t = $this->ticket($p, $cat, ['assigned_last_user' => 2, 'sys_lastedit_user_id' => 2]);
+        TicketManager::addUsersToCategory($cat, [2, 1]);
+        $this->conn->insert('ticket_assigned_log', ['ticket_id' => $t, 'user_id' => 2, 'sys_insert_user_id' => 1, 'assigned_date' => '2021-01-01 00:00:00']);
 
-        TicketManager::deleteUserFromTicketSystem(3);
+        TicketManager::deleteUserFromTicketSystem(2);
 
         $this->assertNull($this->row($t)['assigned_last_user']);
         $this->assertNull($this->row($t)['sys_lastedit_user_id']);
-        $this->assertSame([2], array_map('intval', $this->col(TicketManager::getUsersInCategory($cat), 'user_id')), 'only the other user stays assigned');
+        $this->assertSame([1], array_map('intval', $this->col(TicketManager::getUsersInCategory($cat), 'user_id')), 'only the other user stays assigned');
         $this->assertNull($this->conn->fetchAssociative('SELECT user_id FROM ticket_assigned_log WHERE ticket_id = ?', [$t])['user_id']);
         $this->assertSame('1', (string) $this->row($t)['sys_insert_user_id'], 'tickets written by someone else are untouched');
     }
 
-    public function testDeleteUserFromTicketSystemFailsWhenTheUserAuthoredTicketsBecauseInsertUserIsNotNullable(): void
+    public function testDeleteUserFromTicketSystemReassignsAuthoredRowsToTheFallbackUser(): void
     {
         $p = $this->project('tm_proj_gdpr2');
-        $t = $this->ticket($p, $this->category($p, 'tm_cat_gdpr2'), ['sys_insert_user_id' => 3]);
+        $cat = $this->category($p, 'tm_cat_gdpr2');
+        $t = $this->ticket($p, $cat, ['sys_insert_user_id' => 2]);
+        $other = $this->ticket($p, $cat, ['sys_insert_user_id' => 1]);
+        $msg = $this->message($t, 2);
+        $this->conn->insert('ticket_assigned_log', ['ticket_id' => $t, 'user_id' => 1, 'sys_insert_user_id' => 2, 'assigned_date' => '2021-01-01 00:00:00']);
+        $this->conn->executeStatement('UPDATE ticket_category SET sys_insert_user_id = 2 WHERE id = ?', [$cat]);
+        $fallback = (int) Container::getUserRepository()->getFallbackUser()->getId();
+        $this->assertNotSame(2, $fallback);
 
-        // PINNED QUIRK: the method sets sys_insert_user_id = NULL on a NOT NULL column, so it throws for any user who
-        // authored a ticket (statements before the failing one have already been applied).
+        // Fixed: it used to set the NOT NULL sys_insert_user_id columns to NULL and throw half-way. Authored rows are
+        // now kept (audit trail) and handed to the platform's fallback user, the way UserManager::delete_user() does.
+        TicketManager::deleteUserFromTicketSystem(2);
+
+        $this->assertSame((string) $fallback, (string) $this->row($t)['sys_insert_user_id']);
+        $this->assertSame((string) $fallback, (string) $this->conn->fetchOne('SELECT sys_insert_user_id FROM ticket_message WHERE id = ?', [$msg]));
+        $this->assertSame((string) $fallback, (string) $this->conn->fetchOne('SELECT sys_insert_user_id FROM ticket_assigned_log WHERE ticket_id = ?', [$t]));
+        $this->assertSame((string) $fallback, (string) $this->conn->fetchOne('SELECT sys_insert_user_id FROM ticket_category WHERE id = ?', [$cat]));
+        $this->assertSame(1, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM ticket_message WHERE id = ?', [$msg]), 'rows are kept, not deleted');
+        $this->assertSame('1', (string) $this->row($other)['sys_insert_user_id'], "someone else's rows are untouched");
+    }
+
+    public function testDeleteUserFromTicketSystemWithoutFallbackUserChangesNothingAndThrows(): void
+    {
+        $p = $this->project('tm_proj_gdpr3');
+        $t = $this->ticket($p, $this->category($p, 'tm_cat_gdpr3'), ['sys_insert_user_id' => 2, 'assigned_last_user' => 2]);
+        // Hide the fallback user for this test (rolled back with the test transaction).
+        $this->conn->executeStatement('UPDATE user SET status = 6 WHERE username = ?', ['fallback_user']);
+
         $threw = false;
         try {
-            TicketManager::deleteUserFromTicketSystem(3);
+            TicketManager::deleteUserFromTicketSystem(2);
         } catch (Throwable) {
             $threw = true;
         }
 
-        $this->assertTrue($threw);
-        $this->assertSame('3', (string) $this->row($t)['sys_insert_user_id']);
+        $this->assertTrue($threw, 'no sentinel user to take the NOT NULL columns: fail before touching anything');
+        $this->assertSame('2', (string) $this->row($t)['sys_insert_user_id']);
+        $this->assertSame('2', (string) $this->row($t)['assigned_last_user'], 'nothing half-done');
     }
 
     public function testTicketSubscriptionHelpersAndFollowers(): void

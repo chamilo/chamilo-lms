@@ -3596,7 +3596,7 @@ class learnpathItem
                     WHERE
                         lp_item_id = ".$this->db_id.' AND
                         lp_view_id = '.$this->view_id.' AND
-                        view_count = '.$this->attempt_id;
+                        view_count = '.$this->get_attempt_id();
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
@@ -3646,12 +3646,7 @@ class learnpathItem
                             'score_max' => $objective[3],
                         ];
 
-                        $insertId = Database::insert($iva_table, $params);
-                        if ($insertId) {
-                            $sql = "UPDATE $iva_table SET id = iid
-                                    WHERE iid = $insertId";
-                            Database::query($sql);
-                        }
+                        Database::insert($iva_table, $params);
                     }
                 }
             }

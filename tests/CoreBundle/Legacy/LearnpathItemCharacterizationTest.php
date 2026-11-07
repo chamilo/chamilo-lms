@@ -908,20 +908,36 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertEquals(2, $rows[0]['score_min']);
     }
 
-    public function testWriteObjectivesToDbInsertsTheRowThenFailsOnAColumnThatNoLongerExists(): void
+    public function testWriteObjectivesToDbInsertsNewObjectivesAndKeepsTheirOrder(): void
     {
         $s = $this->scene('sco', 2);
         $item = $this->item($s['item'], $s['view']);
-        $item->add_objective(0, ['li_new_obj', 'passed', 1, 2, 0]);
+        $item->add_objective(0, ['li_new_obj', 'passed', 1, 2, 0.5]);
+        $item->add_objective(1, ['li_new_obj2', 'failed', 3, 4, 1]);
 
-        // PINNED QUIRK: after inserting a new objective the method runs "UPDATE ... SET id = iid" on
-        // c_lp_iv_objective, which has no `id` column: the row is written, then the call dies with an exception.
-        try {
-            $item->write_objectives_to_db();
-            $this->fail('expected the follow-up UPDATE to fail');
-        } catch (NotAllowedException) {
-            $this->assertSame(1, (int) $this->conn()->fetchOne("SELECT COUNT(*) FROM c_lp_iv_objective WHERE lp_iv_id = ? AND objective_id = 'li_new_obj'", [$s['iv']]));
-        }
+        $item->write_objectives_to_db();
+        $item->write_objectives_to_db(); // a second write updates, it does not duplicate
+
+        $rows = $this->conn()->fetchAllAssociative('SELECT * FROM c_lp_iv_objective WHERE lp_iv_id = ? ORDER BY order_id', [$s['iv']]);
+        $this->assertCount(2, $rows);
+        $this->assertSame(['li_new_obj', 'passed', 0, 1], [$rows[0]['objective_id'], $rows[0]['status'], (int) $rows[0]['order_id'], (int) $rows[0]['c_id']]);
+        $this->assertEquals(1, $rows[0]['score_raw']);
+        $this->assertEquals(2, $rows[0]['score_max']);
+        $this->assertEquals(0.5, $rows[0]['score_min']);
+        $this->assertSame(['li_new_obj2', 'failed', 1], [$rows[1]['objective_id'], $rows[1]['status'], (int) $rows[1]['order_id']]);
+    }
+
+    public function testWriteObjectivesToDbWorksForAnItemWithoutAttemptCounterLikeTheOtherWriters(): void
+    {
+        $s = $this->scene('sco', 2);
+        $item = $this->item($s['item'], $s['view']);
+        $item->attempt_id = null;
+        $item->add_objective(0, ['li_obj_default', 'passed', 1, 2, 0]);
+
+        // get_attempt_id() defaults to 1, which is what the other methods query; a bare "view_count = " would be a syntax error.
+        $item->write_objectives_to_db();
+
+        $this->assertSame(1, (int) $this->conn()->fetchOne("SELECT COUNT(*) FROM c_lp_iv_objective WHERE lp_iv_id = ? AND objective_id = 'li_obj_default'", [$s['iv']]));
     }
 
     public function testAddObjectiveIgnoresAnObjectiveWithoutId(): void

@@ -1456,12 +1456,11 @@ final class SurveyCharacterizationTest extends KernelTestCase
         }
     }
 
-    public function testSurveySearchRestrictionWithNoCriterionReadsAnUndefinedVariable(): void
+    public function testSurveySearchRestrictionWithNoCriterionIsEmpty(): void
     {
         $get = $_GET;
         $_GET = ['do_search' => '1', 'keyword_title' => '', 'keyword_code' => '', 'keyword_language' => '%'];
         try {
-            // PINNED QUIRK: $search_term is never initialised, an empty search raises a warning.
             $warnings = [];
             set_error_handler(static function (int $no, string $msg) use (&$warnings): bool {
                 $warnings[] = $msg;
@@ -1469,17 +1468,16 @@ final class SurveyCharacterizationTest extends KernelTestCase
                 return true;
             });
             try {
-                \SurveyUtil::survey_search_restriction();
+                $sql = \SurveyUtil::survey_search_restriction();
             } finally {
                 restore_error_handler();
             }
-            $this->assertSame(['Undefined variable $search_term'], $warnings);
+            $this->assertSame([], $warnings);
+            $this->assertSame('', $sql);
         } finally {
             $_GET = $get;
         }
     }
-
-    // ---------------------------------------------------------------- course/session scoping (resource links)
 
     private int $nodeOffset = 5;
 

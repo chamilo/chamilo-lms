@@ -3230,6 +3230,7 @@ class SurveyUtil
     public static function survey_search_restriction()
     {
         if (isset($_GET['do_search'])) {
+            $search_term = [];
             if ('' != $_GET['keyword_title']) {
                 $search_term[] = 'title like "%" \''.Database::escape_string($_GET['keyword_title']).'\' "%"';
             }

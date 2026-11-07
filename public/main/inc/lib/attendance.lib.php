@@ -1419,7 +1419,7 @@ class Attendance
                         attendance_id = '$attendanceId' AND
                         iid NOT IN (
                             SELECT calendar_id FROM $tbl_acrg
-                            WHERE attendance_id = '$attendanceId'  AND group_id != 0 AND group_id IS NOT NULL
+                            WHERE group_id != 0 AND group_id IS NOT NULL
                         )
                         $whereDate
                     ";
@@ -1433,6 +1433,7 @@ class Attendance
                     WHERE
                         g.group_id = '$groupId' AND
                         c.attendance_id = '$attendanceId'
+                        $whereDate
                    ";
         }
 

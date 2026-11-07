@@ -334,13 +334,19 @@ final class AttendanceCharacterizationTest extends KernelTestCase
         $this->assertSame($g, (int) $rows[1]['groups'][0]['group_id']);
     }
 
-    public function testGetAttendanceCalendarGroupBranchIgnoresDateRange(): void
+    public function testGetAttendanceCalendarGroupBranchAppliesTheDateRange(): void
     {
-        // PINNED QUIRK: when a group id is given the SQL is rebuilt from scratch, dropping the $whereDate range.
+        // Fixed: the group branch rebuilt the SQL from scratch and dropped the $whereDate range.
         $att = $this->att();
         $g = $this->group();
         $old = $this->cal($att, '2031-08-01 08:00:00');
-        $this->calGroup($old, $g);
+        $inside = $this->cal($att, '2032-06-15 08:00:00');
+        $edge = $this->cal($att, '2032-12-31 00:00:00');
+        $late = $this->cal($att, '2033-01-01 08:00:00');
+        $unlinked = $this->cal($att, '2032-07-01 08:00:00');
+        foreach ([$old, $inside, $edge, $late] as $c) {
+            $this->calGroup($c, $g);
+        }
 
         $rows = (new Attendance())->get_attendance_calendar(
             $att,
@@ -353,7 +359,32 @@ final class AttendanceCharacterizationTest extends KernelTestCase
             new DateTime('2032-12-31 00:00:00')
         );
 
-        $this->assertSame([$old], $this->ids($rows));
+        $this->assertSame([$inside, $edge], $this->ids($rows), 'group links within the inclusive range only');
+        $this->assertNotContains($unlinked, $this->ids($rows));
+    }
+
+    public function testGetAttendanceCalendarWithoutShowAllHidesGroupDatesWithinTheDateRange(): void
+    {
+        $att = $this->att();
+        $g = $this->group();
+        $plain = $this->cal($att, '2032-06-10 08:00:00');
+        $grouped = $this->cal($att, '2032-06-11 08:00:00');
+        $outside = $this->cal($att, '2033-06-10 08:00:00');
+        $this->calGroup($grouped, $g);
+
+        $rows = (new Attendance())->get_attendance_calendar(
+            $att,
+            'all',
+            null,
+            0,
+            false,
+            0,
+            new DateTime('2032-01-01 00:00:00'),
+            new DateTime('2032-12-31 00:00:00')
+        );
+
+        $this->assertSame([$plain], $this->ids($rows));
+        $this->assertNotContains($outside, $this->ids($rows));
     }
 
     // ---------------------------------------------------------------- get_number_of_attendance_calendar

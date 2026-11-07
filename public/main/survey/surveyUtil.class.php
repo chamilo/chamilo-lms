@@ -982,8 +982,7 @@ class SurveyUtil
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
 
         $surveyId = $survey->getIid();
-        $course_id = api_get_course_int_id();
-        if (empty($surveyId) || empty($course_id)) {
+        if (empty($surveyId)) {
             return '';
         }
 

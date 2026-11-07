@@ -1698,17 +1698,35 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame(1, $this->rowCount('c_survey_question_option', 'survey_id = ?', [$copy]));
     }
 
-    public function testSurveyReportOfAUserWithAnAnsweredSurveyFailsOnTheSurveyArgumentType(): void
+    public function testSurveyReportShowsTheAnswersOfThatUserOnly(): void
     {
         $s = $this->insertSurvey(['title' => 'sv reported survey']);
-        $q = $this->insertQuestion($s, 'sv q');
-        $this->insertAnswer($s, $q, '1', 'a');
+        $q = $this->insertQuestion($s, 'sv question text', 'open');
+        $this->insertAnswer($s, $q, '1', 'sv my own answer');
+        $this->insertAnswer($s, $q, '2', 'sv somebody elses answer');
+        $this->insertInvitation($s, 1, ['answered' => 1]);
+        $this->setContext(1, null); // my_space/survey_report.php runs without a course
+
+        $html = \SurveyManager::surveyReport(['user_id' => 1], 1);
+
+        $this->assertStringContainsString('sv reported survey', $html);
+        $this->assertStringContainsString('sv question text', $html);
+        $this->assertStringContainsString('sv my own answer', $html);
+        $this->assertStringNotContainsString('sv somebody elses answer', $html);
+    }
+
+    public function testSurveyReportDoesNotShowTheAnswersOfAnAnonymousSurvey(): void
+    {
+        $s = $this->insertSurvey(['title' => 'sv anon reported', 'anonymous' => '1']);
+        $q = $this->insertQuestion($s, 'sv anon question', 'open');
+        $this->insertAnswer($s, $q, 'pseudonym', 'sv anon answer');
         $this->insertInvitation($s, 1, ['answered' => 1]);
         $this->setContext(1, null);
 
-        // PINNED QUIRK: displayCompleteReport() wants a CSurvey but is given the survey array.
-        $this->expectException(\TypeError::class);
-        \SurveyManager::surveyReport(['user_id' => 1], 1);
+        $html = \SurveyManager::surveyReport(['user_id' => 1], 1);
+
+        $this->assertStringContainsString('sv anon reported', $html);
+        $this->assertStringNotContainsString('sv anon answer', $html);
     }
 
     public function testSurveyReportListsUnansweredSurveysOfTheUser(): void

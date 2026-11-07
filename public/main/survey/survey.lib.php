@@ -1983,7 +1983,7 @@ class SurveyManager
 
                 if (!empty($answered) && 0 == $survey->getAnonymous()) {
                     $answers = SurveyUtil::displayCompleteReport(
-                        $surveyData,
+                        $survey,
                         $userId,
                         false,
                         false,

@@ -203,11 +203,11 @@ final class ExerciseCharacterizationTest extends KernelTestCase
     }
 
     /** Inserts a learning path holding one quiz item, linked to the course. Returns [lpId, itemId]. */
-    private function lpWithQuiz(int $quizId, int $courseId, ?string $deletedAt = null): array
+    private function lpWithQuiz(int $quizId, int $courseId, ?string $deletedAt = null, int $nodeId = 1): array
     {
         $now = '2020-01-01 00:00:00';
         $this->conn->insert('c_lp', [
-            'resource_node_id' => 1,
+            'resource_node_id' => $nodeId,
             'lp_type' => 1,
             'title' => 'ex_lp_'.(++$this->seq),
             'path' => '',
@@ -242,7 +242,7 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         ]);
         $itemId = (int) $this->conn->lastInsertId();
         $this->conn->insert('resource_link', [
-            'resource_node_id' => 1,
+            'resource_node_id' => $nodeId,
             'c_id' => $courseId,
             'visibility' => 2,
             'display_order' => 0,
@@ -364,13 +364,27 @@ final class ExerciseCharacterizationTest extends KernelTestCase
 
         $e = $this->read($quizId);
         $this->assertFalse($e->exercise_was_added_in_lp);
-        // PINNED QUIRK: added_in_lp() ignores the resource link, so a soft-deleted LP still counts.
-        $this->assertTrue($e->added_in_lp());
+        // Fixed: added_in_lp() now agrees with read(): a soft-deleted LP link does not count (its callers only
+        // warn "this exercise is included in a learning path" / hide the edit links for a live inclusion).
+        $this->assertFalse($e->added_in_lp());
         $this->assertSame(
             ['lp_id' => 0, 'max_score' => 0, 'session_id' => 0],
             $e->getLpBySession(0),
             'without lp the default triple is returned'
         );
+    }
+
+    public function testAddedInLpIsTrueForALiveLinkInThisCourseOnly(): void
+    {
+        [, $course] = $this->ctx();
+        $quizId = $this->makeQuiz();
+        $this->lpWithQuiz($quizId, (int) $this->getCourse(2)->getId());
+        $this->assertFalse($this->read($quizId)->added_in_lp(), 'an lp linked to another course does not count');
+
+        $this->lpWithQuiz($quizId, (int) $course->getId(), null, 2);
+        $e = $this->read($quizId);
+        $this->assertTrue($e->exercise_was_added_in_lp);
+        $this->assertTrue($e->added_in_lp(), 'consistent with read()');
     }
 
     public function testAddedInLpIsFalseForQuizWithoutItem(): void

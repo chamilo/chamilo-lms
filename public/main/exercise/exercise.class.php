@@ -7233,17 +7233,8 @@ class Exercise
      */
     public function added_in_lp()
     {
-        $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT max_score FROM $TBL_LP_ITEM
-                WHERE
-                    item_type = '".TOOL_QUIZ."' AND
-                    path = '{$this->getId()}'";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            return true;
-        }
-
-        return false;
+        // Same rule as read(): only learning paths still linked to this course (resource_link not deleted).
+        return !empty(self::getLpListFromExercise($this->getId(), $this->course_id));
     }
 
     /**

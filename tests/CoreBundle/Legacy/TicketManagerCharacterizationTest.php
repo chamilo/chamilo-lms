@@ -617,7 +617,7 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         );
     }
 
-    public function testInsertMessageAppendsConfirmationFormAndFailsOnUploadErrorAfterWriting(): void
+    public function testInsertMessageAppendsConfirmationFormAndRejectsUploadErrorsWithoutWriting(): void
     {
         $p = $this->project('tm_proj_msg2');
         $t = $this->ticket($p, $this->category($p, 'tm_cat_msg2'));
@@ -627,10 +627,17 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->assertStringStartsWith('tm_answer<form', $content);
         $this->assertStringContainsString('ticket_details.php?ticket_id='.$t, $content);
 
-        // PINNED QUIRK: an upload error is reported as false only AFTER the message row was written and counted.
+        // Fixed: an upload error used to be reported as false only AFTER the message row was written and counted.
+        // The uploads are checked first now: on failure nothing is persisted.
         $this->assertFalse(TicketManager::insertMessage($t, 'tm_s2', 'x', [['error' => UPLOAD_ERR_INI_SIZE]], 1));
-        $this->assertSame(2, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM ticket_message WHERE ticket_id = ?', [$t]));
-        $this->assertSame(2, (int) $this->row($t)['total_messages']);
+        $this->assertSame(1, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM ticket_message WHERE ticket_id = ?', [$t]));
+        $this->assertSame(0, (int) $this->conn->fetchOne("SELECT COUNT(*) FROM ticket_message WHERE subject = 'tm_s2'"));
+        $this->assertSame(1, (int) $this->row($t)['total_messages']);
+        $this->assertFalse(
+            TicketManager::insertMessage($t, 'tm_s2b', 'x', [['error' => UPLOAD_ERR_NO_FILE], ['error' => UPLOAD_ERR_PARTIAL]], 1),
+            'one bad file anywhere in the list rejects the whole message'
+        );
+        $this->assertSame(1, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM ticket_message WHERE ticket_id = ?', [$t]));
         // "no file" entries are ignored.
         $this->assertTrue(TicketManager::insertMessage($t, 'tm_s3', 'x', [['error' => UPLOAD_ERR_NO_FILE]], 1));
     }

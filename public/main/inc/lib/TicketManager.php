@@ -655,7 +655,8 @@ class TicketManager
      * @param string $status
      * @param bool   $sendConfirmation
      *
-     * @return bool
+     * @return bool false (and nothing is stored) when a file has an upload error other than "no file";
+     *              true once the message is stored and counted
      */
     public static function insertMessage(
         $ticketId,
@@ -680,6 +681,15 @@ class TicketManager
                 get_lang('No').'</button>
                  </form>';
             $content .= $form;
+        }
+
+        // Reject the whole message on an upload error before anything is written ("no file" entries are ignored).
+        if (is_array($fileAttachments)) {
+            foreach ($fileAttachments as $file_attach) {
+                if (0 != $file_attach['error'] && UPLOAD_ERR_NO_FILE != $file_attach['error']) {
+                    return false;
+                }
+            }
         }
 
         $now = api_get_utc_datetime();
@@ -713,15 +723,13 @@ class TicketManager
             if (is_array($fileAttachments)) {
                 foreach ($fileAttachments as $file_attach) {
                     if (0 == $file_attach['error']) {
+                        // A refused attachment (e.g. prohibited extension) is reported by a flash message; the
+                        // message itself is kept.
                         self::saveMessageAttachmentFile(
                             $file_attach,
                             $ticketId,
                             $messageId
                         );
-                    } else {
-                        if (UPLOAD_ERR_NO_FILE != $file_attach['error']) {
-                            return false;
-                        }
                     }
                 }
             }

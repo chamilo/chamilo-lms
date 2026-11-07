@@ -542,38 +542,41 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         $this->assertSame([$q[4], $q[3]], array_map('intval', $e->getQuestionForTeacher(-9, 2)), 'negative start clamps to 0');
     }
 
-    public function testUpdateQuestionPositionsKeepsStoredOrdersAsTheyAre(): void
+    public function testUpdateQuestionPositionsRenumbersGappedOrdersSequentially(): void
     {
         $this->ctx();
-        [$quizId, $q] = $this->quizWithQuestions([10, 20, 30]);
+        [$quizId, $q] = $this->quizWithQuestions([30, 10, 20]);
         $e = $this->read($quizId, false);
 
         $this->assertTrue($e->update_question_positions());
 
-        // PINNED QUIRK: despite its name it does not renumber. The list is keyed by the stored question_order,
-        // and that very key is written back, so gapped orders (10, 20, 30) stay untouched.
+        // Fixed: the list was keyed by the stored question_order and that key was written back unchanged.
+        // Now the questions are renumbered 1..n, keeping their relative order.
         $orders = $this->conn->fetchAllKeyValue(
             'SELECT question_id, question_order FROM c_quiz_rel_question WHERE quiz_id = ?',
             [$quizId]
         );
-        $this->assertEquals([$q[0] => 10, $q[1] => 20, $q[2] => 30], $orders);
+        $this->assertEquals([$q[1] => 1, $q[2] => 2, $q[0] => 3], $orders);
         $this->assertFalse((new Exercise())->update_question_positions(), 'no id gives false');
     }
 
-    public function testUpdateQuestionPositionsDoesNotRepairDuplicatedOrders(): void
+    public function testUpdateQuestionPositionsRepairsDuplicatedOrders(): void
     {
         $this->ctx();
-        [$quizId, $q] = $this->quizWithQuestions([1, 1]);
+        [$quizId, $q] = $this->quizWithQuestions([1, 1, 2]);
         $e = $this->read($quizId, false);
 
         $e->update_question_positions();
 
-        // The duplicates are NOT repaired: the rows are rewritten from the collapsed list and, because
-        // writes are keyed by question id, both rows still say 1.
-        $this->assertSame(
-            2,
-            $this->countRows('c_quiz_rel_question', 'quiz_id = ? AND question_order = 1', [$quizId])
-        );
+        $orders = array_map('intval', $this->conn->fetchFirstColumn(
+            'SELECT question_order FROM c_quiz_rel_question WHERE quiz_id = ? ORDER BY question_order',
+            [$quizId]
+        ));
+        $this->assertSame([1, 2, 3], $orders, 'duplicates are renumbered into distinct positions');
+        $this->assertSame(3, (int) $this->conn->fetchOne(
+            'SELECT question_order FROM c_quiz_rel_question WHERE quiz_id = ? AND question_id = ?',
+            [$quizId, $q[2]]
+        ), 'the highest order stays last');
     }
 
     public function testGetQuestionListPaginationDefaultsToStoredOrderWithLimits(): void

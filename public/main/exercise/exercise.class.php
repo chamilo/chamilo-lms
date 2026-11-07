@@ -1673,12 +1673,13 @@ class Exercise
     public function update_question_positions()
     {
         $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        // Fixes #3483 when updating order
-        $questionList = $this->selectQuestionList(true);
-
         if (empty($this->getId())) {
             return false;
         }
+
+        // Fixes #3483 when updating order: every question, keyed by its sequential position (1..n) in the
+        // current order. The normal list is keyed by the stored question_order, which would write it back as is.
+        $questionList = $this->getQuestionOrderedList(true);
 
         if (!empty($questionList)) {
             foreach ($questionList as $position => $questionId) {

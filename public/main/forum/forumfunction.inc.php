@@ -27,6 +27,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @todo convert this library into a class
+ *
+ * @deprecated No caller left: the forum tool is served by Vue and API Platform. Do not wire it back: every
+ *             action takes its id from the request and acts on it without checking that the resource belongs to
+ *             the current course, and the state-changing actions are GET requests without a token.
  */
 function handleForum($url)
 {
@@ -3669,6 +3673,9 @@ function move_thread_form()
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
  * @version february 2006, dokeos 1.8
+ *
+ * @deprecated No caller besides move_thread_form(); it moves any thread id of $_POST to any forum id, whatever
+ *             the course of either.
  */
 function store_move_thread($values)
 {

@@ -977,7 +977,8 @@ class Event
      * @param int   $lp_id
      * @param array $course
      * @param int   $session_id
-     * @param ?bool $disconnectExerciseResultsFromLp (Replace orig_lp_* variables to null)
+     * @param ?bool $disconnectExerciseResultsFromLp (Replace orig_lp_* variables by 0, the "not from a learning
+     *                                               path" value: the columns are NOT NULL)
      *
      * @return bool
      * @throws Exception
@@ -1052,9 +1053,9 @@ class Event
         $sql = "SELECT exe_id FROM $track_e_exercises
                 WHERE
                     exe_user_id = $user_id AND
-                    session_id = $session_id AND
                     c_id = $course_id AND
-                    orig_lp_id = $lp_id";
+                    orig_lp_id = $lp_id
+                    $sessionCondition";
         $result = Database::query($sql);
         $exeList = [];
         while ($row = Database::fetch_assoc($result)) {
@@ -1065,9 +1066,9 @@ class Event
             $exeListString = implode(',', $exeList);
             if ($disconnectExerciseResultsFromLp) {
                 $sql = "UPDATE $track_e_exercises
-                        SET orig_lp_id = null,
-                            orig_lp_item_id = null,
-                            orig_lp_item_view_id = null
+                        SET orig_lp_id = 0,
+                            orig_lp_item_id = 0,
+                            orig_lp_item_view_id = 0
                         WHERE exe_id IN ($exeListString)";
                 Database::query($sql);
             } else {

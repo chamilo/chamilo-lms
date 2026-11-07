@@ -910,37 +910,38 @@ final class EventCharacterizationTest extends KernelTestCase
         $inLp = $this->seedExercise(['exe_user_id' => $uid, 'c_id' => $cid, 'session_id' => $sid, 'exe_exo_id' => $this->makeQuiz()] + $lp);
         $this->seedAttempt($inLp, $uid, 1);
         $outside = $this->seedExercise(['exe_user_id' => $uid, 'c_id' => $cid, 'session_id' => $sid, 'exe_exo_id' => $this->makeQuiz()]);
-        // A result stored without session (NULL) is NOT matched by session id 0: the SELECT has no IS NULL branch.
+        // A result stored without session (NULL) must be matched by session id 0 (fixed: the SELECT used to
+        // lack the IS NULL branch, so session-0 cleanups silently left these results behind).
         $noSession = $this->seedExercise(['exe_user_id' => $uid, 'c_id' => $cid, 'exe_exo_id' => $this->makeQuiz()] + $lp);
 
         $this->assertFalse(Event::delete_student_lp_events(0, $lpId, ['real_id' => $cid], $sid));
         $this->assertFalse(Event::delete_student_lp_events($uid, $lpId, [], $sid));
 
-        // Detach mode is meant to null the LP columns, but they are NOT NULL: the UPDATE fails and
-        // Database::query rethrows it as NotAllowedException (current behaviour, probably a bug). Nothing was
-        // changed and the final LP log is not written.
-        try {
-            Event::delete_student_lp_events($uid, $lpId, ['real_id' => $cid], $sid, true);
-            $this->fail('Expected the detach UPDATE to fail');
-        } catch (\Chamilo\CoreBundle\Exception\NotAllowedException) {
-        }
+        // Detach mode used to set the NOT NULL orig_lp_* columns to NULL, so the UPDATE failed with
+        // NotAllowedException. Fixed: they are reset to 0, the "not played from a learning path" value of those
+        // columns (what seedExercise/outside results hold); the result and its answers are kept.
+        $this->assertTrue(Event::delete_student_lp_events($uid, $lpId, ['real_id' => $cid], $sid, true));
         $row = $this->rows('track_e_exercises', 'exe_id = ?', [$inLp])[0];
-        $this->assertSame($lpId, (int) $row['orig_lp_id']);
-        $this->assertSame(3, (int) $row['orig_lp_item_id']);
-        $this->assertSame(4, (int) $row['orig_lp_item_view_id']);
+        $this->assertSame(0, (int) $row['orig_lp_id']);
+        $this->assertSame(0, (int) $row['orig_lp_item_id']);
+        $this->assertSame(0, (int) $row['orig_lp_item_view_id']);
         $this->assertCount(1, $this->rows('track_e_attempt', 'exe_id = ?', [$inLp]));
+        $this->assertSame($lpId, (int) $this->rows('track_e_exercises', 'exe_id = ?', [$noSession])[0]['orig_lp_id'], 'other session untouched');
 
-        // The destructive mode removes the results with their answers.
+        // The destructive mode removes the results with their answers (inLp is already detached, so it survives).
+        $inLp2 = $this->seedExercise(['exe_user_id' => $uid, 'c_id' => $cid, 'session_id' => $sid, 'exe_exo_id' => $this->makeQuiz()] + $lp);
+        $this->seedAttempt($inLp2, $uid, 2);
         $this->assertTrue(Event::delete_student_lp_events($uid, $lpId, ['real_id' => $cid], $sid));
-        $this->assertCount(0, $this->rows('track_e_exercises', 'exe_id = ?', [$inLp]));
-        $this->assertCount(0, $this->rows('track_e_attempt', 'exe_id = ?', [$inLp]));
+        $this->assertCount(0, $this->rows('track_e_exercises', 'exe_id = ?', [$inLp2]));
+        $this->assertCount(0, $this->rows('track_e_attempt', 'exe_id = ?', [$inLp2]));
+        $this->assertCount(1, $this->rows('track_e_exercises', 'exe_id = ?', [$inLp]), 'detached result survives');
         $this->assertCount(1, $this->rows('track_e_exercises', 'exe_id = ?', [$outside]), 'results outside the LP survive');
-        $this->assertCount(1, $this->rows('track_e_exercises', 'exe_id = ?', [$noSession]), 'NULL-session results survive a session-0 cleanup');
+        $this->assertCount(1, $this->rows('track_e_exercises', 'exe_id = ?', [$noSession]), 'NULL-session results survive a session cleanup');
         $this->assertTrue(Event::delete_student_lp_events($uid, $lpId, ['real_id' => $cid], 0));
-        $this->assertCount(1, $this->rows('track_e_exercises', 'exe_id = ?', [$noSession]));
+        $this->assertCount(0, $this->rows('track_e_exercises', 'exe_id = ?', [$noSession]), 'session 0 matches NULL-session results');
 
         $log = $this->rows('track_e_default', 'default_event_type = ? AND default_value = ?', [LOG_LP_ATTEMPT_DELETE, (string) $lpId], 'default_id');
-        $this->assertCount(2, $log, 'one log per call that reached the end (the failed detach call logs nothing)');
+        $this->assertCount(3, $log, 'one log per call that reached the end');
         $this->assertSame(LOG_LP_ID, $log[0]['default_value_type']);
         $this->assertSame($cid, (int) $log[0]['c_id']);
         $this->assertSame($sid, (int) $log[0]['session_id']);

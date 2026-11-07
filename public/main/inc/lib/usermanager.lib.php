@@ -6045,8 +6045,8 @@ SQL;
                 if ($firstAccessYear <= $searchYear && $lastAccessYear >= $searchYear) {
                     $calendarSessions[$sessionInfo['session_id']] = [
                         'name' => $sessionInfo['session_name'],
-                        'access_start_date' => $firstAcessDate->format('Y-m-d h:i:s'),
-                        'access_end_date' => $lastAccessDate->format('Y-m-d h:i:s'),
+                        'access_start_date' => $firstAcessDate->format('Y-m-d H:i:s'),
+                        'access_end_date' => $lastAccessDate->format('Y-m-d H:i:s'),
                     ];
                 }
 
@@ -6085,8 +6085,8 @@ SQL;
             if ($isValid) {
                 $calendarSessions[$sessionInfo['session_id']] = [
                     'name' => $sessionInfo['session_name'],
-                    'access_start_date' => $accessStartDate ? $accessStartDate->format('Y-m-d h:i:s') : null,
-                    'access_end_date' => $accessEndDate ? $accessEndDate->format('Y-m-d h:i:s') : null,
+                    'access_start_date' => $accessStartDate ? $accessStartDate->format('Y-m-d H:i:s') : null,
+                    'access_end_date' => $accessEndDate ? $accessEndDate->format('Y-m-d H:i:s') : null,
                 ];
             }
         }

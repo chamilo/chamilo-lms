@@ -675,7 +675,7 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
         $this->assertSame([], UserManager::getSubscribedSessionsByYear($info, 2030));
     }
 
-    public function testSubscribedSessionsByYearFormatsTimesOnAnHourClockOfTwelve(): void
+    public function testSubscribedSessionsByYearFormatsTimesOnA24HourClock(): void
     {
         $u = $this->rawUser('yr3');
         $s = $this->rawSession('yr3', '2031-02-10 15:30:00', '2031-03-10 23:00:00');
@@ -685,14 +685,13 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
 
         $res = UserManager::getSubscribedSessionsByYear(['id' => $u, 'status' => 5], 2031);
 
-        // PINNED QUIRK: 'h' is the 12-hour clock, so the local time of day never exceeds 12:59:59.
         $tz = new \DateTimeZone(api_get_timezone());
-        $expected = static fn (string $utc): string => (new \DateTime(api_get_local_time($utc), $tz))->format('h:i:s');
+        $expected = static fn (string $utc): string => (new \DateTime(api_get_local_time($utc), $tz))->format('H:i:s');
         $this->assertSame(
             [$expected('2031-02-10 15:30:00'), $expected('2031-03-10 23:00:00')],
             [substr($res[$s]['access_start_date'], 11), substr($res[$s]['access_end_date'], 11)]
         );
-        $this->assertLessThan(13, (int) substr($res[$s]['access_end_date'], 11, 2));
+        $this->assertGreaterThan(12, (int) substr($res[$s]['access_end_date'], 11, 2), 'A 24-hour clock.');
     }
 
     // --------------------------------------------------------- getSessionsCalendarByYear

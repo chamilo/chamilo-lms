@@ -72,10 +72,49 @@ if (isset($_GET['calendar_id'])) {
     $calendarEntity = Database::getManager()->getRepository(CAttendanceCalendar::class)->find($calendarId);
 }
 
-$token = Security::get_token();
+// Keep the token of the session: regenerating it on every request would invalidate the one of the page
+// that sent the request, so no token check below could ever pass.
+$token = Security::get_existing_token();
 
 // instance attendance object for using like library here
 $attendance = new Attendance();
+
+$courseIntId = api_get_course_int_id();
+$sessionIntId = api_get_session_id();
+
+// An attendance id coming from the request must be an attendance of the current course (and session): the
+// attendance tables have no course column, so nothing else prevents reaching the one of another course.
+if ($attendanceEntity && !Attendance::attendanceBelongsToCourse($attendanceId, $courseIntId, $sessionIntId)) {
+    $attendanceEntity = null;
+}
+
+$attendanceNotNeeded = ['attendance_list', 'attendance_add', 'attendance_restore', 'calendar_logins'];
+$isBulkAction = isset($_POST['id']) && is_array($_POST['id']) && in_array(
+    $action,
+    [
+        'attendance_set_visible',
+        'attendance_set_visible_select',
+        'attendance_set_invisible',
+        'attendance_set_invisible_select',
+        'attendance_delete',
+        'attendance_delete_select',
+    ],
+    true
+);
+if (!in_array($action, $attendanceNotNeeded, true) && !$isBulkAction) {
+    if (null === $attendanceEntity ||
+        !Attendance::canOpenAttendance($attendanceEntity, api_is_allowed_to_edit(null, true), api_is_hrm())
+    ) {
+        api_not_allowed(true);
+    }
+}
+
+// A calendar date must belong to the attendance it is requested with.
+if (in_array($action, ['calendar_edit', 'calendar_delete'], true) &&
+    !Attendance::attendanceCalendarBelongsToAttendance((int) $calendarId, $attendanceId)
+) {
+    api_not_allowed(true);
+}
 
 $htmlHeadXtra[] = '<script>
 $(function() {
@@ -210,6 +249,12 @@ if ('calendar_list' === $action || 'calendar_edit' === $action) {
 }
 
 $allowToEdit = api_is_allowed_to_edit(null, true);
+if ('attendance_sheet_list' === $action &&
+    !$allowToEdit && !api_is_hrm() && !api_is_coach($sessionIntId, $courseIntId)
+) {
+    // The editable sheet is for those who can edit it: everybody else reads the no-edit report.
+    $action = 'attendance_sheet_list_no_edit';
+}
 $currentUrl = api_get_path(WEB_CODE_PATH).'attendance/index.php?'.api_get_cidreq();
 $content = '';
 switch ($action) {
@@ -271,6 +316,7 @@ switch ($action) {
             $currentUrl.'&action=attendance_add&'
         );
         $attendance->setAttendanceForm($form);
+        $form->protect();
 
         if ($form->validate()) {
             $attendance->set_title($_POST['title']);
@@ -310,8 +356,9 @@ switch ($action) {
         );
 
         $attendance->setAttendanceForm($form, $attendanceEntity);
+        $form->protect();
 
-        if (!empty($_POST['title'])) {
+        if (!empty($_POST['title']) && $form->validate()) {
             $attendance->set_title($_POST['title']);
             $attendance->set_description($_POST['description']);
             if (isset($_POST['attendance_qualify_title'])) {
@@ -353,7 +400,10 @@ switch ($action) {
             }
             Security::clear_token();
             foreach ($_POST['id'] as $id) {
-                $attendanceEntity = $repo->find($id);
+                $attendanceEntity = $repo->find((int) $id);
+                if (!$attendanceEntity || !Attendance::attendanceBelongsToCourse((int) $id, $courseIntId, $sessionIntId)) {
+                    continue;
+                }
                 $attendance->changeVisibility($attendanceEntity, 1);
             }
         } else {
@@ -370,13 +420,20 @@ switch ($action) {
         break;
     case 'attendance_set_invisible':
     case 'attendance_set_invisible_select':
+        if (!$allowToEdit) {
+            api_not_allowed(true);
+        }
+
         if (isset($_POST['id']) && is_array($_POST['id'])) {
             if (!Security::check_token('post')) {
                 api_not_allowed(true);
             }
             Security::clear_token();
             foreach ($_POST['id'] as $id) {
-                $attendanceEntity = $repo->find($id);
+                $attendanceEntity = $repo->find((int) $id);
+                if (!$attendanceEntity || !Attendance::attendanceBelongsToCourse((int) $id, $courseIntId, $sessionIntId)) {
+                    continue;
+                }
                 $attendance->changeVisibility($attendanceEntity, 0);
             }
         } else {
@@ -403,7 +460,10 @@ switch ($action) {
             }
             Security::clear_token();
             foreach ($_POST['id'] as $id) {
-                $attendanceEntity = $repo->find($id);
+                $attendanceEntity = $repo->find((int) $id);
+                if (!$attendanceEntity || !Attendance::attendanceBelongsToCourse((int) $id, $courseIntId, $sessionIntId)) {
+                    continue;
+                }
                 $attendance->attendance_delete($attendanceEntity);
             }
         } else {
@@ -450,10 +510,15 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        if (isset($_POST['hidden_input'])) {
+        if ('POST' !== strtoupper($_SERVER['REQUEST_METHOD']) || !Security::check_token('post')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
+
+        if (isset($_POST['hidden_input']) && is_array($_POST['hidden_input'])) {
             foreach ($_POST['hidden_input'] as $cal_id) {
                 $users_present = [];
-                if (isset($_POST['check_presence'][$cal_id])) {
+                if (isset($_POST['check_presence'][$cal_id]) && is_array($_POST['check_presence'][$cal_id])) {
                     $users_present = $_POST['check_presence'][$cal_id];
                 }
                 $attendance->attendance_sheet_add(
@@ -487,7 +552,12 @@ switch ($action) {
 
         break;
     case 'calendar_add':
-        $groupList = isset($_POST['groups']) ? [$_POST['groups']] : [];
+        // Only the groups of the current course can be linked to a date.
+        $courseGroupIds = [];
+        foreach (GroupManager::get_group_list(null, null, 1) as $courseGroup) {
+            $courseGroupIds[] = (int) $courseGroup['iid'];
+        }
+        $groupList = Attendance::filterGroupIds($_POST['groups'] ?? [], $courseGroupIds);
         $interbreadcrumb[] = [
             'url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendanceId,
             'name' => $attendanceEntity->getTitle(),
@@ -622,9 +692,11 @@ switch ($action) {
             Security::clear_token();
             if (!isset($_POST['cancel'])) {
                 $attendance->set_date_time(api_get_utc_datetime($_POST['date_time']));
-                $attendance->attendance_calendar_edit($calendarId, $attendanceEntity);
-
-                Display::addFlash(Display::return_message(get_lang('Updated')));
+                if ($attendance->attendance_calendar_edit($calendarId, $attendanceEntity)) {
+                    Display::addFlash(Display::return_message(get_lang('Updated')));
+                } else {
+                    Display::addFlash(Display::return_message(get_lang('Date and time already exist'), 'error'));
+                }
             }
 
             header('Location: '.$currentUrl.'&action=calendar_list&attendance_id='.$attendanceId);
@@ -658,6 +730,10 @@ switch ($action) {
         if (!$allowToEdit) {
             api_not_allowed(true);
         }
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
 
         $attendance->attendance_calendar_delete(0, $attendanceEntity, true);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
@@ -669,6 +745,10 @@ switch ($action) {
         if (!$allowToEdit) {
             api_not_allowed(true);
         }
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
         $attendance->attendance_calendar_delete($calendarId, $attendanceEntity);
         Display::addFlash(Display::return_message(get_lang('Deleted')));
 
@@ -676,7 +756,9 @@ switch ($action) {
         exit;
         break;
     case 'calendar_list':
-        $groupList = isset($_POST['groups']) ? [$_POST['groups']] : [];
+        if (!$allowToEdit && !api_is_hrm()) {
+            api_not_allowed(true);
+        }
         $attendance_calendar = $attendance->get_attendance_calendar(
             $attendanceId,
             'all',
@@ -697,7 +779,7 @@ switch ($action) {
                 if (api_is_allowed_to_edit()) {
                     $actions .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_add&attendance_id='.$attendanceId.'">'.
                         Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add a date and time')).'</a>';
-                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete all dates?').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendanceId.'">'.
+                    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete all dates?').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendanceId.'&sec_token='.$token.'">'.
                         Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Clean the calendar of all lists')).'</a>';
                 }
             }
@@ -752,7 +834,7 @@ switch ($action) {
                         $content .= '<div class="pull-right">';
                         $content .= '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.(int) ($calendar['iid']).'&attendance_id='.$attendanceId.'">'.
                             Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', 'vertical-align: middle;', ICON_SIZE_SMALL, get_lang('Edit')).'</a>&nbsp;';
-                        $content .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.(int) ($calendar['iid']).'&attendance_id='.$attendanceId.'">'.
+                        $content .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.(int) ($calendar['iid']).'&attendance_id='.$attendanceId.'&sec_token='.$token.'">'.
                             Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', 'vertical-align: middle;', ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
                         $content .= '</div>';
                     }

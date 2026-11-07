@@ -4652,7 +4652,7 @@ function get_thread_user_post_limit($courseId, $thread_id, $user_id, $limit = 10
                 ON posts.poster_id=users.id
             WHERE posts.thread_id='".Database::escape_string($thread_id)."' AND
                 posts.poster_id='".Database::escape_string($user_id)."'
-            ORDER BY posts.post_id DESC LIMIT $limit ";
+            ORDER BY posts.iid DESC LIMIT $limit ";
     $result = Database::query($sql);
     $post_list = [];
     while ($row = Database::fetch_array($result)) {

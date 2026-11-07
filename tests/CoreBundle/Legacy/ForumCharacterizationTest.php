@@ -464,9 +464,10 @@ final class ForumCharacterizationTest extends KernelTestCase
         $second = $this->post($thread, $forum, 2);
         $this->post($thread, $forum, 1);
 
-        // PINNED QUIRK: orders by posts.post_id, a column c_forum_post no longer has, so it always throws.
-        $this->expectException(Throwable::class);
-        get_thread_user_post_limit(1, $thread, 2, 10);
+        // It used to order by posts.post_id, a column c_forum_post no longer has, and always threw.
+        $list = get_thread_user_post_limit(1, $thread, 2, 10);
+        $this->assertSame([$second, $first], array_map(static fn ($r) => (int) $r['iid'], $list));
+        $this->assertCount(1, get_thread_user_post_limit(1, $thread, 2, 1));
     }
 
     public function testGetNameThreadById(): void

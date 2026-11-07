@@ -460,6 +460,25 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
         $this->assertSame(['us_sc7b', 'us_sc7a'], $names(UserManager::get_sessions_by_category($u, false)), 'ORDER BY position.');
     }
 
+    public function testSessionsByCategoryOrdersByAccessStartDateWhenAllSessionsAreShown(): void
+    {
+        $t = $this->fixedTimes();
+        $u = $this->rawUser('sc8');
+        $late = $this->rawSession('sc8a', '2005-01-01 00:00:00', null);
+        $early = $this->rawSession('sc8b', $t['past_start'], null);
+        foreach ([$late, $early] as $s) {
+            $this->sessionCourse($s, 1, 1);
+            $this->sessionCourseUser($s, 1, $u);
+        }
+        $this->fresh();
+        $this->setSetting('session.show_all_sessions_on_my_course_page', 'true');
+
+        $res = UserManager::get_sessions_by_category($u, false);
+
+        // Title order would give sc8a first; the setting switches to "ORDER BY access start date".
+        $this->assertSame(['us_sc8b', 'us_sc8a'], array_column($res['']['sessions'], 'session_name'));
+    }
+
     // ----------------------------------------------- get_personal_session_course_list
 
     public function testPersonalSessionCourseListIsEmptyForNoUser(): void
@@ -876,6 +895,7 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
         $this->assertTrue(UserManager::addUserCareer($u, $c), 'Adding twice is a no-op that still returns true.');
         $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM user_career WHERE user_id = ? AND career_id = ?', [$u, $c]));
         $this->assertTrue(UserManager::userHasCareer($u, $c));
+        $this->assertFalse(UserManager::userHasCareer($u, $this->rawCareer('ca2other')), 'The career id is part of the lookup.');
 
         $row = UserManager::getUserCareer($u, $c);
         $this->assertSame([$u, $c], [(int) $row['user_id'], (int) $row['career_id']]);

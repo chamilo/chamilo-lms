@@ -2412,7 +2412,7 @@ class Event
         self::addEvent(
             LOG_SESSION_ADD_USER_COURSE,
             LOG_USER_ID,
-            $userSubscribed,
+            $userSubscribed->getId(),
             $dateTime,
             $registrantId,
             $course->getId(),

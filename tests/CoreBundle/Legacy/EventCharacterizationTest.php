@@ -364,9 +364,9 @@ final class EventCharacterizationTest extends KernelTestCase
         $this->assertCount(3, $rows);
         $this->assertSame(LOG_SESSION_ADD_USER_COURSE, $rows[0]['default_event_type']);
         $this->assertSame(LOG_USER_ID, $rows[0]['default_value_type']);
-        // A User entity given with a non-LOG_USER_OBJECT type is not an array, so setDefaultValue gets the
-        // entity cast to string by Doctrine/PHP: pin whatever lands in the column.
-        $this->assertNotSame('', $rows[0]['default_value']);
+        // Fixed: the User entity used to be passed with a LOG_USER_ID type and landed in the column cast to string
+        // (its username); every other LOG_USER_ID caller stores the numeric id, and so does this one now.
+        $this->assertSame((string) $subscribed->getId(), $rows[0]['default_value']);
         $this->assertSame(LOG_SUBSCRIBE_USER_TO_COURSE, $rows[1]['default_event_type']);
         $this->assertSame($course->getCode(), $rows[1]['default_value']);
         $this->assertSame(LOG_USER_OBJECT, $rows[2]['default_value_type']);

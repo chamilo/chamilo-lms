@@ -1039,15 +1039,26 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
         $this->assertSame([], CourseManager::get_course_ranking(0));
     }
 
-    public function testAddCourseVoteWithoutASessionViolatesTheSessionForeignKey(): void
+    public function testAddCourseVoteWithoutASessionStoresNullAndCanBeReadBack(): void
     {
-        // PINNED QUIRK: with no session the vote is stored with session_id = 0, which the foreign key on
-        // user_rel_course_vote.session_id rejects, so voting outside a session cannot work today.
+        // Fixed: with no session the vote was stored with session_id = 0, which the foreign key on
+        // user_rel_course_vote.session_id rejects. It is now NULL (and get_user_course_vote matches it).
         $course = $this->createCourse('cm_votefk_a');
         $user = $this->createUser('cm_votefk_user');
+        $conn = $this->conn();
 
-        $this->expectException(Throwable::class);
-        CourseManager::add_course_vote($user->getId(), 3, $course->getId());
+        $this->assertSame('added', CourseManager::add_course_vote($user->getId(), 3, $course->getId()));
+        $row = $conn->fetchAssociative('SELECT session_id, vote FROM user_rel_course_vote WHERE user_id = ? AND c_id = ?', [$user->getId(), $course->getId()]);
+        $this->assertNull($row['session_id']);
+        $this->assertSame(3, (int) $row['vote']);
+        $this->assertSame(3, (int) CourseManager::get_user_course_vote($user->getId(), $course->getId()));
+
+        $this->assertSame('updated', CourseManager::add_course_vote($user->getId(), 5, $course->getId()));
+        $this->assertSame(
+            1,
+            (int) $conn->fetchOne('SELECT COUNT(*) FROM user_rel_course_vote WHERE user_id = ? AND c_id = ?', [$user->getId(), $course->getId()])
+        );
+        $this->assertSame(5, (int) CourseManager::get_user_course_vote($user->getId(), $course->getId()));
     }
 
     // ---------------------------------------------------------------- extra fields

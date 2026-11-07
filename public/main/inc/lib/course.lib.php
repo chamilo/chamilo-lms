@@ -4778,21 +4778,17 @@ class CourseManager
             return false;
         }
 
-        $params = [
-            'user_id' => $user_id,
-            'c_id' => $course_id,
-            'session_id' => $session_id,
-            'url_id' => $url_id,
-        ];
+        // Votes outside a session are stored with a NULL session_id (see add_course_vote()).
+        if (empty($session_id)) {
+            $where = ['user_id = ? AND c_id = ? AND session_id IS NULL AND url_id = ?' => [$user_id, $course_id, $url_id]];
+        } else {
+            $where = ['user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => [$user_id, $course_id, $session_id, $url_id]];
+        }
 
         $result = Database::select(
             'vote',
             $table_user_course_vote,
-            [
-                'where' => [
-                    'user_id = ? AND c_id = ? AND session_id = ? AND url_id = ?' => $params,
-                ],
-            ],
+            ['where' => $where],
             'first'
         );
         if (!empty($result)) {
@@ -4893,6 +4889,9 @@ class CourseManager
 
         $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
         $urlId = empty($urlId) ? api_get_current_access_url_id() : $urlId;
+
+        // The session foreign key rejects 0: no session is stored as NULL.
+        $sessionId = empty($sessionId) ? null : $sessionId;
 
         $params = [
             'user_id' => $userId,

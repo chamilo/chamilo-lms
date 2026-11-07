@@ -520,8 +520,12 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
             array_map('strval', GroupManager::get_users($g, false, 1, 2, false, null, 'id', 'ASC')),
             'LIMIT start,limit'
         );
-        // PINNED QUIRK: a falsy start (0) disables the LIMIT entirely, so page 1 returns every row.
-        $this->assertCount(3, GroupManager::get_users($g, false, 0, 2, false, null, 'id', 'ASC'));
+        // Fixed: a start of 0 (first page) used to disable the LIMIT and return every row.
+        $this->assertSame(
+            [(string) $a, (string) $b],
+            array_map('strval', GroupManager::get_users($g, false, 0, 2, false, null, 'id', 'ASC')),
+            'first page (start 0) is limited too'
+        );
         // Any direction other than the exact string 'ASC' is DESC.
         $this->assertSame([$c, $b, $a], array_map('intval', GroupManager::get_users($g, false, null, null, false, null, 'id', 'asc')));
     }

@@ -1459,7 +1459,7 @@ class GroupManager
             $sql .= " ORDER BY `$column` $direction";
         }
 
-        if (!empty($start) && !empty($limit)) {
+        if (is_numeric($start) && !empty($limit)) {
             $start = (int) $start;
             $limit = (int) $limit;
             $sql .= " LIMIT $start, $limit";

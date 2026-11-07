@@ -908,9 +908,13 @@ final class AttendanceCharacterizationTest extends KernelTestCase
         $this->assertSame(0, $lib->attendance_restore($active), 'already active: MySQL reports 0 changed rows');
         $this->assertSame(0, $lib->attendance_restore(0), 'unknown id: 0');
 
-        // PINNED QUIRK: with an array only the affected rows of the LAST update are returned.
-        $this->assertSame(0, $lib->attendance_restore([$b, $active]));
-        $this->assertSame(1, (int) $this->row('SELECT active FROM c_attendance WHERE iid = ?', [$b])['active'], 'but every id was restored');
+        // Fixed: with an array the affected rows of every update are summed (only the last one was returned).
+        $d = $this->att('at_rest_d', 2);
+        $this->assertSame(2, $lib->attendance_restore([$b, $d, $active]));
+        $this->assertSame([1, 1], [
+            (int) $this->row('SELECT active FROM c_attendance WHERE iid = ?', [$b])['active'],
+            (int) $this->row('SELECT active FROM c_attendance WHERE iid = ?', [$d])['active'],
+        ], 'every id was restored');
     }
 
     public function testIsAllCalendarDoneComparesDoneAndTotalDates(): void

@@ -493,14 +493,16 @@ class Attendance
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $user_id = api_get_user_id();
         $course_id = $_course['real_id'];
+        $affected_rows = 0;
         if (is_array($attendanceId)) {
             foreach ($attendanceId as $id) {
                 $id = (int) $id;
                 $sql = "UPDATE $tbl_attendance SET active = 1
                         WHERE iid = '$id'";
                 $result = Database::query($sql);
-                $affected_rows = Database::affected_rows($result);
-                if (!empty($affected_rows)) {
+                $rows = Database::affected_rows($result);
+                $affected_rows += $rows;
+                if (!empty($rows)) {
                     // update row item property table
                     /*api_item_property_update(
                         $_course,

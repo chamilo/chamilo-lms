@@ -6816,11 +6816,13 @@ class CourseManager
 
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $tableExercise = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "SELECT count(e.iid) count
+        $tableLink = Database::get_main_table('resource_link');
+        // Quizzes no longer carry c_id/active: they reach their course through resource_link (soft-deleted links are skipped).
+        $sql = "SELECT count(DISTINCT e.iid) count
                 FROM $table c
-                INNER JOIN $tableExercise e
-                ON (c.id = e.c_id)
-                WHERE e.active <> -1 AND visibility IN (".implode(',', $visibility).")";
+                INNER JOIN $tableLink l ON (l.c_id = c.id AND l.deleted_at IS NULL)
+                INNER JOIN $tableExercise e ON (e.resource_node_id = l.resource_node_id)
+                WHERE c.visibility IN (".implode(',', $visibility).")";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 

@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\Tests\ChamiloTestTrait;
 use CourseManager;
 use Database;
@@ -322,11 +323,25 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
         $this->assertSame($before + 3, CourseManager::getCountOpenCourses());
     }
 
-    public function testGetCountExercisesFromOpenCourseIsBrokenAgainstCurrentSchema(): void
+    public function testGetCountExercisesFromOpenCourseCountsLinkedQuizzesOfOpenCoursesOnly(): void
     {
-        // PINNED QUIRK: the query filters on c_quiz.active, a column that no longer exists.
-        $this->expectException(Throwable::class);
-        CourseManager::getCountExercisesFromOpenCourse();
+        // Fixed: c_quiz.active and c_quiz.c_id are gone; quizzes now reach their course through resource_link.
+        $before = CourseManager::getCountExercisesFromOpenCourse();
+
+        $teacher = $this->createUser('cm_quiz_teacher');
+        $open = $this->createCourse('cm_quiz_open');
+        $this->setVisibility($open, Course::OPEN_WORLD);
+        $closed = $this->createCourse('cm_quiz_closed');
+        $this->setVisibility($closed, Course::CLOSED);
+
+        $em = $this->getEntityManager();
+        foreach ([[$open, 'cm_quiz_1'], [$open, 'cm_quiz_2'], [$closed, 'cm_quiz_3']] as [$course, $title]) {
+            $quiz = (new CQuiz())->setTitle($title)->setParent($course)->setCreator($teacher)->addCourseLink($course);
+            $em->persist($quiz);
+        }
+        $em->flush();
+
+        $this->assertSame($before + 2, CourseManager::getCountExercisesFromOpenCourse());
     }
 
     // ---------------------------------------------------------------- subscription / membership

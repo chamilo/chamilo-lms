@@ -345,6 +345,34 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
         ]));
     }
 
+    public function testUpdateCategoryPropagatesItsSettingsToTheGroupsOfTheCourse(): void
+    {
+        $this->setSetting('group.allow_group_categories', 'true');
+        $cat = $this->makeCategory('cat_prop', 2, 5);
+        $linked = $this->makeGroup('prop_linked', $cat, 3);
+        $linkedOtherCourse = $this->makeGroup('prop_other_course', $cat, 3);
+        $unlinked = $this->makeGroup('prop_unlinked', $cat, 3);
+        $this->linkToCourse('c_group_info', $linked, 1);
+        $this->linkToCourse('c_group_info', $linkedOtherCourse, 2);
+
+        GroupManager::update_category($cat, 'gm_cat_prop', 'd', 2, 0, 1, 2, 0, 1, 2, 1, 1, 9, 4, 0);
+
+        $row = $this->conn()->fetchAssociative('SELECT * FROM c_group_info WHERE iid = ?', [$linked]);
+        $this->assertSame([9, 2, 0, 1, 2, 0, 1, 2, 1, 1], array_map('intval', [
+            $row['max_student'], $row['doc_state'], $row['work_state'], $row['calendar_state'], $row['announcements_state'],
+            $row['forum_state'], $row['wiki_state'], $row['chat_state'], $row['self_registration_allowed'], $row['self_unregistration_allowed'],
+        ]), 'a group of the current course takes the category settings');
+        $this->assertSame('gm_prop_linked', $row['title'], 'title and description are kept');
+        $this->assertSame((string) $cat, (string) $row['category_id'], 'and stays in its category');
+        foreach ([$linkedOtherCourse, $unlinked] as $untouched) {
+            $this->assertSame(
+                3,
+                (int) $this->conn()->fetchOne('SELECT max_student FROM c_group_info WHERE iid = ?', [$untouched]),
+                'groups outside the current course are not rewritten'
+            );
+        }
+    }
+
     public function testUpdateCategoryDocumentAccessDependsOnSetting(): void
     {
         $cat = $this->makeCategory('cat_docacc');

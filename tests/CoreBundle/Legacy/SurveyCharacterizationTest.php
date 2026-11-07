@@ -940,6 +940,11 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertMatchesRegularExpression('/^[0-9a-f]{32}$/', $users[0]);
         $this->assertSame($users[0], $users[1], 'all the answers of one respondent share one pseudonym');
         $this->assertSame($users[0], \ChamiloSession::read('surveyuser'));
+        // The pseudonym must not be derivable from the user id and the answer time (both readable on the
+        // invitation row), otherwise anonymous answers can be linked back to a person.
+        for ($t = time() - 30; $t <= time() + 2; $t++) {
+            $this->assertNotSame(md5('1'.$t), $users[0]);
+        }
     }
 
     public function testRemoveAnswerDeletesOnlyTheGivenUsersAnswerToTheGivenQuestion(): void

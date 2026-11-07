@@ -117,7 +117,7 @@ class SurveyUtil
         if (1 == $survey->getAnonymous()) {
             $surveyUser = Session::read('surveyuser');
             if (empty($surveyUser)) {
-                $user = md5($user.time());
+                $user = md5($user.microtime().bin2hex(random_bytes(16)));
                 Session::write('surveyuser', $user);
             } else {
                 $user = Session::read('surveyuser');

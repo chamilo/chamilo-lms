@@ -922,7 +922,7 @@ class Event
      * @param int $lp_item_id
      * @param int $lp_item_view_id
      *
-     * @return int
+     * @return int The 1-based position, or 0 if the attempt is not in the queue
      * @throws \Doctrine\DBAL\Exception
      * @throws Exception
      */
@@ -960,13 +960,11 @@ class Event
         if (Database::num_rows($result) > 0) {
             $position = 1;
             while ($row = Database::fetch_assoc($result)) {
-                if ($row['exe_id'] === $exeId) {
-                    break;
+                if ((int) $row['exe_id'] === $exeId) {
+                    return $position;
                 }
                 $position++;
             }
-
-            return $position;
         }
 
         return 0;

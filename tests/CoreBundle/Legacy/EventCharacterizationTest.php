@@ -989,8 +989,8 @@ final class EventCharacterizationTest extends KernelTestCase
         $this->assertSame(1, Event::getAttemptPosition($first, $uid, $exo, 0, 0, 0));
         $this->assertSame(2, Event::getAttemptPosition($second, $uid, $exo, 0, 0, 0));
         $this->assertSame(3, Event::getAttemptPosition($third, $uid, $exo, 0, 0, 0));
-        // An id that is not in the list ends one past the end; no attempt at all gives 0.
-        $this->assertSame(4, Event::getAttemptPosition(1, $uid, $exo, 0, 0, 0));
+        // An id that is not in the list (fixed: it used to give count + 1) and no attempt at all both give 0.
+        $this->assertSame(0, Event::getAttemptPosition(1, $uid, $exo, 0, 0, 0));
         $this->assertSame(0, Event::getAttemptPosition($first, $uid, $exo2, 0, 0, 0));
     }
 

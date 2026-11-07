@@ -87,16 +87,18 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         );
     }
 
-    public function testTimeSpentOnPlatformReturnsNullWhenNothingMatches(): void
+    public function testTimeSpentOnPlatformReturnsZeroWhenNothingMatches(): void
     {
         $this->seedPlatformLogins();
 
-        // PINNED QUIRK: SUM() is NULL when no row matches, and `null >= 0` is true in PHP, so the
-        // "-1" fallback is dead code and callers receive null (not 0, not -1).
-        $this->assertNull(Tracking::get_time_spent_on_the_platform($this->carol->getId()));
+        // Fixed: SUM() is NULL when no row matches and `null >= 0` is true in PHP, so callers got null.
+        // "No time" is now 0; -1 stays reserved for corrupt (negative) sums, which api_time_to_hms()
+        // renders as "Unknown" (wrong for a user who simply never logged in).
+        $this->assertSame(0, Tracking::get_time_spent_on_the_platform($this->carol->getId()));
         // Rows from 2001 are outside the default rolling "last 7 days" window.
-        $this->assertNull(Tracking::get_time_spent_on_the_platform($this->alice->getId()));
-        $this->assertNull(
+        $this->assertSame(0, Tracking::get_time_spent_on_the_platform($this->alice->getId()));
+        $this->assertSame(
+            0,
             Tracking::get_time_spent_on_the_platform(
                 $this->alice->getId(),
                 'custom',
@@ -157,7 +159,10 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         $this->seedPlatformLogins();
 
         $after = Tracking::getTotalTimeSpentOnThePlatform($from, $to);
-        $this->assertEquals(1845 + 100, ((int) $after) - ((int) max($before, 0)));
+        $this->assertEquals(1845 + 100, $after - $before);
+        // Nothing in range is 0 (not NULL), and no dates at all is valid SQL covering every row.
+        $this->assertSame(0, Tracking::getTotalTimeSpentOnThePlatform('2002-01-01 00:00:00', '2002-01-02 00:00:00'));
+        $this->assertGreaterThanOrEqual(1845 + 100, Tracking::getTotalTimeSpentOnThePlatform());
     }
 
     public function testFirstAndLastPlatformConnectionDates(): void
@@ -207,8 +212,8 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         $this->seedCourseAccess();
         $cid = $this->course->getId();
 
-        // PINNED QUIRK: no matching row gives NULL (SUM of nothing), not 0.
-        $this->assertNull(Tracking::get_time_spent_on_the_course($this->carol->getId(), $cid, 0));
+        // Fixed: no matching row gave NULL (SUM of nothing); the docblock promises an int of seconds.
+        $this->assertSame(0, Tracking::get_time_spent_on_the_course($this->carol->getId(), $cid, 0));
         // Empty user or course short-circuit to 0.
         $this->assertSame(0, Tracking::get_time_spent_on_the_course(0, $cid));
         $this->assertSame(0, Tracking::get_time_spent_on_the_course($this->alice->getId(), 0));

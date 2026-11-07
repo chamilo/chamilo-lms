@@ -1806,6 +1806,11 @@ class Tracking
         $row = Database::fetch_assoc($rs);
         $diff = $row['diff'];
 
+        // SUM() is NULL when no row matches: no time spent, not "unknown" (-1).
+        if (null === $diff) {
+            return 0;
+        }
+
         if ($diff >= 0) {
             return $diff;
         }
@@ -1835,6 +1840,7 @@ class Tracking
             $url_condition = " AND u.login_user_id = url_users.user_id AND access_url_id='$access_url_id'";
         }
 
+        $condition_time = ' 1 = 1 ';
         if (!empty($startDate) && !empty($endDate)) {
             $startDate = Database::escape_string($startDate);
             $endDate = Database::escape_string($endDate);
@@ -1846,6 +1852,11 @@ class Tracking
         $rs = Database::query($sql);
         $row = Database::fetch_assoc($rs);
         $diff = $row['diff'];
+
+        // SUM() is NULL when no row matches: no time spent, not "unknown" (-1).
+        if (null === $diff) {
+            return 0;
+        }
 
         if ($diff >= 0) {
             return $diff;
@@ -1943,7 +1954,7 @@ class Tracking
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
 
-        return $row['nb_seconds'];
+        return (int) $row['nb_seconds'];
     }
 
     /**

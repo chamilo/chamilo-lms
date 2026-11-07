@@ -3657,18 +3657,23 @@ function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $
     $userId = (int) $userId;
     $sessionId = (int) $sessionId;
     $active = (int) $active;
-    $sessionCondition = api_get_session_condition($sessionId);
+    // Course and session live on the resource link of the work, not on the table itself.
+    $sessionCondition = api_get_session_condition($sessionId, true, false, 'link.session_id');
 
     $sql = "SELECT w.* FROM $work w
             INNER JOIN $workRel rel
             ON (w.parent_id = rel.work_id)
+            INNER JOIN resource_link link
+            ON (link.resource_node_id = w.resource_node_id)
             WHERE
                 w.document_id = $documentId AND
                 w.parent_id = $workId AND
-                w.c_id = $courseId
-                $sessionCondition AND
-                user_id = $userId AND
-                active = $active
+                link.c_id = $courseId AND
+                w.user_id = $userId AND
+                w.active = $active
+                $sessionCondition
+            ORDER BY w.iid DESC
+            LIMIT 1
             ";
 
     $result = Database::query($sql);
@@ -4046,15 +4051,16 @@ function getWorkCommentCount($id, $courseInfo = [])
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
     $id = (int) $id;
 
+    // The comment table has no c_id column any more: the work iid is unique platform-wide.
     $sql = "SELECT count(*) as count
             FROM $commentTable
-            WHERE work_id = $id AND c_id = ".$courseInfo['real_id'];
+            WHERE work_id = $id";
 
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
         $comment = Database::fetch_array($result);
 
-        return $comment['count'];
+        return (int) $comment['count'];
     }
 
     return 0;
@@ -4087,16 +4093,19 @@ function getWorkCommentCountFromParent(
     $work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
     $parentId = (int) $parentId;
-    $sessionCondition = api_get_session_condition($sessionId, false, false, 'w.session_id');
+    // Course and session live on the resource link of the work, not on the table itself.
+    $sessionCondition = api_get_session_condition($sessionId, true, false, 'link.session_id');
 
-    $sql = "SELECT count(*) as count
+    $sql = "SELECT count(DISTINCT c.iid) as count
             FROM $commentTable c
             INNER JOIN $work w
-            ON c.c_id = w.c_id AND w.iid = c.work_id
+            ON w.iid = c.work_id
+            INNER JOIN resource_link link
+            ON link.resource_node_id = w.resource_node_id
             WHERE
-                $sessionCondition AND
-                parent_id = $parentId AND
-                w.c_id = ".$courseInfo['real_id'];
+                w.parent_id = $parentId AND
+                link.c_id = ".(int) $courseInfo['real_id']."
+                $sessionCondition";
 
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
@@ -4133,20 +4142,24 @@ function getLastWorkStudentFromParent(
     }
 
     $work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $sessionCondition = api_get_session_condition($sessionId, false);
+    // Course and session live on the resource link of the work, not on the table itself.
+    $sessionCondition = api_get_session_condition($sessionId, true, false, 'link.session_id');
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
     $parentId = (int) $parentId;
 
     $sql = "SELECT w.*
-            FROM $commentTable c INNER JOIN $work w
-            ON c.c_id = w.c_id AND w.iid = c.work_id
+            FROM $commentTable c
+            INNER JOIN $work w
+            ON w.iid = c.work_id
+            INNER JOIN resource_link link
+            ON link.resource_node_id = w.resource_node_id
             WHERE
-                $sessionCondition AND
-                parent_id = $parentId AND
-                w.c_id = ".$courseInfo['real_id'].'
+                w.parent_id = $parentId AND
+                link.c_id = ".(int) $courseInfo['real_id']."
+                $sessionCondition
             ORDER BY w.sent_date
             LIMIT 1
-            ';
+            ";
 
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
@@ -4187,20 +4200,23 @@ function getLastWorkStudentFromParentByUser(
     if (empty($parentInfo)) {
         return false;
     }
-    $parentId = $parentInfo['iid'];
+    $parentId = (int) $parentInfo['iid'];
 
-    $sessionCondition = api_get_session_condition($sessionId);
+    // Course and session live on the resource link of the work, not on the table itself.
+    $sessionCondition = api_get_session_condition($sessionId, true, false, 'link.session_id');
 
-    $sql = "SELECT *
-            FROM $work
+    $sql = "SELECT w.*
+            FROM $work w
+            INNER JOIN resource_link link
+            ON link.resource_node_id = w.resource_node_id
             WHERE
-                user_id = $userId
-                $sessionCondition AND
-                parent_id = $parentId AND
-                c_id = ".$courseInfo['real_id'].'
-            ORDER BY sent_date DESC
+                w.user_id = $userId AND
+                w.parent_id = $parentId AND
+                link.c_id = ".(int) $courseInfo['real_id']."
+                $sessionCondition
+            ORDER BY w.sent_date DESC
             LIMIT 1
-            ';
+            ";
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
         $work = Database::fetch_assoc($result);
@@ -5204,11 +5220,10 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 function agendaExistsForWork($workId, $courseInfo)
 {
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-    $courseId = $courseInfo['real_id'];
     $workId = (int) $workId;
 
     $sql = "SELECT add_to_calendar FROM $workTable
-            WHERE c_id = $courseId AND publication_id = ".$workId;
+            WHERE publication_id = ".$workId;
     $res = Database::query($sql);
     if (Database::num_rows($res)) {
         $row = Database::fetch_assoc($res);

@@ -691,6 +691,124 @@ final class WorkCharacterizationTest extends KernelTestCase
         $this->assertEquals(1, get_count_work($folder), 'works posted by a group are not counted outside that group');
     }
 
+    // ------------------------------------------- comments and last works
+
+    private function comment(int $workId): void
+    {
+        $this->conn->insert('c_student_publication_comment', [
+            'work_id' => $workId,
+            'user_id' => $this->admin()->getId(),
+            'comment' => 'wk_comment',
+            'sent_at' => '2020-01-02 00:00:00',
+        ]);
+    }
+
+    public function testWorkCommentCountCountsTheCommentsOfThatWorkOnly(): void
+    {
+        $folder = $this->folder();
+        $w1 = $this->work(['parent_id' => $folder]);
+        $w2 = $this->work(['parent_id' => $folder]);
+        $this->comment($w1);
+        $this->comment($w1);
+        $this->comment($w2);
+
+        // Fixed: it filtered on comment.c_id, a column that no longer exists, and always threw.
+        $this->assertSame(2, getWorkCommentCount($w1, ['real_id' => 1]));
+        $this->assertSame(1, getWorkCommentCount($w2, ['real_id' => 1]));
+        $this->assertSame(0, getWorkCommentCount($folder, ['real_id' => 1]));
+    }
+
+    public function testWorkCommentCountFromParentHonoursCourseAndSessionOfTheLinks(): void
+    {
+        $folder = $this->folder();
+        $sessionId = $this->session();
+        $base = $this->work(['parent_id' => $folder]);
+        $inSession = $this->work(['parent_id' => $folder]);
+        $otherCourse = $this->work(['parent_id' => $folder]);
+        $this->publish($base, 1);
+        $this->publish($inSession, 1, 2, $sessionId);
+        $this->publish($otherCourse, 2);
+        $this->comment($base);
+        $this->comment($base);
+        $this->comment($inSession);
+        $this->comment($otherCourse);
+
+        $this->assertSame(2, (int) getWorkCommentCountFromParent($folder, ['real_id' => 1], 0));
+        $this->assertSame(1, (int) getWorkCommentCountFromParent($folder, ['real_id' => 1], $sessionId));
+        $this->assertSame(1, (int) getWorkCommentCountFromParent($folder, ['real_id' => 2], 0));
+    }
+
+    public function testLastWorkStudentFromParentReturnsAWorkThatHasCommentsInThatCourse(): void
+    {
+        $folder = $this->folder();
+        $commented = $this->work(['parent_id' => $folder]);
+        $silent = $this->work(['parent_id' => $folder]);
+        $elsewhere = $this->work(['parent_id' => $folder]);
+        $this->publish($commented, 1);
+        $this->publish($silent, 1);
+        $this->publish($elsewhere, 2);
+        $this->comment($commented);
+        $this->comment($elsewhere);
+
+        $this->assertSame($commented, (int) getLastWorkStudentFromParent($folder, ['real_id' => 1], 0)['iid']);
+        $this->assertSame($elsewhere, (int) getLastWorkStudentFromParent($folder, ['real_id' => 2], 0)['iid']);
+        $this->assertSame([], getLastWorkStudentFromParent($this->folder(), ['real_id' => 1], 0));
+    }
+
+    public function testLastWorkStudentFromParentByUserReturnsTheNewestOfThatUserWithRoundedScore(): void
+    {
+        $folder = $this->folder(['qualification' => 10]);
+        $me = $this->student()->getId();
+        $old = $this->work(['parent_id' => $folder, 'user_id' => $me, 'sent_date' => '2020-01-01 10:00:00', 'qualification' => 2]);
+        $new = $this->work(['parent_id' => $folder, 'user_id' => $me, 'sent_date' => '2021-01-01 10:00:00', 'qualification' => 8]);
+        $theirs = $this->work(['parent_id' => $folder, 'user_id' => $this->other()->getId(), 'sent_date' => '2022-01-01 10:00:00']);
+        $elsewhere = $this->work(['parent_id' => $folder, 'user_id' => $me, 'sent_date' => '2023-01-01 10:00:00']);
+        foreach ([$old, $new, $theirs] as $id) {
+            $this->publish($id, 1);
+        }
+        $this->publish($elsewhere, 2);
+        $parent = ['iid' => $folder, 'qualification' => 10];
+
+        $last = getLastWorkStudentFromParentByUser($me, $parent, ['real_id' => 1], 0);
+
+        $this->assertSame($new, (int) $last['iid'], 'newest work of that user in that course, not other users\' nor other courses\'');
+        $this->assertArrayHasKey('qualification_rounded', $last);
+        $this->assertSame([], getLastWorkStudentFromParentByUser($this->admin()->getId(), $parent, ['real_id' => 1], 0));
+        $this->assertFalse(getLastWorkStudentFromParentByUser($me, [], ['real_id' => 1], 0));
+    }
+
+    public function testAgendaExistsForWorkReturnsTheCalendarEventIdOrZero(): void
+    {
+        $with = $this->folder();
+        $without = $this->folder();
+        $this->conn->insert('c_student_publication_assignment', ['publication_id' => $with, 'add_to_calendar' => 77, 'enable_qualification' => 0]);
+        $this->conn->insert('c_student_publication_assignment', ['publication_id' => $without, 'add_to_calendar' => 0, 'enable_qualification' => 0]);
+
+        // Fixed: it filtered on assignment.c_id, a column that no longer exists, and always threw.
+        $this->assertSame(77, (int) agendaExistsForWork($with, ['real_id' => 1]));
+        $this->assertSame(0, agendaExistsForWork($without, ['real_id' => 1]));
+        $this->assertSame(0, agendaExistsForWork($this->folder(), ['real_id' => 1]), 'no assignment row at all');
+    }
+
+    public function testDocumentToWorkPerUserFindsTheCopyOfTheDocumentOfThatUser(): void
+    {
+        $folder = $this->folder();
+        $doc = $this->document();
+        $me = $this->student()->getId();
+        addDocumentToWork($doc, $folder, 1);
+        $mine = $this->work(['parent_id' => $folder, 'user_id' => $me, 'document_id' => $doc]);
+        $theirs = $this->work(['parent_id' => $folder, 'user_id' => $this->other()->getId(), 'document_id' => $doc]);
+        $this->publish($mine, 1);
+        $this->publish($theirs, 1);
+
+        $found = getDocumentToWorkPerUser($doc, $folder, 1, 0, $me);
+
+        $this->assertSame($mine, (int) $found['iid']);
+        $this->assertSame([], getDocumentToWorkPerUser($doc, $folder, 2, 0, $me), 'another course');
+        $this->assertSame([], getDocumentToWorkPerUser($doc, $folder, 1, $this->session(), $me), 'another session');
+        $this->assertSame([], getDocumentToWorkPerUser($doc, $folder, 1, 0, $me, 0), 'inactive filter');
+    }
+
     // ------------------------------------------------------- folder deletion
 
     public function testDeleteDirWorkOfUnknownFolderReturnsFalse(): void
@@ -780,12 +898,6 @@ final class WorkCharacterizationTest extends KernelTestCase
             'get_work_data_by_path' => [static fn () => get_work_data_by_path('/wk_x', 1)],
             'is_work_exist_by_url' => [static fn () => is_work_exist_by_url('/wk_x')],
             'get_work_path' => [static fn () => get_work_path(1)],
-            'getLastWorkStudentFromParent' => [static fn () => getLastWorkStudentFromParent(1, ['real_id' => 1], 0)],
-            'getLastWorkStudentFromParentByUser' => [static fn () => getLastWorkStudentFromParentByUser(1, ['iid' => 1, 'qualification' => 0], ['real_id' => 1], 0)],
-            'getWorkCommentCountFromParent' => [static fn () => getWorkCommentCountFromParent(1, ['real_id' => 1], 0)],
-            'getWorkCommentCount' => [static fn () => getWorkCommentCount(1, ['real_id' => 1])],
-            'agendaExistsForWork' => [static fn () => agendaExistsForWork(1, ['real_id' => 1])],
-            'getDocumentToWorkPerUser' => [static fn () => getDocumentToWorkPerUser(1, 1, 1, 0, 1)],
             'generateMoveForm' => [static fn () => generateMoveForm(1, '/', ['real_id' => 1], 0, 0)],
         ];
     }

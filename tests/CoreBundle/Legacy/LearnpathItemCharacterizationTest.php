@@ -1146,29 +1146,19 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertEquals(7, $old['score']);
     }
 
-    public function testScormUpdateTimeInSeriousGameModeReadsTheStatusFromTheWrongRow(): void
+    public function testScormUpdateTimeInSeriousGameModeFreezesTheTimeOfAFinishedItem(): void
     {
         $s = $this->scene('sco', 2, ['total_time' => 100, 'status' => 'completed']);
         $item = $this->item($s['item'], $s['view']);
         $item->seriousgame_mode = 1;
 
-        // PINNED QUIRK: in serious-game mode the item view status is meant to be tested, but it is read from $row
-        // after $row was overwritten by the c_lp row: PHP raises "Undefined array key status" (a warning, which the
-        // test runner turns into an exception) and the status is never really checked.
-        set_error_handler(static function (int $no, string $msg): never {
-            throw new \ErrorException($msg);
-        });
-        try {
-            $item->scorm_update_time(30);
-            $this->fail('expected an undefined array key warning');
-        } catch (\ErrorException $e) {
-            $this->assertStringContainsString('status', $e->getMessage());
-        } finally {
-            restore_error_handler();
-        }
-    }
+        $item->scorm_update_time(30);
+        $this->assertSame(100, (int) $this->ivRow($s['view'], $s['item'])['total_time'], 'a finished item keeps its time');
 
-    // ---------------------------------------------------------------- terms, delete, audio, paths
+        $this->conn()->executeStatement("UPDATE c_lp_item_view SET status = 'incomplete' WHERE iid = ?", [$s['iv']]);
+        $item->scorm_update_time(30);
+        $this->assertSame(130, (int) $this->ivRow($s['view'], $s['item'])['total_time'], 'an unfinished one still accumulates');
+    }
 
     public function testSetTermsMergesTheNewTermsWithTheStoredOnesAndAppendsAnEmptyTerm(): void
     {

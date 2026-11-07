@@ -3497,6 +3497,7 @@ class learnpathItem
                     view_count = "'.$this->get_attempt_id().'"';
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
+        $itemViewStatus = $row['status'] ?? null;
 
         if (!isset($row['total_time'])) {
             $total_time = 0;
@@ -3513,8 +3514,8 @@ class learnpathItem
         $res = Database::query($sql);
         $accumulateScormTime = 'false';
         if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_assoc($res);
-            $accumulateScormTime = $row['accumulate_scorm_time'];
+            $lpRow = Database::fetch_assoc($res);
+            $accumulateScormTime = $lpRow['accumulate_scorm_time'];
         }
 
         // Step 2.1 : if normal mode total_time = total_time + total_sec
@@ -3555,7 +3556,7 @@ class learnpathItem
         ];
 
         if (1 != $this->seriousgame_mode
-            || !in_array($row['status'], $case_completed)
+            || !in_array($itemViewStatus, $case_completed)
         ) {
             $sql = "UPDATE $item_view_table
                       SET total_time = '$total_time'

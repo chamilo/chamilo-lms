@@ -767,7 +767,10 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         $e->editQuestionToRemind($exe, 5, 'delete');
         $this->assertSame('4,6', $stored());
         $e->editQuestionToRemind($exe, 9, 'delete');
-        $this->assertSame('', $stored(), 'PINNED QUIRK: deleting an id that is not in the list empties the whole list');
+        $this->assertSame('4,6', $stored(), 'deleting an id that is not in the list leaves the list alone');
+        $e->editQuestionToRemind($exe, 4, 'delete');
+        $e->editQuestionToRemind($exe, 6, 'delete');
+        $this->assertSame('', $stored(), 'deleting the last id empties the list');
 
         $this->assertFalse($e->removeAllQuestionToRemind(0));
         $e->addAllQuestionToRemind($exe, [1]);
@@ -785,9 +788,10 @@ final class ExerciseCharacterizationTest extends KernelTestCase
 
         $e->editQuestionToRemind($exe, 8);
         $this->assertSame('8', $stored(), 'first reminder is stored as is');
-        // PINNED QUIRK: on a non-empty list any action other than add/delete empties the list.
+        // Fixed: an unknown action used to empty the list; it now changes nothing.
         $e->editQuestionToRemind($exe, 7, 'noop');
-        $this->assertSame('', $stored());
+        $this->assertSame('8', $stored());
+        // Adding an id that is already listed changes nothing either (it used to wipe the list).
         $e->editQuestionToRemind($exe, 8);
         $this->assertSame('8', $stored());
 
@@ -796,10 +800,15 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         $e->editQuestionToRemind($exe, 3);
         $this->assertSame('3,8', $stored(), 'ordered like the session list, not like insertion');
 
-        // PINNED QUIRK: with no questionList in the session an add to a non-empty list wipes it.
+        // Fixed: with no questionList in the session an add to a non-empty list used to wipe it; it now appends.
         ChamiloSession::erase('questionList');
         $e->editQuestionToRemind($exe, 1);
-        $this->assertSame('', $stored());
+        $this->assertSame('3,8,1', $stored());
+
+        // Ids the session list does not know are kept (at the end), not dropped.
+        ChamiloSession::write('questionList', [1, 3]);
+        $e->editQuestionToRemind($exe, 5);
+        $this->assertSame('1,3,8,5', $stored());
     }
 
     // ---------------------------------------------------------------- cleanResults

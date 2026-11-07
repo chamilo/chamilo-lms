@@ -7632,38 +7632,33 @@ class Exercise
                     Database::query($sql);
                 }
             } else {
-                $remind_list = explode(',', $exercise_info['questions_to_check']);
-                $remind_list_string = '';
+                $remind_list = array_map('intval', explode(',', $exercise_info['questions_to_check']));
+                // Any case that changes nothing (unknown action, id already listed, id not listed on delete)
+                // must leave the stored list as it is.
+                $newRemindList = $remind_list;
                 if ('add' === $action) {
                     if (!in_array($questionId, $remind_list)) {
-                        $newRemindList = [];
-                        $remind_list[] = $questionId;
+                        $newRemindList[] = $questionId;
                         $questionListInSession = Session::read('questionList');
                         if (!empty($questionListInSession)) {
+                            // Follow the order of the questions in the session; ids unknown to that list
+                            // are kept at the end instead of being dropped.
+                            $ordered = [];
                             foreach ($questionListInSession as $originalQuestionId) {
-                                if (in_array($originalQuestionId, $remind_list)) {
-                                    $newRemindList[] = $originalQuestionId;
+                                if (in_array((int) $originalQuestionId, $newRemindList, true)) {
+                                    $ordered[] = (int) $originalQuestionId;
                                 }
                             }
+                            $newRemindList = array_merge($ordered, array_diff($newRemindList, $ordered));
                         }
-                        $remind_list_string = implode(',', $newRemindList);
                     }
                 } elseif ('delete' == $action) {
-                    if (!empty($remind_list)) {
-                        if (in_array($questionId, $remind_list)) {
-                            $remind_list = array_flip($remind_list);
-                            unset($remind_list[$questionId]);
-                            $remind_list = array_flip($remind_list);
-
-                            if (!empty($remind_list)) {
-                                sort($remind_list);
-                                array_filter($remind_list);
-                                $remind_list_string = implode(',', $remind_list);
-                            }
-                        }
+                    if (in_array($questionId, $remind_list)) {
+                        $newRemindList = array_values(array_diff($remind_list, [$questionId]));
+                        sort($newRemindList);
                     }
                 }
-                $value = Database::escape_string($remind_list_string);
+                $value = Database::escape_string(implode(',', $newRemindList));
                 $sql = "UPDATE $track_exercises
                         SET questions_to_check = '$value'
                         WHERE exe_id = $exeId ";

@@ -137,7 +137,7 @@ class UserGroupModel extends Model
                     WHERE u.usergroup_id = $id";
         }
         $limitCondition = '';
-        if (!empty($start) && !empty($limit)) {
+        if (!empty($limit) && !$getCount) {
             $limitCondition = " LIMIT $start, $limit";
         }
 

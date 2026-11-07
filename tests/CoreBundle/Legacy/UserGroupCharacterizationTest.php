@@ -322,9 +322,8 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->assertStringContainsString('ug_alice', $titles);
         $this->assertArrayHasKey('relation_type', $list[0]);
 
-        // CURRENT BEHAVIOUR: the LIMIT is only applied when BOTH start and limit are non-zero,
-        // so (start=0, limit=1) is NOT limited.
-        $this->assertCount(2, $this->model->getUserGroupUsers($group->getId(), false, 0, 1));
+        // Fixed: the LIMIT used to be skipped when start was 0, so the first page was never limited.
+        $this->assertCount(1, $this->model->getUserGroupUsers($group->getId(), false, 0, 1));
         $this->assertCount(1, $this->model->getUserGroupUsers($group->getId(), false, 1, 1));
     }
 

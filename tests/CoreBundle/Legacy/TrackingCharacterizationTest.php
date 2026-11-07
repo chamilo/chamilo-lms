@@ -800,10 +800,28 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         $this->insertCourseAccess($this->alice->getId(), $cid, '2001-03-01 10:00:00', '2001-03-01 11:00:00');
         $this->insertCourseAccess($this->carol->getId(), $this->course2->getId(), '2001-03-01 10:00:00', '2001-03-01 11:00:00');
 
-        // PINNED QUIRK: "never connected" joins the access table on user only, not on the course:
-        // carol is NOT reported although she never opened THIS course.
+        // Fixed: "never connected" joined the access table on user only, so carol (access in ANOTHER
+        // course only) was not reported although she never opened THIS course.
         $never = array_map('intval', Tracking::getInactiveStudentsInCourse($cid, 'never'));
-        $this->assertSame([$this->bob->getId()], $never);
+        sort($never);
+        $this->assertSame([$this->bob->getId(), $this->carol->getId()], $never);
+
+        // Same rule for a session: only its own students, scoped to the course accesses.
+        $sessionA = $this->createSession('tk_session_inactive_a')->getId();
+        $sessionB = $this->createSession('tk_session_inactive_b')->getId();
+        foreach ([[$this->carol, $sessionA], [$this->bob, $sessionB]] as [$user, $sid]) {
+            $this->conn->insert('session_rel_course_rel_user', [
+                'user_id' => $user->getId(),
+                'session_id' => $sid,
+                'c_id' => $cid,
+                'status' => 0,
+                'visibility' => 1,
+                'legal_agreement' => 0,
+                'progress' => 0,
+            ]);
+        }
+        $never = array_map('intval', Tracking::getInactiveStudentsInCourse($cid, 'never', $sessionA));
+        $this->assertSame([$this->carol->getId()], $never);
 
         // Everyone whose latest access in this course is older than N days (alice, from 2001).
         $since = array_map('intval', Tracking::getInactiveStudentsInCourse($cid, 30));

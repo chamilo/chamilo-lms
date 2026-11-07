@@ -4453,6 +4453,7 @@ class Tracking
                         FROM '.$table_course_rel_user.' course_user
                         LEFT JOIN '.$tbl_track_login.' stats_login
                         ON course_user.user_id = stats_login.user_id AND
+                        stats_login.c_id = course_user.c_id AND
                         relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
                         INNER JOIN '.$tableCourse.' c
                         ON (c.id = course_user.c_id)
@@ -4464,11 +4465,13 @@ class Tracking
                 $sql = 'SELECT session_course_user.user_id
                         FROM '.$tbl_session_course_user.' session_course_user
                         LEFT JOIN '.$tbl_track_login.' stats_login
-                        ON session_course_user.user_id = stats_login.user_id
+                        ON session_course_user.user_id = stats_login.user_id AND
+                        stats_login.c_id = session_course_user.c_id
                         INNER JOIN '.$tableCourse.' c
                         ON (c.id = session_course_user.c_id)
                         WHERE
                             session_course_user.c_id = '.$courseId.' AND
+                            session_course_user.session_id = '.$session_id.' AND
                             stats_login.login_course_date IS NULL
                         GROUP BY session_course_user.user_id';
             }

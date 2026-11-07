@@ -937,10 +937,8 @@ class learnpath
                     WHERE prerequisite = '$id'";
         Database::query($sql_all);
 
-        $sql = "UPDATE $lp_item
-                SET previous_item_id = ".$this->getLastInFirstLevel()."
-                WHERE lp_id = {$this->lp_id} AND item_type = '".TOOL_LP_FINAL_ITEM."'";
-        Database::query($sql);
+        // previous_item_id is the left value of the nested tree (Gedmo TreeLeft), maintained by removeFromTree()
+        // above: it must not be overwritten with an item id here (it used to be set to getLastInFirstLevel()).
 
         // Remove the indexed document without querying the legacy search_engine_ref schema.
         if ('true' === api_get_setting('search_enabled') && !empty($searchDid)) {
@@ -1208,11 +1206,18 @@ class learnpath
     public function getLastInFirstLevel()
     {
         try {
+            // First-level items hang from the root item of the learning path (only the root has no parent).
+            $root = Container::getLpItemRepository()->getRootItem((int) $this->lp_id);
+            if (null === $root) {
+                return 0;
+            }
+
             $lastId = Database::getManager()
                 ->createQuery('SELECT i.iid FROM Chamilo\CourseBundle\Entity\CLpItem i
-                WHERE i.lp = :lp AND i.parent IS NULL AND i.itemType != :type ORDER BY i.displayOrder DESC')
+                WHERE i.lp = :lp AND i.parent = :root AND i.itemType != :type
+                ORDER BY i.displayOrder DESC, i.iid DESC')
                 ->setMaxResults(1)
-                ->setParameters(['lp' => $this->lp_id, 'type' => TOOL_LP_FINAL_ITEM])
+                ->setParameters(['lp' => $this->lp_id, 'root' => (int) $root->getIid(), 'type' => TOOL_LP_FINAL_ITEM])
                 ->getSingleScalarResult();
 
             return $lastId;
@@ -9564,7 +9569,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 WHERE path <> 'root' AND lp_id = ".$this->lp_id;
 
         if ($addParentCondition) {
-            $sql .= ' AND parent_item_id IS NULL ';
+            // First-level items hang from the root item (only the root has no parent).
+            $root = Container::getLpItemRepository()->getRootItem((int) $this->lp_id);
+            $sql .= ' AND parent_item_id = '.(null !== $root ? (int) $root->getIid() : 0).' ';
         }
         $sql .= ' ORDER BY display_order ASC';
 

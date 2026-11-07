@@ -356,9 +356,9 @@ final class LearnpathCharacterizationTest extends KernelTestCase
         $this->assertNull($rows[0]['mastery_score']);
         $this->assertSame('0', $rows[0]['prerequisite']);
 
-        // PINNED QUIRK: with $addParentCondition the filter is "parent_item_id IS NULL", but every item hangs
-        // from the root item (never NULL), so nothing is returned.
-        $this->assertSame([], $this->lp($lpId)->getItemsForForm(true));
+        // Fixed: with $addParentCondition the filter was "parent_item_id IS NULL", but every item hangs from the root
+        // item (never NULL), so nothing was returned. It now returns the first-level items (children of the root).
+        $this->assertSame([$a, $c], array_column($this->lp($lpId)->getItemsForForm(true), 'iid'));
     }
 
     public function testGetFlatOrderedItemsListIsDepthFirstByDisplayOrder(): void
@@ -400,26 +400,49 @@ final class LearnpathCharacterizationTest extends KernelTestCase
         $this->assertSame((string) $b, $this->conn()->fetchOne('SELECT prerequisite FROM c_lp_item WHERE iid = ?', [$c]), 'others stay');
     }
 
-    public function testDeleteItemRepointsFinalItemAtTheRootItem(): void
+    public function testDeleteItemKeepsTheNestedTreeOfTheFinalItemIntact(): void
     {
         $lpId = $this->newLpRow('lp_delfinal');
         $a = $this->addItem($lpId, 'lp_a', 'document', 1);
-        $final = $this->addItem($lpId, 'lp_final', TOOL_LP_FINAL_ITEM, 2);
+        $b = $this->addItem($lpId, 'lp_b', 'document', 2);
+        $final = $this->addItem($lpId, 'lp_final', TOOL_LP_FINAL_ITEM, 3);
 
         $this->lp($lpId)->delete_item($a);
 
-        // PINNED QUIRK: getLastInFirstLevel() looks for items WITHOUT parent, which is only the root item, so the
-        // final item's previous_item_id (also the nested-tree "left" column) is overwritten with the root's id.
-        $this->assertSame($this->rootId($lpId), (int) $this->conn()->fetchOne('SELECT previous_item_id FROM c_lp_item WHERE iid = ?', [$final]));
+        // Fixed: delete_item() overwrote the final item's previous_item_id with getLastInFirstLevel() (which was the
+        // root's id). That column is the LEFT value of the nested tree (Gedmo TreeLeft), so the tree got corrupted.
+        // After a delete every lft/rgt of the learning path must still be a distinct number of 1..2n.
+        $rows = $this->conn()->fetchAllAssociative('SELECT iid, previous_item_id AS lft, next_item_id AS rgt FROM c_lp_item WHERE lp_id = ?', [$lpId]);
+        $this->assertCount(3, $rows, 'root, b and the final item');
+        $bounds = [];
+        foreach ($rows as $row) {
+            $this->assertLessThan((int) $row['rgt'], (int) $row['lft']);
+            $bounds[] = (int) $row['lft'];
+            $bounds[] = (int) $row['rgt'];
+        }
+        sort($bounds);
+        $this->assertSame([1, 2, 3, 4, 5, 6], $bounds);
+        $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT previous_item_id FROM c_lp_item WHERE iid = ?', [$this->rootId($lpId)]));
+        $this->assertSame($this->rootId($lpId), (int) $this->conn()->fetchOne('SELECT parent_item_id FROM c_lp_item WHERE iid = ?', [$final]));
+        $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_lp_item WHERE iid = ?', [$b]));
     }
 
-    public function testGetLastInFirstLevelIsTheRootItem(): void
+    public function testGetLastInFirstLevelIsTheLastFirstLevelItemBeforeTheFinalItem(): void
     {
         $lpId = $this->newLpRow('lp_lastfirst');
-        $this->addItem($lpId, 'lp_a', 'document', 1);
+        $this->assertSame(0, (int) $this->lp($lpId)->getLastInFirstLevel(), 'an empty learning path has none');
 
-        // PINNED QUIRK: see testDeleteItemRepointsFinalItemAtTheRootItem.
-        $this->assertSame($this->rootId($lpId), (int) $this->lp($lpId)->getLastInFirstLevel());
+        $dir = $this->addItem($lpId, 'lp_dir', 'dir', 2);
+        $this->addItem($lpId, 'lp_child', 'document', 9, $dir);
+        $first = $this->addItem($lpId, 'lp_a', 'document', 1);
+        $this->addItem($lpId, 'lp_final', TOOL_LP_FINAL_ITEM, 10);
+        $other = $this->newLpRow('lp_lastfirst_other');
+        $this->addItem($other, 'lp_foreign', 'document', 50);
+
+        // Fixed: the query asked for items WITHOUT parent, which is only the root item. First-level items hang from
+        // the root: the highest display_order among them wins, the final item and the nested ones are skipped.
+        $this->assertSame($dir, (int) $this->lp($lpId)->getLastInFirstLevel());
+        $this->assertNotSame($first, $dir);
     }
 
     public function testDeleteChildrenItemsDeletesRecursivelyAndCountsRows(): void
@@ -853,8 +876,10 @@ final class LearnpathCharacterizationTest extends KernelTestCase
 
         $this->assertStringContainsString('var child_name = new Array();', $js);
         $this->assertStringContainsString("child_name[$dir] = new Array();", $js);
-        // PINNED QUIRK: the level-0 list (items without parent) is empty because getItemsForForm(true) never matches.
-        $this->assertStringNotContainsString('child_value[0][0]', $js);
+        // Fixed: the level-0 list was empty because getItemsForForm(true) never matched: it now holds the first-level
+        // items (the folder here), not the nested ones.
+        $this->assertStringContainsString("child_value[0][0] = \"$dir\";", $js);
+        $this->assertStringNotContainsString('child_value[0][1]', $js);
         $firstPos = strpos($js, "child_value[$dir][0] = \"$first\";");
         $secondPos = strpos($js, "child_value[$dir][1] = \"$second\";");
         $this->assertNotFalse($firstPos, 'display_order 5 comes first');

@@ -3815,9 +3815,20 @@ class Tracking
         $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        // At first, courses where $coach_id is coach of the course
-        $sql = 'SELECT 1 FROM '.$tbl_session_course_user.'
-                WHERE user_id='.$coach_id.' AND status = '.SessionEntity::COURSE_COACH;
+        // At first, courses where $coach_id is coach of the course: the student must be a student of the
+        // same course in the same session (the same rule as get_student_followed_by_coach()).
+        $sql = 'SELECT 1
+                FROM '.$tbl_session_course_user.' coach
+                INNER JOIN '.$tbl_session_course_user.' student
+                ON (student.session_id = coach.session_id AND student.c_id = coach.c_id)
+                INNER JOIN '.$tblSessionRelUser.' sru
+                ON (sru.session_id = student.session_id AND sru.user_id = student.user_id)
+                WHERE
+                    coach.user_id = '.$coach_id.' AND
+                    coach.status = '.SessionEntity::COURSE_COACH.' AND
+                    student.user_id = '.$student_id.' AND
+                    sru.relation_type = '.SessionEntity::STUDENT.'
+                LIMIT 1';
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return true;

@@ -282,16 +282,29 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         $this->assertFalse(Tracking::is_allowed_to_coach_student($x['s1'], $x['s1']));
     }
 
-    public function testIsAllowedToCoachStudentForACourseCoach(): void
+    public function testIsAllowedToCoachStudentForACourseCoachOnlyCoversTheStudentsOfHisCourseAndSession(): void
     {
         $x = $this->coachScene();
 
         $this->assertTrue(Tracking::is_allowed_to_coach_student($x['coach'], $x['s1']));
-        // PINNED QUIRK: a course coach is "allowed" for EVERY student of the platform, including s2 who
-        // is in another session and a user who is not even subscribed anywhere. The first query never looks
-        // at the student; callers (myStudents.php, lp_tracking.php) use it as the access check.
+        // Fixed: the course coach branch never looked at the student, so a course coach was "allowed" for every
+        // student of the platform (and myStudents.php / lp_tracking.php use this as their access check).
+        // s2/s3 are in session B, s4 has no course subscription, and a stranger has nothing in common.
+        $this->assertFalse(Tracking::is_allowed_to_coach_student($x['coach'], $x['s2']));
+        $this->assertFalse(Tracking::is_allowed_to_coach_student($x['coach'], $x['s4']));
+        $this->assertFalse(Tracking::is_allowed_to_coach_student($x['coach'], $x['gcoach']));
+        // The same coach also coaching the course in session B now covers s2 there, but still not s4.
+        $this->sessionCourseUser($x['b'], self::COURSE, $x['coach'], self::STATUS_COURSE_COACH);
         $this->assertTrue(Tracking::is_allowed_to_coach_student($x['coach'], $x['s2']));
-        $this->assertTrue(Tracking::is_allowed_to_coach_student($x['coach'], $x['s4']));
+        $this->assertFalse(Tracking::is_allowed_to_coach_student($x['coach'], $x['s4']));
+        // Coach and student agree with the list of students the coach follows.
+        $this->assertSame(
+            $this->ids(Tracking::get_student_followed_by_coach($x['coach'])),
+            array_values(array_filter(
+                [$x['s1'], $x['s2'], $x['s3'], $x['s4']],
+                fn (int $id): bool => Tracking::is_allowed_to_coach_student($x['coach'], $id)
+            ))
+        );
     }
 
     public function testCoursesFollowedByACoachListCodesOfCourseCoachAndGeneralCoachRoles(): void

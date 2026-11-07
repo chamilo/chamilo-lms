@@ -7707,7 +7707,7 @@ document.addEventListener("DOMContentLoaded", function () {
         Database::query($sql);
 
         // Cleaning mastery score for exercises
-        $sql = "UPDATE $tbl_lp_item SET mastery_score = ''
+        $sql = "UPDATE $tbl_lp_item SET mastery_score = NULL
                 WHERE lp_id = $lp_id AND item_type = 'quiz'";
         Database::query($sql);
     }

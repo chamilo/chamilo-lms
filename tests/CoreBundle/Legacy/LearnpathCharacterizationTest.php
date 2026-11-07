@@ -701,19 +701,15 @@ final class LearnpathCharacterizationTest extends KernelTestCase
         $o = $this->addItem($other, 'lp_o', 'document', 1);
         $this->conn()->executeStatement('UPDATE c_lp_item SET prerequisite = ?, mastery_score = 80 WHERE iid IN (?, ?, ?)', ['12', $a, $q, $o]);
 
-        // PINNED QUIRK (source bug): the second UPDATE sets mastery_score = '' on a DOUBLE column, which strict
-        // SQL mode rejects, so clearPrerequisites() throws after having cleared the prerequisites (first UPDATE).
-        try {
-            $this->lp($lpId)->clearPrerequisites();
-            $this->fail('NotAllowedException expected');
-        } catch (NotAllowedException) {
-        }
+        // Fixed: the second UPDATE set mastery_score = '' on a nullable DOUBLE column, which strict SQL mode rejects,
+        // so it threw after the first UPDATE had already run. It now sets NULL and both UPDATEs apply.
+        $this->lp($lpId)->clearPrerequisites();
 
         $get = fn (int $id) => $this->conn()->fetchAssociative('SELECT prerequisite, mastery_score FROM c_lp_item WHERE iid = ?', [$id]);
         $this->assertSame('', $get($a)['prerequisite']);
         $this->assertSame('', $get($q)['prerequisite']);
-        $this->assertEquals(80, $get($a)['mastery_score']);
-        $this->assertEquals(80, $get($q)['mastery_score'], 'the quiz mastery score reset never happens (see above)');
+        $this->assertEquals(80, $get($a)['mastery_score'], 'only quiz items lose their mastery score');
+        $this->assertNull($get($q)['mastery_score']);
         $this->assertSame('12', $get($o)['prerequisite'], 'other learning paths are untouched');
         $this->assertEquals(80, $get($o)['mastery_score']);
     }

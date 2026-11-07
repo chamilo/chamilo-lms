@@ -569,6 +569,24 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->assertSame([], $this->model->add_users_to_groups('x', [1]));
     }
 
+    public function testAddUsersToGroupsDoesNotDuplicateAnExistingReader(): void
+    {
+        $group = $this->group('ug_social', Usergroup::SOCIAL_CLASS);
+        $reader = $this->createUser('ug_reader');
+        $this->addUser($group, $reader, 0);
+
+        // Fixed: a reader has role 0, which looked like "no relation", so a second row was inserted
+        // (the table has no unique key on user/group).
+        $result = $this->model->add_users_to_groups([$reader->getId()], [$group->getId()], 3);
+
+        $this->assertSame([], $result);
+        $this->assertSame(
+            1,
+            $this->countRows('usergroup_rel_user', ['usergroup_id' => $group->getId(), 'user_id' => $reader->getId()])
+        );
+        $this->assertSame(0, $this->relationOf($group, $reader));
+    }
+
     public function testGetUserRoleToStringAndGetRoleName(): void
     {
         $group = $this->group('ug_social', Usergroup::SOCIAL_CLASS);

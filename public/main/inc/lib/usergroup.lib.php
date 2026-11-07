@@ -2422,8 +2422,13 @@ class UserGroupModel extends Model
                     $user_id = (int) $user_id;
                     $group_id = (int) $group_id;
 
-                    $role = $this->get_user_group_role($user_id, $group_id);
-                    if (0 == $role) {
+                    // A reader has role 0 like "no relation": look for the row itself.
+                    $exists = Database::query(
+                        "SELECT 1 FROM $table_url_rel_group
+                         WHERE usergroup_id = $group_id AND user_id = $user_id
+                         LIMIT 1"
+                    );
+                    if (0 == Database::num_rows($exists)) {
                         $sql = "INSERT INTO $table_url_rel_group
 		               			SET
 		               			    user_id = $user_id ,

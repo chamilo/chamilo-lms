@@ -2619,7 +2619,6 @@ class Tracking
                 FROM $tbl_stats_exercises
                 WHERE
                     c_id = $courseId AND
-                    session_id  = $sessionId AND
                     exe_user_id = $user_id AND
                     status = '' AND
                     exe_exo_id IN ('$exercise_list_imploded')
@@ -3628,8 +3627,8 @@ class Tracking
                             status != "not attempted" AND
                             view.c_id = '.$courseId.' AND
                             view.lp_id = '.$lp_id.' AND
-                            view.user_id = '.$student_id.' AND
-                            view.session_id = '.$sessionId;
+                            view.user_id = '.$student_id.
+                            api_get_session_condition($sessionId, true, false, 'view.session_id');
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $lastTime = Database::result($rs, 0, 0);
@@ -3675,8 +3674,8 @@ class Tracking
                             status != "not attempted" AND
                             view.c_id = '.$courseId.' AND
                             view.lp_id = '.$lp_id.' AND
-                            view.user_id = '.$student_id.' AND
-                            view.session_id = '.$sessionId;
+                            view.user_id = '.$student_id.
+                            api_get_session_condition($sessionId, true, false, 'view.session_id');
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $time = Database::result($rs, 0, 0);
@@ -8256,6 +8255,8 @@ class Tracking
         $tblLpView = Database::get_course_table(TABLE_LP_VIEW);
         $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
         $tblLpItemView = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        // Outside a session the column is NULL (nullable FK), legacy rows may hold 0.
+        $sessionCondition = api_get_session_condition($sessionId, true, false, 'lv.session_id');
 
         $sql = "SELECT FROM_UNIXTIME(liv.start_time) as start_date
                 FROM $tblLpItemView liv
@@ -8266,9 +8267,9 @@ class Tracking
                 WHERE
                     lv.user_id = $userId AND
                     lv.c_id = $courseId AND
-                    lv.session_id = $sessionId AND
                     li.item_type = '".TOOL_LP_FINAL_ITEM."' AND
                     liv.status = 'completed'
+                    $sessionCondition
                 ORDER BY start_date DESC
                 LIMIT 1";
 
@@ -8298,14 +8299,16 @@ class Tracking
         bool $convertDate = true
     ) {
         $tblTrackExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        // Outside a session the column is NULL (nullable FK), legacy rows may hold 0.
+        $sessionCondition = api_get_session_condition($sessionId, true, false, 'ex.session_id');
 
         $sql = "SELECT ex.exe_date
                 FROM $tblTrackExercise AS ex
                 WHERE
                     ex.c_id = $courseId AND
-                    ex.session_id  = $sessionId AND
                     ex.exe_user_id = $userId AND
                     ex.status = ''
+                    $sessionCondition
                 ORDER BY ex.exe_date DESC
                 LIMIT 1";
         $rs = Database::query($sql);

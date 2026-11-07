@@ -413,16 +413,26 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         $this->assertSame('0%', Tracking::get_exercise_student_progress($list, $this->bob->getId(), $cid, $sid));
     }
 
-    public function testExerciseStudentProgressInBaseCourseNeverMatchesNullSession(): void
+    public function testExerciseStudentProgressInBaseCourseMatchesNullSession(): void
     {
         [$e1] = $this->seedExercises();
 
-        // PINNED QUIRK (probable bug): attempts made outside a session are stored with a NULL
-        // session_id (the column is a nullable FK), but this method filters `session_id = 0`
-        // strictly, so the base-course progress is always '0%' even with finished attempts.
+        // Fixed: attempts made outside a session are stored with a NULL session_id (nullable FK),
+        // so the base course (session 0) must match NULL rows instead of always giving '0%'.
+        $this->assertSame(
+            '100%',
+            Tracking::get_exercise_student_progress([$this->quiz($e1)], $this->alice->getId(), $this->course->getId(), 0)
+        );
+        // Another user without attempts is still 0%.
         $this->assertSame(
             '0%',
-            Tracking::get_exercise_student_progress([$this->quiz($e1)], $this->alice->getId(), $this->course->getId(), 0)
+            Tracking::get_exercise_student_progress([$this->quiz($e1)], $this->bob->getId(), $this->course->getId(), 0)
+        );
+        // A real session must not see the base-course (NULL session) attempts.
+        $sid = $this->createSession('tk_session_progress_isolated')->getId();
+        $this->assertSame(
+            '0%',
+            Tracking::get_exercise_student_progress([$this->quiz($e1)], $this->alice->getId(), $this->course->getId(), $sid)
         );
     }
 
@@ -439,9 +449,12 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         // The latest FINISHED attempt (status '') wins over the later 'incomplete' one.
         $this->assertSame('2001-02-02 10:00:00', Tracking::getCourseQuizLastFinalizationDate($uid, $cid, $sid, false));
         $this->assertFalse(Tracking::getCourseQuizLastFinalizationDate($this->bob->getId(), $cid, $sid, false));
-        // PINNED QUIRK: attempts outside a session have a NULL session_id, but `session_id = 0` is
-        // filtered strictly, so the base-course finalization date is always false.
-        $this->assertFalse(Tracking::getCourseQuizLastFinalizationDate($uid, $cid, 0, false));
+        // Fixed: attempts outside a session have a NULL session_id; session 0 now matches them, and
+        // the real-session attempts above stay out of the base-course answer.
+        // seedExercises() stored base-course attempts: the latest finished one is 2001-02-03.
+        $this->assertFalse(Tracking::getCourseQuizLastFinalizationDate($this->bob->getId(), $cid, 0, false));
+        $this->assertSame('2001-02-03 10:00:00', Tracking::getCourseQuizLastFinalizationDate($uid, $cid, 0, false));
+        $this->assertSame('2001-02-02 10:00:00', Tracking::getCourseQuizLastFinalizationDate($uid, $cid, $sid, false));
     }
 
     // ------------------------------------------------------------------
@@ -474,10 +487,19 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         $this->assertEquals(1000000000, Tracking::get_last_connection_time_in_lp($uid, $code, $lp, $sid));
         $this->assertEquals(1000000, Tracking::getFirstConnectionTimeInLp($uid, $code, $lp, $sid));
 
-        // PINNED QUIRK: views outside a session have a NULL session_id but these queries filter
-        // `view.session_id = 0`, so for the base course they find nothing (NULL), session or not.
-        $this->assertNull(Tracking::get_last_connection_time_in_lp($uid, $code, $lp, 0));
-        $this->assertNull(Tracking::getFirstConnectionTimeInLp($uid, $code, $lp, 0));
+        // Fixed: views outside a session have a NULL session_id; session 0 now matches them. The
+        // seeded NULL-session views carry no item view, so nothing is found until one is added.
+        $this->assertEmpty(Tracking::get_last_connection_time_in_lp($uid, $code, $lp, 0));
+        $this->assertEmpty(Tracking::getFirstConnectionTimeInLp($uid, $code, $lp, 0));
+        $baseView = $this->insertLpView($uid, $lp, $this->course->getId(), 10, null);
+        $baseItem = $this->insertLpItem($lp, 'sco', 1, 9);
+        $this->insertLpItemView($baseItem, $baseView, 7000000, 10, 0, 'completed');
+        $this->insertLpItemView($baseItem, $baseView, 9000000, 10, 0, 'completed');
+        $this->assertEquals(9000000, Tracking::get_last_connection_time_in_lp($uid, $code, $lp, 0));
+        $this->assertEquals(7000000, Tracking::getFirstConnectionTimeInLp($uid, $code, $lp, 0));
+        // The session answer is unchanged by the base-course rows.
+        $this->assertEquals(1000000000, Tracking::get_last_connection_time_in_lp($uid, $code, $lp, $sid));
+        $this->assertEquals(1000000, Tracking::getFirstConnectionTimeInLp($uid, $code, $lp, $sid));
 
         // Unknown LP, user without view, unknown course: 0 (or NULL-ish) results.
         $this->assertEmpty(Tracking::get_last_connection_time_in_lp($uid, $code, 999999, $sid));
@@ -506,9 +528,20 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         );
         $this->assertFalse(Tracking::getCourseLpFinalizationDate($this->bob->getId(), $cid, $sid, false));
         $this->assertNotFalse(Tracking::getCourseLpFinalizationDate($uid, $cid, $sid, true));
-        // PINNED QUIRK: same NULL-vs-0 session mismatch as above for views outside a session.
+        // Fixed: views outside a session (NULL session_id) are matched by session 0, and only those.
         $this->assertFalse(Tracking::getCourseLpFinalizationDate($uid, $cid, 0, false));
-        $this->assertNotNull($lp);
+        // 500s after the session's one: same DST offset, so the expectation stays derivable.
+        $baseView = $this->insertLpView($uid, $lp, $cid, 10, null);
+        $baseFinal = $this->insertLpItem($lp, TOOL_LP_FINAL_ITEM, 0, 8);
+        $this->insertLpItemView($baseFinal, $baseView, 1000000500, 0, 0, 'completed');
+        $this->assertSame(
+            gmdate('Y-m-d H:i:s', 1000000500 + $offset),
+            Tracking::getCourseLpFinalizationDate($uid, $cid, 0, false)
+        );
+        $this->assertSame(
+            gmdate('Y-m-d H:i:s', $ts + $offset),
+            Tracking::getCourseLpFinalizationDate($uid, $cid, $sid, false)
+        );
     }
 
     public function testAverageStudentScoreIsSumScoreOverSumMaxScoreOfScoAndQuizItems(): void

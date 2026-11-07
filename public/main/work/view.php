@@ -217,6 +217,10 @@ if ('edit' === $page) {
 
 switch ($action) {
     case 'send_comment':
+        // The comment form carries the token (it also sets the score and uploads a correction).
+        if (!workActionTokenIsValid('post')) {
+            api_not_allowed(true);
+        }
         if (isset($_FILES['attachment'])) {
             $_POST['attachment'] = $_FILES['attachment'];
         }
@@ -265,7 +269,7 @@ switch ($action) {
 
     case 'delete_attachment':
         // Only the author of the comment or a manager, and only for a comment of this submission.
-        if (!workCommentFileIsDeletable(
+        if (!workActionTokenIsValid('get') || !workCommentFileIsDeletable(
             (int) ($_REQUEST['comment_id'] ?? 0),
             (int) $workId,
             (int) api_get_user_id(),
@@ -284,6 +288,9 @@ switch ($action) {
         exit;
 
     case 'delete_correction':
+        if (!workActionTokenIsValid('get')) {
+            api_not_allowed(true);
+        }
         if ($allowEdition) {
             deleteCorrection($work);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
@@ -320,7 +327,9 @@ if (null !== $correctionNode) {
         ).'?'.api_get_cidreq();
 
     if ($allowEdition) {
-        $deleteCorrectionUrl = api_get_self().'?action=delete_correction&id='.$id.'&'.api_get_cidreq().work_view_get_origin_query();
+        $deleteCorrectionUrl = workActionUrl(
+            api_get_self().'?action=delete_correction&id='.$id.'&'.api_get_cidreq().work_view_get_origin_query()
+        );
     }
 }
 

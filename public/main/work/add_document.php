@@ -53,6 +53,11 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add document')];
 
+// Removing a document is a link: it needs the token that link carries.
+if ('delete' === $action && !workActionTokenIsValid('get')) {
+    api_not_allowed(true);
+}
+
 switch ($action) {
     case 'delete':
         if (!empty($workId) && !empty($docId)) {
@@ -79,7 +84,9 @@ if (empty($docId)) {
             /** @var CDocument $docData */
             $docData = $docRepo->find($documentId);
             if ($docData) {
-                $url = $urlDocument.'?action=delete&id='.$workId.'&document_id='.$documentId.'&'.api_get_cidreq();
+                $url = workActionUrl(
+                    $urlDocument.'?action=delete&id='.$workId.'&document_id='.$documentId.'&'.api_get_cidreq()
+                );
                 $link = Display::url(get_lang('Remove'), $url, ['class' => 'btn btn--danger']);
                 echo $docData->getTitle().' '.$link.'<br />';
             }
@@ -114,6 +121,7 @@ if (empty($docId)) {
     $form->addElement('hidden', 'id', $workId);
     $form->addElement('hidden', 'document_id', $docId);
     $form->addElement('label', get_lang('File'), $documentInfo->getTitle());
+    $form->protect();
     $form->addButtonCreate(get_lang('Add'));
     if ($form->validate()) {
         // Never trust the posted ids: the ones validated above (from the URL) are the ones used.

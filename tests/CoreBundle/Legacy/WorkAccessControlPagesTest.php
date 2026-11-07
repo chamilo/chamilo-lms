@@ -253,4 +253,24 @@ final class WorkAccessControlPagesTest extends KernelTestCase
         $this->assertFalse(workUserIsStudentOfCourse($userId, 1, 987003), 'not in that session');
         $this->assertFalse(workUserIsStudentOfCourse(0, 1, 0));
     }
+
+    public function testActionTokenIsStableAndChecked(): void
+    {
+        $token = workActionToken();
+        $this->assertNotSame('', $token);
+        $this->assertSame($token, workActionToken(), 'opening a second tab must not invalidate the links of the first');
+
+        $_GET = [];
+        $this->assertFalse(workActionTokenIsValid(), 'no token');
+        $_GET['work_sec_token'] = 'forged';
+        $this->assertFalse(workActionTokenIsValid(), 'wrong token');
+        $_GET['work_sec_token'] = $token;
+        $this->assertTrue(workActionTokenIsValid());
+    }
+
+    public function testActionUrlCarriesTheToken(): void
+    {
+        $url = workActionUrl('http://x.test/main/work/work_list_all.php?cid=1&action=delete');
+        $this->assertStringContainsString('&work_sec_token='.workActionToken(), $url);
+    }
 }

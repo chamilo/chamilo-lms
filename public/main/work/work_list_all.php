@@ -95,6 +95,15 @@ if (in_array($action, ['delete', 'make_visible', 'make_invisible'], true)
     api_not_allowed(true);
 }
 
+// These actions change data and are reached by links: they need the token those links carry (created here so
+// that the grids loaded by ajax afterwards only read it).
+$actionToken = workActionToken();
+if (in_array($action, ['delete', 'delete_correction', 'make_visible', 'make_invisible'], true)
+    && !workActionTokenIsValid('get')
+) {
+    api_not_allowed(true);
+}
+
 switch ($action) {
     case 'delete':
         /*	Delete document */
@@ -240,7 +249,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
         Display::getMdiIcon(ActionIcon::UPLOAD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Upload corrections package')).' '.get_lang('Upload corrections package').'</a>';
     */
     $url = api_get_path(WEB_CODE_PATH).
-        'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_correction';
+        workActionUrl('work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_correction');
     $actionsLeft .= Display::toolbarButton(get_lang('Delete all corrections'), $url, 'delete', 'danger');
 }
 

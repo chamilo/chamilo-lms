@@ -31,6 +31,9 @@ $requestCourseId = api_get_course_int_id();
 if (!empty($work_id) && !workBelongsToCourse($work_id, $requestCourseId, $sessionId)) {
     api_not_allowed(true);
 }
+// State-changing links (delete, visibility, move) carry this token; created here so that the grids loaded by
+// ajax afterwards only read it.
+workActionToken();
 
 $curdirpath = '';
 $htmlHeadXtra[] = to_javascript_work();
@@ -195,7 +198,7 @@ switch ($action) {
     case 'delete_dir':
         if ($is_allowed_to_edit) {
             $deleteId = (int) ($_REQUEST['id'] ?? 0);
-            if (!workBelongsToCourse($deleteId, $requestCourseId, $sessionId)) {
+            if (!workBelongsToCourse($deleteId, $requestCourseId, $sessionId) || !workActionTokenIsValid('request')) {
                 api_not_allowed(true);
             }
             $work_to_delete = get_work_data_by_id($deleteId);
@@ -237,7 +240,8 @@ switch ($action) {
 
             // Both ends must belong to the current course/session, and a folder cannot go into itself
             // or into one of its own descendants.
-            if (!workBelongsToCourse($moveItemId, $moveCourseId, $sessionId)
+            if (!workActionTokenIsValid('request')
+                || !workBelongsToCourse($moveItemId, $moveCourseId, $sessionId)
                 || !workBelongsToCourse($moveToId, $moveCourseId, $sessionId)
                 || workIsSameOrDescendantOf($moveToId, $moveItemId)
             ) {
@@ -275,7 +279,7 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed();
         }
-        if (null === $studentPublication) {
+        if (null === $studentPublication || !workActionTokenIsValid('get')) {
             api_not_allowed(true);
         }
 
@@ -309,7 +313,7 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed();
         }
-        if (null === $studentPublication) {
+        if (null === $studentPublication || !workActionTokenIsValid('get')) {
             api_not_allowed(true);
         }
 

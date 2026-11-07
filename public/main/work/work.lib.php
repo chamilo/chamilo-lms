@@ -675,6 +675,7 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
     $form->addHeader(get_lang('Move the file').' - '.Security::remove_XSS($title));
     $form->addHidden('item_id', $move_file);
     $form->addHidden('action', 'move_to');
+    $form->addHidden('work_sec_token', workActionToken());
 
     // Group documents cannot be uploaded in the root
     $options = [];
@@ -1693,7 +1694,7 @@ function getWorkListTeacher(
 
             $visibilityLink = Display::url(
                 Display::getMdiIcon($icon, 'ch-tool-icon', null, ICON_SIZE_SMALL, $text),
-                api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action='.$action.'&'.api_get_cidreq()
+                workActionUrl(api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action='.$action.'&'.api_get_cidreq())
             );
 
             $title = $studentPublication->getTitle();
@@ -1931,7 +1932,7 @@ function get_work_user_list_from_documents(
 
         $deleteLink = '';
         if (1 == $allowEdition && !empty($itemId)) {
-            $deleteLink = Display::url($deleteIcon, $urlDelete.'&item_id='.$itemId.'&id='.$workId);
+            $deleteLink = Display::url($deleteIcon, workActionUrl($urlDelete.'&item_id='.$itemId.'&id='.$workId));
         }
 
         $row['type'] = null;
@@ -2400,13 +2401,13 @@ function get_work_user_list(
 
                     if ($assignment->getAccepted()) {
                         $action .= '<a
-                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=make_invisible&item_id='.$item_id.'"
+                            href="'.workActionUrl($url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=make_invisible&item_id='.$item_id).'"
                             title="'.get_lang('invisible').'" >'.
                             Display::getMdiIcon(ActionIcon::INVISIBLE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('invisible')).
                             '</a>';
                     } else {
                         $action .= '<a
-                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=make_visible&item_id='.$item_id.'"
+                            href="'.workActionUrl($url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=make_visible&item_id='.$item_id).'"
                             title="'.get_lang('Visible').'" >'.
                             Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Visible')).
                             '</a> ';
@@ -2416,7 +2417,7 @@ function get_work_user_list(
                         $action .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Delete'));
                     } else {
                         $action .= '<a
-                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete&item_id='.$item_id.'"
+                            href="'.workActionUrl($url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete&item_id='.$item_id).'"
                             onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;"
                             title="'.get_lang('Delete').'" >'.
                             Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
@@ -2437,7 +2438,7 @@ function get_work_user_list(
                                 '</a>';
                         }
                         $action .= ' <a
-                            href="'.$url.'work_list.php?'.api_get_cidreq().'&action=delete&item_id='.$item_id.'&id='.$workId.'"
+                            href="'.workActionUrl($url.'work_list.php?'.api_get_cidreq().'&action=delete&item_id='.$item_id.'&id='.$workId).'"
                             onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;"
                             title="'.get_lang('Delete').'"  >'.
                             Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
@@ -4306,7 +4307,7 @@ function getWorkComment(CStudentPublicationComment $commentEntity, array $course
             $workId = $commentEntity->getPublication()->getIid();
             $filePath = '';
             $deleteUrl = api_get_path(WEB_CODE_PATH).
-                'work/view.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_attachment&comment_id='.$id;
+                workActionUrl('work/view.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_attachment&comment_id='.$id);
             $fileName = $commentEntity->getResourceNode()->getResourceFiles()->first()->getTitle();
         }
         $comment['comment'] = $commentEntity->getComment();
@@ -4526,6 +4527,7 @@ function getWorkCommentForm(CStudentPublication $work, $workParent)
     $form->addHtmlEditor('comment', get_lang('Comment'), false);
     $form->addFile('attachment', get_lang('Attachment'));
     $form->addElement('hidden', 'iid', $id);
+    $form->addElement('hidden', 'work_sec_token', workActionToken());
 
     if (api_is_allowed_to_edit()) {
         $form->addCheckBox(
@@ -6877,4 +6879,31 @@ function workUserIsStudentOfCourse(int $userId, int $courseId, int $sessionId = 
     }
 
     return false !== $found;
+}
+
+/**
+ * Token of the state-changing links of the assignments pages (delete, visibility, add/remove user or document...).
+ * Legacy pages under public/main have no resolved route, so CsrfProtectionListener does not cover them and they keep
+ * their own token, as work_missing.php does. It uses its own namespace so that opening another page (which rotates
+ * the default "sec_token") does not invalidate the links of a page already open.
+ */
+function workActionToken(): string
+{
+    return Security::get_existing_token('work');
+}
+
+/**
+ * Checks the token sent by a state-changing request of the assignments pages ($requestType: get, post or request).
+ */
+function workActionTokenIsValid(string $requestType = 'get'): bool
+{
+    return Security::check_token($requestType, null, 'work');
+}
+
+/**
+ * Appends the action token to a link that already carries a query string.
+ */
+function workActionUrl(string $url): string
+{
+    return $url.'&work_sec_token='.workActionToken();
 }

@@ -1348,26 +1348,23 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertFalse(@$this->check($p, '987654=completed'), 'unknown item');
     }
 
-    public function testParsePrereqNegationOfANumericItemReferenceIsAlwaysTrue(): void
+    public function testParsePrereqNegationInvertsANumericItemReference(): void
     {
         $p = $this->prereqScene(['completed', 'incomplete', 'not attempted']);
         [$done, $open] = $p['ids'];
 
-        // PINNED QUIRK: the operand regex /~([^(\d+\*)\{]*)/ excludes digits, so for a numeric item id it captures
-        // '' (nothing), parse_prereq('') is false and its negation is true whatever the item's status.
-        $this->assertTrue($this->check($p, '~'.$done));
+        $this->assertFalse($this->check($p, '~'.$done));
         $this->assertTrue($this->check($p, '~'.$open));
     }
 
-    public function testParsePrereqGroupsWithAMultiplierNeedThatMinimumOfCompletedMembers(): void
+    public function testParsePrereqGroupsNeedAllOrTheMultiplierMinimumOfTheirMembers(): void
     {
         $p = $this->prereqScene(['completed', 'passed', 'incomplete', 'not attempted']);
         [$a, $b, $c] = $p['ids'];
 
-        // PINNED QUIRK: a group without multiplier is split with its braces still attached ("{id", "id}"), which
-        // match no item: such a group is always false, even when every member is done.
-        $this->assertFalse(@$this->check($p, '{'.$a.','.$b.'}'));
-        $this->assertFalse(@$this->check($p, '{'.$a.','.$c.'}'));
+        $this->assertTrue($this->check($p, '{'.$a.','.$b.'}'));
+        $this->assertFalse($this->check($p, '{'.$a.','.$c.'}'));
+        $this->assertFalse(@$this->check($p, '{'.$a.',987654}'), 'an unknown member blocks a plain group');
         $this->assertTrue($this->check($p, '2*{'.$a.','.$b.','.$c.'}'));
         $this->assertFalse($this->check($p, '3*{'.$a.','.$b.','.$c.'}'));
         $this->assertTrue($this->check($p, '1*{'.$c.','.$a.'}'));

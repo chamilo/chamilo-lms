@@ -2170,7 +2170,7 @@ class learnpathItem
 
                         $list = [];
                         $myres = preg_match(
-                            '/~([^(\d+\*)\{]*)/',
+                            '/~([^()*{]*)/',
                             $prereqs_string,
                             $list
                         );
@@ -2215,7 +2215,7 @@ class learnpathItem
                         );
 
                         if ($groups_there) {
-                            foreach ($groups[1] as $gr) {
+                            foreach ($groups[1] as $groupIndex => $gr) {
                                 // Only take the results that correspond to
                                 //  the big brackets-enclosed condition.
                                 if ($debug) {
@@ -2288,7 +2288,8 @@ class learnpathItem
                                             0
                                         );
                                     }
-                                    $list = explode(',', $gr);
+                                    // Members only: $groups[3] is the content of the braces.
+                                    $list = explode(',', $groups[3][$groupIndex]);
                                     $mycond = true;
 
                                     foreach ($list as $cond) {

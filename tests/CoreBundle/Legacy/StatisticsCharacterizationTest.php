@@ -295,8 +295,8 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $this->assertSame('1 MB', Statistics::makeSizeString(1048576));
         $this->assertSame('1.5 MB', Statistics::makeSizeString(1572864));
         $this->assertSame('1.5 GB', Statistics::makeSizeString(1610612736));
-        // PINNED QUIRK: exactly 2^30 bytes falls in no branch (`>` instead of `>=`) and renders as ''.
-        $this->assertSame('', Statistics::makeSizeString(1073741824));
+        // exactly 2^30 bytes used to fall in no branch (`>` instead of `>=`) and render as ''.
+        $this->assertSame('1 GB', Statistics::makeSizeString(1073741824));
     }
 
     public function testBuildDatesArrayExcludesTheEndDate(): void

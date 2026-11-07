@@ -37,7 +37,7 @@ class Statistics
         if ($size >= pow(2, 20) && $size < pow(2, 30)) {
             return round($size / pow(2, 20), 1)." MB";
         }
-        if ($size > pow(2, 30)) {
+        if ($size >= pow(2, 30)) {
             return round($size / pow(2, 30), 2)." GB";
         }
 

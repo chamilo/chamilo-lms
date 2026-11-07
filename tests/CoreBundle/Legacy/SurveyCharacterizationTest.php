@@ -1600,17 +1600,29 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame(1, $this->rowCount('c_survey_question', 'iid = ?', [$q]), 'the questions themselves stay');
     }
 
-    public function testEmptySurveyFromIdThrowsBecauseItFiltersOnDroppedColumns(): void
+    public function testEmptySurveyFromIdDeletesEveryInvitationAndAnswerOfThatSurvey(): void
     {
-        // PINNED QUIRK: it deletes invitations by survey_code and c_id (no survey_code column), answers by
-        // c_id and updates c_survey by c_id/session_id: none of them exist.
-        $s = $this->insertSurvey(['invited' => 1, 'answered' => 1]);
+        $sid = $this->insertSession();
+        $s = $this->insertSurvey(['invited' => 3, 'answered' => 2]);
+        $other = $this->insertSurvey(['invited' => 1, 'answered' => 1]);
         $q = $this->insertQuestion($s, 'sv q');
+        $oq = $this->insertQuestion($other, 'sv oq');
         $this->insertInvitation($s, 1);
+        $this->insertInvitation($s, 2, ['session_id' => $sid]);
+        $this->insertInvitation($s, 1, ['c_id' => 2]);
+        $this->insertInvitation($other, 1);
         $this->insertAnswer($s, $q, '1', 'a');
+        $this->insertAnswer($other, $oq, '1', 'a');
 
-        $this->expectException(\Chamilo\CoreBundle\Exception\NotAllowedException::class);
-        \SurveyManager::emptySurveyFromId($s);
+        $this->assertTrue(\SurveyManager::emptySurveyFromId($s));
+
+        $this->assertSame(0, $this->rowCount('c_survey_invitation', 'survey_id = ?', [$s]));
+        $this->assertSame(0, $this->rowCount('c_survey_answer', 'survey_id = ?', [$s]));
+        $row = $this->surveyRow($s);
+        $this->assertSame([0, 0], [(int) $row['invited'], (int) $row['answered']]);
+        $this->assertSame(1, $this->rowCount('c_survey_invitation', 'survey_id = ?', [$other]));
+        $this->assertSame(1, $this->rowCount('c_survey_answer', 'survey_id = ?', [$other]));
+        $this->assertSame([1, 1], [(int) $this->surveyRow($other)['invited'], (int) $this->surveyRow($other)['answered']]);
     }
 
     public function testEmptySurveyFromIdOfAnUnknownSurveyReturnsFalse(): void

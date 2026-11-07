@@ -1463,21 +1463,17 @@ class SurveyManager
             return false;
         }
 
-        $surveyCode = $surveyData['survey_code'];
-        $courseId = (int) $surveyData['c_id'];
-        $sessionId = (int) $surveyData['session_id'];
-
         $sql = "DELETE FROM $surveyInvitationTable
-                WHERE session_id = $sessionId AND c_id = $courseId AND survey_code = '$surveyCode' ";
+                WHERE survey_id = $surveyId";
         Database::query($sql);
 
         $sql = "DELETE FROM $surveyAnswerTable
-                WHERE survey_id = $surveyId AND c_id = $courseId ";
+                WHERE survey_id = $surveyId";
         Database::query($sql);
 
         $sql = "UPDATE $surveyTable
                 SET invited = 0, answered = 0
-                WHERE iid = $surveyId AND c_id = $courseId AND session_id = $sessionId ";
+                WHERE iid = $surveyId";
         Database::query($sql);
 
         return true;

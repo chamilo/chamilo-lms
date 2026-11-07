@@ -158,6 +158,16 @@ final class WorkCharacterizationTest extends KernelTestCase
         ]);
     }
 
+    private function session(): int
+    {
+        $this->conn->executeStatement(
+            'INSERT INTO session (title, nbr_courses, nbr_users, nbr_classes, visibility, status) VALUES (?, 0, 0, 0, 1, 0)',
+            ['wk_session_'.(++$this->seq)]
+        );
+
+        return (int) $this->conn->lastInsertId();
+    }
+
     private function field(int $iid, string $column): mixed
     {
         return $this->conn->fetchOne("SELECT $column FROM c_student_publication WHERE iid = ?", [$iid]);
@@ -196,25 +206,42 @@ final class WorkCharacterizationTest extends KernelTestCase
         $folder = $this->folder();
         $a = $this->student()->getId();
         $b = $this->other()->getId();
-        $this->work(['parent_id' => $folder, 'user_id' => $a]);
-        $this->work(['parent_id' => $folder, 'user_id' => $a]);
-        $this->work(['parent_id' => $folder, 'user_id' => $b, 'active' => 0]);
-        $this->work(['parent_id' => $folder, 'user_id' => $this->admin()->getId(), 'active' => 2]);
+        foreach ([
+            $this->work(['parent_id' => $folder, 'user_id' => $a]),
+            $this->work(['parent_id' => $folder, 'user_id' => $a]),
+            $this->work(['parent_id' => $folder, 'user_id' => $b, 'active' => 0]),
+            $this->work(['parent_id' => $folder, 'user_id' => $this->admin()->getId(), 'active' => 2]),
+        ] as $id) {
+            $this->publish($id, 1);
+        }
 
         $total = getUniqueStudentAttemptsTotal($folder, 0, 1, 0);
 
         $this->assertEquals(2, $total, 'two distinct authors with active 0/1; the deleted one is ignored');
     }
 
-    public function testUniqueStudentAttemptsTotalFiltersOnPostGroupIdAndIgnoresSession(): void
+    public function testUniqueStudentAttemptsTotalFiltersOnPostGroupId(): void
     {
         $folder = $this->folder();
-        $this->work(['parent_id' => $folder, 'post_group_id' => 0]);
-        $this->work(['parent_id' => $folder, 'user_id' => $this->other()->getId(), 'post_group_id' => 987654]);
+        $this->publish($this->work(['parent_id' => $folder, 'post_group_id' => 0]), 1);
+        $this->publish($this->work(['parent_id' => $folder, 'user_id' => $this->other()->getId(), 'post_group_id' => 987654]), 1);
 
-        // PINNED QUIRK: the session condition is computed but never put in the query, so the session id is ignored.
         $this->assertEquals(1, getUniqueStudentAttemptsTotal($folder, 0, 1, 0));
-        $this->assertEquals(1, getUniqueStudentAttemptsTotal($folder, 0, 1, 12345));
+    }
+
+    public function testUniqueStudentAttemptsTotalHonoursTheSessionAndCourseOfTheWorkLinks(): void
+    {
+        $folder = $this->folder();
+        $sessionId = $this->session();
+        $this->publish($this->work(['parent_id' => $folder, 'user_id' => $this->student()->getId()]), 1);
+        $this->publish($this->work(['parent_id' => $folder, 'user_id' => $this->other()->getId()]), 1, 2, $sessionId);
+        $this->publish($this->work(['parent_id' => $folder, 'user_id' => $this->admin()->getId()]), 2);
+
+        // Fixed: the session condition used to be computed and dropped, so every session saw every submission.
+        $this->assertEquals(1, getUniqueStudentAttemptsTotal($folder, 0, 1, 0), 'base course only');
+        $this->assertEquals(1, getUniqueStudentAttemptsTotal($folder, 0, 1, $sessionId), 'that session only');
+        $this->assertEquals(0, getUniqueStudentAttemptsTotal($folder, 0, 1, $sessionId + 1000), 'another session: none');
+        $this->assertEquals(1, getUniqueStudentAttemptsTotal($folder, 0, 2, 0), 'the course id is honoured too');
     }
 
     public function testUniqueStudentAttemptsWithoutUserNorListIsZero(): void

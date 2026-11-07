@@ -334,11 +334,12 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
     $workId = (int) $workId;
     $sessionId = (int) $sessionId;
     $groupId = (int) $groupId;
+    // Course and session now live on the resource link of the work, not on the table itself.
     $sessionCondition = api_get_session_condition(
         $sessionId,
         true,
         false,
-        'w.session_id'
+        'link.session_id'
     );
 
     $groupIid = 0;
@@ -349,12 +350,16 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
 
     $sql = "SELECT count(DISTINCT u.id)
             FROM $work_table w
+            INNER JOIN resource_link link
+            ON (link.resource_node_id = w.resource_node_id)
             INNER JOIN $user_table u
             ON w.user_id = u.id
             WHERE
+                link.c_id = $course_id AND
                 w.parent_id = $workId AND
-                w.post_group_id = $groupIid AND
+                w.post_group_id = ".(int) $groupIid." AND
                 w.active IN (0, 1)
+                $sessionCondition
             ";
 
     $res_document = Database::query($sql);

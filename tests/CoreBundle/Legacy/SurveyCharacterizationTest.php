@@ -1082,6 +1082,27 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertStringContainsString(get_lang('The page break cannot be the first'), $out);
         $this->assertStringContainsString(get_lang('The page break cannot be the last one'), $out);
 
+        $onlyLast = $this->insertSurvey();
+        $this->insertQuestion($onlyLast, 'sv a', 'yesno', 1);
+        $this->insertQuestion($onlyLast, 'sv brk', 'pagebreak', 2);
+        $this->insertQuestion($onlyLast, 'sv b', 'yesno', 3);
+        $this->insertQuestion($onlyLast, 'sv trailing', 'pagebreak', 4);
+        ob_start();
+        \SurveyUtil::check_first_last_question($onlyLast);
+        $out = (string) ob_get_clean();
+        $this->assertStringContainsString(get_lang('The page break cannot be the last one'), $out);
+        $this->assertStringNotContainsString(get_lang('The page break cannot be the first'), $out);
+
+        $onlyFirst = $this->insertSurvey();
+        $this->insertQuestion($onlyFirst, 'sv leading', 'pagebreak', 1);
+        $this->insertQuestion($onlyFirst, 'sv a', 'yesno', 2);
+        $this->insertQuestion($onlyFirst, 'sv b', 'yesno', 3);
+        ob_start();
+        \SurveyUtil::check_first_last_question($onlyFirst);
+        $out = (string) ob_get_clean();
+        $this->assertStringContainsString(get_lang('The page break cannot be the first'), $out);
+        $this->assertStringNotContainsString(get_lang('The page break cannot be the last one'), $out);
+
         $ok = $this->insertSurvey();
         $this->insertQuestion($ok, 'sv a', 'yesno', 1);
         $this->insertQuestion($ok, 'sv brk', 'pagebreak', 2);
@@ -1610,5 +1631,39 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
         $this->assertStringContainsString('sv pending survey', $html);
         $this->assertSame('', \SurveyManager::surveyReport([], 0));
+    }
+
+    public function testSaveInvitationsReminderReusesTheStoredInvitationCodeInASession(): void
+    {
+        $sid = $this->insertSession();
+        $s = $this->insertSurvey();
+        $this->insertInvitation($s, 2, ['session_id' => $sid, 'invitation_code' => 'svcodekeep']);
+        $this->setContext(1, 1, $sid);
+
+        $sent = \SurveyUtil::saveInvitations($this->survey($s), ['USER:2'], 'sv reminder subject', 'sv body **link**', 1, true);
+
+        $this->assertSame(1, $sent);
+        $content = (string) $this->conn->fetchOne(
+            "SELECT content FROM message WHERE title = 'sv reminder subject' ORDER BY id DESC LIMIT 1"
+        );
+        $this->assertStringContainsString('invitationCode=svcodekeep', $content);
+        $this->assertSame(1, $this->rowCount('c_survey_invitation', 'survey_id = ?', [$s]), 'no second invitation');
+    }
+
+    public function testSaveInvitationsReminderMintsAFreshCodeOutsideSessions(): void
+    {
+        $s = $this->insertSurvey();
+        $this->insertInvitation($s, 2, ['invitation_code' => 'svcodelost']);
+
+        $sent = \SurveyUtil::saveInvitations($this->survey($s), ['USER:2'], 'sv reminder base', 'sv body **link**', 1, true);
+
+        $this->assertSame(1, $sent);
+        $content = (string) $this->conn->fetchOne(
+            "SELECT content FROM message WHERE title = 'sv reminder base' ORDER BY id DESC LIMIT 1"
+        );
+        // PINNED QUIRK: get_invitations() does not find the NULL-session invitation, so the reminder links to
+        // a brand new code that is stored nowhere: the learner cannot open the survey from the reminder.
+        $this->assertStringNotContainsString('svcodelost', $content);
+        $this->assertMatchesRegularExpression('/invitationCode=[0-9a-f]{32}/', $content);
     }
 }

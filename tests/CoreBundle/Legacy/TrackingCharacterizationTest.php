@@ -318,6 +318,7 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         $until = '2001-04-30 23:59:59';
         $before = Tracking::getTotalTimeSpentInCourses($from, $until);
         $beforeCap3 = Tracking::getTotalTimeSpentInCourses($from, $until, 3);
+        $beforeAll = Tracking::getTotalTimeSpentInCourses();
 
         $cid = $this->course->getId();
         $uid = $this->alice->getId();
@@ -331,6 +332,13 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         $this->assertSame(8, Tracking::getTotalTimeSpentInCourses($from, $until) - $before);
         // A lower cap applies to every row (2 stays 2, 10 -> 3): 5 instead of 8.
         $this->assertSame(5, Tracking::getTotalTimeSpentInCourses($from, $until, 3) - $beforeCap3);
+        // Fixed: without both dates the WHERE clause was empty (invalid SQL). It now spans every access:
+        // the three in-window rows (2+0+6) plus the 8h one only partly in the window (capped to 6).
+        $this->assertSame(8 + 6, Tracking::getTotalTimeSpentInCourses() - $beforeAll);
+        $this->assertSame(
+            Tracking::getTotalTimeSpentInCourses(),
+            Tracking::getTotalTimeSpentInCourses($from, '')
+        );
     }
 
     // ------------------------------------------------------------------

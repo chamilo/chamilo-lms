@@ -8358,7 +8358,7 @@ class Tracking
         $tableUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $tableUrl = null;
         $urlCondition = null;
-        $conditionTime = null;
+        $conditionTime = ' 1 = 1 ';
         $accessUrlUtil = Container::getAccessUrlUtil();
         if ($accessUrlUtil->isMultiple()) {
             $accessUrlId = $accessUrlUtil->getCurrent()->getId();

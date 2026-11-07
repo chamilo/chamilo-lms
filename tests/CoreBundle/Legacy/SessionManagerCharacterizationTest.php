@@ -714,19 +714,20 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         $this->assertSame(1, (int) $this->courseCounter($sid, $c1), 'Removal recomputes the per-course counter.');
     }
 
-    public function testSubscribingAnAlreadySubscribedUserToASessionCourseFatals(): void
+    public function testSubscribingAnAlreadySubscribedUserToASessionCourseIsIdempotent(): void
     {
         $a = $this->createUser('sm_dupsub');
+        $b = $this->createUser('sm_dupsub2');
         [$c1, $code1] = $this->newCourse('sm_dupsub_course');
         $sid = $this->newSession('sm_s_dupsub');
         $this->legacy('add_courses_to_session', $sid, [$c1]);
         $this->legacy('subscribe_users_to_session_course', [$a->getId()], $sid, $code1);
 
-        // Current behaviour, almost certainly a bug: insertUsersInCourse() chains ->setVisibility()
-        // on Session::addUserInCourse(), which returns null for an existing subscription.
-        $this->expectException(\Error::class);
-        $this->expectExceptionMessage('setVisibility() on null');
-        $this->legacy('subscribe_users_to_session_course', [$a->getId()], $sid, $code1);
+        // Fixed: this used to die with "setVisibility() on null" because Session::addUserInCourse() returns
+        // null for an existing subscription. The existing one is kept, the new user in the list is added.
+        $this->assertTrue($this->legacy('subscribe_users_to_session_course', [$a->getId(), $b->getId()], $sid, $code1));
+        $this->assertSame(2, (int) $this->one('SELECT COUNT(*) FROM session_rel_course_rel_user WHERE session_id = ? AND c_id = ?', [$sid, $c1]));
+        $this->assertSame(2, (int) $this->courseCounter($sid, $c1), 'The course counter is not incremented twice for the same user.');
     }
 
     // ---------------------------------------------------------------- coaches

@@ -10727,10 +10727,14 @@ class SessionManager
                 continue;
             }
 
-            $session
-                ->addUserInCourse($relationInfo['status'], $user, $course)
-                ->setVisibility($relationInfo['visibility'])
-            ;
+            $subscription = $session->addUserInCourse($relationInfo['status'], $user, $course);
+
+            // Session::addUserInCourse() returns null when the user is already subscribed: nothing to insert.
+            if (null === $subscription) {
+                continue;
+            }
+
+            $subscription->setVisibility($relationInfo['visibility']);
 
             Event::logUserSubscribedInCourseSession($user, $course, $session);
 

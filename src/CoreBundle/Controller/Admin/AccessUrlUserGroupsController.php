@@ -82,13 +82,20 @@ class AccessUrlUserGroupsController extends AbstractController
 
         $assignedIds = $this->getAssignedGroupIds($accessUrlId);
 
-        $groups = $this->em->createQueryBuilder()
+        $groupsQb = $this->em->createQueryBuilder()
             ->select('g.id AS id, g.title AS title')
             ->from(Usergroup::class, 'g')
             ->orderBy('g.title', 'ASC')
-            ->getQuery()
-            ->getArrayResult()
         ;
+        if (null !== $managedUrlIds) {
+            $groupsQb
+                ->andWhere(
+                    'g.id IN (SELECT IDENTITY(scopeRel.userGroup) FROM '.AccessUrlRelUserGroup::class.' scopeRel WHERE IDENTITY(scopeRel.url) IN (:scopeUrlIds))'
+                )
+                ->setParameter('scopeUrlIds', [] === $managedUrlIds ? [0] : $managedUrlIds)
+            ;
+        }
+        $groups = $groupsQb->getQuery()->getArrayResult();
 
         $assigned = [];
         $available = [];
@@ -125,7 +132,11 @@ class AccessUrlUserGroupsController extends AbstractController
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $groupIds = array_map('intval', $data['group_ids'] ?? []);
+        // Only groups already inside the caller's managed URLs may be linked (see AccessUrlScopeHelper).
+        $groupIds = $this->accessUrlScope->filterManagedUserGroupIds(
+            $this->currentUser(),
+            array_map('intval', $data['group_ids'] ?? [])
+        );
 
         UrlManager::update_urls_rel_usergroup($groupIds, $accessUrlId);
 
@@ -151,6 +162,8 @@ class AccessUrlUserGroupsController extends AbstractController
                 return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
             }
         }
+
+        $groupIds = $this->accessUrlScope->filterManagedUserGroupIds($currentUser, $groupIds);
 
         if ('add' === $action) {
             UrlManager::addUserGroupListToUrl($groupIds, $urlIds);

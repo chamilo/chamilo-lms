@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,7 +82,7 @@ class AccessUrlUsersController extends AbstractController
 
         $assignedIds = $this->getAssignedUserIds($accessUrlId);
 
-        $users = $this->em->createQueryBuilder()
+        $usersQb = $this->em->createQueryBuilder()
             ->select('u.id AS id, u.firstname AS firstname, u.lastname AS lastname, u.username AS username')
             ->from(User::class, 'u')
             ->where('u.active <> :softDeleted')
@@ -92,9 +93,9 @@ class AccessUrlUsersController extends AbstractController
             ->setParameter('fallback', User::ROLE_FALLBACK)
             ->orderBy('u.lastname', 'ASC')
             ->addOrderBy('u.firstname', 'ASC')
-            ->getQuery()
-            ->getArrayResult()
         ;
+        $this->restrictToManagedUsers($usersQb, $managedUrlIds);
+        $users = $usersQb->getQuery()->getArrayResult();
 
         $assigned = [];
         $available = [];
@@ -136,7 +137,12 @@ class AccessUrlUsersController extends AbstractController
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $userIds = array_map('intval', $data['user_ids'] ?? []);
+        // Only users already inside the caller's managed URLs may be linked: linking a user of
+        // another branch would make it "managed" and so editable/deletable by the caller.
+        $userIds = $this->accessUrlScope->filterManagedUserIds(
+            $this->currentUser(),
+            array_map('intval', $data['user_ids'] ?? [])
+        );
 
         UrlManager::update_urls_rel_user($userIds, $accessUrlId, true);
 
@@ -163,6 +169,8 @@ class AccessUrlUsersController extends AbstractController
             }
         }
 
+        $userIds = $this->accessUrlScope->filterManagedUserIds($currentUser, $userIds);
+
         if ('add' === $action) {
             UrlManager::add_users_to_urls($userIds, $urlIds);
         } else {
@@ -186,7 +194,9 @@ class AccessUrlUsersController extends AbstractController
             session_write_close();
         }
 
-        $totalUsers = (int) $this->em->createQueryBuilder()
+        $managedUrlIds = $this->accessUrlScope->getManagedUrlIds($this->currentUser());
+
+        $countQb = $this->em->createQueryBuilder()
             ->select('COUNT(u.id)')
             ->from(User::class, 'u')
             ->where('u.active <> :softDeleted')
@@ -195,9 +205,9 @@ class AccessUrlUsersController extends AbstractController
             ->setParameter('softDeleted', User::SOFT_DELETED)
             ->setParameter('anonymous', User::ANONYMOUS)
             ->setParameter('fallback', User::ROLE_FALLBACK)
-            ->getQuery()
-            ->getSingleScalarResult()
         ;
+        $this->restrictToManagedUsers($countQb, $managedUrlIds);
+        $totalUsers = (int) $countQb->getQuery()->getSingleScalarResult();
 
         // No "first_letter" param at all means the caller has no preference yet
         // (first load): apply the size-based default. An explicit "__all__" is
@@ -222,6 +232,8 @@ class AccessUrlUsersController extends AbstractController
             ->addOrderBy('u.firstname', 'ASC')
         ;
 
+        $this->restrictToManagedUsers($qb, $managedUrlIds);
+
         if ('' !== $firstLetter) {
             $qb->andWhere('u.lastname LIKE :firstLetter')
                 ->setParameter('firstLetter', $firstLetter.'%')
@@ -240,6 +252,20 @@ class AccessUrlUsersController extends AbstractController
             'totalUsers' => $totalUsers,
             'appliedFirstLetter' => '' === $firstLetter ? '__all__' : $firstLetter,
         ]);
+    }
+
+    /**
+     * @param int[]|null $managedUrlIds null means unrestricted
+     */
+    private function restrictToManagedUsers(QueryBuilder $qb, ?array $managedUrlIds): void
+    {
+        if (null === $managedUrlIds) {
+            return;
+        }
+
+        $qb->andWhere(
+            'u.id IN (SELECT IDENTITY(scopeRel.user) FROM '.AccessUrlRelUser::class.' scopeRel WHERE IDENTITY(scopeRel.url) IN (:scopeUrlIds))'
+        )->setParameter('scopeUrlIds', [] === $managedUrlIds ? [0] : $managedUrlIds);
     }
 
     /**

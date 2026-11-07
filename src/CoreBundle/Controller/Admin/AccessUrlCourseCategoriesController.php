@@ -82,14 +82,21 @@ class AccessUrlCourseCategoriesController extends AbstractController
 
         $assignedIds = $this->getAssignedCategoryIds($accessUrlId);
 
-        $categories = $this->em->createQueryBuilder()
+        $categoriesQb = $this->em->createQueryBuilder()
             ->select('c.id AS id, c.title AS title')
             ->from(CourseCategory::class, 'c')
             ->where('c.parent IS NULL')
             ->orderBy('c.title', 'ASC')
-            ->getQuery()
-            ->getArrayResult()
         ;
+        if (null !== $managedUrlIds) {
+            $categoriesQb
+                ->andWhere(
+                    'c.id IN (SELECT IDENTITY(scopeRel.courseCategory) FROM '.AccessUrlRelCourseCategory::class.' scopeRel WHERE IDENTITY(scopeRel.url) IN (:scopeUrlIds))'
+                )
+                ->setParameter('scopeUrlIds', [] === $managedUrlIds ? [0] : $managedUrlIds)
+            ;
+        }
+        $categories = $categoriesQb->getQuery()->getArrayResult();
 
         $assigned = [];
         $available = [];
@@ -126,7 +133,11 @@ class AccessUrlCourseCategoriesController extends AbstractController
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $categoryIds = array_map('intval', $data['category_ids'] ?? []);
+        // Only categories already inside the caller's managed URLs may be linked (see AccessUrlScopeHelper).
+        $categoryIds = $this->accessUrlScope->filterManagedCourseCategoryIds(
+            $this->currentUser(),
+            array_map('intval', $data['category_ids'] ?? [])
+        );
 
         UrlManager::updateUrlRelCourseCategory($categoryIds, $accessUrlId);
 

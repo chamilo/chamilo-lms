@@ -3743,7 +3743,6 @@ class learnpathItem
         if ('quiz' === $this->type && 0 == $this->get_prevent_reinit() && 'completed' === $this->get_status()) {
             $this->restart();
             $params = [
-                'c_id' => $courseId,
                 'total_time' => $this->get_total_time(),
                 'start_time' => $this->current_start_time,
                 'score' => $this->get_score(),
@@ -3778,7 +3777,6 @@ class learnpathItem
 
         if (!$inserted && Database::num_rows($checkResult) < 1) {
             $params = [
-                'c_id' => $courseId,
                 'total_time' => $this->get_total_time(),
                 'start_time' => $this->current_start_time,
                 'score' => $this->get_score(),
@@ -3808,8 +3806,7 @@ class learnpathItem
                 'lesson_location' => $this->lesson_location,
             ];
             $where = [
-                'c_id = ? AND lp_item_id = ? AND lp_view_id = ? AND view_count = ?' => [
-                    $courseId,
+                'lp_item_id = ? AND lp_view_id = ? AND view_count = ?' => [
                     $this->db_id,
                     $this->view_id,
                     $this->get_attempt_id(),
@@ -3998,7 +3995,6 @@ class learnpathItem
         if (2 == $lpType) {
             $sql = 'SELECT status FROM '.$itemViewTable.'
                     WHERE
-                        c_id = '.$courseId.' AND
                         lp_item_id = "'.$this->db_id.'" AND
                         lp_view_id = "'.$this->view_id.'" AND
                         view_count = "'.$this->get_attempt_id().'"';

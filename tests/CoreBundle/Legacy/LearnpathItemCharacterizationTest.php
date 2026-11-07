@@ -630,38 +630,45 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertSame(300, (int) $this->ivRow($s['view'], $s['item'])['total_time'], 'total_time is replaced (not added to) by exe_duration');
     }
 
-    public function testWriteToDbInsertsNoRowForAMissingAttemptBecauseItWritesAColumnThatNoLongerExists(): void
+    public function testWriteToDbInsertsTheRowOfAnAttemptThatDoesNotExistYet(): void
     {
         $s = $this->scene('document', 1);
         $item = $this->item($s['item'], $s['view']);
         $item->set_attempt_id(2);
+        $this->window($item, 120);
+        $item->set_status('incomplete');
+        $item->current_score = 3;
+        $item->current_data = 'li_sd';
 
-        // PINNED QUIRK: the INSERT of a not-yet-existing attempt row includes a c_id column, which c_lp_item_view
-        // does not have any more: the query fails (NotAllowedException through Database::handleError) and the row
-        // is never created. Any code path that opens a new attempt (restart() with several attempts) hits this.
-        try {
-            $item->write_to_db();
-            $this->fail('expected the INSERT to fail');
-        } catch (NotAllowedException) {
-            $this->assertFalse($this->ivRow($s['view'], $s['item'], 2));
-        }
+        $this->assertTrue($item->write_to_db());
+
+        $row = $this->ivRow($s['view'], $s['item'], 2);
+        $this->assertNotFalse($row, 'the missing attempt row is inserted (c_lp_item_view has no c_id column)');
+        $this->assertSame((int) $row['iid'], $item->db_item_view_id);
+        $this->assertSame('incomplete', $row['status']);
+        $this->assertSame(120, (int) $row['total_time']);
+        $this->assertSame(1700000000, (int) $row['start_time']);
+        $this->assertEquals(3, $row['score']);
+        $this->assertSame('li_sd', $row['suspend_data']);
+        $this->assertSame('not attempted', $this->ivRow($s['view'], $s['item'], 1)['status'], 'attempt 1 untouched');
     }
 
-    public function testWriteToDbOfAHotpotatoesItemUpdatesItsRowByViewItemAndAttempt(): void
+    public function testWriteToDbOfAHotpotatoesItemReplacesTheTimeAndUpdatesItsRowByViewItemAndAttempt(): void
     {
         $s = $this->scene('hotpotatoes', 1, ['status' => 'incomplete', 'total_time' => 70]);
+        $this->newItemView($s['view'], $s['item'], 2, ['status' => 'incomplete', 'total_time' => 5]);
         $item = $this->item($s['item'], $s['view']);
         $this->window($item, 90);
         $item->set_status('completed');
         $item->current_score = 8;
 
-        // PINNED QUIRK: the UPDATE's WHERE clause includes c_id, a column c_lp_item_view no longer has: it fails.
-        try {
-            $item->write_to_db();
-            $this->fail('expected the UPDATE to fail');
-        } catch (NotAllowedException) {
-            $this->assertSame('incomplete', $this->ivRow($s['view'], $s['item'])['status']);
-        }
+        $this->assertTrue($item->write_to_db());
+
+        $row = $this->ivRow($s['view'], $s['item'], 2);
+        $this->assertSame('completed', $row['status']);
+        $this->assertSame(90, (int) $row['total_time'], 'hotpotatoes replaces the total instead of adding to it');
+        $this->assertEquals(8, $row['score']);
+        $this->assertSame('incomplete', $this->ivRow($s['view'], $s['item'], 1)['status'], 'other attempt untouched');
     }
 
     public function testWriteToDbPersistsInteractionsOnceAndUpdatesThemInPlace(): void
@@ -817,18 +824,18 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $item->set_prevent_reinit(0);
         $item->current_score = 5;
 
-        // PINNED QUIRK: restart() calls write_to_db() right after bumping attempt_id, whose INSERT of the new
-        // attempt row names a column that does not exist (see testWriteToDbInsertsNoRowForAMissingAttempt...):
-        // the whole restart fails with an exception and the new attempt is never recorded.
-        try {
-            $item->restart();
-            $this->fail('expected the INSERT of the new attempt to fail');
-        } catch (NotAllowedException) {
-            $this->assertFalse($this->ivRow($s['view'], $s['item'], 2));
-        }
-    }
+        $this->assertTrue($item->restart());
 
-    // ---------------------------------------------------------------- interactions / objectives
+        $this->assertSame(2, $item->get_attempt_id());
+        $this->assertSame('not attempted', $item->get_status(false));
+        $new = $this->ivRow($s['view'], $s['item'], 2);
+        $this->assertNotFalse($new, 'the new attempt is recorded');
+        $this->assertSame('not attempted', $new['status']);
+        $this->assertEquals(0, $new['score']);
+        $old = $this->ivRow($s['view'], $s['item'], 1);
+        $this->assertSame('passed', $old['status'], 'the finished attempt is kept');
+        $this->assertEquals(5, $old['score']);
+    }
 
     public function testGetInteractionsCountFromTheDatabaseCountsTheRowsOfTheCurrentAttempt(): void
     {
@@ -1065,38 +1072,47 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertSame(160, (int) $row['total_time']);
     }
 
-    public function testWriteToDbWithSeveralAttemptsInAScormLpFailsOnAColumnThatNoLongerExists(): void
+    public function testWriteToDbWithSeveralAttemptsInAScormLpWritesTheTimeAndStatusUnlessAlreadyFinished(): void
     {
         $s = $this->scene('asset', 2, ['total_time' => 100, 'status' => 'incomplete']);
         $item = $this->item($s['item'], $s['view']);
         $item->set_prevent_reinit(0);
+        $this->window($item, 120);
         $item->set_status('completed');
 
-        // PINNED QUIRK: for SCORM lps with several attempts allowed the "do not overwrite a finished status" check
-        // queries c_lp_item_view with "c_id = ..." (no such column any more): every save of such an item fails.
-        try {
-            $item->write_to_db();
-            $this->fail('expected the status lookup to fail');
-        } catch (NotAllowedException) {
-            $this->assertSame('incomplete', $this->ivRow($s['view'], $s['item'])['status']);
-        }
+        $this->assertTrue($item->write_to_db());
+        $row = $this->ivRow($s['view'], $s['item']);
+        $this->assertSame('completed', $row['status']);
+        $this->assertSame(220, (int) $row['total_time']);
+
+        // The stored attempt is finished now: neither its status nor its time are overwritten any more.
+        $item->set_status('incomplete');
+        $this->window($item, 500);
+        $item->current_score = 9;
+        $this->assertTrue($item->write_to_db());
+        $row = $this->ivRow($s['view'], $s['item']);
+        $this->assertSame('completed', $row['status']);
+        $this->assertSame(220, (int) $row['total_time']);
+        $this->assertEquals(9, $row['score']);
     }
 
-    public function testWriteToDbOfAFinishedQuizWithSeveralAttemptsFailsWhileOpeningTheNewAttempt(): void
+    public function testWriteToDbOfAFinishedQuizWithSeveralAttemptsOpensANewAttemptRow(): void
     {
         $quizId = $this->newQuiz();
-        $s = $this->scene('quiz', 1, ['status' => 'completed'], $quizId);
+        $s = $this->scene('quiz', 1, ['status' => 'completed', 'score' => 7], $quizId);
         $item = $this->item($s['item'], $s['view']);
         $item->set_prevent_reinit(0);
 
-        // PINNED QUIRK: a completed quiz with several attempts goes through restart() and then INSERTs the new
-        // attempt row with a c_id column that does not exist: the exception aborts the save.
-        try {
-            $item->write_to_db();
-            $this->fail('expected the INSERT of the new attempt to fail');
-        } catch (NotAllowedException) {
-            $this->assertFalse($this->ivRow($s['view'], $s['item'], 2));
-        }
+        $this->assertTrue($item->write_to_db());
+
+        $this->assertSame(2, $item->get_attempt_id());
+        $new = $this->ivRow($s['view'], $s['item'], 2);
+        $this->assertNotFalse($new);
+        $this->assertSame('not attempted', $new['status']);
+        $this->assertEquals(0, $new['score']);
+        $old = $this->ivRow($s['view'], $s['item'], 1);
+        $this->assertSame('completed', $old['status']);
+        $this->assertEquals(7, $old['score']);
     }
 
     public function testScormUpdateTimeInSeriousGameModeReadsTheStatusFromTheWrongRow(): void

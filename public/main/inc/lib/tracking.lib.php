@@ -7165,6 +7165,11 @@ class Tracking
             api_is_course_admin();
     }
 
+    /**
+     * @deprecated No caller: it passes a course code and a session id to get_avg_student_progress(), which is
+     *             typed for the Course and Session entities, so it throws a TypeError for any user who has a
+     *             course with a visible learning path. Do not use; port it before reviving it.
+     */
     public static function getCourseLpProgress($userId, $sessionId)
     {
         $controller = new IndexManager(get_lang('My courses'));

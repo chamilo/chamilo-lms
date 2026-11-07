@@ -2314,7 +2314,7 @@ class SurveyUtil
                 );
                 if (empty($invitationExists)) {
                     self::saveInvitation(
-                        '',
+                        null,
                         '',
                         api_get_utc_datetime(time(), false, true),
                         $survey,
@@ -2400,7 +2400,7 @@ class SurveyUtil
     }
 
     public static function saveInvitation(
-        User $user,
+        ?User $user,
         $invitationCode,
         $reminderDate,
         CSurvey $survey,

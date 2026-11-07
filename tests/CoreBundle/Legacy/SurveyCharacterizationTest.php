@@ -1655,14 +1655,20 @@ final class SurveyCharacterizationTest extends KernelTestCase
         \SurveyUtil::get_survey_data_for_coach(0, 10, 0, 'asc');
     }
 
-    public function testSaveInvitationsOfAGroupFailsOnTheUserTypeOfSaveInvitation(): void
+    public function testSaveInvitationsOfAGroupStoresOneUserlessInvitationOnce(): void
     {
         $s = $this->insertSurvey();
         $groupId = $this->insertGroup();
 
-        // PINNED QUIRK: a group invitation calls saveInvitation('', ...) but that method is typed User.
-        $this->expectException(\TypeError::class);
         \SurveyUtil::saveInvitations($this->survey($s), ['GROUP:'.$groupId], 'subject', 'text');
+        \SurveyUtil::saveInvitations($this->survey($s), ['GROUP:'.$groupId], 'subject', 'text');
+
+        $rows = $this->conn->fetchAllAssociative('SELECT * FROM c_survey_invitation WHERE survey_id = ?', [$s]);
+        $this->assertCount(1, $rows, 'the group invitation is not stored twice');
+        $this->assertSame($groupId, (int) $rows[0]['group_id']);
+        $this->assertNull($rows[0]['user_id']);
+        $this->assertSame(1, (int) $rows[0]['c_id']);
+        $this->assertSame(0, (int) $rows[0]['answered']);
     }
 
     public function testCopySurveyIntoASessionInsertsColumnsThatDoNotExist(): void

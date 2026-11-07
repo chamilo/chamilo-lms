@@ -470,6 +470,34 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->assertFalse($this->model->is_group_member($other->getId(), $reader->getId()));
     }
 
+    public function testCanInviteToGroupIsLimitedToGroupAdminsAndModerators(): void
+    {
+        $group = $this->group('ug_social', Usergroup::SOCIAL_CLASS);
+        $other = $this->group('ug_social_other', Usergroup::SOCIAL_CLASS);
+        $admin = $this->createUser('ug_admin');
+        $mod = $this->createUser('ug_mod');
+        $reader = $this->createUser('ug_reader');
+        $hrm = $this->createUser('ug_hrm');
+        $invited = $this->createUser('ug_invited');
+        $stranger = $this->createUser('ug_stranger');
+        $this->addUser($group, $admin, 1);
+        $this->addUser($group, $mod, 5);
+        $this->addUser($group, $reader, 0);
+        $this->addUser($group, $hrm, 7);
+        $this->addUser($group, $invited, 3);
+
+        $this->assertTrue($this->model->canInviteToGroup($group->getId(), $admin->getId()));
+        $this->assertTrue($this->model->canInviteToGroup($group->getId(), $mod->getId()));
+        // Plain members used to pass the page check (is_group_member) although only admins and
+        // moderators are documented to invite.
+        $this->assertFalse($this->model->canInviteToGroup($group->getId(), $reader->getId()));
+        $this->assertFalse($this->model->canInviteToGroup($group->getId(), $hrm->getId()));
+        $this->assertFalse($this->model->canInviteToGroup($group->getId(), $invited->getId()));
+        $this->assertFalse($this->model->canInviteToGroup($group->getId(), $stranger->getId()));
+        // Being admin of group A gives no right on group B.
+        $this->assertFalse($this->model->canInviteToGroup($other->getId(), $admin->getId()));
+    }
+
     public function testUpdateUserRoleAndDeleteUserRelGroup(): void
     {
         $group = $this->group('ug_social', Usergroup::SOCIAL_CLASS);

@@ -37,7 +37,7 @@ if (empty($group_id)) {
         api_not_allowed();
     }
     //only admin or moderator can do that
-    if (!$usergroup->is_group_member($group_id)) {
+    if (!$usergroup->canInviteToGroup($group_id)) {
         api_not_allowed();
     }
 }
@@ -55,11 +55,15 @@ $content = null;
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $user_list = isset($_POST['invitation']) ? $_POST['invitation'] : null;
-    $group_id = intval($_POST['id']);
+    // The permission above was checked against the requested group: refuse any other group id.
+    if ((int) ($_POST['id'] ?? 0) !== $group_id) {
+        api_not_allowed();
+    }
 
     if (!is_array($user_list)) {
         $user_list = [];
     }
+    $user_list = array_map('intval', $user_list);
 
     if (1 == $form_sent) {
         // invite this users

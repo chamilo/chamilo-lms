@@ -2264,6 +2264,24 @@ class UserGroupModel extends Model
     }
 
     /**
+     * Whether the user may invite other users into the group: platform admins,
+     * group admins and group moderators (a plain member or a stranger may not).
+     *
+     * @param int $group_id
+     * @param int $user_id  0 for the current user
+     *
+     * @return bool
+     */
+    public function canInviteToGroup($group_id, $user_id = 0)
+    {
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        return $this->isGroupModerator($group_id, $user_id);
+    }
+
+    /**
      * @param int $group_id
      * @param int $user_id
      *

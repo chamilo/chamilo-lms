@@ -70,19 +70,9 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
             $extra['visibility'] ?? 1,
             false,
             null,
-            // The default description (null) hits Session::setDescription(string): TypeError.
             '',
         );
         $this->assertIsInt($id, 'create_session returned: '.var_export($id, true));
-
-        if (!empty($extra['category'])) {
-            // create_session() accepts $sessionCategoryId but never stores it (pinned in
-            // testCreateSessionIgnoresTheCategoryArgument), so the link is written directly.
-            Database::getConnection()->executeStatement(
-                'UPDATE session SET session_category_id = ? WHERE id = ?',
-                [$extra['category'], $id]
-            );
-        }
 
         return $id;
     }
@@ -282,7 +272,7 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         $this->assertSame('sm_edit_b', $this->one('SELECT title FROM session WHERE id = ?', [$other]));
     }
 
-    public function testCreateSessionStoresExplicitCoachDatesButIgnoresTheCategoryArgument(): void
+    public function testCreateSessionStoresExplicitCoachDatesAndTheCategory(): void
     {
         $cat = SessionManager::create_category_session('sm_cat_ignored', 2030, 1, 1, 0, 0, 0);
         $id = SessionManager::create_session(
@@ -306,16 +296,17 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         $before = (new \DateTimeImmutable($row['access_start_date']))->getTimestamp()
             - (new \DateTimeImmutable($row['coach_access_start_date']))->getTimestamp();
         $this->assertSame(5 * 86400, $before);
-        // Surprising but current: the $sessionCategoryId argument is validated nowhere and never stored.
-        $this->assertNull($row['session_category_id']);
-        $this->assertNull($this->one('SELECT session_category_id FROM session WHERE id = ?', [$id]));
+        // Fixed: create_session() used to ignore $sessionCategoryId; it is now stored.
+        $this->assertSame($cat, (int) $row['session_category_id']);
+        $this->assertSame($cat, (int) $this->one('SELECT session_category_id FROM session WHERE id = ?', [$id]));
     }
 
-    public function testCreateSessionWithNullDescriptionThrowsTypeError(): void
+    public function testCreateSessionWithNullDescriptionStoresAnEmptyDescription(): void
     {
-        // Pinned: the documented default ($description = null) breaks Session::setDescription(string).
-        $this->expectException(\TypeError::class);
-        SessionManager::create_session('sm_null_desc', '', '', '', '', '', '', [], 0);
+        // Fixed: the documented default ($description = null) used to hit Session::setDescription(string).
+        $id = SessionManager::create_session('sm_null_desc', '', '', '', '', '', '', [], 0);
+        $this->assertIsInt($id);
+        $this->assertEmpty($this->one('SELECT description FROM session WHERE id = ?', [$id]));
     }
 
     // ---------------------------------------------------------------- categories

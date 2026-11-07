@@ -231,7 +231,6 @@ class SessionManager
                 $session
                     ->setTitle($name)
                     ->setVisibility($visibility)
-                    ->setDescription($description)
                     ->setShowDescription(1 === $showDescription)
                     ->setSendSubscriptionNotification((bool) $sendSubscriptionNotification)
                     ->setNotifyBoss((bool) $notifyBoss)
@@ -242,6 +241,18 @@ class SessionManager
                     ->setValidityInDays((int) $validityInDays)
                     ->setStatus($status)
                 ;
+
+                // Session::setDescription() only takes a string: leave the description unset when none is given.
+                if (null !== $description) {
+                    $session->setDescription((string) $description);
+                }
+
+                if ($sessionCategoryId > 0) {
+                    $category = Database::getManager()->getRepository(SessionCategory::class)->find($sessionCategoryId);
+                    if (null !== $category) {
+                        $session->setCategory($category);
+                    }
+                }
 
                 if (!empty($duration)) {
                     $session->setDuration((int) $duration);

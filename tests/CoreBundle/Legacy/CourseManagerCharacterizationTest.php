@@ -924,22 +924,23 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
         $this->assertNotContains((int) $plain->getId(), array_map('intval', $special));
     }
 
-    public function testCatalogueVisibilityRoundTripOrQuirk(): void
+    public function testCatalogueVisibilityRoundTrip(): void
     {
+        // Fixed: the user existence check read "user.user_id" (the column is "id") and always threw.
         $course = $this->createCourse('cm_catv_a');
         $user = $this->createUser('cm_catv_user');
 
-        // PINNED QUIRK: addUserVisibilityToCourseInCatalogue() checks the user with
-        // "SELECT status FROM user WHERE user_id = ..." but the user table has no user_id column,
-        // so the query itself is invalid. Whatever happens today is pinned here.
-        $outcome = null;
-        try {
-            $outcome = CourseManager::addUserVisibilityToCourseInCatalogue($user->getId(), $course->getCode());
-        } catch (Throwable $e) {
-            $outcome = 'exception';
-        }
-        $this->assertSame('exception', $outcome);
-        $this->assertSame([], CourseManager::getCatalogCourseList(true, $user->getId()));
+        $this->assertTrue(CourseManager::addUserVisibilityToCourseInCatalogue($user->getId(), $course->getCode()));
+        $this->assertSame([$course->getCode()], CourseManager::getCatalogCourseList(true, $user->getId()));
+
+        $this->assertTrue(CourseManager::addUserVisibilityToCourseInCatalogue($user->getId(), $course->getCode()), 'adding twice is still true');
+        $this->assertSame(
+            1,
+            (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM course_rel_user_catalogue WHERE user_id = ? AND c_id = ?', [$user->getId(), $course->getId()]),
+            'no duplicate row'
+        );
+
+        $this->assertFalse(CourseManager::addUserVisibilityToCourseInCatalogue(99999999, $course->getCode()), 'unknown user');
 
         // Guard clauses return before touching the database.
         $this->assertFalse(CourseManager::addUserVisibilityToCourseInCatalogue(0, $course->getCode()));

@@ -1129,7 +1129,7 @@ class CourseManager
         $courseId = $courseInfo['real_id'];
 
         // Check in advance whether the user has already been registered on the platform.
-        $sql = "SELECT status FROM ".$userTable." WHERE user_id = $userId ";
+        $sql = "SELECT status FROM ".$userTable." WHERE id = $userId ";
         if (0 == Database::num_rows(Database::query($sql))) {
             return false; // The user has not been registered to the platform.
         }
@@ -1151,7 +1151,8 @@ class CourseManager
             'visible' => $visible,
         ];
 
-        return Database::insert($courseUserTable, $params);
+        // Database::insert() returns the new id: honour the documented bool contract.
+        return false !== Database::insert($courseUserTable, $params);
     }
 
     /**

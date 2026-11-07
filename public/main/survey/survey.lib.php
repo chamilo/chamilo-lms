@@ -991,7 +991,7 @@ class SurveyManager
                         ->setMaxValue($maxScore)
                     ;
 
-                    $question->isMandatory(isset($form_content['is_required']));
+                    $question->setIsMandatory(isset($form_content['is_required']));
                     $params['parent_id'] = 0;
                     $params['parent_option_id'] = 0;
                     if (isset($form_content['parent_id']) &&

@@ -493,6 +493,38 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame(9, (int) $kept['value']);
     }
 
+    public function testSaveQuestionStoresAndClearsTheRequiredFlag(): void
+    {
+        $s = $this->insertSurvey();
+        $survey = $this->survey($s);
+        $form = [
+            'question' => 'sv required question',
+            'type' => 'open',
+            'horizontalvertical' => 'vertical',
+            'shared_question_id' => 0,
+            'survey_id' => $s,
+            'question_id' => 0,
+            'is_required' => 'on',
+        ];
+
+        \SurveyManager::saveQuestion($survey, $form, false);
+        $q = (int) $this->conn->fetchOne('SELECT iid FROM c_survey_question WHERE survey_id = ?', [$s]);
+        $this->assertSame(1, (int) $this->conn->fetchOne('SELECT is_required FROM c_survey_question WHERE iid = ?', [$q]));
+
+        // Editing without the box ticked clears the flag.
+        unset($form['is_required']);
+        $form['question_id'] = $q;
+        $this->em()->clear();
+        \SurveyManager::saveQuestion($this->survey($s), $form, false, \SurveyManager::get_question($q));
+        $this->assertSame(0, (int) $this->conn->fetchOne('SELECT is_required FROM c_survey_question WHERE iid = ?', [$q]));
+
+        // And ticking it on an edit sets it.
+        $form['is_required'] = 'on';
+        $this->em()->clear();
+        \SurveyManager::saveQuestion($this->survey($s), $form, false, \SurveyManager::get_question($q));
+        $this->assertSame(1, (int) $this->conn->fetchOne('SELECT is_required FROM c_survey_question WHERE iid = ?', [$q]));
+    }
+
     public function testSaveQuestionOnPercentageGeneratesOneToHundredOptions(): void
     {
         $s = $this->insertSurvey();

@@ -870,6 +870,8 @@ class TicketManager
                 $column = 'ticket_id';
         }
 
+        [$conditions, $params] = self::getTicketListConditions($userId, (int) $accessUrlId, $projectId);
+
         $sql = "SELECT DISTINCT
                 ticket.*,
                 ticket.id ticket_id,
@@ -889,84 +891,14 @@ class TicketManager
             ON (ticket.priority_id = priority.id)
             INNER JOIN $table_support_status status
             ON (ticket.status_id = status.id)
-            WHERE 1=1
-        ";
-        $sql .= " AND ticket.access_url_id = $accessUrlId ";
-
-        $userIsAllowInProject = self::userIsAllowInProject($projectId);
-
-        // Check if a role was set to the project
-        if (false == $userIsAllowInProject) {
-            $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
-        }
-
-        // Search simple
-        if (!empty($_GET['keyword'])) {
-            $keyword = Database::escape_string(trim($_GET['keyword']));
-            $sql .= " AND (
-                      ticket.id LIKE '%$keyword%' OR
-                      ticket.code LIKE '%$keyword%' OR
-                      ticket.subject LIKE '%$keyword%' OR
-                      ticket.message LIKE '%$keyword%' OR
-                      ticket.keyword LIKE '%$keyword%' OR
-                      ticket.source LIKE '%$keyword%' OR
-                      cat.title LIKE '%$keyword%' OR
-                      status.title LIKE '%$keyword%' OR
-                      priority.title LIKE '%$keyword%' OR
-                      ticket.personal_email LIKE '%$keyword%'
-            )";
-        }
-
-        $keywords = [
-            'project_id' => 'ticket.project_id',
-            'keyword_category' => 'ticket.category_id',
-            'keyword_assigned_to' => 'ticket.assigned_last_user',
-            'keyword_source' => 'ticket.source ',
-            'keyword_status' => 'ticket.status_id',
-            'keyword_priority' => 'ticket.priority_id',
-        ];
-
-        foreach ($keywords as $keyword => $label) {
-            if (isset($_GET[$keyword])) {
-                $data = Database::escape_string(trim($_GET[$keyword]));
-                if (!empty($data)) {
-                    $sql .= " AND $label = '$data' ";
-                }
-            }
-        }
-
-        // Search advanced
-        $keyword_start_date_start = isset($_GET['keyword_start_date_start']) ? Database::escape_string(trim($_GET['keyword_start_date_start'])) : '';
-        $keyword_start_date_end = isset($_GET['keyword_start_date_end']) ? Database::escape_string(trim($_GET['keyword_start_date_end'])) : '';
-        $keyword_course = isset($_GET['keyword_course']) ? Database::escape_string(trim($_GET['keyword_course'])) : '';
-        $keyword_range = !empty($keyword_start_date_start) && !empty($keyword_start_date_end);
-
-        if (false == $keyword_range && '' != $keyword_start_date_start) {
-            $sql .= " AND DATE_FORMAT(ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start' ";
-        }
-        if ($keyword_range && '' != $keyword_start_date_start && '' != $keyword_start_date_end) {
-            $sql .= " AND DATE_FORMAT(ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start'
-                      AND DATE_FORMAT(ticket.start_date,'%d/%m/%Y') <= '$keyword_start_date_end'";
-        }
-
-        if ('' != $keyword_course) {
-            $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-            $sql .= " AND ticket.course_id IN (
-                     SELECT id FROM $course_table
-                     WHERE (
-                        title LIKE '%$keyword_course%' OR
-                        code LIKE '%$keyword_course%' OR
-                        visual_code LIKE '%$keyword_course%'
-                     )
-            )";
-        }
+            WHERE 1=1 $conditions";
         $sql .= " ORDER BY `$column` $direction";
         $sql .= " LIMIT $from, $number_of_items";
 
-        $result = Database::query($sql);
+        $result = Database::getManager()->getConnection()->executeQuery($sql, $params);
         $tickets = [];
         $webPath = api_get_path(WEB_PATH);
-        while ($row = Database::fetch_assoc($result)) {
+        while ($row = $result->fetchAssociative()) {
             $userInfo = api_get_user_info($row['sys_insert_user_id']);
             $hrefUser = $webPath.'main/admin/user_information.php?user_id='.$userInfo['user_id'];
             $name = "<a href='$hrefUser'> {$userInfo['complete_name_with_username']} </a>";
@@ -1080,7 +1012,10 @@ class TicketManager
 
         $accessUrlId = Container::getAccessUrlUtil()->getCurrent()->getId();
 
-        $sql = "SELECT COUNT(ticket.id) AS total
+        [$conditions, $params] = self::getTicketListConditions((int) $userId, (int) $accessUrlId, $projectId);
+
+        // Same FROM/JOINs and same conditions as getTicketsByCurrentUser(): the total is the list's row count.
+        $sql = "SELECT COUNT(DISTINCT ticket.id) AS total
                 FROM $table_support_tickets ticket
                 INNER JOIN $table_support_category cat
                 ON (cat.id = ticket.category_id)
@@ -1088,38 +1023,61 @@ class TicketManager
                 ON (ticket.priority_id = priority.id)
                 INNER JOIN $table_support_status status
                 ON (ticket.status_id = status.id)
-	            WHERE 1 = 1";
+                WHERE 1 = 1 $conditions";
 
-        $sql .= " AND ticket.access_url_id = $accessUrlId ";
+        $total = Database::getManager()->getConnection()->fetchOne($sql, $params);
 
-        $allowRoleList = self::getAllowedRolesFromProject($projectId);
+        return (int) $total;
+    }
+
+    /**
+     * Builds the access-control and search conditions shared by getTicketsByCurrentUser() and
+     * getTotalTicketsCurrentUser(), so that the count always matches the rows listed.
+     * The tickets must be selected as "ticket", joined to "cat", "priority" and "status".
+     * Every user-provided value is a bound parameter (positional).
+     *
+     * Non-admins (users whose role is not allowed in the project) only see tickets they created or are assigned to.
+     *
+     * @return array{0: string, 1: array} SQL fragment starting with " AND ..." and its parameters
+     */
+    private static function getTicketListConditions(int $userId, int $accessUrlId, int $projectId): array
+    {
+        $params = [];
+        $sql = ' AND ticket.access_url_id = ? ';
+        $params[] = $accessUrlId;
 
         // Check if a role was set to the project
-        if (!empty($allowRoleList) && is_array($allowRoleList)) {
-            $allowed = self::userIsAllowInProject($projectId);
-            if (!$allowed) {
-                $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
-            }
-        } else {
-            if (!api_is_platform_admin()) {
-                $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
-            }
+        if (false == self::userIsAllowInProject($projectId)) {
+            $sql .= ' AND (ticket.assigned_last_user = ? OR ticket.sys_insert_user_id = ?) ';
+            $params[] = $userId;
+            $params[] = $userId;
         }
+
+        $getTrimmed = static function (string $name): string {
+            return isset($_GET[$name]) && is_scalar($_GET[$name]) ? trim((string) $_GET[$name]) : '';
+        };
 
         // Search simple
-        if (!empty($_GET['keyword'])) {
-            $keyword = Database::escape_string(trim($_GET['keyword']));
+        $keyword = $getTrimmed('keyword');
+        if ('' !== $keyword) {
             $sql .= " AND (
-                      ticket.code LIKE '%$keyword%' OR
-                      ticket.subject LIKE '%$keyword%' OR
-                      ticket.message LIKE '%$keyword%' OR
-                      ticket.keyword LIKE '%$keyword%' OR
-                      ticket.personal_email LIKE '%$keyword%' OR
-                      ticket.source LIKE '%$keyword%'
+                      ticket.id LIKE ? OR
+                      ticket.code LIKE ? OR
+                      ticket.subject LIKE ? OR
+                      ticket.message LIKE ? OR
+                      ticket.keyword LIKE ? OR
+                      ticket.source LIKE ? OR
+                      cat.title LIKE ? OR
+                      status.title LIKE ? OR
+                      priority.title LIKE ? OR
+                      ticket.personal_email LIKE ?
             )";
+            for ($i = 0; $i < 10; $i++) {
+                $params[] = '%'.$keyword.'%';
+            }
         }
 
-        $keywords = [
+        $filters = [
             'project_id' => 'ticket.project_id',
             'keyword_category' => 'ticket.category_id',
             'keyword_assigned_to' => 'ticket.assigned_last_user',
@@ -1127,46 +1085,55 @@ class TicketManager
             'keyword_status' => 'ticket.status_id',
             'keyword_priority' => 'ticket.priority_id',
         ];
-
-        foreach ($keywords as $keyword => $sqlLabel) {
-            if (isset($_GET[$keyword])) {
-                $data = Database::escape_string(trim($_GET[$keyword]));
-                if (!empty($data)) {
-                    $sql .= " AND $sqlLabel = '$data' ";
-                }
+        foreach ($filters as $name => $column) {
+            $data = $getTrimmed($name);
+            if ('' !== $data && '0' !== $data) {
+                $sql .= " AND $column = ? ";
+                $params[] = $data;
             }
         }
 
-        // Search advanced
-        $keyword_start_date_start = isset($_GET['keyword_start_date_start']) ? Database::escape_string(trim($_GET['keyword_start_date_start'])) : '';
-        $keyword_start_date_end = isset($_GET['keyword_start_date_end']) ? Database::escape_string(trim($_GET['keyword_start_date_end'])) : '';
-        $keyword_range = isset($_GET['keyword_dates']) ? Database::escape_string(trim($_GET['keyword_dates'])) : '';
-        $keyword_course = isset($_GET['keyword_course']) ? Database::escape_string(trim($_GET['keyword_course'])) : '';
-
-        if (false == $keyword_range && '' != $keyword_start_date_start) {
-            $sql .= " AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') = '$keyword_start_date_start' ";
-        }
-        if ($keyword_range && '' != $keyword_start_date_start && '' != $keyword_start_date_end) {
-            $sql .= " AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start'
-                      AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') <= '$keyword_start_date_end'";
-        }
-        if ('' != $keyword_course) {
-            $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-            $sql .= " AND ticket.course_id IN (
-                        SELECT id
-                        FROM $course_table
-                        WHERE (
-                            title LIKE '%$keyword_course%' OR
-                            code LIKE '%$keyword_course%' OR
-                            visual_code LIKE '%$keyword_course%'
-                        )
-                   ) ";
+        // Search advanced: dd/mm/YYYY input compared as real dates; a value that is not a date is ignored.
+        $start = self::parseTicketFilterDate($getTrimmed('keyword_start_date_start'));
+        $end = self::parseTicketFilterDate($getTrimmed('keyword_start_date_end'));
+        if (null !== $start) {
+            $sql .= ' AND DATE(ticket.start_date) >= ? ';
+            $params[] = $start;
+            if (null !== $end) {
+                $sql .= ' AND DATE(ticket.start_date) <= ? ';
+                $params[] = $end;
+            }
         }
 
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
+        $course = $getTrimmed('keyword_course');
+        if ('' !== $course) {
+            $sql .= ' AND ticket.course_id IN (
+                     SELECT id FROM '.Database::get_main_table(TABLE_MAIN_COURSE).'
+                     WHERE (title LIKE ? OR code LIKE ? OR visual_code LIKE ?)
+            )';
+            for ($i = 0; $i < 3; $i++) {
+                $params[] = '%'.$course.'%';
+            }
+        }
 
-        return (int) $obj->total;
+        return [$sql, $params];
+    }
+
+    /**
+     * Converts a dd/mm/YYYY string to YYYY-mm-dd, or null when it is empty or not a real date.
+     */
+    private static function parseTicketFilterDate(string $value): ?string
+    {
+        if ('' === $value) {
+            return null;
+        }
+        $date = DateTime::createFromFormat('!d/m/Y', $value);
+        $errors = DateTime::getLastErrors();
+        if (false === $date || (is_array($errors) && ($errors['warning_count'] > 0 || $errors['error_count'] > 0))) {
+            return null;
+        }
+
+        return $date->format('Y-m-d');
     }
 
     /**

@@ -890,25 +890,30 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->assertSame([], $this->listSubjects(['keyword_course' => 'tm_no_such_course']));
     }
 
-    public function testGetTicketsByCurrentUserDateFiltersCompareFormattedStringsNotDates(): void
+    public function testGetTicketsByCurrentUserDateFiltersCompareRealDatesNotFormattedStrings(): void
     {
         $this->listFixture();
 
-        // PINNED QUIRK: start dates are compared as 'dd/mm/YYYY' STRINGS, not as dates.
+        // Fixed: the dd/mm/YYYY input is parsed and compared as a date (it used to be a string comparison against
+        // DATE_FORMAT(start_date, '%d/%m/%Y'), where "01/07/2022" < "10/03/2021").
         // t1 = 15/03/2021, t2 = 02/12/2019, t3 = 01/07/2022, t4 = 01/06/2020.
         $this->assertSame(
-            ['tm_subject_1'],
+            ['tm_subject_1', 'tm_subject_3'],
             $this->listSubjects(['keyword_start_date_start' => '10/03/2021']),
-            'start only: string >=, so 02/12/2019, 01/07/2022 and 01/06/2020 (all "0x/" < "10/") drop out'
+            'start only: real >=, the later year 2022 is kept'
         );
         $this->assertSame(
             ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4'],
-            $this->listSubjects(['keyword_start_date_start' => '01/01/2000']),
-            'every dd/mm string is >= "01/01/2000" regardless of the year'
+            $this->listSubjects(['keyword_start_date_start' => '01/01/2000'])
         );
         $this->assertSame(
             ['tm_subject_1'],
             $this->listSubjects(['keyword_start_date_start' => '10/03/2021', 'keyword_start_date_end' => '20/03/2021'])
+        );
+        $this->assertSame(
+            ['tm_subject_1', 'tm_subject_4'],
+            $this->listSubjects(['keyword_start_date_start' => '01/06/2020', 'keyword_start_date_end' => '15/03/2021']),
+            'both bounds are inclusive days, across years'
         );
         $this->assertSame(
             [],
@@ -918,6 +923,11 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
             ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4'],
             $this->listSubjects(['keyword_start_date_end' => '10/03/2021']),
             'an end date alone is ignored'
+        );
+        $this->assertSame(
+            ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4'],
+            $this->listSubjects(['keyword_start_date_start' => "31/02/2021' OR '1'='1"]),
+            'a value that is not a real dd/mm/YYYY date is ignored (and never reaches the SQL text)'
         );
     }
 
@@ -971,11 +981,11 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
 
         $this->assertSame(4, TicketManager::getTotalTicketsCurrentUser(), 'orphan without category excluded: INNER JOIN');
 
-        // PINNED QUIRK: the total's simple search does NOT look at category/status/priority titles (the list does).
+        // Fixed: the total searches the same texts as the list, including category/status/priority titles.
         $_GET = ['project_id' => $pid, 'keyword' => 'tm_cat_alpha'];
-        $this->assertSame(0, TicketManager::getTotalTicketsCurrentUser());
+        $this->assertSame(3, TicketManager::getTotalTicketsCurrentUser());
         $_GET = ['project_id' => $pid, 'keyword' => 'Closed'];
-        $this->assertSame(0, TicketManager::getTotalTicketsCurrentUser());
+        $this->assertSame(1, TicketManager::getTotalTicketsCurrentUser());
         $_GET = ['project_id' => $pid, 'keyword' => 'tm_kw_zebra'];
         $this->assertSame(1, TicketManager::getTotalTicketsCurrentUser());
         $_GET = ['project_id' => $pid, 'keyword' => 'tm_pe@example'];
@@ -994,17 +1004,51 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->listFixture();
         $pid = $_GET['project_id'];
 
-        // PINNED QUIRK: without keyword_dates, a start date is an EXACT dd/mm/YYYY match (the list uses >=).
+        // Fixed: a start date alone is ">=" a real date, as in the list (it used to be an exact string match,
+        // and the range only applied when an undocumented keyword_dates flag was also sent).
         $_GET = ['project_id' => $pid, 'keyword_start_date_start' => '15/03/2021'];
-        $this->assertSame(1, TicketManager::getTotalTicketsCurrentUser());
+        $this->assertSame(2, TicketManager::getTotalTicketsCurrentUser());
         $_GET = ['project_id' => $pid, 'keyword_start_date_start' => '10/03/2021'];
-        $this->assertSame(0, TicketManager::getTotalTicketsCurrentUser());
-        $_GET = ['project_id' => $pid, 'keyword_dates' => '1', 'keyword_start_date_start' => '10/03/2021', 'keyword_start_date_end' => '20/03/2021'];
-        $this->assertSame(1, TicketManager::getTotalTicketsCurrentUser());
+        $this->assertSame(2, TicketManager::getTotalTicketsCurrentUser());
+        $_GET = ['project_id' => $pid, 'keyword_start_date_start' => '10/03/2021', 'keyword_start_date_end' => '20/03/2021'];
+        $this->assertSame(1, TicketManager::getTotalTicketsCurrentUser(), 'range without any keyword_dates flag');
 
         $course = $this->conn->fetchAssociative('SELECT code FROM course WHERE id = 1');
         $_GET = ['project_id' => $pid, 'keyword_course' => (string) $course['code']];
         $this->assertSame(1, TicketManager::getTotalTicketsCurrentUser());
+    }
+
+    public function testGetTotalTicketsCurrentUserEqualsTheNumberOfRowsTheListReturnsForEveryFilter(): void
+    {
+        [, , , , , , $catA] = $this->listFixture();
+        $pid = $_GET['project_id'];
+        $course = $this->conn->fetchAssociative('SELECT code FROM course WHERE id = 1');
+        $filters = [
+            [],
+            ['keyword' => 'tm_cat_alpha'],
+            ['keyword' => 'Closed'],
+            ['keyword' => ' High '],
+            ['keyword' => (string) $catA],
+            ['keyword_category' => (string) $catA],
+            ['keyword_status' => '4'],
+            ['keyword_start_date_start' => '10/03/2021'],
+            ['keyword_start_date_start' => '01/06/2020', 'keyword_start_date_end' => '15/03/2021'],
+            ['keyword_start_date_end' => '10/03/2021'],
+            ['keyword_course' => (string) $course['code']],
+            ['keyword' => 'tm_cat_alpha', 'keyword_start_date_start' => '10/03/2021', 'keyword_priority' => '1'],
+        ];
+
+        foreach ([$this->admin, $this->other] as $user) {
+            $this->loginAs($user);
+            foreach ($filters as $i => $filter) {
+                $_GET = $filter + ['project_id' => $pid];
+                $this->assertSame(
+                    count(TicketManager::getTicketsByCurrentUser(0, 500, 0, 'ASC')),
+                    TicketManager::getTotalTicketsCurrentUser(),
+                    'user '.$user->getUsername().', filter #'.$i.' '.json_encode($filter)
+                );
+            }
+        }
     }
 
     public function testGetTotalTicketsCurrentUserNonAdminIsRestrictedToOwnOrAssigned(): void

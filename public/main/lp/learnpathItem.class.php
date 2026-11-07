@@ -2024,6 +2024,19 @@ class learnpathItem
             }
         }
 
+        // The groups were replaced by their value: an expression made only of parentheses is now a literal.
+        if ('_true_' === $prereqs_string) {
+            return true;
+        }
+
+        if ('_false_' === $prereqs_string) {
+            if (empty($this->prereq_alert)) {
+                $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
+            }
+
+            return false;
+        }
+
         // Parenthesis removed, now look for ORs as it is the lesser-priority
         //  binary operator (= always uses one text operand).
         if (!str_contains($prereqs_string, '|')) {

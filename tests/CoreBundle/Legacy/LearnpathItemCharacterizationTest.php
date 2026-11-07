@@ -1379,14 +1379,11 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $p = $this->prereqScene(['completed', 'passed', 'incomplete', 'not attempted']);
         [$a, $b, $c] = $p['ids'];
 
-        // PINNED QUIRK: each parenthesised group is replaced by the text _true_/_false_, but the literals are only
-        // recognised at the very start of the function, before that loop: an expression that is entirely
-        // parenthesised ends up looked up as the reference "_true_" and is always false.
-        $this->assertFalse(@$this->check($p, '('.$a.'&'.$b.')'));
-        $this->assertFalse(@$this->check($p, '('.$a.'&'.$c.')'));
-        // Mixed with another operand the group works: only the '&' branch parses the literal.
-        $this->assertTrue(@$this->check($p, '('.$a.'&'.$b.')&'.$b));
-        $this->assertFalse(@$this->check($p, '('.$a.'&'.$c.')&'.$b));
+        $this->assertTrue($this->check($p, '('.$a.'&'.$b.')'));
+        $this->assertFalse($this->check($p, '('.$a.'&'.$c.')'));
+        $this->assertTrue($this->check($p, '(('.$a.'&'.$b.')&'.$b.')'));
+        $this->assertFalse($this->check($p, '('.$a.'&'.$c.')&'.$b));
+        $this->assertTrue($this->check($p, '('.$c.'|'.$a.')'));
     }
 
     public function testParsePrereqOfAQuizUsesTheLatestFinishedResultAndTheMasteryScore(): void

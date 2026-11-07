@@ -1671,16 +1671,31 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame(0, (int) $rows[0]['answered']);
     }
 
-    public function testCopySurveyIntoASessionInsertsColumnsThatDoNotExist(): void
+    public function testCopySurveyIntoAnotherCourseAndSessionLinksTheCopyThere(): void
     {
+        // Creates a resource node through the repository: the one test of this class that does.
+        $admin = $this->em()->find(\Chamilo\CoreBundle\Entity\User::class, 1);
+        self::getContainer()->get('security.token_storage')->setToken(
+            new \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken($admin, 'main', $admin->getRoles())
+        );
         $sid = $this->insertSession();
-        $src = $this->insertSurvey();
-        $this->insertQuestion($src, 'sv q');
+        $src = $this->insertSurvey(['code' => 'svcopysrc', 'title' => 'sv copy source']);
+        $q = $this->insertQuestion($src, 'sv q');
+        $this->insertOption($src, $q, 'sv opt', 1);
 
-        // PINNED QUIRK: the row copied for a target session carries session_id (and the source resource node),
-        // which c_survey cannot take.
-        $this->expectException(\Throwable::class);
-        \SurveyManager::copySurvey($src, null, 1, $sid);
+        $copy = \SurveyManager::copySurvey($src, null, 2, $sid);
+
+        $this->assertGreaterThan($src, $copy);
+        $row = $this->surveyRow($copy);
+        $this->assertSame('sv copy source', $row['title'], 'no " Copy" suffix when the target is another course');
+        $this->assertSame('svcopysrc1', $row['code']);
+        $link = $this->conn->fetchAssociative(
+            'SELECT l.c_id, l.session_id FROM resource_link l INNER JOIN c_survey s ON s.resource_node_id = l.resource_node_id WHERE s.iid = ?',
+            [$copy]
+        );
+        $this->assertSame([2, $sid], [(int) $link['c_id'], (int) $link['session_id']]);
+        $this->assertSame(1, $this->rowCount('c_survey_question', 'survey_id = ?', [$copy]));
+        $this->assertSame(1, $this->rowCount('c_survey_question_option', 'survey_id = ?', [$copy]));
     }
 
     public function testSurveyReportOfAUserWithAnAnsweredSurveyFailsOnTheSurveyArgumentType(): void

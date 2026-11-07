@@ -505,54 +505,49 @@ class SurveyManager
 
         if (empty($newSurveyId)) {
             $surveyData['code'] = self::generate_unique_code($surveyData['code']);
-            $surveyData['session_id'] = $targetSessionId ?? api_get_session_id();
-
             if ($targetCourseId === $originalCourseId) {
                 $surveyData['title'] .= ' '.get_lang('Copy');
             }
 
             unset($surveyData['iid'], $surveyData['id']);
 
-            if ($targetSessionId) {
-                $newSurveyId = Database::insert($surveyTable, $surveyData);
-            } else {
-                $course = api_get_course_entity();
-                $session = api_get_session_entity();
+            // c_survey has no course/session column: the copy is linked to its target through its resource node.
+            $course = api_get_course_entity($targetCourseId);
+            $session = api_get_session_entity($targetSessionId ?? api_get_session_id());
 
-                $survey = new CSurvey();
-                $survey
-                    ->setSurveyType($surveyData['survey_type'])
-                    ->setSurveyVersion($surveyData['survey_version'])
-                    ->setCode($surveyData['code'])
-                    ->setTitle($surveyData['title'])
-                    ->setSubtitle($surveyData['subtitle'])
-                    ->setLang($surveyData['lang'])
-                    ->setAvailFrom(new \DateTime($surveyData['avail_from']))
-                    ->setAvailTill(new \DateTime($surveyData['avail_till']))
-                    ->setIsShared($surveyData['is_shared'])
-                    ->setTemplate($surveyData['template'])
-                    ->setIntro($surveyData['intro'])
-                    ->setSurveyThanks($surveyData['surveythanks'])
-                    ->setAnonymous($surveyData['anonymous'])
-                    ->setVisibleResults($surveyData['visible_results'])
-                    ->setResultsHiddenFromTeacher((bool) ($surveyData['results_hidden_from_teacher'] ?? false))
-                    ->setShuffle($surveyData['shuffle'])
-                    ->setOneQuestionPerPage($surveyData['one_question_per_page'])
-                    ->setShowFormProfile($surveyData['show_form_profile'])
-                    ->setFormFields($surveyData['form_fields'])
-                    ->setParent($course)
-                    ->addCourseLink($course, $session);
+            $survey = new CSurvey();
+            $survey
+                ->setSurveyType($surveyData['survey_type'])
+                ->setSurveyVersion($surveyData['survey_version'])
+                ->setCode($surveyData['code'])
+                ->setTitle($surveyData['title'])
+                ->setSubtitle((string) $surveyData['subtitle'])
+                ->setLang((string) $surveyData['lang'])
+                ->setAvailFrom(new \DateTime($surveyData['avail_from']))
+                ->setAvailTill(new \DateTime($surveyData['avail_till']))
+                ->setIsShared((string) $surveyData['is_shared'])
+                ->setTemplate((string) $surveyData['template'])
+                ->setIntro((string) $surveyData['intro'])
+                ->setSurveyThanks((string) $surveyData['surveythanks'])
+                ->setAnonymous($surveyData['anonymous'])
+                ->setVisibleResults((int) $surveyData['visible_results'])
+                ->setResultsHiddenFromTeacher((bool) ($surveyData['results_hidden_from_teacher'] ?? false))
+                ->setShuffle($surveyData['shuffle'])
+                ->setOneQuestionPerPage($surveyData['one_question_per_page'])
+                ->setShowFormProfile($surveyData['show_form_profile'])
+                ->setFormFields($surveyData['form_fields'])
+                ->setParent($course)
+                ->addCourseLink($course, $session);
 
-                if (!empty($surveyData['parent_id'])) {
-                    $parent = $repo->find($surveyData['parent_id']);
-                    if ($parent) {
-                        $survey->setSurveyParent($parent);
-                    }
+            if (!empty($surveyData['parent_id'])) {
+                $parent = $repo->find($surveyData['parent_id']);
+                if ($parent) {
+                    $survey->setSurveyParent($parent);
                 }
-
-                $repo->create($survey);
-                $newSurveyId = $survey->getIid();
             }
+
+            $repo->create($survey);
+            $newSurveyId = $survey->getIid();
         }
 
         if (empty($newSurveyId)) {

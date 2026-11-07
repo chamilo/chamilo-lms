@@ -20,6 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,6 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Validator\Constraints\Json;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
@@ -205,6 +207,7 @@ class SettingsController extends BaseController
         $formList = [];
         $templateMap = [];
         $templateMapByCategory = [];
+        $jsonFieldsByCategory = [];
         $settings = [];
 
         $keyword = trim((string) $request->query->get('keyword', ''));
@@ -256,6 +259,7 @@ class SettingsController extends BaseController
                 'search_form' => $searchForm->createView(),
                 'template_map' => $templateMap,
                 'template_map_by_category' => $templateMapByCategory,
+                'json_fields_by_category' => $jsonFieldsByCategory,
                 'ordered_namespaces' => $ordered,
                 'namespace_labels' => $labelMap,
                 'changeable_map' => $changeableMap,
@@ -320,6 +324,10 @@ class SettingsController extends BaseController
                 );
 
                 $form->setData($settings);
+                $jsonFieldsByCategory[$category] = $this->getJsonTextareaFields(
+                    $form,
+                    $templateMapByCategory[$category] ?? []
+                );
                 $formList[$category] = $form->createView();
             }
         }
@@ -332,6 +340,7 @@ class SettingsController extends BaseController
             'search_form' => $searchForm->createView(),
             'template_map' => $templateMap,
             'template_map_by_category' => $templateMapByCategory,
+            'json_fields_by_category' => $jsonFieldsByCategory,
             'ordered_namespaces' => $ordered,
             'namespace_labels' => $labelMap,
             'changeable_map' => $changeableMap,
@@ -466,6 +475,8 @@ class SettingsController extends BaseController
             }
         }
 
+        $jsonFields = $this->getJsonTextareaFields($form, $templateMap);
+
         $platform = [
             'server_type' => (string) $manager->getSetting('platform.server_type', true),
         ];
@@ -477,6 +488,7 @@ class SettingsController extends BaseController
             'keyword' => $keyword,
             'search_form' => $this->getSearchForm()->createView(),
             'template_map' => $templateMap,
+            'json_fields' => $jsonFields,
             'ordered_namespaces' => $ordered,
             'namespace_labels' => $labelMap,
             'platform' => $platform,
@@ -825,5 +837,34 @@ class SettingsController extends BaseController
     private function getUnsupportedSettings(): array
     {
         return [];
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function getJsonTextareaFields(FormInterface $form, array $templateMap): array
+    {
+        $fields = [];
+
+        foreach ($form->all() as $name => $field) {
+            if (!$field->getConfig()->getType()->getInnerType() instanceof TextareaType) {
+                continue;
+            }
+
+            $constraints = $field->getConfig()->getOption('constraints', []);
+            foreach ($constraints as $constraint) {
+                if ($constraint instanceof Json) {
+                    $fields[] = $name;
+
+                    continue 2;
+                }
+            }
+
+            if (isset($templateMap[$name])) {
+                $fields[] = $name;
+            }
+        }
+
+        return $fields;
     }
 }

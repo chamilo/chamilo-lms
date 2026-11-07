@@ -197,7 +197,8 @@ final class WorkCharacterizationTest extends KernelTestCase
         $folder = $this->folder();
         $this->work(['parent_id' => $folder, 'active' => null]);
 
-        // PINNED QUIRK: "active IN (0, 1)" is never true for NULL, so a NULL-active row does not count.
+        // Kept on purpose: the column is nullable, but the whole library filters "active IN (0, 1)", so a NULL row is
+        // consistently invisible everywhere; counting it here alone would make the counters disagree with the lists.
         $this->assertSame(0, get_work_count_by_student($this->student()->getId(), $folder));
     }
 

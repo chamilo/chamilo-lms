@@ -60,24 +60,31 @@ class Statistics
     {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $courseRelCategoryTable = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
+        $courseCategoryTable = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $accessUrlUtil = Container::getAccessUrlUtil();
+        $params = [];
 
         if ($accessUrlUtil->isMultiple()) {
             $accessUrl = $accessUrlUtil->getCurrent();
-            $urlId = $accessUrl->getId();
+            $urlId = (int) $accessUrl->getId();
             $sql = "SELECT COUNT(*) AS number
                     FROM $courseTable AS c, $accessUrlRelCourseTable AS u
                     WHERE u.c_id = c.id AND u.access_url_id = $urlId";
-            if (isset($categoryCode)) {
-                $sql .= " AND category_code = '".Database::escape_string($categoryCode)."'";
-            }
         } else {
             $sql = "SELECT COUNT(*) AS number
                     FROM $courseTable AS c
                     WHERE 1 = 1";
-            if (isset($categoryCode)) {
-                $sql .= " AND c.category_code = '".Database::escape_string($categoryCode)."'";
-            }
+        }
+        if (isset($categoryCode)) {
+            // A course can sit in several categories: filter with a sub-select so it is counted once.
+            $sql .= " AND c.id IN (
+                        SELECT crc.course_id
+                        FROM $courseRelCategoryTable crc
+                        INNER JOIN $courseCategoryTable cc ON cc.id = crc.course_category_id
+                        WHERE cc.code = ?
+                    )";
+            $params[] = $categoryCode;
         }
 
         if (!empty($dateFrom)) {
@@ -89,10 +96,7 @@ class Statistics
             $sql .= " AND c.creation_date <= '$dateUntil' ";
         }
 
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
-
-        return $obj->number;
+        return (int) Database::getManager()->getConnection()->fetchOne($sql, $params);
     }
 
     /**

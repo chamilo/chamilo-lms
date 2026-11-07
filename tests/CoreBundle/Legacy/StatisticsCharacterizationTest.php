@@ -361,16 +361,36 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $this->assertSame(1, Statistics::countCourses(null, null, '2020-02-29'));
     }
 
-    public function testCountCoursesByCategoryCodeCurrentlyFails(): void
+    public function testCountCoursesByCategoryCode(): void
     {
         $cat = $this->rawCategory('st_cat1');
+        $cat2 = $this->rawCategory('st_cat2');
         $in = $this->rawCourse('catin', '2020-03-01 10:00:00');
+        $both = $this->rawCourse('catboth', '2020-03-01 10:00:00');
+        $this->rawCourse('catout', '2020-03-01 10:00:00');
         $this->courseInCategory($in, $cat);
+        $this->courseInCategory($both, $cat);
+        $this->courseInCategory($both, $cat2);
 
-        // PINNED QUIRK: the query filters on course.category_code, a column that no longer exists (categories
-        // moved to course_rel_category), so any call with a category code throws.
-        $this->expectException(\Chamilo\CoreBundle\Exception\NotAllowedException::class);
-        Statistics::countCourses('st_cat1');
+        // The filter used to read course.category_code, a column that no longer exists: it always threw.
+        $this->assertSame(2, Statistics::countCourses('st_cat1'));
+        $this->assertSame(1, Statistics::countCourses('st_cat2'));
+        $this->assertSame(0, Statistics::countCourses('st_unknown_cat'));
+        $this->assertSame(2, Statistics::countCourses('st_cat1', '2020-03-01', '2020-03-01'));
+        $this->assertSame(0, Statistics::countCourses('st_cat1', '2021-01-01'));
+        $this->assertSame(0, Statistics::countCourses("x' OR '1'='1"), 'the code is a bound value');
+    }
+
+    public function testCountCoursesByCategoryCodeInMultiUrl(): void
+    {
+        $second = $this->enableMultiUrl();
+        $cat = $this->rawCategory('st_mcat');
+        $mine = $this->rawCourse('mcat1', '2020-03-01 10:00:00', 2, 14, 1);
+        $theirs = $this->rawCourse('mcat2', '2020-03-01 10:00:00', 2, 14, $second);
+        $this->courseInCategory($mine, $cat);
+        $this->courseInCategory($theirs, $cat);
+
+        $this->assertSame(1, Statistics::countCourses('st_mcat'));
     }
 
     public function testCountCoursesIsScopedToTheCurrentUrlWhenMultiUrl(): void

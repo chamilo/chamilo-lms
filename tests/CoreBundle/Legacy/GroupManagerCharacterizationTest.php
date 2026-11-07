@@ -606,11 +606,10 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
         $this->assertSame([$u3], array_map('intval', GroupManager::get_groups_users([(string) $g3, 'abc'])), 'non-numeric ids cast to 0');
     }
 
-    public function testGetGroupsUsersEmptyListIsABrokenQuery(): void
+    public function testGetGroupsUsersEmptyListGivesAnEmptyResult(): void
     {
-        // PINNED QUIRK: no guard for an empty list: "IN ()" is a SQL syntax error.
-        $this->expectException(Throwable::class);
-        GroupManager::get_groups_users([]);
+        // Fixed: an empty list used to build "IN ()" (SQL syntax error); no group means no users.
+        $this->assertSame([], GroupManager::get_groups_users([]));
     }
 
     public function testIsSubscribedIsScopedToTheCourse(): void

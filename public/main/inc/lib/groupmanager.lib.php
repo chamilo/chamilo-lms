@@ -1622,6 +1622,9 @@ class GroupManager
         $result = [];
         $table = Database::get_course_table(TABLE_GROUP_USER);
         $groups = array_map('intval', $groups);
+        if (empty($groups)) {
+            return $result;
+        }
         // protect individual elements with surrounding quotes
         $groups = implode(', ', $groups);
         $sql = "SELECT DISTINCT user_id

@@ -1701,11 +1701,34 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame(['2'], array_map('strval', \SurveyManager::get_people_who_filled_survey($s)));
     }
 
-    public function testGetSurveyDataForCoachThrowsBecauseItUsesDroppedColumns(): void
+    public function testGetSurveyDataForCoachListsTheSurveysCreatedByTheCoachSorted(): void
     {
-        // PINNED QUIRK: selects survey.author and filters survey.c_id, neither is a c_survey column.
-        $this->expectException(\Chamilo\CoreBundle\Exception\NotAllowedException::class);
-        \SurveyUtil::get_survey_data_for_coach(0, 10, 0, 'asc');
+        $a = $this->insertSurvey(['code' => 'sv_coach_a', 'title' => 'sv coach a', 'answered' => 1, 'invited' => 4]);
+        $b = $this->insertSurvey(['code' => 'sv_coach_b', 'title' => 'sv coach b']);
+        $this->linkSurvey($a, 1);
+        $this->linkSurvey($b, 1);
+        $this->insertQuestion($a, 'sv q1');
+        $this->insertQuestion($a, 'sv q2', 'yesno', 2);
+        // A survey of the course created by somebody else is not the coach's.
+        $foreign = $this->insertSurvey(['code' => 'sv_coach_foreign']);
+        $node = $this->linkSurvey($foreign, 1);
+        $this->conn->executeStatement('UPDATE resource_node SET creator_id = 2 WHERE id = ?', [$node]);
+
+        $desc = \SurveyUtil::get_survey_data_for_coach(0, 100, 2, 'desc');
+        $codes = array_column($desc, 2);
+
+        $this->assertNotContains('sv_coach_foreign', $codes);
+        $this->assertLessThan(array_search('sv_coach_a', $codes, true), array_search('sv_coach_b', $codes, true), 'column 2 (code) descending');
+        $row = $desc[array_search('sv_coach_a', $codes, true)];
+        $this->assertSame($a, (int) $row[0]);
+        $this->assertSame('sv coach a', $row[1]);
+        $this->assertSame(2, (int) $row[3], 'question count');
+        $this->assertStringContainsString('survey_invitation.php?view=answered&survey_id='.$a, $row[7]);
+        $this->assertStringContainsString('>1</a> / <a', $row[7]);
+        $this->assertSame($a, (int) $row[9]);
+
+        $this->assertCount(1, \SurveyUtil::get_survey_data_for_coach(0, 1, 2, 'asc'));
+        $this->assertSame(array_column(array_reverse($desc), 2), array_column(\SurveyUtil::get_survey_data_for_coach(0, 100, 2, 'asc'), 2));
     }
 
     public function testSaveInvitationsOfAGroupStoresOneUserlessInvitationOnce(): void

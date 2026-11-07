@@ -3472,77 +3472,51 @@ class SurveyUtil
 
         /** @var CSurvey[] $surveys */
         $surveys = $qb->getQuery()->getResult();
-        $list = [];
-        foreach ($surveys as $survey) {
-            $list[] = $survey->getIid();
-        }
-        $list_condition = '';
-        if (count($list) > 0) {
-            $list_condition = " AND survey.iid IN (".implode(',', $list).") ";
-        }
-        $from = (int) $from;
-        $number_of_items = (int) $number_of_items;
         $column = (int) $column;
-        if (!in_array(strtolower($direction), ['asc', 'desc'])) {
-            $direction = 'asc';
-        }
-
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $course_id = api_get_course_int_id();
+        $descending = 'desc' === strtolower((string) $direction);
         $efv = new ExtraFieldValue('survey');
+        $baseUrl = 'survey_invitation.php?';
 
-        $sql = "
-            SELECT
-            survey.iid AS col0,
-                survey.title AS col1,
-                survey.code AS col2,
-                count(survey_question.iid) AS col3,
-        "
-            .(api_is_western_name_order()
-                ? "CONCAT(user.firstname, ' ', user.lastname)"
-                : "CONCAT(user.lastname, ' ', user.firstname)")
-            ."	AS col4,
-                survey.avail_from AS col5,
-                survey.avail_till AS col6,
-                CONCAT('<a href=\"survey_invitation.php?view=answered&survey_id=',survey.iid,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&survey_id=',survey.iid,'\">',survey.invited, '</a>') AS col7,
-                survey.anonymous AS col8,
-                survey.iid AS col9
-            FROM $table_survey survey
-            LEFT JOIN $table_survey_question survey_question
-            ON (survey.iid = survey_question.survey_id),
-            $table_user user
-            WHERE survey.author = user.id AND survey.c_id = $course_id $list_condition
-        ";
-        $sql .= ' GROUP BY survey.iid';
-        $sql .= " ORDER BY col$column $direction ";
-        $sql .= " LIMIT $from,$number_of_items";
-
-        $res = Database::query($sql);
-        $surveys = [];
-        while ($survey = Database::fetch_array($res)) {
-            $survey['col5'] = api_convert_and_format_date(
-                $survey['col5'],
-                DATE_TIME_FORMAT_LONG
-            );
-            $survey['col6'] = api_convert_and_format_date(
-                $survey['col6'],
-                DATE_TIME_FORMAT_LONG
-            );
+        $rows = [];
+        foreach ($surveys as $survey) {
+            $surveyId = (int) $survey->getIid();
+            $row = [
+                0 => $surveyId,
+                1 => $survey->getTitle(),
+                2 => $survey->getCode(),
+                3 => $survey->getQuestions()->count(),
+                4 => UserManager::formatUserFullName($survey->getCreator()),
+                5 => $survey->getAvailFrom()
+                    ? api_convert_and_format_date($survey->getAvailFrom()->format('Y-m-d H:i:s'), DATE_TIME_FORMAT_LONG)
+                    : '',
+                6 => $survey->getAvailTill()
+                    ? api_convert_and_format_date($survey->getAvailTill()->format('Y-m-d H:i:s'), DATE_TIME_FORMAT_LONG)
+                    : '',
+                7 => '<a href="'.$baseUrl.'view=answered&survey_id='.$surveyId.'">'.$survey->getAnswered().'</a> / '
+                    .'<a href="'.$baseUrl.'view=invited&survey_id='.$surveyId.'">'.$survey->getInvited().'</a>',
+                8 => $survey->getAnonymous(),
+                9 => $surveyId,
+            ];
 
             if ($mandatoryAllowed) {
-                $survey['col10'] = $survey['col9'];
-                $efvMandatory = $efv->get_values_by_handler_and_field_variable(
-                    $survey['col9'],
-                    'is_mandatory'
-                );
-                $survey['col9'] = $efvMandatory['value'];
+                $row[10] = $row[9];
+                $efvMandatory = $efv->get_values_by_handler_and_field_variable($surveyId, 'is_mandatory');
+                $row[9] = $efvMandatory['value'] ?? 0;
             }
-            $surveys[] = $survey;
+
+            $rows[] = $row;
         }
 
-        return $surveys;
+        usort(
+            $rows,
+            static function (array $a, array $b) use ($column, $descending): int {
+                $result = ($a[$column] ?? null) <=> ($b[$column] ?? null);
+
+                return $descending ? -$result : $result;
+            }
+        );
+
+        return array_slice($rows, (int) $from, (int) $number_of_items);
     }
 
     /**

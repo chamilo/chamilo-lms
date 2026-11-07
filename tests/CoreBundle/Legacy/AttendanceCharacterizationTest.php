@@ -814,14 +814,18 @@ final class AttendanceCharacterizationTest extends KernelTestCase
         $lib = new Attendance();
 
         $lib->set_date_time('2032-08-05 09:30:00');
-        $this->assertSame(0, $lib->attendance_calendar_edit($c1, $this->entity($att)), 'always returns 0');
+        $this->assertSame(1, $lib->attendance_calendar_edit($c1, $this->entity($att)), 'a moved date reports 1 row');
         $this->assertSame('2032-08-05 09:30:00', $this->row('SELECT date_time FROM c_attendance_calendar WHERE iid = ?', [$c1])['date_time']);
 
-        // PINNED QUIRK: moving onto a date that another row of the same attendance already has is silently ignored.
+        // Fixed: a move onto a date another row of the same attendance already has is still refused, but now
+        // reported (0 rows, was always 0 whatever happened). Re-saving a date unchanged is not a conflict.
         $lib->set_date_time('2032-08-02 08:00:00');
-        $lib->attendance_calendar_edit($c1, $this->entity($att));
+        $this->assertSame(0, $lib->attendance_calendar_edit($c1, $this->entity($att)), 'conflict reports 0 rows');
         $this->assertSame('2032-08-05 09:30:00', $this->row('SELECT date_time FROM c_attendance_calendar WHERE iid = ?', [$c1])['date_time']);
         $this->assertSame(0, (int) $this->row('SELECT locked FROM c_attendance WHERE iid = ?', [$att])['locked']);
+
+        $lib->set_date_time('2032-08-05 09:30:00');
+        $this->assertSame(1, $lib->attendance_calendar_edit($c1, $this->entity($att)), 'same date on the same row is not a conflict');
     }
 
     public function testAttendanceCalendarDeleteOneDateRemovesSheetAndRecomputesResults(): void

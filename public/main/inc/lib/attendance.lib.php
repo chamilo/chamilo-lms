@@ -1826,7 +1826,8 @@ class Attendance
      * @param int         $calendar_id
      * @param CAttendance $attendance
      *
-     * @return int affected rows
+     * @return int 1 when the date was saved, 0 when it was refused because another date of the attendance
+     *             already has that date and time
      */
     public function attendance_calendar_edit($calendar_id, $attendance)
     {
@@ -1836,10 +1837,12 @@ class Attendance
 
         $course_id = api_get_course_int_id();
         // check if datetime already exists inside the table
+        $calendar_id = (int) $calendar_id;
         $sql = "SELECT iid FROM $tbl_attendance_calendar
                 WHERE
                     date_time = '".Database::escape_string($this->date_time)."' AND
-                    attendance_id = '$attendanceId'";
+                    attendance_id = '$attendanceId' AND
+                    iid != $calendar_id";
         $rs = Database::query($sql);
 
         if (0 == Database::num_rows($rs)) {
@@ -1847,6 +1850,7 @@ class Attendance
                     SET date_time='".Database::escape_string($this->date_time)."'
                     WHERE iid = '".$calendar_id."'";
             Database::query($sql);
+            $affected_rows = 1;
         }
 
         // update locked attendance

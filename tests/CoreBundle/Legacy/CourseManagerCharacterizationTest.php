@@ -644,8 +644,13 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
         $this->sessionCourseUser($session->getId(), $course, $s1, 0);
 
         $this->assertEquals(3, CourseManager::get_users_count_in_course($course->getCode()), 'students+teachers, no HRM');
-        $this->assertEquals(3, CourseManager::get_users_count_in_course($course->getCode(), 0, STUDENT), 'PINNED QUIRK: the status argument is ignored');
+        // Fixed: the status argument used to be ignored (always 3 here).
+        $this->assertEquals(2, CourseManager::get_users_count_in_course($course->getCode(), 0, STUDENT));
+        $this->assertEquals(1, CourseManager::get_users_count_in_course($course->getCode(), 0, COURSEMANAGER));
+        $this->assertEquals(0, CourseManager::get_users_count_in_course($course->getCode(), 0, DRH), 'HRM relations are never counted');
         $this->assertEquals(1, CourseManager::get_users_count_in_course($course->getCode(), $session->getId()));
+        $this->assertEquals(1, CourseManager::get_users_count_in_course($course->getCode(), $session->getId(), 0));
+        $this->assertEquals(0, CourseManager::get_users_count_in_course($course->getCode(), $session->getId(), 2), 'no coach in the session');
     }
 
     public function testGetStudentListFromCourseCodeIsKeyedByUserId(): void

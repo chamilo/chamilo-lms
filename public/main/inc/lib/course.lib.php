@@ -1948,6 +1948,7 @@ class CourseManager
      *
      * @param string $course_code
      * @param int    $session_id
+     * @param int    $status     Optional. Only count users with this status (course_rel_user or session relation)
      *
      * @return int
      */
@@ -1972,6 +1973,7 @@ class CourseManager
             FROM $tblUser as user
         ";
         $where = [];
+        $statusCondition = '';
         if (!empty($session_id)) {
             $sql .= "
                 LEFT JOIN $tblSessionCourseUser as session_course_user
@@ -1981,6 +1983,9 @@ class CourseManager
             ";
 
             $where[] = ' session_course_user.c_id IS NOT NULL ';
+            if (null !== $status) {
+                $statusCondition = ' AND session_course_user.status = '.(int) $status;
+            }
         } else {
             $sql .= "
                 LEFT JOIN $tblCourseUser as course_rel_user
@@ -1989,6 +1994,9 @@ class CourseManager
                     AND course_rel_user.c_id = $courseId
             ";
             $where[] = ' course_rel_user.c_id IS NOT NULL ';
+            if (null !== $status) {
+                $statusCondition = ' AND course_rel_user.status = '.(int) $status;
+            }
         }
 
         $multiple_access_url = api_get_multiple_access_url();
@@ -1996,7 +2004,7 @@ class CourseManager
             $sql .= " LEFT JOIN $tblUrlUser au ON (au.user_id = user.id) ";
         }
 
-        $sql .= ' WHERE user.active <> '.USER_SOFT_DELETED.' AND '.implode(' OR ', $where);
+        $sql .= ' WHERE user.active <> '.USER_SOFT_DELETED.' AND '.implode(' OR ', $where).$statusCondition;
 
         if ($multiple_access_url) {
             $current_access_url_id = api_get_current_access_url_id();

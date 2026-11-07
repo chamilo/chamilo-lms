@@ -885,7 +885,7 @@ class TicketManager
                 ticket.subject AS subject,
                 ticket.assigned_last_user
             FROM $table_support_tickets ticket
-            INNER JOIN $table_support_category cat
+            LEFT JOIN $table_support_category cat
             ON (cat.id = ticket.category_id)
             INNER JOIN $table_support_priority priority
             ON (ticket.priority_id = priority.id)
@@ -1017,7 +1017,7 @@ class TicketManager
         // Same FROM/JOINs and same conditions as getTicketsByCurrentUser(): the total is the list's row count.
         $sql = "SELECT COUNT(DISTINCT ticket.id) AS total
                 FROM $table_support_tickets ticket
-                INNER JOIN $table_support_category cat
+                LEFT JOIN $table_support_category cat
                 ON (cat.id = ticket.category_id)
                 INNER JOIN $table_support_priority priority
                 ON (ticket.priority_id = priority.id)

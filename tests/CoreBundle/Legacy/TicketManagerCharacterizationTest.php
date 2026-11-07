@@ -765,7 +765,8 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
     // ---------------------------------------------------------------- listing & counting
 
     /**
-     * Five tickets in a fresh project. t1/t2/t3/t4 are listable, the 5th has no category.
+     * Five tickets in a fresh project; the 5th (listed last by id, distinct status/dates/messages so no sort ties) has no
+     * category, which is what deleteCategory() leaves behind.
      * Dates (start_date): t1 15/03/2021, t2 02/12/2019, t3 01/07/2022, t4 01/06/2020.
      *
      * @return array{0: int, 1: int, 2: int, 3: int, 4: int, 5: int, 6: int, 7: int}
@@ -793,7 +794,10 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
             'subject' => 'tm_subject_4', 'status_id' => 5, 'start_date' => '2020-06-01 10:00:00',
             'sys_lastedit_datetime' => '2021-03-15 10:00:00',
         ]);
-        $orphan = $this->ticket($p, $catA, ['subject' => 'tm_subject_orphan']);
+        $orphan = $this->ticket($p, $catA, [
+            'subject' => 'tm_subject_orphan', 'status_id' => 3, 'start_date' => '2021-12-31 10:00:00',
+            'sys_lastedit_datetime' => '2021-03-25 10:00:00', 'total_messages' => 2,
+        ]);
         $this->conn->executeStatement('UPDATE ticket_ticket SET category_id = NULL WHERE id = ?', [$orphan]);
         $_GET['project_id'] = (string) $p;
 
@@ -819,10 +823,11 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
 
         $byId = TicketManager::getTicketsByCurrentUser(0, 50, 0, 'ASC');
         $this->assertSame(
-            ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4'],
+            ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4', 'tm_subject_orphan'],
             $this->subjects($byId),
-            'the ticket without category is invisible: INNER JOIN'
+            'Fixed: a ticket whose category was deleted is still listed (the category join is a LEFT JOIN)'
         );
+        $this->assertNull($byId[4][4], 'no category title for it');
         $this->assertCount(8, $byId[0], 'admins get 8 columns');
         $this->assertSame('New', $byId[0][1]);
         $this->assertSame('tm_cat_alpha', $byId[0][4]);
@@ -830,13 +835,13 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->assertStringContainsString('>tm_code_', $byId[0][0]);
         $this->assertStringContainsString('ticket_details.php?ticket_id=', $byId[0][0]);
 
-        $this->assertSame(['tm_subject_4', 'tm_subject_3', 'tm_subject_2', 'tm_subject_1'], $this->listSubjects([], 0, 'DESC'));
-        $this->assertSame(['tm_subject_3', 'tm_subject_1', 'tm_subject_2', 'tm_subject_4'], $this->listSubjects([], 7, 'DESC'), 'column 7 = total_messages 9,4,1,0');
-        $this->assertSame(['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4'], $this->listSubjects([], 8, 'ASC'), 'column 8 = subject');
-        $this->assertSame(['tm_subject_2', 'tm_subject_4', 'tm_subject_1', 'tm_subject_3'], $this->listSubjects([], 2, 'ASC'), 'column 2 = start_date');
-        $this->assertSame(['tm_subject_3', 'tm_subject_1', 'tm_subject_4', 'tm_subject_2'], $this->listSubjects([], 3, 'DESC'), 'column 3 = sys_lastedit_datetime');
-        $this->assertSame(['tm_subject_3', 'tm_subject_4', 'tm_subject_1', 'tm_subject_2'], $this->listSubjects([], 1, 'ASC'), 'column 1 = status title: Closed, Forwarded, New, Pending');
-        $this->assertSame(['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4'], $this->listSubjects([], 99, 'ASC'), 'unknown column falls back to ticket id');
+        $this->assertSame(['tm_subject_orphan', 'tm_subject_4', 'tm_subject_3', 'tm_subject_2', 'tm_subject_1'], $this->listSubjects([], 0, 'DESC'));
+        $this->assertSame(['tm_subject_3', 'tm_subject_1', 'tm_subject_orphan', 'tm_subject_2', 'tm_subject_4'], $this->listSubjects([], 7, 'DESC'), 'column 7 = total_messages 9,4,2,1,0');
+        $this->assertSame(['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4', 'tm_subject_orphan'], $this->listSubjects([], 8, 'ASC'), 'column 8 = subject');
+        $this->assertSame(['tm_subject_2', 'tm_subject_4', 'tm_subject_1', 'tm_subject_orphan', 'tm_subject_3'], $this->listSubjects([], 2, 'ASC'), 'column 2 = start_date');
+        $this->assertSame(['tm_subject_3', 'tm_subject_orphan', 'tm_subject_1', 'tm_subject_4', 'tm_subject_2'], $this->listSubjects([], 3, 'DESC'), 'column 3 = sys_lastedit_datetime');
+        $this->assertSame(['tm_subject_3', 'tm_subject_4', 'tm_subject_1', 'tm_subject_2', 'tm_subject_orphan'], $this->listSubjects([], 1, 'ASC'), 'column 1 = status title: Closed, Forwarded, New, Pending, Unconfirmed');
+        $this->assertSame(['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4', 'tm_subject_orphan'], $this->listSubjects([], 99, 'ASC'), 'unknown column falls back to ticket id');
     }
 
     public function testGetTicketsByCurrentUserPaginatesWithOffsetAndCount(): void
@@ -844,11 +849,11 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->listFixture();
 
         $this->assertSame(
-            ['tm_subject_3', 'tm_subject_1'],
+            ['tm_subject_3', 'tm_subject_orphan'],
             $this->subjects(TicketManager::getTicketsByCurrentUser(0, 2, 3, 'DESC'))
         );
         $this->assertSame(
-            ['tm_subject_4', 'tm_subject_2'],
+            ['tm_subject_1', 'tm_subject_4', 'tm_subject_2'],
             $this->subjects(TicketManager::getTicketsByCurrentUser(2, 5, 3, 'DESC')),
             'LIMIT offset,count'
         );
@@ -885,7 +890,7 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
     public function testGetTicketsByCurrentUserStructuredFilters(): void
     {
         [, , , , , , $catA, $catB] = $this->listFixture();
-        $all = ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4'];
+        $all = ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4', 'tm_subject_orphan'];
 
         $this->assertSame(['tm_subject_2'], $this->listSubjects(['keyword_category' => (string) $catB]));
         $this->assertSame(['tm_subject_1', 'tm_subject_3', 'tm_subject_4'], $this->listSubjects(['keyword_category' => (string) $catA]));
@@ -913,14 +918,14 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
 
         // Fixed: the dd/mm/YYYY input is parsed and compared as a date (it used to be a string comparison against
         // DATE_FORMAT(start_date, '%d/%m/%Y'), where "01/07/2022" < "10/03/2021").
-        // t1 = 15/03/2021, t2 = 02/12/2019, t3 = 01/07/2022, t4 = 01/06/2020.
+        // t1 = 15/03/2021, t2 = 02/12/2019, t3 = 01/07/2022, t4 = 01/06/2020, orphan = 31/12/2021.
         $this->assertSame(
-            ['tm_subject_1', 'tm_subject_3'],
+            ['tm_subject_1', 'tm_subject_3', 'tm_subject_orphan'],
             $this->listSubjects(['keyword_start_date_start' => '10/03/2021']),
             'start only: real >=, the later year 2022 is kept'
         );
         $this->assertSame(
-            ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4'],
+            ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4', 'tm_subject_orphan'],
             $this->listSubjects(['keyword_start_date_start' => '01/01/2000'])
         );
         $this->assertSame(
@@ -937,12 +942,12 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
             $this->listSubjects(['keyword_start_date_start' => '20/03/2021', 'keyword_start_date_end' => '10/03/2021'])
         );
         $this->assertSame(
-            ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4'],
+            ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4', 'tm_subject_orphan'],
             $this->listSubjects(['keyword_start_date_end' => '10/03/2021']),
             'an end date alone is ignored'
         );
         $this->assertSame(
-            ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4'],
+            ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4', 'tm_subject_orphan'],
             $this->listSubjects(['keyword_start_date_start' => "31/02/2021' OR '1'='1"]),
             'a value that is not a real dd/mm/YYYY date is ignored (and never reaches the SQL text)'
         );
@@ -956,11 +961,11 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         // A smuggled "ASC, 1=1" used to be executed as part of ORDER BY and kept the ascending order; now any
         // value that is not ASC/DESC falls back to the default DESC.
         $this->assertSame(
-            ['tm_subject_4', 'tm_subject_3', 'tm_subject_2', 'tm_subject_1'],
+            ['tm_subject_orphan', 'tm_subject_4', 'tm_subject_3', 'tm_subject_2', 'tm_subject_1'],
             $this->subjects(TicketManager::getTicketsByCurrentUser(0, 50, 0, 'ASC, 1=1'))
         );
         $this->assertSame(
-            ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4'],
+            ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4', 'tm_subject_orphan'],
             $this->subjects(TicketManager::getTicketsByCurrentUser(0, 50, 0, 'asc')),
             'direction is case-insensitive'
         );
@@ -996,7 +1001,7 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->listFixture();
         $pid = $_GET['project_id'];
 
-        $this->assertSame(4, TicketManager::getTotalTicketsCurrentUser(), 'orphan without category excluded: INNER JOIN');
+        $this->assertSame(5, TicketManager::getTotalTicketsCurrentUser(), 'the ticket without category is counted, as listed (LEFT JOIN)');
 
         // Fixed: the total searches the same texts as the list, including category/status/priority titles.
         $_GET = ['project_id' => $pid, 'keyword' => 'tm_cat_alpha'];
@@ -1024,9 +1029,9 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         // Fixed: a start date alone is ">=" a real date, as in the list (it used to be an exact string match,
         // and the range only applied when an undocumented keyword_dates flag was also sent).
         $_GET = ['project_id' => $pid, 'keyword_start_date_start' => '15/03/2021'];
-        $this->assertSame(2, TicketManager::getTotalTicketsCurrentUser());
+        $this->assertSame(3, TicketManager::getTotalTicketsCurrentUser());
         $_GET = ['project_id' => $pid, 'keyword_start_date_start' => '10/03/2021'];
-        $this->assertSame(2, TicketManager::getTotalTicketsCurrentUser());
+        $this->assertSame(3, TicketManager::getTotalTicketsCurrentUser());
         $_GET = ['project_id' => $pid, 'keyword_start_date_start' => '10/03/2021', 'keyword_start_date_end' => '20/03/2021'];
         $this->assertSame(1, TicketManager::getTotalTicketsCurrentUser(), 'range without any keyword_dates flag');
 

@@ -1567,18 +1567,37 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
     // ---------------------------------------------------------------- dead SQL: columns that no longer exist
 
-    public function testDeleteAllSurveyAnswersThrowsBecauseItFiltersOnADroppedColumn(): void
+    public function testDeleteAllSurveyAnswersRemovesOnlyThatSurveysAnswers(): void
     {
-        // PINNED QUIRK: c_survey_answer has no c_id any more.
-        $this->expectException(\Chamilo\CoreBundle\Exception\NotAllowedException::class);
-        \SurveyManager::delete_all_survey_answers($this->insertSurvey());
+        $s = $this->insertSurvey();
+        $other = $this->insertSurvey();
+        $q = $this->insertQuestion($s, 'sv q');
+        $oq = $this->insertQuestion($other, 'sv oq');
+        $this->insertAnswer($s, $q, '1', 'a');
+        $this->insertAnswer($s, $q, '2', 'a');
+        $this->insertAnswer($other, $oq, '1', 'a');
+
+        $this->assertTrue(\SurveyManager::delete_all_survey_answers($s));
+
+        $this->assertSame(0, $this->rowCount('c_survey_answer', 'survey_id = ?', [$s]));
+        $this->assertSame(1, $this->rowCount('c_survey_answer', 'survey_id = ?', [$other]));
     }
 
-    public function testDeleteAllSurveyQuestionsOptionsThrowsBecauseItFiltersOnADroppedColumn(): void
+    public function testDeleteAllSurveyQuestionsOptionsRemovesOnlyThatSurveysOptions(): void
     {
-        // PINNED QUIRK: c_survey_question_option has no c_id any more.
-        $this->expectException(\Chamilo\CoreBundle\Exception\NotAllowedException::class);
-        \SurveyManager::delete_all_survey_questions_options($this->insertSurvey());
+        $s = $this->insertSurvey();
+        $other = $this->insertSurvey();
+        $q = $this->insertQuestion($s, 'sv q', 'multiplechoice');
+        $oq = $this->insertQuestion($other, 'sv oq', 'multiplechoice');
+        $this->insertOption($s, $q, 'a', 1);
+        $this->insertOption($s, $q, 'b', 2);
+        $this->insertOption($other, $oq, 'c', 1);
+
+        $this->assertTrue(\SurveyManager::delete_all_survey_questions_options($s));
+
+        $this->assertSame(0, $this->rowCount('c_survey_question_option', 'survey_id = ?', [$s]));
+        $this->assertSame(1, $this->rowCount('c_survey_question_option', 'survey_id = ?', [$other]));
+        $this->assertSame(1, $this->rowCount('c_survey_question', 'iid = ?', [$q]), 'the questions themselves stay');
     }
 
     public function testEmptySurveyFromIdThrowsBecauseItFiltersOnDroppedColumns(): void

@@ -1257,10 +1257,8 @@ class SurveyManager
     {
         // Table definitions
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $course_id = api_get_course_int_id();
-        $course_condition = " c_id = $course_id AND ";
         $sql = "DELETE FROM $table_survey_question_option
-                WHERE $course_condition survey_id='".intval($survey_id)."'";
+                WHERE survey_id = ".(int) $survey_id;
 
         // Deleting the options of the survey questions
         Database::query($sql);
@@ -1288,11 +1286,10 @@ class SurveyManager
      */
     public static function delete_all_survey_answers($survey_id)
     {
-        $course_id = api_get_course_int_id();
         $table = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $survey_id = (int) $survey_id;
         $sql = "DELETE FROM $table
-                WHERE c_id = $course_id AND survey_id = $survey_id";
+                WHERE survey_id = $survey_id";
         Database::query($sql);
 
         return true;

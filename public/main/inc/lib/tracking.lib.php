@@ -3890,7 +3890,7 @@ class Tracking
                 $sql = 'SELECT DISTINCT c.code
                         FROM '.$tbl_session_course_user.' scu
                         INNER JOIN '.$tbl_course.' c
-                        ON (c.code = scu.c_id)
+                        ON (c.id = scu.c_id)
                         INNER JOIN '.$tbl_course_rel_access_url.' cru
                         ON (c.id = cru.c_id)
                         WHERE

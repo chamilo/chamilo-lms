@@ -354,8 +354,17 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         $this->assertSame([$codeOne => $codeOne, $codeTwo => $codeTwo], Tracking::get_courses_followed_by_coach($x['gcoach'], $x['a']));
         $this->assertSame([], Tracking::get_courses_followed_by_coach($x['gcoach'], $x['b']));
 
-        // PINNED QUIRK: the course coach branch compares the course CODE with session_rel_course_rel_user.c_id
-        // (an integer), so in multi-URL mode a course coach follows no course at all.
+        // Fixed: the course coach branch compared the course CODE with session_rel_course_rel_user.c_id (an
+        // integer), so in multi-URL mode a course coach followed no course at all.
+        $this->assertSame([$codeOne => $codeOne], Tracking::get_courses_followed_by_coach($x['coach']));
+        $this->assertSame([$codeOne => $codeOne], Tracking::get_courses_followed_by_coach($x['coach'], $x['a']));
+        $this->assertSame([], Tracking::get_courses_followed_by_coach($x['coach'], $x['b']));
+
+        // A course that is not registered on the current URL is not listed.
+        $this->conn->executeStatement(
+            'DELETE FROM access_url_rel_course WHERE c_id = ? AND access_url_id = ?',
+            [self::COURSE, api_get_current_access_url_id()]
+        );
         $this->assertSame([], Tracking::get_courses_followed_by_coach($x['coach']));
     }
 

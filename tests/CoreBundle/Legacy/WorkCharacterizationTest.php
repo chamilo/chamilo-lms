@@ -332,9 +332,17 @@ final class WorkCharacterizationTest extends KernelTestCase
 
         $result = updateDirName(['iid' => $folder, 'url' => '/wk_old'], 'wk_new');
 
-        // PINNED QUIRK: returns null (no return statement) although documented as bool.
-        $this->assertNull($result);
+        // Fixed: it fell off the end and returned null although documented as bool.
+        $this->assertTrue($result);
         $this->assertSame('wk_new', $this->field($folder, 'title'));
+    }
+
+    public function testUpdateDirNameWithAnEmptyNameChangesNothingAndReturnsFalse(): void
+    {
+        $folder = $this->folder(['title' => 'wk_untouched']);
+
+        $this->assertFalse(updateDirName(['iid' => $folder, 'url' => '/x'], ''));
+        $this->assertSame('wk_untouched', $this->field($folder, 'title'));
     }
 
     public function testUpdateDirNameWithSameNameAsUrlIsANoOpReturningTrue(): void

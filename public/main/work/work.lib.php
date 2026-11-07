@@ -972,7 +972,7 @@ function updateDirName($work_data, $newPath)
 {
     $work_id = (int) ($work_data['iid']);
     $oldPath = $work_data['url'];
-    $originalNewPath = Database::escape_string($newPath);
+    $originalNewPath = $newPath;
     $newPath = Database::escape_string($newPath);
     $newPath = api_replace_dangerous_char($newPath);
     $newPath = disable_dangerous_file($newPath);
@@ -981,14 +981,18 @@ function updateDirName($work_data, $newPath)
         return true;
     }
 
-    if (!empty($newPath)) {
-        $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        $sql = "UPDATE $table SET
-                    title = '".$originalNewPath."'
-                WHERE
-                    iid = $work_id";
-        Database::query($sql);
+    if (empty($newPath)) {
+        return false;
     }
+
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    Database::update(
+        $table,
+        ['title' => $originalNewPath],
+        ['iid = ?' => [$work_id]]
+    );
+
+    return true;
 }
 
 /**

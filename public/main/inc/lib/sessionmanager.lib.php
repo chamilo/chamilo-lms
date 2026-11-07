@@ -3761,7 +3761,7 @@ class SessionManager
 				INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
 				LEFT JOIN  $session_category_table sc ON s.session_category_id = sc.id
 				LEFT JOIN $session_course_table sco ON (sco.session_id = s.id)
-				INNER JOIN $course_table c ON sco.c_id = c.id
+				LEFT JOIN $course_table c ON sco.c_id = c.id
 				WHERE ar.access_url_id = $urlId ";
 
         $availableFields = [

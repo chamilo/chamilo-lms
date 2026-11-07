@@ -482,7 +482,7 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         $this->assertFalse($this->legacy('unsubscribe_course_from_session', 0, $c1));
     }
 
-    public function testGetSessionsListJoinsCoursesAndSupportsFilterOrderAndLimit(): void
+    public function testGetSessionsListListsSessionsWithoutCourseAndSupportsFilterOrderAndLimit(): void
     {
         [$c1] = $this->newCourse('sm_list_course');
         $cat = SessionManager::create_category_session('sm_list_cat', 2030, 1, 1, 0, 0, 0);
@@ -494,14 +494,20 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         $only = [$sa, $sb, $sNoCourse];
 
         $all = SessionManager::get_sessions_list([], ['title', 'asc'], null, null, 0, $only);
-        // INNER JOIN on courses: a session without any course is not listed at all.
-        $this->assertSame([$sa, $sb], array_keys($all));
+        // Fixed: the courses were INNER JOINed, so a session without any course was never listed. The callers
+        // (add students/teachers to a session, promotions, session pickers) want every session of the URL.
+        $this->assertSame([$sa, $sb, $sNoCourse], array_keys($all));
+        // A condition on the course still narrows the list to the sessions that have it.
+        $this->assertSame(
+            [$sa, $sb],
+            array_keys(SessionManager::get_sessions_list(['c.id' => ['operator' => '=', 'value' => (string) $c1]], ['title', 'asc'], null, null, 0, $only))
+        );
         $this->assertSame(['id', 'title', 'nbr_courses', 'access_start_date', 'access_end_date', 'category_name', 'promotion_id'], array_values(array_filter(array_keys($all[$sa]), 'is_string')));
         $this->assertNull($all[$sa]['category_name']);
         $this->assertSame('sm_list_cat', $all[$sb]['category_name']);
 
-        $this->assertSame([$sb, $sa], array_keys(SessionManager::get_sessions_list([], ['title', 'desc'], null, null, 0, $only)));
-        $this->assertSame([$sb], array_keys(SessionManager::get_sessions_list([], ['title', 'desc'], 0, 1, 0, $only)));
+        $this->assertSame([$sNoCourse, $sb, $sa], array_keys(SessionManager::get_sessions_list([], ['title', 'desc'], null, null, 0, $only)));
+        $this->assertSame([$sNoCourse], array_keys(SessionManager::get_sessions_list([], ['title', 'desc'], 0, 1, 0, $only)));
         $this->assertSame(
             [$sb],
             array_keys(SessionManager::get_sessions_list(['s.title' => ['operator' => 'LIKE', 'value' => '%list_b']], [], null, null, 0, $only))
@@ -511,7 +517,7 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
             array_keys(SessionManager::get_sessions_list(['s.id' => ['operator' => '=', 'value' => (string) $sa]], [], null, null, 0, $only))
         );
         // A field outside the allow-list is silently ignored, not an error.
-        $this->assertCount(2, SessionManager::get_sessions_list(['s.nbr_users' => ['operator' => '=', 'value' => '999']], [], null, null, 0, $only));
+        $this->assertCount(3, SessionManager::get_sessions_list(['s.nbr_users' => ['operator' => '=', 'value' => '999']], [], null, null, 0, $only));
     }
 
     // ---------------------------------------------------------------- users in sessions

@@ -1066,7 +1066,7 @@ class CourseManager
                 ON cfv.field_id=cf.id
                 WHERE
                     variable = '$original_course_id_name' AND
-                    value = '$original_course_id_value' AND
+                    cfv.field_value = '$original_course_id_value' AND
                     cf.item_type = $extraFieldType
                 ";
         $res = Database::query($sql);
@@ -6715,7 +6715,7 @@ class CourseManager
                     FROM $tableUserFieldValues v
                     INNER JOIN $tableExtraFields f
                     ON (f.id = v.field_id)
-                    WHERE value = '$name' AND item_type = $extraFieldType";
+                    WHERE v.field_value = '$name' AND item_type = $extraFieldType";
             $result_count = Database::query($sql);
             if (Database::num_rows($result_count)) {
                 $row_count = Database::fetch_array($result_count);

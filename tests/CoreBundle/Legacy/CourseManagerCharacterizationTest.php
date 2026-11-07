@@ -1071,22 +1071,27 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
         $this->assertSame(0, CourseManager::get_course_id_from_original_id('cm_nope', $variable));
     }
 
-    public function testRawExtraFieldQueriesUseAColumnThatNoLongerExists(): void
+    public function testRawExtraFieldQueriesFilterOnFieldValue(): void
     {
-        // PINNED QUIRK: these two methods filter on extra_field_values.value, but the column is now field_value,
-        // so they fail as soon as they reach the query. The guard clauses are the only part that still works.
+        // Fixed: both methods filtered on extra_field_values.value, the column is field_value, so they always threw.
+        $one = $this->createCourse('cm_xfr_a');
+        $two = $this->createCourse('cm_xfr_b');
+        $three = $this->createCourse('cm_xfr_c');
+        CourseManager::create_course_extra_field('cm_xfr_var', 1, 'cm_xfr_label');
+        $this->setCourseExtraValue($one, 'cm_xfr_var', 'cm_xfr_shared');
+        $this->setCourseExtraValue($two, 'cm_xfr_var', 'cm_xfr_shared');
+        $this->setCourseExtraValue($three, 'cm_xfr_var', 'cm_xfr_other');
+
+        $this->assertSame(2, (int) CourseManager::getCountRegisteredUsersWithCourseExtraField('cm_xfr_shared'));
+        $this->assertSame(1, (int) CourseManager::getCountRegisteredUsersWithCourseExtraField('cm_xfr_other'));
+        $this->assertSame(0, CourseManager::getCountRegisteredUsersWithCourseExtraField('cm_xfr_none'));
         $this->assertSame(0, CourseManager::getCountRegisteredUsersWithCourseExtraField('-'));
         $this->assertSame(0, CourseManager::getCountRegisteredUsersWithCourseExtraField(''));
 
-        try {
-            CourseManager::get_course_code_from_original_id('cm_xf_x', 'cm_xf_var');
-            $this->fail('get_course_code_from_original_id was expected to fail on the missing "value" column');
-        } catch (Throwable $e) {
-            $this->assertNotInstanceOf(\PHPUnit\Framework\AssertionFailedError::class, $e);
-        }
-
-        $this->expectException(Throwable::class);
-        CourseManager::getCountRegisteredUsersWithCourseExtraField('cm_xf_x');
+        // Despite its name it returns the course id (item_id), 0 when nothing matches.
+        $this->assertSame((int) $three->getId(), (int) CourseManager::get_course_code_from_original_id('cm_xfr_other', 'cm_xfr_var'));
+        $this->assertSame(0, CourseManager::get_course_code_from_original_id('cm_xfr_none', 'cm_xfr_var'));
+        $this->assertSame(0, CourseManager::get_course_code_from_original_id('cm_xfr_other', 'cm_xfr_novar'));
     }
 
     public function testUpdateCourseExtraFieldValueSavesAndOverwritesTheValue(): void

@@ -856,11 +856,10 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->model->setParentGroup($mid->getId(), $root->getId());
         $this->model->setParentGroup($leaf->getId(), $mid->getId());
 
-        // CURRENT BEHAVIOUR (suspected bug): Database::fetch_array() ignores the 'NUM' mode and returns
-        // the row twice (associative then numeric), so every ancestor id is listed twice.
-        $this->assertEquals([$root->getId(), $root->getId()], UserGroupModel::get_parent_groups($mid->getId()));
-        $this->assertEquals(
-            [$mid->getId(), $root->getId(), $mid->getId(), $root->getId()],
+        // Fixed: fetch_array() ignores its 'NUM' mode and returned each id twice (assoc + numeric).
+        $this->assertSame([$root->getId()], UserGroupModel::get_parent_groups($mid->getId()));
+        $this->assertSame(
+            [$mid->getId(), $root->getId()],
             UserGroupModel::get_parent_groups($leaf->getId())
         );
         $this->assertSame([], UserGroupModel::get_parent_groups($root->getId()));
@@ -871,7 +870,7 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         // Re-parenting updates the single row instead of inserting a second one.
         $this->model->setParentGroup($leaf->getId(), $root->getId());
         $this->assertSame(1, $this->countRows('usergroup_rel_usergroup', ['subgroup_id' => $leaf->getId()]));
-        $this->assertEquals([$root->getId(), $root->getId()], UserGroupModel::get_parent_groups($leaf->getId()));
+        $this->assertSame([$root->getId()], UserGroupModel::get_parent_groups($leaf->getId()));
 
         // Parent 0 deletes the association.
         $this->model->setParentGroup($leaf->getId(), 0);

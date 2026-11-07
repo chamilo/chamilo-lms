@@ -3124,7 +3124,7 @@ class UserGroupModel extends Model
         }
         $sql = $select_part.' '.$cond_part."WHERE rg0.subgroup_id='$group_id'";
         $res = Database::query($sql);
-        $temp_arr = Database::fetch_array($res, 'NUM');
+        $temp_arr = Database::fetch_assoc($res);
         $toReturn = [];
         if (is_array($temp_arr)) {
             foreach ($temp_arr as $elt) {

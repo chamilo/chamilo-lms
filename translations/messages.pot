@@ -43434,3 +43434,5 @@ msgstr ""
 msgid "You can review suggestions, but you do not have permission to assign skills to Gradebook."
 msgstr ""
 
+msgid "Invalid JSON syntax"
+msgstr ""

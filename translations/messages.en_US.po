@@ -43505,3 +43505,5 @@ msgstr "The selected session is used for analysis. Approved skills are attached 
 msgid "You can review suggestions, but you do not have permission to assign skills to Gradebook."
 msgstr "You can review suggestions, but you do not have permission to assign skills to Gradebook."
 
+msgid "Invalid JSON syntax"
+msgstr "Invalid JSON syntax"

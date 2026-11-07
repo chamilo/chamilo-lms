@@ -53,6 +53,42 @@ class SettingsControllerTest extends WebTestCase
         $this->assertStringContainsString('Internal messaging tool', $client->getResponse()->getContent());
     }
 
+    public function testJsonSettingsAreMarkedForClientSideValidation(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->getUser('admin'));
+
+        $client->request('GET', '/admin/settings/display');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('textarea[name="form[show_tabs]"][data-json-setting="true"]');
+        $this->assertSelectorExists('textarea[name="form[show_tabs]"] + p[role="alert"]');
+        // A template-backed JSON field without an explicit Json constraint must also be covered.
+        $this->assertSelectorExists('textarea[name="form[show_tabs_per_role]"][data-json-setting="true"]');
+
+        // The DKIM setting has an official JSON template and must be validated.
+        $client->request('GET', '/admin/settings/mail');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('textarea[name="form[mailer_dkim]"][data-json-setting="true"]');
+
+        // A plain-text textarea must remain editable without JSON validation.
+        $client->request('GET', '/admin/settings/certificate');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('textarea[name="form[transcript_grading_scale]"][data-json-setting="true"]');
+        $this->assertSelectorExists('textarea[name="form[transcript_gpa_note]"]');
+        $this->assertSelectorNotExists('textarea[name="form[transcript_gpa_note]"][data-json-setting="true"]');
+    }
+
+    public function testJsonValidationIsAlsoPresentInSettingsSearch(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->getUser('admin'));
+
+        $client->request('GET', '/admin/settings/search_settings?keyword=show_tabs');
+        $this->assertResponseIsSuccessful();
+        $this->assertSelectorExists('textarea[name="form[show_tabs]"][data-json-setting="true"]');
+        $this->assertSelectorExists('textarea[name="form[show_tabs]"] + p[role="alert"]');
+    }
+
     public function testUpdateSettingAction(): void
     {
         $client = static::createClient();

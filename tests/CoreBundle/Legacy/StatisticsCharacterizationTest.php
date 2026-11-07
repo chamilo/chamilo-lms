@@ -789,8 +789,21 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $this->assertSame(1, (int) $distinct[$today]);
         $this->assertSame(2, (int) $distinct[$d3]);
 
+        $this->assertSame(5, array_sum(Statistics::getRecentLoginStats(false, 0)));
         $this->assertSame(0, array_sum(Statistics::getRecentLoginStats(false, 15)), 'min duration 15 min excludes all 10 min sessions');
         $this->assertSame(5, array_sum(Statistics::getRecentLoginStats(false, 5)));
+    }
+
+    public function testGetRecentLoginStatsWindowStartsExactly31DaysBeforeNowIn24HourClock(): void
+    {
+        // The window start used to be formatted with 'h' (12-hour clock): from 13:00 to 23:59 UTC it started
+        // 12 hours too early and counted a login made an hour before the 31-day cut-off. (This guard only
+        // bites when the suite runs between 13:00 and 23:59 UTC; the fix is the 24-hour 'H'.)
+        $u = $this->rawUser('gw');
+        $this->rawLogin($u, gmdate('Y-m-d H:i:s', strtotime('-31 days -1 hour')), gmdate('Y-m-d H:i:s', strtotime('-31 days')));
+        $this->rawLogin($u, gmdate('Y-m-d H:i:s', strtotime('-31 days +1 hour')), gmdate('Y-m-d H:i:s', strtotime('-31 days +2 hours')));
+
+        $this->assertSame(1, array_sum(Statistics::getRecentLoginStats(false, 0)));
     }
 
     // -------------------------------------------------------------- tool stats

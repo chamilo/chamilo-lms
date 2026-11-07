@@ -854,7 +854,7 @@ class Statistics
         $now = api_get_utc_datetime();
         $date = new DateTime($now);
         $date->sub(new DateInterval('P31D'));
-        $newDate = $date->format('Y-m-d h:i:s');
+        $newDate = $date->format('Y-m-d H:i:s');
         $totalLogin = self::buildDatesArray($newDate, $now, true);
 
         $field = 'login_id';

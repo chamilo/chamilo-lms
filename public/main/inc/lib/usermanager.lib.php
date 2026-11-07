@@ -3279,6 +3279,10 @@ class UserManager
 
         $user = api_get_user_entity($user_id);
         $session = api_get_session_entity($session_id);
+        if (null === $user || null === $session) {
+            // Unknown user or session: nothing to list (the repository calls below would raise a TypeError).
+            return [];
+        }
         $url = null;
 
         // We filter the courses from the URL

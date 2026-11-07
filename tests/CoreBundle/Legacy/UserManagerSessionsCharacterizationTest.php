@@ -248,6 +248,15 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
         $this->assertSame([], UserManager::get_courses_list_by_session($u, $s));
     }
 
+    public function testCoursesListBySessionIsEmptyForUnknownUserOrSession(): void
+    {
+        $s = $this->rawSession('cl6');
+        $this->sessionCourse($s, 1, 1);
+
+        $this->assertSame([], UserManager::get_courses_list_by_session(0, $s));
+        $this->assertSame([], UserManager::get_courses_list_by_session($this->rawUser('cl6'), 0));
+    }
+
     public function testCoursesListBySessionGivesGeneralCoachEveryCourseOfTheSession(): void
     {
         $coach = $this->rawUser('cl4', 1);
@@ -678,7 +687,7 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
     public function testSubscribedSessionsByYearFormatsTimesOnA24HourClock(): void
     {
         $u = $this->rawUser('yr3');
-        $s = $this->rawSession('yr3', '2031-02-10 15:30:00', '2031-03-10 23:00:00');
+        $s = $this->rawSession('yr3', '2031-02-10 15:30:00', '2031-03-10 20:00:00');
         $this->sessionCourse($s, 1, 1);
         $this->sessionCourseUser($s, 1, $u);
         $this->fresh();
@@ -688,7 +697,7 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
         $tz = new \DateTimeZone(api_get_timezone());
         $expected = static fn (string $utc): string => (new \DateTime(api_get_local_time($utc), $tz))->format('H:i:s');
         $this->assertSame(
-            [$expected('2031-02-10 15:30:00'), $expected('2031-03-10 23:00:00')],
+            [$expected('2031-02-10 15:30:00'), $expected('2031-03-10 20:00:00')],
             [substr($res[$s]['access_start_date'], 11), substr($res[$s]['access_end_date'], 11)]
         );
         $this->assertGreaterThan(12, (int) substr($res[$s]['access_end_date'], 11, 2), 'A 24-hour clock.');

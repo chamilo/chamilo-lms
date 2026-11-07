@@ -34,7 +34,7 @@ class UrlManager
     {
         $repo = Container::getAccessUrlRepository();
 
-        if (!$repo->exists($url)) {
+        if ($repo->exists($url)) {
             return null;
         }
 

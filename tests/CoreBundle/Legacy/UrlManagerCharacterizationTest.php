@@ -45,6 +45,13 @@ final class UrlManagerCharacterizationTest extends KernelTestCase
         Container::setRequest($request);
     }
 
+    protected function tearDown(): void
+    {
+        \ChamiloSession::erase('_user');
+        self::getContainer()->get('security.token_storage')->setToken(null);
+        parent::tearDown();
+    }
+
     // ------------------------------------------------------------------ url rows
 
     public function testUrlCountGrowsByOnePerUrlRow(): void
@@ -78,6 +85,17 @@ final class UrlManagerCharacterizationTest extends KernelTestCase
 
         $this->assertSame((string) $id, (string) UrlManager::get_url_id('http://um2-a.test/'));
         $this->assertEmpty(UrlManager::get_url_id('http://um2-nope.test/'));
+    }
+
+    public function testAddRefusesAUrlThatIsAlreadyRegistered(): void
+    {
+        $this->url('a');
+
+        // Before the fix the condition was inverted: a registered url was persisted a second time
+        // (and a new one refused). The creation path itself persists a resource node and deadlocks
+        // when other suites run in parallel, so only the refusal is pinned here.
+        $this->assertNull(UrlManager::add('http://um2-a.test/', 'dup', 1));
+        $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM access_url WHERE url = ?', ['http://um2-a.test/']));
     }
 
     public function testUpdateRewritesTheRowAndStampsTheEditor(): void

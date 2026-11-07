@@ -400,19 +400,29 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         $this->assertSame([1 => $q[1], 2 => $q[2], 3 => $q[0]], array_map('intval', $e->getQuestionOrderedList(true)));
     }
 
-    public function testGetQuestionOrderedListLosesQuestionsSharingAnOrder(): void
+    public function testGetQuestionOrderedListKeepsQuestionsSharingAnOrder(): void
     {
         $this->ctx();
         [$quizId, $q] = $this->quizWithQuestions([1, 1, 2]);
         $e = $this->read($quizId, false);
 
-        // PINNED QUIRK: the "question_order not set for all questions" safety net can never trigger (the count and
-        // the row count are always equal), so two questions with the same order collapse into one array slot and
-        // one question silently disappears from the normal view. The admin view still shows all three.
-        $this->assertCount(2, $e->getQuestionOrderedList());
+        // Fixed: questions sharing a question_order used to collapse into one array slot and one disappeared from
+        // the normal view; now such a list falls back to the sequential order so no question is lost.
+        $normal = array_map('intval', $e->getQuestionOrderedList());
+        $this->assertCount(3, $normal);
+        $this->assertEqualsCanonicalizing($q, array_values($normal));
+        $this->assertSame($q[2], $normal[3], 'the question with the highest order stays last');
         $this->assertCount(3, $e->getQuestionOrderedList(true));
-        $this->assertSame(3, $e->getQuestionCount(), 'the SQL count still sees every question');
-        $this->assertSame($q[2], (int) $e->getQuestionOrderedList()[2]);
+        $this->assertSame(3, $e->getQuestionCount());
+    }
+
+    public function testGetQuestionOrderedListKeepsStoredOrdersAsKeysWhenUnique(): void
+    {
+        $this->ctx();
+        [$quizId, $q] = $this->quizWithQuestions([10, 20, 30]);
+        $e = $this->read($quizId, false);
+
+        $this->assertSame([10 => $q[0], 20 => $q[1], 30 => $q[2]], array_map('intval', $e->getQuestionOrderedList()));
     }
 
     public function testGetQuestionCountAndMembershipChecks(): void

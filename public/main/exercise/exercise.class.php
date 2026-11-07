@@ -10907,19 +10907,6 @@ class Exercise
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
-        // Getting question_order to verify that the question
-        // list is correct and all question_order's were set
-        $sql = "SELECT DISTINCT count(e.question_order) as count
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
-                WHERE
-                  e.quiz_id	= ".$this->getId();
-
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-        $count_question_orders = $row['count'];
-
         // Getting question list from the order (question list drag n drop interface).
         $sql = "SELECT DISTINCT e.question_id, e.question_order
                 FROM $TBL_EXERCICE_QUESTION e
@@ -10950,9 +10937,9 @@ class Exercise
         }
 
         if (!empty($temp_question_list)) {
-            /* If both array don't match it means that question_order was not correctly set
-               for all questions using the default mysql order */
-            if (count($temp_question_list) != $count_question_orders) {
+            /* If both arrays differ in size, several questions share the same question_order (so they collapsed
+               into one slot above): fall back to the sequential list using the default mysql order */
+            if (count($temp_question_list) != count($questionList)) {
                 $questionList = $temp_question_list;
             }
         }

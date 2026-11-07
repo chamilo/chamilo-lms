@@ -323,14 +323,48 @@ final class LearnpathCharacterizationTest extends KernelTestCase
         $this->assertSame($this->rootId($lpId), (int) $row['item_root']);
         $this->assertSame(1, (int) $row['lvl']);
         $this->assertEquals(100, $row['max_score']);
-        // PINNED QUIRK: $previousId is ignored, display_order is 0 for every added item, and the prerequisite
-        // argument 0 is stored as the string '0'.
-        $this->assertSame(0, (int) $row['display_order']);
+        // Fixed: $previousId was ignored and display_order stayed 0 for every added item: items are now appended
+        // (or inserted after $previousId), see testAddItemOrdersItemsByPreviousId. The prerequisite argument 0 is
+        // still stored as the string '0'.
+        $this->assertSame(1, (int) $row['display_order']);
         $this->assertSame('0', $row['prerequisite']);
         $second = $this->conn()->fetchAssociative('SELECT * FROM c_lp_item WHERE iid = ?', [$secondId]);
         $this->assertSame('77', $second['path']);
         $this->assertSame('120', (string) $second['max_time_allowed']);
-        $this->assertSame(0, (int) $second['display_order']);
+        $this->assertSame(2, (int) $second['display_order'], 'added after the first item');
+    }
+
+    public function testAddItemOrdersItemsByPreviousId(): void
+    {
+        $lpId = $this->newLpRow('lp_order');
+        $lp = $this->lp($lpId);
+        $root = $this->getEntityManager()->find(CLpItem::class, $this->rootId($lpId));
+        $order = fn (int $id) => (int) $this->conn()->fetchOne('SELECT display_order FROM c_lp_item WHERE iid = ?', [$id]);
+        $titlesInOrder = fn () => $this->conn()->fetchFirstColumn(
+            "SELECT title FROM c_lp_item WHERE lp_id = ? AND path <> 'root' ORDER BY display_order ASC",
+            [$lpId]
+        );
+
+        // No previous item: appended at the end.
+        $a = (int) $lp->add_item($root, 0, 'document', 1, 'lp_a');
+        $c = (int) $lp->add_item($root, $a, 'document', 2, 'lp_c');
+        $d = (int) $lp->add_item($root, 0, 'document', 3, 'lp_d');
+        $this->assertSame(['lp_a', 'lp_c', 'lp_d'], $titlesInOrder());
+
+        // Inserted after $a: lands between a and c and the following items move down.
+        $b = (int) $lp->add_item($root, $a, 'document', 4, 'lp_b');
+        $this->assertSame(['lp_a', 'lp_b', 'lp_c', 'lp_d'], $titlesInOrder());
+        $this->assertSame([1, 2, 3, 4], [$order($a), $order($b), $order($c), $order($d)]);
+
+        // A previous id that is not an item of this learning path (or no longer exists) means "at the end".
+        $otherLp = $this->newLpRow('lp_order_other');
+        $foreign = $this->addItem($otherLp, 'lp_foreign', 'document', 1); // clears the entity manager
+        $lp = $this->lp($lpId);
+        $root = $this->getEntityManager()->find(CLpItem::class, $this->rootId($lpId));
+        $e = (int) $lp->add_item($root, $foreign, 'document', 5, 'lp_e');
+        $this->assertSame(5, $order($e));
+        $this->assertSame(1, $order($foreign), 'the other learning path is not shifted');
+        $this->assertSame(['lp_a', 'lp_b', 'lp_c', 'lp_d', 'lp_e'], $titlesInOrder());
     }
 
     public function testGetItemsForFormOrdersByDisplayOrderAndExcludesRoot(): void

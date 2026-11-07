@@ -472,10 +472,37 @@ class learnpath
             ->setMaxScore($maxScore)
             ->setMaxTimeAllowed($maxTimeAllowed)
             ->setPrerequisite($prerequisites)
-            //->setDisplayOrder($display_order + 1)
             //->setNextItemId((int) $next)
             //->setPreviousItemId($previous)
         ;
+
+        // previous_item_id/next_item_id are the left/right values of the nested tree (Gedmo): the position among
+        // the items is only given by display_order. Insert after $previousId when it is an item of this learning
+        // path (the items after it move one place down), otherwise add the item at the end.
+        $connection = Database::getManager()->getConnection();
+        $lpIdForOrder = (int) $this->get_id();
+        $previousId = (int) $previousId;
+        $displayOrder = null;
+        if ($previousId > 0) {
+            $previousOrder = $connection->fetchOne(
+                'SELECT display_order FROM c_lp_item WHERE iid = ? AND lp_id = ?',
+                [$previousId, $lpIdForOrder]
+            );
+            if (false !== $previousOrder) {
+                $connection->executeStatement(
+                    'UPDATE c_lp_item SET display_order = display_order + 1 WHERE lp_id = ? AND display_order > ?',
+                    [$lpIdForOrder, (int) $previousOrder]
+                );
+                $displayOrder = (int) $previousOrder + 1;
+            }
+        }
+        if (null === $displayOrder) {
+            $displayOrder = 1 + (int) $connection->fetchOne(
+                'SELECT MAX(display_order) FROM c_lp_item WHERE lp_id = ?',
+                [$lpIdForOrder]
+            );
+        }
+        $lpItem->setDisplayOrder($displayOrder);
 
         if (!empty($parent))  {
             $lpItem->setParent($parent);

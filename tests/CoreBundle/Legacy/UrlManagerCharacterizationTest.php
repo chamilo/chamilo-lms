@@ -653,31 +653,31 @@ final class UrlManagerCharacterizationTest extends KernelTestCase
         $this->assertSame(1, $this->countPair('access_url_rel_course_category', 'course_category_id', $c, $b));
     }
 
-    public function testUpdateUrlRelCourseCategoryCascadesToChildren(): void
+    public function testUpdateUrlRelCourseCategoryCascadesToDescendants(): void
     {
         $a = $this->url('a');
         $b = $this->url('b');
         $root = $this->category('um2_root');
         $child = $this->category('um2_child', $root);
+        $grandChild = $this->category('um2_grand', $child);
         $other = $this->category('um2_other');
         UrlManager::addCourseCategoryListToUrl([$other], [$a, $b]);
 
         UrlManager::updateUrlRelCourseCategory([$root], $a);
 
         $this->assertSame(1, $this->countPair('access_url_rel_course_category', 'course_category_id', $root, $a));
-        // PINNED QUIRK: selecting a root is meant to link its children too, but
-        // CourseCategory::getChildren() matches parent_id (an id) against the parent's CODE, so it
-        // never finds any child.
-        $this->assertSame(0, $this->countPair('access_url_rel_course_category', 'course_category_id', $child, $a));
+        // Selecting a root links its whole subtree too.
+        $this->assertSame(1, $this->countPair('access_url_rel_course_category', 'course_category_id', $child, $a));
+        $this->assertSame(1, $this->countPair('access_url_rel_course_category', 'course_category_id', $grandChild, $a));
         $this->assertSame(0, $this->countPair('access_url_rel_course_category', 'course_category_id', $other, $a));
         $this->assertSame(1, $this->countPair('access_url_rel_course_category', 'course_category_id', $other, $b));
 
-        // Dropping the root drops it.
-        $this->conn()->executeStatement('INSERT INTO access_url_rel_course_category (course_category_id, access_url_id) VALUES (?, ?)', [$child, $a]);
+        // Dropping the root drops the subtree too.
         UrlManager::updateUrlRelCourseCategory([], $a);
-        $this->assertSame(0, $this->countPair('access_url_rel_course_category', 'course_category_id', $root, $a));
-        // The explicitly linked child is itself an existing item not in the new list: removed too.
-        $this->assertSame(0, $this->countPair('access_url_rel_course_category', 'course_category_id', $child, $a));
+        foreach ([$root, $child, $grandChild] as $id) {
+            $this->assertSame(0, $this->countPair('access_url_rel_course_category', 'course_category_id', $id, $a));
+        }
+        $this->assertSame(1, $this->countPair('access_url_rel_course_category', 'course_category_id', $other, $b));
     }
 
     // ------------------------------------------------------------------ helpers

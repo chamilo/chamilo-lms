@@ -1174,12 +1174,8 @@ class UrlManager
         // Adding
         foreach ($list as $id) {
             self::addCourseCategoryToUrl($id, $urlId);
-            $categoryInfo = CourseCategory::getCategoryById($id);
-            $children = CourseCategory::getChildren($categoryInfo['code']);
-            if (!empty($children)) {
-                foreach ($children as $category) {
-                    self::addCourseCategoryToUrl($category['id'], $urlId);
-                }
+            foreach (self::getCourseCategoryDescendantIds((int) $id) as $childId) {
+                self::addCourseCategoryToUrl($childId, $urlId);
             }
         }
 
@@ -1187,16 +1183,36 @@ class UrlManager
         foreach ($existingItems as $id) {
             if (!in_array($id, $list)) {
                 self::deleteUrlRelCourseCategory($id, $urlId);
-                $categoryInfo = CourseCategory::getCategoryById($id);
-
-                $children = CourseCategory::getChildren($categoryInfo['code']);
-                if (!empty($children)) {
-                    foreach ($children as $category) {
-                        self::deleteUrlRelCourseCategory($category['id'], $urlId);
-                    }
+                foreach (self::getCourseCategoryDescendantIds((int) $id) as $childId) {
+                    self::deleteUrlRelCourseCategory($childId, $urlId);
                 }
             }
         }
+    }
+
+    /**
+     * Ids of every category below the given one (course_category.parent_id is an id, not a code).
+     *
+     * @return int[]
+     */
+    private static function getCourseCategoryDescendantIds(int $categoryId): array
+    {
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $descendants = [];
+        $pending = [$categoryId];
+        while (!empty($pending)) {
+            $parentId = array_pop($pending);
+            $result = Database::query("SELECT id FROM $table WHERE parent_id = ".$parentId);
+            while ($row = Database::fetch_assoc($result)) {
+                $childId = (int) $row['id'];
+                if (!in_array($childId, $descendants, true)) {
+                    $descendants[] = $childId;
+                    $pending[] = $childId;
+                }
+            }
+        }
+
+        return $descendants;
     }
 
     /**

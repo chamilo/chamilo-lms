@@ -1063,28 +1063,95 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
 
     // ---------------------------------------------------------------- broken legacy queries
 
-    public function testGetNumberOfMessagesQueriesColumnsThatNoLongerExist(): void
+    public function testGetNumberOfMessagesCountsTicketsWithUnreadMessagesFromTheOtherSide(): void
     {
-        // PINNED QUIRK: the SQL references pre-2.0 columns (user.user_id, ticket.request_user); today it fails at the database.
-        $threw = null;
-        try {
-            TicketManager::getNumberOfMessages();
-        } catch (Throwable $e) {
-            $threw = $e;
-        }
-        $this->assertNotNull($threw, 'getNumberOfMessages() currently cannot run: if it starts working, re-pin its result');
+        $p = $this->project('tm_proj_unread');
+        $cat = $this->category($p, 'tm_cat_unread');
+        $before = (int) TicketManager::getNumberOfMessages();
+        $this->loginAs($this->other);
+        $beforeUser = (int) TicketManager::getNumberOfMessages();
+        $this->loginAs($this->admin);
+
+        // Fixed: the query used the pre-2.0 columns user.user_id / ticket.request_user and always threw; the
+        // requester is now ticket.sys_insert_user_id and users are matched on user.id.
+        $answered = $this->ticket($p, $cat, ['sys_insert_user_id' => 2]);
+        $this->message($answered, 2);
+        $this->message($answered, 2);
+        $this->message($answered, 1);
+        $forwarded = $this->ticket($p, $cat, ['sys_insert_user_id' => 2, 'status_id' => TicketManager::STATUS_FORWARDED]);
+        $this->message($forwarded, 2);
+        $readOnly = $this->ticket($p, $cat, ['sys_insert_user_id' => 2]);
+        $this->message($readOnly, 2, ['status' => 'LEI']);
+        $adminTicket = $this->ticket($p, $cat, ['sys_insert_user_id' => 1]);
+        $this->message($adminTicket, 1);
+
+        $this->assertSame($before + 1, TicketManager::getNumberOfMessages(), 'admin: tickets with an unread message written by a non-admin, forwarded ones excluded, tickets counted once');
+
+        $this->loginAs($this->other);
+        $this->assertSame($beforeUser + 1, TicketManager::getNumberOfMessages(), 'non-admin: only own tickets with an unread message written by an admin');
+        $this->message($forwarded, 1);
+        $this->message($readOnly, 1);
+        $this->assertSame($beforeUser + 3, TicketManager::getNumberOfMessages());
+        $this->message($adminTicket, 1);
+        $this->assertSame($beforeUser + 3, TicketManager::getNumberOfMessages(), "someone else's ticket is never counted");
     }
 
-    public function testExportTicketsByUserIdQueriesColumnsThatNoLongerExist(): void
+    public function testExportTicketsByUserIdListsTicketsOfActiveUsersWithHeaderRow(): void
     {
-        // PINNED QUIRK: joins on user.user_id / ticket.request_user, neither exists any more.
-        $threw = null;
-        try {
-            TicketManager::export_tickets_by_user_id(0, 10, 0, 'DESC');
-        } catch (Throwable $e) {
-            $threw = $e;
-        }
-        $this->assertNotNull($threw, 'export_tickets_by_user_id() currently cannot run: if it starts working, re-pin its result');
+        $p = $this->project('tm_proj_export');
+        $cat = $this->category($p, 'tm_cat_export');
+        $mine = $this->ticket($p, $cat, ['code' => 'tm_exp_1', 'sys_insert_user_id' => 2, 'total_messages' => 2, 'assigned_last_user' => 1]);
+        $this->ticket($p, $cat, ['code' => 'tm_exp_gone', 'sys_insert_user_id' => 3]);
+
+        // Fixed: joined on ticket.request_user / user.user_id (both gone), so it always threw.
+        $_GET = ['submit_simple' => '1', 'keyword' => 'tm_exp_1'];
+        $rows = TicketManager::export_tickets_by_user_id(0, 10, 0, 'DESC');
+
+        $this->assertCount(2, $rows, 'header + the matching ticket');
+        $this->assertSame(9, count($rows[0]));
+        $this->assertSame('tm_exp_1', $rows[1]['code']);
+        $this->assertSame('tm_cat_export', $rows[1]['category']);
+        $this->assertSame('Joe Anonymous', $rows[1]['fullname'], 'CONCAT(lastname, firstname) of the creator');
+        $this->assertSame('2', (string) $rows[1]['messages']);
+        $this->assertSame('Joe Doe', $rows[1]['responsable'], 'assignee as "firstname lastname"');
+
+        $_GET = ['submit_simple' => '1', 'keyword' => 'tm_exp_gone'];
+        $this->assertCount(1, TicketManager::export_tickets_by_user_id(0, 10, 0, 'DESC'), 'tickets of soft-deleted users are not exported');
+        $this->assertSame($mine, (int) $this->conn->fetchOne("SELECT id FROM ticket_ticket WHERE code = 'tm_exp_1'"));
+    }
+
+    public function testExportTicketsByUserIdAdvancedFiltersUnreadAndRealDates(): void
+    {
+        $p = $this->project('tm_proj_export2');
+        $cat = $this->category($p, 'tm_cat_export2');
+        $unread = $this->ticket($p, $cat, ['code' => 'tm_exp_unread', 'sys_insert_user_id' => 2, 'start_date' => '2022-07-01 10:00:00']);
+        $this->message($unread, 2);
+        $answered = $this->ticket($p, $cat, ['code' => 'tm_exp_answered', 'sys_insert_user_id' => 2, 'start_date' => '2020-06-01 10:00:00']);
+        $this->message($answered, 2, ['status' => 'LEI']);
+
+        $base = [
+            'submit_advanced' => '1', 'keyword_category' => '', 'keyword_request_user' => 'anon', 'keyword_assigned_to' => '',
+            'keyword_start_date_start' => '', 'keyword_start_date_end' => '', 'keyword_status' => '', 'keyword_source' => '',
+            'keyword_priority' => '', 'keyword_dates' => '', 'keyword_unread' => '', 'keyword_course' => '',
+        ];
+        $codes = function (array $get) use ($base): array {
+            $_GET = $get + $base;
+            $rows = TicketManager::export_tickets_by_user_id(0, 100, 0, 'DESC');
+            $codes = array_filter(array_column(array_slice($rows, 1), 'code'), static fn ($c) => str_starts_with($c, 'tm_exp_'));
+            sort($codes);
+
+            return $codes;
+        };
+
+        $this->assertSame(['tm_exp_answered', 'tm_exp_unread'], $codes([]), 'request user matched by username');
+        $this->assertSame(['tm_exp_unread'], $codes(['keyword_unread' => 'yes']));
+        $this->assertSame(['tm_exp_answered'], $codes(['keyword_unread' => 'no']));
+        $this->assertSame(['tm_exp_unread'], $codes(['keyword_start_date_start' => '01/07/2022']), 'single date: that day, as a real date');
+        $this->assertSame(
+            ['tm_exp_answered', 'tm_exp_unread'],
+            $codes(['keyword_dates' => '1', 'keyword_start_date_start' => '10/03/2019', 'keyword_start_date_end' => '15/08/2022']),
+            'range across years (string comparison used to drop 01/07/2022 < 10/03/2019)'
+        );
     }
 
     // ---------------------------------------------------------------- user removal & ORM-backed helpers

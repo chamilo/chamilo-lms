@@ -1519,15 +1519,18 @@ class TicketManager
     }
 
     /**
-     * @return mixed
+     * Number of tickets with unread messages ("NOL") for the current user: for an administrator, tickets with an
+     * unread message written by a non-administrator (forwarded tickets excluded); for anybody else, own tickets
+     * (the requester is ticket.sys_insert_user_id) with an unread message written by an administrator.
+     *
+     * @return int
      */
     public static function getNumberOfMessages()
     {
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
-        $user_info = api_get_user_info();
-        $userId = $user_info['user_id'];
+        $userId = (int) api_get_user_id();
         $sql = "SELECT COUNT(DISTINCT ticket.id) AS unread
                 FROM $table_support_tickets ticket,
                 $table_support_messages message ,
@@ -1535,9 +1538,9 @@ class TicketManager
                 WHERE
                     ticket.id = message.ticket_id AND
                     message.status = 'NOL' AND
-                    user.user_id = message.sys_insert_user_id ";
+                    user.id = message.sys_insert_user_id ";
         if (!api_is_platform_admin()) {
-            $sql .= " AND ticket.request_user = '$userId'
+            $sql .= " AND ticket.sys_insert_user_id = $userId
                       AND (user.roles LIKE '%ROLE_ADMIN%' OR user.roles LIKE '%ROLE_GLOBAL_ADMIN%') ";
         } else {
             $sql .= " AND user.roles NOT LIKE '%ROLE_ADMIN%'
@@ -1549,7 +1552,7 @@ class TicketManager
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
-        return $obj->unread;
+        return (int) $obj->unread;
     }
 
     /**
@@ -1710,7 +1713,7 @@ class TicketManager
                     cat.id = ticket.category_id
                     AND ticket.priority_id = priority.id
                     AND ticket.status_id = status.id
-                    AND user.user_id = ticket.request_user ";
+                    AND user.id = ticket.sys_insert_user_id ";
         $sql .= ' AND ticket.access_url_id = '.(int) Container::getAccessUrlUtil()->getCurrent()->getId();
 
         // Search simple
@@ -1763,7 +1766,7 @@ class TicketManager
                 $sql .= " AND ticket.category_id = '$keyword_category'  ";
             }
             if ('' != $keyword_request_user) {
-                $sql .= " AND (ticket.request_user = '$keyword_request_user'
+                $sql .= " AND (ticket.sys_insert_user_id = '$keyword_request_user'
                           OR user.firstname LIKE '%$keyword_request_user%'
                           OR user.official_code LIKE '%$keyword_request_user%'
                           OR user.lastname LIKE '%$keyword_request_user%'
@@ -1777,12 +1780,15 @@ class TicketManager
             if ('' != $keyword_status) {
                 $sql .= " AND ticket.status_id = '$keyword_status'  ";
             }
-            if ('' == $keyword_range && '' != $keyword_start_date_start) {
-                $sql .= " AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') = '$keyword_start_date_start' ";
+            // dd/mm/YYYY input compared as real dates (a value that is not a date is ignored).
+            $dateStart = self::parseTicketFilterDate($keyword_start_date_start);
+            $dateEnd = self::parseTicketFilterDate($keyword_start_date_end);
+            if ('' == $keyword_range && null !== $dateStart) {
+                $sql .= " AND DATE(ticket.start_date) = '$dateStart' ";
             }
-            if ('1' == $keyword_range && '' != $keyword_start_date_start && '' != $keyword_start_date_end) {
-                $sql .= " AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start'
-                          AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') <= '$keyword_start_date_end'";
+            if ('1' == $keyword_range && null !== $dateStart && null !== $dateEnd) {
+                $sql .= " AND DATE(ticket.start_date) >= '$dateStart'
+                          AND DATE(ticket.start_date) <= '$dateEnd'";
             }
             if ('' != $keyword_priority) {
                 $sql .= " AND ticket.priority_id = '$keyword_priority'  ";
@@ -1810,8 +1816,9 @@ class TicketManager
                           $table_main_user user
                           WHERE ticket.id = message.ticket_id
                           AND message.status = 'NOL'
-                          AND message.sys_insert_user_id = user.user_id
-                          AND user.status != 1   AND ticket.status_id != '".self::STATUS_FORWARDED."'
+                          AND message.sys_insert_user_id = user.id
+                          AND user.roles NOT LIKE '%ROLE_ADMIN%' AND user.roles NOT LIKE '%ROLE_GLOBAL_ADMIN%'
+                          AND ticket.status_id != '".self::STATUS_FORWARDED."'
                           GROUP BY ticket.id)";
             } else {
                 if ('no' == $keyword_unread) {
@@ -1822,8 +1829,8 @@ class TicketManager
                               $table_main_user user
                               WHERE ticket.id = message.ticket_id
                               AND message.status = 'NOL'
-                              AND message.sys_insert_user_id = user.user_id
-                              AND user.status != 1
+                              AND message.sys_insert_user_id = user.id
+                              AND user.roles NOT LIKE '%ROLE_ADMIN%' AND user.roles NOT LIKE '%ROLE_GLOBAL_ADMIN%'
                               AND ticket.status_id != '".self::STATUS_FORWARDED."'
                              GROUP BY ticket.id)";
                 }

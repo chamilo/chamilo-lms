@@ -860,13 +860,30 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
         $this->assertSame(0, CourseManager::subscribeCoursesToDrhManager($hrm->getId(), []), 'deprecated alias');
     }
 
-    public function testGetCoursesByUserCourseCategoryIsBrokenAgainstCurrentSchema(): void
+    public function testGetCoursesByUserCourseCategoryListsUserCoursesWithTheirFirstCategoryCode(): void
     {
-        // PINNED QUIRK: selects course.category_code, a column the course table no longer has, so the method
-        // cannot run. Pinned so that a rewrite notices the behaviour change.
+        // Fixed: the query selected course.category_code (gone, categories are many-to-many now) and always threw.
+        // 'category' now carries the code of the course's first category, or null when it has none.
         $user = $this->createUser('cm_cat_user');
-        $this->expectException(Throwable::class);
-        CourseManager::getCoursesByUserCourseCategory($user->getId());
+        $withCat = $this->createCourse('cm_cat_a');
+        $noCat = $this->createCourse('cm_cat_b');
+        $other = $this->createCourse('cm_cat_c');
+        $this->sub($user, $withCat, STUDENT, 0, 1);
+        $this->sub($user, $noCat, COURSEMANAGER, 0, 2);
+        $this->conn()->executeStatement(
+            'INSERT INTO course_category (code, title, tree_pos, children_count) VALUES (?, ?, 0, 0)',
+            ['CMCAT', 'cm_cat']
+        );
+        $catId = (int) $this->conn()->lastInsertId();
+        $this->conn()->executeStatement('INSERT INTO course_rel_category (course_id, course_category_id) VALUES (?, ?)', [$withCat->getId(), $catId]);
+
+        $rows = CourseManager::getCoursesByUserCourseCategory($user->getId());
+
+        $this->assertSame([$withCat->getCode(), $noCat->getCode()], $this->col($rows, 'code'), 'only the user courses, by sort');
+        $this->assertSame('CMCAT', $rows[0]['category']);
+        $this->assertNull($rows[1]['category']);
+        $this->assertSame(COURSEMANAGER, (int) $rows[1]['status']);
+        $this->assertNotNull($other);
     }
 
     public function testUserCourseSortReturnsAndMakesRoomForTheAlphabeticalPosition(): void

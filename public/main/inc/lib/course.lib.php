@@ -6839,6 +6839,8 @@ class CourseManager
     {
         $course = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $courseRelCategory = Database::get_main_table('course_rel_category');
+        $courseCategory = Database::get_main_table('course_category');
         $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
         $visibilityCondition = self::getCourseVisibilitySQLCondition('course', true);
 
@@ -6852,7 +6854,12 @@ class CourseManager
                     course.unsubscribe unsubscr,
                     course.title i,
                     course.tutor_name t,
-                    course.category_code cat,
+                    (SELECT cc.code
+                     FROM $courseRelCategory crc
+                     INNER JOIN $courseCategory cc ON cc.id = crc.course_category_id
+                     WHERE crc.course_id = course.id
+                     ORDER BY cc.id ASC
+                     LIMIT 1) cat,
                     course.directory dir,
                     course_rel_user.status status,
                     course_rel_user.sort sort,

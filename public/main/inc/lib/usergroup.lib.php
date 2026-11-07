@@ -243,6 +243,7 @@ class UserGroupModel extends Model
     public function get_count($extraWhereCondition = '')
     {
         $authorCondition = '';
+        $extraCondition = '' === trim((string) $extraWhereCondition) ? '' : " AND $extraWhereCondition";
 
         if ($this->allowTeachers()) {
             if (!api_is_platform_admin()) {
@@ -258,7 +259,7 @@ class UserGroupModel extends Model
                     INNER JOIN $this->access_url_rel_usergroup a
                     ON (u.id = a.usergroup_id)
                     WHERE access_url_id = $urlId $authorCondition
-                    AND $extraWhereCondition
+                    $extraCondition
             ";
 
             $result = Database::query($sql);
@@ -272,7 +273,7 @@ class UserGroupModel extends Model
                     FROM {$this->table} a
                     WHERE 1 = 1
                     $authorCondition
-                    AND $extraWhereCondition
+                    $extraCondition
             ";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {

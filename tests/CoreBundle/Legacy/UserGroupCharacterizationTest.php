@@ -113,12 +113,14 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->assertEquals(0, $this->model->get_count("title = 'ug_never'"));
     }
 
-    public function testGetCountWithoutExtraConditionIsASqlError(): void
+    public function testGetCountWithoutExtraConditionCountsEveryGroup(): void
     {
-        // CURRENT BEHAVIOUR: the default '' leaves a dangling "AND " in the query, so calling
-        // get_count() without a condition throws instead of counting every group.
-        $this->expectException(\Throwable::class);
-        $this->model->get_count();
+        $before = (int) $this->model->get_count();
+        $this->group('ug_count_a');
+        $this->group('ug_count_b', Usergroup::SOCIAL_CLASS);
+
+        // Fixed: the default '' used to leave a dangling "AND " in the query and throw.
+        $this->assertSame($before + 2, (int) $this->model->get_count());
     }
 
     public function testFilterByFirstLetterListsGroupsStartingWithTheLetterInSingleUrlMode(): void

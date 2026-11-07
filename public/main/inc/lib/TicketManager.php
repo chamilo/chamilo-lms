@@ -1480,12 +1480,17 @@ class TicketManager
         $now = api_get_utc_datetime();
         $table = Database::get_main_table(TABLE_TICKET_TICKET);
         $newParams = [
-            'priority_id' => isset($params['priority_id']) ? (int) $params['priority_id'] : '',
-            'status_id' => isset($params['status_id']) ? (int) $params['status_id'] : '',
             'sys_lastedit_user_id' => (int) $userId,
             'sys_lastedit_datetime' => $now,
         ];
-        Database::update($table, $newParams, ['id = ? ' => $ticketId]);
+        // Only the given columns change: a missing one used to be written as '' and made the query fail.
+        if (isset($params['priority_id'])) {
+            $newParams['priority_id'] = (int) $params['priority_id'];
+        }
+        if (isset($params['status_id'])) {
+            $newParams['status_id'] = (int) $params['status_id'];
+        }
+        Database::update($table, $newParams, ['id = ? ' => (int) $ticketId]);
 
         return true;
     }

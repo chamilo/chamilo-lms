@@ -711,6 +711,25 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->assertNowish($row['sys_lastedit_datetime']);
     }
 
+    public function testUpdateTicketLeavesPriorityAndStatusUntouchedWhenNotGiven(): void
+    {
+        $p = $this->project('tm_proj_upd2');
+        $t = $this->ticket($p, $this->category($p, 'tm_cat_upd2'), ['priority_id' => 2, 'status_id' => 3]);
+
+        // Fixed: missing params were written as '' (0 / NULL), wiping the ticket's priority and status.
+        $this->assertTrue(TicketManager::updateTicket([], $t, 3));
+        $row = $this->row($t);
+        $this->assertSame(2, (int) $row['priority_id']);
+        $this->assertSame(3, (int) $row['status_id']);
+        $this->assertSame('3', (string) $row['sys_lastedit_user_id'], 'the edit is still recorded');
+        $this->assertNowish($row['sys_lastedit_datetime']);
+
+        $this->assertTrue(TicketManager::updateTicket(['status_id' => '4'], $t, 1));
+        $row = $this->row($t);
+        $this->assertSame(2, (int) $row['priority_id'], 'only the given column changes');
+        $this->assertSame(4, (int) $row['status_id']);
+    }
+
     public function testSendAlertRaisesPriorityToHigh(): void
     {
         $p = $this->project('tm_proj_alert');

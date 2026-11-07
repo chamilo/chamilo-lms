@@ -265,8 +265,8 @@ final class TrackingCharacterizationTest extends AbstractApiTest
             '2001-03-05 12:01:00',
             Tracking::getLastConnectionDateByCourse($this->course->getId(), 99999)
         );
-        // PINNED QUIRK: "nothing" is the empty string here but false in the sibling methods.
-        $this->assertSame('', Tracking::getLastConnectionDateByCourse($this->course2->getId(), 0));
+        // Fixed: "nothing" was '' here but false in the sibling methods (no caller depended on it).
+        $this->assertFalse(Tracking::getLastConnectionDateByCourse($this->course2->getId(), 0));
     }
 
     public function testCourseConnectionsCountRoundsBoundsToTheMinuteAndExcludesTheEdges(): void

@@ -2242,6 +2242,8 @@ class Tracking
 
     /**
      * Get last course access by course/session.
+     *
+     * @return string|false Last logout date, or false if there is no connection
      */
     public static function getLastConnectionDateByCourse($courseId, $sessionId = 0)
     {
@@ -2265,7 +2267,7 @@ class Tracking
             }
         }
 
-        return '';
+        return false;
     }
 
     /**

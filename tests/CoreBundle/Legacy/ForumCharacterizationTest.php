@@ -435,9 +435,8 @@ final class ForumCharacterizationTest extends KernelTestCase
         $this->post($t2, $forum, 2);
 
         $this->setContext(1, 1);
-        // PINNED QUIRK: filters on c_forum_post.c_id, a column that no longer exists, so it always throws.
-        $this->expectException(Throwable::class);
-        get_unaproved_messages($forum);
+        // It used to filter on c_forum_post.c_id, a column that no longer exists, and always threw.
+        $this->assertSame([$t1], array_map('intval', get_unaproved_messages($forum)));
     }
 
     // ------------------------------------------------------ user posts

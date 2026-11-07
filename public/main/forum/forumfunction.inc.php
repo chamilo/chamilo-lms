@@ -3371,14 +3371,12 @@ function approvePost(CForumPost $post, $action): string
 function get_unaproved_messages($forum_id)
 {
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $course_id = api_get_course_int_id();
 
     $return_array = [];
     $sql = "SELECT DISTINCT thread_id FROM $table_posts
             WHERE
-                c_id = $course_id AND
-                forum_id='".Database::escape_string($forum_id)."' AND
-                visible='0' ";
+                forum_id = ".(int) $forum_id." AND
+                visible = 0";
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
         $return_array[] = $row['thread_id'];

@@ -33,6 +33,16 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
+// The relation helpers do not scope by course: the work and the document must belong to the current course/session.
+if (!workBelongsToCourse($workId, api_get_course_int_id(), api_get_session_id())) {
+    api_not_allowed(true);
+}
+if (!empty($docId) && 'delete' !== $action
+    && !workDocumentBelongsToCourse($docId, api_get_course_int_id(), api_get_session_id())
+) {
+    api_not_allowed(true);
+}
+
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
     'name' => get_lang('Assignments'),
@@ -106,9 +116,7 @@ if (empty($docId)) {
     $form->addElement('label', get_lang('File'), $documentInfo->getTitle());
     $form->addButtonCreate(get_lang('Add'));
     if ($form->validate()) {
-        $values = $form->exportValues();
-        $workId = $values['id'];
-        $docId = $values['document_id'];
+        // Never trust the posted ids: the ones validated above (from the URL) are the ones used.
         $data = getDocumentToWork($docId, $workId, api_get_course_int_id());
 
         if (empty($data)) {

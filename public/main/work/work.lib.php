@@ -6667,3 +6667,88 @@ function workGetExtraFieldData($workId)
 
     return $result;
 }
+
+/**
+ * Tells whether a work (folder or publication) is published in the given course, and session when given.
+ * The relation helpers (assigned users/documents, move form) do not scope by course any more, so every page that
+ * takes a work id from the request must call this before reading or writing through them.
+ * Content of the base course is visible inside a session; session content is not base course content.
+ */
+function workBelongsToCourse(int $workId, int $courseId, ?int $sessionId = null): bool
+{
+    if ($workId <= 0 || $courseId <= 0) {
+        return false;
+    }
+
+    $sessionId = (int) $sessionId;
+    $sessionCondition = $sessionId > 0
+        ? 'AND (link.session_id IS NULL OR link.session_id = :sid)'
+        : 'AND (link.session_id IS NULL OR link.session_id = 0)';
+    $params = ['wid' => $workId, 'cid' => $courseId];
+    if ($sessionId > 0) {
+        $params['sid'] = $sessionId;
+    }
+
+    $found = Database::getManager()->getConnection()->fetchOne(
+        'SELECT w.iid
+         FROM c_student_publication w
+         INNER JOIN resource_link link ON link.resource_node_id = w.resource_node_id
+         WHERE w.iid = :wid AND link.c_id = :cid '.$sessionCondition.'
+         LIMIT 1',
+        $params
+    );
+
+    return false !== $found;
+}
+
+/**
+ * Tells whether $workId is $ancestorId itself or sits anywhere below it in the publication parent chain
+ * (used to refuse moving a folder into itself or one of its own descendants).
+ */
+function workIsSameOrDescendantOf(int $workId, int $ancestorId): bool
+{
+    $connection = Database::getManager()->getConnection();
+    $seen = [];
+    $current = $workId;
+    while ($current > 0 && !isset($seen[$current])) {
+        if ($current === $ancestorId) {
+            return true;
+        }
+        $seen[$current] = true;
+        $parent = $connection->fetchOne('SELECT parent_id FROM c_student_publication WHERE iid = ?', [$current]);
+        $current = (false === $parent || null === $parent) ? 0 : (int) $parent;
+    }
+
+    return false;
+}
+
+/**
+ * Tells whether a course document is published in the given course (and session when given); same rule as
+ * workBelongsToCourse(), used before attaching a document to an assignment.
+ */
+function workDocumentBelongsToCourse(int $documentId, int $courseId, ?int $sessionId = null): bool
+{
+    if ($documentId <= 0 || $courseId <= 0) {
+        return false;
+    }
+
+    $sessionId = (int) $sessionId;
+    $sessionCondition = $sessionId > 0
+        ? 'AND (link.session_id IS NULL OR link.session_id = :sid)'
+        : 'AND (link.session_id IS NULL OR link.session_id = 0)';
+    $params = ['did' => $documentId, 'cid' => $courseId];
+    if ($sessionId > 0) {
+        $params['sid'] = $sessionId;
+    }
+
+    $found = Database::getManager()->getConnection()->fetchOne(
+        'SELECT d.iid
+         FROM c_document d
+         INNER JOIN resource_link link ON link.resource_node_id = d.resource_node_id
+         WHERE d.iid = :did AND link.c_id = :cid '.$sessionCondition.'
+         LIMIT 1',
+        $params
+    );
+
+    return false !== $found;
+}

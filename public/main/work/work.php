@@ -218,17 +218,28 @@ switch ($action) {
     case 'move_to':
         /* Move file command */
         if ($is_allowed_to_edit && isset($_REQUEST['move_to_id'])) {
-            $moveToParentId = $_REQUEST['move_to_id'];
+            $moveItemId = (int) ($_REQUEST['item_id'] ?? 0);
+            $moveToId = (int) $_REQUEST['move_to_id'];
+            $moveCourseId = api_get_course_int_id();
+
+            // Both ends must belong to the current course/session, and a folder cannot go into itself
+            // or into one of its own descendants.
+            if (!workBelongsToCourse($moveItemId, $moveCourseId, $sessionId)
+                || !workBelongsToCourse($moveToId, $moveCourseId, $sessionId)
+                || workIsSameOrDescendantOf($moveToId, $moveItemId)
+            ) {
+                api_not_allowed(true);
+            }
 
             /** @var CStudentPublication $newParent */
-            $newParent = $repo->find($_REQUEST['move_to_id']);
+            $newParent = $repo->find($moveToId);
 
             /** @var CStudentPublication $studentPublication */
-            $studentPublication = $repo->find($_REQUEST['item_id']);
-            if ($_REQUEST['move_to_id']) {
-                $parent = $repo->find($_REQUEST['move_to_id']);
-                $studentPublication->setParent($parent);
+            $studentPublication = $repo->find($moveItemId);
+            if (null === $newParent || null === $studentPublication) {
+                api_not_allowed(true);
             }
+            $studentPublication->setParent($newParent);
             $studentPublication->getResourceNode()->setParent($newParent->getResourceNode());
             $repo->update($studentPublication);
             /*api_item_property_update(

@@ -24,6 +24,11 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
+// The relation helpers do not scope by course: the work must be one of the current course/session.
+if (!workBelongsToCourse($workId, api_get_course_int_id(), $sessionId)) {
+    api_not_allowed(true);
+}
+
 $courseInfo = api_get_course_info();
 
 $interbreadcrumb[] = [
@@ -38,6 +43,9 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add a user')];
 
 switch ($action) {
     case 'add':
+        if (empty($userId)) {
+            api_not_allowed(true);
+        }
         $data = getUserToWork($userId, $workId, api_get_course_int_id());
         if (empty($data)) {
             addUserToWork($userId, $workId, api_get_course_int_id());

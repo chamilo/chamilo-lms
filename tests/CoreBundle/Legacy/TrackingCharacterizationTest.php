@@ -367,9 +367,10 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         $result = Tracking::getCalculateTime($this->carol->getId(), $this->course->getId(), 0);
         $this->assertSame(0, $result['total_time']);
         $this->assertSame(0, $result['number_connections']);
-        // PINNED QUIRK: the MIN/MAX query always returns a row of NULLs, so first/last are null, not ''.
-        $this->assertNull($result['first']);
-        $this->assertNull($result['last']);
+        // Fixed: the MIN/MAX query always returns a row of NULLs, so first/last were null although the
+        // method defaults them to ''. No caller reads them, so the declared empty value is kept.
+        $this->assertSame('', $result['first']);
+        $this->assertSame('', $result['last']);
     }
 
     // ------------------------------------------------------------------

@@ -6870,8 +6870,9 @@ class Tracking
         $lastConnection = '';
         if (Database::num_rows($rs) > 0) {
             $value = Database::fetch_array($rs);
-            $firstConnection = $value['min'];
-            $lastConnection = $value['max'];
+            // MIN/MAX of no rows is a row of NULLs: keep the empty-string default.
+            $firstConnection = $value['min'] ?? '';
+            $lastConnection = $value['max'] ?? '';
         }
 
         $sql = "SELECT * FROM track_e_access_complete

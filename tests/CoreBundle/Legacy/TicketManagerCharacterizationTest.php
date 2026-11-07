@@ -921,6 +921,26 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         );
     }
 
+    public function testGetTicketsByCurrentUserNeverInterpolatesDirectionOrLimitIntoSql(): void
+    {
+        $this->listFixture();
+
+        // Security hardening: $direction and the LIMIT values reach the SQL text, so they are allowlisted / cast.
+        // A smuggled "ASC, 1=1" used to be executed as part of ORDER BY and kept the ascending order; now any
+        // value that is not ASC/DESC falls back to the default DESC.
+        $this->assertSame(
+            ['tm_subject_4', 'tm_subject_3', 'tm_subject_2', 'tm_subject_1'],
+            $this->subjects(TicketManager::getTicketsByCurrentUser(0, 50, 0, 'ASC, 1=1'))
+        );
+        $this->assertSame(
+            ['tm_subject_1', 'tm_subject_2', 'tm_subject_3', 'tm_subject_4'],
+            $this->subjects(TicketManager::getTicketsByCurrentUser(0, 50, 0, 'asc')),
+            'direction is case-insensitive'
+        );
+        // "2 OFFSET 1" used to produce "LIMIT 0, 2 OFFSET 1": a SQL syntax error. The values are cast to int.
+        $this->assertCount(2, TicketManager::getTicketsByCurrentUser('0', '2 OFFSET 1', 0, 'ASC'));
+    }
+
     public function testGetTicketsByCurrentUserNonAdminSeesOnlyOwnOrAssignedTicketsWithFiveColumns(): void
     {
         $this->listFixture();

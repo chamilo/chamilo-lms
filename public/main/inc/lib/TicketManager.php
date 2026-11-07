@@ -817,7 +817,12 @@ class TicketManager
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(TABLE_TICKET_PRIORITY);
         $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
-        $direction = !empty($direction) ? $direction : 'DESC';
+        $direction = strtoupper(trim((string) $direction));
+        if (!in_array($direction, ['ASC', 'DESC'], true)) {
+            $direction = 'DESC';
+        }
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
         $userId = api_get_user_id();
         $userInfo = api_get_user_info($userId);
         $accessUrlId = Container::getAccessUrlUtil()->getCurrent()->getId();

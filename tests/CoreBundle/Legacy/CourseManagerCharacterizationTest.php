@@ -253,11 +253,15 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
         $this->assertSame([], $none);
     }
 
-    public function testGetCoursesListWithOnlyUnknownLikeFieldIsASqlError(): void
+    public function testGetCoursesListWithOnlyUnknownLikeFieldIgnoresTheCondition(): void
     {
-        // PINNED QUIRK: conditionsLike with only non-allowed fields appends a dangling " AND " before ORDER BY.
-        $this->expectException(Throwable::class);
-        CourseManager::get_courses_list(0, 0, 'title', 'ASC', -1, '', null, false, ['description' => 'x']);
+        // Fixed: a conditionsLike holding only non-allowed fields used to leave a dangling " AND " (SQL error);
+        // such fields are skipped, so the condition is simply not applied.
+        $course = $this->createCourse('cm_unk_like_a');
+
+        $rows = CourseManager::get_courses_list(0, 0, 'title', 'ASC', -1, 'cm_unk_like_a', null, false, ['description' => 'x']);
+
+        $this->assertSame([$course->getCode()], $this->col($rows, 'code'));
     }
 
     public function testGetCourseListReturnsEveryCourseWithLanguage(): void

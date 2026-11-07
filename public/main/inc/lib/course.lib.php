@@ -213,7 +213,6 @@ class CourseManager
         ];
 
         if (count($conditionsLike) > 0) {
-            $sql .= ' AND ';
             $temp_conditions = [];
             foreach ($conditionsLike as $field => $value) {
                 if (!in_array($field, $allowedFields)) {
@@ -230,7 +229,7 @@ class CourseManager
             }
             $condition = ' AND ';
             if (!empty($temp_conditions)) {
-                $sql .= implode(' '.$condition.' ', $temp_conditions);
+                $sql .= ' AND '.implode(' '.$condition.' ', $temp_conditions);
             }
         }
 

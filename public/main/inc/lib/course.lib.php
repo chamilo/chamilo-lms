@@ -3729,6 +3729,10 @@ class CourseManager
                     relation_type = '".COURSE_RELATION_TYPE_RRHH."'
                 ";
                 break;
+            default:
+                // Without a known status, still restrict to the courses the user is related to.
+                $whereConditions .= " AND cru.user_id = $user_id";
+                break;
         }
 
         $keywordCondition = null;

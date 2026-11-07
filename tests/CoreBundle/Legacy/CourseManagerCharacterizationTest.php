@@ -827,14 +827,19 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
         $kw = CourseManager::getCoursesFollowedByUser($user->getId(), COURSEMANAGER, null, null, null, null, false, 'fol_teach');
         $this->assertSame([$teaching->getCode()], array_keys($kw));
 
-        // PINNED QUIRK: without a status no user condition is added at all, so every course that has any
-        // course_rel_user row is returned, including courses of other users.
+        // Fixed: without a status no user condition was added, so every course with any course_rel_user row came back,
+        // including other users' courses (information disclosure through the course copy options).
         $stranger = $this->createCourse('cm_fol_stranger');
         $someoneElse = $this->createUser('cm_fol_else');
         $this->sub($someoneElse, $stranger);
         $all = CourseManager::getCoursesFollowedByUser($user->getId());
-        $this->assertContains($stranger->getCode(), array_keys($all));
-        $this->assertContains($learning->getCode(), array_keys($all));
+        $this->assertNotContains($stranger->getCode(), array_keys($all));
+        $this->assertEqualsCanonicalizing(
+            [$teaching->getCode(), $learning->getCode(), $watched->getCode()],
+            array_keys($all),
+            'every course the user has a relation with, whatever the status'
+        );
+        $this->assertSame(3, (int) CourseManager::getCoursesFollowedByUser($user->getId(), null, null, null, null, null, true));
     }
 
     public function testSubscribeCoursesToHrmManagerReplacesPreviousAssignment(): void

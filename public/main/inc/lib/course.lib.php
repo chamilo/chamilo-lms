@@ -7231,7 +7231,7 @@ class CourseManager
                     SELECT user_id
                     FROM $sessionCourseUserTable
                     WHERE c_id = $courseId
-                      AND status = ".STUDENT."
+                      AND status = ".SessionEntity::STUDENT."
                 ) subscribed_users";
 
         $result = Database::query($sql);

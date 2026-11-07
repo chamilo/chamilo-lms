@@ -746,14 +746,16 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
         $this->sub($hrm, $course, DRH, COURSE_RELATION_TYPE_RRHH);
         $this->sub($both, $course, STUDENT);
         $this->sessionCourse($session->getId(), $course);
-        // PINNED QUIRK: the session half of the query filters "status = STUDENT" (5) while session students are
-        // stored with status 0, so real session students are not counted; only a status-5 row would be.
+        // Fixed: the session half filtered "status = STUDENT" (5) while session students are stored with
+        // Session::STUDENT (0), so they were never counted. A session coach (status 2) is still not a student.
+        $coach = $this->createUser('cm_lim_coach');
         $this->sessionCourseUser($session->getId(), $course, $sessionStudent, 0);
-        $this->sessionCourseUser($session->getId(), $course, $both, 5);
+        $this->sessionCourseUser($session->getId(), $course, $both, 0);
+        $this->sessionCourseUser($session->getId(), $course, $coach, 2);
         $cid = $course->getId();
 
         $this->assertSame(3, CourseManager::countUsersForGlobalLimit($cid), 'every course_rel_user row but RRHH: student, teacher, both');
-        $this->assertSame(2, CourseManager::countStudentsForUsersPerCourseLimit($cid), 'student + both, deduplicated across the UNION; status-0 session student ignored');
+        $this->assertSame(3, CourseManager::countStudentsForUsersPerCourseLimit($cid), 'student + both (deduplicated across the UNION) + session student; coach ignored');
         $this->assertSame(0, CourseManager::countUsersForGlobalLimit(0));
         $this->assertSame(0, CourseManager::countStudentsForUsersPerCourseLimit(-1));
         $this->assertGreaterThanOrEqual(0, CourseManager::getEffectiveUsersPerCourseLimit($cid));

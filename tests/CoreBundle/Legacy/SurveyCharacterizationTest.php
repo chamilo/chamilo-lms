@@ -1222,16 +1222,16 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame(0, \SurveyUtil::invitationExists(1, $sid, $groupId, $s + 1));
     }
 
-    public function testInvitationExistsDoesNotSeeInvitationsStoredWithoutASession(): void
+    public function testInvitationExistsSeesInvitationsStoredWithoutASession(): void
     {
         $s = $this->insertSurvey();
         $groupId = $this->insertGroup();
         $this->insertInvitation($s, null, ['session_id' => null, 'group_id' => $groupId]);
 
-        // PINNED QUIRK: the base course is stored as session_id NULL (the column has a foreign key, 0 is
-        // impossible) but the query compares with "= 0", so an existing base-course group invitation is
-        // reported as missing and saveInvitations() would store it again.
-        $this->assertSame(0, \SurveyUtil::invitationExists(1, 0, $groupId, $s));
+        // The base course is stored as session_id NULL (the column has a foreign key, 0 is impossible).
+        $this->assertSame(1, \SurveyUtil::invitationExists(1, 0, $groupId, $s));
+        $this->assertSame(0, \SurveyUtil::invitationExists(1, 0, $groupId + 1, $s));
+        $this->assertSame(0, \SurveyUtil::invitationExists(2, 0, $groupId, $s));
     }
 
     private function insertGroup(): int
@@ -1313,14 +1313,17 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame($inSession, (int) $found[2]['iid']);
     }
 
-    public function testGetInvitationsDoesNotSeeInvitationsStoredWithoutASession(): void
+    public function testGetInvitationsOfTheBaseCourseSeesInvitationsStoredWithoutASession(): void
     {
+        $sid = $this->insertSession();
         $s = $this->insertSurvey();
-        $this->insertInvitation($s, 1, ['session_id' => null]);
+        $base = $this->insertInvitation($s, 1, ['session_id' => null]);
+        $this->insertInvitation($s, 2, ['session_id' => $sid]);
 
-        // PINNED QUIRK: "session_id = 0" never matches the NULL that saveInvitation() stores for the base
-        // course, so no invitation of the base course is ever returned (reminders then mint new codes).
-        $this->assertSame([], \SurveyUtil::get_invitations($s));
+        $found = \SurveyUtil::get_invitations($s);
+
+        $this->assertSame([1], array_map('intval', array_keys($found)));
+        $this->assertSame($base, (int) $found[1]['iid']);
     }
 
     public function testGetSentInvitationsJoinsUserNamesAndHonoursCourseAndSession(): void
@@ -1716,10 +1719,10 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame(1, $this->rowCount('c_survey_invitation', 'survey_id = ?', [$s]), 'no second invitation');
     }
 
-    public function testSaveInvitationsReminderMintsAFreshCodeOutsideSessions(): void
+    public function testSaveInvitationsReminderReusesTheStoredInvitationCodeOutsideSessions(): void
     {
         $s = $this->insertSurvey();
-        $this->insertInvitation($s, 2, ['invitation_code' => 'svcodelost']);
+        $this->insertInvitation($s, 2, ['invitation_code' => 'svcodebase']);
 
         $sent = \SurveyUtil::saveInvitations($this->survey($s), ['USER:2'], 'sv reminder base', 'sv body **link**', 1, true);
 
@@ -1727,9 +1730,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $content = (string) $this->conn->fetchOne(
             "SELECT content FROM message WHERE title = 'sv reminder base' ORDER BY id DESC LIMIT 1"
         );
-        // PINNED QUIRK: get_invitations() does not find the NULL-session invitation, so the reminder links to
-        // a brand new code that is stored nowhere: the learner cannot open the survey from the reminder.
-        $this->assertStringNotContainsString('svcodelost', $content);
-        $this->assertMatchesRegularExpression('/invitationCode=[0-9a-f]{32}/', $content);
+        $this->assertStringContainsString('invitationCode=svcodebase', $content);
+        $this->assertSame(1, $this->rowCount('c_survey_invitation', 'survey_id = ?', [$s]));
     }
 }

@@ -2441,12 +2441,15 @@ class SurveyUtil
         $sessionId = (int) $sessionId;
         $groupId = (int) $groupId;
         $surveyId = (int) $surveyId;
+        // The base course and plain users are stored as NULL, not 0 (foreign keys forbid 0).
+        $sessionCondition = $sessionId > 0 ? "session_id = $sessionId" : '(session_id IS NULL OR session_id = 0)';
+        $groupCondition = $groupId > 0 ? "group_id = $groupId" : '(group_id IS NULL OR group_id = 0)';
 
         $sql = "SELECT iid FROM $table
                 WHERE
                     c_id = $courseId AND
-                    session_id = $sessionId AND
-                    group_id = $groupId AND
+                    ".$sessionCondition." AND
+                    ".$groupCondition." AND
                     survey_id = $surveyId
                 ";
         $result = Database::query($sql);
@@ -2659,8 +2662,8 @@ class SurveyUtil
         $sql = "SELECT * FROM $table_survey_invitation
 		        WHERE
 		            c_id = $course_id AND
-                    session_id = $sessionId AND
-		            survey_id = '".(int) $surveyId."'";
+                    survey_id = '".(int) $surveyId."'".
+                    api_get_session_condition($sessionId);
         $result = Database::query($sql);
         $return = [];
         while ($row = Database::fetch_array($result)) {

@@ -371,16 +371,10 @@ final class ForumCharacterizationTest extends KernelTestCase
         ]);
         $this->qualify($thread, 2, 1, 5.0);
 
-        // PINNED QUIRK: a session with no general coach and no session admin builds "NOT IN ()", a SQL error.
-        $failed = [];
-        foreach (['get_thread_users_qualify', 'get_thread_users_not_qualify'] as $fn) {
-            try {
-                $this->rows($fn($thread));
-            } catch (Throwable $e) {
-                $failed[] = $fn;
-            }
-        }
-        $this->assertSame(['get_thread_users_qualify', 'get_thread_users_not_qualify'], $failed);
+        // A session with no general coach and no session admin used to build "NOT IN ()", a SQL error.
+        $this->assertSame([2], $this->ids($this->rows(get_thread_users_qualify($thread))));
+        $this->conn->delete('c_forum_thread_qualify', ['thread_id' => $thread]);
+        $this->assertSame([2], $this->ids($this->rows(get_thread_users_not_qualify($thread))));
     }
 
     // --------------------------------------------------------------- counts

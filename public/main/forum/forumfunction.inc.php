@@ -1542,7 +1542,8 @@ function get_thread_users_qualify(int $thread_id)
         $generalCoachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
         $sessionAdminsId = $session->getSessionAdmins()->map(fn(User $admin) => $admin->getId())->getValues();
         $coachesId = array_merge($generalCoachesId, $sessionAdminsId);
-        $user_to_avoid = implode(', ', $coachesId);
+        // An empty NOT IN () is a SQL error: a session may have neither general coach nor session admin.
+        $user_to_avoid = implode(', ', array_map('intval', $coachesId ?: [0]));
         //not showing coaches
         $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,forum_qualify.`qualify`
                 FROM $t_posts post , $t_users user, $t_session_rel_user scu, $t_qualify forum_qualify
@@ -1627,7 +1628,8 @@ function get_thread_users_not_qualify(int $thread_id)
         $generalCoachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
         $sessionAdminsId = $session->getSessionAdmins()->map(fn(User $admin) => $admin->getId())->getValues();
         $coachesId = array_merge($generalCoachesId, $sessionAdminsId);
-        $user_to_avoid = implode(', ', $coachesId);
+        // An empty NOT IN () is a SQL error: a session may have neither general coach nor session admin.
+        $user_to_avoid = implode(', ', array_map('intval', $coachesId ?: [0]));
         //not showing coaches
         $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, post.thread_id
                 FROM $t_posts post , $t_users user, $t_session_rel_user session_rel_user_rel_course

@@ -33,7 +33,7 @@ class CForumPostRepository extends ResourceRepository
 
     public function countUserForumPosts(User $user, Course $course, ?Session $session = null): int
     {
-        $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
+        $qb = $this->getResourcesByCourseCreatedByUser($user, $course, $session);
 
         return $this->getCount($qb);
     }

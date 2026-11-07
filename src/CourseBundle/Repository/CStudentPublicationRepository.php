@@ -89,7 +89,7 @@ final class CStudentPublicationRepository extends ResourceRepository
         ?Session $session = null,
         ?CGroup $group = null
     ): int {
-        $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
+        $qb = $this->getResourcesByCourseCreatedByUser($user, $course, $session);
         $qb->andWhere('resource.publicationParent IS NOT NULL');
 
         return $this->getCount($qb);

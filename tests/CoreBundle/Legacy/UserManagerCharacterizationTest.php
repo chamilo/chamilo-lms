@@ -192,15 +192,103 @@ class UserManagerCharacterizationTest extends AbstractApiTest
         $count = UserManager::getUserListExtraConditions(['official_code' => 'um_code_xc'], [], false, false, null, '', true);
         $this->assertEquals(2, $count);
 
+        // Deprecated raw fragment: still appended, but quotes stay escaped.
         $extra = UserManager::getUserListExtraConditions(
             ['official_code' => 'um_code_xc'],
             [],
             false,
             false,
             null,
-            " AND username = 'um_xc_b'"
+            ' AND user.id = '.$b
         );
-        $this->assertSame(['um_xc_b'], array_column($extra, 'username'), 'extraConditions is appended as raw SQL.');
+        $this->assertSame(['um_xc_b'], array_column($extra, 'username'));
+    }
+
+    public function testGetUserListExtraConditionsRawFragmentCannotBreakOutOfQuotes(): void
+    {
+        $a = $this->createUser('um_xi_a')->getId();
+        $b = $this->createUser('um_xi_b')->getId();
+        $this->names($a, 'A', 'B', 'um_code_xi');
+        $this->names($b, 'A', 'B', 'um_code_xi');
+
+        // Before the fix the escaping was undone, so this widened the WHERE to every user.
+        $payload = " AND username = 'um_xi_a' OR '1'='1";
+        try {
+            $rows = UserManager::getUserListExtraConditions(
+                ['official_code' => 'um_code_xi'],
+                [],
+                false,
+                false,
+                null,
+                $payload
+            );
+        } catch (\Throwable) {
+            $rows = [];
+        }
+        $this->assertSame([], $rows, 'A quote-bearing fragment must fail or match nothing, never widen the query.');
+
+        $countPayload = "' OR 1=1 -- ";
+        try {
+            $count = UserManager::getUserListExtraConditions(
+                ['official_code' => 'um_code_xi'],
+                [],
+                false,
+                false,
+                null,
+                $countPayload,
+                true
+            );
+        } catch (\Throwable) {
+            $count = 0;
+        }
+        $this->assertEquals(0, $count);
+    }
+
+    public function testGetUserListExtraConditionsCreatedBetweenFiltersByDate(): void
+    {
+        $a = $this->createUser('um_cb_a')->getId();
+        $b = $this->createUser('um_cb_b')->getId();
+        $c = $this->createUser('um_cb_c')->getId();
+        foreach ([$a, $b, $c] as $id) {
+            $this->names($id, 'A', 'B', 'um_code_cb');
+        }
+        $this->conn()->executeStatement("UPDATE user SET created_at = '2001-03-10 12:00:00' WHERE id = ?", [$a]);
+        $this->conn()->executeStatement("UPDATE user SET created_at = '2001-03-20 00:00:00' WHERE id = ?", [$b]);
+        $this->conn()->executeStatement("UPDATE user SET created_at = '2001-05-01 00:00:00' WHERE id = ?", [$c]);
+
+        $range = ['2001-03-01', '2001-03-31'];
+        $rows = UserManager::getUserListExtraConditions(
+            ['official_code' => 'um_code_cb'],
+            ['username'],
+            false,
+            false,
+            null,
+            '',
+            false,
+            $range
+        );
+        $this->assertSame(['um_cb_a', 'um_cb_b'], array_column($rows, 'username'));
+
+        $count = UserManager::getUserListExtraConditions(
+            ['official_code' => 'um_code_cb'],
+            [],
+            false,
+            false,
+            null,
+            '',
+            true,
+            $range
+        );
+        $this->assertEquals(2, $count);
+
+        $all = UserManager::getUserListExtraConditions(['official_code' => 'um_code_cb'], [], false, false, null, '', true);
+        $this->assertEquals(3, $all, 'Without a range nothing is filtered.');
+    }
+
+    public function testGetUserListExtraConditionsCreatedBetweenRejectsInjection(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        UserManager::getUserListExtraConditions([], [], false, false, null, '', true, ["2001-01-01' OR '1'='1", '2001-12-31']);
     }
 
     public function testGetUserListLikeSimpleAndContainsModes(): void

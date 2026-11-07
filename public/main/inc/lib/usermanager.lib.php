@@ -1668,6 +1668,19 @@ class UserManager
         return $return_array;
     }
 
+    /**
+     * Get a list (or a count) of non-anonymous users matching equality conditions.
+     *
+     * @param array       $conditions      field => value, compared with =
+     * @param string      $extraConditions @deprecated Free-form SQL fragment. It is now fully escaped (quotes
+     *                                     included), so it can no longer break out of a string literal; a
+     *                                     fragment containing quotes will fail instead of being executed.
+     *                                     Use $createdBetween for the only filter the callers need.
+     * @param array|null  $createdBetween  [start, end] as YYYY-MM-DD, filters on user.created_at (inclusive);
+     *                                     an InvalidArgumentException is thrown on any other format
+     *
+     * @return array|int|string
+     */
     public static function getUserListExtraConditions(
         $conditions = [],
         $order_by = [],
@@ -1675,7 +1688,8 @@ class UserManager
         $limit_to = false,
         $idCampus = null,
         $extraConditions = '',
-        $getCount = false
+        $getCount = false,
+        $createdBetween = null
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $userUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -1709,7 +1723,20 @@ class UserManager
             }
         }
 
-        $sql .= str_replace("\'", "'", Database::escape_string($extraConditions));
+        if (!empty($createdBetween)) {
+            $createdBetween = array_values((array) $createdBetween);
+            $start = (string) ($createdBetween[0] ?? '');
+            $end = (string) ($createdBetween[1] ?? '');
+            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $start) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $end)) {
+                throw new InvalidArgumentException('createdBetween expects two YYYY-MM-DD dates');
+            }
+            $start = Database::escape_string($start);
+            $end = Database::escape_string($end);
+            $sql .= " AND user.created_at BETWEEN '$start' AND '$end' ";
+        }
+
+        // Deprecated raw fragment: escaped as a whole, never un-escaped.
+        $sql .= Database::escape_string($extraConditions);
 
         if (!empty($order_by) && count($order_by) > 0) {
             $sql .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));

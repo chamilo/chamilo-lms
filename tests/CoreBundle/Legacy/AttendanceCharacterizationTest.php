@@ -831,27 +831,34 @@ final class AttendanceCharacterizationTest extends KernelTestCase
         $this->assertNotContains($c1, $this->conn->fetchFirstColumn('SELECT iid FROM c_attendance_calendar'));
     }
 
-    public function testAttendanceCalendarDeleteOfAGroupLinkedDateIsBlockedByTheForeignKey(): void
+    public function testAttendanceCalendarDeleteOfAGroupLinkedDateRemovesLinksSheetAndDate(): void
     {
-        // PINNED QUIRK: the calendar row is deleted BEFORE its c_attendance_calendar_rel_group links, and that FK
-        // has no ON DELETE rule, so deleting a group-linked date fails (the group links must go first).
+        // Fixed: the calendar row used to be deleted before its group links, and the FK has no ON DELETE rule, so
+        // deleting a group-linked date failed and left the date behind. Links and sheet rows now go first.
         $att = $this->att();
         $c1 = $this->cal($att, '2032-11-01 08:00:00');
         $this->calGroup($c1, $this->group());
         $this->sheet(self::ANON, $c1, 1);
 
-        ob_start();
-        $threw = false;
-        try {
-            (new Attendance())->attendance_calendar_delete($c1, $this->entity($att));
-        } catch (Throwable) {
-            $threw = true;
-        }
-        $output = ob_get_clean();
+        $affected = (new Attendance())->attendance_calendar_delete($c1, $this->entity($att));
 
-        $this->assertNotFalse($this->row('SELECT iid FROM c_attendance_calendar WHERE iid = ?', [$c1]), 'the date is still there');
-        $this->assertSame([], $this->sheetRows($c1), 'but its sheet rows (deleted first) are gone');
-        $this->assertTrue($threw || str_contains((string) $output, 'foreign key constraint'), 'the failure is surfaced (thrown or printed)');
+        $this->assertSame(1, $affected);
+        $this->assertFalse($this->row('SELECT iid FROM c_attendance_calendar WHERE iid = ?', [$c1]), 'the date is gone');
+        $this->assertSame([], $this->sheetRows($c1));
+        $this->assertSame(0, (int) $this->row('SELECT COUNT(*) c FROM c_attendance_calendar_rel_group WHERE calendar_id = ?', [$c1])['c']);
+    }
+
+    public function testAttendanceCalendarDeleteAllRemovesGroupLinkedDates(): void
+    {
+        $att = $this->att();
+        $c1 = $this->cal($att, '2032-11-02 08:00:00');
+        $this->calGroup($c1, $this->group());
+
+        $affected = (new Attendance())->attendance_calendar_delete(0, $this->entity($att), true);
+
+        $this->assertSame(1, $affected);
+        $this->assertSame(0, (int) $this->row('SELECT COUNT(*) c FROM c_attendance_calendar WHERE attendance_id = ?', [$att])['c']);
+        $this->assertSame(0, (int) $this->row('SELECT COUNT(*) c FROM c_attendance_calendar_rel_group WHERE calendar_id = ?', [$c1])['c']);
     }
 
     // ---------------------------------------------------------------- state changes through the repository

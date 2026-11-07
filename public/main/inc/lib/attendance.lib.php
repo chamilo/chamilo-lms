@@ -1880,10 +1880,13 @@ class Attendance
         $course_id = api_get_course_int_id();
         $affected_rows = 0;
         if ($all_delete) {
-            $attendance_calendar = $this->get_attendance_calendar($attendanceId);
+            // showAll: dates linked to a group must be deleted too
+            $attendance_calendar = $this->get_attendance_calendar($attendanceId, 'all', null, 0, true);
             // get all dates from calendar by current attendance
             if (!empty($attendance_calendar)) {
                 foreach ($attendance_calendar as $cal) {
+                    // the group links reference the calendar row: delete them first
+                    $this->deleteAttendanceCalendarGroup($cal['iid'], $course_id);
                     // delete all data from attendance sheet
                     $sql = "DELETE FROM $tbl_attendance_sheet
                             WHERE attendance_calendar_id = '".intval($cal['iid'])."'";
@@ -1892,12 +1895,12 @@ class Attendance
                     $sql = "DELETE FROM $tbl_attendance_calendar
                             WHERE iid = '".intval($cal['iid'])."'";
                     Database::query($sql);
-
-                    $this->deleteAttendanceCalendarGroup($cal['iid'], $course_id);
                     $affected_rows++;
                 }
             }
         } else {
+            // the group links reference the calendar row: delete them first
+            $this->deleteAttendanceCalendarGroup($calendar_id, $course_id);
             // delete just one row from attendance sheet by the calendar id
             $sql = "DELETE FROM $tbl_attendance_sheet
                     WHERE attendance_calendar_id = '".$calendar_id."'";
@@ -1907,7 +1910,6 @@ class Attendance
                     WHERE iid = '".$calendar_id."'";
             Database::query($sql);
 
-            $this->deleteAttendanceCalendarGroup($calendar_id, $course_id);
             $affected_rows++;
         }
 

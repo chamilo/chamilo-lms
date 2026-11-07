@@ -4178,6 +4178,7 @@ class UserManager
                 ON (u.id AND uv.user_id AND uv.user_id = url_rel_user.user_id)
                 LEFT JOIN $table_user_tag ut ON (uv.tag_id = ut.id)
                 WHERE
+                    (
                     ($where_field tag LIKE '".Database::escape_string($tag."%")."') OR
                     (
                         u.firstname LIKE '".Database::escape_string("%".$tag."%")."' OR
@@ -4186,8 +4187,9 @@ class UserManager
                         concat(u.firstname, ' ', u.lastname) LIKE '".Database::escape_string("%".$tag."%")."' OR
                         concat(u.lastname, ' ', u.firstname) LIKE '".Database::escape_string("%".$tag."%")."'
                      )
+                    )
                      ".(!empty($where_extra_fields) ? $where_extra_fields : '')."
-                     AND url_rel_user.access_url_id=".api_get_current_access_url_id();
+                     AND url_rel_user.access_url_id=".(int) api_get_current_access_url_id();
 
         $keyword_active = true;
         // only active users

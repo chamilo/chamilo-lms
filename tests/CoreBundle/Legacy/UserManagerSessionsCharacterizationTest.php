@@ -1010,11 +1010,10 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
         $this->assertArrayHasKey($match, $res);
         $this->assertSame('us_zzuniquetag', $res[$match]['tag']);
         $this->assertSame(1, UserManager::get_all_user_tags('us_zzuniquetag', 0, 0, 10, true) ? 1 : 0);
-        // PINNED QUIRK: "tag LIKE ... OR (name matches) AND ... url AND active AND status <> 6" - AND binds tighter
-        // than OR, so the url/active/anonymous filters only apply to the name-match branch, never to the tag branch.
-        $this->assertArrayHasKey($inactive, $res, 'Inactive users matched by tag are listed.');
-        $this->assertArrayHasKey($anon, $res, 'Anonymous users matched by tag are listed.');
-        $this->assertArrayHasKey($otherUrl, $res, 'Users of another URL matched by tag are listed.');
+        // The url/active/anonymous filters apply to the tag match as well as to the name match.
+        $this->assertArrayNotHasKey($inactive, $res, 'Inactive users are excluded.');
+        $this->assertArrayNotHasKey($anon, $res, 'Anonymous users are excluded.');
+        $this->assertArrayNotHasKey($otherUrl, $res, 'Users of another URL are excluded.');
         // The same users matched by name only are filtered.
         $byName = UserManager::get_all_user_tags($this->conn()->fetchOne('SELECT username FROM user WHERE id = ?', [$inactive]));
         $this->assertArrayNotHasKey($inactive, $byName);

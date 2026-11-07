@@ -1678,35 +1678,85 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         $this->assertSame($untouchedBefore, $linkOf($untouched));
     }
 
-    public function testProcessUserDataMoveToTheBaseCourseFailsOnTheSessionForeignKey(): void
+    public function testProcessUserDataMoveBackToTheBaseCourseUsesNullWhereTheColumnIsNullable(): void
     {
         $s1 = $this->user('tc_s1');
         $from = $this->session('tc_from');
-        $this->trackingInSession($s1, $from);
+        $ids = $this->trackingInSession($s1, $from, true);
+        $assignment = $this->work($this->creator, self::COURSE);
+        $work = $this->work($s1, self::COURSE, $from, $assignment);
 
-        // PINNED QUIRK: "no session" is written as session_id = 0 in the tracking tables, but session_id is a
-        // foreign key to session.id, so moving a user's data back to the base course fails with the generic
-        // "unknown error" (and, outside a test, half-way through the moves).
-        $this->expectException(NotAllowedException::class);
         $this->moveData($s1, $from, 0, true);
+
+        // Fixed: "no session" was written as 0 everywhere, but track_e_exercises.session_id and
+        // c_lp_view.session_id are foreign keys to session.id: the move failed with the generic "unknown error"
+        // half-way through. Nullable columns now get NULL (the base-course convention api_get_session_condition()
+        // reads); the NOT NULL tracking columns keep 0.
+        $value = fn (string $table, string $pk, int $id): mixed => $this->conn->fetchOne("SELECT session_id FROM $table WHERE $pk = ?", [$id]);
+        $this->assertNull($value('track_e_exercises', 'exe_id', $ids['exercise']));
+        $this->assertNull($value('c_lp_view', 'iid', $ids['lpView']));
+        $this->assertNull($value('track_e_lastaccess', 'access_id', $ids['last']));
+        $this->assertSame(0, (int) $value('track_e_course_access', 'course_access_id', $ids['access']));
+        $this->assertSame(0, (int) $value('track_e_attempt_qualify', 'id', $ids['qualify']));
+        $this->assertNull($this->conn->fetchOne(
+            'SELECT rl.session_id FROM resource_link rl INNER JOIN c_student_publication w ON w.resource_node_id = rl.resource_node_id WHERE w.iid = ?',
+            [$work]
+        ));
     }
 
-    public function testProcessUserDataMoveCannotReadTheLearningPathViews(): void
+    public function testProcessUserDataMoveFindsTheBaseCourseRowsStoredWithANullSession(): void
+    {
+        $s1 = $this->user('tc_s1');
+        $to = $this->session('tc_to');
+        $quiz = $this->quiz(self::COURSE);
+        $nullExercise = $this->exercise($s1, self::COURSE, null, $quiz, '2001-02-01 10:00:00', 5, 10);
+        [$lp] = $this->lp(self::COURSE);
+        $nullView = $this->lpView($s1, $lp, self::COURSE, 40);
+        $this->conn->executeStatement(
+            "INSERT INTO track_e_lastaccess (access_user_id, access_date, c_id, access_tool, session_id) VALUES (?, '2001-03-01 10:00:00', ?, 'learnpath', NULL)",
+            [$s1, self::COURSE]
+        );
+        $lastAccess = (int) $this->conn->lastInsertId();
+
+        $this->moveData($s1, 0, $to, true);
+
+        $session = fn (string $table, string $pk, int $id): int => (int) $this->conn->fetchOne("SELECT session_id FROM $table WHERE $pk = ?", [$id]);
+        $this->assertSame($to, $session('track_e_exercises', 'exe_id', $nullExercise));
+        // Fixed: the learning path views and the last access were selected with "session_id = 0", which never
+        // matches a NULL session (the base-course convention), so nothing of them moved out of the base course.
+        $this->assertSame($to, $session('c_lp_view', 'iid', $nullView));
+        $this->assertSame($to, $session('track_e_lastaccess', 'access_id', $lastAccess));
+    }
+
+    public function testProcessUserDataMoveMovesTheLearningPathViewsOfTheUser(): void
     {
         $s1 = $this->user('tc_s1');
         $from = $this->session('tc_from');
         $to = $this->session('tc_to');
         $ids = $this->trackingInSession($s1, $from, true);
 
-        // PINNED QUIRK: the loop keys the c_lp_view rows by $row['id'], a column that does not exist (it is
-        // 'iid'): PHP raises "Undefined array key" as soon as the user has a learning path view in the
-        // origin session, so none of the views can be moved (the exercises were already updated above it).
-        try {
-            $this->moveData($s1, $from, $to, true);
-            $this->fail('expected the undefined array key warning');
-        } catch (\Throwable $e) {
-            $this->assertStringContainsString('Undefined array key "id"', $e->getMessage());
-        }
+        $this->moveData($s1, $from, $to, true);
+
+        // Fixed: the loop keyed the c_lp_view rows by $row['id'], a column that does not exist (it is 'iid'),
+        // so PHP raised "Undefined array key" and no learning path view could ever be moved.
+        $this->assertSame($to, (int) $this->conn->fetchOne('SELECT session_id FROM c_lp_view WHERE iid = ?', [$ids['lpView']]));
+    }
+
+    public function testProcessUserDataMovePreviewShowsTheLearningPathScoreAndProgressOfBothSides(): void
+    {
+        $s1 = $this->user('tc_s1');
+        $from = $this->session('tc_from');
+        $to = $this->session('tc_to');
+        $ids = $this->trackingInSession($s1, $from, true);
+        $lp = (int) $this->conn->fetchOne('SELECT lp_id FROM c_lp_view WHERE iid = ?', [$ids['lpView']]);
+        $this->lpView($s1, $lp, self::COURSE, 60, $to);
+
+        $out = $this->moveData($s1, $from, $to, false);
+
+        // Fixed: the preview passed the course CODE and the session id to functions typed for entities, which
+        // is a TypeError as soon as the user has a learning path view in either session.
+        $this->assertStringContainsString('Original session #'.$from, $out);
+        $this->assertStringContainsString('Destination session #'.$to, $out);
         $this->assertSame($from, (int) $this->conn->fetchOne('SELECT session_id FROM c_lp_view WHERE iid = ?', [$ids['lpView']]));
     }
 

@@ -7271,8 +7271,12 @@ class Tracking
         $user_id = (int) $user_id;
         $origin_session_id = (int) $origin_session_id;
         $new_session_id = (int) $new_session_id;
-        $session = api_get_session_entity($new_session_id);
-        $em = Database::getManager();
+        // "No session" is NULL in the nullable session columns (they are foreign keys to session.id) and 0 in the
+        // NOT NULL ones.
+        $newSessionNullable = empty($new_session_id) ? 'NULL' : (string) $new_session_id;
+        $courseEntity = api_get_course_entity((int) $course_id);
+        $originSessionEntity = empty($origin_session_id) ? null : api_get_session_entity($origin_session_id);
+        $newSessionEntity = empty($new_session_id) ? null : api_get_session_entity($new_session_id);
 
         $TABLETRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -7306,7 +7310,7 @@ class Tracking
         if (!empty($list)) {
             foreach ($list as $exe_id => $data) {
                 if ($update_database) {
-                    $sql = "UPDATE $TABLETRACK_EXERCICES SET session_id = '$new_session_id' WHERE exe_id = $exe_id";
+                    $sql = "UPDATE $TABLETRACK_EXERCICES SET session_id = $newSessionNullable WHERE exe_id = $exe_id";
                     Database::query($sql);
 
                     //$sql = "UPDATE $TBL_TRACK_ATTEMPT SET session_id = '$new_session_id' WHERE exe_id = $exe_id";
@@ -7336,8 +7340,7 @@ class Tracking
             $sql = "SELECT * FROM $TABLETRACK_EXERCICES
                     WHERE
                         c_id = $course_id AND
-                        session_id = $new_session_id AND
-                        exe_user_id = $user_id ";
+                        exe_user_id = $user_id ".api_get_session_condition($new_session_id);
             $res = Database::query($sql);
             $list = [];
             while ($row = Database::fetch_assoc($res)) {
@@ -7348,7 +7351,7 @@ class Tracking
                 foreach ($list as $exe_id => $data) {
                     if ($update_database) {
                         $sql = "UPDATE $TABLETRACK_EXERCICES
-                                SET session_id = '$new_session_id'
+                                SET session_id = $newSessionNullable
                                 WHERE exe_id = $exe_id";
                         Database::query($sql);
                         $result_message[$TABLETRACK_EXERCICES]++;
@@ -7396,8 +7399,7 @@ class Tracking
         $sql = "SELECT access_id FROM $TBL_TRACK_E_LAST_ACCESS
                 WHERE
                     c_id = $course_id AND
-                    session_id = $origin_session_id AND
-                    access_user_id = $user_id ";
+                    access_user_id = $user_id ".api_get_session_condition($origin_session_id);
         $res = Database::query($sql);
         $list = [];
         while ($row = Database::fetch_assoc($res)) {
@@ -7408,7 +7410,7 @@ class Tracking
             foreach ($list as $id) {
                 if ($update_database) {
                     $sql = "UPDATE $TBL_TRACK_E_LAST_ACCESS
-                            SET session_id = $new_session_id
+                            SET session_id = $newSessionNullable
                             WHERE access_id = $id";
                     if ($debug) {
                         echo $sql;
@@ -7425,7 +7427,7 @@ class Tracking
         // 5. lp_item_view
         // CHECK ORIGIN
         $sql = "SELECT * FROM $TBL_LP_VIEW
-                WHERE user_id = $user_id AND session_id = $origin_session_id AND c_id = $course_id ";
+                WHERE user_id = $user_id AND c_id = $course_id ".api_get_session_condition($origin_session_id);
         $res = Database::query($sql);
 
         // Getting the list of LPs in the new session
@@ -7435,7 +7437,7 @@ class Tracking
         while ($row = Database::fetch_assoc($res)) {
             // Checking if the LP exist in the new session
             //if (in_array($row['lp_id'], array_keys($flat_list))) {
-            $list[$row['id']] = $row;
+            $list[$row['iid']] = $row;
             //}
         }
 
@@ -7443,7 +7445,7 @@ class Tracking
             foreach ($list as $id => $data) {
                 if ($update_database) {
                     $sql = "UPDATE $TBL_LP_VIEW
-                            SET session_id = $new_session_id
+                            SET session_id = $newSessionNullable
                             WHERE c_id = $course_id AND iid = $id ";
                     if ($debug) {
                         var_dump($sql);
@@ -7460,15 +7462,15 @@ class Tracking
                     // Getting all information of that lp_item_id
                     $score = self::get_avg_student_score(
                         $user_id,
-                        $origin_course_code,
+                        $courseEntity,
                         [$data['lp_id']],
-                        $origin_session_id
+                        $originSessionEntity
                     );
                     $progress = self::get_avg_student_progress(
                         $user_id,
-                        $origin_course_code,
+                        $courseEntity,
                         [$data['lp_id']],
-                        $origin_session_id
+                        $originSessionEntity
                     );
                     $result_message['LP_VIEW'][$data['lp_id']] = [
                         'score' => $score,
@@ -7481,7 +7483,7 @@ class Tracking
         // Check destination.
         if (!$update_database) {
             $sql = "SELECT * FROM $TBL_LP_VIEW
-                    WHERE user_id = $user_id AND session_id = $new_session_id AND c_id = $course_id";
+                    WHERE user_id = $user_id AND c_id = $course_id ".api_get_session_condition($new_session_id);
             $res = Database::query($sql);
 
             // Getting the list of LPs in the new session
@@ -7492,7 +7494,7 @@ class Tracking
             while ($row = Database::fetch_assoc($res)) {
                 //Checking if the LP exist in the new session
                 //if (in_array($row['lp_id'], array_keys($flat_list))) {
-                $list[$row['id']] = $row;
+                $list[$row['iid']] = $row;
                 //}
             }
 
@@ -7501,15 +7503,15 @@ class Tracking
                     // Getting all information of that lp_item_id
                     $score = self::get_avg_student_score(
                         $user_id,
-                        $origin_course_code,
+                        $courseEntity,
                         [$data['lp_id']],
-                        $new_session_id
+                        $newSessionEntity
                     );
                     $progress = self::get_avg_student_progress(
                         $user_id,
-                        $origin_course_code,
+                        $courseEntity,
                         [$data['lp_id']],
-                        $new_session_id
+                        $newSessionEntity
                     );
                     $result_message_compare['LP_VIEW'][$data['lp_id']] = [
                         'score' => $score,

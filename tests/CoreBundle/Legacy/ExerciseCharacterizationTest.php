@@ -910,20 +910,69 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         $this->assertCount(2, $e->getExerciseAndResult($course->getId(), 0, (string) $quizA), 'scalar id is wrapped');
     }
 
-    public function testGetExercisesByCourseSessionQueriesAMissingColumn(): void
+    public function testGetExercisesByCourseSessionListsQuizzesLinkedToCourseAndSession(): void
     {
         $this->ctx();
         $e = new Exercise();
-
-        // PINNED QUIRK (suspected bug): the query filters on c_quiz.c_id / c_quiz.session_id, columns that no
-        // longer exist on c_quiz (course scoping moved to resource_link), so the method fails with an SQL error.
-        $failed = false;
-        try {
-            $e->getExercisesByCourseSession(1, 0);
-        } catch (Throwable) {
-            $failed = true;
+        $unusedNodes = $this->conn->fetchFirstColumn(
+            'SELECT id FROM resource_node WHERE id NOT IN (SELECT resource_node_id FROM c_quiz WHERE resource_node_id IS NOT NULL) ORDER BY id DESC LIMIT 5'
+        );
+        $this->assertGreaterThanOrEqual(5, \count($unusedNodes), 'fixture needs 5 spare resource nodes');
+        $now = '2020-01-01 00:00:00';
+        $sessionIds = [];
+        foreach (['ex_gecs_session_a', 'ex_gecs_session_b'] as $title) {
+            $this->conn->insert('session', [
+                'title' => $title,
+                'nbr_courses' => 0,
+                'nbr_users' => 0,
+                'nbr_classes' => 0,
+                'visibility' => 1,
+                'status' => 0,
+            ]);
+            $sessionIds[] = (int) $this->conn->lastInsertId();
         }
-        $this->assertTrue($failed);
+        [$sidA, $sidB] = $sessionIds;
+        $mk = function (string $title, int $node, int $courseId, ?int $sessionId, ?string $deletedAt = null) use ($now): int {
+            $id = $this->makeQuiz(['title' => $title, 'resource_node_id' => $node]);
+            $this->conn->insert('resource_link', [
+                'resource_node_id' => $node,
+                'c_id' => $courseId,
+                'session_id' => $sessionId,
+                'visibility' => 2,
+                'display_order' => 0,
+                'resource_type_group' => 1,
+                'deleted_at' => $deletedAt,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+
+            return $id;
+        };
+        $base = $mk('ex_gecs_base', (int) $unusedNodes[0], 1, null);
+        $inSession = $mk('ex_gecs_s1', (int) $unusedNodes[1], 1, $sidA);
+        $otherSession = $mk('ex_gecs_s2', (int) $unusedNodes[2], 1, $sidB);
+        $otherCourse = $mk('ex_gecs_c2', (int) $unusedNodes[3], 2, null);
+        $deleted = $mk('ex_gecs_del', (int) $unusedNodes[4], 1, null, $now);
+
+        $ids = static fn (array $rows): array => array_map('intval', array_column($rows, 'id'));
+
+        // Fixed: quizzes are scoped through resource_link, not the dropped c_quiz.c_id/session_id columns.
+        $base0 = $ids($e->getExercisesByCourseSession(1, 0));
+        $this->assertContains($base, $base0, 'base-course quiz');
+        $this->assertNotContains($inSession, $base0, 'session quiz is not in the base course view');
+        $this->assertNotContains($otherCourse, $base0);
+        $this->assertNotContains($deleted, $base0, 'soft-deleted link is excluded');
+
+        $rows = $e->getExercisesByCourseSession(1, $sidA);
+        $s1 = $ids($rows);
+        $this->assertContains($base, $s1, 'base quizzes are also offered inside a session (legacy session_id = 0 branch)');
+        $this->assertContains($inSession, $s1);
+        $this->assertNotContains($otherSession, $s1);
+        $this->assertSame(array_values(array_unique($s1)), $s1, 'one row per quiz');
+        $this->assertSame('ex_gecs_base', $rows[array_search($base, $s1, true)]['title']);
+        $sorted = $s1;
+        sort($sorted);
+        $this->assertSame($sorted, $s1, 'ordered by iid');
     }
 
     // ---------------------------------------------------------------- answers

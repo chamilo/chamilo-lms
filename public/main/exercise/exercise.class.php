@@ -8460,13 +8460,18 @@ class Exercise
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
 
+        // Quizzes are resource nodes: they belong to a course/session through resource_link, not through
+        // c_quiz columns. Like the legacy filter, base-course quizzes are listed for a session too.
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "SELECT * FROM $tbl_quiz cq
+        $tblResourceLink = Database::get_main_table('resource_link');
+        $sql = "SELECT DISTINCT cq.*, cq.iid AS id FROM $tbl_quiz cq
+                INNER JOIN $tblResourceLink rl
+                    ON rl.resource_node_id = cq.resource_node_id
                 WHERE
-                    cq.c_id = %s AND
-                    (cq.session_id = %s OR cq.session_id = 0)
+                    rl.c_id = $courseId AND
+                    rl.deleted_at IS NULL AND
+                    (rl.session_id = $sessionId OR rl.session_id IS NULL)
                 ORDER BY cq.iid";
-        $sql = sprintf($sql, $courseId, $sessionId);
 
         $result = Database::query($sql);
 

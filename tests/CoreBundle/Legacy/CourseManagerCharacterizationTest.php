@@ -1241,11 +1241,9 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
         $cid = (int) $course->getId();
 
         $all = CourseManager::getAccessCourse($cid, 2, (int) $user->getId());
-        $this->assertSame(
-            ['2031-01-10', '2031-01-12'],
-            $this->col($all, 'login_course_date'),
-            'session_id is not selected, so SELECT DISTINCT merges the 12th with and without a session'
-        );
+        // Fixed: session_id was not selected, so SELECT DISTINCT merged the 12th with and without a session.
+        $this->assertSame(['2031-01-10', '2031-01-12', '2031-01-12'], $this->col($all, 'login_course_date'));
+        $this->assertSame([0, 0, 5], array_map('intval', $this->col($all, 'session_id')));
 
         $noSession = CourseManager::getAccessCourse($cid, 0, (int) $user->getId());
         $this->assertSame(['2031-01-10', '2031-01-12'], $this->col($noSession, 'login_course_date'), 'two logins the same day collapse to one row');

@@ -7200,11 +7200,12 @@ class CourseManager
         $sql = "SELECT DISTINCT
                     CAST(course_access.login_course_date AS DATE) AS login_course_date,
                     user_id,
-                    c_id
+                    c_id,
+                    session_id
                 FROM $tblTrackECourse AS course_access
                 $where
                 GROUP BY c_id, session_id, CAST(course_access.login_course_date AS DATE), user_id
-                ORDER BY c_id";
+                ORDER BY c_id, login_course_date, session_id";
 
         $res = Database::query($sql);
         $data = Database::store_result($res);

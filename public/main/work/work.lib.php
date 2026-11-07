@@ -5799,10 +5799,11 @@ function makeVisible($itemId, $course_info)
     $repo = Container::getStudentPublicationRepository();
     /** @var CStudentPublication $studentPublication */
     $studentPublication = $repo->find($itemId);
-    if ($studentPublication) {
-        $studentPublication->setAccepted(1);
-        $repo->update($studentPublication);
+    if (null === $studentPublication) {
+        return false;
     }
+    $studentPublication->setAccepted(1);
+    $repo->update($studentPublication);
     /*
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_id = $course_info['real_id'];
@@ -5819,7 +5820,7 @@ function makeVisible($itemId, $course_info)
  * @param int   $itemId
  * @param array $course_info
  *
- * @return int
+ * @return bool
  */
 function makeInvisible($itemId, $course_info)
 {
@@ -5831,10 +5832,11 @@ function makeInvisible($itemId, $course_info)
     $repo = Container::getStudentPublicationRepository();
     /** @var CStudentPublication $studentPublication */
     $studentPublication = $repo->find($itemId);
-    if ($studentPublication) {
-        $studentPublication->setAccepted(0);
-        $repo->update($studentPublication);
+    if (null === $studentPublication) {
+        return false;
     }
+    $studentPublication->setAccepted(0);
+    $repo->update($studentPublication);
 
     /*api_item_property_update(
         $course_info,

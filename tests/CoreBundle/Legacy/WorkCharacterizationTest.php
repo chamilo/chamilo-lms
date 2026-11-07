@@ -368,8 +368,9 @@ final class WorkCharacterizationTest extends KernelTestCase
     {
         $work = $this->work(['accepted' => 1]);
 
-        // PINNED QUIRK: the flag is flipped through the resource repository, which refuses a work that has no
-        // resource node (our bare fixture), so nothing is written. Real works always have a node.
+        // By design, not a bug: the flag is flipped through the resource repository, which refuses a work that has
+        // no resource node (our bare fixture). In 2.x every work is created as a resource node, so a node-less
+        // row is corrupt data and failing loudly is preferable to silently hiding nothing.
         try {
             makeInvisible($work, ['real_id' => 1]);
             $this->fail('Expected the repository to refuse a work without resource node');
@@ -389,10 +390,11 @@ final class WorkCharacterizationTest extends KernelTestCase
         $this->assertSame(0, (int) $this->field($work, 'accepted'));
     }
 
-    public function testMakeVisibleOfUnknownWorkStillReturnsTrue(): void
+    public function testMakeVisibleAndInvisibleOfUnknownWorkReturnFalse(): void
     {
-        // PINNED QUIRK: an id that matches no work is reported as success.
-        $this->assertTrue(makeVisible(2147483000, ['real_id' => 1]));
+        // Fixed: an id that matches no work used to be reported as success.
+        $this->assertFalse(makeVisible(2147483000, ['real_id' => 1]));
+        $this->assertFalse(makeInvisible(2147483000, ['real_id' => 1]));
     }
 
     // ------------------------------------------------- subscribed users

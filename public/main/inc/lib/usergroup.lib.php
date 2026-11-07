@@ -2284,11 +2284,27 @@ class UserGroupModel extends Model
             GROUP_USER_PERMISSION_HRM,
         ];
         $user_role = $this->get_user_group_role($user_id, $group_id);
-        if (in_array($user_role, $roles)) {
-            return true;
-        } else {
+        if (!in_array($user_role, $roles)) {
             return false;
         }
+        if (GROUP_USER_PERMISSION_READER == $user_role) {
+            // get_user_group_role() also returns 0 when there is no relation at all:
+            // a reader must have an actual row in the relation table.
+            $user_id = (int) $user_id;
+            $group_id = (int) $group_id;
+            if (empty($user_id) || empty($group_id)) {
+                return false;
+            }
+            $result = Database::query(
+                "SELECT 1 FROM $this->usergroup_rel_user_table
+                 WHERE usergroup_id = $group_id AND user_id = $user_id
+                 LIMIT 1"
+            );
+
+            return Database::num_rows($result) > 0;
+        }
+
+        return true;
     }
 
     /**

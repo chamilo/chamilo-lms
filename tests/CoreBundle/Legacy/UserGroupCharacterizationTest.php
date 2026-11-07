@@ -440,9 +440,34 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->assertTrue($this->model->isGroupModerator($group->getId(), $mod->getId()));
         $this->assertTrue($this->model->isGroupModerator($group->getId(), $admin->getId()));
         $this->assertFalse($this->model->isGroupModerator($group->getId(), $stranger->getId()));
-        // Anybody with role 0 passes is_group_member() since 0 (reader) is in the allowed list,
-        // even a stranger: only the platform-admin shortcut and this quirk apply.
-        $this->assertTrue($this->model->is_group_member($group->getId(), $stranger->getId()));
+        // Fixed: a user without any relation row is NOT a member (role 0 means both "reader" and
+        // "no relation"; membership now requires the row), otherwise closed groups were readable.
+        $this->assertFalse($this->model->is_group_member($group->getId(), $stranger->getId()));
+        $this->assertFalse($this->model->is_group_member($group->getId(), 0));
+        $this->assertTrue($this->model->is_group_member($group->getId(), $legacyReader->getId()));
+        $this->assertTrue($this->model->is_group_member($group->getId(), $admin->getId()));
+        $this->assertTrue($this->model->is_group_member($group->getId(), $mod->getId()));
+    }
+
+    public function testIsGroupMemberRequiresARelationAndRejectsPendingInvitations(): void
+    {
+        $group = $this->group('ug_social', Usergroup::SOCIAL_CLASS);
+        $other = $this->group('ug_social_other', Usergroup::SOCIAL_CLASS);
+        $reader = $this->createUser('ug_reader');
+        $hrm = $this->createUser('ug_hrm');
+        $invited = $this->createUser('ug_invited');
+        $requested = $this->createUser('ug_requested');
+        $this->addUser($group, $reader, 0);
+        $this->addUser($group, $hrm, 7);
+        $this->addUser($group, $invited, 3);
+        $this->addUser($group, $requested, 4);
+
+        $this->assertTrue($this->model->is_group_member($group->getId(), $reader->getId()));
+        $this->assertTrue($this->model->is_group_member($group->getId(), $hrm->getId()));
+        $this->assertFalse($this->model->is_group_member($group->getId(), $invited->getId()));
+        $this->assertFalse($this->model->is_group_member($group->getId(), $requested->getId()));
+        // A member of one group is not a member of another.
+        $this->assertFalse($this->model->is_group_member($other->getId(), $reader->getId()));
     }
 
     public function testUpdateUserRoleAndDeleteUserRelGroup(): void

@@ -551,7 +551,7 @@ class learnpathItem
         $this->interactions = [];
         $courseId = $this->courseId;
         $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $sql = "SELECT id FROM $tbl
+        $sql = "SELECT iid FROM $tbl
                 WHERE
                     lp_item_id = ".$this->db_id.' AND
                     lp_view_id = '.$this->view_id.' AND
@@ -568,10 +568,10 @@ class learnpathItem
                 $this->interactions[$row['interaction_id']] = [
                     $row['interaction_id'],
                     $row['interaction_type'],
-                    $row['weighting'],
                     $row['completion_time'],
+                    $row['weighting'],
                     $row['correct_responses'],
-                    $row['student_responses'],
+                    $row['student_response'],
                     $row['result'],
                     $row['latency'],
                 ];

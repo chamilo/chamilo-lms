@@ -859,16 +859,31 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertSame(2, $this->item($s['item'], $s['view'])->get_interactions_count(false), 'set_lp_view counted the latest attempt');
     }
 
-    public function testLoadInteractionsReadsAColumnThatNoLongerExists(): void
+    public function testLoadInteractionsFillsTheInteractionsOfTheCurrentAttemptKeyedByInteractionId(): void
     {
         $s = $this->scene('sco', 2);
+        $iv2 = $this->newItemView($s['view'], $s['item'], 2);
+        $ins = fn (int $iv, int $order, string $id, string $time, float $weight) => $this->conn()->executeStatement(
+            "INSERT INTO c_lp_iv_interaction (c_id, order_id, lp_iv_id, interaction_id, interaction_type, weighting, completion_time, correct_responses, student_response, result, latency)
+             VALUES (1, ?, ?, ?, 'choice', ?, ?, 'a,b', 'a', 'wrong', '9')",
+            [$order, $iv, $id, $weight, $time]
+        );
+        $ins($s['iv'], 0, 'li_old', '01:00:00', 9);
+        $ins($iv2, 0, 'li_q1', '10:00:00', 1.5);
+        $ins($iv2, 1, 'li_q2', '10:01:00', 2);
         $item = $this->item($s['item'], $s['view']);
-        $item->set_attempt_id(1);
+        $item->interactions = ['stale' => ['x']];
 
-        // PINNED QUIRK: load_interactions() selects `id` from c_lp_item_view (the primary key is now `iid`), so
-        // every call fails; get_interactions_js_array(true) and the SCORM runtime that rely on it never get data.
-        $this->expectException(NotAllowedException::class);
         $item->load_interactions();
+
+        $this->assertSame(['li_q1', 'li_q2'], array_keys($item->interactions), 'the previous content is replaced, attempt 1 is not loaded');
+        // Same layout as add_interaction(): id(0), type(1), time(2), weighting(3), correct(4), student(5), result(6), latency(7)
+        $this->assertSame('li_q1', $item->interactions['li_q1'][0]);
+        $this->assertSame('choice', $item->interactions['li_q1'][1]);
+        $this->assertSame('10:00:00', $item->interactions['li_q1'][2]);
+        $this->assertEquals(1.5, $item->interactions['li_q1'][3]);
+        $this->assertSame(['a,b', 'a', 'wrong', '9'], array_slice($item->interactions['li_q1'], 4));
+        $this->assertStringContainsString("'li_q2'", $item->get_interactions_js_array(true));
     }
 
     public function testWriteObjectivesToDbUpdatesAnExistingObjectiveRow(): void

@@ -861,14 +861,29 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         $this->assertLessThan(array_search($other, $order, true), array_search($id, $order, true), 'Ordered by title.');
     }
 
-    public function testGetCountAdminFailsWithAnSqlSyntaxError(): void
+    public function testGetCountAdminCountsSessionsAndSkipsSoftDeletedGeneralCoaches(): void
     {
-        // Suspected bug, pinned: the trailing " AND u.active <> -2" is appended after the closing
-        // ") as session_table" of the derived table (and the inner join still reads s.id_coach, a column
-        // sessions no longer have), so MariaDB rejects the SQL and the call dies instead of counting.
-        // A DQL rewrite that "just works" will flip this test on purpose.
-        $this->expectException(\Chamilo\CoreBundle\Exception\NotAllowedException::class);
-        SessionManager::get_count_admin();
+        // Fixed: the count used to die with an SQL syntax error (" AND u.active <> -2" appended after the
+        // derived table, and a join on the removed s.id_coach column). Sessions' general coaches now come
+        // from session_rel_user; a session whose coach is soft-deleted is still left out, as intended.
+        $before = (int) SessionManager::get_count_admin();
+
+        $this->newSession('sm_count_nocoach');
+        $this->assertSame($before + 1, (int) SessionManager::get_count_admin());
+
+        $coach = $this->createUser('sm_count_coach');
+        $withCoach = SessionManager::create_session('sm_count_coached', '', '', '', '', '', '', [$coach->getId()], 0, 1, false, null, '');
+        $this->assertIsInt($withCoach);
+        $this->assertSame($before + 2, (int) SessionManager::get_count_admin());
+
+        Database::getConnection()->executeStatement('UPDATE user SET active = -2 WHERE id = ?', [$coach->getId()]);
+        $this->assertSame($before + 1, (int) SessionManager::get_count_admin());
+
+        // The listing of the same sessions agrees with the count when filtered the same way.
+        $this->assertSame(
+            1,
+            (int) SessionManager::get_count_admin(" AND s.title = 'sm_count_nocoach'")
+        );
     }
 
     public function testSessionsForAdminCountAndListScopedToTheSessionsCreated(): void

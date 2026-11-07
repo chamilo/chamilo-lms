@@ -341,16 +341,18 @@ class SessionManager
         $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-        $where = 'WHERE 1=1 ';
-        $user_id = api_get_user_id();
+        // The general coaches of a session are rows of session_rel_user (there is no s.id_coach column any more).
+        // A session whose coach is a soft-deleted user is left out; a session without coach is counted.
+        $where = 'WHERE 1=1 AND (u.id IS NULL OR u.active <> '.USER_SOFT_DELETED.') ';
+        $user_id = (int) api_get_user_id();
         $extraJoin = '';
 
         if (api_is_session_admin() &&
             'false' == api_get_setting('allow_session_admins_to_manage_all_sessions')
         ) {
             $where .= " AND (
-                            sru.user_id = '$user_id' AND
-                            sru.relation_type IN ('".Session::DRH.", ".Session::SESSION_ADMIN."')
+                            sru.user_id = $user_id AND
+                            sru.relation_type IN (".Session::DRH.", ".Session::SESSION_ADMIN.")
                             )
                       ";
 
@@ -403,8 +405,10 @@ class SessionManager
                 FROM $tbl_session s
                 LEFT JOIN $tbl_session_category sc
                 ON s.session_category_id = sc.id
-                INNER JOIN $tbl_user u
-                ON s.id_coach = u.id
+                LEFT JOIN $tbl_session_rel_user sru_coach
+                ON (sru_coach.session_id = s.id AND sru_coach.relation_type = ".Session::GENERAL_COACH.")
+                LEFT JOIN $tbl_user u
+                ON sru_coach.user_id = u.id
                 $courseCondition
                 $extraJoin
                 $where $where_condition ) as session_table";
@@ -427,7 +431,9 @@ class SessionManager
                 FROM $tbl_session s
                     LEFT JOIN  $tbl_session_category sc
                     ON s.session_category_id = sc.id
-                    INNER JOIN $tbl_user u ON s.id_coach = u.id
+                    LEFT JOIN $tbl_session_rel_user sru_coach
+                    ON (sru_coach.session_id = s.id AND sru_coach.relation_type = ".Session::GENERAL_COACH.")
+                    LEFT JOIN $tbl_user u ON sru_coach.user_id = u.id
                     INNER JOIN $table_access_url_rel_session ar
                     ON ar.session_id = s.id
                     $courseCondition
@@ -435,8 +441,6 @@ class SessionManager
                 $where $where_condition) as session_table";
             }
         }
-
-        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
 
         $result_rows = Database::query($sql);
         $row = Database::fetch_array($result_rows);

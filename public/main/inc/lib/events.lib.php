@@ -587,15 +587,17 @@ class Event
 
             if ($recordingLog) {
                 $repoTrackQualify = $em->getRepository(TrackEAttemptQualify::class);
-                $trackQualify = $repoTrackQualify->findBy(
+                $trackExercise = $em->find(TrackEExercise::class, $exe_id);
+                $trackQualify = $repoTrackQualify->findOneBy(
                     [
-                        'exeId' => $exe_id,
+                        'trackExercise' => $trackExercise,
                         'questionId' => $question_id,
                         'sessionId' => $session_id,
                     ]
                 );
-                $trackExercise = $em->find(TrackEExercise::class, $exe_id);
-                /** @var TrackEAttemptQualify $trackQualify */
+                if (null === $trackQualify) {
+                    $trackQualify = new TrackEAttemptQualify();
+                }
                 $trackQualify
                     ->setTrackExercise($trackExercise)
                     ->setQuestionId($question_id)

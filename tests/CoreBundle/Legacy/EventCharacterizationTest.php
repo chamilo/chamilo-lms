@@ -786,6 +786,38 @@ final class EventCharacterizationTest extends KernelTestCase
         $this->assertEquals(9.0, $rows[0]['marks']);
     }
 
+    public function testSaveQuestionAttemptKeepsOneQualifyRowPerQuestionWhenExtraRecordingIsOn(): void
+    {
+        // Fixed: the update branch called setters on the array returned by findBy() (a fatal error), with
+        // criteria on a non-existent 'exeId' field.
+        $user = $this->makeUser('ev_sqa_rec');
+        $course = $this->makeCourse('ev_course_sqa_rec');
+        $this->setContext($user, $course);
+        $exe = $this->seedExercise(['exe_user_id' => $user->getId(), 'c_id' => $course->getId(), 'exe_exo_id' => $this->makeQuiz()]);
+        $exercise = new Exercise($course->getId());
+        \Chamilo\CoreBundle\Framework\Container::getSettingsManager()->updateSetting('exercise.quiz_answer_extra_recording', 'true');
+        $this->assertSame('true', api_get_setting('exercise.quiz_answer_extra_recording'));
+
+        Event::saveQuestionAttempt($exercise, 2.0, 'first', 555, $exe, 1, 1, false, 0, null, $user->getId(), $course->getId(), 0, 0, 0);
+        $q = $this->rows('track_e_attempt_qualify', 'exe_id = ?', [$exe]);
+        $this->assertCount(1, $q);
+        $this->assertSame('first', $q[0]['answer']);
+
+        $this->assertSame($exe, Event::saveQuestionAttempt($exercise, 4.0, 'second', 555, $exe, 1, 1, true, 0, null, $user->getId(), $course->getId(), 0, 0, 0));
+        $q = $this->rows('track_e_attempt_qualify', 'exe_id = ?', [$exe]);
+        $this->assertCount(1, $q, 'the existing qualify row is updated, not duplicated');
+        $this->assertSame('second', $q[0]['answer']);
+        $this->assertEquals(4.0, $q[0]['marks']);
+        $this->assertSame(555, (int) $q[0]['question_id']);
+        $this->assertSame('second', $this->rows('track_e_attempt', 'exe_id = ?', [$exe])[0]['answer']);
+
+        // Updating a question that has no qualify row yet creates one.
+        Event::saveQuestionAttempt($exercise, 1.0, 'x', 556, $exe, 2, 1, false, 0, null, $user->getId(), $course->getId(), 0, 0, 0);
+        $this->conn->executeStatement('DELETE FROM track_e_attempt_qualify WHERE exe_id = ? AND question_id = 556', [$exe]);
+        Event::saveQuestionAttempt($exercise, 3.0, 'y', 556, $exe, 2, 1, true, 0, null, $user->getId(), $course->getId(), 0, 0, 0);
+        $this->assertCount(1, $this->rows('track_e_attempt_qualify', 'exe_id = ? AND question_id = 556', [$exe]));
+    }
+
     public function testSaveQuestionAttemptRejectsMissingIdsAndStoresEmptyAnswerForNull(): void
     {
         $user = $this->makeUser('ev_sqa2');

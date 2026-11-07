@@ -583,23 +583,20 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         $this->assertNull((new Exercise())->getQuestionListPagination(0, 5, '', ''), 'unsaved exercise returns null');
     }
 
-    public function testGetQuestionListPaginationSortByQuestionIsBrokenSql(): void
+    public function testGetQuestionListPaginationSortsByQuestionTitle(): void
     {
         $this->ctx();
-        [$quizId] = $this->quizWithQuestions([1, 2]);
+        // question_order is the reverse of the alphabetical order, so a sort on the title is observable.
+        [$quizId] = $this->quizWithQuestions([2, 1], ['ex_q_alpha', 'ex_q_beta']);
         $e = $this->read($quizId, false);
+        $titles = static fn (array $rows): array => array_column($rows, 'question');
 
-        // PINNED QUIRK (suspected bug): sorting by "question" emits ORDER BY `q.question`, i.e. one identifier
-        // named "q.question", which does not exist, so the query fails instead of sorting.
-        $failed = false;
-        try {
-            $e->getQuestionListPagination(0, 5, 'question', 'asc');
-        } catch (Throwable) {
-            $failed = true;
-        }
-        $this->assertTrue($failed, 'sorting by question title raises an SQL error today');
-        // Any other sort field is ignored.
-        $this->assertCount(2, $e->getQuestionListPagination(0, 5, 'other', 'asc'));
+        // Fixed: ORDER BY `q.question` (one bogus identifier) became q.question.
+        $this->assertSame(['ex_q_alpha', 'ex_q_beta'], $titles($e->getQuestionListPagination(0, 5, 'question', 'asc')));
+        $this->assertSame(['ex_q_beta', 'ex_q_alpha'], $titles($e->getQuestionListPagination(0, 5, 'question', 'DESC')));
+        // Any other sort field, or an invalid direction, keeps the question_order sequence (beta=1, alpha=2).
+        $this->assertSame(['ex_q_beta', 'ex_q_alpha'], $titles($e->getQuestionListPagination(0, 5, 'other', 'asc')));
+        $this->assertSame(['ex_q_beta', 'ex_q_alpha'], $titles($e->getQuestionListPagination(0, 5, 'question', 'asc; DROP')));
     }
 
     public function testCountQuestionsInExerciseUsesTrackedAttemptElseDbCount(): void

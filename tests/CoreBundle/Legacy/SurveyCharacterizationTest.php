@@ -1056,20 +1056,45 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertFalse(\SurveyUtil::checkIfSurveyHasAnswers($s + 100000));
     }
 
-    public function testDeleteUserReportThrowsBecauseItFiltersOnADroppedColumn(): void
+    public function testDeleteUserReportRemovesThatUsersAnswersAndReopensTheInvitation(): void
+    {
+        $s = $this->insertSurvey();
+        $other = $this->insertSurvey();
+        $q = $this->insertQuestion($s, 'sv q');
+        $oq = $this->insertQuestion($other, 'sv oq');
+        $this->insertAnswer($s, $q, '1', 'a');
+        $this->insertAnswer($s, $q, '2', 'a');
+        $this->insertAnswer($other, $oq, '1', 'a');
+        $mine = $this->insertInvitation($s, 1, ['answered' => 1]);
+        $theirs = $this->insertInvitation($s, 2, ['answered' => 1]);
+        $otherSurvey = $this->insertInvitation($other, 1, ['answered' => 1]);
+
+        ob_start();
+        \SurveyUtil::delete_user_report($s, 1);
+        $out = (string) ob_get_clean();
+
+        $this->assertStringContainsString(get_lang('Go back'), $out);
+        $this->assertSame(0, $this->rowCount('c_survey_answer', 'survey_id = ? AND user = ?', [$s, '1']));
+        $this->assertSame(1, $this->rowCount('c_survey_answer', 'survey_id = ? AND user = ?', [$s, '2']));
+        $this->assertSame(1, $this->rowCount('c_survey_answer', 'survey_id = ?', [$other]));
+        $rows = $this->conn->fetchAllKeyValue('SELECT iid, answered FROM c_survey_invitation WHERE survey_id IN (?, ?)', [$s, $other]);
+        $this->assertSame(0, (int) $rows[$mine]);
+        $this->assertSame(1, (int) $rows[$theirs]);
+        $this->assertSame(1, (int) $rows[$otherSurvey]);
+    }
+
+    public function testDeleteUserReportWithoutAUserDoesNothing(): void
     {
         $s = $this->insertSurvey();
         $q = $this->insertQuestion($s, 'sv q');
         $this->insertAnswer($s, $q, '1', 'a');
 
-        // PINNED QUIRK: c_survey_answer has no c_id column any more, the DELETE is rejected.
-        $this->expectException(\Chamilo\CoreBundle\Exception\NotAllowedException::class);
         ob_start();
-        try {
-            \SurveyUtil::delete_user_report($s, 1);
-        } finally {
-            ob_end_clean();
-        }
+        \SurveyUtil::delete_user_report($s, 0);
+        $out = (string) ob_get_clean();
+
+        $this->assertSame('', $out);
+        $this->assertSame(1, $this->rowCount('c_survey_answer', 'survey_id = ?', [$s]));
     }
 
     // ---------------------------------------------------------------- SurveyUtil: first/last question check

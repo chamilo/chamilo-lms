@@ -303,6 +303,7 @@ class SurveyUtil
         $course_id = api_get_course_int_id();
         $survey_id = (int) $survey_id;
         $user_id = Database::escape_string($user_id);
+        $result = false;
 
         if (!empty($survey_id) && !empty($user_id)) {
 
@@ -314,7 +315,7 @@ class SurveyUtil
 
             // delete data from survey_answer by user_id and survey_id
             $sql = "DELETE FROM $table_survey_answer
-			        WHERE c_id = $course_id AND survey_id = '".$survey_id."' AND user = '".$user_id."' $sessionCondition";
+			        WHERE survey_id = '".$survey_id."' AND user = '".$user_id."' $sessionCondition";
             Database::query($sql);
             // update field answered from survey_invitation by user_id and survey_id
             $sql = "UPDATE $table_survey_invitation SET answered = '0'

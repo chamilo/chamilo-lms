@@ -681,12 +681,14 @@ final class EventCharacterizationTest extends KernelTestCase
         $this->assertSame($course[0]['login_course_date'], $platform[0]['login_date']);
         $this->assertSame($course[0]['logout_course_date'], $platform[0]['logout_date']);
 
-        // Removal is keyed on the exact duration and always returns false (current behaviour).
+        // Removal is keyed on the exact duration; it returns true only when it deleted something (fixed: it used
+        // to return false even after deleting).
         $this->assertFalse(Event::eventRemoveVirtualCourseTime($cid, $uid, 0, '', 77));
         $this->assertCount(1, $this->rows('track_e_course_access', 'user_id = ?', [$uid]));
         $this->assertFalse(Event::eventRemoveVirtualCourseTime($cid, $uid, 0, '02:00:00', 77));
         $this->assertCount(1, $this->rows('track_e_course_access', 'user_id = ?', [$uid]));
-        $this->assertFalse(Event::eventRemoveVirtualCourseTime($cid, $uid, 0, '01:30:00', 77));
+        $this->assertTrue(Event::eventRemoveVirtualCourseTime($cid, $uid, 0, '01:30:00', 77));
+        $this->assertFalse(Event::eventRemoveVirtualCourseTime($cid, $uid, 0, '01:30:00', 77), 'nothing left to remove');
         $this->assertCount(0, $this->rows('track_e_course_access', 'user_id = ?', [$uid]));
         $this->assertCount(0, $this->rows('track_e_login', 'login_user_id = ?', [$uid]));
     }

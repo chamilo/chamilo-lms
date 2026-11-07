@@ -2165,6 +2165,7 @@ class Event
         }
 
         $originalVirtualTime = Database::escape_string($virtualTime);
+        $removed = false;
 
         $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $platformTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
@@ -2202,6 +2203,7 @@ class Event
             $sql = "DELETE FROM $courseTrackingTable
                     WHERE course_access_id = $courseAccessId";
             Database::query($sql);
+            $removed = true;
         }
         $sql = "SELECT login_id
                 FROM $platformTrackingTable
@@ -2216,6 +2218,7 @@ class Event
             $sql = "DELETE FROM $platformTrackingTable
                     WHERE login_id = $loginAccessId";
             Database::query($sql);
+            $removed = true;
         }
 
         if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
@@ -2247,10 +2250,11 @@ class Event
             if ($result) {
                 $sql = 'DELETE FROM track_e_access_complete WHERE id = '.$result['id'];
                 Database::query($sql);
+                $removed = true;
             }
         }
 
-        return false;
+        return $removed;
     }
 
     /**

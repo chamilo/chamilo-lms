@@ -293,10 +293,20 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
         $this->assertSame($total + 1, (int) CourseManager::count_courses());
         $this->assertSame($open + 1, (int) CourseManager::count_courses(null, Course::OPEN_WORLD));
         $this->assertSame($urlTotal + 1, (int) CourseManager::count_courses($this->getAccessUrl()->getId()));
+
+        // Fixed: visibility 0 (CLOSED) used to count as "empty" and silently disabled the filter.
+        $closed = $this->createCourse('cm_count_closed');
+        $this->setVisibility($closed, Course::CLOSED);
+        $expectedClosed = (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM course WHERE visibility = ?', [Course::CLOSED]);
+        $this->assertGreaterThanOrEqual(1, $expectedClosed);
+        $this->assertSame($expectedClosed, (int) CourseManager::count_courses(null, Course::CLOSED));
+        $this->assertLessThan((int) CourseManager::count_courses(), (int) CourseManager::count_courses(null, Course::CLOSED));
         $this->assertSame(
-            (int) CourseManager::count_courses(),
-            (int) CourseManager::count_courses(null, Course::CLOSED),
-            'PINNED QUIRK: visibility 0 (CLOSED) is "empty" so it is ignored and the filter is not applied'
+            (int) $this->conn()->fetchOne(
+                'SELECT COUNT(*) FROM course c INNER JOIN access_url_rel_course u ON u.c_id = c.id WHERE u.access_url_id = ? AND c.visibility = ?',
+                [$this->getAccessUrl()->getId(), Course::CLOSED]
+            ),
+            (int) CourseManager::count_courses($this->getAccessUrl()->getId(), Course::CLOSED)
         );
     }
 

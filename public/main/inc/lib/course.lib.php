@@ -5236,12 +5236,12 @@ class CourseManager
         if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
             $sql .= ", $table_course_rel_access_url u
                     WHERE c.id = u.c_id AND u.access_url_id = $access_url_id";
-            if (!empty($visibility)) {
+            if (null !== $visibility && '' !== $visibility) {
                 $visibility = intval($visibility);
                 $sql .= " AND visibility = $visibility ";
             }
         } else {
-            if (!empty($visibility)) {
+            if (null !== $visibility && '' !== $visibility) {
                 $visibility = intval($visibility);
                 $sql .= " WHERE visibility = $visibility ";
             }

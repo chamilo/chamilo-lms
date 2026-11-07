@@ -1670,7 +1670,8 @@ class UserGroupModel extends Model
         }
 
         // Multidimensional sort
-        $result = msort($result, $sidx, $sord);
+        // msort() has its direction inverted ('desc' sorts lowest first), so swap it here.
+        $result = msort($result, $sidx, 'DESC' === strtoupper((string) $sord) ? 'asc' : 'desc');
 
         return $result;
     }

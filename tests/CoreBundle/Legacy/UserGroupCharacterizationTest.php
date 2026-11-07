@@ -177,9 +177,9 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $rows = $this->model->getUsergroupsPagination('title', 'asc', 0, 10, $where);
 
         $this->assertCount(2, $rows);
-        // CURRENT BEHAVIOUR: the PHP-side msort() is inverted w.r.t. its argument ('asc' yields the
-        // highest title first, 'desc' the lowest first), whatever the SQL ORDER BY did.
-        $this->assertSame(['ug_pg_2', 'ug_pg_1'], array_column($rows, 'title'));
+        // Fixed: msort() sorts 'desc' as lowest-first, so the direction was applied inverted ('asc'
+        // returned the highest title first); it is now honoured as asked.
+        $this->assertSame(['ug_pg_1', 'ug_pg_2'], array_column($rows, 'title'));
         $byTitle = array_column($rows, null, 'title');
         $this->assertSame(1, $byTitle['ug_pg_1']['courses']);
         $this->assertSame(1, $byTitle['ug_pg_1']['sessions']);
@@ -189,7 +189,7 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->assertMatchesRegularExpression('#>2</a>#', $byTitle['ug_pg_1']['users']);
 
         $desc = $this->model->getUsergroupsPagination('title', 'desc', 0, 10, $where);
-        $this->assertSame(['ug_pg_1', 'ug_pg_2'], array_column($desc, 'title'));
+        $this->assertSame(['ug_pg_2', 'ug_pg_1'], array_column($desc, 'title'));
 
         // LIMIT $start, $limit is applied to the ASC title order before the PHP-side sort.
         $page = $this->model->getUsergroupsPagination('title', 'asc', 1, 1, $where);

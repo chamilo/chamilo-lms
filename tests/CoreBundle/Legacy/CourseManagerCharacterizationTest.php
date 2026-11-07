@@ -1113,12 +1113,34 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
 
     // ---------------------------------------------------------------- misc
 
-    public function testGetCoursesWithoutSessionIsBrokenAgainstCurrentSchema(): void
+    public function testGetCoursesWithoutSessionListsCoursesNotInAnySession(): void
     {
-        // PINNED QUIRK: the subquery selects session_rel_course.course_code, a column that no longer exists
-        // (the table has c_id), so this method cannot run. Pinned so a rewrite notices it changed.
-        $this->expectException(Throwable::class);
-        CourseManager::getCoursesWithoutSession();
+        // Fixed: the subquery selected session_rel_course.course_code (now c_id) and always threw.
+        $free = $this->createCourse('cm_nos_free');
+        $inSession = $this->createCourse('cm_nos_insess');
+        $hidden = $this->createCourse('cm_nos_hidden');
+        $this->setVisibility($hidden, Course::HIDDEN);
+        $session = $this->createSession('cm_nos_session');
+        $this->sessionCourse($session->getId(), $inSession);
+
+        $ids = fn (array $rows): array => array_map('intval', $this->col($rows, 'id'));
+
+        $default = $ids(CourseManager::getCoursesWithoutSession());
+        $this->assertContains((int) $free->getId(), $default);
+        $this->assertNotContains((int) $inSession->getId(), $default, 'a course in a session is excluded');
+        $this->assertNotContains((int) $hidden->getId(), $default, 'hidden courses are excluded unless includeClosed');
+        $this->assertContains((int) $hidden->getId(), $ids(CourseManager::getCoursesWithoutSession(null, null, true)));
+        $this->assertEqualsCanonicalizing(['id', 'code', 'title', 0, 1, 2], array_keys(CourseManager::getCoursesWithoutSession()[0]));
+
+        // With dates only the sessions of exactly that period count.
+        $this->conn()->executeStatement(
+            'UPDATE session SET access_start_date = ?, access_end_date = ? WHERE id = ?',
+            ['2031-01-01 00:00:00', '2031-01-31 00:00:00', $session->getId()]
+        );
+        $samePeriod = $ids(CourseManager::getCoursesWithoutSession('2031-01-01 00:00:00', '2031-01-31 00:00:00'));
+        $this->assertNotContains((int) $inSession->getId(), $samePeriod);
+        $otherPeriod = $ids(CourseManager::getCoursesWithoutSession('2032-01-01 00:00:00', '2032-01-31 00:00:00'));
+        $this->assertContains((int) $inSession->getId(), $otherPeriod, 'its session is not in that period');
     }
 
     public function testGetCourseByCategoryReadsGradebookCategory(): void

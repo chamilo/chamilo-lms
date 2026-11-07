@@ -6289,8 +6289,8 @@ class CourseManager
 
         $sql = "SELECT id, code, title
                 FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE $visibility code NOT IN (
-                    SELECT DISTINCT course_code
+                WHERE $visibility id NOT IN (
+                    SELECT DISTINCT c_id
                     FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE).$dateConditional."
                 )
                 ORDER BY id";

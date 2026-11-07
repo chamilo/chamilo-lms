@@ -885,11 +885,12 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $this->rawMessage($a, [$b, $c]);
         $this->rawMessage($a, [$b]);
         $this->rawMessage($a, [$b, $gone]);
+        $this->rawMessage($a, []); // a message without recipient is still a sent message
         $this->rawMessage($b, [$a]);
         $this->rawMessage($gone, [$a]);
 
         $sent = Statistics::getMessages('sent');
-        $this->assertSame(3, (int) $sent[$this->keyFor($sent, $a)]);
+        $this->assertSame(4, (int) $sent[$this->keyFor($sent, $a)]);
         $this->assertSame(1, (int) $sent[$this->keyFor($sent, $b)]);
         $this->assertNull($this->keyFor($sent, $gone), 'soft-deleted sender excluded');
         $this->assertNull($this->keyFor($sent, $c));

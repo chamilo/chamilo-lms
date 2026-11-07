@@ -10359,10 +10359,20 @@ class Exercise
                     switch ($question->type) {
                         case FILL_IN_BLANKS:
                         case FILL_IN_BLANKS_COMBINATION:
-                            $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
-                            if ($option['answer'] === "0") {
-                                $option['answer'] = "there is 0 as answer so we do not want to consider it empty";
+                            // fill_in_blank_answer_to_string() skips a blank holding "0" (empty("0")), so
+                            // look at each blank here: "0" is a real answer, only an empty blank is not.
+                            $isAnswered = false;
+                            foreach ((array) $this->fill_in_blank_answer_to_array($option['answer']) as $blank) {
+                                $blank = strip_tags($blank);
+                                $blank = explode('/', api_substr($blank, 1, api_strlen($blank) - 2));
+                                if ('' !== trim(str_replace('&nbsp;', '', $blank[0]))) {
+                                    $isAnswered = true;
+
+                                    break;
+                                }
                             }
+                            $option['answer'] = $isAnswered ? '1' : '';
+
                             break;
                     }
                 }

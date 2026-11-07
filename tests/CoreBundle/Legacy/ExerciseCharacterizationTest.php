@@ -1007,17 +1007,21 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         $exe = $this->seedExe(['exe_user_id' => $user->getId(), 'c_id' => $course->getId(), 'exe_exo_id' => $quizId]);
         $this->seedAttempt($exe, $user->getId(), $q1, '12', 1);
         $this->seedAttempt($exe, $user->getId(), $q2, '', 2);
-        $this->seedAttempt($exe, $user->getId(), $q3, '0', 3);
+        $this->seedAttempt($exe, $user->getId(), $q3, '[0]', 3);
         $this->seedAttempt($exe, $user->getId(), $q4, '0', 4);
+        $q5 = $this->makeQuestion('ex_ans_5', FILL_IN_BLANKS);
+        $q6 = $this->makeQuestion('ex_ans_6', FILL_IN_BLANKS);
+        $this->seedAttempt($exe, $user->getId(), $q5, '[ ]', 5);
+        $this->seedAttempt($exe, $user->getId(), $q6, '[Rome]', 6);
         $e = $this->read($quizId, false);
 
         $saved = array_map('intval', $e->getUserAnswersSavedInExercise($exe));
 
-        // q2 is empty. PINNED QUIRK: an answer "0" is empty() in PHP so q4 (free answer) does not count, and the
-        // fill-in-blanks guard meant to protect "0" is dead code (the blanks are parsed to '' first), so q3 does not
-        // count either: only a non-"0" answer counts as answered.
-        $this->assertSame([$q1], $saved);
-        $this->assertSame(1, $e->countUserAnswersSavedInExercise($exe));
+        // q2 is empty. Fixed: a fill-in-blanks blank holding "0" is a real answer (q3 counts); the guard meant to
+        // protect it was dead code because the blanks were parsed (and "0" dropped) first. A blank holding only
+        // a space (q5) is still empty. Other types keep treating "0" as "nothing chosen" (q4).
+        $this->assertSame([$q1, $q3, $q6], $saved);
+        $this->assertSame(3, $e->countUserAnswersSavedInExercise($exe));
         $this->assertSame([], $e->getUserAnswersSavedInExercise(2000000000));
         $this->assertSame(0, $e->countUserAnswersSavedInExercise(2000000000));
     }

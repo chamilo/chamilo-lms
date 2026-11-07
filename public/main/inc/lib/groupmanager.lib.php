@@ -855,25 +855,30 @@ class GroupManager
         }
 
         $course_info = api_get_course_info($courseCode);
-        $course_id = $course_info['real_id'];
-        $name = Database::escape_string($name);
+        if (empty($course_info['real_id'])) {
+            return [];
+        }
+        $course_id = (int) $course_info['real_id'];
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
-        $sessionCondition = api_get_session_condition($sessionId);
-
-        $table = Database::get_course_table(TABLE_GROUP);
-        $sql = "SELECT * FROM $table
-                WHERE
-                  c_id = $course_id AND
-                  name = '$name'
-                  $sessionCondition
-                LIMIT 1";
-        $res = Database::query($sql);
-        $group = [];
-        if (Database::num_rows($res)) {
-            $group = Database::fetch_assoc($res);
+        $sessionCondition = empty($sessionId) ? 'rl.session_id IS NULL' : 'rl.session_id = :session';
+        $params = ['course' => $course_id, 'title' => $name];
+        if (!empty($sessionId)) {
+            $params['session'] = $sessionId;
         }
 
-        return $group;
+        $table = Database::get_course_table(TABLE_GROUP);
+        // c_group_info has no c_id nor name: the course/session come from the resource link, the name is "title".
+        $sql = "SELECT g.* FROM $table g
+                INNER JOIN resource_link rl ON rl.resource_node_id = g.resource_node_id
+                WHERE
+                  rl.c_id = :course AND
+                  rl.deleted_at IS NULL AND
+                  $sessionCondition AND
+                  g.title = :title
+                LIMIT 1";
+        $group = Database::getManager()->getConnection()->fetchAssociative($sql, $params);
+
+        return false === $group ? [] : $group;
     }
 
     /**
@@ -1083,19 +1088,22 @@ class GroupManager
         }
 
         $course_info = api_get_course_info($course_code);
-        $courseId = $course_info['real_id'];
-        $title = Database::escape_string($title);
-        $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
-        $sql = "SELECT * FROM $table
-                WHERE c_id = $courseId AND title = '$title'
-                LIMIT 1";
-        $res = Database::query($sql);
-        $category = [];
-        if (Database::num_rows($res)) {
-            $category = Database::fetch_assoc($res);
+        if (empty($course_info['real_id'])) {
+            return [];
         }
+        $courseId = (int) $course_info['real_id'];
+        $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
+        // c_group_category has no c_id: the course is given by the category's resource link.
+        $sql = "SELECT c.* FROM $table c
+                INNER JOIN resource_link rl ON rl.resource_node_id = c.resource_node_id
+                WHERE rl.c_id = :course AND rl.deleted_at IS NULL AND c.title = :title
+                LIMIT 1";
+        $category = Database::getManager()->getConnection()->fetchAssociative(
+            $sql,
+            ['course' => $courseId, 'title' => $title]
+        );
 
-        return $category;
+        return false === $category ? [] : $category;
     }
 
     /**

@@ -84,6 +84,15 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
         return (int) $this->conn()->lastInsertId();
     }
 
+    private function makeSession(): int
+    {
+        $this->conn()->executeStatement(
+            "INSERT INTO session (title, nbr_courses, nbr_users, nbr_classes, visibility, status) VALUES ('gm_session', 0, 0, 0, 1, 0)"
+        );
+
+        return (int) $this->conn()->lastInsertId();
+    }
+
     private function makeCategory(string $title, int $groupsPerUser = 2, int $maxStudent = 5): int
     {
         $this->conn()->executeStatement(
@@ -117,6 +126,34 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
         $this->conn()->insert('c_group_info', $row);
 
         return (int) $this->conn()->lastInsertId();
+    }
+
+    /**
+     * Gives a fixture group ("c_group_info") or category ("c_group_category") a resource node and a published
+     * resource link to the given course (and session), which is what scopes them to a course in this schema.
+     * Prepared statements only; rows are rolled back with the test transaction.
+     */
+    private function linkToCourse(string $table, int $id, int $courseId = 1, ?int $sessionId = null): void
+    {
+        $typeTitle = 'c_group_info' === $table ? 'groups' : 'group_categories';
+        $typeId = (int) $this->conn()->fetchOne('SELECT id FROM resource_type WHERE title = ?', [$typeTitle]);
+        $this->assertGreaterThan(0, $typeId);
+        $now = '2020-01-01 00:00:00';
+        $this->conn()->executeStatement(
+            'INSERT INTO resource_node (resource_type_id, creator_id, title, slug, created_at, updated_at, public, uuid)
+             VALUES (?, 1, ?, ?, ?, ?, 0, ?)',
+            [$typeId, 'gm_node', 'gm-node-'.$table.'-'.$id, $now, $now, random_bytes(16)]
+        );
+        $nodeId = (int) $this->conn()->lastInsertId();
+        $this->conn()->executeStatement(
+            'UPDATE '.$table.' SET resource_node_id = ? WHERE iid = ?',
+            [$nodeId, $id]
+        );
+        $this->conn()->executeStatement(
+            'INSERT INTO resource_link (resource_node_id, c_id, session_id, visibility, display_order, resource_type_group,
+                created_at, updated_at) VALUES (?, ?, ?, 2, 0, 0, ?, ?)',
+            [$nodeId, $courseId, $sessionId, $now, $now]
+        );
     }
 
     private function member(int $userId, int $groupId, int $cid = 1): void
@@ -190,14 +227,25 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
         $this->assertSame([], GroupManager::get_category(999999999), 'unknown id: fetch_array() on no row gives []');
     }
 
-    public function testGetCategoryByTitleQueriesANonExistentColumn(): void
+    public function testGetCategoryByTitleFindsTheCategoryOfTheCourse(): void
     {
-        $this->makeCategory('cat_title');
+        // Fixed: the SQL filtered on c_group_category.c_id (column gone from the schema) and threw for any title.
+        // The course now comes from the category's resource link, like every other course-scoped lookup.
+        $mine = $this->makeCategory('cat_title');
+        $elsewhere = $this->makeCategory('cat_other_course');
+        $unlinked = $this->makeCategory('cat_unlinked');
+        $this->linkToCourse('c_group_category', $mine, 1);
+        $this->linkToCourse('c_group_category', $elsewhere, 2);
 
-        // PINNED QUIRK (probable bug): the SQL filters on c_group_category.c_id, a column that no longer exists
-        // in the schema, so a non-empty title throws instead of returning the category.
-        $this->expectException(Throwable::class);
-        GroupManager::getCategoryByTitle('gm_cat_title');
+        $row = GroupManager::getCategoryByTitle('gm_cat_title');
+        $this->assertSame((string) $mine, (string) $row['iid']);
+        $this->assertSame('gm_cat_title', $row['title']);
+        $this->assertSame((string) $mine, (string) GroupManager::getCategoryByTitle("  gm_cat_title ")['iid'], 'title is trimmed');
+        $this->assertSame([], GroupManager::getCategoryByTitle('gm_cat_other_course'), 'linked to another course only');
+        $this->assertSame((string) $elsewhere, (string) GroupManager::getCategoryByTitle('gm_cat_other_course', 'USINGCHAMILO')['iid'], 'explicit course code');
+        $this->assertSame([], GroupManager::getCategoryByTitle('gm_cat_unlinked'), 'no resource link: in no course');
+        $this->assertSame([], GroupManager::getCategoryByTitle("gm_cat_title' OR '1'='1"), 'title is bound, never interpolated');
+        $this->assertGreaterThan(0, $unlinked);
     }
 
     public function testGetCategoryByTitleBlankTitleShortCircuits(): void
@@ -412,14 +460,24 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
         }
     }
 
-    public function testGetGroupByNameQueriesANonExistentColumn(): void
+    public function testGetGroupByNameFindsTheGroupOfTheCourseAndSession(): void
     {
-        $this->makeGroup('byname');
+        // Fixed: the SQL filtered on c_group_info.c_id and .name (neither exists: the column is "title") and threw.
+        $sessionId = $this->makeSession();
+        $mine = $this->makeGroup('byname');
+        $inSession = $this->makeGroup('byname_sess');
+        $elsewhere = $this->makeGroup('byname_other');
+        $this->linkToCourse('c_group_info', $mine, 1);
+        $this->linkToCourse('c_group_info', $inSession, 1, $sessionId);
+        $this->linkToCourse('c_group_info', $elsewhere, 2);
 
-        // PINNED QUIRK (probable bug): the SQL filters on c_group_info.c_id and .name, which no longer exist
-        // (the title column is "title"), so a non-empty name throws instead of finding the group.
-        $this->expectException(Throwable::class);
-        GroupManager::getGroupByName('gm_byname');
+        $row = GroupManager::getGroupByName('gm_byname');
+        $this->assertSame((string) $mine, (string) $row['iid']);
+        $this->assertSame('gm_byname', $row['title']);
+        $this->assertSame([], GroupManager::getGroupByName('gm_byname_sess'), 'session group is not in the base course');
+        $this->assertSame((string) $inSession, (string) GroupManager::getGroupByName('gm_byname_sess', null, $sessionId)['iid']);
+        $this->assertSame([], GroupManager::getGroupByName('gm_byname_other'), 'linked to another course only');
+        $this->assertSame([], GroupManager::getGroupByName("gm_byname' OR '1'='1"), 'name is bound, never interpolated');
     }
 
     public function testGetGroupByNameBlankShortCircuits(): void

@@ -78,6 +78,9 @@ function displayWorkActionLinks($id, $action, $isTutor)
  * @param int    $courseId
  *
  * @return array
+ *
+ * @deprecated Works no longer have a url column (files live in resource nodes), so the query always throws
+ *   and nothing calls it. Use get_work_data_by_id() or the student publication repository.
  */
 function get_work_data_by_path($path, $courseId = 0)
 {
@@ -905,6 +908,10 @@ function deleteDirWork($id)
  * @param int $id
  *
  * @return string Path (or -1 on error)
+ *
+ * @deprecated Works no longer have id/url columns, so the query always throws. Its only caller is
+ *   public/main/plagiarism/compilatio/upload.php, itself tied to the removed file-url model. Use the
+ *   resource node file path instead.
  */
 function get_work_path($id)
 {
@@ -930,6 +937,9 @@ function get_work_path($id)
  * @param int    $parent_id
  *
  * @return mixed Int -1 on error, sql query result on success
+ *
+ * @deprecated Works no longer have a url column (an existing row makes it fail on an undefined key), and
+ *   moving a work is done through the repository in work.php (move_to). Nothing calls it.
  */
 function updateWorkUrl($id, $new_path, $parent_id)
 {
@@ -3374,6 +3384,9 @@ function sendEmailToStudentsOnHomeworkCreation($workId, $courseId, $sessionId = 
  * @param string $url
  *
  * @return bool
+ *
+ * @deprecated Works no longer have id/url columns, so the query always throws and nothing calls it. Use
+ *   checkExistingWorkFileName() (by title) instead.
  */
 function is_work_exist_by_url($url)
 {

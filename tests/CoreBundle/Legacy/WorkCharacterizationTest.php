@@ -909,7 +909,8 @@ final class WorkCharacterizationTest extends KernelTestCase
         $this->setContext($this->admin(), $this->course(1));
         $work = $this->work();
 
-        // PINNED QUIRK: the row is found but its "url" column no longer exists (undefined array key).
+        // Deprecated, not repaired: it is tied to the removed file-url model and nothing calls it, so it keeps
+        // failing on the missing "url" column (undefined array key) until it is removed.
         try {
             updateWorkUrl($work, '/wk/', 0);
             $this->fail('Expected an undefined array key "url"');
@@ -926,7 +927,7 @@ final class WorkCharacterizationTest extends KernelTestCase
     public static function brokenAgainstCurrentSchema(): array
     {
         return [
-            // c_student_publication has no "url" / "id" / "c_id" / "session_id" column any more.
+            // c_student_publication has no "url" / "id" column any more.
             'get_work_data_by_path' => [static fn () => get_work_data_by_path('/wk_x', 1)],
             'is_work_exist_by_url' => [static fn () => is_work_exist_by_url('/wk_x')],
             'get_work_path' => [static fn () => get_work_path(1)],
@@ -940,8 +941,9 @@ final class WorkCharacterizationTest extends KernelTestCase
     {
         $this->setContext($this->admin(), $this->course(1));
 
-        // PINNED QUIRK: these functions still query columns (url, id, c_id, session_id) that no longer exist in
-        // the c_student_publication* tables, so they fail. A rewrite that repairs them changes this on purpose.
+        // These four are @deprecated and left as is: they belong to the removed file-url model (url / id columns),
+        // nothing calls them but get_work_path() in the compilatio plugin, and there is no schema-faithful meaning to
+        // repair them to. They fail until removed.
         $this->expectException(Throwable::class);
         $call();
     }

@@ -1196,7 +1196,9 @@ class CourseManager
                 ],
             ];
 
-            return Database::delete($courseUserTable, $cond);
+            Database::delete($courseUserTable, $cond);
+
+            return true;
         } else {
             return true; // Register does not exist
         }

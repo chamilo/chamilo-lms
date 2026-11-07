@@ -964,7 +964,8 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
         $this->assertSame([], CourseManager::getCatalogCourseList(true, $other->getId()));
         $this->assertContains($shown->getCode(), CourseManager::getCatalogCourseList(true), 'no user: any user restriction');
 
-        $this->assertSame(1, CourseManager::removeUserVisibilityToCourseInCatalogue($user->getId(), $shown->getCode()), 'returns the deleted row count');
+        // Fixed: it returned the deleted row count (int) while its docblock promises a bool.
+        $this->assertTrue(CourseManager::removeUserVisibilityToCourseInCatalogue($user->getId(), $shown->getCode()), 'true when a row was removed');
         $this->assertSame([], CourseManager::getCatalogCourseList(true, $user->getId()));
         $this->assertTrue(CourseManager::removeUserVisibilityToCourseInCatalogue($user->getId(), $shown->getCode()), 'removing a missing row is still true');
         $this->assertSame([$hidden->getCode()], CourseManager::getCatalogCourseList(false, $user->getId()), 'visible=0 row not touched when removing visible=1');

@@ -1089,28 +1089,18 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
         CourseManager::getCountRegisteredUsersWithCourseExtraField('cm_xf_x');
     }
 
-    public function testUpdateCourseExtraFieldValueIsBrokenByParameterKeyMismatch(): void
+    public function testUpdateCourseExtraFieldValueSavesAndOverwritesTheValue(): void
     {
-        // PINNED QUIRK: update_course_extra_field_value() passes the value under the key 'value' while
-        // ExtraFieldValue::save() reads 'field_value', so the call raises "Undefined array key" instead of saving.
+        // Fixed: the value was passed under the key 'value' while ExtraFieldValue::save() reads 'field_value',
+        // so nothing was ever saved.
         $course = $this->createCourse('cm_xfb_a');
         CourseManager::create_course_extra_field('cm_xfb_var', 1, 'cm_xfb_label');
 
-        set_error_handler(static function (int $no, string $str): bool {
-            if (E_WARNING !== $no) {
-                return false;
-            }
+        CourseManager::update_course_extra_field_value($course->getCode(), 'cm_xfb_var', 'first');
+        $this->assertSame('first', CourseManager::get_course_extra_field_value('cm_xfb_var', $course->getCode()));
 
-            throw new \ErrorException($str, 0, $no);
-        });
-
-        try {
-            $this->expectException(\ErrorException::class);
-            $this->expectExceptionMessage('field_value');
-            CourseManager::update_course_extra_field_value($course->getCode(), 'cm_xfb_var', 'x');
-        } finally {
-            restore_error_handler();
-        }
+        CourseManager::update_course_extra_field_value($course->getCode(), 'cm_xfb_var', 'second');
+        $this->assertSame('second', CourseManager::get_course_extra_field_value('cm_xfb_var', $course->getCode()));
     }
 
     // ---------------------------------------------------------------- misc

@@ -3396,7 +3396,7 @@ class CourseManager
         $params = [
             'item_id' => $courseId,
             'variable' => $variable,
-            'value' => $value,
+            'field_value' => $value,
         ];
 
         return $extraFieldValues->save($params);

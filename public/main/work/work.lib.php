@@ -3607,7 +3607,7 @@ function display_list_users_without_publication($task_id, $studentId = null)
 /**
  * @param int $documentId
  * @param int $workId
- * @param int $courseId
+ * @param int $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  */
 function addDocumentToWork($documentId, $workId, $courseId)
 {
@@ -3615,7 +3615,6 @@ function addDocumentToWork($documentId, $workId, $courseId)
     $params = [
         'document_id' => $documentId,
         'work_id' => $workId,
-        'c_id' => $courseId,
     ];
     Database::insert($table, $params);
 }
@@ -3623,7 +3622,7 @@ function addDocumentToWork($documentId, $workId, $courseId)
 /**
  * @param int $documentId
  * @param int $workId
- * @param int $courseId
+ * @param int $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  *
  * @return array
  */
@@ -3631,7 +3630,7 @@ function getDocumentToWork($documentId, $workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
     $params = [
-        'document_id = ? and work_id = ? and c_id = ?' => [$documentId, $workId, $courseId],
+        'document_id = ? and work_id = ?' => [$documentId, $workId],
     ];
 
     return Database::select('*', $table, ['where' => $params]);
@@ -3683,7 +3682,7 @@ function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $
 
 /**
  * @param int $workId
- * @param int $courseId
+ * @param int $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  *
  * @return array
  */
@@ -3700,13 +3699,13 @@ function getAllDocumentToWork($workId, $courseId)
 /**
  * @param int $documentId
  * @param int $workId
- * @param int $courseId
+ * @param int $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  */
 function deleteDocumentToWork($documentId, $workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
     $params = [
-        'document_id = ? and work_id = ? and c_id = ?' => [$documentId, $workId, $courseId],
+        'document_id = ? and work_id = ?' => [$documentId, $workId],
     ];
     Database::delete($table, $params);
 }
@@ -3714,7 +3713,7 @@ function deleteDocumentToWork($documentId, $workId, $courseId)
 /**
  * @param int $userId
  * @param int $workId
- * @param int $courseId
+ * @param int $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  */
 function addUserToWork($userId, $workId, $courseId)
 {
@@ -3722,7 +3721,6 @@ function addUserToWork($userId, $workId, $courseId)
     $params = [
         'user_id' => $userId,
         'work_id' => $workId,
-        'c_id' => $courseId,
     ];
     Database::insert($table, $params);
 }
@@ -3730,7 +3728,7 @@ function addUserToWork($userId, $workId, $courseId)
 /**
  * @param int $userId
  * @param int $workId
- * @param int $courseId
+ * @param int $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  *
  * @return array
  */
@@ -3738,7 +3736,7 @@ function getUserToWork($userId, $workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
     $params = [
-        'user_id = ? and work_id = ? and c_id = ?' => [$userId, $workId, $courseId],
+        'user_id = ? and work_id = ?' => [$userId, $workId],
     ];
 
     return Database::select('*', $table, ['where' => $params]);
@@ -3746,7 +3744,7 @@ function getUserToWork($userId, $workId, $courseId)
 
 /**
  * @param int  $workId
- * @param int  $courseId
+ * @param int  $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  * @param bool $getCount
  *
  * @return array|int
@@ -3778,13 +3776,13 @@ function getAllUserToWork($workId, $courseId, $getCount = false)
 /**
  * @param int $userId
  * @param int $workId
- * @param int $courseId
+ * @param int $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  */
 function deleteUserToWork($userId, $workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
     $params = [
-        'user_id = ? and work_id = ? and c_id = ?' => [$userId, $workId, $courseId],
+        'user_id = ? and work_id = ?' => [$userId, $workId],
     ];
     Database::delete($table, $params);
 }

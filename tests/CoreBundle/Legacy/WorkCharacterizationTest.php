@@ -415,7 +415,9 @@ final class WorkCharacterizationTest extends KernelTestCase
             array_map('intval', array_column($rows, 'user_id'))
         );
         $this->assertSame(2, getAllUserToWork($w1, 1, true));
-        $this->assertSame(2, getAllUserToWork($w1, 999, true), 'PINNED QUIRK: the course id argument is ignored');
+        // Not a bug: c_student_publication_rel_user lost its c_id column and a work iid is unique platform-wide,
+        // so the course id argument is accepted for compatibility but cannot narrow anything.
+        $this->assertSame(2, getAllUserToWork($w1, 999, true));
         $this->assertSame(0, getAllUserToWork($this->folder(), 1, true));
         $this->assertSame([], getAllUserToWork($this->folder(), 1));
     }
@@ -484,8 +486,62 @@ final class WorkCharacterizationTest extends KernelTestCase
 
         $this->assertCount(1, $rows);
         $this->assertSame($w1, (int) $rows[0]['work_id']);
-        $this->assertCount(1, getAllDocumentToWork($w1, 999), 'PINNED QUIRK: the course id argument is ignored');
+        // Not a bug: c_student_publication_rel_document has no c_id column any more (see getAllUserToWork).
+        $this->assertCount(1, getAllDocumentToWork($w1, 999));
         $this->assertSame([], getAllDocumentToWork($this->folder(), 1));
+    }
+
+    private function document(): int
+    {
+        $this->conn->insert('c_document', ['title' => 'wk_doc_'.(++$this->seq), 'filetype' => 'file', 'readonly' => 0, 'template' => 0]);
+
+        return (int) $this->conn->lastInsertId();
+    }
+
+    public function testAddGetAndDeleteUserToWorkRoundTripPerWorkAndUser(): void
+    {
+        $w1 = $this->folder();
+        $w2 = $this->folder();
+        $me = $this->student()->getId();
+        $other = $this->other()->getId();
+
+        addUserToWork($me, $w1, 1);
+        addUserToWork($other, $w1, 1);
+        addUserToWork($me, $w2, 1);
+
+        $row = getUserToWork($me, $w1, 1);
+        $this->assertCount(1, $row);
+        $this->assertSame($w1, (int) $row[0]['work_id']);
+        $this->assertSame([], getUserToWork($other, $w2, 1), 'the pair (user, work) is what is looked up');
+
+        deleteUserToWork($me, $w1, 1);
+
+        $this->assertSame([], getUserToWork($me, $w1, 1));
+        $this->assertCount(1, getUserToWork($other, $w1, 1), 'the other user of the same work stays');
+        $this->assertCount(1, getUserToWork($me, $w2, 1), 'the same user in another work stays');
+    }
+
+    public function testAddGetAndDeleteDocumentToWorkRoundTripPerWorkAndDocument(): void
+    {
+        $w1 = $this->folder();
+        $w2 = $this->folder();
+        $d1 = $this->document();
+        $d2 = $this->document();
+
+        addDocumentToWork($d1, $w1, 1);
+        addDocumentToWork($d2, $w1, 1);
+        addDocumentToWork($d1, $w2, 1);
+
+        $row = getDocumentToWork($d1, $w1, 1);
+        $this->assertCount(1, $row);
+        $this->assertSame($w1, (int) $row[0]['work_id']);
+        $this->assertSame([], getDocumentToWork($d2, $w2, 1));
+
+        deleteDocumentToWork($d1, $w1, 1);
+
+        $this->assertSame([], getDocumentToWork($d1, $w1, 1));
+        $this->assertCount(1, getDocumentToWork($d2, $w1, 1));
+        $this->assertCount(1, getDocumentToWork($d1, $w2, 1));
     }
 
     // ---------------------------------------- users without a publication
@@ -729,12 +785,6 @@ final class WorkCharacterizationTest extends KernelTestCase
             'getWorkCommentCountFromParent' => [static fn () => getWorkCommentCountFromParent(1, ['real_id' => 1], 0)],
             'getWorkCommentCount' => [static fn () => getWorkCommentCount(1, ['real_id' => 1])],
             'agendaExistsForWork' => [static fn () => agendaExistsForWork(1, ['real_id' => 1])],
-            'getDocumentToWork' => [static fn () => getDocumentToWork(1, 1, 1)],
-            'getUserToWork' => [static fn () => getUserToWork(1, 1, 1)],
-            'addUserToWork' => [static fn () => addUserToWork(1, 1, 1)],
-            'addDocumentToWork' => [static fn () => addDocumentToWork(1, 1, 1)],
-            'deleteUserToWork' => [static fn () => deleteUserToWork(1, 1, 1)],
-            'deleteDocumentToWork' => [static fn () => deleteDocumentToWork(1, 1, 1)],
             'getDocumentToWorkPerUser' => [static fn () => getDocumentToWorkPerUser(1, 1, 1, 0, 1)],
             'generateMoveForm' => [static fn () => generateMoveForm(1, '/', ['real_id' => 1], 0, 0)],
         ];

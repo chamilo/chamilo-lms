@@ -664,11 +664,10 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         $this->assertSame(1, Tracking::countSessionsPerStudent($this->alice->getId()));
         $this->assertSame(0, Tracking::countSessionsPerStudent($this->carol->getId()));
 
-        // PINNED QUIRK: the INNER JOIN on the course table has no ON clause, so every course code
-        // of the platform is returned, not only the courses the student follows in the session.
+        // Fixed: the INNER JOIN on the course table had no ON clause, so every course code of the
+        // platform was returned. Only the courses the student follows in the session are.
         $list = Tracking::get_course_list_in_session_from_student($this->alice->getId(), $sid);
-        $this->assertArrayHasKey($this->course->getCode(), $list);
-        $this->assertArrayHasKey($this->course2->getCode(), $list);
+        $this->assertSame([$this->course->getCode()], array_keys($list));
         $this->assertSame($this->course->getCode(), $list[$this->course->getCode()]);
         $this->assertSame([], Tracking::get_course_list_in_session_from_student($this->carol->getId(), $sid));
     }

@@ -4408,10 +4408,10 @@ class Tracking
 
         $sql = "SELECT c.code
                 FROM $tbl_session_course_user sc
-                INNER JOIN $courseTable c
+                INNER JOIN $courseTable c ON (c.id = sc.c_id)
                 WHERE
-                    user_id= $user_id  AND
-                    session_id = $sessionId";
+                    sc.user_id = $user_id AND
+                    sc.session_id = $sessionId";
         $result = Database::query($sql);
         $courses = [];
         while ($row = Database::fetch_array($result)) {

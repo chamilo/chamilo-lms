@@ -4084,6 +4084,7 @@ class SessionManager
         }
 
         $affected_rows = 0;
+        $touchedSessionIds = [];
         // Deleting assigned sessions to hrm_id.
         if ($removeSessionsFromUser) {
             if (api_is_multiple_url_enabled()) {
@@ -4110,6 +4111,7 @@ class SessionManager
                                 user_id = $userId AND
                                 relation_type =".Session::DRH;
                     Database::query($sql);
+                    $touchedSessionIds[] = (int) $row['session_id'];
                 }
             }
         }
@@ -4121,10 +4123,23 @@ class SessionManager
 
                 if (!$session->hasUserInSession($user, Session::DRH)) {
                     $session->addUserInSession(Session::DRH, $user);
+                    $touchedSessionIds[] = (int) $session_id;
 
                     $affected_rows++;
                 }
             }
+        }
+
+        if ($affected_rows > 0) {
+            // The rows removed above were deleted with raw SQL, so persist the new ones as well, then bring
+            // session.nbr_users (which counts every session_rel_user row) back in line with the table.
+            Database::getManager()->flush();
+        }
+        foreach (array_unique($touchedSessionIds) as $touchedSessionId) {
+            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)."
+                    SET nbr_users = (SELECT COUNT(user_id) FROM $tbl_session_rel_user WHERE session_id = $touchedSessionId)
+                    WHERE id = $touchedSessionId";
+            Database::query($sql);
         }
 
         return $affected_rows;

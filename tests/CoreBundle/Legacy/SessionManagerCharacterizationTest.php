@@ -926,10 +926,16 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
 
         $this->assertSame(0, $this->legacy('subscribeSessionsToDrh', [], [$s1]));
         $this->assertSame(2, SessionManager::subscribeSessionsToDrh($info, [$s1, $s2]));
-        // Suspected bug, pinned: the new follow relations are only queued on the entities and the
-        // method never flushes, so nothing reaches the database until the caller flushes.
-        $this->assertSame(0, (int) $this->one('SELECT COUNT(*) FROM session_rel_user WHERE user_id = ? AND relation_type = ?', [$drh->getId(), Session::DRH]));
-        $this->getEntityManager()->flush();
+        // Fixed: the follow relations used to be only queued on the entities (nothing reached the database
+        // until a caller flushed); they are now persisted by the method itself, like its raw DELETE.
+        $this->assertSame(2, (int) $this->one('SELECT COUNT(*) FROM session_rel_user WHERE user_id = ? AND relation_type = ?', [$drh->getId(), Session::DRH]));
+        foreach ([$s1, $s2] as $sid) {
+            $this->assertSame(
+                (int) $this->one('SELECT COUNT(*) FROM session_rel_user WHERE session_id = ?', [$sid]),
+                (int) $this->counters($sid)['nbr_users'],
+                'nbr_users keeps counting every session_rel_user row.'
+            );
+        }
         $this->getEntityManager()->clear();
 
         $this->assertTrue(SessionManager::isSessionFollowedByDrh($s1, $drh->getId()));
@@ -949,12 +955,12 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         $this->assertEqualsCanonicalizing([$s1, $s2], array_map('intval', is_array(current($ids)) ? array_column($ids, 'id') : $ids));
         $this->assertSame(2, (int) SessionManager::get_sessions_followed_by_hrm($drh->getId(), null, null, true));
 
-        // Re-subscribing with a shorter list replaces the follow list: the raw DELETE runs at once, the
-        // re-adding is only queued (so the same list counts as 1 new relation and needs a flush).
+        // Re-subscribing with a shorter list replaces the follow list: the old rows are deleted and the
+        // session kept in the list is re-inserted at once (it counts as 1 new relation), no flush needed.
         $this->assertSame(1, SessionManager::subscribeSessionsToDrh($info, [$s1]));
-        $this->assertFalse(SessionManager::isSessionFollowedByDrh($s1, $drh->getId()), 'Deleted by SQL, not yet re-inserted.');
-        $this->getEntityManager()->flush();
         $this->assertTrue(SessionManager::isSessionFollowedByDrh($s1, $drh->getId()));
+        $this->assertSame(1, (int) $this->counters($s1)['nbr_users'] - (int) $this->one('SELECT COUNT(*) FROM session_rel_user WHERE session_id = ? AND relation_type <> ?', [$s1, Session::DRH]));
+        $this->assertSame((int) $this->one('SELECT COUNT(*) FROM session_rel_user WHERE session_id = ?', [$s2]), (int) $this->counters($s2)['nbr_users']);
         $this->assertFalse(SessionManager::isSessionFollowedByDrh($s2, $drh->getId()), 'The session left out of the list is no longer followed.');
     }
 

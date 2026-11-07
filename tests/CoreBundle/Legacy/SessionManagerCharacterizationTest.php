@@ -944,10 +944,11 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         $this->assertSame([(int) $drh->getId()], array_map(static fn ($r) => (int) $r['user_id'], SessionManager::getDrhUsersInSession($s1)));
 
         $followed = SessionManager::getSessionFollowedByDrh($drh->getId(), $s1);
-        // SELECT * over session + session_rel_user: the shared "id" column holds the relation id, not the
-        // session id (quirk pinned), so the session is identified through session_id.
+        // Fixed: SELECT * over session + session_rel_user made "id" the relation id; "id" is now the session id.
         $this->assertSame($s1, (int) $followed['session_id']);
-        $this->assertNotSame($s1, (int) $followed['id']);
+        $this->assertSame($s1, (int) $followed['id']);
+        $this->assertSame($drh->getId(), (int) $followed['user_id']);
+        $this->assertSame(Session::DRH, (int) $followed['relation_type']);
         $this->assertSame([$c1], array_keys($followed['course_list']));
         $this->assertSame([], SessionManager::getSessionFollowedByDrh($drh->getId(), 99999999));
 

@@ -4179,8 +4179,10 @@ class SessionManager
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
 
-        $select = " SELECT * ";
+        // Explicit columns: SELECT * over session + session_rel_user made "id" the relation id, not the session id.
+        $select = " SELECT s.*, sru.session_id, sru.user_id, sru.relation_type ";
         if (api_is_multiple_url_enabled()) {
+            $select .= ", a.access_url_id ";
             $sql = " $select FROM $tbl_session s
                     INNER JOIN $tbl_session_rel_user sru ON (sru.session_id = s.id)
                     LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)

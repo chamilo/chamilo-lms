@@ -4959,6 +4959,10 @@ class SessionManager
     /**
      * Updates a session status.
      *
+     * Note: this writes session.visibility on purpose, not session.status. Its only callers (the promotion and
+     * career status toggles) pass the promotion's 1/0 active flag, which is a visibility switch; session.status
+     * holds the lifecycle (Session::STATUS_PLANNED/PROGRESS/FINISHED/CANCELLED), where 1 would mean "planned".
+     *
      * @param int session id
      * @param int status
      */

@@ -828,13 +828,15 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         }
     }
 
-    public function testSetSessionStatusWritesTheVisibilityColumn(): void
+    public function testSetSessionStatusWritesTheVisibilityColumnAndLeavesTheLifecycleStatusAlone(): void
     {
         $id = $this->newSession('sm_status', ['visibility' => 1]);
 
         $this->legacy('set_session_status', $id, 3);
 
-        // Current (odd) behaviour: the "status" argument lands in session.visibility.
+        // Not a bug, kept on purpose: the callers (promotion/career status toggles) pass the promotion's 1/0 active
+        // flag, a visibility switch. Writing session.status instead would corrupt the lifecycle value
+        // (Session::STATUS_PLANNED...), where 1 means "planned". The argument therefore lands in session.visibility.
         $this->assertSame(3, (int) $this->one('SELECT visibility FROM session WHERE id = ?', [$id]));
         $this->assertSame(0, (int) $this->one('SELECT status FROM session WHERE id = ?', [$id]));
     }

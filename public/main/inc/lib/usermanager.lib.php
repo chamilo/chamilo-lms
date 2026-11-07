@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Helpers\NameConventionHelper;
 use ChamiloSession as Session;
+use Doctrine\DBAL\ArrayParameterType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -1798,9 +1799,15 @@ class UserManager
         }
 
         $sql_query .= ' WHERE 1 = 1 ';
+        // Only AND/OR can be glued between the filters.
+        $condition = 'OR' === strtoupper(trim((string) $condition)) ? 'OR' : 'AND';
         if (count($conditions) > 0) {
             $temp_conditions = [];
             foreach ($conditions as $field => $value) {
+                // Field names are identifiers (optionally alias-qualified): never a free-form expression.
+                if (!preg_match('/^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)?$/', (string) $field)) {
+                    continue;
+                }
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
                 if ($simple_like) {
@@ -1831,8 +1838,16 @@ class UserManager
             $sql_query .= " AND user.id IN ('$onlyThisUserListToString') ";
         }
 
+        // Sort entries must look like "[alias.]column [ASC|DESC]"; anything else is dropped.
+        $order_by = array_filter(
+            (array) $order_by,
+            static fn ($item) => 1 === preg_match(
+                '/^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)?(\s+(ASC|DESC))?$/i',
+                trim((string) $item)
+            )
+        );
         if (!empty($order_by)) {
-            $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
+            $sql_query .= ' ORDER BY '.implode(',', array_map('trim', $order_by));
         }
 
         if ($limit > 0) {
@@ -3418,7 +3433,9 @@ class UserManager
      *
      * @param string $username
      *
-     * @return int User ID (or false if not found)
+     * @return int|false User ID, or false if the username is empty, unknown or not unique.
+     *                    Unlike get_user_id_from_original_id() (which returns 0), callers test for false
+     *                    (sessions/CSV imports use `false === $id` and `?:`), so do not change it.
      */
     public static function get_user_id_from_username($username)
     {
@@ -4000,14 +4017,11 @@ class UserManager
 
         //this is a new tag
         if (0 == $tag_id) {
-            //the tag doesn't exist
-            $sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
+            //the tag doesn't exist: the counter starts at 0 and follows the links created below
+            $sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', 0)";
             Database::query($sql);
             $last_insert_id = Database::insert_id();
         } else {
-            //the tag exists we update it
-            $sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $tag_id";
-            Database::query($sql);
             $last_insert_id = $tag_id;
         }
 
@@ -4016,9 +4030,11 @@ class UserManager
             $sql = "SELECT tag_id FROM $table_user_tag_values
                     WHERE user_id = $user_id AND tag_id = $last_insert_id ";
             $result = Database::query($sql);
-            //if the relationship does not exist we create it
+            //if the relationship does not exist we create it and count it
             if (0 == Database::num_rows($result)) {
                 $sql = "INSERT INTO $table_user_tag_values SET user_id = $user_id, tag_id = $last_insert_id";
+                Database::query($sql);
+                $sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id = $last_insert_id";
                 Database::query($sql);
             }
 
@@ -4816,13 +4832,19 @@ class UserManager
      */
     public static function clearHrmRequestsForUser(User $hrmId, $usersId)
     {
-        $users = implode(', ', $usersId);
+        $users = array_map('intval', (array) $usersId);
+        if (empty($users)) {
+            return;
+        }
         Database::getManager()
             ->createQuery('
                 DELETE FROM Chamilo\CoreBundle\Entity\UserRelUser uru
-                WHERE uru.friendUserId = :hrm_id AND uru.relationType = :relation_type AND uru.userId IN (:users_ids)
+                WHERE uru.friend = :hrm_id AND uru.relationType = :relation_type AND uru.user IN (:users_ids)
             ')
-            ->execute(['hrm_id' => $hrmId, 'relation_type' => UserRelUser::USER_RELATION_TYPE_HRM_REQUEST, 'users_ids' => $users]);
+            ->setParameter('hrm_id', (int) $hrmId->getId())
+            ->setParameter('relation_type', UserRelUser::USER_RELATION_TYPE_HRM_REQUEST)
+            ->setParameter('users_ids', $users, ArrayParameterType::INTEGER)
+            ->execute();
     }
 
     /**
@@ -4955,7 +4977,7 @@ class UserManager
      *
      * @param array $courseInfo
      *
-     * @return int The user id, or 0 if the session ID was negative
+     * @return int The user id (lowest id among the course teachers, or among the coaches of the session course), or 0 if there is none or the session ID was negative
      * @throws Exception
      * @throws \Doctrine\DBAL\Exception
      */
@@ -4978,25 +5000,24 @@ class UserManager
                     ON ru.user_id = u.id
                     WHERE
                         ru.status = 1 AND
-                        ru.c_id = "'.$courseId.'" ';
+                        ru.c_id = '.(int) $courseId.'
+                    ORDER BY u.id ASC';
             $rs = Database::query($sql);
             $num_rows = Database::num_rows($rs);
-            if (1 == $num_rows) {
+            if ($num_rows > 0) {
+                // Deterministic: the lowest user id among the course teachers.
                 $row = Database::fetch_array($rs);
 
                 return (int) $row['uid'];
-            } else {
-                $my_num_rows = $num_rows;
-
-                return (int) Database::result($rs, $my_num_rows - 1, 'uid');
             }
         } elseif ($session > 0) {
             $sql = 'SELECT u.id as uid FROM '.$table_user.' u
                     INNER JOIN '.$table_session_course_user.' sru
                     ON sru.user_id = u.id
                     WHERE
-                        sru.c_id = '.$courseId.' AND
-                        sru.status = '.SessionEntity::COURSE_COACH;
+                        sru.c_id = '.(int) $courseId.' AND
+                        sru.status = '.SessionEntity::COURSE_COACH.'
+                    ORDER BY u.id ASC';
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
                 $row = Database::fetch_assoc($rs);

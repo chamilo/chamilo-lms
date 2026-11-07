@@ -338,6 +338,34 @@ class UserManagerCharacterizationTest extends AbstractApiTest
         $this->assertSame(['um_lk_beta'], array_column($only, 'username'));
     }
 
+    public function testGetUserListLikeIgnoresNonAllowlistedConditionOrderAndFields(): void
+    {
+        $a = $this->createUser('um_lh_alpha')->getId();
+        $b = $this->createUser('um_lh_beta')->getId();
+        $this->names($a, 'Alpha', 'Umlh', 'um_lh_code');
+        $this->names($b, 'Beta', 'Umlh', 'um_lh_code');
+
+        // Anything but OR combines with AND: this must not become "... OR 1=1" or a syntax error.
+        $r = UserManager::getUserListLike(
+            ['user.firstname' => 'Alpha', 'user.official_code' => 'um_lh_code'],
+            [],
+            false,
+            "AND 1=1) OR (1=1"
+        );
+        $this->assertSame(['um_lh_alpha'], array_column($r, 'username'));
+
+        // A non-column sort expression is dropped instead of reaching the SQL; a valid one still sorts.
+        $r = UserManager::getUserListLike(
+            ['user.lastname' => 'Umlh'],
+            ['(SELECT 1 FROM dual WHERE SLEEP(0))', 'user.username DESC']
+        );
+        $this->assertSame(['um_lh_beta', 'um_lh_alpha'], array_column($r, 'username'));
+
+        // A non-identifier field name is skipped, so it cannot inject a predicate.
+        $r = UserManager::getUserListLike(['user.lastname' => 'Umlh', '1=1 OR user.id' => '1']);
+        $this->assertCount(2, $r);
+    }
+
     public function testGetUsersByNameMatchesPrefixesAndReturnsObjects(): void
     {
         $a = $this->createUser('um_nm_a')->getId();
@@ -530,10 +558,14 @@ class UserManagerCharacterizationTest extends AbstractApiTest
             '1',
             (string) $this->conn()->fetchOne('SELECT COUNT(*) FROM user_rel_tag WHERE user_id = ? AND tag_id = ?', [$u2, $tagId])
         );
-                $this->assertSame(
-            '3',
+        $this->assertSame(
+            '2',
             (string) $this->conn()->fetchOne('SELECT count FROM tag WHERE id = ?', [$tagId]),
-            'Pinned: the first INSERT stores 1 (its "count + 1" is evaluated without a stored value), then every further add_tag() call adds 1, even when the user link already existed.'
+            'The counter equals the number of user links (u1 and u2); re-adding the u2 link must not inflate it.'
+        );
+        $this->assertSame(
+            (string) $this->conn()->fetchOne('SELECT COUNT(*) FROM user_rel_tag WHERE tag_id = ?', [$tagId]),
+            (string) $this->conn()->fetchOne('SELECT count FROM tag WHERE id = ?', [$tagId])
         );
 
         $mine = UserManager::get_user_tags($u1, $field);
@@ -562,7 +594,7 @@ class UserManagerCharacterizationTest extends AbstractApiTest
         UserManager::delete_user_tags($u1, $field);
         $this->assertSame([], UserManager::get_user_tags($u1, $field));
         $this->assertSame(
-            '2',
+            '1',
             (string) $this->conn()->fetchOne('SELECT count FROM tag WHERE id = ?', [$tagId]),
             'Deleting a user\'s tags decrements the counter of each tag.'
         );
@@ -805,6 +837,32 @@ class UserManagerCharacterizationTest extends AbstractApiTest
         $this->assertSame([$s], array_keys($requests));
     }
 
+    public function testClearHrmRequestsForUserDeletesEveryRequestedUserOfThatHrmOnly(): void
+    {
+        $hrm = $this->createUser('um_clr_hrm');
+        $other = $this->createUser('um_clr_other');
+        $s1 = $this->createUser('um_clr_s1')->getId();
+        $s2 = $this->createUser('um_clr_s2')->getId();
+        $s3 = $this->createUser('um_clr_s3')->getId();
+
+        UserManager::requestUsersToHRManager($hrm->getId(), [$s1, $s2, $s3]);
+        UserManager::requestUsersToHRManager($other->getId(), [$s1]);
+
+        // The ids may come from a form as strings; a real subscription must be left alone.
+        UserManager::clearHrmRequestsForUser($hrm, [(string) $s1, (string) $s2]);
+
+        $left = $this->conn()->fetchFirstColumn(
+            'SELECT user_id FROM user_rel_user WHERE friend_user_id = ? AND relation_type = ?',
+            [$hrm->getId(), UserRelUser::USER_RELATION_TYPE_HRM_REQUEST]
+        );
+        $this->assertEquals([$s3], $left, 'Every listed request goes (not just the first id), the unlisted one stays.');
+        $this->assertEquals(
+            1,
+            $this->conn()->fetchOne('SELECT COUNT(*) FROM user_rel_user WHERE friend_user_id = ?', [$other->getId()]),
+            'Requests addressed to another HRM manager are untouched.'
+        );
+    }
+
     public function testStudentBossSubscriptionAndLookups(): void
     {
         $boss1 = $this->createUser('um_boss1')->getId();
@@ -966,5 +1024,16 @@ class UserManagerCharacterizationTest extends AbstractApiTest
 
         $id = UserManager::get_user_id_of_course_admin_or_session_admin(['real_id' => $cid, 'id' => $cid, 'session_id' => 0]);
         $this->assertSame($teacher, $id);
+
+        // With several teachers the answer must not depend on row order: the lowest user id wins.
+        $second = $this->createUser('um_teach2')->getId();
+        $this->conn()->executeStatement(
+            'INSERT INTO course_rel_user (c_id, user_id, status, relation_type, user_course_cat, sort, legal_agreement, progress, is_tutor)
+             VALUES (?, ?, 1, 0, 0, 0, 0, 0, 0)',
+            [$cid, $second]
+        );
+        $this->assertGreaterThan($teacher, $second);
+        $id = UserManager::get_user_id_of_course_admin_or_session_admin(['real_id' => $cid, 'id' => $cid, 'session_id' => 0]);
+        $this->assertSame($teacher, $id, 'Lowest teacher id, not whichever row the DB returns last.');
     }
 }

@@ -1630,14 +1630,19 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertFalse(\SurveyManager::emptySurveyFromId(99999999));
     }
 
-    public function testGetPeopleWhoFilledSurveyThrowsWhenAnonymousAnsweredIsShown(): void
+    public function testGetPeopleWhoFilledSurveyUsesAnsweredInvitationsWhenAnonymousAnsweredIsShown(): void
     {
-        $s = $this->insertSurvey();
+        $s = $this->insertSurvey(['anonymous' => '1']);
+        $other = $this->insertSurvey();
+        $q = $this->insertQuestion($s, 'sv q');
+        // The answers of an anonymous survey carry pseudonyms; the invitations carry the real users.
+        $this->insertAnswer($s, $q, 'pseudonym-a', 'a');
+        $this->insertInvitation($s, 2, ['answered' => 1]);
+        $this->insertInvitation($s, 1, ['answered' => 0]);
+        $this->insertInvitation($other, 1, ['answered' => 1]);
         \Chamilo\CoreBundle\Framework\Container::getSettingsManager()->updateSetting('survey.survey_anonymous_show_answered', 'true');
 
-        // PINNED QUIRK: the alternative query joins c_survey_invitation.survey_code, which no longer exists.
-        $this->expectException(\Chamilo\CoreBundle\Exception\NotAllowedException::class);
-        \SurveyManager::get_people_who_filled_survey($s);
+        $this->assertSame(['2'], array_map('strval', \SurveyManager::get_people_who_filled_survey($s)));
     }
 
     public function testGetSurveyDataForCoachThrowsBecauseItUsesDroppedColumns(): void

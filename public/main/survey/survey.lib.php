@@ -1349,9 +1349,9 @@ class SurveyManager
                 $tblInvitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
                 $tblSurvey = Database::get_course_table(TABLE_SURVEY);
 
-                $sql = "SELECT i.user_id FROM $tblInvitation i
+                $sql = "SELECT i.user_id AS user FROM $tblInvitation i
                     INNER JOIN $tblSurvey s
-                    ON i.survey_code = s.code
+                    ON i.survey_id = s.iid
                     WHERE i.answered IS TRUE AND s.iid = $survey_id";
             }
         }

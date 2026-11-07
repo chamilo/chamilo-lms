@@ -2739,8 +2739,6 @@ class Tracking
             " lp_view.lp_id IN (".implode(', ', $filteredLP).") ",
         ];
 
-        $groupBy = 'GROUP BY lp_id';
-
         if (is_array($studentId)) {
             $studentId = array_map('intval', $studentId);
             $conditions[] = " lp_view.user_id IN (".implode(',', $studentId).")  ";
@@ -2790,8 +2788,7 @@ class Tracking
                 FROM $lpViewTable lp_view
                 WHERE
                     $conditionToString
-                    $groupBy
-                ORDER BY view_count DESC";
+                ORDER BY view_count DESC, iid ASC";
 
         $result = Database::query($sql);
 

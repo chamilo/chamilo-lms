@@ -1052,18 +1052,22 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         $this->assertSame(40.0, Tracking::get_avg_student_progress([$s1, $s2], $course, [$lp]));
     }
 
-    public function testAvgStudentProgressKeepsTheFirstViewOfAnLpNotTheMostViewed(): void
+    public function testAvgStudentProgressKeepsTheLatestViewOfAnLp(): void
     {
         $s1 = $this->user('tc_s1');
         $course = $this->courseEntity();
         [$lp] = $this->lp(self::COURSE);
         $this->lpView($s1, $lp, self::COURSE, 30, null, 1);
         $this->lpView($s1, $lp, self::COURSE, 90, null, 2);
+        // Stored the other way round too: the order of the rows does not matter, the view_count does.
+        [$lp2] = $this->lp(self::COURSE);
+        $this->lpView($s1, $lp2, self::COURSE, 70, null, 5);
+        $this->lpView($s1, $lp2, self::COURSE, 10, null, 4);
 
-        // PINNED QUIRK: the code orders by view_count DESC and keeps the first row per LP to get the latest
-        // attempt, but GROUP BY lp_id collapses the rows before the ORDER BY: the latest attempt (90) is not
-        // the one reported, the oldest (30) is.
-        $this->assertSame(30.0, Tracking::get_avg_student_progress($s1, $course, [$lp]));
+        // Fixed: the code orders by view_count DESC and keeps the first row per LP to get the latest attempt,
+        // but GROUP BY lp_id collapsed the rows before the ORDER BY, so the OLDEST view (30) was reported.
+        $this->assertSame(90.0, Tracking::get_avg_student_progress($s1, $course, [$lp]));
+        $this->assertSame(70.0, Tracking::get_avg_student_progress($s1, $course, [$lp2]));
     }
 
     public function testAvgStudentProgressWithoutAListUsesTheLearningPathsTheStudentSees(): void

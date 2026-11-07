@@ -656,11 +656,12 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
     $course_id = api_get_course_int_id();
     $move_file = (int) $move_file;
     $tbl_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $sql = "SELECT title, url FROM $tbl_work
+    $sql = "SELECT title FROM $tbl_work
             WHERE iid ='".$move_file."'";
     $result = Database::query($sql);
     $row = Database::fetch_assoc($result);
-    $title = empty($row['title']) ? basename($row['url']) : $row['title'];
+    // The "url" column is gone: the title is the only name a work has.
+    $title = $row['title'] ?? '';
 
     $form = new FormValidator(
         'move_to_form',
@@ -5878,7 +5879,8 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
     $folders = [];
     $session_id = (int) $sessionId;
     $groupId = (int) $groupId;
-    $sessionCondition = empty($sessionId) ? ' AND (session_id = 0 OR session_id IS NULL) ' : " AND session_id='".$session_id."'";
+    // Course and session live on the resource link of the work, not on the table itself.
+    $sessionCondition = api_get_session_condition($session_id, true, false, 'link.session_id');
 
     $groupIid = 0;
     if ($groupId) {
@@ -5886,18 +5888,19 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
         $groupIid = $groupInfo['iid'];
     }
 
-    $sql = "SELECT iid, url, title
-            FROM $work_table
+    $sql = "SELECT DISTINCT w.iid, w.title
+            FROM $work_table w
+            INNER JOIN resource_link link
+            ON (link.resource_node_id = w.resource_node_id)
             WHERE
-                c_id = $courseId AND
-                active IN (0, 1) AND
-                parent_id = 0 AND
-                post_group_id = $groupIid
+                link.c_id = ".(int) $courseId." AND
+                w.active IN (0, 1) AND
+                (w.parent_id IS NULL OR w.parent_id = 0) AND
+                (w.post_group_id = ".(int) $groupIid." OR w.post_group_id IS NULL AND 0 = ".(int) $groupIid.")
                 $sessionCondition";
     $res = Database::query($sql);
     while ($folder = Database::fetch_array($res)) {
-        $title = empty($folder['title']) ? basename($folder['url']) : $folder['title'];
-        $folders[$folder['iid']] = $title;
+        $folders[$folder['iid']] = (string) $folder['title'];
     }
 
     return build_work_move_to_selector($folders, $path, $item_id);

@@ -1783,7 +1783,6 @@ class Attendance
         $repeat_type,
         $groupList = []
     ) {
-        $attendanceId = $attendance->getIid();
         // save start date
         $this->set_date_time(api_get_utc_datetime($start_date));
         $this->attendance_calendar_add($attendance, $groupList);
@@ -1813,7 +1812,7 @@ class Attendance
                 //@todo fix bug with february
                 for ($i = $start_date + 2419200; ($i <= $end_date); $i += 2419200) {
                     $this->set_date_time(api_get_utc_datetime($i));
-                    $this->attendance_calendar_add($attendanceId, $groupList);
+                    $this->attendance_calendar_add($attendance, $groupList);
                     $j++;
                 }
                 break;

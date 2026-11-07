@@ -806,6 +806,21 @@ final class AttendanceCharacterizationTest extends KernelTestCase
         $this->assertSame(1, (int) $this->row('SELECT COUNT(*) c FROM c_attendance_calendar WHERE attendance_id = ?', [$none])['c'], 'unknown repeat type: only the start date');
     }
 
+    public function testAttendanceRepeatCalendarAddMonthlyByDate(): void
+    {
+        // Fixed: 'monthlyByDate' passed the attendance id instead of the CAttendance entity (a TypeError).
+        // The step is a fixed 28 days (the "@todo fix bug with february" in the source), pinned here as is.
+        $start = strtotime('2032-07-01 08:00:00 UTC');
+        $att = $this->att('at_monthly');
+
+        (new Attendance())->attendance_repeat_calendar_add($this->entity($att), $start, $start + 2 * 2419200, 'monthlyByDate');
+
+        $this->assertSame(
+            [gmdate('Y-m-d H:i:s', $start), gmdate('Y-m-d H:i:s', $start + 2419200), gmdate('Y-m-d H:i:s', $start + 2 * 2419200)],
+            $this->conn->fetchFirstColumn('SELECT date_time FROM c_attendance_calendar WHERE attendance_id = ? ORDER BY date_time', [$att])
+        );
+    }
+
     public function testAttendanceCalendarEditMovesTheDateUnlessItAlreadyExists(): void
     {
         $att = $this->att();

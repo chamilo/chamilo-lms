@@ -84,8 +84,9 @@ final class AttendanceCharacterizationTest extends KernelTestCase
         );
         $id = (int) $this->conn->lastInsertId();
         // CAttendanceRepository::update() insists on a resource node: borrow an existing fixture node (inserting a
-        // new resource_node deadlocks on the shared database; the transaction is rolled back anyway).
-        $node = $this->conn->fetchOne('SELECT id FROM resource_node ORDER BY id LIMIT 1 OFFSET '.(int) $this->seq);
+        // new resource_node deadlocks on the shared database; the transaction is rolled back anyway). Offset 5+: the first
+        // nodes belong to the fixture users, which concurrent suites update, deadlocking this FK lock.
+        $node = $this->conn->fetchOne('SELECT id FROM resource_node ORDER BY id LIMIT 1 OFFSET '.(5 + (int) $this->seq));
         $this->conn->executeStatement('UPDATE c_attendance SET resource_node_id = ? WHERE iid = ?', [$node, $id]);
 
         return $id;

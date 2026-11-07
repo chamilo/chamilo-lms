@@ -119,13 +119,14 @@ final class UrlManagerCharacterizationTest extends KernelTestCase
             $this->conn()->executeStatement('INSERT INTO access_url_rel_course (c_id, access_url_id) VALUES (1, ?)', [$u]);
             $this->conn()->executeStatement('INSERT INTO access_url_rel_session (session_id, access_url_id) VALUES (?, ?)', [$this->session('s'.$u), $u]);
             $this->conn()->executeStatement('INSERT INTO access_url_rel_usergroup (usergroup_id, access_url_id) VALUES (?, ?)', [$this->group('g'.$u), $u]);
+            $this->conn()->executeStatement('INSERT INTO access_url_rel_course_category (course_category_id, access_url_id) VALUES (?, ?)', [$this->category('um2_c'.$u), $u]);
         }
 
         $this->assertTrue(UrlManager::delete($a));
         $this->fresh();
 
         $this->assertSame(0, $this->rows('access_url', 'id', $a));
-        foreach (['access_url_rel_user', 'access_url_rel_course', 'access_url_rel_session', 'access_url_rel_usergroup'] as $table) {
+        foreach (['access_url_rel_user', 'access_url_rel_course', 'access_url_rel_session', 'access_url_rel_usergroup', 'access_url_rel_course_category'] as $table) {
             $this->assertSame(0, $this->rows($table, 'access_url_id', $a), $table);
             // The sibling URL keeps its rows.
             $this->assertSame(1, $this->rows($table, 'access_url_id', $b), $table);

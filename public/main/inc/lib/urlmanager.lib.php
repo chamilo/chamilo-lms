@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
+use Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory;
 use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup;
@@ -107,6 +108,7 @@ class UrlManager
         $relEntities = [
             SettingsCurrent::class,
             AccessUrlRelCourse::class,
+            AccessUrlRelCourseCategory::class,
             AccessUrlRelSession::class,
             AccessUrlRelUserGroup::class,
             AccessUrlRelUser::class,

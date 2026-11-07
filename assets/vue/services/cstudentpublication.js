@@ -62,12 +62,24 @@ async function uploadStudentAssignment(formData, queryParams) {
   return baseService.post(`/api/c_student_publications/upload?${queryParams}`, formData)
 }
 
+async function getSubmissionHtmlPreview(submissionId) {
+  return baseService.get(`/assignments/submissions/${submissionId}/html-preview`, buildCidParams())
+}
+
 async function getStudentProgress(queryParams = {}) {
   return baseService.get(`/assignments/progress`, { ...buildCidParams(), ...queryParams })
 }
 
 async function deleteAssignmentSubmission(submissionId) {
   await baseService.delete(`/assignments/submissions/${submissionId}`, { params: buildCidParams() })
+}
+
+async function updateSubmissionVisibility(assignmentId, submissionId, resourceLinkId, visibility) {
+  return baseService.patch(
+    `/assignments/${assignmentId}/submissions/${submissionId}/visibility`,
+    { resourceLinkId, visibility },
+    { params: buildCidParams() },
+  )
 }
 
 async function updateSubmission(id, data) {
@@ -257,6 +269,11 @@ async function removeRelDocument(relId, params = {}) {
 
 /** Uploads a teacher correction file for a submission. */
 async function uploadCorrection(formData, { parentResourceNodeId, submissionId } = {}) {
+  // The correction action reads these values from the multipart request body.
+  formData.set("submissionId", String(submissionId))
+  formData.set("parentResourceNodeId", String(parentResourceNodeId))
+  formData.set("filetype", "file")
+
   return baseService.post(
     `/api/c_student_publication_corrections/upload`,
     formData,
@@ -272,9 +289,11 @@ export default {
   getAssignmentDetail,
   getAssignmentDetailForTeacher,
   uploadStudentAssignment,
+  getSubmissionHtmlPreview,
   getStudentProgress,
   deleteAssignmentSubmission,
   updateSubmission,
+  updateSubmissionVisibility,
   uploadComment,
   loadComments,
   deleteComment,

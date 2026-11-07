@@ -3747,7 +3747,8 @@ class CourseManager
         if (!empty($sessionId)) {
             if (COURSEMANAGER == $status) {
                 // Teacher of course or teacher inside session
-                $whereConditions = " AND (cru.status = ".COURSEMANAGER." OR srcru.status = ".SessionEntity::COURSE_COACH.") ";
+                $whereConditions = " AND ((cru.user_id = $user_id AND cru.status = ".COURSEMANAGER.")
+                    OR srcru.status = ".SessionEntity::COURSE_COACH.") ";
             }
             $courseList = SessionManager::get_course_list_by_session_id($sessionId);
             if (!empty($courseList)) {
@@ -3757,10 +3758,16 @@ class CourseManager
             $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $tableSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
             $orderBy = ' ORDER BY position';
+            $sessionUserJoin = "INNER JOIN $tableSessionRelCourseRelUser srcru
+                                ON (src.session_id = srcru.session_id AND srcru.c_id = src.c_id)";
+            if (COURSEMANAGER == $status) {
+                // Only the session rows of this user count; LEFT so that base-course teachers need no session row.
+                $sessionUserJoin = "LEFT JOIN $tableSessionRelCourseRelUser srcru
+                                ON (src.session_id = srcru.session_id AND srcru.c_id = src.c_id AND srcru.user_id = $user_id)";
+            }
             $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
                                 ON (c.id = src.c_id AND src.session_id = $sessionId)
-                                INNER JOIN $tableSessionRelCourseRelUser srcru
-                                ON (src.session_id = srcru.session_id AND srcru.c_id = src.c_id)
+                                $sessionUserJoin
                             ";
         }
 

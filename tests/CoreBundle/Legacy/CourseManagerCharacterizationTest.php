@@ -842,6 +842,33 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
         $this->assertSame(3, (int) CourseManager::getCoursesFollowedByUser($user->getId(), null, null, null, null, null, true));
     }
 
+    public function testGetCoursesFollowedByUserInASessionKeepsTheUserScope(): void
+    {
+        // Fixed: with a session and COURSEMANAGER the user condition was overwritten, so any teacher's courses
+        // of the session were returned to everyone.
+        $mine = $this->createCourse('cm_fsu_mine');
+        $coached = $this->createCourse('cm_fsu_coached');
+        $theirs = $this->createCourse('cm_fsu_theirs');
+        $session = $this->createSession('cm_fsu_session');
+        $me = $this->createUser('cm_fsu_me');
+        $other = $this->createUser('cm_fsu_other');
+        $this->sub($me, $mine, COURSEMANAGER);
+        $this->sub($other, $theirs, COURSEMANAGER);
+        foreach ([$mine, $coached, $theirs] as $course) {
+            $this->sessionCourse($session->getId(), $course);
+        }
+        $this->sessionCourseUser($session->getId(), $coached, $me, 2);
+        // Residual legacy quirk (not changed): the main query INNER JOINs course_rel_user on the course alone, so a
+        // course is only listed when it has at least one course_rel_user row; a bystander student provides it here.
+        $this->sub($this->createUser('cm_fsu_student'), $coached, STUDENT);
+        $this->sessionCourseUser($session->getId(), $theirs, $other, 2);
+
+        $rows = CourseManager::getCoursesFollowedByUser($me->getId(), COURSEMANAGER, null, null, null, null, false, null, $session->getId());
+
+        $this->assertEqualsCanonicalizing([$mine->getCode(), $coached->getCode()], array_keys($rows));
+        $this->assertSame(2, (int) CourseManager::getCoursesFollowedByUser($me->getId(), COURSEMANAGER, null, null, null, null, true, null, $session->getId()));
+    }
+
     public function testSubscribeCoursesToHrmManagerReplacesPreviousAssignment(): void
     {
         $a = $this->createCourse('cm_hrm_a');

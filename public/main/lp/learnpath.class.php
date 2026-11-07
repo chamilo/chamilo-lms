@@ -322,7 +322,10 @@ class learnpath
                     $status_list = [];
                     $res = Database::query($sql);
                     while ($row = Database:: fetch_array($res)) {
-                        $status_list[$row['lp_item_id']] = $row['status'];
+                        // Rows come by view_count descending: keep the first one (the latest attempt).
+                        if (!isset($status_list[$row['lp_item_id']])) {
+                            $status_list[$row['lp_item_id']] = $row['status'];
+                        }
                     }
 
                     foreach ($lp_item_id_list as $item_id) {

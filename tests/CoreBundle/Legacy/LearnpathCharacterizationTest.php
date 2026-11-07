@@ -235,10 +235,13 @@ final class LearnpathCharacterizationTest extends KernelTestCase
 
         // Ordered by display_order, not by id.
         $this->assertSame([[$b => 'not attempted'], [$a => 'incomplete']], $lp->get_items_status_list());
-        // The status of the HIGHEST view_count wins ('incomplete' of view_count 2 over 'completed' of 1): the
-        // constructor's own "ORDER BY view_count DESC" loop would keep the lowest one, but set_lp_view() on the
-        // item re-reads the latest item view afterwards.
+        // The status of the HIGHEST view_count wins ('incomplete' of view_count 2 over 'completed' of 1), both when
+        // re-read from the database and in memory. Fixed: the constructor's own "ORDER BY view_count DESC" loop
+        // kept the LAST row, i.e. the lowest view_count, and overwrote the in-memory status that set_lp_view() had
+        // right; get_status(false) (used by the table of contents and the SCORM API) then returned 'completed'.
         $this->assertSame('incomplete', $lp->items[$a]->get_status());
+        $this->assertSame('incomplete', $lp->items[$a]->get_status(false));
+        $this->assertSame('not attempted', $lp->items[$b]->get_status(false));
     }
 
     public function testConstructorWithoutUserSetsAnErrorAndCreatesNoView(): void

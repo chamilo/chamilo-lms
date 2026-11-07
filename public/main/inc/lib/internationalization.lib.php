@@ -2019,52 +2019,50 @@ function &_api_get_day_month_names($language = null)
  */
 function _api_get_person_name_convention($iso, $type)
 {
-    $conventions = LanguageFixtures::getLanguages();
+    static $conventionsFormatted = null;
 
-    // Overwrite classic conventions
-    //$customConventions = api_get_configuration_value('name_order_conventions');
-
-    $search1 = ['FIRST_NAME', 'LAST_NAME', 'TITLE'];
-    $replacement1 = ['%F', '%L', '%T'];
-    $search2 = ['first_name', 'last_name', 'title'];
-    $replacement2 = ['%f', '%l', '%t'];
-    $conventionsFormatted = [];
-    foreach ($conventions as $language) {
-        $iso = $language['isocode'];
-        $conventionsFormatted[$iso]['format'] = $language['format'];
-        $conventionsFormatted[$iso]['sort_by'] = $language['sort_by'];
-
-        $conventionsFormatted[$iso]['format'] = str_replace(
-            $search1,
-            $replacement1,
-            $conventionsFormatted[$iso]['format']
-        );
-        $conventionsFormatted[$iso]['format'] = _api_validate_person_name_format(
-            _api_clean_person_name(
-                str_replace(
-                    '%',
-                    ' %',
-                    str_ireplace(
-                        $search2,
-                        $replacement2,
-                        $conventionsFormatted[$iso]['format']
-                    )
+    if (null === $conventionsFormatted) {
+        $search1 = ['FIRST_NAME', 'LAST_NAME', 'TITLE'];
+        $replacement1 = ['%F', '%L', '%T'];
+        $search2 = ['first_name', 'last_name', 'title'];
+        $replacement2 = ['%f', '%l', '%t'];
+        $conventionsFormatted = [];
+        foreach (LanguageFixtures::getLanguages() as $language) {
+            $format = str_replace($search1, $replacement1, (string) $language['format']);
+            $format = _api_validate_person_name_format(
+                _api_clean_person_name(
+                    str_replace('%', ' %', str_ireplace($search2, $replacement2, $format))
                 )
-            )
-        );
+            );
+            $conventionsFormatted[$language['isocode']] = [
+                'format' => $format,
+                'sort_by' => 'last_name' !== strtolower((string) $language['sort_by']),
+            ];
+        }
+    }
 
-        $conventionsFormatted[$iso]['sort_by'] = 'last_name' !== strtolower(
-            $conventionsFormatted[$iso]['sort_by']
-        ) ? true : false;
+    // Exact isocode first, then the same code with '-' as separator, then the language part alone
+    // (or the first regional variant of it). Unknown languages use the safe defaults below.
+    $requested = str_replace('-', '_', (string) $iso);
+    $convention = $conventionsFormatted[$requested] ?? null;
+    if (null === $convention && '' !== $requested) {
+        $base = strtolower(explode('_', $requested)[0]);
+        $convention = $conventionsFormatted[$base] ?? null;
+        if (null === $convention) {
+            foreach ($conventionsFormatted as $code => $candidate) {
+                if (str_starts_with($code, $base.'_')) {
+                    $convention = $candidate;
+                    break;
+                }
+            }
+        }
     }
 
     switch ($type) {
         case 'format':
-            return is_string(
-                $conventionsFormatted[$iso]['format']
-            ) ? $conventionsFormatted[$iso]['format'] : '%t %f %l';
+            return is_string($convention['format'] ?? null) ? $convention['format'] : '%t %f %l';
         case 'sort_by':
-            return is_bool($conventionsFormatted[$iso]['sort_by']) ? $conventionsFormatted[$iso]['sort_by'] : true;
+            return is_bool($convention['sort_by'] ?? null) ? $convention['sort_by'] : true;
     }
 
     return null;

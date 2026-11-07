@@ -1125,10 +1125,6 @@ class UrlManager
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
 
-        if (!is_array($userGroupList) || empty($userGroupList)) {
-            return;
-        }
-
         $sql = "SELECT usergroup_id FROM $table WHERE access_url_id = ".intval($urlId);
         $result = Database::query($sql);
 

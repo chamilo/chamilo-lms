@@ -596,7 +596,7 @@ final class UrlManagerCharacterizationTest extends KernelTestCase
         $this->assertSame(1, $this->countPair('access_url_rel_usergroup', 'usergroup_id', $g, $b));
     }
 
-    public function testUpdateUrlsRelUsergroupSyncsTheListButNeverEmptiesIt(): void
+    public function testUpdateUrlsRelUsergroupSyncsTheListIncludingAnEmptyOne(): void
     {
         $a = $this->url('a');
         $b = $this->url('b');
@@ -609,10 +609,10 @@ final class UrlManagerCharacterizationTest extends KernelTestCase
         $this->assertSame(1, $this->countPair('access_url_rel_usergroup', 'usergroup_id', $g2, $a));
         $this->assertSame(1, $this->countPair('access_url_rel_usergroup', 'usergroup_id', $g1, $b));
 
-        // PINNED QUIRK: an empty list returns early, so the last group of a URL cannot be unassigned
-        // through this method (users/courses/sessions sync to an empty list fine).
+        // An empty list unassigns every group of that URL only, like users, courses and sessions.
         UrlManager::update_urls_rel_usergroup([], $a);
-        $this->assertSame(1, $this->countPair('access_url_rel_usergroup', 'usergroup_id', $g2, $a));
+        $this->assertSame(0, $this->countPair('access_url_rel_usergroup', 'usergroup_id', $g2, $a));
+        $this->assertSame(1, $this->countPair('access_url_rel_usergroup', 'usergroup_id', $g1, $b));
         // Invalid url id: no-op.
         UrlManager::update_urls_rel_usergroup([$g1], 0);
         $this->assertSame(0, $this->countPair('access_url_rel_usergroup', 'usergroup_id', $g1, 0));

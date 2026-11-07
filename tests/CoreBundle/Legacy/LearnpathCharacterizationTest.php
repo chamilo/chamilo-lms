@@ -278,22 +278,29 @@ final class LearnpathCharacterizationTest extends KernelTestCase
         $this->assertNotSame($other, $lp->get_view(0, 3));
     }
 
-    public function testRestartCannotInsertTheNewViewOnThisSchema(): void
+    public function testRestartInsertsANewViewWithoutSession(): void
     {
         $lpId = $this->newLpRow('lp_restart');
         $this->addItem($lpId, 'lp_doc');
         $lp = $this->lp($lpId);
+        $first = $lp->get_view_id();
 
-        // PINNED QUIRK (source bug): restart() inserts into c_lp_view without last_item, a NOT NULL column with
-        // no default, and also writes session_id 0 (a foreign key to session). On this schema the INSERT is
-        // rejected, so a restart is impossible; Database::handleError() turns it into NotAllowedException.
-        $this->expectException(NotAllowedException::class);
-        try {
-            $lp->restart();
-        } finally {
-            $this->assertSame(1, $lp->attempt, 'the attempt counter is not incremented when the insert fails');
-            $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_lp_view WHERE lp_id = ?', [$lpId]));
-        }
+        // Fixed: restart() used to omit last_item (NOT NULL, no default) so it always threw, and wrote session_id 0
+        // (a foreign key to session) where the constructor stores NULL for "no session".
+        $this->assertTrue($lp->restart());
+
+        $this->assertSame(2, $lp->attempt);
+        $this->assertNotSame($first, $lp->get_view_id());
+        $row = $this->conn()->fetchAssociative('SELECT * FROM c_lp_view WHERE iid = ?', [$lp->get_view_id()]);
+        $this->assertSame(2, (int) $row['view_count']);
+        $this->assertSame(0, (int) $row['last_item']);
+        $this->assertSame(self::USER_ID, (int) $row['user_id']);
+        $this->assertSame(self::COURSE_ID, (int) $row['c_id']);
+        $this->assertNull($row['session_id'], 'NULL, as the constructor stores it, for "no session"');
+        $this->assertSame(2, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_lp_view WHERE lp_id = ?', [$lpId]));
+
+        // The new attempt is the one a later construction picks up.
+        $this->assertSame(2, $this->lp($lpId)->attempt);
     }
 
     // ---------------------------------------------------------------- items: add / list / delete

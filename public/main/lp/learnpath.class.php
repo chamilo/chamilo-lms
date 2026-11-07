@@ -3631,13 +3631,22 @@ class learnpath
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
         $lp_view_table = Database::get_course_table(TABLE_LP_VIEW);
-        $sql = "INSERT INTO $lp_view_table (c_id, lp_id, user_id, view_count, session_id)
-                VALUES ($course_id, ".$this->lp_id.",".$this->get_user_id().",".($this->attempt + 1).", $session_id)";
-        if ($this->debug > 2) {
-            error_log('Inserting new lp_view for restart: '.$sql, 0);
+        // last_item is NOT NULL without default and session_id is a foreign key: store NULL (no value) when there is
+        // no session, as the constructor does.
+        $params = [
+            'c_id' => $course_id,
+            'lp_id' => (int) $this->lp_id,
+            'user_id' => (int) $this->get_user_id(),
+            'view_count' => (int) $this->attempt + 1,
+            'last_item' => 0,
+        ];
+        if (!empty($session_id)) {
+            $params['session_id'] = (int) $session_id;
         }
-        Database::query($sql);
-        $view_id = Database::insert_id();
+        if ($this->debug > 2) {
+            error_log('Inserting new lp_view for restart: '.print_r($params, true), 0);
+        }
+        $view_id = Database::insert($lp_view_table, $params);
 
         if ($view_id) {
             $this->lp_view_id = $view_id;

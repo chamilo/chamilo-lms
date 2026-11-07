@@ -121,7 +121,8 @@ class TicketManager
     /**
      * @param int $id
      *
-     * @return array|mixed
+     * @return array the row (keys id, title, name, description, total_tickets, both named and numeric), or an
+     *               empty array when the category does not exist (not false/null: callers test with empty())
      */
     public static function getCategory($id)
     {
@@ -1164,7 +1165,8 @@ class TicketManager
     /**
      * @param int $id
      *
-     * @return array
+     * @return TicketMessageAttachment[]|false the attachments of the ticket, or false (not an empty array) when it
+     *                                          has none
      */
     public static function getTicketMessageAttachmentsByTicketId($id)
     {

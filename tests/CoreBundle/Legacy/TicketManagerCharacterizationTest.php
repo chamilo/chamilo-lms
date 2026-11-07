@@ -22,9 +22,8 @@ use Throwable;
  * Characterization tests for the raw-SQL methods of TicketManager (public/main/inc/lib/TicketManager.php).
  *
  * They pin what the legacy queries return / write TODAY (rows, keys, ordering, NULL handling, DB side effects)
- * so a later rewrite to Doctrine/DQL that changes any of it fails here. Where the current behaviour looks like a
- * bug it is pinned as-is and flagged "PINNED QUIRK": do not "fix" the expectation without deciding that the
- * behaviour change is intended.
+ * so a later rewrite to Doctrine/DQL that changes any of it fails here. The bugs once pinned here were fixed
+ * (each fixed test says "Fixed:" with the reason); what is left as-is is documented in the method docblocks.
  *
  * Every fixture title/code/email starts with "tm_" (sibling test files share the database). Fixture users are the
  * stock admin (id 1), anon (2) and fallback_user (3).
@@ -258,7 +257,7 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->assertSame('tm_desc', $cat['description']);
         $this->assertSame(4, (int) $cat['total_tickets']);
         $this->assertSame('tm_cat_one', $cat[1]);
-        // PINNED QUIRK: a missing category comes back as an empty array (Database::fetch_array), not false/null.
+        // Kept on purpose (documented in the docblock): a missing category is an empty array, not false/null.
         $this->assertSame([], TicketManager::getCategory(987654321));
     }
 
@@ -1290,7 +1289,7 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->getEntityManager()->clear();
 
         $this->assertFalse(TicketManager::getTicketMessageAttachment(987654321));
-        // PINNED QUIRK: "no attachments" is false, not an empty array.
+        // Kept on purpose (documented in the docblock): "no attachments" is false, not an empty array.
         $this->assertFalse(TicketManager::getTicketMessageAttachmentsByTicketId($t));
         $this->assertSame([$t => $this->row($t)['code']], TicketManager::getTicketsFromCriteria(['id' => $t]));
     }

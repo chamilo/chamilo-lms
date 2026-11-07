@@ -296,7 +296,10 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         $this->assertSame($quizId, $e->getId());
         $this->assertSame('ex_read_full', $e->selectTitle());
         $this->assertSame('ex description', $e->selectDescription());
-        // PINNED QUIRK: a stored type 0 is silently promoted to ONE_PER_PAGE (2) on read.
+        // Not a bug, kept on purpose: the only valid types are ALL_ON_ONE_PAGE (1) and ONE_PER_PAGE (2); 0 is
+        // never written by the forms (c_quiz.type is NOT NULL, no default) and only appears for rows created by
+        // imports/API clients that omit it. Every runtime branch tests for 1 or 2, so read() normalises 0 to
+        // ONE_PER_PAGE, the same fallback as 1.11.x, instead of leaving an undefined display mode.
         $this->assertSame(ONE_PER_PAGE, $e->selectType());
         $this->assertSame(4, (int) $e->selectAttempts(), 'max_attempt is exposed as attempts');
         $this->assertSame(2, (int) $e->getFeedbackType());

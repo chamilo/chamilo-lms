@@ -2166,8 +2166,8 @@ class ExtraField extends Model
      */
     public function save($params, $showQuery = false)
     {
-        $fieldInfo = self::get_handler_field_info_by_field_variable($params['variable']);
         $params = $this->clean_parameters($params);
+        $fieldInfo = self::get_handler_field_info_by_field_variable($params['variable']);
         $params['item_type'] = $this->itemType;
 
         if ($fieldInfo) {

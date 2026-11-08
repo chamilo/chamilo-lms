@@ -284,34 +284,28 @@ class ExtraFieldCharacterizationTest extends AbstractApiTest
         $this->assertSame(2, (int) $this->conn()->fetchOne("SELECT COUNT(*) FROM extra_field WHERE variable = 'xf_twice'"));
     }
 
-    public function testSaveOfAVariableThatNeedsNormalisationIsNotIdempotent(): void
+    public function testSaveOfAVariableThatNeedsNormalisationIsIdempotentToo(): void
     {
-        // PINNED QUIRK: the "already exists" lookup uses the raw variable, but the row is stored normalised, so a
-        // second save of "XF Again" misses the first row and the unique (variable, item_type) key rejects it.
+        // The "already exists" lookup must use the normalised variable the row is stored under; with the raw
+        // one the second save missed the first row and the unique (variable, item_type) key rejected it.
         $extraField = new ExtraField('course');
-        $extraField->save($this->saveParams('XF Again'));
+        $first = $extraField->save($this->saveParams('XF Again'));
+        $second = $extraField->save($this->saveParams('XF Again'));
 
-        $this->expectException(NotAllowedException::class);
-        $extraField->save($this->saveParams('XF Again'));
+        $this->assertSame((int) $first, (int) $second);
+        $this->assertSame(1, (int) $this->conn()->fetchOne("SELECT COUNT(*) FROM extra_field WHERE variable = 'xf_again'"));
     }
 
-    public function testSaveWithoutAVariableFailsOnTheLookupInsteadOfUsingTheDisplayText(): void
+    public function testSaveWithoutAVariableDerivesItFromTheDisplayText(): void
     {
-        // PINNED QUIRK: clean_parameters() would derive the variable from display_text, but save() reads
-        // $params['variable'] for the lookup before cleaning, so the call raises "Undefined array key".
-        $params = $this->saveParams('ignored');
+        $params = $this->saveParams('ignored', 'XF Derived Name');
         unset($params['variable']);
+        $extraField = new ExtraField('session');
 
-        set_error_handler(static function (int $no, string $str): never {
-            throw new \ErrorException($str, 0, $no);
-        });
-        try {
-            $this->expectException(\ErrorException::class);
-            $this->expectExceptionMessage('Undefined array key "variable"');
-            (new ExtraField('session'))->save($params);
-        } finally {
-            restore_error_handler();
-        }
+        $id = $extraField->save($params);
+
+        $this->assertSame('xf_derived_name', $this->conn()->fetchOne('SELECT variable FROM extra_field WHERE id = ?', [$id]));
+        $this->assertSame($id, $extraField->save($params), 'And stays idempotent.');
     }
 
     public function testSaveKeepsAnExplicitFieldOrder(): void

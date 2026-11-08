@@ -64,7 +64,14 @@ if (!list($sessionTitle, $courseTitle) = Database::fetch_row($result)) {
     exit;
 }
 
+// Keep the token of the session: regenerating it on every request would invalidate the one of the page that
+// sent the request. Legacy pages are not covered by CsrfProtectionListener.
+$token = Security::get_existing_token();
+
 if ('delete' === $action) {
+    if (!Security::check_token('request')) {
+        api_not_allowed(true);
+    }
     foreach ($checkedIds as $userId) {
         $sql = "SELECT status
                 FROM $sessionRelCourseRelUserTable
@@ -166,6 +173,7 @@ echo '    </div>';
 echo '  </div>';
 
 echo '<form method="post" action="'.$selfUrl.'&sort='.$sort.'&direction='.$queryDirection.'" class="space-y-4" onsubmit="return confirm(\''.addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)).'\');">';
+echo '<input type="hidden" name="sec_token" value="'.$token.'">';
 echo '  <div class="overflow-hidden rounded-lg border border-gray-30 bg-white shadow-sm">';
 echo '    <div class="overflow-x-auto">';
 echo '      <table class="min-w-full divide-y divide-gray-20 text-sm">';
@@ -198,7 +206,7 @@ if (empty($userRows)) {
         $userId = (int) $userRow['user_id'];
         $courseStatus = (int) $userRow['course_status'];
         $statusLabel = Session::COURSE_COACH === $courseStatus ? get_lang('Course tutor') : get_lang('Learner');
-        $rowActionUrl = $selfUrl.'&sort='.$sort.'&direction='.$queryDirection.'&action=delete&idChecked[]='.$userId;
+        $rowActionUrl = $selfUrl.'&sort='.$sort.'&direction='.$queryDirection.'&action=delete&idChecked[]='.$userId.'&sec_token='.$token;
 
         echo '  <tr class="hover:bg-gray-10">';
         echo '    <td class="px-4 py-3 align-middle"><input class="rounded border-gray-30" type="checkbox" name="idChecked[]" value="'.$userId.'"></td>';

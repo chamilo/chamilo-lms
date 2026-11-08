@@ -419,4 +419,31 @@ final class SessionAccessControlTest extends AbstractApiTest
         $this->assertStringNotContainsString("\$session['name']", $source);
         $this->assertStringContainsString('empty($errors)', $source);
     }
+
+    /**
+     * Source-level pin: unsubscribing courses or users from a session was a GET link (or a form) without a
+     * token, and the user subscription page accepted a course id that is not in the session.
+     */
+    public function testSessionCourseListsCheckTheTokenAndTheCourseBelongsToTheSession(): void
+    {
+        foreach (['session/session_course_list.php', 'session/session_course_user_list.php'] as $page) {
+            $source = $this->page($page);
+            $this->assertLessThan(
+                strpos($source, "'delete' === \$action) {\n    if"),
+                strpos($source, 'Security::get_existing_token()'),
+                $page
+            );
+            $this->assertStringContainsString("if ('delete' === \$action) {\n    if (!Security::check_token('request')) {", $source, $page);
+            $this->assertSame(1, substr_count($source, "name=\"sec_token\""), $page.': the bulk form carries the token.');
+            $this->assertSame(1, substr_count($source, "&sec_token='.\$token"), $page.': the row link carries the token.');
+        }
+
+        $source = $this->page('session/add_users_to_session_course.php');
+        $this->assertStringContainsString('$sessionHasCourse', $source);
+        $this->assertLessThan(
+            strpos($source, '$xajax->processRequests();'),
+            strpos($source, '$sessionHasCourse = false;'),
+            'The course is checked before the AJAX search runs too.'
+        );
+    }
 }

@@ -278,6 +278,26 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
         $this->assertSame('2030-01-02 03:04:05', (string) $back->start_time);
     }
 
+    public function testSaveOfAQuizWhoseNullableColumnsAreNullDoesNotThrow(): void
+    {
+        // learnpath::add_item('quiz') reads a quiz and saves it back: sound, description and the two finish texts
+        // are NULL-able columns while the CQuiz setters take strings (TypeError before the cast in save()).
+        $exercise = $this->savedExercise('x2_null_cols');
+        $id = $exercise->getId();
+        $this->conn->executeStatement(
+            'UPDATE c_quiz SET sound = NULL, description = NULL, text_when_finished = NULL, '
+            .'text_when_finished_failure = NULL WHERE iid = ?',
+            [$id]
+        );
+
+        $again = $this->reread($id);
+        $again->save();
+
+        $row = $this->quizRow($id);
+        $this->assertSame('x2_null_cols', $row['title']);
+        $this->assertSame($id, $again->getId());
+    }
+
     public function testSaveUpdatesTheSameRowWithoutNewNodeOrLink(): void
     {
         $e = $this->savedExercise('x2_before');

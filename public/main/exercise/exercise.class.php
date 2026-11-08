@@ -1531,8 +1531,8 @@ class Exercise
     {
         $id = $this->getId();
         $title = $this->exercise;
-        $description = $this->description;
-        $sound = $this->sound;
+        $description = (string) $this->description;
+        $sound = (string) $this->sound;
         $type = $this->type;
         $attempts = isset($this->attempts) ? (int) $this->attempts : 0;
         $feedback_type = isset($this->feedback_type) ? (int) $this->feedback_type : 0;
@@ -1542,7 +1542,7 @@ class Exercise
         $saveCorrectAnswers = isset($this->saveCorrectAnswers) ? (int) $this->saveCorrectAnswers : 0;
         $review_answers = isset($this->review_answers) && $this->review_answers ? 1 : 0;
         $randomByCat = (int) $this->randomByCat;
-        $text_when_finished = $this->text_when_finished;
+        $text_when_finished = (string) $this->text_when_finished;
         $text_when_finished_failure = $this->text_when_finished_failure;
         $display_category_name = (int) $this->display_category_name;
         $pass_percentage = (int) $this->pass_percentage;

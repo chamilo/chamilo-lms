@@ -1566,25 +1566,27 @@ final class CourseReportingSectionQueryService
             throw new AccessDeniedHttpException('The selected users are outside this course context.');
         }
 
-        $senderColumn = $this->columnExists('message', 'user_sender_id') ? 'user_sender_id' : 'sender_id';
-        $receiverColumn = $this->columnExists('message', 'user_receiver_id') ? 'user_receiver_id' : 'receiver_id';
-        $dateColumn = $this->columnExists('message', 'send_date') ? 'send_date' : 'created_at';
-        $titleColumn = $this->columnExists('message', 'title') ? 'title' : "''";
-        $contentColumn = $this->columnExists('message', 'content') ? 'content' : "''";
-        $where = '(('.$senderColumn.' = :userId AND '.$receiverColumn.' = :peerUserId)
-                OR ('.$senderColumn.' = :peerUserId AND '.$receiverColumn.' = :userId))';
-        $params = ['userId' => $userId, 'peerUserId' => $peerUserId];
+        // A message has one sender (message.user_sender_id) and its recipients in message_rel_user (type "to").
+        $where = '((message.user_sender_id = :userId AND EXISTS (
+                        SELECT 1 FROM message_rel_user recipient
+                         WHERE recipient.message_id = message.id AND recipient.user_id = :peerUserId
+                           AND recipient.receiver_type = :toType))
+                OR (message.user_sender_id = :peerUserId AND EXISTS (
+                        SELECT 1 FROM message_rel_user recipient
+                         WHERE recipient.message_id = message.id AND recipient.user_id = :userId
+                           AND recipient.receiver_type = :toType)))';
+        $params = ['userId' => $userId, 'peerUserId' => $peerUserId, 'toType' => 1];
         $total = (int) $this->connection->fetchOne('SELECT COUNT(*) FROM message WHERE '.$where, $params);
         $rows = $this->connection->fetchAllAssociative(
-            'SELECT id,
-                    '.$senderColumn.' AS senderId,
-                    '.$receiverColumn.' AS receiverId,
-                    '.$titleColumn.' AS title,
-                    '.$contentColumn.' AS content,
-                    '.$dateColumn.' AS sendDate
+            'SELECT message.id,
+                    message.user_sender_id AS senderId,
+                    CASE WHEN message.user_sender_id = :userId THEN :peerUserId ELSE :userId END AS receiverId,
+                    message.title AS title,
+                    message.content AS content,
+                    message.send_date AS sendDate
                FROM message
               WHERE '.$where.'
-           ORDER BY '.$dateColumn.' DESC
+           ORDER BY message.send_date DESC
               LIMIT :limit OFFSET :offset',
             $params + [
                 'limit' => $pagination['itemsPerPage'],

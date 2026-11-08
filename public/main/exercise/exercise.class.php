@@ -226,7 +226,10 @@ class Exercise
             }
 
             if (!empty($object->page_result_configuration)) {
-                //$this->pageResultConfiguration = $object->page_result_configuration;
+                $pageResultConfiguration = json_decode((string) $object->page_result_configuration, true);
+                if (is_array($pageResultConfiguration) && !empty($pageResultConfiguration)) {
+                    $this->pageResultConfiguration = $pageResultConfiguration;
+                }
             }
 
             $this->hideQuestionNumber = 1 == $object->hide_question_number;

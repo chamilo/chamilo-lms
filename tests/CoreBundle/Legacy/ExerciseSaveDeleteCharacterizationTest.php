@@ -1153,13 +1153,21 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
     {
         $this->setSetting('exercise.allow_quiz_results_page_config', 'true');
         $e = $this->savedExercise('x2_pageconf_read');
-        $e->setPageResultConfiguration(['hide_total_score' => '1']);
+        $e->setPageResultConfiguration(['hide_total_score' => '1', 'hide_expected_answer' => '1']);
         $e->save();
 
         $back = $this->reread($e->getId());
-        // PINNED QUIRK (bug): read() has the assignment commented out, so the legacy result pages
-        // (getPageConfigurationAttribute) never see what the teacher configured.
-        $this->assertNull($back->getPageConfigurationAttribute('hide_total_score'));
+        $this->assertSame('1', $back->getPageConfigurationAttribute('hide_total_score'));
+        $back->results_disabled = RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS;
+        $this->assertFalse($back->showExpectedChoiceColumn(), 'the legacy result pages apply what the teacher configured');
+
+        // saving the re-read quiz keeps the configuration
+        $back->save();
+        $stored = json_decode($this->quizRow($e->getId())['page_result_configuration'], true);
+        $this->assertSame('1', $stored['hide_total_score']);
+
+        $plain = $this->savedExercise('x2_pageconf_none');
+        $this->assertNull($this->reread($plain->getId())->pageResultConfiguration, 'an empty configuration stays unset');
     }
 
     // ---------------------------------------------------------------- mail notification selection

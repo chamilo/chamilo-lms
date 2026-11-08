@@ -105,6 +105,22 @@ final class SurveyCharacterizationTest extends KernelTestCase
         return (int) $this->conn->lastInsertId();
     }
 
+    private function subscribe(int $userId, int $courseId = 1, int $sessionId = 0): void
+    {
+        if (0 === $sessionId) {
+            $this->conn->executeStatement(
+                'INSERT INTO course_rel_user (user_id, c_id, relation_type, status, is_tutor, sort, user_course_cat, progress) VALUES (?, ?, 0, 5, 0, 0, 0, 0)',
+                [$userId, $courseId]
+            );
+
+            return;
+        }
+        $this->conn->executeStatement(
+            'INSERT INTO session_rel_course_rel_user (user_id, session_id, c_id, status, visibility, legal_agreement, progress) VALUES (?, ?, ?, 0, 1, 0, 0)',
+            [$userId, $sessionId, $courseId]
+        );
+    }
+
     private function insertSurvey(array $over = []): int
     {
         $row = array_merge([
@@ -1278,6 +1294,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
     public function testSaveInvitationsStoresOneInvitationPerNewUserWithoutSendingMail(): void
     {
         $s = $this->insertSurvey();
+        $this->subscribe(2);
 
         $sent = SurveyUtil::saveInvitations($this->survey($s), ['USER:1', 'USER:2'], 'subject', 'text **link**', 0, false);
 
@@ -1294,6 +1311,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
     public function testSaveInvitationsDoesNotInviteAnAlreadyInvitedUserTwice(): void
     {
         $s = $this->insertSurvey();
+        $this->subscribe(2);
         $this->insertInvitation($s, 1, ['invitation_code' => 'sv_keep']);
 
         SurveyUtil::saveInvitations($this->survey($s), ['USER:1', 'USER:2'], 'subject', 'text', 0, false);
@@ -1301,6 +1319,37 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame(1, $this->rowCount('c_survey_invitation', 'survey_id = ? AND user_id = 1', [$s]));
         $this->assertSame('sv_keep', $this->conn->fetchOne('SELECT invitation_code FROM c_survey_invitation WHERE survey_id = ? AND user_id = 1', [$s]));
         $this->assertSame(1, $this->rowCount('c_survey_invitation', 'survey_id = ? AND user_id = 2', [$s]));
+    }
+
+    public function testSaveInvitationsIgnoresUsersWhoAreNotInTheCourse(): void
+    {
+        // Security: the ids come from the posted form. A user who is not subscribed to the course (here the
+        // anonymous user 2, and user 1 who is only subscribed to course 1 not to a session) must get neither an
+        // invitation row nor a mail.
+        $s = $this->insertSurvey();
+
+        $sent = SurveyUtil::saveInvitations($this->survey($s), ['USER:1', 'USER:2'], 'sv scope subject', 'text **link**', 0, true);
+
+        $this->assertSame(1, $sent, 'only the course member is mailed');
+        $this->assertSame([1], array_map('intval', $this->conn->fetchFirstColumn('SELECT user_id FROM c_survey_invitation WHERE survey_id = ?', [$s])));
+
+        $sid = $this->insertSession();
+        $s2 = $this->insertSurvey();
+        $this->setContext(1, 1, $sid);
+        SurveyUtil::saveInvitations($this->survey($s2), ['USER:1'], 'subject', 'text');
+        $this->assertSame(0, $this->rowCount('c_survey_invitation', 'survey_id = ?', [$s2]), 'in a session only session users count');
+    }
+
+    public function testSaveInvitationsOfAGroupInvitesOnlyMembersWhoAreInTheCourse(): void
+    {
+        $s = $this->insertSurvey();
+        $groupId = $this->insertGroup();
+        $this->conn->executeStatement('INSERT INTO c_group_rel_user (c_id, user_id, group_id, status, role) VALUES (1, 2, ?, 0, \'\')', [$groupId]);
+
+        SurveyUtil::saveInvitations($this->survey($s), ['GROUP:'.$groupId], 'subject', 'text');
+
+        $this->assertSame(0, $this->rowCount('c_survey_invitation', 'survey_id = ? AND user_id IS NOT NULL', [$s]));
+        $this->assertSame(1, $this->rowCount('c_survey_invitation', 'survey_id = ? AND group_id = ?', [$s, $groupId]));
     }
 
     public function testSaveInvitationsRequiresAnArray(): void
@@ -1315,6 +1364,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
     {
         $sid = $this->insertSession();
         $s = $this->insertSurvey();
+        $this->subscribe(2, 1, $sid);
         $this->setContext(1, 1, $sid);
 
         SurveyUtil::saveInvitations($this->survey($s), ['USER:2'], 'subject', 'text');
@@ -1885,6 +1935,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
     {
         $sid = $this->insertSession();
         $s = $this->insertSurvey();
+        $this->subscribe(2, 1, $sid);
         $this->insertInvitation($s, 2, ['session_id' => $sid, 'invitation_code' => 'svcodekeep']);
         $this->setContext(1, 1, $sid);
 
@@ -1901,6 +1952,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
     public function testSaveInvitationsReminderReusesTheStoredInvitationCodeOutsideSessions(): void
     {
         $s = $this->insertSurvey();
+        $this->subscribe(2);
         $this->insertInvitation($s, 2, ['invitation_code' => 'svcodebase']);
 
         $sent = SurveyUtil::saveInvitations($this->survey($s), ['USER:2'], 'sv reminder base', 'sv body **link**', 1, true);

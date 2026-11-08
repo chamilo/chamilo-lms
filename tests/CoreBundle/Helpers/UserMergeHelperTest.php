@@ -290,14 +290,16 @@ final class UserMergeHelperTest extends KernelTestCase
         $a = $this->rawUser('a');
         $b = $this->rawUser('b');
         $this->userRel($a, $merge, 3); // a -> merge: moves to a -> keep
-        $this->userRel($b, $merge, 3); // b -> merge but b -> keep exists: dropped
+        $this->userRel($b, $merge, 3); // b -> merge but b -> keep (same type) exists: dropped
+        $this->userRel($b, $merge, 2); // moves: b -> keep has no type 2
         $this->userRel($b, $keep, 3);
+        $this->userRel($b, $keep, 1); // same friend, other type than the merged relation: must not hide it
         $this->userRel($a, $merge, 1); // other type: moves
 
         $this->assertTrue($this->helper->mergeUsers($keep, $merge));
 
         $this->assertSame([1, 3], array_map('intval', $this->conn()->fetchFirstColumn('SELECT relation_type FROM user_rel_user WHERE user_id = ? AND friend_user_id = ? ORDER BY relation_type', [$a, $keep])));
-        $this->assertSame(1, (int) $this->scalar('SELECT COUNT(*) FROM user_rel_user WHERE user_id = ? AND friend_user_id = ? AND relation_type = 3', [$b, $keep]));
+        $this->assertSame([1, 2, 3], array_map('intval', $this->conn()->fetchFirstColumn('SELECT relation_type FROM user_rel_user WHERE user_id = ? AND friend_user_id = ? ORDER BY relation_type', [$b, $keep])));
         $this->assertSame(0, (int) $this->scalar('SELECT COUNT(*) FROM user_rel_user WHERE friend_user_id = ? OR user_id = ?', [$merge, $merge]), 'Nothing may dangle to the soft-deleted account');
     }
 

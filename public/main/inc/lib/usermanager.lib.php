@@ -2717,7 +2717,7 @@ class UserManager
         // LEFT JOIN is used for session_rel_course_rel_user because an inner
         // join would not catch session-courses where the user is general
         // session coach but which do not have students nor coaches registered
-        $dqlSelect = ' COUNT(DISTINCT s.id) ';
+        $dqlSelect = ' DISTINCT s.id ';
 
         if (!$getCount) {
             $dqlSelect = " DISTINCT
@@ -2793,8 +2793,10 @@ class UserManager
             }
         }
 
-        $dqlStudent .= $order;
-        $dqlCoach .= $order;
+        if (!$getCount) {
+            $dqlStudent .= $order;
+            $dqlCoach .= $order;
+        }
 
         $accessUrlId = api_get_current_access_url_id();
         $dqlStudent = Database::getManager()
@@ -2811,7 +2813,11 @@ class UserManager
         ;
 
         if ($getCount) {
-            return $dqlStudent->getSingleScalarResult() + $dqlCoach->getSingleScalarResult();
+            // A session where the user is both student and coach counts once.
+            return count(array_unique(array_merge(
+                $dqlStudent->getSingleColumnResult(),
+                $dqlCoach->getSingleColumnResult()
+            )));
         }
 
         $sessionDataStudent = $dqlStudent->getResult();
@@ -2894,13 +2900,6 @@ class UserManager
                 }
             }
 
-            $categories[$row['session_category_id']]['session_category'] = [
-                'id' => $row['session_category_id'],
-                'name' => $row['session_category_title'],
-                'date_start' => $categoryStart,
-                'date_end' => $categoryEnd,
-            ];
-
             $visibility = api_get_session_visibility(
                 $session_id,
                 null,
@@ -2961,6 +2960,14 @@ class UserManager
                 $collapsedAction = $collapsableData['collapsable_link'];
             }
 
+            // The category entry is only created for a session that is actually listed, so no entry is left
+            // without its 'sessions' key (callers read $category['sessions'] unguarded).
+            $categories[$row['session_category_id']]['session_category'] = [
+                'id' => $row['session_category_id'],
+                'name' => $row['session_category_title'],
+                'date_start' => $categoryStart,
+                'date_end' => $categoryEnd,
+            ];
             $categories[$row['session_category_id']]['sessions'][] = [
                 'session_name' => $row['title'],
                 'session_id' => $row['id'],

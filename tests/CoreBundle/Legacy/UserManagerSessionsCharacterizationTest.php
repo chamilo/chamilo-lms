@@ -394,17 +394,16 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
         $this->fresh();
 
         // Not open yet: access_start_date in the future makes the visibility SESSION_INVISIBLE, even in "all" mode.
-        // PINNED QUIRK: the category entry is created before the visibility check, so a hidden session leaves a
-        // category stub without a 'sessions' key behind.
-        $hidden = UserManager::get_sessions_by_category($u, false, false, true);
-        $this->assertSame([''], array_keys($hidden));
-        $this->assertSame(['session_category'], array_keys($hidden['']));
+        // Fixed: the category entry was created before the visibility check, so a hidden session left a category
+        // stub without a 'sessions' key behind (myspace.ajax.php, my_career.php and access_details_session.php
+        // read $category['sessions'] unguarded). A category now exists only when it lists a session.
+        $this->assertSame([], UserManager::get_sessions_by_category($u, false, false, true));
         // ... unless the caller says to ignore visibility (admins).
         $res = UserManager::get_sessions_by_category($u, false, true, true);
         $this->assertSame([$empty, $future], array_map(static fn ($r) => (int) $r['session_id'], $res['']['sessions']));
 
         // Session without any course: not shown in history either (all of its zero courses are "blocked").
-        $this->assertArrayNotHasKey('sessions', UserManager::get_sessions_by_category($u, true)['']);
+        $this->assertSame([], UserManager::get_sessions_by_category($u, true));
     }
 
     public function testSessionsByCategoryCoachSessionsComeThroughSessionRelUser(): void
@@ -426,10 +425,10 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
             array_column($res['']['sessions'], 'session_name'),
             'Student rows are collected first, then coach rows are appended (merged by session id): the SQL order is not global.'
         );
-        $this->assertSame(2, UserManager::get_sessions_by_category($coach, false, false, false, true));
+        $this->assertSame(2, UserManager::get_sessions_by_category($coach, false, false, false, true), 'two distinct sessions');
     }
 
-    public function testSessionsByCategoryCountAddsStudentAndCoachCounts(): void
+    public function testSessionsByCategoryCountCountsAStudentAndCoachSessionOnce(): void
     {
         $t = $this->fixedTimes();
         $u = $this->rawUser('sc5', 1);
@@ -441,8 +440,9 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
 
         $res = UserManager::get_sessions_by_category($u, false);
         $this->assertCount(1, $res['']['sessions'], 'The list merges the two rows into one session.');
-        // PINNED QUIRK: the count variant sums the two sub-queries without de-duplicating the session id.
-        $this->assertSame(2, UserManager::get_sessions_by_category($u, false, false, false, true));
+        // Fixed: the count variant summed the two sub-queries without de-duplicating the session id (2 for the
+        // one session the list shows): a session where the user is student and coach counts once.
+        $this->assertSame(1, UserManager::get_sessions_by_category($u, false, false, false, true));
     }
 
     public function testSessionsByCategoryIgnoresSessionsOfAnotherUrl(): void

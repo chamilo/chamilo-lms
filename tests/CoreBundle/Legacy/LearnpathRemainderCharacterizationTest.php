@@ -1076,12 +1076,14 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
         $this->conn()->executeStatement('UPDATE c_lp SET accumulate_work_time = 15 WHERE iid = ?', [$lpId]);
 
         $this->assertSame(15, (int) learnpath::getAccumulateWorkTimePrerequisite($lpId, self::COURSE_ID));
-        // PINNED QUIRK: the constructor never loads the minimum time into $accumulateWorkTime (used by the player to
-        // enforce the minimum time) and puts the work time into $accumulateScormTime (the "accumulate SCORM time"
-        // flag) instead of the real flag.
+        // The constructor loads the minimum time (enforced by the player) and, separately, the "accumulate SCORM
+        // time" flag; it used to leave the first one at 0 and copy the work time into the flag.
+        $this->conn()->executeStatement('UPDATE c_lp SET accumulate_scorm_time = 0 WHERE iid = ?', [$lpId]);
         $lp = $this->lp($lpId);
-        $this->assertSame(0, $lp->getAccumulateWorkTime());
-        $this->assertSame(15, $lp->getAccumulateScormTime());
+        $this->assertSame(15, $lp->getAccumulateWorkTime());
+        $this->assertSame(0, $lp->getAccumulateScormTime());
+        $this->conn()->executeStatement('UPDATE c_lp SET accumulate_scorm_time = 1 WHERE iid = ?', [$lpId]);
+        $this->assertSame(1, $this->lp($lpId)->getAccumulateScormTime());
     }
 
     // ---------------------------------------------------------------- forum, search index, autolaunch

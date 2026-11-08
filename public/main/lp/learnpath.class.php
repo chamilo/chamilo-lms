@@ -186,7 +186,8 @@ class learnpath
                 $this->scormUrl = Container::getAssetRepository()->getAssetUrl($asset).'/'.$entity->getPath().'/';
             }
 
-            $this->accumulateScormTime = $entity->getAccumulateWorkTime();
+            $this->accumulateScormTime = $entity->getAccumulateScormTime();
+            $this->accumulateWorkTime = $entity->getAccumulateWorkTime();
 
             if (!empty($entity->getPublishedOn())) {
                 $this->published_on = $entity->getPublishedOn()->format('Y-m-d H:i:s');

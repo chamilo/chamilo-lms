@@ -161,6 +161,8 @@ class TestCategory
 
     /**
      * Gets the number of question of category id=in_id.
+     *
+     * @deprecated no caller; kept only as a pin of its behaviour
      */
     public function getCategoryQuestionsNumber()
     {
@@ -168,7 +170,7 @@ class TestCategory
         $id = (int) $this->id;
         $sql = "SELECT count(*) AS nb
                 FROM $table
-                WHERE category_id = $id AND c_id=".api_get_course_int_id();
+                WHERE category_id = $id";
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
 

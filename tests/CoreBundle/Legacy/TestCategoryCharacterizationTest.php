@@ -308,19 +308,19 @@ final class TestCategoryCharacterizationTest extends KernelTestCase
         $this->assertContains($ok, [true, null]);
     }
 
-    public function testGetCategoryQuestionsNumberQueriesAColumnThatNoLongerExists(): void
+    public function testGetCategoryQuestionsNumberCountsTheLinkedQuestions(): void
     {
-        // PINNED QUIRK: dead code (no caller). c_quiz_question_rel_category has no c_id any more, so the count
-        // query is a SQL error. Marked @deprecated.
+        $quiz = $this->quiz();
         $cat = new TestCategory();
         $cat->id = $this->category();
-        $threw = false;
-        try {
-            @$cat->getCategoryQuestionsNumber();
-        } catch (Throwable) {
-            $threw = true;
-        }
-        $this->assertTrue($threw);
+        $this->question($quiz, 1, (int) $cat->id);
+        $this->question($quiz, 2, (int) $cat->id);
+        $this->question($quiz, 3, $this->category());
+
+        // Dead code (no caller, @deprecated). It used to filter on the c_id column the link table lost, which
+        // made it a SQL error.
+        $this->assertSame(2, (int) $cat->getCategoryQuestionsNumber());
+        $this->assertSame(0, (int) (new TestCategory())->getCategoryQuestionsNumber());
     }
 
     // ---------------------------------------------------------------- per exercise

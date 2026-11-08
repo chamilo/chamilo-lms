@@ -583,6 +583,7 @@ function who_is_online_in_this_course_count(
  */
 function whoIsOnlineInThisSessionCount($timeLimit, $sessionId)
 {
+    $sessionId = (int) $sessionId;
     if (!$sessionId) {
         return 0;
     }
@@ -590,7 +591,7 @@ function whoIsOnlineInThisSessionCount($timeLimit, $sessionId)
     $tblTrackOnline = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 
-    $timeLimit = Database::escape_string($timeLimit);
+    $timeLimit = (int) $timeLimit;
     $online_time = time() - $timeLimit * 60;
     $current_date = api_get_utc_datetime($online_time);
 

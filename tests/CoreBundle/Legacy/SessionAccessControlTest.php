@@ -446,4 +446,15 @@ final class SessionAccessControlTest extends AbstractApiTest
             'The course is checked before the AJAX search runs too.'
         );
     }
+
+    /**
+     * Source-level pin: get_description (public when the catalogue is) echoed the session title unescaped.
+     */
+    public function testSessionDescriptionAnswerEscapesTheTitle(): void
+    {
+        $source = $this->page('inc/ajax/session.ajax.php');
+
+        $this->assertStringContainsString("'<h2>'.api_htmlentities(\$sessionInfo['title']).'</h2>'", $source);
+        $this->assertStringNotContainsString("'<h2>'.\$sessionInfo['name']", $source);
+    }
 }

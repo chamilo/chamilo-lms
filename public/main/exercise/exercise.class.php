@@ -9120,6 +9120,7 @@ class Exercise
         $sum = 0;
         $bestResult = 0;
         $sumResult = 0;
+        $students = [];
         $result = Database::query($sql);
         while ($data = Database::fetch_assoc($result)) {
             // Only take into account users in the current student list.

@@ -1362,14 +1362,14 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
         [$e, $linkId] = $this->gradedQuiz();
         $this->exe($e->getId(), 2, 0.0, 0.0, 'completed', '2020-01-02 10:00:00');
 
-        // PINNED QUIRK (bug): when no student has a scored attempt $students is never defined and
-        // setUserScoreList(null) is a TypeError (PHP 8: warning first), so the link is never refreshed.
-        try {
-            $e->generateStats($e->getId(), api_get_course_info(), 0);
-            $this->fail('expected the undefined-variable warning');
-        } catch (\PHPUnit\Framework\Error\Warning $w) {
-            $this->assertStringContainsString('$students', $w->getMessage());
-        }
+        // No student has a scored attempt: the link is refreshed with zeros and an empty score list.
+        $e->generateStats($e->getId(), api_get_course_info(), 0);
+
+        $link = $this->conn->fetchAssociative('SELECT * FROM gradebook_link WHERE id = ?', [$linkId]);
+        $this->assertSame(0.0, (float) $link['best_score']);
+        $this->assertSame(0.0, (float) $link['average_score']);
+        $this->assertSame(10.0, (float) $link['score_weight']);
+        $this->assertSame([], json_decode((string) $link['user_score_list'], true));
     }
 
     // ---------------------------------------------------------------- tool visibility guard of the result pages

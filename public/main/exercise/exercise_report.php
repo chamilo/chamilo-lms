@@ -71,6 +71,15 @@ if (empty($exercise_id)) {
     api_not_allowed(true);
 }
 
+// Exercise::read() does not scope by course: the test must be one of the current course (and session).
+if (!ExerciseLib::exerciseBelongsToCourse($exercise_id, (int) $course_id, (int) $sessionId)) {
+    api_not_allowed(true);
+}
+
+// State-changing links of this page carry this token (own namespace, so other pages' tokens are not rotated).
+$exerciseToken = Security::get_existing_token('exercise');
+$exerciseTokenIsValid = Security::check_token('request', null, 'exercise');
+
 $blockPage = true;
 if (empty($sessionId)) {
     if ($is_allowedToEdit) {
@@ -113,6 +122,9 @@ if (!empty($_GET['path'])) {
 
 switch ($action) {
     case 'delete_multiple':
+        if (!$exerciseTokenIsValid) {
+            api_not_allowed(true);
+        }
         $exeIds = explode(',', $idMultiple);
         foreach ($exeIds as $exeId) {
             ExerciseLib::deleteExerciseAttempt((int) $exeId);
@@ -140,11 +152,17 @@ switch ($action) {
         exit;
     case 'send_email':
         $attemptId = (int) $_GET['attemptId'];
+        if (!$exerciseTokenIsValid || !ExerciseLib::attemptBelongsToCourse($attemptId, (int) $course_id)) {
+            api_not_allowed(true);
+        }
         ExerciseLib::sendExerciseResultByEmail($attemptId);
         Display::addFlash(Display::return_message(get_lang('Email content logged to error_log')));
         header('Location: '.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exercise_id);
         exit;
     case 'send_all_emails':
+        if (!$exerciseTokenIsValid) {
+            api_not_allowed(true);
+        }
         $sessionId = api_get_session_id();
         $courseId = api_get_course_int_id();
         $attempts = ExerciseLib::getReviewedAttemptsInfo($exercise_id, $sessionId);
@@ -226,8 +244,12 @@ if (isset($_REQUEST['comments']) &&
     $id = (int) $_GET['exeid'];
     $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
 
-    if (empty($track_exercise_info)) {
-        api_not_allowed();
+    // The attempt must belong to the current course, or a teacher of any course could regrade any attempt.
+    if (empty($track_exercise_info)
+        || !ExerciseLib::attemptBelongsToCourse($id, (int) $course_id)
+        || !$exerciseTokenIsValid
+    ) {
+        api_not_allowed(true);
     }
 
     $em = Database::getManager();
@@ -501,7 +523,7 @@ if ($is_allowedToEdit && 'learnpath' != $origin) {
 
         $actions .= Display::url(
             Display::getMdiIcon(ActionIcon::SEND_ALL_EMAILS, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send all results/corrections by email')),
-            api_get_self().'?'.api_get_cidreq().'&action=send_all_emails&exerciseId='.$exercise_id
+            api_get_self().'?'.api_get_cidreq().'&action=send_all_emails&exerciseId='.$exercise_id.'&exercise_sec_token='.$exerciseToken
         );
 
         // clean result before a selected date icon
@@ -557,6 +579,9 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
     !empty($_GET['did']) && false == $locked
 ) {
     $exe_id = (int) $_GET['did'];
+    if (!$exerciseTokenIsValid) {
+        api_not_allowed(true);
+    }
     if (!empty($exe_id)) {
         ExerciseLib::deleteExerciseAttempt($exe_id);
         header('Location: exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id);
@@ -593,8 +618,11 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 ) {
     // Close the user attempt otherwise left pending
     $exe_id = (int) $_GET['id'];
+    if (!$exerciseTokenIsValid) {
+        api_not_allowed(true);
+    }
     $sql = "UPDATE $TBL_TRACK_EXERCISES SET status = ''
-            WHERE exe_id = $exe_id AND status = 'incomplete'";
+            WHERE exe_id = $exe_id AND status = 'incomplete' AND c_id = ".(int) $course_id;
     Database::query($sql);
 }
 
@@ -822,7 +850,7 @@ if ($is_allowedToEdit || $is_tutor) {
     }';
 }
 
-$deleteUrl = api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exercise_id.'&action=delete_multiple';
+$deleteUrl = api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exercise_id.'&action=delete_multiple&exercise_sec_token='.$exerciseToken;
 $extra_params['autowidth'] = 'true';
 $extra_params['multiselect'] = true;
 $extra_params['height'] = 'auto';

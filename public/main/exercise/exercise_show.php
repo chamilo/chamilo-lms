@@ -25,7 +25,11 @@ $printHeaders = 'learnpath' === $origin;
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0; //exe id
 $action     = $_GET['action'] ?? ($_REQUEST['action'] ?? null);
 $exportType = $_GET['export_type'] ?? null;
-$exportTypeAllResults = ($action === 'export' && in_array($exportType, ['all_results', 'result_pdf'], true));
+// Skips the access checks below: only ExerciseLib::getAttemptPdfHtml() (already authorized, in-process) may ask for
+// it. The export_type request parameter alone must never grant it, or any attempt could be read without a login.
+$exportTypeAllResults = ($action === 'export'
+    && in_array($exportType, ['all_results', 'result_pdf'], true)
+    && ExerciseLib::isInternalAttemptExport());
 
 if (empty($id)) {
     api_not_allowed(true);
@@ -1115,6 +1119,7 @@ if ($isFeedbackAllowed && 'learnpath' !== $origin && 'student_progress' !== $ori
             'exerciseId' => $exercise_id,
             'filter' => 2,
             'comments' => 'update',
+            'exercise_sec_token' => Security::get_existing_token('exercise'),
             'exeid' => $id,
             'origin' => $origin,
             'details' => 'true',
@@ -1131,6 +1136,7 @@ if ($isFeedbackAllowed && 'learnpath' !== $origin && 'student_progress' !== $ori
             'exerciseId' => $exercise_id,
             'filter' => 1,
             'comments' => 'update',
+            'exercise_sec_token' => Security::get_existing_token('exercise'),
             'exeid' => $id,
         ]);
 

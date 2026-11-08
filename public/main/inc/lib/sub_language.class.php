@@ -49,6 +49,8 @@ class SubLanguageManager
      * @param bool   $only_main_name true if we only want the "subname" trad4all instead of trad4all.inc.php
      *
      * @return array All file of lang folder
+     *
+     * @deprecated Only used by the gettext migration scripts under tests/scripts.
      */
     public static function get_lang_folder_files_list($path, $only_main_name = false)
     {
@@ -404,6 +406,8 @@ class SubLanguageManager
      * @param string $isocode The language isocode (en, es, fr, zh-TW, etc)
      *
      * @return mixed English name of the matching language, or false if no active language could be found
+     *
+     * @deprecated Only called by getLanguageFromBrowserPreference(), which nothing calls.
      */
     public static function getLanguageFromIsocode($isocode)
     {
@@ -432,6 +436,8 @@ class SubLanguageManager
      * @param string $preferences The browser-configured language preferences (e.g. "en,es;q=0.7;en-us;q=0.3", etc)
      *
      * @return mixed English name of the matching language, or false if no active language could be found
+     *
+     * @deprecated No caller left in public/ or src/.
      */
     public static function getLanguageFromBrowserPreference($preferences)
     {
@@ -480,6 +486,8 @@ class SubLanguageManager
      *
      * @param int $languageId
      * @return array [childIsoCode, parentIsoCode]
+     *
+     * @deprecated Only called by searchTranslations(), which nothing calls.
      */
     public static function getIsoCodes($languageId)
     {
@@ -510,6 +518,8 @@ class SubLanguageManager
      * @param int    $languageId  The ID of the language to search in.
      *
      * @return array An array of matched translations.
+     *
+     * @deprecated No caller left in public/ or src/.
      */
     public static function searchTranslations($term, $languageId): array
     {

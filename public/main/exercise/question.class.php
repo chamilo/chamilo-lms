@@ -1130,6 +1130,7 @@ abstract class Question
             ->setLevel($this->level)
             ->setFeedback($this->feedback)
             ->setParent($courseEntity)
+            ->setCreator(api_get_user_entity())
             ->addCourseLink($courseEntity)
         ;
 

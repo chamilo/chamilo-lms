@@ -21,7 +21,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 /**
  * Characterization tests for the entity-persisting paths of Exercise and Question (save of a NEW quiz/question,
@@ -819,16 +818,21 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
         );
     }
 
-    public function testDuplicateNeedsTheSecurityTokenForTheCreator(): void
+    public function testDuplicateSetsTheCreatorWithoutASecurityToken(): void
     {
         $src = $this->makeQuestion('x2_dup_notoken');
         $origin = Question::read($src);
         $this->loginToken(false);
 
-        // PINNED QUIRK: duplicate() (unlike save()) never calls setCreator(): without a Security token (CLI, cron,
-        // import jobs) ResourceListener refuses the new question.
-        $this->expectException(UserNotFoundException::class);
-        $origin->duplicate();
+        // CLI, cron and import code has no Security token: save() sets the creator explicitly, so must duplicate().
+        $newId = (int) $origin->duplicate();
+
+        $this->assertGreaterThan(0, $newId);
+        $nodeId = (int) $this->conn->fetchOne('SELECT resource_node_id FROM c_quiz_question WHERE iid = ?', [$newId]);
+        $this->assertSame(
+            (int) $this->getUser('admin')->getId(),
+            (int) $this->conn->fetchOne('SELECT creator_id FROM resource_node WHERE id = ?', [$nodeId])
+        );
     }
 
     public function testDuplicateWithoutCourseInfoReturnsFalse(): void

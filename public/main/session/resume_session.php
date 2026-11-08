@@ -46,6 +46,14 @@ $sessionCategory = $session->getCategory();
 $action = $_GET['action'] ?? null;
 $url_id = api_get_current_access_url_id();
 
+// Keep the token of the session: regenerating it on every request would invalidate the one of the page that
+// sent the request. Every action below changes data and is a GET link: legacy pages are not covered by
+// CsrfProtectionListener, so the links carry the token.
+$token = Security::get_existing_token();
+if (null !== $action && !Security::check_token('get')) {
+    api_not_allowed(true);
+}
+
 switch ($action) {
     case 'move_up':
         SessionManager::moveUp($sessionId, $_GET['course_id']);
@@ -64,7 +72,11 @@ switch ($action) {
         break;
 
     case 'add_user_to_url':
-        $user_id = $_REQUEST['user_id'];
+        // Giving a user access to this URL is not a session management right (a session coach reaches this page).
+        if (!api_is_platform_admin()) {
+            api_not_allowed(true);
+        }
+        $user_id = (int) ($_REQUEST['user_id'] ?? 0);
         $result = UrlManager::add_user_to_url($user_id, $url_id);
         $user_info = api_get_user_info($user_id);
         if ($result) {
@@ -228,7 +240,7 @@ if (0 === $session->getNbrCourses()) {
                     ICON_SIZE_SMALL,
                     get_lang('Move up')
                 ),
-                !$count ? '#' : api_get_self().'?id_session='.$sessionId.'&course_id='.$courseId.'&action=move_up',
+                !$count ? '#' : api_get_self().'?id_session='.$sessionId.'&course_id='.$courseId.'&action=move_up&sec_token='.$token,
                 ['class' => 'inline-flex items-center']
             );
             $courseActions .= Display::url(
@@ -241,7 +253,7 @@ if (0 === $session->getNbrCourses()) {
                 ),
                 $count + 1 == count($courses)
                     ? '#'
-                    : api_get_self().'?id_session='.$sessionId.'&course_id='.$courseId.'&action=move_down',
+                    : api_get_self().'?id_session='.$sessionId.'&course_id='.$courseId.'&action=move_down&sec_token='.$token,
                 ['class' => 'inline-flex items-center']
             );
         }
@@ -283,7 +295,7 @@ if (0 === $session->getNbrCourses()) {
         );
         $courseActions .= Display::url(
             Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, 22, get_lang('Delete')),
-            api_get_self()."?id_session=$sessionId&action=delete&idChecked[]=$courseCode",
+            api_get_self()."?id_session=$sessionId&action=delete&idChecked[]=".urlencode($courseCode)."&sec_token=$token",
             [
                 'class' => 'inline-flex items-center',
                 'onclick' => "javascript:if(!confirm('".get_lang('Please confirm your choice')."')) return false;",
@@ -354,7 +366,7 @@ if (!empty($sessionRelUsers)) {
 
         $removeLink = Display::url(
             Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, 22, get_lang('Delete')),
-            api_get_self().'?id_session='.$sessionId.'&action=delete&user='.$userId,
+            api_get_self().'?id_session='.$sessionId.'&action=delete&user='.$userId.'&sec_token='.$token,
             ['onclick' => "javascript:if(!confirm('".get_lang('Please confirm your choice')."')) return false;"]
         );
 

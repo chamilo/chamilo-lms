@@ -321,4 +321,27 @@ final class SessionAccessControlTest extends AbstractApiTest
         $this->assertStringNotContainsString("'>'.\$category['title'].'</option>'", $category, 'Category titles are escaped.');
         $this->assertStringNotContainsString("<?php echo \$enreg['title']; ?>", $category, 'Session titles are escaped.');
     }
+
+    /**
+     * Source-level pin: the overview ran its delete / move / add_user_to_url actions on a plain GET without a
+     * token, and add_user_to_url (giving ANY user id access to the URL) only needed the right to manage this
+     * session, which a general coach has.
+     */
+    public function testSessionOverviewActionsNeedTheTokenAndUrlAccessNeedsAPlatformAdmin(): void
+    {
+        $source = $this->page('session/resume_session.php');
+
+        $this->assertStringContainsString("!Security::check_token('get')", $source);
+        $this->assertLessThan(
+            strpos($source, "switch (\$action)"),
+            strpos($source, "!Security::check_token('get')"),
+            'The token is checked before any action runs.'
+        );
+        $this->assertSame(4, substr_count($source, 'sec_token='), 'move up, move down, delete course, delete user.');
+        $this->assertStringContainsString('Security::get_existing_token()', $source);
+        $this->assertMatchesRegularExpression(
+            "/case 'add_user_to_url':\s*\/\/[^\n]*\n\s*if \(!api_is_platform_admin\(\)\) \{\s*api_not_allowed\(true\);/",
+            $source
+        );
+    }
 }

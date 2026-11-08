@@ -1378,4 +1378,72 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
         $this->assertSame(md5('R2 Alpha'), array_column($result['items'], 'id', 'organization')['R2 Alpha']);
         $this->assertSame('User by organization', $result['title']);
     }
+
+    // ------------------------------------------- student boss and HR scopes
+
+    private const REL_HR = 7;
+
+    public function testStudentBossLearnersListHoldsOnlyTheStudentsHeFollowsAndNoSoftDeletedOne(): void
+    {
+        $boss = $this->rawUser('r2b1', self::BOSS);
+        $mine = $this->rawUser('r2b2');
+        $gone = $this->rawUser('r2b3', 5, -2);
+        $notMine = $this->rawUser('r2b4');
+        foreach ([$mine, $gone] as $uid) {
+            $this->userRel($uid, $boss, self::REL_BOSS);
+        }
+        $this->courseUser($notMine, 1, 5);
+
+        $result = $this->section($this->ctx($boss, ['boss' => true, 'canViewGlobal' => false]), 'learners');
+
+        $this->assertSame([$mine], array_column($result['items'], 'id'));
+        $this->assertSame(1, $result['total']);
+        $this->assertSame('Active', $result['items'][0]['active']);
+    }
+
+    public function testStudentBossHasNoAccessToTeachersUsersOrSessions(): void
+    {
+        $boss = $this->rawUser('r2b5', self::BOSS);
+        foreach (['teachers', 'users', 'sessions', 'courses', 'exams'] as $section) {
+            try {
+                $this->section($this->ctx($boss, ['boss' => true, 'canViewGlobal' => false]), $section);
+                $this->fail($section);
+            } catch (AccessDeniedHttpException) {
+                $this->addToAssertionCount(1);
+            }
+        }
+    }
+
+    public function testHumanResourcesManagerSeesTheLearnersHeFollowsAndTheirSessionsOnly(): void
+    {
+        $hr = $this->rawUser('r2h1', self::HR);
+        $followed = $this->rawUser('r2h2');
+        $other = $this->rawUser('r2h3');
+        $this->userRel($followed, $hr, self::REL_HR);
+        $this->courseUser($other, 1, 5);
+        $hrSession = $this->rawSession('r2h1');
+        $this->sessionUser($hrSession, $hr, 1);
+        $strangerSession = $this->rawSession('r2h2');
+
+        $ctx = $this->ctx($hr, ['hr' => true]);
+        $learners = $this->section($ctx, 'learners');
+        $this->assertSame([$followed], array_column($learners['items'], 'id'));
+        $users = $this->section($ctx, 'users');
+        $this->assertSame([$followed], array_column($users['items'], 'id'));
+        $this->assertSame('Followed users', $users['title']);
+        $sessions = $this->section($ctx, 'sessions');
+        $this->assertContains($hrSession, array_column($sessions['items'], 'id'));
+        $this->assertNotContains($strangerSession, array_column($sessions['items'], 'id'));
+        // The admin-only sections stay closed to an HR manager.
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->section($ctx, 'admin-users');
+    }
+
+    public function testHumanResourcesManagerCannotOpenTheAdminSessionOverview(): void
+    {
+        $hr = $this->rawUser('r2h4', self::HR);
+        $ctx = $this->ctx($hr, ['hr' => true]);
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->section($ctx, 'admin-sessions');
+    }
 }

@@ -18,6 +18,7 @@ $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
 $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 $em = Database::getManager();
 
+GradebookUtils::protectElementInCurrentCourse('LINK', $linkId);
 $linkarray = LinkFactory :: load($linkId);
 if (empty($linkarray)) {
     api_not_allowed(true);
@@ -69,6 +70,8 @@ $form = new LinkAddEditForm(
 );
 if ($form->validate()) {
     $values = $form->exportValues();
+    // The target category is posted back by the form: it must belong to the current course.
+    GradebookUtils::protectElementInCurrentCourse('CATE', $values['select_gradebook'] ?? 0);
     $parent_cat = Category::load($values['select_gradebook']);
 
     if (!empty($values['select_gradebook'])) {

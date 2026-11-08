@@ -10,6 +10,7 @@ $select_eval = isset($_GET['selecteval']) ? (int) $_GET['selecteval'] : 0;
 if (empty($select_eval)) {
     api_not_allowed();
 }
+GradebookUtils::protectElementInCurrentCourse('EVAL', $select_eval);
 $resultedit = Result::load(null, null, $select_eval);
 $evaluation = Evaluation::load($select_eval);
 if (empty($evaluation)) {

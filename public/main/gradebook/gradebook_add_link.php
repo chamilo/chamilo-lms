@@ -36,6 +36,7 @@ if (0 == $session_id) {
     $all_categories = Category::loadSessionCategories(null, $session_id);
 }
 
+GradebookUtils::protectElementInCurrentCourse('CATE', $selectCat);
 $category = Category::load($selectCat);
 
 $url = api_get_self()
@@ -82,6 +83,8 @@ if (isset($typeSelected) && '0' != $typeSelected) {
         $addvalues = $addform->exportValues();
         // The selected item is always a database id: never trust the posted value as-is.
         $selectLinkId = isset($addvalues['select_link']) ? (int) $addvalues['select_link'] : 0;
+        // The target gradebook is posted back by the form: it must belong to the current course.
+        GradebookUtils::protectElementInCurrentCourse('CATE', $addvalues['select_gradebook'] ?? 0);
         $link = LinkFactory::create($typeSelected);
         $link->set_user_id(api_get_user_id());
         // Set course code *and* id

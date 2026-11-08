@@ -11,16 +11,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 GradebookUtils::block_students();
 
+GradebookUtils::protectElementInCurrentCourse('EVAL', $_GET['editeval'] ?? 0);
 $evaledit = Evaluation::load($_GET['editeval']);
 if (empty($evaledit[0])) {
     api_not_allowed(true);
 }
 if (!api_is_platform_admin()) {
-    $currentCourseId = api_get_course_int_id();
-
-    if ($evaledit[0]->getCourseId() && $evaledit[0]->getCourseId() != $currentCourseId) {
-        api_not_allowed(true);
-    }
 
     if ($evaledit[0]->is_locked()) {
         api_not_allowed(true);
@@ -52,6 +48,11 @@ if ($form->validate()) {
     $evaluation->setTitle($values['name']);
     $evaluation->setDescription($values['description']);
 
+    // The course and category are posted back by the form: keep the evaluation in the current course.
+    if (!api_is_platform_admin()) {
+        GradebookUtils::protectElementInCurrentCourse('CATE', $values['hid_category_id'] ?? 0);
+        $values['hid_course_code'] = api_get_course_id();
+    }
     $course = $entityManager->getRepository(Course::class)->findOneBy(['code' => $values['hid_course_code']]);
     $evaluation->setCourse($course);
 

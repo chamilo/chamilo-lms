@@ -12,6 +12,7 @@ GradebookUtils::block_students();
 
 $selectEval = isset($_GET['selecteval']) ? (int) $_GET['selecteval'] : 0;
 
+GradebookUtils::protectElementInCurrentCourse('EVAL', $selectEval);
 $resultadd = new Result();
 $resultadd->set_evaluation_id($selectEval);
 $evaluation = Evaluation::load($selectEval);
@@ -76,6 +77,8 @@ if ($add_result_form->validate() && !$hasInvalidScores) {
     }
 
     $scores = $values['score'];
+    // The evaluation is posted back by the form: only the one that was guarded above may receive results.
+    $values['evaluation_id'] = $selectEval;
 
     foreach ($scores as $userId => $row) {
         $res = new Result();

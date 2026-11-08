@@ -10,6 +10,7 @@ GradebookUtils::block_students();
 
 $selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
+GradebookUtils::protectElementInCurrentCourse('CATE', $selectCat);
 $catadd = new Category();
 $catadd->set_user_id(api_get_user_id());
 $catadd->set_parent_id($selectCat);

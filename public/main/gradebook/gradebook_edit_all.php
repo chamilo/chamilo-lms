@@ -21,6 +21,8 @@ if (empty($my_selectcat)) {
     api_not_allowed(true);
 }
 
+GradebookUtils::protectElementInCurrentCourse('CATE', $my_selectcat);
+
 $action_details = '';
 if (isset($_GET['selectcat'])) {
     $action_details = 'selectcat';

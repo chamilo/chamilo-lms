@@ -45,6 +45,7 @@ if (empty($categoryId)) {
     api_not_allowed(true);
 }
 
+GradebookUtils::protectElementInCurrentCourse('CATE', $categoryId);
 $displayScore = ScoreDisplay::instance($categoryId);
 $customdisplays = $displayScore->get_custom_score_display_settings();
 

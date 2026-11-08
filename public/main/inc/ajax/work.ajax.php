@@ -59,7 +59,8 @@ switch ($action) {
             }
             $itemList = explode(',', $_REQUEST['id']);
             foreach ($itemList as $itemId) {
-                deleteWorkItem($itemId, $courseInfo);
+                // deleteWorkItem() expects the Course entity and scopes the id to it.
+                deleteWorkItem($itemId, $courseEntity);
             }
             echo '1';
             exit;
@@ -68,12 +69,27 @@ switch ($action) {
         break;
     case 'upload_file':
         api_protect_course_script(true);
-        $workId = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
-
-        $workInfo = get_work_data_by_id($workId);
+        $workId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
         $sessionId = api_get_session_id();
         $userId = api_get_user_id();
         $groupId = api_get_group_id();
+
+        // Same access as upload.php: the folder must be one of this course (and session) and visible to the
+        // user, who must be a member of the course (not an invitee).
+        if (empty($workId)) {
+            api_not_allowed(true);
+        }
+        protectWork($courseInfo, $workId);
+        $workInfo = get_work_data_by_id($workId);
+        $courseCode = $courseInfo['code'] ?? '';
+        if (empty($sessionId)) {
+            $isCourseMember = CourseManager::is_user_subscribed_in_course($userId, $courseCode);
+        } else {
+            $isCourseMember = CourseManager::is_user_subscribed_in_course($userId, $courseCode, true, $sessionId);
+        }
+        if (!($isCourseMember || api_is_platform_admin()) || api_is_invitee()) {
+            api_not_allowed(true);
+        }
         // Close the session as we don't need it any further
         session_write_close();
 
@@ -151,6 +167,7 @@ switch ($action) {
 
         break;
     case 'delete_work':
+        api_protect_course_script(true);
         if ($isAllowedToEdit) {
             if (empty($_REQUEST['id'])) {
                 return false;
@@ -164,8 +181,14 @@ switch ($action) {
     case 'upload_correction_file':
         api_protect_course_script(true);
         // User access same as upload.php
-        $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-        $itemId = isset($_GET['item_id']) ? intval($_GET['item_id']) : '';
+        // Corrections are uploaded by the teachers (and coaches) of the course only.
+        if (!api_is_allowed_to_edit(null, true)) {
+            api_not_allowed(true);
+        }
+        $itemId = isset($_GET['item_id']) ? (int) $_GET['item_id'] : 0;
+        if (!empty($itemId) && !workIsInCourse($itemId, (int) $courseInfo['real_id'])) {
+            api_not_allowed(true);
+        }
 
         $result = [];
 
@@ -174,7 +197,7 @@ switch ($action) {
 
             $courseInfo = api_get_course_info();
             $workInfo = get_work_data_by_id($itemId);
-            $workInfoParent = get_work_data_by_id($workInfo['parent_id']);
+            $workInfoParent = get_work_data_by_id($workInfo['parent_id'] ?? 0);
             $resultUpload = uploadWork($workInfoParent, $courseEntity, true, $workInfo);
             if (!$resultUpload) {
                 echo 'false';

@@ -114,4 +114,22 @@ final class PageFollowUpsTest extends KernelTestCase
         $scoped = array_map(static fn ($w) => $w->getIid(), $repo->getStudentAssignments($folder, $course, null, null, $admin)->getQuery()->getResult());
         $this->assertSame([$mine], $scoped, 'a learner filter must hide the submissions of others');
     }
+
+    // Item 2: work.ajax.php passed the course info array where deleteWorkItem() wants the Course entity (a
+    // TypeError), and the id was never scoped: a submission of another course must survive.
+    public function testDeleteWorkItemWithTheCourseEntityIgnoresASubmissionOfAnotherCourse(): void
+    {
+        $adminId = (int) $this->getUser('admin')->getId();
+        $folderId = $this->work($adminId, null, 'folder', 2);
+        $itemId = $this->work($adminId, $folderId, 'file', 2);
+        $this->getEntityManager()->clear();
+        $course1 = $this->getEntityManager()->getRepository(Course::class)->find(1);
+
+        $this->assertFalse(deleteWorkItem($itemId, $course1));
+        $this->assertSame(
+            '1',
+            (string) $this->conn->fetchOne('SELECT active FROM c_student_publication WHERE iid = ?', [$itemId]),
+            'the submission of course 2 must not be deleted from course 1'
+        );
+    }
 }

@@ -247,4 +247,16 @@ final class SurveyAccessControlTest extends KernelTestCase
         $this->assertFalse(\SurveyManager::userIsInvitedToSurvey(self::PLAIN_USER, $id, 2), 'another course');
         $this->assertFalse(\SurveyManager::userIsInvitedToSurvey(self::PLAIN_USER, $this->survey(), 1), 'another survey');
     }
+
+    public function testSurveyTitleFilterMatchesCodeOrTitleNotBoth(): void
+    {
+        // The filter used to AND "code = :title" with "node.title = :title": it only matched a survey whose
+        // code equals its title, so searching a survey by title found nothing.
+        $course = self::getContainer()->get('doctrine')->getRepository(\Chamilo\CoreBundle\Entity\Course::class)->find(1);
+        $qb = Container::getSurveyRepository()->findAllByCourse($course, null, 'sa_title');
+        $dql = $qb->getDQL();
+
+        $this->assertMatchesRegularExpression('/\(resource\.code = :title OR node\.title = :title\)/', $dql);
+        $this->assertSame('sa_title', $qb->getParameter('title')->getValue());
+    }
 }

@@ -74,7 +74,8 @@ final class BuyCoursesPricingCharacterizationTest extends BuyCoursesCharacteriza
         $this->assertSame(BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE, $this->plugin->getTaxCategoryForProductType(1));
         $this->assertSame(BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION, $this->plugin->getTaxCategoryForProductType(2));
         $this->assertSame(BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SERVICES, $this->plugin->getTaxCategoryForProductType(3));
-        // PINNED QUIRK: any unknown type is taxed as a course.
+        // INTENTIONAL: every caller passes a known product type; an unknown one falls back to the course category,
+        // the platform's default kind of product, instead of failing a checkout.
         $this->assertSame(BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE, $this->plugin->getTaxCategoryForProductType(99));
     }
 
@@ -236,7 +237,7 @@ final class BuyCoursesPricingCharacterizationTest extends BuyCoursesCharacteriza
         $this->assertNotFalse($this->plugin->deleteItem($itemId));
         $this->assertSame([], $this->plugin->getItem($itemId));
         $this->assertSame([], $this->plugin->getItemBeneficiaries($itemId));
-        // PINNED QUIRK: deleting an unknown item returns false
+        // INTENTIONAL: the return value is the number of deleted rows (0 = nothing to delete), so false
         $this->assertFalse($this->plugin->deleteItem($itemId));
     }
 

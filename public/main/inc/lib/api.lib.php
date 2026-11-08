@@ -2957,6 +2957,8 @@ function api_get_settings_params_simple($params)
 
 /**
  * Returns the value of a setting from the web-adjustable admin config settings.
+ *
+ * @deprecated No caller left in the codebase.
  */
 function api_delete_settings_params($params)
 {
@@ -3305,6 +3307,8 @@ function api_is_invitee()
 
 /**
  * This function checks whether a session is assigned into a category.
+ *
+ * @deprecated No caller left in the codebase.
  *
  * @param int       - session id
  * @param string    - category name
@@ -4685,6 +4689,8 @@ function api_get_settings_options($var)
 }
 
 /**
+ * @deprecated No caller left in the codebase.
+ *
  * @param array $params
  */
 function api_set_setting_option($params)
@@ -4896,6 +4902,8 @@ function api_set_settings_category($category, $value = null, $access_url = 1, $f
 
 /**
  * Gets all available access urls in an array (as in the database).
+ *
+ * @deprecated No caller left in the codebase.
  *
  * @return array An array of database records
  */
@@ -7640,6 +7648,8 @@ function api_find_template($template)
 }
 
 /**
+ * @deprecated No caller left in the codebase.
+ *
  * @return array
  */
 function api_get_language_list_for_flag()

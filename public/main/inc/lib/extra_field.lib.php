@@ -804,6 +804,8 @@ class ExtraField extends Model
     /**
      * Return an array of all the extra fields available for this item.
      *
+     * @deprecated No caller left in the codebase.
+     *
      * @param int $itemId (session_id, question_id, course id)
      *
      * @return array
@@ -2067,6 +2069,8 @@ class ExtraField extends Model
     }
 
     /**
+     * @deprecated No caller left in the codebase.
+     *
      * @param string $type
      *
      * @return array

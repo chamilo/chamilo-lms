@@ -676,6 +676,8 @@ class ExtraFieldValue extends Model
     }
 
     /**
+     * @deprecated No caller left in the codebase.
+     *
      * @param string $tag
      * @param int    $field_id
      * @param int    $limit

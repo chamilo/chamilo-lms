@@ -566,6 +566,8 @@ class GradebookUtils
 
     /**
      * XML-parser: handle character data.
+     *
+     * @deprecated No caller left in public/ or src/ (the XML import it served is gone).
      */
     public static function character_data($parser, $data)
     {
@@ -1186,6 +1188,8 @@ class GradebookUtils
      * Search students matching a given last name and/or first name.
      *
      * @author Bert Steppé
+     *
+     * @deprecated No caller left in public/ or src/.
      */
     public static function find_students($mask = '')
     {

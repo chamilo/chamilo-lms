@@ -19,9 +19,11 @@ $repo = Container::getStudentPublicationRepository();
 switch ($action) {
     case 'show_student_work':
         api_protect_course_script(true);
+        // State-changing: the token must be read before the session is closed.
+        $tokenIsValid = workActionTokenIsValid('request');
         // Close the session as we don't need it any further
         session_write_close();
-        if ($isAllowedToEdit) {
+        if ($isAllowedToEdit && $tokenIsValid) {
             $itemList = isset($_REQUEST['item_list']) ? $_REQUEST['item_list'] : [];
             $itemList = explode(',', $itemList);
             if (!empty($itemList)) {
@@ -36,9 +38,11 @@ switch ($action) {
         break;
     case 'hide_student_work':
         api_protect_course_script(true);
+        // State-changing: the token must be read before the session is closed.
+        $tokenIsValid = workActionTokenIsValid('request');
         // Close the session as we don't need it any further
         session_write_close();
-        if ($isAllowedToEdit) {
+        if ($isAllowedToEdit && $tokenIsValid) {
             $itemList = isset($_REQUEST['item_list']) ? $_REQUEST['item_list'] : [];
             $itemList = explode(',', $itemList);
             if (!empty($itemList)) {
@@ -53,7 +57,7 @@ switch ($action) {
         break;
     case 'delete_student_work':
         api_protect_course_script(true);
-        if ($isAllowedToEdit) {
+        if ($isAllowedToEdit && workActionTokenIsValid('request')) {
             if (empty($_REQUEST['id'])) {
                 return false;
             }
@@ -168,7 +172,7 @@ switch ($action) {
         break;
     case 'delete_work':
         api_protect_course_script(true);
-        if ($isAllowedToEdit) {
+        if ($isAllowedToEdit && workActionTokenIsValid('request')) {
             if (empty($_REQUEST['id'])) {
                 return false;
             }

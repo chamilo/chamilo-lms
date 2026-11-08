@@ -606,7 +606,7 @@ function showTeacherWorkGrid()
         ],
     ];
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_teacher&'.api_get_cidreq();
-    $deleteUrl = api_get_path(WEB_AJAX_PATH).'work.ajax.php?a=delete_work&'.api_get_cidreq();
+    $deleteUrl = workActionUrl(api_get_path(WEB_AJAX_PATH).'work.ajax.php?a=delete_work&'.api_get_cidreq());
 
     $columns = [
         get_lang('Type'),

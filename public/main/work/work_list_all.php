@@ -452,7 +452,7 @@ $extra_params = [
 $url = api_get_path(WEB_AJAX_PATH).
     'model.ajax.php?a=get_work_user_list_all&work_id='.$workId.'&type='.$type.'&'.api_get_cidreq();
 
-$workUrl = api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq();
+$workUrl = workActionUrl(api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq());
 $deleteUrl = $workUrl.'&a=delete_student_work';
 $showUrl = $workUrl.'&a=show_student_work';
 $hideUrl = $workUrl.'&a=hide_student_work';

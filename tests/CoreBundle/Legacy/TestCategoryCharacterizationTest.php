@@ -386,7 +386,7 @@ final class TestCategoryCharacterizationTest extends KernelTestCase
         $this->assertSame(1, TestCategory::getNumberOfQuestionsInCategoryForTest($other, $a));
     }
 
-    public function testRandomByCategoryCountersNeverCountAnythingBecauseTheyReadTheWrongKey(): void
+    public function testRandomByCategoryCountersCountTheQuestionsOfEachCategory(): void
     {
         $quiz = $this->quiz();
         $a = $this->category('tc_rnd_a');
@@ -396,11 +396,13 @@ final class TestCategoryCharacterizationTest extends KernelTestCase
         }
         $this->question($quiz, 4, $b);
 
-        // PINNED QUIRK (bug): the category rows come keyed by "iid" but both loops test $category['id'], which is
-        // never set, so every category is skipped: the "random questions per category" total is always 0 and the
-        // maximum number of questions in a category is always 0.
-        $this->assertSame(0, TestCategory::getNumberOfQuestionRandomByCategory($quiz, 2));
-        $this->assertSame(0, TestCategory::getNumberMaxQuestionByCat($quiz));
+        // category a: min(3, random); category b: min(1, random). The loops used to test $category['id'], a key
+        // the rows do not have (they are keyed by "iid"), so every category was skipped and both returned 0.
+        $this->assertSame(3, TestCategory::getNumberOfQuestionRandomByCategory($quiz, 2));
+        $this->assertSame(4, TestCategory::getNumberOfQuestionRandomByCategory($quiz, 5), 'never more than the questions it has');
+        $this->assertSame(2, TestCategory::getNumberOfQuestionRandomByCategory($quiz, 1));
+        $this->assertSame(3, TestCategory::getNumberMaxQuestionByCat($quiz));
+        $this->assertSame(0, TestCategory::getNumberMaxQuestionByCat($this->quiz()));
     }
 
     public function testQuestionsByCategoryGroupTheQuestionIdsOfOneTest(): void

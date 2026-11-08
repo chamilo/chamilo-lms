@@ -395,13 +395,13 @@ class TestCategory
         $count = 0;
         $categories = self::getListOfCategoriesIDForTest($exerciseId);
         foreach ($categories as $category) {
-            if (empty($category['id'])) {
+            if (empty($category['iid'])) {
                 continue;
             }
 
             $nbQuestionInThisCat = self::getNumberOfQuestionsInCategoryForTest(
                 $exerciseId,
-                $category['id']
+                $category['iid']
             );
 
             if ($nbQuestionInThisCat > $random) {
@@ -646,13 +646,13 @@ class TestCategory
         $res_num_max = 0;
         $categories = self::getListOfCategoriesIDForTest($exerciseId);
         foreach ($categories as $category) {
-            if (empty($category['id'])) {
+            if (empty($category['iid'])) {
                 continue;
             }
 
             $nbQuestionInThisCat = self::getNumberOfQuestionsInCategoryForTest(
                 $exerciseId,
-                $category['id']
+                $category['iid']
             );
 
             if ($nbQuestionInThisCat > $res_num_max) {

@@ -123,9 +123,9 @@ class SocialManager extends UserManager
                         }
                     }
                 }
-            } else {
-                return UserRelUser::USER_UNKNOWN;
             }
+
+            return UserRelUser::USER_UNKNOWN;
         }
     }
 

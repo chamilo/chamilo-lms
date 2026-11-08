@@ -124,10 +124,9 @@ final class SocialCharacterizationTest extends KernelTestCase
         $this->setSetting('social.social_make_teachers_friend_all', 'true');
 
         // The current user is nobody (anonymous): not an administrator, not a teacher of user 2's courses.
-        // PINNED QUIRK (security): the function falls off its end and returns NULL, not USER_UNKNOWN. vcard_export.php
-        // tests "0 !== get_relation_between_contacts()", and null !== 0, so with this setting on any logged-in
-        // stranger passes the relation check and can export another user's vCard. Intended: USER_UNKNOWN (0).
-        $this->assertNull(SocialManager::get_relation_between_contacts(1, 2));
+        // vcard_export.php tests "0 !== get_relation_between_contacts()": anything other than 0 here (the function
+        // used to fall off its end and return NULL) would let any logged-in stranger export another user's vCard.
+        $this->assertSame(UserRelUser::USER_UNKNOWN, SocialManager::get_relation_between_contacts(1, 2));
     }
 
     // ------------------------------------------------------------------ get_friends

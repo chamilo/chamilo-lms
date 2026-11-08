@@ -400,8 +400,7 @@ class Evaluation implements GradebookItem
         } else {
             $sql .= 'null';
         }
-        $sql .= ', user_id = '.$this->get_user_id()
-            .', c_id = ';
+        $sql .= ', c_id = ';
         if (isset($this->courseId)) {
             $sql .= $this->getCourseId();
         } else {

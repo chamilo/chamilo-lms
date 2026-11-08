@@ -675,6 +675,51 @@ final class GradebookCategoryCharacterizationTest extends KernelTestCase
         $this->assertSame($cat, (int) $e->get_category_id());
     }
 
+    public function testEvaluationSaveUpdatesTheRowAndLogsTheOldWeight(): void
+    {
+        $cat = $this->cat();
+        $other = $this->cat();
+        $id = $this->evaluation($cat, ['title' => 'gc_before', 'weight' => 10, 'max' => 20, 'visible' => 1]);
+        $untouched = $this->evaluation($cat, ['title' => 'gc_untouched']);
+        $this->context(1, 1);
+
+        $e = Evaluation::load($id)[0];
+        $e->set_name('gc_after');
+        $e->set_description('gc_new_description');
+        $e->set_weight(33);
+        $e->set_max(50);
+        $e->set_visible(0);
+        $e->save();
+
+        $row = $this->conn->fetchAssociative('SELECT * FROM gradebook_evaluation WHERE id = ?', [$id]);
+        $this->assertSame('gc_after', $row['title']);
+        $this->assertSame('gc_new_description', $row['description']);
+        $this->assertEquals(33, $row['weight']);
+        $this->assertEquals(50, $row['max']);
+        $this->assertSame('0', (string) $row['visible']);
+        $this->assertSame((string) $cat, (string) $row['category_id'], 'category kept');
+        $this->assertSame('1', (string) $row['c_id']);
+        $this->assertSame('gc_untouched', $this->conn->fetchOne('SELECT title FROM gradebook_evaluation WHERE id = ?', [$untouched]));
+        // history: the weight BEFORE the update is logged
+        $log = $this->conn->fetchAssociative('SELECT * FROM gradebook_linkeval_log WHERE id_linkeval_log = ?', [$id]);
+        $this->assertEquals(10, $log['weight']);
+        $this->assertSame('gc_before', $log['title']);
+        $this->assertSame('evaluation', $log['type']);
+    }
+
+    public function testApplyVisibilityToChildrenAlsoUpdatesTheEvaluations(): void
+    {
+        $root = $this->cat(['visible' => 0]);
+        $evalRoot = $this->evaluation($root, ['visible' => 1]);
+        $outsider = $this->evaluation($this->cat(), ['visible' => 1]);
+        $this->context(1, 1);
+
+        Category::load($root)[0]->apply_visibility_to_children();
+
+        $this->assertSame('0', (string) $this->conn->fetchOne('SELECT visible FROM gradebook_evaluation WHERE id = ?', [$evalRoot]));
+        $this->assertSame('1', (string) $this->conn->fetchOne('SELECT visible FROM gradebook_evaluation WHERE id = ?', [$outsider]));
+    }
+
     // ---------------------------------------------------------------- lock / visibility / move
 
     public function testLockSetsTheFlagOfThatCategoryOnly(): void

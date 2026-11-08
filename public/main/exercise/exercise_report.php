@@ -34,7 +34,7 @@ if (api_is_student_boss() && !empty($filter_user)) {
         api_not_allowed(true);
     }
 } else {
-    api_protect_course_script(true, false, true);
+    api_protect_course_script(true, false, TOOL_QUIZ);
 }
 
 $limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));

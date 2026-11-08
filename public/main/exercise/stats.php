@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
-api_protect_course_script(true, false, true);
+api_protect_course_script(true, false, TOOL_QUIZ);
 
 $showPage = false;
 

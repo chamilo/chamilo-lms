@@ -1360,4 +1360,27 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
             $this->assertStringContainsString('$students', $w->getMessage());
         }
     }
+
+    // ---------------------------------------------------------------- tool visibility guard of the result pages
+
+    /**
+     * Source-level pin (the pages are procedural and end in api_not_allowed()/exit): the third argument of
+     * api_protect_course_script() is the TOOL NAME checked against the course tool visibility. Passing `true`
+     * becomes the string "1", no tool is called "1", and a student could keep using the pages of a course whose
+     * teacher hid the tests tool.
+     */
+    public function testResultPagesNameTheQuizToolInTheCourseScriptGuard(): void
+    {
+        foreach (['stats.php', 'exercise_report.php', 'exercise_show.php'] as $page) {
+            $source = (string) file_get_contents(__DIR__.'/../../../public/main/exercise/'.$page);
+            $this->assertMatchesRegularExpression('/api_protect_course_script\([^;]*TOOL_QUIZ\)/', $source, $page);
+            $this->assertDoesNotMatchRegularExpression('/api_protect_course_script\([^;]*, true\)/', $source, $page);
+        }
+        $this->assertSame('quiz', TOOL_QUIZ);
+        $this->assertSame(
+            1,
+            (int) $this->conn->fetchOne("SELECT COUNT(DISTINCT title) FROM tool WHERE title = 'quiz'"),
+            'the tool table knows the tool by this name'
+        );
+    }
 }

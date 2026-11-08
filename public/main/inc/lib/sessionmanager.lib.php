@@ -3853,6 +3853,8 @@ class SessionManager
      * Get Hot Sessions (limit 8).
      *
      * @return array with sessions
+     *
+     * @deprecated No caller left in the codebase.
      */
     public static function getHotSessions()
     {
@@ -8122,6 +8124,8 @@ class SessionManager
      * @param array  $extraFields A list of fields to be scanned and returned
      *
      * @return mixed
+     *
+     * @deprecated No caller left in the codebase.
      */
     public static function getShortSessionListAndExtraByCategory(
         $categoryId,
@@ -8277,6 +8281,8 @@ class SessionManager
      * @return array If success, return session list and more session related data, else it will return an array
      *               with the next structure:
      *               array('error' => true, 'errorMessage' => ERROR_MESSAGE)
+     *
+     * @deprecated No caller left in the codebase.
      */
     public static function getSessionListAndExtraByCategoryId($sessionCategoryId)
     {
@@ -10266,6 +10272,8 @@ class SessionManager
      * @param int $userId
      *
      * @return array
+     *
+     * @deprecated No caller left, and it always returns an empty array ($listResults is never filled).
      */
     public static function getNamedSessionCourseForCoach($userId)
     {
@@ -10838,6 +10846,9 @@ class SessionManager
         return $careers;
     }
 
+    /**
+     * @deprecated No caller left in the codebase.
+     */
     public static function getCareerDiagramPerSessionList($sessionList, $userId)
     {
         if (empty($sessionList) || empty($userId)) {

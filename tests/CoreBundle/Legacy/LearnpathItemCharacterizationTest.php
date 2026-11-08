@@ -687,9 +687,9 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         ]);
         $this->assertEquals(1.5, $rows[0]['weighting']);
         $this->assertEquals(0, $rows[1]['weighting'], 'an empty weighting is stored as 0');
-        // PINNED QUIRK: only an array of correct responses is stored (joined with commas); a plain string, as sent
-        // for interaction 1 above, is silently replaced by ''.
-        $this->assertSame('', $rows[1]['correct_responses']);
+        // Fixed: only an array of correct responses was stored; a plain string, which is what the player always
+        // sends (lp_ajax_save_item.php splits the request into strings), was silently replaced by ''.
+        $this->assertSame('x', $rows[1]['correct_responses']);
 
         // Same interaction again, with a new answer: updated, not duplicated.
         $item->add_interaction(0, ['li_q1', 'choice', '10:00:00', 1.5, ['a', 'b'], 'b', 'wrong', '9']);

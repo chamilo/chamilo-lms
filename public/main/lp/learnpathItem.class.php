@@ -4089,6 +4089,8 @@ class learnpathItem
                     $correctResp .= $resp.',';
                 }
                 $correctResp = substr($correctResp, 0, -1);
+            } elseif (is_string($interaction[4])) {
+                $correctResp = $interaction[4];
             }
 
             // Check if this interaction already exists for the current SCO view.

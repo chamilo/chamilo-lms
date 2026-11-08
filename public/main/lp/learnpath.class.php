@@ -994,6 +994,8 @@ class learnpath
      * @param string $prefix
      *
      * @return array Array of terms
+     *
+     * @deprecated no caller; reads the legacy specific fields search index (only used by set_terms_by_prefix).
      */
     public function get_common_index_terms_by_prefix($prefix)
     {
@@ -3642,6 +3644,8 @@ class learnpath
      * @param int $courseId
      *
      * @return bool
+     *
+     * @deprecated no caller; always returns false (the CTool based lookup is unreachable).
      */
     public static function categoryIsPublished(CLpCategory $category, $courseId)
     {
@@ -3966,6 +3970,8 @@ class learnpath
      * @param string $prefix       Xapian term prefix
      *
      * @return bool False on error, true otherwise
+     *
+     * @deprecated no caller; queries c_lp_item.c_id/id and search_engine_ref, which no longer exist.
      */
     public function set_terms_by_prefix($terms_string, $prefix)
     {
@@ -4261,6 +4267,8 @@ class learnpath
      * Updates the order of learning paths (goes through all of them by order and fills the gaps).
      *
      * @return bool True on success, false on failure
+     *
+     * @deprecated no caller; returns immediately (the legacy c_lp.c_id query is unreachable).
      */
     public function update_display_order()
     {

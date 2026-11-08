@@ -289,10 +289,7 @@ final class SubLanguageCharacterizationTest extends KernelTestCase
         $this->originalSettings['language.platform_language'] = (string) api_get_setting('language.platform_language');
         Container::getSettingsManager()->updateSetting('language.platform_language', 'en_US');
 
-        // PINNED QUIRK: it reads the legacy setting 'platformLanguage' and compares it with english_name,
-        // but the setting is now language.platform_language and holds an isocode: always false.
-        $this->assertFalse(SubLanguageManager::get_platform_language_id());
-        $this->assertGreaterThan(0, $english);
+        $this->assertSame($english, SubLanguageManager::get_platform_language_id());
     }
 
     // ---------------------------------------------------------------- legacy lookups (dead callers)

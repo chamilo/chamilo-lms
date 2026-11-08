@@ -688,14 +688,11 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $this->answer($other, 'qs_other_ans');
         $q = $this->read($id);
 
-        // PINNED QUIRK: the DELETE filters on c_quiz_answer.c_id, a column that no longer exists: throws.
-        try {
-            $q->updateType(FREE_ANSWER);
-            $this->fail('expected the unknown column c_id to throw');
-        } catch (NotAllowedException) {
-            $this->assertSame(1, $this->cnt('c_quiz_answer', 'question_id = ?', [$id]));
-            $this->assertSame(UNIQUE_ANSWER, $q->type, 'type not changed');
-        }
+        $q->updateType(FREE_ANSWER);
+
+        $this->assertSame(FREE_ANSWER, $q->type);
+        $this->assertSame(0, $this->cnt('c_quiz_answer', 'question_id = ?', [$id]));
+        $this->assertSame(1, $this->cnt('c_quiz_answer', 'question_id = ?', [$other]));
     }
 
     public function testSwapSimpleAnswerTypesPersistsTheOppositeType(): void

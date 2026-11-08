@@ -553,11 +553,7 @@ abstract class Question
     public function updateType($type)
     {
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $course_id = $this->course['real_id'];
 
-        if (empty($course_id)) {
-            $course_id = api_get_course_int_id();
-        }
         // if we really change the type
         if ($type != $this->type) {
             // if we don't change from "unique answer" to "multiple answers" (or conversely)
@@ -566,7 +562,7 @@ abstract class Question
             ) {
                 // removes old answers
                 $sql = "DELETE FROM $table
-                        WHERE c_id = $course_id AND question_id = ".(int) ($this->id);
+                        WHERE question_id = ".(int) ($this->id);
                 Database::query($sql);
             }
 

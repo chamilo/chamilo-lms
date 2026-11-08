@@ -29,7 +29,7 @@ use Symfony\Component\Uid\Uuid;
  * update_glossary, glossary_exists, delete_glossary, display_glossary helpers (get_number_glossary_terms,
  * get_glossary_data), exportToFormat/movePdfToDocuments (output side effects, not covered).
  * DEAD: move_glossary (its only callers are commented out), get_max_glossary_item (only used by save_glossary),
- * reorder_glossary (only used by delete_glossary).
+ * reorder_glossary (no caller; explicit no-op, the schema has no display order).
  *
  * Fixtures: resource_node + c_glossary + resource_link rows are raw INSERTs on course 1 (no repository creation,
  * which deadlocks under concurrent suites); titles start with "gl_". The user is anonymous (no token), so the
@@ -309,12 +309,22 @@ final class GlossaryCharacterizationTest extends KernelTestCase
         $id = $this->term('gl_gone', 'x');
         $other = $this->term('gl_kept', 'x');
 
-        // reorder_glossary() iterates a QueryBuilder (always empty) so it never reaches setDisplayOrder().
+        // Terms have no display order any more: delete_glossary() does not renumber anything.
         $this->assertTrue(GlossaryManager::delete_glossary($id, false));
         $this->fresh();
 
         $this->assertSame(0, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_glossary WHERE iid = ?', [$id]));
         $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_glossary WHERE iid = ?', [$other]));
+    }
+
+    public function testReorderGlossaryIsADeprecatedExplicitNoOp(): void
+    {
+        $id = $this->term('gl_order', 'x');
+        $before = $this->conn()->fetchAllAssociative('SELECT * FROM c_glossary WHERE iid = ?', [$id]);
+
+        $this->assertNull(GlossaryManager::reorder_glossary());
+
+        $this->assertSame($before, $this->conn()->fetchAllAssociative('SELECT * FROM c_glossary WHERE iid = ?', [$id]));
     }
 
     public function testDeleteGlossaryOfAnUnknownIdReturnsTrueAndTouchesNothing(): void

@@ -438,9 +438,6 @@ class GlossaryManager
             api_get_user_id()
         );
         */
-        // reorder the remaining terms
-        self::reorder_glossary();
-
         if ($showMessage) {
             Display::addFlash(
                 Display::return_message(
@@ -865,25 +862,15 @@ class GlossaryManager
 
     /**
      * Re-order glossary.
+     *
+     * @deprecated CGlossary no longer has a display order (terms are sorted by title in the Vue tool), so there is
+     *             nothing to renumber. The former body iterated a QueryBuilder and never did anything; it no
+     *             longer pretends to. No caller remains.
      */
-    public static function reorder_glossary()
+    public static function reorder_glossary(): void
     {
-        $repo = Container::getGlossaryRepository();
+        return;
 
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
-
-        $course = api_get_course_entity($courseId);
-        $session = api_get_session_entity($sessionId);
-
-        $glossaries = $repo->getResourcesByCourse($course, $session);
-        $i = 1;
-        /** @var CGlossary $item */
-        foreach ($glossaries as $item) {
-            $item->setDisplayOrder($i);
-            $repo->update($item);
-            $i++;
-        }
         /*
         // Database table definition
         $table = Database::get_course_table(TABLE_GLOSSARY);

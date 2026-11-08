@@ -63,6 +63,13 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->setParameter('publicationParent', $publication)
         ;
 
+        if (null !== $user) {
+            $qb
+                ->andWhere('node.creator = :submitter')
+                ->setParameter('submitter', (int) $user->getId())
+            ;
+        }
+
         return $qb;
     }
 

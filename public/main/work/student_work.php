@@ -43,10 +43,10 @@ if (!empty($group_id)) {
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('Group area').' '.$group->getTitle(),
     ];
-} else {
-    if (!(api_is_allowed_to_edit() || api_is_coach())) {
-        api_not_allowed(true);
-    }
+}
+// The page lists one learner's submissions: teachers and coaches only, also from inside a group.
+if (!(api_is_allowed_to_edit() || api_is_coach())) {
+    api_not_allowed(true);
 }
 
 $action = $_GET['action'] ?? null;

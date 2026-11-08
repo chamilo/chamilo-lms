@@ -361,4 +361,28 @@ final class SessionAccessControlTest extends AbstractApiTest
         $this->assertStringContainsString("&sec_token='.\$token", $source, 'The delete link carries the token.');
         $this->assertStringContainsString('Security::get_existing_token()', $source);
     }
+
+    /**
+     * Source-level pin: the session reports of model.ajax.php and the session export were open to every session
+     * admin for any session id, whether or not he manages it.
+     */
+    public function testSessionReportsAndExportAreLimitedToManagedSessions(): void
+    {
+        $ajax = $this->page('inc/ajax/model.ajax.php');
+        foreach (['get_session_lp_progress', 'get_session_progress', 'get_exercise_progress', 'get_session_access_overview', 'get_survey_overview'] as $report) {
+            $this->assertMatchesRegularExpression(
+                "/\\\$action, \\[[^\\]]*'".$report."'[^\\]]*\\], true\\)\\s*&& !api_is_platform_admin\\(\\)/",
+                $ajax,
+                $report.' is gated by the managed-session check.'
+            );
+        }
+        $this->assertStringContainsString('SessionManager::canManageSessionId($reportSessionId)', $ajax);
+
+        $export = $this->page('session/session_export.php');
+        $this->assertLessThan(
+            strpos($export, "\$row['title'] = str_replace"),
+            strpos($export, "SessionManager::canManageSessionId((int) \$row['id'])"),
+            'Rows of foreign sessions are skipped before anything is read about them.'
+        );
+    }
 }

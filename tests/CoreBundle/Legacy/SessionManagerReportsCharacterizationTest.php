@@ -254,10 +254,18 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
         $hrm = $this->rawUser('hrm3', 'ROLE_HR', DRH);
         $inUrl = $this->rawSession('url_in');
         $outUrl = $this->rawSession('url_out', ['no_url' => true]);
+        $elsewhere = $this->rawSession('url_elsewhere', ['no_url' => true]);
+        $this->conn()->executeStatement(
+            "INSERT INTO access_url (url, description, active, created_by, tms, lft, rgt, lvl, tree_root, limit_courses, limit_active_courses, limit_sessions, limit_users, limit_teachers, limit_disk_space, email, is_login_only)
+             VALUES ('http://s2-other-url.example/', '', 1, 1, NOW(), 1, 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0)"
+        );
+        $otherUrl = (int) $this->conn()->lastInsertId();
+        $this->conn()->executeStatement('INSERT INTO access_url_rel_session (session_id, access_url_id) VALUES (?, ?)', [$elsewhere, $otherUrl]);
         $this->rel($inUrl, $hrm, Session::DRH);
         $this->rel($outUrl, $hrm, Session::DRH);
+        $this->rel($elsewhere, $hrm, Session::DRH);
 
-        $this->assertSame([$inUrl], array_keys(SessionManager::getSessionsFollowedByUser($hrm, DRH)));
+        $this->assertSame([$inUrl], array_keys(SessionManager::getSessionsFollowedByUser($hrm, DRH)), 'A session of another URL is not listed.');
         $this->assertSame(1, SessionManager::getSessionsFollowedByUser($hrm, DRH, null, null, true));
     }
 

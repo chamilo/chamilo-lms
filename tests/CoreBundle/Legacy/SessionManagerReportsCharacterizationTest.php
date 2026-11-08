@@ -549,4 +549,203 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
         $this->assertSame([], SessionManager::getSessionsFollowedForGroupAdmin($member), 'A plain member administers no class.');
         $this->assertSame([], SessionManager::getSessionsFollowedForGroupAdmin($this->rawUser('gnone')));
     }
+
+    // ---------------------------------------------------------------- who may manage which sessions
+
+    private function sessionEntity(int $id): Session
+    {
+        $this->fresh();
+
+        return $this->getEntityManager()->getRepository(Session::class)->find($id);
+    }
+
+    /**
+     * @return array<string, bool> role => may edit the session
+     */
+    private function editMatrix(int $sessionId): array
+    {
+        $roles = [
+            'admin' => $this->getAdmin()->getId(),
+            'sessionAdminOwner' => $this->users['sessionAdminOwner'],
+            'sessionAdminOther' => $this->users['sessionAdminOther'],
+            'teacherCoach' => $this->users['teacherCoach'],
+            'teacherOther' => $this->users['teacherOther'],
+            'student' => $this->users['student'],
+            'hrm' => $this->users['hrm'],
+        ];
+        $out = [];
+        foreach ($roles as $name => $id) {
+            $this->loginAs($id);
+            $out[$name] = SessionManager::cantEditSession($this->sessionEntity($sessionId));
+        }
+        $this->loginAs($this->getAdmin()->getId());
+
+        return $out;
+    }
+
+    private array $users = [];
+
+    private function accessFixture(): int
+    {
+        $this->users = [
+            'sessionAdminOwner' => $this->rawUser('sao', 'ROLE_SESSION_MANAGER', 3),
+            'sessionAdminOther' => $this->rawUser('sax', 'ROLE_SESSION_MANAGER', 3),
+            'teacherCoach' => $this->rawUser('tc', 'ROLE_TEACHER', 1),
+            'teacherOther' => $this->rawUser('to', 'ROLE_TEACHER', 1),
+            'student' => $this->rawUser('st'),
+            'hrm' => $this->rawUser('hr', 'ROLE_HR', 1),
+        ];
+        $s = $this->rawSession('acc');
+        $this->rel($s, $this->users['sessionAdminOwner'], Session::SESSION_ADMIN);
+        $this->rel($s, $this->users['teacherCoach'], Session::GENERAL_COACH);
+
+        return $s;
+    }
+
+    public function testWhoMayEditASessionWithTheDefaultSettings(): void
+    {
+        $this->setSetting('session.allow_session_admins_to_manage_all_sessions', 'false');
+        $this->setSetting('session.allow_teachers_to_create_sessions', 'false');
+        $s = $this->accessFixture();
+
+        $this->assertSame(
+            [
+                'admin' => true,
+                'sessionAdminOwner' => true,
+                'sessionAdminOther' => false,
+                'teacherCoach' => false,
+                'teacherOther' => false,
+                'student' => false,
+                'hrm' => false,
+            ],
+            $this->editMatrix($s),
+            'Only platform admins and the session admin of that very session.'
+        );
+    }
+
+    public function testWhoMayEditASessionWhenSessionAdminsManageAllAndTeachersMayCreate(): void
+    {
+        $this->setSetting('session.allow_session_admins_to_manage_all_sessions', 'true');
+        $this->setSetting('session.allow_teachers_to_create_sessions', 'true');
+        $s = $this->accessFixture();
+
+        $this->assertSame(
+            [
+                'admin' => true,
+                'sessionAdminOwner' => true,
+                'sessionAdminOther' => true,
+                'teacherCoach' => true,
+                'teacherOther' => false,
+                'student' => false,
+                'hrm' => false,
+            ],
+            $this->editMatrix($s),
+            'A teacher only edits the sessions he coaches as general coach.'
+        );
+    }
+
+    public function testManagementFlagsFollowTheRole(): void
+    {
+        $this->setSetting('session.allow_teachers_to_create_sessions', 'true');
+        $this->accessFixture();
+        $flags = [];
+        foreach (['sessionAdminOwner', 'teacherCoach', 'student', 'hrm'] as $role) {
+            $this->loginAs($this->users[$role]);
+            $flags[$role] = [
+                SessionManager::allowManageAllSessions(),
+                SessionManager::allowToManageSessions(),
+                SessionManager::allowOnlyMySessions(),
+            ];
+        }
+        $this->loginAs($this->getAdmin()->getId());
+
+        $this->assertSame(
+            [
+                'sessionAdminOwner' => [true, true, false],
+                'teacherCoach' => [false, true, true],
+                'student' => [false, false, false],
+                'hrm' => [false, false, false],
+            ],
+            $flags
+        );
+        $this->assertSame([true, true, false], [SessionManager::allowManageAllSessions(), SessionManager::allowToManageSessions(), SessionManager::allowOnlyMySessions()]);
+    }
+
+    public function testCantEditWithoutSessionCheckOnlyNeedsTheManagementRight(): void
+    {
+        $this->setSetting('session.allow_teachers_to_create_sessions', 'false');
+        $this->accessFixture();
+        $out = [];
+        foreach (['sessionAdminOther', 'teacherOther', 'student'] as $role) {
+            $this->loginAs($this->users[$role]);
+            $out[$role] = SessionManager::cantEditSession(null, false);
+        }
+        $this->loginAs($this->getAdmin()->getId());
+
+        $this->assertSame(['sessionAdminOther' => true, 'teacherOther' => false, 'student' => false], $out);
+    }
+
+    // ---------------------------------------------------------------- admin session list scoping
+
+    private function adminListIds(int $userId, string $listType = 'all'): array
+    {
+        $rows = SessionManager::getSessionsForAdmin($userId, ['order' => 's.title ASC'], false, [], $listType);
+
+        return array_map('intval', array_column($rows, 'id'));
+    }
+
+    public function testAdminListIsScopedPerRole(): void
+    {
+        $this->setSetting('session.allow_session_admins_to_manage_all_sessions', 'false');
+        $this->setSetting('session.allow_teachers_to_create_sessions', 'true');
+        $s = $this->accessFixture();
+        $foreign = $this->rawSession('acc_foreign');
+        $this->rel($foreign, $this->users['sessionAdminOther'], Session::SESSION_ADMIN);
+        $this->rel($foreign, $this->users['sessionAdminOwner'], Session::GENERAL_COACH);
+
+        $this->loginAs($this->getAdmin()->getId());
+        $all = $this->adminListIds($this->getAdmin()->getId());
+        $this->assertContains($s, $all);
+        $this->assertContains($foreign, $all, 'A platform admin sees every session.');
+
+        $this->loginAs($this->users['sessionAdminOwner']);
+        $this->assertSame([$s], $this->adminListIds($this->users['sessionAdminOwner']), 'A session admin only sees the sessions where he is session admin, not those he merely coaches.');
+        $this->assertSame(1, (int) SessionManager::getSessionsForAdmin($this->users['sessionAdminOwner'], [], true));
+
+        $this->loginAs($this->users['teacherCoach']);
+        $this->assertSame([$s], $this->adminListIds($this->users['teacherCoach']), 'A teacher only sees the sessions he coaches as general coach.');
+
+        $this->setSetting('session.allow_teachers_to_create_sessions', 'false');
+        $this->loginAs($this->users['teacherCoach']);
+        $this->assertContains($foreign, $this->adminListIds($this->users['teacherCoach']), 'PINNED QUIRK: without the setting the list itself is not restricted (the pages refuse the teacher before).');
+
+        $this->setSetting('session.allow_session_admins_to_manage_all_sessions', 'true');
+        $this->loginAs($this->users['sessionAdminOther']);
+        $this->assertContains($s, $this->adminListIds($this->users['sessionAdminOther']), 'With manage-all a session admin sees every session.');
+        $this->loginAs($this->getAdmin()->getId());
+    }
+
+    public function testAdminListTypesActiveCloseAndKeyword(): void
+    {
+        $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
+        $fmt = 'Y-m-d H:i:s';
+        $open = $this->rawSession('lt_open', ['start' => $now->modify('-5 days')->format($fmt), 'end' => $now->modify('+5 days')->format($fmt)]);
+        $past = $this->rawSession('lt_past', ['start' => $now->modify('-20 days')->format($fmt), 'end' => $now->modify('-10 days')->format($fmt)]);
+        $future = $this->rawSession('lt_future', ['start' => $now->modify('+10 days')->format($fmt), 'end' => $now->modify('+20 days')->format($fmt)]);
+        $endless = $this->rawSession('lt_endless');
+        $admin = $this->getAdmin()->getId();
+        $mine = [$open, $past, $future, $endless];
+
+        $active = array_intersect($this->adminListIds($admin, 'active'), $mine);
+        $closed = array_intersect($this->adminListIds($admin, 'close'), $mine);
+
+        $this->assertEqualsCanonicalizing([$open, $endless], $active, 'Active: no end date, or running now. A future session is neither active nor closed.');
+        $this->assertSame([$past], array_values($closed));
+        $this->assertSame(
+            [$endless, $open],
+            array_map('intval', array_column(SessionManager::getSessionsForAdmin($admin, ['where' => " s.title LIKE 's2_lt_%' AND s.id IN ($open, $endless)", 'order' => 's.title ASC']), 'id')),
+            'The where clause of the grid filters is appended to the query.'
+        );
+        $this->assertSame(2, (int) SessionManager::getSessionsForAdmin($admin, ['where' => " s.id IN ($open, $endless)"], true));
+    }
 }

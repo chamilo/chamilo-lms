@@ -515,8 +515,8 @@ class SessionManager
                      s.title,
                      s.display_start_date,
                      s.display_end_date,
-                     access_start_date,
-                     access_end_date,
+                     s.access_start_date,
+                     s.access_end_date,
                      s.visibility,
                      s.session_category_id,
                      s.id

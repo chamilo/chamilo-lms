@@ -122,9 +122,7 @@ final class AdminStatisticsUserSystemTest extends KernelTestCase
         $this->rawUser('l2', 5);
         $this->rawUser('l3', 5, -2);
         $after = $this->report('usersbylanguage');
-        // PINNED QUIRK: unlike the "users" report, soft-deleted users (active = -2) are counted here too
-        // (fixed in a following commit: the expected delta then becomes 2).
-        $this->assertSame($total + 3, array_sum(array_column($after['stats'], 'value')));
+        $this->assertSame($total + 2, array_sum(array_column($after['stats'], 'value')));
     }
 
     // ----------------------------------------------------------- logins

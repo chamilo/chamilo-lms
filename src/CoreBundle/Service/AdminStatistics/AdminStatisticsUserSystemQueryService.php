@@ -197,6 +197,8 @@ final readonly class AdminStatisticsUserSystemQueryService
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('user.locale AS locale', 'COUNT(DISTINCT user.id) AS total')
             ->from(User::class, 'user')
+            ->andWhere('user.active <> :softDeleted')
+            ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)
             ->groupBy('user.locale')
             ->orderBy('COUNT(DISTINCT user.id)', 'DESC')
         ;

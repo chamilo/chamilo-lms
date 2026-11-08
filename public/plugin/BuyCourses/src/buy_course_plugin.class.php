@@ -9811,11 +9811,15 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the coupon data.
      *
+     * @param bool $checkUsageLimit Refuse a coupon whose usage cap (times_applied, 0 = unlimited) is reached. Only
+     *                              the checks made before a sale is registered use it: the confirmation pages look
+     *                              the coupon up again after "delivered" was increased by that very sale.
+     *
      * @return array The coupon data
      */
-    public function getCoupon(int $couponId, int $productType, int $productId)
+    public function getCoupon(int $couponId, int $productType, int $productId, bool $checkUsageLimit = false)
     {
-        return $this->getDataCoupon($couponId, $productType, $productId);
+        return $this->getDataCoupon($couponId, $productType, $productId, $checkUsageLimit);
     }
 
     /**
@@ -9840,9 +9844,9 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    public function getCouponService(int $couponId, int $serviceId)
+    public function getCouponService(int $couponId, int $serviceId, bool $checkUsageLimit = false)
     {
-        return $this->getDataCouponService($couponId, $serviceId);
+        return $this->getDataCouponService($couponId, $serviceId, $checkUsageLimit);
     }
 
     /**
@@ -11663,7 +11667,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCoupon(int $couponId, ?int $productType = null, ?int $productId = null): array
+    private function getDataCoupon(int $couponId, ?int $productType = null, ?int $productId = null, bool $checkUsageLimit = false): array
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
 
@@ -11688,6 +11692,10 @@ class BuyCoursesPlugin extends Plugin
             INNER JOIN $couponItemTable ci
                 on ci.coupon_id = c.id
         ";
+
+        if ($checkUsageLimit) {
+            $couponFrom .= " AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)";
+        }
 
         return Database::select(
             ['c.*'],
@@ -11740,6 +11748,8 @@ class BuyCoursesPlugin extends Plugin
                 on ci.coupon_id = c.id
         ";
 
+        $couponFrom .= " AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)";
+
         return Database::select(
             ['c.*'],
             $couponFrom,
@@ -11765,7 +11775,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCouponService(int $couponId, int $serviceId): array
+    private function getDataCouponService(int $couponId, int $serviceId, bool $checkUsageLimit = false): array
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponServiceTable = Database::get_main_table(self::TABLE_COUPON_SERVICE);
@@ -11776,6 +11786,10 @@ class BuyCoursesPlugin extends Plugin
             INNER JOIN $couponServiceTable cs
                 on cs.coupon_id = c.id
         ";
+
+        if ($checkUsageLimit) {
+            $couponFrom .= " AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)";
+        }
 
         return Database::select(
             ['c.*'],
@@ -11812,6 +11826,8 @@ class BuyCoursesPlugin extends Plugin
             INNER JOIN $couponServiceTable cs
                 on cs.coupon_id = c.id
         ";
+
+        $couponFrom .= " AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)";
 
         return Database::select(
             ['c.*'],

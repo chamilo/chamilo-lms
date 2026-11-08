@@ -174,16 +174,41 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $this->assertSame(2, (int) $this->conn->fetchOne('SELECT delivered FROM plugin_buycourses_coupon WHERE id = ?', [$id]));
     }
 
-    public function testCouponUsageLimitIsNotEnforcedOnRedemption(): void
+    public function testCouponUsageLimitIsEnforcedOnRedemption(): void
     {
         $id = $this->makeCoupon('BC_LIM', 1, 5, timesApplied: 1);
         $this->conn->insert('plugin_buycourses_coupon_rel_item', ['coupon_id' => $id, 'product_type' => 1, 'product_id' => 1]);
-        $this->plugin->updateCouponDelivered($id);
-        $this->plugin->updateCouponDelivered($id);
 
-        // PINNED QUIRK: times_applied (the cap shown in the coupon list, 0 = unlimited) is compared with
-        // "delivered" nowhere on the course/session flow: a coupon delivered twice with a cap of 1 still redeems.
-        $this->assertNotEmpty($this->plugin->getCouponByCode('BC_LIM', 1, 1));
+        // Fixed: times_applied (the cap shown in the coupon list, 0 = unlimited) was compared with "delivered"
+        // nowhere, so a coupon delivered twice with a cap of 1 still redeemed.
+        $this->assertNotEmpty($this->plugin->getCouponByCode('BC_LIM', 1, 1), 'nothing delivered yet');
+        $this->plugin->updateCouponDelivered($id);
+        $this->assertEmpty($this->plugin->getCouponByCode('BC_LIM', 1, 1), 'cap of 1 reached');
+        $this->assertEmpty($this->plugin->getCoupon($id, 1, 1, true), 'the checks before a sale refuse it too');
+        // The confirmation pages look the coupon up after its own sale was delivered: they must still find it.
+        $this->assertNotEmpty($this->plugin->getCoupon($id, 1, 1));
+        // The admin lookup without a product is not a redemption.
+        $this->assertNotEmpty($this->plugin->getCouponByCode('BC_LIM'));
+
+        $unlimited = $this->makeCoupon('BC_UNL', 1, 5, timesApplied: 0);
+        $this->conn->insert('plugin_buycourses_coupon_rel_item', ['coupon_id' => $unlimited, 'product_type' => 1, 'product_id' => 1]);
+        $this->plugin->updateCouponDelivered($unlimited);
+        $this->plugin->updateCouponDelivered($unlimited);
+        $this->assertNotEmpty($this->plugin->getCouponByCode('BC_UNL', 1, 1), '0 means unlimited');
+    }
+
+    public function testServiceCouponUsageLimitIsEnforcedOnRedemption(): void
+    {
+        $this->conn->insert('plugin_buycourses_services', $this->serviceRow('bc_service'));
+        $serviceId = (int) $this->conn->lastInsertId();
+        $id = $this->makeCoupon('BC_SRVLIM', 2, 5, timesApplied: 1);
+        $this->conn->insert('plugin_buycourses_coupon_rel_service', ['coupon_id' => $id, 'service_id' => $serviceId]);
+
+        $this->assertNotEmpty($this->plugin->getCouponServiceByCode('BC_SRVLIM', $serviceId));
+        $this->plugin->updateCouponDelivered($id);
+        $this->assertEmpty($this->plugin->getCouponServiceByCode('BC_SRVLIM', $serviceId));
+        $this->assertEmpty($this->plugin->getCouponService($id, $serviceId, true));
+        $this->assertNotEmpty($this->plugin->getCouponService($id, $serviceId));
     }
 
     public function testServiceCouponLookup(): void

@@ -2326,8 +2326,17 @@ class SurveyUtil
         }
 
         $users_array = array_unique($users_array);
+        // The ids of the course users come from the posted form (and from the groups): only people
+        // subscribed to this course (or session) may be invited.
+        $courseUserIds = false === $isAdditionalEmail
+            ? self::getCourseOrSessionUserIds((int) $course_id, (int) $session_id)
+            : [];
         foreach ($users_array as $value) {
             if (empty($value)) {
+                continue;
+            }
+
+            if (false === $isAdditionalEmail && !in_array((int) $value, $courseUserIds, true)) {
                 continue;
             }
 
@@ -2396,6 +2405,27 @@ class SurveyUtil
         }
 
         return $counter; // Number of invitations sent
+    }
+
+    /**
+     * Ids of the (not soft-deleted) users subscribed to the course, or to the course inside the session.
+     *
+     * @return int[]
+     */
+    private static function getCourseOrSessionUserIds(int $courseId, int $sessionId): array
+    {
+        $connection = Database::getManager()->getConnection();
+        if ($sessionId > 0) {
+            $sql = 'SELECT u.id FROM session_rel_course_rel_user r INNER JOIN user u ON u.id = r.user_id
+                    WHERE r.c_id = ? AND r.session_id = ? AND u.active <> ?';
+            $params = [$courseId, $sessionId, USER_SOFT_DELETED];
+        } else {
+            $sql = 'SELECT u.id FROM course_rel_user r INNER JOIN user u ON u.id = r.user_id
+                    WHERE r.c_id = ? AND r.relation_type <> ? AND u.active <> ?';
+            $params = [$courseId, COURSE_RELATION_TYPE_RRHH, USER_SOFT_DELETED];
+        }
+
+        return array_map('intval', $connection->fetchFirstColumn($sql, $params));
     }
 
     public static function saveInvitation(

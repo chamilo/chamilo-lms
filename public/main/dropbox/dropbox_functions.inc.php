@@ -134,7 +134,7 @@ function delete_category($action, $id, $user_id = null)
     }
 
     $cat = get_dropbox_category($id);
-    if (0 == count($cat)) {
+    if (empty($cat)) {
         return false;
     }
 

@@ -323,13 +323,10 @@ final class DropboxCharacterizationTest extends KernelTestCase
         $this->assertSame(1, $this->rows('c_dropbox_category', 'iid = ?', [$cat]));
     }
 
-    public function testDeleteCategoryOfUnknownIdThrowsATypeError(): void
+    public function testDeleteCategoryOfUnknownIdReturnsFalse(): void
     {
-        // PINNED QUIRK: get_dropbox_category() returns false for an unknown id and delete_category() calls
-        // count() on it, which is a TypeError on PHP 8 instead of the intended "return false".
-        $this->expectException(\TypeError::class);
-
-        delete_category('deletereceivedcategory', 999999999, 1);
+        $this->assertFalse(delete_category('deletereceivedcategory', 999999999, 1));
+        $this->assertFalse(delete_category('deletereceivedcategory', 0, 1));
     }
 
     public function testDeleteCategoryWithUnknownActionReturnsErrorAndKeepsTheCategory(): void

@@ -194,8 +194,10 @@ final class CustomCertificatePluginCharacterizationTest extends PluginCharacteri
 
     public function testInfoCertificateIsScopedByCourseSessionAndAccessUrl(): void
     {
-        $this->template(['content_course' => 'cu_course 1 base']);
+        // The session template comes first in the table: a query that did not match the session exactly
+        // would answer with it for the base course.
         $this->template(['session_id' => 7, 'content_course' => 'cu_course 1 session 7']);
+        $this->template(['content_course' => 'cu_course 1 base']);
         $this->template(['c_id' => 2, 'content_course' => 'cu_course 2 base']);
         $this->template(['access_url_id' => 2, 'content_course' => 'cu_other url']);
 
@@ -204,6 +206,9 @@ final class CustomCertificatePluginCharacterizationTest extends PluginCharacteri
         $this->assertSame('cu_course 2 base', CustomCertificatePlugin::getInfoCertificate(2, 0, 1)['content_course']);
         $this->assertSame('cu_other url', CustomCertificatePlugin::getInfoCertificate(1, 0, 2)['content_course']);
         $this->assertSame([], CustomCertificatePlugin::getInfoCertificate(1, 8, 1));
+        // A course that only has a session template has no base template.
+        $this->template(['c_id' => 3, 'session_id' => 4, 'content_course' => 'cu_course 3 session 4']);
+        $this->assertSame([], CustomCertificatePlugin::getInfoCertificate(3, 0, 1));
         // PINNED: an empty access URL means URL 1.
         $this->assertSame('cu_course 1 base', CustomCertificatePlugin::getInfoCertificate(1, 0, 0)['content_course']);
         $this->assertSame('cu_course 1 base', CustomCertificatePlugin::getInfoCertificate('1', '0', '1')['content_course']);

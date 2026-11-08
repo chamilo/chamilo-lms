@@ -81,12 +81,16 @@ final class JustificationPluginCharacterizationTest extends PluginCharacterizati
 
     public function testListIsSortedByTitleAndCarriesTheLegacyNameKey(): void
     {
+        $this->document('mid', 'JU_M');
         $this->document('zebra', 'JU_Z');
         $this->document('alpha', 'JU_A');
 
-        $titles = array_column($this->plugin->getList(), 'title');
+        $titles = array_values(array_filter(
+            array_column($this->plugin->getList(), 'title'),
+            static fn (string $title): bool => str_starts_with($title, 'ju_')
+        ));
 
-        $this->assertLessThan(array_search('ju_zebra', $titles, true), array_search('ju_alpha', $titles, true));
+        $this->assertSame(['ju_alpha', 'ju_mid', 'ju_zebra'], $titles);
         foreach ($this->plugin->getList() as $doc) {
             $this->assertSame($doc['title'], $doc['name']);
         }

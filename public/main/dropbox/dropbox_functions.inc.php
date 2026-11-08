@@ -107,6 +107,8 @@ function handle_multiple_actions()
  * Get conf settings.
  *
  * @return array
+ *
+ * @deprecated no caller; the dropbox_conf session value is never written.
  */
 function getDropboxConf()
 {
@@ -1372,6 +1374,8 @@ function zip_download($fileList)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
  * @version march 2006
+ *
+ * @deprecated no caller.
  */
 function my_pre_add_callback($p_event, &$p_header)
 {
@@ -1387,6 +1391,8 @@ function my_pre_add_callback($p_event, &$p_header)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, March 2006
  * @author Ivan Tcholakov, 2010, code for html metadata has been added.
+ *
+ * @deprecated no caller.
  */
 function generate_html_overview($files, $dont_show_columns = [], $make_link = [])
 {

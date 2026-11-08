@@ -208,6 +208,17 @@ final class SkillModelCharacterizationTest extends KernelTestCase
         $this->assertSame(2, $rows[$d]['level']);
     }
 
+    public function testGetAllSkillsWithIdAndParentKeepsBothFilters(): void
+    {
+        $a = $this->skill('a');
+        $b = $this->skill('b', $a);
+        $this->skill('c', $a);
+
+        $rows = (new SkillModel())->getAllSkills(false, false, $b, $a);
+
+        $this->assertSame([$b], array_keys($rows));
+    }
+
     public function testGetAllSkillsWithAParentIdAndNoChildrenIsEmpty(): void
     {
         $a = $this->skill('a');

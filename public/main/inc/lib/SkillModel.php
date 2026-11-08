@@ -387,7 +387,7 @@ class SkillModel extends Model
             if (empty($id_condition)) {
                 $id_condition = " WHERE ss.parent_id = $parent_id";
             } else {
-                $id_condition = " AND ss.parent_id = $parent_id";
+                $id_condition .= " AND ss.parent_id = $parent_id";
             }
         }
 

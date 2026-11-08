@@ -33,6 +33,11 @@ function confirmation() {
 </script>";
 
 $categoryId = isset($_GET['cat_id']) ? (int) $_GET['cat_id'] : 0;
+// A student boss only reads the certificates of the users of its own groups: it holds no course context.
+$isBossOnly = api_is_student_boss() && !api_is_allowed_to_edit();
+if (!$isBossOnly) {
+    GradebookUtils::protectElementInCurrentCourse('CATE', $categoryId);
+}
 $category = null;
 $repo = Container::getGradeBookCategoryRepository();
 if (!empty($categoryId)) {
@@ -61,6 +66,10 @@ $courseLearnerIds = array_values(array_filter(array_unique(array_map(
     $courseLearners
 ))));
 
+if ($isBossOnly) {
+    // Never list more than the users the boss is in charge of (an empty list would mean "everybody").
+    $courseLearnerIds = array_values(array_map('intval', (new UserGroupModel())->getGroupUsersByUser(api_get_user_id())));
+}
 $filter = api_get_setting('certificate.certificate_filter_by_official_code');
 $userList = [];
 $filterForm = null;
@@ -113,6 +122,15 @@ $allowCustomCertificate = class_exists('CustomCertificatePlugin') &&
     CustomCertificatePlugin::isEnabledForCourse($courseInfo);
 
 $tags = Certificate::notificationTags();
+
+// Only who can edit the course changes certificates: a student boss may only read and export.
+if ($isBossOnly && in_array($action, ['send_notifications', 'show_notification_form', 'generate_all_certificates', 'delete_all_certificates', 'delete'], true)) {
+    api_not_allowed(true);
+}
+// Nobody to list means nothing to show, never "every certificate of the platform".
+if (empty($courseLearnerIds)) {
+    $certificate_list = [];
+}
 
 switch ($action) {
     case 'send_notifications':
@@ -177,7 +195,9 @@ switch ($action) {
                 }
             }
 
-            Category::exportAllCertificates($categoryId, $userList);
+            if (!$isBossOnly || !empty($userList)) {
+                Category::exportAllCertificates($categoryId, $userList);
+            }
         }
 
         header('Location: '.$url);
@@ -288,6 +308,10 @@ if ('delete' === $action) {
         Security::clear_token();
         header('Location: '.$url);
         exit;
+    }
+
+    if (!api_is_platform_admin() && !GradebookUtils::certificateBelongsToCourse($certificateId, (int) api_get_course_int_id())) {
+        api_not_allowed(true);
     }
 
     try {

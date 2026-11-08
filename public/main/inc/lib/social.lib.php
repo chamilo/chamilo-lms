@@ -164,7 +164,7 @@ class SocialManager extends UserManager
             $search_name = trim($search_name);
             $search_name = str_replace(' ', '', $search_name);
             $sql .= ' AND friend_user_id IN (
-                SELECT user_id FROM '.$tbl_my_user.'
+                SELECT id FROM '.$tbl_my_user.'
                 WHERE
                     firstName LIKE "%'.Database::escape_string($search_name).'%" OR
                     lastName LIKE "%'.Database::escape_string($search_name).'%" OR

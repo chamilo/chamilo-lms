@@ -162,22 +162,26 @@ final class SocialCharacterizationTest extends KernelTestCase
         $this->assertCount(2, SocialManager::get_friends(1, 0, null, false), 'A zero group means no group filter.');
     }
 
-    public function testGetFriendsSearchByNameFindsNothingBecauseOfAnUnqualifiedColumn(): void
+    public function testGetFriendsSearchMatchesFirstNameLastNameOrBothGluedTogether(): void
     {
         $this->rel(1, 2, UserRelUser::USER_RELATION_TYPE_FRIEND);   // Anonymous Joe
         $this->rel(1, 3, UserRelUser::USER_RELATION_TYPE_FRIEND);   // User Fallback
 
-        // PINNED QUIRK: the name filter is "friend_user_id IN (SELECT user_id FROM user WHERE firstName LIKE ...)",
-        // but `user` has no user_id column, so MySQL resolves it against the OUTER user_rel_user row (the searcher
-        // himself): the sub-select yields the searcher's own id whenever ANY user matches the name, and a friend is
-        // never returned. Intended: the friends whose first name, last name or glued names match.
         $ids = static fn (array $l) => array_column($l, 'friend_user_id');
-        $this->assertSame([], $ids(SocialManager::get_friends(1, null, 'anonym', false)));
-        $this->assertSame([], $ids(SocialManager::get_friends(1, null, 'fallb', false)));
+        $this->assertSame([2], $ids(SocialManager::get_friends(1, null, 'anonym', false)));
+        $this->assertSame([2], $ids(SocialManager::get_friends(1, null, 'joe', false)), 'Last name.');
+        $this->assertSame([3], $ids(SocialManager::get_friends(1, null, 'fallb', false)));
+        // Spaces are removed before searching, so a "full name" search works on the glued names, in the display
+        // order of the platform (first+last for western order, last+first otherwise) and only in that one.
+        $western = api_is_western_name_order();
+        $glued = $western ? ' Anonymous Joe ' : ' Joe Anonymous ';
+        $other = $western ? 'Joe Anonymous' : 'Anonymous Joe';
+        $this->assertSame([2], $ids(SocialManager::get_friends(1, null, $glued, false)));
+        $this->assertSame([], $ids(SocialManager::get_friends(1, null, $other, false)));
         $this->assertSame([], SocialManager::get_friends(1, null, 'nobody-like-this', false));
         $this->assertSame([], SocialManager::get_friends(1, null, '" OR "1"="1', false), 'Quotes are escaped.');
-        // An empty-string search still filters (isset, not empty): everything matches "%%" yet no friend returns.
-        $this->assertSame([], SocialManager::get_friends(1, null, '', false));
+        // Only the searcher's own friends: a user matching the name who is not a friend is not returned.
+        $this->assertSame([], SocialManager::get_friends(2, null, 'fallb', false));
     }
 
     public function testGetFriendsWithExtraInfoAddsTheUserCard(): void

@@ -9,7 +9,17 @@ use Chamilo\CoreBundle\Enums\StateIcon;
 require_once __DIR__.'/../global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'dropbox/dropbox_functions.inc.php';
 
-$action = $_REQUEST['a'];
+/**
+ * @deprecated The dropbox tool is served by the Vue views and the API. store_add_dropbox() needs the undefined
+ *             SYS_COURSE_PATH and Dropbox_SentWork reads removed columns, so this upload never worked since the
+ *             migration: it answers with an error instead of running.
+ */
+api_protect_course_script(true);
+header('Content-Type: application/json');
+echo json_encode(['files' => [['error' => get_lang('Error')]]]);
+exit;
+
+$action = $_REQUEST['a'] ?? null;
 switch ($action) {
     case 'upload_file':
         api_protect_course_script(true);

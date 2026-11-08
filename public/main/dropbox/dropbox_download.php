@@ -9,6 +9,10 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+// Never worked after the migration (removed columns, undefined SYS_COURSE_PATH): deny rather than half-run.
+api_protect_course_script(true);
+api_not_allowed(true);
+
 $_course = api_get_course_info();
 
 // the dropbox file that contains additional functions

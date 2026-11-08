@@ -322,6 +322,8 @@ final class UserMergeHelper
             $this->log(LogLevel::ERROR, 'Updated resource_node.parent_id.', ['affected' => $affected]);
         }
 
+        $this->repointFriendRelations($conn, $sourceId, $targetId);
+
         foreach ($this->getPivotMergeRules() as $rule) {
             $this->log(LogLevel::ERROR, 'Pivot merge rule start.', $rule);
 
@@ -370,6 +372,34 @@ final class UserMergeHelper
         }
 
         $this->log(LogLevel::ERROR, 'Reassign step finished.');
+    }
+
+    /**
+     * Rows of user_rel_user where the merged account is on the friend side move to the target, unless the same
+     * relation already exists; rows between the two accounts are dropped (they would become self-relations).
+     * The rows where the merged account is on the user side are handled by the pivot rule.
+     */
+    private function repointFriendRelations(Connection $conn, int $sourceId, int $targetId): void
+    {
+        $conn->executeStatement(
+            'DELETE FROM user_rel_user
+             WHERE (user_id = :sourceId AND friend_user_id = :targetId)
+                OR (user_id = :targetId AND friend_user_id = :sourceId)',
+            ['sourceId' => $sourceId, 'targetId' => $targetId]
+        );
+
+        $conn->executeStatement(
+            'DELETE s FROM user_rel_user s
+             INNER JOIN user_rel_user t
+                ON t.user_id = s.user_id AND t.relation_type = s.relation_type AND t.friend_user_id = :targetId
+             WHERE s.friend_user_id = :sourceId',
+            ['sourceId' => $sourceId, 'targetId' => $targetId]
+        );
+
+        $conn->executeStatement(
+            'UPDATE user_rel_user SET friend_user_id = :targetId WHERE friend_user_id = :sourceId',
+            ['sourceId' => $sourceId, 'targetId' => $targetId]
+        );
     }
 
     private function pivotMerge(

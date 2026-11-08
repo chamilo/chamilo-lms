@@ -283,6 +283,37 @@ final class UserMergeHelperTest extends KernelTestCase
         $this->assertSame(0, (int) $this->scalar('SELECT COUNT(*) FROM usergroup_rel_user WHERE user_id = ?', [$merge]));
     }
 
+    public function testFriendSideOfUserRelationsIsRepointedToTheTarget(): void
+    {
+        $keep = $this->rawUser('keep');
+        $merge = $this->rawUser('merge');
+        $a = $this->rawUser('a');
+        $b = $this->rawUser('b');
+        $this->userRel($a, $merge, 3); // a -> merge: moves to a -> keep
+        $this->userRel($b, $merge, 3); // b -> merge but b -> keep exists: dropped
+        $this->userRel($b, $keep, 3);
+        $this->userRel($a, $merge, 1); // other type: moves
+
+        $this->assertTrue($this->helper->mergeUsers($keep, $merge));
+
+        $this->assertSame([1, 3], array_map('intval', $this->conn()->fetchFirstColumn('SELECT relation_type FROM user_rel_user WHERE user_id = ? AND friend_user_id = ? ORDER BY relation_type', [$a, $keep])));
+        $this->assertSame(1, (int) $this->scalar('SELECT COUNT(*) FROM user_rel_user WHERE user_id = ? AND friend_user_id = ? AND relation_type = 3', [$b, $keep]));
+        $this->assertSame(0, (int) $this->scalar('SELECT COUNT(*) FROM user_rel_user WHERE friend_user_id = ? OR user_id = ?', [$merge, $merge]), 'Nothing may dangle to the soft-deleted account');
+    }
+
+    public function testMergingTwoFriendsDoesNotLeaveASelfRelation(): void
+    {
+        $keep = $this->rawUser('keep');
+        $merge = $this->rawUser('merge');
+        $this->userRel($keep, $merge, 3);
+        $this->userRel($merge, $keep, 3);
+
+        $this->assertTrue($this->helper->mergeUsers($keep, $merge));
+
+        $this->assertSame(0, (int) $this->scalar('SELECT COUNT(*) FROM user_rel_user WHERE user_id = friend_user_id AND user_id IN (?, ?)', [$keep, $merge]));
+        $this->assertSame(0, (int) $this->scalar('SELECT COUNT(*) FROM user_rel_user WHERE user_id IN (?, ?) OR friend_user_id IN (?, ?)', [$keep, $merge, $keep, $merge]));
+    }
+
     public function testUserRelationsMatchOnFriendAndType(): void
     {
         $keep = $this->rawUser('keep');

@@ -160,6 +160,24 @@ final class DocumentLibCharacterizationTest extends KernelTestCase
         $this->assertFalse(DocumentManager::get_document_id([], 'dl_dir'));
     }
 
+    public function testGetDocumentIdOnlyFindsSessionDocumentsInsideThatSession(): void
+    {
+        $this->conn()->executeStatement(
+            'INSERT INTO session (title, nbr_courses, nbr_users, nbr_classes, visibility, status, position) VALUES (?, 0, 0, 0, 1, 0, 0)',
+            ['dl_session']
+        );
+        $sessionId = (int) $this->conn()->lastInsertId();
+        $inSession = $this->doc('dl_session_only.txt', 'file');
+        $this->conn()->executeStatement(
+            'UPDATE resource_link SET session_id = ? WHERE resource_node_id = (SELECT resource_node_id FROM c_document WHERE iid = ?)',
+            [$sessionId, $inSession]
+        );
+        $info = api_get_course_info('AIACT');
+
+        $this->assertFalse(DocumentManager::get_document_id($info, 'dl_session_only.txt'), 'Outside the session it does not exist.');
+        $this->assertSame($inSession, DocumentManager::get_document_id($info, 'dl_session_only.txt', $sessionId));
+    }
+
     // ------------------------------------------------------------------ folderExists (broken raw SQL)
 
     public function testFolderExistsQueriesColumnsThatNoLongerExist(): void

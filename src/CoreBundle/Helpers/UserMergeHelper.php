@@ -323,7 +323,17 @@ final class UserMergeHelper
         }
 
         $this->repointFriendRelations($conn, $sourceId, $targetId);
-        $this->moveGradebookResults($conn, $sourceId, $targetId);
+        foreach ($this->getMoveKeepingTargetRules() as $rule) {
+            $this->moveRowsKeepingTarget(
+                $conn,
+                $rule['table'],
+                $rule['userField'],
+                $rule['matchColumns'],
+                $sourceId,
+                $targetId,
+                $rule['deleteConflicts']
+            );
+        }
 
         foreach ($this->getPivotMergeRules() as $rule) {
             $this->log(LogLevel::ERROR, 'Pivot merge rule start.', $rule);
@@ -404,22 +414,40 @@ final class UserMergeHelper
     }
 
     /**
-     * Gradebook results keep their ids (the result log points to them): the ones for evaluations the target has
-     * no result for move to the target, the others are dropped (the target's result wins, like every pivot rule).
+     * Moves rows to the target keeping their ids (children point to them): a source row moves unless the target
+     * already has a row with the same $matchColumns (NULL-safe), in which case the target's row wins.
+     * Conflicting source rows are deleted when $deleteConflicts, otherwise left on the merged account.
+     *
+     * @param string[] $matchColumns
      */
-    private function moveGradebookResults(Connection $conn, int $sourceId, int $targetId): void
-    {
+    private function moveRowsKeepingTarget(
+        Connection $conn,
+        string $table,
+        string $userField,
+        array $matchColumns,
+        int $sourceId,
+        int $targetId,
+        bool $deleteConflicts
+    ): void {
+        $pairs = ["t.{$userField} = :targetId"];
+        foreach ($matchColumns as $mc) {
+            $pairs[] = "t.{$mc} <=> s.{$mc}";
+        }
+
         $conn->executeStatement(
-            'UPDATE gradebook_result s
-             LEFT JOIN gradebook_result t ON t.user_id = :targetId AND t.evaluation_id = s.evaluation_id
-             SET s.user_id = :targetId
-             WHERE s.user_id = :sourceId AND t.id IS NULL',
+            "UPDATE {$table} s
+             LEFT JOIN {$table} t ON ".implode(' AND ', $pairs)."
+             SET s.{$userField} = :targetId
+             WHERE s.{$userField} = :sourceId AND t.{$userField} IS NULL",
             ['sourceId' => $sourceId, 'targetId' => $targetId]
         );
-        $conn->executeStatement(
-            'DELETE FROM gradebook_result WHERE user_id = :sourceId',
-            ['sourceId' => $sourceId]
-        );
+
+        if ($deleteConflicts) {
+            $conn->executeStatement(
+                "DELETE FROM {$table} WHERE {$userField} = :sourceId",
+                ['sourceId' => $sourceId]
+            );
+        }
     }
 
     private function pivotMerge(
@@ -697,6 +725,37 @@ final class UserMergeHelper
             ['table' => 'user_rel_user', 'userField' => 'user_id', 'matchColumns' => ['friend_user_id', 'relation_type']],
 
             ['table' => 'skill_rel_user', 'userField' => 'user_id', 'matchColumns' => ['skill_id']],
+            ['table' => 'skill_rel_item_rel_user', 'userField' => 'user_id', 'matchColumns' => ['skill_rel_item_id']],
+            ['table' => 'user_rel_tag', 'userField' => 'user_id', 'matchColumns' => ['tag_id']],
+
+            ['table' => 'c_group_rel_user', 'userField' => 'user_id', 'matchColumns' => ['group_id']],
+            ['table' => 'c_group_rel_tutor', 'userField' => 'user_id', 'matchColumns' => ['group_id']],
+            ['table' => 'c_autogroup_user_invitation', 'userField' => 'user_id', 'matchColumns' => ['group_id']],
+            ['table' => 'c_blog_rel_user', 'userField' => 'user_id', 'matchColumns' => ['blog_id']],
+            ['table' => 'c_lp_rel_user', 'userField' => 'user_id', 'matchColumns' => ['lp_id', 'session_id']],
+            ['table' => 'c_lp_user_access', 'userField' => 'user_id', 'matchColumns' => ['lp_id']],
+            ['table' => 'c_lp_category_rel_user', 'userField' => 'user_id', 'matchColumns' => ['category_id']],
+            ['table' => 'c_student_publication_rel_user', 'userField' => 'user_id', 'matchColumns' => ['work_id']],
+            ['table' => 'c_student_publication_follow', 'userField' => 'user_id', 'matchColumns' => ['publication_id']],
+            ['table' => 'ticket_rel_user', 'userField' => 'user_id', 'matchColumns' => ['ticket_id']],
+            ['table' => 'ticket_category_rel_user', 'userField' => 'user_id', 'matchColumns' => ['category_id']],
+        ];
+    }
+
+    /**
+     * Tables whose rows have children (or ids referenced elsewhere) and so keep their id when moved.
+     *
+     * @return list<array{table: string, userField: string, matchColumns: string[], deleteConflicts: bool}>
+     */
+    private function getMoveKeepingTargetRules(): array
+    {
+        return [
+            ['table' => 'gradebook_result', 'userField' => 'user_id', 'matchColumns' => ['evaluation_id'], 'deleteConflicts' => true],
+            ['table' => 'gradebook_certificate', 'userField' => 'user_id', 'matchColumns' => ['cat_id'], 'deleteConflicts' => false],
+            ['table' => 'c_lp_view', 'userField' => 'user_id', 'matchColumns' => ['lp_id', 'c_id', 'session_id'], 'deleteConflicts' => false],
+            ['table' => 'c_survey_invitation', 'userField' => 'user_id', 'matchColumns' => ['survey_id', 'c_id', 'session_id'], 'deleteConflicts' => false],
+            ['table' => 'c_attendance_result', 'userField' => 'user_id', 'matchColumns' => ['attendance_id'], 'deleteConflicts' => true],
+            ['table' => 'c_attendance_sheet', 'userField' => 'user_id', 'matchColumns' => ['attendance_calendar_id'], 'deleteConflicts' => true],
         ];
     }
 
@@ -722,6 +781,28 @@ final class UserMergeHelper
             ['table' => 'track_e_access_complete', 'field' => 'user_id'],
             ['table' => 'gradebook_score_log', 'field' => 'user_id'],
             ['table' => 'gradebook_comment', 'field' => 'user_id'],
+            ['table' => 'gradebook_result_log', 'field' => 'user_id'],
+            ['table' => 'gradebook_category', 'field' => 'user_id'],
+            ['table' => 'c_blog_post', 'field' => 'author_id'],
+            ['table' => 'c_blog_comment', 'field' => 'author_id'],
+            ['table' => 'c_blog_task', 'field' => 'author_id'],
+            ['table' => 'c_blog_rating', 'field' => 'user_id'],
+            ['table' => 'c_forum_thread_feedback', 'field' => 'user_id'],
+            ['table' => 'c_forum_thread_feedback', 'field' => 'author_id'],
+            ['table' => 'c_forum_thread_qualify', 'field' => 'qualify_user_id'],
+            ['table' => 'c_lp_rel_user', 'field' => 'creator_id'],
+            ['table' => 'c_notebook', 'field' => 'user_id'],
+            ['table' => 'c_quiz_destination_result', 'field' => 'user_id'],
+            ['table' => 'c_student_publication', 'field' => 'user_id'],
+            ['table' => 'c_student_publication_comment', 'field' => 'user_id'],
+            ['table' => 'ticket_ticket', 'field' => 'assigned_last_user'],
+            ['table' => 'user_course_category', 'field' => 'user_id'],
+            ['table' => 'portfolio_category', 'field' => 'user_id'],
+            ['table' => 'track_e_exercise_confirmation', 'field' => 'user_id'],
+            ['table' => 'course_invitation', 'field' => 'registered_user_id'],
+            ['table' => 'course_invitation', 'field' => 'invited_user_id'],
+            ['table' => 'course_invitation', 'field' => 'created_by'],
+            ['table' => 'page', 'field' => 'creator_id'],
 
             ['table' => 'track_e_default', 'field' => 'default_user_id'],
             ['table' => 'track_e_access', 'field' => 'access_user_id'],

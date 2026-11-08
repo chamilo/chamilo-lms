@@ -344,4 +344,21 @@ final class SessionAccessControlTest extends AbstractApiTest
             $source
         );
     }
+
+    /**
+     * Source-level pin: the scheduled announcements page is open to every session admin and edited / deleted any
+     * announcement id (of any session) on a GET without token; the hidden session_id of the form decided which
+     * session a new announcement was saved into.
+     */
+    public function testScheduledAnnouncementsAreBoundToTheManagedSession(): void
+    {
+        $source = $this->page('session/scheduled_announcement.php');
+
+        $this->assertStringContainsString('SessionManager::canManageSessionId($sessionId)', $source);
+        $this->assertStringContainsString("(int) \$item['session_id'] !== \$sessionId", $source, 'The announcement is one of this session.');
+        $this->assertStringContainsString("'delete' === \$action && !Security::check_token('get')", $source);
+        $this->assertSame(2, substr_count($source, "\$values['session_id'] = \$sessionId;"), 'add and edit ignore the posted session id.');
+        $this->assertStringContainsString("&sec_token='.\$token", $source, 'The delete link carries the token.');
+        $this->assertStringContainsString('Security::get_existing_token()', $source);
+    }
 }

@@ -163,6 +163,26 @@ final class CourseReportingMetricsTest extends KernelTestCase
         $this->assertGreaterThan(0, $n);
     }
 
+    /**
+     * Outside a session the learning path views are stored with session_id NULL (the column is a foreign key to
+     * session, 0 cannot be written), so the base course report must read the NULL rows too.
+     */
+    public function testLearningPathMetricsOfTheBaseCourseReadViewsWithoutSession(): void
+    {
+        $a = $this->learner('r3l3');
+        $lp = $this->newLp('r3_lp_nosession');
+        $n = $this->lpCount();
+        $view = $this->lpView($a, $lp, 60);
+        $this->lpItemView($view, 21, 3, '4');
+
+        $row = $this->row($a);
+
+        $this->assertSame(round(60 / $n, 2), $row['learningPathProgress']);
+        $this->assertSame(75.0, $row['score']);
+        $this->assertSame(75.0, $row['bestScore']);
+        $this->assertSame(60.0, $this->row($a, $this->ctx(1, null, false, true))['learningPathProgress'], 'maximum mode sees the view too');
+    }
+
     public function testLearningPathScoresAverageTheLatestViewItemsAndTheBestItemsApart(): void
     {
         $a = $this->learner('r3l2');

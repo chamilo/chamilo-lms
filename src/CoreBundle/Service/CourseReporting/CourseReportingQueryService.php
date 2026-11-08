@@ -1047,7 +1047,7 @@ final class CourseReportingQueryService
                 'SELECT iid, user_id, lp_id, view_count, progress, completion_date
                    FROM c_lp_view
                   WHERE c_id = :courseId
-                    AND session_id = :sessionId
+                    AND COALESCE(session_id, 0) = :sessionId
                     AND user_id IN (:userIds)
                     AND lp_id IN (:lpIds)
                   ORDER BY user_id ASC, lp_id ASC, view_count DESC, iid DESC',
@@ -1094,7 +1094,7 @@ final class CourseReportingQueryService
                 INNER JOIN c_lp_item item
                     ON item.iid = item_view.lp_item_id
                 WHERE lp_view.c_id = :courseId
-                    AND lp_view.session_id = :sessionId
+                    AND COALESCE(lp_view.session_id, 0) = :sessionId
                     AND lp_view.user_id IN (:userIds)
                     AND lp_view.lp_id IN (:lpIds)
                     AND item.item_type = 'final_item'
@@ -1170,7 +1170,7 @@ final class CourseReportingQueryService
             INNER JOIN c_lp_item_view item_view
                 ON item_view.lp_view_id = lp_view.iid
             WHERE lp_view.c_id = :courseId
-                AND lp_view.session_id = :sessionId
+                AND COALESCE(lp_view.session_id, 0) = :sessionId
                 AND lp_view.user_id IN (:userIds)
                 AND lp_view.lp_id IN (:lpIds)
             ORDER BY

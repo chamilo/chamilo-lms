@@ -2569,7 +2569,7 @@ HOTSPOT;
                                     .api_get_cidreq()
                                     .'&exerciseId='
                                     .$exercise_id
-                                    .'&a=close&id='
+                                    .'&a=close&exercise_sec_token='.Security::get_existing_token('exercise').'&id='
                                     .$id
                                     .'">'.
                                     Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Mark attempt as closed'));
@@ -2633,14 +2633,14 @@ HOTSPOT;
                                 .Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Export to PDF'))
                                 .'</a>';
 
-                            $sendMailUrl =  api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&action=send_email&exerciseId='.$exercise_id.'&attemptId='.$results[$i]['exe_id'];
+                            $sendMailUrl =  api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&action=send_email&exercise_sec_token='.Security::get_existing_token('exercise').'&exerciseId='.$exercise_id.'&attemptId='.$results[$i]['exe_id'];
                             $emailLink = '<a href="'.$sendMailUrl.'">'
                                 .Display::getMdiIcon(ActionIcon::SEND_SINGLE_EMAIL, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Send by e-mail'))
                                 .'</a>';
 
                             $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
                             $delete_link = '<a
-                            href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
+                            href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&exercise_sec_token='.Security::get_existing_token('exercise').'&did='.$id.'"
                             onclick=
                             "javascript:if(!confirm(\''.sprintf(addslashes(get_lang('Delete attempt?')), $results[$i]['username'], $dt).'\')) return false;"
                             >';
@@ -6768,6 +6768,80 @@ EOT;
         );
     }
 
+    /**
+     * True only while getAttemptPdfHtml() includes exercise_show.php on behalf of an already authorized export.
+     * The flag lives in PHP memory, so a request can never set it (unlike the export_type request parameter).
+     */
+    private static bool $internalAttemptExport = false;
+
+    public static function isInternalAttemptExport(): bool
+    {
+        return self::$internalAttemptExport;
+    }
+
+    /**
+     * Tells whether an attempt (track_e_exercises row) belongs to the given course (the current one by default).
+     * Pages taking an exe_id from the request must call this before reading or writing through it.
+     */
+    public static function attemptBelongsToCourse(int $exeId, ?int $courseId = null): bool
+    {
+        $courseId = null === $courseId ? (int) api_get_course_int_id() : $courseId;
+        if ($exeId <= 0 || $courseId <= 0) {
+            return false;
+        }
+
+        $found = Database::getManager()->getConnection()->fetchOne(
+            'SELECT exe_id FROM track_e_exercises WHERE exe_id = :exe AND c_id = :cid LIMIT 1',
+            ['exe' => $exeId, 'cid' => $courseId]
+        );
+
+        return false !== $found;
+    }
+
+    /**
+     * Tells whether a test is published (resource link not deleted) in the given course, and session when given.
+     * Exercise::read() does not scope by course, so pages taking an exerciseId from the request must call this.
+     */
+    public static function exerciseBelongsToCourse(int $exerciseId, int $courseId, ?int $sessionId = null): bool
+    {
+        return self::resourceLinkedToCourse('c_quiz', $exerciseId, $courseId, $sessionId);
+    }
+
+    /**
+     * Same as exerciseBelongsToCourse() for a question (c_quiz_question), which carries its own resource link.
+     */
+    public static function questionBelongsToCourse(int $questionId, int $courseId, ?int $sessionId = null): bool
+    {
+        return self::resourceLinkedToCourse('c_quiz_question', $questionId, $courseId, $sessionId);
+    }
+
+    private static function resourceLinkedToCourse(string $table, int $iid, int $courseId, ?int $sessionId): bool
+    {
+        if ($iid <= 0 || $courseId <= 0 || !in_array($table, ['c_quiz', 'c_quiz_question'], true)) {
+            return false;
+        }
+
+        $sessionId = (int) $sessionId;
+        $sessionCondition = $sessionId > 0
+            ? 'AND (link.session_id IS NULL OR link.session_id = :sid)'
+            : 'AND (link.session_id IS NULL OR link.session_id = 0)';
+        $params = ['iid' => $iid, 'cid' => $courseId];
+        if ($sessionId > 0) {
+            $params['sid'] = $sessionId;
+        }
+
+        $found = Database::getManager()->getConnection()->fetchOne(
+            'SELECT t.iid
+             FROM '.$table.' t
+             INNER JOIN resource_link link ON link.resource_node_id = t.resource_node_id
+             WHERE t.iid = :iid AND link.c_id = :cid AND link.deleted_at IS NULL '.$sessionCondition.'
+             LIMIT 1',
+            $params
+        );
+
+        return false !== $found;
+    }
+
     public static function scorePassed($score, $total)
     {
         $compareResult = bccomp($score, $total, 3);
@@ -6799,8 +6873,14 @@ EOT;
         ];
         $_REQUEST = $_GET + $_REQUEST;
 
+        self::$internalAttemptExport = true;
         ob_start();
-        include __DIR__ . '/../../exercise/exercise_show.php';
+        try {
+            include __DIR__ . '/../../exercise/exercise_show.php';
+        } finally {
+            self::$internalAttemptExport = false;
+        }
+
         return ob_get_clean();
     }
 

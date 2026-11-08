@@ -706,6 +706,11 @@ switch ($action) {
         if (!empty($statusId)) {
             $statusCondition .= " AND status = $statusId ";
         }
+        // Only the sessions of the current URL (the date block above is regex-checked, so safe to interpolate).
+        if (api_is_multiple_url_enabled()) {
+            $statusCondition .= ' AND id IN (SELECT session_id FROM '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION)
+                .' WHERE access_url_id = '.api_get_current_access_url_id().') ';
+        }
 
         switch ($filter) {
             case 'category':

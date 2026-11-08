@@ -297,6 +297,19 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $this->assertEqualsWithDelta(30, $days, 0.01);
     }
 
+    public function testRegisterSubscriptionSaleCapsTheDiscountAtThePrice(): void
+    {
+        $this->plugin->addNewSubscription($this->subscription([['duration' => 30, 'price' => 80]]));
+        $coupon = $this->makeCoupon('BC_SUBBIG', 2, 500);
+        $this->conn->insert('plugin_buycourses_coupon_rel_item', ['coupon_id' => $coupon, 'product_type' => 1, 'product_id' => 1]);
+
+        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30, $coupon);
+        $sale = $this->plugin->getSubscriptionSale($saleId);
+
+        $this->assertEquals(0, (float) $sale['price']);
+        $this->assertEquals(80, (float) $sale['discount_amount']);
+    }
+
     public function testRegisterSubscriptionSaleRejectsOtherInputs(): void
     {
         $this->plugin->addNewSubscription($this->subscription([['duration' => 30, 'price' => 80]]));

@@ -127,9 +127,9 @@ final class BuyCoursesSalesCharacterizationTest extends BuyCoursesCharacterizati
         $c = $this->couponForCourse('BC_BIG', 2, 150);
         $sale = $this->saleRow((int) $this->plugin->registerSale($this->item, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, $c));
 
-        // PINNED QUIRK: no cap, the sale is stored with a negative price (the service sale caps the discount).
-        $this->assertSame('-50.00', $sale['price']);
-        $this->assertSame('150.00', $sale['discount_amount']);
+        // the discount is capped at the price (it used to store a negative sale price)
+        $this->assertSame('0.00', $sale['price']);
+        $this->assertSame('100.00', $sale['discount_amount']);
     }
 
     public function testRegisterSaleIgnoresExpiredFutureAndForeignCoupons(): void

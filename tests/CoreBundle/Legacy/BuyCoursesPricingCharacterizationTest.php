@@ -185,10 +185,10 @@ final class BuyCoursesPricingCharacterizationTest extends BuyCoursesCharacteriza
         $product = ['price' => '100', 'iso_code' => 'EUR'];
         $this->plugin->setPriceSettings($product, 1, ['discount_type' => 2, 'discount_amount' => 150]);
 
-        // PINNED QUIRK: the discount is not capped, so an amount coupon above the price gives a negative price
-        // (the service flow caps it with min($basePrice, ...)).
-        $this->assertSame(-50.0, $product['price']);
-        $this->assertSame(150.0, $product['discount_amount']);
+        // a coupon cannot make the price negative: the discount is capped at the price
+        $this->assertSame(0.0, $product['price']);
+        $this->assertSame(100.0, $product['discount_amount']);
+        $this->assertSame(0.0, $product['total_price']);
     }
 
     public function testSetPriceSettingsEmptyProductIsRejected(): void

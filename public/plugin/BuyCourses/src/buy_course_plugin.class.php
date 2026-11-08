@@ -4329,6 +4329,7 @@ class BuyCoursesPlugin extends Plugin
             } elseif (self::COUPON_DISCOUNT_TYPE_PERCENTAGE == $coupon['discount_type']) {
                 $couponDiscount = ($item['price'] * $coupon['discount_amount']) / 100;
             }
+            $couponDiscount = min($couponDiscount, (float) $item['price']);
             $priceWithoutDiscount = $item['price'];
         }
         $item['price'] -= $couponDiscount;
@@ -6041,6 +6042,7 @@ class BuyCoursesPlugin extends Plugin
                 $couponDiscount = ($product['price'] * $discountAmount) / 100;
             }
 
+            $couponDiscount = min($couponDiscount, (float) $product['price']);
             $product['price_without_discount'] = (float) $product['price'];
         }
 
@@ -10039,6 +10041,7 @@ class BuyCoursesPlugin extends Plugin
             } elseif (self::COUPON_DISCOUNT_TYPE_PERCENTAGE == $coupon['discount_type']) {
                 $couponDiscount = ($item['price'] * $coupon['discount_amount']) / 100;
             }
+            $couponDiscount = min($couponDiscount, (float) $item['price']);
             $priceWithoutDiscount = $item['price'];
         }
         $item['price'] -= $couponDiscount;

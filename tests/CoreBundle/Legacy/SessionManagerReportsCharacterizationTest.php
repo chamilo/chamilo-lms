@@ -1011,6 +1011,20 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
         $this->assertSame([$full, $noCourse], $all, 'With manage-all he gets those with a general coach, like everybody else.');
     }
 
+    public function testCompleteCountForASessionAdmin(): void
+    {
+        [$full, $noCourse] = $this->completeFixture();
+        $sa = $this->rawUser('cmp_sa2', 'ROLE_SESSION_MANAGER', 3);
+        $this->rel($full, $sa, Session::SESSION_ADMIN);
+        $this->setSetting('session.allow_session_admins_to_manage_all_sessions', 'false');
+        $this->loginAs($sa);
+
+        $count = SessionManager::get_count_admin_complete(['where' => 's.id IN ('.$full.', '.$noCourse.')']);
+        $this->loginAs($this->getAdmin()->getId());
+
+        $this->assertSame(1, (int) $count);
+    }
+
     // ---------------------------------------------------------------- formatSessionsAdminForGrid
 
     public function testGridFormattingOfTheAdminList(): void

@@ -9180,7 +9180,7 @@ class SessionManager
         $where = 'WHERE 1 = 1 AND u.active <> -1 ';
 
         if (api_is_session_admin() &&
-            'false' == api_get_setting('allow_session_admins_to_see_all_sessions')
+            'false' == api_get_setting('allow_session_admins_to_manage_all_sessions')
         ) {
             $user_id = api_get_user_id();
             $where .= ' AND (sru.relation_type = '.Session::SESSION_ADMIN." AND sru.user_id = $user_id) ";

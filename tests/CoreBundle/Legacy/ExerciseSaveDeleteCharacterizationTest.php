@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
@@ -788,11 +787,20 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
         $this->conn->insert('c_quiz_question_option', ['question_id' => $src, 'title' => 'x2_opt_true', 'position' => 1]);
         $this->conn->insert('c_quiz_question_option', ['question_id' => $src, 'title' => 'x2_opt_false', 'position' => 2]);
 
-        // PINNED QUIRK (bug): Database::select() rows carry the numeric column indexes too, and duplicate() feeds
-        // each row to Database::insert() as is: ":0, :1..." named parameters that do not exist, so copying any
-        // question that has options always throws, after the new question row was created.
-        $this->expectException(NotAllowedException::class);
-        Question::read($src)->duplicate();
+        // Database::select() rows carry the numeric column indexes too: they must not reach the INSERT.
+        $newId = (int) Question::read($src)->duplicate();
+
+        $this->assertGreaterThan(0, $newId);
+        $options = $this->conn->fetchAllAssociative(
+            'SELECT title, position FROM c_quiz_question_option WHERE question_id = ? ORDER BY position',
+            [$newId]
+        );
+        $this->assertSame(['x2_opt_true', 'x2_opt_false'], array_column($options, 'title'));
+        $this->assertSame(
+            2,
+            (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_quiz_question_option WHERE question_id = ?', [$src]),
+            'the source options are untouched'
+        );
     }
 
     public function testDuplicateDoesNotCopyTheMandatoryFlag(): void

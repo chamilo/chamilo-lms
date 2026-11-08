@@ -1145,6 +1145,8 @@ abstract class Question
             if (!empty($options)) {
                 // Saving the quiz_options
                 foreach ($options as $item) {
+                    // Database::select() rows also carry the numeric column indexes: keep the named columns only
+                    $item = array_filter($item, 'is_string', ARRAY_FILTER_USE_KEY);
                     $item['question_id'] = $newQuestionId;
                     unset($item['iid']);
                     Database::insert($TBL_QUESTION_OPTIONS, $item);

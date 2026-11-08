@@ -54,6 +54,13 @@ final class RepairGroupForumsWithoutItemPropertyCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Repair legacy group forums missing resource nodes');
 
+        // The legacy c_item_property table only exists on installations migrated from 1.x.
+        if (!$this->connection->createSchemaManager()->tablesExist(['c_item_property'])) {
+            $io->success('The legacy c_item_property table does not exist: nothing to repair.');
+
+            return Command::SUCCESS;
+        }
+
         $dryRun = (bool) $input->getOption('dry-run');
         if ($dryRun) {
             $io->warning('Dry-run enabled. Every repair batch will be rolled back.');

@@ -150,10 +150,10 @@ final class RawSqlMaintenanceCommandsTest extends KernelTestCase
         $this->assertSame($links, (int) $this->scalar('SELECT COUNT(*) FROM gradebook_link'));
     }
 
-    public function testGroupForumRepairNeedsTheLegacyItemPropertyTableAndFailsLoudlyWithoutIt(): void
+    public function testGroupForumRepairExitsCleanlyWithoutTheLegacyItemPropertyTable(): void
     {
         // A migrated database still holds the legacy c_item_property table; a fresh install does not, and the
-        // command then stops on the missing table instead of repairing anything.
+        // command exits cleanly with an explanation (it used to fail with SQLSTATE 42S02) without repairing anything.
         $legacyTable = (int) $this->scalar("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'c_item_property'");
         if ($legacyTable > 0) {
             $this->markTestSkipped('The legacy c_item_property table exists: the repair would run for real.');
@@ -161,11 +161,13 @@ final class RawSqlMaintenanceCommandsTest extends KernelTestCase
         $nodes = (int) $this->scalar('SELECT COUNT(*) FROM resource_node');
         $tester = $this->tester('chamilo:migration:repair-group-forums-without-item-property');
 
-        $status = $tester->execute(['--dry-run' => true]);
+        foreach ([['--dry-run' => true], []] as $args) {
+            $status = $tester->execute($args);
 
-        $this->assertSame(Command::FAILURE, $status);
-        $this->assertStringContainsString('Dry-run enabled', $tester->getDisplay());
-        $this->assertStringContainsString('c_item_property', $tester->getDisplay());
+            $this->assertSame(Command::SUCCESS, $status);
+            $this->assertStringContainsString('does not exist: nothing to repair', $tester->getDisplay());
+            $this->assertStringNotContainsString('Dry-run enabled', $tester->getDisplay());
+        }
         $this->assertSame($nodes, (int) $this->scalar('SELECT COUNT(*) FROM resource_node'));
     }
 }

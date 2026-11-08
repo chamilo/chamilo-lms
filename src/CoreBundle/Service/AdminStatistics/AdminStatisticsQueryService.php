@@ -647,7 +647,7 @@ final readonly class AdminStatisticsQueryService
                 'COUNT(relation.id) AS total'
             )
             ->from(UserRelUser::class, 'relation')
-            ->leftJoin('relation.user', 'user', Join::WITH, 'user.active <> :softDeleted')
+            ->innerJoin('relation.user', 'user', Join::WITH, 'user.active <> :softDeleted')
             ->andWhere('relation.relationType <> :hrRelation')
             ->setParameter('hrRelation', UserRelUser::USER_RELATION_TYPE_HRM, Types::INTEGER)
             ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)

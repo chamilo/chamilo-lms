@@ -748,4 +748,189 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
         );
         $this->assertSame(2, (int) SessionManager::getSessionsForAdmin($admin, ['where' => " s.id IN ($open, $endless)"], true));
     }
+
+    // ---------------------------------------------------------------- coached sessions and subscription helpers
+
+    public function testSessionsCoachedByUserMergeGeneralAndCourseCoachAndDropInvisible(): void
+    {
+        $coach = $this->rawUser('coached', 'ROLE_TEACHER', 1);
+        $general = $this->rawSession('co_general');
+        $course = $this->rawSession('co_course');
+        $both = $this->rawSession('co_both');
+        $hidden = $this->rawSession('co_hidden', [
+            'visibility' => Session::INVISIBLE,
+            'start' => '2020-01-01 00:00:00',
+            'end' => '2020-02-01 00:00:00',
+        ]);
+        $notMine = $this->rawSession('co_not_mine');
+        $c = $this->rawCourse('co');
+        foreach ([$course, $both, $hidden, $notMine] as $id) {
+            $this->sessionCourse($id, $c);
+        }
+        $this->rel($general, $coach, Session::GENERAL_COACH);
+        $this->rel($both, $coach, Session::GENERAL_COACH);
+        $this->rel($hidden, $coach, Session::GENERAL_COACH);
+        $this->courseUser($course, $c, $coach, Session::COURSE_COACH);
+        $this->courseUser($both, $c, $coach, Session::COURSE_COACH);
+        $this->courseUser($notMine, $c, $this->rawUser('costud'), Session::STUDENT);
+
+        $all = SessionManager::getSessionsCoachedByUser($coach);
+        $this->assertEqualsCanonicalizing([$general, $course, $both, $hidden], array_map('intval', array_keys($all)));
+        $this->assertSame('s2_co_course', $all[$course]['title']);
+
+        // A finished session whose visibility is INVISIBLE is removed on request, unless the viewer is a
+        // platform admin (api_get_session_visibility ignores the visibility for admins).
+        $this->loginAs($coach);
+        $asCoach = array_map('intval', array_column(SessionManager::getSessionsCoachedByUser($coach, true), 'id'));
+        $this->loginAs($this->getAdmin()->getId());
+        $asAdmin = array_map('intval', array_column(SessionManager::getSessionsCoachedByUser($coach, true), 'id'));
+        $this->assertNotContains($hidden, $asCoach);
+        $this->assertContains($hidden, $asAdmin);
+        $this->assertContains($general, $asCoach);
+    }
+
+    public function testCoursesOfACoachAreMergedPerCourse(): void
+    {
+        $coach = $this->rawUser('cc', 'ROLE_TEACHER', 1);
+        $s1 = $this->rawSession('cc_1');
+        $s2 = $this->rawSession('cc_2');
+        $c1 = $this->rawCourse('cc_a');
+        $c2 = $this->rawCourse('cc_b');
+        $this->sessionCourse($s1, $c1);
+        $this->sessionCourse($s1, $c2);
+        $this->sessionCourse($s2, $c1);
+        $this->rel($s1, $coach, Session::GENERAL_COACH);
+        $this->courseUser($s2, $c1, $coach, Session::COURSE_COACH);
+        $this->loginAs($coach);
+
+        $byCourseCoach = SessionManager::getCoursesForCourseSessionCoach($coach);
+        $byMainCoach = SessionManager::getCoursesForMainSessionCoach($coach);
+        $merged = SessionManager::getSessionCourseForUser($coach);
+        $this->loginAs($this->getAdmin()->getId());
+
+        $this->assertSame([$c1 => [$s2]], $byCourseCoach);
+        $this->assertEqualsCanonicalizing([$c1, $c2], array_keys($byMainCoach));
+        $this->assertSame([$s1], $byMainCoach[$c1]);
+        $this->assertEqualsCanonicalizing([$s2, $s1], $merged[$c1], 'A course in two sessions lists both.');
+        $this->assertSame([$s1], $merged[$c2]);
+    }
+
+    public function testStudentIdsOfASessionFilterAndSearch(): void
+    {
+        $s = $this->rawSession('stu');
+        $a = $this->rawUser('sa');
+        $b = $this->rawUser('sb');
+        $coach = $this->rawUser('sc', 'ROLE_TEACHER', 1);
+        $outside = $this->rawUser('so');
+        $this->rel($s, $a, Session::STUDENT);
+        $this->rel($s, $b, Session::STUDENT);
+        $this->rel($s, $coach, Session::GENERAL_COACH);
+
+        $this->assertSame([$a => $a, $b => $b], SessionManager::getSessionStudentUserIds($s), 'Students only, keyed by id.');
+        $this->assertSame([], SessionManager::getSessionStudentUserIds(0));
+        $this->assertSame([], SessionManager::getSessionStudentUserIds(-5));
+        $this->assertSame([$b], SessionManager::filterUsersSubscribedToSession($s, [(string) $b, $outside, $coach, 0, $b]));
+        $this->assertSame([], SessionManager::filterUsersSubscribedToSession($s, []));
+        $this->assertSame([], SessionManager::filterUsersSubscribedToSession(0, [$a]));
+    }
+
+    public function testCourseSubscriptionSearchAndCounts(): void
+    {
+        $s = $this->rawSession('srch');
+        $other = $this->rawSession('srch2');
+        $c = $this->rawCourse('srch');
+        $u = $this->rawUser('srchu');
+        $v = $this->rawUser('srchv');
+        $this->sessionCourse($s, $c);
+        $this->sessionCourse($other, $c);
+        $this->courseUser($s, $c, $u, Session::STUDENT);
+        $this->courseUser($other, $c, $u, Session::STUDENT);
+        $this->courseUser($s, $c, $v, Session::COURSE_COACH);
+        foreach ([$u, $v] as $id) {
+            $this->rel($s, $id, Session::STUDENT);
+        }
+        $this->rel($s, $this->rawUser('srchd'), Session::HRM);
+        $this->conn()->executeStatement('INSERT INTO access_url_rel_user (access_url_id, user_id) SELECT 1, user_id FROM session_rel_user WHERE session_id = ? AND user_id NOT IN (SELECT user_id FROM access_url_rel_user)', [$s]);
+
+        $this->assertSame([], SessionManager::searchCourseInSessionsFromUser(0, $c));
+        $this->assertSame([], SessionManager::searchCourseInSessionsFromUser($u, 0));
+        $rows = SessionManager::searchCourseInSessionsFromUser($u, $c);
+        $this->assertEqualsCanonicalizing([$s, $other], array_map('intval', array_column($rows, 'session_id')));
+        $this->assertCount(1, SessionManager::searchCourseInSessionsFromUser($v, $c));
+
+        $this->fresh();
+        $sessionEntity = $this->sessionEntity($s);
+        $course = $this->getEntityManager()->getRepository(\Chamilo\CoreBundle\Entity\Course::class)->find($c);
+        $this->assertSame(
+            2,
+            (int) SessionManager::getCountUsersInCourseSession($course, $sessionEntity),
+            'Students and coaches of the course who are also subscribed to the session, never the HR managers.'
+        );
+    }
+
+    public function testAllUserIdsInASessionCoverCoachesStudentsAndGeneralCoaches(): void
+    {
+        $s = $this->rawSession('allu');
+        $c = $this->rawCourse('allu');
+        $stud = $this->rawUser('au_s');
+        $cc = $this->rawUser('au_c', 'ROLE_TEACHER', 1);
+        $gc = $this->rawUser('au_g', 'ROLE_TEACHER', 1);
+        $this->sessionCourse($s, $c);
+        $this->courseUser($s, $c, $stud, Session::STUDENT);
+        $this->courseUser($s, $c, $cc, Session::COURSE_COACH);
+        $this->rel($s, $gc, Session::GENERAL_COACH);
+        $this->rel($s, $this->rawUser('au_hrm', 'ROLE_HR', 1), Session::HRM);
+
+        $ids = array_map('intval', array_column(SessionManager::getAllUserIdsInSession($s), 'user_id'));
+
+        $this->assertSame([$cc, $stud, $gc], $ids, 'Course coaches, then students, then the general coaches.');
+        $this->assertSame([], SessionManager::getAllUserIdsInSession(99999999));
+    }
+
+    public function testSessionAdminsAndCoachNamesOfASession(): void
+    {
+        $s = $this->rawSession('adm');
+        $admin = $this->rawUser('adm_a', 'ROLE_SESSION_MANAGER', 3);
+        $gc = $this->rawUser('adm_g', 'ROLE_TEACHER', 1);
+        $this->rel($s, $admin, Session::SESSION_ADMIN);
+        $this->rel($s, $gc, Session::GENERAL_COACH);
+        $this->fresh();
+
+        $this->assertTrue(SessionManager::sessionHasSessionAdmin($s, $admin));
+        $this->assertFalse(SessionManager::sessionHasSessionAdmin($s, $gc), 'A coach is not a session admin.');
+        $this->assertSame([$gc], SessionManager::getGeneralCoachesIdForSession($s));
+        $this->assertCount(1, SessionManager::getGeneralCoachesNamesForSession($s));
+    }
+
+    public function testCoachesOfACourseSessionAndCountUsersByLanguage(): void
+    {
+        $s = $this->rawSession('lang');
+        $c = $this->rawCourse('lang');
+        $coach = $this->rawUser('lang_c', 'ROLE_TEACHER', 1);
+        $a = $this->rawUser('lang_a');
+        $b = $this->rawUser('lang_b');
+        $this->sessionCourse($s, $c);
+        $this->courseUser($s, $c, $coach, Session::COURSE_COACH);
+        $this->courseUser($s, $c, $a, Session::STUDENT);
+        $this->conn()->executeStatement("UPDATE user SET locale = 'fr_FR' WHERE id IN (?, ?)", [$a, $b]);
+        $this->conn()->executeStatement("UPDATE user SET locale = 'en_US' WHERE id = ?", [$coach]);
+        $this->rel($s, $a, Session::STUDENT);
+        $this->rel($s, $b, Session::STUDENT);
+
+        $this->assertSame([$coach], array_map('intval', SessionManager::getCoachesBySession($s)));
+        $this->assertSame([$coach], array_map('intval', SessionManager::getCoachesByCourseSession($s, $c)));
+        $this->assertSame([], SessionManager::getCoachesByCourseSession($s, 99999999));
+        $this->assertStringContainsString('Lastlang_c', SessionManager::getCoachesByCourseSessionToString($s, $c) ?: '') ;
+        $langs = SessionManager::getCountUsersLangBySession($s, 0, Session::STUDENT);
+        $this->assertContains('FR_FR 2', $langs);
+        $this->assertSame([], SessionManager::getCountUsersLangBySession($s, 0, Session::HRM));
+        $all = SessionManager::getCountUsersLangBySession($s);
+        $this->assertContains('FR_FR 2', $all);
+    }
+
+    public function testClearSessionRefPromotion(): void
+    {
+        $this->assertFalse(SessionManager::clear_session_ref_promotion(0));
+        $this->assertFalse(SessionManager::clear_session_ref_promotion(99999999), 'No row changed means false.');
+    }
 }

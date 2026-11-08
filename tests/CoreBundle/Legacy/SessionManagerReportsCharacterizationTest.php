@@ -933,4 +933,118 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
         $this->assertFalse(SessionManager::clear_session_ref_promotion(0));
         $this->assertFalse(SessionManager::clear_session_ref_promotion(99999999), 'No row changed means false.');
     }
+
+    // ---------------------------------------------------------------- jqGrid-bound admin list ("complete")
+
+    private function completeFixture(): array
+    {
+        $coach = $this->rawUser('cmp_coach', 'ROLE_TEACHER', 1);
+        $student = $this->rawUser('cmp_stud');
+        $full = $this->rawSession('cmp_full');
+        $noCourse = $this->rawSession('cmp_nocourse');
+        $noCoach = $this->rawSession('cmp_nocoach');
+        $c = $this->rawCourse('cmp');
+        foreach ([$full, $noCoach] as $id) {
+            $this->sessionCourse($id, $c);
+            $this->courseUser($id, $c, $student, Session::STUDENT);
+        }
+        $this->rel($full, $coach, Session::GENERAL_COACH);
+        $this->rel($noCourse, $coach, Session::GENERAL_COACH);
+
+        return [$full, $noCourse, $noCoach, $coach, $c];
+    }
+
+    public function testCompleteListShowsSessionsWithAGeneralCoachWithOneRowPerSession(): void
+    {
+        [$full, $noCourse, $noCoach] = $this->completeFixture();
+
+        $rows = SessionManager::get_sessions_admin_complete(['where' => 's.id IN ('.$full.', '.$noCourse.', '.$noCoach.')', 'order' => 's.title ASC']);
+
+        $this->assertSame([$full, $noCourse], array_map('intval', array_keys($rows)), 'A session without general coach is not listed; one without course is.');
+        $row = $rows[$full];
+        $this->assertStringContainsString('resume_session.php?id_session='.$full, $row['title']);
+        $this->assertStringContainsString('s2_cmp_full', $row['title']);
+        $this->assertStringContainsString('user_information.php?user_id=', $row['coach_name']);
+        $this->assertSame(get_lang('Visible') === $row['visibility'] || get_lang('Read only') === $row['visibility'], true);
+        $this->assertSame($row['course_title'], 's2_cmp');
+        $this->assertNull($rows[$noCourse]['course_title']);
+    }
+
+    public function testCompleteCountCountsTheRowsOfSessionsWithACoachAndCourseUsers(): void
+    {
+        [$full, $noCourse, $noCoach] = $this->completeFixture();
+        $where = ['where' => 's.id IN ('.$full.', '.$noCourse.', '.$noCoach.')'];
+
+        // PINNED QUIRK: the count joins session_rel_course_rel_user (a session needs users in a course) while the
+        // list does not, so the two disagree: the list shows 2 sessions, the count 1.
+        $this->assertSame(1, (int) SessionManager::get_count_admin_complete($where));
+        $this->assertFalse(SessionManager::get_count_admin_complete('not an array'));
+        $this->assertFalse(SessionManager::get_sessions_admin_complete('not an array'));
+    }
+
+    public function testCompleteListHonoursLimitAndOrder(): void
+    {
+        [$full, $noCourse] = $this->completeFixture();
+        $where = 's.id IN ('.$full.', '.$noCourse.')';
+
+        $desc = SessionManager::get_sessions_admin_complete(['where' => $where, 'order' => 's.title DESC']);
+        $this->assertSame([$noCourse, $full], array_map('intval', array_keys($desc)));
+        $this->assertCount(1, SessionManager::get_sessions_admin_complete(['where' => $where, 'order' => 's.title ASC', 'limit' => '1 , 1']));
+    }
+
+    public function testCompleteListOfASessionAdminFollowsTheManageAllSetting(): void
+    {
+        [$full, $noCourse] = $this->completeFixture();
+        $sa = $this->rawUser('cmp_sa', 'ROLE_SESSION_MANAGER', 3);
+        $this->rel($noCourse, $sa, Session::SESSION_ADMIN);
+        $where = ['where' => 's.id IN ('.$full.', '.$noCourse.')', 'order' => 's.title ASC'];
+
+        $this->setSetting('session.allow_session_admins_to_manage_all_sessions', 'false');
+        $this->loginAs($sa);
+        $mine = array_map('intval', array_keys(SessionManager::get_sessions_admin_complete($where)));
+        $this->setSetting('session.allow_session_admins_to_manage_all_sessions', 'true');
+        $this->loginAs($sa);
+        $all = array_map('intval', array_keys(SessionManager::get_sessions_admin_complete($where)));
+        $this->loginAs($this->getAdmin()->getId());
+
+        $this->assertSame([$noCourse], $mine, 'A session admin only gets the sessions he administers.');
+        $this->assertSame([$full, $noCourse], $all, 'With manage-all he gets those with a general coach, like everybody else.');
+    }
+
+    // ---------------------------------------------------------------- formatSessionsAdminForGrid
+
+    public function testGridFormattingOfTheAdminList(): void
+    {
+        $cat = SessionManager::create_category_session('s2_grid_cat', 2030, 1, 1, 0, 0, 0);
+        $a = $this->rawSession('grid_a', ['category' => $cat, 'visibility' => Session::INVISIBLE, 'status' => Session::STATUS_PLANNED]);
+        $b = $this->rawSession('grid_b', ['start' => '2020-01-01 00:00:00', 'end' => '2020-02-01 00:00:00', 'visibility' => Session::READ_ONLY]);
+        $where = ['where' => 's.id IN ('.$a.', '.$b.')', 'order' => 's.title ASC'];
+
+        $this->assertSame(2, SessionManager::formatSessionsAdminForGrid($where, true));
+        $rows = SessionManager::formatSessionsAdminForGrid($where);
+
+        $this->assertCount(2, $rows);
+        $this->assertStringContainsString('resume_session.php?id_session='.$a, $rows[0]['title']);
+        $this->assertSame('s2_grid_cat', $rows[0]['category_name']);
+        $this->assertSame('', $rows[1]['category_name']);
+        $this->assertSame(api_ucfirst(get_lang('Invisible')), $rows[0]['visibility']);
+        $this->assertSame(get_lang('Read only'), $rows[1]['visibility']);
+        $this->assertSame(get_lang('Planned'), $rows[0]['status'], 'The numeric status is replaced by its label.');
+    }
+
+    public function testGridUserColumnShowsTheStudentCountAndTheLanguageTooltip(): void
+    {
+        $s = $this->rawSession('grid_users');
+        $u = $this->rawUser('gu1');
+        $this->rel($s, $u, Session::STUDENT);
+        $this->rel($s, $this->rawUser('gu2', 'ROLE_TEACHER', 1), Session::GENERAL_COACH);
+        $this->conn()->executeStatement("UPDATE user SET locale = 'es' WHERE id = ?", [$u]);
+        $columns = ['column_model' => [['name' => 'users']]];
+
+        $rows = SessionManager::formatSessionsAdminForGrid(['where' => 's.id = '.$s], false, $columns);
+
+        $this->assertSame(1, (int) strip_tags($rows[0]['users']), 'The coach is not counted, only students.');
+        $this->assertStringContainsString('title="ES 1"', $rows[0]['users']);
+        $this->assertSame('', $rows[0]['teachers']);
+    }
 }

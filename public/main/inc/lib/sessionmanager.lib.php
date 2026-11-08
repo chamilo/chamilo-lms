@@ -9867,8 +9867,8 @@ class SessionManager
                 s.display_start_date,
                 s.display_end_date,
                 $coach_name,
-                access_start_date,
-                access_end_date,
+                s.access_start_date,
+                s.access_end_date,
                 s.visibility,
                 u.id as user_id,
                 $injectExtraFields

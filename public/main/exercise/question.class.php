@@ -541,6 +541,8 @@ abstract class Question
      * @param int $type - answer type
      *
      * @author Olivier Brouckaert
+     *
+     * @deprecated No caller left (the callers named updateType() are Exercise::updateType())
      */
     public function updateType($type)
     {

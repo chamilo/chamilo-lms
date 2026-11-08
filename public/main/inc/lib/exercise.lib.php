@@ -3608,6 +3608,8 @@ EOT;
      * @param bool $return_string
      *
      * @return int the position of the user between his friends in a course (or course within a session)
+     *
+     * @deprecated No caller left
      */
     public static function get_exercise_result_ranking_by_attempt(
         $my_score,
@@ -3757,6 +3759,8 @@ EOT;
      * @param    int    session id
      *
      * @return float Average score
+     *
+     * @deprecated No caller left
      */
     public static function get_average_score($exercise_id, $courseId, $session_id)
     {
@@ -3892,6 +3896,8 @@ EOT;
      * @param int $session_id
      *
      * @return float Best average score
+     *
+     * @deprecated No caller left
      */
     public static function getBestScoreByExercise(
         $exercise_id,

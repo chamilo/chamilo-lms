@@ -806,18 +806,25 @@ final readonly class AdminStatisticsUserSystemQueryService
         }
 
         $connection = $this->entityManager->getConnection();
+        $params = [
+            'start' => $start->format('Y-m-d').' 00:00:00',
+            'end' => $end->format('Y-m-d').' 23:59:59',
+            'events' => ['user_subscribed', 'user_unsubscribed', 'session_user_deleted'],
+        ];
+        $types = ['start' => Types::STRING, 'end' => Types::STRING, 'events' => ArrayParameterType::STRING];
+        $urlScope = '';
+        $urlId = $this->getCurrentAccessUrlId();
+        if ($this->accessUrlHelper->isMultiple() && null !== $urlId) {
+            // An event belongs to the URL of its course or of its session; one with neither cannot be attributed.
+            $urlScope = 'AND (EXISTS (SELECT 1 FROM access_url_rel_course aurc WHERE aurc.c_id = track_e_default.c_id AND aurc.access_url_id = :urlId) '
+                .'OR EXISTS (SELECT 1 FROM access_url_rel_session aurs WHERE aurs.session_id = track_e_default.session_id AND aurs.access_url_id = :urlId)) ';
+            $params['urlId'] = $urlId;
+            $types['urlId'] = Types::INTEGER;
+        }
         $sql = 'SELECT DATE(default_date) AS event_date, default_event_type, COUNT(default_id) AS total '
             .'FROM track_e_default WHERE default_date BETWEEN :start AND :end '
-            .'AND default_event_type IN (:events) GROUP BY DATE(default_date), default_event_type ORDER BY DATE(default_date)';
-        $rows = $connection->executeQuery(
-            $sql,
-            [
-                'start' => $start->format('Y-m-d').' 00:00:00',
-                'end' => $end->format('Y-m-d').' 23:59:59',
-                'events' => ['user_subscribed', 'user_unsubscribed', 'session_user_deleted'],
-            ],
-            ['start' => Types::STRING, 'end' => Types::STRING, 'events' => ArrayParameterType::STRING]
-        )->fetchAllAssociative();
+            .'AND default_event_type IN (:events) '.$urlScope.'GROUP BY DATE(default_date), default_event_type ORDER BY DATE(default_date)';
+        $rows = $connection->executeQuery($sql, $params, $types)->fetchAllAssociative();
         foreach ($rows as $row) {
             $date = (string) $row['event_date'];
             if (!isset($dates[$date])) {

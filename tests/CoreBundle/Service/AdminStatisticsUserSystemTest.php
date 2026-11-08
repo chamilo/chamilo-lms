@@ -375,6 +375,33 @@ final class AdminStatisticsUserSystemTest extends KernelTestCase
         $this->assertSame([2, 1, 0], $report['chart']['data']['datasets'][0]['data']);
     }
 
+    /**
+     * Once the portal is multi-URL an event only counts when its course or its session belongs to the current URL.
+     */
+    public function testSubscriptionsByDayAreConfinedToTheCoursesAndSessionsOfTheCurrentUrl(): void
+    {
+        $other = $this->secondUrl();
+        $this->conn()->executeStatement('UPDATE access_url_rel_course SET access_url_id = ? WHERE c_id = 2', [$other]);
+        $mySession = $this->rawSession('sub1');
+        $foreignSession = $this->rawSession('sub2', $other);
+        $events = [
+            [1, null, 'user_subscribed'],
+            [2, null, 'user_subscribed'],
+            [null, null, 'user_subscribed'],
+            [null, $mySession, 'user_unsubscribed'],
+            [null, $foreignSession, 'user_unsubscribed'],
+        ];
+        foreach ($events as [$courseId, $sessionId, $type]) {
+            $this->conn()->executeStatement(
+                "INSERT INTO track_e_default (default_user_id, c_id, session_id, default_date, default_event_type, default_value_type, default_value)
+                 VALUES (1, ?, ?, '2001-11-01 10:00:00', ?, 'x', 'y')",
+                [$courseId, $sessionId, $type]
+            );
+        }
+        $report = $this->report('subscription_by_day', ['rangeStart' => '2001-11-01', 'rangeEnd' => '2001-11-01']);
+        $this->assertSame([['date' => '2001-11-01', 'subscriptions' => 1, 'unsubscriptions' => 1]], $report['table']['items']);
+    }
+
     // ---------------------------------------------------------- user session
 
     public function testUserSessionCountsLearnersRegisteredInTheRangePerUrlAndSession(): void

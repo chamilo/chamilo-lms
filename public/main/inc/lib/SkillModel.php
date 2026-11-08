@@ -1343,6 +1343,8 @@ class SkillModel extends Model
      * @param mixed $where_condition
      *
      * @return array
+     *
+     * @deprecated No caller left in public/ or src/ (the ranking page moved to the Symfony side).
      */
     public function getUserListSkillRanking(
         $start,
@@ -1377,6 +1379,8 @@ class SkillModel extends Model
 
     /**
      * @return int
+     *
+     * @deprecated No caller left in public/ or src/.
      */
     public function getUserListSkillRankingCount()
     {
@@ -1404,6 +1408,8 @@ class SkillModel extends Model
      * @param string $courseCode
      *
      * @return int
+     *
+     * @deprecated No caller left in public/ or src/.
      */
     public function getCountSkillsByCourse($courseCode)
     {

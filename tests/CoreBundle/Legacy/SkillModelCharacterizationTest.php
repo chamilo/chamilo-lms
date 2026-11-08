@@ -23,9 +23,9 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  *
  * LIVE (callers under public/): getAllSkills, getGradebooksBySkill, getUserSkills, getUserSkillRanking,
  * getCoursesBySkill, getSessionsBySkill, userHasSkill, listAchievedByCourse, listUsersWhoAchieved,
- * isToolAvailable, isAllowed, hasAccessToUserSkill, userCanAddFeedbackToUser, sanitizeInternalUrl.
+ * isSearched (through getSkillToJson), isToolAvailable, isAllowed, hasAccessToUserSkill, userCanAddFeedbackToUser, sanitizeInternalUrl.
  * DEAD (no caller, marked @deprecated in the source): getUserListSkillRanking,
- * getUserListSkillRankingCount, getCountSkillsByCourse, isSearched. The remaining methods (tree
+ * getUserListSkillRankingCount, getCountSkillsByCourse. The remaining methods (tree
  * building, add/edit/delete, saveSkills*, getItemInfo, ...) go through Doctrine entities, not raw SQL.
  *
  * Fixtures: skills (title sk_...) and their relations, gradebook categories, sessions and acquired

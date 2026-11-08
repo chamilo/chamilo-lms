@@ -543,7 +543,15 @@ class BuyCoursesPlugin extends Plugin
      */
     public function isEnabled(): bool
     {
-        return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable') || 'true' === $this->get('btcpay_enable');
+        // Settings are strings: 'false' is truthy, so only 'true' (or a real true) switches a method on.
+        foreach (['paypal_enable', 'transfer_enable', 'culqi_enable', 'stripe_enable', 'cecabank_enable', 'btcpay_enable'] as $method) {
+            $value = $this->get($method);
+            if (true === $value || 'true' === $value) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

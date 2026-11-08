@@ -211,6 +211,27 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $this->assertNotEmpty($this->plugin->getCouponService($id, $serviceId));
     }
 
+    public function testPluginIsEnabledOnlyWhenAPaymentMethodIsReallyOn(): void
+    {
+        // Plugin settings are strings: 'false' is truthy, so isEnabled() used to be true with every method off.
+        $methods = ['paypal_enable', 'transfer_enable', 'culqi_enable', 'stripe_enable', 'cecabank_enable', 'btcpay_enable'];
+        $off = array_fill_keys($methods, 'false');
+
+        $this->setPluginSettings($off);
+        $this->assertFalse($this->plugin->isEnabled(), "every method 'false'");
+        $this->setPluginSettings(array_fill_keys($methods, ''));
+        $this->assertFalse($this->plugin->isEnabled(), 'every method empty');
+        $this->setPluginSettings([]);
+        $this->assertFalse($this->plugin->isEnabled(), 'unset');
+
+        foreach ($methods as $method) {
+            $this->setPluginSettings([$method => 'true'] + $off);
+            $this->assertTrue($this->plugin->isEnabled(), $method.' on');
+        }
+        $this->setPluginSettings(['paypal_enable' => true]);
+        $this->assertTrue($this->plugin->isEnabled(), 'a real boolean true');
+    }
+
     public function testServiceCouponLookup(): void
     {
         $id = $this->makeCoupon('BC_SRV', 2, 5);

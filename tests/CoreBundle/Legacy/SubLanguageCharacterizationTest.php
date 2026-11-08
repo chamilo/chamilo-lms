@@ -195,24 +195,23 @@ final class SubLanguageCharacterizationTest extends KernelTestCase
         $this->assertTrue(SubLanguageManager::check_if_language_is_father($parent));
     }
 
-    public function testCheckIfLanguageIsUsedMatchesTheUserLocaleAgainstTheEnglishName(): void
+    public function testCheckIfLanguageIsUsedMatchesTheUserLocaleAgainstTheIsocode(): void
     {
         $used = $this->language('used', null, 1, 'slu');
         $free = $this->language('free', null, 1, 'slf');
         $this->userWithLocale('slu');
+        // user.locale stores the ISO code: a user whose locale equals another language's ENGLISH name
+        // does not make that language used.
         $this->userWithLocale($this->row($free)['english_name']);
 
-        // PINNED QUIRK: user.locale stores the ISO code (en_US), but the query compares it with the
-        // english_name column, so a language that users really use is reported as unused and one whose
-        // english name happens to be a locale value is reported as used.
-        $this->assertFalse(SubLanguageManager::check_if_language_is_used($used));
-        $this->assertTrue(SubLanguageManager::check_if_language_is_used($free));
+        $this->assertTrue(SubLanguageManager::check_if_language_is_used($used));
+        $this->assertFalse(SubLanguageManager::check_if_language_is_used($free));
     }
 
     public function testCheckIfLanguageIsUsedIgnoresSoftDeletedUsers(): void
     {
         $lang = $this->language('gone', null, 1, 'slg');
-        $this->userWithLocale($this->row($lang)['english_name'], -2);
+        $this->userWithLocale('slg', -2);
 
         $this->assertFalse(SubLanguageManager::check_if_language_is_used($lang));
     }

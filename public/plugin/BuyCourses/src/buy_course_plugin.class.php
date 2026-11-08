@@ -2091,6 +2091,9 @@ class BuyCoursesPlugin extends Plugin
         return sprintf($this->get_lang('BenefitSummaryValueUntil'), $value.' '.$definition['unit'], $expiry);
     }
 
+    /**
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
+     */
     public function getServiceBenefitSummaries(int $serviceId, int $userId = 0): array
     {
         $summaries = [];
@@ -4455,6 +4458,8 @@ class BuyCoursesPlugin extends Plugin
      * @param int $paymentType The payment type to filter (default : Paypal)
      *
      * @return array The sale list. Otherwise, return false
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function getSaleListByPaymentType(int $paymentType = self::PAYMENT_TYPE_PAYPAL)
     {
@@ -4798,6 +4803,8 @@ class BuyCoursesPlugin extends Plugin
      * @return array
      *
      * @throws Exception
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function getSaleListReport(?string $dateStart = null, ?string $dateEnd = null)
     {
@@ -7061,6 +7068,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Set the external recurring profile ID for a service sale.
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function updateRecurringProfileId(int $serviceSaleId, string $recurringProfileId): bool
     {
@@ -7079,6 +7088,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Update the recurring payment status for a service sale.
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function updateRecurringPayments(int $serviceSaleId, int $recurringPaymentStatus): bool
     {
@@ -7097,6 +7108,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Update recurring payment metadata for a service sale.
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function updateServiceSaleRecurringData(
         int $serviceSaleId,
@@ -10540,6 +10553,8 @@ class BuyCoursesPlugin extends Plugin
      * @param int $id The user id
      *
      * @return array The sale list. Otherwise, return false
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function getSubscriptionSaleListByUserId(int $id)
     {
@@ -10681,6 +10696,8 @@ class BuyCoursesPlugin extends Plugin
      * @param string $date The date
      *
      * @return array
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function getSubscriptionsDue(string $date)
     {
@@ -10707,6 +10724,8 @@ class BuyCoursesPlugin extends Plugin
      * @param int $productType The product type
      *
      * @return array
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function checkItemSubscriptionActive(int $userId, int $productId, int $productType)
     {
@@ -10731,6 +10750,8 @@ class BuyCoursesPlugin extends Plugin
      * Get subscription sale data by ID.
      *
      * @return array
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function updateSubscriptionSaleExpirationStatus(int $id)
     {
@@ -12356,6 +12377,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Activate the benefits granted by a completed service sale.
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function activateServiceBenefitsForSale(int $serviceSaleId): void
     {
@@ -12662,6 +12685,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Return whether the user can create one more course.
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function canUserCreateMoreCourses(int $userId): bool
     {
@@ -12738,6 +12763,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Return a clear user-facing message for course creation limit.
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function getCourseCreationLimitMessage(int $userId): string
     {
@@ -14004,6 +14031,9 @@ class BuyCoursesPlugin extends Plugin
         }
     }
 
+    /**
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
+     */
     private function shouldApplyCourseCreationLimitForUser(int $userId): bool
     {
         if ($userId <= 0) {

@@ -230,6 +230,44 @@ final class CourseReportingSectionsTest extends KernelTestCase
         $this->assertSame(0, $result['total']);
     }
 
+    public function testSessionReportGivesAccessesTimeProgressAndExerciseAverageOfEachSessionLearner(): void
+    {
+        $session = $this->rawSession('r2se1');
+        $this->sessionCourse($session, 1);
+        $learner = $this->rawUser('r2se1a');
+        $statusCoach = $this->rawUser('r2se1c');
+        $this->sessionCourseUser($session, 1, $learner, 0);
+        $this->sessionCourseUser($session, 1, $statusCoach, 2);
+        $this->visit($learner, '2001-01-01 10:00:00', '2001-01-01 10:10:00', 1, $session);
+        $this->visit($learner, '2001-01-02 10:00:00', null, 1, $session);
+        $this->visit($learner, '2001-01-03 10:00:00', '2001-01-03 12:00:00', 1, 0);
+        $lp1 = $this->lp();
+        $lp2 = $this->lp();
+        $this->conn()->executeStatement('INSERT INTO c_lp_view (user_id, lp_id, c_id, session_id, view_count, last_item, progress) VALUES (?, ?, 1, ?, 1, 0, 20), (?, ?, 1, ?, 2, 0, 80), (?, ?, 1, ?, 1, 0, 40)', [$learner, $lp1, $session, $learner, $lp1, $session, $learner, $lp2, $session]);
+        foreach ([[5, 10], [10, 10], [1, 0]] as [$score, $max]) {
+            $this->conn()->executeStatement(
+                "INSERT INTO track_e_exercises (exe_user_id, c_id, session_id, exe_exo_id, exe_date, score, max_score, user_ip, status, data_tracking,
+                    start_date, steps_counter, orig_lp_id, orig_lp_item_id, exe_duration, orig_lp_item_view_id, questions_to_check)
+                 VALUES (?, 1, ?, 1, '2001-01-01 10:00:00', ?, ?, '', '', '', '2001-01-01 09:00:00', 0, 0, 0, 0, 0, '')",
+                [$learner, $session, $score, $max]
+            );
+        }
+        $this->conn()->executeStatement(
+            "INSERT INTO resource_link (resource_node_id, c_id, session_id, visibility, display_order, resource_type_group, created_at, updated_at)
+             SELECT resource_node_id, 1, ?, 2, 0, 0, '2001-01-01 00:00:00', '2001-01-01 00:00:00' FROM c_lp WHERE iid IN (?, ?) AND resource_node_id IS NOT NULL",
+            [$session, $lp1, $lp2]
+        );
+
+        $result = $this->section('session', [], $this->ctx(1, $session));
+
+        $this->assertSame([$learner], array_column($result['items'], 'id'), 'course coaches are not learners');
+        $row = $result['items'][0];
+        $this->assertSame(2, $row['courseAccesses'], 'the visit outside the session does not count');
+        $this->assertSame(600, $row['totalTime']);
+        $this->assertSame(50.0, round((float) $row['exerciseAverage'], 2), '(50 + 100 + 0 for a zero maximum) / 3');
+        $this->assertSame(0.0, (float) $row['learningPathProgress'], 'learning paths that are not linked to the course contribute nothing');
+    }
+
     // ------------------------------------------------------------- messages
 
     private function message(int $from, int $to, string $title, string $date, string $content = 'hello'): int

@@ -1663,6 +1663,8 @@ final class CourseReportingSectionQueryService
                      WHERE relation.c_id = :courseId
                        AND relation.session_id = :sessionId
                        AND relation.status = :studentStatus';
+            // session_rel_course_rel_user.status: 0 = learner (Session::STUDENT), 2 = course coach.
+            $params['studentStatus'] = 0;
             $params['sessionId'] = $context->sessionId();
         } else {
             $sql = $select.'

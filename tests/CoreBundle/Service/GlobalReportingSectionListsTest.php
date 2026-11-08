@@ -678,4 +678,85 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
         $this->assertSame(70, $result['meta']['scoreThreshold'], 'the default pass mark');
         $this->assertSame(100, $this->section($this->admin(), 'exams', ['score' => 500])['meta']['scoreThreshold'], 'the pass mark is capped at 100');
     }
+
+    // ------------------------------------------------------ tracked courses
+
+    /**
+     * An administrator looking at the courses taught by $teacher (the "userId" filter of /reporting/courses).
+     *
+     * @return array{0: int, 1: GlobalReportingContext}
+     */
+    private function courseTeacher(string $tag, int $courseId): array
+    {
+        $teacher = $this->rawUser($tag, self::TEACHER);
+        $this->conn()->executeStatement('DELETE FROM course_rel_user WHERE c_id = ? AND status = 1', [$courseId]);
+        $this->courseUser($teacher, $courseId, 1);
+
+        return [$teacher, $this->admin()];
+    }
+
+    public function testTrackedCoursesOfATeacherListLearnersAndAverageTimeSpent(): void
+    {
+        [$teacher, $ctx] = $this->courseTeacher('r2t1', 2);
+        $a = $this->rawUser('r2t1a');
+        $b = $this->rawUser('r2t1b');
+        $manager = $this->rawUser('r2t1c');
+        $this->courseUser($a, 2, 5);
+        $this->courseUser($b, 2, 5);
+        $this->courseUser($manager, 2, 5, 1);
+        $this->courseVisit($a, 2, '2001-01-01 10:00:00', '2001-01-01 10:10:00');
+        $this->courseVisit($b, 2, '2001-01-02 10:00:00', '2001-01-02 10:05:00');
+        $this->courseVisit($b, 2, '2001-01-03 10:00:00', null);
+
+        $result = $this->section($ctx, 'courses', ['userId' => $teacher]);
+
+        $this->assertSame('Your courses', $result['title']);
+        $this->assertSame(1, $result['total']);
+        $row = $result['items'][0];
+        $this->assertSame(2, $row['id']);
+        $this->assertSame(2, $row['learners'], 'the teacher and the manager relation are not learners');
+        $this->assertSame(450, $row['averageTimeSeconds'], '(600 + 300) seconds / 2 learners');
+        $this->assertNull($row['learningPathProgress']);
+        $this->assertNull($row['forumPosts']);
+        $this->assertNull($row['thematicUrl']);
+        $this->assertNull($row['attendanceUrl']);
+        $this->assertSame((string) $this->conn()->fetchOne('SELECT code FROM course WHERE id = 2'), $row['code']);
+    }
+
+    public function testTrackedCoursesFilterByKeywordAndStayWithinTheUrl(): void
+    {
+        [$teacher, $ctx] = $this->courseTeacher('r2t2', 1);
+        $title = (string) $this->conn()->fetchOne('SELECT title FROM course WHERE id = 1');
+        $this->assertSame(1, $this->section($ctx, 'courses', ['userId' => $teacher, 'keyword' => substr($title, 0, 3)])['total']);
+        $this->assertSame(0, $this->section($ctx, 'courses', ['userId' => $teacher, 'keyword' => 'zz-no-such-course'])['total']);
+        $other = $this->secondUrl();
+        $this->conn()->executeStatement('UPDATE access_url_rel_course SET access_url_id = ? WHERE c_id = 1', [$other]);
+        $this->assertSame([], $this->section($ctx, 'courses', ['userId' => $teacher])['items']);
+    }
+
+    public function testTrackedCoursesInASessionCountSessionLearnersAndOfferTheAttendanceLink(): void
+    {
+        $session = $this->rawSession('r2t3');
+        $this->sessionCourse($session, 1);
+        $learner = $this->rawUser('r2t3a');
+        $this->sessionCourseUser($session, 1, $learner, 0);
+        $this->conn()->executeStatement(
+            "INSERT INTO track_e_course_access (user_id, c_id, login_course_date, logout_course_date, counter, session_id, user_ip)
+             VALUES (?, 1, '2001-01-01 10:00:00', '2001-01-01 11:00:00', 1, ?, '')",
+            [$learner, $session]
+        );
+
+        $result = $this->section($this->admin(), 'courses', ['sessionId' => $session]);
+
+        $this->assertSame('Courses in this session', $result['title']);
+        $this->assertSame([1], array_column($result['items'], 'id'));
+        $this->assertSame(1, $result['items'][0]['learners']);
+        $this->assertSame(3600, $result['items'][0]['averageTimeSeconds']);
+        $this->assertSame($session, $result['items'][0]['sessionId']);
+        $this->assertNull($result['items'][0]['attendanceUrl'], 'no attendance sheet in the session');
+        // A session of another URL shows no course at all.
+        $other = $this->secondUrl();
+        $this->conn()->executeStatement('UPDATE access_url_rel_session SET access_url_id = ? WHERE session_id = ?', [$other, $session]);
+        $this->assertSame([], $this->section($this->admin(), 'courses', ['sessionId' => $session])['items']);
+    }
 }

@@ -159,6 +159,22 @@ final class CourseReportingSectionsTest extends KernelTestCase
         $this->assertSame(2, $page['itemsPerPage'] ?? 2);
     }
 
+    /**
+     * The sections list the learners of the course like the learners table does: never the soft-deleted accounts
+     * (a removed user must not come back in the time, activity and message reports of a teacher).
+     */
+    public function testTotalTimeLeavesSoftDeletedLearnersOut(): void
+    {
+        $alive = $this->learner('r2c3a');
+        $gone = $this->learner('r2c3b');
+        $this->conn()->executeStatement('UPDATE user SET active = -2 WHERE id = ?', [$gone]);
+
+        $result = $this->section('total-time');
+
+        $this->assertSame([$alive], array_column($result['items'], 'id'));
+        $this->assertSame(1, $result['total']);
+    }
+
     // ------------------------------------------------------------ activity
 
     public function testActivityGroupsConnectedLearnersByPeriodAndListsTheNeverConnectedOnes(): void
@@ -273,7 +289,7 @@ final class CourseReportingSectionsTest extends KernelTestCase
     private function message(int $from, int $to, string $title, string $date, string $content = 'hello'): int
     {
         $this->conn()->executeStatement(
-            "INSERT INTO message (user_sender_id, msg_type, status, send_date, title, content, mail_answer) VALUES (?, 1, 0, ?, ?, ?, 0)",
+            'INSERT INTO message (user_sender_id, msg_type, status, send_date, title, content, mail_answer) VALUES (?, 1, 0, ?, ?, ?, 0)',
             [$from, $date, $title, $content]
         );
         $id = (int) $this->conn()->lastInsertId();
@@ -295,7 +311,21 @@ final class CourseReportingSectionsTest extends KernelTestCase
         }
         $em = $this->getEntityManager();
         $student = new CourseReportingContext(
-            $em->find(Course::class, 1), null, 0, $this->entityUser(1), false, false, false, false, false, false, false, true, [], [], []
+            $em->find(Course::class, 1),
+            null,
+            0,
+            $this->entityUser(1),
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            true,
+            [],
+            [],
+            []
         );
         $this->expectException(AccessDeniedHttpException::class);
         $this->service->getSection($student, 'messages', []);

@@ -1674,6 +1674,10 @@ final class CourseReportingSectionQueryService
                        AND relation.status = :studentStatus';
         }
 
+        // Removed accounts (active = -2) are never listed, as in the learners table.
+        $sql .= ' AND user.active <> :softDeleted';
+        $params['softDeleted'] = -2;
+
         if ($context->groupId > 0 && $this->tableExists('c_group_rel_user')) {
             $sql .= ' AND EXISTS (
                 SELECT 1

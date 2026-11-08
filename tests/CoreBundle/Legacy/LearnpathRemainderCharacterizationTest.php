@@ -903,9 +903,8 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
         $other = $this->newLpRow('l2_rl_other');
         $foreign = $this->addItem($other, 'l2_foreign', 'dir', 1);
 
-        // PINNED QUIRK: the item is looked up by (lp, id) and the miss is dereferenced without a check.
-        $this->expectException(\Error::class);
-        learnpath::rl_get_resource_link_for_learnpath(self::COURSE_ID, $mine, $foreign, 0);
+        // The miss used to be dereferenced (fatal error): there is no link for an item the path does not own.
+        $this->assertSame('', learnpath::rl_get_resource_link_for_learnpath(self::COURSE_ID, $mine, $foreign, 0));
     }
 
     // ---------------------------------------------------------------- table of contents helpers

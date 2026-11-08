@@ -8956,6 +8956,9 @@ document.addEventListener("DOMContentLoaded", function () {
             'lp' => $learningPathId,
             'iid' => $id_in_path,
         ]);
+        if (!$rowItem instanceof CLpItem) {
+            return '';
+        }
         $type = $rowItem->getItemType();
         $id = empty($rowItem->getPath()) ? '0' : $rowItem->getPath();
         $main_dir_path = api_get_path(WEB_CODE_PATH);

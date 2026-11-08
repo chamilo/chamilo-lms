@@ -469,4 +469,78 @@ final class UserMergeHelperTest extends KernelTestCase
         $this->assertSame([], $this->courseIds($keep));
         $this->assertSame([1], $this->courseIds($a));
     }
+
+    private function gradebookCategory(): int
+    {
+        $this->conn()->executeStatement("INSERT INTO gradebook_category (title, weight, visible, locked, generate_certificates, is_requirement, calculation_mode, c_id) VALUES ('sv3_cat', 1, 1, 0, 0, 0, 'weighted', 1)");
+
+        return (int) $this->conn()->lastInsertId();
+    }
+
+    private function gradebookEvaluation(int $categoryId): int
+    {
+        $this->conn()->executeStatement("INSERT INTO gradebook_evaluation (title, created_at, weight, max, visible, type, locked, category_id, c_id) VALUES ('sv3_eval', '2020-01-01 00:00:00', 1, 20, 1, 'evalcourse', 0, ?, 1)", [$categoryId]);
+
+        return (int) $this->conn()->lastInsertId();
+    }
+
+    private function gradebookResult(int $evaluationId, int $userId, float $score): int
+    {
+        $this->conn()->executeStatement("INSERT INTO gradebook_result (evaluation_id, user_id, score, created_at) VALUES (?, ?, ?, '2020-01-01 00:00:00')", [$evaluationId, $userId, $score]);
+
+        return (int) $this->conn()->lastInsertId();
+    }
+
+    public function testGradebookResultsMoveToTheTargetAndTheTargetResultWins(): void
+    {
+        $keep = $this->rawUser('keep');
+        $merge = $this->rawUser('merge');
+        $cat = $this->gradebookCategory();
+        $shared = $this->gradebookEvaluation($cat);
+        $onlyMerge = $this->gradebookEvaluation($cat);
+        $this->gradebookResult($shared, $keep, 15.0);
+        $this->gradebookResult($shared, $merge, 3.0);
+        $moved = $this->gradebookResult($onlyMerge, $merge, 12.5);
+
+        $this->assertTrue($this->helper->mergeUsers($keep, $merge));
+
+        $this->assertSame(
+            [[$shared, 15.0], [$onlyMerge, 12.5]],
+            array_map(static fn (array $r): array => [(int) $r['evaluation_id'], (float) $r['score']], $this->conn()->fetchAllAssociative('SELECT evaluation_id, score FROM gradebook_result WHERE user_id = ? ORDER BY evaluation_id', [$keep]))
+        );
+        $this->assertSame($keep, (int) $this->scalar('SELECT user_id FROM gradebook_result WHERE id = ?', [$moved]), 'The row keeps its id');
+        $this->assertSame(0, (int) $this->scalar('SELECT COUNT(*) FROM gradebook_result WHERE user_id = ?', [$merge]));
+    }
+
+    public function testGradebookScoreLogsAndCommentsAreReassigned(): void
+    {
+        $keep = $this->rawUser('keep');
+        $merge = $this->rawUser('merge');
+        $bystander = $this->rawUser('bystander');
+        $cat = $this->gradebookCategory();
+        foreach ([$merge, $bystander] as $u) {
+            $this->conn()->executeStatement("INSERT INTO gradebook_score_log (category_id, user_id, score, registered_at) VALUES (?, ?, 7, '2020-01-01 00:00:00')", [$cat, $u]);
+            $this->conn()->executeStatement("INSERT INTO gradebook_comment (user_id, gradebook_id, comment, created_at, updated_at) VALUES (?, ?, 'sv3', '2020-01-01 00:00:00', '2020-01-01 00:00:00')", [$u, $cat]);
+        }
+
+        $this->assertTrue($this->helper->mergeUsers($keep, $merge));
+
+        foreach (['gradebook_score_log', 'gradebook_comment'] as $table) {
+            $this->assertSame(1, (int) $this->scalar("SELECT COUNT(*) FROM {$table} WHERE user_id = ?", [$keep]), $table);
+            $this->assertSame(0, (int) $this->scalar("SELECT COUNT(*) FROM {$table} WHERE user_id = ?", [$merge]), $table);
+            $this->assertSame(1, (int) $this->scalar("SELECT COUNT(*) FROM {$table} WHERE user_id = ?", [$bystander]), $table);
+        }
+    }
+
+    public function testCompleteAccessTrackingIsReassigned(): void
+    {
+        $keep = $this->rawUser('keep');
+        $merge = $this->rawUser('merge');
+        $this->conn()->executeStatement("INSERT INTO track_e_access_complete (user_id, date_reg, tool, tool_id, tool_id_detail, action, action_details, current_id, ip_user, user_agent, session_id, c_id, ch_sid, login_as, info, url) VALUES (?, '2020-01-01 00:00:00', 'sv3', 0, 0, 'a', '', 0, '', '', 0, 0, '', 0, '', '')", [$merge]);
+
+        $this->assertTrue($this->helper->mergeUsers($keep, $merge));
+
+        $this->assertSame(1, (int) $this->scalar('SELECT COUNT(*) FROM track_e_access_complete WHERE user_id = ? AND tool = ?', [$keep, 'sv3']));
+        $this->assertSame(0, (int) $this->scalar('SELECT COUNT(*) FROM track_e_access_complete WHERE user_id = ?', [$merge]));
+    }
 }

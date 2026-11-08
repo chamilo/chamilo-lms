@@ -323,6 +323,7 @@ final class UserMergeHelper
         }
 
         $this->repointFriendRelations($conn, $sourceId, $targetId);
+        $this->moveGradebookResults($conn, $sourceId, $targetId);
 
         foreach ($this->getPivotMergeRules() as $rule) {
             $this->log(LogLevel::ERROR, 'Pivot merge rule start.', $rule);
@@ -399,6 +400,25 @@ final class UserMergeHelper
         $conn->executeStatement(
             'UPDATE user_rel_user SET friend_user_id = :targetId WHERE friend_user_id = :sourceId',
             ['sourceId' => $sourceId, 'targetId' => $targetId]
+        );
+    }
+
+    /**
+     * Gradebook results keep their ids (the result log points to them): the ones for evaluations the target has
+     * no result for move to the target, the others are dropped (the target's result wins, like every pivot rule).
+     */
+    private function moveGradebookResults(Connection $conn, int $sourceId, int $targetId): void
+    {
+        $conn->executeStatement(
+            'UPDATE gradebook_result s
+             LEFT JOIN gradebook_result t ON t.user_id = :targetId AND t.evaluation_id = s.evaluation_id
+             SET s.user_id = :targetId
+             WHERE s.user_id = :sourceId AND t.id IS NULL',
+            ['sourceId' => $sourceId, 'targetId' => $targetId]
+        );
+        $conn->executeStatement(
+            'DELETE FROM gradebook_result WHERE user_id = :sourceId',
+            ['sourceId' => $sourceId]
         );
     }
 
@@ -698,6 +718,10 @@ final class UserMergeHelper
             ['table' => 'social_post', 'field' => 'sender_id'],
             ['table' => 'social_post', 'field' => 'user_receiver_id'],
             ['table' => 'social_post_feedback', 'field' => 'user_id'],
+
+            ['table' => 'track_e_access_complete', 'field' => 'user_id'],
+            ['table' => 'gradebook_score_log', 'field' => 'user_id'],
+            ['table' => 'gradebook_comment', 'field' => 'user_id'],
 
             ['table' => 'track_e_default', 'field' => 'default_user_id'],
             ['table' => 'track_e_access', 'field' => 'access_user_id'],

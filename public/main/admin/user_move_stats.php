@@ -3,6 +3,10 @@
 
 /**
  * User move script (to move between courses and sessions).
+ *
+ * @deprecated Not reachable from the admin menu outside development installs and broken: the moving steps
+ *             query tables that no longer exist (c_item_property, c_agenda) after having already updated the
+ *             exercise, access and learning path tracking rows. To be reimplemented or deleted.
  */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;

@@ -334,9 +334,10 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $this->assertSame([$first, $second], $this->results($quiz));
         $this->assertSame([$second, $first], $this->results($quiz, '', 'exe_id', 'desc'));
         $this->assertSame(2, $this->examCount($quiz));
-        // PINNED QUIRK: the quiz's resource_link is joined without checking its course, so an attempt row of
-        // another course (c_id = 2) on the same quiz is listed when that course is requested.
-        $this->assertCount(1, $this->results($quiz, '', 'exe_id', 'asc', 2));
+        // The quiz must be linked to the requested course: an attempt row of another course (c_id = 2) on a quiz
+        // that only lives in course 1 is not listed for course 2.
+        $this->assertSame([], $this->results($quiz, '', 'exe_id', 'asc', 2));
+        $this->assertSame(0, $this->examCount($quiz, '', 2));
     }
 
     public function testResultRowsCarryUserQuizAndFormattedScores(): void

@@ -2338,7 +2338,7 @@ HOTSPOT;
             INNER JOIN resource_node rn
                 ON rn.id = ce.resource_node_id
             INNER JOIN resource_link rl
-                ON rl.resource_node_id = rn.id
+                ON rl.resource_node_id = rn.id AND rl.c_id = $courseId
             WHERE
                 te.c_id = $courseId $session_id_and AND
                 rl.deleted_at IS NULL

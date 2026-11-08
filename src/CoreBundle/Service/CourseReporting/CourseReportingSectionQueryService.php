@@ -277,6 +277,7 @@ final class CourseReportingSectionQueryService
                    INNER JOIN c_group_rel_user group_user
                            ON group_user.group_id = group_info.iid
                           AND group_user.c_id = :courseId
+                   INNER JOIN user member ON member.id = group_user.user_id AND member.active <> -2
                   WHERE '.$whereSql,
                 $params
             );
@@ -285,6 +286,7 @@ final class CourseReportingSectionQueryService
         $memberExpression = $this->tableExists('c_group_rel_user')
             ? '(SELECT COUNT(DISTINCT group_user.user_id)
                   FROM c_group_rel_user group_user
+                  INNER JOIN user member ON member.id = group_user.user_id AND member.active <> -2
                  WHERE group_user.group_id = group_info.iid
                    AND group_user.c_id = :courseId)'
             : '0';
@@ -2095,11 +2097,12 @@ final class CourseReportingSectionQueryService
         }
 
         $ids = $this->connection->fetchFirstColumn(
-            'SELECT DISTINCT user_id
-               FROM c_group_rel_user
-              WHERE group_id = :groupId
-                AND c_id = :courseId
-              ORDER BY user_id ASC',
+            'SELECT DISTINCT group_user.user_id
+               FROM c_group_rel_user group_user
+               INNER JOIN user member ON member.id = group_user.user_id AND member.active <> -2
+              WHERE group_user.group_id = :groupId
+                AND group_user.c_id = :courseId
+              ORDER BY group_user.user_id ASC',
             [
                 'groupId' => $groupId,
                 'courseId' => $context->courseId(),
@@ -2156,6 +2159,7 @@ final class CourseReportingSectionQueryService
                 ), 0)
                FROM track_e_course_access access_log
                INNER JOIN c_group_rel_user group_user ON group_user.user_id = access_log.user_id
+               INNER JOIN user member ON member.id = group_user.user_id AND member.active <> -2
               WHERE group_user.group_id = :groupId
                 AND access_log.c_id = :courseId
                 AND COALESCE(access_log.session_id, 0) = :sessionId',
@@ -2199,6 +2203,7 @@ final class CourseReportingSectionQueryService
                        ON group_user.user_id = publication.user_id
                       AND group_user.group_id = :groupId
                       AND group_user.c_id = :courseId
+               INNER JOIN user member ON member.id = group_user.user_id AND member.active <> -2
                INNER JOIN resource_link rl ON rl.resource_node_id = publication.resource_node_id
               WHERE rl.c_id = :courseId
                 AND rl.deleted_at IS NULL
@@ -2236,6 +2241,7 @@ final class CourseReportingSectionQueryService
                        ON group_user.user_id = post.poster_id
                       AND group_user.group_id = :groupId
                       AND group_user.c_id = :courseId
+               INNER JOIN user member ON member.id = group_user.user_id AND member.active <> -2
                INNER JOIN resource_link rl ON rl.resource_node_id = post.resource_node_id
               WHERE rl.c_id = :courseId
                 AND rl.deleted_at IS NULL

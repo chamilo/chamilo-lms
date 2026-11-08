@@ -149,6 +149,45 @@ final class CourseReportingSectionsMoreTest extends KernelTestCase
         $this->assertSame(2, $row['messages'], 'forum posts linked to this course');
     }
 
+    /**
+     * A removed account (-2) is not a member of the group report: not in the member counts, nor in the time,
+     * assignments and messages the group is credited with.
+     */
+    public function testGroupsIgnoreRemovedAccountsEverywhere(): void
+    {
+        $a = $this->learner('r3gr3a');
+        $gone = $this->learner('r3gr3b', 1, -2);
+        $g = $this->newGroup('r3_grp_removed_member');
+        $this->groupMember($g, $a);
+        $this->groupMember($g, $gone);
+        $this->courseVisit($a, '2001-01-01 10:00:00', '2001-01-01 10:10:00');
+        $this->courseVisit($gone, '2001-01-01 10:00:00', '2001-01-01 12:00:00');
+        $this->insert('c_student_publication', ['user_id' => $a, 'title' => 'r3_assignment_gone']);
+        $assignment = (int) $this->conn()->lastInsertId();
+        foreach ([$a, $gone] as $i => $uid) {
+            $node = $this->node('student_publications', 'r3_gwork'.$i);
+            $this->insert('c_student_publication', ['resource_node_id' => $node, 'user_id' => $uid, 'parent_id' => $assignment, 'title' => 'r3_gwork'.$i]);
+            $this->link($node, 1);
+        }
+        $forumNode = $this->node('forums', 'r3_forum_gone');
+        $this->insert('c_forum_forum', ['resource_node_id' => $forumNode, 'title' => 'r3_forum_gone']);
+        $forum = (int) $this->conn()->lastInsertId();
+        foreach ([$a, $gone] as $i => $uid) {
+            $node = $this->node('forum_posts', 'r3_ggpost'.$i);
+            $this->insert('c_forum_post', ['resource_node_id' => $node, 'forum_id' => $forum, 'poster_id' => $uid, 'title' => 'r3_ggpost'.$i, 'post_date' => '2001-01-01 10:00:00', 'visible' => 1]);
+            $this->link($node, 1);
+        }
+
+        $result = $this->section('groups', ['keyword' => 'r3_grp_removed_member']);
+        $row = $result['items'][0];
+
+        $this->assertSame(1, $row['members']);
+        $this->assertSame(600, $row['time']);
+        $this->assertSame(1, $row['works']);
+        $this->assertSame(1, $row['messages']);
+        $this->assertSame(1, $result['summary'][1]['value']);
+    }
+
     // ------------------------------------------------------------ resources
 
     public function testResourcesListTheLinkedResourcesOfTheCourseMostRecentFirst(): void

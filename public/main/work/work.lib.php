@@ -5550,13 +5550,18 @@ function deleteWorkItem($item_id, Course $course)
     $work_data = get_work_data_by_id($item_id);
     $locked = api_resource_is_locked_by_gradebook($work_data['parent_id'], LINK_STUDENTPUBLICATION);
     $course_id = $course->getId();
+    $sessionId = api_get_session_id();
+    // get_work_data_by_id() does not carry the reviewer: a submission that has been reviewed is frozen.
+    $qualificatorId = Database::fetch_array(
+        Database::query("SELECT qualificator_id FROM $work_table WHERE iid = $item_id")
+    )['qualificator_id'] ?? 0;
 
     if (($is_allowed_to_edit && false == $locked) ||
         (
             false == $locked &&
             $is_author &&
             1 == api_get_course_setting('student_delete_own_publication') &&
-            0 == $work_data['qualificator_id']
+            0 == (int) $qualificatorId
         )
     ) {
         // We found the current user is the author
@@ -5582,7 +5587,7 @@ function deleteWorkItem($item_id, Course $course)
                     $row['user_id'],
                     false,
                     $course_id,
-                    $row['session_id']
+                    $sessionId
                 );
                 // We're only interested in deleting the time if this is the latest work sent
                 if (1 == count($userWorks)) {
@@ -5603,7 +5608,6 @@ function deleteWorkItem($item_id, Course $course)
                     }
                     // If no time was defined, or a time of "0" was set, do nothing
                     if (!empty($workingTime)) {
-                        $sessionId = empty($row['session_id']) ? 0 : $row['session_id'];
                         // Getting false from the following call would mean the
                         // time record
                         Event::eventRemoveVirtualCourseTime(

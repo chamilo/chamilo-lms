@@ -940,4 +940,120 @@ final class WorkListsCharacterizationTest extends KernelTestCase
         $this->assertStringContainsString('1 ', strip_tags($row['feedback']), 'one comment on my work, the two on the other learner\'s are not mine');
         $this->assertStringNotContainsString('3', strip_tags($row['feedback']));
     }
+
+    // ----------------------------------------------------------------- deleteWorkItem / deleteAllWorkPerUser
+
+    private function setCourseSetting(int $courseId, string $variable, string $value): void
+    {
+        $this->conn->insert('c_course_setting', [
+            'c_id' => $courseId,
+            'variable' => $variable,
+            'value' => $value,
+            'title' => $variable,
+        ]);
+        // api_get_course_setting() keeps its answers in a static array: force the reload.
+        api_get_course_setting($variable, ['real_id' => $courseId], true);
+    }
+
+    private function deleteEvents(): int
+    {
+        return (int) $this->conn->fetchOne("SELECT COUNT(*) FROM track_e_default WHERE default_event_type = 'work_file_delete'");
+    }
+
+    public function testATeacherDeletesASubmissionBySettingItInactiveAndLogsIt(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $folder = $this->folder();
+        $work = $this->submission($folder, $this->learner(), ['title' => 'w2_del']);
+        $sibling = $this->submission($folder, $this->learner(), ['title' => 'w2_keep']);
+        $events = $this->deleteEvents();
+
+        $this->assertTrue(deleteWorkItem($work, $this->course(1)));
+
+        $this->assertSame(2, (int) $this->field($work, 'active'), 'soft delete: the row stays, active = 2');
+        $this->assertSame(1, (int) $this->field($sibling, 'active'));
+        $this->assertSame($events + 1, $this->deleteEvents(), 'the deletion is logged');
+        $this->assertSame([], array_filter(
+            array_column(get_work_user_list(0, 50, null, null, $folder), 'title_clean'),
+            static fn ($t) => 'w2_del' === $t
+        ));
+    }
+
+    public function testDeleteWorkItemOfAnUnknownOrEmptyIdIsFalse(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+
+        $this->assertFalse(deleteWorkItem(0, $this->course(1)));
+        $this->assertFalse(deleteWorkItem(999999999, $this->course(1)));
+    }
+
+    public function testALearnerDeletesHisOwnUnmarkedSubmissionOnlyWhenTheCourseAllowsIt(): void
+    {
+        $this->setContext($this->learner(), $this->course(1));
+        $folder = $this->folder();
+        $mine = $this->submission($folder, $this->learner());
+
+        $this->setCourseSetting(1, 'student_delete_own_publication', '0');
+        $this->assertFalse(deleteWorkItem($mine, $this->course(1)), 'setting off');
+        $this->assertSame(1, (int) $this->field($mine, 'active'));
+
+        $this->setCourseSetting(1, 'student_delete_own_publication', '1');
+        $this->assertTrue(deleteWorkItem($mine, $this->course(1)), 'setting on');
+        $this->assertSame(2, (int) $this->field($mine, 'active'));
+    }
+
+    public function testALearnerCannotDeleteAMarkedSubmissionNorSomebodyElsesWork(): void
+    {
+        $this->setContext($this->learner(), $this->course(1));
+        $this->setCourseSetting(1, 'student_delete_own_publication', '1');
+        $folder = $this->folder();
+        $marked = $this->submission($folder, $this->learner(), ['qualificator_id' => $this->admin()->getId(), 'qualification' => 5]);
+        $theirs = $this->submission($folder, $this->other());
+
+        $this->assertFalse(deleteWorkItem($marked, $this->course(1)), 'a reviewed submission is frozen');
+        $this->assertFalse(deleteWorkItem($theirs, $this->course(1)), 'not the author');
+        $this->assertSame(1, (int) $this->field($marked, 'active'));
+        $this->assertSame(1, (int) $this->field($theirs, 'active'));
+    }
+
+    public function testDeleteAllWorkOfAUserLeavesTheOtherLearnersAlone(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $folderA = $this->folder();
+        $folderB = $this->folder();
+        $mineA = $this->submission($folderA, $this->learner());
+        $mineB = $this->submission($folderB, $this->learner());
+        $theirsA = $this->submission($folderA, $this->other());
+        $mineElsewhere = $this->submission($folderA, $this->learner(), [], 2);
+
+        $deleted = deleteAllWorkPerUser($this->learner(), $this->course(1));
+
+        $deletedIds = array_map(static fn ($w) => $w->getIid(), $deleted);
+        sort($deletedIds);
+        $this->assertSame([$mineA, $mineB], $deletedIds);
+        $this->assertSame(2, (int) $this->field($mineA, 'active'));
+        $this->assertSame(2, (int) $this->field($mineB, 'active'));
+        $this->assertSame(1, (int) $this->field($theirsA, 'active'), 'the other learner keeps his work');
+        $this->assertSame(1, (int) $this->field($mineElsewhere, 'active'), 'other course untouched');
+    }
+
+    public function testDeleteAllWorkOfAUserNeedsTheRightToDelete(): void
+    {
+        $this->setContext($this->learner(), $this->course(1));
+        $folder = $this->folder();
+        $mine = $this->submission($folder, $this->learner());
+
+        // A learner running the helper on himself is still bound by the course setting (off by default).
+        $this->setCourseSetting(1, 'student_delete_own_publication', '0');
+        $this->assertSame([], deleteAllWorkPerUser($this->learner(), $this->course(1)));
+        $this->assertSame(1, (int) $this->field($mine, 'active'));
+    }
+
+    public function testDeleteAllWorkOfAUserWithoutWorkIsEmpty(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $this->folder();
+
+        $this->assertSame([], deleteAllWorkPerUser($this->other(), $this->course(1)));
+    }
 }

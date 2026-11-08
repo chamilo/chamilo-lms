@@ -609,7 +609,8 @@ function getOnlineUsersInCourseCount($userId, $courseInfo)
 {
     $cacheAvailable = api_get_configuration_value('apc');
     $numberOnlineInCourse = 0;
-    if (!empty($courseInfo['id'])) {
+    // who_is_online_in_this_course_count() expects the course CODE, not its numeric id.
+    if (!empty($courseInfo['id']) && !empty($courseInfo['code'])) {
         if (true === $cacheAvailable) {
             $apcVar = api_get_configuration_value('apc_prefix').'my_campus_whoisonline_count_simple_'.$courseInfo['id'];
             if (apcu_exists($apcVar)) {
@@ -618,7 +619,7 @@ function getOnlineUsersInCourseCount($userId, $courseInfo)
                 $numberOnlineInCourse = who_is_online_in_this_course_count(
                     $userId,
                     api_get_setting('time_limit_whosonline'),
-                    $courseInfo['id']
+                    $courseInfo['code']
                 );
                 apcu_store(
                     $apcVar,
@@ -630,7 +631,7 @@ function getOnlineUsersInCourseCount($userId, $courseInfo)
             $numberOnlineInCourse = who_is_online_in_this_course_count(
                 $userId,
                 api_get_setting('time_limit_whosonline'),
-                $courseInfo['id']
+                $courseInfo['code']
             );
         }
     }

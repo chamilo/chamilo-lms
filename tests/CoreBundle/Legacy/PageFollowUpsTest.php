@@ -132,4 +132,21 @@ final class PageFollowUpsTest extends KernelTestCase
             'the submission of course 2 must not be deleted from course 1'
         );
     }
+
+    // Item 5: the banner passed the numeric course id where the course code is expected, so the counter was
+    // always false.
+    public function testBannerOnlineCounterOfTheCourseUsesTheCourseCode(): void
+    {
+        require_once __DIR__.'/../../../public/main/inc/lib/banner.lib.php';
+        $this->conn->executeStatement('DELETE FROM track_e_online');
+        $adminId = (int) $this->getUser('admin')->getId();
+        $this->conn->executeStatement(
+            'INSERT INTO track_e_online (login_user_id, login_date, user_ip, c_id, session_id, access_url_id)
+             VALUES (?, ?, ?, 1, 0, 1)',
+            [$adminId, gmdate('Y-m-d H:i:s', time() - 60), '127.0.0.1']
+        );
+        $code = (string) $this->conn->fetchOne('SELECT code FROM course WHERE id = 1');
+
+        $this->assertSame(1, (int) getOnlineUsersInCourseCount($adminId, ['id' => 1, 'code' => $code]));
+    }
 }

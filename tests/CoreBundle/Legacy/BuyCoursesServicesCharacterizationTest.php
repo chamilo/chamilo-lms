@@ -129,6 +129,21 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
         $this->assertSame(21, (int) $sale['tax_perc']);
     }
 
+    public function testRegisterServiceSaleTaxFollowsTheServicesCategory(): void
+    {
+        $this->setPluginSettings(['tax_enable' => 'true']);
+        $service = $this->makeService(['price' => '100.00', 'tax_perc' => 10]);
+
+        $this->setGlobalConfig(0, \BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SERVICES);
+        $taxed = $this->serviceSaleRow((int) $this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
+        $this->assertSame('110.00', $taxed['price']);
+
+        $this->setGlobalConfig(0, \BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE);
+        $untaxed = $this->serviceSaleRow((int) $this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 1));
+        $this->assertSame('100.00', $untaxed['price']);
+        $this->assertNull($untaxed['tax_perc']);
+    }
+
     public function testRegisterServiceSalePercentageCouponRoundsTheDiscount(): void
     {
         $service = $this->makeService(['price' => '99.99']);

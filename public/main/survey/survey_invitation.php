@@ -20,8 +20,8 @@ if (empty($surveyId)) {
     api_not_allowed(true);
 }
 /** @var CSurvey $survey */
-$survey = $repo->find($surveyId);
-if (null === $survey) {
+$survey = $repo->find((int) $surveyId);
+if (null === $survey || !SurveyManager::surveyBelongsToCurrentCourse((int) $survey->getIid())) {
     api_not_allowed(true);
 }
 $surveyId = $survey->getIid();

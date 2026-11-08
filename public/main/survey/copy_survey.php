@@ -29,7 +29,7 @@ if (empty($surveyId)) {
 }
 
 $survey = SurveyManager::get_survey($surveyId);
-if (empty($survey)) {
+if (empty($survey) || !SurveyManager::surveyBelongsToCurrentCourse($surveyId)) {
     api_not_allowed(true);
 }
 

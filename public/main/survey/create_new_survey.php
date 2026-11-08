@@ -111,6 +111,9 @@ if (!api_is_allowed_to_edit()) {
 // Getting the survey information
 $survey_id = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : null;
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+if (!empty($survey_id) && !SurveyManager::surveyBelongsToCurrentCourse($survey_id)) {
+    api_not_allowed(true);
+}
 $survey_data = SurveyManager::get_survey($survey_id);
 
 // Additional information
@@ -433,6 +436,10 @@ $form->setDefaults($defaults);
 if ($form->validate()) {
     // Exporting the values
     $values = $form->getSubmitValues();
+    // The survey updated is the one validated above, not the one named in the body.
+    if (!empty($values['survey_id']) && (int) $values['survey_id'] !== (int) $survey_id) {
+        api_not_allowed(true);
+    }
     // Storing the survey
     $return = SurveyManager::store_survey($values);
     survey_apply_resource_language((int) ($return['id'] ?? 0), $values['language'] ?? '');

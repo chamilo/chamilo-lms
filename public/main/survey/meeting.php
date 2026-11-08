@@ -61,6 +61,11 @@ if (null === $survey) {
     api_not_allowed(true);
 }
 
+// Without an invitation the survey id comes straight from the request: it must be a survey of this course.
+if (empty($invitationcode) && !SurveyManager::surveyBelongsToCurrentCourse((int) $survey->getIid())) {
+    api_not_allowed(true);
+}
+
 $surveyId = $survey->getIid();
 $invitations = SurveyUtil::get_invited_users($survey);
 $students = $invitations['course_users'] ?? [];

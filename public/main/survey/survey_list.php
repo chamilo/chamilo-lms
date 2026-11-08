@@ -87,6 +87,9 @@ $survey = null;
 if (!empty($surveyId)) {
     /** @var CSurvey $survey */
     $survey = $repo->find($surveyId);
+    if (null === $survey || !SurveyManager::surveyBelongsToCurrentCourse($surveyId)) {
+        api_not_allowed(true);
+    }
 }
 
 // Action handling: performing the same action on multiple surveys
@@ -107,8 +110,8 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
             foreach ($_POST['id'] as $value) {
                 /** @var CSurvey $survey */
-                $survey = $repo->find($value);
-                if (null === $survey) {
+                $survey = $repo->find((int) $value);
+                if (null === $survey || !SurveyManager::surveyBelongsToCurrentCourse((int) $value)) {
                     continue;
                 }
                 $surveyId = $survey->getIid();
@@ -389,8 +392,8 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
     $exportList = [];
     foreach ($_POST['id'] as $value) {
         /** @var CSurvey $survey */
-        $survey = $repo->find($value);
-        if (null === $survey) {
+        $survey = $repo->find((int) $value);
+        if (null === $survey || !SurveyManager::surveyBelongsToCurrentCourse((int) $value)) {
             continue;
         }
         $title = trim(strip_tags($survey->getTitle()));

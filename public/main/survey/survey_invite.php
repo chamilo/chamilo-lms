@@ -20,12 +20,12 @@ $repo = Container::getSurveyRepository();
 $survey = null;
 if (!empty($surveyId)) {
     /** @var CSurvey $survey */
-    $survey = $repo->find($surveyId);
-    $surveyId = $survey->getIid();
+    $survey = $repo->find((int) $surveyId);
 }
-if (null === $survey) {
+if (null === $survey || !SurveyManager::surveyBelongsToCurrentCourse((int) $survey->getIid())) {
     api_not_allowed(true);
 }
+$surveyId = $survey->getIid();
 
 $survey_data = SurveyManager::get_survey($surveyId);
 $table_survey = Database::get_course_table(TABLE_SURVEY);

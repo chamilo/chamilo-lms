@@ -27,7 +27,7 @@ use UserGroupModel;
  * They pin what the legacy class returns TODAY (rows, ordering, role normalisation, side effects),
  * so that rewriting its SQL to DQL cannot silently change what the admin class pages, the course
  * "classes" tab and the social groups receive. Where the current behaviour looks wrong it is pinned
- * anyway and flagged "CURRENT BEHAVIOUR" in a comment: do not "fix" the test, decide on the source.
+ * anyway and flagged "INTENTIONAL" (or "CURRENT BEHAVIOUR" while undecided) in a comment: do not "fix" the test, decide on the source.
  *
  * Legacy constants: GROUP_USER_PERMISSION_READER = 0 (legacy define), while the entity constant for
  * a reader is 2; the library treats 0, 2 and '' as "reader".
@@ -464,7 +464,8 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         // Stored 2 (legacy reader) is returned as GROUP_USER_PERMISSION_READER (0).
         $this->assertSame(0, $this->model->get_user_group_role($legacyReader->getId(), $group->getId()));
         $this->assertSame(5, $this->model->get_user_group_role($mod->getId(), $group->getId()));
-        // CURRENT BEHAVIOUR: "no relation" and "reader" are indistinguishable (both 0).
+        // INTENTIONAL: "no relation" and "reader" are indistinguishable (both 0); callers that need membership use
+        // is_group_member(), which requires the relation row (see below).
         $this->assertSame(0, $this->model->get_user_group_role($stranger->getId(), $group->getId()));
         $this->assertSame(0, $this->model->get_user_group_role(0, $group->getId()));
 
@@ -794,7 +795,8 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $out = $this->group('ug_out');
         $this->addCourse($in, $course);
 
-        // CURRENT BEHAVIOUR: without course_id the method returns false (not []).
+        // INTENTIONAL: without course_id the method returns false (not []); its only callers (model.ajax.php jqGrid
+        // list/count) treat any empty value alike and the count flavour must stay scalar-compatible.
         $this->assertFalse($this->model->getUserGroupNotInCourse([]));
 
         $options = [

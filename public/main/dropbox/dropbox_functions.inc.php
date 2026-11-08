@@ -1522,7 +1522,7 @@ function get_last_tool_access($tool, $courseId = null, $user_id = null)
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
 
-    return $row['access_date'];
+    return $row['access_date'] ?? null;
 }
 /**
  * Previously $dropbox_cnf['mailingIdBase'], returns a mailing ID to generate a mail ID.

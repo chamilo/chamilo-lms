@@ -595,12 +595,12 @@ final class DropboxCharacterizationTest extends KernelTestCase
         $this->assertSame('2020-05-01 10:00:00', get_last_tool_access('forum', 1, 1));
     }
 
-    public function testGetLastToolAccessWithoutAnyAccessRaisesAWarning(): void
+    public function testGetLastToolAccessWithoutAnyAccessIsNullWithoutWarning(): void
     {
-        // PINNED QUIRK: with no track_e_lastaccess row the function reads $row['access_date'] of false.
-        $this->assertStringContainsString('access_date', $this->warningRaisedBy(
+        $this->assertSame('', $this->warningRaisedBy(
             static fn () => get_last_tool_access('dropbox', 2, 1)
         ));
+        $this->assertNull(get_last_tool_access('dropbox', 2, 1));
     }
 
     public function testRemoveUnusedFilesDeletesFilesNobodyKeepsAndTheirPosts(): void

@@ -7711,6 +7711,11 @@ class SessionManager
             }
         }
 
+        // The course is unknown in this session or already at the end of the list: nothing to swap.
+        if (!isset($nextId, $thisCourseCode)) {
+            return false;
+        }
+
         $sql1 = "UPDATE $table SET position = '".intval($nextOrder)."'
                  WHERE session_id = $sessionId AND c_id =  $thisCourseCode";
         Database::query($sql1);

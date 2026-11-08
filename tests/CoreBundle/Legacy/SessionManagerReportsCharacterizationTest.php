@@ -503,6 +503,21 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
         $this->assertSame(1, (int) $this->one('SELECT nbr_users FROM session_rel_course WHERE session_id = ? AND c_id = ?', [$s, $c]));
     }
 
+    public function testMovingTheFirstCourseUpOrTheLastDownIsHarmless(): void
+    {
+        [$s, [$a, $b, $c]] = $this->orderedSession();
+
+        $this->assertFalse(SessionManager::moveUp($s, $a), 'Nothing above the first course.');
+        $this->assertFalse(SessionManager::moveDown($s, $c), 'Nothing below the last course.');
+        $this->assertFalse(SessionManager::moveDown($s, 99999999), 'A course that is not in the session.');
+
+        $this->assertSame(
+            [$a, $b, $c],
+            array_keys(SessionManager::get_course_list_by_session_id($s)),
+            'Moving past an end keeps the order.'
+        );
+    }
+
     // ---------------------------------------------------------------- group admin
 
     public function testSessionsFollowedForGroupAdminAreTheOnesOfTheStudentsOfHisClasses(): void

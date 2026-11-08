@@ -252,9 +252,11 @@ final class TrackELoginRecordRepositoryTest extends KernelTestCase
         $ranged = $this->repo->findFailedPaginated(1, 10, $filters + ['from' => '2001-06-02 00:00:00', 'to' => '2001-06-04 10:00:00']);
         $this->assertSame(3, $ranged['total'], 'Bounds are inclusive');
 
-        // PINNED QUIRK: a date-only "to" is midnight, so it excludes every login of that very day.
+        // The admin form sends plain dates (<input type="date">): the "to" day must be included whole.
         $dateOnly = $this->repo->findFailedPaginated(1, 10, $filters + ['to' => '2001-06-04']);
-        $this->assertSame(3, $dateOnly['total']);
+        $this->assertSame(4, $dateOnly['total']);
+        $fromOnly = $this->repo->findFailedPaginated(1, 10, $filters + ['from' => '2001-06-02', 'to' => '2001-06-02']);
+        $this->assertSame(1, $fromOnly['total'], 'The same day as from and to selects that day');
     }
 
     public function testFindFailedPaginatedNeverReturnsSuccessfulLogins(): void

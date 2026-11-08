@@ -737,9 +737,8 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
         [$lpId, , , $q3] = $this->lpWithQuizzes('l2_stars_zero');
         $this->addExerciseAttempt($lpId, $q3, 3, 0, 0);
 
-        // PINNED QUIRK: the chapter exercises guard against max_score 0 but the final evaluation divides by it.
-        $this->expectException(\DivisionByZeroError::class);
-        $this->lp($lpId)->getCalculateStars();
+        // The chapter exercises guard against max_score 0; the final evaluation divided by it and threw.
+        $this->assertSame(0, $this->lp($lpId)->getCalculateStars());
     }
 
     public function testCalculateScoreSumsTheLastAttemptOfEveryQuiz(): void

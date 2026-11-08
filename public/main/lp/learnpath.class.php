@@ -8181,7 +8181,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             $evaluationResultInfo = end($evaluationResultInfo);
 
-            if ($evaluationResultInfo) {
+            if ($evaluationResultInfo && !empty($evaluationResultInfo['max_score'])) {
                 $evaluationResult = $evaluationResultInfo['score'] * 100 / $evaluationResultInfo['max_score'];
                 if ($evaluationResult >= 80) {
                     $stars++;

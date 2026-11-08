@@ -267,19 +267,19 @@ final class UserMergeHelperTest extends KernelTestCase
         $this->assertSame(0, (int) $this->scalar('SELECT COUNT(*) FROM access_url_rel_user WHERE user_id = ?', [$merge]));
     }
 
-    public function testUsergroupMembershipsMatchOnGroupOnly(): void
+    public function testUsergroupMembershipsMatchOnGroupAndRelationType(): void
     {
         $keep = $this->rawUser('keep');
         $merge = $this->rawUser('merge');
-        $this->conn()->executeStatement("INSERT INTO usergroup (title, description, created_at, updated_at, group_type, visibility, allow_members_leave_group, author_id) VALUES (?, '', '2020-01-01 00:00:00', '2020-01-01 00:00:00', 0, 1, 0, 1)", ['sv2_g_'.getmypid().'_'.(++$this->rpSeq)]);
+        $this->conn()->executeStatement("INSERT INTO usergroup (title, description, created_at, updated_at, group_type, visibility, allow_members_leave_group, author_id) VALUES (?, '', '2020-01-01 00:00:00', '2020-01-01 00:00:00', 0, 1, 0, 1)", ['sv3_g_'.getmypid().'_'.(++$this->rpSeq)]);
         $g1 = (int) $this->conn()->lastInsertId();
         $this->conn()->executeStatement('INSERT INTO usergroup_rel_user (user_id, usergroup_id, relation_type) VALUES (?, ?, 1)', [$keep, $g1]);
-        $this->conn()->executeStatement('INSERT INTO usergroup_rel_user (user_id, usergroup_id, relation_type) VALUES (?, ?, 2)', [$merge, $g1]);
+        $this->conn()->executeStatement('INSERT INTO usergroup_rel_user (user_id, usergroup_id, relation_type) VALUES (?, ?, 1)', [$merge, $g1]); // same: dropped
+        $this->conn()->executeStatement('INSERT INTO usergroup_rel_user (user_id, usergroup_id, relation_type) VALUES (?, ?, 2)', [$merge, $g1]); // other role: kept
 
         $this->assertTrue($this->helper->mergeUsers($keep, $merge));
 
-        // PINNED QUIRK: relation_type is not part of the match, the source's other-role membership is lost.
-        $this->assertSame([1], array_map('intval', $this->conn()->fetchFirstColumn('SELECT relation_type FROM usergroup_rel_user WHERE user_id = ? AND usergroup_id = ?', [$keep, $g1])));
+        $this->assertSame([1, 2], array_map('intval', $this->conn()->fetchFirstColumn('SELECT relation_type FROM usergroup_rel_user WHERE user_id = ? AND usergroup_id = ? ORDER BY relation_type', [$keep, $g1])));
         $this->assertSame(0, (int) $this->scalar('SELECT COUNT(*) FROM usergroup_rel_user WHERE user_id = ?', [$merge]));
     }
 

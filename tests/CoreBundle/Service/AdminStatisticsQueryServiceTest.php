@@ -14,6 +14,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Characterization of the course, session and social reports of the admin statistics page
@@ -83,7 +84,7 @@ final class AdminStatisticsQueryServiceTest extends KernelTestCase
         try {
             $this->service->getReport('nope');
             $this->fail('unknown report accepted');
-        } catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+        } catch (NotFoundHttpException) {
             $this->addToAssertionCount(1);
         }
         $this->expectException(BadRequestHttpException::class);

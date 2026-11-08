@@ -426,9 +426,11 @@ final class AdminStatisticsUserSystemTest extends KernelTestCase
         $in2 = $this->rawUser('us2');
         $outside = $this->rawUser('us3');
         $coach = $this->rawUser('us4', 1);
-        $this->conn()->executeStatement("INSERT INTO session_rel_user (session_id, user_id, relation_type, duration, registered_at) VALUES
+        $this->conn()->executeStatement(
+            "INSERT INTO session_rel_user (session_id, user_id, relation_type, duration, registered_at) VALUES
             (?, ?, 0, 0, '2001-12-01 00:00:00'), (?, ?, 0, 0, '2001-12-31 23:59:59'), (?, ?, 0, 0, '2002-01-01 00:00:00'), (?, ?, 3, 0, '2001-12-10 00:00:00')",
-            [$s, $in1, $s, $in2, $s, $outside, $s, $coach]);
+            [$s, $in1, $s, $in2, $s, $outside, $s, $coach]
+        );
         $items = $this->report('user_session', ['rangeStart' => '2001-12-01', 'rangeEnd' => '2001-12-31'])['table']['items'];
         $mine = array_values(array_filter($items, static fn (array $i): bool => $i['sessionId'] === $s));
         $this->assertCount(1, $mine);
@@ -490,7 +492,7 @@ final class AdminStatisticsUserSystemTest extends KernelTestCase
         $report = $this->report('users_online');
         $cards = [];
         foreach ($report['meta']['onlineCards'] as $card) {
-            $cards[$card['minutes']] = $card['value'] - ($this->cardValue($before, $card['minutes']));
+            $cards[$card['minutes']] = $card['value'] - $this->cardValue($before, $card['minutes']);
         }
         $this->assertSame([3 => 1, 5 => 2, 30 => 2, 120 => 2], $cards);
         $this->assertSame(30, $report['meta']['configuredOnlineMinutes']);

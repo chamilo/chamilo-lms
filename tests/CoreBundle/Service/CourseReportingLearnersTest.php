@@ -135,7 +135,7 @@ final class CourseReportingLearnersTest extends KernelTestCase
 
     public function testKeywordSortAndPaging(): void
     {
-        $this->conn()->executeStatement("UPDATE course_rel_user SET status = 1 WHERE c_id = 1 AND user_id = 1");
+        $this->conn()->executeStatement('UPDATE course_rel_user SET status = 1 WHERE c_id = 1 AND user_id = 1');
         $ids = [];
         foreach (['b', 'a', 'c'] as $i => $letter) {
             $ids[$letter] = $this->learner('kw_'.$letter);

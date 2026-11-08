@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Service\GlobalReporting\GlobalReportingContext;
 use Chamilo\CoreBundle\Service\GlobalReporting\GlobalReportingSectionQueryService;
 use Chamilo\Tests\ChamiloTestTrait;
+use Database;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
@@ -45,8 +46,8 @@ final class GlobalReportingSectionTest extends KernelTestCase
         Container::setContainer(self::getContainer());
         Container::setSession($httpSession);
         Container::setRequest($request);
-        \Database::setManager($this->getEntityManager());
-        \Database::setConnection($this->getEntityManager()->getConnection());
+        Database::setManager($this->getEntityManager());
+        Database::setConnection($this->getEntityManager()->getConnection());
         $this->service = self::getContainer()->get(GlobalReportingSectionQueryService::class);
     }
 
@@ -124,21 +125,6 @@ final class GlobalReportingSectionTest extends KernelTestCase
     }
 
     /**
-     * @return array<string, array{0: string}>
-     */
-    public static function adminOnlySections(): array
-    {
-        $sections = [
-            'admin-index', 'admin-coaches', 'admin-users', 'admin-sessions', 'admin-courses', 'expired-certificates',
-            'learning-results', 'session-results', 'access-overview', 'exercise-categories', 'surveys',
-            'student-bosses', 'tutor-planning', 'question-stats', 'question-stats-detail', 'organization',
-            'learning-path-authors', 'learning-path-item-authors',
-        ];
-
-        return array_combine($sections, array_map(static fn (string $s): array => [$s], $sections));
-    }
-
-    /**
      * @dataProvider adminOnlySections
      */
     public function testAdministrationSectionsAreDeniedToEveryoneWhoIsNotAnAdministrator(string $section): void
@@ -152,6 +138,21 @@ final class GlobalReportingSectionTest extends KernelTestCase
                 $this->addToAssertionCount(1);
             }
         }
+    }
+
+    /**
+     * @return array<string, array{0: string}>
+     */
+    public static function adminOnlySections(): array
+    {
+        $sections = [
+            'admin-index', 'admin-coaches', 'admin-users', 'admin-sessions', 'admin-courses', 'expired-certificates',
+            'learning-results', 'session-results', 'access-overview', 'exercise-categories', 'surveys',
+            'student-bosses', 'tutor-planning', 'question-stats', 'question-stats-detail', 'organization',
+            'learning-path-authors', 'learning-path-item-authors',
+        ];
+
+        return array_combine($sections, array_map(static fn (string $s): array => [$s], $sections));
     }
 
     public function testListSectionsRequireTheGlobalReportsPermission(): void
@@ -270,7 +271,7 @@ final class GlobalReportingSectionTest extends KernelTestCase
         [, $ctx] = $this->teacher('sl4');
         $ids = [];
         foreach (range(1, 12) as $i) {
-            $ids[$i] = $this->learner('sl4_'.$i, ['lastname' => sprintf('L%02d', $i)]);
+            $ids[$i] = $this->learner('sl4_'.$i, ['lastname' => \sprintf('L%02d', $i)]);
         }
         $asc = $this->section($ctx, 'learners', ['sort' => 'lastname', 'direction' => 'ASC', 'itemsPerPage' => 10]);
         $this->assertSame(12, $asc['total']);

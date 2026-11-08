@@ -74,6 +74,7 @@ final class AdminStatisticsMaintenanceTest extends KernelTestCase
         $this->assertTrue($this->query->supports('zombies'));
         $this->assertTrue($this->query->supports('duplicated_users'));
         $this->assertFalse($this->query->supports('users'));
+
         try {
             $this->query->getReport('users');
             $this->fail('unknown report');
@@ -204,7 +205,7 @@ final class AdminStatisticsMaintenanceTest extends KernelTestCase
 
         $items = array_values(array_filter(
             $this->duplicates(['dupMode' => 'name']),
-            static fn (array $r): bool => in_array($r['id'], [$a, $b, $c, $single, $deleted], true)
+            static fn (array $r): bool => \in_array($r['id'], [$a, $b, $c, $single, $deleted], true)
         ));
 
         $this->assertSame([$b, $a], array_column($items, 'id'), 'the soft-deleted twin and the unique names are left out; oldest first');
@@ -231,7 +232,7 @@ final class AdminStatisticsMaintenanceTest extends KernelTestCase
 
         $items = array_values(array_filter(
             $this->duplicates(['dupMode' => 'email']),
-            static fn (array $r): bool => in_array($r['id'], $mine, true)
+            static fn (array $r): bool => \in_array($r['id'], $mine, true)
         ));
 
         $ids = array_column($items, 'id');
@@ -347,6 +348,7 @@ final class AdminStatisticsMaintenanceTest extends KernelTestCase
     public function testZombieActionWithoutMatchingUserOrWithUnknownActionIsRejected(): void
     {
         $zombie = $this->zombie('r2a6');
+
         try {
             $this->action->runZombieAction('activate', [], '2001-06-01', false);
             $this->fail('no ids');
@@ -363,6 +365,7 @@ final class AdminStatisticsMaintenanceTest extends KernelTestCase
         $other = $this->secondUrl();
         $foreign = $this->rawUser('r2a7', 5, 1, $other);
         $this->login($foreign, '2001-01-01 10:00:00');
+
         try {
             $this->action->runZombieAction('deactivate', [$foreign], '2001-06-01', false);
             $this->fail('foreign user must not be reachable');
@@ -388,6 +391,7 @@ final class AdminStatisticsMaintenanceTest extends KernelTestCase
     {
         $zombie = $this->zombie('r2a9');
         $_SERVER['DENY_DELETE_USERS'] = 'yes';
+
         try {
             $result = $this->action->runZombieAction('delete', [$zombie], '2001-06-01', false);
         } finally {

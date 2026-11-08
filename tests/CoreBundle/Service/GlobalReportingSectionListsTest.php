@@ -10,12 +10,16 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Service\GlobalReporting\GlobalReportingContext;
 use Chamilo\CoreBundle\Service\GlobalReporting\GlobalReportingSectionQueryService;
 use Chamilo\Tests\ChamiloTestTrait;
+use Database;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+
+use const SORT_FLAG_CASE;
+use const SORT_STRING;
 
 /**
  * Second pass over GlobalReportingSectionQueryService::getSection(): the admin and tracking lists that
@@ -46,8 +50,8 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
         Container::setContainer(self::getContainer());
         Container::setSession($httpSession);
         Container::setRequest($request);
-        \Database::setManager($this->getEntityManager());
-        \Database::setConnection($this->getEntityManager()->getConnection());
+        Database::setManager($this->getEntityManager());
+        Database::setConnection($this->getEntityManager()->getConnection());
         $this->service = self::getContainer()->get(GlobalReportingSectionQueryService::class);
     }
 
@@ -149,6 +153,7 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
     {
         foreach ([['hr' => true], [], ['sessionAdminOnly' => true]] as $flags) {
             $me = $this->rawUser('r2c0', self::HR);
+
             try {
                 $this->section($this->ctx($me, $flags), 'certificates');
                 $this->fail('certificates must be denied');
@@ -196,6 +201,7 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
                 $this->addToAssertionCount(1);
             }
         }
+
         // A learner filter only exists for student bosses.
         try {
             $this->section($this->admin(), 'certificates', ['userId' => 1]);
@@ -296,6 +302,7 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
         $this->assertTrue($result['meta']['supportsLearnerFilter']);
         $this->assertSame([$mine], array_column($result['meta']['learnerOptions'], 'id'));
         $this->assertSame([$ok], array_column($this->section($ctx, 'certificates', ['year' => '2001', 'userId' => $mine])['items'], 'id'));
+
         try {
             $this->section($ctx, 'certificates', ['userId' => $other]);
             $this->fail('a learner of somebody else');
@@ -340,7 +347,7 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
      */
     private function companyRowsOf(array $result, array $userIds): array
     {
-        return array_values(array_filter($result['items'], static fn (array $r): bool => in_array($r['userId'], $userIds, true)));
+        return array_values(array_filter($result['items'], static fn (array $r): bool => \in_array($r['userId'], $userIds, true)));
     }
 
     public function testCompanyReportIsOpenToAdministratorsHrManagersAndStudentBossesOnly(): void
@@ -970,7 +977,7 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
             $ids[] = $id;
         }
         $first = $this->section($this->admin(), 'admin-coaches', ['itemsPerPage' => 10]);
-        $this->assertSame($ids, array_slice(array_column($first['items'], 'id'), 0, 3));
+        $this->assertSame($ids, \array_slice(array_column($first['items'], 'id'), 0, 3));
         $total = $first['total'];
         $page2 = $this->section($this->admin(), 'admin-coaches', ['itemsPerPage' => 10, 'page' => 2]);
         $this->assertCount(max(0, min(10, $total - 10)), $page2['items']);
@@ -1107,7 +1114,7 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
         $this->assertSame([$a, $gone, $z], array_column($row['learners'], 'id'), 'ordered by learner last name; soft-deleted ones are listed too');
         $this->assertSame([true, false, true], array_column($row['learners'], 'active'));
         $this->assertSame('fr_FR', $row['locale']);
-        $this->assertContains('fr_FR', $result["meta"]['languageOptions']);
+        $this->assertContains('fr_FR', $result['meta']['languageOptions']);
         $this->assertTrue($result['meta']['canAddLearners']);
         $this->assertSame("Student's superior follow up", $result['title']);
         $byLanguage = $this->section($this->admin(), 'student-bosses', ['language' => 'fr_FR']);
@@ -1184,7 +1191,7 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
     private function question(string $text, float $weight): int
     {
         $this->conn()->executeStatement(
-            "INSERT INTO c_quiz_question (question, ponderation, position, type, level, mandatory) VALUES (?, ?, 1, 1, 1, 0)",
+            'INSERT INTO c_quiz_question (question, ponderation, position, type, level, mandatory) VALUES (?, ?, 1, 1, 1, 0)',
             [$text, $weight]
         );
 
@@ -1315,7 +1322,7 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
         $this->sessionUser($early, $tutor2, 1);
 
         $result = $this->section($this->admin(), 'tutor-planning', ['startDate' => '2001-01-01', 'endDate' => '2001-12-31']);
-        $mine = array_values(array_filter($result['items'], static fn (array $r): bool => in_array($r['id'], [$tutor, $tutor2], true)));
+        $mine = array_values(array_filter($result['items'], static fn (array $r): bool => \in_array($r['id'], [$tutor, $tutor2], true)));
 
         $this->assertSame([$tutor, $tutor2], array_column($mine, 'id'));
         $this->assertSame([$early, $late], array_column($mine[0]['sessions'], 'id'), 'oldest session first, sessions of another URL left out');

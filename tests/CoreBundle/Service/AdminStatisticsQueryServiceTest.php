@@ -175,16 +175,19 @@ final class AdminStatisticsQueryServiceTest extends KernelTestCase
     }
 
     /**
-     * PINNED QUIRK (scope): the course list and its total are not restricted to the courses of the current access
-     * URL, unlike the other course reports; an admin of a secondary portal sees every course title.
+     * The course list and its total are restricted to the courses of the current access URL, like the other course
+     * reports: an admin of a secondary portal must not see the course titles of another portal.
      */
-    public function testCoursesUsageListsCoursesOfEveryUrl(): void
+    public function testCoursesUsageIsConfinedToTheCoursesOfTheCurrentUrl(): void
     {
         $other = $this->secondUrl();
         $this->conn()->executeStatement('UPDATE access_url_rel_course SET access_url_id = ? WHERE c_id = 2', [$other]);
+        $expected = (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM access_url_rel_course WHERE access_url_id = 1');
         $report = $this->report('courses_usage', ['itemsPerPage' => 100]);
-        $this->assertSame((int) $this->conn()->fetchOne('SELECT COUNT(*) FROM course'), $report['table']['totalItems']);
-        $this->assertContains($this->conn()->fetchOne('SELECT title FROM course WHERE id = 2'), array_column($report['table']['items'], 'course'));
+        $this->assertSame($expected, $report['table']['totalItems']);
+        $this->assertCount($expected, $report['table']['items']);
+        $this->assertNotContains($this->conn()->fetchOne('SELECT title FROM course WHERE id = 2'), array_column($report['table']['items'], 'course'));
+        $this->assertContains($this->conn()->fetchOne('SELECT title FROM course WHERE id = 1'), array_column($report['table']['items'], 'course'));
     }
 
     // ----------------------------------------------------------- messages

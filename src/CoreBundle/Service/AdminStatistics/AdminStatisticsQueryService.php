@@ -474,15 +474,32 @@ final readonly class AdminStatisticsQueryService
         $itemsPerPage = $this->normalizePositiveInt($parameters['itemsPerPage'] ?? 20, 20, 1, PHP_INT_MAX);
         $connection = $this->entityManager->getConnection();
 
-        $totalItems = (int) $connection->executeQuery('SELECT COUNT(*) FROM course')->fetchOne();
-        $courses = $connection->createQueryBuilder()
+        $currentUrlId = null;
+        if ($this->accessUrlHelper->isMultiple()) {
+            $currentUrl = $this->accessUrlHelper->getCurrent();
+            if (null !== $currentUrl && null !== $currentUrl->getId()) {
+                $currentUrlId = (int) $currentUrl->getId();
+            }
+        }
+
+        $countBuilder = $connection->createQueryBuilder()->select('COUNT(*)')->from('course', 'course');
+        $listBuilder = $connection->createQueryBuilder()
             ->select('course.id', 'course.title')
             ->from('course', 'course')
             ->setFirstResult(($page - 1) * $itemsPerPage)
             ->setMaxResults($itemsPerPage)
-            ->executeQuery()
-            ->fetchAllAssociative()
         ;
+        if (null !== $currentUrlId) {
+            foreach ([$countBuilder, $listBuilder] as $builder) {
+                $builder
+                    ->innerJoin('course', 'access_url_rel_course', 'usage_url', 'usage_url.c_id = course.id')
+                    ->andWhere('usage_url.access_url_id = :usageUrlId')
+                    ->setParameter('usageUrlId', $currentUrlId, Types::INTEGER)
+                ;
+            }
+        }
+        $totalItems = (int) $countBuilder->executeQuery()->fetchOne();
+        $courses = $listBuilder->executeQuery()->fetchAllAssociative();
 
         $courseIds = array_map(static fn (array $course): int => (int) $course['id'], $courses);
         $today = new DateTimeImmutable('now', $this->getUserTimezone());

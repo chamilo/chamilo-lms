@@ -322,7 +322,14 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
     $values = buycoursesBuildPostedServicePayload($serviceId, $plugin);
 
     if (isset($_POST['delete_service'])) {
-        $plugin->deleteService($serviceId);
+        if (!$plugin->deleteService($serviceId)) {
+            Display::addFlash(
+                Display::return_message($plugin->get_lang('ServiceHasCompletedSales'), 'error')
+            );
+
+            header('Location: services_edit.php?id='.$serviceId);
+            exit;
+        }
 
         Display::addFlash(
             Display::return_message($plugin->get_lang('ServiceDeleted'), 'error')

@@ -6049,6 +6049,15 @@ class BuyCoursesPlugin extends Plugin
      */
     public function deleteService(int $id)
     {
+        // The history of paid sales must survive: a service with a completed sale is refused (disable it instead).
+        $completedSales = (int) Database::fetch_row(Database::query(
+            'SELECT COUNT(*) FROM '.Database::get_main_table(self::TABLE_SERVICES_SALE).'
+             WHERE service_id = '.(int) $id.' AND status = '.self::SERVICE_STATUS_COMPLETED
+        ))[0];
+        if ($completedSales > 0) {
+            return false;
+        }
+
         Database::delete(
             Database::get_main_table(self::TABLE_SERVICES_SALE),
             ['service_id = ?' => $id]
@@ -7440,6 +7449,11 @@ class BuyCoursesPlugin extends Plugin
         $previousStatus = (int) ($serviceSale['status'] ?? self::SERVICE_STATUS_PENDING);
         if (self::SERVICE_STATUS_CANCELLED === $previousStatus) {
             return true;
+        }
+
+        // A completed (paid) sale is not cancelled by a status flip: its benefits would stay granted.
+        if (self::SERVICE_STATUS_COMPLETED === $previousStatus) {
+            return false;
         }
 
         if (!$this->updateServiceSaleStatus($serviceSaleId, self::SERVICE_STATUS_CANCELLED)) {

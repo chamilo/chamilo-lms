@@ -254,13 +254,13 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
         $this->assertTrue($this->plugin->cancelServiceSale($saleId), 'already cancelled');
         $this->assertFalse($this->plugin->cancelServiceSale(999999));
 
-        // PINNED QUIRK: a completed (paid) service sale can be cancelled and a cancelled one completed again,
-        // there is no transition table.
+        // Fixed: a completed (paid) service sale could be cancelled (its benefits stayed granted); it is refused
+        // now (false, status untouched). INTENTIONAL: a cancelled sale can still be completed again (late payment).
         $done = $this->makeServiceSale($this->makeService(), ['status' => 1]);
-        $this->assertTrue($this->plugin->cancelServiceSale($done));
-        $this->assertSame(-1, (int) $this->serviceSaleRow($done)['status']);
-        $this->assertTrue($this->plugin->completeServiceSale($done));
+        $this->assertFalse($this->plugin->cancelServiceSale($done));
         $this->assertSame(1, (int) $this->serviceSaleRow($done)['status']);
+        $this->assertTrue($this->plugin->completeServiceSale($saleId));
+        $this->assertSame(1, (int) $this->serviceSaleRow($saleId)['status']);
     }
 
     public function testGetServiceSalesFiltersAndOrder(): void
@@ -389,19 +389,25 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
         $this->assertSame(0, (int) $row['visibility']);
     }
 
-    public function testDeleteServiceAlsoDeletesItsSales(): void
+    public function testDeleteServiceKeepsServicesWithCompletedSales(): void
     {
         $service = $this->makeService();
         $other = $this->makeService();
-        $sale = $this->makeServiceSale($service, ['status' => 1]);
-        $keep = $this->makeServiceSale($other);
+        $paid = $this->makeServiceSale($service, ['status' => 1]);
+        $unpaid = $this->makeServiceSale($other, ['status' => 0]);
+        $cancelled = $this->makeServiceSale($other, ['status' => -1]);
 
-        $this->plugin->deleteService($service);
+        // Fixed: the sales history (including COMPLETED, paid sales) of the service was erased with it. A service
+        // with a completed sale is refused; the manager can disable it instead.
+        $this->assertFalse($this->plugin->deleteService($service));
+        $this->assertNotEmpty($this->serviceSaleRow($paid));
+        $this->assertNotEmpty($this->plugin->getService($service));
 
-        // PINNED QUIRK: the sales history (including COMPLETED, paid sales) of the service is erased with it.
-        $this->assertSame([], $this->serviceSaleRow($sale));
-        $this->assertNotEmpty($this->serviceSaleRow($keep));
-        $this->assertSame([], $this->plugin->getService($service));
+        // Without a completed sale the pending/cancelled rows go with the service, as before.
+        $this->plugin->deleteService($other);
+        $this->assertSame([], $this->serviceSaleRow($unpaid));
+        $this->assertSame([], $this->serviceSaleRow($cancelled));
+        $this->assertSame([], $this->plugin->getService($other));
     }
 
     public function testGetServiceAppliesTax(): void

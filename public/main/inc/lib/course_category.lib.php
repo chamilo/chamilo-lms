@@ -333,22 +333,33 @@ class CourseCategory
     }
 
     /**
+     * All the descendants of a category (depth first), as [code, id] rows.
+     *
      * @param string $categoryCode
      *
      * @return array
      */
     public static function getChildren($categoryCode)
     {
+        $category = self::getCategory($categoryCode);
+        if (empty($category)) {
+            return [];
+        }
+
+        return self::getChildrenByParentId((int) $category['id']);
+    }
+
+    private static function getChildrenByParentId(int $parentId): array
+    {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $categoryCode = Database::escape_string($categoryCode);
         $sql = "SELECT code, id FROM $table
-                WHERE parent_id = '$categoryCode'";
+                WHERE parent_id = $parentId
+                ORDER BY tree_pos, id";
         $result = Database::query($sql);
         $children = [];
         while ($row = Database::fetch_assoc($result)) {
             $children[] = $row;
-            $subChildren = self::getChildren($row['code']);
-            $children = array_merge($children, $subChildren);
+            $children = array_merge($children, self::getChildrenByParentId((int) $row['id']));
         }
 
         return $children;
@@ -396,7 +407,7 @@ class CourseCategory
         $result = Database::query($sql);
         $children = [];
         while ($row = Database::fetch_assoc($result)) {
-            $parent = self::getCategory($row['parent_id']);
+            $parent = empty($row['parent_id']) ? [] : self::getCategoryById($row['parent_id']);
             $children[] = $row;
             $subChildren = self::getParents($parent ? $parent['code'] : null);
             $children = array_merge($children, $subChildren);

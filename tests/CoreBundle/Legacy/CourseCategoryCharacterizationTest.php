@@ -374,9 +374,7 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
 
         $parents = CourseCategory::getParents('CCL');
 
-        // PINNED QUIRK: the parent is looked up by CODE with the parent_id (an id), so it is never found and the
-        // chain stops at the category itself. Intended: ['CCL', 'CCM', 'CCR'].
-        $this->assertSame(['CCL'], array_column($parents, 'code'));
+        $this->assertSame(['CCL', 'CCM', 'CCR'], array_column($parents, 'code'));
     }
 
     public function testGetParentsToStringBuildsTheBreadcrumbFromTheRoot(): void
@@ -385,8 +383,7 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
         $m = $this->cat('cc_m', 'CCM', $r);
         $this->cat('cc_l', 'CCL', $m);
 
-        // PINNED QUIRK (see getParents): only the category itself. Intended: 'CCR > CCM > CCL > '.
-        $this->assertSame('CCL > ', CourseCategory::getParentsToString('CCL'));
+        $this->assertSame('CCR > CCM > CCL > ', CourseCategory::getParentsToString('CCL'));
         $this->assertSame('CCR > ', CourseCategory::getParentsToString('CCR'));
         $this->assertNull(CourseCategory::getParentsToString('CC-NOPE'));
         $this->assertNull(CourseCategory::getParentsToString(''));
@@ -399,12 +396,12 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
         $a1 = $this->cat('cc_a1', 'CCA1', $a, 1);
         $b = $this->cat('cc_b', 'CCB', $r, 2);
 
-        // PINNED QUIRK: parent_id (an id) is compared with the CODE, so no child is ever found.
-        // Intended: codes ['CCA', 'CCA1', 'CCB'] with ids [$a, $a1, $b]. No caller (dead code).
-        $this->assertSame([], CourseCategory::getChildren('CCR'));
-        // Called with an id it finds the direct children only: the recursion then passes their CODE again.
-        $this->assertSame(['CCA', 'CCB'], array_column(CourseCategory::getChildren((string) $r), 'code'));
-        $this->assertNotEmpty([$a, $a1, $b]);
+        $children = CourseCategory::getChildren('CCR');
+
+        $this->assertSame(['CCA', 'CCA1', 'CCB'], array_column($children, 'code'));
+        $this->assertSame([$a, $a1, $b], array_map('intval', array_column($children, 'id')));
+        $this->assertSame([], CourseCategory::getChildren('CCB'));
+        $this->assertSame([], CourseCategory::getChildren('CC-NOPE'));
     }
 
     // ------------------------------------------------------------------ search / lists

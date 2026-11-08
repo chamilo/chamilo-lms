@@ -1088,14 +1088,31 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
 
     // ---------------------------------------------------------------- forum, search index, autolaunch
 
-    public function testLpHasForumQueriesTablesThatNoLongerExist(): void
+    public function testLpHasForumLooksForALiveForumOfThePathInTheBaseCourse(): void
     {
         $lpId = $this->newLpRow('l2_forum');
+        $other = $this->newLpRow('l2_forum_other');
+        $this->assertFalse($this->lp($lpId)->lpHasForum());
 
-        // PINNED QUIRK (no caller, already @deprecated): c_forum and c_item_property were replaced by c_forum_forum and
-        // resource_link, so the query throws instead of answering.
-        $this->expectException(\Throwable::class);
-        $this->lp($lpId)->lpHasForum();
+        $insertForum = function (int $forumLp, ?int $sessionId = null, ?string $deletedAt = null): void {
+            $node = $this->newNode('l2_forum_node', 25);
+            $this->conn()->executeStatement(
+                "INSERT INTO c_forum_forum (resource_node_id, title, locked, forum_image, lp_id) VALUES (?, 'l2_forum', 0, '', ?)",
+                [$node, $forumLp]
+            );
+            $this->link($node, 2, 0, $sessionId);
+            if (null !== $deletedAt) {
+                $this->conn()->executeStatement('UPDATE resource_link SET deleted_at = ? WHERE resource_node_id = ?', [$deletedAt, $node]);
+            }
+        };
+        $insertForum($other);
+        $this->assertFalse($this->lp($lpId)->lpHasForum(), 'a forum of another path does not count');
+        $insertForum($lpId, null, '2030-01-01 00:00:00');
+        $this->assertFalse($this->lp($lpId)->lpHasForum(), 'a deleted forum does not count');
+        $insertForum($lpId, $this->newSession('l2_forum_session'));
+        $this->assertFalse($this->lp($lpId)->lpHasForum(), 'only the base course counts');
+        $insertForum($lpId);
+        $this->assertTrue($this->lp($lpId)->lpHasForum());
     }
 
     public function testGetForumListsTheForumsOfTheCurrentCourse(): void

@@ -8361,30 +8361,20 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     public function lpHasForum()
     {
-        $forumTable = Database::get_course_table(TABLE_FORUM);
-        $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-        $fakeFrom = "
-            $forumTable f
-            INNER JOIN $itemProperty ip
-            ON (f.forum_id = ip.ref AND f.c_id = ip.c_id)
-        ";
-
-        $resultData = Database::select(
-            'COUNT(f.iid) AS qty',
-            $fakeFrom,
-            [
-                'where' => [
-                    'ip.visibility != ? AND ' => 2,
-                    'ip.tool = ? AND ' => TOOL_FORUM,
-                    'f.c_id = ? AND ' => intval($this->course_int_id),
-                    'f.lp_id = ?' => intval($this->lp_id),
-                ],
-            ],
-            'first'
+        // c_forum and c_item_property no longer exist: a forum is a resource linked to the course (and not deleted).
+        $qty = Database::getManager()->getConnection()->fetchOne(
+            'SELECT COUNT(f.iid) FROM c_forum_forum f
+             WHERE f.lp_id = ? AND EXISTS (
+                 SELECT 1 FROM resource_link rl
+                 WHERE rl.resource_node_id = f.resource_node_id
+                     AND rl.c_id = ?
+                     AND rl.session_id IS NULL
+                     AND rl.deleted_at IS NULL
+             )',
+            [(int) $this->lp_id, (int) $this->course_int_id]
         );
 
-        return $resultData['qty'] > 0;
+        return (int) $qty > 0;
     }
 
     /**

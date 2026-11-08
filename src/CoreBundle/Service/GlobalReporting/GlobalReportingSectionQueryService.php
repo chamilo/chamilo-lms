@@ -3255,7 +3255,7 @@ final readonly class GlobalReportingSectionQueryService
         }
 
         $rows = $this->connection->fetchAllAssociative(
-            "SELECT ranked.c_id, SUM(ranked.progress) / COUNT(DISTINCT ranked.lp_id) AS progress
+            "SELECT ranked.c_id, AVG(ranked.progress) AS progress
                FROM (
                     SELECT lp_view.c_id,
                            lp_view.lp_id,
@@ -3283,7 +3283,7 @@ final readonly class GlobalReportingSectionQueryService
                 continue;
             }
 
-            $result[$courseId] = round((float) $row['progress'] / $learners, 2);
+            $result[$courseId] = round((float) $row['progress'], 2);
         }
 
         return $result;

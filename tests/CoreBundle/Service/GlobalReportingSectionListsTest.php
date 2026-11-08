@@ -761,9 +761,8 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
     }
 
     /**
-     * The course progress is the average, over its learners, of their progress in the learning paths of the course:
-     * two learners who both finished the only learning path show 100 %, and a learner who never opened a learning
-     * path counts as 0 %.
+     * The course progress is the average of the latest view of every (learner, learning path) pair, like the admin
+     * courses overview: two learners who both finished the only learning path show 100 %.
      */
     public function testTrackedCoursesLearningPathProgressAveragesTheLearners(): void
     {
@@ -798,8 +797,8 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
 
         $row = $this->section($ctx, 'courses', ['userId' => $teacher])['items'][0];
 
-        // Learner a: lp1 latest view 100, lp2 50; learner b: lp1 30. (100 + 50 + 30) / 2 learning paths / 2 learners.
-        $this->assertSame(45.0, $row['learningPathProgress']);
+        // Learner a: lp1 latest view 100 (not the older 10), lp2 50; learner b: lp1 30. (100 + 50 + 30) / 3 views.
+        $this->assertSame(60.0, $row['learningPathProgress']);
     }
 
     public function testTrackedCoursesAverageLearningPathScoreIsTheMeanOfTheLatestExerciseAttempts(): void

@@ -344,6 +344,23 @@ final class CourseReportingSectionsMoreTest extends KernelTestCase
         $this->assertSame(1, $users['total']);
     }
 
+    /**
+     * The sections use the same learners as the learners table, which lists active accounts only: an inactive
+     * (active = 0) learner is in neither, so the totals of both pages agree.
+     */
+    public function testSectionsListTheSameLearnersAsTheLearnersTable(): void
+    {
+        $alive = $this->learner('r3in1a');
+        $inactive = $this->learner('r3in1b', 1, 0);
+        $this->courseVisit($alive, '2001-01-01 10:00:00', '2001-01-01 10:10:00');
+        $this->courseVisit($inactive, '2001-01-01 10:00:00', '2001-01-01 10:10:00');
+
+        $result = $this->section('total-time', ['keyword' => 'rp_r3in1']);
+
+        $this->assertSame([$alive], array_column($result['items'], 'id'));
+        $this->assertSame(600, $result['summary'][1]['value']);
+    }
+
     // ---------------------------------------------------------------- exams
 
     public function testExamsCrossEveryTestWithEveryLearnerAndGradeTheBestAttempt(): void

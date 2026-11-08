@@ -266,17 +266,16 @@ final class CourseLegalPluginCharacterizationTest extends PluginCharacterization
         $this->assertCount(1, $this->agreementRows(1, self::SESSION));
     }
 
-    public function testSaveUserLegalWithoutSessionIsNotFoundAgain(): void
+    public function testSaveUserLegalWithoutSessionIsStoredForTheBaseCourse(): void
     {
-        // PINNED QUIRK: legal.php hands $session_id = null over when the URL has none; the insert stores
-        // session_id NULL while every reader looks for session_id = 0 (cast), so the agreement is never seen.
+        // legal.php hands $session_id = null over when the URL has none: it is the base course (session 0).
         $user = $this->rawUser('cl_nullsess');
 
         $id = $this->plugin->saveUserLegal($user, 'AIACT', null);
 
-        $this->assertNull($this->conn->fetchOne('SELECT session_id FROM session_rel_course_rel_user_legal WHERE id = ?', [$id]));
-        $this->assertFalse($this->plugin->isUserAcceptedLegal($user, 'AIACT', null));
-        $this->assertFalse($this->plugin->isUserAcceptedLegal($user, 'AIACT', 0));
+        $this->assertSame(0, (int) $this->conn->fetchOne('SELECT session_id FROM session_rel_course_rel_user_legal WHERE id = ?', [$id]));
+        $this->assertTrue($this->plugin->isUserAcceptedLegal($user, 'AIACT', null));
+        $this->assertTrue($this->plugin->isUserAcceptedLegal($user, 'AIACT', 0));
     }
 
     public function testSaveUserMailLegalConfirmsTheMailWhenTheLinkMatches(): void
@@ -304,15 +303,16 @@ final class CourseLegalPluginCharacterizationTest extends PluginCharacterization
         $this->assertSame('0', $this->plugin->getUserAcceptedLegal($owner, 1, self::SESSION)['mail_agreement']);
     }
 
-    public function testSaveUserMailLegalComparesTheLinksLoosely(): void
+    public function testSaveUserMailLegalComparesTheLinksExactly(): void
     {
-        // PINNED QUIRK: "==" between two numeric-looking strings ("0e..." forms) compares them as numbers,
-        // so two different links that both read as 0 x 10^n are accepted for each other.
+        // Two different links that both read as "0e..." numbers must not be taken for each other.
         $user = $this->rawUser('cl_loose');
         $this->agreement($user, 1, self::SESSION, '1', '0', '0e111');
 
         $this->plugin->saveUserMailLegal('0e222', $user, 1, self::SESSION);
+        $this->assertSame('0', $this->plugin->getUserAcceptedLegal($user, 1, self::SESSION)['mail_agreement']);
 
+        $this->plugin->saveUserMailLegal('0e111', $user, 1, self::SESSION);
         $this->assertSame('1', $this->plugin->getUserAcceptedLegal($user, 1, self::SESSION)['mail_agreement']);
     }
 

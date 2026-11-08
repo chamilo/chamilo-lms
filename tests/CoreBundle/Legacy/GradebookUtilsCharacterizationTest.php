@@ -440,7 +440,7 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
             );
         }
         \ChamiloSession::write('_real_cid', 1);
-        $eval = new Evaluation();
+        $eval = (new Evaluation())->setCourseId(null);
         $eval->set_id($evalId);
 
         // The query used to get a second "ORDER BY" appended for first-name-first languages, a syntax
@@ -448,6 +448,8 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
         $users = GradebookUtils::get_all_users([$eval]);
 
         $this->assertArrayNotHasKey('STUD'.$noResult, $users);
+        // The row carries the username like the course branch does (the query used to omit it).
+        $this->assertStringStartsWith('gu_res_', $users['STUD'.$withResult][1]);
         $keys = array_values(array_intersect(array_keys($users), ['STUD'.$withResult, 'STUD'.$second]));
         $expected = api_is_western_name_order() ? ['STUD'.$withResult, 'STUD'.$second] : ['STUD'.$second, 'STUD'.$withResult];
         $this->assertSame($expected, $keys);

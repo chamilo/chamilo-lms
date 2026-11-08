@@ -9259,7 +9259,7 @@ class Exercise
         $tableRows = [];
         $origin = api_get_origin();
         $charset = 'utf-8';
-        $token = Security::get_token();
+        $token = Security::get_existing_token('exercise');
         $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($userId, ['real_id' => $courseId]);
         $limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
         $content = '';
@@ -9930,7 +9930,7 @@ class Exercise
                     'cid' => api_get_course_int_id(),
                     'sid' => api_get_session_id(),
                     'category_id' => $categoryId,
-                    'sec_token'   => Security::get_token(),
+                    'sec_token'   => Security::get_existing_token('exercise'),
                 ]
             );
 

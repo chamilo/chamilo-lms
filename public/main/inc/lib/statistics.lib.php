@@ -1490,7 +1490,7 @@ class Statistics
             $urlId = $accessUrl->getId();
             $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
                     FROM $access_url_rel_user_table as url, $user_friend_table uf
-                    LEFT JOIN $user_table u
+                    INNER JOIN $user_table u
                     ON (uf.user_id = u.id) AND u.active <> ".USER_SOFT_DELETED."
                     WHERE
                         uf.relation_type <> '".UserRelUser::USER_RELATION_TYPE_RRHH."' AND
@@ -1501,7 +1501,7 @@ class Statistics
         } else {
             $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
                     FROM $user_friend_table uf
-                    LEFT JOIN $user_table u
+                    INNER JOIN $user_table u
                     ON (uf.user_id = u.id) AND u.active <> ".USER_SOFT_DELETED."
                     WHERE uf.relation_type <> '".UserRelUser::USER_RELATION_TYPE_RRHH."'
                     GROUP BY uf.user_id
@@ -1603,7 +1603,7 @@ class Statistics
         $endTimestamp = strtotime($endDate);
 
         $list = [];
-        for ($time = $startTimestamp; $time < $endTimestamp; $time += 86400) {
+        for ($time = $startTimestamp; $time <= $endTimestamp; $time += 86400) {
             $datetime = api_get_utc_datetime($time);
             $key = $removeYear ? substr($datetime, 5, 5) : substr($datetime, 0, 10);
             $list[$key] = 0;
@@ -2418,6 +2418,7 @@ class Statistics
             WHERE
                 t.c_id = :courseId
                 AND t.session_id = :sessionId
+                AND u.active <> -2
                 AND scru.id IS NULL
             GROUP BY
                 u.id, u.firstname, u.lastname, u.email
@@ -2440,6 +2441,7 @@ class Statistics
                 AND cu.c_id = :courseId
             WHERE
                 t.c_id = :courseId
+                AND u.active <> -2
                 AND cu.id IS NULL
             GROUP BY
                 u.id, u.firstname, u.lastname, u.email

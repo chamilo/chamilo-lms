@@ -303,16 +303,16 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $this->assertSame('1 GB', Statistics::makeSizeString(1073741824));
     }
 
-    public function testBuildDatesArrayExcludesTheEndDate(): void
+    public function testBuildDatesArrayIncludesBothLimits(): void
     {
-        // PINNED QUIRK: the docblock says "including limits" but the loop is `$time < $endTimestamp`:
-        // the end date is never part of the array. 2024 is a leap year.
+        // As documented ("including limits"); the end date used to be dropped, so a chart showed no point for
+        // today unless there was a login. 2024 is a leap year.
         $this->assertSame(
-            ['2024-02-27' => 0, '2024-02-28' => 0, '2024-02-29' => 0, '2024-03-01' => 0],
+            ['2024-02-27' => 0, '2024-02-28' => 0, '2024-02-29' => 0, '2024-03-01' => 0, '2024-03-02' => 0],
             Statistics::buildDatesArray('2024-02-27', '2024-03-02')
         );
         $this->assertSame(
-            ['02-27' => 0, '02-28' => 0],
+            ['02-27' => 0, '02-28' => 0, '02-29' => 0],
             Statistics::buildDatesArray('2024-02-27 15:00:00', '2024-02-29 01:00:00', true)
         );
         $this->assertFalse(Statistics::buildDatesArray('garbage', '2024-03-02'));
@@ -639,8 +639,8 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $_GET['keyword'] = 'st_ev_ser';
 
         $rows = Statistics::getActivitiesData(0, 10, 7, 'ASC');
-        // PINNED QUIRK: implode_with_key() leaves a trailing separator ("v2 ,  ") and pads the pairs.
-        $this->assertSame('k1 : v1 ,  k2 : v2 ,  ', $rows[0][2], 'arrays are flattened with implode_with_key');
+        // No trailing separator after the last pair.
+        $this->assertSame('k1 : v1 ,  k2 : v2', $rows[0][2], 'arrays are flattened with implode_with_key');
         $this->assertSame('not serialized at all', $rows[1][2], 'unserialize failure keeps the original text');
     }
 
@@ -980,7 +980,7 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $this->assertSame($this->keyFor($friends, $a), array_key_first($friends), 'most friends first');
     }
 
-    public function testGetFriendsListsSoftDeletedUsersAsAnAnonymousRow(): void
+    public function testGetFriendsLeavesSoftDeletedUsersOut(): void
     {
         $a = $this->rawUser('ffa');
         $gone = $this->rawUser('ffgone', ['active' => -2]);
@@ -990,10 +990,9 @@ class StatisticsCharacterizationTest extends AbstractApiTest
 
         $friends = Statistics::getFriends();
         $this->assertSame(1, (int) $friends[$this->keyFor($friends, $a)]);
-        // PINNED QUIRK: the soft-deleted filter sits in the LEFT JOIN's ON clause, so the user is not removed:
-        // its relations are still counted, under a blank "<br />()" key (names/username are NULL).
+        // Soft-deleted users are left out (they used to be counted under a blank "<br />()" key).
         $this->assertNull($this->keyFor($friends, $gone));
-        $this->assertSame(2, (int) $friends[api_get_person_name('', '').'<br />()']);
+        $this->assertArrayNotHasKey(api_get_person_name('', '').'<br />()', $friends);
     }
 
     public function testGetFriendsIsScopedToTheCurrentUrlWhenMultiUrl(): void
@@ -1221,11 +1220,11 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $this->rawAccess($free, '2020-10-09 09:00:00', 2, 'document');
 
         $rows = Statistics::getNonRegisteredActiveUsersInCourse(1);
-        $this->assertSame([$free, $free2, $gone], array_map(static fn (array $r): int => (int) $r['id'], $rows), 'ORDER BY lastAccess DESC');
+        $this->assertSame([$free, $free2], array_map(static fn (array $r): int => (int) $r['id'], $rows), 'ORDER BY lastAccess DESC');
         $this->assertSame('2020-10-05 08:30:00', $rows[0]['lastAccess'], 'MAX(access_date) over the user accesses');
         $this->assertSame('Free', $rows[0]['firstname']);
         $this->assertSame('st_free@example.com', $rows[0]['email']);
-        // PINNED QUIRK: soft-deleted users are not filtered out ($gone is listed).
+        // Soft-deleted users are filtered out ($gone is not listed).
         // Course 2: $free2 is enrolled there, $enrolled and $gone never accessed it.
         $this->assertSame([$free], array_map(static fn (array $r): int => (int) $r['id'], Statistics::getNonRegisteredActiveUsersInCourse(2)));
     }

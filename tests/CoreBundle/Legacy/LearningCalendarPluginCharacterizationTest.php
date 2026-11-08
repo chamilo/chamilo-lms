@@ -665,54 +665,174 @@ final class LearningCalendarPluginCharacterizationTest extends PluginCharacteriz
         $this->assertSame('', $this->plugin->getGradebookEvaluationListToString($user, []));
     }
 
-    public function testGradebookEvaluationListQueryNoLongerRunsOnTheCurrentSchema(): void
+    // ---------------------------------------------------------------- learning path completion
+
+    private function calendarFieldId(): int
     {
-        // PINNED QUIRK: the query joins on gradebook_evaluation.course_code, a column that the 2.0 schema dropped
-        // (it has c_id): the call throws as soon as there is a course to look at.
-        $this->expectException(\Throwable::class);
-        $this->plugin->getGradebookEvaluationList(1, [0 => [1]]);
+        return (int) $this->conn->fetchOne("SELECT id FROM extra_field WHERE variable = 'calendar' ORDER BY id LIMIT 1");
     }
 
-    public function testItemCountCheckedQueryNoLongerRunsOnTheCurrentSchema(): void
+    /**
+     * A learning path with $items items, the first $marked of them carrying the "calendar day" mark.
+     *
+     * @return int[] [lp id, item ids...]
+     */
+    private function learningPath(int $items, int $marked): array
     {
-        // PINNED QUIRK: c_lp_item_view.c_id, c_lp.c_id/session_id and extra_field_values.value do not exist any
-        // more, so the query throws; the my-progress panel of a user with courses is the live caller.
-        $this->expectException(\Throwable::class);
-        $this->plugin->getItemCountChecked(1, [0 => [1]]);
-    }
-
-    public function testFirstToggleOfAnLpItemFailsBecauseTheValueIsPassedUnderTheWrongKey(): void
-    {
-        // PINNED QUIRK: toggleVisibility() saves ['value' => 1] but ExtraFieldValue::save() reads
-        // $params['field_value']: undefined array key, so an item can never be marked from the LP builder.
-        try {
-            $this->plugin->toggleVisibility(987001);
-        } catch (\Throwable $e) {
-            $this->assertStringContainsString('field_value', $e->getMessage());
-
-            return;
-        }
-        $this->fail('The missing field_value key should have been reported');
-    }
-
-    public function testSecondToggleOfAMarkedLpItemChangesNothing(): void
-    {
-        // PINNED QUIRK: the update sends ['value' => 0|1], which is not a column of extra_field_values and is
-        // dropped by the model, so the mark stays as it was.
-        $fieldId = (int) $this->conn->fetchOne(
-            "SELECT id FROM extra_field WHERE variable = 'calendar' AND item_type = (SELECT item_type FROM extra_field WHERE variable = 'calendar' LIMIT 1) LIMIT 1"
-        );
-        $this->assertGreaterThan(0, $fieldId, 'the plugin install creates the calendar extra field');
         $this->conn->executeStatement(
-            "INSERT INTO extra_field_values (field_id, item_id, field_value, created_at, updated_at)
-             VALUES (?, 987003, '1', '2026-01-01 00:00:00', '2026-01-01 00:00:00')",
-            [$fieldId]
+            "INSERT INTO c_lp (lp_type, title, path, force_commit, content_maker, content_license, js_lib, debug, theme,
+                author, prerequisite, hide_toc_frame, seriousgame_mode, autolaunch, max_attempts, subscribe_users,
+                created_on, modified_on)
+             VALUES (1, 'lc_lp', '', 0, '', '', '', 0, '', '', 0, 0, 0, 0, 0, 0, '2026-01-01 00:00:00', '2026-01-01 00:00:00')"
+        );
+        $lpId = (int) $this->conn->lastInsertId();
+        $ids = [$lpId];
+        for ($i = 0; $i < $items; ++$i) {
+            $this->conn->executeStatement(
+                "INSERT INTO c_lp_item (lp_id, title, item_type, ref, path, min_score, display_order, launch_data, lvl)
+                 VALUES (?, ?, 'document', '', '', 0, ?, '', 0)",
+                [$lpId, 'lc_item_'.$i, $i]
+            );
+            $itemId = (int) $this->conn->lastInsertId();
+            $ids[] = $itemId;
+            if ($i < $marked) {
+                $this->conn->executeStatement(
+                    "INSERT INTO extra_field_values (field_id, item_id, field_value, created_at, updated_at)
+                     VALUES (?, ?, '1', '2026-01-01 00:00:00', '2026-01-01 00:00:00')",
+                    [$this->calendarFieldId(), $itemId]
+                );
+            }
+        }
+
+        return $ids;
+    }
+
+    /**
+     * Records one attempt of the user at a learning path: $statusByItem = [item id => status].
+     */
+    private function view(int $userId, int $lpId, int $courseId, int $sessionId, array $statusByItem, int $viewCount = 1): void
+    {
+        $this->conn->executeStatement(
+            'INSERT INTO c_lp_view (user_id, lp_id, c_id, session_id, view_count, last_item) VALUES (?, ?, ?, ?, ?, 0)',
+            [$userId, $lpId, $courseId, $sessionId ?: null, $viewCount]
+        );
+        $viewId = (int) $this->conn->lastInsertId();
+        foreach ($statusByItem as $itemId => $status) {
+            $this->conn->executeStatement(
+                'INSERT INTO c_lp_item_view (lp_item_id, lp_view_id, view_count, start_time, total_time, score, status)
+                 VALUES (?, ?, ?, 0, 0, 0, ?)',
+                [$itemId, $viewId, $viewCount, $status]
+            );
+        }
+    }
+
+    public function testItemCountCheckedCountsTheCompletedCalendarItemsOfTheUser(): void
+    {
+        $user = $this->rawUser('lc_count');
+        $other = $this->rawUser('lc_count_other');
+        [$lp, $a, $b, $c] = $this->learningPath(3, 2);
+        $this->view($user, $lp, 1, 0, [$a => 'completed', $b => 'incomplete', $c => 'completed']);
+        $this->view($other, $lp, 1, 0, [$a => 'completed', $b => 'completed']);
+
+        // Only the marked items (a, b) count, and only the completed ones: a.
+        $this->assertSame(1, (int) $this->plugin->getItemCountChecked($user, [0 => [1]]));
+        $this->assertSame(2, (int) $this->plugin->getItemCountChecked($other, [0 => [1]]));
+        // Another course, or a session the learning path was not seen in, counts nothing.
+        $this->assertSame(0, (int) $this->plugin->getItemCountChecked($user, [0 => [2]]));
+        $this->assertSame(0, (int) $this->plugin->getItemCountChecked($user, [9999 => [2]]));
+    }
+
+    public function testItemCountCheckedCountsAnItemOnceWhateverTheNumberOfAttempts(): void
+    {
+        $user = $this->rawUser('lc_attempts');
+        [$lp, $a, $b] = $this->learningPath(2, 2);
+        $this->view($user, $lp, 1, 0, [$a => 'completed'], 1);
+        $this->view($user, $lp, 1, 0, [$a => 'completed', $b => 'completed'], 2);
+
+        $this->assertSame(2, (int) $this->plugin->getItemCountChecked($user, [0 => [1]]));
+    }
+
+    public function testItemCountCheckedUnderASessionAlsoCountsTheBaseCourseViews(): void
+    {
+        $user = $this->rawUser('lc_sess');
+        $this->conn->executeStatement(
+            "INSERT INTO session (title, nbr_courses, nbr_users, nbr_classes, visibility, status) VALUES ('lc_session', 0, 0, 0, 1, 0)"
+        );
+        $sessionId = (int) $this->conn->lastInsertId();
+        [$lp, $a, $b] = $this->learningPath(2, 2);
+        $this->view($user, $lp, 1, 0, [$a => 'completed']);
+        $this->view($user, $lp, 1, $sessionId, [$b => 'completed']);
+
+        $this->assertSame(1, (int) $this->plugin->getItemCountChecked($user, [0 => [1]]), 'no session: base views only');
+        $this->assertSame(2, (int) $this->plugin->getItemCountChecked($user, [$sessionId => ['course_list' => [1 => 'AIACT']]]));
+    }
+
+    private function evaluation(int $courseId, string $title, string $type = 'evaluation'): int
+    {
+        $this->conn->executeStatement(
+            "INSERT INTO gradebook_evaluation (c_id, title, created_at, weight, max, visible, type, locked)
+             VALUES (?, ?, '2026-01-01 00:00:00', 1, 10, 1, ?, 0)",
+            [$courseId, 'lc_'.$title, $type]
         );
 
-        $this->assertSame(1, (int) $this->plugin->getItemVisibility(987003)['field_value']);
-        $this->plugin->toggleVisibility(987003);
+        return (int) $this->conn->lastInsertId();
+    }
 
-        $this->assertSame(1, (int) $this->plugin->getItemVisibility(987003)['field_value']);
+    private function result(int $evaluationId, int $userId, float $score): void
+    {
+        $this->conn->executeStatement(
+            "INSERT INTO gradebook_result (evaluation_id, user_id, score, created_at) VALUES (?, ?, ?, '2026-01-01 00:00:00')",
+            [$evaluationId, $userId, $score]
+        );
+    }
+
+    public function testGradebookEvaluationListHoldsTheEvaluationsPassedWithAtLeastTwoPoints(): void
+    {
+        $user = $this->rawUser('lc_grade');
+        $passed = $this->evaluation(1, 'passed');
+        $low = $this->evaluation(1, 'low');
+        $otherCourse = $this->evaluation(2, 'other_course');
+        $category = $this->evaluation(1, 'a_category', 'category');
+        $this->result($passed, $user, 2.0);
+        $this->result($low, $user, 1.99);
+        $this->result($otherCourse, $user, 9);
+        $this->result($category, $user, 9);
+        $stranger = $this->rawUser('lc_grade_other');
+        $this->result($this->evaluation(1, 'stranger'), $stranger, 9);
+
+        $list = $this->plugin->getGradebookEvaluationList($user, [0 => [1]]);
+
+        $this->assertSame([$passed], array_keys($list));
+        $this->assertSame('lc_passed', $list[$passed]['title']);
+        $this->assertSame('lc_passed', $this->plugin->getGradebookEvaluationListToString($user, [0 => [1]]));
+    }
+
+    public function testGradebookEvaluationListLooksInEveryCourseOfEverySession(): void
+    {
+        $user = $this->rawUser('lc_grade_all');
+        $one = $this->evaluation(1, 'course_one');
+        $two = $this->evaluation(2, 'course_two');
+        $this->result($one, $user, 5);
+        $this->result($two, $user, 5);
+
+        $list = $this->plugin->getGradebookEvaluationList(
+            $user,
+            [0 => [1], 5 => ['course_list' => [2 => 'USINGCHAMILO']]]
+        );
+
+        $this->assertEqualsCanonicalizing([$one, $two], array_keys($list));
+    }
+
+    public function testFirstToggleOfAnLpItemMarksItAndEveryOtherToggleFlipsTheMark(): void
+    {
+        $itemId = 987001;
+
+        $this->plugin->toggleVisibility($itemId);
+        $this->assertSame(1, (int) $this->plugin->getItemVisibility($itemId)['field_value']);
+        $this->plugin->toggleVisibility($itemId);
+        $this->assertSame(0, (int) $this->plugin->getItemVisibility($itemId)['field_value']);
+        $this->plugin->toggleVisibility($itemId);
+        $this->assertSame(1, (int) $this->plugin->getItemVisibility($itemId)['field_value']);
         $this->assertSame([], $this->plugin->getItemVisibility(987002));
     }
 }

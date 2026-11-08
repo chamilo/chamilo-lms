@@ -464,7 +464,7 @@ class LearningCalendarPlugin extends Plugin
                 $value = 1;
                 $params = [
                     'field_id' => $fieldInfo['id'],
-                    'value' => $value,
+                    'field_value' => $value,
                     'item_id' => $id,
                 ];
                 $extraField->save($params);
@@ -473,7 +473,7 @@ class LearningCalendarPlugin extends Plugin
                 $extraField = new ExtraFieldValue('lp_item');
                 $params = [
                     'id' => $itemInfo['id'],
-                    'value' => $newValue,
+                    'field_value' => $newValue,
                 ];
                 $extraField->update($params);
             }
@@ -909,45 +909,32 @@ class LearningCalendarPlugin extends Plugin
             return 0;
         }
 
-        $courseSessionConditionToString = '';
-        foreach ($coursesAndSessions as $sessionId => $courseList) {
+        $courseIds = [];
+        foreach ($coursesAndSessions as $courseList) {
             if (isset($courseList['course_list'])) {
                 $courseList = array_keys($courseList['course_list']);
             }
-            if (empty($courseList)) {
-                continue;
+            foreach ((array) $courseList as $courseId) {
+                $courseIds[] = (int) $courseId;
             }
-            //$courseListToString = implode("','", $courseList);
-            /*if (empty($sessionId)) {
-                $courseAndSessionCondition[] =
-                    " c.id IN ('$courseListToString') ";
-            } else {
-                $courseAndSessionCondition[] = "
-                    (
-                        c.id IN ('$courseListToString')
-                    )";
-            }*/
-            $courseSessionConditionToString = " AND c.id IN ('".implode("','", $courseList)."') ";
         }
 
-        if (empty($courseSessionConditionToString)) {
+        if (empty($courseIds)) {
             return 0;
         }
 
+        $courseIdsToString = implode(',', array_unique($courseIds));
         $tableEvaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tableResult = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = "SELECT DISTINCT e.title, e.id
                 FROM $tableEvaluation e
-                INNER JOIN $tableCourse c
-                ON (course_code = c.code)
                 INNER JOIN $tableResult r
                 ON (r.evaluation_id = e.id)
                 WHERE
                   e.type = 'evaluation' AND
                   r.score >= 2 AND
-                  r.user_id = $userId
-                  $courseSessionConditionToString
+                  r.user_id = $userId AND
+                  e.c_id IN ($courseIdsToString)
         ";
         $result = Database::query($sql);
         $list = [];
@@ -975,7 +962,6 @@ class LearningCalendarPlugin extends Plugin
         }
 
         $tableItem = Database::get_course_table(TABLE_LP_ITEM);
-        $tableLp = Database::get_course_table(TABLE_LP_MAIN);
         $tableLpItemView = Database::get_course_table(TABLE_LP_ITEM_VIEW);
         $tableLpView = Database::get_course_table(TABLE_LP_VIEW);
         $extraField = new ExtraField('lp_item');
@@ -985,6 +971,7 @@ class LearningCalendarPlugin extends Plugin
             return 0;
         }
 
+        // The course and the session of an attempt are the ones of its learning path view.
         $courseAndSessionCondition = [];
         foreach ($coursesAndSessions as $sessionId => $courseList) {
             if (isset($courseList['course_list'])) {
@@ -993,15 +980,16 @@ class LearningCalendarPlugin extends Plugin
             if (empty($courseList)) {
                 continue;
             }
-            $courseListToString = implode("','", $courseList);
+            $sessionId = (int) $sessionId;
+            $courseListToString = implode(',', array_map('intval', $courseList));
             if (empty($sessionId)) {
                 $courseAndSessionCondition[] =
-                    " ((l.session_id = 0 OR l.session_id is NULL) AND i.c_id IN ('$courseListToString'))";
+                    " ((v.session_id = 0 OR v.session_id IS NULL) AND v.c_id IN ($courseListToString))";
             } else {
                 $courseAndSessionCondition[] = "
                     (
-                        ((l.session_id = 0 OR l.session_id is NULL) OR l.session_id = $sessionId) AND
-                        i.c_id IN ('$courseListToString')
+                        ((v.session_id = 0 OR v.session_id IS NULL) OR v.session_id = $sessionId) AND
+                        v.c_id IN ($courseListToString)
                     )";
             }
         }
@@ -1011,20 +999,18 @@ class LearningCalendarPlugin extends Plugin
         }
 
         $courseSessionConditionToString = 'AND ('.implode(' OR ', $courseAndSessionCondition).') ';
-        $sql = "SELECT count(*) as count
-                FROM $tableItem i INNER JOIN $tableLp l
-                ON (i.c_id = l.c_id AND i.lp_id = l.iid)
-                INNER JOIN $tableLpItemView iv
-                ON (iv.c_id = l.c_id AND i.iid = iv.lp_item_id)
+        $sql = "SELECT COUNT(DISTINCT i.iid) as count
+                FROM $tableItem i
                 INNER JOIN $tableLpView v
-                ON (v.c_id = l.c_id AND v.lp_id = l.iid AND iv.lp_view_id = v.iid)
+                ON (v.lp_id = i.lp_id)
+                INNER JOIN $tableLpItemView iv
+                ON (iv.lp_view_id = v.iid AND iv.lp_item_id = i.iid)
                 INNER JOIN extra_field_values e
-                ON (e.item_id = i.iid AND value = 1 AND field_id = ".$fieldInfo['id'].")
+                ON (e.item_id = i.iid AND e.field_value = '1' AND e.field_id = ".(int) $fieldInfo['id'].")
                 WHERE
                     v.user_id = $userId AND
-                    status = 'completed'
+                    iv.status = 'completed'
                     $courseSessionConditionToString
-                GROUP BY iv.view_count
                ";
 
         $result = Database::query($sql);

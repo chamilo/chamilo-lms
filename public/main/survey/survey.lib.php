@@ -2180,4 +2180,20 @@ class SurveyManager
             [$sessionId, $courseId, $userId]
         );
     }
+
+    /**
+     * Tells whether a user holds an invitation to the given survey in the given course: answering a survey is
+     * only open to those invited (anonymous links work through their invitation code, not through this).
+     */
+    public static function userIsInvitedToSurvey(int $userId, int $surveyId, int $courseId): bool
+    {
+        if ($userId <= 0 || $surveyId <= 0 || $courseId <= 0) {
+            return false;
+        }
+
+        return false !== Database::getManager()->getConnection()->fetchOne(
+            'SELECT iid FROM c_survey_invitation WHERE user_id = ? AND survey_id = ? AND c_id = ? LIMIT 1',
+            [$userId, $surveyId, $courseId]
+        );
+    }
 }

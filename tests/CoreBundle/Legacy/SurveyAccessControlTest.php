@@ -232,4 +232,19 @@ final class SurveyAccessControlTest extends KernelTestCase
         $this->assertFalse(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, $other, false));
         $this->assertFalse(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false), 'coach is not course teacher');
     }
+
+    public function testOnlyInvitedUsersMayAnswerAndOnlyInTheCourseOfTheInvitation(): void
+    {
+        $id = $this->survey();
+        $this->conn->insert('c_survey_invitation', [
+            'c_id' => 1, 'session_id' => null, 'group_id' => null, 'survey_id' => $id, 'user_id' => self::PLAIN_USER,
+            'invitation_code' => 'sa_inv_'.uniqid(), 'answered' => 0, 'invitation_date' => '2026-01-01 00:00:00',
+            'c_lp_item_id' => 0,
+        ]);
+
+        $this->assertTrue(\SurveyManager::userIsInvitedToSurvey(self::PLAIN_USER, $id, 1));
+        $this->assertFalse(\SurveyManager::userIsInvitedToSurvey(1, $id, 1), 'another user');
+        $this->assertFalse(\SurveyManager::userIsInvitedToSurvey(self::PLAIN_USER, $id, 2), 'another course');
+        $this->assertFalse(\SurveyManager::userIsInvitedToSurvey(self::PLAIN_USER, $this->survey(), 1), 'another survey');
+    }
 }

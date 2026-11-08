@@ -14,12 +14,18 @@ $repo = Container::getSurveyRepository();
 $repoQuestion = Container::getSurveyQuestionRepository();
 
 $action = $_GET['a'] ?? null;
-$surveyId = $_REQUEST['survey_id'] ?? 0;
-$questionId = $_REQUEST['question_id'] ?? 0;
+$surveyId = (int) ($_REQUEST['survey_id'] ?? 0);
+$questionId = (int) ($_REQUEST['question_id'] ?? 0);
 
 switch ($action) {
     case 'load_question_options':
         if (!api_is_allowed_to_edit(false, true)) {
+            exit;
+        }
+        // The survey must be one of the current course and the question one of that survey.
+        if (!SurveyManager::surveyBelongsToCurrentCourse($surveyId) ||
+            !SurveyManager::surveyQuestionBelongsToSurvey($questionId, $surveyId)
+        ) {
             exit;
         }
         $question = SurveyManager::get_question($questionId);
@@ -44,15 +50,19 @@ switch ($action) {
         /** @var CSurveyQuestion $survey */
         $question = $repoQuestion->find($questionId);
 
-        if (null === $survey) {
+        if (null === $survey || null === $question ||
+            !SurveyManager::surveyBelongsToCurrentCourse($surveyId) ||
+            !SurveyManager::surveyQuestionBelongsToSurvey($questionId, $surveyId) ||
+            !SurveyManager::userIsInvitedToSurvey((int) $userId, $surveyId, (int) $courseId)
+        ) {
             exit;
         }
 
+        // The fourth argument of remove_answer() is the learning path item, not the course.
         SurveyUtil::remove_answer(
             $userId,
             $survey->getIid(),
-            $questionId,
-            $courseId
+            $questionId
         );
 
         SurveyUtil::saveAnswer(

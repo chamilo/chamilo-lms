@@ -565,14 +565,32 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
 
     // -------------------------------------------------------------- exams
 
-    private function quiz(int $courseId, string $title, int $sessionId = 0): int
+    private function freeNode(): int
     {
-        // Borrow a resource node that no quiz or link uses yet (the installer leaves a few unused ones).
+        // Borrow a resource node that no quiz, survey, learning path or link uses yet (the installer leaves a few).
         $node = (int) $this->conn()->fetchOne(
             'SELECT id FROM resource_node WHERE id NOT IN (SELECT resource_node_id FROM resource_link WHERE resource_node_id IS NOT NULL)
-               AND id NOT IN (SELECT resource_node_id FROM c_quiz WHERE resource_node_id IS NOT NULL) ORDER BY id LIMIT 1'
+               AND id NOT IN (SELECT resource_node_id FROM c_quiz WHERE resource_node_id IS NOT NULL)
+               AND id NOT IN (SELECT resource_node_id FROM c_lp WHERE resource_node_id IS NOT NULL)
+               AND id NOT IN (SELECT resource_node_id FROM c_survey WHERE resource_node_id IS NOT NULL) ORDER BY id LIMIT 1'
         );
-        $this->assertGreaterThan(0, $node, 'no free resource node to attach a quiz to');
+        $this->assertGreaterThan(0, $node, 'no free resource node to attach a resource to');
+
+        return $node;
+    }
+
+    private function linkNode(int $node, int $courseId, int $sessionId = 0): void
+    {
+        $this->conn()->executeStatement(
+            "INSERT INTO resource_link (resource_node_id, c_id, session_id, visibility, display_order, resource_type_group, created_at, updated_at)
+             VALUES (?, ?, ?, 2, 0, 0, '2001-01-01 00:00:00', '2001-01-01 00:00:00')",
+            [$node, $courseId, 0 === $sessionId ? null : $sessionId]
+        );
+    }
+
+    private function quiz(int $courseId, string $title, int $sessionId = 0): int
+    {
+        $node = $this->freeNode();
         $this->conn()->executeStatement(
             "INSERT INTO c_quiz (resource_node_id, title, type, random, random_answers, results_disabled, max_attempt, feedback_type, expired_time,
                 propagate_neg, review_answers, random_by_category, display_category_name, hide_question_title, page_result_configuration)
@@ -580,11 +598,7 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
             [$node, $title]
         );
         $quiz = (int) $this->conn()->lastInsertId();
-        $this->conn()->executeStatement(
-            "INSERT INTO resource_link (resource_node_id, c_id, session_id, visibility, display_order, resource_type_group, created_at, updated_at)
-             VALUES (?, ?, ?, 2, 0, 0, '2001-01-01 00:00:00', '2001-01-01 00:00:00')",
-            [$node, $courseId, 0 === $sessionId ? null : $sessionId]
-        );
+        $this->linkNode($node, $courseId, $sessionId);
 
         return $quiz;
     }
@@ -1100,5 +1114,238 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
         $this->assertContains($boss, array_column($byLanguage['items'], 'id'));
         $this->assertSame($byLanguage['total'], \count($byLanguage['items']));
         $this->assertSame(0, $this->section($this->admin(), 'student-bosses', ['language' => 'xx_XX'])['total']);
+    }
+
+    // -------------------------------------------- exercise categories report
+
+    private function attemptId(int $userId, int $courseId, int $quizId, float $score, float $max, string $date): int
+    {
+        $this->conn()->executeStatement(
+            "INSERT INTO track_e_exercises (exe_user_id, c_id, session_id, exe_exo_id, exe_date, score, max_score, user_ip, status, data_tracking,
+                start_date, steps_counter, orig_lp_id, orig_lp_item_id, exe_duration, orig_lp_item_view_id, questions_to_check)
+             VALUES (?, ?, NULL, ?, ?, ?, ?, '', '', '', '2001-01-01 09:00:00', 0, 0, 0, 0, 0, '')",
+            [$userId, $courseId, $quizId, $date, $score, $max]
+        );
+
+        return (int) $this->conn()->lastInsertId();
+    }
+
+    public function testExerciseCategoriesNeedACourseAndAnExercise(): void
+    {
+        $quiz = $this->quiz(1, 'rp_r2 cat quiz');
+        foreach ([[], ['courseId' => 1], ['exerciseId' => $quiz]] as $filters) {
+            $result = $this->section($this->admin(), 'exercise-categories', $filters);
+            $this->assertSame([], $result['items']);
+            $this->assertSame(0, $result['total']);
+        }
+    }
+
+    public function testExerciseCategoriesSummariseAttemptsLearnersAndAverageScore(): void
+    {
+        $quiz = $this->quiz(1, 'rp_r2 cat quiz');
+        $a = $this->rawUser('r2ec1');
+        $b = $this->rawUser('r2ec2');
+        $this->attemptId($a, 1, $quiz, 5, 10, '2001-01-01 10:00:00');
+        $this->attemptId($a, 1, $quiz, 10, 10, '2001-02-01 10:00:00');
+        $this->attemptId($b, 1, $quiz, 3, 0, '2001-03-01 10:00:00');
+
+        $result = $this->section($this->admin(), 'exercise-categories', ['courseId' => 1, 'exerciseId' => $quiz]);
+
+        $this->assertSame(1, $result['total']);
+        $row = $result['items'][0];
+        $this->assertSame($quiz, $row['id']);
+        $this->assertSame('rp_r2 cat quiz', $row['test']);
+        $this->assertSame(3, $row['attempts']);
+        $this->assertSame(2, $row['learners']);
+        $this->assertSame(50.0, $row['score'], '(50 + 100 + 0 for a zero maximum) / 3');
+        $this->assertSame('2001-03-01 10:00:00', $row['lastAttempt']);
+        $since = $this->section($this->admin(), 'exercise-categories', ['courseId' => 1, 'exerciseId' => $quiz, 'startDate' => '2001-02-01']);
+        $this->assertSame(2, $since['items'][0]['attempts']);
+        $this->assertSame(2, $since['items'][0]['learners']);
+    }
+
+    // ------------------------------------------------------- question stats
+
+    private function question(string $text, float $weight): int
+    {
+        $this->conn()->executeStatement(
+            "INSERT INTO c_quiz_question (question, ponderation, position, type, level, mandatory) VALUES (?, ?, 1, 1, 1, 0)",
+            [$text, $weight]
+        );
+
+        return (int) $this->conn()->lastInsertId();
+    }
+
+    private function answer(int $exeId, int $userId, int $questionId, float $marks): void
+    {
+        $this->conn()->executeStatement(
+            "INSERT INTO track_e_attempt (exe_id, user_id, question_id, answer, teacher_comment, marks, tms, seconds_spent)
+             VALUES (?, ?, ?, '', '', ?, '2001-01-01 10:00:00', 0)",
+            [$exeId, $userId, $questionId, $marks]
+        );
+    }
+
+    public function testQuestionStatsAverageTheMarksPerQuestionAndDetailPerUser(): void
+    {
+        $quiz = $this->quiz(1, 'rp_r2 stats quiz');
+        $q1 = $this->question('r2 q1', 4);
+        $q2 = $this->question('r2 q2', 0);
+        $a = $this->rawUser('r2qs1');
+        $b = $this->rawUser('r2qs2');
+        $ea = $this->attemptId($a, 1, $quiz, 3, 4, '2001-01-01 10:00:00');
+        $eb = $this->attemptId($b, 1, $quiz, 1, 4, '2001-01-01 11:00:00');
+        $this->answer($ea, $a, $q1, 3);
+        $this->answer($eb, $b, $q1, 2);
+        $this->answer($ea, $a, $q2, 1);
+
+        $result = $this->section($this->admin(), 'question-stats', ['courseId' => 1, 'exerciseId' => $quiz]);
+
+        $this->assertSame(2, $result['total']);
+        $this->assertSame([$q1, $q2], array_column($result['items'], 'id'));
+        $first = $result['items'][0];
+        $this->assertSame('rp_r2 stats quiz', $first['test']);
+        $this->assertSame(2, $first['attempts']);
+        $this->assertSame(2.5, $first['averageMarks']);
+        $this->assertSame(4.0, $first['weighting']);
+        $this->assertSame(62.5, $first['success']);
+        $this->assertSame(0.0, $result['items'][1]['success'], 'a question without weight has no percentage');
+        $onlyB = $this->section($this->admin(), 'question-stats', ['courseId' => 1, 'exerciseId' => $quiz, 'userId' => $b]);
+        $this->assertSame([$q1], array_column($onlyB['items'], 'id'));
+        $this->assertSame(2.0, $onlyB['items'][0]['averageMarks']);
+
+        $detail = $this->section($this->admin(), 'question-stats-detail', ['courseId' => 1, 'exerciseId' => $quiz]);
+        $this->assertSame([$q1.'-'.$a, $q1.'-'.$b, $q2.'-'.$a], array_column($detail['items'], 'id'));
+        $this->assertSame('Firstr2qs1 Lastr2qs1', $detail['items'][0]['user']);
+        $this->assertSame('Detailed questions stats', $detail['title']);
+        $this->assertFalse($detail['meta']['supportsUser']);
+    }
+
+    // ------------------------------------------------------------ surveys
+
+    public function testSurveysReportNeedsAUserOfTheCurrentUrl(): void
+    {
+        $this->assertSame([], $this->section($this->admin(), 'surveys')['items']);
+        $other = $this->secondUrl();
+        $foreign = $this->rawUser('r2sv1', 5, 1, $other);
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->section($this->admin(), 'surveys', ['userId' => $foreign]);
+    }
+
+    public function testSurveysReportCountsTheAnswersOfAUserPerSurveyInTheCoursesOfTheUrl(): void
+    {
+        $user = $this->rawUser('r2sv2');
+        $node1 = $this->freeNode();
+        $this->conn()->executeStatement(
+            "INSERT INTO c_survey (resource_node_id, code, title, creation_date, invited, answered, invite_mail, reminder_mail, mail_subject, anonymous,
+                shuffle, one_question_per_page, survey_version, survey_type, show_form_profile, form_fields)
+             VALUES (?, 'r2sv', 'rp_r2 survey', '2001-01-01 00:00:00', 0, 0, '', '', '', '0', 0, 0, '', 0, 0, '')",
+            [$node1]
+        );
+        $survey = (int) $this->conn()->lastInsertId();
+        $this->linkNode($node1, 2);
+        foreach ([1, 2, 3] as $i) {
+            $this->conn()->executeStatement("INSERT INTO c_survey_answer (survey_id, question_id, option_id, value, user, c_lp_item_id) VALUES (?, NULL, '', 1, ?, 0)", [$survey, (string) $user]);
+        }
+        $this->conn()->executeStatement("INSERT INTO c_survey_answer (survey_id, question_id, option_id, value, user, c_lp_item_id) VALUES (?, NULL, '', 1, 'someone-else', 0)", [$survey]);
+
+        $result = $this->section($this->admin(), 'surveys', ['userId' => $user]);
+
+        $this->assertSame([$survey], array_column($result['items'], 'id'));
+        $this->assertSame(3, $result['items'][0]['answers']);
+        $this->assertSame('rp_r2 survey', $result['items'][0]['title']);
+        $this->assertSame($user, $result['meta']['selectedUser']['id']);
+        $this->assertSame('Firstr2sv2 Lastr2sv2', $result['meta']['selectedUser']['fullName']);
+
+        $other = $this->secondUrl();
+        $this->conn()->executeStatement('UPDATE access_url_rel_course SET access_url_id = ? WHERE c_id = 2', [$other]);
+        $this->assertSame([], $this->section($this->admin(), 'surveys', ['userId' => $user])['items']);
+    }
+
+    // ----------------------------------------------------- tutor planning
+
+    public function testTutorPlanningGroupsTheSessionsOfEachGeneralCoachOfTheUrl(): void
+    {
+        $other = $this->secondUrl();
+        $tutor = $this->rawUser('r2tp1', self::TEACHER);
+        $tutor2 = $this->rawUser('r2tp2', self::TEACHER);
+        $this->conn()->executeStatement('UPDATE user SET lastname = ? WHERE id = ?', ['0r2tpA', $tutor]);
+        $this->conn()->executeStatement('UPDATE user SET lastname = ? WHERE id = ?', ['0r2tpB', $tutor2]);
+        $late = $this->rawSession('r2tp_late');
+        $early = $this->rawSession('r2tp_early');
+        $foreign = $this->rawSession('r2tp_foreign', $other);
+        $coachOnly = $this->rawSession('r2tp_other');
+        $dates = [$late => '2001-06-01 00:00:00', $early => '2001-02-01 00:00:00', $foreign => '2001-03-01 00:00:00', $coachOnly => '2001-04-01 00:00:00'];
+        foreach ($dates as $sid => $date) {
+            $this->conn()->executeStatement('UPDATE session SET display_start_date = ?, display_end_date = ? WHERE id = ?', [$date, '2001-12-31 00:00:00', $sid]);
+        }
+        foreach ([$late, $early, $foreign] as $sid) {
+            $this->sessionUser($sid, $tutor, 3);
+        }
+        $this->sessionUser($coachOnly, $tutor2, 3);
+        $this->sessionUser($early, $tutor2, 1);
+
+        $result = $this->section($this->admin(), 'tutor-planning', ['startDate' => '2001-01-01', 'endDate' => '2001-12-31']);
+        $mine = array_values(array_filter($result['items'], static fn (array $r): bool => in_array($r['id'], [$tutor, $tutor2], true)));
+
+        $this->assertSame([$tutor, $tutor2], array_column($mine, 'id'));
+        $this->assertSame([$early, $late], array_column($mine[0]['sessions'], 'id'), 'oldest session first, sessions of another URL left out');
+        $this->assertSame([$coachOnly], array_column($mine[1]['sessions'], 'id'), 'only general coach relations count');
+        $this->assertSame('/main/session/resume_session.php?id_session='.$early, $mine[0]['sessions'][0]['url']);
+        $this->assertSame('General tutor planning', $result['title']);
+        $this->assertSame($result['total'], \count($result['items']));
+    }
+
+    public function testTutorPlanningDateRangeUsesTheSessionStartDate(): void
+    {
+        $tutor = $this->rawUser('r2tp3', self::TEACHER);
+        $s = $this->rawSession('r2tp3');
+        $this->conn()->executeStatement("UPDATE session SET display_start_date = '2001-05-15 00:00:00' WHERE id = ?", [$s]);
+        $this->sessionUser($s, $tutor, 3);
+        $ids = static fn (array $result): array => array_column($result['items'], 'id');
+        $this->assertContains($tutor, $ids($this->section($this->admin(), 'tutor-planning', ['startDate' => '2001-05-15', 'endDate' => '2001-05-15'])));
+        $this->assertNotContains($tutor, $ids($this->section($this->admin(), 'tutor-planning', ['startDate' => '2001-05-16'])));
+        $this->assertNotContains($tutor, $ids($this->section($this->admin(), 'tutor-planning', ['endDate' => '2001-05-14'])));
+    }
+
+    // ------------------------------------------------------- organization
+
+    public function testOrganizationReportCountsUsersPerCompanyOrRucValue(): void
+    {
+        $this->conn()->executeStatement(
+            "INSERT INTO extra_field (item_type, value_type, variable, display_text, field_order, visible_to_self, visible_to_others, changeable, filter, created_at, auto_remove)
+             VALUES (1, 1, 'company', 'Company', 1, 0, 0, 0, 0, '2020-01-01 00:00:00', 0), (1, 1, 'ruc', 'RUC', 2, 0, 0, 0, 0, '2020-01-01 00:00:00', 0)"
+        );
+        $company = (int) $this->conn()->lastInsertId();
+        $ruc = $company + 1;
+        $values = [['a', $company, 'R2 Zeta'], ['b', $company, 'R2 Alpha'], ['c', $company, 'R2 Alpha'], ['d', $ruc, 'R2 Ruc 1']];
+        foreach ($values as [$tag, $field, $value]) {
+            $uid = $this->rawUser('r2og'.$tag);
+            $this->conn()->executeStatement(
+                "INSERT INTO extra_field_values (field_id, field_value, item_id, created_at, updated_at) VALUES (?, ?, ?, '2020-01-01 00:00:00', '2020-01-01 00:00:00')",
+                [$field, $value, $uid]
+            );
+        }
+        // A user with both keeps the company value (the company rows are read first).
+        $both = $this->rawUser('r2ogboth');
+        foreach ([[$ruc, 'R2 Ruc 2'], [$company, 'R2 Zeta']] as [$field, $value]) {
+            $this->conn()->executeStatement(
+                "INSERT INTO extra_field_values (field_id, field_value, item_id, created_at, updated_at) VALUES (?, ?, ?, '2020-01-01 00:00:00', '2020-01-01 00:00:00')",
+                [$field, $value, $both]
+            );
+        }
+
+        $result = $this->section($this->admin(), 'organization', ['itemsPerPage' => 100]);
+        $byName = array_column($result['items'], 'users', 'organization');
+
+        $this->assertSame(2, $byName['R2 Alpha']);
+        $this->assertSame(2, $byName['R2 Zeta']);
+        $this->assertSame(1, $byName['R2 Ruc 1']);
+        $this->assertArrayNotHasKey('R2 Ruc 2', $byName);
+        $names = array_column($result['items'], 'organization');
+        $sorted = $names;
+        usort($sorted, 'strcasecmp');
+        $this->assertSame($sorted, $names);
+        $this->assertSame(md5('R2 Alpha'), array_column($result['items'], 'id', 'organization')['R2 Alpha']);
+        $this->assertSame('User by organization', $result['title']);
     }
 }

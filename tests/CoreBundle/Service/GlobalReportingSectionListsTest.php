@@ -827,4 +827,139 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
 
         $this->assertSame(70.0, $row['averageLearningPathScore'], '(80 + 60) / 2: only the latest attempt of each learner counts');
     }
+
+    // ------------------------------------------------------ access overview
+
+    private function access(int $user, int $course, string $in, ?string $out, int $session = 0, string $ip = '10.0.0.1'): int
+    {
+        $this->conn()->executeStatement(
+            'INSERT INTO track_e_course_access (user_id, c_id, login_course_date, logout_course_date, counter, session_id, user_ip)
+             VALUES (?, ?, ?, ?, 1, ?, ?)',
+            [$user, $course, $in, $out, $session, $ip]
+        );
+
+        return (int) $this->conn()->lastInsertId();
+    }
+
+    public function testAccessOverviewNeedsACourseAndAProfileBeforeListingAnything(): void
+    {
+        $u = $this->rawUser('r2a0');
+        $this->access($u, 1, '2001-01-01 10:00:00', '2001-01-01 11:00:00');
+        foreach ([[], ['courseId' => 1], ['status' => 5]] as $filters) {
+            $result = $this->section($this->admin(), 'access-overview', $filters);
+            $this->assertSame([], $result['items']);
+            $this->assertSame(0, $result['total']);
+        }
+        $this->assertTrue($this->section($this->admin(), 'access-overview')['meta']['requiresCourse']);
+    }
+
+    public function testAccessOverviewListsTheVisitsOfLiveUsersOfTheProfileNewestFirst(): void
+    {
+        $u = $this->rawUser('r2a1');
+        $teacher = $this->rawUser('r2a2', self::TEACHER);
+        $deleted = $this->rawUser('r2a3', 5, -2);
+        $old = $this->access($u, 2, '2001-01-01 10:00:00', '2001-01-01 11:30:00');
+        $new = $this->access($u, 2, '2001-02-01 10:00:00', '2001-02-01 10:00:45');
+        $open = $this->access($u, 2, '2001-03-01 10:00:00', null);
+        $this->access($teacher, 2, '2001-01-01 10:00:00', '2001-01-01 11:00:00');
+        $this->access($deleted, 2, '2001-01-01 10:00:00', '2001-01-01 11:00:00');
+        $this->access($u, 1, '2001-01-01 10:00:00', '2001-01-01 11:00:00');
+
+        $result = $this->section($this->admin(), 'access-overview', ['courseId' => 2, 'status' => 5, 'keyword' => 'x']);
+        $mine = array_values(array_filter($result['items'], static fn (array $r): bool => str_starts_with($r['username'], 'rp_r2a1_')));
+
+        $this->assertSame([$open, $new, $old], array_column($mine, 'id'));
+        $this->assertSame([0, 45, 5400], array_column($mine, 'durationSeconds'), 'an open visit lasts 0 seconds');
+        // The IP column follows the platform's "hide IP" setting; a hidden column never leaks the value.
+        $this->assertSame(\in_array('ip', array_column($result['columns'], 'key'), true), isset($mine[0]['ip']));
+        $this->assertSame($result['total'], \count($result['items']));
+        $this->assertNotContains('rp_r2a2', array_map(static fn (array $r): string => substr($r['username'], 0, 7), $result['items']));
+        $this->assertSame(3, $result['total'], 'the teacher, the soft-deleted learner and the other course are left out');
+    }
+
+    public function testAccessOverviewFiltersBySessionUserAndDateRange(): void
+    {
+        $session = $this->rawSession('r2a4');
+        $a = $this->rawUser('r2a4a');
+        $b = $this->rawUser('r2a4b');
+        $inSession = $this->access($a, 2, '2001-05-10 10:00:00', '2001-05-10 11:00:00', $session);
+        $outside = $this->access($a, 2, '2001-05-11 10:00:00', '2001-05-11 11:00:00');
+        $other = $this->access($b, 2, '2001-05-10 12:00:00', '2001-05-10 13:00:00', $session);
+
+        $base = ['courseId' => 2, 'status' => 5];
+        $this->assertSame([$other, $inSession], array_column($this->section($this->admin(), 'access-overview', $base + ['sessionId' => $session])['items'], 'id'));
+        $this->assertSame([$inSession], array_column($this->section($this->admin(), 'access-overview', $base + ['sessionId' => $session, 'userId' => $a])['items'], 'id'));
+        $range = $this->section($this->admin(), 'access-overview', $base + ['userId' => $a, 'startDate' => '2001-05-11', 'endDate' => '2001-05-11']);
+        $this->assertSame([$outside], array_column($range['items'], 'id'), 'the end date is inclusive');
+        $this->assertSame(0, $this->section($this->admin(), 'access-overview', $base + ['userId' => $a, 'startDate' => '2001-05-12'])['total']);
+    }
+
+    /**
+     * PINNED QUIRK: with an end date, visits whose logout is still NULL (the visit is open) are never listed, since
+     * "NULL < date" is not true.
+     */
+    public function testAccessOverviewEndDateHidesOpenVisits(): void
+    {
+        $a = $this->rawUser('r2a5');
+        $this->access($a, 2, '2001-06-10 10:00:00', null);
+        $base = ['courseId' => 2, 'status' => 5, 'userId' => $a];
+        $this->assertSame(1, $this->section($this->admin(), 'access-overview', $base)['total']);
+        $this->assertSame(0, $this->section($this->admin(), 'access-overview', $base + ['endDate' => '2001-12-31'])['total']);
+    }
+
+    public function testAccessOverviewRejectsACourseOfAnotherUrl(): void
+    {
+        $other = $this->secondUrl();
+        $this->conn()->executeStatement('UPDATE access_url_rel_course SET access_url_id = ? WHERE c_id = 2', [$other]);
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->section($this->admin(), 'access-overview', ['courseId' => 2, 'status' => 5]);
+    }
+
+    // ------------------------------------------------------------ coaches
+
+    public function testAdminCoachesListTeachersOfTheUrlWithTheirSessionsAndCourses(): void
+    {
+        $other = $this->secondUrl();
+        $coach = $this->rawUser('r2k1', self::TEACHER);
+        $notTeacher = $this->rawUser('r2k2');
+        $foreign = $this->rawUser('r2k3', self::TEACHER, 1, $other);
+        $s1 = $this->rawSession('r2k1');
+        $s2 = $this->rawSession('r2k2');
+        $this->sessionUser($s1, $coach, 3);
+        $this->sessionUser($s2, $coach, 3);
+        $this->sessionUser($s2, $notTeacher, 3);
+        $this->sessionCourseUser($s1, 1, $coach, 2);
+        $this->sessionCourseUser($s1, 2, $coach, 2);
+        $this->sessionCourseUser($s2, 1, $coach, 2);
+        $this->conn()->executeStatement("INSERT INTO track_e_login (login_user_id, login_date, user_ip, logout_date) VALUES (?, '2001-01-01 10:00:00', '', NULL), (?, '2001-04-01 10:00:00', '', NULL)", [$coach, $coach]);
+        $this->conn()->executeStatement('UPDATE user SET lastname = ? WHERE id IN (?, ?)', ['AAAr2k', $coach, $foreign]);
+
+        $result = $this->section($this->admin(), 'admin-coaches', ['itemsPerPage' => 100]);
+        $row = array_values(array_filter($result['items'], static fn (array $r): bool => $r['id'] === $coach))[0];
+
+        $this->assertSame(2, $row['sessions']);
+        $this->assertSame(2, $row['courses'], 'distinct courses');
+        $this->assertSame('2001-04-01 10:00:00', $row['lastLogin']);
+        $this->assertSame('Trainers Overview', $result['title']);
+        $ids = array_column($result['items'], 'id');
+        $this->assertNotContains($notTeacher, $ids);
+        $this->assertNotContains($foreign, $ids);
+        $this->assertSame($result['total'], $result['summary'][0]['value']);
+        $this->assertArrayNotHasKey('email', $row);
+    }
+
+    public function testAdminCoachesArePagedAlphabetically(): void
+    {
+        $ids = [];
+        foreach (['a', 'b', 'c'] as $letter) {
+            $id = $this->rawUser('r2kp'.$letter, self::TEACHER);
+            $this->conn()->executeStatement('UPDATE user SET lastname = ?, firstname = ? WHERE id = ?', ['0000r2kp'.$letter, 'F', $id]);
+            $ids[] = $id;
+        }
+        $first = $this->section($this->admin(), 'admin-coaches', ['itemsPerPage' => 10]);
+        $this->assertSame($ids, array_slice(array_column($first['items'], 'id'), 0, 3));
+        $total = $first['total'];
+        $page2 = $this->section($this->admin(), 'admin-coaches', ['itemsPerPage' => 10, 'page' => 2]);
+        $this->assertCount(max(0, min(10, $total - 10)), $page2['items']);
+    }
 }

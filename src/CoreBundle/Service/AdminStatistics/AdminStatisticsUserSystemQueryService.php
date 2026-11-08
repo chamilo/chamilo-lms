@@ -809,7 +809,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         $params = [
             'start' => $start->format('Y-m-d').' 00:00:00',
             'end' => $end->format('Y-m-d').' 23:59:59',
-            'events' => ['user_subscribed', 'user_unsubscribed', 'session_user_deleted'],
+            'events' => ['user_subscribed', 'user_unsubscribed', 'session_delete_user'],
         ];
         $types = ['start' => Types::STRING, 'end' => Types::STRING, 'events' => ArrayParameterType::STRING];
         $urlScope = '';

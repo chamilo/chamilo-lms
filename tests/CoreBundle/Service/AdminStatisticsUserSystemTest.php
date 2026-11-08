@@ -354,7 +354,7 @@ final class AdminStatisticsUserSystemTest extends KernelTestCase
             ['2001-11-01 10:00:00', 'user_subscribed'],
             ['2001-11-01 23:59:59', 'user_subscribed'],
             ['2001-11-02 00:00:00', 'user_unsubscribed'],
-            ['2001-11-02 05:00:00', 'session_user_deleted'],
+            ['2001-11-02 05:00:00', 'session_delete_user'],
             ['2001-11-02 06:00:00', 'user_subscribed'],
             ['2001-11-04 06:00:00', 'user_subscribed'],
             ['2001-11-03 06:00:00', 'something_else'],
@@ -400,6 +400,19 @@ final class AdminStatisticsUserSystemTest extends KernelTestCase
         }
         $report = $this->report('subscription_by_day', ['rangeStart' => '2001-11-01', 'rangeEnd' => '2001-11-01']);
         $this->assertSame([['date' => '2001-11-01', 'subscriptions' => 1, 'unsubscriptions' => 1]], $report['table']['items']);
+    }
+
+    /**
+     * Sessions are logged as LOG_SESSION_DELETE_USER ("session_delete_user"): they count as unsubscriptions.
+     */
+    public function testSubscriptionsByDayCountUsersRemovedFromASession(): void
+    {
+        $this->conn()->executeStatement(
+            "INSERT INTO track_e_default (default_user_id, default_date, default_event_type, default_value_type, default_value)
+             VALUES (1, '2001-11-01 10:00:00', 'session_delete_user', 'x', 'y')"
+        );
+        $report = $this->report('subscription_by_day', ['rangeStart' => '2001-11-01', 'rangeEnd' => '2001-11-01']);
+        $this->assertSame(1, $report['table']['items'][0]['unsubscriptions']);
     }
 
     // ---------------------------------------------------------- user session

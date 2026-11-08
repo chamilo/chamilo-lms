@@ -534,81 +534,71 @@ class Agenda
                         $groupsToDelete = array_diff($sentToEvent['groups'], $sendTo['groups']);
                         $groupToAdd = array_diff($sendTo['groups'], $sentToEvent['groups']);
 
-                        //var_dump($sendTo['everyone'], $usersToDelete, $usersToAdd, $groupsToDelete, $groupToAdd);exit;
                         $links = $event->getResourceNode()->getResourceLinks();
+                        // addCourseLink() needs the parent (the course) on an event loaded from the database.
+                        $event->setParent($courseEntity);
+                        // Links are removed after persist($event): persisting cascades to the node's links and
+                        // would otherwise cancel a removal scheduled before it.
+                        // They also leave the collection now, or addCourseLink() would see them as existing.
+                        $linksToRemove = [];
+                        $removeLink = static function ($link) use (&$linksToRemove, $links): void {
+                            $links->removeElement($link);
+                            $linksToRemove[] = $link;
+                        };
 
                         if ($sendTo['everyone']) {
-                            // Delete all from group
-                            if (isset($sentToEvent['groups']) && !empty($sentToEvent['groups'])) {
-                                foreach ($sentToEvent['groups'] as $group) {
-                                    foreach ($links as $link) {
-                                        if ($link->hasGroup() && $link->getGroup()->getIid() === $group) {
-                                            $em->remove($link);
-                                        }
-                                    }
+                            // Remove the links to groups and users, then make sure the course-wide link exists.
+                            $hasCourseLink = false;
+                            foreach ($links as $link) {
+                                if ($link->hasGroup() || $link->hasUser()) {
+                                    $removeLink($link);
+                                } else {
+                                    $hasCourseLink = true;
                                 }
                             }
-
-                            // Storing the selected users.
-                            if (isset($sentToEvent['users']) && !empty($sentToEvent['users'])) {
-                                foreach ($sentToEvent['users'] as $userId) {
-                                    foreach ($links as $link) {
-                                        if ($link->hasUser() && $link->getUser()->getId() === $userId) {
-                                            $em->remove($link);
-                                        }
-                                    }
-                                }
+                            if (!$hasCourseLink) {
+                                $event->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
                             }
                         } else {
                             foreach ($links as $link) {
-                                $em->remove($link);
-                            }
-
-                            // Add groups
-                            if (!empty($groupToAdd)) {
-                                foreach ($groupToAdd as $group) {
-                                    $group = api_get_group_entity($group);
-                                    $event->addCourseLink($courseEntity, $sessionEntity, $group);
-                                }
-                            }
-
-                            // Delete groups.
-                            if (!empty($groupsToDelete)) {
-                                foreach ($groupsToDelete as $group) {
-                                    foreach ($links as $link) {
-                                        if ($link->hasGroup() && $link->getGroup()->getIid() === $group) {
-                                            $em->remove($link);
-                                        }
+                                if ($link->hasGroup()) {
+                                    // Delete groups.
+                                    if (in_array($link->getGroup()->getIid(), $groupsToDelete)) {
+                                        $removeLink($link);
                                     }
+                                } elseif ($link->hasUser()) {
+                                    // Delete users.
+                                    if (in_array($link->getUser()->getId(), $usersToDelete)) {
+                                        $removeLink($link);
+                                    }
+                                } else {
+                                    // The course-wide link: the event is no longer for everyone.
+                                    $removeLink($link);
                                 }
+                            }
+
+                            // Add groups.
+                            foreach ($groupToAdd as $group) {
+                                $group = api_get_group_entity($group);
+                                $event->addCourseLink($courseEntity, $sessionEntity, $group);
                             }
 
                             // Add users.
-                            if (!empty($usersToAdd)) {
-                                foreach ($usersToAdd as $userId) {
-                                    $event = $event->addUserLink(
-                                        api_get_user_entity($userId),
-                                        $courseEntity,
-                                        $sessionEntity,
-                                        $groupEntity
-                                    );
-                                }
-                            }
-
-                            // Delete users.
-                            if (!empty($usersToDelete)) {
-                                foreach ($usersToDelete as $userId) {
-                                    foreach ($links as $link) {
-                                        if ($link->hasUser() && $link->getUser()->getId() === $userId) {
-                                            $em->remove($link);
-                                        }
-                                    }
-                                }
+                            foreach ($usersToAdd as $userId) {
+                                $event = $event->addUserLink(
+                                    api_get_user_entity($userId),
+                                    $courseEntity,
+                                    $sessionEntity,
+                                    $groupEntity
+                                );
                             }
                         }
                     }
 
                     $em->persist($event);
+                    foreach ($linksToRemove ?? [] as $link) {
+                        $em->remove($link);
+                    }
                     $em->flush($event);
 
                     // Add announcement.

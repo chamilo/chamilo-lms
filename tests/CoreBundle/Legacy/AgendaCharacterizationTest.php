@@ -144,7 +144,7 @@ final class AgendaCharacterizationTest extends KernelTestCase
     {
         return $this->conn->fetchAllAssociative(
             'SELECT l.* FROM resource_link l INNER JOIN c_calendar_event e ON e.resource_node_id = l.resource_node_id
-             WHERE e.iid = ? ORDER BY l.id',
+             WHERE e.iid = ? AND l.deleted_at IS NULL ORDER BY l.id',
             [$iid]
         );
     }
@@ -511,28 +511,60 @@ final class AgendaCharacterizationTest extends KernelTestCase
         $this->assertSame('ag_by_owner', $this->row($foreign)['title']);
     }
 
-    public function testEditEventAddsTheNewRecipientsButDoesNotUnlinkTheOldOnes(): void
+    public function testEditEventReplacesTheUserRecipients(): void
     {
-        // PINNED QUIRK: editEvent() calls $em->remove() on the old links, but they are still in the resource
-        // node collection (cascade persist), so the flush re-persists them: user 2 stays a recipient.
         $id = $this->agenda()->addEvent('2030-06-14 09:00:00', '2030-06-14 10:00:00', 'false', 'ag_r', '', ['USER:2']);
         Container::getEntityManager()->clear();
 
         $this->agenda()->editEvent($id, '2030-06-14 09:00:00', '2030-06-14 10:00:00', 'false', 'ag_r', '', ['USER:3']);
 
-        $this->assertEqualsCanonicalizing([2, 3], $this->linkedUsers($id));
+        $this->assertSame([3], $this->linkedUsers($id), 'user 2 is unlinked, user 3 linked');
+        $this->assertCount(1, $this->links($id));
     }
 
-    public function testEditEventToEveryoneDoesNotUnlinkTheUsers(): void
+    public function testEditEventKeepsTheRecipientsThatStayAndSwapsTheOthers(): void
     {
-        // PINNED QUIRK: same cause; switching to "everyone" leaves the user link in place and adds no
-        // course-wide link.
+        $id = $this->agenda()->addEvent('2030-06-14 09:00:00', '2030-06-14 10:00:00', 'false', 'ag_k', '', ['USER:1', 'USER:2']);
+        Container::getEntityManager()->clear();
+
+        $this->agenda()->editEvent($id, '2030-06-14 09:00:00', '2030-06-14 10:00:00', 'false', 'ag_k', '', ['USER:2', 'USER:3']);
+
+        $this->assertEqualsCanonicalizing([2, 3], $this->linkedUsers($id));
+        $this->assertCount(2, $this->links($id));
+    }
+
+    public function testEditEventFromEveryoneToUsersDropsTheCourseWideLink(): void
+    {
+        $id = $this->agenda()->addEvent('2030-06-14 09:00:00', '2030-06-14 10:00:00', 'false', 'ag_e2u', '', ['everyone']);
+        Container::getEntityManager()->clear();
+
+        $this->agenda()->editEvent($id, '2030-06-14 09:00:00', '2030-06-14 10:00:00', 'false', 'ag_e2u', '', ['USER:3']);
+
+        $this->assertSame([3], $this->linkedUsers($id));
+        $this->assertCount(1, $this->links($id), 'the course-wide link is gone, so the event is no longer for everyone');
+    }
+
+    public function testEditEventFromUsersToEveryoneUnlinksThemAndLinksTheCourse(): void
+    {
         $id = $this->agenda()->addEvent('2030-06-14 09:00:00', '2030-06-14 10:00:00', 'false', 'ag_all', '', ['USER:2']);
         Container::getEntityManager()->clear();
 
         $this->agenda()->editEvent($id, '2030-06-14 09:00:00', '2030-06-14 10:00:00', 'false', 'ag_all', '', ['everyone']);
 
-        $this->assertSame([2], $this->linkedUsers($id));
+        $this->assertSame([], $this->linkedUsers($id));
+        $links = $this->links($id);
+        $this->assertCount(1, $links, 'one course-wide link, so the event is visible to everyone again');
+        $this->assertSame(1, (int) $links[0]['c_id']);
+        $this->assertNull($links[0]['user_id']);
+    }
+
+    public function testEditEventToEveryoneTwiceKeepsASingleCourseLink(): void
+    {
+        $id = $this->agenda()->addEvent('2030-06-14 09:00:00', '2030-06-14 10:00:00', 'false', 'ag_ee', '', ['everyone']);
+        Container::getEntityManager()->clear();
+
+        $this->agenda()->editEvent($id, '2030-06-14 09:00:00', '2030-06-14 10:00:00', 'false', 'ag_ee', '', ['everyone']);
+
         $this->assertCount(1, $this->links($id));
     }
 

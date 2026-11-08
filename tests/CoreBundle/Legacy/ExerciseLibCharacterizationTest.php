@@ -717,17 +717,27 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $this->assertSame(3, ExerciseLib::getCountOfAnswers(7, $q, $quiz, $code, 0, FILL_IN_BLANKS), 'fill-in-blanks: every student answer row, whatever the answer id');
     }
 
-    public function testGetCountOfAnswersInASessionIsBrokenByTheMissingAttemptCourseColumn(): void
+    public function testGetCountOfAnswersInASessionCountsTheSessionStudentsOnly(): void
     {
         $this->ctx();
         $quiz = $this->quiz();
         $q = $this->question('qs_count_answers_sess');
         $sid = $this->rawSession('count_sess');
+        $inSession = $this->rawUser('cs_in');
+        $coach = $this->rawUser('cs_coach');
+        $baseOnly = $this->rawUser('cs_base');
+        $this->subscribeInSession($inSession, 1, $sid);
+        $this->subscribeInSession($coach, 1, $sid, SessionEntity::COURSE_COACH);
+        $this->subscribe($baseOnly, 1);
+        foreach ([[$inSession, $sid], [$coach, $sid], [$baseOnly, null]] as [$uid, $sess]) {
+            $exe = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $uid, 'session_id' => $sess]);
+            $this->attempt($exe, $uid, $q, '7');
+        }
         $code = $this->getCourse(1)->getCode();
 
-        // PINNED QUIRK: the session branch joins on `a.c_id` (track_e_attempt has no c_id): always throws.
-        $this->expectException(NotAllowedException::class);
-        ExerciseLib::getCountOfAnswers(7, $q, $quiz, $code, $sid);
+        $this->assertSame(1, ExerciseLib::getCountOfAnswers(7, $q, $quiz, $code, $sid));
+        $this->assertSame(1, ExerciseLib::getCountOfAnswers(7, $q, $quiz, $code, 0), 'base course: the base-course student only');
+        $this->assertSame(0, ExerciseLib::getCountOfAnswers(8, $q, $quiz, $code, $sid));
     }
 
     public function testGetNumberStudentsAnswerHotspotCount(): void
@@ -753,22 +763,24 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $this->assertSame(0, ExerciseLib::getNumberStudentsAnswerHotspotCount(3, $q, $quiz, $code, 0));
     }
 
-    public function testLegacyPerAnswerCountersAreBrokenByTheMissingAttemptCourseColumn(): void
+    public function testPerAnswerStudentCountersCountDistinctStudents(): void
     {
         $this->ctx();
         $quiz = $this->quiz();
         $q = $this->question('qs_legacy_counter');
+        $s1 = $this->rawUser('lc_s1');
+        $s2 = $this->rawUser('lc_s2');
+        $this->subscribe($s1, 1);
+        $this->subscribe($s2, 1);
+        foreach ([[$s1, '7'], [$s1, '7'], [$s2, '8'], [$s2, '0']] as [$uid, $ans]) {
+            $this->attempt($this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $uid]), $uid, $q, $ans);
+        }
         $code = $this->getCourse(1)->getCode();
 
-        // PINNED QUIRK (no caller anywhere): both join track_e_attempt on `a.c_id`, a column it does not have.
-        try {
-            ExerciseLib::get_number_students_answer_count(1, $q, $quiz, $code, 0);
-            $this->fail('expected unknown column');
-        } catch (NotAllowedException) {
-            $this->addToAssertionCount(1);
-        }
-        $this->expectException(NotAllowedException::class);
-        ExerciseLib::get_number_students_question_with_answer_count($q, $quiz, $code, 0);
+        // Both helpers have no caller anywhere (the statistics page uses getCountOfAnswers).
+        $this->assertSame(1, ExerciseLib::get_number_students_answer_count(7, $q, $quiz, $code, 0), 'one student chose 7, twice');
+        $this->assertSame(1, ExerciseLib::get_number_students_answer_count(8, $q, $quiz, $code, 0));
+        $this->assertSame(2, ExerciseLib::get_number_students_question_with_answer_count($q, $quiz, $code, 0), "answer '0' means unanswered");
     }
 
     // ---------------------------------------------------------------- deleting and fixing attempts

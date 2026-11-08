@@ -4045,6 +4045,8 @@ EOT;
      * @param string $questionType
      *
      * @return int
+     *
+     * @deprecated No caller left: the question statistics use getCountOfAnswers()
      */
     public static function get_number_students_question_with_answer_count(
         $question_id,
@@ -4098,7 +4100,7 @@ EOT;
         $sql = "SELECT DISTINCT exe_user_id
             FROM $track_exercises e
             INNER JOIN $track_attempt a
-                ON (a.exe_id = e.exe_id AND a.c_id = e.c_id)
+                ON (a.exe_id = e.exe_id)
             INNER JOIN $courseTable c
                 ON c.id = e.c_id
             $courseCondition
@@ -4190,6 +4192,8 @@ EOT;
      * @param string $current_answer
      *
      * @return int
+     *
+     * @deprecated No caller left: the question statistics use getCountOfAnswers()
      */
     public static function get_number_students_answer_count(
         $answer_id,
@@ -4244,7 +4248,7 @@ EOT;
         $sql = "SELECT $select_condition
             FROM $track_exercises e
             INNER JOIN $track_attempt a
-                ON (a.exe_id = e.exe_id AND a.c_id = e.c_id)
+                ON (a.exe_id = e.exe_id)
             INNER JOIN $courseTable c
                 ON c.id = e.c_id
             $courseCondition
@@ -4328,7 +4332,7 @@ EOT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON (cu.c_id = a.c_id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
+            ON (cu.c_id = e.c_id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
             $courseConditionWhere = ' AND cu.status = '.SessionEntity::STUDENT;
         }
 

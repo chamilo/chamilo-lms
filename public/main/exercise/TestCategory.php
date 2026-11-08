@@ -456,7 +456,7 @@ class TestCategory
 
         $mandatoryCondition = '';
         if ($onlyMandatory) {
-            $mandatoryCondition = ' AND qrc.mandatory = 1';
+            $mandatoryCondition = ' AND q.mandatory = 1';
         }
         $sql = "SELECT DISTINCT qrc.question_id, qrc.category_id
                 FROM $tblQuestionRelCategory qrc

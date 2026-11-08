@@ -436,21 +436,18 @@ final class TestCategoryCharacterizationTest extends KernelTestCase
         $this->assertSame([$a => [$q1], $b => [$q3]], TestCategory::getQuestionsByCat($quiz, [$q1, $q3]));
     }
 
-    public function testQuestionsByCategoryMandatoryFilterReadsAColumnOfTheWrongTable(): void
+    public function testQuestionsByCategoryCanBeRestrictedToTheMandatoryQuestions(): void
     {
         $quiz = $this->quiz();
         $a = $this->category('tc_m_a');
-        $this->question($quiz, 1, $a, true);
+        $b = $this->category('tc_m_b');
+        $this->question($quiz, 1, $a);
+        $mandatory = $this->question($quiz, 2, $a, true);
+        $this->question($quiz, 3, $b);
 
-        // PINNED QUIRK (bug): "AND qrc.mandatory = 1" - the mandatory flag is a column of c_quiz_question, not of
-        // c_quiz_question_rel_category, so asking for the mandatory questions is a SQL error.
-        $threw = false;
-        try {
-            TestCategory::getQuestionsByCat($quiz, [], [], true);
-        } catch (Throwable) {
-            $threw = true;
-        }
-        $this->assertTrue($threw);
+        // The flag lives on c_quiz_question (the filter used to read it from the link table: a SQL error).
+        $this->assertSame([$a => [$mandatory]], TestCategory::getQuestionsByCat($quiz, [], [], true));
+        $this->assertCount(2, TestCategory::getQuestionsByCat($quiz, [], [], false));
     }
 
     public function testQuestionsByCategoryKeepsOnlyTheCategoriesAddedToTheTestAndAddsTheUncategorised(): void

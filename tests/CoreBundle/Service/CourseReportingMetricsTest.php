@@ -319,6 +319,36 @@ final class CourseReportingMetricsTest extends KernelTestCase
         $this->assertSame('r3_doc_file', $detail['downloads'][0]['resource_title']);
     }
 
+    public function testLearnerDetailListsForumPostsAndThreadsOfTheCourse(): void
+    {
+        $a = $this->learner('r3d4');
+        $forumNode = $this->node('forums', 'r3_forum');
+        $this->insert('c_forum_forum', ['resource_node_id' => $forumNode, 'title' => 'r3_forum_title']);
+        $forum = (int) $this->conn()->lastInsertId();
+        $this->link($forumNode, 1);
+        $threadNode = $this->node('forum_threads', 'r3_thread');
+        $this->insert('c_forum_thread', ['resource_node_id' => $threadNode, 'forum_id' => $forum, 'thread_poster_id' => $a, 'title' => 'r3_thread_title', 'thread_date' => '2001-05-01 10:00:00']);
+        $thread = (int) $this->conn()->lastInsertId();
+        $this->link($threadNode, 1);
+        $postNode = $this->node('forum_posts', 'r3_post');
+        $this->insert('c_forum_post', ['resource_node_id' => $postNode, 'thread_id' => $thread, 'forum_id' => $forum, 'poster_id' => $a, 'title' => 'r3_post_title', 'post_date' => '2001-05-02 10:00:00', 'visible' => 1]);
+        $this->link($postNode, 1);
+        $otherThreadNode = $this->node('forum_threads', 'r3_thread_other');
+        $this->insert('c_forum_thread', ['resource_node_id' => $otherThreadNode, 'forum_id' => $forum, 'thread_poster_id' => $a, 'title' => 'r3_thread_other_course', 'thread_date' => '2001-05-04 10:00:00']);
+        $otherThread = (int) $this->conn()->lastInsertId();
+        $this->link($otherThreadNode, 2);
+        $hiddenPostNode = $this->node('forum_posts', 'r3_post_other');
+        $this->insert('c_forum_post', ['resource_node_id' => $hiddenPostNode, 'thread_id' => $otherThread, 'forum_id' => $forum, 'poster_id' => $a, 'title' => 'r3_post_other_course', 'post_date' => '2001-05-03 10:00:00', 'visible' => 1]);
+        $this->link($hiddenPostNode, 2);
+
+        $detail = $this->service->getLearnerDetail($this->ctx(), $a);
+
+        $this->assertSame(['r3_post_title'], array_column($detail['forumPosts'], 'post_title'));
+        $this->assertSame('r3_thread_title', $detail['forumPosts'][0]['thread_title']);
+        $this->assertSame('r3_forum_title', $detail['forumPosts'][0]['forum_title']);
+        $this->assertSame(['r3_thread_title'], array_column($detail['forumThreads'], 'thread_title'));
+    }
+
     /**
      * The learners table never lists removed (-2) or inactive accounts, so their detail (name, forum posts, downloads,
      * accesses) must not be reachable by id either.

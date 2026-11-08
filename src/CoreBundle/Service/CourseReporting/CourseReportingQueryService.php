@@ -562,7 +562,7 @@ final class CourseReportingQueryService
         }
 
         $forumPosts = [];
-        if ($this->hasTables(['c_forum_post', 'c_forum_thread', 'c_forum', 'resource_link'])) {
+        if ($this->hasTables(['c_forum_post', 'c_forum_thread', 'c_forum_forum', 'resource_link'])) {
             $postSessionCondition = $context->sessionId() > 0
                 ? 'AND post_link.session_id = :sessionId'
                 : 'AND (post_link.session_id IS NULL OR post_link.session_id = 0)';
@@ -584,7 +584,7 @@ final class CourseReportingQueryService
                 FROM c_forum_post post
                 LEFT JOIN c_forum_thread thread
                     ON thread.iid = post.thread_id
-                LEFT JOIN c_forum forum
+                LEFT JOIN c_forum_forum forum
                     ON forum.iid = post.forum_id
                 LEFT JOIN resource_link post_link
                     ON post_link.resource_node_id = post.resource_node_id
@@ -604,7 +604,7 @@ final class CourseReportingQueryService
         }
 
         $forumThreads = [];
-        if ($this->hasTables(['c_forum_thread', 'c_forum', 'resource_link'])) {
+        if ($this->hasTables(['c_forum_thread', 'c_forum_forum', 'resource_link'])) {
             $forumThreads = $this->connection->fetchAllAssociative(
                 "SELECT
                     thread.iid AS thread_id,
@@ -615,7 +615,7 @@ final class CourseReportingQueryService
                     forum.iid AS forum_id,
                     forum.title AS forum_title
                 FROM c_forum_thread thread
-                LEFT JOIN c_forum forum
+                LEFT JOIN c_forum_forum forum
                     ON forum.iid = thread.forum_id
                 INNER JOIN resource_link rl
                     ON rl.resource_node_id = thread.resource_node_id

@@ -1030,6 +1030,19 @@ class ApiLibCharacterizationTest extends AbstractApiTest
         $this->assertTrue(api_is_course_visible_for_user($teacher, 'AIACT'));
     }
 
+    public function testPlatformOpenCourseIsVisibleToAnyRegisteredUserButNotToTheAnonymousVisitor(): void
+    {
+        // "Open to registered platform users": a registered non member qualifies, the anonymous user does not,
+        // whether it is passed as an id, or implied by an empty user id on an unauthenticated request.
+        $this->courseVisibility(2);
+        $registered = $this->rawUser('cvp');
+
+        $this->assertTrue(api_is_course_visible_for_user($registered, 'AIACT'));
+        $this->assertFalse(api_is_course_visible_for_user(2, 'AIACT'), 'The anonymous user id.');
+        $this->assertFalse(api_is_course_visible_for_user(0, 'AIACT'), 'No user on an anonymous request.');
+        $this->assertFalse(api_is_course_visible_for_user(999999999, 'AIACT'), 'Unknown user.');
+    }
+
     public function testHiddenCourseIsNotVisibleToItsOwnTeacherButToAnAdmin(): void
     {
         $this->courseVisibility(4);

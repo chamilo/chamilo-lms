@@ -5103,12 +5103,14 @@ function api_add_setting(
  */
 function api_is_course_visible_for_user($userid = null, $cid = null)
 {
+    $isAnonymousVisitor = false;
     if (null === $userid) {
         $userid = api_get_user_id();
     }
     if (empty($userid) || strval(intval($userid)) != $userid) {
         if (api_is_anonymous()) {
             $userid = api_get_anonymous_id();
+            $isAnonymousVisitor = true;
         } else {
             return false;
         }
@@ -5130,7 +5132,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
 
     if (Database::num_rows($result) > 0) {
         $visibility = Database::fetch_array($result);
-        $visibility = $visibility['visibility'];
+        $visibility = (int) $visibility['visibility'];
     } else {
         $visibility = 0;
     }
@@ -5240,7 +5242,13 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
         case Course::OPEN_WORLD:
             return true;
         case Course::OPEN_PLATFORM:
-            return isset($userid);
+            // Open to registered platform users only: never to the anonymous visitor nor to an unknown id.
+            if ($isAnonymousVisitor) {
+                return false;
+            }
+            $userStatus = Database::query('SELECT status FROM user WHERE id = '.(int) $userid)->fetchOne();
+
+            return false !== $userStatus && ANONYMOUS != (int) $userStatus;
         case Course::REGISTERED:
         case Course::CLOSED:
             return $is_platformAdmin || $is_courseMember || $is_courseAdmin;

@@ -381,6 +381,11 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ['table' => 'usergroup_rel_user', 'field' => 'user_id', 'action' => 'update'],
             ['table' => 'user_rel_tag', 'field' => 'user_id', 'action' => 'delete'],
             ['table' => 'user_rel_user', 'field' => 'user_id', 'action' => 'delete'],
+            ['table' => 'notification_event_rel_user', 'field' => 'user_id', 'action' => 'delete'],
+            ['table' => 'reset_password_request', 'field' => 'user_id', 'action' => 'delete'],
+            ['table' => 'user_career', 'field' => 'user_id', 'action' => 'delete'],
+            ['table' => 'xapi_internal_log', 'field' => 'user_id', 'action' => 'update'],
+            ['table' => 'support_bot_tree', 'field' => 'created_by_id', 'action' => 'update'],
         ];
     }
 

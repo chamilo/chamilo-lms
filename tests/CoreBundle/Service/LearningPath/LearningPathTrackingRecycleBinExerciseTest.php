@@ -231,7 +231,8 @@ final class LearningPathTrackingRecycleBinExerciseTest extends KernelTestCase
         $this->capture($user, false);
         [$archiveId] = $this->snapshotArchives($user);
         $this->conn()->executeStatement('DELETE FROM c_lp_view WHERE user_id = ?', [$user]);
-        // The attempt was NOT detached (still linked to the path): the guarded UPDATE matches nothing.
+        // The attempt was NOT detached (still linked to the path, to another item): the guarded UPDATE matches nothing.
+        $this->conn()->executeStatement('UPDATE track_e_exercises SET orig_lp_item_id = 777 WHERE exe_id = ?', [$mine]);
 
         $this->expectException(ConflictHttpException::class);
         $this->expectExceptionMessage('changed after the reset');

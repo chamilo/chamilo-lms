@@ -186,4 +186,56 @@ final class LearningPathTrackingRecycleBinExerciseTest extends KernelTestCase
         $this->fresh();
         $this->bin->restore($archiveId, $this->lpId, $this->course, null, 1);
     }
+
+    public function testAnOlderRestoredArchiveOfTheSameAttemptIsIgnoredWhenLinkingTheNewOne(): void
+    {
+        $user = $this->rawUser('lp');
+        $this->view($user);
+        $mine = $this->attempt($user, $this->lpId, $this->quizId);
+        // An earlier archive of this attempt id, already restored (and about another exercise).
+        $this->insert('exercise_attempt_recycle_bin', [
+            'attempt_id' => $mine, 'exercise_id' => 0, 'user_id' => $user, 'course_id' => 1, 'session_id' => null,
+            'restored_at' => '2019-01-01 00:00:00',
+        ]);
+
+        $this->capture($user);
+
+        [, $archives] = $this->snapshotArchives($user);
+        $this->assertCount(1, $archives);
+        $this->assertSame((string) $this->quizId, $archives[0]['exercise_id'], 'The live (not restored, newest) archive is the one linked');
+    }
+
+    public function testDetachedAttemptsGoBackToTheLearningPathOnRestore(): void
+    {
+        $user = $this->rawUser('lp');
+        $this->view($user);
+        $mine = $this->attempt($user, $this->lpId, $this->quizId);
+        $this->capture($user, false);
+        [$archiveId] = $this->snapshotArchives($user);
+        // What the reporting reset does after the capture: detach the attempt and drop the views.
+        $this->conn()->executeStatement('UPDATE track_e_exercises SET orig_lp_id = 0, orig_lp_item_id = 0, orig_lp_item_view_id = 0 WHERE exe_id = ?', [$mine]);
+        $this->conn()->executeStatement('DELETE FROM c_lp_view WHERE user_id = ?', [$user]);
+
+        $this->fresh();
+        $this->bin->restore($archiveId, $this->lpId, $this->course, null, 1);
+
+        $row = $this->conn()->fetchAssociative('SELECT orig_lp_id, orig_lp_item_id FROM track_e_exercises WHERE exe_id = ?', [$mine]);
+        $this->assertSame([$this->lpId, $this->itemId], [(int) $row['orig_lp_id'], (int) $row['orig_lp_item_id']]);
+    }
+
+    public function testRestoreRefusesToReattachAnAttemptThatChangedAfterTheReset(): void
+    {
+        $user = $this->rawUser('lp');
+        $this->view($user);
+        $mine = $this->attempt($user, $this->lpId, $this->quizId);
+        $this->capture($user, false);
+        [$archiveId] = $this->snapshotArchives($user);
+        $this->conn()->executeStatement('DELETE FROM c_lp_view WHERE user_id = ?', [$user]);
+        // The attempt was NOT detached (still linked to the path): the guarded UPDATE matches nothing.
+
+        $this->expectException(ConflictHttpException::class);
+        $this->expectExceptionMessage('changed after the reset');
+        $this->fresh();
+        $this->bin->restore($archiveId, $this->lpId, $this->course, null, 1);
+    }
 }

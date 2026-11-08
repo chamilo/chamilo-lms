@@ -10,6 +10,7 @@ use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -88,7 +89,7 @@ final class RawSqlMaintenanceCommandsTest extends KernelTestCase
 
     public function testMultiUrlConversionRequiresTheAdminUrlArgument(): void
     {
-        $this->expectException(\Symfony\Component\Console\Exception\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->tester('app:multi-url:convert')->execute([]);
     }
 

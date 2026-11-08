@@ -23,8 +23,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 final class UserRepositoryHardDeleteTest extends KernelTestCase
 {
     use ChamiloTestTrait;
-    use RawReportingFixturesTrait;
     use GenericRowInsertTrait;
+    use RawReportingFixturesTrait;
 
     private UserRepository $repo;
 
@@ -65,6 +65,7 @@ final class UserRepositoryHardDeleteTest extends KernelTestCase
     public function testEveryRelationIsDeletedOrReassignedToTheFallbackUser(): void
     {
         $this->conn()->executeStatement('SET FOREIGN_KEY_CHECKS = 0');
+
         try {
             // The method moves the resource nodes of the deleted user, so both users need one: borrow free nodes.
             $nodes = array_map('intval', $this->conn()->fetchFirstColumn('SELECT id FROM resource_node WHERE id NOT IN (SELECT resource_node_id FROM user WHERE resource_node_id IS NOT NULL) ORDER BY id DESC LIMIT 2'));

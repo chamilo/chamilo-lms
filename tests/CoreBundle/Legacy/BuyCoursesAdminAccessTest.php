@@ -26,6 +26,7 @@ final class BuyCoursesAdminAccessTest extends BuyCoursesCharacterizationTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         require_once self::SRC.'admin_token.lib.php';
         $this->savedRequest = $_REQUEST;
         $_REQUEST = [];
@@ -93,20 +94,9 @@ final class BuyCoursesAdminAccessTest extends BuyCoursesCharacterizationTestCase
 
         // The row is JSON-encoded with JSON_HEX_AMP: "&" appears as \u0026.
         $token = buycoursesAdminToken();
-        $tail = '\\u0026'.buycoursesAdminTokenName().'='.$token;
-        self::assertStringContainsString('order=4242\\u0026action=confirm'.$tail, $html);
-        self::assertStringContainsString('order=4242\\u0026action=cancel'.$tail, $html);
-    }
-
-    /**
-     * @return array<string, array{string, string}>
-     */
-    public static function saleReportPages(): array
-    {
-        return [
-            'sales_report' => ['sales_report.php', 'completeSale'],
-            'subscription_sales_report' => ['subscription_sales_report.php', 'completeSubscriptionSale'],
-        ];
+        $tail = '\u0026'.buycoursesAdminTokenName().'='.$token;
+        self::assertStringContainsString('order=4242\u0026action=confirm'.$tail, $html);
+        self::assertStringContainsString('order=4242\u0026action=cancel'.$tail, $html);
     }
 
     /**
@@ -129,31 +119,26 @@ final class BuyCoursesAdminAccessTest extends BuyCoursesCharacterizationTestCase
         self::assertStringContainsString('api_protect_admin_script()', $source);
     }
 
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function saleReportPages(): array
+    {
+        return [
+            'sales_report' => ['sales_report.php', 'completeSale'],
+            'subscription_sales_report' => ['subscription_sales_report.php', 'completeSubscriptionSale'],
+        ];
+    }
+
     public function testSubscriptionReportTemplateLinksCarryTheToken(): void
     {
         $tpl = (string) file_get_contents(self::SRC.'../view/subscription_sales_report.tpl');
 
         self::assertSame(2, substr_count($tpl, "'buycourses_admin_sec_token': admin_token"));
         self::assertStringContainsString(
-            "buycoursesAdminToken()",
+            'buycoursesAdminToken()',
             (string) file_get_contents(self::SRC.'subscription_sales_report.php')
         );
-    }
-
-    /**
-     * @return array<string, array{string}>
-     */
-    public static function adminFormPages(): array
-    {
-        return [
-            'paymentsetup' => ['paymentsetup.php'],
-            'services_add' => ['services_add.php'],
-            'services_edit' => ['services_edit.php'],
-            'subscription_add' => ['subscription_add.php'],
-            'configure_course' => ['configure_course.php'],
-            'configure_subscription' => ['configure_subscription.php'],
-            'configure_frequency' => ['configure_frequency.php'],
-        ];
     }
 
     /**
@@ -176,6 +161,22 @@ final class BuyCoursesAdminAccessTest extends BuyCoursesCharacterizationTestCase
             substr_count($source, 'buycoursesAdminTokenField('),
             'every form of the page carries the hidden token'
         );
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function adminFormPages(): array
+    {
+        return [
+            'paymentsetup' => ['paymentsetup.php'],
+            'services_add' => ['services_add.php'],
+            'services_edit' => ['services_edit.php'],
+            'subscription_add' => ['subscription_add.php'],
+            'configure_course' => ['configure_course.php'],
+            'configure_subscription' => ['configure_subscription.php'],
+            'configure_frequency' => ['configure_frequency.php'],
+        ];
     }
 
     public function testDeleteTransferAccountLinkIsNotAnUnsignedGet(): void

@@ -8,9 +8,12 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
+use Database;
 use Doctrine\DBAL\Connection;
 use Evaluation;
 use GradebookUtils;
+use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
@@ -56,17 +59,17 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
         $request->setSession($httpSession);
         Container::setRequest($request);
         $this->conn = $container->get('doctrine')->getConnection();
-        \ChamiloSession::erase('_user');
-        \ChamiloSession::erase('sid');
-        \ChamiloSession::erase('_real_cid');
+        ChamiloSession::erase('_user');
+        ChamiloSession::erase('sid');
+        ChamiloSession::erase('_real_cid');
         $_GET = [];
     }
 
     protected function tearDown(): void
     {
-        \ChamiloSession::erase('_user');
-        \ChamiloSession::erase('sid');
-        \ChamiloSession::erase('_real_cid');
+        ChamiloSession::erase('_user');
+        ChamiloSession::erase('sid');
+        ChamiloSession::erase('_real_cid');
         $_GET = [];
         self::getContainer()->get('security.token_storage')->setToken(null);
         parent::tearDown();
@@ -130,7 +133,9 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
         return (int) $this->conn->lastInsertId();
     }
 
-    /** gradebook_link.ref_id is a foreign key to resource_node: borrow an existing node (nothing is written to it). */
+    /**
+     * gradebook_link.ref_id is a foreign key to resource_node: borrow an existing node (nothing is written to it).
+     */
     private function resourceNode(): int
     {
         return (int) $this->conn->fetchOne('SELECT id FROM resource_node ORDER BY id LIMIT 1 OFFSET 5');
@@ -161,8 +166,8 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
     private function certificate(int $catId, int $userId, string $createdAt = '2010-01-01 00:00:00'): int
     {
         $this->conn->executeStatement(
-            "INSERT INTO gradebook_certificate (cat_id, user_id, score_certificate, created_at, path_certificate, publish)
-             VALUES (?, ?, 80, ?, ?, 0)",
+            'INSERT INTO gradebook_certificate (cat_id, user_id, score_certificate, created_at, path_certificate, publish)
+             VALUES (?, ?, 80, ?, ?, 0)',
             [$catId, $userId, $createdAt, 'gu_'.(++$this->seq).'.html']
         );
 
@@ -258,7 +263,7 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
         $cat = $this->category(1);
         $a = $this->evaluation(1, $cat, 10.0);
         $b = $this->evaluation(1, $cat, 10.0);
-        \ChamiloSession::write('_user', ['id' => 1]);
+        ChamiloSession::write('_user', ['id' => 1]);
 
         GradebookUtils::updateEvaluationWeight($a, '42.5');
 
@@ -275,7 +280,7 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
         $cat = $this->category(1);
         $a = $this->link(1, $cat, 10.0);
         $b = $this->link(1, $cat, 10.0);
-        \ChamiloSession::write('_user', ['id' => 1]);
+        ChamiloSession::write('_user', ['id' => 1]);
 
         GradebookUtils::updateLinkWeight($a, 'gu_renamed', '12.25');
 
@@ -382,7 +387,7 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
         $this->sessionSubscribe($session, 1, $inSession, 0);
         $this->sessionSubscribe($session, 1, $coach, 2);
         $this->subscribe($baseOnly, 1);
-        \ChamiloSession::write('sid', $session);
+        ChamiloSession::write('sid', $session);
 
         $users = GradebookUtils::get_users_in_course(1);
 
@@ -392,7 +397,7 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
     public function testGetUserArrayFromSqlResultKeysRowsByUserAndKeepsFiveColumns(): void
     {
         $u = $this->user('x', 'Last', 'First');
-        $result = \Database::query("SELECT id AS user_id, username, lastname, firstname, official_code FROM user WHERE id = $u");
+        $result = Database::query("SELECT id AS user_id, username, lastname, firstname, official_code FROM user WHERE id = $u");
 
         $rows = GradebookUtils::get_user_array_from_sql_result($result);
 
@@ -406,7 +411,7 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
     {
         $student = $this->user('s', 'S', 'S');
         $this->subscribe($student, 1);
-        \ChamiloSession::write('_real_cid', 1);
+        ChamiloSession::write('_real_cid', 1);
 
         $this->assertArrayHasKey('STUD'.$student, GradebookUtils::get_all_users());
     }
@@ -417,7 +422,7 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
         $s2 = $this->user('s2', 'Two', 'Two');
         $this->subscribe($s1, 1);
         $this->subscribe($s2, 2);
-        \ChamiloSession::write('_real_cid', 1);
+        ChamiloSession::write('_real_cid', 1);
         $eval = (new Evaluation())->setCourseId(2);
 
         $users = GradebookUtils::get_all_users([$eval]);
@@ -439,7 +444,7 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
                 [$evalId, $uid]
             );
         }
-        \ChamiloSession::write('_real_cid', 1);
+        ChamiloSession::write('_real_cid', 1);
         $eval = (new Evaluation())->setCourseId(null);
         $eval->set_id($evalId);
 
@@ -533,7 +538,7 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
 
     public function testGetTableTypeCourseRejectsUnknownTypes(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         GradebookUtils::get_table_type_course('gu_unknown_type');
     }

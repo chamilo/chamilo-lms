@@ -9,13 +9,20 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use Database;
 use Doctrine\DBAL\Connection;
+use Exception;
+use SubLanguageManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Uid\UuidV4;
-use SubLanguageManager;
+use Throwable;
+
+use const PHP_EOL;
+use const SORT_FLAG_CASE;
+use const SORT_STRING;
 
 /**
  * Characterization of SubLanguageManager (public/main/inc/lib/sub_language.class.php).
@@ -41,7 +48,10 @@ final class SubLanguageCharacterizationTest extends KernelTestCase
 
     private Connection $conn;
     private int $seq = 0;
-    /** @var array<string, string> */
+
+    /**
+     * @var array<string, string>
+     */
     private array $originalSettings = [];
 
     protected function setUp(): void
@@ -250,7 +260,7 @@ final class SubLanguageCharacterizationTest extends KernelTestCase
         $this->assertSame(0, (int) $this->row($a)['available']);
         $this->assertSame(
             0,
-            (int) $this->conn->fetchOne("SELECT COUNT(*) FROM language WHERE available = 0 AND id <> ?", [$a]),
+            (int) $this->conn->fetchOne('SELECT COUNT(*) FROM language WHERE available = 0 AND id <> ?', [$a]),
         );
     }
 
@@ -297,7 +307,7 @@ final class SubLanguageCharacterizationTest extends KernelTestCase
     public function testGetParentLanguagePathQueriesAColumnThatNoLongerExists(): void
     {
         // PINNED QUIRK (dead, @deprecated): dokeos_folder was dropped from `language`.
-        $this->expectException(\Throwable::class);
+        $this->expectException(Throwable::class);
 
         SubLanguageManager::get_parent_language_path('sl_nothing');
     }
@@ -345,7 +355,7 @@ final class SubLanguageCharacterizationTest extends KernelTestCase
 
     public function testAddSubLanguageWithAnUnknownParentThrows(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
 
         SubLanguageManager::addSubLanguage('a', 'sl_b', true, 999999, 'slzz');
     }
@@ -365,7 +375,7 @@ final class SubLanguageCharacterizationTest extends KernelTestCase
         // Unknown id.
         $this->assertFalse(SubLanguageManager::removeSubLanguage($parent, 999999));
 
-        \Database::getManager()->clear();
+        Database::getManager()->clear();
         $this->assertTrue(SubLanguageManager::removeSubLanguage($parent, $child));
         $this->assertFalse($this->row($child));
         $this->assertNotFalse($this->row($parent));
@@ -440,14 +450,14 @@ final class SubLanguageCharacterizationTest extends KernelTestCase
     public function testGenerateSublanguageCodeKeepsTheParentAndTruncatesTheVariant(): void
     {
         $this->assertSame('es_co', SubLanguageManager::generateSublanguageCode('ES', ' CO '));
-        $this->assertSame(Language::ISO_MAX_LENGTH, strlen(SubLanguageManager::generateSublanguageCode('es', 'abcdefghijklmnop')));
+        $this->assertSame(Language::ISO_MAX_LENGTH, \strlen(SubLanguageManager::generateSublanguageCode('es', 'abcdefghijklmnop')));
         $this->assertSame('es_abcde', SubLanguageManager::generateSublanguageCode('es', 'abcdefghijklmnop', 8));
     }
 
     public function testStringToCamelCaseVariableName(): void
     {
         $this->assertSame('helloWorldFoo', SubLanguageManager::stringToCamelCaseVariableName('Hello, world! foo'));
-        $this->assertSame(25, strlen(SubLanguageManager::stringToCamelCaseVariableName(str_repeat('abc ', 20))));
+        $this->assertSame(25, \strlen(SubLanguageManager::stringToCamelCaseVariableName(str_repeat('abc ', 20))));
     }
 
     public function testUpdateOrAddMsgidRefusesFilenamesThatEscapeTheTranslationsDirectory(): void

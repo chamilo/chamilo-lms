@@ -24,11 +24,14 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 final class StudentLearningActivityCollectorSectionsTest extends KernelTestCase
 {
     use ChamiloTestTrait;
-    use RawReportingFixturesTrait;
     use GenericRowInsertTrait;
+    use RawReportingFixturesTrait;
 
     private StudentLearningActivityCollector $collector;
-    /** @var int[] */
+
+    /**
+     * @var int[]
+     */
     private array $nodes = [];
     private int $sid = 0;
 
@@ -69,7 +72,9 @@ final class StudentLearningActivityCollectorSectionsTest extends KernelTestCase
         return (int) array_pop($this->nodes);
     }
 
-    /** A resource node of its own, linked to a course (and optionally a session). */
+    /**
+     * A resource node of its own, linked to a course (and optionally a session).
+     */
     private function linkedNode(int $courseId = 1, ?int $sessionId = null): int
     {
         $node = $this->node();

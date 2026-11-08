@@ -257,6 +257,8 @@ final class ForumCharacterizationTest extends KernelTestCase
     }
 
     /**
+     * @param mixed $result
+     *
      * @return list<array<string, mixed>>
      */
     private function rows($result): array

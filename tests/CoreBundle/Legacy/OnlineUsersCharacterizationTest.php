@@ -8,6 +8,7 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,14 +48,14 @@ final class OnlineUsersCharacterizationTest extends KernelTestCase
         $request->setSession($httpSession);
         Container::setRequest($request);
         $this->conn = $container->get('doctrine')->getConnection();
-        \ChamiloSession::erase('_user');
+        ChamiloSession::erase('_user');
         // A clean slate for the presence table: DAMA rolls this back.
         $this->conn->executeStatement('DELETE FROM track_e_online');
     }
 
     protected function tearDown(): void
     {
-        \ChamiloSession::erase('_user');
+        ChamiloSession::erase('_user');
         self::getContainer()->get('security.token_storage')->setToken(null);
         parent::tearDown();
     }
@@ -76,7 +77,9 @@ final class OnlineUsersCharacterizationTest extends KernelTestCase
         return (int) $this->conn->lastInsertId();
     }
 
-    /** Presence row seen $minutesAgo minutes ago (UTC, as the library compares). */
+    /**
+     * Presence row seen $minutesAgo minutes ago (UTC, as the library compares).
+     */
     private function online(int $userId, int $minutesAgo, int $courseId = 0, int $sessionId = 0, ?int $urlId = null): void
     {
         $this->conn->executeStatement(
@@ -93,7 +96,9 @@ final class OnlineUsersCharacterizationTest extends KernelTestCase
         );
     }
 
-    /** A second access URL switches the platform to multi-URL mode (AccessUrlHelper::isMultiple()). */
+    /**
+     * A second access URL switches the platform to multi-URL mode (AccessUrlHelper::isMultiple()).
+     */
     private function secondUrl(): int
     {
         $this->conn->executeStatement(
@@ -115,10 +120,12 @@ final class OnlineUsersCharacterizationTest extends KernelTestCase
 
     private function actAs(int $userId): void
     {
-        \ChamiloSession::write('_user', ['id' => $userId]);
+        ChamiloSession::write('_user', ['id' => $userId]);
     }
 
-    /** @return int[] */
+    /**
+     * @return int[]
+     */
     private function ids(array|false $rows): array
     {
         $this->assertIsArray($rows);

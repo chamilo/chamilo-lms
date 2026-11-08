@@ -28,9 +28,10 @@ trait GenericRowInsertTrait
         $params = [];
         foreach ($cols as $c) {
             $n = $c['n'];
-            if (array_key_exists($n, $values)) {
+            if (\array_key_exists($n, $values)) {
                 $names[] = '`'.$n.'`';
                 $params[] = $values[$n];
+
                 continue;
             }
             if (str_contains((string) $c['x'], 'auto_increment') || 'YES' === $c['nul'] || null !== $c['d']) {

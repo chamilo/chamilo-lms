@@ -34,7 +34,10 @@ final class AchievementCertificateBatchServiceTest extends KernelTestCase
     private const LEGACY = 'plugin_gradingelectronic_course_id';
 
     private AchievementCertificateBatchService $service;
-    /** @var int[] */
+
+    /**
+     * @var int[]
+     */
     private array $nodes = [];
 
     protected function setUp(): void

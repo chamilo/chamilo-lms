@@ -23,8 +23,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 final class UserMergeHelperOwnedTablesTest extends KernelTestCase
 {
     use ChamiloTestTrait;
-    use RawReportingFixturesTrait;
     use GenericRowInsertTrait;
+    use RawReportingFixturesTrait;
 
     private UserMergeHelper $helper;
 

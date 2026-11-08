@@ -19,7 +19,7 @@ use ReflectionProperty;
  * the managed courses above the course-creation limit, freezes the students above the hosting limit and reopens
  * closed courses on renewal. Gated by the plugin being enabled on the current access URL AND its tables existing.
  * The plugin counts as enabled when a payment method is on (BuyCoursesPlugin::isEnabled()), forced on the plugin
-singleton inside each test and restored afterwards; the platform limits are the
+ * singleton inside each test and restored afterwards; the platform limits are the
  * max_courses_per_user / hosting_limit_users_per_course settings rows, the service grants are the installer
  * extra fields buycourses_max_courses / buycourses_hosting_limit. Users are raw "rp_" rows, courses are 1 and 2
  * (their visibility is changed and rolled back). Dates are fixed in 2001 (expired) or 2999 (active).

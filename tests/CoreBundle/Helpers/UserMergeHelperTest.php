@@ -41,9 +41,7 @@ final class UserMergeHelperTest extends KernelTestCase
 
     private function courseIds(int $userId): array
     {
-        $ids = array_map('intval', $this->conn()->fetchFirstColumn('SELECT c_id FROM course_rel_user WHERE user_id = ? ORDER BY c_id', [$userId]));
-
-        return $ids;
+        return array_map('intval', $this->conn()->fetchFirstColumn('SELECT c_id FROM course_rel_user WHERE user_id = ? ORDER BY c_id', [$userId]));
     }
 
     private function extraField(string $variable, int $itemType = 1): int
@@ -132,23 +130,6 @@ final class UserMergeHelperTest extends KernelTestCase
         $this->fresh();
     }
 
-    public static function privilegeProvider(): iterable
-    {
-        // [source roles, target roles, merge allowed]
-        yield 'admin into student' => [['ROLE_ADMIN'], [], false];
-        yield 'global admin into student' => [['ROLE_GLOBAL_ADMIN'], [], false];
-        yield 'global admin into admin' => [['ROLE_GLOBAL_ADMIN'], ['ROLE_ADMIN'], false];
-        yield 'session manager into student' => [['ROLE_SESSION_MANAGER'], ['ROLE_STUDENT'], false];
-        yield 'admin into teacher' => [['ROLE_ADMIN'], ['ROLE_TEACHER'], false];
-        yield 'admin into admin' => [['ROLE_ADMIN'], ['ROLE_ADMIN'], true];
-        yield 'admin into global admin' => [['ROLE_ADMIN'], ['ROLE_GLOBAL_ADMIN'], true];
-        yield 'session manager into admin' => [['ROLE_SESSION_MANAGER'], ['ROLE_ADMIN'], true];
-        yield 'session manager into session manager' => [['ROLE_SESSION_MANAGER'], ['ROLE_SESSION_MANAGER'], true];
-        yield 'student into admin' => [[], ['ROLE_ADMIN'], true];
-        yield 'student into student' => [[], [], true];
-        yield 'teacher into student' => [['ROLE_TEACHER'], [], true];
-    }
-
     /**
      * @dataProvider privilegeProvider
      */
@@ -167,6 +148,34 @@ final class UserMergeHelperTest extends KernelTestCase
         $this->assertSame($allowed ? User::SOFT_DELETED : 1, (int) $this->scalar('SELECT active FROM user WHERE id = ?', [$merge]));
         $this->assertSame($allowed ? [1] : [], $this->courseIds($keep), 'A refused merge must not move anything');
         $this->assertSame($allowed ? [] : [1], $this->courseIds($merge));
+    }
+
+    public static function privilegeProvider(): iterable
+    {
+        // [source roles, target roles, merge allowed]
+        yield 'admin into student' => [['ROLE_ADMIN'], [], false];
+
+        yield 'global admin into student' => [['ROLE_GLOBAL_ADMIN'], [], false];
+
+        yield 'global admin into admin' => [['ROLE_GLOBAL_ADMIN'], ['ROLE_ADMIN'], false];
+
+        yield 'session manager into student' => [['ROLE_SESSION_MANAGER'], ['ROLE_STUDENT'], false];
+
+        yield 'admin into teacher' => [['ROLE_ADMIN'], ['ROLE_TEACHER'], false];
+
+        yield 'admin into admin' => [['ROLE_ADMIN'], ['ROLE_ADMIN'], true];
+
+        yield 'admin into global admin' => [['ROLE_ADMIN'], ['ROLE_GLOBAL_ADMIN'], true];
+
+        yield 'session manager into admin' => [['ROLE_SESSION_MANAGER'], ['ROLE_ADMIN'], true];
+
+        yield 'session manager into session manager' => [['ROLE_SESSION_MANAGER'], ['ROLE_SESSION_MANAGER'], true];
+
+        yield 'student into admin' => [[], ['ROLE_ADMIN'], true];
+
+        yield 'student into student' => [[], [], true];
+
+        yield 'teacher into student' => [['ROLE_TEACHER'], [], true];
     }
 
     public function testBatchRefusesAPrivilegedSourceAndRollsBackTheOthers(): void

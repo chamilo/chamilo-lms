@@ -25,8 +25,8 @@ use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 final class LearningPathTrackingRecycleBinExerciseTest extends KernelTestCase
 {
     use ChamiloTestTrait;
-    use RawReportingFixturesTrait;
     use GenericRowInsertTrait;
+    use RawReportingFixturesTrait;
 
     private LearningPathTrackingRecycleBin $bin;
     private Course $course;

@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
-use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLp;

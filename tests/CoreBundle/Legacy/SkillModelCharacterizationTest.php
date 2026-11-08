@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use SkillModel;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -37,7 +38,10 @@ final class SkillModelCharacterizationTest extends KernelTestCase
 
     private Connection $conn;
     private int $seq = 0;
-    /** @var array<string, string> */
+
+    /**
+     * @var array<string, string>
+     */
     private array $originalSettings = [];
 
     protected function setUp(): void
@@ -52,7 +56,7 @@ final class SkillModelCharacterizationTest extends KernelTestCase
         $request->setSession($httpSession);
         Container::setRequest($request);
         $this->conn = $container->get('doctrine')->getConnection();
-        \ChamiloSession::erase('_user');
+        ChamiloSession::erase('_user');
     }
 
     protected function tearDown(): void
@@ -60,7 +64,7 @@ final class SkillModelCharacterizationTest extends KernelTestCase
         foreach ($this->originalSettings as $name => $value) {
             Container::getSettingsManager()->updateSetting($name, $value);
         }
-        \ChamiloSession::erase('_user');
+        ChamiloSession::erase('_user');
         self::getContainer()->get('security.token_storage')->setToken(null);
         parent::tearDown();
     }
@@ -493,7 +497,7 @@ final class SkillModelCharacterizationTest extends KernelTestCase
     public function testIsAllowedForAStudentIsLimitedToOwnSkillsAndNeverBlocksWhenAskedNotTo(): void
     {
         $this->setSetting('skill.allow_skills_tool', 'true');
-        \ChamiloSession::write('_user', ['id' => 5]);
+        ChamiloSession::write('_user', ['id' => 5]);
 
         $this->assertTrue(SkillModel::isAllowed(5, false));
         $this->assertFalse(SkillModel::isAllowed(6, false));

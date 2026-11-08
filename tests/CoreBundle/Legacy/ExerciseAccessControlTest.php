@@ -138,12 +138,12 @@ final class ExerciseAccessControlTest extends KernelTestCase
         return (int) $this->conn->lastInsertId();
     }
 
-    private function attempt(int $courseId, ?int $quizId = null): int
+    private function attempt(int $courseId, ?int $quizId = null, ?int $sessionId = null): int
     {
         $this->conn->insert('track_e_exercises', [
             'exe_user_id' => 1,
             'c_id' => $courseId,
-            'session_id' => null,
+            'session_id' => $sessionId,
             'exe_exo_id' => $quizId,
             'exe_date' => '2020-01-01 10:00:00',
             'score' => 0,
@@ -186,6 +186,49 @@ final class ExerciseAccessControlTest extends KernelTestCase
 
         // No course in the legacy context: the default course id is 0 and nothing matches.
         $this->assertFalse(ExerciseLib::attemptBelongsToCourse($exe));
+    }
+
+    public function testAttemptSessionParityWhenAsked(): void
+    {
+        $sid = $this->session();
+        $other = $this->session();
+        $quiz = $this->quiz(1);
+        $inSession = $this->attempt(1, $quiz, $sid);
+        $noSession = $this->attempt(1, $quiz, null);
+
+        $this->assertTrue(ExerciseLib::attemptBelongsToCourse($inSession, 1, $sid));
+        $this->assertFalse(ExerciseLib::attemptBelongsToCourse($inSession, 1, $other), 'another session of the course');
+        $this->assertFalse(ExerciseLib::attemptBelongsToCourse($inSession, 1, 0), 'base course context must not reach a session attempt');
+        $this->assertTrue(ExerciseLib::attemptBelongsToCourse($noSession, 1, 0));
+        $this->assertFalse(ExerciseLib::attemptBelongsToCourse($noSession, 1, $sid), 'a session context must not reach a session-less attempt');
+        // Not asked: course-only behaviour is unchanged for the other callers.
+        $this->assertTrue(ExerciseLib::attemptBelongsToCourse($inSession, 1));
+    }
+
+    public function testAttemptExerciseParityWhenAsked(): void
+    {
+        $quiz = $this->quiz(1);
+        $otherQuiz = $this->quiz(1);
+        $exe = $this->attempt(1, $quiz);
+
+        $this->assertTrue(ExerciseLib::attemptBelongsToCourse($exe, 1, null, $quiz));
+        $this->assertFalse(ExerciseLib::attemptBelongsToCourse($exe, 1, null, $otherQuiz), 'attempt of another test of the same course');
+        $this->assertTrue(ExerciseLib::attemptBelongsToCourse($exe, 1, 0, $quiz));
+    }
+
+    /**
+     * admin.php is procedural (it cannot be included in a test), so pin the guard list at source level: every request
+     * key that ends in a Question::read() must be in the list that goes through questionBelongsToCourse().
+     */
+    public function testAdminPageGuardsEveryQuestionIdKey(): void
+    {
+        $source = (string) file_get_contents(__DIR__.'/../../../public/main/exercise/admin.php');
+        $start = (int) strpos($source, '$requestedQuestionIds = [');
+        $list = substr($source, $start, (int) strpos($source, '];', $start) - $start);
+
+        foreach (['editQuestion', 'modifyQuestion', 'modifyAnswers', 'deleteQuestion', 'clone_question', 'mad_admin', 'hotspotadmin'] as $key) {
+            $this->assertStringContainsString("['".$key."']", $list, $key.' reaches Question::read(), it must be guarded');
+        }
     }
 
     public function testExerciseOfAnotherCourseIsRejected(): void

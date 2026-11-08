@@ -125,8 +125,12 @@ switch ($action) {
         if (!$exerciseTokenIsValid) {
             api_not_allowed(true);
         }
-        $exeIds = explode(',', $idMultiple);
+        $exeIds = explode(',', (string) $idMultiple);
         foreach ($exeIds as $exeId) {
+            // Only attempts of this test, in the current course and session.
+            if (!ExerciseLib::attemptBelongsToCourse((int) $exeId, (int) $course_id, (int) $sessionId, (int) $exercise_id)) {
+                continue;
+            }
             ExerciseLib::deleteExerciseAttempt((int) $exeId);
         }
         echo 1;
@@ -152,7 +156,7 @@ switch ($action) {
         exit;
     case 'send_email':
         $attemptId = (int) $_GET['attemptId'];
-        if (!$exerciseTokenIsValid || !ExerciseLib::attemptBelongsToCourse($attemptId, (int) $course_id)) {
+        if (!$exerciseTokenIsValid || !ExerciseLib::attemptBelongsToCourse($attemptId, (int) $course_id, (int) $sessionId, (int) $exercise_id)) {
             api_not_allowed(true);
         }
         ExerciseLib::sendExerciseResultByEmail($attemptId);
@@ -246,7 +250,7 @@ if (isset($_REQUEST['comments']) &&
 
     // The attempt must belong to the current course, or a teacher of any course could regrade any attempt.
     if (empty($track_exercise_info)
-        || !ExerciseLib::attemptBelongsToCourse($id, (int) $course_id)
+        || !ExerciseLib::attemptBelongsToCourse($id, (int) $course_id, (int) $sessionId, (int) $exercise_id)
         || !$exerciseTokenIsValid
     ) {
         api_not_allowed(true);
@@ -580,6 +584,9 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 ) {
     $exe_id = (int) $_GET['did'];
     if (!$exerciseTokenIsValid) {
+        api_not_allowed(true);
+    }
+    if (!ExerciseLib::attemptBelongsToCourse($exe_id, (int) $course_id, (int) $sessionId, (int) $exercise_id)) {
         api_not_allowed(true);
     }
     if (!empty($exe_id)) {

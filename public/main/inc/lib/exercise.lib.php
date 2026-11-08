@@ -6814,18 +6814,32 @@ EOT;
     /**
      * Tells whether an attempt (track_e_exercises row) belongs to the given course (the current one by default).
      * Pages taking an exe_id from the request must call this before reading or writing through it.
+     * When $sessionId is given, the attempt must also belong to that session (0 = no session); when $exerciseId is
+     * given, to that test. Null (default) skips the check, so existing callers keep the course-only behaviour.
      */
-    public static function attemptBelongsToCourse(int $exeId, ?int $courseId = null): bool
-    {
+    public static function attemptBelongsToCourse(
+        int $exeId,
+        ?int $courseId = null,
+        ?int $sessionId = null,
+        ?int $exerciseId = null
+    ): bool {
         $courseId = null === $courseId ? (int) api_get_course_int_id() : $courseId;
         if ($exeId <= 0 || $courseId <= 0) {
             return false;
         }
 
-        $found = Database::getManager()->getConnection()->fetchOne(
-            'SELECT exe_id FROM track_e_exercises WHERE exe_id = :exe AND c_id = :cid LIMIT 1',
-            ['exe' => $exeId, 'cid' => $courseId]
-        );
+        $sql = 'SELECT exe_id FROM track_e_exercises WHERE exe_id = :exe AND c_id = :cid';
+        $params = ['exe' => $exeId, 'cid' => $courseId];
+        if (null !== $sessionId) {
+            $sql .= ' AND COALESCE(session_id, 0) = :sid';
+            $params['sid'] = $sessionId;
+        }
+        if (null !== $exerciseId) {
+            $sql .= ' AND exe_exo_id = :quiz';
+            $params['quiz'] = $exerciseId;
+        }
+
+        $found = Database::getManager()->getConnection()->fetchOne($sql.' LIMIT 1', $params);
 
         return false !== $found;
     }

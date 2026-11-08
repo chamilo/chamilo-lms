@@ -76,6 +76,8 @@ $requestedQuestionIds = [
     $_GET['modifyAnswers'] ?? 0,
     $_GET['deleteQuestion'] ?? 0,
     $_REQUEST['clone_question'] ?? 0,
+    $_GET['mad_admin'] ?? 0,
+    $_GET['hotspotadmin'] ?? 0,
 ];
 if ($exerciseId > 0
     && !ExerciseLib::exerciseBelongsToCourse($exerciseId, api_get_course_int_id(), $sessionId)

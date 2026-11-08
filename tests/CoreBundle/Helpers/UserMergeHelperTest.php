@@ -15,8 +15,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Characterization of the account merge (admin "unify duplicate users" action and Statistics::unifyUsers()).
- * The helper has NO authorization of its own: whoever reaches it merges and soft-deletes accounts, so the admin gate
- * lives in the callers (AdminStatisticsMaintenanceActionService, ROLE_ADMIN API resource). Users are raw rows
+ * The helper has no caller authorization (the admin gate lives in AdminStatisticsMaintenanceActionService and the
+ * admin pages) but refuses by itself to lose an administrative role. Users are raw rows
  * (the trait names them "rp_", the extra fields and tags are "sv2_"); the hard-delete branch goes through the
  * resource-node repository, which deadlocks against concurrent suites, so it is only covered through its guards.
  * Every statement runs inside the DAMA transaction (the helper's own begin/commit become savepoints).
@@ -116,24 +116,87 @@ final class UserMergeHelperTest extends KernelTestCase
     {
         $keep = $this->rawUser('keep');
         $merge = $this->rawUser('merge');
-        $this->conn()->executeStatement('UPDATE user SET roles = ? WHERE id = ?', ['["ROLE_ADMIN"]', $merge]);
+        $this->conn()->executeStatement('UPDATE user SET roles = ? WHERE id = ?', ['["ROLE_TEACHER"]', $merge]);
 
         $this->assertTrue($this->helper->mergeUsers($keep, $merge));
 
         $this->assertSame('[]', $this->scalar('SELECT roles FROM user WHERE id = ?', [$keep]));
-        // PINNED QUIRK: the merged account keeps its roles and password, only active=-2 disables it.
-        $this->assertSame('["ROLE_ADMIN"]', $this->scalar('SELECT roles FROM user WHERE id = ?', [$merge]));
+        // PINNED QUIRK: the merged account keeps its roles and password, only active=-2 disables it (administrative
+        // roles never get here: see testMergeNeverDropsAdministrativePrivilege).
+        $this->assertSame('["ROLE_TEACHER"]', $this->scalar('SELECT roles FROM user WHERE id = ?', [$merge]));
     }
 
-    public function testMergeDoesNotCheckWhoIsCalling(): void
+    private function setRoles(int $userId, array $roles): void
     {
-        // PINNED QUIRK (security): no role check and no "target must be the more privileged account" rule, an
-        // administrator can be merged away into a student. The callers are the only gate.
-        $student = $this->rawUser('student');
-        $admin = $this->rawUser('admin');
-        $this->conn()->executeStatement('UPDATE user SET roles = ? WHERE id = ?', ['["ROLE_ADMIN"]', $admin]);
+        $this->conn()->executeStatement('UPDATE user SET roles = ? WHERE id = ?', [json_encode($roles), $userId]);
+        $this->fresh();
+    }
 
-        $this->assertTrue($this->helper->mergeUsers($student, $admin));
+    public static function privilegeProvider(): iterable
+    {
+        // [source roles, target roles, merge allowed]
+        yield 'admin into student' => [['ROLE_ADMIN'], [], false];
+        yield 'global admin into student' => [['ROLE_GLOBAL_ADMIN'], [], false];
+        yield 'global admin into admin' => [['ROLE_GLOBAL_ADMIN'], ['ROLE_ADMIN'], false];
+        yield 'session manager into student' => [['ROLE_SESSION_MANAGER'], ['ROLE_STUDENT'], false];
+        yield 'admin into teacher' => [['ROLE_ADMIN'], ['ROLE_TEACHER'], false];
+        yield 'admin into admin' => [['ROLE_ADMIN'], ['ROLE_ADMIN'], true];
+        yield 'admin into global admin' => [['ROLE_ADMIN'], ['ROLE_GLOBAL_ADMIN'], true];
+        yield 'session manager into admin' => [['ROLE_SESSION_MANAGER'], ['ROLE_ADMIN'], true];
+        yield 'session manager into session manager' => [['ROLE_SESSION_MANAGER'], ['ROLE_SESSION_MANAGER'], true];
+        yield 'student into admin' => [[], ['ROLE_ADMIN'], true];
+        yield 'student into student' => [[], [], true];
+        yield 'teacher into student' => [['ROLE_TEACHER'], [], true];
+    }
+
+    /**
+     * @dataProvider privilegeProvider
+     */
+    public function testMergeNeverDropsAdministrativePrivilege(array $sourceRoles, array $targetRoles, bool $allowed): void
+    {
+        // The helper has no caller check, so it refuses by itself to make an administrative account vanish into
+        // an account that is not at least as privileged (the admin would be soft-deleted, its roles not transferred).
+        $keep = $this->rawUser('keep');
+        $merge = $this->rawUser('merge');
+        $this->setRoles($keep, $targetRoles);
+        $this->setRoles($merge, $sourceRoles);
+        $this->courseUser($merge, 1, 1);
+
+        $this->assertSame($allowed, $this->helper->mergeUsers($keep, $merge));
+
+        $this->assertSame($allowed ? User::SOFT_DELETED : 1, (int) $this->scalar('SELECT active FROM user WHERE id = ?', [$merge]));
+        $this->assertSame($allowed ? [1] : [], $this->courseIds($keep), 'A refused merge must not move anything');
+        $this->assertSame($allowed ? [] : [1], $this->courseIds($merge));
+    }
+
+    public function testBatchRefusesAPrivilegedSourceAndRollsBackTheOthers(): void
+    {
+        $keep = $this->rawUser('keep');
+        $plain = $this->rawUser('plain');
+        $admin = $this->rawUser('admin');
+        $this->courseUser($plain, 1, 5);
+        $this->setRoles($admin, ['ROLE_ADMIN']);
+
+        try {
+            $this->helper->mergeUsersBatch($keep, [$plain, $admin]);
+            $this->fail('A privileged source must abort the batch');
+        } catch (RuntimeException $e) {
+            $this->assertStringContainsString('#'.$admin, $e->getMessage());
+        }
+
+        $this->assertSame(1, (int) $this->scalar('SELECT active FROM user WHERE id = ?', [$plain]));
+        $this->assertSame(1, (int) $this->scalar('SELECT active FROM user WHERE id = ?', [$admin]));
+        $this->assertSame([], $this->courseIds($keep));
+    }
+
+    public function testBatchMergesAdminsIntoAnAdmin(): void
+    {
+        $keep = $this->rawUser('keep');
+        $admin = $this->rawUser('admin');
+        $this->setRoles($keep, ['ROLE_ADMIN']);
+        $this->setRoles($admin, ['ROLE_ADMIN']);
+
+        $this->assertSame(1, $this->helper->mergeUsersBatch($keep, [$admin]));
         $this->assertSame(User::SOFT_DELETED, (int) $this->scalar('SELECT active FROM user WHERE id = ?', [$admin]));
     }
 

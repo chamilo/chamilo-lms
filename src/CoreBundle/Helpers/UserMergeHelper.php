@@ -24,6 +24,16 @@ use const JSON_UNESCAPED_UNICODE;
 final class UserMergeHelper
 {
     private const string LOG_PREFIX = '[UserMergeHelper]';
+
+    /**
+     * Administrative roles an account may not lose through a merge, with the roles each one implies
+     * (mirrors role_hierarchy in config/packages/security.yaml).
+     */
+    private const array ADMIN_ROLES = [
+        'ROLE_GLOBAL_ADMIN' => ['ROLE_ADMIN', 'ROLE_SESSION_MANAGER'],
+        'ROLE_ADMIN' => ['ROLE_SESSION_MANAGER'],
+        'ROLE_SESSION_MANAGER' => [],
+    ];
     private bool $enableLogs = false;
 
     public function __construct(
@@ -73,6 +83,15 @@ final class UserMergeHelper
                 $this->log(LogLevel::ERROR, 'User(s) not found.', [
                     'keepFound' => (bool) $keepUser,
                     'mergeFound' => (bool) $mergeUser,
+                    'keepUserId' => $keepUserId,
+                    'mergeUserId' => $mergeUserId,
+                ]);
+
+                return false;
+            }
+
+            if (!$this->canAbsorbRoles($keepUser, $mergeUser)) {
+                $this->log(LogLevel::ERROR, 'Refused: the account to merge holds administrative roles the target lacks.', [
                     'keepUserId' => $keepUserId,
                     'mergeUserId' => $mergeUserId,
                 ]);
@@ -173,6 +192,10 @@ final class UserMergeHelper
                         throw new RuntimeException(self::LOG_PREFIX." Batch merge: user #{$mergeUserId} not found.");
                     }
 
+                    if (!$this->canAbsorbRoles($keepUser, $mergeUser)) {
+                        throw new RuntimeException(self::LOG_PREFIX." Batch merge: user #{$mergeUserId} holds administrative roles that the target #{$keepUserId} lacks.");
+                    }
+
                     $this->mergeExtraFieldValues($conn, $mergeUserId, $keepUserId);
                     $this->mergeExtraFieldTags($conn, $mergeUserId, $keepUserId);
                     $this->reassignUserResourcesToTargetSQL($conn, $mergeUser, $keepUser);
@@ -210,6 +233,29 @@ final class UserMergeHelper
         } finally {
             $this->enableLogs = $previousEnableLogs;
         }
+    }
+
+    /**
+     * A merge soft-deletes the source and never transfers its roles, so an administrative source may only be
+     * merged into a target that already holds each of its administrative roles (directly or by hierarchy).
+     */
+    private function canAbsorbRoles(User $target, User $source): bool
+    {
+        $granted = [];
+        foreach ($target->getRoles() as $role) {
+            $granted[$role] = true;
+            foreach (self::ADMIN_ROLES[$role] ?? [] as $implied) {
+                $granted[$implied] = true;
+            }
+        }
+
+        foreach ($source->getRoles() as $role) {
+            if (isset(self::ADMIN_ROLES[$role]) && !isset($granted[$role])) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function hardDeleteUserAfterMerge(int $userId): bool

@@ -630,23 +630,22 @@ final class GradebookCategoryCharacterizationTest extends KernelTestCase
         $this->assertSame([], Category::load(0)[0]->get_links(), 'no links in the virtual root');
     }
 
-    public function testGetEvaluationsOfARootCategoryOfANonAdminFilterOnAColumnThatNoLongerExists(): void
+    public function testEvaluationLoadWithAUserSelectsTheEvaluationsOfTheCoursesTheUserTeaches(): void
     {
-        // PINNED QUIRK (bug): gradebook_evaluation has no user_id column, but Evaluation::load() still builds
-        // "user_id = X" when a user id is passed; get_evaluations() passes one in the course-admin/root branch.
-        $this->context(2, 1);
+        // gradebook_evaluation has no user_id column any more: the old creator filter is replaced by "the
+        // courses the user teaches" (see GradebookUtils::taughtCoursesCondition). It used to throw.
+        $cat = $this->cat();
+        $inCourse1 = $this->evaluation($cat, ['title' => 'gc_taught', 'c_id' => 1]);
+        $inCourse2 = $this->evaluation($cat, ['title' => 'gc_not_taught', 'c_id' => 2]);
         $teacher = $this->user(1);
         $this->subscribe($teacher, 1, 1);
-        ChamiloSession::write('_user', ['id' => $teacher, 'user_id' => $teacher]);
-        $cat = new Category();
-        $cat->set_id(0);
-        $threw = false;
-        try {
-            Evaluation::load(null, 1, null, 0, null);
-        } catch (Throwable) {
-            $threw = true;
-        }
-        $this->assertTrue($threw);
+        $student = $this->user(5);
+        $this->subscribe($student, 2, 5);
+        $ids = static fn (array $l): array => array_map(static fn (Evaluation $e): int => (int) $e->get_id(), $l);
+
+        $this->assertSame([$inCourse1], $ids(Evaluation::load(null, $teacher, null, $cat, null)));
+        $this->assertSame([], $ids(Evaluation::load(null, $student, null, $cat, null)), 'a learner teaches nothing');
+        $this->assertSame([], $ids(Evaluation::load(null, $this->user(1), null, $cat, null)), 'no course at all');
     }
 
     // ---------------------------------------------------------------- Evaluation::load()

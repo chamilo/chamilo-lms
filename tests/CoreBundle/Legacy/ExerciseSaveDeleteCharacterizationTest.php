@@ -802,7 +802,7 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
         );
     }
 
-    public function testDuplicateDoesNotCopyTheMandatoryFlag(): void
+    public function testDuplicateCopiesTheMandatoryFlag(): void
     {
         $this->setSetting('exercise.allow_mandatory_question_in_category', 'true');
         $src = $this->makeQuestion('x2_dup_mand', UNIQUE_ANSWER, 1.0, ['mandatory' => 1]);
@@ -811,9 +811,8 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
 
         $newId = (int) Question::read($src)->duplicate();
 
-        // PINNED QUIRK (bug): the copy loses the "mandatory" flag, so a copied test draws it like any other question.
         $this->assertSame(
-            0,
+            1,
             (int) $this->conn->fetchOne('SELECT mandatory FROM c_quiz_question WHERE iid = ?', [$newId])
         );
     }

@@ -1129,6 +1129,7 @@ abstract class Question
             ->setExtra($this->extra)
             ->setLevel($this->level)
             ->setFeedback($this->feedback)
+            ->setMandatory((int) $this->mandatory)
             ->setParent($courseEntity)
             ->setCreator(api_get_user_entity())
             ->addCourseLink($courseEntity)

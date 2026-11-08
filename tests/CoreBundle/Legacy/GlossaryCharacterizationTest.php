@@ -239,6 +239,16 @@ final class GlossaryCharacterizationTest extends KernelTestCase
         $this->assertSame(['title' => 'gl_new', 'description' => 'new'], $row);
     }
 
+    public function testUpdateGlossaryAcceptsKeepingItsOwnTitle(): void
+    {
+        $id = $this->term('gl_same', 'old');
+
+        $this->assertTrue(GlossaryManager::update_glossary(['glossary_id' => $id, 'title' => 'gl_same', 'description' => 'new'], false));
+        $this->fresh();
+
+        $this->assertSame('new', $this->conn()->fetchOne('SELECT description FROM c_glossary WHERE iid = ?', [$id]));
+    }
+
     public function testUpdateGlossaryRefusesATitleUsedByAnotherTerm(): void
     {
         $a = $this->term('gl_a', 'a');

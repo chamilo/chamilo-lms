@@ -550,6 +550,63 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame([$parent, $option], [(int) $row['parent_id'], (int) $row['parent_option_id']]);
     }
 
+    public function testSaveQuestionRejectsAParentQuestionOfAnotherSurvey(): void
+    {
+        // Security: parent_id / parent_option_id come from the POSTed form. A condition pointing at a question or
+        // option of ANOTHER survey would make the display logic of this survey depend on foreign data.
+        $s = $this->insertSurvey();
+        $other = $this->insertSurvey();
+        $foreignParent = $this->insertQuestion($other, 'sv foreign parent', 'multiplechoice');
+        $foreignOption = $this->insertOption($other, $foreignParent, 'sv foreign trigger', 1);
+        $ownParent = $this->insertQuestion($s, 'sv own parent', 'multiplechoice');
+        $ownOption = $this->insertOption($s, $ownParent, 'sv own trigger', 1);
+
+        $base = [
+            'question' => 'sv guarded dependent',
+            'type' => 'open',
+            'horizontalvertical' => 'vertical',
+            'shared_question_id' => 0,
+            'survey_id' => $s,
+            'question_id' => 0,
+        ];
+        foreach ([
+            'foreign parent and option' => [$foreignParent, $foreignOption],
+            'foreign parent, own option' => [$foreignParent, $ownOption],
+            'own parent, foreign option' => [$ownParent, $foreignOption],
+        ] as $label => [$parentId, $optionId]) {
+            $result = SurveyManager::saveQuestion(
+                $this->survey($s),
+                $base + ['parent_id' => $parentId, 'parent_option_id' => $optionId],
+                false
+            );
+            $this->assertTrue($result['error'], $label);
+        }
+        $this->assertSame(
+            0,
+            $this->rowCount('c_survey_question', 'survey_question = ?', ['sv guarded dependent']),
+            'nothing is stored when the condition is refused'
+        );
+    }
+
+    public function testSaveQuestionEditRejectsAQuestionOfAnotherSurvey(): void
+    {
+        $s = $this->insertSurvey();
+        $other = $this->insertSurvey();
+        $foreign = $this->insertQuestion($other, 'sv foreign untouched', 'open');
+
+        $result = SurveyManager::saveQuestion($this->survey($s), [
+            'question' => 'sv hijacked text',
+            'type' => 'open',
+            'horizontalvertical' => 'vertical',
+            'shared_question_id' => 0,
+            'survey_id' => $s,
+            'question_id' => $foreign,
+        ], false);
+
+        $this->assertTrue($result['error']);
+        $this->assertSame('sv foreign untouched', $this->conn->fetchOne('SELECT survey_question FROM c_survey_question WHERE iid = ?', [$foreign]));
+    }
+
     public function testSaveQuestionOnPercentageGeneratesOneToHundredOptions(): void
     {
         $s = $this->insertSurvey();

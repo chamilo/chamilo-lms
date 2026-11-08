@@ -913,6 +913,24 @@ class SurveyManager
                 // Getting all the information of the survey
                 $survey_data = self::get_survey($surveyId);
 
+                // The question being edited and the condition (parent question/option) come from the posted
+                // form: they must belong to this very survey.
+                $invalidMessage = 'The form contains incorrect or incomplete data. Please check your input.';
+                if (!empty($form_content['question_id']) && is_numeric($form_content['question_id']) &&
+                    !self::surveyQuestionBelongsToSurvey((int) $form_content['question_id'], (int) $surveyId)
+                ) {
+                    return ['error' => true, 'message' => $invalidMessage];
+                }
+                if (!empty($form_content['parent_id']) && !empty($form_content['parent_option_id']) &&
+                    !self::questionOptionBelongsToQuestion(
+                        (int) $form_content['parent_option_id'],
+                        (int) $form_content['parent_id'],
+                        (int) $surveyId
+                    )
+                ) {
+                    return ['error' => true, 'message' => $invalidMessage];
+                }
+
                 // Storing a new question
                 if (empty($form_content['question_id']) || !is_numeric($form_content['question_id'])) {
                     // Finding the max sort order of the questions in the given survey
@@ -2143,6 +2161,26 @@ class SurveyManager
         $found = Database::getManager()->getConnection()->fetchOne(
             'SELECT iid FROM c_survey_question WHERE iid = ? AND survey_id = ?',
             [$questionId, $surveyId]
+        );
+
+        return false !== $found;
+    }
+
+    /**
+     * Tells whether an option belongs to the given question, and the question to the given survey (the condition of
+     * a dependent question must point inside its own survey).
+     */
+    public static function questionOptionBelongsToQuestion(int $optionId, int $questionId, int $surveyId): bool
+    {
+        if ($optionId <= 0 || $questionId <= 0 || $surveyId <= 0) {
+            return false;
+        }
+
+        $found = Database::getManager()->getConnection()->fetchOne(
+            'SELECT o.iid FROM c_survey_question_option o
+             INNER JOIN c_survey_question q ON q.iid = o.question_id
+             WHERE o.iid = ? AND o.question_id = ? AND q.survey_id = ?',
+            [$optionId, $questionId, $surveyId]
         );
 
         return false !== $found;

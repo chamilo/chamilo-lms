@@ -273,14 +273,15 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
     }
 
     /**
-     * PINNED QUIRK: the administrator's certificate lists take every user of the URL, soft-deleted ones included
-     * (allAccessUrlUserIds() does not look at user.active).
+     * Fixed: the administrator's certificate lists took every user of the URL, soft-deleted ones included
+     * (allAccessUrlUserIds() did not look at user.active). A soft-deleted account is gone for every other
+     * report (they all filter user.active <> SOFT_DELETED), so its certificates are not listed.
      */
-    public function testAdministratorCertificatesStillListSoftDeletedUsers(): void
+    public function testAdministratorCertificatesDoNotListSoftDeletedUsers(): void
     {
         $gone = $this->rawUser('r2c6', 5, -2);
         $id = $this->certificate($this->category(1), $gone, '2001-07-01 10:00:00');
-        $this->assertSame([$id], array_column($this->section($this->admin(), 'certificates', ['year' => '2001'])['items'], 'id'));
+        $this->assertNotContains($id, array_column($this->section($this->admin(), 'certificates', ['year' => '2001'])['items'], 'id'));
     }
 
     public function testStudentBossSeesTheCertificatesOfHisStudentsOnly(): void
@@ -915,16 +916,17 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
     }
 
     /**
-     * PINNED QUIRK: with an end date, visits whose logout is still NULL (the visit is open) are never listed, since
-     * "NULL < date" is not true.
+     * Fixed: with an end date, visits whose logout is still NULL (the visit is open) were never listed, since
+     * "NULL < date" is not true. An open visit counts at its login date.
      */
-    public function testAccessOverviewEndDateHidesOpenVisits(): void
+    public function testAccessOverviewEndDateKeepsOpenVisitsStartedBeforeIt(): void
     {
         $a = $this->rawUser('r2a5');
         $this->access($a, 2, '2001-06-10 10:00:00', null);
         $base = ['courseId' => 2, 'status' => 5, 'userId' => $a];
         $this->assertSame(1, $this->section($this->admin(), 'access-overview', $base)['total']);
-        $this->assertSame(0, $this->section($this->admin(), 'access-overview', $base + ['endDate' => '2001-12-31'])['total']);
+        $this->assertSame(1, $this->section($this->admin(), 'access-overview', $base + ['endDate' => '2001-12-31'])['total']);
+        $this->assertSame(0, $this->section($this->admin(), 'access-overview', $base + ['endDate' => '2001-06-09'])['total'], 'opened after the end date');
     }
 
     public function testAccessOverviewRejectsACourseOfAnotherUrl(): void

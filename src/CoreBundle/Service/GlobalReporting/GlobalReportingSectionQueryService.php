@@ -4337,7 +4337,7 @@ final readonly class GlobalReportingSectionQueryService
             $types['startDate'] = Types::DATE_IMMUTABLE;
         }
         if (null !== $filters['endDate']) {
-            $where[] = 'access_log.logout_course_date < DATE_ADD(:endDate, INTERVAL 1 DAY)';
+            $where[] = 'COALESCE(access_log.logout_course_date, access_log.login_course_date) < DATE_ADD(:endDate, INTERVAL 1 DAY)';
             $parameters['endDate'] = $filters['endDate'];
             $types['endDate'] = Types::DATE_IMMUTABLE;
         }
@@ -6717,9 +6717,13 @@ final readonly class GlobalReportingSectionQueryService
         return array_values(array_map(
             'intval',
             $this->connection->fetchFirstColumn(
-                'SELECT DISTINCT user_id FROM access_url_rel_user WHERE access_url_id = :accessUrlId ORDER BY user_id',
-                ['accessUrlId' => $context->accessUrlId],
-                ['accessUrlId' => Types::INTEGER],
+                'SELECT DISTINCT relation.user_id
+                   FROM access_url_rel_user relation
+                  INNER JOIN user relation_user ON relation_user.id = relation.user_id
+                  WHERE relation.access_url_id = :accessUrlId AND relation_user.active <> :softDeleted
+                  ORDER BY relation.user_id',
+                ['accessUrlId' => $context->accessUrlId, 'softDeleted' => User::SOFT_DELETED],
+                ['accessUrlId' => Types::INTEGER, 'softDeleted' => Types::INTEGER],
             ),
         ));
     }

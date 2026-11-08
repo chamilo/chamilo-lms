@@ -1207,7 +1207,7 @@ final class CourseReportingSectionQueryService
                            WHERE '.implode(' AND ', $latestWhere).'
                         GROUP BY candidate.user_id, candidate.lp_id';
 
-        $where = [];
+        $where = ['(user.id IS NULL OR user.active <> -2)'];
         $keyword = trim((string) ($filters['keyword'] ?? ''));
         if ('' !== $keyword) {
             $where[] = '(user.username LIKE :keyword
@@ -1844,7 +1844,8 @@ final class CourseReportingSectionQueryService
                FROM track_e_exercises
               WHERE c_id = :courseId
                 AND COALESCE(session_id, 0) = :sessionId
-                AND exe_exo_id = :exerciseId',
+                AND exe_exo_id = :exerciseId
+                AND exe_user_id NOT IN (SELECT id FROM user WHERE active = -2)',
             [
                 'courseId' => $context->courseId(),
                 'sessionId' => $context->sessionId(),
@@ -1886,7 +1887,8 @@ final class CourseReportingSectionQueryService
                FROM c_lp_view
               WHERE c_id = :courseId
                 AND COALESCE(session_id, 0) = :sessionId
-                AND lp_id = :learningPathId',
+                AND lp_id = :learningPathId
+                AND user_id NOT IN (SELECT id FROM user WHERE active = -2)',
             [
                 'courseId' => $context->courseId(),
                 'sessionId' => $context->sessionId(),
@@ -1920,7 +1922,8 @@ final class CourseReportingSectionQueryService
                    INNER JOIN c_lp_view view ON view.iid = item_view.lp_view_id
                   WHERE view.c_id = :courseId
                     AND COALESCE(view.session_id, 0) = :sessionId
-                    AND view.lp_id = :learningPathId',
+                    AND view.lp_id = :learningPathId
+                    AND view.user_id NOT IN (SELECT id FROM user WHERE active = -2)',
                 [
                     'courseId' => $context->courseId(),
                     'sessionId' => $context->sessionId(),

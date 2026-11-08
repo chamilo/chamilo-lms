@@ -313,6 +313,37 @@ final class CourseReportingSectionsMoreTest extends KernelTestCase
         $this->assertSame(150, $lpRow['totalTime']);
     }
 
+    /**
+     * The attempts and views of a removed account (-2) are not statistics of the course any more: not in the
+     * per-path and per-test figures, nor in the by-learner list.
+     */
+    public function testToolStatisticsAndLearningPathsByLearnerIgnoreRemovedAccounts(): void
+    {
+        $a = $this->learner('r3rm1a');
+        $gone = $this->learner('r3rm1b', 1, -2);
+        $quiz = $this->newQuiz('r3_rm_quiz');
+        $lp = $this->newLp('r3_rm_lp');
+        $this->exerciseAttempt($a, $quiz, 5, 10);
+        $this->exerciseAttempt($gone, $quiz, 10, 10);
+        $this->exerciseAttempt($gone, $quiz, 10, 10);
+        $v = $this->lpView($a, $lp, 20);
+        $vg = $this->lpView($gone, $lp, 100);
+        $this->lpItemView($v, 1, 1, '2', 10);
+        $this->lpItemView($vg, 1, 2, '2', 500);
+
+        $sections = array_column($this->section('tools')['sections'], null, 'key');
+        $test = array_column($sections['tests']['items'], null, 'title')['r3_rm_quiz'];
+        $path = array_column($sections['learning-paths']['items'], null, 'title')['r3_rm_lp'];
+        $this->assertSame([1, 1, 50.0, 50.0], [$test['learners'], $test['attempts'], $test['averageScore'], $test['bestScore']]);
+        $this->assertSame([1, 20.0, 50.0, 10], [$path['learners'], $path['averageProgress'], $path['averageScore'], $path['totalTime']]);
+
+        $paths = $this->section('learning-paths', ['keyword' => 'r3_rm_lp'])['items'][0];
+        $this->assertSame([1, 20.0, 10], [$paths['learners'], $paths['averageProgress'], $paths['totalTime']]);
+        $users = $this->section('learning-paths', ['mode' => 'users', 'keyword' => 'r3_rm_lp']);
+        $this->assertSame([$a], array_column($users['items'], 'userId'));
+        $this->assertSame(1, $users['total']);
+    }
+
     // ---------------------------------------------------------------- exams
 
     public function testExamsCrossEveryTestWithEveryLearnerAndGradeTheBestAttempt(): void

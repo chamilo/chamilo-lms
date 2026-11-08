@@ -486,4 +486,196 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
         $this->assertSame(0, $result['items'][1]['certificates']);
         $this->assertSame(md5('R2 Acme'), $result['items'][0]['id']);
     }
+
+    // ----------------------------------------------- learning path results
+
+    public function testLearningResultsAskForACourseBeforeListingAnything(): void
+    {
+        $u = $this->rawUser('r2l0');
+        $this->lpView($u, 1, 50);
+        $result = $this->section($this->admin(), 'learning-results');
+        $this->assertSame([], $result['items']);
+        $this->assertSame(0, $result['total']);
+        $this->assertTrue($result['meta']['requiresCourse']);
+        $this->assertSame('Learning paths exercises results list', $result['title']);
+        $session = $this->section($this->admin(), 'session-results', ['courseId' => 1]);
+        $this->assertSame([], $session['items']);
+        $this->assertTrue($session['meta']['requiresSession']);
+    }
+
+    public function testLearningResultsSummariseTheLearningPathViewsOfACourse(): void
+    {
+        $a = $this->rawUser('r2l1');
+        $b = $this->rawUser('r2l2');
+        $lp1 = $this->lp();
+        $lp2 = $this->lp();
+        $this->lpView($a, 2, 100, 0, $lp1);
+        $this->lpView($a, 2, 40, 0, $lp2);
+        $this->lpView($b, 2, 61, 0, $lp1);
+
+        $result = $this->section($this->admin(), 'learning-results', ['courseId' => 2]);
+
+        $this->assertCount(1, $result['items']);
+        $row = $result['items'][0];
+        $this->assertSame(2, $row['id']);
+        $this->assertSame(2, $row['learners']);
+        $this->assertSame(2, $row['learningPaths']);
+        $this->assertSame(67.0, $row['progress'], '(100 + 40 + 61) / 3');
+        $this->assertSame(1, $row['completed']);
+        $this->assertSame(1, $result['total']);
+    }
+
+    public function testLearningResultsCanBeNarrowedToASessionAndNeverShowACourseOfAnotherUrl(): void
+    {
+        $session = $this->rawSession('r2l3');
+        $u = $this->rawUser('r2l3a');
+        $this->lpView($u, 2, 30, 0);
+        $this->lpView($u, 2, 90, $session);
+
+        $inSession = $this->section($this->admin(), 'learning-results', ['courseId' => 2, 'sessionId' => $session]);
+        $this->assertSame(90.0, $inSession['items'][0]['progress']);
+        $this->assertSame(1, $inSession['items'][0]['learners']);
+
+        $other = $this->secondUrl();
+        $this->conn()->executeStatement('UPDATE access_url_rel_course SET access_url_id = ? WHERE c_id = 2', [$other]);
+        $this->assertSame([], $this->section($this->admin(), 'learning-results', ['courseId' => 2])['items']);
+    }
+
+    public function testSessionResultsListOneRowPerLearnerAndCourseSortedByName(): void
+    {
+        $session = $this->rawSession('r2l4');
+        $z = $this->rawUser('r2l4z');
+        $a = $this->rawUser('r2l4a');
+        $this->conn()->executeStatement('UPDATE user SET lastname = ?, last_login = ? WHERE id = ?', ['R2Zed', '2001-02-03 04:05:06', $z]);
+        $this->conn()->executeStatement('UPDATE user SET lastname = ? WHERE id = ?', ['R2Alpha', $a]);
+        $this->lpView($z, 1, 20, $session);
+        $this->lpView($z, 1, 60, $session);
+        $this->lpView($a, 1, 100, $session);
+        $this->lpView($a, 2, 10, $session);
+        $this->lpView($a, 2, 99, 0);
+
+        $result = $this->section($this->admin(), 'session-results', ['sessionId' => $session]);
+
+        $this->assertSame(3, $result['total']);
+        $this->assertSame(['R2Alpha', 'R2Alpha', 'R2Zed'], array_map(static fn (array $r): string => substr($r['user'], strpos($r['user'], ' ') + 1), $result['items']));
+        $this->assertSame([100.0, 10.0, 40.0], array_column($result['items'], 'averageScore'));
+        $this->assertSame($a.'-'.md5((string) $result['items'][0]['course']), $result['items'][0]['id']);
+        $this->assertSame('2001-02-03 04:05:06', $result['items'][2]['lastAccess']);
+    }
+
+    // -------------------------------------------------------------- exams
+
+    private function quiz(int $courseId, string $title, int $sessionId = 0): int
+    {
+        // Borrow a resource node that no quiz or link uses yet (the installer leaves a few unused ones).
+        $node = (int) $this->conn()->fetchOne(
+            'SELECT id FROM resource_node WHERE id NOT IN (SELECT resource_node_id FROM resource_link WHERE resource_node_id IS NOT NULL)
+               AND id NOT IN (SELECT resource_node_id FROM c_quiz WHERE resource_node_id IS NOT NULL) ORDER BY id LIMIT 1'
+        );
+        $this->assertGreaterThan(0, $node, 'no free resource node to attach a quiz to');
+        $this->conn()->executeStatement(
+            "INSERT INTO c_quiz (resource_node_id, title, type, random, random_answers, results_disabled, max_attempt, feedback_type, expired_time,
+                propagate_neg, review_answers, random_by_category, display_category_name, hide_question_title, page_result_configuration)
+             VALUES (?, ?, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '[]')",
+            [$node, $title]
+        );
+        $quiz = (int) $this->conn()->lastInsertId();
+        $this->conn()->executeStatement(
+            "INSERT INTO resource_link (resource_node_id, c_id, session_id, visibility, display_order, resource_type_group, created_at, updated_at)
+             VALUES (?, ?, ?, 2, 0, 0, '2001-01-01 00:00:00', '2001-01-01 00:00:00')",
+            [$node, $courseId, 0 === $sessionId ? null : $sessionId]
+        );
+
+        return $quiz;
+    }
+
+    private function attempt(int $userId, int $courseId, int $quizId, float $score, float $max, int $sessionId = 0): void
+    {
+        $this->conn()->executeStatement(
+            "INSERT INTO track_e_exercises (exe_user_id, c_id, session_id, exe_exo_id, exe_date, score, max_score, user_ip, status, data_tracking,
+                start_date, steps_counter, orig_lp_id, orig_lp_item_id, exe_duration, orig_lp_item_view_id, questions_to_check)
+             VALUES (?, ?, ?, ?, '2001-01-01 10:00:00', ?, ?, '', '', '', '2001-01-01 09:00:00', 0, 0, 0, 0, 0, '')",
+            [$userId, $courseId, 0 === $sessionId ? null : $sessionId, $quizId, $score, $max]
+        );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function examRow(array $result, int $courseId, int $quizId, int $sessionId = 0): array
+    {
+        $found = array_values(array_filter($result['items'], static fn (array $r): bool => $r['id'] === $courseId.'-'.$quizId.'-'.$sessionId));
+        $this->assertCount(1, $found);
+
+        return $found[0];
+    }
+
+    public function testExamsCountTakersPassersAndLearnersWhoDidNotTakeTheTest(): void
+    {
+        $quiz = $this->quiz(1, 'rp_r2 exam');
+        $students = [];
+        foreach (['a', 'b', 'c'] as $tag) {
+            $students[$tag] = $this->rawUser('r2q'.$tag);
+            $this->courseUser($students[$tag], 1, 5);
+        }
+        $teacher = $this->rawUser('r2qt', self::TEACHER);
+        $this->courseUser($teacher, 1, 1);
+        $this->attempt($students['a'], 1, $quiz, 10, 10);
+        $this->attempt($students['a'], 1, $quiz, 2, 10);
+        $this->attempt($students['b'], 1, $quiz, 6, 10);
+        $totalLearners = (int) $this->conn()->fetchOne('SELECT COUNT(DISTINCT user_id) FROM course_rel_user WHERE c_id = 1 AND status = 5');
+
+        $result = $this->section($this->admin(), 'exams', ['score' => 70]);
+        $row = $this->examRow($result, 1, $quiz);
+
+        $this->assertSame('rp_r2 exam', $row['test']);
+        $this->assertSame($totalLearners, $row['totalLearners'], 'teachers are not learners');
+        $this->assertSame(2, $row['taken']);
+        $this->assertSame($totalLearners - 2, $row['notTaken']);
+        $this->assertSame(1, $row['passed'], 'a learner passes with his BEST attempt (100%), the 60% one does not');
+        $this->assertSame(1, $row['failed']);
+        $this->assertSame(70, $result['meta']['scoreThreshold']);
+        $this->assertSame($row['id'], '1-'.$quiz.'-0');
+        $lowBar = $this->examRow($this->section($this->admin(), 'exams', ['score' => 60]), 1, $quiz);
+        $this->assertSame(2, $lowBar['passed'], 'the threshold is inclusive');
+    }
+
+    public function testExamsOfASessionAreCountedAgainstTheLearnersOfThatSession(): void
+    {
+        $session = $this->rawSession('r2q2');
+        $this->sessionCourse($session, 1);
+        $quiz = $this->quiz(1, 'rp_r2 base exam');
+        $learner = $this->rawUser('r2q2a');
+        $this->sessionCourseUser($session, 1, $learner, 0);
+        $this->courseUser($learner, 1, 5);
+        $this->attempt($learner, 1, $quiz, 5, 10, $session);
+        $this->attempt($learner, 1, $quiz, 9, 10, 0);
+
+        $result = $this->section($this->admin(), 'exams', ['score' => 50]);
+
+        $inSession = $this->examRow($result, 1, $quiz, $session);
+        $this->assertSame(1, $inSession['totalLearners']);
+        $this->assertSame(1, $inSession['taken']);
+        $this->assertSame(1, $inSession['passed']);
+        $this->assertSame(0, $inSession['notTaken']);
+        $this->assertStringStartsWith('rp_r2 base exam (rp_r2q2_', $inSession['test']);
+        $this->assertSame(1, $this->examRow($result, 1, $quiz)['taken'], 'the base course context keeps its own attempts (clamped to its registered learners)');
+    }
+
+    public function testExamsListACoursePlaceholderWhenItHasNoTestAndOnlyCoursesOfTheScope(): void
+    {
+        $other = $this->secondUrl();
+        $this->conn()->executeStatement('UPDATE access_url_rel_course SET access_url_id = ? WHERE c_id = 2', [$other]);
+        $result = $this->section($this->admin(), 'exams');
+        $courseIds = array_values(array_unique(array_column($result['items'], 'courseId')));
+        $this->assertContains(1, $courseIds);
+        $this->assertNotContains(2, $courseIds);
+        $placeholder = array_values(array_filter($result['items'], static fn (array $r): bool => $r['empty']));
+        foreach ($placeholder as $row) {
+            $this->assertSame('There is no test for the moment', $row['test']);
+            $this->assertNull($row['taken']);
+        }
+        $this->assertSame(70, $result['meta']['scoreThreshold'], 'the default pass mark');
+        $this->assertSame(100, $this->section($this->admin(), 'exams', ['score' => 500])['meta']['scoreThreshold'], 'the pass mark is capped at 100');
+    }
 }

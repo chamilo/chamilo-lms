@@ -995,11 +995,86 @@ class ApiLibCharacterizationTest extends AbstractApiTest
 
     // ---------------------------------------------------------------- course visibility (search processors only)
 
-    public function testCourseVisibilityForUserAlwaysThrowsBecauseCourseCategoryIdIsGone(): void
+    private function courseVisibility(int $visibility): void
     {
-        // PINNED QUIRK: the first query joins course.category_id, which moved to course_rel_category, so every
-        // call fails before any visibility rule is evaluated (the only callers are the search tool processors).
-        $this->expectException(NotAllowedException::class);
-        api_is_course_visible_for_user(1, 'AIACT');
+        $this->conn()->executeStatement('UPDATE course SET visibility = ? WHERE id = 1', [$visibility]);
+        $this->fresh();
+    }
+
+    public function testCourseVisibleForEveryoneWhenOpenToTheWorld(): void
+    {
+        $this->courseVisibility(3);
+        $stranger = $this->rawUser('cvw');
+
+        $this->assertTrue(api_is_course_visible_for_user($stranger, 'AIACT'));
+    }
+
+    public function testCourseVisibleToASubscribedMemberOfARegisteredCourse(): void
+    {
+        $this->courseVisibility(1);
+        $member = $this->rawUser('cvm');
+        $this->courseUser($member, 1, 5);
+
+        $this->assertTrue(api_is_course_visible_for_user($member, 'AIACT'));
+    }
+
+    public function testCourseOpenToThePlatformIsVisibleToAKnownUser(): void
+    {
+        $this->courseVisibility(2);
+        $teacher = $this->rawUser('cvt');
+        $this->courseUser($teacher, 1, 1);
+
+        $this->assertTrue(api_is_course_visible_for_user($teacher, 'AIACT'));
+    }
+
+    public function testHiddenCourseIsNotVisibleToItsOwnTeacherButToAnAdmin(): void
+    {
+        $this->courseVisibility(4);
+        $teacher = $this->rawUser('cvh');
+        $this->courseUser($teacher, 1, 1);
+
+        $this->assertFalse(api_is_course_visible_for_user($teacher, 'AIACT'));
+
+        $this->loginAs(1);
+        $this->assertTrue(api_is_course_visible_for_user($teacher, 'AIACT'));
+    }
+
+    public function testClosedCourseIsVisibleToItsMembersOnly(): void
+    {
+        $this->courseVisibility(0);
+        $member = $this->rawUser('cvcl');
+        $stranger = $this->rawUser('cvcl_out');
+        $this->courseUser($member, 1, 5);
+
+        $this->assertTrue(api_is_course_visible_for_user($member, 'AIACT'));
+        $this->assertFalse(api_is_course_visible_for_user($stranger, 'AIACT'));
+    }
+
+    public function testNonMembersCannotSeeARegisteredCourse(): void
+    {
+        $this->courseVisibility(1);
+        $stranger = $this->rawUser('cvx');
+
+        $this->assertFalse(api_is_course_visible_for_user($stranger, 'AIACT'));
+    }
+
+    public function testACourseCoachOfASessionOfTheCourseSeesARegisteredCourse(): void
+    {
+        $this->courseVisibility(1);
+        $coach = $this->rawUser('cvc');
+        $other = $this->rawUser('cvc_other');
+        $sid = $this->rawSession('cvc', null, null);
+        $this->sessionCourseUser($sid, 1, $coach, 2);
+        $this->sessionCourseUser($sid, 2, $other, 2);
+
+        $this->assertTrue(api_is_course_visible_for_user($coach, 'AIACT'));
+        $this->assertFalse(api_is_course_visible_for_user($other, 'AIACT'), 'Coach of another course only.');
+    }
+
+    public function testCourseVisibilityOfANonNumericUserIsFalseUnlessAnonymous(): void
+    {
+        $this->courseVisibility(1);
+
+        $this->assertFalse(api_is_course_visible_for_user('abc', 'AIACT'));
     }
 }

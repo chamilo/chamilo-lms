@@ -5120,18 +5120,10 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
     $is_platformAdmin = api_is_platform_admin();
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
-    $sql = "SELECT
-                $course_cat_table.code AS category_code,
-                $course_table.visibility,
-                $course_table.code,
-                $course_cat_table.code
+    $sql = "SELECT visibility
             FROM $course_table
-            LEFT JOIN $course_cat_table
-                ON $course_table.category_id = $course_cat_table.id
-            WHERE
-                $course_table.code = '$cid'
+            WHERE code = '$cid'
             LIMIT 1";
 
     $result = Database::query($sql);
@@ -5148,6 +5140,8 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
     }
 
     $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $is_courseMember = false;
+    $is_courseAdmin = false;
 
     $sql = "SELECT
                 is_tutor, status
@@ -5198,9 +5192,10 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
         } else {
             // Check if the current user is the course coach.
             $sql = "SELECT 1
-                    FROM $tbl_session_course
-                    WHERE session_rel_course.c_id = '$courseId'
-                    AND session_rel_course.id_coach = '$userid'
+                    FROM $tbl_session_course_user
+                    WHERE c_id = '$courseId'
+                    AND user_id = '$userid'
+                    AND status = ".SessionEntity::COURSE_COACH."
                     LIMIT 1";
 
             $result = Database::query($sql);

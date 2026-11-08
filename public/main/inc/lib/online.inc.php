@@ -18,6 +18,8 @@ use ChamiloSession as Session;
  * don't keep traces of anything older).
  *
  * @param int user id
+ *
+ * @deprecated No caller left: presence rows are written elsewhere (track_e_online is kept by the Symfony side)
  */
 function LoginCheck($uid)
 {
@@ -74,6 +76,8 @@ function LoginCheck($uid)
 
 /**
  * @param int $userId
+ *
+ * @deprecated No caller left (not wired anywhere in public/ or src/)
  */
 function preventMultipleLogin($userId)
 {

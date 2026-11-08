@@ -191,8 +191,8 @@ final class SubLanguageCharacterizationTest extends KernelTestCase
         $this->language('c1', $parent);
         $this->language('c2', $parent);
 
-        // PINNED QUIRK: the query tests count(*) = 1, so a language with TWO sub-languages is not a father.
-        $this->assertFalse(SubLanguageManager::check_if_language_is_father($parent));
+        // A language with two sub-languages is a father too (the query used to test count(*) = 1).
+        $this->assertTrue(SubLanguageManager::check_if_language_is_father($parent));
     }
 
     public function testCheckIfLanguageIsUsedMatchesTheUserLocaleAgainstTheEnglishName(): void

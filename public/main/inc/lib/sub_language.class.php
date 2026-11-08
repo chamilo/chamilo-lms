@@ -279,7 +279,7 @@ class SubLanguageManager
                 WHERE parent_id= '.intval($language_id).' AND NOT ISNULL(parent_id);';
         $rs = Database::query($sql);
 
-        if (Database::num_rows($rs) > 0 && 1 == Database::result($rs, '0', 'count')) {
+        if (Database::num_rows($rs) > 0 && Database::result($rs, '0', 'count') >= 1) {
             return true;
         } else {
             return false;

@@ -451,7 +451,7 @@ final class UrlManagerCharacterizationTest extends KernelTestCase
 
         $result = UrlManager::add_courses_to_urls(['AIACT', 'USINGCHAMILO'], [$a, $b]);
 
-        // PINNED QUIRK: a pair that already existed is simply absent from the result array.
+        // INTENTIONAL: the result lists the pairs NEWLY added (the callers report what changed); an existing pair is absent.
         $this->assertSame([$a => ['USINGCHAMILO' => 1], $b => ['AIACT' => 1, 'USINGCHAMILO' => 1]], $result);
         $this->assertSame(1, $this->countPair('access_url_rel_course', 'c_id', 1, $a));
         $this->assertSame(1, $this->countPair('access_url_rel_course', 'c_id', 2, $b));
@@ -592,7 +592,7 @@ final class UrlManagerCharacterizationTest extends KernelTestCase
         $this->assertGreaterThan(0, $id);
 
         $result = UrlManager::addUserGroupListToUrl([$g1, $g2], [$a, $b]);
-        // PINNED QUIRK: pairs that already existed are absent from the result.
+        // INTENTIONAL: the result lists the pairs newly added; existing pairs are absent.
         $this->assertSame([$a => [$g2 => 1], $b => [$g1 => 1, $g2 => 1]], $result);
 
         UrlManager::removeUserGroupListFromUrl([$g1], [$a, $b]);

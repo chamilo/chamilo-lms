@@ -1033,9 +1033,15 @@ class TestCategory
     public static function get_category_id_for_title($title, $courseId = 0)
     {
         $out_res = 0;
+        $courseId = empty($courseId) ? (int) api_get_course_int_id() : (int) $courseId;
         $tableCategory = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT iid FROM $tableCategory
-                WHERE title = '".Database::escape_string($title)."'";
+        // The course of a category is the resource link of its resource node.
+        $sql = "SELECT c.iid FROM $tableCategory c
+                INNER JOIN resource_link link ON link.resource_node_id = c.resource_node_id
+                WHERE c.title = '".Database::escape_string($title)."'
+                    AND link.c_id = $courseId
+                    AND link.deleted_at IS NULL
+                ORDER BY c.iid ASC";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $data = Database::fetch_array($res);

@@ -47,6 +47,11 @@ final class TestCategoryCharacterizationTest extends KernelTestCase
     private Connection $conn;
     private int $seq = 0;
 
+    /**
+     * @var int[]|null
+     */
+    private ?array $spare = null;
+
     protected function setUp(): void
     {
         self::bootKernel();
@@ -85,6 +90,32 @@ final class TestCategoryCharacterizationTest extends KernelTestCase
         ]);
 
         return (int) $this->conn->lastInsertId();
+    }
+
+    /**
+     * Links a (bare) category to a course through a resource_link on a borrowed spare resource node.
+     */
+    private function linkCategory(int $categoryId, int $nodeIdx, int $courseId, ?string $deletedAt = null): void
+    {
+        $this->spare ??= $this->conn->fetchFirstColumn(
+            'SELECT id FROM resource_node WHERE id NOT IN (SELECT resource_node_id FROM c_quiz_question_category WHERE resource_node_id IS NOT NULL)'
+            .' AND id NOT IN (SELECT resource_node_id FROM resource_link WHERE resource_node_id IS NOT NULL) ORDER BY id DESC LIMIT 6'
+        );
+        $this->assertGreaterThan($nodeIdx, \count($this->spare), 'fixture needs spare resource nodes');
+        $node = (int) $this->spare[$nodeIdx];
+        $this->conn->update('c_quiz_question_category', ['resource_node_id' => $node], ['iid' => $categoryId]);
+        $now = '2020-01-01 00:00:00';
+        $this->conn->insert('resource_link', [
+            'resource_node_id' => $node,
+            'c_id' => $courseId,
+            'session_id' => null,
+            'visibility' => 2,
+            'display_order' => 0,
+            'resource_type_group' => 1,
+            'deleted_at' => $deletedAt,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
     }
 
     private function quiz(): int
@@ -224,19 +255,29 @@ final class TestCategoryCharacterizationTest extends KernelTestCase
         $this->assertSame(1, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_quiz_question_rel_category WHERE question_id = ?', [$q]));
     }
 
-    public function testGetCategoryIdForTitleMatchesTheTitleExactlyButInAnyCourse(): void
+    public function testGetCategoryIdForTitleMatchesTheTitleExactlyInTheGivenCourseOnly(): void
     {
-        $id = $this->category('tc_by_title');
-        $this->category("tc_o'brien");
+        $inCourse1 = $this->category('tc_by_title');
+        $this->linkCategory($inCourse1, 0, 1);
+        $quoted = $this->category("tc_o'brien");
+        $this->linkCategory($quoted, 1, 1);
+        $inCourse2 = $this->category('tc_only_in_two');
+        $this->linkCategory($inCourse2, 2, 2);
+        $deleted = $this->category('tc_deleted_link');
+        $this->linkCategory($deleted, 3, 1, '2020-02-02 00:00:00');
+        $this->category('tc_no_course_at_all');
 
-        $this->assertSame($id, (int) TestCategory::get_category_id_for_title('tc_by_title', 1));
+        $this->assertSame($inCourse1, (int) TestCategory::get_category_id_for_title('tc_by_title', 1));
+        $this->assertSame($inCourse1, (int) TestCategory::get_category_id_for_title('tc_by_title'), 'defaults to the course of the request');
         $this->assertSame(0, TestCategory::get_category_id_for_title('tc_by_titl', 1));
-        $this->assertSame(0, TestCategory::get_category_id_for_title('TC_BY_TITLE_NOPE', 1));
-        $this->assertGreaterThan(0, (int) TestCategory::get_category_id_for_title("tc_o'brien", 1), 'the quote is escaped');
+        $this->assertSame($quoted, (int) TestCategory::get_category_id_for_title("tc_o'brien", 1), 'the quote is escaped');
         $this->assertSame(0, TestCategory::get_category_id_for_title("x' OR '1'='1", 1));
-        // PINNED QUIRK (bug): the course id is ignored, so importing a quiz in course B reuses the category of
-        // the same title that belongs to course A (or to nobody, as this bare row).
-        $this->assertSame($id, (int) TestCategory::get_category_id_for_title('tc_by_title', 2));
+        // A category of another course (or of none, or with a deleted link) is never reused.
+        $this->assertSame(0, TestCategory::get_category_id_for_title('tc_by_title', 2), 'course 2 has no such category');
+        $this->assertSame(0, TestCategory::get_category_id_for_title('tc_only_in_two', 1));
+        $this->assertSame($inCourse2, (int) TestCategory::get_category_id_for_title('tc_only_in_two', 2));
+        $this->assertSame(0, TestCategory::get_category_id_for_title('tc_deleted_link', 1));
+        $this->assertSame(0, TestCategory::get_category_id_for_title('tc_no_course_at_all', 1));
     }
 
     public function testRemoveCategoryReturnsFalseForAnUnknownCategory(): void

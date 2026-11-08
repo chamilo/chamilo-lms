@@ -300,10 +300,7 @@ final class GlobalReportingSectionTest extends KernelTestCase
         [, $ctx] = $this->teacher('sl6');
         $alive = $this->learner('sl6a');
         $this->learner('sl6b', ['active' => -2]);
-        // PINNED QUIRK: the scope lets soft-deleted learners through (fixed in a following commit:
-        // the assertion then becomes [$alive]).
-        $this->assertCount(2, $this->section($ctx, 'learners')['items']);
-        $this->assertContains($alive, array_column($this->section($ctx, 'learners')['items'], 'id'));
+        $this->assertSame([$alive], array_column($this->section($ctx, 'learners')['items'], 'id'));
     }
 
     public function testTeachersAndUsersSectionsSelectByStatus(): void
@@ -371,14 +368,12 @@ final class GlobalReportingSectionTest extends KernelTestCase
         $this->assertCount(2, $admin['items']);
     }
 
-    public function testLearnerDetailOfASoftDeletedLearnerInScopeIsStillServed(): void
+    public function testLearnerDetailOfASoftDeletedLearnerIsDenied(): void
     {
-        // PINNED QUIRK: see testLearnersListNeverContainsSoftDeletedLearners; the detail page of a
-        // soft-deleted learner opens (fixed together with the scope: it must then be denied).
         [, $ctx] = $this->teacher('ld3');
         $gone = $this->learner('ld3a', ['active' => -2]);
-        $detail = $this->section($ctx, 'learner-detail', ['userId' => $gone]);
-        $this->assertNotEmpty($detail['title']);
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->section($ctx, 'learner-detail', ['userId' => $gone]);
     }
 
     // ------------------------------------------------------------- sessions

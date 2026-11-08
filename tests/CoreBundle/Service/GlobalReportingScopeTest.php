@@ -292,9 +292,8 @@ final class GlobalReportingScopeTest extends KernelTestCase
         $deleted = $this->rawUser('u5b', self::STUDENT, -2);
         $this->courseUser($alive, 1, 5);
         $this->courseUser($deleted, 1, 5);
-        // PINNED QUIRK: the scope SQL never looks at user.active, so a soft-deleted learner (active = -2) is
-        // still listed (fixed in a following commit: the assertion then becomes [$alive]).
-        $this->assertSame([$alive, $deleted], $this->service->getScopedUserIds($this->ctx($me), self::STUDENT));
+        $this->assertNotSame($deleted, $alive);
+        $this->assertSame([$alive], $this->service->getScopedUserIds($this->ctx($me), self::STUDENT));
     }
 
     public function testStudentBossSeesOnlyTheUsersHeBosses(): void

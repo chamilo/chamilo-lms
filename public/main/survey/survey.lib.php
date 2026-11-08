@@ -52,7 +52,7 @@ class SurveyManager
             }
         }
 
-        return $code.$num;
+        return $new_code;
     }
 
     /**
@@ -637,8 +637,16 @@ class SurveyManager
 		        survey_id = "'.$surveyId.'" '.$session_where.' ';
         Database::query($sql);
 
-        $sql = 'UPDATE '.$table_survey.' SET invited=0, answered=0
+        if (empty($session_where)) {
+            $sql = 'UPDATE '.$table_survey.' SET invited=0, answered=0
 		        WHERE iid ='.$surveyId;
+        } else {
+            // Only the rows of the session were deleted: the counters follow the rows that survive.
+            $sql = 'UPDATE '.$table_survey.' SET
+		            invited = (SELECT COUNT(*) FROM '.$table_survey_invitation.' WHERE survey_id = '.$surveyId.'),
+		            answered = (SELECT COUNT(DISTINCT user) FROM '.$table_survey_answer.' WHERE survey_id = '.$surveyId.')
+		        WHERE iid ='.$surveyId;
+        }
         Database::query($sql);
 
         Event::addEvent(

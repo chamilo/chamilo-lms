@@ -231,11 +231,10 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame('sv_dup2', SurveyManager::generate_unique_code('sv_dup'));
     }
 
-    public function testGenerateUniqueCodeOfAFreeCodeGetsAZeroSuffix(): void
+    public function testGenerateUniqueCodeOfAFreeCodeIsUnchanged(): void
     {
-        // PINNED QUIRK: a code that is not taken is returned as "<code>0", not unchanged. Harmless today
-        // because the only caller (copySurvey) always passes the code of an existing survey.
-        $this->assertSame('sv_free0', SurveyManager::generate_unique_code('sv_free'));
+        // A code that is not taken is returned unchanged.
+        $this->assertSame('sv_free', SurveyManager::generate_unique_code('sv_free'));
     }
 
     public function testGenerateUniqueCodeWithSurveyIdOnlyCollidesWithThatSurvey(): void
@@ -245,7 +244,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
         // The code exists on survey $a: with $a it collides, with a foreign id it does not.
         $this->assertSame('sv_own1', SurveyManager::generate_unique_code('sv_own', $a));
-        $this->assertSame('sv_own0', SurveyManager::generate_unique_code('sv_own', $b + 1000));
+        $this->assertSame('sv_own', SurveyManager::generate_unique_code('sv_own', $b + 1000));
     }
 
     public function testGenerateSurveyCodeIsLowercasedAndSanitized(): void
@@ -286,7 +285,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame('0', $survey['survey_share']);
         $this->assertSame('sv intro', $survey['survey_introduction']);
         $this->assertSame('sv thanks', $survey['survey_thanks']);
-        // PINNED QUIRK: c_survey has no c_id/session_id column any more, the aliases are always 0/null.
+        // INTENTIONAL: c_survey has no c_id/session_id column any more, the compatibility aliases are always 0/null.
         $this->assertSame(0, $survey['c_id']);
         $this->assertSame(0, $survey['session_id']);
         $this->assertNull($survey['input_name_list']);
@@ -650,7 +649,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $s = $this->insertSurvey();
         $q = $this->insertQuestion($s, 'sv stays');
 
-        // PINNED QUIRK: the body is commented out, the questions are removed by the ORM cascade instead.
+        // INTENTIONAL: the body is gone on purpose, deleteSurvey() removes the questions through the ORM cascade.
         $this->assertTrue(SurveyManager::delete_all_survey_questions($s));
         $this->assertSame(1, $this->rowCount('c_survey_question', 'iid = ?', [$q]));
     }
@@ -780,9 +779,9 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame(1, $this->rowCount('c_survey_invitation', 'survey_id = ? AND session_id IS NULL', [$s]));
         $this->assertSame(0, $this->rowCount('c_survey_answer', 'survey_id = ? AND session_id = ?', [$s, $sid]));
         $this->assertSame(1, $this->rowCount('c_survey_answer', 'survey_id = ? AND session_id IS NULL', [$s]));
-        // PINNED QUIRK: the counters are reset even though the base-course rows of the survey survive.
-        $this->assertSame(0, (int) $this->surveyRow($s)['invited']);
-        $this->assertSame(0, (int) $this->surveyRow($s)['answered']);
+        // The counters follow the base-course rows that survive (1 invitation, 1 answering user).
+        $this->assertSame(1, (int) $this->surveyRow($s)['invited']);
+        $this->assertSame(1, (int) $this->surveyRow($s)['answered']);
     }
 
     public function testUpdateSurveyAnsweredIncrementsTheCounterAndFlagsTheCurrentUsersInvitation(): void
@@ -796,7 +795,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
         $this->assertSame(5, (int) $this->surveyRow($s)['answered']);
         $rows = $this->conn->fetchAllKeyValue('SELECT iid, answered FROM c_survey_invitation WHERE survey_id = ?', [$s]);
-        // PINNED QUIRK: with no lp item given, every invitation of the user to that survey is flagged,
+        // INTENTIONAL (its only caller, meeting.php, has no learning path): with no lp item given, every invitation of the user to that survey is flagged,
         // including the one tied to a learning path item.
         $this->assertSame(1, (int) $rows[$mine]);
         $this->assertSame(0, (int) $rows[$theirs]);

@@ -159,7 +159,7 @@ final class AgendaCharacterizationTest extends KernelTestCase
         $this->assertSame('course', (new Agenda('course'))->getType());
         $this->assertSame('admin', (new Agenda('admin'))->getType());
         $this->assertSame('personal', (new Agenda('personal'))->getType());
-        // PINNED QUIRK: an unknown type is ignored silently and the class default (personal) stays.
+        // INTENTIONAL: an unknown type is ignored and the class default (personal) stays.
         $this->assertSame('personal', (new Agenda('nonsense'))->getType());
         $this->assertSame('course', (new Agenda(' course '))->getType(), 'the type is trimmed');
     }
@@ -236,7 +236,7 @@ final class AgendaCharacterizationTest extends KernelTestCase
 
     public function testParseSendToArrayEmptyInputHasNoGroupsOrUsersKeys(): void
     {
-        // PINNED QUIRK: an empty/non-array input returns only the "everyone" key.
+        // INTENTIONAL: an empty/non-array input returns only the "everyone" key (addEvent() checks it with empty()).
         $this->assertSame(['everyone' => false], $this->agenda()->parseSendToArray([]));
         $this->assertSame(['everyone' => false], $this->agenda()->parseSendToArray('everyone'));
     }
@@ -279,7 +279,7 @@ final class AgendaCharacterizationTest extends KernelTestCase
         $this->assertSame(2, (int) $links[0]['visibility'], 'published');
     }
 
-    public function testAddEventAllDayIsOnlyTheExactStringTrue(): void
+    public function testAddEventAllDayAcceptsTrueStringBoolAndOne(): void
     {
         $agenda = $this->agenda();
         $a = $agenda->addEvent('2030-06-14 09:00:00', '2030-06-14 10:00:00', 'true', 'ag_allday', '', ['everyone']);
@@ -287,22 +287,23 @@ final class AgendaCharacterizationTest extends KernelTestCase
         $c = $agenda->addEvent('2030-06-14 09:00:00', '2030-06-14 10:00:00', 1, 'ag_allday_int', '', ['everyone']);
 
         $this->assertSame(1, (int) $this->row($a)['all_day']);
-        // PINNED QUIRK: the boolean true and the integer 1 (as the callers pass) do not make an all-day event.
-        $this->assertSame(0, (int) $this->row($b)['all_day']);
-        $this->assertSame(0, (int) $this->row($c)['all_day']);
+        // The boolean true and the integer 1 (as the callers pass) also make an all-day event.
+        $this->assertSame(1, (int) $this->row($b)['all_day']);
+        $this->assertSame(1, (int) $this->row($c)['all_day']);
     }
 
-    public function testAddEventWithoutRecipientsCreatesNoLinkAtAll(): void
+    public function testAddEventWithoutUsableRecipientsIsLinkedToTheCourse(): void
     {
-        // PINNED QUIRK: with an empty $usersToSend no resource link is created, so the event is attached to
-        // the course node only and is listed to nobody. add_course.lib.inc.php (the "Course creation" event)
-        // and the work tool when the group id is 0 (['GROUP:0']) end up here.
+        // An empty $usersToSend (the "Course creation" event) or only GROUP:0 (the work tool without a group)
+        // used to create no link, so the event was listed to nobody. It now goes to the course context.
         $id = $this->agenda()->addEvent('2030-06-14 09:00:00', '2030-06-14 10:00:00', 'false', 'ag_nobody', '');
         $this->assertGreaterThan(0, $id);
-        $this->assertSame([], $this->links($id));
+        $this->assertCount(1, $this->links($id));
+        $this->assertSame(1, (int) $this->links($id)[0]['c_id']);
+        $this->assertNull($this->links($id)[0]['user_id']);
 
         $viaGroupZero = $this->agenda()->addEvent('2030-06-14 09:00:00', '2030-06-14 10:00:00', 'false', 'ag_g0', '', ['GROUP:0']);
-        $this->assertSame([], $this->links($viaGroupZero));
+        $this->assertCount(1, $this->links($viaGroupZero));
     }
 
     public function testAddEventToUsersCreatesOneUserLinkEach(): void
@@ -336,14 +337,12 @@ final class AgendaCharacterizationTest extends KernelTestCase
         $this->assertSame($sessionId, (int) $links[0]['session_id']);
     }
 
-    public function testAddEventWithoutEndDateEndsNow(): void
+    public function testAddEventWithoutEndDateEndsAtTheStart(): void
     {
-        // PINNED QUIRK: a null end (the Bbb plugin passes null) becomes "now", not the start date, so the event
-        // starts in the future and ends before it began.
+        // A null end (the Bbb plugin passes null) is the start date, not "now".
         $id = $this->agenda()->addEvent('2030-06-14 09:00:00', null, 'false', 'ag_noend', '', ['everyone']);
 
-        $end = strtotime($this->row($id)['end_date'].' UTC');
-        $this->assertLessThanOrEqual(10, abs(time() - $end));
+        $this->assertSame($this->row($id)['start_date'], $this->row($id)['end_date']);
         $this->assertSame('2030-06-14 00:00:00', $this->row($id)['start_date']);
     }
 
@@ -358,8 +357,9 @@ final class AgendaCharacterizationTest extends KernelTestCase
 
     public function testAddEventOfAdminAndPersonalTypeCreatesNothing(): void
     {
-        // PINNED QUIRK: addEvent() has no branch for 'admin' nor 'personal' (the code was commented out when the
-        // tables went away), so system_announcements "add to calendar" silently stores nothing and returns null.
+        // INTENTIONAL (limitation): the platform/personal agenda tables are gone and no entity replaced them, so
+        // addEvent() has no branch for 'admin' nor 'personal' and returns null. The dead "Add to calendar"
+        // checkbox of the system announcements form was removed so that it no longer promises it.
         $before = (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_calendar_event');
 
         $this->assertNull($this->agenda('admin', null)->addEvent('2030-06-14 09:00:00', '2030-06-14 10:00:00', false, 'ag_admin', ''));
@@ -394,9 +394,21 @@ final class AgendaCharacterizationTest extends KernelTestCase
         $this->assertSame(['everyone' => true, 'users' => [], 'groups' => []], $event['send_to']);
         $this->assertCount(0, $event['repeat_info']);
         $this->assertCount(0, $event['attachment']);
-        // PINNED QUIRK: "parent_event_id" is never put in the result, so "parent_info" can never be set either.
+        // A top-level event has no parent keys.
         $this->assertArrayNotHasKey('parent_event_id', $event);
         $this->assertArrayNotHasKey('parent_info', $event);
+    }
+
+    public function testGetEventOfAChildExposesItsParent(): void
+    {
+        $parent = $this->event();
+        $child = $this->agenda()->addEvent('2030-06-14 09:00:00', '2030-06-14 10:00:00', 'false', 'ag_child_info', '', ['everyone'], false, $parent);
+        Container::getEntityManager()->clear();
+
+        $event = $this->agenda()->get_event($child);
+
+        $this->assertSame($parent, $event['parent_event_id']);
+        $this->assertSame($parent, $event['parent_info']->getIid());
     }
 
     public function testGetEventSendToListsTheUsersLinked(): void
@@ -590,7 +602,7 @@ final class AgendaCharacterizationTest extends KernelTestCase
         $this->agenda('course', 1, false)->deleteEvent($id);
         $this->assertSame(1, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_calendar_event WHERE iid = ?', [$id]));
 
-        // PINNED QUIRK: deleteEvent() prints "1" on success (legacy AJAX protocol).
+        // INTENTIONAL: deleteEvent() prints "1" on success (legacy AJAX protocol); the method is @deprecated, no caller.
         ob_start();
         $this->agenda()->deleteEvent($id);
         $this->assertSame('1', ob_get_clean());
@@ -611,7 +623,7 @@ final class AgendaCharacterizationTest extends KernelTestCase
 
     public function testDeleteWholeSeriesFailsBecauseOfTheOldRepeatQuery(): void
     {
-        // PINNED QUIRK (schema drift): getAllRepeatEvents() filters c_calendar_event on c_id, a column that no
+        // DEAD (schema drift, @deprecated, no caller): getAllRepeatEvents() filters c_calendar_event on c_id, a column that no
         // longer exists, so deleting a series throws before anything is removed.
         $id = $this->event();
 

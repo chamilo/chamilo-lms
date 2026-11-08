@@ -284,9 +284,14 @@ class Agenda
         $eventComment = '',
         $color = ''
     ) {
+        if (empty($end)) {
+            // Callers without an end date (e.g. the Bbb plugin) get a zero-length event, not one ending "now".
+            $end = $start;
+        }
         $start = api_get_utc_datetime($start, false, true);
         $end = api_get_utc_datetime($end, false, true);
-        $allDay = isset($allDay) && 'true' === $allDay ? 1 : 0;
+        // Callers pass 'true', true or 1 indifferently.
+        $allDay = (isset($allDay) && ('true' === $allDay || true === $allDay || 1 === $allDay || '1' === $allDay)) ? 1 : 0;
         $id = null;
 
         $em = Database::getManager();
@@ -331,8 +336,14 @@ class Agenda
 
                 $event->setParent($courseEntity);
 
-                if (!empty($usersToSend)) {
-                    $sendTo = $this->parseSendToArray($usersToSend);
+                $sendTo = $this->parseSendToArray($usersToSend);
+                $hasRecipients = !empty($sendTo['everyone']) || !empty($sendTo['users'])
+                    || !empty(array_filter($sendTo['groups'] ?? []));
+                if (!$hasRecipients) {
+                    // No usable recipient (empty list, or only GROUP:0): publish to the whole course context,
+                    // otherwise the event would be linked to nobody and listed nowhere.
+                    $event->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
+                } else {
                     if ($sendTo['everyone']) {
                         $event->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
                     } else {
@@ -1055,8 +1066,10 @@ class Agenda
                         // Getting repeat info
                         $event['repeat_info'] = $eventEntity->getRepeatEvents();
 
-                        if (!empty($event['parent_event_id'])) {
-                            $event['parent_info'] = $eventEntity->getParentEvent();
+                        $parentEvent = $eventEntity->getParentEvent();
+                        if (null !== $parentEvent) {
+                            $event['parent_event_id'] = $parentEvent->getIid();
+                            $event['parent_info'] = $parentEvent;
                         }
 
                         $event['attachment'] = $eventEntity->getAttachments();

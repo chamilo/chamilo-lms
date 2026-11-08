@@ -39,7 +39,7 @@ class GlossaryManager
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
 
-        $glossaries = $repo->getResourcesByCourse($course, $session);
+        $glossaries = $repo->getResourcesByCourse($course, $session)->getQuery()->getResult();
         /** @var CGlossary $item */
         foreach ($glossaries as $item) {
             $glossaryData[] = [

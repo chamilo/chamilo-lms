@@ -74,12 +74,15 @@ final class GlossaryCharacterizationTest extends KernelTestCase
     {
         $a = $this->term('gl_alpha', '<p>first</p>');
         $b = $this->term('gl_beta', 'second');
+        $terms = $this->mine(GlossaryManager::get_glossary_terms());
 
-        // PINNED QUIRK: the method iterates the QueryBuilder instead of its result, so it always returns []
-        // (the AJAX helper and the import's "delete all" then see an empty glossary). Intended:
-        // [['id' => $a, 'title' => 'gl_alpha', 'description' => '<p>first</p>'], ['id' => $b, ...]].
-        $this->assertSame([], GlossaryManager::get_glossary_terms());
-        $this->assertGreaterThan($a, $b);
+        $this->assertSame(
+            [
+                ['id' => $a, 'title' => 'gl_alpha', 'description' => '<p>first</p>'],
+                ['id' => $b, 'title' => 'gl_beta', 'description' => 'second'],
+            ],
+            array_values($terms)
+        );
     }
 
     public function testStudentsDoNotSeeDraftTermsNorTermsOfOtherCourses(): void

@@ -88,6 +88,28 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $this->assertEmpty($this->plugin->getCouponByCode('BC_UNKNOWN'));
     }
 
+    public function testDisabledCouponIsNotRedeemableByCodeOrId(): void
+    {
+        $off = $this->makeCoupon('BC_DISABLED', 1, 20, active: 0);
+        $this->conn->insert('plugin_buycourses_coupon_rel_item', ['coupon_id' => $off, 'product_type' => 1, 'product_id' => 1]);
+
+        $this->assertEmpty($this->plugin->getCouponByCode('BC_DISABLED', 1, 1));
+        $this->assertEmpty($this->plugin->getCoupon($off, 1, 1));
+        // without a product it is the plain lookup used by the coupon admin screens, which must still find it
+        $this->assertSame($off, (int) $this->plugin->getCouponByCode('BC_DISABLED')['id']);
+    }
+
+    public function testDisabledServiceCouponIsNotRedeemable(): void
+    {
+        $this->conn->insert('plugin_buycourses_services', $this->serviceRow('bc_service'));
+        $serviceId = (int) $this->conn->lastInsertId();
+        $off = $this->makeCoupon('BC_SRVOFF', 2, 5, active: 0);
+        $this->conn->insert('plugin_buycourses_coupon_rel_service', ['coupon_id' => $off, 'service_id' => $serviceId]);
+
+        $this->assertEmpty($this->plugin->getCouponServiceByCode('BC_SRVOFF', $serviceId));
+        $this->assertEmpty($this->plugin->getCouponService($off, $serviceId));
+    }
+
     public function testCouponCodeLookupIsCaseInsensitive(): void
     {
         $this->makeCoupon('BC_Case', 1, 5);

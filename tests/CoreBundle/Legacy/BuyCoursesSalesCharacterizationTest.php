@@ -145,13 +145,13 @@ final class BuyCoursesSalesCharacterizationTest extends BuyCoursesCharacterizati
         }
     }
 
-    public function testRegisterSaleAppliesADisabledCoupon(): void
+    public function testRegisterSaleIgnoresADisabledCoupon(): void
     {
         $c = $this->couponForCourse('BC_OFF', 2, 30, ['active' => 0]);
         $sale = $this->saleRow((int) $this->plugin->registerSale($this->item, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, $c));
 
-        // PINNED QUIRK: the "active" flag of the coupon is never checked when a coupon is redeemed.
-        $this->assertSame('70.00', $sale['price']);
+        $this->assertSame('100.00', $sale['price']);
+        $this->assertSame('0.00', $sale['discount_amount']);
     }
 
     public function testReferenceLookupAndUpdate(): void

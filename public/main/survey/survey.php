@@ -494,18 +494,18 @@ if ($is_survey_type_1) {
     echo '<input type="hidden" name="sec_token" value="'.htmlspecialchars($sec_token, ENT_QUOTES).'">';
     if ('editgroup' === $_GET['action']) {
         $sql = 'SELECT title, description FROM '.$table_survey_question_group.'
-                WHERE id = '.intval($_GET['gid']).' AND survey_id = '.$survey_id.'
+                WHERE id = '.(int) $_GET['gid'].' AND survey_id = '.$survey_id.'
                 LIMIT 1';
         $rs = Database::query($sql);
         $editedrow = Database::fetch_assoc($rs);
-        echo '<input type="text" maxlength="20" name="name" value="'.$editedrow['title'].'" size="10" disabled>';
-        echo '<input type="text" maxlength="150" name="description" value="'.$editedrow['description'].'" size="40">';
-        echo '<input type="hidden" name="group_id" value="'.Security::remove_XSS($_GET['gid']).'">';
+        echo '<input type="text" maxlength="20" name="name" value="'.api_htmlentities((string) ($editedrow['title'] ?? ''), ENT_QUOTES).'" size="10" disabled>';
+        echo '<input type="text" maxlength="150" name="description" value="'.api_htmlentities((string) ($editedrow['description'] ?? ''), ENT_QUOTES).'" size="40">';
+        echo '<input type="hidden" name="group_id" value="'.(int) $_GET['gid'].'">';
         echo '<input
                 type="submit"
                 value="'.get_lang('Save').'"'.'
                 <input type="button" value="'.get_lang('Cancel').'"
-                onclick="window.location.href = \'survey.php?survey_id='.Security::remove_XSS($survey_id).'\';" />';
+                onclick="window.location.href = \'survey.php?survey_id='.$survey_id.'\';" />';
     } else {
         echo '<input type="text" maxlength="20" name="name" value="" size="10">';
         echo '<input type="text" maxlength="250" name="description" value="" size="80">';

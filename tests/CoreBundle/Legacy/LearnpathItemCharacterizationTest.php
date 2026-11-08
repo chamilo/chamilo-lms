@@ -1206,15 +1206,25 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertSame('-1', $this->item($quiz)->get_file_path(), 'numeric path of a tool item other than document');
     }
 
-    public function testGetFilePathOfADocumentReadsAPathColumnThatNoLongerExists(): void
+    public function testGetFilePathOfADocumentIsBuiltFromTheDocumentEntity(): void
     {
         $lp = $this->newLpRow('li_path_doc');
-        $doc = $this->addItem($lp, 'li_doc', 'document', 1, null, 123456);
 
-        // PINNED QUIRK: a numeric document path is resolved with "SELECT path FROM c_document WHERE iid = ...";
-        // c_document has no path column any more (the file lives in the resource node), so this always fails.
-        $this->expectException(NotAllowedException::class);
-        $this->item($doc)->get_file_path();
+        // Fixed: a numeric document path was resolved with "SELECT path FROM c_document", a column that no
+        // longer exists (the file lives in the resource node), so the call always threw and the SCORM export
+        // of any LP with a document failed. The path is now 'document/' + the document's path, like
+        // DocumentManager::get_document_data_by_id() builds it. An unknown document is an error page ('-1').
+        $missing = $this->addItem($lp, 'li_missing', 'document', 1, null, 123456);
+        $this->assertSame('-1', $this->item($missing)->get_file_path());
+
+        $docId = $this->conn()->fetchOne("SELECT iid FROM c_document WHERE filetype = 'file' ORDER BY iid LIMIT 1");
+        if (false === $docId) {
+            $this->markTestSkipped('no document in the fixtures');
+        }
+        $doc = Container::getDocumentRepository()->find((int) $docId);
+        $expected = 'document/'.ltrim($doc->getFullPath(), '/');
+        $real = $this->addItem($lp, 'li_real', 'document', 2, null, (int) $docId);
+        $this->assertSame($expected, $this->item($real)->get_file_path());
     }
 
     public function testHumanizeStatusReturnsTheTranslatedLabelOrABadge(): void

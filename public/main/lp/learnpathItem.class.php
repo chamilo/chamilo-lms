@@ -500,14 +500,13 @@ class learnpathItem
 
                 case TOOL_DOCUMENT:
                 case 'video':
-                    $table_doc = Database::get_course_table(TABLE_DOCUMENT);
-                    $sql = 'SELECT path
-                            FROM '.$table_doc.'
-                            WHERE iid = '.$path;
-                    $res = Database::query($sql);
-                    $row = Database::fetch_array($res);
+                    // c_document has no path column any more: the path comes from the resource tree.
+                    $document = Container::getDocumentRepository()->find((int) $path);
+                    if (null === $document) {
+                        return '-1';
+                    }
 
-                    return 'document'.$row['path'];
+                    return 'document/'.ltrim($document->getFullPath(), '/');
 
                 case TOOL_STUDENTPUBLICATION:
                 case TOOL_QUIZ:

@@ -385,15 +385,20 @@ final class DropboxCharacterizationTest extends KernelTestCase
         $this->assertSame(0, (int) $this->conn->fetchOne('SELECT cat_id FROM c_dropbox_post WHERE file_id = ?', [$file]));
     }
 
-    public function testStoreMoveSentFailsBecauseTheFileTableHasNoIdColumn(): void
+    public function testStoreMoveSentChangesOnlyMyUploadOfTheCurrentCourse(): void
     {
-        // PINNED QUIRK (schema drift): c_dropbox_file has only "iid"; the UPDATE still filters on "id" and the
-        // query layer raises NotAllowedException, so moving a sent file never works.
         $mine = $this->file(1);
+        $notMine = $this->file(2);
+        $otherCourse = $this->file(1, 0, 2);
 
-        $this->expectException(NotAllowedException::class);
+        $this->assertSame(get_lang('The sent file has been moved'), store_move($mine, 7, 'sent'));
+        store_move($notMine, 7, 'sent');
+        store_move($otherCourse, 7, 'sent');
 
-        store_move($mine, 7, 'sent');
+        $cat = fn (int $id): int => (int) $this->conn->fetchOne('SELECT cat_id FROM c_dropbox_file WHERE iid = ?', [$id]);
+        $this->assertSame(7, $cat($mine));
+        $this->assertSame(0, $cat($notMine), 'a file uploaded by someone else cannot be moved');
+        $this->assertSame(0, $cat($otherCourse));
     }
 
     public function testStoreMoveWithMissingArgumentsMovesNothing(): void

@@ -250,7 +250,7 @@ function store_move($id, $target, $part)
                     WHERE
                         c_id = $course_id AND
                         uploader_id = ".intval($_user['user_id'])." AND
-                        id = ".intval($id);
+                        iid = ".intval($id);
             Database::query($sql);
             $return_message = get_lang('The sent file has been moved');
         }

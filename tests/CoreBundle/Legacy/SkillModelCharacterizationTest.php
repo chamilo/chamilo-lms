@@ -191,16 +191,21 @@ final class SkillModelCharacterizationTest extends KernelTestCase
         $this->assertSame([$first, $second, $third], array_values(array_intersect($ids, [$first, $second, $third])));
     }
 
-    public function testGetAllSkillsWithAParentIdCrashesWhenAChildIsFound(): void
+    public function testGetAllSkillsWithAParentIdLoadsAllTheDescendants(): void
     {
         $a = $this->skill('a');
-        $this->skill('b', $a);
+        $b = $this->skill('b', $a);
+        $c = $this->skill('c', $a);
+        $d = $this->skill('d', $b);
+        $other = $this->skill('other');
 
-        // PINNED QUIRK: the recursive "load all children" step calls self::get_all(), which is
-        // Model::get_all(array $options): passing the first boolean argument throws a TypeError.
-        $this->expectException(\TypeError::class);
+        $rows = (new SkillModel())->getAllSkills(false, false, null, $a);
 
-        (new SkillModel())->getAllSkills(false, false, null, $a);
+        // Direct children first, then the children of each of them (the recursion used to call a
+        // method with another signature and throw a TypeError as soon as a child existed).
+        $this->assertSame([$b, $c, $d], array_keys($rows));
+        $this->assertArrayNotHasKey($other, $rows);
+        $this->assertSame(2, $rows[$d]['level']);
     }
 
     public function testGetAllSkillsWithAParentIdAndNoChildrenIsEmpty(): void

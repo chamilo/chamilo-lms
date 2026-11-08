@@ -439,7 +439,7 @@ class SkillModel extends Model
         // Load all children of the parent_id
         if (!empty($skills) && !empty($parent_id)) {
             foreach ($skills as $skill) {
-                $children = self::get_all($load_user_data, $user_id, $id, $skill['id']);
+                $children = $this->getAllSkills($load_user_data, $user_id, $id, $skill['id']);
                 if (!empty($children)) {
                     // $skills = array_merge($skills, $children);
                     $skills += $children;

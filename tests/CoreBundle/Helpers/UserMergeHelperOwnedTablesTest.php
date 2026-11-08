@@ -185,4 +185,38 @@ final class UserMergeHelperOwnedTablesTest extends KernelTestCase
         ), 'NULL session ids must match each other');
         $this->assertSame([10], array_map('intval', $this->conn()->fetchFirstColumn('SELECT progress FROM c_lp_view WHERE user_id = ?', [$merge])));
     }
+
+    public function testTheRuleListsPinTheMatchColumnsThatDecideWhichRowWins(): void
+    {
+        // The generic tests above follow the helper's own lists; this one pins the decisions in them.
+        $pivots = [];
+        foreach ($this->rules('getPivotMergeRules') as $r) {
+            $pivots[$r['table']] = $r['matchColumns'];
+        }
+        $this->assertSame(['access_url_id'], $pivots['access_url_rel_user']);
+        $this->assertSame(['c_id'], $pivots['course_rel_user']);
+        $this->assertSame(['session_id', 'relation_type'], $pivots['session_rel_user']);
+        $this->assertSame(['usergroup_id', 'relation_type'], $pivots['usergroup_rel_user']);
+        $this->assertSame(['friend_user_id', 'relation_type'], $pivots['user_rel_user']);
+        foreach (['c_group_rel_user' => 'group_id', 'c_group_rel_tutor' => 'group_id', 'c_blog_rel_user' => 'blog_id', 'ticket_rel_user' => 'ticket_id', 'c_lp_user_access' => 'lp_id', 'user_rel_tag' => 'tag_id'] as $table => $col) {
+            $this->assertSame([$col], $pivots[$table], $table);
+        }
+
+        $moves = [];
+        foreach ($this->rules('getMoveKeepingTargetRules') as $r) {
+            $moves[$r['table']] = $r['matchColumns'];
+        }
+        $this->assertSame(['evaluation_id'], $moves['gradebook_result']);
+        $this->assertSame(['cat_id'], $moves['gradebook_certificate']);
+        $this->assertSame(['lp_id', 'c_id', 'session_id'], $moves['c_lp_view']);
+        $this->assertSame(['attendance_id'], $moves['c_attendance_result']);
+
+        $updates = array_map(static fn (array $r): string => $r['table'].'.'.$r['field'], $this->rules('getUpdateRules'));
+        foreach (['c_blog_post.author_id', 'c_notebook.user_id', 'c_student_publication.user_id', 'gradebook_result_log.user_id', 'ticket_ticket.assigned_last_user', 'course_invitation.created_by', 'message.user_sender_id', 'track_e_login.login_user_id'] as $entry) {
+            $this->assertContains($entry, $updates);
+        }
+        foreach (['user_auth_source', 'oauth_access_token', 'reset_password_request', 'push_subscription', 'user_api_key', 'ai_tutor_conversation'] as $table) {
+            $this->assertNotContains($table, array_map(static fn (string $e): string => explode('.', $e)[0], $updates), 'Credentials and private conversations are never transferred');
+        }
+    }
 }

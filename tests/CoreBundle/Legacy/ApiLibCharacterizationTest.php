@@ -981,6 +981,100 @@ class ApiLibCharacterizationTest extends AbstractApiTest
         $this->assertFalse(api_get_tool_information_by_name('document'));
     }
 
+    // ---------------------------------------------------------------- tool visibility
+
+    private function toolLinkVisibility(string $tool, ?int $visibility, ?int $sessionId = null): void
+    {
+        $nodeId = (int) $this->conn()->fetchOne(
+            'SELECT ct.resource_node_id FROM c_tool ct JOIN tool t ON t.id = ct.tool_id
+             WHERE ct.c_id = 1 AND t.title = ? AND ct.session_id IS NULL LIMIT 1',
+            [$tool]
+        );
+        $this->assertGreaterThan(0, $nodeId, 'Fixture course 1 needs the '.$tool.' tool.');
+        if (null === $sessionId) {
+            $this->conn()->executeStatement(
+                'UPDATE resource_link SET visibility = ? WHERE resource_node_id = ? AND c_id = 1 AND session_id IS NULL',
+                [$visibility, $nodeId]
+            );
+
+            return;
+        }
+        $this->conn()->executeStatement(
+            'INSERT INTO resource_link (resource_node_id, c_id, session_id, visibility, display_order, resource_type_group, created_at, updated_at)
+             VALUES (?, 1, ?, ?, 0, 0, NOW(), NOW())',
+            [$nodeId, $sessionId, $visibility]
+        );
+    }
+
+    public function testToolInformationCarriesTheVisibilityOfTheCourseToolLink(): void
+    {
+        ChamiloSession::write('_real_cid', 1);
+        $this->toolLinkVisibility('group', 0);
+        $this->assertSame(0, (int) api_get_tool_information_by_name('group')['visibility']);
+
+        $this->toolLinkVisibility('group', 2);
+        $this->assertSame(2, (int) api_get_tool_information_by_name('group')['visibility']);
+        $this->assertSame('group', $this->conn()->fetchOne('SELECT title FROM c_tool WHERE iid = ?', [api_get_tool_information_by_name('group')['iid']]));
+    }
+
+    public function testToolInformationPrefersTheSessionLinkOverTheBaseCourseLink(): void
+    {
+        ChamiloSession::write('_real_cid', 1);
+        $sid = $this->rawSession('toolvis', null, null);
+        $this->toolLinkVisibility('group', 2);
+        $this->toolLinkVisibility('group', 0, $sid);
+
+        $this->assertSame(2, (int) api_get_tool_information_by_name('group')['visibility'], 'No session: base link.');
+        ChamiloSession::write('sid', $sid);
+        $this->assertSame(0, (int) api_get_tool_information_by_name('group')['visibility'], 'Session link overrides.');
+    }
+
+    private function protectAsStudentOfOpenCourse(string $tool): void
+    {
+        $this->courseVisibility(3);
+        ChamiloSession::write('_real_cid', 1);
+        ChamiloSession::write('_cid', 'AIACT');
+        $_REQUEST['cid'] = '1';
+        $student = $this->rawUser('toolstu', 5);
+        $this->courseUser($student, 1, 5);
+        $this->loginAs($student);
+        api_protect_course_script(false, false, $tool);
+    }
+
+    public function testHiddenToolIsRefusedToAStudent(): void
+    {
+        $this->toolLinkVisibility('group', 0);
+
+        $this->expectException(NotAllowedException::class);
+        $this->protectAsStudentOfOpenCourse('group');
+    }
+
+    public function testVisibleToolAndUnknownToolNamesAreAllowedToAStudent(): void
+    {
+        $this->toolLinkVisibility('group', 2);
+        $this->protectAsStudentOfOpenCourse('group');
+        $this->addToAssertionCount(1);
+
+        $this->protectAsStudentOfOpenCourse('ap_unknown_tool');
+        $this->addToAssertionCount(1);
+    }
+
+    public function testHiddenToolStaysAvailableToTheCourseTeacher(): void
+    {
+        $this->toolLinkVisibility('group', 0);
+        $this->courseVisibility(3);
+        ChamiloSession::write('_real_cid', 1);
+        ChamiloSession::write('_cid', 'AIACT');
+        $_REQUEST['cid'] = '1';
+        $teacher = $this->rawUser('tooltea', 1);
+        $this->courseUser($teacher, 1, 1);
+        $this->loginAs($teacher);
+        // The request listener grants the contextual course role; do the same for the logged-in entity.
+        self::getContainer()->get('security.token_storage')->getToken()->getUser()->addTemporaryRole('ROLE_CURRENT_COURSE_TEACHER');
+
+        $this->assertTrue(api_protect_course_script(false, false, 'group'));
+    }
+
     // ---------------------------------------------------------------- dead helpers (cheap pins)
 
     public function testIsSessionInCategoryMatchesTheCategoryTitleSuffix(): void

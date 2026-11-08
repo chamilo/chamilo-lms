@@ -5700,8 +5700,22 @@ function api_get_tool_information_by_name($name)
     $data = Database::fetch_array($rs);
     if ($data) {
         $tool = $data['id'];
-        $sql = "SELECT * FROM $t_tool
-                WHERE c_id = $course_id  AND tool_id = '".$tool."' ";
+        // The visibility of a course tool lives in the resource link of its resource node: the link of the
+        // current session when there is one, the base course link otherwise.
+        $session_id = api_get_session_id();
+        $sql = "SELECT ct.*, rl.visibility
+                FROM $t_tool ct
+                LEFT JOIN resource_link rl
+                    ON rl.resource_node_id = ct.resource_node_id
+                    AND rl.c_id = ct.c_id
+                    AND rl.group_id IS NULL
+                    AND rl.usergroup_id IS NULL
+                    AND rl.user_id IS NULL
+                    AND rl.deleted_at IS NULL
+                    AND (rl.session_id IS NULL OR rl.session_id = $session_id)
+                WHERE ct.c_id = $course_id AND ct.tool_id = ".(int) $tool."
+                ORDER BY (rl.session_id IS NULL) ASC, ct.iid ASC
+                LIMIT 1";
         $rs = Database::query($sql);
 
         return Database::fetch_assoc($rs);

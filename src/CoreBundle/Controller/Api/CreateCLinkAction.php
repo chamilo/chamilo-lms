@@ -69,11 +69,13 @@ class CreateCLinkAction extends BaseResourceFileAction
             ;
 
             if ($linkCategory) {
+                $this->assertResourceBelongsToCurrentCourse($linkCategory, $cidReqHelper);
                 $link->setCategory($linkCategory);
             }
         }
 
         if (!empty($parentResourceNodeId)) {
+            $this->assertParentNodeIsInCurrentCourse($cidReqHelper, (int) $parentResourceNodeId, $em);
             $link->setParentResourceNode($parentResourceNodeId);
         }
 

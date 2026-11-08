@@ -51,7 +51,9 @@ class FileManagerController extends AbstractController
             $request,
             $this->entityManager,
             $this->cidReqHelper,
-            'overwrite'
+            'overwrite',
+            // A personal file is created unlinked, whatever the body asks for.
+            resourceLinkListOverride: []
         );
 
         $this->entityManager->persist($resource);

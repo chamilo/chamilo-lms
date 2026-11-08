@@ -27,15 +27,7 @@ class Login
      */
     public static function get_user_account_list($user, $reset = false, $by_username = false)
     {
-        $portal_url = api_get_path(WEB_PATH);
-
-        if (api_is_multiple_url_enabled()) {
-            $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
-                $url = api_get_access_url($access_url_id);
-                $portal_url = $url['url'];
-            }
-        }
+        $portal_url = Container::getAccessUrlUtil()->getCurrentBaseUrl();
 
         if ($reset) {
             if ($by_username) {
@@ -106,14 +98,7 @@ class Login
             $email_to = $user[0]['email'];
         }
 
-        $portal_url = api_get_path(WEB_PATH);
-        if (api_is_multiple_url_enabled()) {
-            $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
-                $url = api_get_access_url($access_url_id);
-                $portal_url = $url['url'];
-            }
-        }
+        $portal_url = Container::getAccessUrlUtil()->getCurrentBaseUrl();
 
         $email_body = get_lang('This is your information to connect to')." ".$portal_url."\n\n$user_account_list";
         // SEND MESSAGE
@@ -204,7 +189,7 @@ class Login
         Database::getManager()->persist($user);
         Database::getManager()->flush();
 
-        $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
+        $url = Container::getAccessUrlUtil()->getCurrentBaseUrl().'main/auth/reset.php?token='.$uniqueId;
         $mailSubject = get_lang('Instructions for the password change procedure');
         $mailBody = sprintf(
             get_lang('This message is being sent to you because you (or someone attempting to impersonate you) requested that a new password be generated for your account.<br/>To set up your new password, please follow this link:<br/>%s<br/>If you did not make this request, you can simply ignore this message. If you continue to receive these messages, please contact the portal administrator.'),

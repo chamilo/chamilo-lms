@@ -439,4 +439,49 @@ class UserAddControllerTest extends WebTestCase
             'A session admin must not be able to bypass registration.user_hide_never_expire_option by claiming hasExpirationDate=0.'
         );
     }
+
+    /**
+     * Session managers may use this form, but administrator rights are not theirs to hand out.
+     */
+    public function testSessionManagerCannotCreateAnAdministrator(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->createUser('user_add_ctrl_sm', '', '', 'ROLE_SESSION_MANAGER'));
+
+        $client->request(
+            'POST',
+            '/admin/user-add-action',
+            [
+                'firstname' => 'Test',
+                'lastname' => 'SmAdmin',
+                'email' => 'user_add_ctrl_sm_admin@example.com',
+                'username' => 'user_add_ctrl_sm_admin',
+                'authSource' => ['platform'],
+                'roles' => ['ROLE_ADMIN'],
+                'locale' => 'en_US',
+                'sendMail' => '0',
+                'active' => '1',
+                'passwordMode' => 'auto',
+            ],
+            [],
+            ['HTTP_SEC_FETCH_SITE' => 'same-origin']
+        );
+
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertNull(static::getContainer()->get(UserRepository::class)->findOneBy(['username' => 'user_add_ctrl_sm_admin']));
+    }
+
+    public function testSessionManagerIsNotOfferedTheAdministratorRole(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->createUser('user_add_ctrl_sm_options', '', '', 'ROLE_SESSION_MANAGER'));
+
+        $client->request('GET', '/admin/user-add-data', [], [], ['HTTP_ACCEPT' => 'application/json']);
+
+        $this->assertResponseIsSuccessful();
+        $data = json_decode((string) $client->getResponse()->getContent(), true);
+        $roles = array_map('api_normalize_role_code', array_column($data['roleOptions'], 'value'));
+        $this->assertNotContains('ROLE_ADMIN', $roles);
+        $this->assertContains('ROLE_STUDENT', $roles);
+    }
 }

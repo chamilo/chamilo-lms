@@ -163,7 +163,7 @@ if ($hasBrowseAccess) {
                 api_is_allowed_to_edit(false, true)
             ) {
                 $actions_array[] = [
-                    'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?forum='.$forum->getIid().'&'.api_get_cidreq().'&origin=group',
+                    'url' => getForumToolUrl(api_get_course_int_id(), api_get_session_id(), $groupEntity->getIid(), $forum->getIid(), 0, ['origin' => 'group']),
                     'icon' => Display::getMdiIcon(ToolIcon::FORUM, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Forum')),
                     'label' => get_lang('Forum'),
                     'subtitle' => Security::remove_XSS($forum->getTitle()),
@@ -253,7 +253,7 @@ if ($hasBrowseAccess) {
         foreach ($forums as $forum) {
             if ('public' === $forum->getForumGroupPublicPrivate()) {
                 $actions_array[] = [
-                    'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?cid='.api_get_course_int_id().'&forum='.$forum->getIid().'&gid='.$groupEntity->getIid().'&origin=group',
+                    'url' => getForumToolUrl(api_get_course_int_id(), api_get_session_id(), $groupEntity->getIid(), $forum->getIid(), 0, ['origin' => 'group']),
                     'content' => Display::getMdiIcon(ToolIcon::FORUM, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Group Forum')),
                 ];
             }

@@ -220,6 +220,34 @@ class AccessUrlScopeHelperTest extends KernelTestCase
         $this->assertTrue($scope->canEditUser($tree['childAdmin'], $peerOnChild));
     }
 
+    public function testCanEditUserOnlyAnUnrestrictedGlobalAdminMayEditAnotherGlobalAdmin(): void
+    {
+        self::bootKernel();
+        $tree = $this->buildTree();
+
+        /** @var AccessUrlScopeHelper $scope */
+        $scope = static::getContainer()->get(AccessUrlScopeHelper::class);
+
+        $globalTarget = $this->createUserOnUrl('scope_global_target_'.uniqid(), $tree['child'], 'ROLE_GLOBAL_ADMIN');
+
+        // A plain admin is never allowed to act on a higher-privileged account, even when
+        // registered at the top of the tree (unrestricted URL scope).
+        $this->assertTrue($scope->isUnrestricted($tree['rootAdmin']));
+        $this->assertFalse($scope->canEditUser($tree['rootAdmin'], $globalTarget));
+
+        // A global admin scoped to a subtree may not act on another global admin either,
+        // even one registered inside that subtree.
+        $tree['childAdmin']->addRole('ROLE_GLOBAL_ADMIN');
+        $this->assertFalse($scope->canEditUser($tree['childAdmin'], $globalTarget));
+
+        // An unrestricted global admin may.
+        $tree['rootAdmin']->addRole('ROLE_GLOBAL_ADMIN');
+        $this->assertTrue($scope->canEditUser($tree['rootAdmin'], $globalTarget));
+
+        // A global admin may still act on their own account.
+        $this->assertTrue($scope->canEditUser($globalTarget, $globalTarget));
+    }
+
     public function testCanGrantGlobalAdminRoleOnlyForAnUnrestrictedGlobalAdmin(): void
     {
         self::bootKernel();

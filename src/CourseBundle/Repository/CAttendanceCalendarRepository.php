@@ -190,23 +190,4 @@ final class CAttendanceCalendarRepository extends ResourceRepository
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
-
-    public function countDoneAttendanceByAttendanceAndGroup(int $attendanceId, ?int $groupId = null): int
-    {
-        $qb = $this->createQueryBuilder('calendar')
-            ->select('COUNT(calendar.iid)')
-            ->where('calendar.attendance = :attendanceId')
-            ->andWhere('calendar.doneAttendance = true')
-            ->setParameter('attendanceId', $attendanceId)
-        ;
-
-        if ($groupId) {
-            $qb->join('calendar.groups', 'groups')
-                ->andWhere('groups.group = :groupId')
-                ->setParameter('groupId', $groupId)
-            ;
-        }
-
-        return (int) $qb->getQuery()->getSingleScalarResult();
-    }
 }

@@ -10,12 +10,14 @@ use Chamilo\CoreBundle\Entity\AgendaReminder;
 use Chamilo\CoreBundle\Entity\Career;
 use Chamilo\CoreBundle\Entity\Promotion;
 use Chamilo\CoreBundle\Entity\Room;
+use Chamilo\CoreBundle\Helpers\AgendaHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Repository\CCalendarEventRepository;
 use DateTime;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UpdateCCalendarEventAction extends BaseResourceFileAction
@@ -26,8 +28,22 @@ class UpdateCCalendarEventAction extends BaseResourceFileAction
         CCalendarEventRepository $repo,
         EntityManager $em,
         SettingsManager $settingsManager,
+        AgendaHelper $agendaHelper,
     ): CCalendarEvent {
-        $this->handleUpdateRequest($calendarEvent, $repo, $request, $em);
+        // The new links need the right to add an event where they point.
+        $this->handleUpdateRequest(
+            $calendarEvent,
+            $repo,
+            $request,
+            $em,
+            static function (array $links) use ($agendaHelper): void {
+                if (!$agendaHelper->canAddLinks($links)) {
+                    throw new AccessDeniedHttpException();
+                }
+            },
+            // The agenda form sends the creator's user id as parent; events are scoped by their links.
+            false,
+        );
 
         $result = json_decode($request->getContent(), true);
         if (!\is_array($result)) {

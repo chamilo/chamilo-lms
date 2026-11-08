@@ -9,6 +9,8 @@ require_once __DIR__.'/../0_dal/dal.global_lib.php';
 require_once __DIR__.'/../0_dal/dal.vdatabase.php';
 $VDB = new VirtualDatabase();
 
+require_once __DIR__.'/../ajax/inc/functions.php';
+
 require_once __DIR__.'/../inc/tranformSource.php';
 
 require_once __DIR__.'/../0_dal/dal.save.php';
@@ -20,7 +22,7 @@ if (!file_exists('files/tmp')) {
     //mkdir('files/tmp', 0777, true);
 }
 $mod = 'template';
-if (isset($_GET['mod'])) {
+if (isset($_GET['mod']) && in_array($_GET['mod'], ['template', 'page'], true)) {
     $mod = $_GET['mod'];
 }
 
@@ -28,6 +30,12 @@ if (isset($_GET['id'])) {
     $idPage = (int) $_GET['id'];
 } else {
     echo 'Error';
+
+    exit;
+}
+
+if (false == oel_ctr_rights($idPage)) {
+    echo 'KO';
 
     exit;
 }

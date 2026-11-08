@@ -188,7 +188,7 @@ olms.lesson_location = '<?php echo $oItem->get_lesson_location(); ?>';
 olms.total_time = '<?php echo $oItem->get_scorm_time('js'); ?>';
 olms.mastery_score = '<?php echo $oItem->get_mastery_score(); ?>';
 olms.launch_data = '<?php echo $oItem->get_launch_data(); ?>';
-olms.max_time_allowed = '<?php echo $oItem->get_max_time_allowed(); ?>';
+olms.max_time_allowed = <?php echo json_encode((string) $oItem->get_max_time_allowed(), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
 olms.interactions = new Array(<?php echo $oItem->get_interactions_js_array(); ?>);
 olms.item_objectives = new Array();
 olms.info_lms_item = new Array();
@@ -2002,58 +2002,6 @@ var checkCurrentItemPosition = function(lpItemId) {
         }
     });
 }
-
-/**
- * Get a forum info when the learning path item has a associated forum
- */
-var loadForumThread = function(lpId, lpItemId) {
-    var loadForum = $.getJSON(
-        '<?php echo api_get_path(WEB_AJAX_PATH); ?>lp.ajax.php' + courseUrl, {
-            a: 'get_forum_thread',
-            lp: lpId,
-            lp_item: lpItemId
-        }
-    );
-
-    $.when(loadForum).done(function(forumThreadData) {
-        var tabForumLink = $('.lp-view-tabs a[href="#lp-view-forum"]'),
-            tabForum = tabForumLink.parent();
-            $("#navTabs").show();
-            $("#tab-iframe").removeClass("tab-none-forum");
-            $("#btn-menu-float").removeClass("none-forum");
-
-        if (forumThreadData.error) {
-            tabForumLink.removeAttr('data-toggle');
-            tabForum.addClass('disabled');
-            $("#navTabs").hide();
-            $("#tab-iframe").addClass("tab-none-forum");
-            $("#btn-menu-float").addClass("none-forum");
-            $('#lp-view-forum').html('');
-
-            return;
-        }
-
-        tabForumLink.attr('data-toggle', 'tab');
-        tabForum.removeClass('disabled');
-
-        var forumIframe = $('<iframe>').attr({
-            width:'100%',
-            frameborder:'0',
-            scrolling:'yes',
-            tabindex:'0',
-            id:'chamilo-disqus',
-            src: '<?php echo api_get_path(WEB_CODE_PATH); ?>forum/viewthread.php?<?php echo api_get_cidreq(); ?>&' + $.param({
-                gradebook: 0,
-                origin: 'learnpath',
-                forum: forumThreadData.forumId,
-                thread: forumThreadData.threadId,
-                posts_order: 'desc'
-            })
-        });
-
-        $('#lp-view-forum').html(forumIframe);
-    });
-};
 
 /**
  * Save a specific item (with its interactions, if any) into the LMS through

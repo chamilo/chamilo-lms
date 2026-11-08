@@ -12,7 +12,7 @@
                                 class="chzn-select form-control w-full rounded-xl bg-white px-3 py-2 text-body-2 text-gray-90 ring-1 ring-gray-20">
                             <option value="0">{{ 'Please make a choice'|trans }}</option>
                             {% for tag in tags %}
-                                <option value="{{ tag.id }}">{{ tag.tag }}</option>
+                                <option value="{{ tag.id }}">{{ tag.tag|e }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -64,19 +64,19 @@
                         </td>
 
                         <td class="px-4 py-3 text-body-2 text-gray-90 font-medium">
-                            {{ skill.title }}
+                            {{ skill.title|e }}
                         </td>
 
                         <td class="px-4 py-3 text-center text-body-2 text-gray-70 whitespace-nowrap">
                             {% if skill.short_code is not empty %}
-                                {{ skill.short_code }}
+                                {{ skill.short_code|e }}
                             {% else %}
                                 <span class="text-gray-40">—</span>
                             {% endif %}
                         </td>
 
                         <td class="px-4 py-3 text-body-2 text-gray-70">
-                            {{ skill.description }}
+                            {{ skill.description|e }}
                         </td>
 
                         <td class="px-4 py-3">

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Pdp\Rules;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
 
 use const PHP_SAPI;
@@ -21,6 +22,7 @@ readonly class AccessUrlHelper
     public function __construct(
         private AccessUrlRepository $accessUrlRepository,
         private RequestStack $requestStack,
+        private ?UrlGeneratorInterface $urlGenerator = null,
     ) {}
 
     public function isMultiple(): bool
@@ -83,6 +85,32 @@ readonly class AccessUrlHelper
         }
 
         return $accessUrl;
+    }
+
+    /**
+     * Base URL, with a trailing slash, for absolute links read outside the request (e-mails).
+     * It comes from the access URL, because the client chooses the Host header. The request is
+     * only used while the main URL still holds the placeholder written at installation.
+     */
+    public function getCurrentBaseUrl(): string
+    {
+        $url = (string) $this->getCurrent()?->getUrl();
+
+        if ('' !== $url && AccessUrl::DEFAULT_ACCESS_URL !== $url) {
+            return rtrim($url, '/').'/';
+        }
+
+        $request = $this->requestStack->getMainRequest();
+        if (null === $request) {
+            return '/';
+        }
+
+        // A legacy script under public/main/ is run by the web server, so the request's base path is
+        // the script's directory (/main/auth). The router's context is reset to the platform root for
+        // these scripts (global.inc.php, LegacyListener), as api_get_path(WEB_PATH) relies on.
+        $rootPath = null !== $this->urlGenerator ? $this->urlGenerator->generate('index') : $request->getBasePath().'/';
+
+        return $request->getSchemeAndHttpHost().rtrim($rootPath, '/').'/';
     }
 
     public function isSameBaseDomain(array $urls): bool

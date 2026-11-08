@@ -229,10 +229,6 @@ export default {
     }
   },
 
-  getAttendancesWithDoneCount: async (params) => {
-    return await baseService.get(`/attendance/list_with_done_count`, params)
-  },
-
   getStudentAttendanceData: async (attendanceId, params = {}) => {
     try {
       return await baseService.get(`/attendance/${attendanceId}/student-dates`, params)

@@ -17,7 +17,11 @@ return function (array $context) {
     );
 
     if ($installed !== '1') {
-        return new HttpRedirectResponse('./main/install/index.php');
+        // Absolute path from the front controller's directory: a relative one resolves against the requested
+        // URL, so a request under /main/install/ that reaches this file would loop on nested paths.
+        $basePath = rtrim(dirname((string) ($_SERVER['SCRIPT_NAME'] ?? '/index.php')), '/\\');
+
+        return new HttpRedirectResponse($basePath.'/main/install/index.php');
     }
 
     return new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
@@ -70,6 +71,7 @@ final class ForumThreadPostsStateProvider implements ProviderInterface
         private readonly CourseAccessResolver $courseAccessResolver,
         private readonly CidReqHelper $cidReqHelper,
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
+        private readonly CourseFromRequestHelper $courseFromRequestHelper,
     ) {}
 
     /**

@@ -386,6 +386,8 @@ class ResourceControllerTest extends WebTestCase
         $sessionRepo->update($session);
         $sessionRepo->addUserInCourse(Session::STUDENT, $sessionStudent, $course, $session);
         $sessionRepo->update($session);
+        // The inverse collection of the user is not kept in sync in memory; the web request reads it from the database.
+        $this->getEntityManager()->refresh($sessionStudent);
 
         $client->loginUser($sessionStudent);
         $client->request('GET', $url);

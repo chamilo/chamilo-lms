@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\UsergroupRelCourse;
 use Chamilo\CoreBundle\Entity\UsergroupRelSession;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
@@ -239,16 +240,16 @@ class UsergroupListController extends AbstractController
                 return;
             }
 
-            fputcsv($handle, ['title', 'description', 'url', 'visibility', 'groupType']);
+            fputcsv($handle, CsvFormulaEscaper::escapeRow(['title', 'description', 'url', 'visibility', 'groupType']));
 
             foreach ($usergroups as $ug) {
-                fputcsv($handle, [
+                fputcsv($handle, CsvFormulaEscaper::escapeRow([
                     $ug->getTitle(),
                     $ug->getDescription(),
                     $ug->getUrl(),
                     $ug->getVisibility(),
                     $ug->getGroupType(),
-                ]);
+                ]));
             }
 
             fclose($handle);

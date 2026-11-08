@@ -162,7 +162,7 @@
           <h2 class="text-lg font-semibold text-gray-90">{{ t("Description") }}</h2>
           <div
             class="prose mt-3 max-w-none"
-            v-html="detail.ticket.messageHtml"
+            v-html="sanitizeHtml(detail.ticket.messageHtml)"
           />
         </div>
       </article>
@@ -205,7 +205,7 @@
           <div
             v-if="message.messageHtml"
             class="prose mt-4 max-w-none"
-            v-html="message.messageHtml"
+            v-html="sanitizeHtml(message.messageHtml)"
           />
 
           <div
@@ -449,6 +449,7 @@ import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 import { useNotification } from "../../composables/notification"
 import ticketService from "../../services/ticketService"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const { t, locale } = useI18n()
 const route = useRoute()

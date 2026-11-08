@@ -6,9 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
-use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
 use Doctrine\ORM\EntityManager;
@@ -21,19 +20,21 @@ final class CreateCGlossaryAction extends BaseResourceFileAction
         private readonly AiDisclosureHelper $aiDisclosureHelper,
     ) {}
 
-    public function __invoke(Request $request, CGlossaryRepository $repo, EntityManager $em): CGlossary
+    public function __invoke(Request $request, CGlossaryRepository $repo, EntityManager $em, CidReqHelper $cidReqHelper): CGlossary
     {
         $data = json_decode($request->getContent(), true);
         $title = (string) ($data['title'] ?? '');
         $description = (string) ($data['description'] ?? '');
         $parentResourceNodeId = $data['parentResourceNodeId'] ?? null;
-        $resourceLinkList = json_decode((string) ($data['resourceLinkList'] ?? '[]'), true);
+        $bodyResourceLinkList = json_decode((string) ($data['resourceLinkList'] ?? '[]'), true);
+        $resourceLinkList = $this->buildResourceLinkListFromContext(
+            $cidReqHelper,
+            \is_array($bodyResourceLinkList) ? $bodyResourceLinkList : [],
+        );
 
-        $sid = isset($data['sid']) ? (int) $data['sid'] : 0;
-        $cid = (int) ($data['cid'] ?? 0);
-
-        $course = $cid ? $em->getRepository(Course::class)->find($cid) : null;
-        $session = $sid ? $em->getRepository(Session::class)->find($sid) : null;
+        // The course and session come from the context that authorized the request, never from the body.
+        $course = $cidReqHelper->requireDoctrineCourseEntity();
+        $session = $cidReqHelper->getDoctrineSessionEntity();
 
         // Check duplicates
         $qb = $repo->getResourcesByCourse($course, $session)
@@ -52,12 +53,11 @@ final class CreateCGlossaryAction extends BaseResourceFileAction
         ;
 
         if (!empty($parentResourceNodeId)) {
+            $this->assertParentNodeIsInCurrentCourse($cidReqHelper, (int) $parentResourceNodeId, $em);
             $glossary->setParentResourceNode($parentResourceNodeId);
         }
 
-        if (!empty($resourceLinkList)) {
-            $glossary->setResourceLinkArray($resourceLinkList);
-        }
+        $glossary->setResourceLinkArray($resourceLinkList);
 
         // Persist early so we can store ExtraField values using iid.
         $em->persist($glossary);

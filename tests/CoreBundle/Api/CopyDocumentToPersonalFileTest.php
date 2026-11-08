@@ -8,6 +8,7 @@ namespace Chamilo\Tests\CoreBundle\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\Tests\AbstractApiTest;
@@ -231,5 +232,59 @@ class CopyDocumentToPersonalFileTest extends AbstractApiTest
             '@context' => '/api/contexts/DocumentPersonalFile',
             '@type' => 'PersonalFile',
         ]);
+    }
+
+    public function testTeacherOfAnotherCourseCannotCopyPrivateDocumentUsingOwnCid(): void
+    {
+        global $_SERVER;
+        $_SERVER['REMOTE_ADDR'] = 'localhost';
+
+        $courseA = $this->createCourse('Copy Own Course');
+        $courseB = $this->createCourse('Copy Private Course');
+        $courseB->setVisibility(Course::REGISTERED);
+        $this->getEntityManager()->flush();
+
+        $teacherA = $this->createUser('copy_foreign_teacher');
+        $this->enrollUserInCourse($teacherA, $courseA, CourseRelUser::TEACHER);
+
+        $documentId = $this->createFileDocument($courseB->getId(), $courseB->getResourceNode()->getId());
+        $copiesBefore = $this->getEntityManager()->getRepository(PersonalFile::class)->count([]);
+
+        // The cid only admits the caller into their own course; it says nothing about the document's course.
+        $this->createClientWithCredentials($this->getUserTokenFromUser($teacherA))->request(
+            'POST',
+            "/api/documents/{$documentId}/personal_files",
+            [
+                'query' => ['cid' => $courseA->getId()],
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertSame($copiesBefore, $this->getEntityManager()->getRepository(PersonalFile::class)->count([]));
+    }
+
+    public function testStudentOfThePrivateCourseCanCopyItsDocumentWithCid(): void
+    {
+        global $_SERVER;
+        $_SERVER['REMOTE_ADDR'] = 'localhost';
+
+        $course = $this->createCourse('Copy Private Own Course');
+        $course->setVisibility(Course::REGISTERED);
+        $this->getEntityManager()->flush();
+
+        $student = $this->createUser('copy_private_student');
+        $this->enrollUserInCourse($student, $course, CourseRelUser::STUDENT);
+
+        $documentId = $this->createFileDocument($course->getId(), $course->getResourceNode()->getId());
+
+        $this->createClientWithCredentials($this->getUserTokenFromUser($student))->request(
+            'POST',
+            "/api/documents/{$documentId}/personal_files",
+            [
+                'query' => ['cid' => $course->getId()],
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(201);
     }
 }

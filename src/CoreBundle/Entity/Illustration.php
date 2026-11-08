@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Traits\PersonalResourceTrait;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,6 +17,9 @@ use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
+    operations: [
+        new Get(),
+    ],
     normalizationContext: ['groups' => ['illustration:read']],
     security: "is_granted('ROLE_USER')"
 )]

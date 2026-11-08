@@ -1544,35 +1544,35 @@ function get_thread_users_qualify(int $thread_id)
         $coachesId = array_merge($generalCoachesId, $sessionAdminsId);
         $user_to_avoid = implode(', ', $coachesId);
         //not showing coaches
-        $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,qualify.qualify
-                FROM $t_posts post , $t_users user, $t_session_rel_user scu, $t_qualify qualify
+        $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,forum_qualify.`qualify`
+                FROM $t_posts post , $t_users user, $t_session_rel_user scu, $t_qualify forum_qualify
                 WHERE poster_id = user.id
-                    AND post.poster_id = qualify.user_id
+                    AND post.poster_id = forum_qualify.user_id
                     AND user.id = scu.user_id
                     AND scu.status = ".SessionEntity::STUDENT."
                     AND scu.user_id NOT IN ($user_to_avoid)
-                    AND qualify.thread_id = $thread_id
+                    AND forum_qualify.thread_id = $thread_id
                     AND post.thread_id = $thread_id
                     AND scu.session_id = $sessionId
                     AND scu.c_id = $course_id AND
-                    qualify.c_id = $course_id
+                    forum_qualify.c_id = $course_id
                 $orderby ";
     } else {
-        $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,qualify.qualify
+        $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,forum_qualify.`qualify`
                 FROM $t_posts post,
-                     $t_qualify qualify,
+                     $t_qualify forum_qualify,
                      $t_users user,
                      $t_course_user course_user
                 WHERE
                      post.poster_id = user.id
-                     AND post.poster_id = qualify.user_id
+                     AND post.poster_id = forum_qualify.user_id
                      AND user.id = course_user.user_id
                      AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                     AND qualify.thread_id = $thread_id
+                     AND forum_qualify.thread_id = $thread_id
                      AND post.thread_id = $thread_id
                      AND course_user.status not in('1')
                      AND course_user.c_id = $course_id
-                     AND qualify.c_id = $course_id
+                     AND forum_qualify.c_id = $course_id
                  $orderby ";
     }
 
@@ -2648,7 +2648,7 @@ function saveThreadScore(
         $row = Database::fetch_array($result);
 
         if (0 == $row[0]) {
-            $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id,qualify,qualify_user_id,qualify_time)
+            $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id, `qualify`, qualify_user_id, qualify_time)
                     VALUES (".$course_id.", '".$user_id."','".$thread_id."',".$thread_qualify.", '".$currentUserId."','".$qualify_time."')";
             Database::query($sql);
 
@@ -2664,7 +2664,7 @@ function saveThreadScore(
             // Update
             $sql = "UPDATE $table_threads_qualify
                     SET
-                        qualify = '".$thread_qualify."',
+                        `qualify` = '".$thread_qualify."',
                         qualify_time = '".$qualify_time."'
                     WHERE
                         user_id=".$user_id.' AND
@@ -2710,7 +2710,7 @@ function showQualify($option, $user_id, $thread_id)
     $sql = '';
     switch ($option) {
         case 1:
-            $sql = "SELECT qualify FROM $table_threads_qualify
+            $sql = "SELECT `qualify` FROM $table_threads_qualify
                     WHERE
                         c_id = $course_id AND
                         user_id=".$user_id.' AND
@@ -2815,7 +2815,7 @@ function saveThreadScoreHistory(
 
     if (1 == $option) {
         // Extract information of thread_qualify.
-        $sql = "SELECT qualify, qualify_time
+        $sql = "SELECT `qualify`, qualify_time
                 FROM $table_threads_qualify
                 WHERE
                     c_id = $course_id AND
@@ -2826,9 +2826,16 @@ function saveThreadScoreHistory(
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
 
+        // Nothing to archive when this grader has not graded the thread before.
+        if (empty($row)) {
+            return;
+        }
+
+        $qualifyTime = empty($row[1]) ? 'NULL' : "'".Database::escape_string($row[1])."'";
+
         // Insert thread_historical.
-        $sql = "INSERT INTO $table_threads_qualify_log (c_id, user_id, thread_id, qualify, qualify_user_id,qualify_time)
-                VALUES(".$course_id.", '".$user_id."','".$thread_id."',".(float) $row[0].", '".$qualify_user_id."')";
+        $sql = "INSERT INTO $table_threads_qualify_log (c_id, user_id, thread_id, `qualify`, qualify_user_id, qualify_time)
+                VALUES(".$course_id.", ".$user_id.", ".$thread_id.", ".(float) $row[0].", ".(int) $qualify_user_id.", ".$qualifyTime.")";
         Database::query($sql);
     }
 }
@@ -2855,7 +2862,7 @@ function current_qualify_of_thread($threadId, $sessionId, $userId)
     $sessionId = (int) $sessionId;
     $threadId = (int) $threadId;
 
-    $sql = "SELECT qualify FROM $table_threads_qualify
+    $sql = "SELECT `qualify` FROM $table_threads_qualify
             WHERE
                 c_id = $course_id AND
                 thread_id = $threadId AND
@@ -5409,13 +5416,16 @@ function reportPost(CForumPost $post, CForum $forumInfo, CForumThread $threadInf
         return false;
     }
 
-    $postId = $post->getIid();
-
     $currentUser = api_get_user_info();
     $users = getReportRecipients();
     if (!empty($users)) {
-        $url = api_get_path(WEB_CODE_PATH).
-            'forum/viewthread.php?forum='.$forumInfo->getIid().'&thread='.$threadInfo->getIid().'&'.api_get_cidreq(true, true, false).'&post_id='.$postId.'#post_id_'.$postId;
+        $url = getForumToolUrl(
+            api_get_course_int_id(),
+            api_get_session_id(),
+            api_get_group_id(),
+            $forumInfo->getIid(),
+            $threadInfo->getIid()
+        );
         $postLink = Display::url(
             $post->getTitle(),
             $url
@@ -5545,4 +5555,32 @@ function getCountPostsWithStatusBatch(int $status, array $forumIds): array
     }
 
     return $map;
+}
+
+/**
+ * URL of the forum tool (Vue) of a course, optionally pointing to a forum or to one of its threads.
+ * Empty when the course has no resource node.
+ */
+function getForumToolUrl(
+    int $courseId,
+    int $sessionId = 0,
+    int $groupId = 0,
+    int $forumId = 0,
+    int $threadId = 0,
+    array $params = []
+): string {
+    $nodeId = (int) api_get_course_entity($courseId)?->getResourceNode()?->getId();
+    if (0 === $nodeId) {
+        return '';
+    }
+
+    $path = api_get_path(WEB_PATH).'resources/forum/'.$nodeId.'/';
+    if ($forumId > 0) {
+        $path .= 'forum/'.$forumId;
+        if ($threadId > 0) {
+            $path .= '/thread/'.$threadId;
+        }
+    }
+
+    return $path.'?'.http_build_query(['cid' => $courseId, 'sid' => $sessionId, 'gid' => $groupId] + $params);
 }

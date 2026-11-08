@@ -363,7 +363,7 @@ if ($exportCsv) {
     $headers[] = get_lang('Corrector');
     $headers[] = get_lang('CorrectionDate');
 
-    fputcsv($output, $headers);
+    fputcsv($output, \Chamilo\CoreBundle\Helpers\CsvFormulaEscaper::escapeRow($headers));
 
     foreach ($rows as $row) {
         $line = [
@@ -391,7 +391,7 @@ if ($exportCsv) {
         $line[] = $row['qualificator_fullname'];
         $line[] = $row['date_of_qualification'];
 
-        fputcsv($output, $line);
+        fputcsv($output, \Chamilo\CoreBundle\Helpers\CsvFormulaEscaper::escapeRow($line));
     }
 
     fclose($output);

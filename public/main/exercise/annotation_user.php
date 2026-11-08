@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 
 session_cache_limiter('none');
 
@@ -13,16 +14,99 @@ $questionId = (int) ($_GET['question_id'] ?? 0);
 $exeId      = (int) ($_GET['exe_id'] ?? 0);
 $courseId   = (int) ($_GET['course_id'] ?? 0);
 
-$courseInfo = api_get_course_info_by_id($courseId);
-if (empty($courseInfo) || !$questionId) {
+$denyAccess = static function (): void {
+    http_response_code(403);
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'access_denied']);
+    exit;
+};
+
+$invalidRequest = static function (): void {
+    http_response_code(400);
     header('Content-Type: application/json');
     echo json_encode(['error' => 'invalid_request']);
     exit;
+};
+
+if ($questionId <= 0 || $exeId < 0 || $courseId <= 0) {
+    $invalidRequest();
+}
+
+$currentUser = api_get_user_entity();
+if (null === $currentUser) {
+    $denyAccess();
 }
 
 $questionRepo = Container::getQuestionRepository();
 /** @var CQuizQuestion|null $question */
 $question = $questionRepo->find($questionId);
+if (null === $question) {
+    $invalidRequest();
+}
+
+$entityManager = Database::getManager();
+$authorizationChecker = Container::getAuthorizationChecker();
+
+if ($exeId > 0) {
+    $trackExercise = Container::getTrackEExerciseRepository()->find($exeId);
+    if (null === $trackExercise
+        || $courseId !== (int) $trackExercise->getCourse()->getId()
+        || !$authorizationChecker->isGranted('VIEW', $trackExercise)
+    ) {
+        $denyAccess();
+    }
+
+    $quiz = $trackExercise->getQuiz();
+    if (null === $quiz) {
+        $denyAccess();
+    }
+
+    $questionRelation = $entityManager->getRepository(CQuizRelQuestion::class)->findOneBy([
+        'quiz' => $quiz,
+        'question' => $question,
+    ]);
+    if (null === $questionRelation) {
+        $denyAccess();
+    }
+} else {
+    $isAuthorizedPreview = $authorizationChecker->isGranted('ROLE_ADMIN');
+    $questionBelongsToCourse = false;
+
+    foreach ($question->getRelQuizzes() as $questionRelation) {
+        $quiz = $questionRelation->getQuiz();
+        $resourceLink = $quiz->getFirstResourceLink();
+        $course = $resourceLink?->getCourse();
+
+        if (null === $course || $courseId !== (int) $course->getId()) {
+            continue;
+        }
+
+        $questionBelongsToCourse = true;
+        if ($isAuthorizedPreview || $course->hasUserAsTeacher($currentUser)) {
+            $isAuthorizedPreview = true;
+            break;
+        }
+
+        $session = $resourceLink?->getSession();
+        if (null !== $session
+            && ($session->hasUserAsSessionAdmin($currentUser)
+                || $session->hasUserAsGeneralCoach($currentUser)
+                || $session->hasCourseCoachInCourse($currentUser, $course))
+        ) {
+            $isAuthorizedPreview = true;
+            break;
+        }
+    }
+
+    if (!$questionBelongsToCourse || !$isAuthorizedPreview) {
+        $denyAccess();
+    }
+}
+
+$courseInfo = api_get_course_info_by_id($courseId);
+if (empty($courseInfo)) {
+    $invalidRequest();
+}
 
 $webBase = rtrim(api_get_path(WEB_PATH), '/');
 $imageUrl = '';

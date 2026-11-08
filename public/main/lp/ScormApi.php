@@ -59,9 +59,12 @@ class ScormApi
     ) {
         $debug = 0;
         $return = null;
-        if (empty($courseId)) {
-            $courseId = api_get_course_int_id();
-        }
+        $lp_id = (int) $lp_id;
+        $item_id = (int) $item_id;
+        $score = is_numeric($score) ? (float) $score : null;
+        $max = is_numeric($max) ? (float) $max : null;
+        $min = is_numeric($min) ? (float) $min : null;
+        $courseId = api_get_course_int_id();
 
         if ($debug > 0) {
             error_log('--------------------------------------');
@@ -83,13 +86,15 @@ class ScormApi
 
             return null;
         }
+        $view_id = (int) $myLP->get_view_id();
+        if ($view_id <= 0 || $item_id <= 0) {
+            return null;
+        }
+
         $prerequisitesCheck = $myLP->prerequisites_match($item_id);
 
         /** @var learnpathItem $myLPI */
-        if ($myLP->items && isset($myLP->items[$item_id])) {
-            $myLPI = $myLP->items[$item_id];
-        }
-
+        $myLPI = $myLP->getItem($item_id);
         if (empty($myLPI)) {
             if ($debug > 0) {
                 error_log("item #$item_id not found in the items array: ".print_r($myLP->items, 1));
@@ -782,7 +787,7 @@ class ScormApi
             "olms.suspend_data='".$mysuspend_data."';".
             "olms.total_time = '".$mytotal_time."';".
             "olms.mastery_score = '".$mymastery_score."';".
-            "olms.max_time_allowed = '".$mymax_time_allowed."';".
+            "olms.max_time_allowed = ".json_encode((string) $mymax_time_allowed, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT).";".
             "olms.launch_data = '".$mylaunch_data."';".
             "olms.interactions = new Array(".$myistring.");".
             "olms.item_objectives = new Array();".

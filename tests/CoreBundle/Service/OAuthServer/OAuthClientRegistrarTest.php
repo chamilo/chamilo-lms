@@ -102,6 +102,22 @@ final class OAuthClientRegistrarTest extends TestCase
         );
     }
 
+    public function testItKeepsOnlyHttpsInformationUris(): void
+    {
+        $response = $this->register([
+            'redirect_uris' => ['https://client.example/callback'],
+            'client_uri' => 'https://client.example/',
+            'logo_uri' => 'http://client.example/logo.png',
+            'policy_uri' => 'data:text/html,policy',
+            'tos_uri' => '//client.example/tos',
+        ]);
+
+        self::assertSame('https://client.example/', $response['client_uri']);
+        self::assertArrayNotHasKey('logo_uri', $response);
+        self::assertArrayNotHasKey('policy_uri', $response);
+        self::assertArrayNotHasKey('tos_uri', $response);
+    }
+
     /**
      * @param array<string, mixed> $metadata
      */

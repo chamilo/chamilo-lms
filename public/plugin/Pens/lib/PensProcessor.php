@@ -11,6 +11,8 @@ require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 require_once __DIR__.'/pens.php';
 
+require_once __DIR__.'/PENSPlugin.php';
+
 /**
  * Processes PENS collect requests inside the plugin.
  */
@@ -32,10 +34,20 @@ class PensProcessor
      */
     public function handle(array $payload): string
     {
+        $plugin = PENSPlugin::create();
+
+        if (!$plugin->isEnabled()) {
+            return (string) new PENSResponse(1421, 'PENS is not enabled');
+        }
+
         try {
             $request = $this->createCollectRequest($payload);
         } catch (PENSException $exception) {
             return (string) new PENSResponse($exception);
+        }
+
+        if (!$this->isClientAuthenticated($plugin, $request)) {
+            return (string) new PENSResponse(1201, 'Invalid system-user-id or system-password');
         }
 
         $initialResponse = new PENSResponse(0, 'collect command received and understood');
@@ -109,6 +121,25 @@ class PensProcessor
         }
 
         return $request;
+    }
+
+    /**
+     * Check the PENS system credentials against the ones configured in the plugin.
+     * Without configured credentials, no client is accepted.
+     */
+    private function isClientAuthenticated(PENSPlugin $plugin, PENSRequestCollect $request): bool
+    {
+        $expectedUserId = (string) $plugin->get(PENSPlugin::SETTING_SYSTEM_USER_ID);
+        $expectedPassword = (string) $plugin->get(PENSPlugin::SETTING_SYSTEM_PASSWORD);
+
+        if ('' === $expectedUserId || '' === $expectedPassword) {
+            return false;
+        }
+
+        $userIdMatches = hash_equals($expectedUserId, (string) $request->getSystemUserId());
+        $passwordMatches = hash_equals($expectedPassword, (string) $request->getSystemPassword());
+
+        return $userIdMatches && $passwordMatches;
     }
 
     /**

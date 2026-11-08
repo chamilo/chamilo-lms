@@ -25,7 +25,13 @@ class UpdatePersonalFileAction extends BaseResourceFileAction
             throw new AccessDeniedHttpException('Personal files are disabled.');
         }
 
-        $this->handleUpdateRequest($resource, $repo, $request, $em);
+        $this->handleUpdateRequest(
+            $resource,
+            $repo,
+            $request,
+            $em,
+            fn (array $links) => $this->assertResourceLinksAreUserShares($links),
+        );
 
         return $resource;
     }

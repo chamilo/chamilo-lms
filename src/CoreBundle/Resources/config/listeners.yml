@@ -165,3 +165,11 @@ services:
         tags:
             - name: kernel.event_listener
               event: Symfony\Component\Security\Http\Event\CheckPassportEvent
+
+    Chamilo\CoreBundle\EventListener\ApiPasswordLoginMfaListener:
+        tags:
+            - name: kernel.event_listener
+              event: Symfony\Component\Security\Http\Event\CheckPassportEvent
+              dispatcher: security.event_dispatcher.api
+              # After CheckCredentialsListener, so the 2FA state is not revealed before the password is checked
+              priority: -10

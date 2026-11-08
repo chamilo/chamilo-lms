@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
+use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\Helpers\UsergroupHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\DBAL\Types\Types;
@@ -230,9 +231,9 @@ class UsergroupAddUsersController extends AbstractController
             if (false === $handle) {
                 return;
             }
-            fputcsv($handle, ['UserName', 'ClassName']);
+            fputcsv($handle, CsvFormulaEscaper::escapeRow(['UserName', 'ClassName']));
             foreach ($rows as $row) {
-                fputcsv($handle, [$row['username'], $groupTitle]);
+                fputcsv($handle, CsvFormulaEscaper::escapeRow([$row['username'], $groupTitle]));
             }
             fclose($handle);
         });

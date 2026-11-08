@@ -15,10 +15,11 @@ use Symfony\Component\HttpFoundation\Request;
 use const CURLINFO_HTTP_CODE;
 use const CURLOPT_FOLLOWLOCATION;
 use const CURLOPT_HEADER;
+use const CURLOPT_NOPROXY;
 use const CURLOPT_PROTOCOLS;
 use const CURLOPT_PROXY;
-use const CURLOPT_PROXYPORT;
 use const CURLOPT_REDIR_PROTOCOLS;
+use const CURLOPT_RESOLVE;
 use const CURLOPT_RETURNTRANSFER;
 use const CURLOPT_TIMEOUT;
 use const CURLOPT_URL;
@@ -54,39 +55,36 @@ final class CheckCLinkAction extends AbstractController
             return false;
         }
 
-        $normalizedUrl = $this->normalizeAndValidateUrl($url);
-        if (null === $normalizedUrl) {
+        $target = $this->normalizeAndValidateUrl($url);
+        if (null === $target) {
             return false;
         }
 
-        $defaults = [
-            CURLOPT_URL => $normalizedUrl,
-            CURLOPT_FOLLOWLOCATION => false, // Avoid SSRF via redirects
-            CURLOPT_HEADER => 0,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 4,
-            CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
-        ];
-
-        if (\defined('CURLOPT_REDIR_PROTOCOLS')) {
-            $defaults[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
+        // A proxy can resolve the hostname itself, bypassing CURLOPT_RESOLVE.
+        // Fail closed rather than sending user-controlled URLs through a proxy.
+        $proxySettings = $settingsManager->getSetting('security.proxy_settings', true);
+        if (\is_array($proxySettings)
+            && isset($proxySettings['curl_setopt_array'])
+            && \is_array($proxySettings['curl_setopt_array'])
+            && !empty($proxySettings['curl_setopt_array']['CURLOPT_PROXY'])
+        ) {
+            return false;
         }
 
-        // Optional proxy settings
-        $proxySettings = $settingsManager->getSetting('security.proxy_settings', true);
-        if (\is_array($proxySettings) && isset($proxySettings['curl_setopt_array']) && \is_array($proxySettings['curl_setopt_array'])) {
-            $opts = $proxySettings['curl_setopt_array'];
-
-            if (isset($opts['CURLOPT_PROXY'])) {
-                $defaults[CURLOPT_PROXY] = $opts['CURLOPT_PROXY'];
-            }
-            if (isset($opts['CURLOPT_PROXYPORT'])) {
-                $defaults[CURLOPT_PROXYPORT] = $opts['CURLOPT_PROXYPORT'];
-            }
+        if (!\defined('CURLOPT_RESOLVE')) {
+            return false;
         }
 
         $ch = curl_init();
-        curl_setopt_array($ch, $defaults);
+        if (false === $ch) {
+            return false;
+        }
+
+        if (!curl_setopt_array($ch, $this->createCurlOptions($target))) {
+            curl_close($ch);
+
+            return false;
+        }
 
         $result = curl_exec($ch);
         $httpCode = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -101,10 +99,50 @@ final class CheckCLinkAction extends AbstractController
         return $httpCode >= 200 && $httpCode < 400;
     }
 
-    private function normalizeAndValidateUrl(string $url): ?string
+    /**
+     * Keep the original URL for Host, SNI and certificate verification while
+     * forcing the connection to the IP already checked by the SSRF filter.
+     *
+     * @param array{url: string, host: string, port: int, ip: string, literal: bool} $target
+     *
+     * @return array<int, mixed>
+     */
+    private function createCurlOptions(array $target): array
+    {
+        $options = [
+            CURLOPT_URL => $target['url'],
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_HEADER => 0,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 4,
+            CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
+            CURLOPT_PROXY => '', // Also disable proxy environment variables.
+            CURLOPT_NOPROXY => '*',
+        ];
+
+        if (\defined('CURLOPT_REDIR_PROTOCOLS')) {
+            $options[CURLOPT_REDIR_PROTOCOLS] = CURLPROTO_HTTP | CURLPROTO_HTTPS;
+        }
+
+        if (!$target['literal']) {
+            $ip = $target['ip'];
+            if (str_contains($ip, ':')) {
+                $ip = '['.$ip.']';
+            }
+
+            $options[CURLOPT_RESOLVE] = [$target['host'].':'.$target['port'].':'.$ip];
+        }
+
+        return $options;
+    }
+
+    /**
+     * @return array{url: string, host: string, port: int, ip: string, literal: bool}|null
+     */
+    private function normalizeAndValidateUrl(string $url): ?array
     {
         $url = trim($url);
-        if ('' === $url) {
+        if ('' === $url || str_contains($url, '\\') || preg_match('/[\x00-\x1F\x7F]/', $url)) {
             return null;
         }
 
@@ -123,6 +161,19 @@ final class CheckCLinkAction extends AbstractController
             return null;
         }
 
+        // parse_url() retains brackets around IPv6 literals.
+        if (str_starts_with($host, '[') && str_ends_with($host, ']')) {
+            $host = substr($host, 1, -1);
+            if (false === filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+                return null;
+            }
+        }
+
+        $port = $parts['port'] ?? ('https' === $scheme ? 443 : 80);
+        if (!\is_int($port) || $port < 1 || $port > 65535) {
+            return null;
+        }
+
         // Block credentials in URL: http://user:pass@host/
         if (isset($parts['user']) || isset($parts['pass'])) {
             return null;
@@ -130,6 +181,12 @@ final class CheckCLinkAction extends AbstractController
 
         $lowerHost = strtolower($host);
         if ('localhost' === $lowerHost || str_ends_with($lowerHost, '.localhost')) {
+            return null;
+        }
+
+        // Reject non-canonical hostnames that PHP and cURL may parse differently.
+        $isIpLiteral = false !== filter_var($host, FILTER_VALIDATE_IP);
+        if (!$isIpLiteral && !preg_match('/\A[a-z0-9.-]+\z/i', $host)) {
             return null;
         }
 
@@ -145,7 +202,13 @@ final class CheckCLinkAction extends AbstractController
             }
         }
 
-        return $url;
+        return [
+            'url' => $url,
+            'host' => $host,
+            'port' => $port,
+            'ip' => $ips[0],
+            'literal' => $isIpLiteral,
+        ];
     }
 
     /**

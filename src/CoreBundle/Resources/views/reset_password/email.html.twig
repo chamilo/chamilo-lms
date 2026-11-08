@@ -2,7 +2,7 @@
 
 <p>To reset your password, please visit the following link</p>
 
-<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+<a href="{{ resetUrl }}">{{ resetUrl }}</a>
 
 <p>This link will expire in {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.</p>
 

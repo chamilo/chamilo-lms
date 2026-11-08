@@ -122,7 +122,7 @@ if (api_is_in_gradebook()) {
 // Define the 'doc.inc.php' as language file.
 $nameTools = $learnPath->getNameNoTags();
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'lp/lp_list.php?'.api_get_cidreq(),
+    'url' => api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('Document'),
 ];
 // Update global setting to avoid displaying right menu.

@@ -929,7 +929,7 @@ if ($form->validate()) {
     }
 
     $courseInfo = api_get_course_info($courseInfo['code']);
-    $message = Display::url($courseInfo['title'], $courseInfo['course_public_url']);
+    $message = Display::url(htmlspecialchars($courseInfo['title'], ENT_QUOTES, 'UTF-8'), $courseInfo['course_public_url']);
     Display::addFlash(Display::return_message(get_lang('Item updated').': '.$message, 'info', false));
     if ($visual_code_is_used) {
         Display::addFlash(Display::return_message($warn));

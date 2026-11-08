@@ -36,6 +36,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use enshrined\svgSanitize\Sanitizer as SvgSanitizer;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -50,6 +51,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
@@ -228,21 +230,17 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * @return RedirectResponse|void
      */
     #[Route('/{tool}/{type}/{id}/link', name: 'chamilo_core_resource_link', methods: ['GET'])]
+    #[IsGranted(ResourceNodeVoter::VIEW, subject: 'resourceNode', message: 'Unauthorised access to resource')]
     public function link(
         Request $request,
+        #[MapEntity(id: 'id')]
+        ResourceNode $resourceNode,
         RouterInterface $router,
         CLinkRepository $cLinkRepository,
         EntityManagerInterface $entityManager
     ): RedirectResponse {
         $tool = (string) $request->attributes->get('tool');
         $type = (string) $request->attributes->get('type');
-        $id = (int) $request->attributes->get('id');
-
-        $resourceNode = $this->getResourceNodeRepository()->find($id);
-
-        if (null === $resourceNode) {
-            throw new FileNotFoundException('Resource not found');
-        }
 
         $this->courseToolAccessTracker->trackFromResourceRequest($request);
 
@@ -646,14 +644,18 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     #[Route('/resource_files/{resourceNodeId}/variants', name: 'chamilo_core_resource_files_variants', methods: ['GET'])]
-    public function getVariants(string $resourceNodeId, EntityManagerInterface $em): JsonResponse
-    {
+    #[IsGranted(ResourceNodeVoter::VIEW, subject: 'resourceNode', message: 'Unauthorised access to resource')]
+    public function getVariants(
+        #[MapEntity(id: 'resourceNodeId')]
+        ResourceNode $resourceNode,
+        EntityManagerInterface $em
+    ): JsonResponse {
         $variants = $em->getRepository(ResourceFile::class)->createQueryBuilder('rf')
             ->join('rf.resourceNode', 'rn')
             ->leftJoin('rn.creator', 'creator')
             ->where('rf.resourceNode = :resourceNodeId')
             ->andWhere('rf.accessUrl IS NOT NULL')
-            ->setParameter('resourceNodeId', $resourceNodeId)
+            ->setParameter('resourceNodeId', (int) $resourceNode->getId())
             ->getQuery()
             ->getResult()
         ;
@@ -738,9 +740,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         // image extensions here so /view can use the image pipeline without changing stored data.
         $mimeType = $this->normalizeImageMimeType($mimeType, (string) $fileName);
 
-        // Defense-in-depth: social post attachments must never render HTML inline (XSS mitigation).
+        // Defense-in-depth: social post and blog attachments must never render HTML inline (XSS mitigation).
         // This covers files uploaded before the MIME-type allowlist was introduced.
-        $isSocialAttachment = 'social_post_attachments' === (string) $request->attributes->get('type');
+        $isSocialAttachment = \in_array(
+            (string) $request->attributes->get('type'),
+            ['social_post_attachments', 'blog'],
+            true
+        );
 
         // Such files are always delivered as a neutral download, so the browser can never
         // execute them in the Chamilo origin, whatever the requested mode is.

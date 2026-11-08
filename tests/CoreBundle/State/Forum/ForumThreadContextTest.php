@@ -88,17 +88,20 @@ final class ForumThreadContextTest extends AbstractApiTest
         $client = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['admin']));
         $em = $this->getEntityManager();
 
+        // Creating the client rebooted the kernel, so re-attach the scenario entities.
+        $admin = $em->getReference(User::class, $ctx['admin']->getId());
         $post = (new CForumPost())
             ->setTitle('Base post')
             ->setPostText('Base post text')
-            ->setThread($ctx['baseThread'])
-            ->setForum($ctx['forum'])
-            ->setUser($ctx['admin'])
+            ->setThread($em->getReference(CForumThread::class, $ctx['baseThread']->getIid()))
+            ->setForum($em->getReference(CForum::class, $ctx['forum']->getIid()))
+            ->setUser($admin)
+            ->setCreator($admin)
             ->setPostDate(new DateTime())
             ->setVisible(true)
             ->setStatus(CForumPost::STATUS_VALIDATED)
-            ->setParent($ctx['baseThread'])
-            ->addCourseLink($ctx['course'])
+            ->setParent($em->getReference(CForumThread::class, $ctx['baseThread']->getIid()))
+            ->addCourseLink($em->getReference(Course::class, $ctx['course']->getId()))
         ;
         $em->persist($post);
         $em->flush();
@@ -182,6 +185,7 @@ final class ForumThreadContextTest extends AbstractApiTest
             ->setTitle($title)
             ->setThreadDate(new DateTime())
             ->setForum($forum)
+            ->setUser($creator)
             ->setParent($course)
             ->setCreator($creator)
             ->addCourseLink($course, $session)

@@ -7,12 +7,14 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\XApiToolLaunch;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\SafeHttpClientHelper;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\SimplifiedXmlDriver;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
 
 /**
  * Class XApiPlugin.
@@ -294,10 +296,6 @@ class XApiPlugin extends Plugin
         if ($response['status'] < 200 || $response['status'] >= 300) {
             $message = 'xAPI state request failed with HTTP '.$response['status'].'.';
 
-            if ('' !== trim($response['content'])) {
-                $message .= ' '.$response['content'];
-            }
-
             throw new Exception($message);
         }
 
@@ -406,10 +404,6 @@ class XApiPlugin extends Plugin
 
         if ($response['status'] < 200 || $response['status'] >= 300) {
             $message = 'xAPI statements request failed with HTTP '.$response['status'].'.';
-
-            if ('' !== trim($response['content'])) {
-                $message .= ' '.$response['content'];
-            }
 
             throw new Exception($message);
         }
@@ -999,10 +993,6 @@ class XApiPlugin extends Plugin
         if ($response['status'] < 200 || $response['status'] >= 300) {
             $message = 'xAPI request failed with HTTP '.$response['status'].'.';
 
-            if (!empty($response['content'])) {
-                $message .= ' '.$response['content'];
-            }
-
             throw new Exception($message);
         }
     }
@@ -1029,11 +1019,7 @@ class XApiPlugin extends Plugin
                 );
         }
 
-        $options = [
-            'headers' => $headers,
-            'verify_peer' => false,
-            'verify_host' => false,
-        ];
+        $options = ['headers' => $headers];
 
         if (null !== $payload) {
             $options['body'] = json_encode(
@@ -1042,18 +1028,44 @@ class XApiPlugin extends Plugin
             );
         }
 
-        $client = HttpClient::create([
-            'verify_peer' => false,
-            'verify_host' => false,
-        ]);
+        // Only the LRS set by the administrator may live on a private network
+        // (the default one is this server); any other URL comes from a teacher.
+        if ($this->isAdministratorLrsUrl($url)) {
+            $options['verify_peer'] = false;
+            $options['verify_host'] = false;
+            $client = HttpClient::create();
+        } else {
+            $client = SafeHttpClientHelper::create();
+        }
 
-        $response = $client->request($method, $url, $options);
+        try {
+            $response = $client->request($method, $url, $options);
 
-        return [
-            'status' => $response->getStatusCode(),
-            'content' => $response->getContent(false),
-            'headers' => $response->getHeaders(false),
-        ];
+            return [
+                'status' => $response->getStatusCode(),
+                'content' => $response->getContent(false),
+                'headers' => $response->getHeaders(false),
+            ];
+        } catch (ExceptionInterface) {
+            throw new Exception('The LRS could not be reached.');
+        }
+    }
+
+    private function isAdministratorLrsUrl(string $url): bool
+    {
+        if (1 === preg_match('#/\.\.?(/|\?|$)#', $url)) {
+            return false;
+        }
+
+        foreach ([self::SETTING_LRS_URL, self::SETTING_CRON_LRS_URL] as $setting) {
+            $base = rtrim((string) $this->normalizeLrsUrl(trim((string) $this->get($setting))), '/');
+
+            if ('' !== $base && str_starts_with($url, $base.'/')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function addCourseToolForTinCan(int $courseId): ?CTool

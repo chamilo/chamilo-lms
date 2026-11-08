@@ -15,6 +15,8 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CoreBundle\State\Forum\ForumAttachmentProcessor;
 use Chamilo\CourseBundle\Repository\CForumAttachmentRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -41,6 +43,8 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Table(name: 'c_forum_attachment')]
 #[ORM\Index(name: 'course', columns: ['c_id'])]
 #[ORM\Entity(repositoryClass: CForumAttachmentRepository::class)]
+#[ApiFilter(filterClass: CidFilter::class, arguments: ['linkOwner' => 'post'])]
+#[ApiFilter(filterClass: SidFilter::class, arguments: ['linkOwner' => 'post'])]
 class CForumAttachment extends AbstractResource implements ResourceInterface, Stringable
 {
     #[ApiProperty(identifier: true)]

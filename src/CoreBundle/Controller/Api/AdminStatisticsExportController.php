@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\Service\AdminStatistics\AdminStatisticsQueryService;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xls;
@@ -139,10 +140,10 @@ final class AdminStatisticsExportController extends AbstractController
                 throw new RuntimeException('Could not open the CSV output stream.');
             }
 
-            fputcsv($output, array_map(
+            fputcsv($output, CsvFormulaEscaper::escapeRow(array_map(
                 static fn (array $column): string => (string) ($column['label'] ?? $column['key'] ?? ''),
                 $data['columns']
-            ));
+            )));
 
             foreach ($data['items'] as $item) {
                 $row = [];
@@ -150,7 +151,7 @@ final class AdminStatisticsExportController extends AbstractController
                     $key = (string) ($column['key'] ?? '');
                     $row[] = $this->normalizeExportValue($item[$key] ?? '');
                 }
-                fputcsv($output, $row);
+                fputcsv($output, CsvFormulaEscaper::escapeRow($row));
             }
 
             fclose($output);

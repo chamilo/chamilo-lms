@@ -220,11 +220,15 @@ XML);
             }
         }
 
+        // The path on disk drops the colon Windows refuses; the title keeps it.
+        $portableTitle = 'Module 1- Finding Your Way Around Chamilo 3.0';
+
         self::assertArrayHasKey(322, $bySourceId);
-        self::assertSame('/document/'.$filename, (string) $bySourceId[322]->path);
+        self::assertSame('/document/'.$portableTitle.'.html', (string) $bySourceId[322]->path);
+        self::assertSame($title, (string) $bySourceId[322]->title);
         self::assertSame('file', (string) $bySourceId[322]->file_type);
-        self::assertFileExists($this->workDir.'/document/'.$filename);
-        self::assertDirectoryExists($this->workDir.'/document/'.$title.'/Learning paths');
+        self::assertFileExists($this->workDir.'/document/'.$portableTitle.'.html');
+        self::assertDirectoryExists($this->workDir.'/document/'.$portableTitle.'/Learning paths');
     }
 
     public function testImportIllustrationFallsBackToFilesXml(): void

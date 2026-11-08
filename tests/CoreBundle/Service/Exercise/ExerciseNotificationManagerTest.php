@@ -120,7 +120,7 @@ final class ExerciseNotificationManagerTest extends KernelTestCase
         // The reported case: the session's coaches run the learners there, so they correct the
         // answer. The base-course teacher does not follow session learners.
         $this->setCourseOptions('3');
-        $attempt = $this->createAttempt($this->session, [$this->openQuestion->getIid() => '<p>My open answer</p>']);
+        $attempt = $this->createAttempt($this->session, [(int) $this->openQuestion->getIid() => '<p>My open answer</p>']);
 
         $this->finish($attempt, $this->session);
 
@@ -134,7 +134,7 @@ final class ExerciseNotificationManagerTest extends KernelTestCase
     {
         self::getContainer()->get(SettingsManager::class)->updateSetting('exercise.block_quiz_mail_notification_general_coach', 'true');
         $this->setCourseOptions('3');
-        $attempt = $this->createAttempt($this->session, [$this->openQuestion->getIid() => 'Answer']);
+        $attempt = $this->createAttempt($this->session, [(int) $this->openQuestion->getIid() => 'Answer']);
 
         $this->finish($attempt, $this->session);
 
@@ -145,7 +145,7 @@ final class ExerciseNotificationManagerTest extends KernelTestCase
     public function testOutsideASessionTheCourseTeachersAreToldWhenTheLearnerStartsAndFinishes(): void
     {
         $this->setCourseOptions('1,2');
-        $attempt = $this->createAttempt(null, [$this->openQuestion->getIid() => 'Answer']);
+        $attempt = $this->createAttempt(null, [(int) $this->openQuestion->getIid() => 'Answer']);
 
         $this->loginAs($this->learner);
         $this->notificationManager->notifyOnStart($this->quiz, $this->course, null, $this->learner, $attempt);
@@ -162,7 +162,7 @@ final class ExerciseNotificationManagerTest extends KernelTestCase
     {
         // Option 3 is about answers that need correcting; an empty one needs nothing.
         $this->setCourseOptions('3');
-        $attempt = $this->createAttempt(null, [$this->openQuestion->getIid() => '']);
+        $attempt = $this->createAttempt(null, [(int) $this->openQuestion->getIid() => '']);
 
         $this->finish($attempt, null);
 
@@ -174,7 +174,7 @@ final class ExerciseNotificationManagerTest extends KernelTestCase
         // The Vue recorder stores the answer as an attached file and an empty answer text, so
         // the recording is the only proof the learner answered.
         $this->setCourseOptions('4');
-        $attempt = $this->createAttempt(null, [$this->oralQuestion->getIid() => ''], 'oral_recording_test.wav');
+        $attempt = $this->createAttempt(null, [(int) $this->oralQuestion->getIid() => ''], 'oral_recording_test.wav');
 
         $this->finish($attempt, null);
 
@@ -187,7 +187,7 @@ final class ExerciseNotificationManagerTest extends KernelTestCase
         $this->setCourseOptions('3');
         $this->quiz->setNotifications('1');
         $this->entityManager->flush();
-        $attempt = $this->createAttempt(null, [$this->openQuestion->getIid() => 'Answer']);
+        $attempt = $this->createAttempt(null, [(int) $this->openQuestion->getIid() => 'Answer']);
 
         $this->finish($attempt, null);
 
@@ -197,7 +197,7 @@ final class ExerciseNotificationManagerTest extends KernelTestCase
     public function testNoneOptionDisablesEveryNotification(): void
     {
         $this->setCourseOptions('0,1,3');
-        $attempt = $this->createAttempt(null, [$this->openQuestion->getIid() => 'Answer']);
+        $attempt = $this->createAttempt(null, [(int) $this->openQuestion->getIid() => 'Answer']);
 
         $this->finish($attempt, null);
 
@@ -212,7 +212,7 @@ final class ExerciseNotificationManagerTest extends KernelTestCase
         $otherTeacher = $this->createRecipient('enm_teacher2_'.bin2hex(random_bytes(4)));
         $this->course->addUserAsTeacher($otherTeacher);
         self::getContainer()->get(CourseRepository::class)->update($this->course);
-        $attempt = $this->createAttempt(null, [$this->openQuestion->getIid() => 'Answer'], null, $this->teacher);
+        $attempt = $this->createAttempt(null, [(int) $this->openQuestion->getIid() => 'Answer'], null, $this->teacher);
 
         $this->loginAs($this->teacher);
         $this->notificationManager->notifyOnStart($this->quiz, $this->course, null, $this->teacher, $attempt);
@@ -227,7 +227,7 @@ final class ExerciseNotificationManagerTest extends KernelTestCase
         $this->learner->setFirstname('<img src=x onerror=alert(1)>');
         $this->entityManager->flush();
         $this->setCourseOptions('1');
-        $attempt = $this->createAttempt(null, [$this->openQuestion->getIid() => 'Answer']);
+        $attempt = $this->createAttempt(null, [(int) $this->openQuestion->getIid() => 'Answer']);
 
         $this->finish($attempt, null);
 

@@ -6,8 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Framework;
 
+use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use RuntimeException;
 use Sonata\Exporter\Handler;
+use Sonata\Exporter\Source\IteratorCallbackSourceIterator;
 use Sonata\Exporter\Source\SourceIteratorInterface;
 use Sonata\Exporter\Writer\CsvWriter;
 use Sonata\Exporter\Writer\JsonWriter;
@@ -45,6 +47,10 @@ class Exporter
                 break;
 
             case 'csv':
+                $source = new IteratorCallbackSourceIterator(
+                    $source,
+                    static fn (array $row): array => CsvFormulaEscaper::escapeRow($row, true)
+                );
                 $writer = new CsvWriter('php://output', ',', '"', '', true, true);
                 $contentType = 'text/csv';
 

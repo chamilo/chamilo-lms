@@ -157,11 +157,18 @@ final class AccessUrlScopeHelper
      *   no descendant expansion, even if one of those URLs itself has children. A plain
      *   admin managing one portal must not be able to reach users of a child portal just
      *   because the URLs happen to share a tree.
+     *
+     * Regardless of URL scope, another ROLE_GLOBAL_ADMIN may only be acted on by an
+     * unrestricted ROLE_GLOBAL_ADMIN (same rule as api_global_admin_can_edit_admin()).
      */
     public function canEditUser(User $actor, User $target): bool
     {
         if ((int) $actor->getId() === (int) $target->getId()) {
             return true;
+        }
+
+        if ($target->hasRole('ROLE_GLOBAL_ADMIN')) {
+            return $actor->hasRole('ROLE_GLOBAL_ADMIN') && $this->isUnrestricted($actor);
         }
 
         if ($this->isUnrestricted($actor)) {

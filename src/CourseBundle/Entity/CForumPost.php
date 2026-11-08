@@ -25,6 +25,8 @@ use Chamilo\CoreBundle\ApiResource\Forum\ForumPostWriteInput;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CoreBundle\State\Forum\ForumPostActionProvider;
 use Chamilo\CoreBundle\State\Forum\ForumPostCreateStateProvider;
 use Chamilo\CoreBundle\State\Forum\ForumPostProcessor;
@@ -363,6 +365,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'idx_forum_post_thread_id', columns: ['thread_id'])]
 #[ORM\Index(name: 'idx_forum_post_visible', columns: ['visible'])]
 #[ORM\Entity(repositoryClass: CForumPostRepository::class)]
+#[ApiFilter(filterClass: CidFilter::class)]
+#[ApiFilter(filterClass: SidFilter::class)]
 class CForumPost extends AbstractResource implements ResourceInterface, Stringable
 {
     public const int STATUS_VALIDATED = 1;

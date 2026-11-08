@@ -7,6 +7,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Form\ChangePasswordFormType;
 use Chamilo\CoreBundle\Form\ResetPasswordRequestFormType;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,6 +36,7 @@ class ResetPasswordController extends AbstractController
         private EntityManagerInterface $entityManager,
         private UserRepository $userRepository,
         private MailHelper $mailHelper,
+        private AccessUrlHelper $accessUrlHelper,
     ) {
         $this->resetPasswordHelper = $resetPasswordHelper;
     }
@@ -168,6 +170,8 @@ class ResetPasswordController extends AbstractController
             ->htmlTemplate('@ChamiloCore/reset_password/email.html.twig')
             ->context([
                 'resetToken' => $resetToken,
+                'resetUrl' => rtrim($this->accessUrlHelper->getCurrentBaseUrl(), '/')
+                    .$this->generateUrl('app_reset_password', ['token' => $resetToken->getToken()]),
             ])
         ;
 

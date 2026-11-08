@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
@@ -64,9 +65,9 @@ final readonly class ExerciseRuntimeReportExportService
                 return;
             }
 
-            fputcsv($handle, $exportData['headers']);
+            fputcsv($handle, CsvFormulaEscaper::escapeRow($exportData['headers']));
             foreach ($exportData['rows'] as $row) {
-                fputcsv($handle, $row);
+                fputcsv($handle, CsvFormulaEscaper::escapeRow($row));
             }
             fclose($handle);
         });

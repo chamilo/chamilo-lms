@@ -182,9 +182,14 @@ class ForumParticipationLink extends AbstractLink
 
         $forumId = $thread->getForum() ? $thread->getForum()->getIid() : 0;
 
-        return api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.
-            api_get_cidreq_params($this->getCourseId(), $this->get_session_id()).
-            '&thread='.$this->get_ref_id().'&gradebook=view&forum='.$forumId;
+        return getForumToolUrl(
+            (int) $this->getCourseId(),
+            (int) $this->get_session_id(),
+            0,
+            $forumId,
+            (int) $this->get_ref_id(),
+            ['gradebook' => 'view']
+        );
     }
 
     public function get_icon_name(): string

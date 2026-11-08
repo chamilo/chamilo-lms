@@ -78,12 +78,7 @@ class CourseCategoryRepository extends ServiceEntityRepository
     {
         $ids = $this->createQueryBuilder('c')
             ->select('c.id')
-            ->innerJoin(
-                AccessUrlRelCourseCategory::class,
-                'a',
-                Join::WITH,
-                'c = a.courseCategory'
-            )
+            ->innerJoin('c.urls', 'a')
             ->where('a.url IN (:accessUrlIds)')
             ->setParameter('accessUrlIds', array_map('intval', $accessUrlIds))
             ->getQuery()

@@ -1394,7 +1394,12 @@ class Agenda
 
         $groupMemberships = [];
         if (!empty($groupId)) {
-            $groupMemberships = [$groupId];
+            if (!$isAllowToEdit
+                && !GroupManager::userHasAccess($userId, api_get_group_entity((int) $groupId), GroupManager::GROUP_TOOL_CALENDAR)
+            ) {
+                return [];
+            }
+            $groupMemberships = [(int) $groupId];
         } else {
             if ($isAllowToEdit) {
                 if (!empty($groupList)) {
@@ -2624,7 +2629,8 @@ class Agenda
     public function importEventFile($courseInfo, $file)
     {
         $charset = api_get_system_encoding();
-        $filepath = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
+        // Never use the client-supplied file name to build the destination path
+        $filepath = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.ics';
         $messages = [];
 
         if (!@move_uploaded_file($file['tmp_name'], $filepath)) {
@@ -2636,6 +2642,7 @@ class Agenda
         }
 
         $data = file_get_contents($filepath);
+        @unlink($filepath);
 
         $trans = [
             'DAILY' => 'daily',
@@ -2739,9 +2746,9 @@ class Agenda
             $everyone = true;
         } else {
             if ('G' === substr($filter, 0, 1)) {
-                $groupId = str_replace('GROUP:', '', $filter);
+                $groupId = (int) str_replace('GROUP:', '', $filter);
             } else {
-                $userId = str_replace('USER:', '', $filter);
+                $userId = (int) str_replace('USER:', '', $filter);
             }
         }
         if (empty($userId) && empty($groupId)) {

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
+use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\State\CourseGroup\CourseGroupManager;
 use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
@@ -67,7 +68,7 @@ final class CourseGroupExportController extends AbstractController
             }
             fwrite($stream, "\xEF\xBB\xBF");
             foreach ($rows as $row) {
-                fputcsv($stream, $row);
+                fputcsv($stream, CsvFormulaEscaper::escapeRow($row));
             }
             fclose($stream);
         });

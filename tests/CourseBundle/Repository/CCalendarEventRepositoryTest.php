@@ -336,7 +336,13 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
             ],
         ];
 
+        // Only the course editors may add an event to the course agenda.
         $user = $this->createUser('test');
+        $course->addUserAsTeacher($user);
+        $em = $this->getEntityManager();
+        $em->persist($course);
+        $em->flush();
+
         $token = $this->getUserToken(
             [
                 'username' => 'test',
@@ -388,6 +394,43 @@ class CCalendarEventRepositoryTest extends AbstractApiTest
             '@type' => 'hydra:Collection',
             'hydra:totalItems' => 1,
         ]);
+    }
+
+    public function testCreateCourseEventIsDeniedToNonMember(): void
+    {
+        $course = $this->createCourse('Test');
+
+        $this->createUser('outsider');
+        $token = $this->getUserToken(
+            [
+                'username' => 'outsider',
+                'password' => 'outsider',
+            ]
+        );
+
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/c_calendar_events',
+            [
+                'json' => [
+                    'allDay' => true,
+                    'collective' => false,
+                    'title' => 'intruder',
+                    'startDate' => '2040-06-30 11:00:00',
+                    'endDate' => '2040-06-30 15:00:00',
+                    'parentResourceNode' => $course->getResourceNode()->getId(),
+                    'resourceLinkList' => [
+                        [
+                            'cid' => $course->getId(),
+                            'visibility' => ResourceLink::VISIBILITY_PUBLISHED,
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        // A user without a role in the course must not write in its agenda (GHSA-68v9-j462-rg94).
+        $this->assertResponseStatusCodeSame(403);
     }
 
     public function testCreateFromAnnouncement(): void

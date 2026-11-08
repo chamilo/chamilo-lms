@@ -996,7 +996,7 @@ class MoodleImport
                 continue;
             }
 
-            $name = (string) ($f->getElementsByTagName('filename')->item(0)?->nodeValue ?? '');
+            $name = basename(str_replace('\\', '/', (string) ($f->getElementsByTagName('filename')->item(0)?->nodeValue ?? '')));
             $fp = (string) ($f->getElementsByTagName('filepath')->item(0)?->nodeValue ?? '/');
             $comp = (string) ($f->getElementsByTagName('component')->item(0)?->nodeValue ?? '');
             $fa = (string) ($f->getElementsByTagName('filearea')->item(0)?->nodeValue ?? '');
@@ -2770,8 +2770,13 @@ class MoodleImport
 
             // Clean technical folder suffixes like certificates-23443 => certificates
             if (!$hasExtension && preg_match('~^(.+)-\d{3,}$~', $segment, $matches)) {
-                $segments[$index] = (string) $matches[1];
+                $segment = (string) $matches[1];
             }
+
+            // The path is also a directory on the server's disk: replace the characters Windows
+            // refuses in a file or folder name ("Module 1: Intro", "What's next?.html") and the
+            // trailing dots and spaces it drops. The document keeps its original title.
+            $segments[$index] = rtrim((string) preg_replace('~[:<>"|?*\x00-\x1F]~', '-', $segment), '. ');
         }
 
         $segments = array_values(array_filter(
@@ -5943,7 +5948,7 @@ class MoodleImport
         $out = [];
         foreach ($list as $f) {
             /** @var \DOMElement $f */
-            $filename = (string) ($f->getElementsByTagName('filename')->item(0)?->nodeValue ?? '');
+            $filename = basename(str_replace('\\', '/', (string) ($f->getElementsByTagName('filename')->item(0)?->nodeValue ?? '')));
             if ($filename === '' || $filename === '.') { continue; } // skip directories
 
             $contenthash = (string) ($f->getElementsByTagName('contenthash')->item(0)?->nodeValue ?? '');

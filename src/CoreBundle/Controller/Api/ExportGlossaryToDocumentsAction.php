@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Repository\CGlossaryRepository;
@@ -23,13 +24,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
 
-final class ExportGlossaryToDocumentsAction
+final class ExportGlossaryToDocumentsAction extends BaseResourceFileAction
 {
     public function __invoke(
         Request $request,
         CGlossaryRepository $repo,
         EntityManagerInterface $em,
         TranslatorInterface $translator,
+        CidReqHelper $cidReqHelper,
     ): Response {
         $data = json_decode((string) $request->getContent(), true) ?: [];
 
@@ -41,25 +43,17 @@ final class ExportGlossaryToDocumentsAction
             $resourceLinkListRaw = json_decode($resourceLinkListRaw, true) ?: [];
         }
 
-        $resourceLinkList = $this->normalizeResourceLinks($resourceLinkListRaw);
+        $resourceLinkList = $this->buildResourceLinkListFromContext(
+            $cidReqHelper,
+            \is_array($resourceLinkListRaw) ? $resourceLinkListRaw : [],
+        );
 
-        // cid/sid are top-level body fields, not part of resourceLinkList (which
-        // only ever carries visibility) -- same shape as CreateCGlossaryAction.
-        $cid = (int) ($data['cid'] ?? 0);
-        $sid = isset($data['sid']) ? (int) $data['sid'] : 0;
+        // The course and session come from the context that authorized the request, never from the body.
+        $course = $cidReqHelper->requireDoctrineCourseEntity();
+        $session = $cidReqHelper->getDoctrineSessionEntity();
 
-        $course = null;
-        $session = null;
-
-        if ($cid > 0) {
-            $course = $em->getRepository(Course::class)->find($cid);
-        }
-        if ($sid > 0) {
-            $session = $em->getRepository(Session::class)->find($sid);
-        }
-
-        if (!$course instanceof Course) {
-            throw new BadRequestHttpException('Course not found.');
+        if ($parentResourceNodeId > 0) {
+            $this->assertParentNodeIsInCurrentCourse($cidReqHelper, $parentResourceNodeId, $em);
         }
 
         $qb = $repo->getResourcesByCourse($course, $session, null, null, true, true);
@@ -109,33 +103,6 @@ final class ExportGlossaryToDocumentsAction
             'created' => true,
             'title' => $fileName,
         ]);
-    }
-
-    /**
-     * @return array<int, array{cid:int,sid:int,gid:int,visibility:int}>
-     */
-    private function normalizeResourceLinks(mixed $links): array
-    {
-        if (!\is_array($links)) {
-            return [];
-        }
-
-        $normalized = [];
-
-        foreach ($links as $link) {
-            if (!\is_array($link)) {
-                continue;
-            }
-
-            $normalized[] = [
-                'cid' => (int) ($link['cid'] ?? 0),
-                'sid' => (int) ($link['sid'] ?? 0),
-                'gid' => (int) ($link['gid'] ?? 0),
-                'visibility' => (int) ($link['visibility'] ?? 0),
-            ];
-        }
-
-        return $normalized;
     }
 
     /**

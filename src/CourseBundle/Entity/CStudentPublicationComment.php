@@ -16,6 +16,8 @@ use Chamilo\CoreBundle\Controller\Api\CreateStudentPublicationCommentAction;
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Filter\CidFilter;
+use Chamilo\CoreBundle\Filter\SidFilter;
 use Chamilo\CourseBundle\Repository\CStudentPublicationCommentRepository;
 use Cocur\Slugify\Slugify;
 use DateTime;
@@ -48,6 +50,8 @@ use Symfony\Component\Uid\Uuid;
 ])]
 #[ORM\Table(name: 'c_student_publication_comment')]
 #[ORM\Entity(repositoryClass: CStudentPublicationCommentRepository::class)]
+#[ApiFilter(filterClass: CidFilter::class, arguments: ['linkOwner' => 'publication'])]
+#[ApiFilter(filterClass: SidFilter::class, arguments: ['linkOwner' => 'publication'])]
 class CStudentPublicationComment extends AbstractResource implements ResourceInterface, Stringable
 {
     #[Groups(['student_publication_comment:read'])]

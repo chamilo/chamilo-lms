@@ -35,6 +35,7 @@ class KeycloakAuthenticator extends AbstractAuthenticator
         if (!$user) {
             $user = (new User())
                 ->setCreatorId($this->userRepository->getRootUser()->getId())
+                ->setPlainPassword(bin2hex(random_bytes(32)))
             ;
         }
 
@@ -45,7 +46,6 @@ class KeycloakAuthenticator extends AbstractAuthenticator
             ->setLastname($resourceOwner->getLastName())
             ->setEmail($resourceOwner->getEmail())
             ->setUsername($username)
-            ->setPlainPassword('keycloak')
             ->setStatus(STUDENT)
             ->addAuthSourceByAuthentication(
                 UserAuthSource::KEYCLOAK,

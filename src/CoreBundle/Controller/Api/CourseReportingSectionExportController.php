@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller\Api;
 
+use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\Service\CourseReporting\CourseReportingContext;
 use Chamilo\CoreBundle\Service\CourseReporting\CourseReportingContextResolver;
 use Chamilo\CoreBundle\Service\CourseReporting\CourseReportingSectionQueryService;
@@ -101,13 +102,13 @@ final readonly class CourseReportingSectionExportController
             }
 
             fwrite($handle, "\xEF\xBB\xBF");
-            fputcsv($handle, array_map(
+            fputcsv($handle, CsvFormulaEscaper::escapeRow(array_map(
                 static fn (array $column): string => (string) ($column['label'] ?? $column['key'] ?? ''),
                 $data['columns']
-            ));
+            )));
 
             foreach ($data['items'] as $item) {
-                fputcsv($handle, $this->formatRow($data['columns'], $item));
+                fputcsv($handle, CsvFormulaEscaper::escapeRow($this->formatRow($data['columns'], $item)));
             }
 
             fclose($handle);

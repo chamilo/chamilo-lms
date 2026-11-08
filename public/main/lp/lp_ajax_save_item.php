@@ -47,7 +47,7 @@ $result = ScormApi::saveItem(
     $interactions,
     $_REQUEST['core_exit'] ?? '',
     !empty($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : null,
-    !empty($_REQUEST['course_id']) ? (int) $_REQUEST['course_id'] : null,
+    api_get_course_int_id(),
     empty($_REQUEST['finish']) ? 0 : 1,
     empty($_REQUEST['userNavigatesAway']) ? 0 : 1,
     empty($_REQUEST['statusSignalReceived']) ? 0 : 1,

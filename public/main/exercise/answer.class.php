@@ -447,7 +447,7 @@ class Answer
     public function getGradesList()
     {
         $list = [];
-        for ($i = 0; $i < $this->nbrAnswers; $i++) {
+        for ($i = 1; $i <= $this->nbrAnswers; $i++) {
             if (!empty($this->answer[$i])) {
                 $list[$i] = $this->weighting[$i];
             }

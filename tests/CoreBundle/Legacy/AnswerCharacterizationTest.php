@@ -304,17 +304,17 @@ final class AnswerCharacterizationTest extends KernelTestCase
         $this->assertSame('an_&_one', $decoded[0]['answer']);
     }
 
-    public function testGetGradesListStartsAtIndexZeroSoItMissesTheLastAnswer(): void
+    public function testGetGradesListHoldsTheWeightingOfEveryNonEmptyAnswer(): void
     {
         $q = $this->question(HOT_SPOT);
         $this->answer($q, 'an_g1', 1);
-        $this->answer($q, 'an_g2', 2);
+        $this->answer($q, '', 2, 0, ['ponderation' => 3]);
         $this->answer($q, 'an_g3', 3, 0, ['ponderation' => 7]);
         $ans = $this->load($q);
 
-        // PINNED QUIRK: the arrays are 1-based but the loop is "for ($i = 0; $i < nbrAnswers; ...)": index 0 does
-        // not exist and the last answer (index nbrAnswers) is never visited.
-        $this->assertSame([1 => 2.0, 2 => 2.0], array_map('floatval', $ans->getGradesList()));
+        // 1-based like every other array of the class; the empty answer is skipped. The loop used to run from 0 to
+        // nbrAnswers - 1, so the last answer was always missing.
+        $this->assertSame([1 => 2.0, 3 => 7.0], array_map('floatval', $ans->getGradesList()));
     }
 
     public function testLookupsByAutoIdAndByPosition(): void

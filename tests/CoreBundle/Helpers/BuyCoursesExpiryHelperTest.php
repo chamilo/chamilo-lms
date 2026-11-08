@@ -181,6 +181,30 @@ final class BuyCoursesExpiryHelperTest extends BuyCoursesCharacterizationTestCas
         $this->assertSame($before, $this->visibility(2));
     }
 
+    public function testALimitStoredForAnotherAccessUrlIsNeverUsedInsteadOfTheCurrentOne(): void
+    {
+        $this->enablePlugin();
+        $teacher = $this->rawUser('t');
+        $this->courseUser($teacher, 1, 1);
+        $this->courseUser($teacher, 2, 1);
+        $this->setSetting('max_courses_per_user', '1');
+        // The row of another URL ("no limit") sorts BEFORE the URL 1 row (its access URL id is lower): without
+        // ordering by the access URL, "LIMIT 1" returned that row and the limit silently vanished.
+        $this->conn()->executeStatement(
+            "INSERT INTO access_url (id, lft, lvl, rgt, url, description, active, created_by) VALUES (-5, 1, 0, 2, 'http://bp-other.test/', '', 1, 1)"
+        );
+        $this->conn()->executeStatement(
+            "INSERT INTO settings (id, access_url, variable, type, category, selected_value, title, access_url_changeable)
+             VALUES (?, -5, 'max_courses_per_user', 'textfield', 'platform', '0', 'bp_other_url', 1)",
+            [1 + (int) $this->conn()->fetchOne('SELECT MAX(id) FROM settings')]
+        );
+        $this->sale($teacher, 910006, '2001-01-01 00:00:00');
+
+        $this->assertSame(1, $this->helper->processExpiredServiceBenefits());
+
+        $this->assertSame(0, $this->visibility(2), 'The limit of the current URL (1 course) is applied');
+    }
+
     public function testLimitZeroMeansNoLimit(): void
     {
         $this->enablePlugin();

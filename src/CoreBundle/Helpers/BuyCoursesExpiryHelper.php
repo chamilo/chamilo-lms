@@ -552,14 +552,19 @@ final class BuyCoursesExpiryHelper
 
     private function getSettingAsPositiveInt(string ...$variables): int
     {
+        // A setting has one row per access URL: take the current URL's row, else the lowest URL id (the main one).
+        $accessUrlId = function_exists('api_get_current_access_url_id') ? api_get_current_access_url_id() : 1;
+
         foreach ($variables as $variable) {
             $value = $this->connection->fetchOne(
                 'SELECT selected_value
                  FROM '.self::TABLE_SETTINGS.'
                  WHERE variable = :variable
+                 ORDER BY (access_url = :accessUrl) DESC, access_url ASC
                  LIMIT 1',
                 [
                     'variable' => $variable,
+                    'accessUrl' => $accessUrlId,
                 ]
             );
 

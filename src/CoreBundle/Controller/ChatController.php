@@ -16,12 +16,14 @@ use Chamilo\CoreBundle\Entity\MessageTag;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
+use Chamilo\CoreBundle\Helpers\AiHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\LanguageHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ChatRepository;
 use Chamilo\CoreBundle\Repository\MessageTagRepository;
+use Chamilo\CoreBundle\Security\CourseAccessResolver;
 use Chamilo\CoreBundle\Service\Chat\VideoChatSignalService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
@@ -45,6 +47,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
@@ -64,7 +67,8 @@ final class ChatController extends AbstractController
     private const string AI_TUTOR_UNAVAILABLE_SESSION_KEY = 'ai_tutor_temporarily_unavailable_until';
     private const int AI_TUTOR_UNAVAILABLE_COOLDOWN_SECONDS = 60;
     private const string AI_TUTOR_UNAVAILABLE_MESSAGE = 'AI tutor is temporarily unavailable. Please try again later.';
-    private const int AI_SELECTED_TEXT_CONTEXT_MAX_CHARS = 12000;
+    private const int AI_SELECTED_TEXT_CONTEXT_MAX_CHARS = 1800;
+    private const int AI_MESSAGE_MAX_CHARS = 2000;
     private const int AI_CURRENT_PATH_MAX_CHARS = 2048;
     private const array VIDEO_SIGNAL_TYPES = ['offer', 'answer', 'ice', 'reject', 'cancel', 'hangup'];
     private const int VIDEO_SIGNAL_MAX_SDP_LENGTH = 20000;
@@ -75,6 +79,8 @@ final class ChatController extends AbstractController
         private readonly UserHelper $userHelper,
         private readonly SettingsManager $settingsManager,
         private readonly AiFeatureAccessHelper $aiFeatureAccessHelper,
+        private readonly CourseAccessResolver $courseAccessResolver,
+        private readonly AiHelper $aiHelper,
     ) {}
 
     #[Route(path: '/resources/chat/', name: 'chamilo_core_chat_home', options: ['expose' => true])]
@@ -565,13 +571,19 @@ final class ChatController extends AbstractController
         // AI Tutor path (global chat)
         if (AiTutorChatService::FRIEND_AI === $to) {
             // Server-side guard: AI must not be available during tests.
-            if (!empty($_SESSION['is_in_a_test'])) {
+            if ($this->isAiTutorBlockedInExam()) {
                 return new JsonResponse(['error' => 'ai_disabled_in_exam'], 403);
             }
 
             $message = trim($message);
             if ('' === $message) {
                 return new JsonResponse(['id' => 0]);
+            }
+            if (mb_strlen($message, 'UTF-8') > self::AI_MESSAGE_MAX_CHARS) {
+                return new JsonResponse([
+                    'error' => 'ai_message_too_long',
+                    'message' => 'AI tutor question exceeds the maximum length.',
+                ], 422);
             }
 
             $selectedTextContext = $this->normalizeAiSelectedTextContext(
@@ -625,10 +637,6 @@ final class ChatController extends AbstractController
             try {
                 if ($req->hasSession()) {
                     $req->getSession()->set('ai_tutor_context', $ctx);
-                    $req->getSession()->set(
-                        'ai_tutor_system_prompt',
-                        $aiTutorChatService->buildContextSystemPrompt($course, (string) $ctx['lang'])
-                    );
                 }
             } catch (Throwable) {
                 // Best effort: ignore session storage failures.
@@ -1357,7 +1365,6 @@ final class ChatController extends AbstractController
     )]
     public function globalTutorContext(
         Request $req,
-        AiTutorChatService $aiTutorChatService,
         AiProviderFactory $aiProviderFactory,
         LanguageHelper $languageHelper,
         SettingsCourseManager $courseSettingsManager,
@@ -1368,7 +1375,7 @@ final class ChatController extends AbstractController
             return new JsonResponse(['error' => 'unauthorized'], 401);
         }
 
-        $inTest = !empty($_SESSION['is_in_a_test']);
+        $inTest = $this->isAiTutorBlockedInExam();
 
         if (!$this->isGlobalChatEnabled()) {
             return new JsonResponse([
@@ -1479,10 +1486,6 @@ final class ChatController extends AbstractController
         try {
             if ($req->hasSession()) {
                 $req->getSession()->set('ai_tutor_context', $ctx);
-                $req->getSession()->set(
-                    'ai_tutor_system_prompt',
-                    $aiTutorChatService->buildContextSystemPrompt($course, (string) $ctx['lang'])
-                );
             }
         } catch (Throwable) {
             // Best effort: ignore session storage failures.
@@ -1888,8 +1891,14 @@ final class ChatController extends AbstractController
             return null;
         }
 
-        if ('' !== $requestedProvider && \in_array($requestedProvider, $available, true)) {
-            return $requestedProvider;
+        $requestedProvider = strtolower(trim($requestedProvider));
+        // Course setting tutor_chatbot is an enable/disable flag, not a provider key.
+        if (\in_array($requestedProvider, ['true', 'false', '1', '0'], true)) {
+            $requestedProvider = '';
+        }
+
+        if ('' !== $requestedProvider) {
+            return \in_array($requestedProvider, $available, true) ? $requestedProvider : null;
         }
 
         if (null !== $defaultProvider && '' !== trim($defaultProvider) && \in_array($defaultProvider, $available, true)) {
@@ -1922,6 +1931,8 @@ final class ChatController extends AbstractController
     {
         $course = $this->cidReqHelper->getDoctrineCourseEntity();
         if (null !== $course) {
+            $this->assertAiTutorCourseAccess($course);
+
             return $course;
         }
 
@@ -1946,7 +1957,28 @@ final class ChatController extends AbstractController
             return null;
         }
 
-        return $doctrine->getRepository(Course::class)->find($cid);
+        $course = $doctrine->getRepository(Course::class)->find($cid);
+        if ($course instanceof Course) {
+            $this->assertAiTutorCourseAccess($course);
+        }
+
+        return $course;
+    }
+
+    private function assertAiTutorCourseAccess(Course $course): void
+    {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return;
+        }
+
+        $user = $this->userHelper->getCurrent();
+        if (null === $user || [] === $this->courseAccessResolver->resolveCourseRoles(
+            $user,
+            $course,
+            $this->cidReqHelper->getSessionEntity()
+        )) {
+            throw new AccessDeniedHttpException('You do not have access to this course.');
+        }
     }
 
     /**
@@ -2031,6 +2063,15 @@ final class ChatController extends AbstractController
     private function globalChatDisabledHtml(): Response
     {
         return new Response('', 200, ['Content-Type' => 'text/html; charset=UTF-8']);
+    }
+
+    /**
+     * Exercise attempts and learning-path tests are tracked in Symfony session.
+     * Preserve the legacy session flag for older exercise entry points.
+     */
+    private function isAiTutorBlockedInExam(): bool
+    {
+        return !empty($_SESSION['is_in_a_test']) || $this->aiHelper->isUserInTest();
     }
 
     private function isAiTutorTemporarilyUnavailable(Request $request): bool

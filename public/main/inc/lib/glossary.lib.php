@@ -22,6 +22,22 @@ use Doctrine\ORM\NoResultException;
 class GlossaryManager
 {
     /**
+     * The term with this id, only when it belongs to the current course (or session) and the user may see it.
+     * Ids come from the request, so they must never be trusted to find a term of another course.
+     */
+    private static function findInCurrentCourse($glossaryId): ?CGlossary
+    {
+        $repo = Container::getGlossaryRepository();
+        $course = api_get_course_entity(api_get_course_int_id());
+        $session = api_get_session_entity(api_get_session_id());
+
+        $qb = $repo->getResourcesByCourse($course, $session);
+        $qb->andWhere('resource.iid = :glossaryId')->setParameter('glossaryId', (int) $glossaryId);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
      * Get all glossary terms.
      *
      * @author Isaac Flores <isaac.flores@dokeos.com>
@@ -80,9 +96,8 @@ class GlossaryManager
      */
     public static function get_glossary_term_by_glossary_id($glossary_id)
     {
-        $repo = Container::getGlossaryRepository();
-        /** @var CGlossary $glossary */
-        $glossary = $repo->find($glossary_id);
+        /** @var CGlossary|null $glossary */
+        $glossary = self::findInCurrentCourse($glossary_id);
         $description = '';
         if (null !== $glossary) {
             $description = $glossary->getDescription();
@@ -236,8 +251,8 @@ class GlossaryManager
         } else {
             $repo = Container::getGlossaryRepository();
 
-            /** @var CGlossary $glossary */
-            $glossary = $repo->find($values['glossary_id']);
+            /** @var CGlossary|null $glossary */
+            $glossary = self::findInCurrentCourse($values['glossary_id']);
             if (null !== $glossary) {
                 $glossary
                     ->setTitle($values['title'])
@@ -400,8 +415,8 @@ class GlossaryManager
     public static function delete_glossary($glossary_id, $showMessage = true)
     {
         $repo = Container::getGlossaryRepository();
-        /** @var CGlossary $glossary */
-        $glossary = $repo->find($glossary_id);
+        /** @var CGlossary|null $glossary */
+        $glossary = self::findInCurrentCourse($glossary_id);
         if (null !== $glossary) {
             $repo->delete($glossary);
         } else {

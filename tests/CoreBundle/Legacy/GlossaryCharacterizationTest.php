@@ -323,6 +323,48 @@ final class GlossaryCharacterizationTest extends KernelTestCase
         $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_glossary WHERE iid = ?', [$kept]));
     }
 
+    // ------------------------------------------------------------------ course scoping (Rule 13)
+
+    public function testAPageOfCourseOneCannotDeleteATermOfAnotherCourse(): void
+    {
+        $foreign = $this->term('gl_course_two', 'secret', 2);
+        $this->loginAsAdmin();
+
+        GlossaryManager::delete_glossary($foreign, false);
+        $this->fresh();
+
+        $this->assertSame(
+            1,
+            (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_glossary WHERE iid = ?', [$foreign]),
+            'The glossary_id comes from the request: it must belong to the current course.'
+        );
+    }
+
+    public function testAPageOfCourseOneCannotUpdateATermOfAnotherCourse(): void
+    {
+        $foreign = $this->term('gl_course_two', 'original', 2);
+        $this->loginAsAdmin();
+
+        GlossaryManager::update_glossary(['glossary_id' => $foreign, 'title' => 'gl_hijacked', 'description' => 'changed'], false);
+        $this->fresh();
+
+        $this->assertSame(
+            ['title' => 'gl_course_two', 'description' => 'original'],
+            $this->conn()->fetchAssociative('SELECT title, description FROM c_glossary WHERE iid = ?', [$foreign])
+        );
+    }
+
+    public function testTheAjaxDescriptionLookupDoesNotReadAnotherCoursesTerm(): void
+    {
+        $foreign = $this->term('gl_course_two', 'private definition', 2);
+        $mine = $this->term('gl_course_one', 'public definition', 1);
+        $draft = $this->term('gl_draft', 'not yet', 1, 0);
+
+        $this->assertSame('public definition', GlossaryManager::get_glossary_term_by_glossary_id($mine));
+        $this->assertSame('', GlossaryManager::get_glossary_term_by_glossary_id($foreign));
+        $this->assertSame('', GlossaryManager::get_glossary_term_by_glossary_id($draft), 'A student does not read a draft.');
+    }
+
     // ------------------------------------------------------------------ helpers
 
     private function conn(): Connection

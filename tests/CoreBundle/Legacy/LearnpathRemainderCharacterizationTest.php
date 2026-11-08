@@ -614,6 +614,8 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
 
         $this->assertSame([1, '/4'], $lp->get_progress_bar_text('abs'));
         $this->assertSame([3, '/4'], $lp->get_progress_bar_text('abs', 2), 'faked steps are added');
+        $this->assertSame([4, '/4'], $lp->get_progress_bar_text('abs', 3), 'exactly the total');
+        $this->assertSame([4, '/4'], $lp->get_progress_bar_text('abs', 4), 'one more than the total is capped');
         $this->assertSame([4, '/4'], $lp->get_progress_bar_text('abs', 10), 'but never exceed the total');
         $this->assertSame('25', (string) $lp->get_progress_bar_text('%')[0]);
         $this->assertSame([0, ''], $lp->get_progress_bar_text('other'), 'unknown mode: percentage 0 and no text');

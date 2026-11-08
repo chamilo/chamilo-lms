@@ -182,10 +182,12 @@ final class ExerciseAccessControlTest extends KernelTestCase
 
     public function testAttemptDefaultsToTheCurrentCourse(): void
     {
-        $exe = $this->attempt(1);
+        // Earlier tests may leave a course in the legacy context: use the fixture course that is NOT the current one.
+        $current = (int) api_get_course_int_id();
+        $foreign = 1 === $current ? 2 : 1;
+        $exe = $this->attempt($foreign);
 
-        // No course in the legacy context: the default course id is 0 and nothing matches.
-        $this->assertFalse(ExerciseLib::attemptBelongsToCourse($exe));
+        $this->assertFalse(ExerciseLib::attemptBelongsToCourse($exe), 'an attempt of another course never matches the default');
     }
 
     public function testAttemptSessionParityWhenAsked(): void

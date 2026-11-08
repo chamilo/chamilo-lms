@@ -885,25 +885,36 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
 
     // ---------------------------------------------------------------- doctrine-based helpers
 
-    public function testCountAnsweredQuestionsByUserAfterTime(): void
+    public function testCountAnsweredQuestionsByUserAfterTimeCountsTheUsersAnswersOfThatCourseAndSession(): void
     {
         $this->ctx();
         $quiz = $this->quiz();
         $q = $this->question('qs_after');
         $u = $this->rawUser('after');
-        $exe = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $u]);
-        foreach ([['2020-05-01 10:00:00', 1], ['2020-05-02 10:00:00', 1], ['2020-04-01 10:00:00', 1]] as [$tms, $c]) {
+        $other = $this->rawUser('after_other');
+        $sid = $this->rawSession('after_sess');
+        $base = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $u]);
+        $inSession = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $u, 'session_id' => $sid]);
+        $otherCourse = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $u, 'c_id' => 2]);
+        $otherUser = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $other]);
+        $at = function (int $exe, int $user, string $tms) use ($q): void {
             $this->conn->insert('track_e_attempt', [
-                'exe_id' => $exe, 'user_id' => $u, 'question_id' => $q, 'answer' => 'x', 'teacher_comment' => '',
+                'exe_id' => $exe, 'user_id' => $user, 'question_id' => $q, 'answer' => 'x', 'teacher_comment' => '',
                 'marks' => 1, 'position' => 1, 'tms' => $tms, 'seconds_spent' => 0,
             ]);
-        }
+        };
+        $at($base, $u, '2020-05-01 10:00:00');
+        $at($base, $u, '2020-05-02 10:00:00');
+        $at($base, $u, '2020-04-01 10:00:00'); // before the limit
+        $at($inSession, $u, '2020-05-03 10:00:00');
+        $at($otherCourse, $u, '2020-05-04 10:00:00');
+        $at($otherUser, $other, '2020-05-05 10:00:00');
+        $since = new \DateTime('2020-04-15 00:00:00', new \DateTimeZone('UTC'));
 
-        // PINNED QUIRK: the DQL filters TrackEAttempt on userId/cId/sessionId, none of which are mapped fields (the
-        // entity has user and trackExercise associations): always a QueryException. Its only caller,
-        // isQuestionsLimitPerDayReached(), therefore throws whenever a course sets quiz_question_limit_per_day.
-        $this->expectException(\Doctrine\ORM\Query\QueryException::class);
-        ExerciseLib::countAnsweredQuestionsByUserAfterTime(new \DateTime('2020-04-15 00:00:00', new \DateTimeZone('UTC')), $u, 1, 0);
+        $this->assertSame(2, (int) ExerciseLib::countAnsweredQuestionsByUserAfterTime($since, $u, 1, 0), 'base course');
+        $this->assertSame(1, (int) ExerciseLib::countAnsweredQuestionsByUserAfterTime($since, $u, 1, $sid), 'session');
+        $this->assertSame(1, (int) ExerciseLib::countAnsweredQuestionsByUserAfterTime($since, $u, 2, 0));
+        $this->assertSame(1, (int) ExerciseLib::countAnsweredQuestionsByUserAfterTime($since, $other, 1, 0));
     }
 
     public function testGetExerciseTitleById(): void

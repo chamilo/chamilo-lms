@@ -5969,22 +5969,25 @@ EOT;
     {
         $em = Database::getManager();
 
-        if (empty($sessionId)) {
-            $sessionId = null;
-        }
-
         $time = api_get_utc_datetime($time->format('Y-m-d H:i:s'), false, true);
 
-        $result = $em
-            ->createQuery('
-                SELECT COUNT(ea) FROM Chamilo\CoreBundle\Entity\TrackEAttempt ea
-                WHERE ea.userId = :user AND ea.cId = :course AND ea.sessionId = :session
-                    AND ea.tms > :time
-            ')
-            ->setParameters(['user' => $userId, 'course' => $courseId, 'session' => $sessionId, 'time' => $time])
-            ->getSingleScalarResult();
+        // Course and session belong to the attempt of the exercise the answer was given in.
+        $dql = '
+            SELECT COUNT(ea.id) FROM Chamilo\CoreBundle\Entity\TrackEAttempt ea
+            INNER JOIN ea.trackExercise te
+            WHERE IDENTITY(ea.user) = :user AND IDENTITY(te.course) = :course AND ea.tms > :time';
+        $parameters = ['user' => (int) $userId, 'course' => (int) $courseId, 'time' => $time];
+        if (empty($sessionId)) {
+            $dql .= ' AND te.session IS NULL';
+        } else {
+            $dql .= ' AND IDENTITY(te.session) = :session';
+            $parameters['session'] = (int) $sessionId;
+        }
 
-        return $result;
+        return (int) $em
+            ->createQuery($dql)
+            ->setParameters($parameters)
+            ->getSingleScalarResult();
     }
 
     /**

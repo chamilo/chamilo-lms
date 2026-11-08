@@ -234,7 +234,7 @@ abstract class Question
                 $objQuestion->course = $course_info;
                 $objQuestion->feedback = $object->feedback ?? '';
                 $objQuestion->category = 0;
-                $objQuestion->code = $object->code ?? '';
+                $objQuestion->code = $object->question_code ?? '';
 
                 if ($course_id > 0) {
                     $objQuestion->category = TestCategory::getCategoryForQuestion($id, $course_id);
@@ -245,11 +245,9 @@ abstract class Question
                             $objQuestion->category = (int) $categoryInfo['category_id'];
                         }
 
-                        if (
-                            'true' === api_get_setting('exercise.allow_mandatory_question_in_category') &&
-                            isset($categoryInfo['mandatory'])
-                        ) {
-                            $objQuestion->mandatory = (int) $categoryInfo['mandatory'];
+                        if ('true' === api_get_setting('exercise.allow_mandatory_question_in_category')) {
+                            // The flag is a column of the question, not of the category link
+                            $objQuestion->mandatory = (int) $object->mandatory;
                         }
                     }
                 }
@@ -466,13 +464,8 @@ abstract class Question
             $row = Database::fetch_array($res);
             $allowMandatory = ('true' === api_get_setting('exercise.allow_mandatory_question_in_category'));
             if ($row['nb'] > 0) {
-                $extraMandatoryCondition = '';
-                if ($allowMandatory) {
-                    $extraMandatoryCondition = ", mandatory = {$this->mandatory}";
-                }
                 $sql = "UPDATE $table
                         SET category_id = $categoryId
-                        $extraMandatoryCondition
                         WHERE
                             question_id = $questionId
                         ";
@@ -482,14 +475,13 @@ abstract class Question
                         VALUES ($questionId, $categoryId)
                         ";
                 Database::query($sql);
-                if ($allowMandatory) {
-                    $id = Database::insert_id();
-                    if ($id) {
-                        $sql = "UPDATE $table SET mandatory = {$this->mandatory}
-                                WHERE iid = $id";
-                        Database::query($sql);
-                    }
-                }
+            }
+            if ($allowMandatory) {
+                // The flag is a column of the question, not of the category link
+                $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+                $sql = 'UPDATE '.$tableQuestion.' SET mandatory = '.(int) $this->mandatory.'
+                        WHERE iid = '.$questionId;
+                Database::query($sql);
             }
         }
 

@@ -241,9 +241,7 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $this->assertSame('qs_feedback', $q->feedback);
         $this->assertSame($media, $q->parent_id);
         $this->assertSame(0, $q->category);
-        // PINNED QUIRK: read() looks for a `code` column but the table column is `question_code`, so the
-        // question code is never loaded, whatever the row holds.
-        $this->assertSame('', $q->code);
+        $this->assertSame('QCODE', $q->code, 'the column is question_code');
     }
 
     public function testReadWithNullParentMediaGivesZeroParent(): void
@@ -263,17 +261,21 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $this->assertSame($cat, $this->read($id)->category);
     }
 
-    public function testReadNeverLoadsMandatoryFromTheCategoryRow(): void
+    public function testReadLoadsMandatoryOfACategorisedQuestionOnlyWhenSettingIsOn(): void
     {
         $this->ctx();
         $cat = $this->category('qs_cat_m');
         $id = $this->makeQuestion('qs_q_mand', UNIQUE_ANSWER, 1.0, ['mandatory' => 1]);
+        $plain = $this->makeQuestion('qs_q_mand_nocat', UNIQUE_ANSWER, 1.0, ['mandatory' => 1]);
         $this->conn->insert('c_quiz_question_rel_category', ['question_id' => $id, 'category_id' => $cat]);
 
-        // PINNED QUIRK: with the setting on, read() asks the c_quiz_question_rel_category row for a `mandatory`
-        // column that table does not have (it lives on c_quiz_question), so the flag is never loaded.
-        $this->setSetting('exercise.allow_mandatory_question_in_category', 'true');
+        // The flag lives on c_quiz_question (the category link table has no such column).
+        $this->setSetting('exercise.allow_mandatory_question_in_category', 'false');
         $this->assertEmpty($this->read($id)->mandatory);
+
+        $this->setSetting('exercise.allow_mandatory_question_in_category', 'true');
+        $this->assertSame(1, $this->read($id)->mandatory);
+        $this->assertEmpty($this->read($plain)->mandatory, 'only questions that belong to a category');
     }
 
     public function testReadListsOnlyLiveQuizzesOfTheCurrentSession(): void
@@ -337,31 +339,33 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $this->assertSame($b, (int) $this->conn->fetchOne('SELECT category_id FROM c_quiz_question_rel_category WHERE question_id = ?', [$id]));
     }
 
-    public function testSaveCategoryWithMandatorySettingOnLosesTheFlagThenFails(): void
+    public function testSaveCategoryStoresMandatoryOnTheQuestionOnlyWhenSettingIsOn(): void
     {
         $this->ctx();
         $cat = $this->category('qs_cat_mand');
         $off = $this->makeQuestion('qs_q_mand_off');
         $on = $this->makeQuestion('qs_q_mand_on');
+        $other = $this->makeQuestion('qs_q_mand_other');
+        $mandatory = fn (int $id): int => (int) $this->conn->fetchOne('SELECT mandatory FROM c_quiz_question WHERE iid = ?', [$id]);
 
         $this->setSetting('exercise.allow_mandatory_question_in_category', 'false');
         $q = $this->read($off);
         $q->setMandatory(1);
         $this->assertTrue($q->saveCategory($cat));
         $this->assertSame(1, $this->cnt('c_quiz_question_rel_category', 'question_id = ?', [$off]));
-        $this->assertSame(0, (int) $this->conn->fetchOne('SELECT mandatory FROM c_quiz_question WHERE iid = ?', [$off]));
+        $this->assertSame(0, $mandatory($off));
 
-        // PINNED QUIRK: with the setting on, the flag is never stored. The INSERT path asks insert_id() of a
-        // link table without auto-increment column (0) and silently skips the UPDATE; the UPDATE path
-        // (a category row already exists) writes `mandatory` into c_quiz_question_rel_category, which has no such
-        // column, and throws.
         $this->setSetting('exercise.allow_mandatory_question_in_category', 'true');
         $q = $this->read($on);
         $q->setMandatory(1);
-        $this->assertTrue($q->saveCategory($cat));
-        $this->assertSame(0, (int) $this->conn->fetchOne('SELECT mandatory FROM c_quiz_question WHERE iid = ?', [$on]), 'flag lost');
-        $this->expectException(NotAllowedException::class);
-        $q->saveCategory($cat);
+        $this->assertTrue($q->saveCategory($cat), 'insert path');
+        $this->assertSame(1, $mandatory($on));
+        $this->assertSame(0, $mandatory($other), 'other questions untouched');
+
+        $q->setMandatory(0);
+        $this->assertTrue($q->saveCategory($cat), 'update path');
+        $this->assertSame(0, $mandatory($on));
+        $this->assertSame(1, $this->cnt('c_quiz_question_rel_category', 'question_id = ?', [$on]));
     }
 
     public function testSaveCategoryWithZeroRemovesTheCategoryAndDeleteCategoryNeedsAnId(): void

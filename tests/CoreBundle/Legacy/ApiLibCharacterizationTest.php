@@ -923,11 +923,17 @@ class ApiLibCharacterizationTest extends AbstractApiTest
 
     // ---------------------------------------------------------------- dead helpers (cheap pins)
 
-    public function testIsSessionInCategoryReferencesAColumnThatNoLongerExists(): void
+    public function testIsSessionInCategoryMatchesTheCategoryTitleSuffix(): void
     {
-        // PINNED QUIRK: the query filters on session_category.name, now called title: always throws.
-        $this->expectException(NotAllowedException::class);
-        api_is_session_in_category(1, 'ap_category');
+        $this->conn()->executeStatement("INSERT INTO session_category (access_url_id, title) VALUES (1, 'ap_category')");
+        $cat = (int) $this->conn()->lastInsertId();
+        $sid = $this->rawSession('incat', null, null, ['category' => $cat]);
+        $out = $this->rawSession('outcat', null, null);
+
+        $this->assertTrue(api_is_session_in_category($sid, 'ap_category'));
+        $this->assertTrue(api_is_session_in_category($sid, 'category'), 'LIKE %name: a suffix of the title matches.');
+        $this->assertFalse(api_is_session_in_category($sid, 'ap_cat'), 'A prefix does not.');
+        $this->assertFalse(api_is_session_in_category($out, 'ap_category'));
     }
 
     // ---------------------------------------------------------------- course visibility (search processors only)

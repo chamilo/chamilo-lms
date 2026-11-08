@@ -3324,7 +3324,7 @@ function api_is_session_in_category($session_id, $category_name)
                 SELECT s.id FROM $tbl_session s, $tbl_session_category sc
                 WHERE
                   s.session_category_id = sc.id AND
-                  sc.name LIKE '%$category_name'
+                  sc.title LIKE '%$category_name'
             )";
     $rs = Database::query($sql);
 

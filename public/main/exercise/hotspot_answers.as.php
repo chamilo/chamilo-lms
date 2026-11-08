@@ -50,6 +50,11 @@ if (!api_is_allowed_to_edit(null, true)) {
     }
 }
 
+// The question (the solution is returned) must be one of the current course.
+if (!ExerciseLib::questionBelongsToCourse($questionId, $courseId, (int) api_get_session_id())) {
+    api_not_allowed();
+}
+
 $questionRepo = Container::getQuestionRepository();
 /** @var CQuizQuestion $objQuestion */
 $objQuestion = $questionRepo->find($questionId);

@@ -124,6 +124,10 @@ function edit_category_form($action)
     $action = Security::remove_XSS($action);
     if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $category_id = (int) $_GET['id'];
+        // TestCategory::getCategory() does not scope by course.
+        if (!ExerciseLib::questionCategoryBelongsToCourse($category_id, (int) api_get_course_int_id(), (int) api_get_session_id())) {
+            api_not_allowed(true);
+        }
         $objcat = new TestCategory();
         $objcat = $objcat->getCategory($category_id);
         $form = new FormValidator(
@@ -161,6 +165,9 @@ function edit_category_form($action)
 
             if ($check) {
                 $values = $form->exportValues();
+                if (!ExerciseLib::questionCategoryBelongsToCourse((int) $values['id'], (int) api_get_course_int_id(), (int) api_get_session_id())) {
+                    api_not_allowed(true);
+                }
                 $category = new TestCategory();
                 $category = $category->getCategory($values['id']);
 
@@ -191,6 +198,13 @@ function edit_category_form($action)
 // process to delete a category
 function delete_category_form()
 {
+    // State-changing GET: the list link carries the token; the category must be one of the current course.
+    $categoryId = (int) ($_GET['category_id'] ?? 0);
+    if (!Security::check_token('request', null, 'exercise')
+        || !ExerciseLib::questionCategoryBelongsToCourse($categoryId, (int) api_get_course_int_id(), (int) api_get_session_id())
+    ) {
+        api_not_allowed(true);
+    }
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
         $category = new TestCategory();
         if ($category->removeCategory($_GET['category_id'])) {

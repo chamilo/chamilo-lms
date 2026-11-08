@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -27,6 +28,13 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_categories&c_i
 $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 
 $obj = new ExerciseCategoryManager();
+
+// The category ids of the request must belong to the current course: the repository find() does not scope.
+$categoryInCourse = static function ($id) use ($courseId): bool {
+    $category = Container::getQuizCategoryRepository()->find((int) $id);
+
+    return null !== $category && (int) $category->getCourse()->getId() === (int) $courseId;
+};
 
 $check = Security::check_token('request');
 $token = Security::get_token();
@@ -108,11 +116,17 @@ switch ($action) {
     case 'edit':
         $interbreadcrumb[] = ['url' => $url, 'name' => get_lang('Categories')];
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
+        if (!$categoryInCourse($_GET['id'] ?? 0)) {
+            api_not_allowed(true);
+        }
         $form = $obj->return_form($url.'&action=edit&id='.(int) ($_GET['id']), 'edit');
 
         // The validation or display
         if ($form->validate()) {
             $values = $form->exportValues();
+            if (!$categoryInCourse($values['id'] ?? 0)) {
+                api_not_allowed(true);
+            }
             $res = $obj->update($values);
             if ($res) {
                 Display::addFlash(Display::return_message(get_lang('Item updated'), 'confirmation'));
@@ -130,7 +144,11 @@ switch ($action) {
 
         break;
     case 'delete':
-        $res = $obj->delete($_GET['id']);
+        // State-changing GET: needs the token of the action link, and a category of this course.
+        if (!$check || !$categoryInCourse($_GET['id'] ?? 0)) {
+            api_not_allowed(true);
+        }
+        $res = $obj->delete((int) $_GET['id']);
         if ($res) {
             Display::addFlash(Display::return_message(get_lang('Item deleted'), 'confirmation'));
         }

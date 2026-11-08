@@ -1130,7 +1130,7 @@ class TestCategory
                     href="'.api_get_self().'?action=editcategory&id='.$id.'&'.api_get_cidreq().'">'.
                     Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                 $links .= ' <a
-                    href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&id='.$id.'" ';
+                    href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&category_id='.$id.'&exercise_sec_token='.Security::get_existing_token('exercise').'" ';
                 $links .= 'onclick="return confirmDelete(\''.
                     self::protectJSDialogQuote(get_lang('Are you sure you want to delete this category?').'['.$rowname).'] ?\', \'id_cat'.$id.'\');">';
                 $links .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';

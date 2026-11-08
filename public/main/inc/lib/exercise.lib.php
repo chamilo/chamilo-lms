@@ -6861,9 +6861,17 @@ EOT;
         return self::resourceLinkedToCourse('c_quiz_question', $questionId, $courseId, $sessionId);
     }
 
+    /**
+     * Same as exerciseBelongsToCourse() for a question category (c_quiz_question_category).
+     */
+    public static function questionCategoryBelongsToCourse(int $categoryId, int $courseId, ?int $sessionId = null): bool
+    {
+        return self::resourceLinkedToCourse('c_quiz_question_category', $categoryId, $courseId, $sessionId);
+    }
+
     private static function resourceLinkedToCourse(string $table, int $iid, int $courseId, ?int $sessionId): bool
     {
-        if ($iid <= 0 || $courseId <= 0 || !in_array($table, ['c_quiz', 'c_quiz_question'], true)) {
+        if ($iid <= 0 || $courseId <= 0 || !in_array($table, ['c_quiz', 'c_quiz_question', 'c_quiz_question_category'], true)) {
             return false;
         }
 

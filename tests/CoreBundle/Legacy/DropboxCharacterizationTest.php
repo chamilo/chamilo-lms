@@ -603,35 +603,42 @@ final class DropboxCharacterizationTest extends KernelTestCase
         ));
     }
 
-    public function testRemoveUnusedFilesFailsBecauseTheFileTableHasNoIdColumn(): void
+    public function testRemoveUnusedFilesDeletesFilesNobodyKeepsAndTheirPosts(): void
     {
-        // PINNED QUIRK (schema drift): the orphan-file query joins on f.id, which does not exist any more.
-        // Deleting a received or sent file ends here, so no file can ever be deleted through the legacy page.
-        $this->expectException(NotAllowedException::class);
+        $orphan = $this->file(1, 0, 1, 'db_orphan_nonexistent.txt');
+        $this->post($orphan, 3);
+        $kept = $this->file(1);
+        $this->person($kept, 1);
+        $otherCourseOrphan = $this->file(1, 0, 2);
 
         removeUnusedFiles();
+
+        $this->assertSame(0, $this->rows('c_dropbox_file', 'iid = ?', [$orphan]));
+        $this->assertSame(0, $this->rows('c_dropbox_post', 'file_id = ?', [$orphan]));
+        $this->assertSame(1, $this->rows('c_dropbox_file', 'iid = ?', [$kept]), 'a file somebody still has is kept');
+        $this->assertSame(1, $this->rows('c_dropbox_file', 'iid = ?', [$otherCourseOrphan]), 'other courses are not touched');
     }
 
-    public function testGetUserOwningThisMailingFailsBecauseTheFileTableHasNoIdColumn(): void
+    public function testGetUserOwningThisMailingReturnsTheUploaderOfTheMailingFile(): void
     {
+        $pseudo = self::MAILING_ID_BASE + 1;
+        $zip = $this->file(1);
+        $this->post($zip, $pseudo);
+
+        $this->assertSame(1, (int) getUserOwningThisMailing($pseudo));
+        $this->assertTrue(getUserOwningThisMailing($pseudo, 1));
+    }
+
+    public function testDeleteSentCategoryWithAFileStillFailsInDropboxClass(): void
+    {
+        // PINNED QUIRK (not fixable from this file): after the "id" -> "iid" repair here, the loop reaches
+        // Dropbox_Person -> Dropbox_SentWork -> Dropbox_Work, whose own SQL (dropbox_class.inc.php) still
+        // targets removed columns. The legacy dropbox classes belong to a later pass; see the decisions file.
+        $cat = $this->category(1, 'sent');
+        $this->person($this->file(1, $cat), 1);
+
         $this->expectException(NotAllowedException::class);
 
-        getUserOwningThisMailing(self::MAILING_ID_BASE + 1);
-    }
-
-    public function testDeleteSentCategoryWithAFileFailsBecauseOfTheMissingIdColumn(): void
-    {
-        // PINNED QUIRK (schema drift): the loop reads $row['id'] from c_dropbox_file, which has only "iid".
-        $cat = $this->category(1, 'sent');
-        $this->file(1, $cat);
-
-        // The undefined key is only a warning; the work is then deleted through removeUnusedFiles(), which throws.
-        $warning = $this->warningRaisedBy(static function () use ($cat): void {
-            try {
-                delete_category('deletesentcategory', $cat);
-            } catch (NotAllowedException) {
-            }
-        });
-        $this->assertStringContainsString('"id"', $warning);
+        delete_category('deletesentcategory', $cat);
     }
 }

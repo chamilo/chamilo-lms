@@ -151,7 +151,7 @@ function delete_category($action, $id, $user_id = null)
     } elseif ('deletesentcategory' == $action) {
         $sentreceived = 'sent';
         $entries_table = Database::get_course_table(TABLE_DROPBOX_FILE);
-        $id_field = 'id';
+        $id_field = 'iid';
         $return_message = get_lang('The folder has been deleted');
     } else {
         return get_lang('Error');
@@ -769,10 +769,10 @@ function removeUnusedFiles()
     $course_id = $_course['real_id'];
 
     // select all files that aren't referenced anymore
-    $sql = "SELECT DISTINCT f.id, f.filename
+    $sql = "SELECT DISTINCT f.iid, f.filename
             FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)." f
             LEFT JOIN ".Database::get_course_table(TABLE_DROPBOX_PERSON)." p
-            ON (f.id = p.file_id)
+            ON (f.iid = p.file_id)
             WHERE p.user_id IS NULL AND
                   f.c_id = $course_id
             ";
@@ -780,13 +780,16 @@ function removeUnusedFiles()
     while ($res = Database::fetch_array($result)) {
         //delete the selected files from the post and file tables
         $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
-                WHERE c_id = $course_id AND file_id = '".$res['id']."'";
+                WHERE c_id = $course_id AND file_id = '".$res['iid']."'";
         Database::query($sql);
         $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)."
-                WHERE c_id = $course_id AND id ='".$res['id']."'";
+                WHERE c_id = $course_id AND iid ='".$res['iid']."'";
         Database::query($sql);
         //delete file from server
-        @unlink(api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$res['filename']);
+        // SYS_COURSE_PATH no longer exists (course files moved to resource nodes): nothing to remove from disk.
+        if (defined('SYS_COURSE_PATH')) {
+            @unlink(api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$res['filename']);
+        }
     }
 }
 
@@ -809,7 +812,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     $sql = "SELECT f.uploader_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)." f
             LEFT JOIN ".Database::get_course_table(TABLE_DROPBOX_POST)." p
-            ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
+            ON (f.iid = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
             WHERE
                 p.dest_user_id = '".$mailingPseudoId."' AND
                 p.c_id = $course_id

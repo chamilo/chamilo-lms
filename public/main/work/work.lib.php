@@ -3070,6 +3070,12 @@ function getPendingWorkList(
                 continue;
             }
 
+            // get_courses_list_by_user_id() lists every course the user belongs to: only the ones he
+            // teaches may expose the work of their learners (a teacher can be a learner elsewhere).
+            if (!CourseManager::isCourseTeacher($userId, $teacherCourseId)) {
+                continue;
+            }
+
             if (0 === $teacherSessionId && $showAllSessionAssignmentsFromBaseCourse) {
                 $contextConditions[] = '(rl.c_id = '.$teacherCourseId.')';
 

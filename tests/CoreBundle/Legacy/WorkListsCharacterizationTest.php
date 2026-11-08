@@ -629,4 +629,146 @@ final class WorkListsCharacterizationTest extends KernelTestCase
         $this->assertNotContains('w2_cs_session', $base);
         $this->assertContains('w2_cs_session', $inSession);
     }
+
+    // ----------------------------------------------------------------- getPendingWorkList
+
+    /**
+     * @return string[] the submission titles of the pending list that belong to this test
+     */
+    private function pendingTitles(?array $rows): array
+    {
+        $titles = array_values(array_filter(
+            array_column($rows ?? [], 'title'),
+            static fn ($t) => str_starts_with((string) $t, 'w2_')
+        ));
+        sort($titles);
+
+        return $titles;
+    }
+
+    private function pendingFixture(): int
+    {
+        $folder = $this->folder(['title' => 'w2_pf1']);
+        $folder2 = $this->folder(['title' => 'w2_pf2'], 2);
+        $this->submission($folder, $this->learner(), ['title' => 'w2_pn_open']);
+        $this->submission($folder, $this->other(), [
+            'title' => 'w2_pn_graded',
+            'qualification' => 6,
+            'qualificator_id' => $this->admin()->getId(),
+        ]);
+        $this->submission($folder, $this->learner(), ['title' => 'w2_pn_hidden_flag', 'active' => 0]);
+        $this->submission($folder, $this->learner(), ['title' => 'w2_pn_deleted', 'active' => 2]);
+        $this->node(['parent_id' => $folder, 'title' => 'w2_pn_draft', 'user_id' => $this->learner()->getId()], 1, 0);
+        $this->submission($folder2, $this->learner(), ['title' => 'w2_pn_course2'], 2);
+
+        return $folder;
+    }
+
+    public function testPendingListOfAnAdministratorHoldsEverySubmittedWorkOfEveryCourse(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $this->pendingFixture();
+
+        $rows = getPendingWorkList(null, null, null, null, '', false);
+
+        // Folders are not submissions, deleted and draft ones are not pending.
+        $this->assertSame(
+            ['w2_pn_course2', 'w2_pn_graded', 'w2_pn_hidden_flag', 'w2_pn_open'],
+            $this->pendingTitles($rows)
+        );
+        $row = array_values(array_filter($rows, static fn ($r) => 'w2_pn_graded' === $r['title']))[0];
+        $this->assertSame('w2_pf1', $row['work_name']);
+        $this->assertStringContainsString('Reviewed', strip_tags($row['qualificator_id']));
+        $this->assertSame('6', $row['qualification']);
+    }
+
+    public function testPendingListFiltersByCourseAndByReviewStatus(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $this->pendingFixture();
+
+        $course1 = getPendingWorkList(null, null, null, null, '', false, 1);
+        $this->assertSame(['w2_pn_graded', 'w2_pn_hidden_flag', 'w2_pn_open'], $this->pendingTitles($course1));
+        $this->assertSame(['w2_pn_course2'], $this->pendingTitles(getPendingWorkList(null, null, null, null, '', false, 2)));
+
+        $notReviewed = getPendingWorkList(null, null, null, null, '', false, 1, 2);
+        $this->assertSame(['w2_pn_hidden_flag', 'w2_pn_open'], $this->pendingTitles($notReviewed));
+        $reviewed = getPendingWorkList(null, null, null, null, '', false, 1, 3);
+        $this->assertSame(['w2_pn_graded'], $this->pendingTitles($reviewed));
+    }
+
+    public function testPendingListCountAgreesWithTheRows(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $this->pendingFixture();
+
+        $count = getPendingWorkList(null, null, null, null, '', true, 1);
+
+        $this->assertIsInt($count);
+        $this->assertCount($count, getPendingWorkList(null, null, null, null, '', false, 1));
+        $this->assertSame(3, getPendingWorkList(null, null, null, null, '1 = 1', true, 1) - (getPendingWorkList(null, null, null, null, '', true, 1) - 3));
+    }
+
+    public function testPendingListSortAllowlistAndPaging(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $folder = $this->folder(['title' => 'w2_ps']);
+        foreach (['b' => '2020-02-01', 'a' => '2020-03-01', 'c' => '2020-01-01'] as $letter => $date) {
+            $this->submission($folder, $this->learner(), ['title' => 'w2_pn_'.$letter, 'sent_date' => $date.' 00:00:00']);
+        }
+
+        $byTitle = getPendingWorkList(0, 500, 'title', 'asc', '', false, 1);
+        $this->assertSame(['w2_pn_a', 'w2_pn_b', 'w2_pn_c'], $this->pendingTitles($byTitle));
+        $this->assertSame(['w2_pn_c', 'w2_pn_b', 'w2_pn_a'], array_values(array_filter(
+            array_column(getPendingWorkList(0, 500, 'title', 'desc', '', false, 1), 'title'),
+            static fn ($t) => str_starts_with($t, 'w2_pn_')
+        )));
+        $this->assertSame(['w2_pn_c', 'w2_pn_b', 'w2_pn_a'], array_values(array_filter(
+            array_column(getPendingWorkList(0, 500, 'sent_date', 'asc', '', false, 1), 'title'),
+            static fn ($t) => str_starts_with($t, 'w2_pn_')
+        )));
+        // A column name that is not in the allowlist falls back to the sent date (the direction is kept).
+        $this->assertSame(['w2_pn_c', 'w2_pn_b', 'w2_pn_a'], array_values(array_filter(
+            array_column(getPendingWorkList(0, 500, '1; DROP TABLE user', 'asc', '', false, 1), 'title'),
+            static fn ($t) => str_starts_with($t, 'w2_pn_')
+        )));
+        $this->assertCount(2, getPendingWorkList(1, 2, 'title', 'asc', '', false, 1));
+    }
+
+    public function testPendingListLeavesOutWorkOfInvitees(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $folder = $this->folder(['title' => 'w2_pi']);
+        $this->submission($folder, $this->other(), ['title' => 'w2_pn_invited']);
+        $this->submission($folder, $this->learner(), ['title' => 'w2_pn_normal']);
+        $this->conn->update('user', ['status' => INVITEE], ['id' => $this->other()->getId()]);
+
+        $this->assertSame(['w2_pn_normal'], $this->pendingTitles(getPendingWorkList(null, null, null, null, '', false, 1)));
+    }
+
+    public function testPendingListIsEmptyForALearner(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $this->pendingFixture();
+        $this->setContext($this->learner(), $this->course(1));
+
+        $this->assertSame([], getPendingWorkList(null, null, null, null, '', false));
+        $this->assertSame(0, getPendingWorkList(null, null, null, null, '', true));
+    }
+
+    public function testPendingListOfATeacherIsLimitedToTheCoursesHeTeaches(): void
+    {
+        $teacher = $this->learner();
+        $teacher->setRoles(['ROLE_TEACHER']);
+        $this->subscribe($teacher, 1, 1);  // teaches course 1
+        $this->subscribe($teacher, 2, 5);  // only a learner in course 2
+        $this->setContext($teacher, $this->course(1));
+        $this->pendingFixture();
+
+        $titles = $this->pendingTitles(getPendingWorkList(null, null, null, null, '', false));
+
+        $this->assertSame(['w2_pn_graded', 'w2_pn_hidden_flag', 'w2_pn_open'], $titles, 'nothing from the course where he is a learner');
+        $this->assertSame([], $this->pendingTitles(getPendingWorkList(null, null, null, null, '', false, 2)), 'asking for that course explicitly changes nothing');
+        $this->assertSame(0, getPendingWorkList(null, null, null, null, '', true, 2));
+    }
 }

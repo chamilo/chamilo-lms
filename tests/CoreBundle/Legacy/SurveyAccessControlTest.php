@@ -178,4 +178,58 @@ final class SurveyAccessControlTest extends KernelTestCase
         $this->assertFalse(\SurveyManager::surveyQuestionBelongsToSurvey(0, $a));
         $this->assertFalse(\SurveyManager::surveyQuestionBelongsToSurvey($q, 0));
     }
+
+    private const PLAIN_USER = 2;
+
+    private function teacherOf(int $userId, int $courseId, int $status = 1): void
+    {
+        $this->conn->insert('course_rel_user', [
+            'user_id' => $userId,
+            'c_id' => $courseId,
+            'relation_type' => 0,
+            'status' => $status,
+            'progress' => 0,
+        ]);
+    }
+
+    public function testCopyTargetNeedsTeacherRightsOnTheTargetCourse(): void
+    {
+        // Course 2 has no teacher row for user 2: the posted target must be refused.
+        $this->assertFalse(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false));
+        $this->teacherOf(self::PLAIN_USER, 2);
+        $this->assertTrue(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false));
+        $this->assertFalse(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 1, 0, false), 'teacher of 2 only');
+    }
+
+    public function testCopyTargetStudentOfTheCourseIsRefused(): void
+    {
+        $this->teacherOf(self::PLAIN_USER, 2, 5);
+
+        $this->assertFalse(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false));
+    }
+
+    public function testCopyTargetAdminMayCopyAnywhereButNotToUnknownTargets(): void
+    {
+        $this->assertTrue(\SurveyManager::canCopySurveyTo(1, 2, 0, true));
+        $this->assertFalse(\SurveyManager::canCopySurveyTo(1, 999999, 0, true), 'unknown course');
+        $this->assertFalse(\SurveyManager::canCopySurveyTo(1, 2, 999999, true), 'session without the course');
+        $this->assertFalse(\SurveyManager::canCopySurveyTo(1, 0, 0, true));
+    }
+
+    public function testCopyTargetSessionCoachMayCopyIntoHisSessionOnly(): void
+    {
+        $sid = $this->session();
+        $other = $this->session();
+        foreach ([$sid, $other] as $id) {
+            $this->conn->insert('session_rel_course', ['session_id' => $id, 'c_id' => 2, 'position' => 0, 'nbr_users' => 0]);
+        }
+        $this->conn->insert('session_rel_course_rel_user', [
+            'user_id' => self::PLAIN_USER, 'session_id' => $sid, 'c_id' => 2, 'status' => 2,
+            'visibility' => 1, 'legal_agreement' => 0, 'progress' => 0,
+        ]);
+
+        $this->assertTrue(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, $sid, false));
+        $this->assertFalse(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, $other, false));
+        $this->assertFalse(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false), 'coach is not course teacher');
+    }
 }

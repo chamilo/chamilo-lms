@@ -2139,4 +2139,45 @@ class SurveyManager
 
         return false !== $found;
     }
+
+    /**
+     * Tells whether a user may write a survey into the given target course (and session): the course must exist,
+     * the session (when given) must contain the course, and the user must be a platform admin, a teacher of the
+     * course or (for a session) a coach of the course in that session. copy_survey.php used to trust the target
+     * posted by the form.
+     */
+    public static function canCopySurveyTo(int $userId, int $courseId, int $sessionId, bool $isPlatformAdmin): bool
+    {
+        if ($courseId <= 0 || $sessionId < 0 || $userId <= 0) {
+            return false;
+        }
+
+        $connection = Database::getManager()->getConnection();
+        if (false === $connection->fetchOne('SELECT id FROM course WHERE id = ?', [$courseId])) {
+            return false;
+        }
+
+        if ($sessionId > 0 && false === $connection->fetchOne(
+            'SELECT id FROM session_rel_course WHERE session_id = ? AND c_id = ?',
+            [$sessionId, $courseId]
+        )) {
+            return false;
+        }
+
+        if ($isPlatformAdmin) {
+            return true;
+        }
+
+        if (false !== $connection->fetchOne(
+            'SELECT id FROM course_rel_user WHERE c_id = ? AND user_id = ? AND status = 1',
+            [$courseId, $userId]
+        )) {
+            return true;
+        }
+
+        return $sessionId > 0 && false !== $connection->fetchOne(
+            'SELECT id FROM session_rel_course_rel_user WHERE session_id = ? AND c_id = ? AND user_id = ? AND status = 2',
+            [$sessionId, $courseId, $userId]
+        );
+    }
 }

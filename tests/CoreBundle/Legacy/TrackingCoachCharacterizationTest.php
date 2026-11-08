@@ -1017,8 +1017,8 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
 
         // Explicit list: the sum of progresses over the listed LPs that have a view, divided by the list size.
         $this->assertSame(30.0, Tracking::get_avg_student_progress($s1, $course, [$lp1, $lp2]));
-        // PINNED QUIRK: the c_id condition of the query is commented out, so a view counts whatever its c_id
-        // says: only lp_id (and the session) decide. lp3's 90 is added: [40 + 20 + 90, 3 LPs].
+        // INTENTIONAL: the query has no c_id condition because lp_view.lp_id is the c_lp primary key (iid), unique
+        // across courses and already restricted to the LPs of the course: only lp_id (and the session) decide. lp3's 90 is added: [40 + 20 + 90, 3 LPs].
         $this->assertSame([150.0, 3.0], array_map('floatval', Tracking::get_avg_student_progress($s1, $course, [$lp1, $lp2, $lp3], null, true)));
         $this->assertSame(90.0, Tracking::get_avg_student_progress($s1, $course, [$lp3]));
         // An LP of the list the course does not own is simply not found in the views: 0.
@@ -1051,9 +1051,13 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         $this->lpView($s1, $lp, self::COURSE, 40);
         $this->lpView($s2, $lp, self::COURSE, 60);
 
-        // PINNED QUIRK: with a list of students the query is "GROUP BY lp_id", so ONE view per LP survives
-        // (the first stored, here s1's 40), not the mean of the group: the result depends on row order.
-        $this->assertSame(40.0, Tracking::get_avg_student_progress([$s1, $s2], $course, [$lp]));
+        // Fixed: only the first view row per LP survived (s1's 40), whoever the other students were. With a list
+        // of students the latest view of each (student, LP) now counts, and the result is the SUM of the students'
+        // averages over the LPs, the same contract as get_avg_student_score(): the only caller with a list
+        // (myspace.lib.php) divides by the number of students itself. 40 + 60 over one LP.
+        $this->assertSame(100.0, Tracking::get_avg_student_progress([$s1, $s2], $course, [$lp]));
+        $this->assertSame([100.0, 1.0], array_map('floatval', Tracking::get_avg_student_progress([$s1, $s2], $course, [$lp], null, true)));
+        $this->assertSame(40.0, Tracking::get_avg_student_progress($s1, $course, [$lp]));
     }
 
     public function testAvgStudentProgressKeepsTheLatestViewOfAnLp(): void
@@ -1103,7 +1107,8 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         $this->assertNull(Tracking::get_avg_student_score(0, $course));
         // Unknown learning path ids leave nothing to average.
         $this->assertNull(Tracking::get_avg_student_score($s1, $course, [999999999]));
-        // PINNED QUIRK: a learning path without any sco/quiz item answers the string '-' (not a number).
+        // INTENTIONAL: a learning path without any sco/quiz item answers the string '-', the placeholder the
+        // reports print when there is no score to show (callers test is_numeric()).
         $this->assertSame('-', Tracking::get_avg_student_score($s1, $course, [$lp]));
     }
 
@@ -1203,7 +1208,9 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         }
 
         // 50% and 100%: each (user, LP) pair is added to the total, which is divided by the number of LPs with a
-        // score (1), never by the number of students: PINNED QUIRK, the "average" of two students is 150%.
+        // score (1), never by the number of students. INTENTIONAL: with a list of students the function returns the sum
+        // of the students' averages and the caller divides by the number of students (myspace.lib.php does), so
+        // the "average" of two students here is 150%.
         $this->assertSame(150.0, Tracking::get_avg_student_score([$s1, $s2], $course, [$lp]));
         $this->assertSame([150.0, 1], Tracking::get_avg_student_score([$s1, $s2], $course, [$lp], null, true));
         $this->assertSame(100.0, Tracking::get_avg_student_score($s2, $course, [$lp]));

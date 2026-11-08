@@ -2784,7 +2784,7 @@ class Tracking
         }
 
         $conditionToString = implode('AND', $conditions);
-        $sql = "SELECT lp_id, view_count, progress
+        $sql = "SELECT lp_id, user_id, view_count, progress
                 FROM $lpViewTable lp_view
                 WHERE
                     $conditionToString
@@ -2792,27 +2792,36 @@ class Tracking
 
         $result = Database::query($sql);
 
+        // Latest view of each (learning path, student): the first row of the ordered list.
         $progress = [];
-        $viewCount = [];
+        $seen = [];
         while ($row = Database::fetch_assoc($result)) {
-            if (!isset($viewCount[$row['lp_id']])) {
-                $progress[$row['lp_id']] = $row['progress'];
+            $key = $row['lp_id'].'_'.$row['user_id'];
+            if (!isset($seen[$key])) {
+                $seen[$key] = true;
+                $progress[$row['lp_id']][] = $row['progress'];
             }
-            $viewCount[$row['lp_id']] = $row['view_count'];
         }
 
-        // Fill with lp ids
+        // Fill with lp ids. With several students the progresses of all of them are summed (the caller divides
+        // by the number of students), the divisor stays the number of learning paths.
         $newProgress = [];
         if (!empty($lpIdList)) {
             foreach ($lpIdList as $lpId) {
                 if (isset($progress[$lpId])) {
-                    $newProgress[] = $progress[$lpId];
+                    foreach ($progress[$lpId] as $lpProgress) {
+                        $newProgress[] = $lpProgress;
+                    }
                 }
             }
             $total = count($lpIdList);
         } else {
-            $newProgress = $progress;
-            $total = count($newProgress);
+            foreach ($progress as $lpProgressList) {
+                foreach ($lpProgressList as $lpProgress) {
+                    $newProgress[] = $lpProgress;
+                }
+            }
+            $total = count($progress);
         }
 
         $average = 0;

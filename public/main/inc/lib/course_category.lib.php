@@ -7,6 +7,8 @@ use Chamilo\CoreBundle\Entity\CourseCategory as CourseCategoryEntity;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class CourseCategory
 {
@@ -226,8 +228,9 @@ class CourseCategory
             ->setAuthCourseChild($canHaveCourses)
         ;
 
-        if (!empty($parentId)) {
-            $category->setParent(Container::getCourseCategoryRepository()->find($parentId));
+        // null: parent not given, leave as is. An empty value (no parent selected in the form) means the root.
+        if (null !== $parentId) {
+            $category->setParent(empty($parentId) ? null : $repo->find($parentId));
         }
 
         $repo->save($category);
@@ -262,6 +265,12 @@ class CourseCategory
 
         self::reorganizeTreePos($parentId);
 
+        // The posted position is stale once the siblings were renumbered: read the real one.
+        $treePos = self::getTreePos($categoryId, $parentIdCondition);
+        if (null === $treePos) {
+            return false;
+        }
+
         $sql = "SELECT id, tree_pos
             FROM $table
             WHERE $parentIdCondition AND tree_pos < $treePos
@@ -294,6 +303,12 @@ class CourseCategory
 
         self::reorganizeTreePos($parentId);
 
+        // The posted position is stale once the siblings were renumbered: read the real one.
+        $treePos = self::getTreePos($categoryId, $parentIdCondition);
+        if (null === $treePos) {
+            return false;
+        }
+
         $sql = "SELECT id, tree_pos
             FROM $table
             WHERE $parentIdCondition AND tree_pos > $treePos
@@ -311,6 +326,18 @@ class CourseCategory
         Database::query("UPDATE $table SET tree_pos = $treePos WHERE id = {$nextCategory['id']}");
 
         return true;
+    }
+
+    /**
+     * Position of a category among the siblings selected by $parentIdCondition, null if it is not one of them.
+     */
+    private static function getTreePos(int $categoryId, string $parentIdCondition): ?int
+    {
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $result = Database::query("SELECT tree_pos FROM $table WHERE id = $categoryId AND $parentIdCondition");
+        $row = Database::fetch_array($result);
+
+        return $row ? (int) $row['tree_pos'] : null;
     }
 
     public static function reorganizeTreePos($parentId): void
@@ -629,8 +656,8 @@ class CourseCategory
     }
 
     /**
-     * @param string $category_code
-     * @param string $keyword
+     * @param int|string $category_code Category id or code
+     * @param string     $keyword
      *
      * @paran bool  $avoidCourses
      * @paran array $conditions
@@ -647,7 +674,10 @@ class CourseCategory
     }
 
     /**
-     * @return \Chamilo\CoreBundle\Entity\Course[]
+     * @param int|string|null $categoryId Category id or category code; an unknown one (or 'NONE') matches nothing
+     * @param string          $keyword    Only the courses whose title contains it (case-insensitive)
+     *
+     * @return Collection|int The courses, or their number when $getCount is true
      */
     public static function getCoursesInCategory(
         $categoryId,
@@ -657,12 +687,21 @@ class CourseCategory
         $getCount = false
     ) {
         $repo = Container::getCourseCategoryRepository();
-        /** @var CourseCategoryEntity $category */
-        $category = $repo->find($categoryId);
+        $category = null;
+        if (is_int($categoryId) || (is_string($categoryId) && ctype_digit($categoryId))) {
+            $category = $repo->find((int) $categoryId);
+        } elseif (is_string($categoryId) && '' !== $categoryId) {
+            $category = $repo->findOneBy(['code' => $categoryId]);
+        }
 
-        // @todo add filters
+        $courses = null === $category ? new ArrayCollection() : $category->getCourses();
+        if (is_string($keyword) && '' !== $keyword) {
+            $courses = $courses->filter(
+                static fn ($course): bool => false !== mb_stripos((string) $course->getTitle(), $keyword)
+            );
+        }
 
-        return $category->getCourses();
+        return $getCount ? count($courses) : $courses;
     }
 
     /**

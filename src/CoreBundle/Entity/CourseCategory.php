@@ -169,7 +169,7 @@ class CourseCategory implements Stringable
         return $this->parent;
     }
 
-    public function setParent(self $parent): self
+    public function setParent(?self $parent): self
     {
         $this->parent = $parent;
 

@@ -211,7 +211,7 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
 
     public function testUpdateParentCategoryChildrenCountDoesNotClampAtZero(): void
     {
-        // PINNED QUIRK: nothing prevents a negative children_count.
+        // INTENTIONAL: no clamping; the counter is only ever moved by add()/delete in pairs, a negative value would reveal an unbalanced caller.
         $cat = $this->cat('cc_a', 'CCA', null, 0, 0);
 
         CourseCategory::updateParentCategoryChildrenCount($cat, -1);
@@ -259,7 +259,7 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
         $this->assertSame('CCKEEP', $this->conn()->fetchOne('SELECT code FROM course_category WHERE id = ?', [$id]));
     }
 
-    public function testEditCanReparentButNotMoveBackToTheRoot(): void
+    public function testEditCanReparentAndMoveBackToTheRoot(): void
     {
         $parent = $this->cat('cc_p', 'CCP');
         $id = $this->cat('cc_a', 'CCA');
@@ -268,10 +268,15 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
         $this->fresh();
         $this->assertSame($parent, (int) $this->conn()->fetchOne('SELECT parent_id FROM course_category WHERE id = ?', [$id]));
 
-        // PINNED QUIRK: an empty parent means "leave as is", the category cannot be moved back to the root.
+        // null means "leave as is" (the argument was not given) ...
         CourseCategory::edit($id, 'cc_a', 'TRUE', 'CCA', '', null);
         $this->fresh();
         $this->assertSame($parent, (int) $this->conn()->fetchOne('SELECT parent_id FROM course_category WHERE id = ?', [$id]));
+
+        // ... while an empty value posted by the form (no parent selected) moves it back to the root.
+        CourseCategory::edit($id, 'cc_a', 'TRUE', 'CCA', '', '');
+        $this->fresh();
+        $this->assertNull($this->conn()->fetchOne('SELECT parent_id FROM course_category WHERE id = ?', [$id]));
     }
 
     // ------------------------------------------------------------------ tree order
@@ -322,12 +327,11 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
         $b = $this->cat('cc_b', 'CCB', $p, 20);
         $c = $this->cat('cc_c', 'CCC', $p, 30);
 
-        // The caller still passes the old position of $b (20); the swap runs after the renumbering to 1,2,3.
-        // PINNED QUIRK: with a stale position the sibling lookup uses 20 against the renumbered rows, so "up"
-        // from 20 picks the row at 3 (the highest one below 20), i.e. $c, and writes 3 to $b and 20 to $c.
+        // The caller still passes the old position of $b (20); the position is read again after the renumbering to
+        // 1,2,3, so "up" swaps $b with $a (it used to pick $c and write 20 into the tree).
         $this->assertTrue(CourseCategory::moveNodeUp($b, 20, $p));
 
-        $this->assertSame([$a => 1, $b => 3, $c => 20], $this->positions([$a, $b, $c]));
+        $this->assertSame([$b => 1, $a => 2, $c => 3], $this->positions([$a, $b, $c]));
     }
 
     public function testMoveNodeUpAtRootScopesToRootCategoriesAndNullParent(): void
@@ -437,7 +441,7 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
 
     public function testSearchCategoryByKeywordDoesNotEscapeLikeWildcards(): void
     {
-        // PINNED QUIRK: "%" and "_" typed by the user act as LIKE wildcards. Harmless (read-only and scoped)
+        // INTENTIONAL: "%" and "_" typed by the user act as LIKE wildcards (search box semantics). Harmless (read-only and scoped)
         // but "%" matches every assignable category of the URL.
         $a = $this->cat('cc_wild', 'CCWILD', null, 80);
         $this->assign($a, 1);
@@ -476,10 +480,15 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
 
         $this->assertCount(1, $courses);
         $this->assertSame(1, $courses->first()->getId());
-        // PINNED QUIRK: the keyword/conditions arguments are ignored (@todo in the source) and the "count" flavour
-        // returns the same collection, not an integer.
-        $this->assertCount(1, CourseCategory::getCoursesInCategory($cat, 'no-such-title'));
-        $this->assertCount(1, CourseCategory::countCoursesInCategory($cat));
+        // The keyword filters on the title; the count flavour returns an integer; a category code works like an id
+        // (the catalogue and auth/courses.php pass codes, which used to fatal) and an unknown code is empty.
+        $this->assertCount(0, CourseCategory::getCoursesInCategory($cat, 'no-such-title'));
+        $this->assertCount(1, CourseCategory::getCoursesInCategory($cat, (string) $courses->first()->getTitle()));
+        $this->assertSame(1, CourseCategory::countCoursesInCategory($cat));
+        $this->assertSame(1, CourseCategory::countCoursesInCategory('CCC'));
+        $this->assertCount(1, CourseCategory::getCoursesInCategory('CCC'));
+        $this->assertSame(0, CourseCategory::countCoursesInCategory('CC-NO-SUCH-CODE'));
+        $this->assertCount(0, CourseCategory::getCoursesInCategory('CC-NO-SUCH-CODE'));
     }
 
     // ------------------------------------------------------------------ dead code, cheap pins

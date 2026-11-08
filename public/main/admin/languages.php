@@ -26,8 +26,16 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
+// Legacy pages are not covered by CsrfProtectionListener: every state-changing request carries this token
+// (stable per session, own prefix so that other pages rotating "sec_token" do not break links left open).
+$langToken = Security::get_existing_token('lang');
+$tokenVar = 'lang_sec_token';
+
 //Ajax request
 if (isset($_POST['sent_http_request'])) {
+    if (!Security::check_token('post', null, 'lang')) {
+        api_not_allowed(true);
+    }
     if (isset($_POST['visibility']) &&
         $_POST['visibility'] == strval(intval($_POST['visibility'])) && 0 == $_POST['visibility']
     ) {
@@ -60,6 +68,20 @@ $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS);
 
 $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $url = api_get_self();
+
+if (in_array($action, [
+    'makeunavailable',
+    'makeavailable',
+    'setplatformlanguage',
+    'disable_all_except_default',
+    'make_unavailable_confirmed',
+], true) && !Security::check_token('get', null, 'lang')) {
+    api_not_allowed(true);
+}
+
+if (isset($_POST['Submit']) && $_POST['Submit'] && !Security::check_token('post', null, 'lang')) {
+    api_not_allowed(true);
+}
 
 switch ($action) {
     case 'makeunavailable':
@@ -138,6 +160,9 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
         exit;
     }
 } elseif (isset($_POST['action'])) {
+    if (!Security::check_token('post', null, 'lang')) {
+        api_not_allowed(true);
+    }
     switch ($_POST['action']) {
         case 'makeavailable':
             if (!empty($_POST['id'])) {
@@ -206,7 +231,7 @@ $(function () {
                 },
                 type: "GET",
                 url: ' . json_encode($selfUrl) . ',
-                data: { action: "disable_all_except_default" },
+                data: { action: "disable_all_except_default", ' . json_encode($tokenVar) . ': ' . json_encode($langToken) . ' },
                 success: function() {
                     window.location.href = ' . json_encode($selfUrl) . ';
                 }
@@ -229,7 +254,7 @@ $(function () {
         $.ajax({
             type: "POST",
             url: "../admin/languages.php",
-            data: { id: id, visibility: nextVisibility, sent_http_request: 1 },
+            data: { id: id, visibility: nextVisibility, sent_http_request: 1, ' . json_encode($tokenVar) . ': ' . json_encode($langToken) . ' },
             beforeSend: function () {
                 $("#id_content_message").html(
                     "<div class=\\"warning-message alert alert-warning\\"><em class=\\"fa fa-refresh fa-spin\\"></em> ' . $jsLoading . '...</div>"
@@ -253,7 +278,7 @@ $(function () {
                     // Feedback
                     $("#id_content_message").html("<div class=\\"alert alert-success\\">' . $jsUpdated . '</div>");
                 } else if (typeof response === "string" && response.indexOf("confirm:") === 0) {
-                    window.location.href = ' . json_encode($selfUrl) . ' + "?action=make_unavailable_confirmed&id=" + id;
+                    window.location.href = ' . json_encode($selfUrl) . ' + "?action=make_unavailable_confirmed&id=" + id + "&" + ' . json_encode($tokenVar) . ' + "=" + ' . json_encode($langToken) . ';
                 }
             },
             complete: function () {
@@ -287,6 +312,7 @@ while ($row = Database::fetch_array($result_select)) {
         $originalName = htmlspecialchars($row['original_name'], ENT_QUOTES, 'UTF-8');
         $row_td[] = '
             <input type="hidden" name="edit_id" value="'.$id.'" />
+            <input type="hidden" name="lang_sec_token" value="'.$langToken.'" />
             <input type="text" name="txt_name" value="'.$originalName.'" />
             <input type="checkbox" '.$checked.' name="platformlanguage" id="platformlanguage" value="'.$row['isocode'].'" />
             <label for="platformlanguage">'.sprintf(get_lang('%s as platform language'), $originalName).'</label>
@@ -309,7 +335,7 @@ while ($row = Database::fetch_array($result_select)) {
     } else {
         $confirmSet = addslashes(get_lang('Are you sure you want to set this language as the portal\'s default?'));
         $setplatformlanguage =
-            "<a href=\"javascript:if (confirm('".$confirmSet."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".
+            "<a href=\"javascript:if (confirm('".$confirmSet."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."&lang_sec_token=".$langToken."'; }\">".
             Display::getMdiIcon(ToolIcon::TRANSLATION, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Set language as default'))."</a>";
     }
 
@@ -348,7 +374,7 @@ while ($row = Database::fetch_array($result_select)) {
 
         $row_td[] = "<a class=\"make_visible_and_invisible\"
                 id=\"linktool_".$row['id']."\"
-                href=\"".api_get_self()."?action=".(($row['available']==1)?'makeunavailable':'makeavailable')."&id=".$row['id']."\"
+                href=\"".api_get_self()."?action=".(($row['available']==1)?'makeunavailable':'makeavailable')."&id=".$row['id']."&lang_sec_token=".$langToken."\"
                 data-id=\"".$row['id']."\"
                 data-available=\"".$row['available']."\"
                 aria-pressed=\"".($row['available'] ? 'true' : 'false')."\">
@@ -370,6 +396,7 @@ $form_actions = [];
 $form_actions['makeavailable'] = get_lang('Make available');
 $form_actions['makeunavailable'] = get_lang('Make unavailable');
 $table->set_form_actions($form_actions);
+$table->set_additional_parameters([$tokenVar => $langToken]);
 echo '<div id="id_content_message">&nbsp;</div>';
 $table->display();
 

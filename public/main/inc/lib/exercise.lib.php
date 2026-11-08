@@ -2201,13 +2201,13 @@ HOTSPOT;
                         official_code,
                         email,
                         username,
-                        g.name as group_name,
-                        g.id as group_id
+                        g.title as group_name,
+                        g.iid as group_id
                     FROM $TBL_USER u
                     INNER JOIN $TBL_GROUP_REL_USER gru
                     ON (gru.user_id = u.id AND gru.c_id= $courseId )
                     INNER JOIN $TBL_GROUP g
-                    ON (gru.group_id = g.id AND g.c_id= $courseId )
+                    ON (gru.group_id = g.iid)
                     WHERE u.active <> ".USER_SOFT_DELETED."
                 )";
             }
@@ -2266,16 +2266,23 @@ HOTSPOT;
                     official_code,
                     email,
                     username,
-                    g.name as group_name,
+                    g.title as group_name,
                     g.iid as group_id
                 FROM $TBL_USER u
                 LEFT OUTER JOIN $TBL_GROUP_REL_USER gru
                 ON (gru.user_id = u.id AND gru.c_id= $courseId )
                 LEFT OUTER JOIN $TBL_GROUP g
-                ON (gru.group_id = g.id AND g.c_id = $courseId )
+                ON (gru.group_id = g.iid)
                 WHERE u.active <> ".USER_SOFT_DELETED."
             )";
             }
+
+            // The group filter targets the user sub-select: resource_link (joined below) has a group_id too.
+            $extra_where_conditions = preg_replace(
+                '/(?<![\w.])group_id\b/',
+                'user.group_id',
+                $extra_where_conditions
+            );
 
             // All
             $is_empty_sql_inner_join_tbl_user = false;

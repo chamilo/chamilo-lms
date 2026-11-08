@@ -474,14 +474,10 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $this->assertSame([$ids[1], $ids[2]], array_map(static fn ($r) => (int) $r['exe_id'], $page));
     }
 
-    public function testResultsGroupFilterWorksOnGroupMembership(): void
+    private function group(string $title): int
     {
-        $this->ctx();
-        $quiz = $this->quiz();
-        $member = $this->rawUser('grp_member');
-        $outsider = $this->rawUser('grp_out');
         $this->conn->insert('c_group_info', [
-            'title' => 'qs_group',
+            'title' => $title,
             'status' => 1,
             'description' => '',
             'max_student' => 0,
@@ -496,27 +492,43 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
             'self_unregistration_allowed' => 0,
             'document_access' => 0,
         ]);
-        $groupId = (int) $this->conn->lastInsertId();
-        $this->conn->insert('c_group_rel_user', ['user_id' => $member, 'group_id' => $groupId, 'c_id' => 1, 'status' => 0, 'role' => '']);
-        $inGroup = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $member]);
-        $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $outsider]);
 
-        // PINNED QUIRK: the "group" filter sub-select joins c_group_info on `g.id`/`g.c_id`/`g.name`, columns the
-        // table no longer has (iid/title only): picking a group in the results page always throws.
-        $this->expectException(NotAllowedException::class);
-        $this->results($quiz, " AND group_id = $groupId ");
-        $this->assertSame([$inGroup], []);
+        return (int) $this->conn->lastInsertId();
     }
 
-    public function testResultsGroupNoneFilterThrowsOnTheSameMissingColumns(): void
+    public function testResultsGroupFilterKeepsTheMembersOfThatGroup(): void
     {
         $this->ctx();
         $quiz = $this->quiz();
-        $this->exe(['exe_exo_id' => $quiz]);
+        $member = $this->rawUser('grp_member');
+        $outsider = $this->rawUser('grp_out');
+        $otherMember = $this->rawUser('grp_other');
+        $groupId = $this->group('qs_group');
+        $otherGroupId = $this->group('qs_group_other');
+        $this->conn->insert('c_group_rel_user', ['user_id' => $member, 'group_id' => $groupId, 'c_id' => 1, 'status' => 0, 'role' => '']);
+        $this->conn->insert('c_group_rel_user', ['user_id' => $otherMember, 'group_id' => $otherGroupId, 'c_id' => 1, 'status' => 0, 'role' => '']);
+        $inGroup = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $member]);
+        $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $outsider]);
+        $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $otherMember]);
 
-        // PINNED QUIRK: "No group" uses the same `g.id` / `g.c_id` join: throws.
-        $this->expectException(NotAllowedException::class);
-        $this->results($quiz, " AND group_id = 'group_none' ");
+        $this->assertSame([$inGroup], $this->results($quiz, " AND group_id = $groupId "));
+        $rows = ExerciseLib::get_exam_results_data(0, 100, 'exe_id', 'asc', $quiz, " AND group_id = $groupId ", false, 1, false, true);
+        $this->assertSame('qs_group', $rows[0]['group_name']);
+        $this->assertSame(1, $this->examCount($quiz, " AND group_id = $groupId "));
+    }
+
+    public function testResultsGroupNoneFilterKeepsUsersWithoutAGroupInTheCourse(): void
+    {
+        $this->ctx();
+        $quiz = $this->quiz();
+        $member = $this->rawUser('none_member');
+        $loner = $this->rawUser('none_loner');
+        $groupId = $this->group('qs_group_none');
+        $this->conn->insert('c_group_rel_user', ['user_id' => $member, 'group_id' => $groupId, 'c_id' => 1, 'status' => 0, 'role' => '']);
+        $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $member]);
+        $noGroup = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $loner]);
+
+        $this->assertSame([$noGroup], $this->results($quiz, " AND group_id = 'group_none' "));
     }
 
     public function testResultsGroupAllFilterListsEveryone(): void

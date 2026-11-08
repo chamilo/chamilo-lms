@@ -162,6 +162,104 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
         );
     }
 
+    // ---------------------------------------------------------------- getSessionsFollowedByUser
+
+    public function testFollowedSessionsOfAnHrManagerAreOnlyThoseHeIsSubscribedTo(): void
+    {
+        $hrm = $this->rawUser('hrm', 'ROLE_HR', DRH);
+        $mine = $this->rawSession('fol_b');
+        $mine2 = $this->rawSession('fol_a');
+        $other = $this->rawSession('fol_other');
+        $this->rel($mine, $hrm, Session::DRH);
+        $this->rel($mine2, $hrm, Session::DRH);
+
+        $rows = SessionManager::getSessionsFollowedByUser($hrm, DRH);
+
+        $this->assertSame([$mine2, $mine], array_keys($rows), 'Default order is by title, rows are keyed by session id.');
+        $this->assertArrayNotHasKey($other, $rows);
+        $this->assertSame('s2_fol_a', $rows[$mine2]['title']);
+        $this->assertArrayHasKey('image', $rows[$mine2], 'A default icon url is added to every row.');
+        $this->assertSame($rows, SessionManager::get_sessions_followed_by_hrm($hrm));
+        $this->assertSame($rows, SessionManager::get_sessions_followed_by_drh($hrm));
+    }
+
+    public function testFollowedSessionsCountIdsKeywordLimitAndOrder(): void
+    {
+        $hrm = $this->rawUser('hrm2', 'ROLE_HR', DRH);
+        $a = $this->rawSession('fk_alpha', ['description' => 'zebra topic']);
+        $b = $this->rawSession('fk_beta');
+        $c = $this->rawSession('fk_gamma');
+        foreach ([$a, $b, $c] as $id) {
+            $this->rel($id, $hrm, Session::DRH);
+        }
+
+        $this->assertSame(3, SessionManager::getSessionsFollowedByUser($hrm, DRH, null, null, true));
+        $ids = SessionManager::getSessionsFollowedByUser($hrm, DRH, null, null, false, true);
+        $this->assertSame([$a, $b, $c], array_keys($ids));
+        $this->assertEqualsCanonicalizing([0, 'id'], array_keys($ids[$a]), 'Only the id column is selected (fetch_array: numeric and named key).');
+
+        $this->assertSame([$b], array_keys(SessionManager::getSessionsFollowedByUser($hrm, DRH, null, null, false, false, false, null, 'fk_bet')));
+        // With a description the keyword condition becomes title OR description.
+        $this->assertSame(
+            [$b, $a],
+            array_keys(SessionManager::getSessionsFollowedByUser($hrm, DRH, null, null, false, false, false, null, 'fk_bet', 'zebra'))
+        );
+        $this->assertSame(
+            [$c, $b],
+            array_keys(SessionManager::getSessionsFollowedByUser($hrm, DRH, 0, 2, false, false, false, ' ORDER BY s.title DESC '))
+        );
+        $this->assertSame(
+            [$a],
+            array_keys(SessionManager::getSessionsFollowedByUser($hrm, DRH, 0, 1))
+        );
+        $this->assertSame(
+            [$b],
+            array_keys(SessionManager::getSessionsFollowedByUser($hrm, DRH, 1, 1))
+        );
+
+        $sql = SessionManager::getSessionsFollowedByUser($hrm, DRH, null, null, false, true, true);
+        $this->assertIsString($sql);
+        $this->assertStringContainsString('SELECT DISTINCT(s.id)', $sql);
+    }
+
+    public function testFollowedSessionsRoleSwitchStudentCoachAndSessionAdmin(): void
+    {
+        $u = $this->rawUser('multi');
+        $asStudent = $this->rawSession('role_student');
+        $asGeneral = $this->rawSession('role_general');
+        $asCourseCoach = $this->rawSession('role_ccoach');
+        $asAdmin = $this->rawSession('role_admin');
+        $asHrm = $this->rawSession('role_hrm');
+        $course = $this->rawCourse('role');
+        $this->sessionCourse($asCourseCoach, $course);
+        $this->rel($asStudent, $u, Session::STUDENT);
+        $this->rel($asGeneral, $u, Session::GENERAL_COACH);
+        $this->rel($asAdmin, $u, Session::SESSION_ADMIN);
+        $this->rel($asHrm, $u, Session::DRH);
+        $this->courseUser($asCourseCoach, $course, $u, Session::COURSE_COACH);
+
+        $this->assertSame([$asStudent], array_keys(SessionManager::getSessionsFollowedByUser($u)));
+        $this->assertSame([$asStudent], array_keys(SessionManager::getSessionsFollowedByUser($u, STUDENT)));
+        $this->assertSame([$asHrm], array_keys(SessionManager::getSessionsFollowedByUser($u, DRH)));
+        $this->assertSame([$asAdmin], array_keys(SessionManager::getSessionsFollowedByUser($u, SESSIONADMIN)));
+        $this->assertEqualsCanonicalizing(
+            [$asGeneral, $asCourseCoach],
+            array_keys(SessionManager::getSessionsFollowedByUser($u, COURSEMANAGER)),
+            'A teacher follows the sessions he coaches in a course and those where he is general coach.'
+        );
+    }
+
+    public function testFollowedSessionsAreScopedToTheCurrentAccessUrl(): void
+    {
+        $hrm = $this->rawUser('hrm3', 'ROLE_HR', DRH);
+        $inUrl = $this->rawSession('url_in');
+        $outUrl = $this->rawSession('url_out', ['no_url' => true]);
+        $this->rel($inUrl, $hrm, Session::DRH);
+        $this->rel($outUrl, $hrm, Session::DRH);
+
+        $this->assertSame([$inUrl], array_keys(SessionManager::getSessionsFollowedByUser($hrm, DRH)));
+        $this->assertSame(1, SessionManager::getSessionsFollowedByUser($hrm, DRH, null, null, true));
+    }
 
     public function testFollowedSessionsOfAUserWhoFollowsNothingIsEmpty(): void
     {
@@ -180,6 +278,34 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
 
     // ---------------------------------------------------------------- getAllCoursesFollowedByUser
 
+    public function testCoursesFollowedByAnHrManager(): void
+    {
+        $hrm = $this->rawUser('hrmc', 'ROLE_HR', DRH);
+        $s1 = $this->rawSession('fc_1');
+        $s2 = $this->rawSession('fc_2');
+        $other = $this->rawSession('fc_other');
+        $c1 = $this->rawCourse('fc_one');
+        $c2 = $this->rawCourse('fc_two');
+        $c3 = $this->rawCourse('fc_three');
+        $this->rel($s1, $hrm, Session::DRH);
+        $this->rel($s2, $hrm, Session::DRH);
+        $this->sessionCourse($s1, $c1);
+        $this->sessionCourse($s2, $c1);
+        $this->sessionCourse($s2, $c2);
+        $this->sessionCourse($other, $c3);
+
+        $all = SessionManager::getAllCoursesFollowedByUser($hrm, null);
+        $this->assertEqualsCanonicalizing([$c1, $c2], array_keys($all), 'Distinct courses of every followed session.');
+        $this->assertArrayHasKey('course_language', $all[$c1]);
+        $this->assertSame(2, (int) SessionManager::getAllCoursesFollowedByUser($hrm, null, null, null, null, null, true));
+
+        $one = SessionManager::getAllCoursesFollowedByUser($hrm, $s1);
+        $this->assertSame([$c1], array_keys($one));
+        $this->assertSame([$c2], array_keys(SessionManager::getAllCoursesFollowedByUser($hrm, $s2, null, null, null, null, false, 'fc_two')));
+        $this->assertSame(1, (int) SessionManager::getAllCoursesFollowedByUser($hrm, $s2, null, null, null, null, true, 'fc_two'));
+        $this->assertCount(1, SessionManager::getAllCoursesFollowedByUser($hrm, null, 0, 1));
+    }
+
     public function testCoursesFollowedByAnHrManagerWithoutSessionsAreEmpty(): void
     {
         // Security: the sub-query of followed sessions must not degrade to "every session" for a manager
@@ -193,4 +319,187 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
         $this->assertSame(0, (int) SessionManager::getAllCoursesFollowedByUser($nobody, null, null, null, null, null, true));
     }
 
+    public function testAllCoursesFromAllSessionsOfAnHrManagerAndOfThePlatform(): void
+    {
+        $hrm = $this->rawUser('hrmall', 'ROLE_HR', DRH);
+        $s = $this->rawSession('ca_1');
+        $other = $this->rawSession('ca_2');
+        $c = $this->rawCourse('ca');
+        $this->rel($s, $hrm, Session::DRH);
+        $this->sessionCourse($s, $c);
+        $this->sessionCourse($other, $c);
+        $code = $this->one('SELECT code FROM course WHERE id = ?', [$c]);
+
+        $this->assertSame([$code], SessionManager::getAllCoursesFromAllSessionFromDrh($hrm));
+        $this->assertSame([], SessionManager::getAllCoursesFromAllSessionFromDrh($this->rawUser('hrmx', 'ROLE_HR', DRH)));
+
+        $all = SessionManager::getAllCoursesFromAllSessions();
+        $this->assertSame('s2_ca ('.'s2_ca_1'.')', substr($all[$code.':'.$s], strpos($all[$code.':'.$s], 's2_ca')));
+        $this->assertArrayHasKey($code.':'.$other, $all);
+    }
+
+    // ---------------------------------------------------------------- teachers / users tracking
+
+    public function testTeacherTrackingListsTheTeachersOfTheFollowedSessions(): void
+    {
+        $hrm = $this->rawUser('hrmt', 'ROLE_HR', DRH);
+        $teacher = $this->rawUser('teach', 'ROLE_TEACHER', COURSEMANAGER);
+        $inactive = $this->rawUser('teach_off', 'ROLE_TEACHER', COURSEMANAGER);
+        $this->conn()->executeStatement('UPDATE user SET active = 0 WHERE id = ?', [$inactive]);
+        $outsider = $this->rawUser('teach_out', 'ROLE_TEACHER', COURSEMANAGER);
+        $s = $this->rawSession('tt');
+        $notMine = $this->rawSession('tt_other');
+        $c = $this->rawCourse('tt');
+        $this->rel($s, $hrm, Session::DRH);
+        $this->sessionCourse($s, $c);
+        $this->sessionCourse($notMine, $c);
+        // course_rel_user.status = 1 is "teacher of the base course".
+        foreach ([$teacher, $inactive] as $id) {
+            $this->conn()->executeStatement(
+                'INSERT INTO course_rel_user (c_id, user_id, status, relation_type, sort, user_course_cat, is_tutor, progress)
+                 VALUES (?, ?, 1, 0, 0, 0, 0, 0)',
+                [$c, $id]
+            );
+        }
+        $this->loginAs($hrm);
+
+        $active = SessionManager::getTeacherTracking($hrm, 1);
+        $this->assertSame([$teacher], array_map('intval', array_column($active, 'id')));
+        $this->assertSame(1, (int) SessionManager::getTeacherTracking($hrm, 1, null, true));
+        $this->assertSame([$inactive], array_map('intval', array_column(SessionManager::getTeacherTracking($hrm, 0), 'id')));
+        // Explicit session list overrides the followed sessions.
+        $this->assertSame(0, SessionManager::getTeacherTracking($hrm, 1, null, false, [$notMine + 1000]));
+        $this->assertNotContains($outsider, array_column($active, 'id'));
+    }
+
+    public function testTeacherTrackingIsEmptyForAPlainStudent(): void
+    {
+        $student = $this->rawUser('tstud');
+        $this->loginAs($student);
+
+        $this->assertSame(0, SessionManager::getTeacherTracking($student));
+    }
+
+    public function testTotalUserTimeInPlatform(): void
+    {
+        $u = $this->rawUser('time');
+        $this->assertSame('00:00:00', SessionManager::getTotalUserTimeInPlatform($u));
+
+        $ins = 'INSERT INTO track_e_login (login_user_id, user_ip, login_date, logout_date) VALUES (?, \'\', ?, ?)';
+        $this->conn()->executeStatement($ins, [$u, '2030-01-01 10:00:00', '2030-01-01 10:30:00']);
+        $this->conn()->executeStatement($ins, [$u, '2030-01-02 08:00:00', '2030-01-02 09:00:15']);
+        $this->conn()->executeStatement($ins, [$u, '2030-02-10 08:00:00', '2030-02-10 08:00:30']);
+
+        $this->assertSame('01:30:45', SessionManager::getTotalUserTimeInPlatform($u));
+        $this->assertSame(
+            '01:30:15',
+            SessionManager::getTotalUserTimeInPlatform($u, '2030-01-01', '2030-01-02'),
+            'The until date is inclusive (logout <= until + 1 day).'
+        );
+        $this->assertSame('00:30:00', SessionManager::getTotalUserTimeInPlatform($u, '2030-01-01', '2030-01-01'));
+        $this->assertSame('00:00:30', SessionManager::getTotalUserTimeInPlatform($u, '2030-02-01', '2030-02-28'));
+        // Dates are only used when both are given.
+        $this->assertSame('01:30:45', SessionManager::getTotalUserTimeInPlatform($u, '2030-02-01'));
+    }
+
+    // ---------------------------------------------------------------- course ordering
+
+    private function orderedSession(): array
+    {
+        $this->setSetting('session.session_course_ordering', 'true');
+        $s = $this->rawSession('ord');
+        $c = [$this->rawCourse('ord_a'), $this->rawCourse('ord_b'), $this->rawCourse('ord_c')];
+        foreach ($c as $i => $id) {
+            $this->sessionCourse($s, $id, $i + 1);
+        }
+
+        return [$s, $c];
+    }
+
+    private function positions(int $sessionId): array
+    {
+        return $this->conn()->fetchAllKeyValue('SELECT c_id, position FROM session_rel_course WHERE session_id = ?', [$sessionId]);
+    }
+
+    public function testCourseOrderingFlagFollowsTheSetting(): void
+    {
+        $this->setSetting('session.session_course_ordering', 'false');
+        $this->assertFalse(SessionManager::orderCourseIsEnabled());
+        $this->setSetting('session.session_course_ordering', 'true');
+        $this->assertTrue(SessionManager::orderCourseIsEnabled());
+    }
+
+    public function testMoveIsANoOpWhenOrderingIsDisabled(): void
+    {
+        $this->setSetting('session.session_course_ordering', 'false');
+        $s = $this->rawSession('ord_off');
+        $a = $this->rawCourse('off_a');
+        $b = $this->rawCourse('off_b');
+        $this->sessionCourse($s, $a, 1);
+        $this->sessionCourse($s, $b, 2);
+
+        $this->assertFalse(SessionManager::moveDown($s, $a));
+        $this->assertSame([$a => 1, $b => 2], array_map('intval', $this->positions($s)));
+    }
+
+    public function testMoveDownAndUpSwapAdjacentCourses(): void
+    {
+        [$s, [$a, $b, $c]] = $this->orderedSession();
+
+        $this->assertTrue(SessionManager::moveDown($s, $a));
+        // The positions are first renumbered 0,1,2 by the current order, then the pair is swapped.
+        $this->assertSame([$a => 1, $b => 0, $c => 2], array_map('intval', $this->positions($s)));
+
+        $this->assertTrue(SessionManager::moveUp($s, $c));
+        $this->assertSame([$a => 2, $b => 0, $c => 1], array_map('intval', $this->positions($s)));
+
+        $this->assertSame(
+            [$b, $c, $a],
+            array_keys(SessionManager::get_course_list_by_session_id($s)),
+            'With the ordering enabled the course list is sorted by position, not by title.'
+        );
+    }
+
+    public function testCourseListOrderingFollowsTheSettingAndTheExplicitOrder(): void
+    {
+        $this->setSetting('session.session_course_ordering', 'false');
+        $s = $this->rawSession('ord_list');
+        $z = $this->rawCourse('zzz');
+        $a = $this->rawCourse('aaa');
+        $this->sessionCourse($s, $z, 1);
+        $this->sessionCourse($s, $a, 2);
+
+        $this->assertSame([$a, $z], array_keys(SessionManager::get_course_list_by_session_id($s)), 'By title.');
+        $this->assertSame([$z, $a], array_keys(SessionManager::get_course_list_by_session_id($s, '', 'position')));
+        $this->assertSame([$z, $a], array_keys(SessionManager::get_course_list_by_session_id($s, '', 'title DESC')));
+        $this->assertSame(2, SessionManager::get_course_list_by_session_id($s, '', null, true));
+        $this->assertSame(1, SessionManager::get_course_list_by_session_id($s, 's2_aaa', null, true));
+        $this->assertSame([], SessionManager::get_course_list_by_session_id($s, 'nomatch'));
+    }
+
+    // ---------------------------------------------------------------- user in course subscription
+
+    public function testUnSubscribeUserFromCourseSessionKeepsTheCounterInSync(): void
+    {
+        $s = $this->rawSession('unsub');
+        $c = $this->rawCourse('unsub');
+        $u1 = $this->rawUser('un1');
+        $u2 = $this->rawUser('un2');
+        $this->sessionCourse($s, $c);
+        $this->courseUser($s, $c, $u1, Session::STUDENT);
+        $this->courseUser($s, $c, $u2, Session::STUDENT);
+        $this->conn()->executeStatement('UPDATE session_rel_course SET nbr_users = 2 WHERE session_id = ?', [$s]);
+
+        SessionManager::unSubscribeUserFromCourseSession($u1, $c, $s);
+
+        $this->assertSame(
+            [$u2],
+            array_map('intval', $this->conn()->fetchFirstColumn('SELECT user_id FROM session_rel_course_rel_user WHERE session_id = ?', [$s]))
+        );
+        $this->assertSame(1, (int) $this->one('SELECT nbr_users FROM session_rel_course WHERE session_id = ? AND c_id = ?', [$s, $c]));
+
+        // Unsubscribing somebody who is not subscribed must not touch the counter.
+        SessionManager::unSubscribeUserFromCourseSession($u1, $c, $s);
+        $this->assertSame(1, (int) $this->one('SELECT nbr_users FROM session_rel_course WHERE session_id = ? AND c_id = ?', [$s, $c]));
+    }
 }

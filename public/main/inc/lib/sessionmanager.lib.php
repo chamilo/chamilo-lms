@@ -4334,7 +4334,8 @@ class SessionManager
         $userId = (int) $userId;
         $user = api_get_user_entity($userId);
 
-        $select = ' SELECT DISTINCT * '.$injectExtraFields;
+        // s.* and not *: the join with access_url_rel_session also has an id column that would replace the session id.
+        $select = ' SELECT DISTINCT s.* '.$injectExtraFields;
         if ($getCount) {
             $select = ' SELECT count(DISTINCT(s.id)) as count ';
         }

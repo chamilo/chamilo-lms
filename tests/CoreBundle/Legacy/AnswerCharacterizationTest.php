@@ -245,11 +245,17 @@ final class AnswerCharacterizationTest extends KernelTestCase
         sort($got);
         $this->assertSame($texts, $got);
 
+        // 8 answers: a shuffle would keep the natural order with a probability of 1 in 40320
         $calc = $this->question(CALCULATED_ANSWER);
-        $this->answer($calc, 'an_c2', 2);
-        $this->answer($calc, 'an_c1', 1);
+        for ($i = 8; $i >= 1; --$i) {
+            $this->answer($calc, 'an_c'.$i, $i);
+        }
         $calcAnswer = $this->load($calc, 1);
-        $this->assertSame('an_c1', $calcAnswer->selectAnswer(1), 'calculated answers are never shuffled');
+        $natural = [];
+        for ($i = 1; $i <= 8; ++$i) {
+            $natural[] = $calcAnswer->selectAnswer($i);
+        }
+        $this->assertSame(['an_c1', 'an_c2', 'an_c3', 'an_c4', 'an_c5', 'an_c6', 'an_c7', 'an_c8'], $natural, 'calculated answers are never shuffled');
     }
 
     public function testSelectAnswerByAutoIdReturnsIdAndTextOrFalse(): void
@@ -448,6 +454,22 @@ final class AnswerCharacterizationTest extends KernelTestCase
         $stored = $this->stored($q);
         $this->assertSame((string) $stored[2]['iid'], (string) $stored[1]['correct']);
         $this->assertSame('0', (string) $stored[2]['correct'], 'an empty status is left alone');
+    }
+
+    public function testSaveOfMatchingDraggableAnswersRewritesCorrectToTheSavedAutoIds(): void
+    {
+        foreach ([MATCHING_DRAGGABLE, MATCHING_DRAGGABLE_COMBINATION] as $type) {
+            $q = $this->question($type);
+            $ans = new Answer($q, 1, $this->exercise(), false);
+            $ans->createAnswer('an_target', 0, '', 0, 1);
+            $ans->createAnswer('an_item', 1, '', 1, 2);
+
+            $ans->save();
+
+            $stored = $this->stored($q);
+            $this->assertSame((string) $stored[1]['iid'], (string) $stored[2]['correct'], 'type '.$type);
+            $this->assertSame('0', (string) $stored[1]['correct'], 'type '.$type);
+        }
     }
 
     public function testUpdateAnswersChangesOneRowAndReturnsFalseForAnUnknownId(): void

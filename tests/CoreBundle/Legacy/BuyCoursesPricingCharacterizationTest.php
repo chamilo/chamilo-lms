@@ -262,9 +262,8 @@ final class BuyCoursesPricingCharacterizationTest extends BuyCoursesCharacteriza
         $this->plugin->updateItem(['price' => 55.5], 1, 1);
 
         $this->assertSame('55.50', $this->plugin->getItem($a)['price']);
-        // PINNED QUIRK: the 'product_type' condition has no "= ?", so it is a bare truthy column and the update
-        // also hits the item of the same product id with another type (a session with the same id as the course).
-        $this->assertSame('55.50', $this->plugin->getItem($b)['price']);
+        // the item of the same product id with another type (a session with the same id as the course) is untouched
+        $this->assertSame('20.00', $this->plugin->getItem($b)['price']);
     }
 
     public function testGetBeneficiariesBySaleFollowsTheSaleItem(): void

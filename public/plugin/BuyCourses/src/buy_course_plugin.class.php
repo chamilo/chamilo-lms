@@ -5320,7 +5320,7 @@ class BuyCoursesPlugin extends Plugin
             $itemData,
             [
                 'product_id = ? AND ' => $productId,
-                'product_type' => $productType,
+                'product_type = ?' => $productType,
             ]
         );
     }

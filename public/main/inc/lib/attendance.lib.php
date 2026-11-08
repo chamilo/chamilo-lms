@@ -1890,12 +1890,22 @@ class Attendance
                 }
                 break;
             case 'monthlyByDate':
-                $j = 1;
-                //@todo fix bug with february
-                for ($i = $start_date + 2419200; ($i <= $end_date); $i += 2419200) {
+                // Same day of the month and same time of day; a month without that day (the 31st) gets its last day.
+                $first = (new DateTimeImmutable('@'.$start_date))->setTimezone(new DateTimeZone('UTC'));
+                $day = (int) $first->format('j');
+                for ($months = 1; ; $months++) {
+                    $month = $first->modify('first day of this month')->modify('+'.$months.' months');
+                    $date = $month->setDate(
+                        (int) $month->format('Y'),
+                        (int) $month->format('n'),
+                        min($day, (int) $month->format('t'))
+                    )->setTime((int) $first->format('G'), (int) $first->format('i'), (int) $first->format('s'));
+                    $i = $date->getTimestamp();
+                    if ($i > $end_date) {
+                        break;
+                    }
                     $this->set_date_time(api_get_utc_datetime($i));
                     $this->attendance_calendar_add($attendance, $groupList);
-                    $j++;
                 }
                 break;
         }

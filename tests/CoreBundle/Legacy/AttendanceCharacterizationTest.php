@@ -810,16 +810,24 @@ final class AttendanceCharacterizationTest extends KernelTestCase
 
     public function testAttendanceRepeatCalendarAddMonthlyByDate(): void
     {
-        // Fixed: 'monthlyByDate' passed the attendance id instead of the CAttendance entity (a TypeError).
-        // The step is a fixed 28 days (the "@todo fix bug with february" in the source), pinned here as is.
-        $start = strtotime('2032-07-01 08:00:00 UTC');
+        // Fixed: 'monthlyByDate' passed the attendance id instead of the CAttendance entity (a TypeError), and
+        // stepped a fixed 28 days ("@todo fix bug with february"), so a "monthly" series drifted a few days a
+        // month. It now keeps the day of the month and the time, clamped to the month's last day.
+        $start = strtotime('2032-01-31 08:00:00 UTC');
         $att = $this->att('at_monthly');
 
-        (new Attendance())->attendance_repeat_calendar_add($this->entity($att), $start, $start + 2 * 2419200, 'monthlyByDate');
+        (new Attendance())->attendance_repeat_calendar_add($this->entity($att), $start, strtotime('2032-05-15 00:00:00 UTC'), 'monthlyByDate');
 
         $this->assertSame(
-            [gmdate('Y-m-d H:i:s', $start), gmdate('Y-m-d H:i:s', $start + 2419200), gmdate('Y-m-d H:i:s', $start + 2 * 2419200)],
+            ['2032-01-31 08:00:00', '2032-02-29 08:00:00', '2032-03-31 08:00:00', '2032-04-30 08:00:00'],
             $this->conn->fetchFirstColumn('SELECT date_time FROM c_attendance_calendar WHERE attendance_id = ? ORDER BY date_time', [$att])
+        );
+
+        $att2 = $this->att('at_monthly2');
+        (new Attendance())->attendance_repeat_calendar_add($this->entity($att2), strtotime('2032-07-01 08:00:00 UTC'), strtotime('2032-09-01 08:00:00 UTC'), 'monthlyByDate');
+        $this->assertSame(
+            ['2032-07-01 08:00:00', '2032-08-01 08:00:00', '2032-09-01 08:00:00'],
+            $this->conn->fetchFirstColumn('SELECT date_time FROM c_attendance_calendar WHERE attendance_id = ? ORDER BY date_time', [$att2])
         );
     }
 

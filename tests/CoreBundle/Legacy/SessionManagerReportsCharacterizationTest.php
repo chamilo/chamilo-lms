@@ -1061,4 +1061,77 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
         $this->assertStringContainsString('title="ES 1"', $rows[0]['users']);
         $this->assertSame('', $rows[0]['teachers']);
     }
+
+    // ---------------------------------------------------------------- deleting sessions and categories
+
+    private function deleteAs(int $userId, int $sessionId): string
+    {
+        $this->loginAs($userId);
+        try {
+            $result = SessionManager::delete($sessionId);
+            $outcome = $result ? 'deleted' : 'refused';
+        } catch (\Chamilo\CoreBundle\Exception\NotAllowedException) {
+            $outcome = 'denied';
+        } finally {
+            $this->loginAs($this->getAdmin()->getId());
+        }
+
+        return $outcome.':'.(int) $this->one('SELECT COUNT(*) FROM session WHERE id = ?', [$sessionId]);
+    }
+
+    public function testOnlyThoseWhoManageASessionMayDeleteIt(): void
+    {
+        // Security: delete() is reached from the session category page, open to session admins.
+        $this->setSetting('session.allow_session_admins_to_manage_all_sessions', 'false');
+        $this->setSetting('session.allow_teachers_to_create_sessions', 'true');
+        $owned = $this->rawSession('del_owned');
+        $foreign = $this->rawSession('del_foreign');
+        $coached = $this->rawSession('del_coached');
+        $stranger = $this->rawSession('del_stranger');
+        $owner = $this->rawUser('del_owner', 'ROLE_SESSION_MANAGER', 3);
+        $other = $this->rawUser('del_other', 'ROLE_SESSION_MANAGER', 3);
+        $teacher = $this->rawUser('del_teacher', 'ROLE_TEACHER', 1);
+        $student = $this->rawUser('del_student');
+        $this->rel($owned, $owner, Session::SESSION_ADMIN);
+        $this->rel($foreign, $other, Session::SESSION_ADMIN);
+        $this->rel($coached, $teacher, Session::GENERAL_COACH);
+
+        $this->assertSame('denied:1', $this->deleteAs($owner, $foreign), 'A session admin cannot delete the session of another one.');
+        $this->assertSame('denied:1', $this->deleteAs($teacher, $stranger), 'A teacher cannot delete a session he does not coach.');
+        $this->assertSame('denied:1', $this->deleteAs($student, $stranger));
+        $this->assertSame('deleted:0', $this->deleteAs($owner, $owned), 'The session admin of the session can.');
+        $this->assertSame('deleted:0', $this->deleteAs($teacher, $coached), 'The general coach of a session may delete it when teachers may create sessions.');
+        $this->assertSame('deleted:0', $this->deleteAs($this->getAdmin()->getId(), $stranger), 'A platform admin always can.');
+
+        $this->setSetting('session.allow_session_admins_to_manage_all_sessions', 'true');
+        $this->assertSame('deleted:0', $this->deleteAs($owner, $foreign), 'With manage-all a session admin can delete any session.');
+    }
+
+    public function testDeletingACategoryKeepsOrDeletesItsSessions(): void
+    {
+        $keepCat = SessionManager::create_category_session('s2_cat_keep', 2030, 1, 1, 0, 0, 0);
+        $dropCat = SessionManager::create_category_session('s2_cat_drop', 2030, 1, 1, 0, 0, 0);
+        $kept = $this->rawSession('cat_kept', ['category' => $keepCat]);
+        $dropped = $this->rawSession('cat_dropped', ['category' => $dropCat]);
+
+        $this->assertTrue(SessionManager::delete_session_category($keepCat));
+        $this->assertSame(0, (int) $this->one('SELECT COUNT(*) FROM session_category WHERE id = ?', [$keepCat]));
+        $this->assertNull($this->one('SELECT session_category_id FROM session WHERE id = ?', [$kept]), 'Without the flag the sessions only lose their category.');
+
+        $this->assertTrue(SessionManager::delete_session_category([$dropCat], true));
+        $this->assertSame(0, (int) $this->one('SELECT COUNT(*) FROM session_category WHERE id = ?', [$dropCat]));
+        $this->assertSame(0, (int) $this->one('SELECT COUNT(*) FROM session WHERE id = ?', [$dropped]), 'With the flag the sessions are deleted too.');
+        $this->assertSame(1, (int) $this->one('SELECT COUNT(*) FROM session WHERE id = ?', [$kept]));
+    }
+
+    public function testParentSessionListIsOrderedByTitle(): void
+    {
+        $b = $this->rawSession('par_b');
+        $a = $this->rawSession('par_a');
+
+        $list = SessionManager::getListOfParentSessions();
+
+        $this->assertSame('s2_par_a', $list[$a]);
+        $this->assertLessThan(array_search($b, array_keys($list)), array_search($a, array_keys($list)));
+    }
 }

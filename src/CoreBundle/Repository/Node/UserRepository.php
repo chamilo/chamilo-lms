@@ -492,22 +492,24 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             $currentDate
         );
 
+        // Attachments first: once the sender is NULLed the messages of this user can no longer be told apart
+        // from the ones that never had a sender.
+        $connection->executeStatement(
+            'DELETE ma
+         FROM message_attachment ma
+         INNER JOIN message m ON ma.message_id = m.id
+         WHERE m.user_sender_id = :userId',
+            [
+                'userId' => $user->getId(),
+            ]
+        );
+
         $connection->executeStatement(
             'UPDATE message m
          SET m.content = :content, m.user_sender_id = NULL
          WHERE m.user_sender_id = :userId',
             [
                 'content' => $updatedContent,
-                'userId' => $user->getId(),
-            ]
-        );
-
-        $connection->executeStatement(
-            'DELETE ma
-         FROM message_attachment ma
-         INNER JOIN message m ON ma.message_id = m.id
-         WHERE m.user_sender_id IS NULL',
-            [
                 'userId' => $user->getId(),
             ]
         );

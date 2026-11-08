@@ -1034,18 +1034,19 @@ abstract class Question
                     WHERE question_id = ".$id;
             Database::query($sql);
 
+            // remove the category of this question in the question_rel_category table (that foreign key
+            // is RESTRICT: it has to go before the question itself)
+            $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
+                    WHERE
+                        question_id = ".$id;
+            Database::query($sql);
+
             $sql = "DELETE FROM $TBL_QUESTIONS
                     WHERE iid = ".$id;
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_REPONSES
                     WHERE question_id = ".$id;
-            Database::query($sql);
-
-            // remove the category of this question in the question_rel_category table
-            $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
-                    WHERE
-                        question_id = ".$id;
             Database::query($sql);
 
             // Add extra fields.

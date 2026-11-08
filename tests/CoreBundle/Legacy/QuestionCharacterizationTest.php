@@ -495,7 +495,7 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $this->assertSame(1, $this->cnt('c_quiz_question_rel_category', 'question_id = ?', [$keeper]));
     }
 
-    public function testDeleteOfAQuestionHavingACategoryFailsOnTheForeignKey(): void
+    public function testDeleteOfAQuestionHavingACategoryRemovesTheCategoryLinkFirst(): void
     {
         $this->ctx();
         $id = $this->makeQuestion('qs_del_cat');
@@ -503,10 +503,12 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $this->conn->insert('c_quiz_question_rel_category', ['question_id' => $id, 'category_id' => $cat]);
         $q = $this->read($id, false);
 
-        // PINNED QUIRK: delete() removes the c_quiz_question row BEFORE the category link, and that FK is
-        // ON DELETE RESTRICT: any categorised question can not be deleted (the DELETE throws).
-        $this->expectException(NotAllowedException::class);
-        $q->delete();
+        // The category link is ON DELETE RESTRICT: it has to go before the question row, otherwise any categorised
+        // question could not be deleted at all.
+        $this->assertTrue($q->delete());
+        $this->assertSame(0, $this->cnt('c_quiz_question', 'iid = ?', [$id]));
+        $this->assertSame(0, $this->cnt('c_quiz_question_rel_category', 'question_id = ?', [$id]));
+        $this->assertSame(1, $this->cnt('c_quiz_question_category', 'iid = ?', [$cat]), 'the category itself is kept');
     }
 
     public function testDeleteFromOneQuizOnlyUnlinksIt(): void

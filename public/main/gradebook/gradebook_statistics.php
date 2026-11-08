@@ -4,9 +4,11 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
 api_block_anonymous_users();
 
-$categoryId = (int) $_GET['selecteval'];
+$categoryId = (int) ($_GET['selecteval'] ?? 0);
+GradebookUtils::protectElementInCurrentCourse('EVAL', $categoryId);
 $eval = Evaluation::load($categoryId);
 if (!isset($eval[0])) {
     api_not_allowed(true);

@@ -9,6 +9,7 @@ GradebookUtils::block_students();
 
 $selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $visibleLink = isset($_GET['visiblelink']) ? (int) $_GET['visiblelink'] : 0;
+GradebookUtils::protectElementInCurrentCourse('LINK', $visibleLink);
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl(),

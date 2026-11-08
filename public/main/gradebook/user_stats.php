@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
 api_block_anonymous_users();
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
@@ -23,6 +24,10 @@ $interbreadcrumb[] = [
 $categoryId = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $evaluationId = isset($_GET['selecteval']) ? (int) $_GET['selecteval'] : 0;
 
+GradebookUtils::protectElementInCurrentCourse('CATE', $categoryId);
+if (!empty($evaluationId)) {
+    GradebookUtils::protectElementInCurrentCourse('EVAL', $evaluationId);
+}
 $category = Category::load($categoryId);
 $userId = Security::remove_XSS($_GET['userid']);
 $allevals = $category[0]->get_evaluations($userId, true);

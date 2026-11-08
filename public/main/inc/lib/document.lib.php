@@ -3133,7 +3133,7 @@ jQuery(function ($) {
         $sessionId,
         $groupId
     ) {
-        $courseId = $courseInfo['real_id'];
+        $courseId = (int) $courseInfo['real_id'];
 
         if (empty($courseId)) {
             return false;
@@ -3148,17 +3148,21 @@ jQuery(function ($) {
             $groupId
         );
 
-        $folder = Database::escape_string($folder);
-        $folderWithSuffix = Database::escape_string($folderWithSuffix);
+        // Documents are resource nodes: the course and the session live on the resource link, the folder name is
+        // the document title (the legacy path was "/title").
+        $folder = Database::escape_string(ltrim($folder, '/'));
+        $folderWithSuffix = Database::escape_string(ltrim($folderWithSuffix, '/'));
 
-        // Check if pathname already exists inside document table
         $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
-        $sql = "SELECT iid, path FROM $tbl_document
+        $sql = "SELECT d.iid FROM $tbl_document d
+                INNER JOIN resource_link l ON l.resource_node_id = d.resource_node_id
                 WHERE
-                    filetype = 'folder' AND
-                    c_id = $courseId AND
-                    (path = '$folder' OR path = '$folderWithSuffix') AND
-                    (session_id = 0 OR session_id IS NULL OR session_id = $sessionId)
+                    d.filetype = 'folder' AND
+                    l.c_id = $courseId AND
+                    l.deleted_at IS NULL AND
+                    d.title IN ('$folder', '$folderWithSuffix') AND
+                    (l.session_id IS NULL OR l.session_id = $sessionId)
+                LIMIT 1
         ";
 
         $rs = Database::query($sql);

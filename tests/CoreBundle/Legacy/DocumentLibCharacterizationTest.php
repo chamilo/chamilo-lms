@@ -180,16 +180,37 @@ final class DocumentLibCharacterizationTest extends KernelTestCase
 
     // ------------------------------------------------------------------ folderExists (broken raw SQL)
 
-    public function testFolderExistsQueriesColumnsThatNoLongerExist(): void
+    public function testFolderExistsFindsAFolderByNameInTheCourse(): void
     {
         $this->doc('dl_exists', 'folder');
+        $this->doc('dl_a_file', 'file');
+        $this->doc('dl_course_two_folder', 'folder', null, 2);
+        $info = api_get_course_info('AIACT');
 
-        // PINNED QUIRK: the SQL filters c_document on c_id, path and session_id, which the table lost when documents
-        // became resource nodes: every call fails (NotAllowedException when the server is not in debug mode),
-        // including the ones in fileUpload.lib.php and the session AJAX. Intended: true when a folder with that path
-        // exists in the course (or its session).
-        $this->expectException(\Throwable::class);
-        DocumentManager::folderExists('/dl_exists', api_get_course_info('AIACT'), 0, 0);
+        $this->assertTrue(DocumentManager::folderExists('/dl_exists', $info, 0, 0));
+        $this->assertTrue(DocumentManager::folderExists('dl_exists', $info, 0, 0), 'The leading slash is optional.');
+        $this->assertFalse(DocumentManager::folderExists('/dl_missing', $info, 0, 0));
+        $this->assertFalse(DocumentManager::folderExists('/dl_a_file', $info, 0, 0), 'A file is not a folder.');
+        $this->assertFalse(DocumentManager::folderExists('/dl_course_two_folder', $info, 0, 0), 'Another course folder does not count.');
+        $this->assertFalse(DocumentManager::folderExists("/x' OR '1'='1", $info, 0, 0));
+    }
+
+    public function testFolderExistsSeesSessionFoldersOnlyFromThatSession(): void
+    {
+        $this->conn()->executeStatement(
+            'INSERT INTO session (title, nbr_courses, nbr_users, nbr_classes, visibility, status, position) VALUES (?, 0, 0, 0, 1, 0, 0)',
+            ['dl_session_f']
+        );
+        $sessionId = (int) $this->conn()->lastInsertId();
+        $folder = $this->doc('dl_session_folder', 'folder');
+        $this->conn()->executeStatement(
+            'UPDATE resource_link SET session_id = ? WHERE resource_node_id = (SELECT resource_node_id FROM c_document WHERE iid = ?)',
+            [$sessionId, $folder]
+        );
+        $info = api_get_course_info('AIACT');
+
+        $this->assertFalse(DocumentManager::folderExists('/dl_session_folder', $info, 0, 0));
+        $this->assertTrue(DocumentManager::folderExists('/dl_session_folder', $info, $sessionId, 0));
     }
 
     public function testFolderAndDocumentExistRejectAMissingCourse(): void

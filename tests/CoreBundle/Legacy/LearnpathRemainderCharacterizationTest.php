@@ -14,7 +14,6 @@ use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\Tests\ChamiloTestTrait;
 use Database;
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use learnpath;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -355,10 +354,13 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
         $this->assertSame(get_lang('Select a category'), $withEmpty[0]);
 
         $this->assertSame(0, learnpath::getCountCategories(0));
-        // PINNED QUIRK: the count adds count(resource) to a query that already selects the entity, so it always
-        // throws NonUniqueResultException for a real course (no caller left).
-        $this->expectException(NonUniqueResultException::class);
-        learnpath::getCountCategories(self::COURSE_ID);
+        // The count added count(resource) to a query that already selects the entity and always threw
+        // NonUniqueResultException; drafts are counted like in the other helpers' unfiltered query.
+        $before = learnpath::getCountCategories(self::COURSE_ID);
+        $this->newCategory('l2_cat_counted');
+        $this->newCategory('l2_cat_counted_draft', 0);
+        $this->getEntityManager()->clear();
+        $this->assertSame($before + 1, learnpath::getCountCategories(self::COURSE_ID), 'published categories of the course');
     }
 
     public function testUpdateCategoryRenamesIt(): void

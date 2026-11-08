@@ -7902,7 +7902,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         $repo = Container::getLpCategoryRepository();
         $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
-        $qb->addSelect('count(resource)');
+        $qb->select('count(resource)');
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }

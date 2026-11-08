@@ -765,18 +765,60 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $this->assertSame(get_lang('Not linked to media'), $list[0]);
     }
 
-    public function testCourseMediaListAndCountThrowOnMissingColumns(): void
+    /** A question linked to a course through a resource_link on a spare resource node (as quizzes are). */
+    private function publishedQuestion(string $title, int $type, int $nodeIdx, int $courseId, ?string $deletedAt = null, array $o = []): int
+    {
+        $this->spareQuestionNodes ??= $this->conn->fetchFirstColumn(
+            'SELECT id FROM resource_node WHERE id NOT IN (SELECT resource_node_id FROM c_quiz_question WHERE resource_node_id IS NOT NULL)'
+            .' AND id NOT IN (SELECT resource_node_id FROM c_quiz WHERE resource_node_id IS NOT NULL)'
+            .' AND id NOT IN (SELECT resource_node_id FROM resource_link WHERE resource_node_id IS NOT NULL) ORDER BY id DESC LIMIT 8'
+        );
+        $this->assertGreaterThan($nodeIdx, \count($this->spareQuestionNodes), 'fixture needs spare resource nodes');
+        $node = (int) $this->spareQuestionNodes[$nodeIdx];
+        $id = $this->makeQuestion($title, $type, 1.0, $o + ['resource_node_id' => $node]);
+        $now = '2020-01-01 00:00:00';
+        $this->conn->insert('resource_link', [
+            'resource_node_id' => $node,
+            'c_id' => $courseId,
+            'visibility' => 2,
+            'display_order' => 0,
+            'resource_type_group' => 1,
+            'deleted_at' => $deletedAt,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
+
+        return $id;
+    }
+
+    /** @var int[]|null */
+    private ?array $spareQuestionNodes = null;
+
+    public function testCourseMediasAreListedAndCountedPerCourse(): void
     {
         $this->ctx();
-        // PINNED QUIRK: both filter on c_quiz_question.c_id / parent_id, which do not exist: they always throw.
-        // (Only reachable from the 'get_course_exercise_medias' jqgrid action of model.ajax.php, which no page uses.)
-        try {
-            Question::get_count_course_medias(1);
-            $this->fail('expected unknown column');
-        } catch (NotAllowedException) {
-            $this->addToAssertionCount(1);
-        }
-        $this->expectException(NotAllowedException::class);
-        Question::get_course_medias(1);
+        $b = $this->publishedQuestion('qs_cm_b', MEDIA_QUESTION, 0, 1);
+        $a = $this->publishedQuestion('qs_cm_a', MEDIA_QUESTION, 1, 1);
+        $this->publishedQuestion('qs_cm_plain', UNIQUE_ANSWER, 2, 1);
+        $this->publishedQuestion('qs_cm_nested', MEDIA_QUESTION, 3, 1, null, ['parent_media_id' => $a]);
+        $this->publishedQuestion('qs_cm_deleted', MEDIA_QUESTION, 4, 1, '2020-02-01 00:00:00');
+        $this->publishedQuestion('qs_cm_other_course', MEDIA_QUESTION, 5, 2);
+        $this->makeQuestion('qs_cm_unlinked', MEDIA_QUESTION);
+
+        $mine = Question::get_course_medias(1, 0, 1000, 'question', 'ASC');
+        $ours = array_values(array_filter(array_column($mine, 'question'), static fn ($t) => str_starts_with($t, 'qs_cm_')));
+        $this->assertSame(['qs_cm_a', 'qs_cm_b'], $ours, 'top-level live media of the course, sorted');
+        $desc = array_values(array_filter(array_column(Question::get_course_medias(1, 0, 1000, 'question', 'DESC'), 'question'), static fn ($t) => str_starts_with($t, 'qs_cm_')));
+        $this->assertSame(['qs_cm_b', 'qs_cm_a'], $desc);
+        $this->assertSame(1, \count(Question::get_course_medias(1, 0, 1, 'question', 'ASC')), 'limit');
+        $this->assertSame([$a, $b], array_map('intval', array_column(
+            array_filter($mine, static fn ($r) => str_starts_with((string) $r['question'], 'qs_cm_')),
+            'iid'
+        )));
+
+        $beforeOther = (int) Question::get_count_course_medias(2);
+        $this->assertSame($beforeOther, (int) Question::get_count_course_medias(2));
+        $this->assertGreaterThanOrEqual(1, $beforeOther);
+        $this->assertSame(\count($mine), (int) Question::get_count_course_medias(1));
     }
 }

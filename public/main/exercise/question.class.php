@@ -2004,9 +2004,11 @@ abstract class Question
     }
 
     /**
-     * Get course medias.
+     * Get course medias: the top-level media questions linked (not deleted) to the course.
      *
      * @param int $course_id
+     *
+     * @deprecated Only reachable from the 'get_course_exercise_medias' action of model.ajax.php, which no page uses
      *
      * @return array
      */
@@ -2019,22 +2021,20 @@ abstract class Question
         $where_condition = []
     ) {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $default_where = [
-            'c_id = ? AND parent_id = 0 AND type = ?' => [
-                $course_id,
-                MEDIA_QUESTION,
-            ],
-        ];
+        // Only the title can be sorted on, the direction is allowlisted.
+        $sidx = 'question';
+        $sord = 'DESC' === strtoupper(trim((string) $sord)) ? 'DESC' : 'ASC';
+        $sql = 'SELECT DISTINCT q.*
+                FROM '.$table_question.' q
+                INNER JOIN resource_link rl ON rl.resource_node_id = q.resource_node_id
+                WHERE rl.c_id = '.(int) $course_id.'
+                    AND rl.deleted_at IS NULL
+                    AND (q.parent_media_id IS NULL OR q.parent_media_id = 0)
+                    AND q.type = '.(int) MEDIA_QUESTION.'
+                ORDER BY q.'.$sidx.' '.$sord.'
+                LIMIT '.(int) $start.', '.(int) $limit;
 
-        return Database::select(
-            '*',
-            $table_question,
-            [
-                'limit' => " $start, $limit",
-                'where' => $default_where,
-                'order' => "$sidx $sord",
-            ]
-        );
+        return Database::store_result(Database::query($sql), 'ASSOC');
     }
 
     /**
@@ -2042,24 +2042,21 @@ abstract class Question
      *
      * @param int $course_id course id
      *
+     * @deprecated Only reachable from the 'get_course_exercise_medias' action of model.ajax.php, which no page uses
+     *
      * @return int
      */
     public static function get_count_course_medias($course_id)
     {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $result = Database::select(
-            'count(*) as count',
-            $table_question,
-            [
-                'where' => [
-                    'c_id = ? AND parent_id = 0 AND type = ?' => [
-                        $course_id,
-                        MEDIA_QUESTION,
-                    ],
-                ],
-            ],
-            'first'
-        );
+        $sql = 'SELECT COUNT(DISTINCT q.iid) AS count
+                FROM '.$table_question.' q
+                INNER JOIN resource_link rl ON rl.resource_node_id = q.resource_node_id
+                WHERE rl.c_id = '.(int) $course_id.'
+                    AND rl.deleted_at IS NULL
+                    AND (q.parent_media_id IS NULL OR q.parent_media_id = 0)
+                    AND q.type = '.(int) MEDIA_QUESTION;
+        $result = Database::fetch_assoc(Database::query($sql));
 
         if ($result && isset($result['count'])) {
             return $result['count'];

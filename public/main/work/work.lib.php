@@ -16,6 +16,7 @@ use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Repository\CStudentPublicationFollowRepository;
 use ChamiloSession as Session;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  *  @author Thomas, Hugues, Christophe - original version
@@ -271,56 +272,12 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
 
     $qb = $repo->getResourcesByCourse($course, $session, $group);
 
-    $contains_file_query = '';
-    // Get list from database
-    if ($is_allowed_to_edit) {
-        $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
-        $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
-    /*$active_condition = ' active IN (0, 1)';
-    $sql = "SELECT * FROM $work_table
-            WHERE
-                c_id = $course_id
-                $add_in_where_query
-                $condition_session AND
-                $active_condition AND
-                (parent_id = 0)
-                $contains_file_query AND
-                post_group_id = $groupIid
-            ORDER BY sent_date DESC";*/
-    } else {
-        if (!empty($group_id)) {
-            // set to select only messages posted by the user's group
-            $group_query = " WHERE c_id = $course_id AND post_group_id = $groupIid";
-            $subdirs_query = ' AND parent_id = 0';
-        } else {
-            $group_query = " WHERE c_id = $course_id AND (post_group_id = '0' OR post_group_id is NULL) ";
-            $subdirs_query = ' AND parent_id = 0';
-        }
-        //@todo how we can active or not an assignment?
-        $active_condition = ' AND active IN (1, 0)';
-        $sql = "SELECT * FROM  $work_table
-                $group_query
-                $subdirs_query
-                $add_in_where_query
-                $active_condition
-                $condition_session
-                ORDER BY title";
-    }
+    // Root folders that are not deleted: the same for a teacher and for a learner (a learner only gets the
+    // published ones through the repository's visibility rule).
+    $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
+    $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
 
     return $qb->getQuery()->getResult();
-
-    $work_parents = [];
-
-    $sql_result = Database::query($sql);
-    if (Database::num_rows($sql_result)) {
-        while ($work = Database::fetch_object($sql_result)) {
-            if (0 == $work->parent_id) {
-                $work_parents[] = $work;
-            }
-        }
-    }
-
-    return $work_parents;
 }
 
 /**
@@ -1250,6 +1207,15 @@ function getWorkListStudent(
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
+    workApplyOrder(
+        $qb,
+        $column,
+        $direction,
+        [
+            'title' => 'resource.title',
+            'expires_on' => 'work_assignment.expiresOn',
+        ]
+    );
     $qb
         ->setFirstResult($start)
         ->setMaxResults($limit)
@@ -1614,6 +1580,17 @@ function getWorkListTeacher(
         $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
         if ($getCount) {
             $qb->select('count(resource)');
+        } else {
+            workApplyOrder(
+                $qb,
+                $column,
+                $direction,
+                [
+                    'title' => 'resource.title',
+                    'sent_date' => 'resource.sentDate',
+                    'expires_on' => 'work_assignment.expiresOn',
+                ]
+            );
         }
 
         $qb
@@ -2097,7 +2074,21 @@ function get_work_user_list(
             $whereCondition .= " AND u.id = $studentId ";
         }*/
 
-        $qb = $repo->getStudentAssignments($studentPublication, $course, $session, $group);
+        // The submissions of one learner when asked to (the SQL used to filter on u.id = $studentId).
+        $studentUser = !empty($studentId) ? api_get_user_entity((int) $studentId) : null;
+        $qb = $repo->getStudentAssignments($studentPublication, $course, $session, $group, $studentUser);
+
+        // Who may see which row is decided here, in the query, so that the count and the pages agree with
+        // what the loop below shows: a learner only gets his own submissions, plus the accepted ones of the
+        // others when the course shows the scores.
+        if (!$is_allowed_to_edit && !api_is_drh()) {
+            if (0 == (int) ($course_info['show_score'] ?? 1)) {
+                $qb->andWhere('(resource.user = :viewer OR resource.accepted = 1)');
+            } else {
+                $qb->andWhere('resource.user = :viewer');
+            }
+            $qb->setParameter('viewer', (int) api_get_user_id());
+        }
 
         if ($getCount) {
             $qb->select('count(resource)');
@@ -2105,8 +2096,27 @@ function get_work_user_list(
             return $qb->getQuery()->getSingleScalarResult();
         }
 
-        $qb->setFirstResult($start);
-        $qb->setMaxResults($limit);
+        workApplyOrder(
+            $qb,
+            $column,
+            $direction,
+            [
+                'title' => 'resource.title',
+                'sent_date' => 'resource.sentDate',
+                'qualification' => 'resource.qualification',
+                'qualificator_id' => 'resource.qualificatorId',
+                'firstname' => 'work_user.firstname',
+                'lastname' => 'work_user.lastname',
+                'fullname' => 'work_user.lastname',
+            ]
+        );
+        // Like the SQL it replaces, no start/limit means no LIMIT (upload_corrections.php passes nulls).
+        if ($start > 0) {
+            $qb->setFirstResult($start);
+        }
+        if ($limit > 0) {
+            $qb->setMaxResults($limit);
+        }
 
         $assignments = $qb->getQuery()->getResult();
 
@@ -2209,12 +2219,13 @@ function get_work_user_list(
 
             if (!empty($expiresOn) &&
                 !empty($time_expires) &&
-                ($time_expires < api_strtotime($studentPublication->getSentDate(), 'UTC'))
+                ($time_expires < api_strtotime($assignment->getSentDate(), 'UTC'))
             ) {
                 $add_string = Display::label(get_lang('Expired'), 'important').' - ';
             }
 
-            $accepted = $studentPublication->getAccepted();
+            // The flag of the submission itself: the folder's one says nothing about this row.
+            $accepted = $assignment->getAccepted();
             if (($can_read && $accepted) ||
                 $is_author ||
                 ($is_allowed_to_edit || api_is_drh())
@@ -2242,13 +2253,13 @@ function get_work_user_list(
                 // File name.
                 $linkToDownload = '';
                 // If URL is present then there's a file to download keep BC.
-                if ($studentPublication->getContainsFile()) {
+                if ($assignment->getContainsFile()) {
                     $downloadUrl = $repo->getResourceFileDownloadUrl($assignment).'?'.api_get_cidreq();
                     $linkToDownload = '<a href="'.$downloadUrl.'">'.$saveIcon.'</a> ';
                 }
 
                 $feedback = '';
-                $count = count($studentPublication->getComments()); // getWorkCommentCount($item_id, $course_info);
+                $count = count($assignment->getComments()); // getWorkCommentCount($item_id, $course_info);
                 if (null !== $count && !empty($count)) {
                     if ($qualification_exists) {
                         $feedback .= ' ';
@@ -2279,8 +2290,8 @@ function get_work_user_list(
                 $work['qualification_only'] = $qualification_string;
 
                 // Date.
-                $sendDate = $studentPublication->getSentDate();
-                $sendDateToString = $studentPublication->getSentDate()->format('Y-m-d H:i:s');
+                $sendDate = $assignment->getSentDate();
+                $sendDateToString = $sendDate->format('Y-m-d H:i:s');
 
                 $work_date = api_get_local_time($sendDate);
                 $date = date_to_str_ago($sendDate).' '.$work_date;
@@ -3451,6 +3462,9 @@ function user_is_author($itemId, $userId = null, $courseId = 0, $sessionId = 0)
         $repo = Container::getStudentPublicationRepository();
         /** @var CStudentPublication $studentPublication */
         $studentPublication = $repo->find($itemId);
+        if (null === $studentPublication) {
+            return false;
+        }
         if ($studentPublication->getResourceNode()->getCreator()->getId() === $userId) {
             $isAuthor = true;
         }
@@ -6910,4 +6924,31 @@ function workActionTokenIsValid(string $requestType = 'get'): bool
 function workActionUrl(string $url): string
 {
     return $url.'&work_sec_token='.workActionToken();
+}
+
+/**
+ * Orders a repository query by a column name that came from the request: only the names of $columnMap
+ * (request name => DQL field) can reach the query, anything else falls back to the legacy default (newest
+ * first). A field of the 'work_user' or 'work_assignment' alias makes that relation join in.
+ *
+ * @param array<string, string> $columnMap
+ */
+function workApplyOrder(QueryBuilder $qb, ?string $column, ?string $direction, array $columnMap): void
+{
+    if (!empty($column) && isset($columnMap[$column])) {
+        $field = $columnMap[$column];
+        $order = 'asc' === strtolower((string) $direction) ? 'ASC' : 'DESC';
+    } else {
+        $field = 'resource.sentDate';
+        $order = 'DESC';
+    }
+
+    if (str_starts_with($field, 'work_user.')) {
+        $qb->innerJoin('resource.user', 'work_user');
+    } elseif (str_starts_with($field, 'work_assignment.')) {
+        $qb->leftJoin('resource.assignment', 'work_assignment');
+    }
+
+    $qb->addOrderBy($field, $order);
+    $qb->addOrderBy('resource.iid', 'ASC');
 }

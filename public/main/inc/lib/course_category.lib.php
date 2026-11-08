@@ -216,8 +216,11 @@ class CourseCategory
         }
 
         $name = trim($name);
+        $code = CourseManager::generate_course_code(trim((string) $code));
+        if ('' !== $code) {
+            $category->setCode($code);
+        }
         $category
-            ->setCode($name)
             ->setTitle($name)
             ->setDescription($description)
             ->setAuthCourseChild($canHaveCourses)

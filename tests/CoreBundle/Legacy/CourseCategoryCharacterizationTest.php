@@ -238,18 +238,23 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
         $this->assertSame('new description', $row['description']);
     }
 
-    public function testEditOverwritesTheCodeWithTheTitle(): void
+    public function testEditSetsTheCodeTheFormSentNotTheTitle(): void
     {
         $id = $this->cat('cc_old', 'CCOLD');
 
-        CourseCategory::edit($id, 'Renamed title', 'TRUE', 'CCKEEP', '');
+        CourseCategory::edit($id, 'Renamed title', 'TRUE', ' cc-keep ', '');
         $this->fresh();
 
-        // PINNED QUIRK: the $code argument (the form's code field) is ignored, the code becomes the title.
+        // The code goes through the same normalisation as add().
         $this->assertSame(
-            'Renamed title',
+            'CCKEEP',
             $this->conn()->fetchOne('SELECT code FROM course_category WHERE id = ?', [$id])
         );
+
+        // A code that normalises to nothing leaves the stored one alone.
+        CourseCategory::edit($id, 'Renamed again', 'TRUE', '--', '');
+        $this->fresh();
+        $this->assertSame('CCKEEP', $this->conn()->fetchOne('SELECT code FROM course_category WHERE id = ?', [$id]));
     }
 
     public function testEditCanReparentButNotMoveBackToTheRoot(): void

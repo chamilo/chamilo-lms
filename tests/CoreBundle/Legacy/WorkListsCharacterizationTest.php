@@ -337,6 +337,34 @@ final class WorkListsCharacterizationTest extends KernelTestCase
         $this->assertStringContainsString('Expired', strip_tags($rows['w2_late']['expiry_note']));
     }
 
+    public function testUserListShowsAcceptedSubmissionsWhateverTheFlagOfTheFolder(): void
+    {
+        $this->setShowScore(1, 0);
+        $this->setContext($this->learner(), $this->course(1));
+        $folder = $this->folder(['accepted' => 0]);
+        $this->submission($folder, $this->other(), ['title' => 'w2_theirs_accepted', 'accepted' => 1]);
+
+        $rows = get_work_user_list(0, 50, null, null, $folder);
+
+        $this->assertSame(['w2_theirs_accepted'], $this->titles($rows), 'it is the submission\'s own flag that counts');
+    }
+
+    public function testUserListOfAHumanResourcesManagerShowsEverySubmission(): void
+    {
+        $this->setShowScore(1, 1);
+        $drh = $this->learner();
+        $drh->setRoles(['ROLE_HR']);
+        $this->setContext($drh, $this->course(1));
+        $folder = $this->folder();
+        $this->submission($folder, $this->other(), ['title' => 'w2_theirs']);
+        $this->submission($folder, $this->other(), ['title' => 'w2_theirs_pending', 'accepted' => 0]);
+
+        $rows = get_work_user_list(0, 50, null, null, $folder);
+
+        $this->assertSame(['w2_theirs', 'w2_theirs_pending'], $this->titles($rows));
+        $this->assertSame(2, (int) get_work_user_list(0, 50, null, null, $folder, '', null, true));
+    }
+
     public function testUserListIgnoresLinksOfAnotherSession(): void
     {
         $sessionId = $this->session();

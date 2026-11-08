@@ -2788,7 +2788,8 @@ class learnpath
                 INNER JOIN $lp_item_table li
                 ON (li.lp_id = l.iid)
         		WHERE
-        		    li.iid = $item_id
+        		    li.iid = $item_id AND
+        		    l.iid = ".(int) $this->get_id()."
         		";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {

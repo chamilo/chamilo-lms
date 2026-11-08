@@ -876,8 +876,8 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
         $foreign = $this->addItem($other, 'l2_foreign', 'sco', 1);
         $this->conn()->executeStatement("UPDATE c_lp_item SET path = 'secret/page.htm' WHERE iid = ?", [$foreign]);
 
-        // PINNED QUIRK: the item is looked up by id alone, so a SCORM path resolves an item of another learning path.
-        $this->assertSame('secret/page.htm?', $this->lp($mine)->get_link('http', $foreign));
+        // The item used to be looked up by id alone, so a path resolved an item of another learning path.
+        $this->assertSame('', $this->lp($mine)->get_link('http', $foreign));
     }
 
     public function testResourceLinkOfCoursePagesAndUnknownItems(): void

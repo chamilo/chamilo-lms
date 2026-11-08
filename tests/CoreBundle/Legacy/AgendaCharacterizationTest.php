@@ -416,15 +416,25 @@ final class AgendaCharacterizationTest extends KernelTestCase
         $this->assertNull($this->agenda('personal', null)->get_event($id), 'the personal branch is commented out');
     }
 
-    public function testGetEventDoesNotCheckThatTheEventBelongsToTheCourse(): void
+    public function testGetEventOfAnotherCourseIsNotReturned(): void
     {
-        // PINNED QUIRK (access control, see decisions file): the event is looked up by id alone, the course is
-        // only tested for being set. An event of course 2 is returned to an agenda of course 1.
+        // Access control: the event id may come from a request, an event of course 2 must not be readable
+        // through the agenda of course 1.
         $foreign = $this->event(2, 'ag_foreign');
 
-        $event = $this->agenda('course', 1)->get_event($foreign);
+        $this->assertNull($this->agenda('course', 1)->get_event($foreign));
+        $this->assertSame('ag_foreign', $this->agenda('course', 2)->get_event($foreign)['title']);
+    }
 
-        $this->assertSame('ag_foreign', $event['title']);
+    public function testGetEventOfAnEventWithoutLinkIsReturnedThroughItsParentCourse(): void
+    {
+        // An event created without recipients has no resource link (see testAddEventWithoutRecipients...); it
+        // still belongs to the course through its parent node, so the work tool can find its own event again.
+        $id = $this->agenda()->addEvent('2030-06-14 09:00:00', '2030-06-14 10:00:00', 'false', 'ag_nolink', '');
+        Container::getEntityManager()->clear();
+
+        $this->assertSame('ag_nolink', $this->agenda('course', 1)->get_event($id)['title']);
+        $this->assertNull($this->agenda('course', 2)->get_event($id));
     }
 
     // ---------------------------------------------------------------- editEvent
@@ -488,15 +498,17 @@ final class AgendaCharacterizationTest extends KernelTestCase
         $this->assertFalse($this->agenda('course', null)->editEvent($id, '2031-01-02 08:00:00', '2031-01-02 09:00:00', 'false', 't', 'c'));
     }
 
-    public function testEditEventDoesNotCheckThatTheEventBelongsToTheCourse(): void
+    public function testEditEventOfAnotherCourseIsRefused(): void
     {
-        // PINNED QUIRK (access control, see decisions file): a teacher of course 1 can change an event of course 2.
+        // Access control: a teacher of course 1 must not change an event of course 2 by passing its id.
         $foreign = $this->event(2, 'ag_foreign');
 
         $result = $this->agenda('course', 1)->editEvent($foreign, '2031-01-02 08:00:00', '2031-01-02 09:00:00', 'false', 'ag_overwritten', 'c');
 
-        $this->assertTrue($result);
-        $this->assertSame('ag_overwritten', $this->row($foreign)['title']);
+        $this->assertFalse($result);
+        $this->assertSame('ag_foreign', $this->row($foreign)['title']);
+        $this->assertTrue($this->agenda('course', 2)->editEvent($foreign, '2031-01-02 08:00:00', '2031-01-02 09:00:00', 'false', 'ag_by_owner', 'c'));
+        $this->assertSame('ag_by_owner', $this->row($foreign)['title']);
     }
 
     public function testEditEventAddsTheNewRecipientsButDoesNotUnlinkTheOldOnes(): void
@@ -547,6 +559,18 @@ final class AgendaCharacterizationTest extends KernelTestCase
         $this->agenda()->deleteEvent($id);
         $this->assertSame('1', ob_get_clean());
         $this->assertSame(0, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_calendar_event WHERE iid = ?', [$id]));
+    }
+
+    public function testDeleteEventOfAnotherCourseIsRefused(): void
+    {
+        // Access control: deleteEvent() reads the course from the context but the event only by id.
+        $foreign = $this->event(2, 'ag_foreign');
+
+        ob_start();
+        $this->agenda('course', 1)->deleteEvent($foreign);
+        ob_end_clean();
+
+        $this->assertSame(1, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_calendar_event WHERE iid = ?', [$foreign]));
     }
 
     public function testDeleteWholeSeriesFailsBecauseOfTheOldRepeatQuery(): void

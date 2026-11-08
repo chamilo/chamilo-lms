@@ -227,6 +227,32 @@ class Agenda
     }
 
     /**
+     * Whether the event belongs to the course of this agenda: it is a child of the course resource node or has a
+     * link to the course. Event ids come from the request, so every read or write by id must check this.
+     */
+    private function eventBelongsToCourse(CCalendarEvent $event): bool
+    {
+        $courseId = (int) ($this->course['real_id'] ?? 0);
+        $node = $event->getResourceNode();
+        if (empty($courseId) || null === $node) {
+            return false;
+        }
+
+        $courseNodeId = api_get_course_entity($courseId)?->getResourceNode()?->getId();
+        if (null !== $courseNodeId && $node->getParent()?->getId() === $courseNodeId) {
+            return true;
+        }
+
+        foreach ($node->getResourceLinks() as $link) {
+            if ($link->getCourse()?->getId() === $courseId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Adds an event to the calendar.
      *
      * @param string         $start                 datetime format: 2012-06-14 09:00:00 in local time
@@ -468,7 +494,7 @@ class Agenda
                 /** @var CCalendarEvent $event */
                 $event = $repo->find($id);
 
-                if (empty($event)) {
+                if (empty($event) || !$this->eventBelongsToCourse($event)) {
                     return false;
                 }
 
@@ -666,7 +692,7 @@ class Agenda
                     $repo = Container::getCalendarEventRepository();
                     $event = $repo->find($id);
 
-                    if ($event) {
+                    if ($event && $this->eventBelongsToCourse($event)) {
                         Database::getManager()->remove($event);
                         Database::getManager()->flush();
 
@@ -1015,7 +1041,7 @@ class Agenda
                 $eventEntity = $repo->find($id);
 
                 if (!empty($this->course['real_id'])) {
-                    if ($eventEntity) {
+                    if ($eventEntity && $this->eventBelongsToCourse($eventEntity)) {
                         $event = [];
                         $event['iid'] = $eventEntity->getIid();
                         $event['title'] = $eventEntity->getTitle();

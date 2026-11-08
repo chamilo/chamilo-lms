@@ -795,6 +795,22 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
         Question::read($src)->duplicate();
     }
 
+    public function testDuplicateDoesNotCopyTheMandatoryFlag(): void
+    {
+        $this->setSetting('exercise.allow_mandatory_question_in_category', 'true');
+        $src = $this->makeQuestion('x2_dup_mand', UNIQUE_ANSWER, 1.0, ['mandatory' => 1]);
+        $this->categorize($src, $this->makeCategory('x2_dup_mand_cat'));
+        $this->assertSame(1, Question::read($src)->mandatory);
+
+        $newId = (int) Question::read($src)->duplicate();
+
+        // PINNED QUIRK (bug): the copy loses the "mandatory" flag, so a copied test draws it like any other question.
+        $this->assertSame(
+            0,
+            (int) $this->conn->fetchOne('SELECT mandatory FROM c_quiz_question WHERE iid = ?', [$newId])
+        );
+    }
+
     public function testDuplicateNeedsTheSecurityTokenForTheCreator(): void
     {
         $src = $this->makeQuestion('x2_dup_notoken');
@@ -1040,6 +1056,9 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
 
         $this->setExtra('results_available_for_x_minutes', $e->getId(), '10');
         $this->assertSame(10, $e->getResultAccess());
+        // PINNED QUIRK (bug): getResultsAccess() casts the whole extra-field array to int (always 1); it feeds the
+        // "You have passed the %s minutes limit" message.
+        $this->assertSame(1, $e->getResultsAccess());
 
         $recent = ['exe_date' => gmdate('Y-m-d H:i:s', time() - 60)];
         $diff = $e->getResultAccessTimeDiff($recent);
@@ -1301,6 +1320,29 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
         $this->assertSame(8.0, (float) $link['average_score'], 'sum of the latest scores / number of students');
         $this->assertSame(10.0, (float) $link['score_weight'], 'the max score of the test');
         $this->assertEquals([2 => 8], json_decode($link['user_score_list'], true));
+    }
+
+    public function testGenerateStatsAveragesOverEveryStudentOfTheCourse(): void
+    {
+        $this->setSetting('gradebook.allow_gradebook_stats', 'true');
+        [$e, $linkId] = $this->gradedQuiz();
+        $this->conn->executeStatement(
+            "INSERT INTO user (username, username_canonical, email, email_canonical, password, salt, roles, locale, timezone,
+                locked, expired, credentials_expired, status, active, uuid, created_at, updated_at, firstname, lastname)
+             VALUES ('x2_student', 'x2_student', 'x2_student@example.com', 'x2_student@example.com', 'x', 'x', '[]', 'en_US', 'UTC',
+                0, 0, 0, 5, 1, UNHEX(REPLACE(UUID(), '-', '')), '2020-01-01 00:00:00', '2020-01-01 00:00:00', 'X', 'Two')"
+        );
+        $student = (int) $this->conn->lastInsertId();
+        $this->conn->insert('course_rel_user', ['user_id' => $student, 'c_id' => 1, 'relation_type' => 0, 'status' => 5, 'progress' => 0]);
+        $this->exe($e->getId(), 2, 8.0, 10.0, 'completed', '2020-01-02 10:00:00');
+        $this->exe($e->getId(), $student, 4.0, 10.0, 'completed', '2020-01-02 11:00:00');
+
+        $e->generateStats($e->getId(), api_get_course_info(), 0);
+
+        $link = $this->conn->fetchAssociative('SELECT * FROM gradebook_link WHERE id = ?', [$linkId]);
+        $this->assertSame(8.0, (float) $link['best_score']);
+        $this->assertSame(6.0, (float) $link['average_score'], '(8 + 4) / 2 students');
+        $this->assertEquals([2 => 8, $student => 4], json_decode($link['user_score_list'], true));
     }
 
     public function testGenerateStatsSkipsAttemptsWithoutMaxScore(): void

@@ -336,14 +336,15 @@ class ExtraFieldCharacterizationTest extends AbstractApiTest
         $this->assertSame('xf_upd', $row['variable']);
     }
 
-    public function testUpdateWithoutValueTypeWritesTheTypeNameIntoTheIntegerColumnAndFails(): void
+    public function testUpdateWithoutValueTypeKeepsTheStoredValueType(): void
     {
-        // PINNED QUIRK: update() defaults an empty value_type to $this->type ("course") for the option step and
-        // then leaves that string in the params it passes to the UPDATE of an integer column.
-        $id = $this->field(self::COURSE, 'upd_novt', 1, ['order' => 3]);
+        $id = $this->field(self::COURSE, 'upd_novt', ExtraField::FIELD_TYPE_DATE, ['order' => 3]);
 
-        $this->expectException(NotAllowedException::class);
-        (new ExtraField('course'))->update(['id' => $id, 'variable' => 'xf_upd_novt', 'display_text' => 'x', 'field_order' => 1]);
+        (new ExtraField('course'))->update(['id' => $id, 'variable' => 'xf_upd_novt', 'display_text' => 'Renamed', 'field_order' => 1]);
+
+        $row = $this->conn()->fetchAssociative('SELECT display_text, value_type FROM extra_field WHERE id = ?', [$id]);
+        $this->assertSame('Renamed', $row['display_text']);
+        $this->assertSame(ExtraField::FIELD_TYPE_DATE, (int) $row['value_type'], 'The type name must not leak into the integer column.');
     }
 
     public function testDeleteRemovesTheFieldItsOptionsAndItsValuesButNotOtherFields(): void

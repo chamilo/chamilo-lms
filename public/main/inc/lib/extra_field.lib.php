@@ -2273,11 +2273,12 @@ class ExtraField extends Model
         $params = $this->clean_parameters($params);
         if (isset($params['id'])) {
             $fieldOption = new ExtraFieldOption($this->type);
-            $params['field_id'] = $params['id'];
-            if (empty($params['value_type'])) {
-                $params['value_type'] = $this->type;
+            $optionParams = $params;
+            $optionParams['field_id'] = $params['id'];
+            if (empty($optionParams['value_type'])) {
+                $optionParams['value_type'] = $this->type;
             }
-            $fieldOption->save($params, $showQuery);
+            $fieldOption->save($optionParams, $showQuery);
         }
 
         return parent::update($params, $showQuery);

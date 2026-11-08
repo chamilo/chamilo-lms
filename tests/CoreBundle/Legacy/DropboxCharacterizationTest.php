@@ -199,7 +199,7 @@ final class DropboxCharacterizationTest extends KernelTestCase
         $this->assertSame([$sent], array_keys(get_dropbox_categories('sent')));
         $this->assertSame([$received], array_keys(get_dropbox_categories('received')));
         $this->assertEqualsCanonicalizing([$sent, $received], array_keys(get_dropbox_categories()));
-        // PINNED QUIRK: an unknown filter value matches nothing instead of falling back to "all".
+        // INTENTIONAL: an unknown filter value matches nothing (the only callers pass sent/received or move*-stripped values).
         $this->assertSame([], get_dropbox_categories('whatever'));
     }
 
@@ -208,7 +208,7 @@ final class DropboxCharacterizationTest extends KernelTestCase
         $base = $this->category(1, 'sent');
         $inSession = $this->category(1, 'sent', 1, 7);
 
-        // PINNED QUIRK: a session sees only its own categories (api_get_session_condition without base content).
+        // INTENTIONAL: a session sees only its own categories (api_get_session_condition without base content).
         $this->setContext(1, 1, 7);
         $this->assertSame([$inSession], array_keys(get_dropbox_categories()));
 
@@ -234,7 +234,7 @@ final class DropboxCharacterizationTest extends KernelTestCase
 
     public function testGetCategoryOfUnknownIdReturnsFalseNotAnEmptyArray(): void
     {
-        // PINNED QUIRK: fetch_assoc() on an empty result is returned as is, so the "not found" value is false for
+        // INTENTIONAL: fetch_assoc() on an empty result is returned as is, so the "not found" value is false for
         // an unknown id but [] for an empty id; callers only test count()/empty().
         $this->assertFalse(get_dropbox_category(999999999));
     }
@@ -289,8 +289,8 @@ final class DropboxCharacterizationTest extends KernelTestCase
     public function testStoreAddCategoryValidatesTargetAndName(): void
     {
         $_POST = ['target' => 'nowhere', 'category_name' => 'db_x'];
-        // PINNED QUIRK: an invalid target returns a bare string while the other outcomes return arrays.
-        $this->assertSame(get_lang('Error'), store_addcategory());
+        // An invalid target returns the same array shape as the other outcomes (index.php reads ['type']).
+        $this->assertSame(['type' => 'error', 'message' => get_lang('Error')], store_addcategory());
 
         $_POST = ['target' => 'sent', 'category_name' => ''];
         $result = store_addcategory();
@@ -636,7 +636,7 @@ final class DropboxCharacterizationTest extends KernelTestCase
 
     public function testDeleteSentCategoryWithAFileStillFailsInDropboxClass(): void
     {
-        // PINNED QUIRK (not fixable from this file): after the "id" -> "iid" repair here, the loop reaches
+        // DEAD (legacy dropbox tool, superseded by the Vue dropbox views and API): after the "id" -> "iid" repair here, the loop reaches
         // Dropbox_Person -> Dropbox_SentWork -> Dropbox_Work, whose own SQL (dropbox_class.inc.php) still
         // targets removed columns. The legacy dropbox classes belong to a later pass; see the decisions file.
         $cat = $this->category(1, 'sent');

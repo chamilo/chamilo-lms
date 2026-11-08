@@ -9,6 +9,9 @@ use ChamiloSession as Session;
  * functions in the init files also but I have moved them over
  * to one file -- Patrick Cool <patrick.cool@UGent.be>, Ghent University.
  *
+ * @deprecated The dropbox tool is served by the Vue views (assets/vue/views/dropbox) and the API; this legacy
+ *             code still uses removed columns and the undefined SYS_COURSE_PATH and is kept only for reference.
+ *
  * @author Julio Montoya adding c_id support
  */
 $this_section = SECTION_COURSES;
@@ -354,7 +357,7 @@ function store_addcategory()
         $sent = 0;
         $received = 1;
     } else {
-        return get_lang('Error');
+        return ['type' => 'error', 'message' => get_lang('Error')];
     }
 
     // check if the category name is valid

@@ -2,6 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
+/**
+ * @deprecated The dropbox tool is served by the Vue views (assets/vue/views/dropbox) and the API; this legacy
+ *             code still uses removed columns and the undefined SYS_COURSE_PATH and is kept only for reference.
+ */
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $_course = api_get_course_info();

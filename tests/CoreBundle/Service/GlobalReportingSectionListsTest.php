@@ -1164,6 +1164,21 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
         $this->assertSame(2, $since['items'][0]['learners']);
     }
 
+    /**
+     * A course of another access URL is outside the scope of an administrator of this one, like in the access
+     * overview: no result rows (and no exercise titles) of foreign courses.
+     */
+    public function testExerciseCategoriesRefuseACourseOfAnotherUrl(): void
+    {
+        $quiz = $this->quiz(2, 'rp_r2 foreign quiz');
+        $this->attemptId($this->rawUser('r2ec3'), 2, $quiz, 5, 10, '2001-01-01 10:00:00');
+        $other = $this->secondUrl();
+        $this->conn()->executeStatement('UPDATE access_url_rel_course SET access_url_id = ? WHERE c_id = 2', [$other]);
+
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->section($this->admin(), 'exercise-categories', ['courseId' => 2, 'exerciseId' => $quiz]);
+    }
+
     // ------------------------------------------------------- question stats
 
     private function question(string $text, float $weight): int
@@ -1218,6 +1233,21 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
         $this->assertSame('Firstr2qs1 Lastr2qs1', $detail['items'][0]['user']);
         $this->assertSame('Detailed questions stats', $detail['title']);
         $this->assertFalse($detail['meta']['supportsUser']);
+    }
+
+    public function testQuestionStatsAskForACourseAndRefuseACourseOfAnotherUrl(): void
+    {
+        $this->assertSame([], $this->section($this->admin(), 'question-stats')['items']);
+        $other = $this->secondUrl();
+        $this->conn()->executeStatement('UPDATE access_url_rel_course SET access_url_id = ? WHERE c_id = 2', [$other]);
+        foreach (['question-stats', 'question-stats-detail'] as $section) {
+            try {
+                $this->section($this->admin(), $section, ['courseId' => 2]);
+                $this->fail($section);
+            } catch (AccessDeniedHttpException) {
+                $this->addToAssertionCount(1);
+            }
+        }
     }
 
     // ------------------------------------------------------------ surveys

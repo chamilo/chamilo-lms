@@ -5593,6 +5593,10 @@ final readonly class GlobalReportingSectionQueryService
             );
         }
 
+        if (!\in_array((int) $filters['courseId'], $this->allAccessUrlCourseIds($context), true)) {
+            throw new AccessDeniedHttpException('The requested course is outside the current access URL.');
+        }
+
         $where = [
             'resource_link.c_id = :courseId',
             'quiz.iid = :exerciseId',
@@ -5874,6 +5878,10 @@ final readonly class GlobalReportingSectionQueryService
 
         if ((int) $filters['courseId'] <= 0) {
             return $this->result($filters, $title, 0, [], $columns, [], [], $meta);
+        }
+
+        if (!\in_array((int) $filters['courseId'], $this->allAccessUrlCourseIds($context), true)) {
+            throw new AccessDeniedHttpException('The requested course is outside the current access URL.');
         }
 
         $where = ['exercise.c_id = :courseId'];

@@ -154,6 +154,7 @@ final class CourseStudentInfoHelperTest extends KernelTestCase
         $other = $this->rawUser('other');
         $this->access($u, 'document', '2020-02-01 00:00:00');
         $this->link($this->fileNodes[0], '2020-06-01 00:00:00', ['visibility' => 0]);                      // hidden
+        $this->link($this->fileNodes[0], '2020-06-01 00:00:00', ['visibility' => 1]);                      // draft
         $this->link($this->fileNodes[0], '2020-06-01 00:00:00', ['deleted_at' => '2020-06-02 00:00:00']);   // deleted
         $this->link($this->fileNodes[0], '2020-06-01 00:00:00', ['user_id' => $other]);                    // for someone else
         $this->link($this->fileNodes[0], '2020-06-01 00:00:00', ['group_id' => 4]);                        // group content
@@ -217,5 +218,32 @@ final class CourseStudentInfoHelperTest extends KernelTestCase
         $this->link($this->fileNodes[0], '2020-06-01 00:00:00');
 
         $this->assertFalse($this->helper->getStudentInfoBatchForCourses($u, [1])['1']['hasNewContent']);
+    }
+
+    public function testContentChangedExactlyAtTheLastAccessIsNotNew(): void
+    {
+        $u = $this->rawUser('learner');
+        $this->access($u, 'document', '2020-06-01 00:00:00');
+        $this->link($this->fileNodes[0], '2020-06-01 00:00:00');
+
+        $this->assertSame([], $this->helper->getNewContentToolsForCourse($u, $this->course()));
+        $this->assertFalse($this->helper->getStudentInfoForCourse($u, $this->course())['hasNewContent']);
+        $this->assertFalse($this->helper->getStudentInfoBatchForCourses($u, [1])[1]['hasNewContent']);
+    }
+
+    public function testBatchIgnoresHiddenGroupAndOtherLearnerContent(): void
+    {
+        $u = $this->rawUser('learner');
+        $other = $this->rawUser('other');
+        $this->access($u, 'document', '2020-02-01 00:00:00');
+        foreach ([['visibility' => 0], ['visibility' => 1], ['group_id' => 4], ['usergroup_id' => 4], ['user_id' => $other], ['deleted_at' => '2020-07-01 00:00:00'], ['session_id' => 9]] as $over) {
+            $this->link($this->fileNodes[0], '2020-06-01 00:00:00', $over);
+        }
+
+        $this->assertFalse($this->helper->getStudentInfoBatchForCourses($u, [1])[1]['hasNewContent']);
+        $this->assertFalse($this->helper->getStudentInfoForCourse($u, $this->course())['hasNewContent']);
+
+        $this->link($this->fileNodes[1], '2020-06-02 00:00:00', ['user_id' => $u]);
+        $this->assertTrue($this->helper->getStudentInfoBatchForCourses($u, [1])[1]['hasNewContent']);
     }
 }

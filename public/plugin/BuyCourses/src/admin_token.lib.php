@@ -50,16 +50,26 @@ if (!function_exists('buycoursesAdminTokenName')) {
     }
 
     /**
+     * The current page with its (re-encoded) query string: where a refused request goes back to.
+     */
+    function buycoursesSelfUrl(): string
+    {
+        $query = http_build_query($_GET);
+
+        return api_get_self().('' !== $query ? '?'.$query : '');
+    }
+
+    /**
      * Stops a state-changing request that does not carry a valid token: flash message, redirect, exit.
      */
-    function buycoursesRequireAdminToken(string $redirectUrl): void
+    function buycoursesRequireAdminToken(?string $redirectUrl = null): void
     {
         if (buycoursesAdminTokenIsValid()) {
             return;
         }
 
         Display::addFlash(Display::return_message(get_lang('Not validated'), 'warning'));
-        header('Location: '.$redirectUrl);
+        header('Location: '.($redirectUrl ?? buycoursesSelfUrl()));
 
         exit;
     }
@@ -67,7 +77,7 @@ if (!function_exists('buycoursesAdminTokenName')) {
     /**
      * Same as buycoursesRequireAdminToken() but only for POST requests (pages that also render on GET).
      */
-    function buycoursesRequireAdminTokenOnPost(string $redirectUrl): void
+    function buycoursesRequireAdminTokenOnPost(?string $redirectUrl = null): void
     {
         if ('POST' === ($_SERVER['REQUEST_METHOD'] ?? 'GET')) {
             buycoursesRequireAdminToken($redirectUrl);

@@ -10,6 +10,7 @@ declare(strict_types=1);
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 /**
  * Add classes to an element without removing existing ones.
@@ -329,6 +330,9 @@ function getPluginLabelWithFallback($plugin, string $key, string $fallback): str
 
 api_protect_admin_script(true);
 
+// Every form of this page carries the token (CsrfProtectionListener does not cover legacy plugin pages).
+buycoursesRequireAdminTokenOnPost();
+
 $plugin = BuyCoursesPlugin::create();
 
 $subscriptionsListUrl = api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/subscriptions_courses.php';
@@ -405,6 +409,7 @@ foreach ($frequencies as &$frequency) {
 unset($frequency);
 
 $form = new FormValidator('add_frequency');
+buycoursesAdminTokenField($form);
 $form->addText('name', get_lang('Name'), false);
 $form->addElement(
     'number',
@@ -479,6 +484,7 @@ $template->assign('back_url', $backUrl);
 $template->assign('subscriptions_list_url', $subscriptionsListUrl);
 $template->assign('delete_action_url', $deleteActionUrl);
 $template->assign('items_form', styleBuyCoursesFormHtml($form->returnForm()));
+$template->assign('admin_token', buycoursesAdminToken());
 $template->assign('frequencies_list', $frequencies);
 $template->assign('frequencies_count', count($frequencies));
 

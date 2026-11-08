@@ -178,6 +178,18 @@ if (in_array((string) $action, $adminActions, true)) {
     bcRequireAdminAjax();
 }
 
+// Admin actions that change something (PayPal payouts, completing or cancelling a service sale) need the token.
+if (in_array((string) $action, ['proceedPayout', 'cancelPayout', 'service_sale_confirm', 'service_sale_cancel'], true)) {
+    require_once __DIR__.'/admin_token.lib.php';
+
+    if (!buycoursesAdminTokenIsValid()) {
+        http_response_code(403);
+        echo Display::return_message(get_lang('Not validated'), 'warning');
+
+        exit;
+    }
+}
+
 switch ($action) {
     case 'verifyPaypal':
         $userId = $httpRequest->request->getInt('id');

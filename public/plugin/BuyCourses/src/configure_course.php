@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Framework\Container;
 $cidReset = true;
 
 require_once '../config.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 /**
  * Add classes to an element without removing existing ones.
@@ -350,6 +351,9 @@ function styleBuyCoursesFormHtml(string $html): string
 
 api_protect_admin_script();
 
+// Every form of this page carries the token (CsrfProtectionListener does not cover legacy plugin pages).
+buycoursesRequireAdminTokenOnPost();
+
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : 0;
 
@@ -575,6 +579,7 @@ if ('true' === $commissionsEnable) {
 $globalSettingsParams = $plugin->getGlobalParameters();
 
 $form = new FormValidator('beneficiaries');
+buycoursesAdminTokenField($form);
 $form->addText('product_type', $plugin->get_lang('ProductType'), false);
 $form->addText('name', get_lang('Name'), false);
 $form->addCheckBox(

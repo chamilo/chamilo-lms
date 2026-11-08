@@ -139,4 +139,85 @@ final class BuyCoursesAdminAccessTest extends BuyCoursesCharacterizationTestCase
             (string) file_get_contents(self::SRC.'subscription_sales_report.php')
         );
     }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function adminFormPages(): array
+    {
+        return [
+            'paymentsetup' => ['paymentsetup.php'],
+            'services_add' => ['services_add.php'],
+            'services_edit' => ['services_edit.php'],
+            'subscription_add' => ['subscription_add.php'],
+            'configure_course' => ['configure_course.php'],
+            'configure_subscription' => ['configure_subscription.php'],
+            'configure_frequency' => ['configure_frequency.php'],
+        ];
+    }
+
+    /**
+     * @dataProvider adminFormPages
+     */
+    public function testAdminFormPagesRefuseAPostWithoutTokenBeforeBuildingAnyForm(string $page): void
+    {
+        $source = (string) file_get_contents(self::SRC.$page);
+
+        $admin = strpos($source, 'api_protect_admin_script(');
+        $guard = strpos($source, 'buycoursesRequireAdminTokenOnPost(');
+        $firstForm = strpos($source, 'new FormValidator(');
+
+        self::assertNotFalse($admin);
+        self::assertNotFalse($guard, $page.' must refuse a POST without token');
+        self::assertLessThan($guard, $admin, 'the role check comes first');
+        self::assertLessThan($firstForm, $guard, 'the token is checked before any form can validate');
+        self::assertGreaterThanOrEqual(
+            substr_count($source, 'new FormValidator('),
+            substr_count($source, 'buycoursesAdminTokenField('),
+            'every form of the page carries the hidden token'
+        );
+    }
+
+    public function testDeleteTransferAccountLinkIsNotAnUnsignedGet(): void
+    {
+        $source = (string) file_get_contents(self::SRC.'paymentsetup.php');
+        $delete = (int) strpos($source, "'delete_taccount' === \$_GET['action']");
+        $guard = (int) strpos($source, 'buycoursesRequireAdminToken(api_get_self())');
+        $call = (int) strpos($source, '->deleteTransferAccount(');
+
+        self::assertGreaterThan($delete, $guard);
+        self::assertLessThan($call, $guard);
+        self::assertStringContainsString(
+            "'buycourses_admin_sec_token': admin_token",
+            (string) file_get_contents(self::SRC.'../view/paymentsetup.tpl')
+        );
+    }
+
+    public function testDeleteFrequencyFormsPostTheToken(): void
+    {
+        foreach (['configure_frequency.tpl', 'configure_subscription.tpl'] as $tpl) {
+            self::assertStringContainsString(
+                'name="buycourses_admin_sec_token" value="{{ admin_token',
+                (string) file_get_contents(self::SRC.'../view/'.$tpl)
+            );
+        }
+    }
+
+    public function testAjaxStateChangingAdminActionsNeedTheToken(): void
+    {
+        $source = (string) file_get_contents(self::SRC.'buycourses.ajax.php');
+
+        $guard = (int) strpos($source, 'buycoursesAdminTokenIsValid()');
+        $switch = (int) strpos($source, 'switch ($action)');
+        self::assertGreaterThan(0, $guard);
+        self::assertLessThan($switch, $guard);
+        $guardBlock = substr($source, (int) strpos($source, 'Admin actions that change something'), 400);
+        foreach (['proceedPayout', 'cancelPayout', 'service_sale_confirm', 'service_sale_cancel'] as $action) {
+            self::assertStringContainsString("'".$action."'", $guardBlock);
+        }
+
+        // The pages that call these actions send the token.
+        self::assertStringContainsString('buycourses_admin_sec_token', (string) file_get_contents(self::SRC.'../view/service_sales_report.tpl'));
+        self::assertSame(2, substr_count((string) file_get_contents(self::SRC.'../view/paypal_payout.tpl'), 'buycourses_admin_sec_token'));
+    }
 }

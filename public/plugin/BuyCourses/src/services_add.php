@@ -12,8 +12,12 @@ use Chamilo\CoreBundle\Framework\Container;
 $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 api_protect_admin_script(true);
+
+// Every form of this page carries the token (CsrfProtectionListener does not cover legacy plugin pages).
+buycoursesRequireAdminTokenOnPost();
 
 $plugin = BuyCoursesPlugin::create();
 $currency = $plugin->getSelectedCurrency();
@@ -93,6 +97,7 @@ $form = new FormValidator(
     'post',
     api_get_self()
 );
+buycoursesAdminTokenField($form);
 $form->addText('name', $plugin->get_lang('ServiceName'));
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addHtmlEditor('description', $plugin->get_lang('Description'), true, false, $translatableHtmlEditorConfig);

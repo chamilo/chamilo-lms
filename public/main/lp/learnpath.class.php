@@ -1761,80 +1761,58 @@ class learnpath
                 )) {
                 return false;
             }
+        }
 
-            $prerequisite = $lp->getPrerequisite();
-            $is_visible = true;
+        // The prerequisite and the availability dates apply to every path, in a category or not.
+        $prerequisite = $lp->getPrerequisite();
+        $is_visible = true;
 
-            $isBlocked = self::isBlockedByPrerequisite(
-                $student_id,
-                $prerequisite,
-                $course,
-                $sessionId
-            );
+        $isBlocked = self::isBlockedByPrerequisite(
+            $student_id,
+            $prerequisite,
+            $course,
+            $sessionId
+        );
 
-            if ($isBlocked) {
-                $is_visible = false;
-            }
+        if ($isBlocked) {
+            $is_visible = false;
+        }
 
-            // Also check the time availability of the LP
-            if ($is_visible) {
-                // Adding visibility restrictions
-                if (null !== $lp->getPublishedOn()) {
-                    if ($now < $lp->getPublishedOn()->getTimestamp()) {
-                        $is_visible = false;
-                    }
-                }
-                // Blocking empty start times see BT#2800
-                global $_custom;
-                if (isset($_custom['lps_hidden_when_no_start_date']) &&
-                    $_custom['lps_hidden_when_no_start_date']
-                ) {
-                    if (null !== $lp->getPublishedOn()) {
-                        $is_visible = false;
-                    }
-                }
-
-                if (null !== $lp->getExpiredOn()) {
-                    if ($now > $lp->getExpiredOn()->getTimestamp()) {
-                        $is_visible = false;
-                    }
-                }
-            }
-
-            if ($is_visible) {
-                $subscriptionSettings = self::getSubscriptionSettings();
-
-                // Check if the subscription users/group to a LP is ON
-                if (1 == $lp->getSubscribeUsers() &&
-                    true === $subscriptionSettings['allow_add_users_to_lp']
-                ) {
-                    // Try group
+        // Also check the time availability of the LP
+        if ($is_visible) {
+            // Adding visibility restrictions
+            if (null !== $lp->getPublishedOn()) {
+                if ($now < $lp->getPublishedOn()->getTimestamp()) {
                     $is_visible = false;
-                    // Checking only the user visibility
-                    $userVisibility = self::isUserSubscribedToLp($lp, $student_id, $course, $session);
-
-                    if (true === $userVisibility) {
-                        return true;
-                    }
-
-                    // Try with groups
-                    $groupVisibility = self::isGroupSubscribedToLp($lp, $student_id, $course, $session);
-                    if (true === $groupVisibility) {
-                        return true;
-                    }
+                }
+            }
+            // Blocking empty start times see BT#2800
+            global $_custom;
+            if (isset($_custom['lps_hidden_when_no_start_date']) &&
+                $_custom['lps_hidden_when_no_start_date']
+            ) {
+                if (null !== $lp->getPublishedOn()) {
+                    $is_visible = false;
                 }
             }
 
-            return $is_visible;
-        } else {
+            if (null !== $lp->getExpiredOn()) {
+                if ($now > $lp->getExpiredOn()->getTimestamp()) {
+                    $is_visible = false;
+                }
+            }
+        }
 
-            $is_visible = true;
+        if ($is_visible) {
             $subscriptionSettings = self::getSubscriptionSettings();
+
             // Check if the subscription users/group to a LP is ON
             if (1 == $lp->getSubscribeUsers() &&
                 true === $subscriptionSettings['allow_add_users_to_lp']
             ) {
+                // Try group
                 $is_visible = false;
+                // Checking only the user visibility
                 $userVisibility = self::isUserSubscribedToLp($lp, $student_id, $course, $session);
 
                 if (true === $userVisibility) {
@@ -1847,11 +1825,9 @@ class learnpath
                     return true;
                 }
             }
-
-            return $is_visible;
         }
 
-        return true;
+        return $is_visible;
     }
 
     public static function isGroupSubscribedToLp(

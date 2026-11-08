@@ -536,12 +536,36 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
         [$blocked] = $this->publishedLp('l2_vis_n_blocked', 2, 0, ['prerequisite' => $prereq]);
         [$future] = $this->publishedLp('l2_vis_n_future', 2, 0, ['published_on' => '2099-01-01 00:00:00']);
         [$expired] = $this->publishedLp('l2_vis_n_expired', 2, 0, ['expired_on' => '2001-01-01 00:00:00']);
+        [$open] = $this->publishedLp('l2_vis_n_open', 2, 0, ['published_on' => '2001-01-01 00:00:00', 'expired_on' => '2099-01-01 00:00:00']);
 
-        // PINNED QUIRK: the prerequisite and the dates are only checked for paths that have a category; the
-        // else-branch returns true for an expired, not yet open or prerequisite-blocked path.
-        $this->assertTrue($this->visibleFor($blocked, 3));
-        $this->assertTrue($this->visibleFor($future, 3));
-        $this->assertTrue($this->visibleFor($expired, 3));
+        // The prerequisite and the dates apply whether or not the path is in a category: only the category branch
+        // used to check them, so an expired, not yet open or prerequisite-blocked path without category was open.
+        $this->assertFalse($this->visibleFor($blocked, 3), 'prerequisite not completed');
+        $this->assertFalse($this->visibleFor($future, 3), 'not published yet');
+        $this->assertFalse($this->visibleFor($expired, 3), 'expired');
+        $this->assertTrue($this->visibleFor($open, 3));
+
+        $this->conn()->executeStatement(
+            'INSERT INTO c_lp_view (c_id, lp_id, user_id, view_count, last_item, progress) VALUES (?, ?, 3, 1, 0, 100)',
+            [self::COURSE_ID, $prereq]
+        );
+        $this->assertTrue($this->visibleFor($blocked, 3), 'prerequisite completed');
+    }
+
+    public function testSubscriptionStillAppliesToAnOpenPathWithoutCategory(): void
+    {
+        [$lpId] = $this->publishedLp('l2_vis_n_subscribed', 2, 0, ['subscribe_users' => 1, 'expired_on' => '2099-01-01 00:00:00']);
+        [$expired] = $this->publishedLp('l2_vis_n_sub_expired', 2, 0, ['subscribe_users' => 1, 'expired_on' => '2001-01-01 00:00:00']);
+        foreach ([$lpId, $expired] as $id) {
+            $this->conn()->executeStatement(
+                'INSERT INTO c_lp_rel_user (lp_id, c_id, user_id, creator_id, created_at, is_open_without_date) VALUES (?, ?, 3, 1, NOW(), 1)',
+                [$id, self::COURSE_ID]
+            );
+        }
+
+        $this->assertTrue($this->visibleFor($lpId, 3));
+        $this->assertFalse($this->visibleFor($lpId, 2), 'not subscribed');
+        $this->assertFalse($this->visibleFor($expired, 3), 'a subscription does not override the expiry date');
     }
 
     // ---------------------------------------------------------------- progress bar / stars / score

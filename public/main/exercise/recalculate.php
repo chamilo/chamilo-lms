@@ -22,6 +22,11 @@ $studentId = (int) $_REQUEST['user'];
 $exerciseId = (int) $_REQUEST['exercise'];
 $exeId = (int) $_REQUEST['id'];
 
+// Only recalculate an attempt of the current course.
+if (!ExerciseLib::attemptBelongsToCourse($exeId)) {
+    exit;
+}
+
 /** @var TrackEExercise $trackedExercise */
 $trackedExercise = ExerciseLib::recalculateResult(
     $_REQUEST['id'],

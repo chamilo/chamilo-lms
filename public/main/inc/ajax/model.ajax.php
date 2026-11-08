@@ -769,7 +769,11 @@ switch ($action) {
         }
 
         $courseId = (int) ($_REQUEST['course_id'] ?? 0);
-        $exerciseId = $_REQUEST['exercise_id'] ?? 0;
+        // The access check above was made for the current course: the grid cannot count another one.
+        if (!empty($courseId) && $courseId !== (int) api_get_course_int_id()) {
+            api_not_allowed(true);
+        }
+        $exerciseId = (int) ($_REQUEST['exercise_id'] ?? 0);
         $status = $_REQUEST['status'] ?? 0;
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
             $filter_user = (int) $_GET['filter_by_user'];

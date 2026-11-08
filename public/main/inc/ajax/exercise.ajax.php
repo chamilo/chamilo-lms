@@ -31,6 +31,14 @@ switch ($action) {
     case 'get_exercise_by_course':
         $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? (int) $_GET['course_id'] : 0;
         $session_id = (!empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
+        // The access check above was made for the current course: listing the tests (drafts included) of another
+        // course requires being its teacher (or a platform admin).
+        if ($course_id !== (int) api_get_course_int_id()
+            && !api_is_platform_admin()
+            && !CourseManager::isCourseTeacher($currentUserId, $course_id)
+        ) {
+            api_not_allowed(true);
+        }
         $data = [];
         $onlyActiveExercises = !(api_is_platform_admin(true) || api_is_course_admin());
         $results = ExerciseLib::get_all_exercises_for_course_id(
@@ -175,6 +183,9 @@ switch ($action) {
 
         // 1. Setting variables needed by jqgrid
         $exercise_id = (int) $_GET['exercise_id'];
+        if (!ExerciseLib::exerciseBelongsToCourse($exercise_id, (int) $course_id, (int) api_get_session_id())) {
+            break;
+        }
         $page = (int) $_REQUEST['page']; //page
         $limit = (int) $_REQUEST['rows']; //quantity of rows
         $sidx = (int) $_REQUEST['sidx']; //index to filter
@@ -362,7 +373,7 @@ switch ($action) {
         if (empty($exercise_id)) {
             return Display::return_message(get_lang('Error'), 'error');
         }
-        if ($isAllowedToEdit) {
+        if ($isAllowedToEdit && ExerciseLib::exerciseBelongsToCourse($exercise_id, (int) $course_id, (int) api_get_session_id())) {
             $new_question_list = $_POST['question_id_list'];
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $counter = 1;
@@ -988,6 +999,13 @@ switch ($action) {
 
         if (!$questionId || !$exerciseId) {
             break;
+        }
+
+        // Exercise::read() and Question::read() do not scope by course.
+        if (!ExerciseLib::exerciseBelongsToCourse($exerciseId, (int) $course_id, (int) api_get_session_id())
+            || !ExerciseLib::questionBelongsToCourse($questionId, (int) $course_id, (int) api_get_session_id())
+        ) {
+            api_not_allowed(true);
         }
 
         $objExercise = new Exercise();

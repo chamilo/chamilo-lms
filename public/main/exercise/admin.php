@@ -68,6 +68,29 @@ if (0 === $exerciseId && isset($_POST['exerciseId'])) {
     $exerciseId = (int) $_POST['exerciseId'];
 }
 
+// Exercise::read() and Question::read() do not scope by course: every id of the request must be one of the
+// current course (and session), or a teacher of any course could read, edit, copy or delete another course's content.
+$requestedQuestionIds = [
+    $_GET['editQuestion'] ?? 0,
+    $_GET['modifyQuestion'] ?? 0,
+    $_GET['modifyAnswers'] ?? 0,
+    $_GET['deleteQuestion'] ?? 0,
+    $_REQUEST['clone_question'] ?? 0,
+];
+if ($exerciseId > 0
+    && !ExerciseLib::exerciseBelongsToCourse($exerciseId, api_get_course_int_id(), $sessionId)
+) {
+    Exercise::cleanSessionVariables();
+    api_not_allowed(true);
+}
+foreach ($requestedQuestionIds as $requestedQuestionId) {
+    if (!empty($requestedQuestionId)
+        && !ExerciseLib::questionBelongsToCourse((int) $requestedQuestionId, api_get_course_int_id(), $sessionId)
+    ) {
+        api_not_allowed(true);
+    }
+}
+
 $newQuestion = $_GET['newQuestion'] ?? 0;
 $modifyAnswers = $_GET['modifyAnswers'] ?? 0;
 $editQuestion = $_GET['editQuestion'] ?? 0;
@@ -173,6 +196,14 @@ if (empty($objExercise)) {
     Session::erase('objExercise');
     header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq());
     exit;
+}
+
+// The exercise kept in the session may come from another course context.
+if ((int) $objExercise->getId() > 0
+    && !ExerciseLib::exerciseBelongsToCourse((int) $objExercise->getId(), api_get_course_int_id(), $sessionId)
+) {
+    Exercise::cleanSessionVariables();
+    api_not_allowed(true);
 }
 
 // Exercise can be edited in their course.

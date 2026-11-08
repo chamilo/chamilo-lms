@@ -86,7 +86,11 @@ if ($is_allowedToEdit && !empty($action)) {
         && !empty($_POST['id']);
 
     if (!$isBulk) {
-        if (empty($exerciseId) || !$objExerciseTmp->read($exerciseId)) {
+        // Exercise::read() does not scope by course: the test must belong to the current course (and session).
+        if (empty($exerciseId)
+            || !ExerciseLib::exerciseBelongsToCourse((int) $exerciseId, (int) $courseId, (int) $sessionId)
+            || !$objExerciseTmp->read($exerciseId)
+        ) {
             api_not_allowed(true);
         }
         $exercise_action_locked = api_resource_is_locked_by_gradebook($exerciseId, LINK_EXERCISE);
@@ -124,6 +128,8 @@ if ($is_allowedToEdit && !empty($action)) {
             $ids = $idsRaw ? (is_array($idsRaw) ? $idsRaw : explode(',', (string)$idsRaw))
                 : ($exerciseId ? [$exerciseId] : []);
             $ids = array_filter(array_map('intval', $ids));
+            // Only tests of the current course (and session) may be deleted.
+            $ids = array_filter($ids, static fn (int $id): bool => ExerciseLib::exerciseBelongsToCourse($id, (int) $courseId, (int) $sessionId));
 
             $deleted = 0; $skipped = 0;
             foreach ($ids as $id) {

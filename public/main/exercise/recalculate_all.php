@@ -14,6 +14,10 @@ if (!isset($_REQUEST['exercise'])) {
 
 $exerciseId = (int) $_REQUEST['exercise'];
 
+if (!ExerciseLib::exerciseBelongsToCourse($exerciseId, api_get_course_int_id(), api_get_session_id())) {
+    api_not_allowed(true);
+}
+
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
     api_is_hrm() ||
     api_is_student_boss() ||

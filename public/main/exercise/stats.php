@@ -22,6 +22,10 @@ if (!$showPage) {
 }
 
 $exerciseId = isset($_GET['exerciseId']) && !empty($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
+if (!ExerciseLib::exerciseBelongsToCourse($exerciseId, api_get_course_int_id(), api_get_session_id())) {
+    api_not_allowed(true);
+}
+
 $objExercise = new Exercise();
 $result = $objExercise->read($exerciseId);
 

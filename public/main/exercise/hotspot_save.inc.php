@@ -9,6 +9,11 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
 
+// Writes the hotspot definition of an answer: authoring right only (students could reach this file directly).
+if (!api_is_allowed_to_edit(null, true)) {
+    api_not_allowed(true);
+}
+
 $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $questionId = (int) ($_GET['questionId']);
 $answerId = (int) ($_GET['answerId']);

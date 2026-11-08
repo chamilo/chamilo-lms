@@ -69,7 +69,11 @@ if ($time_control) {
 $htmlHeadXtra[] = api_get_css_asset('pretty-checkbox/dist/pretty-checkbox.min.css');
 
 $trackInfo = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
-if (empty($trackInfo)) {
+// The attempt is read and its blocked categories updated: it must be the user's own, in the current course.
+if (empty($trackInfo)
+    || (int) $trackInfo['exe_user_id'] !== (int) api_get_user_id()
+    || (int) $trackInfo['c_id'] !== (int) api_get_course_int_id()
+) {
     api_not_allowed();
 }
 $blockedCategories = [];

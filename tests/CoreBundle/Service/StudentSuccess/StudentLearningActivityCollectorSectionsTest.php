@@ -215,7 +215,9 @@ final class StudentLearningActivityCollectorSectionsTest extends KernelTestCase
         $q = $this->row('c_survey_question', ['survey_id' => $survey, 'survey_question' => 'Q', 'type' => 'open', 'sort' => 1]);
         $this->row('c_survey_answer', ['survey_id' => $survey, 'question_id' => $q, 'option_id' => 'private words', 'value' => 0, 'user' => (string) $u, 'session_id' => null]);
 
-        $item = $this->collect($u)['surveys']['items'][0];
+        $items = array_values(array_filter($this->collect($u)['surveys']['items'], static fn (array $i): bool => $i['surveyId'] === $survey));
+        $this->assertCount(1, $items);
+        $item = $items[0];
 
         $this->assertTrue($item['anonymous']);
         $this->assertFalse($item['responsesIncluded']);

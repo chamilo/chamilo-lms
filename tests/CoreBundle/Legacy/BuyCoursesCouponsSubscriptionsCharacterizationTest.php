@@ -258,9 +258,7 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
     {
         $this->plugin->addNewSubscription($this->subscription([['duration' => 30, 'price' => 19.99]]));
 
-        // PINNED QUIRK: the subscription price column is DECIMAL(10,0) (database.php declares Types::DECIMAL
-        // without a scale), so 19.99 is stored as 20.
-        $this->assertEqualsWithDelta(20.0, (float) $this->conn->fetchOne('SELECT price FROM plugin_buycourses_subscription WHERE duration = 30 AND product_id = 1'), 0.0001);
+        $this->assertEqualsWithDelta(19.99, (float) $this->conn->fetchOne('SELECT price FROM plugin_buycourses_subscription WHERE duration = 30 AND product_id = 1'), 0.0001);
     }
 
     public function testGetSubscriptionAppliesCouponAndTax(): void
@@ -330,6 +328,22 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
 
         $this->assertEquals(0, (float) $sale['price']);
         $this->assertEquals(80, (float) $sale['discount_amount']);
+    }
+
+    public function testSubscriptionSaleKeepsTheCentsOfPriceAndTax(): void
+    {
+        $this->setGlobalConfig(0, \BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
+        $this->setPluginSettings(['tax_enable' => 'true']);
+        $this->plugin->addNewSubscription($this->subscription([['duration' => 30, 'price' => 19.99]], ['tax_perc' => 21]));
+
+        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30);
+        $sale = $this->conn->fetchAssociative('SELECT * FROM plugin_buycourses_subscription_rel_sale WHERE id = ?', [$saleId]);
+
+        // 19.99 * 21% = 4.1979 -> 4.20 ; total 24.19
+        $this->assertSame('24.19', $sale['price']);
+        $this->assertSame('19.99', $sale['price_without_tax']);
+        $this->assertSame('4.20', $sale['tax_amount']);
+        $this->assertSame('0.00', $sale['discount_amount']);
     }
 
     public function testRegisterSubscriptionSaleRejectsOtherInputs(): void

@@ -596,7 +596,7 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_S
         ['unsigned' => true]
     );
     $subscriptionTable->addColumn('currency_id', Types::INTEGER);
-    $subscriptionTable->addColumn('price', Types::DECIMAL);
+    $subscriptionTable->addColumn('price', Types::DECIMAL, ['precision' => 10, 'scale' => 2]);
     $subscriptionTable->addColumn('tax_perc', Types::INTEGER);
     $subscriptionTable->setPrimaryKey(['product_type', 'product_id', 'duration']);
 }
@@ -615,15 +615,15 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_S
     $subscriptionSaleTable->addColumn('product_type', Types::INTEGER);
     $subscriptionSaleTable->addColumn('product_name', Types::STRING);
     $subscriptionSaleTable->addColumn('product_id', Types::INTEGER);
-    $subscriptionSaleTable->addColumn('price', Types::DECIMAL);
-    $subscriptionSaleTable->addColumn('price_without_tax', Types::DECIMAL, ['notnull' => false]);
+    $subscriptionSaleTable->addColumn('price', Types::DECIMAL, ['precision' => 10, 'scale' => 2]);
+    $subscriptionSaleTable->addColumn('price_without_tax', Types::DECIMAL, ['precision' => 10, 'scale' => 2, 'notnull' => false]);
     $subscriptionSaleTable->addColumn('tax_perc', Types::INTEGER, ['notnull' => false]);
-    $subscriptionSaleTable->addColumn('tax_amount', Types::DECIMAL, ['notnull' => false]);
+    $subscriptionSaleTable->addColumn('tax_amount', Types::DECIMAL, ['precision' => 10, 'scale' => 2, 'notnull' => false]);
     $subscriptionSaleTable->addColumn('status', Types::INTEGER);
     $subscriptionSaleTable->addColumn('payment_type', Types::INTEGER);
     $subscriptionSaleTable->addColumn('invoice', Types::INTEGER, ['default' => 0]);
-    $subscriptionSaleTable->addColumn('price_without_discount', Types::DECIMAL);
-    $subscriptionSaleTable->addColumn('discount_amount', Types::DECIMAL);
+    $subscriptionSaleTable->addColumn('price_without_discount', Types::DECIMAL, ['precision' => 10, 'scale' => 2]);
+    $subscriptionSaleTable->addColumn('discount_amount', Types::DECIMAL, ['precision' => 10, 'scale' => 2]);
     $subscriptionSaleTable->addColumn('subscription_end', Types::DATETIME_MUTABLE);
     $subscriptionSaleTable->addColumn('expired', Types::BOOLEAN, ['default' => 0]);
     $subscriptionSaleTable->setPrimaryKey(['id']);

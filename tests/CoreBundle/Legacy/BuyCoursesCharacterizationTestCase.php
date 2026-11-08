@@ -54,8 +54,13 @@ abstract class BuyCoursesCharacterizationTestCase extends KernelTestCase
         )->fetchColumn();
         $hasVatColumns = $count > 0
             && (bool) $pdo->query("SHOW COLUMNS FROM plugin_buycourses_global_config LIKE 'seller_vat_number'")->fetch();
+        // Installs made before the subscription prices got their 2 decimals are repaired by update().
+        $priceColumn = $count > 0
+            ? $pdo->query("SHOW COLUMNS FROM plugin_buycourses_subscription LIKE 'price'")->fetch(PDO::FETCH_ASSOC)
+            : false;
+        $hasCents = false !== $priceColumn && str_contains((string) $priceColumn['Type'], ',2)');
         // The installer creates 30 plugin tables.
-        if ($count >= 30 && $hasVatColumns) {
+        if ($count >= 30 && $hasVatColumns && $hasCents) {
             return;
         }
 

@@ -1087,6 +1087,29 @@ class BuyCoursesPlugin extends Plugin
 
         $table = Database::get_main_table(self::TABLE_CURRENCY);
         Database::query("ALTER TABLE $table CHANGE iso_code iso_code VARCHAR(4) NOT NULL");
+
+        // The subscription amounts were created as DECIMAL(10,0), which rounded every price to a whole unit.
+        $moneyColumns = [
+            self::TABLE_SUBSCRIPTION => ['price' => 'NOT NULL'],
+            self::TABLE_SUBSCRIPTION_SALE => [
+                'price' => 'NOT NULL',
+                'price_without_tax' => 'NULL',
+                'tax_amount' => 'NULL',
+                'price_without_discount' => 'NOT NULL',
+                'discount_amount' => 'NOT NULL',
+            ],
+        ];
+
+        foreach ($moneyColumns as $tableName => $columns) {
+            $moneyTable = Database::get_main_table($tableName);
+            foreach ($columns as $field => $nullability) {
+                $res = Database::query("SHOW COLUMNS FROM $moneyTable WHERE Field = '$field'");
+                $column = $res ? Database::fetch_assoc($res) : false;
+                if (is_array($column) && 'decimal(10,0)' === strtolower((string) $column['Type'])) {
+                    Database::query("ALTER TABLE $moneyTable MODIFY $field DECIMAL(10,2) $nullability");
+                }
+            }
+        }
     }
 
     private function ensureAuditTable(): void

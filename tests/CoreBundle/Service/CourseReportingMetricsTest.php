@@ -319,6 +319,32 @@ final class CourseReportingMetricsTest extends KernelTestCase
         $this->assertSame('r3_doc_file', $detail['downloads'][0]['resource_title']);
     }
 
+    /**
+     * The learners table never lists removed (-2) or inactive accounts, so their detail (name, forum posts, downloads,
+     * accesses) must not be reachable by id either.
+     */
+    public function testLearnerDetailRefusesSoftDeletedAndInactiveAccounts(): void
+    {
+        $gone = $this->learner('r3d5a', 1, -2);
+        $inactive = $this->learner('r3d5b', 1, 0);
+        $alive = $this->learner('r3d5c');
+        $this->courseVisit($gone, '2001-01-01 10:00:00', null);
+
+        $this->assertSame($alive, $this->service->getLearnerDetail($this->ctx(), $alive)['user']['id']);
+        foreach ([$gone, $inactive] as $uid) {
+            try {
+                $this->service->getLearnerDetail($this->ctx(), $uid);
+                $this->fail('account '.$uid.' must be refused');
+            } catch (NotFoundHttpException) {
+                $this->addToAssertionCount(1);
+            }
+        }
+        $stranger = $this->rawUser('r3d5d', 5, -2);
+        $this->courseVisit($stranger, '2001-01-01 10:00:00', null);
+        $this->expectException(NotFoundHttpException::class);
+        $this->service->getLearnerDetail($this->ctx(), $stranger);
+    }
+
     // --------------------------------------------------------------- export
 
     public function testExportReturnsEveryLearnerBeyondTheTablePageSizeAndHonoursFilters(): void

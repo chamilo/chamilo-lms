@@ -1644,6 +1644,15 @@ final class CourseReportingQueryService
         CourseReportingContext $context,
         int $userId
     ): bool {
+        // Same accounts as the participants table: removed (-2) and inactive accounts are not reportable.
+        $active = $this->connection->fetchOne(
+            'SELECT active FROM `user` WHERE id = :userId',
+            ['userId' => $userId]
+        );
+        if (1 !== (int) $active) {
+            return false;
+        }
+
         if ($context->sessionId() > 0) {
             $isEnrolled = (bool) $this->connection->fetchOne(
                 'SELECT 1

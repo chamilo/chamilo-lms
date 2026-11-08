@@ -1110,6 +1110,14 @@ class BuyCoursesPlugin extends Plugin
                 }
             }
         }
+
+        // The amount of a coupon was created as an INT, which rounded 7.50 to 8 (and a 7.5% coupon to 8%).
+        $couponTable = Database::get_main_table(self::TABLE_COUPON);
+        $res = Database::query("SHOW COLUMNS FROM $couponTable WHERE Field = 'discount_amount'");
+        $column = $res ? Database::fetch_assoc($res) : false;
+        if (is_array($column) && str_starts_with(strtolower((string) $column['Type']), 'int')) {
+            Database::query("ALTER TABLE $couponTable MODIFY discount_amount DECIMAL(10,2) NOT NULL");
+        }
     }
 
     private function ensureAuditTable(): void

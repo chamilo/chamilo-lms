@@ -61,13 +61,14 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $this->assertSame(10, (int) $this->plugin->getCouponByCode('BC_C1')['discount_amount']);
     }
 
-    public function testCouponAmountIsStoredAsAnInteger(): void
+    public function testCouponAmountKeepsItsCents(): void
     {
         $this->plugin->addNewCoupon($this->coupon(['code' => 'BC_DEC', 'discount_type' => 2, 'discount_amount' => '7.50']));
 
-        // PINNED QUIRK: coupon.discount_amount is an INT column, so a fractional amount-off coupon is rounded
-        // by MySQL (7.50 -> 8): the shop charges 0.50 less than the manager typed.
-        $this->assertSame(8, (int) $this->plugin->getCouponByCode('BC_DEC')['discount_amount']);
+        // Fixed: coupon.discount_amount was an INT column, so a fractional amount-off coupon was rounded by MySQL
+        // (7.50 -> 8): the shop took 0.50 more off than the manager typed. The column is DECIMAL(10,2) now
+        // (update() converts existing installs).
+        $this->assertEquals(7.5, $this->plugin->getCouponByCode('BC_DEC')['discount_amount']);
     }
 
     public function testCouponLookupByIdAndCodeRespectsTheValidityWindowAndProduct(): void
@@ -115,7 +116,8 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
     public function testCouponCodeLookupIsCaseInsensitive(): void
     {
         $this->makeCoupon('BC_Case', 1, 5);
-        // PINNED QUIRK: MySQL's default collation makes coupon codes case-insensitive.
+        // INTENTIONAL: MySQL's default collation makes coupon codes case-insensitive, which suits buyers who type the
+        // code by hand (and makes the duplicate-code check case-insensitive too).
         $this->assertNotEmpty($this->plugin->getCouponByCode('bc_case'));
     }
 

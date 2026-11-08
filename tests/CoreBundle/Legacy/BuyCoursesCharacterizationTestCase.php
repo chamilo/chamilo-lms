@@ -63,7 +63,11 @@ abstract class BuyCoursesCharacterizationTestCase extends KernelTestCase
         $priceColumn = $count > 0
             ? $pdo->query("SHOW COLUMNS FROM plugin_buycourses_subscription LIKE 'price'")->fetch(PDO::FETCH_ASSOC)
             : false;
-        $hasCents = false !== $priceColumn && str_contains((string) $priceColumn['Type'], ',2)');
+        $couponColumn = $count > 0
+            ? $pdo->query("SHOW COLUMNS FROM plugin_buycourses_coupon LIKE 'discount_amount'")->fetch(PDO::FETCH_ASSOC)
+            : false;
+        $hasCents = false !== $priceColumn && str_contains((string) $priceColumn['Type'], ',2)')
+            && false !== $couponColumn && str_contains((string) $couponColumn['Type'], ',2)');
         // The installer creates 30 plugin tables.
         if ($count >= 30 && $hasVatColumns && $hasCents) {
             return;

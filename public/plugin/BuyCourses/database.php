@@ -544,7 +544,7 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_C
     );
     $couponTable->addColumn('code', Types::STRING);
     $couponTable->addColumn('discount_type', Types::INTEGER);
-    $couponTable->addColumn('discount_amount', Types::INTEGER);
+    $couponTable->addColumn('discount_amount', Types::DECIMAL, ['precision' => 10, 'scale' => 2]);
     $couponTable->addColumn('valid_start', Types::DATETIME_MUTABLE);
     $couponTable->addColumn('valid_end', Types::DATETIME_MUTABLE);
     $couponTable->addColumn('delivered', Types::INTEGER);

@@ -143,13 +143,13 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         );
     }
 
-    private function node(int $resourceTypeId, string $title): int
+    private function node(int $resourceTypeId, string $title, ?int $creatorId = null): int
     {
         static $n = 0;
         $this->conn->executeStatement(
             "INSERT INTO resource_node (resource_type_id, creator_id, title, slug, level, path, created_at, updated_at, public, uuid)
              VALUES (?, ?, ?, ?, 0, ?, '2001-01-01 00:00:00', '2001-01-01 00:00:00', 0, ?)",
-            [$resourceTypeId, $this->creator, $title, 'tc-'.(++$n).'-'.(++$this->seq), 'tc-'.$this->seq.'-'.$n.'/', UuidV4::v4()->toBinary()]
+            [$resourceTypeId, $creatorId ?? $this->creator, $title, 'tc-'.(++$n).'-'.(++$this->seq), 'tc-'.$this->seq.'-'.$n.'/', UuidV4::v4()->toBinary()]
         );
 
         return (int) $this->conn->lastInsertId();
@@ -518,7 +518,7 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
             "INSERT INTO c_forum_post (thread_id, forum_id, poster_id, title, post_text, post_date, post_notification,
                 visible, resource_node_id)
              VALUES (?, ?, ?, 'tc_post', 'x', '2001-01-01 00:00:00', 0, ?, ?)",
-            [$threadId, $forumId, $posterId, $visible, $node = $this->node(28, 'tc_post')]
+            [$threadId, $forumId, $posterId, $visible, $node = $this->node(28, 'tc_post', $posterId)]
         );
         $id = (int) $this->conn->lastInsertId();
         $this->link($node, $courseId, $sessionId, $groupId);
@@ -535,7 +535,7 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
             "INSERT INTO c_student_publication (parent_id, user_id, title, active, post_group_id, filetype, has_properties,
                 qualification, qualificator_id, weight, allow_text_assignment, contains_file, document_id, resource_node_id)
              VALUES (?, ?, 'tc_work', ?, 0, 'file', 0, 0, 0, 0, 0, 0, 0, ?)",
-            [$parentId, $userId, $active, $node = $this->node(6, 'tc_work')]
+            [$parentId, $userId, $active, $node = $this->node(6, 'tc_work', $userId)]
         );
         $id = (int) $this->conn->lastInsertId();
         if ($linked) {
@@ -548,11 +548,11 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
     /**
      * @return array{0: int, 1: int} [document id, resource link id]
      */
-    private function document(int $courseId, ?int $sessionId = null, string $title = 'tc_doc'): array
+    private function document(int $courseId, ?int $sessionId = null, string $title = 'tc_doc', ?int $creatorId = null): array
     {
         $this->conn->executeStatement(
             "INSERT INTO c_document (title, filetype, readonly, template, resource_node_id) VALUES (?, 'file', 0, 0, ?)",
-            [$title, $node = $this->node(17, $title)]
+            [$title, $node = $this->node(17, $title, $creatorId)]
         );
         $id = (int) $this->conn->lastInsertId();
 
@@ -721,7 +721,7 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         $this->assertSame(0.0, $row['score']);
     }
 
-    public function testGroupReportingWorksAndMessagesCountEveryLinkedResourceOfTheCourse(): void
+    public function testGroupReportingWorksAndMessagesCountWhatEachMemberCreated(): void
     {
         $s1 = $this->user('tc_s1');
         $s2 = $this->user('tc_s2');
@@ -738,12 +738,11 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
 
         $row = Tracking::get_group_reporting(self::COURSE)[0];
 
-        // PINNED QUIRK: countUserForumPosts()/countUserPublications() go through
-        // getResourcesByCourseLinkedToUser(), whose "links.user IS NULL" branch matches every resource linked
-        // to the course without a user. So each member is credited with ALL 3 posts: 2 members x 3 = 6
-        // (the real figure is 3), and the one submission is credited to both members (2).
-        $this->assertSame(6, $row['messages']);
-        $this->assertSame(2, $row['works']);
+        // Fixed: the counters used getResourcesByCourseLinkedToUser(), whose "links.user IS NULL" branch credited
+        // every member with ALL 3 posts (6) and the one submission to both members (2). They now count what
+        // each member created: s1 wrote 2 posts and 1 submission, s2 wrote 1 post.
+        $this->assertSame(3, $row['messages']);
+        $this->assertSame(1, $row['works']);
     }
 
     // ------------------------------------------------------------------
@@ -848,24 +847,21 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
     // Documents
     // ------------------------------------------------------------------
 
-    public function testUploadedDocumentsOfAStudentAreCountedForTheWholeCourse(): void
+    public function testUploadedDocumentsOfAStudentAreCountedForThatStudentOnly(): void
     {
         $s1 = $this->user('tc_s1');
         $s2 = $this->user('tc_s2');
         $code = api_get_course_info_by_id(self::COURSE)['code'];
-        $base = (int) Tracking::count_student_uploaded_documents($s1, $code);
+        $base1 = (int) Tracking::count_student_uploaded_documents($s1, $code);
+        $base2 = (int) Tracking::count_student_uploaded_documents($s2, $code);
 
-        $this->document(self::COURSE);
-        $this->document(self::COURSE_TWO);
+        $this->document(self::COURSE, null, 'tc_doc', $s1);
+        $this->document(self::COURSE_TWO, null, 'tc_doc', $s1);
 
-        // PINNED QUIRK: the count goes through getResourcesByCourseLinkedToUser(), whose "links.user IS NULL"
-        // branch matches every document linked to the course with no user. The count ignores who uploaded
-        // it: the same 1 for the student who uploaded nothing and for any other user.
-        $this->assertSame(1, (int) Tracking::count_student_uploaded_documents($s1, $code) - $base);
-        $this->assertSame(
-            (int) Tracking::count_student_uploaded_documents($s1, $code),
-            (int) Tracking::count_student_uploaded_documents($s2, $code)
-        );
+        // Fixed: the count went through getResourcesByCourseLinkedToUser(), whose "links.user IS NULL" branch
+        // matched every document of the course whoever uploaded it. Only s1's document of THIS course counts.
+        $this->assertSame(1, (int) Tracking::count_student_uploaded_documents($s1, $code) - $base1);
+        $this->assertSame(0, (int) Tracking::count_student_uploaded_documents($s2, $code) - $base2);
     }
 
     public function testDownloadedDocumentsCountsOnlyThatStudentInThatCourseAndSession(): void

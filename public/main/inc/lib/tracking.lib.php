@@ -4167,7 +4167,7 @@ class Tracking
         $session = api_get_session_entity($sessionId);
         //$group = api_get_group_entity(api_get_group_id());
 
-        $qb = $repo->getResourcesByCourseLinkedToUser($user, $course, $session);
+        $qb = $repo->getResourcesByCourseCreatedByUser($user, $course, $session);
 
         $qb->select('count(resource)');
         $count = $qb->getQuery()->getSingleScalarResult();

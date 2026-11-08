@@ -674,12 +674,17 @@ class GlossaryManager
 
         $keyword = $_GET['keyword'] ?? null;
 
+        $qb = $repo->getResourcesByCourse($course, $session);
         if (!empty($keyword)) {
-            $glossaries = $repo->findCourseResourcesByTitle($keyword, $course->getResourceNode(), $course, $session);
-        } else {
-            $qb = $repo->getResourcesByCourse($course, $session);
-            $glossaries = $qb->getQuery()->getResult();
+            $qb
+                ->andWhere($qb->expr()->orX(
+                    $qb->expr()->like('resource.title', ':keyword'),
+                    $qb->expr()->like('resource.description', ':keyword')
+                ))
+                ->setParameter('keyword', '%'.addcslashes((string) $keyword, '%_\\').'%')
+            ;
         }
+        $glossaries = $qb->getQuery()->getResult();
 
         $return = [];
         $array = [];

@@ -131,20 +131,25 @@ final class GlossaryCharacterizationTest extends KernelTestCase
         $this->assertArrayNotHasKey(2, $rows[0], 'The id column is for editors only.');
     }
 
-    public function testGetGlossaryDataKeywordFiltersByTitle(): void
+    public function testGetGlossaryDataKeywordSearchesTitleAndDescription(): void
     {
-        $this->term('gl_apple', 'x');
-        $this->term('gl_pear', 'x');
-        $_GET['keyword'] = 'gl_apple';
+        $this->term('gl_apple', 'a fruit');
+        $this->term('gl_pear', 'another fruit with apple notes');
+        $this->term('gl_car', 'vehicle');
+        $this->term('gl_elsewhere', 'apple', 2);
 
-        $rows = GlossaryManager::get_glossary_data(0, 100, 0, 'ASC');
+        $_GET['keyword'] = 'apple';
+        $titles = array_map(static fn ($r) => substr((string) $r[0], 0, 8), $this->mineRows(GlossaryManager::get_glossary_data(0, 100, 0, 'ASC')));
+        $this->assertEqualsCanonicalizing(['gl_apple', 'gl_pear'], $titles, 'Title or description, the term of another course is out.');
 
-        $this->assertCount(1, $rows);
-        $this->assertStringStartsWith('gl_apple', $rows[0][0]);
-        // PINNED QUIRK: the keyword must equal the whole title (node.title = :title). The legacy SQL searched
-        // "%keyword%" in the title and the description.
-        $_GET['keyword'] = 'gl_app';
-        $this->assertSame([], GlossaryManager::get_glossary_data(0, 100, 0, 'ASC'));
+        $_GET['keyword'] = 'gl_ap';
+        $this->assertCount(1, $this->mineRows(GlossaryManager::get_glossary_data(0, 100, 0, 'ASC')), 'A partial title matches.');
+
+        $_GET['keyword'] = '%';
+        $this->assertSame([], $this->mineRows(GlossaryManager::get_glossary_data(0, 100, 0, 'ASC')), 'LIKE wildcards are literal.');
+
+        $_GET['keyword'] = "x' OR '1'='1";
+        $this->assertSame([], $this->mineRows(GlossaryManager::get_glossary_data(0, 100, 0, 'ASC')));
     }
 
     public function testGetGlossaryDataShowsTheIdColumnToEditors(): void

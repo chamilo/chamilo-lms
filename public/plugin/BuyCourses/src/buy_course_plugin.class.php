@@ -10263,7 +10263,15 @@ class BuyCoursesPlugin extends Plugin
         switch ($sale['product_type']) {
             case self::PRODUCT_TYPE_COURSE:
                 $course = api_get_course_info_by_id($sale['product_id']);
-                $saleIsCompleted = CourseManager::subscribeUser($sale['user_id'], $course['code']);
+
+                if (empty($course) || empty($course['real_id'])) {
+                    return false;
+                }
+
+                $saleIsCompleted = CourseManager::subscribeUser(
+                    (int) $sale['user_id'],
+                    (int) $course['real_id']
+                );
 
                 break;
 

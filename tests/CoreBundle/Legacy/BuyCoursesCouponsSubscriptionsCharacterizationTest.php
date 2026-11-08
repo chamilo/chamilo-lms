@@ -312,10 +312,21 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30);
         $before = (int) $this->conn->fetchOne('SELECT COUNT(*) FROM course_rel_user WHERE user_id = 2 AND c_id = 1');
 
-        // PINNED QUIRK: the course is passed to CourseManager::subscribeUser() by its CODE where an id is expected
-        // (completeSale() passes real_id), so nobody is subscribed and a paid subscription stays pending.
+        $this->assertTrue($this->plugin->completeSubscriptionSale($saleId));
+
+        // the buyer is subscribed to the course and the sale is completed (as completeSale does)
+        $this->assertSame($before + 1, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM course_rel_user WHERE user_id = 2 AND c_id = 1'));
+        $this->assertSame(1, (int) $this->plugin->getSubscriptionSale($saleId)['status']);
+        $this->assertTrue($this->plugin->completeSubscriptionSale($saleId), 'idempotent');
+    }
+
+    public function testCompleteSubscriptionSaleOfAnUnknownCourseStaysPending(): void
+    {
+        $this->plugin->addNewSubscription($this->subscription([['duration' => 30, 'price' => 80]]));
+        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30);
+        $this->conn->executeStatement('UPDATE plugin_buycourses_subscription_rel_sale SET product_id = 987654 WHERE id = ?', [$saleId]);
+
         $this->assertFalse($this->plugin->completeSubscriptionSale($saleId));
-        $this->assertSame($before, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM course_rel_user WHERE user_id = 2 AND c_id = 1'));
         $this->assertSame(0, (int) $this->plugin->getSubscriptionSale($saleId)['status']);
     }
 

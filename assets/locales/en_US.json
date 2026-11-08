@@ -4715,5 +4715,11 @@
     "Generate TXT": "Generate TXT",
     "Generate XLSX": "Generate XLSX",
     "Number of posts": "Number of posts",
-    "Share of the thread's posts": "Share of the thread's posts"
+    "Share of the thread's posts": "Share of the thread's posts",
+    "Conversations": "Conversations",
+    "Published and archived trees are read-only. To make changes, duplicate the tree, edit the new draft, and publish it. Publishing a new tree automatically archives the previously published tree for the same portal.": "Published and archived trees are read-only. To make changes, duplicate the tree, edit the new draft, and publish it. Publishing a new tree automatically archives the previously published tree for the same portal.",
+    "Use View conversations on any tree to review its conversation logs, even when the count is zero.": "Use View conversations on any tree to review its conversation logs, even when the count is zero.",
+    "Download an example file, edit its questions and options, then import it. The examples work without an existing ticket project; add ticket escalation after importing if needed.": "Download an example file, edit its questions and options, then import it. The examples work without an existing ticket project; add ticket escalation after importing if needed.",
+    "Download JSON example": "Download JSON example",
+    "Download CSV example": "Download CSV example"
 }

@@ -1,0 +1,47 @@
+{
+  "tree": {
+    "title": "Support Bot Example - Login and Video Help",
+    "description": "A ready-to-import example for first-line LMS support."
+  },
+  "nodes": [
+    {
+      "ref": "n1",
+      "content": "Hello! What do you need help with?",
+      "options": [
+        {
+          "label": "A video does not play",
+          "action": "goto_node",
+          "target": "n2"
+        },
+        {
+          "label": "I cannot log in",
+          "action": "goto_node",
+          "target": "n3"
+        }
+      ]
+    },
+    {
+      "ref": "n2",
+      "content": "Please check your internet connection and try another browser.",
+      "options": [
+        {
+          "label": "I understand, thank you",
+          "action": "end_conversation",
+          "closingMessage": "Glad we could help."
+        }
+      ]
+    },
+    {
+      "ref": "n3",
+      "content": "Please verify your username and try the password reset option on the login page.",
+      "options": [
+        {
+          "label": "I understand, thank you",
+          "action": "end_conversation",
+          "closingMessage": "Glad we could help."
+        }
+      ]
+    }
+  ],
+  "entryNode": "n1"
+}

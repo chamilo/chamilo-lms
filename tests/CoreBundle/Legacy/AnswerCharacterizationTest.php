@@ -19,7 +19,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Throwable;
 
 /**
  * Characterization of the legacy Answer class (public/main/exercise/answer.class.php): how the answers of a quiz
@@ -29,7 +28,7 @@ use Throwable;
  * copy): constructor, read, readOrderedBy, getQuestionType, selectAnswerByAutoId, getAnswers (MigrationMoodle
  * plugin), getAnswersList (QTI export), getGradesList (QTI hotspot export), getAnswerByAutoId, isCorrectByAutoId,
  * createAnswer, updateAnswers, save, duplicate and the select* accessors.
- * DEAD (no caller, marked @deprecated): selectAnswerId, which also throws (see its test).
+ * DEAD (no caller, marked @deprecated): selectAnswerId (repaired, it used to throw).
  *
  * Scoping: Answer reads rows by question id only; nothing here checks that the question belongs to the course
  * of the request. The callers decide (stats.php and exercise_submit_modal.php take their ids from an exercise
@@ -333,21 +332,18 @@ final class AnswerCharacterizationTest extends KernelTestCase
         $this->assertFalse($ans->selectAnswerIdByPosition(99));
     }
 
-    public function testSelectAnswerIdQueriesColumnsAndAPropertyThatNoLongerExist(): void
+    public function testSelectAnswerIdListsTheAnswerIdsOfTheQuestion(): void
     {
         $q = $this->question();
-        $this->answer($q, 'an_dead', 1);
+        $first = $this->answer($q, 'an_dead1', 1);
+        $second = $this->answer($q, 'an_dead2', 2);
+        $this->answer($this->question(), 'an_foreign', 1);
         $ans = $this->load($q);
 
-        // PINNED QUIRK: dead code. It selects "id"/"c_id" (columns dropped; the key is iid) and reads the undefined
-        // property $this->course_id, so it cannot return the ids; marked @deprecated.
-        $threw = false;
-        try {
-            @$ans->selectAnswerId();
-        } catch (Throwable) {
-            $threw = true;
-        }
-        $this->assertTrue($threw);
+        // Dead code (no caller, @deprecated). It used to select "id"/"c_id" (columns dropped; the key is iid) and
+        // read the undefined property $this->course_id, so it was a SQL error.
+        $this->assertEqualsCanonicalizing([$first, $second], array_map('intval', $ans->selectAnswerId()));
+        $this->assertSame([], $this->load($this->question())->selectAnswerId());
     }
 
     // ---------------------------------------------------------------- writing

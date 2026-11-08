@@ -681,8 +681,7 @@ class TestCategory
             return '';
         }
 
-        $hide = (int) $exercise->getPageConfigurationAttribute('hide_category_table');
-        if (1 === $hide) {
+        if (api_is_flag_enabled($exercise->getPageConfigurationAttribute('hide_category_table'))) {
             return '';
         }
         $exerciseId = $exercise->iId;

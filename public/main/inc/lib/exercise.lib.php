@@ -5499,8 +5499,7 @@ EOT;
         $checkPassPercentage = false,
         $countPendingQuestions = 0
     ) {
-        $hide = (int) $objExercise->getPageConfigurationAttribute('hide_total_score');
-        if (1 === $hide) {
+        if (api_is_flag_enabled($objExercise->getPageConfigurationAttribute('hide_total_score'))) {
             return '';
         }
 

@@ -8889,8 +8889,7 @@ class Exercise
             ]
         )
         ) {
-            $hide = (int) $this->getPageConfigurationAttribute('hide_expected_answer');
-            if (1 === $hide) {
+            if (api_is_flag_enabled($this->getPageConfigurationAttribute('hide_expected_answer'))) {
                 return false;
             }
 
@@ -8902,8 +8901,7 @@ class Exercise
 
     public function getQuestionRibbon(string $class, string $scoreLabel, ?string $result, array $array): string
     {
-        $hide = (int) $this->getPageConfigurationAttribute('hide_question_score');
-        if (1 === $hide) {
+        if (api_is_flag_enabled($this->getPageConfigurationAttribute('hide_question_score'))) {
             return '';
         }
 

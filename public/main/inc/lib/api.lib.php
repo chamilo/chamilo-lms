@@ -6090,6 +6090,20 @@ function api_get_multiple_access_url(): bool
 }
 
 /**
+ * Tells whether a stored on/off flag is enabled. Flags written by the Vue side are strings ('on'), the legacy forms
+ * store '1' or 1: a plain (int) cast reads 'on' as 0.
+ * Accepts true, 1, '1', 'on', 'true' and 'yes' (case-insensitive); anything else is disabled.
+ */
+function api_is_flag_enabled(mixed $value): bool
+{
+    if (is_bool($value)) {
+        return $value;
+    }
+
+    return is_scalar($value) && in_array(strtolower(trim((string) $value)), ['1', 'on', 'true', 'yes'], true);
+}
+
+/**
  * @deprecated Use AccessUrlUtil::isMultiple
  */
 function api_is_multiple_url_enabled(): bool

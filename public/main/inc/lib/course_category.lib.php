@@ -676,6 +676,7 @@ class CourseCategory
     /**
      * @param int|string|null $categoryId Category id or category code; an unknown one (or 'NONE') matches nothing
      * @param string          $keyword    Only the courses whose title contains it (case-insensitive)
+     * @param bool            $avoidCourses Apply the catalogue visibility/URL/avoid-list filters (pass false for admin use)
      *
      * @return Collection|int The courses, or their number when $getCount is true
      */
@@ -699,6 +700,27 @@ class CourseCategory
             $courses = $courses->filter(
                 static fn ($course): bool => false !== mb_stripos((string) $course->getTitle(), $keyword)
             );
+        }
+
+        if ($avoidCourses && !$courses->isEmpty()) {
+            // Same filters as the catalogue listing (searchAndSortCourses): never expose closed/hidden courses,
+            // the courses to avoid, the catalogue restrictions or the courses of another access URL.
+            $ids = array_map(static fn ($course): int => (int) $course->getId(), $courses->toArray());
+            $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+            $join = '';
+            $urlCondition = '';
+            if (api_is_multiple_url_enabled()) {
+                $join = ' INNER JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE).
+                    ' url_rel_course ON url_rel_course.c_id = course.id';
+                $urlCondition = ' AND url_rel_course.access_url_id = '.(int) api_get_current_access_url_id();
+            }
+            $sql = "SELECT DISTINCT course.id FROM $tblCourse course $join
+                    WHERE course.id IN (".implode(',', $ids).")
+                    $urlCondition
+                    ".CoursesAndSessionsCatalog::getAvoidCourseCondition().'
+                    '.CourseManager::getCourseVisibilitySQLCondition('course', true);
+            $allowed = array_map('intval', array_column(Database::store_result(Database::query($sql), 'ASSOC'), 'id'));
+            $courses = $courses->filter(static fn ($course): bool => in_array((int) $course->getId(), $allowed, true));
         }
 
         return $getCount ? count($courses) : $courses;

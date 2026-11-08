@@ -491,6 +491,22 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
         $this->assertCount(0, CourseCategory::getCoursesInCategory('CC-NO-SUCH-CODE'));
     }
 
+    public function testCoursesInCategoryNeverExposeClosedOrHiddenCoursesToTheCatalogue(): void
+    {
+        $cat = $this->cat('cc_vis', 'CCVIS');
+        $this->conn()->executeStatement('INSERT INTO course_rel_category (course_id, course_category_id) VALUES (1, ?), (2, ?)', [$cat, $cat]);
+        $this->assertSame(2, CourseCategory::countCoursesInCategory('CCVIS'));
+
+        foreach ([0, 4] as $visibility) { // CLOSED, HIDDEN
+            $this->conn()->executeStatement('UPDATE course SET visibility = ? WHERE id = 2', [$visibility]);
+            $this->fresh();
+            $this->assertSame(1, CourseCategory::countCoursesInCategory('CCVIS'), 'visibility '.$visibility);
+            $this->assertCount(1, CourseCategory::getCoursesInCategory('CCVIS'));
+            // The admin export (avoidCourses = false) still sees every course of the category.
+            $this->assertCount(2, CourseCategory::getCoursesInCategory($cat, '', false));
+        }
+    }
+
     // ------------------------------------------------------------------ dead code, cheap pins
 
     public function testDeadHelpersStillRunAgainstTheCurrentSchema(): void

@@ -362,14 +362,19 @@ final class AdminStatisticsQueryServiceTest extends KernelTestCase
     }
 
     /**
-     * PINNED QUIRK (scope): sessions are not restricted to the current access URL, a session that belongs to no URL
-     * at all is reported.
+     * Sessions are restricted to the current access URL once the portal is multi-URL: a session of another portal or
+     * of no portal at all is not reported (the other session reports and lists confine themselves the same way).
      */
-    public function testSessionByDateIgnoresTheAccessUrlOfTheSession(): void
+    public function testSessionByDateIsConfinedToTheSessionsOfTheCurrentUrl(): void
     {
-        $id = $this->datedSession('sbd6', '2001-05-05 08:00:00', '2001-05-06 08:00:00', Session::STATUS_PLANNED);
-        $this->conn()->executeStatement('DELETE FROM access_url_rel_session WHERE session_id = ?', [$id]);
+        $other = $this->secondUrl();
+        $this->datedSession('sbd6', '2001-05-05 08:00:00', '2001-05-06 08:00:00', Session::STATUS_PLANNED);
+        $orphan = $this->datedSession('sbd7', '2001-05-05 08:00:00', '2001-05-06 08:00:00', Session::STATUS_PLANNED);
+        $foreign = $this->datedSession('sbd8', '2001-05-05 08:00:00', '2001-05-06 08:00:00', Session::STATUS_PLANNED);
+        $this->conn()->executeStatement('DELETE FROM access_url_rel_session WHERE session_id = ?', [$orphan]);
+        $this->conn()->executeStatement('UPDATE access_url_rel_session SET access_url_id = ? WHERE session_id = ?', [$other, $foreign]);
         $report = $this->report('session_by_date', ['rangeStart' => '2001-05-01', 'rangeEnd' => '2001-05-31']);
         $this->assertSame(1, $report['table']['totalItems']);
+        $this->assertStringContainsString('rp_sbd6', $report['table']['items'][0]['name']);
     }
 }

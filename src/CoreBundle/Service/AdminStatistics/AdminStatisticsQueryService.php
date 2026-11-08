@@ -759,6 +759,17 @@ final readonly class AdminStatisticsQueryService
             ->setParameter('rangeEnd', $endDate, Types::DATETIME_MUTABLE)
         ;
 
+        if ($this->accessUrlHelper->isMultiple()) {
+            $currentUrl = $this->accessUrlHelper->getCurrent();
+            if (null !== $currentUrl && null !== $currentUrl->getId()) {
+                $queryBuilder
+                    ->innerJoin('session.urls', 'sessionUrl')
+                    ->andWhere('IDENTITY(sessionUrl.url) = :sessionUrlId')
+                    ->setParameter('sessionUrlId', (int) $currentUrl->getId(), Types::INTEGER)
+                ;
+            }
+        }
+
         if ($statusId > 0) {
             $queryBuilder
                 ->andWhere('session.status = :statusId')

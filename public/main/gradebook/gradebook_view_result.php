@@ -28,6 +28,14 @@ if (empty($select_eval)) {
     api_not_allowed(true);
 }
 
+GradebookUtils::protectElementInCurrentCourse('EVAL', $select_eval);
+// A DRH may read this page but not change anything in it.
+if (isset($_GET['delete_mark']) || isset($_GET['editres']) || isset($_GET['import']) || isset($_GET['resultdelete'])
+    || isset($_GET['deleteall']) || isset($_GET['action']) || isset($_POST['action'])
+) {
+    GradebookUtils::block_students();
+}
+
 $_course = api_get_course_info();
 $_user = api_get_user_info();
 $displayscore = ScoreDisplay::instance();
@@ -43,6 +51,10 @@ if ($eval[0]->get_category_id() < 0) {
 
 //load the result with the evaluation id
 if (isset($_GET['delete_mark'])) {
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $result = Result::load($_GET['delete_mark']);
     if (!empty($result[0]) && $result[0]->get_evaluation_id() == $select_eval) {
         $result[0]->delete();
@@ -182,6 +194,10 @@ if (isset($_GET['action'])) {
 
 if (isset($_GET['editres'])) {
     $resultedit = Result::load($_GET['editres']);
+    // The result being edited must be one of this evaluation (its id comes from the request).
+    if (empty($resultedit[0]) || (int) $resultedit[0]->get_evaluation_id() !== $select_eval) {
+        api_not_allowed(true);
+    }
     $edit_res_form = new EvalForm(
         EvalForm::TYPE_RESULT_EDIT,
         $eval[0],
@@ -641,6 +657,10 @@ function confirmationall () {
     }
 </script>';
 if (isset($_GET['deleteall'])) {
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $eval[0]->delete_results();
     Display::addFlash(Display::return_message(get_lang('All results have been removed')));
     header('Location: '.api_get_path(WEB_CODE_PATH).'gradebook/gradebook_view_result.php?allresdeleted=&selecteval='.$select_eval.'&'.api_get_cidreq());

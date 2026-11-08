@@ -25,7 +25,9 @@ $itemId = isset($_GET['itemId']) ? (int) $_GET['itemId'] : 0;
 
 switch ($action) {
     case 'generate_eval_stats':
+        GradebookUtils::block_students();
         if (!empty($itemId)) {
+            GradebookUtils::protectElementInCurrentCourse('EVAL', $itemId);
             Evaluation::generateStats($itemId);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
@@ -33,7 +35,9 @@ switch ($action) {
         exit;
         break;
     case 'generate_link_stats':
+        GradebookUtils::block_students();
         if (!empty($itemId)) {
+            GradebookUtils::protectElementInCurrentCourse('LINK', $itemId);
             $link = LinkFactory::create(LINK_EXERCISE);
             $links = $link::load($itemId);
 
@@ -58,10 +62,12 @@ switch ($action) {
         exit;
         break;
     case 'lock':
+        GradebookUtils::block_students();
         if (!Security::check_token('get')) {
             api_not_allowed(true);
         }
         Security::clear_token();
+        GradebookUtils::protectElementInCurrentCourse('CATE', (int) ($_GET['category_id'] ?? 0));
         $category_to_lock = Category::load((int) $_GET['category_id']);
         $category_to_lock[0]->lockAllItems(1);
         $confirmation_message = get_lang('This assessment has been locked. You cannot unlock it. If you really need to unlock it, please contact the platform administrator, explaining the reason why you would need to do that (it might otherwise be considered as fraud attempt).');
@@ -72,6 +78,7 @@ switch ($action) {
         }
         Security::clear_token();
         if (api_is_platform_admin()) {
+            GradebookUtils::protectElementInCurrentCourse('CATE', (int) ($_GET['category_id'] ?? 0));
             $category_to_lock = Category::load((int) $_GET['category_id']);
             $category_to_lock[0]->lockAllItems(0);
             $confirmation_message = get_lang('Evaluation has been unlocked');
@@ -83,6 +90,7 @@ switch ($action) {
             api_not_allowed(true);
         }
         if (isset($_GET['category_id'])) {
+            GradebookUtils::protectElementInCurrentCourse('CATE', (int) $_GET['category_id']);
             $cats = Category::load(
                 (int) $_GET['category_id'],
                 null,
@@ -261,6 +269,10 @@ $course_to_crsind = false;
 if (isset($_GET['movecat'])) {
     GradebookUtils::block_students();
     $moveCategoryId = isset($_GET['movecat']) ? (int) $_GET['movecat'] : 0;
+    GradebookUtils::protectElementInCurrentCourse('CATE', $moveCategoryId);
+    if (isset($_GET['targetcat'])) {
+        GradebookUtils::protectElementInCurrentCourse('CATE', (int) $_GET['targetcat']);
+    }
     $cats = Category::load($moveCategoryId);
     if (!isset($_GET['targetcat'])) {
         $move_form = new CatForm(
@@ -292,6 +304,10 @@ if (isset($_GET['movecat'])) {
 //move an evaluation
 if (isset($_GET['moveeval'])) {
     GradebookUtils::block_students();
+    GradebookUtils::protectElementInCurrentCourse('EVAL', $_GET['moveeval']);
+    if (isset($_GET['targetcat'])) {
+        GradebookUtils::protectElementInCurrentCourse('CATE', (int) $_GET['targetcat']);
+    }
     $evals = Evaluation::load($_GET['moveeval']);
     if (!isset($_GET['targetcat'])) {
         $move_form = new EvalForm(
@@ -327,6 +343,7 @@ if (isset($_GET['moveeval'])) {
 if (isset($_GET['movelink'])) {
     $moveLink = (int) $_GET['movelink'];
     GradebookUtils::block_students();
+    GradebookUtils::protectElementInCurrentCourse('LINK', $moveLink);
     $link = LinkFactory::load($moveLink);
     $move_form = new LinkForm(
         LinkForm::TYPE_MOVE,
@@ -338,6 +355,7 @@ if (isset($_GET['movelink'])) {
     );
 
     if ($move_form->validate()) {
+        GradebookUtils::protectElementInCurrentCourse('CATE', (int) $move_form->exportValue('move_cat'));
         $targetcat = Category::load($move_form->exportValue('move_cat'));
         $link[0]->move_to_cat($targetcat[0]);
         header('Location: '.api_get_self().'?linkmoved=&selectcat='.$selectCat.'&'.api_get_cidreq());
@@ -351,6 +369,7 @@ if (isset($_GET['deletecat'])) {
         api_not_allowed(true);
     }
     Security::clear_token();
+    GradebookUtils::protectElementInCurrentCourse('CATE', $_GET['deletecat']);
     $cats = Category::load($_GET['deletecat']);
     if (isset($cats[0])) {
         // Delete all categories,subcategories and results
@@ -373,6 +392,7 @@ if (isset($_GET['lockedeval'])) {
     }
     Security::clear_token();
     $locked = (int) $_GET['lockedeval'];
+    GradebookUtils::protectElementInCurrentCourse('EVAL', $locked);
     $type_locked = 1;
     $confirmation_message = get_lang('Evaluation has been locked');
     if (isset($_GET['typelocked']) && api_is_platform_admin()) {
@@ -393,6 +413,7 @@ if (isset($_GET['deleteeval'])) {
         api_not_allowed(true);
     }
     Security::clear_token();
+    GradebookUtils::protectElementInCurrentCourse('EVAL', $_GET['deleteeval']);
     $eval = Evaluation::load($_GET['deleteeval']);
     if (null != $eval[0]) {
         $eval[0]->delete_with_results();
@@ -410,6 +431,7 @@ if (isset($_GET['deletelink'])) {
     $get_delete_link = (int) $_GET['deletelink'];
     //fixing #5229
     if (!empty($get_delete_link)) {
+        GradebookUtils::protectElementInCurrentCourse('LINK', $get_delete_link);
         $link = LinkFactory::load($get_delete_link);
         if (null != $link[0]) {
             $resourceId = $link[0]->get_ref_id();
@@ -472,6 +494,7 @@ if (isset($_POST['action'])) {
                 $number_of_deleted_evaluations = 0;
                 $number_of_deleted_links = 0;
                 foreach ($_POST['id'] as $indexstr) {
+                    GradebookUtils::protectElementInCurrentCourse(substr($indexstr, 0, 4), substr($indexstr, 4));
                     if ('CATE' == substr($indexstr, 0, 4)) {
                         $cats = Category::load(substr($indexstr, 4));
                         if (null != $cats[0]) {
@@ -509,6 +532,7 @@ if (isset($_POST['action'])) {
                 break;
             case 'setvisible':
                 foreach ($_POST['id'] as $indexstr) {
+                    GradebookUtils::protectElementInCurrentCourse(substr($indexstr, 0, 4), substr($indexstr, 4));
                     if ('CATE' == substr($indexstr, 0, 4)) {
                         $cats = Category::load(substr($indexstr, 4));
                         $cats[0]->set_visible(1);
@@ -531,6 +555,7 @@ if (isset($_POST['action'])) {
                 break;
             case 'setinvisible':
                 foreach ($_POST['id'] as $indexstr) {
+                    GradebookUtils::protectElementInCurrentCourse(substr($indexstr, 0, 4), substr($indexstr, 4));
                     if ('CATE' == substr($indexstr, 0, 4)) {
                         $cats = Category::load(substr($indexstr, 4));
                         $cats[0]->set_visible(0);

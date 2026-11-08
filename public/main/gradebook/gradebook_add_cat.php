@@ -17,6 +17,7 @@ GradebookUtils::block_students();
 $edit_cat = isset($_REQUEST['editcat']) ? (int) $_REQUEST['editcat'] : '';
 $get_select_cat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
+GradebookUtils::protectElementInCurrentCourse('CATE', $get_select_cat);
 $catadd = new Category();
 $my_user_id = api_get_user_id();
 $catadd->set_user_id($my_user_id);
@@ -42,6 +43,11 @@ $form = new CatForm(
 
 if ($form->validate()) {
     $values = $form->exportValues();
+    // The parent and owner are posted back by hidden fields: do not hang a category under another course's one.
+    GradebookUtils::protectElementInCurrentCourse('CATE', $values['hid_parent_id'] ?? 0);
+    if (!api_is_platform_admin()) {
+        $values['hid_user_id'] = $my_user_id;
+    }
     $select_course = isset($values['select_course']) ? $values['select_course'] : [];
     $cat = new Category();
     if ('0' == $values['hid_parent_id']) {

@@ -1330,7 +1330,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         $connection = $this->entityManager->getConnection();
         $field = $distinct ? 'COUNT(DISTINCT l.login_user_id)' : 'COUNT(l.login_id)';
         $sql = "SELECT {$field} AS total, DATE(l.login_date) AS login_day FROM track_e_login l ";
-        $params = ['start' => $start->format('Y-m-d h:i:s'), 'duration' => $sessionDuration * 60];
+        $params = ['start' => $start->format('Y-m-d H:i:s'), 'duration' => $sessionDuration * 60];
         $types = ['start' => Types::STRING, 'duration' => Types::INTEGER];
         if ($this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId()) {
             $sql .= 'INNER JOIN access_url_rel_user aur ON aur.user_id = l.login_user_id ';

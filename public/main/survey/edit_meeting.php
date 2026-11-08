@@ -33,7 +33,7 @@ $surveyRepo = Container::getSurveyRepository();
 $survey = $surveyRepo->find($surveyId);
 $surveyData = SurveyManager::get_survey($surveyId);
 
-if (null === $survey) {
+if (null === $survey || !SurveyManager::surveyBelongsToCurrentCourse((int) $survey->getIid())) {
     api_not_allowed(true);
 }
 

@@ -2081,4 +2081,62 @@ class SurveyManager
 
         return $query->getResult();
     }
+
+    /**
+     * Tells whether a survey is published in the given course (and session when given). c_survey has no course
+     * column: its course is the resource link of its node. Every page taking a survey id from the request must
+     * call this before reading or writing through the helpers, which do not scope by course.
+     * Content of the base course is visible inside a session.
+     */
+    public static function surveyBelongsToCourse(int $surveyId, int $courseId, ?int $sessionId = null): bool
+    {
+        if ($surveyId <= 0 || $courseId <= 0) {
+            return false;
+        }
+
+        $sessionId = (int) $sessionId;
+        $sessionCondition = $sessionId > 0
+            ? 'AND (link.session_id IS NULL OR link.session_id = :sid)'
+            : 'AND (link.session_id IS NULL OR link.session_id = 0)';
+        $params = ['sid_survey' => $surveyId, 'cid' => $courseId];
+        if ($sessionId > 0) {
+            $params['sid'] = $sessionId;
+        }
+
+        $found = Database::getManager()->getConnection()->fetchOne(
+            'SELECT s.iid
+             FROM c_survey s
+             INNER JOIN resource_link link ON link.resource_node_id = s.resource_node_id
+             WHERE s.iid = :sid_survey AND link.c_id = :cid '.$sessionCondition.'
+             LIMIT 1',
+            $params
+        );
+
+        return false !== $found;
+    }
+
+    /**
+     * Same as surveyBelongsToCourse() for the course and session of the current request.
+     */
+    public static function surveyBelongsToCurrentCourse(int $surveyId): bool
+    {
+        return self::surveyBelongsToCourse($surveyId, (int) api_get_course_int_id(), (int) api_get_session_id());
+    }
+
+    /**
+     * Tells whether a question belongs to the given survey.
+     */
+    public static function surveyQuestionBelongsToSurvey(int $questionId, int $surveyId): bool
+    {
+        if ($questionId <= 0 || $surveyId <= 0) {
+            return false;
+        }
+
+        $found = Database::getManager()->getConnection()->fetchOne(
+            'SELECT iid FROM c_survey_question WHERE iid = ? AND survey_id = ?',
+            [$questionId, $surveyId]
+        );
+
+        return false !== $found;
+    }
 }

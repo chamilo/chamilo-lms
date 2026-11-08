@@ -59,7 +59,7 @@ Session::erase('answer_list');
 // Getting the survey information
 if (!empty($_GET['survey_id'])) {
     $course_code = api_get_course_id();
-    if (-1 != $course_code) {
+    if (-1 != $course_code && SurveyManager::surveyBelongsToCurrentCourse($survey_id)) {
         $survey_data = SurveyManager::get_survey($survey_id);
     } else {
         api_not_allowed(true);
@@ -87,7 +87,7 @@ if ($is_survey_type_1 && ('addgroup' === $action || 'deletegroup' === $action)) 
             Database::update(
                 $table_survey_question_group,
                 ['description' => $_POST['description']],
-                ['c_id = ? AND id = ?' => [$course_id, $groupId]]
+                ['c_id = ? AND id = ? AND survey_id = ?' => [$course_id, $groupId, $survey_id]]
             );
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         } elseif (!empty($_POST['name'])) {
@@ -124,9 +124,15 @@ $my_question_id_survey = isset($_GET['question_id']) ? (int) $_GET['question_id'
 $my_survey_id_survey = (int) $_GET['survey_id'];
 // Displaying the header
 if (!empty($action)) {
+    // Question actions: the question must belong to the (already validated) survey.
+    if (in_array($action, ['copyquestion', 'delete', 'moveup', 'movedown'], true) &&
+        !SurveyManager::surveyQuestionBelongsToSurvey((int) $my_question_id_survey, $survey_id)
+    ) {
+        api_not_allowed(true);
+    }
     switch ($action) {
         case 'copyquestion':
-            $copied = SurveyManager::copyQuestion($_GET['question_id']);
+            $copied = SurveyManager::copyQuestion($my_question_id_survey);
             if (false !== $copied) {
                 Display::addFlash(Display::return_message(get_lang('The question has been added.')));
             } else {
@@ -162,7 +168,7 @@ if (!empty($survey_data['survey_version'])) {
 }
 
 // We exit here is the first or last question is a pagebreak (which causes errors)
-SurveyUtil::check_first_last_question($_GET['survey_id']);
+SurveyUtil::check_first_last_question($survey_id);
 
 /**
  * Render a Tailwind "card" toolbar with icon-only buttons.

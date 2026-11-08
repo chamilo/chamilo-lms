@@ -29,7 +29,7 @@ $repo = Container::getSurveyRepository();
 
 /** @var CSurvey $survey */
 $survey = $repo->find($surveyId);
-if (null === $survey) {
+if (null === $survey || !SurveyManager::surveyBelongsToCurrentCourse($surveyId)) {
     api_not_allowed(true);
 }
 

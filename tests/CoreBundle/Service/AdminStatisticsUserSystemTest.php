@@ -315,16 +315,35 @@ final class AdminStatisticsUserSystemTest extends KernelTestCase
         $this->assertSame([1, 1], $report['charts'][0]['data']['datasets'][0]['data']);
     }
 
-    /**
-     * PINNED QUIRK: the bounds are plain dates ('2001-05-31'), i.e. midnight, so a user registered during the last
-     * day of the range is not counted (fixed in a following commit: the last day must be inclusive).
-     */
-    public function testRegistrationsOfTheLastDayOfTheRangeAreMissed(): void
+    public function testRegistrationsOfTheLastDayOfTheRangeAreCounted(): void
     {
         $a = $this->rawUser('rg6');
         $this->conn()->executeStatement("UPDATE user SET created_at = '2001-05-20 15:00:00' WHERE id = ?", [$a]);
         $report = $this->report('new_user_registrations', ['rangeStart' => '2001-05-10', 'rangeEnd' => '2001-05-20']);
-        $this->assertTrue($report['meta']['noData'] ?? false);
+        $this->assertArrayNotHasKey('noData', $report['meta']);
+        $values = array_combine($report['charts'][0]['data']['labels'], $report['charts'][0]['data']['datasets'][0]['data']);
+        $this->assertSame(1, $values['2001-05-20']);
+    }
+
+    public function testRegistrationsOfTheLastDayOfTheMonthAreCountedInTheDrilldown(): void
+    {
+        $a = $this->rawUser('rg7');
+        $this->conn()->executeStatement("UPDATE user SET created_at = '2001-05-31 18:00:00' WHERE id = ?", [$a]);
+        $report = $this->report('new_user_registrations', ['rangeStart' => '2001-05-01', 'rangeEnd' => '2001-06-30', 'month' => '2001-05']);
+        $values = array_combine($report['chart']['data']['labels'], $report['chart']['data']['datasets'][0]['data']);
+        $this->assertSame(1, $values['2001-05-31']);
+    }
+
+    public function testRegistrationsAreConfinedToTheUsersOfTheCurrentUrl(): void
+    {
+        $here = $this->rawUser('rg8');
+        $elsewhere = $this->rawUser('rg9', 5, 1, null);
+        $other = $this->secondUrl();
+        $this->conn()->executeStatement('INSERT INTO access_url_rel_user (access_url_id, user_id) VALUES (?, ?)', [$other, $elsewhere]);
+        $this->conn()->executeStatement("UPDATE user SET created_at = '2001-06-05 10:00:00' WHERE id IN (?, ?)", [$here, $elsewhere]);
+        $report = $this->report('new_user_registrations', ['rangeStart' => '2001-06-01', 'rangeEnd' => '2001-06-07']);
+        $values = array_combine($report['charts'][0]['data']['labels'], $report['charts'][0]['data']['datasets'][0]['data']);
+        $this->assertSame(1, $values['2001-06-05']);
     }
 
     // ------------------------------------------------------ subscription by day

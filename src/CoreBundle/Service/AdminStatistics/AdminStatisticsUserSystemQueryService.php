@@ -1911,14 +1911,19 @@ final readonly class AdminStatisticsUserSystemQueryService
     private function queryNewUserRegistrations(DateTimeImmutable $start, DateTimeImmutable $end): array
     {
         $connection = $this->entityManager->getConnection();
+        $scoped = $this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId();
+        $params = ['start' => $start->format('Y-m-d').' 00:00:00', 'end' => $end->format('Y-m-d').' 23:59:59'];
+        $types = ['start' => Types::STRING, 'end' => Types::STRING];
+        if ($scoped) {
+            $params['urlId'] = $this->getCurrentAccessUrlId();
+            $types['urlId'] = Types::INTEGER;
+        }
         $rows = $connection->executeQuery(
-            "SELECT DATE_FORMAT(created_at, '%Y-%m-%d') reg_date, COUNT(*) total FROM user "
-            .'WHERE created_at BETWEEN :start AND :end GROUP BY reg_date',
-            [
-                'start' => $start->format('Y-m-d'),
-                'end' => $end->format('Y-m-d'),
-            ],
-            ['start' => Types::STRING, 'end' => Types::STRING]
+            "SELECT DATE_FORMAT(u.created_at, '%Y-%m-%d') reg_date, COUNT(*) total FROM user u "
+            .($scoped ? 'INNER JOIN access_url_rel_user aur ON aur.user_id = u.id AND aur.access_url_id = :urlId ' : '')
+            .'WHERE u.created_at BETWEEN :start AND :end GROUP BY reg_date',
+            $params,
+            $types
         )->fetchAllAssociative();
 
         $values = [];
@@ -1960,12 +1965,20 @@ final readonly class AdminStatisticsUserSystemQueryService
     private function queryRegistrationsByCreator(DateTimeImmutable $start, DateTimeImmutable $end): array
     {
         $connection = $this->entityManager->getConnection();
+        $scoped = $this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId();
+        $params = ['start' => $start->format('Y-m-d').' 00:00:00', 'end' => $end->format('Y-m-d').' 23:59:59'];
+        $types = ['start' => Types::STRING, 'end' => Types::STRING];
+        if ($scoped) {
+            $params['urlId'] = $this->getCurrentAccessUrlId();
+            $types['urlId'] = Types::INTEGER;
+        }
         $rows = $connection->executeQuery(
             'SELECT u.creator_id, COUNT(u.id) total, c.firstname, c.lastname FROM user u '
+            .($scoped ? 'INNER JOIN access_url_rel_user aur ON aur.user_id = u.id AND aur.access_url_id = :urlId ' : '')
             .'LEFT JOIN user c ON u.creator_id = c.id WHERE u.created_at BETWEEN :start AND :end '
             .'AND u.creator_id IS NOT NULL GROUP BY u.creator_id, c.firstname, c.lastname',
-            ['start' => $start->format('Y-m-d'), 'end' => $end->format('Y-m-d')],
-            ['start' => Types::STRING, 'end' => Types::STRING]
+            $params,
+            $types
         )->fetchAllAssociative();
         $values = [];
         foreach ($rows as $row) {

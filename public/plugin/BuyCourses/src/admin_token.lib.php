@@ -83,4 +83,15 @@ if (!function_exists('buycoursesAdminTokenName')) {
             buycoursesRequireAdminToken($redirectUrl);
         }
     }
+
+    /**
+     * True when the (anonymous excluded) user is the buyer of a sale returned by getServiceSale().
+     * Used by the pages that act on a sale id taken from the request.
+     */
+    function buycoursesUserOwnsServiceSale(array $serviceSale, int $userId): bool
+    {
+        $buyerId = (int) ($serviceSale['buyer']['id'] ?? $serviceSale['buyer_id'] ?? 0);
+
+        return $userId > 0 && $buyerId === $userId;
+    }
 }

@@ -220,4 +220,38 @@ final class BuyCoursesAdminAccessTest extends BuyCoursesCharacterizationTestCase
         self::assertStringContainsString('buycourses_admin_sec_token', (string) file_get_contents(self::SRC.'../view/service_sales_report.tpl'));
         self::assertSame(2, substr_count((string) file_get_contents(self::SRC.'../view/paypal_payout.tpl'), 'buycourses_admin_sec_token'));
     }
+
+    public function testOnlyTheBuyerOwnsAServiceSale(): void
+    {
+        $this->conn->insert('plugin_buycourses_services', [
+            'name' => 'bp_service', 'description' => 'bp', 'price' => '100.00', 'duration_days' => 30,
+            'applies_to' => 1, 'owner_id' => 1, 'active' => 1, 'visibility' => 1, 'video_url' => '',
+            'image' => '', 'service_information' => '',
+        ]);
+        $serviceId = (int) $this->conn->lastInsertId();
+        $this->conn->insert('plugin_buycourses_service_sale', [
+            'service_id' => $serviceId, 'reference' => 'bp_sref_'.uniqid('', true),
+            'currency_id' => (int) $this->conn->fetchOne('SELECT id FROM plugin_buycourses_currency WHERE status = 1'),
+            'price' => '100.00', 'node_type' => 1, 'node_id' => 2, 'buyer_id' => 2,
+            'buy_date' => '2026-01-10 08:00:00', 'date_start' => '2026-01-10 08:00:00',
+            'date_end' => '2026-02-09 08:00:00', 'status' => 0, 'payment_type' => 2, 'invoice' => 0,
+        ]);
+        $sale = $this->plugin->getServiceSale((int) $this->conn->lastInsertId());
+
+        self::assertTrue(buycoursesUserOwnsServiceSale($sale, 2));
+        self::assertFalse(buycoursesUserOwnsServiceSale($sale, 1), 'another user (even an admin) is not the buyer');
+        self::assertFalse(buycoursesUserOwnsServiceSale($sale, 0), 'nobody is not the buyer');
+        self::assertFalse(buycoursesUserOwnsServiceSale([], 2), 'unknown sale');
+        self::assertFalse(buycoursesUserOwnsServiceSale([], 0), 'unknown sale and nobody');
+    }
+
+    public function testStripeServiceCancelPageChecksTheBuyerBeforeCancelling(): void
+    {
+        $source = (string) file_get_contents(self::SRC.'service_stripe_cancel.php');
+
+        $guard = (int) strpos($source, 'buycoursesUserOwnsServiceSale(');
+        $cancel = (int) strpos($source, '->cancelServiceSale(');
+        self::assertGreaterThan(0, $guard);
+        self::assertLessThan($cancel, $guard);
+    }
 }

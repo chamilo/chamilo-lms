@@ -120,37 +120,30 @@ class GlossaryManager
      */
     public static function get_glossary_term_by_glossary_name($name)
     {
-        // @todo Filter by like on ORM
-        $table = Database::get_course_table(TABLE_GLOSSARY);
-        $sessionId = api_get_session_id();
-        $course_id = api_get_course_int_id();
-        $sessionCondition = api_get_session_condition($sessionId);
+        $repo = Container::getGlossaryRepository();
+        $course = api_get_course_entity(api_get_course_int_id());
+        $session = api_get_session_entity(api_get_session_id());
 
         $glossaryName = Security::remove_XSS($name);
         $glossaryName = api_convert_encoding($glossaryName, 'UTF-8', 'UTF-8');
-        $glossaryName = trim($glossaryName);
+        $glossaryName = mb_strtolower(trim($glossaryName));
         $parsed = $glossaryName;
 
-        if ('true' === api_get_setting('editor.save_titles_as_html')) {
-            $parsed = api_htmlentities($parsed);
-            $parsed = "%$parsed%";
+        $titlesAsHtml = 'true' === api_get_setting('editor.save_titles_as_html');
+        if ($titlesAsHtml) {
+            $parsed = mb_strtolower(api_htmlentities($glossaryName));
         }
 
-        $sql = "SELECT * FROM $table
-		        WHERE
-		            c_id = $course_id AND
-		            (
-		                title LIKE '".Database::escape_string($glossaryName)."'
-		                OR
-		                title LIKE '".Database::escape_string($parsed)."'
-                    )
-                    $sessionCondition
-                LIMIT 1
-                ";
-        $rs = Database::query($sql);
-
-        if (Database::num_rows($rs) > 0) {
-            return Database::fetch_assoc($rs);
+        /** @var CGlossary $item */
+        foreach ($repo->getResourcesByCourse($course, $session)->getQuery()->getResult() as $item) {
+            $title = mb_strtolower($item->getTitle());
+            if ($title === $glossaryName || ($titlesAsHtml && str_contains($title, $parsed))) {
+                return [
+                    'glossary_id' => $item->getIid(),
+                    'title' => $item->getTitle(),
+                    'description' => $item->getDescription(),
+                ];
+            }
         }
 
         return [];

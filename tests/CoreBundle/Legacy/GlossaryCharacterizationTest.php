@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
-use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
 use Doctrine\DBAL\Connection;
@@ -185,21 +184,24 @@ final class GlossaryCharacterizationTest extends KernelTestCase
 
     public function testGetGlossaryTermByNameFindsTheTermOfTheCourse(): void
     {
-        $this->term('gl_byname', 'the definition');
+        $id = $this->term('gl_byname', 'the definition');
+        $this->term('gl_byname_longer', 'other');
 
-        // PINNED QUIRK: the raw SQL still filters on c_id and session_id, columns c_glossary no longer has, so
-        // every call throws. Intended: ['title' => 'gl_byname', 'description' => ..., 'glossary_id' => $id].
-        $this->expectException(NotAllowedException::class);
-        GlossaryManager::get_glossary_term_by_glossary_name('GL_BYNAME ');
+        // Case-insensitive (the column collation was), trimmed, whole title.
+        $row = GlossaryManager::get_glossary_term_by_glossary_name('GL_BYNAME ');
+
+        $this->assertSame('gl_byname', $row['title']);
+        $this->assertSame('the definition', $row['description']);
+        $this->assertSame($id, (int) $row['glossary_id']);
     }
 
     public function testGetGlossaryTermByNameDoesNotLeakAnotherCourseOrAnUnknownTerm(): void
     {
         $this->term('gl_elsewhere', 'x', 2);
 
-        // PINNED QUIRK (same query): it throws even for an unknown term. Intended: [] for both.
-        $this->expectException(NotAllowedException::class);
-        GlossaryManager::get_glossary_term_by_glossary_name('gl_does_not_exist');
+        $this->assertSame([], GlossaryManager::get_glossary_term_by_glossary_name('gl_elsewhere'));
+        $this->assertSame([], GlossaryManager::get_glossary_term_by_glossary_name('gl_does_not_exist'));
+        $this->assertSame([], GlossaryManager::get_glossary_term_by_glossary_name("x' OR '1'='1"));
     }
 
     public function testGlossaryExistsComparesTitlesWithinTheCourseAndCanExcludeOneId(): void

@@ -1283,7 +1283,7 @@ class Category implements GradebookItem
         $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
-        $sql = "SELECT * FROM $table WHERE parent_id = 0";
+        $sql = "SELECT * FROM $table WHERE (parent_id IS NULL OR parent_id = 0)";
 
         if (!api_is_allowed_to_edit()) {
             $sql .= ' AND visible = 1';
@@ -1380,7 +1380,7 @@ class Category implements GradebookItem
         $courseId = isset($courseId) ? (int) $courseId : null;
         $session_id = isset($session_id) ? (int) $session_id : null;
 
-        $sql = 'SELECT * FROM '.$tbl_grade_categories.' WHERE parent_id = 0';
+        $sql = 'SELECT * FROM '.$tbl_grade_categories.' WHERE (parent_id IS NULL OR parent_id = 0)';
 
         if (!empty($courseId)) {
             $sql .= " AND c_id = $courseId";
@@ -1578,7 +1578,7 @@ class Category implements GradebookItem
              (
                 SELECT c_id FROM '.$tbl_grade_categories.'
                 WHERE
-                    parent_id = 0 AND
+                    (parent_id IS NULL OR parent_id = 0) AND
                     c_id IS NOT NULL
                 )';
         $result = Database::query($sql);

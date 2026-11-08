@@ -531,11 +531,13 @@ final class GradebookCategoryCharacterizationTest extends KernelTestCase
 
         $found = $this->ids((new Category())->get_root_categories_for_student(2, 1, 0));
 
-        // PINNED QUIRK (bug): the query says "parent_id = 0", but a root category is stored with parent_id NULL (and 0
-        // cannot even be stored: FK to gradebook_category.id), so the root listing never finds anything.
-        $this->assertNotContains($visible, $found);
+        // A root category is stored with parent_id NULL (0 cannot even be stored: FK to gradebook_category.id); the
+        // query used to say "parent_id = 0" and so never found any.
+        $this->assertContains($visible, $found);
         $this->assertNotContains($hidden, $found);
         $this->assertNotContains($otherCourse, $found);
+        $child = $this->cat(['parent_id' => $visible]);
+        $this->assertNotContains($child, $this->ids((new Category())->get_root_categories_for_student(2, 1, 0)), 'only roots');
     }
 
     public function testRootCategoriesForAStudentWithoutCourseFollowTheirSubscriptions(): void
@@ -548,8 +550,7 @@ final class GradebookCategoryCharacterizationTest extends KernelTestCase
 
         $found = $this->ids((new Category())->get_root_categories_for_student($student));
 
-        // PINNED QUIRK (bug): same "parent_id = 0" vs NULL mismatch.
-        $this->assertNotContains($mine, $found);
+        $this->assertContains($mine, $found);
         $this->assertNotContains($notMine, $found);
     }
 
@@ -561,12 +562,11 @@ final class GradebookCategoryCharacterizationTest extends KernelTestCase
         $inCourse1 = $this->cat(['c_id' => 1]);
 
         $withCourse = $this->ids((new Category())->get_root_categories_for_teacher($teacher, 2, 0));
-        // PINNED QUIRK (bug): "parent_id = 0" never matches the NULL parent of a root category.
-        $this->assertNotContains($inCourse2, $withCourse);
+        $this->assertContains($inCourse2, $withCourse);
         $this->assertNotContains($inCourse1, $withCourse);
 
         $anyCourse = $this->ids((new Category())->get_root_categories_for_teacher($teacher));
-        $this->assertNotContains($inCourse2, $anyCourse);
+        $this->assertContains($inCourse2, $anyCourse);
         $this->assertNotContains($inCourse1, $anyCourse);
     }
 
@@ -581,9 +581,10 @@ final class GradebookCategoryCharacterizationTest extends KernelTestCase
         $codes = array_column(Category::get_not_created_course_categories($teacher), 0);
         sort($codes);
 
-        // PINNED QUIRK (bug): course 1 has a root category now, yet is still offered as "not created" because the
-        // NOT IN subquery tests "parent_id = 0" instead of NULL.
-        $this->assertSame(['AIACT', 'USINGCHAMILO'], $codes);
+        // course 1 has a root category now, so only course 2 is still offered as "not created" (the NOT IN subquery
+        // used to test "parent_id = 0" instead of NULL and so excluded nothing).
+        $this->assertContains('USINGCHAMILO', $codes);
+        $this->assertNotContains('AIACT', $codes);
         $this->assertSame([], Category::get_not_created_course_categories($this->user()), 'a user who manages nothing');
         $all = array_column(Category::get_all_courses($teacher), 0);
         sort($all);

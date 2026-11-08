@@ -41,6 +41,8 @@ $actions = [
     'calendar_edit',
     'calendar_delete',
     'calendar_all_delete',
+    'lock_attendance',
+    'unlock_attendance',
 ];
 
 $action = 'attendance_list';
@@ -539,6 +541,14 @@ switch ($action) {
         if (!$allowToEdit) {
             api_not_allowed(true);
         }
+        // Teachers may lock a sheet, only platform administrators may unlock it (as the list offers).
+        if ('unlock_attendance' === $action && !api_is_platform_admin()) {
+            api_not_allowed(true);
+        }
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
 
         if ('lock_attendance' === $action) {
             $attendance->lock($attendanceEntity);

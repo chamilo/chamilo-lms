@@ -274,13 +274,13 @@ class Attendance
                         }
                         $actions .= '&nbsp;<a
                             onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;"
-                            href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$id.'">'.
+                            href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$id.$tokenParam.'">'.
                             Display::getMdiIcon(ActionIcon::UNLOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Lock attendance')).'</a>';
                     } else {
                         if (api_is_platform_admin()) {
                             $actions .= '&nbsp;<a
                             onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to unlock the attendance?').'\')) return false;"
-                            href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$id.'">'.
+                            href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$id.$tokenParam.'">'.
                                     Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Unlock attendance')).'</a>';
                         } else {
                             $actions .= '&nbsp;'.Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Locked attendance'));

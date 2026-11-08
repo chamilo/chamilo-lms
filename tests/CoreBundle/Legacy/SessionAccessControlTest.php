@@ -385,4 +385,38 @@ final class SessionAccessControlTest extends AbstractApiTest
             'Rows of foreign sessions are skipped before anything is read about them.'
         );
     }
+
+    /**
+     * getSessionsFollowedByUser() rows come straight from the session table, whose name column is now title:
+     * the anonymisation page read and wrote the removed column (an SQL error on "Anonymize user's sessions").
+     */
+    public function testFollowedSessionRowsCarryTheTitleTheAnonymisationPageReads(): void
+    {
+        $this->fixture();
+        $boss = $this->rawUser('anonstu');
+        $session = $this->rawSession('anon');
+        $this->rel($session, $boss, Session::STUDENT);
+
+        $rows = SessionManager::getSessionsFollowedByUser($boss);
+
+        $this->assertCount(1, $rows);
+        $this->assertSame('sa2_anon', $rows[array_key_first($rows)]['title']);
+        $this->assertArrayNotHasKey('name', $rows[array_key_first($rows)], 'The page must not read name.');
+    }
+
+    /**
+     * Source-level pin: the page admits session admins, anonymises irreversibly and had no token; a session
+     * admin could wipe a platform admin account.
+     */
+    public function testAnonymisationImportIsProtectedAndUsesTheTitleColumn(): void
+    {
+        $source = $this->page('admin/user_anonymize_import.php');
+
+        $this->assertStringContainsString('$step2Form->protect();', $source);
+        $this->assertStringContainsString('!api_is_platform_admin() && UserManager::is_admin($userId)', $source);
+        $this->assertStringContainsString("SET title = '", $source);
+        $this->assertStringNotContainsString("SET name = '", $source);
+        $this->assertStringNotContainsString("\$session['name']", $source);
+        $this->assertStringContainsString('empty($errors)', $source);
+    }
 }

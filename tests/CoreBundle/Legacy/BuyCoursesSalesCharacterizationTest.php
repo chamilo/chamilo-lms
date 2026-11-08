@@ -231,11 +231,13 @@ final class BuyCoursesSalesCharacterizationTest extends BuyCoursesCharacterizati
         $this->plugin->cancelSale($pending);
         $this->assertSame(-1, (int) $this->saleRow($pending)['status']);
 
-        // PINNED QUIRK: no guard on the previous status, a completed sale can be cancelled
-        // (the subscription it granted is not revoked) and a cancelled sale can be completed again.
+        // Fixed: there was no guard on the previous status, so a completed (paid) sale could be cancelled by any
+        // failure/return page while the access it granted was not revoked. Only a pending sale is cancelled now.
         $completed = $this->makeSale(['status' => 1]);
         $this->plugin->cancelSale($completed);
-        $this->assertSame(-1, (int) $this->saleRow($completed)['status']);
+        $this->assertSame(1, (int) $this->saleRow($completed)['status']);
+        // INTENTIONAL: a cancelled sale can still be completed (a late payment notification or the manager
+        // confirming a transfer that arrived after the cancellation).
         $this->assertTrue($this->plugin->completeSale($pending));
         $this->assertSame(1, (int) $this->saleRow($pending)['status']);
     }

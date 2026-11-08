@@ -435,6 +435,11 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30);
         $this->plugin->cancelSubscriptionSale($saleId);
         $this->assertSame(-1, (int) $this->plugin->getSubscriptionSale($saleId)['status']);
+
+        // Only a pending sale is cancelled: a completed one keeps its status (same rule as cancelSale()).
+        $this->conn->executeStatement('UPDATE plugin_buycourses_subscription_rel_sale SET status = 1 WHERE id = ?', [$saleId]);
+        $this->plugin->cancelSubscriptionSale($saleId);
+        $this->assertSame(1, (int) $this->plugin->getSubscriptionSale($saleId)['status']);
     }
 
     public function testSubscriptionSaleListByUserIdOnlyCompleted(): void

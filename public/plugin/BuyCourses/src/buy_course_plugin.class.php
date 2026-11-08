@@ -4641,12 +4641,19 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Update sale status to canceled.
+     * Update sale status to canceled (pending sales only).
      *
      * @param int $saleId The sale ID
      */
     public function cancelSale(int $saleId): void
     {
+        $sale = $this->getSale($saleId);
+        // Only a pending sale can be cancelled: a completed (paid) one keeps its status, whatever failure or
+        // return page asks for the cancellation afterwards.
+        if (empty($sale) || self::SALE_STATUS_PENDING !== (int) $sale['status']) {
+            return;
+        }
+
         $this->updateSaleStatus($saleId, self::SALE_STATUS_CANCELED);
     }
 
@@ -10364,6 +10371,12 @@ class BuyCoursesPlugin extends Plugin
      */
     public function cancelSubscriptionSale(int $saleId): void
     {
+        $sale = $this->getSubscriptionSale($saleId);
+        // Only a pending sale can be cancelled, see cancelSale().
+        if (empty($sale) || self::SALE_STATUS_PENDING !== (int) $sale['status']) {
+            return;
+        }
+
         $this->updateSubscriptionSaleStatus($saleId, self::SALE_STATUS_CANCELED);
     }
 

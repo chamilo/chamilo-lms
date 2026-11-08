@@ -42,14 +42,16 @@ final class AiTutorConversationRepository extends ServiceEntityRepository
             ->from(AiTutorMessage::class, 'm')
             ->andWhere('m.conversation = :c')
             ->setParameter('c', $conversation)
-            ->orderBy('m.createdAt', 'ASC')
+            ->orderBy('m.id', $limit > 0 ? 'DESC' : 'ASC')
         ;
 
         if ($limit > 0) {
             $qb->setMaxResults($limit);
         }
 
-        return $qb->getQuery()->getResult();
+        $messages = $qb->getQuery()->getResult();
+
+        return $limit > 0 ? array_reverse($messages) : $messages;
     }
 
     /**
@@ -84,6 +86,27 @@ final class AiTutorConversationRepository extends ServiceEntityRepository
             ->setParameter('sid', $sinceId)
             ->orderBy('m.id', 'ASC')
             ->setMaxResults(max(1, $limit))
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return AiTutorMessage[]
+     */
+    public function findAssistantMessagesSince(AiTutorConversation $conversation, int $sinceId): array
+    {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('m')
+            ->from(AiTutorMessage::class, 'm')
+            ->andWhere('m.conversation = :c')
+            ->andWhere('m.id > :sid')
+            ->andWhere('m.role = :role')
+            ->setParameter('c', $conversation)
+            ->setParameter('sid', max(0, $sinceId))
+            ->setParameter('role', 'assistant')
+            ->orderBy('m.id', 'ASC')
+            ->setMaxResults(80)
             ->getQuery()
             ->getResult()
         ;

@@ -297,4 +297,28 @@ final class SessionAccessControlTest extends AbstractApiTest
         $this->assertStringNotContainsString('Security::get_token()', $source, 'A new token on each request breaks the links of the previous page.');
         $this->assertStringContainsString('sec_token=', $source, 'The delete links carry the token.');
     }
+
+    /**
+     * Source-level pin: these pages are protected for ONE session id (or only for the role) but act on lists of
+     * session / course ids from the body. A session admin of one session could copy the students of any session,
+     * enrol the coaches of any session as TEACHERS of any course, or move any session into a category.
+     */
+    public function testPagesActingOnPostedIdListsScopeThemToWhatTheUserManages(): void
+    {
+        $students = $this->page('session/add_students_to_session.php');
+        $this->assertStringContainsString("filterManageableSessionIds(\$_POST['sessions'] ?? [])", $students);
+        $this->assertStringContainsString("filterManageableSessionIds(\$_POST['sessions_destination'] ?? [])", $students);
+        $this->assertStringNotContainsString("= \$_POST['sessions'] ?? [];", $students);
+
+        $teachers = $this->page('session/add_teachers_to_session.php');
+        $this->assertStringContainsString("filterManageableSessionIds(\$_POST['sessions'])", $teachers);
+        $this->assertStringContainsString('array_intersect(', $teachers, 'Teacher courses of a non-admin are limited to this session.');
+
+        $category = $this->page('session/add_many_session_to_category.php');
+        $this->assertStringContainsString("Security::check_token('post')", $category);
+        $this->assertStringContainsString('SessionManager::filterManageableSessionIds(', $category);
+        $this->assertStringContainsString('SessionManager::get_all_session_category()', $category, 'The category must be one of the current URL.');
+        $this->assertStringNotContainsString("'>'.\$category['title'].'</option>'", $category, 'Category titles are escaped.');
+        $this->assertStringNotContainsString("<?php echo \$enreg['title']; ?>", $category, 'Session titles are escaped.');
+    }
 }

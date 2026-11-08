@@ -79,21 +79,47 @@ $CourseList = $SessionList = [];
 $courses = $sessions = [];
 $categoryId = isset($_POST['CategorySessionId']) ? intval($_POST['CategorySessionId']) : null;
 
+// Keep the token of the session: regenerating it on every request would invalidate the one of the page that
+// sent the request. Legacy pages are not covered by CsrfProtectionListener.
+$token = Security::get_existing_token();
+
 if (isset($_POST['formSent']) && $_POST['formSent']) {
+    if (!Security::check_token('post')) {
+        api_not_allowed(true);
+    }
     $formSent = $_POST['formSent'];
-    $sessionCategoryList = $_POST['SessionCategoryList'];
+    $sessionCategoryList = isset($_POST['SessionCategoryList']) && is_array($_POST['SessionCategoryList'])
+        ? $_POST['SessionCategoryList']
+        : [];
 
-    if (0 != $categoryId && count($sessionCategoryList) > 0) {
-        // Removing all
-        $sql = "UPDATE $tbl_session SET session_category_id = NULL WHERE session_category_id = $categoryId";
-        Database::query($sql);
+    // The category must be one of the current access URL.
+    $categoryIsKnown = false;
+    foreach ((array) SessionManager::get_all_session_category() as $knownCategory) {
+        if ((int) $knownCategory['id'] === (int) $categoryId) {
+            $categoryIsKnown = true;
+        }
+    }
+
+    if (0 != $categoryId && $categoryIsKnown && count($sessionCategoryList) > 0) {
+        // Only sessions the user manages are moved out of, or into, the category.
+        $inCategory = [];
+        $result = Database::query("SELECT id FROM $tbl_session WHERE session_category_id = ".(int) $categoryId);
+        while ($row = Database::fetch_assoc($result)) {
+            $inCategory[] = (int) $row['id'];
+        }
+        $inCategory = SessionManager::filterManageableSessionIds($inCategory);
+        if (!empty($inCategory)) {
+            Database::query(
+                "UPDATE $tbl_session SET session_category_id = NULL WHERE id IN (".implode(',', $inCategory).')'
+            );
+        }
         // Adding new
-        $sessionCategoryList = array_map('intval', $sessionCategoryList);
-        $session_id = join(',', $sessionCategoryList);
-
-        $sql = "UPDATE $tbl_session SET session_category_id = $categoryId WHERE id in ($session_id) ";
-        Database::query($sql);
-        header('Location: add_many_session_to_category.php?id_category='.$categoryId.'&msg=ok');
+        $sessionCategoryList = SessionManager::filterManageableSessionIds($sessionCategoryList);
+        if (!empty($sessionCategoryList)) {
+            $session_id = join(',', $sessionCategoryList);
+            Database::query("UPDATE $tbl_session SET session_category_id = ".(int) $categoryId." WHERE id in ($session_id) ");
+        }
+        header('Location: add_many_session_to_category.php?id_category='.(int) $categoryId.'&msg=ok');
         exit;
     } else {
         header('Location: add_many_session_to_category.php?msg=error');
@@ -123,7 +149,10 @@ if ((isset($_POST['CategorySessionId']) && 0 == $_POST['formSent']) || isset($_G
     $where = 'WHERE session_category_id != '.$categoryId.' OR session_category_id IS NULL';
     $sql = 'SELECT id, title  FROM '.$tbl_session.' WHERE session_category_id = '.$categoryId.' ORDER BY title';
     $result = Database::query($sql);
-    $rows_category_session = Database::store_result($result);
+    $rows_category_session = array_values(array_filter(
+        Database::store_result($result),
+        static fn (array $row): bool => SessionManager::canManageSessionId((int) $row['id'])
+    ));
 }
 
 $rows_session_category = SessionManager::get_all_session_category();
@@ -141,7 +170,10 @@ if (api_get_multiple_access_url()) {
     $sql = "SELECT id, title  FROM $tbl_session $where ORDER BY title";
 }
 $result = Database::query($sql);
-$rows_session = Database::store_result($result);
+$rows_session = array_values(array_filter(
+    Database::store_result($result),
+    static fn (array $row): bool => SessionManager::canManageSessionId((int) $row['id'])
+));
 ?>
 <form name="formulaire" method="post"
       action="<?php echo api_get_self(); ?>?page=<?php echo $page;
@@ -150,6 +182,7 @@ if (!empty($_GET['add'])) {
 } ?>" style="margin:0px;">
 <?php echo '<legend>'.$tool_name.'</legend>'; ?>
 <input type="hidden" name="formSent" value="1"/>
+<input type="hidden" name="sec_token" value="<?php echo $token; ?>"/>
 <?php
 if (!empty($errorMsg)) {
     echo Display::return_message($errorMsg, 'error'); //main API
@@ -188,9 +221,9 @@ if (!empty($OkMsg)) {
         if (!empty($rows_session_category)) {
             foreach ($rows_session_category as $category) {
                 if ($category['id'] == $categoryId) {
-                    echo '<option value="'.$category['id'].'" selected>'.$category['title'].'</option>';
+                    echo '<option value="'.(int) $category['id'].'" selected>'.api_htmlentities($category['title']).'</option>';
                 } else {
-                    echo '<option value="'.$category['id'].'">'.$category['title'].'</option>';
+                    echo '<option value="'.(int) $category['id'].'">'.api_htmlentities($category['title']).'</option>';
                 }
             }
         }
@@ -220,7 +253,7 @@ if (!empty($OkMsg)) {
         <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'], ENT_QUOTES).'"';
         if (in_array($enreg['id'], $CourseList)) {
             echo 'selected="selected"';
-        } ?>><?php echo $enreg['title']; ?></option>
+        } ?>><?php echo api_htmlentities($enreg['title']); ?></option>
     <?php
     } ?>
     </select></div>
@@ -246,7 +279,7 @@ if (!empty($OkMsg)) {
         <option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'], ENT_QUOTES).'"';
         if (in_array($enreg['id'], $CourseList)) {
             echo 'selected="selected"';
-        } ?>><?php echo $enreg['title']; ?></option>
+        } ?>><?php echo api_htmlentities($enreg['title']); ?></option>
     <?php
     } ?>
   </select></td>

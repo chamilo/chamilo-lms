@@ -226,14 +226,12 @@ class ExtraFieldCharacterizationTest extends AbstractApiTest
 
     // ---------------------------------------------------------------- ordering / save / update / delete
 
-    public function testGetMaxFieldOrderIsAlwaysOneBecauseTheItemTypeIsQuotedAsADotNumberDot(): void
+    public function testGetMaxFieldOrderIsTheHighestOrderOfTheItemTypePlusOne(): void
     {
-        // PINNED QUIRK: the query reads "item_type = '.$this->itemType.'" inside a double-quoted PHP string, so it
-        // compares item_type with the text ".3." (0.3), never matching: MAX() is NULL and the next order is 1,
-        // whatever the existing fields are.
         $this->field(self::COURSE, 'maxorder', 1, ['order' => 9000]);
+        $this->field(self::USER, 'maxorder_other', 1, ['order' => 99000]);
 
-        $this->assertSame(1, (new ExtraField('course'))->get_max_field_order());
+        $this->assertSame(9001, (new ExtraField('course'))->get_max_field_order(), 'Fields of other item types do not count.');
     }
 
     private function saveParams(string $variable, string $displayText = 'Save me'): array
@@ -253,6 +251,7 @@ class ExtraFieldCharacterizationTest extends AbstractApiTest
     public function testSaveCreatesTheFieldAndIsIdempotentOnAnAlreadyNormalisedVariable(): void
     {
         $extraField = new ExtraField('course');
+        $expectedOrder = (int) $this->conn()->fetchOne('SELECT COALESCE(MAX(field_order), 0) + 1 FROM extra_field WHERE item_type = ?', [self::COURSE]);
 
         $id = $extraField->save($this->saveParams('xf_save_me'));
 
@@ -260,7 +259,7 @@ class ExtraFieldCharacterizationTest extends AbstractApiTest
         $this->assertSame('xf_save_me', $row['variable']);
         $this->assertSame(self::COURSE, (int) $row['item_type']);
         $this->assertSame(ExtraField::FIELD_TYPE_TEXT, (int) $row['value_type']);
-        $this->assertSame(1, (int) $row['field_order'], 'Order comes from get_max_field_order() (see its pinned quirk).');
+        $this->assertSame($expectedOrder, (int) $row['field_order'], 'The new field is appended after the last one.');
 
         $again = $extraField->save($this->saveParams('xf_save_me'));
         $this->assertSame($id, (int) $again, 'Saving an existing variable returns the existing id.');

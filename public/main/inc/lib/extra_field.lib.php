@@ -2253,7 +2253,7 @@ class ExtraField extends Model
         $sql = "SELECT MAX(field_order)
                 FROM {$this->table}
                 WHERE
-                    item_type = '.$this->itemType.'";
+                    item_type = ".(int) $this->itemType;
         $res = Database::query($sql);
 
         $order = 0;

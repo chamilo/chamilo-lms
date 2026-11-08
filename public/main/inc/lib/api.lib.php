@@ -2619,7 +2619,7 @@ function api_get_session_visibility(
     }
 
     // If I'm a coach the visibility can change in my favor depending in the coach dates.
-    $isCoach = api_is_coach($session_id, $courseId);
+    $isCoach = api_is_coach((int) $session_id, null === $courseId ? null : (int) $courseId, true, (int) $userId);
 
     if ($isCoach) {
         // Test start date.

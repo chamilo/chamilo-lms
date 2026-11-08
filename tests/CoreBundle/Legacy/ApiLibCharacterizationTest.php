@@ -465,20 +465,23 @@ class ApiLibCharacterizationTest extends AbstractApiTest
         $this->assertSame(SESSION_INVISIBLE, api_get_session_visibility($sid, 1), 'Non coaches keep the session dates.');
     }
 
-    public function testSessionVisibilityCoachRuleIgnoresTheGivenUserId(): void
+    public function testSessionVisibilityCoachRuleUsesTheGivenUserId(): void
     {
-        // PINNED QUIRK: $userId is only used for the per-student duration; the coach rule asks
-        // api_is_coach() about the LOGGED-IN user, so a coach asked about through an explicit id does not
-        // get the coach window while somebody else is logged in.
+        // The $userId argument names the user the visibility is computed for: the coach window must apply to
+        // that user whoever is logged in, and a coach who is logged in must not lend it to somebody else.
         $coach = $this->rawUser('coachvis2');
         $sid = $this->rawSession('coachwin2', '2090-01-01 00:00:00', '2091-01-01 00:00:00', [
             'coach_start' => '2001-01-01 00:00:00',
             'coach_end' => '2090-01-01 00:00:00',
         ]);
         $this->sessionUser($sid, $coach, 3);
-        $this->loginAs($this->rawUser('bystander'));
+        $bystander = $this->rawUser('bystander');
+        $this->loginAs($bystander);
 
-        $this->assertSame(SESSION_INVISIBLE, api_get_session_visibility($sid, 1, true, $coach));
+        $this->assertSame(SESSION_AVAILABLE, api_get_session_visibility($sid, 1, true, $coach));
+
+        $this->loginAs($coach);
+        $this->assertSame(SESSION_INVISIBLE, api_get_session_visibility($sid, 1, true, $bystander));
     }
 
     // ---------------------------------------------------------------- coaches

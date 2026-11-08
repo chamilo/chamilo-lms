@@ -6001,7 +6001,7 @@ final readonly class GlobalReportingSectionQueryService
             $rows = $this->connection->fetchAllAssociative(
                 "SELECT MIN(item.iid) AS id,
                         COALESCE(NULLIF(TRIM(field_values.field_value), ''), 'Unknown') AS author,
-                        COUNT(*) AS items,
+                        COUNT(DISTINCT item.iid) AS items,
                         GROUP_CONCAT(DISTINCT course.title ORDER BY course.title SEPARATOR ', ') AS courses
                    FROM c_lp_item item
                    INNER JOIN c_lp lp ON lp.iid = item.lp_id
@@ -6021,7 +6021,7 @@ final readonly class GlobalReportingSectionQueryService
             $rows = $this->connection->fetchAllAssociative(
                 "SELECT MIN(lp.iid) AS id,
                         COALESCE(NULLIF(TRIM(lp.author), ''), 'Unknown') AS author,
-                        COUNT(*) AS items,
+                        COUNT(DISTINCT lp.iid) AS items,
                         GROUP_CONCAT(DISTINCT course.title ORDER BY course.title SEPARATOR ', ') AS courses
                    FROM c_lp lp
                    INNER JOIN resource_link ON resource_link.resource_node_id = lp.resource_node_id

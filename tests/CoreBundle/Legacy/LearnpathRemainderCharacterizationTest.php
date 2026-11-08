@@ -950,8 +950,9 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
         $this->assertSame('none', $lp->isFirstOrLastItem($b));
         $this->assertSame('last', $lp->isFirstOrLastItem($c));
         $this->assertSame('both', $this->lp($single)->isFirstOrLastItem($only));
-        // PINNED QUIRK: a folder (or unknown id) is not in the list: array_search() returns false, which matches case 0.
-        $this->assertSame('first', $lp->isFirstOrLastItem($dir));
+        // A folder (or unknown id) is not in the list: array_search() returns false, which used to match case 0.
+        $this->assertSame('none', $lp->isFirstOrLastItem($dir));
+        $this->assertSame('none', $lp->isFirstOrLastItem(999999999));
         $this->assertSame(['chapter_types' => ['dir']], ['chapter_types' => learnpath::getChapterTypes()]);
     }
 

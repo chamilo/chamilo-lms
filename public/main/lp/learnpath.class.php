@@ -8739,6 +8739,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         $lastLpItemIndex = count($lpItemId) - 1;
         $position = array_search($currentItemId, $lpItemId);
+        if (false === $position) {
+            return 'none';
+        }
 
         switch ($position) {
             case 0:

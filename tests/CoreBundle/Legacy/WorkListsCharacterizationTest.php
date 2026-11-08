@@ -1056,4 +1056,181 @@ final class WorkListsCharacterizationTest extends KernelTestCase
 
         $this->assertSame([], deleteAllWorkPerUser($this->other(), $this->course(1)));
     }
+
+    // ----------------------------------------------------------------- comments
+
+    /**
+     * A comment on a submission, with its resource node (and one attached file when asked).
+     */
+    private function comment(int $workId, string $text, bool $withFile = false): int
+    {
+        $typeId = (int) $this->conn->fetchOne("SELECT id FROM resource_type WHERE title = 'student_publications_comments'");
+        $now = '2020-01-02 00:00:00';
+        $this->conn->executeStatement(
+            'INSERT INTO resource_node (resource_type_id, creator_id, title, slug, level, path, created_at, updated_at, public, uuid)
+             VALUES (?, ?, ?, ?, 1, ?, ?, ?, 0, ?)',
+            [$typeId, $this->admin()->getId(), 'w2_cnode', 'w2-cnode-'.(++$this->seq), 'w2-cnode-'.$this->seq.'/', $now, $now, Uuid::v4()->toBinary()]
+        );
+        $nodeId = (int) $this->conn->lastInsertId();
+        $this->conn->insert('c_student_publication_comment', [
+            'resource_node_id' => $nodeId,
+            'work_id' => $workId,
+            'user_id' => $this->admin()->getId(),
+            'comment' => $text,
+            'sent_at' => $now,
+        ]);
+        $commentId = (int) $this->conn->lastInsertId();
+        if ($withFile) {
+            $this->conn->insert('resource_file', [
+                'resource_node_id' => $nodeId,
+                'title' => 'w2_attachment.txt',
+                'original_name' => 'w2_attachment.txt',
+                'size' => 3,
+                'updated_at' => $now,
+                'created_at' => $now,
+            ]);
+        }
+
+        return $commentId;
+    }
+
+    private function filesOfComment(int $commentId): int
+    {
+        return (int) $this->conn->fetchOne(
+            'SELECT COUNT(*) FROM resource_file f INNER JOIN c_student_publication_comment c ON c.resource_node_id = f.resource_node_id WHERE c.iid = ?',
+            [$commentId]
+        );
+    }
+
+    public function testCommentsOfASubmissionAreListedWithTheirTextAndAttachment(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $folder = $this->folder();
+        $work = $this->submission($folder, $this->learner());
+        $other = $this->submission($folder, $this->other());
+        $plain = $this->comment($work, 'w2_plain');
+        $withFile = $this->comment($work, 'w2_with_file', true);
+        $this->comment($other, 'w2_not_mine');
+
+        $entity = Container::getStudentPublicationRepository()->find($work);
+        $comments = getWorkComments($entity);
+
+        $this->assertCount(2, $comments);
+        $byText = array_column($comments, null, 'comment');
+        $this->assertNull($byText['w2_plain']['delete_file_url'], 'no attachment, nothing to delete');
+        $this->assertSame('w2_attachment.txt', $byText['w2_with_file']['file_name_to_show']);
+        $this->assertStringContainsString('action=delete_attachment&comment_id='.$withFile, $byText['w2_with_file']['delete_file_url']);
+        $this->assertStringContainsString('&id='.$work.'&', $byText['w2_with_file']['delete_file_url']);
+        $this->assertStringContainsString('work_sec_token='.workActionToken(), $byText['w2_with_file']['delete_file_url'], 'the removal link carries the CSRF token');
+        $this->assertNotSame($plain, $withFile);
+    }
+
+    public function testCommentWithoutACourseInContextIsEmpty(): void
+    {
+        $this->setContext($this->admin(), null);
+        $folder = $this->folder();
+        $work = $this->submission($folder, $this->learner());
+        $this->comment($work, 'w2_x');
+
+        $entity = Container::getStudentPublicationRepository()->find($work);
+
+        // getWorkComment() answers [] when there is no course to build the links from.
+        $this->assertSame([[]], getWorkComments($entity));
+    }
+
+    public function testDeletingACommentFileKeepsTheCommentAndOtherCommentsFiles(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $folder = $this->folder();
+        $work = $this->submission($folder, $this->learner());
+        $target = $this->comment($work, 'w2_target', true);
+        $other = $this->comment($work, 'w2_other', true);
+
+        deleteCommentFile($target);
+
+        $this->assertSame(0, $this->filesOfComment($target));
+        $this->assertSame(1, $this->filesOfComment($other), 'only the attachment of that comment goes');
+        $this->assertSame(
+            'w2_target',
+            $this->conn->fetchOne('SELECT comment FROM c_student_publication_comment WHERE iid = ?', [$target]),
+            'the comment text stays'
+        );
+    }
+
+    public function testDeletingTheFileOfAnUnknownCommentDoesNothing(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+
+        $this->assertNull(deleteCommentFile(999999999));
+    }
+
+    public function testAnEmptyCommentWithoutAttachmentIsNotSaved(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $folder = $this->folder();
+        $work = $this->submission($folder, $this->learner());
+        $entity = Container::getStudentPublicationRepository()->find($work);
+        $before = (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_student_publication_comment WHERE work_id = ?', [$work]);
+
+        $result = addWorkComment(api_get_course_info(), $this->admin()->getId(), ['title' => 'x'], $entity, ['comment' => '']);
+
+        $this->assertFalse($result);
+        $this->assertSame($before, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_student_publication_comment WHERE work_id = ?', [$work]));
+    }
+
+    // ----------------------------------------------------------------- marks of the assignment
+
+    public function testUpdateWorkChangesTheMaximumMarkTheWeightAndTheDescriptionOfThatFolderOnly(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $folder = $this->folder(['description' => 'w2_before']);
+        $other = $this->folder(['description' => 'w2_untouched', 'qualification' => 3]);
+
+        updateWork(
+            $folder,
+            ['description' => 'w2_after', 'qualification' => 12.5, 'weight' => '40', 'allow_text_assignment' => 1],
+            api_get_course_info()
+        );
+
+        $this->assertSame('w2_after', $this->field($folder, 'description'));
+        $this->assertEquals(12.5, $this->field($folder, 'qualification'));
+        $this->assertEquals(40.0, $this->field($folder, 'weight'));
+        $this->assertSame(1, (int) $this->field($folder, 'allow_text_assignment'));
+        $this->assertSame('w2_untouched', $this->field($other, 'description'));
+        $this->assertEquals(3, $this->field($other, 'qualification'));
+    }
+
+    public function testFormatWorkScoreShowsTheMarkOverTheMaximumWithAColourByRatio(): void
+    {
+        $good = formatWorkScore(8, 10);
+        $middle = formatWorkScore(6, 10);
+        $bad = formatWorkScore(3, 10);
+
+        $this->assertSame('8.0 / 10', trim(strip_tags($good)));
+        $this->assertStringContainsString('badge--info', $good);
+        $this->assertStringContainsString('badge--warning', $middle);
+        $this->assertStringContainsString('badge--error', $bad);
+        // PINNED QUIRK: the maximum is cast to int, a maximum of 12.5 is shown (and used) as 12.
+        $this->assertSame('6.0 / 12', trim(strip_tags(formatWorkScore(6, 12.5))));
+        $this->assertStringContainsString('badge--error', formatWorkScore(5, 0), 'no maximum: ratio 0');
+    }
+
+    public function testTotalWorkScoreAddsTheMarksOfTheRows(): void
+    {
+        $this->assertSame(0, getTotalWorkScore([]));
+        $this->assertEquals(7.5, getTotalWorkScore([['qualification_score' => 5], ['qualification_score' => 2.5]]));
+    }
+
+    // ----------------------------------------------------------------- dead helper
+
+    public function testGetAllWorkStillAsksForTheColumnsThatNoLongerExist(): void
+    {
+        $this->subscribe($this->learner(), 1);
+        $this->setContext($this->learner(), null);
+
+        // PINNED QUIRK: no caller; it reads work.c_id / work.session_id / work.id / work.url, none of which exist.
+        // Marked @deprecated: the pending list (getPendingWorkList) replaced it.
+        $this->expectException(\Throwable::class);
+        getAllWork(0, 10, 'title', 'asc', '', false, 0, 0);
+    }
 }

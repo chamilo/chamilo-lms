@@ -2484,6 +2484,10 @@ function get_work_user_list(
     }
 }
 
+/**
+ * @deprecated No caller, and its SQL reads the removed work.c_id/session_id/id/url columns (it always fails):
+ *             getPendingWorkList() replaced it.
+ */
 function getAllWork(
     $start,
     $limit,

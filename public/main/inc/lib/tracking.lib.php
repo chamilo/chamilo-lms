@@ -3994,8 +3994,8 @@ class Tracking
         }
 
         $limitCondition = null;
-        if (!empty($start) && !empty($limit)) {
-            $limitCondition = " LIMIT ".intval($start).", ".intval($limit);
+        if (!empty($limit)) {
+            $limitCondition = " LIMIT ".(int) $start.", ".(int) $limit;
         }
 
         $keywordCondition = null;

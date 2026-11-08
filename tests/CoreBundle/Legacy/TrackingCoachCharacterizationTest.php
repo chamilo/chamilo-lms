@@ -420,9 +420,9 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         $this->assertSame([$three], array_keys($found));
         $this->assertSame(1, Tracking::get_sessions_coached_by_user($coach, 0, 0, true, 'tc_mid'));
 
-        // PINNED QUIRK: LIMIT is only applied when BOTH start and limit are non-zero, so the first page
-        // (start = 0) is never limited.
-        $this->assertCount(3, Tracking::get_sessions_coached_by_user($coach, 0, 2));
+        // Fixed: LIMIT was only applied when BOTH start and limit were non-zero, so the first page (start = 0)
+        // was never limited. A limit alone now cuts the first page; no limit still means everything.
+        $this->assertCount(2, Tracking::get_sessions_coached_by_user($coach, 0, 2));
         $this->assertCount(2, Tracking::get_sessions_coached_by_user($coach, 1, 2));
         // Fixed: the query put LIMIT before ORDER BY (a syntax error), so sorting a page failed with the generic
         // "unknown error". The page is now cut from the sorted list.

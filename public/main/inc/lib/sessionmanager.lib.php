@@ -4398,7 +4398,9 @@ class SessionManager
         }
 
         $whereConditions .= $keywordCondition;
-        $subQuery = !empty($sessionsQuery) ? (' AND s.id IN ('.implode(',', $sessionsQuery).')') : '';
+        // A user who follows no session must see no session: without any id the condition used to be dropped
+        // and every session of the access URL was returned.
+        $subQuery = !empty($sessionsQuery) ? (' AND s.id IN ('.implode(',', array_map('intval', $sessionsQuery)).')') : ' AND 1 = 0 ';
 
         $sql = " $select
                 FROM $tbl_session s

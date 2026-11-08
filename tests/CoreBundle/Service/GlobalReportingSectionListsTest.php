@@ -759,4 +759,72 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
         $this->conn()->executeStatement('UPDATE access_url_rel_session SET access_url_id = ? WHERE session_id = ?', [$other, $session]);
         $this->assertSame([], $this->section($this->admin(), 'courses', ['sessionId' => $session])['items']);
     }
+
+    /**
+     * The course progress is the average, over its learners, of their progress in the learning paths of the course:
+     * two learners who both finished the only learning path show 100 %, and a learner who never opened a learning
+     * path counts as 0 %.
+     */
+    public function testTrackedCoursesLearningPathProgressAveragesTheLearners(): void
+    {
+        [$teacher, $ctx] = $this->courseTeacher('r2t4', 2);
+        $lp = $this->lp();
+        foreach (['a', 'b'] as $tag) {
+            $learner = $this->rawUser('r2t4'.$tag);
+            $this->courseUser($learner, 2, 5);
+            $this->lpView($learner, 2, 100, 0, $lp);
+        }
+
+        $row = $this->section($ctx, 'courses', ['userId' => $teacher])['items'][0];
+
+        $this->assertSame(2, $row['learners']);
+        $this->assertSame(100.0, $row['learningPathProgress']);
+    }
+
+    public function testTrackedCoursesLearningPathProgressCountsTheLatestViewOfEachLearnerAndLearningPath(): void
+    {
+        [$teacher, $ctx] = $this->courseTeacher('r2t5', 2);
+        $lp1 = $this->lp();
+        $lp2 = $this->lp();
+        $a = $this->rawUser('r2t5a');
+        $b = $this->rawUser('r2t5b');
+        $this->courseUser($a, 2, 5);
+        $this->courseUser($b, 2, 5);
+        $this->lpView($a, 2, 10, 0, $lp1);
+        $this->conn()->executeStatement('UPDATE c_lp_view SET view_count = 1 WHERE user_id = ?', [$a]);
+        $this->conn()->executeStatement('INSERT INTO c_lp_view (user_id, lp_id, c_id, session_id, view_count, last_item, progress) VALUES (?, ?, 2, NULL, 2, 0, 100)', [$a, $lp1]);
+        $this->lpView($a, 2, 50, 0, $lp2);
+        $this->lpView($b, 2, 30, 0, $lp1);
+
+        $row = $this->section($ctx, 'courses', ['userId' => $teacher])['items'][0];
+
+        // Learner a: lp1 latest view 100, lp2 50; learner b: lp1 30. (100 + 50 + 30) / 2 learning paths / 2 learners.
+        $this->assertSame(45.0, $row['learningPathProgress']);
+    }
+
+    public function testTrackedCoursesAverageLearningPathScoreIsTheMeanOfTheLatestExerciseAttempts(): void
+    {
+        [$teacher, $ctx] = $this->courseTeacher('r2t6', 2);
+        $lp = $this->lp();
+        $learners = [];
+        foreach (['a', 'b'] as $tag) {
+            $learners[$tag] = $this->rawUser('r2t6'.$tag);
+            $this->courseUser($learners[$tag], 2, 5);
+        }
+        $insert = function (int $user, float $score, string $date) use ($lp): void {
+            $this->conn()->executeStatement(
+                "INSERT INTO track_e_exercises (exe_user_id, c_id, session_id, exe_exo_id, exe_date, score, max_score, user_ip, status, data_tracking,
+                    start_date, steps_counter, orig_lp_id, orig_lp_item_id, exe_duration, orig_lp_item_view_id, questions_to_check)
+                 VALUES (?, 2, NULL, 1, ?, ?, 10, '', '', '', '2001-01-01 09:00:00', 0, ?, 7, 0, 0, '')",
+                [$user, $date, $score, $lp]
+            );
+        };
+        $insert($learners['a'], 2, '2001-01-01 10:00:00');
+        $insert($learners['a'], 8, '2001-01-02 10:00:00');
+        $insert($learners['b'], 6, '2001-01-01 10:00:00');
+
+        $row = $this->section($ctx, 'courses', ['userId' => $teacher])['items'][0];
+
+        $this->assertSame(70.0, $row['averageLearningPathScore'], '(80 + 60) / 2: only the latest attempt of each learner counts');
+    }
 }

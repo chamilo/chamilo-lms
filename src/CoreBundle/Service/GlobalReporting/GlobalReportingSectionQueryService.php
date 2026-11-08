@@ -3255,13 +3255,13 @@ final readonly class GlobalReportingSectionQueryService
         }
 
         $rows = $this->connection->fetchAllAssociative(
-            "SELECT ranked.c_id, AVG(ranked.progress) AS progress
+            "SELECT ranked.c_id, SUM(ranked.progress) / COUNT(DISTINCT ranked.lp_id) AS progress
                FROM (
                     SELECT lp_view.c_id,
                            lp_view.lp_id,
                            COALESCE(lp_view.progress, 0) AS progress,
                            ROW_NUMBER() OVER (
-                               PARTITION BY lp_view.c_id, lp_view.lp_id
+                               PARTITION BY lp_view.c_id, lp_view.lp_id, lp_view.user_id
                                ORDER BY lp_view.view_count DESC, lp_view.iid DESC
                            ) AS rowNumber
                       FROM c_lp_view lp_view
@@ -3382,7 +3382,7 @@ final readonly class GlobalReportingSectionQueryService
                 continue;
             }
 
-            $result[$courseId] = round((float) $row['score'] / $learners, 2);
+            $result[$courseId] = round((float) $row['score'], 2);
         }
 
         return $result;

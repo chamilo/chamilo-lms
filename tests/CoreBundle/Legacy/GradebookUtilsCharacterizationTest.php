@@ -428,29 +428,29 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
 
     public function testGetAllUsersForACourseIndependentEvaluationListsThePeopleWithAResult(): void
     {
-        $withResult = $this->user('res', 'Res', 'Res');
+        $withResult = $this->user('res', 'Zulu', 'Alpha');
+        $second = $this->user('res2', 'Alpha', 'Zulu');
         $noResult = $this->user('nores', 'No', 'No');
         $this->subscribe($noResult, 2);
         $evalId = $this->evaluation(null, null);
-        $this->conn->executeStatement(
-            "INSERT INTO gradebook_result (evaluation_id, user_id, score, created_at) VALUES (?, ?, 5, '2001-01-01 00:00:00')",
-            [$evalId, $withResult]
-        );
+        foreach ([$withResult, $second] as $uid) {
+            $this->conn->executeStatement(
+                "INSERT INTO gradebook_result (evaluation_id, user_id, score, created_at) VALUES (?, ?, 5, '2001-01-01 00:00:00')",
+                [$evalId, $uid]
+            );
+        }
         \ChamiloSession::write('_real_cid', 1);
         $eval = new Evaluation();
         $eval->set_id($evalId);
 
-        if (api_is_western_name_order()) {
-            // PINNED QUIRK: the western-name-order branch appends a SECOND "ORDER BY" to the query
-            // ("ORDER BY lastname, firstname ORDER BY firstname, lastname"), a syntax error: the flat
-            // view of a course-independent evaluation breaks for every language written first-name first.
-            $this->expectException(\Throwable::class);
-        }
-
+        // The query used to get a second "ORDER BY" appended for first-name-first languages, a syntax
+        // error: the flat view of a course-independent evaluation broke for them.
         $users = GradebookUtils::get_all_users([$eval]);
 
-        $this->assertArrayHasKey('STUD'.$withResult, $users);
         $this->assertArrayNotHasKey('STUD'.$noResult, $users);
+        $keys = array_values(array_intersect(array_keys($users), ['STUD'.$withResult, 'STUD'.$second]));
+        $expected = api_is_western_name_order() ? ['STUD'.$withResult, 'STUD'.$second] : ['STUD'.$second, 'STUD'.$withResult];
+        $this->assertSame($expected, $keys);
     }
 
     // ---------------------------------------------------------------- certificates

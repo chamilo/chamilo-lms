@@ -1152,9 +1152,10 @@ class GradebookUtils
                             res.evaluation_id = '.$eval->get_id().' AND
                             res.user_id = user.id
                         ';
-                $sql .= ' ORDER BY lastname, firstname';
                 if (api_is_western_name_order()) {
                     $sql .= ' ORDER BY firstname, lastname';
+                } else {
+                    $sql .= ' ORDER BY lastname, firstname';
                 }
 
                 $result = Database::query($sql);

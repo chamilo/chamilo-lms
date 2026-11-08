@@ -949,8 +949,9 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertSame([], $item->objectives);
         $item->add_objective(0, ['li_o', 'passed', 1, 2, 0]);
         $this->assertCount(1, $item->objectives);
-        // PINNED QUIRK: the counter is count()+1 (one more than the number of objectives).
-        $this->assertSame(2, $item->get_objectives_count());
+        // Fixed: the counter was count()+1, one more than the number of objectives (the database path of
+        // load_from_db() counts the rows, so the same item answered differently depending on where it came from).
+        $this->assertSame(1, $item->get_objectives_count());
     }
 
     // ---------------------------------------------------------------- time

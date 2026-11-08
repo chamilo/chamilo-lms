@@ -273,9 +273,9 @@ class learnpathItem
             return null;
         }
         $this->objectives[$index] = $params;
-        // Take the current maximum index to generate the objectives_count.
-        if ((count($this->objectives) + 1) > $this->objectives_count) {
-            $this->objectives_count = (count($this->objectives) + 1);
+        // The objectives count is the number of objectives, like the one loaded from the database.
+        if (count($this->objectives) > $this->objectives_count) {
+            $this->objectives_count = count($this->objectives);
         }
     }
 

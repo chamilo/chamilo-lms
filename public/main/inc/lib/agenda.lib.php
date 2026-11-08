@@ -634,6 +634,8 @@ class Agenda
     /**
      * @param int  $id
      * @param bool $deleteAllItemsFromSerie
+     *
+     * @deprecated no caller; deletion goes through the CCalendarEvent API operations.
      */
     public function deleteEvent($id, $deleteAllItemsFromSerie = false)
     {
@@ -736,6 +738,8 @@ class Agenda
      * @param string $format
      *
      * @return array|string
+     *
+     * @deprecated no caller; the calendar tool is served by API Platform (CCalendarEvent).
      */
     public function getEvents(
         $start,
@@ -927,6 +931,8 @@ class Agenda
      * @param int $minute_delta
      *
      * @return int
+     *
+     * @deprecated no caller; updates c_calendar_event.c_id/id/end_date, columns that no longer exist (the calendar tool is Vue + API Platform).
      */
     public function resizeEvent($id, $minute_delta)
     {
@@ -961,6 +967,8 @@ class Agenda
      * @param int $allDay
      *
      * @return int
+     *
+     * @deprecated no caller; updates c_calendar_event.c_id/id/start_date, columns that no longer exist.
      */
     public function move_event($id, $minute_delta, $allDay)
     {
@@ -1067,6 +1075,8 @@ class Agenda
      * @param int $end
      *
      * @return array
+     *
+     * @deprecated no caller; reads the personal_agenda table, which no longer exists.
      */
     public function getPersonalEvents($start, $end)
     {
@@ -1144,6 +1154,8 @@ class Agenda
      * @param string $color
      *
      * @return array
+     *
+     * @deprecated only called by getEvents(), itself without caller.
      */
     public function getSessionEvents(
         $start,
@@ -1179,6 +1191,8 @@ class Agenda
      * @param string $color
      *
      * @return array
+     *
+     * @deprecated only called by getEvents(), itself without caller.
      */
     public function getCourseEvents(
         $start,
@@ -1573,6 +1587,8 @@ class Agenda
      * @param int $end   tms
      *
      * @return array
+     *
+     * @deprecated no caller; reads the sys_calendar table, which no longer exists.
      */
     public function getPlatformEvents($start, $end)
     {
@@ -1684,6 +1700,8 @@ class Agenda
      * @param int   $visibility 0= invisible, 1 visible
      * @param array $courseInfo
      * @param int   $userId
+     *
+     * @deprecated no caller; visibility is changed through ResourceController::changeVisibility().
      */
     public static function changeVisibility(
         $id,
@@ -1717,6 +1735,8 @@ class Agenda
      * @param array $courseInfo
      *
      * @return array with the post info
+     *
+     * @deprecated only called by updateAttachment() (no caller passes attachments); selects c_id/path columns that c_calendar_event_attachment no longer has.
      */
     public function getAttachment($attachmentId, $eventId, $courseInfo)
     {
@@ -1848,6 +1868,8 @@ class Agenda
      * @param int $eventId
      *
      * @return array
+     *
+     * @deprecated only called by deleteEvent(); filters c_calendar_event on c_id, which no longer exists.
      */
     public function getAllRepeatEvents($eventId)
     {
@@ -2011,6 +2033,8 @@ class Agenda
      * @param    string    Type of view (month_view, week_view, day_view)
      *
      * @return array The results of the database query, or null if not found
+     *
+     * @deprecated no caller; reads the sys_calendar table, which no longer exists.
      */
     public static function get_global_agenda_items(
         $agendaitems,
@@ -2139,6 +2163,8 @@ class Agenda
     /**
      * This function retrieves all the personal agenda items and add them to the agenda items found by the other
      * functions.
+     *
+     * @deprecated no caller; reads the personal_agenda table, which no longer exists.
      */
     public static function get_personal_agenda_items(
         $user_id,
@@ -2263,6 +2289,8 @@ class Agenda
      * @param    array    Array of strings containing long week day names (deprecated, you can send an empty array
      *                          instead)
      * @param    string    The month name
+     *
+     * @deprecated no caller; relies on the removed personal/global agenda queries.
      */
     public static function display_mymonthcalendar(
         $user_id,

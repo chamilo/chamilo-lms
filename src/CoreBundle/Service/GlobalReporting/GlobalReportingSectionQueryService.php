@@ -5280,7 +5280,12 @@ final readonly class GlobalReportingSectionQueryService
                     usr.email,
                     COALESCE(access_metrics.timeSeconds, 0) AS timeSeconds,
                     COALESCE(lp_metrics.progress, 0) AS progress,
-                    CASE WHEN certificate.id IS NULL THEN \'No\' ELSE \'Yes\' END AS certificate,
+                    CASE WHEN EXISTS (
+                        SELECT 1
+                          FROM gradebook_certificate certificate
+                          INNER JOIN gradebook_category category ON category.id = certificate.cat_id
+                         WHERE category.c_id = course.id AND certificate.user_id = usr.id
+                    ) THEN \'Yes\' ELSE \'No\' END AS certificate,
                     COALESCE(lp_metrics.completed, 0) AS completedLearningPaths
                FROM user usr
                INNER JOIN course_rel_user subscription ON subscription.user_id = usr.id
@@ -5300,12 +5305,9 @@ final readonly class GlobalReportingSectionQueryService
                       FROM c_lp_view
                   GROUP BY user_id, c_id
                ) lp_metrics ON lp_metrics.user_id = usr.id AND lp_metrics.c_id = course.id
-               LEFT JOIN gradebook_category category ON category.c_id = course.id
-               LEFT JOIN gradebook_certificate certificate
-                   ON certificate.cat_id = category.id AND certificate.user_id = usr.id
               WHERE usr.id IN (:userIds)
            GROUP BY course.id, course.title, usr.id, usr.firstname, usr.lastname, usr.email,
-                    access_metrics.timeSeconds, lp_metrics.progress, lp_metrics.completed, certificate.id
+                    access_metrics.timeSeconds, lp_metrics.progress, lp_metrics.completed
            ORDER BY course.title ASC, usr.lastname ASC, usr.firstname ASC',
             ['accessUrlId' => $context->accessUrlId, 'userIds' => $userIds],
             ['accessUrlId' => Types::INTEGER, 'userIds' => ArrayParameterType::INTEGER],

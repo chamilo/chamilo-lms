@@ -403,6 +403,24 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
         $this->assertContains('email', array_column($result['columns'], 'key'));
     }
 
+    /**
+     * A learner subscribed to a course is one row of the report (its id is "course-user"), however many gradebook
+     * categories the course has: a root category and a sub-category are the normal layout.
+     */
+    public function testCompanyReportDoesNotDuplicateASubscriptionWhenTheCourseHasSeveralGradebookCategories(): void
+    {
+        $a = $this->rawUser('r2y6');
+        $this->courseUser($a, 1);
+        $root = $this->category(1);
+        $this->category(1, null, $root);
+        $this->certificate($root, $a, '2001-01-05 10:00:00');
+
+        $rows = $this->companyRowsOf($this->section($this->admin(), 'company', ['itemsPerPage' => 100]), [$a]);
+
+        $this->assertCount(1, $rows);
+        $this->assertSame('Yes', $rows[0]['certificate']);
+    }
+
     public function testCompanyReportOnlyListsCoursesOfTheUrlAndPages(): void
     {
         $other = $this->secondUrl();

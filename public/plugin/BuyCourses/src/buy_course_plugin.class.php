@@ -11580,7 +11580,7 @@ class BuyCoursesPlugin extends Plugin
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
 
-        if (null != $status) {
+        if (null !== $status) {
             return Database::select(
                 ['*'],
                 $couponTable,

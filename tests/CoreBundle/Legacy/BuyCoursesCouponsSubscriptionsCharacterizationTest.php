@@ -127,16 +127,16 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
     {
         $on = $this->makeCoupon('BC_ON', 1, 5, active: 1);
         $off = $this->makeCoupon('BC_OFF2', 1, 5, active: 0);
+        $off2 = $this->makeCoupon('BC_OFF3', 1, 5, active: 0);
 
         $active = array_map('intval', array_column($this->plugin->getCouponsListByStatus(1), 'id'));
         $disabled = array_map('intval', array_column($this->plugin->getCouponsListByStatus(0), 'id'));
         $this->assertContains($on, $active);
         $this->assertNotContains($off, $active);
-        // PINNED QUIRK: status 0 is "== null" in the PHP loose comparison, so the filter is dropped and the
-        // list of disabled coupons contains every coupon.
-        $this->assertContains($on, $disabled);
         $this->assertContains($off, $disabled);
-        $this->assertLessThan(array_search($on, $disabled), array_search($off, $disabled), 'newest first');
+        $this->assertNotContains($on, $disabled, 'status 0 lists the disabled coupons only');
+        $this->assertLessThan(array_search($off, $disabled), array_search($off2, $disabled), 'newest first');
+        $this->assertGreaterThan(0, count($this->plugin->getCouponsListByStatus(1)));
     }
 
     public function testUpdateCouponDataReplacesItemsButNotTheCode(): void

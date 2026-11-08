@@ -28,7 +28,7 @@ use Symfony\Component\Uid\Uuid;
  * caller left: only saveForumCategory/store_forum/saveThread (course creation, imports), set_notification, the
  * read helpers (get_forums, get_threads, get_forum_categories, get_forums_of_group, getForumCreatedByUser,
  * getForumToolUrl) are still used. The dead helpers keep their raw SQL, which is what a rewrite would have to
- * reproduce, so both groups are pinned. "PINNED QUIRK" marks behaviour that looks wrong and is not changed here.
+ * reproduce, so both groups are pinned. "PINNED QUIRK" marks behaviour that looks wrong and is not changed here; "DEAD"/"INTENTIONAL" mark triaged ones.
  *
  * Fixtures are raw prepared inserts (no createCourse()/createUser(): they deadlock when sibling suites share the
  * database) on fixture users (admin 1, anon 2) and courses 1 and 2. Every title starts with "fm_".
@@ -364,9 +364,8 @@ final class ForumCharacterizationTest extends KernelTestCase
         $this->qualify($thread, 2, 2, 3.0); // recorded for another course (c_id = 2)
 
         $this->assertSame([], $this->rows(get_thread_users_qualify($thread)));
-        // PINNED QUIRK: "not qualify" does not look at c_id, so a grade of another course already removes the
-        // student from the "to grade" list.
-        $this->assertSame([], $this->rows(get_thread_users_not_qualify($thread)));
+        // A grade of another course does not remove the student from the "to grade" list.
+        $this->assertSame([2], $this->ids($this->rows(get_thread_users_not_qualify($thread))));
     }
 
     public function testThreadUsersQualifyInSessionWithoutCoachDoesNotBreakTheQuery(): void
@@ -400,7 +399,7 @@ final class ForumCharacterizationTest extends KernelTestCase
         $this->forum(1, $other);
 
         $this->setContext(1, 1);
-        // PINNED QUIRK: not scoped by course (the category id is already unique), and it returns a numeric string.
+        // DEAD (no caller): not scoped by course (the category id is already unique), and it returns a numeric string.
         $this->assertEquals(3, count_number_of_forums_in_category($cat));
         $this->assertEquals(1, count_number_of_forums_in_category($other));
         $this->assertEquals(0, count_number_of_forums_in_category(999999));
@@ -598,7 +597,7 @@ final class ForumCharacterizationTest extends KernelTestCase
         $this->qualify($thread, 2, 1, 3.0, 2);
         $this->setContext(1, 1);
 
-        // PINNED QUIRK: a grade given by someone else is invisible, so a second teacher sees 0.
+        // DEAD (no caller): the function is by definition about the grade given by the CURRENT user, so another teacher's grade is invisible (0).
         $this->assertSame(0, current_qualify_of_thread($thread, 0, 2));
         $this->qualify($thread, 2, 1, 5.0, 1);
         $this->assertEquals(5, current_qualify_of_thread($thread, 0, 2));
@@ -685,9 +684,9 @@ final class ForumCharacterizationTest extends KernelTestCase
         getNotificationsPerUser(0, true);
 
         $this->assertSame(1, $_SESSION['forum_notification']['course']);
-        // PINNED QUIRK: the 0 left in the unused column is not NULL, so it is stored as a forum/thread id.
-        $this->assertEqualsCanonicalizing([$forum, 0], array_map('intval', $_SESSION['forum_notification']['forum']));
-        $this->assertEqualsCanonicalizing([$thread, 0], array_map('intval', $_SESSION['forum_notification']['thread']));
+        // The 0 left in the unused column is not an id and is not cached.
+        $this->assertEqualsCanonicalizing([$forum], array_map('intval', $_SESSION['forum_notification']['forum']));
+        $this->assertEqualsCanonicalizing([$thread], array_map('intval', $_SESSION['forum_notification']['thread']));
     }
 
     // ----------------------------------------------------------- mail queue

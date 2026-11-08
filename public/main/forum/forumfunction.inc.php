@@ -1595,6 +1595,8 @@ function get_thread_users_qualify(int $thread_id)
  * @author   Jhon Hinojosa<jhon.hinojosa@dokeos.com>,
  *
  * @version oct 2008, dokeos 1.8
+ *
+ * @deprecated no caller; the forum tool is served by Vue and the API.
  */
 function get_thread_users_not_qualify(int $thread_id)
 {
@@ -1614,7 +1616,7 @@ function get_thread_users_not_qualify(int $thread_id)
     $course_id = api_get_course_int_id();
 
     $sql1 = "SELECT user_id FROM  $t_qualify
-             WHERE thread_id = '".$thread_id."'";
+             WHERE c_id = ".(int) $course_id." AND thread_id = ".(int) $thread_id;
     $result1 = Database::query($sql1);
     $cad = '';
     while ($row = Database::fetch_array($result1)) {
@@ -1673,6 +1675,8 @@ function get_thread_users_not_qualify(int $thread_id)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
  * @version february 2006, dokeos 1.8
+ *
+ * @deprecated no caller; the forum tool is served by Vue and the API.
  */
 function count_number_of_forums_in_category($cat_id)
 {
@@ -2864,6 +2868,8 @@ function saveThreadScoreHistory(
  * @author Isaac Flores <isaac.flores@dokeos.com>, U.N.A.S University
  *
  * @version December 2008, dokeos  1.8.6
+ *
+ * @deprecated no caller; the forum tool is served by Vue and the API.
  */
 function current_qualify_of_thread($threadId, $sessionId, $userId)
 {
@@ -4393,10 +4399,10 @@ function getNotificationsPerUser($user_id = 0, $force = false, $course_id = 0)
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            if (null !== $row['forum_id']) {
+            if (!empty($row['forum_id'])) {
                 $_SESSION['forum_notification']['forum'][] = $row['forum_id'];
             }
-            if (null !== $row['thread_id']) {
+            if (!empty($row['thread_id'])) {
                 $_SESSION['forum_notification']['thread'][] = $row['thread_id'];
             }
         }

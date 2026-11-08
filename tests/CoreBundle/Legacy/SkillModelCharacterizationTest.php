@@ -244,16 +244,24 @@ final class SkillModelCharacterizationTest extends KernelTestCase
         $this->assertSame([], (new SkillModel())->getGradebooksBySkill(999999));
     }
 
-    public function testGetCoursesBySkillJoinsOnAGradebookColumnThatNoLongerExists(): void
+    public function testGetCoursesBySkillListsTheCoursesOfItsGradebooksWithoutSession(): void
     {
         $s = $this->skill('s');
+        $session = $this->session('sess');
         $this->link($s, $this->gradebook(1));
+        $this->link($s, $this->gradebook(2, null));
+        $this->link($s, $this->gradebook(1, $session));
+        $other = $this->skill('other');
+        $this->link($other, $this->gradebook(1));
 
-        // PINNED QUIRK: gradebook_category has no course_code column any more (it has c_id), so the
-        // query fails; the skill pages that list "courses where this skill can be achieved" break.
-        $this->expectException(\Throwable::class);
+        $rows = (new SkillModel())->getCoursesBySkill($s);
 
-        (new SkillModel())->getCoursesBySkill($s);
+        // Session gradebooks are listed by getSessionsBySkill() instead.
+        $codes = array_column($rows, 'code');
+        sort($codes);
+        $this->assertSame(['AIACT', 'USINGCHAMILO'], $codes);
+        $this->assertSame([], (new SkillModel())->getCoursesBySkill(999999));
+        $this->assertSame(['AIACT'], array_column((new SkillModel())->getCoursesBySkill($other), 'code'));
     }
 
     public function testGetSessionsBySkillListsSessionGradebooksOnly(): void

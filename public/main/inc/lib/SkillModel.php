@@ -1437,7 +1437,7 @@ class SkillModel extends Model
                 INNER JOIN {$this->table_skill_rel_gradebook} sg
                 ON g.id = sg.gradebook_id
                 INNER JOIN {$this->table_course} c
-                ON c.code = g.course_code
+                ON c.id = g.c_id
                 WHERE sg.skill_id = $skillId
                 AND (g.session_id IS NULL OR g.session_id = 0)";
         $result = Database::query($sql);

@@ -961,4 +961,144 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
         $page2 = $this->section($this->admin(), 'admin-coaches', ['itemsPerPage' => 10, 'page' => 2]);
         $this->assertCount(max(0, min(10, $total - 10)), $page2['items']);
     }
+
+    // ------------------------------------------------------ current courses
+
+    public function testCurrentCoursesCountLearnersSessionsVisitorsAndProgressPerCourse(): void
+    {
+        $session = $this->rawSession('r2cc1');
+        $this->sessionCourse($session, 2);
+        $a = $this->rawUser('r2cc1a');
+        $b = $this->rawUser('r2cc1b');
+        $teacher = $this->rawUser('r2cc1t', self::TEACHER);
+        $this->courseUser($a, 2, 5);
+        $this->courseUser($b, 2, 5);
+        $this->courseUser($teacher, 2, 5);
+        $this->courseVisit($a, 2, '2001-01-01 10:00:00', '2001-01-01 11:00:00');
+        $this->courseVisit($a, 2, '2001-03-01 10:00:00', '2001-03-01 11:00:00');
+        $this->courseVisit($teacher, 2, '2001-02-01 10:00:00', null);
+        $this->lpView($a, 2, 100);
+        $this->lpView($b, 2, 51);
+
+        $result = $this->section($this->admin(), 'current-courses', ['itemsPerPage' => 100]);
+        $row = array_values(array_filter($result['items'], static fn (array $r): bool => 2 === $r['id']))[0];
+
+        $this->assertSame(2, $row['learners'], 'users with the learner profile subscribed to the course');
+        $this->assertSame(1, $row['sessions']);
+        $this->assertSame(2, $row['activeLearners'], 'distinct users who visited the course, the teacher included');
+        $this->assertSame('2001-03-01 10:00:00', $row['lastAccess']);
+        $this->assertSame(75.5, $row['progress']);
+        $this->assertSame('Courses overview', $result['title']);
+        $this->assertSame($result['total'], $result['summary'][0]['value']);
+        $this->assertSame(['id', 'code', 'visualCode', 'title'], \array_slice(array_keys($row), 0, 4));
+    }
+
+    public function testCurrentCoursesAreFilteredByKeyword(): void
+    {
+        $title = (string) $this->conn()->fetchOne('SELECT title FROM course WHERE id = 1');
+        $this->assertSame(0, $this->section($this->admin(), 'current-courses', ['keyword' => 'zz-no-such-course'])['total']);
+        $result = $this->section($this->admin(), 'current-courses', ['keyword' => $title]);
+        $this->assertContains(1, array_column($result['items'], 'id'));
+        $this->assertSame([], array_values(array_filter($result['items'], static fn (array $r): bool => !str_contains($r['title'].$r['code'].$r['visualCode'], substr($title, 0, 1)))));
+    }
+
+    // ------------------------------------------------------- courses overview
+
+    public function testAdminCoursesOverviewSumsStudentTimeProgressAndTestScoresOutsideSessions(): void
+    {
+        $session = $this->rawSession('r2co1');
+        $learner = $this->rawUser('r2co1a');
+        $teacher = $this->rawUser('r2co1t', self::TEACHER);
+        $this->courseUser($learner, 2, 5);
+        $this->courseUser($teacher, 2, 1);
+        $this->courseVisit($learner, 2, '2001-01-01 10:00:00', '2001-01-01 10:20:00');
+        $this->courseVisit($teacher, 2, '2001-01-02 10:00:00', '2001-01-02 12:00:00');
+        $this->access($learner, 2, '2001-01-03 10:00:00', '2001-01-03 12:00:00', $session);
+        $lp = $this->lp();
+        $this->lpView($learner, 2, 20, 0, $lp);
+        $this->conn()->executeStatement('INSERT INTO c_lp_view (user_id, lp_id, c_id, session_id, view_count, last_item, progress) VALUES (?, ?, 2, NULL, 5, 0, 80)', [$learner, $lp]);
+        $this->lpView($learner, 2, 10, $session, $lp);
+        foreach ([[6, 10], [9, 10]] as [$score, $max]) {
+            $this->conn()->executeStatement(
+                "INSERT INTO track_e_exercises (exe_user_id, c_id, session_id, exe_exo_id, exe_date, score, max_score, user_ip, status, data_tracking,
+                    start_date, steps_counter, orig_lp_id, orig_lp_item_id, exe_duration, orig_lp_item_view_id, questions_to_check)
+                 VALUES (?, 2, NULL, 1, '2001-01-01 10:00:00', ?, ?, '', '', '', '2001-01-01 09:00:00', 0, 0, 0, 0, 0, '')",
+                [$learner, $score, $max]
+            );
+        }
+
+        $result = $this->section($this->admin(), 'admin-courses', ['itemsPerPage' => 100]);
+        $row = array_values(array_filter($result['items'], static fn (array $r): bool => 2 === $r['id']))[0];
+
+        $this->assertSame(1, $row['learners']);
+        $this->assertSame(1200, $row['timeSeconds'], 'only the learner, outside sessions');
+        $this->assertSame('2001-01-01 10:00:00', $row['lastAccess']);
+        $this->assertSame(80.0, $row['progress'], 'the latest view of the pair counts, session views are left out');
+        $this->assertSame(15.0, $row['scoreObtained']);
+        $this->assertSame(20.0, $row['scorePossible']);
+        $this->assertSame(75.0, $row['scorePercentage']);
+        $this->assertSame(2, $row['questionsAnswered']);
+        $this->assertSame(0, $row['messages']);
+        $this->assertSame(0, $row['assignments']);
+        $this->assertNull($row['averageLearningPathScore']);
+        $this->assertSame('Courses overview', $result['title']);
+        $this->assertSame('course-cards', $result['meta']['renderMode']);
+        $untouched = array_values(array_filter($result['items'], static fn (array $r): bool => 1 === $r['id']))[0];
+        $this->assertNull($untouched['scorePercentage']);
+        $this->assertSame(0.0, $untouched['progress']);
+    }
+
+    public function testAdminCoursesOverviewKeywordPagingAndUrlScope(): void
+    {
+        $other = $this->secondUrl();
+        $this->conn()->executeStatement('UPDATE access_url_rel_course SET access_url_id = ? WHERE c_id = 2', [$other]);
+        $result = $this->section($this->admin(), 'admin-courses', ['itemsPerPage' => 100]);
+        $this->assertNotContains(2, array_column($result['items'], 'id'));
+        $this->assertContains(1, array_column($result['items'], 'id'));
+        $this->assertSame(0, $this->section($this->admin(), 'admin-courses', ['keyword' => 'zz-no-such-course'])['total']);
+        $titles = array_column($result['items'], 'title');
+        $sorted = $titles;
+        sort($sorted, SORT_STRING | SORT_FLAG_CASE);
+        $this->assertSame($sorted, $titles, 'ordered by title');
+    }
+
+    // ----------------------------------------------------- student bosses
+
+    public function testStudentBossesReportListsActiveBossesOfTheUrlWithTheirLearners(): void
+    {
+        $other = $this->secondUrl();
+        $boss = $this->rawUser('r2sb1', self::BOSS);
+        $inactiveBoss = $this->rawUser('r2sb2', self::BOSS, 0);
+        $foreignBoss = $this->rawUser('r2sb3', self::BOSS, 1, $other);
+        $notBoss = $this->rawUser('r2sb4');
+        $z = $this->rawUser('r2sb1z');
+        $a = $this->rawUser('r2sb1a');
+        $gone = $this->rawUser('r2sb1g', 5, -2);
+        $this->conn()->executeStatement('UPDATE user SET lastname = ? WHERE id = ?', ['Zed', $z]);
+        $this->conn()->executeStatement('UPDATE user SET lastname = ? WHERE id = ?', ['Alpha', $a]);
+        $this->conn()->executeStatement('UPDATE user SET lastname = ?, locale = ? WHERE id = ?', ['0000r2sb', 'fr_FR', $boss]);
+        foreach ([$z, $a, $gone] as $learner) {
+            $this->userRel($learner, $boss, self::REL_BOSS);
+        }
+        $this->userRel($a, $inactiveBoss, self::REL_BOSS);
+        $this->userRel($notBoss, $boss, 7);
+
+        $result = $this->section($this->admin(), 'student-bosses', ['itemsPerPage' => 100]);
+        $row = array_values(array_filter($result['items'], static fn (array $r): bool => $r['id'] === $boss))[0];
+
+        $ids = array_column($result['items'], 'id');
+        $this->assertNotContains($inactiveBoss, $ids);
+        $this->assertNotContains($foreignBoss, $ids);
+        $this->assertNotContains($notBoss, $ids);
+        $this->assertSame([$a, $gone, $z], array_column($row['learners'], 'id'), 'ordered by learner last name; soft-deleted ones are listed too');
+        $this->assertSame([true, false, true], array_column($row['learners'], 'active'));
+        $this->assertSame('fr_FR', $row['locale']);
+        $this->assertContains('fr_FR', $result["meta"]['languageOptions']);
+        $this->assertTrue($result['meta']['canAddLearners']);
+        $this->assertSame("Student's superior follow up", $result['title']);
+        $byLanguage = $this->section($this->admin(), 'student-bosses', ['language' => 'fr_FR']);
+        $this->assertContains($boss, array_column($byLanguage['items'], 'id'));
+        $this->assertSame($byLanguage['total'], \count($byLanguage['items']));
+        $this->assertSame(0, $this->section($this->admin(), 'student-bosses', ['language' => 'xx_XX'])['total']);
+    }
 }

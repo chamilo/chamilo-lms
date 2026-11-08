@@ -45,10 +45,11 @@ if (!empty($glossaryId)) {
             $glossaryInfo['description']
         );*/
 
-        if (null === $description || 0 == strlen(trim($description))) {
+        $termDescription = (string) ($glossaryInfo['description'] ?? '');
+        if (0 == strlen(trim($termDescription))) {
             $description = get_lang('No results found');
         } else {
-            $description = str_replace('class="glossary"', '', $description);
+            $description = str_replace('class="glossary"', '', $termDescription);
         }
     }
 }

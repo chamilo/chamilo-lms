@@ -79,6 +79,7 @@
             id="learning-calendar-grid"
             class="learning-calendar-year-grid"
             data-ajax-url="{{ ajax_url }}"
+            data-sec-token="{{ sec_token }}"
         ></div>
 
         <div id="learning-calendar-message" class="learning-calendar-message learning-calendar-message--hidden"></div>
@@ -288,6 +289,7 @@
     }
 
     var ajaxUrl = grid.getAttribute('data-ajax-url');
+    var secToken = grid.getAttribute('data-sec-token');
     var currentYear = new Date().getFullYear();
     var eventsByDate = {};
     var lastSelectedDate = null;
@@ -517,10 +519,14 @@
         setSavingState(startDate, endDate, true);
 
         return fetch(
-            ajaxUrl + '&a=toggle_day&start_date=' + encodeURIComponent(startDate) + '&end_date=' + encodeURIComponent(endDate),
+            ajaxUrl + '&a=toggle_day',
             {
                 credentials: 'same-origin',
-                method: 'GET'
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'learning_calendar_sec_token=' + encodeURIComponent(secToken) +
+                    '&start_date=' + encodeURIComponent(startDate) +
+                    '&end_date=' + encodeURIComponent(endDate)
             }
         ).then(function (response) {
             if (!response.ok) {

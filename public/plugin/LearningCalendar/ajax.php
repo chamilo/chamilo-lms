@@ -18,6 +18,11 @@ $plugin->protectCalendar($item);
 
 switch ($action) {
     case 'toggle_day':
+        // Changes the calendar: POST with the page token, never a plain GET.
+        if ('POST' !== $_SERVER['REQUEST_METHOD'] || !Security::check_token('post', null, 'learning_calendar')) {
+            api_not_allowed(true);
+        }
+
         $startDate = isset($_REQUEST['start_date']) ? Security::remove_XSS($_REQUEST['start_date']) : '';
         if (empty($startDate)) {
             exit;

@@ -484,6 +484,64 @@ class UserManagerCharacterizationTest extends AbstractApiTest
         }
     }
 
+    public function testSoftDeleteLeavesTheTicketsOfTheUserUntouched(): void
+    {
+        // A soft delete only sets active = -2 (the username stays reserved): the ticket history keeps pointing at
+        // the same user, nothing is reassigned to the fallback user.
+        $id = (int) $this->createUser('um_tk_soft')->getId();
+        $ticket = $this->insertTicket($id);
+
+        $this->assertTrue(UserManager::delete_user($id));
+
+        $row = $this->conn()->fetchAssociative('SELECT assigned_last_user, sys_insert_user_id FROM ticket_ticket WHERE id = ?', [$ticket]);
+        $this->assertSame([$id, $id], [(int) $row['assigned_last_user'], (int) $row['sys_insert_user_id']]);
+    }
+
+    public function testHardDeleteKeepsTheTicketsOfTheUserAndHandsThemToTheFallbackUser(): void
+    {
+        // ticket_ticket.assigned_last_user is ON DELETE CASCADE and sys_insert_user_id has no foreign key: without
+        // TicketManager::deleteUserFromTicketSystem() a permanent delete wiped the tickets assigned to the user (with
+        // their messages) and left the authored ones pointing at a user id that no longer exists.
+        $id = (int) $this->createUser('um_tk_hard')->getId();
+        $ticket = $this->insertTicket($id);
+        $fallback = (int) Container::getUserRepository()->getFallbackUser()->getId();
+
+        $this->assertTrue(UserManager::delete_user($id, true));
+
+        $row = $this->conn()->fetchAssociative('SELECT assigned_last_user, sys_insert_user_id FROM ticket_ticket WHERE id = ?', [$ticket]);
+        $this->assertNotFalse($row, 'the ticket survives the deletion of its assignee');
+        $this->assertNull($row['assigned_last_user']);
+        $this->assertSame($fallback, (int) $row['sys_insert_user_id']);
+    }
+
+    private function insertTicket(int $userId): int
+    {
+        $this->conn()->insert('ticket_project', ['access_url_id' => 1, 'title' => 'um_tk_project', 'sys_insert_user_id' => 1, 'sys_insert_datetime' => '2020-01-01 00:00:00']);
+        $project = (int) $this->conn()->lastInsertId();
+        $this->conn()->insert('ticket_category', ['project_id' => $project, 'title' => 'um_tk_cat', 'total_tickets' => 0, 'course_required' => 0, 'sys_insert_user_id' => 1, 'sys_insert_datetime' => '2020-01-01 00:00:00']);
+        $category = (int) $this->conn()->lastInsertId();
+        $this->conn()->insert('ticket_ticket', [
+            'project_id' => $project,
+            'category_id' => $category,
+            'priority_id' => 1,
+            'status_id' => 1,
+            'access_url_id' => 1,
+            'code' => 'um_tk_code',
+            'subject' => 'um_tk_subject',
+            'message' => 'um_tk_body',
+            'personal_email' => '',
+            'total_messages' => 0,
+            'start_date' => '2021-03-15 10:00:00',
+            'assigned_last_user' => $userId,
+            'sys_insert_user_id' => $userId,
+            'sys_insert_datetime' => '2021-03-15 10:00:00',
+            'sys_lastedit_user_id' => 1,
+            'sys_lastedit_datetime' => '2021-03-15 10:00:00',
+        ]);
+
+        return (int) $this->conn()->lastInsertId();
+    }
+
     // ---------------------------------------------------------------- API keys
 
     public function testApiKeyLifecycle(): void

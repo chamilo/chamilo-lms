@@ -928,6 +928,12 @@ class UserManager
         $userInfo = $destroy ? api_get_user_info($user_id) : [];
         $actorId = api_get_user_id();
 
+        if ($destroy) {
+            // A soft delete keeps the ticket history on the (still existing) user. A permanent one must first
+            // detach the user: tickets assigned to him would be removed by the foreign key cascade.
+            TicketManager::deleteUserFromTicketSystem($user_id);
+        }
+
         $repository->deleteUser($user, $destroy);
 
         $postData = ['deleteType' => $deleteType];

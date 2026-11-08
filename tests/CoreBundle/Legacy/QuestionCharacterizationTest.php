@@ -702,14 +702,16 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $other = $this->makeQuestion('qs_swap_other', UNIQUE_ANSWER);
         $q = $this->read($id);
 
-        // PINNED QUIRK: UPDATE ... WHERE c_id = ? AND id = ? on a table with neither column: always throws.
-        try {
-            $q->swapSimpleAnswerTypes();
-            $this->fail('expected the unknown columns to throw');
-        } catch (NotAllowedException) {
-            $this->assertSame(UNIQUE_ANSWER, (int) $this->conn->fetchOne('SELECT type FROM c_quiz_question WHERE iid = ?', [$id]));
-            $this->assertSame(UNIQUE_ANSWER, (int) $this->conn->fetchOne('SELECT type FROM c_quiz_question WHERE iid = ?', [$other]));
-        }
+        $swapped = $q->swapSimpleAnswerTypes();
+
+        $this->assertInstanceOf(\MultipleAnswer::class, $swapped);
+        $this->assertSame(MULTIPLE_ANSWER, $swapped->type);
+        $this->assertSame($id, $swapped->iid, 'the state of the question is carried over');
+        $this->assertSame(MULTIPLE_ANSWER, (int) $this->conn->fetchOne('SELECT type FROM c_quiz_question WHERE iid = ?', [$id]));
+        $this->assertSame(UNIQUE_ANSWER, (int) $this->conn->fetchOne('SELECT type FROM c_quiz_question WHERE iid = ?', [$other]));
+        $back = $swapped->swapSimpleAnswerTypes();
+        $this->assertInstanceOf(\UniqueAnswer::class, $back);
+        $this->assertSame(UNIQUE_ANSWER, (int) $this->conn->fetchOne('SELECT type FROM c_quiz_question WHERE iid = ?', [$id]));
     }
 
     // ---------------------------------------------------------------- how many quizzes use a question

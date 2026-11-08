@@ -2157,7 +2157,7 @@ abstract class Question
         Database::update(
             Database::get_course_table(TABLE_QUIZ_QUESTION),
             ['type' => $this->type],
-            ['c_id = ? AND id = ?' => [$this->course['real_id'], $this->id]]
+            ['iid = ?' => [$this->id]]
         );
         $answerClasses = [
             UNIQUE_ANSWER => 'UniqueAnswer',

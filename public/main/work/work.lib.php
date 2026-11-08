@@ -4145,7 +4145,11 @@ function getWorkCommentCountFromParent(
  * @param array $courseInfo
  * @param int   $sessionId
  *
- * @return int
+ * @return array The work row ([] when none)
+ *
+ * @deprecated No caller (only a commented-out one). Despite its name it returns the OLDEST work that has a
+ *             comment (ORDER BY sent_date ascending): use getLastWorkStudentFromParentByUser() or fix the order
+ *             before reviving it.
  */
 function getLastWorkStudentFromParent(
     $parentId,

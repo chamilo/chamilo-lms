@@ -753,6 +753,7 @@ final class WorkCharacterizationTest extends KernelTestCase
         $this->comment($commented);
         $this->comment($elsewhere);
 
+        // DEAD: no caller; "last" is really the oldest commented work (ascending sent_date), see the @deprecated note.
         $this->assertSame($commented, (int) getLastWorkStudentFromParent($folder, ['real_id' => 1], 0)['iid']);
         $this->assertSame($elsewhere, (int) getLastWorkStudentFromParent($folder, ['real_id' => 2], 0)['iid']);
         $this->assertSame([], getLastWorkStudentFromParent($this->folder(), ['real_id' => 1], 0));

@@ -6736,15 +6736,24 @@ EOT;
      *
      * Log the exe_id deleted with the exe_user_id related.
      *
-     * @param int $exeId
+     * The attempt must belong to the given course (the current course by default): callers take the id from the
+     * request, so without this check a teacher of one course could delete the results of another.
+     *
+     * @param int      $exeId
+     * @param int|null $courseId Course the attempt must belong to, current course when null
      */
-    public static function deleteExerciseAttempt($exeId)
+    public static function deleteExerciseAttempt($exeId, $courseId = null)
     {
         $exeId = (int) $exeId;
+        $courseId = null === $courseId ? (int) api_get_course_int_id() : (int) $courseId;
 
         $trackExerciseInfo = self::get_exercise_track_exercise_info($exeId);
 
         if (empty($trackExerciseInfo)) {
+            return;
+        }
+
+        if (empty($courseId) || (int) $trackExerciseInfo['c_id'] !== $courseId) {
             return;
         }
 

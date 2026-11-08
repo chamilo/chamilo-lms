@@ -786,6 +786,25 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $this->assertSame(2, $this->cnt('track_e_default', "default_event_type = 'exe_attempt_deleted' AND default_value IN (?, ?)", [(string) $victim, $victim.'-1']));
     }
 
+    public function testDeleteExerciseAttemptRefusesAnAttemptOfAnotherCourse(): void
+    {
+        $this->ctx(); // course 1
+        $quiz = $this->quiz();
+        $foreign = $this->exe(['exe_exo_id' => $quiz, 'c_id' => 2]);
+        $this->attempt($foreign, 1, $this->question('qs_foreign_q'), 'f');
+
+        // Intended: exercise_report.php lets any teacher/tutor of the CURRENT course delete an attempt by id, so
+        // the id must belong to that course (otherwise a teacher of course A deletes results of course B).
+        ExerciseLib::deleteExerciseAttempt($foreign);
+
+        $this->assertSame(1, $this->cnt('track_e_exercises', 'exe_id = ?', [$foreign]));
+        $this->assertSame(1, $this->cnt('track_e_attempt', 'exe_id = ?', [$foreign]));
+
+        // Explicit course argument: the owning course may delete it.
+        ExerciseLib::deleteExerciseAttempt($foreign, 2);
+        $this->assertSame(0, $this->cnt('track_e_exercises', 'exe_id = ?', [$foreign]));
+    }
+
     public function testDeleteExerciseAttemptIgnoresUnknownIds(): void
     {
         $this->ctx();

@@ -3751,9 +3751,14 @@ class CourseManager
 
         $orderBy = null;
         $extraInnerJoin = null;
+        $courseUserJoin = "INNER JOIN $tbl_course_rel_user cru
+                ON (cru.c_id = c.id)";
 
         if (!empty($sessionId)) {
             if (COURSEMANAGER == $status) {
+                // A course coached in the session needs no base-course subscription row of this user.
+                $courseUserJoin = "LEFT JOIN $tbl_course_rel_user cru
+                ON (cru.c_id = c.id AND cru.user_id = $user_id)";
                 // Teacher of course or teacher inside session
                 $whereConditions = " AND ((cru.user_id = $user_id AND cru.status = ".COURSEMANAGER.")
                     OR srcru.status = ".SessionEntity::COURSE_COACH.") ";
@@ -3783,8 +3788,7 @@ class CourseManager
         $sql = "$select
                 FROM $tbl_course c
                 INNER JOIN $languageTable language ON language.id = c.language_id
-                INNER JOIN $tbl_course_rel_user cru
-                ON (cru.c_id = c.id)
+                $courseUserJoin
                 INNER JOIN $tbl_course_rel_access_url a
                 ON (a.c_id = c.id)
                 $extraInnerJoin

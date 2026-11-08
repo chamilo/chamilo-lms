@@ -863,9 +863,9 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
             $this->sessionCourse($session->getId(), $course);
         }
         $this->sessionCourseUser($session->getId(), $coached, $me, 2);
-        // Residual legacy quirk (not changed): the main query INNER JOINs course_rel_user on the course alone, so a
-        // course is only listed when it has at least one course_rel_user row; a bystander student provides it here.
-        $this->sub($this->createUser('cm_fsu_student'), $coached, STUDENT);
+        // Fixed: the main query INNER JOINed course_rel_user on the course alone, so a course coached in the
+        // session was only listed when somebody was subscribed to the base course (a bystander student was needed
+        // here). The coach alone is enough now.
         $this->sessionCourseUser($session->getId(), $theirs, $other, 2);
 
         $rows = CourseManager::getCoursesFollowedByUser($me->getId(), COURSEMANAGER, null, null, null, null, false, null, $session->getId());

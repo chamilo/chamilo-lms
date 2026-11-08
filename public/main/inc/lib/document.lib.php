@@ -1000,6 +1000,8 @@ class DocumentManager
      * @param string
      *
      * @return bool
+     *
+     * @deprecated Queries c_document.c_id/path/session_id, columns that no longer exist: it always fails and has no caller.
      */
     public static function is_visible(
         $doc_path,
@@ -1486,6 +1488,8 @@ class DocumentManager
      * @return int The document id of the directory certificate
      *
      * @todo move to certificate.lib.php
+     *
+     * @deprecated Queries c_document.c_id/path, columns that no longer exist: it always fails and has no caller.
      */
     public static function get_document_id_of_directory_certificate()
     {
@@ -3182,6 +3186,8 @@ jQuery(function ($) {
      * @param int    $groupId
      *
      * @return bool
+     *
+     * @deprecated Queries c_document.c_id/title/session_id, columns that no longer exist: it always fails and has no caller.
      */
     public static function documentExists(
         $fileName,

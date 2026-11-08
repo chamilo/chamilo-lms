@@ -11,7 +11,6 @@ use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Database;
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\Query\QueryException;
 use ExtraField;
 use ExtraFieldValue;
 use Symfony\Component\HttpFoundation\Request;
@@ -277,11 +276,17 @@ class ExtraFieldValueCharacterizationTest extends AbstractApiTest
         $this->assertSame([], $efv->searchValuesByField("xf' OR '1'='1", $f));
     }
 
-    public function testGetCountAlwaysThrowsBecauseTheValueEntityHasNoItemTypeField(): void
+    public function testGetCountCountsTheValuesStoredForTheItemType(): void
     {
-        // PINNED QUIRK: the DQL filters ExtraFieldValues on "itemType", which lives on the ExtraField entity.
-        $this->expectException(QueryException::class);
-        (new ExtraFieldValue('session'))->get_count();
+        $efv = new ExtraFieldValue('session');
+        $before = (int) $efv->get_count();
+        $f = $this->field(self::SESSION, 'cnt');
+        $this->value($f, 424341, 'a');
+        $this->value($f, 424342, 'b');
+        $this->value($this->field(self::USER, 'cnt'), 424343, 'c');
+        $this->fresh();
+
+        $this->assertSame($before + 2, (int) $efv->get_count());
     }
 
     // ---------------------------------------------------------------- save

@@ -1713,7 +1713,9 @@ abstract class Question
 
     /**
      * @param int $question_id
-     * @param int $course_id
+     * @param int $course_id    Unused: options hang off the question, the table has no course column any more
+     *
+     * @deprecated No caller left in the code base
      */
     public static function deleteAllQuestionOptions($question_id, $course_id)
     {
@@ -1721,8 +1723,7 @@ abstract class Question
         Database::delete(
             $table,
             [
-                'c_id = ? AND question_id = ?' => [
-                    $course_id,
+                'question_id = ?' => [
                     $question_id,
                 ],
             ]

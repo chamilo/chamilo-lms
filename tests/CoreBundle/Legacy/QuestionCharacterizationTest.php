@@ -642,14 +642,10 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $this->option($id, 'qs_del_2');
         $this->option($other, 'qs_keep');
 
-        // PINNED QUIRK: filters on a c_id column c_quiz_question_option no longer has: always throws.
-        try {
-            Question::deleteAllQuestionOptions($id, 1);
-            $this->fail('expected the unknown column c_id to throw');
-        } catch (NotAllowedException) {
-            $this->assertSame(2, $this->cnt('c_quiz_question_option', 'question_id = ?', [$id]));
-            $this->assertSame(1, $this->cnt('c_quiz_question_option', 'question_id = ?', [$other]));
-        }
+        Question::deleteAllQuestionOptions($id, 1);
+
+        $this->assertSame(0, $this->cnt('c_quiz_question_option', 'question_id = ?', [$id]));
+        $this->assertSame(1, $this->cnt('c_quiz_question_option', 'question_id = ?', [$other]));
     }
 
     public function testCountAnswers(): void

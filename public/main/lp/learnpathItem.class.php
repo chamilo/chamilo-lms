@@ -173,8 +173,8 @@ class learnpathItem
         if (!empty($this->lp_id)) {
             $sql = "SELECT iid FROM $items_table
                     WHERE
-                        lp_id = ".$this->lp_id." AND
-                        parent_item_id = $id";
+                        lp_id = ".(int) $this->lp_id." AND
+                        parent_item_id = ".(int) $this->db_id;
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 while ($row = Database::fetch_assoc($res)) {

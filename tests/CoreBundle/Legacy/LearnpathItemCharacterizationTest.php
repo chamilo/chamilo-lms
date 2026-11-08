@@ -267,7 +267,7 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertSame([$dir], array_map('intval', $this->item($this->rootId($lp))->get_children()));
     }
 
-    public function testConstructorFromAnEntityMapsTheSameFieldsAndLoadsNoChildren(): void
+    public function testConstructorFromAnEntityMapsTheSameFieldsAndLoadsTheChildren(): void
     {
         $lp = $this->newLpRow('li_ctor_entity');
         $dir = $this->addItem($lp, 'li_dir', 'dir', 1);
@@ -283,9 +283,10 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertSame($viaRow->get_type(), $viaEntity->get_type());
         $this->assertSame((int) $viaRow->lp_id, (int) $viaEntity->lp_id);
         $this->assertSame([$a], array_map('intval', $viaRow->get_children()));
-        // PINNED QUIRK: children are looked up with parent_item_id = $id, and $id is 0 when the item is passed as
-        // an entity, so an item built that way never knows its children.
-        $this->assertSame([], $viaEntity->get_children());
+        // Fixed: children were looked up with parent_item_id = $id, and $id is 0 when the item is passed as an
+        // entity (the way learnpath builds every item of a normal LP), so autocomplete_parents() never saw any
+        // sibling and completed a chapter as soon as ONE of its items was done.
+        $this->assertSame([$a], array_map('intval', $viaEntity->get_children()));
     }
 
     public function testGettersFallBackToDefaultsWhenTheColumnsAreEmpty(): void

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\CourseStudentInfoHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -26,15 +27,24 @@ final class CourseStudentInfoHelperTest extends KernelTestCase
     use RawReportingFixturesTrait;
 
     private CourseStudentInfoHelper $helper;
-    /** @var int[] */
+
+    /**
+     * @var int[]
+     */
     private array $fileNodes = [];
-    /** @var int[] */
+
+    /**
+     * @var int[]
+     */
     private array $exerciseNodes = [];
 
     protected function setUp(): void
     {
         self::bootKernel();
         $c = self::getContainer();
+        // CourseStudentInfoHelper reads the legacy Container static, which an earlier test class leaves
+        // pointing at its own, already shut down kernel.
+        Container::setContainer($c);
         $this->helper = $c->get(CourseStudentInfoHelper::class);
         $this->fileNodes = array_map('intval', $this->conn()->fetchFirstColumn("SELECT rn.id FROM resource_node rn INNER JOIN resource_type rt ON rt.id = rn.resource_type_id INNER JOIN tool t ON t.id = rt.tool_id WHERE rt.title = 'files' AND t.title = 'document' ORDER BY rn.id LIMIT 3"));
         $this->exerciseNodes = array_map('intval', $this->conn()->fetchFirstColumn("SELECT rn.id FROM resource_node rn INNER JOIN resource_type rt ON rt.id = rn.resource_type_id INNER JOIN tool t ON t.id = rt.tool_id WHERE rt.title = 'exercises' AND t.title = 'quiz' ORDER BY rn.id LIMIT 2"));

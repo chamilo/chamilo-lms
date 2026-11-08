@@ -878,6 +878,19 @@ class DocumentManager
 
         $row = Database::fetch_assoc($result);
 
+        // The document must be linked to the requested course (any session/group/visibility), otherwise the
+        // data of a document of another course would be returned.
+        $linked = Database::getManager()->getConnection()->fetchOne(
+            'SELECT 1 FROM resource_link l
+             INNER JOIN c_document d ON d.resource_node_id = l.resource_node_id
+             WHERE d.iid = :iid AND l.c_id = :cid AND l.deleted_at IS NULL
+             LIMIT 1',
+            ['iid' => $id, 'cid' => $course_id]
+        );
+        if (false === $linked) {
+            return false;
+        }
+
         try {
             /** @var EntityManagerInterface $em */
             $em = \Database::getManager();

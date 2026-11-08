@@ -123,19 +123,17 @@ final class DocumentLibCharacterizationTest extends KernelTestCase
         $this->assertFalse(DocumentManager::get_document_data_by_id($this->doc('dl_x', 'file'), 'DL_NO_SUCH_COURSE'));
     }
 
-    public function testGetDocumentDataByIdDoesNotCheckTheDocumentBelongsToTheCourse(): void
+    public function testGetDocumentDataByIdRefusesADocumentOfAnotherCourse(): void
     {
         $foreign = $this->doc('dl_course_two_file', 'file', null, 2);
 
-        $data = DocumentManager::get_document_data_by_id($foreign, 'AIACT');
+        // Security: the data (title, comment) of a document of ANOTHER course must not come back.
+        $this->assertFalse(DocumentManager::get_document_data_by_id($foreign, 'AIACT'));
 
-        // PINNED QUIRK: the first query is "WHERE iid = id" with no course/link condition, so the title and comment
-        // of a document of ANOTHER course (or a hidden one) come back; only the enrichment (path, size, parent) is
-        // course scoped and is skipped. The 35 callers must do their own access check.
-        $this->assertSame('dl_course_two_file', $data['title']);
-        $this->assertSame('file', $data['filetype'], 'The raw column.');
-        $this->assertSame('document/'.$foreign, $data['basename'] ? 'document/'.$foreign : '', 'basename defaults to the id.');
-        $this->assertSame('0', (string) ($data['size'] ?? '0'));
+        $own = $this->doc('dl_course_one_file', 'file', null, 1);
+        $data = DocumentManager::get_document_data_by_id($own, 'AIACT');
+        $this->assertSame('dl_course_one_file', $data['title']);
+        $this->assertSame('file', $data['filetype']);
     }
 
     public function testGetDocumentIdMatchesTheFullNodePathOrTheBareTitle(): void
@@ -151,7 +149,7 @@ final class DocumentLibCharacterizationTest extends KernelTestCase
         $this->assertSame($file, DocumentManager::get_document_id($info, '/'.strtoupper($fullPath)), 'Case-insensitive, leading slash ignored.');
         $this->assertSame($folder, DocumentManager::get_document_id($info, 'dl_dir'));
 
-        // PINNED QUIRK: a path relative to the course document root never matches, because the candidates are the
+        // INTENTIONAL (no caller passes a relative path; see the decisions file): a path relative to the course document root never matches, because the candidates are the
         // whole node chain (access URL and course titles included) and the bare title. The bare title matches a
         // document in ANY folder, so two documents with the same title are ambiguous (the first one found wins).
         $this->assertFalse(DocumentManager::get_document_id($info, 'dl_dir/dl_doc.txt'));
@@ -232,7 +230,7 @@ final class DocumentLibCharacterizationTest extends KernelTestCase
             static fn () => DocumentManager::is_visible('/dl_a.txt', $info),
             static fn () => DocumentManager::get_document_id_of_directory_certificate(),
         ];
-        // PINNED QUIRK: c_id/path/session_id are gone from c_document, so each of these throws. No caller.
+        // DEAD (no caller): c_id/path/session_id are gone from c_document, so each of these throws.
         foreach ($calls as $call) {
             try {
                 $call();

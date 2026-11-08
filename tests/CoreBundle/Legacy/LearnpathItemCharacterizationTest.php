@@ -1431,6 +1431,26 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertTrue($this->check($p, (string) $q), 'score = maximum');
     }
 
+    public function testParsePrereqOfAQuizWithAMinimumAndNoMaximumHasNoUpperBound(): void
+    {
+        $quiz = $this->newQuiz();
+        $p = $this->prereqScene(['completed', 'not attempted'], 'quiz', $quiz);
+        [$q, $self] = $p['ids'];
+        $this->conn()->executeStatement('UPDATE c_lp_item SET prerequisite_min_score = 2, prerequisite_max_score = NULL WHERE iid = ?', [$self]);
+        $p = $this->prereqItems($p['lp'], $p['view'], $p['ids'], $p['iv']);
+
+        // Fixed: the guard was isset($minScore, $minScore) (the maximum was never tested) and a NULL maximum made
+        // "score <= NULL" true only for 0, so a minimum alone blocked every real score. An unset maximum is open.
+        $this->newExe($p['lp'], $q, $quiz, 8, '2030-01-01 10:00:00');
+        $this->assertTrue($this->check($p, (string) $q), '8 >= 2, no maximum');
+        $this->newExe($p['lp'], $q, $quiz, 1, '2030-01-02 10:00:00');
+        $this->assertFalse($this->check($p, (string) $q), '1 is below the minimum');
+
+        // Several attempts allowed: same rule in the second branch.
+        $p['items'][$self]->set_prevent_reinit(0);
+        $this->assertTrue($this->check($p, (string) $q), 'the earlier attempt of 8 is in range');
+    }
+
     public function testParsePrereqOfAQuizWithSeveralAttemptsAcceptsAnyAttemptInRangeEvenIfTheStatusIsNotFinished(): void
     {
         $quiz = $this->newQuiz();

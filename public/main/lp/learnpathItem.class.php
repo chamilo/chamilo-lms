@@ -2390,10 +2390,10 @@ class learnpathItem
                                                 $minScore = $myItemToCheck->getPrerequisiteMinScore();
                                                 $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
 
-                                                if (isset($minScore, $minScore)) {
+                                                if (isset($minScore)) {
                                                     // Taking min/max prerequisites values see BT#5776
                                                     if ($quiz['score'] >= $minScore
-                                                        && $quiz['score'] <= $maxScore
+                                                        && (null === $maxScore || $quiz['score'] <= $maxScore)
                                                     ) {
                                                         $returnstatus = true;
                                                     } else {
@@ -2483,9 +2483,9 @@ class learnpathItem
                                                     }
                                                 }
 
-                                                if (isset($minScore, $minScore)) {
+                                                if (isset($minScore)) {
                                                     // Taking min/max prerequisites values see BT#5776.
-                                                    if ($quiz['score'] >= $minScore && $quiz['score'] <= $maxScore) {
+                                                    if ($quiz['score'] >= $minScore && (null === $maxScore || $quiz['score'] <= $maxScore)) {
                                                         $returnstatus = true;
                                                         break;
                                                     }

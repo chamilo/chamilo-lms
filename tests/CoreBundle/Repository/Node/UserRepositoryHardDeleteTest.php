@@ -98,4 +98,20 @@ final class UserRepositoryHardDeleteTest extends KernelTestCase
             $this->conn()->executeStatement('SET FOREIGN_KEY_CHECKS = 1');
         }
     }
+
+    public function testPersonalDataIsDeletedAndSharedRecordsAreKeptForTheFallbackUser(): void
+    {
+        $actions = [];
+        foreach ($this->relations() as $r) {
+            $actions[$r['table'].'.'.$r['field']] = $r['action'];
+        }
+        foreach (['reset_password_request.user_id', 'user_career.user_id', 'notification_event_rel_user.user_id', 'access_url_rel_user.user_id', 'course_rel_user.user_id'] as $key) {
+            $this->assertSame('delete', $actions[$key], $key);
+        }
+        foreach (['xapi_internal_log.user_id', 'support_bot_tree.created_by_id', 'c_forum_post.poster_id', 'message.user_sender_id'] as $key) {
+            if (isset($actions[$key])) {
+                $this->assertSame('update', $actions[$key], $key.' keeps the record for the fallback user');
+            }
+        }
+    }
 }

@@ -290,7 +290,7 @@
                         <div class="inline-flex items-center gap-2">
                             <a
                                     title="{{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}"
-                                    href="{{ app.request.pathInfo ~ '?' ~ {'order': sale.id, 'action': 'confirm'}|url_encode }}"
+                                    href="{{ app.request.pathInfo ~ '?' ~ {'order': sale.id, 'action': 'confirm', 'buycourses_admin_sec_token': admin_token}|url_encode }}"
                                     class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 shadow-sm transition hover:border-primary/30 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2"
                             >
                                 <img
@@ -303,7 +303,7 @@
 
                             <a
                                     title="{{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}"
-                                    href="{{ app.request.pathInfo ~ '?' ~ {'order': sale.id, 'action': 'cancel'}|url_encode }}"
+                                    href="{{ app.request.pathInfo ~ '?' ~ {'order': sale.id, 'action': 'cancel', 'buycourses_admin_sec_token': admin_token}|url_encode }}"
                                     class="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 shadow-sm transition hover:border-danger/30 hover:text-danger focus:outline-none focus:ring-2 focus:ring-danger/20 focus:ring-offset-2"
                             >
                                 <img

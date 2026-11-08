@@ -11030,12 +11030,12 @@ class BuyCoursesPlugin extends Plugin
                 $item['status'] = get_plugin_lang('SaleStatusPending', 'BuyCoursesPlugin');
                 $option = "<div class='btn-group btn-group-xs' role='group'>".
                     "<a title='".get_plugin_lang('SubscribeUser', 'BuyCoursesPlugin')."'".
-                    " href='".api_get_self().'?order='.$item['id']."&action=confirm'".
+                    " href='".api_get_self().'?order='.$item['id']."&action=confirm&buycourses_admin_sec_token=".Security::get_existing_token('buycourses_admin')."'".
                     " class='btn btn-default'>".
                     Display::return_icon('user_subscribe_session.png', get_plugin_lang('SubscribeUser', 'BuyCoursesPlugin'), [], ICON_SIZE_SMALL)
                     .'</a>'.
                     "<a title='".get_plugin_lang('DeleteOrder', 'BuyCoursesPlugin')."'".
-                    " href='".api_get_self().'?order='.$item['id']."&action=cancel'".
+                    " href='".api_get_self().'?order='.$item['id']."&action=cancel&buycourses_admin_sec_token=".Security::get_existing_token('buycourses_admin')."'".
                     " class='btn btn-default'>".
                     Display::return_icon('delete.png', get_plugin_lang('DeleteOrder', 'BuyCoursesPlugin'), [], ICON_SIZE_SMALL)
                     .'</a>'.

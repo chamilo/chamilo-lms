@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Framework\Container;
 $cidReset = true;
 
 require_once '../config.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 api_protect_admin_script();
 
@@ -25,6 +26,9 @@ $includeServices = 'true' === $plugin->get('include_services');
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
 if ($orderId = $httpRequest->query->getInt('order')) {
+    // Completing a sale grants the product without any payment: never from a bare link (CSRF).
+    buycoursesRequireAdminToken(api_get_self());
+
     $sale = $plugin->getSale($orderId);
 
     if (empty($sale)) {

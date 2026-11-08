@@ -170,8 +170,8 @@ final class GlossaryCharacterizationTest extends KernelTestCase
         $this->term('gl_b', 'x');
         $this->term('gl_c', 'x');
 
-        // PINNED QUIRK: pagination and sort arguments are ignored (@todo in the source); the legacy SQL honoured
-        // LIMIT/ORDER BY. All the visible terms come back, in insertion order, whatever $from/$number/$direction.
+        // INTENTIONAL: pagination and sort arguments are ignored; every caller passes the whole range (0, count or 1000)
+        // and sorts afterwards if needed (the legacy SQL honoured LIMIT/ORDER BY). All the visible terms come back, in insertion order, whatever $from/$number/$direction.
         $all = $this->mineRows(GlossaryManager::get_glossary_data(0, 1000, 0, 'ASC'));
         $page = $this->mineRows(GlossaryManager::get_glossary_data(2, 1, 0, 'DESC'));
 
@@ -219,8 +219,10 @@ final class GlossaryCharacterizationTest extends KernelTestCase
         $this->assertTrue(GlossaryManager::glossary_exists('gl_dup'));
         $this->assertFalse(GlossaryManager::glossary_exists('gl_dup', $id), 'Editing a term must not clash with itself.');
         $this->assertFalse(GlossaryManager::glossary_exists('gl_elsewhere'));
-        // PINNED QUIRK: the comparison is a loose PHP "==" on the whole title, case sensitive.
-        $this->assertFalse(GlossaryManager::glossary_exists('GL_DUP'));
+        // Case-insensitive like the legacy SQL comparison, and strict (no numeric-string coercion).
+        $this->assertTrue(GlossaryManager::glossary_exists('GL_DUP'));
+        $this->term('10', 'x');
+        $this->assertFalse(GlossaryManager::glossary_exists('1e1'));
     }
 
     // ------------------------------------------------------------------ writes
@@ -272,10 +274,10 @@ final class GlossaryCharacterizationTest extends KernelTestCase
         $this->assertSame('a', $this->conn()->fetchOne('SELECT description FROM c_glossary WHERE iid = ?', [$a]));
     }
 
-    public function testUpdateGlossaryOnAnUnknownIdSucceedsWithoutChangingAnything(): void
+    public function testUpdateGlossaryOnAnUnknownIdFailsWithoutChangingAnything(): void
     {
-        // PINNED QUIRK: no term to update, yet true is returned.
-        $this->assertTrue(GlossaryManager::update_glossary(['glossary_id' => 999999, 'title' => 'gl_nobody', 'description' => 'z'], false));
+        // No term to update: false, not a fake success.
+        $this->assertFalse(GlossaryManager::update_glossary(['glossary_id' => 999999, 'title' => 'gl_nobody', 'description' => 'z'], false));
         $this->assertSame(0, (int) $this->conn()->fetchOne("SELECT COUNT(*) FROM c_glossary WHERE title = 'gl_nobody'"));
     }
 

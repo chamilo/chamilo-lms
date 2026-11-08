@@ -258,6 +258,9 @@ class GlossaryManager
                     ->setTitle($values['title'])
                     ->setDescription($values['description']);
                 $repo->update($glossary);
+            } else {
+                // Nothing to update: do not report a success.
+                return false;
             }
             /*
 
@@ -375,7 +378,9 @@ class GlossaryManager
 
         /** @var CGlossary $item */
         foreach ($glossaries as $item) {
-            if ($term == $item->getTitle() && $not_id != $item->getIid()) {
+            // Strict and case-insensitive, like the former "name = '...'" SQL comparison (a loose "==" would
+            // also match numeric strings such as "10" and "1e1").
+            if (0 === strcasecmp((string) $term, $item->getTitle()) && $not_id != $item->getIid()) {
                 return true;
             }
         }

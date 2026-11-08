@@ -6775,6 +6775,9 @@ EOT;
         $tblTrackAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         Database::query("DELETE FROM $tblTrackAttempt WHERE exe_id = $exeId");
+        Database::query(
+            'DELETE FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT).' WHERE hotspot_exe_id = '.$exeId
+        );
         Database::query("DELETE FROM $tblTrackExercises WHERE exe_id = $exeId");
 
         Event::addEvent(

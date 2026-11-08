@@ -804,9 +804,8 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $this->assertSame(0, $this->cnt('track_e_attempt', 'exe_id = ?', [$victim]));
         $this->assertSame(1, $this->cnt('track_e_exercises', 'exe_id = ?', [$keeper]));
         $this->assertSame(1, $this->cnt('track_e_attempt', 'exe_id = ?', [$keeper]));
-        // PINNED QUIRK: hotspot answers of the deleted attempt are left orphaned (no FK on track_e_hotspot);
-        // the teacher qualifications only vanish through the ON DELETE CASCADE of their foreign key.
-        $this->assertSame(1, $this->cnt('track_e_hotspot', 'hotspot_exe_id = ?', [$victim]));
+        // track_e_hotspot has no foreign key: its rows must be deleted explicitly (qualifications cascade).
+        $this->assertSame(0, $this->cnt('track_e_hotspot', 'hotspot_exe_id = ?', [$victim]));
         $this->assertSame(0, $this->cnt('track_e_attempt_qualify', 'exe_id = ?', [$victim]));
         $this->assertSame(2, $this->cnt('track_e_default', "default_event_type = 'exe_attempt_deleted' AND default_value IN (?, ?)", [(string) $victim, $victim.'-1']));
     }

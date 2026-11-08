@@ -116,7 +116,8 @@ final class CStudentPublicationRepository extends ResourceRepository
      */
     public function findWorksByTeacher(User $user, Course $course, ?Session $session = null): array
     {
-        $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
+        // The works the teacher created (as 1.11 did with work.user_id), not those of the learners linked to the course.
+        $qb = $this->getResourcesByCourseCreatedByUser($user, $course, $session);
         $qb->andWhere('resource.publicationParent IS NOT NULL');
 
         return $qb

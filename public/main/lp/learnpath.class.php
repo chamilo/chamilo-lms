@@ -3532,7 +3532,7 @@ class learnpath
             $repo->setVisibilityDraft($resource, $course, $session);
         }
 
-        return false;
+        return true;
     }
 
     /**

@@ -215,8 +215,7 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
         $result = learnpath::toggleCategoryVisibility($catId, 0);
 
         $this->assertSame(0, $this->linkVisibility($node));
-        // PINNED QUIRK: returns false even when the category was updated (the only caller ignores the result).
-        $this->assertFalse($result);
+        $this->assertTrue($result, 'reports success when the category was updated (it returned false)');
         $this->assertSame(2, (function () use ($catId, $node) {
             learnpath::toggleCategoryVisibility($catId, 1);
 

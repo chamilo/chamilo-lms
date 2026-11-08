@@ -138,7 +138,7 @@ if (isset($_GET['show'])) {
                 LEFT JOIN $table_survey_question_option survey_question_option
                 ON survey_question.iid = survey_question_option.question_id
                 WHERE survey_question.survey_id = '".$surveyId."'
-                    AND survey_question.iid IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).")
+                    AND survey_question.iid IN (".implode(',', array_map('intval', $paged_questions[$_GET['show']])).")
                     AND survey_question NOT LIKE '%{{%'
                 ORDER BY survey_question.sort, survey_question_option.sort ASC";
 

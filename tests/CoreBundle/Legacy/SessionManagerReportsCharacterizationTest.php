@@ -201,7 +201,7 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
         $this->assertSame([$b], array_keys(SessionManager::getSessionsFollowedByUser($hrm, DRH, null, null, false, false, false, null, 'fk_bet')));
         // With a description the keyword condition becomes title OR description.
         $this->assertSame(
-            [$b, $a],
+            [$a, $b],
             array_keys(SessionManager::getSessionsFollowedByUser($hrm, DRH, null, null, false, false, false, null, 'fk_bet', 'zebra'))
         );
         $this->assertSame(

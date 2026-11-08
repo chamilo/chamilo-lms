@@ -93,7 +93,8 @@ final class SocialCharacterizationTest extends KernelTestCase
         $this->rel(1, 2, UserRelUser::USER_RELATION_TYPE_RRHH);
 
         $this->assertSame(UserRelUser::USER_UNKNOWN, SocialManager::get_relation_between_contacts(1, 2));
-        // PINNED QUIRK: with $includeRH the type is still looked up in user_friend_relation_type, which only holds
+        // INTENTIONAL (no caller passes true; the lookup in user_friend_relation_type is what restricts the answer to the
+        // known friendship types): with $includeRH the type is still looked up in user_friend_relation_type, which only holds
         // ids 1..6, so an HR link (7) is not found either and the answer is "unknown". No caller passes true.
         $this->assertSame(UserRelUser::USER_UNKNOWN, SocialManager::get_relation_between_contacts(1, 2, true));
     }
@@ -208,7 +209,7 @@ final class SocialCharacterizationTest extends KernelTestCase
      */
     public function testMessageTableHelpersThrowBecauseTheirColumnsAreGone(callable $call): void
     {
-        // PINNED QUIRK: user_receiver_id / msg_status do not exist on `message` any more, so the query fails.
+        // DEAD (all @deprecated; the only admin caller, user_information.php, is inside `if (false)`): user_receiver_id / msg_status do not exist on `message` any more, so the query fails.
         // Intended (if ever revived): counts and lists computed through message_rel_user and message.status.
         $this->expectException(Throwable::class);
         $call();

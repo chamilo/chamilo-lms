@@ -41,6 +41,7 @@ final class CourseLegalPluginCharacterizationTest extends PluginCharacterization
     protected function setUp(): void
     {
         parent::setUp();
+
         require_once api_get_path(SYS_PLUGIN_PATH).'CourseLegal/CourseLegalPlugin.php';
         $this->plugin = CourseLegalPlugin::create();
     }

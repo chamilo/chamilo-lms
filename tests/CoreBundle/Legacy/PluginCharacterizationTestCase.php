@@ -44,8 +44,7 @@ abstract class PluginCharacterizationTestCase extends KernelTestCase
         string $classFile,
         string $className,
         ?string $schemaScript = null
-    ): void
-    {
+    ): void {
         // A plain PDO connection: booting the kernel here would make DAMA open its transaction too early.
         $dsn = \sprintf(
             'mysql:host=%s;port=%s;dbname=%s',

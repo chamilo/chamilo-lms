@@ -33,6 +33,7 @@ final class JustificationPluginCharacterizationTest extends PluginCharacterizati
     protected function setUp(): void
     {
         parent::setUp();
+
         require_once api_get_path(SYS_PLUGIN_PATH).'Justification/Justification.php';
         $this->plugin = Justification::create();
     }
@@ -184,6 +185,7 @@ final class JustificationPluginCharacterizationTest extends PluginCharacterizati
         $user = $this->rawUser('ju_up');
         $tmp = tempnam(sys_get_temp_dir(), 'ju_');
         file_put_contents($tmp, 'x');
+
         try {
             $file = ['tmp_name' => $tmp, 'name' => 'proof.pdf'];
 

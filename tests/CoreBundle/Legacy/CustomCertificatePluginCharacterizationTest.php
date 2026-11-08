@@ -40,6 +40,7 @@ final class CustomCertificatePluginCharacterizationTest extends PluginCharacteri
     protected function setUp(): void
     {
         parent::setUp();
+
         require_once api_get_path(SYS_PLUGIN_PATH).'CustomCertificate/src/CustomCertificatePlugin.php';
         $this->conn->executeStatement('DELETE FROM '.self::TABLE);
     }
@@ -155,7 +156,7 @@ final class CustomCertificatePluginCharacterizationTest extends PluginCharacteri
             'plain relative path' => ['12/logo.png', '12/logo.png'],
             'trimmed' => ["  12/logo.png \n", '12/logo.png'],
             'leading slashes are removed' => ['//12/logo.png', '12/logo.png'],
-            'backslashes become slashes' => ['12\\logo.png', '12/logo.png'],
+            'backslashes become slashes' => ['12\logo.png', '12/logo.png'],
             'empty' => ['', ''],
             'parent traversal' => ['12/../../secret.png', ''],
             'only parent' => ['..', ''],

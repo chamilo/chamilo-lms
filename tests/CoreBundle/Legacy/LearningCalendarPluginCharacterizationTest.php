@@ -43,6 +43,7 @@ final class LearningCalendarPluginCharacterizationTest extends PluginCharacteriz
     protected function setUp(): void
     {
         parent::setUp();
+
         require_once api_get_path(SYS_PLUGIN_PATH).'LearningCalendar/LearningCalendarPlugin.php';
         $this->plugin = LearningCalendarPlugin::create();
     }
@@ -462,7 +463,7 @@ final class LearningCalendarPluginCharacterizationTest extends PluginCharacteriz
         $this->assign($cal, $user);
         $id = $this->event($cal, '2026-03-05', '2026-03-06', 2);
         $this->loginAs($user);
-        $agenda = new class() {
+        $agenda = new class {
             public function formatEventDate(string $date): string
             {
                 return 'fmt:'.$date;
@@ -536,6 +537,7 @@ final class LearningCalendarPluginCharacterizationTest extends PluginCharacteriz
             $this->fail('A teacher deleted a calendar of someone else');
         } catch (NotAllowedException) {
         }
+
         try {
             $this->plugin->copyCalendar($cal);
             $this->fail('A teacher copied a calendar of someone else');

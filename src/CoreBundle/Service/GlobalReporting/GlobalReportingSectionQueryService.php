@@ -3790,9 +3790,29 @@ final readonly class GlobalReportingSectionQueryService
             $rowTypes['courseCoachStatus'] = Types::INTEGER;
         }
 
+        // Course learners who are live accounts of this URL (or of no URL, like the tracking list below).
         $learnerCountExpression = '(SELECT COUNT(DISTINCT relation.user_id)
                                       FROM session_rel_course_rel_user relation
-                                     WHERE relation.session_id = session.id AND relation.status = 0)';
+                                      INNER JOIN user relation_user ON relation_user.id = relation.user_id
+                                     WHERE relation.session_id = session.id AND relation.status = 0
+                                       AND relation_user.active <> :softDeleted
+                                       AND (
+                                           EXISTS (
+                                               SELECT 1
+                                                 FROM access_url_rel_user relation_url
+                                                WHERE relation_url.user_id = relation.user_id
+                                                  AND relation_url.access_url_id = :accessUrlId
+                                           )
+                                           OR NOT EXISTS (
+                                               SELECT 1
+                                                 FROM access_url_rel_user relation_url
+                                                WHERE relation_url.user_id = relation.user_id
+                                           )
+                                       ))';
+        $rowParameters['softDeleted'] = User::SOFT_DELETED;
+        $rowParameters['accessUrlId'] = $context->accessUrlId;
+        $rowTypes['softDeleted'] = Types::INTEGER;
+        $rowTypes['accessUrlId'] = Types::INTEGER;
 
         if (!$adminMode) {
             // Same rule as legacy SessionManager::get_users_by_session(): session-level learners of this URL.
@@ -3816,11 +3836,7 @@ final readonly class GlobalReportingSectionQueryService
                                                )
                                            ))';
             $rowParameters['learnerRelationType'] = Session::STUDENT;
-            $rowParameters['softDeleted'] = User::SOFT_DELETED;
-            $rowParameters['accessUrlId'] = $context->accessUrlId;
             $rowTypes['learnerRelationType'] = Types::INTEGER;
-            $rowTypes['softDeleted'] = Types::INTEGER;
-            $rowTypes['accessUrlId'] = Types::INTEGER;
         }
 
         $rows = $this->connection->fetchAllAssociative(

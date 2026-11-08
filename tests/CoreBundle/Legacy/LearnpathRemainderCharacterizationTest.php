@@ -676,8 +676,8 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
         $this->assertSame('1', $this->lp($scorm)->getUseScoreAsProgress());
         $this->conn()->executeStatement('UPDATE c_lp_item SET max_score = 4 WHERE iid = ?', [$item]);
         $this->conn()->executeStatement('UPDATE c_lp_item_view SET score = 3 WHERE lp_item_id = ?', [$item]);
-        // PINNED QUIRK: `if ($mode = '%')` assigns instead of comparing, so the 'abs' mode is answered as a percentage.
-        $this->assertSame(['75', '%'], $this->lp($scorm)->get_progress_bar_text('abs'));
+        // The 'abs' mode used to be answered as a percentage (`if ($mode = '%')` assigned instead of comparing).
+        $this->assertSame([3.0, '/4'], array_map(static fn ($v) => is_numeric($v) ? (float) $v : $v, $this->lp($scorm)->get_progress_bar_text('abs')));
         $this->assertSame(['75', '%'], $this->lp($scorm)->get_progress_bar_text('%'));
         $this->assertFalse($this->lp($document)->getUseScoreAsProgress(), 'only SCORM paths');
         $this->addItem($scorm, 'l2_sco2', 'sco', 2);

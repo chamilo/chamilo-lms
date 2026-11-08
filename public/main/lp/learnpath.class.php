@@ -2033,7 +2033,7 @@ class learnpath
                 $item = $this->getItem($itemId);
                 $score = $item->get_score();
                 $maxScore = $item->get_max();
-                if ($mode = '%') {
+                if ('%' === $mode) {
                     if (!empty($maxScore)) {
                         $percentage = ((float) $score / (float) $maxScore) * 100;
                     }

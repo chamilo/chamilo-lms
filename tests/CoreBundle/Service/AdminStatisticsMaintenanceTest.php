@@ -452,4 +452,24 @@ final class AdminStatisticsMaintenanceTest extends KernelTestCase
         $this->expectExceptionMessage('No other duplicates found for this user.');
         $this->action->runDuplicateAction('unify', 0, $a, 'name', 0);
     }
+
+    /**
+     * Like every other maintenance action, enabling or disabling a duplicate is confined to the users of the current
+     * access URL: an administrator of one portal must not switch the accounts of another portal on or off.
+     */
+    public function testDuplicateActivationIsConfinedToTheUsersOfTheCurrentUrl(): void
+    {
+        $other = $this->secondUrl();
+        $foreign = $this->rawUser('r2m3', 5, 1, $other);
+        $twin = $this->rawUser('r2m4', 5, 1, $other);
+        $this->setNames($foreign, 'Scope-r2', 'Pair', 'r2m3@example.com');
+        $this->setNames($twin, 'Scope-r2', 'Pair', 'r2m4@example.com');
+
+        try {
+            $this->action->runDuplicateAction('deactivate', $foreign, 0, 'name', 0);
+            $this->fail('a user of another portal must not be reachable');
+        } catch (BadRequestHttpException) {
+            $this->assertSame(1, $this->activeOf($foreign));
+        }
+    }
 }

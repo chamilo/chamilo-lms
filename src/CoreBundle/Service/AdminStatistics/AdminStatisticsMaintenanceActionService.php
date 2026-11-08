@@ -312,10 +312,12 @@ final readonly class AdminStatisticsMaintenanceActionService
     private function isUserInDuplicateReport(string $dupMode, int $userId, int $extraFieldId): bool
     {
         $connection = $this->entityManager->getConnection();
+        [$joinUrl, $urlCondition, $urlParameters, $urlTypes] = $this->getUserAccessUrlSql('u', 'url');
         $target = $connection->executeQuery(
-            'SELECT id, firstname, lastname, email FROM user WHERE id = :userId AND active <> :softDeleted LIMIT 1',
-            ['userId' => $userId, 'softDeleted' => User::SOFT_DELETED],
-            ['userId' => Types::INTEGER, 'softDeleted' => Types::INTEGER],
+            'SELECT u.id, u.firstname, u.lastname, u.email FROM user u '.$joinUrl
+            .'WHERE u.id = :userId AND u.active <> :softDeleted '.$urlCondition.'LIMIT 1',
+            [...$urlParameters, 'userId' => $userId, 'softDeleted' => User::SOFT_DELETED],
+            [...$urlTypes, 'userId' => Types::INTEGER, 'softDeleted' => Types::INTEGER],
         )->fetchAssociative();
         if (false === $target) {
             return false;

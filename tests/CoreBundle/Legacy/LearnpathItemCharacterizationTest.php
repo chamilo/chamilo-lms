@@ -380,8 +380,9 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertTrue($item->set_status('PASSED'));
         $this->assertSame('PASSED', $item->get_status(false), 'the value is stored as given, not normalised');
 
-        // PINNED QUIRK: "succeeded" (listed by is_done()'s docblock) is not a known status: an unknown status does
-        // not keep the previous one, it resets the item to "not attempted".
+        // INTENTIONAL: set_status() only accepts the statuses of $possible_status; an unknown one ("succeeded" is
+        // only tolerated by is_done() for SCORM 2004 data, never produced by the player) resets the item to the
+        // default "not attempted" and returns false, so the caller learns that the status was refused.
         $this->assertFalse($item->set_status('succeeded'));
         $this->assertSame('not attempted', $item->get_status(false));
     }
@@ -497,9 +498,10 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $a = $this->addItem($lp, 'li_a');
         $item = $this->item($a);
 
-        // PINNED QUIRK: get_prevent_reinit() only reads c_lp.prevent_reinit when the property is unset, but the
-        // property is declared with a default of 1 so the lookup never runs; learnpath pushes the value with
-        // set_prevent_reinit() instead. Same for get_seriousgame_mode() (always 0 from the constructor).
+        // INTENTIONAL: get_prevent_reinit() only reads c_lp.prevent_reinit when the property is unset, but the
+        // property is declared with a default of 1 so the lookup never runs; learnpath pushes the value into every
+        // item it builds with set_prevent_reinit() (learnpath.class.php), which is the single source of truth.
+        // Same for get_seriousgame_mode() (deprecated, always 0 from the constructor).
         $this->assertSame(1, $item->get_prevent_reinit());
         $this->assertSame(0, $item->get_seriousgame_mode());
         $item->set_prevent_reinit(0);
@@ -1523,8 +1525,9 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         [$a] = $p['ids'];
         $item = $p['items'][$p['ids'][1]];
 
-        // PINNED QUIRK: with the platform setting off the method has no return statement and yields null.
-        $this->assertNull($item->getStatusFromOtherSessions(self::USER_ID, (string) $a, $p['refs']));
+        // Fixed: with the platform setting off the method had no return statement and yielded null instead of the
+        // documented bool (every caller already checks the setting first).
+        $this->assertFalse($item->getStatusFromOtherSessions(self::USER_ID, (string) $a, $p['refs']));
 
         $this->setPrerequisiteSetting('validate_lp_prerequisite_from_other_session', 'true');
         $this->assertFalse($item->getStatusFromOtherSessions(self::USER_ID, (string) $a, $p['refs']), 'no view in a session');

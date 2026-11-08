@@ -4427,6 +4427,8 @@ class learnpathItem
 
             return $resultFromOtherSessions;
         }
+
+        return false;
     }
 
     public function get_title_to_display(): string

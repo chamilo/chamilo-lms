@@ -7,7 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use CourseCategory;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -47,7 +49,7 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
 
     protected function tearDown(): void
     {
-        \ChamiloSession::erase('_user');
+        ChamiloSession::erase('_user');
         self::getContainer()->get('security.token_storage')->setToken(null);
         parent::tearDown();
     }
@@ -518,7 +520,7 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
 
     private function setSetting(string $name, string $value): void
     {
-        self::getContainer()->get(\Chamilo\CoreBundle\Settings\SettingsManager::class)->updateSetting($name, $value);
+        self::getContainer()->get(SettingsManager::class)->updateSetting($name, $value);
     }
 
     private function cat(
@@ -567,7 +569,9 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
         return (int) $this->conn()->fetchOne('SELECT tree_pos FROM course_category WHERE id = ?', [$id]);
     }
 
-    /** @param int[] $ids @return array<int,int> id => tree_pos */
+    /**
+     * @param int[] $ids @return array<int,int> id => tree_pos
+     */
     private function positions(array $ids): array
     {
         $out = [];

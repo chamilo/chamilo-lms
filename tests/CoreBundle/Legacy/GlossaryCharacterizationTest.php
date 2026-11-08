@@ -8,12 +8,14 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use GlossaryManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -50,18 +52,18 @@ final class GlossaryCharacterizationTest extends KernelTestCase
         $request = Request::create('/main/glossary/index.php');
         $request->setSession($httpSession);
         Container::setRequest($request);
-        \ChamiloSession::erase('studentview');
-        \ChamiloSession::erase('glossary_view');
-        \ChamiloSession::write('_real_cid', 1);
-        \ChamiloSession::write('_cid', 'AIACT');
-        \ChamiloSession::erase('id_session');
+        ChamiloSession::erase('studentview');
+        ChamiloSession::erase('glossary_view');
+        ChamiloSession::write('_real_cid', 1);
+        ChamiloSession::write('_cid', 'AIACT');
+        ChamiloSession::erase('id_session');
         unset($_GET['keyword'], $_GET['action']);
     }
 
     protected function tearDown(): void
     {
-        \ChamiloSession::erase('_real_cid');
-        \ChamiloSession::erase('_cid');
+        ChamiloSession::erase('_real_cid');
+        ChamiloSession::erase('_cid');
         unset($_GET['keyword'], $_GET['action']);
         self::getContainer()->get('security.token_storage')->setToken(null);
         parent::tearDown();
@@ -380,7 +382,7 @@ final class GlossaryCharacterizationTest extends KernelTestCase
     private function loginAsAdmin(): void
     {
         $admin = $this->getUser('admin');
-        $token = new \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken(
+        $token = new UsernamePasswordToken(
             $admin,
             'main',
             $admin->getRoles()
@@ -388,7 +390,9 @@ final class GlossaryCharacterizationTest extends KernelTestCase
         self::getContainer()->get('security.token_storage')->setToken($token);
     }
 
-    /** Raw fixture: resource node + c_glossary + resource link on a course. Returns the c_glossary iid. */
+    /**
+     * Raw fixture: resource node + c_glossary + resource link on a course. Returns the c_glossary iid.
+     */
     private function term(string $title, string $description, int $courseId = 1, int $visibility = 2): int
     {
         $this->seq++;
@@ -412,7 +416,9 @@ final class GlossaryCharacterizationTest extends KernelTestCase
         return $iid;
     }
 
-    /** Keep only the fixture terms: the demo course may already hold some. */
+    /**
+     * Keep only the fixture terms: the demo course may already hold some.
+     */
     private function mine(array $terms): array
     {
         return array_filter($terms, static fn ($t) => str_starts_with($t['title'], 'gl_'));

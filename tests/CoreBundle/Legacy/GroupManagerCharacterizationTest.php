@@ -18,7 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Throwable;
 
 /**
  * Characterization tests for the raw-SQL methods of GroupManager (public/main/inc/lib/groupmanager.lib.php,
@@ -246,7 +245,7 @@ final class GroupManagerCharacterizationTest extends KernelTestCase
         $row = GroupManager::getCategoryByTitle('gm_cat_title');
         $this->assertSame((string) $mine, (string) $row['iid']);
         $this->assertSame('gm_cat_title', $row['title']);
-        $this->assertSame((string) $mine, (string) GroupManager::getCategoryByTitle("  gm_cat_title ")['iid'], 'title is trimmed');
+        $this->assertSame((string) $mine, (string) GroupManager::getCategoryByTitle('  gm_cat_title ')['iid'], 'title is trimmed');
         $this->assertSame([], GroupManager::getCategoryByTitle('gm_cat_other_course'), 'linked to another course only');
         $this->assertSame((string) $elsewhere, (string) GroupManager::getCategoryByTitle('gm_cat_other_course', 'USINGCHAMILO')['iid'], 'explicit course code');
         $this->assertSame([], GroupManager::getCategoryByTitle('gm_cat_unlinked'), 'no resource link: in no course');

@@ -1,15 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Database;
+use DateTime;
+use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
@@ -64,7 +70,9 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
         return $this->getEntityManager()->getConnection();
     }
 
-    /** Legacy code runs with an empty identity map on every request. */
+    /**
+     * Legacy code runs with an empty identity map on every request.
+     */
     private function fresh(): void
     {
         $this->getEntityManager()->clear();
@@ -75,7 +83,7 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
         $user = $this->getEntityManager()->getRepository(User::class)->find($userId);
         $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
         self::getContainer()->get('security.token_storage')->setToken($token);
-        \ChamiloSession::write('_user', ['id' => $userId]);
+        ChamiloSession::write('_user', ['id' => $userId]);
         $this->fresh();
     }
 
@@ -432,7 +440,7 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
         $this->fresh();
 
         $res = UserManager::get_sessions_by_category($u, false);
-        $this->assertCount(1, $res[''] ['sessions'], 'The list merges the two rows into one session.');
+        $this->assertCount(1, $res['']['sessions'], 'The list merges the two rows into one session.');
         // PINNED QUIRK: the count variant sums the two sub-queries without de-duplicating the session id.
         $this->assertSame(2, UserManager::get_sessions_by_category($u, false, false, false, true));
     }
@@ -543,7 +551,7 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
         $this->assertSame($t['future_end'], $row['access_end_date']);
         $this->assertSame(
             ['code', 'i', 't', 'email', 'l', 'sort', 'access_start_date', 'access_end_date', 'session_id', 'session_name'],
-            array_slice(array_keys($row), 0, 10)
+            \array_slice(array_keys($row), 0, 10)
         );
         $this->assertSame('5', (string) $row[array_keys($row)[10]], 'Unnamed IF(...) status column: "5" for a student.');
         $this->assertSame('course_info', array_keys($row)[11]);
@@ -694,8 +702,8 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
 
         $res = UserManager::getSubscribedSessionsByYear(['id' => $u, 'status' => 5], 2031);
 
-        $tz = new \DateTimeZone(api_get_timezone());
-        $expected = static fn (string $utc): string => (new \DateTime(api_get_local_time($utc), $tz))->format('H:i:s');
+        $tz = new DateTimeZone(api_get_timezone());
+        $expected = static fn (string $utc): string => (new DateTime(api_get_local_time($utc), $tz))->format('H:i:s');
         $this->assertSame(
             [$expected('2031-02-10 15:30:00'), $expected('2031-03-10 20:00:00')],
             [substr($res[$s]['access_start_date'], 11), substr($res[$s]['access_end_date'], 11)]
@@ -975,7 +983,7 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
         $stud = $this->rawUser('bo1s');
         $this->conn()->executeStatement(
             'INSERT INTO user_rel_user (user_id, friend_user_id, relation_type, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())',
-            [$stud, $boss, \Chamilo\CoreBundle\Entity\UserRelUser::USER_RELATION_TYPE_BOSS]
+            [$stud, $boss, UserRelUser::USER_RELATION_TYPE_BOSS]
         );
 
         $this->assertSame([$stud], array_keys(UserManager::getUsersFollowedByStudentBoss($boss)));

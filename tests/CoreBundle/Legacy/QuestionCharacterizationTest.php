@@ -8,17 +8,19 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use Doctrine\DBAL\Connection;
+use Exercise;
+use MultipleAnswer;
 use Question;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use UniqueAnswer;
 
 /**
  * Characterization tests for the raw-SQL methods of the legacy Question class
@@ -37,7 +39,10 @@ final class QuestionCharacterizationTest extends KernelTestCase
 
     private Connection $conn;
     private int $seq = 0;
-    /** @var int[]|null */
+
+    /**
+     * @var int[]|null
+     */
     private ?array $spare = null;
 
     protected function setUp(): void
@@ -148,7 +153,9 @@ final class QuestionCharacterizationTest extends KernelTestCase
         return (int) $this->conn->lastInsertId();
     }
 
-    /** Links the (bare) quiz to course/session through a resource_link on a borrowed spare resource node. */
+    /**
+     * Links the (bare) quiz to course/session through a resource_link on a borrowed spare resource node.
+     */
     private function publishQuiz(int $quizId, int $nodeIdx, int $courseId, ?int $sessionId = null, ?string $deletedAt = null): void
     {
         // Spare nodes: neither used by a quiz nor carrying any resource_link (fixed list for the whole test).
@@ -181,7 +188,9 @@ final class QuestionCharacterizationTest extends KernelTestCase
         return $q;
     }
 
-    /** @return array<int,int> question_id => question_order for a quiz */
+    /**
+     * @return array<int,int> question_id => question_order for a quiz
+     */
     private function orders(int $quizId): array
     {
         $rows = $this->conn->fetchAllKeyValue(
@@ -229,7 +238,7 @@ final class QuestionCharacterizationTest extends KernelTestCase
 
         $q = $this->read($id);
 
-        $this->assertInstanceOf(\MultipleAnswer::class, $q);
+        $this->assertInstanceOf(MultipleAnswer::class, $q);
         $this->assertSame($id, $q->iid);
         $this->assertSame('qs_title', $q->question);
         $this->assertSame('qs_desc', $q->description);
@@ -382,7 +391,7 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $this->assertSame(0, $this->cnt('c_quiz_question_rel_category', 'question_id = ?', [$id]));
         $this->assertSame(1, $this->cnt('c_quiz_question_rel_category', 'question_id = ?', [$other]), 'other questions untouched');
 
-        $noId = new \UniqueAnswer();
+        $noId = new UniqueAnswer();
         $this->assertFalse($noId->deleteCategory());
     }
 
@@ -568,7 +577,7 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $q->updateCategory($cat);
         $q->setFeedback('qs_fb');
         $q->setExtra('qs_x');
-        $exercise = new \Exercise();
+        $exercise = new Exercise();
         $exercise->iId = $quiz;
         $q->save($exercise);
         $this->getContainer()->get('doctrine')->getManager()->clear();
@@ -596,7 +605,7 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $this->link($quiz, $first, 6);
         $this->link($quiz, $second, 3);
 
-        $maker = new \UniqueAnswer();
+        $maker = new UniqueAnswer();
         $newId = $maker->create_question($quiz, 'qs_created', 'qs_created_desc', 3.5, MULTIPLE_ANSWER, 2);
 
         $row = $this->conn->fetchAssociative('SELECT * FROM c_quiz_question WHERE iid = ?', [$newId]);
@@ -613,7 +622,7 @@ final class QuestionCharacterizationTest extends KernelTestCase
     {
         $this->ctx();
         $quiz = $this->makeQuiz();
-        $newId = (new \UniqueAnswer())->create_question($quiz, 'qs_created_empty');
+        $newId = (new UniqueAnswer())->create_question($quiz, 'qs_created_empty');
         $this->assertSame(1, (int) $this->conn->fetchOne('SELECT position FROM c_quiz_question WHERE iid = ?', [$newId]));
         $this->assertSame([$newId => 1], $this->orders($quiz));
         $this->assertSame(1, (int) $this->conn->fetchOne('SELECT type FROM c_quiz_question WHERE iid = ?', [$newId]));
@@ -704,13 +713,13 @@ final class QuestionCharacterizationTest extends KernelTestCase
 
         $swapped = $q->swapSimpleAnswerTypes();
 
-        $this->assertInstanceOf(\MultipleAnswer::class, $swapped);
+        $this->assertInstanceOf(MultipleAnswer::class, $swapped);
         $this->assertSame(MULTIPLE_ANSWER, $swapped->type);
         $this->assertSame($id, $swapped->iid, 'the state of the question is carried over');
         $this->assertSame(MULTIPLE_ANSWER, (int) $this->conn->fetchOne('SELECT type FROM c_quiz_question WHERE iid = ?', [$id]));
         $this->assertSame(UNIQUE_ANSWER, (int) $this->conn->fetchOne('SELECT type FROM c_quiz_question WHERE iid = ?', [$other]));
         $back = $swapped->swapSimpleAnswerTypes();
-        $this->assertInstanceOf(\UniqueAnswer::class, $back);
+        $this->assertInstanceOf(UniqueAnswer::class, $back);
         $this->assertSame(UNIQUE_ANSWER, (int) $this->conn->fetchOne('SELECT type FROM c_quiz_question WHERE iid = ?', [$id]));
     }
 
@@ -765,7 +774,9 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $this->assertSame(get_lang('Not linked to media'), $list[0]);
     }
 
-    /** A question linked to a course through a resource_link on a spare resource node (as quizzes are). */
+    /**
+     * A question linked to a course through a resource_link on a spare resource node (as quizzes are).
+     */
     private function publishedQuestion(string $title, int $type, int $nodeIdx, int $courseId, ?string $deletedAt = null, array $o = []): int
     {
         $this->spareQuestionNodes ??= $this->conn->fetchFirstColumn(
@@ -791,7 +802,9 @@ final class QuestionCharacterizationTest extends KernelTestCase
         return $id;
     }
 
-    /** @var int[]|null */
+    /**
+     * @var int[]|null
+     */
     private ?array $spareQuestionNodes = null;
 
     public function testCourseMediasAreListedAndCountedPerCourse(): void

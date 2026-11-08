@@ -14,12 +14,12 @@ use Chamilo\Tests\ChamiloTestTrait;
 use CourseManager;
 use Database;
 use Doctrine\DBAL\Connection;
+use ExtraFieldValue;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Throwable;
 
 /**
  * Characterization tests for the raw-SQL methods of CourseManager (public/main/inc/lib/course.lib.php).
@@ -92,7 +92,7 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
 
     private function setCourseExtraValue(Course $course, string $variable, string $value): void
     {
-        (new \ExtraFieldValue('course'))->save(['item_id' => $course->getId(), 'variable' => $variable, 'field_value' => $value]);
+        (new ExtraFieldValue('course'))->save(['item_id' => $course->getId(), 'variable' => $variable, 'field_value' => $value]);
     }
 
     private function setVisibility(Course $course, int $visibility): void
@@ -1206,7 +1206,7 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
     public function testGenerateCourseCodeAndNextCode(): void
     {
         $this->assertSame('CMGENERATEDCODE', CourseManager::generate_course_code('cm generated-code!'));
-        $this->assertLessThanOrEqual(CourseManager::MAX_COURSE_LENGTH_CODE, strlen(CourseManager::generate_course_code(str_repeat('cm', 50))));
+        $this->assertLessThanOrEqual(CourseManager::MAX_COURSE_LENGTH_CODE, \strlen(CourseManager::generate_course_code(str_repeat('cm', 50))));
 
         $this->assertSame('CMNEXTFREE', CourseManager::generate_nice_next_course_code('CMNEXTFREE'), 'a free code is returned as is');
 

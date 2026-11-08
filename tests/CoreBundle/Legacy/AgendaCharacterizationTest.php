@@ -10,13 +10,14 @@ use Agenda;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Characterization of the legacy Agenda class (public/main/inc/lib/agenda.lib.php).
@@ -59,21 +60,21 @@ final class AgendaCharacterizationTest extends KernelTestCase
 
     private function setContext(int $userId, ?int $courseId, int $sessionId = 0): void
     {
-        \ChamiloSession::write('_user', ['id' => $userId, 'user_id' => $userId]);
+        ChamiloSession::write('_user', ['id' => $userId, 'user_id' => $userId]);
         if (null !== $courseId) {
             $code = 1 === $courseId ? 'AIACT' : 'USINGCHAMILO';
-            \ChamiloSession::write('_real_cid', $courseId);
-            \ChamiloSession::write('_cid', $code);
-            \ChamiloSession::write('_course', api_get_course_info($code));
+            ChamiloSession::write('_real_cid', $courseId);
+            ChamiloSession::write('_cid', $code);
+            ChamiloSession::write('_course', api_get_course_info($code));
         } else {
-            \ChamiloSession::erase('_real_cid');
-            \ChamiloSession::erase('_cid');
-            \ChamiloSession::erase('_course');
+            ChamiloSession::erase('_real_cid');
+            ChamiloSession::erase('_cid');
+            ChamiloSession::erase('_course');
         }
-        \ChamiloSession::write('sid', $sessionId);
-        \ChamiloSession::write('gid', 0);
-        \ChamiloSession::write('system_timezone', 'Asia/Tokyo');
-        \ChamiloSession::erase('login_as');
+        ChamiloSession::write('sid', $sessionId);
+        ChamiloSession::write('gid', 0);
+        ChamiloSession::write('system_timezone', 'Asia/Tokyo');
+        ChamiloSession::erase('login_as');
         Container::getEntityManager()->clear();
         // ResourceListener takes the creator of a new resource from the security token, as in a real request.
         $user = $this->getUser(1 === $userId ? 'admin' : 'anon');
@@ -139,7 +140,9 @@ final class AgendaCharacterizationTest extends KernelTestCase
         return $this->conn->fetchAssociative('SELECT * FROM c_calendar_event WHERE iid = ?', [$iid]);
     }
 
-    /** @return list<array<string, mixed>> */
+    /**
+     * @return list<array<string, mixed>>
+     */
     private function links(int $iid): array
     {
         return $this->conn->fetchAllAssociative(
@@ -185,7 +188,6 @@ final class AgendaCharacterizationTest extends KernelTestCase
         $this->assertTrue((new Agenda('course'))->getIsAllowedToEdit());
         $this->assertTrue((new Agenda('admin'))->getIsAllowedToEdit());
         $this->assertTrue((new Agenda('personal'))->getIsAllowedToEdit());
-
     }
 
     public function testAnonymousCannotEditAnyTypeOfAgenda(): void
@@ -568,7 +570,9 @@ final class AgendaCharacterizationTest extends KernelTestCase
         $this->assertCount(1, $this->links($id));
     }
 
-    /** @return list<int> */
+    /**
+     * @return list<int>
+     */
     private function linkedUsers(int $iid): array
     {
         return array_values(array_filter(array_map(

@@ -8,6 +8,7 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,7 +48,7 @@ final class UrlManagerCharacterizationTest extends KernelTestCase
 
     protected function tearDown(): void
     {
-        \ChamiloSession::erase('_user');
+        ChamiloSession::erase('_user');
         self::getContainer()->get('security.token_storage')->setToken(null);
         parent::tearDown();
     }
@@ -706,7 +707,9 @@ final class UrlManagerCharacterizationTest extends KernelTestCase
         return $this->getEntityManager()->getConnection();
     }
 
-    /** Legacy code runs with an empty identity map on every request. */
+    /**
+     * Legacy code runs with an empty identity map on every request.
+     */
     private function fresh(): void
     {
         $this->getEntityManager()->clear();

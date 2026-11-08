@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
@@ -10,9 +12,11 @@ use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Database;
 use Doctrine\DBAL\Connection;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Throwable;
 use UserManager;
 
 /**
@@ -155,7 +159,7 @@ class UserManagerCharacterizationTest extends AbstractApiTest
         $this->assertCount(1, $single, 'A scalar id is accepted.');
     }
 
-    public function testGetUserListByConditionsOrderAndComplete_name(): void
+    public function testGetUserListByConditionsOrderAndCompleteName(): void
     {
         $a = $this->createUser('um_gl_a')->getId();
         $b = $this->createUser('um_gl_b')->getId();
@@ -213,6 +217,7 @@ class UserManagerCharacterizationTest extends AbstractApiTest
 
         // Before the fix the escaping was undone, so this widened the WHERE to every user.
         $payload = " AND username = 'um_xi_a' OR '1'='1";
+
         try {
             $rows = UserManager::getUserListExtraConditions(
                 ['official_code' => 'um_code_xi'],
@@ -222,12 +227,13 @@ class UserManagerCharacterizationTest extends AbstractApiTest
                 null,
                 $payload
             );
-        } catch (\Throwable) {
+        } catch (Throwable) {
             $rows = [];
         }
         $this->assertSame([], $rows, 'A quote-bearing fragment must fail or match nothing, never widen the query.');
 
         $countPayload = "' OR 1=1 -- ";
+
         try {
             $count = UserManager::getUserListExtraConditions(
                 ['official_code' => 'um_code_xi'],
@@ -238,7 +244,7 @@ class UserManagerCharacterizationTest extends AbstractApiTest
                 $countPayload,
                 true
             );
-        } catch (\Throwable) {
+        } catch (Throwable) {
             $count = 0;
         }
         $this->assertEquals(0, $count);
@@ -287,7 +293,7 @@ class UserManagerCharacterizationTest extends AbstractApiTest
 
     public function testGetUserListExtraConditionsCreatedBetweenRejectsInjection(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         UserManager::getUserListExtraConditions([], [], false, false, null, '', true, ["2001-01-01' OR '1'='1", '2001-12-31']);
     }
 
@@ -350,7 +356,7 @@ class UserManagerCharacterizationTest extends AbstractApiTest
             ['user.firstname' => 'Alpha', 'user.official_code' => 'um_lh_code'],
             [],
             false,
-            "AND 1=1) OR (1=1"
+            'AND 1=1) OR (1=1'
         );
         $this->assertSame(['um_lh_alpha'], array_column($r, 'username'));
 
@@ -401,7 +407,7 @@ class UserManagerCharacterizationTest extends AbstractApiTest
         $grouped = UserManager::getOfficialCodeGrouped();
         $this->assertSame('um_OC1', $grouped['um_OC1'], 'Result is keyed by the code itself, one entry per distinct code.');
         $this->assertSame('um_OC2', $grouped['um_OC2']);
-        $this->assertSame(count($grouped), count(array_unique(array_keys($grouped))));
+        $this->assertSame(\count($grouped), \count(array_unique(array_keys($grouped))));
     }
 
     public function testGetNumberOfUsersCountsByStatusAndActive(): void
@@ -493,7 +499,7 @@ class UserManagerCharacterizationTest extends AbstractApiTest
 
         $keys = UserManager::get_api_keys($id, 'um_svc');
         $this->assertSame([$keyId], array_keys($keys), 'Keys are indexed by row id.');
-        $this->assertSame(64, strlen($keys[$keyId]));
+        $this->assertSame(64, \strlen($keys[$keyId]));
         $this->assertSame([], array_diff(array_keys(UserManager::get_api_keys($id, 'um_svc')), [$keyId]));
         $this->assertFalse(UserManager::get_api_keys($id, 'other'), 'Service name scopes the lookup.');
         $this->assertEquals($keyId, UserManager::get_api_key_id($id, 'um_svc'));

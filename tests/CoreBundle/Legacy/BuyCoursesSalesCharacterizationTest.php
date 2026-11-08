@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use BuyCoursesPlugin;
+
 /**
  * Characterization of the course/session sale flow of BuyCoursesPlugin: registration with tax and coupons,
  * status transitions, sale listings, invoices (fixtures prefix bc_).
@@ -40,14 +42,14 @@ final class BuyCoursesSalesCharacterizationTest extends BuyCoursesCharacterizati
 
     public function testRegisterSaleRejectsUnknownItemAndMissingCourse(): void
     {
-        $this->assertNull($this->plugin->registerSale(999999, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER));
+        $this->assertNull($this->plugin->registerSale(999999, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER));
         $ghost = $this->makeItem(987654, 10.0);
-        $this->assertNull($this->plugin->registerSale($ghost, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER), 'item of a course that does not exist');
+        $this->assertNull($this->plugin->registerSale($ghost, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER), 'item of a course that does not exist');
     }
 
     public function testRegisterSalePlain(): void
     {
-        $saleId = $this->plugin->registerSale($this->item, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER);
+        $saleId = $this->plugin->registerSale($this->item, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER);
         $sale = $this->saleRow((int) $saleId);
 
         $this->assertSame(2, (int) $sale['user_id']);
@@ -69,17 +71,17 @@ final class BuyCoursesSalesCharacterizationTest extends BuyCoursesCharacterizati
     public function testRegisterSaleStoresTheBuyerFromTheSessionNotFromArguments(): void
     {
         $this->loginAs(1);
-        $saleId = $this->plugin->registerSale($this->item, \BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL);
+        $saleId = $this->plugin->registerSale($this->item, BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL);
         $this->assertSame(1, (int) $this->saleRow((int) $saleId)['user_id']);
     }
 
     public function testRegisterSaleAddsTaxOnTheDiscountedPriceWithRounding(): void
     {
-        $this->setGlobalConfig(10, \BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
+        $this->setGlobalConfig(10, BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
         $this->setPluginSettings(['tax_enable' => 'true']);
         $item = $this->makeItem(2, 33.33, 21);
 
-        $sale = $this->saleRow((int) $this->plugin->registerSale($item, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER));
+        $sale = $this->saleRow((int) $this->plugin->registerSale($item, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER));
 
         // 33.33 * 21% = 6.9993 -> 7.00 ; total 40.33
         $this->assertSame('40.33', $sale['price']);
@@ -90,10 +92,10 @@ final class BuyCoursesSalesCharacterizationTest extends BuyCoursesCharacterizati
 
     public function testRegisterSaleGlobalTaxWhenItemHasNone(): void
     {
-        $this->setGlobalConfig(10, \BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE);
+        $this->setGlobalConfig(10, BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE);
         $this->setPluginSettings(['tax_enable' => 'true']);
 
-        $sale = $this->saleRow((int) $this->plugin->registerSale($this->item, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER));
+        $sale = $this->saleRow((int) $this->plugin->registerSale($this->item, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER));
 
         $this->assertSame('110.00', $sale['price']);
         $this->assertSame('100.00', $sale['price_without_tax']);
@@ -105,7 +107,7 @@ final class BuyCoursesSalesCharacterizationTest extends BuyCoursesCharacterizati
         $item = $this->makeItem(2, 80.0);
         $this->conn->insert('plugin_buycourses_coupon_rel_item', ['coupon_id' => $c = $this->makeCoupon('BC_PCT', 1, 15), 'product_type' => 1, 'product_id' => 2]);
 
-        $sale = $this->saleRow((int) $this->plugin->registerSale($item, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, $c));
+        $sale = $this->saleRow((int) $this->plugin->registerSale($item, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, $c));
 
         $this->assertSame('68.00', $sale['price']);
         $this->assertSame('80.00', $sale['price_without_discount']);
@@ -115,7 +117,7 @@ final class BuyCoursesSalesCharacterizationTest extends BuyCoursesCharacterizati
     public function testRegisterSaleAmountCoupon(): void
     {
         $c = $this->couponForCourse('BC_AMT', 2, 30);
-        $sale = $this->saleRow((int) $this->plugin->registerSale($this->item, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, $c));
+        $sale = $this->saleRow((int) $this->plugin->registerSale($this->item, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, $c));
 
         $this->assertSame('70.00', $sale['price']);
         $this->assertSame('100.00', $sale['price_without_discount']);
@@ -125,7 +127,7 @@ final class BuyCoursesSalesCharacterizationTest extends BuyCoursesCharacterizati
     public function testRegisterSaleAmountCouponAbovePrice(): void
     {
         $c = $this->couponForCourse('BC_BIG', 2, 150);
-        $sale = $this->saleRow((int) $this->plugin->registerSale($this->item, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, $c));
+        $sale = $this->saleRow((int) $this->plugin->registerSale($this->item, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, $c));
 
         // the discount is capped at the price (it used to store a negative sale price)
         $this->assertSame('0.00', $sale['price']);
@@ -139,7 +141,7 @@ final class BuyCoursesSalesCharacterizationTest extends BuyCoursesCharacterizati
         $foreign = $this->couponForCourse('BC_OTHER', 2, 30, ['product' => 2]);
 
         foreach ([$expired, $future, $foreign] as $couponId) {
-            $sale = $this->saleRow((int) $this->plugin->registerSale($this->item, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, $couponId));
+            $sale = $this->saleRow((int) $this->plugin->registerSale($this->item, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, $couponId));
             $this->assertSame('100.00', $sale['price'], 'coupon '.$couponId.' must not apply');
             $this->assertSame('0.00', $sale['discount_amount']);
         }
@@ -148,7 +150,7 @@ final class BuyCoursesSalesCharacterizationTest extends BuyCoursesCharacterizati
     public function testRegisterSaleIgnoresADisabledCoupon(): void
     {
         $c = $this->couponForCourse('BC_OFF', 2, 30, ['active' => 0]);
-        $sale = $this->saleRow((int) $this->plugin->registerSale($this->item, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, $c));
+        $sale = $this->saleRow((int) $this->plugin->registerSale($this->item, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, $c));
 
         $this->assertSame('100.00', $sale['price']);
         $this->assertSame('0.00', $sale['discount_amount']);
@@ -156,7 +158,7 @@ final class BuyCoursesSalesCharacterizationTest extends BuyCoursesCharacterizati
 
     public function testReferenceLookupAndUpdate(): void
     {
-        $saleId = (int) $this->plugin->registerSale($this->item, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER);
+        $saleId = (int) $this->plugin->registerSale($this->item, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER);
         $this->plugin->updateSaleReference($saleId, 'bc_custom_ref');
 
         $this->assertSame($saleId, (int) $this->plugin->getSaleFromReference('bc_custom_ref')['id']);

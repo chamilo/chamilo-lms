@@ -6,15 +6,20 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use BuyCoursesPlugin;
 use Chamilo\CoreBundle\Framework\Container;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use PDO;
-use RuntimeException;
+use Plugin;
 use ReflectionProperty;
+use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+
+use const PHP_BINARY;
 
 /**
  * Shared harness of the BuyCourses characterization tests (public/plugin/BuyCourses).
@@ -29,7 +34,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 abstract class BuyCoursesCharacterizationTestCase extends KernelTestCase
 {
     protected Connection $conn;
-    protected \BuyCoursesPlugin $plugin;
+    protected BuyCoursesPlugin $plugin;
 
     private static bool $schemaChecked = false;
 
@@ -42,7 +47,7 @@ abstract class BuyCoursesCharacterizationTestCase extends KernelTestCase
         self::$schemaChecked = true;
 
         // A plain PDO connection: booting the kernel here would make DAMA open its transaction too early.
-        $dsn = sprintf(
+        $dsn = \sprintf(
             'mysql:host=%s;port=%s;dbname=%s',
             $_SERVER['DATABASE_HOST'] ?? '127.0.0.1',
             $_SERVER['DATABASE_PORT'] ?? '3306',
@@ -83,6 +88,7 @@ abstract class BuyCoursesCharacterizationTestCase extends KernelTestCase
         // The plugin language lookup resolves the request locale in the language table (isocode en_US).
         $request->setLocale('en_US');
         Container::setRequest($request);
+
         require_once api_get_path(SYS_PLUGIN_PATH).'BuyCourses/src/buy_course_plugin.class.php';
     }
 
@@ -91,7 +97,7 @@ abstract class BuyCoursesCharacterizationTestCase extends KernelTestCase
         self::bootKernel();
         self::prepareLegacyContext();
         $this->conn = self::getContainer()->get('doctrine')->getConnection();
-        $this->plugin = new \BuyCoursesPlugin();
+        $this->plugin = new BuyCoursesPlugin();
         $this->loginAs(0);
     }
 
@@ -101,21 +107,27 @@ abstract class BuyCoursesCharacterizationTestCase extends KernelTestCase
         parent::tearDown();
     }
 
-    /** Sets the legacy "current user" (0 = nobody). Does not give a security token. */
+    /**
+     * Sets the legacy "current user" (0 = nobody). Does not give a security token.
+     */
     protected function loginAs(int $userId): void
     {
-        \ChamiloSession::write('_user', $userId > 0 ? ['id' => $userId] : null);
+        ChamiloSession::write('_user', $userId > 0 ? ['id' => $userId] : null);
     }
 
-    /** Overrides the plugin settings read through $plugin->get() (values are strings: 'true'/'false'). */
+    /**
+     * Overrides the plugin settings read through $plugin->get() (values are strings: 'true'/'false').
+     */
     protected function setPluginSettings(array $settings): void
     {
-        $prop = new ReflectionProperty(\Plugin::class, 'settings');
+        $prop = new ReflectionProperty(Plugin::class, 'settings');
         $prop->setAccessible(true);
         $prop->setValue($this->plugin, $settings);
     }
 
-    /** Selects the currency row of a given ISO code (the lowest id) as the platform currency. */
+    /**
+     * Selects the currency row of a given ISO code (the lowest id) as the platform currency.
+     */
     protected function selectCurrency(string $iso): int
     {
         $id = (int) $this->conn->fetchOne('SELECT MIN(id) FROM plugin_buycourses_currency WHERE iso_code = ?', [$iso]);

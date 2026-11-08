@@ -8,6 +8,7 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -15,11 +16,11 @@ use Database;
 use Doctrine\DBAL\Connection;
 use learnpath;
 use learnpathItem;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Throwable;
 
 /**
  * Characterization tests for the raw-SQL methods of learnpathItem (public/main/lp/learnpathItem.class.php).
@@ -53,7 +54,6 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         Container::setRequest($request);
         $session->set('_real_cid', self::COURSE_ID);
     }
-
 
     private function conn(): Connection
     {
@@ -89,7 +89,7 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         return (int) $this->conn()->fetchOne("SELECT iid FROM c_lp_item WHERE lp_id = ? AND path = 'root'", [$lpId]);
     }
 
-    private function addItem(int $lpId, string $title, string $type = 'document', int $order = 1, ?int $parentIid = null, string|int $path = 0): int
+    private function addItem(int $lpId, string $title, string $type = 'document', int $order = 1, ?int $parentIid = null, int|string $path = 0): int
     {
         $this->getEntityManager()->clear();
         $em = $this->getEntityManager();
@@ -105,7 +105,6 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
 
         return $id;
     }
-
 
     // ---------------------------------------------------------------- fixtures
 
@@ -184,7 +183,7 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
      *
      * @return array{lp: int, item: int, view: int, iv: int}
      */
-    private function scene(string $type = 'document', int $lpType = 1, array $iv = [], string|int $path = 0): array
+    private function scene(string $type = 'document', int $lpType = 1, array $iv = [], int|string $path = 0): array
     {
         $lp = $this->newLpRow('li_lp_'.$type.$lpType, $lpType);
         $item = $this->addItem($lp, 'li_item_'.$type, $type, 1, null, $path);
@@ -216,7 +215,7 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         foreach (['validate_lp_prerequisite_from_other_session', 'lp_prerequisite_use_last_attempt_only', 'lp_prerequisite_on_quiz_unblock_if_max_attempt_reached'] as $name) {
             try {
                 $this->setPrerequisiteSetting($name, 'false');
-            } catch (\Throwable) {
+            } catch (Throwable) {
             }
         }
         $_GET = [];
@@ -446,6 +445,18 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
     }
 
     /**
+     * @dataProvider restartAllowedProvider
+     */
+    public function testIsRestartAllowedDependsOnPreventReinitAndTheDatabaseStatus(int $prevent, string $status, int $expected): void
+    {
+        $s = $this->scene('document', 1, ['status' => $status]);
+        $item = $this->item($s['item'], $s['view']);
+        $item->set_prevent_reinit($prevent);
+
+        $this->assertSame($expected, $item->isRestartAllowed());
+    }
+
+    /**
      * @return array<string, array{int, string, int}>
      */
     public static function restartAllowedProvider(): array
@@ -460,18 +471,6 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
             'multiple attempts, incomplete' => [0, 'incomplete', -1],
             'multiple attempts, passed' => [0, 'passed', 1],
         ];
-    }
-
-    /**
-     * @dataProvider restartAllowedProvider
-     */
-    public function testIsRestartAllowedDependsOnPreventReinitAndTheDatabaseStatus(int $prevent, string $status, int $expected): void
-    {
-        $s = $this->scene('document', 1, ['status' => $status]);
-        $item = $this->item($s['item'], $s['view']);
-        $item->set_prevent_reinit($prevent);
-
-        $this->assertSame($expected, $item->isRestartAllowed());
     }
 
     public function testCreditAndLessonModeFollowTheStatusWhenReinitIsPrevented(): void
@@ -882,7 +881,7 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
         $this->assertSame('choice', $item->interactions['li_q1'][1]);
         $this->assertSame('10:00:00', $item->interactions['li_q1'][2]);
         $this->assertEquals(1.5, $item->interactions['li_q1'][3]);
-        $this->assertSame(['a,b', 'a', 'wrong', '9'], array_slice($item->interactions['li_q1'], 4));
+        $this->assertSame(['a,b', 'a', 'wrong', '9'], \array_slice($item->interactions['li_q1'], 4));
         $this->assertStringContainsString("'li_q2'", $item->get_interactions_js_array(true));
     }
 
@@ -1236,7 +1235,7 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
      *
      * @return array{items: array<int, learnpathItem>, refs: array<int, int>, ids: array<int, int>, lp: int, view: int, iv: array<int, int>}
      */
-    private function prereqScene(array $statuses, string $type = 'document', string|int $path = 0): array
+    private function prereqScene(array $statuses, string $type = 'document', int|string $path = 0): array
     {
         $lp = $this->newLpRow('li_prereq');
         $view = $this->newView($lp);
@@ -1547,5 +1546,4 @@ final class LearnpathItemCharacterizationTest extends KernelTestCase
 
         $this->assertSame('li_item_document', $this->item($s['item'])->get_title_to_display());
     }
-
 }

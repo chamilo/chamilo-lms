@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Database;
+use DateTimeImmutable;
 use SessionManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
@@ -196,8 +197,8 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         $this->assertNull($row['display_start_date']);
         $this->assertNull($row['display_start_date_to_local_time']);
         $this->assertNotNull($row['access_start_date_to_local_time']);
-        $diff = (new \DateTimeImmutable($row['access_end_date']))->getTimestamp()
-            - (new \DateTimeImmutable($row['access_start_date']))->getTimestamp();
+        $diff = (new DateTimeImmutable($row['access_end_date']))->getTimestamp()
+            - (new DateTimeImmutable($row['access_start_date']))->getTimestamp();
         $this->assertSame(30 * 86400, $diff);
         // With the default session_days_before/after_coach_access settings (0) no coach window is derived.
         $this->assertNull($row['coach_access_start_date']);
@@ -257,8 +258,20 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         $id = $this->newSession('sm_edit_a');
         $other = $this->newSession('sm_edit_b');
 
-        $this->assertSame($id, $this->legacy('edit_session', 
-            $id, 'sm_edit_renamed', '2030-03-01 10:00:00', '2030-03-11 10:00:00', '', '', '', '', [], 0, 2, 'new description'
+        $this->assertSame($id, $this->legacy(
+            'edit_session',
+            $id,
+            'sm_edit_renamed',
+            '2030-03-01 10:00:00',
+            '2030-03-11 10:00:00',
+            '',
+            '',
+            '',
+            '',
+            [],
+            0,
+            2,
+            'new description'
         ));
         $this->getEntityManager()->clear();
 
@@ -296,8 +309,8 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         $row = SessionManager::fetch($id);
 
         $this->assertNotNull($row['coach_access_start_date']);
-        $before = (new \DateTimeImmutable($row['access_start_date']))->getTimestamp()
-            - (new \DateTimeImmutable($row['coach_access_start_date']))->getTimestamp();
+        $before = (new DateTimeImmutable($row['access_start_date']))->getTimestamp()
+            - (new DateTimeImmutable($row['coach_access_start_date']))->getTimestamp();
         $this->assertSame(5 * 86400, $before);
         // Fixed: create_session() used to ignore $sessionCategoryId; it is now stored.
         $this->assertSame($cat, (int) $row['session_category_id']);
@@ -825,6 +838,7 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         $promotionId = 987654;
         $conn = Database::getConnection();
         $conn->executeStatement('SET FOREIGN_KEY_CHECKS = 0');
+
         try {
             $this->legacy('subscribe_sessions_to_promotion', $promotionId, [$s1, $s2]);
             $rows = SessionManager::get_all_sessions_by_promotion($promotionId);
@@ -967,7 +981,7 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         $this->assertSame([], SessionManager::getSessionFollowedByDrh($drh->getId(), 99999999));
 
         $ids = SessionManager::get_sessions_followed_by_hrm($drh->getId(), null, null, false, true);
-        $this->assertEqualsCanonicalizing([$s1, $s2], array_map('intval', is_array(current($ids)) ? array_column($ids, 'id') : $ids));
+        $this->assertEqualsCanonicalizing([$s1, $s2], array_map('intval', \is_array(current($ids)) ? array_column($ids, 'id') : $ids));
         $this->assertSame(2, (int) SessionManager::get_sessions_followed_by_hrm($drh->getId(), null, null, true));
 
         // Re-subscribing with a shorter list replaces the follow list: the old rows are deleted and the

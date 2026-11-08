@@ -10,12 +10,14 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Uid\Uuid;
 use Throwable;
 
 /**
@@ -55,14 +57,14 @@ final class WorkCharacterizationTest extends KernelTestCase
         Container::setRequest($request);
 
         $this->conn = $container->get('doctrine')->getConnection();
-        \ChamiloSession::erase('login_as');
-        \ChamiloSession::erase('studentview');
-        \ChamiloSession::erase('groupId');
+        ChamiloSession::erase('login_as');
+        ChamiloSession::erase('studentview');
+        ChamiloSession::erase('groupId');
     }
 
     protected function tearDown(): void
     {
-        \ChamiloSession::erase('login_as');
+        ChamiloSession::erase('login_as');
         parent::tearDown();
     }
 
@@ -93,18 +95,18 @@ final class WorkCharacterizationTest extends KernelTestCase
         $this->getEntityManager()->clear();
         $tokenStorage = self::getContainer()->get('security.token_storage');
         $tokenStorage->setToken(null !== $user ? new UsernamePasswordToken($user, 'main', $user->getRoles()) : null);
-        \ChamiloSession::write('_user', null !== $user ? ['id' => $user->getId()] : null);
+        ChamiloSession::write('_user', null !== $user ? ['id' => $user->getId()] : null);
         if (null !== $course) {
-            \ChamiloSession::write('_real_cid', $course->getId());
-            \ChamiloSession::write('_cid', $course->getCode());
-            \ChamiloSession::write('_course', api_get_course_info($course->getCode()));
+            ChamiloSession::write('_real_cid', $course->getId());
+            ChamiloSession::write('_cid', $course->getCode());
+            ChamiloSession::write('_course', api_get_course_info($course->getCode()));
         } else {
-            \ChamiloSession::erase('_real_cid');
-            \ChamiloSession::erase('_cid');
-            \ChamiloSession::erase('_course');
+            ChamiloSession::erase('_real_cid');
+            ChamiloSession::erase('_cid');
+            ChamiloSession::erase('_course');
         }
-        \ChamiloSession::write('sid', $sessionId);
-        \ChamiloSession::erase('login_as');
+        ChamiloSession::write('sid', $sessionId);
+        ChamiloSession::erase('login_as');
     }
 
     /**
@@ -623,7 +625,7 @@ final class WorkCharacterizationTest extends KernelTestCase
         $this->conn->executeStatement(
             'INSERT INTO resource_node (resource_type_id, creator_id, title, slug, level, path, created_at, updated_at, public, uuid)
              VALUES (?, ?, ?, ?, 1, ?, ?, ?, 0, ?)',
-            [$typeId, $this->admin()->getId(), 'wk_node_'.$workId, 'wk-node-'.$workId, 'wk-node-'.$workId.'/', $now, $now, \Symfony\Component\Uid\Uuid::v4()->toBinary()]
+            [$typeId, $this->admin()->getId(), 'wk_node_'.$workId, 'wk-node-'.$workId, 'wk-node-'.$workId.'/', $now, $now, Uuid::v4()->toBinary()]
         );
         $nodeId = (int) $this->conn->lastInsertId();
         $this->conn->update('c_student_publication', ['resource_node_id' => $nodeId], ['iid' => $workId]);
@@ -922,6 +924,20 @@ final class WorkCharacterizationTest extends KernelTestCase
         }
     }
 
+    /**
+     * @dataProvider brokenAgainstCurrentSchema
+     */
+    public function testQueryThatReferencesDroppedColumnsIsAnSqlError(callable $call): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+
+        // These four are @deprecated and left as is: they belong to the removed file-url model (url / id columns),
+        // nothing calls them but get_work_path() in the compilatio plugin, and there is no schema-faithful meaning to
+        // repair them to. They fail until removed.
+        $this->expectException(Throwable::class);
+        $call();
+    }
+
     // ------------------------------------------------ queries broken by schema
 
     /**
@@ -935,19 +951,5 @@ final class WorkCharacterizationTest extends KernelTestCase
             'is_work_exist_by_url' => [static fn () => is_work_exist_by_url('/wk_x')],
             'get_work_path' => [static fn () => get_work_path(1)],
         ];
-    }
-
-    /**
-     * @dataProvider brokenAgainstCurrentSchema
-     */
-    public function testQueryThatReferencesDroppedColumnsIsAnSqlError(callable $call): void
-    {
-        $this->setContext($this->admin(), $this->course(1));
-
-        // These four are @deprecated and left as is: they belong to the removed file-url model (url / id columns),
-        // nothing calls them but get_work_path() in the compilatio plugin, and there is no schema-faithful meaning to
-        // repair them to. They fail until removed.
-        $this->expectException(Throwable::class);
-        $call();
     }
 }

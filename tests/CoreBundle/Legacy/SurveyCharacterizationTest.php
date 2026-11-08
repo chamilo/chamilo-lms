@@ -6,15 +6,20 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use SurveyManager;
+use SurveyUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * Characterization of the legacy survey libraries (public/main/survey/survey.lib.php: SurveyManager and
@@ -44,15 +49,15 @@ final class SurveyCharacterizationTest extends KernelTestCase
         Container::setRequest($request);
 
         $this->conn = $container->get('doctrine')->getConnection();
-        \ChamiloSession::erase('login_as');
-        \ChamiloSession::erase('surveyuser');
+        ChamiloSession::erase('login_as');
+        ChamiloSession::erase('surveyuser');
         unset($_SESSION['filled_surveys']);
         $this->setContext(1, 1);
     }
 
     protected function tearDown(): void
     {
-        \ChamiloSession::erase('surveyuser');
+        ChamiloSession::erase('surveyuser');
         unset($_SESSION['filled_surveys'], $_REQUEST['cid']);
         global $_configuration;
         unset($_configuration['show_surveys_base_in_sessions']);
@@ -68,19 +73,19 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
     private function setContext(?int $userId, ?int $courseId, int $sessionId = 0): void
     {
-        \ChamiloSession::write('_user', null !== $userId ? ['id' => $userId] : null);
+        ChamiloSession::write('_user', null !== $userId ? ['id' => $userId] : null);
         if (null !== $courseId) {
             $code = (string) $this->conn->fetchOne('SELECT code FROM course WHERE id = ?', [$courseId]);
-            \ChamiloSession::write('_real_cid', $courseId);
-            \ChamiloSession::write('_cid', $code);
-            \ChamiloSession::write('_course', api_get_course_info($code));
+            ChamiloSession::write('_real_cid', $courseId);
+            ChamiloSession::write('_cid', $code);
+            ChamiloSession::write('_course', api_get_course_info($code));
         } else {
-            \ChamiloSession::erase('_real_cid');
-            \ChamiloSession::erase('_cid');
-            \ChamiloSession::erase('_course');
+            ChamiloSession::erase('_real_cid');
+            ChamiloSession::erase('_cid');
+            ChamiloSession::erase('_course');
         }
-        \ChamiloSession::write('sid', $sessionId);
-        \ChamiloSession::erase('login_as');
+        ChamiloSession::write('sid', $sessionId);
+        ChamiloSession::erase('login_as');
         $this->em()->clear();
     }
 
@@ -215,7 +220,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
     public function testGenerateUniqueCodeEmptyCodeReturnsFalse(): void
     {
-        $this->assertFalse(\SurveyManager::generate_unique_code(''));
+        $this->assertFalse(SurveyManager::generate_unique_code(''));
     }
 
     public function testGenerateUniqueCodeAppendsFirstFreeNumber(): void
@@ -223,14 +228,14 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertSurvey(['code' => 'sv_dup']);
         $this->insertSurvey(['code' => 'sv_dup1']);
 
-        $this->assertSame('sv_dup2', \SurveyManager::generate_unique_code('sv_dup'));
+        $this->assertSame('sv_dup2', SurveyManager::generate_unique_code('sv_dup'));
     }
 
     public function testGenerateUniqueCodeOfAFreeCodeGetsAZeroSuffix(): void
     {
         // PINNED QUIRK: a code that is not taken is returned as "<code>0", not unchanged. Harmless today
         // because the only caller (copySurvey) always passes the code of an existing survey.
-        $this->assertSame('sv_free0', \SurveyManager::generate_unique_code('sv_free'));
+        $this->assertSame('sv_free0', SurveyManager::generate_unique_code('sv_free'));
     }
 
     public function testGenerateUniqueCodeWithSurveyIdOnlyCollidesWithThatSurvey(): void
@@ -239,24 +244,24 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $b = $this->insertSurvey(['code' => 'sv_own']);
 
         // The code exists on survey $a: with $a it collides, with a foreign id it does not.
-        $this->assertSame('sv_own1', \SurveyManager::generate_unique_code('sv_own', $a));
-        $this->assertSame('sv_own0', \SurveyManager::generate_unique_code('sv_own', $b + 1000));
+        $this->assertSame('sv_own1', SurveyManager::generate_unique_code('sv_own', $a));
+        $this->assertSame('sv_own0', SurveyManager::generate_unique_code('sv_own', $b + 1000));
     }
 
     public function testGenerateSurveyCodeIsLowercasedAndSanitized(): void
     {
-        $this->assertSame('svcode', \SurveyManager::generateSurveyCode('SV_Code'));
+        $this->assertSame('svcode', SurveyManager::generateSurveyCode('SV_Code'));
     }
 
     public function testGetSurveyNeedsACourseAndAKnownId(): void
     {
         $id = $this->insertSurvey();
 
-        $this->assertSame([], \SurveyManager::get_survey(0));
-        $this->assertSame([], \SurveyManager::get_survey($id + 100000));
+        $this->assertSame([], SurveyManager::get_survey(0));
+        $this->assertSame([], SurveyManager::get_survey($id + 100000));
 
         $this->setContext(1, null);
-        $this->assertSame([], \SurveyManager::get_survey($id));
+        $this->assertSame([], SurveyManager::get_survey($id));
     }
 
     public function testGetSurveyAddsLegacyAliasKeys(): void
@@ -270,7 +275,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
             'lang' => 'french',
         ]);
 
-        $survey = \SurveyManager::get_survey($id);
+        $survey = SurveyManager::get_survey($id);
 
         $this->assertSame('sv_alias', $survey['survey_code']);
         $this->assertSame('sv alias title', $survey['survey_title']);
@@ -291,7 +296,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
     {
         $id = $this->insertSurvey(['code' => 'sv_raw']);
 
-        $raw = \SurveyManager::get_survey($id, 0, '', true);
+        $raw = SurveyManager::get_survey($id, 0, '', true);
 
         $this->assertSame('sv_raw', $raw['code']);
         $this->assertArrayNotHasKey('survey_code', $raw);
@@ -304,7 +309,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertSurvey(['code' => 'svtaken', 'lang' => 'english']);
         $before = $this->rowCount('c_survey', 'code = ?', ['svtaken']);
 
-        $result = \SurveyManager::store_survey([
+        $result = SurveyManager::store_survey([
             'survey_code' => 'SV_TAKEN',
             'survey_language' => 'english',
             'survey_title' => 'sv dup',
@@ -320,7 +325,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
     public function testStoreSurveyUpdateOfAnUnknownSurveyIsAnError(): void
     {
-        $result = \SurveyManager::store_survey(['survey_id' => 99999999]);
+        $result = SurveyManager::store_survey(['survey_id' => 99999999]);
 
         $this->assertSame(['type' => 'error', 'id' => 99999999], $result);
     }
@@ -330,7 +335,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertSurvey(['code' => 'svother', 'lang' => 'english']);
         $mine = $this->insertSurvey(['code' => 'svmine', 'lang' => 'english']);
 
-        $result = \SurveyManager::store_survey([
+        $result = SurveyManager::store_survey([
             'survey_id' => $mine,
             'survey_code' => 'svother',
             'survey_language' => 'english',
@@ -347,7 +352,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
     public function testGetQuestionReturnsEmptyForUnknownId(): void
     {
-        $this->assertSame([], \SurveyManager::get_question(0));
+        $this->assertSame([], SurveyManager::get_question(0));
     }
 
     public function testGetQuestionReturnsOptionsInSortOrder(): void
@@ -357,7 +362,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $o2 = $this->insertOption($s, $q, 'second', 2, 20);
         $o1 = $this->insertOption($s, $q, 'first', 1, 10);
 
-        $question = \SurveyManager::get_question($q);
+        $question = SurveyManager::get_question($q);
 
         $this->assertSame($s, (int) $question['survey_id']);
         $this->assertSame($q, (int) $question['question_id']);
@@ -382,7 +387,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $s = $this->insertSurvey();
         $q = $this->insertQuestion($s, 'sv q2', 'open', 1, ['survey_group_sec1' => 3, 'survey_group_sec2' => 4]);
 
-        $question = \SurveyManager::get_question($q);
+        $question = SurveyManager::get_question($q);
 
         $this->assertSame(2, $question['choose']);
         $this->assertSame(3, (int) $question['assigned1']);
@@ -400,7 +405,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertOption($s1, $q2, 'only', 1);
         $this->insertOption($s2, $other, 'foreign option', 1);
 
-        $questions = \SurveyManager::get_questions($s1);
+        $questions = SurveyManager::get_questions($s1);
 
         $this->assertSame([$q1, $q2], array_keys($questions));
         $this->assertSame('sv a', $questions[$q1]['question']);
@@ -409,7 +414,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame(3, (int) $questions[$q2]['maximum_score']);
         $this->assertSame(['only'], $questions[$q2]['answers']);
         $this->assertArrayNotHasKey('answers', $questions[$q1]);
-        $this->assertSame([], \SurveyManager::get_questions($s1 + 100000));
+        $this->assertSame([], SurveyManager::get_questions($s1 + 100000));
     }
 
     public function testSaveQuestionAppendsAtTheEndAndStoresItsOptions(): void
@@ -418,7 +423,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertQuestion($s, 'sv existing', 'yesno', 4);
         $survey = $this->survey($s);
 
-        $result = \SurveyManager::saveQuestion($survey, [
+        $result = SurveyManager::saveQuestion($survey, [
             'question' => 'sv new question',
             'type' => 'multiplechoice',
             'horizontalvertical' => 'horizontal',
@@ -451,10 +456,10 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $s = $this->insertSurvey();
         $survey = $this->survey($s);
 
-        $short = \SurveyManager::saveQuestion($survey, ['question' => 'x', 'type' => 'open'], false);
+        $short = SurveyManager::saveQuestion($survey, ['question' => 'x', 'type' => 'open'], false);
         $this->assertSame(['error' => true, 'message' => 'PleaseEnterAQuestion'], $short);
 
-        $empty = \SurveyManager::saveQuestion($survey, [
+        $empty = SurveyManager::saveQuestion($survey, [
             'question' => 'sv with empty answer',
             'type' => 'multiplechoice',
             'answers' => ['ok', ''],
@@ -471,9 +476,9 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $keep = $this->insertOption($s, $q, 'keep', 1, 1);
         $drop = $this->insertOption($s, $q, 'drop', 2, 2);
         $survey = $this->survey($s);
-        $data = \SurveyManager::get_question($q);
+        $data = SurveyManager::get_question($q);
 
-        $result = \SurveyManager::saveQuestion($survey, [
+        $result = SurveyManager::saveQuestion($survey, [
             'question' => 'sv after',
             'type' => 'multiplechoice',
             'horizontalvertical' => 'horizontal',
@@ -507,7 +512,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
             'is_required' => 'on',
         ];
 
-        \SurveyManager::saveQuestion($survey, $form, false);
+        SurveyManager::saveQuestion($survey, $form, false);
         $q = (int) $this->conn->fetchOne('SELECT iid FROM c_survey_question WHERE survey_id = ?', [$s]);
         $this->assertSame(1, (int) $this->conn->fetchOne('SELECT is_required FROM c_survey_question WHERE iid = ?', [$q]));
 
@@ -515,13 +520,13 @@ final class SurveyCharacterizationTest extends KernelTestCase
         unset($form['is_required']);
         $form['question_id'] = $q;
         $this->em()->clear();
-        \SurveyManager::saveQuestion($this->survey($s), $form, false, \SurveyManager::get_question($q));
+        SurveyManager::saveQuestion($this->survey($s), $form, false, SurveyManager::get_question($q));
         $this->assertSame(0, (int) $this->conn->fetchOne('SELECT is_required FROM c_survey_question WHERE iid = ?', [$q]));
 
         // And ticking it on an edit sets it.
         $form['is_required'] = 'on';
         $this->em()->clear();
-        \SurveyManager::saveQuestion($this->survey($s), $form, false, \SurveyManager::get_question($q));
+        SurveyManager::saveQuestion($this->survey($s), $form, false, SurveyManager::get_question($q));
         $this->assertSame(1, (int) $this->conn->fetchOne('SELECT is_required FROM c_survey_question WHERE iid = ?', [$q]));
     }
 
@@ -531,7 +536,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $parent = $this->insertQuestion($s, 'sv parent', 'multiplechoice');
         $option = $this->insertOption($s, $parent, 'sv trigger', 1);
 
-        \SurveyManager::saveQuestion($this->survey($s), [
+        SurveyManager::saveQuestion($this->survey($s), [
             'question' => 'sv dependent question',
             'type' => 'open',
             'horizontalvertical' => 'vertical',
@@ -551,7 +556,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $s = $this->insertSurvey();
         $survey = $this->survey($s);
 
-        \SurveyManager::saveQuestion($survey, [
+        SurveyManager::saveQuestion($survey, [
             'question' => 'sv percentage',
             'type' => 'percentage',
             'horizontalvertical' => 'vertical',
@@ -572,17 +577,17 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $q2 = $this->insertQuestion($s, 'sv m2', 'yesno', 2);
         $q3 = $this->insertQuestion($s, 'sv m3', 'yesno', 3);
 
-        \SurveyManager::moveSurveyQuestion('moveup', $q2, $s);
+        SurveyManager::moveSurveyQuestion('moveup', $q2, $s);
         $this->assertSame([$q2, $q1, $q3], $this->questionIdsBySort($s));
 
         $this->em()->clear();
-        \SurveyManager::moveSurveyQuestion('movedown', $q2, $s);
+        SurveyManager::moveSurveyQuestion('movedown', $q2, $s);
         $this->assertSame([$q1, $q2, $q3], $this->questionIdsBySort($s));
 
         // The first question cannot go up and the last cannot go down: nothing changes.
         $this->em()->clear();
-        \SurveyManager::moveSurveyQuestion('moveup', $q1, $s);
-        \SurveyManager::moveSurveyQuestion('movedown', $q3, $s);
+        SurveyManager::moveSurveyQuestion('moveup', $q1, $s);
+        SurveyManager::moveSurveyQuestion('movedown', $q3, $s);
         $this->assertSame([$q1, $q2, $q3], $this->questionIdsBySort($s));
     }
 
@@ -603,9 +608,9 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertAnswer($s, $q, '1', (string) $o);
         $this->insertAnswer($s, $keepQ, '1', 'x');
 
-        $this->assertFalse(\SurveyManager::deleteQuestion(0));
-        $this->assertFalse(\SurveyManager::deleteQuestion($q + 100000));
-        $this->assertTrue(\SurveyManager::deleteQuestion($q));
+        $this->assertFalse(SurveyManager::deleteQuestion(0));
+        $this->assertFalse(SurveyManager::deleteQuestion($q + 100000));
+        $this->assertTrue(SurveyManager::deleteQuestion($q));
 
         $this->assertSame(0, $this->rowCount('c_survey_question', 'iid = ?', [$q]));
         $this->assertSame(0, $this->rowCount('c_survey_question_option', 'question_id = ?', [$q]));
@@ -621,7 +626,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertOption($s, $q, 'a', 1, 5);
         $this->insertOption($s, $q, 'b', 2, 6);
 
-        $new = \SurveyManager::copyQuestion($q);
+        $new = SurveyManager::copyQuestion($q);
 
         $this->assertGreaterThan($q, $new);
         $row = $this->conn->fetchAssociative('SELECT * FROM c_survey_question WHERE iid = ?', [$new]);
@@ -637,7 +642,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
                 $this->conn->fetchAllAssociative('SELECT * FROM c_survey_question_option WHERE question_id = ? ORDER BY sort', [$new])
             )
         );
-        $this->assertSame(0, \SurveyManager::copyQuestion(0));
+        $this->assertSame(0, SurveyManager::copyQuestion(0));
     }
 
     public function testDeleteAllSurveyQuestionsIsANoOpThatReturnsTrue(): void
@@ -646,7 +651,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $q = $this->insertQuestion($s, 'sv stays');
 
         // PINNED QUIRK: the body is commented out, the questions are removed by the ORM cascade instead.
-        $this->assertTrue(\SurveyManager::delete_all_survey_questions($s));
+        $this->assertTrue(SurveyManager::delete_all_survey_questions($s));
         $this->assertSame(1, $this->rowCount('c_survey_question', 'iid = ?', [$q]));
     }
 
@@ -654,12 +659,12 @@ final class SurveyCharacterizationTest extends KernelTestCase
     {
         $s = $this->insertSurvey();
         $q = $this->insertQuestion($s, 'sv parent');
-        $this->assertFalse(\SurveyManager::hasDependency($this->survey($s)));
+        $this->assertFalse(SurveyManager::hasDependency($this->survey($s)));
 
         $o = $this->insertOption($s, $q, 'opt', 1);
         $this->insertQuestion($s, 'sv child', 'yesno', 2, ['parent_id' => $q, 'parent_option_id' => $o]);
 
-        $this->assertTrue(\SurveyManager::hasDependency($this->survey($s)));
+        $this->assertTrue(SurveyManager::hasDependency($this->survey($s)));
     }
 
     public function testGetCountPagesCountsPageBreaksUnlessOneQuestionPerPage(): void
@@ -671,17 +676,17 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertQuestion($s, 'sv {{class_name}}', 'pagebreak', 4); // generated templates are not counted
         $this->insertQuestion($s, 'sv {{student_full_name}}', 'yesno', 5);
 
-        $this->assertSame(2, \SurveyManager::getCountPages($this->survey($s)));
+        $this->assertSame(2, SurveyManager::getCountPages($this->survey($s)));
 
         $one = $this->insertSurvey(['one_question_per_page' => 1]);
-        $this->assertSame(1, \SurveyManager::getCountPages($this->survey($one)), 'no question at all: one page');
+        $this->assertSame(1, SurveyManager::getCountPages($this->survey($one)), 'no question at all: one page');
         $this->insertQuestion($one, 'sv o1', 'yesno', 1);
         $this->insertQuestion($one, 'sv o2', 'yesno', 2);
         $this->insertQuestion($one, 'sv obreak', 'pagebreak', 3);
-        $this->assertSame(2, \SurveyManager::getCountPages($this->survey($one)));
+        $this->assertSame(2, SurveyManager::getCountPages($this->survey($one)));
 
         $none = $this->insertSurvey();
-        $this->assertSame(1, \SurveyManager::getCountPages($this->survey($none)));
+        $this->assertSame(1, SurveyManager::getCountPages($this->survey($none)));
     }
 
     // ---------------------------------------------------------------- SurveyManager: copy
@@ -697,7 +702,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $foreign = $this->insertSurvey();
         $this->insertQuestion($foreign, 'sv foreign', 'open', 1);
 
-        $result = \SurveyManager::copySurvey($src, $dst);
+        $result = SurveyManager::copySurvey($src, $dst);
 
         $this->assertSame($dst, $result);
         $copied = $this->conn->fetchAllAssociative('SELECT * FROM c_survey_question WHERE survey_id = ? ORDER BY sort', [$dst]);
@@ -713,7 +718,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
     public function testCopySurveyOfAnUnknownSurveyReturnsNull(): void
     {
-        $this->assertNull(\SurveyManager::copySurvey(99999999, 1));
+        $this->assertNull(SurveyManager::copySurvey(99999999, 1));
     }
 
     // ---------------------------------------------------------------- SurveyManager: invitations and counters
@@ -726,8 +731,8 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertInvitation($s1, 1);
         $this->insertInvitation($s2, 2, ['c_id' => 2]);
 
-        $this->assertFalse(\SurveyManager::delete_all_survey_invitations_by_user(''));
-        \SurveyManager::delete_all_survey_invitations_by_user(2);
+        $this->assertFalse(SurveyManager::delete_all_survey_invitations_by_user(''));
+        SurveyManager::delete_all_survey_invitations_by_user(2);
 
         $this->assertSame(0, $this->rowCount('c_survey_invitation', 'user_id = ? AND survey_id IN (?, ?)', [2, $s1, $s2]));
         $this->assertSame(1, $this->rowCount('c_survey_invitation', 'user_id = ? AND survey_id = ?', [1, $s1]));
@@ -747,7 +752,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertAnswer($s, $q, '1', 'a');
         $this->insertAnswer($other, $oq, '1', 'a');
 
-        $this->assertTrue(\SurveyManager::empty_survey($s));
+        $this->assertTrue(SurveyManager::empty_survey($s));
 
         $this->assertSame(0, $this->rowCount('c_survey_invitation', 'survey_id = ?', [$s]));
         $this->assertSame(0, $this->rowCount('c_survey_answer', 'survey_id = ?', [$s]));
@@ -769,7 +774,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertAnswer($s, $q, '2', 'a');
         $this->setContext(1, 1, $sid);
 
-        \SurveyManager::empty_survey($s);
+        SurveyManager::empty_survey($s);
 
         $this->assertSame(0, $this->rowCount('c_survey_invitation', 'survey_id = ? AND session_id = ?', [$s, $sid]));
         $this->assertSame(1, $this->rowCount('c_survey_invitation', 'survey_id = ? AND session_id IS NULL', [$s]));
@@ -787,7 +792,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $theirs = $this->insertInvitation($s, 2);
         $otherLp = $this->insertInvitation($s, 1, ['c_lp_item_id' => 77]);
 
-        \SurveyManager::updateSurveyAnswered($this->survey($s), 1);
+        SurveyManager::updateSurveyAnswered($this->survey($s), 1);
 
         $this->assertSame(5, (int) $this->surveyRow($s)['answered']);
         $rows = $this->conn->fetchAllKeyValue('SELECT iid, answered FROM c_survey_invitation WHERE survey_id = ?', [$s]);
@@ -805,7 +810,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $plain = $this->insertInvitation($s, 1);
         $lp = $this->insertInvitation($s, 1, ['c_lp_item_id' => 77]);
 
-        \SurveyManager::updateSurveyAnswered($this->survey($s), 1, 77);
+        SurveyManager::updateSurveyAnswered($this->survey($s), 1, 77);
 
         $rows = $this->conn->fetchAllKeyValue('SELECT iid, answered FROM c_survey_invitation WHERE survey_id = ?', [$s]);
         $this->assertSame(0, (int) $rows[$plain]);
@@ -820,7 +825,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $otherCourse = $this->insertInvitation($s, 1, ['c_id' => 2]);
         $inSession = $this->insertInvitation($s, 1, ['session_id' => $sid]);
 
-        \SurveyManager::updateSurveyAnswered($this->survey($s), 1);
+        SurveyManager::updateSurveyAnswered($this->survey($s), 1);
 
         $rows = $this->conn->fetchAllKeyValue('SELECT iid, answered FROM c_survey_invitation WHERE survey_id = ?', [$s]);
         $this->assertSame(1, (int) $rows[$base]);
@@ -840,7 +845,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertAnswer($s, $q, '1', 'a');
         $this->insertAnswer($other, $oq, '3', 'a');
 
-        $people = \SurveyManager::get_people_who_filled_survey($s);
+        $people = SurveyManager::get_people_who_filled_survey($s);
 
         sort($people);
         $this->assertSame(['1', '2'], $people);
@@ -853,7 +858,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertAnswer($s, $q, '1', 'a');
         $this->insertAnswer($s, $q, '2', 'a');
 
-        $people = \SurveyManager::get_people_who_filled_survey($s, true);
+        $people = SurveyManager::get_people_who_filled_survey($s, true);
 
         $ids = array_map(static fn (array $p): int => (int) $p['user_id'], $people);
         sort($ids);
@@ -866,36 +871,36 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
     public function testSurveyHashDependsOnEveryScopeComponent(): void
     {
-        $hash = \SurveyManager::generate_survey_hash(5, 6, 7, 8);
+        $hash = SurveyManager::generate_survey_hash(5, 6, 7, 8);
 
-        $this->assertSame(128, strlen($hash));
-        $this->assertSame($hash, \SurveyManager::generate_survey_hash(5, 6, 7, 8));
+        $this->assertSame(128, \strlen($hash));
+        $this->assertSame($hash, SurveyManager::generate_survey_hash(5, 6, 7, 8));
         foreach ([[6, 6, 7, 8], [5, 7, 7, 8], [5, 6, 8, 8], [5, 6, 7, 9]] as $other) {
-            $this->assertNotSame($hash, \SurveyManager::generate_survey_hash(...$other));
+            $this->assertNotSame($hash, SurveyManager::generate_survey_hash(...$other));
         }
-        $this->assertTrue(\SurveyManager::validate_survey_hash(5, 6, 7, 8, $hash));
-        $this->assertFalse(\SurveyManager::validate_survey_hash(5, 6, 7, 9, $hash));
-        $this->assertFalse(\SurveyManager::validate_survey_hash(5, 6, 7, 8, 'nope'));
+        $this->assertTrue(SurveyManager::validate_survey_hash(5, 6, 7, 8, $hash));
+        $this->assertFalse(SurveyManager::validate_survey_hash(5, 6, 7, 9, $hash));
+        $this->assertFalse(SurveyManager::validate_survey_hash(5, 6, 7, 8, 'nope'));
     }
 
     public function testGenerateSurveyLinkCarriesTheHashAndTheScope(): void
     {
-        $link = \SurveyManager::generate_survey_link(5, 6, 7, 8);
+        $link = SurveyManager::generate_survey_link(5, 6, 7, 8);
 
-        $this->assertStringContainsString('survey/link.php?h='.\SurveyManager::generate_survey_hash(5, 6, 7, 8), $link);
+        $this->assertStringContainsString('survey/link.php?h='.SurveyManager::generate_survey_hash(5, 6, 7, 8), $link);
         $this->assertStringContainsString('&i=5&c=6&s=7&g=8', $link);
     }
 
     public function testSurveyGenerationHashIsAvailableOnlyWithMcrypt(): void
     {
-        $this->assertSame(extension_loaded('mcrypt'), \SurveyManager::survey_generation_hash_available());
+        $this->assertSame(\extension_loaded('mcrypt'), SurveyManager::survey_generation_hash_available());
     }
 
     public function testIconQuestionMapsKnownTypesAndFallsBackOnUnknownOnes(): void
     {
-        $known = \SurveyManager::icon_question('yesno');
+        $known = SurveyManager::icon_question('yesno');
         $this->assertNotSame('', (string) $known);
-        $this->assertNotSame((string) $known, (string) \SurveyManager::icon_question('sv_unknown_type'));
+        $this->assertNotSame((string) $known, (string) SurveyManager::icon_question('sv_unknown_type'));
     }
 
     // ---------------------------------------------------------------- SurveyManager: invitation queries (DQL)
@@ -912,8 +917,8 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertInvitation($s, 1, ['answered' => 1, 'session_id' => $sid]);
         $this->insertInvitation($other, 1, ['answered' => 1]);
 
-        $base = \SurveyManager::getInvitationsAnswered('sv_ans', 1, 0);
-        $inSession = \SurveyManager::getInvitationsAnswered('sv_ans', 1, $sid);
+        $base = SurveyManager::getInvitationsAnswered('sv_ans', 1, 0);
+        $inSession = SurveyManager::getInvitationsAnswered('sv_ans', 1, $sid);
 
         // Newest first; base course invitations only when no session is given.
         $this->assertSame([$new, $old], array_map(static fn ($i): int => $i->getIid(), $base));
@@ -927,12 +932,12 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $b = $this->insertInvitation($s, 1, ['invitation_date' => '2026-04-01 10:00:00', 'c_lp_item_id' => 9]);
         $this->insertInvitation($s, 2);
 
-        $all = \SurveyManager::getUserInvitationsForSurveyInCourse(1, 'sv_uinv', 1);
-        $lp = \SurveyManager::getUserInvitationsForSurveyInCourse(1, 'sv_uinv', 1, 0, 0, 9);
+        $all = SurveyManager::getUserInvitationsForSurveyInCourse(1, 'sv_uinv', 1);
+        $lp = SurveyManager::getUserInvitationsForSurveyInCourse(1, 'sv_uinv', 1, 0, 0, 9);
 
         $this->assertSame([$b, $a], array_map(static fn ($i): int => $i->getIid(), $all));
         $this->assertSame([$b], array_map(static fn ($i): int => $i->getIid(), $lp));
-        $this->assertSame([], \SurveyManager::getUserInvitationsForSurveyInCourse(1, 'sv_missing', 1));
+        $this->assertSame([], SurveyManager::getUserInvitationsForSurveyInCourse(1, 'sv_missing', 1));
     }
 
     // ---------------------------------------------------------------- SurveyUtil: answers
@@ -942,7 +947,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $s = $this->insertSurvey();
         $q = $this->insertQuestion($s, 'sv q', 'multiplechoice');
 
-        $ok = \SurveyUtil::saveAnswer('1', $this->survey($s), $this->em()->find(CSurveyQuestion::class, $q), '15', 3, '', 0);
+        $ok = SurveyUtil::saveAnswer('1', $this->survey($s), $this->em()->find(CSurveyQuestion::class, $q), '15', 3, '', 0);
 
         $this->assertTrue($ok);
         $row = $this->conn->fetchAssociative('SELECT * FROM c_survey_answer WHERE survey_id = ?', [$s]);
@@ -959,7 +964,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $s = $this->insertSurvey();
         $q = $this->insertQuestion($s, 'sv q', 'multiplechoiceother');
 
-        \SurveyUtil::saveAnswer('1', $this->survey($s), $this->em()->find(CSurveyQuestion::class, $q), '15', 0, 'my text', 4);
+        SurveyUtil::saveAnswer('1', $this->survey($s), $this->em()->find(CSurveyQuestion::class, $q), '15', 0, 'my text', 4);
 
         $row = $this->conn->fetchAssociative('SELECT option_id, c_lp_item_id FROM c_survey_answer WHERE survey_id = ?', [$s]);
         $this->assertSame('15@:@my text', $row['option_id']);
@@ -973,7 +978,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $q = $this->insertQuestion($s, 'sv q');
         $this->setContext(1, 1, $sid);
 
-        \SurveyUtil::saveAnswer('1', $this->survey($s), $this->em()->find(CSurveyQuestion::class, $q), '1', 0);
+        SurveyUtil::saveAnswer('1', $this->survey($s), $this->em()->find(CSurveyQuestion::class, $q), '1', 0);
 
         $this->assertSame($sid, (int) $this->conn->fetchOne('SELECT session_id FROM c_survey_answer WHERE survey_id = ?', [$s]));
     }
@@ -985,14 +990,14 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $q2 = $this->insertQuestion($s, 'sv q2', 'yesno', 2);
         $survey = $this->survey($s);
 
-        \SurveyUtil::saveAnswer('1', $survey, $this->em()->find(CSurveyQuestion::class, $q1), 'a', 0);
-        \SurveyUtil::saveAnswer('1', $survey, $this->em()->find(CSurveyQuestion::class, $q2), 'b', 0);
+        SurveyUtil::saveAnswer('1', $survey, $this->em()->find(CSurveyQuestion::class, $q1), 'a', 0);
+        SurveyUtil::saveAnswer('1', $survey, $this->em()->find(CSurveyQuestion::class, $q2), 'b', 0);
 
         $users = $this->conn->fetchFirstColumn('SELECT user FROM c_survey_answer WHERE survey_id = ? ORDER BY iid', [$s]);
         $this->assertNotSame('1', $users[0], 'the real user id must not be stored for an anonymous survey');
         $this->assertMatchesRegularExpression('/^[0-9a-f]{32}$/', $users[0]);
         $this->assertSame($users[0], $users[1], 'all the answers of one respondent share one pseudonym');
-        $this->assertSame($users[0], \ChamiloSession::read('surveyuser'));
+        $this->assertSame($users[0], ChamiloSession::read('surveyuser'));
         // The pseudonym must not be derivable from the user id and the answer time (both readable on the
         // invitation row), otherwise anonymous answers can be linked back to a person.
         for ($t = time() - 30; $t <= time() + 2; $t++) {
@@ -1013,7 +1018,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertAnswer($s, $q2, '1', 'a');
         $this->insertAnswer($other, $oq, '1', 'a');
 
-        \SurveyUtil::remove_answer('1', $s, $q1);
+        SurveyUtil::remove_answer('1', $s, $q1);
 
         $this->assertSame(0, $this->rowCount('c_survey_answer', 'survey_id = ? AND question_id = ? AND user = ?', [$s, $q1, '1']));
         $this->assertSame(1, $this->rowCount('c_survey_answer', 'survey_id = ? AND question_id = ? AND user = ?', [$s, $q1, '2']));
@@ -1028,7 +1033,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertAnswer($s, $q, '1', 'a', 0, ['c_lp_item_id' => 5]);
         $this->insertAnswer($s, $q, '1', 'a', 0, ['c_lp_item_id' => 6]);
 
-        \SurveyUtil::remove_answer('1', $s, $q, 5);
+        SurveyUtil::remove_answer('1', $s, $q, 5);
 
         $this->assertSame([6], array_map('intval', $this->conn->fetchFirstColumn('SELECT c_lp_item_id FROM c_survey_answer WHERE survey_id = ?', [$s])));
     }
@@ -1042,13 +1047,13 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertAnswer($s, $q, '1', 'b');
         $this->setContext(1, 1, $sid);
 
-        \SurveyUtil::remove_answer('1', $s, $q);
+        SurveyUtil::remove_answer('1', $s, $q);
         $this->assertSame(0, $this->rowCount('c_survey_answer', 'survey_id = ?', [$s]), 'default: the session is ignored');
 
         $this->insertAnswer($s, $q, '1', 'a', 0, ['session_id' => $sid]);
         $this->insertAnswer($s, $q, '1', 'b');
         $this->enableBaseInSessions();
-        \SurveyUtil::remove_answer('1', $s, $q);
+        SurveyUtil::remove_answer('1', $s, $q);
         $this->assertSame(['b'], $this->conn->fetchFirstColumn('SELECT option_id FROM c_survey_answer WHERE survey_id = ?', [$s]));
     }
 
@@ -1062,7 +1067,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertAnswer($s, $q, '1', '11', 2);
         $this->insertAnswer($s, $oq, '1', '99', 1);
 
-        $answers = \SurveyUtil::get_answers_of_question_by_user($s, $q);
+        $answers = SurveyUtil::get_answers_of_question_by_user($s, $q);
 
         // value 0 is the bare option id, any other value is "<option>*<value>"; ordered by user.
         $this->assertSame(['1' => ['10', '11*2'], '2' => ['10*3']], $answers);
@@ -1078,11 +1083,11 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertAnswer($s, $q, '2', 'b', 0, ['c_lp_item_id' => 6]);
         $this->setContext(1, 1, $sid);
 
-        $this->assertSame(['1' => ['a']], \SurveyUtil::get_answers_of_question_by_user($s, $q, 5));
-        $this->assertSame(['1' => ['a'], '2' => ['b']], \SurveyUtil::get_answers_of_question_by_user($s, $q));
+        $this->assertSame(['1' => ['a']], SurveyUtil::get_answers_of_question_by_user($s, $q, 5));
+        $this->assertSame(['1' => ['a'], '2' => ['b']], SurveyUtil::get_answers_of_question_by_user($s, $q));
 
         $this->enableBaseInSessions();
-        $this->assertSame(['1' => ['a']], \SurveyUtil::get_answers_of_question_by_user($s, $q));
+        $this->assertSame(['1' => ['a']], SurveyUtil::get_answers_of_question_by_user($s, $q));
     }
 
     public function testComparativeCheckCountsUsersHavingBothOptions(): void
@@ -1090,11 +1095,11 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $x = ['1' => ['10', '11*2'], '2' => ['10'], '3' => ['12']];
         $y = ['1' => ['20'], '2' => ['21'], '3' => ['20']];
 
-        $this->assertSame(1, \SurveyUtil::comparative_check($x, $y, '10', '20'));
-        $this->assertSame(1, \SurveyUtil::comparative_check($x, $y, '11', '20', 2));
-        $this->assertSame(0, \SurveyUtil::comparative_check($x, $y, '11', '20'));
-        $this->assertSame(2, \SurveyUtil::comparative_check($x, $y, '10', '21') + \SurveyUtil::comparative_check($x, $y, '12', '20'));
-        $this->assertSame(0, \SurveyUtil::comparative_check('nope', $y, '10', '20'));
+        $this->assertSame(1, SurveyUtil::comparative_check($x, $y, '10', '20'));
+        $this->assertSame(1, SurveyUtil::comparative_check($x, $y, '11', '20', 2));
+        $this->assertSame(0, SurveyUtil::comparative_check($x, $y, '11', '20'));
+        $this->assertSame(2, SurveyUtil::comparative_check($x, $y, '10', '21') + SurveyUtil::comparative_check($x, $y, '12', '20'));
+        $this->assertSame(0, SurveyUtil::comparative_check('nope', $y, '10', '20'));
     }
 
     public function testCheckIfSurveyHasAnswers(): void
@@ -1102,11 +1107,11 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $s = $this->insertSurvey();
         $q = $this->insertQuestion($s, 'sv q');
 
-        $this->assertFalse(\SurveyUtil::checkIfSurveyHasAnswers(0));
-        $this->assertFalse(\SurveyUtil::checkIfSurveyHasAnswers($s));
+        $this->assertFalse(SurveyUtil::checkIfSurveyHasAnswers(0));
+        $this->assertFalse(SurveyUtil::checkIfSurveyHasAnswers($s));
         $this->insertAnswer($s, $q, '1', 'a');
-        $this->assertTrue(\SurveyUtil::checkIfSurveyHasAnswers($s));
-        $this->assertFalse(\SurveyUtil::checkIfSurveyHasAnswers($s + 100000));
+        $this->assertTrue(SurveyUtil::checkIfSurveyHasAnswers($s));
+        $this->assertFalse(SurveyUtil::checkIfSurveyHasAnswers($s + 100000));
     }
 
     public function testDeleteUserReportRemovesThatUsersAnswersAndReopensTheInvitation(): void
@@ -1123,7 +1128,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $otherSurvey = $this->insertInvitation($other, 1, ['answered' => 1]);
 
         ob_start();
-        \SurveyUtil::delete_user_report($s, 1);
+        SurveyUtil::delete_user_report($s, 1);
         $out = (string) ob_get_clean();
 
         $this->assertStringContainsString(get_lang('Go back'), $out);
@@ -1143,7 +1148,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertAnswer($s, $q, '1', 'a');
 
         ob_start();
-        \SurveyUtil::delete_user_report($s, 0);
+        SurveyUtil::delete_user_report($s, 0);
         $out = (string) ob_get_clean();
 
         $this->assertSame('', $out);
@@ -1160,7 +1165,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertQuestion($s, 'sv break2', 'pagebreak', 3);
 
         ob_start();
-        \SurveyUtil::check_first_last_question($s);
+        SurveyUtil::check_first_last_question($s);
         $out = (string) ob_get_clean();
         $this->assertStringContainsString(get_lang('The page break cannot be the first'), $out);
         $this->assertStringContainsString(get_lang('The page break cannot be the last one'), $out);
@@ -1171,7 +1176,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertQuestion($onlyLast, 'sv b', 'yesno', 3);
         $this->insertQuestion($onlyLast, 'sv trailing', 'pagebreak', 4);
         ob_start();
-        \SurveyUtil::check_first_last_question($onlyLast);
+        SurveyUtil::check_first_last_question($onlyLast);
         $out = (string) ob_get_clean();
         $this->assertStringContainsString(get_lang('The page break cannot be the last one'), $out);
         $this->assertStringNotContainsString(get_lang('The page break cannot be the first'), $out);
@@ -1181,7 +1186,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertQuestion($onlyFirst, 'sv a', 'yesno', 2);
         $this->insertQuestion($onlyFirst, 'sv b', 'yesno', 3);
         ob_start();
-        \SurveyUtil::check_first_last_question($onlyFirst);
+        SurveyUtil::check_first_last_question($onlyFirst);
         $out = (string) ob_get_clean();
         $this->assertStringContainsString(get_lang('The page break cannot be the first'), $out);
         $this->assertStringNotContainsString(get_lang('The page break cannot be the last one'), $out);
@@ -1191,7 +1196,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertQuestion($ok, 'sv brk', 'pagebreak', 2);
         $this->insertQuestion($ok, 'sv b', 'yesno', 3);
         ob_start();
-        \SurveyUtil::check_first_last_question($ok);
+        SurveyUtil::check_first_last_question($ok);
         $this->assertSame('', (string) ob_get_clean());
     }
 
@@ -1201,13 +1206,13 @@ final class SurveyCharacterizationTest extends KernelTestCase
     {
         $s = $this->insertSurvey();
 
-        \SurveyUtil::saveInviteMail($this->survey($s), 'invite body', 'invite subject', false);
+        SurveyUtil::saveInviteMail($this->survey($s), 'invite body', 'invite subject', false);
         $row = $this->surveyRow($s);
         $this->assertSame('invite body', $row['invite_mail']);
         $this->assertSame('', $row['reminder_mail']);
         $this->assertSame('invite subject', $row['mail_subject']);
 
-        \SurveyUtil::saveInviteMail($this->survey($s), 'reminder body', 'reminder subject', true);
+        SurveyUtil::saveInviteMail($this->survey($s), 'reminder body', 'reminder subject', true);
         $row = $this->surveyRow($s);
         $this->assertSame('invite body', $row['invite_mail']);
         $this->assertSame('reminder body', $row['reminder_mail']);
@@ -1218,7 +1223,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
     {
         $s = $this->insertSurvey();
 
-        $sent = \SurveyUtil::saveInvitations($this->survey($s), ['USER:1', 'USER:2'], 'subject', 'text **link**', 0, false);
+        $sent = SurveyUtil::saveInvitations($this->survey($s), ['USER:1', 'USER:2'], 'subject', 'text **link**', 0, false);
 
         $this->assertSame(0, $sent, 'no mail requested: nothing "sent"');
         $rows = $this->conn->fetchAllAssociative('SELECT * FROM c_survey_invitation WHERE survey_id = ? ORDER BY user_id', [$s]);
@@ -1235,7 +1240,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $s = $this->insertSurvey();
         $this->insertInvitation($s, 1, ['invitation_code' => 'sv_keep']);
 
-        \SurveyUtil::saveInvitations($this->survey($s), ['USER:1', 'USER:2'], 'subject', 'text', 0, false);
+        SurveyUtil::saveInvitations($this->survey($s), ['USER:1', 'USER:2'], 'subject', 'text', 0, false);
 
         $this->assertSame(1, $this->rowCount('c_survey_invitation', 'survey_id = ? AND user_id = 1', [$s]));
         $this->assertSame('sv_keep', $this->conn->fetchOne('SELECT invitation_code FROM c_survey_invitation WHERE survey_id = ? AND user_id = 1', [$s]));
@@ -1246,7 +1251,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
     {
         $s = $this->insertSurvey();
 
-        $this->assertSame(0, \SurveyUtil::saveInvitations($this->survey($s), 'not an array', 's', 't'));
+        $this->assertSame(0, SurveyUtil::saveInvitations($this->survey($s), 'not an array', 's', 't'));
         $this->assertSame(0, $this->rowCount('c_survey_invitation', 'survey_id = ?', [$s]));
     }
 
@@ -1256,7 +1261,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $s = $this->insertSurvey();
         $this->setContext(1, 1, $sid);
 
-        \SurveyUtil::saveInvitations($this->survey($s), ['USER:2'], 'subject', 'text');
+        SurveyUtil::saveInvitations($this->survey($s), ['USER:2'], 'subject', 'text');
 
         $this->assertSame($sid, (int) $this->conn->fetchOne('SELECT session_id FROM c_survey_invitation WHERE survey_id = ?', [$s]));
     }
@@ -1268,11 +1273,11 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $groupId = $this->insertGroup();
         $this->insertInvitation($s, null, ['session_id' => $sid, 'group_id' => $groupId]);
 
-        $this->assertSame(1, \SurveyUtil::invitationExists(1, $sid, $groupId, $s));
-        $this->assertSame(0, \SurveyUtil::invitationExists(2, $sid, $groupId, $s));
-        $this->assertSame(0, \SurveyUtil::invitationExists(1, $sid + 1, $groupId, $s));
-        $this->assertSame(0, \SurveyUtil::invitationExists(1, $sid, $groupId + 1, $s));
-        $this->assertSame(0, \SurveyUtil::invitationExists(1, $sid, $groupId, $s + 1));
+        $this->assertSame(1, SurveyUtil::invitationExists(1, $sid, $groupId, $s));
+        $this->assertSame(0, SurveyUtil::invitationExists(2, $sid, $groupId, $s));
+        $this->assertSame(0, SurveyUtil::invitationExists(1, $sid + 1, $groupId, $s));
+        $this->assertSame(0, SurveyUtil::invitationExists(1, $sid, $groupId + 1, $s));
+        $this->assertSame(0, SurveyUtil::invitationExists(1, $sid, $groupId, $s + 1));
     }
 
     public function testInvitationExistsSeesInvitationsStoredWithoutASession(): void
@@ -1282,9 +1287,9 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertInvitation($s, null, ['session_id' => null, 'group_id' => $groupId]);
 
         // The base course is stored as session_id NULL (the column has a foreign key, 0 is impossible).
-        $this->assertSame(1, \SurveyUtil::invitationExists(1, 0, $groupId, $s));
-        $this->assertSame(0, \SurveyUtil::invitationExists(1, 0, $groupId + 1, $s));
-        $this->assertSame(0, \SurveyUtil::invitationExists(2, 0, $groupId, $s));
+        $this->assertSame(1, SurveyUtil::invitationExists(1, 0, $groupId, $s));
+        $this->assertSame(0, SurveyUtil::invitationExists(1, 0, $groupId + 1, $s));
+        $this->assertSame(0, SurveyUtil::invitationExists(2, 0, $groupId, $s));
     }
 
     private function insertGroup(): int
@@ -1307,15 +1312,15 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertInvitation($s, 2, ['session_id' => $sid]);
         $this->insertInvitation($s, null); // a group invitation has no user
 
-        $total = \SurveyUtil::updateInvitedCount($this->survey($s));
+        $total = SurveyUtil::updateInvitedCount($this->survey($s));
 
         $this->assertSame(2, (int) $total);
         $this->assertSame(2, (int) $this->surveyRow($s)['invited']);
 
         // Explicit course and session arguments win over the current context.
-        $this->assertSame(1, (int) \SurveyUtil::updateInvitedCount($this->survey($s), 1, $sid));
+        $this->assertSame(1, (int) SurveyUtil::updateInvitedCount($this->survey($s), 1, $sid));
         $this->assertSame(1, (int) $this->surveyRow($s)['invited']);
-        $this->assertSame(1, (int) \SurveyUtil::updateInvitedCount($this->survey($s), 2));
+        $this->assertSame(1, (int) SurveyUtil::updateInvitedCount($this->survey($s), 2));
     }
 
     public function testGetInvitedUsersSplitsUsersAndGroups(): void
@@ -1327,7 +1332,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertInvitation($s, null, ['group_id' => $groupId]);
         $this->insertInvitation($s, 1, ['c_id' => 2]);
 
-        $invited = \SurveyUtil::get_invited_users($this->survey($s));
+        $invited = SurveyUtil::get_invited_users($this->survey($s));
 
         $users = array_map('intval', $invited['course_users']);
         sort($users);
@@ -1345,10 +1350,10 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertInvitation($s, 2, ['c_id' => 2]);
         $code = (string) $this->conn->fetchOne('SELECT code FROM course WHERE id = 2');
 
-        $invited = \SurveyUtil::get_invited_users($this->survey($s), $code);
+        $invited = SurveyUtil::get_invited_users($this->survey($s), $code);
 
         $this->assertSame([2], array_map('intval', $invited['course_users']));
-        $this->assertSame([], \SurveyUtil::get_invited_users($this->survey($s))['course_users']);
+        $this->assertSame([], SurveyUtil::get_invited_users($this->survey($s))['course_users']);
     }
 
     public function testGetInvitationsIsKeyedByUserAndScopedToCourseAndExactSession(): void
@@ -1360,7 +1365,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $inSession = $this->insertInvitation($s, 2, ['session_id' => $sid]);
 
         $this->setContext(1, 1, $sid);
-        $found = \SurveyUtil::get_invitations($s);
+        $found = SurveyUtil::get_invitations($s);
 
         $this->assertSame([2], array_map('intval', array_keys($found)));
         $this->assertSame($inSession, (int) $found[2]['iid']);
@@ -1373,7 +1378,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $base = $this->insertInvitation($s, 1, ['session_id' => null]);
         $this->insertInvitation($s, 2, ['session_id' => $sid]);
 
-        $found = \SurveyUtil::get_invitations($s);
+        $found = SurveyUtil::get_invitations($s);
 
         $this->assertSame([1], array_map('intval', array_keys($found)));
         $this->assertSame($base, (int) $found[1]['iid']);
@@ -1389,8 +1394,8 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $other = $this->insertSurvey();
         $this->insertInvitation($other, 1);
 
-        $base = \SurveyUtil::getSentInvitations($s, 1);
-        $inSession = \SurveyUtil::getSentInvitations($s, 1, $sid);
+        $base = SurveyUtil::getSentInvitations($s, 1);
+        $inSession = SurveyUtil::getSentInvitations($s, 1, $sid);
 
         $this->assertCount(1, $base);
         $this->assertSame(1, (int) $base[0]['user_id']);
@@ -1399,7 +1404,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame((string) $this->conn->fetchOne('SELECT email FROM user WHERE id = 1'), $base[0]['email']);
         $this->assertCount(1, $inSession);
         $this->assertSame(2, (int) $inSession[0]['user_id']);
-        $this->assertCount(1, \SurveyUtil::getSentInvitations($s, 2));
+        $this->assertCount(1, SurveyUtil::getSentInvitations($s, 2));
     }
 
     // ---------------------------------------------------------------- SurveyUtil: lists and links
@@ -1417,7 +1422,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertInvitation($notMine, 1);
 
         ob_start();
-        \SurveyUtil::getSurveyList(2);
+        SurveyUtil::getSurveyList(2);
         $html = (string) ob_get_clean();
 
         $this->assertSame(substr_count($html, '<section'), substr_count($html, '</section>'), 'balanced markup');
@@ -1436,9 +1441,9 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $meeting = $this->insertSurvey(['survey_type' => 3]);
         $course = api_get_course_entity(1);
 
-        $namedUrl = \SurveyUtil::generateFillSurveyLink($this->survey($named), 'abc', $course, 5);
-        $anonUrl = \SurveyUtil::generateFillSurveyLink($this->survey($anon), 'abc', $course, 5);
-        $meetingUrl = \SurveyUtil::generateFillSurveyLink($this->survey($meeting), 'abc', $course);
+        $namedUrl = SurveyUtil::generateFillSurveyLink($this->survey($named), 'abc', $course, 5);
+        $anonUrl = SurveyUtil::generateFillSurveyLink($this->survey($anon), 'abc', $course, 5);
+        $meetingUrl = SurveyUtil::generateFillSurveyLink($this->survey($meeting), 'abc', $course);
 
         $this->assertStringContainsString('/'.$named.'/answer?', $namedUrl);
         $this->assertStringContainsString('invitationCode=abc', $namedUrl);
@@ -1452,16 +1457,16 @@ final class SurveyCharacterizationTest extends KernelTestCase
     {
         $s = $this->insertSurvey();
 
-        $url = \SurveyUtil::generateFillSurveyLink($this->survey($s), '"><script>alert(1)</script>', api_get_course_entity(1));
+        $url = SurveyUtil::generateFillSurveyLink($this->survey($s), '"><script>alert(1)</script>', api_get_course_entity(1));
 
         $this->assertStringNotContainsString('<script>', $url);
     }
 
     public function testGenerateSurveyReportingLinkMapsLegacyReportNamesAndUsers(): void
     {
-        $base = \SurveyUtil::generateSurveyReportingLink(7);
-        $question = \SurveyUtil::generateSurveyReportingLink(7, null, 'questionreport');
-        $user = \SurveyUtil::generateSurveyReportingLink(7, 3, 'completereport');
+        $base = SurveyUtil::generateSurveyReportingLink(7);
+        $question = SurveyUtil::generateSurveyReportingLink(7, null, 'questionreport');
+        $user = SurveyUtil::generateSurveyReportingLink(7, 3, 'completereport');
 
         $this->assertStringContainsString('/7/reporting?cid=1&sid=0&gid=0', $base);
         $this->assertStringNotContainsString('report=', $base);
@@ -1474,34 +1479,35 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
     public function testAnonymousFilterTranslatesTheFlag(): void
     {
-        $this->assertSame(get_lang('Yes'), \SurveyUtil::anonymous_filter(1));
-        $this->assertSame(get_lang('Yes'), \SurveyUtil::anonymous_filter('1'));
-        $this->assertSame(get_lang('No'), \SurveyUtil::anonymous_filter(0));
-        $this->assertSame(get_lang('No'), \SurveyUtil::anonymous_filter(''));
+        $this->assertSame(get_lang('Yes'), SurveyUtil::anonymous_filter(1));
+        $this->assertSame(get_lang('Yes'), SurveyUtil::anonymous_filter('1'));
+        $this->assertSame(get_lang('No'), SurveyUtil::anonymous_filter(0));
+        $this->assertSame(get_lang('No'), SurveyUtil::anonymous_filter(''));
     }
 
     public function testAnsweredFlagIsPerUserCourseAndSurveyCode(): void
     {
-        $this->assertFalse(\SurveyUtil::isSurveyAnsweredFlagged('sv_flag', 1));
+        $this->assertFalse(SurveyUtil::isSurveyAnsweredFlagged('sv_flag', 1));
 
-        \SurveyUtil::flagSurveyAsAnswered('sv_flag', 1);
+        SurveyUtil::flagSurveyAsAnswered('sv_flag', 1);
 
-        $this->assertTrue(\SurveyUtil::isSurveyAnsweredFlagged('sv_flag', 1));
-        $this->assertFalse(\SurveyUtil::isSurveyAnsweredFlagged('sv_flag', 2));
-        $this->assertFalse(\SurveyUtil::isSurveyAnsweredFlagged('sv_other', 1));
+        $this->assertTrue(SurveyUtil::isSurveyAnsweredFlagged('sv_flag', 1));
+        $this->assertFalse(SurveyUtil::isSurveyAnsweredFlagged('sv_flag', 2));
+        $this->assertFalse(SurveyUtil::isSurveyAnsweredFlagged('sv_other', 1));
         $this->setContext(2, 1);
-        $this->assertFalse(\SurveyUtil::isSurveyAnsweredFlagged('sv_flag', 1), 'another user is not flagged');
+        $this->assertFalse(SurveyUtil::isSurveyAnsweredFlagged('sv_flag', 1), 'another user is not flagged');
     }
 
     public function testSurveySearchRestrictionBuildsAnAndedClauseOnlyOnSearch(): void
     {
         $get = $_GET;
+
         try {
             $_GET = [];
-            $this->assertFalse(\SurveyUtil::survey_search_restriction());
+            $this->assertFalse(SurveyUtil::survey_search_restriction());
 
             $_GET = ['do_search' => '1', 'keyword_title' => "o'brien", 'keyword_code' => 'svc', 'keyword_language' => 'french'];
-            $sql = \SurveyUtil::survey_search_restriction();
+            $sql = SurveyUtil::survey_search_restriction();
             $this->assertStringContainsString("code ='svc'", $sql);
             $this->assertStringContainsString("lang ='french'", $sql);
             $this->assertStringContainsString("o\\'brien", $sql, 'the title is escaped');
@@ -1515,6 +1521,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
     {
         $get = $_GET;
         $_GET = ['do_search' => '1', 'keyword_title' => '', 'keyword_code' => '', 'keyword_language' => '%'];
+
         try {
             $warnings = [];
             set_error_handler(static function (int $no, string $msg) use (&$warnings): bool {
@@ -1522,8 +1529,9 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
                 return true;
             });
+
             try {
-                $sql = \SurveyUtil::survey_search_restriction();
+                $sql = SurveyUtil::survey_search_restriction();
             } finally {
                 restore_error_handler();
             }
@@ -1574,7 +1582,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->linkSurvey($draft, 1, null, 0);
         $this->linkSurvey($foreign, 2);
 
-        $ids = array_map(static fn (array $s): int => (int) $s['iid'], \SurveyManager::get_surveys('', 0));
+        $ids = array_map(static fn (array $s): int => (int) $s['iid'], SurveyManager::get_surveys('', 0));
 
         $this->assertContains($mine, $ids);
         $this->assertNotContains($draft, $ids, 'an unpublished survey is not listed');
@@ -1591,8 +1599,8 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $q = $this->insertQuestion($base, 'sv q');
         $this->insertQuestion($base, 'sv q2', 'yesno', 2);
 
-        $before = \SurveyUtil::get_number_of_surveys();
-        $rows = \SurveyUtil::get_survey_data(0, 50, 0, 'asc');
+        $before = SurveyUtil::get_number_of_surveys();
+        $rows = SurveyUtil::get_survey_data(0, 50, 0, 'asc');
         $codes = array_column($rows, 2);
 
         $this->assertContains('sv_row_base', $codes);
@@ -1605,7 +1613,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertGreaterThanOrEqual(1, $before);
 
         $this->setContext(1, 1, $sid);
-        $sessionCodes = array_column(\SurveyUtil::get_survey_data(0, 50, 0, 'asc'), 2);
+        $sessionCodes = array_column(SurveyUtil::get_survey_data(0, 50, 0, 'asc'), 2);
         $this->assertContains('sv_row_session', $sessionCodes);
         $this->assertNotContains('sv_row_base', $sessionCodes);
     }
@@ -1616,8 +1624,8 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->linkSurvey($a, 1);
 
         $this->assertSame(
-            array_column(\SurveyUtil::get_survey_data(0, 50, 0, 'asc'), 2),
-            array_column(\SurveyUtil::get_survey_data(0, 50, 0, 'sideways; DROP TABLE x'), 2)
+            array_column(SurveyUtil::get_survey_data(0, 50, 0, 'asc'), 2),
+            array_column(SurveyUtil::get_survey_data(0, 50, 0, 'sideways; DROP TABLE x'), 2)
         );
     }
 
@@ -1633,7 +1641,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertAnswer($s, $q, '2', 'a');
         $this->insertAnswer($other, $oq, '1', 'a');
 
-        $this->assertTrue(\SurveyManager::delete_all_survey_answers($s));
+        $this->assertTrue(SurveyManager::delete_all_survey_answers($s));
 
         $this->assertSame(0, $this->rowCount('c_survey_answer', 'survey_id = ?', [$s]));
         $this->assertSame(1, $this->rowCount('c_survey_answer', 'survey_id = ?', [$other]));
@@ -1649,7 +1657,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertOption($s, $q, 'b', 2);
         $this->insertOption($other, $oq, 'c', 1);
 
-        $this->assertTrue(\SurveyManager::delete_all_survey_questions_options($s));
+        $this->assertTrue(SurveyManager::delete_all_survey_questions_options($s));
 
         $this->assertSame(0, $this->rowCount('c_survey_question_option', 'survey_id = ?', [$s]));
         $this->assertSame(1, $this->rowCount('c_survey_question_option', 'survey_id = ?', [$other]));
@@ -1670,7 +1678,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertAnswer($s, $q, '1', 'a');
         $this->insertAnswer($other, $oq, '1', 'a');
 
-        $this->assertTrue(\SurveyManager::emptySurveyFromId($s));
+        $this->assertTrue(SurveyManager::emptySurveyFromId($s));
 
         $this->assertSame(0, $this->rowCount('c_survey_invitation', 'survey_id = ?', [$s]));
         $this->assertSame(0, $this->rowCount('c_survey_answer', 'survey_id = ?', [$s]));
@@ -1683,7 +1691,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
     public function testEmptySurveyFromIdOfAnUnknownSurveyReturnsFalse(): void
     {
-        $this->assertFalse(\SurveyManager::emptySurveyFromId(99999999));
+        $this->assertFalse(SurveyManager::emptySurveyFromId(99999999));
     }
 
     public function testGetPeopleWhoFilledSurveyUsesAnsweredInvitationsWhenAnonymousAnsweredIsShown(): void
@@ -1696,9 +1704,9 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertInvitation($s, 2, ['answered' => 1]);
         $this->insertInvitation($s, 1, ['answered' => 0]);
         $this->insertInvitation($other, 1, ['answered' => 1]);
-        \Chamilo\CoreBundle\Framework\Container::getSettingsManager()->updateSetting('survey.survey_anonymous_show_answered', 'true');
+        Container::getSettingsManager()->updateSetting('survey.survey_anonymous_show_answered', 'true');
 
-        $this->assertSame(['2'], array_map('strval', \SurveyManager::get_people_who_filled_survey($s)));
+        $this->assertSame(['2'], array_map('strval', SurveyManager::get_people_who_filled_survey($s)));
     }
 
     public function testGetSurveyDataForCoachListsTheSurveysCreatedByTheCoachSorted(): void
@@ -1714,7 +1722,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $node = $this->linkSurvey($foreign, 1);
         $this->conn->executeStatement('UPDATE resource_node SET creator_id = 2 WHERE id = ?', [$node]);
 
-        $desc = \SurveyUtil::get_survey_data_for_coach(0, 100, 2, 'desc');
+        $desc = SurveyUtil::get_survey_data_for_coach(0, 100, 2, 'desc');
         $codes = array_column($desc, 2);
 
         $this->assertNotContains('sv_coach_foreign', $codes);
@@ -1727,8 +1735,8 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertStringContainsString('>1</a> / <a', $row[7]);
         $this->assertSame($a, (int) $row[9]);
 
-        $this->assertCount(1, \SurveyUtil::get_survey_data_for_coach(0, 1, 2, 'asc'));
-        $this->assertSame(array_column(array_reverse($desc), 2), array_column(\SurveyUtil::get_survey_data_for_coach(0, 100, 2, 'asc'), 2));
+        $this->assertCount(1, SurveyUtil::get_survey_data_for_coach(0, 1, 2, 'asc'));
+        $this->assertSame(array_column(array_reverse($desc), 2), array_column(SurveyUtil::get_survey_data_for_coach(0, 100, 2, 'asc'), 2));
     }
 
     public function testSaveInvitationsOfAGroupStoresOneUserlessInvitationOnce(): void
@@ -1736,8 +1744,8 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $s = $this->insertSurvey();
         $groupId = $this->insertGroup();
 
-        \SurveyUtil::saveInvitations($this->survey($s), ['GROUP:'.$groupId], 'subject', 'text');
-        \SurveyUtil::saveInvitations($this->survey($s), ['GROUP:'.$groupId], 'subject', 'text');
+        SurveyUtil::saveInvitations($this->survey($s), ['GROUP:'.$groupId], 'subject', 'text');
+        SurveyUtil::saveInvitations($this->survey($s), ['GROUP:'.$groupId], 'subject', 'text');
 
         $rows = $this->conn->fetchAllAssociative('SELECT * FROM c_survey_invitation WHERE survey_id = ?', [$s]);
         $this->assertCount(1, $rows, 'the group invitation is not stored twice');
@@ -1750,16 +1758,16 @@ final class SurveyCharacterizationTest extends KernelTestCase
     public function testCopySurveyIntoAnotherCourseAndSessionLinksTheCopyThere(): void
     {
         // Creates a resource node through the repository: the one test of this class that does.
-        $admin = $this->em()->find(\Chamilo\CoreBundle\Entity\User::class, 1);
+        $admin = $this->em()->find(User::class, 1);
         self::getContainer()->get('security.token_storage')->setToken(
-            new \Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken($admin, 'main', $admin->getRoles())
+            new UsernamePasswordToken($admin, 'main', $admin->getRoles())
         );
         $sid = $this->insertSession();
         $src = $this->insertSurvey(['code' => 'svcopysrc', 'title' => 'sv copy source']);
         $q = $this->insertQuestion($src, 'sv q');
         $this->insertOption($src, $q, 'sv opt', 1);
 
-        $copy = \SurveyManager::copySurvey($src, null, 2, $sid);
+        $copy = SurveyManager::copySurvey($src, null, 2, $sid);
 
         $this->assertGreaterThan($src, $copy);
         $row = $this->surveyRow($copy);
@@ -1783,7 +1791,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertInvitation($s, 1, ['answered' => 1]);
         $this->setContext(1, null); // my_space/survey_report.php runs without a course
 
-        $html = \SurveyManager::surveyReport(['user_id' => 1], 1);
+        $html = SurveyManager::surveyReport(['user_id' => 1], 1);
 
         $this->assertStringContainsString('sv reported survey', $html);
         $this->assertStringContainsString('sv question text', $html);
@@ -1799,7 +1807,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertInvitation($s, 1, ['answered' => 1]);
         $this->setContext(1, null);
 
-        $html = \SurveyManager::surveyReport(['user_id' => 1], 1);
+        $html = SurveyManager::surveyReport(['user_id' => 1], 1);
 
         $this->assertStringContainsString('sv anon reported', $html);
         $this->assertStringNotContainsString('sv anon answer', $html);
@@ -1811,10 +1819,10 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertInvitation($s, 1, ['answered' => 0]);
         $this->setContext(1, null);
 
-        $html = \SurveyManager::surveyReport(['user_id' => 1], 0);
+        $html = SurveyManager::surveyReport(['user_id' => 1], 0);
 
         $this->assertStringContainsString('sv pending survey', $html);
-        $this->assertSame('', \SurveyManager::surveyReport([], 0));
+        $this->assertSame('', SurveyManager::surveyReport([], 0));
     }
 
     public function testSaveInvitationsReminderReusesTheStoredInvitationCodeInASession(): void
@@ -1824,7 +1832,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->insertInvitation($s, 2, ['session_id' => $sid, 'invitation_code' => 'svcodekeep']);
         $this->setContext(1, 1, $sid);
 
-        $sent = \SurveyUtil::saveInvitations($this->survey($s), ['USER:2'], 'sv reminder subject', 'sv body **link**', 1, true);
+        $sent = SurveyUtil::saveInvitations($this->survey($s), ['USER:2'], 'sv reminder subject', 'sv body **link**', 1, true);
 
         $this->assertSame(1, $sent);
         $content = (string) $this->conn->fetchOne(
@@ -1839,7 +1847,7 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $s = $this->insertSurvey();
         $this->insertInvitation($s, 2, ['invitation_code' => 'svcodebase']);
 
-        $sent = \SurveyUtil::saveInvitations($this->survey($s), ['USER:2'], 'sv reminder base', 'sv body **link**', 1, true);
+        $sent = SurveyUtil::saveInvitations($this->survey($s), ['USER:2'], 'sv reminder base', 'sv body **link**', 1, true);
 
         $this->assertSame(1, $sent);
         $content = (string) $this->conn->fetchOne(

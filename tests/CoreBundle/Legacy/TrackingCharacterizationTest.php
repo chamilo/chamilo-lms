@@ -1015,9 +1015,9 @@ final class TrackingCharacterizationTest extends AbstractApiTest
     private function quiz(int $id): object
     {
         return new class($id) {
-            public function __construct(private readonly int $id)
-            {
-            }
+            public function __construct(
+                private readonly int $id
+            ) {}
 
             public function getIid(): int
             {

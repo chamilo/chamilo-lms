@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use SocialManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -17,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Throwable;
 
 /**
  * Characterization tests for SocialManager (social.lib.php).
@@ -47,12 +49,12 @@ final class SocialCharacterizationTest extends KernelTestCase
         $request = Request::create('/main/social/home.php');
         $request->setSession($httpSession);
         Container::setRequest($request);
-        \ChamiloSession::erase('_user');
+        ChamiloSession::erase('_user');
     }
 
     protected function tearDown(): void
     {
-        \ChamiloSession::erase('_user');
+        ChamiloSession::erase('_user');
         self::getContainer()->get('security.token_storage')->setToken(null);
         parent::tearDown();
     }
@@ -110,7 +112,7 @@ final class SocialCharacterizationTest extends KernelTestCase
     public function testTeachersAreFriendsWithEveryoneSettingGrantsAdministratorsGoodFriendStatus(): void
     {
         $this->setSetting('social.social_make_teachers_friend_all', 'true');
-        \ChamiloSession::write('_user', ['id' => 1]);
+        ChamiloSession::write('_user', ['id' => 1]);
 
         $this->assertSame(
             UserRelUser::USER_RELATION_TYPE_GOODFRIEND,
@@ -208,20 +210,28 @@ final class SocialCharacterizationTest extends KernelTestCase
     {
         // PINNED QUIRK: user_receiver_id / msg_status do not exist on `message` any more, so the query fails.
         // Intended (if ever revived): counts and lists computed through message_rel_user and message.status.
-        $this->expectException(\Throwable::class);
+        $this->expectException(Throwable::class);
         $call();
     }
 
     public static function brokenMessageQueries(): iterable
     {
         yield 'messages sent' => [static fn () => SocialManager::getCountMessagesSent(1)];
+
         yield 'messages received' => [static fn () => SocialManager::getCountMessagesReceived(1)];
+
         yield 'wall posts' => [static fn () => SocialManager::getCountWallPostedMessages(1)];
+
         yield 'invitations received' => [static fn () => SocialManager::get_list_invitation_of_friends_by_user_id(1, 3)];
+
         yield 'invitations sent' => [static fn () => SocialManager::get_list_invitation_sent_by_user_id(1)];
+
         yield 'invitation count' => [static fn () => SocialManager::getCountInvitationSent(1)];
+
         yield 'accept invitation' => [static fn () => SocialManager::invitation_accepted(1, 2)];
+
         yield 'deny invitation' => [static fn () => SocialManager::invitation_denied(1, 2)];
+
         yield 'wall messages' => [static fn () => SocialManager::getWallMessages(1)];
     }
 

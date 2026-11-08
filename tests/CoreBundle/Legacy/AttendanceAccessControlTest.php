@@ -10,6 +10,7 @@ use Attendance;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Database;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -48,12 +49,12 @@ final class AttendanceAccessControlTest extends KernelTestCase
 
         $this->conn = $container->get('doctrine')->getConnection();
         $course = $this->getCourse(self::COURSE);
-        \ChamiloSession::write('_user', ['id' => self::ADMIN]);
-        \ChamiloSession::write('_real_cid', $course->getId());
-        \ChamiloSession::write('_cid', $course->getCode());
-        \ChamiloSession::write('_course', api_get_course_info($course->getCode()));
-        \ChamiloSession::write('sid', 0);
-        \ChamiloSession::erase('login_as');
+        ChamiloSession::write('_user', ['id' => self::ADMIN]);
+        ChamiloSession::write('_real_cid', $course->getId());
+        ChamiloSession::write('_cid', $course->getCode());
+        ChamiloSession::write('_course', api_get_course_info($course->getCode()));
+        ChamiloSession::write('sid', 0);
+        ChamiloSession::erase('login_as');
     }
 
     private function att(int $courseId): int
@@ -67,8 +68,8 @@ final class AttendanceAccessControlTest extends KernelTestCase
         $node = $this->conn->fetchOne('SELECT id FROM resource_node ORDER BY id LIMIT 1 OFFSET '.(5 + $this->seq));
         $this->conn->executeStatement('UPDATE c_attendance SET resource_node_id = ? WHERE iid = ?', [$node, $id]);
         $this->conn->executeStatement(
-            "INSERT INTO resource_link (resource_node_id, c_id, visibility, display_order, resource_type_group, created_at, updated_at)
-             VALUES (?, ?, 2, 0, 0, NOW(), NOW())",
+            'INSERT INTO resource_link (resource_node_id, c_id, visibility, display_order, resource_type_group, created_at, updated_at)
+             VALUES (?, ?, 2, 0, 0, NOW(), NOW())',
             [$node, $courseId]
         );
 

@@ -6,9 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
 use Doctrine\DBAL\Connection;
+use SurveyManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -130,7 +132,7 @@ final class SurveyAccessControlTest extends KernelTestCase
         $id = $this->survey();
         $this->publish($id, 1);
 
-        $this->assertTrue(\SurveyManager::surveyBelongsToCourse($id, 1, 0));
+        $this->assertTrue(SurveyManager::surveyBelongsToCourse($id, 1, 0));
     }
 
     public function testSurveyOfAnotherCourseIsRejected(): void
@@ -138,18 +140,18 @@ final class SurveyAccessControlTest extends KernelTestCase
         $id = $this->survey();
         $this->publish($id, 2);
 
-        $this->assertFalse(\SurveyManager::surveyBelongsToCourse($id, 1, 0), 'a teacher of course 1 must not reach a course 2 survey');
-        $this->assertTrue(\SurveyManager::surveyBelongsToCourse($id, 2, 0));
+        $this->assertFalse(SurveyManager::surveyBelongsToCourse($id, 1, 0), 'a teacher of course 1 must not reach a course 2 survey');
+        $this->assertTrue(SurveyManager::surveyBelongsToCourse($id, 2, 0));
     }
 
     public function testUnknownEmptyOrUnlinkedIdIsRejected(): void
     {
-        $this->assertFalse(\SurveyManager::surveyBelongsToCourse(999999999, 1, 0));
-        $this->assertFalse(\SurveyManager::surveyBelongsToCourse(0, 1, 0));
-        $this->assertFalse(\SurveyManager::surveyBelongsToCourse($this->survey(), 1, 0), 'no resource link');
+        $this->assertFalse(SurveyManager::surveyBelongsToCourse(999999999, 1, 0));
+        $this->assertFalse(SurveyManager::surveyBelongsToCourse(0, 1, 0));
+        $this->assertFalse(SurveyManager::surveyBelongsToCourse($this->survey(), 1, 0), 'no resource link');
         $id = $this->survey();
         $this->publish($id, 1);
-        $this->assertFalse(\SurveyManager::surveyBelongsToCourse($id, 0, 0));
+        $this->assertFalse(SurveyManager::surveyBelongsToCourse($id, 0, 0));
     }
 
     public function testBaseCourseSurveyIsVisibleInASessionButSessionSurveyIsNotInTheBaseCourse(): void
@@ -161,10 +163,10 @@ final class SurveyAccessControlTest extends KernelTestCase
         $inSession = $this->survey();
         $this->publish($inSession, 1, $sid);
 
-        $this->assertTrue(\SurveyManager::surveyBelongsToCourse($base, 1, $sid));
-        $this->assertTrue(\SurveyManager::surveyBelongsToCourse($inSession, 1, $sid));
-        $this->assertFalse(\SurveyManager::surveyBelongsToCourse($inSession, 1, 0));
-        $this->assertFalse(\SurveyManager::surveyBelongsToCourse($inSession, 1, $other));
+        $this->assertTrue(SurveyManager::surveyBelongsToCourse($base, 1, $sid));
+        $this->assertTrue(SurveyManager::surveyBelongsToCourse($inSession, 1, $sid));
+        $this->assertFalse(SurveyManager::surveyBelongsToCourse($inSession, 1, 0));
+        $this->assertFalse(SurveyManager::surveyBelongsToCourse($inSession, 1, $other));
     }
 
     public function testQuestionMustBelongToTheSurvey(): void
@@ -173,10 +175,10 @@ final class SurveyAccessControlTest extends KernelTestCase
         $b = $this->survey();
         $q = $this->question($a);
 
-        $this->assertTrue(\SurveyManager::surveyQuestionBelongsToSurvey($q, $a));
-        $this->assertFalse(\SurveyManager::surveyQuestionBelongsToSurvey($q, $b));
-        $this->assertFalse(\SurveyManager::surveyQuestionBelongsToSurvey(0, $a));
-        $this->assertFalse(\SurveyManager::surveyQuestionBelongsToSurvey($q, 0));
+        $this->assertTrue(SurveyManager::surveyQuestionBelongsToSurvey($q, $a));
+        $this->assertFalse(SurveyManager::surveyQuestionBelongsToSurvey($q, $b));
+        $this->assertFalse(SurveyManager::surveyQuestionBelongsToSurvey(0, $a));
+        $this->assertFalse(SurveyManager::surveyQuestionBelongsToSurvey($q, 0));
     }
 
     private const PLAIN_USER = 2;
@@ -195,25 +197,25 @@ final class SurveyAccessControlTest extends KernelTestCase
     public function testCopyTargetNeedsTeacherRightsOnTheTargetCourse(): void
     {
         // Course 2 has no teacher row for user 2: the posted target must be refused.
-        $this->assertFalse(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false));
+        $this->assertFalse(SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false));
         $this->teacherOf(self::PLAIN_USER, 2);
-        $this->assertTrue(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false));
-        $this->assertFalse(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 1, 0, false), 'teacher of 2 only');
+        $this->assertTrue(SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false));
+        $this->assertFalse(SurveyManager::canCopySurveyTo(self::PLAIN_USER, 1, 0, false), 'teacher of 2 only');
     }
 
     public function testCopyTargetStudentOfTheCourseIsRefused(): void
     {
         $this->teacherOf(self::PLAIN_USER, 2, 5);
 
-        $this->assertFalse(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false));
+        $this->assertFalse(SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false));
     }
 
     public function testCopyTargetAdminMayCopyAnywhereButNotToUnknownTargets(): void
     {
-        $this->assertTrue(\SurveyManager::canCopySurveyTo(1, 2, 0, true));
-        $this->assertFalse(\SurveyManager::canCopySurveyTo(1, 999999, 0, true), 'unknown course');
-        $this->assertFalse(\SurveyManager::canCopySurveyTo(1, 2, 999999, true), 'session without the course');
-        $this->assertFalse(\SurveyManager::canCopySurveyTo(1, 0, 0, true));
+        $this->assertTrue(SurveyManager::canCopySurveyTo(1, 2, 0, true));
+        $this->assertFalse(SurveyManager::canCopySurveyTo(1, 999999, 0, true), 'unknown course');
+        $this->assertFalse(SurveyManager::canCopySurveyTo(1, 2, 999999, true), 'session without the course');
+        $this->assertFalse(SurveyManager::canCopySurveyTo(1, 0, 0, true));
     }
 
     public function testCopyTargetSessionCoachMayCopyIntoHisSessionOnly(): void
@@ -228,9 +230,9 @@ final class SurveyAccessControlTest extends KernelTestCase
             'visibility' => 1, 'legal_agreement' => 0, 'progress' => 0,
         ]);
 
-        $this->assertTrue(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, $sid, false));
-        $this->assertFalse(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, $other, false));
-        $this->assertFalse(\SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false), 'coach is not course teacher');
+        $this->assertTrue(SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, $sid, false));
+        $this->assertFalse(SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, $other, false));
+        $this->assertFalse(SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false), 'coach is not course teacher');
     }
 
     public function testOnlyInvitedUsersMayAnswerAndOnlyInTheCourseOfTheInvitation(): void
@@ -242,17 +244,17 @@ final class SurveyAccessControlTest extends KernelTestCase
             'c_lp_item_id' => 0,
         ]);
 
-        $this->assertTrue(\SurveyManager::userIsInvitedToSurvey(self::PLAIN_USER, $id, 1));
-        $this->assertFalse(\SurveyManager::userIsInvitedToSurvey(1, $id, 1), 'another user');
-        $this->assertFalse(\SurveyManager::userIsInvitedToSurvey(self::PLAIN_USER, $id, 2), 'another course');
-        $this->assertFalse(\SurveyManager::userIsInvitedToSurvey(self::PLAIN_USER, $this->survey(), 1), 'another survey');
+        $this->assertTrue(SurveyManager::userIsInvitedToSurvey(self::PLAIN_USER, $id, 1));
+        $this->assertFalse(SurveyManager::userIsInvitedToSurvey(1, $id, 1), 'another user');
+        $this->assertFalse(SurveyManager::userIsInvitedToSurvey(self::PLAIN_USER, $id, 2), 'another course');
+        $this->assertFalse(SurveyManager::userIsInvitedToSurvey(self::PLAIN_USER, $this->survey(), 1), 'another survey');
     }
 
     public function testSurveyTitleFilterMatchesCodeOrTitleNotBoth(): void
     {
         // The filter used to AND "code = :title" with "node.title = :title": it only matched a survey whose
         // code equals its title, so searching a survey by title found nothing.
-        $course = self::getContainer()->get('doctrine')->getRepository(\Chamilo\CoreBundle\Entity\Course::class)->find(1);
+        $course = self::getContainer()->get('doctrine')->getRepository(Course::class)->find(1);
         $qb = Container::getSurveyRepository()->findAllByCourse($course, null, 'sa_title');
         $dql = $qb->getDQL();
 

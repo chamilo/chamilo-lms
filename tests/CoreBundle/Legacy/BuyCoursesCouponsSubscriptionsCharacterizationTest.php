@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use BuyCoursesPlugin;
+
 /**
  * Characterization of the coupon and subscription (time-limited course/session access) code of BuyCoursesPlugin
  * (fixtures prefix bc_).
@@ -136,7 +138,7 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $this->assertContains($off, $disabled);
         $this->assertNotContains($on, $disabled, 'status 0 lists the disabled coupons only');
         $this->assertLessThan(array_search($off, $disabled), array_search($off2, $disabled), 'newest first');
-        $this->assertGreaterThan(0, count($this->plugin->getCouponsListByStatus(1)));
+        $this->assertGreaterThan(0, \count($this->plugin->getCouponsListByStatus(1)));
     }
 
     public function testUpdateCouponDataReplacesItemsButNotTheCode(): void
@@ -264,7 +266,7 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
     public function testGetSubscriptionAppliesCouponAndTax(): void
     {
         $this->plugin->addNewSubscription($this->subscription([['duration' => 30, 'price' => 50]], ['tax_perc' => 20]));
-        $this->setGlobalConfig(0, \BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
+        $this->setGlobalConfig(0, BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
         $this->setPluginSettings(['tax_enable' => 'true']);
 
         $sub = $this->plugin->getSubscription(1, 1, 30, ['discount_type' => 2, 'discount_amount' => 10]);
@@ -303,7 +305,7 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $coupon = $this->makeCoupon('BC_SUB', 1, 25);
         $this->conn->insert('plugin_buycourses_coupon_rel_item', ['coupon_id' => $coupon, 'product_type' => 1, 'product_id' => 1]);
 
-        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30, $coupon);
+        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30, $coupon);
         $sale = $this->plugin->getSubscriptionSale($saleId);
 
         $this->assertSame(2, (int) $sale['user_id']);
@@ -323,7 +325,7 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $coupon = $this->makeCoupon('BC_SUBBIG', 2, 500);
         $this->conn->insert('plugin_buycourses_coupon_rel_item', ['coupon_id' => $coupon, 'product_type' => 1, 'product_id' => 1]);
 
-        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30, $coupon);
+        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30, $coupon);
         $sale = $this->plugin->getSubscriptionSale($saleId);
 
         $this->assertEquals(0, (float) $sale['price']);
@@ -332,11 +334,11 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
 
     public function testSubscriptionSaleKeepsTheCentsOfPriceAndTax(): void
     {
-        $this->setGlobalConfig(0, \BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
+        $this->setGlobalConfig(0, BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
         $this->setPluginSettings(['tax_enable' => 'true']);
         $this->plugin->addNewSubscription($this->subscription([['duration' => 30, 'price' => 19.99]], ['tax_perc' => 21]));
 
-        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30);
+        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30);
         $sale = $this->conn->fetchAssociative('SELECT * FROM plugin_buycourses_subscription_rel_sale WHERE id = ?', [$saleId]);
 
         // 19.99 * 21% = 4.1979 -> 4.20 ; total 24.19
@@ -351,14 +353,14 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $this->plugin->addNewSubscription($this->subscription([['duration' => 30, 'price' => 80]]));
 
         $this->assertFalse($this->plugin->registerSubscriptionSale(1, 1, 99, 30));
-        $this->assertFalse($this->plugin->registerSubscriptionSale(1, 1, \BuyCoursesPlugin::PAYMENT_TYPE_BTCPAY, 30), 'btcpay is not a subscription gateway');
-        $this->assertFalse($this->plugin->registerSubscriptionSale(2, 1, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30), 'no subscription for course 2');
+        $this->assertFalse($this->plugin->registerSubscriptionSale(1, 1, BuyCoursesPlugin::PAYMENT_TYPE_BTCPAY, 30), 'btcpay is not a subscription gateway');
+        $this->assertFalse($this->plugin->registerSubscriptionSale(2, 1, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30), 'no subscription for course 2');
     }
 
     public function testCompleteSubscriptionSaleSubscribesTheBuyer(): void
     {
         $this->plugin->addNewSubscription($this->subscription([['duration' => 30, 'price' => 80]]));
-        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30);
+        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30);
         $before = (int) $this->conn->fetchOne('SELECT COUNT(*) FROM course_rel_user WHERE user_id = 2 AND c_id = 1');
 
         $this->assertTrue($this->plugin->completeSubscriptionSale($saleId));
@@ -372,7 +374,7 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
     public function testCompleteSubscriptionSaleOfAnUnknownCourseStaysPending(): void
     {
         $this->plugin->addNewSubscription($this->subscription([['duration' => 30, 'price' => 80]]));
-        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30);
+        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30);
         $this->conn->executeStatement('UPDATE plugin_buycourses_subscription_rel_sale SET product_id = 987654 WHERE id = ?', [$saleId]);
 
         $this->assertFalse($this->plugin->completeSubscriptionSale($saleId));
@@ -382,7 +384,7 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
     public function testCancelSubscriptionSale(): void
     {
         $this->plugin->addNewSubscription($this->subscription([['duration' => 30, 'price' => 80]]));
-        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30);
+        $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30);
         $this->plugin->cancelSubscriptionSale($saleId);
         $this->assertSame(-1, (int) $this->plugin->getSubscriptionSale($saleId)['status']);
     }

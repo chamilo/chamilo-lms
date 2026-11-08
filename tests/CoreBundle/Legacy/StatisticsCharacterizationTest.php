@@ -12,12 +12,16 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Database;
 use Doctrine\DBAL\Connection;
+use InvalidArgumentException;
+use RuntimeException;
 use Statistics;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Throwable;
 
 /**
  * Characterization of the legacy Statistics library (public/main/inc/lib/statistics.lib.php).
@@ -49,14 +53,14 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         Database::setConnection($this->getEntityManager()->getConnection());
         $_GET = [];
         // api_get_utc_datetime() converts from this timezone: the fixed boundaries below assume UTC.
-        \ChamiloSession::write('system_timezone', 'UTC');
-        \ChamiloSession::erase('_user');
+        ChamiloSession::write('system_timezone', 'UTC');
+        ChamiloSession::erase('_user');
     }
 
     protected function tearDown(): void
     {
         $_GET = [];
-        \ChamiloSession::erase('system_timezone');
+        ChamiloSession::erase('system_timezone');
         parent::tearDown();
     }
 
@@ -102,7 +106,7 @@ class StatisticsCharacterizationTest extends AbstractApiTest
             ]
         );
         $id = (int) $this->conn()->lastInsertId();
-        $url = array_key_exists('url', $o) ? $o['url'] : 1;
+        $url = \array_key_exists('url', $o) ? $o['url'] : 1;
         if (null !== $url) {
             $this->conn()->executeStatement('INSERT INTO access_url_rel_user (access_url_id, user_id) VALUES (?, ?)', [$url, $id]);
         }
@@ -855,7 +859,7 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $after = Statistics::printCourseByLanguageStats();
         $this->assertSame(($before[$iso(1)] ?? 0) + 4, (int) $after[$iso(1)]);
         $this->assertSame(($before[$iso(2)] ?? 0) + 1, (int) $after[$iso(2)]);
-        $this->assertSame(($before[$iso(14)] ?? 0), (int) $after[$iso(14)]);
+        $this->assertSame($before[$iso(14)] ?? 0, (int) $after[$iso(14)]);
         $counts = array_map('intval', array_values($after));
         $sorted = $counts;
         rsort($sorted);
@@ -1026,7 +1030,7 @@ class StatisticsCharacterizationTest extends AbstractApiTest
                 get_lang('This day') => (string) ($total - 1),
                 get_lang('In the last 7 days') => (string) ($total - 2),
                 get_lang('In the last 31 days') => (string) ($total - 2),
-                sprintf(get_lang('Last %d months'), 6) => (string) ($total - 3),
+                \sprintf(get_lang('Last %d months'), 6) => (string) ($total - 3),
                 get_lang('Never connected') => (string) ($total - 3),
             ],
             array_map(static fn ($v): string => str_replace('.', '', (string) $v), $rows)
@@ -1264,11 +1268,11 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $this->assertTrue(Statistics::updateUserActiveStatus($u, 1));
         $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT active FROM user WHERE id = ?', [$u]));
 
-        $this->assertThrowsAny(static fn () => Statistics::updateUserActiveStatus($u, -2), \InvalidArgumentException::class);
-        $this->assertThrowsAny(static fn () => Statistics::updateUserActiveStatus($u, 2), \InvalidArgumentException::class);
-        $this->assertThrowsAny(static fn () => Statistics::updateUserActiveStatus(0, 1), \InvalidArgumentException::class);
-        $this->assertThrowsAny(static fn () => Statistics::updateUserActiveStatus(999999999, 1), \RuntimeException::class);
-        $this->assertThrowsAny(static fn () => Statistics::updateUserActiveStatus($gone, 1), \RuntimeException::class);
+        $this->assertThrowsAny(static fn () => Statistics::updateUserActiveStatus($u, -2), InvalidArgumentException::class);
+        $this->assertThrowsAny(static fn () => Statistics::updateUserActiveStatus($u, 2), InvalidArgumentException::class);
+        $this->assertThrowsAny(static fn () => Statistics::updateUserActiveStatus(0, 1), InvalidArgumentException::class);
+        $this->assertThrowsAny(static fn () => Statistics::updateUserActiveStatus(999999999, 1), RuntimeException::class);
+        $this->assertThrowsAny(static fn () => Statistics::updateUserActiveStatus($gone, 1), RuntimeException::class);
         $this->assertSame(-2, (int) $this->conn()->fetchOne('SELECT active FROM user WHERE id = ?', [$gone]), 'soft-deleted stays so');
     }
 
@@ -1276,7 +1280,7 @@ class StatisticsCharacterizationTest extends AbstractApiTest
     {
         try {
             $fn();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->assertInstanceOf($class, $e);
 
             return;
@@ -1317,7 +1321,7 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $this->assertSame([], Statistics::getDuplicateUserGroupUserIds('email', $c), 'a soft-deleted target has no group');
         $this->assertNotNull($f);
 
-        $field = (int) $this->conn()->fetchOne("SELECT id FROM extra_field WHERE item_type = 1 ORDER BY id LIMIT 1");
+        $field = (int) $this->conn()->fetchOne('SELECT id FROM extra_field WHERE item_type = 1 ORDER BY id LIMIT 1');
         $this->assertGreaterThan(0, $field);
         $val = function (int $uid, string $v) use ($field): void {
             $this->conn()->executeStatement(
@@ -1356,7 +1360,7 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $this->courseUser($b, 1);
 
         $table = Statistics::returnDuplicatedUsersTable('email', [], 0, 'tok');
-        $mine = array_values(array_filter($table->table_data, static fn (array $r): bool => in_array((int) $r[0], [$a, $b, $c], true)));
+        $mine = array_values(array_filter($table->table_data, static fn (array $r): bool => \in_array((int) $r[0], [$a, $b, $c], true)));
         // Group sorted by registration date then id: b (older) and c share a date, b has the lower id
         $this->assertSame([(string) $b, (string) $c, (string) $a], array_column($mine, 0));
         $this->assertSame(['Two', 'Three', 'One'], array_column($mine, 2));

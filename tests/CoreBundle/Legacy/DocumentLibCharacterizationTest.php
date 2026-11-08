@@ -8,13 +8,16 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use DocumentManager;
+use PHPUnit\Framework\AssertionFailedError;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Uid\Uuid;
+use Throwable;
 
 /**
  * Characterization tests for DocumentManager (document.lib.php), the legacy document helpers.
@@ -52,17 +55,17 @@ final class DocumentLibCharacterizationTest extends KernelTestCase
         $request = Request::create('/main/document/document.php');
         $request->setSession($httpSession);
         Container::setRequest($request);
-        \ChamiloSession::erase('studentview');
-        \ChamiloSession::erase('id_session');
-        \ChamiloSession::erase('_gid');
-        \ChamiloSession::write('_real_cid', 1);
-        \ChamiloSession::write('_cid', 'AIACT');
+        ChamiloSession::erase('studentview');
+        ChamiloSession::erase('id_session');
+        ChamiloSession::erase('_gid');
+        ChamiloSession::write('_real_cid', 1);
+        ChamiloSession::write('_cid', 'AIACT');
     }
 
     protected function tearDown(): void
     {
-        \ChamiloSession::erase('_real_cid');
-        \ChamiloSession::erase('_cid');
+        ChamiloSession::erase('_real_cid');
+        ChamiloSession::erase('_cid');
         self::getContainer()->get('security.token_storage')->setToken(null);
         parent::tearDown();
     }
@@ -234,8 +237,8 @@ final class DocumentLibCharacterizationTest extends KernelTestCase
             try {
                 $call();
                 $this->fail('Expected the query to fail.');
-            } catch (\Throwable $e) {
-                $this->assertNotInstanceOf(\PHPUnit\Framework\AssertionFailedError::class, $e);
+            } catch (Throwable $e) {
+                $this->assertNotInstanceOf(AssertionFailedError::class, $e);
             }
         }
     }
@@ -273,7 +276,9 @@ final class DocumentLibCharacterizationTest extends KernelTestCase
         return $this->getEntityManager()->getConnection();
     }
 
-    /** Raw fixture: node + c_document + published link. Returns the c_document iid. */
+    /**
+     * Raw fixture: node + c_document + published link. Returns the c_document iid.
+     */
     private function doc(string $title, string $type, ?int $parentDocIid = null, int $courseId = 1): int
     {
         $this->seq++;

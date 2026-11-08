@@ -18,7 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Throwable;
 
 /**
  * Characterization tests for the raw-SQL methods of the legacy Exercise class
@@ -79,7 +78,9 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         ChamiloSession::erase('login_as');
     }
 
-    /** @return array{0: User, 1: Course} admin + fixture course 1, as current context */
+    /**
+     * @return array{0: User, 1: Course} admin + fixture course 1, as current context
+     */
     private function ctx(int $sessionId = 0): array
     {
         $user = $this->getUser('admin');
@@ -142,13 +143,15 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         return $exercise;
     }
 
-    /** @param int[] $orders titles ex_q_a, ex_q_b ... in the given question_order sequence */
+    /**
+     * @param int[] $orders titles ex_q_a, ex_q_b ... in the given question_order sequence
+     */
     private function quizWithQuestions(array $orders, array $titles = []): array
     {
         $quizId = $this->makeQuiz();
         $ids = [];
         foreach ($orders as $i => $order) {
-            $title = $titles[$i] ?? 'ex_q_'.chr(97 + $i);
+            $title = $titles[$i] ?? 'ex_q_'.\chr(97 + $i);
             $qid = $this->makeQuestion($title);
             $this->link($quizId, $qid, $order);
             $ids[$i] = $qid;
@@ -202,7 +205,9 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         return (int) $this->conn->fetchOne("SELECT COUNT(*) FROM $table WHERE $where", $params);
     }
 
-    /** Inserts a learning path holding one quiz item, linked to the course. Returns [lpId, itemId]. */
+    /**
+     * Inserts a learning path holding one quiz item, linked to the course. Returns [lpId, itemId].
+     */
     private function lpWithQuiz(int $quizId, int $courseId, ?string $deletedAt = null, int $nodeId = 1): array
     {
         $now = '2020-01-01 00:00:00';
@@ -869,7 +874,7 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         $this->assertSame(1, $this->countRows('track_e_exercises', 'exe_id = ?', [$foreign]), 'other quizzes untouched');
         $this->assertSame(
             1,
-            $this->countRows('track_e_default', "default_event_type = ? AND default_value_type = ? AND default_value = ? AND c_id = ?", [LOG_EXERCISE_RESULT_DELETE, LOG_EXERCISE_ID, (string) $quizId, $course->getId()]),
+            $this->countRows('track_e_default', 'default_event_type = ? AND default_value_type = ? AND default_value = ? AND c_id = ?', [LOG_EXERCISE_RESULT_DELETE, LOG_EXERCISE_ID, (string) $quizId, $course->getId()]),
             'the deletion is logged once'
         );
     }
@@ -1081,7 +1086,9 @@ final class ExerciseCharacterizationTest extends KernelTestCase
             'score' => 8, 'max_score' => 10, 'exe_duration' => 77,
         ]);
         $lp = new class($viewId) {
-            public function __construct(private int $viewId) {}
+            public function __construct(
+                private int $viewId
+            ) {}
 
             public function get_view_id(): int
             {
@@ -1118,7 +1125,9 @@ final class ExerciseCharacterizationTest extends KernelTestCase
         $itemViewId = (int) $this->conn->lastInsertId();
         $exe = $this->seedExe(['exe_user_id' => $user->getId(), 'c_id' => $course->getId(), 'exe_exo_id' => $quizId, 'score' => 5, 'max_score' => 10]);
         ChamiloSession::write('oLP', new class($viewId) {
-            public function __construct(private int $viewId) {}
+            public function __construct(
+                private int $viewId
+            ) {}
 
             public function get_view_id(): int
             {

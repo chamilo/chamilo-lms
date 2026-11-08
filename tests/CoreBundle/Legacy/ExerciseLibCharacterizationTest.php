@@ -9,12 +9,15 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
+use DateTime;
+use DateTimeZone;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\NoResultException;
 use ExerciseLib;
 use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -39,7 +42,10 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
 
     private Connection $conn;
     private int $seq = 0;
-    /** @var int[]|null */
+
+    /**
+     * @var int[]|null
+     */
     private ?array $spare = null;
 
     protected function setUp(): void
@@ -145,7 +151,9 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         ]);
     }
 
-    /** A quiz linked to the course through a live (or soft-deleted) resource_link on a spare node. */
+    /**
+     * A quiz linked to the course through a live (or soft-deleted) resource_link on a spare node.
+     */
     private function quiz(array $o = [], ?int $courseId = 1, ?string $deletedAt = null, int $nodeIdx = 0): int
     {
         $this->spare ??= $this->conn->fetchFirstColumn(
@@ -277,7 +285,9 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         return (int) $this->conn->fetchOne("SELECT COUNT(*) FROM $table WHERE $where", $params);
     }
 
-    /** @return int[] exe ids of the rows (key 'exe_id') returned by get_exam_results_data */
+    /**
+     * @return int[] exe ids of the rows (key 'exe_id') returned by get_exam_results_data
+     */
     private function results(int $quizId, string $where = '', ?string $column = 'exe_id', string $dir = 'asc', int $courseId = 1): array
     {
         $rows = ExerciseLib::get_exam_results_data(0, 100, $column, $dir, $quizId, $where, false, $courseId, false, true);
@@ -400,7 +410,7 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $sid = $this->rawSession('res_sess');
         $quiz = $this->quiz();
         $base = $this->exe(['exe_exo_id' => $quiz]);
-                $inSession = $this->exe(['exe_exo_id' => $quiz, 'session_id' => $sid]);
+        $inSession = $this->exe(['exe_exo_id' => $quiz, 'session_id' => $sid]);
 
         $this->ctx();
         $this->assertSame([$base], $this->results($quiz), 'base course: NULL session');
@@ -921,7 +931,7 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $at($inSession, $u, '2020-05-03 10:00:00');
         $at($otherCourse, $u, '2020-05-04 10:00:00');
         $at($otherUser, $other, '2020-05-05 10:00:00');
-        $since = new \DateTime('2020-04-15 00:00:00', new \DateTimeZone('UTC'));
+        $since = new DateTime('2020-04-15 00:00:00', new DateTimeZone('UTC'));
 
         $this->assertSame(2, (int) ExerciseLib::countAnsweredQuestionsByUserAfterTime($since, $u, 1, 0), 'base course');
         $this->assertSame(1, (int) ExerciseLib::countAnsweredQuestionsByUserAfterTime($since, $u, 1, $sid), 'session');
@@ -933,7 +943,7 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
     {
         $quiz = $this->quiz(['title' => 'qs_title_by_id']);
         $this->assertSame('qs_title_by_id', ExerciseLib::getExerciseTitleById($quiz));
-        $this->expectException(\Doctrine\ORM\NoResultException::class);
+        $this->expectException(NoResultException::class);
         ExerciseLib::getExerciseTitleById(999999999);
     }
 
@@ -962,7 +972,7 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $this->exe(['exe_exo_id' => $quiz, 'c_id' => 2]);
         $em = Container::getEntityManager();
         $course = $em->getRepository(Course::class)->find(1);
-        $quizEntity = $em->getRepository(\Chamilo\CourseBundle\Entity\CQuiz::class)->find($quiz);
+        $quizEntity = $em->getRepository(CQuiz::class)->find($quiz);
         $sessionEntity = $em->getRepository(SessionEntity::class)->find($sid);
         $method = new ReflectionMethod(ExerciseLib::class, 'findAttemptExeIdsForExport');
 

@@ -13,15 +13,17 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Kernel;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 $root = dirname(__DIR__, 3);
+
 require $root.'/vendor/autoload.php';
 
 $_SERVER['APP_ENV'] = $_ENV['APP_ENV'] = 'test';
-(new Symfony\Component\Dotenv\Dotenv())->bootEnv($root.'/.env');
+(new Dotenv())->bootEnv($root.'/.env');
 
 $kernel = new Kernel('test', true);
 $kernel->boot();

@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use BuyCoursesPlugin;
+
 /**
  * Characterization of the service-sale flow of BuyCoursesPlugin (services bought by a user for a node: user,
  * course or session): registration, tax, coupons, repurchase blocking, status transitions, gateway helpers.
@@ -79,9 +81,9 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
 
     public function testRegisterServiceSaleRejectsUnknownAndInactiveServices(): void
     {
-        $this->assertFalse($this->plugin->registerServiceSale(999999, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
+        $this->assertFalse($this->plugin->registerServiceSale(999999, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
         $inactive = $this->makeService(['active' => 0]);
-        $this->assertFalse($this->plugin->registerServiceSale($inactive, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
+        $this->assertFalse($this->plugin->registerServiceSale($inactive, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
         $this->assertSame(0, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM plugin_buycourses_service_sale WHERE service_id = ?', [$inactive]));
     }
 
@@ -89,7 +91,7 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
     {
         $service = $this->makeService(['duration_days' => 45]);
 
-        $saleId = $this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2);
+        $saleId = $this->plugin->registerServiceSale($service, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2);
         $sale = $this->serviceSaleRow((int) $saleId);
 
         $this->assertSame(2, (int) $sale['buyer_id']);
@@ -107,21 +109,21 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
     public function testRegisterServiceSaleRecordsAnAuditEntry(): void
     {
         $service = $this->makeService();
-        $saleId = (int) $this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_STRIPE, 2);
+        $saleId = (int) $this->plugin->registerServiceSale($service, BuyCoursesPlugin::PAYMENT_TYPE_STRIPE, 2);
 
-        $entries = array_values($this->plugin->getAuditEntries(\BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE, $saleId));
+        $entries = array_values($this->plugin->getAuditEntries(BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE, $saleId));
         $this->assertCount(1, $entries);
-        $this->assertSame(\BuyCoursesPlugin::AUDIT_ACTION_SERVICE_SALE_CREATED, $entries[0]['action']);
-        $this->assertSame(\BuyCoursesPlugin::AUDIT_SOURCE_USER, $entries[0]['source']);
+        $this->assertSame(BuyCoursesPlugin::AUDIT_ACTION_SERVICE_SALE_CREATED, $entries[0]['action']);
+        $this->assertSame(BuyCoursesPlugin::AUDIT_SOURCE_USER, $entries[0]['source']);
     }
 
     public function testRegisterServiceSaleTaxIsRoundedToCents(): void
     {
-        $this->setGlobalConfig(10, \BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
+        $this->setGlobalConfig(10, BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
         $this->setPluginSettings(['tax_enable' => 'true']);
         $service = $this->makeService(['price' => '33.33', 'tax_perc' => 21]);
 
-        $sale = $this->serviceSaleRow((int) $this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
+        $sale = $this->serviceSaleRow((int) $this->plugin->registerServiceSale($service, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
 
         $this->assertSame('40.33', $sale['price']);
         $this->assertSame('33.33', $sale['price_without_tax']);
@@ -134,12 +136,12 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
         $this->setPluginSettings(['tax_enable' => 'true']);
         $service = $this->makeService(['price' => '100.00', 'tax_perc' => 10]);
 
-        $this->setGlobalConfig(0, \BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SERVICES);
-        $taxed = $this->serviceSaleRow((int) $this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
+        $this->setGlobalConfig(0, BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SERVICES);
+        $taxed = $this->serviceSaleRow((int) $this->plugin->registerServiceSale($service, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
         $this->assertSame('110.00', $taxed['price']);
 
-        $this->setGlobalConfig(0, \BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE);
-        $untaxed = $this->serviceSaleRow((int) $this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 1));
+        $this->setGlobalConfig(0, BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE);
+        $untaxed = $this->serviceSaleRow((int) $this->plugin->registerServiceSale($service, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 1));
         $this->assertSame('100.00', $untaxed['price']);
         $this->assertNull($untaxed['tax_perc']);
     }
@@ -150,7 +152,7 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
         $coupon = $this->makeCoupon('BC_SP', 1, 15);
         $this->conn->insert('plugin_buycourses_coupon_rel_service', ['coupon_id' => $coupon, 'service_id' => $service]);
 
-        $sale = $this->serviceSaleRow((int) $this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2, $coupon));
+        $sale = $this->serviceSaleRow((int) $this->plugin->registerServiceSale($service, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2, $coupon));
 
         // 99.99 * 15% = 14.9985 -> 15.00 ; 99.99 - 15.00 = 84.99
         $this->assertSame('15.00', $sale['discount_amount']);
@@ -165,7 +167,7 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
         $coupon = $this->makeCoupon('BC_SO', 2, 40);
         $this->conn->insert('plugin_buycourses_coupon_rel_service', ['coupon_id' => $coupon, 'service_id' => $other]);
 
-        $sale = $this->serviceSaleRow((int) $this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2, $coupon));
+        $sale = $this->serviceSaleRow((int) $this->plugin->registerServiceSale($service, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2, $coupon));
         $this->assertSame('100.00', $sale['price']);
     }
 
@@ -176,23 +178,23 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
         $this->conn->insert('plugin_buycourses_coupon_rel_service', ['coupon_id' => $coupon, 'service_id' => $service]);
 
         // the discount is capped at the price, which leaves nothing to charge: the purchase is refused
-        $this->assertFalse($this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2, $coupon));
+        $this->assertFalse($this->plugin->registerServiceSale($service, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2, $coupon));
         $this->assertSame(0, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM plugin_buycourses_service_sale WHERE service_id = ?', [$service]));
     }
 
     public function testRegisterServiceSaleRenewableKeepsTheRecurringAmount(): void
     {
         $service = $this->makeService(['price' => '50.00', 'renewable' => 1]);
-        $sale = $this->serviceSaleRow((int) $this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_STRIPE, 2));
+        $sale = $this->serviceSaleRow((int) $this->plugin->registerServiceSale($service, BuyCoursesPlugin::PAYMENT_TYPE_STRIPE, 2));
         $this->assertSame('50.00', $sale['recurring_amount']);
     }
 
     public function testSecondPendingPurchaseOfTheSameServiceAndNodeIsRefused(): void
     {
         $service = $this->makeService();
-        $this->assertNotFalse($this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
-        $this->assertFalse($this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
-        $this->assertNotFalse($this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 1), 'another node is a different purchase');
+        $this->assertNotFalse($this->plugin->registerServiceSale($service, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
+        $this->assertFalse($this->plugin->registerServiceSale($service, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
+        $this->assertNotFalse($this->plugin->registerServiceSale($service, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 1), 'another node is a different purchase');
         $this->assertSame(2, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM plugin_buycourses_service_sale WHERE service_id = ?', [$service]));
     }
 
@@ -201,11 +203,11 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
         $service = $this->makeService();
         $future = gmdate('Y-m-d H:i:s', time() + 86400);
         $this->makeServiceSale($service, ['status' => 1, 'date_end' => $future]);
-        $this->assertFalse($this->plugin->registerServiceSale($service, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
+        $this->assertFalse($this->plugin->registerServiceSale($service, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2));
 
         $serviceB = $this->makeService();
         $this->makeServiceSale($serviceB, ['status' => 1, 'date_end' => '2026-02-09 08:00:00']);
-        $this->assertNotFalse($this->plugin->registerServiceSale($serviceB, \BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2), 'expired and not renewable');
+        $this->assertNotFalse($this->plugin->registerServiceSale($serviceB, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 2), 'expired and not renewable');
     }
 
     public function testCompleteServiceSale(): void
@@ -213,15 +215,15 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
         $service = $this->makeService();
         $saleId = $this->makeServiceSale($service);
 
-        $this->assertTrue($this->plugin->completeServiceSale($saleId, \BuyCoursesPlugin::AUDIT_SOURCE_ADMIN, 1));
+        $this->assertTrue($this->plugin->completeServiceSale($saleId, BuyCoursesPlugin::AUDIT_SOURCE_ADMIN, 1));
         $this->assertSame(1, (int) $this->serviceSaleRow($saleId)['status']);
-        $actions = array_column($this->plugin->getAuditEntries(\BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE, $saleId), 'action');
-        $this->assertContains(\BuyCoursesPlugin::AUDIT_ACTION_SERVICE_SALE_COMPLETED, $actions);
+        $actions = array_column($this->plugin->getAuditEntries(BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE, $saleId), 'action');
+        $this->assertContains(BuyCoursesPlugin::AUDIT_ACTION_SERVICE_SALE_COMPLETED, $actions);
 
         $this->assertTrue($this->plugin->completeServiceSale($saleId), 'idempotent');
-        $this->assertSame(1, count(array_filter(
-            array_column($this->plugin->getAuditEntries(\BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE, $saleId), 'action'),
-            static fn ($a) => \BuyCoursesPlugin::AUDIT_ACTION_SERVICE_SALE_COMPLETED === $a
+        $this->assertSame(1, \count(array_filter(
+            array_column($this->plugin->getAuditEntries(BuyCoursesPlugin::AUDIT_OBJECT_SERVICE_SALE, $saleId), 'action'),
+            static fn ($a) => BuyCoursesPlugin::AUDIT_ACTION_SERVICE_SALE_COMPLETED === $a
         )), 'the second call does not log a second completion');
     }
 
@@ -247,7 +249,7 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
     {
         $saleId = $this->makeServiceSale($this->makeService());
 
-        $this->assertTrue($this->plugin->cancelServiceSale($saleId, \BuyCoursesPlugin::AUDIT_SOURCE_ADMIN, 1));
+        $this->assertTrue($this->plugin->cancelServiceSale($saleId, BuyCoursesPlugin::AUDIT_SOURCE_ADMIN, 1));
         $this->assertSame(-1, (int) $this->serviceSaleRow($saleId)['status']);
         $this->assertTrue($this->plugin->cancelServiceSale($saleId), 'already cancelled');
         $this->assertFalse($this->plugin->cancelServiceSale(999999));
@@ -271,7 +273,7 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
         $mine = [$a, $b, $c];
         $ids = static fn (array $rows) => array_values(array_filter(
             array_map(static fn ($r) => (int) $r['id'], $rows),
-            static fn ($i) => in_array($i, $mine, true)
+            static fn ($i) => \in_array($i, $mine, true)
         ));
         $this->assertSame([$c, $b, $a], $ids($this->plugin->getServiceSales()), 'newest first');
         // the status filter is driven by func_num_args(): an explicit 0 means "pending only", not "any"
@@ -404,7 +406,7 @@ final class BuyCoursesServicesCharacterizationTest extends BuyCoursesCharacteriz
 
     public function testGetServiceAppliesTax(): void
     {
-        $this->setGlobalConfig(0, \BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SERVICES, 'IVA');
+        $this->setGlobalConfig(0, BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SERVICES, 'IVA');
         $this->setPluginSettings(['tax_enable' => 'true']);
         $service = $this->makeService(['price' => '10.00', 'tax_perc' => 21]);
 

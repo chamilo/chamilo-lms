@@ -9,14 +9,20 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use TicketManager;
 use Throwable;
+use TicketManager;
+
+use const STR_PAD_LEFT;
+use const UPLOAD_ERR_INI_SIZE;
+use const UPLOAD_ERR_NO_FILE;
+use const UPLOAD_ERR_PARTIAL;
 
 /**
  * Characterization tests for the raw-SQL methods of TicketManager (public/main/inc/lib/TicketManager.php).
@@ -68,8 +74,8 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
     {
         $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
         self::getContainer()->get('security.token_storage')->setToken($token);
-        \ChamiloSession::write('_user', ['id' => $user->getId()]);
-        \ChamiloSession::erase('login_as');
+        ChamiloSession::write('_user', ['id' => $user->getId()]);
+        ChamiloSession::erase('login_as');
         $this->getEntityManager()->clear();
     }
 
@@ -1014,7 +1020,7 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
     public function testListingsReturnNothingWithoutCurrentUser(): void
     {
         $this->listFixture();
-        \ChamiloSession::write('_user', null);
+        ChamiloSession::write('_user', null);
         self::getContainer()->get('security.token_storage')->setToken(null);
 
         $this->assertSame([], TicketManager::getTicketsByCurrentUser(0, 50, 0, 'ASC'));
@@ -1090,7 +1096,7 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
             foreach ($filters as $i => $filter) {
                 $_GET = $filter + ['project_id' => $pid];
                 $this->assertSame(
-                    count(TicketManager::getTicketsByCurrentUser(0, 500, 0, 'ASC')),
+                    \count(TicketManager::getTicketsByCurrentUser(0, 500, 0, 'ASC')),
                     TicketManager::getTotalTicketsCurrentUser(),
                     'user '.$user->getUsername().', filter #'.$i.' '.json_encode($filter)
                 );
@@ -1155,7 +1161,7 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $rows = TicketManager::export_tickets_by_user_id(0, 10, 0, 'DESC');
 
         $this->assertCount(2, $rows, 'header + the matching ticket');
-        $this->assertSame(9, count($rows[0]));
+        $this->assertSame(9, \count($rows[0]));
         $this->assertSame('tm_exp_1', $rows[1]['code']);
         $this->assertSame('tm_cat_export', $rows[1]['category']);
         $this->assertSame('Joe Anonymous', $rows[1]['fullname'], 'CONCAT(lastname, firstname) of the creator');
@@ -1184,7 +1190,7 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $codes = function (array $get) use ($base): array {
             $_GET = $get + $base;
             $rows = TicketManager::export_tickets_by_user_id(0, 100, 0, 'DESC');
-            $codes = array_filter(array_column(array_slice($rows, 1), 'code'), static fn ($c) => str_starts_with($c, 'tm_exp_'));
+            $codes = array_filter(array_column(\array_slice($rows, 1), 'code'), static fn ($c) => str_starts_with($c, 'tm_exp_'));
             sort($codes);
 
             return $codes;
@@ -1252,6 +1258,7 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->conn->executeStatement('UPDATE user SET status = 6 WHERE username = ?', ['fallback_user']);
 
         $threw = false;
+
         try {
             TicketManager::deleteUserFromTicketSystem(2);
         } catch (Throwable) {

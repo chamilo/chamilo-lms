@@ -9,11 +9,14 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+
+use const E_WARNING;
 
 /**
  * Characterization of the legacy dropbox helpers (public/main/dropbox/dropbox_functions.inc.php).
@@ -35,6 +38,7 @@ final class DropboxCharacterizationTest extends KernelTestCase
     public static function setUpBeforeClass(): void
     {
         require_once __DIR__.'/../../../public/main/dropbox/dropbox_functions.inc.php';
+
         require_once __DIR__.'/../../../public/main/dropbox/dropbox_class.inc.php';
     }
 
@@ -66,12 +70,12 @@ final class DropboxCharacterizationTest extends KernelTestCase
 
     private function setContext(int $userId, int $courseId, int $sessionId = 0): void
     {
-        \ChamiloSession::write('_user', ['id' => $userId, 'user_id' => $userId]);
-        \ChamiloSession::write('_real_cid', $courseId);
-        \ChamiloSession::write('_cid', 1 === $courseId ? 'AIACT' : 'USINGCHAMILO');
-        \ChamiloSession::write('_course', api_get_course_info(1 === $courseId ? 'AIACT' : 'USINGCHAMILO'));
-        \ChamiloSession::write('sid', $sessionId);
-        \ChamiloSession::erase('login_as');
+        ChamiloSession::write('_user', ['id' => $userId, 'user_id' => $userId]);
+        ChamiloSession::write('_real_cid', $courseId);
+        ChamiloSession::write('_cid', 1 === $courseId ? 'AIACT' : 'USINGCHAMILO');
+        ChamiloSession::write('_course', api_get_course_info(1 === $courseId ? 'AIACT' : 'USINGCHAMILO'));
+        ChamiloSession::write('sid', $sessionId);
+        ChamiloSession::erase('login_as');
         Container::getEntityManager()->clear();
     }
 
@@ -157,6 +161,7 @@ final class DropboxCharacterizationTest extends KernelTestCase
 
             return true;
         }, E_WARNING);
+
         try {
             $call();
         } finally {

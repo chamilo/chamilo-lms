@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use Event;
 use Exercise;
@@ -48,7 +49,7 @@ final class EventCharacterizationTest extends KernelTestCase
 
         $this->conn = $container->get('doctrine')->getConnection();
         unset($_SERVER['HTTP_REFERER']);
-        \ChamiloSession::erase('login_as');
+        ChamiloSession::erase('login_as');
         $_SERVER['HTTP_USER_AGENT'] = 'ev_agent';
         $_SERVER['REQUEST_URI'] = '/ev_uri';
     }
@@ -56,7 +57,7 @@ final class EventCharacterizationTest extends KernelTestCase
     protected function tearDown(): void
     {
         unset($_SERVER['HTTP_REFERER']);
-        \ChamiloSession::erase('login_as');
+        ChamiloSession::erase('login_as');
         parent::tearDown();
     }
 
@@ -91,18 +92,18 @@ final class EventCharacterizationTest extends KernelTestCase
      */
     private function setContext(?User $user, ?Course $course, int $sessionId = 0): void
     {
-        \ChamiloSession::write('_user', null !== $user ? ['id' => $user->getId()] : null);
+        ChamiloSession::write('_user', null !== $user ? ['id' => $user->getId()] : null);
         if (null !== $course) {
-            \ChamiloSession::write('_real_cid', $course->getId());
-            \ChamiloSession::write('_cid', $course->getCode());
-            \ChamiloSession::write('_course', api_get_course_info($course->getCode()));
+            ChamiloSession::write('_real_cid', $course->getId());
+            ChamiloSession::write('_cid', $course->getCode());
+            ChamiloSession::write('_course', api_get_course_info($course->getCode()));
         } else {
-            \ChamiloSession::erase('_real_cid');
-            \ChamiloSession::erase('_cid');
-            \ChamiloSession::erase('_course');
+            ChamiloSession::erase('_real_cid');
+            ChamiloSession::erase('_cid');
+            ChamiloSession::erase('_course');
         }
-        \ChamiloSession::write('sid', $sessionId);
-        \ChamiloSession::erase('login_as');
+        ChamiloSession::write('sid', $sessionId);
+        ChamiloSession::erase('login_as');
     }
 
     private function utc(string $modify = 'now'): string
@@ -481,7 +482,7 @@ final class EventCharacterizationTest extends KernelTestCase
         $this->assertFalse(Event::event_access_tool('ev_tool5'));
 
         $this->setContext($user, $course, 0);
-        \ChamiloSession::write('login_as', 1);
+        ChamiloSession::write('login_as', 1);
         $this->assertFalse(Event::event_access_tool('ev_tool5'));
 
         $this->assertCount(0, $this->rows('track_e_lastaccess', 'access_user_id = ?', [$user->getId()]));
@@ -515,7 +516,7 @@ final class EventCharacterizationTest extends KernelTestCase
         $user = $this->makeUser('ev_upl2');
         $course = $this->makeCourse('ev_course_upl2');
         $this->setContext($user, $course, 0);
-        \ChamiloSession::write('login_as', 1);
+        ChamiloSession::write('login_as', 1);
 
         $this->assertSame(0, Event::event_upload(1));
         $this->assertSame(0, Event::event_link(1));
@@ -563,7 +564,7 @@ final class EventCharacterizationTest extends KernelTestCase
         $user = $this->makeUser('ev_cl2');
         $course = $this->makeCourse('ev_course_cl2');
         $this->setContext($user, $course);
-        \ChamiloSession::write('login_as', 1);
+        ChamiloSession::write('login_as', 1);
 
         $this->assertFalse(Event::eventCourseLogin($course->getId(), $user->getId(), 0));
         $this->assertFalse(Event::eventCourseLoginUpdate($course->getId(), $user->getId(), 0));
@@ -823,7 +824,7 @@ final class EventCharacterizationTest extends KernelTestCase
         $this->setContext($user, $course);
         $exe = $this->seedExercise(['exe_user_id' => $user->getId(), 'c_id' => $course->getId(), 'exe_exo_id' => $this->makeQuiz()]);
         $exercise = new Exercise($course->getId());
-        \Chamilo\CoreBundle\Framework\Container::getSettingsManager()->updateSetting('exercise.quiz_answer_extra_recording', 'true');
+        Container::getSettingsManager()->updateSetting('exercise.quiz_answer_extra_recording', 'true');
         $this->assertSame('true', api_get_setting('exercise.quiz_answer_extra_recording'));
 
         Event::saveQuestionAttempt($exercise, 2.0, 'first', 555, $exe, 1, 1, false, 0, null, $user->getId(), $course->getId(), 0, 0, 0);
@@ -1290,12 +1291,12 @@ final class EventCharacterizationTest extends KernelTestCase
         $uid = $user->getId();
         $exe = $this->seedExercise(['exe_user_id' => $uid, 'c_id' => $course->getId()]);
         $this->seedAttempt($exe, $uid, 81, ['seconds_spent' => 30]);
-        \ChamiloSession::erase('question_start');
+        ChamiloSession::erase('question_start');
 
         $first = Event::getAttemptQuestionDuration($exe, 81);
         $this->assertSame(30, $first, 'resumes from the seconds already stored');
         $this->assertSame(0, Event::getAttemptQuestionDuration($exe, 82), 'a question without attempt starts at 0');
-        $this->assertArrayHasKey(81, \ChamiloSession::read('question_start'));
+        $this->assertArrayHasKey(81, ChamiloSession::read('question_start'));
     }
 
     public function testSessionLogIsSavedByDefault(): void

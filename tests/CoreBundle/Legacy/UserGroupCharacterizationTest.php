@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use CourseManager;
 use Database;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -844,8 +845,8 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->addUser($g2, $shared, 0);
         $this->addCourse($g1, $course);
         $this->addCourse($g2, $course);
-        \CourseManager::subscribeUser($shared->getId(), $course->getId());
-        \CourseManager::subscribeUser($solo->getId(), $course->getId());
+        CourseManager::subscribeUser($shared->getId(), $course->getId());
+        CourseManager::subscribeUser($solo->getId(), $course->getId());
         $this->assertSame(1, $this->countRows('course_rel_user', ['c_id' => $course->getId(), 'user_id' => $solo->getId()]));
 
         $this->model->unsubscribe_courses_from_usergroup($g1->getId(), [$course->getId()]);
@@ -973,7 +974,7 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $group = $this->group('ug_group_a');
         $this->addUser($group, $in, 0);
         $this->addUser($group, $out, 0);
-        \CourseManager::subscribeUser($in->getId(), $course->getId());
+        CourseManager::subscribeUser($in->getId(), $course->getId());
 
         $data = $this->model->getUsersInAndOutOfCourse($group->getId(), $course->getId());
         // Entries are standardised {identity, email} pairs, not User entities.

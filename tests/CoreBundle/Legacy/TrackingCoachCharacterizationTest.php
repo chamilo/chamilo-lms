@@ -6,9 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
-use Chamilo\CoreBundle\Exception\NotAllowedException;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Database;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -17,6 +18,8 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Uid\UuidV4;
 use Tracking;
+
+use const STDERR;
 
 /**
  * Second characterization file for the legacy Tracking library: the coach and group reporting, the averages that
@@ -48,7 +51,10 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
     private Connection $conn;
     private int $seq = 0;
     private int $creator = 0;
-    /** @var array<string, string> */
+
+    /**
+     * @var array<string, string>
+     */
     private array $originalSettings = [];
 
     protected function setUp(): void
@@ -65,7 +71,7 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
 
         $this->conn = $container->get('doctrine')->getConnection();
         Database::setManager($container->get('doctrine')->getManager());
-        \ChamiloSession::erase('system_timezone');
+        ChamiloSession::erase('system_timezone');
         $this->creator = $this->user('tc_creator');
         $this->originalSettings = [
             'platform.timezone' => (string) Container::getSettingsManager()->getSetting('platform.timezone'),
@@ -598,7 +604,9 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         return [$id, $node];
     }
 
-    /** @var array<int, int> lp id => id of its root item */
+    /**
+     * @var array<int, int> lp id => id of its root item
+     */
     private array $lpRoots = [];
 
     private function lpItem(int $lpId, string $type, float $maxScore, int $order, string $path = ''): int
@@ -704,7 +712,7 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         $this->groupUser($g, $s1, self::COURSE);
         $this->groupUser($g, $s2, self::COURSE);
         $course = api_get_course_entity(self::COURSE);
-        $existing = count(Container::getLpRepository()->findAllByCourse($course)->getQuery()->getResult());
+        $existing = \count(Container::getLpRepository()->findAllByCourse($course)->getQuery()->getResult());
         [$lp] = $this->lp(self::COURSE);
         $this->lpView($s1, $lp, self::COURSE, 40);
         $this->lpView($s2, $lp, self::COURSE, 20);
@@ -958,7 +966,7 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         return (int) $this->conn->lastInsertId();
     }
 
-    private function courseEntity(int $courseId = self::COURSE): \Chamilo\CoreBundle\Entity\Course
+    private function courseEntity(int $courseId = self::COURSE): Course
     {
         return api_get_course_entity($courseId);
     }
@@ -972,7 +980,7 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
     {
         $session = null === $sessionId ? null : $this->sessionEntity($sessionId);
 
-        return count(Container::getLpRepository()->findAllByCourse($this->courseEntity($courseId), $session)->getQuery()->getResult());
+        return \count(Container::getLpRepository()->findAllByCourse($this->courseEntity($courseId), $session)->getQuery()->getResult());
     }
 
     // ------------------------------------------------------------------
@@ -1376,7 +1384,7 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
     {
         Container::getSettingsManager()->updateSetting('platform.timezone', $timezone);
         // api_get_timezone() memoizes its answer under this key.
-        \ChamiloSession::erase('system_timezone');
+        ChamiloSession::erase('system_timezone');
     }
 
     private function setMinimumTimeSetting(string $value): void
@@ -1622,6 +1630,7 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
     private function moveData(int $user, int $from, int $to, bool $update): string
     {
         ob_start();
+
         try {
             Tracking::processUserDataMove($user, api_get_course_info_by_id(self::COURSE), $from, $to, $update);
         } finally {

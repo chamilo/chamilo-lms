@@ -10,6 +10,7 @@ use Attendance;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Database;
 use DateTime;
 use Doctrine\DBAL\Connection;
@@ -17,7 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Throwable;
 
 /**
  * Characterization of the raw-SQL methods of the legacy Attendance library
@@ -67,12 +67,12 @@ final class AttendanceCharacterizationTest extends KernelTestCase
     private function setContext(int $sessionId = 0): void
     {
         $course = $this->getCourse(self::COURSE);
-        \ChamiloSession::write('_user', ['id' => self::ADMIN]);
-        \ChamiloSession::write('_real_cid', $course->getId());
-        \ChamiloSession::write('_cid', $course->getCode());
-        \ChamiloSession::write('_course', api_get_course_info($course->getCode()));
-        \ChamiloSession::write('sid', $sessionId);
-        \ChamiloSession::erase('login_as');
+        ChamiloSession::write('_user', ['id' => self::ADMIN]);
+        ChamiloSession::write('_real_cid', $course->getId());
+        ChamiloSession::write('_cid', $course->getCode());
+        ChamiloSession::write('_course', api_get_course_info($course->getCode()));
+        ChamiloSession::write('sid', $sessionId);
+        ChamiloSession::erase('login_as');
     }
 
     private function att(string $title = 'at_att', int $active = 1, int $qualifyMax = 0, int $locked = 0): int
@@ -121,10 +121,10 @@ final class AttendanceCharacterizationTest extends KernelTestCase
     private function group(): int
     {
         $this->conn->executeStatement(
-            "INSERT INTO c_group_info (title, status, max_student, doc_state, calendar_state, work_state,
+            'INSERT INTO c_group_info (title, status, max_student, doc_state, calendar_state, work_state,
                 announcements_state, forum_state, wiki_state, chat_state, self_registration_allowed,
                 self_unregistration_allowed, document_access)
-             VALUES (?, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0)",
+             VALUES (?, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0)',
             ['at_group_'.(++$this->seq)]
         );
 
@@ -471,7 +471,7 @@ final class AttendanceCharacterizationTest extends KernelTestCase
         $lib = new Attendance();
         $done = [];
         for ($i = 1; $i <= 8; $i++) {
-            $done[] = $this->cal($att, sprintf('2031-11-%02d 08:00:00', $i), 1);
+            $done[] = $this->cal($att, \sprintf('2031-11-%02d 08:00:00', $i), 1);
         }
         $this->cal($att, '2031-11-20 08:00:00', 0);
         $this->cal($att, '2031-11-21 08:00:00', 0);
@@ -600,8 +600,8 @@ final class AttendanceCharacterizationTest extends KernelTestCase
             $this->assertSame('', $row['signature']);
         }
         $this->assertSame(1, $presence[self::ANON], 'present user stored with presence 1');
-        $this->assertSame(count($roster), count($rows), 'every roster user gets a row (absent ones with 0)');
-        $this->assertSame(count($roster), $affected, 'affected rows = inserted rows');
+        $this->assertSame(\count($roster), \count($rows), 'every roster user gets a row (absent ones with 0)');
+        $this->assertSame(\count($roster), $affected, 'affected rows = inserted rows');
         foreach ($roster as $uid) {
             if (self::ANON !== $uid) {
                 $this->assertSame(0, $presence[$uid]);

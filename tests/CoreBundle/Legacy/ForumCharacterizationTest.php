@@ -6,19 +6,20 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
-use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
-use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
+use Database;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Uid\Uuid;
-use Throwable;
 
 /**
  * Characterization of the procedural forum library (public/main/forum/forumfunction.inc.php).
@@ -59,9 +60,9 @@ final class ForumCharacterizationTest extends KernelTestCase
         Container::setRequest($request);
 
         $this->conn = $container->get('doctrine')->getConnection();
-        \ChamiloSession::erase('login_as');
-        \ChamiloSession::erase('studentview');
-        \ChamiloSession::erase('groupId');
+        ChamiloSession::erase('login_as');
+        ChamiloSession::erase('studentview');
+        ChamiloSession::erase('groupId');
         unset($_SESSION['forum_notification'], $_POST['forum'], $_POST['thread_id']);
     }
 
@@ -76,12 +77,12 @@ final class ForumCharacterizationTest extends KernelTestCase
     private function setContext(int $userId, int $courseId, int $sessionId = 0): void
     {
         $this->getEntityManager()->clear();
-        \ChamiloSession::write('_user', ['id' => $userId]);
+        ChamiloSession::write('_user', ['id' => $userId]);
         $course = $this->getCourse($courseId);
-        \ChamiloSession::write('_real_cid', $courseId);
-        \ChamiloSession::write('_cid', $course->getCode());
-        \ChamiloSession::write('_course', api_get_course_info($course->getCode()));
-        \ChamiloSession::write('sid', $sessionId);
+        ChamiloSession::write('_real_cid', $courseId);
+        ChamiloSession::write('_cid', $course->getCode());
+        ChamiloSession::write('_course', api_get_course_info($course->getCode()));
+        ChamiloSession::write('sid', $sessionId);
     }
 
     private function u1(): array
@@ -136,7 +137,9 @@ final class ForumCharacterizationTest extends KernelTestCase
         return (int) $this->conn->fetchOne('SELECT resource_node_id FROM course WHERE id = ?', [$courseId]);
     }
 
-    /** @return int category iid */
+    /**
+     * @return int category iid
+     */
     private function category(int $courseId, ?int $sessionId = null, int $visibility = 2, int $order = 0): int
     {
         $node = $this->node('forum_categories', 'fm_cat_'.(++$this->seq), $this->courseNode($courseId));
@@ -151,7 +154,9 @@ final class ForumCharacterizationTest extends KernelTestCase
         return $iid;
     }
 
-    /** @return int forum iid */
+    /**
+     * @return int forum iid
+     */
     private function forum(?int $courseId, ?int $categoryId = null, ?int $sessionId = null, int $visibility = 2, array $o = []): int
     {
         $node = $this->node('forums', 'fm_forum_'.(++$this->seq), $this->courseNode($courseId ?? 1));
@@ -172,7 +177,9 @@ final class ForumCharacterizationTest extends KernelTestCase
         return $iid;
     }
 
-    /** @return int thread iid */
+    /**
+     * @return int thread iid
+     */
     private function thread(int $forumId, ?int $courseId = null, ?int $sessionId = null, array $o = []): int
     {
         $node = null;
@@ -201,7 +208,9 @@ final class ForumCharacterizationTest extends KernelTestCase
         return $iid;
     }
 
-    /** @return int post iid */
+    /**
+     * @return int post iid
+     */
     private function post(int $threadId, int $forumId, int $posterId, array $o = []): int
     {
         $this->conn->insert('c_forum_post', $o + [
@@ -247,11 +256,13 @@ final class ForumCharacterizationTest extends KernelTestCase
         ]);
     }
 
-    /** @return list<array<string, mixed>> */
+    /**
+     * @return list<array<string, mixed>>
+     */
     private function rows($result): array
     {
         $out = [];
-        while ($row = \Database::fetch_assoc($result)) {
+        while ($row = Database::fetch_assoc($result)) {
             $out[] = $row;
         }
 
@@ -407,7 +418,7 @@ final class ForumCharacterizationTest extends KernelTestCase
         $this->assertEquals(2, count_number_of_post_in_thread($thread));
         $this->assertSame(0, count_number_of_post_in_thread(999999));
 
-        \ChamiloSession::erase('_real_cid');
+        ChamiloSession::erase('_real_cid');
         $this->assertSame(0, count_number_of_post_in_thread($thread), 'no course context, no count');
     }
 
@@ -801,7 +812,7 @@ final class ForumCharacterizationTest extends KernelTestCase
         $all = get_forum_categories(1);
         $titles = array_map(static fn ($c) => $c->getTitle(), $all);
         $iids = array_map(static fn ($c) => $c->getIid(), $all);
-        $this->assertCount(count($before) + 2, $all, 'other course, invisible and session categories are left out');
+        $this->assertCount(\count($before) + 2, $all, 'other course, invisible and session categories are left out');
         $this->assertLessThan(array_search($second, $iids, true), array_search($first, $iids, true), 'ordered by display_order');
         $this->assertNotContains('fm_cat_', $titles);
     }
@@ -820,7 +831,7 @@ final class ForumCharacterizationTest extends KernelTestCase
 
         $course1 = array_map(static fn ($f) => $f->getIid(), get_forums(1));
         $this->assertContains($a, $course1);
-        $this->assertCount(2, array_filter($course1, fn ($i) => $this->conn->fetchOne('SELECT title FROM c_forum_forum WHERE iid = ?', [$i]) !== false && str_starts_with((string) $this->conn->fetchOne('SELECT title FROM c_forum_forum WHERE iid = ?', [$i]), 'fm_forum_')), 'visible forums of course 1 only');
+        $this->assertCount(2, array_filter($course1, fn ($i) => false !== $this->conn->fetchOne('SELECT title FROM c_forum_forum WHERE iid = ?', [$i]) && str_starts_with((string) $this->conn->fetchOne('SELECT title FROM c_forum_forum WHERE iid = ?', [$i]), 'fm_forum_')), 'visible forums of course 1 only');
     }
 
     public function testGetThreadsListsAndCountsTheThreadsOfAForum(): void

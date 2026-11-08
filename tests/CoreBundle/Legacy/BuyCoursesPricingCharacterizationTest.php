@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use BuyCoursesPlugin;
+
 /**
  * Characterization of BuyCoursesPlugin price/tax/currency/item code (fixtures prefix bc_).
  */
@@ -69,31 +71,31 @@ final class BuyCoursesPricingCharacterizationTest extends BuyCoursesCharacteriza
 
     public function testTaxCategoryOfProductTypes(): void
     {
-        $this->assertSame(\BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE, $this->plugin->getTaxCategoryForProductType(1));
-        $this->assertSame(\BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION, $this->plugin->getTaxCategoryForProductType(2));
-        $this->assertSame(\BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SERVICES, $this->plugin->getTaxCategoryForProductType(3));
+        $this->assertSame(BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE, $this->plugin->getTaxCategoryForProductType(1));
+        $this->assertSame(BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION, $this->plugin->getTaxCategoryForProductType(2));
+        $this->assertSame(BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SERVICES, $this->plugin->getTaxCategoryForProductType(3));
         // PINNED QUIRK: any unknown type is taxed as a course.
-        $this->assertSame(\BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE, $this->plugin->getTaxCategoryForProductType(99));
+        $this->assertSame(BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE, $this->plugin->getTaxCategoryForProductType(99));
     }
 
     public function testCheckTaxEnabledInProductMatrix(): void
     {
-        $this->setGlobalConfig(10, \BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION);
+        $this->setGlobalConfig(10, BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION);
 
         $this->setPluginSettings(['tax_enable' => 'false']);
         $this->assertFalse($this->plugin->checkTaxEnabledInProduct(2));
 
         $this->setPluginSettings(['tax_enable' => 'true']);
-        $this->assertTrue($this->plugin->checkTaxEnabledInProduct(\BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION));
-        $this->assertFalse($this->plugin->checkTaxEnabledInProduct(\BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE));
+        $this->assertTrue($this->plugin->checkTaxEnabledInProduct(BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION));
+        $this->assertFalse($this->plugin->checkTaxEnabledInProduct(BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE));
 
-        $this->setGlobalConfig(10, \BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
-        $this->assertTrue($this->plugin->checkTaxEnabledInProduct(\BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE));
+        $this->setGlobalConfig(10, BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
+        $this->assertTrue($this->plugin->checkTaxEnabledInProduct(BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE));
     }
 
     public function testSetPriceSettingsAddsItemTaxWithRounding(): void
     {
-        $this->setGlobalConfig(10, \BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
+        $this->setGlobalConfig(10, BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
         $this->setPluginSettings(['tax_enable' => 'true']);
 
         $product = ['price' => '19.99', 'tax_perc' => '21', 'iso_code' => 'EUR'];
@@ -110,7 +112,7 @@ final class BuyCoursesPricingCharacterizationTest extends BuyCoursesCharacteriza
 
     public function testSetPriceSettingsFallsBackToGlobalTaxPercentage(): void
     {
-        $this->setGlobalConfig(10, \BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
+        $this->setGlobalConfig(10, BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
         $this->setPluginSettings(['tax_enable' => 'true']);
 
         $product = ['price' => '33.33', 'tax_perc' => null, 'iso_code' => 'EUR'];
@@ -124,7 +126,7 @@ final class BuyCoursesPricingCharacterizationTest extends BuyCoursesCharacteriza
 
     public function testSetPriceSettingsZeroItemTaxOverridesGlobalTax(): void
     {
-        $this->setGlobalConfig(10, \BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
+        $this->setGlobalConfig(10, BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
         $this->setPluginSettings(['tax_enable' => 'true']);
 
         $product = ['price' => '50', 'tax_perc' => '0', 'iso_code' => 'EUR'];
@@ -137,23 +139,23 @@ final class BuyCoursesPricingCharacterizationTest extends BuyCoursesCharacteriza
 
     public function testSetPriceSettingsNoTaxWhenDisabledOrOtherCategory(): void
     {
-        $this->setGlobalConfig(10, \BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION);
+        $this->setGlobalConfig(10, BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION);
         $this->setPluginSettings(['tax_enable' => 'true']);
         $product = ['price' => '100', 'tax_perc' => '21', 'iso_code' => 'EUR'];
-        $this->plugin->setPriceSettings($product, \BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE);
+        $this->plugin->setPriceSettings($product, BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_COURSE);
         $this->assertSame(0.0, $product['tax_amount']);
         $this->assertSame(100.0, $product['total_price']);
         $this->assertNull($product['tax_perc_show']);
 
         $this->setPluginSettings(['tax_enable' => 'false']);
         $product = ['price' => '100', 'tax_perc' => '21', 'iso_code' => 'EUR'];
-        $this->plugin->setPriceSettings($product, \BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION);
+        $this->plugin->setPriceSettings($product, BuyCoursesPlugin::TAX_APPLIES_TO_ONLY_SESSION);
         $this->assertSame(100.0, $product['total_price']);
     }
 
     public function testSetPriceSettingsPercentageCouponThenTax(): void
     {
-        $this->setGlobalConfig(0, \BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
+        $this->setGlobalConfig(0, BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
         $this->setPluginSettings(['tax_enable' => 'true']);
 
         $product = ['price' => '80.00', 'tax_perc' => '20', 'iso_code' => 'EUR'];
@@ -200,7 +202,7 @@ final class BuyCoursesPricingCharacterizationTest extends BuyCoursesCharacteriza
     public function testCurrencyFormatting(): void
     {
         $this->setPluginSettings(['use_currency_symbol' => 'false']);
-        $this->assertSame('EUR 1,234.50', str_replace(["\u{a0}", '.', ','], ['', '.', ','], $this->plugin->getPriceWithCurrencyFromIsoCode(1234.5, 'EUR')) === 'EUR1.234,50' ? 'EUR 1,234.50' : $this->plugin->getPriceWithCurrencyFromIsoCode(1234.5, 'EUR'));
+        $this->assertSame('EUR 1,234.50', 'EUR1.234,50' === str_replace(["\u{a0}", '.', ','], ['', '.', ','], $this->plugin->getPriceWithCurrencyFromIsoCode(1234.5, 'EUR')) ? 'EUR 1,234.50' : $this->plugin->getPriceWithCurrencyFromIsoCode(1234.5, 'EUR'));
         $this->setPluginSettings(['use_currency_symbol' => 'true']);
         $this->assertStringStartsWith('R$ ', $this->plugin->getPriceWithCurrencyFromIsoCode(10, 'BRL'));
     }
@@ -208,7 +210,7 @@ final class BuyCoursesPricingCharacterizationTest extends BuyCoursesCharacteriza
     public function testGetItemByProductJoinsCurrencyAndComputesTax(): void
     {
         $this->selectCurrency('EUR');
-        $this->setGlobalConfig(0, \BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
+        $this->setGlobalConfig(0, BuyCoursesPlugin::TAX_APPLIES_TO_ALL);
         $this->setPluginSettings(['tax_enable' => 'true']);
         $itemId = $this->makeItem(1, 100.0, 21);
 
@@ -310,20 +312,20 @@ final class BuyCoursesPricingCharacterizationTest extends BuyCoursesCharacteriza
         $active = $this->plugin->getPaymentTypes(true);
 
         $this->assertSame([1, 5], array_keys($active));
-        $this->assertSame(7, count($this->plugin->getPaymentTypes(false)));
+        $this->assertSame(7, \count($this->plugin->getPaymentTypes(false)));
     }
 
     public function testRandomTextAndReference(): void
     {
-        $this->assertSame('', \BuyCoursesPlugin::randomText(5, false, false, false));
-        $this->assertMatchesRegularExpression('/^[0-9]{8}$/', \BuyCoursesPlugin::randomText(8, false, false, true));
-        $this->assertSame(6, strlen(\BuyCoursesPlugin::randomText()));
+        $this->assertSame('', BuyCoursesPlugin::randomText(5, false, false, false));
+        $this->assertMatchesRegularExpression('/^[0-9]{8}$/', BuyCoursesPlugin::randomText(8, false, false, true));
+        $this->assertSame(6, \strlen(BuyCoursesPlugin::randomText()));
         $this->assertMatchesRegularExpression('/^7-2-15-[A-Za-z0-9]{6}$/', $this->plugin->generateReference(7, 2, 15));
     }
 
     public function testConstantsOfStatusesAreStable(): void
     {
-        $this->assertSame([-1, 0, 1], [\BuyCoursesPlugin::SALE_STATUS_CANCELED, \BuyCoursesPlugin::SALE_STATUS_PENDING, \BuyCoursesPlugin::SALE_STATUS_COMPLETED]);
-        $this->assertSame([-1, 0, 1], [\BuyCoursesPlugin::SERVICE_STATUS_CANCELLED, \BuyCoursesPlugin::SERVICE_STATUS_PENDING, \BuyCoursesPlugin::SERVICE_STATUS_COMPLETED]);
+        $this->assertSame([-1, 0, 1], [BuyCoursesPlugin::SALE_STATUS_CANCELED, BuyCoursesPlugin::SALE_STATUS_PENDING, BuyCoursesPlugin::SALE_STATUS_COMPLETED]);
+        $this->assertSame([-1, 0, 1], [BuyCoursesPlugin::SERVICE_STATUS_CANCELLED, BuyCoursesPlugin::SERVICE_STATUS_PENDING, BuyCoursesPlugin::SERVICE_STATUS_COMPLETED]);
     }
 }

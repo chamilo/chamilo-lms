@@ -5314,6 +5314,91 @@ class SessionManager
         }
     }
 
+    /**
+     * Whether the current user may manage the session with this id: the session exists, belongs to the current
+     * access URL (when several are enabled) and cantEditSession() accepts it. Use it for every session id that
+     * comes from a request, including the ones posted next to the session the page was protected for.
+     */
+    public static function canManageSessionId(int $sessionId): bool
+    {
+        if ($sessionId <= 0) {
+            return false;
+        }
+
+        $session = api_get_session_entity($sessionId);
+        if (null === $session) {
+            return false;
+        }
+
+        if (api_get_multiple_access_url()) {
+            $inUrl = Database::fetch_row(Database::query(
+                'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION).'
+                 WHERE session_id = '.$sessionId.' AND access_url_id = '.(int) api_get_current_access_url_id().'
+                 LIMIT 1'
+            ));
+            if (empty($inUrl)) {
+                return false;
+            }
+        }
+
+        return self::cantEditSession($session);
+    }
+
+    /**
+     * Keeps, from a list of session ids taken from a request, the ones the current user may manage.
+     *
+     * @param mixed $sessionIds
+     *
+     * @return int[]
+     */
+    public static function filterManageableSessionIds($sessionIds): array
+    {
+        if (!is_array($sessionIds)) {
+            return [];
+        }
+
+        $allowed = [];
+        foreach (array_unique(array_map('intval', $sessionIds)) as $sessionId) {
+            if (self::canManageSessionId($sessionId)) {
+                $allowed[] = $sessionId;
+            }
+        }
+
+        return $allowed;
+    }
+
+    /**
+     * Whether the current user may delete this session category: platform admins and session admins only, the
+     * category must belong to the current access URL, and every session in it must be manageable by the user
+     * (deleting a category either unlinks or deletes the sessions in it).
+     */
+    public static function canDeleteSessionCategory(int $categoryId): bool
+    {
+        if ($categoryId <= 0 || (!api_is_platform_admin() && !api_is_session_admin())) {
+            return false;
+        }
+
+        $tblCategory = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        $inUrl = Database::fetch_row(Database::query(
+            "SELECT id FROM $tblCategory
+             WHERE id = $categoryId AND access_url_id = ".(int) api_get_current_access_url_id()
+        ));
+        if (empty($inUrl)) {
+            return false;
+        }
+
+        $result = Database::query("SELECT id FROM $tblSession WHERE session_category_id = $categoryId");
+        while ($row = Database::fetch_assoc($result)) {
+            $session = api_get_session_entity((int) $row['id']);
+            if (null === $session || !self::cantEditSession($session)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static function allowToManageSessions(): bool
     {
         if (self::allowManageAllSessions()) {

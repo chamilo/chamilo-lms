@@ -439,4 +439,79 @@ final class CustomCertificatePluginCharacterizationTest extends PluginCharacteri
         $this->assertFalse(CustomCertificatePlugin::isLegacyItemPropertyHidden('', 1, 0));
         $this->assertFalse(CustomCertificatePlugin::isLegacyItemPropertyHidden('learnpath', -1, 0));
     }
+
+    // ---------------------------------------------------------------- who may print a certificate
+
+    private function session(): int
+    {
+        $this->conn->executeStatement(
+            "INSERT INTO session (title, nbr_courses, nbr_users, nbr_classes, visibility, status) VALUES ('cu_session', 0, 0, 0, 1, 0)"
+        );
+
+        return (int) $this->conn->lastInsertId();
+    }
+
+    public function testUserHasCertificateNeedsAGradebookCertificateOfTheCourseAndSession(): void
+    {
+        $student = $this->rawUser('cu_has');
+        $other = $this->rawUser('cu_has_other');
+        $sessionId = $this->session();
+        $base = $this->category(1, 0);
+        $inSession = $this->category(1, $sessionId);
+        $this->certificate($student, $base);
+
+        $this->assertTrue(CustomCertificatePlugin::userHasCertificate($student, 1, 0));
+        $this->assertTrue(CustomCertificatePlugin::userHasCertificate($student, 1, 0, $base));
+        $this->assertFalse(CustomCertificatePlugin::userHasCertificate($student, 1, 0, $inSession), 'another category');
+        $this->assertFalse(CustomCertificatePlugin::userHasCertificate($student, 1, $sessionId));
+        $this->assertFalse(CustomCertificatePlugin::userHasCertificate($student, 2, 0), 'another course');
+        $this->assertFalse(CustomCertificatePlugin::userHasCertificate($other, 1, 0), 'another user');
+        $this->assertFalse(CustomCertificatePlugin::userHasCertificate(0, 1, 0));
+
+        $this->certificate($other, $inSession);
+        $this->assertTrue(CustomCertificatePlugin::userHasCertificate($other, 1, $sessionId));
+        $this->assertFalse(CustomCertificatePlugin::userHasCertificate($other, 1, 0));
+    }
+
+    public function testCourseCertificatesAreManagedByTheCourseTeacherAndTheSessionCoachesOnly(): void
+    {
+        $teacher = $this->rawUser('cu_teacher', ['ROLE_TEACHER'], 1);
+        $otherTeacher = $this->rawUser('cu_teacher2', ['ROLE_TEACHER'], 1);
+        $student = $this->rawUser('cu_stud');
+        $courseCoach = $this->rawUser('cu_ccoach');
+        $generalCoach = $this->rawUser('cu_gcoach');
+        $sessionId = $this->session();
+        $this->conn->executeStatement('INSERT INTO course_rel_user (c_id, user_id, relation_type, status, progress) VALUES (1, ?, 0, 1, 0)', [$teacher]);
+        $this->conn->executeStatement('INSERT INTO course_rel_user (c_id, user_id, relation_type, status, progress) VALUES (2, ?, 0, 1, 0)', [$otherTeacher]);
+        $this->conn->executeStatement('INSERT INTO course_rel_user (c_id, user_id, relation_type, status, progress) VALUES (1, ?, 0, 5, 0)', [$student]);
+        $this->conn->executeStatement(
+            'INSERT INTO session_rel_course_rel_user (session_id, c_id, user_id, status, visibility, legal_agreement, progress) VALUES (?, 1, ?, 2, 1, 0, 0)',
+            [$sessionId, $courseCoach]
+        );
+        $this->conn->executeStatement(
+            'INSERT INTO session_rel_user (session_id, user_id, relation_type, duration, registered_at) VALUES (?, ?, 3, 0, NOW())',
+            [$sessionId, $generalCoach]
+        );
+        $this->conn->executeStatement('INSERT INTO session_rel_course (session_id, c_id, position, nbr_users) VALUES (?, 1, 0, 0)', [$sessionId]);
+
+        $this->assertTrue(CustomCertificatePlugin::canManageCourseCertificates($teacher, 1, 0));
+        $this->assertTrue(CustomCertificatePlugin::canManageCourseCertificates($teacher, 1, $sessionId));
+        $this->assertFalse(CustomCertificatePlugin::canManageCourseCertificates($otherTeacher, 1, 0), 'teacher of another course');
+        $this->assertFalse(CustomCertificatePlugin::canManageCourseCertificates($student, 1, 0));
+        $this->assertTrue(CustomCertificatePlugin::canManageCourseCertificates($courseCoach, 1, $sessionId));
+        $this->assertFalse(CustomCertificatePlugin::canManageCourseCertificates($courseCoach, 1, 0));
+        $this->assertTrue(CustomCertificatePlugin::canManageCourseCertificates($generalCoach, 1, $sessionId));
+        $this->assertFalse(CustomCertificatePlugin::canManageCourseCertificates(0, 1, 0));
+        $this->assertFalse(CustomCertificatePlugin::canManageCourseCertificates($teacher, 0, 0));
+    }
+
+    public function testACategoryBelongsToCourseOnlyWhenItsCourseMatches(): void
+    {
+        $category = $this->category(1, 0);
+
+        $this->assertTrue(CustomCertificatePlugin::categoryBelongsToCourse($category, 1));
+        $this->assertFalse(CustomCertificatePlugin::categoryBelongsToCourse($category, 2));
+        $this->assertFalse(CustomCertificatePlugin::categoryBelongsToCourse(0, 1));
+        $this->assertFalse(CustomCertificatePlugin::categoryBelongsToCourse(987654321, 1));
+    }
 }

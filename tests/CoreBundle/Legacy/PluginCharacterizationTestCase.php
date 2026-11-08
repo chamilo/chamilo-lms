@@ -38,7 +38,13 @@ abstract class PluginCharacterizationTestCase extends KernelTestCase
     /**
      * @param string[] $tables
      */
-    protected static function ensurePluginTables(array $tables, string $pluginDir, string $classFile, string $className): void
+    protected static function ensurePluginTables(
+        array $tables,
+        string $pluginDir,
+        string $classFile,
+        string $className,
+        ?string $schemaScript = null
+    ): void
     {
         // A plain PDO connection: booting the kernel here would make DAMA open its transaction too early.
         $dsn = \sprintf(
@@ -65,7 +71,8 @@ abstract class PluginCharacterizationTestCase extends KernelTestCase
         $script = __DIR__.'/PluginInstallSchema.php';
         exec(
             'APP_ENV=test '.escapeshellarg(PHP_BINARY).' -d memory_limit=2G '.escapeshellarg($script).' '
-            .escapeshellarg($pluginDir).' '.escapeshellarg($classFile).' '.escapeshellarg($className).' 2>&1',
+            .escapeshellarg($pluginDir).' '.escapeshellarg($classFile).' '.escapeshellarg($className)
+            .(null !== $schemaScript ? ' '.escapeshellarg($schemaScript) : '').' 2>&1',
             $out,
             $status
         );

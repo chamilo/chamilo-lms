@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Entity\CourseCategory as CourseCategoryEntity;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
@@ -724,6 +725,22 @@ class CourseCategory
         }
 
         return $getCount ? count($courses) : $courses;
+    }
+
+    /**
+     * Row (id, title, code, category_code) of a Course entity, as the course search JSON expects it.
+     * category_code is the code of the first category of the course, or null.
+     */
+    public static function courseEntityToSearchRow(CourseEntity $course): array
+    {
+        $category = $course->getCategories()->first();
+
+        return [
+            'id' => (int) $course->getId(),
+            'title' => $course->getTitle(),
+            'code' => $course->getCode(),
+            'category_code' => $category ? $category->getCode() : null,
+        ];
     }
 
     /**

@@ -491,6 +491,32 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
         $this->assertCount(0, CourseCategory::getCoursesInCategory('CC-NO-SUCH-CODE'));
     }
 
+    public function testCourseEntityToSearchRowKeepsTheKeysOfTheCourseSearchJson(): void
+    {
+        // course.ajax.php (action search_course) builds its JSON from rows with id/title/code/category_code, but
+        // getCoursesInCategory() returns Course ENTITIES: reading $course['id'] on them was a fatal error.
+        $cat = $this->cat('cc_row', 'CCROW');
+        $this->conn()->executeStatement('INSERT INTO course_rel_category (course_id, course_category_id) VALUES (1, ?)', [$cat]);
+
+        $course = CourseCategory::getCoursesInCategory($cat)->first();
+        $row = CourseCategory::courseEntityToSearchRow($course);
+
+        $this->assertSame(
+            ['id' => 1, 'title' => $course->getTitle(), 'code' => $course->getCode(), 'category_code' => 'CCROW'],
+            $row
+        );
+    }
+
+    public function testCourseEntityToSearchRowOfAnUncategorisedCourseHasNoCategoryCode(): void
+    {
+        $course = Container::getCourseRepository()->find(2);
+        $this->conn()->executeStatement('DELETE FROM course_rel_category WHERE course_id = 2');
+        $this->fresh();
+        $course = Container::getCourseRepository()->find(2);
+
+        $this->assertNull(CourseCategory::courseEntityToSearchRow($course)['category_code']);
+    }
+
     public function testCoursesInCategoryNeverExposeClosedOrHiddenCoursesToTheCatalogue(): void
     {
         $cat = $this->cat('cc_vis', 'CCVIS');

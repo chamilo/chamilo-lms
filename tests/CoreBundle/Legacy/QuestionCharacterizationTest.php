@@ -586,7 +586,9 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $this->ctx();
         $quiz = $this->makeQuiz();
         $first = $this->makeQuestion('qs_first', 1, 1.0, ['position' => 4]);
+        $second = $this->makeQuestion('qs_second', 1, 1.0, ['position' => 9]);
         $this->link($quiz, $first, 6);
+        $this->link($quiz, $second, 3);
 
         $maker = new \UniqueAnswer();
         $newId = $maker->create_question($quiz, 'qs_created', 'qs_created_desc', 3.5, MULTIPLE_ANSWER, 2);
@@ -595,10 +597,10 @@ final class QuestionCharacterizationTest extends KernelTestCase
         $this->assertSame('qs_created', $row['question']);
         $this->assertSame('qs_created_desc', $row['description']);
         $this->assertEquals(3.5, $row['ponderation']);
-        $this->assertSame(5, (int) $row['position'], 'max(position of the quiz questions)+1');
+        $this->assertSame(10, (int) $row['position'], 'max(position of the quiz questions)+1');
         $this->assertSame(MULTIPLE_ANSWER, (int) $row['type']);
         $this->assertSame(2, (int) $row['level']);
-        $this->assertSame([$first => 6, $newId => 7], $this->orders($quiz), 'max(question_order)+1');
+        $this->assertSame([$second => 3, $first => 6, $newId => 7], $this->orders($quiz), 'max(question_order)+1');
     }
 
     public function testCreateQuestionInAnEmptyQuizStartsAtOne(): void

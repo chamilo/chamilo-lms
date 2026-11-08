@@ -629,17 +629,22 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
             $this->attempt($e, 1, $hard, 'a', 0.0);
         }
         $this->attempt($e1, 1, $easy, 'a', 0.0);
+        $this->attempt($e2, 1, $easy, 'a', 0.0);
         $this->attempt($e1, 1, $fine, 'a', 2.0);
         $this->attempt($e2, 1, $fine, 'a', 2.0);
         $this->attempt($e4, 1, $easy, 'a', 1.0);
+        $this->attempt($e4, 1, $hard, 'a', 2.0);
+        $e5 = $this->exe(['exe_exo_id' => $quiz]);
+        $this->attempt($e5, 1, $hard, 'a', 0.5);
+        $this->attempt($this->exe(['exe_exo_id' => $quiz]), 1, $hard, 'a', 0.0);
 
         $rows = ExerciseLib::getWrongQuestionResults(1, $quiz);
         $this->assertSame(['qs_hard', 'qs_easy'], array_column($rows, 'question'), 'incomplete attempts ignored, fully right questions absent');
-        $this->assertSame([2, 2], array_map('intval', array_column($rows, 'count')), 'e4 (session) counts for easy without session filter');
+        $this->assertSame([4, 3], array_map('intval', array_column($rows, 'count')), 'most wrong first; session attempts count without a session filter');
         $this->assertSame([$hard, $easy], array_map('intval', array_column($rows, 'question_id')));
 
         $this->assertSame(['qs_easy'], array_column(ExerciseLib::getWrongQuestionResults(1, $quiz, $sid), 'question'));
-        $this->assertCount(1, ExerciseLib::getWrongQuestionResults(1, $quiz, 0, 1), 'limit');
+        $this->assertSame(['qs_hard'], array_column(ExerciseLib::getWrongQuestionResults(1, $quiz, 0, 1), 'question'), 'limit keeps the worst');
     }
 
     // ---------------------------------------------------------------- per-question statistics
@@ -658,15 +663,18 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $this->attempt($a, $student, $q, 'x', 1.0);
         $this->attempt($b, 1, $q, 'x', 3.0);
         $this->attempt($c, $student, $q, 'x', 100.0);
+        $hrm = $this->rawUser('stats_hrm');
+        $this->subscribe($hrm, 1, STUDENT, 2); // relation_type 2: not a learner
+        $this->attempt($this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $hrm]), $hrm, $q, 'x', 50.0);
         $code = $this->getCourse(1)->getCode();
 
         $all = ExerciseLib::getStudentStatsByQuestion($q, $quiz, $code, 0);
-        $this->assertEquals(3, $all['max']);
+        $this->assertEquals(50, $all['max']);
         $this->assertEquals(1, $all['min']);
-        $this->assertEquals(2, $all['average']);
+        $this->assertEquals(18, $all['average'], 'every completed attempt, incomplete ones excluded');
 
         $students = ExerciseLib::getStudentStatsByQuestion($q, $quiz, $code, 0, true);
-        $this->assertEquals(1, $students['max'], 'only the subscribed student (status 5)');
+        $this->assertEquals(1, $students['max'], 'only the subscribed student (status 5, relation_type 0)');
 
         $none = ExerciseLib::getStudentStatsByQuestion($q + 1000000, $quiz, $code, 0);
         $this->assertNull($none['max']);

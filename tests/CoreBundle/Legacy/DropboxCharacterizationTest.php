@@ -465,6 +465,7 @@ final class DropboxCharacterizationTest extends KernelTestCase
     public function testStoreFeedbackInsertsTheRowAndSetsFeedbackIdToIid(): void
     {
         $file = $this->file(2);
+        $this->post($file, 1);
         $_GET['id'] = (string) $file;
         $_POST['feedback'] = 'db_nice work';
 
@@ -490,17 +491,38 @@ final class DropboxCharacterizationTest extends KernelTestCase
         $this->assertSame(0, $this->rows('c_dropbox_feedback', 'file_id = 5'));
     }
 
-    public function testStoreFeedbackDoesNotCheckThatTheFileBelongsToTheUser(): void
+    public function testStoreFeedbackIsRefusedOnAFileTheUserCannotSee(): void
     {
-        // PINNED QUIRK (access control, see decisions file): any user of the course can attach feedback to any
-        // file id, even one he neither sent nor received (and not even one of this course).
-        $foreign = $this->file(2, 0, 2);
-        $_GET['id'] = (string) $foreign;
+        // Access control: the file id comes from the request. Feedback is only stored on a file the user sent
+        // or received in this course, not on someone else's file nor on one of another course.
         $_POST['feedback'] = 'db_injected';
+        $someoneElses = $this->file(2);
+        $this->person($someoneElses, 2);
+        $foreign = $this->file(2, 0, 2);
+        $this->person($foreign, 1, 2);
 
-        store_feedback();
+        foreach ([$someoneElses, $foreign, 999999999] as $id) {
+            $_GET['id'] = (string) $id;
+            $this->assertSame(get_lang('Feedback error'), store_feedback());
+        }
 
-        $this->assertSame(1, $this->rows('c_dropbox_feedback', "file_id = ? AND c_id = 1 AND feedback = 'db_injected'", [$foreign]));
+        $this->assertSame(0, $this->rows('c_dropbox_feedback', "feedback = 'db_injected'"));
+    }
+
+    public function testStoreFeedbackIsAcceptedOnASentOrReceivedFile(): void
+    {
+        $_POST['feedback'] = 'db_ok';
+        $sent = $this->file(1);
+        $this->person($sent, 1);
+        $received = $this->file(2);
+        $this->post($received, 1);
+
+        foreach ([$sent, $received] as $id) {
+            $_GET['id'] = (string) $id;
+            $this->assertSame(get_lang('The feedback message has been stored'), store_feedback());
+        }
+
+        $this->assertSame(2, $this->rows('c_dropbox_feedback', "feedback = 'db_ok'"));
     }
 
     public function testFeedbackCountsAreGroupedByFileAndScopedToTheCourse(): void

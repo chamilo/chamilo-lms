@@ -1266,6 +1266,9 @@ function store_feedback()
     $course_id = api_get_course_int_id();
     if (empty($_POST['feedback'])) {
         return get_lang('Please type some text.');
+    } elseif (!user_can_download_file((int) $_GET['id'], api_get_user_id())) {
+        // The id comes from the request: only a file sent or received by the user, in this course, takes feedback.
+        return get_lang('Feedback error');
     } else {
         $table = Database::get_course_table(TABLE_DROPBOX_FEEDBACK);
         $params = [

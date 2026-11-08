@@ -272,21 +272,27 @@ final class GlossaryCharacterizationTest extends KernelTestCase
         $this->assertSame(0, (int) $this->conn()->fetchOne("SELECT COUNT(*) FROM c_glossary WHERE title = 'gl_nobody'"));
     }
 
-    public function testSaveGlossaryOfANewTermFailsOnAMissingSetter(): void
+    public function testSaveGlossaryCreatesTheTermInTheCourse(): void
     {
-        $before = (int) $this->conn()->fetchOne("SELECT COUNT(*) FROM c_glossary WHERE title = 'gl_new_term'");
+        $this->loginAsAdmin();
+        $glossary = GlossaryManager::save_glossary(['title' => 'gl_new_term', 'description' => 'd'], false);
+        $this->fresh();
 
-        // PINNED QUIRK: save_glossary() calls CGlossary::setDisplayOrder(), which no longer exists (the entity and
-        // the table have no display_order), so adding a term from the legacy page is a fatal error. Intended:
-        // the CGlossary is created and returned.
-        try {
-            GlossaryManager::save_glossary(['title' => 'gl_new_term', 'description' => 'd'], false);
-            $this->fail('Expected the undefined method error.');
-        } catch (\Error $e) {
-            $this->assertStringContainsString('setDisplayOrder', $e->getMessage());
-        }
-
-        $this->assertSame($before, (int) $this->conn()->fetchOne("SELECT COUNT(*) FROM c_glossary WHERE title = 'gl_new_term'"));
+        $this->assertNotFalse($glossary);
+        $row = $this->conn()->fetchAssociative('SELECT title, description FROM c_glossary WHERE iid = ?', [$glossary->getIid()]);
+        $this->assertSame(['title' => 'gl_new_term', 'description' => 'd'], $row);
+        $this->assertSame(
+            1,
+            (int) $this->conn()->fetchOne(
+                'SELECT COUNT(*) FROM resource_link l INNER JOIN c_glossary g ON g.resource_node_id = l.resource_node_id
+                 WHERE g.iid = ? AND l.c_id = 1 AND l.session_id IS NULL',
+                [$glossary->getIid()]
+            ),
+            'The term is linked to the current course.'
+        );
+        $titles = array_column($this->mineRows(GlossaryManager::get_glossary_data(0, 100, 0, 'ASC')), 0);
+        $this->assertSame(['gl_new_term'], $titles);
+        $this->assertFalse(GlossaryManager::save_glossary(['title' => 'gl_new_term', 'description' => 'again'], false));
     }
 
     public function testDeleteGlossaryRemovesTheTerm(): void

@@ -162,9 +162,6 @@ class GlossaryManager
             return false;
         }
 
-        // get the maximum display order of all the glossary items
-        $max_glossary_item = self::get_max_glossary_item();
-
         // check if the glossary term already exists
         if (self::glossary_exists($values['title'])) {
             // display the feedback message
@@ -187,7 +184,6 @@ class GlossaryManager
             $glossary
                 ->setTitle($values['title'])
                 ->setDescription($values['description'])
-                ->setDisplayOrder($max_glossary_item + 1)
             ;
 
             $course = api_get_course_entity($courseId);
@@ -284,6 +280,8 @@ class GlossaryManager
 
     /**
      * Get the maximum display order of the glossary item.
+     *
+     * @deprecated No caller left: the glossary has no display order any more (the tool is Vue/API Platform).
      *
      * @return int Maximum glossary display order
      */

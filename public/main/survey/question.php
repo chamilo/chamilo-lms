@@ -138,10 +138,19 @@ if (!empty($_GET['question_id'])) {
 
 $formData = $surveyQuestion->preSave($formData);
 $surveyQuestion->createForm($surveyData, $formData);
+// The form is posted several times (add/remove option) before being saved, so it carries the session token
+// without consuming it (protect() would consume it at the first post); only the save checks it.
+$surveyQuestion->getForm()->addHidden('sec_token', Security::get_existing_token());
 $surveyQuestion->getForm()->setDefaults($formData);
 $surveyQuestion->renderForm();
 
 if ($surveyQuestion->getForm()->validate()) {
+    if (isset($_POST['buttons']['save'])) {
+        if (!Security::check_token('post')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
+    }
     $values = $surveyQuestion->getForm()->getSubmitValues();
     $survey = Container::getSurveyRepository()->find($surveyId);
     $surveyQuestion->save($survey, $values, $formData);

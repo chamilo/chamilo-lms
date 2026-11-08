@@ -199,6 +199,8 @@ class SocialManager extends UserManager
      * @param int $userId
      *
      * @return int
+     *
+     * @deprecated Queries message.user_receiver_id/msg_status, columns that no longer exist: it always fails and has no working caller.
      */
     public static function getCountMessagesSent($userId)
     {
@@ -220,6 +222,8 @@ class SocialManager extends UserManager
      * @param int $receiver_id
      *
      * @return int
+     *
+     * @deprecated Queries message.user_receiver_id/msg_status, columns that no longer exist: it always fails and has no working caller.
      */
     public static function getCountMessagesReceived($receiver_id)
     {
@@ -240,6 +244,8 @@ class SocialManager extends UserManager
      * @param int $userId
      *
      * @return int
+     *
+     * @deprecated Queries message.user_receiver_id/msg_status, columns that no longer exist: it always fails and has no working caller.
      */
     public static function getCountWallPostedMessages($userId)
     {
@@ -272,6 +278,8 @@ class SocialManager extends UserManager
      * @param int $limit
      *
      * @return array
+     *
+     * @deprecated Queries message.user_receiver_id/msg_status, columns that no longer exist: it always fails and has no working caller.
      */
     public static function get_list_invitation_of_friends_by_user_id($userId, $limit = 0)
     {
@@ -308,6 +316,8 @@ class SocialManager extends UserManager
      * @param int $userId
      *
      * @return array
+     *
+     * @deprecated Queries message.user_receiver_id/msg_status, columns that no longer exist: it always fails and has no working caller.
      */
     public static function get_list_invitation_sent_by_user_id($userId)
     {
@@ -340,6 +350,8 @@ class SocialManager extends UserManager
      * @param int $userId
      *
      * @return int
+     *
+     * @deprecated Queries message.user_receiver_id/msg_status, columns that no longer exist: it always fails and has no working caller.
      */
     public static function getCountInvitationSent($userId)
     {
@@ -375,6 +387,8 @@ class SocialManager extends UserManager
      *
      * @author isaac flores paz
      * @author Julio Montoya <gugli100@gmail.com> Cleaning code
+     *
+     * @deprecated Queries message.user_receiver_id/msg_status, columns that no longer exist: it always fails and has no working caller.
      */
     public static function invitation_accepted($user_send_id, $user_receiver_id)
     {
@@ -404,6 +418,8 @@ class SocialManager extends UserManager
      *
      * @author isaac flores paz
      * @author Julio Montoya <gugli100@gmail.com> Cleaning code
+     *
+     * @deprecated Queries message.user_receiver_id/msg_status, columns that no longer exist: it always fails and has no working caller.
      */
     public static function invitation_denied($user_send_id, $user_receiver_id)
     {
@@ -643,6 +659,8 @@ class SocialManager extends UserManager
      * @return array|int
      *
      * @author Yannick Warnier
+     *
+     * @deprecated Queries message.user_receiver_id/msg_status, columns that no longer exist: it always fails and has no working caller.
      */
     public static function getWallMessages(
         $userId,

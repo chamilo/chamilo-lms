@@ -798,6 +798,26 @@ class ApiLibCharacterizationTest extends AbstractApiTest
         $this->assertFalse(api_set_settings_category(''));
     }
 
+    public function testSetSettingsCategoryOnlyTouchesTheGivenAccessUrl(): void
+    {
+        $this->conn()->executeStatement(
+            "INSERT INTO access_url (url, active, description, created_by, lft, rgt, lvl) VALUES ('http://ap-settings.invalid/', 1, '', 1, 1, 2, 0)"
+        );
+        $second = (int) $this->conn()->lastInsertId();
+        $this->conn()->executeStatement(
+            "INSERT INTO settings (access_url, variable, subkey, type, category, selected_value, title, access_url_changeable)
+             VALUES (1, 'ap_u1', NULL, 'radio', 'ap_cat7', 'old', 'ap', 0), (?, 'ap_u2', NULL, 'radio', 'ap_cat7', 'old', 'ap', 0)",
+            [$second]
+        );
+
+        api_set_settings_category('ap_cat7', 'changed', $second);
+
+        $this->assertSame(
+            ['ap_u1' => 'old', 'ap_u2' => 'changed'],
+            $this->conn()->fetchAllKeyValue("SELECT variable, selected_value FROM settings WHERE category = 'ap_cat7'")
+        );
+    }
+
     public function testGetSettingsFiltersByCategoryAndUrl(): void
     {
         $this->conn()->executeStatement(

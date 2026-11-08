@@ -5272,8 +5272,9 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
     }
 
     $element_id = (int) $element_id;
+    $session_id = (int) $session_id;
 
-    if (empty($element_id)) {
+    if (empty($element_id) || empty($session_id)) {
         return false;
     }
 
@@ -5281,36 +5282,33 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
     switch ($tool) {
         case TOOL_SURVEY:
             $table_tool = Database::get_course_table(TABLE_SURVEY);
-            $key_field = 'survey_id';
             break;
         case TOOL_ANNOUNCEMENT:
             $table_tool = Database::get_course_table(TABLE_ANNOUNCEMENT);
-            $key_field = 'id';
             break;
         case TOOL_AGENDA:
             $table_tool = Database::get_course_table(TABLE_AGENDA);
-            $key_field = 'id';
             break;
         case TOOL_GROUP:
             $table_tool = Database::get_course_table(TABLE_GROUP);
-            $key_field = 'id';
             break;
         default:
             return false;
     }
     $course_id = api_get_course_int_id();
 
-    $sql = "SELECT session_id FROM $table_tool
-            WHERE c_id = $course_id AND $key_field =  ".$element_id;
+    // The course and the session of a resource live in its resource links.
+    $sql = "SELECT rl.id
+            FROM $table_tool t
+            INNER JOIN resource_link rl ON rl.resource_node_id = t.resource_node_id
+            WHERE t.iid = $element_id
+                AND rl.c_id = $course_id
+                AND rl.session_id = $session_id
+                AND rl.deleted_at IS NULL
+            LIMIT 1";
     $rs = Database::query($sql);
-    if ($element_session_id = Database::result($rs, 0, 0)) {
-        if ($element_session_id == intval($session_id)) {
-            // The element belongs to the session.
-            return true;
-        }
-    }
 
-    return false;
+    return Database::num_rows($rs) > 0;
 }
 
 /**

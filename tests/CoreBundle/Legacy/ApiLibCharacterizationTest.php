@@ -570,14 +570,71 @@ class ApiLibCharacterizationTest extends AbstractApiTest
 
     // ---------------------------------------------------------------- session element / category
 
-    public function testIsElementInTheSessionIsBrokenForEveryToolBecauseTheTablesLostTheirColumns(): void
+    private function freeResourceNode(): int
     {
-        // PINNED QUIRK: the query reads c_survey.survey_id / session_id / c_id (and the same for the other tools),
-        // columns that moved to resource_link. It throws (the legacy error handler turns it into NotAllowed).
-        ChamiloSession::write('_real_cid', 1);
+        return (int) $this->conn()->fetchOne(
+            'SELECT id FROM resource_node
+             WHERE id NOT IN (SELECT resource_node_id FROM c_survey WHERE resource_node_id IS NOT NULL)
+               AND id NOT IN (SELECT resource_node_id FROM resource_link WHERE resource_node_id IS NOT NULL)
+             ORDER BY id DESC LIMIT 1'
+        );
+    }
 
-        $this->expectException(NotAllowedException::class);
-        api_is_element_in_the_session(TOOL_SURVEY, 1, 1);
+    private function rawSurvey(): int
+    {
+        $this->conn()->executeStatement(
+            "INSERT INTO c_survey (resource_node_id, title, creation_date, invited, answered, invite_mail, reminder_mail,
+                mail_subject, anonymous, shuffle, one_question_per_page, survey_version, survey_type, show_form_profile,
+                form_fields, results_hidden_from_teacher, is_mandatory, display_question_number)
+             VALUES (?, 'ap_survey', NOW(), 0, 0, '', '', '', '0', 0, 0, '', 0, 0, '', 0, 0, 0)",
+            [$this->freeResourceNode()]
+        );
+
+        return (int) $this->conn()->lastInsertId();
+    }
+
+    private function link(int $surveyId, int $courseId, ?int $sessionId, ?string $deletedAt = null): void
+    {
+        $this->conn()->executeStatement(
+            'INSERT INTO resource_link (resource_node_id, c_id, session_id, visibility, display_order, resource_type_group, deleted_at, created_at, updated_at)
+             VALUES ((SELECT resource_node_id FROM c_survey WHERE iid = ?), ?, ?, 2, 0, 0, ?, NOW(), NOW())',
+            [$surveyId, $courseId, $sessionId, $deletedAt]
+        );
+    }
+
+    public function testIsElementInTheSessionIsTrueOnlyForAResourceLinkOfThatCourseAndSession(): void
+    {
+        ChamiloSession::write('_real_cid', 1);
+        $sid = $this->rawSession('elem', null, null);
+        $sid2 = $this->rawSession('elem2', null, null);
+        $inSession = $this->rawSurvey();
+        $this->link($inSession, 1, $sid);
+        $baseOnly = $this->rawSurvey();
+        $this->link($baseOnly, 1, null);
+        $otherCourse = $this->rawSurvey();
+        $this->link($otherCourse, 2, $sid);
+        $removed = $this->rawSurvey();
+        $this->link($removed, 1, $sid, '2020-01-01 00:00:00');
+
+        $this->assertTrue(api_is_element_in_the_session(TOOL_SURVEY, $inSession, $sid));
+        $this->assertFalse(api_is_element_in_the_session(TOOL_SURVEY, $inSession, $sid2), 'Another session.');
+        $this->assertFalse(api_is_element_in_the_session(TOOL_SURVEY, $baseOnly, $sid), 'A base course element is not in the session.');
+        $this->assertFalse(api_is_element_in_the_session(TOOL_SURVEY, $otherCourse, $sid), 'The link must be in the current course.');
+        $this->assertFalse(api_is_element_in_the_session(TOOL_SURVEY, $removed, $sid), 'A soft-deleted link does not count.');
+        $this->assertFalse(api_is_element_in_the_session(TOOL_SURVEY, $inSession, 0), 'No session: never.');
+        $this->assertFalse(api_is_element_in_the_session(TOOL_SURVEY, 999999999, $sid));
+    }
+
+    public function testIsElementInTheSessionDefaultsToTheCurrentSession(): void
+    {
+        ChamiloSession::write('_real_cid', 1);
+        $sid = $this->rawSession('elemcur', null, null);
+        $survey = $this->rawSurvey();
+        $this->link($survey, 1, $sid);
+
+        $this->assertFalse(api_is_element_in_the_session(TOOL_SURVEY, $survey));
+        ChamiloSession::write('sid', $sid);
+        $this->assertTrue(api_is_element_in_the_session(TOOL_SURVEY, $survey));
     }
 
     public function testIsElementInTheSessionShortCircuitsOnEmptyIdAndUnknownTools(): void
@@ -595,7 +652,7 @@ class ApiLibCharacterizationTest extends AbstractApiTest
             'SELECT id FROM resource_node
              WHERE id NOT IN (SELECT resource_node_id FROM c_quiz WHERE resource_node_id IS NOT NULL)
                AND id NOT IN (SELECT resource_node_id FROM resource_link WHERE resource_node_id IS NOT NULL)
-             ORDER BY id LIMIT 1 OFFSET 5'
+             ORDER BY id DESC LIMIT 1'
         );
         $this->conn()->executeStatement(
             "INSERT INTO c_quiz (resource_node_id, title, type, random, random_answers, results_disabled, max_attempt,

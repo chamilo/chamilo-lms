@@ -3470,11 +3470,37 @@ class learnpath
 
         /** @var CLpCategory|null $category */
         $category = Container::getLpCategoryRepository()->find($id);
-        if (null === $category || null === $category->getFirstResourceLinkFromCourseSession($course)) {
+        if (null === $category || null === self::getCategoryLinkInCurrentContext($category)) {
             return null;
         }
 
         return $category;
+    }
+
+    /**
+     * The link of the category for exactly the current course and session (no session: the base course only).
+     * getFirstResourceLinkFromCourseSession() ignores the session when none is given, so it would accept the link of
+     * any session of the course.
+     */
+    private static function getCategoryLinkInCurrentContext(CLpCategory $category): ?ResourceLink
+    {
+        $courseId = (int) api_get_course_int_id();
+        $sessionId = (int) api_get_session_id();
+        $node = $category->getResourceNode();
+        if (null === $node) {
+            return null;
+        }
+
+        foreach ($node->getResourceLinks() as $link) {
+            if ($link->getCourse() && $courseId === (int) $link->getCourse()->getId()
+                && $sessionId === (int) ($link->getSession() ? $link->getSession()->getId() : 0)
+                && null === $link->getGroup() && null === $link->getUser() && null === $link->getUserGroup()
+            ) {
+                return $link;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -7924,6 +7950,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         $em  = Database::getManager();
+        $course  = api_get_course_entity();
+        $session = api_get_session_entity();
+        $contextLink = self::getCategoryLinkInCurrentContext($category);
+
+        // Another course or session may still use the category: only remove the link of the current context.
+        foreach ($category->getResourceNode()->getResourceLinks() as $link) {
+            if ($link !== $contextLink && null === $link->getDeletedAt()) {
+                $em->getRepository(ResourceLink::class)->removeByResourceInContext($category, $course, $session);
+                $em->flush();
+
+                return true;
+            }
+        }
+
         $lps = $category->getLps();
 
         // Detach all learning paths from this category
@@ -7931,10 +7971,6 @@ document.addEventListener("DOMContentLoaded", function () {
             $lp->setCategory(null);
             $em->persist($lp);
         }
-
-        // Remove the resource link of this category in the current context
-        $course  = api_get_course_entity();
-        $session = api_get_session_entity();
 
         $em->getRepository(ResourceLink::class)->removeByResourceInContext(
             $category,

@@ -1287,4 +1287,61 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
 
         $this->assertSame(0, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_shortcut WHERE shortcut_node_id = ?', [$node]));
     }
+
+    // ---------------------------------------------------------------- categories of another session of the course
+
+    private function newSession(string $title): int
+    {
+        $this->conn()->executeStatement(
+            'INSERT INTO session (title, nbr_courses, nbr_users, nbr_classes, visibility, status) VALUES (?, 0, 0, 0, 1, 0)',
+            [$title]
+        );
+
+        return (int) $this->conn()->lastInsertId();
+    }
+
+    private function enterSession(int $sessionId): void
+    {
+        Container::getSession()->set('sid', $sessionId);
+    }
+
+    public function testACategoryOfAnotherSessionIsNotReachableFromTheBaseCourse(): void
+    {
+        $sid = $this->newSession('l2_sess_a');
+        [$catId, $node] = $this->newCategory('l2_cat_sess_only');
+        $this->conn()->executeStatement('UPDATE resource_link SET session_id = ? WHERE resource_node_id = ?', [$sid, $node]);
+        $this->getEntityManager()->clear();
+
+        $this->assertFalse(learnpath::deleteCategory($catId), 'the base course context has no link for it');
+        learnpath::toggleCategoryVisibility($catId, 0);
+
+        $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_lp_category WHERE iid = ?', [$catId]));
+        $this->assertSame([2], array_map('intval', $this->conn()->fetchFirstColumn('SELECT visibility FROM resource_link WHERE resource_node_id = ?', [$node])));
+    }
+
+    public function testACategoryOfTheBaseCourseIsNotReachableFromASession(): void
+    {
+        $sid = $this->newSession('l2_sess_b');
+        [$catId, $node] = $this->newCategory('l2_cat_base_only');
+        $this->enterSession($sid);
+        $this->getEntityManager()->clear();
+
+        $this->assertFalse(learnpath::deleteCategory($catId));
+
+        $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_lp_category WHERE iid = ?', [$catId]));
+    }
+
+    public function testDeletingACategoryKeepsItWhileAnotherContextStillLinksIt(): void
+    {
+        $sid = $this->newSession('l2_sess_c');
+        [$catId, $node] = $this->newCategory('l2_cat_shared');
+        $this->link($node, 2, 0, $sid);
+        $this->getEntityManager()->clear();
+
+        $this->assertTrue(learnpath::deleteCategory($catId));
+
+        $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_lp_category WHERE iid = ?', [$catId]), 'the session still uses it');
+        $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM resource_link WHERE resource_node_id = ? AND session_id = ?', [$node, $sid]));
+        $this->assertSame(0, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM resource_link WHERE resource_node_id = ? AND session_id IS NULL AND deleted_at IS NULL', [$node]), 'the base link is gone');
+    }
 }

@@ -6000,6 +6000,8 @@ SQL;
      * @throws Exception
      *
      * @return array
+     *
+     * @deprecated No caller (only feeds getSessionsCalendarByYear(), itself unused).
      */
     public static function getSubscribedSessionsByYear(array $userInfo, $searchYear)
     {
@@ -6114,6 +6116,10 @@ SQL;
      * @throws Exception
      *
      * @return array
+     *
+     * @deprecated No caller (the session calendar moved to the Vue/API side). Its input already holds local dates
+     *             (getSubscribedSessionsByYear() converts them), so converting again with api_get_local_time()
+     *             shifts them twice outside UTC: fix that before reviving it.
      */
     public static function getSessionsCalendarByYear(array $sessionsList, $searchYear)
     {

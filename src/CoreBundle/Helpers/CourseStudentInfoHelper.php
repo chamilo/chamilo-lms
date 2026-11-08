@@ -1084,6 +1084,8 @@ final class CourseStudentInfoHelper
 
     /**
      * Checks if there exists any resource_link entry newer than $since.
+     *
+     * @deprecated No caller (only named in a debug list): computeHasNewContent() replaced it
      */
     private function existsNewResourceLinkSince(int $courseId, int $userId, int $sessionId, DateTimeImmutable $since): bool
     {

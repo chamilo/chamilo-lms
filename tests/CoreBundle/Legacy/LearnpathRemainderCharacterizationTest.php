@@ -1206,4 +1206,59 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
         $this->assertNotNull($deletedAt, 'the course link is soft-deleted');
         $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_lp WHERE iid = ?', [$lpId]), 'the row stays (soft delete)');
     }
+
+    // ---------------------------------------------------------------- categories of another course
+
+    /**
+     * Category linked to another course only (what a teacher of course 1 must not be able to reach by id).
+     *
+     * @return array{int, int} category id, node id
+     */
+    private function foreignCategory(string $title): array
+    {
+        $otherCourse = (int) $this->conn()->fetchOne('SELECT MIN(id) FROM course WHERE id <> ?', [self::COURSE_ID]);
+        $node = $this->newNode($title, 41);
+        $this->conn()->executeStatement('INSERT INTO c_lp_category (resource_node_id, title) VALUES (?, ?)', [$node, $title]);
+        $id = (int) $this->conn()->lastInsertId();
+        $this->conn()->executeStatement(
+            'INSERT INTO resource_link (resource_node_id, c_id, visibility, display_order, resource_type_group, created_at, updated_at) VALUES (?, ?, 2, 0, 41, NOW(), NOW())',
+            [$node, $otherCourse]
+        );
+
+        return [$id, $node];
+    }
+
+    public function testACategoryOfAnotherCourseCannotBeDeleted(): void
+    {
+        [$catId] = $this->foreignCategory('l2_foreign_cat_del');
+        [$lpId] = $this->publishedLp('l2_foreign_cat_lp');
+        $this->conn()->executeStatement('UPDATE c_lp SET category_id = ? WHERE iid = ?', [$catId, $lpId]);
+        $this->getEntityManager()->clear();
+
+        $this->assertFalse(learnpath::deleteCategory($catId), 'not linked to the current course');
+
+        $this->assertSame(1, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_lp_category WHERE iid = ?', [$catId]));
+        $this->assertSame($catId, (int) $this->conn()->fetchOne('SELECT category_id FROM c_lp WHERE iid = ?', [$lpId]), 'its paths stay attached');
+    }
+
+    public function testTheVisibilityOfACategoryOfAnotherCourseCannotBeChanged(): void
+    {
+        [$catId, $node] = $this->foreignCategory('l2_foreign_cat_vis');
+
+        learnpath::toggleCategoryVisibility($catId, 0);
+
+        $links = $this->conn()->fetchAllAssociative('SELECT c_id, visibility FROM resource_link WHERE resource_node_id = ?', [$node]);
+        $this->assertCount(1, $links, 'no link is created for the current course');
+        $this->assertSame(2, (int) $links[0]['visibility']);
+    }
+
+    public function testACategoryOfAnotherCourseCannotBePublishedOnTheCourseHome(): void
+    {
+        [$catId, $node] = $this->foreignCategory('l2_foreign_cat_pub');
+        $this->setCurrentUser();
+
+        $this->assertFalse(learnpath::toggleCategoryPublish($catId));
+
+        $this->assertSame(0, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_shortcut WHERE shortcut_node_id = ?', [$node]));
+    }
 }

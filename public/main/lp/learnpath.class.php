@@ -3480,6 +3480,27 @@ class learnpath
     }
 
     /**
+     * Finds a category by id, only when it is linked to the current course. The category id comes from the request
+     * and the callers only check that the user may edit the current course: without this check a teacher could
+     * change or delete the categories of any other course.
+     */
+    private static function getCategoryOfCurrentCourse(int $id): ?CLpCategory
+    {
+        $course = api_get_course_entity();
+        if (null === $course) {
+            return null;
+        }
+
+        /** @var CLpCategory|null $category */
+        $category = Container::getLpCategoryRepository()->find($id);
+        if (null === $category || null === $category->getFirstResourceLinkFromCourseSession($course)) {
+            return null;
+        }
+
+        return $category;
+    }
+
+    /**
      * Publishes a learnpath category.
      * This basically means show or hide the learnpath category to normal users.
      *
@@ -3491,7 +3512,7 @@ class learnpath
     public static function toggleCategoryVisibility($id, $visibility = 1)
     {
         $repo = Container::getLpCategoryRepository();
-        $resource = $repo->find($id);
+        $resource = self::getCategoryOfCurrentCourse((int) $id);
 
         if (!$resource) {
             return false;
@@ -3548,9 +3569,8 @@ class learnpath
      */
     public static function toggleCategoryPublish($id)
     {
-        $repo = Container::getLpCategoryRepository();
-        /** @var CLpCategory|null $lp */
-        $category = $repo->find($id);
+        /** @var CLpCategory|null $category */
+        $category = self::getCategoryOfCurrentCourse((int) $id);
 
         if (null === $category) {
             return false;
@@ -7919,9 +7939,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     public static function deleteCategory(int $id): bool
     {
-        $repo = Container::getLpCategoryRepository();
         /** @var CLpCategory|null $category */
-        $category = $repo->find($id);
+        $category = self::getCategoryOfCurrentCourse($id);
 
         if (null === $category) {
             return false;

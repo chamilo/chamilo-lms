@@ -1339,170 +1339,145 @@ function getAllWorkListStudent(
     $getCount = false,
     $withResults = 1
 ) {
-    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $userId = api_get_user_id();
 
     if (empty($userId)) {
         return [];
     }
 
-    $courses = CourseManager::get_courses_list_by_user_id($userId, true);
+    $user = api_get_user_entity($userId);
+    $repo = Container::getStudentPublicationRepository();
+    $now = api_get_utc_datetime();
 
-    if (!empty($where_condition)) {
-        $where_condition = ' AND '.$where_condition;
+    // The assignments of every course and session of the user (the course/session of an assignment is its
+    // resource link). $where_condition (a jqGrid filter written for the removed columns) is not applied.
+    $candidates = [];
+    foreach (CourseManager::get_courses_list_by_user_id($userId, true) as $courseRow) {
+        $courseId = (int) $courseRow['real_id'];
+        $sessionId = (int) ($courseRow['session_id'] ?? 0);
+        $course = api_get_course_entity($courseId);
+        if (null === $course) {
+            continue;
+        }
+        $session = $sessionId > 0 ? api_get_session_entity($sessionId) : null;
+
+        $qb = $repo->getResourcesByCourse($course, $session);
+        $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
+        $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
+
+        /** @var CStudentPublication $folder */
+        foreach ($qb->getQuery()->getResult() as $folder) {
+            if (false === userIsSubscribedToWork($userId, $folder->getIid(), $courseId)) {
+                continue;
+            }
+
+            $assignment = $folder->getAssignment();
+            $expiresOn = $assignment?->getExpiresOn();
+            $hasSentWork = !empty(
+                $repo->getStudentAssignments($folder, $course, $session, null, $user)
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getResult()
+            );
+            // expires_on is stored as a UTC wall-clock string, compared as such (like the SQL did).
+            $isExpired = null !== $expiresOn && $expiresOn->format('Y-m-d H:i:s') < $now;
+
+            // "To do": nothing sent yet and still open. "Results": something sent, or closed without a hand-in.
+            $keep = $withResults ? ($hasSentWork || $isExpired) : (!$hasSentWork && !$isExpired);
+            if (!$keep) {
+                continue;
+            }
+
+            $candidates[] = [
+                'folder' => $folder,
+                'assignment' => $assignment,
+                'course_id' => $courseId,
+                'session_id' => $sessionId,
+            ];
+        }
     }
 
-    if (!in_array($direction, ['asc', 'desc'])) {
-        $direction = 'desc';
+    if ($getCount) {
+        return count($candidates);
     }
 
-    $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
-    $start = (int) $start;
+    $direction = 'asc' === strtolower((string) $direction) ? 1 : -1;
+    $sortKey = static function (array $candidate) use ($column): string {
+        if ('expires_on' === $column) {
+            $expiresOn = $candidate['assignment']?->getExpiresOn();
+
+            return null === $expiresOn ? '' : $expiresOn->format('Y-m-d H:i:s');
+        }
+
+        return mb_strtolower($candidate['folder']->getTitle());
+    };
+    usort(
+        $candidates,
+        static fn (array $a, array $b): int => $direction * strnatcmp($sortKey($a), $sortKey($b))
+            ?: $a['folder']->getIid() <=> $b['folder']->getIid()
+    );
+
     $limit = (int) $limit;
-    $courseQuery = [];
-    $courseList = [];
-    foreach ($courses as $course) {
-        $course_id = $course['real_id'];
-        $courseInfo = api_get_course_info_by_id($course_id);
-        $session_id = isset($course['session_id']) ? $course['session_id'] : 0;
-        $conditionSession = api_get_session_condition($session_id, true, false, 'w.session_id');
-        $parentCondition = '';
-        if ($withResults) {
-            $parentCondition = 'AND ww.parent_id is NOT NULL';
-        }
-        $courseQuery[] = " (w.c_id = $course_id $conditionSession $parentCondition )";
-        $courseList[$course_id] = $courseInfo;
-    }
-
-    $courseQueryToString = implode(' OR ', $courseQuery);
-
-    if ($getCount) {
-        if (empty($courseQuery)) {
-            return 0;
-        }
-        $select = 'SELECT count(DISTINCT(w.iid)) as count ';
-    } else {
-        if (empty($courseQuery)) {
-            return [];
-        }
-        $select = 'SELECT DISTINCT
-                        w.url,
-                        w.iid,
-                        w.c_id,
-                        w.session_id,
-                        a.expires_on,
-                        a.ends_on,
-                        a.enable_qualification,
-                        w.qualification,
-                        a.publication_id';
-    }
-
-    $checkSentWork = " LEFT JOIN $workTable ww
-                       ON (ww.c_id = w.c_id AND ww.parent_id = w.iid AND ww.user_id = $userId ) ";
-    $where = ' AND ww.url IS NULL ';
-    $expirationCondition = " AND (a.expires_on IS NULL OR a.expires_on > '".api_get_utc_datetime()."') ";
-    if ($withResults) {
-        $where = '';
-        $checkSentWork = " LEFT JOIN $workTable ww
-                           ON (
-                            ww.c_id = w.c_id AND
-                            ww.parent_id = w.iid AND
-                            ww.user_id = $userId AND
-                            a.expires_on IS NULL AND
-                            ww.parent_id is NOT NULL
-                        ) ";
-        $expirationCondition = " OR (
-                ww.parent_id is NULL AND
-                a.expires_on IS NOT NULL AND
-                a.expires_on < '".api_get_utc_datetime()."'
-            ) ";
-    }
-
-    $sql = "$select
-            FROM $workTable w
-            LEFT JOIN $workTableAssignment a
-            ON (a.publication_id = w.iid AND a.c_id = w.c_id)
-            $checkSentWork
-            WHERE
-                w.parent_id = 0 AND
-                w.active IN (1, 0) AND
-                ($courseQueryToString)
-                $where_condition
-                $expirationCondition
-                $where
-            ";
-
-    $sql .= " ORDER BY `$column` $direction ";
-
-    if (!empty($start) && !empty($limit)) {
-        $sql .= " LIMIT $start, $limit";
-    }
-
-    $result = Database::query($sql);
-
-    if ($getCount) {
-        $row = Database::fetch_array($result);
-
-        if ($row) {
-            return (int) $row['count'];
-        }
-
-        return 0;
+    if ($limit > 0) {
+        $candidates = array_slice($candidates, max(0, (int) $start), $limit);
     }
 
     $works = [];
-    while ($work = Database::fetch_assoc($result)) {
-        $courseId = $work['c_id'];
-        $courseInfo = $courseList[$work['c_id']];
-        $sessionId = $work['session_id'];
+    $icon = Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
+    foreach ($candidates as $candidate) {
+        /** @var CStudentPublication $folder */
+        $folder = $candidate['folder'];
+        $assignment = $candidate['assignment'];
+        $courseId = $candidate['course_id'];
+        $sessionId = $candidate['session_id'];
+        $courseInfo = api_get_course_info_by_id($courseId);
 
         $cidReq = api_get_cidreq_params($courseId, $sessionId);
         $url = api_get_path(WEB_CODE_PATH).'work/work_list.php?'.$cidReq;
-        $isSubscribed = userIsSubscribedToWork($userId, $work['iid'], $courseId);
-        if (false == $isSubscribed) {
-            continue;
-        }
 
-        /*$visibility = api_get_item_visibility($courseInfo, 'work', $work['iid'], $sessionId);
-
-        if (1 != $visibility) {
-            continue;
-        }*/
-
-        $work['type'] = Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
-        $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
-
-        if (empty($work['title'])) {
-            $work['title'] = basename($work['url']);
-        }
+        $work = [
+            'iid' => $folder->getIid(),
+            'c_id' => $courseId,
+            'session_id' => $sessionId,
+            'expires_on' => null === $assignment?->getExpiresOn() ? null : api_get_local_time($assignment->getExpiresOn()),
+            'ends_on' => null === $assignment?->getEndsOn() ? null : api_get_local_time($assignment->getEndsOn()),
+            'enable_qualification' => (int) $assignment?->getEnableQualification(),
+            'qualification' => $folder->getQualification(),
+            'publication_id' => $assignment?->getPublication()?->getIid(),
+            'type' => $icon,
+        ];
 
         if ($withResults) {
-            $whereCondition = " AND u.id = $userId ";
+            // Only what this learner sent (and the comments on it), as the "Others" column is not shown here.
             $workList = get_work_user_list(
                 0,
                 1000,
                 null,
                 null,
-                $work['iid'],
-                $whereCondition,
-                null,
+                $folder->getIid(),
+                '',
+                $userId,
                 false,
                 $courseId,
                 $sessionId
             );
 
-            $count = getTotalWorkComment($workList, $courseInfo);
-            $lastWork = getLastWorkStudentFromParentByUser($userId, $work, $courseInfo);
+            $count = getTotalWorkComment($workList ?? [], $courseInfo);
+            $lastWork = getLastWorkStudentFromParentByUser(
+                $userId,
+                ['iid' => $folder->getIid(), 'qualification' => $folder->getQualification()],
+                $courseInfo,
+                $sessionId
+            );
 
-            if (!is_null($count) && !empty($count)) {
+            if (!empty($count) && !empty($lastWork)) {
                 $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$lastWork['iid'].'&'.$cidReq;
 
                 $feedback = '&nbsp;'.Display::url(
-                        Display::getMdiIcon('comment-outline'),
-                        $urlView,
-                        ['title' => get_lang('View')]
-                    );
+                    Display::getMdiIcon('comment-outline'),
+                    $urlView,
+                    ['title' => get_lang('View')]
+                );
 
                 $work['feedback'] = ' '.Display::label($count.' '.get_lang('Feedback'), 'info').$feedback;
             }
@@ -1513,7 +1488,7 @@ function getAllWorkListStudent(
             }
         }
 
-        $work['title'] = Display::url($work['title'], $url.'&id='.$work['iid']);
+        $work['title'] = Display::url($folder->getTitle(), $url.'&id='.$folder->getIid());
         $works[] = $work;
     }
 
@@ -2219,7 +2194,7 @@ function get_work_user_list(
 
             if (!empty($expiresOn) &&
                 !empty($time_expires) &&
-                ($time_expires < api_strtotime($assignment->getSentDate(), 'UTC'))
+                ($time_expires < api_strtotime($assignment->getSentDate()->format('Y-m-d H:i:s'), 'UTC'))
             ) {
                 $add_string = Display::label(get_lang('Expired'), 'important').' - ';
             }
@@ -4069,7 +4044,8 @@ function getTotalWorkComment($workList, $courseInfo = [])
 
     $count = 0;
     foreach ($workList as $data) {
-        $count += getWorkCommentCount($data['id'], $courseInfo);
+        // get_work_user_list() rows are keyed by 'iid'.
+        $count += getWorkCommentCount($data['iid'] ?? $data['id'], $courseInfo);
     }
 
     return $count;

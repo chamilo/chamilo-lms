@@ -317,6 +317,26 @@ final class WorkListsCharacterizationTest extends KernelTestCase
         $this->assertSame(2, (int) get_work_user_list(0, 50, null, null, $folder, '', null, true));
     }
 
+    public function testUserListMarksASubmissionSentAfterTheDeadlineAndDoesNotCrashOnIt(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $folder = $this->folder();
+        $this->conn->insert('c_student_publication_assignment', [
+            'publication_id' => $folder,
+            'expires_on' => '2020-02-01 00:00:00',
+            'ends_on' => null,
+            'add_to_calendar' => 0,
+            'enable_qualification' => 0,
+        ]);
+        $this->submission($folder, $this->learner(), ['title' => 'w2_in_time', 'sent_date' => '2020-01-15 00:00:00']);
+        $this->submission($folder, $this->other(), ['title' => 'w2_late', 'sent_date' => '2020-03-01 00:00:00']);
+
+        $rows = array_column(get_work_user_list(0, 50, null, null, $folder), null, 'title_clean');
+
+        $this->assertSame('', $rows['w2_in_time']['expiry_note']);
+        $this->assertStringContainsString('Expired', strip_tags($rows['w2_late']['expiry_note']));
+    }
+
     public function testUserListIgnoresLinksOfAnotherSession(): void
     {
         $sessionId = $this->session();
@@ -770,5 +790,154 @@ final class WorkListsCharacterizationTest extends KernelTestCase
         $this->assertSame(['w2_pn_graded', 'w2_pn_hidden_flag', 'w2_pn_open'], $titles, 'nothing from the course where he is a learner');
         $this->assertSame([], $this->pendingTitles(getPendingWorkList(null, null, null, null, '', false, 2)), 'asking for that course explicitly changes nothing');
         $this->assertSame(0, getPendingWorkList(null, null, null, null, '', true, 2));
+    }
+
+    // ----------------------------------------------------------------- getAllWorkListStudent
+
+    private function assignment(int $folder, ?string $expiresOn): void
+    {
+        $this->conn->insert('c_student_publication_assignment', [
+            'publication_id' => $folder,
+            'expires_on' => $expiresOn,
+            'ends_on' => null,
+            'add_to_calendar' => 0,
+            'enable_qualification' => 0,
+        ]);
+    }
+
+    /**
+     * @return string[] the folder titles of an "all my assignments" result that belong to this test
+     */
+    private function allTitles(array $rows): array
+    {
+        $titles = [];
+        foreach ($rows as $row) {
+            $title = trim(strip_tags($row['title']));
+            if (str_starts_with($title, 'w2_')) {
+                $titles[] = $title;
+            }
+        }
+        sort($titles);
+
+        return $titles;
+    }
+
+    private function allFixture(): void
+    {
+        $this->subscribe($this->learner(), 1);
+        $this->subscribe($this->learner(), 2);
+        $open = $this->folder(['title' => 'w2_a_open']);
+        $sent = $this->folder(['title' => 'w2_a_sent']);
+        $closed = $this->folder(['title' => 'w2_a_closed']);
+        $closedAndSent = $this->folder(['title' => 'w2_a_closed_sent']);
+        $future = $this->folder(['title' => 'w2_a_future']);
+        $otherCourse = $this->folder(['title' => 'w2_a_course2'], 2);
+        $mine = $this->folder(['title' => 'w2_a_for_me']);
+        $theirs = $this->folder(['title' => 'w2_a_for_them']);
+        $this->folder(['title' => 'w2_a_gone', 'active' => 2]);
+        $this->folder(['title' => 'w2_a_draft'], 1, 0);
+        $this->assignment($closed, '2000-01-01 00:00:00');
+        $this->assignment($closedAndSent, '2000-01-01 00:00:00');
+        $this->assignment($future, '2999-01-01 00:00:00');
+        $this->relUser($mine, $this->learner()->getId());
+        $this->relUser($theirs, $this->other()->getId());
+        $this->submission($sent, $this->learner(), ['title' => 'w2_a_mine']);
+        $this->submission($closedAndSent, $this->learner(), ['title' => 'w2_a_mine2']);
+        $this->submission($open, $this->other(), ['title' => 'w2_a_theirs_in_open']);
+        $this->submission($otherCourse, $this->other(), ['title' => 'w2_a_theirs_in_c2'], 2);
+    }
+
+    public function testAllAssignmentsToDoAreTheOpenOnesWithNothingSentOfMyCourses(): void
+    {
+        $this->setContext($this->learner(), null);
+        $this->allFixture();
+
+        $rows = getAllWorkListStudent(0, 500, 'title', 'asc', '1 = 1', false, 0);
+
+        // Not the one I already answered, not the expired one, not the deleted/draft ones, not the one assigned
+        // to somebody else; what others sent does not matter.
+        $this->assertSame(
+            ['w2_a_course2', 'w2_a_for_me', 'w2_a_future', 'w2_a_open'],
+            $this->allTitles($rows)
+        );
+        $this->assertSame(count($rows), getAllWorkListStudent(0, 500, 'title', 'asc', '1 = 1', true, 0));
+    }
+
+    public function testAllAssignmentsWithResultsAreTheOnesIAnsweredOrThatClosedWithoutMe(): void
+    {
+        $this->setContext($this->learner(), null);
+        $this->allFixture();
+
+        $rows = getAllWorkListStudent(0, 500, 'title', 'asc', '1 = 1', false, 1);
+
+        $this->assertSame(['w2_a_closed', 'w2_a_closed_sent', 'w2_a_sent'], $this->allTitles($rows));
+        $this->assertSame(count($rows), getAllWorkListStudent(0, 500, 'title', 'asc', '1 = 1', true, 1));
+        $sent = array_values(array_filter($rows, static fn ($r) => str_contains($r['title'], 'w2_a_sent')))[0];
+        $this->assertArrayHasKey('last_upload', $sent);
+        $this->assertArrayNotHasKey('feedback', $sent, 'no comment yet');
+        $this->assertStringContainsString('2020', $sent['last_upload']);
+    }
+
+    public function testAllAssignmentsOnlyCoverTheCoursesOfTheUser(): void
+    {
+        $this->subscribe($this->learner(), 1);
+        $this->setContext($this->learner(), null);
+        $this->folder(['title' => 'w2_a_mine']);
+        $this->folder(['title' => 'w2_a_not_mine'], 2);
+
+        $titles = $this->allTitles(getAllWorkListStudent(0, 500, 'title', 'asc', '1 = 1', false, 0));
+
+        $this->assertSame(['w2_a_mine'], $titles, 'course 2 is not one of his courses');
+    }
+
+    public function testAllAssignmentsSortPageAndDeadlineColumn(): void
+    {
+        $this->subscribe($this->learner(), 1);
+        $this->setContext($this->learner(), null);
+        $b = $this->folder(['title' => 'w2_a_b']);
+        $a = $this->folder(['title' => 'w2_a_a']);
+        $c = $this->folder(['title' => 'w2_a_c']);
+        $this->assignment($b, '2998-01-01 00:00:00');
+        $this->assignment($a, '2999-01-01 00:00:00');
+        $this->assignment($c, '2997-01-01 00:00:00');
+        $mine = static fn (array $rows): array => array_map(
+            static fn ($r) => trim(strip_tags($r['title'])),
+            array_values(array_filter($rows, static fn ($r) => str_contains($r['title'], 'w2_a_')))
+        );
+
+        $this->assertSame(['w2_a_a', 'w2_a_b', 'w2_a_c'], $mine(getAllWorkListStudent(0, 500, 'title', 'asc', '', false, 0)));
+        $this->assertSame(['w2_a_c', 'w2_a_b', 'w2_a_a'], $mine(getAllWorkListStudent(0, 500, 'title', 'desc', '', false, 0)));
+        $this->assertSame(['w2_a_c', 'w2_a_b', 'w2_a_a'], $mine(getAllWorkListStudent(0, 500, 'expires_on', 'asc', '', false, 0)));
+        $this->assertCount(2, getAllWorkListStudent(1, 2, 'title', 'asc', '', false, 0));
+    }
+
+    public function testAllAssignmentsOfAnAnonymousVisitorAreEmpty(): void
+    {
+        $this->setContext(null, null);
+
+        $this->assertSame([], getAllWorkListStudent(0, 500, 'title', 'asc', '', false, 0));
+    }
+
+    public function testAllAssignmentsShowTheFeedbackCountOfMyOwnWorkOnly(): void
+    {
+        $this->subscribe($this->learner(), 1);
+        $this->setContext($this->learner(), null);
+        $folder = $this->folder(['title' => 'w2_a_fb']);
+        $mine = $this->submission($folder, $this->learner(), ['title' => 'w2_a_fb_mine']);
+        $theirs = $this->submission($folder, $this->other(), ['title' => 'w2_a_fb_theirs']);
+        foreach ([$mine, $theirs, $theirs] as $workId) {
+            $this->conn->insert('c_student_publication_comment', [
+                'work_id' => $workId,
+                'user_id' => $this->admin()->getId(),
+                'comment' => 'w2_comment',
+                'sent_at' => '2020-01-02 00:00:00',
+            ]);
+        }
+
+        $rows = getAllWorkListStudent(0, 500, 'title', 'asc', '', false, 1);
+        $row = array_values(array_filter($rows, static fn ($r) => str_contains($r['title'], 'w2_a_fb')))[0];
+
+        $this->assertStringContainsString('1 ', strip_tags($row['feedback']), 'one comment on my work, the two on the other learner\'s are not mine');
+        $this->assertStringNotContainsString('3', strip_tags($row['feedback']));
     }
 }

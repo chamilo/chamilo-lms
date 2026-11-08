@@ -1394,6 +1394,7 @@ class Category implements GradebookItem
             SELECT cu.c_id
             FROM '.$main_course_user_table.' cu
             WHERE cu.user_id = '.$user_id.'
+            AND cu.status = '.COURSEMANAGER.'
         )';
         }
         $result = Database::query($sql);

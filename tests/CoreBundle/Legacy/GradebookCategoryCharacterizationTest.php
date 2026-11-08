@@ -570,6 +570,21 @@ final class GradebookCategoryCharacterizationTest extends KernelTestCase
         $this->assertNotContains($inCourse1, $anyCourse);
     }
 
+    public function testRootCategoriesForATeacherIgnoreTheCoursesWhereTheUserIsOnlyAStudent(): void
+    {
+        // The teacher listing used to follow any course_rel_user row, so a plain student subscription exposed the
+        // root categories (hidden ones included) of that course through the teacher listing; the student listing
+        // always filtered on the STUDENT status.
+        $student = $this->user();
+        $this->subscribe($student, 2, 5);
+        $teacher = $this->user(1);
+        $this->subscribe($teacher, 2, 1);
+        $hidden = $this->cat(['c_id' => 2, 'visible' => 0]);
+
+        $this->assertNotContains($hidden, $this->ids((new Category())->get_root_categories_for_teacher($student)));
+        $this->assertContains($hidden, $this->ids((new Category())->get_root_categories_for_teacher($teacher)));
+    }
+
     public function testGetNotCreatedCourseCategoriesListsTheTeachersCoursesWithoutAGradebookRoot(): void
     {
         $teacher = $this->user(1);

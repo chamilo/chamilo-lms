@@ -2948,26 +2948,26 @@ class SurveyUtil
                 $actions[] = Display::url(
                     Display::getMdiIcon(ObjectIcon::MULTI_ELEMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Duplicate survey')),
                     $codePath.'survey/survey_list.php?'
-                    .http_build_query($params + ['action' => 'copy_survey', 'survey_id' => $survey_id])
+                    .http_build_query($params + ['action' => 'copy_survey', 'survey_id' => $survey_id, 'sec_token' => Security::get_existing_token()])
                 );
 
                 $actions[] = Display::url(
                     Display::getMdiIcon('view-grid-plus-outline', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Multiply questions')),
                     $codePath.'survey/survey_list.php?'
-                    .http_build_query($params + ['action' => 'multiplicate', 'survey_id' => $survey_id])
+                    .http_build_query($params + ['action' => 'multiplicate', 'survey_id' => $survey_id, 'sec_token' => Security::get_existing_token()])
                 );
 
                 $actions[] = Display::url(
                     Display::getMdiIcon('view-grid-plus-outline', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Remove multiplied questions')),
                     $codePath.'survey/survey_list.php?'
-                    .http_build_query($params + ['action' => 'remove_multiplicate', 'survey_id' => $survey_id])
+                    .http_build_query($params + ['action' => 'remove_multiplicate', 'survey_id' => $survey_id, 'sec_token' => Security::get_existing_token()])
                 );
 
                 $warning = addslashes(api_htmlentities(get_lang('Empty survey').'?', ENT_QUOTES));
                 $actions[] = Display::url(
                     Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Empty survey')),
                     $codePath.'survey/survey_list.php?'
-                    .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id]),
+                    .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id, 'sec_token' => Security::get_existing_token()]),
                     [
                         'onclick' => "javascript: if (!confirm('".$warning."')) return false;",
                     ]
@@ -2992,7 +2992,7 @@ class SurveyUtil
         if ($groupData && !empty($groupData['value'])) {
             $actions[] = Display::url(
                 Display::getMdiIcon(ObjectIcon::TEACHER, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Publish for group tutors')),
-                $codePath.'survey/survey_list.php?action=send_to_tutors&'.http_build_query($params + ['survey_id' => $survey_id])
+                $codePath.'survey/survey_list.php?action=send_to_tutors&'.http_build_query($params + ['survey_id' => $survey_id, 'sec_token' => Security::get_existing_token()])
             );
         }
 
@@ -3009,7 +3009,7 @@ class SurveyUtil
             $actions[] = Display::url(
                 Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
                 $codePath.'survey/survey_list.php?'
-                .http_build_query($params + ['action' => 'delete', 'survey_id' => $survey_id]),
+                .http_build_query($params + ['action' => 'delete', 'survey_id' => $survey_id, 'sec_token' => Security::get_existing_token()]),
                 [
                     'onclick' => "javascript: if (!confirm('".$warning."')) return false;",
                 ]
@@ -3202,7 +3202,7 @@ class SurveyUtil
         $actions[] = Display::url(
             Display::getMdiIcon(ActionIcon::RESET, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Empty survey')),
             $codePath.'survey/survey_list.php?'
-                .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id]),
+                .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id, 'sec_token' => Security::get_existing_token()]),
             [
                 'onclick' => "javascript: if(!confirm('".$warning."')) return false;",
             ]

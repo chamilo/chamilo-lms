@@ -189,6 +189,7 @@ $form = new FormValidator(
 );
 
 $form->addElement('header', $tool_name);
+$form->protect();
 
 // Setting the form elements
 if ('edit' === $action && isset($survey_id) && is_numeric($survey_id)) {

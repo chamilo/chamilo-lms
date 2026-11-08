@@ -502,4 +502,36 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
         SessionManager::unSubscribeUserFromCourseSession($u1, $c, $s);
         $this->assertSame(1, (int) $this->one('SELECT nbr_users FROM session_rel_course WHERE session_id = ? AND c_id = ?', [$s, $c]));
     }
+
+    // ---------------------------------------------------------------- group admin
+
+    public function testSessionsFollowedForGroupAdminAreTheOnesOfTheStudentsOfHisClasses(): void
+    {
+        $boss = $this->rawUser('gadm', 'ROLE_STUDENT_BOSS', 9);
+        $member = $this->rawUser('gmember');
+        $stranger = $this->rawUser('gstranger');
+        $mine = $this->rawSession('ga_mine');
+        $theirs = $this->rawSession('ga_theirs');
+        $coachOnly = $this->rawSession('ga_coach');
+        $this->conn()->executeStatement(
+            "INSERT INTO usergroup (title, group_type, visibility, allow_members_leave_group, created_at, updated_at)
+             VALUES ('s2_class', 1, '1', 0, NOW(), NOW())"
+        );
+        $group = (int) $this->conn()->lastInsertId();
+        foreach ([[$boss, GROUP_USER_PERMISSION_ADMIN], [$member, GROUP_USER_PERMISSION_READER]] as [$u, $rel]) {
+            $this->conn()->executeStatement(
+                'INSERT INTO usergroup_rel_user (usergroup_id, user_id, relation_type) VALUES (?, ?, ?)',
+                [$group, $u, $rel]
+            );
+        }
+        $this->rel($mine, $member, Session::STUDENT);
+        $this->rel($theirs, $stranger, Session::STUDENT);
+        $this->rel($coachOnly, $member, Session::GENERAL_COACH);
+
+        $rows = SessionManager::getSessionsFollowedForGroupAdmin($boss);
+
+        $this->assertSame([$mine], array_map('intval', array_column($rows, 'id')), 'Only the sessions where a class member is a STUDENT.');
+        $this->assertSame([], SessionManager::getSessionsFollowedForGroupAdmin($member), 'A plain member administers no class.');
+        $this->assertSame([], SessionManager::getSessionsFollowedForGroupAdmin($this->rawUser('gnone')));
+    }
 }

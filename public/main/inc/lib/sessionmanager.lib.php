@@ -8592,9 +8592,9 @@ class SessionManager
         $sql = "SELECT DISTINCT s.*
                 FROM $sessionTable s
                 INNER JOIN $sessionUserTable sru
-                ON s.id = sru.id_session
+                ON s.id = sru.session_id
                 WHERE
-                    (sru.id_user IN (".implode(', ', $userIdList).")
+                    (sru.user_id IN (".implode(', ', array_map('intval', $userIdList)).")
                     AND sru.relation_type = ".Session::STUDENT."
                 )";
 
@@ -8605,12 +8605,12 @@ class SessionManager
             if (-1 != $accessUrlId) {
                 $sql = "SELECT DISTINCT s.*
                         FROM $sessionTable s
-                        INNER JOIN $sessionUserTable sru ON s.id = sru.id_session
+                        INNER JOIN $sessionUserTable sru ON s.id = sru.session_id
                         INNER JOIN $sessionAccessUrlTable srau ON s.id = srau.session_id
                         WHERE
                             srau.access_url_id = $accessUrlId
                             AND (
-                                sru.id_user IN (".implode(', ', $userIdList).")
+                                sru.user_id IN (".implode(', ', array_map('intval', $userIdList)).")
                                 AND sru.relation_type = ".Session::STUDENT."
                             )";
             }

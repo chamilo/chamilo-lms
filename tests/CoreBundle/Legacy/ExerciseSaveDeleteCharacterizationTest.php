@@ -1067,9 +1067,7 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
 
         $this->setExtra('results_available_for_x_minutes', $e->getId(), '10');
         $this->assertSame(10, $e->getResultAccess());
-        // PINNED QUIRK (bug): getResultsAccess() casts the whole extra-field array to int (always 1); it feeds the
-        // "You have passed the %s minutes limit" message.
-        $this->assertSame(1, $e->getResultsAccess());
+        $this->assertSame(10, $e->getResultsAccess(), 'the minutes of the window, as shown in the "passed the limit" message');
 
         $recent = ['exe_date' => gmdate('Y-m-d H:i:s', time() - 60)];
         $diff = $e->getResultAccessTimeDiff($recent);

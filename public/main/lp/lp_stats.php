@@ -25,6 +25,11 @@ $extendedAll = $_GET['extend_all'] ?? null;
 $export = isset($_GET['export']) && 'csv' === $_GET['export'];
 $allowExtend = $_GET['allow_extend'] ?? 1;
 
+// The statistics of another user are for teachers/coaches/admins only: student_id comes from the request.
+if (api_get_user_id() !== $userId && !api_is_allowed_to_edit(null, true)) {
+    api_not_allowed(true);
+}
+
 $lpReportType = api_get_setting('lp.lp_show_reduced_report');
 $type = 'classic';
 if ('true' === $lpReportType) {

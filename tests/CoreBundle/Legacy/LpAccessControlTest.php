@@ -300,6 +300,24 @@ final class LpAccessControlTest extends KernelTestCase
         $this->assertFalse(learnpath::mayViewStatsOfUser($coach, $student, self::COURSE_ID));
     }
 
+    public function testCoachOfAnotherSessionDoesNotQualifyWhenASessionIsRequested(): void
+    {
+        $student = $this->user();
+        $courseCoach = $this->user();
+        $generalCoach = $this->user();
+        $sidA = $this->sessionWithStudent($this->user());
+        $sidB = $this->sessionWithStudent($student);
+        foreach ([$sidA, $sidB] as $sid) {
+            $this->sessionCourseUser($sid, $courseCoach, SessionEntity::COURSE_COACH);
+            $this->sessionUser($sid, $generalCoach, SessionEntity::GENERAL_COACH);
+        }
+
+        $this->assertTrue(learnpath::isCoachOfLearnerInCourse($courseCoach, $student, self::COURSE_ID, $sidB));
+        $this->assertFalse(learnpath::isCoachOfLearnerInCourse($courseCoach, $student, self::COURSE_ID, $sidA), 'the student is not in session A');
+        $this->assertTrue(learnpath::isCoachOfLearnerInCourse($generalCoach, $student, self::COURSE_ID, $sidB));
+        $this->assertFalse(learnpath::isCoachOfLearnerInCourse($generalCoach, $student, self::COURSE_ID, $sidA));
+    }
+
     public function testUserIsLearnerOfCourseRules(): void
     {
         $direct = $this->user();

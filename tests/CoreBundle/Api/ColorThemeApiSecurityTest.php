@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CoreBundle\Api;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\ColorTheme;
+use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Service\ColorTheme\ColorThemeArchive;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -125,6 +126,18 @@ class ColorThemeApiSecurityTest extends AbstractApiTest
         $this->assertStringNotContainsString('url(', $css);
     }
 
+    public function testThemeBoundToAnotherPortalIsNotFound(): void
+    {
+        $otherUrl = $this->createAccessUrl('https://other-portal.example.org/');
+        $foreignTheme = $this->createBoundTheme('theme_sec_foreign', $otherUrl);
+
+        // The admin acts on the default portal (http://localhost/), so the
+        // foreign theme is invisible to it and the write must 404.
+        $this->patchVariables($foreignTheme->getId(), $this->validPalette());
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+    }
+
     /**
      * @return array<string, string>
      */
@@ -156,6 +169,21 @@ class ColorThemeApiSecurityTest extends AbstractApiTest
         $em->flush();
 
         return $theme;
+    }
+
+    private function createAccessUrl(string $url): AccessUrl
+    {
+        /** @var AccessUrlRepository $repo */
+        $repo = static::getContainer()->get(AccessUrlRepository::class);
+
+        $accessUrl = (new AccessUrl())
+            ->setUrl($url)
+            ->setActive(1)
+            ->setCreator($this->getAdmin())
+        ;
+        $repo->create($accessUrl);
+
+        return $accessUrl;
     }
 
     /**

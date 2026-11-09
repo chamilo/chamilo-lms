@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\ColorTheme;
@@ -20,6 +22,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use const DIRECTORY_SEPARATOR;
 
@@ -42,13 +45,21 @@ final readonly class ColorThemeStateProcessor implements ProcessorInterface
 
         // Keep the database update uncommitted until theme assets are written successfully.
         return $this->entityManager->wrapInTransaction(function () use ($data, $operation, $uriVariables, $context): ?ColorTheme {
+            $accessUrl = $this->accessUrlHelper->getCurrent();
+
+            // An update may only touch a theme already bound to the current portal.
+            if (($operation instanceof Put || $operation instanceof Patch)
+                && !$accessUrl->getColorThemeByTheme($data)
+            ) {
+                throw new NotFoundHttpException('Color theme not found.');
+            }
+
             /** @var ColorTheme|null $colorTheme */
             $colorTheme = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
             if (null === $colorTheme) {
                 return null;
             }
 
-            $accessUrl = $this->accessUrlHelper->getCurrent();
             $accessUrlRelColorTheme = $accessUrl->getColorThemeByTheme($colorTheme);
             if (!$accessUrlRelColorTheme) {
                 $accessUrlRelColorTheme = (new AccessUrlRelColorTheme())->setColorTheme($colorTheme);

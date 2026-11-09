@@ -45174,3 +45174,27 @@ msgstr "Télécharger l’exemple JSON"
 
 msgid "Download CSV example"
 msgstr "Télécharger l’exemple CSV"
+
+msgid "Page backgrounds"
+msgstr "Arrière-plans des pages"
+
+msgid "Images shown at the bottom of some pages, repeated horizontally. Upload a PNG, JPEG or WebP image (2 MB maximum) to replace one, or hide it."
+msgstr "Images affichées en bas de certaines pages, répétées horizontalement. Importez une image PNG, JPEG ou WebP (2 Mo maximum) pour en remplacer une, ou masquez-la."
+
+msgid "Uploaded image"
+msgstr "Image importée"
+
+msgid "Image of the theme"
+msgstr "Image du thème"
+
+msgid "Restore the image of the theme"
+msgstr "Rétablir l'image du thème"
+
+msgid "Select a PNG, JPEG or WebP image smaller than 2 MB."
+msgstr "Sélectionnez une image PNG, JPEG ou WebP de moins de 2 Mo."
+
+msgid "Delete the uploaded image and restore the image of the theme?"
+msgstr "Supprimer l'image importée et rétablir l'image du thème ?"
+
+msgid "Theme image restored"
+msgstr "Image du thème rétablie"

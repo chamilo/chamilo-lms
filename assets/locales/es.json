@@ -4643,5 +4643,7 @@
     "Saved.": "Guardado.",
     "You have tried to resolve this exercise earlier": "Ya intent\u00f3 resolver este ejercicio anteriormente",
     "Disable new test attempts": "Desactivar nuevos intentos de ejercicio",
-    "This skill cannot be acquired": "Esta competencia no se puede adquirir"
+    "This skill cannot be acquired": "Esta competencia no se puede adquirir",
+    "Validated": "Corregido",
+    "Not validated": "Sin corregir"
 }

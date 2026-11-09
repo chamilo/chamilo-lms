@@ -4721,5 +4721,15 @@
     "Use View conversations on any tree to review its conversation logs, even when the count is zero.": "Use View conversations on any tree to review its conversation logs, even when the count is zero.",
     "Download an example file, edit its questions and options, then import it. The examples work without an existing ticket project; add ticket escalation after importing if needed.": "Download an example file, edit its questions and options, then import it. The examples work without an existing ticket project; add ticket escalation after importing if needed.",
     "Download JSON example": "Download JSON example",
-    "Download CSV example": "Download CSV example"
+    "Download CSV example": "Download CSV example",
+    "Validated": "Validated",
+    "Not validated": "Not validated",
+    "Page backgrounds": "Page backgrounds",
+    "Images shown at the bottom of some pages, repeated horizontally. Upload a PNG, JPEG or WebP image (2 MB maximum) to replace one, or hide it.": "Images shown at the bottom of some pages, repeated horizontally. Upload a PNG, JPEG or WebP image (2 MB maximum) to replace one, or hide it.",
+    "Uploaded image": "Uploaded image",
+    "Image of the theme": "Image of the theme",
+    "Restore the image of the theme": "Restore the image of the theme",
+    "Select a PNG, JPEG or WebP image smaller than 2 MB.": "Select a PNG, JPEG or WebP image smaller than 2 MB.",
+    "Delete the uploaded image and restore the image of the theme?": "Delete the uploaded image and restore the image of the theme?",
+    "Theme image restored": "Theme image restored"
 }

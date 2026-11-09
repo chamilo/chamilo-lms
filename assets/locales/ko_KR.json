@@ -4616,5 +4616,7 @@
     "Saved.": "\uc800\uc7a5\ub418\uc5c8\uc2b5\ub2c8\ub2e4.",
     "You have tried to resolve this exercise earlier": "\uc774 \uc5f0\uc2b5\uc744 \uc774\uc804\uc5d0 \uc2dc\ub3c4\ud55c \uc801\uc774 \uc788\uc2b5\ub2c8\ub2e4",
     "Disable new test attempts": "\uc0c8 \uc2dc\ud5d8 \uc2dc\ub3c4 \ube44\ud65c\uc131\ud654",
-    "This skill cannot be acquired": "\uc774 \uc5ed\ub7c9\uc740 \ud68d\ub4dd\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4"
+    "This skill cannot be acquired": "\uc774 \uc5ed\ub7c9\uc740 \ud68d\ub4dd\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4",
+    "Validated": "\uc2b9\uc778\ub428",
+    "Not validated": "\uc2b9\uc778\ub418\uc9c0 \uc54a\uc74c"
 }

@@ -4616,5 +4616,7 @@
     "Saved.": "Pastrat.",
     "You have tried to resolve this exercise earlier": "A incercat sa rezolve aceasta intrebare inainte",
     "Disable new test attempts": "Dezactiva\u021bi noile \u00eencerc\u0103ri de test",
-    "This skill cannot be acquired": "Aceast\u0103 competen\u021b\u0103 nu poate fi dob\u00e2ndit\u0103"
+    "This skill cannot be acquired": "Aceast\u0103 competen\u021b\u0103 nu poate fi dob\u00e2ndit\u0103",
+    "Validated": "Corectat",
+    "Not validated": "Necorectat"
 }

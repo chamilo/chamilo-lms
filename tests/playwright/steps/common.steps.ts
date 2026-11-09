@@ -1983,10 +1983,32 @@ function registerSettingsGuard(tag: string, pages: { path: string; field: string
         // its page is exactly the one we want to skip-and-warn rather than
         // retry four more times.
         await page.goto(path, { timeout: 10_000, waitUntil: "domcontentloaded" })
-        await page.locator(`#${field}`).selectOption(
-          values.map((value) => ({ value })),
-          { timeout: 5_000 },
-        )
+        const select = page.locator(`#${field}`)
+        if ("@settings-fontResize" === tag) {
+          await select.evaluate(
+            (element, restoredValues) => {
+              if (!(element instanceof HTMLSelectElement)) {
+                throw new Error("Expected a native settings select element.")
+              }
+              if (
+                1 !== restoredValues.length ||
+                !Array.from(element.options).some((option) => option.value === restoredValues[0])
+              ) {
+                throw new Error("The original accessibility setting is no longer available.")
+              }
+              element.value = restoredValues[0]
+              element.dispatchEvent(new Event("input", { bubbles: true }))
+              element.dispatchEvent(new Event("change", { bubbles: true }))
+            },
+            values,
+            { timeout: 5_000 },
+          )
+        } else {
+          await select.selectOption(
+            values.map((value) => ({ value })),
+            { timeout: 5_000 },
+          )
+        }
         // "Save settings" (not "Save"): matches the literal button text on
         // every /admin/settings/* page confirmed live (both the
         // search_settings?keyword=... pages and category pages like
@@ -2021,6 +2043,14 @@ function registerSettingsGuard(tag: string, pages: { path: string; field: string
       .catch(() => {})
   })
 }
+
+// Preserve the existing platform value after accessibility font-resize tests.
+registerSettingsGuard("@settings-fontResize", [
+  {
+    path: "/admin/settings/search_settings?keyword=accessibility_font_resize",
+    field: "form_accessibility_font_resize",
+  },
+])
 
 registerSettingsGuard("@settings", [
   { path: "/admin/settings/search_settings?keyword=changeable_options", field: "form_changeable_options" },
@@ -2283,8 +2313,11 @@ async function loginAsAdminOnFreshPage(browser: import("@playwright/test").Brows
   await page.goto("/login")
   // ":visible" — see loginAs()'s own comment: some installs render a hidden
   // duplicate login form (portal-style homepage) sharing the same ids.
-  await page.locator("#login:visible").fill("admin", { timeout: 10_000 })
-  await page.locator("#password:visible").fill("admin", { timeout: 10_000 })
+  const username = process.env.PLAYWRIGHT_ADMIN_USERNAME || "admin"
+  const password = process.env.PLAYWRIGHT_ADMIN_PASSWORD || username
+
+  await page.locator("#login:visible").fill(username, { timeout: 10_000 })
+  await page.locator("#password:visible").fill(password, { timeout: 10_000 })
   const signIn = page.locator("form.login-section__form button[type='submit']:visible")
   if (await signIn.isVisible().catch(() => false)) {
     await signIn.click({ timeout: 15_000 }).catch(() => {})

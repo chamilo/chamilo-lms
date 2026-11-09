@@ -4616,5 +4616,7 @@
     "Saved.": "Gemt.",
     "You have tried to resolve this exercise earlier": "Du har tidligere fors\u00f8gt at l\u00f8se denne opgave",
     "Disable new test attempts": "Deaktiv\u00e9r nye testfors\u00f8g",
-    "This skill cannot be acquired": "Denne f\u00e6rdighed kan ikke erhverves"
+    "This skill cannot be acquired": "Denne f\u00e6rdighed kan ikke erhverves",
+    "Validated": "Valideret",
+    "Not validated": "Ikke valideret"
 }

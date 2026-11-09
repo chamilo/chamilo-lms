@@ -191,6 +191,8 @@ Feature: Work tool
     And I follow "Work 1 Test Edited"
     And wait for the page to be loaded when ready
     Then I should see "Work description"
+    And the assignment list should contain 1 distinct submitters
+    And I press "View"
     And I should see "favicon"
 
   Scenario: Edit maximum score
@@ -217,7 +219,8 @@ Feature: Work tool
     And wait for the page to be loaded when ready
     And I follow "Work 1 Test Edited"
     And wait for the page to be loaded when ready
-    Then I should see "favicon"
+    Then I press "View"
+    And I should see "favicon"
     Then I press "Correct and grade"
     And wait for the page to be loaded when ready
     When I fill in the following:
@@ -247,6 +250,7 @@ Feature: Work tool
     And I follow "Work 1 Test Edited"
     And wait for the page to be loaded when ready
     Then I should see "Work 1 Test Edited"
+    And I press "View"
     And I should see "10.0 / 20.0"
 
   Scenario: Admin deletes Work 1 from assignments list

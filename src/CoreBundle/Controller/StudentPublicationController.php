@@ -292,6 +292,39 @@ class StudentPublicationController extends AbstractController
         ]);
     }
 
+    #[Route('/{assignmentId}/submissions/teacher/groups', name: 'chamilo_core_assignment_teacher_submission_groups', methods: ['GET'])]
+    public function getAssignmentSubmissionGroupsForTeacher(
+        int $assignmentId,
+        Request $request,
+        CStudentPublicationRepository $repo,
+    ): JsonResponse {
+        $assignment = $repo->find($assignmentId);
+        if (!$assignment instanceof CStudentPublication || 'folder' !== $assignment->getFiletype()) {
+            return new JsonResponse(['error' => 'Assignment not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $course = $this->cidReqHelper->getCourseEntity();
+        $session = $this->cidReqHelper->getSessionEntity();
+        $contextLink = $assignment->getFirstResourceLinkFromCourseSession($course, $session);
+        if (null === $contextLink && null !== $session) {
+            $contextLink = $assignment->getResourceNode()?->getResourceLinkByContext($course);
+        }
+        if (null === $contextLink) {
+            return new JsonResponse(['error' => 'Assignment not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
+        $page = max(1, $request->query->getInt('page', 1));
+        $itemsPerPage = min(100, max(1, $request->query->getInt('itemsPerPage', 20)));
+        [$groups, $total] = $repo->findSubmissionGroupsByAssignment($assignmentId, $page, $itemsPerPage);
+
+        return new JsonResponse([
+            'hydra:member' => $groups,
+            'hydra:totalItems' => $total,
+        ]);
+    }
+
     #[Route('/{assignmentId}/submissions/teacher', name: 'chamilo_core_assignment_teacher_submission_list', methods: ['GET'])]
     public function getAssignmentSubmissionsForTeacher(
         int $assignmentId,
@@ -310,11 +343,14 @@ class StudentPublicationController extends AbstractController
         $itemsPerPage = (int) $request->query->get('itemsPerPage', '10');
         $order = $request->query->all('order');
 
+        // Optional filter is only used after the existing teacher EDIT check.
+        $userId = $request->query->getInt('userId', 0);
         [$submissions, $total] = $repo->findAllSubmissionsByAssignment(
             $assignmentId,
             $page,
             $itemsPerPage,
-            $order
+            $order,
+            $userId > 0 ? $userId : null,
         );
 
         $data = json_decode($serializer->serialize(

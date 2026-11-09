@@ -172,11 +172,10 @@
           :flags="{ allowText: allowTextFlag, allowFile: allowFileFlag }"
           @update:submission-count="studentSubmissionCount = $event"
         />
-        <TeacherSubmissionList
+        <TeacherSubmissionGroupList
           v-else
           :key="submissionListKey"
           :assignment-id="assignmentId"
-          :flags="{ allowText: allowTextFlag, allowFile: allowFileFlag }"
         />
       </div>
     </div>
@@ -194,7 +193,7 @@ import { useNotification } from "../../composables/notification"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import StudentSubmissionList from "../../components/assignments/StudentSubmissionList.vue"
-import TeacherSubmissionList from "../../components/assignments/TeacherSubmissionList.vue"
+import TeacherSubmissionGroupList from "../../components/assignments/TeacherSubmissionGroupList.vue"
 const { t } = useI18n()
 const { cid, sid, gid } = getCourseContext()
 const route = useRoute()

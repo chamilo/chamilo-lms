@@ -47,15 +47,24 @@ async function getAssignmentDetail({ assignmentId, page = 1, itemsPerPage = 10, 
   return baseService.get(`/assignments/${assignmentId}/submissions`, params)
 }
 
-async function getAssignmentDetailForTeacher({ assignmentId, page = 1, itemsPerPage = 10, order = {} }) {
+async function getAssignmentDetailForTeacher({ assignmentId, page = 1, itemsPerPage = 10, order = {}, userId = null }) {
   const params = {
     ...buildCidParams(),
     page,
     itemsPerPage,
+    ...(userId != null ? { userId } : {}),
     ...Object.fromEntries(Object.entries(order).map(([key, val]) => [`order[${key}]`, val])),
   }
 
   return baseService.get(`/assignments/${assignmentId}/submissions/teacher`, params)
+}
+
+async function getAssignmentSubmissionGroupsForTeacher({ assignmentId, page = 1, itemsPerPage = 20 }) {
+  return baseService.get(`/assignments/${assignmentId}/submissions/teacher/groups`, {
+    ...buildCidParams(),
+    page,
+    itemsPerPage,
+  })
 }
 
 async function uploadStudentAssignment(formData, queryParams) {
@@ -288,6 +297,7 @@ export default {
   getAssignmentMetadata,
   getAssignmentDetail,
   getAssignmentDetailForTeacher,
+  getAssignmentSubmissionGroupsForTeacher,
   uploadStudentAssignment,
   getSubmissionHtmlPreview,
   getStudentProgress,

@@ -134,6 +134,16 @@ switch ($action) {
             exit;
         }
 
+        // Teachers only, and only in the current course (course_code comes from the request body).
+        $currentCourse = api_get_course_entity();
+        if (!api_is_allowed_to_edit(false, true)
+            || null === $currentCourse
+            || (string) $requestData['course_code'] !== $currentCourse->getCode()
+        ) {
+            echo json_encode(['success' => false, 'text' => 'Not allowed.']);
+            exit;
+        }
+
         $aiAssisted = isset($requestData['ai_assisted']) && (int) $requestData['ai_assisted'] === 1;
         $aiProvider = null;
         if (isset($requestData['ai_provider'])) {

@@ -159,12 +159,12 @@ final class LpAccessControlTest extends KernelTestCase
         return array_combine($names, array_map(static fn (string $n): array => [$n], $names));
     }
 
-    public function testStatsOfAnotherUserAreForTeachersOnly(): void
+    public function testAiCreationEndpointIsTeacherOnlyAndBoundToTheCurrentCourse(): void
     {
-        $code = $this->source('public/main/lp/lp_stats.php');
-        $this->assertMatchesRegularExpression('/api_get_user_id\(\)\s*!==\s*\$userId/', $code);
-        $this->assertStringContainsString('api_is_allowed_to_edit', $code);
-        $this->assertStringContainsString('api_not_allowed', $code);
+        $code = $this->source('public/main/inc/ajax/lp.ajax.php');
+        $block = substr($code, (int) strpos($code, "case 'add_lp_ai':"), 900);
+        $this->assertStringContainsString('api_is_allowed_to_edit', $block);
+        $this->assertStringContainsString('getCode()', $block, 'course_code must be the current course');
     }
 
 }

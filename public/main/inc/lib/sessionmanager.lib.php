@@ -5345,6 +5345,20 @@ class SessionManager
     }
 
     /**
+     * Whether an import that "updates existing sessions" may overwrite this session, matched by name. The CLI cron
+     * import runs without a logged in user and is trusted; any import done by a user must be allowed to manage the
+     * session.
+     */
+    public static function canImportOverwriteSession(int $sessionId): bool
+    {
+        if ('cli' === PHP_SAPI && empty(api_get_user_id())) {
+            return true;
+        }
+
+        return self::canManageSessionId($sessionId);
+    }
+
+    /**
      * Keeps, from a list of session ids taken from a request, the ones the current user may manage.
      *
      * @param mixed $sessionIds
@@ -5903,6 +5917,10 @@ class SessionManager
 
                     if (isset($sessionId) && !empty($sessionId)) {
                         $session_id = $sessionId;
+                        if (!self::canImportOverwriteSession((int) $session_id)) {
+                            $error_message .= $eol.get_lang('Not allowed').': '.$session_name;
+                            continue;
+                        }
                         if (!empty($enreg['SessionName'])) {
                             $sessionExistsWithName = self::get_session_by_name($session_name);
                             if (false === $sessionExistsWithName) {
@@ -5936,6 +5954,10 @@ class SessionManager
                     } else {
                         $my_session_result = self::get_session_by_name($session_name);
                         $session_id = $my_session_result['id'];
+                        if (!self::canImportOverwriteSession((int) $session_id)) {
+                            $error_message .= $eol.get_lang('Not allowed').': '.$session_name;
+                            continue;
+                        }
                     }
 
                     if ($debug) {
@@ -6680,6 +6702,10 @@ class SessionManager
 
                 if ($updateSession && $mySession) {
                     $sessionId = $mySession['id'];
+                    if (!self::canImportOverwriteSession((int) $sessionId)) {
+                        $errorMessage .= get_lang('Not allowed').': '.$sessionName.' ';
+                        continue;
+                    }
                     Database::update($tblSession, [
                         'access_start_date' => $dateStart,
                         'access_end_date' => $dateEnd,

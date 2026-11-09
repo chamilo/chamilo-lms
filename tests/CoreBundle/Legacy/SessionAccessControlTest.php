@@ -346,6 +346,47 @@ final class SessionAccessControlTest extends AbstractApiTest
     }
 
     /**
+     * The "update existing sessions" import matched sessions BY NAME: a session admin without manage-all
+     * overwrote (dates, users, courses) the sessions of other admins.
+     */
+    public function testCsvImportUpdateSkipsSessionsTheUserDoesNotManage(): void
+    {
+        [$mine, $theirs] = $this->fixture();
+        $this->conn()->executeStatement('UPDATE session SET description = ?, show_description = 0 WHERE id IN (?, ?)', ['orig', $mine, $theirs]);
+        $csv = tempnam(sys_get_temp_dir(), 'sa2');
+        file_put_contents(
+            $csv,
+            "SessionName,DateStart,DateEnd,SessionDescription\n".
+            "sa2_mine,2031-01-01,2031-02-01,changed\n".
+            "sa2_theirs,2031-01-01,2031-02-01,changed\n"
+        );
+
+        $this->actAs('owner');
+        try {
+            $result = SessionManager::importCSV($csv, true, $this->users['owner']);
+        } finally {
+            unlink($csv);
+        }
+        $this->fresh();
+        $this->actAs('admin');
+
+        $this->assertSame('changed', $this->one('SELECT description FROM session WHERE id = ?', [$mine]));
+        $this->assertSame('orig', $this->one('SELECT description FROM session WHERE id = ?', [$theirs]), 'Not his session.');
+        $this->assertNotEmpty($result['error_message'], 'The skipped session is reported.');
+        $this->assertStringContainsString('sa2_theirs', (string) $result['error_message']);
+    }
+
+    public function testXmlImportUpdateGuardIsInPlace(): void
+    {
+        $source = (string) file_get_contents(__DIR__.'/../../../public/main/inc/lib/sessionmanager.lib.php');
+        $xml = substr($source, (int) strpos($source, 'public static function importXML'));
+        $this->assertMatchesRegularExpression(
+            '/if \(\$updateSession && \$mySession\) \{\s*\$sessionId = \$mySession\[\'id\'\];\s*if \(!self::canImportOverwriteSession/',
+            $xml
+        );
+    }
+
+    /**
      * Source-level pin: user/resume_session.php (tutors assigning students) kept the old behaviour: delete and
      * add_user_to_url on a GET without token, and add_user_to_url open to the general coach.
      */

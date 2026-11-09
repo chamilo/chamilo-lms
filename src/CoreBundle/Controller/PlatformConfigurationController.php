@@ -95,6 +95,7 @@ class PlatformConfigurationController extends AbstractController
             'studentview' => $this->studentViewHelper->isActive() ? 'studentview' : 'teacherview',
             'plugins' => [],
             'visual_theme' => $this->themeHelper->getVisualTheme(),
+            'page_backgrounds' => $this->themeHelper->getPageBackgroundUrls(),
             'oauth2_providers' => $oauth2Providers,
             'ldap_auth' => null,
             'forced_login_method' => $forcedLoginMethod,

@@ -8,6 +8,8 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
   const studentView = ref("teacherview")
   const plugins = ref([])
   const visualTheme = ref("chamilo")
+  // The image at the bottom of the pages of each slot, null when the administrator removed it
+  const pageBackgrounds = ref({})
   const oauth2Providers = ref([])
   const ldapAuth = ref(null)
   const forcedLoginMethod = ref(null)
@@ -65,6 +67,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
       const data = await loadConfiguration()
 
       visualTheme.value = data.visual_theme
+      pageBackgrounds.value = data.page_backgrounds || {}
       settings.value = data.settings
       studentView.value = data.studentview
       plugins.value = data.plugins
@@ -102,6 +105,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
     getSetting,
     isStudentViewActive,
     visualTheme,
+    pageBackgrounds,
     oauth2Providers,
     ldapAuth,
     forcedLoginMethod,

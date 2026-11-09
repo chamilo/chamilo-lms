@@ -43454,3 +43454,27 @@ msgstr ""
 
 msgid "Download CSV example"
 msgstr ""
+
+msgid "Page backgrounds"
+msgstr ""
+
+msgid "Images shown at the bottom of some pages, repeated horizontally. Upload a PNG, JPEG or WebP image (2 MB maximum) to replace one, or hide it."
+msgstr ""
+
+msgid "Uploaded image"
+msgstr ""
+
+msgid "Image of the theme"
+msgstr ""
+
+msgid "Restore the image of the theme"
+msgstr ""
+
+msgid "Select a PNG, JPEG or WebP image smaller than 2 MB."
+msgstr ""
+
+msgid "Delete the uploaded image and restore the image of the theme?"
+msgstr ""
+
+msgid "Theme image restored"
+msgstr ""

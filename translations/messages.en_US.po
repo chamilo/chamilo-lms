@@ -43525,3 +43525,27 @@ msgstr "Download JSON example"
 
 msgid "Download CSV example"
 msgstr "Download CSV example"
+
+msgid "Page backgrounds"
+msgstr "Page backgrounds"
+
+msgid "Images shown at the bottom of some pages, repeated horizontally. Upload a PNG, JPEG or WebP image (2 MB maximum) to replace one, or hide it."
+msgstr "Images shown at the bottom of some pages, repeated horizontally. Upload a PNG, JPEG or WebP image (2 MB maximum) to replace one, or hide it."
+
+msgid "Uploaded image"
+msgstr "Uploaded image"
+
+msgid "Image of the theme"
+msgstr "Image of the theme"
+
+msgid "Restore the image of the theme"
+msgstr "Restore the image of the theme"
+
+msgid "Select a PNG, JPEG or WebP image smaller than 2 MB."
+msgstr "Select a PNG, JPEG or WebP image smaller than 2 MB."
+
+msgid "Delete the uploaded image and restore the image of the theme?"
+msgstr "Delete the uploaded image and restore the image of the theme?"
+
+msgid "Theme image restored"
+msgstr "Theme image restored"

@@ -22,11 +22,17 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use const IMAGETYPE_JPEG;
+use const IMAGETYPE_PNG;
+use const IMAGETYPE_WEBP;
 use const PATHINFO_EXTENSION;
 
 #[Route('/themes')]
 class ThemeController extends AbstractController
 {
+    private const string PAGE_BACKGROUND_SLOT_REQUIREMENT = 'landscape|cityscape|fieldscape|seascape';
+    private const int PAGE_BACKGROUND_MAX_BYTES = 2 * 1024 * 1024;
+
     public function __construct(
         private readonly ThemeHelper $themeHelper
     ) {}
@@ -108,6 +114,137 @@ class ThemeController extends AbstractController
         }
 
         return $this->json(['uploaded' => false]);
+    }
+
+    /**
+     * The images at the bottom of the pages of the active visual theme: what each slot shows, and
+     * whether the administrator replaced or removed it.
+     */
+    #[Route('/{slug}/page-backgrounds', name: 'theme_page_backgrounds', methods: ['GET'], priority: 10)]
+    #[IsGranted('ROLE_ADMIN')]
+    public function pageBackgrounds(string $slug): JsonResponse
+    {
+        $this->assertActiveTheme($slug);
+
+        return $this->json($this->describePageBackgrounds($slug));
+    }
+
+    #[Route(
+        '/{slug}/page-backgrounds/{slot}',
+        name: 'theme_page_background_upload',
+        requirements: ['slot' => self::PAGE_BACKGROUND_SLOT_REQUIREMENT],
+        methods: ['POST'],
+        priority: 10
+    )]
+    #[IsGranted('ROLE_ADMIN')]
+    public function uploadPageBackground(
+        string $slug,
+        string $slot,
+        Request $request,
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
+        FilesystemOperator $fs
+    ): JsonResponse {
+        $this->assertActiveTheme($slug);
+        $file = $request->files->get('image');
+        if (!$file instanceof UploadedFile || !$file->isValid()) {
+            return $this->json(['error' => 'Select an image file.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (($file->getSize() ?: 0) > self::PAGE_BACKGROUND_MAX_BYTES) {
+            return $this->json(['error' => 'The image cannot exceed 2 MB.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        // The type is read from the image itself, not from the name or the type the browser sent
+        $info = @getimagesize($file->getPathname());
+        $extension = match (false === $info ? null : $info[2]) {
+            IMAGETYPE_PNG => 'png',
+            IMAGETYPE_JPEG => 'jpg',
+            IMAGETYPE_WEBP => 'webp',
+            default => null,
+        };
+        if (null === $extension) {
+            return $this->json(['error' => 'Select a PNG, JPEG or WebP image.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $choices = $this->themeHelper->getPageBackgroundChoices($slug);
+        $previousPath = $choices[$slot]['file'] ?? null;
+        // A name of its own, so that the image the theme ships stays as the default
+        $path = 'images/bg-'.$slot.'-custom.'.$extension;
+
+        $this->ensureDir($fs, $slug);
+        $this->ensureDir($fs, $slug.'/images');
+        $stream = fopen($file->getPathname(), 'rb');
+        $fs->writeStream($slug.'/'.$path, $stream);
+        if (\is_resource($stream)) {
+            fclose($stream);
+        }
+        if (null !== $previousPath && $previousPath !== $path && $fs->fileExists($slug.'/'.$previousPath)) {
+            $fs->delete($slug.'/'.$previousPath);
+        }
+
+        $choices[$slot] = ['file' => $path, 'version' => time()];
+        $this->themeHelper->savePageBackgroundChoices($slug, $choices);
+
+        return $this->json($this->describePageBackgrounds($slug), Response::HTTP_CREATED);
+    }
+
+    /**
+     * Removes the image of a slot from the pages, or shows it again, without losing an uploaded one.
+     */
+    #[Route(
+        '/{slug}/page-backgrounds/{slot}',
+        name: 'theme_page_background_visibility',
+        requirements: ['slot' => self::PAGE_BACKGROUND_SLOT_REQUIREMENT],
+        methods: ['PATCH'],
+        priority: 10
+    )]
+    #[IsGranted('ROLE_ADMIN')]
+    public function updatePageBackgroundVisibility(string $slug, string $slot, Request $request): JsonResponse
+    {
+        $this->assertActiveTheme($slug);
+        $hidden = json_decode($request->getContent(), true)['hidden'] ?? null;
+        if (!\is_bool($hidden)) {
+            return $this->json(['error' => 'Tell whether the image is hidden.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $choices = $this->themeHelper->getPageBackgroundChoices($slug);
+        unset($choices[$slot]['hidden']);
+        if ($hidden) {
+            $choices[$slot]['hidden'] = true;
+        }
+        $this->themeHelper->savePageBackgroundChoices($slug, $choices);
+
+        return $this->json($this->describePageBackgrounds($slug));
+    }
+
+    /**
+     * Restores the image the theme ships for a slot: deletes the uploaded one and shows it again.
+     */
+    #[Route(
+        '/{slug}/page-backgrounds/{slot}',
+        name: 'theme_page_background_delete',
+        requirements: ['slot' => self::PAGE_BACKGROUND_SLOT_REQUIREMENT],
+        methods: ['DELETE'],
+        priority: 10
+    )]
+    #[IsGranted('ROLE_ADMIN')]
+    public function deletePageBackground(
+        string $slug,
+        string $slot,
+        #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
+        FilesystemOperator $fs
+    ): JsonResponse {
+        $this->assertActiveTheme($slug);
+        $choices = $this->themeHelper->getPageBackgroundChoices($slug);
+        $path = $choices[$slot]['file'] ?? null;
+        if (null !== $path && $fs->fileExists($slug.'/'.$path)) {
+            $fs->delete($slug.'/'.$path);
+        }
+
+        unset($choices[$slot]);
+        $this->themeHelper->savePageBackgroundChoices($slug, $choices);
+
+        return $this->json($this->describePageBackgrounds($slug));
     }
 
     private function assertActiveTheme(string $slug): void
@@ -443,6 +580,25 @@ class ThemeController extends AbstractController
         $response->setMaxAge(86400);
 
         return $response;
+    }
+
+    /**
+     * @return list<array{slot: string, imageUrl: string|null, custom: bool, hidden: bool}>
+     */
+    private function describePageBackgrounds(string $slug): array
+    {
+        $choices = $this->themeHelper->getPageBackgroundChoices($slug);
+        $urls = $this->themeHelper->getPageBackgroundUrls($slug, true);
+
+        return array_map(
+            static fn (string $slot): array => [
+                'slot' => $slot,
+                'imageUrl' => $urls[$slot],
+                'custom' => isset($choices[$slot]['file']),
+                'hidden' => $choices[$slot]['hidden'] ?? false,
+            ],
+            ThemeHelper::PAGE_BACKGROUND_SLOTS,
+        );
     }
 
     private function ensureDir(FilesystemOperator $fs, string $dir): void

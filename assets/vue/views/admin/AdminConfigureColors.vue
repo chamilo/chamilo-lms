@@ -8,6 +8,7 @@ import ColorThemePreview from "../../components/admin/ColorThemePreview.vue"
 import ColorThemeForm from "../../components/admin/ColorThemeForm.vue"
 import BrandingSection from "../../components/admin/BrandingSection.vue"
 import ChartPaletteSection from "../../components/admin/ChartPaletteSection.vue"
+import PageBackgroundSection from "../../components/admin/PageBackgroundSection.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 
@@ -112,6 +113,17 @@ function goBranding() {
         {{ t("Switch the active theme if you want to upload logos for a different one.") }}
       </p>
       <BrandingSection :slug="effectiveSlug" />
+    </div>
+
+    <div
+      id="page-backgrounds"
+      class="mt-10"
+    >
+      <SectionHeader
+        :title="t('Page backgrounds')"
+        size="6"
+      />
+      <PageBackgroundSection :slug="effectiveSlug" />
       <div class="mt-4 text-end">
         <a
           class="text-sm underline opacity-70 hover:opacity-100"

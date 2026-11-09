@@ -4616,5 +4616,7 @@
     "Saved.": "Gorde da",
     "You have tried to resolve this exercise earlier": "Lehen ere saiatu zinen ariketa hau egiten",
     "Disable new test attempts": "Desgaitu proba saiakerak berriak",
-    "This skill cannot be acquired": "Trebetasun hau ezin da lortu"
+    "This skill cannot be acquired": "Trebetasun hau ezin da lortu",
+    "Validated": "Zuzendua",
+    "Not validated": "Zuzendu gabe"
 }

@@ -4616,5 +4616,7 @@
     "Saved.": "Nai-save.",
     "You have tried to resolve this exercise earlier": "Sinubukan mo nang lutasin ang ehersisyong ito kanina",
     "Disable new test attempts": "Hindi i-enable ang mga bagong attempt ng pagsusulit",
-    "This skill cannot be acquired": "Hindi maaaring makuha ang kasanayang ito"
+    "This skill cannot be acquired": "Hindi maaaring makuha ang kasanayang ito",
+    "Validated": "Na-validate",
+    "Not validated": "Hindi na-validate"
 }

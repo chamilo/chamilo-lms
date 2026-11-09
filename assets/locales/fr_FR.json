@@ -4657,5 +4657,7 @@
     "Use View conversations on any tree to review its conversation logs, even when the count is zero.": "Utilisez \u00ab Voir les conversations \u00bb sur chaque arbre pour consulter son historique, m\u00eame si aucune conversation n\u2019a encore \u00e9t\u00e9 enregistr\u00e9e.",
     "Download an example file, edit its questions and options, then import it. The examples work without an existing ticket project; add ticket escalation after importing if needed.": "T\u00e9l\u00e9chargez un fichier d\u2019exemple, modifiez ses questions et ses options, puis importez-le. Les exemples fonctionnent sans projet de tickets existant ; ajoutez l\u2019escalade vers les tickets apr\u00e8s l\u2019importation si n\u00e9cessaire.",
     "Download JSON example": "T\u00e9l\u00e9charger l\u2019exemple JSON",
-    "Download CSV example": "T\u00e9l\u00e9charger l\u2019exemple CSV"
+    "Download CSV example": "T\u00e9l\u00e9charger l\u2019exemple CSV",
+    "Validated": "Annot\u00e9",
+    "Not validated": "Non annot\u00e9"
 }

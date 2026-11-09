@@ -4721,5 +4721,7 @@
     "Use View conversations on any tree to review its conversation logs, even when the count is zero.": "Use View conversations on any tree to review its conversation logs, even when the count is zero.",
     "Download an example file, edit its questions and options, then import it. The examples work without an existing ticket project; add ticket escalation after importing if needed.": "Download an example file, edit its questions and options, then import it. The examples work without an existing ticket project; add ticket escalation after importing if needed.",
     "Download JSON example": "Download JSON example",
-    "Download CSV example": "Download CSV example"
+    "Download CSV example": "Download CSV example",
+    "Validated": "Validated",
+    "Not validated": "Not validated"
 }

@@ -4616,5 +4616,7 @@
     "Saved.": "Tallennettu",
     "You have tried to resolve this exercise earlier": "Olet yritt\u00e4nyt ratkaista t\u00e4m\u00e4n harjoituksen aiemmin",
     "Disable new test attempts": "Poista k\u00e4yt\u00f6st\u00e4 uudet testiyritykset",
-    "This skill cannot be acquired": "T\u00e4t\u00e4 taitoa ei voi hankkia"
+    "This skill cannot be acquired": "T\u00e4t\u00e4 taitoa ei voi hankkia",
+    "Validated": "Vahvistettu",
+    "Not validated": "Ei vahvistettu"
 }

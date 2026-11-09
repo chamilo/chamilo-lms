@@ -4616,5 +4616,7 @@
     "Saved.": "\u0110\u00e3 l\u01b0u.",
     "You have tried to resolve this exercise earlier": "B\u1ea1n \u0111\u00e3 th\u1eed gi\u1ea3i b\u00e0i t\u1eadp n\u00e0y tr\u01b0\u1edbc \u0111\u00f3",
     "Disable new test attempts": "T\u1eaft th\u1eed l\u1ea1i b\u00e0i ki\u1ec3m tra m\u1edbi",
-    "This skill cannot be acquired": "K\u1ef9 n\u0103ng n\u00e0y kh\u00f4ng th\u1ec3 \u0111\u1ea1t \u0111\u01b0\u1ee3c"
+    "This skill cannot be acquired": "K\u1ef9 n\u0103ng n\u00e0y kh\u00f4ng th\u1ec3 \u0111\u1ea1t \u0111\u01b0\u1ee3c",
+    "Validated": "\u0110\u00e3 x\u00e1c nh\u1eadn",
+    "Not validated": "Ch\u01b0a x\u00e1c nh\u1eadn"
 }

@@ -246,7 +246,7 @@
     v-model="showMoveDialog"
     :submission="selectedSubmission"
     :currentAssignmentId="props.assignmentId"
-    @moved="loadData"
+    @moved="onSubmissionsChanged"
   />
 </template>
 
@@ -275,7 +275,13 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  userId: {
+    type: Number,
+    default: null,
+  },
 })
+
+const emit = defineEmits(["submissions-changed"])
 
 const { t } = useI18n()
 const { abbreviatedDatetime } = useFormatDate()
@@ -345,6 +351,7 @@ async function loadData() {
       page: loadParams.page,
       itemsPerPage: loadParams.itemsPerPage,
       order: buildOrderFromSort(),
+      userId: props.userId,
     })
 
     submissions.value = response["hydra:member"]
@@ -354,6 +361,11 @@ async function loadData() {
   } finally {
     loading.value = false
   }
+}
+
+async function onSubmissionsChanged() {
+  await loadData()
+  emit("submissions-changed")
 }
 
 function onPage(event) {
@@ -532,7 +544,7 @@ async function deleteSubmission(item) {
   try {
     await cStudentPublicationService.deleteAssignmentSubmission(item.iid)
     notification.showSuccessNotification(t("Submission deleted successfully!"))
-    await loadData()
+    await onSubmissionsChanged()
   } catch (error) {
     notification.showErrorNotification(error)
   }

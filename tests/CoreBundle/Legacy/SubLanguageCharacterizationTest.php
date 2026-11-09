@@ -340,15 +340,18 @@ final class SubLanguageCharacterizationTest extends KernelTestCase
 
     public function testAddSubLanguagePersistsAChildOfTheParent(): void
     {
-        $parent = $this->language('p', null, 1, 'slpa');
+        // A one-letter parent code on purpose: the isocode column holds 8 characters (ISO_MAX_LENGTH) and the
+        // auto-increment of a long-lived test database is not rolled back, so a longer prefix stops fitting once
+        // the child id reaches four digits.
+        $parent = $this->language('p', null, 1, 's');
 
-        $child = SubLanguageManager::addSubLanguage('Orig child', 'sl_child', true, $parent, 'slpa_x');
+        $child = SubLanguageManager::addSubLanguage('Orig child', 'sl_child', true, $parent, 's_x');
 
         $this->assertInstanceOf(Language::class, $child);
         $row = $this->row((int) $child->getId());
         $this->assertSame($parent, (int) $row['parent_id']);
         // The LanguageListener rewrites a child's code as "<parent prefix>_<child id>".
-        $this->assertSame('slpa_'.$child->getId(), $row['isocode']);
+        $this->assertSame('s_'.$child->getId(), $row['isocode']);
         $this->assertSame(1, (int) $row['available']);
         $this->assertSame('sl_child', $row['english_name']);
     }

@@ -43,8 +43,19 @@ if ('true' === $allowTutors) {
 
     $url_id = api_get_current_access_url_id();
 
+    // Every action is a GET link that changes data: legacy pages are not covered by CsrfProtectionListener.
+    // Keep the token of the session (regenerating it per request would invalidate the one of the page).
+    $token = Security::get_existing_token();
+    if (null !== $action && !Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+
     switch ($action) {
         case 'add_user_to_url':
+            // Giving a user access to this URL is not a session management right (a session coach reaches this page).
+            if (!api_is_platform_admin()) {
+                api_not_allowed(true);
+            }
             $user_id = (int) $_REQUEST['user_id'];
             $userInSession = Database::query(
                 "SELECT 1 FROM $tbl_session_rel_user WHERE session_id = $id_session AND user_id = $user_id LIMIT 1"
@@ -266,7 +277,7 @@ if ('true' === $allowTutors) {
                 if ($user['access_url_id'] != $url_id) {
                     $user_link .= ' '.Display::getMdiIcon('alert', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Users not added to the URL'));
                     $add = Display::getMdiIcon(ActionIcon::ADD, get_lang('Add users to an URL'));
-                    $link_to_add_user_in_url = '<a href="resume_session.php?action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
+                    $link_to_add_user_in_url = '<a href="resume_session.php?action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'&sec_token='.$token.'">'.$add.'</a>';
                 }
             }
 
@@ -279,7 +290,7 @@ if ('true' === $allowTutors) {
                         Display::getMdiIcon('chart-box', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Reporting')).'</a>&nbsp;
                         <a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.
                         Display::getMdiIcon('book-open-page-variant', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Block user from courses in this session')).'</a>&nbsp;
-                        <a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('Please confirm your choice').'\')) return false;">'.
+                        <a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'&sec_token='.$token.'" onclick="javascript:if(!confirm(\''.get_lang('Please confirm your choice').'\')) return false;">'.
                         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>
                         '.$link_to_add_user_in_url.'
                     </td>

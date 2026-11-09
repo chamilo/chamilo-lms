@@ -346,6 +346,27 @@ final class SessionAccessControlTest extends AbstractApiTest
     }
 
     /**
+     * Source-level pin: user/resume_session.php (tutors assigning students) kept the old behaviour: delete and
+     * add_user_to_url on a GET without token, and add_user_to_url open to the general coach.
+     */
+    public function testTutorSessionOverviewActionsNeedTheTokenAndUrlAccessNeedsAPlatformAdmin(): void
+    {
+        $source = $this->page('user/resume_session.php');
+
+        $this->assertLessThan(
+            strpos($source, 'switch ($action)'),
+            strpos($source, "!Security::check_token('get')"),
+            'The token is checked before any action runs.'
+        );
+        $this->assertStringContainsString('Security::get_existing_token()', $source);
+        $this->assertSame(2, substr_count($source, "&sec_token='.\$token"), 'delete user and add_user_to_url links.');
+        $this->assertMatchesRegularExpression(
+            "/case 'add_user_to_url':\s*\/\/[^\n]*\n\s*if \(!api_is_platform_admin\(\)\) \{\s*api_not_allowed\(true\);/",
+            $source
+        );
+    }
+
+    /**
      * Source-level pin: the scheduled announcements page is open to every session admin and edited / deleted any
      * announcement id (of any session) on a GET without token; the hidden session_id of the form decided which
      * session a new announcement was saved into.

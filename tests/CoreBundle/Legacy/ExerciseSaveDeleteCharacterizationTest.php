@@ -13,9 +13,12 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
+use DateTime;
+use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use Exercise;
 use Question;
+use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -175,7 +178,7 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
     {
         $exercise = $this->newExercise($title);
         foreach ($props as $k => $v) {
-            $exercise->$k = $v;
+            $exercise->{$k} = $v;
         }
         $exercise->save();
         $this->assertGreaterThan(0, $exercise->getId());
@@ -1030,8 +1033,8 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
         [$e, $ids, $catA, $catB] = $this->categorizedQuiz(EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM);
         $list = array_values($e->selectQuestionList(true));
         $this->assertCount(4, $list);
-        $this->assertEqualsCanonicalizing([$ids[0], $ids[2]], array_slice($list, 2), 'B has exactly two questions');
-        $head = array_slice($list, 0, 2);
+        $this->assertEqualsCanonicalizing([$ids[0], $ids[2]], \array_slice($list, 2), 'B has exactly two questions');
+        $head = \array_slice($list, 0, 2);
         $this->assertSame([], array_diff($head, [$ids[1], $ids[3], $ids[4]]), 'two of the three A questions, A first');
     }
 
@@ -1137,7 +1140,7 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
         $this->assertSame('incomplete', $row['status']);
         $this->assertNull($row['expired_time_control'], 'empty clock = no expiry');
 
-        $withClock = (int) $e->save_stat_track_exercise_info(new \DateTime('2030-01-01 10:00:00', new \DateTimeZone('UTC')), 0, 0, 0, [$q1]);
+        $withClock = (int) $e->save_stat_track_exercise_info(new DateTime('2030-01-01 10:00:00', new DateTimeZone('UTC')), 0, 0, 0, [$q1]);
         $this->assertSame(
             '2030-01-01 10:00:00',
             $this->conn->fetchOne('SELECT expired_time_control FROM track_e_exercises WHERE exe_id = ?', [$withClock])
@@ -1153,7 +1156,7 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
             $this->link($e->getId(), $qs[$i], $i + 1);
         }
         $e = $this->reread($e->getId());
-        $count = new \ReflectionMethod(Exercise::class, 'countQuestionsInExercise');
+        $count = new ReflectionMethod(Exercise::class, 'countQuestionsInExercise');
         $count->setAccessible(true);
         $this->assertSame([], $e->get_stat_track_exercise_info());
         $this->assertSame(3, $count->invoke($e), 'no attempt: the quiz size');

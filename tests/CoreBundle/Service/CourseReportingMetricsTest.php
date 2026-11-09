@@ -14,6 +14,8 @@ use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use const STR_PAD_LEFT;
+
 /**
  * Characterization of the per-learner metrics, the group summary, getLearnerDetail() and getLearnersForExport() of
  * CourseReportingQueryService. Learners are "rp_" rows of the installer course 1; resources are "r3_" rows.

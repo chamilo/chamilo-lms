@@ -13,6 +13,7 @@ use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use Exercise;
+use ExerciseLib;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -198,7 +199,7 @@ final class TestCategoryCharacterizationTest extends KernelTestCase
         // course is (the $courseId argument is accepted and ignored). tests_category.php therefore calls
         // ExerciseLib::questionCategoryBelongsToCourse() before using it.
         $id = $this->category('tc_foreign_course');
-        $this->assertFalse(\ExerciseLib::questionCategoryBelongsToCourse($id, 1, 0), 'it belongs to no course at all');
+        $this->assertFalse(ExerciseLib::questionCategoryBelongsToCourse($id, 1, 0), 'it belongs to no course at all');
 
         $cat = (new TestCategory())->getCategory($id, 2);
 
@@ -531,7 +532,7 @@ final class TestCategoryCharacterizationTest extends KernelTestCase
         $this->assertSame([9], TestCategory::getNElementsFromArray([1, 2, 9], 1, false, [9]));
         $this->assertSame([7, 8], TestCategory::getNElementsFromArray([7, 8, 9], 2, false, [7, 8, 9]), 'too many mandatory: truncated');
         $mixed = TestCategory::getNElementsFromArray([1, 2, 3, 4], 3, false, [4]);
-        $this->assertSame(3, count($mixed));
+        $this->assertSame(3, \count($mixed));
         $this->assertContains(4, $mixed);
     }
 }

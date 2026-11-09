@@ -15,11 +15,12 @@ use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use Database;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception as DbalException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+
+use const SORT_STRING;
 
 /**
  * Characterization tests for the SQL-bearing helpers of public/main/inc/lib/api.lib.php.
@@ -305,7 +306,7 @@ class ApiLibCharacterizationTest extends AbstractApiTest
         // Admin 1 is registered on URL 1 by the installer; URL 99999 has no relation row.
         $linked = (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM access_url_rel_user WHERE user_id = 1 AND access_url_id = 1');
 
-        $this->assertSame($linked === 1, api_is_platform_admin_by_id(1, 1));
+        $this->assertSame(1 === $linked, api_is_platform_admin_by_id(1, 1));
         $this->assertFalse(api_is_platform_admin_by_id(1, 99999));
     }
 
@@ -811,7 +812,7 @@ class ApiLibCharacterizationTest extends AbstractApiTest
         if (!$this->conn()->fetchOne('SELECT 1 FROM language WHERE isocode = ?', [$iso])) {
             $this->markTestSkipped('fr_FR language is not installed.');
         }
-        $this->conn()->executeStatement("UPDATE language SET available = 0 WHERE isocode = ?", [$iso]);
+        $this->conn()->executeStatement('UPDATE language SET available = 0 WHERE isocode = ?', [$iso]);
         $this->setSetting('language.platform_language', $iso);
 
         $this->assertArrayNotHasKey($iso, api_get_languages());

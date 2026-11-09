@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Database;
+use Doctrine\DBAL\Connection;
 use SessionManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
@@ -50,7 +51,7 @@ final class SessionAccessControlTest extends AbstractApiTest
 
     // ---------------------------------------------------------------- helpers
 
-    private function conn(): \Doctrine\DBAL\Connection
+    private function conn(): Connection
     {
         return $this->getEntityManager()->getConnection();
     }
@@ -141,7 +142,6 @@ final class SessionAccessControlTest extends AbstractApiTest
             [$sessionId, $userId, $type]
         );
     }
-
 
     private array $users = [];
 
@@ -333,14 +333,14 @@ final class SessionAccessControlTest extends AbstractApiTest
 
         $this->assertStringContainsString("!Security::check_token('get')", $source);
         $this->assertLessThan(
-            strpos($source, "switch (\$action)"),
+            strpos($source, 'switch ($action)'),
             strpos($source, "!Security::check_token('get')"),
             'The token is checked before any action runs.'
         );
         $this->assertSame(4, substr_count($source, 'sec_token='), 'move up, move down, delete course, delete user.');
         $this->assertStringContainsString('Security::get_existing_token()', $source);
         $this->assertMatchesRegularExpression(
-            "/case 'add_user_to_url':\s*\/\/[^\n]*\n\s*if \(!api_is_platform_admin\(\)\) \{\s*api_not_allowed\(true\);/",
+            "/case 'add_user_to_url':\\s*\\/\\/[^\n]*\n\\s*if \\(!api_is_platform_admin\\(\\)\\) \\{\\s*api_not_allowed\\(true\\);/",
             $source
         );
     }
@@ -362,6 +362,7 @@ final class SessionAccessControlTest extends AbstractApiTest
         );
 
         $this->actAs('owner');
+
         try {
             $result = SessionManager::importCSV($csv, true, $this->users['owner']);
         } finally {
@@ -409,7 +410,7 @@ final class SessionAccessControlTest extends AbstractApiTest
         $this->assertStringContainsString('Security::get_existing_token()', $source);
         $this->assertSame(2, substr_count($source, "&sec_token='.\$token"), 'delete user and add_user_to_url links.');
         $this->assertMatchesRegularExpression(
-            "/case 'add_user_to_url':\s*\/\/[^\n]*\n\s*if \(!api_is_platform_admin\(\)\) \{\s*api_not_allowed\(true\);/",
+            "/case 'add_user_to_url':\\s*\\/\\/[^\n]*\n\\s*if \\(!api_is_platform_admin\\(\\)\\) \\{\\s*api_not_allowed\\(true\\);/",
             $source
         );
     }
@@ -503,7 +504,7 @@ final class SessionAccessControlTest extends AbstractApiTest
                 $page
             );
             $this->assertStringContainsString("if ('delete' === \$action) {\n    if (!Security::check_token('request')) {", $source, $page);
-            $this->assertSame(1, substr_count($source, "name=\"sec_token\""), $page.': the bulk form carries the token.');
+            $this->assertSame(1, substr_count($source, 'name="sec_token"'), $page.': the bulk form carries the token.');
             $this->assertSame(1, substr_count($source, "&sec_token='.\$token"), $page.': the row link carries the token.');
         }
 

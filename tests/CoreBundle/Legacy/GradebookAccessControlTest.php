@@ -265,6 +265,19 @@ final class GradebookAccessControlTest extends KernelTestCase
     }
 
     /**
+     * @dataProvider pageGuards
+     *
+     * @param string[] $needles
+     */
+    public function testPagesGuardTheIdsOfTheRequest(string $page, array $needles): void
+    {
+        $source = (string) file_get_contents(self::GRADEBOOK_DIR.$page);
+        foreach ($needles as $needle) {
+            $this->assertStringContainsString($needle, $source, $page.' must contain '.$needle);
+        }
+    }
+
+    /**
      * The pages are procedural and end the request on denial: pin the guards at source level.
      *
      * @return iterable<string, array{string, string[]}>
@@ -276,38 +289,44 @@ final class GradebookAccessControlTest extends KernelTestCase
         $link = 'protectElementInCurrentCourse(\'LINK\'';
 
         yield 'index lock/unlock/delete/move/stats' => ['index.php', [$cat, $eval, $link, 'GradebookUtils::block_students();']];
-        yield 'edit category' => ['gradebook_edit_cat.php', [$cat, "\$values['hid_id']"]];
-        yield 'add category' => ['gradebook_add_cat.php', [$cat]];
-        yield 'add evaluation' => ['gradebook_add_eval.php', [$cat, 'categoryBelongsToCourse']];
-        yield 'edit evaluation' => ['gradebook_edit_eval.php', [$eval, $cat]];
-        yield 'add link' => ['gradebook_add_link.php', [$cat]];
-        yield 'edit link' => ['gradebook_edit_link.php', [$link, $cat]];
-        yield 'add result' => ['gradebook_add_result.php', [$eval, "\$values['evaluation_id'] = \$selectEval"]];
-        yield 'edit result' => ['gradebook_edit_result.php', [$eval]];
-        yield 'edit all weights' => ['gradebook_edit_all.php', [$cat]];
-        yield 'scoring system' => ['gradebook_scoring_system.php', [$cat]];
-        yield 'log evaluation' => ['gradebook_showlog_eval.php', [$eval]];
-        yield 'log link' => ['gradebook_showlog_link.php', [$link]];
-        yield 'flat view' => ['gradebook_flatview.php', [$cat]];
-        yield 'view result' => ['gradebook_view_result.php', [$eval, 'check_token(\'get\')', 'GradebookUtils::block_students();']];
-        yield 'statistics' => ['gradebook_statistics.php', [$eval, 'api_protect_course_script(true)']];
-        yield 'user stats' => ['user_stats.php', [$cat, 'api_protect_course_script(true)']];
-        yield 'summary' => ['gradebook_display_summary.php', [$cat]];
-        yield 'personal stats' => ['personal_stats.php', [$cat, 'api_protect_course_script(true)', 'api_block_anonymous_users']];
-        yield 'certificates' => ['gradebook_display_certificate.php', [$cat, 'certificateBelongsToCourse', '$isBossOnly']];
-    }
 
-    /**
-     * @dataProvider pageGuards
-     *
-     * @param string[] $needles
-     */
-    public function testPagesGuardTheIdsOfTheRequest(string $page, array $needles): void
-    {
-        $source = (string) file_get_contents(self::GRADEBOOK_DIR.$page);
-        foreach ($needles as $needle) {
-            $this->assertStringContainsString($needle, $source, $page.' must contain '.$needle);
-        }
+        yield 'edit category' => ['gradebook_edit_cat.php', [$cat, "\$values['hid_id']"]];
+
+        yield 'add category' => ['gradebook_add_cat.php', [$cat]];
+
+        yield 'add evaluation' => ['gradebook_add_eval.php', [$cat, 'categoryBelongsToCourse']];
+
+        yield 'edit evaluation' => ['gradebook_edit_eval.php', [$eval, $cat]];
+
+        yield 'add link' => ['gradebook_add_link.php', [$cat]];
+
+        yield 'edit link' => ['gradebook_edit_link.php', [$link, $cat]];
+
+        yield 'add result' => ['gradebook_add_result.php', [$eval, "\$values['evaluation_id'] = \$selectEval"]];
+
+        yield 'edit result' => ['gradebook_edit_result.php', [$eval]];
+
+        yield 'edit all weights' => ['gradebook_edit_all.php', [$cat]];
+
+        yield 'scoring system' => ['gradebook_scoring_system.php', [$cat]];
+
+        yield 'log evaluation' => ['gradebook_showlog_eval.php', [$eval]];
+
+        yield 'log link' => ['gradebook_showlog_link.php', [$link]];
+
+        yield 'flat view' => ['gradebook_flatview.php', [$cat]];
+
+        yield 'view result' => ['gradebook_view_result.php', [$eval, 'check_token(\'get\')', 'GradebookUtils::block_students();']];
+
+        yield 'statistics' => ['gradebook_statistics.php', [$eval, 'api_protect_course_script(true)']];
+
+        yield 'user stats' => ['user_stats.php', [$cat, 'api_protect_course_script(true)']];
+
+        yield 'summary' => ['gradebook_display_summary.php', [$cat]];
+
+        yield 'personal stats' => ['personal_stats.php', [$cat, 'api_protect_course_script(true)', 'api_block_anonymous_users']];
+
+        yield 'certificates' => ['gradebook_display_certificate.php', [$cat, 'certificateBelongsToCourse', '$isBossOnly']];
     }
 
     public function testAjaxActionsGuardTheCategoryAndTheArchiveLookupIsRestricted(): void

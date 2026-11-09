@@ -409,23 +409,6 @@ final class LpAccessControlTest extends KernelTestCase
         $this->assertFalse(learnpath::lpItemBelongsToLp(999999999, $lpA));
     }
 
-    // ------------------------------------------------------------- source-level pins of the page guards
-
-    /**
-     * @return array<string, array{string}>
-     */
-    public static function stateChangingActions(): array
-    {
-        $names = [
-            'delete', 'delete_lp_category', 'move_up_category', 'move_down_category', 'toggle_category_visibility',
-            'toggle_visible', 'toggle_category_publish', 'toggle_publish', 'move_lp_up', 'move_lp_down', 'auto_launch',
-            'copy', 'toggle_seriousgame', 'switch_force_commit', 'switch_attempt_mode', 'switch_scorm_debug',
-            'switch_view_mode', 'set_previous_step_as_prerequisite', 'clear_prerequisites', 'dissociate_forum',
-        ];
-
-        return array_combine($names, array_map(static fn (string $n): array => [$n], $names));
-    }
-
     /**
      * Legacy pages are outside CsrfProtectionListener and these actions are plain GET links: they must carry the
      * session token (checked, never regenerated, so the player and the other tabs keep working).
@@ -443,6 +426,23 @@ final class LpAccessControlTest extends KernelTestCase
     public function testStateChangingControllerActionIsTeacherOnly(string $case): void
     {
         $this->assertStringContainsString('$is_allowed_to_edit', $this->caseBlock($case), "$case must be teacher only");
+    }
+
+    // ------------------------------------------------------------- source-level pins of the page guards
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function stateChangingActions(): array
+    {
+        $names = [
+            'delete', 'delete_lp_category', 'move_up_category', 'move_down_category', 'toggle_category_visibility',
+            'toggle_visible', 'toggle_category_publish', 'toggle_publish', 'move_lp_up', 'move_lp_down', 'auto_launch',
+            'copy', 'toggle_seriousgame', 'switch_force_commit', 'switch_attempt_mode', 'switch_scorm_debug',
+            'switch_view_mode', 'set_previous_step_as_prerequisite', 'clear_prerequisites', 'dissociate_forum',
+        ];
+
+        return array_combine($names, array_map(static fn (string $n): array => [$n], $names));
     }
 
     public function testThePlayerActionsStayTokenFree(): void

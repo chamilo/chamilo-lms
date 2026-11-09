@@ -6,13 +6,18 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Database;
+use DateTimeImmutable;
+use DateTimeZone;
+use Doctrine\DBAL\Connection;
 use SessionManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
@@ -53,7 +58,7 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
 
     // ---------------------------------------------------------------- helpers
 
-    private function conn(): \Doctrine\DBAL\Connection
+    private function conn(): Connection
     {
         return $this->getEntityManager()->getConnection();
     }
@@ -342,7 +347,7 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
         $this->assertSame([], SessionManager::getAllCoursesFromAllSessionFromDrh($this->rawUser('hrmx', 'ROLE_HR', DRH)));
 
         $all = SessionManager::getAllCoursesFromAllSessions();
-        $this->assertSame('s2_ca ('.'s2_ca_1'.')', substr($all[$code.':'.$s], strpos($all[$code.':'.$s], 's2_ca')));
+        $this->assertSame('s2_ca (s2_ca_1)', substr($all[$code.':'.$s], strpos($all[$code.':'.$s], 's2_ca')));
         $this->assertArrayHasKey($code.':'.$other, $all);
     }
 
@@ -735,7 +740,7 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
 
     public function testAdminListTypesActiveCloseAndKeyword(): void
     {
-        $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
+        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
         $fmt = 'Y-m-d H:i:s';
         $open = $this->rawSession('lt_open', ['start' => $now->modify('-5 days')->format($fmt), 'end' => $now->modify('+5 days')->format($fmt)]);
         $past = $this->rawSession('lt_past', ['start' => $now->modify('-20 days')->format($fmt), 'end' => $now->modify('-10 days')->format($fmt)]);
@@ -868,7 +873,7 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
 
         $this->fresh();
         $sessionEntity = $this->sessionEntity($s);
-        $course = $this->getEntityManager()->getRepository(\Chamilo\CoreBundle\Entity\Course::class)->find($c);
+        $course = $this->getEntityManager()->getRepository(Course::class)->find($c);
         $this->assertSame(
             2,
             (int) SessionManager::getCountUsersInCourseSession($course, $sessionEntity),
@@ -928,7 +933,7 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
         $this->assertSame([$coach], array_map('intval', SessionManager::getCoachesBySession($s)));
         $this->assertSame([$coach], array_map('intval', SessionManager::getCoachesByCourseSession($s, $c)));
         $this->assertSame([], SessionManager::getCoachesByCourseSession($s, 99999999));
-        $this->assertStringContainsString('Lastlang_c', SessionManager::getCoachesByCourseSessionToString($s, $c) ?: '') ;
+        $this->assertStringContainsString('Lastlang_c', SessionManager::getCoachesByCourseSessionToString($s, $c) ?: '');
         $langs = SessionManager::getCountUsersLangBySession($s, 0, Session::STUDENT);
         $this->assertContains('FR_FR 2', $langs);
         $this->assertSame([], SessionManager::getCountUsersLangBySession($s, 0, Session::HRM));
@@ -1075,10 +1080,11 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
     private function deleteAs(int $userId, int $sessionId): string
     {
         $this->loginAs($userId);
+
         try {
             $result = SessionManager::delete($sessionId);
             $outcome = $result ? 'deleted' : 'refused';
-        } catch (\Chamilo\CoreBundle\Exception\NotAllowedException) {
+        } catch (NotAllowedException) {
             $outcome = 'denied';
         } finally {
             $this->loginAs($this->getAdmin()->getId());

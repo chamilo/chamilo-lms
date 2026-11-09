@@ -31,29 +31,6 @@ final class CrossCuttingFixesTest extends KernelTestCase
     }
 
     /**
-     * The Vue ExerciseConfigurationProcessor stores the results page flags as 'on' / '' (legacy mirror keys);
-     * the legacy form stores '1'. Both must hide the piece of the page, and '' / '0' must not.
-     *
-     * @return array<string, array{mixed, bool}>
-     */
-    public static function flagProvider(): array
-    {
-        return [
-            'on (stored by Vue)' => ['on', true],
-            'ON' => ['ON', true],
-            '1' => ['1', true],
-            'int 1' => [1, true],
-            'true' => [true, true],
-            'true string' => ['true', true],
-            'empty (not hidden)' => ['', false],
-            '0' => ['0', false],
-            'off' => ['off', false],
-            'false' => [false, false],
-            'null' => [null, false],
-        ];
-    }
-
-    /**
      * @dataProvider flagProvider
      */
     public function testApiIsFlagEnabled(mixed $value, bool $expected): void
@@ -77,6 +54,29 @@ final class CrossCuttingFixesTest extends KernelTestCase
         $this->assertSame(!$hidden, $e->showExpectedChoiceColumn());
         $ribbon = $e->getQuestionRibbon('success', 'Right', '1/1', ['used' => 1, 'missing' => 1]);
         $this->assertSame($hidden, '' === $ribbon);
+    }
+
+    /**
+     * The Vue ExerciseConfigurationProcessor stores the results page flags as 'on' / '' (legacy mirror keys);
+     * the legacy form stores '1'. Both must hide the piece of the page, and '' / '0' must not.
+     *
+     * @return array<string, array{mixed, bool}>
+     */
+    public static function flagProvider(): array
+    {
+        return [
+            'on (stored by Vue)' => ['on', true],
+            'ON' => ['ON', true],
+            '1' => ['1', true],
+            'int 1' => [1, true],
+            'true' => [true, true],
+            'true string' => ['true', true],
+            'empty (not hidden)' => ['', false],
+            '0' => ['0', false],
+            'off' => ['off', false],
+            'false' => [false, false],
+            'null' => [null, false],
+        ];
     }
 
     public function testHideTotalScoreAndCategoryTableAcceptTheVueValue(): void

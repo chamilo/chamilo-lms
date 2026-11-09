@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+use const SORT_STRING;
+
 /**
  * Characterization of the learning-path-authors, learning-path-item-authors and works-in-session sections of
  * GlobalReportingSectionQueryService. Fixtures are "r3_" resources and "rp_" users, rolled back with the

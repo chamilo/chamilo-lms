@@ -6,20 +6,21 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
-use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\Tests\ChamiloTestTrait;
 use Database;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use learnpath;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -112,8 +113,8 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
     private function newNode(string $title, int $type = 40): int
     {
         $this->conn()->executeStatement(
-            "INSERT INTO resource_node (resource_type_id, title, slug, created_at, updated_at, public, uuid)
-             VALUES (?, ?, ?, NOW(), NOW(), 0, ?)",
+            'INSERT INTO resource_node (resource_type_id, title, slug, created_at, updated_at, public, uuid)
+             VALUES (?, ?, ?, NOW(), NOW(), 0, ?)',
             [$type, $title, $title.'-'.uniqid(), Uuid::v4()->toBinary()]
         );
 
@@ -1123,7 +1124,7 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
 
         $this->assertIsArray($forums);
         foreach ($forums as $forum) {
-            $this->assertInstanceOf(\Chamilo\CourseBundle\Entity\CForum::class, $forum);
+            $this->assertInstanceOf(CForum::class, $forum);
         }
     }
 

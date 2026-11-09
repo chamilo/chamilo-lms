@@ -86,6 +86,7 @@ final class CourseReportingContextResolverTest extends KernelTestCase
         } catch (BadRequestHttpException) {
             $this->addToAssertionCount(1);
         }
+
         try {
             $this->resolveAs(1, ['cid' => 999999999]);
             $this->fail('unknown course');

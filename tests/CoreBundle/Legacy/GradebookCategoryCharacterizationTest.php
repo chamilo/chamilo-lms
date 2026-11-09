@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Uid\UuidV4;
-use Throwable;
 
 /**
  * Characterization of the raw-SQL half of the legacy gradebook Category class
@@ -457,7 +456,7 @@ final class GradebookCategoryCharacterizationTest extends KernelTestCase
         $after = Category::show_message_resource_delete(2);
 
         $this->assertStringContainsString('resource-deleted', $after);
-        $this->assertNotSame($before, $after === '' ? 'x' : $after);
+        $this->assertNotSame($before, '' === $after ? 'x' : $after);
         $this->assertSame('', Category::show_message_resource_delete(2000000000));
     }
 

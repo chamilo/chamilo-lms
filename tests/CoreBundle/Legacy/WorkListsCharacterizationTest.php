@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Uid\Uuid;
+use Throwable;
 
 /**
  * Second pass over work.lib.php: the list functions now built on the repository QueryBuilder (teacher, student,
@@ -547,7 +548,7 @@ final class WorkListsCharacterizationTest extends KernelTestCase
         $total = getWorkListStudent(0, 500, 'title', 'asc', null, true);
         // PINNED QUIRK: the count includes the folders the loop skips (the grid pager can promise more than it
         // shows).
-        $this->assertSame(count($rows) + 1, $total);
+        $this->assertSame(\count($rows) + 1, $total);
     }
 
     public function testStudentListLinksToTheDrhViewForAHumanResourcesManager(): void
@@ -888,7 +889,7 @@ final class WorkListsCharacterizationTest extends KernelTestCase
             ['w2_a_course2', 'w2_a_for_me', 'w2_a_future', 'w2_a_open'],
             $this->allTitles($rows)
         );
-        $this->assertSame(count($rows), getAllWorkListStudent(0, 500, 'title', 'asc', '1 = 1', true, 0));
+        $this->assertSame(\count($rows), getAllWorkListStudent(0, 500, 'title', 'asc', '1 = 1', true, 0));
     }
 
     public function testAllAssignmentsWithResultsAreTheOnesIAnsweredOrThatClosedWithoutMe(): void
@@ -899,7 +900,7 @@ final class WorkListsCharacterizationTest extends KernelTestCase
         $rows = getAllWorkListStudent(0, 500, 'title', 'asc', '1 = 1', false, 1);
 
         $this->assertSame(['w2_a_closed', 'w2_a_closed_sent', 'w2_a_sent'], $this->allTitles($rows));
-        $this->assertSame(count($rows), getAllWorkListStudent(0, 500, 'title', 'asc', '1 = 1', true, 1));
+        $this->assertSame(\count($rows), getAllWorkListStudent(0, 500, 'title', 'asc', '1 = 1', true, 1));
         $sent = array_values(array_filter($rows, static fn ($r) => str_contains($r['title'], 'w2_a_sent')))[0];
         $this->assertArrayHasKey('last_upload', $sent);
         $this->assertArrayNotHasKey('feedback', $sent, 'no comment yet');
@@ -1258,7 +1259,7 @@ final class WorkListsCharacterizationTest extends KernelTestCase
 
         // PINNED QUIRK: no caller; it reads work.c_id / work.session_id / work.id / work.url, none of which exist.
         // Marked @deprecated: the pending list (getPendingWorkList) replaced it.
-        $this->expectException(\Throwable::class);
+        $this->expectException(Throwable::class);
         getAllWork(0, 10, 'title', 'asc', '', false, 0, 0);
     }
 }

@@ -239,6 +239,8 @@ final class LpAccessControlTest extends KernelTestCase
 
         $this->assertTrue(learnpath::mayViewStatsOfUser($teacher, $student, self::COURSE_ID));
         $this->assertFalse(learnpath::mayViewStatsOfUser($teacher, $student, $this->otherCourse()), 'not a teacher there');
+        $stranger = $this->user();
+        $this->assertFalse(learnpath::mayViewStatsOfUser($teacher, $stranger, self::COURSE_ID), 'a user who is not in the course');
     }
 
     public function testStudentBossMayView(): void
@@ -246,10 +248,12 @@ final class LpAccessControlTest extends KernelTestCase
         $student = $this->user();
         $boss = $this->user();
         $other = $this->user();
+        $this->subscribe($student, self::COURSE_ID, 5);
         $this->relation($student, $boss, UserRelUser::USER_RELATION_TYPE_BOSS);
 
         $this->assertTrue(learnpath::mayViewStatsOfUser($boss, $student, self::COURSE_ID));
         $this->assertFalse(learnpath::mayViewStatsOfUser($other, $student, self::COURSE_ID));
+        $this->assertFalse(learnpath::mayViewStatsOfUser($boss, $student, $this->otherCourse()), 'the user does not follow that course');
         $this->assertFalse(learnpath::mayViewStatsOfUser($student, $boss, self::COURSE_ID), 'the relation is not symmetric');
     }
 
@@ -258,10 +262,12 @@ final class LpAccessControlTest extends KernelTestCase
         $student = $this->user();
         $hrm = $this->user();
         $otherHrm = $this->user();
+        $this->subscribe($student, self::COURSE_ID, 5);
         $this->relation($student, $hrm, UserRelUser::USER_RELATION_TYPE_RRHH);
 
         $this->assertTrue(learnpath::mayViewStatsOfUser($hrm, $student, self::COURSE_ID));
         $this->assertFalse(learnpath::mayViewStatsOfUser($otherHrm, $student, self::COURSE_ID));
+        $this->assertFalse(learnpath::mayViewStatsOfUser($hrm, $student, $this->otherCourse()), 'a course the user is not in');
     }
 
     public function testSessionCourseCoachMayViewTheStudentsOfThatSession(): void
@@ -272,8 +278,43 @@ final class LpAccessControlTest extends KernelTestCase
         $sid = $this->sessionWithStudent($student);
         $this->sessionCourseUser($sid, $coach, SessionEntity::COURSE_COACH);
 
+        $this->assertTrue(learnpath::mayViewStatsOfUser($coach, $student, self::COURSE_ID, $sid));
         $this->assertTrue(learnpath::mayViewStatsOfUser($coach, $student, self::COURSE_ID));
         $this->assertFalse(learnpath::mayViewStatsOfUser($outsider, $student, self::COURSE_ID));
+        $this->assertFalse(learnpath::mayViewStatsOfUser($coach, $student, self::COURSE_ID, $sid + 1000000), 'another session');
+    }
+
+    public function testCoachOfAnotherCourseOfTheSameSessionDoesNotQualify(): void
+    {
+        $student = $this->user();
+        $coach = $this->user();
+        $sid = $this->sessionWithStudent($student);
+        $otherCourse = $this->otherCourse();
+        $this->conn()->executeStatement('INSERT INTO session_rel_course (session_id, c_id, position, nbr_users) VALUES (?, ?, 0, 1)', [$sid, $otherCourse]);
+        $this->conn()->executeStatement(
+            'INSERT INTO session_rel_course_rel_user (session_id, user_id, c_id, status, visibility, legal_agreement, progress) VALUES (?, ?, ?, ?, 1, 0, 0)',
+            [$sid, $coach, $otherCourse, SessionEntity::COURSE_COACH]
+        );
+
+        $this->assertFalse(learnpath::isCoachOfLearnerInCourse($coach, $student, self::COURSE_ID), 'coach of course B only');
+        $this->assertFalse(learnpath::mayViewStatsOfUser($coach, $student, self::COURSE_ID));
+    }
+
+    public function testUserIsLearnerOfCourseRules(): void
+    {
+        $direct = $this->user();
+        $inSession = $this->user();
+        $teacher = $this->user();
+        $this->subscribe($direct, self::COURSE_ID, 5);
+        $sid = $this->sessionWithStudent($inSession);
+        $this->subscribe($teacher, self::COURSE_ID, 1);
+
+        $this->assertTrue(learnpath::userIsLearnerOfCourse($direct, self::COURSE_ID));
+        $this->assertFalse(learnpath::userIsLearnerOfCourse($direct, self::COURSE_ID, $sid), 'not in that session');
+        $this->assertTrue(learnpath::userIsLearnerOfCourse($inSession, self::COURSE_ID, $sid));
+        $this->assertTrue(learnpath::userIsLearnerOfCourse($inSession, self::COURSE_ID));
+        $this->assertFalse(learnpath::userIsLearnerOfCourse($inSession, $this->otherCourse()));
+        $this->assertFalse(learnpath::userIsLearnerOfCourse(0, self::COURSE_ID));
     }
 
     public function testSessionGeneralCoachMayViewTheStudentsOfThatSession(): void
@@ -287,12 +328,15 @@ final class LpAccessControlTest extends KernelTestCase
         $this->assertFalse(learnpath::mayViewStatsOfUser($student, $coach, self::COURSE_ID), 'a student does not follow the coach');
     }
 
-    public function testStatsPageKeepsTheAdminAndEditRightsBranchesAndPassesTheCourse(): void
+    public function testStatsPageAdmitsOnlyRealAdminsTheSessionAdminOfTheSessionAndTheFollowers(): void
     {
         $code = $this->source('public/main/lp/lp_stats.php');
-        $this->assertStringContainsString('api_is_platform_admin(true, true)', $code);
-        $this->assertStringContainsString('api_is_allowed_to_edit(null, true)', $code);
-        $this->assertStringContainsString('learnpath::mayViewStatsOfUser(api_get_user_id(), $userId', $code);
+        $this->assertStringContainsString('!api_is_platform_admin()', $code, 'session admins and HR managers do not pass as admins');
+        $this->assertStringNotContainsString('api_is_platform_admin(true', $code);
+        $this->assertStringNotContainsString('api_is_allowed_to_edit', $code, 'teachers go through the learner check');
+        $this->assertStringContainsString('learnpath::mayViewStatsOfUser(api_get_user_id(), $userId, $statsCourseId, $statsSessionId)', $code);
+        $this->assertStringContainsString('SessionManager::canManageSessionId($statsSessionId)', $code);
+        $this->assertStringContainsString('learnpath::userIsLearnerOfCourse($userId, $statsCourseId, $statsSessionId)', $code);
     }
 
     public function testLpOfTheCurrentCourseIsAccepted(): void

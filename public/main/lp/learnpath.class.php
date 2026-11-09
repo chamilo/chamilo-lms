@@ -3531,20 +3531,84 @@ class learnpath
     }
 
     /**
-     * True when the viewer may see the learning path statistics of the target user in the course: the user
-     * himself, a teacher of the course, a coach (course or general) of the user, a student boss or the human
-     * resources manager following the user. Platform and session administrators are checked by the caller (they
-     * depend on the session of the request). The same relationships as my_space/myStudents.php.
+     * True when the user is a learner of the course: subscribed to it, or a student of a session containing it
+     * (that session only when $sessionId is given).
      */
-    public static function mayViewStatsOfUser(int $viewerId, int $targetUserId, int $courseId): bool
+    public static function userIsLearnerOfCourse(int $userId, int $courseId, int $sessionId = 0): bool
+    {
+        if ($userId <= 0 || $courseId <= 0) {
+            return false;
+        }
+
+        $conn = Database::getManager()->getConnection();
+        if ($sessionId <= 0 && $conn->fetchOne(
+            'SELECT 1 FROM course_rel_user WHERE user_id = ? AND c_id = ? LIMIT 1',
+            [$userId, $courseId]
+        )) {
+            return true;
+        }
+
+        $sql = 'SELECT 1 FROM session_rel_course_rel_user WHERE user_id = ? AND c_id = ? AND status = ?';
+        $params = [$userId, $courseId, SessionEntity::STUDENT];
+        if ($sessionId > 0) {
+            $sql .= ' AND session_id = ?';
+            $params[] = $sessionId;
+        }
+
+        return false !== $conn->fetchOne($sql.' LIMIT 1', $params);
+    }
+
+    /**
+     * True when the viewer is a course coach of a session that has the target user as a student in the course,
+     * or the general coach of such a session ($sessionId = 0: any session, otherwise that one only).
+     */
+    public static function isCoachOfLearnerInCourse(int $viewerId, int $targetUserId, int $courseId, int $sessionId = 0): bool
+    {
+        $conn = Database::getManager()->getConnection();
+        $extra = $sessionId > 0 ? ' AND student.session_id = '.(int) $sessionId : '';
+
+        $courseCoach = $conn->fetchOne(
+            'SELECT 1 FROM session_rel_course_rel_user coach
+             INNER JOIN session_rel_course_rel_user student
+                ON student.session_id = coach.session_id AND student.c_id = coach.c_id
+             WHERE coach.user_id = ? AND coach.status = ? AND coach.c_id = ?
+                AND student.user_id = ? AND student.status = ?'.$extra.' LIMIT 1',
+            [$viewerId, SessionEntity::COURSE_COACH, $courseId, $targetUserId, SessionEntity::STUDENT]
+        );
+        if (false !== $courseCoach) {
+            return true;
+        }
+
+        return false !== $conn->fetchOne(
+            'SELECT 1 FROM session_rel_user general
+             INNER JOIN session_rel_course_rel_user student ON student.session_id = general.session_id
+             WHERE general.user_id = ? AND general.relation_type = ?
+                AND student.user_id = ? AND student.c_id = ? AND student.status = ?'.$extra.' LIMIT 1',
+            [$viewerId, SessionEntity::GENERAL_COACH, $targetUserId, $courseId, SessionEntity::STUDENT]
+        );
+    }
+
+    /**
+     * True when the viewer may see the learning path statistics of the target user in the course (and session):
+     * the user himself, or, for a user who is a learner of that course/session, a teacher of the course, a coach
+     * (course or general) of a session with that learner in that course, his student boss or the human resources
+     * manager following him. Platform and session administrators are checked by the caller (they depend on the
+     * session of the request).
+     */
+    public static function mayViewStatsOfUser(int $viewerId, int $targetUserId, int $courseId, int $sessionId = 0): bool
     {
         if ($viewerId <= 0 || $targetUserId <= 0) {
             return false;
         }
+        if ($viewerId === $targetUserId) {
+            return true;
+        }
+        if (!self::userIsLearnerOfCourse($targetUserId, $courseId, $sessionId)) {
+            return false;
+        }
 
-        return $viewerId === $targetUserId
-            || CourseManager::isCourseTeacher($viewerId, $courseId)
-            || Tracking::is_allowed_to_coach_student($viewerId, $targetUserId)
+        return CourseManager::isCourseTeacher($viewerId, $courseId)
+            || self::isCoachOfLearnerInCourse($viewerId, $targetUserId, $courseId, $sessionId)
             || UserManager::userIsBossOfStudent($viewerId, $targetUserId)
             || UserManager::is_user_followed_by_hrm($targetUserId, $viewerId);
     }

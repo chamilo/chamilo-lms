@@ -32,10 +32,6 @@ final class Version20261005120000 extends AbstractMigrationChamilo
             throw new RuntimeException('The course.course_language column was not found.');
         }
 
-        if ($courseTable->hasColumn('language_id')) {
-            throw new RuntimeException('The course table already contains language_id while course_language still exists.');
-        }
-
         $invalidLanguages = $this->connection->fetchAllAssociative(<<<'SQL'
             SELECT c.course_language, COUNT(DISTINCT l.id) AS language_matches
             FROM course c
@@ -58,7 +54,11 @@ final class Version20261005120000 extends AbstractMigrationChamilo
             throw new RuntimeException('Cannot migrate course languages because every course language must match exactly one language.isocode: '.implode(', ', $details));
         }
 
-        $this->addSql('ALTER TABLE course ADD language_id INT DEFAULT NULL');
+        // On an upgrade, V200\Version20201212195010 already added it, nullable: refilled below because
+        // course_language stayed the reference since
+        if (!$courseTable->hasColumn('language_id')) {
+            $this->addSql('ALTER TABLE course ADD language_id INT DEFAULT NULL');
+        }
         $this->addSql(<<<'SQL'
             UPDATE course c
             INNER JOIN language l ON l.isocode = c.course_language

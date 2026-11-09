@@ -111,6 +111,8 @@
 
     <BaseTable
       v-model:rows="itemsPerPage"
+      class="gradebook-flat-table"
+      scrollable
       :is-loading="isLoading"
       :lazy="true"
       :text-for-empty="t('No results found')"
@@ -123,6 +125,8 @@
       <Column
         :header="t('First name')"
         field="firstName"
+        frozen
+        style="min-width: 9rem; max-width: 12rem"
         sortable
       >
         <template #body="{ data }">
@@ -140,6 +144,8 @@
       <Column
         :header="t('Last name')"
         field="lastName"
+        frozen
+        style="min-width: 9rem; max-width: 12rem"
         sortable
       >
         <template #body="{ data }">
@@ -460,9 +466,7 @@ function formatScore(result) {
   }
 
   if (result.score === null || result.score === undefined) {
-    return result.percentage === null || result.percentage === undefined
-      ? "-"
-      : `${formatNumber(result.percentage)}%`
+    return result.percentage === null || result.percentage === undefined ? "-" : `${formatNumber(result.percentage)}%`
   }
 
   return formatNumber(result.score)
@@ -507,3 +511,19 @@ watch(
   },
 )
 </script>
+
+<style scoped>
+/* Keep frozen identity cells opaque when evaluation columns scroll behind them. */
+:deep(.gradebook-flat-table .p-datatable-thead > tr > .p-datatable-frozen-column) {
+  background-color: var(--p-datatable-header-cell-background, #f4f4f5);
+}
+
+:deep(.gradebook-flat-table .p-datatable-tbody > tr > .p-datatable-frozen-column) {
+  background-color: var(--p-datatable-row-background, #fff);
+  overflow-wrap: anywhere;
+}
+
+:deep(.gradebook-flat-table .p-datatable-tbody > tr:nth-child(even) > .p-datatable-frozen-column) {
+  background-color: var(--p-datatable-row-striped-background, #fafafa);
+}
+</style>

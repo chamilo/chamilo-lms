@@ -11,11 +11,13 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -88,6 +90,65 @@ class CourseUserManagerTest extends AbstractApiTest
         $this->assertSame(7, $data2['totalItems']);
         $this->assertCount(2, $data2['items']);
         $this->assertSame(['Fiona', 'George'], array_column($data2['items'], 'firstname'));
+    }
+
+    public function testSubscriptionDatesSortBeforePaginationAndKeepUnknownDatesLast(): void
+    {
+        $em = $this->getEntityManager();
+        $suffix = uniqid();
+        $course = $this->createCourse('cum_dates_course_'.$suffix);
+        $teacher = $this->createUser('cum_dates_teacher_'.$suffix, '', '', 'ROLE_TEACHER');
+        $course->addUserAsTeacher($teacher);
+        $em->flush();
+
+        $dates = [
+            'Alice' => '2026-09-07 10:00:00',
+            'Bob' => null,
+            'Charlie' => '2026-09-05 10:00:00',
+            'Diana' => '2026-09-02 10:00:00',
+            'Elliot' => '2026-09-06 10:00:00',
+            'Fiona' => '2026-09-04 10:00:00',
+            'George' => '2026-09-03 10:00:00',
+        ];
+
+        foreach ($dates as $name => $date) {
+            $student = $this->createUser('cum_dates_'.strtolower($name).'_'.$suffix);
+            $student->setFirstname($name)->setLastname($name);
+            $em->persist($student);
+
+            $subscription = (new CourseRelUser())
+                ->setCourse($course)
+                ->setUser($student)
+                ->setStatus(CourseRelUser::STUDENT)
+                ->setRelationType(0)
+                ->setSubscriptionDate(null === $date ? null : new DateTimeImmutable($date))
+            ;
+            $em->persist($subscription);
+        }
+        $em->flush();
+
+        $token = $this->getUserTokenFromUser($teacher);
+        $baseUrl = '/api/course-users/list?cid='.$course->getId().'&sort=subscriptionDate&itemsPerPage=5';
+
+        $page1 = $this->createClientWithCredentials($token)->request('GET', $baseUrl.'&order=desc&page=1');
+        $this->assertResponseIsSuccessful();
+        $data1 = $page1->toArray();
+        $this->assertSame(7, $data1['totalItems']);
+        $this->assertSame(['Alice', 'Elliot', 'Charlie', 'Fiona', 'George'], array_column($data1['items'], 'firstname'));
+        $this->assertSame('2026-09-07 10:00:00', $data1['items'][0]['subscriptionDate']);
+
+        $page2 = $this->createClientWithCredentials($token)->request('GET', $baseUrl.'&order=desc&page=2');
+        $this->assertResponseIsSuccessful();
+        $data2 = $page2->toArray();
+        $this->assertSame(['Diana', 'Bob'], array_column($data2['items'], 'firstname'));
+        $this->assertNull($data2['items'][1]['subscriptionDate']);
+
+        $ascending = $this->createClientWithCredentials($token)->request('GET', $baseUrl.'&order=asc&page=1');
+        $this->assertResponseIsSuccessful();
+        $this->assertSame(
+            ['Diana', 'George', 'Fiona', 'Charlie', 'Elliot'],
+            array_column($ascending->toArray()['items'], 'firstname'),
+        );
     }
 
     public function testListKeywordSearchFiltersBeforePagination(): void
@@ -233,5 +294,29 @@ class CourseUserManagerTest extends AbstractApiTest
         $this->assertSame(2, $data['totalItems']);
         $this->assertCount(2, $data['items']);
         $this->assertSame(['Amir', 'Bella'], array_column($data['items'], 'firstname'));
+
+        // A session course has independent dates, not those from direct course memberships.
+        $subscriptions = $em->getRepository(SessionRelCourseRelUser::class)->findBy([
+            'course' => $course,
+            'session' => $session,
+        ]);
+        $this->assertCount(2, $subscriptions);
+        foreach ($subscriptions as $subscription) {
+            $subscribedUser = $subscription->getUser();
+            $this->assertInstanceOf(User::class, $subscribedUser);
+            $subscription->setSubscriptionDate(new DateTimeImmutable(
+                'Amir' === $subscribedUser->getFirstname()
+                    ? '2026-08-01 08:00:00'
+                    : '2026-08-02 08:00:00',
+            ));
+        }
+        $em->flush();
+
+        $byDate = $this->createClientWithCredentials($token)->request(
+            'GET',
+            '/api/course-users/list?cid='.$course->getId().'&sid='.$session->getId().'&sort=subscriptionDate&order=desc',
+        );
+        $this->assertResponseIsSuccessful();
+        $this->assertSame(['Bella', 'Amir'], array_column($byDate->toArray()['items'], 'firstname'));
     }
 }

@@ -317,7 +317,8 @@ class StudentPublicationController extends AbstractController
 
         $page = max(1, $request->query->getInt('page', 1));
         $itemsPerPage = min(100, max(1, $request->query->getInt('itemsPerPage', 20)));
-        [$groups, $total] = $repo->findSubmissionGroupsByAssignment($assignmentId, $page, $itemsPerPage);
+        $order = $request->query->all('order');
+        [$groups, $total] = $repo->findSubmissionGroupsByAssignment($assignmentId, $page, $itemsPerPage, $order);
 
         return new JsonResponse([
             'hydra:member' => $groups,

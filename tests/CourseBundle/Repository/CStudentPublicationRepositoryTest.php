@@ -316,6 +316,39 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
         $this->assertCount(1, $pageTwo);
         $this->assertNotSame($pageOne[0]['userId'], $pageTwo[0]['userId']);
 
+        // The server must sort the entire student list before pagination.
+        [$mostFiles] = $repo->findSubmissionGroupsByAssignment(
+            $assignment->getIid(),
+            1,
+            1,
+            ['submissionCount' => 'desc'],
+        );
+        [$fewestFiles] = $repo->findSubmissionGroupsByAssignment(
+            $assignment->getIid(),
+            2,
+            1,
+            ['submissionCount' => 'desc'],
+        );
+        $this->assertSame($firstStudent->getId(), $mostFiles[0]['userId']);
+        $this->assertSame($secondStudent->getId(), $fewestFiles[0]['userId']);
+
+        [$byNameDesc] = $repo->findSubmissionGroupsByAssignment(
+            $assignment->getIid(),
+            1,
+            1,
+            ['user.fullName' => 'desc'],
+        );
+        $this->assertSame($secondStudent->getId(), $byNameDesc[0]['userId']);
+
+        // Unknown sort fields must not be interpolated into DQL.
+        [$invalidSort] = $repo->findSubmissionGroupsByAssignment(
+            $assignment->getIid(),
+            1,
+            1,
+            ['invalidField' => 'desc'],
+        );
+        $this->assertSame($firstStudent->getId(), $invalidSort[0]['userId']);
+
         [$firstFiles, $firstTotal] = $repo->findAllSubmissionsByAssignment(
             $assignment->getIid(),
             1,

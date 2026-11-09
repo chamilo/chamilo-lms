@@ -269,6 +269,12 @@ import { storeToRefs } from "pinia"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import { useSecurityStore } from "../../store/securityStore"
+import { getCourseContext } from "../../utils/courseContext"
+import {
+  getAssignmentSortStorageKey,
+  loadAssignmentSort,
+  saveAssignmentSort,
+} from "../../utils/assignmentSubmissionSort"
 
 const props = defineProps({
   assignmentId: {
@@ -311,6 +317,22 @@ const { course, session } = storeToRefs(cidReqStore)
 const platform = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 const securityStore = useSecurityStore()
+const sortableFields = ["user.fullName", "title", "sentDate"]
+const sortStorageKey = computed(() =>
+  getAssignmentSortStorageKey("files", securityStore.user?.id, getCourseContext()),
+)
+
+watch(
+  sortStorageKey,
+  (key) => {
+    if (!key) return
+    const saved = loadAssignmentSort(key, sortableFields, "sentDate", -1)
+    sortField.value = saved.field
+    sortOrder.value = saved.order
+    if (loadParams.itemsPerPage) loadData()
+  },
+  { immediate: true },
+)
 
 const aiHelpersEnabled = computed(() => {
   const v = String(platform.getSetting("ai_helpers.enable_ai_helpers"))
@@ -374,12 +396,15 @@ function onPage(event) {
 }
 
 function onSort(event) {
-  sortField.value = event.sortField ?? sortField.value
-  sortOrder.value = event.sortOrder ?? sortOrder.value
+  if (!sortableFields.includes(event.sortField)) return
+
+  sortField.value = event.sortField
+  sortOrder.value = event.sortOrder === -1 ? -1 : 1
+  saveAssignmentSort(sortStorageKey.value, sortField.value, sortOrder.value)
+
+  const isFirstPage = loadParams.page === 1
   loadParams.page = 1
-  if (loadParams.itemsPerPage) {
-    loadData()
-  }
+  if (isFirstPage && loadParams.itemsPerPage) loadData()
 }
 
 /**

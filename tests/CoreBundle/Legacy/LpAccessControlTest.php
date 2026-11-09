@@ -6,6 +6,8 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -18,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * The legacy learning path pages (lp_controller.php, lp_add_category.php, lp_stats.php, lp.ajax.php) take learning
@@ -117,6 +120,76 @@ final class LpAccessControlTest extends KernelTestCase
         return $id;
     }
 
+    private int $seq = 0;
+
+    private function user(): int
+    {
+        $name = 'lc2_user_'.(++$this->seq).'_'.substr(md5((string) microtime(true)), 0, 6);
+        $this->conn()->executeStatement(
+            "INSERT INTO user (username, username_canonical, locale, password, timezone, email, email_canonical,
+                locked, expired, credentials_expired, salt, roles, status, active, uuid, created_at, updated_at,
+                firstname, lastname, official_code)
+             VALUES (?, ?, 'en_US', 'x', 'UTC', ?, ?, 0, 0, 0, 'x', '[]', 5, 1, ?,
+                '2001-01-01 00:00:00', '2001-01-01 00:00:00', 'F', 'L', ?)",
+            [$name, $name, $name.'@example.com', $name.'@example.com', UuidV4::v4()->toBinary(), 'LC'.$this->seq]
+        );
+
+        return (int) $this->conn()->lastInsertId();
+    }
+
+    private function subscribe(int $userId, int $courseId, int $status): void
+    {
+        $this->conn()->executeStatement(
+            'INSERT INTO course_rel_user (user_id, c_id, status, relation_type, sort, user_course_cat, is_tutor, progress)
+             VALUES (?, ?, ?, 0, 0, 0, 0, 0)',
+            [$userId, $courseId, $status]
+        );
+    }
+
+    private function relation(int $userId, int $friendId, int $type): void
+    {
+        $this->conn()->executeStatement(
+            'INSERT INTO user_rel_user (user_id, friend_user_id, relation_type, created_at, updated_at)
+             VALUES (?, ?, ?, NOW(), NOW())',
+            [$userId, $friendId, $type]
+        );
+    }
+
+    /**
+     * Session with course 1 where $studentId is a student.
+     */
+    private function sessionWithStudent(int $studentId): int
+    {
+        $this->conn()->executeStatement(
+            "INSERT INTO session (title, nbr_courses, nbr_users, nbr_classes, visibility, status)
+             VALUES ('lc2_session_".uniqid()."', 1, 1, 0, 1, 0)"
+        );
+        $sid = (int) $this->conn()->lastInsertId();
+        $this->conn()->executeStatement('INSERT INTO session_rel_course (session_id, c_id, position, nbr_users) VALUES (?, ?, 0, 1)', [$sid, self::COURSE_ID]);
+        $this->sessionUser($sid, $studentId, SessionEntity::STUDENT);
+        $this->sessionCourseUser($sid, $studentId, SessionEntity::STUDENT);
+
+        return $sid;
+    }
+
+    private function sessionUser(int $sid, int $userId, int $type): void
+    {
+        $this->conn()->executeStatement(
+            "INSERT INTO session_rel_user (session_id, user_id, relation_type, duration, registered_at)
+             VALUES (?, ?, ?, 0, '2001-01-01 00:00:00')",
+            [$sid, $userId, $type]
+        );
+    }
+
+    private function sessionCourseUser(int $sid, int $userId, int $status): void
+    {
+        $this->conn()->executeStatement(
+            'INSERT INTO session_rel_course_rel_user (session_id, user_id, c_id, status, visibility, legal_agreement, progress)
+             VALUES (?, ?, ?, ?, 1, 0, 0)',
+            [$sid, $userId, self::COURSE_ID, $status]
+        );
+    }
+
     private function source(string $path): string
     {
         $code = file_get_contents(__DIR__.'/../../../'.$path);
@@ -141,6 +214,86 @@ final class LpAccessControlTest extends KernelTestCase
     }
 
     // ------------------------------------------------------------- behavioural guards
+
+    // ------------------------------------------------------------- who may read the stats of another user
+
+    public function testStatsViewerRules(): void
+    {
+        $student = $this->user();
+        $classmate = $this->user();
+        $this->subscribe($student, self::COURSE_ID, 5);
+        $this->subscribe($classmate, self::COURSE_ID, 5);
+
+        $this->assertTrue(learnpath::mayViewStatsOfUser($student, $student, self::COURSE_ID), 'own statistics');
+        $this->assertFalse(learnpath::mayViewStatsOfUser($classmate, $student, self::COURSE_ID), 'a plain course member');
+        $this->assertFalse(learnpath::mayViewStatsOfUser(0, $student, self::COURSE_ID));
+        $this->assertFalse(learnpath::mayViewStatsOfUser($classmate, 0, self::COURSE_ID));
+    }
+
+    public function testCourseTeacherMayViewButOnlyInHisCourse(): void
+    {
+        $student = $this->user();
+        $teacher = $this->user();
+        $this->subscribe($student, self::COURSE_ID, 5);
+        $this->subscribe($teacher, self::COURSE_ID, 1);
+
+        $this->assertTrue(learnpath::mayViewStatsOfUser($teacher, $student, self::COURSE_ID));
+        $this->assertFalse(learnpath::mayViewStatsOfUser($teacher, $student, $this->otherCourse()), 'not a teacher there');
+    }
+
+    public function testStudentBossMayView(): void
+    {
+        $student = $this->user();
+        $boss = $this->user();
+        $other = $this->user();
+        $this->relation($student, $boss, UserRelUser::USER_RELATION_TYPE_BOSS);
+
+        $this->assertTrue(learnpath::mayViewStatsOfUser($boss, $student, self::COURSE_ID));
+        $this->assertFalse(learnpath::mayViewStatsOfUser($other, $student, self::COURSE_ID));
+        $this->assertFalse(learnpath::mayViewStatsOfUser($student, $boss, self::COURSE_ID), 'the relation is not symmetric');
+    }
+
+    public function testHrManagerFollowingTheUserMayViewAndAnotherHrManagerMayNot(): void
+    {
+        $student = $this->user();
+        $hrm = $this->user();
+        $otherHrm = $this->user();
+        $this->relation($student, $hrm, UserRelUser::USER_RELATION_TYPE_RRHH);
+
+        $this->assertTrue(learnpath::mayViewStatsOfUser($hrm, $student, self::COURSE_ID));
+        $this->assertFalse(learnpath::mayViewStatsOfUser($otherHrm, $student, self::COURSE_ID));
+    }
+
+    public function testSessionCourseCoachMayViewTheStudentsOfThatSession(): void
+    {
+        $student = $this->user();
+        $coach = $this->user();
+        $outsider = $this->user();
+        $sid = $this->sessionWithStudent($student);
+        $this->sessionCourseUser($sid, $coach, SessionEntity::COURSE_COACH);
+
+        $this->assertTrue(learnpath::mayViewStatsOfUser($coach, $student, self::COURSE_ID));
+        $this->assertFalse(learnpath::mayViewStatsOfUser($outsider, $student, self::COURSE_ID));
+    }
+
+    public function testSessionGeneralCoachMayViewTheStudentsOfThatSession(): void
+    {
+        $student = $this->user();
+        $coach = $this->user();
+        $sid = $this->sessionWithStudent($student);
+        $this->sessionUser($sid, $coach, SessionEntity::GENERAL_COACH);
+
+        $this->assertTrue(learnpath::mayViewStatsOfUser($coach, $student, self::COURSE_ID));
+        $this->assertFalse(learnpath::mayViewStatsOfUser($student, $coach, self::COURSE_ID), 'a student does not follow the coach');
+    }
+
+    public function testStatsPageKeepsTheAdminAndEditRightsBranchesAndPassesTheCourse(): void
+    {
+        $code = $this->source('public/main/lp/lp_stats.php');
+        $this->assertStringContainsString('api_is_platform_admin(true, true)', $code);
+        $this->assertStringContainsString('api_is_allowed_to_edit(null, true)', $code);
+        $this->assertStringContainsString('learnpath::mayViewStatsOfUser(api_get_user_id(), $userId', $code);
+    }
 
     public function testLpOfTheCurrentCourseIsAccepted(): void
     {
@@ -259,8 +412,7 @@ final class LpAccessControlTest extends KernelTestCase
     public function testStatsOfAnotherUserAreForTeachersOnly(): void
     {
         $code = $this->source('public/main/lp/lp_stats.php');
-        $this->assertMatchesRegularExpression('/api_get_user_id\(\)\s*!==\s*\$userId/', $code);
-        $this->assertStringContainsString('api_is_allowed_to_edit', $code);
+        $this->assertStringContainsString('mayViewStatsOfUser', $code);
         $this->assertStringContainsString('api_not_allowed', $code);
     }
 

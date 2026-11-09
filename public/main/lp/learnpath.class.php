@@ -3531,6 +3531,25 @@ class learnpath
     }
 
     /**
+     * True when the viewer may see the learning path statistics of the target user in the course: the user
+     * himself, a teacher of the course, a coach (course or general) of the user, a student boss or the human
+     * resources manager following the user. Platform and session administrators are checked by the caller (they
+     * depend on the session of the request). The same relationships as my_space/myStudents.php.
+     */
+    public static function mayViewStatsOfUser(int $viewerId, int $targetUserId, int $courseId): bool
+    {
+        if ($viewerId <= 0 || $targetUserId <= 0) {
+            return false;
+        }
+
+        return $viewerId === $targetUserId
+            || CourseManager::isCourseTeacher($viewerId, $courseId)
+            || Tracking::is_allowed_to_coach_student($viewerId, $targetUserId)
+            || UserManager::userIsBossOfStudent($viewerId, $targetUserId)
+            || UserManager::is_user_followed_by_hrm($targetUserId, $viewerId);
+    }
+
+    /**
      * True when the item (id from the request) belongs to the given learning path. Callers must have checked the
      * learning path with lpBelongsToCurrentCourse() or got it from the controller.
      */

@@ -25,8 +25,11 @@ $extendedAll = $_GET['extend_all'] ?? null;
 $export = isset($_GET['export']) && 'csv' === $_GET['export'];
 $allowExtend = $_GET['allow_extend'] ?? 1;
 
-// The statistics of another user are for teachers/coaches/admins only: student_id comes from the request.
-if (api_get_user_id() !== $userId && !api_is_allowed_to_edit(null, true)) {
+// The statistics of another user are for admins and the people following that user: student_id comes from the request.
+if (!api_is_platform_admin(true, true)
+    && !api_is_allowed_to_edit(null, true)
+    && !learnpath::mayViewStatsOfUser(api_get_user_id(), $userId, (int) api_get_course_entity()?->getId())
+) {
     api_not_allowed(true);
 }
 

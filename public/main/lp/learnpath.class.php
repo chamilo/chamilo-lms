@@ -3507,6 +3507,46 @@ class learnpath
     }
 
     /**
+     * True when the category (id from the request) is linked to the current course and session context.
+     */
+    public static function categoryBelongsToCurrentCourse(int $id): bool
+    {
+        return $id > 0 && null !== self::getCategoryOfCurrentCourse($id);
+    }
+
+    /**
+     * True when the learning path (id from the request) is linked to the current course.
+     */
+    public static function lpBelongsToCurrentCourse(int $id): bool
+    {
+        $course = api_get_course_entity();
+        if ($id <= 0 || null === $course) {
+            return false;
+        }
+
+        /** @var CLp|null $lp */
+        $lp = Container::getLpRepository()->find($id);
+
+        return null !== $lp && null !== $lp->getFirstResourceLinkFromCourseSession($course);
+    }
+
+    /**
+     * True when the item (id from the request) belongs to the given learning path. Callers must have checked the
+     * learning path with lpBelongsToCurrentCourse() or got it from the controller.
+     */
+    public static function lpItemBelongsToLp(int $itemId, int $lpId): bool
+    {
+        if ($itemId <= 0 || $lpId <= 0) {
+            return false;
+        }
+
+        /** @var CLpItem|null $item */
+        $item = Container::getLpItemRepository()->find($itemId);
+
+        return null !== $item && $lpId === (int) $item->getLp()->getIid();
+    }
+
+    /**
      * Publishes a learnpath category.
      * This basically means show or hide the learnpath category to normal users.
      *
@@ -4859,6 +4899,7 @@ class learnpath
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                         'action' => 'set_previous_step_as_prerequisite',
                         'lp_id' => $lpId,
+                        'sec_token' => Security::get_existing_token(),
                     ]),
                 ],
                 [
@@ -4866,6 +4907,7 @@ class learnpath
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                         'action' => 'clear_prerequisites',
                         'lp_id' => $lpId,
+                        'sec_token' => Security::get_existing_token(),
                     ]),
                 ],
             ];
@@ -7852,8 +7894,7 @@ document.addEventListener("DOMContentLoaded", function () {
     public static function updateCategory($params)
     {
         $em = Database::getManager();
-        /** @var CLpCategory $item */
-        $item = $em->find(CLpCategory::class, $params['id']);
+        $item = self::getCategoryOfCurrentCourse((int) $params['id']);
         if ($item) {
             $item->setTitle($params['name']);
             $em->persist($item);

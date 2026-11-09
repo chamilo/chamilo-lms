@@ -273,6 +273,15 @@ $redirectToModernTeacherPage = static function (string $url) use ($is_allowed_to
     exit;
 };
 
+// State-changing teacher actions are plain GET links on a legacy page, which CsrfProtectionListener does not cover:
+// they must carry the session token. It is only checked here, never regenerated, so the player is not affected.
+$requireToken = static function () use ($goList): void {
+    if (!Security::check_token('request')) {
+        Display::addFlash(Display::return_message(get_lang('Invalid token'), 'error'));
+        $goList();
+    }
+};
+
 if ('GET' === ($_SERVER['REQUEST_METHOD'] ?? 'GET') && $nodeId > 0) {
     switch ($action) {
         case 'ai_helper':
@@ -584,7 +593,12 @@ switch ($action) {
             Session::write('refresh', 1);
 
             if (isset($_REQUEST['id'])) {
-                $lp_item_obj = new learnpathItem($_REQUEST['id']);
+                // The item must belong to this learning path (the id comes from the request).
+                if (!learnpath::lpItemBelongsToLp((int) $_REQUEST['id'], $lpId)) {
+                    api_not_allowed(true);
+                }
+                $requireToken();
+                $lp_item_obj = new learnpathItem((int) $_REQUEST['id']);
 
                 $url = api_get_self().
                     '?action=add_audio&lp_id='.$oLP->lp_id.'&id='.$lp_item_obj->get_id().'&'.api_get_cidreq();
@@ -637,6 +651,7 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
+        $requireToken();
         if (isset($_REQUEST['id'])) {
             learnpath::moveUpCategory((int) $_REQUEST['id']);
         }
@@ -646,6 +661,7 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
+        $requireToken();
         if (isset($_REQUEST['id'])) {
             learnpath::moveDownCategory((int) $_REQUEST['id']);
         }
@@ -655,6 +671,7 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
+        $requireToken();
         if (isset($_REQUEST['id'])) {
             $result = learnpath::deleteCategory((int) $_REQUEST['id']);
             if ($result) {
@@ -684,10 +701,11 @@ switch ($action) {
             if (!$is_allowed_to_edit) {
                 api_not_allowed(true);
             }
+            $requireToken();
             if (!$lp_found) {
                 $goList();
             } else {
-                $oLP->set_autolaunch($lpId, $_GET['status']);
+                $oLP->set_autolaunch($lpId, (int) ($_GET['status'] ?? 0));
                 $goList();
                 exit;
             }
@@ -724,6 +742,7 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
+        $requireToken();
 
         $hideScormCopyLink = api_get_setting('lp.hide_scorm_copy_link');
         if ('true' === $hideScormCopyLink) {
@@ -787,6 +806,7 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
+        $requireToken();
         if (!$lp_found) {
             $goList();
         } else {
@@ -802,8 +822,9 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
+        $requireToken();
 
-        learnpath::toggleCategoryVisibility($_REQUEST['id'], $_REQUEST['new_status']);
+        learnpath::toggleCategoryVisibility((int) ($_REQUEST['id'] ?? 0), (int) ($_REQUEST['new_status'] ?? 0));
         Display::addFlash(Display::return_message(get_lang('Update successful')));
         $goList();
         exit;
@@ -814,9 +835,10 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
+        $requireToken();
 
         if ($lp_found) {
-            learnpath::toggleVisibility($_REQUEST['lp_id'], $_REQUEST['new_status']);
+            learnpath::toggleVisibility($lpId, (int) ($_REQUEST['new_status'] ?? 0));
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
         $goList();
@@ -827,8 +849,9 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
+        $requireToken();
 
-        learnpath::toggleCategoryPublish($_REQUEST['id']);
+        learnpath::toggleCategoryPublish((int) ($_REQUEST['id'] ?? 0));
         Display::addFlash(Display::return_message(get_lang('Update successful')));
         $goList();
         exit;
@@ -839,8 +862,9 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
+        $requireToken();
         if ($lp_found) {
-            learnpath::togglePublish($_REQUEST['lp_id']);
+            learnpath::togglePublish($lpId);
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
         $goList();
@@ -852,8 +876,9 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
+        $requireToken();
         if ($lp_found) {
-            learnpath::move($_REQUEST['lp_id'], 'up');
+            learnpath::move($lpId, 'up');
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
         $goList();
@@ -865,8 +890,9 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
+        $requireToken();
         if ($lp_found) {
-            learnpath::move($_REQUEST['lp_id'], 'down');
+            learnpath::move($lpId, 'down');
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
         $goList();
@@ -1001,7 +1027,10 @@ switch ($action) {
         break;
     case 'mode':
         // Switch between fullscreen and embedded mode.
-        $mode = $_REQUEST['mode'];
+        if (!$lp_found || !is_object($oLP)) {
+            $goList();
+        }
+        $mode = $_REQUEST['mode'] ?? '';
         if ('fullscreen' === $mode) {
             $oLP->mode = 'fullscreen';
         } elseif ('embedded' === $mode) {
@@ -1014,18 +1043,28 @@ switch ($action) {
         require 'lp_view.php';
         break;
     case 'switch_view_mode':
-        if ($lp_found) {
-            if (Security::check_token('get')) {
-                Session::write('refresh', 1);
-                $oLP->update_default_view_mode();
-            }
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
         }
+        $requireToken();
+        if (!$lp_found) {
+            $goList();
+        }
+        Session::write('refresh', 1);
+        $oLP->update_default_view_mode();
 
         $goList();
         exit;
 
         break;
     case 'switch_force_commit':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        $requireToken();
+        if (!$lp_found) {
+            $goList();
+        }
         if ($lp_found) {
             Session::write('refresh', 1);
             $oLP->update_default_scorm_commit();
@@ -1036,6 +1075,13 @@ switch ($action) {
 
         break;
     case 'switch_attempt_mode':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        $requireToken();
+        if (!$lp_found) {
+            $goList();
+        }
         if ($lp_found) {
             Session::write('refresh', 1);
             $oLP->switch_attempt_mode();
@@ -1046,6 +1092,13 @@ switch ($action) {
 
         break;
     case 'switch_scorm_debug':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        $requireToken();
+        if (!$lp_found) {
+            $goList();
+        }
         if ($lp_found) {
             Session::write('refresh', 1);
             $oLP->update_scorm_debug();
@@ -1126,6 +1179,13 @@ switch ($action) {
         }
         break;
     case 'set_previous_step_as_prerequisite':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        $requireToken();
+        if (!$lp_found) {
+            $goList();
+        }
         $oLP->set_previous_step_as_prerequisite_for_all_items();
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id)."&".api_get_cidreq();
         Display::addFlash(Display::return_message(get_lang('Item updated')));
@@ -1133,6 +1193,13 @@ switch ($action) {
         exit;
         break;
     case 'clear_prerequisites':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        $requireToken();
+        if (!$lp_found) {
+            $goList();
+        }
         $oLP->clearPrerequisites();
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($oLP->lp_id)."&".api_get_cidreq();
         Display::addFlash(Display::return_message(get_lang('Item updated')));
@@ -1144,6 +1211,7 @@ switch ($action) {
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
+        $requireToken();
 
         if (!$lp_found) {
             $goList();
@@ -1157,6 +1225,13 @@ switch ($action) {
         require 'lp_report.php';
         break;
     case 'dissociate_forum':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        $requireToken();
+        if (!$lp_found) {
+            $goList();
+        }
         if (!isset($_GET['id'])) {
             break;
         }

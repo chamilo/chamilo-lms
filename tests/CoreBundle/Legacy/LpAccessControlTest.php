@@ -142,6 +142,58 @@ final class LpAccessControlTest extends KernelTestCase
 
     // ------------------------------------------------------------- behavioural guards
 
+    public function testLpOfTheCurrentCourseIsAccepted(): void
+    {
+        [$lpId] = $this->lp(self::COURSE_ID);
+
+        $this->assertTrue(learnpath::lpBelongsToCurrentCourse($lpId));
+    }
+
+    public function testLpOfAnotherCourseUnknownOrEmptyIdIsRejected(): void
+    {
+        [$foreign] = $this->lp($this->otherCourse());
+
+        $this->assertFalse(learnpath::lpBelongsToCurrentCourse($foreign), 'linked to another course only');
+        $this->assertFalse(learnpath::lpBelongsToCurrentCourse(999999999));
+        $this->assertFalse(learnpath::lpBelongsToCurrentCourse(0));
+        $this->assertFalse(learnpath::lpBelongsToCurrentCourse(-5));
+    }
+
+    public function testCategoryGuardFollowsTheCourseLink(): void
+    {
+        $own = $this->category(self::COURSE_ID);
+        $foreign = $this->category($this->otherCourse());
+
+        $this->assertTrue(learnpath::categoryBelongsToCurrentCourse($own));
+        $this->assertFalse(learnpath::categoryBelongsToCurrentCourse($foreign));
+        $this->assertFalse(learnpath::categoryBelongsToCurrentCourse(0));
+        $this->assertFalse(learnpath::categoryBelongsToCurrentCourse(999999999));
+    }
+
+    public function testRenamingACategoryOfAnotherCourseChangesNothing(): void
+    {
+        $foreign = $this->category($this->otherCourse());
+        $own = $this->category(self::COURSE_ID);
+
+        learnpath::updateCategory(['id' => $foreign, 'name' => 'lc2_hijacked']);
+        learnpath::updateCategory(['id' => $own, 'name' => 'lc2_renamed']);
+
+        $this->assertSame('lc2_cat', $this->conn()->fetchOne('SELECT title FROM c_lp_category WHERE iid = ?', [$foreign]));
+        $this->assertSame('lc2_renamed', $this->conn()->fetchOne('SELECT title FROM c_lp_category WHERE iid = ?', [$own]));
+    }
+
+    public function testItemGuardRequiresTheItemToBelongToThatPath(): void
+    {
+        [$lpA, $rootA] = $this->lp(self::COURSE_ID);
+        [$lpB] = $this->lp(self::COURSE_ID);
+
+        $this->assertTrue(learnpath::lpItemBelongsToLp($rootA, $lpA));
+        $this->assertFalse(learnpath::lpItemBelongsToLp($rootA, $lpB), 'an item id of another path of the same course');
+        $this->assertFalse(learnpath::lpItemBelongsToLp(0, $lpA));
+        $this->assertFalse(learnpath::lpItemBelongsToLp($rootA, 0));
+        $this->assertFalse(learnpath::lpItemBelongsToLp(999999999, $lpA));
+    }
+
     // ------------------------------------------------------------- source-level pins of the page guards
 
     /**
@@ -159,12 +211,56 @@ final class LpAccessControlTest extends KernelTestCase
         return array_combine($names, array_map(static fn (string $n): array => [$n], $names));
     }
 
-    public function testAiCreationEndpointIsTeacherOnlyAndBoundToTheCurrentCourse(): void
+    /**
+     * Legacy pages are outside CsrfProtectionListener and these actions are plain GET links: they must carry the
+     * session token (checked, never regenerated, so the player and the other tabs keep working).
+     *
+     * @dataProvider stateChangingActions
+     */
+    public function testStateChangingControllerActionChecksTheToken(string $case): void
     {
-        $code = $this->source('public/main/inc/ajax/lp.ajax.php');
-        $block = substr($code, (int) strpos($code, "case 'add_lp_ai':"), 900);
-        $this->assertStringContainsString('api_is_allowed_to_edit', $block);
-        $this->assertStringContainsString('getCode()', $block, 'course_code must be the current course');
+        $this->assertStringContainsString('$requireToken()', $this->caseBlock($case), "$case must check the token");
+    }
+
+    /**
+     * @dataProvider stateChangingActions
+     */
+    public function testStateChangingControllerActionIsTeacherOnly(string $case): void
+    {
+        $this->assertStringContainsString('$is_allowed_to_edit', $this->caseBlock($case), "$case must be teacher only");
+    }
+
+    public function testThePlayerActionsStayTokenFree(): void
+    {
+        // Learners use these through the player: a token requirement would break them.
+        foreach (['view', 'content', 'save', 'next', 'previous', 'first', 'last', 'restart', 'stats'] as $case) {
+            $this->assertStringNotContainsString('$requireToken()', $this->caseBlock($case), $case);
+        }
+    }
+
+    public function testTheTokenCheckDoesNotRegenerateTheToken(): void
+    {
+        $code = $this->source('public/main/lp/lp_controller.php');
+        $this->assertStringContainsString('Security::check_token(\'request\')', $code);
+        $this->assertStringNotContainsString('Security::get_token(', $code, 'get_token() rotates the token on every request');
+    }
+
+    public function testPrerequisiteLinksCarryTheToken(): void
+    {
+        $code = $this->source('public/main/lp/learnpath.class.php');
+        $this->assertSame(2, substr_count($code, "'sec_token' => Security::get_existing_token()"));
+    }
+
+    public function testAudioActionChecksTheItemBelongsToThePath(): void
+    {
+        $this->assertStringContainsString('lpItemBelongsToLp', $this->caseBlock('add_audio'));
+    }
+
+    public function testMoveOfAnotherCoursePathsIsRefusedByTheControllerLookup(): void
+    {
+        // Pre-existing guard (89b1e7aeb04): the controller ignores a lp_id not linked to the current course.
+        $code = $this->source('public/main/lp/lp_controller.php');
+        $this->assertStringContainsString('getFirstResourceLinkFromCourseSession($course)', $code);
     }
 
 }

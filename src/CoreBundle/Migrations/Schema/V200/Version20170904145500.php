@@ -15,6 +15,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
     private const int TRACKING_BATCH_SIZE = 1000;
     private const int ATTEMPT_BATCH_SIZE = 50000;
     private const string REFERENCE_STATE_TABLE = 'migration_v20170904145500_reference_state';
+    private const int LISTED_QUESTIONS_MAX = 100;
 
     public function getDescription(): string
     {
@@ -1029,13 +1030,8 @@ class Version20170904145500 extends AbstractMigrationChamilo
         // still carry the per-question legacy id, so use that only when no id_auto match
         // exists. The choice comes from the legacy schema, never from numeric offsets.
         if ($hasLegacyAutoId) {
-            $ambiguousAutoReferences = (int) $this->connection->fetchOne(
-                'SELECT COUNT(*)
-                 FROM c_quiz_answer source_answer
-                 INNER JOIN c_quiz_question question
-                    ON question.c_id = source_answer.c_id
-                   AND question.iid = source_answer.question_id
-                 INNER JOIN (
+            $this->abortIfMatchingAnswersFound(
+                'INNER JOIN (
                      SELECT c_id, id_auto
                      FROM c_quiz_answer
                      WHERE id_auto IS NOT NULL
@@ -1044,16 +1040,9 @@ class Version20170904145500 extends AbstractMigrationChamilo
                      HAVING COUNT(*) > 1
                  ) duplicate_auto
                     ON duplicate_auto.c_id = source_answer.c_id
-                   AND duplicate_auto.id_auto = source_answer.correct
-                 WHERE question.type = 4
-                   AND source_answer.correct > 0'
-            );
-            $this->abortIf(
-                $ambiguousAutoReferences > 0,
-                \sprintf(
-                    'Cannot safely normalize %d matching-answer rows that reference a duplicated legacy id_auto.',
-                    $ambiguousAutoReferences
-                )
+                   AND duplicate_auto.id_auto = source_answer.correct',
+                '',
+                'Cannot safely normalize %d matching-answer rows that reference a duplicated legacy id_auto.'
             );
         }
 
@@ -1067,13 +1056,8 @@ class Version20170904145500 extends AbstractMigrationChamilo
                    )'
                 : '';
 
-            $ambiguousLocalIdReferences = (int) $this->connection->fetchOne(
-                'SELECT COUNT(*)
-                 FROM c_quiz_answer source_answer
-                 INNER JOIN c_quiz_question question
-                    ON question.c_id = source_answer.c_id
-                   AND question.iid = source_answer.question_id
-                 INNER JOIN (
+            $this->abortIfMatchingAnswersFound(
+                'INNER JOIN (
                      SELECT c_id, question_id, id
                      FROM c_quiz_answer
                      WHERE id IS NOT NULL
@@ -1082,17 +1066,9 @@ class Version20170904145500 extends AbstractMigrationChamilo
                  ) duplicate_local
                     ON duplicate_local.c_id = source_answer.c_id
                    AND duplicate_local.question_id = source_answer.question_id
-                   AND duplicate_local.id = source_answer.correct
-                 WHERE question.type = 4
-                   AND source_answer.correct > 0
-                   '.$autoNotExistsCondition
-            );
-            $this->abortIf(
-                $ambiguousLocalIdReferences > 0,
-                \sprintf(
-                    'Cannot safely normalize %d matching-answer rows that reference a duplicated per-question legacy answer id.',
-                    $ambiguousLocalIdReferences
-                )
+                   AND duplicate_local.id = source_answer.correct',
+                $autoNotExistsCondition,
+                'Cannot safely normalize %d matching-answer rows that reference a duplicated per-question legacy answer id.'
             );
         }
 
@@ -1122,22 +1098,10 @@ class Version20170904145500 extends AbstractMigrationChamilo
               AND normalized_target.iid = source_answer.correct
         )';
 
-        $unresolvedMatchingReferences = (int) $this->connection->fetchOne(
-            'SELECT COUNT(*)
-             FROM c_quiz_answer source_answer
-             INNER JOIN c_quiz_question question
-                ON question.c_id = source_answer.c_id
-               AND question.iid = source_answer.question_id
-             WHERE question.type = 4
-               AND source_answer.correct > 0
-               AND NOT ('.implode(' OR ', $resolutionChecks).')'
-        );
-        $this->abortIf(
-            $unresolvedMatchingReferences > 0,
-            \sprintf(
-                'Cannot safely normalize %d matching-answer references in c_quiz_answer.correct.',
-                $unresolvedMatchingReferences
-            )
+        $this->abortIfMatchingAnswersFound(
+            '',
+            'AND NOT ('.implode(' OR ', $resolutionChecks).')',
+            'Cannot safely normalize %d matching-answer references in c_quiz_answer.correct.'
         );
 
         $joins = [];
@@ -1182,6 +1146,52 @@ class Version20170904145500 extends AbstractMigrationChamilo
         $this->getLogger()->info('Normalized legacy matching-answer references.', [
             'updated_rows' => $updatedRows,
         ]);
+    }
+
+    /**
+     * Stops the migration when a check finds matching answers it cannot convert, naming their
+     * questions: the administrator fixes c_quiz_answer.correct in those before retrying, which a
+     * mere count left them to find by writing the query of the check again.
+     */
+    private function abortIfMatchingAnswersFound(string $joins, string $conditions, string $message): void
+    {
+        $questions = $this->connection->fetchAllAssociative(
+            'SELECT COALESCE(course.code, CONCAT(\'c_id \', source_answer.c_id)) AS course_code,
+                    source_answer.question_id,
+                    COUNT(*) AS answers
+             FROM c_quiz_answer source_answer
+             INNER JOIN c_quiz_question question
+                ON question.c_id = source_answer.c_id
+               AND question.iid = source_answer.question_id
+             LEFT JOIN course
+                ON course.id = source_answer.c_id
+             '.$joins.'
+             WHERE question.type = 4
+               AND source_answer.correct > 0
+               '.$conditions.'
+             GROUP BY source_answer.c_id, course.code, source_answer.question_id
+             ORDER BY course_code, source_answer.question_id'
+        );
+        if ([] === $questions) {
+            return;
+        }
+
+        $questionsByCourse = [];
+        foreach (\array_slice($questions, 0, self::LISTED_QUESTIONS_MAX) as $question) {
+            $questionsByCourse[(string) $question['course_code']][] = $question['question_id'];
+        }
+        $list = [];
+        foreach ($questionsByCourse as $courseCode => $questionIds) {
+            $list[] = $courseCode.': '.implode(', ', $questionIds);
+        }
+        $unlisted = \count($questions) - self::LISTED_QUESTIONS_MAX;
+
+        $this->abortIf(
+            true,
+            \sprintf($message, array_sum(array_column($questions, 'answers')))
+            .' Matching questions to fix (course code: c_quiz_question.iid): '.implode('; ', $list)
+            .($unlisted > 0 ? \sprintf(' and %d more questions', $unlisted) : '').'.'
+        );
     }
 
     private function normalizeSimpleLegacyQuizReferences(Schema $schema): void

@@ -376,6 +376,13 @@ final class SessionAccessControlTest extends AbstractApiTest
         $this->assertStringContainsString('sa2_theirs', (string) $result['error_message']);
     }
 
+    public function testSessionEditOnlyAcceptsAManagedParentSession(): void
+    {
+        $source = $this->page('session/session_edit.php');
+        $this->assertStringContainsString('SessionManager::canManageSessionId($parentId)', $source);
+        $this->assertStringContainsString('$parentId === (int) $id', $source);
+    }
+
     public function testXmlImportUpdateGuardIsInPlace(): void
     {
         $source = (string) file_get_contents(__DIR__.'/../../../public/main/inc/lib/sessionmanager.lib.php');

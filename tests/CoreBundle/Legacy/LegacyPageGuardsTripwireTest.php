@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class LegacyPageGuardsTripwireTest extends TestCase
 {
-    private const GUARD = '/Security::check_token\(|->protect\(\)|api_not_allowed\(|api_protect_admin_script\(|protectElementInCurrentCourse\(|BelongsToCourse\(|canManageCourseCertificates\(|categoryInCourse\(|workActionTokenIsValid\(/';
+    private const GUARD = '/Security::check_token\(|->protect\(\)|api_not_allowed\(|api_protect_admin_script\(|protectElementInCurrentCourse\(|BelongsToCourse\(|canManageCourseCertificates\(|categoryInCourse\(|workActionTokenIsValid\(|mayViewStatsOfUser\(/';
 
     /**
      * @return array<string, array{string, int}>
@@ -53,6 +53,7 @@ final class LegacyPageGuardsTripwireTest extends TestCase
             'public/main/exercise/result.php' => 7,
             'public/main/exercise/stats.php' => 4,
             'public/main/exercise/tests_category.php' => 10,
+            'public/main/lp/lp_stats.php' => 2,
             'public/main/glossary/index.php' => 10,
             'public/main/gradebook/gradebook_add_cat.php' => 2,
             'public/main/gradebook/gradebook_add_eval.php' => 3,

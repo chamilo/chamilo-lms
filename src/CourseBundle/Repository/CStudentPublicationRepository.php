@@ -454,6 +454,9 @@ final class CStudentPublicationRepository extends ResourceRepository
             }
         }
 
+        // Keep row positions stable when several submissions share the same sort value.
+        $qb->addOrderBy('submission.iid', 'ASC');
+
         $qb->setFirstResult(($page - 1) * $itemsPerPage)
             ->setMaxResults($itemsPerPage)
         ;
@@ -472,8 +475,12 @@ final class CStudentPublicationRepository extends ResourceRepository
      *
      * @return array{0: array<int, array<string, mixed>>, 1: int}
      */
-    public function findSubmissionGroupsByAssignment(int $assignmentId, int $page, int $itemsPerPage): array
-    {
+    public function findSubmissionGroupsByAssignment(
+        int $assignmentId,
+        int $page,
+        int $itemsPerPage,
+        array $order = [],
+    ): array {
         $qb = $this->createQueryBuilder('submission')
             ->join('submission.user', 'user')
             ->where('submission.publicationParent = :assignmentId')
@@ -488,14 +495,27 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->getSingleScalarResult()
         ;
 
-        $rows = $qb
-            ->select('user.id AS userId', 'user.firstname AS firstname', 'user.lastname AS lastname')
+        $qb->select('user.id AS userId', 'user.firstname AS firstname', 'user.lastname AS lastname')
             ->addSelect('COUNT(submission.iid) AS submissionCount')
             ->groupBy('user.id')
             ->addGroupBy('user.firstname')
             ->addGroupBy('user.lastname')
-            ->orderBy('user.lastname', 'ASC')
-            ->addOrderBy('user.firstname', 'ASC')
+        ;
+
+        $allowedOrderFields = [
+            'user.fullName' => ['user.lastname', 'user.firstname'],
+            'submissionCount' => ['submissionCount'],
+        ];
+        $sortField = array_key_first($order);
+        $validField = isset($allowedOrderFields[$sortField]);
+        $sortColumns = $validField ? $allowedOrderFields[$sortField] : $allowedOrderFields['user.fullName'];
+        $requestedDirection = $validField && \is_string($order[$sortField]) ? strtolower($order[$sortField]) : 'asc';
+        $sortDirection = 'desc' === $requestedDirection ? 'DESC' : 'ASC';
+        foreach ($sortColumns as $column) {
+            $qb->addOrderBy($column, $sortDirection);
+        }
+
+        $rows = $qb
             ->addOrderBy('user.id', 'ASC')
             ->setFirstResult(($page - 1) * $itemsPerPage)
             ->setMaxResults($itemsPerPage)

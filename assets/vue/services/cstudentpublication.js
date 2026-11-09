@@ -59,11 +59,12 @@ async function getAssignmentDetailForTeacher({ assignmentId, page = 1, itemsPerP
   return baseService.get(`/assignments/${assignmentId}/submissions/teacher`, params)
 }
 
-async function getAssignmentSubmissionGroupsForTeacher({ assignmentId, page = 1, itemsPerPage = 20 }) {
+async function getAssignmentSubmissionGroupsForTeacher({ assignmentId, page = 1, itemsPerPage = 20, order = {} }) {
   return baseService.get(`/assignments/${assignmentId}/submissions/teacher/groups`, {
     ...buildCidParams(),
     page,
     itemsPerPage,
+    ...Object.fromEntries(Object.entries(order).map(([key, value]) => [`order[${key}]`, value])),
   })
 }
 

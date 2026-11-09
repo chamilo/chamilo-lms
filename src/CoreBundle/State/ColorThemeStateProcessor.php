@@ -11,15 +11,17 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\ColorTheme;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Service\ColorTheme\ColorThemeArchive;
 use Doctrine\ORM\EntityManagerInterface;
+use InvalidArgumentException;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use const DIRECTORY_SEPARATOR;
-use const PHP_EOL;
 
 /**
  * @implements ProcessorInterface<ColorTheme, ColorTheme|void>
@@ -54,11 +56,11 @@ final readonly class ColorThemeStateProcessor implements ProcessorInterface
             }
             $this->entityManager->flush();
 
-            $contentParts = [':root {'];
-            foreach ($colorTheme->getVariables() as $variable => $value) {
-                $contentParts[] = "  $variable: $value;";
+            try {
+                $css = ColorThemeArchive::colorCss($colorTheme->getVariables());
+            } catch (InvalidArgumentException $exception) {
+                throw new BadRequestHttpException($exception->getMessage(), $exception);
             }
-            $contentParts[] = '}';
 
             try {
                 $slug = $colorTheme->getSlug();
@@ -67,7 +69,7 @@ final readonly class ColorThemeStateProcessor implements ProcessorInterface
                 }
                 $this->filesystem->write(
                     $slug.DIRECTORY_SEPARATOR.'colors.css',
-                    implode(PHP_EOL, $contentParts)
+                    $css
                 );
             } catch (FilesystemException $exception) {
                 throw new HttpException(Response::HTTP_SERVICE_UNAVAILABLE, 'The themes storage is not writable. Check its file permissions before saving.', $exception);

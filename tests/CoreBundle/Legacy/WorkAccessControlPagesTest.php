@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use ChamiloSession;
+use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
 use Doctrine\DBAL\Connection;
@@ -157,6 +158,24 @@ final class WorkAccessControlPagesTest extends KernelTestCase
 
         $this->assertFalse(deleteWorkItem($id, $course));
         $this->assertSame(1, $this->active($id), 'the foreign submission must not be soft-deleted');
+    }
+
+    public function testProtectWorkRefusesAWorkOfAnotherCourseEvenToAnAdministrator(): void
+    {
+        // The role checks of protectWork() are about the current course: an administrator sitting in course 1 is
+        // let through for a course 1 work, but a work id of course 2 taken from the request is refused first.
+        $admin = $this->getUser('admin');
+        self::getContainer()->get('security.token_storage')->setToken(new UsernamePasswordToken($admin, 'main', $admin->getRoles()));
+        ChamiloSession::write('_user', ['id' => $admin->getId()]);
+        ChamiloSession::write('_real_cid', 1);
+        $courseInfo = ['real_id' => 1];
+        $mine = $this->publishedWork(1);
+        $theirs = $this->publishedWork(2);
+
+        $this->assertTrue(protectWork($courseInfo, $mine));
+
+        $this->expectException(NotAllowedException::class);
+        protectWork($courseInfo, $theirs);
     }
 
     public function testDeleteDirWorkRefusesAFolderOfAnotherCourse(): void

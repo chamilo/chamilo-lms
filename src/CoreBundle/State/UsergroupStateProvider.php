@@ -12,8 +12,11 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\UsergroupVoter;
 use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @template-implements ProviderInterface<Usergroup>
@@ -27,9 +30,11 @@ final class UsergroupStateProvider implements ProviderInterface
     ) {}
 
     /**
+     * @return list<Usergroup>|Usergroup
+     *
      * @throws Exception
      */
-    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array
+    public function provide(Operation $operation, array $uriVariables = [], array $context = []): array|Usergroup
     {
         $operationName = $operation->getName();
         if ('get_usergroup' === $operationName) {
@@ -42,12 +47,20 @@ final class UsergroupStateProvider implements ProviderInterface
             $group = $this->usergroupRepository->findGroupById($groupId);
 
             if (!$group) {
-                throw new Exception('Group not found');
+                throw new NotFoundHttpException('Group not found.');
+            }
+
+            // A closed group is readable by its members and admins only, as
+            // main/social/group_topics.php did in 1.11.x. An open one stays readable.
+            if (Usergroup::GROUP_PERMISSION_CLOSED === (int) $group->getVisibility()
+                && !$this->security->isGranted(UsergroupVoter::VIEW, $group)
+            ) {
+                throw new AccessDeniedException('You are not allowed to view this group.');
             }
 
             $this->setGroupDetails($group);
 
-            return [$group];
+            return $group;
         }
 
         if ('search_usergroups' === $operationName) {

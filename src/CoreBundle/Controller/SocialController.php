@@ -967,10 +967,20 @@ class SocialController extends AbstractController
             return $this->json(['error' => 'User not authenticated'], Response::HTTP_UNAUTHORIZED);
         }
 
-        /** @var Usergroup $group */
-        $group = $usergroupRepository->find($groupId);
+        // findGroupById() keeps the lookup inside the current portal.
+        /** @var null|Usergroup $group */
+        $group = $usergroupRepository->findGroupById($groupId);
         if (!$group) {
             return $this->json(['error' => 'Group not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // A class is an administrative object, readable by its own members and admins only.
+        // A closed social group still returns its title and description, as
+        // main/social/group_view.php did in 1.11.x, so a non-member can ask to join it.
+        if (Usergroup::NORMAL_CLASS === $group->getGroupType()
+            && !$this->isGranted(UsergroupVoter::VIEW, $group)
+        ) {
+            return $this->json(['error' => 'Access denied'], Response::HTTP_FORBIDDEN);
         }
 
         $isMember = $usergroupRepository->isGroupMember($groupId, $user);

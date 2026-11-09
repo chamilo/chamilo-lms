@@ -40,7 +40,7 @@
 }
 
 .lp_resource {
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 
 .list-group-item-empty {
@@ -686,7 +686,7 @@
 
 #learning_path_main.lp-modern-view #panel-scorm .media-author-description {
     color: #333333;
-    font-size: 13px;
+    font-size: 0.8125rem;
     line-height: 1.35;
 }
 
@@ -762,7 +762,7 @@
 #learning_path_main.lp-modern-view #progress_bar .lp-progress-label {
     margin-top: 8px !important;
     color: rgb(var(--color-primary-base)) !important;
-    font-size: 11px !important;
+    font-size: 0.6875rem !important;
     font-weight: 600 !important;
     line-height: 1 !important;
     text-align: end !important;
@@ -788,7 +788,7 @@
 #learning_path_main.lp-modern-view .lp-toc-title {
     padding: 16px 22px 12px 22px;
     color: #333333;
-    font-size: 14px;
+    font-size: 0.875rem;
     font-weight: 700;
     border-bottom: 1px solid #edf0f2;
 }
@@ -876,7 +876,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 14px;
+    font-size: 0.875rem;
     line-height: 1.35;
 }
 
@@ -942,13 +942,13 @@
 
 #learning_path_main.lp-modern-view .lp-empty-state-title {
     font-weight: 700;
-    font-size: 15px;
+    font-size: 0.9375rem;
 }
 
 #learning_path_main.lp-modern-view .lp-empty-state-text {
     max-width: 220px;
     color: #6b7280;
-    font-size: 13px;
+    font-size: 0.8125rem;
     line-height: 1.35;
 }
 
@@ -1067,14 +1067,14 @@
     clip: auto !important;
     white-space: nowrap !important;
     color: inherit !important;
-    font-size: 14px !important;
+    font-size: 0.875rem !important;
     font-weight: 500 !important;
 }
 
 #learning_path_main.lp-modern-view #btn-menu-float .circle .lp-menu-text-action,
 #learning_path_main.lp-modern-view #btn-menu-float .circle .lp-menu-text-action *,
 #learning_path_main.lp-modern-view #btn-menu-float .circle .icon-toolbar:not(.lp-view-primary-nav .icon-toolbar) {
-    font-size: 14px !important;
+    font-size: 0.875rem !important;
     line-height: 1.2 !important;
     font-weight: 500 !important;
 }
@@ -1269,7 +1269,7 @@
 
 #learning_path_main.lp-modern-view #timer .container div {
   display: table-cell;
-  font-size: 24px;
+  font-size: 1.5rem;
   padding: 0;
   width: 20px;
 }
@@ -1330,7 +1330,7 @@
   max-width: 240px;
   margin: 0 auto;
   color: #374151;
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 1.45;
   text-align: start;
   overflow-wrap: anywhere;

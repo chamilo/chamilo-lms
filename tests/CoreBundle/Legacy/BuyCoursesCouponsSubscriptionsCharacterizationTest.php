@@ -71,6 +71,22 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $this->assertEquals(7.5, $this->plugin->getCouponByCode('BC_DEC')['discount_amount']);
     }
 
+    public function testCouponAmountColumnIsDecimalWithTwoDecimalsInTheInstalledSchemaAndTheInstaller(): void
+    {
+        // On a database where the table already exists with the right type the test above cannot tell whether the
+        // installer still creates it that way, so pin both: the installed column and the installer's own definition.
+        $type = (string) $this->conn->fetchOne(
+            "SELECT COLUMN_TYPE FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'plugin_buycourses_coupon' AND COLUMN_NAME = 'discount_amount'"
+        );
+        $this->assertSame('decimal(10,2)', strtolower($type));
+
+        $installer = (string) file_get_contents(__DIR__.'/../../../public/plugin/BuyCourses/database.php');
+        $this->assertMatchesRegularExpression(
+            "/couponTable->addColumn\('discount_amount', Types::DECIMAL, \['precision' => 10, 'scale' => 2\]\)/",
+            $installer
+        );
+    }
+
     public function testCouponLookupByIdAndCodeRespectsTheValidityWindowAndProduct(): void
     {
         $id = $this->makeCoupon('BC_WIN', 1, 20, '2026-06-01 00:00:00', '2026-06-30 23:59:59');

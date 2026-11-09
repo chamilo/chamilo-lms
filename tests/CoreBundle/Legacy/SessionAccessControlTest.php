@@ -526,4 +526,120 @@ final class SessionAccessControlTest extends AbstractApiTest
         $this->assertStringContainsString("'<h2>'.api_htmlentities(\$sessionInfo['title']).'</h2>'", $source);
         $this->assertStringNotContainsString("'<h2>'.\$sessionInfo['name']", $source);
     }
+
+    // ------------------------------------------------- access URL scoping ("su_")
+
+    /**
+     * Makes the install multi-URL: root URL 1 plus a child URL B. Returns the id of B. The current URL of the
+     * request stays 1. Rolled back with the test transaction.
+     */
+    private function multiUrl(): int
+    {
+        $this->conn()->executeStatement('UPDATE access_url SET lft = 1, rgt = 4, tree_root = 1 WHERE id = 1');
+        $this->conn()->executeStatement(
+            'INSERT INTO access_url (parent_id, tree_root, lft, lvl, rgt, url, description, active, created_by)
+             VALUES (1, 1, 2, 1, 3, \'http://su-b.example.com/\', \'su_b\', 1, 1)'
+        );
+        $this->fresh();
+
+        return (int) $this->conn()->lastInsertId();
+    }
+
+    private function sessionOnUrl(string $title, int $urlId): int
+    {
+        $id = $this->rawSession($title, ['no_url' => true]);
+        $this->conn()->executeStatement(
+            'INSERT INTO access_url_rel_session (session_id, access_url_id) VALUES (?, ?)',
+            [$id, $urlId]
+        );
+
+        return $id;
+    }
+
+    /**
+     * @return array<string, bool> can edit, per session name
+     */
+    private function canEdit(array $sessions): array
+    {
+        $out = [];
+        foreach ($sessions as $name => $id) {
+            $out[$name] = SessionManager::cantEditSession(api_get_session_entity($id));
+        }
+
+        return $out;
+    }
+
+    private function urlFixture(): array
+    {
+        $urlB = $this->multiUrl();
+        $this->setSetting('session.allow_session_admins_to_manage_all_sessions', 'true');
+        $this->setSetting('session.allow_teachers_to_create_sessions', 'false');
+
+        return [
+            'urlB' => $urlB,
+            'sessions' => [
+                'inA' => $this->sessionOnUrl('su_a', 1),
+                'inB' => $this->sessionOnUrl('su_b', $urlB),
+                'noUrl' => $this->rawSession('su_none', ['no_url' => true]),
+            ],
+        ];
+    }
+
+    public function testSuRootAdminManagesEverySessionOfEveryUrl(): void
+    {
+        $f = $this->urlFixture();
+        $this->actAs('admin');
+        $this->assertSame(['inA' => true, 'inB' => true, 'noUrl' => true], $this->canEdit($f['sessions']));
+    }
+
+    public function testSuScopedAdminIsLimitedToTheSessionsOfItsManagedUrls(): void
+    {
+        $f = $this->urlFixture();
+        $scoped = $this->rawUser('scoped', 'ROLE_ADMIN', 1);
+        $this->conn()->executeStatement('UPDATE access_url_rel_user SET access_url_id = ? WHERE user_id = ?', [$f['urlB'], $scoped]);
+        $this->loginAs($scoped);
+        // PINNED: a session without any URL row belongs to no URL (the lists INNER JOIN access_url_rel_session).
+        $this->assertSame(['inA' => false, 'inB' => true, 'noUrl' => false], $this->canEdit($f['sessions']));
+    }
+
+    public function testSuSessionAdminWithManageAllIsLimitedToTheCurrentUrl(): void
+    {
+        $f = $this->urlFixture();
+        $sa = $this->rawUser('sa', 'ROLE_SESSION_MANAGER', 3);
+        $this->loginAs($sa);
+        $this->assertSame(['inA' => true, 'inB' => false, 'noUrl' => false], $this->canEdit($f['sessions']));
+    }
+
+    public function testSuGeneralCoachCannotEditHisSessionOfAnotherUrl(): void
+    {
+        $f = $this->urlFixture();
+        $this->setSetting('session.allow_teachers_to_create_sessions', 'true');
+        $coach = $this->rawUser('coach', 'ROLE_TEACHER', 1);
+        $this->rel($f['sessions']['inA'], $coach, Session::GENERAL_COACH);
+        $this->rel($f['sessions']['inB'], $coach, Session::GENERAL_COACH);
+        $this->loginAs($coach);
+        $this->assertSame(['inA' => true, 'inB' => false], $this->canEdit([
+            'inA' => $f['sessions']['inA'],
+            'inB' => $f['sessions']['inB'],
+        ]));
+    }
+
+    public function testSuSingleUrlInstallKeepsEverySessionReachableEvenWithoutUrlRow(): void
+    {
+        $this->setSetting('session.allow_session_admins_to_manage_all_sessions', 'true');
+        $noUrl = $this->rawSession('su_single', ['no_url' => true]);
+        $sa = $this->rawUser('sasingle', 'ROLE_SESSION_MANAGER', 3);
+        foreach ([$this->getAdmin()->getId(), $sa] as $userId) {
+            $this->loginAs($userId);
+            $this->assertTrue(SessionManager::cantEditSession(api_get_session_entity($noUrl)));
+        }
+    }
+
+    public function testSuPagesWithoutASessionAreNotAffected(): void
+    {
+        $this->urlFixture();
+        $sa = $this->rawUser('sanull', 'ROLE_SESSION_MANAGER', 3);
+        $this->loginAs($sa);
+        $this->assertTrue(SessionManager::cantEditSession(null, false), 'session_add.php must stay reachable.');
+    }
 }

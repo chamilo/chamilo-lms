@@ -5287,6 +5287,10 @@ class SessionManager
             return false;
         }
 
+        if (!self::isSessionInUserUrlScope($session)) {
+            return false;
+        }
+
         if (api_is_platform_admin() && self::allowed($session)) {
             return true;
         }
@@ -5300,6 +5304,47 @@ class SessionManager
         }
 
         return true;
+    }
+
+    /**
+     * Access URL tenancy of a session: on a multi-URL install, only an unrestricted admin (registered on a root URL)
+     * reaches every session. A subtree-scoped admin reaches the sessions linked to a URL it manages; anybody else
+     * (session admin, coach, teacher) the sessions linked to the current URL. A session without any
+     * access_url_rel_session row belongs to no URL (the session lists INNER JOIN that table), so only the
+     * unrestricted admins reach it. Single-URL installs, calls without a session and calls without a user
+     * (cron/CLI) are not restricted.
+     */
+    private static function isSessionInUserUrlScope(?Session $session): bool
+    {
+        if (null === $session || !api_get_multiple_access_url()) {
+            return true;
+        }
+
+        $user = api_get_user_entity();
+        if (null === $user) {
+            return true;
+        }
+
+        $urlIds = [(int) api_get_current_access_url_id()];
+        if (api_is_platform_admin()) {
+            $managed = Container::getAccessUrlScopeHelper()->getManagedUrlIds($user);
+            if (null === $managed) {
+                return true;
+            }
+            $urlIds = $managed;
+        }
+
+        if ([] === $urlIds) {
+            return false;
+        }
+
+        $row = Database::fetch_row(Database::query(
+            'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION).'
+             WHERE session_id = '.(int) $session->getId().' AND access_url_id IN ('.implode(',', array_map('intval', $urlIds)).')
+             LIMIT 1'
+        ));
+
+        return !empty($row);
     }
 
     /**

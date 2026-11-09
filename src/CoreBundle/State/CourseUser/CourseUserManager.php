@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use CourseManager;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -284,6 +285,9 @@ final readonly class CourseUserManager
         $keyword = trim((string) $request->query->get('search', ''));
         $canManage = $this->canManage($course, $session);
         $extraFields = $canManage ? $this->getFilteredExtraFields() : [];
+        $subscriptionDates = $canManage && [] !== $users
+            ? $this->getSubscriptionDates($course, $session, $status)
+            : [];
 
         $rows = [];
         foreach ($users as $userId => $userData) {
@@ -293,6 +297,7 @@ final readonly class CourseUserManager
             }
 
             $userData['user_id'] = $userId;
+            $userData['subscription_date'] = $subscriptionDates[$userId] ?? null;
             $userData['full_name'] = trim(
                 ((string) ($userData['firstname'] ?? '')).' '.((string) ($userData['lastname'] ?? ''))
             );
@@ -912,6 +917,7 @@ final readonly class CourseUserManager
             'lastname' => (string) $user->getLastname(),
             'fullName' => trim($user->getFullName()),
             'username' => $user->getUsername(),
+            'subscriptionDate' => $canManage ? ($userData['subscription_date'] ?? null) : null,
             'email' => $canManage ? $user->getEmail() : '',
             'phone' => $canManage ? (string) $user->getPhone() : '',
             'legalAgreement' => $canManage && 1 === (int) ($userData['legal_agreement'] ?? 0),
@@ -940,6 +946,56 @@ final readonly class CourseUserManager
     }
 
     /**
+     * Fetches the enrollment date for the specific course/session and membership role.
+     * Existing subscriptions without a known date remain null.
+     *
+     * @return array<int, string>
+     */
+    private function getSubscriptionDates(Course $course, ?Session $session, int $status): array
+    {
+        $relationClass = $session instanceof Session
+            ? SessionRelCourseRelUser::class
+            : CourseRelUser::class;
+
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select('IDENTITY(relation.user) AS userId', 'relation.subscriptionDate AS subscriptionDate')
+            ->from($relationClass, 'relation')
+            ->where('relation.course = :course')
+            ->andWhere('relation.status = :status')
+            ->setParameter('course', $course)
+            ->setParameter('status', $status)
+        ;
+
+        if ($session instanceof Session) {
+            $qb->andWhere('relation.session = :session')->setParameter('session', $session);
+        } else {
+            // Match the legacy member list: HR-management relations are not course members.
+            $qb->andWhere('relation.relationType <> :hrRelationType')
+                ->setParameter('hrRelationType', COURSE_RELATION_TYPE_RRHH)
+            ;
+        }
+
+        $dates = [];
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $value = $row['subscriptionDate'] ?? null;
+            $date = $value instanceof DateTimeInterface
+                ? $value->format('Y-m-d H:i:s')
+                : (\is_string($value) ? $value : null);
+
+            if (null === $date || '' === $date) {
+                continue;
+            }
+
+            $userId = (int) $row['userId'];
+            if (!isset($dates[$userId]) || $date < $dates[$userId]) {
+                $dates[$userId] = $date;
+            }
+        }
+
+        return $dates;
+    }
+
+    /**
      * Sorts the raw (pre-hydration) rows returned by CourseManager::get_user_list_from_course_code(),
      * so pagination can slice down to one page before the per-user enrichment queries run.
      *
@@ -953,12 +1009,33 @@ final readonly class CourseUserManager
         $rawField = match ($field) {
             'officialCode' => 'official_code',
             'fullName' => 'full_name',
+            'subscriptionDate' => 'subscription_date',
             'firstname', 'lastname', 'username', 'email' => $field,
             default => 'lastname',
         };
         $direction = 'desc' === strtolower((string) $request->query->get('order', 'asc')) ? -1 : 1;
 
         usort($rows, static function (array $left, array $right) use ($rawField, $direction): int {
+            if ('subscription_date' === $rawField) {
+                $leftDate = $left[$rawField] ?? null;
+                $rightDate = $right[$rawField] ?? null;
+
+                // Unknown historical dates are always last, regardless of direction.
+                if (null === $leftDate || null === $rightDate) {
+                    if (null === $leftDate && null === $rightDate) {
+                        return (int) $left['user_id'] <=> (int) $right['user_id'];
+                    }
+
+                    return null === $leftDate ? 1 : -1;
+                }
+
+                $comparison = strcmp((string) $leftDate, (string) $rightDate);
+
+                return 0 !== $comparison
+                    ? $direction * $comparison
+                    : ((int) $left['user_id'] <=> (int) $right['user_id']);
+            }
+
             return $direction * strcasecmp((string) ($left[$rawField] ?? ''), (string) ($right[$rawField] ?? ''));
         });
 

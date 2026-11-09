@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\State\CourseRelUserCollectionStateProvider;
 use Chamilo\CoreBundle\State\CourseRelUserStateProcessor;
 use Chamilo\CoreBundle\State\UserCourseSubscriptionsStateProvider;
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -99,6 +100,9 @@ class CourseRelUser implements Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     protected ?int $id = null;
+
+    #[ORM\Column(name: 'subscription_date', type: 'datetime_immutable', nullable: true, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    protected ?DateTimeImmutable $subscriptionDate = null;
 
     #[Groups([
         'course:read',
@@ -184,6 +188,7 @@ class CourseRelUser implements Stringable
 
     public function __construct()
     {
+        $this->subscriptionDate = new DateTimeImmutable();
         $this->progress = 0;
         $this->userCourseCat = 0;
         $this->sort = 0;
@@ -212,6 +217,18 @@ class CourseRelUser implements Stringable
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getSubscriptionDate(): ?DateTimeImmutable
+    {
+        return $this->subscriptionDate;
+    }
+
+    public function setSubscriptionDate(?DateTimeImmutable $subscriptionDate): self
+    {
+        $this->subscriptionDate = $subscriptionDate;
+
+        return $this;
     }
 
     public function getRelationType(): int

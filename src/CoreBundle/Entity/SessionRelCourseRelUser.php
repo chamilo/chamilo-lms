@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\Repository\SessionRelCourseRelUserRepository;
 use Chamilo\CoreBundle\Traits\UserTrait;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\MaxDepth;
@@ -94,6 +95,9 @@ class SessionRelCourseRelUser
     #[ORM\GeneratedValue]
     protected ?int $id = null;
 
+    #[ORM\Column(name: 'subscription_date', type: 'datetime_immutable', nullable: true, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    protected ?DateTimeImmutable $subscriptionDate = null;
+
     #[Groups([
         'session:read',
         'session_rel_course_rel_user:read',
@@ -140,6 +144,7 @@ class SessionRelCourseRelUser
 
     public function __construct()
     {
+        $this->subscriptionDate = new DateTimeImmutable();
         $this->progress = 0;
         $this->visibility = 1;
         $this->legalAgreement = 0;
@@ -173,6 +178,18 @@ class SessionRelCourseRelUser
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getSubscriptionDate(): ?DateTimeImmutable
+    {
+        return $this->subscriptionDate;
+    }
+
+    public function setSubscriptionDate(?DateTimeImmutable $subscriptionDate): self
+    {
+        $this->subscriptionDate = $subscriptionDate;
+
+        return $this;
     }
 
     public function getVisibility(): int

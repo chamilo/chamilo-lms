@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use ChamiloSession;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
 use Doctrine\DBAL\Connection;
@@ -13,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -146,6 +148,12 @@ final class WorkAccessControlPagesTest extends KernelTestCase
         $id = $this->publishedWork(2);
         $course = Container::getCourseRepository()->find(1);
         $this->assertNotNull($course, 'fixture course 1 expected');
+        // Be a platform administrator in course 1: the only thing left to refuse the delete is the course scope
+        // (without a role the delete is refused for the wrong reason and the scope check could be removed unnoticed).
+        $admin = $this->getUser('admin');
+        self::getContainer()->get('security.token_storage')->setToken(new UsernamePasswordToken($admin, 'main', $admin->getRoles()));
+        ChamiloSession::write('_user', ['id' => $admin->getId()]);
+        ChamiloSession::write('_real_cid', 1);
 
         $this->assertFalse(deleteWorkItem($id, $course));
         $this->assertSame(1, $this->active($id), 'the foreign submission must not be soft-deleted');

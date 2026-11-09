@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use CourseManager;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,13 +35,13 @@ use const ENT_QUOTES;
  */
 final readonly class ExercisePendingAttemptsProvider implements ProviderInterface
 {
-    private const STATUS_ALL = 1;
-    private const STATUS_VALIDATED = 2;
-    private const STATUS_NOT_VALIDATED = 3;
-    private const STATUS_UNCLOSED = 4;
-    private const STATUS_ONGOING = 5;
-    private const QUESTION_TYPE_WITHOUT_AUTOMATIC_CORRECTION = 1;
-    private const DEFAULT_LIMIT = 1000;
+    private const int STATUS_ALL = 1;
+    private const int STATUS_VALIDATED = 2;
+    private const int STATUS_NOT_VALIDATED = 3;
+    private const int STATUS_UNCLOSED = 4;
+    private const int STATUS_ONGOING = 5;
+    private const int QUESTION_TYPE_WITHOUT_AUTOMATIC_CORRECTION = 1;
+    private const int DEFAULT_LIMIT = 1000;
 
     public function __construct(
         private RequestStack $requestStack,
@@ -244,9 +245,10 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
 
     /**
      * @param array<string, int|string> $filters
-     * @param array<int, int>           $allowedCourseIds
+     * @param array<int, int> $allowedCourseIds
      *
      * @return array<int, array<string, mixed>>
+     * @throws Exception
      */
     private function getPendingAttempts(array $filters, bool $includeSessions, array $allowedCourseIds): array
     {
@@ -531,6 +533,7 @@ SQL;
      * @param array<int, int> $allowedCourseIds
      *
      * @return array<int, array<string, int|string>>
+     * @throws Exception
      */
     private function getExerciseOptions(int $courseId, array $allowedCourseIds): array
     {
@@ -554,7 +557,9 @@ WHERE rl.c_id = :courseId
 ORDER BY q.title ASC
 SQL;
 
-        $rows = $this->connection->executeQuery($sql, ['courseId' => $courseId], ['courseId' => ParameterType::INTEGER])->fetchAllAssociative();
+        $rows = $this->connection
+            ->executeQuery($sql, ['courseId' => $courseId], ['courseId' => ParameterType::INTEGER])
+            ->fetchAllAssociative();
         $items = [];
 
         foreach ($rows as $row) {
@@ -675,6 +680,9 @@ SQL;
         return true === $value || 1 === $value || '1' === (string) $value || 'true' === (string) $value;
     }
 
+    /**
+     * @throws Exception
+     */
     private function tableHasColumn(string $table, string $column): bool
     {
         $rows = $this->connection
@@ -690,13 +698,10 @@ SQL;
      */
     private function buildQueryString(array $filters): string
     {
-        $params = [];
 
-        foreach ($filters as $key => $value) {
-            if ('' !== (string) $value && '0' !== (string) $value) {
-                $params[$key] = $value;
-            }
-        }
+        $params = array_filter($filters, function ($value) {
+            return '' !== (string) $value && '0' !== (string) $value;
+        });
 
         return http_build_query($params);
     }

@@ -4616,5 +4616,7 @@
     "Saved.": "Desat.",
     "You have tried to resolve this exercise earlier": "Ja heu intentat resoldre aquesta pregunta anteriorment",
     "Disable new test attempts": "Desactiva nous intents de test",
-    "This skill cannot be acquired": "Aquesta compet\u00e8ncia no es pot adquirir"
+    "This skill cannot be acquired": "Aquesta compet\u00e8ncia no es pot adquirir",
+    "Validated": "Corregit",
+    "Not validated": "Sense corregir"
 }

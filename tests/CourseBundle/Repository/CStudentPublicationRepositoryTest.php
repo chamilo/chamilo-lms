@@ -251,6 +251,118 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
         $this->assertSame('B work', $items[0]->getTitle());
     }
 
+    public function testTeacherSubmissionGroupsPaginateStudentsAndKeepEveryFile(): void
+    {
+        $em = $this->getEntityManager();
+        $repo = self::getContainer()->get(CStudentPublicationRepository::class);
+
+        $course = $this->createCourse('new');
+        $teacher = $this->createUser('teacher');
+        $firstStudent = $this->createUser('groupedStudentOne');
+        $secondStudent = $this->createUser('groupedStudentTwo');
+
+        $assignment = (new CStudentPublication())
+            ->setTitle('Grouped assignment')
+            ->setParent($course)
+            ->setFiletype('folder')
+            ->setWeight(100)
+            ->setCreator($teacher)
+            ->addCourseLink($course)
+        ;
+        $otherAssignment = (new CStudentPublication())
+            ->setTitle('Other assignment')
+            ->setParent($course)
+            ->setFiletype('folder')
+            ->setWeight(100)
+            ->setCreator($teacher)
+            ->addCourseLink($course)
+        ;
+        $em->persist($assignment);
+        $em->persist($otherAssignment);
+
+        foreach ([
+            [$firstStudent, $assignment, 'First'],
+            [$firstStudent, $assignment, 'Second'],
+            [$firstStudent, $assignment, 'Third'],
+            [$secondStudent, $assignment, 'Fourth'],
+            [$secondStudent, $otherAssignment, 'Other assignment upload'],
+        ] as [$student, $parent, $title]) {
+            $submission = (new CStudentPublication())
+                ->setTitle($title)
+                ->setPublicationParent($parent)
+                ->setParent($parent)
+                ->setFiletype('file')
+                ->setWeight(100)
+                ->setCreator($student)
+                ->setUser($student)
+                ->setActive(1)
+                ->addCourseLink($course)
+            ;
+            $em->persist($submission);
+        }
+        $em->flush();
+
+        [$groups, $total] = $repo->findSubmissionGroupsByAssignment($assignment->getIid(), 1, 10);
+        $this->assertSame(2, $total);
+        $this->assertCount(2, $groups);
+        $counts = array_column($groups, 'submissionCount', 'userId');
+        $this->assertSame(3, $counts[$firstStudent->getId()]);
+        $this->assertSame(1, $counts[$secondStudent->getId()]);
+
+        [$pageOne, $pageTotal] = $repo->findSubmissionGroupsByAssignment($assignment->getIid(), 1, 1);
+        [$pageTwo] = $repo->findSubmissionGroupsByAssignment($assignment->getIid(), 2, 1);
+        $this->assertSame(2, $pageTotal);
+        $this->assertCount(1, $pageOne);
+        $this->assertCount(1, $pageTwo);
+        $this->assertNotSame($pageOne[0]['userId'], $pageTwo[0]['userId']);
+
+        // The server must sort the entire student list before pagination.
+        [$mostFiles] = $repo->findSubmissionGroupsByAssignment(
+            $assignment->getIid(),
+            1,
+            1,
+            ['submissionCount' => 'desc'],
+        );
+        [$fewestFiles] = $repo->findSubmissionGroupsByAssignment(
+            $assignment->getIid(),
+            2,
+            1,
+            ['submissionCount' => 'desc'],
+        );
+        $this->assertSame($firstStudent->getId(), $mostFiles[0]['userId']);
+        $this->assertSame($secondStudent->getId(), $fewestFiles[0]['userId']);
+
+        [$byNameDesc] = $repo->findSubmissionGroupsByAssignment(
+            $assignment->getIid(),
+            1,
+            1,
+            ['user.fullName' => 'desc'],
+        );
+        $this->assertSame($secondStudent->getId(), $byNameDesc[0]['userId']);
+
+        // Unknown sort fields must not be interpolated into DQL.
+        [$invalidSort] = $repo->findSubmissionGroupsByAssignment(
+            $assignment->getIid(),
+            1,
+            1,
+            ['invalidField' => 'desc'],
+        );
+        $this->assertSame($firstStudent->getId(), $invalidSort[0]['userId']);
+
+        [$firstFiles, $firstTotal] = $repo->findAllSubmissionsByAssignment(
+            $assignment->getIid(),
+            1,
+            10,
+            [],
+            $firstStudent->getId(),
+        );
+        $this->assertSame(3, $firstTotal);
+        $this->assertCount(3, $firstFiles);
+        [$allFiles, $allTotal] = $repo->findAllSubmissionsByAssignment($assignment->getIid(), 1, 10);
+        $this->assertSame(4, $allTotal);
+        $this->assertCount(4, $allFiles);
+    }
+
     public function testGetStudentPublicationByUser(): void
     {
         $em = $this->getEntityManager();

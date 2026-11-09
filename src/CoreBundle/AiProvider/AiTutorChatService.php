@@ -36,7 +36,10 @@ final class AiTutorChatService
      */
     public const int FRIEND_AI = -1;
 
-    private const string DEFAULT_PROVIDER = 'openai';
+    private const int COURSE_DESCRIPTION_CONTEXT_MAX_CHARS = 4200;
+    private const int CONVERSATION_HISTORY_CONTEXT_MAX_CHARS = 3200;
+    private const int SELECTED_TEXT_CONTEXT_MAX_CHARS = 1800;
+    private const int USER_QUESTION_MAX_CHARS = 2000;
     private const string ACTIVE_PROVIDER_SESSION_PREFIX = 'ai_tutor_active_provider_';
     public const string OFFICIAL_DOCUMENTATION_URL = 'https://docs.chamilo.org/student-guide';
 
@@ -51,36 +54,25 @@ final class AiTutorChatService
     ) {}
 
     /**
-     * Resolve the provider for the current course without requiring UI selection:
-     * - If $requestedProvider is empty, use session-stored active provider (per course).
-     * - Validate provider supports 'text'; otherwise fallback to DEFAULT_PROVIDER.
+     * Only use a configured text provider. Never silently switch to a different
+     * service, since that could send private course context outside the selected
+     * AI infrastructure.
      */
     private function resolveProviderForCourse(Course $course, string $requestedProvider): string
     {
-        $courseId = (int) $course->getId();
-
         $provider = strtolower(trim($requestedProvider));
         if ('' === $provider) {
-            $provider = $this->getActiveProviderFromSession($courseId);
+            $provider = strtolower(trim($this->getActiveProviderFromSession((int) $course->getId())));
         }
-
         if ('' === $provider) {
-            $provider = self::DEFAULT_PROVIDER;
+            $provider = $this->aiProviderFactory->getProvidersForType('text')[0] ?? '';
+        }
+        if ('' === $provider) {
+            throw new RuntimeException('No AI text provider is configured.');
         }
 
-        // Validate provider supports text
-        try {
-            $this->aiProviderFactory->getProvider($provider, 'text');
-        } catch (Throwable $e) {
-            $this->logger->warning('[AiTutorChat] Unsupported provider requested, falling back to default', [
-                'requested' => $provider,
-                'default' => self::DEFAULT_PROVIDER,
-                'courseId' => $courseId,
-                'error' => $e->getMessage(),
-            ]);
-
-            $provider = self::DEFAULT_PROVIDER;
-        }
+        // Invalid or unavailable providers must fail rather than fall back.
+        $this->aiProviderFactory->getProvider($provider, 'text');
 
         return $provider;
     }
@@ -116,40 +108,6 @@ final class AiTutorChatService
         } catch (Throwable) {
             // ignore
         }
-    }
-
-    /**
-     * Candidate providers for failover:
-     * - preferred first
-     * - then all configured providers supporting text (config order)
-     * - ensure DEFAULT_PROVIDER is always present at the end
-     *
-     * @return string[]
-     */
-    private function resolveProviderCandidates(string $preferred): array
-    {
-        $preferred = strtolower(trim($preferred));
-        $out = [];
-
-        if ('' !== $preferred) {
-            $out[] = $preferred;
-        }
-
-        foreach ($this->aiProviderFactory->getProvidersForType('text') as $p) {
-            $p = strtolower(trim((string) $p));
-            if ('' === $p) {
-                continue;
-            }
-            if (!\in_array($p, $out, true)) {
-                $out[] = $p;
-            }
-        }
-
-        if (!\in_array(self::DEFAULT_PROVIDER, $out, true)) {
-            $out[] = self::DEFAULT_PROVIDER;
-        }
-
-        return $out;
     }
 
     /**
@@ -205,16 +163,33 @@ final class AiTutorChatService
         $providerMessages = [];
         $providerMessages[] = ['role' => 'system', 'content' => $system];
 
-        // Only load history if conversation already exists in DB
+        // Keep the most recent exchanges, bounded for small-context models.
+        // The repository returns recent messages in chronological order.
         if (null !== $conversation->getId()) {
             $history = $this->conversationRepo->findMessages($conversation, 20);
+            $remaining = self::CONVERSATION_HISTORY_CONTEXT_MAX_CHARS;
+            $recent = [];
 
-            foreach ($history as $m) {
-                $providerMessages[] = [
-                    'role' => (string) $m->getRole(),
-                    'content' => (string) $m->getContent(),
+            foreach (array_reverse($history) as $previousMessage) {
+                if ($remaining <= 0) {
+                    break;
+                }
+
+                $content = mb_substr((string) $previousMessage->getContent(), 0, min($remaining, 1000), 'UTF-8');
+                $recent[] = [
+                    'role' => (string) $previousMessage->getRole(),
+                    'content' => $content,
                 ];
+                $remaining -= mb_strlen($content, 'UTF-8');
             }
+
+            foreach (array_reverse($recent) as $previous) {
+                $providerMessages[] = $previous;
+            }
+        }
+
+        if (mb_strlen($newUserMessage, 'UTF-8') > self::USER_QUESTION_MAX_CHARS) {
+            throw new InvalidArgumentException('AI tutor question exceeds the maximum length.');
         }
 
         $providerMessages[] = [
@@ -227,7 +202,7 @@ final class AiTutorChatService
 
     private function buildUserMessageWithSelectedTextContext(string $message, string $selectedTextContext): string
     {
-        $selectedTextContext = trim($selectedTextContext);
+        $selectedTextContext = mb_substr(trim($selectedTextContext), 0, self::SELECTED_TEXT_CONTEXT_MAX_CHARS, 'UTF-8');
         if ('' === $selectedTextContext) {
             return $message;
         }
@@ -239,8 +214,7 @@ final class AiTutorChatService
     }
 
     /**
-     * Try a single provider once (fast path).
-     * - Throws on any error so caller can decide to failover.
+     * Call only the selected provider and propagate failures to the caller.
      *
      * @return array{provider:string,conversation:AiTutorConversation,result:AiChatCompletionResult}
      */
@@ -274,7 +248,7 @@ final class AiTutorChatService
 
         $options = [
             'temperature' => 0.4,
-            // IMPORTANT: allow failover to detect real failures.
+            // Propagate provider errors instead of storing them as tutor replies.
             'throw_on_error' => true,
         ];
 
@@ -303,13 +277,12 @@ final class AiTutorChatService
     }
 
     /**
-     * Sticky provider strategy:
-     * - Fast path: try ONLY the preferred/active provider once.
-     * - Only on failure: iterate the remaining candidates.
+     * Use only the chosen provider. In particular, a local model failure must
+     * never trigger an outbound request to a different configured provider.
      *
      * @return array{provider:string,conversation:AiTutorConversation,result:AiChatCompletionResult}
      */
-    private function chatWithFailover(
+    private function chatWithSelectedProvider(
         int $userId,
         Course $course,
         ?Session $session,
@@ -318,98 +291,19 @@ final class AiTutorChatService
         string $selectedTextContext = '',
         string $currentPath = ''
     ): array {
-        $courseId = (int) $course->getId();
-        $preferredProvider = strtolower(trim($preferredProvider));
+        $meta = $this->tryChatProviderOnce(
+            $userId,
+            $course,
+            $session,
+            $preferredProvider,
+            $message,
+            $selectedTextContext,
+            $currentPath
+        );
 
-        // Fast path: try the preferred provider only.
-        try {
-            error_log('[AiTutorChat] Trying provider (fast path): '.$preferredProvider);
+        $this->setActiveProviderInSession((int) $course->getId(), $meta['provider']);
 
-            $meta = $this->tryChatProviderOnce(
-                $userId,
-                $course,
-                $session,
-                $preferredProvider,
-                $message,
-                $selectedTextContext,
-                $currentPath
-            );
-
-            $this->setActiveProviderInSession($courseId, $meta['provider']);
-
-            error_log('[AiTutorChat] Provider selected (fast path): '.$meta['provider']);
-
-            return $meta;
-        } catch (Throwable $e) {
-            error_log('[AiTutorChat] Preferred provider failed, starting failover: '.$preferredProvider.' / '.$e->getMessage());
-
-            $this->logger->warning('[AiTutorChat] Preferred provider failed, starting failover', [
-                'provider' => $preferredProvider,
-                'courseId' => $courseId,
-                'userId' => $userId,
-                'error' => $e->getMessage(),
-            ]);
-        }
-
-        $candidates = $this->resolveProviderCandidates($preferredProvider);
-        $lastError = null;
-
-        $this->logger->info('[AiTutorChat] Failover candidates', [
-            'courseId' => $courseId,
-            'userId' => $userId,
-            'preferred' => $preferredProvider,
-            'candidates' => $candidates,
-        ]);
-
-        foreach ($candidates as $provider) {
-            $provider = strtolower(trim($provider));
-
-            if ('' === $provider || $provider === $preferredProvider) {
-                continue;
-            }
-
-            try {
-                error_log('[AiTutorChat] Trying provider (failover): '.$provider);
-
-                $meta = $this->tryChatProviderOnce(
-                    $userId,
-                    $course,
-                    $session,
-                    $provider,
-                    $message,
-                    $selectedTextContext,
-                    $currentPath
-                );
-
-                $this->setActiveProviderInSession($courseId, $provider);
-
-                error_log('[AiTutorChat] Provider selected (failover): '.$provider);
-
-                return $meta;
-            } catch (Throwable $e) {
-                error_log('[AiTutorChat] Provider failed (failover): '.$provider.' / '.$e->getMessage());
-
-                $lastError = $e;
-
-                $this->logger->warning('[AiTutorChat] Provider failed, trying next', [
-                    'provider' => $provider,
-                    'courseId' => $courseId,
-                    'userId' => $userId,
-                    'error' => $e->getMessage(),
-                ]);
-
-                continue;
-            }
-        }
-
-        $this->logger->error('[AiTutorChat] All providers failed', [
-            'preferred' => $preferredProvider,
-            'courseId' => $courseId,
-            'userId' => $userId,
-            'error' => $lastError?->getMessage(),
-        ]);
-
-        throw new RuntimeException('All AI providers failed.');
+        return $meta;
     }
 
     public function getOrCreateConversation(
@@ -597,7 +491,7 @@ final class AiTutorChatService
         string $selectedTextContext = '',
         string $currentPath = ''
     ): string {
-        $systemPrompt = $this->resolveSystemPrompt($uiLang, $currentPath);
+        $systemPrompt = $this->buildContextSystemPrompt(null, $uiLang, $currentPath);
 
         $messages = [
             ['role' => 'system', 'content' => $systemPrompt],
@@ -607,28 +501,14 @@ final class AiTutorChatService
             ],
         ];
 
-        return $this->client->chat($providerKey, $messages, [
+        $result = $this->client->chatWithMeta($providerKey, $messages, [
             'language' => $uiLang,
             'user_id' => $userId,
             'temperature' => 0.4,
+            'throw_on_error' => true,
         ]);
-    }
 
-    private function resolveSystemPrompt(string $uiLang, string $currentPath = ''): string
-    {
-        try {
-            $req = $this->requestStack->getCurrentRequest();
-            if ($req && $req->hasSession()) {
-                $v = (string) $req->getSession()->get('ai_tutor_system_prompt', '');
-                if ('' !== trim($v)) {
-                    return $this->appendCurrentPathContext($v, $currentPath);
-                }
-            }
-        } catch (Throwable) {
-            // ignore
-        }
-
-        return $this->buildContextSystemPrompt(null, $uiLang, $currentPath);
+        return $result->text;
     }
 
     /**
@@ -712,17 +592,9 @@ final class AiTutorChatService
         string $provider
     ): ?array {
         $courseId = (int) $course->getId();
-        $providers = [];
-
-        $activeProvider = strtolower(trim($this->getActiveProviderFromSession($courseId)));
-        if ('' !== $activeProvider) {
-            $providers[] = $activeProvider;
-        }
-
-        $resolvedProvider = $this->resolveProviderForCourse($course, $provider);
-        if (!\in_array($resolvedProvider, $providers, true)) {
-            $providers[] = $resolvedProvider;
-        }
+        // Never export a different provider's conversation when the user
+        // explicitly selected one. The provider is part of the thread identity.
+        $providers = [$this->resolveProviderForCourse($course, $provider)];
 
         foreach ($providers as $providerKey) {
             $conversation = $this->conversationRepo->findOneByUserCourseProvider(
@@ -775,8 +647,17 @@ final class AiTutorChatService
             $title = preg_replace('/\s+/u', ' ', $title) ?? $title;
             $content = preg_replace('/\s+/u', ' ', $content) ?? $content;
 
-            $title = htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-            $content = htmlspecialchars($content, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $used = mb_strlen(implode('', $blocks), 'UTF-8');
+            $remaining = self::COURSE_DESCRIPTION_CONTEXT_MAX_CHARS - $used;
+            if ($remaining < 180) {
+                break;
+            }
+
+            $title = htmlspecialchars(mb_substr($title, 0, 160, 'UTF-8'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $title = mb_substr($title, 0, 200, 'UTF-8');
+            $maxContent = max(0, $remaining - mb_strlen($title, 'UTF-8') - 100);
+            $content = htmlspecialchars(mb_substr($content, 0, $maxContent, 'UTF-8'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            $content = mb_substr($content, 0, $maxContent, 'UTF-8');
 
             $blocks[] = "\n<course_description>\n"
                 .'  <title>'.$title."</title>\n"
@@ -860,8 +741,8 @@ final class AiTutorChatService
             throw new InvalidArgumentException('Empty message.');
         }
 
-        // Failover before persisting anything (prevents half-written messages)
-        $meta = $this->chatWithFailover(
+        // Call the selected provider before persisting any messages.
+        $meta = $this->chatWithSelectedProvider(
             $userId,
             $course,
             $session,
@@ -960,8 +841,8 @@ final class AiTutorChatService
         }
 
         try {
-            // Failover before persisting anything
-            $meta = $this->chatWithFailover(
+            // Call the selected provider before persisting any messages.
+            $meta = $this->chatWithSelectedProvider(
                 $userId,
                 $course,
                 $session,
@@ -1076,7 +957,7 @@ final class AiTutorChatService
         $limit = min($pageSize, $remaining);
         $offset = max(0, $total - $visible - $limit);
 
-        $messages = $this->conversationRepo->findMessagesPage($conversation, $offset, $limit);
+        $messages = $this->conversationRepo->findMessagesSlice($conversation, $offset, $limit);
 
         $items = [];
         foreach ($messages as $m) {
@@ -1258,8 +1139,8 @@ final class AiTutorChatService
             throw new InvalidArgumentException('Empty message.');
         }
 
-        // Failover before persisting
-        $meta = $this->chatWithFailover($userId, $course, $session, $provider, $message, $selectedTextContext);
+        // Call the selected provider before persisting any messages.
+        $meta = $this->chatWithSelectedProvider($userId, $course, $session, $provider, $message, $selectedTextContext);
 
         $providerUsed = $meta['provider'];
         $conversation = $meta['conversation'];
@@ -1386,7 +1267,7 @@ final class AiTutorChatService
             return true;
         }
 
-        // Generic fallback messages should trigger failover.
+        // A provider error is not valid assistant content.
         if (str_contains($t, 'ai is temporarily unavailable')) {
             return true;
         }

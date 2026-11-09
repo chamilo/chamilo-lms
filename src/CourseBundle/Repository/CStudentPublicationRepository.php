@@ -417,7 +417,8 @@ final class CStudentPublicationRepository extends ResourceRepository
         int $assignmentId,
         int $page,
         int $itemsPerPage,
-        array $order = []
+        array $order = [],
+        ?int $userId = null,
     ): array {
         $qb = $this->createQueryBuilder('submission')
             ->leftJoin('submission.user', 'user')
@@ -429,6 +430,12 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->setParameter('assignmentId', $assignmentId)
             ->setParameter('filetype', 'file')
         ;
+
+        if (null !== $userId) {
+            $qb->andWhere('user.id = :userId')
+                ->setParameter('userId', $userId)
+            ;
+        }
 
         $allowedOrderFields = [
             'user.fullName' => ['user.lastname', 'user.firstname'],
@@ -447,6 +454,9 @@ final class CStudentPublicationRepository extends ResourceRepository
             }
         }
 
+        // Keep row positions stable when several submissions share the same sort value.
+        $qb->addOrderBy('submission.iid', 'ASC');
+
         $qb->setFirstResult(($page - 1) * $itemsPerPage)
             ->setMaxResults($itemsPerPage)
         ;
@@ -456,6 +466,71 @@ final class CStudentPublicationRepository extends ResourceRepository
         return [
             iterator_to_array($paginator),
             \count($paginator),
+        ];
+    }
+
+    /**
+     * Paginate distinct submitters instead of individual files. The underlying
+     * teacher submission query remains available for each student's details.
+     *
+     * @return array{0: array<int, array<string, mixed>>, 1: int}
+     */
+    public function findSubmissionGroupsByAssignment(
+        int $assignmentId,
+        int $page,
+        int $itemsPerPage,
+        array $order = [],
+    ): array {
+        $qb = $this->createQueryBuilder('submission')
+            ->join('submission.user', 'user')
+            ->where('submission.publicationParent = :assignmentId')
+            ->andWhere('submission.filetype = :filetype')
+            ->setParameter('assignmentId', $assignmentId)
+            ->setParameter('filetype', 'file')
+        ;
+
+        $total = (int) (clone $qb)
+            ->select('COUNT(DISTINCT user.id)')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        $qb->select('user.id AS userId', 'user.firstname AS firstname', 'user.lastname AS lastname')
+            ->addSelect('COUNT(submission.iid) AS submissionCount')
+            ->groupBy('user.id')
+            ->addGroupBy('user.firstname')
+            ->addGroupBy('user.lastname')
+        ;
+
+        $allowedOrderFields = [
+            'user.fullName' => ['user.lastname', 'user.firstname'],
+            'submissionCount' => ['submissionCount'],
+        ];
+        $sortField = array_key_first($order);
+        $validField = isset($allowedOrderFields[$sortField]);
+        $sortColumns = $validField ? $allowedOrderFields[$sortField] : $allowedOrderFields['user.fullName'];
+        $requestedDirection = $validField && \is_string($order[$sortField]) ? strtolower($order[$sortField]) : 'asc';
+        $sortDirection = 'desc' === $requestedDirection ? 'DESC' : 'ASC';
+        foreach ($sortColumns as $column) {
+            $qb->addOrderBy($column, $sortDirection);
+        }
+
+        $rows = $qb
+            ->addOrderBy('user.id', 'ASC')
+            ->setFirstResult(($page - 1) * $itemsPerPage)
+            ->setMaxResults($itemsPerPage)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return [
+            array_map(static fn (array $row): array => [
+                'userId' => (int) $row['userId'],
+                'firstname' => (string) $row['firstname'],
+                'lastname' => (string) $row['lastname'],
+                'submissionCount' => (int) $row['submissionCount'],
+            ], $rows),
+            $total,
         ];
     }
 

@@ -2300,13 +2300,9 @@ function repaintKnownPresence() {
   resolvedPresenceByPeer.forEach((online, pid) => applyPresenceToPeer(Number(pid), online))
 }
 
-/** Current Chamilo URL without scheme or domain, for AI contextual help. */
+/** Share only the current page path, never sensitive query parameters or URL fragments. */
 function currentRelativeUrl() {
-  const pathname = String(window.location.pathname || "/")
-  const search = String(window.location.search || "")
-  const hash = String(window.location.hash || "")
-
-  return `${pathname}${search}${hash}`
+  return String(window.location.pathname || "/")
 }
 
 /** Tutor context */
@@ -3299,18 +3295,41 @@ async function send() {
       if (res.sec_token) me.secToken = res.sec_token
       replaceTempId(pid, tempId, { id: Number(res.id), recd: 2, date: nowSec })
       removePending(pid, tempId)
-    } else if (pid === AI_PEER_ID && res?.assistant) {
-      // Course AI errors are intentionally not persisted in the global chat table.
-      // Remove the optimistic user row and keep only the transient assistant error.
+    } else if (pid === AI_PEER_ID) {
+      // Do not leave failed AI requests pending forever.
       const arr2 = messagesByPeer.get(pid) || []
-      messagesByPeer.set(
-        pid,
-        arr2.filter((m) => Number(m.id) !== Number(tempId)),
-      )
+      const clean = arr2.filter((m) => Number(m.id) !== Number(tempId))
+      if (!res?.assistant) {
+        clean.push({
+          id: -Date.now() - 1,
+          from_user_info: { id: AI_PEER_ID, complete_name: t("AI Tutor") },
+          f: AI_PEER_ID,
+          message: t("An unexpected error occurred. Please try again later."),
+          date: Math.floor(Date.now() / 1000),
+          recd: 1,
+        })
+        if (Number(activePeer.value?.id) === pid && !draft.value) draft.value = raw
+      }
+      messagesByPeer.set(pid, clean)
       removePending(pid, tempId)
     }
   } catch {
-    // keep pending bubble
+    if (pid === AI_PEER_ID) {
+      const messages = messagesByPeer.get(pid) || []
+      messagesByPeer.set(pid, [
+        ...messages.filter((msg) => Number(msg.id) !== Number(tempId)),
+        {
+          id: -Date.now() - 1,
+          from_user_info: { id: AI_PEER_ID, complete_name: t("AI Tutor") },
+          f: AI_PEER_ID,
+          message: t("An unexpected error occurred. Please try again later."),
+          date: Math.floor(Date.now() / 1000),
+          recd: 1,
+        },
+      ])
+      removePending(pid, tempId)
+      if (Number(activePeer.value?.id) === pid && !draft.value) draft.value = raw
+    }
   } finally {
     if (pid === AI_PEER_ID) {
       aiTutorResponding.value = false

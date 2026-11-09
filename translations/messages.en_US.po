@@ -43505,3 +43505,47 @@ msgstr "The selected session is used for analysis. Approved skills are attached 
 msgid "You can review suggestions, but you do not have permission to assign skills to Gradebook."
 msgstr "You can review suggestions, but you do not have permission to assign skills to Gradebook."
 
+msgid "Invalid JSON syntax"
+msgstr "Invalid JSON syntax"
+
+msgid "Conversations"
+msgstr "Conversations"
+
+msgid "Published and archived trees are read-only. To make changes, duplicate the tree, edit the new draft, and publish it. Publishing a new tree automatically archives the previously published tree for the same portal."
+msgstr "Published and archived trees are read-only. To make changes, duplicate the tree, edit the new draft, and publish it. Publishing a new tree automatically archives the previously published tree for the same portal."
+
+msgid "Use View conversations on any tree to review its conversation logs, even when the count is zero."
+msgstr "Use View conversations on any tree to review its conversation logs, even when the count is zero."
+
+msgid "Download an example file, edit its questions and options, then import it. The examples work without an existing ticket project; add ticket escalation after importing if needed."
+msgstr "Download an example file, edit its questions and options, then import it. The examples work without an existing ticket project; add ticket escalation after importing if needed."
+
+msgid "Download JSON example"
+msgstr "Download JSON example"
+
+msgid "Download CSV example"
+msgstr "Download CSV example"
+
+msgid "Page backgrounds"
+msgstr "Page backgrounds"
+
+msgid "Images shown at the bottom of some pages, repeated horizontally. Upload a PNG, JPEG or WebP image (2 MB maximum) to replace one, or hide it."
+msgstr "Images shown at the bottom of some pages, repeated horizontally. Upload a PNG, JPEG or WebP image (2 MB maximum) to replace one, or hide it."
+
+msgid "Uploaded image"
+msgstr "Uploaded image"
+
+msgid "Image of the theme"
+msgstr "Image of the theme"
+
+msgid "Restore the image of the theme"
+msgstr "Restore the image of the theme"
+
+msgid "Select a PNG, JPEG or WebP image smaller than 2 MB."
+msgstr "Select a PNG, JPEG or WebP image smaller than 2 MB."
+
+msgid "Delete the uploaded image and restore the image of the theme?"
+msgstr "Delete the uploaded image and restore the image of the theme?"
+
+msgid "Theme image restored"
+msgstr "Theme image restored"

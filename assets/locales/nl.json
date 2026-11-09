@@ -4616,5 +4616,7 @@
     "Saved.": "Opgeslagen",
     "You have tried to resolve this exercise earlier": "U hebt vroeger al geprobeerd om deze oefening op te doen",
     "Disable new test attempts": "Nieuwe oefenpogingen uitschakelen",
-    "This skill cannot be acquired": "Deze vaardigheid kan niet worden verworven"
+    "This skill cannot be acquired": "Deze vaardigheid kan niet worden verworven",
+    "Validated": "Nagezien",
+    "Not validated": "Niet nagezien"
 }

@@ -2091,10 +2091,11 @@ class SessionManager
             return false;
         }
 
-        if (self::allowed($sessionEntity) && !$fromWs) {
-            if (!$sessionEntity->hasUserAsSessionAdmin($user) && !api_is_platform_admin()) {
-                api_not_allowed(true);
-            }
+        // The caller must be allowed to manage this very session (platform admin, session admin of the session or
+        // with the manage-all setting, general coach when teachers may create sessions). The check used to be
+        // inverted: it only ran for the users allowed to manage the session and let the others delete it.
+        if (!$fromWs && !self::cantEditSession($sessionEntity)) {
+            api_not_allowed(true);
         }
 
         Container::getEventDispatcher()->dispatch(

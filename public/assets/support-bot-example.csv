@@ -1,0 +1,5 @@
+tree_title,tree_description,entry_node,node_ref,node_content,option_label,option_action,option_target_ref,option_target_url,option_ticket_category,option_closing_message,default_ticket_project
+Support Bot Example - Login and Video Help,A ready-to-import example for first-line LMS support.,n1,n1,Hello! What do you need help with?,A video does not play,goto_node,n2,,,,
+,,,n1,Hello! What do you need help with?,I cannot log in,goto_node,n3,,,,
+,,,n2,Please check your internet connection and try another browser.,"I understand, thank you",end_conversation,,,,Glad we could help.,
+,,,n3,Please verify your username and try the password reset option on the login page.,"I understand, thank you",end_conversation,,,,Glad we could help.,

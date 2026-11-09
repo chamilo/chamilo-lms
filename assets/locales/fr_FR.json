@@ -4651,5 +4651,21 @@
     "Disable new test attempts": "D\u00e9sactiver les nouvelles tentatives de test",
     "This skill cannot be acquired": "Cette comp\u00e9tence ne peut pas \u00eatre acquise",
     "Number of posts": "Nombre de messages",
-    "Share of the thread's posts": "Part des messages du fil"
+    "Share of the thread's posts": "Part des messages du fil",
+    "Conversations": "Conversations",
+    "Published and archived trees are read-only. To make changes, duplicate the tree, edit the new draft, and publish it. Publishing a new tree automatically archives the previously published tree for the same portal.": "Les arbres publi\u00e9s et archiv\u00e9s sont en lecture seule. Pour les modifier, dupliquez l\u2019arbre, modifiez le nouveau brouillon, puis publiez-le. La publication d\u2019un nouvel arbre archive automatiquement l\u2019arbre pr\u00e9c\u00e9demment publi\u00e9 pour le m\u00eame portail.",
+    "Use View conversations on any tree to review its conversation logs, even when the count is zero.": "Utilisez \u00ab Voir les conversations \u00bb sur chaque arbre pour consulter son historique, m\u00eame si aucune conversation n\u2019a encore \u00e9t\u00e9 enregistr\u00e9e.",
+    "Download an example file, edit its questions and options, then import it. The examples work without an existing ticket project; add ticket escalation after importing if needed.": "T\u00e9l\u00e9chargez un fichier d\u2019exemple, modifiez ses questions et ses options, puis importez-le. Les exemples fonctionnent sans projet de tickets existant ; ajoutez l\u2019escalade vers les tickets apr\u00e8s l\u2019importation si n\u00e9cessaire.",
+    "Download JSON example": "T\u00e9l\u00e9charger l\u2019exemple JSON",
+    "Download CSV example": "T\u00e9l\u00e9charger l\u2019exemple CSV",
+    "Validated": "Annot\u00e9",
+    "Not validated": "Non annot\u00e9",
+    "Page backgrounds": "Arri\u00e8re-plans des pages",
+    "Images shown at the bottom of some pages, repeated horizontally. Upload a PNG, JPEG or WebP image (2 MB maximum) to replace one, or hide it.": "Images affich\u00e9es en bas de certaines pages, r\u00e9p\u00e9t\u00e9es horizontalement. Importez une image PNG, JPEG ou WebP (2 Mo maximum) pour en remplacer une, ou masquez-la.",
+    "Uploaded image": "Image import\u00e9e",
+    "Image of the theme": "Image du th\u00e8me",
+    "Restore the image of the theme": "R\u00e9tablir l'image du th\u00e8me",
+    "Select a PNG, JPEG or WebP image smaller than 2 MB.": "S\u00e9lectionnez une image PNG, JPEG ou WebP de moins de 2 Mo.",
+    "Delete the uploaded image and restore the image of the theme?": "Supprimer l'image import\u00e9e et r\u00e9tablir l'image du th\u00e8me ?",
+    "Theme image restored": "Image du th\u00e8me r\u00e9tablie"
 }

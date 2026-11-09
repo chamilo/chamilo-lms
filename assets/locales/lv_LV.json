@@ -4616,5 +4616,7 @@
     "Saved.": "Saglab\u0101ts",
     "You have tried to resolve this exercise earlier": "J\u016bs jau m\u0113\u0123in\u0101j\u0101t atbild\u0113t uz \u0161o jaut\u0101jumu agr\u0101k",
     "Disable new test attempts": "Atsp\u0113jot jaunus testa m\u0113\u0123in\u0101jumus",
-    "This skill cannot be acquired": "\u0160o prasmi nevar ieg\u016bt"
+    "This skill cannot be acquired": "\u0160o prasmi nevar ieg\u016bt",
+    "Validated": "Apstiprin\u0101ts",
+    "Not validated": "Nav apstiprin\u0101ts"
 }

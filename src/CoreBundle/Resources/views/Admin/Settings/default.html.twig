@@ -195,8 +195,15 @@ For transparency, future releases may show non-intrusive end-user tags indicatin
 
                                     {% else %}
                                         {% set widgetAttr = (isDisabledOnSubUrl or isUnsupported) ? { disabled: 'disabled' } : {} %}
+                                        {% set isJsonField = fieldName in (json_fields ?? []) %}
+                                        {% if isJsonField %}
+                                            {% set widgetAttr = widgetAttr|merge({'data-json-setting': 'true'}) %}
+                                        {% endif %}
 
                                         {{ form_widget(field, { attr: widgetAttr }) }}
+                                        {% if isJsonField %}
+                                            <p id="{{ field.vars.id }}_json_validation_error" class="hidden text-danger text-body-2 mt-2" role="alert" aria-live="polite"></p>
+                                        {% endif %}
                                     {% endif %}
 
                                     {% if field.vars.help is not empty %}
@@ -619,6 +626,7 @@ sudo systemctl restart apache2
       });
     </script>
 
+    {% include '@ChamiloCore/Admin/Settings/json_validation.html.twig' %}
 {% endblock %}
 {% block javascripts %}
     {% set ns = app.request.get('namespace')|default('') %}

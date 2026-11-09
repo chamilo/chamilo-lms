@@ -144,6 +144,25 @@ final class SurveyAccessControlTest extends KernelTestCase
         $this->assertTrue(SurveyManager::surveyBelongsToCourse($id, 2, 0));
     }
 
+    public function testSurveyBelongsToCurrentCourseFollowsTheCourseOfTheRequest(): void
+    {
+        // The pages call this wrapper: it must use the course of the request, not accept any survey.
+        $mine = $this->survey();
+        $this->publish($mine, 1);
+        $theirs = $this->survey();
+        $this->publish($theirs, 2);
+        \ChamiloSession::write('_real_cid', 1);
+        \ChamiloSession::write('sid', 0);
+
+        try {
+            $this->assertTrue(SurveyManager::surveyBelongsToCurrentCourse($mine));
+            $this->assertFalse(SurveyManager::surveyBelongsToCurrentCourse($theirs), 'a survey of course 2 is out of reach of course 1');
+            $this->assertFalse(SurveyManager::surveyBelongsToCurrentCourse(999999999));
+        } finally {
+            \ChamiloSession::erase('_real_cid');
+        }
+    }
+
     public function testUnknownEmptyOrUnlinkedIdIsRejected(): void
     {
         $this->assertFalse(SurveyManager::surveyBelongsToCourse(999999999, 1, 0));

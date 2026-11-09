@@ -341,6 +341,30 @@ final class CourseReportingSectionsTest extends KernelTestCase
         $this->assertStringContainsString('(rp_r2m1_', $result['meta']['users'][0]['label']);
     }
 
+    public function testMessagesListTheConversationOfTwoLearnersNewestFirstWithItsDirection(): void
+    {
+        // The recipients of a message live in message_rel_user (type "to" = 1), the sender on the message itself.
+        $a = $this->learner('r2m4');
+        $b = $this->learner('r2m5');
+        $c = $this->learner('r2m6');
+        $this->message($a, $b, 'r2_first', '2026-01-01 10:00:00', '<b>hello</b> b');
+        $this->message($b, $a, 'r2_reply', '2026-01-02 10:00:00', 'hi a');
+        $this->message($a, $c, 'r2_other_peer', '2026-01-03 10:00:00');
+        $this->message($c, $b, 'r2_third_party', '2026-01-04 10:00:00');
+
+        $result = $this->section('messages', ['userId' => $a, 'peerUserId' => $b]);
+
+        $this->assertSame(2, $result['total']);
+        $this->assertSame(['r2_reply', 'r2_first'], array_column($result['items'], 'title'), 'newest first');
+        $this->assertSame(['received', 'sent'], array_column($result['items'], 'direction'));
+        $this->assertSame('hello b', $result['items'][1]['content'], 'markup is stripped');
+        $this->assertSame([$b, $a], array_map('intval', array_column($result['items'], 'senderId')));
+        $this->assertSame([$a, $b], array_map('intval', array_column($result['items'], 'receiverId')));
+
+        $reverse = $this->section('messages', ['userId' => $b, 'peerUserId' => $a]);
+        $this->assertSame(['sent', 'received'], array_column($reverse['items'], 'direction'));
+    }
+
     public function testMessagesRefuseUsersWhoAreNotLearnersOfTheCourse(): void
     {
         $a = $this->learner('r2m2');

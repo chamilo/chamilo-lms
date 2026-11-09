@@ -769,6 +769,9 @@
     }
 
     merged = applyChamiloEditorPolicies(merged, features)
+    // The global TinyMCE init wrapper can rebuild this configuration repeatedly.
+    // Keep the effective policy so each pass enforces the same iframe permissions.
+    merged.chamiloEditorFeatures = features
 
     return merged
   }

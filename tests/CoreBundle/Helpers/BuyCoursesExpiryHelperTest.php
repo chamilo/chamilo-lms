@@ -166,6 +166,33 @@ final class BuyCoursesExpiryHelperTest extends BuyCoursesCharacterizationTestCas
         $this->assertSame(0, $this->visibility(2), 'The excess course is closed');
     }
 
+    public function testTheLimitIsReadFromTheCurrentAccessUrlRowOfTheSetting(): void
+    {
+        // A setting has one row per access URL. Another URL with a higher id and a generous limit must not
+        // override the limit of the URL the cron runs on (the current one).
+        $this->enablePlugin();
+        $teacher = $this->rawUser('t');
+        $this->courseUser($teacher, 1, 1);
+        $this->courseUser($teacher, 2, 1);
+        $this->setSetting('max_courses_per_user', '1');
+        $this->conn()->executeStatement(
+            "INSERT INTO access_url (url, description, active, created_by, lft, lvl, rgt, is_login_only)
+             VALUES ('http://bx-other.test/', 'bx', 1, 1, 1, 0, 2, 0)"
+        );
+        $otherUrl = (int) $this->conn()->lastInsertId();
+        $this->conn()->executeStatement(
+            "INSERT INTO settings (access_url, variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_locked, access_url_changeable)
+             SELECT ?, variable, subkey, type, category, '50', title, comment, scope, subkeytext, access_url_locked, access_url_changeable
+               FROM settings WHERE variable = 'max_courses_per_user' AND access_url = 1",
+            [$otherUrl]
+        );
+        $this->sale($teacher, 910009, '2001-01-01 00:00:00');
+
+        $this->assertSame(1, $this->helper->processExpiredServiceBenefits());
+
+        $this->assertSame(0, $this->visibility(2), 'the limit of URL 1 (1 course) applies, not the 50 of the other URL');
+    }
+
     public function testUnexpiredOrNonCompletedSalesDoNotTriggerTheSweep(): void
     {
         $this->enablePlugin();

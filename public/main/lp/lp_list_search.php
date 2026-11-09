@@ -169,7 +169,7 @@ if (count($blocks) > 0) {
             //Sortable additional_parameters doesn't accept multi dimensional arrays
             //$additional_parameters[ 'sf_'. $specific_field['code'] ] = $values;
             foreach ($values as $value) {
-                $get_params .= '&sf_'.$specific_field['code'].'[]='.$value;
+                $get_params .= '&sf_'.$specific_field['code'].'[]='.rawurlencode((string) $value);
             }
             $get_params .= '&';
         }
@@ -183,10 +183,11 @@ if (count($blocks) > 0) {
 
     $search_link = '<a href="%ssearch/index.php?mode=%s&action=search&query=%s%s">';
 
+    $queryParam = rawurlencode((string) $_REQUEST['query']);
     $mode_selector = '<div id="mode-selector">';
-    $mode_selector .= sprintf($search_link, api_get_path(WEB_CODE_PATH), 'gallery', $_REQUEST['query'], $get_params);
+    $mode_selector .= sprintf($search_link, api_get_path(WEB_CODE_PATH), 'gallery', $queryParam, htmlspecialchars($get_params, ENT_QUOTES));
     $mode_selector .= ('gallery' == $mode) ? getMdiIcon(ObjectIcon::GALLERY, 'ch-tool-icon') : getMdiIcon(ObjectIcon::GALLERY, 'ch-tool-icon-disabled');
-    $mode_selector .= sprintf($search_link, api_get_path(WEB_CODE_PATH), 'default', $_REQUEST['query'], $get_params);
+    $mode_selector .= sprintf($search_link, api_get_path(WEB_CODE_PATH), 'default', $queryParam, htmlspecialchars($get_params, ENT_QUOTES));
     $mode_selector .= ('default' == $mode) ? getMdiIcon(ObjectIcon::LIST, 'ch-tool-icon') : getMdiIcon(ObjectIcon::LIST, 'ch-tool-icon-disabled');
     $mode_selector .= '</div>';
 

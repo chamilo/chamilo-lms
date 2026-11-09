@@ -256,6 +256,27 @@ final class LpAccessControlTest extends KernelTestCase
         $this->assertStringContainsString('lpItemBelongsToLp', $this->caseBlock('add_audio'));
     }
 
+    public function testStatsOfAnotherUserAreForTeachersOnly(): void
+    {
+        $code = $this->source('public/main/lp/lp_stats.php');
+        $this->assertMatchesRegularExpression('/api_get_user_id\(\)\s*!==\s*\$userId/', $code);
+        $this->assertStringContainsString('api_is_allowed_to_edit', $code);
+        $this->assertStringContainsString('api_not_allowed', $code);
+    }
+
+    public function testCategoryFormOnlyReadsCategoriesOfTheCurrentCourse(): void
+    {
+        $this->assertStringContainsString('categoryBelongsToCurrentCourse', $this->source('public/main/lp/lp_add_category.php'));
+    }
+
+    public function testAiCreationEndpointIsTeacherOnlyAndBoundToTheCurrentCourse(): void
+    {
+        $code = $this->source('public/main/inc/ajax/lp.ajax.php');
+        $block = substr($code, (int) strpos($code, "case 'add_lp_ai':"), 900);
+        $this->assertStringContainsString('api_is_allowed_to_edit', $block);
+        $this->assertStringContainsString('getCode()', $block, 'course_code must be the current course');
+    }
+
     public function testMoveOfAnotherCoursePathsIsRefusedByTheControllerLookup(): void
     {
         // Pre-existing guard (89b1e7aeb04): the controller ignores a lp_id not linked to the current course.
@@ -263,4 +284,9 @@ final class LpAccessControlTest extends KernelTestCase
         $this->assertStringContainsString('getFirstResourceLinkFromCourseSession($course)', $code);
     }
 
+    public function testRequestValuesAreNotEchoedRawInTheSearchLinks(): void
+    {
+        $code = $this->source('public/main/lp/lp_list_search.php');
+        $this->assertStringNotContainsString("\$_REQUEST['query'], \$get_params", $code);
+    }
 }

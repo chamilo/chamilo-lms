@@ -50,6 +50,9 @@ $form->addButtonSave(get_lang('Save'));
 $repo = Container::getLpCategoryRepository();
 if ($form->validate()) {
     $values = $form->getSubmitValues();
+    if (!empty($values['id']) && !learnpath::categoryBelongsToCurrentCourse((int) $values['id'])) {
+        api_not_allowed(true);
+    }
     if (!empty($values['id'])) {
         learnpath::updateCategory($values);
         $url = api_get_self().'?action=list&'.api_get_cidreq();
@@ -67,6 +70,10 @@ if ($form->validate()) {
     $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 
     if ($id) {
+        // The id comes from the request: only categories of the current course can be loaded and renamed.
+        if (!learnpath::categoryBelongsToCurrentCourse((int) $id)) {
+            api_not_allowed(true);
+        }
         $item = $repo->find($id);
         $defaults = [
             'id' => $item->getIid(),

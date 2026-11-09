@@ -87,6 +87,35 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         );
     }
 
+    public function testSubscriptionAmountColumnsKeepTwoDecimalsInTheInstalledSchemaAndTheInstaller(): void
+    {
+        // The subscription amounts were created as DECIMAL(10,0), which rounded every price to a whole unit.
+        $columns = [
+            'plugin_buycourses_subscription' => ['price'],
+            'plugin_buycourses_subscription_rel_sale' => ['price', 'price_without_tax', 'tax_amount', 'price_without_discount', 'discount_amount'],
+        ];
+        foreach ($columns as $table => $fields) {
+            foreach ($fields as $field) {
+                $type = (string) $this->conn->fetchOne(
+                    'SELECT COLUMN_TYPE FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?',
+                    [$table, $field]
+                );
+                $this->assertSame('decimal(10,2)', strtolower($type), $table.'.'.$field);
+            }
+        }
+
+        $installer = (string) file_get_contents(__DIR__.'/../../../public/plugin/BuyCourses/database.php');
+        foreach (['subscriptionTable' => ['price'], 'subscriptionSaleTable' => ['price', 'price_without_tax', 'tax_amount', 'price_without_discount', 'discount_amount']] as $var => $fields) {
+            foreach ($fields as $field) {
+                $this->assertMatchesRegularExpression(
+                    '/\$'.$var.'->addColumn\(\''.$field.'\', Types::DECIMAL, \[\'precision\' => 10, \'scale\' => 2/',
+                    $installer,
+                    $var.'.'.$field
+                );
+            }
+        }
+    }
+
     public function testCouponLookupByIdAndCodeRespectsTheValidityWindowAndProduct(): void
     {
         $id = $this->makeCoupon('BC_WIN', 1, 20, '2026-06-01 00:00:00', '2026-06-30 23:59:59');

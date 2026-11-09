@@ -5944,7 +5944,7 @@ class SessionManager
 
                     if ($session_id) {
                         $sessionInfo = api_get_session_info($session_id);
-                        $params['show_description'] = $sessionInfo['show_description'] ?? intval($showDescription);
+                        $params['show_description'] = (int) ($sessionInfo['show_description'] ?? $showDescription);
 
                         if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
                             if (empty($sessionInfo['nb_days_access_before_beginning']) ||

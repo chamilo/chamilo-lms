@@ -82,7 +82,7 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
 
         $installer = (string) file_get_contents(__DIR__.'/../../../public/plugin/BuyCourses/database.php');
         $this->assertMatchesRegularExpression(
-            "/couponTable->addColumn\('discount_amount', Types::DECIMAL, \['precision' => 10, 'scale' => 2\]\)/",
+            "/couponTable->addColumn\\('discount_amount', Types::DECIMAL, \\['precision' => 10, 'scale' => 2\\]\\)/",
             $installer
         );
     }

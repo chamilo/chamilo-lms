@@ -14,6 +14,8 @@ use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use Database;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
 use InvalidArgumentException;
 use RuntimeException;
@@ -804,15 +806,15 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         // 12 hours too early. A fixed afternoon time makes this deterministic whatever the hour the suite runs at.
         $this->assertSame(
             '2026-02-12 15:30:00',
-            Statistics::getRecentLoginWindowStart(new \DateTimeImmutable('2026-03-15 15:30:00'))
+            Statistics::getRecentLoginWindowStart(new DateTimeImmutable('2026-03-15 15:30:00'))
         );
         $this->assertSame(
             '2026-02-12 23:59:59',
-            Statistics::getRecentLoginWindowStart(new \DateTime('2026-03-15 23:59:59'))
+            Statistics::getRecentLoginWindowStart(new DateTime('2026-03-15 23:59:59'))
         );
         $this->assertSame(
             '2026-02-12 00:05:00',
-            Statistics::getRecentLoginWindowStart(new \DateTime('2026-03-15 00:05:00'))
+            Statistics::getRecentLoginWindowStart(new DateTime('2026-03-15 00:05:00'))
         );
     }
 

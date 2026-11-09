@@ -6,10 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
-use ChamiloSession;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;

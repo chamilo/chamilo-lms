@@ -22,6 +22,16 @@ final class LegacyPageGuardsTripwireTest extends TestCase
     private const GUARD = '/Security::check_token\(|->protect\(\)|api_not_allowed\(|api_protect_admin_script\(|protectElementInCurrentCourse\(|BelongsToCourse\(|canManageCourseCertificates\(|categoryInCourse\(|workActionTokenIsValid\(|mayViewStatsOfUser\(/';
 
     /**
+     * @dataProvider pages
+     */
+    public function testThePageKeepsItsGuards(string $file, int $minimum): void
+    {
+        $source = (string) file_get_contents(__DIR__.'/../../../'.$file);
+        $this->assertNotSame('', $source, $file.' is missing');
+        $this->assertGreaterThanOrEqual($minimum, preg_match_all(self::GUARD, $source), $file.' lost a guard call');
+    }
+
+    /**
      * @return array<string, array{string, int}>
      */
     public static function pages(): array
@@ -110,16 +120,6 @@ final class LegacyPageGuardsTripwireTest extends TestCase
         }
 
         return $rows;
-    }
-
-    /**
-     * @dataProvider pages
-     */
-    public function testThePageKeepsItsGuards(string $file, int $minimum): void
-    {
-        $source = (string) file_get_contents(__DIR__.'/../../../'.$file);
-        $this->assertNotSame('', $source, $file.' is missing');
-        $this->assertGreaterThanOrEqual($minimum, preg_match_all(self::GUARD, $source), $file.' lost a guard call');
     }
 
     public function testTheStatisticsAjaxScopesTheSessionsByDateChartsToTheCurrentUrl(): void

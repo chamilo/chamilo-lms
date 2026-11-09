@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use SurveyManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -151,15 +152,15 @@ final class SurveyAccessControlTest extends KernelTestCase
         $this->publish($mine, 1);
         $theirs = $this->survey();
         $this->publish($theirs, 2);
-        \ChamiloSession::write('_real_cid', 1);
-        \ChamiloSession::write('sid', 0);
+        ChamiloSession::write('_real_cid', 1);
+        ChamiloSession::write('sid', 0);
 
         try {
             $this->assertTrue(SurveyManager::surveyBelongsToCurrentCourse($mine));
             $this->assertFalse(SurveyManager::surveyBelongsToCurrentCourse($theirs), 'a survey of course 2 is out of reach of course 1');
             $this->assertFalse(SurveyManager::surveyBelongsToCurrentCourse(999999999));
         } finally {
-            \ChamiloSession::erase('_real_cid');
+            ChamiloSession::erase('_real_cid');
         }
     }
 

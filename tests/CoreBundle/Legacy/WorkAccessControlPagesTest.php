@@ -178,6 +178,36 @@ final class WorkAccessControlPagesTest extends KernelTestCase
         protectWork($courseInfo, $theirs);
     }
 
+    public function testGetFileContentsRefusesASubmissionOfAnotherCourseEvenToAnAdministrator(): void
+    {
+        $admin = $this->getUser('admin');
+        self::getContainer()->get('security.token_storage')->setToken(new UsernamePasswordToken($admin, 'main', $admin->getRoles()));
+        ChamiloSession::write('_user', ['id' => $admin->getId()]);
+        ChamiloSession::write('_real_cid', 1);
+
+        $withFile = function (int $courseId): int {
+            $folder = $this->publishedWork($courseId);
+            $work = $this->publishedWork($courseId, $folder);
+            $nodeId = (int) $this->conn->fetchOne('SELECT resource_node_id FROM c_student_publication WHERE iid = ?', [$work]);
+            $this->conn->insert('resource_file', [
+                'resource_node_id' => $nodeId,
+                'title' => 'wp_file.txt',
+                'original_name' => 'wp_file.txt',
+                'size' => 3,
+                'created_at' => '2020-01-01 00:00:00',
+                'updated_at' => '2020-01-01 00:00:00',
+            ]);
+
+            return $work;
+        };
+        $mine = $withFile(1);
+        $theirs = $withFile(2);
+        Container::getEntityManager()->clear();
+
+        $this->assertNotFalse(getFileContents($mine, ['real_id' => 1, 'show_score' => 0], 0, false, true), 'a file of the current course is readable');
+        $this->assertFalse(getFileContents($theirs, ['real_id' => 1, 'show_score' => 0], 0, false, true), 'a submission id of course 2 is not');
+    }
+
     public function testDeleteDirWorkRefusesAFolderOfAnotherCourse(): void
     {
         $id = $this->publishedWork(2);

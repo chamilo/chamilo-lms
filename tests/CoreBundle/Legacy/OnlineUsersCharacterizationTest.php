@@ -510,6 +510,19 @@ final class OnlineUsersCharacterizationTest extends KernelTestCase
         $this->assertSame(0, (int) whoIsOnlineInThisSessionCount(30, 9));
     }
 
+    public function testWhoIsOnlineInThisSessionCountCastsItsArgumentsInsteadOfInterpolatingThem(): void
+    {
+        // Security: both arguments come from the request. They are cast to integers, so SQL text appended to
+        // them is dropped instead of widening the query to every session or every soft-deleted/anonymous account.
+        $this->online($this->user('a'), 1, 1, 7);
+        $this->online($this->user('other'), 1, 1, 8);
+        $this->online($this->user('gone', 5, -2), 1, 1, 7);
+        $this->online($this->user('anon', 6), 1, 1, 7);
+
+        $this->assertSame(1, (int) whoIsOnlineInThisSessionCount('30', '7 OR 1=1'));
+        $this->assertSame(1, (int) whoIsOnlineInThisSessionCount('30 OR 1=1', 7));
+    }
+
     public function testWhoIsOnlineInThisSessionCountWithoutASessionIsZero(): void
     {
         $this->online($this->user('a'), 1, 1, 0);

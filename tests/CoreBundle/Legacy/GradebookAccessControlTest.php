@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use AbstractLink;
+use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
@@ -16,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Uid\UuidV4;
 
 /**
@@ -136,6 +138,51 @@ final class GradebookAccessControlTest extends KernelTestCase
              VALUES (?, ?, ?, 0, 0, 0, 0, 0)',
             [$userId, $courseId, $status]
         );
+    }
+
+    public function testProtectElementInCurrentCourseStopsTheRequestForElementsOfAnotherCourse(): void
+    {
+        // The page guard every gradebook page calls: without a token the viewer is not a platform admin.
+        ChamiloSession::write('_real_cid', 1);
+        $mineCat = $this->cat(1);
+        $theirCat = $this->cat(2);
+        $mineEval = $this->evaluation($mineCat, 1);
+        $theirEval = $this->evaluation($theirCat, 2);
+        $mineLink = $this->link($mineCat, 1);
+        $theirLink = $this->link($theirCat, 2);
+
+        try {
+            GradebookUtils::protectElementInCurrentCourse('CATE', $mineCat);
+            GradebookUtils::protectElementInCurrentCourse('CATE', 0);
+            GradebookUtils::protectElementInCurrentCourse('EVAL', $mineEval);
+            GradebookUtils::protectElementInCurrentCourse('LINK', (string) $mineLink);
+
+            foreach ([['CATE', $theirCat], ['EVAL', $theirEval], ['LINK', $theirLink], ['CATE', 999999999], ['EVAL', 0], ['OTHER', $mineCat]] as [$kind, $id]) {
+                try {
+                    GradebookUtils::protectElementInCurrentCourse($kind, $id);
+                    $this->fail($kind.' '.$id.' must be refused');
+                } catch (NotAllowedException) {
+                    $this->addToAssertionCount(1);
+                }
+            }
+        } finally {
+            ChamiloSession::erase('_real_cid');
+        }
+    }
+
+    public function testProtectElementInCurrentCourseDoesNotRestrictAPlatformAdministrator(): void
+    {
+        $admin = $this->getUser('admin');
+        self::getContainer()->get('security.token_storage')->setToken(new UsernamePasswordToken($admin, 'main', $admin->getRoles()));
+        ChamiloSession::write('_real_cid', 1);
+        $theirCat = $this->cat(2);
+
+        try {
+            GradebookUtils::protectElementInCurrentCourse('CATE', $theirCat);
+            $this->addToAssertionCount(1);
+        } finally {
+            ChamiloSession::erase('_real_cid');
+        }
     }
 
     public function testCategoryBelongsToCourseOnlyForItsOwnCourse(): void

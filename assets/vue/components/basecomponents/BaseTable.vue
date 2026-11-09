@@ -25,6 +25,10 @@ const props = defineProps({
     required: false,
     default: false,
   },
+  scrollable: {
+    type: Boolean,
+    default: false,
+  },
   isLoading: {
     type: Boolean,
     required: false,
@@ -162,6 +166,7 @@ defineExpose({
     :reorderable-rows="reorderableRows"
     :removable-sort="removableSort"
     :row-class="rowClass"
+    :scrollable="scrollable"
     :rows-per-page-options="rowsPerPageOptions"
     :sort-mode="sortMode"
     :total-records="totalItems"

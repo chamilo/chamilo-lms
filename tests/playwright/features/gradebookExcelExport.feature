@@ -60,6 +60,16 @@ Feature: Gradebook Excel export
     And the downloaded file should contain "xlsexam (Max score)"
     And the downloaded file should contain "Total (Percentage)"
 
+  Scenario: Keep learner names visible when scrolling across Gradebook evaluations
+    Given I am a platform administrator
+    And I am on course "GBXLS" homepage
+    And I wait for the page content to settle
+    And I follow "Assessments"
+    And I wait for the page content to settle
+    And I click the "[title='List view']" element
+    And wait for the page to be loaded when ready
+    Then the Gradebook list view should keep learner names visible while scores scroll horizontally
+
   Scenario: Delete the course
     Given I am a platform administrator
     And I am on course "GBXLS" homepage

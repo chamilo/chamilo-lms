@@ -826,6 +826,17 @@ class Statistics
     }
 
     /**
+     * Start of the 31-day window used by getRecentLoginStats(), as a 24-hour clock 'Y-m-d H:i:s' string.
+     */
+    public static function getRecentLoginWindowStart(DateTimeInterface $now): string
+    {
+        $date = DateTime::createFromInterface($now);
+        $date->sub(new DateInterval('P31D'));
+
+        return $date->format('Y-m-d H:i:s');
+    }
+
+    /**
      * Get the number of recent logins.
      *
      * @param ?bool $distinct            Whether to only give distinct users stats, or *all* logins
@@ -852,9 +863,7 @@ class Statistics
         }
 
         $now = api_get_utc_datetime();
-        $date = new DateTime($now);
-        $date->sub(new DateInterval('P31D'));
-        $newDate = $date->format('Y-m-d H:i:s');
+        $newDate = self::getRecentLoginWindowStart(new DateTime($now));
         $totalLogin = self::buildDatesArray($newDate, $now, true);
 
         $field = 'login_id';

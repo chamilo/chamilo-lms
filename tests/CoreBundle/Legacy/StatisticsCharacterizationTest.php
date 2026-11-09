@@ -798,16 +798,22 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $this->assertSame(5, array_sum(Statistics::getRecentLoginStats(false, 5)));
     }
 
-    public function testGetRecentLoginStatsWindowStartsExactly31DaysBeforeNowIn24HourClock(): void
+    public function testGetRecentLoginWindowStartIs31DaysEarlierIn24HourClock(): void
     {
-        // The window start used to be formatted with 'h' (12-hour clock): from 13:00 to 23:59 UTC it started
-        // 12 hours too early and counted a login made an hour before the 31-day cut-off. (This guard only
-        // bites when the suite runs between 13:00 and 23:59 UTC; the fix is the 24-hour 'H'.)
-        $u = $this->rawUser('gw');
-        $this->rawLogin($u, gmdate('Y-m-d H:i:s', strtotime('-31 days -1 hour')), gmdate('Y-m-d H:i:s', strtotime('-31 days')));
-        $this->rawLogin($u, gmdate('Y-m-d H:i:s', strtotime('-31 days +1 hour')), gmdate('Y-m-d H:i:s', strtotime('-31 days +2 hours')));
-
-        $this->assertSame(1, array_sum(Statistics::getRecentLoginStats(false, 0)));
+        // The window start used to be formatted with 'h' (12-hour clock), so an afternoon "now" started the window
+        // 12 hours too early. A fixed afternoon time makes this deterministic whatever the hour the suite runs at.
+        $this->assertSame(
+            '2026-02-12 15:30:00',
+            Statistics::getRecentLoginWindowStart(new \DateTimeImmutable('2026-03-15 15:30:00'))
+        );
+        $this->assertSame(
+            '2026-02-12 23:59:59',
+            Statistics::getRecentLoginWindowStart(new \DateTime('2026-03-15 23:59:59'))
+        );
+        $this->assertSame(
+            '2026-02-12 00:05:00',
+            Statistics::getRecentLoginWindowStart(new \DateTime('2026-03-15 00:05:00'))
+        );
     }
 
     // -------------------------------------------------------------- tool stats

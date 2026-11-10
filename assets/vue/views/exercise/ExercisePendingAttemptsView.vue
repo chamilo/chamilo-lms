@@ -1,9 +1,11 @@
 <template>
   <section class="space-y-6">
-    <div class="flex flex-col gap-3 rounded-xl border border-gray-20 bg-white p-4 shadow-sm md:flex-row md:items-center md:justify-between">
+    <div
+      class="flex flex-col gap-3 rounded-xl border border-gray-20 bg-white p-4 shadow-sm md:flex-row md:items-center md:justify-between"
+    >
       <div>
         <h1 class="text-2xl font-semibold text-gray-90">
-          {{ t("Pending attempts") }}
+          {{ Number(filters.status) === 6 ? t("Pending corrections") : t("Pending attempts") }}
         </h1>
         <p class="mt-1 text-sm text-gray-600">
           {{ t("List of pending test attempts across your courses.") }}
@@ -17,8 +19,11 @@
           :title="t('Back to my courses')"
           :to="{ name: 'MyCourses' }"
         >
-          <BaseIcon icon="back" size="small" />
-          <span class="sr-only">{{ t('Back to my courses') }}</span>
+          <BaseIcon
+            icon="back"
+            size="small"
+          />
+          <span class="sr-only">{{ t("Back to my courses") }}</span>
         </router-link>
 
         <a
@@ -28,8 +33,11 @@
           :href="actionUrls.exportCsv"
           :title="t('Export as CSV')"
         >
-          <BaseIcon icon="export" size="small" />
-          <span class="sr-only">{{ t('Export as CSV') }}</span>
+          <BaseIcon
+            icon="export"
+            size="small"
+          />
+          <span class="sr-only">{{ t("Export as CSV") }}</span>
         </a>
       </div>
     </div>
@@ -71,7 +79,7 @@
             name="filterByUser"
             :placeholder="t('User ID')"
             type="number"
-          >
+          />
         </label>
 
         <BaseSelect
@@ -103,7 +111,7 @@
             class="h-11 w-full rounded-lg border border-gray-25 bg-white px-3 text-sm text-gray-90 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             name="startDate"
             type="date"
-          >
+          />
         </label>
 
         <label class="relative block">
@@ -115,7 +123,7 @@
             class="h-11 w-full rounded-lg border border-gray-25 bg-white px-3 text-sm text-gray-90 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             name="endDate"
             type="date"
-          >
+          />
         </label>
       </div>
 
@@ -125,8 +133,11 @@
           type="button"
           @click="resetFilters"
         >
-          <BaseIcon icon="close" size="small" />
-          <span>{{ t('Reset') }}</span>
+          <BaseIcon
+            icon="close"
+            size="small"
+          />
+          <span>{{ t("Reset") }}</span>
         </button>
 
         <button
@@ -134,8 +145,11 @@
           :disabled="isLoading"
           type="submit"
         >
-          <BaseIcon icon="search" size="small" />
-          <span>{{ t('Search') }}</span>
+          <BaseIcon
+            icon="search"
+            size="small"
+          />
+          <span>{{ t("Search") }}</span>
         </button>
       </div>
     </form>
@@ -156,13 +170,13 @@
     >
       <Column
         :header="t('Course')"
+        :sortable="true"
         field="courseTitle"
-        sortable
       >
         <template #body="{ data }">
           <div class="min-w-56">
             <p class="font-semibold text-gray-90">
-              {{ data.courseTitle || '-' }}
+              {{ data.courseTitle || "-" }}
             </p>
             <p
               v-if="data.courseCode"
@@ -176,15 +190,15 @@
 
       <Column
         :header="t('Exercise')"
+        :sortable="true"
         field="exerciseTitle"
-        sortable
       >
         <template #body="{ data }">
           <router-link
             class="font-semibold text-gray-90 hover:underline"
             :to="reportRoute(data)"
           >
-            {{ data.exerciseTitle || '-' }}
+            {{ data.exerciseTitle || "-" }}
           </router-link>
         </template>
       </Column>
@@ -221,11 +235,11 @@
         <template #body="{ data }">
           <div class="space-y-1 text-xs text-gray-600">
             <div>
-              <span class="font-semibold text-gray-700">{{ t('Start date') }}:</span>
+              <span class="font-semibold text-gray-700">{{ t("Start date") }}:</span>
               {{ formatDate(data.startDate) }}
             </div>
             <div>
-              <span class="font-semibold text-gray-700">{{ t('End date') }}:</span>
+              <span class="font-semibold text-gray-700">{{ t("End date") }}:</span>
               {{ formatDate(data.endDate) }}
             </div>
           </div>
@@ -234,14 +248,14 @@
 
       <Column :header="t('Score')">
         <template #body="{ data }">
-          {{ data.scoreLabel || '-' }}
+          {{ data.scoreLabel || "-" }}
         </template>
       </Column>
 
       <Column :header="t('Status')">
         <template #body="{ data }">
           <span :class="['rounded-full px-2 py-1 text-xs font-semibold', statusClass(data.status)]">
-            {{ t(data.statusLabel || 'Not validated') }}
+            {{ t(data.statusLabel || "Not validated") }}
           </span>
           <div
             v-if="data.qualificatorFullName || data.qualificationDate"
@@ -266,13 +280,29 @@
         <template #body="{ data }">
           <div class="flex justify-end gap-1">
             <router-link
+              v-if="data.pendingCorrection"
+              :aria-label="t('Correct')"
+              :class="compactIconActionClass"
+              :title="t('Correct')"
+              :to="correctionRoute(data)"
+            >
+              <BaseIcon
+                icon="edit"
+                size="small"
+              />
+              <span class="sr-only">{{ t("Correct") }}</span>
+            </router-link>
+            <router-link
               :aria-label="t('Open report')"
               :class="compactIconActionClass"
               :title="t('Open report')"
               :to="reportRoute(data)"
             >
-              <BaseIcon icon="tracking" size="small" />
-              <span class="sr-only">{{ t('Open report') }}</span>
+              <BaseIcon
+                icon="tracking"
+                size="small"
+              />
+              <span class="sr-only">{{ t("Open report") }}</span>
             </router-link>
           </div>
         </template>
@@ -283,7 +313,7 @@
       v-if="items.length > 0"
       class="rounded-xl border border-gray-20 bg-white px-4 py-3 text-sm text-gray-600 shadow-sm"
     >
-      {{ t('{0} results', [items.length]) }}
+      {{ items.length }} {{ t("Results") }}
     </div>
   </section>
 </template>
@@ -313,15 +343,18 @@ const filters = reactive({
   courseId: getNumberQuery("courseId", "course_id"),
   exerciseId: getNumberQuery("exerciseId", "exercise_id"),
   filterByUser: getNumberQuery("filterByUser", "filter_by_user"),
-  status: getNumberQuery("status") || 3,
+  status: getStatusQuery(),
   questionTypeId: getNumberQuery("questionTypeId"),
   startDate: getStringQuery("startDate", "start_date"),
   endDate: getStringQuery("endDate", "end_date"),
 })
-const iconActionClass = "inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-20 bg-white text-primary shadow-sm transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/30"
-const compactIconActionClass = "inline-flex h-8 w-8 items-center justify-center rounded-lg text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/30"
+const iconActionClass =
+  "inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-20 bg-white text-primary shadow-sm transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/30"
+const compactIconActionClass =
+  "inline-flex h-8 w-8 items-center justify-center rounded-lg text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/30"
 
 const statusOptions = computed(() => [
+  { label: t("Pending correction"), value: 6 },
   { label: t("All"), value: 1 },
   { label: t("Validated"), value: 2 },
   { label: t("Not validated"), value: 3 },
@@ -332,14 +365,8 @@ const questionTypeOptions = computed(() => [
   { label: t("All"), value: 0 },
   { label: t("Questions with no automatic correction"), value: 1 },
 ])
-const courseSelectOptions = computed(() => [
-  { label: t("All"), value: 0 },
-  ...courseOptions.value,
-])
-const exerciseSelectOptions = computed(() => [
-  { label: t("All"), value: 0 },
-  ...exerciseOptions.value,
-])
+const courseSelectOptions = computed(() => [{ label: t("All"), value: 0 }, ...courseOptions.value])
+const exerciseSelectOptions = computed(() => [{ label: t("All"), value: 0 }, ...exerciseOptions.value])
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -362,6 +389,11 @@ function getNumberQuery(...keys) {
   return value ? Number(value) : 0
 }
 
+function getStatusQuery() {
+  const status = getNumberQuery("status")
+  return [1, 2, 3, 4, 5, 6].includes(status) ? status : 6
+}
+
 function getContextParams() {
   return {
     cid: getQueryValue(route.query.cid),
@@ -376,7 +408,7 @@ function getRequestParams() {
     courseId,
     exerciseId: courseId > 0 ? Number(filters.exerciseId || 0) : 0,
     filterByUser: Number(filters.filterByUser || 0),
-    status: Number(filters.status || 3),
+    status: Number(filters.status || 6),
     questionTypeId: Number(filters.questionTypeId || 0),
     startDate: filters.startDate || "",
     endDate: filters.endDate || "",
@@ -390,7 +422,7 @@ function syncFiltersFromRoute() {
   filters.courseId = getNumberQuery("courseId", "course_id")
   filters.exerciseId = getNumberQuery("exerciseId", "exercise_id")
   filters.filterByUser = getNumberQuery("filterByUser", "filter_by_user")
-  filters.status = getNumberQuery("status") || 3
+  filters.status = getStatusQuery()
   filters.questionTypeId = getNumberQuery("questionTypeId")
   filters.startDate = getStringQuery("startDate", "start_date")
   filters.endDate = getStringQuery("endDate", "end_date")
@@ -431,7 +463,7 @@ async function resetFilters() {
   filters.courseId = 0
   filters.exerciseId = 0
   filters.filterByUser = 0
-  filters.status = 3
+  filters.status = 6
   filters.questionTypeId = 0
   filters.startDate = ""
   filters.endDate = ""
@@ -455,6 +487,34 @@ function reportRoute(data) {
     params: {
       node: data.exerciseResourceNodeId || data.resourceNodeId,
       exerciseId: data.exerciseId,
+    },
+    query,
+  }
+}
+
+function correctionRoute(data) {
+  const returnFilters = Object.fromEntries(
+    Object.entries(getRequestParams()).map(([key, value]) => [`pending_${key}`, String(value)]),
+  )
+  const query = {
+    cid: data.courseId,
+    gid: 0,
+    review: 1,
+    mode: "review",
+    from: "pending-corrections",
+    ...returnFilters,
+  }
+
+  if (Number(data.sessionId || 0) > 0) {
+    query.sid = Number(data.sessionId)
+  }
+
+  return {
+    name: "ExerciseResult",
+    params: {
+      node: data.exerciseResourceNodeId || data.resourceNodeId,
+      exerciseId: data.exerciseId,
+      attemptId: data.attemptId,
     },
     query,
   }

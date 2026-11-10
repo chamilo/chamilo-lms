@@ -8,10 +8,10 @@
       class="exercise-result-toolbar flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm"
     >
       <BaseButton
-        :label="t('Return to exercises list')"
-        :route="{ name: 'ExerciseList', params: getBaseRouteParams(), query: getContextParams() }"
+        :label="returnToPendingCorrections ? t('Pending corrections') : t('Return to exercises list')"
+        :route="backRoute"
         icon="back"
-        only-icon
+        :only-icon="!returnToPendingCorrections"
         size="small"
         type="primary-text"
       />
@@ -1119,6 +1119,27 @@
                         type="success"
                         @click="saveManualCorrection(question, true)"
                       />
+                      <BaseButton
+                        v-if="returnToPendingCorrections && correctionSavingQuestionId !== question.id"
+                        :label="t('Pending corrections')"
+                        :route="backRoute"
+                        icon="back"
+                        type="primary-text"
+                      />
+                    </div>
+                    <div
+                      v-if="correctionFeedbackQuestionId === question.id && correctionError"
+                      class="mt-2 rounded-lg border border-danger/30 bg-danger/10 p-3 text-sm text-danger"
+                      role="alert"
+                    >
+                      {{ correctionError }}
+                    </div>
+                    <div
+                      v-if="correctionFeedbackQuestionId === question.id && correctionMessage"
+                      class="mt-2 rounded-lg border border-success/30 bg-success/10 p-3 text-sm text-success"
+                      role="status"
+                    >
+                      {{ correctionMessage }}
                     </div>
                   </div>
                   <div class="mt-3 rounded-lg border border-gray-20 bg-gray-10 p-3">
@@ -1360,6 +1381,27 @@
                         type="success"
                         @click="saveManualCorrection(question, true)"
                       />
+                      <BaseButton
+                        v-if="returnToPendingCorrections && correctionSavingQuestionId !== question.id"
+                        :label="t('Pending corrections')"
+                        :route="backRoute"
+                        icon="back"
+                        type="primary-text"
+                      />
+                    </div>
+                    <div
+                      v-if="correctionFeedbackQuestionId === question.id && correctionError"
+                      class="mt-2 rounded-lg border border-danger/30 bg-danger/10 p-3 text-sm text-danger"
+                      role="alert"
+                    >
+                      {{ correctionError }}
+                    </div>
+                    <div
+                      v-if="correctionFeedbackQuestionId === question.id && correctionMessage"
+                      class="mt-2 rounded-lg border border-success/30 bg-success/10 p-3 text-sm text-success"
+                      role="status"
+                    >
+                      {{ correctionMessage }}
                     </div>
                   </div>
                   <div class="mt-3 rounded-lg border border-gray-20 bg-gray-10 p-3">
@@ -1606,6 +1648,27 @@
                         type="success"
                         @click="saveManualCorrection(question, true)"
                       />
+                      <BaseButton
+                        v-if="returnToPendingCorrections && correctionSavingQuestionId !== question.id"
+                        :label="t('Pending corrections')"
+                        :route="backRoute"
+                        icon="back"
+                        type="primary-text"
+                      />
+                    </div>
+                    <div
+                      v-if="correctionFeedbackQuestionId === question.id && correctionError"
+                      class="mt-2 rounded-lg border border-danger/30 bg-danger/10 p-3 text-sm text-danger"
+                      role="alert"
+                    >
+                      {{ correctionError }}
+                    </div>
+                    <div
+                      v-if="correctionFeedbackQuestionId === question.id && correctionMessage"
+                      class="mt-2 rounded-lg border border-success/30 bg-success/10 p-3 text-sm text-success"
+                      role="status"
+                    >
+                      {{ correctionMessage }}
                     </div>
                   </div>
                   <div class="mt-3 rounded-lg border border-gray-20 bg-gray-10 p-3">
@@ -1831,6 +1894,27 @@
                         type="success"
                         @click="saveManualCorrection(question, true)"
                       />
+                      <BaseButton
+                        v-if="returnToPendingCorrections && correctionSavingQuestionId !== question.id"
+                        :label="t('Pending corrections')"
+                        :route="backRoute"
+                        icon="back"
+                        type="primary-text"
+                      />
+                    </div>
+                    <div
+                      v-if="correctionFeedbackQuestionId === question.id && correctionError"
+                      class="mt-2 rounded-lg border border-danger/30 bg-danger/10 p-3 text-sm text-danger"
+                      role="alert"
+                    >
+                      {{ correctionError }}
+                    </div>
+                    <div
+                      v-if="correctionFeedbackQuestionId === question.id && correctionMessage"
+                      class="mt-2 rounded-lg border border-success/30 bg-success/10 p-3 text-sm text-success"
+                      role="status"
+                    >
+                      {{ correctionMessage }}
                     </div>
                   </div>
                   <div class="mt-3 rounded-lg border border-gray-20 bg-gray-10 p-3">
@@ -1916,6 +2000,17 @@
           </div>
         </div>
       </section>
+      <div
+        v-if="returnToPendingCorrections && !isLearnpathContext && !shouldAutoPrint()"
+        class="flex justify-end"
+      >
+        <BaseButton
+          :label="t('Pending corrections')"
+          :route="backRoute"
+          icon="back"
+          type="primary"
+        />
+      </div>
     </template>
   </section>
 </template>
@@ -1930,6 +2025,10 @@ import BaseInputNumber from "../../components/basecomponents/BaseInputNumber.vue
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import exerciseService from "../../services/exerciseService"
+import {
+  isPendingCorrectionsOrigin,
+  pendingCorrectionsReturnQuery,
+} from "../../utils/exercisePendingCorrectionNavigation"
 import ExerciseTeacherAudioRecorder from "./components/ExerciseTeacherAudioRecorder.vue"
 import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 
@@ -1963,6 +2062,7 @@ const aiCorrectionForms = ref({})
 const correctionSavingQuestionId = ref(null)
 const correctionError = ref("")
 const correctionMessage = ref("")
+const correctionFeedbackQuestionId = ref(null)
 const resultHotspotImageSizes = ref({})
 const autoPrintDone = ref(false)
 const AI_CORRECTION_PROVIDER_STORAGE_KEY = "chamilo.ai.open_answer.provider"
@@ -2011,7 +2111,7 @@ function isEmbeddedInLearnpath() {
         referrer.includes("/main/newscorm/")
       )
     }
-  } catch (error) {
+  } catch {
     return (
       (document.referrer || "").includes("/resources/lp/") ||
       (document.referrer || "").includes("/main/lp/") ||
@@ -2031,6 +2131,16 @@ const isLearnpathContext = computed(() => {
     Boolean(getQueryValue(route.query.learnpath_id)) ||
     isEmbeddedInLearnpath()
   )
+})
+
+const returnToPendingCorrections = computed(() => isPendingCorrectionsOrigin(route.query))
+
+const backRoute = computed(() => {
+  if (returnToPendingCorrections.value) {
+    return { name: "ExercisePendingAttempts", query: pendingCorrectionsReturnQuery(route.query) }
+  }
+
+  return { name: "ExerciseList", params: getBaseRouteParams(), query: getContextParams() }
 })
 
 function getBaseRouteParams() {
@@ -2590,7 +2700,7 @@ function getSavedAiCorrectionProvider() {
 
   try {
     return window.localStorage.getItem(AI_CORRECTION_PROVIDER_STORAGE_KEY) || ""
-  } catch (error) {
+  } catch {
     return ""
   }
 }
@@ -2603,7 +2713,7 @@ function saveAiCorrectionProvider(question) {
 
   try {
     window.localStorage.setItem(AI_CORRECTION_PROVIDER_STORAGE_KEY, state.provider || "")
-  } catch (error) {
+  } catch {
     // Ignore local storage failures.
   }
 }
@@ -2691,7 +2801,7 @@ async function generateAiCorrection(question) {
 
     try {
       data = JSON.parse(text)
-    } catch (error) {
+    } catch {
       data = {}
     }
 
@@ -2771,6 +2881,7 @@ async function saveManualCorrection(question, final = true) {
   }
 
   correctionSavingQuestionId.value = questionId
+  correctionFeedbackQuestionId.value = questionId
   correctionError.value = ""
   correctionMessage.value = ""
 
@@ -2802,12 +2913,37 @@ async function saveManualCorrection(question, final = true) {
       throw new Error(response?.message || "Could not save correction")
     }
 
+    await loadResult()
+
+    const updatedQuestion = questions.value.find((item) => Number(item.id) === questionId)
+    const updatedMarks = updatedQuestion?.score
+    const pendingQuestionIds = Array.isArray(response.questionsToCheck) ? response.questionsToCheck : []
+    const scoreMismatch =
+      updatedMarks !== null &&
+      updatedMarks !== undefined &&
+      Math.abs(Number(updatedMarks) - Number(response.marks)) > 0.00001
+    const stillPending =
+      final &&
+      (pendingQuestionIds.some((id) => Number(id) === questionId) || Boolean(updatedQuestion?.pendingCorrection))
+
+    if (errorMessage.value || scoreMismatch || stillPending) {
+      console.error("Exercise correction was not reflected in the refreshed result", {
+        attemptId,
+        questionId,
+        final,
+        savedMarks: response.marks,
+        refreshedMarks: updatedMarks,
+        pendingQuestionIds,
+      })
+      correctionError.value = t("Could not save correction")
+      return
+    }
+
     correctionMessage.value = response?.notificationSent
       ? t("Message Sent")
       : final
         ? t("Correction saved")
         : t("Draft saved")
-    await loadResult()
   } catch (error) {
     console.error("Error saving exercise correction", error)
     correctionError.value = t("Could not save correction")

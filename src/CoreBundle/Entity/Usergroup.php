@@ -34,7 +34,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/usergroup/{id}',
             normalizationContext: ['groups' => ['usergroup:read']],
             security: "is_granted('ROLE_USER')",
-            name: 'get_usergroup'
+            name: 'get_usergroup',
+            provider: UsergroupStateProvider::class
         ),
         new Put(security: "is_granted('EDIT', object)"),
         new Patch(security: "is_granted('EDIT', object)"), new Delete(security: "is_granted('DELETE', object)"),

@@ -32,10 +32,16 @@ final class Version20261005120000 extends AbstractMigrationChamilo
             throw new RuntimeException('The course.course_language column was not found.');
         }
 
-        $invalidLanguages = $this->connection->fetchAllAssociative(<<<'SQL'
+        // Courses created through the ORM since V300\Version20260822212650 (the demo courses) only have
+        // language_id: it is already right, and the refill below leaves it as is
+        $ormCreatedCourses = $courseTable->hasColumn('language_id')
+            ? 'WHERE c.course_language IS NOT NULL OR c.language_id IS NULL'
+            : '';
+        $invalidLanguages = $this->connection->fetchAllAssociative(<<<SQL
             SELECT c.course_language, COUNT(DISTINCT l.id) AS language_matches
             FROM course c
             LEFT JOIN language l ON l.isocode = c.course_language
+            {$ormCreatedCourses}
             GROUP BY c.course_language
             HAVING COUNT(DISTINCT l.id) <> 1
             ORDER BY c.course_language

@@ -313,7 +313,10 @@
       </div>
 
       <!-- Attach correction file -->
-      <div class="flex flex-col gap-2">
+      <div
+        v-if="!forceStudentView"
+        class="flex flex-col gap-2"
+      >
         <label class="text-sm font-medium text-gray-900">
           {{ t("Attach file (optional)") }}
         </label>
@@ -332,7 +335,7 @@
       <!-- Send mail -->
       <div class="flex items-center gap-2">
         <BaseCheckbox
-          v-if="props.flags.allowText"
+          v-if="!forceStudentView && props.flags.allowText"
           id="sendmail"
           v-model="sendMail"
           :label="t('Send mail to student')"
@@ -899,7 +902,7 @@ async function submit() {
 
   const trimmed = comment.value.trim()
   const hasComment = trimmed.length > 0
-  const hasFile = !!selectedFile.value
+  const hasFile = !forceStudentView.value && !!selectedFile.value
 
   const currentQ =
     qualification.value === null || qualification.value === undefined || qualification.value === ""
@@ -911,7 +914,7 @@ async function submit() {
       ? null
       : Number(props.item.qualification)
 
-  const hasQualificationChange = currentQ !== originalQ
+  const hasQualificationChange = !forceStudentView.value && currentQ !== originalQ
 
   if (!hasComment && !hasFile && !hasQualificationChange) {
     notification.showErrorNotification(t("Please add a comment, a grade or a file"))
@@ -943,9 +946,11 @@ async function submit() {
   try {
     const formData = new FormData()
     formData.append("submissionId", props.item.iid)
-    formData.append("qualification", currentQ === null ? "" : String(currentQ))
+    if (!forceStudentView.value) {
+      formData.append("qualification", currentQ === null ? "" : String(currentQ))
+    }
 
-    if (selectedFile.value) {
+    if (hasFile) {
       formData.append("uploadFile", selectedFile.value)
     }
 

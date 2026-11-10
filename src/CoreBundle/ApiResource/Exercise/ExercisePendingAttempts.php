@@ -25,7 +25,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'courseId', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'exerciseId', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'filterByUser', in: 'query', required: false, schema: ['type' => 'integer']),
-                    new Parameter(name: 'status', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'status', in: 'query', required: false, description: '6: pending manual correction; 1: all; 2: validated; 3: not validated (API default); 4: unclosed; 5: ongoing', schema: ['type' => 'integer']),
                     new Parameter(name: 'questionTypeId', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'startDate', in: 'query', required: false, schema: ['type' => 'string']),
                     new Parameter(name: 'endDate', in: 'query', required: false, schema: ['type' => 'string']),

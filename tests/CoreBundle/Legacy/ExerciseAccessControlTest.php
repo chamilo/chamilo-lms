@@ -8,6 +8,7 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use Database;
 use Doctrine\DBAL\Connection;
 use ExerciseLib;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -239,6 +240,7 @@ final class ExerciseAccessControlTest extends KernelTestCase
         // access check for it: reading any attempt needed no login at all.
         $_GET = ['action' => 'export', 'export_type' => 'all_results'];
         $_REQUEST = $_GET;
+
         try {
             $this->assertFalse(ExerciseLib::isInternalAttemptExport());
         } finally {
@@ -253,11 +255,11 @@ final class ExerciseAccessControlTest extends KernelTestCase
         // " <escapeField(col)> <op> '<escape_string(val)>' ": a value is quoted and a column name is reduced to
         // [A-Za-z0-9_.], so neither can close the quote or add SQL (audit: no injection found).
         $payload = "x' OR '1'='1' -- \\";
-        $escaped = \Database::escape_string($payload);
+        $escaped = Database::escape_string($payload);
         $this->assertStringNotContainsString("x' OR", $escaped, 'the quote must be escaped');
         $fragment = "te.title = '".$escaped."'";
         $rows = $this->conn->fetchFirstColumn("SELECT te.title FROM (SELECT 'a' AS title) te WHERE 1 = 1 AND ".$fragment);
         $this->assertSame([], $rows, 'the payload is a literal that matches nothing, not extra SQL');
-        $this->assertSame('te.exe_idOR1', \Database::escapeField("te.exe_id OR 1; --"));
+        $this->assertSame('te.exe_idOR1', Database::escapeField('te.exe_id OR 1; --'));
     }
 }

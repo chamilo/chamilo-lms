@@ -40,6 +40,7 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
     private const int STATUS_NOT_VALIDATED = 3;
     private const int STATUS_UNCLOSED = 4;
     private const int STATUS_ONGOING = 5;
+    private const int STATUS_PENDING_CORRECTION = 6;
     private const int QUESTION_TYPE_WITHOUT_AUTOMATIC_CORRECTION = 1;
     private const int DEFAULT_LIMIT = 1000;
 
@@ -223,6 +224,7 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
             self::STATUS_NOT_VALIDATED,
             self::STATUS_UNCLOSED,
             self::STATUS_ONGOING,
+            self::STATUS_PENDING_CORRECTION,
         ], true) ? $status : self::STATUS_NOT_VALIDATED;
     }
 
@@ -306,10 +308,12 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
             $where[] = "te.status = 'incomplete'";
         } elseif (self::STATUS_ONGOING === $status) {
             $where[] = "(te.exe_date IS NULL OR te.exe_date = '0000-00-00 00:00:00')";
+        } elseif (self::STATUS_PENDING_CORRECTION === $status) {
+            $where[] = $this->pendingCorrectionPredicateSql();
         }
 
         if (self::QUESTION_TYPE_WITHOUT_AUTOMATIC_CORRECTION === (int) $filters['questionTypeId']) {
-            $where[] = "te.status = 'incomplete'";
+            $where[] = $this->pendingCorrectionPredicateSql();
         }
 
         $whereSql = [] === $where ? '1 = 1' : implode("\n AND ", $where);
@@ -331,6 +335,7 @@ SELECT DISTINCT
     te.start_date AS start_date,
     te.exe_date AS end_date,
     te.status AS attempt_status,
+    te.questions_to_check AS pending_questions_to_check,
     te.exe_duration AS duration,
     te.user_ip AS user_ip,
     {$this->revisedSelectSql()} AS revised,
@@ -369,6 +374,11 @@ SQL;
         }
 
         return $items;
+    }
+
+    private function pendingCorrectionPredicateSql(): string
+    {
+        return "te.status <> 'incomplete' AND TRIM(te.questions_to_check) <> ''";
     }
 
     private function existsQualifiedAttemptSql(): string
@@ -443,7 +453,9 @@ SQL;
     private function normalizeRow(array $row): array
     {
         $revised = (int) ($row['revised'] ?? 0);
-        $statusLabel = match ($revised) {
+        $pendingCorrection = 'incomplete' !== (string) ($row['attempt_status'] ?? '')
+            && '' !== trim((string) ($row['pending_questions_to_check'] ?? ''));
+        $statusLabel = $pendingCorrection ? 'Pending correction' : match ($revised) {
             1 => 'Validated',
             -1 => 'Unclosed',
             default => 'Not validated',
@@ -484,6 +496,7 @@ SQL;
             'userIp' => $this->reportIpVisibility->isExerciseHidden() ? '' : (string) ($row['user_ip'] ?? ''),
             'status' => $revised,
             'statusLabel' => $statusLabel,
+            'pendingCorrection' => $pendingCorrection,
             'qualificatorFullName' => (string) ($row['qualificator_fullname'] ?? ''),
             'qualificationDate' => $this->formatDateValue($row['date_of_qualification'] ?? null),
             'resultQuery' => [

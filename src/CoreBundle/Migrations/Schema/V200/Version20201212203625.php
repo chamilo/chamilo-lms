@@ -542,34 +542,17 @@ final class Version20201212203625 extends AbstractMigrationChamilo
     }
 
     /**
+     * A failed flush closes the EntityManager, so no file could be retried after it: the error stops the
+     * migration. The rows are only inserted once the assets exist, so that a retry never inserts them twice.
+     *
      * @param array<int, array{0: int, 1: int, 2: Asset}> $pendingRows
      */
     private function flushPendingFeedbackRows(array $pendingRows): void
     {
-        try {
-            $this->entityManager->flush();
-            foreach ($pendingRows as [$attemptId, $userId, $asset]) {
-                $this->insertAttemptFeedbackRow($attemptId, $userId, $asset);
-            }
-            $this->entityManager->clear();
-
-            return;
-        } catch (Throwable) {
-            $this->entityManager->clear();
-        }
-
-        // A single bad file must not drop the whole batch: retry one by one,
-        // exactly like the original per-row flush this batching replaced.
+        $this->entityManager->flush();
         foreach ($pendingRows as [$attemptId, $userId, $asset]) {
-            try {
-                $this->entityManager->persist($asset);
-                $this->entityManager->flush();
-                $this->insertAttemptFeedbackRow($attemptId, $userId, $asset);
-            } catch (Throwable) {
-                // Ignore single-file failures to keep the migration running.
-            }
+            $this->insertAttemptFeedbackRow($attemptId, $userId, $asset);
         }
-
         $this->entityManager->clear();
     }
 
@@ -578,30 +561,10 @@ final class Version20201212203625 extends AbstractMigrationChamilo
      */
     private function flushPendingFileRows(array $pendingRows): void
     {
-        try {
-            $this->entityManager->flush();
-            foreach ($pendingRows as [$attemptId, $asset]) {
-                $this->insertAttemptFileRow($attemptId, $asset);
-            }
-            $this->entityManager->clear();
-
-            return;
-        } catch (Throwable) {
-            $this->entityManager->clear();
-        }
-
-        // A single bad file must not drop the whole batch: retry one by one,
-        // exactly like the original per-row flush this batching replaced.
+        $this->entityManager->flush();
         foreach ($pendingRows as [$attemptId, $asset]) {
-            try {
-                $this->entityManager->persist($asset);
-                $this->entityManager->flush();
-                $this->insertAttemptFileRow($attemptId, $asset);
-            } catch (Throwable) {
-                // Ignore single-file failures to keep the migration running.
-            }
+            $this->insertAttemptFileRow($attemptId, $asset);
         }
-
         $this->entityManager->clear();
     }
 
@@ -614,7 +577,6 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             'attempt_id' => $attemptId,
             'user_id' => $userId,
             'asset_id' => $asset->getId()->toBinary(),
-            'resource_node_id' => null,
             'comment' => '',
             'created_at' => $now,
             'updated_at' => $now,
@@ -629,7 +591,6 @@ final class Version20201212203625 extends AbstractMigrationChamilo
             'id' => Uuid::v4()->toBinary(),
             'attempt_id' => $attemptId,
             'asset_id' => $asset->getId()->toBinary(),
-            'resource_node_id' => null,
             'comment' => '',
             'created_at' => $now,
             'updated_at' => $now,

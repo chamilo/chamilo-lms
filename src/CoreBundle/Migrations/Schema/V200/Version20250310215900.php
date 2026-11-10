@@ -71,7 +71,10 @@ final class Version20250310215900 extends AbstractMigrationChamilo
             $this->entityManager->commit();
         } catch (Exception $e) {
             $this->entityManager->rollBack();
-            error_log('Migration failed: '.$e->getMessage());
+
+            // Stop here: going on would lose this data silently, with a closed EntityManager failing the
+            // next migration.
+            throw $e;
         }
     }
 

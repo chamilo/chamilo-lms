@@ -217,6 +217,11 @@ if ('edit' === $page) {
 
 switch ($action) {
     case 'send_comment':
+        $commentRequest = Container::getRequest();
+        if (!$isCourseManager && ($commentRequest->files->get('attachment') || $commentRequest->files->get('file'))) {
+            api_not_allowed(true);
+        }
+
         if (isset($_FILES['attachment'])) {
             $_POST['attachment'] = $_FILES['attachment'];
         }

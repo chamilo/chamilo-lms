@@ -14,6 +14,8 @@ use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
+use RuntimeException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Regression tests for the cross-course assignment-comment advisory.
@@ -263,6 +265,179 @@ final class CStudentPublicationCommentTest extends AbstractApiTest
         $this->assertNotNull($fresh);
         $this->assertSame(85.0, $fresh->getQualification());
         $this->assertSame($ctx['teacher']->getId(), $fresh->getQualificatorId());
+    }
+
+    // -------------------------------------------------------------------------
+    // #1647 — learner comments stay text-only, while teacher feedback may have files.
+    // -------------------------------------------------------------------------
+
+    private function createCommentAttachment(string $name): UploadedFile
+    {
+        $path = tempnam(sys_get_temp_dir(), 'work-comment-');
+        if (false === $path) {
+            throw new RuntimeException('Could not create a temporary comment attachment.');
+        }
+
+        file_put_contents($path, 'Test feedback attachment');
+
+        return new UploadedFile($path, $name, 'text/plain', null, true);
+    }
+
+    public function testStudentCanReplyWithTextOnly(): void
+    {
+        $ctx = $this->bootstrapSubmissionScenario('student_text_reply');
+        $token = $this->getUserTokenFromUser($ctx['student']);
+        $parentNodeId = (int) $ctx['submission']->getResourceNode()?->getId();
+        $this->assertGreaterThan(0, $parentNodeId);
+
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/c_student_publication_comments/upload?cid='.$ctx['course']->getId(),
+            [
+                'headers' => ['Content-Type' => 'multipart/form-data'],
+                'extra' => [
+                    'parameters' => [
+                        'submissionId' => (string) $ctx['submission']->getIid(),
+                        'parentResourceNodeId' => (string) $parentNodeId,
+                        'filetype' => 'file',
+                        'comment' => 'Thank you for the feedback.',
+                    ],
+                ],
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(201);
+
+        $em = $this->getEntityManager();
+        $em->clear();
+        $comments = $em->getRepository(CStudentPublicationComment::class)
+            ->findBy(['publication' => $ctx['submission']->getIid()])
+        ;
+        $this->assertCount(1, $comments);
+        $this->assertSame('Thank you for the feedback.', $comments[0]->getComment());
+        $this->assertNull($comments[0]->getFile());
+    }
+
+    public function testStudentCannotEmbedAnAttachmentInHtmlComment(): void
+    {
+        $ctx = $this->bootstrapSubmissionScenario('shtml');
+        $token = $this->getUserTokenFromUser($ctx['student']);
+        $parentNodeId = (int) $ctx['submission']->getResourceNode()?->getId();
+        $this->assertGreaterThan(0, $parentNodeId);
+
+        $this->createClientWithCredentials($token)->request(
+            'POST',
+            '/api/c_student_publication_comments/upload?cid='.$ctx['course']->getId(),
+            [
+                'headers' => ['Content-Type' => 'multipart/form-data'],
+                'extra' => [
+                    'parameters' => [
+                        'submissionId' => (string) $ctx['submission']->getIid(),
+                        'parentResourceNodeId' => (string) $parentNodeId,
+                        'filetype' => 'file',
+                        'comment' => '<a href="data:application/pdf;base64,JVBERi0=">Revised assignment</a>',
+                    ],
+                ],
+            ]
+        );
+
+        $this->assertResponseStatusCodeSame(201);
+
+        $em = $this->getEntityManager();
+        $em->clear();
+        $comments = $em->getRepository(CStudentPublicationComment::class)
+            ->findBy(['publication' => $ctx['submission']->getIid()])
+        ;
+        $this->assertCount(1, $comments);
+        $this->assertSame('Revised assignment', $comments[0]->getComment());
+    }
+
+    public function testStudentCannotAttachFilesToComments(): void
+    {
+        foreach (['uploadFile', 'attachment'] as $fieldName) {
+            $ctx = $this->bootstrapSubmissionScenario('student_file_'.$fieldName);
+            $token = $this->getUserTokenFromUser($ctx['student']);
+            $parentNodeId = (int) $ctx['submission']->getResourceNode()?->getId();
+            $this->assertGreaterThan(0, $parentNodeId);
+
+            $file = $this->createCommentAttachment('second-submission.txt');
+
+            try {
+                $this->createClientWithCredentials($token)->request(
+                    'POST',
+                    '/api/c_student_publication_comments/upload?cid='.$ctx['course']->getId(),
+                    [
+                        'headers' => ['Content-Type' => 'multipart/form-data'],
+                        'extra' => [
+                            'parameters' => [
+                                'submissionId' => (string) $ctx['submission']->getIid(),
+                                'parentResourceNodeId' => (string) $parentNodeId,
+                                'filetype' => 'file',
+                                'comment' => 'Here is my revised assignment.',
+                            ],
+                            'files' => [$fieldName => $file],
+                        ],
+                    ]
+                );
+            } finally {
+                if (is_file($file->getPathname())) {
+                    unlink($file->getPathname());
+                }
+            }
+
+            $this->assertResponseStatusCodeSame(403);
+
+            $em = $this->getEntityManager();
+            $em->clear();
+            $this->assertSame(
+                0,
+                $em->getRepository(CStudentPublicationComment::class)
+                    ->count(['publication' => $ctx['submission']->getIid()])
+            );
+        }
+    }
+
+    public function testTeacherCanAttachAFeedbackFile(): void
+    {
+        $ctx = $this->bootstrapSubmissionScenario('teacher_attachment');
+        $token = $this->getUserTokenFromUser($ctx['teacher']);
+        $parentNodeId = (int) $ctx['submission']->getResourceNode()?->getId();
+        $this->assertGreaterThan(0, $parentNodeId);
+
+        $file = $this->createCommentAttachment('teacher-feedback.txt');
+
+        try {
+            $this->createClientWithCredentials($token)->request(
+                'POST',
+                '/api/c_student_publication_comments/upload?cid='.$ctx['course']->getId(),
+                [
+                    'headers' => ['Content-Type' => 'multipart/form-data'],
+                    'extra' => [
+                        'parameters' => [
+                            'submissionId' => (string) $ctx['submission']->getIid(),
+                            'parentResourceNodeId' => (string) $parentNodeId,
+                            'filetype' => 'file',
+                            'comment' => 'Please review my corrections.',
+                        ],
+                        'files' => ['uploadFile' => $file],
+                    ],
+                ]
+            );
+        } finally {
+            if (is_file($file->getPathname())) {
+                unlink($file->getPathname());
+            }
+        }
+
+        $this->assertResponseStatusCodeSame(201);
+
+        $em = $this->getEntityManager();
+        $em->clear();
+        $comments = $em->getRepository(CStudentPublicationComment::class)
+            ->findBy(['publication' => $ctx['submission']->getIid()])
+        ;
+        $this->assertCount(1, $comments);
+        $this->assertSame('teacher-feedback.txt', $comments[0]->getFile());
     }
 
     // -------------------------------------------------------------------------

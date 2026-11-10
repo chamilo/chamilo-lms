@@ -100,15 +100,12 @@ async function updateSubmission(id, data) {
 }
 
 async function uploadComment(submissionId, parentResourceNodeId, formData, sendMail = false) {
-  const params = {
-    submissionId,
-    parentResourceNodeId,
-    filetype: "file",
-    sendMail: sendMail ? "1" : "0",
-    ...buildCidParams(),
-  }
+  formData.set("submissionId", String(submissionId))
+  formData.set("parentResourceNodeId", String(parentResourceNodeId))
+  formData.set("filetype", "file")
+  formData.set("sendMail", sendMail ? "1" : "0")
 
-  return baseService.post(`/api/c_student_publication_comments/upload`, formData, {}, { params })
+  return baseService.post(`/api/c_student_publication_comments/upload`, formData, {}, { params: buildCidParams() })
 }
 
 async function loadComments(submissionId) {

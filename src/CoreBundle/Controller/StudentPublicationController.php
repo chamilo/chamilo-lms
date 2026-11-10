@@ -441,6 +441,7 @@ class StudentPublicationController extends AbstractController
         CStudentPublicationRepository $repo,
         ResourceNodeRepository $resourceNodeRepository,
         AssignmentHtmlSubmission $htmlSubmission,
+        EntityManagerInterface $entityManager,
     ): JsonResponse {
         $submission = $repo->find($id);
         $assignment = $submission instanceof CStudentPublication ? $submission->getPublicationParent() : null;
@@ -451,9 +452,62 @@ class StudentPublicationController extends AbstractController
             throw $this->createNotFoundException('Assignment submission not found.');
         }
 
-        // The assignment must be editable in this request's course context.
-        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
-        $this->denyAccessUnlessGranted('VIEW', $submission->getResourceNode());
+        $assignmentNode = $assignment->getResourceNode();
+        $submissionNode = $submission->getResourceNode();
+        if (null === $assignmentNode || null === $submissionNode) {
+            throw $this->createNotFoundException('Assignment submission not found.');
+        }
+
+        $this->denyAccessUnlessGranted('VIEW', $submissionNode);
+
+        if (!$this->isGranted('EDIT', $assignmentNode)) {
+            // Learners may preview only their own submission, never a classmate's work.
+            $this->denyAccessUnlessGranted('VIEW', $assignmentNode);
+            $user = $this->getUser();
+            if (!$user instanceof User || $submission->getUser()->getId() !== $user->getId()) {
+                throw new AccessDeniedHttpException('You can only preview your own assignment submission.');
+            }
+
+            // Resolve the managed request context rather than comparing detached session entities.
+            $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+            $session = $this->cidReqHelper->getDoctrineSessionEntity();
+            $group = $this->cidReqHelper->getDoctrineGroupEntity();
+
+            // Match the same persisted resource-link context used by assignment listing.
+            // An owned node's VIEW permission alone is not enough to authorize a foreign cid.
+            $linkRepository = $entityManager->getRepository(ResourceLink::class);
+            $submissionLink = $linkRepository->findOneBy([
+                'resourceNode' => $submissionNode,
+                'course' => $course,
+                'session' => $session,
+                'group' => $group,
+            ]);
+            if (null === $submissionLink) {
+                throw $this->createNotFoundException('Assignment submission not found in the current course context.');
+            }
+
+            // A base-course assignment is also valid in an authorized session or group.
+            // Scoped assignments must match the requested session/group exactly.
+            $assignmentInContext = false;
+            foreach ($linkRepository->findBy([
+                'resourceNode' => $assignmentNode,
+                'course' => $course,
+            ]) as $link) {
+                if ((null !== $link->getSession() && $link->getSession()->getId() !== $session?->getId())
+                    || (null !== $link->getGroup() && $link->getGroup()->getIid() !== $group?->getIid())
+                ) {
+                    continue;
+                }
+
+                $assignmentInContext = true;
+
+                break;
+            }
+
+            if (!$assignmentInContext) {
+                throw $this->createNotFoundException('Assignment not found in the current course context.');
+            }
+        }
 
         $resourceFile = $submission->getResourceNode()?->getFirstResourceFile();
         if (null === $resourceFile || 1 !== preg_match('/\.html?$/i', (string) $resourceFile->getOriginalName())) {

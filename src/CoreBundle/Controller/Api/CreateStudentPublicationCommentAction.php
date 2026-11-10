@@ -24,6 +24,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -49,24 +50,6 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
 
         $hasFile = (bool) $request->files->get('uploadFile');
         $hasComment = '' !== trim((string) $request->request->get('comment'));
-
-        if ($hasFile || $hasComment) {
-            $result = $this->handleCreateCommentRequest(
-                $commentEntity,
-                $commentRepo,
-                $request,
-                $em,
-                $cidReqHelper,
-                $fileExistsOption,
-                $translator
-            );
-
-            $filename = $result['filename'] ?? null;
-            if (!empty($filename)) {
-                $commentEntity->setFile($filename);
-            }
-        }
-
         $commentText = $request->request->get('comment');
         $submissionId = (int) $request->request->get('submissionId');
         $sendMail = $request->request->get('sendMail', false);
@@ -104,11 +87,43 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         // Grading must be restricted to teachers/coaches of the submission's course or session.
         // The VIEW check above is not sufficient because the submission owner (a student) also
         // passes it, and students must never overwrite their own qualification.
-        if ($hasQualification && !$this->isAllowedToGrade($submission, $securityUser, $security)) {
+        $canGrade = $this->isAllowedToGrade($submission, $securityUser, $security);
+        if ($hasQualification && !$canGrade) {
             throw new AccessDeniedHttpException('You are not allowed to grade this submission.');
         }
 
+        // A learner may reply with text but cannot attach a new submission as feedback.
+        // Reject every uploaded file before creating a comment or a resource node.
+        if ($request->files->count() > 0 && !$canGrade) {
+            throw new AccessDeniedHttpException('You are not allowed to attach files to comments.');
+        }
+
+        if (!$canGrade) {
+            // Learner comments are text-only, including requests that bypass the Vue textarea.
+            $commentText = strip_tags((string) $commentText);
+            $hasComment = '' !== trim($commentText);
+        }
+
+        if (!$hasFile && !$hasComment && !$hasQualification) {
+            throw new BadRequestHttpException('A comment, file, or qualification is required.');
+        }
+
         if ($hasFile || $hasComment) {
+            $result = $this->handleCreateCommentRequest(
+                $commentEntity,
+                $commentRepo,
+                $request,
+                $em,
+                $cidReqHelper,
+                $fileExistsOption,
+                $translator
+            );
+
+            $filename = $result['filename'] ?? null;
+            if (!empty($filename)) {
+                $commentEntity->setFile($filename);
+            }
+
             $commentEntity->setUser($managedUser);
             $commentEntity->setPublication($submission);
             $commentEntity->setComment($commentText ?? '');
@@ -138,7 +153,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         }
 
         // Existing mail logic (unchanged)
-        if ($sendMail && $submission->getUser() instanceof User) {
+        if ($sendMail && $canGrade && $submission->getUser() instanceof User) {
             /** @var User $receiverUser */
             $receiverUser = $submission->getUser();
             $senderUserId = $managedUser->getId() ?? 0;
@@ -165,7 +180,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         $submissionCourse = $submissionLink?->getCourse();
         if (($hasFile || $hasComment)
             && $submissionCourse instanceof Course
-            && !$this->isAllowedToGrade($submission, $securityUser, $security)
+            && !$canGrade
         ) {
             $feedbackNotifier->notifyLearnerFeedback(
                 $submission,

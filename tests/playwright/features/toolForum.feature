@@ -68,6 +68,9 @@ Feature: Forum tool
   Scenario: Create a forum category
     Given I follow the course tool "Forum"
     And I wait until I no longer see "Loading"
+    # The list can refetch after it first renders (more so when the course already has group forums) and
+    # remounts the page, closing a dialog opened in that window: let it settle before opening the dialog.
+    And I wait for the page content to settle
     When I click the "button[title='Add a category']" element
     And I wait for the element "#forum-category-title" to appear
     And I fill in "forum_category_title" with "Forum Category Test"

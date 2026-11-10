@@ -31,7 +31,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'endDate', in: 'query', required: false, schema: ['type' => 'string']),
                 ],
             ),
-            security: "is_granted('ROLE_USER')",
+            security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_SESSION_MANAGER')",
             name: 'get_exercise_pending_attempts',
             provider: ExercisePendingAttemptsProvider::class,
         ),

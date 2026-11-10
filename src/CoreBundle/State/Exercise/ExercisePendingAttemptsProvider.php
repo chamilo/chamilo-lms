@@ -193,19 +193,7 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
 
     private function isGlobalExerciseManager(): bool
     {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
-        if (\function_exists('api_is_platform_admin') && api_is_platform_admin()) {
-            return true;
-        }
-
-        if (\function_exists('api_is_teacher') && api_is_teacher()) {
-            return true;
-        }
-
-        return \function_exists('api_is_session_admin') && api_is_session_admin();
+        return $this->security->isGranted('ROLE_TEACHER') || $this->security->isGranted('ROLE_SESSION_MANAGER');
     }
 
     /**

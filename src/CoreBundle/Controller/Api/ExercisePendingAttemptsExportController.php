@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('ROLE_USER')]
+#[IsGranted(new Expression('is_granted("ROLE_TEACHER") or is_granted("ROLE_SESSION_MANAGER")'))]
 final class ExercisePendingAttemptsExportController extends AbstractController
 {
     public function __construct(

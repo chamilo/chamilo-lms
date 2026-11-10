@@ -9,9 +9,9 @@
     />
     <BaseButton
       v-if="showPendingExerciseAttemptsLink"
-      :label="t('Pending tests')"
-      icon="quiz"
-      :route="{ name: 'ExercisePendingAttempts' }"
+      :label="t('Pending corrections')"
+      icon="bell"
+      :route="{ name: 'ExercisePendingAttempts', query: { status: 6 } }"
       type="primary"
     />
   </SectionHeader>

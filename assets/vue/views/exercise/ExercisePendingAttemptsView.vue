@@ -5,7 +5,7 @@
     >
       <div>
         <h1 class="text-2xl font-semibold text-gray-90">
-          {{ t("Pending attempts") }}
+          {{ Number(filters.status) === 6 ? t("Pending corrections") : t("Pending attempts") }}
         </h1>
         <p class="mt-1 text-sm text-gray-600">
           {{ t("List of pending test attempts across your courses.") }}
@@ -280,6 +280,19 @@
         <template #body="{ data }">
           <div class="flex justify-end gap-1">
             <router-link
+              v-if="data.pendingCorrection"
+              :aria-label="t('Correct')"
+              :class="compactIconActionClass"
+              :title="t('Correct')"
+              :to="correctionRoute(data)"
+            >
+              <BaseIcon
+                icon="edit"
+                size="small"
+              />
+              <span class="sr-only">{{ t("Correct") }}</span>
+            </router-link>
+            <router-link
               :aria-label="t('Open report')"
               :class="compactIconActionClass"
               :title="t('Open report')"
@@ -300,7 +313,7 @@
       v-if="items.length > 0"
       class="rounded-xl border border-gray-20 bg-white px-4 py-3 text-sm text-gray-600 shadow-sm"
     >
-      {{ t("{0} results", [items.length]) }}
+      {{ items.length }} {{ t("Results") }}
     </div>
   </section>
 </template>
@@ -330,7 +343,7 @@ const filters = reactive({
   courseId: getNumberQuery("courseId", "course_id"),
   exerciseId: getNumberQuery("exerciseId", "exercise_id"),
   filterByUser: getNumberQuery("filterByUser", "filter_by_user"),
-  status: getNumberQuery("status") || 3,
+  status: getStatusQuery(),
   questionTypeId: getNumberQuery("questionTypeId"),
   startDate: getStringQuery("startDate", "start_date"),
   endDate: getStringQuery("endDate", "end_date"),
@@ -341,6 +354,7 @@ const compactIconActionClass =
   "inline-flex h-8 w-8 items-center justify-center rounded-lg text-primary transition hover:bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/30"
 
 const statusOptions = computed(() => [
+  { label: t("Pending correction"), value: 6 },
   { label: t("All"), value: 1 },
   { label: t("Validated"), value: 2 },
   { label: t("Not validated"), value: 3 },
@@ -375,6 +389,11 @@ function getNumberQuery(...keys) {
   return value ? Number(value) : 0
 }
 
+function getStatusQuery() {
+  const status = getNumberQuery("status")
+  return [1, 2, 3, 4, 5, 6].includes(status) ? status : 6
+}
+
 function getContextParams() {
   return {
     cid: getQueryValue(route.query.cid),
@@ -389,7 +408,7 @@ function getRequestParams() {
     courseId,
     exerciseId: courseId > 0 ? Number(filters.exerciseId || 0) : 0,
     filterByUser: Number(filters.filterByUser || 0),
-    status: Number(filters.status || 3),
+    status: Number(filters.status || 6),
     questionTypeId: Number(filters.questionTypeId || 0),
     startDate: filters.startDate || "",
     endDate: filters.endDate || "",
@@ -403,7 +422,7 @@ function syncFiltersFromRoute() {
   filters.courseId = getNumberQuery("courseId", "course_id")
   filters.exerciseId = getNumberQuery("exerciseId", "exercise_id")
   filters.filterByUser = getNumberQuery("filterByUser", "filter_by_user")
-  filters.status = getNumberQuery("status") || 3
+  filters.status = getStatusQuery()
   filters.questionTypeId = getNumberQuery("questionTypeId")
   filters.startDate = getStringQuery("startDate", "start_date")
   filters.endDate = getStringQuery("endDate", "end_date")
@@ -444,7 +463,7 @@ async function resetFilters() {
   filters.courseId = 0
   filters.exerciseId = 0
   filters.filterByUser = 0
-  filters.status = 3
+  filters.status = 6
   filters.questionTypeId = 0
   filters.startDate = ""
   filters.endDate = ""
@@ -468,6 +487,34 @@ function reportRoute(data) {
     params: {
       node: data.exerciseResourceNodeId || data.resourceNodeId,
       exerciseId: data.exerciseId,
+    },
+    query,
+  }
+}
+
+function correctionRoute(data) {
+  const returnFilters = Object.fromEntries(
+    Object.entries(getRequestParams()).map(([key, value]) => [`pending_${key}`, String(value)]),
+  )
+  const query = {
+    cid: data.courseId,
+    gid: 0,
+    review: 1,
+    mode: "review",
+    from: "pending-corrections",
+    ...returnFilters,
+  }
+
+  if (Number(data.sessionId || 0) > 0) {
+    query.sid = Number(data.sessionId)
+  }
+
+  return {
+    name: "ExerciseResult",
+    params: {
+      node: data.exerciseResourceNodeId || data.resourceNodeId,
+      exerciseId: data.exerciseId,
+      attemptId: data.attemptId,
     },
     query,
   }

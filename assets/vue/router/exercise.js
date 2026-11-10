@@ -1,3 +1,5 @@
+import { isPendingCorrectionsOrigin, pendingCorrectionsReturnQuery } from "../utils/exercisePendingCorrectionNavigation"
+
 export default {
   path: "/resources/exercise/:node/",
   meta: {
@@ -96,7 +98,19 @@ export default {
     {
       name: "ExerciseResult",
       path: ":exerciseId/result/:attemptId",
-      meta: { breadcrumb: "Exercise result" },
+      meta: {
+        breadcrumb: "Exercise result",
+        breadcrumbParents: (route) =>
+          isPendingCorrectionsOrigin(route.query)
+            ? [
+                { label: "My courses", route: { name: "MyCourses" } },
+                {
+                  label: "Pending corrections",
+                  route: { name: "ExercisePendingAttempts", query: pendingCorrectionsReturnQuery(route.query) },
+                },
+              ]
+            : [],
+      },
       component: () => import("../views/exercise/ExerciseResultView.vue"),
     },
     {

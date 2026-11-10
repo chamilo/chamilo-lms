@@ -50,6 +50,8 @@ import { useCidReqStore } from "../store/cidReq"
 import { formatToolName, getQueryInt, normalizeLegacyUrl, stripHtml } from "../utils/breadcrumb"
 import BaseIcon from "./basecomponents/BaseIcon.vue"
 
+defineOptions({ name: "AppBreadcrumb" })
+
 const cidReqStore = useCidReqStore()
 const route = useRoute()
 const router = useRouter()
@@ -205,15 +207,16 @@ function resolveCrumbLabel(meta, name) {
 /**
  * Build the trail of a route that declares its own fixed ancestors.
  *
- * `meta.breadcrumbParents` holds the crumbs that always precede the page, each one a
- * `{ label, route }` pair whose label is a translation key. The page's own crumb comes from
+ * `meta.breadcrumbParents` holds an array of parent crumbs or a function returning that array
+ * for the current route. Each `{ label, route }` pair uses a translation key. The page's own crumb comes from
  * `meta.breadcrumb`, so the route owns its whole trail and this file names no page. An empty
  * key omits that last crumb, which is what a page whose own name depends on the query wants.
  *
  * @returns {Array|null} Array of crumb items if the route declared ancestors; `null` otherwise.
  */
 function buildDeclaredParentCrumbs() {
-  const parents = route.meta?.breadcrumbParents
+  const declaredParents = route.meta?.breadcrumbParents
+  const parents = typeof declaredParents === "function" ? declaredParents(route) : declaredParents
 
   if (!Array.isArray(parents) || 0 === parents.length) {
     return null

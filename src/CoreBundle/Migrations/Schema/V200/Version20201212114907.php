@@ -10,15 +10,16 @@ use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
- * Version20230204150030 loads sessions through the ORM, with their course subscriptions, whose mapping
- * includes subscription_date: V310\Version20261109180000 only adds it later. Same definition and guard,
- * so that this later migration then leaves the column as is. See Version20201218132718.
+ * Version20201212114912 loads users, and Version20230204150030 sessions, through the ORM, with their course
+ * subscriptions, whose mapping includes subscription_date: V310\Version20261109180000 only adds it later.
+ * Same definition and guard, so that this later migration then leaves the column as is.
+ * See Version20201218132718.
  */
-final class Version20230204150029 extends AbstractMigrationChamilo
+final class Version20201212114907 extends AbstractMigrationChamilo
 {
     public function getDescription(): string
     {
-        return 'Add early the subscription dates that the V200 ORM hydration of sessions needs';
+        return 'Add early the subscription dates that the V200 ORM hydration of users and sessions needs';
     }
 
     public function up(Schema $schema): void

@@ -233,9 +233,10 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
 
     /**
      * @param array<string, int|string> $filters
-     * @param array<int, int> $allowedCourseIds
+     * @param array<int, int>           $allowedCourseIds
      *
      * @return array<int, array<string, mixed>>
+     *
      * @throws Exception
      */
     private function getPendingAttempts(array $filters, bool $includeSessions, array $allowedCourseIds): array
@@ -521,6 +522,7 @@ SQL;
      * @param array<int, int> $allowedCourseIds
      *
      * @return array<int, array<string, int|string>>
+     *
      * @throws Exception
      */
     private function getExerciseOptions(int $courseId, array $allowedCourseIds): array
@@ -547,7 +549,8 @@ SQL;
 
         $rows = $this->connection
             ->executeQuery($sql, ['courseId' => $courseId], ['courseId' => ParameterType::INTEGER])
-            ->fetchAllAssociative();
+            ->fetchAllAssociative()
+        ;
         $items = [];
 
         foreach ($rows as $row) {
@@ -686,7 +689,6 @@ SQL;
      */
     private function buildQueryString(array $filters): string
     {
-
         $params = array_filter($filters, function ($value) {
             return '' !== (string) $value && '0' !== (string) $value;
         });

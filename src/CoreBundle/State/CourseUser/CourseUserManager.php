@@ -962,12 +962,12 @@ final readonly class CourseUserManager
             ->from($relationClass, 'relation')
             ->where('relation.course = :course')
             ->andWhere('relation.status = :status')
-            ->setParameter('course', $course)
+            ->setParameter('course', $course->getId())
             ->setParameter('status', $status)
         ;
 
         if ($session instanceof Session) {
-            $qb->andWhere('relation.session = :session')->setParameter('session', $session);
+            $qb->andWhere('relation.session = :session')->setParameter('session', $session->getId());
         } else {
             // Match the legacy member list: HR-management relations are not course members.
             $qb->andWhere('relation.relationType <> :hrRelationType')

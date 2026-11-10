@@ -24,8 +24,9 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         $sql = "SELECT * FROM language WHERE parent_id IS NOT NULL AND isocode NOT IN('".implode("', '", Version20::ALLOWED_SUBLANGUAGES)."')";
         $sublanguages = $this->connection->executeQuery($sql)->fetchAllAssociative();
 
+        $userHasLanguage = $schema->getTable('user')->hasColumn('language');
         foreach ($sublanguages as $sublanguage) {
-            $newIsoCode = $this->updateAndGenerateSubLanguage($sublanguage);
+            $newIsoCode = $this->updateAndGenerateSubLanguage($sublanguage, $userHasLanguage);
             $this->generatePoFileFromTrad4All($sublanguage['english_name'], $newIsoCode);
         }
 
@@ -38,7 +39,7 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         // $this->deleteImportFolder();
     }
 
-    private function updateAndGenerateSubLanguage(array $sublanguage): string
+    private function updateAndGenerateSubLanguage(array $sublanguage, bool $userHasLanguage): string
     {
         // Get the parent language ID
         $parentId = $sublanguage['parent_id'];
@@ -62,8 +63,15 @@ final class Version20240122221400 extends AbstractMigrationChamilo
         error_log('Updated settings for language '.$sublanguage['english_name']);
 
         // Check and update in user table
-        $updateUserQuery = 'UPDATE user SET locale = ? WHERE locale = ?';
-        $this->connection->executeStatement($updateUserQuery, [$newIsoCode, $sublanguage['english_name']]);
+        // Version20170626122900 gave the users of a sublanguage its 1.11 isocode, that of its parent ("fr" for
+        // "french2"): user.language, dropped by Version20240811221400 only, still names the sublanguage
+        if ($userHasLanguage) {
+            $updateUserQuery = 'UPDATE user SET locale = ? WHERE locale = ? OR language = ?';
+            $this->connection->executeStatement($updateUserQuery, [$newIsoCode, $sublanguage['english_name'], $sublanguage['english_name']]);
+        } else {
+            $updateUserQuery = 'UPDATE user SET locale = ? WHERE locale = ?';
+            $this->connection->executeStatement($updateUserQuery, [$newIsoCode, $sublanguage['english_name']]);
+        }
         error_log('Updated user table for language '.$sublanguage['english_name']);
 
         // Check and update in course table

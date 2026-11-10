@@ -105,6 +105,9 @@
 
     <h3>Added</h3>
     <ul aria-live="off">
+        <li>[2026-11-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/52151690135cf01b1562a5f44c22c1e890c312c5">52151690</a> - <a href="https://task.beeznest.com/issues/23688">BT#23688</a>) Migration: Add the conference activity metrics before migrating the BBB and Zoom plugins, and stop on errors instead of losing their data silently</li>
+        <li>[2026-11-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/a2a7e51af4130b6ee7d1a8dd91dda8fbede15dae">a2a7e51a</a> - <a href="https://task.beeznest.com/issues/23688">BT#23688</a>) Migration: Add early the subscription dates that the V200 ORM hydration of sessions needs</li>
+        <li>[2026-11-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/c64d4b39c8415e20cbf968bbd1168320a365c96d">c64d4b39</a> - <a href="https://task.beeznest.com/issues/23688">BT#23688</a>) Migration: Add early the columns that later migrations add and the V200 ORM hydration of surveys, wikis, skills, quizzes, glossaries, messages and certificates needs</li>
         <li>[2026-11-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/be3631996f60e03cd195f5fafc5573718b5ff938">be363199</a> - <a href="https://task.beeznest.com/issues/23688">BT#23688</a>) Migration: Add course.language_id before the V200 migrations that load courses through the ORM</li>
         <li>[2026-11-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/691759a345276d2afea490cdbcd3e8f8e82a9aca">691759a3</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/9119">GH#9119</a>) Course: Add AI-assisted course skills mapping</li>
         <li>[2026-11-06] (<a href="https://github.com/chamilo/chamilo-lms/commit/be8f2644f186e88a1e6502c86ef3010c357d4ef8">be8f2644</a>) MCP: Add set_course_introduction to set the introduction on the course homepage</li>
@@ -174,6 +177,13 @@
 
     <h3>Changed</h3>
     <ul aria-live="off">
+        <li>[2026-11-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/853f70baf485bb3dee0b53d0b1e7524bfd6d37ea">853f70ba</a> - <a href="https://task.beeznest.com/issues/23688">BT#23688</a>) Migration: Let the demo courses be created while course.course_language still exists, and keep their language when it is dropped</li>
+        <li>[2026-11-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/0bb8fe6f83a325d32fe2101de24a32e4af862ab2">0bb8fe6f</a> - <a href="https://task.beeznest.com/issues/23688">BT#23688</a>) Migration: Skip legacy files larger than 2 GB, which resource_file.size cannot hold, instead of failing</li>
+        <li>[2026-11-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/ade51158dd883d0f7ca44a319c41199010df900b">ade51158</a> - <a href="https://task.beeznest.com/issues/23688">BT#23688</a>) Migration: Save exercise audio attempts without the resource_node_id column added later and without re-inserting their assets</li>
+        <li>[2026-11-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/7bddc0088e195f27e9b1532730c638496b4aafe6">7bddc008</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/9305">GH#9305</a>) Skill: Preserve custom level names</li>
+        <li>[2026-11-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/3bb742a19fc7b001e672f6e69e24154ae1e42a98">3bb742a1</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/4975">GH#4975</a>) Exercise: Fix pending exercise correction workflow</li>
+        <li>[2026-11-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/b1cba16eb74dbd70d4a4bf1690f91373ca90d755">b1cba16e</a>) Exercise: Use ROLE_TEACHER and ROLE_SESSION_MANAGER to validate access to exercise pending attempts page</li>
+        <li>[2026-11-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/6633951ea9e6984f16e6858596689334b5de5ee0">6633951e</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1650">GH#1650</a>) Gradebook: Freeze learner columns in flat view</li>
         <li>[2026-11-10] (<a href="https://github.com/chamilo/chamilo-lms/commit/b3a089977e579cd2b495ab9707404d850a28c58f">b3a08997</a>) Session: Check that the caller may manage the session in delete()</li>
         <li>[2026-11-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/71b101a1a5e3fc2e4c81da020885aa1be37fba40">71b101a1</a> - <a href="https://github.com/chamilo/chamilo-lms/issues/1651">GH#1651</a>) Course: Sort by subscription date</li>
         <li>[2026-11-09] (<a href="https://github.com/chamilo/chamilo-lms/commit/89016b46539d3db2f5d70d8078ea7a1b4b64d6c5">89016b46</a> - <a href="https://task.beeznest.com/issues/23688">BT#23688</a>) Migration: Fill c_survey_invitation.user_id without failing on invitees identified by e-mail or hash</li>

@@ -3936,7 +3936,7 @@ function api_get_languages_with_platform_default(): array
  *
  * @param   string  language name (the corresponding name of the language-folder in the filesystem)
  *
- * @return int id of the language
+ * @return int|null id of the language, null when no language matches
  */
 function api_get_language_id($language)
 {
@@ -3957,7 +3957,7 @@ function api_get_language_id($language)
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
 
-    return $row['id'];
+    return $row['id'] ?? null;
 }
 
 /**

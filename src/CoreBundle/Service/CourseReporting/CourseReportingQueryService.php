@@ -994,7 +994,7 @@ final class CourseReportingQueryService
                 FROM track_e_exercises
                 WHERE c_id = :courseId
                     AND COALESCE(session_id, 0) = :sessionId
-                    AND status = ''
+                    AND status IN ('', 'completed')
                     AND exe_user_id IN (:userIds)
                     AND exe_exo_id IN (:quizIds)
                 GROUP BY exe_user_id, exe_exo_id",

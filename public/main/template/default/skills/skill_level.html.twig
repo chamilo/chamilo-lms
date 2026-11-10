@@ -83,7 +83,7 @@
                     {% for item in list %}
                         <tr class="hover:bg-gray-10">
                             <td class="px-6 py-4">
-                                <div class="text-sm font-semibold text-gray-900">{{ item.title|trans }}</div>
+                                <div class="text-sm font-semibold text-gray-900">{{ item.title }}</div>
                             </td>
 
                             <td class="px-6 py-4 whitespace-nowrap">
@@ -98,7 +98,7 @@
 
                             <td class="px-6 py-4">
                                 {% if item.description %}
-                                    <div class="max-w-2xl text-sm text-gray-600">{{ item.description|trans }}</div>
+                                    <div class="max-w-2xl text-sm text-gray-600">{{ item.description }}</div>
                                 {% else %}
                                     <span class="text-sm text-gray-400">—</span>
                                 {% endif %}

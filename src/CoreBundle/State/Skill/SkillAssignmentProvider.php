@@ -212,9 +212,11 @@ final readonly class SkillAssignmentProvider implements ProviderInterface
                 array_unshift($options, ['label' => $skill->getTitle(), 'value' => (int) $skill->getId()]);
             }
 
-            $levelName = $levelNames[$index + 1] ?? (0 === $index ? 'Skill' : 'Sub-skill');
+            $customLevelName = $levelNames[$index + 1] ?? null;
             $levels[] = [
-                'label' => $this->translator->trans((string) $levelName),
+                'label' => null !== $customLevelName
+                    ? (string) $customLevelName
+                    : $this->translator->trans(0 === $index ? 'Skill' : 'Sub-skill'),
                 'name' => 0 === $index ? 'skillId' : 'subSkillId'.$index,
                 'value' => $skill?->getId(),
                 'options' => $options,

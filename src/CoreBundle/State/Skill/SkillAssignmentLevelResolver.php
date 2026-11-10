@@ -10,13 +10,11 @@ use Chamilo\CoreBundle\Entity\Level;
 use Chamilo\CoreBundle\Entity\Skill;
 use Chamilo\CoreBundle\Entity\SkillRelSkill;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class SkillAssignmentLevelResolver
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private TranslatorInterface $translator,
     ) {}
 
     /**
@@ -33,7 +31,7 @@ final readonly class SkillAssignmentLevelResolver
             }
 
             $options[] = [
-                'label' => $this->translator->trans($level->getTitle()),
+                'label' => $level->getTitle(),
                 'value' => (int) $level->getId(),
             ];
         }

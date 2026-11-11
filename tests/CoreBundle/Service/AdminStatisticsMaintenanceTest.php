@@ -6,12 +6,18 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Service;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Service\AdminStatistics\AdminStatisticsMaintenanceActionService;
 use Chamilo\CoreBundle\Service\AdminStatistics\AdminStatisticsMaintenanceQueryService;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Zombie users and duplicate users of the admin statistics maintenance reports, and the actions that run on them.
@@ -184,6 +190,105 @@ final class AdminStatisticsMaintenanceTest extends KernelTestCase
     }
 
     // -------------------------------------------------------- duplicates
+
+    /**
+     * The service as it behaves when the request comes in through the portal $currentUrlId and $userId is signed in
+     * (the CLI always resolves the first URL, so the portal is pinned through a stub helper).
+     */
+    private function duplicatesFrom(int $currentUrlId, int $userId, array $parameters): array
+    {
+        $this->fresh();
+        $current = $this->getEntityManager()->find(AccessUrl::class, $currentUrlId);
+        $urlHelper = new readonly class($current) extends AccessUrlHelper {
+            public function __construct(private ?AccessUrl $fixed) {}
+
+            public function isMultiple(): bool
+            {
+                return true;
+            }
+
+            public function getCurrent(): ?AccessUrl
+            {
+                return $this->fixed;
+            }
+        };
+        $user = $this->entityUser($userId);
+        $storage = self::getContainer()->get('security.token_storage');
+        $storage->setToken(new UsernamePasswordToken($user, 'main', $user->getRoles()));
+        $service = new AdminStatisticsMaintenanceQueryService(
+            $this->getEntityManager(),
+            $urlHelper,
+            self::getContainer()->get(TranslatorInterface::class),
+            self::getContainer()->get(UserHelper::class),
+            self::getContainer()->get(AccessUrlScopeHelper::class),
+        );
+
+        return array_column($service->getReport('duplicated_users', $parameters)['table']['items'], 'id');
+    }
+
+    /**
+     * A twin that lives on another, unrelated portal is not a duplicate of this portal: the report only compares
+     * the users of the portal it is opened from.
+     */
+    public function testDuplicateReportIgnoresTwinsOfAnUnrelatedUrl(): void
+    {
+        $other = $this->secondUrl();
+        $mine = $this->rawUser('r3d1');
+        $foreign = $this->rawUser('r3d2', 5, 1, $other);
+        $this->setNames($mine, 'Scope3-r3', 'Twin', 'r3d1@example.com');
+        $this->setNames($foreign, 'Scope3-r3', 'Twin', 'r3d2@example.com');
+
+        $this->assertSame([], array_values(array_intersect([$mine, $foreign], $this->duplicatesFrom(1, 1, ['dupMode' => 'name']))));
+        $this->assertSame([], array_values(array_intersect([$mine, $foreign], $this->duplicatesFrom(1, 1, ['dupMode' => 'email']))));
+    }
+
+    /**
+     * Owner rule: a global admin sees the duplicates across the portals they manage, but only from the interface of
+     * the parent portal of that subtree (the portal they are registered in). From a child portal, only that portal.
+     */
+    public function testGlobalAdminSeesDuplicatesOfTheManagedSubtreeOnlyFromTheParentPortal(): void
+    {
+        $child = $this->secondUrl(true);
+        $this->conn()->executeStatement('UPDATE access_url SET rgt = 4 WHERE id = 1');
+        $onParent = $this->rawUser('r3d3');
+        $onChild = $this->rawUser('r3d4', 5, 1, $child);
+        $onChild2 = $this->rawUser('r3d5', 5, 1, $child);
+        foreach ([$onParent, $onChild, $onChild2] as $i => $id) {
+            $this->setNames($id, 'Tree3-r3', 'Twin', 'r3d'.($i + 3).'@example.com');
+        }
+        // A grandchild: the admin is registered in the root only, so from the middle portal it is not "their parent".
+        $this->conn()->executeStatement(
+            'INSERT INTO access_url (url, active, description, created_by, lft, rgt, lvl, parent_id, tree_root)
+             VALUES (?, 1, \'\', 1, 3, 4, 2, ?, 1)',
+            ['http://rp-grandchild.invalid/'.getmypid(), $child]
+        );
+        $grandchild = (int) $this->conn()->lastInsertId();
+        $this->conn()->executeStatement('UPDATE access_url SET rgt = 5 WHERE id = ?', [$child]);
+        $this->conn()->executeStatement('UPDATE access_url SET rgt = 6 WHERE id = 1');
+        $onGrandchild = $this->rawUser('r3d9', 5, 1, $grandchild);
+        $this->setNames($onGrandchild, 'Tree3-r3', 'Twin', 'r3d9@example.com');
+        $names = ['dupMode' => 'name'];
+
+        $fromParent = $this->duplicatesFrom(1, 1, $names);
+        $this->assertSame([$onParent, $onChild, $onChild2, $onGrandchild], array_values(array_intersect([$onParent, $onChild, $onChild2, $onGrandchild], $fromParent)));
+
+        $fromChild = $this->duplicatesFrom($child, 1, $names);
+        $this->assertSame([$onChild, $onChild2], array_values(array_intersect([$onParent, $onChild, $onChild2, $onGrandchild], $fromChild)), 'the middle portal only compares its own users: the admin is registered in the root, not here');
+    }
+
+    public function testAdministratorWithoutTheGlobalRoleNeverSeesTheSubtreeEvenFromTheParentPortal(): void
+    {
+        $child = $this->secondUrl(true);
+        $this->conn()->executeStatement('UPDATE access_url SET rgt = 4 WHERE id = 1');
+        $admin = $this->rawUser('r3d6');
+        $this->conn()->executeStatement('UPDATE user SET roles = ? WHERE id = ?', ['["ROLE_ADMIN"]', $admin]);
+        $onParent = $this->rawUser('r3d7');
+        $onChild = $this->rawUser('r3d8', 5, 1, $child);
+        $this->setNames($onParent, 'Plain3-r3', 'Twin', 'r3d7@example.com');
+        $this->setNames($onChild, 'Plain3-r3', 'Twin', 'r3d8@example.com');
+
+        $this->assertSame([], array_values(array_intersect([$onParent, $onChild], $this->duplicatesFrom(1, $admin, ['dupMode' => 'name']))));
+    }
 
     public function testDuplicateNamesAreMatchedIgnoringCaseAndSpacesAndGroupedOldestFirst(): void
     {

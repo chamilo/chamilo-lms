@@ -268,6 +268,40 @@ final class AccessUrlScopeHelper
     }
 
     /**
+     * Access URLs whose users a report opened from the portal $currentUrlId may put side by side.
+     *
+     * Always the current portal. In addition, a ROLE_GLOBAL_ADMIN who is registered in the current portal (so the
+     * current portal is the parent of the subtree they manage) also gets the descendants of that portal, restricted
+     * to the URLs they manage. From any other portal, or for any other role, it is the current portal alone.
+     *
+     * @return int[]
+     */
+    public function getReportUrlIds(User $user, int $currentUrlId): array
+    {
+        if (!$user->hasRole('ROLE_GLOBAL_ADMIN')) {
+            return [$currentUrlId];
+        }
+
+        // fetchOne() returns false (not null) when no row matches.
+        $registered = false !== $this->connection->fetchOne(
+            'SELECT 1 FROM access_url_rel_user WHERE user_id = :userId AND access_url_id = :urlId LIMIT 1',
+            ['userId' => (int) $user->getId(), 'urlId' => $currentUrlId],
+            ['userId' => Types::INTEGER, 'urlId' => Types::INTEGER],
+        );
+        if (!$registered) {
+            return [$currentUrlId];
+        }
+
+        $ids = $this->getDescendantUrlIds($currentUrlId);
+        $managed = $this->getManagedUrlIds($user);
+        if (null !== $managed) {
+            $ids = array_values(array_intersect($ids, $managed));
+        }
+
+        return array_values(array_unique([$currentUrlId, ...$ids]));
+    }
+
+    /**
      * @return int[] every access URL id in the subtree rooted at $urlId (including $urlId itself)
      */
     public function getDescendantUrlIds(int $urlId): array

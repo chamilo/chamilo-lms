@@ -2643,6 +2643,9 @@ class Statistics
      * @param array  $additionalExtraFieldsInfo Fields selected via TrackingCourseLog “additional profile fields”
      * @param int    $extraFieldId Only used when $mode=extra
      * @param string $csrfToken Security::get_token() from index.php
+     *
+     * @deprecated no caller left: the report is AdminStatisticsMaintenanceQueryService, which is scoped to the access
+     *             URL. This legacy copy compares the users of the whole platform.
      */
     public static function returnDuplicatedUsersTable(
         string $dupMode = 'name',

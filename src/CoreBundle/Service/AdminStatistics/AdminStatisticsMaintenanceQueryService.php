@@ -9,6 +9,8 @@ namespace Chamilo\CoreBundle\Service\AdminStatistics;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use DateTimeImmutable;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
@@ -43,6 +45,8 @@ final readonly class AdminStatisticsMaintenanceQueryService
         private EntityManagerInterface $entityManager,
         private AccessUrlHelper $accessUrlHelper,
         private TranslatorInterface $translator,
+        private UserHelper $userHelper,
+        private AccessUrlScopeHelper $accessUrlScopeHelper,
     ) {}
 
     public function supports(string $report): bool
@@ -389,6 +393,13 @@ final readonly class AdminStatisticsMaintenanceQueryService
         $connection = $this->entityManager->getConnection();
         $params = ['softDeleted' => User::SOFT_DELETED];
         $types = ['softDeleted' => Types::INTEGER];
+        $urlIds = $this->getDuplicateScopeUrlIds();
+        if (null !== $urlIds) {
+            $params['scopeUrlIds'] = $urlIds;
+            $types['scopeUrlIds'] = ArrayParameterType::INTEGER;
+        }
+        $scope = static fn (string $userRef): string => null === $urlIds ? '' : ' AND EXISTS (SELECT 1 FROM access_url_rel_user scope_rel'
+            .' WHERE scope_rel.user_id = '.$userRef.'.id AND scope_rel.access_url_id IN (:scopeUrlIds))';
 
         if ('name' === $dupMode) {
             $sql = <<<'SQL'
@@ -402,13 +413,13 @@ INNER JOIN (
     SELECT LOWER(TRIM(COALESCE(firstname, ''))) AS d_firstname,
            LOWER(TRIM(COALESCE(lastname, ''))) AS d_lastname
     FROM user
-    WHERE active <> :softDeleted
+    WHERE active <> :softDeleted{scopeInner}
       AND (TRIM(COALESCE(firstname, '')) <> '' OR TRIM(COALESCE(lastname, '')) <> '')
     GROUP BY LOWER(TRIM(COALESCE(firstname, ''))), LOWER(TRIM(COALESCE(lastname, '')))
     HAVING COUNT(*) > 1
 ) d ON d.d_firstname = LOWER(TRIM(COALESCE(u.firstname, '')))
    AND d.d_lastname = LOWER(TRIM(COALESCE(u.lastname, '')))
-WHERE u.active <> :softDeleted
+WHERE u.active <> :softDeleted{scopeOuter}
 ORDER BY duplicate_label ASC, u.created_at ASC, u.id ASC
 SQL;
         } elseif ('email' === $dupMode) {
@@ -421,11 +432,11 @@ FROM user u
 INNER JOIN (
     SELECT LOWER(TRIM(COALESCE(email, ''))) AS d_email
     FROM user
-    WHERE active <> :softDeleted AND TRIM(COALESCE(email, '')) <> ''
+    WHERE active <> :softDeleted{scopeInner} AND TRIM(COALESCE(email, '')) <> ''
     GROUP BY LOWER(TRIM(COALESCE(email, '')))
     HAVING COUNT(*) > 1
 ) d ON d.d_email = LOWER(TRIM(COALESCE(u.email, '')))
-WHERE u.active <> :softDeleted
+WHERE u.active <> :softDeleted{scopeOuter}
 ORDER BY duplicate_label ASC, u.created_at ASC, u.id ASC
 SQL;
         } else {
@@ -444,19 +455,51 @@ INNER JOIN (
     FROM extra_field_values efv2
     INNER JOIN user u2 ON u2.id = efv2.item_id
     WHERE efv2.field_id = :extraFieldId
-      AND u2.active <> :softDeleted
+      AND u2.active <> :softDeleted{scopeInner2}
       AND TRIM(COALESCE(efv2.field_value, '')) <> ''
     GROUP BY LOWER(TRIM(COALESCE(efv2.field_value, '')))
     HAVING COUNT(*) > 1
 ) d ON d.d_value = LOWER(TRIM(COALESCE(efv.field_value, '')))
-WHERE u.active <> :softDeleted
+WHERE u.active <> :softDeleted{scopeOuter}
 ORDER BY duplicate_label ASC, u.created_at ASC, u.id ASC
 SQL;
             $params['extraFieldId'] = $extraFieldId;
             $types['extraFieldId'] = Types::INTEGER;
         }
 
+        $sql = strtr($sql, [
+            '{scopeInner}' => $scope('user'),
+            '{scopeInner2}' => $scope('u2'),
+            '{scopeOuter}' => $scope('u'),
+        ]);
+
         return $connection->executeQuery($sql, $params, $types)->fetchAllAssociative();
+    }
+
+    /**
+     * Access URLs the duplicate users report compares: the current portal, plus, for a global administrator opened
+     * from the parent portal of the subtree they manage, that subtree (see AccessUrlScopeHelper::getReportUrlIds()).
+     * Null when there is a single portal, so nothing is filtered.
+     *
+     * @return int[]|null
+     */
+    private function getDuplicateScopeUrlIds(): ?array
+    {
+        if (!$this->accessUrlHelper->isMultiple()) {
+            return null;
+        }
+
+        $current = $this->accessUrlHelper->getCurrent();
+        if (null === $current || null === $current->getId()) {
+            return null;
+        }
+
+        $user = $this->userHelper->getCurrent();
+        if (null === $user) {
+            return [(int) $current->getId()];
+        }
+
+        return $this->accessUrlScopeHelper->getReportUrlIds($user, (int) $current->getId());
     }
 
     /**

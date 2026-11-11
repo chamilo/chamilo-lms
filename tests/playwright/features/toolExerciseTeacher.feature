@@ -288,6 +288,8 @@ Feature: Exercise tool
     And I wait for the page content to settle
     And I click the "[title='Configure']" icon in the row for "Exercise 1"
     And I wait for the page content to settle
+    # The setting sits in the collapsed "Advanced settings" panel.
+    And I press "Advanced settings"
     Then the checkbox "showQuestionMaxScore" should be checked
     When I uncheck "Show maximum score per question during the test"
     And I press "Proceed to questions"
@@ -298,6 +300,8 @@ Feature: Exercise tool
     And I wait for the page content to settle
     And I click the "[title='Configure']" icon in the row for "Exercise 1"
     And I wait for the page content to settle
+    # The setting sits in the collapsed "Advanced settings" panel.
+    And I press "Advanced settings"
     Then the checkbox "showQuestionMaxScore" should not be checked
     When I check "Show maximum score per question during the test"
     And I press "Proceed to questions"

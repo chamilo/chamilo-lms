@@ -838,6 +838,28 @@ final class LearnpathRemainderCharacterizationTest extends KernelTestCase
         $this->assertStringEndsWith('not_multiple_attempt=0', $this->recreate($lpId, $quiz)->get_link('http', $quiz));
     }
 
+    public function testGetLinkOfAQuizItemUsesTheLinkedItemNotTheCurrentOne(): void
+    {
+        // The attempt lock belongs to the item the link is built for: the current item of the object is irrelevant.
+        $this->conn()->executeStatement("UPDATE c_quiz SET sound = '' WHERE iid = 1");
+        $lpId = $this->newLpRow('l2_link_quiz_other');
+        $dir = $this->addItem($lpId, 'l2_quiz_other_dir', 'dir', 1);
+        $quiz = $this->addItem($lpId, 'l2_quiz_other', 'quiz', 2, null, 1);
+        $this->lp($lpId)->get_link('http', $quiz);
+        $viewId = (int) $this->conn()->fetchOne('SELECT iid FROM c_lp_view WHERE lp_id = ? AND user_id = 1', [$lpId]);
+        $this->conn()->executeStatement(
+            "INSERT INTO c_lp_item_view (lp_item_id, lp_view_id, view_count, start_time, total_time, score, status, suspend_data, lesson_location, core_exit, max_score)
+             VALUES (?, ?, 0, 0, 0, 0, 'completed', '', '', 'none', '')",
+            [$quiz, $viewId]
+        );
+
+        $url = $this->recreate($lpId, $dir)->get_link('http', $quiz);
+        $this->assertStringEndsWith('not_multiple_attempt=1', $url, 'the completed attempt is the one of the linked quiz');
+
+        $this->conn()->executeStatement('UPDATE c_lp SET prevent_reinit = 0 WHERE iid = ?', [$lpId]);
+        $this->assertStringEndsWith('not_multiple_attempt=0', $this->recreate($lpId, $dir)->get_link('http', $quiz));
+    }
+
     /**
      * New learnpath object whose current item is forced to the given item.
      */

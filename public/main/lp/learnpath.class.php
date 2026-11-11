@@ -3022,12 +3022,13 @@ class learnpath
                             break;
                         case 'quiz':
                             // Check how much attempts of a exercise exits in lp
-                            $lp_item_id = $this->get_current_item_id();
+                            // (of the linked item, not of the current one)
+                            $lp_item_id = $item_id;
                             $lp_view_id = $this->get_view_id();
 
                             $prevent_reinit = null;
-                            if (isset($this->items[$this->current])) {
-                                $prevent_reinit = $this->items[$this->current]->get_prevent_reinit();
+                            if (isset($this->items[$item_id])) {
+                                $prevent_reinit = $this->items[$item_id]->get_prevent_reinit();
                             }
 
                             if (empty($provided_toc)) {

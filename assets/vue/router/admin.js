@@ -189,6 +189,17 @@ export default {
       component: () => import("../views/admin/QuestionBank.vue"),
     },
     {
+      name: "AdminBuyCoursesCourseLifecycle",
+      path: "buycourses/course-lifecycle",
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Course lifecycle",
+        breadcrumbParents: [adminCrumb],
+      },
+      component: () => import("../views/admin/BuyCoursesCourseLifecycle.vue"),
+    },
+    {
       name: "AdminCourseList",
       path: "course-list",
       meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Course list" },

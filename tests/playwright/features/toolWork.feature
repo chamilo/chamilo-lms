@@ -163,6 +163,16 @@ Feature: Work tool
     Then I should see "Assignment updated"
     Then I should see "Work 1 Test Edited"
 
+  # The student below must belong to TEMP. Nothing in this file used to subscribe her: it only passed when another
+  # file (toolGroup, studentView...) had already done it. Idempotent, like toolGroup's own subscription step:
+  # "Register" is not shown when she is already subscribed, and she is left subscribed for the other files.
+  Scenario: Subscribe acostea to TEMP so she can send work
+    Given I am a platform administrator
+    And I am on "/main/user/subscribe_user.php?keyword=acostea&type=5&cid=3"
+    And wait for the page to be loaded
+    Then I follow "Register" if it is visible
+    And wait very long for the page to be loaded
+
   Scenario: Send work as student
     Given I am not logged
     Given I am a student

@@ -251,6 +251,7 @@ $defaults['expired_on'] = api_get_local_time(time() + 86400);
 
 $form->setDefaults($defaults);
 $form->addButtonCreate(get_lang('Continue'));
+$form->protect();
 
 if ($form->validate()) {
     $published_on = null;

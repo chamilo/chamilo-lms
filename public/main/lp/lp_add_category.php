@@ -47,6 +47,7 @@ $form->addElement('hidden', 'c_id', api_get_course_int_id());
 $form->addElement('hidden', 'id', 0);
 
 $form->addButtonSave(get_lang('Save'));
+$form->protect();
 $repo = Container::getLpCategoryRepository();
 if ($form->validate()) {
     $values = $form->getSubmitValues();

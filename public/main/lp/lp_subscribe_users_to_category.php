@@ -91,6 +91,7 @@ $groupMultiSelect = $form->addMultiSelect(
 
 // submit button
 $form->addButtonSave(get_lang('Save'));
+$form->protect();
 
 if ($allowUserGroups) {
     $formUserGroup = new FormValidator('lp_edit', 'post', $url);
@@ -120,6 +121,7 @@ if ($allowUserGroups) {
 
     $formUserGroup->setDefaults(['usergroups' => $selectedUserGroupChoices]);
     $formUserGroup->addButtonSave(get_lang('Save'));
+    $formUserGroup->protect();
     $sessionCondition = api_get_session_condition($sessionId, true);
     if ($formUserGroup->validate()) {
         $values = $formUserGroup->getSubmitValues();
@@ -257,6 +259,7 @@ $userMultiSelect = $formUsers->addMultiSelect(
     $choices
 );
 $formUsers->addButtonSave(get_lang('Save'));
+$formUsers->protect();
 
 $defaults = [];
 if (!empty($selectedChoices)) {

@@ -451,6 +451,7 @@ $defaults['subscribe_users'] = $learnPath->getSubscribeUsers();
 $defaults['skills'] = array_keys($skillList);
 $form->setDefaults($defaults);
 
+$form->protect();
 if ($form->validate()) {
     $em = Database::getManager();
     $hide_toc_frame = 1 === $request->request->getInt('hide_toc_frame');

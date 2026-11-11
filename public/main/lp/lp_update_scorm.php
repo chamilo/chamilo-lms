@@ -113,6 +113,7 @@ $form->addElement('hidden', 'curdirpath', '');
 $form->addElement('file', 'user_file', get_lang('Upload').' SCORM (.zip)');
 $form->addRule('user_file', get_lang('Required field'), 'required');
 $form->addButtonUpload(get_lang('Upload'));
+$form->protect();
 
 /**
  * Map PHP upload error codes to readable messages.
@@ -146,6 +147,8 @@ if ($isPost && empty($_POST) && empty($_FILES) && !empty($_SERVER['CONTENT_LENGT
             'error'
         )
     );
+} elseif ($isPost && !Security::check_token('form', $form)) {
+    Display::addFlash(Display::return_message(get_lang('Invalid token'), 'error'));
 } elseif ($isPost) {
     // If submitted, try processing even if FormValidator validate() fails,
     // because file uploads can fail validation silently depending on server limits.

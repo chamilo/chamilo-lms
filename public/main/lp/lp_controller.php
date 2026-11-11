@@ -530,6 +530,7 @@ switch ($action) {
         $redirectToModernTeacherPage($buildModernLpUrl('/'.$lpId.'/builder', ['panel' => 'author-price']));
         break;
     case 'send_notify_teacher':
+        $requireToken();
         // Send notification to the teacher
         $studentInfo = api_get_user_info();
         $courseName = $courseInfo['title'];

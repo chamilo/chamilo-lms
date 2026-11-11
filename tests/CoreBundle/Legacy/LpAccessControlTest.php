@@ -466,6 +466,45 @@ final class LpAccessControlTest extends KernelTestCase
         $this->assertSame(2, substr_count($code, "'sec_token' => Security::get_existing_token()"));
     }
 
+    public function testNotifyTeacherActionRequiresTheToken(): void
+    {
+        // It sends e-mails to the coaches on a plain GET: it must not be triggerable by a cross-site link.
+        $this->assertStringContainsString('$requireToken()', $this->caseBlock('send_notify_teacher'));
+    }
+
+    /**
+     * @return array<string, array{string, int}>
+     */
+    public static function legacyFormPages(): array
+    {
+        return [
+            'lp_edit' => ['public/main/lp/lp_edit.php', 1],
+            'lp_add' => ['public/main/lp/lp_add.php', 1],
+            'lp_add_category' => ['public/main/lp/lp_add_category.php', 1],
+            'lp_subscribe_users_to_category' => ['public/main/lp/lp_subscribe_users_to_category.php', 3],
+        ];
+    }
+
+    /**
+     * These pages still process a POST reaching them directly (the controller only redirects their GET): a FormValidator
+     * checks its token only when protect() was called.
+     *
+     * @dataProvider legacyFormPages
+     */
+    public function testLegacyFormPagesProtectTheirForms(string $path, int $forms): void
+    {
+        $code = $this->source($path);
+        $this->assertSame($forms, substr_count($code, '->protect();'), $path);
+    }
+
+    public function testScormUpdatePageChecksTheFormToken(): void
+    {
+        // It processes the upload even when validate() fails, so validate()'s own token check is not enough.
+        $code = $this->source('public/main/lp/lp_update_scorm.php');
+        $this->assertStringContainsString('$form->protect();', $code);
+        $this->assertStringContainsString("Security::check_token('form', \$form)", $code);
+    }
+
     public function testAudioActionChecksTheItemBelongsToThePath(): void
     {
         $this->assertStringContainsString('lpItemBelongsToLp', $this->caseBlock('add_audio'));

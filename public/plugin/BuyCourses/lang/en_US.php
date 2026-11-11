@@ -427,7 +427,6 @@ $strings['Invoicing'] = 'Invoicing';
 $strings['Teachers'] = 'Teachers';
 $strings['TermsAndConditions'] = 'Terms and conditions';
 
-
 $strings['GrantedBenefits'] = 'Granted benefits';
 $strings['BenefitMaxCoursesTitle'] = 'Number of courses with these benefits';
 $strings['BenefitMaxCoursesDescription'] = 'Number of courses that can use these service benefits while the service is valid.';
@@ -738,7 +737,6 @@ $strings['SubscriptionPeriodsRequired'] = 'You must add at least one subscriptio
 $strings['FrequencyNotRemoved'] = 'The subscription period could not be removed.';
 $strings['CourseSessionBlock'] = 'Courses/Sessions';
 
-
 // Service upgrade.
 $strings['Upsale'] = 'Upsale';
 $strings['UpsaleHelp'] = 'Select the service that this service upgrades. Leave None for a regular service.';
@@ -761,6 +759,7 @@ $strings['UpsaleRecurringDurationMustMatch'] = 'Renewable source and upgrade ser
 $strings['UpsaleTargetDurationMustNotBeShorter'] = 'The upgrade service duration must be equal to or longer than the source service duration.';
 $strings['UpsaleCycleNotAllowed'] = 'This upsale relation would create a cycle between services.';
 $strings['UpgradePriceMustBePositive'] = 'The calculated upgrade price must be greater than zero.';
+$strings['PayPalUpgradeRequiresSameBillingSchedule'] = 'This PayPal subscription can only be upgraded to a service with the same billing interval and currency.';
 $strings['UpgradeMustUseExistingPaymentGateway'] = 'This upgrade must use the payment gateway of the current recurring subscription.';
 $strings['UpgradeSourceNoLongerAvailable'] = 'The current service is no longer available for this upgrade. Reload the catalog and try again.';
 $strings['UpgradeRecurringTransitionFailed'] = 'The recurring subscription could not be moved to the upgraded service. No local service change was applied.';

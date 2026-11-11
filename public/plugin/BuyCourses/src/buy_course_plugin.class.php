@@ -6466,6 +6466,16 @@ class BuyCoursesPlugin extends Plugin
             === (int) ($sourceSale['recurring_payment'] ?? self::SERVICE_RECURRING_PAYMENT_DISABLED)
             && '' !== $sourceRecurringProfileId;
         $sourceDateEnd = (string) ($sourceSale['date_end'] ?? '');
+        $sourceDurationDays = (int) ($sourceSale['service']['duration_days'] ?? $sourceSale['duration_days'] ?? 0);
+        $targetDurationDays = (int) ($targetService['duration_days'] ?? 0);
+        $sourceCurrency = $this->getCurrency((int) ($sourceSale['currency_id'] ?? 0));
+        $sourceCurrencyCode = strtoupper(trim((string) ($sourceCurrency['iso_code'] ?? '')));
+        $unsupportedPayPalUpgrade = $sourceRecurringEnabled
+            && 'paypal' === $sourceRecurringGateway
+            && ($sourceDurationDays <= 0
+                || $sourceDurationDays !== $targetDurationDays
+                || '' === $sourceCurrencyCode
+                || $sourceCurrencyCode !== strtoupper(trim($isoCode)));
         $sourceDateEndFormatted = '' !== $sourceDateEnd
             ? api_format_date(api_get_local_time($sourceDateEnd), DATE_TIME_FORMAT_LONG_24H)
             : '';
@@ -6518,8 +6528,10 @@ class BuyCoursesPlugin extends Plugin
                 $upgradePriceWithoutTax,
                 $isoCode
             ),
+            'block_reason' => $unsupportedPayPalUpgrade ? 'PayPalUpgradeRequiresSameBillingSchedule' : null,
             'purchasable' => $upgradePriceWithoutTax > 0
-                && (!$sourceRecurringEnabled || null !== $requiredPaymentType),
+                && (!$sourceRecurringEnabled || null !== $requiredPaymentType)
+                && !$unsupportedPayPalUpgrade,
         ];
     }
 
@@ -7776,11 +7788,20 @@ class BuyCoursesPlugin extends Plugin
         $currency = $this->getCurrency((int) ($newServiceSale['currency_id'] ?? 0));
         $currencyCode = strtoupper(trim((string) ($currency['iso_code'] ?? '')));
 
+        $sourceDuration = (int) ($sourceServiceSale['service']['duration_days'] ?? $sourceServiceSale['duration_days'] ?? 0);
+        $targetDuration = (int) ($newServiceSale['service']['duration_days'] ?? 0);
+        $sourceCurrency = $this->getCurrency((int) ($sourceServiceSale['currency_id'] ?? 0));
+        $sourceCurrencyCode = strtoupper(trim((string) ($sourceCurrency['iso_code'] ?? '')));
+
         if ('' === $paypalUsername
             || '' === $paypalPassword
             || '' === $paypalSignature
             || $recurringAmount <= 0
             || '' === $currencyCode
+            || $sourceDuration <= 0
+            || $sourceDuration !== $targetDuration
+            || '' === $sourceCurrencyCode
+            || $sourceCurrencyCode !== $currencyCode
         ) {
             return false;
         }
@@ -9163,7 +9184,9 @@ class BuyCoursesPlugin extends Plugin
 
         if (null !== $upgradeOffer) {
             if (empty($upgradeOffer['purchasable'])) {
-                $this->lastServiceSaleError = $this->get_lang('UpgradePriceMustBePositive');
+                $this->lastServiceSaleError = $this->get_lang(
+                    (string) ($upgradeOffer['block_reason'] ?? 'UpgradePriceMustBePositive')
+                );
 
                 return false;
             }

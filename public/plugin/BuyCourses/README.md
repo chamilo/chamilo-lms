@@ -95,7 +95,15 @@ Permission denied. Enabling Invoices Read ('invoice_read') permissions on this k
 ```
 
 PayPal recurring payments are updated through the PayPal IPN endpoint configured
-for the plugin.
+for the plugin. Before extending a recurring service sale, BuyCourses validates the
+original IPN with PayPal and uses the merchant's NVP `GetTransactionDetails` API
+to verify the transaction ID, receiver, gross amount, currency and completed
+status against the stored service sale. The merchant account requires permission
+to retrieve its own transaction details; verification failures never grant access.
+Only the current recurring profile and known payment transactions are accepted.
+PayPal subscription upgrades keep the same billing frequency and currency;
+incompatible upgrades are blocked before checkout because the classic NVP profile
+cannot change its billing interval in place.
 
 As a safety fallback, configure the recurring subscription processor to run once
 per day from the Chamilo project root. This command does not charge the customer;

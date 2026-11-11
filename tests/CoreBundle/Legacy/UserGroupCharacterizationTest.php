@@ -1161,7 +1161,8 @@ final class UserGroupCharacterizationTest extends KernelTestCase
     private function setGroupSetting(string $value): void
     {
         self::getContainer()->get(SettingsManager::class)
-            ->updateSetting('group.allow_invite_non_friends_to_social_groups', $value);
+            ->updateSetting('group.allow_invite_non_friends_to_social_groups', $value)
+        ;
     }
 
     private function addCourse(Usergroup $group, Course $course): void

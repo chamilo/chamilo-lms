@@ -59,6 +59,14 @@ final class LegacyGetMutatorTokenTest extends TestCase
     }
 
     /**
+     * @dataProvider gradebookAdminPageActions
+     */
+    public function testGradebookPageGetActionsNeedTheToken(string $marker, string $mutator): void
+    {
+        $this->assertTokenBefore('public/main/gradebook/gradebook.php', 'if ('.$marker.')', $mutator, 700);
+    }
+
+    /**
      * @return array<string, array{string, string}>
      */
     public static function gradebookAdminPageActions(): array
@@ -72,14 +80,6 @@ final class LegacyGetMutatorTokenTest extends TestCase
             'visiblelink' => ["isset(\$_GET['visiblelink'])", '->save()'],
             'deletelink' => ["isset(\$_GET['deletelink'])", '->delete()'],
         ];
-    }
-
-    /**
-     * @dataProvider gradebookAdminPageActions
-     */
-    public function testGradebookPageGetActionsNeedTheToken(string $marker, string $mutator): void
-    {
-        $this->assertTokenBefore('public/main/gradebook/gradebook.php', 'if ('.$marker.')', $mutator, 700);
     }
 
     public function testGradebookPageMovesNeedTheTokenAndTheRedirectsCarryIt(): void
@@ -126,7 +126,7 @@ final class LegacyGetMutatorTokenTest extends TestCase
     public function testTheCronEntryPointsDoNotGoThroughTheWebRunAction(): void
     {
         // The token on `run` only protects the admin's "send now" button: cron must not depend on it.
-        $this->assertStringNotContainsString("action=run", $this->source('public/main/cron/scheduled_announcement.php'));
+        $this->assertStringNotContainsString('action=run', $this->source('public/main/cron/scheduled_announcement.php'));
         $this->assertStringNotContainsString('check_token', $this->source('public/main/cron/scheduled_announcement.php'));
         $this->assertStringNotContainsString('check_token', $this->source('src/CoreBundle/Command/SendScheduledAnnouncementsCommand.php'));
     }

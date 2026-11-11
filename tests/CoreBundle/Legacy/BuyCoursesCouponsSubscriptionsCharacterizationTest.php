@@ -467,7 +467,9 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
     public static function serverTimezones(): iterable
     {
         yield 'UTC+14' => ['Pacific/Kiritimati'];
+
         yield 'UTC-11' => ['Pacific/Pago_Pago'];
+
         yield 'UTC' => ['UTC'];
     }
 

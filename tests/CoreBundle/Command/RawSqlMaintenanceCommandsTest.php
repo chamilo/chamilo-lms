@@ -193,6 +193,7 @@ final class RawSqlMaintenanceCommandsTest extends KernelTestCase
         $tester = $this->tester('app:multi-url:convert');
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('cannot be combined');
+
         try {
             $tester->execute(['admin-url' => 'https://sv2-admin.invalid/', '--apply' => true, '--dry-run' => true]);
         } finally {

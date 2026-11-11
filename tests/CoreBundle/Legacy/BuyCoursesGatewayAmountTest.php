@@ -38,7 +38,7 @@ final class BuyCoursesGatewayAmountTest extends BuyCoursesCharacterizationTestCa
     /**
      * @dataProvider wrongAmounts
      */
-    public function testAnyOtherAmountIsRefused(string|int|float|null $received): void
+    public function testAnyOtherAmountIsRefused(float|int|string|null $received): void
     {
         self::assertFalse(BuyCoursesPlugin::gatewayAmountMatchesSale($received, ['price' => '19.99']));
     }
@@ -46,14 +46,23 @@ final class BuyCoursesGatewayAmountTest extends BuyCoursesCharacterizationTestCa
     public static function wrongAmounts(): iterable
     {
         yield 'one cent less' => ['1998'];
+
         yield 'one cent more' => ['2000'];
+
         yield 'a tenth of the price' => ['199'];
+
         yield 'zero' => ['0'];
+
         yield 'empty' => [''];
+
         yield 'missing' => [null];
+
         yield 'decimal notation instead of cents' => ['19.99'];
+
         yield 'not a number' => ['abc'];
+
         yield 'negative' => ['-1999'];
+
         yield 'float' => [1999.0];
     }
 
@@ -80,6 +89,7 @@ final class BuyCoursesGatewayAmountTest extends BuyCoursesCharacterizationTestCa
     public static function gatewayPages(): iterable
     {
         yield ['tpv_response.php'];
+
         yield ['cecabank_response.php'];
     }
 }

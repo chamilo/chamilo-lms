@@ -16,7 +16,7 @@ final class ArrayLibMsortTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
-        if (!function_exists('msort')) {
+        if (!\function_exists('msort')) {
             require_once __DIR__.'/../../../public/main/inc/lib/array.lib.php';
         }
     }

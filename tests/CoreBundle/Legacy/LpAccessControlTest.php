@@ -473,6 +473,18 @@ final class LpAccessControlTest extends KernelTestCase
     }
 
     /**
+     * These pages still process a POST reaching them directly (the controller only redirects their GET): a FormValidator
+     * checks its token only when protect() was called.
+     *
+     * @dataProvider legacyFormPages
+     */
+    public function testLegacyFormPagesProtectTheirForms(string $path, int $forms): void
+    {
+        $code = $this->source($path);
+        $this->assertSame($forms, substr_count($code, '->protect();'), $path);
+    }
+
+    /**
      * @return array<string, array{string, int}>
      */
     public static function legacyFormPages(): array
@@ -483,18 +495,6 @@ final class LpAccessControlTest extends KernelTestCase
             'lp_add_category' => ['public/main/lp/lp_add_category.php', 1],
             'lp_subscribe_users_to_category' => ['public/main/lp/lp_subscribe_users_to_category.php', 3],
         ];
-    }
-
-    /**
-     * These pages still process a POST reaching them directly (the controller only redirects their GET): a FormValidator
-     * checks its token only when protect() was called.
-     *
-     * @dataProvider legacyFormPages
-     */
-    public function testLegacyFormPagesProtectTheirForms(string $path, int $forms): void
-    {
-        $code = $this->source($path);
-        $this->assertSame($forms, substr_count($code, '->protect();'), $path);
     }
 
     public function testScormUpdatePageChecksTheFormToken(): void

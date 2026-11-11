@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Command;
 
 use Chamilo\Tests\ChamiloTestTrait;
+use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
@@ -36,7 +37,7 @@ final class RepairUserTagCountersCommandTest extends KernelTestCase
         $this->link(1, $this->correct);
     }
 
-    private function conn(): \Doctrine\DBAL\Connection
+    private function conn(): Connection
     {
         return $this->getEntityManager()->getConnection();
     }

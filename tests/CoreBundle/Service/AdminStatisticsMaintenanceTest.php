@@ -200,7 +200,9 @@ final class AdminStatisticsMaintenanceTest extends KernelTestCase
         $this->fresh();
         $current = $this->getEntityManager()->find(AccessUrl::class, $currentUrlId);
         $urlHelper = new readonly class($current) extends AccessUrlHelper {
-            public function __construct(private ?AccessUrl $fixed) {}
+            public function __construct(
+                private ?AccessUrl $fixed
+            ) {}
 
             public function isMultiple(): bool
             {

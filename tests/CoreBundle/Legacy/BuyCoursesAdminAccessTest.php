@@ -287,8 +287,11 @@ final class BuyCoursesAdminAccessTest extends BuyCoursesCharacterizationTestCase
     public static function successPages(): iterable
     {
         yield ['success.php', '$buyingCourse = false;'];
+
         yield ['subscription_success.php', '$coupon = [];'];
+
         yield ['service_success.php', '$couponId = isset('];
+
         yield ['stripe_success.php', '$userInfo = api_get_user_info('];
     }
 
@@ -313,7 +316,9 @@ final class BuyCoursesAdminAccessTest extends BuyCoursesCharacterizationTestCase
     public static function couponAndPlanPages(): iterable
     {
         yield ['coupon_add.php', 'coupon_add.tpl'];
+
         yield ['configure_coupon.php', 'coupon_add.tpl'];
+
         yield ['public_plan_cards.php', 'public_plan_cards_admin.tpl'];
     }
 

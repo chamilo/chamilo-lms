@@ -41,10 +41,15 @@ final class UsergroupRepositoryFriendsTest extends KernelTestCase
     public static function relationProvider(): iterable
     {
         yield 'friend' => [3, true];
+
         yield 'good friend' => [4, true];
+
         yield 'deleted' => [6, false];
+
         yield 'hr manager' => [7, false];
+
         yield 'boss' => [8, false];
+
         yield 'friend request' => [10, false];
     }
 }

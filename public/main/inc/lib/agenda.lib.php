@@ -2418,7 +2418,7 @@ class Agenda
 
                     if (!empty($agendaitems[$curday])) {
                         $items = $agendaitems[$curday];
-                        $items = msort($items, 'start_date_tms');
+                        $items = msort($items, 'start_date_tms', 'asc');
 
                         foreach ($items as $value) {
                             $value['title'] = Security::remove_XSS(

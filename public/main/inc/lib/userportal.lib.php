@@ -81,7 +81,7 @@ class IndexManager
                 }
             }
             if (!empty($exercise_list)) {
-                $exercise_list = msort($exercise_list, 'tms');
+                $exercise_list = msort($exercise_list, 'tms', 'asc');
                 $my_exercise = $exercise_list[0];
                 $url = Display::url(
                     $my_exercise['title'],

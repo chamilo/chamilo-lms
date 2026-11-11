@@ -178,8 +178,7 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $rows = $this->model->getUsergroupsPagination('title', 'asc', 0, 10, $where);
 
         $this->assertCount(2, $rows);
-        // Fixed: msort() sorts 'desc' as lowest-first, so the direction was applied inverted ('asc'
-        // returned the highest title first); it is now honoured as asked.
+        // msort() used to apply the direction inverted; it is fixed at source, 'asc' is lowest first.
         $this->assertSame(['ug_pg_1', 'ug_pg_2'], array_column($rows, 'title'));
         $byTitle = array_column($rows, null, 'title');
         $this->assertSame(1, $byTitle['ug_pg_1']['courses']);

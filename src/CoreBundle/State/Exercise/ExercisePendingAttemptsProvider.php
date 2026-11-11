@@ -9,6 +9,8 @@ namespace Chamilo\CoreBundle\State\Exercise;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExercisePendingAttempts;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use CourseManager;
@@ -592,8 +594,8 @@ SQL;
             if (class_exists('CourseManager')) {
                 $courses = CourseManager::get_courses_list();
             }
-        } elseif (class_exists('CourseManager')) {
-            $courses = CourseManager::get_courses_list_by_user_id($this->getCurrentUserId(), $includeSessions, false, false);
+        } else {
+            $courses = $this->getManagedCourses($includeSessions);
         }
 
         $options = [];
@@ -627,25 +629,56 @@ SQL;
             return [];
         }
 
-        if (!class_exists('CourseManager')) {
+        return array_map(
+            static fn (array $course): int => (int) $course['real_id'],
+            $this->getManagedCourses($includeSessions)
+        );
+    }
+
+    /**
+     * Courses the current user teaches, plus, when sessions are included, the courses they coach.
+     * Being subscribed as a student never counts, whatever the platform status of the user.
+     *
+     * @return array<int, array{real_id: int, title: string}>
+     */
+    private function getManagedCourses(bool $includeSessions): array
+    {
+        $userId = $this->getCurrentUserId();
+        if ($userId <= 0) {
             return [];
         }
 
-        $courses = CourseManager::get_courses_list_by_user_id($this->getCurrentUserId(), $includeSessions, false, false);
-        $courseIds = [];
+        $sources = [
+            'SELECT cru.c_id FROM course_rel_user cru WHERE cru.user_id = :userId AND cru.status = :teacherStatus',
+        ];
+        $params = [
+            'userId' => $userId,
+            'teacherStatus' => CourseRelUser::TEACHER,
+            'urlId' => \function_exists('api_get_current_access_url_id') ? (int) api_get_current_access_url_id() : 1,
+        ];
 
-        foreach ($courses as $course) {
-            if (!\is_array($course)) {
-                continue;
-            }
-
-            $courseId = (int) ($course['real_id'] ?? $course['id'] ?? 0);
-            if ($courseId > 0) {
-                $courseIds[$courseId] = $courseId;
-            }
+        if ($includeSessions) {
+            $sources[] = 'SELECT srcru.c_id FROM session_rel_course_rel_user srcru
+                WHERE srcru.user_id = :userId AND srcru.status = :courseCoach';
+            $sources[] = 'SELECT src.c_id FROM session_rel_course src
+                INNER JOIN session_rel_user sru ON sru.session_id = src.session_id
+                WHERE sru.user_id = :userId AND sru.relation_type = :generalCoach';
+            $params['courseCoach'] = Session::COURSE_COACH;
+            $params['generalCoach'] = Session::GENERAL_COACH;
         }
 
-        return array_values($courseIds);
+        $sql = 'SELECT DISTINCT c.id AS real_id, c.title
+            FROM course c
+            INNER JOIN access_url_rel_course url ON url.c_id = c.id AND url.access_url_id = :urlId
+            WHERE c.id IN ('.implode(' UNION ', $sources).')
+            ORDER BY c.title';
+
+        $courses = [];
+        foreach ($this->connection->fetchAllAssociative($sql, $params) as $row) {
+            $courses[] = ['real_id' => (int) $row['real_id'], 'title' => (string) $row['title']];
+        }
+
+        return $courses;
     }
 
     private function getCurrentUserId(): int

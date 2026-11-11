@@ -308,7 +308,7 @@ class ResultTable extends SortableTable
                     3,
                     Display::url(
                         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
-                        $url.'&action=delete_attempt&result_attempt_id='.$data['id']
+                        $url.'&action=delete_attempt&result_attempt_id='.$data['id'].'&sec_token='.Security::get_existing_token()
                     )
                 );
             }
@@ -350,7 +350,7 @@ class ResultTable extends SortableTable
         }
 
         if (null == $this->evaluation->getCourseId()) {
-            $editColumn .= '&nbsp;<a href="'.api_get_self().'?resultdelete='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'" onclick="return confirmationuser();">';
+            $editColumn .= '&nbsp;<a href="'.api_get_self().'?resultdelete='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&sec_token='.Security::get_existing_token().'" onclick="return confirmationuser();">';
             $editColumn .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
             $editColumn .= '</a>';
             $editColumn .= '&nbsp;<a href="user_stats.php?userid='.$item['id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">';

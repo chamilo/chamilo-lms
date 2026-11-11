@@ -71,6 +71,10 @@ $allowMultipleAttempts = ('true' === api_get_setting('gradebook.gradebook_multip
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
         case 'delete_attempt':
+            if (!Security::check_token('get')) {
+                api_not_allowed(true);
+            }
+            Security::clear_token();
             $result = Result::load($_GET['editres']);
             if ($allowMultipleAttempts && isset($result[0]) && api_is_allowed_to_edit()
                 && $result[0]->get_evaluation_id() == $select_eval
@@ -546,6 +550,10 @@ if (isset($_GET['export'])) {
 }
 
 if (isset($_GET['resultdelete'])) {
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $result = Result::load($_GET['resultdelete']);
     if (!empty($result[0]) && $result[0]->get_evaluation_id() == $select_eval) {
         $result[0]->delete();

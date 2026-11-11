@@ -8,6 +8,7 @@ declare(strict_types=1);
  * Configure an existing coupon with a clean Tailwind form contract.
  */
 require_once '../config.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 api_protect_admin_script();
 
@@ -230,13 +231,8 @@ $formData['courses_lookup'] = buildConfiguredCouponLookup($formData['courses']);
 $formData['sessions_lookup'] = buildConfiguredCouponLookup($formData['sessions']);
 $formData['services_lookup'] = buildConfiguredCouponLookup($formData['services']);
 
-$csrfSessionKey = 'buycourses_configure_coupon_token_'.$couponId;
-
-if (empty($_SESSION[$csrfSessionKey])) {
-    $_SESSION[$csrfSessionKey] = bin2hex(random_bytes(32));
-}
-
-$csrfToken = (string) $_SESSION[$csrfSessionKey];
+// Same token as every other BuyCourses admin form (never rotated: several tabs keep working).
+$csrfToken = buycoursesAdminToken();
 
 if ('POST' === $_SERVER['REQUEST_METHOD']) {
     $formData['active'] = isset($_POST['active']);
@@ -253,8 +249,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
 
     $hasError = false;
 
-    $submittedToken = (string) ($_POST['csrf_token'] ?? '');
-    if ('' === $submittedToken || !hash_equals($csrfToken, $submittedToken)) {
+    if (!buycoursesAdminTokenIsValid()) {
         $messages[] = Display::return_message(
             'Invalid form token. Please refresh the page and try again.',
             'error',
@@ -328,7 +323,6 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
                 )
             );
 
-            $_SESSION[$csrfSessionKey] = bin2hex(random_bytes(32));
             header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/configure_coupon.php?id='.$couponId);
             exit;
         }

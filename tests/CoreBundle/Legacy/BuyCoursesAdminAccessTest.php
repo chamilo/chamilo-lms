@@ -291,4 +291,53 @@ final class BuyCoursesAdminAccessTest extends BuyCoursesCharacterizationTestCase
         yield ['service_success.php', '$couponId = isset('];
         yield ['stripe_success.php', '$userInfo = api_get_user_info('];
     }
+
+    /**
+     * @dataProvider couponAndPlanPages
+     */
+    public function testCouponAndPublicPlanFormsUseThePluginTokenInsteadOfTheirOwn(string $page, string $template): void
+    {
+        $source = (string) file_get_contents(self::SRC.$page);
+
+        self::assertStringContainsString("require_once __DIR__.'/admin_token.lib.php'", $source);
+        self::assertStringContainsString('buycoursesAdminTokenIsValid()', $source);
+        self::assertStringNotContainsString('hash_equals(', $source, $page.' must not keep its own token scheme');
+        self::assertStringNotContainsString("\$_POST['csrf_token']", $source);
+        self::assertStringContainsString('buycoursesAdminToken()', $source);
+
+        $tpl = (string) file_get_contents(self::SRC.'../view/'.$template);
+        self::assertStringContainsString('name="buycourses_admin_sec_token"', $tpl);
+        self::assertStringNotContainsString('name="csrf_token"', $tpl);
+    }
+
+    public static function couponAndPlanPages(): iterable
+    {
+        yield ['coupon_add.php', 'coupon_add.tpl'];
+        yield ['configure_coupon.php', 'coupon_add.tpl'];
+        yield ['public_plan_cards.php', 'public_plan_cards_admin.tpl'];
+    }
+
+    public function testRequestInvoiceNeedsATokenBeforeItCreatesTheInvoice(): void
+    {
+        $source = (string) file_get_contents(self::SRC.'request_invoice.php');
+
+        $guard = strpos($source, 'buycoursesRequireAdminToken(');
+        $create = strpos($source, '$plugin->setInvoice(');
+        self::assertNotFalse($guard, 'a GET that creates an invoice must carry the token');
+        self::assertNotFalse($create);
+        self::assertLessThan($create, $guard);
+        self::assertStringContainsString("require_once __DIR__.'/admin_token.lib.php'", $source);
+    }
+
+    public function testRecurringProcessorNeedsATokenWhenRunFromTheWeb(): void
+    {
+        $source = (string) file_get_contents(self::SRC.'process_recurring_subscriptions.php');
+
+        $guard = strpos($source, 'buycoursesRequireAdminToken(');
+        $firstQuery = strpos($source, 'Database::get_main_table(BuyCoursesPlugin::TABLE_SERVICES_SALE)');
+        self::assertNotFalse($guard, 'the web trigger of the renewal batch must carry the token');
+        self::assertLessThan($firstQuery, $guard);
+        // The CLI (cron) has no session: it is exempt from the token, and only it.
+        self::assertMatchesRegularExpression('/if \(!\$isCli\)[^}]*buycoursesRequireAdminToken\(/s', $source);
+    }
 }

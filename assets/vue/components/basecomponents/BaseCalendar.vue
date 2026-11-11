@@ -136,6 +136,21 @@ const dateFormat = computed(() => {
   }
 })
 
+/**
+ * The expected format, shown while the field is empty. It also keeps the label floated, as in
+ * the Figma input (see .p-floatlabel:has(input[placeholder])).
+ */
+const placeholder = computed(() => {
+  // PrimeVue "yy" is the four-digit year.
+  let value = dateFormat.value.replace("yy", "yyyy")
+
+  if (props.showTime) {
+    value += " hh:mm"
+  }
+
+  return "range" === props.type ? `${value} - ${value}` : value
+})
+
 const selectedLocale = computed(() => calendarLocales[localePrefix.value] || calendarLocales.en)
 
 const primevue = usePrimeVue()
@@ -228,6 +243,7 @@ const onCancelClick = () => {
         :input-id="id"
         :invalid="isInvalid"
         :manual-input="allowManualInput"
+        :placeholder="placeholder"
         :selection-mode="type"
         :show-time="showTime"
         :step-minute="timepicketIncrement"

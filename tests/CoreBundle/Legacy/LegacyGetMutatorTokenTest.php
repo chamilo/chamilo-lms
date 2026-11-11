@@ -106,6 +106,23 @@ final class LegacyGetMutatorTokenTest extends TestCase
         $this->assertSame(3, substr_count($page, "'&sec_token='.Security::get_existing_token()"), 'the move redirects and the confirm form must carry the token');
     }
 
+    public function testGenerateAllCertificatesNeedsTheTokenAndItsLinkCarriesIt(): void
+    {
+        $file = 'public/main/gradebook/gradebook_display_certificate.php';
+        $this->assertTokenBefore($file, "case 'generate_all_certificates':", 'Category::generateUserCertificate(', 1400);
+        $this->assertContainsToken($file, "\$url.'&action=generate_all_certificates");
+    }
+
+    public function testResultDeletionsNeedTheTokenAndTheirLinksCarryIt(): void
+    {
+        $file = 'public/main/gradebook/gradebook_view_result.php';
+        $this->assertTokenBefore($file, "case 'delete_attempt':", 'DELETE FROM', 900);
+        $this->assertTokenBefore($file, "if (isset(\$_GET['resultdelete']))", '->delete()', 700);
+        $table = 'public/main/gradebook/lib/fe/resulttable.class.php';
+        $this->assertContainsToken($table, "\$url.'&action=delete_attempt");
+        $this->assertContainsToken($table, "?resultdelete='");
+    }
+
     public function testTheCronEntryPointsDoNotGoThroughTheWebRunAction(): void
     {
         // The token on `run` only protects the admin's "send now" button: cron must not depend on it.

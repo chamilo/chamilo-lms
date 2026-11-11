@@ -215,6 +215,14 @@ switch ($action) {
         }
         exit;
     case 'generate_all_certificates':
+        // Creates certificates (and may send mails) on a GET: same token as the bulk delete.
+        if (!Security::check_token('get')) {
+            Display::addFlash(
+                Display::return_message(get_lang('Security token expired. Please reload the page and try again.'), 'warning')
+            );
+            header('Location: '.$url);
+            exit;
+        }
         $userList = CourseManager::getUserListFromCourseId(
             api_get_course_int_id(),
             api_get_session_id(),
@@ -416,7 +424,7 @@ $actions .= Display::url(
 
 $actions .= Display::url(
     Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Generate certificates')),
-    $url.'&action=generate_all_certificates'
+    $url.'&action=generate_all_certificates&sec_token='.$token
 );
 $actions .= Display::url(
     Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete all certificates')),

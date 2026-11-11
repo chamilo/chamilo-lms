@@ -3262,6 +3262,9 @@ class Statistics
 
     /**
      * Unify 2 users: keep $keepUserId, merge $mergeUserId into it.
+     *
+     * @deprecated no caller left: it passes no actor, so UserMergeHelper cannot check the access-URL scope. Use
+     *             AdminStatisticsMaintenanceActionService, which does.
      */
     public static function unifyUsers(int $keepUserId, int $mergeUserId): bool
     {

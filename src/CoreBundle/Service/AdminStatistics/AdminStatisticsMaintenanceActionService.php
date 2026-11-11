@@ -12,7 +12,9 @@ use Chamilo\CoreBundle\Event\AbstractEvent;
 use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\UserDeletedEvent;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
 use Chamilo\CoreBundle\Helpers\UserMergeHelper;
+use Chamilo\CoreBundle\Helpers\UserMergeRefusedException;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use DateTime;
 use DateTimeImmutable;
@@ -22,6 +24,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
@@ -35,6 +38,7 @@ final readonly class AdminStatisticsMaintenanceActionService
         private UserMergeHelper $userMergeHelper,
         private EventDispatcherInterface $eventDispatcher,
         private Security $security,
+        private AccessUrlScopeHelper $accessUrlScope,
     ) {}
 
     /**
@@ -110,8 +114,29 @@ final readonly class AdminStatisticsMaintenanceActionService
             static fn (int $id): bool => $targetUserId !== $id
         ));
 
+        // Merging is destructive: it needs a real administrator, and only accounts inside that administrator's
+        // access-URL scope may be merged (the helper enforces the same rule again for every account).
+        $actor = $this->security->getUser();
+        if (!$actor instanceof User) {
+            throw new AccessDeniedHttpException('Only an authenticated administrator may unify users.');
+        }
+        $target = $this->userRepository->find($targetUserId);
+        if (!$target instanceof User || !$this->accessUrlScope->canEditUser($actor, $target)) {
+            throw new AccessDeniedHttpException('The account to keep is outside the access URLs you manage.');
+        }
+        $mergeIds = array_values(array_filter(
+            $mergeIds,
+            fn (int $id): bool => ($other = $this->userRepository->find($id)) instanceof User
+                && $this->accessUrlScope->canEditUser($actor, $other)
+        ));
+        if ([] === $mergeIds) {
+            throw new AccessDeniedHttpException('The duplicate accounts are outside the access URLs you manage.');
+        }
+
         try {
-            $mergedCount = $this->userMergeHelper->mergeUsersBatch($targetUserId, $mergeIds, null, true);
+            $mergedCount = $this->userMergeHelper->mergeUsersBatch($targetUserId, $mergeIds, null, true, $actor);
+        } catch (UserMergeRefusedException $exception) {
+            throw new BadRequestHttpException($exception->getMessage(), $exception);
         } catch (Throwable $exception) {
             throw new BadRequestHttpException('An error occurred while unifying users.', $exception);
         }

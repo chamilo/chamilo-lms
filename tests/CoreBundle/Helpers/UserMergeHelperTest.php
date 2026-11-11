@@ -114,14 +114,14 @@ final class UserMergeHelperTest extends KernelTestCase
     {
         $keep = $this->rawUser('keep');
         $merge = $this->rawUser('merge');
-        $this->conn()->executeStatement('UPDATE user SET roles = ? WHERE id = ?', ['["ROLE_TEACHER"]', $merge]);
+        $this->conn()->executeStatement('UPDATE user SET roles = ? WHERE id = ?', ['["ROLE_QUESTION_MANAGER"]', $merge]);
 
         $this->assertTrue($this->helper->mergeUsers($keep, $merge));
 
         $this->assertSame('[]', $this->scalar('SELECT roles FROM user WHERE id = ?', [$keep]));
         // PINNED QUIRK: the merged account keeps its roles and password, only active=-2 disables it (administrative
         // roles never get here: see testMergeNeverDropsAdministrativePrivilege).
-        $this->assertSame('["ROLE_TEACHER"]', $this->scalar('SELECT roles FROM user WHERE id = ?', [$merge]));
+        $this->assertSame('["ROLE_QUESTION_MANAGER"]', $this->scalar('SELECT roles FROM user WHERE id = ?', [$merge]));
     }
 
     private function setRoles(int $userId, array $roles): void
@@ -175,7 +175,8 @@ final class UserMergeHelperTest extends KernelTestCase
 
         yield 'student into student' => [[], [], true];
 
-        yield 'teacher into student' => [['ROLE_TEACHER'], [], true];
+        // Owner decision: teacher into student is refused (the reverse stays allowed, see UserMergeHelperHardeningTest).
+        yield 'teacher into student' => [['ROLE_TEACHER'], [], false];
     }
 
     public function testBatchRefusesAPrivilegedSourceAndRollsBackTheOthers(): void

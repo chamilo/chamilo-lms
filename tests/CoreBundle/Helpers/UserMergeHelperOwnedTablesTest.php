@@ -61,18 +61,26 @@ final class UserMergeHelperOwnedTablesTest extends KernelTestCase
         $rules = $this->rules('getUpdateRules');
         $this->assertGreaterThan(50, \count($rules));
 
+        $n = 0;
         foreach ($rules as $rule) {
             $t = $rule['table'];
             $f = $rule['field'];
+            if ('user' === $t) {
+                continue; // user.creator_id needs whole user rows: covered by UserMergeHelperHardeningTest
+            }
             // One row of the merged account and one of a bystander per rule, tagged by the column under test.
-            $this->insert($t, [$f => $merge]);
-            $this->insert($t, [$f => $bystander]);
+            // c_toolbox_version has a unique key on (toolbox_id, version_number) that does not involve the user.
+            $this->insert($t, [$f => $merge] + ('c_toolbox_version' === $t ? ['version_number' => ++$n] : []));
+            $this->insert($t, [$f => $bystander] + ('c_toolbox_version' === $t ? ['version_number' => ++$n] : []));
         }
 
         $this->assertTrue($this->helper->mergeUsers($keep, $merge));
 
         // A table can carry several rules (two columns): count per column.
         foreach ($rules as $rule) {
+            if ('user' === $rule['table']) {
+                continue;
+            }
             $this->assertSame(0, $this->rows($rule['table'], $rule['field'], $merge), $rule['table'].'.'.$rule['field'].' still points to the merged account');
             $this->assertGreaterThanOrEqual(1, $this->rows($rule['table'], $rule['field'], $keep), $rule['table'].'.'.$rule['field'].' not moved to the target');
             $this->assertGreaterThanOrEqual(1, $this->rows($rule['table'], $rule['field'], $bystander), $rule['table'].'.'.$rule['field'].' of a bystander must stay');
@@ -90,6 +98,9 @@ final class UserMergeHelperOwnedTablesTest extends KernelTestCase
 
             // Nullable match columns are set explicitly: pivotMerge compares them with '=', so NULLs never match.
             $zeros = array_fill_keys($rule['matchColumns'], 0);
+            if (isset($zeros['target_date'])) {
+                $zeros['target_date'] = '2020-01-01';
+            }
             $this->insert($t, [$f => $keep] + $zeros);
             $this->insert($t, [$f => $merge] + $zeros);                   // same match values as the target: dropped
             $this->insert($t, [$f => $merge, $first => 77] + $zeros);     // other match value: moved

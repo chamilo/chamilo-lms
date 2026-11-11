@@ -359,6 +359,10 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ['table' => 'ticket_message', 'field' => 'sys_lastedit_user_id', 'action' => 'update'],
             ['table' => 'ticket_message_attachments', 'field' => 'sys_insert_user_id', 'action' => 'update'],
             ['table' => 'ticket_message_attachments', 'field' => 'sys_lastedit_user_id', 'action' => 'update'],
+            // Plain on-demand SQL, run only when a user is permanently deleted: no ORM association on User.
+            ['table' => 'ticket_ticket', 'field' => 'assigned_last_user', 'action' => 'update'],
+            ['table' => 'ticket_ticket', 'field' => 'sys_insert_user_id', 'action' => 'update'],
+            ['table' => 'ticket_ticket', 'field' => 'sys_lastedit_user_id', 'action' => 'update'],
             ['table' => 'ticket_priority', 'field' => 'sys_insert_user_id', 'action' => 'update'],
             ['table' => 'ticket_priority', 'field' => 'sys_lastedit_user_id', 'action' => 'update'],
             ['table' => 'ticket_project', 'field' => 'sys_insert_user_id', 'action' => 'update'],

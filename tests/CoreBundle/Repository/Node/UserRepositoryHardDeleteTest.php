@@ -115,4 +115,17 @@ final class UserRepositoryHardDeleteTest extends KernelTestCase
             }
         }
     }
+
+    public function testTicketsOfTheDeletedUserAreKeptNotCascadeDeleted(): void
+    {
+        // ticket_ticket.assigned_last_user is ON DELETE CASCADE: without an explicit hand-over, deleting an
+        // assignee silently deleted every ticket assigned to him.
+        $actions = [];
+        foreach ($this->relations() as $r) {
+            $actions[$r['table'].'.'.$r['field']] = $r['action'];
+        }
+        foreach (['ticket_ticket.assigned_last_user', 'ticket_ticket.sys_insert_user_id', 'ticket_ticket.sys_lastedit_user_id'] as $key) {
+            $this->assertSame('update', $actions[$key] ?? null, $key);
+        }
+    }
 }

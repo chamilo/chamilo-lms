@@ -2562,6 +2562,10 @@ class UserGroupModel extends Model
         $role = $this->get_user_group_role($user_id, $group_id);
 
         if (0 === $role) {
+            // Role 0 is also "reader": an existing row must not be inserted a second time.
+            if ($this->hasRelation($group_id, $user_id)) {
+                return true;
+            }
             // No relationship yet → insert normalized relation_type
             $sql = "INSERT INTO $table_rel
                 SET

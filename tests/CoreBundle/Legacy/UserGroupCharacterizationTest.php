@@ -558,6 +558,21 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->assertFalse($this->model->canViewGroupMembers($group->getId(), 0));
     }
 
+    public function testAddUserToGroupNeverDuplicatesAnExistingReaderRow(): void
+    {
+        $class = $this->group('ug_class', Usergroup::NORMAL_CLASS);
+        $alice = $this->createUser('ug_alice');
+
+        $this->model->add_user_to_group($alice->getId(), $class->getId());
+        $this->model->add_user_to_group($alice->getId(), $class->getId());
+
+        // Role 0 means "reader" and "no relation": the second call used to insert a second row.
+        $this->assertSame(
+            1,
+            $this->countRows('usergroup_rel_user', ['usergroup_id' => $class->getId(), 'user_id' => $alice->getId()])
+        );
+    }
+
     public function testUpdateUserRoleAndDeleteUserRelGroup(): void
     {
         $group = $this->group('ug_social', Usergroup::SOCIAL_CLASS);

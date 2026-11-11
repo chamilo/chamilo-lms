@@ -108,6 +108,7 @@
                         {% set title        = file.title|default('N/A'|trans) %}
                         {% set originalName = file.originalName ?? file.title ?? null %}
                         {% set courses      = coursesByFile[file.id]|default([]) %}
+                        {% set locations    = locationsByFile[file.id]|default([]) %}
 
                         {% if courses is not empty %}
                             {% set courseTitle = '' %}
@@ -161,6 +162,7 @@
                                    data-creation-date="{{ creationDate }}"
                                    data-course="{{ courseTitle|e('html_attr') }}"
                                    data-courses-json="{{ courses|json_encode|e('html_attr') }}"
+                                   data-locations-json="{{ locations|json_encode|e('html_attr') }}"
                                    data-user="{{ username }}"
                                    data-file-url="{{ fileUrl }}"
                                    data-file-path="{{ filePath }}"
@@ -218,6 +220,11 @@
                             title="{{ 'Attach this file to another course'|trans }}"
                     ></button>
                 </p>
+
+                <div class="mb-3">
+                    <strong>{{ 'File locations:'|trans }}</strong>
+                    <ul id="file-locations" class="list-disc ps-6 mt-2 space-y-2 text-sm"></ul>
+                </div>
 
                 <p class="mb-3"><strong>{{ 'User:'|trans }}</strong> <span id="file-user"></span></p>
                 <p class="mb-3"><strong>{{ 'Resource Node ID:'|trans }}</strong> <span id="resource-node-id"></span></p>
@@ -505,6 +512,7 @@
             var creationDate = button.getAttribute('data-creation-date');
             var courseLabel = button.getAttribute('data-course') || "";
             var coursesJson = button.getAttribute('data-courses-json') || "[]";
+            var locationsJson = button.getAttribute('data-locations-json') || "[]";
             var user = button.getAttribute('data-user');
             var filePath = button.getAttribute('data-file-path');
             var fileUrl = button.getAttribute('data-file-url');
@@ -518,6 +526,39 @@
             } catch (e) {
               coursesData = [];
             }
+
+            var locationList = document.getElementById('file-locations');
+            locationList.replaceChildren();
+            var locationsData = [];
+            try {
+              locationsData = JSON.parse(locationsJson);
+            } catch (e) {
+              locationsData = [];
+            }
+            if (!locationsData.length) {
+              var emptyLocation = document.createElement('li');
+              emptyLocation.textContent = "{{ 'No document or personal file location found.'|trans|e('js') }}";
+              locationList.appendChild(emptyLocation);
+            }
+            locationsData.forEach(function(location) {
+              var item = document.createElement('li');
+              var label = document.createElement('strong');
+              label.textContent = location.label || '';
+              item.appendChild(label);
+              item.appendChild(document.createTextNode(' — '));
+              if (location.url) {
+                var anchor = document.createElement('a');
+                anchor.href = location.url;
+                anchor.target = '_blank';
+                anchor.rel = 'noopener noreferrer';
+                anchor.className = 'text-primary hover:underline';
+                anchor.textContent = location.path || '';
+                item.appendChild(anchor);
+              } else {
+                item.appendChild(document.createTextNode(location.path || ''));
+              }
+              locationList.appendChild(item);
+            });
 
             document.getElementById('file-title').textContent = title || '';
             document.getElementById('file-mime-type').textContent = mimeType || '';

@@ -20,11 +20,13 @@ class GroupSettingsSchema extends AbstractSettingsSchema
                     'allow_group_categories' => 'false',
                     'hide_course_group_if_no_tools_available' => 'false',
                     'show_groups_to_users' => 'false',
+                    'allow_invite_non_friends_to_social_groups' => 'false',
                 ]
             )
         ;
         $allowedTypes = [
             'allow_group_categories' => ['string'],
+            'allow_invite_non_friends_to_social_groups' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
     }
@@ -35,6 +37,7 @@ class GroupSettingsSchema extends AbstractSettingsSchema
             ->add('allow_group_categories', YesNoType::class)
             ->add('hide_course_group_if_no_tools_available', YesNoType::class)
             ->add('show_groups_to_users', YesNoType::class)
+            ->add('allow_invite_non_friends_to_social_groups', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

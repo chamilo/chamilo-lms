@@ -1585,6 +1585,13 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
     public static function getNewConfigurationSettings(): array
     {
         return [
+            'group' => [
+                [
+                    'name' => 'allow_invite_non_friends_to_social_groups',
+                    'title' => 'Allow inviting non-friends to social groups',
+                    'comment' => 'By default (off), the admin or moderator of a social group can only invite their own friends to it. Enable this to let them invite any user of the platform.',
+                ],
+            ],
             'catalog' => [
                 [
                     'name' => 'course_catalog_settings',

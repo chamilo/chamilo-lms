@@ -10,24 +10,18 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookCertificateSearch;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
-use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-
-use const DATE_ATOM;
 
 /**
  * @implements ProviderInterface<GradebookCertificateSearch>
@@ -41,7 +35,6 @@ final readonly class GradebookCertificateSearchProvider implements ProviderInter
         private RequestStack $requestStack,
         private AccessUrlHelper $accessUrlHelper,
         private SettingsManager $settingsManager,
-        private CourseSettingPolicyManager $courseSettingPolicyManager,
         private GradebookCertificateGenerator $certificateGenerator,
         private Security $security,
         private GradebookCertificateRepository $certificateRepository,
@@ -150,56 +143,24 @@ final readonly class GradebookCertificateSearchProvider implements ProviderInter
 
             $course = $category->getCourse();
             if (!$this->courseBelongsToAccessUrl($course, $accessUrlId)
-                || !$this->isCoursePublicCertificateEnabled($course)
+                || !$this->certificateGenerator->isPublicCertificateEnabledForCourse($course)
             ) {
                 continue;
             }
 
-            $session = $category->getSession();
-            if (null === $session) {
-                $subscription = $this->entityManager->getRepository(CourseRelUser::class)->findOneBy([
-                    'course' => $course,
-                    'user' => $user,
-                ]);
-                if (!$subscription instanceof CourseRelUser) {
-                    continue;
-                }
-            } else {
-                $subscription = $this->entityManager->getRepository(SessionRelCourseRelUser::class)->findOneBy([
-                    'course' => $course,
-                    'session' => $session,
-                    'user' => $user,
-                ]);
-                if (!$subscription instanceof SessionRelCourseRelUser) {
-                    continue;
-                }
+            if (!$this->certificateGenerator->isUserSubscribedToCategory($user, $category)) {
+                continue;
             }
 
             $summary = $this->certificateGenerator->normalizeCertificate($certificate, false);
-            $row = [
-                'id' => (int) $certificate->getId(),
-                'course' => [
-                    'id' => (int) $course->getId(),
-                    'code' => (string) $course->getCode(),
-                    'title' => (string) $course->getTitle(),
-                ],
-                'score' => (float) $certificate->getScoreCertificate(),
-                'issuedAt' => $certificate->getCreatedAt()->format(DATE_ATOM),
-                'certificate' => $summary,
-            ];
-
-            if (null === $session) {
-                $resource->courseCertificates[] = $row;
+            $row = $this->certificateGenerator->normalizeCertificateRow($certificate, $category, $summary);
+            if (isset($row['session'])) {
+                $resource->sessionCertificates[] = $row;
 
                 continue;
             }
 
-            $row['session'] = [
-                'id' => (int) $session->getId(),
-                'title' => (string) $session->getTitle(),
-            ];
-            $row['certificate']['downloadUrl'] = '';
-            $resource->sessionCertificates[] = $row;
+            $resource->courseCertificates[] = $row;
         }
     }
 
@@ -228,36 +189,6 @@ final readonly class GradebookCertificateSearchProvider implements ProviderInter
         }
 
         return false;
-    }
-
-    private function isCoursePublicCertificateEnabled(Course $course): bool
-    {
-        $settings = $this->entityManager->getRepository(CCourseSetting::class)->findBy(
-            [
-                'cId' => (int) $course->getId(),
-                'variable' => 'allow_public_certificates',
-            ],
-            ['iid' => 'ASC'],
-        );
-
-        $courseValue = null;
-        foreach ($settings as $setting) {
-            if ($setting instanceof CCourseSetting && null !== $setting->getValue()
-                && '-1' !== $setting->getValue()) {
-                $courseValue = $setting->getValue();
-
-                break;
-            }
-        }
-
-        // Historically, a missing course override leaves public certificates enabled.
-        $value = strtolower(trim((string) $this->courseSettingPolicyManager->effectiveValue(
-            'allow_public_certificates',
-            $courseValue,
-            '1',
-        )));
-
-        return !\in_array($value, ['', '0', 'false', 'no', 'off'], true);
     }
 
     private function isSettingEnabled(string $name): bool

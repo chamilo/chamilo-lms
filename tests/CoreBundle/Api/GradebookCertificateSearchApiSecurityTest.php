@@ -95,6 +95,33 @@ class GradebookCertificateSearchApiSecurityTest extends AbstractApiTest
         }
     }
 
+    public function testCertificateIsListedOnlyForAUserSubscribedToItsCourse(): void
+    {
+        $this->setSearchEnabled(true);
+        self::getContainer()->get(SettingsManager::class)
+            ->updateSetting('certificate.allow_public_certificates', 'true')
+        ;
+
+        $category = $this->createCategory();
+        $subscribed = $this->createUser('certsearch_subscribed');
+        $unsubscribed = $this->createUser('certsearch_unsubscribed');
+        $this->createCertificate($category, $subscribed, true);
+        $this->createCertificate($category, $unsubscribed, true);
+        $category->getCourse()->addUserAsStudent($subscribed);
+        $this->getEntityManager()->flush();
+
+        $client = static::createClient();
+
+        $data = $client->request('GET', self::URL, ['query' => ['userId' => $subscribed->getId()]])->toArray();
+        $this->assertCount(1, $data['courseCertificates']);
+        $this->assertSame($category->getCourse()->getCode(), $data['courseCertificates'][0]['course']['code']);
+        $this->assertSame([], $data['sessionCertificates']);
+
+        // A certificate left behind after an unsubscription is not public.
+        $data = $client->request('GET', self::URL, ['query' => ['userId' => $unsubscribed->getId()]])->toArray();
+        $this->assertSame([], $data['courseCertificates']);
+    }
+
     public function testBroadSearchIsCapped(): void
     {
         $this->setSearchEnabled(true);

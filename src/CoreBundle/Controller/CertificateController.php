@@ -16,9 +16,8 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
+use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
 use Chamilo\CoreBundle\Settings\SettingsManager;
-use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\FilesystemException;
 use Mpdf\Mpdf;
@@ -46,7 +45,7 @@ class CertificateController extends AbstractController
     public function __construct(
         private readonly GradebookCertificateRepository $certificateRepository,
         private readonly SettingsManager $settingsManager,
-        private readonly CourseSettingPolicyManager $courseSettingPolicyManager,
+        private readonly GradebookCertificateGenerator $certificateGenerator,
         private readonly UserHelper $userHelper,
         private readonly ResourceNodeRepository $resourceNodeRepository,
         private readonly EntityManagerInterface $entityManager,
@@ -398,42 +397,12 @@ SQL,
         if ($allowPublic
             && $certificate->getPublish()
             && $category instanceof GradebookCategory
-            && $this->isCoursePublicCertificateEnabled($category)
+            && $this->certificateGenerator->isPublicCertificateEnabledForCourse($category->getCourse())
         ) {
             return;
         }
 
         throw new AccessDeniedHttpException('The requested certificate is not accessible.');
-    }
-
-    private function isCoursePublicCertificateEnabled(GradebookCategory $category): bool
-    {
-        $settings = $this->entityManager->getRepository(CCourseSetting::class)->findBy(
-            [
-                'cId' => (int) $category->getCourse()->getId(),
-                'variable' => 'allow_public_certificates',
-            ],
-            ['iid' => 'ASC'],
-        );
-
-        $courseValue = null;
-        foreach ($settings as $setting) {
-            if ($setting instanceof CCourseSetting && null !== $setting->getValue()
-                && '-1' !== $setting->getValue()) {
-                $courseValue = $setting->getValue();
-
-                break;
-            }
-        }
-
-        // Historically, a missing course override leaves public certificates enabled.
-        $value = strtolower(trim((string) $this->courseSettingPolicyManager->effectiveValue(
-            'allow_public_certificates',
-            $courseValue,
-            '1',
-        )));
-
-        return !\in_array($value, ['', '0', 'false', 'no', 'off'], true);
     }
 
     private function isSettingEnabled(string $name): bool

@@ -6405,6 +6405,33 @@ final readonly class GlobalReportingSectionQueryService
         if ([] === $sessionIds || !$this->hasTables(['c_student_publication', 'resource_link'])) {
             return $this->emptyResult($filters, 'Works in session report', []);
         }
+        $parameters = ['sessionIds' => $sessionIds];
+        $types = ['sessionIds' => ArrayParameterType::INTEGER];
+        $coachCondition = '';
+        if (!$context->isAdministrator && !$context->isHumanResourcesManager && !$context->isSessionAdministratorOnly) {
+            // A coach: the courses he coaches (every course of a session he is general coach of), not every course
+            // of the session. The works definitions of the other courses are an agenda matter only.
+            $coachCondition = ' AND (
+                    EXISTS (SELECT 1 FROM session_rel_user general_coach
+                             WHERE general_coach.session_id = resource_link.session_id
+                               AND general_coach.user_id = :coachId
+                               AND general_coach.relation_type = :generalCoachRelationType)
+                 OR EXISTS (SELECT 1 FROM session_rel_course_rel_user course_coach
+                             WHERE course_coach.session_id = resource_link.session_id
+                               AND course_coach.c_id = resource_link.c_id
+                               AND course_coach.user_id = :coachId
+                               AND course_coach.status = :courseCoachStatus))';
+            $parameters += [
+                'coachId' => $context->currentUserId(),
+                'generalCoachRelationType' => self::SESSION_RELATION_TYPE_GENERAL_COACH,
+                'courseCoachStatus' => self::SESSION_STATUS_COURSE_COACH,
+            ];
+            $types += [
+                'coachId' => Types::INTEGER,
+                'generalCoachRelationType' => Types::INTEGER,
+                'courseCoachStatus' => Types::INTEGER,
+            ];
+        }
         $rows = $this->connection->fetchAllAssociative(
             'SELECT publication.iid AS id,
                     session.title AS session,
@@ -6421,10 +6448,10 @@ final readonly class GlobalReportingSectionQueryService
                INNER JOIN session ON session.id = resource_link.session_id
               WHERE resource_link.session_id IN (:sessionIds)
                 AND resource_link.deleted_at IS NULL
-                AND publication.parent_id IS NOT NULL
+                AND publication.parent_id IS NOT NULL'.$coachCondition.'
            ORDER BY session.title, course.title, publication.sent_date DESC',
-            ['sessionIds' => $sessionIds],
-            ['sessionIds' => ArrayParameterType::INTEGER],
+            $parameters,
+            $types,
         );
         foreach ($rows as &$row) {
             $row['id'] = (int) $row['id'];

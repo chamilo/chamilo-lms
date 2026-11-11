@@ -227,4 +227,31 @@ final class GlobalReportingAuthorsWorksTest extends KernelTestCase
         $this->expectException(AccessDeniedHttpException::class);
         $this->section($this->ctx($coach), 'works-in-session', ['sessionId' => $theirs]);
     }
+
+    /**
+     * Owner rule: a course coach is shown the works of the courses he coaches, not of every course of the session.
+     * (The definitions of the other courses' works belong to the agenda only.) A general coach coaches the whole
+     * session, so he still sees every course.
+     */
+    public function testWorksInSessionOfACourseCoachAreLimitedToTheCoursesHeCoaches(): void
+    {
+        $this->insert('c_student_publication', ['title' => 'r3_assignment3']);
+        $assignment = (int) $this->conn()->lastInsertId();
+        $session = $this->rawSession('r3ws7');
+        $courseCoach = $this->rawUser('r3ws8', 1);
+        $generalCoach = $this->rawUser('r3ws9', 1);
+        $this->sessionCourseUser($session, 1, $courseCoach, 2);
+        $this->sessionUser($session, $generalCoach, 3);
+        $own = $this->work('r3_work_own_course', 1, $session, 'Learner O', '2001-03-01 10:00:00', $assignment);
+        $other = $this->work('r3_work_other_course', 2, $session, 'Learner P', '2001-03-02 10:00:00', $assignment);
+
+        $course = $this->section($this->ctx($courseCoach), 'works-in-session', ['sessionId' => $session]);
+        $this->assertSame([$own], array_column($course['items'], 'id'));
+        $this->assertSame([$own], array_column($this->section($this->ctx($courseCoach), 'works-in-session')['items'], 'id'));
+
+        $general = $this->section($this->ctx($generalCoach), 'works-in-session', ['sessionId' => $session]);
+        $ids = array_column($general['items'], 'id');
+        sort($ids);
+        $this->assertSame([$own, $other], $ids);
+    }
 }

@@ -315,6 +315,9 @@ Feature: Group tool
     Then I should see "My folder in group"
     Then I follow "My folder in group"
     And I wait for the page to be loaded when ready
+    # Following the folder is a client-side route change: the page-loaded wait returns at once, and "New document" /
+    # "Upload" / "Delete" would act on the course root list (node 233) still on screen. Wait for the route to leave it.
+    And the URL should not contain "/resources/document/233/"
     Then I press "New document"
     And I wait for the page to be loaded when ready
     And I fill in the following:
@@ -333,11 +336,18 @@ Feature: Group tool
     And I wait for the page to be loaded when ready
     Then I follow "My folder in group"
     And I wait for the page to be loaded when ready
+    # Following the folder is a client-side route change: the page-loaded wait returns at once, and "New document" /
+    # "Upload" / "Delete" would act on the course root list (node 233) still on screen. Wait for the route to leave it.
+    And the URL should not contain "/resources/document/233/"
     Then I press "Upload"
     And I wait for the page to be loaded when ready
     Then I should see "Drop files here"
     Then I attach the file "/public/favicon.ico" to the upload dropzone
     Then I press "Upload 1 file"
+    # The dropzone shows the file name before the upload is done, and the browser context is closed as soon as the
+    # scenario ends (aborting an upload still in flight). The page goes back to the folder list once the upload
+    # completes: wait for that, so the name asserted below is the one in the list.
+    And the URL should not contain "/upload"
     And I wait for the page to be loaded when ready
     Then I should see "favicon.ico"
 
@@ -366,6 +376,9 @@ Feature: Group tool
     And I wait for the page to be loaded when ready
     Then I follow "My folder in group"
     And I wait for the page to be loaded when ready
+    # Following the folder is a client-side route change: the page-loaded wait returns at once, and "New document" /
+    # "Upload" / "Delete" would act on the course root list (node 233) still on screen. Wait for the route to leave it.
+    And the URL should not contain "/resources/document/233/"
     Then I click the "[title='Delete']" icon in the row for "html test"
     And I press "Yes"
     Then I should not see "html test"

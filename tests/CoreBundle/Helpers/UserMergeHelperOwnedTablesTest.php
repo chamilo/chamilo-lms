@@ -166,7 +166,7 @@ final class UserMergeHelperOwnedTablesTest extends KernelTestCase
         $this->assertSame(['access_url_id'], $pivots['access_url_rel_user']);
         $this->assertSame(['c_id'], $pivots['course_rel_user']);
         $this->assertSame(['session_id', 'relation_type'], $pivots['session_rel_user']);
-        $this->assertSame(['usergroup_id', 'relation_type'], $pivots['usergroup_rel_user']);
+        $this->assertSame(['usergroup_id'], $pivots['usergroup_rel_user']);
         $this->assertSame(['friend_user_id', 'relation_type'], $pivots['user_rel_user']);
         foreach (['c_group_rel_user' => 'group_id', 'c_group_rel_tutor' => 'group_id', 'c_blog_rel_user' => 'blog_id', 'ticket_rel_user' => 'ticket_id', 'c_lp_user_access' => 'lp_id', 'user_rel_tag' => 'tag_id'] as $table => $col) {
             $this->assertSame([$col], $pivots[$table], $table);

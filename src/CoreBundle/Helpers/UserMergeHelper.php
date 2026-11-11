@@ -795,7 +795,8 @@ final class UserMergeHelper
             ['table' => 'session_rel_user', 'userField' => 'user_id', 'matchColumns' => ['session_id', 'relation_type']],
             ['table' => 'session_rel_course_rel_user', 'userField' => 'user_id', 'matchColumns' => ['session_id', 'c_id']],
 
-            ['table' => 'usergroup_rel_user', 'userField' => 'user_id', 'matchColumns' => ['usergroup_id', 'relation_type']],
+            // Unique on (usergroup_id, user_id): the target's row wins whatever the role of the merged user in that group.
+            ['table' => 'usergroup_rel_user', 'userField' => 'user_id', 'matchColumns' => ['usergroup_id']],
 
             ['table' => 'message_rel_user', 'userField' => 'user_id', 'matchColumns' => ['message_id', 'receiver_type']],
             ['table' => 'user_rel_user', 'userField' => 'user_id', 'matchColumns' => ['friend_user_id', 'relation_type']],

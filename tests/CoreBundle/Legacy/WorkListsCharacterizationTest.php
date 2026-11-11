@@ -821,6 +821,31 @@ final class WorkListsCharacterizationTest extends KernelTestCase
         $this->assertSame(0, getPendingWorkList(null, null, null, null, '', true, 2));
     }
 
+    public function testPendingListOfASessionCoachHoldsTheWorkOfTheSessionsHeCoaches(): void
+    {
+        $coach = $this->learner();
+        $coach->setRoles(['ROLE_TEACHER']);
+        $courseCoachSession = $this->session();
+        $generalCoachSession = $this->session();
+        $foreignSession = $this->session();
+        $this->conn->insert('session_rel_course_rel_user', ['session_id' => $courseCoachSession, 'c_id' => 1, 'user_id' => $coach->getId(), 'status' => 2, 'visibility' => 0, 'legal_agreement' => 0, 'progress' => 0]);
+        $this->conn->insert('session_rel_user', ['session_id' => $generalCoachSession, 'user_id' => $coach->getId(), 'relation_type' => 3, 'duration' => 0, 'moved_to' => 0, 'moved_status' => 0, 'registered_at' => '2020-01-01 00:00:00']);
+        $this->conn->insert('session_rel_course', ['session_id' => $generalCoachSession, 'c_id' => 2, 'position' => 0, 'nbr_users' => 0]);
+        $this->setContext($coach, $this->course(1));
+        $folder = $this->folder(['title' => 'w2_pc_f1'], 1, 2, $courseCoachSession);
+        $folder2 = $this->folder(['title' => 'w2_pc_f2'], 2, 2, $generalCoachSession);
+        $folder3 = $this->folder(['title' => 'w2_pc_f3'], 1, 2, $foreignSession);
+        $this->submission($folder, $this->other(), ['title' => 'w2_pn_course_coach'], 1, $courseCoachSession);
+        $this->submission($folder2, $this->other(), ['title' => 'w2_pn_general_coach'], 2, $generalCoachSession);
+        $this->submission($folder3, $this->other(), ['title' => 'w2_pn_not_his_session'], 1, $foreignSession);
+
+        $titles = $this->pendingTitles(getPendingWorkList(null, null, null, null, '', false));
+
+        $this->assertSame(['w2_pn_course_coach', 'w2_pn_general_coach'], $titles, 'both coach roles, and no session he does not coach');
+        $this->assertSame(['w2_pn_general_coach'], $this->pendingTitles(getPendingWorkList(null, null, null, null, '', false, 2)));
+        $this->assertSame([], $this->pendingTitles(getPendingWorkList(null, null, null, null, '', false, 1, 3)), 'status filter still applies');
+    }
+
     // ----------------------------------------------------------------- getAllWorkListStudent
 
     private function assignment(int $folder, ?string $expiresOn): void

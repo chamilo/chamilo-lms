@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
@@ -2960,6 +2961,42 @@ function getAllWork(
 }
 
 /**
+ * The (course id, session id) pairs where the user is a coach: course coach of the course in the session, or
+ * general coach of a session (every course of it). Sessions are restricted to the current access URL when there
+ * are several.
+ *
+ * @return array<int, array{0: int, 1: int}>
+ */
+function getPendingWorkCoachContexts(int $userId): array
+{
+    $urlJoinCourseCoach = '';
+    $urlJoinGeneralCoach = '';
+    $accessUrlUtil = Container::getAccessUrlUtil();
+    if ($accessUrlUtil->isMultiple()) {
+        $accessUrlId = (int) $accessUrlUtil->getCurrent()->getId();
+        $urlJoinCourseCoach = ' INNER JOIN access_url_rel_session url ON url.session_id = scu.session_id AND url.access_url_id = '.$accessUrlId;
+        $urlJoinGeneralCoach = ' INNER JOIN access_url_rel_session url ON url.session_id = sru.session_id AND url.access_url_id = '.$accessUrlId;
+    }
+
+    $sql = 'SELECT scu.c_id, scu.session_id
+            FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' scu'.$urlJoinCourseCoach.'
+            WHERE scu.user_id = '.$userId.' AND scu.status = '.SessionEntity::COURSE_COACH.'
+            UNION
+            SELECT src.c_id, src.session_id
+            FROM '.Database::get_main_table(TABLE_MAIN_SESSION_USER).' sru
+            INNER JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE).' src ON src.session_id = sru.session_id'.$urlJoinGeneralCoach.'
+            WHERE sru.user_id = '.$userId.' AND sru.relation_type = '.SessionEntity::GENERAL_COACH;
+
+    $contexts = [];
+    $result = Database::query($sql);
+    while ($row = Database::fetch_assoc($result)) {
+        $contexts[] = [(int) $row['c_id'], (int) $row['session_id']];
+    }
+
+    return $contexts;
+}
+
+/**
  * Returns pending assignment submissions for the global pending assignments page.
  *
  * This function is adapted to the Chamilo 2 resource model:
@@ -3066,6 +3103,16 @@ function getPendingWorkList(
             } else {
                 $contextConditions[] = '(rl.c_id = '.$teacherCourseId.' AND rl.session_id IS NULL)';
             }
+        }
+
+        // Session coaches: get_courses_list_by_user_id() above is called without sessions, so the courses
+        // a user only coaches inside a session are added here (course coach, general coach).
+        foreach (getPendingWorkCoachContexts($userId) as [$coachCourseId, $coachSessionId]) {
+            if (null !== $courseId && $coachCourseId !== $courseId) {
+                continue;
+            }
+
+            $contextConditions[] = '(rl.c_id = '.$coachCourseId.' AND rl.session_id = '.$coachSessionId.')';
         }
 
         if (empty($contextConditions)) {

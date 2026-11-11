@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
 use CourseManager;
 use Database;
@@ -529,6 +530,62 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->assertFalse($this->model->canInviteToGroup($group->getId(), $stranger->getId()));
         // Being admin of group A gives no right on group B.
         $this->assertFalse($this->model->canInviteToGroup($other->getId(), $admin->getId()));
+    }
+
+    public function testInvitableUserIdsAreLimitedToFriendsUnlessTheSettingIsOn(): void
+    {
+        $group = $this->group('ug_social', Usergroup::SOCIAL_CLASS);
+        $mod = $this->createUser('ug_mod');
+        $friend = $this->createUser('ug_friend');
+        $goodFriend = $this->createUser('ug_good_friend');
+        $requested = $this->createUser('ug_requested');
+        $deleted = $this->createUser('ug_deleted_friend');
+        $stranger = $this->createUser('ug_stranger');
+        $this->addUser($group, $mod, 5);
+        $this->befriend($mod, $friend, 3);
+        $this->befriend($mod, $goodFriend, 4);
+        $this->befriend($mod, $requested, 10);
+        $this->befriend($mod, $deleted, 6);
+        $ids = [
+            $friend->getId(), $stranger->getId(), $goodFriend->getId(), $requested->getId(),
+            $deleted->getId(), $friend->getId(), 0, -5, 99999999,
+        ];
+
+        // Default OFF: only the inviter's friends, each once, ids cast and cleaned.
+        $this->setGroupSetting('false');
+        $this->assertSame(
+            [$friend->getId(), $goodFriend->getId()],
+            $this->model->getInvitableUserIds($ids, $group->getId(), $mod->getId())
+        );
+        // POSTed ids come as strings.
+        $this->assertSame(
+            [$friend->getId()],
+            $this->model->getInvitableUserIds([(string) $friend->getId(), (string) $stranger->getId()], $group->getId(), $mod->getId())
+        );
+
+        // ON: any existing user, but never an id that does not exist.
+        $this->setGroupSetting('true');
+        $this->assertSame(
+            [$friend->getId(), $stranger->getId(), $goodFriend->getId(), $requested->getId(), $deleted->getId()],
+            $this->model->getInvitableUserIds($ids, $group->getId(), $mod->getId())
+        );
+    }
+
+    public function testInvitableUserIdsIsEmptyForAnyoneWhoMayNotInvite(): void
+    {
+        $group = $this->group('ug_social', Usergroup::SOCIAL_CLASS);
+        $reader = $this->createUser('ug_reader');
+        $stranger = $this->createUser('ug_stranger');
+        $friend = $this->createUser('ug_friend');
+        $this->addUser($group, $reader, 0);
+        $this->befriend($reader, $friend, 3);
+        $this->befriend($stranger, $friend, 3);
+
+        foreach (['false', 'true'] as $value) {
+            $this->setGroupSetting($value);
+            $this->assertSame([], $this->model->getInvitableUserIds([$friend->getId()], $group->getId(), $reader->getId()));
+            $this->assertSame([], $this->model->getInvitableUserIds([$friend->getId()], $group->getId(), $stranger->getId()));
+        }
     }
 
     public function testCanViewGroupMembersRequiresARealRelation(): void
@@ -1090,6 +1147,21 @@ final class UserGroupCharacterizationTest extends KernelTestCase
             'user_id' => $user->getId(),
             'relation_type' => $relation,
         ]);
+    }
+
+    private function befriend(User $user, User $friend, int $relation): void
+    {
+        $this->conn()->executeStatement(
+            'INSERT INTO user_rel_user (user_id, friend_user_id, relation_type, created_at, updated_at)
+             VALUES (?, ?, ?, ?, ?)',
+            [$user->getId(), $friend->getId(), $relation, '2026-01-01 00:00:00', '2026-01-01 00:00:00']
+        );
+    }
+
+    private function setGroupSetting(string $value): void
+    {
+        self::getContainer()->get(SettingsManager::class)
+            ->updateSetting('group.allow_invite_non_friends_to_social_groups', $value);
     }
 
     private function addCourse(Usergroup $group, Course $course): void

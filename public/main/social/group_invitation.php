@@ -55,6 +55,7 @@ $content = null;
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $user_list = isset($_POST['invitation']) ? $_POST['invitation'] : null;
+    $otherUsers = $_POST['invitation_other'] ?? [];
     // The permission above was checked against the requested group: refuse any other group id.
     if ((int) ($_POST['id'] ?? 0) !== $group_id) {
         api_not_allowed();
@@ -64,6 +65,16 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         $user_list = [];
     }
     $user_list = array_map('intval', $user_list);
+    if (is_array($otherUsers)) {
+        $user_list = array_merge($user_list, array_map('intval', $otherUsers));
+    }
+    // The form only offers friends (or any user when the platform setting allows it), but posted ids
+    // are free: keep only the ids the inviter may really invite.
+    $requestedCount = count(array_unique($user_list));
+    $user_list = $usergroup->getInvitableUserIds($user_list, $group_id);
+    if (count($user_list) < $requestedCount) {
+        Container::addFlash(get_lang('Some of the selected users cannot be invited and were skipped'), 'warning');
+    }
 
     if (1 == $form_sent) {
         // invite this users
@@ -107,6 +118,12 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 $nosessionUsersList = $sessionUsersList = [];
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 $friends = SocialManager::get_friends(api_get_user_id());
+// Only confirmed friends can be invited (same rule as the server-side check on the posted ids).
+$confirmedFriendIds = array_flip($usergroup->getFriendIds(api_get_user_id()));
+$friends = array_values(array_filter(
+    (array) $friends,
+    static fn (array $friend): bool => isset($confirmedFriendIds[(int) $friend['friend_user_id']])
+));
 
 $suggest_friends = false;
 $Users = [];
@@ -182,6 +199,20 @@ $group_members_element = $form->addMultiSelect(
     get_lang('Friends'),
     $nosessionUsersList
 );
+
+if ('true' === api_get_setting('group.allow_invite_non_friends_to_social_groups')) {
+    // Not limited to friends: search any user.
+    $form->addSelectAjax(
+        'invitation_other',
+        get_lang('Users'),
+        [],
+        [
+            'url' => api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users',
+            'multiple' => 'multiple',
+            'placeholder' => get_lang('Search users'),
+        ]
+    );
+}
 
 $form->addButtonSave(get_lang('Invite users to group'));
 $social_right_content .= $form->returnForm();

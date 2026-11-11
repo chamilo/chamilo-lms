@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
@@ -2281,6 +2282,74 @@ class UserGroupModel extends Model
         }
 
         return $this->isGroupModerator($group_id, $user_id);
+    }
+
+    /**
+     * Ids of the confirmed friends of a user (friends and good friends: not pending friend requests,
+     * deleted relations, HR managers or bosses).
+     *
+     * @param int $user_id
+     *
+     * @return int[]
+     */
+    public function getFriendIds($user_id)
+    {
+        $user_id = (int) $user_id;
+        if (empty($user_id)) {
+            return [];
+        }
+        $result = Database::query(
+            'SELECT DISTINCT friend_user_id FROM '.Database::get_main_table(TABLE_MAIN_USER_REL_USER).'
+             WHERE user_id = '.$user_id.' AND friend_user_id <> '.$user_id.'
+             AND relation_type IN ('.UserRelUser::USER_RELATION_TYPE_FRIEND.', '.UserRelUser::USER_RELATION_TYPE_GOODFRIEND.')'
+        );
+        $ids = [];
+        while ($row = Database::fetch_assoc($result)) {
+            $ids[] = (int) $row['friend_user_id'];
+        }
+
+        return $ids;
+    }
+
+    /**
+     * Keeps, among the posted user ids, those the user may invite to the group. Nobody but a platform
+     * admin or the group admin/moderator may invite (empty result otherwise). With the platform setting
+     * group.allow_invite_non_friends_to_social_groups off (default) only the inviter's friends are kept;
+     * when on, any existing, not deleted user is. Ids are cast to int and de-duplicated, order is kept.
+     *
+     * @param array $user_ids
+     * @param int   $group_id
+     * @param int   $inviter_id 0 for the current user
+     *
+     * @return int[]
+     */
+    public function getInvitableUserIds($user_ids, $group_id, $inviter_id = 0)
+    {
+        if (empty($inviter_id)) {
+            $inviter_id = api_get_user_id();
+        }
+        if (!is_array($user_ids) || !$this->canInviteToGroup($group_id, $inviter_id)) {
+            return [];
+        }
+        $user_ids = array_values(array_unique(array_filter(array_map('intval', $user_ids), static fn ($id) => $id > 0)));
+        if (empty($user_ids)) {
+            return [];
+        }
+
+        if ('true' === api_get_setting('group.allow_invite_non_friends_to_social_groups')) {
+            $result = Database::query(
+                'SELECT id FROM '.Database::get_main_table(TABLE_MAIN_USER).'
+                 WHERE id IN ('.implode(',', $user_ids).') AND active <> '.USER_SOFT_DELETED
+            );
+            $allowed = [];
+            while ($row = Database::fetch_assoc($result)) {
+                $allowed[(int) $row['id']] = true;
+            }
+        } else {
+            $allowed = array_flip($this->getFriendIds($inviter_id));
+        }
+
+        return array_values(array_filter($user_ids, static fn ($id) => isset($allowed[$id])));
     }
 
     /**

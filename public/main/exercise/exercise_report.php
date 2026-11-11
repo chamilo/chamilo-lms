@@ -756,6 +756,11 @@ if (!empty($group_parameters)) {
 $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
 
 if ($is_allowedToEdit || $is_tutor) {
+    // The IP column is left out of the model, and of the data (model.ajax.php), when the platform hides IP addresses:
+    // its name must be left out of the header too, or the grid has more names than columns and jqGrid does not build.
+    $hideIp = 'true' === api_get_setting('tracking.hide_ip_address')
+        || 'true' === api_get_setting('exercise.exercise_hide_ip');
+
     // The order is important you need to check the the $column variable in the model.ajax.php file
     $columns = [
         get_lang('First name'),
@@ -766,7 +771,7 @@ if ($is_allowedToEdit || $is_tutor) {
         get_lang('Start Date'),
         get_lang('End Date'),
         get_lang('Score'),
-        get_lang('IP'),
+        ...($hideIp ? [] : [get_lang('IP')]),
         get_lang('Status'),
         get_lang('Learning path'),
         get_lang('Detail'),
@@ -814,8 +819,7 @@ if ($is_allowedToEdit || $is_tutor) {
         ['name' => 'start_date', 'index' => 'start_date', 'width' => '150', 'align' => 'left', 'search' => 'true'],
         ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '150', 'align' => 'left', 'search' => 'true'],
         ['name' => 'score', 'index' => 'score', 'width' => '120', 'align' => 'center', 'search' => 'true'],
-        ...(('true' === api_get_setting('tracking.hide_ip_address')
-            || 'true' === api_get_setting('exercise.exercise_hide_ip'))
+        ...($hideIp
             ? [] : [['name' => 'ip', 'index' => 'user_ip', 'width' => '120', 'align' => 'center', 'search' => 'true']]),
         [
             'name' => 'status',

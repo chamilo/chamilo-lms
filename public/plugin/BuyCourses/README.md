@@ -99,8 +99,9 @@ for the plugin.
 
 As a safety fallback, configure the recurring subscription processor to run once
 per day from the Chamilo project root. This command does not charge the customer;
-it only reconciles expired or renewed BuyCourses recurring service subscriptions
-and applies the local course closing/reactivation rules when needed.
+it reconciles expired or renewed BuyCourses recurring service subscriptions,
+applies course closing/hiding/reactivation rules, and previews courses eligible for
+permanent deletion. Deletion is disabled unless explicitly enabled on the command.
 
 Test it first with:
 
@@ -115,6 +116,47 @@ Example daily cron entry:
 ```
 
 Adjust `/var/www/chamilo` and `/usr/bin/php` to match your installation.
+
+BuyCourses subscription course retention (GH #8690)
+----------------------------------------------------
+
+A renewable service can define lifecycle delays in its **Subscription behavior JSON**:
+
+```json
+{
+  "close_after_days": 0,
+  "hide_after_days": 30,
+  "delete_after_days": 90
+}
+```
+
+- `close_after_days`: days after the paid period's `date_end` before closing the course (0 = immediately after expiry). Set `null` to disable this stage.
+- `hide_after_days`: days after `closed_at` before hiding the course (default 30). Set `null` to disable hiding.
+- `delete_after_days`: days after `hidden_at` before permanent deletion. The default is `null` (disabled); only a positive integer enables it.
+
+These periods are **sequential**, not all measured from cancellation. Canceling a renewal does not prematurely terminate a paid period. Existing closed/hidden courses can be reactivated if the service becomes active again.
+
+Always preview first:
+
+```bash
+php bin/console chamilo:buycourses:process-recurring-subscriptions --dry-run
+```
+
+Explicitly enable deletion when configuring the scheduled job:
+
+```bash
+php bin/console chamilo:buycourses:process-recurring-subscriptions --delete-expired --max-deletions=25
+```
+
+Without `--delete-expired`, the command continues to close, hide and reactivate courses but **never deletes any**. The optional `--max-deletions` accepts 1–25 (default 25). On single-URL installations, eligible hidden courses are deleted through `CourseHelper::deleteCourse()` and their subscription history is marked as deleted. Courses are skipped if another sale of the same service remains active, they are linked to a session, the course is no longer hidden, or the owner linkage is inconsistent. Auto-deletion is blocked on multi-URL installations.
+
+Administrators can preview and execute a limited manual batch at:
+
+```text
+/admin/buycourses/course-lifecycle
+```
+
+The administration page uses the Chamilo Vue shell, previews eligible/blocked/pending courses, and requires an explicit confirmation phrase and confirmation dialog before a POST execution. The POST route is guarded by the standard Chamilo same-origin CSRF listener. It deletes at most one eligible course per execution. This is a destructive operation: back up the database and course files before enabling it. Only use disposable test courses when verifying the deletion path. On deployments with multiple application nodes, schedule one cleanup worker and verify the course renewal/deletion concurrency policy before enabling deletion.
 
 Design note: refunds vs. cancellations
 =======================================

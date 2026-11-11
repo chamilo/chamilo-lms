@@ -37,6 +37,12 @@
 
                     {% if activeTab == 'services' %}
                         <a
+                            href="{{ path('admin_vue_entrypoint', {vueRouting: 'buycourses/course-lifecycle'}) }}"
+                            class="inline-flex items-center justify-center rounded-xl border border-gray-25 bg-white px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:border-primary/30 hover:text-primary"
+                        >
+                            Course lifecycle
+                        </a>
+                        <a
                             href="{{ url('index') ~ 'plugin/BuyCourses/src/services_add.php' }}"
                             class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2"
                         >

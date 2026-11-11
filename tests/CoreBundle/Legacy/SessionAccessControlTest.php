@@ -426,7 +426,7 @@ final class SessionAccessControlTest extends AbstractApiTest
 
         $this->assertStringContainsString('SessionManager::canManageSessionId($sessionId)', $source);
         $this->assertStringContainsString("(int) \$item['session_id'] !== \$sessionId", $source, 'The announcement is one of this session.');
-        $this->assertStringContainsString("'delete' === \$action && !Security::check_token('get')", $source);
+        $this->assertStringContainsString("in_array(\$action, ['delete', 'run'], true) && !Security::check_token('get')", $source, 'Both state-changing actions need the token.');
         $this->assertSame(2, substr_count($source, "\$values['session_id'] = \$sessionId;"), 'add and edit ignore the posted session id.');
         $this->assertStringContainsString("&sec_token='.\$token", $source, 'The delete link carries the token.');
         $this->assertStringContainsString('Security::get_existing_token()', $source);

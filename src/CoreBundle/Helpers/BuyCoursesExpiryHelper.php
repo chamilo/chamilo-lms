@@ -39,8 +39,12 @@ final class BuyCoursesExpiryHelper
 
     private ?bool $buyCoursesAvailable = null;
 
+    /**
+     * @param int|null $accessUrlId Access URL whose settings apply; null = the URL of the current request
+     */
     public function __construct(
         private readonly Connection $connection,
+        private readonly ?int $accessUrlId = null,
     ) {}
 
     public function processExpiredServiceBenefits(): int
@@ -552,23 +556,10 @@ final class BuyCoursesExpiryHelper
 
     private function getSettingAsPositiveInt(string ...$variables): int
     {
-        // A setting has one row per access URL: take the current URL's row, else the lowest URL id (the main one).
-        $accessUrlId = \function_exists('api_get_current_access_url_id') ? api_get_current_access_url_id() : 1;
-
         foreach ($variables as $variable) {
-            $value = $this->connection->fetchOne(
-                'SELECT selected_value
-                 FROM '.self::TABLE_SETTINGS.'
-                 WHERE variable = :variable
-                 ORDER BY (access_url = :accessUrl) DESC, access_url ASC
-                 LIMIT 1',
-                [
-                    'variable' => $variable,
-                    'accessUrl' => $accessUrlId,
-                ]
-            );
+            $value = $this->getSettingForCurrentAccessUrl($variable);
 
-            if (false === $value || null === $value || '' === (string) $value) {
+            if (null === $value || '' === $value) {
                 continue;
             }
 
@@ -576,6 +567,52 @@ final class BuyCoursesExpiryHelper
         }
 
         return 0;
+    }
+
+    /**
+     * Raw value of a setting for the current access URL, resolved like SettingsManager does for the rest of the
+     * platform: the main URL (id 1) row is the base; a sub URL overrides it with its own row only when the main row
+     * is neither locked (access_url_locked) nor non-changeable (access_url_changeable = 0).
+     */
+    private function getSettingForCurrentAccessUrl(string $variable): ?string
+    {
+        $accessUrlId = $this->accessUrlId
+            ?? (\function_exists('api_get_current_access_url_id') ? api_get_current_access_url_id() : 1);
+
+        $rows = $this->connection->fetchAllAssociative(
+            'SELECT access_url, selected_value, access_url_locked, access_url_changeable
+             FROM '.self::TABLE_SETTINGS.'
+             WHERE variable = :variable
+               AND access_url IN (1, :accessUrl)',
+            [
+                'variable' => $variable,
+                'accessUrl' => $accessUrlId,
+            ]
+        );
+
+        $main = null;
+        $current = null;
+        foreach ($rows as $row) {
+            if (1 === (int) $row['access_url']) {
+                $main = $row;
+            }
+            if ($accessUrlId === (int) $row['access_url']) {
+                $current = $row;
+            }
+        }
+
+        if (null !== $current && 1 !== $accessUrlId) {
+            $mainAllowsOverride = null === $main
+                || (1 !== (int) $main['access_url_locked'] && 0 !== (int) $main['access_url_changeable']);
+
+            if ($mainAllowsOverride) {
+                return null === $current['selected_value'] ? null : (string) $current['selected_value'];
+            }
+        }
+
+        $row = $main ?? $current;
+
+        return null === $row || null === $row['selected_value'] ? null : (string) $row['selected_value'];
     }
 
     private function getUtcNow(): string

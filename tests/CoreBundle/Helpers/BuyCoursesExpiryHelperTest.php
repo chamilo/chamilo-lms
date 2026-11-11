@@ -232,6 +232,68 @@ final class BuyCoursesExpiryHelperTest extends BuyCoursesCharacterizationTestCas
         $this->assertSame(0, $this->visibility(2), 'The limit of the current URL (1 course) is applied');
     }
 
+    /**
+     * Gives the max_courses_per_user setting of another access URL (id -5) its own row and runs the sweep as that
+     * URL. $mainValue is the main URL row, $subValue the row of URL -5 (null = no row of its own).
+     */
+    private function sweepAsSubUrl(string $mainValue, ?string $subValue, int $locked, int $changeable): int
+    {
+        $this->enablePlugin();
+        $teacher = $this->rawUser('t');
+        $this->courseUser($teacher, 1, 1);
+        $this->courseUser($teacher, 2, 1);
+        $this->setSetting('max_courses_per_user', $mainValue);
+        $this->conn()->executeStatement(
+            'UPDATE settings SET access_url_locked = ?, access_url_changeable = ? WHERE variable = ? AND access_url = 1',
+            [$locked, $changeable, 'max_courses_per_user']
+        );
+        $this->conn()->executeStatement(
+            "INSERT INTO access_url (id, lft, lvl, rgt, url, description, active, created_by) VALUES (-5, 1, 0, 2, 'http://bx-sub.test/', '', 1, 1)"
+        );
+        if (null !== $subValue) {
+            $this->conn()->executeStatement(
+                "INSERT INTO settings (id, access_url, variable, type, category, selected_value, title, access_url_changeable)
+                 VALUES (?, -5, 'max_courses_per_user', 'textfield', 'platform', ?, 'bx_sub_url', 1)",
+                [1 + (int) $this->conn()->fetchOne('SELECT MAX(id) FROM settings'), $subValue]
+            );
+        }
+        $this->sale($teacher, 910020, '2001-01-01 00:00:00');
+        $this->helper = new BuyCoursesExpiryHelper($this->conn(), -5);
+
+        return $this->helper->processExpiredServiceBenefits();
+    }
+
+    public function testASubUrlUsesItsOwnLimitWhenTheMainUrlLetsItChangeIt(): void
+    {
+        $this->sweepAsSubUrl('50', '1', 0, 1);
+
+        $this->assertSame(0, $this->visibility(2), 'the sub URL limit (1 course) applies, not the 50 of the main URL');
+    }
+
+    public function testASubUrlWithoutItsOwnRowInheritsTheMainUrlLimit(): void
+    {
+        $this->sweepAsSubUrl('1', null, 0, 1);
+
+        $this->assertSame(0, $this->visibility(2), 'the main URL limit (1 course) is inherited');
+    }
+
+    public function testALimitLockedOnTheMainUrlCannotBeOverriddenByASubUrl(): void
+    {
+        // Same rule as SettingsManager (what the rest of the platform reads): locked on main = main value wins.
+        $before = $this->visibility(2);
+        $this->sweepAsSubUrl('1', '50', 1, 1);
+
+        $this->assertSame(0, $this->visibility(2), 'the locked main limit (1 course) applies, not the 50 of the sub URL');
+        $this->assertNotSame(0, $before);
+    }
+
+    public function testALimitNotChangeableOnTheMainUrlCannotBeOverriddenByASubUrl(): void
+    {
+        $this->sweepAsSubUrl('1', '50', 0, 0);
+
+        $this->assertSame(0, $this->visibility(2), 'access_url_changeable = 0: the main limit applies');
+    }
+
     public function testLimitZeroMeansNoLimit(): void
     {
         $this->enablePlugin();

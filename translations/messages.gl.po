@@ -39136,12 +39136,6 @@ msgstr "Fíos conectados"
 msgid "Temporary tables on disk"
 msgstr "Táboas temporais no disco"
 
-msgid "Privilege scope"
-msgstr "Ámbito de privilexios"
-
-msgid "Not measurable with the current database user"
-msgstr "Non se pode medir co usuario actual da base de datos"
-
 msgid "Uptime"
 msgstr "Tempo de actividade"
 

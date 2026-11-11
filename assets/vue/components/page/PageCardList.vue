@@ -63,7 +63,7 @@ watchEffect(async (onCleanup) => {
 
   const localizedPages = await fetchPages({
     ...baseParams,
-    locale: locale.value,
+    locale: [locale.value, "all"],
   })
 
   if (cancelled) {

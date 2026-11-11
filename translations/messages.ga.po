@@ -39121,12 +39121,6 @@ msgstr "Snáitheanna ceangailte"
 msgid "Temporary tables on disk"
 msgstr "Táblaí sealadacha ar dhiosca"
 
-msgid "Privilege scope"
-msgstr "Scóip pribhléidí"
-
-msgid "Not measurable with the current database user"
-msgstr "Ní féidir a thomhas leis an úsáideoir bunachar sonraí reatha"
-
 msgid "Uptime"
 msgstr "Am suas"
 

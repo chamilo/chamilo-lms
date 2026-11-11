@@ -39121,12 +39121,6 @@ msgstr "Thread-et e lidhur"
 msgid "Temporary tables on disk"
 msgstr "Tabela të përkohshme në disk"
 
-msgid "Privilege scope"
-msgstr "Fusha e privilegjit"
-
-msgid "Not measurable with the current database user"
-msgstr "Nuk matet me përdoruesin aktual të bazës së të dhënave"
-
 msgid "Uptime"
 msgstr "Koha e funksionimit"
 

@@ -39137,12 +39137,6 @@ msgstr "Fire conectate"
 msgid "Temporary tables on disk"
 msgstr "Tabele temporare pe disc"
 
-msgid "Privilege scope"
-msgstr "Domeniu de privilegii"
-
-msgid "Not measurable with the current database user"
-msgstr "Nu se poate măsura cu utilizatorul curent al bazei de date"
-
 msgid "Uptime"
 msgstr "Timp de funcționare"
 

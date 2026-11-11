@@ -39127,12 +39127,6 @@ msgstr "Połączone wątki"
 msgid "Temporary tables on disk"
 msgstr "Tymczasowe tabele na dysku"
 
-msgid "Privilege scope"
-msgstr "Zakres uprawnień"
-
-msgid "Not measurable with the current database user"
-msgstr "Nie można zmierzyć przy obecnym użytkowniku bazy danych"
-
 msgid "Uptime"
 msgstr "Czas pracy"
 

@@ -39121,12 +39121,6 @@ msgstr "Qoşulmuş axınlar"
 msgid "Temporary tables on disk"
 msgstr "Diskdəki müvəqqəti cədvəllər"
 
-msgid "Privilege scope"
-msgstr "Səlahiyyət dairəsi"
-
-msgid "Not measurable with the current database user"
-msgstr "Cari verilənlər bazası istifadəçisi ilə ölçülə bilmir"
-
 msgid "Uptime"
 msgstr "Fasiləsiz işləmə müddəti"
 

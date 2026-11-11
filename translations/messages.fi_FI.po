@@ -39123,12 +39123,6 @@ msgstr "Yhdistetyt säikeet"
 msgid "Temporary tables on disk"
 msgstr "Väliaikaiset taulut levyllä"
 
-msgid "Privilege scope"
-msgstr "Käyttöoikeuksien laajuus"
-
-msgid "Not measurable with the current database user"
-msgstr "Ei mitattavissa nykyisellä tietokantakäyttäjällä"
-
 msgid "Uptime"
 msgstr "Käynnissäoloaika"
 

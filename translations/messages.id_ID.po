@@ -39121,12 +39121,6 @@ msgstr "Utas terhubung"
 msgid "Temporary tables on disk"
 msgstr "Tabel sementara di disk"
 
-msgid "Privilege scope"
-msgstr "Cakupan hak istimewa"
-
-msgid "Not measurable with the current database user"
-msgstr "Tidak dapat diukur dengan pengguna basis data saat ini"
-
 msgid "Uptime"
 msgstr "Waktu aktif"
 

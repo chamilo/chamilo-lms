@@ -39117,12 +39117,6 @@ msgstr "დაკავშირებული ნაკადები"
 msgid "Temporary tables on disk"
 msgstr "დროებითი ცხრილები დისკზე"
 
-msgid "Privilege scope"
-msgstr "პრივილეგიების ფარგლები"
-
-msgid "Not measurable with the current database user"
-msgstr "მიმდინარე მონაცემთა ბაზის მომხმარებლით არ იზომება"
-
 msgid "Uptime"
 msgstr "მუშაობის დრო"
 

@@ -39121,12 +39121,6 @@ msgstr "ချိတ်ဆက်ထားသော ချည်မျှင်�
 msgid "Temporary tables on disk"
 msgstr "ဒစ်ခ်ပေါ်ရှိ ယာယီ ဇယားများ"
 
-msgid "Privilege scope"
-msgstr "အခွင့်အရေး နယ်ပယ်"
-
-msgid "Not measurable with the current database user"
-msgstr "လက်ရှိ ဒေတာဘေ့စ် အသုံးပြုသူဖြင့် တိုင်းတာ၍ မရပါ"
-
 msgid "Uptime"
 msgstr "အလုပ်လုပ်ချိန်"
 

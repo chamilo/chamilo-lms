@@ -3668,8 +3668,6 @@
     "Click to show database server load metrics": "Ikklikkja biex turi l-metri\u010bi tat-tag\u0127bija tas-server tad-database",
     "Threads connected": "\u0126jut konnessi",
     "Temporary tables on disk": "Tabelli temporanji fuq id-diska",
-    "Privilege scope": "Ambitu tal-privile\u0121\u0121i",
-    "Not measurable with the current database user": "Mhux jista' jitkejjel bl-utent attwali tad-database",
     "Uptime": "\u0126in ta' t\u0127addim",
     "Queries per second": "Mistoqsijiet kull sekonda",
     "Slow queries": "Mistoqsijiet bil-mod",

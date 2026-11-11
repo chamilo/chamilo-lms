@@ -39117,12 +39117,6 @@ msgstr "कनेक्टेड थ्रेड्स"
 msgid "Temporary tables on disk"
 msgstr "डिस्क पर अस्थायी टेबल्स"
 
-msgid "Privilege scope"
-msgstr "अधिकार क्षेत्र"
-
-msgid "Not measurable with the current database user"
-msgstr "वर्तमान डेटाबेस उपयोगकर्ता से मापने योग्य नहीं"
-
 msgid "Uptime"
 msgstr "अपटाइम"
 

@@ -39117,12 +39117,6 @@ msgstr "Dunta ku xidhan"
 msgid "Temporary tables on disk"
 msgstr "Jadwalka ku meel gaarka ah ee diskiga"
 
-msgid "Privilege scope"
-msgstr "Baaxadda xuquuqda"
-
-msgid "Not measurable with the current database user"
-msgstr "Lama qiyaasi karo isticmaalaha xogta hadda"
-
 msgid "Uptime"
 msgstr "Waqtiga shaqada"
 

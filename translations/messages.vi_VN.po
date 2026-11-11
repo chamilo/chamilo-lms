@@ -39123,12 +39123,6 @@ msgstr "Luồng đã kết nối"
 msgid "Temporary tables on disk"
 msgstr "Bảng tạm trên ổ đĩa"
 
-msgid "Privilege scope"
-msgstr "Phạm vi quyền"
-
-msgid "Not measurable with the current database user"
-msgstr "Không thể đo lường với người dùng cơ sở dữ liệu hiện tại"
-
 msgid "Uptime"
 msgstr "Thời gian hoạt động"
 

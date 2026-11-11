@@ -3693,8 +3693,6 @@
     "Click to show database server load metrics": "Click to show database server load metrics",
     "Threads connected": "Threads connected",
     "Temporary tables on disk": "Temporary tables on disk",
-    "Privilege scope": "Privilege scope",
-    "Not measurable with the current database user": "Not measurable with the current database user",
     "Uptime": "Uptime",
     "Queries per second": "Queries per second",
     "Slow queries": "Slow queries",
@@ -4731,5 +4729,7 @@
     "Restore the image of the theme": "Restore the image of the theme",
     "Select a PNG, JPEG or WebP image smaller than 2 MB.": "Select a PNG, JPEG or WebP image smaller than 2 MB.",
     "Delete the uploaded image and restore the image of the theme?": "Delete the uploaded image and restore the image of the theme?",
-    "Theme image restored": "Theme image restored"
+    "Theme image restored": "Theme image restored",
+    "Login page (visitors who are not signed in)": "Login page (visitors who are not signed in)",
+    "Interface of signed-in users": "Interface of signed-in users"
 }

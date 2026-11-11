@@ -39122,12 +39122,6 @@ msgstr "Prijungti siūlai"
 msgid "Temporary tables on disk"
 msgstr "Laikinosios lentelės diske"
 
-msgid "Privilege scope"
-msgstr "Privilegijų apimtis"
-
-msgid "Not measurable with the current database user"
-msgstr "Negalima išmatuoti esamu duomenų bazės naudotoju"
-
 msgid "Uptime"
 msgstr "Veikimo laikas"
 

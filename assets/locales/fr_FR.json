@@ -3668,8 +3668,6 @@
     "Click to show database server load metrics": "Cliquez pour afficher les m\u00e9triques de charge du serveur de base de donn\u00e9es",
     "Threads connected": "Threads connect\u00e9s",
     "Temporary tables on disk": "Tables temporaires sur disque",
-    "Privilege scope": "Port\u00e9e des privil\u00e8ges",
-    "Not measurable with the current database user": "Non mesurable avec l\u2019utilisateur de base de donn\u00e9es actuel",
     "Uptime": "Temps de disponibilit\u00e9",
     "Queries per second": "Requ\u00eates par seconde",
     "Slow queries": "Requ\u00eates lentes",

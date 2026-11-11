@@ -39123,12 +39123,6 @@ msgstr "已連線執行緒"
 msgid "Temporary tables on disk"
 msgstr "磁碟上的暫存表"
 
-msgid "Privilege scope"
-msgstr "權限範圍"
-
-msgid "Not measurable with the current database user"
-msgstr "無法以目前資料庫使用者進行測量"
-
 msgid "Uptime"
 msgstr "運作時間"
 

@@ -39123,12 +39123,6 @@ msgstr "Konektitaj fadenoj"
 msgid "Temporary tables on disk"
 msgstr "Provizoraj tabeloj sur disko"
 
-msgid "Privilege scope"
-msgstr "Privilegia amplekso"
-
-msgid "Not measurable with the current database user"
-msgstr "Ne mezurebla kun la nuna datumbaza uzanto"
-
 msgid "Uptime"
 msgstr "Funkciada tempo"
 

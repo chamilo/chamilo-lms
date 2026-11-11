@@ -39123,12 +39123,6 @@ msgstr "Свързани нишки"
 msgid "Temporary tables on disk"
 msgstr "Временни таблици на диска"
 
-msgid "Privilege scope"
-msgstr "Обхват на привилегиите"
-
-msgid "Not measurable with the current database user"
-msgstr "Не може да се измери с текущия потребител на базата данни"
-
 msgid "Uptime"
 msgstr "Време на работа"
 

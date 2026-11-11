@@ -39117,12 +39117,6 @@ msgstr "نښلېدلي تارونه"
 msgid "Temporary tables on disk"
 msgstr "لنډمهالي جدولونه په ډسک کې"
 
-msgid "Privilege scope"
-msgstr "د امتياز ساحه"
-
-msgid "Not measurable with the current database user"
-msgstr "د اوسني ډېټابېس کاروونکي سره نه اندازه کېدونکي"
-
 msgid "Uptime"
 msgstr "فعال وخت"
 

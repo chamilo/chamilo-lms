@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Klaku por montri datumbazajn servilajn \u015dar\u011dajn metrikojn",
     "Threads connected": "Konektitaj fadenoj",
     "Temporary tables on disk": "Provizoraj tabeloj sur disko",
-    "Privilege scope": "Privilegia amplekso",
-    "Not measurable with the current database user": "Ne mezurebla kun la nuna datumbaza uzanto",
     "Uptime": "Funkciada tempo",
     "Queries per second": "Demandoj por sekundo",
     "Slow queries": "Malrapidaj demandoj",

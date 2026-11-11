@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Guji si aad u muujiso cabbirrada culeyska server-ka xogta",
     "Threads connected": "Dunta ku xidhan",
     "Temporary tables on disk": "Jadwalka ku meel gaarka ah ee diskiga",
-    "Privilege scope": "Baaxadda xuquuqda",
-    "Not measurable with the current database user": "Lama qiyaasi karo isticmaalaha xogta hadda",
     "Uptime": "Waqtiga shaqada",
     "Queries per second": "Wejiyada ilbiriqsi kasta",
     "Slow queries": "Wejiyada gaabiska ah",

@@ -39117,12 +39117,6 @@ msgstr "সংযুক্ত থ্রেড"
 msgid "Temporary tables on disk"
 msgstr "ডিস্কে অস্থায়ী টেবিল"
 
-msgid "Privilege scope"
-msgstr "অধিকারের সুযোগ"
-
-msgid "Not measurable with the current database user"
-msgstr "বর্তমান ডাটাবেস ব্যবহারকারীর সাথে পরিমাপযোগ্য নয়"
-
 msgid "Uptime"
 msgstr "আপটাইম"
 

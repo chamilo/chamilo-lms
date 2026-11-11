@@ -39123,12 +39123,6 @@ msgstr "已连接线程"
 msgid "Temporary tables on disk"
 msgstr "磁盘上的临时表"
 
-msgid "Privilege scope"
-msgstr "权限范围"
-
-msgid "Not measurable with the current database user"
-msgstr "当前数据库用户无法测量"
-
 msgid "Uptime"
 msgstr "运行时间"
 

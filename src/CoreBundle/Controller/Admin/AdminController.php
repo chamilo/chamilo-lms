@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller\Admin;
 use Chamilo\CoreBundle\Component\Composer\ScriptHandler;
 use Chamilo\CoreBundle\Controller\BaseController;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
@@ -78,7 +79,8 @@ class AdminController extends BaseController
         Request $request,
         ResourceFileRepository $resourceFileRepository,
         CourseRepository $courseRepository,
-        TicketMessageAttachmentRepository $ticketMessageAttachmentRepository
+        TicketMessageAttachmentRepository $ticketMessageAttachmentRepository,
+        EntityManagerInterface $em
     ): Response {
         $page = $request->query->getInt('page', 1);
         $search = $request->query->get('search', '');
@@ -93,13 +95,41 @@ class AdminController extends BaseController
         $orphanFlags = [];
         $linksCount = [];
         $coursesByFile = [];
+        $locationsByFile = [];
         $resourceNodeIds = [];
+        $resourceNodes = [];
 
         /** @var ResourceFile $file */
         foreach ($files as $file) {
-            $resourceNodeId = $file->getResourceNode()?->getId();
-            if (null !== $resourceNodeId) {
-                $resourceNodeIds[] = $resourceNodeId;
+            $node = $file->getResourceNode();
+            if (null !== $node && null !== $node->getId()) {
+                $resourceNodeIds[] = $node->getId();
+                $resourceNodes[$node->getId()] = $node;
+            }
+        }
+
+        // A link to a course/user is not necessarily a Documents/My files entry.
+        // Resolve actual resource entities in two batches, never guess from the node path.
+        $documentNodes = [];
+        $personalFileNodes = [];
+        $personalFileOwners = [];
+        if ($resourceNodes) {
+            $documentRepo = Container::getDocumentRepository();
+            foreach ($documentRepo->findBy(['resourceNode' => array_values($resourceNodes)]) as $document) {
+                $nodeId = $document->getResourceNode()?->getId();
+                if (null !== $nodeId) {
+                    $documentNodes[$nodeId] = true;
+                }
+            }
+            $personalFiles = $em->getRepository(PersonalFile::class)->findBy([
+                'resourceNode' => array_values($resourceNodes),
+            ]);
+            foreach ($personalFiles as $personalFile) {
+                $nodeId = $personalFile->getResourceNode()?->getId();
+                if (null !== $nodeId) {
+                    $personalFileNodes[$nodeId] = true;
+                    $personalFileOwners[$nodeId] = $personalFile->getCreator();
+                }
             }
         }
 
@@ -112,6 +142,7 @@ class AdminController extends BaseController
             $resourceNode = $file->getResourceNode();
             $count = 0;
             $coursesForThisFile = [];
+            $locationsForThisFile = [];
 
             if ($resourceNode) {
                 $resourceNodeId = $resourceNode->getId();
@@ -131,24 +162,100 @@ class AdminController extends BaseController
                     $count = $links->count();
 
                     foreach ($links as $link) {
-                        $course = $link->getCourse();
-                        if (!$course) {
+                        if (null !== $link->getDeletedAt()) {
                             continue;
                         }
 
-                        $courseId = $course->getId();
+                        $course = $link->getCourse();
+                        if ($course) {
+                            $courseId = $course->getId();
+                            $courseResourceNode = $course->getResourceNode();
+                            $courseResourceNodeId = $courseResourceNode?->getId();
 
-                        // Root resource node of the course (used to build Documents URL in the template JS)
-                        $courseResourceNode = $course->getResourceNode();
-                        $courseResourceNodeId = $courseResourceNode ? $courseResourceNode->getId() : null;
+                            // Keep the existing per-course tags and their root links.
+                            if (!isset($coursesForThisFile[$courseId])) {
+                                $coursesForThisFile[$courseId] = [
+                                    'id' => $courseId,
+                                    'code' => $course->getCode(),
+                                    'title' => $course->getTitle(),
+                                    'resourceNodeId' => $courseResourceNodeId,
+                                ];
+                            }
 
-                        // Avoid duplicates for the same course.
-                        if (!isset($coursesForThisFile[$courseId])) {
-                            $coursesForThisFile[$courseId] = [
-                                'id' => $courseId,
-                                'code' => $course->getCode(),
-                                'title' => $course->getTitle(),
-                                'resourceNodeId' => $courseResourceNodeId,
+                            if (!isset($documentNodes[$resourceNodeId])) {
+                                continue;
+                            }
+
+                            // A shared document can have a different folder in each course context.
+                            $location = $this->getFileLocationInContext($link, $courseResourceNode);
+                            $params = [
+                                'cid' => $courseId,
+                                'sid' => $link->getSession()?->getId() ?? 0,
+                                'gid' => $link->getGroup()?->getIid() ?? 0,
+                            ];
+                            $label = '['.$course->getCode().'] '.$course->getTitle();
+                            if ($params['sid']) {
+                                $label .= ' (session #'.$params['sid'].')';
+                            }
+                            if ($params['gid']) {
+                                $label .= ' (group #'.$params['gid'].')';
+                            }
+
+                            $browseNodeId = $location['folderNodeId'] ?? $courseResourceNodeId;
+                            $url = null;
+                            if (null !== $browseNodeId) {
+                                $url = $request->getBasePath().'/resources/document/'.$browseNodeId.'/?'.http_build_query($params);
+                            }
+                            $locationKey = $courseId.':'.$params['sid'].':'.$params['gid'].':'.$location['path'];
+                            $locationsForThisFile['course:'.$locationKey] = [
+                                'label' => $label,
+                                'path' => 'Documents / '.$location['path'],
+                                'url' => $url,
+                            ];
+
+                            continue;
+                        }
+
+                        // A personal folder belongs to its user, not the current admin.
+                        $owner = $link->getUser();
+                        if (
+                            !isset($personalFileNodes[$resourceNodeId])
+                            || null === $owner
+                            || null === $owner->getResourceNode()
+                        ) {
+                            continue;
+                        }
+
+                        $userRoot = $owner->getResourceNode();
+                        $location = $this->getFileLocationInContext($link, $userRoot);
+                        $locationsForThisFile['personal:'.$owner->getId().':'.$location['path']] = [
+                            'label' => 'Personal files ('.$owner->getUsername().')',
+                            'path' => 'My files / '.$location['path'],
+                            // The personal file UI always redirects to the signed-in user's root.
+                            'url' => null,
+                        ];
+                    }
+                }
+
+                // PersonalFile uploads may have no ResourceLink at all. Their
+                // ResourceNode is still rooted in the file owner's personal tree.
+                $owner = $personalFileOwners[$resourceNodeId] ?? null;
+                if (null !== $owner && null !== $owner->getResourceNode()) {
+                    $hasOwnerLocation = false;
+                    foreach ($locationsForThisFile as $locationKey => $unused) {
+                        if (str_starts_with($locationKey, 'personal:'.$owner->getId().':')) {
+                            $hasOwnerLocation = true;
+
+                            break;
+                        }
+                    }
+                    if (!$hasOwnerLocation) {
+                        $personalLocation = $this->getNodeLocationInContext($resourceNode, $owner->getResourceNode());
+                        if (null !== $personalLocation) {
+                            $locationsForThisFile['personal:'.$owner->getId().':'.$personalLocation] = [
+                                'label' => 'Personal files ('.$owner->getUsername().')',
+                                'path' => 'My files / '.$personalLocation,
+                                'url' => null,
                             ];
                         }
                     }
@@ -167,6 +274,7 @@ class AdminController extends BaseController
             $linksCount[$file->getId()] = $count;
             $orphanFlags[$file->getId()] = 0 === $count;
             $coursesByFile[$file->getId()] = array_values($coursesForThisFile);
+            $locationsByFile[$file->getId()] = array_values($locationsForThisFile);
         }
 
         // Build course selector options for the "Attach to course" form.
@@ -196,8 +304,89 @@ class AdminController extends BaseController
             'orphanFlags' => $orphanFlags,
             'linksCount' => $linksCount,
             'coursesByFile' => $coursesByFile,
+            'locationsByFile' => $locationsByFile,
             'courseOptions' => $courseOptions,
         ]);
+    }
+
+    /**
+     * Personal files can exist without a ResourceLink. Their node hierarchy
+     * is authoritative only if it actually leads to the owner's personal root.
+     */
+    private function getNodeLocationInContext(ResourceNode $node, ResourceNode $root): ?string
+    {
+        $parts = [$node->getTitle()];
+        $parent = $node->getParent();
+        $depth = 0;
+        while (null !== $parent && $depth++ < 50) {
+            if ($parent->getId() === $root->getId()) {
+                return implode(' / ', $parts);
+            }
+            array_unshift($parts, $parent->getTitle());
+            $parent = $parent->getParent();
+        }
+
+        return null;
+    }
+
+    /**
+     * Return a file's folder path in the given course/user context.
+     * Link parents take priority because a shared node may belong to another tree.
+     *
+     * @return array{path: string, folderNodeId: ?int}
+     */
+    private function getFileLocationInContext(ResourceLink $link, ?ResourceNode $rootNode): array
+    {
+        $parts = [$link->getResourceNode()->getTitle()];
+        $folderNodeId = $rootNode?->getId();
+        $parentLink = $link->getParent();
+        $seen = [];
+        $depth = 0;
+
+        while (null !== $parentLink && $depth++ < 50) {
+            $parentId = $parentLink->getId();
+            if (null !== $parentId && isset($seen[$parentId])) {
+                break;
+            }
+            if (null !== $parentId) {
+                $seen[$parentId] = true;
+            }
+
+            $parentNode = $parentLink->getResourceNode();
+            if (null !== $rootNode && $parentNode->getId() === $rootNode->getId()) {
+                break;
+            }
+
+            array_unshift($parts, $parentNode->getTitle());
+            if ($link->getParent() === $parentLink) {
+                $folderNodeId = $parentNode->getId();
+            }
+            $parentLink = $parentLink->getParent();
+        }
+
+        // Older files may only have ResourceNode parents. Use those only when
+        // their hierarchy reaches the current context's root (never another course).
+        if (null === $link->getParent() && null !== $rootNode) {
+            $node = $link->getResourceNode()->getParent();
+            $ancestors = [];
+            $nearestFolderId = $node?->getId();
+            $depth = 0;
+            while (null !== $node && $depth++ < 50) {
+                if ($node->getId() === $rootNode->getId()) {
+                    $parts = array_merge(array_reverse($ancestors), $parts);
+                    $folderNodeId = $nearestFolderId ?? $folderNodeId;
+
+                    break;
+                }
+                $ancestors[] = $node->getTitle();
+                $node = $node->getParent();
+            }
+        }
+
+        return [
+            'path' => implode(' / ', $parts),
+            'folderNodeId' => $folderNodeId,
+        ];
     }
 
     #[IsGranted('ROLE_ADMIN')]

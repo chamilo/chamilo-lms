@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "I-click upang ipakita ang database server load metrics",
     "Threads connected": "Threads na konektado",
     "Temporary tables on disk": "Temporary tables sa disk",
-    "Privilege scope": "Saklaw ng pribilehiyo",
-    "Not measurable with the current database user": "Hindi masusukat gamit ang kasalukuyang database user",
     "Uptime": "Uptime",
     "Queries per second": "Queries bawat segundo",
     "Slow queries": "Mabagal na queries",

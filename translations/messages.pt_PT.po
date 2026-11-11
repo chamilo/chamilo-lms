@@ -39129,12 +39129,6 @@ msgstr "Threads conectadas"
 msgid "Temporary tables on disk"
 msgstr "Tabelas temporárias em disco"
 
-msgid "Privilege scope"
-msgstr "Âmbito do privilégio"
-
-msgid "Not measurable with the current database user"
-msgstr "Não mensurável com o utilizador atual da base de dados"
-
 msgid "Uptime"
 msgstr "Tempo de atividade"
 

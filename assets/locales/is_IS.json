@@ -3671,8 +3671,6 @@
     "Click to show database server load metrics": "Smelltu til a\u00f0 s\u00fdna gagnagrunnsnet\u00fej\u00f3ns\u00e1lagsm\u00e6lingar",
     "Threads connected": "Tengdir \u00fer\u00e6\u00f0ir",
     "Temporary tables on disk": "T\u00edmabundnar t\u00f6flur \u00e1 diski",
-    "Privilege scope": "R\u00e9ttindasvi\u00f0",
-    "Not measurable with the current database user": "Ekki m\u00e6lanlegt me\u00f0 n\u00faverandi gagnagrunnsnotanda",
     "Uptime": "Uppit\u00edmi",
     "Queries per second": "Fyrirspurnir \u00e1 sek\u00fandu",
     "Slow queries": "H\u00e6gar fyrirspurnir",

@@ -39121,12 +39121,6 @@ msgstr "Поврзани нишки"
 msgid "Temporary tables on disk"
 msgstr "Привремени табели на диск"
 
-msgid "Privilege scope"
-msgstr "Опсег на привилегии"
-
-msgid "Not measurable with the current database user"
-msgstr "Не може да се измери со тековниот корисник на базата"
-
 msgid "Uptime"
 msgstr "Време на работа"
 

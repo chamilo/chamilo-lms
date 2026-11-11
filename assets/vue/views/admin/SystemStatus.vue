@@ -602,22 +602,6 @@
                   </div>
                 </dl>
               </div>
-
-              <Message
-                v-if="dbPrivilegeNote"
-                :closable="false"
-                icon="mdi mdi-information"
-                severity="info"
-              >
-                <p class="font-semibold">{{ t("Privilege scope") }}: {{ dbPrivilegeNote.scopeLabel }}</p>
-                <p
-                  v-if="dbPrivilegeNote.unavailableList"
-                  class="mt-1 text-caption"
-                >
-                  {{ t("Not measurable with the current database user") }}:
-                  {{ dbPrivilegeNote.unavailableList }}
-                </p>
-              </Message>
             </template>
             <p
               v-else
@@ -1549,32 +1533,6 @@ const dbQueryCacheMetrics = computed(() => {
   ]
 })
 
-const dbPrivilegeNote = computed(() => {
-  const p = dbData.value?.privileges
-  if (!p) {
-    return null
-  }
-
-  let scopeLabel = t("Unknown")
-  if (false !== p.resolved) {
-    scopeLabel = p.hasGlobalPrivileges ? t("Global") : t("Database")
-  }
-
-  const unavailableList = (p.unavailable || [])
-    .map((item) => {
-      const capability = item?.capability
-      if (!capability) {
-        return null
-      }
-      // Technical identifiers: t() returns the key when no translation exists.
-      return t(capability)
-    })
-    .filter(Boolean)
-    .join(", ")
-
-  return { scopeLabel, unavailableList }
-})
-
 function statusIconClass(status) {
   switch (status) {
     case "ok":
@@ -1845,7 +1803,6 @@ async function loadDbData({ silent = false } = {}) {
         data?.server && typeof data.server === "object"
           ? data.server
           : { available: false, reason: "status_unavailable" },
-      privileges: data?.privileges && typeof data.privileges === "object" ? data.privileges : null,
     }
     if (dbData.value?.server?.available && safe.server?.available) {
       dbPrevSample.value = dbData.value
@@ -1859,7 +1816,6 @@ async function loadDbData({ silent = false } = {}) {
     dbData.value = {
       fetchedAt: new Date().toISOString(),
       server: { available: false, reason: "status_unavailable" },
-      privileges: null,
     }
     if (!silent) {
       showErrorNotification(e)

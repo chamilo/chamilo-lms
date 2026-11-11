@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Bofya ili kuonyesha vipimo vya mzigo wa seva ya hifadhidata",
     "Threads connected": "Nyuzi zilizounganishwa",
     "Temporary tables on disk": "Majedwali ya muda kwenye diski",
-    "Privilege scope": "Wigo wa haki",
-    "Not measurable with the current database user": "Haiwezi kupimwa na mtumiaji wa hifadhidata wa sasa",
     "Uptime": "Muda wa kufanya kazi",
     "Queries per second": "Maswali kwa sekunde",
     "Slow queries": "Maswali ya polepole",

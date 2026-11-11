@@ -39123,12 +39123,6 @@ msgstr "เธรดที่เชื่อมต่อ"
 msgid "Temporary tables on disk"
 msgstr "ตารางชั่วคราวบนดิสก์"
 
-msgid "Privilege scope"
-msgstr "ขอบเขตสิทธิ์"
-
-msgid "Not measurable with the current database user"
-msgstr "ไม่สามารถวัดได้ด้วยผู้ใช้ฐานข้อมูลปัจจุบัน"
-
 msgid "Uptime"
 msgstr "เวลาทำงาน"
 

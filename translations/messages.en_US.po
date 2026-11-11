@@ -39121,12 +39121,6 @@ msgstr "Threads connected"
 msgid "Temporary tables on disk"
 msgstr "Temporary tables on disk"
 
-msgid "Privilege scope"
-msgstr "Privilege scope"
-
-msgid "Not measurable with the current database user"
-msgstr "Not measurable with the current database user"
-
 msgid "Uptime"
 msgstr "Uptime"
 
@@ -43549,3 +43543,9 @@ msgstr "Delete the uploaded image and restore the image of the theme?"
 
 msgid "Theme image restored"
 msgstr "Theme image restored"
+
+msgid "Login page (visitors who are not signed in)"
+msgstr "Login page (visitors who are not signed in)"
+
+msgid "Interface of signed-in users"
+msgstr "Interface of signed-in users"

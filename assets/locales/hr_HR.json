@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Kliknite za prikaz mjernih podataka o optere\u0107enju poslu\u017eitelja baze podataka",
     "Threads connected": "Povezane niti",
     "Temporary tables on disk": "Privremene tablice na disku",
-    "Privilege scope": "Opseg privilegija",
-    "Not measurable with the current database user": "Nije mogu\u0107e izmjeriti s trenutnim korisnikom baze podataka",
     "Uptime": "Vrijeme rada",
     "Queries per second": "Upiti u sekundi",
     "Slow queries": "Spori upiti",

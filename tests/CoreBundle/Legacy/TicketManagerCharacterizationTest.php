@@ -8,6 +8,7 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Service\Ticket\TicketWorkflowService;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use Doctrine\DBAL\Connection;
@@ -1224,6 +1225,21 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->assertSame([1], array_map('intval', $this->col(TicketManager::getUsersInCategory($cat), 'user_id')), 'only the other user stays assigned');
         $this->assertNull($this->conn->fetchAssociative('SELECT user_id FROM ticket_assigned_log WHERE ticket_id = ?', [$t])['user_id']);
         $this->assertSame('1', (string) $this->row($t)['sys_insert_user_id'], 'tickets written by someone else are untouched');
+    }
+
+    public function testWorkflowServiceRemovesADeletedUserFromTheTicketSystem(): void
+    {
+        $p = $this->project('tm_proj_svc');
+        $cat = $this->category($p, 'tm_cat_svc');
+        $t = $this->ticket($p, $cat, ['assigned_last_user' => 2, 'sys_insert_user_id' => 2]);
+        TicketManager::addUsersToCategory($cat, [2]);
+        $fallback = (int) Container::getUserRepository()->getFallbackUser()->getId();
+
+        self::getContainer()->get(TicketWorkflowService::class)->removeUserFromTicketSystem(2);
+
+        $this->assertNull($this->row($t)['assigned_last_user']);
+        $this->assertSame((string) $fallback, (string) $this->row($t)['sys_insert_user_id']);
+        $this->assertSame([], TicketManager::getUsersInCategory($cat));
     }
 
     public function testDeleteUserFromTicketSystemReassignsAuthoredRowsToTheFallbackUser(): void

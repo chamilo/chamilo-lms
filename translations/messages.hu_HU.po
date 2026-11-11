@@ -39121,12 +39121,6 @@ msgstr "Csatlakoztatott szálak"
 msgid "Temporary tables on disk"
 msgstr "Ideiglenes táblák lemezen"
 
-msgid "Privilege scope"
-msgstr "Jogosultsági kör"
-
-msgid "Not measurable with the current database user"
-msgstr "Nem mérhető a jelenlegi adatbázis-felhasználóval"
-
 msgid "Uptime"
 msgstr "Üzemidő"
 

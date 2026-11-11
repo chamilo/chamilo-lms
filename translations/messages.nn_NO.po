@@ -39121,12 +39121,6 @@ msgstr "Tilkopla trådar"
 msgid "Temporary tables on disk"
 msgstr "Mellombelse tabellar på disk"
 
-msgid "Privilege scope"
-msgstr "Rettaromfang"
-
-msgid "Not measurable with the current database user"
-msgstr "Ikkje målbart med gjeldande databasebrukar"
-
 msgid "Uptime"
 msgstr "Oppetid"
 

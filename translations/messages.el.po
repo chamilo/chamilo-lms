@@ -39136,12 +39136,6 @@ msgstr "Συνδεδεμένα νήματα"
 msgid "Temporary tables on disk"
 msgstr "Προσωρινές πίνακες στο δίσκο"
 
-msgid "Privilege scope"
-msgstr "Εύρος προνομίων"
-
-msgid "Not measurable with the current database user"
-msgstr "Μη μετρήσιμο με τον τρέχοντα χρήστη της βάσης δεδομένων"
-
 msgid "Uptime"
 msgstr "Χρόνος λειτουργίας"
 

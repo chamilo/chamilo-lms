@@ -39121,12 +39121,6 @@ msgstr "Threads connected"
 msgid "Temporary tables on disk"
 msgstr "Temporary tables on disk"
 
-msgid "Privilege scope"
-msgstr "Privilege scope"
-
-msgid "Not measurable with the current database user"
-msgstr "Not measurable with the current database user"
-
 msgid "Uptime"
 msgstr "Uptime"
 

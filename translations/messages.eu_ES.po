@@ -39128,12 +39128,6 @@ msgstr "Konektatutako hariak"
 msgid "Temporary tables on disk"
 msgstr "Aldi baterako taulak diskoan"
 
-msgid "Privilege scope"
-msgstr "Pribilegioen irismena"
-
-msgid "Not measurable with the current database user"
-msgstr "Ezin da neurtu uneko datu-base erabiltzailearekin"
-
 msgid "Uptime"
 msgstr "Jardunaldi-denbora"
 

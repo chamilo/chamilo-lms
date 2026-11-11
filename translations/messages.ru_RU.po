@@ -39124,12 +39124,6 @@ msgstr "Подключённые потоки"
 msgid "Temporary tables on disk"
 msgstr "Временные таблицы на диске"
 
-msgid "Privilege scope"
-msgstr "Область привилегий"
-
-msgid "Not measurable with the current database user"
-msgstr "Невозможно измерить с текущим пользователем базы данных"
-
 msgid "Uptime"
 msgstr "Время работы"
 

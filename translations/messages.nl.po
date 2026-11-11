@@ -41197,12 +41197,6 @@ msgstr "Verbonden threads"
 msgid "Temporary tables on disk"
 msgstr "Tijdelijke tabellen op schijf"
 
-msgid "Privilege scope"
-msgstr "Privilegescope"
-
-msgid "Not measurable with the current database user"
-msgstr "Niet meetbaar met de huidige databasegebruiker"
-
 msgid "Uptime"
 msgstr "Uptime"
 

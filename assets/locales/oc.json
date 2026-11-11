@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Clicatz per afichar las mesuras de carga del servidor de basa de donadas",
     "Threads connected": "Fils connectats",
     "Temporary tables on disk": "Taulas tempor\u00e0rias sul disc",
-    "Privilege scope": "Portada dels privil\u00e8gis",
-    "Not measurable with the current database user": "Pas mesurable amb l'utilizaire actual de la basa de donadas",
     "Uptime": "Temps de foncionament",
     "Queries per second": "Requ\u00e8stas per segonda",
     "Slow queries": "Requ\u00e8stas lentas",

@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Cofa ukubonisa iinkcukacha zomthwalo weseva yedatha",
     "Threads connected": "Imisonto edityanisiweyo",
     "Temporary tables on disk": "Iitafile zethutyana kwidiski",
-    "Privilege scope": "Umda wamalungelo",
-    "Not measurable with the current database user": "Ayinakulinganiswa ngomsebenzisi wedatha wangoku",
     "Uptime": "Ixesha lokusebenza",
     "Queries per second": "Imibuzo ngesekhondi",
     "Slow queries": "Imibuzo ecothayo",

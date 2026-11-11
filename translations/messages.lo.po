@@ -39166,12 +39166,6 @@ msgstr "ກະແສທີ່ເຊື່ອມຕໍ່"
 msgid "Temporary tables on disk"
 msgstr "ຕາຕະລາງຊົ່ວຄາວໃນດິສກ"
 
-msgid "Privilege scope"
-msgstr "ຂອບເຂດສິດທິ"
-
-msgid "Not measurable with the current database user"
-msgstr "ວັດແທກບໍ່ໄດ້ດ້ວຍຜູ້ໃຊ້ຖານຂໍ້ມູນປັດຈຸບັນ"
-
 msgid "Uptime"
 msgstr "ເວລາເຮັດວຽກ"
 

@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Noklik\u0161\u0137iniet, lai par\u0101d\u012btu datub\u0101zes servera noslodzes r\u0101d\u012bt\u0101jus",
     "Threads connected": "Savienot\u0101s pavedienu",
     "Temporary tables on disk": "Pagaidu tabulas disk\u0101",
-    "Privilege scope": "Privile\u0123iju apjoms",
-    "Not measurable with the current database user": "Nav izm\u0113r\u0101ms ar pa\u0161reiz\u0113jo datu b\u0101zes lietot\u0101ju",
     "Uptime": "Darb\u012bbas laiks",
     "Queries per second": "Vaic\u0101jumi sekund\u0113",
     "Slow queries": "L\u0113nie vaic\u0101jumi",

@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Klicken, um Datenbankserverlast-Metriken anzuzeigen",
     "Threads connected": "Verbundene Threads",
     "Temporary tables on disk": "Tempor\u00e4re Tabellen auf Festplatte",
-    "Privilege scope": "Berechtigungsumfang",
-    "Not measurable with the current database user": "Mit dem aktuellen Datenbankbenutzer nicht messbar",
     "Uptime": "Betriebszeit",
     "Queries per second": "Abfragen pro Sekunde",
     "Slow queries": "Langsame Abfragen",

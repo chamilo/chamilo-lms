@@ -39121,12 +39121,6 @@ msgstr "Benang disambungkan"
 msgid "Temporary tables on disk"
 msgstr "Jadual sementara pada cakera"
 
-msgid "Privilege scope"
-msgstr "Skop keistimewaan"
-
-msgid "Not measurable with the current database user"
-msgstr "Tidak boleh diukur dengan pengguna pangkalan data semasa"
-
 msgid "Uptime"
 msgstr "Masa hidup"
 

@@ -38988,12 +38988,6 @@ msgstr ""
 msgid "Temporary tables on disk"
 msgstr ""
 
-msgid "Privilege scope"
-msgstr ""
-
-msgid "Not measurable with the current database user"
-msgstr ""
-
 msgid "Uptime"
 msgstr ""
 

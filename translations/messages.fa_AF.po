@@ -39117,12 +39117,6 @@ msgstr "رشته‌های متصل"
 msgid "Temporary tables on disk"
 msgstr "جدول‌های موقت روی دیسک"
 
-msgid "Privilege scope"
-msgstr "محدوده امتیاز"
-
-msgid "Not measurable with the current database user"
-msgstr "با کاربر فعلی پایگاه داده قابل اندازه‌گیری نیست"
-
 msgid "Uptime"
 msgstr "زمان کارکرد"
 

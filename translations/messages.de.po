@@ -40687,12 +40687,6 @@ msgstr "Verbundene Threads"
 msgid "Temporary tables on disk"
 msgstr "Temporäre Tabellen auf Festplatte"
 
-msgid "Privilege scope"
-msgstr "Berechtigungsumfang"
-
-msgid "Not measurable with the current database user"
-msgstr "Mit dem aktuellen Datenbankbenutzer nicht messbar"
-
 msgid "Uptime"
 msgstr "Betriebszeit"
 

@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "T\u1eb9 l\u00e1ti fi \u00e0w\u1ecdn \u00ecw\u1ecd\u0300n \u00ecd\u00e1ray\u00e1 \u1eb9\u0300r\u1ecd ib\u00f9d\u00f3 data h\u00e0n",
     "Threads connected": "\u00c0w\u1ecdn \u00ecsop\u1ecd\u0300 \u00e0k\u00f3\u0323l\u00e9",
     "Temporary tables on disk": "\u00c0w\u1ecdn t\u00e1b\u00ecl\u00ec \u00ecgb\u00e0l\u00f3d\u00ec l\u00f3r\u00ed d\u00eds\u00eck\u00ec",
-    "Privilege scope": "\u00c0\u00e0y\u00e8 \u00e0\u00e0y\u00e8 \u00e0\u00e0y\u00e8",
-    "Not measurable with the current database user": "K\u00f2 \u1e63e\u00e9 \u1e63e l\u00e1ti w\u1ecdn p\u1eb9\u0300l\u00fa ol\u00f9m\u00fal\u00f2 ib\u00f9d\u00f3 data l\u1ecd\u0301w\u1ecd\u0301l\u1ecd\u0301w\u1ecd\u0301",
     "Uptime": "\u00c0k\u00f3k\u00f2 \u00ec\u1e63i\u1e63\u1eb9\u0301",
     "Queries per second": "\u00c0w\u1ecdn \u00ecb\u00e9\u00e8r\u00e8 n\u00ed \u00ec\u1e63\u1eb9\u0301j\u00fa kan",
     "Slow queries": "\u00c0w\u1ecdn \u00ecb\u00e9\u00e8r\u00e8 t\u00ed \u00f3 l\u1ecdra",

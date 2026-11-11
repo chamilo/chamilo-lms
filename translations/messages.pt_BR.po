@@ -39136,12 +39136,6 @@ msgstr "Conexões ativas"
 msgid "Temporary tables on disk"
 msgstr "Tabelas temporárias em disco"
 
-msgid "Privilege scope"
-msgstr "Escopo de privilégios"
-
-msgid "Not measurable with the current database user"
-msgstr "Não mensurável com o usuário atual do banco de dados"
-
 msgid "Uptime"
 msgstr "Tempo de atividade"
 

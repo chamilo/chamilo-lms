@@ -39122,12 +39122,6 @@ msgstr "Tilkoblede tråder"
 msgid "Temporary tables on disk"
 msgstr "Midlertidige tabeller på disk"
 
-msgid "Privilege scope"
-msgstr "Rettighetsomfang"
-
-msgid "Not measurable with the current database user"
-msgstr "Ikke målbart med gjeldende databasebruker"
-
 msgid "Uptime"
 msgstr "Oppetid"
 

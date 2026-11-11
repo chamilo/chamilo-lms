@@ -39122,12 +39122,6 @@ msgstr "Ühendatud lõimed"
 msgid "Temporary tables on disk"
 msgstr "Ajutised tabelid kettal"
 
-msgid "Privilege scope"
-msgstr "Õiguste ulatus"
-
-msgid "Not measurable with the current database user"
-msgstr "Praeguse andmebaasi kasutajaga ei ole mõõdetav"
-
 msgid "Uptime"
 msgstr "Tööaeg"
 

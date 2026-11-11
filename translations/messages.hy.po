@@ -39121,12 +39121,6 @@ msgstr "Միացված թրեդներ"
 msgid "Temporary tables on disk"
 msgstr "Ժամանակավոր աղյուսակներ սկավառակի վրա"
 
-msgid "Privilege scope"
-msgstr "Արտոնությունների շրջանակ"
-
-msgid "Not measurable with the current database user"
-msgstr "Չի կարող չափվել ընթացիկ տվյալների բազայի օգտատիրոջ միջոցով"
-
 msgid "Uptime"
 msgstr "Աշխատանքի տևողություն"
 

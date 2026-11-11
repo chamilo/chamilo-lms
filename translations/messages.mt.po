@@ -39122,12 +39122,6 @@ msgstr "Ħjut konnessi"
 msgid "Temporary tables on disk"
 msgstr "Tabelli temporanji fuq id-diska"
 
-msgid "Privilege scope"
-msgstr "Ambitu tal-privileġġi"
-
-msgid "Not measurable with the current database user"
-msgstr "Mhux jista' jitkejjel bl-utent attwali tad-database"
-
 msgid "Uptime"
 msgstr "Ħin ta' tħaddim"
 

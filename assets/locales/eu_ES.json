@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Egin klik datu-basearen zerbitzariaren karga-metrikoak erakusteko",
     "Threads connected": "Konektatutako hariak",
     "Temporary tables on disk": "Aldi baterako taulak diskoan",
-    "Privilege scope": "Pribilegioen irismena",
-    "Not measurable with the current database user": "Ezin da neurtu uneko datu-base erabiltzailearekin",
     "Uptime": "Jardunaldi-denbora",
     "Queries per second": "Kontsultak segundoko",
     "Slow queries": "Kontsulta motelak",

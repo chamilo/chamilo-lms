@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Feu clic per mostrar les m\u00e8triques de c\u00e0rrega del servidor de base de dades",
     "Threads connected": "Fils connectats",
     "Temporary tables on disk": "Taules temporals al disc",
-    "Privilege scope": "\u00c0mbit de privilegis",
-    "Not measurable with the current database user": "No es pot mesurar amb l'usuari actual de la base de dades",
     "Uptime": "Temps d'activitat",
     "Queries per second": "Consultes per segon",
     "Slow queries": "Consultes lentes",

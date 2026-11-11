@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Klicka f\u00f6r att visa databas-serverbelastningsm\u00e5tt",
     "Threads connected": "Anslutna tr\u00e5dar",
     "Temporary tables on disk": "Tillf\u00e4lliga tabeller p\u00e5 disk",
-    "Privilege scope": "Privilegiernas omfattning",
-    "Not measurable with the current database user": "Kan inte m\u00e4tas med aktuell databasanv\u00e4ndare",
     "Uptime": "Drifttid",
     "Queries per second": "Fr\u00e5gor per sekund",
     "Slow queries": "L\u00e5ngsamma fr\u00e5gor",

@@ -39121,12 +39121,6 @@ msgstr "இணைக்கப்பட்ட தொடர்கள்"
 msgid "Temporary tables on disk"
 msgstr "வட்டில் தற்காலிக அட்டவணைகள்"
 
-msgid "Privilege scope"
-msgstr "சலுகை வரம்பு"
-
-msgid "Not measurable with the current database user"
-msgstr "தற்போதைய தரவுத்தள பயனருடன் அளவிட முடியவில்லை"
-
 msgid "Uptime"
 msgstr "இயக்க நேரம்"
 

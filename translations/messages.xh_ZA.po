@@ -39117,12 +39117,6 @@ msgstr "Imisonto edityanisiweyo"
 msgid "Temporary tables on disk"
 msgstr "Iitafile zethutyana kwidiski"
 
-msgid "Privilege scope"
-msgstr "Umda wamalungelo"
-
-msgid "Not measurable with the current database user"
-msgstr "Ayinakulinganiswa ngomsebenzisi wedatha wangoku"
-
 msgid "Uptime"
 msgstr "Ixesha lokusebenza"
 

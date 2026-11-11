@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Klik untuk menampilkan metrik beban server basis data",
     "Threads connected": "Utas terhubung",
     "Temporary tables on disk": "Tabel sementara di disk",
-    "Privilege scope": "Cakupan hak istimewa",
-    "Not measurable with the current database user": "Tidak dapat diukur dengan pengguna basis data saat ini",
     "Uptime": "Waktu aktif",
     "Queries per second": "Kueri per detik",
     "Slow queries": "Kueri lambat",

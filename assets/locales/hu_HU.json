@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Kattintson az adatb\u00e1zis-szerver terhel\u00e9si metrik\u00e1k megjelen\u00edt\u00e9s\u00e9hez",
     "Threads connected": "Csatlakoztatott sz\u00e1lak",
     "Temporary tables on disk": "Ideiglenes t\u00e1bl\u00e1k lemezen",
-    "Privilege scope": "Jogosults\u00e1gi k\u00f6r",
-    "Not measurable with the current database user": "Nem m\u00e9rhet\u0151 a jelenlegi adatb\u00e1zis-felhaszn\u00e1l\u00f3val",
     "Uptime": "\u00dczemid\u0151",
     "Queries per second": "Lek\u00e9rdez\u00e9sek m\u00e1sodpercenk\u00e9nt",
     "Slow queries": "Lass\u00fa lek\u00e9rdez\u00e9sek",

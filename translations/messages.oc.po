@@ -39117,12 +39117,6 @@ msgstr "Fils connectats"
 msgid "Temporary tables on disk"
 msgstr "Taulas temporàrias sul disc"
 
-msgid "Privilege scope"
-msgstr "Portada dels privilègis"
-
-msgid "Not measurable with the current database user"
-msgstr "Pas mesurable amb l'utilizaire actual de la basa de donadas"
-
 msgid "Uptime"
 msgstr "Temps de foncionament"
 

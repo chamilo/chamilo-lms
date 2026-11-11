@@ -39117,12 +39117,6 @@ msgstr "Thread colegâts"
 msgid "Temporary tables on disk"
 msgstr "Tabelis temporaniis sul disc"
 
-msgid "Privilege scope"
-msgstr "Ambit dai privileçs"
-
-msgid "Not measurable with the current database user"
-msgstr "No misurabil cul utent de base di dâts atuâl"
-
 msgid "Uptime"
 msgstr "Timp di ativazion"
 

@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Prema para mostrar as m\u00e9tricas de carga do servidor de base de datos",
     "Threads connected": "F\u00edos conectados",
     "Temporary tables on disk": "T\u00e1boas temporais no disco",
-    "Privilege scope": "\u00c1mbito de privilexios",
-    "Not measurable with the current database user": "Non se pode medir co usuario actual da base de datos",
     "Uptime": "Tempo de actividade",
     "Queries per second": "Consultas por segundo",
     "Slow queries": "Consultas lentas",

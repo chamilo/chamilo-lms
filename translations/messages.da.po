@@ -39123,12 +39123,6 @@ msgstr "Forbundne tråde"
 msgid "Temporary tables on disk"
 msgstr "Midlertidige tabeller på disk"
 
-msgid "Privilege scope"
-msgstr "Rettighedsomfang"
-
-msgid "Not measurable with the current database user"
-msgstr "Kan ikke måles med den aktuelle databasebruger"
-
 msgid "Uptime"
 msgstr "Driftstid"
 

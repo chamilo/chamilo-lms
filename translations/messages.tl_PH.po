@@ -39117,12 +39117,6 @@ msgstr "Threads na konektado"
 msgid "Temporary tables on disk"
 msgstr "Temporary tables sa disk"
 
-msgid "Privilege scope"
-msgstr "Saklaw ng pribilehiyo"
-
-msgid "Not measurable with the current database user"
-msgstr "Hindi masusukat gamit ang kasalukuyang database user"
-
 msgid "Uptime"
 msgstr "Uptime"
 

@@ -441,6 +441,36 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $this->assertSame('0.00', $sale['discount_amount']);
     }
 
+    /**
+     * @dataProvider serverTimezones
+     */
+    public function testSubscriptionEndIsStoredInUtcWhateverTheServerTimezone(string $timezone): void
+    {
+        // The sale date is UTC (api_get_utc_datetime); the end of the subscription must be on the same clock, i.e.
+        // exactly 30 days later. With date() it carried the PHP timezone offset (e.g. +14h) on top.
+        $previous = date_default_timezone_get();
+        date_default_timezone_set($timezone);
+
+        try {
+            $this->plugin->addNewSubscription($this->subscription([['duration' => 30, 'price' => 10]]));
+            $saleId = (int) $this->plugin->registerSubscriptionSale(1, 1, BuyCoursesPlugin::PAYMENT_TYPE_TRANSFER, 30);
+            $sale = $this->conn->fetchAssociative('SELECT * FROM plugin_buycourses_subscription_rel_sale WHERE id = ?', [$saleId]);
+        } finally {
+            date_default_timezone_set($previous);
+        }
+
+        $this->assertNotEmpty($sale);
+        $seconds = strtotime($sale['subscription_end'].' UTC') - strtotime($sale['date'].' UTC');
+        $this->assertEqualsWithDelta(30 * 86400, $seconds, 5, 'subscription_end = sale date + 30 days, both in UTC ('.$timezone.')');
+    }
+
+    public static function serverTimezones(): iterable
+    {
+        yield 'UTC+14' => ['Pacific/Kiritimati'];
+        yield 'UTC-11' => ['Pacific/Pago_Pago'];
+        yield 'UTC' => ['UTC'];
+    }
+
     public function testRegisterSubscriptionSaleRejectsOtherInputs(): void
     {
         $this->plugin->addNewSubscription($this->subscription([['duration' => 30, 'price' => 80]]));

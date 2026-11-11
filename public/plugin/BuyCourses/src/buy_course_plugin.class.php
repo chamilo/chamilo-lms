@@ -10167,7 +10167,10 @@ class BuyCoursesPlugin extends Plugin
             $globalParameters
         );
 
-        $subscriptionEnd = date('Y-m-d H:i:s', strtotime('+'.$duration.' days'));
+        // UTC like the sale date (api_get_utc_datetime): never depends on the PHP/server timezone.
+        $subscriptionEnd = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
+            ->modify('+'.$duration.' days')
+            ->format('Y-m-d H:i:s');
 
         $values = array_merge([
             'reference' => $this->generateReference(

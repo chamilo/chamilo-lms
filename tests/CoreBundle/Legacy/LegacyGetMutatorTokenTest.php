@@ -58,6 +58,41 @@ final class LegacyGetMutatorTokenTest extends TestCase
         $this->assertContainsToken('public/main/inc/lib/ScheduledAnnouncement.php', 'scheduled_announcement.php?action=run');
     }
 
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function gradebookAdminPageActions(): array
+    {
+        return [
+            'createallcategories' => ["isset(\$_GET['createallcategories'])", '->add()'],
+            'visiblecat' => ["isset(\$_GET['visiblecat'])", '->save()'],
+            'deletecat' => ["isset(\$_GET['deletecat'])", '->delete_all()'],
+            'visibleeval' => ["isset(\$_GET['visibleeval'])", '->save()'],
+            'deleteeval' => ["isset(\$_GET['deleteeval'])", '->delete_with_results()'],
+            'visiblelink' => ["isset(\$_GET['visiblelink'])", '->save()'],
+            'deletelink' => ["isset(\$_GET['deletelink'])", '->delete()'],
+        ];
+    }
+
+    /**
+     * @dataProvider gradebookAdminPageActions
+     */
+    public function testGradebookPageGetActionsNeedTheToken(string $marker, string $mutator): void
+    {
+        $this->assertTokenBefore('public/main/gradebook/gradebook.php', 'if ('.$marker.')', $mutator, 700);
+    }
+
+    public function testGradebookPageMovesNeedTheTokenAndTheRedirectsCarryIt(): void
+    {
+        $page = $this->source('public/main/gradebook/gradebook.php');
+        foreach (['$cats[0]->move_to_cat(', '$evals[0]->move_to_cat('] as $move) {
+            $at = (int) strpos($page, $move);
+            $this->assertGreaterThan(0, $at);
+            $this->assertStringContainsString("check_token('get')", substr($page, max(0, $at - 700), 700), $move.' without token');
+        }
+        $this->assertSame(3, substr_count($page, "'&sec_token='.Security::get_existing_token()"), 'the move redirects and the confirm form must carry the token');
+    }
+
     public function testTheCronEntryPointsDoNotGoThroughTheWebRunAction(): void
     {
         // The token on `run` only protects the admin's "send now" button: cron must not depend on it.

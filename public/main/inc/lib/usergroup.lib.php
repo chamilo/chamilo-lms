@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Service\StandardizationService;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
@@ -2481,7 +2482,13 @@ class UserGroupModel extends Model
 		               			    usergroup_id = $group_id ,
 		               			    relation_type = $relation_type ";
 
-                        $result = Database::query($sql);
+                        // usergroup_rel_user is UNIQUE(usergroup_id, user_id): a concurrent request that
+                        // inserted the same pair after the check above is a no-op, not an error.
+                        try {
+                            $result = Database::getManager()->getConnection()->executeStatement($sql);
+                        } catch (UniqueConstraintViolationException) {
+                            continue;
+                        }
                         if ($result) {
                             $result_array[$group_id][$user_id] = 1;
                         } else {

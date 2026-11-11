@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
@@ -447,6 +448,28 @@ class UsergroupRepository extends ResourceRepository
         $result = $qb->getQuery()->getOneOrNullResult();
 
         return $result ? $result['relationType'] : null;
+    }
+
+    /**
+     * Ids of the confirmed friends (friends and good friends) of a user: not pending requests,
+     * deleted relations, HR managers or bosses.
+     *
+     * @return int[]
+     */
+    public function getConfirmedFriendIds(int $userId): array
+    {
+        $rows = $this->getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(r.friend) AS friendId')
+            ->from(UserRelUser::class, 'r')
+            ->where('r.user = :userId')
+            ->andWhere('r.relationType IN (:types)')
+            ->setParameter('userId', $userId)
+            ->setParameter('types', [UserRelUser::USER_RELATION_TYPE_FRIEND, UserRelUser::USER_RELATION_TYPE_GOODFRIEND])
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return array_map(static fn (array $row): int => (int) $row['friendId'], $rows);
     }
 
     public function isGroupModerator(int $groupId, int $userId): bool

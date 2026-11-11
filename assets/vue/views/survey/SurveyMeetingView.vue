@@ -1,126 +1,107 @@
 <template>
   <section class="space-y-6">
-    <div class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm">
-      <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-        <div class="flex items-start gap-4">
-          <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gray-15">
-            <BaseIcon
-              icon="calendar-plus"
-              size="big"
-            />
-          </div>
-          <div>
-            <p class="text-sm font-semibold uppercase tracking-wide text-primary">{{ t("Surveys") }}</p>
-            <h1 class="mt-1 text-2xl font-bold text-gray-90">
-              {{ pageTitle }}
-            </h1>
-            <p class="mt-2 max-w-3xl text-sm text-gray-600">
-              {{ t("Meeting polls let invited users select the dates when they are available.") }}
-            </p>
-          </div>
-        </div>
-
-        <div class="flex flex-wrap items-center gap-2">
-          <BaseButton
-            v-if="!isLearningPathContext"
-            :label="t('Back to surveys')"
-            :route="buildListRoute()"
-            icon="back"
-            type="black"
-          />
-          <BaseButton
-            v-if="!isEditorMode && meeting.canEdit"
-            :label="t('Edit meeting poll')"
-            :route="buildEditRoute()"
-            icon="edit"
-            type="secondary"
-          />
-          <BaseButton
-            v-if="isEditorMode && meeting.surveyId"
-            :label="t('View meeting poll')"
-            :route="buildMeetingRoute()"
-            icon="play-box-outline"
-            type="primary-text"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div
-      v-if="errorMessage"
-      class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
-    >
-      {{ errorMessage }}
+    <div>
+      <SectionHeader
+        :title="pageTitle"
+        icon="calendar-plus"
+      >
+        <BaseButton
+          v-if="!isLearningPathContext"
+          :label="t('Back to surveys')"
+          :route="buildListRoute()"
+          icon="back"
+          type="black"
+        />
+        <BaseButton
+          v-if="!isEditorMode && meeting.canEdit"
+          :label="t('Edit meeting poll')"
+          :route="buildEditRoute()"
+          icon="edit"
+          type="secondary"
+        />
+        <BaseButton
+          v-if="isEditorMode && meeting.surveyId"
+          :label="t('View meeting poll')"
+          :route="buildMeetingRoute()"
+          icon="play-box-outline"
+          type="primary-text"
+        />
+      </SectionHeader>
+      <p class="text-body-2 text-gray-50">
+        {{ t("Meeting polls let invited users select the dates when they are available.") }}
+      </p>
     </div>
 
     <div
       v-if="isLoading"
-      class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm"
+      aria-busy="true"
+      class="space-y-6"
     >
-      <div class="flex items-center gap-3 text-sm text-gray-600">
-        <BaseIcon
-          icon="refresh"
-          size="small"
+      <div
+        v-for="(card, index) in loadingSkeleton"
+        :key="index"
+        :class="CARD_CLASS"
+      >
+        <Skeleton
+          v-if="card.heading"
+          :height="`${card.heading}px`"
+          :style="{ marginBottom: `${card.gap}px` }"
+          width="16rem"
         />
-        {{ t("Loading") }}
+        <Skeleton :height="`${card.body}px`" />
       </div>
     </div>
 
     <form
-      v-else-if="isEditorMode"
+      v-else-if="isEditorMode && !loadFailed"
       class="space-y-6"
       novalidate
       @submit.prevent="saveMeeting"
     >
-      <div class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm">
+      <div :class="CARD_CLASS">
         <div class="mb-6 flex items-center gap-3">
-          <BaseIcon
-            icon="information"
-            size="small"
-          />
-          <h2 class="text-lg font-semibold text-gray-90">{{ t("Basic information") }}</h2>
+          <span :class="ICON_BOX_CLASS">
+            <BaseIcon
+              icon="information"
+              size="small"
+            />
+          </span>
+          <h2 class="text-body-1 font-semibold text-gray-90">{{ t("Basic information") }}</h2>
         </div>
 
-        <div class="grid gap-6 md:grid-cols-2">
-          <BaseInputText
-            id="meeting_title"
-            v-model="form.title"
-            :form-submitted="formSubmitted"
-            :is-invalid="formSubmitted && !form.title.trim()"
-            :label="t('Title')"
-            :required="true"
-            error-text="Required field"
-            name="survey_title"
-          />
+        <BaseInputText
+          id="meeting_title"
+          v-model="form.title"
+          :form-submitted="formSubmitted"
+          :is-invalid="formSubmitted && !form.title.trim()"
+          :label="t('Title')"
+          :required="true"
+          error-text="Required field"
+          name="survey_title"
+        />
 
-          <div class="rounded-xl bg-gray-15 p-4 text-sm text-gray-700">
-            {{ t("This will create a survey of type meeting poll. Answers and invitations are handled separately.") }}
-          </div>
-        </div>
+        <BaseTextArea
+          id="meeting_description"
+          v-model="form.description"
+          label="Description"
+          name="survey_introduction"
+          rows="4"
+        />
 
-        <div class="mt-6">
-          <label
-            class="mb-2 block text-sm font-semibold text-gray-700"
-            for="meeting_description"
-          >
-            {{ t("Description") }}
-          </label>
-          <textarea
-            id="meeting_description"
-            v-model="form.description"
-            class="min-h-28 w-full rounded-lg border border-gray-25 p-3 text-sm focus:border-primary focus:outline-none"
-            name="survey_introduction"
-          />
-        </div>
+        <p class="text-body-2 text-gray-50">
+          {{ t("This will create a survey of type meeting poll. Answers and invitations are handled separately.") }}
+        </p>
       </div>
 
-      <div class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm">
+      <div :class="CARD_CLASS">
         <div class="mb-6 flex items-center gap-3">
-          <BaseIcon
-            icon="agenda-event"
-            size="small"
-          />
-          <h2 class="text-lg font-semibold text-gray-90">{{ t("Availability") }}</h2>
+          <span :class="ICON_BOX_CLASS">
+            <BaseIcon
+              icon="agenda-event"
+              size="small"
+            />
+          </span>
+          <h2 class="text-body-1 font-semibold text-gray-90">{{ t("Availability") }}</h2>
         </div>
 
         <div class="grid gap-6 md:grid-cols-2">
@@ -144,14 +125,16 @@
         </div>
       </div>
 
-      <div class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm">
+      <div :class="CARD_CLASS">
         <div class="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div class="flex items-center gap-3">
-            <BaseIcon
-              icon="calendar-plus"
-              size="small"
-            />
-            <h2 class="text-lg font-semibold text-gray-90">{{ t("Meeting dates") }}</h2>
+            <span :class="ICON_BOX_CLASS">
+              <BaseIcon
+                icon="calendar-plus"
+                size="small"
+              />
+            </span>
+            <h2 class="text-body-1 font-semibold text-gray-90">{{ t("Meeting dates") }}</h2>
           </div>
           <BaseButton
             :label="t('Add')"
@@ -165,10 +148,10 @@
           <div
             v-for="(slot, index) in form.slots"
             :key="slot.localKey"
-            class="rounded-xl border border-gray-20 p-4"
+            class="rounded-lg border border-gray-25 bg-support-2 p-4"
           >
             <div class="mb-4 flex items-center justify-between gap-3">
-              <h3 class="font-semibold text-gray-800">{{ t("Date") }} {{ index + 1 }}</h3>
+              <h3 class="text-body-2 font-semibold text-gray-90">{{ t("Date") }} {{ index + 1 }}</h3>
               <BaseButton
                 v-if="form.slots.length > 1"
                 :label="t('Remove')"
@@ -208,7 +191,7 @@
           :label="t('Cancel')"
           :route="buildListRoute()"
           icon="close"
-          type="secondary"
+          type="plain"
         />
         <BaseButton
           :is-loading="isSaving"
@@ -221,23 +204,23 @@
     </form>
 
     <div
-      v-else
+      v-else-if="!loadFailed"
       class="space-y-6"
     >
-      <div class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm">
+      <div :class="CARD_CLASS">
         <div class="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
           <div>
-            <h2 class="text-xl font-bold text-gray-90">{{ displayText(meeting.title, t("Meeting poll")) }}</h2>
+            <h2 class="text-xl font-semibold text-gray-90">{{ displayText(meeting.title, t("Meeting poll")) }}</h2>
             <p
               v-if="displayText(meeting.description)"
-              class="mt-2 text-sm text-gray-600"
+              class="mt-2 text-body-2 text-gray-50"
             >
               {{ displayText(meeting.description) }}
             </p>
           </div>
           <span
             v-if="meeting.isAnswered"
-            class="rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700"
+            class="rounded-full bg-success/10 px-3 py-1 text-caption font-semibold text-success"
           >
             {{ t("Answered") }}
           </span>
@@ -246,31 +229,33 @@
 
       <form
         v-if="meeting.canSubmit"
-        class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm"
+        :class="CARD_CLASS"
         @submit.prevent="submitAvailability"
       >
         <div class="mb-4 flex items-center gap-3">
-          <BaseIcon
-            icon="check"
-            size="small"
-          />
-          <h2 class="text-lg font-semibold text-gray-90">{{ t("My availability") }}</h2>
+          <span :class="ICON_BOX_CLASS">
+            <BaseIcon
+              icon="check"
+              size="small"
+            />
+          </span>
+          <h2 class="text-body-1 font-semibold text-gray-90">{{ t("My availability") }}</h2>
         </div>
 
-        <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <label
             v-for="slot in meeting.slots"
             :key="slot.id"
-            class="flex cursor-pointer items-center gap-3 rounded-xl border border-gray-20 p-4 hover:border-primary"
+            :class="selectedSlots.includes(slot.id) ? 'border-primary bg-support-1' : 'border-gray-25 bg-white'"
+            class="flex cursor-pointer items-center gap-3 rounded-lg border p-4 hover:border-primary"
           >
-            <input
+            <Checkbox
               v-model="selectedSlots"
+              :input-id="`meeting_slot_${slot.id}`"
               :name="`meeting_slot_${slot.id}`"
               :value="slot.id"
-              class="h-4 w-4"
-              type="checkbox"
             />
-            <span class="text-sm font-semibold text-gray-800">{{ slot.label }}</span>
+            <span class="text-body-2 font-semibold text-gray-90">{{ slot.label }}</span>
           </label>
         </div>
 
@@ -285,60 +270,65 @@
         </div>
       </form>
 
-      <div class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm">
-        <div class="mb-6 flex items-center gap-3">
-          <BaseIcon
-            icon="tracking"
-            size="small"
-          />
-          <h2 class="text-lg font-semibold text-gray-90">{{ t("Meeting poll results") }}</h2>
+      <div :class="CARD_CLASS">
+        <div class="mb-4 flex items-center gap-3">
+          <span :class="ICON_BOX_CLASS">
+            <BaseIcon
+              icon="tracking"
+              size="small"
+            />
+          </span>
+          <h2 class="text-body-1 font-semibold text-gray-90">{{ t("Meeting poll results") }}</h2>
         </div>
 
-        <div
+        <p
           v-if="!meeting.participants.length"
-          class="rounded-xl bg-gray-15 p-4 text-sm text-gray-600"
+          class="text-body-2 text-gray-50"
         >
           {{ t("No invitations found") }}
-        </div>
+        </p>
 
         <div
           v-else
           class="overflow-x-auto"
         >
-          <table class="min-w-full divide-y divide-gray-20 text-sm">
+          <table class="min-w-full text-body-2">
             <thead>
-              <tr>
-                <th class="whitespace-nowrap px-3 py-3 text-start font-semibold text-gray-700">
+              <tr class="bg-support-2">
+                <th class="whitespace-nowrap rounded-s-lg px-4 py-3 text-start font-semibold text-gray-90">
                   {{ t("User") }}
                 </th>
                 <th
                   v-for="slot in meeting.slots"
                   :key="slot.id"
-                  class="min-w-36 px-3 py-3 text-center font-semibold text-gray-700"
+                  class="min-w-36 px-4 py-3 text-center font-semibold text-gray-90 last:rounded-e-lg"
                 >
                   {{ slot.label }}
-                  <div class="mt-1 text-xs text-primary">
-                    {{ slotTotal(slot.id) }} {{ t("available") }}
+                  <div class="mt-2">
+                    <span class="rounded-full bg-support-1 px-2 py-1 text-caption font-semibold text-primary">
+                      {{ slotTotal(slot.id) }} {{ t("available") }}
+                    </span>
                   </div>
                 </th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-10">
+            <tbody>
               <tr
                 v-for="participant in meeting.participants"
                 :key="participant.id"
+                class="border-b border-gray-25 last:border-b-0"
               >
-                <td class="whitespace-nowrap px-3 py-3 font-semibold text-gray-800">
+                <td class="whitespace-nowrap px-4 py-3 font-semibold text-gray-90">
                   {{ participant.name }}
                 </td>
                 <td
                   v-for="slot in meeting.slots"
                   :key="`${participant.id}_${slot.id}`"
-                  class="px-3 py-3 text-center"
+                  class="px-4 py-3 text-center"
                 >
                   <span
                     :class="availabilityClass(participant, slot.id)"
-                    class="inline-flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold"
+                    class="inline-flex h-8 w-8 items-center justify-center rounded-full font-bold"
                   >
                     {{ availabilitySymbol(participant, slot.id) }}
                   </span>
@@ -360,12 +350,32 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
+import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import Checkbox from "primevue/checkbox"
+import Skeleton from "primevue/skeleton"
 import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
 import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
-const { showSuccessNotification } = useNotification()
+const { showSuccessNotification, showErrorNotification } = useNotification()
+
+const CARD_CLASS = "rounded-lg border border-gray-25 bg-white p-6 shadow-sm"
+const ICON_BOX_CLASS = "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-support-1 text-primary"
+
+// One entry per card: heading height, gap under it and body height, as measured on the loaded
+// page at 1440 px with a poll of three dates and three participants. The answer form card is
+// absent because the page only knows after loading whether the user may answer.
+const ANSWER_SKELETON = [
+  { heading: 0, gap: 0, body: 52 },
+  { heading: 32, gap: 16, body: 235 },
+]
+const EDITOR_SKELETON = [
+  { heading: 32, gap: 24, body: 189 },
+  { heading: 32, gap: 24, body: 62 },
+  { heading: 40, gap: 24, body: 464 },
+]
 const route = useRoute()
 const router = useRouter()
 const { displayTranslatedHtml } = useTranslatedHtml()
@@ -401,7 +411,7 @@ const selectedSlots = ref([])
 const isLoading = ref(false)
 const isSaving = ref(false)
 const formSubmitted = ref(false)
-const errorMessage = ref("")
+const loadFailed = ref(false)
 
 const isCreateMode = computed(() => route.name === "SurveyMeetingCreate")
 const isEditorMode = computed(() => isCreateMode.value || route.name === "SurveyMeetingEdit")
@@ -416,6 +426,7 @@ const isLearningPathContext = computed(() => {
     Boolean(getQueryValue(route.query.lpItemId || route.query.lp_item_id))
   )
 })
+const loadingSkeleton = computed(() => (isEditorMode.value ? EDITOR_SKELETON : ANSWER_SKELETON))
 const pageTitle = computed(() => {
   if (isCreateMode.value) {
     return t("Create meeting poll")
@@ -481,7 +492,7 @@ function hydrateForm(data) {
 
 async function loadMeeting() {
   isLoading.value = true
-  errorMessage.value = ""
+  loadFailed.value = false
 
   try {
     const surveyId = route.params.surveyId ? Number(route.params.surveyId) : null
@@ -492,7 +503,8 @@ async function loadMeeting() {
     hydrateForm(response)
   } catch (error) {
     console.error("Error loading meeting poll", error)
-    errorMessage.value = error?.response?.data?.["hydra:description"] || t("Could not load meeting poll")
+    loadFailed.value = true
+    showErrorNotification(error?.response?.data?.["hydra:description"] || t("Could not load meeting poll"))
   } finally {
     isLoading.value = false
   }
@@ -557,10 +569,9 @@ function validateForm() {
 
 async function saveMeeting() {
   formSubmitted.value = true
-  errorMessage.value = ""
 
   if (!validateForm()) {
-    errorMessage.value = t("Please complete the required fields")
+    showErrorNotification(t("Please complete the required fields"))
     return
   }
 
@@ -602,14 +613,13 @@ async function saveMeeting() {
     hydrateForm(response)
   } catch (error) {
     console.error("Error saving meeting poll", error)
-    errorMessage.value = error?.response?.data?.["hydra:description"] || t("Could not save meeting poll")
+    showErrorNotification(error?.response?.data?.["hydra:description"] || t("Could not save meeting poll"))
   } finally {
     isSaving.value = false
   }
 }
 
 async function submitAvailability() {
-  errorMessage.value = ""
   isSaving.value = true
 
   try {
@@ -628,7 +638,7 @@ async function submitAvailability() {
     }
   } catch (error) {
     console.error("Error saving meeting availability", error)
-    errorMessage.value = error?.response?.data?.["hydra:description"] || t("Could not save meeting availability")
+    showErrorNotification(error?.response?.data?.["hydra:description"] || t("Could not save meeting availability"))
   } finally {
     isSaving.value = false
   }
@@ -663,14 +673,14 @@ function availabilitySymbol(participant, slotId) {
 function availabilityClass(participant, slotId) {
   const value = participantValue(participant, slotId)
   if (value === 1) {
-    return "bg-green-100 text-green-700"
+    return "bg-success/10 text-success"
   }
 
   if (value === 0) {
-    return "bg-gray-100 text-gray-600"
+    return "bg-gray-20 text-gray-50"
   }
 
-  return "bg-yellow-100 text-yellow-700"
+  return "bg-warning/10 text-warning"
 }
 
 function decodeHtml(value) {

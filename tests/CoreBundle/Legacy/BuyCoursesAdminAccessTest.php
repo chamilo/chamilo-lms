@@ -255,4 +255,40 @@ final class BuyCoursesAdminAccessTest extends BuyCoursesCharacterizationTestCase
         self::assertGreaterThan(0, $guard);
         self::assertLessThan($cancel, $guard);
     }
+
+    public function testOnlyTheBuyerOwnsASale(): void
+    {
+        $saleId = $this->makeSale(['user_id' => 2]);
+        $sale = $this->plugin->getSale($saleId);
+
+        self::assertTrue(buycoursesUserOwnsSale($sale, 2));
+        self::assertFalse(buycoursesUserOwnsSale($sale, 1), 'another user (even an admin) is not the buyer');
+        self::assertFalse(buycoursesUserOwnsSale($sale, 0), 'nobody is not the buyer');
+        self::assertFalse(buycoursesUserOwnsSale([], 2), 'unknown sale');
+        self::assertFalse(buycoursesUserOwnsSale([], 0), 'unknown sale and nobody');
+    }
+
+    /**
+     * @dataProvider successPages
+     */
+    public function testSuccessPagesCheckTheBuyerBeforeShowingOrCompletingTheSale(string $page, string $firstUse): void
+    {
+        $source = (string) file_get_contents(self::SRC.$page);
+
+        $guard = strpos($source, 'buycoursesUserOwns');
+        $use = strpos($source, $firstUse);
+
+        self::assertNotFalse($guard, $page.' must check that the sale belongs to the current user');
+        self::assertNotFalse($use);
+        self::assertLessThan($use, $guard);
+        self::assertStringContainsString("require_once __DIR__.'/admin_token.lib.php'", $source);
+    }
+
+    public static function successPages(): iterable
+    {
+        yield ['success.php', '$buyingCourse = false;'];
+        yield ['subscription_success.php', '$coupon = [];'];
+        yield ['service_success.php', '$couponId = isset('];
+        yield ['stripe_success.php', '$userInfo = api_get_user_info('];
+    }
 }

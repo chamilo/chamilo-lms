@@ -94,4 +94,13 @@ if (!function_exists('buycoursesAdminTokenName')) {
 
         return $userId > 0 && $buyerId === $userId;
     }
+
+    /**
+     * True when the (anonymous excluded) user is the buyer of a sale row (sale or subscription sale tables).
+     * The success pages take the sale id from the session; this re-checks it belongs to the current user.
+     */
+    function buycoursesUserOwnsSale(array $sale, int $userId): bool
+    {
+        return $userId > 0 && (int) ($sale['user_id'] ?? 0) === $userId;
+    }
 }

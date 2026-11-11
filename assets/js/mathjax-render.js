@@ -22,6 +22,9 @@
   var SCAN_DELAY = 100
   var mathJaxLoadingPromise = null
   var scanScheduled = false
+  // Vue may trigger new scans before the lazy-loaded library has finished.
+  // Typeset each in-flight formula once, even if the DOM changes again.
+  var processingNodes = new WeakSet()
 
   window.MathJax = window.MathJax || {
     // MathJax 4 ships its fonts as a separate package and defaults to
@@ -95,6 +98,7 @@
     // decodes it back to plain text, so this must stay textContent, never
     // innerHTML, or a formula containing markup would execute as HTML.
     nodes.forEach(function (node) {
+      processingNodes.add(node)
       node.textContent = "\\(\\displaystyle " + node.getAttribute("data-latex") + "\\)"
     })
 
@@ -110,6 +114,11 @@
       .catch(function (err) {
         console.error("MathJax typeset error:", err)
       })
+      .finally(function () {
+        nodes.forEach(function (node) {
+          processingNodes.delete(node)
+        })
+      })
   }
 
   /**
@@ -120,7 +129,7 @@
    */
   function scan(root) {
     var nodes = Array.prototype.slice.call((root || document).querySelectorAll(SELECTOR)).filter(function (node) {
-      return !node.classList.contains("mathjax-processed")
+      return !node.classList.contains("mathjax-processed") && !processingNodes.has(node)
     })
 
     if (nodes.length) {

@@ -37,7 +37,8 @@ if (in_array($action, ['edit', 'delete'], true)) {
         api_not_allowed(true);
     }
 }
-if ('delete' === $action && !Security::check_token('get')) {
+// `run` sends mail on a GET: it needs the token too (cron does not use this page: see cron/scheduled_announcement.php).
+if (in_array($action, ['delete', 'run'], true) && !Security::check_token('get')) {
     api_not_allowed(true);
 }
 

@@ -3,12 +3,21 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory;
+use Chamilo\CoreBundle\Entity\AccessUrlRelPlugin;
 use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup;
+use Chamilo\CoreBundle\Entity\Branch;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\CoreBundle\Entity\Ticket;
+use Chamilo\CoreBundle\Entity\TicketPriority;
+use Chamilo\CoreBundle\Entity\TicketProject;
+use Chamilo\CoreBundle\Entity\TicketStatus;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\NonUniqueResultException;
@@ -105,7 +114,35 @@ class UrlManager
          */
         $em = Container::getEntityManager();
 
+        // Rows whose access_url foreign key is RESTRICT and that would block deleting the URL.
+        // Data that can live without a URL (branches, tickets and their project/priority/status dictionaries,
+        // all nullable) is detached, not destroyed. Session categories cannot be detached (the entity requires a
+        // URL), so they go, after their sessions are released from them.
+        $detachEntities = [
+            [Branch::class, 'url'],
+            [Ticket::class, 'accessUrl'],
+            [TicketProject::class, 'accessUrl'],
+            [TicketPriority::class, 'accessUrl'],
+            [TicketStatus::class, 'accessUrl'],
+        ];
+        foreach ($detachEntities as [$detachEntity, $property]) {
+            $em
+                ->createQuery("UPDATE $detachEntity e SET e.$property = NULL WHERE e.$property = :id")
+                ->setParameter('id', $id)
+                ->execute()
+            ;
+        }
+
+        $em
+            ->createQuery('UPDATE '.Session::class.' s SET s.category = NULL WHERE s.category IN (SELECT sc.id FROM '.SessionCategory::class.' sc WHERE sc.url = :id)')
+            ->setParameter('id', $id)
+            ->execute()
+        ;
+
         $relEntities = [
+            SessionCategory::class,
+            AccessUrlRelPlugin::class,
+            AccessUrlRelColorTheme::class,
             SettingsCurrent::class,
             AccessUrlRelCourse::class,
             AccessUrlRelCourseCategory::class,

@@ -340,4 +340,24 @@ final class BuyCoursesAdminAccessTest extends BuyCoursesCharacterizationTestCase
         // The CLI (cron) has no session: it is exempt from the token, and only it.
         self::assertMatchesRegularExpression('/if \(!\$isCli\)[^}]*buycoursesRequireAdminToken\(/s', $source);
     }
+
+    public function testPanelAjaxPayoutActionsNeedPlatformAdminPostAndTokenBeforeTheyChangeAnything(): void
+    {
+        $source = (string) file_get_contents(self::SRC.'panel.ajax.php');
+
+        self::assertStringContainsString("require_once __DIR__.'/admin_token.lib.php'", $source);
+
+        $switch = (int) strpos($source, 'switch ($action)');
+        $guardZone = substr($source, 0, $switch);
+        self::assertGreaterThan(0, $switch);
+        // The guard runs before the switch that performs MassPayment() and setStatusPayouts().
+        self::assertStringContainsString("['proceedPayout', 'cancelPayout']", $guardZone);
+        self::assertStringContainsString('api_is_platform_admin()', $guardZone, 'api_protect_admin_script(true) lets session admins in');
+        self::assertStringContainsString("'POST' !==", $guardZone);
+        self::assertStringContainsString('buycoursesAdminTokenIsValid()', $guardZone);
+
+        // Identifiers from the request are cast before they reach the payout queries.
+        self::assertStringNotContainsString("\$payoutId = isset(\$_POST['id']) ? \$_POST['id'] : '';", $source);
+        self::assertStringContainsString("array_map('intval'", $source);
+    }
 }

@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
@@ -126,6 +127,76 @@ class CourseRepository extends ResourceRepository
         $query = $qb->getQuery();
 
         return $query->getArrayResult();
+    }
+
+    /**
+     * Courses the user teaches and, when $includeSessionCoaching is true, the session courses they coach.
+     * A student subscription never counts.
+     *
+     * @return array<int, array{id: int, title: string}>
+     */
+    public function getCoursesManagedByUser(int $userId, int $accessUrlId, bool $includeSessionCoaching): array
+    {
+        $em = $this->getEntityManager();
+
+        $qb = $this->createQueryBuilder('c')
+            ->select('DISTINCT c.id, c.title')
+            ->innerJoin('c.urls', 'accessUrlRelCourse')
+            ->where('accessUrlRelCourse.url = :url')
+            ->orderBy('c.title')
+            ->setParameter('url', $accessUrlId)
+            ->setParameter('user', $userId)
+            ->setParameter('teacher', CourseRelUser::TEACHER)
+        ;
+
+        $managed = $qb->expr()->orX(
+            $qb->expr()->in(
+                'c.id',
+                $em->createQueryBuilder()
+                    ->select('IDENTITY(cru.course)')
+                    ->from(CourseRelUser::class, 'cru')
+                    ->where('cru.user = :user')
+                    ->andWhere('cru.status = :teacher')
+                    ->getDQL()
+            )
+        );
+
+        if ($includeSessionCoaching) {
+            $managed->add(
+                $qb->expr()->in(
+                    'c.id',
+                    $em->createQueryBuilder()
+                        ->select('IDENTITY(srcru.course)')
+                        ->from(SessionRelCourseRelUser::class, 'srcru')
+                        ->where('srcru.user = :user')
+                        ->andWhere('srcru.status = :courseCoach')
+                        ->getDQL()
+                )
+            );
+            $managed->add(
+                $qb->expr()->in(
+                    'c.id',
+                    $em->createQueryBuilder()
+                        ->select('IDENTITY(src.course)')
+                        ->from(SessionRelCourse::class, 'src')
+                        ->innerJoin(SessionRelUser::class, 'sru', Join::ON, 'sru.session = src.session')
+                        ->where('sru.user = :user')
+                        ->andWhere('sru.relationType = :generalCoach')
+                        ->getDQL()
+                )
+            );
+            $qb
+                ->setParameter('courseCoach', Session::COURSE_COACH)
+                ->setParameter('generalCoach', Session::GENERAL_COACH)
+            ;
+        }
+
+        $qb->andWhere($managed);
+
+        return array_map(
+            static fn (array $row): array => ['id' => (int) $row['id'], 'title' => (string) $row['title']],
+            $qb->getQuery()->getArrayResult()
+        );
     }
 
     /**

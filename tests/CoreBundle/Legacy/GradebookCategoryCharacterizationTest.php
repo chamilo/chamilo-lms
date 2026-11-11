@@ -517,8 +517,11 @@ final class GradebookCategoryCharacterizationTest extends KernelTestCase
         $parent = Category::load($root)[0];
 
         $this->assertSame([$visible], $this->ids($parent->get_subcategories(2, 1, 0)));
-        // PINNED QUIRK: without a student id a non-admin, non-editor gets nothing at all (not even the visible ones).
-        $this->assertSame([], $parent->get_subcategories(null, 1, 0));
+        // Without a student id a non-admin, non-editor gets the visible subcategories (never the hidden ones).
+        $this->assertSame([$visible], $this->ids($parent->get_subcategories(null, 1, 0)));
+        $this->assertSame([$visible], $this->ids($parent->get_subcategories(null, 0, 0)), 'the course falls back to the category own course');
+        // The root (id 0) still lists nothing for that caller: Category::load() treats parent 0 as "no parent filter".
+        $this->assertSame([], (new Category())->get_subcategories(null, 1, 0));
     }
 
     public function testRootCategoriesForAStudentAreOnlyTheVisibleOnesOfThatCourseAndSession(): void

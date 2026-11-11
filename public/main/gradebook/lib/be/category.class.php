@@ -1830,6 +1830,18 @@ class Category implements GradebookItem
                     $session_id,
                     $order
                 );
+            } elseif (0 != $this->id) {
+                // Not an editor and no student given: the visible subcategories only. The root (id 0) stays
+                // empty because load() reads parent 0 as "no parent filter".
+                return self::load(
+                    null,
+                    null,
+                    !empty($courseId) ? $courseId : $this->courseId,
+                    $this->id,
+                    1,
+                    $session_id,
+                    $order
+                );
             }
         }
 

@@ -43478,3 +43478,6 @@ msgstr ""
 
 msgid "Interface of signed-in users"
 msgstr ""
+
+msgid "Too many results. Please refine your search."
+msgstr ""

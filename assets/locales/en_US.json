@@ -4731,5 +4731,6 @@
     "Delete the uploaded image and restore the image of the theme?": "Delete the uploaded image and restore the image of the theme?",
     "Theme image restored": "Theme image restored",
     "Login page (visitors who are not signed in)": "Login page (visitors who are not signed in)",
-    "Interface of signed-in users": "Interface of signed-in users"
+    "Interface of signed-in users": "Interface of signed-in users",
+    "Too many results. Please refine your search.": "Too many results. Please refine your search."
 }

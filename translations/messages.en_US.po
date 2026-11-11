@@ -43549,3 +43549,6 @@ msgstr "Login page (visitors who are not signed in)"
 
 msgid "Interface of signed-in users"
 msgstr "Interface of signed-in users"
+
+msgid "Too many results. Please refine your search."
+msgstr "Too many results. Please refine your search."

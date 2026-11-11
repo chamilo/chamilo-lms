@@ -19,6 +19,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use InvalidArgumentException;
 use RuntimeException;
@@ -531,5 +532,89 @@ class GradebookCertificateRepository extends ResourceRepository
         ;
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Users of an access URL who hold a certificate and match the given names.
+     *
+     * @return list<User>
+     */
+    public function findCertificateHolders(
+        int $urlId,
+        string $firstname,
+        string $lastname,
+        bool $includeUnpublished,
+        int $limit
+    ): array {
+        $qb = $this->createCertificateHoldersQueryBuilder($urlId, $includeUnpublished)
+            ->orderBy('u.lastname', 'ASC')
+            ->addOrderBy('u.firstname', 'ASC')
+            ->setMaxResults($limit)
+        ;
+
+        if ('' !== $firstname) {
+            $qb
+                ->andWhere('LOWER(u.firstname) LIKE :firstname')
+                ->setParameter('firstname', '%'.mb_strtolower($firstname).'%')
+            ;
+        }
+
+        if ('' !== $lastname) {
+            $qb
+                ->andWhere('LOWER(u.lastname) LIKE :lastname')
+                ->setParameter('lastname', '%'.mb_strtolower($lastname).'%')
+            ;
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * The user, only when they belong to the access URL and hold a certificate.
+     */
+    public function findCertificateHolder(int $userId, int $urlId, bool $includeUnpublished): ?User
+    {
+        return $this->createCertificateHoldersQueryBuilder($urlId, $includeUnpublished)
+            ->andWhere('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * A holder has a certificate in a root category that generates certificates.
+     * Users without one are left out, so that a search cannot enumerate the user directory.
+     */
+    private function createCertificateHoldersQueryBuilder(int $urlId, bool $includeUnpublished): QueryBuilder
+    {
+        $em = $this->getEntityManager();
+
+        $certificates = $em->createQueryBuilder()
+            ->select('gc.id')
+            ->from(GradebookCertificate::class, 'gc')
+            ->join('gc.category', 'cat')
+            ->where('gc.user = u')
+            ->andWhere('cat.parent IS NULL')
+            ->andWhere('cat.generateCertificates = true')
+        ;
+        if (!$includeUnpublished) {
+            $certificates->andWhere('gc.publish = true');
+        }
+
+        $qb = $em->createQueryBuilder();
+
+        return $qb
+            ->select('DISTINCT u')
+            ->from(User::class, 'u')
+            ->join('u.portals', 'portal')
+            ->join('portal.url', 'url')
+            ->where('url.id = :urlId')
+            ->andWhere('u.active != :softDeleted')
+            ->andWhere($qb->expr()->exists($certificates->getDQL()))
+            ->setParameter('urlId', $urlId)
+            ->setParameter('softDeleted', User::SOFT_DELETED)
+        ;
     }
 }

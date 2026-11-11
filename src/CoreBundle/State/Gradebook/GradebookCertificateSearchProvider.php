@@ -16,11 +16,11 @@ use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
 use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +34,8 @@ use const DATE_ATOM;
  */
 final readonly class GradebookCertificateSearchProvider implements ProviderInterface
 {
+    private const int MAX_USERS = 50;
+
     public function __construct(
         private EntityManagerInterface $entityManager,
         private RequestStack $requestStack,
@@ -42,6 +44,7 @@ final readonly class GradebookCertificateSearchProvider implements ProviderInter
         private CourseSettingPolicyManager $courseSettingPolicyManager,
         private GradebookCertificateGenerator $certificateGenerator,
         private Security $security,
+        private GradebookCertificateRepository $certificateRepository,
     ) {}
 
     /**
@@ -69,9 +72,11 @@ final readonly class GradebookCertificateSearchProvider implements ProviderInter
         $userId = $request->query->getInt('userId');
 
         $resource = new GradebookCertificateSearch();
+        // Only an administrator finds the holders of unpublished certificates.
+        $isAdmin = $this->security->isGranted('ROLE_ADMIN');
 
         if ($userId > 0) {
-            $user = $this->findUserInAccessUrl($userId, $accessUrlId);
+            $user = $this->certificateRepository->findCertificateHolder($userId, $accessUrlId, $isAdmin);
             if (!$user instanceof User) {
                 $resource->message = 'No user';
 
@@ -91,65 +96,27 @@ final readonly class GradebookCertificateSearchProvider implements ProviderInter
             return $resource;
         }
 
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('DISTINCT u')
-            ->from(User::class, 'u')
-            ->join('u.portals', 'portal')
-            ->join('portal.url', 'url')
-            ->where('url.id = :urlId')
-            ->andWhere('u.active != :softDeleted')
-            ->setParameter('urlId', $accessUrlId, Types::INTEGER)
-            ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)
-            ->orderBy('u.lastname', 'ASC')
-            ->addOrderBy('u.firstname', 'ASC')
-        ;
-
-        if ('' !== $firstname) {
-            $queryBuilder
-                ->andWhere('LOWER(u.firstname) LIKE :firstname')
-                ->setParameter('firstname', '%'.mb_strtolower($firstname).'%')
-            ;
-        }
-
-        if ('' !== $lastname) {
-            $queryBuilder
-                ->andWhere('LOWER(u.lastname) LIKE :lastname')
-                ->setParameter('lastname', '%'.mb_strtolower($lastname).'%')
-            ;
-        }
-
-        /** @var list<User> $users */
-        $users = $queryBuilder->getQuery()->getResult();
+        // One extra row tells whether the search exceeds the limit.
+        $users = $this->certificateRepository->findCertificateHolders(
+            $accessUrlId,
+            $firstname,
+            $lastname,
+            $isAdmin,
+            self::MAX_USERS + 1,
+        );
+        $isTruncated = \count($users) > self::MAX_USERS;
         $resource->users = array_map(
             fn (User $user): array => $this->normalizeUser($user),
-            $users,
+            \array_slice($users, 0, self::MAX_USERS),
         );
         if ([] === $resource->users) {
             $resource->message = 'No results found';
         }
+        if ($isTruncated) {
+            $resource->message = 'Too many results. Please refine your search.';
+        }
 
         return $resource;
-    }
-
-    private function findUserInAccessUrl(int $userId, int $accessUrlId): ?User
-    {
-        $user = $this->entityManager->createQueryBuilder()
-            ->select('u')
-            ->from(User::class, 'u')
-            ->join('u.portals', 'portal')
-            ->join('portal.url', 'url')
-            ->where('u.id = :userId')
-            ->andWhere('url.id = :urlId')
-            ->andWhere('u.active != :softDeleted')
-            ->setParameter('userId', $userId, Types::INTEGER)
-            ->setParameter('urlId', $accessUrlId, Types::INTEGER)
-            ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-
-        return $user instanceof User ? $user : null;
     }
 
     private function loadPublicCertificates(

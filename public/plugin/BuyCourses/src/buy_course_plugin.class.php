@@ -10019,6 +10019,40 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Price as an integer number of cents (the unit the gateways use), rounded so that float products such as
+     * 19.99 * 100 = 1998.9999999999998 give 1999.
+     *
+     * @param float|int|string $price
+     */
+    public static function priceToCents($price): int
+    {
+        return (int) round((float) $price * 100);
+    }
+
+    /**
+     * True when the amount a gateway returned (in cents, as a string of digits) is exactly the price of the sale.
+     * A valid gateway signature only proves the gateway charged that amount, not that it is what the sale costs.
+     * Integer comparison on purpose, never float equality; free sales never match (nothing is charged for them).
+     *
+     * @param float|int|string|null $gatewayCents
+     */
+    public static function gatewayAmountMatchesSale($gatewayCents, array $sale): bool
+    {
+        if (!is_string($gatewayCents) && !is_int($gatewayCents)) {
+            return false;
+        }
+
+        $gatewayCents = trim((string) $gatewayCents);
+        if ('' === $gatewayCents || !ctype_digit($gatewayCents)) {
+            return false;
+        }
+
+        $saleCents = self::priceToCents($sale['price'] ?? 0);
+
+        return $saleCents > 0 && (int) $gatewayCents === $saleCents;
+    }
+
+    /**
      * @return array
      */
     public function getCecabankSignature(string $saleReference, float $price)

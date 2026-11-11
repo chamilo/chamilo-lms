@@ -43543,3 +43543,9 @@ msgstr "Delete the uploaded image and restore the image of the theme?"
 
 msgid "Theme image restored"
 msgstr "Theme image restored"
+
+msgid "Login page (visitors who are not signed in)"
+msgstr "Login page (visitors who are not signed in)"
+
+msgid "Interface of signed-in users"
+msgstr "Interface of signed-in users"

@@ -239,6 +239,10 @@ if ($selectCat > 0 && $isStudentView) {
 //this is called when there is no data for the course admin
 if (isset($_GET['createallcategories'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $coursecat = Category::get_not_created_course_categories($stud_id);
     if (0 == !count($coursecat)) {
         foreach ($coursecat as $row) {
@@ -284,14 +288,20 @@ if (isset($_GET['movecat'])) {
         );
         if ($move_form->validate()) {
             header('Location: '.api_get_self().'?selectcat='.$selectCat
-                .'&movecat='.$moveCategoryId.'&targetcat='.$move_form->exportValue('move_cat'));
+                .'&movecat='.$moveCategoryId.'&targetcat='.$move_form->exportValue('move_cat')
+                .'&sec_token='.Security::get_existing_token());
             exit;
         }
     } else {
+        // The move is a state change on a GET: the token comes with the redirect of the form (and the confirm button).
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
         $targetcat = Category::load($_GET['targetcat']);
         $course_to_crsind = (null != $cats[0]->getCourseId() && null == $targetcat[0]->getCourseId());
 
         if (!($course_to_crsind && !isset($_GET['confirm']))) {
+            Security::clear_token();
             $cats[0]->move_to_cat($targetcat[0]);
             header('Location: '.api_get_self().'?categorymoved=&selectcat='.$selectCat);
             exit;
@@ -322,14 +332,20 @@ if (isset($_GET['moveeval'])) {
         if ($move_form->validate()) {
             header('Location: '.api_get_self().'?selectcat='.$selectCat
                 .'&moveeval='.Security::remove_XSS($_GET['moveeval'])
-                .'&targetcat='.$move_form->exportValue('move_cat'));
+                .'&targetcat='.$move_form->exportValue('move_cat')
+                .'&sec_token='.Security::get_existing_token());
             exit;
         }
     } else {
+        // The move is a state change on a GET: the token comes with the redirect of the form (and the confirm button).
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
         $targetcat = Category::load($_GET['targetcat']);
         $course_to_crsind = null != $evals[0]->getCourseId() && null == $targetcat[0]->getCourseId();
 
         if (!($course_to_crsind && !isset($_GET['confirm']))) {
+            Security::clear_token();
             $evals[0]->move_to_cat($targetcat[0]);
             header('Location: '.api_get_self().'?evaluationmoved=&selectcat='.$selectCat);
             exit;
@@ -468,7 +484,7 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
     }
     $button = '<form name="confirm" method="post" action="'.api_get_self().'?confirm='
         .(isset($_GET['movecat']) ? '&movecat='.$moveCategoryId
-            : '&moveeval='.intval($_GET['moveeval'])).'&selectcat='.$selectCat.'&targetcat='.intval($_GET['targetcat']).'">
+            : '&moveeval='.intval($_GET['moveeval'])).'&selectcat='.$selectCat.'&targetcat='.intval($_GET['targetcat']).'&sec_token='.Security::get_existing_token().'">
 			   <input type="submit" value="'.get_lang('Validate').'">
 			   </form>';
     $warning_message = get_lang('Warning: moving gradebook elements can be dangerous for the data inside your gradebook.').'<br><br>'.$button;

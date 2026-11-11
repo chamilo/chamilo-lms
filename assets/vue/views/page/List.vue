@@ -33,6 +33,19 @@
     </Column>
 
     <Column
+      :header="t('Friendly URL')"
+      field="slug"
+    >
+      <template #body="{ data }">
+        <span
+          v-if="data?.slug"
+          :title="data.slug.length > 20 ? data.slug : null"
+        >
+          {{ data.slug.length > 20 ? `${data.slug.slice(0, 20)}...` : data.slug }}
+        </span>
+      </template>
+    </Column>
+    <Column
       :header="t('Language')"
       field="locale"
     >

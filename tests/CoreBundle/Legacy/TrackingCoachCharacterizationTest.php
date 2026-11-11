@@ -1138,7 +1138,7 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         $this->assertSame(250.0, Tracking::get_avg_student_score($s1, $course, [$lpOwn]));
     }
 
-    public function testAvgStudentScoreOfAQuizItemUsesTheLastAttemptAndItsQuestionsMaximum(): void
+    public function testAvgStudentScoreOfAQuizItemUsesTheBestAttemptByRatioAndItsQuestionsMaximum(): void
     {
         $s1 = $this->user('tc_s1');
         $course = $this->courseEntity();
@@ -1147,17 +1147,21 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         $item = $this->lpItem($lp, 'quiz', 20, 1, (string) $quiz);
         $view = $this->lpView($s1, $lp, self::COURSE, 100);
         $itemView = $this->lpItemView($item, $view, 60, 5, 0);
-        // Two attempts in the LP: the latest by date (8) is the one that counts, not the best (9).
+        // Two attempts in the LP: the best one counts (owner decision: attempts are no longer averaged nor is
+        // the latest taken): 9 of 20 first, the later 8 does not replace it.
         $this->exercise($s1, self::COURSE, null, $quiz, '2001-02-01 10:00:00', 9, 20, '', $lp, $item, $itemView);
         $last = $this->exercise($s1, self::COURSE, null, $quiz, '2001-02-02 10:00:00', 8, 20, '', $lp, $item, $itemView);
         // An attempt flagged "incomplete" and one outside the LP are ignored.
         $this->exercise($s1, self::COURSE, null, $quiz, '2001-02-03 10:00:00', 20, 20, 'incomplete', $lp, $item, $itemView);
         $this->exercise($s1, self::COURSE, null, $quiz, '2001-02-04 10:00:00', 20, 20, '', 0, 0, 0);
 
-        // Without recorded questions the max score is the one of the LP item (20): 5 (item view score) / 20.
-        $this->assertSame(25.0, Tracking::get_avg_student_score($s1, $course, [$lp]));
+        // Without recorded questions the max score is the one of the LP item (20): best attempt 9 / 20.
+        $this->assertSame(45.0, Tracking::get_avg_student_score($s1, $course, [$lp]));
+        // The latest attempt keeps its own mode: the score saved in the item view (5) / 20.
+        $this->assertSame(25.0, Tracking::get_avg_student_score($s1, $course, [$lp], null, false, true));
 
-        // With the questions of the last attempt (ponderation 5 + 5 = 10) the maximum comes from them.
+        // The questions of the last attempt (ponderation 5 + 5 = 10) give it a maximum of 10: its ratio (8/10) now
+        // beats the 9 of 20 of the first attempt although its score is lower.
         foreach ([1, 2] as $n) {
             $this->conn->executeStatement(
                 "INSERT INTO c_quiz_question (question, position, type, level, mandatory, ponderation) VALUES ('tc_q', ?, 1, 1, 0, 5)",
@@ -1170,7 +1174,9 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
                 [$last, $s1, $questionId]
             );
         }
-        $this->assertSame(50.0, Tracking::get_avg_student_score($s1, $course, [$lp]));
+        $this->assertSame(80.0, Tracking::get_avg_student_score($s1, $course, [$lp]));
+        // Latest mode: the maximum also comes from the questions of the latest attempt (5 / 10).
+        $this->assertSame(50.0, Tracking::get_avg_student_score($s1, $course, [$lp], null, false, true));
     }
 
     public function testAvgStudentScoreLatestAndBestAttemptModes(): void
@@ -1187,12 +1193,36 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
             [$item, $view, $item, $view]
         );
 
-        // Default: every try is a row of its own, and each also counts as an item: (0.9 + 0.4) / 2 = 65%.
-        $this->assertSame(65.0, Tracking::get_avg_student_score($s1, $course, [$lp]));
+        // Default: the BEST try of the item (9 of 10), never the average of the tries (it was (0.9 + 0.4) / 2 = 65%,
+        // each try counting as an item of its own).
+        $this->assertSame(90.0, Tracking::get_avg_student_score($s1, $course, [$lp]));
         // Latest only: the try with the highest view_count (4 of 10).
         $this->assertSame(40.0, Tracking::get_avg_student_score($s1, $course, [$lp], null, false, true));
         // Best only: the try with the highest score (9 of 10).
         $this->assertSame(90.0, Tracking::get_avg_student_score($s1, $course, [$lp], null, false, false, true));
+    }
+
+    public function testAvgStudentScoreBestAttemptIsTheBestRatioNotTheHighestScore(): void
+    {
+        $s1 = $this->user('tc_s1');
+        $course = $this->courseEntity();
+        // use_max_score off and no max on the item: each try carries its own max score.
+        [$lp] = $this->lp(self::COURSE, null, 0);
+        $item = $this->lpItem($lp, 'sco', 0, 1);
+        $view = $this->lpView($s1, $lp, self::COURSE, 100);
+        $this->conn->executeStatement(
+            "INSERT INTO c_lp_item_view (lp_item_id, lp_view_id, view_count, start_time, total_time, score, max_score, status)
+             VALUES (?, ?, 1, 1, 10, 9, 20, 'completed'), (?, ?, 2, 1, 10, 4, 5, 'completed'), (?, ?, 3, 1, 10, 1, 5, 'completed')",
+            [$item, $view, $item, $view, $item, $view]
+        );
+
+        // 9/20 = 45%, 4/5 = 80%, 1/5 = 20%: the second try wins although its score is not the highest.
+        $this->assertSame(80.0, Tracking::get_avg_student_score($s1, $course, [$lp]));
+        $this->assertSame(80.0, Tracking::get_avg_student_score($s1, $course, [$lp], null, false, false, true));
+        // Latest try: 1/5.
+        $this->assertSame(20.0, Tracking::get_avg_student_score($s1, $course, [$lp], null, false, true));
+        // One item counts once, however many tries it has.
+        $this->assertSame([80.0, 1], Tracking::get_avg_student_score($s1, $course, [$lp], null, true));
     }
 
     public function testAvgStudentScoreOfSeveralStudentsIsNotDividedByTheirNumber(): void

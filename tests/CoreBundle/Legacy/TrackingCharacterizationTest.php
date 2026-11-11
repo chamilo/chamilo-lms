@@ -579,6 +579,32 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         $this->assertSame(0, Tracking::getAverageStudentScore(0, $code, [$lp], 0));
     }
 
+    public function testAverageStudentScoreCountsTheBestAttemptOfEachItemNotEveryAttempt(): void
+    {
+        [$lp] = $this->seedLearningPath();
+        $code = $this->course->getCode();
+        $sco = (int) $this->conn->fetchOne("SELECT iid FROM c_lp_item WHERE lp_id = ? AND item_type = 'sco'", [$lp]);
+        $view = (int) $this->conn->fetchOne('SELECT iid FROM c_lp_view WHERE lp_id = ? AND user_id = ? AND progress = 40', [$lp, $this->alice->getId()]);
+        // Two more tries of the same item in the same view: 9 of 10 (the best) and then 2 of 10 (the latest).
+        foreach ([[2, 9], [3, 2]] as [$count, $score]) {
+            $this->conn->insert('c_lp_item_view', [
+                'lp_item_id' => $sco,
+                'lp_view_id' => $view,
+                'view_count' => $count,
+                'start_time' => 1000000,
+                'total_time' => 10,
+                'score' => $score,
+                'status' => 'completed',
+            ]);
+        }
+
+        // Owner decision: one value per item, the best try. sco 9/10 + quiz 15/20 = 24/30 (it used to add every try:
+        // (5 + 9 + 2 + 15) / (10 + 10 + 10 + 20)).
+        $this->assertEqualsWithDelta(80.0, Tracking::getAverageStudentScore($this->alice->getId(), $code, [$lp], 0), 0.0001);
+        // The other learner is not affected by Alice's tries (0 of 10).
+        $this->assertEqualsWithDelta(0.0, Tracking::getAverageStudentScore($this->bob->getId(), $code, [$lp], 0), 0.0001);
+    }
+
     public function testAverageLpProgressForStudentListTakesBestViewPerLpAndCountsMissingAsZero(): void
     {
         [$lp, $lp2] = $this->seedLearningPath();

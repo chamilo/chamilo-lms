@@ -2963,51 +2963,22 @@ class Tracking
                     echo "getOnlyBestAttempt: $getOnlyBestAttempt <br />";
                 }
 
-                if ($get_only_latest_attempt_results || $getOnlyBestAttempt) {
-                    // Getting lp_items done by the user
-                    $sql = "SELECT DISTINCT lp_item_id
-                            FROM $lp_item_view_table
-                            WHERE
-                                lp_view_id = $lp_view_id
-                            ORDER BY lp_item_id";
-                    $res_lp_item = Database::query($sql);
+                // One attempt per item: the latest one when asked for, otherwise the BEST one (highest
+                // score/max_score ratio, ties go to the latest). Attempts are never averaged.
+                $getOnlyBestAttempt = !$get_only_latest_attempt_results;
 
-                    while ($row_lp_item = Database::fetch_assoc($res_lp_item)) {
-                        $my_lp_item_id = $row_lp_item['lp_item_id'];
-                        $order = ' view_count DESC';
-                        if ($getOnlyBestAttempt) {
-                            $order = ' lp_iv.score DESC';
-                        }
+                // Getting lp_items done by the user
+                $sql = "SELECT DISTINCT lp_item_id
+                        FROM $lp_item_view_table
+                        WHERE
+                            lp_view_id = $lp_view_id
+                        ORDER BY lp_item_id";
+                $res_lp_item = Database::query($sql);
 
-                        // Getting the most recent attempt
-                        $sql = "SELECT
-                                    lp_iv.iid as lp_item_view_id,
-                                    lp_iv.score as score,
-                                    lp_i.max_score,
-                                    lp_iv.max_score as max_score_item_view,
-                                    lp_i.path,
-                                    lp_i.item_type,
-                                    lp_i.iid
-                                FROM $lp_item_view_table as lp_iv
-                                INNER JOIN $lp_item_table as lp_i
-                                ON (
-                                    lp_i.iid = lp_iv.lp_item_id
-                                )
-                                WHERE
-                                    lp_item_id = $my_lp_item_id AND
-                                    lp_view_id = $lp_view_id AND
-                                    (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."')
-                                ORDER BY $order
-                                LIMIT 1";
+                while ($row_lp_item = Database::fetch_assoc($res_lp_item)) {
+                    $my_lp_item_id = (int) $row_lp_item['lp_item_id'];
 
-                        $res_lp_item_result = Database::query($sql);
-                        while ($row_max_score = Database::fetch_assoc($res_lp_item_result)) {
-                            $list[] = $row_max_score;
-                        }
-                    }
-                } else {
-                    // For the currently analysed view, get the score and
-                    // max_score of each item if it is a sco or a TOOL_QUIZ
+                    // All the attempts of the item, the most recent first
                     $sql = "SELECT
                                 lp_iv.iid as lp_item_view_id,
                                 lp_iv.score as score,
@@ -3016,16 +2987,40 @@ class Tracking
                                 lp_i.path,
                                 lp_i.item_type,
                                 lp_i.iid
-                              FROM $lp_item_view_table as lp_iv
-                              INNER JOIN $lp_item_table as lp_i
-                              ON lp_i.iid = lp_iv.lp_item_id
-                              WHERE
+                            FROM $lp_item_view_table as lp_iv
+                            INNER JOIN $lp_item_table as lp_i
+                            ON (
+                                lp_i.iid = lp_iv.lp_item_id
+                            )
+                            WHERE
+                                lp_item_id = $my_lp_item_id AND
                                 lp_view_id = $lp_view_id AND
                                 (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."')
-                            ";
-                    $res_max_score = Database::query($sql);
-                    while ($row_max_score = Database::fetch_assoc($res_max_score)) {
-                        $list[] = $row_max_score;
+                            ORDER BY lp_iv.view_count DESC, lp_iv.iid DESC";
+
+                    $res_lp_item_result = Database::query($sql);
+                    $bestRow = null;
+                    $bestRatio = null;
+                    while ($row_attempt = Database::fetch_assoc($res_lp_item_result)) {
+                        if (!$getOnlyBestAttempt) {
+                            $bestRow = $row_attempt;
+                            break;
+                        }
+                        $attemptMax = (float) $row_attempt['max_score'];
+                        if ($attemptMax <= 0) {
+                            $attemptMax = !empty($use_max_score[$lp_id]) && 'sco' === $row_attempt['item_type']
+                                ? 100.0
+                                : (float) $row_attempt['max_score_item_view'];
+                        }
+                        $ratio = $attemptMax > 0 ? (float) $row_attempt['score'] / $attemptMax : 0.0;
+                        // Strictly greater: on a tie the first row, i.e. the latest attempt, is kept.
+                        if (null === $bestRatio || $ratio > $bestRatio) {
+                            $bestRatio = $ratio;
+                            $bestRow = $row_attempt;
+                        }
+                    }
+                    if (null !== $bestRow) {
+                        $list[] = $bestRow;
                     }
                 }
 
@@ -3080,7 +3075,8 @@ class Tracking
                         // the current lp for the current user
                         $order = 'exe_date DESC';
                         if ($getOnlyBestAttempt) {
-                            $order = 'score DESC';
+                            // The best attempt is chosen below, by ratio: the latest ones come first for the ties.
+                            $order = 'exe_date DESC, exe_id DESC';
                         }
                         $sql = "SELECT exe_id, score
                                 FROM $tbl_stats_exercices
@@ -3093,15 +3089,55 @@ class Tracking
                                     status = ''
                                     $sessionCondition
                                 ORDER BY $order
-                                LIMIT 1";
+                                ".($getOnlyBestAttempt ? '' : 'LIMIT 1');
 
                         $result_last_attempt = Database::query($sql);
                         $num = Database::num_rows($result_last_attempt);
                         if ($num > 0) {
-                            $attemptResult = Database::fetch_assoc($result_last_attempt);
+                            // Within an attempt, the sum of the max_scores of all questions that it was made of
+                            // (this has to be dynamic because of random questions selection)
+                            $attemptMaxScore = static function ($exeId) use ($tbl_stats_attempts, $tbl_quiz_questions) {
+                                $sql = "SELECT SUM(t.ponderation) as maxscore FROM
+                                            (
+                                                SELECT DISTINCT
+                                                    question_id,
+                                                    marks,
+                                                    ponderation
+                                                FROM $tbl_stats_attempts AS at
+                                                INNER JOIN $tbl_quiz_questions AS q
+                                                ON (q.iid = at.question_id)
+                                                WHERE
+                                                    exe_id ='$exeId'
+                                            )
+                                            AS t";
+                                $row = Database::fetch_array(Database::query($sql));
+
+                                return $row['maxscore'] ?? null;
+                            };
+
+                            $attemptResult = null;
+                            $bestAttemptRatio = null;
+                            while ($candidate = Database::fetch_assoc($result_last_attempt)) {
+                                if (!$getOnlyBestAttempt) {
+                                    $attemptResult = $candidate;
+                                    break;
+                                }
+                                $candidateMax = $attemptMaxScore($candidate['exe_id']);
+                                if (empty($candidateMax)) {
+                                    $candidateMax = $max_score;
+                                }
+                                $candidateRatio = !empty($candidateMax) && (float) $candidateMax > 0
+                                    ? (float) $candidate['score'] / (float) $candidateMax
+                                    : 0.0;
+                                // Strictly greater: the candidates come latest first, so a tie keeps the latest.
+                                if (null === $bestAttemptRatio || $candidateRatio > $bestAttemptRatio) {
+                                    $bestAttemptRatio = $candidateRatio;
+                                    $attemptResult = $candidate;
+                                }
+                            }
                             $id_last_attempt = $attemptResult['exe_id'];
-                            // We overwrite the score with the best one not the one saved in the LP (latest)
-                            if ($getOnlyBestAttempt && false == $get_only_latest_attempt_results) {
+                            // We overwrite the score with the one of the chosen attempt, not the one saved in the LP
+                            if ($getOnlyBestAttempt) {
                                 if ($debug) {
                                     echo "Following score comes from the track_exercise table not in the LP because the score is the best<br />";
                                 }
@@ -3111,28 +3147,10 @@ class Tracking
                             if ($debug) {
                                 echo "Attempt id: $id_last_attempt with score $score<br />";
                             }
-                            // Within the last attempt number tracking, get the sum of
-                            // the max_scores of all questions that it was
-                            // made of (we need to make this call dynamic because of random questions selection)
-                            $sql = "SELECT SUM(t.ponderation) as maxscore FROM
-                                        (
-                                            SELECT DISTINCT
-                                                question_id,
-                                                marks,
-                                                ponderation
-                                            FROM $tbl_stats_attempts AS at
-                                            INNER JOIN $tbl_quiz_questions AS q
-                                            ON (q.iid = at.question_id)
-                                            WHERE
-                                                exe_id ='$id_last_attempt'
-                                        )
-                                        AS t";
 
-                            $res_max_score_bis = Database::query($sql);
-                            $row_max_score_bis = Database::fetch_array($res_max_score_bis);
-
-                            if (!empty($row_max_score_bis['maxscore'])) {
-                                $max_score = $row_max_score_bis['maxscore'];
+                            $attemptMax = $attemptMaxScore($id_last_attempt);
+                            if (!empty($attemptMax)) {
+                                $max_score = $attemptMax;
                             }
                             if (!empty($max_score) && floatval($max_score) > 0) {
                                 $lpPartialTotal += $score / $max_score;
@@ -3289,7 +3307,20 @@ class Tracking
                     lp_i.iid = lp_iv.lp_item_id AND
                     lp_iv.lp_view_id = lp_view.iid
                 WHERE (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."') AND
-                $conditionsToString
+                $conditionsToString AND
+                lp_iv.iid = (
+                    -- only the BEST attempt of each item per learner and session is counted, never every attempt
+                    SELECT best_iv.iid
+                    FROM $lp_item_view_table AS best_iv
+                    INNER JOIN $lp_view_table AS best_view
+                    ON best_view.iid = best_iv.lp_view_id
+                    WHERE
+                        best_iv.lp_item_id = lp_i.iid AND
+                        best_view.user_id = lp_view.user_id AND
+                        best_view.session_id <=> lp_view.session_id
+                    ORDER BY best_iv.score DESC, best_iv.view_count DESC, best_iv.iid DESC
+                    LIMIT 1
+                )
         ";
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);

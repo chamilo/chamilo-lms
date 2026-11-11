@@ -31,19 +31,9 @@ if (empty($group_id)) {
     if (empty($group_info)) {
         api_not_allowed(true);
     }
-    $user_role = $userGroup->get_user_group_role(
-        api_get_user_id(),
-        $group_id
-    );
-    if (!in_array(
-        $user_role,
-        [
-            GROUP_USER_PERMISSION_ADMIN,
-            GROUP_USER_PERMISSION_MODERATOR,
-            GROUP_USER_PERMISSION_READER,
-        ]
-    )
-    ) {
+    // Role 0 means reader AND no relation at all: canViewGroupMembers() checks the relation row.
+    $user_role = $userGroup->get_user_group_role(api_get_user_id(), $group_id);
+    if (!$userGroup->canViewGroupMembers($group_id)) {
         api_not_allowed(true);
     }
 }

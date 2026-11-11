@@ -532,6 +532,32 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->assertFalse($this->model->canInviteToGroup($other->getId(), $admin->getId()));
     }
 
+    public function testCanViewGroupMembersRequiresARealRelation(): void
+    {
+        $group = $this->group('ug_social', Usergroup::SOCIAL_CLASS);
+        $admin = $this->createUser('ug_admin');
+        $mod = $this->createUser('ug_mod');
+        $reader = $this->createUser('ug_reader');
+        $legacyReader = $this->createUser('ug_legacy');
+        $invited = $this->createUser('ug_invited');
+        $stranger = $this->createUser('ug_stranger');
+        $this->addUser($group, $admin, 1);
+        $this->addUser($group, $mod, 5);
+        $this->addUser($group, $reader, 0);
+        $this->addUser($group, $legacyReader, 2);
+        $this->addUser($group, $invited, 3);
+
+        $this->assertTrue($this->model->canViewGroupMembers($group->getId(), $admin->getId()));
+        $this->assertTrue($this->model->canViewGroupMembers($group->getId(), $mod->getId()));
+        $this->assertTrue($this->model->canViewGroupMembers($group->getId(), $reader->getId()));
+        $this->assertTrue($this->model->canViewGroupMembers($group->getId(), $legacyReader->getId()));
+        // get_user_group_role() returns 0 (reader) for a user with no relation at all: the members list
+        // of a closed group must not be shown to that user.
+        $this->assertFalse($this->model->canViewGroupMembers($group->getId(), $stranger->getId()));
+        $this->assertFalse($this->model->canViewGroupMembers($group->getId(), $invited->getId()));
+        $this->assertFalse($this->model->canViewGroupMembers($group->getId(), 0));
+    }
+
     public function testUpdateUserRoleAndDeleteUserRelGroup(): void
     {
         $group = $this->group('ug_social', Usergroup::SOCIAL_CLASS);

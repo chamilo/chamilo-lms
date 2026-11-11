@@ -2284,6 +2284,53 @@ class UserGroupModel extends Model
     }
 
     /**
+     * Whether a row exists in usergroup_rel_user for this user and group, whatever its role.
+     * get_user_group_role() cannot tell: it returns 0 both for a reader and for "no relation".
+     *
+     * @param int $group_id
+     * @param int $user_id
+     *
+     * @return bool
+     */
+    public function hasRelation($group_id, $user_id)
+    {
+        $user_id = (int) $user_id;
+        $group_id = (int) $group_id;
+        if (empty($user_id) || empty($group_id)) {
+            return false;
+        }
+        $result = Database::query(
+            "SELECT 1 FROM $this->usergroup_rel_user_table
+             WHERE usergroup_id = $group_id AND user_id = $user_id
+             LIMIT 1"
+        );
+
+        return Database::num_rows($result) > 0;
+    }
+
+    /**
+     * Whether the user may see the members list of the group: group admin, moderator or a reader
+     * who really has a relation row (a stranger also gets role 0).
+     *
+     * @param int $group_id
+     * @param int $user_id  0 for the current user
+     *
+     * @return bool
+     */
+    public function canViewGroupMembers($group_id, $user_id = 0)
+    {
+        if (empty($user_id)) {
+            $user_id = api_get_user_id();
+        }
+        $user_role = $this->get_user_group_role($user_id, $group_id);
+        if (in_array($user_role, [GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR])) {
+            return true;
+        }
+
+        return GROUP_USER_PERMISSION_READER === $user_role && $this->hasRelation($group_id, $user_id);
+    }
+
+    /**
      * @param int $group_id
      * @param int $user_id
      *

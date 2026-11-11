@@ -68,16 +68,15 @@ Feature: Test attempts inside a learning path
     And I wait for the page content to settle
     Then I should see "Describe the learning path"
 
-  # A new test is hidden, and the learning path builder only lists visible ones (unless
-  # lp.show_invisible_exercise_in_lp_list is on).
-  Scenario: Make the test visible
+  # A new test is created visible by default (the platform's default visibility on creation), and the learning
+  # path builder only lists visible ones (unless lp.show_invisible_exercise_in_lp_list is on): check that it is.
+  Scenario: The test is visible
     Given I am a platform administrator
     And I wait for the page to be loaded
     And I am on course "LPQUIZHIST" homepage
     And I wait for the page to be loaded
     And I follow "Tests"
     And I wait for the page content to settle
-    When I click the "[title='Activate']" icon in the row for "Learning path quiz"
     Then I wait for the element "tr:has-text('Learning path quiz') [title='Deactivate']" to appear
 
   Scenario: Create a learning path holding the test

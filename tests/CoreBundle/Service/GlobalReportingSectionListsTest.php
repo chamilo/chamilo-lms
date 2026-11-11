@@ -970,6 +970,30 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
         $this->assertArrayNotHasKey('email', $row);
     }
 
+    /**
+     * Fixed: a trainer who also coaches sessions of another portal had those sessions and their courses counted in
+     * this portal's overview. Only the sessions linked to the current access URL count.
+     */
+    public function testAdminCoachesCountOnlyTheSessionsOfTheCurrentUrl(): void
+    {
+        $other = $this->secondUrl();
+        $coach = $this->rawUser('r2k4', self::TEACHER);
+        $mine = $this->rawSession('r2k4');
+        $foreign = $this->rawSession('r2k5', $other);
+        $this->sessionUser($mine, $coach, 3);
+        $this->sessionUser($foreign, $coach, 3);
+        $this->sessionCourseUser($mine, 1, $coach, 2);
+        $this->sessionCourseUser($foreign, 2, $coach, 2);
+
+        $row = array_values(array_filter(
+            $this->section($this->admin(), 'admin-coaches', ['itemsPerPage' => 100])['items'],
+            static fn (array $r): bool => $r['id'] === $coach
+        ))[0];
+
+        $this->assertSame(1, $row['sessions'], 'the session of the other portal is not ours');
+        $this->assertSame(1, $row['courses'], 'nor is the course the coach only follows there');
+    }
+
     public function testAdminCoachesArePagedAlphabetically(): void
     {
         $ids = [];

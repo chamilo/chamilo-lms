@@ -4195,8 +4195,14 @@ final readonly class GlobalReportingSectionQueryService
                    ON access_user.user_id = usr.id AND access_user.access_url_id = :accessUrlId
                LEFT JOIN session_rel_user session_relation
                    ON session_relation.user_id = usr.id AND session_relation.relation_type = 3
+                  AND EXISTS (SELECT 1 FROM access_url_rel_session session_url
+                               WHERE session_url.session_id = session_relation.session_id
+                                 AND session_url.access_url_id = :accessUrlId)
                LEFT JOIN session_rel_course_rel_user course_relation
                    ON course_relation.user_id = usr.id AND course_relation.status = 2
+                  AND EXISTS (SELECT 1 FROM access_url_rel_session course_session_url
+                               WHERE course_session_url.session_id = course_relation.session_id
+                                 AND course_session_url.access_url_id = :accessUrlId)
                LEFT JOIN track_e_login login ON login.login_user_id = usr.id
               WHERE usr.status = :teacherStatus
            GROUP BY usr.id, usr.official_code, usr.firstname, usr.lastname, usr.username, usr.email

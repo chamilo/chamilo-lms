@@ -255,6 +255,24 @@ final class SurveyAccessControlTest extends KernelTestCase
         $this->assertFalse(SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false), 'coach is not course teacher');
     }
 
+    public function testCopyTargetSessionAdminMayCopyIntoTheSessionsHeManagesOnly(): void
+    {
+        $sid = $this->session();
+        $other = $this->session();
+        foreach ([$sid, $other] as $id) {
+            $this->conn->insert('session_rel_course', ['session_id' => $id, 'c_id' => 2, 'position' => 0, 'nbr_users' => 0]);
+        }
+        $this->conn->insert('session_rel_user', [
+            'session_id' => $sid, 'user_id' => self::PLAIN_USER, 'relation_type' => 4, 'duration' => 0,
+            'registered_at' => '2026-01-01 00:00:00',
+        ]);
+
+        $this->assertTrue(SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, $sid, false, true));
+        $this->assertFalse(SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, $other, false, true), 'session not managed');
+        $this->assertFalse(SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, 0, false, true), 'no base-course rights');
+        $this->assertFalse(SurveyManager::canCopySurveyTo(self::PLAIN_USER, 2, $sid, false, false), 'not a session admin role');
+    }
+
     public function testOnlyInvitedUsersMayAnswerAndOnlyInTheCourseOfTheInvitation(): void
     {
         $id = $this->survey();

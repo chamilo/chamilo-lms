@@ -69,7 +69,7 @@ if ($form->validate() && Security::check_token('post')) {
     $sessionId = (int) ($courseParts[1] ?? 0);
 
     // The target is a free form value: the user must be allowed to add content to it.
-    if (!SurveyManager::canCopySurveyTo(api_get_user_id(), $courseId, $sessionId, api_is_platform_admin())) {
+    if (!SurveyManager::canCopySurveyTo(api_get_user_id(), $courseId, $sessionId, api_is_platform_admin(), api_is_session_admin())) {
         api_not_allowed(true);
     }
 

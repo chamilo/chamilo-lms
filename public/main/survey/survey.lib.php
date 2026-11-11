@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
@@ -2189,10 +2190,10 @@ class SurveyManager
     /**
      * Tells whether a user may write a survey into the given target course (and session): the course must exist,
      * the session (when given) must contain the course, and the user must be a platform admin, a teacher of the
-     * course or (for a session) a coach of the course in that session. copy_survey.php used to trust the target
+     * course, a coach of the course in that session or a session admin of that session. copy_survey.php used to trust the target
      * posted by the form.
      */
-    public static function canCopySurveyTo(int $userId, int $courseId, int $sessionId, bool $isPlatformAdmin): bool
+    public static function canCopySurveyTo(int $userId, int $courseId, int $sessionId, bool $isPlatformAdmin, bool $isSessionAdmin = false): bool
     {
         if ($courseId <= 0 || $sessionId < 0 || $userId <= 0) {
             return false;
@@ -2221,9 +2222,21 @@ class SurveyManager
             return true;
         }
 
-        return $sessionId > 0 && false !== $connection->fetchOne(
+        if ($sessionId <= 0) {
+            return false;
+        }
+
+        if (false !== $connection->fetchOne(
             'SELECT id FROM session_rel_course_rel_user WHERE session_id = ? AND c_id = ? AND user_id = ? AND status = 2',
             [$sessionId, $courseId, $userId]
+        )) {
+            return true;
+        }
+
+        // A session admin may write into the sessions he is registered to as session admin (relation_type 4).
+        return $isSessionAdmin && false !== $connection->fetchOne(
+            'SELECT id FROM session_rel_user WHERE session_id = ? AND user_id = ? AND relation_type = ?',
+            [$sessionId, $userId, SessionEntity::SESSION_ADMIN]
         );
     }
 

@@ -12,16 +12,15 @@
   var ART_SCALE = 2;
   var BUILD_SPEED = 27;
   var ATTACK_DELAY_MS = 1150;
-  var ATTACK_DURATION_MS = 4400;
+  var ATTACK_DURATION_MS = 5200;
   var DEFAULT_STAGES = ['Unprotected', 'Fence', 'Palisade', 'Stone walls', 'Castle', 'Fortified castle'];
   var TARGET_PIECES = [0, 20, 43, 69, 91, 105];
   var COLOR = {
     sky: '#111d36', skyLight: '#263452', moon: '#ffe6ae',
     hill: '#2c5460', hillFar: '#263c56', ground: '#244a42',
     wall: '#aab1c5', wallDark: '#5e6887', wallLight: '#e2d7cb',
-    wood: '#a97855', woodDark: '#523e51', water: '#327c9b',
-    ripple: '#9be4d9', banner: '#e58a76', raccoon: '#c0c2c0',
-    raccoonDark: '#353e54', stars: '#eff0df', leaf: '#73c5a7',
+    wood: '#a97855', woodDark: '#523e51', rope: '#e4c2a3', water: '#327c9b',
+    ripple: '#9be4d9', banner: '#e58a76', stars: '#eff0df', leaf: '#73c5a7',
     leafDark: '#318a86', ember: '#ffc26e', fire: '#f17d65',
     gold: '#f5cd75', dust: '#e4c2a3', grass: '#39775c',
     stoneDeep: '#414e6f', stoneMid: '#8996b0', brick: '#d3c6c1',
@@ -30,6 +29,9 @@
     light: '#ffdc90', cloud: '#34425d',
     rim: '#fff4d8', stoneShade: '#485672', copper: '#eea775',
     sparkle: '#fcf1be', stoneTop: '#e9e3db',
+    fox: '#df8240', foxLight: '#ffbc69', foxDark: '#92503e', foxCream: '#fff0c3',
+    guardian: '#0568ad', guardianLight: '#34bfe7', guardianDark: '#052d69',
+    guardianRim: '#d4f2fa', guardianCrest: '#ff842d', guardianCrestLight: '#ffd078',
   };
 
   function rect(ctx, x, y, w, h, color) {
@@ -149,7 +151,7 @@
     rect(ctx, x - 2, y - size + 4, 2, 3, COLOR.spruceLight);
   }
 
-  function background(ctx, seconds, showChest) {
+  function background(ctx, seconds) {
     // Stacked twilight bands preserve sharp pixels without gradients or image assets.
     rect(ctx, 0, 0, WIDTH, HEIGHT, COLOR.sky);
     rect(ctx, 0, 32, WIDTH, 28, '#192846');
@@ -217,15 +219,17 @@
     rect(ctx, 54, 111, 7, 5, COLOR.stoneDeep);
     rect(ctx, 198, 112, 9, 4, COLOR.stoneDeep);
 
-    // The treasure is decorative and vanishes after a successful low-level raid.
-    if (showChest) {
-      rect(ctx, 123, 95, 17, 12, COLOR.outline);
-      rect(ctx, 125, 93, 13, 5, COLOR.wood);
-      rect(ctx, 126, 98, 11, 7, '#9f654b');
-      rect(ctx, 130, 94, 3, 12, COLOR.gold);
-      rect(ctx, 126, 100, 11, 2, COLOR.gold);
-      rect(ctx, 131, 100, 2, 2, '#fff1b9');
-    }
+    // The chest is drawn in front of the weaker structures to keep the raid readable.
+  }
+
+  function treasureChest(ctx, x, y) {
+    rect(ctx, x, y + 2, 17, 12, COLOR.outline);
+    rect(ctx, x + 2, y, 13, 5, COLOR.wood);
+    rect(ctx, x + 3, y + 5, 11, 7, '#9f654b');
+    rect(ctx, x + 7, y + 1, 3, 12, COLOR.gold);
+    rect(ctx, x + 3, y + 7, 11, 2, COLOR.gold);
+    rect(ctx, x + 8, y + 7, 2, 2, '#fff1b9');
+    rect(ctx, x + 3, y + 1, 9, 1, '#e2af7c');
   }
 
   function brickwork(ctx, x, y, columns, rows, cellW, cellH) {
@@ -590,49 +594,200 @@
     }
   }
 
-  function raccoon(ctx, x, y, progress, options) {
-    var legSwing = options.walk ? (Math.sin(progress * 20) > 0 ? 2 : -2) : 0;
+  function fox(ctx, x, y, progress, options) {
+    var step = options.walk ? (Math.sin(progress * 19) > 0 ? 2 : -2) : 0;
     var facing = options.facing === 'left' ? -1 : 1;
     ctx.save();
     ctx.translate(Math.round(x), Math.round(y));
     ctx.scale(facing, 1);
-    // A bush hides the raccoon at the end of the dragon attack.
+
     if (options.hidden) {
-      rect(ctx, -13, 6, 29, 10, COLOR.spruce);
-      rect(ctx, -8, 1, 21, 10, COLOR.grass);
-      rect(ctx, -3, -2, 12, 6, COLOR.spruceLight);
-      rect(ctx, 1, 5, 2, 2, COLOR.stars);
+      rect(ctx, -20, 10, 45, 7, COLOR.spruce);
+      rect(ctx, -13, 4, 34, 9, COLOR.grass);
+      rect(ctx, 1, 0, 14, 6, COLOR.spruceLight);
+      rect(ctx, 6, 6, 2, 2, COLOR.stars);
       ctx.restore();
       return;
     }
-    // Banded tail and rounded body, with bold, recognizable eye mask.
-    rect(ctx, -20, 5, 11, 8, COLOR.outline);
-    rect(ctx, -22, 7, 5, 4, COLOR.raccoon);
-    rect(ctx, -19, 5, 4, 6, COLOR.raccoon);
-    rect(ctx, -15, 6, 3, 6, COLOR.raccoonDark);
-    rect(ctx, -12, 7, 3, 6, COLOR.raccoon);
-    rect(ctx, -9, 5, 19, 12, COLOR.outline);
-    rect(ctx, -7, 6, 16, 10, options.wet ? '#80b6c2' : '#9d9da6');
-    rect(ctx, 2, 8, 6, 5, COLOR.raccoon);
-    rect(ctx, -5, 15 + legSwing, 5, 5, COLOR.outline);
-    rect(ctx, 6, 15 - legSwing, 5, 5, COLOR.outline);
-    // Ear tips, face, bright cheeks and a small nose.
-    rect(ctx, -1, -6, 5, 7, COLOR.outline);
-    rect(ctx, 11, -6, 5, 7, COLOR.outline);
-    rect(ctx, 0, -4, 4, 5, COLOR.raccoon);
-    rect(ctx, 12, -4, 3, 5, COLOR.raccoon);
-    rect(ctx, -2, -1, 18, 14, COLOR.outline);
-    rect(ctx, 0, 1, 16, 10, COLOR.raccoon);
-    rect(ctx, 1, 3, 6, 5, COLOR.raccoonDark);
-    rect(ctx, 10, 3, 5, 5, COLOR.raccoonDark);
-    rect(ctx, 3, 4, 2, 2, COLOR.stars);
-    rect(ctx, 11, 4, 2, 2, COLOR.stars);
-    rect(ctx, 6, 9, 5, 3, COLOR.wallLight);
-    rect(ctx, 7, 8, 3, 3, COLOR.outline);
-    if (options.sack) {
-      polygon(ctx, [[-14, 7], [-7, 5], [-4, 15], [-16, 18]], COLOR.gold);
-      rect(ctx, -11, 5, 4, 3, COLOR.woodDark);
-      rect(ctx, -11, 10, 2, 2, '#fff0af');
+
+    // Bushy tail, pointed ears and narrow muzzle distinguish the thief from the guardian.
+    polygon(ctx, [[-8, 8], [-17, 1], [-27, 0], [-24, 5], [-30, 7],
+      [-27, 12], [-17, 16], [-7, 13]], COLOR.outline);
+    polygon(ctx, [[-9, 7], [-17, 3], [-23, 2], [-21, 7], [-27, 8],
+      [-22, 12], [-15, 14], [-8, 11]], COLOR.foxDark);
+    polygon(ctx, [[-16, 4], [-22, 2], [-21, 7], [-26, 8], [-21, 11],
+      [-17, 12], [-19, 8]], COLOR.foxCream);
+
+    polygon(ctx, [[-13, 7], [-8, 0], [7, -1], [18, 5], [19, 13],
+      [13, 17], [-8, 16], [-13, 12]], COLOR.outline);
+    polygon(ctx, [[-11, 6], [-7, 1], [7, 1], [15, 5], [16, 12],
+      [10, 15], [-8, 14]], COLOR.fox);
+    polygon(ctx, [[-8, 2], [5, 0], [14, 5], [8, 6], [-8, 5]], COLOR.foxLight);
+    polygon(ctx, [[-7, 10], [2, 12], [14, 9], [11, 15], [-7, 14]], COLOR.foxCream);
+    for (var fur = 0; fur < 4; fur++) {
+      rect(ctx, -8 + fur * 5, 6 + (fur % 2), 3, 1, fur % 2 ? COLOR.foxDark : COLOR.foxLight);
+    }
+    rect(ctx, -4, 15 + step, 5, 5, COLOR.outline);
+    rect(ctx, -3, 16 + step, 4, 3, COLOR.foxDark);
+    rect(ctx, 9, 14 - step, 6, 6, COLOR.outline);
+    rect(ctx, 10, 15 - step, 4, 4, COLOR.foxDark);
+
+    // A larger front ear and a smaller rear ear make the fox silhouette unambiguous.
+    polygon(ctx, [[7, 0], [9, -12], [17, -6], [19, 1]], COLOR.outline);
+    polygon(ctx, [[10, -2], [11, -9], [16, -5], [17, 1]], COLOR.fox);
+    polygon(ctx, [[12, -6], [14, -4], [13, -1]], COLOR.roofLight);
+    polygon(ctx, [[18, 0], [21, -11], [27, -5], [28, 4]], COLOR.outline);
+    polygon(ctx, [[21, 0], [22, -7], [25, -4], [26, 3]], COLOR.foxLight);
+    polygon(ctx, [[22, -4], [24, -2], [23, 1]], COLOR.roofLight);
+
+    polygon(ctx, [[12, 2], [15, -4], [25, -5], [30, 0], [30, 5],
+      [36, 7], [36, 12], [26, 14], [15, 12]], COLOR.outline);
+    polygon(ctx, [[15, 2], [18, -3], [25, -3], [28, 1], [28, 6],
+      [34, 8], [33, 10], [25, 12], [17, 10]], COLOR.fox);
+    polygon(ctx, [[18, -3], [25, -2], [29, 2], [22, 3], [16, 4]], COLOR.foxLight);
+    polygon(ctx, [[18, 7], [26, 8], [34, 7], [33, 11], [25, 12], [20, 10]], COLOR.foxCream);
+    rect(ctx, 33, 8, 3, 3, COLOR.outline);
+    rect(ctx, 22, 2, 3, 3, COLOR.outline);
+    rect(ctx, 23, 2, 1, 1, COLOR.stars);
+    rect(ctx, 28, 11, 4, 1, COLOR.foxDark);
+
+    if (options.wet) {
+      rect(ctx, -1, 7, 3, 3, COLOR.ripple);
+      rect(ctx, 12, 11, 2, 3, COLOR.water);
+      rect(ctx, 23, 6, 2, 2, COLOR.ripple);
+    }
+    if (options.grab) {
+      rect(ctx, 34, 10, 8, 2, COLOR.fox);
+      rect(ctx, 40, 9, 3, 3, COLOR.foxDark);
+    }
+    if (options.carry) {
+      // The same treasure is visibly carried away, not replaced by an unrelated sack.
+      ctx.save();
+      ctx.translate(32, -2);
+      ctx.scale(0.82, 0.82);
+      treasureChest(ctx, 0, 0);
+      ctx.restore();
+      rect(ctx, 30, 8, 5, 2, COLOR.foxDark);
+    }
+    ctx.restore();
+  }
+
+  function guardianChameleon(ctx, x, y, seconds, alert) {
+    // Original 2.5D pixel-art guardian: blue scales, amber eye and orange crest.
+    // Photo-inspired palette, not the Chamilo logo or an embedded external image.
+    var breath = Math.round(Math.sin(seconds * 2.2) * 0.8);
+    ctx.save();
+    ctx.translate(Math.round(x), Math.round(y + breath));
+
+    // Grounding shadow and silhouette; the curled tail stays clearly separate from the fox.
+    ctx.save();
+    ctx.globalAlpha = 0.35;
+    rect(ctx, -25, 19, 69, 3, COLOR.outline);
+    ctx.restore();
+    ctx.beginPath();
+    for (var i = 0; i <= 48; i++) {
+      var portion = i / 48;
+      var angle = -0.25 + portion * Math.PI * 3.8;
+      var radius = 13.5 - portion * 11;
+      var px = -14 + Math.cos(angle) * radius;
+      var py = 6 + Math.sin(angle) * radius;
+      if (!i) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = COLOR.guardianDark;
+    ctx.stroke();
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = COLOR.guardian;
+    ctx.stroke();
+    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = COLOR.guardianLight;
+    ctx.stroke();
+
+    // Orange crown spikes are a signature feature of the supplied animal reference.
+    for (var crest = 0; crest < 5; crest++) {
+      var cx = -7 + crest * 6;
+      var tip = -12 - (crest % 3) * 3;
+      polygon(ctx, [[cx - 3, 4], [cx - 1, tip + 2],
+        [cx + 3, tip - 3], [cx + 5, 5]], COLOR.guardianDark);
+      polygon(ctx, [[cx - 1, 2], [cx, tip + 1],
+        [cx + 2, tip], [cx + 3, 4]], COLOR.guardianCrest);
+      rect(ctx, cx + 1, tip + 2, 1, 3, COLOR.guardianCrestLight);
+    }
+
+    // Torso: dark outline, upper turquoise planes and shaded underbelly.
+    polygon(ctx, [[-12, 9], [-9, 0], [-2, -4], [12, -3], [21, 3],
+      [20, 13], [13, 18], [-2, 18], [-10, 14]], COLOR.guardianDark);
+    polygon(ctx, [[-9, 8], [-6, 1], [1, -2], [12, -1], [19, 4],
+      [17, 12], [12, 15], [-1, 15], [-8, 12]], COLOR.guardian);
+    polygon(ctx, [[-6, 4], [3, -1], [14, 2], [16, 6], [3, 9], [-7, 8]], COLOR.guardianLight);
+    polygon(ctx, [[-6, 10], [6, 12], [17, 9], [12, 15], [-2, 16]], '#115188');
+    for (var scale = 0; scale < 12; scale++) {
+      var sx = -5 + (scale % 6) * 4;
+      var sy = 6 + Math.floor(scale / 6) * 4;
+      rect(ctx, sx + (scale % 2), sy, 2, 1,
+        scale % 3 === 0 ? '#a2edf4' : '#378ab9');
+    }
+
+    // Clawed feet keep the defender securely planted beside the gate.
+    rect(ctx, -1, 14, 7, 6, COLOR.guardianDark);
+    rect(ctx, 0, 15, 5, 4, COLOR.guardian);
+    rect(ctx, 1, 19, 7, 2, COLOR.guardianLight);
+    rect(ctx, 11, 13, 9, 7, COLOR.guardianDark);
+    rect(ctx, 13, 15, 6, 4, COLOR.guardian);
+    rect(ctx, 16, 19, 8, 2, COLOR.guardianLight);
+
+    // Three-dimensional casque and muzzle; highlights track the moonward upper face.
+    polygon(ctx, [[11, 3], [13, -7], [20, -12], [30, -12],
+      [34, -6], [32, 1], [40, 3], [44, 8], [39, 13],
+      [25, 14], [15, 11]], COLOR.guardianDark);
+    polygon(ctx, [[14, 2], [17, -7], [22, -10], [29, -9],
+      [32, -5], [30, 3], [38, 5], [41, 8], [37, 11],
+      [24, 12], [18, 10]], COLOR.guardian);
+    polygon(ctx, [[18, -6], [23, -10], [29, -8], [33, -4],
+      [30, -1], [22, -2]], COLOR.guardianLight);
+    polygon(ctx, [[30, 1], [36, 3], [41, 7], [35, 7], [29, 4]], '#58d0ef');
+    polygon(ctx, [[28, 9], [36, 9], [39, 11], [35, 12], [29, 12]], '#174679');
+    rect(ctx, 38, 5, 2, 2, COLOR.guardianDark);
+    rect(ctx, 34, 11, 4, 1, COLOR.guardianCrestLight);
+
+    // Ringed amber eye, dark pupil and reflective glint; blink very occasionally.
+    ctx.fillStyle = COLOR.guardianDark;
+    ctx.beginPath();
+    ctx.arc(23, -3, 7, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = COLOR.guardianCrest;
+    ctx.beginPath();
+    ctx.arc(23, -3, 5.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#ffe7ac';
+    ctx.beginPath();
+    ctx.arc(23, -3, 3.7, 0, Math.PI * 2);
+    ctx.fill();
+    if (Math.sin(seconds * 1.6) > 0.995) {
+      rect(ctx, 17, -4, 12, 2, COLOR.guardianDark);
+    } else {
+      ctx.fillStyle = COLOR.guardianDark;
+      ctx.beginPath();
+      ctx.arc(alert ? 25 : 24, -3, 2.6, 0, Math.PI * 2);
+      ctx.fill();
+      rect(ctx, 24, -5, 1, 2, COLOR.stars);
+    }
+    for (var spot = 0; spot < 6; spot++) {
+      var hx = 17 + (spot % 3) * 6;
+      var hy = 5 + Math.floor(spot / 3) * 4;
+      rect(ctx, hx, hy, 3, 1, spot % 2 ? COLOR.guardianLight : '#8cdcf1');
+    }
+
+    if (alert) {
+      // An understated protective shimmer accompanies the castle's existing arrow.
+      for (var shine = 0; shine < 4; shine++) {
+        var phase = seconds * 3.5 + shine * 2.4;
+        rect(ctx, -22 + shine * 19, -20 - Math.sin(phase) * 3,
+          2, 2, shine % 2 ? COLOR.guardianCrestLight : COLOR.ripple);
+      }
     }
     ctx.restore();
   }
@@ -665,38 +820,64 @@
     var t = ms / 1000;
     var x = 216;
     var y = 88;
-    var options = { facing: 'left', walk: true, sack: false, wet: false, hidden: false };
+    var options = { facing: 'left', walk: true, carry: false, grab: false, wet: false, hidden: false };
 
     if (level <= 1) {
-      if (t < 1.6) x = lerp(216, 137, t / 1.6);
-      else if (t < 2.2) {
-        x = 137;
+      // An unguarded chest or a simple rope fence cannot stop the first theft.
+      if (t < 1.35) x = lerp(216, 163, t / 1.35);
+      else if (t < 1.75) {
+        x = 163;
         options.walk = false;
+        options.grab = t < 1.55;
       } else {
-        x = lerp(137, 250, (t - 2.2) / 1.6);
+        x = lerp(163, 195, (t - 1.75) / 1.85);
         options.facing = 'right';
-        options.sack = true;
+        options.carry = true;
       }
-      raccoon(ctx, x, y, t, options);
+      if (t >= 3.6) {
+        x = 195;
+        options.walk = false;
+        options.carry = true;
+      }
+      fox(ctx, x, y, t, options);
       return;
     }
 
     if (level === 2) {
-      if (t < 1.15) x = lerp(216, 188, t / 1.15);
-      else if (t < 3.2) {
-        x = 188;
-        y = lerp(88, 60, (t - 1.15) / 2.05);
-      } else {
-        x = lerp(188, 238, (t - 3.2) / 1.2);
-        y = lerp(60, 88, (t - 3.2) / 1.2);
+      // The palisade costs time, but its ladder still lets the thief reach the chest.
+      if (t < 0.95) x = lerp(216, 195, t / 0.95);
+      else if (t < 2.05) {
+        x = 195;
+        y = lerp(88, 54, (t - 0.95) / 1.1);
+      } else if (t < 3.0) {
+        x = lerp(195, 163, (t - 2.05) / 0.95);
+        y = lerp(54, 88, (t - 2.05) / 0.95);
+      } else if (t < 3.35) {
+        x = 163;
+        options.walk = false;
+        options.grab = t < 3.15;
+      } else if (t < 4.2) {
+        x = lerp(163, 197, (t - 3.35) / 0.85);
+        y = lerp(88, 52, (t - 3.35) / 0.85);
         options.facing = 'right';
+        options.carry = true;
+      } else {
+        x = lerp(197, 195, (t - 4.2) / 0.75);
+        y = lerp(52, 88, (t - 4.2) / 0.75);
+        options.facing = 'right';
+        options.carry = true;
       }
-      if (t > 0.95 && t < 3.55) {
-        rect(ctx, 186, 58, 2, 48, COLOR.woodDark);
-        rect(ctx, 195, 58, 2, 48, COLOR.woodDark);
-        for (var rung = 0; rung < 6; rung++) rect(ctx, 186, 62 + rung * 7, 11, 2, COLOR.wood);
+      if (t >= 0.8 && t < 4.85) {
+        rect(ctx, 194, 60, 2, 47, COLOR.woodDark);
+        rect(ctx, 204, 60, 2, 47, COLOR.woodDark);
+        for (var rung = 0; rung < 6; rung++) rect(ctx, 194, 64 + rung * 7, 12, 2, COLOR.wood);
       }
-      raccoon(ctx, x, y, t, options);
+      if (t >= 4.95) {
+        x = 195;
+        y = 88;
+        options.walk = false;
+      }
+      fox(ctx, x, y, t, options);
       return;
     }
 
@@ -718,7 +899,7 @@
         rect(ctx, 154, 103 - Math.abs(splash) * 6, 5, 2, COLOR.ripple);
         rect(ctx, 175, 103 - Math.abs(splash) * 9, 4, 2, COLOR.ripple);
       }
-      raccoon(ctx, x, y, t, options);
+      fox(ctx, x, y, t, options);
       return;
     }
 
@@ -729,7 +910,7 @@
         options.walk = false;
         if (t > 1.3) arrow(ctx, range(t, 1.3, 2.0));
       } else {
-        x = lerp(188, 249, (t - 2.6) / 1.5);
+        x = lerp(188, 224, (t - 2.6) / 1.5);
         options.facing = 'right';
       }
       if (t > 1.9 && t < 2.35) {
@@ -741,12 +922,11 @@
         }
       }
       if (t > 1.4 && t < 2.6) {
-        // A small knight watches from the upper window.
         rect(ctx, 128, 54, 7, 9, COLOR.wallLight);
         rect(ctx, 130, 51, 4, 4, COLOR.gold);
         rect(ctx, 129, 58, 6, 2, COLOR.woodDark);
       }
-      raccoon(ctx, x, y, t, options);
+      fox(ctx, x, y, t, options);
       return;
     }
 
@@ -760,7 +940,11 @@
       options.facing = 'right';
       options.hidden = t > 3.55;
     }
-    raccoon(ctx, x, y, t, options);
+    fox(ctx, x, y, t, options);
+  }
+
+  function chestTaken(level, attackMs, stolen) {
+    return stolen || (level <= 1 && attackMs >= 1550) || (level === 2 && attackMs >= 3150);
   }
 
   function levelOf(value, policy) {
@@ -828,10 +1012,12 @@
     canvas.width = WIDTH * ART_SCALE;
     canvas.height = HEIGHT * ART_SCALE;
     ctx.setTransform(ART_SCALE, 0, 0, ART_SCALE, 0, 0);
-    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingEnabled = false;
     var policy = policyOf(root);
     var stages = stageNames(root);
     var suffix = root.getAttribute('data-visual-suffix') || 'Visual guide only';
+    var stolenLabel = root.getAttribute('data-stolen-label') || 'Treasure stolen';
+    var blockedLabel = root.getAttribute('data-blocked-label') || 'Attack blocked';
     var media = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
     var reduced = media ? media.matches : false;
     var container = root.closest('details');
@@ -840,9 +1026,10 @@
     var raf = 0;
     var timer = 0;
     var previousTimestamp = 0;
+    var lastInputValue = field.value;
     var state = {
       level: 0, target: 0, built: 0, pendingAttack: false, attackMs: -1,
-      seconds: 0, pulseMs: 0,
+      seconds: 0, pulseMs: 0, chestStolen: false, attackResult: '',
     };
 
     function canAnimate() {
@@ -855,15 +1042,31 @@
       previousTimestamp = 0;
     }
 
+    function updateStatus() {
+      var result = state.attackResult === 'stolen' ? stolenLabel :
+        state.attackResult === 'blocked' ? blockedLabel : '';
+      status.textContent = stages[state.level] + ' — ' + (result ? result + ' · ' : '') + suffix;
+      root.dataset.castleResult = state.attackResult || 'idle';
+    }
+
     function draw() {
       ctx.clearRect(0, 0, WIDTH, HEIGHT);
-      background(ctx, state.seconds, !(state.level <= 1 && state.attackMs > 1750));
+      background(ctx, state.seconds);
       building(ctx, state.built,
         canAnimate() && Math.abs(state.built - state.target) > 0.001);
       castleDetails(ctx, state.built, state.seconds);
+      if (state.level <= 2 && !chestTaken(state.level, state.attackMs, state.chestStolen)) {
+        treasureChest(ctx, 123, 93);
+      }
       drawRevealBurst(ctx, state.level, state.pulseMs);
+      if (state.level >= 4 && state.built >= TARGET_PIECES[4] - 4) {
+        guardianChameleon(ctx, 66, 86, state.seconds, state.attackMs >= 0 && state.attackMs > 950);
+      }
       if (state.attackMs >= 0) raid(ctx, state.level, state.attackMs);
-      else raccoon(ctx, 217, 88, 0, { facing: 'left', walk: false, wet: false, hidden: false, sack: false });
+      else if (state.level > 0) fox(ctx, state.chestStolen ? 195 : 212, 88, state.seconds, {
+        facing: state.chestStolen ? 'right' : 'left',
+        walk: false, hidden: false, grab: false, carry: state.chestStolen,
+      });
       // Small heraldic shields make progress readable without relying on color alone.
       for (var i = 0; i < 5; i++) {
         var x = 9 + i * 11;
@@ -894,7 +1097,12 @@
       }
       if (state.attackMs >= 0) {
         state.attackMs += elapsed;
-        if (state.attackMs >= ATTACK_DURATION_MS) state.attackMs = -1;
+        if (state.attackMs >= ATTACK_DURATION_MS) {
+          state.chestStolen = state.level <= 2;
+          state.attackResult = state.chestStolen ? 'stolen' : 'blocked';
+          state.attackMs = -1;
+          updateStatus();
+        }
       }
       draw();
       if (Math.abs(state.built - state.target) > 0.001 || state.attackMs >= 0 || state.pulseMs > 0) {
@@ -935,7 +1143,7 @@
     }
 
     function scheduleAttack() {
-      if (!canAnimate() || !field.value) return;
+      if (!canAnimate() || !field.value || timer || state.pendingAttack || state.attackMs >= 0 || state.attackResult) return;
       timer = window.setTimeout(function () {
         timer = 0;
         if (!canAnimate()) return;
@@ -945,15 +1153,19 @@
     }
 
     function update() {
+      if (field.value === lastInputValue) return;
+      lastInputValue = field.value;
       cancelAttack();
       stopAmbient();
       var previousLevel = state.level;
+      state.chestStolen = false;
+      state.attackResult = '';
       state.level = levelOf(field.value, policy);
       state.target = TARGET_PIECES[state.level];
       if (state.level > previousLevel && canAnimate()) state.pulseMs = 820;
       else if (state.level <= previousLevel) state.pulseMs = 0;
-      if (state.level !== previousLevel) status.textContent = stages[state.level] + ' — ' + suffix;
       root.dataset.castleLevel = String(state.level);
+      updateStatus();
       if (!canAnimate()) {
         stopFrame();
         state.built = state.target;
@@ -976,6 +1188,7 @@
     function resume() {
       if (!canAnimate()) return;
       startFrame();
+      scheduleAttack();
       scheduleAmbient();
     }
 
@@ -1017,8 +1230,8 @@
     state.level = levelOf(field.value, policy);
     state.target = TARGET_PIECES[state.level];
     state.built = state.target;
-    status.textContent = stages[state.level] + ' — ' + suffix;
     root.dataset.castleLevel = String(state.level);
+    updateStatus();
     draw();
   }
 

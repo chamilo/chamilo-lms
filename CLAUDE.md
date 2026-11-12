@@ -110,6 +110,60 @@ php bin/console doctrine:fixtures:load        # Load test fixtures
 php bin/console cache:clear                   # Clear Symfony cache
 ```
 
+#### Entity changes vs. earlier migrations that use the ORM
+
+Upgrading from 1.11 runs **every** migration in `V200` → `V210` → `V300` → `V310` order (Doctrine sorts
+the versions as strings, so all of `V200` runs before any of `V210`). Many of the earlier ones do not
+only use SQL: they load and save entities through the ORM (`$this->entityManager`,
+`$this->container->get(...Repository::class)`, legacy code they call). **The ORM always uses the
+*current* entity mapping**, not the one from when the migration was written. So when you change an
+entity and add the matching migration in the current directory (`V310`), an older migration that loads
+that entity now runs against a table that does not have your change yet, and the upgrade fails. For
+example, it fails with `Unknown column 't0.subscription_date'` or with a `NOT NULL` violation on a
+column the ORM no longer writes.
+
+Fresh installs and the CI install never show this, because they build the schema straight from the
+entities. Only a real 1.11 upgrade reveals it, so check by reading, before committing.
+
+**Whenever a new migration changes the table of a mapped entity** (adds, renames, drops or retypes a
+column; makes one `NOT NULL`; adds a relation or a table the entity needs), do this:
+
+1. Find the earlier migrations that hydrate or persist that entity, directly or through a relation
+   the ORM loads with it (eager associations, and the cascade of `persist`). Start with:
+   ```bash
+   grep -rlE '<EntityName>|<EntityName>Repository|<table_name>' src/CoreBundle/Migrations/Schema/V200 \
+     src/CoreBundle/Migrations/Schema/V210 src/CoreBundle/Migrations/Schema/V300
+   ```
+   Then read the hits that go through `entityManager`/`container->get`; a plain `addSql()` or
+   `$this->connection` query is not affected.
+2. If none use the entity through the ORM, nothing else is needed.
+3. If one does, add an **early-add migration** that applies your change before the **first** of
+   them, in that migration's directory and namespace, with a timestamp just below it. Before creating
+   it, check that the file name is free: never overwrite an existing migration. Rules:
+   - Same guard as the real migration (`hasTable`/`hasColumn`/column type check), so whichever runs
+     second does nothing.
+   - Only what the ORM needs to work. Data refills and constraints stay in the real migration,
+     unless the ORM needs them too.
+   - `down()` is a no-op.
+   - A docblock saying which migration needs it and which one adds it for real, and a description
+     starting with "Add early …".
+   - If several columns of the same period are missing, extend the existing early-add migration
+     instead of adding another one: `V200/Version20201218132718.php` already gathers some.
+4. Make the **real** migration tolerate the early add: its guard must skip what is already there,
+   with a comment pointing to the early migration (e.g. `// Version20250310215800 adds it first on a migration from 1.11`).
+5. The reverse case works the same way: when the ORM stops writing a column that the old schema
+   requires (`NOT NULL`, no default), relax it before the first migration that creates rows through
+   the ORM, then let the real migration drop it.
+
+The table below lists only the first three cases, as examples of how it was done; it is not an
+exhaustive list of early migrations.
+
+| Early migration | Needed by | Real migration |
+|---|---|---|
+| `V200/Version20201212114907` (`subscription_date`) | `V200/Version20201212114912` (users), `V200/Version20230204150030` (sessions) | `V310/Version20261109180000` |
+| `V200/Version20250310215800` (`conference_activity.metrics`) | `V200/Version20250310215900` (BBB/Zoom) | `V200/Version20250925215200` |
+| `V300/Version20260822212650` (makes `course.course_language` optional) | `V300/Version20260822212700` (demo courses) | `V310/Version20261005120000` |
+
 ### Code Quality
 ```bash
 composer phpcs              # Check PHP code style (ECS/Symfony standard)

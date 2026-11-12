@@ -14,30 +14,26 @@
         class="mb-4"
       />
 
-      <!-- These two fields keep their original name: the hidden loginForm of the administrator
-           section comes later in the form and is the value the server reads. -->
+      <!-- Read-only and not submitted: the server reads these values from the old configuration. -->
       <BaseInputText
         id="rootWeb"
         v-model="installerData.stepData.rootWeb"
         :label="t('Chamilo URL')"
-        maxlength="80"
-        name="loginForm"
+        readonly
       />
 
       <BaseInputText
         id="rootSys"
         v-model="installerData.stepData.rootSys"
         :label="t('Path')"
-        maxlength="80"
-        name="loginForm"
+        readonly
       />
 
       <BaseInputText
         id="systemVersion"
         v-model="installerData.stepData.systemVersion"
         :label="t('Source Chamilo version')"
-        maxlength="80"
-        name="systemVersion"
+        readonly
       />
     </div>
 

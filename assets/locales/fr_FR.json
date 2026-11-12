@@ -4665,5 +4665,18 @@
     "Restore the image of the theme": "R\u00e9tablir l'image du th\u00e8me",
     "Select a PNG, JPEG or WebP image smaller than 2 MB.": "S\u00e9lectionnez une image PNG, JPEG ou WebP de moins de 2 Mo.",
     "Delete the uploaded image and restore the image of the theme?": "Supprimer l'image import\u00e9e et r\u00e9tablir l'image du th\u00e8me ?",
-    "Theme image restored": "Image du th\u00e8me r\u00e9tablie"
+    "Theme image restored": "Image du th\u00e8me r\u00e9tablie",
+    "Password fortress: visual preview": "Forteresse des mots de passe : aperçu visuel",
+    "Try an example password to explore the visual indicator. Do not enter a real password here.": "Essayez un mot de passe fictif pour découvrir l’indicateur visuel. N’utilisez pas votre vrai mot de passe ici.",
+    "Example password": "Mot de passe d’exemple",
+    "Show or hide example password": "Afficher ou masquer le mot de passe d’exemple",
+    "Illustration only. Passwords are not submitted or stored, and the existing security rules still apply.": "Illustration uniquement. Les mots de passe ne sont ni envoyés ni enregistrés et les règles de sécurité actuelles restent applicables.",
+    "Illustration only. The configured password policy is enforced by the existing form validation.": "Illustration uniquement. La politique de mot de passe configurée reste appliquée lors de la validation du formulaire.",
+    "Unprotected": "Sans protection",
+    "Fence": "Clôture",
+    "Palisade": "Palissade",
+    "Stone walls": "Murailles de pierre",
+    "Castle": "Château",
+    "Fortified castle": "Château fortifié",
+    "Visual guide only": "Indicateur visuel uniquement"
 }

@@ -4732,5 +4732,18 @@
     "Theme image restored": "Theme image restored",
     "Login page (visitors who are not signed in)": "Login page (visitors who are not signed in)",
     "Interface of signed-in users": "Interface of signed-in users",
-    "Too many results. Please refine your search.": "Too many results. Please refine your search."
+    "Too many results. Please refine your search.": "Too many results. Please refine your search.",
+    "Password fortress: visual preview": "Password fortress: visual preview",
+    "Try an example password to explore the visual indicator. Do not enter a real password here.": "Try an example password to explore the visual indicator. Do not enter a real password here.",
+    "Example password": "Example password",
+    "Show or hide example password": "Show or hide example password",
+    "Illustration only. Passwords are not submitted or stored, and the existing security rules still apply.": "Illustration only. Passwords are not submitted or stored, and the existing security rules still apply.",
+    "Illustration only. The configured password policy is enforced by the existing form validation.": "Illustration only. The configured password policy is enforced by the existing form validation.",
+    "Unprotected": "Unprotected",
+    "Fence": "Fence",
+    "Palisade": "Palisade",
+    "Stone walls": "Stone walls",
+    "Castle": "Castle",
+    "Fortified castle": "Fortified castle",
+    "Visual guide only": "Visual guide only"
 }

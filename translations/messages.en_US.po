@@ -43561,3 +43561,42 @@ msgstr "Interface of signed-in users"
 
 msgid "Too many results. Please refine your search."
 msgstr "Too many results. Please refine your search."
+
+msgid "Password fortress: visual preview"
+msgstr "Password fortress: visual preview"
+
+msgid "Try an example password to explore the visual indicator. Do not enter a real password here."
+msgstr "Try an example password to explore the visual indicator. Do not enter a real password here."
+
+msgid "Example password"
+msgstr "Example password"
+
+msgid "Show or hide example password"
+msgstr "Show or hide example password"
+
+msgid "Illustration only. Passwords are not submitted or stored, and the existing security rules still apply."
+msgstr "Illustration only. Passwords are not submitted or stored, and the existing security rules still apply."
+
+msgid "Illustration only. The configured password policy is enforced by the existing form validation."
+msgstr "Illustration only. The configured password policy is enforced by the existing form validation."
+
+msgid "Unprotected"
+msgstr "Unprotected"
+
+msgid "Fence"
+msgstr "Fence"
+
+msgid "Palisade"
+msgstr "Palisade"
+
+msgid "Stone walls"
+msgstr "Stone walls"
+
+msgid "Castle"
+msgstr "Castle"
+
+msgid "Fortified castle"
+msgstr "Fortified castle"
+
+msgid "Visual guide only"
+msgstr "Visual guide only"

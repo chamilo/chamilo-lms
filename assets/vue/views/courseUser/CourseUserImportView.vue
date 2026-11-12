@@ -8,7 +8,7 @@
         :label="t('Back')"
         :route="buildListRoute()"
         icon="back"
-        type="plain"
+        type="black"
       />
     </div>
 
@@ -55,7 +55,7 @@
             :label="t('Cancel')"
             :route="buildListRoute()"
             icon="close"
-            type="plain"
+            type="black"
           />
         </div>
       </div>

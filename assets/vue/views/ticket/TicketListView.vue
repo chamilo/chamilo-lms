@@ -217,7 +217,7 @@
             v-else
             icon="close"
             :label="t('Cancel')"
-            type="plain"
+            type="black"
             @click="toggleSearch"
           />
         </div>

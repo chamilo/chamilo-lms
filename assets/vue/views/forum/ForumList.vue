@@ -35,7 +35,7 @@
         icon="back"
         only-icon
         size="small"
-        type="plain"
+        type="black"
         @click="goBackToLearningPath"
       />
     </BaseToolbar>
@@ -103,7 +103,7 @@
             v-if="categoryLanguageFilter"
             :label="t('Reset')"
             size="small"
-            type="plain"
+            type="black"
             @click="resetCategoryLanguageFilter"
           />
         </div>
@@ -179,7 +179,7 @@
                 :icon="isCategoryFolded(category) ? 'unfold' : 'fold'"
                 only-icon
                 size="small"
-                type="plain"
+                type="black"
                 @click="toggleCategoryFold(category)"
               />
             </div>

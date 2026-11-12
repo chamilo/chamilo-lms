@@ -722,7 +722,7 @@
             :label="t('Select all')"
             icon="select-all"
             size="small"
-            type="plain"
+            type="black"
             @click="selectAllItems"
           />
           <BaseButton
@@ -730,7 +730,7 @@
             :label="t('Deselect all')"
             icon="unselect-all"
             size="small"
-            type="plain"
+            type="black"
             @click="deselectAllItems"
           />
           <BaseSelect

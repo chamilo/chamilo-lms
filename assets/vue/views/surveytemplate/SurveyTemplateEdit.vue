@@ -125,7 +125,7 @@ onMounted(loadConfiguration)
         :route="{ name: 'SurveyTemplateList' }"
         icon="back"
         only-icon
-        type="plain"
+        type="black"
       />
       <BaseButton
         v-if="isEditMode"

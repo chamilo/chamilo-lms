@@ -98,7 +98,7 @@
             <BaseButton
               :label="t('Reset')"
               icon="refresh"
-              type="plain"
+              type="black"
               @click="resetCourseFilters"
             />
           </div>

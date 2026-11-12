@@ -191,7 +191,7 @@
           :label="t('Cancel')"
           :route="buildListRoute()"
           icon="close"
-          type="plain"
+          type="black"
         />
         <BaseButton
           :is-loading="isSaving"

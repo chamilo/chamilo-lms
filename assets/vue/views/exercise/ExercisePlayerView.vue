@@ -328,7 +328,7 @@
             :disabled="isReviewFlagSaving"
             :label="t('Select all')"
             icon="checkbox-marked-outline"
-            type="plain"
+            type="black"
             @click="setAllReviewQuestions(true)"
           />
           <BaseButton
@@ -336,7 +336,7 @@
             :disabled="isReviewFlagSaving"
             :label="t('Unselect all')"
             icon="checkbox-blank-outline"
-            type="plain"
+            type="black"
             @click="setAllReviewQuestions(false)"
           />
           <BaseButton
@@ -1690,7 +1690,7 @@
               query: getContextParams(),
             }"
             icon="format-list-bulleted"
-            type="plain"
+            type="black"
           />
         </div>
       </section>
@@ -1728,7 +1728,7 @@
           <BaseButton
             :disabled="isSubmittingQuestionFeedbackReport"
             :label="t('Cancel')"
-            type="plain"
+            type="black"
             @click="closeQuestionFeedbackReport"
           />
           <BaseButton
@@ -1864,7 +1864,7 @@
             :disabled="isCategoryReminderProceeding"
             :label="t('Go back')"
             icon="back"
-            type="plain"
+            type="black"
             @click="closeCategoryReminder"
           />
           <BaseButton
@@ -1880,7 +1880,7 @@
             :disabled="isCategoryReminderProceeding"
             :label="t('Select all')"
             icon="checkbox-marked-outline"
-            type="plain"
+            type="black"
             @click="setCategoryReminderQuestions(true)"
           />
           <BaseButton
@@ -1888,7 +1888,7 @@
             :disabled="isCategoryReminderProceeding"
             :label="t('Unselect all')"
             icon="checkbox-blank-outline"
-            type="plain"
+            type="black"
             @click="setCategoryReminderQuestions(false)"
           />
           <BaseButton
@@ -1920,7 +1920,7 @@
       <template #footer>
         <BaseButton
           :label="t('Close')"
-          type="plain"
+          type="black"
           @click="isZoomDialogVisible = false"
         />
       </template>

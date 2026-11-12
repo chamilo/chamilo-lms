@@ -531,7 +531,7 @@ CRUD color convention (`type` prop):
 - Read/view/export/list → blue → `type="primary"`
 - Update/edit/configure/move → orange → `type="secondary"`
 - Delete/disable/remove → red → `type="danger"`
-- Cancel/dismiss → gray → `type="plain"`
+- Cancel/dismiss/back → dark outline → `type="black"` (also the inactive buttons of a button-tab group). There is no `plain` type: `BaseButton` rejects it.
 - Buttons are for actions only — never style a non-action link as a button.
 
 Table row action convention:

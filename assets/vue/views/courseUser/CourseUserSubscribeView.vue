@@ -51,7 +51,7 @@
             only-icon
             size="normal"
             :tooltip="t('Back')"
-            type="plain"
+            type="black"
           />
         </div>
       </template>
@@ -160,7 +160,7 @@
         <BaseButton
           :label="t('Clear selection')"
           icon="close"
-          type="plain"
+          type="black"
           @click="selectedUserIds = []"
         />
       </div>

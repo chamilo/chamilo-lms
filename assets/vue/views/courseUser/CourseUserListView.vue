@@ -216,7 +216,7 @@
           :label="t('Clear selection')"
           icon="close"
           size="small"
-          type="plain"
+          type="black"
           @click="selectedUserIds = []"
         />
       </div>

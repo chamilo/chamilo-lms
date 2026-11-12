@@ -90,7 +90,7 @@ onMounted(() => {
       <BaseButton
         :label="t('Back')"
         icon="back"
-        type="plain"
+        type="black"
         :route="{ name: 'AdminUsergroupList' }"
       />
     </SectionHeader>
@@ -214,7 +214,7 @@ onMounted(() => {
       <BaseButton
         :label="t('Cancel')"
         icon="back"
-        type="plain"
+        type="black"
         :route="{ name: 'AdminUsergroupList' }"
       />
     </div>

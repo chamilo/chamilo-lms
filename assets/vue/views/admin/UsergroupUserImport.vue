@@ -57,7 +57,7 @@ async function handleSubmit() {
       <BaseButton
         :label="t('Back')"
         icon="arrow-left"
-        type="plain"
+        type="black"
         :route="{ name: 'AdminUsergroupList' }"
       />
     </SectionHeader>
@@ -139,7 +139,7 @@ async function handleSubmit() {
         <BaseButton
           :label="t('Cancel')"
           icon="arrow-left"
-          type="plain"
+          type="black"
           :to-url="'/admin/usergroups'"
         />
       </div>

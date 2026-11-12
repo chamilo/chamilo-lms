@@ -966,12 +966,12 @@ function goBack() {
               <div class="flex flex-wrap gap-2 border-b border-gray-20 pb-3">
                 <BaseButton
                   :label="t('Files')"
-                  :type="activeDocumentAction === 'list' && activeDocumentTab === 'files' ? 'primary' : 'plain'"
+                  :type="activeDocumentAction === 'list' && activeDocumentTab === 'files' ? 'primary' : 'black'"
                   @click="selectDocumentList('files')"
                 />
                 <BaseButton
                   :label="t('Videos')"
-                  :type="activeDocumentAction === 'list' && activeDocumentTab === 'videos' ? 'primary' : 'plain'"
+                  :type="activeDocumentAction === 'list' && activeDocumentTab === 'videos' ? 'primary' : 'black'"
                   @click="selectDocumentList('videos')"
                 />
                 <BaseButton

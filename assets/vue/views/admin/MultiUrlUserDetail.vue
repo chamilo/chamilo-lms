@@ -97,7 +97,7 @@ onMounted(loadReport)
       <BaseButton
         :label="t('Back')"
         icon="back"
-        type="plain"
+        type="black"
         :route="{ name: 'AdminMultiUrlList' }"
       />
     </SectionHeader>

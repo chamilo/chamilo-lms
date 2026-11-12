@@ -9,7 +9,7 @@
         icon="back"
         only-icon
         size="small"
-        type="plain"
+        type="black"
       />
     </BaseToolbar>
 
@@ -96,7 +96,7 @@
             :label="t('Cancel')"
             icon="back"
             :route="{ name: 'ForumPostList', params: { node: parentId, forumId, threadId }, query: route.query }"
-            type="plain"
+            type="black"
           />
           <BaseButton
             :disabled="isSubmitting || !canSubmitReply"

@@ -270,7 +270,7 @@ onBeforeUnmount(() => {
         :icon="focusMode ? 'eye-off' : 'eye-on'"
         only-icon
         size="small"
-        type="plain"
+        type="black"
         @click="toggleFocusMode"
       />
       <BaseButton
@@ -279,7 +279,7 @@ onBeforeUnmount(() => {
         icon="information"
         only-icon
         size="small"
-        type="plain"
+        type="black"
         @click="showHelp = true"
       />
     </div>
@@ -306,7 +306,7 @@ onBeforeUnmount(() => {
           icon="close"
           only-icon
           size="small"
-          type="plain"
+          type="black"
           @click="closeSkillDetail"
         />
       </div>

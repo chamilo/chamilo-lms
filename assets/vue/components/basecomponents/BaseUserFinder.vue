@@ -133,7 +133,7 @@ defineExpose({ selectedUsers })
           :label="t('Clear filters')"
           icon="clear-all"
           size="small"
-          type="plain"
+          type="black"
           @click="clearFilters"
         />
       </div>

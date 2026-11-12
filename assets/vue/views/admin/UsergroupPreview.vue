@@ -109,7 +109,7 @@ onMounted(loadData)
       <BaseButton
         :label="t('Back to classes')"
         icon="back"
-        type="plain"
+        type="black"
         @click="goBack"
       />
     </SectionHeader>

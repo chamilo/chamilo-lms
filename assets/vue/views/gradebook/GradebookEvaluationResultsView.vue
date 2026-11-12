@@ -300,7 +300,7 @@
       <template #footer>
         <BaseButton
           :label="t('Cancel')"
-          type="plain"
+          type="black"
           @click="importDialogVisible = false"
         />
         <BaseButton

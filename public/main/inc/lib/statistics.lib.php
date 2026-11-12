@@ -2092,11 +2092,13 @@ class Statistics
             $urlWhere = "AND au.access_url_id = $urlId";
         }
 
+        $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
+        $durationSql = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::sqlForSeconds('l.login_date', 'l.logout_date', $maxSeconds);
         $sql = "SELECT u.id,
                     u.firstname,
                     u.lastname,
                     u.username,
-                    SUM(TIMESTAMPDIFF(SECOND, l.login_date, l.logout_date)) AS time_count
+                    SUM($durationSql) AS time_count
                 FROM $tblUser u
                 INNER JOIN $tblLogin l
                 ON u.id = l.login_user_id

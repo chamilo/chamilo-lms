@@ -52,6 +52,23 @@ class UserConnectionTimeApiTest extends AbstractApiTest
         $this->assertJsonContains(['totalConnectionTimeFormatted' => '00:40:00']);
     }
 
+    public function testLongConnectionsAreCappedIndividuallyBeforeSumming(): void
+    {
+        $user = $this->createUser('connection_time_cap_'.uniqid());
+        $this->addConnection($user, '2026-04-10 08:00:00', '2026-04-10 16:00:00');
+        $this->addConnection($user, '2026-04-11 08:00:00', '2026-04-11 10:00:00');
+        $this->addConnection($user, '2026-04-12 08:00:00', '2026-04-12 16:00:00');
+
+        $client = $this->createClientWithCredentials($this->getUserToken());
+        $client->request('GET', '/api/users/'.$user->getId().'/connection-time');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertJsonContains([
+            'totalConnectionTime' => 14 * 3600,
+            'totalConnectionTimeFormatted' => '14:00:00',
+        ]);
+    }
+
     public function testLearnerMaySeeTheirOwnTimeButNotSomeoneElses(): void
     {
         $learner = $this->createUser('connection_time_self');

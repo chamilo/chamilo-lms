@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\SettingsManagerHelper;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
+use Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateInterval;
 use DatePeriod;
@@ -77,6 +78,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         private LanguageRepository $languageRepository,
         private Security $security,
         private TranslatorInterface $translator,
+        private SessionTimeLimit $sessionTimeLimit,
     ) {}
 
     public function supports(string $report): bool
@@ -450,7 +452,7 @@ final readonly class AdminStatisticsUserSystemQueryService
 
         $connection = $this->entityManager->getConnection();
         $sql = 'SELECT u.id, u.firstname, u.lastname, u.username, '
-            .'SUM(TIMESTAMPDIFF(SECOND, l.login_date, l.logout_date)) AS time_count '
+            .'SUM('.$this->sessionTimeLimit->sql('l.login_date', 'l.logout_date').') AS time_count '
             .'FROM user u INNER JOIN track_e_login l ON u.id = l.login_user_id ';
         $params = [
             'softDeleted' => User::SOFT_DELETED,
@@ -2137,7 +2139,7 @@ final readonly class AdminStatisticsUserSystemQueryService
     private function getTrainingHours(string $start, string $end): int
     {
         $connection = $this->entityManager->getConnection();
-        $sql = 'SELECT TIMESTAMPDIFF(HOUR, a.login_course_date, a.logout_course_date) diff FROM track_e_course_access a ';
+        $sql = 'SELECT TIMESTAMPDIFF(SECOND, a.login_course_date, a.logout_course_date) diff FROM track_e_course_access a ';
         $params = ['start' => $start, 'end' => $end];
         $types = ['start' => Types::STRING, 'end' => Types::STRING];
         if ($this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId()) {
@@ -2149,12 +2151,13 @@ final readonly class AdminStatisticsUserSystemQueryService
             $params['urlId'] = $this->getCurrentAccessUrlId();
             $types['urlId'] = Types::INTEGER;
         }
-        $total = 0;
-        foreach ($connection->executeQuery($sql, $params, $types)->fetchFirstColumn() as $hours) {
-            $total += min(6, max(0, (int) $hours));
+        $totalSeconds = 0;
+        $maxSeconds = $this->sessionTimeLimit->getMaximumSeconds();
+        foreach ($connection->executeQuery($sql, $params, $types)->fetchFirstColumn() as $seconds) {
+            $totalSeconds += SessionTimeLimit::clampSeconds((int) $seconds, $maxSeconds);
         }
 
-        return $total;
+        return intdiv($totalSeconds, 3600);
     }
 
     private function countCertificatesUntil(string $dateUntil): int

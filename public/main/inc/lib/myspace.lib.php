@@ -873,10 +873,12 @@ class MySpace
             $start_date = Database::escape_string($start_date);
             $end_date = Database::escape_string($end_date);
             $sessionCondition = api_get_session_condition($sessionId);
+            $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
+            $durationSql = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::sqlForSeconds('login_course_date', 'logout_course_date', $maxSeconds);
             $sql = "SELECT
                         login_course_date,
                         logout_course_date,
-                        TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date) duration,
+                        $durationSql duration,
                         user_ip
                     FROM $table
                     WHERE
@@ -932,9 +934,11 @@ class MySpace
             $user_id = (int) $user_id;
             $courseId = (int) $course_info['real_id'];
             $sessionCondition = api_get_session_condition($sessionId);
+            $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
+            $durationSql = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::sqlForSeconds('login_course_date', 'logout_course_date', $maxSeconds);
             $sql = "SELECT
-                SEC_TO_TIME(AVG(time_to_sec(timediff(logout_course_date,login_course_date)))) as avrg,
-                SEC_TO_TIME(SUM(time_to_sec(timediff(logout_course_date,login_course_date)))) as total,
+                SEC_TO_TIME(AVG($durationSql)) as avrg,
+                SEC_TO_TIME(SUM($durationSql)) as total,
                 count(user_id) as times
                 FROM $table
                 WHERE
@@ -1035,6 +1039,7 @@ class MySpace
             $cursorYear->modify('+1 year');
         }
 
+        $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
         $i = 0;
         foreach ($sql_result as $data) {
             if (empty($data['login']) || empty($data['logout'])) {
@@ -1048,7 +1053,7 @@ class MySpace
                 continue;
             }
 
-            $minutes = (float) ($logout - $login) / 60;
+            $minutes = min((float) ($logout - $login), $maxSeconds) / 60;
 
             $dayKey = date('d-m-Y', $login);
             $monthKey = date('m-Y', $login);

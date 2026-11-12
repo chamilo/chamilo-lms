@@ -12,6 +12,7 @@ import BaseRating from "../basecomponents/BaseRating.vue"
 import { useNotification } from "../../composables/notification"
 import { usePlatformConfig } from "../../store/platformConfig"
 import CatalogueRequirementModal from "./CatalogueRequirementModal.vue"
+import RoomFloorPlanViewer from "../room/RoomFloorPlanViewer.vue"
 import courseRelUserService from "../../services/courseRelUserService"
 import { useCourseRequirementStatus } from "../../composables/course/useCourseRequirementStatus"
 import { useLocale } from "../../composables/locale"
@@ -656,6 +657,12 @@ onMounted(() => {
     >
       {{ t("No description available") }}
     </p>
+
+    <RoomFloorPlanViewer
+      v-if="showDescriptionDialog"
+      :course-id="localCourse.id"
+      preload
+    />
   </Dialog>
 </template>
 <style scoped>

@@ -66,7 +66,8 @@
   </template>
 
   <details
-    v-else
+    v-else-if="!preload || (loaded && details?.available && !error)"
+    :open="preload"
     class="mt-2 rounded border p-3"
     @toggle="onToggle"
   >
@@ -86,11 +87,22 @@
     </p>
     <template v-else-if="details?.available">
       <p class="my-2 text-sm">{{ details.branchTitle }} — {{ details.roomTitle }}</p>
-      <div class="relative w-full overflow-hidden rounded border">
+      <p
+        v-if="imageFailed"
+        role="status"
+        class="text-sm text-gray-600"
+      >
+        {{ t("Floor plan unavailable") }}
+      </p>
+      <div
+        v-else
+        class="relative w-full overflow-hidden rounded border"
+      >
         <img
           :src="imageUrl"
           :alt="t('Floor plan')"
           class="block w-full"
+          @error="imageFailed = true"
         />
         <svg
           v-if="validPolygon"
@@ -132,6 +144,7 @@ const props = defineProps({
   courseId: { type: [Number, String], default: null },
   calendarId: { type: [Number, String], default: null },
   dialogMode: { type: Boolean, default: false },
+  preload: { type: Boolean, default: false },
 })
 
 const { t } = useI18n()
@@ -151,6 +164,8 @@ const url = computed(() =>
     : `/api/room-floor-plans/courses/${Number(props.courseId)}`,
 )
 const contextParams = computed(() => {
+  // Catalogue views are not inside the course context.
+  if (props.preload) return {}
   const params = {}
   for (const key of ["cid", "sid", "gid"]) {
     const number = Number((key === "cid" && props.courseId) || route.query[key] || 0)
@@ -181,7 +196,7 @@ const polygonPoints = computed(() =>
 )
 
 watch(
-  [url, contextParams, () => props.dialogMode],
+  [url, contextParams, () => props.dialogMode, () => props.preload],
   async (_, __, onCleanup) => {
     let active = true
     onCleanup(() => {
@@ -196,11 +211,15 @@ watch(
     dialogVisible.value = false
 
     // Other callers keep their existing lazy-loaded inline viewer.
-    if (!props.dialogMode || !Number(props.courseId || props.calendarId)) return
+    if ((!props.dialogMode && !props.preload) || !Number(props.courseId || props.calendarId)) return
 
     loading.value = true
     try {
-      const result = await baseService.get(url.value, contextParams.value)
+      const result = await baseService.get(
+        url.value,
+        contextParams.value,
+        props.preload ? { skipCourseContext: true } : {},
+      )
       if (active) details.value = result
     } catch {
       if (active) error.value = t("Floor plan unavailable")

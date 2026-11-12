@@ -141,7 +141,7 @@
       <div class="formgroup-inline">
         <div
           v-text="t('Your company short name')"
-          class="field text-body-2font-semibold"
+          class="field text-body-2 font-semibold"
         />
         <div
           class="field text-body-2"
@@ -250,7 +250,7 @@
         <Button
           v-if="!installerData.isUpdateAvailable"
           :label="t('Previous')"
-          class="p-button-secondary"
+          class="p-button-outlined p-button-plain"
           icon="mdi mdi-page-previous"
           name="step4"
           type="submit"
@@ -324,7 +324,7 @@
     :modal="true"
     :show-header="false"
   >
-    <div class="p-d-flex p-ai-center p-jc-center">
+    <div class="flex items-center justify-center">
       <h3
         v-text="t('Migration completed successfully!')"
         class="mb-4"
@@ -367,18 +367,18 @@
     :modal="true"
     :show-header="false"
   >
-    <div class="p-d-flex p-ai-center p-jc-center">
+    <div class="flex items-center justify-center">
       <h3
         v-text="t('Migration failed!')"
         class="mb-4 text-error"
       />
     </div>
-    <div class="p-d-flex p-ai-center p-jc-center">
+    <div class="flex items-center justify-center">
       <p class="text-error">{{ errorMessage }}</p>
     </div>
     <div
       v-if="currentMigration"
-      class="p-d-flex p-ai-center p-jc-center mt-4"
+      class="flex items-center justify-center mt-4"
     >
       <p class="text-body-2">
         {{ t("The last migration executed successfully was:") }} <br /><strong>{{ currentMigration }}</strong>

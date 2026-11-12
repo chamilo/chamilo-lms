@@ -73,7 +73,9 @@
       />
     </div>
 
-    <div class="grid grid-flow-row-dense grid-cols-3 gap-x-3 gap-y-4 place-items-center mb-4">
+    <div
+      class="grid grid-flow-row-dense grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-4 place-items-center mb-4"
+    >
       <p
         v-for="(extension, i) in installerData.stepData.extensions"
         :key="i"
@@ -251,7 +253,7 @@
         <div class="field">
           <Button
             :label="t('Back')"
-            class="p-button-secondary"
+            class="p-button-outlined p-button-plain"
             icon="mdi mdi-page-previous"
             name="step1"
             type="submit"
@@ -337,7 +339,7 @@
         <div class="field">
           <Button
             :label="t('Previous')"
-            class="p-button-plain"
+            class="p-button-outlined p-button-plain"
             icon="mdi mdi-page-previous"
             name="step1"
             type="button"

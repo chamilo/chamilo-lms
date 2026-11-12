@@ -52,7 +52,7 @@
         <!-- The installer never asks for write permission on its own directory, so it cannot
              remove it. Give the commands instead, and leave the step to the administrator. -->
         <pre
-          class="mt-2 overflow-x-auto rounded bg-white px-4 py-3 text-xs text-gray-700"
+          class="mt-2 overflow-x-auto rounded bg-white px-4 py-3 text-xs text-gray-90"
           v-text="cleanupCommands"
         />
       </Message>

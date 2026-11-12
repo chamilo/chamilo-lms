@@ -483,7 +483,7 @@
       <div class="field">
         <Button
           :label="t('Previous')"
-          class="p-button-secondary"
+          class="p-button-outlined p-button-plain"
           icon="mdi mdi-page-previous"
           name="step3"
           type="submit"

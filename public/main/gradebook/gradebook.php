@@ -45,6 +45,10 @@ $filter_warning_msg = true;
 //this is called when there is no data for the course admin
 if (isset($_GET['createallcategories'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $coursecat = Category :: get_not_created_course_categories(api_get_user_id());
     if (0 == !count($coursecat)) {
         foreach ($coursecat as $row) {
@@ -80,15 +84,21 @@ if (isset($_GET['movecat'])) {
         if ($move_form->validate()) {
             header('Location: '.api_get_self().'?selectcat='.$selectcat
                 .'&movecat='.$move_cat
-                .'&targetcat='.$move_form->exportValue('move_cat'));
+                .'&targetcat='.$move_form->exportValue('move_cat')
+                .'&sec_token='.Security::get_existing_token());
             exit;
         }
     } else {
+        // The move is a state change on a GET: the token comes with the redirect of the form (and the confirm button).
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
         $get_target_cat = Security::remove_XSS($_GET['targetcat']);
         $targetcat = Category :: load($get_target_cat);
         $course_to_crsind = (null != $cats[0]->getCourseId() && null == $targetcat[0]->getCourseId());
 
         if (!($course_to_crsind && !isset($_GET['confirm']))) {
+            Security::clear_token();
             $cats[0]->move_to_cat($targetcat[0]);
             header('Location: '.api_get_self().'?categorymoved=&selectcat='.$selectcat);
             exit;
@@ -116,15 +126,20 @@ if (isset($_GET['moveeval'])) {
         if ($move_form->validate()) {
             header('Location: '.api_get_self().'?selectcat='.$selectcat
                 .'&moveeval='.$get_move_eval
-                .'&targetcat='.$move_form->exportValue('move_cat'));
+                .'&targetcat='.$move_form->exportValue('move_cat')
+                .'&sec_token='.Security::get_existing_token());
             exit;
         }
     } else {
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
         $get_target_cat = Security::remove_XSS($_GET['targetcat']);
         $targetcat = Category :: load($get_target_cat);
         $course_to_crsind = (null != $evals[0]->getCourseId() && null == $targetcat[0]->getCourseId());
 
         if (!($course_to_crsind && !isset($_GET['confirm']))) {
+            Security::clear_token();
             $evals[0]->move_to_cat($targetcat[0]);
             header('Location: '.api_get_self().'?evaluationmoved=&selectcat='.$selectcat);
             exit;
@@ -159,6 +174,10 @@ if (isset($_GET['movelink'])) {
 //parameters for categories
 if (isset($_GET['visiblecat'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     if (isset($_GET['set_visible'])) {
         $visibility_command = 1;
     } else {
@@ -174,6 +193,10 @@ if (isset($_GET['visiblecat'])) {
 }
 if (isset($_GET['deletecat'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $cats = Category :: load($_GET['deletecat']);
     //delete all categories,subcategories and results
     if (null != $cats[0]) {
@@ -189,6 +212,10 @@ if (isset($_GET['deletecat'])) {
 //parameters for evaluations
 if (isset($_GET['visibleeval'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     if (isset($_GET['set_visible'])) {
         $visibility_command = 1;
     } else {
@@ -205,6 +232,10 @@ if (isset($_GET['visibleeval'])) {
 
 if (isset($_GET['deleteeval'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     $eval = Evaluation :: load($_GET['deleteeval']);
     if (null != $eval[0]) {
         $eval[0]->delete_with_results();
@@ -215,6 +246,10 @@ if (isset($_GET['deleteeval'])) {
 //parameters for links
 if (isset($_GET['visiblelink'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     if (isset($_GET['set_visible'])) {
         $visibility_command = 1;
     } else {
@@ -229,6 +264,10 @@ if (isset($_GET['visiblelink'])) {
 }
 if (isset($_GET['deletelink'])) {
     GradebookUtils::block_students();
+    if (!Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
     //fixing #5229
     if (!empty($_GET['deletelink'])) {
         $link = LinkFactory:: load($_GET['deletelink']);
@@ -250,7 +289,7 @@ if ($course_to_crsind && !isset($_GET['confirm'])) {
                  method="post"
                  action="'.api_get_self().'?confirm='
         .(isset($_GET['movecat']) ? '&movecat='.Security::remove_XSS($_GET['movecat'])
-            : '&moveeval='.intval($_GET['moveeval'])).'&selectcat='.$selectcat.'&targetcat='.Security::remove_XSS($_GET['targetcat']).'">
+            : '&moveeval='.intval($_GET['moveeval'])).'&selectcat='.$selectcat.'&targetcat='.Security::remove_XSS($_GET['targetcat']).'&sec_token='.Security::get_existing_token().'">
 			   <input type="submit" value="'.'  '.get_lang('Validate').'  '.'">
 			   </form>';
 

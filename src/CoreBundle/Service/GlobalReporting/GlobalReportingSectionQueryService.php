@@ -3259,7 +3259,7 @@ final readonly class GlobalReportingSectionQueryService
                            lp_view.lp_id,
                            COALESCE(lp_view.progress, 0) AS progress,
                            ROW_NUMBER() OVER (
-                               PARTITION BY lp_view.c_id, lp_view.lp_id
+                               PARTITION BY lp_view.c_id, lp_view.lp_id, lp_view.user_id
                                ORDER BY lp_view.view_count DESC, lp_view.iid DESC
                            ) AS rowNumber
                       FROM c_lp_view lp_view
@@ -3281,7 +3281,7 @@ final readonly class GlobalReportingSectionQueryService
                 continue;
             }
 
-            $result[$courseId] = round((float) $row['progress'] / $learners, 2);
+            $result[$courseId] = round((float) $row['progress'], 2);
         }
 
         return $result;
@@ -3380,7 +3380,7 @@ final readonly class GlobalReportingSectionQueryService
                 continue;
             }
 
-            $result[$courseId] = round((float) $row['score'] / $learners, 2);
+            $result[$courseId] = round((float) $row['score'], 2);
         }
 
         return $result;
@@ -3788,9 +3788,29 @@ final readonly class GlobalReportingSectionQueryService
             $rowTypes['courseCoachStatus'] = Types::INTEGER;
         }
 
+        // Course learners who are live accounts of this URL (or of no URL, like the tracking list below).
         $learnerCountExpression = '(SELECT COUNT(DISTINCT relation.user_id)
                                       FROM session_rel_course_rel_user relation
-                                     WHERE relation.session_id = session.id AND relation.status = 0)';
+                                      INNER JOIN user relation_user ON relation_user.id = relation.user_id
+                                     WHERE relation.session_id = session.id AND relation.status = 0
+                                       AND relation_user.active <> :softDeleted
+                                       AND (
+                                           EXISTS (
+                                               SELECT 1
+                                                 FROM access_url_rel_user relation_url
+                                                WHERE relation_url.user_id = relation.user_id
+                                                  AND relation_url.access_url_id = :accessUrlId
+                                           )
+                                           OR NOT EXISTS (
+                                               SELECT 1
+                                                 FROM access_url_rel_user relation_url
+                                                WHERE relation_url.user_id = relation.user_id
+                                           )
+                                       ))';
+        $rowParameters['softDeleted'] = User::SOFT_DELETED;
+        $rowParameters['accessUrlId'] = $context->accessUrlId;
+        $rowTypes['softDeleted'] = Types::INTEGER;
+        $rowTypes['accessUrlId'] = Types::INTEGER;
 
         if (!$adminMode) {
             // Same rule as legacy SessionManager::get_users_by_session(): session-level learners of this URL.
@@ -3814,11 +3834,7 @@ final readonly class GlobalReportingSectionQueryService
                                                )
                                            ))';
             $rowParameters['learnerRelationType'] = Session::STUDENT;
-            $rowParameters['softDeleted'] = User::SOFT_DELETED;
-            $rowParameters['accessUrlId'] = $context->accessUrlId;
             $rowTypes['learnerRelationType'] = Types::INTEGER;
-            $rowTypes['softDeleted'] = Types::INTEGER;
-            $rowTypes['accessUrlId'] = Types::INTEGER;
         }
 
         $rows = $this->connection->fetchAllAssociative(
@@ -4177,8 +4193,14 @@ final readonly class GlobalReportingSectionQueryService
                    ON access_user.user_id = usr.id AND access_user.access_url_id = :accessUrlId
                LEFT JOIN session_rel_user session_relation
                    ON session_relation.user_id = usr.id AND session_relation.relation_type = 3
+                  AND EXISTS (SELECT 1 FROM access_url_rel_session session_url
+                               WHERE session_url.session_id = session_relation.session_id
+                                 AND session_url.access_url_id = :accessUrlId)
                LEFT JOIN session_rel_course_rel_user course_relation
                    ON course_relation.user_id = usr.id AND course_relation.status = 2
+                  AND EXISTS (SELECT 1 FROM access_url_rel_session course_session_url
+                               WHERE course_session_url.session_id = course_relation.session_id
+                                 AND course_session_url.access_url_id = :accessUrlId)
                LEFT JOIN track_e_login login ON login.login_user_id = usr.id
               WHERE usr.status = :teacherStatus
            GROUP BY usr.id, usr.official_code, usr.firstname, usr.lastname, usr.username, usr.email
@@ -4319,7 +4341,7 @@ final readonly class GlobalReportingSectionQueryService
             $types['startDate'] = Types::DATE_IMMUTABLE;
         }
         if (null !== $filters['endDate']) {
-            $where[] = 'access_log.logout_course_date < DATE_ADD(:endDate, INTERVAL 1 DAY)';
+            $where[] = 'COALESCE(access_log.logout_course_date, access_log.login_course_date) < DATE_ADD(:endDate, INTERVAL 1 DAY)';
             $parameters['endDate'] = $filters['endDate'];
             $types['endDate'] = Types::DATE_IMMUTABLE;
         }
@@ -5258,7 +5280,12 @@ final readonly class GlobalReportingSectionQueryService
                     usr.email,
                     COALESCE(access_metrics.timeSeconds, 0) AS timeSeconds,
                     COALESCE(lp_metrics.progress, 0) AS progress,
-                    CASE WHEN certificate.id IS NULL THEN \'No\' ELSE \'Yes\' END AS certificate,
+                    CASE WHEN EXISTS (
+                        SELECT 1
+                          FROM gradebook_certificate certificate
+                          INNER JOIN gradebook_category category ON category.id = certificate.cat_id
+                         WHERE category.c_id = course.id AND certificate.user_id = usr.id
+                    ) THEN \'Yes\' ELSE \'No\' END AS certificate,
                     COALESCE(lp_metrics.completed, 0) AS completedLearningPaths
                FROM user usr
                INNER JOIN course_rel_user subscription ON subscription.user_id = usr.id
@@ -5278,12 +5305,9 @@ final readonly class GlobalReportingSectionQueryService
                       FROM c_lp_view
                   GROUP BY user_id, c_id
                ) lp_metrics ON lp_metrics.user_id = usr.id AND lp_metrics.c_id = course.id
-               LEFT JOIN gradebook_category category ON category.c_id = course.id
-               LEFT JOIN gradebook_certificate certificate
-                   ON certificate.cat_id = category.id AND certificate.user_id = usr.id
               WHERE usr.id IN (:userIds)
            GROUP BY course.id, course.title, usr.id, usr.firstname, usr.lastname, usr.email,
-                    access_metrics.timeSeconds, lp_metrics.progress, lp_metrics.completed, certificate.id
+                    access_metrics.timeSeconds, lp_metrics.progress, lp_metrics.completed
            ORDER BY course.title ASC, usr.lastname ASC, usr.firstname ASC',
             ['accessUrlId' => $context->accessUrlId, 'userIds' => $userIds],
             ['accessUrlId' => Types::INTEGER, 'userIds' => ArrayParameterType::INTEGER],
@@ -5569,6 +5593,10 @@ final readonly class GlobalReportingSectionQueryService
             );
         }
 
+        if (!\in_array((int) $filters['courseId'], $this->allAccessUrlCourseIds($context), true)) {
+            throw new AccessDeniedHttpException('The requested course is outside the current access URL.');
+        }
+
         $where = [
             'resource_link.c_id = :courseId',
             'quiz.iid = :exerciseId',
@@ -5852,6 +5880,10 @@ final readonly class GlobalReportingSectionQueryService
             return $this->result($filters, $title, 0, [], $columns, [], [], $meta);
         }
 
+        if (!\in_array((int) $filters['courseId'], $this->allAccessUrlCourseIds($context), true)) {
+            throw new AccessDeniedHttpException('The requested course is outside the current access URL.');
+        }
+
         $where = ['exercise.c_id = :courseId'];
         $parameters = ['courseId' => (int) $filters['courseId']];
         $types = ['courseId' => Types::INTEGER];
@@ -5969,7 +6001,7 @@ final readonly class GlobalReportingSectionQueryService
             $rows = $this->connection->fetchAllAssociative(
                 "SELECT MIN(item.iid) AS id,
                         COALESCE(NULLIF(TRIM(field_values.field_value), ''), 'Unknown') AS author,
-                        COUNT(*) AS items,
+                        COUNT(DISTINCT item.iid) AS items,
                         GROUP_CONCAT(DISTINCT course.title ORDER BY course.title SEPARATOR ', ') AS courses
                    FROM c_lp_item item
                    INNER JOIN c_lp lp ON lp.iid = item.lp_id
@@ -5989,7 +6021,7 @@ final readonly class GlobalReportingSectionQueryService
             $rows = $this->connection->fetchAllAssociative(
                 "SELECT MIN(lp.iid) AS id,
                         COALESCE(NULLIF(TRIM(lp.author), ''), 'Unknown') AS author,
-                        COUNT(*) AS items,
+                        COUNT(DISTINCT lp.iid) AS items,
                         GROUP_CONCAT(DISTINCT course.title ORDER BY course.title SEPARATOR ', ') AS courses
                    FROM c_lp lp
                    INNER JOIN resource_link ON resource_link.resource_node_id = lp.resource_node_id
@@ -6363,6 +6395,33 @@ final readonly class GlobalReportingSectionQueryService
         if ([] === $sessionIds || !$this->hasTables(['c_student_publication', 'resource_link'])) {
             return $this->emptyResult($filters, 'Works in session report', []);
         }
+        $parameters = ['sessionIds' => $sessionIds];
+        $types = ['sessionIds' => ArrayParameterType::INTEGER];
+        $coachCondition = '';
+        if (!$context->isAdministrator && !$context->isHumanResourcesManager && !$context->isSessionAdministratorOnly) {
+            // A coach: the courses he coaches (every course of a session he is general coach of), not every course
+            // of the session. The works definitions of the other courses are an agenda matter only.
+            $coachCondition = ' AND (
+                    EXISTS (SELECT 1 FROM session_rel_user general_coach
+                             WHERE general_coach.session_id = resource_link.session_id
+                               AND general_coach.user_id = :coachId
+                               AND general_coach.relation_type = :generalCoachRelationType)
+                 OR EXISTS (SELECT 1 FROM session_rel_course_rel_user course_coach
+                             WHERE course_coach.session_id = resource_link.session_id
+                               AND course_coach.c_id = resource_link.c_id
+                               AND course_coach.user_id = :coachId
+                               AND course_coach.status = :courseCoachStatus))';
+            $parameters += [
+                'coachId' => $context->currentUserId(),
+                'generalCoachRelationType' => self::SESSION_RELATION_TYPE_GENERAL_COACH,
+                'courseCoachStatus' => self::SESSION_STATUS_COURSE_COACH,
+            ];
+            $types += [
+                'coachId' => Types::INTEGER,
+                'generalCoachRelationType' => Types::INTEGER,
+                'courseCoachStatus' => Types::INTEGER,
+            ];
+        }
         $rows = $this->connection->fetchAllAssociative(
             'SELECT publication.iid AS id,
                     session.title AS session,
@@ -6379,10 +6438,10 @@ final readonly class GlobalReportingSectionQueryService
                INNER JOIN session ON session.id = resource_link.session_id
               WHERE resource_link.session_id IN (:sessionIds)
                 AND resource_link.deleted_at IS NULL
-                AND publication.parent_id IS NOT NULL
+                AND publication.parent_id IS NOT NULL'.$coachCondition.'
            ORDER BY session.title, course.title, publication.sent_date DESC',
-            ['sessionIds' => $sessionIds],
-            ['sessionIds' => ArrayParameterType::INTEGER],
+            $parameters,
+            $types,
         );
         foreach ($rows as &$row) {
             $row['id'] = (int) $row['id'];
@@ -6681,9 +6740,13 @@ final readonly class GlobalReportingSectionQueryService
         return array_values(array_map(
             'intval',
             $this->connection->fetchFirstColumn(
-                'SELECT DISTINCT user_id FROM access_url_rel_user WHERE access_url_id = :accessUrlId ORDER BY user_id',
-                ['accessUrlId' => $context->accessUrlId],
-                ['accessUrlId' => Types::INTEGER],
+                'SELECT DISTINCT relation.user_id
+                   FROM access_url_rel_user relation
+                  INNER JOIN user relation_user ON relation_user.id = relation.user_id
+                  WHERE relation.access_url_id = :accessUrlId AND relation_user.active <> :softDeleted
+                  ORDER BY relation.user_id',
+                ['accessUrlId' => $context->accessUrlId, 'softDeleted' => User::SOFT_DELETED],
+                ['accessUrlId' => Types::INTEGER, 'softDeleted' => Types::INTEGER],
             ),
         ));
     }

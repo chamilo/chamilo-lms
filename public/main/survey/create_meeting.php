@@ -26,6 +26,7 @@ $form = new FormValidator(
 );
 
 $form->addHeader($tool_name);
+$form->protect();
 $form->addHidden('anonymous', 0);
 $form->addHidden('survey_language', $courseInfo['language']);
 $form->addHidden('survey_subtitle', '');

@@ -49,7 +49,7 @@ $coupon = null;
 if (isset($_REQUEST['c']) && '' !== trim((string) $_REQUEST['c'])) {
     $couponValue = trim((string) $_REQUEST['c']);
     $coupon = ctype_digit($couponValue)
-        ? $plugin->getCouponService((int) $couponValue, $serviceId)
+        ? $plugin->getCouponService((int) $couponValue, $serviceId, true)
         : $plugin->getCouponServiceByCode($couponValue, $serviceId);
 
     if (empty($coupon) || empty($coupon['id'])) {

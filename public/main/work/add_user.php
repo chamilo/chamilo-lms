@@ -24,6 +24,11 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
+// The relation helpers do not scope by course: the work must be one of the current course/session.
+if (!workBelongsToCourse($workId, api_get_course_int_id(), $sessionId)) {
+    api_not_allowed(true);
+}
+
 $courseInfo = api_get_course_info();
 
 $interbreadcrumb[] = [
@@ -36,8 +41,20 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add a user')];
 
+// Adding and removing a user are links: they need the token those links carry.
+if (in_array($action, ['add', 'delete'], true) && !workActionTokenIsValid('get')) {
+    api_not_allowed(true);
+}
+
 switch ($action) {
     case 'add':
+        if (empty($userId)) {
+            api_not_allowed(true);
+        }
+        // Only a learner of this course (or session) can be assigned to the assignment.
+        if (!workUserIsStudentOfCourse($userId, api_get_course_int_id(), $sessionId)) {
+            api_not_allowed(true);
+        }
         $data = getUserToWork($userId, $workId, api_get_course_int_id());
         if (empty($data)) {
             addUserToWork($userId, $workId, api_get_course_int_id());
@@ -72,7 +89,9 @@ if (!empty($items)) {
         $myUserId = $data['user_id'];
         $usersAdded[] = $myUserId;
         $userInfo = api_get_user_info($myUserId);
-        $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?action=delete&id='.$workId.'&user_id='.$myUserId;
+        $url = workActionUrl(
+            api_get_path(WEB_CODE_PATH).'work/add_user.php?action=delete&id='.$workId.'&user_id='.$myUserId.'&'.api_get_cidreq()
+        );
         $link = Display::url(
             '<em class="fa fa-trash"></em> '.get_lang('Delete'),
             $url,
@@ -109,7 +128,9 @@ if (!empty($userToAddList)) {
     echo '<ul class="list-group">';
     foreach ($userToAddList as $user) {
         $userName = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
-        $url = api_get_path(WEB_CODE_PATH).'work/add_user.php?action=add&id='.$workId.'&user_id='.$user['user_id'];
+        $url = workActionUrl(
+            api_get_path(WEB_CODE_PATH).'work/add_user.php?action=add&id='.$workId.'&user_id='.$user['user_id'].'&'.api_get_cidreq()
+        );
         $link = Display::url(
             '<em class="fa fa-plus"></em> '.get_lang('Add'),
             $url,

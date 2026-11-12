@@ -39,6 +39,11 @@ $interbreadcrumb[] = [
     'name' => get_lang('Details'),
 ];
 
+// The attempt must belong to the current course: exe_id is a sequential integer.
+if (!ExerciseLib::attemptBelongsToCourse((int) ($_GET['exe_id'] ?? 0))) {
+    api_not_allowed(true);
+}
+
 $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_EXERCISES_QUESTION = Database::get_course_table(TABLE_QUIZ_QUESTION);

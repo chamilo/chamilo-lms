@@ -30,7 +30,7 @@ class MessageRepositoryTest extends AbstractApiTest
 
         $this->createUser('from');
         $senderUserIri = $this->findIriBy(User::class, ['username' => 'from']);
-        $fromUserToken = $this->getUserToken(['username' => 'from', 'password' => 'from']);
+        $fromUserToken = $this->getUserToken(['username' => 'from', 'password' => 'from'], true);
 
         $this->createUser('to');
         $receiverUserIri = $this->findIriBy(User::class, ['username' => 'to']);

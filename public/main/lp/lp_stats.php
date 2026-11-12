@@ -25,6 +25,19 @@ $extendedAll = $_GET['extend_all'] ?? null;
 $export = isset($_GET['export']) && 'csv' === $_GET['export'];
 $allowExtend = $_GET['allow_extend'] ?? 1;
 
+// The statistics of another user are for platform admins, the session admin of the session and the people
+// following that user in this course: student_id comes from the request.
+$statsCourseId = (int) api_get_course_entity()?->getId();
+$statsSessionId = (int) api_get_session_id();
+if (!api_is_platform_admin()
+    && !learnpath::mayViewStatsOfUser(api_get_user_id(), $userId, $statsCourseId, $statsSessionId)
+    && !($statsSessionId > 0
+        && SessionManager::canManageSessionId($statsSessionId)
+        && learnpath::userIsLearnerOfCourse($userId, $statsCourseId, $statsSessionId))
+) {
+    api_not_allowed(true);
+}
+
 $lpReportType = api_get_setting('lp.lp_show_reduced_report');
 $type = 'classic';
 if ('true' === $lpReportType) {

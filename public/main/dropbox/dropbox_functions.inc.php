@@ -9,6 +9,9 @@ use ChamiloSession as Session;
  * functions in the init files also but I have moved them over
  * to one file -- Patrick Cool <patrick.cool@UGent.be>, Ghent University.
  *
+ * @deprecated The dropbox tool is served by the Vue views (assets/vue/views/dropbox) and the API; this legacy
+ *             code still uses removed columns and the undefined SYS_COURSE_PATH and is kept only for reference.
+ *
  * @author Julio Montoya adding c_id support
  */
 $this_section = SECTION_COURSES;
@@ -107,6 +110,8 @@ function handle_multiple_actions()
  * Get conf settings.
  *
  * @return array
+ *
+ * @deprecated no caller; the dropbox_conf session value is never written.
  */
 function getDropboxConf()
 {
@@ -134,7 +139,7 @@ function delete_category($action, $id, $user_id = null)
     }
 
     $cat = get_dropbox_category($id);
-    if (0 == count($cat)) {
+    if (empty($cat)) {
         return false;
     }
 
@@ -151,7 +156,7 @@ function delete_category($action, $id, $user_id = null)
     } elseif ('deletesentcategory' == $action) {
         $sentreceived = 'sent';
         $entries_table = Database::get_course_table(TABLE_DROPBOX_FILE);
-        $id_field = 'id';
+        $id_field = 'iid';
         $return_message = get_lang('The folder has been deleted');
     } else {
         return get_lang('Error');
@@ -250,7 +255,7 @@ function store_move($id, $target, $part)
                     WHERE
                         c_id = $course_id AND
                         uploader_id = ".intval($_user['user_id'])." AND
-                        id = ".intval($id);
+                        iid = ".intval($id);
             Database::query($sql);
             $return_message = get_lang('The sent file has been moved');
         }
@@ -352,7 +357,7 @@ function store_addcategory()
         $sent = 0;
         $received = 1;
     } else {
-        return get_lang('Error');
+        return ['type' => 'error', 'message' => get_lang('Error')];
     }
 
     // check if the category name is valid
@@ -769,10 +774,10 @@ function removeUnusedFiles()
     $course_id = $_course['real_id'];
 
     // select all files that aren't referenced anymore
-    $sql = "SELECT DISTINCT f.id, f.filename
+    $sql = "SELECT DISTINCT f.iid, f.filename
             FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)." f
             LEFT JOIN ".Database::get_course_table(TABLE_DROPBOX_PERSON)." p
-            ON (f.id = p.file_id)
+            ON (f.iid = p.file_id)
             WHERE p.user_id IS NULL AND
                   f.c_id = $course_id
             ";
@@ -780,13 +785,16 @@ function removeUnusedFiles()
     while ($res = Database::fetch_array($result)) {
         //delete the selected files from the post and file tables
         $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
-                WHERE c_id = $course_id AND file_id = '".$res['id']."'";
+                WHERE c_id = $course_id AND file_id = '".$res['iid']."'";
         Database::query($sql);
         $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)."
-                WHERE c_id = $course_id AND id ='".$res['id']."'";
+                WHERE c_id = $course_id AND iid ='".$res['iid']."'";
         Database::query($sql);
         //delete file from server
-        @unlink(api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$res['filename']);
+        // SYS_COURSE_PATH no longer exists (course files moved to resource nodes): nothing to remove from disk.
+        if (defined('SYS_COURSE_PATH')) {
+            @unlink(api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$res['filename']);
+        }
     }
 }
 
@@ -809,7 +817,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     $sql = "SELECT f.uploader_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)." f
             LEFT JOIN ".Database::get_course_table(TABLE_DROPBOX_POST)." p
-            ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
+            ON (f.iid = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
             WHERE
                 p.dest_user_id = '".$mailingPseudoId."' AND
                 p.c_id = $course_id
@@ -1266,6 +1274,9 @@ function store_feedback()
     $course_id = api_get_course_int_id();
     if (empty($_POST['feedback'])) {
         return get_lang('Please type some text.');
+    } elseif (!user_can_download_file((int) $_GET['id'], api_get_user_id())) {
+        // The id comes from the request: only a file sent or received by the user, in this course, takes feedback.
+        return get_lang('Feedback error');
     } else {
         $table = Database::get_course_table(TABLE_DROPBOX_FEEDBACK);
         $params = [
@@ -1366,6 +1377,8 @@ function zip_download($fileList)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
  * @version march 2006
+ *
+ * @deprecated no caller.
  */
 function my_pre_add_callback($p_event, &$p_header)
 {
@@ -1381,6 +1394,8 @@ function my_pre_add_callback($p_event, &$p_header)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, March 2006
  * @author Ivan Tcholakov, 2010, code for html metadata has been added.
+ *
+ * @deprecated no caller.
  */
 function generate_html_overview($files, $dont_show_columns = [], $make_link = [])
 {
@@ -1516,7 +1531,7 @@ function get_last_tool_access($tool, $courseId = null, $user_id = null)
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
 
-    return $row['access_date'];
+    return $row['access_date'] ?? null;
 }
 /**
  * Previously $dropbox_cnf['mailingIdBase'], returns a mailing ID to generate a mail ID.

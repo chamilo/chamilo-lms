@@ -138,6 +138,10 @@ if (isset($_POST['formSent'])) {
         }
 
         while ($row = Database::fetch_array($result)) {
+            // api_protect_admin_script(true) lets every session admin in: export only the sessions he manages.
+            if (!SessionManager::canManageSessionId((int) $row['id'])) {
+                continue;
+            }
             $row['title'] = str_replace(';', ',', $row['title']);
             $row['username'] = str_replace(';', ',', $row['username']);
             $row['access_start_date'] = str_replace(';', ',', $row['access_start_date']);

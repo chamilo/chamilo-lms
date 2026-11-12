@@ -224,6 +224,7 @@ $strings['YouNeedToBeRegisteredInAtLeastOneCourse'] = 'You need to be registered
 $strings['YouNeedToBeRegisteredInAtLeastOneSession'] = 'You need to be registered in at least one session';
 $strings['IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere'] = "To obtain the certificate and/or the skills associated to this course, you need to buy the <b> Certificate </b> service. Go to the services catalogue to buy it by clicking <a target='_blank' href='%s'>here</a>";
 $strings['ServiceDeleted'] = 'Service deleted';
+$strings['ServiceHasCompletedSales'] = 'This service cannot be deleted because it has completed sales. Disable it instead.';
 $strings['ServiceCopied'] = 'Service copied successfully.';
 $strings['ServiceCopyFailed'] = 'The service could not be copied.';
 $strings['ServiceCopyInvalidSecurityToken'] = 'The copy request is no longer valid. Please try again.';

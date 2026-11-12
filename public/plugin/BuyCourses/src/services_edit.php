@@ -12,8 +12,12 @@ use Chamilo\CoreBundle\Framework\Container;
 $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 api_protect_admin_script(true);
+
+// Every form of this page carries the token (CsrfProtectionListener does not cover legacy plugin pages).
+buycoursesRequireAdminTokenOnPost();
 
 $serviceId = isset($_GET['id'])
     ? (int) $_GET['id']
@@ -131,6 +135,7 @@ $form = new FormValidator(
     'post',
     api_get_self().'?id='.$serviceId
 );
+buycoursesAdminTokenField($form);
 
 $form->addText('name', $plugin->get_lang('ServiceName'));
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
@@ -322,7 +327,14 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
     $values = buycoursesBuildPostedServicePayload($serviceId, $plugin);
 
     if (isset($_POST['delete_service'])) {
-        $plugin->deleteService($serviceId);
+        if (!$plugin->deleteService($serviceId)) {
+            Display::addFlash(
+                Display::return_message($plugin->get_lang('ServiceHasCompletedSales'), 'error')
+            );
+
+            header('Location: services_edit.php?id='.$serviceId);
+            exit;
+        }
 
         Display::addFlash(
             Display::return_message($plugin->get_lang('ServiceDeleted'), 'error')

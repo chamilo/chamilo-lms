@@ -9,6 +9,7 @@ declare(strict_types=1);
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 api_protect_admin_script(true);
 
@@ -18,6 +19,27 @@ $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 
 $action = isset($_GET['a']) ? $_GET['a'] : null;
+
+// PayPal payouts and payout cancellation change money records: platform admin only (api_protect_admin_script(true)
+// also lets session admins in), POST only, and the plugin admin token, like the same actions of buycourses.ajax.php.
+if (in_array((string) $action, ['proceedPayout', 'cancelPayout'], true)) {
+    if (!api_is_platform_admin()) {
+        api_not_allowed(true);
+    }
+
+    if ('POST' !== ($_SERVER['REQUEST_METHOD'] ?? 'GET')) {
+        http_response_code(405);
+
+        exit;
+    }
+
+    if (!buycoursesAdminTokenIsValid()) {
+        http_response_code(403);
+        echo Display::return_message(get_lang('Not validated'), 'warning');
+
+        exit;
+    }
+}
 
 switch ($action) {
     case 'saleInfo':
@@ -180,7 +202,9 @@ switch ($action) {
         $totalAccounts = 0;
         $totalPayout = 0;
 
-        $payouts = isset($_POST['payouts']) ? $_POST['payouts'] : '';
+        $payouts = isset($_POST['payouts']) && is_array($_POST['payouts'])
+            ? array_map('intval', $_POST['payouts'])
+            : '';
 
         if (!$payouts) {
             echo Display::return_message(get_plugin_lang('SelectOptionToProceed', 'BuyCoursesPlugin'), 'error', false);
@@ -219,7 +243,7 @@ switch ($action) {
             break;
         }
 
-        $payoutId = isset($_POST['id']) ? $_POST['id'] : '';
+        $payoutId = isset($_POST['id']) ? (int) $_POST['id'] : 0;
         $plugin->setStatusPayouts($payoutId, BuyCoursesPlugin::PAYOUT_STATUS_CANCELED);
         echo '';
 

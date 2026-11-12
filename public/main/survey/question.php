@@ -22,7 +22,7 @@ if (!api_is_allowed_to_edit(false, true)) {
 $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
 // Getting the survey information
 $surveyData = SurveyManager::get_survey($surveyId);
-if (empty($surveyData)) {
+if (empty($surveyData) || !SurveyManager::surveyBelongsToCurrentCourse($surveyId)) {
     api_not_allowed(true);
 }
 
@@ -91,6 +91,18 @@ if (!in_array($_GET['type'], $possible_types)) {
     api_not_allowed(true, Display::return_message(get_lang('This type does not exist'), 'error', false));
 }
 
+// The question being edited (from the URL, and from the body of the saving POST) must belong to this survey.
+foreach ([$_GET['question_id'] ?? 0, $_POST['question_id'] ?? 0] as $requestedQuestionId) {
+    if (!empty($requestedQuestionId) &&
+        !SurveyManager::surveyQuestionBelongsToSurvey((int) $requestedQuestionId, $surveyId)
+    ) {
+        api_not_allowed(true);
+    }
+}
+if (!empty($_POST['question_id']) && (int) $_POST['question_id'] !== (int) ($_GET['question_id'] ?? 0)) {
+    api_not_allowed(true);
+}
+
 // Displaying the form for adding or editing the question
 $surveyQuestion = survey_question::createQuestion($_GET['type']);
 
@@ -126,10 +138,19 @@ if (!empty($_GET['question_id'])) {
 
 $formData = $surveyQuestion->preSave($formData);
 $surveyQuestion->createForm($surveyData, $formData);
+// The form is posted several times (add/remove option) before being saved, so it carries the session token
+// without consuming it (protect() would consume it at the first post); only the save checks it.
+$surveyQuestion->getForm()->addHidden('sec_token', Security::get_existing_token());
 $surveyQuestion->getForm()->setDefaults($formData);
 $surveyQuestion->renderForm();
 
 if ($surveyQuestion->getForm()->validate()) {
+    if (isset($_POST['buttons']['save'])) {
+        if (!Security::check_token('post')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
+    }
     $values = $surveyQuestion->getForm()->getSubmitValues();
     $survey = Container::getSurveyRepository()->find($surveyId);
     $surveyQuestion->save($survey, $values, $formData);

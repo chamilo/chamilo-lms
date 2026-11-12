@@ -231,7 +231,6 @@ class SessionManager
                 $session
                     ->setTitle($name)
                     ->setVisibility($visibility)
-                    ->setDescription($description)
                     ->setShowDescription(1 === $showDescription)
                     ->setSendSubscriptionNotification((bool) $sendSubscriptionNotification)
                     ->setNotifyBoss((bool) $notifyBoss)
@@ -242,6 +241,18 @@ class SessionManager
                     ->setValidityInDays((int) $validityInDays)
                     ->setStatus($status)
                 ;
+
+                // Session::setDescription() only takes a string: leave the description unset when none is given.
+                if (null !== $description) {
+                    $session->setDescription((string) $description);
+                }
+
+                if ($sessionCategoryId > 0) {
+                    $category = Database::getManager()->getRepository(SessionCategory::class)->find($sessionCategoryId);
+                    if (null !== $category) {
+                        $session->setCategory($category);
+                    }
+                }
 
                 if (!empty($duration)) {
                     $session->setDuration((int) $duration);
@@ -330,16 +341,18 @@ class SessionManager
         $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-        $where = 'WHERE 1=1 ';
-        $user_id = api_get_user_id();
+        // The general coaches of a session are rows of session_rel_user (there is no s.id_coach column any more).
+        // A session whose coach is a soft-deleted user is left out; a session without coach is counted.
+        $where = 'WHERE 1=1 AND (u.id IS NULL OR u.active <> '.USER_SOFT_DELETED.') ';
+        $user_id = (int) api_get_user_id();
         $extraJoin = '';
 
         if (api_is_session_admin() &&
             'false' == api_get_setting('allow_session_admins_to_manage_all_sessions')
         ) {
             $where .= " AND (
-                            sru.user_id = '$user_id' AND
-                            sru.relation_type IN ('".Session::DRH.", ".Session::SESSION_ADMIN."')
+                            sru.user_id = $user_id AND
+                            sru.relation_type IN (".Session::DRH.", ".Session::SESSION_ADMIN.")
                             )
                       ";
 
@@ -392,8 +405,10 @@ class SessionManager
                 FROM $tbl_session s
                 LEFT JOIN $tbl_session_category sc
                 ON s.session_category_id = sc.id
-                INNER JOIN $tbl_user u
-                ON s.id_coach = u.id
+                LEFT JOIN $tbl_session_rel_user sru_coach
+                ON (sru_coach.session_id = s.id AND sru_coach.relation_type = ".Session::GENERAL_COACH.")
+                LEFT JOIN $tbl_user u
+                ON sru_coach.user_id = u.id
                 $courseCondition
                 $extraJoin
                 $where $where_condition ) as session_table";
@@ -416,7 +431,9 @@ class SessionManager
                 FROM $tbl_session s
                     LEFT JOIN  $tbl_session_category sc
                     ON s.session_category_id = sc.id
-                    INNER JOIN $tbl_user u ON s.id_coach = u.id
+                    LEFT JOIN $tbl_session_rel_user sru_coach
+                    ON (sru_coach.session_id = s.id AND sru_coach.relation_type = ".Session::GENERAL_COACH.")
+                    LEFT JOIN $tbl_user u ON sru_coach.user_id = u.id
                     INNER JOIN $table_access_url_rel_session ar
                     ON ar.session_id = s.id
                     $courseCondition
@@ -424,8 +441,6 @@ class SessionManager
                 $where $where_condition) as session_table";
             }
         }
-
-        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE u.active <> '.USER_SOFT_DELETED : ' AND u.active <> '.USER_SOFT_DELETED;
 
         $result_rows = Database::query($sql);
         $row = Database::fetch_array($result_rows);
@@ -500,8 +515,8 @@ class SessionManager
                      s.title,
                      s.display_start_date,
                      s.display_end_date,
-                     access_start_date,
-                     access_end_date,
+                     s.access_start_date,
+                     s.access_end_date,
                      s.visibility,
                      s.session_category_id,
                      s.id
@@ -3747,7 +3762,7 @@ class SessionManager
 				INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
 				LEFT JOIN  $session_category_table sc ON s.session_category_id = sc.id
 				LEFT JOIN $session_course_table sco ON (sco.session_id = s.id)
-				INNER JOIN $course_table c ON sco.c_id = c.id
+				LEFT JOIN $course_table c ON sco.c_id = c.id
 				WHERE ar.access_url_id = $urlId ";
 
         $availableFields = [
@@ -3838,6 +3853,8 @@ class SessionManager
      * Get Hot Sessions (limit 8).
      *
      * @return array with sessions
+     *
+     * @deprecated No caller left in the codebase.
      */
     public static function getHotSessions()
     {
@@ -3947,7 +3964,7 @@ class SessionManager
 
         $user = api_get_user_entity($userId);
 
-        if (!$user->isTeacher()) {
+        if (null === $user || !$user->isTeacher()) {
             return false;
         }
 
@@ -4070,6 +4087,7 @@ class SessionManager
         }
 
         $affected_rows = 0;
+        $touchedSessionIds = [];
         // Deleting assigned sessions to hrm_id.
         if ($removeSessionsFromUser) {
             if (api_is_multiple_url_enabled()) {
@@ -4096,6 +4114,7 @@ class SessionManager
                                 user_id = $userId AND
                                 relation_type =".Session::DRH;
                     Database::query($sql);
+                    $touchedSessionIds[] = (int) $row['session_id'];
                 }
             }
         }
@@ -4107,10 +4126,23 @@ class SessionManager
 
                 if (!$session->hasUserInSession($user, Session::DRH)) {
                     $session->addUserInSession(Session::DRH, $user);
+                    $touchedSessionIds[] = (int) $session_id;
 
                     $affected_rows++;
                 }
             }
+        }
+
+        if ($affected_rows > 0) {
+            // The rows removed above were deleted with raw SQL, so persist the new ones as well, then bring
+            // session.nbr_users (which counts every session_rel_user row) back in line with the table.
+            Database::getManager()->flush();
+        }
+        foreach (array_unique($touchedSessionIds) as $touchedSessionId) {
+            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)."
+                    SET nbr_users = (SELECT COUNT(user_id) FROM $tbl_session_rel_user WHERE session_id = $touchedSessionId)
+                    WHERE id = $touchedSessionId";
+            Database::query($sql);
         }
 
         return $affected_rows;
@@ -4150,8 +4182,10 @@ class SessionManager
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
 
-        $select = " SELECT * ";
+        // Explicit columns: SELECT * over session + session_rel_user made "id" the relation id, not the session id.
+        $select = " SELECT s.*, sru.session_id, sru.user_id, sru.relation_type ";
         if (api_is_multiple_url_enabled()) {
+            $select .= ", a.access_url_id ";
             $sql = " $select FROM $tbl_session s
                     INNER JOIN $tbl_session_rel_user sru ON (sru.session_id = s.id)
                     LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
@@ -4303,7 +4337,8 @@ class SessionManager
         $userId = (int) $userId;
         $user = api_get_user_entity($userId);
 
-        $select = ' SELECT DISTINCT * '.$injectExtraFields;
+        // s.* and not *: the join with access_url_rel_session also has an id column that would replace the session id.
+        $select = ' SELECT DISTINCT s.* '.$injectExtraFields;
         if ($getCount) {
             $select = ' SELECT count(DISTINCT(s.id)) as count ';
         }
@@ -4367,7 +4402,9 @@ class SessionManager
         }
 
         $whereConditions .= $keywordCondition;
-        $subQuery = !empty($sessionsQuery) ? (' AND s.id IN ('.implode(',', $sessionsQuery).')') : '';
+        // A user who follows no session must see no session: without any id the condition used to be dropped
+        // and every session of the access URL was returned.
+        $subQuery = !empty($sessionsQuery) ? (' AND s.id IN ('.implode(',', array_map('intval', $sessionsQuery)).')') : ' AND 1 = 0 ';
 
         $sql = " $select
                 FROM $tbl_session s
@@ -4928,6 +4965,10 @@ class SessionManager
     /**
      * Updates a session status.
      *
+     * Note: this writes session.visibility on purpose, not session.status. Its only callers (the promotion and
+     * career status toggles) pass the promotion's 1/0 active flag, which is a visibility switch; session.status
+     * holds the lifecycle (Session::STATUS_PLANNED/PROGRESS/FINISHED/CANCELLED), where 1 would mean "planned".
+     *
      * @param int session id
      * @param int status
      */
@@ -5246,6 +5287,10 @@ class SessionManager
             return false;
         }
 
+        if (!self::isSessionInUserUrlScope($session)) {
+            return false;
+        }
+
         if (api_is_platform_admin() && self::allowed($session)) {
             return true;
         }
@@ -5262,6 +5307,47 @@ class SessionManager
     }
 
     /**
+     * Access URL tenancy of a session: on a multi-URL install, only an unrestricted admin (registered on a root URL)
+     * reaches every session. A subtree-scoped admin reaches the sessions linked to a URL it manages; anybody else
+     * (session admin, coach, teacher) the sessions linked to the current URL. A session without any
+     * access_url_rel_session row belongs to no URL (the session lists INNER JOIN that table), so only the
+     * unrestricted admins reach it. Single-URL installs, calls without a session and calls without a user
+     * (cron/CLI) are not restricted.
+     */
+    private static function isSessionInUserUrlScope(?Session $session): bool
+    {
+        if (null === $session || !api_get_multiple_access_url()) {
+            return true;
+        }
+
+        $user = api_get_user_entity();
+        if (null === $user) {
+            return true;
+        }
+
+        $urlIds = [(int) api_get_current_access_url_id()];
+        if (api_is_platform_admin()) {
+            $managed = Container::getAccessUrlScopeHelper()->getManagedUrlIds($user);
+            if (null === $managed) {
+                return true;
+            }
+            $urlIds = $managed;
+        }
+
+        if ([] === $urlIds) {
+            return false;
+        }
+
+        $row = Database::fetch_row(Database::query(
+            'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION).'
+             WHERE session_id = '.(int) $session->getId().' AND access_url_id IN ('.implode(',', array_map('intval', $urlIds)).')
+             LIMIT 1'
+        ));
+
+        return !empty($row);
+    }
+
+    /**
      * Protect a session to be edited.
      *
      * @return mixed | bool true if pass the check, api_not_allowed otherwise
@@ -5271,6 +5357,105 @@ class SessionManager
         if (!self::cantEditSession($session, $checkSession)) {
             api_not_allowed(true);
         }
+    }
+
+    /**
+     * Whether the current user may manage the session with this id: the session exists, belongs to the current
+     * access URL (when several are enabled) and cantEditSession() accepts it. Use it for every session id that
+     * comes from a request, including the ones posted next to the session the page was protected for.
+     */
+    public static function canManageSessionId(int $sessionId): bool
+    {
+        if ($sessionId <= 0) {
+            return false;
+        }
+
+        $session = api_get_session_entity($sessionId);
+        if (null === $session) {
+            return false;
+        }
+
+        if (api_get_multiple_access_url()) {
+            $inUrl = Database::fetch_row(Database::query(
+                'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION).'
+                 WHERE session_id = '.$sessionId.' AND access_url_id = '.(int) api_get_current_access_url_id().'
+                 LIMIT 1'
+            ));
+            if (empty($inUrl)) {
+                return false;
+            }
+        }
+
+        return self::cantEditSession($session);
+    }
+
+    /**
+     * Whether an import that "updates existing sessions" may overwrite this session, matched by name. The CLI cron
+     * import runs without a logged in user and is trusted; any import done by a user must be allowed to manage the
+     * session.
+     */
+    public static function canImportOverwriteSession(int $sessionId): bool
+    {
+        if ('cli' === PHP_SAPI && empty(api_get_user_id())) {
+            return true;
+        }
+
+        return self::canManageSessionId($sessionId);
+    }
+
+    /**
+     * Keeps, from a list of session ids taken from a request, the ones the current user may manage.
+     *
+     * @param mixed $sessionIds
+     *
+     * @return int[]
+     */
+    public static function filterManageableSessionIds($sessionIds): array
+    {
+        if (!is_array($sessionIds)) {
+            return [];
+        }
+
+        $allowed = [];
+        foreach (array_unique(array_map('intval', $sessionIds)) as $sessionId) {
+            if (self::canManageSessionId($sessionId)) {
+                $allowed[] = $sessionId;
+            }
+        }
+
+        return $allowed;
+    }
+
+    /**
+     * Whether the current user may delete this session category: platform admins and session admins only, the
+     * category must belong to the current access URL, and every session in it must be manageable by the user
+     * (deleting a category either unlinks or deletes the sessions in it).
+     */
+    public static function canDeleteSessionCategory(int $categoryId): bool
+    {
+        if ($categoryId <= 0 || (!api_is_platform_admin() && !api_is_session_admin())) {
+            return false;
+        }
+
+        $tblCategory = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        $inUrl = Database::fetch_row(Database::query(
+            "SELECT id FROM $tblCategory
+             WHERE id = $categoryId AND access_url_id = ".(int) api_get_current_access_url_id()
+        ));
+        if (empty($inUrl)) {
+            return false;
+        }
+
+        $result = Database::query("SELECT id FROM $tblSession WHERE session_category_id = $categoryId");
+        while ($row = Database::fetch_assoc($result)) {
+            $session = api_get_session_entity((int) $row['id']);
+            if (null === $session || !self::cantEditSession($session)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static function allowToManageSessions(): bool
@@ -5777,6 +5962,10 @@ class SessionManager
 
                     if (isset($sessionId) && !empty($sessionId)) {
                         $session_id = $sessionId;
+                        if (!self::canImportOverwriteSession((int) $session_id)) {
+                            $error_message .= $eol.get_lang('Not allowed').': '.$session_name;
+                            continue;
+                        }
                         if (!empty($enreg['SessionName'])) {
                             $sessionExistsWithName = self::get_session_by_name($session_name);
                             if (false === $sessionExistsWithName) {
@@ -5810,6 +5999,10 @@ class SessionManager
                     } else {
                         $my_session_result = self::get_session_by_name($session_name);
                         $session_id = $my_session_result['id'];
+                        if (!self::canImportOverwriteSession((int) $session_id)) {
+                            $error_message .= $eol.get_lang('Not allowed').': '.$session_name;
+                            continue;
+                        }
                     }
 
                     if ($debug) {
@@ -5818,7 +6011,7 @@ class SessionManager
 
                     if ($session_id) {
                         $sessionInfo = api_get_session_info($session_id);
-                        $params['show_description'] = $sessionInfo['show_description'] ?? intval($showDescription);
+                        $params['show_description'] = (int) ($sessionInfo['show_description'] ?? $showDescription);
 
                         if (!empty($daysCoachAccessBeforeBeginning) && !empty($daysCoachAccessAfterBeginning)) {
                             if (empty($sessionInfo['nb_days_access_before_beginning']) ||
@@ -6554,6 +6747,10 @@ class SessionManager
 
                 if ($updateSession && $mySession) {
                     $sessionId = $mySession['id'];
+                    if (!self::canImportOverwriteSession((int) $sessionId)) {
+                        $errorMessage .= get_lang('Not allowed').': '.$sessionName.' ';
+                        continue;
+                    }
                     Database::update($tblSession, [
                         'access_start_date' => $dateStart,
                         'access_end_date' => $dateEnd,
@@ -7673,6 +7870,11 @@ class SessionManager
             }
         }
 
+        // The course is unknown in this session or already at the end of the list: nothing to swap.
+        if (!isset($nextId, $thisCourseCode)) {
+            return false;
+        }
+
         $sql1 = "UPDATE $table SET position = '".intval($nextOrder)."'
                  WHERE session_id = $sessionId AND c_id =  $thisCourseCode";
         Database::query($sql1);
@@ -8080,6 +8282,8 @@ class SessionManager
      * @param array  $extraFields A list of fields to be scanned and returned
      *
      * @return mixed
+     *
+     * @deprecated No caller left in the codebase.
      */
     public static function getShortSessionListAndExtraByCategory(
         $categoryId,
@@ -8235,6 +8439,8 @@ class SessionManager
      * @return array If success, return session list and more session related data, else it will return an array
      *               with the next structure:
      *               array('error' => true, 'errorMessage' => ERROR_MESSAGE)
+     *
+     * @deprecated No caller left in the codebase.
      */
     public static function getSessionListAndExtraByCategoryId($sessionCategoryId)
     {
@@ -8556,9 +8762,9 @@ class SessionManager
         $sql = "SELECT DISTINCT s.*
                 FROM $sessionTable s
                 INNER JOIN $sessionUserTable sru
-                ON s.id = sru.id_session
+                ON s.id = sru.session_id
                 WHERE
-                    (sru.id_user IN (".implode(', ', $userIdList).")
+                    (sru.user_id IN (".implode(', ', array_map('intval', $userIdList)).")
                     AND sru.relation_type = ".Session::STUDENT."
                 )";
 
@@ -8569,12 +8775,12 @@ class SessionManager
             if (-1 != $accessUrlId) {
                 $sql = "SELECT DISTINCT s.*
                         FROM $sessionTable s
-                        INNER JOIN $sessionUserTable sru ON s.id = sru.id_session
+                        INNER JOIN $sessionUserTable sru ON s.id = sru.session_id
                         INNER JOIN $sessionAccessUrlTable srau ON s.id = srau.session_id
                         WHERE
                             srau.access_url_id = $accessUrlId
                             AND (
-                                sru.id_user IN (".implode(', ', $userIdList).")
+                                sru.user_id IN (".implode(', ', array_map('intval', $userIdList)).")
                                 AND sru.relation_type = ".Session::STUDENT."
                             )";
             }
@@ -9139,7 +9345,7 @@ class SessionManager
         $where = 'WHERE 1 = 1 AND u.active <> -1 ';
 
         if (api_is_session_admin() &&
-            'false' == api_get_setting('allow_session_admins_to_see_all_sessions')
+            'false' == api_get_setting('allow_session_admins_to_manage_all_sessions')
         ) {
             $user_id = api_get_user_id();
             $where .= ' AND (sru.relation_type = '.Session::SESSION_ADMIN." AND sru.user_id = $user_id) ";
@@ -9826,8 +10032,8 @@ class SessionManager
                 s.display_start_date,
                 s.display_end_date,
                 $coach_name,
-                access_start_date,
-                access_end_date,
+                s.access_start_date,
+                s.access_end_date,
                 s.visibility,
                 u.id as user_id,
                 $injectExtraFields
@@ -10224,6 +10430,8 @@ class SessionManager
      * @param int $userId
      *
      * @return array
+     *
+     * @deprecated No caller left, and it always returns an empty array ($listResults is never filled).
      */
     public static function getNamedSessionCourseForCoach($userId)
     {
@@ -10698,10 +10906,14 @@ class SessionManager
                 continue;
             }
 
-            $session
-                ->addUserInCourse($relationInfo['status'], $user, $course)
-                ->setVisibility($relationInfo['visibility'])
-            ;
+            $subscription = $session->addUserInCourse($relationInfo['status'], $user, $course);
+
+            // Session::addUserInCourse() returns null when the user is already subscribed: nothing to insert.
+            if (null === $subscription) {
+                continue;
+            }
+
+            $subscription->setVisibility($relationInfo['visibility']);
 
             Event::logUserSubscribedInCourseSession($user, $course, $session);
 
@@ -10792,6 +11004,9 @@ class SessionManager
         return $careers;
     }
 
+    /**
+     * @deprecated No caller left in the codebase.
+     */
     public static function getCareerDiagramPerSessionList($sessionList, $userId)
     {
         if (empty($sessionList) || empty($userId)) {

@@ -63,6 +63,15 @@ if ($signature === $signatureReceived) {
     }
 
     if ('0000' == $response) {
+        // The signature binds the amount the bank charged: it must be the price of the sale.
+        if (!BuyCoursesPlugin::gatewayAmountMatchesSale((string) $tpv->getParameter('Ds_Amount'), $sale)) {
+            error_log(
+                '[BuyCourses] Redsys notification refused: amount '.(string) $tpv->getParameter('Ds_Amount')
+                .' does not match the price of sale '.(int) $sale['id']
+            );
+            api_not_allowed(true);
+        }
+
         $saleIsCompleted = $plugin->completeSale($sale['id']);
         if ($saleIsCompleted) {
             $plugin->storePayouts($sale['id']);

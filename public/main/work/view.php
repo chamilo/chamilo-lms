@@ -217,6 +217,10 @@ if ('edit' === $page) {
 
 switch ($action) {
     case 'send_comment':
+        // The comment form carries the token (it also sets the score and uploads a correction).
+        if (!workActionTokenIsValid('post')) {
+            api_not_allowed(true);
+        }
         $commentRequest = Container::getRequest();
         if (!$isCourseManager && ($commentRequest->files->get('attachment') || $commentRequest->files->get('file'))) {
             api_not_allowed(true);
@@ -269,6 +273,16 @@ switch ($action) {
         exit;
 
     case 'delete_attachment':
+        // Only the author of the comment or a manager, and only for a comment of this submission.
+        if (!workActionTokenIsValid('get') || !workCommentFileIsDeletable(
+            (int) ($_REQUEST['comment_id'] ?? 0),
+            (int) $workId,
+            (int) api_get_user_id(),
+            $isCourseManager
+        )) {
+            api_not_allowed(true);
+        }
+
         deleteCommentFile(
             (int) ($_REQUEST['comment_id'] ?? 0),
             api_get_course_info()
@@ -279,6 +293,9 @@ switch ($action) {
         exit;
 
     case 'delete_correction':
+        if (!workActionTokenIsValid('get')) {
+            api_not_allowed(true);
+        }
         if ($allowEdition) {
             deleteCorrection($work);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
@@ -315,7 +332,9 @@ if (null !== $correctionNode) {
         ).'?'.api_get_cidreq();
 
     if ($allowEdition) {
-        $deleteCorrectionUrl = api_get_self().'?action=delete_correction&id='.$id.'&'.api_get_cidreq().work_view_get_origin_query();
+        $deleteCorrectionUrl = workActionUrl(
+            api_get_self().'?action=delete_correction&id='.$id.'&'.api_get_cidreq().work_view_get_origin_query()
+        );
     }
 }
 

@@ -28,14 +28,33 @@ $action = isset($_REQUEST['action']) ? Security::remove_XSS($_REQUEST['action'])
 $sort = isset($_GET['sort']) && in_array($_GET['sort'], ['title', 'nbr_session', 'date_start', 'date_end'])
     ? Security::remove_XSS($_GET['sort'])
     : 'title';
-$idChecked = isset($_REQUEST['idChecked']) ? Security::remove_XSS($_REQUEST['idChecked']) : null;
 $order = (isset($_REQUEST['order']) && 'DESC' === strtoupper($_REQUEST['order'])) ? 'DESC' : 'ASC';
 $keyword = null;
 
+// Keep the token of the session: regenerating it on every request would invalidate the one of the page that
+// sent the request. Legacy pages are not covered by CsrfProtectionListener.
+$token = Security::get_existing_token();
+
 if ('delete_on_session' === $action || 'delete_off_session' === $action) {
+    if (!Security::check_token('request')) {
+        api_not_allowed(true);
+    }
     $delete_session = 'delete_on_session' == $action ? true : false;
-    SessionManager::delete_session_category($idChecked, $delete_session);
-    Display::addFlash(Display::return_message(get_lang('The selected categories have been deleted')));
+    $categoryIds = array_values(array_unique(array_map('intval', (array) ($_REQUEST['idChecked'] ?? []))));
+    $deletable = [];
+    foreach ($categoryIds as $categoryId) {
+        // Only the categories of the current URL whose sessions the user manages: nothing is deleted halfway.
+        if (SessionManager::canDeleteSessionCategory($categoryId)) {
+            $deletable[] = $categoryId;
+        }
+    }
+    if (!empty($deletable)) {
+        SessionManager::delete_session_category($deletable, $delete_session);
+        Display::addFlash(Display::return_message(get_lang('The selected categories have been deleted')));
+    }
+    if (count($deletable) !== count($categoryIds)) {
+        Display::addFlash(Display::return_message(get_lang('You are not allowed to see this page.'), 'warning'));
+    }
     header('Location: '.api_get_self().'?sort='.$sort);
     exit();
 }
@@ -118,6 +137,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
     echo Display::toolbarAction('category', [$actionsLeft, $actionsRight]); ?>
     <form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>"
           onsubmit="if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
+        <input type="hidden" name="sec_token" value="<?php echo $token; ?>">
         <?php
         if (0 == count($Sessions) && isset($_POST['keyword'])) {
             echo Display::return_message(get_lang('No search results'), 'warning');
@@ -209,7 +229,7 @@ if (isset($_GET['search']) && 'advanced' === $_GET['search']) {
                                 <?php echo Display::getMdiIcon('pencil', 'ch-tool-icon', null, 22, get_lang('Edit')); ?>
                             </a>
                             <a href="<?php echo api_get_self(
-                            ); ?>?sort=<?php echo $sort; ?>&action=delete_off_session&idChecked=<?php echo $enreg['id']; ?>"
+                            ); ?>?sort=<?php echo $sort; ?>&action=delete_off_session&idChecked[]=<?php echo (int) $enreg['id']; ?>&sec_token=<?php echo $token; ?>"
                                onclick="if(!confirm('<?php echo get_lang(
                                    'Please confirm your choice'
                                ); ?>')) return false;">

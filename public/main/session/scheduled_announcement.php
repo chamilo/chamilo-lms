@@ -14,13 +14,31 @@ $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $sessionInfo = api_get_session_info($sessionId);
-if (!$sessionInfo) {
+// api_protect_admin_script(true) lets every session admin in: the session must be one the user manages.
+if (!$sessionInfo || !SessionManager::canManageSessionId($sessionId)) {
     api_not_allowed(true);
 }
 
 $object = new ScheduledAnnouncement();
 
 if (!$object->allowed()) {
+    api_not_allowed(true);
+}
+
+// Keep the token of the session: regenerating it on every request would invalidate the one of the page that
+// sent the request. Legacy pages are not covered by CsrfProtectionListener.
+$token = Security::get_existing_token();
+
+// An announcement id taken from the request must be an announcement of THIS session.
+$item = null;
+if (in_array($action, ['edit', 'delete'], true)) {
+    $item = $object->get($id);
+    if (empty($item) || (int) $item['session_id'] !== $sessionId) {
+        api_not_allowed(true);
+    }
+}
+// `run` sends mail on a GET: it needs the token too (cron does not use this page: see cron/scheduled_announcement.php).
+if (in_array($action, ['delete', 'run'], true) && !Security::check_token('get')) {
     api_not_allowed(true);
 }
 
@@ -89,6 +107,8 @@ switch ($action) {
             }
 
             $values['sent'] = isset($values['sent']) ? (int) $values['sent'] : 0;
+            // Never trust the hidden session_id of the form: it is the session of the page.
+            $values['session_id'] = $sessionId;
             $res = $object->save($values);
 
             if ($res) {
@@ -129,6 +149,7 @@ switch ($action) {
         if ($form->validate()) {
             $values = $form->getSubmitValues();
             $values['id'] = $id;
+            $values['session_id'] = $sessionId;
             $values['sent'] = isset($values['sent']) ? (int)$values['sent'] : 0;
             $values['date'] = api_get_utc_datetime($values['date']);
             $res = $object->update($values);
@@ -144,7 +165,6 @@ switch ($action) {
 
             $content = $object->getGrid($sessionId);
         } else {
-            $item = $object->get($id);
             $item['date'] = api_get_local_time($item['date']);
             $form->setDefaults($item);
             $content = $form->returnForm();
@@ -200,7 +220,7 @@ $columnModel = [
 
 $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
     return \'<a href="?action=edit&session_id='.$sessionId.'&id=\'+options.rowId+\'">'.Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?action=delete&session_id='.$sessionId.'&id=\'+options.rowId+\'">'.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?action=delete&session_id='.$sessionId.'&id=\'+options.rowId+\'&sec_token='.$token.'">'.Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>'.
     '\';
 }';
 
@@ -224,6 +244,6 @@ $(function() {
 </script>';
 
 $tpl = new Template($tool_name);
-$sessionTitle = Display::page_header($sessionInfo['name']);
+$sessionTitle = Display::page_header(api_htmlentities($sessionInfo['name']));
 $tpl->assign('content', $sessionTitle.$content);
 $tpl->display_one_col_template();

@@ -6,6 +6,9 @@
  * Dropbox module for Chamilo
  * Classes for the dropbox module.
  *
+ * @deprecated The dropbox tool is served by the Vue views (assets/vue/views/dropbox) and the API; this legacy
+ *             code still uses removed columns and the undefined SYS_COURSE_PATH and is kept only for reference.
+ *
  * 3 classes have been defined:
  * - Dropbox_Work:
  *        . id

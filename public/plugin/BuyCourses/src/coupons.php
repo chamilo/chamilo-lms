@@ -57,7 +57,7 @@ $coupons = $plugin->getCouponsListByStatus($selectedStatus);
 
 foreach ($coupons as &$coupon) {
     if (BuyCoursesPlugin::COUPON_DISCOUNT_TYPE_PERCENTAGE == (int) $coupon['discount_type']) {
-        $coupon['discount_value'] = $coupon['discount_amount'].' %';
+        $coupon['discount_value'] = (float) $coupon['discount_amount'].' %';
     } elseif (BuyCoursesPlugin::COUPON_DISCOUNT_TYPE_AMOUNT == (int) $coupon['discount_type']) {
         if ($currencyIso) {
             $coupon['discount_value'] = $plugin->getPriceWithCurrencyFromIsoCode(

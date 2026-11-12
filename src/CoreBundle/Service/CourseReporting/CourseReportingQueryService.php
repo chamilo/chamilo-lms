@@ -564,7 +564,7 @@ final class CourseReportingQueryService
         }
 
         $forumPosts = [];
-        if ($this->hasTables(['c_forum_post', 'c_forum_thread', 'c_forum', 'resource_link'])) {
+        if ($this->hasTables(['c_forum_post', 'c_forum_thread', 'c_forum_forum', 'resource_link'])) {
             $postSessionCondition = $context->sessionId() > 0
                 ? 'AND post_link.session_id = :sessionId'
                 : 'AND (post_link.session_id IS NULL OR post_link.session_id = 0)';
@@ -586,7 +586,7 @@ final class CourseReportingQueryService
                 FROM c_forum_post post
                 LEFT JOIN c_forum_thread thread
                     ON thread.iid = post.thread_id
-                LEFT JOIN c_forum forum
+                LEFT JOIN c_forum_forum forum
                     ON forum.iid = post.forum_id
                 LEFT JOIN resource_link post_link
                     ON post_link.resource_node_id = post.resource_node_id
@@ -606,7 +606,7 @@ final class CourseReportingQueryService
         }
 
         $forumThreads = [];
-        if ($this->hasTables(['c_forum_thread', 'c_forum', 'resource_link'])) {
+        if ($this->hasTables(['c_forum_thread', 'c_forum_forum', 'resource_link'])) {
             $forumThreads = $this->connection->fetchAllAssociative(
                 "SELECT
                     thread.iid AS thread_id,
@@ -617,7 +617,7 @@ final class CourseReportingQueryService
                     forum.iid AS forum_id,
                     forum.title AS forum_title
                 FROM c_forum_thread thread
-                LEFT JOIN c_forum forum
+                LEFT JOIN c_forum_forum forum
                     ON forum.iid = thread.forum_id
                 INNER JOIN resource_link rl
                     ON rl.resource_node_id = thread.resource_node_id
@@ -1049,7 +1049,7 @@ final class CourseReportingQueryService
                 'SELECT iid, user_id, lp_id, view_count, progress, completion_date
                    FROM c_lp_view
                   WHERE c_id = :courseId
-                    AND session_id = :sessionId
+                    AND COALESCE(session_id, 0) = :sessionId
                     AND user_id IN (:userIds)
                     AND lp_id IN (:lpIds)
                   ORDER BY user_id ASC, lp_id ASC, view_count DESC, iid DESC',
@@ -1096,7 +1096,7 @@ final class CourseReportingQueryService
                 INNER JOIN c_lp_item item
                     ON item.iid = item_view.lp_item_id
                 WHERE lp_view.c_id = :courseId
-                    AND lp_view.session_id = :sessionId
+                    AND COALESCE(lp_view.session_id, 0) = :sessionId
                     AND lp_view.user_id IN (:userIds)
                     AND lp_view.lp_id IN (:lpIds)
                     AND item.item_type = 'final_item'
@@ -1172,7 +1172,7 @@ final class CourseReportingQueryService
             INNER JOIN c_lp_item_view item_view
                 ON item_view.lp_view_id = lp_view.iid
             WHERE lp_view.c_id = :courseId
-                AND lp_view.session_id = :sessionId
+                AND COALESCE(lp_view.session_id, 0) = :sessionId
                 AND lp_view.user_id IN (:userIds)
                 AND lp_view.lp_id IN (:lpIds)
             ORDER BY
@@ -1646,6 +1646,15 @@ final class CourseReportingQueryService
         CourseReportingContext $context,
         int $userId
     ): bool {
+        // Same accounts as the participants table: removed (-2) and inactive accounts are not reportable.
+        $active = $this->connection->fetchOne(
+            'SELECT active FROM `user` WHERE id = :userId',
+            ['userId' => $userId]
+        );
+        if (1 !== (int) $active) {
+            return false;
+        }
+
         if ($context->sessionId() > 0) {
             $isEnrolled = (bool) $this->connection->fetchOne(
                 'SELECT 1

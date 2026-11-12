@@ -3582,55 +3582,50 @@ Given("I have a friend named {string}", async ({ page }, friendUsername: string)
   if (!adminId) {
     throw new Error("Could not resolve the admin user's id")
   }
-  await page.goto(
-    `/main/inc/ajax/message.ajax.php?a=send_invitation&user_id=${encodeURIComponent(friendId)}&content=${encodeURIComponent("Add me")}`,
-  )
-  // An explicit /logout before switching to friendUsername is needed for the
-  // same reason noted above — this page already carries the admin cookie
-  // from the Gherkin's preceding "Given I am a platform administrator".
+  // SocialController::user() only accepts "add_friend" for an invitation that is pending, and only lets
+  // the invitee accept it. The invitation itself has to come from the friend: an admin or teacher inviting
+  // a student is refused unless social.social_make_teachers_friend_all is on. So the friend invites admin
+  // and admin accepts. In-page fetch (not page.request.post): CsrfProtectionListener needs the
+  // Origin/Referer/Sec-Fetch-Site of a same-origin browser request.
+  const userAction = (targetUserId: number, action: string) =>
+    page.evaluate(
+      async ({ targetUserId, action }) => {
+        const response = await fetch("/social-network/user-action", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            targetUserId,
+            action,
+            subject: "Add me",
+            content: "Add me",
+            is_my_friend: true,
+          }),
+        })
+        return { status: response.status, body: await response.text() }
+      },
+      { targetUserId, action },
+    )
+  const assertSuccess = (result: { status: number; body: string }, action: string) => {
+    if (result.status >= 400 || !result.body.includes("success")) {
+      throw new Error(`${action} failed with ${result.status}: ${result.body}`)
+    }
+  }
+
+  // An explicit /logout before switching user is needed: this page already carries the admin cookie.
   await page.goto("/logout")
   await loginAs(page, friendUsername)
-  // Ported from FeatureContext, this originally called
-  // social.ajax.php?a=add_friend — but that action doesn't exist in
-  // social.ajax.php at all (confirmed via a full-repo grep: no case handles
-  // it, nothing else in the codebase calls it either — it silently falls
-  // through to social.ajax.php's own `default:` case and no-ops, always
-  // returning 200 without ever creating a friend relation). The real,
-  // currently-working implementation is SocialController::user()'s
-  // 'add_friend' case (the same modern /social-network/user-action endpoint
-  // the Vue "Add friend" UI itself posts to) — uses page.request.post() (not
-  // page.goto(), since this needs a JSON body) so friendUsername's own
-  // session cookie is used, matching "the target user's own session
-  // accepts it".
-  //
-  // Real CI failure (socialGroup.feature "Invite a friend to group"): the
-  // first version of this post used Playwright's default form encoding
-  // (`data: { ... }` without a JSON Content-Type). SocialController::user()
-  // reads json_decode($request->getContent()), so the body never parsed,
-  // add_friend never ran, and group_invitation.php rendered "You already
-  // invite all your contacts" with an empty dual-list (admin had leftover
-  // non-friend relations from other fixtures, but fbaggins was not among
-  // them). The Vue UI itself sends application/json; match that, and fail
-  // loud if the endpoint doesn't accept the friendship.
-  // Use in-page fetch (not page.request.post): CsrfProtectionListener
-  // requires Origin/Referer/Sec-Fetch-Site from a same-origin browser
-  // request. Playwright's APIRequestContext does not send those, so the
-  // first version of this post returned 200/4xx without creating the
-  // user_rel_user row — group_invitation.php then showed "You already
-  // invite all your contacts" with an empty dual-list.
-  const addFriendResult = await page.evaluate(async (targetUserId: number) => {
-    const response = await fetch("/social-network/user-action", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ targetUserId, action: "add_friend", is_my_friend: true }),
-    })
-    return { status: response.status, body: await response.text() }
-  }, Number(adminId))
-  if (addFriendResult.status >= 400 || !addFriendResult.body.includes("success")) {
-    throw new Error(`add_friend failed with ${addFriendResult.status}: ${addFriendResult.body}`)
+  const invitation = await userAction(Number(adminId), "send_invitation")
+  // The suite does not delete the friendship afterwards, so on a database that already ran this step the
+  // two are friends (or invited) already: nothing is left to do, and that is what the step promises.
+  const alreadyRelated = invitation.body.includes("already exists")
+  if (!alreadyRelated) {
+    assertSuccess(invitation, "send_invitation")
   }
   await page.goto("/logout")
   await loginAs(page, "admin")
+  if (!alreadyRelated) {
+    assertSuccess(await userAction(Number(friendId), "add_friend"), "add_friend")
+  }
 })
 
 // Not ported — new, for specialCase2TutorWorkflow.feature's "assign a learner

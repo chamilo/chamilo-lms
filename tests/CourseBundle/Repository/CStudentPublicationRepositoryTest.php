@@ -197,6 +197,22 @@ class CStudentPublicationRepositoryTest extends AbstractApiTest
         $this->assertCount(1, $qb->getQuery()->getResult());
 
         $this->assertSame(1, $repo->countUserPublications($student, $course));
+        // The report of the teachers' time counts what the teacher published, not the learners' submissions.
+        $this->assertCount(0, $repo->findWorksByTeacher($teacher, $course));
+        $this->assertCount(1, $repo->findWorksByTeacher($student, $course));
+
+        $teacherResult = (new CStudentPublication())
+            ->setTitle('work from teacher')
+            ->setPublicationParent($item)
+            ->setParent($item)
+            ->setFiletype('file')
+            ->setWeight(100)
+            ->setCreator($teacher)
+            ->setActive(1)
+            ->addCourseLink($course)
+        ;
+        $em->persist($teacherResult);
+        $em->flush();
         $this->assertCount(1, $repo->findWorksByTeacher($teacher, $course));
     }
 

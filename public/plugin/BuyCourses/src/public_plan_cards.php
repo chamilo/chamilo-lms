@@ -7,6 +7,7 @@ declare(strict_types=1);
 $cidReset = true;
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 require_once __DIR__.'/public_plan_cards.lib.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 api_protect_admin_script(true);
 
@@ -15,14 +16,8 @@ $errors = [];
 $saved = false;
 $config = buycoursesGetPublicPlanSettings($plugin);
 
-$tokenKey = 'buycourses_public_plan_cards_csrf';
-if (empty($_SESSION[$tokenKey])) {
-    $_SESSION[$tokenKey] = bin2hex(random_bytes(32));
-}
-
 if ('POST' === $_SERVER['REQUEST_METHOD']) {
-    $postedToken = (string) ($_POST['csrf_token'] ?? '');
-    if (!hash_equals((string) $_SESSION[$tokenKey], $postedToken)) {
+    if (!buycoursesAdminTokenIsValid()) {
         $errors[] = $plugin->get_lang('PublicPlanInvalidToken');
     } else {
         $submitted = [
@@ -60,7 +55,6 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
                 buycoursesSavePublicPlanSettings($plugin, $submitted);
                 $config = buycoursesNormalizePublicPlanSettings($submitted);
                 $saved = true;
-                $_SESSION[$tokenKey] = bin2hex(random_bytes(32));
             } catch (Throwable $exception) {
                 error_log('[BuyCourses][PublicPlans] Save failed: '.$exception->getMessage());
                 $errors[] = $plugin->get_lang('PublicPlanSaveFailed');
@@ -83,7 +77,7 @@ $view->assign('plan_current_language', buycoursesPublicPlanLanguage());
 $view->assign('plan_language_labels', ['en_US' => 'English', 'fr_FR' => 'Français', 'es' => 'Español']);
 $view->assign('errors', $errors);
 $view->assign('saved', $saved);
-$view->assign('csrf_token', $_SESSION[$tokenKey]);
+$view->assign('csrf_token', buycoursesAdminToken());
 $view->assign('catalog_url', api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php?preview_public=1');
 $view->assign('plugin_url', api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php');
 $view->assign('plan_labels', [

@@ -49,6 +49,8 @@ class SubLanguageManager
      * @param bool   $only_main_name true if we only want the "subname" trad4all instead of trad4all.inc.php
      *
      * @return array All file of lang folder
+     *
+     * @deprecated Only used by the gettext migration scripts under tests/scripts.
      */
     public static function get_lang_folder_files_list($path, $only_main_name = false)
     {
@@ -256,7 +258,7 @@ class SubLanguageManager
         $language_info = self::get_all_information_of_language($language_id);
         $table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT count(*) AS count FROM '.$table.'
-                WHERE locale ="'.Database::escape_string($language_info['english_name']).'" AND active <> '.USER_SOFT_DELETED;
+                WHERE locale ="'.Database::escape_string($language_info['isocode'] ?? '').'" AND active <> '.USER_SOFT_DELETED;
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0 && Database::result($rs, '0', 'count') >= 1) {
             return true;
@@ -279,7 +281,7 @@ class SubLanguageManager
                 WHERE parent_id= '.intval($language_id).' AND NOT ISNULL(parent_id);';
         $rs = Database::query($sql);
 
-        if (Database::num_rows($rs) > 0 && 1 == Database::result($rs, '0', 'count')) {
+        if (Database::num_rows($rs) > 0 && Database::result($rs, '0', 'count') >= 1) {
             return true;
         } else {
             return false;
@@ -358,9 +360,9 @@ class SubLanguageManager
      */
     public static function get_platform_language_id()
     {
-        $name = api_get_setting('platformLanguage');
+        $isocode = Database::escape_string((string) api_get_setting('language.platform_language'));
         $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = "SELECT id FROM $tbl_admin_languages WHERE english_name ='$name'";
+        $sql = "SELECT id FROM $tbl_admin_languages WHERE isocode ='$isocode'";
         $res = Database::query($sql);
         if (Database::num_rows($res) < 1) {
             return false;
@@ -404,6 +406,8 @@ class SubLanguageManager
      * @param string $isocode The language isocode (en, es, fr, zh-TW, etc)
      *
      * @return mixed English name of the matching language, or false if no active language could be found
+     *
+     * @deprecated Only called by getLanguageFromBrowserPreference(), which nothing calls.
      */
     public static function getLanguageFromIsocode($isocode)
     {
@@ -432,6 +436,8 @@ class SubLanguageManager
      * @param string $preferences The browser-configured language preferences (e.g. "en,es;q=0.7;en-us;q=0.3", etc)
      *
      * @return mixed English name of the matching language, or false if no active language could be found
+     *
+     * @deprecated No caller left in public/ or src/.
      */
     public static function getLanguageFromBrowserPreference($preferences)
     {
@@ -480,6 +486,8 @@ class SubLanguageManager
      *
      * @param int $languageId
      * @return array [childIsoCode, parentIsoCode]
+     *
+     * @deprecated Only called by searchTranslations(), which nothing calls.
      */
     public static function getIsoCodes($languageId)
     {
@@ -510,6 +518,8 @@ class SubLanguageManager
      * @param int    $languageId  The ID of the language to search in.
      *
      * @return array An array of matched translations.
+     *
+     * @deprecated No caller left in public/ or src/.
      */
     public static function searchTranslations($term, $languageId): array
     {

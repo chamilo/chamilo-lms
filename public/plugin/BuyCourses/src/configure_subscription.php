@@ -13,8 +13,12 @@ use Chamilo\CoreBundle\Entity\Session;
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 api_protect_admin_script(true);
+
+// Every form of this page carries the token (CsrfProtectionListener does not cover legacy plugin pages).
+buycoursesRequireAdminTokenOnPost();
 
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : 0;
@@ -123,6 +127,7 @@ $globalSettingsParams = $plugin->getGlobalParameters();
 $defaultGlobalTax = (int) ($globalSettingsParams['global_tax_perc'] ?? 0);
 
 $form = new FormValidator('subscription_settings');
+buycoursesAdminTokenField($form);
 $form->addElement(
     'number',
     'tax_perc',
@@ -152,6 +157,7 @@ if (!is_array($frequenciesOptions)) {
 }
 
 $frequencyForm = new FormValidator('frequency_config', 'post', api_get_self().'?'.$queryString);
+buycoursesAdminTokenField($frequencyForm);
 $frequencyForm->addElement(
     'select',
     'duration',
@@ -288,6 +294,7 @@ $template->assign('product_label', $productLabelText);
 $template->assign('product_name', $productNameText);
 $template->assign('currencyIso', $currencyIso);
 $template->assign('items_form', $form->returnForm());
+$template->assign('admin_token', buycoursesAdminToken());
 $template->assign('frequency_form', $frequencyForm->returnForm());
 $template->assign('subscriptions', $subscriptions);
 $template->assign('subscriptions_count', count($subscriptions));

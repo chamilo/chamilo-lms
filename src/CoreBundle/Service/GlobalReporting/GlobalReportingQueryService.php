@@ -407,6 +407,7 @@ final readonly class GlobalReportingQueryService
               WHERE relation.friend_user_id = :currentUserId
                 AND relation.relation_type = :hrRelationType
                 AND target.status IN (:userStatuses)
+                AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
               UNION
              SELECT DISTINCT target.id, target.status
@@ -422,6 +423,7 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_course access_course
                    ON access_course.c_id = target_subscription.c_id
               WHERE target.status IN (:userStatuses)
+              AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
                 AND access_course.access_url_id = :accessUrlId
               UNION
@@ -438,6 +440,7 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_subscription.session_id
               WHERE target.status IN (:userStatuses)
+              AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
                 AND access_session.access_url_id = :accessUrlId
               UNION
@@ -455,6 +458,7 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_subscription.session_id
               WHERE target.status IN (:userStatuses)
+              AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
                 AND access_session.access_url_id = :accessUrlId',
             [
@@ -486,6 +490,7 @@ final readonly class GlobalReportingQueryService
               WHERE relation.friend_user_id = :currentUserId
                 AND relation.relation_type = :relationType
                 AND target.status IN (:userStatuses)
+                AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId',
             [
                 'currentUserId' => $context->currentUserId(),
@@ -517,6 +522,7 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_relation.session_id
               WHERE target.status IN (:userStatuses)
+              AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
                 AND access_session.access_url_id = :accessUrlId
               UNION
@@ -533,6 +539,7 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_relation.session_id
               WHERE target.status IN (:userStatuses)
+              AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
                 AND access_session.access_url_id = :accessUrlId',
             [
@@ -565,6 +572,7 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_subscription.session_id
               WHERE target.status IN (:userStatuses)
+              AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
                 AND access_session.access_url_id = :accessUrlId
               UNION
@@ -582,6 +590,7 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_course access_course
                    ON access_course.c_id = target_subscription.c_id
               WHERE target.status IN (:userStatuses)
+              AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
                 AND access_course.access_url_id = :accessUrlId
               UNION
@@ -594,6 +603,7 @@ final readonly class GlobalReportingQueryService
               WHERE relation.friend_user_id = :currentUserId
                 AND relation.relation_type = :humanResourcesUserRelation
                 AND target.status IN (:userStatuses)
+                AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId',
             [
                 'currentUserId' => $context->currentUserId(),

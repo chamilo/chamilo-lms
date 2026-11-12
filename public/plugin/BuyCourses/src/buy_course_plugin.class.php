@@ -543,7 +543,15 @@ class BuyCoursesPlugin extends Plugin
      */
     public function isEnabled(): bool
     {
-        return $this->get('paypal_enable') || $this->get('transfer_enable') || $this->get('culqi_enable') || $this->get('stripe_enable') || $this->get('cecabank_enable') || 'true' === $this->get('btcpay_enable');
+        // Settings are strings: 'false' is truthy, so only 'true' (or a real true) switches a method on.
+        foreach (['paypal_enable', 'transfer_enable', 'culqi_enable', 'stripe_enable', 'cecabank_enable', 'btcpay_enable'] as $method) {
+            $value = $this->get($method);
+            if (true === $value || 'true' === $value) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -1087,6 +1095,37 @@ class BuyCoursesPlugin extends Plugin
 
         $table = Database::get_main_table(self::TABLE_CURRENCY);
         Database::query("ALTER TABLE $table CHANGE iso_code iso_code VARCHAR(4) NOT NULL");
+
+        // The subscription amounts were created as DECIMAL(10,0), which rounded every price to a whole unit.
+        $moneyColumns = [
+            self::TABLE_SUBSCRIPTION => ['price' => 'NOT NULL'],
+            self::TABLE_SUBSCRIPTION_SALE => [
+                'price' => 'NOT NULL',
+                'price_without_tax' => 'NULL',
+                'tax_amount' => 'NULL',
+                'price_without_discount' => 'NOT NULL',
+                'discount_amount' => 'NOT NULL',
+            ],
+        ];
+
+        foreach ($moneyColumns as $tableName => $columns) {
+            $moneyTable = Database::get_main_table($tableName);
+            foreach ($columns as $field => $nullability) {
+                $res = Database::query("SHOW COLUMNS FROM $moneyTable WHERE Field = '$field'");
+                $column = $res ? Database::fetch_assoc($res) : false;
+                if (is_array($column) && 'decimal(10,0)' === strtolower((string) $column['Type'])) {
+                    Database::query("ALTER TABLE $moneyTable MODIFY $field DECIMAL(10,2) $nullability");
+                }
+            }
+        }
+
+        // The amount of a coupon was created as an INT, which rounded 7.50 to 8 (and a 7.5% coupon to 8%).
+        $couponTable = Database::get_main_table(self::TABLE_COUPON);
+        $res = Database::query("SHOW COLUMNS FROM $couponTable WHERE Field = 'discount_amount'");
+        $column = $res ? Database::fetch_assoc($res) : false;
+        if (is_array($column) && str_starts_with(strtolower((string) $column['Type']), 'int')) {
+            Database::query("ALTER TABLE $couponTable MODIFY discount_amount DECIMAL(10,2) NOT NULL");
+        }
     }
 
     private function ensureAuditTable(): void
@@ -2068,6 +2107,9 @@ class BuyCoursesPlugin extends Plugin
         return sprintf($this->get_lang('BenefitSummaryValueUntil'), $value.' '.$definition['unit'], $expiry);
     }
 
+    /**
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
+     */
     public function getServiceBenefitSummaries(int $serviceId, int $userId = 0): array
     {
         $summaries = [];
@@ -4329,6 +4371,7 @@ class BuyCoursesPlugin extends Plugin
             } elseif (self::COUPON_DISCOUNT_TYPE_PERCENTAGE == $coupon['discount_type']) {
                 $couponDiscount = ($item['price'] * $coupon['discount_amount']) / 100;
             }
+            $couponDiscount = min($couponDiscount, (float) $item['price']);
             $priceWithoutDiscount = $item['price'];
         }
         $item['price'] -= $couponDiscount;
@@ -4431,6 +4474,8 @@ class BuyCoursesPlugin extends Plugin
      * @param int $paymentType The payment type to filter (default : Paypal)
      *
      * @return array The sale list. Otherwise, return false
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function getSaleListByPaymentType(int $paymentType = self::PAYMENT_TYPE_PAYPAL)
     {
@@ -4596,12 +4641,19 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Update sale status to canceled.
+     * Update sale status to canceled (pending sales only).
      *
      * @param int $saleId The sale ID
      */
     public function cancelSale(int $saleId): void
     {
+        $sale = $this->getSale($saleId);
+        // Only a pending sale can be cancelled: a completed (paid) one keeps its status, whatever failure or
+        // return page asks for the cancellation afterwards.
+        if (empty($sale) || self::SALE_STATUS_PENDING !== (int) $sale['status']) {
+            return;
+        }
+
         $this->updateSaleStatus($saleId, self::SALE_STATUS_CANCELED);
     }
 
@@ -4774,6 +4826,8 @@ class BuyCoursesPlugin extends Plugin
      * @return array
      *
      * @throws Exception
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function getSaleListReport(?string $dateStart = null, ?string $dateEnd = null)
     {
@@ -5320,7 +5374,7 @@ class BuyCoursesPlugin extends Plugin
             $itemData,
             [
                 'product_id = ? AND ' => $productId,
-                'product_type' => $productType,
+                'product_type = ?' => $productType,
             ]
         );
     }
@@ -5995,6 +6049,15 @@ class BuyCoursesPlugin extends Plugin
      */
     public function deleteService(int $id)
     {
+        // The history of paid sales must survive: a service with a completed sale is refused (disable it instead).
+        $completedSales = (int) Database::fetch_row(Database::query(
+            'SELECT COUNT(*) FROM '.Database::get_main_table(self::TABLE_SERVICES_SALE).'
+             WHERE service_id = '.(int) $id.' AND status = '.self::SERVICE_STATUS_COMPLETED
+        ))[0];
+        if ($completedSales > 0) {
+            return false;
+        }
+
         Database::delete(
             Database::get_main_table(self::TABLE_SERVICES_SALE),
             ['service_id = ?' => $id]
@@ -6041,6 +6104,7 @@ class BuyCoursesPlugin extends Plugin
                 $couponDiscount = ($product['price'] * $discountAmount) / 100;
             }
 
+            $couponDiscount = min($couponDiscount, (float) $product['price']);
             $product['price_without_discount'] = (float) $product['price'];
         }
 
@@ -7048,6 +7112,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Set the external recurring profile ID for a service sale.
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function updateRecurringProfileId(int $serviceSaleId, string $recurringProfileId): bool
     {
@@ -7066,6 +7132,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Update the recurring payment status for a service sale.
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function updateRecurringPayments(int $serviceSaleId, int $recurringPaymentStatus): bool
     {
@@ -7084,6 +7152,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Update recurring payment metadata for a service sale.
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function updateServiceSaleRecurringData(
         int $serviceSaleId,
@@ -7391,6 +7461,11 @@ class BuyCoursesPlugin extends Plugin
         $previousStatus = (int) ($serviceSale['status'] ?? self::SERVICE_STATUS_PENDING);
         if (self::SERVICE_STATUS_CANCELLED === $previousStatus) {
             return true;
+        }
+
+        // A completed (paid) sale is not cancelled by a status flip: its benefits would stay granted.
+        if (self::SERVICE_STATUS_COMPLETED === $previousStatus) {
+            return false;
         }
 
         if (!$this->updateServiceSaleStatus($serviceSaleId, self::SERVICE_STATUS_CANCELLED)) {
@@ -9788,11 +9863,15 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the coupon data.
      *
+     * @param bool $checkUsageLimit Refuse a coupon whose usage cap (times_applied, 0 = unlimited) is reached. Only
+     *                              the checks made before a sale is registered use it: the confirmation pages look
+     *                              the coupon up again after "delivered" was increased by that very sale.
+     *
      * @return array The coupon data
      */
-    public function getCoupon(int $couponId, int $productType, int $productId)
+    public function getCoupon(int $couponId, int $productType, int $productId, bool $checkUsageLimit = false)
     {
-        return $this->getDataCoupon($couponId, $productType, $productId);
+        return $this->getDataCoupon($couponId, $productType, $productId, $checkUsageLimit);
     }
 
     /**
@@ -9817,9 +9896,9 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    public function getCouponService(int $couponId, int $serviceId)
+    public function getCouponService(int $couponId, int $serviceId, bool $checkUsageLimit = false)
     {
-        return $this->getDataCouponService($couponId, $serviceId);
+        return $this->getDataCouponService($couponId, $serviceId, $checkUsageLimit);
     }
 
     /**
@@ -9963,6 +10042,40 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
+     * Price as an integer number of cents (the unit the gateways use), rounded so that float products such as
+     * 19.99 * 100 = 1998.9999999999998 give 1999.
+     *
+     * @param float|int|string $price
+     */
+    public static function priceToCents($price): int
+    {
+        return (int) round((float) $price * 100);
+    }
+
+    /**
+     * True when the amount a gateway returned (in cents, as a string of digits) is exactly the price of the sale.
+     * A valid gateway signature only proves the gateway charged that amount, not that it is what the sale costs.
+     * Integer comparison on purpose, never float equality; free sales never match (nothing is charged for them).
+     *
+     * @param float|int|string|null $gatewayCents
+     */
+    public static function gatewayAmountMatchesSale($gatewayCents, array $sale): bool
+    {
+        if (!is_string($gatewayCents) && !is_int($gatewayCents)) {
+            return false;
+        }
+
+        $gatewayCents = trim((string) $gatewayCents);
+        if ('' === $gatewayCents || !ctype_digit($gatewayCents)) {
+            return false;
+        }
+
+        $saleCents = self::priceToCents($sale['price'] ?? 0);
+
+        return $saleCents > 0 && (int) $gatewayCents === $saleCents;
+    }
+
+    /**
      * @return array
      */
     public function getCecabankSignature(string $saleReference, float $price)
@@ -10062,6 +10175,7 @@ class BuyCoursesPlugin extends Plugin
             } elseif (self::COUPON_DISCOUNT_TYPE_PERCENTAGE == $coupon['discount_type']) {
                 $couponDiscount = ($item['price'] * $coupon['discount_amount']) / 100;
             }
+            $couponDiscount = min($couponDiscount, (float) $item['price']);
             $priceWithoutDiscount = $item['price'];
         }
         $item['price'] -= $couponDiscount;
@@ -10076,7 +10190,10 @@ class BuyCoursesPlugin extends Plugin
             $globalParameters
         );
 
-        $subscriptionEnd = date('Y-m-d H:i:s', strtotime('+'.$duration.' days'));
+        // UTC like the sale date (api_get_utc_datetime): never depends on the PHP/server timezone.
+        $subscriptionEnd = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
+            ->modify('+'.$duration.' days')
+            ->format('Y-m-d H:i:s');
 
         $values = array_merge([
             'reference' => $this->generateReference(
@@ -10286,7 +10403,15 @@ class BuyCoursesPlugin extends Plugin
         switch ($sale['product_type']) {
             case self::PRODUCT_TYPE_COURSE:
                 $course = api_get_course_info_by_id($sale['product_id']);
-                $saleIsCompleted = CourseManager::subscribeUser($sale['user_id'], $course['code']);
+
+                if (empty($course) || empty($course['real_id'])) {
+                    return false;
+                }
+
+                $saleIsCompleted = CourseManager::subscribeUser(
+                    (int) $sale['user_id'],
+                    (int) $course['real_id']
+                );
 
                 break;
 
@@ -10320,6 +10445,12 @@ class BuyCoursesPlugin extends Plugin
      */
     public function cancelSubscriptionSale(int $saleId): void
     {
+        $sale = $this->getSubscriptionSale($saleId);
+        // Only a pending sale can be cancelled, see cancelSale().
+        if (empty($sale) || self::SALE_STATUS_PENDING !== (int) $sale['status']) {
+            return;
+        }
+
         $this->updateSubscriptionSaleStatus($saleId, self::SALE_STATUS_CANCELED);
     }
 
@@ -10529,6 +10660,8 @@ class BuyCoursesPlugin extends Plugin
      * @param int $id The user id
      *
      * @return array The sale list. Otherwise, return false
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function getSubscriptionSaleListByUserId(int $id)
     {
@@ -10670,6 +10803,8 @@ class BuyCoursesPlugin extends Plugin
      * @param string $date The date
      *
      * @return array
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function getSubscriptionsDue(string $date)
     {
@@ -10696,6 +10831,8 @@ class BuyCoursesPlugin extends Plugin
      * @param int $productType The product type
      *
      * @return array
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function checkItemSubscriptionActive(int $userId, int $productId, int $productType)
     {
@@ -10720,6 +10857,8 @@ class BuyCoursesPlugin extends Plugin
      * Get subscription sale data by ID.
      *
      * @return array
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function updateSubscriptionSaleExpirationStatus(int $id)
     {
@@ -10951,12 +11090,12 @@ class BuyCoursesPlugin extends Plugin
                 $item['status'] = get_plugin_lang('SaleStatusPending', 'BuyCoursesPlugin');
                 $option = "<div class='btn-group btn-group-xs' role='group'>".
                     "<a title='".get_plugin_lang('SubscribeUser', 'BuyCoursesPlugin')."'".
-                    " href='".api_get_self().'?order='.$item['id']."&action=confirm'".
+                    " href='".api_get_self().'?order='.$item['id']."&action=confirm&buycourses_admin_sec_token=".Security::get_existing_token('buycourses_admin')."'".
                     " class='btn btn-default'>".
                     Display::return_icon('user_subscribe_session.png', get_plugin_lang('SubscribeUser', 'BuyCoursesPlugin'), [], ICON_SIZE_SMALL)
                     .'</a>'.
                     "<a title='".get_plugin_lang('DeleteOrder', 'BuyCoursesPlugin')."'".
-                    " href='".api_get_self().'?order='.$item['id']."&action=cancel'".
+                    " href='".api_get_self().'?order='.$item['id']."&action=cancel&buycourses_admin_sec_token=".Security::get_existing_token('buycourses_admin')."'".
                     " class='btn btn-default'>".
                     Display::return_icon('delete.png', get_plugin_lang('DeleteOrder', 'BuyCoursesPlugin'), [], ICON_SIZE_SMALL)
                     .'</a>'.
@@ -11592,7 +11731,7 @@ class BuyCoursesPlugin extends Plugin
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
 
-        if (null != $status) {
+        if (null !== $status) {
             return Database::select(
                 ['*'],
                 $couponTable,
@@ -11623,7 +11762,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCoupon(int $couponId, ?int $productType = null, ?int $productId = null): array
+    private function getDataCoupon(int $couponId, ?int $productType = null, ?int $productId = null, bool $checkUsageLimit = false): array
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
 
@@ -11649,6 +11788,10 @@ class BuyCoursesPlugin extends Plugin
                 on ci.coupon_id = c.id
         ";
 
+        if ($checkUsageLimit) {
+            $couponFrom .= " AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)";
+        }
+
         return Database::select(
             ['c.*'],
             $couponFrom,
@@ -11657,6 +11800,7 @@ class BuyCoursesPlugin extends Plugin
                     'c.id = ? AND ' => $couponId,
                     'c.valid_start <= ? AND ' => $dtmNow,
                     'c.valid_end >= ? AND ' => $dtmNow,
+                    'c.active = ? AND ' => 1,
                     'ci.product_type = ? AND ' => $productType,
                     'ci.product_id = ?' => $productId,
                 ],
@@ -11699,6 +11843,8 @@ class BuyCoursesPlugin extends Plugin
                 on ci.coupon_id = c.id
         ";
 
+        $couponFrom .= " AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)";
+
         return Database::select(
             ['c.*'],
             $couponFrom,
@@ -11707,6 +11853,7 @@ class BuyCoursesPlugin extends Plugin
                     'c.code = ? AND ' => $couponCode,
                     'c.valid_start <= ? AND ' => $dtmNow,
                     'c.valid_end >= ? AND ' => $dtmNow,
+                    'c.active = ? AND ' => 1,
                     'ci.product_type = ? AND ' => $productType,
                     'ci.product_id = ?' => $productId,
                 ],
@@ -11723,7 +11870,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array The coupon data
      */
-    private function getDataCouponService(int $couponId, int $serviceId): array
+    private function getDataCouponService(int $couponId, int $serviceId, bool $checkUsageLimit = false): array
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
         $couponServiceTable = Database::get_main_table(self::TABLE_COUPON_SERVICE);
@@ -11735,6 +11882,10 @@ class BuyCoursesPlugin extends Plugin
                 on cs.coupon_id = c.id
         ";
 
+        if ($checkUsageLimit) {
+            $couponFrom .= " AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)";
+        }
+
         return Database::select(
             ['c.*'],
             $couponFrom,
@@ -11743,6 +11894,7 @@ class BuyCoursesPlugin extends Plugin
                     'c.id = ? AND ' => $couponId,
                     'c.valid_start <= ? AND ' => $dtmNow,
                     'c.valid_end >= ? AND ' => $dtmNow,
+                    'c.active = ? AND ' => 1,
                     'cs.service_id = ?' => $serviceId,
                 ],
             ],
@@ -11770,6 +11922,8 @@ class BuyCoursesPlugin extends Plugin
                 on cs.coupon_id = c.id
         ";
 
+        $couponFrom .= " AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)";
+
         return Database::select(
             ['c.*'],
             $couponFrom,
@@ -11778,6 +11932,7 @@ class BuyCoursesPlugin extends Plugin
                     'c.code = ? AND ' => $couponCode,
                     'c.valid_start <= ? AND ' => $dtmNow,
                     'c.valid_end >= ? AND ' => $dtmNow,
+                    'c.active = ? AND ' => 1,
                     'cs.service_id = ?' => $serviceId,
                 ],
             ],
@@ -12341,6 +12496,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Activate the benefits granted by a completed service sale.
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function activateServiceBenefitsForSale(int $serviceSaleId): void
     {
@@ -12647,6 +12804,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Return whether the user can create one more course.
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function canUserCreateMoreCourses(int $userId): bool
     {
@@ -12723,6 +12882,8 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Return a clear user-facing message for course creation limit.
+     *
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
      */
     public function getCourseCreationLimitMessage(int $userId): string
     {
@@ -13989,6 +14150,9 @@ class BuyCoursesPlugin extends Plugin
         }
     }
 
+    /**
+     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
+     */
     private function shouldApplyCourseCreationLimitForUser(int $userId): bool
     {
         if ($userId <= 0) {

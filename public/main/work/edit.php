@@ -40,6 +40,15 @@ if (empty($parent_data)) {
     api_not_allowed(true);
 }
 
+// Both ids come from the request: the folder and the submission must be of the current course (or its
+// session) and the submission must be one of that folder, whatever the role of the user.
+if (!workBelongsToCourse($work_id, $course_id, $session_id)
+    || !workBelongsToCourse($item_id, $course_id, $session_id)
+    || !workItemIsInFolder($item_id, $work_id)
+) {
+    api_not_allowed(true);
+}
+
 if (empty($session_id)) {
     $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code);
 } else {
@@ -214,8 +223,9 @@ if ($form->validate()) {
          * SPECIAL CASE ! For a work edited
         */
         //Get the author ID for that document from the item_property table
+        // The posted id is only a copy of the validated one: the entity updated below is the one of item_id.
         $item_to_edit_id = (int) ($_POST['item_to_edit']);
-        $is_author = user_is_author($item_to_edit_id);
+        $is_author = $item_to_edit_id === (int) $item_id && user_is_author($item_to_edit_id);
 
         if ($is_author) {
             $work_data = get_work_data_by_id($item_to_edit_id);

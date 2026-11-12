@@ -855,25 +855,30 @@ class GroupManager
         }
 
         $course_info = api_get_course_info($courseCode);
-        $course_id = $course_info['real_id'];
-        $name = Database::escape_string($name);
+        if (empty($course_info['real_id'])) {
+            return [];
+        }
+        $course_id = (int) $course_info['real_id'];
         $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
-        $sessionCondition = api_get_session_condition($sessionId);
-
-        $table = Database::get_course_table(TABLE_GROUP);
-        $sql = "SELECT * FROM $table
-                WHERE
-                  c_id = $course_id AND
-                  name = '$name'
-                  $sessionCondition
-                LIMIT 1";
-        $res = Database::query($sql);
-        $group = [];
-        if (Database::num_rows($res)) {
-            $group = Database::fetch_assoc($res);
+        $sessionCondition = empty($sessionId) ? 'rl.session_id IS NULL' : 'rl.session_id = :session';
+        $params = ['course' => $course_id, 'title' => $name];
+        if (!empty($sessionId)) {
+            $params['session'] = $sessionId;
         }
 
-        return $group;
+        $table = Database::get_course_table(TABLE_GROUP);
+        // c_group_info has no c_id nor name: the course/session come from the resource link, the name is "title".
+        $sql = "SELECT g.* FROM $table g
+                INNER JOIN resource_link rl ON rl.resource_node_id = g.resource_node_id
+                WHERE
+                  rl.c_id = :course AND
+                  rl.deleted_at IS NULL AND
+                  $sessionCondition AND
+                  g.title = :title
+                LIMIT 1";
+        $group = Database::getManager()->getConnection()->fetchAssociative($sql, $params);
+
+        return false === $group ? [] : $group;
     }
 
     /**
@@ -1083,19 +1088,22 @@ class GroupManager
         }
 
         $course_info = api_get_course_info($course_code);
-        $courseId = $course_info['real_id'];
-        $title = Database::escape_string($title);
-        $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
-        $sql = "SELECT * FROM $table
-                WHERE c_id = $courseId AND title = '$title'
-                LIMIT 1";
-        $res = Database::query($sql);
-        $category = [];
-        if (Database::num_rows($res)) {
-            $category = Database::fetch_assoc($res);
+        if (empty($course_info['real_id'])) {
+            return [];
         }
+        $courseId = (int) $course_info['real_id'];
+        $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
+        // c_group_category has no c_id: the course is given by the category's resource link.
+        $sql = "SELECT c.* FROM $table c
+                INNER JOIN resource_link rl ON rl.resource_node_id = c.resource_node_id
+                WHERE rl.c_id = :course AND rl.deleted_at IS NULL AND c.title = :title
+                LIMIT 1";
+        $category = Database::getManager()->getConnection()->fetchAssociative(
+            $sql,
+            ['course' => $courseId, 'title' => $title]
+        );
 
-        return $category;
+        return false === $category ? [] : $category;
     }
 
     /**
@@ -1459,7 +1467,7 @@ class GroupManager
             $sql .= " ORDER BY `$column` $direction";
         }
 
-        if (!empty($start) && !empty($limit)) {
+        if (is_numeric($start) && !empty($limit)) {
             $start = (int) $start;
             $limit = (int) $limit;
             $sql .= " LIMIT $start, $limit";
@@ -1622,6 +1630,9 @@ class GroupManager
         $result = [];
         $table = Database::get_course_table(TABLE_GROUP_USER);
         $groups = array_map('intval', $groups);
+        if (empty($groups)) {
+            return $result;
+        }
         // protect individual elements with surrounding quotes
         $groups = implode(', ', $groups);
         $sql = "SELECT DISTINCT user_id
@@ -1754,6 +1765,10 @@ class GroupManager
                 WHERE iid = $group_id";
         $db_result = Database::query($sql);
         $db_object = Database::fetch_object($db_result);
+        if (empty($db_object)) {
+            // Unknown group: no capacity (callers compare "members < maximum", so nobody can join it).
+            return 0;
+        }
         if (0 == $db_object->max_student) {
             return self::INFINITE;
         }
@@ -2014,6 +2029,8 @@ class GroupManager
      * @param mixed $userList  Can be an array with user-id's or a single user-id
      * @param CGroup $group
      * @param int   $course_id
+     *
+     * @return bool
      */
     public static function subscribeTutors($userList, CGroup $group = null, $course_id = 0)
     {
@@ -2021,7 +2038,6 @@ class GroupManager
             return false;
         }
         $userList = is_array($userList) ? $userList : [$userList];
-        $result = true;
         $course_id = !empty($course_id) ? intval($course_id) : api_get_course_int_id();
         $table_group_tutor = Database::get_course_table(TABLE_GROUP_TUTOR);
         $groupId = (int) $group->getIid();
@@ -2031,11 +2047,11 @@ class GroupManager
             if (self::canUserSubscribe($user_id, $group, false)) {
                 $sql = 'INSERT INTO '.$table_group_tutor." (c_id, user_id, group_id)
                         VALUES ('$course_id', '".$user_id."', '".$groupId."')";
-                $result = Database::query($sql);
+                Database::query($sql);
             }
         }
 
-        return $result;
+        return true;
     }
 
     /**

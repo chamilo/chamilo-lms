@@ -88,13 +88,15 @@ if (isset($_REQUEST['c']) && '' !== trim((string) $_REQUEST['c'])) {
             $coupon = $plugin->getCoupon(
                 $couponId,
                 BuyCoursesPlugin::PRODUCT_TYPE_COURSE,
-                $productId
+                $productId,
+                true
             );
         } else {
             $coupon = $plugin->getCoupon(
                 $couponId,
                 BuyCoursesPlugin::PRODUCT_TYPE_SESSION,
-                $productId
+                $productId,
+                true
             );
         }
     }

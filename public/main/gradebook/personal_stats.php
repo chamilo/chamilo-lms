@@ -4,11 +4,15 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+api_block_anonymous_users();
+
 $categoryId = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : false;
 
 if (empty($categoryId)) {
     api_not_allowed(false);
 }
+GradebookUtils::protectElementInCurrentCourse('CATE', $categoryId);
 $userId = api_get_user_id();
 
 $cats = Category::load($categoryId);

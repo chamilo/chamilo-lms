@@ -66,7 +66,7 @@ class DisplayGradebook
                                 Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Grade learners')).
                                 '</a>';
 
-                            $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&deleteall=" onclick="return confirmationall();">'.
+                            $links[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&selecteval='.$evalobj->get_id().'&sec_token='.Security::get_existing_token().'&deleteall=" onclick="return confirmationall();">'.
                                 Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete marks')).
                                 '</a>';
                         }

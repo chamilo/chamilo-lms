@@ -64,12 +64,36 @@ if (1 !== $default) {
     }
 }
 
-if (!empty($_GET['student_id']) && (int) $_GET['student_id'] !== api_get_user_id() && !api_is_platform_admin() && !api_is_teacher()) {
-    api_not_allowed(true);
-}
+$isExportRequest = !empty($_GET['export_all']) || !empty($_GET['export_all_in_one']);
 
-if ((!empty($_GET['export_all']) || !empty($_GET['export_all_in_one'])) && !api_is_platform_admin() && !api_is_teacher()) {
-    api_not_allowed(true);
+if (1 === $default) {
+    // Preview of the default template: it only holds the template, never the data of a course.
+    if (!empty($_GET['student_id']) && (int) $_GET['student_id'] !== api_get_user_id() && !api_is_platform_admin() && !api_is_teacher()) {
+        api_not_allowed(true);
+    }
+
+    if ($isExportRequest && !api_is_platform_admin() && !api_is_teacher()) {
+        api_not_allowed(true);
+    }
+} else {
+    $viewerId = api_get_user_id();
+    $isAdmin = api_is_platform_admin();
+    $isManager = $isAdmin || CustomCertificatePlugin::canManageCourseCertificates($viewerId, $courseId, $sessionId);
+
+    if ($isExportRequest) {
+        // Exporting every certificate of a category: the teachers and coaches of its own course only.
+        if (!$isManager || (!$isAdmin && !CustomCertificatePlugin::categoryBelongsToCourse($categoryId, $courseId))) {
+            api_not_allowed(true);
+        }
+    } elseif (!$isManager) {
+        // A learner only gets the page of the certificate they earned in this course.
+        $requestedStudentId = !empty($_GET['student_id']) ? (int) $_GET['student_id'] : $viewerId;
+        if ($requestedStudentId !== $viewerId
+            || !CustomCertificatePlugin::userHasCertificate($viewerId, $courseId, $sessionId, $categoryId)
+        ) {
+            api_not_allowed(true);
+        }
+    }
 }
 
 $userList = [];

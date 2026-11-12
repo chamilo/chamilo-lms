@@ -29,7 +29,8 @@ $limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teach
 $allowDelete = Exercise::allowAction('delete');
 $allowClean = Exercise::allowAction('clean_results');
 
-$check = Security::get_existing_token('get');
+// State-changing actions of this page carry the 'exercise' token as sec_token (links and bulk form of the list).
+$check = hash_equals(Security::get_existing_token('exercise'), (string) ($_REQUEST['sec_token'] ?? ''));
 
 $currentUrl = api_get_self().'?'.api_get_cidreq();
 
@@ -81,12 +82,20 @@ if (api_is_in_gradebook()) {
 $nameTools = get_lang('Tests');
 // Simple actions
 if ($is_allowedToEdit && !empty($action)) {
+    // Every action but the read-only QTI2 export changes data and was a plain GET: require the token.
+    if ('exportqti2' !== $action && !$check) {
+        api_not_allowed(true);
+    }
     $objExerciseTmp = new Exercise();
     $isBulk = in_array($action, ['delete','enable','disable','visible','invisible'], true)
         && !empty($_POST['id']);
 
     if (!$isBulk) {
-        if (empty($exerciseId) || !$objExerciseTmp->read($exerciseId)) {
+        // Exercise::read() does not scope by course: the test must belong to the current course (and session).
+        if (empty($exerciseId)
+            || !ExerciseLib::exerciseBelongsToCourse((int) $exerciseId, (int) $courseId, (int) $sessionId)
+            || !$objExerciseTmp->read($exerciseId)
+        ) {
             api_not_allowed(true);
         }
         $exercise_action_locked = api_resource_is_locked_by_gradebook($exerciseId, LINK_EXERCISE);
@@ -124,6 +133,8 @@ if ($is_allowedToEdit && !empty($action)) {
             $ids = $idsRaw ? (is_array($idsRaw) ? $idsRaw : explode(',', (string)$idsRaw))
                 : ($exerciseId ? [$exerciseId] : []);
             $ids = array_filter(array_map('intval', $ids));
+            // Only tests of the current course (and session) may be deleted.
+            $ids = array_filter($ids, static fn (int $id): bool => ExerciseLib::exerciseBelongsToCourse($id, (int) $courseId, (int) $sessionId));
 
             $deleted = 0; $skipped = 0;
             foreach ($ids as $id) {
@@ -289,7 +300,11 @@ if ($is_allowedToEdit && !empty($action)) {
             $categoryIdFromGet = isset($_REQUEST['category_id_edit']) ? $_REQUEST['category_id_edit'] : 0;
             $em = Database::getManager();
             $repo = Container::getQuizCategoryRepository();
-            $category = $repo->find($categoryIdFromGet);
+            $category = $repo->find((int) $categoryIdFromGet);
+            // The category must belong to the current course.
+            if (null === $category || (int) $category->getCourse()->getId() !== (int) $courseId) {
+                api_not_allowed(true);
+            }
             $currentPosition = $category->getPosition();
 
             if ('up_category' === $action) {
@@ -340,7 +355,7 @@ Display::display_introduction_section(TOOL_QUIZ);
 // maximum number of exercises on a same page
 $limit = Exercise::PAGINATION_ITEMS_PER_PAGE;
 
-$token = Security::get_token();
+$token = Security::get_existing_token('exercise');
 if ($is_allowedToEdit && 'learnpath' !== $origin) {
     $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'">'.
         Display::getMdiIcon('order-bool-ascending-variant', 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Create a new test')).'</a>';
@@ -453,11 +468,11 @@ if ('true' !== api_get_setting('exercise.allow_exercise_categories')) {
             $up = '';
             $down = '';
             if ($is_allowedToEdit) {
-                $up = Display::url($upIcon, $modifyUrl.'&action=up_category&category_id_edit='.$categoryIdItem);
+                $up = Display::url($upIcon, $modifyUrl.'&action=up_category&sec_token='.$token.'&category_id_edit='.$categoryIdItem);
                 if (0 === $counter) {
                     $up = Display::url(Display::getMdiIcon('arrow-up-bold', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Move up')), '#');
                 }
-                $down = Display::url($downIcon, $modifyUrl.'&action=down_category&category_id_edit='.$categoryIdItem);
+                $down = Display::url($downIcon, $modifyUrl.'&action=down_category&sec_token='.$token.'&category_id_edit='.$categoryIdItem);
                 $counter++;
                 if ($total === $counter) {
                     $down = Display::url(Display::getMdiIcon('arrow-down-bold', 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Move down')), '#');

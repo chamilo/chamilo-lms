@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
@@ -52,7 +53,7 @@ class SurveyManager
             }
         }
 
-        return $code.$num;
+        return $new_code;
     }
 
     /**
@@ -505,54 +506,49 @@ class SurveyManager
 
         if (empty($newSurveyId)) {
             $surveyData['code'] = self::generate_unique_code($surveyData['code']);
-            $surveyData['session_id'] = $targetSessionId ?? api_get_session_id();
-
             if ($targetCourseId === $originalCourseId) {
                 $surveyData['title'] .= ' '.get_lang('Copy');
             }
 
             unset($surveyData['iid'], $surveyData['id']);
 
-            if ($targetSessionId) {
-                $newSurveyId = Database::insert($surveyTable, $surveyData);
-            } else {
-                $course = api_get_course_entity();
-                $session = api_get_session_entity();
+            // c_survey has no course/session column: the copy is linked to its target through its resource node.
+            $course = api_get_course_entity($targetCourseId);
+            $session = api_get_session_entity($targetSessionId ?? api_get_session_id());
 
-                $survey = new CSurvey();
-                $survey
-                    ->setSurveyType($surveyData['survey_type'])
-                    ->setSurveyVersion($surveyData['survey_version'])
-                    ->setCode($surveyData['code'])
-                    ->setTitle($surveyData['title'])
-                    ->setSubtitle($surveyData['subtitle'])
-                    ->setLang($surveyData['lang'])
-                    ->setAvailFrom(new \DateTime($surveyData['avail_from']))
-                    ->setAvailTill(new \DateTime($surveyData['avail_till']))
-                    ->setIsShared($surveyData['is_shared'])
-                    ->setTemplate($surveyData['template'])
-                    ->setIntro($surveyData['intro'])
-                    ->setSurveyThanks($surveyData['surveythanks'])
-                    ->setAnonymous($surveyData['anonymous'])
-                    ->setVisibleResults($surveyData['visible_results'])
-                    ->setResultsHiddenFromTeacher((bool) ($surveyData['results_hidden_from_teacher'] ?? false))
-                    ->setShuffle($surveyData['shuffle'])
-                    ->setOneQuestionPerPage($surveyData['one_question_per_page'])
-                    ->setShowFormProfile($surveyData['show_form_profile'])
-                    ->setFormFields($surveyData['form_fields'])
-                    ->setParent($course)
-                    ->addCourseLink($course, $session);
+            $survey = new CSurvey();
+            $survey
+                ->setSurveyType($surveyData['survey_type'])
+                ->setSurveyVersion($surveyData['survey_version'])
+                ->setCode($surveyData['code'])
+                ->setTitle($surveyData['title'])
+                ->setSubtitle((string) $surveyData['subtitle'])
+                ->setLang((string) $surveyData['lang'])
+                ->setAvailFrom(new \DateTime($surveyData['avail_from']))
+                ->setAvailTill(new \DateTime($surveyData['avail_till']))
+                ->setIsShared((string) $surveyData['is_shared'])
+                ->setTemplate((string) $surveyData['template'])
+                ->setIntro((string) $surveyData['intro'])
+                ->setSurveyThanks((string) $surveyData['surveythanks'])
+                ->setAnonymous($surveyData['anonymous'])
+                ->setVisibleResults((int) $surveyData['visible_results'])
+                ->setResultsHiddenFromTeacher((bool) ($surveyData['results_hidden_from_teacher'] ?? false))
+                ->setShuffle($surveyData['shuffle'])
+                ->setOneQuestionPerPage($surveyData['one_question_per_page'])
+                ->setShowFormProfile($surveyData['show_form_profile'])
+                ->setFormFields($surveyData['form_fields'])
+                ->setParent($course)
+                ->addCourseLink($course, $session);
 
-                if (!empty($surveyData['parent_id'])) {
-                    $parent = $repo->find($surveyData['parent_id']);
-                    if ($parent) {
-                        $survey->setSurveyParent($parent);
-                    }
+            if (!empty($surveyData['parent_id'])) {
+                $parent = $repo->find($surveyData['parent_id']);
+                if ($parent) {
+                    $survey->setSurveyParent($parent);
                 }
-
-                $repo->create($survey);
-                $newSurveyId = $survey->getIid();
             }
+
+            $repo->create($survey);
+            $newSurveyId = $survey->getIid();
         }
 
         if (empty($newSurveyId)) {
@@ -642,8 +638,16 @@ class SurveyManager
 		        survey_id = "'.$surveyId.'" '.$session_where.' ';
         Database::query($sql);
 
-        $sql = 'UPDATE '.$table_survey.' SET invited=0, answered=0
+        if (empty($session_where)) {
+            $sql = 'UPDATE '.$table_survey.' SET invited=0, answered=0
 		        WHERE iid ='.$surveyId;
+        } else {
+            // Only the rows of the session were deleted: the counters follow the rows that survive.
+            $sql = 'UPDATE '.$table_survey.' SET
+		            invited = (SELECT COUNT(*) FROM '.$table_survey_invitation.' WHERE survey_id = '.$surveyId.'),
+		            answered = (SELECT COUNT(DISTINCT user) FROM '.$table_survey_answer.' WHERE survey_id = '.$surveyId.')
+		        WHERE iid ='.$surveyId;
+        }
         Database::query($sql);
 
         Event::addEvent(
@@ -910,6 +914,24 @@ class SurveyManager
                 // Getting all the information of the survey
                 $survey_data = self::get_survey($surveyId);
 
+                // The question being edited and the condition (parent question/option) come from the posted
+                // form: they must belong to this very survey.
+                $invalidMessage = 'The form contains incorrect or incomplete data. Please check your input.';
+                if (!empty($form_content['question_id']) && is_numeric($form_content['question_id']) &&
+                    !self::surveyQuestionBelongsToSurvey((int) $form_content['question_id'], (int) $surveyId)
+                ) {
+                    return ['error' => true, 'message' => $invalidMessage];
+                }
+                if (!empty($form_content['parent_id']) && !empty($form_content['parent_option_id']) &&
+                    !self::questionOptionBelongsToQuestion(
+                        (int) $form_content['parent_option_id'],
+                        (int) $form_content['parent_id'],
+                        (int) $surveyId
+                    )
+                ) {
+                    return ['error' => true, 'message' => $invalidMessage];
+                }
+
                 // Storing a new question
                 if (empty($form_content['question_id']) || !is_numeric($form_content['question_id'])) {
                     // Finding the max sort order of the questions in the given survey
@@ -946,15 +968,11 @@ class SurveyManager
 
                     $question->setIsMandatory(isset($form_content['is_required']));
 
-                    $params['parent_id'] = 0;
-                    $params['parent_option_id'] = 0;
-                    if (isset($form_content['parent_id']) &&
-                        isset($form_content['parent_option_id']) &&
-                        !empty($form_content['parent_id']) &&
-                        !empty($form_content['parent_option_id'])
-                    ) {
-                        $params['parent_id'] = $form_content['parent_id'];
-                        $params['parent_option_id'] = $form_content['parent_option_id'];
+                    if (!empty($form_content['parent_id']) && !empty($form_content['parent_option_id'])) {
+                        $question->setParent($em->getRepository(CSurveyQuestion::class)->find($form_content['parent_id']));
+                        $question->setParentOption(
+                            $em->getRepository(CSurveyQuestionOption::class)->find($form_content['parent_option_id'])
+                        );
                     }
 
                     $em->persist($question);
@@ -996,7 +1014,7 @@ class SurveyManager
                         ->setMaxValue($maxScore)
                     ;
 
-                    $question->isMandatory(isset($form_content['is_required']));
+                    $question->setIsMandatory(isset($form_content['is_required']));
                     $params['parent_id'] = 0;
                     $params['parent_option_id'] = 0;
                     if (isset($form_content['parent_id']) &&
@@ -1257,10 +1275,8 @@ class SurveyManager
     {
         // Table definitions
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $course_id = api_get_course_int_id();
-        $course_condition = " c_id = $course_id AND ";
         $sql = "DELETE FROM $table_survey_question_option
-                WHERE $course_condition survey_id='".intval($survey_id)."'";
+                WHERE survey_id = ".(int) $survey_id;
 
         // Deleting the options of the survey questions
         Database::query($sql);
@@ -1288,11 +1304,10 @@ class SurveyManager
      */
     public static function delete_all_survey_answers($survey_id)
     {
-        $course_id = api_get_course_int_id();
         $table = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $survey_id = (int) $survey_id;
         $sql = "DELETE FROM $table
-                WHERE c_id = $course_id AND survey_id = $survey_id";
+                WHERE survey_id = $survey_id";
         Database::query($sql);
 
         return true;
@@ -1352,9 +1367,9 @@ class SurveyManager
                 $tblInvitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
                 $tblSurvey = Database::get_course_table(TABLE_SURVEY);
 
-                $sql = "SELECT i.user_id FROM $tblInvitation i
+                $sql = "SELECT i.user_id AS user FROM $tblInvitation i
                     INNER JOIN $tblSurvey s
-                    ON i.survey_code = s.code
+                    ON i.survey_id = s.iid
                     WHERE i.answered IS TRUE AND s.iid = $survey_id";
             }
         }
@@ -1466,21 +1481,17 @@ class SurveyManager
             return false;
         }
 
-        $surveyCode = $surveyData['survey_code'];
-        $courseId = (int) $surveyData['c_id'];
-        $sessionId = (int) $surveyData['session_id'];
-
         $sql = "DELETE FROM $surveyInvitationTable
-                WHERE session_id = $sessionId AND c_id = $courseId AND survey_code = '$surveyCode' ";
+                WHERE survey_id = $surveyId";
         Database::query($sql);
 
         $sql = "DELETE FROM $surveyAnswerTable
-                WHERE survey_id = $surveyId AND c_id = $courseId ";
+                WHERE survey_id = $surveyId";
         Database::query($sql);
 
         $sql = "UPDATE $surveyTable
                 SET invited = 0, answered = 0
-                WHERE iid = $surveyId AND c_id = $courseId AND session_id = $sessionId ";
+                WHERE iid = $surveyId";
         Database::query($sql);
 
         return true;
@@ -1995,7 +2006,7 @@ class SurveyManager
 
                 if (!empty($answered) && 0 == $survey->getAnonymous()) {
                     $answers = SurveyUtil::displayCompleteReport(
-                        $surveyData,
+                        $survey,
                         $userId,
                         false,
                         false,
@@ -2096,5 +2107,152 @@ class SurveyManager
         $query = $qb->getQuery();
 
         return $query->getResult();
+    }
+
+    /**
+     * Tells whether a survey is published in the given course (and session when given). c_survey has no course
+     * column: its course is the resource link of its node. Every page taking a survey id from the request must
+     * call this before reading or writing through the helpers, which do not scope by course.
+     * Content of the base course is visible inside a session.
+     */
+    public static function surveyBelongsToCourse(int $surveyId, int $courseId, ?int $sessionId = null): bool
+    {
+        if ($surveyId <= 0 || $courseId <= 0) {
+            return false;
+        }
+
+        $sessionId = (int) $sessionId;
+        $sessionCondition = $sessionId > 0
+            ? 'AND (link.session_id IS NULL OR link.session_id = :sid)'
+            : 'AND (link.session_id IS NULL OR link.session_id = 0)';
+        $params = ['sid_survey' => $surveyId, 'cid' => $courseId];
+        if ($sessionId > 0) {
+            $params['sid'] = $sessionId;
+        }
+
+        $found = Database::getManager()->getConnection()->fetchOne(
+            'SELECT s.iid
+             FROM c_survey s
+             INNER JOIN resource_link link ON link.resource_node_id = s.resource_node_id
+             WHERE s.iid = :sid_survey AND link.c_id = :cid '.$sessionCondition.'
+             LIMIT 1',
+            $params
+        );
+
+        return false !== $found;
+    }
+
+    /**
+     * Same as surveyBelongsToCourse() for the course and session of the current request.
+     */
+    public static function surveyBelongsToCurrentCourse(int $surveyId): bool
+    {
+        return self::surveyBelongsToCourse($surveyId, (int) api_get_course_int_id(), (int) api_get_session_id());
+    }
+
+    /**
+     * Tells whether a question belongs to the given survey.
+     */
+    public static function surveyQuestionBelongsToSurvey(int $questionId, int $surveyId): bool
+    {
+        if ($questionId <= 0 || $surveyId <= 0) {
+            return false;
+        }
+
+        $found = Database::getManager()->getConnection()->fetchOne(
+            'SELECT iid FROM c_survey_question WHERE iid = ? AND survey_id = ?',
+            [$questionId, $surveyId]
+        );
+
+        return false !== $found;
+    }
+
+    /**
+     * Tells whether an option belongs to the given question, and the question to the given survey (the condition of
+     * a dependent question must point inside its own survey).
+     */
+    public static function questionOptionBelongsToQuestion(int $optionId, int $questionId, int $surveyId): bool
+    {
+        if ($optionId <= 0 || $questionId <= 0 || $surveyId <= 0) {
+            return false;
+        }
+
+        $found = Database::getManager()->getConnection()->fetchOne(
+            'SELECT o.iid FROM c_survey_question_option o
+             INNER JOIN c_survey_question q ON q.iid = o.question_id
+             WHERE o.iid = ? AND o.question_id = ? AND q.survey_id = ?',
+            [$optionId, $questionId, $surveyId]
+        );
+
+        return false !== $found;
+    }
+
+    /**
+     * Tells whether a user may write a survey into the given target course (and session): the course must exist,
+     * the session (when given) must contain the course, and the user must be a platform admin, a teacher of the
+     * course, a coach of the course in that session or a session admin of that session. copy_survey.php used to trust the target
+     * posted by the form.
+     */
+    public static function canCopySurveyTo(int $userId, int $courseId, int $sessionId, bool $isPlatformAdmin, bool $isSessionAdmin = false): bool
+    {
+        if ($courseId <= 0 || $sessionId < 0 || $userId <= 0) {
+            return false;
+        }
+
+        $connection = Database::getManager()->getConnection();
+        if (false === $connection->fetchOne('SELECT id FROM course WHERE id = ?', [$courseId])) {
+            return false;
+        }
+
+        if ($sessionId > 0 && false === $connection->fetchOne(
+            'SELECT id FROM session_rel_course WHERE session_id = ? AND c_id = ?',
+            [$sessionId, $courseId]
+        )) {
+            return false;
+        }
+
+        if ($isPlatformAdmin) {
+            return true;
+        }
+
+        if (false !== $connection->fetchOne(
+            'SELECT id FROM course_rel_user WHERE c_id = ? AND user_id = ? AND status = 1',
+            [$courseId, $userId]
+        )) {
+            return true;
+        }
+
+        if ($sessionId <= 0) {
+            return false;
+        }
+
+        if (false !== $connection->fetchOne(
+            'SELECT id FROM session_rel_course_rel_user WHERE session_id = ? AND c_id = ? AND user_id = ? AND status = 2',
+            [$sessionId, $courseId, $userId]
+        )) {
+            return true;
+        }
+
+        // A session admin may write into the sessions he is registered to as session admin (relation_type 4).
+        return $isSessionAdmin && false !== $connection->fetchOne(
+            'SELECT id FROM session_rel_user WHERE session_id = ? AND user_id = ? AND relation_type = ?',
+            [$sessionId, $userId, SessionEntity::SESSION_ADMIN]
+        );
+    }
+
+    /**
+     * Tells whether a user holds an invitation to the given survey in the given course: answering a survey is
+     * only open to those invited (anonymous links work through their invitation code, not through this).
+     */
+    public static function userIsInvitedToSurvey(int $userId, int $surveyId, int $courseId): bool
+    {
+        if ($userId <= 0 || $surveyId <= 0 || $courseId <= 0) {
+            return false;
+        }
+
+        return false !== Database::getManager()->getConnection()->fetchOne(
+            'SELECT iid FROM c_survey_invitation WHERE user_id = ? AND survey_id = ? AND c_id = ? LIMIT 1',
+            [$userId, $surveyId, $courseId]
+        );
     }
 }

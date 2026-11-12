@@ -171,23 +171,25 @@ class Answer
      *
      * @author Yoselyn Castillo
      *
+     * @deprecated no caller anywhere; kept only as a pin of its behaviour
+     *
      * @return array - $id (answer ids)
      */
     public function selectAnswerId()
     {
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $questionId = $this->questionId;
+        $questionId = (int) $this->questionId;
 
-        $sql = "SELECT id FROM
+        $sql = "SELECT iid FROM
               $table
-              WHERE c_id = {$this->course_id} AND question_id ='".$questionId."'";
+              WHERE question_id = $questionId";
 
         $result = Database::query($sql);
         $id = [];
         // while a record is found
         if (Database::num_rows($result) > 0) {
             while ($object = Database::fetch_array($result)) {
-                $id[] = $object['id'];
+                $id[] = $object['iid'];
             }
         }
 
@@ -447,7 +449,7 @@ class Answer
     public function getGradesList()
     {
         $list = [];
-        for ($i = 0; $i < $this->nbrAnswers; $i++) {
+        for ($i = 1; $i <= $this->nbrAnswers; $i++) {
             if (!empty($this->answer[$i])) {
                 $list[$i] = $this->weighting[$i];
             }

@@ -146,7 +146,7 @@ class survey_question
      */
     public function createForm($surveyData, $formData)
     {
-        $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
+        $action = isset($_GET['action']) && in_array($_GET['action'], ['add', 'edit'], true) ? $_GET['action'] : null;
         $questionId = isset($_GET['question_id']) ? (int) $_GET['question_id'] : null;
         $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : null;
         $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;

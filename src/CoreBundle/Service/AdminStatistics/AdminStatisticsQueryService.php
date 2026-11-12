@@ -474,15 +474,32 @@ final readonly class AdminStatisticsQueryService
         $itemsPerPage = $this->normalizePositiveInt($parameters['itemsPerPage'] ?? 20, 20, 1, PHP_INT_MAX);
         $connection = $this->entityManager->getConnection();
 
-        $totalItems = (int) $connection->executeQuery('SELECT COUNT(*) FROM course')->fetchOne();
-        $courses = $connection->createQueryBuilder()
+        $currentUrlId = null;
+        if ($this->accessUrlHelper->isMultiple()) {
+            $currentUrl = $this->accessUrlHelper->getCurrent();
+            if (null !== $currentUrl && null !== $currentUrl->getId()) {
+                $currentUrlId = (int) $currentUrl->getId();
+            }
+        }
+
+        $countBuilder = $connection->createQueryBuilder()->select('COUNT(*)')->from('course', 'course');
+        $listBuilder = $connection->createQueryBuilder()
             ->select('course.id', 'course.title')
             ->from('course', 'course')
             ->setFirstResult(($page - 1) * $itemsPerPage)
             ->setMaxResults($itemsPerPage)
-            ->executeQuery()
-            ->fetchAllAssociative()
         ;
+        if (null !== $currentUrlId) {
+            foreach ([$countBuilder, $listBuilder] as $builder) {
+                $builder
+                    ->innerJoin('course', 'access_url_rel_course', 'usage_url', 'usage_url.c_id = course.id')
+                    ->andWhere('usage_url.access_url_id = :usageUrlId')
+                    ->setParameter('usageUrlId', $currentUrlId, Types::INTEGER)
+                ;
+            }
+        }
+        $totalItems = (int) $countBuilder->executeQuery()->fetchOne();
+        $courses = $listBuilder->executeQuery()->fetchAllAssociative();
 
         $courseIds = array_map(static fn (array $course): int => (int) $course['id'], $courses);
         $today = new DateTimeImmutable('now', $this->getUserTimezone());
@@ -630,7 +647,7 @@ final readonly class AdminStatisticsQueryService
                 'COUNT(relation.id) AS total'
             )
             ->from(UserRelUser::class, 'relation')
-            ->leftJoin('relation.user', 'user', Join::WITH, 'user.active <> :softDeleted')
+            ->innerJoin('relation.user', 'user', Join::WITH, 'user.active <> :softDeleted')
             ->andWhere('relation.relationType <> :hrRelation')
             ->setParameter('hrRelation', UserRelUser::USER_RELATION_TYPE_HRM, Types::INTEGER)
             ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)
@@ -741,6 +758,17 @@ final readonly class AdminStatisticsQueryService
             ->setParameter('rangeStart', $startDate, Types::DATETIME_MUTABLE)
             ->setParameter('rangeEnd', $endDate, Types::DATETIME_MUTABLE)
         ;
+
+        if ($this->accessUrlHelper->isMultiple()) {
+            $currentUrl = $this->accessUrlHelper->getCurrent();
+            if (null !== $currentUrl && null !== $currentUrl->getId()) {
+                $queryBuilder
+                    ->innerJoin('session.urls', 'sessionUrl')
+                    ->andWhere('IDENTITY(sessionUrl.url) = :sessionUrlId')
+                    ->setParameter('sessionUrlId', (int) $currentUrl->getId(), Types::INTEGER)
+                ;
+            }
+        }
 
         if ($statusId > 0) {
             $queryBuilder

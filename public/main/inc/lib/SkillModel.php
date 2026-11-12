@@ -388,7 +388,7 @@ class SkillModel extends Model
             if (empty($id_condition)) {
                 $id_condition = " WHERE ss.parent_id = $parent_id";
             } else {
-                $id_condition = " AND ss.parent_id = $parent_id";
+                $id_condition .= " AND ss.parent_id = $parent_id";
             }
         }
 
@@ -440,7 +440,7 @@ class SkillModel extends Model
         // Load all children of the parent_id
         if (!empty($skills) && !empty($parent_id)) {
             foreach ($skills as $skill) {
-                $children = self::get_all($load_user_data, $user_id, $id, $skill['id']);
+                $children = $this->getAllSkills($load_user_data, $user_id, $id, $skill['id']);
                 if (!empty($children)) {
                     // $skills = array_merge($skills, $children);
                     $skills += $children;
@@ -1344,6 +1344,8 @@ class SkillModel extends Model
      * @param mixed $where_condition
      *
      * @return array
+     *
+     * @deprecated No caller left in public/ or src/ (the ranking page moved to the Symfony side).
      */
     public function getUserListSkillRanking(
         $start,
@@ -1378,6 +1380,8 @@ class SkillModel extends Model
 
     /**
      * @return int
+     *
+     * @deprecated No caller left in public/ or src/.
      */
     public function getUserListSkillRankingCount()
     {
@@ -1405,6 +1409,8 @@ class SkillModel extends Model
      * @param string $courseCode
      *
      * @return int
+     *
+     * @deprecated No caller left in public/ or src/.
      */
     public function getCountSkillsByCourse($courseCode)
     {
@@ -1438,7 +1444,7 @@ class SkillModel extends Model
                 INNER JOIN {$this->table_skill_rel_gradebook} sg
                 ON g.id = sg.gradebook_id
                 INNER JOIN {$this->table_course} c
-                ON c.code = g.course_code
+                ON c.id = g.c_id
                 WHERE sg.skill_id = $skillId
                 AND (g.session_id IS NULL OR g.session_id = 0)";
         $result = Database::query($sql);

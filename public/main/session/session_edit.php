@@ -246,7 +246,13 @@ $(function() {
         $status = $params['status'] ?? 0;
         $notifyBoss = isset($params['notify_boss']) ? 1 : 0;
 
-        $parentId = $params['parent_id'] ?? 0;
+        // The parent must be another session the user manages (or the one already set): never an arbitrary id.
+        $parentId = (int) ($params['parent_id'] ?? 0);
+        if ($parentId !== (int) $session->getParentId() &&
+            ($parentId === (int) $id || ($parentId > 0 && !SessionManager::canManageSessionId($parentId)))
+        ) {
+            $parentId = (int) $session->getParentId();
+        }
         $daysBeforeFinishingForReinscription = $params['days_before_finishing_for_reinscription'] ?? null;
         $daysBeforeFinishingToCreateNewRepetition = $params['days_before_finishing_to_create_new_repetition'] ?? null;
         $lastRepetition = isset($params['last_repetition']);

@@ -50,6 +50,15 @@ switch ($sale['product_type']) {
         break;
 }
 
+// The signature binds the amount the bank charged: it must be the price of the sale.
+if (!BuyCoursesPlugin::gatewayAmountMatchesSale(trim((string) $_POST['Importe']), $sale)) {
+    error_log(
+        '[BuyCourses] Cecabank notification refused: amount '.(string) $_POST['Importe']
+        .' does not match the price of sale '.(int) $sale['id']
+    );
+    api_not_allowed(true);
+}
+
 $saleIsCompleted = $plugin->completeSale($sale['id']);
 if ($saleIsCompleted) {
     $plugin->storePayouts($sale['id']);

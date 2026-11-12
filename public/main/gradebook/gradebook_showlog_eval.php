@@ -7,6 +7,7 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 
 $selectCat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
+GradebookUtils::protectElementInCurrentCourse('EVAL', $_GET['visiblelog'] ?? 0);
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl(),

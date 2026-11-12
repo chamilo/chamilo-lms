@@ -39,6 +39,18 @@ if (!$session || empty($courseInfo)) {
     api_not_allowed(true);
 }
 
+// The course id comes from the URL: it must be a course of this session, or users would be registered
+// in a session-course relation that does not exist.
+$sessionHasCourse = false;
+foreach ($session->getCourses() as $sessionRelCourse) {
+    if ((int) $sessionRelCourse->getCourse()->getId() === $courseId) {
+        $sessionHasCourse = true;
+    }
+}
+if (!$sessionHasCourse) {
+    api_not_allowed(true);
+}
+
 /*
  * XAJAX requests must be processed before the normal page protection flow.
  * The search_users() callback performs its own session permission check.

@@ -269,7 +269,7 @@
                 })
 
                 $.ajax({
-                    data: { payouts: val },
+                    data: { payouts: val, buycourses_admin_sec_token: '{{ admin_token|e('js') }}' },
                     url: '{{ url('index') ~ 'plugin/BuyCourses/src/buycourses.ajax.php?' ~ {'a': 'proceedPayout'}|url_encode }}',
                     type: 'POST',
                     beforeSend: function () {
@@ -289,7 +289,7 @@
                 var id = this.id
 
                 $.ajax({
-                    data: { id: id },
+                    data: { id: id, buycourses_admin_sec_token: '{{ admin_token|e('js') }}' },
                     url: '{{ url('index') ~ 'plugin/BuyCourses/src/buycourses.ajax.php?' ~ {'a': 'cancelPayout'}|url_encode }}',
                     type: 'POST',
                     success: function () {

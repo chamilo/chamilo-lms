@@ -186,7 +186,8 @@ class learnpath
                 $this->scormUrl = Container::getAssetRepository()->getAssetUrl($asset).'/'.$entity->getPath().'/';
             }
 
-            $this->accumulateScormTime = $entity->getAccumulateWorkTime();
+            $this->accumulateScormTime = $entity->getAccumulateScormTime();
+            $this->accumulateWorkTime = $entity->getAccumulateWorkTime();
 
             if (!empty($entity->getPublishedOn())) {
                 $this->published_on = $entity->getPublishedOn()->format('Y-m-d H:i:s');
@@ -322,7 +323,10 @@ class learnpath
                     $status_list = [];
                     $res = Database::query($sql);
                     while ($row = Database:: fetch_array($res)) {
-                        $status_list[$row['lp_item_id']] = $row['status'];
+                        // Rows come by view_count descending: keep the first one (the latest attempt).
+                        if (!isset($status_list[$row['lp_item_id']])) {
+                            $status_list[$row['lp_item_id']] = $row['status'];
+                        }
                     }
 
                     foreach ($lp_item_id_list as $item_id) {
@@ -472,10 +476,37 @@ class learnpath
             ->setMaxScore($maxScore)
             ->setMaxTimeAllowed($maxTimeAllowed)
             ->setPrerequisite($prerequisites)
-            //->setDisplayOrder($display_order + 1)
             //->setNextItemId((int) $next)
             //->setPreviousItemId($previous)
         ;
+
+        // previous_item_id/next_item_id are the left/right values of the nested tree (Gedmo): the position among
+        // the items is only given by display_order. Insert after $previousId when it is an item of this learning
+        // path (the items after it move one place down), otherwise add the item at the end.
+        $connection = Database::getManager()->getConnection();
+        $lpIdForOrder = (int) $this->get_id();
+        $previousId = (int) $previousId;
+        $displayOrder = null;
+        if ($previousId > 0) {
+            $previousOrder = $connection->fetchOne(
+                'SELECT display_order FROM c_lp_item WHERE iid = ? AND lp_id = ?',
+                [$previousId, $lpIdForOrder]
+            );
+            if (false !== $previousOrder) {
+                $connection->executeStatement(
+                    'UPDATE c_lp_item SET display_order = display_order + 1 WHERE lp_id = ? AND display_order > ?',
+                    [$lpIdForOrder, (int) $previousOrder]
+                );
+                $displayOrder = (int) $previousOrder + 1;
+            }
+        }
+        if (null === $displayOrder) {
+            $displayOrder = 1 + (int) $connection->fetchOne(
+                'SELECT MAX(display_order) FROM c_lp_item WHERE lp_id = ?',
+                [$lpIdForOrder]
+            );
+        }
+        $lpItem->setDisplayOrder($displayOrder);
 
         if (!empty($parent))  {
             $lpItem->setParent($parent);
@@ -937,10 +968,8 @@ class learnpath
                     WHERE prerequisite = '$id'";
         Database::query($sql_all);
 
-        $sql = "UPDATE $lp_item
-                SET previous_item_id = ".$this->getLastInFirstLevel()."
-                WHERE lp_id = {$this->lp_id} AND item_type = '".TOOL_LP_FINAL_ITEM."'";
-        Database::query($sql);
+        // previous_item_id is the left value of the nested tree (Gedmo TreeLeft), maintained by removeFromTree()
+        // above: it must not be overwritten with an item id here (it used to be set to getLastInFirstLevel()).
 
         // Remove the indexed document without querying the legacy search_engine_ref schema.
         if ('true' === api_get_setting('search_enabled') && !empty($searchDid)) {
@@ -965,6 +994,8 @@ class learnpath
      * @param string $prefix
      *
      * @return array Array of terms
+     *
+     * @deprecated no caller; reads the legacy specific fields search index (only used by set_terms_by_prefix).
      */
     public function get_common_index_terms_by_prefix($prefix)
     {
@@ -1208,11 +1239,18 @@ class learnpath
     public function getLastInFirstLevel()
     {
         try {
+            // First-level items hang from the root item of the learning path (only the root has no parent).
+            $root = Container::getLpItemRepository()->getRootItem((int) $this->lp_id);
+            if (null === $root) {
+                return 0;
+            }
+
             $lastId = Database::getManager()
                 ->createQuery('SELECT i.iid FROM Chamilo\CourseBundle\Entity\CLpItem i
-                WHERE i.lp = :lp AND i.parent IS NULL AND i.itemType != :type ORDER BY i.displayOrder DESC')
+                WHERE i.lp = :lp AND i.parent = :root AND i.itemType != :type
+                ORDER BY i.displayOrder DESC, i.iid DESC')
                 ->setMaxResults(1)
-                ->setParameters(['lp' => $this->lp_id, 'type' => TOOL_LP_FINAL_ITEM])
+                ->setParameters(['lp' => $this->lp_id, 'root' => (int) $root->getIid(), 'type' => TOOL_LP_FINAL_ITEM])
                 ->getSingleScalarResult();
 
             return $lastId;
@@ -1726,80 +1764,58 @@ class learnpath
                 )) {
                 return false;
             }
+        }
 
-            $prerequisite = $lp->getPrerequisite();
-            $is_visible = true;
+        // The prerequisite and the availability dates apply to every path, in a category or not.
+        $prerequisite = $lp->getPrerequisite();
+        $is_visible = true;
 
-            $isBlocked = self::isBlockedByPrerequisite(
-                $student_id,
-                $prerequisite,
-                $course,
-                $sessionId
-            );
+        $isBlocked = self::isBlockedByPrerequisite(
+            $student_id,
+            $prerequisite,
+            $course,
+            $sessionId
+        );
 
-            if ($isBlocked) {
-                $is_visible = false;
-            }
+        if ($isBlocked) {
+            $is_visible = false;
+        }
 
-            // Also check the time availability of the LP
-            if ($is_visible) {
-                // Adding visibility restrictions
-                if (null !== $lp->getPublishedOn()) {
-                    if ($now < $lp->getPublishedOn()->getTimestamp()) {
-                        $is_visible = false;
-                    }
-                }
-                // Blocking empty start times see BT#2800
-                global $_custom;
-                if (isset($_custom['lps_hidden_when_no_start_date']) &&
-                    $_custom['lps_hidden_when_no_start_date']
-                ) {
-                    if (null !== $lp->getPublishedOn()) {
-                        $is_visible = false;
-                    }
-                }
-
-                if (null !== $lp->getExpiredOn()) {
-                    if ($now > $lp->getExpiredOn()->getTimestamp()) {
-                        $is_visible = false;
-                    }
-                }
-            }
-
-            if ($is_visible) {
-                $subscriptionSettings = self::getSubscriptionSettings();
-
-                // Check if the subscription users/group to a LP is ON
-                if (1 == $lp->getSubscribeUsers() &&
-                    true === $subscriptionSettings['allow_add_users_to_lp']
-                ) {
-                    // Try group
+        // Also check the time availability of the LP
+        if ($is_visible) {
+            // Adding visibility restrictions
+            if (null !== $lp->getPublishedOn()) {
+                if ($now < $lp->getPublishedOn()->getTimestamp()) {
                     $is_visible = false;
-                    // Checking only the user visibility
-                    $userVisibility = self::isUserSubscribedToLp($lp, $student_id, $course, $session);
-
-                    if (true === $userVisibility) {
-                        return true;
-                    }
-
-                    // Try with groups
-                    $groupVisibility = self::isGroupSubscribedToLp($lp, $student_id, $course, $session);
-                    if (true === $groupVisibility) {
-                        return true;
-                    }
+                }
+            }
+            // Blocking empty start times see BT#2800
+            global $_custom;
+            if (isset($_custom['lps_hidden_when_no_start_date']) &&
+                $_custom['lps_hidden_when_no_start_date']
+            ) {
+                if (null !== $lp->getPublishedOn()) {
+                    $is_visible = false;
                 }
             }
 
-            return $is_visible;
-        } else {
+            if (null !== $lp->getExpiredOn()) {
+                if ($now > $lp->getExpiredOn()->getTimestamp()) {
+                    $is_visible = false;
+                }
+            }
+        }
 
-            $is_visible = true;
+        if ($is_visible) {
             $subscriptionSettings = self::getSubscriptionSettings();
+
             // Check if the subscription users/group to a LP is ON
             if (1 == $lp->getSubscribeUsers() &&
                 true === $subscriptionSettings['allow_add_users_to_lp']
             ) {
+                // Try group
                 $is_visible = false;
+                // Checking only the user visibility
                 $userVisibility = self::isUserSubscribedToLp($lp, $student_id, $course, $session);
 
                 if (true === $userVisibility) {
@@ -1812,11 +1828,9 @@ class learnpath
                     return true;
                 }
             }
-
-            return $is_visible;
         }
 
-        return true;
+        return $is_visible;
     }
 
     public static function isGroupSubscribedToLp(
@@ -2021,7 +2035,7 @@ class learnpath
                 $item = $this->getItem($itemId);
                 $score = $item->get_score();
                 $maxScore = $item->get_max();
-                if ($mode = '%') {
+                if ('%' === $mode) {
                     if (!empty($maxScore)) {
                         $percentage = ((float) $score / (float) $maxScore) * 100;
                     }
@@ -2776,7 +2790,8 @@ class learnpath
                 INNER JOIN $lp_item_table li
                 ON (li.lp_id = l.iid)
         		WHERE
-        		    li.iid = $item_id
+        		    li.iid = $item_id AND
+        		    l.iid = ".(int) $this->get_id()."
         		";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
@@ -3007,12 +3022,13 @@ class learnpath
                             break;
                         case 'quiz':
                             // Check how much attempts of a exercise exits in lp
-                            $lp_item_id = $this->get_current_item_id();
+                            // (of the linked item, not of the current one)
+                            $lp_item_id = $item_id;
                             $lp_view_id = $this->get_view_id();
 
                             $prevent_reinit = null;
-                            if (isset($this->items[$this->current])) {
-                                $prevent_reinit = $this->items[$this->current]->get_prevent_reinit();
+                            if (isset($this->items[$item_id])) {
+                                $prevent_reinit = $this->items[$item_id]->get_prevent_reinit();
                             }
 
                             if (empty($provided_toc)) {
@@ -3175,6 +3191,7 @@ class learnpath
                 $userId = $this->get_user_id();
             }
         }
+        $userId = (int) $userId;
         $sessionCondition = api_get_session_condition($sessionId);
 
         // When missing $attempt_num, search for a unique lp_view record for this lp and user.
@@ -3195,7 +3212,7 @@ class learnpath
             $params = [
                 'c_id' => $course_id,
                 'lp_id' => $this->get_id(),
-                'user_id' => $this->get_user_id(),
+                'user_id' => $userId,
                 'view_count' => 1,
                 'last_item' => 0,
             ];
@@ -3444,6 +3461,176 @@ class learnpath
     }
 
     /**
+     * Finds a category by id, only when it is linked to the current course. The category id comes from the request
+     * and the callers only check that the user may edit the current course: without this check a teacher could
+     * change or delete the categories of any other course.
+     */
+    private static function getCategoryOfCurrentCourse(int $id): ?CLpCategory
+    {
+        $course = api_get_course_entity();
+        if (null === $course) {
+            return null;
+        }
+
+        /** @var CLpCategory|null $category */
+        $category = Container::getLpCategoryRepository()->find($id);
+        if (null === $category || null === self::getCategoryLinkInCurrentContext($category)) {
+            return null;
+        }
+
+        return $category;
+    }
+
+    /**
+     * The link of the category for exactly the current course and session (no session: the base course only).
+     * getFirstResourceLinkFromCourseSession() ignores the session when none is given, so it would accept the link of
+     * any session of the course.
+     */
+    private static function getCategoryLinkInCurrentContext(CLpCategory $category): ?ResourceLink
+    {
+        $courseId = (int) api_get_course_int_id();
+        $sessionId = (int) api_get_session_id();
+        $node = $category->getResourceNode();
+        if (null === $node) {
+            return null;
+        }
+
+        foreach ($node->getResourceLinks() as $link) {
+            if ($link->getCourse() && $courseId === (int) $link->getCourse()->getId()
+                && $sessionId === (int) ($link->getSession() ? $link->getSession()->getId() : 0)
+                && null === $link->getGroup() && null === $link->getUser() && null === $link->getUserGroup()
+            ) {
+                return $link;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * True when the category (id from the request) is linked to the current course and session context.
+     */
+    public static function categoryBelongsToCurrentCourse(int $id): bool
+    {
+        return $id > 0 && null !== self::getCategoryOfCurrentCourse($id);
+    }
+
+    /**
+     * True when the learning path (id from the request) is linked to the current course.
+     */
+    public static function lpBelongsToCurrentCourse(int $id): bool
+    {
+        $course = api_get_course_entity();
+        if ($id <= 0 || null === $course) {
+            return false;
+        }
+
+        /** @var CLp|null $lp */
+        $lp = Container::getLpRepository()->find($id);
+
+        return null !== $lp && null !== $lp->getFirstResourceLinkFromCourseSession($course);
+    }
+
+    /**
+     * True when the user is a learner of the course: subscribed to it, or a student of a session containing it
+     * (that session only when $sessionId is given).
+     */
+    public static function userIsLearnerOfCourse(int $userId, int $courseId, int $sessionId = 0): bool
+    {
+        if ($userId <= 0 || $courseId <= 0) {
+            return false;
+        }
+
+        $conn = Database::getManager()->getConnection();
+        if ($sessionId <= 0 && $conn->fetchOne(
+            'SELECT 1 FROM course_rel_user WHERE user_id = ? AND c_id = ? LIMIT 1',
+            [$userId, $courseId]
+        )) {
+            return true;
+        }
+
+        $sql = 'SELECT 1 FROM session_rel_course_rel_user WHERE user_id = ? AND c_id = ? AND status = ?';
+        $params = [$userId, $courseId, SessionEntity::STUDENT];
+        if ($sessionId > 0) {
+            $sql .= ' AND session_id = ?';
+            $params[] = $sessionId;
+        }
+
+        return false !== $conn->fetchOne($sql.' LIMIT 1', $params);
+    }
+
+    /**
+     * True when the viewer is a course coach of a session that has the target user as a student in the course,
+     * or the general coach of such a session ($sessionId = 0: any session, otherwise that one only).
+     */
+    public static function isCoachOfLearnerInCourse(int $viewerId, int $targetUserId, int $courseId, int $sessionId = 0): bool
+    {
+        $conn = Database::getManager()->getConnection();
+        $extra = $sessionId > 0 ? ' AND student.session_id = '.(int) $sessionId : '';
+
+        $courseCoach = $conn->fetchOne(
+            'SELECT 1 FROM session_rel_course_rel_user coach
+             INNER JOIN session_rel_course_rel_user student
+                ON student.session_id = coach.session_id AND student.c_id = coach.c_id
+             WHERE coach.user_id = ? AND coach.status = ? AND coach.c_id = ?
+                AND student.user_id = ? AND student.status = ?'.$extra.' LIMIT 1',
+            [$viewerId, SessionEntity::COURSE_COACH, $courseId, $targetUserId, SessionEntity::STUDENT]
+        );
+        if (false !== $courseCoach) {
+            return true;
+        }
+
+        return false !== $conn->fetchOne(
+            'SELECT 1 FROM session_rel_user general
+             INNER JOIN session_rel_course_rel_user student ON student.session_id = general.session_id
+             WHERE general.user_id = ? AND general.relation_type = ?
+                AND student.user_id = ? AND student.c_id = ? AND student.status = ?'.$extra.' LIMIT 1',
+            [$viewerId, SessionEntity::GENERAL_COACH, $targetUserId, $courseId, SessionEntity::STUDENT]
+        );
+    }
+
+    /**
+     * True when the viewer may see the learning path statistics of the target user in the course (and session):
+     * the user himself, or, for a user who is a learner of that course/session, a teacher of the course, a coach
+     * (course or general) of a session with that learner in that course, his student boss or the human resources
+     * manager following him. Platform and session administrators are checked by the caller (they depend on the
+     * session of the request).
+     */
+    public static function mayViewStatsOfUser(int $viewerId, int $targetUserId, int $courseId, int $sessionId = 0): bool
+    {
+        if ($viewerId <= 0 || $targetUserId <= 0) {
+            return false;
+        }
+        if ($viewerId === $targetUserId) {
+            return true;
+        }
+        if (!self::userIsLearnerOfCourse($targetUserId, $courseId, $sessionId)) {
+            return false;
+        }
+
+        return CourseManager::isCourseTeacher($viewerId, $courseId)
+            || self::isCoachOfLearnerInCourse($viewerId, $targetUserId, $courseId, $sessionId)
+            || UserManager::userIsBossOfStudent($viewerId, $targetUserId)
+            || UserManager::is_user_followed_by_hrm($targetUserId, $viewerId);
+    }
+
+    /**
+     * True when the item (id from the request) belongs to the given learning path. Callers must have checked the
+     * learning path with lpBelongsToCurrentCourse() or got it from the controller.
+     */
+    public static function lpItemBelongsToLp(int $itemId, int $lpId): bool
+    {
+        if ($itemId <= 0 || $lpId <= 0) {
+            return false;
+        }
+
+        /** @var CLpItem|null $item */
+        $item = Container::getLpItemRepository()->find($itemId);
+
+        return null !== $item && $lpId === (int) $item->getLp()->getIid();
+    }
+
+    /**
      * Publishes a learnpath category.
      * This basically means show or hide the learnpath category to normal users.
      *
@@ -3455,7 +3642,7 @@ class learnpath
     public static function toggleCategoryVisibility($id, $visibility = 1)
     {
         $repo = Container::getLpCategoryRepository();
-        $resource = $repo->find($id);
+        $resource = self::getCategoryOfCurrentCourse((int) $id);
 
         if (!$resource) {
             return false;
@@ -3472,7 +3659,7 @@ class learnpath
             $repo->setVisibilityDraft($resource, $course, $session);
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -3512,9 +3699,8 @@ class learnpath
      */
     public static function toggleCategoryPublish($id)
     {
-        $repo = Container::getLpCategoryRepository();
-        /** @var CLpCategory|null $lp */
-        $category = $repo->find($id);
+        /** @var CLpCategory|null $category */
+        $category = self::getCategoryOfCurrentCourse((int) $id);
 
         if (null === $category) {
             return false;
@@ -3582,6 +3768,8 @@ class learnpath
      * @param int $courseId
      *
      * @return bool
+     *
+     * @deprecated no caller; always returns false (the CTool based lookup is unreachable).
      */
     public static function categoryIsPublished(CLpCategory $category, $courseId)
     {
@@ -3631,13 +3819,22 @@ class learnpath
         $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
         $lp_view_table = Database::get_course_table(TABLE_LP_VIEW);
-        $sql = "INSERT INTO $lp_view_table (c_id, lp_id, user_id, view_count, session_id)
-                VALUES ($course_id, ".$this->lp_id.",".$this->get_user_id().",".($this->attempt + 1).", $session_id)";
-        if ($this->debug > 2) {
-            error_log('Inserting new lp_view for restart: '.$sql, 0);
+        // last_item is NOT NULL without default and session_id is a foreign key: store NULL (no value) when there is
+        // no session, as the constructor does.
+        $params = [
+            'c_id' => $course_id,
+            'lp_id' => (int) $this->lp_id,
+            'user_id' => (int) $this->get_user_id(),
+            'view_count' => (int) $this->attempt + 1,
+            'last_item' => 0,
+        ];
+        if (!empty($session_id)) {
+            $params['session_id'] = (int) $session_id;
         }
-        Database::query($sql);
-        $view_id = Database::insert_id();
+        if ($this->debug > 2) {
+            error_log('Inserting new lp_view for restart: '.print_r($params, true), 0);
+        }
+        $view_id = Database::insert($lp_view_table, $params);
 
         if ($view_id) {
             $this->lp_view_id = $view_id;
@@ -3897,6 +4094,8 @@ class learnpath
      * @param string $prefix       Xapian term prefix
      *
      * @return bool False on error, true otherwise
+     *
+     * @deprecated no caller; queries c_lp_item.c_id/id and search_engine_ref, which no longer exist.
      */
     public function set_terms_by_prefix($terms_string, $prefix)
     {
@@ -4192,6 +4391,8 @@ class learnpath
      * Updates the order of learning paths (goes through all of them by order and fills the gaps).
      *
      * @return bool True on success, false on failure
+     *
+     * @deprecated no caller; returns immediately (the legacy c_lp.c_id query is unreachable).
      */
     public function update_display_order()
     {
@@ -4782,6 +4983,7 @@ class learnpath
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                         'action' => 'set_previous_step_as_prerequisite',
                         'lp_id' => $lpId,
+                        'sec_token' => Security::get_existing_token(),
                     ]),
                 ],
                 [
@@ -4789,6 +4991,7 @@ class learnpath
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                         'action' => 'clear_prerequisites',
                         'lp_id' => $lpId,
+                        'sec_token' => Security::get_existing_token(),
                     ]),
                 ],
             ];
@@ -7511,26 +7714,19 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     public function select_previous_item_id()
     {
-        $course_id = api_get_course_int_id();
         $table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
-        // Get the max order of the items
-        $sql = "SELECT max(display_order) AS display_order FROM $table_lp_item
-                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
-        $rs_max_order = Database::query($sql);
-        $row_max_order = Database::fetch_object($rs_max_order);
-        $max_order = $row_max_order->display_order;
-        // Get the previous item ID
-        $sql = "SELECT iid as previous FROM $table_lp_item
-                WHERE
-                    c_id = $course_id AND
-                    lp_id = ".$this->lp_id." AND
-                    display_order = '$max_order' ";
+        // c_lp_item has no c_id column: the items belong to the course through their learning path. The last item
+        // is the one with the highest display order (the most recently created one on a tie).
+        $sql = "SELECT iid AS previous FROM $table_lp_item
+                WHERE lp_id = ".(int) $this->lp_id."
+                ORDER BY display_order DESC, iid DESC
+                LIMIT 1";
         $rs_max = Database::query($sql);
         $row_max = Database::fetch_object($rs_max);
 
         // Return the previous item ID
-        return $row_max->previous;
+        return $row_max ? $row_max->previous : 0;
     }
 
     /**
@@ -7697,7 +7893,7 @@ document.addEventListener("DOMContentLoaded", function () {
         Database::query($sql);
 
         // Cleaning mastery score for exercises
-        $sql = "UPDATE $tbl_lp_item SET mastery_score = ''
+        $sql = "UPDATE $tbl_lp_item SET mastery_score = NULL
                 WHERE lp_id = $lp_id AND item_type = 'quiz'";
         Database::query($sql);
     }
@@ -7782,8 +7978,7 @@ document.addEventListener("DOMContentLoaded", function () {
     public static function updateCategory($params)
     {
         $em = Database::getManager();
-        /** @var CLpCategory $item */
-        $item = $em->find(CLpCategory::class, $params['id']);
+        $item = self::getCategoryOfCurrentCourse((int) $params['id']);
         if ($item) {
             $item->setTitle($params['name']);
             $em->persist($item);
@@ -7841,7 +8036,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         $repo = Container::getLpCategoryRepository();
         $qb = $repo->getResourcesByCourse(api_get_course_entity($courseId));
-        $qb->addSelect('count(resource)');
+        $qb->select('count(resource)');
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -7881,15 +8076,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
     public static function deleteCategory(int $id): bool
     {
-        $repo = Container::getLpCategoryRepository();
         /** @var CLpCategory|null $category */
-        $category = $repo->find($id);
+        $category = self::getCategoryOfCurrentCourse($id);
 
         if (null === $category) {
             return false;
         }
 
         $em  = Database::getManager();
+        $course  = api_get_course_entity();
+        $session = api_get_session_entity();
+        $contextLink = self::getCategoryLinkInCurrentContext($category);
+
+        // Another course or session may still use the category: only remove the link of the current context.
+        foreach ($category->getResourceNode()->getResourceLinks() as $link) {
+            if ($link !== $contextLink && null === $link->getDeletedAt()) {
+                $em->getRepository(ResourceLink::class)->removeByResourceInContext($category, $course, $session);
+                $em->flush();
+
+                return true;
+            }
+        }
+
         $lps = $category->getLps();
 
         // Detach all learning paths from this category
@@ -7897,10 +8105,6 @@ document.addEventListener("DOMContentLoaded", function () {
             $lp->setCategory(null);
             $em->persist($lp);
         }
-
-        // Remove the resource link of this category in the current context
-        $course  = api_get_course_entity();
-        $session = api_get_session_entity();
 
         $em->getRepository(ResourceLink::class)->removeByResourceInContext(
             $category,
@@ -8111,7 +8315,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             $evaluationResultInfo = end($evaluationResultInfo);
 
-            if ($evaluationResultInfo) {
+            if ($evaluationResultInfo && !empty($evaluationResultInfo['max_score'])) {
                 $evaluationResult = $evaluationResultInfo['score'] * 100 / $evaluationResultInfo['max_score'];
                 if ($evaluationResult >= 80) {
                     $stars++;
@@ -8290,30 +8494,20 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     public function lpHasForum()
     {
-        $forumTable = Database::get_course_table(TABLE_FORUM);
-        $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-        $fakeFrom = "
-            $forumTable f
-            INNER JOIN $itemProperty ip
-            ON (f.forum_id = ip.ref AND f.c_id = ip.c_id)
-        ";
-
-        $resultData = Database::select(
-            'COUNT(f.iid) AS qty',
-            $fakeFrom,
-            [
-                'where' => [
-                    'ip.visibility != ? AND ' => 2,
-                    'ip.tool = ? AND ' => TOOL_FORUM,
-                    'f.c_id = ? AND ' => intval($this->course_int_id),
-                    'f.lp_id = ?' => intval($this->lp_id),
-                ],
-            ],
-            'first'
+        // c_forum and c_item_property no longer exist: a forum is a resource linked to the course (and not deleted).
+        $qty = Database::getManager()->getConnection()->fetchOne(
+            'SELECT COUNT(f.iid) FROM c_forum_forum f
+             WHERE f.lp_id = ? AND EXISTS (
+                 SELECT 1 FROM resource_link rl
+                 WHERE rl.resource_node_id = f.resource_node_id
+                     AND rl.c_id = ?
+                     AND rl.session_id IS NULL
+                     AND rl.deleted_at IS NULL
+             )',
+            [(int) $this->lp_id, (int) $this->course_int_id]
         );
 
-        return $resultData['qty'] > 0;
+        return (int) $qty > 0;
     }
 
     /**
@@ -8669,6 +8863,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         $lastLpItemIndex = count($lpItemId) - 1;
         $position = array_search($currentItemId, $lpItemId);
+        if (false === $position) {
+            return 'none';
+        }
 
         switch ($position) {
             case 0:
@@ -8886,6 +9083,9 @@ document.addEventListener("DOMContentLoaded", function () {
             'lp' => $learningPathId,
             'iid' => $id_in_path,
         ]);
+        if (!$rowItem instanceof CLpItem) {
+            return '';
+        }
         $type = $rowItem->getItemType();
         $id = empty($rowItem->getPath()) ? '0' : $rowItem->getPath();
         $main_dir_path = api_get_path(WEB_CODE_PATH);
@@ -9415,14 +9615,7 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     public function getAccumulateWorkTimeTotalCourse()
     {
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT SUM(accumulate_work_time) AS total
-                FROM $table
-                WHERE c_id = ".$this->course_int_id;
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
-        return (int) $row['total'];
+        return self::getAccumulateWorkTimeTotal($this->course_int_id);
     }
 
     /**
@@ -9453,9 +9646,15 @@ document.addEventListener("DOMContentLoaded", function () {
     {
         $table = Database::get_course_table(TABLE_LP_MAIN);
         $courseId = (int) $courseId;
+        // c_lp has no c_id column: a learning path belongs to a course through the link of its resource node.
         $sql = "SELECT SUM(accumulate_work_time) AS total
                 FROM $table
-                WHERE c_id = $courseId";
+                WHERE EXISTS (
+                    SELECT 1 FROM resource_link rl
+                    WHERE rl.resource_node_id = $table.resource_node_id
+                        AND rl.c_id = $courseId
+                        AND rl.deleted_at IS NULL
+                )";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
@@ -9562,7 +9761,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 WHERE path <> 'root' AND lp_id = ".$this->lp_id;
 
         if ($addParentCondition) {
-            $sql .= ' AND parent_item_id IS NULL ';
+            // First-level items hang from the root item (only the root has no parent).
+            $root = Container::getLpItemRepository()->getRootItem((int) $this->lp_id);
+            $sql .= ' AND parent_item_id = '.(null !== $root ? (int) $root->getIid() : 0).' ';
         }
         $sql .= ' ORDER BY display_order ASC';
 

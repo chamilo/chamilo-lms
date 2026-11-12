@@ -28,6 +28,8 @@ use const JSON_THROW_ON_ERROR;
 )]
 final class RepairGradebookStructureCommand extends Command
 {
+    use DryRunByDefaultTrait;
+
     private const string SOURCE = 'legacy_course_completion_rule';
     private const string SOURCE_DATA_SHA256 = '20d36aeea40353265e15cdc4a07128108c98db18bc64b8e5bc8d52a080bc9436';
     private const int LINK_EXERCISE = 1;
@@ -43,10 +45,10 @@ final class RepairGradebookStructureCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Validate every change and roll the transaction back.')
             ->addOption('course-id', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Limit processing to one or more Chamilo 2 course IDs.')
             ->addOption('category-id', null, InputOption::VALUE_REQUIRED, 'Use this gradebook category. Valid only with one --course-id.')
         ;
+        $this->addApplyOptions();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -54,7 +56,18 @@ final class RepairGradebookStructureCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Repair gradebook structure');
 
-        $dryRun = (bool) $input->getOption('dry-run');
+        try {
+            $apply = $this->isApply($input);
+            if ($apply) {
+                $this->requireExpectedCountOption($input);
+            }
+        } catch (Throwable $e) {
+            $io->error($e->getMessage());
+
+            return Command::FAILURE;
+        }
+
+        $dryRun = !$apply;
         $courseIds = array_values(array_unique(array_filter(array_map(
             static fn (mixed $value): int => (int) $value,
             (array) $input->getOption('course-id')
@@ -160,6 +173,14 @@ final class RepairGradebookStructureCommand extends Command
                 }
             }
 
+            $plannedChanges = $summary['repaired_exercise_links'] + $summary['created_exercise_links'] + $summary['created_work_links']
+                + $summary['created_forum_links'] + $summary['updated_weights'];
+
+            if ($apply && 0 === $summary['conflicts']) {
+                // Checked before the commit: a mismatch rolls the whole transaction back (see the catch below).
+                $this->assertExpectedCount($input, $plannedChanges);
+            }
+
             if ($dryRun || $summary['conflicts'] > 0) {
                 $this->connection->rollBack();
             } else {
@@ -167,7 +188,8 @@ final class RepairGradebookStructureCommand extends Command
             }
 
             $io->definitionList(
-                ['Mode' => $dryRun ? 'dry-run' : 'write'],
+                ['Mode' => $dryRun ? 'dry-run (read-only, default)' : 'write (--apply)'],
+                ['Planned changes (use as --expected-count)' => $plannedChanges],
                 ['Selected courses' => $summary['selected_courses']],
                 ['Processed courses' => $summary['processed_courses']],
                 ['Skipped incomplete' => $summary['skipped_incomplete']],
@@ -190,7 +212,7 @@ final class RepairGradebookStructureCommand extends Command
 
             $io->success(
                 $dryRun
-                ? 'Gradebook structure dry-run completed without changing data.'
+                ? \sprintf('Gradebook structure dry-run completed without changing data. To write, re-run with --apply --expected-count=%d.', $plannedChanges)
                 : 'Gradebook structure was repaired successfully.'
             );
 

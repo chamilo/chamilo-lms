@@ -384,7 +384,8 @@ abstract class AbstractLink implements GradebookItem
             } else {
                 $sql .= ' WHERE';
             }
-            $sql .= ' user_id = '.intval($user_id);
+            // The user_id column is gone: the user now selects the links of the courses taught or coached.
+            $sql .= ' '.GradebookUtils::taughtCoursesCondition((int) $user_id);
             $paramcount++;
         }
         if (!empty($courseId)) {

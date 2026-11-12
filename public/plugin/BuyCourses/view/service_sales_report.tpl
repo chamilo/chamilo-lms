@@ -605,6 +605,7 @@
         }
 
         requestBody.append('id', saleId)
+        requestBody.append('buycourses_admin_sec_token', '{{ admin_token|e('js') }}')
         body.innerHTML = buyCoursesLoadingLabel
 
         modal.classList.remove('hidden')

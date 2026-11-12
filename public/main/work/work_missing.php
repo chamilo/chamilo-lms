@@ -26,6 +26,11 @@ if (!api_is_allowed_to_edit(null, true)) {
     api_not_allowed(true);
 }
 
+// The folder id comes from the request: it must be one of the current course (or its session).
+if (!workBelongsToCourse($workId, api_get_course_int_id(), api_get_session_id())) {
+    api_not_allowed(true);
+}
+
 // User with no works
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
 

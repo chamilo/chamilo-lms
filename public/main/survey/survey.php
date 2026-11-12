@@ -59,7 +59,7 @@ Session::erase('answer_list');
 // Getting the survey information
 if (!empty($_GET['survey_id'])) {
     $course_code = api_get_course_id();
-    if (-1 != $course_code) {
+    if (-1 != $course_code && SurveyManager::surveyBelongsToCurrentCourse($survey_id)) {
         $survey_data = SurveyManager::get_survey($survey_id);
     } else {
         api_not_allowed(true);
@@ -87,7 +87,7 @@ if ($is_survey_type_1 && ('addgroup' === $action || 'deletegroup' === $action)) 
             Database::update(
                 $table_survey_question_group,
                 ['description' => $_POST['description']],
-                ['c_id = ? AND id = ?' => [$course_id, $groupId]]
+                ['c_id = ? AND id = ? AND survey_id = ?' => [$course_id, $groupId, $survey_id]]
             );
             Display::addFlash(Display::return_message(get_lang('Update successful')));
         } elseif (!empty($_POST['name'])) {
@@ -120,13 +120,28 @@ if ($is_survey_type_1 && ('addgroup' === $action || 'deletegroup' === $action)) 
     api_location(api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq());
 }
 
+// One token per session (not regenerated on each request, or no link of a page could ever carry a valid one).
+$surveySecToken = Security::get_existing_token();
 $my_question_id_survey = isset($_GET['question_id']) ? (int) $_GET['question_id'] : null;
 $my_survey_id_survey = (int) $_GET['survey_id'];
 // Displaying the header
 if (!empty($action)) {
+    // Question actions: the question must belong to the (already validated) survey.
+    if (in_array($action, ['copyquestion', 'delete', 'moveup', 'movedown'], true) &&
+        !SurveyManager::surveyQuestionBelongsToSurvey((int) $my_question_id_survey, $survey_id)
+    ) {
+        api_not_allowed(true);
+    }
+    if (in_array($action, ['copyquestion', 'delete', 'moveup', 'movedown'], true)) {
+        // These links change the survey: they are only valid when sent from a page of this session.
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
+    }
     switch ($action) {
         case 'copyquestion':
-            $copied = SurveyManager::copyQuestion($_GET['question_id']);
+            $copied = SurveyManager::copyQuestion($my_question_id_survey);
             if (false !== $copied) {
                 Display::addFlash(Display::return_message(get_lang('The question has been added.')));
             } else {
@@ -162,7 +177,7 @@ if (!empty($survey_data['survey_version'])) {
 }
 
 // We exit here is the first or last question is a pagebreak (which causes errors)
-SurveyUtil::check_first_last_question($_GET['survey_id']);
+SurveyUtil::check_first_last_question($survey_id);
 
 /**
  * Render a Tailwind "card" toolbar with icon-only buttons.
@@ -216,7 +231,7 @@ if (3 != $survey_data['survey_type']) {
         Display::getMdiIcon(ActionIcon::EDIT, 'ch-toolbar-icon', null, ICON_SIZE_MEDIUM, get_lang('Edit survey')).'</a>';
 }
 $survey_actions .= '<a
-    href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&action=delete&survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('Delete survey').'?', ENT_QUOTES)).'\')) return false;">'.
+    href="'.api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&action=delete&survey_id='.$survey_id.'&sec_token='.$surveySecToken.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('Delete survey').'?', ENT_QUOTES)).'\')) return false;">'.
     Display::getMdiIcon(ActionIcon::DELETE, 'ch-toolbar-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete survey')).'</a>';
 
 if (3 != $survey_data['survey_type']) {
@@ -412,19 +427,19 @@ while ($row = Database::fetch_assoc($result)) {
 
     echo '<a
         href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?'.
-        api_get_cidreq().'&action=copyquestion&type='.$row['type'].'&survey_id='.$survey_id.'&question_id='.$questionId.'">'.
+        api_get_cidreq().'&action=copyquestion&type='.$row['type'].'&survey_id='.$survey_id.'&question_id='.$questionId.'&sec_token='.$surveySecToken.'">'.
         Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Copy')).'</a>';
 
     echo '<a
         href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?'.
-        api_get_cidreq().'&action=delete&survey_id='.$survey_id.'&question_id='.$questionId.'"
+        api_get_cidreq().'&action=delete&survey_id='.$survey_id.'&question_id='.$questionId.'&sec_token='.$surveySecToken.'"
         onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("Are you sure you want to delete the question?").'?', ENT_QUOTES)).'\')) return false;">'.
         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')).'</a>';
     if (3 != $survey_data['survey_type']) {
         if ($question_counter > 1) {
             echo '<a
                 href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?'.
-                api_get_cidreq().'&action=moveup&survey_id='.$survey_id.'&question_id='.$questionId.'">'.
+                api_get_cidreq().'&action=moveup&survey_id='.$survey_id.'&question_id='.$questionId.'&sec_token='.$surveySecToken.'">'.
                 Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move up')).'</a>';
         } else {
             echo Display::getMdiIcon(ActionIcon::UP, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, '&nbsp;');
@@ -432,7 +447,7 @@ while ($row = Database::fetch_assoc($result)) {
         if ($question_counter < $question_counter_max) {
             echo '<a
                 href="'.api_get_path(WEB_CODE_PATH).
-                'survey/survey.php?'.api_get_cidreq().'&action=movedown&survey_id='.$survey_id.'&question_id='.$questionId.'">'.
+                'survey/survey.php?'.api_get_cidreq().'&action=movedown&survey_id='.$survey_id.'&question_id='.$questionId.'&sec_token='.$surveySecToken.'">'.
                 Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Move down')).'</a>';
         } else {
             echo Display::getMdiIcon(ActionIcon::DOWN, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL,'&nbsp;');
@@ -473,24 +488,24 @@ if ($is_survey_type_1) {
     }
     echo '<table border="0">
             <tr><td width="100">'.get_lang('Name').'</td><td>'.get_lang('Description').'</td></tr></table>';
-    $sec_token = Security::get_existing_token();
+    $sec_token = $surveySecToken;
     echo '<form
         action="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?action=addgroup&survey_id='.$survey_id.'" method="post">';
     echo '<input type="hidden" name="sec_token" value="'.htmlspecialchars($sec_token, ENT_QUOTES).'">';
     if ('editgroup' === $_GET['action']) {
         $sql = 'SELECT title, description FROM '.$table_survey_question_group.'
-                WHERE id = '.intval($_GET['gid']).' AND survey_id = '.$survey_id.'
+                WHERE id = '.(int) $_GET['gid'].' AND survey_id = '.$survey_id.'
                 LIMIT 1';
         $rs = Database::query($sql);
         $editedrow = Database::fetch_assoc($rs);
-        echo '<input type="text" maxlength="20" name="name" value="'.$editedrow['title'].'" size="10" disabled>';
-        echo '<input type="text" maxlength="150" name="description" value="'.$editedrow['description'].'" size="40">';
-        echo '<input type="hidden" name="group_id" value="'.Security::remove_XSS($_GET['gid']).'">';
+        echo '<input type="text" maxlength="20" name="name" value="'.api_htmlentities((string) ($editedrow['title'] ?? ''), ENT_QUOTES).'" size="10" disabled>';
+        echo '<input type="text" maxlength="150" name="description" value="'.api_htmlentities((string) ($editedrow['description'] ?? ''), ENT_QUOTES).'" size="40">';
+        echo '<input type="hidden" name="group_id" value="'.(int) $_GET['gid'].'">';
         echo '<input
                 type="submit"
                 value="'.get_lang('Save').'"'.'
                 <input type="button" value="'.get_lang('Cancel').'"
-                onclick="window.location.href = \'survey.php?survey_id='.Security::remove_XSS($survey_id).'\';" />';
+                onclick="window.location.href = \'survey.php?survey_id='.$survey_id.'\';" />';
     } else {
         echo '<input type="text" maxlength="20" name="name" value="" size="10">';
         echo '<input type="text" maxlength="250" name="description" value="" size="80">';

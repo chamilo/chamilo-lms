@@ -50,8 +50,7 @@ final class CSurveyRepository extends ResourceRepository
         }
 
         $qb
-            ->andWhere('resource.code = :title')
-            ->andWhere('node.title = :title')
+            ->andWhere($qb->expr()->orX('resource.code = :title', 'node.title = :title'))
             ->setParameter('title', $title)
         ;
 

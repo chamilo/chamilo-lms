@@ -112,6 +112,8 @@ class CourseLegalPlugin extends Plugin
     {
         $courseInfo = api_get_course_info($courseCode);
         $courseId = $courseInfo['real_id'];
+        $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
         $data = $this->getUserAcceptedLegal($userId, $courseId, $sessionId);
         $table = Database::get_main_table('session_rel_course_rel_user_legal');
         $uniqueId = api_get_unique_id();
@@ -237,7 +239,7 @@ class CourseLegalPlugin extends Plugin
             return null;
         }
 
-        if ($data['mail_agreement_link'] == $link) {
+        if (hash_equals((string) $data['mail_agreement_link'], (string) $link)) {
             $table = Database::get_main_table('session_rel_course_rel_user_legal');
             $id = $data['id'];
             $values = [

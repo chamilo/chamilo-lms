@@ -10,6 +10,14 @@ ini_set('default_socket_timeout', '1000');
 api_set_more_memory_and_time_limits();
 
 api_protect_course_script();
+
+// DISABLED: this script is written for the removed 1.x assignments model (c_student_publication.id/c_id/url,
+// files under the course directory) and cannot work with 2.x resource nodes; it also let any course member
+// push an arbitrary work id to the external service. It denies access until it is rewritten on top of the
+// resource node file API. The legacy body below is kept as reference only and is never reached.
+api_not_allowed(true);
+exit;
+
 $courseId = api_get_course_int_id();
 $courseInfo = api_get_course_info();
 $compilatio = new Compilatio();

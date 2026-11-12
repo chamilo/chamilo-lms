@@ -127,6 +127,12 @@ $(function() {
 $objExercise = new Exercise();
 $course_id = api_get_course_int_id();
 $exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
+// Exercise::read() does not scope by course: only a test of the current course (and session) may be edited.
+if (!empty($exerciseId)
+    && !ExerciseLib::exerciseBelongsToCourse($exerciseId, (int) $course_id, (int) api_get_session_id())
+) {
+    api_not_allowed(true);
+}
 //INIT FORM
 if (!empty($exerciseId)) {
     $form = new FormValidator(

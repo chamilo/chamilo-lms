@@ -220,8 +220,8 @@ class LanguageFixtures extends Fixture
                 'english_name' => 'galician',
                 'isocode' => 'gl',
                 'available' => 0,
-                'format' => 'title last_name first_name',
-                'sort_by' => 'last_name',
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
             ],
             [
                 'original_name' => 'ქართული',
@@ -334,8 +334,8 @@ class LanguageFixtures extends Fixture
                 'english_name' => 'malay',
                 'isocode' => 'ms_MY',
                 'available' => 0,
-                'format' => 'title last_name first_name',
-                'sort_by' => 'last_name',
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
             ],
             [
                 'original_name' => 'Norsk',
@@ -458,16 +458,16 @@ class LanguageFixtures extends Fixture
                 'isocode' => 'es',
                 'available' => 1,
 
-                'format' => 'title last_name first_name',
-                'sort_by' => 'last_name',
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
             ],
             [
                 'original_name' => 'Español (México)',
                 'english_name' => 'spanish (mexico)',
                 'isocode' => 'es_MX',
                 'available' => 1,
-                'format' => 'title last_name first_name',
-                'sort_by' => 'last_name',
+                'format' => 'title first_name last_name',
+                'sort_by' => 'first_name',
             ],
             [
                 'original_name' => 'Kiswahili',

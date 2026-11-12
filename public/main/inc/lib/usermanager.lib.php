@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Helpers\NameConventionHelper;
 use ChamiloSession as Session;
+use Doctrine\DBAL\ArrayParameterType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -927,6 +928,12 @@ class UserManager
         $userInfo = $destroy ? api_get_user_info($user_id) : [];
         $actorId = api_get_user_id();
 
+        if ($destroy) {
+            // A soft delete keeps the ticket history on the (still existing) user. A permanent one must first
+            // detach the user: tickets assigned to him would be removed by the foreign key cascade.
+            TicketManager::deleteUserFromTicketSystem($user_id);
+        }
+
         $repository->deleteUser($user, $destroy);
 
         $postData = ['deleteType' => $deleteType];
@@ -1668,6 +1675,19 @@ class UserManager
         return $return_array;
     }
 
+    /**
+     * Get a list (or a count) of non-anonymous users matching equality conditions.
+     *
+     * @param array       $conditions      field => value, compared with =
+     * @param string      $extraConditions @deprecated Free-form SQL fragment. It is now fully escaped (quotes
+     *                                     included), so it can no longer break out of a string literal; a
+     *                                     fragment containing quotes will fail instead of being executed.
+     *                                     Use $createdBetween for the only filter the callers need.
+     * @param array|null  $createdBetween  [start, end] as YYYY-MM-DD, filters on user.created_at (inclusive);
+     *                                     an InvalidArgumentException is thrown on any other format
+     *
+     * @return array|int|string
+     */
     public static function getUserListExtraConditions(
         $conditions = [],
         $order_by = [],
@@ -1675,7 +1695,8 @@ class UserManager
         $limit_to = false,
         $idCampus = null,
         $extraConditions = '',
-        $getCount = false
+        $getCount = false,
+        $createdBetween = null
     ) {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $userUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -1709,7 +1730,20 @@ class UserManager
             }
         }
 
-        $sql .= str_replace("\'", "'", Database::escape_string($extraConditions));
+        if (!empty($createdBetween)) {
+            $createdBetween = array_values((array) $createdBetween);
+            $start = (string) ($createdBetween[0] ?? '');
+            $end = (string) ($createdBetween[1] ?? '');
+            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $start) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $end)) {
+                throw new InvalidArgumentException('createdBetween expects two YYYY-MM-DD dates');
+            }
+            $start = Database::escape_string($start);
+            $end = Database::escape_string($end);
+            $sql .= " AND user.created_at BETWEEN '$start' AND '$end' ";
+        }
+
+        // Deprecated raw fragment: escaped as a whole, never un-escaped.
+        $sql .= Database::escape_string($extraConditions);
 
         if (!empty($order_by) && count($order_by) > 0) {
             $sql .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
@@ -1771,9 +1805,15 @@ class UserManager
         }
 
         $sql_query .= ' WHERE 1 = 1 ';
+        // Only AND/OR can be glued between the filters.
+        $condition = 'OR' === strtoupper(trim((string) $condition)) ? 'OR' : 'AND';
         if (count($conditions) > 0) {
             $temp_conditions = [];
             foreach ($conditions as $field => $value) {
+                // Field names are identifiers (optionally alias-qualified): never a free-form expression.
+                if (!preg_match('/^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)?$/', (string) $field)) {
+                    continue;
+                }
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
                 if ($simple_like) {
@@ -1804,8 +1844,16 @@ class UserManager
             $sql_query .= " AND user.id IN ('$onlyThisUserListToString') ";
         }
 
+        // Sort entries must look like "[alias.]column [ASC|DESC]"; anything else is dropped.
+        $order_by = array_filter(
+            (array) $order_by,
+            static fn ($item) => 1 === preg_match(
+                '/^[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)?(\s+(ASC|DESC))?$/i',
+                trim((string) $item)
+            )
+        );
         if (!empty($order_by)) {
-            $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
+            $sql_query .= ' ORDER BY '.implode(',', array_map('trim', $order_by));
         }
 
         if ($limit > 0) {
@@ -2675,7 +2723,7 @@ class UserManager
         // LEFT JOIN is used for session_rel_course_rel_user because an inner
         // join would not catch session-courses where the user is general
         // session coach but which do not have students nor coaches registered
-        $dqlSelect = ' COUNT(DISTINCT s.id) ';
+        $dqlSelect = ' DISTINCT s.id ';
 
         if (!$getCount) {
             $dqlSelect = " DISTINCT
@@ -2751,8 +2799,10 @@ class UserManager
             }
         }
 
-        $dqlStudent .= $order;
-        $dqlCoach .= $order;
+        if (!$getCount) {
+            $dqlStudent .= $order;
+            $dqlCoach .= $order;
+        }
 
         $accessUrlId = api_get_current_access_url_id();
         $dqlStudent = Database::getManager()
@@ -2769,7 +2819,11 @@ class UserManager
         ;
 
         if ($getCount) {
-            return $dqlStudent->getSingleScalarResult() + $dqlCoach->getSingleScalarResult();
+            // A session where the user is both student and coach counts once.
+            return count(array_unique(array_merge(
+                $dqlStudent->getSingleColumnResult(),
+                $dqlCoach->getSingleColumnResult()
+            )));
         }
 
         $sessionDataStudent = $dqlStudent->getResult();
@@ -2852,13 +2906,6 @@ class UserManager
                 }
             }
 
-            $categories[$row['session_category_id']]['session_category'] = [
-                'id' => $row['session_category_id'],
-                'name' => $row['session_category_title'],
-                'date_start' => $categoryStart,
-                'date_end' => $categoryEnd,
-            ];
-
             $visibility = api_get_session_visibility(
                 $session_id,
                 null,
@@ -2919,6 +2966,14 @@ class UserManager
                 $collapsedAction = $collapsableData['collapsable_link'];
             }
 
+            // The category entry is only created for a session that is actually listed, so no entry is left
+            // without its 'sessions' key (callers read $category['sessions'] unguarded).
+            $categories[$row['session_category_id']]['session_category'] = [
+                'id' => $row['session_category_id'],
+                'name' => $row['session_category_title'],
+                'date_start' => $categoryStart,
+                'date_end' => $categoryEnd,
+            ];
             $categories[$row['session_category_id']]['sessions'][] = [
                 'session_name' => $row['title'],
                 'session_id' => $row['id'],
@@ -3237,6 +3292,10 @@ class UserManager
 
         $user = api_get_user_entity($user_id);
         $session = api_get_session_entity($session_id);
+        if (null === $user || null === $session) {
+            // Unknown user or session: nothing to list (the repository calls below would raise a TypeError).
+            return [];
+        }
         $url = null;
 
         // We filter the courses from the URL
@@ -3391,7 +3450,9 @@ class UserManager
      *
      * @param string $username
      *
-     * @return int User ID (or false if not found)
+     * @return int|false User ID, or false if the username is empty, unknown or not unique.
+     *                    Unlike get_user_id_from_original_id() (which returns 0), callers test for false
+     *                    (sessions/CSV imports use `false === $id` and `?:`), so do not change it.
      */
     public static function get_user_id_from_username($username)
     {
@@ -3973,14 +4034,11 @@ class UserManager
 
         //this is a new tag
         if (0 == $tag_id) {
-            //the tag doesn't exist
-            $sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
+            //the tag doesn't exist: the counter starts at 0 and follows the links created below
+            $sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', 0)";
             Database::query($sql);
             $last_insert_id = Database::insert_id();
         } else {
-            //the tag exists we update it
-            $sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $tag_id";
-            Database::query($sql);
             $last_insert_id = $tag_id;
         }
 
@@ -3989,9 +4047,11 @@ class UserManager
             $sql = "SELECT tag_id FROM $table_user_tag_values
                     WHERE user_id = $user_id AND tag_id = $last_insert_id ";
             $result = Database::query($sql);
-            //if the relationship does not exist we create it
+            //if the relationship does not exist we create it and count it
             if (0 == Database::num_rows($result)) {
                 $sql = "INSERT INTO $table_user_tag_values SET user_id = $user_id, tag_id = $last_insert_id";
+                Database::query($sql);
+                $sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id = $last_insert_id";
                 Database::query($sql);
             }
 
@@ -4135,6 +4195,7 @@ class UserManager
                 ON (u.id AND uv.user_id AND uv.user_id = url_rel_user.user_id)
                 LEFT JOIN $table_user_tag ut ON (uv.tag_id = ut.id)
                 WHERE
+                    (
                     ($where_field tag LIKE '".Database::escape_string($tag."%")."') OR
                     (
                         u.firstname LIKE '".Database::escape_string("%".$tag."%")."' OR
@@ -4143,8 +4204,9 @@ class UserManager
                         concat(u.firstname, ' ', u.lastname) LIKE '".Database::escape_string("%".$tag."%")."' OR
                         concat(u.lastname, ' ', u.firstname) LIKE '".Database::escape_string("%".$tag."%")."'
                      )
+                    )
                      ".(!empty($where_extra_fields) ? $where_extra_fields : '')."
-                     AND url_rel_user.access_url_id=".api_get_current_access_url_id();
+                     AND url_rel_user.access_url_id=".(int) api_get_current_access_url_id();
 
         $keyword_active = true;
         // only active users
@@ -4789,13 +4851,19 @@ class UserManager
      */
     public static function clearHrmRequestsForUser(User $hrmId, $usersId)
     {
-        $users = implode(', ', $usersId);
+        $users = array_map('intval', (array) $usersId);
+        if (empty($users)) {
+            return;
+        }
         Database::getManager()
             ->createQuery('
                 DELETE FROM Chamilo\CoreBundle\Entity\UserRelUser uru
-                WHERE uru.friendUserId = :hrm_id AND uru.relationType = :relation_type AND uru.userId IN (:users_ids)
+                WHERE uru.friend = :hrm_id AND uru.relationType = :relation_type AND uru.user IN (:users_ids)
             ')
-            ->execute(['hrm_id' => $hrmId, 'relation_type' => UserRelUser::USER_RELATION_TYPE_HRM_REQUEST, 'users_ids' => $users]);
+            ->setParameter('hrm_id', (int) $hrmId->getId())
+            ->setParameter('relation_type', UserRelUser::USER_RELATION_TYPE_HRM_REQUEST)
+            ->setParameter('users_ids', $users, ArrayParameterType::INTEGER)
+            ->execute();
     }
 
     /**
@@ -4928,7 +4996,7 @@ class UserManager
      *
      * @param array $courseInfo
      *
-     * @return int The user id, or 0 if the session ID was negative
+     * @return int The user id (lowest id among the course teachers, or among the coaches of the session course), or 0 if there is none or the session ID was negative
      * @throws Exception
      * @throws \Doctrine\DBAL\Exception
      */
@@ -4951,25 +5019,24 @@ class UserManager
                     ON ru.user_id = u.id
                     WHERE
                         ru.status = 1 AND
-                        ru.c_id = "'.$courseId.'" ';
+                        ru.c_id = '.(int) $courseId.'
+                    ORDER BY u.id ASC';
             $rs = Database::query($sql);
             $num_rows = Database::num_rows($rs);
-            if (1 == $num_rows) {
+            if ($num_rows > 0) {
+                // Deterministic: the lowest user id among the course teachers.
                 $row = Database::fetch_array($rs);
 
                 return (int) $row['uid'];
-            } else {
-                $my_num_rows = $num_rows;
-
-                return (int) Database::result($rs, $my_num_rows - 1, 'uid');
             }
         } elseif ($session > 0) {
             $sql = 'SELECT u.id as uid FROM '.$table_user.' u
                     INNER JOIN '.$table_session_course_user.' sru
                     ON sru.user_id = u.id
                     WHERE
-                        sru.c_id = '.$courseId.' AND
-                        sru.status = '.SessionEntity::COURSE_COACH;
+                        sru.c_id = '.(int) $courseId.' AND
+                        sru.status = '.SessionEntity::COURSE_COACH.'
+                    ORDER BY u.id ASC';
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
                 $row = Database::fetch_assoc($rs);
@@ -5941,6 +6008,8 @@ SQL;
      * @throws Exception
      *
      * @return array
+     *
+     * @deprecated No caller (only feeds getSessionsCalendarByYear(), itself unused).
      */
     public static function getSubscribedSessionsByYear(array $userInfo, $searchYear)
     {
@@ -5997,8 +6066,8 @@ SQL;
                 if ($firstAccessYear <= $searchYear && $lastAccessYear >= $searchYear) {
                     $calendarSessions[$sessionInfo['session_id']] = [
                         'name' => $sessionInfo['session_name'],
-                        'access_start_date' => $firstAcessDate->format('Y-m-d h:i:s'),
-                        'access_end_date' => $lastAccessDate->format('Y-m-d h:i:s'),
+                        'access_start_date' => $firstAcessDate->format('Y-m-d H:i:s'),
+                        'access_end_date' => $lastAccessDate->format('Y-m-d H:i:s'),
                     ];
                 }
 
@@ -6037,8 +6106,8 @@ SQL;
             if ($isValid) {
                 $calendarSessions[$sessionInfo['session_id']] = [
                     'name' => $sessionInfo['session_name'],
-                    'access_start_date' => $accessStartDate ? $accessStartDate->format('Y-m-d h:i:s') : null,
-                    'access_end_date' => $accessEndDate ? $accessEndDate->format('Y-m-d h:i:s') : null,
+                    'access_start_date' => $accessStartDate ? $accessStartDate->format('Y-m-d H:i:s') : null,
+                    'access_end_date' => $accessEndDate ? $accessEndDate->format('Y-m-d H:i:s') : null,
                 ];
             }
         }
@@ -6055,6 +6124,10 @@ SQL;
      * @throws Exception
      *
      * @return array
+     *
+     * @deprecated No caller (the session calendar moved to the Vue/API side). Its input already holds local dates
+     *             (getSubscribedSessionsByYear() converts them), so converting again with api_get_local_time()
+     *             shifts them twice outside UTC: fix that before reviving it.
      */
     public static function getSessionsCalendarByYear(array $sessionsList, $searchYear)
     {

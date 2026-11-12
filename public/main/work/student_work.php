@@ -43,13 +43,18 @@ if (!empty($group_id)) {
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('Group area').' '.$group->getTitle(),
     ];
-} else {
-    if (!(api_is_allowed_to_edit() || api_is_coach())) {
-        api_not_allowed(true);
-    }
+}
+// The page lists one learner's submissions: teachers and coaches only, also from inside a group.
+if (!(api_is_allowed_to_edit() || api_is_coach())) {
+    api_not_allowed(true);
 }
 
 $action = $_GET['action'] ?? null;
+
+// Deleting all the papers is a link: it needs the token that link carries.
+if ('delete_all' === $action && !workActionTokenIsValid('get')) {
+    api_not_allowed(true);
+}
 
 switch ($action) {
     case 'export_to_pdf':
@@ -109,7 +114,7 @@ if (api_is_allowed_to_edit()) {
 
     $actions .= '<a
             onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;"
-            href="'.api_get_path(WEB_CODE_PATH).'work/student_work.php?action=delete_all&studentId='.$studentId.'&'.api_get_cidreq().'">'.
+            href="'.workActionUrl(api_get_path(WEB_CODE_PATH).'work/student_work.php?action=delete_all&studentId='.$studentId.'&'.api_get_cidreq()).'">'.
         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete all papers')).
         '</a>';
 }

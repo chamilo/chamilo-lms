@@ -94,7 +94,7 @@
 
         <div class="p-6 lg:p-8">
             <form method="post" action="{{ action }}" class="space-y-8" id="buycourses-coupon-form">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token|default('')|e('html_attr') }}">
+                <input type="hidden" name="buycourses_admin_sec_token" value="{{ csrf_token|default('')|e('html_attr') }}">
 
                 {% set couponIdValue = data.id|default(0) %}
                 {% if mode == 'configure' or couponIdValue > 0 %}

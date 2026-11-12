@@ -608,6 +608,11 @@ abstract class ResourceRepository extends ServiceEntityRepository
         return $qb;
     }
 
+    /**
+     * What the user may SEE in the course: created by the user, linked to the user, or linked to nobody (addressed
+     * to everyone, as an announcement for the whole course). To count or list what a user WROTE, use
+     * getResourcesByCourseCreatedByUser(): this one credits every user with all the resources linked to no user.
+     */
     public function getResourcesByCourseLinkedToUser(
         User $user,
         Course $course,
@@ -618,6 +623,24 @@ abstract class ResourceRepository extends ServiceEntityRepository
         $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
         $qb->andWhere('node.creator = :user OR (links.user = :user OR links.user IS NULL)');
         $qb->setParameter('user', $user);
+
+        return $qb;
+    }
+
+    /**
+     * The resources of the course (and session/group) that the user created: forum posts written, works
+     * submitted, documents uploaded.
+     */
+    public function getResourcesByCourseCreatedByUser(
+        User $user,
+        Course $course,
+        ?Session $session = null,
+        ?CGroup $group = null,
+        ?ResourceNode $parentNode = null
+    ): QueryBuilder {
+        $qb = $this->getResourcesByCourse($course, $session, $group, $parentNode);
+        $qb->andWhere('node.creator = :creator');
+        $qb->setParameter('creator', (int) $user->getId());
 
         return $qb;
     }

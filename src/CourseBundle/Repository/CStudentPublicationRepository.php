@@ -63,6 +63,13 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->setParameter('publicationParent', $publication)
         ;
 
+        if (null !== $user) {
+            $qb
+                ->andWhere('node.creator = :submitter')
+                ->setParameter('submitter', (int) $user->getId())
+            ;
+        }
+
         return $qb;
     }
 
@@ -89,7 +96,7 @@ final class CStudentPublicationRepository extends ResourceRepository
         ?Session $session = null,
         ?CGroup $group = null
     ): int {
-        $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
+        $qb = $this->getResourcesByCourseCreatedByUser($user, $course, $session);
         $qb->andWhere('resource.publicationParent IS NOT NULL');
 
         return $this->getCount($qb);
@@ -109,7 +116,8 @@ final class CStudentPublicationRepository extends ResourceRepository
      */
     public function findWorksByTeacher(User $user, Course $course, ?Session $session = null): array
     {
-        $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session);
+        // The works the teacher created (as 1.11 did with work.user_id), not those of the learners linked to the course.
+        $qb = $this->getResourcesByCourseCreatedByUser($user, $course, $session);
         $qb->andWhere('resource.publicationParent IS NOT NULL');
 
         return $qb

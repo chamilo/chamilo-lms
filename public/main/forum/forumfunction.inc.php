@@ -27,6 +27,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * @todo convert this library into a class
+ *
+ * @deprecated No caller left: the forum tool is served by Vue and API Platform. Do not wire it back: every
+ *             action takes its id from the request and acts on it without checking that the resource belongs to
+ *             the current course, and the state-changing actions are GET requests without a token.
  */
 function handleForum($url)
 {
@@ -1542,7 +1546,8 @@ function get_thread_users_qualify(int $thread_id)
         $generalCoachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
         $sessionAdminsId = $session->getSessionAdmins()->map(fn(User $admin) => $admin->getId())->getValues();
         $coachesId = array_merge($generalCoachesId, $sessionAdminsId);
-        $user_to_avoid = implode(', ', $coachesId);
+        // An empty NOT IN () is a SQL error: a session may have neither general coach nor session admin.
+        $user_to_avoid = implode(', ', array_map('intval', $coachesId ?: [0]));
         //not showing coaches
         $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,forum_qualify.`qualify`
                 FROM $t_posts post , $t_users user, $t_session_rel_user scu, $t_qualify forum_qualify
@@ -1590,6 +1595,8 @@ function get_thread_users_qualify(int $thread_id)
  * @author   Jhon Hinojosa<jhon.hinojosa@dokeos.com>,
  *
  * @version oct 2008, dokeos 1.8
+ *
+ * @deprecated no caller; the forum tool is served by Vue and the API.
  */
 function get_thread_users_not_qualify(int $thread_id)
 {
@@ -1609,7 +1616,7 @@ function get_thread_users_not_qualify(int $thread_id)
     $course_id = api_get_course_int_id();
 
     $sql1 = "SELECT user_id FROM  $t_qualify
-             WHERE thread_id = '".$thread_id."'";
+             WHERE c_id = ".(int) $course_id." AND thread_id = ".(int) $thread_id;
     $result1 = Database::query($sql1);
     $cad = '';
     while ($row = Database::fetch_array($result1)) {
@@ -1627,7 +1634,8 @@ function get_thread_users_not_qualify(int $thread_id)
         $generalCoachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
         $sessionAdminsId = $session->getSessionAdmins()->map(fn(User $admin) => $admin->getId())->getValues();
         $coachesId = array_merge($generalCoachesId, $sessionAdminsId);
-        $user_to_avoid = implode(', ', $coachesId);
+        // An empty NOT IN () is a SQL error: a session may have neither general coach nor session admin.
+        $user_to_avoid = implode(', ', array_map('intval', $coachesId ?: [0]));
         //not showing coaches
         $sql = "SELECT DISTINCT user.id, user.lastname, user.firstname, post.thread_id
                 FROM $t_posts post , $t_users user, $t_session_rel_user session_rel_user_rel_course
@@ -1667,6 +1675,8 @@ function get_thread_users_not_qualify(int $thread_id)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
  * @version february 2006, dokeos 1.8
+ *
+ * @deprecated no caller; the forum tool is served by Vue and the API.
  */
 function count_number_of_forums_in_category($cat_id)
 {
@@ -2858,6 +2868,8 @@ function saveThreadScoreHistory(
  * @author Isaac Flores <isaac.flores@dokeos.com>, U.N.A.S University
  *
  * @version December 2008, dokeos  1.8.6
+ *
+ * @deprecated no caller; the forum tool is served by Vue and the API.
  */
 function current_qualify_of_thread($threadId, $sessionId, $userId)
 {
@@ -3369,14 +3381,12 @@ function approvePost(CForumPost $post, $action): string
 function get_unaproved_messages($forum_id)
 {
     $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $course_id = api_get_course_int_id();
 
     $return_array = [];
     $sql = "SELECT DISTINCT thread_id FROM $table_posts
             WHERE
-                c_id = $course_id AND
-                forum_id='".Database::escape_string($forum_id)."' AND
-                visible='0' ";
+                forum_id = ".(int) $forum_id." AND
+                visible = 0";
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
         $return_array[] = $row['thread_id'];
@@ -3669,6 +3679,9 @@ function move_thread_form()
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
  * @version february 2006, dokeos 1.8
+ *
+ * @deprecated No caller besides move_thread_form(); it moves any thread id of $_POST to any forum id, whatever
+ *             the course of either.
  */
 function store_move_thread($values)
 {
@@ -4386,10 +4399,10 @@ function getNotificationsPerUser($user_id = 0, $force = false, $course_id = 0)
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            if (null !== $row['forum_id']) {
+            if (!empty($row['forum_id'])) {
                 $_SESSION['forum_notification']['forum'][] = $row['forum_id'];
             }
-            if (null !== $row['thread_id']) {
+            if (!empty($row['thread_id'])) {
                 $_SESSION['forum_notification']['thread'][] = $row['thread_id'];
             }
         }
@@ -4652,7 +4665,7 @@ function get_thread_user_post_limit($courseId, $thread_id, $user_id, $limit = 10
                 ON posts.poster_id=users.id
             WHERE posts.thread_id='".Database::escape_string($thread_id)."' AND
                 posts.poster_id='".Database::escape_string($user_id)."'
-            ORDER BY posts.post_id DESC LIMIT $limit ";
+            ORDER BY posts.iid DESC LIMIT $limit ";
     $result = Database::query($sql);
     $post_list = [];
     while ($row = Database::fetch_array($result)) {
@@ -5130,7 +5143,7 @@ function getCountPostsWithStatus($status, $forum, $threadId = null)
     $criteria = Criteria::create();
     $criteria
         ->where(Criteria::expr()->eq('status', $status))
-        //->andWhere(Criteria::expr()->eq('cId', $forum->getCId()))
+        ->andWhere(Criteria::expr()->eq('forum', $forum))
         ->andWhere(Criteria::expr()->eq('visible', 1))
     ;
 

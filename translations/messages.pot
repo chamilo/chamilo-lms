@@ -43368,6 +43368,15 @@ msgstr ""
 msgid "Generate XLSX"
 msgstr ""
 
+
+msgid "Allow inviting non-friends to social groups"
+msgstr ""
+
+msgid "By default (off), the admin or moderator of a social group can only invite their own friends to it. Enable this to let them invite any user of the platform."
+msgstr ""
+
+msgid "Some of the selected users cannot be invited and were skipped"
+
 msgid "Your first message in this thread must contain at least %d words (currently %d)."
 msgstr ""
 

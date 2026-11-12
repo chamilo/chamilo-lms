@@ -274,13 +274,13 @@ class Attendance
                         }
                         $actions .= '&nbsp;<a
                             onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;"
-                            href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$id.'">'.
+                            href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$id.$tokenParam.'">'.
                             Display::getMdiIcon(ActionIcon::UNLOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Lock attendance')).'</a>';
                     } else {
                         if (api_is_platform_admin()) {
                             $actions .= '&nbsp;<a
                             onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to unlock the attendance?').'\')) return false;"
-                            href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$id.'">'.
+                            href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$id.$tokenParam.'">'.
                                     Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Unlock attendance')).'</a>';
                         } else {
                             $actions .= '&nbsp;'.Display::getMdiIcon(ActionIcon::LOCK, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Locked attendance'));
@@ -333,6 +333,83 @@ class Attendance
         }
 
         return $attendance_data;
+    }
+
+    /**
+     * Whether the attendance is linked (resource link) to the given course, in the base course or in the given
+     * session. A request-supplied attendance id must pass this before being read or written: the attendance
+     * tables themselves carry no course column.
+     */
+    public static function attendanceBelongsToCourse(int $attendanceId, int $courseId, int $sessionId = 0): bool
+    {
+        if ($attendanceId <= 0 || $courseId <= 0) {
+            return false;
+        }
+
+        $sessionCondition = 'rl.session_id IS NULL';
+        $params = [$attendanceId, $courseId];
+        if ($sessionId > 0) {
+            $sessionCondition = '(rl.session_id IS NULL OR rl.session_id = ?)';
+            $params[] = $sessionId;
+        }
+
+        $sql = 'SELECT COUNT(rl.id)
+                FROM c_attendance a
+                INNER JOIN resource_link rl ON rl.resource_node_id = a.resource_node_id
+                WHERE a.iid = ? AND rl.c_id = ? AND rl.deleted_at IS NULL AND '.$sessionCondition;
+
+        return (int) Database::getManager()->getConnection()->fetchOne($sql, $params) > 0;
+    }
+
+    /**
+     * Whether the calendar date (c_attendance_calendar row) belongs to the given attendance.
+     */
+    public static function attendanceCalendarBelongsToAttendance(int $calendarId, int $attendanceId): bool
+    {
+        if ($calendarId <= 0 || $attendanceId <= 0) {
+            return false;
+        }
+
+        $sql = 'SELECT COUNT(iid) FROM c_attendance_calendar WHERE iid = ? AND attendance_id = ?';
+
+        return (int) Database::getManager()->getConnection()->fetchOne($sql, [$calendarId, $attendanceId]) > 0;
+    }
+
+    /**
+     * Whether the current user may open this attendance: editors and course HRMs may open any, everybody else
+     * only the visible ones (the list never shows the hidden or deleted ones to them).
+     */
+    public static function canOpenAttendance(CAttendance $attendance, bool $canEdit, bool $isHrm): bool
+    {
+        if ($canEdit) {
+            return true;
+        }
+
+        return $isHrm ? 2 !== $attendance->getActive() : 1 === $attendance->getActive();
+    }
+
+    /**
+     * Keep only the requested group ids that are in the allowed list (the groups of the current course).
+     *
+     * @param mixed $requested a group id, or an array of them, as received from the request
+     *
+     * @return int[]
+     */
+    public static function filterGroupIds($requested, array $allowedGroupIds): array
+    {
+        $allowed = array_map('intval', $allowedGroupIds);
+        $result = [];
+        foreach ((array) $requested as $groupId) {
+            if (!is_scalar($groupId)) {
+                continue;
+            }
+            $groupId = (int) $groupId;
+            if ($groupId > 0 && in_array($groupId, $allowed, true) && !in_array($groupId, $result, true)) {
+                $result[] = $groupId;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -493,14 +570,16 @@ class Attendance
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $user_id = api_get_user_id();
         $course_id = $_course['real_id'];
+        $affected_rows = 0;
         if (is_array($attendanceId)) {
             foreach ($attendanceId as $id) {
                 $id = (int) $id;
                 $sql = "UPDATE $tbl_attendance SET active = 1
                         WHERE iid = '$id'";
                 $result = Database::query($sql);
-                $affected_rows = Database::affected_rows($result);
-                if (!empty($affected_rows)) {
+                $rows = Database::affected_rows($result);
+                $affected_rows += $rows;
+                if (!empty($rows)) {
                     // update row item property table
                     /*api_item_property_update(
                         $_course,
@@ -769,8 +848,13 @@ class Attendance
         $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 
         $calendar_id = (int) $calendar_id;
+        if (!self::attendanceCalendarBelongsToAttendance($calendar_id, (int) $attendance->getIid())) {
+            return 0;
+        }
         $users = $this->get_users_rel_course();
         $user_ids = array_keys($users);
+        // only the users of the course can be marked
+        $users_present = array_values(array_intersect(array_map('intval', (array) $users_present), $user_ids));
         $users_absent = array_diff($user_ids, $users_present);
         $affected_rows = 0;
 
@@ -1417,7 +1501,7 @@ class Attendance
                         attendance_id = '$attendanceId' AND
                         iid NOT IN (
                             SELECT calendar_id FROM $tbl_acrg
-                            WHERE attendance_id = '$attendanceId'  AND group_id != 0 AND group_id IS NOT NULL
+                            WHERE group_id != 0 AND group_id IS NOT NULL
                         )
                         $whereDate
                     ";
@@ -1431,6 +1515,7 @@ class Attendance
                     WHERE
                         g.group_id = '$groupId' AND
                         c.attendance_id = '$attendanceId'
+                        $whereDate
                    ";
         }
 
@@ -1692,7 +1777,6 @@ class Attendance
 
             $result = $this->getAttendanceCalendarGroup(
                 $calendarId,
-                $courseId,
                 $groupId
             );
 
@@ -1781,7 +1865,6 @@ class Attendance
         $repeat_type,
         $groupList = []
     ) {
-        $attendanceId = $attendance->getIid();
         // save start date
         $this->set_date_time(api_get_utc_datetime($start_date));
         $this->attendance_calendar_add($attendance, $groupList);
@@ -1807,12 +1890,22 @@ class Attendance
                 }
                 break;
             case 'monthlyByDate':
-                $j = 1;
-                //@todo fix bug with february
-                for ($i = $start_date + 2419200; ($i <= $end_date); $i += 2419200) {
+                // Same day of the month and same time of day; a month without that day (the 31st) gets its last day.
+                $first = (new DateTimeImmutable('@'.$start_date))->setTimezone(new DateTimeZone('UTC'));
+                $day = (int) $first->format('j');
+                for ($months = 1; ; $months++) {
+                    $month = $first->modify('first day of this month')->modify('+'.$months.' months');
+                    $date = $month->setDate(
+                        (int) $month->format('Y'),
+                        (int) $month->format('n'),
+                        min($day, (int) $month->format('t'))
+                    )->setTime((int) $first->format('G'), (int) $first->format('i'), (int) $first->format('s'));
+                    $i = $date->getTimestamp();
+                    if ($i > $end_date) {
+                        break;
+                    }
                     $this->set_date_time(api_get_utc_datetime($i));
-                    $this->attendance_calendar_add($attendanceId, $groupList);
-                    $j++;
+                    $this->attendance_calendar_add($attendance, $groupList);
                 }
                 break;
         }
@@ -1824,7 +1917,8 @@ class Attendance
      * @param int         $calendar_id
      * @param CAttendance $attendance
      *
-     * @return int affected rows
+     * @return int 1 when the date was saved, 0 when it was refused because another date of the attendance
+     *             already has that date and time
      */
     public function attendance_calendar_edit($calendar_id, $attendance)
     {
@@ -1834,10 +1928,15 @@ class Attendance
 
         $course_id = api_get_course_int_id();
         // check if datetime already exists inside the table
+        $calendar_id = (int) $calendar_id;
+        if (!self::attendanceCalendarBelongsToAttendance($calendar_id, (int) $attendanceId)) {
+            return 0;
+        }
         $sql = "SELECT iid FROM $tbl_attendance_calendar
                 WHERE
                     date_time = '".Database::escape_string($this->date_time)."' AND
-                    attendance_id = '$attendanceId'";
+                    attendance_id = '$attendanceId' AND
+                    iid != $calendar_id";
         $rs = Database::query($sql);
 
         if (0 == Database::num_rows($rs)) {
@@ -1845,6 +1944,7 @@ class Attendance
                     SET date_time='".Database::escape_string($this->date_time)."'
                     WHERE iid = '".$calendar_id."'";
             Database::query($sql);
+            $affected_rows = 1;
         }
 
         // update locked attendance
@@ -1874,6 +1974,9 @@ class Attendance
 
         $attendanceId = $attendance->getIid();
         $calendar_id = (int) $calendar_id;
+        if (!$all_delete && !self::attendanceCalendarBelongsToAttendance($calendar_id, (int) $attendanceId)) {
+            return 0;
+        }
 
         // get all registered users inside current course
         $users = $this->get_users_rel_course();
@@ -1881,10 +1984,13 @@ class Attendance
         $course_id = api_get_course_int_id();
         $affected_rows = 0;
         if ($all_delete) {
-            $attendance_calendar = $this->get_attendance_calendar($attendanceId);
+            // showAll: dates linked to a group must be deleted too
+            $attendance_calendar = $this->get_attendance_calendar($attendanceId, 'all', null, 0, true);
             // get all dates from calendar by current attendance
             if (!empty($attendance_calendar)) {
                 foreach ($attendance_calendar as $cal) {
+                    // the group links reference the calendar row: delete them first
+                    $this->deleteAttendanceCalendarGroup($cal['iid'], $course_id);
                     // delete all data from attendance sheet
                     $sql = "DELETE FROM $tbl_attendance_sheet
                             WHERE attendance_calendar_id = '".intval($cal['iid'])."'";
@@ -1893,12 +1999,12 @@ class Attendance
                     $sql = "DELETE FROM $tbl_attendance_calendar
                             WHERE iid = '".intval($cal['iid'])."'";
                     Database::query($sql);
-
-                    $this->deleteAttendanceCalendarGroup($cal['iid'], $course_id);
                     $affected_rows++;
                 }
             }
         } else {
+            // the group links reference the calendar row: delete them first
+            $this->deleteAttendanceCalendarGroup($calendar_id, $course_id);
             // delete just one row from attendance sheet by the calendar id
             $sql = "DELETE FROM $tbl_attendance_sheet
                     WHERE attendance_calendar_id = '".$calendar_id."'";
@@ -1908,7 +2014,6 @@ class Attendance
                     WHERE iid = '".$calendar_id."'";
             Database::query($sql);
 
-            $this->deleteAttendanceCalendarGroup($calendar_id, $course_id);
             $affected_rows++;
         }
 
@@ -2444,7 +2549,7 @@ class Attendance
     {
         $attendanceId = $attendance->getIid();
         $content = '';
-        $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
+        $groupId = (int) ($_REQUEST['group_id'] ?? 0);
         $filter_type = 'today';
         if (!empty($_REQUEST['filter'])) {
             $filter_type = $_REQUEST['filter'];
@@ -2633,6 +2738,7 @@ class Attendance
 
                 $form = '
                 <form method="post" action="index.php?action=attendance_sheet_add&'.api_get_cidreq().$param_filter.'&attendance_id='.$attendanceId.'">
+                    <input type="hidden" name="sec_token" value="'.htmlspecialchars(Security::get_existing_token(), ENT_QUOTES).'" />
                     <div
                         class="attendance-sheet-content"
                         style="width:100%;background-color:#E1E1E1;margin-top:20px;">
@@ -2943,7 +3049,7 @@ class Attendance
     ) {
         $courseInfo = api_get_course_info($course_id);
         $this->set_course_id($courseInfo['code']);
-        $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
+        $groupId = (int) ($_REQUEST['group_id'] ?? 0);
         $data_array = [];
         $data_array['attendance_id'] = $attendance_id;
         $data_array['users_in_course'] = $this->get_users_rel_course($attendance_id, $groupId);
@@ -3102,7 +3208,7 @@ class Attendance
     ) {
         $courseInfo = api_get_course_info($course_id);
         $this->set_course_id($courseInfo['code']);
-        $groupId = isset($_REQUEST['group_id']) ? $_REQUEST['group_id'] : null;
+        $groupId = (int) ($_REQUEST['group_id'] ?? 0);
         $data = [];
         $showOfficialCode = $this->shouldShowOfficialCode();
 

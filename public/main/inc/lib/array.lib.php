@@ -31,44 +31,29 @@ function array_unique_dimensional($array)
 }
 
 /**
- * Sort multidimensional arrays.
+ * Sort multidimensional arrays (HTML tags of the values are ignored). The sort is stable.
  *
- * @param    array    unsorted multidimensional array
- * @param    string    key to be sorted
+ * @param array  $array unsorted multidimensional array
+ * @param string $id    key to be sorted
+ * @param string $order 'asc' (lowest first, default) or 'desc' (highest first), case-insensitive
  *
- * @return array result array
+ * @return array result array, reindexed
  *
  * @author    found in http://php.net/manual/en/function.sort.php
  */
-function msort($array, $id = 'id', $order = 'desc')
+function msort($array, $id = 'id', $order = 'asc')
 {
     if (empty($array)) {
         return $array;
     }
-    $temp_array = [];
-    while (count($array) > 0) {
-        $lowest_id = 0;
-        $index = 0;
-        foreach ($array as $item) {
-            if ('desc' === $order) {
-                if (strip_tags($item[$id]) < strip_tags($array[$lowest_id][$id])) {
-                    $lowest_id = $index;
-                }
-            } else {
-                if (isset($item[$id]) && strip_tags($item[$id]) > strip_tags($array[$lowest_id][$id])) {
-                    $lowest_id = $index;
-                }
-            }
-            $index++;
-        }
-        $temp_array[] = $array[$lowest_id];
-        $array = array_merge(
-            array_slice($array, 0, $lowest_id),
-            array_slice($array, $lowest_id + 1)
-        );
-    }
+    $direction = 'desc' === strtolower((string) $order) ? -1 : 1;
+    $array = array_values($array);
+    usort(
+        $array,
+        static fn ($a, $b): int => $direction * (strip_tags((string) ($a[$id] ?? '')) <=> strip_tags((string) ($b[$id] ?? '')))
+    );
 
-    return $temp_array;
+    return $array;
 }
 
 /**

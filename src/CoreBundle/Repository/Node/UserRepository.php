@@ -359,6 +359,10 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ['table' => 'ticket_message', 'field' => 'sys_lastedit_user_id', 'action' => 'update'],
             ['table' => 'ticket_message_attachments', 'field' => 'sys_insert_user_id', 'action' => 'update'],
             ['table' => 'ticket_message_attachments', 'field' => 'sys_lastedit_user_id', 'action' => 'update'],
+            // Plain on-demand SQL, run only when a user is permanently deleted: no ORM association on User.
+            ['table' => 'ticket_ticket', 'field' => 'assigned_last_user', 'action' => 'update'],
+            ['table' => 'ticket_ticket', 'field' => 'sys_insert_user_id', 'action' => 'update'],
+            ['table' => 'ticket_ticket', 'field' => 'sys_lastedit_user_id', 'action' => 'update'],
             ['table' => 'ticket_priority', 'field' => 'sys_insert_user_id', 'action' => 'update'],
             ['table' => 'ticket_priority', 'field' => 'sys_lastedit_user_id', 'action' => 'update'],
             ['table' => 'ticket_project', 'field' => 'sys_insert_user_id', 'action' => 'update'],
@@ -381,6 +385,11 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ['table' => 'usergroup_rel_user', 'field' => 'user_id', 'action' => 'update'],
             ['table' => 'user_rel_tag', 'field' => 'user_id', 'action' => 'delete'],
             ['table' => 'user_rel_user', 'field' => 'user_id', 'action' => 'delete'],
+            ['table' => 'notification_event_rel_user', 'field' => 'user_id', 'action' => 'delete'],
+            ['table' => 'reset_password_request', 'field' => 'user_id', 'action' => 'delete'],
+            ['table' => 'user_career', 'field' => 'user_id', 'action' => 'delete'],
+            ['table' => 'xapi_internal_log', 'field' => 'user_id', 'action' => 'update'],
+            ['table' => 'support_bot_tree', 'field' => 'created_by_id', 'action' => 'update'],
         ];
     }
 
@@ -492,22 +501,24 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             $currentDate
         );
 
+        // Attachments first: once the sender is NULLed the messages of this user can no longer be told apart
+        // from the ones that never had a sender.
+        $connection->executeStatement(
+            'DELETE ma
+         FROM message_attachment ma
+         INNER JOIN message m ON ma.message_id = m.id
+         WHERE m.user_sender_id = :userId',
+            [
+                'userId' => $user->getId(),
+            ]
+        );
+
         $connection->executeStatement(
             'UPDATE message m
          SET m.content = :content, m.user_sender_id = NULL
          WHERE m.user_sender_id = :userId',
             [
                 'content' => $updatedContent,
-                'userId' => $user->getId(),
-            ]
-        );
-
-        $connection->executeStatement(
-            'DELETE ma
-         FROM message_attachment ma
-         INNER JOIN message m ON ma.message_id = m.id
-         WHERE m.user_sender_id IS NULL',
-            [
                 'userId' => $user->getId(),
             ]
         );

@@ -121,7 +121,8 @@ class TicketManager
     /**
      * @param int $id
      *
-     * @return array|mixed
+     * @return array the row (keys id, title, name, description, total_tickets, both named and numeric), or an
+     *               empty array when the category does not exist (not false/null: callers test with empty())
      */
     public static function getCategory($id)
     {
@@ -655,7 +656,8 @@ class TicketManager
      * @param string $status
      * @param bool   $sendConfirmation
      *
-     * @return bool
+     * @return bool false (and nothing is stored) when a file has an upload error other than "no file";
+     *              true once the message is stored and counted
      */
     public static function insertMessage(
         $ticketId,
@@ -680,6 +682,15 @@ class TicketManager
                 get_lang('No').'</button>
                  </form>';
             $content .= $form;
+        }
+
+        // Reject the whole message on an upload error before anything is written ("no file" entries are ignored).
+        if (is_array($fileAttachments)) {
+            foreach ($fileAttachments as $file_attach) {
+                if (0 != $file_attach['error'] && UPLOAD_ERR_NO_FILE != $file_attach['error']) {
+                    return false;
+                }
+            }
         }
 
         $now = api_get_utc_datetime();
@@ -713,15 +724,13 @@ class TicketManager
             if (is_array($fileAttachments)) {
                 foreach ($fileAttachments as $file_attach) {
                     if (0 == $file_attach['error']) {
+                        // A refused attachment (e.g. prohibited extension) is reported by a flash message; the
+                        // message itself is kept.
                         self::saveMessageAttachmentFile(
                             $file_attach,
                             $ticketId,
                             $messageId
                         );
-                    } else {
-                        if (UPLOAD_ERR_NO_FILE != $file_attach['error']) {
-                            return false;
-                        }
                     }
                 }
             }
@@ -817,7 +826,12 @@ class TicketManager
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(TABLE_TICKET_PRIORITY);
         $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
-        $direction = !empty($direction) ? $direction : 'DESC';
+        $direction = strtoupper(trim((string) $direction));
+        if (!in_array($direction, ['ASC', 'DESC'], true)) {
+            $direction = 'DESC';
+        }
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
         $userId = api_get_user_id();
         $userInfo = api_get_user_info($userId);
         $accessUrlId = Container::getAccessUrlUtil()->getCurrent()->getId();
@@ -865,6 +879,8 @@ class TicketManager
                 $column = 'ticket_id';
         }
 
+        [$conditions, $params] = self::getTicketListConditions($userId, (int) $accessUrlId, $projectId);
+
         $sql = "SELECT DISTINCT
                 ticket.*,
                 ticket.id ticket_id,
@@ -878,90 +894,20 @@ class TicketManager
                 ticket.subject AS subject,
                 ticket.assigned_last_user
             FROM $table_support_tickets ticket
-            INNER JOIN $table_support_category cat
+            LEFT JOIN $table_support_category cat
             ON (cat.id = ticket.category_id)
             INNER JOIN $table_support_priority priority
             ON (ticket.priority_id = priority.id)
             INNER JOIN $table_support_status status
             ON (ticket.status_id = status.id)
-            WHERE 1=1
-        ";
-        $sql .= " AND ticket.access_url_id = $accessUrlId ";
-
-        $userIsAllowInProject = self::userIsAllowInProject($projectId);
-
-        // Check if a role was set to the project
-        if (false == $userIsAllowInProject) {
-            $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
-        }
-
-        // Search simple
-        if (!empty($_GET['keyword'])) {
-            $keyword = Database::escape_string(trim($_GET['keyword']));
-            $sql .= " AND (
-                      ticket.id LIKE '%$keyword%' OR
-                      ticket.code LIKE '%$keyword%' OR
-                      ticket.subject LIKE '%$keyword%' OR
-                      ticket.message LIKE '%$keyword%' OR
-                      ticket.keyword LIKE '%$keyword%' OR
-                      ticket.source LIKE '%$keyword%' OR
-                      cat.title LIKE '%$keyword%' OR
-                      status.title LIKE '%$keyword%' OR
-                      priority.title LIKE '%$keyword%' OR
-                      ticket.personal_email LIKE '%$keyword%'
-            )";
-        }
-
-        $keywords = [
-            'project_id' => 'ticket.project_id',
-            'keyword_category' => 'ticket.category_id',
-            'keyword_assigned_to' => 'ticket.assigned_last_user',
-            'keyword_source' => 'ticket.source ',
-            'keyword_status' => 'ticket.status_id',
-            'keyword_priority' => 'ticket.priority_id',
-        ];
-
-        foreach ($keywords as $keyword => $label) {
-            if (isset($_GET[$keyword])) {
-                $data = Database::escape_string(trim($_GET[$keyword]));
-                if (!empty($data)) {
-                    $sql .= " AND $label = '$data' ";
-                }
-            }
-        }
-
-        // Search advanced
-        $keyword_start_date_start = isset($_GET['keyword_start_date_start']) ? Database::escape_string(trim($_GET['keyword_start_date_start'])) : '';
-        $keyword_start_date_end = isset($_GET['keyword_start_date_end']) ? Database::escape_string(trim($_GET['keyword_start_date_end'])) : '';
-        $keyword_course = isset($_GET['keyword_course']) ? Database::escape_string(trim($_GET['keyword_course'])) : '';
-        $keyword_range = !empty($keyword_start_date_start) && !empty($keyword_start_date_end);
-
-        if (false == $keyword_range && '' != $keyword_start_date_start) {
-            $sql .= " AND DATE_FORMAT(ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start' ";
-        }
-        if ($keyword_range && '' != $keyword_start_date_start && '' != $keyword_start_date_end) {
-            $sql .= " AND DATE_FORMAT(ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start'
-                      AND DATE_FORMAT(ticket.start_date,'%d/%m/%Y') <= '$keyword_start_date_end'";
-        }
-
-        if ('' != $keyword_course) {
-            $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-            $sql .= " AND ticket.course_id IN (
-                     SELECT id FROM $course_table
-                     WHERE (
-                        title LIKE '%$keyword_course%' OR
-                        code LIKE '%$keyword_course%' OR
-                        visual_code LIKE '%$keyword_course%'
-                     )
-            )";
-        }
+            WHERE 1=1 $conditions";
         $sql .= " ORDER BY `$column` $direction";
         $sql .= " LIMIT $from, $number_of_items";
 
-        $result = Database::query($sql);
+        $result = Database::getManager()->getConnection()->executeQuery($sql, $params);
         $tickets = [];
         $webPath = api_get_path(WEB_PATH);
-        while ($row = Database::fetch_assoc($result)) {
+        while ($row = $result->fetchAssociative()) {
             $userInfo = api_get_user_info($row['sys_insert_user_id']);
             $hrefUser = $webPath.'main/admin/user_information.php?user_id='.$userInfo['user_id'];
             $name = "<a href='$hrefUser'> {$userInfo['complete_name_with_username']} </a>";
@@ -1075,46 +1021,72 @@ class TicketManager
 
         $accessUrlId = Container::getAccessUrlUtil()->getCurrent()->getId();
 
-        $sql = "SELECT COUNT(ticket.id) AS total
+        [$conditions, $params] = self::getTicketListConditions((int) $userId, (int) $accessUrlId, $projectId);
+
+        // Same FROM/JOINs and same conditions as getTicketsByCurrentUser(): the total is the list's row count.
+        $sql = "SELECT COUNT(DISTINCT ticket.id) AS total
                 FROM $table_support_tickets ticket
-                INNER JOIN $table_support_category cat
+                LEFT JOIN $table_support_category cat
                 ON (cat.id = ticket.category_id)
                 INNER JOIN $table_support_priority priority
                 ON (ticket.priority_id = priority.id)
                 INNER JOIN $table_support_status status
                 ON (ticket.status_id = status.id)
-	            WHERE 1 = 1";
+                WHERE 1 = 1 $conditions";
 
-        $sql .= " AND ticket.access_url_id = $accessUrlId ";
+        $total = Database::getManager()->getConnection()->fetchOne($sql, $params);
 
-        $allowRoleList = self::getAllowedRolesFromProject($projectId);
+        return (int) $total;
+    }
+
+    /**
+     * Builds the access-control and search conditions shared by getTicketsByCurrentUser() and
+     * getTotalTicketsCurrentUser(), so that the count always matches the rows listed.
+     * The tickets must be selected as "ticket", joined to "cat", "priority" and "status".
+     * Every user-provided value is a bound parameter (positional).
+     *
+     * Non-admins (users whose role is not allowed in the project) only see tickets they created or are assigned to.
+     *
+     * @return array{0: string, 1: array} SQL fragment starting with " AND ..." and its parameters
+     */
+    private static function getTicketListConditions(int $userId, int $accessUrlId, int $projectId): array
+    {
+        $params = [];
+        $sql = ' AND ticket.access_url_id = ? ';
+        $params[] = $accessUrlId;
 
         // Check if a role was set to the project
-        if (!empty($allowRoleList) && is_array($allowRoleList)) {
-            $allowed = self::userIsAllowInProject($projectId);
-            if (!$allowed) {
-                $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
-            }
-        } else {
-            if (!api_is_platform_admin()) {
-                $sql .= " AND (ticket.assigned_last_user = $userId OR ticket.sys_insert_user_id = $userId )";
-            }
+        if (false == self::userIsAllowInProject($projectId)) {
+            $sql .= ' AND (ticket.assigned_last_user = ? OR ticket.sys_insert_user_id = ?) ';
+            $params[] = $userId;
+            $params[] = $userId;
         }
+
+        $getTrimmed = static function (string $name): string {
+            return isset($_GET[$name]) && is_scalar($_GET[$name]) ? trim((string) $_GET[$name]) : '';
+        };
 
         // Search simple
-        if (!empty($_GET['keyword'])) {
-            $keyword = Database::escape_string(trim($_GET['keyword']));
+        $keyword = $getTrimmed('keyword');
+        if ('' !== $keyword) {
             $sql .= " AND (
-                      ticket.code LIKE '%$keyword%' OR
-                      ticket.subject LIKE '%$keyword%' OR
-                      ticket.message LIKE '%$keyword%' OR
-                      ticket.keyword LIKE '%$keyword%' OR
-                      ticket.personal_email LIKE '%$keyword%' OR
-                      ticket.source LIKE '%$keyword%'
+                      ticket.id LIKE ? OR
+                      ticket.code LIKE ? OR
+                      ticket.subject LIKE ? OR
+                      ticket.message LIKE ? OR
+                      ticket.keyword LIKE ? OR
+                      ticket.source LIKE ? OR
+                      cat.title LIKE ? OR
+                      status.title LIKE ? OR
+                      priority.title LIKE ? OR
+                      ticket.personal_email LIKE ?
             )";
+            for ($i = 0; $i < 10; $i++) {
+                $params[] = '%'.$keyword.'%';
+            }
         }
 
-        $keywords = [
+        $filters = [
             'project_id' => 'ticket.project_id',
             'keyword_category' => 'ticket.category_id',
             'keyword_assigned_to' => 'ticket.assigned_last_user',
@@ -1122,46 +1094,55 @@ class TicketManager
             'keyword_status' => 'ticket.status_id',
             'keyword_priority' => 'ticket.priority_id',
         ];
-
-        foreach ($keywords as $keyword => $sqlLabel) {
-            if (isset($_GET[$keyword])) {
-                $data = Database::escape_string(trim($_GET[$keyword]));
-                if (!empty($data)) {
-                    $sql .= " AND $sqlLabel = '$data' ";
-                }
+        foreach ($filters as $name => $column) {
+            $data = $getTrimmed($name);
+            if ('' !== $data && '0' !== $data) {
+                $sql .= " AND $column = ? ";
+                $params[] = $data;
             }
         }
 
-        // Search advanced
-        $keyword_start_date_start = isset($_GET['keyword_start_date_start']) ? Database::escape_string(trim($_GET['keyword_start_date_start'])) : '';
-        $keyword_start_date_end = isset($_GET['keyword_start_date_end']) ? Database::escape_string(trim($_GET['keyword_start_date_end'])) : '';
-        $keyword_range = isset($_GET['keyword_dates']) ? Database::escape_string(trim($_GET['keyword_dates'])) : '';
-        $keyword_course = isset($_GET['keyword_course']) ? Database::escape_string(trim($_GET['keyword_course'])) : '';
-
-        if (false == $keyword_range && '' != $keyword_start_date_start) {
-            $sql .= " AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') = '$keyword_start_date_start' ";
-        }
-        if ($keyword_range && '' != $keyword_start_date_start && '' != $keyword_start_date_end) {
-            $sql .= " AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start'
-                      AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') <= '$keyword_start_date_end'";
-        }
-        if ('' != $keyword_course) {
-            $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-            $sql .= " AND ticket.course_id IN (
-                        SELECT id
-                        FROM $course_table
-                        WHERE (
-                            title LIKE '%$keyword_course%' OR
-                            code LIKE '%$keyword_course%' OR
-                            visual_code LIKE '%$keyword_course%'
-                        )
-                   ) ";
+        // Search advanced: dd/mm/YYYY input compared as real dates; a value that is not a date is ignored.
+        $start = self::parseTicketFilterDate($getTrimmed('keyword_start_date_start'));
+        $end = self::parseTicketFilterDate($getTrimmed('keyword_start_date_end'));
+        if (null !== $start) {
+            $sql .= ' AND DATE(ticket.start_date) >= ? ';
+            $params[] = $start;
+            if (null !== $end) {
+                $sql .= ' AND DATE(ticket.start_date) <= ? ';
+                $params[] = $end;
+            }
         }
 
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
+        $course = $getTrimmed('keyword_course');
+        if ('' !== $course) {
+            $sql .= ' AND ticket.course_id IN (
+                     SELECT id FROM '.Database::get_main_table(TABLE_MAIN_COURSE).'
+                     WHERE (title LIKE ? OR code LIKE ? OR visual_code LIKE ?)
+            )';
+            for ($i = 0; $i < 3; $i++) {
+                $params[] = '%'.$course.'%';
+            }
+        }
 
-        return (int) $obj->total;
+        return [$sql, $params];
+    }
+
+    /**
+     * Converts a dd/mm/YYYY string to YYYY-mm-dd, or null when it is empty or not a real date.
+     */
+    private static function parseTicketFilterDate(string $value): ?string
+    {
+        if ('' === $value) {
+            return null;
+        }
+        $date = DateTime::createFromFormat('!d/m/Y', $value);
+        $errors = DateTime::getLastErrors();
+        if (false === $date || (is_array($errors) && ($errors['warning_count'] > 0 || $errors['error_count'] > 0))) {
+            return null;
+        }
+
+        return $date->format('Y-m-d');
     }
 
     /**
@@ -1184,7 +1165,8 @@ class TicketManager
     /**
      * @param int $id
      *
-     * @return array
+     * @return TicketMessageAttachment[]|false the attachments of the ticket, or false (not an empty array) when it
+     *                                          has none
      */
     public static function getTicketMessageAttachmentsByTicketId($id)
     {
@@ -1199,9 +1181,13 @@ class TicketManager
     }
 
     /**
+     * Ticket row ('ticket', whose 'title' is the category title, NULL for a ticket without category), its author
+     * ('user') and its visible messages ('messages': message columns, with 'id' and 'message_id' being the message
+     * id, plus 'user_id', 'admin', 'user_info' and 'attachments').
+     *
      * @param int $ticketId
      *
-     * @return array
+     * @return array empty when the ticket does not exist
      */
     public static function get_ticket_detail_by_id($ticketId)
     {
@@ -1221,7 +1207,7 @@ class TicketManager
                     status.title as status,
                     priority.title priority
                 FROM $table_support_tickets ticket
-                INNER JOIN $table_support_category cat
+                LEFT JOIN $table_support_category cat
                 ON (cat.id = ticket.category_id)
                 INNER JOIN $table_support_priority priority
                 ON (priority.id = ticket.priority_id)
@@ -1305,7 +1291,7 @@ class TicketManager
                 $ticket['ticket'] = $row;
             }
 
-            $sql = "SELECT *, message.id as message_id, user.id AS user_id
+            $sql = "SELECT message.*, message.id AS message_id, user.id AS user_id
                     FROM $table_support_messages message
                     INNER JOIN $table_main_user user
                     ON (message.sys_insert_user_id = user.id)
@@ -1496,12 +1482,17 @@ class TicketManager
         $now = api_get_utc_datetime();
         $table = Database::get_main_table(TABLE_TICKET_TICKET);
         $newParams = [
-            'priority_id' => isset($params['priority_id']) ? (int) $params['priority_id'] : '',
-            'status_id' => isset($params['status_id']) ? (int) $params['status_id'] : '',
             'sys_lastedit_user_id' => (int) $userId,
             'sys_lastedit_datetime' => $now,
         ];
-        Database::update($table, $newParams, ['id = ? ' => $ticketId]);
+        // Only the given columns change: a missing one used to be written as '' and made the query fail.
+        if (isset($params['priority_id'])) {
+            $newParams['priority_id'] = (int) $params['priority_id'];
+        }
+        if (isset($params['status_id'])) {
+            $newParams['status_id'] = (int) $params['status_id'];
+        }
+        Database::update($table, $newParams, ['id = ? ' => (int) $ticketId]);
 
         return true;
     }
@@ -1547,15 +1538,18 @@ class TicketManager
     }
 
     /**
-     * @return mixed
+     * Number of tickets with unread messages ("NOL") for the current user: for an administrator, tickets with an
+     * unread message written by a non-administrator (forwarded tickets excluded); for anybody else, own tickets
+     * (the requester is ticket.sys_insert_user_id) with an unread message written by an administrator.
+     *
+     * @return int
      */
     public static function getNumberOfMessages()
     {
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
-        $user_info = api_get_user_info();
-        $userId = $user_info['user_id'];
+        $userId = (int) api_get_user_id();
         $sql = "SELECT COUNT(DISTINCT ticket.id) AS unread
                 FROM $table_support_tickets ticket,
                 $table_support_messages message ,
@@ -1563,9 +1557,9 @@ class TicketManager
                 WHERE
                     ticket.id = message.ticket_id AND
                     message.status = 'NOL' AND
-                    user.user_id = message.sys_insert_user_id ";
+                    user.id = message.sys_insert_user_id ";
         if (!api_is_platform_admin()) {
-            $sql .= " AND ticket.request_user = '$userId'
+            $sql .= " AND ticket.sys_insert_user_id = $userId
                       AND (user.roles LIKE '%ROLE_ADMIN%' OR user.roles LIKE '%ROLE_GLOBAL_ADMIN%') ";
         } else {
             $sql .= " AND user.roles NOT LIKE '%ROLE_ADMIN%'
@@ -1577,7 +1571,7 @@ class TicketManager
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
-        return $obj->unread;
+        return (int) $obj->unread;
     }
 
     /**
@@ -1738,7 +1732,7 @@ class TicketManager
                     cat.id = ticket.category_id
                     AND ticket.priority_id = priority.id
                     AND ticket.status_id = status.id
-                    AND user.user_id = ticket.request_user ";
+                    AND user.id = ticket.sys_insert_user_id ";
         $sql .= ' AND ticket.access_url_id = '.(int) Container::getAccessUrlUtil()->getCurrent()->getId();
 
         // Search simple
@@ -1791,7 +1785,7 @@ class TicketManager
                 $sql .= " AND ticket.category_id = '$keyword_category'  ";
             }
             if ('' != $keyword_request_user) {
-                $sql .= " AND (ticket.request_user = '$keyword_request_user'
+                $sql .= " AND (ticket.sys_insert_user_id = '$keyword_request_user'
                           OR user.firstname LIKE '%$keyword_request_user%'
                           OR user.official_code LIKE '%$keyword_request_user%'
                           OR user.lastname LIKE '%$keyword_request_user%'
@@ -1805,12 +1799,15 @@ class TicketManager
             if ('' != $keyword_status) {
                 $sql .= " AND ticket.status_id = '$keyword_status'  ";
             }
-            if ('' == $keyword_range && '' != $keyword_start_date_start) {
-                $sql .= " AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') = '$keyword_start_date_start' ";
+            // dd/mm/YYYY input compared as real dates (a value that is not a date is ignored).
+            $dateStart = self::parseTicketFilterDate($keyword_start_date_start);
+            $dateEnd = self::parseTicketFilterDate($keyword_start_date_end);
+            if ('' == $keyword_range && null !== $dateStart) {
+                $sql .= " AND DATE(ticket.start_date) = '$dateStart' ";
             }
-            if ('1' == $keyword_range && '' != $keyword_start_date_start && '' != $keyword_start_date_end) {
-                $sql .= " AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') >= '$keyword_start_date_start'
-                          AND DATE_FORMAT( ticket.start_date,'%d/%m/%Y') <= '$keyword_start_date_end'";
+            if ('1' == $keyword_range && null !== $dateStart && null !== $dateEnd) {
+                $sql .= " AND DATE(ticket.start_date) >= '$dateStart'
+                          AND DATE(ticket.start_date) <= '$dateEnd'";
             }
             if ('' != $keyword_priority) {
                 $sql .= " AND ticket.priority_id = '$keyword_priority'  ";
@@ -1838,8 +1835,9 @@ class TicketManager
                           $table_main_user user
                           WHERE ticket.id = message.ticket_id
                           AND message.status = 'NOL'
-                          AND message.sys_insert_user_id = user.user_id
-                          AND user.status != 1   AND ticket.status_id != '".self::STATUS_FORWARDED."'
+                          AND message.sys_insert_user_id = user.id
+                          AND user.roles NOT LIKE '%ROLE_ADMIN%' AND user.roles NOT LIKE '%ROLE_GLOBAL_ADMIN%'
+                          AND ticket.status_id != '".self::STATUS_FORWARDED."'
                           GROUP BY ticket.id)";
             } else {
                 if ('no' == $keyword_unread) {
@@ -1850,8 +1848,8 @@ class TicketManager
                               $table_main_user user
                               WHERE ticket.id = message.ticket_id
                               AND message.status = 'NOL'
-                              AND message.sys_insert_user_id = user.user_id
-                              AND user.status != 1
+                              AND message.sys_insert_user_id = user.id
+                              AND user.roles NOT LIKE '%ROLE_ADMIN%' AND user.roles NOT LIKE '%ROLE_GLOBAL_ADMIN%'
                               AND ticket.status_id != '".self::STATUS_FORWARDED."'
                              GROUP BY ticket.id)";
                 }
@@ -2458,76 +2456,58 @@ class TicketManager
     /**
      * Deletes the user from all the ticket system.
      *
+     * Nullable references (assignee, last editor, assignment log user) are set to NULL and the category assignments
+     * are removed. The NOT NULL "sys_insert_user_id" author columns cannot be emptied: the rows are kept for the
+     * audit trail and handed to the platform's fallback user, like UserManager::delete_user() does for other tools.
+     * Everything runs in one transaction: it is applied completely or not at all.
+     *
      * @param int $userId
+     *
+     * @throws RuntimeException when there is no fallback user to take over the authored rows
      */
     public static function deleteUserFromTicketSystem($userId)
     {
         $userId = (int) $userId;
-        $schema = Database::getManager()->getConnection()->createSchemaManager();
-
-        if ($schema->tablesExist('ticket_assigned_log')) {
-            $sql = "UPDATE ticket_assigned_log SET user_id = NULL WHERE user_id = $userId";
-            Database::query($sql);
-
-            $sql = "UPDATE ticket_assigned_log SET sys_insert_user_id = NULL WHERE sys_insert_user_id = $userId";
-            Database::query($sql);
+        $fallbackUser = Container::getUserRepository()->getFallbackUser();
+        if (null === $fallbackUser) {
+            throw new RuntimeException('Cannot remove a user from the ticket system without a fallback user');
+        }
+        $fallbackId = (int) $fallbackUser->getId();
+        if ($fallbackId === $userId) {
+            return;
         }
 
-        if ($schema->tablesExist('ticket_ticket')) {
-            $sql = "UPDATE ticket_ticket SET assigned_last_user = NULL WHERE assigned_last_user = $userId";
-            Database::query($sql);
+        $connection = Database::getManager()->getConnection();
+        $schema = $connection->createSchemaManager();
 
-            $sql = "UPDATE ticket_ticket SET sys_insert_user_id = NULL WHERE sys_insert_user_id = $userId";
-            Database::query($sql);
+        // table => [columns set to NULL, columns handed to the fallback user]
+        $references = [
+            'ticket_assigned_log' => [['user_id'], ['sys_insert_user_id']],
+            'ticket_ticket' => [['assigned_last_user', 'sys_lastedit_user_id'], ['sys_insert_user_id']],
+            'ticket_category' => [['sys_lastedit_user_id'], ['sys_insert_user_id']],
+            'ticket_message' => [['sys_lastedit_user_id'], ['sys_insert_user_id']],
+            'ticket_message_attachments' => [['sys_lastedit_user_id'], ['sys_insert_user_id']],
+            'ticket_priority' => [['sys_lastedit_user_id'], ['sys_insert_user_id']],
+            'ticket_project' => [['sys_lastedit_user_id'], ['sys_insert_user_id']],
+        ];
 
-            $sql = "UPDATE ticket_ticket SET sys_lastedit_user_id = NULL WHERE sys_lastedit_user_id = $userId";
-            Database::query($sql);
-        }
+        $connection->transactional(function () use ($connection, $schema, $references, $userId, $fallbackId): void {
+            foreach ($references as $table => [$nullable, $authored]) {
+                if (!$schema->tablesExist($table)) {
+                    continue;
+                }
+                foreach ($nullable as $column) {
+                    $connection->executeStatement("UPDATE $table SET $column = NULL WHERE $column = ?", [$userId]);
+                }
+                foreach ($authored as $column) {
+                    $connection->executeStatement("UPDATE $table SET $column = ? WHERE $column = ?", [$fallbackId, $userId]);
+                }
+            }
 
-        if ($schema->tablesExist('ticket_category')) {
-            $sql = "UPDATE ticket_category SET sys_insert_user_id = NULL WHERE sys_insert_user_id = $userId";
-            Database::query($sql);
-
-            $sql = "UPDATE ticket_category SET sys_lastedit_user_id = NULL WHERE sys_lastedit_user_id = $userId";
-            Database::query($sql);
-        }
-
-        if ($schema->tablesExist('ticket_category_rel_user')) {
-            $sql = "DELETE FROM ticket_category_rel_user WHERE user_id = $userId";
-            Database::query($sql);
-        }
-
-        if ($schema->tablesExist('ticket_message')) {
-            $sql = "UPDATE ticket_message SET sys_insert_user_id = NULL WHERE sys_insert_user_id = $userId";
-            Database::query($sql);
-
-            $sql = "UPDATE ticket_message SET sys_lastedit_user_id = NULL WHERE sys_lastedit_user_id = $userId";
-            Database::query($sql);
-        }
-
-        if ($schema->tablesExist('ticket_message_attachments')) {
-            $sql = "UPDATE ticket_message_attachments SET sys_insert_user_id = NULL WHERE sys_insert_user_id = $userId";
-            Database::query($sql);
-
-            $sql = "UPDATE ticket_message_attachments SET sys_lastedit_user_id = NULL WHERE sys_lastedit_user_id = $userId";
-            Database::query($sql);
-        }
-
-        if ($schema->tablesExist('ticket_priority')) {
-            $sql = "UPDATE ticket_priority SET sys_insert_user_id = NULL WHERE sys_insert_user_id = $userId";
-            Database::query($sql);
-
-            $sql = "UPDATE ticket_priority SET sys_lastedit_user_id = NULL WHERE sys_lastedit_user_id = $userId";
-            Database::query($sql);
-        }
-
-        if ($schema->tablesExist('ticket_project')) {
-            $sql = "UPDATE ticket_project SET sys_insert_user_id = NULL WHERE sys_insert_user_id = $userId";
-            Database::query($sql);
-
-            $sql = "UPDATE ticket_project SET sys_lastedit_user_id = NULL WHERE sys_lastedit_user_id = $userId";
-            Database::query($sql);
-        }
+            if ($schema->tablesExist('ticket_category_rel_user')) {
+                $connection->executeStatement('DELETE FROM ticket_category_rel_user WHERE user_id = ?', [$userId]);
+            }
+        });
     }
 
     /**

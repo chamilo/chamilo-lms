@@ -2619,7 +2619,7 @@ function api_get_session_visibility(
     }
 
     // If I'm a coach the visibility can change in my favor depending in the coach dates.
-    $isCoach = api_is_coach($session_id, $courseId);
+    $isCoach = api_is_coach((int) $session_id, null === $courseId ? null : (int) $courseId, true, (int) $userId);
 
     if ($isCoach) {
         // Test start date.
@@ -2957,6 +2957,8 @@ function api_get_settings_params_simple($params)
 
 /**
  * Returns the value of a setting from the web-adjustable admin config settings.
+ *
+ * @deprecated No caller left in the codebase.
  */
 function api_delete_settings_params($params)
 {
@@ -3306,6 +3308,8 @@ function api_is_invitee()
 /**
  * This function checks whether a session is assigned into a category.
  *
+ * @deprecated No caller left in the codebase.
+ *
  * @param int       - session id
  * @param string    - category name
  *
@@ -3324,7 +3328,7 @@ function api_is_session_in_category($session_id, $category_name)
                 SELECT s.id FROM $tbl_session s, $tbl_session_category sc
                 WHERE
                   s.session_category_id = sc.id AND
-                  sc.name LIKE '%$category_name'
+                  sc.title LIKE '%$category_name'
             )";
     $rs = Database::query($sql);
 
@@ -4685,6 +4689,8 @@ function api_get_settings_options($var)
 }
 
 /**
+ * @deprecated No caller left in the codebase.
+ *
  * @param array $params
  */
 function api_set_setting_option($params)
@@ -4897,6 +4903,8 @@ function api_set_settings_category($category, $value = null, $access_url = 1, $f
 /**
  * Gets all available access urls in an array (as in the database).
  *
+ * @deprecated No caller left in the codebase.
+ *
  * @return array An array of database records
  */
 function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $direction = 'ASC')
@@ -5103,12 +5111,14 @@ function api_add_setting(
  */
 function api_is_course_visible_for_user($userid = null, $cid = null)
 {
+    $isAnonymousVisitor = false;
     if (null === $userid) {
         $userid = api_get_user_id();
     }
     if (empty($userid) || strval(intval($userid)) != $userid) {
         if (api_is_anonymous()) {
             $userid = api_get_anonymous_id();
+            $isAnonymousVisitor = true;
         } else {
             return false;
         }
@@ -5120,25 +5130,17 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
     $is_platformAdmin = api_is_platform_admin();
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
-    $sql = "SELECT
-                $course_cat_table.code AS category_code,
-                $course_table.visibility,
-                $course_table.code,
-                $course_cat_table.code
+    $sql = "SELECT visibility
             FROM $course_table
-            LEFT JOIN $course_cat_table
-                ON $course_table.category_id = $course_cat_table.id
-            WHERE
-                $course_table.code = '$cid'
+            WHERE code = '$cid'
             LIMIT 1";
 
     $result = Database::query($sql);
 
     if (Database::num_rows($result) > 0) {
         $visibility = Database::fetch_array($result);
-        $visibility = $visibility['visibility'];
+        $visibility = (int) $visibility['visibility'];
     } else {
         $visibility = 0;
     }
@@ -5148,6 +5150,8 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
     }
 
     $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $is_courseMember = false;
+    $is_courseAdmin = false;
 
     $sql = "SELECT
                 is_tutor, status
@@ -5198,9 +5202,10 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
         } else {
             // Check if the current user is the course coach.
             $sql = "SELECT 1
-                    FROM $tbl_session_course
-                    WHERE session_rel_course.c_id = '$courseId'
-                    AND session_rel_course.id_coach = '$userid'
+                    FROM $tbl_session_course_user
+                    WHERE c_id = '$courseId'
+                    AND user_id = '$userid'
+                    AND status = ".SessionEntity::COURSE_COACH."
                     LIMIT 1";
 
             $result = Database::query($sql);
@@ -5245,7 +5250,13 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
         case Course::OPEN_WORLD:
             return true;
         case Course::OPEN_PLATFORM:
-            return isset($userid);
+            // Open to registered platform users only: never to the anonymous visitor nor to an unknown id.
+            if ($isAnonymousVisitor) {
+                return false;
+            }
+            $userStatus = Database::query('SELECT status FROM user WHERE id = '.(int) $userid)->fetchOne();
+
+            return false !== $userStatus && ANONYMOUS != (int) $userStatus;
         case Course::REGISTERED:
         case Course::CLOSED:
             return $is_platformAdmin || $is_courseMember || $is_courseAdmin;
@@ -5272,8 +5283,9 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
     }
 
     $element_id = (int) $element_id;
+    $session_id = (int) $session_id;
 
-    if (empty($element_id)) {
+    if (empty($element_id) || empty($session_id)) {
         return false;
     }
 
@@ -5281,36 +5293,33 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
     switch ($tool) {
         case TOOL_SURVEY:
             $table_tool = Database::get_course_table(TABLE_SURVEY);
-            $key_field = 'survey_id';
             break;
         case TOOL_ANNOUNCEMENT:
             $table_tool = Database::get_course_table(TABLE_ANNOUNCEMENT);
-            $key_field = 'id';
             break;
         case TOOL_AGENDA:
             $table_tool = Database::get_course_table(TABLE_AGENDA);
-            $key_field = 'id';
             break;
         case TOOL_GROUP:
             $table_tool = Database::get_course_table(TABLE_GROUP);
-            $key_field = 'id';
             break;
         default:
             return false;
     }
     $course_id = api_get_course_int_id();
 
-    $sql = "SELECT session_id FROM $table_tool
-            WHERE c_id = $course_id AND $key_field =  ".$element_id;
+    // The course and the session of a resource live in its resource links.
+    $sql = "SELECT rl.id
+            FROM $table_tool t
+            INNER JOIN resource_link rl ON rl.resource_node_id = t.resource_node_id
+            WHERE t.iid = $element_id
+                AND rl.c_id = $course_id
+                AND rl.session_id = $session_id
+                AND rl.deleted_at IS NULL
+            LIMIT 1";
     $rs = Database::query($sql);
-    if ($element_session_id = Database::result($rs, 0, 0)) {
-        if ($element_session_id == intval($session_id)) {
-            // The element belongs to the session.
-            return true;
-        }
-    }
 
-    return false;
+    return Database::num_rows($rs) > 0;
 }
 
 /**
@@ -5691,8 +5700,22 @@ function api_get_tool_information_by_name($name)
     $data = Database::fetch_array($rs);
     if ($data) {
         $tool = $data['id'];
-        $sql = "SELECT * FROM $t_tool
-                WHERE c_id = $course_id  AND tool_id = '".$tool."' ";
+        // The visibility of a course tool lives in the resource link of its resource node: the link of the
+        // current session when there is one, the base course link otherwise.
+        $session_id = api_get_session_id();
+        $sql = "SELECT ct.*, rl.visibility
+                FROM $t_tool ct
+                LEFT JOIN resource_link rl
+                    ON rl.resource_node_id = ct.resource_node_id
+                    AND rl.c_id = ct.c_id
+                    AND rl.group_id IS NULL
+                    AND rl.usergroup_id IS NULL
+                    AND rl.user_id IS NULL
+                    AND rl.deleted_at IS NULL
+                    AND (rl.session_id IS NULL OR rl.session_id = $session_id)
+                WHERE ct.c_id = $course_id AND ct.tool_id = ".(int) $tool."
+                ORDER BY (rl.session_id IS NULL) ASC, ct.iid ASC
+                LIMIT 1";
         $rs = Database::query($sql);
 
         return Database::fetch_assoc($rs);
@@ -6064,6 +6087,20 @@ function api_get_course_url($courseId = null, $sessionId = null, $groupId = null
 function api_get_multiple_access_url(): bool
 {
     return Container::getAccessUrlUtil()->isMultiple();
+}
+
+/**
+ * Tells whether a stored on/off flag is enabled. Flags written by the Vue side are strings ('on'), the legacy forms
+ * store '1' or 1: a plain (int) cast reads 'on' as 0.
+ * Accepts true, 1, '1', 'on', 'true' and 'yes' (case-insensitive); anything else is disabled.
+ */
+function api_is_flag_enabled(mixed $value): bool
+{
+    if (is_bool($value)) {
+        return $value;
+    }
+
+    return is_scalar($value) && in_array(strtolower(trim((string) $value)), ['1', 'on', 'true', 'yes'], true);
 }
 
 /**
@@ -7639,6 +7676,8 @@ function api_find_template($template)
 }
 
 /**
+ * @deprecated No caller left in the codebase.
+ *
  * @return array
  */
 function api_get_language_list_for_flag()

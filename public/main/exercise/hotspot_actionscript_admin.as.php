@@ -23,6 +23,10 @@ if (!$isAllowedToEdit) {
 
 $_course = api_get_course_info();
 $questionId = isset($_GET['modifyAnswers']) ? (int) $_GET['modifyAnswers'] : 0;
+// The question must be one of the current course (the repository find() does not scope).
+if (!ExerciseLib::questionBelongsToCourse($questionId, (int) api_get_course_int_id(), (int) api_get_session_id())) {
+    api_not_allowed();
+}
 $questionRepo = Container::getQuestionRepository();
 /** @var CQuizQuestion $objQuestion */
 $objQuestion = $questionRepo->find($questionId);

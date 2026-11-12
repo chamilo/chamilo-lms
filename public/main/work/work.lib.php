@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
@@ -16,6 +17,7 @@ use Chamilo\CourseBundle\Entity\CStudentPublicationAssignment;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Repository\CStudentPublicationFollowRepository;
 use ChamiloSession as Session;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  *  @author Thomas, Hugues, Christophe - original version
@@ -78,6 +80,9 @@ function displayWorkActionLinks($id, $action, $isTutor)
  * @param int    $courseId
  *
  * @return array
+ *
+ * @deprecated Works no longer have a url column (files live in resource nodes), so the query always throws
+ *   and nothing calls it. Use get_work_data_by_id() or the student publication repository.
  */
 function get_work_data_by_path($path, $courseId = 0)
 {
@@ -268,56 +273,12 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
 
     $qb = $repo->getResourcesByCourse($course, $session, $group);
 
-    $contains_file_query = '';
-    // Get list from database
-    if ($is_allowed_to_edit) {
-        $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
-        $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
-    /*$active_condition = ' active IN (0, 1)';
-    $sql = "SELECT * FROM $work_table
-            WHERE
-                c_id = $course_id
-                $add_in_where_query
-                $condition_session AND
-                $active_condition AND
-                (parent_id = 0)
-                $contains_file_query AND
-                post_group_id = $groupIid
-            ORDER BY sent_date DESC";*/
-    } else {
-        if (!empty($group_id)) {
-            // set to select only messages posted by the user's group
-            $group_query = " WHERE c_id = $course_id AND post_group_id = $groupIid";
-            $subdirs_query = ' AND parent_id = 0';
-        } else {
-            $group_query = " WHERE c_id = $course_id AND (post_group_id = '0' OR post_group_id is NULL) ";
-            $subdirs_query = ' AND parent_id = 0';
-        }
-        //@todo how we can active or not an assignment?
-        $active_condition = ' AND active IN (1, 0)';
-        $sql = "SELECT * FROM  $work_table
-                $group_query
-                $subdirs_query
-                $add_in_where_query
-                $active_condition
-                $condition_session
-                ORDER BY title";
-    }
+    // Root folders that are not deleted: the same for a teacher and for a learner (a learner only gets the
+    // published ones through the repository's visibility rule).
+    $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
+    $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
 
     return $qb->getQuery()->getResult();
-
-    $work_parents = [];
-
-    $sql_result = Database::query($sql);
-    if (Database::num_rows($sql_result)) {
-        while ($work = Database::fetch_object($sql_result)) {
-            if (0 == $work->parent_id) {
-                $work_parents[] = $work;
-            }
-        }
-    }
-
-    return $work_parents;
 }
 
 /**
@@ -334,11 +295,12 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
     $workId = (int) $workId;
     $sessionId = (int) $sessionId;
     $groupId = (int) $groupId;
+    // Course and session now live on the resource link of the work, not on the table itself.
     $sessionCondition = api_get_session_condition(
         $sessionId,
         true,
         false,
-        'w.session_id'
+        'link.session_id'
     );
 
     $groupIid = 0;
@@ -349,12 +311,16 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
 
     $sql = "SELECT count(DISTINCT u.id)
             FROM $work_table w
+            INNER JOIN resource_link link
+            ON (link.resource_node_id = w.resource_node_id)
             INNER JOIN $user_table u
             ON w.user_id = u.id
             WHERE
+                link.c_id = $course_id AND
                 w.parent_id = $workId AND
-                w.post_group_id = $groupIid AND
+                w.post_group_id = ".(int) $groupIid." AND
                 w.active IN (0, 1)
+                $sessionCondition
             ";
 
     $res_document = Database::query($sql);
@@ -598,7 +564,7 @@ function showTeacherWorkGrid()
         ],
     ];
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_teacher&'.api_get_cidreq();
-    $deleteUrl = api_get_path(WEB_AJAX_PATH).'work.ajax.php?a=delete_work&'.api_get_cidreq();
+    $deleteUrl = workActionUrl(api_get_path(WEB_AJAX_PATH).'work.ajax.php?a=delete_work&'.api_get_cidreq());
 
     $columns = [
         get_lang('Type'),
@@ -651,11 +617,12 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
     $course_id = api_get_course_int_id();
     $move_file = (int) $move_file;
     $tbl_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $sql = "SELECT title, url FROM $tbl_work
+    $sql = "SELECT title FROM $tbl_work
             WHERE iid ='".$move_file."'";
     $result = Database::query($sql);
     $row = Database::fetch_assoc($result);
-    $title = empty($row['title']) ? basename($row['url']) : $row['title'];
+    // The "url" column is gone: the title is the only name a work has.
+    $title = $row['title'] ?? '';
 
     $form = new FormValidator(
         'move_to_form',
@@ -666,6 +633,7 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
     $form->addHeader(get_lang('Move the file').' - '.Security::remove_XSS($title));
     $form->addHidden('item_id', $move_file);
     $form->addHidden('action', 'move_to');
+    $form->addHidden('work_sec_token', workActionToken());
 
     // Group documents cannot be uploaded in the root
     $options = [];
@@ -744,8 +712,14 @@ function create_unexisting_work_directory($workDir, $desiredDirName)
  *
  * @return int -1 on error
  */
-function deleteDirWork($id)
+function deleteDirWork($id, $courseId = 0)
 {
+    // The id comes from the request: it must be a folder of the course it is deleted from.
+    $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+    if (!workIsInCourse((int) $id, (int) $courseId)) {
+        return false;
+    }
+
     $locked = api_resource_is_locked_by_gradebook($id, LINK_STUDENTPUBLICATION);
     if ($locked) {
         echo Display::return_message(
@@ -781,7 +755,7 @@ function deleteDirWork($id)
         if (!empty($consideredWorkingTime)) {
             $fieldValue = new ExtraFieldValue('work');
             $resultExtra = $fieldValue->getAllValuesForAnItem(
-                $work_data['id'],
+                $work_data['iid'],
                 true
             );
 
@@ -853,7 +827,7 @@ function deleteDirWork($id)
         // delete from agenda if it exists
         if (!empty($calendar_id[0])) {
             $sql = "DELETE FROM $t_agenda
-                    WHERE id = '".$calendar_id[0]."'";
+                    WHERE iid = ".(int) $calendar_id[0];
             Database::query($sql);
         }
         $sql = "DELETE FROM $TSTDPUBASG
@@ -883,7 +857,8 @@ function deleteDirWork($id)
             $sessionId
         );
 
-        if (false !== $linkInfo) {
+        // isResourceInCourseGradebook() returns an empty array (never false) when there is no link.
+        if (!empty($linkInfo)) {
             $link_id = $linkInfo['id'];
             GradebookUtils::remove_resource_from_course_gradebook($link_id);
         }
@@ -898,6 +873,10 @@ function deleteDirWork($id)
  * @param int $id
  *
  * @return string Path (or -1 on error)
+ *
+ * @deprecated Works no longer have id/url columns, so the query always throws. Its only caller is
+ *   public/main/plagiarism/compilatio/upload.php, itself tied to the removed file-url model. Use the
+ *   resource node file path instead.
  */
 function get_work_path($id)
 {
@@ -923,6 +902,9 @@ function get_work_path($id)
  * @param int    $parent_id
  *
  * @return mixed Int -1 on error, sql query result on success
+ *
+ * @deprecated Works no longer have a url column (an existing row makes it fail on an undefined key), and
+ *   moving a work is done through the repository in work.php (move_to). Nothing calls it.
  */
 function updateWorkUrl($id, $new_path, $parent_id)
 {
@@ -966,7 +948,7 @@ function updateDirName($work_data, $newPath)
 {
     $work_id = (int) ($work_data['iid']);
     $oldPath = $work_data['url'];
-    $originalNewPath = Database::escape_string($newPath);
+    $originalNewPath = $newPath;
     $newPath = Database::escape_string($newPath);
     $newPath = api_replace_dangerous_char($newPath);
     $newPath = disable_dangerous_file($newPath);
@@ -975,14 +957,18 @@ function updateDirName($work_data, $newPath)
         return true;
     }
 
-    if (!empty($newPath)) {
-        $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        $sql = "UPDATE $table SET
-                    title = '".$originalNewPath."'
-                WHERE
-                    iid = $work_id";
-        Database::query($sql);
+    if (empty($newPath)) {
+        return false;
     }
+
+    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    Database::update(
+        $table,
+        ['title' => $originalNewPath],
+        ['iid = ?' => [$work_id]]
+    );
+
+    return true;
 }
 
 /**
@@ -1222,6 +1208,15 @@ function getWorkListStudent(
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
+    workApplyOrder(
+        $qb,
+        $column,
+        $direction,
+        [
+            'title' => 'resource.title',
+            'expires_on' => 'work_assignment.expiresOn',
+        ]
+    );
     $qb
         ->setFirstResult($start)
         ->setMaxResults($limit)
@@ -1345,170 +1340,145 @@ function getAllWorkListStudent(
     $getCount = false,
     $withResults = 1
 ) {
-    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $userId = api_get_user_id();
 
     if (empty($userId)) {
         return [];
     }
 
-    $courses = CourseManager::get_courses_list_by_user_id($userId, true);
+    $user = api_get_user_entity($userId);
+    $repo = Container::getStudentPublicationRepository();
+    $now = api_get_utc_datetime();
 
-    if (!empty($where_condition)) {
-        $where_condition = ' AND '.$where_condition;
+    // The assignments of every course and session of the user (the course/session of an assignment is its
+    // resource link). $where_condition (a jqGrid filter written for the removed columns) is not applied.
+    $candidates = [];
+    foreach (CourseManager::get_courses_list_by_user_id($userId, true) as $courseRow) {
+        $courseId = (int) $courseRow['real_id'];
+        $sessionId = (int) ($courseRow['session_id'] ?? 0);
+        $course = api_get_course_entity($courseId);
+        if (null === $course) {
+            continue;
+        }
+        $session = $sessionId > 0 ? api_get_session_entity($sessionId) : null;
+
+        $qb = $repo->getResourcesByCourse($course, $session);
+        $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
+        $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
+
+        /** @var CStudentPublication $folder */
+        foreach ($qb->getQuery()->getResult() as $folder) {
+            if (false === userIsSubscribedToWork($userId, $folder->getIid(), $courseId)) {
+                continue;
+            }
+
+            $assignment = $folder->getAssignment();
+            $expiresOn = $assignment?->getExpiresOn();
+            $hasSentWork = !empty(
+                $repo->getStudentAssignments($folder, $course, $session, null, $user)
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getResult()
+            );
+            // expires_on is stored as a UTC wall-clock string, compared as such (like the SQL did).
+            $isExpired = null !== $expiresOn && $expiresOn->format('Y-m-d H:i:s') < $now;
+
+            // "To do": nothing sent yet and still open. "Results": something sent, or closed without a hand-in.
+            $keep = $withResults ? ($hasSentWork || $isExpired) : (!$hasSentWork && !$isExpired);
+            if (!$keep) {
+                continue;
+            }
+
+            $candidates[] = [
+                'folder' => $folder,
+                'assignment' => $assignment,
+                'course_id' => $courseId,
+                'session_id' => $sessionId,
+            ];
+        }
     }
 
-    if (!in_array($direction, ['asc', 'desc'])) {
-        $direction = 'desc';
+    if ($getCount) {
+        return count($candidates);
     }
 
-    $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
-    $start = (int) $start;
+    $direction = 'asc' === strtolower((string) $direction) ? 1 : -1;
+    $sortKey = static function (array $candidate) use ($column): string {
+        if ('expires_on' === $column) {
+            $expiresOn = $candidate['assignment']?->getExpiresOn();
+
+            return null === $expiresOn ? '' : $expiresOn->format('Y-m-d H:i:s');
+        }
+
+        return mb_strtolower($candidate['folder']->getTitle());
+    };
+    usort(
+        $candidates,
+        static fn (array $a, array $b): int => $direction * strnatcmp($sortKey($a), $sortKey($b))
+            ?: $a['folder']->getIid() <=> $b['folder']->getIid()
+    );
+
     $limit = (int) $limit;
-    $courseQuery = [];
-    $courseList = [];
-    foreach ($courses as $course) {
-        $course_id = $course['real_id'];
-        $courseInfo = api_get_course_info_by_id($course_id);
-        $session_id = isset($course['session_id']) ? $course['session_id'] : 0;
-        $conditionSession = api_get_session_condition($session_id, true, false, 'w.session_id');
-        $parentCondition = '';
-        if ($withResults) {
-            $parentCondition = 'AND ww.parent_id is NOT NULL';
-        }
-        $courseQuery[] = " (w.c_id = $course_id $conditionSession $parentCondition )";
-        $courseList[$course_id] = $courseInfo;
-    }
-
-    $courseQueryToString = implode(' OR ', $courseQuery);
-
-    if ($getCount) {
-        if (empty($courseQuery)) {
-            return 0;
-        }
-        $select = 'SELECT count(DISTINCT(w.iid)) as count ';
-    } else {
-        if (empty($courseQuery)) {
-            return [];
-        }
-        $select = 'SELECT DISTINCT
-                        w.url,
-                        w.iid,
-                        w.c_id,
-                        w.session_id,
-                        a.expires_on,
-                        a.ends_on,
-                        a.enable_qualification,
-                        w.qualification,
-                        a.publication_id';
-    }
-
-    $checkSentWork = " LEFT JOIN $workTable ww
-                       ON (ww.c_id = w.c_id AND ww.parent_id = w.iid AND ww.user_id = $userId ) ";
-    $where = ' AND ww.url IS NULL ';
-    $expirationCondition = " AND (a.expires_on IS NULL OR a.expires_on > '".api_get_utc_datetime()."') ";
-    if ($withResults) {
-        $where = '';
-        $checkSentWork = " LEFT JOIN $workTable ww
-                           ON (
-                            ww.c_id = w.c_id AND
-                            ww.parent_id = w.iid AND
-                            ww.user_id = $userId AND
-                            a.expires_on IS NULL AND
-                            ww.parent_id is NOT NULL
-                        ) ";
-        $expirationCondition = " OR (
-                ww.parent_id is NULL AND
-                a.expires_on IS NOT NULL AND
-                a.expires_on < '".api_get_utc_datetime()."'
-            ) ";
-    }
-
-    $sql = "$select
-            FROM $workTable w
-            LEFT JOIN $workTableAssignment a
-            ON (a.publication_id = w.iid AND a.c_id = w.c_id)
-            $checkSentWork
-            WHERE
-                w.parent_id = 0 AND
-                w.active IN (1, 0) AND
-                ($courseQueryToString)
-                $where_condition
-                $expirationCondition
-                $where
-            ";
-
-    $sql .= " ORDER BY `$column` $direction ";
-
-    if (!empty($start) && !empty($limit)) {
-        $sql .= " LIMIT $start, $limit";
-    }
-
-    $result = Database::query($sql);
-
-    if ($getCount) {
-        $row = Database::fetch_array($result);
-
-        if ($row) {
-            return (int) $row['count'];
-        }
-
-        return 0;
+    if ($limit > 0) {
+        $candidates = array_slice($candidates, max(0, (int) $start), $limit);
     }
 
     $works = [];
-    while ($work = Database::fetch_assoc($result)) {
-        $courseId = $work['c_id'];
-        $courseInfo = $courseList[$work['c_id']];
-        $sessionId = $work['session_id'];
+    $icon = Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
+    foreach ($candidates as $candidate) {
+        /** @var CStudentPublication $folder */
+        $folder = $candidate['folder'];
+        $assignment = $candidate['assignment'];
+        $courseId = $candidate['course_id'];
+        $sessionId = $candidate['session_id'];
+        $courseInfo = api_get_course_info_by_id($courseId);
 
         $cidReq = api_get_cidreq_params($courseId, $sessionId);
         $url = api_get_path(WEB_CODE_PATH).'work/work_list.php?'.$cidReq;
-        $isSubscribed = userIsSubscribedToWork($userId, $work['iid'], $courseId);
-        if (false == $isSubscribed) {
-            continue;
-        }
 
-        /*$visibility = api_get_item_visibility($courseInfo, 'work', $work['iid'], $sessionId);
-
-        if (1 != $visibility) {
-            continue;
-        }*/
-
-        $work['type'] = Display::getMdiIcon(ObjectIcon::ASSIGNMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
-        $work['expires_on'] = empty($work['expires_on']) ? null : api_get_local_time($work['expires_on']);
-
-        if (empty($work['title'])) {
-            $work['title'] = basename($work['url']);
-        }
+        $work = [
+            'iid' => $folder->getIid(),
+            'c_id' => $courseId,
+            'session_id' => $sessionId,
+            'expires_on' => null === $assignment?->getExpiresOn() ? null : api_get_local_time($assignment->getExpiresOn()),
+            'ends_on' => null === $assignment?->getEndsOn() ? null : api_get_local_time($assignment->getEndsOn()),
+            'enable_qualification' => (int) $assignment?->getEnableQualification(),
+            'qualification' => $folder->getQualification(),
+            'publication_id' => $assignment?->getPublication()?->getIid(),
+            'type' => $icon,
+        ];
 
         if ($withResults) {
-            $whereCondition = " AND u.id = $userId ";
+            // Only what this learner sent (and the comments on it), as the "Others" column is not shown here.
             $workList = get_work_user_list(
                 0,
                 1000,
                 null,
                 null,
-                $work['iid'],
-                $whereCondition,
-                null,
+                $folder->getIid(),
+                '',
+                $userId,
                 false,
                 $courseId,
                 $sessionId
             );
 
-            $count = getTotalWorkComment($workList, $courseInfo);
-            $lastWork = getLastWorkStudentFromParentByUser($userId, $work, $courseInfo);
+            $count = getTotalWorkComment($workList ?? [], $courseInfo);
+            $lastWork = getLastWorkStudentFromParentByUser(
+                $userId,
+                ['iid' => $folder->getIid(), 'qualification' => $folder->getQualification()],
+                $courseInfo,
+                $sessionId
+            );
 
-            if (!is_null($count) && !empty($count)) {
+            if (!empty($count) && !empty($lastWork)) {
                 $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$lastWork['iid'].'&'.$cidReq;
 
                 $feedback = '&nbsp;'.Display::url(
-                        Display::getMdiIcon('comment-outline'),
-                        $urlView,
-                        ['title' => get_lang('View')]
-                    );
+                    Display::getMdiIcon('comment-outline'),
+                    $urlView,
+                    ['title' => get_lang('View')]
+                );
 
                 $work['feedback'] = ' '.Display::label($count.' '.get_lang('Feedback'), 'info').$feedback;
             }
@@ -1519,7 +1489,7 @@ function getAllWorkListStudent(
             }
         }
 
-        $work['title'] = Display::url($work['title'], $url.'&id='.$work['iid']);
+        $work['title'] = Display::url($folder->getTitle(), $url.'&id='.$folder->getIid());
         $works[] = $work;
     }
 
@@ -1586,6 +1556,17 @@ function getWorkListTeacher(
         $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
         if ($getCount) {
             $qb->select('count(resource)');
+        } else {
+            workApplyOrder(
+                $qb,
+                $column,
+                $direction,
+                [
+                    'title' => 'resource.title',
+                    'sent_date' => 'resource.sentDate',
+                    'expires_on' => 'work_assignment.expiresOn',
+                ]
+            );
         }
 
         $qb
@@ -1666,7 +1647,7 @@ function getWorkListTeacher(
 
             $visibilityLink = Display::url(
                 Display::getMdiIcon($icon, 'ch-tool-icon', null, ICON_SIZE_SMALL, $text),
-                api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action='.$action.'&'.api_get_cidreq()
+                workActionUrl(api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action='.$action.'&'.api_get_cidreq())
             );
 
             $title = $studentPublication->getTitle();
@@ -1904,7 +1885,7 @@ function get_work_user_list_from_documents(
 
         $deleteLink = '';
         if (1 == $allowEdition && !empty($itemId)) {
-            $deleteLink = Display::url($deleteIcon, $urlDelete.'&item_id='.$itemId.'&id='.$workId);
+            $deleteLink = Display::url($deleteIcon, workActionUrl($urlDelete.'&item_id='.$itemId.'&id='.$workId));
         }
 
         $row['type'] = null;
@@ -2069,7 +2050,21 @@ function get_work_user_list(
             $whereCondition .= " AND u.id = $studentId ";
         }*/
 
-        $qb = $repo->getStudentAssignments($studentPublication, $course, $session, $group);
+        // The submissions of one learner when asked to (the SQL used to filter on u.id = $studentId).
+        $studentUser = !empty($studentId) ? api_get_user_entity((int) $studentId) : null;
+        $qb = $repo->getStudentAssignments($studentPublication, $course, $session, $group, $studentUser);
+
+        // Who may see which row is decided here, in the query, so that the count and the pages agree with
+        // what the loop below shows: a learner only gets his own submissions, plus the accepted ones of the
+        // others when the course shows the scores.
+        if (!$is_allowed_to_edit && !api_is_drh()) {
+            if (0 == (int) ($course_info['show_score'] ?? 1)) {
+                $qb->andWhere('(resource.user = :viewer OR resource.accepted = 1)');
+            } else {
+                $qb->andWhere('resource.user = :viewer');
+            }
+            $qb->setParameter('viewer', (int) api_get_user_id());
+        }
 
         if ($getCount) {
             $qb->select('count(resource)');
@@ -2077,8 +2072,27 @@ function get_work_user_list(
             return $qb->getQuery()->getSingleScalarResult();
         }
 
-        $qb->setFirstResult($start);
-        $qb->setMaxResults($limit);
+        workApplyOrder(
+            $qb,
+            $column,
+            $direction,
+            [
+                'title' => 'resource.title',
+                'sent_date' => 'resource.sentDate',
+                'qualification' => 'resource.qualification',
+                'qualificator_id' => 'resource.qualificatorId',
+                'firstname' => 'work_user.firstname',
+                'lastname' => 'work_user.lastname',
+                'fullname' => 'work_user.lastname',
+            ]
+        );
+        // Like the SQL it replaces, no start/limit means no LIMIT (upload_corrections.php passes nulls).
+        if ($start > 0) {
+            $qb->setFirstResult($start);
+        }
+        if ($limit > 0) {
+            $qb->setMaxResults($limit);
+        }
 
         $assignments = $qb->getQuery()->getResult();
 
@@ -2181,12 +2195,13 @@ function get_work_user_list(
 
             if (!empty($expiresOn) &&
                 !empty($time_expires) &&
-                ($time_expires < api_strtotime($studentPublication->getSentDate(), 'UTC'))
+                ($time_expires < api_strtotime($assignment->getSentDate()->format('Y-m-d H:i:s'), 'UTC'))
             ) {
                 $add_string = Display::label(get_lang('Expired'), 'important').' - ';
             }
 
-            $accepted = $studentPublication->getAccepted();
+            // The flag of the submission itself: the folder's one says nothing about this row.
+            $accepted = $assignment->getAccepted();
             if (($can_read && $accepted) ||
                 $is_author ||
                 ($is_allowed_to_edit || api_is_drh())
@@ -2214,13 +2229,13 @@ function get_work_user_list(
                 // File name.
                 $linkToDownload = '';
                 // If URL is present then there's a file to download keep BC.
-                if ($studentPublication->getContainsFile()) {
+                if ($assignment->getContainsFile()) {
                     $downloadUrl = $repo->getResourceFileDownloadUrl($assignment).'?'.api_get_cidreq();
                     $linkToDownload = '<a href="'.$downloadUrl.'">'.$saveIcon.'</a> ';
                 }
 
                 $feedback = '';
-                $count = count($studentPublication->getComments()); // getWorkCommentCount($item_id, $course_info);
+                $count = count($assignment->getComments()); // getWorkCommentCount($item_id, $course_info);
                 if (null !== $count && !empty($count)) {
                     if ($qualification_exists) {
                         $feedback .= ' ';
@@ -2251,8 +2266,8 @@ function get_work_user_list(
                 $work['qualification_only'] = $qualification_string;
 
                 // Date.
-                $sendDate = $studentPublication->getSentDate();
-                $sendDateToString = $studentPublication->getSentDate()->format('Y-m-d H:i:s');
+                $sendDate = $assignment->getSentDate();
+                $sendDateToString = $sendDate->format('Y-m-d H:i:s');
 
                 $work_date = api_get_local_time($sendDate);
                 $date = date_to_str_ago($sendDate).' '.$work_date;
@@ -2373,13 +2388,13 @@ function get_work_user_list(
 
                     if ($assignment->getAccepted()) {
                         $action .= '<a
-                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=make_invisible&item_id='.$item_id.'"
+                            href="'.workActionUrl($url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=make_invisible&item_id='.$item_id).'"
                             title="'.get_lang('invisible').'" >'.
                             Display::getMdiIcon(ActionIcon::INVISIBLE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('invisible')).
                             '</a>';
                     } else {
                         $action .= '<a
-                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=make_visible&item_id='.$item_id.'"
+                            href="'.workActionUrl($url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=make_visible&item_id='.$item_id).'"
                             title="'.get_lang('Visible').'" >'.
                             Display::getMdiIcon(ActionIcon::VISIBLE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Visible')).
                             '</a> ';
@@ -2389,7 +2404,7 @@ function get_work_user_list(
                         $action .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon-disabled', null, ICON_SIZE_SMALL, get_lang('Delete'));
                     } else {
                         $action .= '<a
-                            href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete&item_id='.$item_id.'"
+                            href="'.workActionUrl($url.'work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete&item_id='.$item_id).'"
                             onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;"
                             title="'.get_lang('Delete').'" >'.
                             Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
@@ -2410,7 +2425,7 @@ function get_work_user_list(
                                 '</a>';
                         }
                         $action .= ' <a
-                            href="'.$url.'work_list.php?'.api_get_cidreq().'&action=delete&item_id='.$item_id.'&id='.$workId.'"
+                            href="'.workActionUrl($url.'work_list.php?'.api_get_cidreq().'&action=delete&item_id='.$item_id.'&id='.$workId).'"
                             onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;"
                             title="'.get_lang('Delete').'"  >'.
                             Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';
@@ -2470,6 +2485,10 @@ function get_work_user_list(
     }
 }
 
+/**
+ * @deprecated No caller, and its SQL reads the removed work.c_id/session_id/id/url columns (it always fails):
+ *             getPendingWorkList() replaced it.
+ */
 function getAllWork(
     $start,
     $limit,
@@ -2942,6 +2961,42 @@ function getAllWork(
 }
 
 /**
+ * The (course id, session id) pairs where the user is a coach: course coach of the course in the session, or
+ * general coach of a session (every course of it). Sessions are restricted to the current access URL when there
+ * are several.
+ *
+ * @return array<int, array{0: int, 1: int}>
+ */
+function getPendingWorkCoachContexts(int $userId): array
+{
+    $urlJoinCourseCoach = '';
+    $urlJoinGeneralCoach = '';
+    $accessUrlUtil = Container::getAccessUrlUtil();
+    if ($accessUrlUtil->isMultiple()) {
+        $accessUrlId = (int) $accessUrlUtil->getCurrent()->getId();
+        $urlJoinCourseCoach = ' INNER JOIN access_url_rel_session url ON url.session_id = scu.session_id AND url.access_url_id = '.$accessUrlId;
+        $urlJoinGeneralCoach = ' INNER JOIN access_url_rel_session url ON url.session_id = sru.session_id AND url.access_url_id = '.$accessUrlId;
+    }
+
+    $sql = 'SELECT scu.c_id, scu.session_id
+            FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' scu'.$urlJoinCourseCoach.'
+            WHERE scu.user_id = '.$userId.' AND scu.status = '.SessionEntity::COURSE_COACH.'
+            UNION
+            SELECT src.c_id, src.session_id
+            FROM '.Database::get_main_table(TABLE_MAIN_SESSION_USER).' sru
+            INNER JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE).' src ON src.session_id = sru.session_id'.$urlJoinGeneralCoach.'
+            WHERE sru.user_id = '.$userId.' AND sru.relation_type = '.SessionEntity::GENERAL_COACH;
+
+    $contexts = [];
+    $result = Database::query($sql);
+    while ($row = Database::fetch_assoc($result)) {
+        $contexts[] = [(int) $row['c_id'], (int) $row['session_id']];
+    }
+
+    return $contexts;
+}
+
+/**
  * Returns pending assignment submissions for the global pending assignments page.
  *
  * This function is adapted to the Chamilo 2 resource model:
@@ -3031,6 +3086,12 @@ function getPendingWorkList(
                 continue;
             }
 
+            // get_courses_list_by_user_id() lists every course the user belongs to: only the ones he
+            // teaches may expose the work of their learners (a teacher can be a learner elsewhere).
+            if (!CourseManager::isCourseTeacher($userId, $teacherCourseId)) {
+                continue;
+            }
+
             if (0 === $teacherSessionId && $showAllSessionAssignmentsFromBaseCourse) {
                 $contextConditions[] = '(rl.c_id = '.$teacherCourseId.')';
 
@@ -3042,6 +3103,16 @@ function getPendingWorkList(
             } else {
                 $contextConditions[] = '(rl.c_id = '.$teacherCourseId.' AND rl.session_id IS NULL)';
             }
+        }
+
+        // Session coaches: get_courses_list_by_user_id() above is called without sessions, so the courses
+        // a user only coaches inside a session are added here (course coach, general coach).
+        foreach (getPendingWorkCoachContexts($userId) as [$coachCourseId, $coachSessionId]) {
+            if (null !== $courseId && $coachCourseId !== $courseId) {
+                continue;
+            }
+
+            $contextConditions[] = '(rl.c_id = '.$coachCourseId.' AND rl.session_id = '.$coachSessionId.')';
         }
 
         if (empty($contextConditions)) {
@@ -3363,6 +3434,9 @@ function sendEmailToStudentsOnHomeworkCreation($workId, $courseId, $sessionId = 
  * @param string $url
  *
  * @return bool
+ *
+ * @deprecated Works no longer have id/url columns, so the query always throws and nothing calls it. Use
+ *   checkExistingWorkFileName() (by title) instead.
  */
 function is_work_exist_by_url($url)
 {
@@ -3420,6 +3494,9 @@ function user_is_author($itemId, $userId = null, $courseId = 0, $sessionId = 0)
         $repo = Container::getStudentPublicationRepository();
         /** @var CStudentPublication $studentPublication */
         $studentPublication = $repo->find($itemId);
+        if (null === $studentPublication) {
+            return false;
+        }
         if ($studentPublication->getResourceNode()->getCreator()->getId() === $userId) {
             $isAuthor = true;
         }
@@ -3597,7 +3674,7 @@ function display_list_users_without_publication($task_id, $studentId = null)
 /**
  * @param int $documentId
  * @param int $workId
- * @param int $courseId
+ * @param int $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  */
 function addDocumentToWork($documentId, $workId, $courseId)
 {
@@ -3605,7 +3682,6 @@ function addDocumentToWork($documentId, $workId, $courseId)
     $params = [
         'document_id' => $documentId,
         'work_id' => $workId,
-        'c_id' => $courseId,
     ];
     Database::insert($table, $params);
 }
@@ -3613,7 +3689,7 @@ function addDocumentToWork($documentId, $workId, $courseId)
 /**
  * @param int $documentId
  * @param int $workId
- * @param int $courseId
+ * @param int $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  *
  * @return array
  */
@@ -3621,7 +3697,7 @@ function getDocumentToWork($documentId, $workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
     $params = [
-        'document_id = ? and work_id = ? and c_id = ?' => [$documentId, $workId, $courseId],
+        'document_id = ? and work_id = ?' => [$documentId, $workId],
     ];
 
     return Database::select('*', $table, ['where' => $params]);
@@ -3648,18 +3724,23 @@ function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $
     $userId = (int) $userId;
     $sessionId = (int) $sessionId;
     $active = (int) $active;
-    $sessionCondition = api_get_session_condition($sessionId);
+    // Course and session live on the resource link of the work, not on the table itself.
+    $sessionCondition = api_get_session_condition($sessionId, true, false, 'link.session_id');
 
     $sql = "SELECT w.* FROM $work w
             INNER JOIN $workRel rel
             ON (w.parent_id = rel.work_id)
+            INNER JOIN resource_link link
+            ON (link.resource_node_id = w.resource_node_id)
             WHERE
                 w.document_id = $documentId AND
                 w.parent_id = $workId AND
-                w.c_id = $courseId
-                $sessionCondition AND
-                user_id = $userId AND
-                active = $active
+                link.c_id = $courseId AND
+                w.user_id = $userId AND
+                w.active = $active
+                $sessionCondition
+            ORDER BY w.iid DESC
+            LIMIT 1
             ";
 
     $result = Database::query($sql);
@@ -3673,7 +3754,7 @@ function getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $
 
 /**
  * @param int $workId
- * @param int $courseId
+ * @param int $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  *
  * @return array
  */
@@ -3690,13 +3771,13 @@ function getAllDocumentToWork($workId, $courseId)
 /**
  * @param int $documentId
  * @param int $workId
- * @param int $courseId
+ * @param int $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  */
 function deleteDocumentToWork($documentId, $workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
     $params = [
-        'document_id = ? and work_id = ? and c_id = ?' => [$documentId, $workId, $courseId],
+        'document_id = ? and work_id = ?' => [$documentId, $workId],
     ];
     Database::delete($table, $params);
 }
@@ -3704,7 +3785,7 @@ function deleteDocumentToWork($documentId, $workId, $courseId)
 /**
  * @param int $userId
  * @param int $workId
- * @param int $courseId
+ * @param int $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  */
 function addUserToWork($userId, $workId, $courseId)
 {
@@ -3712,7 +3793,6 @@ function addUserToWork($userId, $workId, $courseId)
     $params = [
         'user_id' => $userId,
         'work_id' => $workId,
-        'c_id' => $courseId,
     ];
     Database::insert($table, $params);
 }
@@ -3720,7 +3800,7 @@ function addUserToWork($userId, $workId, $courseId)
 /**
  * @param int $userId
  * @param int $workId
- * @param int $courseId
+ * @param int $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  *
  * @return array
  */
@@ -3728,7 +3808,7 @@ function getUserToWork($userId, $workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
     $params = [
-        'user_id = ? and work_id = ? and c_id = ?' => [$userId, $workId, $courseId],
+        'user_id = ? and work_id = ?' => [$userId, $workId],
     ];
 
     return Database::select('*', $table, ['where' => $params]);
@@ -3736,7 +3816,7 @@ function getUserToWork($userId, $workId, $courseId)
 
 /**
  * @param int  $workId
- * @param int  $courseId
+ * @param int  $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  * @param bool $getCount
  *
  * @return array|int
@@ -3768,13 +3848,13 @@ function getAllUserToWork($workId, $courseId, $getCount = false)
 /**
  * @param int $userId
  * @param int $workId
- * @param int $courseId
+ * @param int $courseId unused: the relation tables have no c_id column any more, a work iid is unique platform-wide
  */
 function deleteUserToWork($userId, $workId, $courseId)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
     $params = [
-        'user_id = ? and work_id = ? and c_id = ?' => [$userId, $workId, $courseId],
+        'user_id = ? and work_id = ?' => [$userId, $workId],
     ];
     Database::delete($table, $params);
 }
@@ -4015,7 +4095,8 @@ function getTotalWorkComment($workList, $courseInfo = [])
 
     $count = 0;
     foreach ($workList as $data) {
-        $count += getWorkCommentCount($data['id'], $courseInfo);
+        // get_work_user_list() rows are keyed by 'iid'.
+        $count += getWorkCommentCount($data['iid'] ?? $data['id'], $courseInfo);
     }
 
     return $count;
@@ -4038,15 +4119,16 @@ function getWorkCommentCount($id, $courseInfo = [])
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
     $id = (int) $id;
 
+    // The comment table has no c_id column any more: the work iid is unique platform-wide.
     $sql = "SELECT count(*) as count
             FROM $commentTable
-            WHERE work_id = $id AND c_id = ".$courseInfo['real_id'];
+            WHERE work_id = $id";
 
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
         $comment = Database::fetch_array($result);
 
-        return $comment['count'];
+        return (int) $comment['count'];
     }
 
     return 0;
@@ -4079,16 +4161,19 @@ function getWorkCommentCountFromParent(
     $work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
     $parentId = (int) $parentId;
-    $sessionCondition = api_get_session_condition($sessionId, false, false, 'w.session_id');
+    // Course and session live on the resource link of the work, not on the table itself.
+    $sessionCondition = api_get_session_condition($sessionId, true, false, 'link.session_id');
 
-    $sql = "SELECT count(*) as count
+    $sql = "SELECT count(DISTINCT c.iid) as count
             FROM $commentTable c
             INNER JOIN $work w
-            ON c.c_id = w.c_id AND w.iid = c.work_id
+            ON w.iid = c.work_id
+            INNER JOIN resource_link link
+            ON link.resource_node_id = w.resource_node_id
             WHERE
-                $sessionCondition AND
-                parent_id = $parentId AND
-                w.c_id = ".$courseInfo['real_id'];
+                w.parent_id = $parentId AND
+                link.c_id = ".(int) $courseInfo['real_id']."
+                $sessionCondition";
 
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
@@ -4107,7 +4192,11 @@ function getWorkCommentCountFromParent(
  * @param array $courseInfo
  * @param int   $sessionId
  *
- * @return int
+ * @return array The work row ([] when none)
+ *
+ * @deprecated No caller (only a commented-out one). Despite its name it returns the OLDEST work that has a
+ *             comment (ORDER BY sent_date ascending): use getLastWorkStudentFromParentByUser() or fix the order
+ *             before reviving it.
  */
 function getLastWorkStudentFromParent(
     $parentId,
@@ -4125,20 +4214,24 @@ function getLastWorkStudentFromParent(
     }
 
     $work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $sessionCondition = api_get_session_condition($sessionId, false);
+    // Course and session live on the resource link of the work, not on the table itself.
+    $sessionCondition = api_get_session_condition($sessionId, true, false, 'link.session_id');
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
     $parentId = (int) $parentId;
 
     $sql = "SELECT w.*
-            FROM $commentTable c INNER JOIN $work w
-            ON c.c_id = w.c_id AND w.iid = c.work_id
+            FROM $commentTable c
+            INNER JOIN $work w
+            ON w.iid = c.work_id
+            INNER JOIN resource_link link
+            ON link.resource_node_id = w.resource_node_id
             WHERE
-                $sessionCondition AND
-                parent_id = $parentId AND
-                w.c_id = ".$courseInfo['real_id'].'
+                w.parent_id = $parentId AND
+                link.c_id = ".(int) $courseInfo['real_id']."
+                $sessionCondition
             ORDER BY w.sent_date
             LIMIT 1
-            ';
+            ";
 
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
@@ -4179,20 +4272,23 @@ function getLastWorkStudentFromParentByUser(
     if (empty($parentInfo)) {
         return false;
     }
-    $parentId = $parentInfo['iid'];
+    $parentId = (int) $parentInfo['iid'];
 
-    $sessionCondition = api_get_session_condition($sessionId);
+    // Course and session live on the resource link of the work, not on the table itself.
+    $sessionCondition = api_get_session_condition($sessionId, true, false, 'link.session_id');
 
-    $sql = "SELECT *
-            FROM $work
+    $sql = "SELECT w.*
+            FROM $work w
+            INNER JOIN resource_link link
+            ON link.resource_node_id = w.resource_node_id
             WHERE
-                user_id = $userId
-                $sessionCondition AND
-                parent_id = $parentId AND
-                c_id = ".$courseInfo['real_id'].'
-            ORDER BY sent_date DESC
+                w.user_id = $userId AND
+                w.parent_id = $parentId AND
+                link.c_id = ".(int) $courseInfo['real_id']."
+                $sessionCondition
+            ORDER BY w.sent_date DESC
             LIMIT 1
-            ';
+            ";
     $result = Database::query($sql);
     if (Database::num_rows($result)) {
         $work = Database::fetch_assoc($result);
@@ -4262,7 +4358,7 @@ function getWorkComment(CStudentPublicationComment $commentEntity, array $course
             $workId = $commentEntity->getPublication()->getIid();
             $filePath = '';
             $deleteUrl = api_get_path(WEB_CODE_PATH).
-                'work/view.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_attachment&comment_id='.$id;
+                workActionUrl('work/view.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_attachment&comment_id='.$id);
             $fileName = $commentEntity->getResourceNode()->getResourceFiles()->first()->getTitle();
         }
         $comment['comment'] = $commentEntity->getComment();
@@ -4284,13 +4380,12 @@ function deleteCommentFile($id, $courseInfo = [])
 {
     $repo = Container::getStudentPublicationCommentRepository();
     $em = Database::getManager();
-    $criteria = [
-        'iid' => $id,
-        'cId' => $courseInfo['real_id'],
-    ];
 
-    /** @var CStudentPublicationComment $commentEntity */
-    $commentEntity = $repo->findOneBy($criteria);
+    /** @var CStudentPublicationComment|null $commentEntity */
+    $commentEntity = $repo->find((int) $id);
+    if (null === $commentEntity) {
+        return;
+    }
 
     foreach ($commentEntity->getResourceNode()->getResourceFiles() as $file) {
         $em->remove($file);
@@ -4495,6 +4590,7 @@ function getWorkCommentForm(CStudentPublication $work, $workParent)
         $form->addTextarea('comment', get_lang('Comment'), ['rows' => 5]);
     }
     $form->addElement('hidden', 'iid', $id);
+    $form->addElement('hidden', 'work_sec_token', workActionToken());
 
     if (api_is_allowed_to_edit()) {
         $form->addCheckBox(
@@ -4881,6 +4977,11 @@ function processWorkForm(
     $sessionId = (int) $sessionId;
     $userId = (int) $userId;
 
+    // The assignment comes from the request: a submission can only be added to an assignment of this course.
+    if (!workIsInCourse((int) ($workInfo['iid'] ?? 0), (int) $courseId)) {
+        return null;
+    }
+
     $extension = '';
     if (isset($values['extension'])) {
         $extension = $values['extension'];
@@ -5208,11 +5309,10 @@ function addDir($formValues, $user_id, $courseInfo, $groupId, $sessionId = 0)
 function agendaExistsForWork($workId, $courseInfo)
 {
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-    $courseId = $courseInfo['real_id'];
     $workId = (int) $workId;
 
     $sql = "SELECT add_to_calendar FROM $workTable
-            WHERE c_id = $courseId AND publication_id = ".$workId;
+            WHERE publication_id = ".$workId;
     $res = Database::query($sql);
     if (Database::num_rows($res)) {
         $row = Database::fetch_assoc($res);
@@ -5473,6 +5573,10 @@ function deleteAllWorkPerUser(User $user, Course $course)
         /** @var CStudentPublication[] $results */
         $results = $workData['results'];
         foreach ($results as $userResult) {
+            // getStudentPublicationByUser() lists the whole course: only this user's own submissions go.
+            if ($userResult->getUser()->getId() !== $user->getId()) {
+                continue;
+            }
             $result = deleteWorkItem($userResult->getIid(), $course);
             if ($result) {
                 $deletedItems[] = $userResult;
@@ -5497,6 +5601,11 @@ function deleteWorkItem($item_id, Course $course)
         return false;
     }
 
+    // The id comes from the request: it must be a submission of the course it is deleted from.
+    if (!workIsInCourse($item_id, (int) $course->getId())) {
+        return false;
+    }
+
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $is_allowed_to_edit = api_is_allowed_to_edit();
     $file_deleted = false;
@@ -5504,13 +5613,18 @@ function deleteWorkItem($item_id, Course $course)
     $work_data = get_work_data_by_id($item_id);
     $locked = api_resource_is_locked_by_gradebook($work_data['parent_id'], LINK_STUDENTPUBLICATION);
     $course_id = $course->getId();
+    $sessionId = api_get_session_id();
+    // get_work_data_by_id() does not carry the reviewer: a submission that has been reviewed is frozen.
+    $qualificatorId = Database::fetch_array(
+        Database::query("SELECT qualificator_id FROM $work_table WHERE iid = $item_id")
+    )['qualificator_id'] ?? 0;
 
     if (($is_allowed_to_edit && false == $locked) ||
         (
             false == $locked &&
             $is_author &&
             1 == api_get_course_setting('student_delete_own_publication') &&
-            0 == $work_data['qualificator_id']
+            0 == (int) $qualificatorId
         )
     ) {
         // We found the current user is the author
@@ -5536,7 +5650,7 @@ function deleteWorkItem($item_id, Course $course)
                     $row['user_id'],
                     false,
                     $course_id,
-                    $row['session_id']
+                    $sessionId
                 );
                 // We're only interested in deleting the time if this is the latest work sent
                 if (1 == count($userWorks)) {
@@ -5557,7 +5671,6 @@ function deleteWorkItem($item_id, Course $course)
                     }
                     // If no time was defined, or a time of "0" was set, do nothing
                     if (!empty($workingTime)) {
-                        $sessionId = empty($row['session_id']) ? 0 : $row['session_id'];
                         // Getting false from the following call would mean the
                         // time record
                         Event::eventRemoveVirtualCourseTime(
@@ -5798,13 +5911,19 @@ function makeVisible($itemId, $course_info)
         return false;
     }
 
+    // The id comes from the request: it must be a submission of the course it is changed from.
+    if (!workIsInCourse($itemId, (int) ($course_info['real_id'] ?? 0))) {
+        return false;
+    }
+
     $repo = Container::getStudentPublicationRepository();
     /** @var CStudentPublication $studentPublication */
     $studentPublication = $repo->find($itemId);
-    if ($studentPublication) {
-        $studentPublication->setAccepted(1);
-        $repo->update($studentPublication);
+    if (null === $studentPublication) {
+        return false;
     }
+    $studentPublication->setAccepted(1);
+    $repo->update($studentPublication);
     /*
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_id = $course_info['real_id'];
@@ -5821,7 +5940,7 @@ function makeVisible($itemId, $course_info)
  * @param int   $itemId
  * @param array $course_info
  *
- * @return int
+ * @return bool
  */
 function makeInvisible($itemId, $course_info)
 {
@@ -5830,13 +5949,19 @@ function makeInvisible($itemId, $course_info)
         return false;
     }
 
+    // The id comes from the request: it must be a submission of the course it is changed from.
+    if (!workIsInCourse($itemId, (int) ($course_info['real_id'] ?? 0))) {
+        return false;
+    }
+
     $repo = Container::getStudentPublicationRepository();
     /** @var CStudentPublication $studentPublication */
     $studentPublication = $repo->find($itemId);
-    if ($studentPublication) {
-        $studentPublication->setAccepted(0);
-        $repo->update($studentPublication);
+    if (null === $studentPublication) {
+        return false;
     }
+    $studentPublication->setAccepted(0);
+    $repo->update($studentPublication);
 
     /*api_item_property_update(
         $course_info,
@@ -5865,7 +5990,8 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
     $folders = [];
     $session_id = (int) $sessionId;
     $groupId = (int) $groupId;
-    $sessionCondition = empty($sessionId) ? ' AND (session_id = 0 OR session_id IS NULL) ' : " AND session_id='".$session_id."'";
+    // Course and session live on the resource link of the work, not on the table itself.
+    $sessionCondition = api_get_session_condition($session_id, true, false, 'link.session_id');
 
     $groupIid = 0;
     if ($groupId) {
@@ -5873,18 +5999,19 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
         $groupIid = $groupInfo['iid'];
     }
 
-    $sql = "SELECT iid, url, title
-            FROM $work_table
+    $sql = "SELECT DISTINCT w.iid, w.title
+            FROM $work_table w
+            INNER JOIN resource_link link
+            ON (link.resource_node_id = w.resource_node_id)
             WHERE
-                c_id = $courseId AND
-                active IN (0, 1) AND
-                parent_id = 0 AND
-                post_group_id = $groupIid
+                link.c_id = ".(int) $courseId." AND
+                w.active IN (0, 1) AND
+                (w.parent_id IS NULL OR w.parent_id = 0) AND
+                (w.post_group_id = ".(int) $groupIid." OR w.post_group_id IS NULL AND 0 = ".(int) $groupIid.")
                 $sessionCondition";
     $res = Database::query($sql);
     while ($folder = Database::fetch_array($res)) {
-        $title = empty($folder['title']) ? basename($folder['url']) : $folder['title'];
-        $folders[$folder['iid']] = $title;
+        $folders[$folder['iid']] = (string) $folder['title'];
     }
 
     return build_work_move_to_selector($folders, $path, $item_id);
@@ -6126,8 +6253,6 @@ function downloadFile($id, $course_info, $isCorrection)
 function getFile($id, $course_info, $download = true, $isCorrection = false, $forceAccessForCourseAdmins = false)
 {
     $file = getFileContents($id, $course_info, 0, $isCorrection, $forceAccessForCourseAdmins);
-    var_dump($file);
-    exit;
     if (!empty($file) && isset($file['entity'])) {
         /** @var CStudentPublication $studentPublication */
         $studentPublication = $file['entity'];
@@ -6154,6 +6279,12 @@ function getFileContents($id, $courseInfo, $sessionId = 0, $correction = false, 
     if (empty($courseInfo) || empty($id)) {
         return false;
     }
+
+    // The id comes from the request: it must be a submission of the course the file is requested from.
+    if (!workIsInCourse($id, (int) $courseInfo['real_id'])) {
+        return false;
+    }
+
     if (empty($sessionId)) {
         $sessionId = api_get_session_id();
     }
@@ -6576,6 +6707,11 @@ function protectWork($courseInfo, $workId)
         api_not_allowed(true);
     }
 
+    // The role checks below are about the current course: the work must be one of its (or its session's).
+    if (!workBelongsToCourse((int) $workId, (int) $courseInfo['real_id'], $sessionId)) {
+        api_not_allowed(true);
+    }
+
     if (api_is_platform_admin() || api_is_allowed_to_edit()) {
         return true;
     }
@@ -6637,4 +6773,231 @@ function workGetExtraFieldData($workId)
     }
 
     return $result;
+}
+
+/**
+ * Tells whether a work (folder or publication) is published in the given course, and session when given.
+ * The relation helpers (assigned users/documents, move form) do not scope by course any more, so every page that
+ * takes a work id from the request must call this before reading or writing through them.
+ * Content of the base course is visible inside a session; session content is not base course content.
+ */
+function workBelongsToCourse(int $workId, int $courseId, ?int $sessionId = null): bool
+{
+    if ($workId <= 0 || $courseId <= 0) {
+        return false;
+    }
+
+    $sessionId = (int) $sessionId;
+    $sessionCondition = $sessionId > 0
+        ? 'AND (link.session_id IS NULL OR link.session_id = :sid)'
+        : 'AND (link.session_id IS NULL OR link.session_id = 0)';
+    $params = ['wid' => $workId, 'cid' => $courseId];
+    if ($sessionId > 0) {
+        $params['sid'] = $sessionId;
+    }
+
+    $found = Database::getManager()->getConnection()->fetchOne(
+        'SELECT w.iid
+         FROM c_student_publication w
+         INNER JOIN resource_link link ON link.resource_node_id = w.resource_node_id
+         WHERE w.iid = :wid AND link.c_id = :cid '.$sessionCondition.'
+         LIMIT 1',
+        $params
+    );
+
+    return false !== $found;
+}
+
+/**
+ * Tells whether $workId is $ancestorId itself or sits anywhere below it in the publication parent chain
+ * (used to refuse moving a folder into itself or one of its own descendants).
+ */
+function workIsSameOrDescendantOf(int $workId, int $ancestorId): bool
+{
+    $connection = Database::getManager()->getConnection();
+    $seen = [];
+    $current = $workId;
+    while ($current > 0 && !isset($seen[$current])) {
+        if ($current === $ancestorId) {
+            return true;
+        }
+        $seen[$current] = true;
+        $parent = $connection->fetchOne('SELECT parent_id FROM c_student_publication WHERE iid = ?', [$current]);
+        $current = (false === $parent || null === $parent) ? 0 : (int) $parent;
+    }
+
+    return false;
+}
+
+/**
+ * Tells whether a course document is published in the given course (and session when given); same rule as
+ * workBelongsToCourse(), used before attaching a document to an assignment.
+ */
+function workDocumentBelongsToCourse(int $documentId, int $courseId, ?int $sessionId = null): bool
+{
+    if ($documentId <= 0 || $courseId <= 0) {
+        return false;
+    }
+
+    $sessionId = (int) $sessionId;
+    $sessionCondition = $sessionId > 0
+        ? 'AND (link.session_id IS NULL OR link.session_id = :sid)'
+        : 'AND (link.session_id IS NULL OR link.session_id = 0)';
+    $params = ['did' => $documentId, 'cid' => $courseId];
+    if ($sessionId > 0) {
+        $params['sid'] = $sessionId;
+    }
+
+    $found = Database::getManager()->getConnection()->fetchOne(
+        'SELECT d.iid
+         FROM c_document d
+         INNER JOIN resource_link link ON link.resource_node_id = d.resource_node_id
+         WHERE d.iid = :did AND link.c_id = :cid '.$sessionCondition.'
+         LIMIT 1',
+        $params
+    );
+
+    return false !== $found;
+}
+
+/**
+ * Course-level variant of workBelongsToCourse(): the work is published in the course, whatever the session.
+ * Used inside the shared helpers (delete, visibility, upload) that can be called with any session context
+ * and must nevertheless never cross the course boundary.
+ */
+function workIsInCourse(int $workId, int $courseId): bool
+{
+    if ($workId <= 0 || $courseId <= 0) {
+        return false;
+    }
+
+    $found = Database::getManager()->getConnection()->fetchOne(
+        'SELECT w.iid
+         FROM c_student_publication w
+         INNER JOIN resource_link link ON link.resource_node_id = w.resource_node_id
+         WHERE w.iid = :wid AND link.c_id = :cid
+         LIMIT 1',
+        ['wid' => $workId, 'cid' => $courseId]
+    );
+
+    return false !== $found;
+}
+
+/**
+ * Tells whether the submission $itemId is a direct child of the folder $folderId (the folder an edit/view page
+ * says it was opened from).
+ */
+function workItemIsInFolder(int $itemId, int $folderId): bool
+{
+    if ($itemId <= 0 || $folderId <= 0) {
+        return false;
+    }
+
+    $parent = Database::getManager()->getConnection()->fetchOne(
+        'SELECT parent_id FROM c_student_publication WHERE iid = ?',
+        [$itemId]
+    );
+
+    return false !== $parent && null !== $parent && (int) $parent === $folderId;
+}
+
+/**
+ * Tells whether the attachment of the comment $commentId may be removed by $userId: the comment must belong to
+ * the work $workId the page was opened on, and the user must be its author or a manager of the course.
+ */
+function workCommentFileIsDeletable(int $commentId, int $workId, int $userId, bool $isManager): bool
+{
+    if ($commentId <= 0 || $workId <= 0) {
+        return false;
+    }
+
+    $row = Database::getManager()->getConnection()->fetchAssociative(
+        'SELECT work_id, user_id FROM c_student_publication_comment WHERE iid = ?',
+        [$commentId]
+    );
+    if (false === $row || (int) $row['work_id'] !== $workId) {
+        return false;
+    }
+
+    return $isManager || (int) $row['user_id'] === $userId;
+}
+
+/**
+ * Tells whether $userId is one of the learners the "Add a user" page of an assignment offers in the course (or in
+ * the course of the session): only those may be assigned to an assignment.
+ */
+function workUserIsStudentOfCourse(int $userId, int $courseId, int $sessionId = 0): bool
+{
+    if ($userId <= 0 || $courseId <= 0) {
+        return false;
+    }
+
+    $connection = Database::getManager()->getConnection();
+    if ($sessionId > 0) {
+        $found = $connection->fetchOne(
+            'SELECT id FROM session_rel_course_rel_user WHERE user_id = ? AND c_id = ? AND session_id = ? LIMIT 1',
+            [$userId, $courseId, $sessionId]
+        );
+    } else {
+        $found = $connection->fetchOne(
+            'SELECT id FROM course_rel_user WHERE user_id = ? AND c_id = ? AND status = ? AND relation_type <> ? LIMIT 1',
+            [$userId, $courseId, STUDENT, COURSE_RELATION_TYPE_RRHH]
+        );
+    }
+
+    return false !== $found;
+}
+
+/**
+ * Token of the state-changing links of the assignments pages (delete, visibility, add/remove user or document...).
+ * Legacy pages under public/main have no resolved route, so CsrfProtectionListener does not cover them and they keep
+ * their own token, as work_missing.php does. It uses its own namespace so that opening another page (which rotates
+ * the default "sec_token") does not invalidate the links of a page already open.
+ */
+function workActionToken(): string
+{
+    return Security::get_existing_token('work');
+}
+
+/**
+ * Checks the token sent by a state-changing request of the assignments pages ($requestType: get, post or request).
+ */
+function workActionTokenIsValid(string $requestType = 'get'): bool
+{
+    return Security::check_token($requestType, null, 'work');
+}
+
+/**
+ * Appends the action token to a link that already carries a query string.
+ */
+function workActionUrl(string $url): string
+{
+    return $url.'&work_sec_token='.workActionToken();
+}
+
+/**
+ * Orders a repository query by a column name that came from the request: only the names of $columnMap
+ * (request name => DQL field) can reach the query, anything else falls back to the legacy default (newest
+ * first). A field of the 'work_user' or 'work_assignment' alias makes that relation join in.
+ *
+ * @param array<string, string> $columnMap
+ */
+function workApplyOrder(QueryBuilder $qb, ?string $column, ?string $direction, array $columnMap): void
+{
+    if (!empty($column) && isset($columnMap[$column])) {
+        $field = $columnMap[$column];
+        $order = 'asc' === strtolower((string) $direction) ? 'ASC' : 'DESC';
+    } else {
+        $field = 'resource.sentDate';
+        $order = 'DESC';
+    }
+
+    if (str_starts_with($field, 'work_user.')) {
+        $qb->innerJoin('resource.user', 'work_user');
+    } elseif (str_starts_with($field, 'work_assignment.')) {
+        $qb->leftJoin('resource.assignment', 'work_assignment');
+    }
+
+    $qb->addOrderBy($field, $order);
+    $qb->addOrderBy('resource.iid', 'ASC');
 }

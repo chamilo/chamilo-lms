@@ -58,13 +58,11 @@
       </Message>
       <div class="formgroup-inline">
         <div class="field">
-          <BaseAppLink url="../../">
-            <Button
-              :label="t('Go to your newly created portal.')"
-              class="p-button-success"
-              type="button"
-            />
-          </BaseAppLink>
+          <BaseButton
+            :label="t('Go to your newly created portal.')"
+            to-url="../../"
+            type="success"
+          />
         </div>
       </div>
     </div>
@@ -75,9 +73,8 @@
 import { inject } from "vue"
 import { useI18n } from "vue-i18n"
 import Message from "primevue/message"
-import Button from "primevue/button"
 import SectionHeader from "../layout/SectionHeader.vue"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
 

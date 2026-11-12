@@ -13,7 +13,7 @@
     >
       <a
         v-text="t('Read the installation guide')"
-        href="/main/documentation/installation_guide.html"
+        href="../../documentation/installation_guide.html"
         target="_blank"
         rel="noopener noreferrer"
       />
@@ -25,7 +25,7 @@
     >
       {{ t("If you plan to upgrade from an older version of Chamilo, you might want to") }}
       <a
-        href="/main/documentation/changelog.html"
+        href="../../documentation/changelog.html"
         target="_blank"
         v-text="t('have a look at the changelog')"
       />
@@ -232,39 +232,34 @@
       <br />
 
       <!-- form inputs for old version path -->
-      <div class="field">
-        <FloatLabel variant="on">
-          <InputText
-            id="updatePath"
-            v-model="updatePathInput"
-            autocomplete="off"
-            size="50"
-          />
-          <label v-text="t('Old version\'s root path')" />
-        </FloatLabel>
-        <input
-          :value="updatePathInput"
-          name="updatePath"
-          type="hidden"
-        />
-      </div>
+      <BaseInputText
+        id="updatePath"
+        v-model="updatePathInput"
+        :label="t('Old version\'s root path')"
+        autocomplete="off"
+      />
+      <input
+        :value="updatePathInput"
+        name="updatePath"
+        type="hidden"
+      />
 
       <div class="formgroup-inline">
         <div class="field">
-          <Button
+          <BaseButton
             :label="t('Back')"
-            class="p-button-outlined p-button-plain"
-            icon="mdi mdi-page-previous"
+            icon="back"
+            is-submit
             name="step1"
-            type="submit"
+            type="black"
           />
         </div>
-        <Button
+        <BaseButton
           :label="t('Next')"
           :name="installerData.stepData.step2_update_6 ? 'step2_update_6' : 'step2_update_8'"
-          class="p-button-secondary"
-          icon="mdi mdi-page-next"
-          type="submit"
+          icon="next"
+          is-submit
+          type="secondary"
         />
         <input
           id="is_executable"
@@ -287,7 +282,7 @@
             )
           }}
           <a
-            href="/main/documentation/installation_guide.html"
+            href="../../documentation/installation_guide.html"
             target="_blank"
             rel="noopener noreferrer"
             v-text="t('Installation guide')"
@@ -337,31 +332,29 @@
       <div class="formgroup-inline">
         <!-- And now display the choice buttons (go back or install) -->
         <div class="field">
-          <Button
+          <BaseButton
             :label="t('Previous')"
-            class="p-button-outlined p-button-plain"
-            icon="mdi mdi-page-previous"
+            icon="back"
             name="step1"
-            type="button"
+            type="black"
             @click.prevent="goToIndex"
           />
         </div>
         <div class="field">
-          <Button
-            :disabled="installerData.stepData.installError || installerData.isUpdateAvailable"
+          <BaseButton
+            :disabled="Boolean(installerData.stepData.installError || installerData.isUpdateAvailable)"
             :label="t('New installation')"
-            class="p-button-success"
-            icon="mdi mdi-page-next"
+            icon="next"
+            is-submit
             name="step2_install"
-            type="submit"
+            type="success"
           />
         </div>
-        <Button
+        <BaseButton
           :label="t('Upgrade Chamilo LMS version')"
-          class="p-button-secondary"
-          icon="mdi mdi-page-next"
+          icon="next"
           name="step2_update_8"
-          type="button"
+          type="secondary"
           @click.prevent="goToUpgrade"
         />
         <input
@@ -381,10 +374,9 @@ import { inject, ref, watch } from "vue"
 
 import Message from "primevue/message"
 import Tag from "primevue/tag"
-import FloatLabel from "primevue/floatlabel"
-import InputText from "primevue/inputtext"
-import Button from "primevue/button"
 import SectionHeader from "../layout/SectionHeader.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseInputText from "../basecomponents/BaseInputText.vue"
 import BaseTag from "../basecomponents/BaseTag.vue"
 
 const { t } = useI18n()

@@ -44,11 +44,14 @@
         <div class="field text-body-2 flex items-center">
           <span v-if="!showAdminPass">********</span>
           <span v-else>{{ installerData.stepData.passForm }}</span>
-          <Button
-            icon="mdi mdi-eye"
-            class="p-button-text ms-2"
+          <BaseButton
+            :icon="showAdminPass ? 'eye-off' : 'eye-on'"
+            :label="showAdminPass ? t('Hide password') : t('Show password')"
+            class="ms-2"
+            only-icon
+            size="small"
+            type="primary-text"
             @click="toggleAdminPass"
-            :aria-label="showAdminPass ? t('Hide password') : t('Show password')"
           />
         </div>
         <div
@@ -247,13 +250,13 @@
 
     <div class="formgroup-inline">
       <div class="field">
-        <Button
+        <BaseButton
           v-if="!installerData.isUpdateAvailable"
           :label="t('Previous')"
-          class="p-button-outlined p-button-plain"
-          icon="mdi mdi-page-previous"
+          icon="back"
+          is-submit
           name="step4"
-          type="submit"
+          type="black"
         />
         <input
           id="is_executable"
@@ -267,14 +270,13 @@
           value="1"
         />
       </div>
-      <Button
+      <BaseButton
         id="button_step6"
+        :is-loading="loading"
         :label="installerData.isUpdateAvailable ? t('Update Chamilo') : t('Install Chamilo')"
-        :loading="loading"
-        class="p-button-success"
-        icon="mdi mdi-progress-download"
+        icon="download"
         name="button_step6"
-        type="button"
+        type="success"
         @click="btnStep6OnClick"
       />
     </div>
@@ -351,10 +353,9 @@
     </Message>
     <div class="formgroup-inline">
       <div class="field">
-        <Button
+        <BaseButton
           :label="t('Go to your newly created portal.')"
-          class="p-button-success"
-          type="button"
+          type="success"
           @click="btnFinishOnClick"
         />
       </div>
@@ -386,10 +387,10 @@
     </div>
     <div class="formgroup-inline">
       <div class="field">
-        <Button
+        <BaseButton
           :label="t('Contact support')"
-          class="p-button-danger mt-4"
-          type="button"
+          class="mt-4"
+          type="danger"
           @click="btnSupportOnClick"
         />
       </div>
@@ -402,10 +403,10 @@ import { inject, ref, computed } from "vue"
 import { useI18n } from "vue-i18n"
 
 import Message from "primevue/message"
-import Button from "primevue/button"
 import ProgressBar from "primevue/progressbar"
 import Dialog from "primevue/dialog"
 import SectionHeader from "../layout/SectionHeader.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
 

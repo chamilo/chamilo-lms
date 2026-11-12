@@ -21,56 +21,33 @@
       class="RequirementContent mb-4"
     />
 
-    <div class="field">
-      <FloatLabel variant="on">
-        <InputText
-          v-model="installerData.stepData.dbHostForm"
-          input-id="dbHostForm"
-          maxlength="50"
-          name="dbHostForm"
-          type="text"
-        />
-        <label
-          v-text="t('Database host')"
-          for="dbHostForm"
-        />
-      </FloatLabel>
-      <small v-text="t('ex. localhost')" />
-    </div>
+    <BaseInputText
+      id="dbHostForm"
+      v-model="installerData.stepData.dbHostForm"
+      :help-text="t('ex. localhost')"
+      :label="t('Database host')"
+      maxlength="50"
+      name="dbHostForm"
+    />
 
-    <div class="field">
-      <FloatLabel variant="on">
-        <InputText
-          v-model="installerData.stepData.dbPortForm"
-          input-id="dbPortForm"
-          maxlength="25"
-          name="dbPortForm"
-          type="number"
-        />
-        <label
-          v-text="t('Port')"
-          for="dbPortForm"
-        />
-      </FloatLabel>
-      <small v-text="t('ex. 3306')" />
-    </div>
+    <BaseInputText
+      id="dbPortForm"
+      v-model="installerData.stepData.dbPortForm"
+      :help-text="t('ex. 3306')"
+      :label="t('Port')"
+      maxlength="25"
+      name="dbPortForm"
+      type="number"
+    />
 
-    <div class="field">
-      <FloatLabel variant="on">
-        <InputText
-          v-model="installerData.stepData.dbUsernameForm"
-          input-id="dbUsernameForm"
-          maxlength="25"
-          name="dbUsernameForm"
-          type="text"
-        />
-        <label
-          v-text="t('Database user')"
-          for="dbUsernameForm"
-        />
-      </FloatLabel>
-      <small v-text="t('ex. root')" />
-    </div>
+    <BaseInputText
+      id="dbUsernameForm"
+      v-model="installerData.stepData.dbUsernameForm"
+      :help-text="t('ex. root')"
+      :label="t('Database user')"
+      maxlength="25"
+      name="dbUsernameForm"
+    />
 
     <div class="field">
       <FloatLabel variant="on">
@@ -89,40 +66,32 @@
       <small v-text="t('ex. {0}', [installerData.stepData.examplePassword])" />
     </div>
 
-    <div class="field">
-      <FloatLabel variant="on">
-        <InputText
-          v-model="installerData.stepData.dbNameForm"
-          input-id="dbNameForm"
-          maxlength="25"
-          name="dbNameForm"
-          type="text"
-        />
-        <label
-          v-text="t('Database name')"
-          for="dbNameForm"
-        />
-      </FloatLabel>
-      <small v-if="'update' !== installerData.installType">
-        {{
-          t(
-            "Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically.",
-          )
-        }}
-      </small>
-    </div>
+    <BaseInputText
+      id="dbNameForm"
+      v-model="installerData.stepData.dbNameForm"
+      :help-text="
+        'update' !== installerData.installType
+          ? t(
+              'Only letters, digits and underscore (_) are allowed in the database name. Invalid characters will be removed automatically.',
+            )
+          : ''
+      "
+      :label="t('Database name')"
+      maxlength="25"
+      name="dbNameForm"
+    />
 
     <div
       v-if="'update' !== installerData.installType"
       class="formgroup-inline"
     >
       <div class="field">
-        <Button
+        <BaseButton
           :label="t('Check database connection')"
-          class="p-button-outlined"
-          icon="mdi mdi-database-sync"
+          icon="refresh"
+          is-submit
           name="step3"
-          type="submit"
+          type="primary-alternative"
           value="step3"
         />
       </div>
@@ -200,21 +169,21 @@
 
     <div class="formgroup-inline">
       <div class="field">
-        <Button
+        <BaseButton
           :label="t('Previous')"
-          class="p-button-outlined p-button-plain"
-          icon="mdi mdi-page-previous"
+          icon="back"
+          is-submit
           name="step2"
-          type="submit"
+          type="black"
         />
       </div>
-      <Button
+      <BaseButton
         :disabled="!installerData.stepData.connParams"
         :label="t('Next')"
-        class="p-button-success"
-        icon="mdi mdi-page-next"
+        icon="next"
+        is-submit
         name="step4"
-        type="submit"
+        type="success"
       />
       <input
         id="is_executable"
@@ -231,15 +200,20 @@ import { inject } from "vue"
 import { useI18n } from "vue-i18n"
 
 import FloatLabel from "primevue/floatlabel"
-import InputText from "primevue/inputtext"
 import Password from "primevue/password"
-import Button from "primevue/button"
 import Message from "primevue/message"
 import SectionHeader from "../layout/SectionHeader.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseInputText from "../basecomponents/BaseInputText.vue"
 
 const { t } = useI18n()
 
 const installerData = inject("installerData")
+
+// The server sends the port as a number; BaseInputText expects a string.
+if (null !== installerData.value.stepData.dbPortForm && undefined !== installerData.value.stepData.dbPortForm) {
+  installerData.value.stepData.dbPortForm = String(installerData.value.stepData.dbPortForm)
+}
 
 // Normalize database name on the client so it matches backend sanitization.
 // We only allow letters, digits and underscore. Other characters are stripped.

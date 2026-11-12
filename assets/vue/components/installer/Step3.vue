@@ -10,7 +10,7 @@
     <a
       v-text="t('Printable version')"
       class="mb-4"
-      href="/main/documentation/license.html"
+      href="../../documentation/license.html"
       target="_blank"
     />
 
@@ -21,19 +21,12 @@
       />
     </div>
 
-    <div class="field-checkbox">
-      <Checkbox
-        v-model="acceptLicence"
-        :binary="true"
-        input-id="accept_licence"
-        name="accept"
-        value="1"
-      />
-      <label
-        v-text="t('I accept')"
-        for="accept_licence"
-      />
-    </div>
+    <BaseCheckbox
+      id="accept_licence"
+      v-model="acceptLicence"
+      :label="t('I accept')"
+      name="accept"
+    />
 
     <hr />
 
@@ -141,41 +134,23 @@
         option-value="0"
       />
 
-      <label v-text="t('Do you have the power to take financial decisions on behalf of your company?')" />
-      <div class="formgroup-inline">
-        <div class="field-checkbox">
-          <RadioButton
-            v-model="contact.financialDecision"
-            :value="true"
-            input-id="final_decision_yes"
-            name="finalcial_decision"
-          />
-          <label
-            v-text="t('Yes')"
-            for="final_decision_yes"
-          />
-        </div>
-        <div class="field-checkbox">
-          <RadioButton
-            v-model="contact.financialDecision"
-            :value="false"
-            input-id="final_decision_no"
-            name="finalcial_decision"
-          />
-          <label
-            v-text="t('No')"
-            for="final_decision_no"
-          />
-        </div>
-      </div>
+      <BaseRadioButtons
+        v-model="contact.financialDecision"
+        :options="[
+          { label: t('Yes'), value: 1 },
+          { label: t('No'), value: 0 },
+        ]"
+        :title="t('Do you have the power to take financial decisions on behalf of your company?')"
+        class="mb-4"
+        name="finalcial_decision"
+      />
 
       <div class="formgroup-inline">
-        <Button
+        <BaseButton
+          :is-loading="sendingContactInformation"
           :label="t('Send information')"
-          :loading="sendingContactInformation"
-          class="p-button-outlined p-button-plain"
-          icon="mdi mdi-send"
-          type="button"
+          icon="send"
+          type="black"
           @click="sendContactInformation"
         />
       </div>
@@ -185,23 +160,23 @@
 
     <div class="formgroup-inline">
       <div class="field">
-        <Button
+        <BaseButton
           :label="t('Previous')"
-          class="p-button-outlined p-button-plain"
-          icon="mdi mdi-page-previous"
+          icon="back"
+          is-submit
           name="step1"
-          type="submit"
+          type="black"
         />
       </div>
-      <Button
+      <BaseButton
         id="license-next"
         ref="btnNext"
         :disabled="!acceptLicence"
         :label="t('Next')"
-        class="p-button-success"
-        icon="mdi mdi-page-next"
+        icon="next"
+        is-submit
         name="step3"
-        type="submit"
+        type="success"
       />
       <input
         id="is_executable"
@@ -218,11 +193,11 @@ import { useI18n } from "vue-i18n"
 import { inject, reactive, ref } from "vue"
 import installerService from "../../services/installerService"
 
-import Checkbox from "primevue/checkbox"
 import Fieldset from "primevue/fieldset"
-import RadioButton from "primevue/radiobutton"
-import Button from "primevue/button"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
+import BaseRadioButtons from "../basecomponents/BaseRadioButtons.vue"
 import BaseSelect from "../basecomponents/BaseSelect.vue"
 import SectionHeader from "../layout/SectionHeader.vue"
 
@@ -241,7 +216,7 @@ const contact = reactive({
   companyCountry: null,
   companyCity: null,
   contactLanguage: null,
-  financialDecision: true,
+  financialDecision: 1,
 })
 
 const sendingContactInformation = ref(false)

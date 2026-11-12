@@ -11,53 +11,31 @@
         class="mb-4"
       />
 
-      <div class="field">
-        <FloatLabel variant="on">
-          <InputText
-            v-model="installerData.stepData.rootWeb"
-            input-id="loginForm"
-            maxlength="80"
-            name="loginForm"
-            type="text"
-          />
-          <label
-            v-text="t('Chamilo URL')"
-            for="loginForm"
-          />
-        </FloatLabel>
-      </div>
+      <!-- These two fields keep their original name: the hidden loginForm of the administrator
+           section comes later in the form and is the value the server reads. -->
+      <BaseInputText
+        id="rootWeb"
+        v-model="installerData.stepData.rootWeb"
+        :label="t('Chamilo URL')"
+        maxlength="80"
+        name="loginForm"
+      />
 
-      <div class="field">
-        <FloatLabel variant="on">
-          <InputText
-            v-model="installerData.stepData.rootSys"
-            input-id="loginForm"
-            maxlength="80"
-            name="loginForm"
-            type="text"
-          />
-          <label
-            v-text="t('Path')"
-            for="loginForm"
-          />
-        </FloatLabel>
-      </div>
+      <BaseInputText
+        id="rootSys"
+        v-model="installerData.stepData.rootSys"
+        :label="t('Path')"
+        maxlength="80"
+        name="loginForm"
+      />
 
-      <div class="field">
-        <FloatLabel variant="on">
-          <InputText
-            v-model="installerData.stepData.systemVersion"
-            input-id="systemVersion"
-            maxlength="80"
-            name="systemVersion"
-            type="text"
-          />
-          <label
-            v-text="t('Source Chamilo version')"
-            for="systemVersion"
-          />
-        </FloatLabel>
-      </div>
+      <BaseInputText
+        id="systemVersion"
+        v-model="installerData.stepData.systemVersion"
+        :label="t('Source Chamilo version')"
+        maxlength="80"
+        name="systemVersion"
+      />
     </div>
 
     <div>
@@ -67,24 +45,14 @@
       />
 
       <!-- Parameter 1: administrator's login -->
-      <div
+      <BaseInputText
         v-if="'update' !== installerData.installType"
-        class="field"
-      >
-        <FloatLabel variant="on">
-          <InputText
-            v-model="installerData.stepData.loginForm"
-            input-id="loginForm"
-            maxlength="80"
-            name="loginForm"
-            type="text"
-          />
-          <label
-            v-text="t('Administrator login')"
-            for="loginForm"
-          />
-        </FloatLabel>
-      </div>
+        id="loginForm"
+        v-model="installerData.stepData.loginForm"
+        :label="t('Administrator login')"
+        maxlength="80"
+        name="loginForm"
+      />
       <div
         v-else
         class="field"
@@ -127,71 +95,40 @@
       </div>
 
       <!-- Parameters 3 and 4: administrator's names -->
-      <div class="field">
-        <FloatLabel variant="on">
-          <InputText
-            v-model="installerData.stepData.adminFirstName"
-            input-id="adminFirstName"
-            maxlength="80"
-            name="adminFirstName"
-            type="text"
-          />
-          <label
-            v-text="t('Administrator first name')"
-            for="adminFirstName"
-          />
-        </FloatLabel>
-      </div>
+      <BaseInputText
+        id="adminFirstName"
+        v-model="installerData.stepData.adminFirstName"
+        :label="t('Administrator first name')"
+        maxlength="80"
+        name="adminFirstName"
+      />
 
-      <div class="field">
-        <FloatLabel variant="on">
-          <InputText
-            v-model="installerData.stepData.adminLastName"
-            input-id="adminLastName"
-            maxlength="80"
-            name="adminLastName"
-            type="text"
-          />
-          <label
-            v-text="t('Administrator last name')"
-            for="adminLastName"
-          />
-        </FloatLabel>
-      </div>
+      <BaseInputText
+        id="adminLastName"
+        v-model="installerData.stepData.adminLastName"
+        :label="t('Administrator last name')"
+        maxlength="80"
+        name="adminLastName"
+      />
 
       <!-- Parameter 5: administrator's email -->
-      <div class="field">
-        <FloatLabel variant="on">
-          <InputText
-            v-model="installerData.stepData.emailForm"
-            input-id="emailForm"
-            maxlength="80"
-            name="emailForm"
-            type="email"
-          />
-          <label
-            v-text="t('Administrator e-mail')"
-            for="emailForm"
-          />
-        </FloatLabel>
-      </div>
+      <BaseInputText
+        id="emailForm"
+        v-model="installerData.stepData.emailForm"
+        :label="t('Administrator e-mail')"
+        maxlength="80"
+        name="emailForm"
+        type="email"
+      />
 
       <!-- Parameter 6: administrator's telephone -->
-      <div class="field">
-        <FloatLabel variant="on">
-          <InputText
-            v-model="installerData.stepData.adminPhoneForm"
-            input-id="adminPhoneForm"
-            maxlength="80"
-            name="adminPhoneForm"
-            type="text"
-          />
-          <label
-            v-text="t('Administrator telephone')"
-            for="adminPhoneForm"
-          />
-        </FloatLabel>
-      </div>
+      <BaseInputText
+        id="adminPhoneForm"
+        v-model="installerData.stepData.adminPhoneForm"
+        :label="t('Administrator telephone')"
+        maxlength="80"
+        name="adminPhoneForm"
+      />
     </div>
 
     <div>
@@ -201,164 +138,85 @@
       />
 
       <!-- First parameter: language. -->
-      <div class="field">
-        <FloatLabel variant="on">
-          <Select
-            v-if="'update' !== installerData.installType"
-            v-model="installerData.stepData.languageForm"
-            :filter="true"
-            :options="languages"
-            input-id="language_form_list"
-            option-label="original_name"
-            option-value="isocode"
-          />
-          <InputText
-            v-else
-            v-model="installerData.stepData.languageForm"
-            :readonly="true"
-            type="text"
-          />
-          <label
-            v-text="t('Language')"
-            for="language_form_list"
-          />
-          <input
-            v-model="installerData.stepData.languageForm"
-            name="languageForm"
-            type="hidden"
-          />
-        </FloatLabel>
-      </div>
+      <BaseSelect
+        v-if="'update' !== installerData.installType"
+        id="language_form_list"
+        v-model="installerData.stepData.languageForm"
+        :label="t('Language')"
+        :options="languages"
+        filter
+        option-label="original_name"
+        option-value="isocode"
+      />
+      <BaseInputText
+        v-else
+        id="language_form_list"
+        v-model="installerData.stepData.languageForm"
+        :label="t('Language')"
+        readonly
+      />
+      <input
+        v-model="installerData.stepData.languageForm"
+        name="languageForm"
+        type="hidden"
+      />
 
       <!-- Second parameter: Chamilo URL -->
-      <div
+      <BaseInputText
         v-if="'install' === installerData.installType"
-        class="field"
-      >
-        <FloatLabel variant="on">
-          <InputText
-            v-model="installerData.stepData.urlForm"
-            input-id="urlForm"
-            maxlength="100"
-            name="urlForm"
-            type="url"
-          />
-          <label
-            v-text="t('Chamilo URL')"
-            for="urlForm"
-          />
-        </FloatLabel>
-      </div>
+        id="urlForm"
+        v-model="installerData.stepData.urlForm"
+        :label="t('Chamilo URL')"
+        maxlength="100"
+        name="urlForm"
+        type="url"
+      />
 
       <!-- Parameter 9: campus name -->
-      <div class="field">
-        <FloatLabel variant="on">
-          <InputText
-            v-model="installerData.stepData.campusForm"
-            input-id="campusForm"
-            maxlength="80"
-            name="campusForm"
-            type="text"
-          />
-          <label
-            v-text="t('Your portal name')"
-            for="campusForm"
-          />
-        </FloatLabel>
-      </div>
+      <BaseInputText
+        id="campusForm"
+        v-model="installerData.stepData.campusForm"
+        :label="t('Your portal name')"
+        maxlength="80"
+        name="campusForm"
+      />
 
       <!-- Parameter 10: institute (short) name -->
-      <div class="field">
-        <FloatLabel variant="on">
-          <InputText
-            v-model="installerData.stepData.institutionForm"
-            input-id="institutionForm"
-            maxlength="80"
-            name="institutionForm"
-            type="text"
-          />
-          <label
-            v-text="t('Your company short name')"
-            for="institutionForm"
-          />
-        </FloatLabel>
-      </div>
+      <BaseInputText
+        id="institutionForm"
+        v-model="installerData.stepData.institutionForm"
+        :label="t('Your company short name')"
+        maxlength="80"
+        name="institutionForm"
+      />
 
       <!-- Parameter 11: institute URL -->
-      <div class="field">
-        <FloatLabel variant="on">
-          <InputText
-            v-model="installerData.stepData.institutionUrlForm"
-            input-id="institutionUrlForm"
-            maxlength="80"
-            name="institutionUrlForm"
-            type="text"
-          />
-          <label
-            v-text="t('URL of this company')"
-            for="institutionUrlForm"
-          />
-        </FloatLabel>
-      </div>
+      <BaseInputText
+        id="institutionUrlForm"
+        v-model="installerData.stepData.institutionUrlForm"
+        :label="t('URL of this company')"
+        maxlength="80"
+        name="institutionUrlForm"
+      />
 
-      <label v-text="t('Encryption method')" />
-      <div
+      <BaseRadioButtons
         v-if="'update' !== installerData.installType"
-        class="formgroup-inline"
-      >
-        <div class="field-checkbox">
-          <RadioButton
-            v-model="installerData.stepData.encryptPassForm"
-            input-id="encrypt_bcrypt"
-            name="encryptPassForm"
-            value="bcrypt"
-          />
-          <label
-            for="encrypt_bcrypt"
-            v-text="'bcrypt'"
-          />
-        </div>
-        <div class="field-checkbox">
-          <RadioButton
-            v-model="installerData.stepData.encryptPassForm"
-            input-id="encrypt_sha1"
-            name="encryptPassForm"
-            value="sha1"
-          />
-          <label
-            for="encrypt_sha1"
-            v-text="'SHA1'"
-          />
-        </div>
-        <div class="field-checkbox">
-          <RadioButton
-            v-model="installerData.stepData.encryptPassForm"
-            input-id="encrypt_md5"
-            name="encryptPassForm"
-            value="md5"
-          />
-          <label
-            for="encrypt_md5"
-            v-text="'MD5'"
-          />
-        </div>
-        <div class="field-checkbox">
-          <RadioButton
-            v-model="installerData.stepData.encryptPassForm"
-            input-id="encrypt_none"
-            name="encryptPassForm"
-            value="none"
-          />
-          <label
-            v-text="t('None')"
-            for="encrypt_none"
-          />
-        </div>
-      </div>
+        v-model="installerData.stepData.encryptPassForm"
+        :options="[
+          { label: 'bcrypt', value: 'bcrypt' },
+          { label: 'SHA1', value: 'sha1' },
+          { label: 'MD5', value: 'md5' },
+          { label: t('None'), value: 'none' },
+        ]"
+        :title="t('Encryption method')"
+        class="mb-4"
+        name="encryptPassForm"
+      />
       <div
         v-else
         class="formgroup-inline"
       >
+        <label v-text="t('Encryption method')" />
         <input
           v-model="installerData.stepData.encryptPassForm"
           name="encryptPassForm"
@@ -367,49 +225,20 @@
         {{ installerData.stepData.encryptPassForm }}
       </div>
 
-      <label v-text="t('Allow self-registration')" />
-      <div
+      <BaseRadioButtons
         v-if="'update' !== installerData.installType"
-        class="formgroup-inline"
-      >
-        <div class="field-checkbox">
-          <RadioButton
-            v-model="installerData.stepData.allowSelfReg"
-            input-id="self_reg_yes"
-            name="allowSelfReg"
-            value="true"
-          />
-          <label
-            v-text="t('Yes')"
-            for="self_reg_yes"
-          />
-        </div>
-        <div class="field-checkbox">
-          <RadioButton
-            v-model="installerData.stepData.allowSelfReg"
-            input-id="self_reg_no"
-            name="allowSelfReg"
-            value="false"
-          />
-          <label
-            v-text="t('No')"
-            for="self_reg_no"
-          />
-        </div>
-        <div class="field-checkbox">
-          <RadioButton
-            v-model="installerData.stepData.allowSelfReg"
-            input-id="self_reg_approval"
-            name="allowSelfReg"
-            value="approval"
-          />
-          <label
-            v-text="t('After approval')"
-            for="self_reg_approval"
-          />
-        </div>
-      </div>
+        v-model="installerData.stepData.allowSelfReg"
+        :options="[
+          { label: t('Yes'), value: 'true' },
+          { label: t('No'), value: 'false' },
+          { label: t('After approval'), value: 'approval' },
+        ]"
+        :title="t('Allow self-registration')"
+        class="mb-4"
+        name="allowSelfReg"
+      />
       <div v-else>
+        <label v-text="t('Allow self-registration')" />
         <input
           v-model="installerData.stepData.allowSelfReg"
           name="allowSelfReg"
@@ -429,37 +258,18 @@
         />
       </div>
 
-      <label v-text="t('Allow self-registration as a trainer')" />
-      <div
+      <BaseRadioButtons
         v-if="'update' !== installerData.installType"
-        class="formgroup-inline"
-      >
-        <div class="field-checkbox">
-          <RadioButton
-            v-model="installerData.stepData.allowSelfRegProf"
-            input-id="self_reg_prof_yes"
-            name="allowSelfRegProf"
-            value="1"
-          />
-          <label
-            v-text="t('Yes')"
-            for="self_reg_prof_yes"
-          />
-        </div>
-        <div class="field-checkbox">
-          <RadioButton
-            v-model="installerData.stepData.allowSelfRegProf"
-            input-id="self_reg_prof_no"
-            name="allowSelfRegProf"
-            value="0"
-          />
-          <label
-            v-text="t('No')"
-            for="self_reg_prof_no"
-          />
-        </div>
-      </div>
+        v-model="installerData.stepData.allowSelfRegProf"
+        :options="[
+          { label: t('Yes'), value: '1' },
+          { label: t('No'), value: '0' },
+        ]"
+        :title="t('Allow self-registration as a trainer')"
+        name="allowSelfRegProf"
+      />
       <div v-else>
+        <label v-text="t('Allow self-registration as a trainer')" />
         <input
           v-model="installerData.stepData.allowSelfRegProf"
           name="allowSelfRegProf"
@@ -481,21 +291,21 @@
 
     <div class="formgroup-inline">
       <div class="field">
-        <Button
+        <BaseButton
           :label="t('Previous')"
-          class="p-button-outlined p-button-plain"
-          icon="mdi mdi-page-previous"
+          icon="back"
+          is-submit
           name="step3"
-          type="submit"
+          type="black"
         />
       </div>
 
-      <Button
+      <BaseButton
         :label="t('Next')"
-        class="p-button-success"
-        icon="mdi mdi-page-next"
+        icon="next"
+        is-submit
         name="step5"
-        type="submit"
+        type="success"
       />
 
       <input
@@ -513,12 +323,12 @@ import { inject } from "vue"
 import { useI18n } from "vue-i18n"
 
 import FloatLabel from "primevue/floatlabel"
-import InputText from "primevue/inputtext"
 import Password from "primevue/password"
-import Select from "primevue/select"
-import Button from "primevue/button"
-import RadioButton from "primevue/radiobutton"
 import SectionHeader from "../layout/SectionHeader.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseInputText from "../basecomponents/BaseInputText.vue"
+import BaseRadioButtons from "../basecomponents/BaseRadioButtons.vue"
+import BaseSelect from "../basecomponents/BaseSelect.vue"
 
 import languages from "../../utils/languages"
 import EmailSettings from "./EmailSettings.vue"

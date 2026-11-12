@@ -19,7 +19,10 @@
 }
 
 .install-step {
-
+  // Also styles the links that come from translations and server data (v-html, extension URLs).
+  a:not(.p-button) {
+    @apply text-primary hover:underline;
+  }
 }
 
 table.requirements-list {

@@ -33,12 +33,10 @@
           url="../../documentation/installation_guide.html"
           target="_blank"
           rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 text-body-2 font-semibold text-primary hover:underline"
         >
-          <BaseButton
-            type="primary"
-            icon="courses"
-            :label="t('Read the installation guide')"
-          />
+          <BaseIcon icon="courses" />
+          {{ t("Read the installation guide") }}
         </BaseAppLink>
       </div>
     </aside>
@@ -259,7 +257,7 @@ import { computed, onMounted, provide, ref, watch } from "vue"
 
 import { setLocale } from "./i18n"
 import BaseAppLink from "./components/basecomponents/BaseAppLink.vue"
-import BaseButton from "./components/basecomponents/BaseButton.vue"
+import BaseIcon from "./components/basecomponents/BaseIcon.vue"
 import Step1 from "./components/installer/Step1"
 import Step2 from "./components/installer/Step2"
 import Step3 from "./components/installer/Step3"

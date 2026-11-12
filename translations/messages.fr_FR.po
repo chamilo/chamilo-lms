@@ -45192,3 +45192,42 @@ msgstr "Supprimer l'image importée et rétablir l'image du thème ?"
 
 msgid "Theme image restored"
 msgstr "Image du thème rétablie"
+
+msgid "Password fortress: visual preview"
+msgstr "Forteresse des mots de passe : aperçu visuel"
+
+msgid "Try an example password to explore the visual indicator. Do not enter a real password here."
+msgstr "Essayez un mot de passe fictif pour découvrir l’indicateur visuel. N’utilisez pas votre vrai mot de passe ici."
+
+msgid "Example password"
+msgstr "Mot de passe d’exemple"
+
+msgid "Show or hide example password"
+msgstr "Afficher ou masquer le mot de passe d’exemple"
+
+msgid "Illustration only. Passwords are not submitted or stored, and the existing security rules still apply."
+msgstr "Illustration uniquement. Les mots de passe ne sont ni envoyés ni enregistrés et les règles de sécurité actuelles restent applicables."
+
+msgid "Illustration only. The configured password policy is enforced by the existing form validation."
+msgstr "Illustration uniquement. La politique de mot de passe configurée reste appliquée lors de la validation du formulaire."
+
+msgid "Unprotected"
+msgstr "Sans protection"
+
+msgid "Fence"
+msgstr "Clôture"
+
+msgid "Palisade"
+msgstr "Palissade"
+
+msgid "Stone walls"
+msgstr "Murailles de pierre"
+
+msgid "Castle"
+msgstr "Château"
+
+msgid "Fortified castle"
+msgstr "Château fortifié"
+
+msgid "Visual guide only"
+msgstr "Indicateur visuel uniquement"

@@ -43490,3 +43490,42 @@ msgstr ""
 
 msgid "Too many results. Please refine your search."
 msgstr ""
+
+msgid "Password fortress: visual preview"
+msgstr ""
+
+msgid "Try an example password to explore the visual indicator. Do not enter a real password here."
+msgstr ""
+
+msgid "Example password"
+msgstr ""
+
+msgid "Show or hide example password"
+msgstr ""
+
+msgid "Illustration only. Passwords are not submitted or stored, and the existing security rules still apply."
+msgstr ""
+
+msgid "Illustration only. The configured password policy is enforced by the existing form validation."
+msgstr ""
+
+msgid "Unprotected"
+msgstr ""
+
+msgid "Fence"
+msgstr ""
+
+msgid "Palisade"
+msgstr ""
+
+msgid "Stone walls"
+msgstr ""
+
+msgid "Castle"
+msgstr ""
+
+msgid "Fortified castle"
+msgstr ""
+
+msgid "Visual guide only"
+msgstr ""

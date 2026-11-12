@@ -8,11 +8,14 @@ namespace Chamilo\CoreBundle\Service;
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
-use Chamilo\CoreBundle\Security\FloorPlanSvgValidator;
+use Chamilo\CoreBundle\Security\CourseToolSvgSanitizer;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\EntityManagerInterface;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+
+use const LOCK_EX;
 
 final readonly class CourseToolCustomizationService
 {
@@ -23,7 +26,7 @@ final readonly class CourseToolCustomizationService
     public function __construct(
         private EntityManagerInterface $entityManager,
         private ResourceNodeRepository $resourceNodeRepository,
-        private FloorPlanSvgValidator $svgValidator,
+        private CourseToolSvgSanitizer $svgSanitizer,
     ) {}
 
     public static function getCustomTitle(CTool $tool): ?string
@@ -91,9 +94,16 @@ final readonly class CourseToolCustomizationService
             }
 
             $contents = file_get_contents($icon->getPathname());
-            if (false === $contents || !$this->svgValidator->isSafe($contents)) {
+            $safeSvg = false === $contents ? null : $this->svgSanitizer->sanitize($contents);
+            if (null === $safeSvg) {
                 throw new BadRequestHttpException('The icon must be a safe static SVG with width and height.');
             }
+
+            // The PHP upload is a temporary copy. Store the normalized SVG, not the untrusted original.
+            if (\strlen($safeSvg) !== file_put_contents($icon->getPathname(), $safeSvg, LOCK_EX)) {
+                throw new RuntimeException('Failed to save the sanitized SVG upload.');
+            }
+            clearstatcache(true, $icon->getPathname());
         }
 
         // c_tool.title is per-course; tool.title remains the immutable internal identifier.

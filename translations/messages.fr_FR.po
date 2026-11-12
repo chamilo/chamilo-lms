@@ -45231,3 +45231,9 @@ msgstr "Château fortifié"
 
 msgid "Visual guide only"
 msgstr "Indicateur visuel uniquement"
+
+msgid "Treasure stolen"
+msgstr "Trésor volé"
+
+msgid "Attack blocked"
+msgstr "Attaque repoussée"

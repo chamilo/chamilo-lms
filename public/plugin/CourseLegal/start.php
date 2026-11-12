@@ -25,6 +25,7 @@ $sessionId = api_get_session_id();
 $courseEntity = api_get_course_entity();
 
 $form = new FormValidator('plugin', 'post', $url);
+$form->protect();
 $form->addElement('hidden', 'session_id', $sessionId);
 $form->addElement('hidden', 'c_id', $courseId);
 $form->addElement(
@@ -100,6 +101,9 @@ $form->setDefaults($defaults);
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
+    // The hidden fields are posted by the browser: the agreement edited is always the one of the course in the URL.
+    $values['c_id'] = $courseId;
+    $values['session_id'] = $sessionId;
     $file = $_FILES['uploaded_file'] ?? [];
     $deleteFile = $values['delete_file'] ?? false;
 

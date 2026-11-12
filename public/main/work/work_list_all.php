@@ -25,6 +25,10 @@ $my_folder_data = get_work_data_by_id($workId);
 if (empty($my_folder_data)) {
     api_not_allowed(true);
 }
+// The folder id comes from the request: it must be one of the current course (or its session).
+if (!workBelongsToCourse($workId, api_get_course_int_id(), api_get_session_id())) {
+    api_not_allowed(true);
+}
 $course = api_get_course_entity();
 $work_data = get_work_assignment_by_id($workId);
 
@@ -83,6 +87,23 @@ $interbreadcrumb[] = [
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $itemId = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 
+// The submission acted on must be one of the folder this page was opened on.
+if (in_array($action, ['delete', 'make_visible', 'make_invisible'], true)
+    && !empty($itemId)
+    && !workItemIsInFolder($itemId, $workId)
+) {
+    api_not_allowed(true);
+}
+
+// These actions change data and are reached by links: they need the token those links carry (created here so
+// that the grids loaded by ajax afterwards only read it).
+$actionToken = workActionToken();
+if (in_array($action, ['delete', 'delete_correction', 'make_visible', 'make_invisible'], true)
+    && !workActionTokenIsValid('get')
+) {
+    api_not_allowed(true);
+}
+
 switch ($action) {
     case 'delete':
         /*	Delete document */
@@ -102,6 +123,9 @@ switch ($action) {
         exit;
         break;
     case 'delete_correction':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
         $result = get_work_user_list(null, null, null, null, $workId);
         if ($result) {
             foreach ($result as $item) {
@@ -134,6 +158,9 @@ switch ($action) {
 
         break;
     case 'make_invisible':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
         if (!empty($itemId)) {
             if (isset($itemId) && 'all' == $itemId) {
             } else {
@@ -222,7 +249,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
         Display::getMdiIcon(ActionIcon::UPLOAD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Upload corrections package')).' '.get_lang('Upload corrections package').'</a>';
     */
     $url = api_get_path(WEB_CODE_PATH).
-        'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_correction';
+        workActionUrl('work/work_list_all.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_correction');
     $actionsLeft .= Display::toolbarButton(get_lang('Delete all corrections'), $url, 'delete', 'danger');
 }
 
@@ -425,7 +452,7 @@ $extra_params = [
 $url = api_get_path(WEB_AJAX_PATH).
     'model.ajax.php?a=get_work_user_list_all&work_id='.$workId.'&type='.$type.'&'.api_get_cidreq();
 
-$workUrl = api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq();
+$workUrl = workActionUrl(api_get_path(WEB_AJAX_PATH).'work.ajax.php?'.api_get_cidreq());
 $deleteUrl = $workUrl.'&a=delete_student_work';
 $showUrl = $workUrl.'&a=show_student_work';
 $hideUrl = $workUrl.'&a=hide_student_work';

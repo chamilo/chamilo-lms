@@ -39,6 +39,13 @@ if ('' == session_id()) {
 
 /**
  * Prepare the parameters for the SetExpressCheckout API call.
+ *
+ * @param mixed $paymentAmount
+ * @param mixed $currencyCodeType
+ * @param mixed $paymentType
+ * @param mixed $returnURL
+ * @param mixed $cancelURL
+ * @param mixed $extra
  */
 function CallShortcutExpressCheckout($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL, $extra)
 {
@@ -68,6 +75,20 @@ function CallShortcutExpressCheckout($paymentAmount, $currencyCodeType, $payment
 
 /**
  * Prepare the parameters for the MarkExpressCheckout API call.
+ *
+ * @param mixed $paymentAmount
+ * @param mixed $currencyCodeType
+ * @param mixed $paymentType
+ * @param mixed $returnURL
+ * @param mixed $cancelURL
+ * @param mixed $shipToName
+ * @param mixed $shipToStreet
+ * @param mixed $shipToCity
+ * @param mixed $shipToState
+ * @param mixed $shipToCountryCode
+ * @param mixed $shipToZip
+ * @param mixed $shipToStreet2
+ * @param mixed $phoneNum
  */
 function CallMarkExpressCheckout(
     $paymentAmount,
@@ -117,6 +138,8 @@ function CallMarkExpressCheckout(
 
 /**
  * Prepare the parameters for the GetExpressCheckoutDetails API call.
+ *
+ * @param mixed $token
  */
 function GetShippingDetails($token)
 {
@@ -134,6 +157,8 @@ function GetShippingDetails($token)
 
 /**
  * Finalize the PayPal payment.
+ *
+ * @param mixed $finalPaymentAmt
  */
 function ConfirmPayment($finalPaymentAmt)
 {
@@ -165,6 +190,8 @@ function ConfirmPayment($finalPaymentAmt)
 
 /**
  * Prepare a minimal Express Checkout request for a billing agreement.
+ *
+ * @param mixed $extraParameters
  */
 function MinimalExpressCheckout($extraParameters)
 {
@@ -286,6 +313,21 @@ function ManageRecurringPaymentsProfileStatus(string $profileId, string $action,
 
 /**
  * Make a DoDirectPayment API call.
+ *
+ * @param mixed $paymentType
+ * @param mixed $paymentAmount
+ * @param mixed $creditCardType
+ * @param mixed $creditCardNumber
+ * @param mixed $expDate
+ * @param mixed $cvv2
+ * @param mixed $firstName
+ * @param mixed $lastName
+ * @param mixed $street
+ * @param mixed $city
+ * @param mixed $state
+ * @param mixed $zip
+ * @param mixed $countryCode
+ * @param mixed $currencyCode
  */
 function DirectPayment(
     $paymentType,
@@ -323,6 +365,8 @@ function DirectPayment(
 
 /**
  * Make a MassPay API call.
+ *
+ * @param mixed $currencyCode
  */
 function MassPayment(array $beneficiaries, $currencyCode)
 {
@@ -342,6 +386,9 @@ function MassPayment(array $beneficiaries, $currencyCode)
 
 /**
  * Perform the API call to PayPal using API signature.
+ *
+ * @param mixed $methodName
+ * @param mixed $nvpStr
  */
 function hash_call($methodName, $nvpStr)
 {
@@ -351,17 +398,17 @@ function hash_call($methodName, $nvpStr)
 
     $ch = curl_init();
 
-    curl_setopt($ch, CURLOPT_URL, $API_Endpoint);
-    curl_setopt($ch, CURLOPT_VERBOSE, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+    curl_setopt($ch, \CURLOPT_URL, $API_Endpoint);
+    curl_setopt($ch, \CURLOPT_VERBOSE, 0);
+    curl_setopt($ch, \CURLOPT_SSL_VERIFYPEER, true);
+    curl_setopt($ch, \CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($ch, \CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, \CURLOPT_POST, true);
+    curl_setopt($ch, \CURLOPT_CONNECTTIMEOUT, 30);
+    curl_setopt($ch, \CURLOPT_TIMEOUT, 60);
 
     if ($USE_PROXY) {
-        curl_setopt($ch, CURLOPT_PROXY, $PROXY_HOST.':'.$PROXY_PORT);
+        curl_setopt($ch, \CURLOPT_PROXY, $PROXY_HOST.':'.$PROXY_PORT);
     }
 
     $nvpreq = 'METHOD='.urlencode((string) $methodName)
@@ -372,7 +419,7 @@ function hash_call($methodName, $nvpStr)
         .$nvpStr
         .'&BUTTONSOURCE='.urlencode((string) $sBNCode);
 
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $nvpreq);
+    curl_setopt($ch, \CURLOPT_POSTFIELDS, $nvpreq);
 
     $response = curl_exec($ch);
 
@@ -400,17 +447,22 @@ function hash_call($methodName, $nvpStr)
 
 /**
  * Redirect to PayPal.
+ *
+ * @param mixed $token
  */
 function RedirectToPayPal($token): void
 {
     global $PAYPAL_URL;
 
     header('Location: '.$PAYPAL_URL.$token);
+
     exit;
 }
 
 /**
  * Convert NVP string to associative array.
+ *
+ * @param mixed $nvpstr
  */
 function deformatNVP($nvpstr)
 {

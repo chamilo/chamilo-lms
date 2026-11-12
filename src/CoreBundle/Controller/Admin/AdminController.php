@@ -102,9 +102,10 @@ class AdminController extends BaseController
         /** @var ResourceFile $file */
         foreach ($files as $file) {
             $node = $file->getResourceNode();
-            if (null !== $node && null !== $node->getId()) {
-                $resourceNodeIds[] = $node->getId();
-                $resourceNodes[$node->getId()] = $node;
+            $nodeId = $node?->getId();
+            if (null !== $node && null !== $nodeId) {
+                $resourceNodeIds[] = $nodeId;
+                $resourceNodes[$nodeId] = $node;
             }
         }
 

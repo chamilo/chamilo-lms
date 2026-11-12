@@ -71,6 +71,9 @@ switch ($action) {
 
         break;
     case 'copy':
+        if (!Security::check_token('get', null, 'learning_calendar')) {
+            api_not_allowed(true);
+        }
         $result = $plugin->copyCalendar($calendarId);
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('Saved.')));
@@ -80,6 +83,9 @@ switch ($action) {
 
         break;
     case 'delete':
+        if (!Security::check_token('get', null, 'learning_calendar')) {
+            api_not_allowed(true);
+        }
         $result = $plugin->deleteCalendar($calendarId);
         if ($result) {
             Display::addFlash(Display::return_message(get_lang('Deleted')));
@@ -89,6 +95,9 @@ switch ($action) {
 
         break;
     case 'toggle_visibility':
+        if (!Security::check_token('get', null, 'learning_calendar')) {
+            api_not_allowed(true);
+        }
         $itemId = isset($_REQUEST['lp_item_id']) ? (int) $_REQUEST['lp_item_id'] : 0;
         $lpId = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : 0;
         $plugin->toggleVisibility($itemId);
@@ -102,6 +111,8 @@ switch ($action) {
 }
 
 $template = new Template($plugin->get_lang('LearningCalendar'));
+// One token for the copy / delete links of this page view (checked above on the next request).
+$actionToken = Security::get_token('learning_calendar');
 
 $toolbarActions = [];
 $toolbarActions[] = Display::url(
@@ -136,8 +147,8 @@ if (!in_array($action, ['add', 'edit'], true)) {
             'view_url' => api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/calendar.php?id='.$calendarId,
             'users_url' => api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/calendar_users.php?id='.$calendarId,
             'edit_url' => api_get_self().'?action=edit&id='.$calendarId,
-            'copy_url' => api_get_self().'?action=copy&id='.$calendarId,
-            'delete_url' => api_get_self().'?action=delete&id='.$calendarId,
+            'copy_url' => api_get_self().'?action=copy&id='.$calendarId.'&learning_calendar_sec_token='.$actionToken,
+            'delete_url' => api_get_self().'?action=delete&id='.$calendarId.'&learning_calendar_sec_token='.$actionToken,
         ];
     }
 }

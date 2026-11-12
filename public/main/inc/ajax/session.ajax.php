@@ -181,8 +181,12 @@ switch ($action) {
             api_block_anonymous_users();
         }
         if (isset($_GET['session'])) {
-            $sessionInfo = api_get_session_info($_GET['session']);
-            echo '<h2>'.$sessionInfo['name'].'</h2>';
+            $sessionInfo = api_get_session_info((int) $_GET['session']);
+            if (empty($sessionInfo)) {
+                break;
+            }
+            // The title is typed by whoever creates the session, and this answer may be public.
+            echo '<h2>'.api_htmlentities($sessionInfo['title']).'</h2>';
             echo '<div class="home-course-intro"><div class="page-course"><div class="page-course-intro">';
             echo 1 == $sessionInfo['show_description'] ? $sessionInfo['description'] : get_lang('none');
             echo '</div></div></div>';

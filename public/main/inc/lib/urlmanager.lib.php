@@ -3,11 +3,21 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
+use Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory;
+use Chamilo\CoreBundle\Entity\AccessUrlRelPlugin;
 use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup;
+use Chamilo\CoreBundle\Entity\Branch;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\CoreBundle\Entity\Ticket;
+use Chamilo\CoreBundle\Entity\TicketPriority;
+use Chamilo\CoreBundle\Entity\TicketProject;
+use Chamilo\CoreBundle\Entity\TicketStatus;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\NonUniqueResultException;
@@ -33,7 +43,7 @@ class UrlManager
     {
         $repo = Container::getAccessUrlRepository();
 
-        if (!$repo->exists($url)) {
+        if ($repo->exists($url)) {
             return null;
         }
 
@@ -104,9 +114,38 @@ class UrlManager
          */
         $em = Container::getEntityManager();
 
+        // Rows whose access_url foreign key is RESTRICT and that would block deleting the URL.
+        // Data that can live without a URL (branches, tickets and their project/priority/status dictionaries,
+        // all nullable) is detached, not destroyed. Session categories cannot be detached (the entity requires a
+        // URL), so they go, after their sessions are released from them.
+        $detachEntities = [
+            [Branch::class, 'url'],
+            [Ticket::class, 'accessUrl'],
+            [TicketProject::class, 'accessUrl'],
+            [TicketPriority::class, 'accessUrl'],
+            [TicketStatus::class, 'accessUrl'],
+        ];
+        foreach ($detachEntities as [$detachEntity, $property]) {
+            $em
+                ->createQuery("UPDATE $detachEntity e SET e.$property = NULL WHERE e.$property = :id")
+                ->setParameter('id', $id)
+                ->execute()
+            ;
+        }
+
+        $em
+            ->createQuery('UPDATE '.Session::class.' s SET s.category = NULL WHERE s.category IN (SELECT sc.id FROM '.SessionCategory::class.' sc WHERE sc.url = :id)')
+            ->setParameter('id', $id)
+            ->execute()
+        ;
+
         $relEntities = [
+            SessionCategory::class,
+            AccessUrlRelPlugin::class,
+            AccessUrlRelColorTheme::class,
             SettingsCurrent::class,
             AccessUrlRelCourse::class,
+            AccessUrlRelCourseCategory::class,
             AccessUrlRelSession::class,
             AccessUrlRelUserGroup::class,
             AccessUrlRelUser::class,
@@ -196,7 +235,7 @@ class UrlManager
         $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         if (!empty($urlId)) {
-            $where = " AND $table_url_rel_user.access_url_id = ".$urlId;
+            $where .= " AND $table_url_rel_user.access_url_id = ".$urlId;
         }
         if (empty($order_by)) {
             $order_clause = api_sort_by_first_name(
@@ -288,12 +327,12 @@ class UrlManager
             $where = "WHERE $table_url_rel_session.access_url_id = ".$urlId;
         }
 
-        $sql = "SELECT id, name, access_url_id
+        $sql = "SELECT u.id, u.title AS name, access_url_id
                 FROM $tbl_session u
                 INNER JOIN $table_url_rel_session
-                ON $table_url_rel_session.session_id = id
+                ON $table_url_rel_session.session_id = u.id
                 $where
-                ORDER BY name, id";
+                ORDER BY u.title, u.id";
 
         $result = Database::query($sql);
         $sessions = Database::store_result($result);
@@ -1125,10 +1164,6 @@ class UrlManager
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
 
-        if (!is_array($userGroupList) || empty($userGroupList)) {
-            return;
-        }
-
         $sql = "SELECT usergroup_id FROM $table WHERE access_url_id = ".intval($urlId);
         $result = Database::query($sql);
 
@@ -1174,12 +1209,8 @@ class UrlManager
         // Adding
         foreach ($list as $id) {
             self::addCourseCategoryToUrl($id, $urlId);
-            $categoryInfo = CourseCategory::getCategoryById($id);
-            $children = CourseCategory::getChildren($categoryInfo['code']);
-            if (!empty($children)) {
-                foreach ($children as $category) {
-                    self::addCourseCategoryToUrl($category['id'], $urlId);
-                }
+            foreach (self::getCourseCategoryDescendantIds((int) $id) as $childId) {
+                self::addCourseCategoryToUrl($childId, $urlId);
             }
         }
 
@@ -1187,16 +1218,36 @@ class UrlManager
         foreach ($existingItems as $id) {
             if (!in_array($id, $list)) {
                 self::deleteUrlRelCourseCategory($id, $urlId);
-                $categoryInfo = CourseCategory::getCategoryById($id);
-
-                $children = CourseCategory::getChildren($categoryInfo['code']);
-                if (!empty($children)) {
-                    foreach ($children as $category) {
-                        self::deleteUrlRelCourseCategory($category['id'], $urlId);
-                    }
+                foreach (self::getCourseCategoryDescendantIds((int) $id) as $childId) {
+                    self::deleteUrlRelCourseCategory($childId, $urlId);
                 }
             }
         }
+    }
+
+    /**
+     * Ids of every category below the given one (course_category.parent_id is an id, not a code).
+     *
+     * @return int[]
+     */
+    private static function getCourseCategoryDescendantIds(int $categoryId): array
+    {
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $descendants = [];
+        $pending = [$categoryId];
+        while (!empty($pending)) {
+            $parentId = array_pop($pending);
+            $result = Database::query("SELECT id FROM $table WHERE parent_id = ".$parentId);
+            while ($row = Database::fetch_assoc($result)) {
+                $childId = (int) $row['id'];
+                if (!in_array($childId, $descendants, true)) {
+                    $descendants[] = $childId;
+                    $pending[] = $childId;
+                }
+            }
+        }
+
+        return $descendants;
     }
 
     /**

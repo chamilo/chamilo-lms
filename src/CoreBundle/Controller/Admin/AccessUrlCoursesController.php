@@ -82,14 +82,21 @@ class AccessUrlCoursesController extends AbstractController
 
         $assignedIds = $this->getAssignedCourseIds($accessUrlId);
 
-        $courses = $this->em->createQueryBuilder()
+        $coursesQb = $this->em->createQueryBuilder()
             ->select('c.id AS id, c.title AS title, c.code AS code')
             ->from(Course::class, 'c')
             ->orderBy('c.title', 'ASC')
             ->addOrderBy('c.code', 'ASC')
-            ->getQuery()
-            ->getArrayResult()
         ;
+        if (null !== $managedUrlIds) {
+            $coursesQb
+                ->andWhere(
+                    'c.id IN (SELECT IDENTITY(scopeRel.course) FROM '.AccessUrlRelCourse::class.' scopeRel WHERE IDENTITY(scopeRel.url) IN (:scopeUrlIds))'
+                )
+                ->setParameter('scopeUrlIds', [] === $managedUrlIds ? [0] : $managedUrlIds)
+            ;
+        }
+        $courses = $coursesQb->getQuery()->getArrayResult();
 
         $assigned = [];
         $available = [];
@@ -126,7 +133,11 @@ class AccessUrlCoursesController extends AbstractController
             return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $courseIds = array_map('intval', $data['course_ids'] ?? []);
+        // Only courses already inside the caller's managed URLs may be linked (see AccessUrlScopeHelper).
+        $courseIds = $this->accessUrlScope->filterManagedCourseIds(
+            $this->currentUser(),
+            array_map('intval', $data['course_ids'] ?? [])
+        );
 
         UrlManager::update_urls_rel_course($courseIds, $accessUrlId);
 
@@ -151,6 +162,11 @@ class AccessUrlCoursesController extends AbstractController
             if (!$this->accessUrlScope->isUrlManaged($currentUser, $urlId)) {
                 return $this->json(['error' => 'Not found'], Response::HTTP_NOT_FOUND);
             }
+        }
+
+        $courseIds = $this->accessUrlScope->filterManagedCourseIds($currentUser, $courseIds);
+        if ([] === $courseIds) {
+            return $this->json(['success' => true]);
         }
 
         $codes = $this->em->createQueryBuilder()

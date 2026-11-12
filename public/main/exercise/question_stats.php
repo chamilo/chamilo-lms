@@ -24,6 +24,9 @@ if (empty($exerciseId)) {
 }
 
 $sessionId = api_get_session_id();
+if (!ExerciseLib::exerciseBelongsToCourse($exerciseId, api_get_course_int_id(), $sessionId)) {
+    api_not_allowed(true);
+}
 $exercise = new Exercise();
 $result = $exercise->read($exerciseId);
 $course  = api_get_course_entity();

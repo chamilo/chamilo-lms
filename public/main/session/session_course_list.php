@@ -31,7 +31,14 @@ $sort = isset($_GET['sort']) && in_array($_GET['sort'], ['title', 'nbr_users'], 
     : 'title';
 $sortColumn = 'nbr_users' === $sort ? 'src.nbr_users' : 'c.title';
 
+// Keep the token of the session: regenerating it on every request would invalidate the one of the page that
+// sent the request. Legacy pages are not covered by CsrfProtectionListener.
+$token = Security::get_existing_token();
+
 if ('delete' === $action) {
+    if (!Security::check_token('request')) {
+        api_not_allowed(true);
+    }
     $checkedIds = $_REQUEST['idChecked'] ?? [];
 
     if (is_array($checkedIds) && !empty($checkedIds)) {
@@ -116,6 +123,7 @@ echo '    </div>';
 echo '  </div>';
 
 echo '<form method="post" action="'.api_get_self().'?id_session='.$sessionId.'&sort='.$sort.'" class="space-y-4" onsubmit="return confirm(\''.addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)).'\');">';
+echo '<input type="hidden" name="sec_token" value="'.$token.'">';
 echo '  <div class="overflow-hidden rounded-lg border border-gray-30 bg-white shadow-sm">';
 echo '    <div class="overflow-x-auto">';
 echo '      <table class="min-w-full divide-y divide-gray-20 text-sm">';
@@ -139,7 +147,7 @@ if (empty($courseRows)) {
         $courseHomeUrl = api_get_path(WEB_COURSE_PATH).$courseId.'/home?sid='.$sessionId;
         $usersUrl = 'session_course_user_list.php?id_session='.$sessionId.'&course_code='.urlencode($courseCode);
         $editUrl = 'session_course_edit.php?id_session='.$sessionId.'&page=session_course_list.php&course_code='.urlencode($courseCode);
-        $deleteUrl = api_get_self().'?id_session='.$sessionId.'&sort='.$sort.'&action=delete&idChecked[]='.$courseId;
+        $deleteUrl = api_get_self().'?id_session='.$sessionId.'&sort='.$sort.'&action=delete&idChecked[]='.$courseId.'&sec_token='.$token;
         $roomLabel = '-';
 
         if (!empty($courseRow['room_title'])) {

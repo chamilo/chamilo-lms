@@ -54,6 +54,15 @@ Feature: Follow an assignment
     Then I should see the "[data-testid='assignment-follow-toggle'] .mdi-bell" element
     And I should see "Following"
 
+  # The learner below must belong to TEMP; nothing in this file subscribed her, so it only passed after another
+  # file had. Idempotent ("Register" is not shown when she already is), and she stays subscribed for the others.
+  Scenario: Subscribe the learner to TEMP
+    Given I am a platform administrator
+    And I am on "/main/user/subscribe_user.php?keyword=acostea&type=5&cid=3"
+    And wait for the page to be loaded
+    Then I follow "Register" if it is visible
+    And wait very long for the page to be loaded
+
   Scenario: A learner does not get the follow toggle
     Given I am not logged
     Given I am a student

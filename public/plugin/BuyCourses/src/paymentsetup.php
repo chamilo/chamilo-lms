@@ -10,6 +10,7 @@ declare(strict_types=1);
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 /**
  * Add classes to an element without removing the existing ones.
@@ -419,6 +420,9 @@ $taxEnable = 'true' === $plugin->get('tax_enable');
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
 if (isset($_GET['action'], $_GET['id']) && 'delete_taccount' === $_GET['action']) {
+    // Deleting a bank account must not be possible from a bare link (CSRF).
+    buycoursesRequireAdminToken(api_get_self());
+
     $transferAccountId = is_scalar($_GET['id']) ? (int) $_GET['id'] : 0;
 
     if ($transferAccountId <= 0) {
@@ -446,7 +450,11 @@ if (isset($_GET['action'], $_GET['id']) && 'delete_taccount' === $_GET['action']
     exit;
 }
 
+// Every form of this page (payment credentials, accounts, commissions...) carries the token.
+buycoursesRequireAdminTokenOnPost(api_get_self());
+
 $globalSettingForm = new FormValidator('currency');
+buycoursesAdminTokenField($globalSettingForm);
 
 if ($globalSettingForm->validate()) {
     $globalSettingFormValues = $globalSettingForm->getSubmitValues();
@@ -669,8 +677,10 @@ $globalSettingForm->addButtonSave(get_lang('Save'));
 $globalSettingForm->setDefaults($plugin->getGlobalParameters());
 
 $termsAndConditionsForm = new FormValidator('termsconditions');
+buycoursesAdminTokenField($termsAndConditionsForm);
 
 $paypalForm = new FormValidator('paypal');
+buycoursesAdminTokenField($paypalForm);
 
 if ($paypalForm->validate()) {
     $paypalFormValues = $paypalForm->getSubmitValues();
@@ -716,6 +726,7 @@ $htmlTpvRedsys = Display::return_message($plugin->get_lang('NotFindRedsysFile'),
 
 if (file_exists(api_get_path(SYS_PLUGIN_PATH).'BuyCourses/resources/apiRedsys.php')) {
     $tpvRedsysForm = new FormValidator('tpv_redsys');
+    buycoursesAdminTokenField($tpvRedsysForm);
     $tpvRedsysForm->addHtml(
         Display::return_message($plugin->get_lang('InfoTpvRedsysApiCredentials'), 'info', false)
     );
@@ -782,6 +793,7 @@ if (file_exists(api_get_path(SYS_PLUGIN_PATH).'BuyCourses/resources/apiRedsys.ph
 }
 
 $commissionForm = new FormValidator('commissions');
+buycoursesAdminTokenField($commissionForm);
 
 if ($commissionForm->validate()) {
     $commissionFormValues = $commissionForm->getSubmitValues();
@@ -816,6 +828,7 @@ $commissionForm->addButtonSave(get_lang('Save'));
 $commissionForm->setDefaults($plugin->getPlatformCommission());
 
 $transferForm = new FormValidator('transfer_account');
+buycoursesAdminTokenField($transferForm);
 
 if ($transferForm->validate()) {
     $transferFormValues = $transferForm->getSubmitValues();
@@ -858,6 +871,7 @@ $transferForm->addButtonCreate(get_lang('Add'));
 $transferAccounts = $plugin->getTransferAccounts();
 
 $transferInfoForm = new FormValidator('transfer_info');
+buycoursesAdminTokenField($transferInfoForm);
 
 if ($transferInfoForm->validate()) {
     $transferInfoFormValues = $transferInfoForm->getSubmitValues();
@@ -888,6 +902,7 @@ $transferInfoForm->addButtonSave(get_lang('Save'));
 $transferInfoForm->setDefaults($plugin->getTransferInfoExtra());
 
 $culqiForm = new FormValidator('culqi_config');
+buycoursesAdminTokenField($culqiForm);
 
 if ($culqiForm->validate()) {
     $culqiFormValues = $culqiForm->getSubmitValues();
@@ -920,6 +935,7 @@ $culqiForm->addButtonSave(get_lang('Save'));
 $culqiForm->setDefaults($plugin->getCulqiParams());
 
 $stripeForm = new FormValidator('stripe_config');
+buycoursesAdminTokenField($stripeForm);
 
 if ($stripeForm->validate()) {
     $stripeFormValues = $stripeForm->getSubmitValues();
@@ -961,6 +977,7 @@ $stripeForm->addButtonSave(get_lang('Save'));
 $stripeForm->setDefaults($plugin->getStripeParams());
 
 $btcpayForm = new FormValidator('btcpay_config');
+buycoursesAdminTokenField($btcpayForm);
 
 if ($btcpayForm->validate()) {
     $btcpayFormValues = $btcpayForm->getSubmitValues();
@@ -1085,6 +1102,7 @@ $btcpayForm->setDefaults([
 ]);
 
 $cecabankForm = new FormValidator('cecabank_config');
+buycoursesAdminTokenField($cecabankForm);
 
 if ($cecabankForm->validate()) {
     $cecabankFormValues = $cecabankForm->getSubmitValues();
@@ -1190,6 +1208,7 @@ $tpl->assign('plugin_title', $plugin->get_lang('plugin_title'));
 $tpl->assign('plugin_index_url', $pluginIndexUrl);
 $tpl->assign('plugin_settings_url', $pluginSettingsUrl);
 $tpl->assign('delete_transfer_base_url', $deleteTransferBaseUrl);
+$tpl->assign('admin_token', buycoursesAdminToken());
 
 $tpl->assign('selected_currency_label', $selectedCurrencyLabel);
 $tpl->assign('tax_enable', $taxEnable);

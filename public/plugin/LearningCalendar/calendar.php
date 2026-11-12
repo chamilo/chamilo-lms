@@ -31,6 +31,7 @@ $toolbarActions[] = Display::url(
 $eventList = $plugin->getEventTypeList();
 $template->assign('events', $eventList);
 $template->assign('ajax_url', api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/ajax.php?id='.$calendarId);
+$template->assign('sec_token', Security::get_token('learning_calendar'));
 $template->assign('plugin_title', $plugin->get_lang('LearningCalendar'));
 $template->assign('header', $item['title']);
 $template->assign('description', $item['description'] ?? '');

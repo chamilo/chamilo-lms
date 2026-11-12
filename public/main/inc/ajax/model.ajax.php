@@ -154,6 +154,32 @@ if ($isDiagnosisLoadSearch) {
     api_protect_admin_script(true);
 }
 
+// The session reports take the session id from the request, and api_protect_admin_script(true) lets every
+// session admin in: a session admin who may not manage every session only gets the ones he manages, and no
+// unscoped (empty id) report.
+if (in_array($action, [
+        'get_session_lp_progress',
+        'get_session_progress',
+        'get_exercise_progress',
+        'get_session_access_overview',
+        'get_survey_overview',
+    ], true)
+    && !api_is_platform_admin()
+) {
+    $reportSessionId = (int) ($_GET['session_id'] ?? 0);
+    $manageAll = 'true' === api_get_setting('session.allow_session_admins_to_manage_all_sessions');
+    if (empty($reportSessionId) ? !$manageAll : !SessionManager::canManageSessionId($reportSessionId)) {
+        api_not_allowed(true);
+    }
+}
+
+// The work grids take the work id from the request: it must be a work of the current course (or its session).
+if (in_array($action, ['get_work_user_list_all', 'get_work_user_list_others', 'get_work_user_list'], true)
+    && !workBelongsToCourse((int) ($_REQUEST['work_id'] ?? 0), api_get_course_int_id(), api_get_session_id())
+) {
+    api_not_allowed(true);
+}
+
 $toRemove = ['extra_access_start_date', 'extra_access_end_date'];
 
 // Search features
@@ -762,7 +788,11 @@ switch ($action) {
         }
 
         $courseId = (int) ($_REQUEST['course_id'] ?? 0);
-        $exerciseId = $_REQUEST['exercise_id'] ?? 0;
+        // The access check above was made for the current course: the grid cannot count another one.
+        if (!empty($courseId) && $courseId !== (int) api_get_course_int_id()) {
+            api_not_allowed(true);
+        }
+        $exerciseId = (int) ($_REQUEST['exercise_id'] ?? 0);
         $status = $_REQUEST['status'] ?? 0;
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
             $filter_user = (int) $_GET['filter_by_user'];

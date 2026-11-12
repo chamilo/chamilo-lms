@@ -31,6 +31,14 @@ switch ($action) {
     case 'get_exercise_by_course':
         $course_id = (isset($_GET['course_id']) && !empty($_GET['course_id'])) ? (int) $_GET['course_id'] : 0;
         $session_id = (!empty($_GET['session_id'])) ? (int) $_GET['session_id'] : 0;
+        // The access check above was made for the current course: listing the tests (drafts included) of another
+        // course requires being its teacher (or a platform admin).
+        if ($course_id !== (int) api_get_course_int_id()
+            && !api_is_platform_admin()
+            && !CourseManager::isCourseTeacher($currentUserId, $course_id)
+        ) {
+            api_not_allowed(true);
+        }
         $data = [];
         $onlyActiveExercises = !(api_is_platform_admin(true) || api_is_course_admin());
         $results = ExerciseLib::get_all_exercises_for_course_id(
@@ -175,6 +183,9 @@ switch ($action) {
 
         // 1. Setting variables needed by jqgrid
         $exercise_id = (int) $_GET['exercise_id'];
+        if (!ExerciseLib::exerciseBelongsToCourse($exercise_id, (int) $course_id, (int) api_get_session_id())) {
+            break;
+        }
         $page = (int) $_REQUEST['page']; //page
         $limit = (int) $_REQUEST['rows']; //quantity of rows
         $sidx = (int) $_REQUEST['sidx']; //index to filter
@@ -324,11 +335,18 @@ switch ($action) {
         echo json_encode($response);
         break;
     case 'update_exercise_list_order':
-        if (api_is_allowed_to_edit(null, true)) {
+        // The order may only be written for the session of the current context, and only for tests of this course.
+        if (api_is_allowed_to_edit(null, true)
+            && $session_id === (int) api_get_session_id()
+            && is_array($_REQUEST['exercise_list'] ?? null)
+        ) {
             // Close the session as we don't need it any further
             session_write_close();
 
-            $new_list = $_REQUEST['exercise_list'];
+            $new_list = array_filter(
+                $_REQUEST['exercise_list'],
+                static fn ($id): bool => ExerciseLib::exerciseBelongsToCourse((int) $id, (int) $course_id, (int) $session_id)
+            );
             $table = Database::get_course_table(TABLE_QUIZ_ORDER);
             $counter = 1;
             //Drop all
@@ -362,7 +380,7 @@ switch ($action) {
         if (empty($exercise_id)) {
             return Display::return_message(get_lang('Error'), 'error');
         }
-        if ($isAllowedToEdit) {
+        if ($isAllowedToEdit && ExerciseLib::exerciseBelongsToCourse($exercise_id, (int) $course_id, (int) api_get_session_id())) {
             $new_question_list = $_POST['question_id_list'];
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $counter = 1;
@@ -990,6 +1008,13 @@ switch ($action) {
             break;
         }
 
+        // Exercise::read() and Question::read() do not scope by course.
+        if (!ExerciseLib::exerciseBelongsToCourse($exerciseId, (int) $course_id, (int) api_get_session_id())
+            || !ExerciseLib::questionBelongsToCourse($questionId, (int) $course_id, (int) api_get_session_id())
+        ) {
+            api_not_allowed(true);
+        }
+
         $objExercise = new Exercise();
         $objExercise->read($exerciseId);
         $objQuestion = Question::read($questionId);
@@ -1159,7 +1184,11 @@ switch ($action) {
         session_write_close();
 
         $track = ExerciseLib::get_exercise_track_exercise_info((int) $exeId);
-        if (empty($track)) {
+        // Only the owner can sign an attempt, in the current course.
+        if (empty($track)
+            || (int) $track['exe_user_id'] !== (int) $currentUserId
+            || (int) $track['c_id'] !== (int) $course_id
+        ) {
             echo 'Exercise attempt was not found.';
             exit;
         }
@@ -1204,7 +1233,9 @@ switch ($action) {
                     }
                 }
                 foreach ($fileList as $file) {
-                    $tmpFile = disable_dangerous_file(api_replace_dangerous_char($file['name']));
+                    // Chunks of one user live under their own prefix: the "done" phase would otherwise read (and
+                    // unlink) any file of the shared archive directory named like the posted file.
+                    $tmpFile = 'exa_'.$currentUserId.'_'.disable_dangerous_file(api_replace_dangerous_char($file['name']));
                     file_put_contents(
                         $tempDirectory.$tmpFile,
                         fopen($file['tmp_name'], 'r'),
@@ -1251,7 +1282,7 @@ switch ($action) {
                 if (isset($_REQUEST['chunkAction']) && 'done' === $_REQUEST['chunkAction']) {
                     // Same sanitization as the "send" phase, so the path stays inside the
                     // archive directory and still matches the chunk written there.
-                    $chunkName = disable_dangerous_file(api_replace_dangerous_char($file['name'] ?? $originalName));
+                    $chunkName = 'exa_'.$currentUserId.'_'.disable_dangerous_file(api_replace_dangerous_char($file['name'] ?? $originalName));
                     $tmpPath = api_get_path(SYS_ARCHIVE_PATH).$chunkName;
                 }
 

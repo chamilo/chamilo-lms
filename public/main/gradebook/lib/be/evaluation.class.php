@@ -252,7 +252,8 @@ class Evaluation implements GradebookItem
             } else {
                 $sql .= ' WHERE';
             }
-            $sql .= ' user_id = '.$userId;
+            // The user_id column is gone: the user now selects the evaluations of the courses taught or coached.
+            $sql .= ' '.GradebookUtils::taughtCoursesCondition((int) $userId);
             $parametersCount++;
         }
 
@@ -400,8 +401,7 @@ class Evaluation implements GradebookItem
         } else {
             $sql .= 'null';
         }
-        $sql .= ', user_id = '.$this->get_user_id()
-            .', c_id = ';
+        $sql .= ', c_id = ';
         if (isset($this->courseId)) {
             $sql .= $this->getCourseId();
         } else {

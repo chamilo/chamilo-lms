@@ -804,6 +804,8 @@ class ExtraField extends Model
     /**
      * Return an array of all the extra fields available for this item.
      *
+     * @deprecated No caller left in the codebase.
+     *
      * @param int $itemId (session_id, question_id, course id)
      *
      * @return array
@@ -2067,6 +2069,8 @@ class ExtraField extends Model
     }
 
     /**
+     * @deprecated No caller left in the codebase.
+     *
      * @param string $type
      *
      * @return array
@@ -2166,8 +2170,8 @@ class ExtraField extends Model
      */
     public function save($params, $showQuery = false)
     {
-        $fieldInfo = self::get_handler_field_info_by_field_variable($params['variable']);
         $params = $this->clean_parameters($params);
+        $fieldInfo = self::get_handler_field_info_by_field_variable($params['variable']);
         $params['item_type'] = $this->itemType;
 
         if ($fieldInfo) {
@@ -2253,7 +2257,7 @@ class ExtraField extends Model
         $sql = "SELECT MAX(field_order)
                 FROM {$this->table}
                 WHERE
-                    item_type = '.$this->itemType.'";
+                    item_type = ".(int) $this->itemType;
         $res = Database::query($sql);
 
         $order = 0;
@@ -2273,11 +2277,12 @@ class ExtraField extends Model
         $params = $this->clean_parameters($params);
         if (isset($params['id'])) {
             $fieldOption = new ExtraFieldOption($this->type);
-            $params['field_id'] = $params['id'];
-            if (empty($params['value_type'])) {
-                $params['value_type'] = $this->type;
+            $optionParams = $params;
+            $optionParams['field_id'] = $params['id'];
+            if (empty($optionParams['value_type'])) {
+                $optionParams['value_type'] = $this->type;
             }
-            $fieldOption->save($params, $showQuery);
+            $fieldOption->save($optionParams, $showQuery);
         }
 
         return parent::update($params, $showQuery);

@@ -139,12 +139,12 @@ final class ExerciseAccessControlTest extends KernelTestCase
         return (int) $this->conn->lastInsertId();
     }
 
-    private function attempt(int $courseId, ?int $quizId = null): int
+    private function attempt(int $courseId, ?int $quizId = null, ?int $sessionId = null): int
     {
         $this->conn->insert('track_e_exercises', [
             'exe_user_id' => 1,
             'c_id' => $courseId,
-            'session_id' => null,
+            'session_id' => $sessionId,
             'exe_exo_id' => $quizId,
             'exe_date' => '2020-01-01 10:00:00',
             'score' => 0,
@@ -183,10 +183,105 @@ final class ExerciseAccessControlTest extends KernelTestCase
 
     public function testAttemptDefaultsToTheCurrentCourse(): void
     {
-        $exe = $this->attempt(1);
+        // Earlier tests may leave a course in the legacy context: use the fixture course that is NOT the current one.
+        $current = (int) api_get_course_int_id();
+        $foreign = 1 === $current ? 2 : 1;
+        $exe = $this->attempt($foreign);
 
-        // No course in the legacy context: the default course id is 0 and nothing matches.
-        $this->assertFalse(ExerciseLib::attemptBelongsToCourse($exe));
+        $this->assertFalse(ExerciseLib::attemptBelongsToCourse($exe), 'an attempt of another course never matches the default');
+    }
+
+    public function testAttemptSessionParityWhenAsked(): void
+    {
+        $sid = $this->session();
+        $other = $this->session();
+        $quiz = $this->quiz(1);
+        $inSession = $this->attempt(1, $quiz, $sid);
+        $noSession = $this->attempt(1, $quiz, null);
+
+        $this->assertTrue(ExerciseLib::attemptBelongsToCourse($inSession, 1, $sid));
+        $this->assertFalse(ExerciseLib::attemptBelongsToCourse($inSession, 1, $other), 'another session of the course');
+        $this->assertFalse(ExerciseLib::attemptBelongsToCourse($inSession, 1, 0), 'base course context must not reach a session attempt');
+        $this->assertTrue(ExerciseLib::attemptBelongsToCourse($noSession, 1, 0));
+        $this->assertFalse(ExerciseLib::attemptBelongsToCourse($noSession, 1, $sid), 'a session context must not reach a session-less attempt');
+        // Not asked: course-only behaviour is unchanged for the other callers.
+        $this->assertTrue(ExerciseLib::attemptBelongsToCourse($inSession, 1));
+    }
+
+    public function testAttemptExerciseParityWhenAsked(): void
+    {
+        $quiz = $this->quiz(1);
+        $otherQuiz = $this->quiz(1);
+        $exe = $this->attempt(1, $quiz);
+
+        $this->assertTrue(ExerciseLib::attemptBelongsToCourse($exe, 1, null, $quiz));
+        $this->assertFalse(ExerciseLib::attemptBelongsToCourse($exe, 1, null, $otherQuiz), 'attempt of another test of the same course');
+        $this->assertTrue(ExerciseLib::attemptBelongsToCourse($exe, 1, 0, $quiz));
+    }
+
+    /**
+     * admin.php is procedural (it cannot be included in a test), so pin the guard list at source level: every request
+     * key that ends in a Question::read() must be in the list that goes through questionBelongsToCourse().
+     */
+    public function testAdminPageGuardsEveryQuestionIdKey(): void
+    {
+        $source = (string) file_get_contents(__DIR__.'/../../../public/main/exercise/admin.php');
+        $start = (int) strpos($source, '$requestedQuestionIds = [');
+        $list = substr($source, $start, (int) strpos($source, '];', $start) - $start);
+
+        foreach (['editQuestion', 'modifyQuestion', 'modifyAnswers', 'deleteQuestion', 'clone_question', 'mad_admin', 'hotspotadmin'] as $key) {
+            $this->assertStringContainsString("['".$key."']", $list, $key.' reaches Question::read(), it must be guarded');
+        }
+    }
+
+    public function testQuestionCategoryOfAnotherCourseIsRejected(): void
+    {
+        $node = $this->node();
+        $this->conn->insert('c_quiz_question_category', [
+            'title' => 'ea_cat_'.(++$this->seq),
+            'description' => '',
+            'resource_node_id' => $node,
+        ]);
+        $cat = (int) $this->conn->lastInsertId();
+        $this->link($node, 2);
+
+        $this->assertFalse(ExerciseLib::questionCategoryBelongsToCourse($cat, 1, 0), 'tests_category.php must not touch it from course 1');
+        $this->assertTrue(ExerciseLib::questionCategoryBelongsToCourse($cat, 2, 0));
+        $this->assertFalse(ExerciseLib::questionCategoryBelongsToCourse(0, 2, 0));
+    }
+
+    /**
+     * The list pages are procedural: pin at source level that each state-changing action is behind the token and the
+     * course check (these were plain GETs on unscoped ids).
+     */
+    public function testListPagesRequireTokenAndCourseScope(): void
+    {
+        $dir = __DIR__.'/../../../public/main/';
+        $exercise = (string) file_get_contents($dir.'exercise/exercise.php');
+        $this->assertStringContainsString("'exportqti2' !== \$action && !\$check", $exercise);
+        $this->assertStringContainsString("get_existing_token('exercise')", $exercise);
+        $this->assertStringContainsString('$category->getCourse()->getId() !== (int) $courseId', $exercise);
+
+        $category = (string) file_get_contents($dir.'exercise/category.php');
+        $this->assertMatchesRegularExpression("/case 'delete':\\s+[^\\n]*\\n\\s+if \\(!\\\$check \\|\\| !\\\$categoryInCourse/", $category);
+
+        $pool = (string) file_get_contents($dir.'exercise/question_pool.php');
+        $this->assertStringContainsString('questionPoolSourceCourseIsAllowed', $pool);
+        $this->assertStringContainsString('$changesData && !$exerciseTokenIsValid', $pool);
+
+        foreach (['overview.php', 'exercise_submit.php'] as $entry) {
+            $this->assertStringContainsString('exerciseBelongsToCourse', (string) file_get_contents($dir.'exercise/'.$entry), $entry.' starts a test: it must be one of the course');
+        }
+        foreach (['hotspot_actionscript.as.php', 'hotspot_actionscript_admin.as.php', 'hotspot_answers.as.php'] as $hotspot) {
+            $this->assertStringContainsString('questionBelongsToCourse', (string) file_get_contents($dir.'exercise/'.$hotspot), $hotspot.' returns the hotspot solution');
+        }
+        $ajax = (string) file_get_contents($dir.'inc/ajax/exercise.ajax.php');
+        $this->assertStringContainsString('$session_id === (int) api_get_session_id()', $ajax);
+        $this->assertStringContainsString("(int) \$track['exe_user_id'] !== (int) \$currentUserId", $ajax);
+
+        $tests = (string) file_get_contents($dir.'exercise/tests_category.php');
+        $this->assertStringContainsString("check_token('request', null, 'exercise')", $tests);
+        $this->assertStringContainsString('questionCategoryBelongsToCourse', $tests);
     }
 
     public function testExerciseOfAnotherCourseIsRejected(): void

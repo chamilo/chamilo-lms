@@ -173,8 +173,8 @@ class learnpathItem
         if (!empty($this->lp_id)) {
             $sql = "SELECT iid FROM $items_table
                     WHERE
-                        lp_id = ".$this->lp_id." AND
-                        parent_item_id = $id";
+                        lp_id = ".(int) $this->lp_id." AND
+                        parent_item_id = ".(int) $this->db_id;
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 while ($row = Database::fetch_assoc($res)) {
@@ -273,9 +273,9 @@ class learnpathItem
             return null;
         }
         $this->objectives[$index] = $params;
-        // Take the current maximum index to generate the objectives_count.
-        if ((count($this->objectives) + 1) > $this->objectives_count) {
-            $this->objectives_count = (count($this->objectives) + 1);
+        // The objectives count is the number of objectives, like the one loaded from the database.
+        if (count($this->objectives) > $this->objectives_count) {
+            $this->objectives_count = count($this->objectives);
         }
     }
 
@@ -500,14 +500,13 @@ class learnpathItem
 
                 case TOOL_DOCUMENT:
                 case 'video':
-                    $table_doc = Database::get_course_table(TABLE_DOCUMENT);
-                    $sql = 'SELECT path
-                            FROM '.$table_doc.'
-                            WHERE iid = '.$path;
-                    $res = Database::query($sql);
-                    $row = Database::fetch_array($res);
+                    // c_document has no path column any more: the path comes from the resource tree.
+                    $document = Container::getDocumentRepository()->find((int) $path);
+                    if (null === $document) {
+                        return '-1';
+                    }
 
-                    return 'document'.$row['path'];
+                    return 'document/'.ltrim($document->getFullPath(), '/');
 
                 case TOOL_STUDENTPUBLICATION:
                 case TOOL_QUIZ:
@@ -551,7 +550,7 @@ class learnpathItem
         $this->interactions = [];
         $courseId = $this->courseId;
         $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $sql = "SELECT id FROM $tbl
+        $sql = "SELECT iid FROM $tbl
                 WHERE
                     lp_item_id = ".$this->db_id.' AND
                     lp_view_id = '.$this->view_id.' AND
@@ -568,10 +567,10 @@ class learnpathItem
                 $this->interactions[$row['interaction_id']] = [
                     $row['interaction_id'],
                     $row['interaction_type'],
-                    $row['weighting'],
                     $row['completion_time'],
+                    $row['weighting'],
                     $row['correct_responses'],
-                    $row['student_responses'],
+                    $row['student_response'],
                     $row['result'],
                     $row['latency'],
                 ];
@@ -2024,6 +2023,19 @@ class learnpathItem
             }
         }
 
+        // The groups were replaced by their value: an expression made only of parentheses is now a literal.
+        if ('_true_' === $prereqs_string) {
+            return true;
+        }
+
+        if ('_false_' === $prereqs_string) {
+            if (empty($this->prereq_alert)) {
+                $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
+            }
+
+            return false;
+        }
+
         // Parenthesis removed, now look for ORs as it is the lesser-priority
         //  binary operator (= always uses one text operand).
         if (!str_contains($prereqs_string, '|')) {
@@ -2157,7 +2169,7 @@ class learnpathItem
 
                         $list = [];
                         $myres = preg_match(
-                            '/~([^(\d+\*)\{]*)/',
+                            '/~([^()*{]*)/',
                             $prereqs_string,
                             $list
                         );
@@ -2202,7 +2214,7 @@ class learnpathItem
                         );
 
                         if ($groups_there) {
-                            foreach ($groups[1] as $gr) {
+                            foreach ($groups[1] as $groupIndex => $gr) {
                                 // Only take the results that correspond to
                                 //  the big brackets-enclosed condition.
                                 if ($debug) {
@@ -2275,7 +2287,8 @@ class learnpathItem
                                             0
                                         );
                                     }
-                                    $list = explode(',', $gr);
+                                    // Members only: $groups[3] is the content of the braces.
+                                    $list = explode(',', $groups[3][$groupIndex]);
                                     $mycond = true;
 
                                     foreach ($list as $cond) {
@@ -2376,10 +2389,10 @@ class learnpathItem
                                                 $minScore = $myItemToCheck->getPrerequisiteMinScore();
                                                 $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
 
-                                                if (isset($minScore, $minScore)) {
+                                                if (isset($minScore)) {
                                                     // Taking min/max prerequisites values see BT#5776
                                                     if ($quiz['score'] >= $minScore
-                                                        && $quiz['score'] <= $maxScore
+                                                        && (null === $maxScore || $quiz['score'] <= $maxScore)
                                                     ) {
                                                         $returnstatus = true;
                                                     } else {
@@ -2469,9 +2482,9 @@ class learnpathItem
                                                     }
                                                 }
 
-                                                if (isset($minScore, $minScore)) {
+                                                if (isset($minScore)) {
                                                     // Taking min/max prerequisites values see BT#5776.
-                                                    if ($quiz['score'] >= $minScore && $quiz['score'] <= $maxScore) {
+                                                    if ($quiz['score'] >= $minScore && (null === $maxScore || $quiz['score'] <= $maxScore)) {
                                                         $returnstatus = true;
                                                         break;
                                                     }
@@ -2623,7 +2636,7 @@ class learnpathItem
                 }
             }
         } else {
-            $list = explode('\\|', $prereqs_string);
+            $list = explode('|', $prereqs_string);
             if (count($list) > 1) {
                 if (self::DEBUG > 1) {
                     error_log('New LP - Found OR, looking into it', 0);
@@ -3277,7 +3290,7 @@ class learnpathItem
         global $charset;
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $a_terms = preg_split('/,/', $terms);
-        $i_terms = preg_split('/,/', $this->get_terms());
+        $i_terms = array_filter(preg_split('/,/', (string) $this->get_terms()), static fn ($term) => '' !== $term);
         foreach ($i_terms as $term) {
             if (!in_array($term, $a_terms)) {
                 $a_terms[] = $term;
@@ -3497,6 +3510,7 @@ class learnpathItem
                     view_count = "'.$this->get_attempt_id().'"';
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
+        $itemViewStatus = $row['status'] ?? null;
 
         if (!isset($row['total_time'])) {
             $total_time = 0;
@@ -3513,8 +3527,8 @@ class learnpathItem
         $res = Database::query($sql);
         $accumulateScormTime = 'false';
         if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_assoc($res);
-            $accumulateScormTime = $row['accumulate_scorm_time'];
+            $lpRow = Database::fetch_assoc($res);
+            $accumulateScormTime = $lpRow['accumulate_scorm_time'];
         }
 
         // Step 2.1 : if normal mode total_time = total_time + total_sec
@@ -3555,7 +3569,7 @@ class learnpathItem
         ];
 
         if (1 != $this->seriousgame_mode
-            || !in_array($row['status'], $case_completed)
+            || !in_array($itemViewStatus, $case_completed)
         ) {
             $sql = "UPDATE $item_view_table
                       SET total_time = '$total_time'
@@ -3596,7 +3610,7 @@ class learnpathItem
                     WHERE
                         lp_item_id = ".$this->db_id.' AND
                         lp_view_id = '.$this->view_id.' AND
-                        view_count = '.$this->attempt_id;
+                        view_count = '.$this->get_attempt_id();
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row = Database::fetch_array($res);
@@ -3646,12 +3660,7 @@ class learnpathItem
                             'score_max' => $objective[3],
                         ];
 
-                        $insertId = Database::insert($iva_table, $params);
-                        if ($insertId) {
-                            $sql = "UPDATE $iva_table SET id = iid
-                                    WHERE iid = $insertId";
-                            Database::query($sql);
-                        }
+                        Database::insert($iva_table, $params);
                     }
                 }
             }
@@ -3743,7 +3752,6 @@ class learnpathItem
         if ('quiz' === $this->type && 0 == $this->get_prevent_reinit() && 'completed' === $this->get_status()) {
             $this->restart();
             $params = [
-                'c_id' => $courseId,
                 'total_time' => $this->get_total_time(),
                 'start_time' => $this->current_start_time,
                 'score' => $this->get_score(),
@@ -3778,7 +3786,6 @@ class learnpathItem
 
         if (!$inserted && Database::num_rows($checkResult) < 1) {
             $params = [
-                'c_id' => $courseId,
                 'total_time' => $this->get_total_time(),
                 'start_time' => $this->current_start_time,
                 'score' => $this->get_score(),
@@ -3808,8 +3815,7 @@ class learnpathItem
                 'lesson_location' => $this->lesson_location,
             ];
             $where = [
-                'c_id = ? AND lp_item_id = ? AND lp_view_id = ? AND view_count = ?' => [
-                    $courseId,
+                'lp_item_id = ? AND lp_view_id = ? AND view_count = ?' => [
                     $this->db_id,
                     $this->view_id,
                     $this->get_attempt_id(),
@@ -3998,7 +4004,6 @@ class learnpathItem
         if (2 == $lpType) {
             $sql = 'SELECT status FROM '.$itemViewTable.'
                     WHERE
-                        c_id = '.$courseId.' AND
                         lp_item_id = "'.$this->db_id.'" AND
                         lp_view_id = "'.$this->view_id.'" AND
                         view_count = "'.$this->get_attempt_id().'"';
@@ -4084,6 +4089,8 @@ class learnpathItem
                     $correctResp .= $resp.',';
                 }
                 $correctResp = substr($correctResp, 0, -1);
+            } elseif (is_string($interaction[4])) {
+                $correctResp = $interaction[4];
             }
 
             // Check if this interaction already exists for the current SCO view.
@@ -4420,6 +4427,8 @@ class learnpathItem
 
             return $resultFromOtherSessions;
         }
+
+        return false;
     }
 
     public function get_title_to_display(): string

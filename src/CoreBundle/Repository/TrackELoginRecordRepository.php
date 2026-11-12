@@ -97,7 +97,10 @@ final class TrackELoginRecordRepository extends ServiceEntityRepository
         }
         if (!empty($filters['to'])) {
             $where[] = 'login_date <= :to';
-            $params['to'] = $filters['to'];
+            // The admin form sends a plain date: include the whole last day, not only its midnight.
+            $params['to'] = 1 === preg_match('/^\d{4}-\d{2}-\d{2}$/', (string) $filters['to'])
+                ? $filters['to'].' 23:59:59'
+                : $filters['to'];
         }
 
         $whereSql = $where ? ('WHERE '.implode(' AND ', $where)) : '';

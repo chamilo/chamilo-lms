@@ -26,6 +26,15 @@ $my_folder_data = get_work_data_by_id($work_id);
 $repo = Container::getStudentPublicationRepository();
 $studentPublication = empty($work_id) ? null : $repo->find($work_id);
 
+// Every id taken from the request below (work, item, move target) is only usable if it is in this course.
+$requestCourseId = api_get_course_int_id();
+if (!empty($work_id) && !workBelongsToCourse($work_id, $requestCourseId, $sessionId)) {
+    api_not_allowed(true);
+}
+// State-changing links (delete, visibility, move) carry this token; created here so that the grids loaded by
+// ajax afterwards only read it.
+workActionToken();
+
 $curdirpath = '';
 $htmlHeadXtra[] = to_javascript_work();
 $tool_name = get_lang('Assignments');
@@ -188,8 +197,12 @@ switch ($action) {
         break;
     case 'delete_dir':
         if ($is_allowed_to_edit) {
-            $work_to_delete = get_work_data_by_id($_REQUEST['id']);
-            $result = deleteDirWork($_REQUEST['id']);
+            $deleteId = (int) ($_REQUEST['id'] ?? 0);
+            if (!workBelongsToCourse($deleteId, $requestCourseId, $sessionId) || !workActionTokenIsValid('request')) {
+                api_not_allowed(true);
+            }
+            $work_to_delete = get_work_data_by_id($deleteId);
+            $result = deleteDirWork($deleteId, $requestCourseId);
             if ($result) {
                 $message = Display::return_message(
                     get_lang('Folder deleted').': '.$work_to_delete['title'],
@@ -205,6 +218,9 @@ switch ($action) {
     case 'move':
         // Move file form request
         if ($is_allowed_to_edit && !empty($item_id)) {
+            if (!workBelongsToCourse($item_id, $requestCourseId, $sessionId)) {
+                api_not_allowed(true);
+            }
             $content = generateMoveForm(
                 $item_id,
                 $curdirpath,
@@ -218,17 +234,29 @@ switch ($action) {
     case 'move_to':
         /* Move file command */
         if ($is_allowed_to_edit && isset($_REQUEST['move_to_id'])) {
-            $moveToParentId = $_REQUEST['move_to_id'];
+            $moveItemId = (int) ($_REQUEST['item_id'] ?? 0);
+            $moveToId = (int) $_REQUEST['move_to_id'];
+            $moveCourseId = api_get_course_int_id();
+
+            // Both ends must belong to the current course/session, and a folder cannot go into itself
+            // or into one of its own descendants.
+            if (!workActionTokenIsValid('request')
+                || !workBelongsToCourse($moveItemId, $moveCourseId, $sessionId)
+                || !workBelongsToCourse($moveToId, $moveCourseId, $sessionId)
+                || workIsSameOrDescendantOf($moveToId, $moveItemId)
+            ) {
+                api_not_allowed(true);
+            }
 
             /** @var CStudentPublication $newParent */
-            $newParent = $repo->find($_REQUEST['move_to_id']);
+            $newParent = $repo->find($moveToId);
 
             /** @var CStudentPublication $studentPublication */
-            $studentPublication = $repo->find($_REQUEST['item_id']);
-            if ($_REQUEST['move_to_id']) {
-                $parent = $repo->find($_REQUEST['move_to_id']);
-                $studentPublication->setParent($parent);
+            $studentPublication = $repo->find($moveItemId);
+            if (null === $newParent || null === $studentPublication) {
+                api_not_allowed(true);
             }
+            $studentPublication->setParent($newParent);
             $studentPublication->getResourceNode()->setParent($newParent->getResourceNode());
             $repo->update($studentPublication);
             /*api_item_property_update(
@@ -250,6 +278,9 @@ switch ($action) {
     case 'visible':
         if (!$is_allowed_to_edit) {
             api_not_allowed();
+        }
+        if (null === $studentPublication || !workActionTokenIsValid('get')) {
+            api_not_allowed(true);
         }
 
         $repo->setVisibilityPublished($studentPublication, $course, $session);
@@ -281,6 +312,9 @@ switch ($action) {
     case 'invisible':
         if (!$is_allowed_to_edit) {
             api_not_allowed();
+        }
+        if (null === $studentPublication || !workActionTokenIsValid('get')) {
+            api_not_allowed(true);
         }
 
         $repo->setVisibilityDraft($studentPublication, $course, $session);

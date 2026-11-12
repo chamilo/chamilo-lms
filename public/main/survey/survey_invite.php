@@ -20,12 +20,12 @@ $repo = Container::getSurveyRepository();
 $survey = null;
 if (!empty($surveyId)) {
     /** @var CSurvey $survey */
-    $survey = $repo->find($surveyId);
-    $surveyId = $survey->getIid();
+    $survey = $repo->find((int) $surveyId);
 }
-if (null === $survey) {
+if (null === $survey || !SurveyManager::surveyBelongsToCurrentCourse((int) $survey->getIid())) {
     api_not_allowed(true);
 }
+$surveyId = $survey->getIid();
 
 $survey_data = SurveyManager::get_survey($surveyId);
 $table_survey = Database::get_course_table(TABLE_SURVEY);
@@ -103,6 +103,7 @@ $form = new FormValidator(
     api_get_self().'?survey_id='.$surveyId.'&'.api_get_cidreq()
 );
 $form->addHeader($tool_name);
+$form->protect();
 $sessionId = api_get_session_id();
 CourseManager::addUserGroupMultiSelect($form, [], true);
 
@@ -184,6 +185,9 @@ if ($form->validate()) {
             $defaults['mail_title'] = $survey->getMailSubject();
             $defaults['send_mail'] = 1;
             $form->setDefaults($defaults);
+            // validate() consumed the token: give the redisplayed form a fresh one.
+            $form->setToken(Security::get_token());
+            $form->getElement('protect_token')->setValue($form->getToken());
             $form->display();
         }
     }

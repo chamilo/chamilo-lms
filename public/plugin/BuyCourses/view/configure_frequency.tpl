@@ -144,6 +144,7 @@
                                 {% else %}
                                     <form method="post" action="{{ delete_action_url }}" class="inline-flex">
                                         <input type="hidden" name="action" value="delete_frequency">
+                                        <input type="hidden" name="buycourses_admin_sec_token" value="{{ admin_token|e('html_attr') }}">
                                         <input type="hidden" name="duration" value="{{ frequency.duration }}">
                                         <button
                                             type="submit"

@@ -16,6 +16,7 @@ GradebookUtils::block_students();
 $select_cat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $userId = api_get_user_id();
 
+GradebookUtils::protectElementInCurrentCourse('CATE', $select_cat);
 $evaladd = new Evaluation();
 $evaladd->set_user_id($userId);
 $evaladd->set_category_id($select_cat);
@@ -45,6 +46,10 @@ if ($form->validate()) {
 
     // Resolve Category entity
     $categoryId = isset($values['hid_category_id']) ? (int) $values['hid_category_id'] : 0;
+    // The category is posted back by the form: it must belong to the current course.
+    if (!api_is_platform_admin() && !GradebookUtils::categoryBelongsToCourse($categoryId, (int) api_get_course_int_id())) {
+        api_not_allowed(true);
+    }
     $category = $entityManager->getRepository(GradebookCategory::class)->find($categoryId);
     if (!$category) {
         Display::addFlash(Display::return_message(get_lang('Select assessment'), 'error', false));

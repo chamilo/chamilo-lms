@@ -29,6 +29,8 @@ $usernameListFile = $step1Form->addFile('usernameList', get_lang('Username list'
 $step1Form->addButtonUpload(get_lang('Upload'));
 
 $step2Form = new FormValidator('step2Form');
+// Anonymizing is irreversible and this legacy page is not covered by CsrfProtectionListener.
+$step2Form->protect();
 $usernameTextarea = $step2Form->addTextarea(
     'usersToBeAnonymized',
     get_lang('Users about to be anonymized:'),
@@ -125,6 +127,13 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
         foreach ($users as $user) {
             $username = $user->getUsername();
             $userId = $user->getId();
+            // api_protect_admin_script(true) admits session admins: they may not wipe a platform admin account.
+            if (!api_is_platform_admin() && UserManager::is_admin($userId)) {
+                echo '<h4>'.api_htmlentities($username).'</h4>';
+                echo get_lang('You are not allowed to see this page.');
+                $errors[] = $username;
+                continue;
+            }
             $name = api_get_person_name($user->getFirstname(), $user->getLastname());
             echo "<h4>$username ($name, id= $userId) </h4>";
             try {
@@ -135,13 +144,13 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
                             echo '<p> '.get_lang('Sessions').' </p>';
                             foreach ($sessions as $session) {
                                 $sessionId = $session['id'];
-                                $sessionTitle = $session['name'];
+                                $sessionTitle = api_htmlentities($session['title']);
                                 $usersCount = SessionManager::get_users_by_session($sessionId, null, true);
                                 echo '<p> '.$sessionTitle.' ('.$sessionId.') - '.get_lang('Learners').': '.$usersCount.'</p>';
                                 if (1 === $usersCount) {
                                     $uniqueId = uniqid('anon_session', true);
                                     echo '<p> '.get_lang('Rename').': '.$sessionTitle.' -> '.$uniqueId.'</p>';
-                                    $sql = "UPDATE $tableSession SET name = '$uniqueId' WHERE id = $sessionId";
+                                    $sql = "UPDATE $tableSession SET title = '$uniqueId' WHERE id = $sessionId";
                                     Database::query($sql);
                                 } else {
                                     echo '<p> '.sprintf(get_lang('Session %s skipped'), $sessionTitle).'</p>';
@@ -161,7 +170,7 @@ if ($step1Form->validate() && $usernameListFile->isUploadedFile()) {
             }
             echo "</p>\n";
         }
-        if (empty($error)) {
+        if (empty($errors)) {
             printf('<p>'.get_lang('All %d users were anonymized.').'</p>', count($users));
         } else {
             printf(

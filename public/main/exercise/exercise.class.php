@@ -226,7 +226,10 @@ class Exercise
             }
 
             if (!empty($object->page_result_configuration)) {
-                //$this->pageResultConfiguration = $object->page_result_configuration;
+                $pageResultConfiguration = json_decode((string) $object->page_result_configuration, true);
+                if (is_array($pageResultConfiguration) && !empty($pageResultConfiguration)) {
+                    $this->pageResultConfiguration = $pageResultConfiguration;
+                }
             }
 
             $this->hideQuestionNumber = 1 == $object->hide_question_number;
@@ -674,7 +677,7 @@ class Exercise
             if (!empty($sidx) && !empty($sord)) {
                 if ('question' === $sidx) {
                     if (in_array(strtolower($sord), ['desc', 'asc'])) {
-                        $orderCondition = " ORDER BY `q.$sidx` $sord";
+                        $orderCondition = " ORDER BY q.question $sord";
                     }
                 }
             }
@@ -1528,8 +1531,8 @@ class Exercise
     {
         $id = $this->getId();
         $title = $this->exercise;
-        $description = $this->description;
-        $sound = $this->sound;
+        $description = (string) $this->description;
+        $sound = (string) $this->sound;
         $type = $this->type;
         $attempts = isset($this->attempts) ? (int) $this->attempts : 0;
         $feedback_type = isset($this->feedback_type) ? (int) $this->feedback_type : 0;
@@ -1539,7 +1542,7 @@ class Exercise
         $saveCorrectAnswers = isset($this->saveCorrectAnswers) ? (int) $this->saveCorrectAnswers : 0;
         $review_answers = isset($this->review_answers) && $this->review_answers ? 1 : 0;
         $randomByCat = (int) $this->randomByCat;
-        $text_when_finished = $this->text_when_finished;
+        $text_when_finished = (string) $this->text_when_finished;
         $text_when_finished_failure = $this->text_when_finished_failure;
         $display_category_name = (int) $this->display_category_name;
         $pass_percentage = (int) $this->pass_percentage;
@@ -1673,12 +1676,13 @@ class Exercise
     public function update_question_positions()
     {
         $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        // Fixes #3483 when updating order
-        $questionList = $this->selectQuestionList(true);
-
         if (empty($this->getId())) {
             return false;
         }
+
+        // Fixes #3483 when updating order: every question, keyed by its sequential position (1..n) in the
+        // current order. The normal list is keyed by the stored question_order, which would write it back as is.
+        $questionList = $this->getQuestionOrderedList(true);
 
         if (!empty($questionList)) {
             foreach ($questionList as $position => $questionId) {
@@ -7232,17 +7236,8 @@ class Exercise
      */
     public function added_in_lp()
     {
-        $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT max_score FROM $TBL_LP_ITEM
-                WHERE
-                    item_type = '".TOOL_QUIZ."' AND
-                    path = '{$this->getId()}'";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            return true;
-        }
-
-        return false;
+        // Same rule as read(): only learning paths still linked to this course (resource_link not deleted).
+        return !empty(self::getLpListFromExercise($this->getId(), $this->course_id));
     }
 
     /**
@@ -7631,38 +7626,33 @@ class Exercise
                     Database::query($sql);
                 }
             } else {
-                $remind_list = explode(',', $exercise_info['questions_to_check']);
-                $remind_list_string = '';
+                $remind_list = array_map('intval', explode(',', $exercise_info['questions_to_check']));
+                // Any case that changes nothing (unknown action, id already listed, id not listed on delete)
+                // must leave the stored list as it is.
+                $newRemindList = $remind_list;
                 if ('add' === $action) {
                     if (!in_array($questionId, $remind_list)) {
-                        $newRemindList = [];
-                        $remind_list[] = $questionId;
+                        $newRemindList[] = $questionId;
                         $questionListInSession = Session::read('questionList');
                         if (!empty($questionListInSession)) {
+                            // Follow the order of the questions in the session; ids unknown to that list
+                            // are kept at the end instead of being dropped.
+                            $ordered = [];
                             foreach ($questionListInSession as $originalQuestionId) {
-                                if (in_array($originalQuestionId, $remind_list)) {
-                                    $newRemindList[] = $originalQuestionId;
+                                if (in_array((int) $originalQuestionId, $newRemindList, true)) {
+                                    $ordered[] = (int) $originalQuestionId;
                                 }
                             }
+                            $newRemindList = array_merge($ordered, array_diff($newRemindList, $ordered));
                         }
-                        $remind_list_string = implode(',', $newRemindList);
                     }
                 } elseif ('delete' == $action) {
-                    if (!empty($remind_list)) {
-                        if (in_array($questionId, $remind_list)) {
-                            $remind_list = array_flip($remind_list);
-                            unset($remind_list[$questionId]);
-                            $remind_list = array_flip($remind_list);
-
-                            if (!empty($remind_list)) {
-                                sort($remind_list);
-                                array_filter($remind_list);
-                                $remind_list_string = implode(',', $remind_list);
-                            }
-                        }
+                    if (in_array($questionId, $remind_list)) {
+                        $newRemindList = array_values(array_diff($remind_list, [$questionId]));
+                        sort($newRemindList);
                     }
                 }
-                $value = Database::escape_string($remind_list_string);
+                $value = Database::escape_string(implode(',', $newRemindList));
                 $sql = "UPDATE $track_exercises
                         SET questions_to_check = '$value'
                         WHERE exe_id = $exeId ";
@@ -7792,7 +7782,9 @@ class Exercise
      */
     public function saveCategoriesInExercise($categories)
     {
-        if (!empty($categories) && !empty($this->getId())) {
+        // null means "no categories provided" (save() passes the unset $this->categories): leave them alone.
+        // An empty array is an explicit "no categories" and clears the existing ones.
+        if (is_array($categories) && !empty($this->getId())) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
             $sql = "DELETE FROM $table
                     WHERE exercise_id = {$this->getId()}";
@@ -8460,13 +8452,18 @@ class Exercise
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
 
+        // Quizzes are resource nodes: they belong to a course/session through resource_link, not through
+        // c_quiz columns. Like the legacy filter, base-course quizzes are listed for a session too.
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "SELECT * FROM $tbl_quiz cq
+        $tblResourceLink = Database::get_main_table('resource_link');
+        $sql = "SELECT DISTINCT cq.*, cq.iid AS id FROM $tbl_quiz cq
+                INNER JOIN $tblResourceLink rl
+                    ON rl.resource_node_id = cq.resource_node_id
                 WHERE
-                    cq.c_id = %s AND
-                    (cq.session_id = %s OR cq.session_id = 0)
+                    rl.c_id = $courseId AND
+                    rl.deleted_at IS NULL AND
+                    (rl.session_id = $sessionId OR rl.session_id IS NULL)
                 ORDER BY cq.iid";
-        $sql = sprintf($sql, $courseId, $sessionId);
 
         $result = Database::query($sql);
 
@@ -8892,8 +8889,7 @@ class Exercise
             ]
         )
         ) {
-            $hide = (int) $this->getPageConfigurationAttribute('hide_expected_answer');
-            if (1 === $hide) {
+            if (api_is_flag_enabled($this->getPageConfigurationAttribute('hide_expected_answer'))) {
                 return false;
             }
 
@@ -8905,8 +8901,7 @@ class Exercise
 
     public function getQuestionRibbon(string $class, string $scoreLabel, ?string $result, array $array): string
     {
-        $hide = (int) $this->getPageConfigurationAttribute('hide_question_score');
-        if (1 === $hide) {
+        if (api_is_flag_enabled($this->getPageConfigurationAttribute('hide_question_score'))) {
             return '';
         }
 
@@ -9126,6 +9121,7 @@ class Exercise
         $sum = 0;
         $bestResult = 0;
         $sumResult = 0;
+        $students = [];
         $result = Database::query($sql);
         while ($data = Database::fetch_assoc($result)) {
             // Only take into account users in the current student list.
@@ -9265,7 +9261,7 @@ class Exercise
         $tableRows = [];
         $origin = api_get_origin();
         $charset = 'utf-8';
-        $token = Security::get_token();
+        $token = Security::get_existing_token('exercise');
         $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($userId, ['real_id' => $courseId]);
         $limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
         $content = '';
@@ -9936,7 +9932,7 @@ class Exercise
                     'cid' => api_get_course_int_id(),
                     'sid' => api_get_session_id(),
                     'category_id' => $categoryId,
-                    'sec_token'   => Security::get_token(),
+                    'sec_token'   => Security::get_existing_token('exercise'),
                 ]
             );
 
@@ -10036,8 +10032,8 @@ class Exercise
             $this->iId,
             'results_available_for_x_minutes'
         );
-        if (!empty($value)) {
-            return (int) $value;
+        if (!empty($value) && isset($value['value'])) {
+            return (int) $value['value'];
         }
 
         return 0;
@@ -10358,10 +10354,20 @@ class Exercise
                     switch ($question->type) {
                         case FILL_IN_BLANKS:
                         case FILL_IN_BLANKS_COMBINATION:
-                            $option['answer'] = $this->fill_in_blank_answer_to_string($option['answer']);
-                            if ($option['answer'] === "0") {
-                                $option['answer'] = "there is 0 as answer so we do not want to consider it empty";
+                            // fill_in_blank_answer_to_string() skips a blank holding "0" (empty("0")), so
+                            // look at each blank here: "0" is a real answer, only an empty blank is not.
+                            $isAnswered = false;
+                            foreach ((array) $this->fill_in_blank_answer_to_array($option['answer']) as $blank) {
+                                $blank = strip_tags($blank);
+                                $blank = explode('/', api_substr($blank, 1, api_strlen($blank) - 2));
+                                if ('' !== trim(str_replace('&nbsp;', '', $blank[0]))) {
+                                    $isAnswered = true;
+
+                                    break;
+                                }
                             }
+                            $option['answer'] = $isAnswered ? '1' : '';
+
                             break;
                     }
                 }
@@ -10902,19 +10908,6 @@ class Exercise
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 
-        // Getting question_order to verify that the question
-        // list is correct and all question_order's were set
-        $sql = "SELECT DISTINCT count(e.question_order) as count
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
-                WHERE
-                  e.quiz_id	= ".$this->getId();
-
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-        $count_question_orders = $row['count'];
-
         // Getting question list from the order (question list drag n drop interface).
         $sql = "SELECT DISTINCT e.question_id, e.question_order
                 FROM $TBL_EXERCICE_QUESTION e
@@ -10945,9 +10938,9 @@ class Exercise
         }
 
         if (!empty($temp_question_list)) {
-            /* If both array don't match it means that question_order was not correctly set
-               for all questions using the default mysql order */
-            if (count($temp_question_list) != $count_question_orders) {
+            /* If both arrays differ in size, several questions share the same question_order (so they collapsed
+               into one slot above): fall back to the sequential list using the default mysql order */
+            if (count($temp_question_list) != count($questionList)) {
                 $questionList = $temp_question_list;
             }
         }

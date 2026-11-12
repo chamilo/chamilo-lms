@@ -17,6 +17,7 @@ require_once '../config.php';
 
 if (!isset($_REQUEST['t'], $_REQUEST['i'])) {
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_catalog.php');
+
     exit;
 }
 
@@ -48,7 +49,7 @@ $coupon = null;
 if (isset($_REQUEST['c']) && '' !== trim((string) $_REQUEST['c'])) {
     $couponValue = trim((string) $_REQUEST['c']);
     $coupon = ctype_digit($couponValue)
-        ? $plugin->getCouponService((int) $couponValue, $serviceId)
+        ? $plugin->getCouponService((int) $couponValue, $serviceId, true)
         : $plugin->getCouponServiceByCode($couponValue, $serviceId);
 
     if (empty($coupon) || empty($coupon['id'])) {
@@ -61,6 +62,7 @@ if (isset($_REQUEST['c']) && '' !== trim((string) $_REQUEST['c'])) {
         );
 
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_process.php?i='.$serviceId.'&t='.$type);
+
         exit;
     }
 }
@@ -69,6 +71,7 @@ $serviceInfo = $plugin->getService($serviceId, $coupon);
 
 if (empty($serviceInfo) || empty($serviceInfo['id'])) {
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_catalog.php');
+
     exit;
 }
 
@@ -82,6 +85,7 @@ if (!$plugin->isServiceActive($serviceInfo)) {
     );
 
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_catalog.php');
+
     exit;
 }
 
@@ -96,6 +100,7 @@ if (null !== $purchaseUpsaleChainBlock) {
     );
 
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+
     exit;
 }
 
@@ -107,13 +112,14 @@ $serviceInfo['is_upgrade'] = null !== $upgradeOffer;
 if (null !== $upgradeOffer && empty($upgradeOffer['purchasable'])) {
     Display::addFlash(
         Display::return_message(
-            $plugin->get_lang('UpgradePriceMustBePositive'),
+            $plugin->get_lang((string) ($upgradeOffer['block_reason'] ?? 'UpgradePriceMustBePositive')),
             'warning',
             false
         )
     );
 
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+
     exit;
 }
 
@@ -127,6 +133,7 @@ if (!$plugin->canCurrentUserBuyService($serviceInfo)) {
     );
 
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+
     exit;
 }
 
@@ -140,6 +147,7 @@ if ($plugin->hasBlockingUserServiceSaleForCurrentBuyer($serviceId)) {
     );
 
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+
     exit;
 }
 
@@ -153,6 +161,7 @@ if ($plugin->hasPendingUserServiceSaleForCurrentBuyer($serviceId)) {
     );
 
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+
     exit;
 }
 
@@ -180,6 +189,7 @@ if ([] === $paymentTypesOptions) {
     );
 
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_information.php?service_id='.$serviceId);
+
     exit;
 }
 
@@ -216,9 +226,9 @@ $selectOptions = [
 
 if ($typeUser) {
     $currentUserLabel = api_get_person_name(
-            $userInfo['firstname'],
-            $userInfo['lastname']
-        ).' ('.get_lang('Myself').')';
+        $userInfo['firstname'],
+        $userInfo['lastname']
+    ).' ('.get_lang('Myself').')';
 
     $form->addHidden('info_select', (string) $currentUserId);
     $form->addHtml(
@@ -289,7 +299,8 @@ if ($typeUser) {
         $thisLpList = $lpRepo
             ->getResourcesByCourse($course->getCourse())
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         foreach ($thisLpList as $lp) {
             $courseLpList[$course->getId()] = $lp->getTitle().' ('.$course->getCourse()->getTitle().')';
@@ -304,7 +315,8 @@ if ($typeUser) {
         $thisLpList = $lpRepo
             ->getResourcesByCourse($subscriptionCourse, $subscriptionSession)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         foreach ($thisLpList as $lp) {
             foreach ($lp->getItems() as $item) {
@@ -319,7 +331,8 @@ if ($typeUser) {
         $thisLpList = $lpRepo
             ->getResourcesByCourse($subscriptionCourse)
             ->getQuery()
-            ->getResult();
+            ->getResult()
+        ;
 
         foreach ($thisLpList as $lp) {
             foreach ($lp->getItems() as $item) {
@@ -408,6 +421,7 @@ if ('confirm_order' === $checkoutAction) {
         );
 
         header('Location: '.api_get_self().'?'.$queryString);
+
         exit;
     }
 
@@ -428,6 +442,7 @@ if ('confirm_order' === $checkoutAction) {
             );
 
             header('Location: '.api_get_self().'?'.$queryString);
+
             exit;
         }
     }
@@ -446,6 +461,7 @@ if ('confirm_order' === $checkoutAction) {
         }
 
         header('Location: '.api_get_self().'?'.$queryString);
+
         exit;
     }
 
@@ -473,6 +489,7 @@ if ('confirm_order' === $checkoutAction) {
         }
 
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_process_confirm.php');
+
         exit;
     }
 
@@ -486,6 +503,7 @@ if ('confirm_order' === $checkoutAction) {
     );
 
     header('Location: '.api_get_self().'?'.$queryString);
+
     exit;
 }
 
@@ -510,6 +528,7 @@ if ('coupon' === $checkoutAction) {
         );
 
         header('Location: '.api_get_self().'?'.$queryString);
+
         exit;
     }
 
@@ -525,6 +544,7 @@ if ('coupon' === $checkoutAction) {
         );
 
         header('Location: '.api_get_self().'?'.$queryString);
+
         exit;
     }
 
@@ -540,6 +560,7 @@ if ('coupon' === $checkoutAction) {
         'Location: '.api_get_path(WEB_PLUGIN_PATH)
         .'BuyCourses/src/service_process.php?i='.$serviceId.'&t='.$type.'&c='.urlencode($couponCode)
     );
+
     exit;
 }
 

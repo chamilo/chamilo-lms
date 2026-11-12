@@ -308,7 +308,6 @@ if ($action_todo) {
     $form->addCheckBox('send_mail', null, get_lang('Send mail'));
 
     if ('add' === $action) {
-        $form->addElement('checkbox', 'add_to_calendar', null, get_lang('Add to calendar'));
         $text = get_lang('Add news');
         $class = 'add';
         $form->addHidden('action', 'add');

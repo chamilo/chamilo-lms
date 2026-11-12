@@ -234,6 +234,13 @@ if (api_is_allowed_to_edit(null, true)
     Session::erase('objExercise');
 }
 
+// The test must be one of the current course (and session): Exercise::read() does not scope by course and a test
+// kept in the PHP session may come from another course.
+if ($exerciseId > 0 && !ExerciseLib::exerciseBelongsToCourse($exerciseId, (int) $courseId, (int) $sessionId)) {
+    Exercise::cleanSessionVariables();
+    api_not_allowed(true);
+}
+
 // 1. Loading the $objExercise variable
 /** @var Exercise $exerciseInSession */
 $exerciseInSession = Session::read('objExercise');

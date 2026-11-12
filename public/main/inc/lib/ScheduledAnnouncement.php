@@ -69,7 +69,7 @@ class ScheduledAnnouncement extends Model
 
         $action .= '<a href="'.api_get_self().'?action=add&session_id='.$sessionId.'">'.
             Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Add')).'</a>';
-        $action .= '<a href="scheduled_announcement.php?action=run&session_id='.$sessionId.'">'.
+        $action .= '<a href="scheduled_announcement.php?action=run&session_id='.$sessionId.'&sec_token='.Security::get_existing_token().'">'.
             Display::getMdiIcon(ActionIcon::SEND_MESSAGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Send pending announcements manually')).
             '</a>';
 

@@ -41,8 +41,13 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = (int) $_POST['form_sent'];
 
     if (1 === $form_sent && isset($_POST['sessions'], $_POST['courses'])) {
-        $sessions = $_POST['sessions'];
-        $courses = $_POST['courses'];
+        // The ids come from the body: only sessions the user manages, and (unless platform admin) only the
+        // courses of this session, since the coaches are enrolled as TEACHERS of those courses.
+        $sessions = SessionManager::filterManageableSessionIds($_POST['sessions']);
+        $courses = is_array($_POST['courses']) ? array_map('intval', $_POST['courses']) : [];
+        if (!api_is_platform_admin()) {
+            $courses = array_values(array_intersect($courses, array_map('intval', SessionManager::getCoursesInSession($id))));
+        }
 
         // Copy trainers from selected sessions to selected course(s)
         $htmlResult = SessionManager::copyCoachesFromSessionToCourse($sessions, $courses);
@@ -53,13 +58,18 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 $session_list = SessionManager::get_sessions_list([], ['title']);
 $sessionList = [];
 foreach ($session_list as $row) {
-    $sessionList[(int) $row['id']] = $row['title'];
+    if (SessionManager::canManageSessionId((int) $row['id'])) {
+        $sessionList[(int) $row['id']] = $row['title'];
+    }
 }
 
 $courseList = CourseManager::get_courses_list(0, 0, 'title');
 $courseOptions = [];
+$sessionCourseIds = api_is_platform_admin() ? null : array_map('intval', SessionManager::getCoursesInSession($id));
 foreach ($courseList as $course) {
-    $courseOptions[(int) $course['id']] = $course['title'];
+    if (null === $sessionCourseIds || in_array((int) $course['id'], $sessionCourseIds, true)) {
+        $courseOptions[(int) $course['id']] = $course['title'];
+    }
 }
 Display::display_header($tool_name);
 

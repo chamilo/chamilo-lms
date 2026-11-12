@@ -76,7 +76,8 @@ class ExtraFieldValue extends Model
         $em = Database::getManager();
         $query = $em->getRepository(ExtraFieldValues::class)->createQueryBuilder('e');
         $query->select('count(e.id)');
-        $query->where('e.itemType = :type');
+        $query->join('e.field', 'f');
+        $query->where('f.itemType = :type');
         $query->setParameter('type', $this->getExtraField()->getItemType());
 
         return $query->getQuery()->getSingleScalarResult();
@@ -675,6 +676,8 @@ class ExtraFieldValue extends Model
     }
 
     /**
+     * @deprecated No caller left in the codebase.
+     *
      * @param string $tag
      * @param int    $field_id
      * @param int    $limit

@@ -15,6 +15,10 @@ use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ObjectRepository;
 use ChamiloSession as Session;
 
+/**
+ * @deprecated no file includes wiki.inc.php: public/main/wiki/index.php now only redirects to the Vue wiki
+ *             (WikiLegacyRouteResolver), so this class has no caller. Kept, not deleted.
+ */
 final class WikiManager
 {
 

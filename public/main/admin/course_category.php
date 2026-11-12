@@ -66,7 +66,7 @@ switch ($action) {
             ));
         exit;
     case 'export':
-        $courses = CourseCategory::getCoursesInCategory($categoryId);
+        $courses = CourseCategory::getCoursesInCategory($categoryId, '', false);
         if ($courses && count($courses) > 0) {
             $name = api_get_local_time().'_'.$categoryInfo['code'];
             $courseList = [];

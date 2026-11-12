@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\SettingsManagerHelper;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
+use Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateInterval;
 use DatePeriod;
@@ -77,6 +78,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         private LanguageRepository $languageRepository,
         private Security $security,
         private TranslatorInterface $translator,
+        private SessionTimeLimit $sessionTimeLimit,
     ) {}
 
     public function supports(string $report): bool
@@ -197,6 +199,8 @@ final readonly class AdminStatisticsUserSystemQueryService
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('user.locale AS locale', 'COUNT(DISTINCT user.id) AS total')
             ->from(User::class, 'user')
+            ->andWhere('user.active <> :softDeleted')
+            ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)
             ->groupBy('user.locale')
             ->orderBy('COUNT(DISTINCT user.id)', 'DESC')
         ;
@@ -450,7 +454,7 @@ final readonly class AdminStatisticsUserSystemQueryService
 
         $connection = $this->entityManager->getConnection();
         $sql = 'SELECT u.id, u.firstname, u.lastname, u.username, '
-            .'SUM(TIMESTAMPDIFF(SECOND, l.login_date, l.logout_date)) AS time_count '
+            .'SUM('.$this->sessionTimeLimit->sql('l.login_date', 'l.logout_date').') AS time_count '
             .'FROM user u INNER JOIN track_e_login l ON u.id = l.login_user_id ';
         $params = [
             'softDeleted' => User::SOFT_DELETED,
@@ -804,18 +808,25 @@ final readonly class AdminStatisticsUserSystemQueryService
         }
 
         $connection = $this->entityManager->getConnection();
+        $params = [
+            'start' => $start->format('Y-m-d').' 00:00:00',
+            'end' => $end->format('Y-m-d').' 23:59:59',
+            'events' => ['user_subscribed', 'user_unsubscribed', 'session_delete_user'],
+        ];
+        $types = ['start' => Types::STRING, 'end' => Types::STRING, 'events' => ArrayParameterType::STRING];
+        $urlScope = '';
+        $urlId = $this->getCurrentAccessUrlId();
+        if ($this->accessUrlHelper->isMultiple() && null !== $urlId) {
+            // An event belongs to the URL of its course or of its session; one with neither cannot be attributed.
+            $urlScope = 'AND (EXISTS (SELECT 1 FROM access_url_rel_course aurc WHERE aurc.c_id = track_e_default.c_id AND aurc.access_url_id = :urlId) '
+                .'OR EXISTS (SELECT 1 FROM access_url_rel_session aurs WHERE aurs.session_id = track_e_default.session_id AND aurs.access_url_id = :urlId)) ';
+            $params['urlId'] = $urlId;
+            $types['urlId'] = Types::INTEGER;
+        }
         $sql = 'SELECT DATE(default_date) AS event_date, default_event_type, COUNT(default_id) AS total '
             .'FROM track_e_default WHERE default_date BETWEEN :start AND :end '
-            .'AND default_event_type IN (:events) GROUP BY DATE(default_date), default_event_type ORDER BY DATE(default_date)';
-        $rows = $connection->executeQuery(
-            $sql,
-            [
-                'start' => $start->format('Y-m-d').' 00:00:00',
-                'end' => $end->format('Y-m-d').' 23:59:59',
-                'events' => ['user_subscribed', 'user_unsubscribed', 'session_user_deleted'],
-            ],
-            ['start' => Types::STRING, 'end' => Types::STRING, 'events' => ArrayParameterType::STRING]
-        )->fetchAllAssociative();
+            .'AND default_event_type IN (:events) '.$urlScope.'GROUP BY DATE(default_date), default_event_type ORDER BY DATE(default_date)';
+        $rows = $connection->executeQuery($sql, $params, $types)->fetchAllAssociative();
         foreach ($rows as $row) {
             $date = (string) $row['event_date'];
             if (!isset($dates[$date])) {
@@ -1321,7 +1332,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         $connection = $this->entityManager->getConnection();
         $field = $distinct ? 'COUNT(DISTINCT l.login_user_id)' : 'COUNT(l.login_id)';
         $sql = "SELECT {$field} AS total, DATE(l.login_date) AS login_day FROM track_e_login l ";
-        $params = ['start' => $start->format('Y-m-d h:i:s'), 'duration' => $sessionDuration * 60];
+        $params = ['start' => $start->format('Y-m-d H:i:s'), 'duration' => $sessionDuration * 60];
         $types = ['start' => Types::STRING, 'duration' => Types::INTEGER];
         if ($this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId()) {
             $sql .= 'INNER JOIN access_url_rel_user aur ON aur.user_id = l.login_user_id ';
@@ -1909,14 +1920,19 @@ final readonly class AdminStatisticsUserSystemQueryService
     private function queryNewUserRegistrations(DateTimeImmutable $start, DateTimeImmutable $end): array
     {
         $connection = $this->entityManager->getConnection();
+        $scoped = $this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId();
+        $params = ['start' => $start->format('Y-m-d').' 00:00:00', 'end' => $end->format('Y-m-d').' 23:59:59'];
+        $types = ['start' => Types::STRING, 'end' => Types::STRING];
+        if ($scoped) {
+            $params['urlId'] = $this->getCurrentAccessUrlId();
+            $types['urlId'] = Types::INTEGER;
+        }
         $rows = $connection->executeQuery(
-            "SELECT DATE_FORMAT(created_at, '%Y-%m-%d') reg_date, COUNT(*) total FROM user "
-            .'WHERE created_at BETWEEN :start AND :end GROUP BY reg_date',
-            [
-                'start' => $start->format('Y-m-d'),
-                'end' => $end->format('Y-m-d'),
-            ],
-            ['start' => Types::STRING, 'end' => Types::STRING]
+            "SELECT DATE_FORMAT(u.created_at, '%Y-%m-%d') reg_date, COUNT(*) total FROM user u "
+            .($scoped ? 'INNER JOIN access_url_rel_user aur ON aur.user_id = u.id AND aur.access_url_id = :urlId ' : '')
+            .'WHERE u.created_at BETWEEN :start AND :end GROUP BY reg_date',
+            $params,
+            $types
         )->fetchAllAssociative();
 
         $values = [];
@@ -1958,12 +1974,20 @@ final readonly class AdminStatisticsUserSystemQueryService
     private function queryRegistrationsByCreator(DateTimeImmutable $start, DateTimeImmutable $end): array
     {
         $connection = $this->entityManager->getConnection();
+        $scoped = $this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId();
+        $params = ['start' => $start->format('Y-m-d').' 00:00:00', 'end' => $end->format('Y-m-d').' 23:59:59'];
+        $types = ['start' => Types::STRING, 'end' => Types::STRING];
+        if ($scoped) {
+            $params['urlId'] = $this->getCurrentAccessUrlId();
+            $types['urlId'] = Types::INTEGER;
+        }
         $rows = $connection->executeQuery(
             'SELECT u.creator_id, COUNT(u.id) total, c.firstname, c.lastname FROM user u '
+            .($scoped ? 'INNER JOIN access_url_rel_user aur ON aur.user_id = u.id AND aur.access_url_id = :urlId ' : '')
             .'LEFT JOIN user c ON u.creator_id = c.id WHERE u.created_at BETWEEN :start AND :end '
             .'AND u.creator_id IS NOT NULL GROUP BY u.creator_id, c.firstname, c.lastname',
-            ['start' => $start->format('Y-m-d'), 'end' => $end->format('Y-m-d')],
-            ['start' => Types::STRING, 'end' => Types::STRING]
+            $params,
+            $types
         )->fetchAllAssociative();
         $values = [];
         foreach ($rows as $row) {
@@ -2137,7 +2161,7 @@ final readonly class AdminStatisticsUserSystemQueryService
     private function getTrainingHours(string $start, string $end): int
     {
         $connection = $this->entityManager->getConnection();
-        $sql = 'SELECT TIMESTAMPDIFF(HOUR, a.login_course_date, a.logout_course_date) diff FROM track_e_course_access a ';
+        $sql = 'SELECT TIMESTAMPDIFF(SECOND, a.login_course_date, a.logout_course_date) diff FROM track_e_course_access a ';
         $params = ['start' => $start, 'end' => $end];
         $types = ['start' => Types::STRING, 'end' => Types::STRING];
         if ($this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId()) {
@@ -2149,12 +2173,13 @@ final readonly class AdminStatisticsUserSystemQueryService
             $params['urlId'] = $this->getCurrentAccessUrlId();
             $types['urlId'] = Types::INTEGER;
         }
-        $total = 0;
-        foreach ($connection->executeQuery($sql, $params, $types)->fetchFirstColumn() as $hours) {
-            $total += min(6, max(0, (int) $hours));
+        $totalSeconds = 0;
+        $maxSeconds = $this->sessionTimeLimit->getMaximumSeconds();
+        foreach ($connection->executeQuery($sql, $params, $types)->fetchFirstColumn() as $seconds) {
+            $totalSeconds += SessionTimeLimit::clampSeconds((int) $seconds, $maxSeconds);
         }
 
-        return $total;
+        return intdiv($totalSeconds, 3600);
     }
 
     private function countCertificatesUntil(string $dateUntil): int

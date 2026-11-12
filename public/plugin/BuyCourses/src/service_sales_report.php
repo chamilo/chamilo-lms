@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Framework\Container;
 $cidReset = true;
 
 require_once '../config.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 /**
  * Add classes to an element without removing existing ones.
@@ -456,6 +457,7 @@ $templateName = $plugin->get_lang('SalesReport');
 
 $template = new Template($templateName);
 $template->assign('header', $templateName);
+$template->assign('admin_token', buycoursesAdminToken());
 $template->assign('page_title', $templateName);
 $template->assign('plugin_title', $plugin->get_lang('plugin_title'));
 $template->assign('back_url', $backUrl);

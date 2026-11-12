@@ -47,11 +47,21 @@ if (!empty($sessionId)) {
 $coursesInfo = [];
 $usersInfo = [];
 
+// A coach is shown the courses he coaches, not every course of the session (the works of the other courses are
+// only visible to him through the agenda).
+$coachedCourseCodes = null;
+if ($session && !api_is_platform_admin() && !api_is_hrm() && !api_is_session_admin()) {
+    $coachedCourseCodes = Tracking::get_courses_followed_by_coach(api_get_user_id(), $sessionId);
+}
+
 if ($session) {
     $sessionCourses = $session->getCourses();
     foreach ($sessionCourses as $sessionCourse) {
         /** @var Course $course */
         $course = $sessionCourse->getCourse();
+        if (null !== $coachedCourseCodes && !isset($coachedCourseCodes[$course->getCode()])) {
+            continue;
+        }
         $coursesInfo[$course->getId()] = $course->getCode();
         $userCourseSubscriptions = $session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT);
 

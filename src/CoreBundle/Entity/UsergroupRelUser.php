@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'usergroup_rel_user')]
 #[ORM\Index(name: 'IDX_739515A9A76ED395', columns: ['user_id'])]
 #[ORM\Index(name: 'IDX_739515A9D2112630', columns: ['usergroup_id'])]
+#[ORM\UniqueConstraint(name: 'uniq_usergroup_user', columns: ['usergroup_id', 'user_id'])]
 #[ORM\Entity]
 class UsergroupRelUser
 {

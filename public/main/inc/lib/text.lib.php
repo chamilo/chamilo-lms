@@ -728,7 +728,7 @@ function substrwords(string $text, int $maxchar, string $end = '...'): string
 function implode_with_key($glue, $array)
 {
     if (!empty($array)) {
-        $string = '';
+        $pairs = [];
         foreach ($array as $key => $value) {
             if (empty($value)) {
                 $value = 'null';
@@ -737,10 +737,10 @@ function implode_with_key($glue, $array)
                 // We don't supported embedded arrays here yet. Will show as "{array}".
                 $value = 'array';
             }
-            $string .= $key.' : '.$value." $glue ";
+            $pairs[] = $key.' : '.$value;
         }
 
-        return $string;
+        return implode(" $glue ", $pairs);
     }
 
     return '';

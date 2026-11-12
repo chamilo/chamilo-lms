@@ -235,10 +235,23 @@ switch ($action) {
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed(true);
         }
-        GlossaryManager::delete_glossary($_GET['glossary_id']);
-        Security::clear_token();
-        header('Location: '.$currentUrl);
-        exit;
+        // The delete link is a GET: it only opens a confirmation form, the deletion itself is a tokenised POST.
+        $glossaryId = isset($_GET['glossary_id']) ? (int) $_GET['glossary_id'] : 0;
+        if (!empty($_POST['sec_token']) && Security::check_token('post')) {
+            GlossaryManager::delete_glossary($glossaryId);
+            Security::clear_token();
+            header('Location: '.$currentUrl);
+            exit;
+        }
+        $form = new FormValidator(
+            'glossary_delete',
+            'post',
+            api_get_self().'?action=delete_glossary&glossary_id='.$glossaryId.'&'.api_get_cidreq()
+        );
+        $form->addHeader(get_lang('Please confirm your choice'));
+        $form->addHidden('sec_token', Security::get_token());
+        $form->addButtonDelete(get_lang('Delete'), 'SubmitDelete');
+        $content = $form->returnForm();
 
         break;
     case 'moveup':
@@ -281,6 +294,8 @@ switch ($action) {
         $form->addGroup($group, null, get_lang('File type'), null);
         $form->addElement('checkbox', 'replace', null, get_lang('Delete all terms before import.'));
         $form->addElement('checkbox', 'update', null, get_lang('Update existing terms.'));
+        $importToken = Security::get_existing_token('import_glossary');
+        $form->addHidden('import_glossary_sec_token', $importToken);
         $form->addButtonImport(get_lang('Import'), 'SubmitImport');
         $form->setDefaults(['file_type' => 'csv']);
         $content = $form->returnForm();
@@ -293,6 +308,10 @@ switch ($action) {
         </pre>';
 
         if ($form->validate()) {
+            // Importing (and "delete all terms before import") is state-changing and legacy pages have no listener.
+            if (!Security::check_token('post', null, 'import_glossary')) {
+                api_not_allowed(true);
+            }
             $values = $form->getSubmitValues();
 
             $termsDeleted = [];

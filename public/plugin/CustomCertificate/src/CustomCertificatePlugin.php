@@ -1264,4 +1264,83 @@ class CustomCertificatePlugin extends Plugin
 
         return $resultArray;
     }
+
+    /**
+     * Whether the user has a gradebook certificate in the course (and session, and category when given).
+     * A certificate page must only be rendered for a user who earned one.
+     */
+    public static function userHasCertificate($userId, $courseId, $sessionId, $categoryId = 0)
+    {
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $categoryId = (int) $categoryId;
+
+        if ($userId <= 0 || $courseId <= 0) {
+            return false;
+        }
+
+        $sql = 'SELECT 1
+                FROM '.Database::get_main_table('gradebook_certificate').' cer
+                INNER JOIN '.Database::get_main_table('gradebook_category').' cat ON cer.cat_id = cat.id
+                WHERE cer.user_id = '.$userId.'
+                  AND cat.c_id = '.$courseId.'
+                  AND (cat.session_id = '.$sessionId.($sessionId > 0 ? '' : ' OR cat.session_id IS NULL').')';
+        if ($categoryId > 0) {
+            $sql .= ' AND cer.cat_id = '.$categoryId;
+        }
+        $sql .= ' LIMIT 1';
+
+        return Database::num_rows(Database::query($sql)) > 0;
+    }
+
+    /**
+     * Whether the user teaches the course, or coaches it in the session: the people who may print the
+     * certificates of other users (platform admins are checked by the caller).
+     */
+    public static function canManageCourseCertificates($userId, $courseId, $sessionId)
+    {
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+
+        if ($userId <= 0 || $courseId <= 0) {
+            return false;
+        }
+
+        if (CourseManager::isCourseTeacher($userId, $courseId)) {
+            return true;
+        }
+
+        if ($sessionId <= 0) {
+            return false;
+        }
+
+        $sql = 'SELECT 1 FROM '.Database::get_main_table('session_rel_course_rel_user').'
+                WHERE session_id = '.$sessionId.' AND c_id = '.$courseId.' AND user_id = '.$userId.' AND status = 2
+                UNION
+                SELECT 1 FROM '.Database::get_main_table('session_rel_user').'
+                WHERE session_id = '.$sessionId.' AND user_id = '.$userId.' AND relation_type = 3
+                LIMIT 1';
+
+        return Database::num_rows(Database::query($sql)) > 0;
+    }
+
+    /**
+     * Whether the gradebook category belongs to the course (guards a category id coming from the request).
+     */
+    public static function categoryBelongsToCourse($categoryId, $courseId)
+    {
+        $categoryId = (int) $categoryId;
+        $courseId = (int) $courseId;
+
+        if ($categoryId <= 0 || $courseId <= 0) {
+            return false;
+        }
+
+        $sql = 'SELECT 1 FROM '.Database::get_main_table('gradebook_category').'
+                WHERE id = '.$categoryId.' AND c_id = '.$courseId.' LIMIT 1';
+
+        return Database::num_rows(Database::query($sql)) > 0;
+    }
 }

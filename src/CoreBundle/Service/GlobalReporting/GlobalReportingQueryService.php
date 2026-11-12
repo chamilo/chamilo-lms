@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Service\GlobalReporting;
 
 use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
+use Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\DBAL\ArrayParameterType;
@@ -37,6 +38,7 @@ final readonly class GlobalReportingQueryService
     public function __construct(
         private Connection $connection,
         private AccessUrlScopeHelper $accessUrlScope,
+        private SessionTimeLimit $sessionTimeLimit,
     ) {}
 
     /**
@@ -405,6 +407,7 @@ final readonly class GlobalReportingQueryService
               WHERE relation.friend_user_id = :currentUserId
                 AND relation.relation_type = :hrRelationType
                 AND target.status IN (:userStatuses)
+                AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
               UNION
              SELECT DISTINCT target.id, target.status
@@ -420,6 +423,7 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_course access_course
                    ON access_course.c_id = target_subscription.c_id
               WHERE target.status IN (:userStatuses)
+              AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
                 AND access_course.access_url_id = :accessUrlId
               UNION
@@ -436,6 +440,7 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_subscription.session_id
               WHERE target.status IN (:userStatuses)
+              AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
                 AND access_session.access_url_id = :accessUrlId
               UNION
@@ -453,6 +458,7 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_subscription.session_id
               WHERE target.status IN (:userStatuses)
+              AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
                 AND access_session.access_url_id = :accessUrlId',
             [
@@ -484,6 +490,7 @@ final readonly class GlobalReportingQueryService
               WHERE relation.friend_user_id = :currentUserId
                 AND relation.relation_type = :relationType
                 AND target.status IN (:userStatuses)
+                AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId',
             [
                 'currentUserId' => $context->currentUserId(),
@@ -515,6 +522,7 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_relation.session_id
               WHERE target.status IN (:userStatuses)
+              AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
                 AND access_session.access_url_id = :accessUrlId
               UNION
@@ -531,6 +539,7 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_relation.session_id
               WHERE target.status IN (:userStatuses)
+              AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
                 AND access_session.access_url_id = :accessUrlId',
             [
@@ -563,6 +572,7 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_session access_session
                    ON access_session.session_id = target_subscription.session_id
               WHERE target.status IN (:userStatuses)
+              AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
                 AND access_session.access_url_id = :accessUrlId
               UNION
@@ -580,6 +590,7 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_course access_course
                    ON access_course.c_id = target_subscription.c_id
               WHERE target.status IN (:userStatuses)
+              AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId
                 AND access_course.access_url_id = :accessUrlId
               UNION
@@ -592,6 +603,7 @@ final readonly class GlobalReportingQueryService
               WHERE relation.friend_user_id = :currentUserId
                 AND relation.relation_type = :humanResourcesUserRelation
                 AND target.status IN (:userStatuses)
+                AND target.active <> -2
                 AND access_user.access_url_id = :accessUrlId',
             [
                 'currentUserId' => $context->currentUserId(),
@@ -756,7 +768,7 @@ final readonly class GlobalReportingQueryService
         );
 
         $totalTimeSpent = (int) $this->connection->fetchOne(
-            'SELECT COALESCE(SUM(TIMESTAMPDIFF(SECOND, login.login_date, login.logout_date)), 0)
+            'SELECT COALESCE(SUM('.$this->sessionTimeLimit->sql('login.login_date', 'login.logout_date').'), 0)
                FROM track_e_login login
                INNER JOIN access_url_rel_user access_user
                    ON access_user.user_id = login.login_user_id

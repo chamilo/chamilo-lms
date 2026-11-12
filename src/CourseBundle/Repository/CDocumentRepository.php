@@ -115,7 +115,7 @@ final class CDocumentRepository extends ResourceRepository
 
     public function countUserDocuments(User $user, Course $course, ?Session $session = null, ?CGroup $group = null): int
     {
-        $qb = $this->getResourcesByCourseLinkedToUser($user, $course, $session, $group);
+        $qb = $this->getResourcesByCourseCreatedByUser($user, $course, $session, $group);
         $qb->select('count(resource)');
         $this->addFileTypeQueryBuilder('file', $qb);
 

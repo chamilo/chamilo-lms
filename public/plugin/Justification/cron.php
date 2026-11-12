@@ -3,6 +3,11 @@
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
+// The script (un)subscribes users: run it from the command line, or as a platform administrator.
+if ('cli' !== PHP_SAPI) {
+    api_protect_admin_script();
+}
+
 $plugin = Justification::create();
 $courseId = $plugin->getDefaultCourseId();
 

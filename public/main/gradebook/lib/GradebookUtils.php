@@ -147,6 +147,134 @@ class GradebookUtils
     }
 
     /**
+     * Tells whether a gradebook category (root or sub-category) belongs to the given course.
+     * Every page that takes a category id from the request must check this before reading
+     * or writing through Category::load()/save()/delete_all()/move_to_cat()...
+     */
+    public static function categoryBelongsToCourse(int $categoryId, int $courseId): bool
+    {
+        return self::rowBelongsToCourse('gradebook_category', $categoryId, $courseId);
+    }
+
+    /**
+     * Tells whether a gradebook evaluation belongs to the given course.
+     */
+    public static function evaluationBelongsToCourse(int $evaluationId, int $courseId): bool
+    {
+        return self::rowBelongsToCourse('gradebook_evaluation', $evaluationId, $courseId);
+    }
+
+    /**
+     * Tells whether a gradebook link belongs to the given course.
+     */
+    public static function linkBelongsToCourse(int $linkId, int $courseId): bool
+    {
+        return self::rowBelongsToCourse('gradebook_link', $linkId, $courseId);
+    }
+
+    /**
+     * Tells whether a gradebook result (a score of one user in one evaluation) belongs to the given course.
+     */
+    public static function resultBelongsToCourse(int $resultId, int $courseId): bool
+    {
+        if ($resultId <= 0 || $courseId <= 0) {
+            return false;
+        }
+
+        $found = Database::getManager()->getConnection()->fetchOne(
+            'SELECT r.id
+             FROM gradebook_result r
+             INNER JOIN gradebook_evaluation e ON e.id = r.evaluation_id
+             WHERE r.id = :id AND e.c_id = :cid
+             LIMIT 1',
+            ['id' => $resultId, 'cid' => $courseId]
+        );
+
+        return false !== $found;
+    }
+
+    /**
+     * SQL condition (on the c_id column of gradebook_evaluation/gradebook_link) restricting rows to the courses
+     * the user teaches, or coaches inside a session. It replaces the old creator filter (user_id column), which
+     * the tables no longer have. A user without such course matches nothing.
+     */
+    public static function taughtCoursesCondition(int $userId, string $column = 'c_id'): string
+    {
+        if (!preg_match('/^[a-z_.]+$/', $column)) {
+            $column = 'c_id';
+        }
+
+        return '('.$column.' IN (SELECT cu.c_id FROM course_rel_user cu WHERE cu.user_id = '.$userId
+            .' AND cu.status = '.COURSEMANAGER.')'
+            .' OR '.$column.' IN (SELECT sc.c_id FROM session_rel_course_rel_user sc WHERE sc.user_id = '.$userId
+            .' AND sc.status = 2))';
+    }
+
+    /**
+     * Tells whether a certificate was issued for a category of the given course.
+     */
+    public static function certificateBelongsToCourse(int $certificateId, int $courseId): bool
+    {
+        if ($certificateId <= 0 || $courseId <= 0) {
+            return false;
+        }
+
+        $found = Database::getManager()->getConnection()->fetchOne(
+            'SELECT gc.id
+             FROM gradebook_certificate gc
+             INNER JOIN gradebook_category c ON c.id = gc.cat_id
+             WHERE gc.id = :id AND c.c_id = :cid
+             LIMIT 1',
+            ['id' => $certificateId, 'cid' => $courseId]
+        );
+
+        return false !== $found;
+    }
+
+    /**
+     * Page guard: stops the request (api_not_allowed) unless the gradebook element of the given kind
+     * (CATE, EVAL, LINK) belongs to the current course. Platform admins are not restricted. Category 0 is the
+     * virtual root of the course and holds no data, so it is accepted.
+     */
+    public static function protectElementInCurrentCourse(string $kind, $id): void
+    {
+        $id = (int) $id;
+        if (api_is_platform_admin()) {
+            return;
+        }
+        if ('CATE' === $kind && 0 === $id) {
+            return;
+        }
+        $courseId = (int) api_get_course_int_id();
+        $allowed = match ($kind) {
+            'CATE' => self::categoryBelongsToCourse($id, $courseId),
+            'EVAL' => self::evaluationBelongsToCourse($id, $courseId),
+            'LINK' => self::linkBelongsToCourse($id, $courseId),
+            default => false,
+        };
+        if (!$allowed) {
+            api_not_allowed(true);
+        }
+    }
+
+    private static function rowBelongsToCourse(string $table, int $id, int $courseId): bool
+    {
+        if ($id <= 0 || $courseId <= 0) {
+            return false;
+        }
+        if (!in_array($table, ['gradebook_category', 'gradebook_evaluation', 'gradebook_link'], true)) {
+            return false;
+        }
+
+        $found = Database::getManager()->getConnection()->fetchOne(
+            'SELECT id FROM '.$table.' WHERE id = :id AND c_id = :cid LIMIT 1',
+            ['id' => $id, 'cid' => $courseId]
+        );
+
+        return false !== $found;
+    }
+
+    /**
      * Builds an img tag for a gradebook item.
      */
     public static function build_type_icon_tag($kind, $style = null)
@@ -566,6 +694,8 @@ class GradebookUtils
 
     /**
      * XML-parser: handle character data.
+     *
+     * @deprecated No caller left in public/ or src/ (the XML import it served is gone).
      */
     public static function character_data($parser, $data)
     {
@@ -1146,15 +1276,16 @@ class GradebookUtils
                 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
                 $tbl_res = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
-                $sql = 'SELECT user.id as user_id, lastname, firstname, user.official_code
+                $sql = 'SELECT user.id as user_id, user.username, lastname, firstname, user.official_code
                         FROM '.$tbl_res.' as res, '.$tbl_user.' as user
                         WHERE
                             res.evaluation_id = '.$eval->get_id().' AND
                             res.user_id = user.id
                         ';
-                $sql .= ' ORDER BY lastname, firstname';
                 if (api_is_western_name_order()) {
                     $sql .= ' ORDER BY firstname, lastname';
+                } else {
+                    $sql .= ' ORDER BY lastname, firstname';
                 }
 
                 $result = Database::query($sql);
@@ -1185,6 +1316,8 @@ class GradebookUtils
      * Search students matching a given last name and/or first name.
      *
      * @author Bert Steppé
+     *
+     * @deprecated No caller left in public/ or src/.
      */
     public static function find_students($mask = '')
     {

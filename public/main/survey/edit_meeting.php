@@ -33,7 +33,7 @@ $surveyRepo = Container::getSurveyRepository();
 $survey = $surveyRepo->find($surveyId);
 $surveyData = SurveyManager::get_survey($surveyId);
 
-if (null === $survey) {
+if (null === $survey || !SurveyManager::surveyBelongsToCurrentCourse((int) $survey->getIid())) {
     api_not_allowed(true);
 }
 
@@ -48,6 +48,7 @@ $form = new FormValidator(
 );
 
 $form->addHeader($tool_name);
+$form->protect();
 $form->addHidden('anonymous', 0);
 $form->addHidden('survey_language', $courseInfo['language']);
 $form->addHidden('survey_subtitle', '');

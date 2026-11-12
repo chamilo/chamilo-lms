@@ -227,6 +227,32 @@ class Agenda
     }
 
     /**
+     * Whether the event belongs to the course of this agenda: it is a child of the course resource node or has a
+     * link to the course. Event ids come from the request, so every read or write by id must check this.
+     */
+    private function eventBelongsToCourse(CCalendarEvent $event): bool
+    {
+        $courseId = (int) ($this->course['real_id'] ?? 0);
+        $node = $event->getResourceNode();
+        if (empty($courseId) || null === $node) {
+            return false;
+        }
+
+        $courseNodeId = api_get_course_entity($courseId)?->getResourceNode()?->getId();
+        if (null !== $courseNodeId && $node->getParent()?->getId() === $courseNodeId) {
+            return true;
+        }
+
+        foreach ($node->getResourceLinks() as $link) {
+            if ($link->getCourse()?->getId() === $courseId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Adds an event to the calendar.
      *
      * @param string         $start                 datetime format: 2012-06-14 09:00:00 in local time
@@ -258,9 +284,14 @@ class Agenda
         $eventComment = '',
         $color = ''
     ) {
+        if (empty($end)) {
+            // Callers without an end date (e.g. the Bbb plugin) get a zero-length event, not one ending "now".
+            $end = $start;
+        }
         $start = api_get_utc_datetime($start, false, true);
         $end = api_get_utc_datetime($end, false, true);
-        $allDay = isset($allDay) && 'true' === $allDay ? 1 : 0;
+        // Callers pass 'true', true or 1 indifferently.
+        $allDay = (isset($allDay) && ('true' === $allDay || true === $allDay || 1 === $allDay || '1' === $allDay)) ? 1 : 0;
         $id = null;
 
         $em = Database::getManager();
@@ -305,8 +336,14 @@ class Agenda
 
                 $event->setParent($courseEntity);
 
-                if (!empty($usersToSend)) {
-                    $sendTo = $this->parseSendToArray($usersToSend);
+                $sendTo = $this->parseSendToArray($usersToSend);
+                $hasRecipients = !empty($sendTo['everyone']) || !empty($sendTo['users'])
+                    || !empty(array_filter($sendTo['groups'] ?? []));
+                if (!$hasRecipients) {
+                    // No usable recipient (empty list, or only GROUP:0): publish to the whole course context,
+                    // otherwise the event would be linked to nobody and listed nowhere.
+                    $event->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
+                } else {
                     if ($sendTo['everyone']) {
                         $event->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
                     } else {
@@ -468,7 +505,7 @@ class Agenda
                 /** @var CCalendarEvent $event */
                 $event = $repo->find($id);
 
-                if (empty($event)) {
+                if (empty($event) || !$this->eventBelongsToCourse($event)) {
                     return false;
                 }
 
@@ -508,81 +545,71 @@ class Agenda
                         $groupsToDelete = array_diff($sentToEvent['groups'], $sendTo['groups']);
                         $groupToAdd = array_diff($sendTo['groups'], $sentToEvent['groups']);
 
-                        //var_dump($sendTo['everyone'], $usersToDelete, $usersToAdd, $groupsToDelete, $groupToAdd);exit;
                         $links = $event->getResourceNode()->getResourceLinks();
+                        // addCourseLink() needs the parent (the course) on an event loaded from the database.
+                        $event->setParent($courseEntity);
+                        // Links are removed after persist($event): persisting cascades to the node's links and
+                        // would otherwise cancel a removal scheduled before it.
+                        // They also leave the collection now, or addCourseLink() would see them as existing.
+                        $linksToRemove = [];
+                        $removeLink = static function ($link) use (&$linksToRemove, $links): void {
+                            $links->removeElement($link);
+                            $linksToRemove[] = $link;
+                        };
 
                         if ($sendTo['everyone']) {
-                            // Delete all from group
-                            if (isset($sentToEvent['groups']) && !empty($sentToEvent['groups'])) {
-                                foreach ($sentToEvent['groups'] as $group) {
-                                    foreach ($links as $link) {
-                                        if ($link->hasGroup() && $link->getGroup()->getIid() === $group) {
-                                            $em->remove($link);
-                                        }
-                                    }
+                            // Remove the links to groups and users, then make sure the course-wide link exists.
+                            $hasCourseLink = false;
+                            foreach ($links as $link) {
+                                if ($link->hasGroup() || $link->hasUser()) {
+                                    $removeLink($link);
+                                } else {
+                                    $hasCourseLink = true;
                                 }
                             }
-
-                            // Storing the selected users.
-                            if (isset($sentToEvent['users']) && !empty($sentToEvent['users'])) {
-                                foreach ($sentToEvent['users'] as $userId) {
-                                    foreach ($links as $link) {
-                                        if ($link->hasUser() && $link->getUser()->getId() === $userId) {
-                                            $em->remove($link);
-                                        }
-                                    }
-                                }
+                            if (!$hasCourseLink) {
+                                $event->addCourseLink($courseEntity, $sessionEntity, $groupEntity);
                             }
                         } else {
                             foreach ($links as $link) {
-                                $em->remove($link);
-                            }
-
-                            // Add groups
-                            if (!empty($groupToAdd)) {
-                                foreach ($groupToAdd as $group) {
-                                    $group = api_get_group_entity($group);
-                                    $event->addCourseLink($courseEntity, $sessionEntity, $group);
-                                }
-                            }
-
-                            // Delete groups.
-                            if (!empty($groupsToDelete)) {
-                                foreach ($groupsToDelete as $group) {
-                                    foreach ($links as $link) {
-                                        if ($link->hasGroup() && $link->getGroup()->getIid() === $group) {
-                                            $em->remove($link);
-                                        }
+                                if ($link->hasGroup()) {
+                                    // Delete groups.
+                                    if (in_array($link->getGroup()->getIid(), $groupsToDelete)) {
+                                        $removeLink($link);
                                     }
+                                } elseif ($link->hasUser()) {
+                                    // Delete users.
+                                    if (in_array($link->getUser()->getId(), $usersToDelete)) {
+                                        $removeLink($link);
+                                    }
+                                } else {
+                                    // The course-wide link: the event is no longer for everyone.
+                                    $removeLink($link);
                                 }
+                            }
+
+                            // Add groups.
+                            foreach ($groupToAdd as $group) {
+                                $group = api_get_group_entity($group);
+                                $event->addCourseLink($courseEntity, $sessionEntity, $group);
                             }
 
                             // Add users.
-                            if (!empty($usersToAdd)) {
-                                foreach ($usersToAdd as $userId) {
-                                    $event = $event->addUserLink(
-                                        api_get_user_entity($userId),
-                                        $courseEntity,
-                                        $sessionEntity,
-                                        $groupEntity
-                                    );
-                                }
-                            }
-
-                            // Delete users.
-                            if (!empty($usersToDelete)) {
-                                foreach ($usersToDelete as $userId) {
-                                    foreach ($links as $link) {
-                                        if ($link->hasUser() && $link->getUser()->getId() === $userId) {
-                                            $em->remove($link);
-                                        }
-                                    }
-                                }
+                            foreach ($usersToAdd as $userId) {
+                                $event = $event->addUserLink(
+                                    api_get_user_entity($userId),
+                                    $courseEntity,
+                                    $sessionEntity,
+                                    $groupEntity
+                                );
                             }
                         }
                     }
 
                     $em->persist($event);
+                    foreach ($linksToRemove ?? [] as $link) {
+                        $em->remove($link);
+                    }
                     $em->flush($event);
 
                     // Add announcement.
@@ -618,6 +645,8 @@ class Agenda
     /**
      * @param int  $id
      * @param bool $deleteAllItemsFromSerie
+     *
+     * @deprecated no caller; deletion goes through the CCalendarEvent API operations.
      */
     public function deleteEvent($id, $deleteAllItemsFromSerie = false)
     {
@@ -666,7 +695,7 @@ class Agenda
                     $repo = Container::getCalendarEventRepository();
                     $event = $repo->find($id);
 
-                    if ($event) {
+                    if ($event && $this->eventBelongsToCourse($event)) {
                         Database::getManager()->remove($event);
                         Database::getManager()->flush();
 
@@ -720,6 +749,8 @@ class Agenda
      * @param string $format
      *
      * @return array|string
+     *
+     * @deprecated no caller; the calendar tool is served by API Platform (CCalendarEvent).
      */
     public function getEvents(
         $start,
@@ -911,6 +942,8 @@ class Agenda
      * @param int $minute_delta
      *
      * @return int
+     *
+     * @deprecated no caller; updates c_calendar_event.c_id/id/end_date, columns that no longer exist (the calendar tool is Vue + API Platform).
      */
     public function resizeEvent($id, $minute_delta)
     {
@@ -945,6 +978,8 @@ class Agenda
      * @param int $allDay
      *
      * @return int
+     *
+     * @deprecated no caller; updates c_calendar_event.c_id/id/start_date, columns that no longer exist.
      */
     public function move_event($id, $minute_delta, $allDay)
     {
@@ -1015,7 +1050,7 @@ class Agenda
                 $eventEntity = $repo->find($id);
 
                 if (!empty($this->course['real_id'])) {
-                    if ($eventEntity) {
+                    if ($eventEntity && $this->eventBelongsToCourse($eventEntity)) {
                         $event = [];
                         $event['iid'] = $eventEntity->getIid();
                         $event['title'] = $eventEntity->getTitle();
@@ -1031,8 +1066,10 @@ class Agenda
                         // Getting repeat info
                         $event['repeat_info'] = $eventEntity->getRepeatEvents();
 
-                        if (!empty($event['parent_event_id'])) {
-                            $event['parent_info'] = $eventEntity->getParentEvent();
+                        $parentEvent = $eventEntity->getParentEvent();
+                        if (null !== $parentEvent) {
+                            $event['parent_event_id'] = $parentEvent->getIid();
+                            $event['parent_info'] = $parentEvent;
                         }
 
                         $event['attachment'] = $eventEntity->getAttachments();
@@ -1051,6 +1088,8 @@ class Agenda
      * @param int $end
      *
      * @return array
+     *
+     * @deprecated no caller; reads the personal_agenda table, which no longer exists.
      */
     public function getPersonalEvents($start, $end)
     {
@@ -1128,6 +1167,8 @@ class Agenda
      * @param string $color
      *
      * @return array
+     *
+     * @deprecated only called by getEvents(), itself without caller.
      */
     public function getSessionEvents(
         $start,
@@ -1163,6 +1204,8 @@ class Agenda
      * @param string $color
      *
      * @return array
+     *
+     * @deprecated only called by getEvents(), itself without caller.
      */
     public function getCourseEvents(
         $start,
@@ -1557,6 +1600,8 @@ class Agenda
      * @param int $end   tms
      *
      * @return array
+     *
+     * @deprecated no caller; reads the sys_calendar table, which no longer exists.
      */
     public function getPlatformEvents($start, $end)
     {
@@ -1668,6 +1713,8 @@ class Agenda
      * @param int   $visibility 0= invisible, 1 visible
      * @param array $courseInfo
      * @param int   $userId
+     *
+     * @deprecated no caller; visibility is changed through ResourceController::changeVisibility().
      */
     public static function changeVisibility(
         $id,
@@ -1701,6 +1748,8 @@ class Agenda
      * @param array $courseInfo
      *
      * @return array with the post info
+     *
+     * @deprecated only called by updateAttachment() (no caller passes attachments); selects c_id/path columns that c_calendar_event_attachment no longer has.
      */
     public function getAttachment($attachmentId, $eventId, $courseInfo)
     {
@@ -1832,6 +1881,8 @@ class Agenda
      * @param int $eventId
      *
      * @return array
+     *
+     * @deprecated only called by deleteEvent(); filters c_calendar_event on c_id, which no longer exists.
      */
     public function getAllRepeatEvents($eventId)
     {
@@ -1995,6 +2046,8 @@ class Agenda
      * @param    string    Type of view (month_view, week_view, day_view)
      *
      * @return array The results of the database query, or null if not found
+     *
+     * @deprecated no caller; reads the sys_calendar table, which no longer exists.
      */
     public static function get_global_agenda_items(
         $agendaitems,
@@ -2123,6 +2176,8 @@ class Agenda
     /**
      * This function retrieves all the personal agenda items and add them to the agenda items found by the other
      * functions.
+     *
+     * @deprecated no caller; reads the personal_agenda table, which no longer exists.
      */
     public static function get_personal_agenda_items(
         $user_id,
@@ -2247,6 +2302,8 @@ class Agenda
      * @param    array    Array of strings containing long week day names (deprecated, you can send an empty array
      *                          instead)
      * @param    string    The month name
+     *
+     * @deprecated no caller; relies on the removed personal/global agenda queries.
      */
     public static function display_mymonthcalendar(
         $user_id,
@@ -2361,7 +2418,7 @@ class Agenda
 
                     if (!empty($agendaitems[$curday])) {
                         $items = $agendaitems[$curday];
-                        $items = msort($items, 'start_date_tms');
+                        $items = msort($items, 'start_date_tms', 'asc');
 
                         foreach ($items as $value) {
                             $value['title'] = Security::remove_XSS(

@@ -31,6 +31,8 @@ if ('learnpath' === $origin) {
 }
 
 protectWork($courseInfo, $workId);
+// The delete links of the grid (loaded by ajax afterwards) carry this token.
+workActionToken();
 
 $my_folder_data = get_work_data_by_id($workId);
 $work_data = get_work_assignment_by_id($workId);
@@ -135,6 +137,10 @@ $item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 
 switch ($action) {
     case 'delete':
+        // The submission must be one of the folder this page was opened on, and the link carries the token.
+        if (!workItemIsInFolder((int) $item_id, (int) $workId) || !workActionTokenIsValid('get')) {
+            api_not_allowed(true);
+        }
         $fileDeleted = deleteWorkItem($item_id, $course);
 
         if (!$fileDeleted) {

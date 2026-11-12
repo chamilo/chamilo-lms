@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
-api_protect_course_script(true, false, true);
+api_protect_course_script(true, false, TOOL_QUIZ);
 
 $showPage = false;
 
@@ -22,6 +22,10 @@ if (!$showPage) {
 }
 
 $exerciseId = isset($_GET['exerciseId']) && !empty($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
+if (!ExerciseLib::exerciseBelongsToCourse($exerciseId, api_get_course_int_id(), api_get_session_id())) {
+    api_not_allowed(true);
+}
+
 $objExercise = new Exercise();
 $result = $objExercise->read($exerciseId);
 

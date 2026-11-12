@@ -15,6 +15,16 @@ GradebookUtils::block_students();
 $cat_id = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : null;
 $action = isset($_GET['action']) && $_GET['action'] ? $_GET['action'] : null;
 
+switch ($action) {
+    case 'export_all':
+    case 'download':
+        GradebookUtils::protectElementInCurrentCourse('CATE', (int) $cat_id);
+        break;
+    case 'add_comment':
+        GradebookUtils::protectElementInCurrentCourse('CATE', $_GET['gradebook_id'] ?? 0);
+        break;
+}
+
 $sessionId = api_get_session_id();
 $courseInfo = api_get_course_info();
 $statusToFilter = empty($sessionId) ? STUDENT : 0;

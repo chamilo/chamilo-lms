@@ -25,6 +25,8 @@ use const DIRECTORY_SEPARATOR;
 )]
 final class RepairLegacyCertificateHistoryCommand extends Command
 {
+    use DryRunByDefaultTrait;
+
     public function __construct(
         private readonly ManagerRegistry $registry,
     ) {
@@ -46,13 +48,8 @@ final class RepairLegacyCertificateHistoryCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'Legacy Chamilo root containing app/upload/users.'
             )
-            ->addOption(
-                'dry-run',
-                null,
-                InputOption::VALUE_NONE,
-                'Validate the repair without writing anything.'
-            )
         ;
+        $this->addApplyOptions();
     }
 
     protected function execute(
@@ -61,7 +58,11 @@ final class RepairLegacyCertificateHistoryCommand extends Command
     ): int {
         $sourceDatabase = trim((string) $input->getOption('source-database'));
         $legacyRoot = trim((string) $input->getOption('legacy-root'));
-        $dryRun = (bool) $input->getOption('dry-run');
+        $apply = $this->isApply($input);
+        $dryRun = !$apply;
+        if ($apply) {
+            $this->requireExpectedCountOption($input);
+        }
 
         if (
             '' === $sourceDatabase
@@ -225,8 +226,12 @@ final class RepairLegacyCertificateHistoryCommand extends Command
         }
 
         if ($dryRun) {
+            $output->writeln(\sprintf('Read-only mode (default). To write, re-run with --apply --expected-count=%d.', \count($missingRows)));
+
             return Command::SUCCESS;
         }
+
+        $this->assertExpectedCount($input, \count($missingRows));
 
         $connection->beginTransaction();
 

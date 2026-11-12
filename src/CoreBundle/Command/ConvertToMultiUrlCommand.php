@@ -29,7 +29,7 @@ use const PHP_URL_HOST;
 /**
  * MultiURL Converter (Single → Multi)
  * Usage:
- *   php bin/console app:multi-url:convert "https://admin.example.com/" [--admin-username=admin] [--preserve-admin-id] [--dry-run] [--force].
+ *   php bin/console app:multi-url:convert "https://admin.example.com/" [--admin-username=admin] [--preserve-admin-id] [--apply] [--force].
  *
  * What it does:
  *   • Default: adds a NEW ADMIN URL; keeps current URL as SECONDARY; links the chosen admin user.
@@ -41,7 +41,7 @@ use const PHP_URL_HOST;
  *     Then copies user_auth_source for the admin user back to the ADMIN URL.
  *
  * Safeguards:
- *   • Expects exactly 1 row in access_url (unless --force). Runs in a transaction; --dry-run prints the plan only.
+ *   • Expects exactly 1 row in access_url (unless --force). Runs in a transaction. Read-only by default: prints the plan only; --apply writes.
  *
  * After running:
  *   • Enable multi-URL in configuration and clear caches if needed. Non-existent tables/columns are skipped.
@@ -52,6 +52,8 @@ use const PHP_URL_HOST;
 )]
 class ConvertToMultiUrlCommand extends Command
 {
+    use DryRunByDefaultTrait;
+
     public function __construct(
         private readonly Connection $conn,
         private readonly ParameterBagInterface $params
@@ -65,9 +67,10 @@ class ConvertToMultiUrlCommand extends Command
             ->addArgument('admin-url', InputArgument::REQUIRED, 'New admin URL (with scheme and trailing slash)')
             ->addOption('admin-username', null, InputOption::VALUE_REQUIRED, 'Global admin username (default: user id 1)')
             ->addOption('preserve-admin-id', null, InputOption::VALUE_NONE, 'Legacy migration: keep current access_url id as ADMIN and insert secondary with id+1, moving foreign keys')
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Do not write; only show planned changes')
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Skip single-URL safety check (use with caution)')
         ;
+        // No --expected-count here: the conversion is one all-or-nothing operation, guarded by the single-URL check.
+        $this->addApplyOptions(false);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -76,7 +79,7 @@ class ConvertToMultiUrlCommand extends Command
         $newAdminUrl = (string) $input->getArgument('admin-url');
         $username = (string) ($input->getOption('admin-username') ?? '');
         $preserveId = (bool) $input->getOption('preserve-admin-id');
-        $dryRun = (bool) $input->getOption('dry-run');
+        $dryRun = !$this->isApply($input);
         $force = (bool) $input->getOption('force');
 
         $prefix = (string) ($this->params->has('database_prefix') ? $this->params->get('database_prefix') : '');
@@ -444,6 +447,7 @@ class ConvertToMultiUrlCommand extends Command
 
         if ($dryRun) {
             $io->success('Dry-run complete. No changes were committed.');
+            $io->note('Read-only mode (default). Re-run with --apply to write.');
             $io->note('If you proceed for real, remember to enable multiple_access_urls afterwards.');
 
             return Command::SUCCESS;

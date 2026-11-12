@@ -331,16 +331,12 @@ switch ($action) {
         $startDate = isset($_REQUEST['date_start']) ? $_REQUEST['date_start'] : '';
         $endDate = isset($_REQUEST['date_end']) ? $_REQUEST['date_end'] : '';
 
-        $extraConditions = '';
-        if (!empty($startDate) && !empty($endDate)) {
-            if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $startDate) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)) {
-                $startDate = '';
-                $endDate = '';
-            } else {
-                $startDate = Database::escape_string($startDate);
-                $endDate = Database::escape_string($endDate);
-                $extraConditions .= " AND created_at BETWEEN '$startDate' AND '$endDate' ";
-            }
+        $createdBetween = null;
+        if (!empty($startDate) && !empty($endDate)
+            && preg_match('/^\d{4}-\d{2}-\d{2}$/', $startDate)
+            && preg_match('/^\d{4}-\d{2}-\d{2}$/', $endDate)
+        ) {
+            $createdBetween = [$startDate, $endDate];
         }
 
         switch ($filter) {
@@ -352,8 +348,9 @@ switch ($action) {
                     false,
                     false,
                     null,
-                    $extraConditions,
-                    true
+                    '',
+                    true,
+                    $createdBetween
                 );
                 $conditions = ['active' => 0];
                 $noActive = UserManager::getUserListExtraConditions(
@@ -362,8 +359,9 @@ switch ($action) {
                     false,
                     false,
                     null,
-                    $extraConditions,
-                    true
+                    '',
+                    true,
+                    $createdBetween
                 );
 
                 $all = [
@@ -384,8 +382,9 @@ switch ($action) {
                         false,
                         false,
                         null,
-                        $extraConditions,
-                    false
+                        '',
+                    false,
+                        $createdBetween
                     );
 
                 $userIdList = array_column($users, 'user_id');
@@ -438,8 +437,9 @@ switch ($action) {
                         false,
                         false,
                         null,
-                        $extraConditions,
-                        true
+                        '',
+                        true,
+                        $createdBetween
                     );
                 }
 
@@ -456,8 +456,9 @@ switch ($action) {
                     false,
                     false,
                     null,
-                    $extraConditions,
-                    false
+                    '',
+                    false,
+                    $createdBetween
                 );
 
                 $userIdList = array_column($users, 'user_id');
@@ -497,8 +498,9 @@ switch ($action) {
                     false,
                     false,
                     null,
-                    $extraConditions,
-                    false
+                    '',
+                    false,
+                    $createdBetween
                 );
 
                 $userIdList = array_column($users, 'user_id');
@@ -557,8 +559,9 @@ switch ($action) {
                     false,
                     false,
                     null,
-                    $extraConditions,
-                    false
+                    '',
+                    false,
+                    $createdBetween
                 );
 
                 $userIdList = array_column($users, 'user_id');
@@ -597,8 +600,9 @@ switch ($action) {
                     false,
                     false,
                     null,
-                    $extraConditions,
-                    false
+                    '',
+                    false,
+                    $createdBetween
                 );
 
                 $userIdList = array_column($users, 'user_id');
@@ -631,8 +635,9 @@ switch ($action) {
                     false,
                     false,
                     null,
-                    $extraConditions,
-                    false
+                    '',
+                    false,
+                    $createdBetween
                 );
 
                 $total = count($users);
@@ -700,6 +705,11 @@ switch ($action) {
         $statusCondition = '';
         if (!empty($statusId)) {
             $statusCondition .= " AND status = $statusId ";
+        }
+        // Only the sessions of the current URL (the date block above is regex-checked, so safe to interpolate).
+        if (api_is_multiple_url_enabled()) {
+            $statusCondition .= ' AND id IN (SELECT session_id FROM '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION)
+                .' WHERE access_url_id = '.api_get_current_access_url_id().') ';
         }
 
         switch ($filter) {
@@ -1113,9 +1123,6 @@ switch ($action) {
     case 'report_quarterly_hours_of_training':
         // Close the session as we don't need it any further
         session_write_close();
-        // The maximum time spent, in number of hours, to be considered.
-        // Anything above that is considered a time registration error.
-        $maxTimeSpent = 6;
         $currentQuarterDates = getQuarterDates();
         $pre1QuarterDates = getQuarterDates(
             date_create($currentQuarterDates['quarter_start'])
@@ -1156,33 +1163,27 @@ switch ($action) {
         // Get data for the row
         $timeSpentCoursesCurrentQuarter = Tracking::getTotalTimeSpentInCourses(
             $currentQuarterDates['quarter_start'],
-            $currentQuarterDates['quarter_end'],
-            $maxTimeSpent
+            $currentQuarterDates['quarter_end']
         );
         $timeSpentCourses1PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre1QuarterDates['quarter_start'],
-            $pre1QuarterDates['quarter_end'],
-            $maxTimeSpent
+            $pre1QuarterDates['quarter_end']
         );
         $timeSpentCourses2PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre2QuarterDates['quarter_start'],
-            $pre2QuarterDates['quarter_end'],
-            $maxTimeSpent
+            $pre2QuarterDates['quarter_end']
         );
         $timeSpentCourses3PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre3QuarterDates['quarter_start'],
-            $pre3QuarterDates['quarter_end'],
-            $maxTimeSpent
+            $pre3QuarterDates['quarter_end']
         );
         $timeSpentCourses4PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre4QuarterDates['quarter_start'],
-            $pre4QuarterDates['quarter_end'],
-            $maxTimeSpent
+            $pre4QuarterDates['quarter_end']
         );
         $timeSpentCourses5PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre5QuarterDates['quarter_start'],
-            $pre5QuarterDates['quarter_end'],
-            $maxTimeSpent
+            $pre5QuarterDates['quarter_end']
         );
         // Calculate percent for the row
         $percentIncrementTimeSpent = api_calculate_increment_percent(

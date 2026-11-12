@@ -224,6 +224,7 @@ $strings['YouNeedToBeRegisteredInAtLeastOneCourse'] = 'You need to be registered
 $strings['YouNeedToBeRegisteredInAtLeastOneSession'] = 'You need to be registered in at least one session';
 $strings['IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere'] = "To obtain the certificate and/or the skills associated to this course, you need to buy the <b> Certificate </b> service. Go to the services catalogue to buy it by clicking <a target='_blank' href='%s'>here</a>";
 $strings['ServiceDeleted'] = 'Service deleted';
+$strings['ServiceHasCompletedSales'] = 'This service cannot be deleted because it has completed sales. Disable it instead.';
 $strings['ServiceCopied'] = 'Service copied successfully.';
 $strings['ServiceCopyFailed'] = 'The service could not be copied.';
 $strings['ServiceCopyInvalidSecurityToken'] = 'The copy request is no longer valid. Please try again.';
@@ -426,7 +427,6 @@ $strings['DeleteFrequency'] = 'Delete period';
 $strings['Invoicing'] = 'Invoicing';
 $strings['Teachers'] = 'Teachers';
 $strings['TermsAndConditions'] = 'Terms and conditions';
-
 
 $strings['GrantedBenefits'] = 'Granted benefits';
 $strings['BenefitMaxCoursesTitle'] = 'Number of courses with these benefits';
@@ -738,7 +738,6 @@ $strings['SubscriptionPeriodsRequired'] = 'You must add at least one subscriptio
 $strings['FrequencyNotRemoved'] = 'The subscription period could not be removed.';
 $strings['CourseSessionBlock'] = 'Courses/Sessions';
 
-
 // Service upgrade.
 $strings['Upsale'] = 'Upsale';
 $strings['UpsaleHelp'] = 'Select the service that this service upgrades. Leave None for a regular service.';
@@ -761,6 +760,7 @@ $strings['UpsaleRecurringDurationMustMatch'] = 'Renewable source and upgrade ser
 $strings['UpsaleTargetDurationMustNotBeShorter'] = 'The upgrade service duration must be equal to or longer than the source service duration.';
 $strings['UpsaleCycleNotAllowed'] = 'This upsale relation would create a cycle between services.';
 $strings['UpgradePriceMustBePositive'] = 'The calculated upgrade price must be greater than zero.';
+$strings['PayPalUpgradeRequiresSameBillingSchedule'] = 'This PayPal subscription can only be upgraded to a service with the same billing interval and currency.';
 $strings['UpgradeMustUseExistingPaymentGateway'] = 'This upgrade must use the payment gateway of the current recurring subscription.';
 $strings['UpgradeSourceNoLongerAvailable'] = 'The current service is no longer available for this upgrade. Reload the catalog and try again.';
 $strings['UpgradeRecurringTransitionFailed'] = 'The recurring subscription could not be moved to the upgraded service. No local service change was applied.';

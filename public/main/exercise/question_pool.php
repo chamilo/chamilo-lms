@@ -54,6 +54,75 @@ if (!isset($_GET['selected_course']) && !isset($_GET['exerciseId'])) {
     $selected_course = -1;
 }
 
+// Ids of the request: nothing here is scoped by Question::read()/Exercise::read(), so check them before any read or
+// write. Source courses are the ones this page lists (current course, courses the user teaches or has through their
+// sessions, any for a platform admin); questions must belong to the course they are read from; state-changing
+// requests (plain GET links and the bulk GET form) carry the 'exercise' token.
+$exerciseToken = Security::get_existing_token('exercise');
+$exerciseTokenIsValid = Security::check_token('request', null, 'exercise');
+if ($is_allowedToEdit) {
+    $currentCourseId = (int) api_get_course_int_id();
+    $currentSessionId = (int) api_get_session_id();
+    $requestedSourceCourses = [(int) $selected_course, (int) ($_GET['course_id'] ?? 0)];
+    if (isset($_POST['recup']) && is_array($_POST['recup'])) {
+        $requestedSourceCourses = array_merge($requestedSourceCourses, array_map('intval', array_keys($_POST['recup'])));
+    }
+    foreach ($requestedSourceCourses as $requestedCourseId) {
+        if ($requestedCourseId > 0 && !questionPoolSourceCourseIsAllowed($requestedCourseId)) {
+            api_not_allowed(true);
+        }
+    }
+    if ($session_id > 0 && !api_is_platform_admin()) {
+        $allowedSessionIds = array_map('intval', array_column(
+            SessionManager::get_sessions_by_user(api_get_user_id(), false),
+            'session_id'
+        ));
+        if (!in_array($session_id, $allowedSessionIds, true)) {
+            api_not_allowed(true);
+        }
+    }
+    if (!empty($fromExercise)
+        && !ExerciseLib::exerciseBelongsToCourse($fromExercise, $currentCourseId, $currentSessionId)
+    ) {
+        api_not_allowed(true);
+    }
+    // Questions that are read, linked or deleted in the current course.
+    $currentCourseQuestionIds = array_filter([$delete, $recup]);
+    if (isset($_REQUEST['action']) && 'reuse' === $_REQUEST['action'] && is_array($_REQUEST['questions'] ?? null)) {
+        $currentCourseQuestionIds = array_merge($currentCourseQuestionIds, array_map('intval', $_REQUEST['questions']));
+    }
+    foreach ($currentCourseQuestionIds as $requestedQuestionId) {
+        if (!ExerciseLib::questionBelongsToCourse((int) $requestedQuestionId, $currentCourseId, $currentSessionId)) {
+            api_not_allowed(true);
+        }
+    }
+    // Questions that are copied from a source course.
+    $copiedQuestions = [];
+    if ($question_copy > 0) {
+        $copiedQuestions[(int) ($_GET['course_id'] ?? 0)][] = $question_copy;
+    }
+    if (isset($_REQUEST['action']) && 'clone' === $_REQUEST['action'] && is_array($_REQUEST['questions'] ?? null)) {
+        $copiedQuestions[(int) ($_GET['course_id'] ?? 0)] = array_map('intval', $_REQUEST['questions']);
+    }
+    if (isset($_POST['recup']) && is_array($_POST['recup'])) {
+        foreach ($_POST['recup'] as $originCourseId => $originQuestionIds) {
+            $copiedQuestions[(int) $originCourseId] = array_map('intval', (array) $originQuestionIds);
+        }
+    }
+    foreach ($copiedQuestions as $originCourseId => $originQuestionIds) {
+        foreach ($originQuestionIds as $originQuestionId) {
+            if (!ExerciseLib::questionBelongsToCourse((int) $originQuestionId, (int) $originCourseId, max(0, (int) $session_id))) {
+                api_not_allowed(true);
+            }
+        }
+    }
+    $changesData = $delete || $recup || $question_copy > 0 || isset($_POST['recup'])
+        || (isset($_REQUEST['action']) && in_array($_REQUEST['action'], ['reuse', 'clone'], true));
+    if ($changesData && !$exerciseTokenIsValid) {
+        api_not_allowed(true);
+    }
+}
+
 $_course = api_get_course_info();
 $objExercise = new Exercise();
 if (!empty($fromExercise)) {
@@ -1093,6 +1162,7 @@ echo '<input type="hidden" name="sid" value="'.api_get_session_id().'">';
 echo '<input type="hidden" name="selected_course" value="'.$selected_course.'">';
 echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
 echo '<input type="hidden" name="action">';
+echo '<input type="hidden" name="exercise_sec_token" value="'.$exerciseToken.'">';
 
 $table = new HTML_Table(['class' => 'table table-hover table-striped table-bordered data_table'], false);
 $row = 0;
@@ -1285,7 +1355,7 @@ function get_action_icon_for_question(
                 );
             } else {
                 $res = "<a href='".api_get_self()."?".
-                    api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
+                    api_get_cidreq().$getParams."&delete=$in_questionid&exercise_sec_token=".Security::get_existing_token('exercise')."' onclick='return confirm_your_choice()'>";
                 $res .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete'));
                 $res .= "</a>";
             }
@@ -1319,7 +1389,7 @@ function get_action_icon_for_question(
             $res = '-';
             if ($from_exercise > 0 && !$myObjEx->hasQuestion($in_questionid)) {
                 $res = "<a href='".api_get_self().'?'.
-                    api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
+                    api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise&exercise_sec_token=".Security::get_existing_token('exercise')."'>";
                 $res .= Display::getMdiIcon(ActionIcon::VIEW_DETAILS, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Use this question in the test as a link (not a copy)'));
                 $res .= '</a>';
             }
@@ -1327,7 +1397,7 @@ function get_action_icon_for_question(
 
         case 'clone':
             $url = api_get_self().'?'.api_get_cidreq().$getParams.
-                "&question_copy=$in_questionid&course_id=$in_selected_course&fromExercise=$from_exercise";
+                "&question_copy=$in_questionid&course_id=$in_selected_course&fromExercise=$from_exercise&exercise_sec_token=".Security::get_existing_token('exercise');
             $res = Display::url(
                 Display::getMdiIcon(ActionIcon::COPY_CONTENT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Re-use a copy inside the current test')),
                 $url
@@ -1418,4 +1488,28 @@ function get_question_type_for_question($in_selectedcourse, $in_questionid)
     }
 
     return $questionType;
+}
+
+/**
+ * Whether the question pool may read questions from the given course: the current course, a platform admin, a teacher
+ * of that course, or a course reachable through one of the user's sessions (what the course selector of this page lists).
+ */
+function questionPoolSourceCourseIsAllowed(int $courseId): bool
+{
+    if ($courseId === (int) api_get_course_int_id() || api_is_platform_admin()) {
+        return true;
+    }
+    $userId = (int) api_get_user_id();
+    if (CourseManager::isCourseTeacher($userId, $courseId)) {
+        return true;
+    }
+    foreach (SessionManager::get_sessions_by_user($userId, false) as $session) {
+        foreach ($session['courses'] ?? [] as $course) {
+            if ((int) ($course['id'] ?? 0) === $courseId) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }

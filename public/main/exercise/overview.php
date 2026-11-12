@@ -25,6 +25,12 @@ $courseId = isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : api_get_course_in
 $sessionId = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : api_get_session_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 
+// Exercise::read() does not scope by course: without this a learner of any course could open (and then start) the
+// test of another course, drafts included, by its sequential id.
+if (!ExerciseLib::exerciseBelongsToCourse($exercise_id, (int) api_get_course_int_id(), (int) api_get_session_id())) {
+    api_not_allowed(true);
+}
+
 $objExercise = new Exercise($courseId);
 $result = $objExercise->read($exercise_id, true);
 

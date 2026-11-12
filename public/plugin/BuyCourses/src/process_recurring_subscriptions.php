@@ -22,6 +22,7 @@ declare(strict_types=1);
 $cidReset = true;
 
 require_once __DIR__.'/../config.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 $plugin = BuyCoursesPlugin::create();
 
@@ -30,6 +31,11 @@ $isDryRun = $isCli && in_array('--dry-run', $argv ?? [], true);
 
 if (!$isCli && !api_is_platform_admin()) {
     api_not_allowed(true);
+}
+
+// The web trigger runs the renewal batch: it needs the admin token (cron/CLI has no session and is exempt).
+if (!$isCli) {
+    buycoursesRequireAdminToken(api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/service_panel.php');
 }
 
 $includeServices = 'true' === $plugin->get('include_services');

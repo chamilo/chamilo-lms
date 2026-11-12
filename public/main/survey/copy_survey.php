@@ -29,7 +29,7 @@ if (empty($surveyId)) {
 }
 
 $survey = SurveyManager::get_survey($surveyId);
-if (empty($survey)) {
+if (empty($survey) || !SurveyManager::surveyBelongsToCurrentCourse($surveyId)) {
     api_not_allowed(true);
 }
 
@@ -65,8 +65,13 @@ if ($form->validate() && Security::check_token('post')) {
     $values = $form->getSubmitValues();
     $courseKey = $values['destination_course'];
     $courseParts = explode('_', $courseKey);
-    $courseId = $courseParts[0];
-    $sessionId = $courseParts[1];
+    $courseId = (int) $courseParts[0];
+    $sessionId = (int) ($courseParts[1] ?? 0);
+
+    // The target is a free form value: the user must be allowed to add content to it.
+    if (!SurveyManager::canCopySurveyTo(api_get_user_id(), $courseId, $sessionId, api_is_platform_admin(), api_is_session_admin())) {
+        api_not_allowed(true);
+    }
 
     // Copy the survey to the target course
     $surveyCopyId = SurveyManager::copySurvey($surveyId, null, $courseId, $sessionId);

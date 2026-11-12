@@ -37,7 +37,7 @@ class Statistics
         if ($size >= pow(2, 20) && $size < pow(2, 30)) {
             return round($size / pow(2, 20), 1)." MB";
         }
-        if ($size > pow(2, 30)) {
+        if ($size >= pow(2, 30)) {
             return round($size / pow(2, 30), 2)." GB";
         }
 
@@ -60,24 +60,31 @@ class Statistics
     {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $courseRelCategoryTable = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
+        $courseCategoryTable = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $accessUrlUtil = Container::getAccessUrlUtil();
+        $params = [];
 
         if ($accessUrlUtil->isMultiple()) {
             $accessUrl = $accessUrlUtil->getCurrent();
-            $urlId = $accessUrl->getId();
+            $urlId = (int) $accessUrl->getId();
             $sql = "SELECT COUNT(*) AS number
                     FROM $courseTable AS c, $accessUrlRelCourseTable AS u
                     WHERE u.c_id = c.id AND u.access_url_id = $urlId";
-            if (isset($categoryCode)) {
-                $sql .= " AND category_code = '".Database::escape_string($categoryCode)."'";
-            }
         } else {
             $sql = "SELECT COUNT(*) AS number
                     FROM $courseTable AS c
                     WHERE 1 = 1";
-            if (isset($categoryCode)) {
-                $sql .= " AND c.category_code = '".Database::escape_string($categoryCode)."'";
-            }
+        }
+        if (isset($categoryCode)) {
+            // A course can sit in several categories: filter with a sub-select so it is counted once.
+            $sql .= " AND c.id IN (
+                        SELECT crc.course_id
+                        FROM $courseRelCategoryTable crc
+                        INNER JOIN $courseCategoryTable cc ON cc.id = crc.course_category_id
+                        WHERE cc.code = ?
+                    )";
+            $params[] = $categoryCode;
         }
 
         if (!empty($dateFrom)) {
@@ -89,10 +96,7 @@ class Statistics
             $sql .= " AND c.creation_date <= '$dateUntil' ";
         }
 
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
-
-        return $obj->number;
+        return (int) Database::getManager()->getConnection()->fetchOne($sql, $params);
     }
 
     /**
@@ -378,7 +382,7 @@ class Statistics
                     $table_user as user,
                     $access_url_rel_user_table as url
                     WHERE
-                        user.active <> -1 AND
+                        user.active <> ".USER_SOFT_DELETED." AND
                         track_default.default_user_id = user.id AND
                         url.user_id = user.id AND
                         access_url_id= $urlId";
@@ -822,6 +826,17 @@ class Statistics
     }
 
     /**
+     * Start of the 31-day window used by getRecentLoginStats(), as a 24-hour clock 'Y-m-d H:i:s' string.
+     */
+    public static function getRecentLoginWindowStart(DateTimeInterface $now): string
+    {
+        $date = DateTime::createFromInterface($now);
+        $date->sub(new DateInterval('P31D'));
+
+        return $date->format('Y-m-d H:i:s');
+    }
+
+    /**
      * Get the number of recent logins.
      *
      * @param ?bool $distinct            Whether to only give distinct users stats, or *all* logins
@@ -848,9 +863,7 @@ class Statistics
         }
 
         $now = api_get_utc_datetime();
-        $date = new DateTime($now);
-        $date->sub(new DateInterval('P31D'));
-        $newDate = $date->format('Y-m-d h:i:s');
+        $newDate = self::getRecentLoginWindowStart(new DateTime($now));
         $totalLogin = self::buildDatesArray($newDate, $now, true);
 
         $field = 'login_id';
@@ -1486,7 +1499,7 @@ class Statistics
             $urlId = $accessUrl->getId();
             $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
                     FROM $access_url_rel_user_table as url, $user_friend_table uf
-                    LEFT JOIN $user_table u
+                    INNER JOIN $user_table u
                     ON (uf.user_id = u.id) AND u.active <> ".USER_SOFT_DELETED."
                     WHERE
                         uf.relation_type <> '".UserRelUser::USER_RELATION_TYPE_RRHH."' AND
@@ -1497,7 +1510,7 @@ class Statistics
         } else {
             $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
                     FROM $user_friend_table uf
-                    LEFT JOIN $user_table u
+                    INNER JOIN $user_table u
                     ON (uf.user_id = u.id) AND u.active <> ".USER_SOFT_DELETED."
                     WHERE uf.relation_type <> '".UserRelUser::USER_RELATION_TYPE_RRHH."'
                     GROUP BY uf.user_id
@@ -1599,7 +1612,7 @@ class Statistics
         $endTimestamp = strtotime($endDate);
 
         $list = [];
-        for ($time = $startTimestamp; $time < $endTimestamp; $time += 86400) {
+        for ($time = $startTimestamp; $time <= $endTimestamp; $time += 86400) {
             $datetime = api_get_utc_datetime($time);
             $key = $removeYear ? substr($datetime, 5, 5) : substr($datetime, 0, 10);
             $list[$key] = 0;
@@ -2092,11 +2105,13 @@ class Statistics
             $urlWhere = "AND au.access_url_id = $urlId";
         }
 
+        $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
+        $durationSql = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::sqlForSeconds('l.login_date', 'l.logout_date', $maxSeconds);
         $sql = "SELECT u.id,
                     u.firstname,
                     u.lastname,
                     u.username,
-                    SUM(TIMESTAMPDIFF(SECOND, l.login_date, l.logout_date)) AS time_count
+                    SUM($durationSql) AS time_count
                 FROM $tblUser u
                 INNER JOIN $tblLogin l
                 ON u.id = l.login_user_id
@@ -2414,6 +2429,7 @@ class Statistics
             WHERE
                 t.c_id = :courseId
                 AND t.session_id = :sessionId
+                AND u.active <> -2
                 AND scru.id IS NULL
             GROUP BY
                 u.id, u.firstname, u.lastname, u.email
@@ -2436,6 +2452,7 @@ class Statistics
                 AND cu.c_id = :courseId
             WHERE
                 t.c_id = :courseId
+                AND u.active <> -2
                 AND cu.id IS NULL
             GROUP BY
                 u.id, u.firstname, u.lastname, u.email
@@ -2628,6 +2645,9 @@ class Statistics
      * @param array  $additionalExtraFieldsInfo Fields selected via TrackingCourseLog “additional profile fields”
      * @param int    $extraFieldId Only used when $mode=extra
      * @param string $csrfToken Security::get_token() from index.php
+     *
+     * @deprecated no caller left: the report is AdminStatisticsMaintenanceQueryService, which is scoped to the access
+     *             URL. This legacy copy compares the users of the whole platform.
      */
     public static function returnDuplicatedUsersTable(
         string $dupMode = 'name',
@@ -3244,6 +3264,9 @@ class Statistics
 
     /**
      * Unify 2 users: keep $keepUserId, merge $mergeUserId into it.
+     *
+     * @deprecated no caller left: it passes no actor, so UserMergeHelper cannot check the access-URL scope. Use
+     *             AdminStatisticsMaintenanceActionService, which does.
      */
     public static function unifyUsers(int $keepUserId, int $mergeUserId): bool
     {

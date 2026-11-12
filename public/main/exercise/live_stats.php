@@ -14,6 +14,10 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed();
 }
 
+if (!ExerciseLib::exerciseBelongsToCourse($exercise_id, api_get_course_int_id(), api_get_session_id())) {
+    api_not_allowed(true);
+}
+
 $objExercise = new Exercise();
 $result = $objExercise->read($exercise_id);
 

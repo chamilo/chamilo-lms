@@ -623,8 +623,14 @@ class SocialController extends AbstractController
     }
 
     #[Route('/add-users-to-group/{groupId}', name: 'chamilo_core_social_add_users_to_group')]
-    public function addUsersToGroup(Request $request, int $groupId, UsergroupRepository $usergroupRepository): JsonResponse
-    {
+    public function addUsersToGroup(
+        Request $request,
+        int $groupId,
+        UsergroupRepository $usergroupRepository,
+        SettingsManager $settingsManager,
+        #[CurrentUser]
+        User $currentUser
+    ): JsonResponse {
         $group = $usergroupRepository->find($groupId);
         if (null === $group) {
             return $this->json(['error' => 'Group not found'], Response::HTTP_NOT_FOUND);
@@ -634,9 +640,27 @@ class SocialController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
         $userIds = $data['userIds'] ?? [];
+        if (!\is_array($userIds)) {
+            return $this->json(['success' => false, 'message' => 'Invalid users.'], Response::HTTP_BAD_REQUEST);
+        }
+        $userIds = array_values(array_unique(array_filter(array_map('intval', $userIds), static fn (int $id): bool => $id > 0)));
+
+        // Posted ids are free: unless the platform allows inviting non-friends, only the inviter's
+        // friends may be added.
+        if ('true' !== $settingsManager->getSetting('group.allow_invite_non_friends_to_social_groups')) {
+            $friendIds = $usergroupRepository->getConfirmedFriendIds((int) $currentUser->getId());
+            if (!empty(array_diff($userIds, $friendIds))) {
+                return $this->json(
+                    ['success' => false, 'message' => 'Only your friends can be invited to this group.'],
+                    Response::HTTP_FORBIDDEN
+                );
+            }
+        }
 
         try {
-            $usergroupRepository->addUserToGroup($userIds, $groupId);
+            foreach ($userIds as $userId) {
+                $usergroupRepository->addUserToGroup($userId, $groupId);
+            }
 
             return $this->json(['success' => true, 'message' => 'Users added to group successfully.']);
         } catch (Exception $e) {

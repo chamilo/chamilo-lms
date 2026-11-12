@@ -47,8 +47,10 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = (int) $_POST['form_sent'];
 
     if (1 === $form_sent) {
-        $sessionSourceList = $_POST['sessions'] ?? [];
-        $sessionDestinationList = $_POST['sessions_destination'] ?? [];
+        // The ids come from the body: keep only the sessions the user may manage (the one the page was
+        // protected for is not the only one posted).
+        $sessionSourceList = SessionManager::filterManageableSessionIds($_POST['sessions'] ?? []);
+        $sessionDestinationList = SessionManager::filterManageableSessionIds($_POST['sessions_destination'] ?? []);
 
         // Copy students from source sessions to destination sessions
         $result = SessionManager::copyStudentsFromSession($sessionSourceList, $sessionDestinationList);
@@ -65,7 +67,9 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 $session_list = SessionManager::get_sessions_list([], ['title']);
 $sessionList = [];
 foreach ($session_list as $row) {
-    $sessionList[(int) $row['id']] = $row['title'];
+    if (SessionManager::canManageSessionId((int) $row['id'])) {
+        $sessionList[(int) $row['id']] = $row['title'];
+    }
 }
 
 Display::display_header($tool_name);

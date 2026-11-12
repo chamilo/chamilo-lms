@@ -427,6 +427,16 @@ final readonly class TicketWorkflowService
         );
     }
 
+    /**
+     * Detaches a user that is being permanently deleted from the ticket system (assignments, category
+     * subscriptions, authored rows handed to the fallback user). Single entry point for the ticket side of a user
+     * deletion; the work itself stays in TicketManager::deleteUserFromTicketSystem().
+     */
+    public function removeUserFromTicketSystem(int $userId): void
+    {
+        TicketManager::deleteUserFromTicketSystem($userId);
+    }
+
     public function close(Ticket $ticket, User $user): void
     {
         $this->assertCanClose($ticket, $user);

@@ -16,7 +16,6 @@ use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Uid\Uuid;
@@ -31,6 +30,8 @@ use const ENT_QUOTES;
 )]
 final class RepairForumPostsWithoutItemPropertyCommand extends Command
 {
+    use DryRunByDefaultTrait;
+
     private const int BATCH_SIZE = 100;
     private const int RESOURCE_NODE_TITLE_MAX_LENGTH = 255;
 
@@ -42,12 +43,7 @@ final class RepairForumPostsWithoutItemPropertyCommand extends Command
 
     protected function configure(): void
     {
-        $this->addOption(
-            'dry-run',
-            null,
-            InputOption::VALUE_NONE,
-            'Shows the posts that would be repaired and rolls back every batch.'
-        );
+        $this->addApplyOptions();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -55,12 +51,29 @@ final class RepairForumPostsWithoutItemPropertyCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Repair legacy forum posts missing resource nodes');
 
-        $dryRun = (bool) $input->getOption('dry-run');
+        try {
+            $apply = $this->isApply($input);
+            if ($apply) {
+                $this->requireExpectedCountOption($input);
+            }
+        } catch (Throwable $e) {
+            $io->error($e->getMessage());
+
+            return Command::FAILURE;
+        }
+
+        $dryRun = !$apply;
         if ($dryRun) {
-            $io->warning('Dry-run enabled. Every repair batch will be rolled back.');
+            $io->warning('Read-only mode (default): every repair batch will be rolled back. Use --apply --expected-count=N to write.');
         }
 
         try {
+            if ($apply) {
+                // Simulate first: the count that would be repaired must be the one the operator reviewed.
+                $planned = $this->repair(true, null);
+                $this->assertExpectedCount($input, (int) $planned['repaired']);
+            }
+
             $summary = $this->repair(
                 $dryRun,
                 static function (array $progress) use ($io): void {
@@ -81,6 +94,9 @@ final class RepairForumPostsWithoutItemPropertyCommand extends Command
         }
 
         $io->success($dryRun ? 'Dry-run completed.' : 'Repair completed.');
+        if ($dryRun) {
+            $io->note(\sprintf('Read-only mode. No database changes were made. To write, re-run with --apply --expected-count=%d.', (int) $summary['repaired']));
+        }
         $io->definitionList(
             ['Rows seen' => $summary['seen']],
             [$dryRun ? 'Posts simulated' : 'Posts repaired' => $summary['repaired']],

@@ -10,6 +10,7 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 $edit_cat = isset($_REQUEST['editcat']) ? (int) $_REQUEST['editcat'] : 0;
 
+GradebookUtils::protectElementInCurrentCourse('CATE', $edit_cat);
 $catedit = Category::load($edit_cat);
 $form = new CatForm(
     CatForm::TYPE_EDIT,
@@ -21,6 +22,17 @@ $form = new CatForm(
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
+
+    // The form posts back the id, parent, owner and course: only the category being edited may be saved,
+    // and a teacher cannot re-parent it elsewhere or move it to another course through those hidden fields.
+    if ((int) ($values['hid_id'] ?? 0) !== $edit_cat) {
+        api_not_allowed(true);
+    }
+    if (!api_is_platform_admin() && isset($catedit[0])) {
+        $values['hid_parent_id'] = $catedit[0]->get_parent_id();
+        $values['hid_user_id'] = $catedit[0]->get_user_id();
+        $values['course_code'] = api_get_course_id();
+    }
 
     $cat = new Category();
 

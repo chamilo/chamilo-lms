@@ -27,22 +27,32 @@ $url = api_get_self().'?'.api_get_cidreq();
 $action = $_GET['action'] ?? null;
 switch ($action) {
     case 'resend':
+        // State-changing links carry a one-use token: a plain GET must not mail or delete on its own.
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
         if (isset($_GET['user_id'])) {
-            $legal->updateMailAgreementLink($_GET['user_id'], $courseId, $sessionId);
+            $legal->updateMailAgreementLink((int) $_GET['user_id'], $courseId, $sessionId);
             header('Location: '.$url);
             exit;
         }
 
         break;
     case 'delete':
+        if (!Security::check_token('get')) {
+            api_not_allowed(true);
+        }
+        Security::clear_token();
         if (isset($_GET['user_id'])) {
-            $legal->deleteUserAgreement($_GET['user_id'], $courseId, $sessionId);
+            $legal->deleteUserAgreement((int) $_GET['user_id'], $courseId, $sessionId);
             header('Location: '.$url);
             exit;
         }
 
         break;
 }
+$token = Security::get_token();
 
 $order = ' ORDER BY firstname, lastname';
 $userList = $legal->getUserAgreementList($courseId, $sessionId, $order);
@@ -61,8 +71,8 @@ if (!empty($userList)) {
 
         $webDate = !empty($user['web_agreement_date']) ? api_get_local_time($user['web_agreement_date']) : '-';
         $mailDate = !empty($user['mail_agreement_date']) ? api_get_local_time($user['mail_agreement_date']) : '-';
-        $resendUrl = $pluginPath.'user_list.php?action=resend&user_id='.$user['user_id'].'&'.api_get_cidreq();
-        $deleteUrl = $pluginPath.'user_list.php?action=delete&user_id='.$user['user_id'].'&'.api_get_cidreq();
+        $resendUrl = $pluginPath.'user_list.php?action=resend&user_id='.(int) $user['user_id'].'&sec_token='.$token.'&'.api_get_cidreq();
+        $deleteUrl = $pluginPath.'user_list.php?action=delete&user_id='.(int) $user['user_id'].'&sec_token='.$token.'&'.api_get_cidreq();
 
         $resendLink = Display::url(
             Display::getMdiIcon(

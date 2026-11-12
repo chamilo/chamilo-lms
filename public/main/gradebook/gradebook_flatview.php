@@ -20,6 +20,7 @@ if (!$isDrhOfCourse) {
 }
 
 $categoryId = isset($_REQUEST['selectcat']) ? (int) $_REQUEST['selectcat'] : 0;
+GradebookUtils::protectElementInCurrentCourse('CATE', $categoryId);
 
 if (isset($_POST['submit']) && isset($_POST['keyword'])) {
     $searchKeyword = trim(Security::remove_XSS((string) $_POST['keyword']));

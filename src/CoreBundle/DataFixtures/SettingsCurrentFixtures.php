@@ -1585,6 +1585,13 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
     public static function getNewConfigurationSettings(): array
     {
         return [
+            'group' => [
+                [
+                    'name' => 'allow_invite_non_friends_to_social_groups',
+                    'title' => 'Allow inviting non-friends to social groups',
+                    'comment' => 'By default (off), the admin or moderator of a social group can only invite their own friends to it. Enable this to let them invite any user of the platform.',
+                ],
+            ],
             'catalog' => [
                 [
                     'name' => 'course_catalog_settings',
@@ -3969,6 +3976,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'recycle_bin_retention_hours',
                     'title' => 'Recycle bin retention (hours)',
                     'comment' => 'Minimum age in hours before deleted exercise attempts and learning path progress can be permanently purged. The cleanup command runs in preview mode unless --execute is provided.',
+                ],
+                [
+                    'name' => 'max_time_spent_per_session_threshold',
+                    'title' => 'Max time spent per session threshold (minutes)',
+                    'comment' => 'Sometimes, time tracking can escape the control of the platform, and reports could consider that a study time of 48 hours is totally legitimate. To avoid this issue, this setting allows you to set a maximum number of minutes that you consider is believable as student activity on the platform, in one single learning session. If they login and logout again, this is considered another session and time spent there is still summed up to the total study time.',
                 ],
                 [
                     'name' => 'maximum_inactive_time_to_consider',

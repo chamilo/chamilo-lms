@@ -14,6 +14,10 @@ if (empty($survey_id)) {
     api_not_allowed(true);
 }
 
+if (!SurveyManager::surveyBelongsToCurrentCourse((int) $survey_id)) {
+    api_not_allowed(true);
+}
+
 $survey_data = SurveyManager::get_survey($survey_id);
 
 $interbreadcrumb[] = [

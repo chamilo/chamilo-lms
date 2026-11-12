@@ -137,6 +137,81 @@ final class AccessUrlScopeHelper
     }
 
     /**
+     * Keeps only the ids that are registered on at least one managed URL. An unrestricted actor
+     * keeps every id. Used by the assign/bulk endpoints so that an entity of another branch of
+     * the hierarchy cannot be pulled into the actor's subtree (which would make it "managed").
+     *
+     * @param int[] $ids
+     *
+     * @return int[]
+     */
+    public function filterManagedUserIds(User $user, array $ids): array
+    {
+        return $this->filterManagedIds($user, $ids, 'access_url_rel_user', 'user_id');
+    }
+
+    /**
+     * @param int[] $ids
+     *
+     * @return int[]
+     */
+    public function filterManagedCourseIds(User $user, array $ids): array
+    {
+        return $this->filterManagedIds($user, $ids, 'access_url_rel_course', 'c_id');
+    }
+
+    /**
+     * @param int[] $ids
+     *
+     * @return int[]
+     */
+    public function filterManagedUserGroupIds(User $user, array $ids): array
+    {
+        return $this->filterManagedIds($user, $ids, 'access_url_rel_usergroup', 'usergroup_id');
+    }
+
+    /**
+     * @param int[] $ids
+     *
+     * @return int[]
+     */
+    public function filterManagedCourseCategoryIds(User $user, array $ids): array
+    {
+        return $this->filterManagedIds($user, $ids, 'access_url_rel_course_category', 'course_category_id');
+    }
+
+    /**
+     * @param int[] $ids
+     *
+     * @return int[]
+     */
+    private function filterManagedIds(User $user, array $ids, string $table, string $column): array
+    {
+        $managedUrlIds = $this->getManagedUrlIds($user);
+        if (null === $managedUrlIds) {
+            return $ids;
+        }
+        if ([] === $ids || [] === $managedUrlIds) {
+            return [];
+        }
+
+        // $table and $column are internal constants of this class, never user input.
+        $managed = array_map(
+            'intval',
+            $this->connection->fetchFirstColumn(
+                "SELECT DISTINCT $column
+                   FROM $table
+                  WHERE $column IN (:ids)
+                    AND access_url_id IN (:managedUrlIds)",
+                ['ids' => $ids, 'managedUrlIds' => $managedUrlIds],
+                ['ids' => ArrayParameterType::INTEGER, 'managedUrlIds' => ArrayParameterType::INTEGER],
+            )
+        );
+
+        return array_values(array_filter($ids, static fn (int $id): bool => \in_array($id, $managed, true)));
+    }
+
+    /**
      * A ROLE_GLOBAL_ADMIN may only grant ROLE_GLOBAL_ADMIN to someone else (or to themselves)
      * if they are themselves unrestricted (registered in the topmost URL of a tree).
      */
@@ -190,6 +265,40 @@ final class AccessUrlScopeHelper
             ['actorId' => (int) $actor->getId(), 'targetId' => (int) $target->getId()],
             ['actorId' => Types::INTEGER, 'targetId' => Types::INTEGER],
         );
+    }
+
+    /**
+     * Access URLs whose users a report opened from the portal $currentUrlId may put side by side.
+     *
+     * Always the current portal. In addition, a ROLE_GLOBAL_ADMIN who is registered in the current portal (so the
+     * current portal is the parent of the subtree they manage) also gets the descendants of that portal, restricted
+     * to the URLs they manage. From any other portal, or for any other role, it is the current portal alone.
+     *
+     * @return int[]
+     */
+    public function getReportUrlIds(User $user, int $currentUrlId): array
+    {
+        if (!$user->hasRole('ROLE_GLOBAL_ADMIN')) {
+            return [$currentUrlId];
+        }
+
+        // fetchOne() returns false (not null) when no row matches.
+        $registered = false !== $this->connection->fetchOne(
+            'SELECT 1 FROM access_url_rel_user WHERE user_id = :userId AND access_url_id = :urlId LIMIT 1',
+            ['userId' => (int) $user->getId(), 'urlId' => $currentUrlId],
+            ['userId' => Types::INTEGER, 'urlId' => Types::INTEGER],
+        );
+        if (!$registered) {
+            return [$currentUrlId];
+        }
+
+        $ids = $this->getDescendantUrlIds($currentUrlId);
+        $managed = $this->getManagedUrlIds($user);
+        if (null !== $managed) {
+            $ids = array_values(array_intersect($ids, $managed));
+        }
+
+        return array_values(array_unique([$currentUrlId, ...$ids]));
     }
 
     /**

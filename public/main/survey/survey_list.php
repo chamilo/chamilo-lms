@@ -87,6 +87,9 @@ $survey = null;
 if (!empty($surveyId)) {
     /** @var CSurvey $survey */
     $survey = $repo->find($surveyId);
+    if (null === $survey || !SurveyManager::surveyBelongsToCurrentCourse($surveyId)) {
+        api_not_allowed(true);
+    }
 }
 
 // Action handling: performing the same action on multiple surveys
@@ -94,6 +97,11 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
     if (!api_is_allowed_to_edit()) {
         api_not_allowed(true);
     }
+    // The bulk form (SortableTable) posts the session token.
+    if (!Security::check_token('post')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
 
     switch ($action) {
         case 'export_by_class':
@@ -107,8 +115,8 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
             foreach ($_POST['id'] as $value) {
                 /** @var CSurvey $survey */
-                $survey = $repo->find($value);
-                if (null === $survey) {
+                $survey = $repo->find((int) $value);
+                if (null === $survey || !SurveyManager::surveyBelongsToCurrentCourse((int) $value)) {
                     continue;
                 }
                 $surveyId = $survey->getIid();
@@ -389,8 +397,8 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
     $exportList = [];
     foreach ($_POST['id'] as $value) {
         /** @var CSurvey $survey */
-        $survey = $repo->find($value);
-        if (null === $survey) {
+        $survey = $repo->find((int) $value);
+        if (null === $survey || !SurveyManager::surveyBelongsToCurrentCourse((int) $value)) {
             continue;
         }
         $title = trim(strip_tags($survey->getTitle()));
@@ -465,6 +473,14 @@ if (isset($_POST['action']) && $_POST['action'] && isset($_POST['id']) && is_arr
 
     header('Location: '.$listUrl);
     exit;
+}
+
+// These actions change data and are reached through links: they are only valid when sent from a page of this session.
+if (in_array($action, ['send_to_tutors', 'multiplicate', 'remove_multiplicate', 'copy_survey', 'delete', 'empty'], true)) {
+    if (!api_is_allowed_to_edit() || !Security::check_token('get')) {
+        api_not_allowed(true);
+    }
+    Security::clear_token();
 }
 
 switch ($action) {

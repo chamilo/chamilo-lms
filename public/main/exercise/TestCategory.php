@@ -161,6 +161,8 @@ class TestCategory
 
     /**
      * Gets the number of question of category id=in_id.
+     *
+     * @deprecated no caller; kept only as a pin of its behaviour
      */
     public function getCategoryQuestionsNumber()
     {
@@ -168,7 +170,7 @@ class TestCategory
         $id = (int) $this->id;
         $sql = "SELECT count(*) AS nb
                 FROM $table
-                WHERE category_id = $id AND c_id=".api_get_course_int_id();
+                WHERE category_id = $id";
         $res = Database::query($sql);
         $row = Database::fetch_array($res);
 
@@ -395,13 +397,13 @@ class TestCategory
         $count = 0;
         $categories = self::getListOfCategoriesIDForTest($exerciseId);
         foreach ($categories as $category) {
-            if (empty($category['id'])) {
+            if (empty($category['iid'])) {
                 continue;
             }
 
             $nbQuestionInThisCat = self::getNumberOfQuestionsInCategoryForTest(
                 $exerciseId,
-                $category['id']
+                $category['iid']
             );
 
             if ($nbQuestionInThisCat > $random) {
@@ -456,7 +458,7 @@ class TestCategory
 
         $mandatoryCondition = '';
         if ($onlyMandatory) {
-            $mandatoryCondition = ' AND qrc.mandatory = 1';
+            $mandatoryCondition = ' AND q.mandatory = 1';
         }
         $sql = "SELECT DISTINCT qrc.question_id, qrc.category_id
                 FROM $tblQuestionRelCategory qrc
@@ -646,13 +648,13 @@ class TestCategory
         $res_num_max = 0;
         $categories = self::getListOfCategoriesIDForTest($exerciseId);
         foreach ($categories as $category) {
-            if (empty($category['id'])) {
+            if (empty($category['iid'])) {
                 continue;
             }
 
             $nbQuestionInThisCat = self::getNumberOfQuestionsInCategoryForTest(
                 $exerciseId,
-                $category['id']
+                $category['iid']
             );
 
             if ($nbQuestionInThisCat > $res_num_max) {
@@ -679,8 +681,7 @@ class TestCategory
             return '';
         }
 
-        $hide = (int) $exercise->getPageConfigurationAttribute('hide_category_table');
-        if (1 === $hide) {
+        if (api_is_flag_enabled($exercise->getPageConfigurationAttribute('hide_category_table'))) {
             return '';
         }
         $exerciseId = $exercise->iId;
@@ -1033,9 +1034,15 @@ class TestCategory
     public static function get_category_id_for_title($title, $courseId = 0)
     {
         $out_res = 0;
+        $courseId = empty($courseId) ? (int) api_get_course_int_id() : (int) $courseId;
         $tableCategory = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT iid FROM $tableCategory
-                WHERE title = '".Database::escape_string($title)."'";
+        // The course of a category is the resource link of its resource node.
+        $sql = "SELECT c.iid FROM $tableCategory c
+                INNER JOIN resource_link link ON link.resource_node_id = c.resource_node_id
+                WHERE c.title = '".Database::escape_string($title)."'
+                    AND link.c_id = $courseId
+                    AND link.deleted_at IS NULL
+                ORDER BY c.iid ASC";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $data = Database::fetch_array($res);
@@ -1130,7 +1137,7 @@ class TestCategory
                     href="'.api_get_self().'?action=editcategory&id='.$id.'&'.api_get_cidreq().'">'.
                     Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
                 $links .= ' <a
-                    href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&id='.$id.'" ';
+                    href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&category_id='.$id.'&exercise_sec_token='.Security::get_existing_token('exercise').'" ';
                 $links .= 'onclick="return confirmDelete(\''.
                     self::protectJSDialogQuote(get_lang('Are you sure you want to delete this category?').'['.$rowname).'] ?\', \'id_cat'.$id.'\');">';
                 $links .= Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a>';

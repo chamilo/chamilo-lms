@@ -183,9 +183,76 @@
     </plugins>
 
     <issueHandlers>
+        <!--
+            The characterization tests in tests/CoreBundle/Legacy pin the CURRENT behaviour of legacy code, including its
+            wrong inputs (strings for ints, null for required arguments, undefined legacy functions and constants loaded by
+            global.inc.php). Typing those calls "correctly" would change what the tests prove, so these issues are not
+            reported for that folder only. The rest of tests/ and src/ stay fully checked.
+        -->
+        <InvalidArgument>
+            <errorLevel type="suppress">
+                <directory name="tests/CoreBundle/Legacy"/>
+            </errorLevel>
+        </InvalidArgument>
+        <NullArgument>
+            <errorLevel type="suppress">
+                <directory name="tests/CoreBundle/Legacy"/>
+            </errorLevel>
+        </NullArgument>
+        <InvalidArrayOffset>
+            <errorLevel type="suppress">
+                <directory name="tests/CoreBundle/Legacy"/>
+            </errorLevel>
+        </InvalidArrayOffset>
+        <InvalidArrayAccess>
+            <errorLevel type="suppress">
+                <directory name="tests/CoreBundle/Legacy"/>
+            </errorLevel>
+        </InvalidArrayAccess>
+        <UndefinedFunction>
+            <errorLevel type="suppress">
+                <directory name="tests/CoreBundle/Legacy"/>
+            </errorLevel>
+        </UndefinedFunction>
+        <UndefinedConstant>
+            <errorLevel type="suppress">
+                <directory name="tests/CoreBundle/Legacy"/>
+            </errorLevel>
+        </UndefinedConstant>
+        <UndefinedPropertyFetch>
+            <errorLevel type="suppress">
+                <directory name="tests/CoreBundle/Legacy"/>
+            </errorLevel>
+        </UndefinedPropertyFetch>
+        <InvalidPropertyFetch>
+            <errorLevel type="suppress">
+                <directory name="tests/CoreBundle/Legacy"/>
+            </errorLevel>
+        </InvalidPropertyFetch>
+        <UndefinedClass>
+            <errorLevel type="suppress">
+                <directory name="tests/CoreBundle/Legacy"/>
+            </errorLevel>
+        </UndefinedClass>
+        <InvalidReturnStatement>
+            <errorLevel type="suppress">
+                <directory name="tests/CoreBundle/Legacy"/>
+            </errorLevel>
+        </InvalidReturnStatement>
+        <InvalidReturnType>
+            <errorLevel type="suppress">
+                <directory name="tests/CoreBundle/Legacy"/>
+            </errorLevel>
+        </InvalidReturnType>
+        <NoValue>
+            <errorLevel type="suppress">
+                <directory name="tests/CoreBundle/Legacy"/>
+            </errorLevel>
+        </NoValue>
         <PluginIssue name="ServiceNotFound">
             <errorLevel type="suppress">
                 <file name="src/CoreBundle/Traits/ControllerTrait.php"/>
+                <directory name="tests/CoreBundle/Legacy"/>
             </errorLevel>
         </PluginIssue>
     </issueHandlers>

@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Framework\Container;
 $cidReset = true;
 
 require_once '../config.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 /**
  * Add classes to an element without removing existing ones.
@@ -304,6 +305,9 @@ $includeServices = 'true' === $plugin->get('include_services');
 $invoicingEnable = 'true' === $plugin->get('invoicing_enable');
 
 if ($orderId = $httpRequest->query->getInt('order')) {
+    // Completing a sale grants the product without any payment: never from a bare link (CSRF).
+    buycoursesRequireAdminToken(api_get_self());
+
     $sale = $plugin->getSubscriptionSale($orderId);
 
     if (empty($sale)) {
@@ -503,6 +507,7 @@ $templateName = $plugin->get_lang('SalesReport');
 $template = new Template($templateName);
 
 $template->assign('page_title', $templateName);
+$template->assign('admin_token', buycoursesAdminToken());
 $template->assign('plugin_title', $plugin->get_lang('plugin_title'));
 $template->assign('back_url', $backUrl);
 

@@ -34,7 +34,7 @@ if (api_is_student_boss() && !empty($filter_user)) {
         api_not_allowed(true);
     }
 } else {
-    api_protect_course_script(true, false, true);
+    api_protect_course_script(true, false, TOOL_QUIZ);
 }
 
 $limitTeacherAccess = ('true' === api_get_setting('exercise.limit_exercise_teacher_access'));
@@ -125,8 +125,12 @@ switch ($action) {
         if (!$exerciseTokenIsValid) {
             api_not_allowed(true);
         }
-        $exeIds = explode(',', $idMultiple);
+        $exeIds = explode(',', (string) $idMultiple);
         foreach ($exeIds as $exeId) {
+            // Only attempts of this test, in the current course and session.
+            if (!ExerciseLib::attemptBelongsToCourse((int) $exeId, (int) $course_id, (int) $sessionId, (int) $exercise_id)) {
+                continue;
+            }
             ExerciseLib::deleteExerciseAttempt((int) $exeId);
         }
         echo 1;
@@ -152,7 +156,7 @@ switch ($action) {
         exit;
     case 'send_email':
         $attemptId = (int) $_GET['attemptId'];
-        if (!$exerciseTokenIsValid || !ExerciseLib::attemptBelongsToCourse($attemptId, (int) $course_id)) {
+        if (!$exerciseTokenIsValid || !ExerciseLib::attemptBelongsToCourse($attemptId, (int) $course_id, (int) $sessionId, (int) $exercise_id)) {
             api_not_allowed(true);
         }
         ExerciseLib::sendExerciseResultByEmail($attemptId);
@@ -246,7 +250,7 @@ if (isset($_REQUEST['comments']) &&
 
     // The attempt must belong to the current course, or a teacher of any course could regrade any attempt.
     if (empty($track_exercise_info)
-        || !ExerciseLib::attemptBelongsToCourse($id, (int) $course_id)
+        || !ExerciseLib::attemptBelongsToCourse($id, (int) $course_id, (int) $sessionId, (int) $exercise_id)
         || !$exerciseTokenIsValid
     ) {
         api_not_allowed(true);
@@ -582,6 +586,9 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
     if (!$exerciseTokenIsValid) {
         api_not_allowed(true);
     }
+    if (!ExerciseLib::attemptBelongsToCourse($exe_id, (int) $course_id, (int) $sessionId, (int) $exercise_id)) {
+        api_not_allowed(true);
+    }
     if (!empty($exe_id)) {
         ExerciseLib::deleteExerciseAttempt($exe_id);
         header('Location: exercise_report.php?'.api_get_cidreq().'&exerciseId='.$exercise_id);
@@ -749,6 +756,11 @@ if (!empty($group_parameters)) {
 $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
 
 if ($is_allowedToEdit || $is_tutor) {
+    // The IP column is left out of the model, and of the data (model.ajax.php), when the platform hides IP addresses:
+    // its name must be left out of the header too, or the grid has more names than columns and jqGrid does not build.
+    $hideIp = 'true' === api_get_setting('tracking.hide_ip_address')
+        || 'true' === api_get_setting('exercise.exercise_hide_ip');
+
     // The order is important you need to check the the $column variable in the model.ajax.php file
     $columns = [
         get_lang('First name'),
@@ -759,7 +771,7 @@ if ($is_allowedToEdit || $is_tutor) {
         get_lang('Start Date'),
         get_lang('End Date'),
         get_lang('Score'),
-        get_lang('IP'),
+        ...($hideIp ? [] : [get_lang('IP')]),
         get_lang('Status'),
         get_lang('Learning path'),
         get_lang('Detail'),
@@ -807,8 +819,7 @@ if ($is_allowedToEdit || $is_tutor) {
         ['name' => 'start_date', 'index' => 'start_date', 'width' => '150', 'align' => 'left', 'search' => 'true'],
         ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '150', 'align' => 'left', 'search' => 'true'],
         ['name' => 'score', 'index' => 'score', 'width' => '120', 'align' => 'center', 'search' => 'true'],
-        ...(('true' === api_get_setting('tracking.hide_ip_address')
-            || 'true' === api_get_setting('exercise.exercise_hide_ip'))
+        ...($hideIp
             ? [] : [['name' => 'ip', 'index' => 'user_ip', 'width' => '120', 'align' => 'center', 'search' => 'true']]),
         [
             'name' => 'status',

@@ -48,6 +48,8 @@ use const LIBXML_NOWARNING;
 )]
 final class RepairTranslateHtmlLanguageBlocksCommand extends Command
 {
+    use DryRunByDefaultTrait;
+
     private const string MARKER_CLASS = 'mce-translatehtml';
 
     public function __construct(
@@ -59,9 +61,9 @@ final class RepairTranslateHtmlLanguageBlocksCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Report what would change without writing anything.')
             ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'Only process the first N rows per column (for testing).')
         ;
+        $this->addApplyOptions();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -69,11 +71,22 @@ final class RepairTranslateHtmlLanguageBlocksCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Repair translatehtml language blocks');
 
-        $dryRun = (bool) $input->getOption('dry-run');
+        try {
+            $apply = $this->isApply($input);
+            if ($apply) {
+                $this->requireExpectedCountOption($input);
+            }
+        } catch (Throwable $exception) {
+            $io->error($exception->getMessage());
+
+            return Command::FAILURE;
+        }
+
+        $dryRun = !$apply;
         $limit = null !== $input->getOption('limit') ? (int) $input->getOption('limit') : null;
 
         if ($dryRun) {
-            $io->note('Running in dry-run mode: no rows will be updated.');
+            $io->note('Read-only mode (default): no rows will be updated. Use --apply --expected-count=N to write.');
         }
 
         /** @var list<array{table: string, idColumn: string, columns: list<string>}> $targets */
@@ -99,6 +112,12 @@ final class RepairTranslateHtmlLanguageBlocksCommand extends Command
                         $dryRun,
                     );
                 }
+            }
+
+            $plannedRepairs = array_sum(array_column($summary, 'repaired'));
+            if ($apply) {
+                // Checked before the commit: a mismatch rolls the whole transaction back (see the catch below).
+                $this->assertExpectedCount($input, (int) $plannedRepairs);
             }
 
             if ($dryRun) {
@@ -132,7 +151,7 @@ final class RepairTranslateHtmlLanguageBlocksCommand extends Command
             ));
         }
 
-        $io->success($dryRun ? 'Dry run complete.' : \sprintf('Repaired %d field(s).', $totals['repaired']));
+        $io->success($dryRun ? \sprintf('Dry run complete. To write, re-run with --apply --expected-count=%d.', $totals['repaired']) : \sprintf('Repaired %d field(s).', $totals['repaired']));
 
         return Command::SUCCESS;
     }

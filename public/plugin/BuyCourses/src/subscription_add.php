@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 /**
  * Add classes to an element without removing existing ones.
@@ -547,6 +548,9 @@ HTML;
 
 api_protect_admin_script(true);
 
+// Every form of this page carries the token (CsrfProtectionListener does not cover legacy plugin pages).
+buycoursesRequireAdminTokenOnPost();
+
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : 0;
 
@@ -678,6 +682,7 @@ if (isset($_POST['tax_perc'])) {
 }
 
 $form = new FormValidator('add_subscription', 'post', api_get_self().'?'.$queryString);
+buycoursesAdminTokenField($form);
 
 $form->addElement(
     'number',

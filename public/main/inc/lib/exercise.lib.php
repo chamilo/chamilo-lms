@@ -2201,13 +2201,13 @@ HOTSPOT;
                         official_code,
                         email,
                         username,
-                        g.name as group_name,
-                        g.id as group_id
+                        g.title as group_name,
+                        g.iid as group_id
                     FROM $TBL_USER u
                     INNER JOIN $TBL_GROUP_REL_USER gru
                     ON (gru.user_id = u.id AND gru.c_id= $courseId )
                     INNER JOIN $TBL_GROUP g
-                    ON (gru.group_id = g.id AND g.c_id= $courseId )
+                    ON (gru.group_id = g.iid)
                     WHERE u.active <> ".USER_SOFT_DELETED."
                 )";
             }
@@ -2266,16 +2266,23 @@ HOTSPOT;
                     official_code,
                     email,
                     username,
-                    g.name as group_name,
+                    g.title as group_name,
                     g.iid as group_id
                 FROM $TBL_USER u
                 LEFT OUTER JOIN $TBL_GROUP_REL_USER gru
                 ON (gru.user_id = u.id AND gru.c_id= $courseId )
                 LEFT OUTER JOIN $TBL_GROUP g
-                ON (gru.group_id = g.id AND g.c_id = $courseId )
+                ON (gru.group_id = g.iid)
                 WHERE u.active <> ".USER_SOFT_DELETED."
             )";
             }
+
+            // The group filter targets the user sub-select: resource_link (joined below) has a group_id too.
+            $extra_where_conditions = preg_replace(
+                '/(?<![\w.])group_id\b/',
+                'user.group_id',
+                $extra_where_conditions
+            );
 
             // All
             $is_empty_sql_inner_join_tbl_user = false;
@@ -2331,7 +2338,7 @@ HOTSPOT;
             INNER JOIN resource_node rn
                 ON rn.id = ce.resource_node_id
             INNER JOIN resource_link rl
-                ON rl.resource_node_id = rn.id
+                ON rl.resource_node_id = rn.id AND rl.c_id = $courseId
             WHERE
                 te.c_id = $courseId $session_id_and AND
                 rl.deleted_at IS NULL
@@ -3601,6 +3608,8 @@ EOT;
      * @param bool $return_string
      *
      * @return int the position of the user between his friends in a course (or course within a session)
+     *
+     * @deprecated No caller left
      */
     public static function get_exercise_result_ranking_by_attempt(
         $my_score,
@@ -3750,6 +3759,8 @@ EOT;
      * @param    int    session id
      *
      * @return float Average score
+     *
+     * @deprecated No caller left
      */
     public static function get_average_score($exercise_id, $courseId, $session_id)
     {
@@ -3885,6 +3896,8 @@ EOT;
      * @param int $session_id
      *
      * @return float Best average score
+     *
+     * @deprecated No caller left
      */
     public static function getBestScoreByExercise(
         $exercise_id,
@@ -4038,6 +4051,8 @@ EOT;
      * @param string $questionType
      *
      * @return int
+     *
+     * @deprecated No caller left: the question statistics use getCountOfAnswers()
      */
     public static function get_number_students_question_with_answer_count(
         $question_id,
@@ -4091,7 +4106,7 @@ EOT;
         $sql = "SELECT DISTINCT exe_user_id
             FROM $track_exercises e
             INNER JOIN $track_attempt a
-                ON (a.exe_id = e.exe_id AND a.c_id = e.c_id)
+                ON (a.exe_id = e.exe_id)
             INNER JOIN $courseTable c
                 ON c.id = e.c_id
             $courseCondition
@@ -4183,6 +4198,8 @@ EOT;
      * @param string $current_answer
      *
      * @return int
+     *
+     * @deprecated No caller left: the question statistics use getCountOfAnswers()
      */
     public static function get_number_students_answer_count(
         $answer_id,
@@ -4237,7 +4254,7 @@ EOT;
         $sql = "SELECT $select_condition
             FROM $track_exercises e
             INNER JOIN $track_attempt a
-                ON (a.exe_id = e.exe_id AND a.c_id = e.c_id)
+                ON (a.exe_id = e.exe_id)
             INNER JOIN $courseTable c
                 ON c.id = e.c_id
             $courseCondition
@@ -4321,7 +4338,7 @@ EOT;
         } else {
             $courseCondition = "
             INNER JOIN $courseUserSession cu
-            ON (cu.c_id = a.c_id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
+            ON (cu.c_id = e.c_id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
             $courseConditionWhere = ' AND cu.status = '.SessionEntity::STUDENT;
         }
 
@@ -5482,8 +5499,7 @@ EOT;
         $checkPassPercentage = false,
         $countPendingQuestions = 0
     ) {
-        $hide = (int) $objExercise->getPageConfigurationAttribute('hide_total_score');
-        if (1 === $hide) {
+        if (api_is_flag_enabled($objExercise->getPageConfigurationAttribute('hide_total_score'))) {
             return '';
         }
 
@@ -5962,22 +5978,25 @@ EOT;
     {
         $em = Database::getManager();
 
-        if (empty($sessionId)) {
-            $sessionId = null;
-        }
-
         $time = api_get_utc_datetime($time->format('Y-m-d H:i:s'), false, true);
 
-        $result = $em
-            ->createQuery('
-                SELECT COUNT(ea) FROM Chamilo\CoreBundle\Entity\TrackEAttempt ea
-                WHERE ea.userId = :user AND ea.cId = :course AND ea.sessionId = :session
-                    AND ea.tms > :time
-            ')
-            ->setParameters(['user' => $userId, 'course' => $courseId, 'session' => $sessionId, 'time' => $time])
-            ->getSingleScalarResult();
+        // Course and session belong to the attempt of the exercise the answer was given in.
+        $dql = '
+            SELECT COUNT(ea.id) FROM Chamilo\CoreBundle\Entity\TrackEAttempt ea
+            INNER JOIN ea.trackExercise te
+            WHERE IDENTITY(ea.user) = :user AND IDENTITY(te.course) = :course AND ea.tms > :time';
+        $parameters = ['user' => (int) $userId, 'course' => (int) $courseId, 'time' => $time];
+        if (empty($sessionId)) {
+            $dql .= ' AND te.session IS NULL';
+        } else {
+            $dql .= ' AND IDENTITY(te.session) = :session';
+            $parameters['session'] = (int) $sessionId;
+        }
 
-        return $result;
+        return (int) $em
+            ->createQuery($dql)
+            ->setParameters($parameters)
+            ->getSingleScalarResult();
     }
 
     /**
@@ -6736,11 +6755,16 @@ EOT;
      *
      * Log the exe_id deleted with the exe_user_id related.
      *
-     * @param int $exeId
+     * The attempt must belong to the given course (the current course by default): callers take the id from the
+     * request, so without this check a teacher of one course could delete the results of another.
+     *
+     * @param int      $exeId
+     * @param int|null $courseId Course the attempt must belong to, current course when null
      */
-    public static function deleteExerciseAttempt($exeId)
+    public static function deleteExerciseAttempt($exeId, $courseId = null)
     {
         $exeId = (int) $exeId;
+        $courseId = null === $courseId ? (int) api_get_course_int_id() : (int) $courseId;
 
         $trackExerciseInfo = self::get_exercise_track_exercise_info($exeId);
 
@@ -6748,10 +6772,17 @@ EOT;
             return;
         }
 
+        if (empty($courseId) || (int) $trackExerciseInfo['c_id'] !== $courseId) {
+            return;
+        }
+
         $tblTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tblTrackAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         Database::query("DELETE FROM $tblTrackAttempt WHERE exe_id = $exeId");
+        Database::query(
+            'DELETE FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT).' WHERE hotspot_exe_id = '.$exeId
+        );
         Database::query("DELETE FROM $tblTrackExercises WHERE exe_id = $exeId");
 
         Event::addEvent(
@@ -6782,18 +6813,32 @@ EOT;
     /**
      * Tells whether an attempt (track_e_exercises row) belongs to the given course (the current one by default).
      * Pages taking an exe_id from the request must call this before reading or writing through it.
+     * When $sessionId is given, the attempt must also belong to that session (0 = no session); when $exerciseId is
+     * given, to that test. Null (default) skips the check, so existing callers keep the course-only behaviour.
      */
-    public static function attemptBelongsToCourse(int $exeId, ?int $courseId = null): bool
-    {
+    public static function attemptBelongsToCourse(
+        int $exeId,
+        ?int $courseId = null,
+        ?int $sessionId = null,
+        ?int $exerciseId = null
+    ): bool {
         $courseId = null === $courseId ? (int) api_get_course_int_id() : $courseId;
         if ($exeId <= 0 || $courseId <= 0) {
             return false;
         }
 
-        $found = Database::getManager()->getConnection()->fetchOne(
-            'SELECT exe_id FROM track_e_exercises WHERE exe_id = :exe AND c_id = :cid LIMIT 1',
-            ['exe' => $exeId, 'cid' => $courseId]
-        );
+        $sql = 'SELECT exe_id FROM track_e_exercises WHERE exe_id = :exe AND c_id = :cid';
+        $params = ['exe' => $exeId, 'cid' => $courseId];
+        if (null !== $sessionId) {
+            $sql .= ' AND COALESCE(session_id, 0) = :sid';
+            $params['sid'] = $sessionId;
+        }
+        if (null !== $exerciseId) {
+            $sql .= ' AND exe_exo_id = :quiz';
+            $params['quiz'] = $exerciseId;
+        }
+
+        $found = Database::getManager()->getConnection()->fetchOne($sql.' LIMIT 1', $params);
 
         return false !== $found;
     }
@@ -6815,9 +6860,17 @@ EOT;
         return self::resourceLinkedToCourse('c_quiz_question', $questionId, $courseId, $sessionId);
     }
 
+    /**
+     * Same as exerciseBelongsToCourse() for a question category (c_quiz_question_category).
+     */
+    public static function questionCategoryBelongsToCourse(int $categoryId, int $courseId, ?int $sessionId = null): bool
+    {
+        return self::resourceLinkedToCourse('c_quiz_question_category', $categoryId, $courseId, $sessionId);
+    }
+
     private static function resourceLinkedToCourse(string $table, int $iid, int $courseId, ?int $sessionId): bool
     {
-        if ($iid <= 0 || $courseId <= 0 || !in_array($table, ['c_quiz', 'c_quiz_question'], true)) {
+        if ($iid <= 0 || $courseId <= 0 || !in_array($table, ['c_quiz', 'c_quiz_question', 'c_quiz_question_category'], true)) {
             return false;
         }
 

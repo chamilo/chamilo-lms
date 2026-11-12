@@ -22,6 +22,22 @@ use Doctrine\ORM\NoResultException;
 class GlossaryManager
 {
     /**
+     * The term with this id, only when it belongs to the current course (or session) and the user may see it.
+     * Ids come from the request, so they must never be trusted to find a term of another course.
+     */
+    private static function findInCurrentCourse($glossaryId): ?CGlossary
+    {
+        $repo = Container::getGlossaryRepository();
+        $course = api_get_course_entity(api_get_course_int_id());
+        $session = api_get_session_entity(api_get_session_id());
+
+        $qb = $repo->getResourcesByCourse($course, $session);
+        $qb->andWhere('resource.iid = :glossaryId')->setParameter('glossaryId', (int) $glossaryId);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
      * Get all glossary terms.
      *
      * @author Isaac Flores <isaac.flores@dokeos.com>
@@ -39,7 +55,7 @@ class GlossaryManager
         $course = api_get_course_entity($courseId);
         $session = api_get_session_entity($sessionId);
 
-        $glossaries = $repo->getResourcesByCourse($course, $session);
+        $glossaries = $repo->getResourcesByCourse($course, $session)->getQuery()->getResult();
         /** @var CGlossary $item */
         foreach ($glossaries as $item) {
             $glossaryData[] = [
@@ -80,9 +96,8 @@ class GlossaryManager
      */
     public static function get_glossary_term_by_glossary_id($glossary_id)
     {
-        $repo = Container::getGlossaryRepository();
-        /** @var CGlossary $glossary */
-        $glossary = $repo->find($glossary_id);
+        /** @var CGlossary|null $glossary */
+        $glossary = self::findInCurrentCourse($glossary_id);
         $description = '';
         if (null !== $glossary) {
             $description = $glossary->getDescription();
@@ -120,37 +135,30 @@ class GlossaryManager
      */
     public static function get_glossary_term_by_glossary_name($name)
     {
-        // @todo Filter by like on ORM
-        $table = Database::get_course_table(TABLE_GLOSSARY);
-        $sessionId = api_get_session_id();
-        $course_id = api_get_course_int_id();
-        $sessionCondition = api_get_session_condition($sessionId);
+        $repo = Container::getGlossaryRepository();
+        $course = api_get_course_entity(api_get_course_int_id());
+        $session = api_get_session_entity(api_get_session_id());
 
         $glossaryName = Security::remove_XSS($name);
         $glossaryName = api_convert_encoding($glossaryName, 'UTF-8', 'UTF-8');
-        $glossaryName = trim($glossaryName);
+        $glossaryName = mb_strtolower(trim($glossaryName));
         $parsed = $glossaryName;
 
-        if ('true' === api_get_setting('editor.save_titles_as_html')) {
-            $parsed = api_htmlentities($parsed);
-            $parsed = "%$parsed%";
+        $titlesAsHtml = 'true' === api_get_setting('editor.save_titles_as_html');
+        if ($titlesAsHtml) {
+            $parsed = mb_strtolower(api_htmlentities($glossaryName));
         }
 
-        $sql = "SELECT * FROM $table
-		        WHERE
-		            c_id = $course_id AND
-		            (
-		                title LIKE '".Database::escape_string($glossaryName)."'
-		                OR
-		                title LIKE '".Database::escape_string($parsed)."'
-                    )
-                    $sessionCondition
-                LIMIT 1
-                ";
-        $rs = Database::query($sql);
-
-        if (Database::num_rows($rs) > 0) {
-            return Database::fetch_assoc($rs);
+        /** @var CGlossary $item */
+        foreach ($repo->getResourcesByCourse($course, $session)->getQuery()->getResult() as $item) {
+            $title = mb_strtolower($item->getTitle());
+            if ($title === $glossaryName || ($titlesAsHtml && str_contains($title, $parsed))) {
+                return [
+                    'glossary_id' => $item->getIid(),
+                    'title' => $item->getTitle(),
+                    'description' => $item->getDescription(),
+                ];
+            }
         }
 
         return [];
@@ -168,9 +176,6 @@ class GlossaryManager
         if (!is_array($values) || !isset($values['title'])) {
             return false;
         }
-
-        // get the maximum display order of all the glossary items
-        $max_glossary_item = self::get_max_glossary_item();
 
         // check if the glossary term already exists
         if (self::glossary_exists($values['title'])) {
@@ -194,7 +199,6 @@ class GlossaryManager
             $glossary
                 ->setTitle($values['title'])
                 ->setDescription($values['description'])
-                ->setDisplayOrder($max_glossary_item + 1)
             ;
 
             $course = api_get_course_entity($courseId);
@@ -247,13 +251,16 @@ class GlossaryManager
         } else {
             $repo = Container::getGlossaryRepository();
 
-            /** @var CGlossary $glossary */
-            $glossary = $repo->find($values['glossary_id']);
+            /** @var CGlossary|null $glossary */
+            $glossary = self::findInCurrentCourse($values['glossary_id']);
             if (null !== $glossary) {
                 $glossary
                     ->setTitle($values['title'])
                     ->setDescription($values['description']);
                 $repo->update($glossary);
+            } else {
+                // Nothing to update: do not report a success.
+                return false;
             }
             /*
 
@@ -291,6 +298,8 @@ class GlossaryManager
 
     /**
      * Get the maximum display order of the glossary item.
+     *
+     * @deprecated No caller left: the glossary has no display order any more (the tool is Vue/API Platform).
      *
      * @return int Maximum glossary display order
      */
@@ -369,7 +378,9 @@ class GlossaryManager
 
         /** @var CGlossary $item */
         foreach ($glossaries as $item) {
-            if ($term == $item->getTitle() && $not_id != $item->getIid()) {
+            // Strict and case-insensitive, like the former "name = '...'" SQL comparison (a loose "==" would
+            // also match numeric strings such as "10" and "1e1").
+            if (0 === strcasecmp((string) $term, $item->getTitle()) && $not_id != $item->getIid()) {
                 return true;
             }
         }
@@ -409,8 +420,8 @@ class GlossaryManager
     public static function delete_glossary($glossary_id, $showMessage = true)
     {
         $repo = Container::getGlossaryRepository();
-        /** @var CGlossary $glossary */
-        $glossary = $repo->find($glossary_id);
+        /** @var CGlossary|null $glossary */
+        $glossary = self::findInCurrentCourse($glossary_id);
         if (null !== $glossary) {
             $repo->delete($glossary);
         } else {
@@ -427,9 +438,6 @@ class GlossaryManager
             api_get_user_id()
         );
         */
-        // reorder the remaining terms
-        self::reorder_glossary();
-
         if ($showMessage) {
             Display::addFlash(
                 Display::return_message(
@@ -683,12 +691,17 @@ class GlossaryManager
 
         $keyword = $_GET['keyword'] ?? null;
 
+        $qb = $repo->getResourcesByCourse($course, $session);
         if (!empty($keyword)) {
-            $glossaries = $repo->findCourseResourcesByTitle($keyword, $course->getResourceNode(), $course, $session);
-        } else {
-            $qb = $repo->getResourcesByCourse($course, $session);
-            $glossaries = $qb->getQuery()->getResult();
+            $qb
+                ->andWhere($qb->expr()->orX(
+                    $qb->expr()->like('resource.title', ':keyword'),
+                    $qb->expr()->like('resource.description', ':keyword')
+                ))
+                ->setParameter('keyword', '%'.addcslashes((string) $keyword, '%_\\').'%')
+            ;
         }
+        $glossaries = $qb->getQuery()->getResult();
 
         $return = [];
         $array = [];
@@ -849,25 +862,15 @@ class GlossaryManager
 
     /**
      * Re-order glossary.
+     *
+     * @deprecated CGlossary no longer has a display order (terms are sorted by title in the Vue tool), so there is
+     *             nothing to renumber. The former body iterated a QueryBuilder and never did anything; it no
+     *             longer pretends to. No caller remains.
      */
-    public static function reorder_glossary()
+    public static function reorder_glossary(): void
     {
-        $repo = Container::getGlossaryRepository();
+        return;
 
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
-
-        $course = api_get_course_entity($courseId);
-        $session = api_get_session_entity($sessionId);
-
-        $glossaries = $repo->getResourcesByCourse($course, $session);
-        $i = 1;
-        /** @var CGlossary $item */
-        foreach ($glossaries as $item) {
-            $item->setDisplayOrder($i);
-            $repo->update($item);
-            $i++;
-        }
         /*
         // Database table definition
         $table = Database::get_course_table(TABLE_GLOSSARY);

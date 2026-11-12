@@ -23,7 +23,7 @@
     {% endfor %}
 
     <form method="post" class="space-y-6" id="buycourses-public-plans-form">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="buycourses_admin_sec_token" value="{{ csrf_token }}">
         <section class="rounded-3xl border border-gray-25 bg-white p-6 shadow-sm">
             <div class="mb-5 flex flex-wrap items-center justify-between gap-4">
                 <div>

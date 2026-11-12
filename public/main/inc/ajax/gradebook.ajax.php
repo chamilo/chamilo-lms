@@ -18,7 +18,9 @@ switch ($action) {
             // Close the session as we don't need it any further
             session_write_close();
             $userId = $_REQUEST['user_id'] ?? 0;
-            $gradeBookId = $_REQUEST['gradebook_id'] ?? 0;
+            $gradeBookId = (int) ($_REQUEST['gradebook_id'] ?? 0);
+            // The gradebook (category) is posted by the client: it must belong to the current course.
+            GradebookUtils::protectElementInCurrentCourse('CATE', $gradeBookId);
             $comment = $_REQUEST['comment'] ?? '';
             GradebookUtils::saveComment($gradeBookId, $userId, $comment);
             echo 1;
@@ -28,7 +30,8 @@ switch ($action) {
         break;
     case 'get_gradebook_weight':
         if (api_is_allowed_to_edit(null, true)) {
-            $cat_id = $_GET['cat_id'];
+            $cat_id = (int) ($_GET['cat_id'] ?? 0);
+            GradebookUtils::protectElementInCurrentCourse('CATE', $cat_id);
             $cat = Category::load($cat_id);
             if ($cat && isset($cat[0])) {
                 echo $cat[0]->get_weight();
@@ -61,6 +64,7 @@ switch ($action) {
         }
 
         $categoryId = (int) $_GET['cat_id'];
+        GradebookUtils::protectElementInCurrentCourse('CATE', $categoryId);
         $filterOfficialCodeGet = isset($_GET['filter']) ? Security::remove_XSS($_GET['filter']) : null;
 
         if (api_is_student_boss()) {
@@ -92,9 +96,15 @@ switch ($action) {
         ));
         break;
     case 'verify_export_all_certificates':
+        // The archive holds the certificates of every learner: only who can start the export may locate it.
+        if (!api_is_allowed_to_edit(null, true) && !api_is_student_boss()) {
+            exit;
+        }
         $categoryId = (int) $_GET['cat_id'];
-        $courseCode = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : api_get_course_id();
-        $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : api_get_session_id();
+        GradebookUtils::protectElementInCurrentCourse('CATE', $categoryId);
+        // Only the file of the current course and session can be located.
+        $courseCode = api_get_course_id();
+        $sessionId = api_get_session_id();
         // Close the session as we don't need it any further
         session_write_close();
 

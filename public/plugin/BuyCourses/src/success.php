@@ -7,6 +7,7 @@ declare(strict_types=1);
  * Success page for the purchase of a course or session in the Buy Courses plugin.
  */
 require_once '../config.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 $plugin = BuyCoursesPlugin::create();
 $paypalEnabled = 'true' === $plugin->get('paypal_enable');
@@ -21,7 +22,7 @@ if (empty($saleId)) {
 }
 
 $sale = $plugin->getSale($saleId);
-if (empty($sale)) {
+if (empty($sale) || !buycoursesUserOwnsSale($sale, (int) api_get_user_id())) {
     api_not_allowed(true);
 }
 

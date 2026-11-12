@@ -5,11 +5,13 @@
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Service\StandardizationService;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
@@ -137,7 +139,7 @@ class UserGroupModel extends Model
                     WHERE u.usergroup_id = $id";
         }
         $limitCondition = '';
-        if (!empty($start) && !empty($limit)) {
+        if (!empty($limit) && !$getCount) {
             $limitCondition = " LIMIT $start, $limit";
         }
 
@@ -243,6 +245,7 @@ class UserGroupModel extends Model
     public function get_count($extraWhereCondition = '')
     {
         $authorCondition = '';
+        $extraCondition = '' === trim((string) $extraWhereCondition) ? '' : " AND $extraWhereCondition";
 
         if ($this->allowTeachers()) {
             if (!api_is_platform_admin()) {
@@ -258,7 +261,7 @@ class UserGroupModel extends Model
                     INNER JOIN $this->access_url_rel_usergroup a
                     ON (u.id = a.usergroup_id)
                     WHERE access_url_id = $urlId $authorCondition
-                    AND $extraWhereCondition
+                    $extraCondition
             ";
 
             $result = Database::query($sql);
@@ -272,7 +275,7 @@ class UserGroupModel extends Model
                     FROM {$this->table} a
                     WHERE 1 = 1
                     $authorCondition
-                    AND $extraWhereCondition
+                    $extraCondition
             ";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
@@ -1004,7 +1007,7 @@ class UserGroupModel extends Model
             $urlId = api_get_current_access_url_id();
             $from = $this->usergroup_rel_user_table." u
                 INNER JOIN {$this->access_url_rel_usergroup} a
-                ON (a.usergroup_id AND u.usergroup_id)
+                ON (a.usergroup_id = u.usergroup_id)
                 INNER JOIN {$this->table} g
                 ON (u.usergroup_id = g.id)
                 ";
@@ -1739,12 +1742,12 @@ class UserGroupModel extends Model
                     ON (g.id = a.usergroup_id) ";
             $urlCondition = " AND access_url_id = $urlId ";
         } else {
-            $sql = " FROM $this->table g ";
+            $sql .= " FROM $this->table g ";
         }
         $sql .= "
 		        WHERE
-		            title LIKE '".$firstLetter."%' OR
-		            title LIKE '".api_strtolower($firstLetter)."%'
+		            (title LIKE '".$firstLetter."%' OR
+		            title LIKE '".api_strtolower($firstLetter)."%')
 		            $urlCondition
 		        ORDER BY title DESC ";
 
@@ -2264,6 +2267,139 @@ class UserGroupModel extends Model
     }
 
     /**
+     * Whether the user may invite other users into the group: platform admins,
+     * group admins and group moderators (a plain member or a stranger may not).
+     *
+     * @param int $group_id
+     * @param int $user_id  0 for the current user
+     *
+     * @return bool
+     */
+    public function canInviteToGroup($group_id, $user_id = 0)
+    {
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        return $this->isGroupModerator($group_id, $user_id);
+    }
+
+    /**
+     * Ids of the confirmed friends of a user (friends and good friends: not pending friend requests,
+     * deleted relations, HR managers or bosses).
+     *
+     * @param int $user_id
+     *
+     * @return int[]
+     */
+    public function getFriendIds($user_id)
+    {
+        $user_id = (int) $user_id;
+        if (empty($user_id)) {
+            return [];
+        }
+        $result = Database::query(
+            'SELECT DISTINCT friend_user_id FROM '.Database::get_main_table(TABLE_MAIN_USER_REL_USER).'
+             WHERE user_id = '.$user_id.' AND friend_user_id <> '.$user_id.'
+             AND relation_type IN ('.UserRelUser::USER_RELATION_TYPE_FRIEND.', '.UserRelUser::USER_RELATION_TYPE_GOODFRIEND.')'
+        );
+        $ids = [];
+        while ($row = Database::fetch_assoc($result)) {
+            $ids[] = (int) $row['friend_user_id'];
+        }
+
+        return $ids;
+    }
+
+    /**
+     * Keeps, among the posted user ids, those the user may invite to the group. Nobody but a platform
+     * admin or the group admin/moderator may invite (empty result otherwise). With the platform setting
+     * group.allow_invite_non_friends_to_social_groups off (default) only the inviter's friends are kept;
+     * when on, any existing, not deleted user is. Ids are cast to int and de-duplicated, order is kept.
+     *
+     * @param array $user_ids
+     * @param int   $group_id
+     * @param int   $inviter_id 0 for the current user
+     *
+     * @return int[]
+     */
+    public function getInvitableUserIds($user_ids, $group_id, $inviter_id = 0)
+    {
+        if (empty($inviter_id)) {
+            $inviter_id = api_get_user_id();
+        }
+        if (!is_array($user_ids) || !$this->canInviteToGroup($group_id, $inviter_id)) {
+            return [];
+        }
+        $user_ids = array_values(array_unique(array_filter(array_map('intval', $user_ids), static fn ($id) => $id > 0)));
+        if (empty($user_ids)) {
+            return [];
+        }
+
+        if ('true' === api_get_setting('group.allow_invite_non_friends_to_social_groups')) {
+            $result = Database::query(
+                'SELECT id FROM '.Database::get_main_table(TABLE_MAIN_USER).'
+                 WHERE id IN ('.implode(',', $user_ids).') AND active <> '.USER_SOFT_DELETED
+            );
+            $allowed = [];
+            while ($row = Database::fetch_assoc($result)) {
+                $allowed[(int) $row['id']] = true;
+            }
+        } else {
+            $allowed = array_flip($this->getFriendIds($inviter_id));
+        }
+
+        return array_values(array_filter($user_ids, static fn ($id) => isset($allowed[$id])));
+    }
+
+    /**
+     * Whether a row exists in usergroup_rel_user for this user and group, whatever its role.
+     * get_user_group_role() cannot tell: it returns 0 both for a reader and for "no relation".
+     *
+     * @param int $group_id
+     * @param int $user_id
+     *
+     * @return bool
+     */
+    public function hasRelation($group_id, $user_id)
+    {
+        $user_id = (int) $user_id;
+        $group_id = (int) $group_id;
+        if (empty($user_id) || empty($group_id)) {
+            return false;
+        }
+        $result = Database::query(
+            "SELECT 1 FROM $this->usergroup_rel_user_table
+             WHERE usergroup_id = $group_id AND user_id = $user_id
+             LIMIT 1"
+        );
+
+        return Database::num_rows($result) > 0;
+    }
+
+    /**
+     * Whether the user may see the members list of the group: group admin, moderator or a reader
+     * who really has a relation row (a stranger also gets role 0).
+     *
+     * @param int $group_id
+     * @param int $user_id  0 for the current user
+     *
+     * @return bool
+     */
+    public function canViewGroupMembers($group_id, $user_id = 0)
+    {
+        if (empty($user_id)) {
+            $user_id = api_get_user_id();
+        }
+        $user_role = $this->get_user_group_role($user_id, $group_id);
+        if (in_array($user_role, [GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR])) {
+            return true;
+        }
+
+        return GROUP_USER_PERMISSION_READER === $user_role && $this->hasRelation($group_id, $user_id);
+    }
+
+    /**
      * @param int $group_id
      * @param int $user_id
      *
@@ -2284,11 +2420,27 @@ class UserGroupModel extends Model
             GROUP_USER_PERMISSION_HRM,
         ];
         $user_role = $this->get_user_group_role($user_id, $group_id);
-        if (in_array($user_role, $roles)) {
-            return true;
-        } else {
+        if (!in_array($user_role, $roles)) {
             return false;
         }
+        if (GROUP_USER_PERMISSION_READER == $user_role) {
+            // get_user_group_role() also returns 0 when there is no relation at all:
+            // a reader must have an actual row in the relation table.
+            $user_id = (int) $user_id;
+            $group_id = (int) $group_id;
+            if (empty($user_id) || empty($group_id)) {
+                return false;
+            }
+            $result = Database::query(
+                "SELECT 1 FROM $this->usergroup_rel_user_table
+                 WHERE usergroup_id = $group_id AND user_id = $user_id
+                 LIMIT 1"
+            );
+
+            return Database::num_rows($result) > 0;
+        }
+
+        return true;
     }
 
     /**
@@ -2386,15 +2538,26 @@ class UserGroupModel extends Model
                     $user_id = (int) $user_id;
                     $group_id = (int) $group_id;
 
-                    $role = $this->get_user_group_role($user_id, $group_id);
-                    if (0 == $role) {
+                    // A reader has role 0 like "no relation": look for the row itself.
+                    $exists = Database::query(
+                        "SELECT 1 FROM $table_url_rel_group
+                         WHERE usergroup_id = $group_id AND user_id = $user_id
+                         LIMIT 1"
+                    );
+                    if (0 == Database::num_rows($exists)) {
                         $sql = "INSERT INTO $table_url_rel_group
 		               			SET
 		               			    user_id = $user_id ,
 		               			    usergroup_id = $group_id ,
 		               			    relation_type = $relation_type ";
 
-                        $result = Database::query($sql);
+                        // usergroup_rel_user is UNIQUE(usergroup_id, user_id): a concurrent request that
+                        // inserted the same pair after the check above is a no-op, not an error.
+                        try {
+                            $result = Database::getManager()->getConnection()->executeStatement($sql);
+                        } catch (UniqueConstraintViolationException) {
+                            continue;
+                        }
                         if ($result) {
                             $result_array[$group_id][$user_id] = 1;
                         } else {
@@ -2474,6 +2637,10 @@ class UserGroupModel extends Model
         $role = $this->get_user_group_role($user_id, $group_id);
 
         if (0 === $role) {
+            // Role 0 is also "reader": an existing row must not be inserted a second time.
+            if ($this->hasRelation($group_id, $user_id)) {
+                return true;
+            }
             // No relationship yet → insert normalized relation_type
             $sql = "INSERT INTO $table_rel
                 SET
@@ -2989,7 +3156,7 @@ class UserGroupModel extends Model
 				FROM $tbl_group g
 				INNER JOIN $table_group_rel_user gu
 				ON gu.usergroup_id = g.id
-				WHERE gu.user_id = $user_id $where_relation_condition ";
+				WHERE g.group_type = ".Usergroup::SOCIAL_CLASS." AND gu.user_id = $user_id $where_relation_condition ";
 
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
@@ -3089,7 +3256,7 @@ class UserGroupModel extends Model
         }
         $sql = $select_part.' '.$cond_part."WHERE rg0.subgroup_id='$group_id'";
         $res = Database::query($sql);
-        $temp_arr = Database::fetch_array($res, 'NUM');
+        $temp_arr = Database::fetch_assoc($res);
         $toReturn = [];
         if (is_array($temp_arr)) {
             foreach ($temp_arr as $elt) {

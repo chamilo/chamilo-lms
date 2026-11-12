@@ -16,6 +16,7 @@ use Throwable;
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 function formatPayoutAmount(BuyCoursesPlugin $plugin, float $amount, mixed $isoCode): string
 {
@@ -81,6 +82,7 @@ $templateName = $plugin->get_lang('PaypalPayoutCommissions');
 $template = new Template($templateName);
 
 $template->assign('header', $templateName);
+$template->assign('admin_token', buycoursesAdminToken());
 $template->assign('page_title', $templateName);
 $template->assign('plugin_title', $plugin->get_lang('plugin_title'));
 $template->assign('back_url', api_get_path(WEB_PLUGIN_PATH).'BuyCourses/index.php');

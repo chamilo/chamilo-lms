@@ -193,15 +193,26 @@ class Event
                     session_id = $sessionId";
         $result = Database::query($sql);
 
+        // MySQL reports 0 affected rows when the date is unchanged (same second), so check the row exists
+        // before inserting, or a duplicate lastaccess row would be created.
         if (0 == Database::affected_rows($result)) {
-            $params = [
-                'access_user_id' => $userId,
-                'c_id' => $courseId,
-                'access_tool' => $tool,
-                'access_date' => $reallyNow,
-                'session_id' => $sessionId,
-            ];
-            Database::insert($tableLastAccess, $params);
+            $sql = "SELECT 1 FROM $tableLastAccess
+                    WHERE
+                        access_user_id = $userId AND
+                        c_id = $courseId AND
+                        access_tool = '$tool' AND
+                        session_id = $sessionId
+                    LIMIT 1";
+            if (0 == Database::num_rows(Database::query($sql))) {
+                $params = [
+                    'access_user_id' => $userId,
+                    'c_id' => $courseId,
+                    'access_tool' => $tool,
+                    'access_date' => $reallyNow,
+                    'session_id' => $sessionId,
+                ];
+                Database::insert($tableLastAccess, $params);
+            }
         }
 
         return true;
@@ -587,15 +598,17 @@ class Event
 
             if ($recordingLog) {
                 $repoTrackQualify = $em->getRepository(TrackEAttemptQualify::class);
-                $trackQualify = $repoTrackQualify->findBy(
+                $trackExercise = $em->find(TrackEExercise::class, $exe_id);
+                $trackQualify = $repoTrackQualify->findOneBy(
                     [
-                        'exeId' => $exe_id,
+                        'trackExercise' => $trackExercise,
                         'questionId' => $question_id,
                         'sessionId' => $session_id,
                     ]
                 );
-                $trackExercise = $em->find(TrackEExercise::class, $exe_id);
-                /** @var TrackEAttemptQualify $trackQualify */
+                if (null === $trackQualify) {
+                    $trackQualify = new TrackEAttemptQualify();
+                }
                 $trackQualify
                     ->setTrackExercise($trackExercise)
                     ->setQuestionId($question_id)
@@ -922,7 +935,7 @@ class Event
      * @param int $lp_item_id
      * @param int $lp_item_view_id
      *
-     * @return int
+     * @return int The 1-based position, or 0 if the attempt is not in the queue
      * @throws \Doctrine\DBAL\Exception
      * @throws Exception
      */
@@ -960,13 +973,11 @@ class Event
         if (Database::num_rows($result) > 0) {
             $position = 1;
             while ($row = Database::fetch_assoc($result)) {
-                if ($row['exe_id'] === $exeId) {
-                    break;
+                if ((int) $row['exe_id'] === $exeId) {
+                    return $position;
                 }
                 $position++;
             }
-
-            return $position;
         }
 
         return 0;
@@ -977,7 +988,8 @@ class Event
      * @param int   $lp_id
      * @param array $course
      * @param int   $session_id
-     * @param ?bool $disconnectExerciseResultsFromLp (Replace orig_lp_* variables to null)
+     * @param ?bool $disconnectExerciseResultsFromLp (Replace orig_lp_* variables by 0, the "not from a learning
+     *                                               path" value: the columns are NOT NULL)
      *
      * @return bool
      * @throws Exception
@@ -1052,9 +1064,9 @@ class Event
         $sql = "SELECT exe_id FROM $track_e_exercises
                 WHERE
                     exe_user_id = $user_id AND
-                    session_id = $session_id AND
                     c_id = $course_id AND
-                    orig_lp_id = $lp_id";
+                    orig_lp_id = $lp_id
+                    $sessionCondition";
         $result = Database::query($sql);
         $exeList = [];
         while ($row = Database::fetch_assoc($result)) {
@@ -1065,9 +1077,9 @@ class Event
             $exeListString = implode(',', $exeList);
             if ($disconnectExerciseResultsFromLp) {
                 $sql = "UPDATE $track_e_exercises
-                        SET orig_lp_id = null,
-                            orig_lp_item_id = null,
-                            orig_lp_item_view_id = null
+                        SET orig_lp_id = 0,
+                            orig_lp_item_id = 0,
+                            orig_lp_item_view_id = 0
                         WHERE exe_id IN ($exeListString)";
                 Database::query($sql);
             } else {
@@ -2164,6 +2176,7 @@ class Event
         }
 
         $originalVirtualTime = Database::escape_string($virtualTime);
+        $removed = false;
 
         $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $platformTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
@@ -2201,6 +2214,7 @@ class Event
             $sql = "DELETE FROM $courseTrackingTable
                     WHERE course_access_id = $courseAccessId";
             Database::query($sql);
+            $removed = true;
         }
         $sql = "SELECT login_id
                 FROM $platformTrackingTable
@@ -2215,6 +2229,7 @@ class Event
             $sql = "DELETE FROM $platformTrackingTable
                     WHERE login_id = $loginAccessId";
             Database::query($sql);
+            $removed = true;
         }
 
         if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
@@ -2246,10 +2261,11 @@ class Event
             if ($result) {
                 $sql = 'DELETE FROM track_e_access_complete WHERE id = '.$result['id'];
                 Database::query($sql);
+                $removed = true;
             }
         }
 
-        return false;
+        return $removed;
     }
 
     /**
@@ -2396,7 +2412,7 @@ class Event
         self::addEvent(
             LOG_SESSION_ADD_USER_COURSE,
             LOG_USER_ID,
-            $userSubscribed,
+            $userSubscribed->getId(),
             $dateTime,
             $registrantId,
             $course->getId(),

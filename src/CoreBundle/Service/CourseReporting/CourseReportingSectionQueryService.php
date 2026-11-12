@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Service\CourseReporting;
 
 use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
+use Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit;
 use DateTimeImmutable;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
@@ -48,6 +49,7 @@ final class CourseReportingSectionQueryService
     public function __construct(
         private readonly Connection $connection,
         private readonly ReportIpVisibility $reportIpVisibility,
+        private readonly SessionTimeLimit $sessionTimeLimit,
     ) {}
 
     /**
@@ -277,6 +279,7 @@ final class CourseReportingSectionQueryService
                    INNER JOIN c_group_rel_user group_user
                            ON group_user.group_id = group_info.iid
                           AND group_user.c_id = :courseId
+                   INNER JOIN user member ON member.id = group_user.user_id AND member.active <> -2
                   WHERE '.$whereSql,
                 $params
             );
@@ -285,6 +288,7 @@ final class CourseReportingSectionQueryService
         $memberExpression = $this->tableExists('c_group_rel_user')
             ? '(SELECT COUNT(DISTINCT group_user.user_id)
                   FROM c_group_rel_user group_user
+                  INNER JOIN user member ON member.id = group_user.user_id AND member.active <> -2
                  WHERE group_user.group_id = group_info.iid
                    AND group_user.c_id = :courseId)'
             : '0';
@@ -1205,7 +1209,7 @@ final class CourseReportingSectionQueryService
                            WHERE '.implode(' AND ', $latestWhere).'
                         GROUP BY candidate.user_id, candidate.lp_id';
 
-        $where = [];
+        $where = ['(user.id IS NULL OR user.active <> -2)'];
         $keyword = trim((string) ($filters['keyword'] ?? ''));
         if ('' !== $keyword) {
             $where[] = '(user.username LIKE :keyword
@@ -1566,25 +1570,27 @@ final class CourseReportingSectionQueryService
             throw new AccessDeniedHttpException('The selected users are outside this course context.');
         }
 
-        $senderColumn = $this->columnExists('message', 'user_sender_id') ? 'user_sender_id' : 'sender_id';
-        $receiverColumn = $this->columnExists('message', 'user_receiver_id') ? 'user_receiver_id' : 'receiver_id';
-        $dateColumn = $this->columnExists('message', 'send_date') ? 'send_date' : 'created_at';
-        $titleColumn = $this->columnExists('message', 'title') ? 'title' : "''";
-        $contentColumn = $this->columnExists('message', 'content') ? 'content' : "''";
-        $where = '(('.$senderColumn.' = :userId AND '.$receiverColumn.' = :peerUserId)
-                OR ('.$senderColumn.' = :peerUserId AND '.$receiverColumn.' = :userId))';
-        $params = ['userId' => $userId, 'peerUserId' => $peerUserId];
+        // A message has one sender (message.user_sender_id) and its recipients in message_rel_user (type "to").
+        $where = '((message.user_sender_id = :userId AND EXISTS (
+                        SELECT 1 FROM message_rel_user recipient
+                         WHERE recipient.message_id = message.id AND recipient.user_id = :peerUserId
+                           AND recipient.receiver_type = :toType))
+                OR (message.user_sender_id = :peerUserId AND EXISTS (
+                        SELECT 1 FROM message_rel_user recipient
+                         WHERE recipient.message_id = message.id AND recipient.user_id = :userId
+                           AND recipient.receiver_type = :toType)))';
+        $params = ['userId' => $userId, 'peerUserId' => $peerUserId, 'toType' => 1];
         $total = (int) $this->connection->fetchOne('SELECT COUNT(*) FROM message WHERE '.$where, $params);
         $rows = $this->connection->fetchAllAssociative(
-            'SELECT id,
-                    '.$senderColumn.' AS senderId,
-                    '.$receiverColumn.' AS receiverId,
-                    '.$titleColumn.' AS title,
-                    '.$contentColumn.' AS content,
-                    '.$dateColumn.' AS sendDate
+            'SELECT message.id,
+                    message.user_sender_id AS senderId,
+                    CASE WHEN message.user_sender_id = :userId THEN :peerUserId ELSE :userId END AS receiverId,
+                    message.title AS title,
+                    message.content AS content,
+                    message.send_date AS sendDate
                FROM message
               WHERE '.$where.'
-           ORDER BY '.$dateColumn.' DESC
+           ORDER BY message.send_date DESC
               LIMIT :limit OFFSET :offset',
             $params + [
                 'limit' => $pagination['itemsPerPage'],
@@ -1663,6 +1669,8 @@ final class CourseReportingSectionQueryService
                      WHERE relation.c_id = :courseId
                        AND relation.session_id = :sessionId
                        AND relation.status = :studentStatus';
+            // session_rel_course_rel_user.status: 0 = learner (Session::STUDENT), 2 = course coach.
+            $params['studentStatus'] = 0;
             $params['sessionId'] = $context->sessionId();
         } else {
             $sql = $select.'
@@ -1671,6 +1679,10 @@ final class CourseReportingSectionQueryService
                      WHERE relation.c_id = :courseId
                        AND relation.status = :studentStatus';
         }
+
+        // Same accounts as the learners table: removed (-2) and inactive (0) accounts are never listed.
+        $sql .= ' AND user.active = :activeStatus';
+        $params['activeStatus'] = 1;
 
         if ($context->groupId > 0 && $this->tableExists('c_group_rel_user')) {
             $sql .= ' AND EXISTS (
@@ -1751,11 +1763,7 @@ final class CourseReportingSectionQueryService
                         CASE
                             WHEN access_log.logout_course_date IS NOT NULL
                             THEN GREATEST(
-                                TIMESTAMPDIFF(
-                                    SECOND,
-                                    access_log.login_course_date,
-                                    access_log.logout_course_date
-                                ),
+                                '.$this->sessionTimeLimit->sql('access_log.login_course_date', 'access_log.logout_course_date').',
                                 0
                             )
                             ELSE 0
@@ -1834,7 +1842,8 @@ final class CourseReportingSectionQueryService
                FROM track_e_exercises
               WHERE c_id = :courseId
                 AND COALESCE(session_id, 0) = :sessionId
-                AND exe_exo_id = :exerciseId',
+                AND exe_exo_id = :exerciseId
+                AND exe_user_id NOT IN (SELECT id FROM user WHERE active = -2)',
             [
                 'courseId' => $context->courseId(),
                 'sessionId' => $context->sessionId(),
@@ -1876,7 +1885,8 @@ final class CourseReportingSectionQueryService
                FROM c_lp_view
               WHERE c_id = :courseId
                 AND COALESCE(session_id, 0) = :sessionId
-                AND lp_id = :learningPathId',
+                AND lp_id = :learningPathId
+                AND user_id NOT IN (SELECT id FROM user WHERE active = -2)',
             [
                 'courseId' => $context->courseId(),
                 'sessionId' => $context->sessionId(),
@@ -1910,7 +1920,8 @@ final class CourseReportingSectionQueryService
                    INNER JOIN c_lp_view view ON view.iid = item_view.lp_view_id
                   WHERE view.c_id = :courseId
                     AND COALESCE(view.session_id, 0) = :sessionId
-                    AND view.lp_id = :learningPathId',
+                    AND view.lp_id = :learningPathId
+                    AND view.user_id NOT IN (SELECT id FROM user WHERE active = -2)',
                 [
                     'courseId' => $context->courseId(),
                     'sessionId' => $context->sessionId(),
@@ -2087,11 +2098,12 @@ final class CourseReportingSectionQueryService
         }
 
         $ids = $this->connection->fetchFirstColumn(
-            'SELECT DISTINCT user_id
-               FROM c_group_rel_user
-              WHERE group_id = :groupId
-                AND c_id = :courseId
-              ORDER BY user_id ASC',
+            'SELECT DISTINCT group_user.user_id
+               FROM c_group_rel_user group_user
+               INNER JOIN user member ON member.id = group_user.user_id AND member.active <> -2
+              WHERE group_user.group_id = :groupId
+                AND group_user.c_id = :courseId
+              ORDER BY group_user.user_id ASC',
             [
                 'groupId' => $groupId,
                 'courseId' => $context->courseId(),
@@ -2142,12 +2154,13 @@ final class CourseReportingSectionQueryService
             'SELECT COALESCE(SUM(
                     CASE
                         WHEN access_log.logout_course_date IS NOT NULL
-                        THEN GREATEST(TIMESTAMPDIFF(SECOND, access_log.login_course_date, access_log.logout_course_date), 0)
+                        THEN GREATEST('.$this->sessionTimeLimit->sql('access_log.login_course_date', 'access_log.logout_course_date').', 0)
                         ELSE 0
                     END
                 ), 0)
                FROM track_e_course_access access_log
                INNER JOIN c_group_rel_user group_user ON group_user.user_id = access_log.user_id
+               INNER JOIN user member ON member.id = group_user.user_id AND member.active <> -2
               WHERE group_user.group_id = :groupId
                 AND access_log.c_id = :courseId
                 AND COALESCE(access_log.session_id, 0) = :sessionId',
@@ -2191,6 +2204,7 @@ final class CourseReportingSectionQueryService
                        ON group_user.user_id = publication.user_id
                       AND group_user.group_id = :groupId
                       AND group_user.c_id = :courseId
+               INNER JOIN user member ON member.id = group_user.user_id AND member.active <> -2
                INNER JOIN resource_link rl ON rl.resource_node_id = publication.resource_node_id
               WHERE rl.c_id = :courseId
                 AND rl.deleted_at IS NULL
@@ -2228,6 +2242,7 @@ final class CourseReportingSectionQueryService
                        ON group_user.user_id = post.poster_id
                       AND group_user.group_id = :groupId
                       AND group_user.c_id = :courseId
+               INNER JOIN user member ON member.id = group_user.user_id AND member.active <> -2
                INNER JOIN resource_link rl ON rl.resource_node_id = post.resource_node_id
               WHERE rl.c_id = :courseId
                 AND rl.deleted_at IS NULL
@@ -2260,7 +2275,7 @@ final class CourseReportingSectionQueryService
                     CASE
                         WHEN logout_course_date IS NOT NULL
                         THEN GREATEST(
-                            TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date),
+                            '.$this->sessionTimeLimit->sql('login_course_date', 'logout_course_date').',
                             0
                         )
                         ELSE 0
@@ -2289,7 +2304,7 @@ final class CourseReportingSectionQueryService
             'SELECT COALESCE(SUM(
                     CASE
                         WHEN logout_course_date IS NOT NULL
-                        THEN GREATEST(TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date), 0)
+                        THEN GREATEST('.$this->sessionTimeLimit->sql('login_course_date', 'logout_course_date').', 0)
                         ELSE 0
                     END
                 ), 0)

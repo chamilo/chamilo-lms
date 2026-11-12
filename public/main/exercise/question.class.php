@@ -234,7 +234,7 @@ abstract class Question
                 $objQuestion->course = $course_info;
                 $objQuestion->feedback = $object->feedback ?? '';
                 $objQuestion->category = 0;
-                $objQuestion->code = $object->code ?? '';
+                $objQuestion->code = $object->question_code ?? '';
 
                 if ($course_id > 0) {
                     $objQuestion->category = TestCategory::getCategoryForQuestion($id, $course_id);
@@ -245,11 +245,9 @@ abstract class Question
                             $objQuestion->category = (int) $categoryInfo['category_id'];
                         }
 
-                        if (
-                            'true' === api_get_setting('exercise.allow_mandatory_question_in_category') &&
-                            isset($categoryInfo['mandatory'])
-                        ) {
-                            $objQuestion->mandatory = (int) $categoryInfo['mandatory'];
+                        if ('true' === api_get_setting('exercise.allow_mandatory_question_in_category')) {
+                            // The flag is a column of the question, not of the category link
+                            $objQuestion->mandatory = (int) $object->mandatory;
                         }
                     }
                 }
@@ -466,13 +464,8 @@ abstract class Question
             $row = Database::fetch_array($res);
             $allowMandatory = ('true' === api_get_setting('exercise.allow_mandatory_question_in_category'));
             if ($row['nb'] > 0) {
-                $extraMandatoryCondition = '';
-                if ($allowMandatory) {
-                    $extraMandatoryCondition = ", mandatory = {$this->mandatory}";
-                }
                 $sql = "UPDATE $table
                         SET category_id = $categoryId
-                        $extraMandatoryCondition
                         WHERE
                             question_id = $questionId
                         ";
@@ -482,14 +475,13 @@ abstract class Question
                         VALUES ($questionId, $categoryId)
                         ";
                 Database::query($sql);
-                if ($allowMandatory) {
-                    $id = Database::insert_id();
-                    if ($id) {
-                        $sql = "UPDATE $table SET mandatory = {$this->mandatory}
-                                WHERE iid = $id";
-                        Database::query($sql);
-                    }
-                }
+            }
+            if ($allowMandatory) {
+                // The flag is a column of the question, not of the category link
+                $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+                $sql = 'UPDATE '.$tableQuestion.' SET mandatory = '.(int) $this->mandatory.'
+                        WHERE iid = '.$questionId;
+                Database::query($sql);
             }
         }
 
@@ -549,15 +541,13 @@ abstract class Question
      * @param int $type - answer type
      *
      * @author Olivier Brouckaert
+     *
+     * @deprecated No caller left (the callers named updateType() are Exercise::updateType())
      */
     public function updateType($type)
     {
         $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $course_id = $this->course['real_id'];
 
-        if (empty($course_id)) {
-            $course_id = api_get_course_int_id();
-        }
         // if we really change the type
         if ($type != $this->type) {
             // if we don't change from "unique answer" to "multiple answers" (or conversely)
@@ -566,7 +556,7 @@ abstract class Question
             ) {
                 // removes old answers
                 $sql = "DELETE FROM $table
-                        WHERE c_id = $course_id AND question_id = ".(int) ($this->id);
+                        WHERE question_id = ".(int) ($this->id);
                 Database::query($sql);
             }
 
@@ -1034,18 +1024,19 @@ abstract class Question
                     WHERE question_id = ".$id;
             Database::query($sql);
 
+            // remove the category of this question in the question_rel_category table (that foreign key
+            // is RESTRICT: it has to go before the question itself)
+            $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
+                    WHERE
+                        question_id = ".$id;
+            Database::query($sql);
+
             $sql = "DELETE FROM $TBL_QUESTIONS
                     WHERE iid = ".$id;
             Database::query($sql);
 
             $sql = "DELETE FROM $TBL_REPONSES
                     WHERE question_id = ".$id;
-            Database::query($sql);
-
-            // remove the category of this question in the question_rel_category table
-            $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
-                    WHERE
-                        question_id = ".$id;
             Database::query($sql);
 
             // Add extra fields.
@@ -1138,7 +1129,9 @@ abstract class Question
             ->setExtra($this->extra)
             ->setLevel($this->level)
             ->setFeedback($this->feedback)
+            ->setMandatory((int) $this->mandatory)
             ->setParent($courseEntity)
+            ->setCreator(api_get_user_entity())
             ->addCourseLink($courseEntity)
         ;
 
@@ -1154,9 +1147,9 @@ abstract class Question
             if (!empty($options)) {
                 // Saving the quiz_options
                 foreach ($options as $item) {
+                    // Database::select() rows also carry the numeric column indexes: keep the named columns only
+                    $item = array_filter($item, 'is_string', ARRAY_FILTER_USE_KEY);
                     $item['question_id'] = $newQuestionId;
-                    $item['c_id'] = $course_id;
-                    unset($item['iid']);
                     unset($item['iid']);
                     Database::insert($TBL_QUESTION_OPTIONS, $item);
                 }
@@ -1716,7 +1709,9 @@ abstract class Question
 
     /**
      * @param int $question_id
-     * @param int $course_id
+     * @param int $course_id    Unused: options hang off the question, the table has no course column any more
+     *
+     * @deprecated No caller left in the code base
      */
     public static function deleteAllQuestionOptions($question_id, $course_id)
     {
@@ -1724,8 +1719,7 @@ abstract class Question
         Database::delete(
             $table,
             [
-                'c_id = ? AND question_id = ?' => [
-                    $course_id,
+                'question_id = ?' => [
                     $question_id,
                 ],
             ]
@@ -2014,9 +2008,11 @@ abstract class Question
     }
 
     /**
-     * Get course medias.
+     * Get course medias: the top-level media questions linked (not deleted) to the course.
      *
      * @param int $course_id
+     *
+     * @deprecated Only reachable from the 'get_course_exercise_medias' action of model.ajax.php, which no page uses
      *
      * @return array
      */
@@ -2029,22 +2025,20 @@ abstract class Question
         $where_condition = []
     ) {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $default_where = [
-            'c_id = ? AND parent_id = 0 AND type = ?' => [
-                $course_id,
-                MEDIA_QUESTION,
-            ],
-        ];
+        // Only the title can be sorted on, the direction is allowlisted.
+        $sidx = 'question';
+        $sord = 'DESC' === strtoupper(trim((string) $sord)) ? 'DESC' : 'ASC';
+        $sql = 'SELECT DISTINCT q.*
+                FROM '.$table_question.' q
+                INNER JOIN resource_link rl ON rl.resource_node_id = q.resource_node_id
+                WHERE rl.c_id = '.(int) $course_id.'
+                    AND rl.deleted_at IS NULL
+                    AND (q.parent_media_id IS NULL OR q.parent_media_id = 0)
+                    AND q.type = '.(int) MEDIA_QUESTION.'
+                ORDER BY q.'.$sidx.' '.$sord.'
+                LIMIT '.(int) $start.', '.(int) $limit;
 
-        return Database::select(
-            '*',
-            $table_question,
-            [
-                'limit' => " $start, $limit",
-                'where' => $default_where,
-                'order' => "$sidx $sord",
-            ]
-        );
+        return Database::store_result(Database::query($sql), 'ASSOC');
     }
 
     /**
@@ -2052,24 +2046,21 @@ abstract class Question
      *
      * @param int $course_id course id
      *
+     * @deprecated Only reachable from the 'get_course_exercise_medias' action of model.ajax.php, which no page uses
+     *
      * @return int
      */
     public static function get_count_course_medias($course_id)
     {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $result = Database::select(
-            'count(*) as count',
-            $table_question,
-            [
-                'where' => [
-                    'c_id = ? AND parent_id = 0 AND type = ?' => [
-                        $course_id,
-                        MEDIA_QUESTION,
-                    ],
-                ],
-            ],
-            'first'
-        );
+        $sql = 'SELECT COUNT(DISTINCT q.iid) AS count
+                FROM '.$table_question.' q
+                INNER JOIN resource_link rl ON rl.resource_node_id = q.resource_node_id
+                WHERE rl.c_id = '.(int) $course_id.'
+                    AND rl.deleted_at IS NULL
+                    AND (q.parent_media_id IS NULL OR q.parent_media_id = 0)
+                    AND q.type = '.(int) MEDIA_QUESTION;
+        $result = Database::fetch_assoc(Database::query($sql));
 
         if ($result && isset($result['count'])) {
             return $result['count'];
@@ -2160,7 +2151,7 @@ abstract class Question
         Database::update(
             Database::get_course_table(TABLE_QUIZ_QUESTION),
             ['type' => $this->type],
-            ['c_id = ? AND id = ?' => [$this->course['real_id'], $this->id]]
+            ['iid = ?' => [$this->id]]
         );
         $answerClasses = [
             UNIQUE_ANSWER => 'UniqueAnswer',

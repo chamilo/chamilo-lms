@@ -171,8 +171,9 @@ switch ($action) {
                         }
                         $coursesInCategory = CourseCategory::getCoursesInCategory($category, $_GET['q']);
                         foreach ($coursesInCategory as $course) {
-                            if (!in_array($course['id'], $alreadyAdded)) {
-                                $courseList[] = $course;
+                            $row = CourseCategory::courseEntityToSearchRow($course);
+                            if (!in_array($row['id'], $alreadyAdded)) {
+                                $courseList[] = $row;
                             }
                         }
                     }

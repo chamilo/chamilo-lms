@@ -34,6 +34,15 @@ switch ($action) {
         $sessionId = isset($_POST['sessionId']) ? (int) $_POST['sessionId'] : 0;
         $accessUrlId = isset($_POST['accessUrlId']) ? (int) $_POST['accessUrlId'] : api_get_current_access_url_id();
 
+        // The ids come from the request: only an admin, or somebody teaching/coaching that very course, may
+        // delete its template, and only for the access URL the user is working on.
+        if (!api_is_platform_admin()) {
+            if (!CustomCertificatePlugin::canManageCourseCertificates(api_get_user_id(), $courseId, $sessionId)) {
+                api_not_allowed();
+            }
+            $accessUrlId = api_get_current_access_url_id();
+        }
+
         if (!empty($courseId)) {
             Database::delete(
                 $table,

@@ -9,6 +9,7 @@ declare(strict_types=1);
  * Uses a manual Tailwind form instead of legacy FormValidator HTML.
  */
 require_once '../config.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 api_protect_admin_script();
 
@@ -196,13 +197,8 @@ $formData = [
     'services_lookup' => [],
 ];
 
-$csrfSessionKey = 'buycourses_coupon_add_token';
-
-if (empty($_SESSION[$csrfSessionKey])) {
-    $_SESSION[$csrfSessionKey] = bin2hex(random_bytes(32));
-}
-
-$csrfToken = (string) $_SESSION[$csrfSessionKey];
+// Same token as every other BuyCourses admin form (never rotated: several tabs keep working).
+$csrfToken = buycoursesAdminToken();
 
 if (empty($currency)) {
     $messages[] = Display::return_message(
@@ -231,8 +227,7 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
 
     $hasError = false;
 
-    $submittedToken = (string) ($_POST['csrf_token'] ?? '');
-    if ('' === $submittedToken || !hash_equals($csrfToken, $submittedToken)) {
+    if (!buycoursesAdminTokenIsValid()) {
         $messages[] = Display::return_message(
             $plugin->get_lang('InvalidFormTokenRefreshPage'),
             'error',
@@ -331,7 +326,6 @@ if ('POST' === $_SERVER['REQUEST_METHOD']) {
         $result = $plugin->addNewCoupon($coupon);
 
         if ($result) {
-            $_SESSION[$csrfSessionKey] = bin2hex(random_bytes(32));
             header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/coupons.php');
             exit;
         }

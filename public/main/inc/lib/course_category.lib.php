@@ -3,10 +3,13 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Asset;
+use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Entity\CourseCategory as CourseCategoryEntity;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class CourseCategory
 {
@@ -216,15 +219,19 @@ class CourseCategory
         }
 
         $name = trim($name);
+        $code = CourseManager::generate_course_code(trim((string) $code));
+        if ('' !== $code) {
+            $category->setCode($code);
+        }
         $category
-            ->setCode($name)
             ->setTitle($name)
             ->setDescription($description)
             ->setAuthCourseChild($canHaveCourses)
         ;
 
-        if (!empty($parentId)) {
-            $category->setParent(Container::getCourseCategoryRepository()->find($parentId));
+        // null: parent not given, leave as is. An empty value (no parent selected in the form) means the root.
+        if (null !== $parentId) {
+            $category->setParent(empty($parentId) ? null : $repo->find($parentId));
         }
 
         $repo->save($category);
@@ -259,6 +266,12 @@ class CourseCategory
 
         self::reorganizeTreePos($parentId);
 
+        // The posted position is stale once the siblings were renumbered: read the real one.
+        $treePos = self::getTreePos($categoryId, $parentIdCondition);
+        if (null === $treePos) {
+            return false;
+        }
+
         $sql = "SELECT id, tree_pos
             FROM $table
             WHERE $parentIdCondition AND tree_pos < $treePos
@@ -291,6 +304,12 @@ class CourseCategory
 
         self::reorganizeTreePos($parentId);
 
+        // The posted position is stale once the siblings were renumbered: read the real one.
+        $treePos = self::getTreePos($categoryId, $parentIdCondition);
+        if (null === $treePos) {
+            return false;
+        }
+
         $sql = "SELECT id, tree_pos
             FROM $table
             WHERE $parentIdCondition AND tree_pos > $treePos
@@ -308,6 +327,18 @@ class CourseCategory
         Database::query("UPDATE $table SET tree_pos = $treePos WHERE id = {$nextCategory['id']}");
 
         return true;
+    }
+
+    /**
+     * Position of a category among the siblings selected by $parentIdCondition, null if it is not one of them.
+     */
+    private static function getTreePos(int $categoryId, string $parentIdCondition): ?int
+    {
+        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $result = Database::query("SELECT tree_pos FROM $table WHERE id = $categoryId AND $parentIdCondition");
+        $row = Database::fetch_array($result);
+
+        return $row ? (int) $row['tree_pos'] : null;
     }
 
     public static function reorganizeTreePos($parentId): void
@@ -330,22 +361,33 @@ class CourseCategory
     }
 
     /**
+     * All the descendants of a category (depth first), as [code, id] rows.
+     *
      * @param string $categoryCode
      *
      * @return array
      */
     public static function getChildren($categoryCode)
     {
+        $category = self::getCategory($categoryCode);
+        if (empty($category)) {
+            return [];
+        }
+
+        return self::getChildrenByParentId((int) $category['id']);
+    }
+
+    private static function getChildrenByParentId(int $parentId): array
+    {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $categoryCode = Database::escape_string($categoryCode);
         $sql = "SELECT code, id FROM $table
-                WHERE parent_id = '$categoryCode'";
+                WHERE parent_id = $parentId
+                ORDER BY tree_pos, id";
         $result = Database::query($sql);
         $children = [];
         while ($row = Database::fetch_assoc($result)) {
             $children[] = $row;
-            $subChildren = self::getChildren($row['code']);
-            $children = array_merge($children, $subChildren);
+            $children = array_merge($children, self::getChildrenByParentId((int) $row['id']));
         }
 
         return $children;
@@ -393,7 +435,7 @@ class CourseCategory
         $result = Database::query($sql);
         $children = [];
         while ($row = Database::fetch_assoc($result)) {
-            $parent = self::getCategory($row['parent_id']);
+            $parent = empty($row['parent_id']) ? [] : self::getCategoryById($row['parent_id']);
             $children[] = $row;
             $subChildren = self::getParents($parent ? $parent['code'] : null);
             $children = array_merge($children, $subChildren);
@@ -615,8 +657,8 @@ class CourseCategory
     }
 
     /**
-     * @param string $category_code
-     * @param string $keyword
+     * @param int|string $category_code Category id or code
+     * @param string     $keyword
      *
      * @paran bool  $avoidCourses
      * @paran array $conditions
@@ -633,7 +675,11 @@ class CourseCategory
     }
 
     /**
-     * @return \Chamilo\CoreBundle\Entity\Course[]
+     * @param int|string|null $categoryId Category id or category code; an unknown one (or 'NONE') matches nothing
+     * @param string          $keyword    Only the courses whose title contains it (case-insensitive)
+     * @param bool            $avoidCourses Apply the catalogue visibility/URL/avoid-list filters (pass false for admin use)
+     *
+     * @return Collection|int The courses, or their number when $getCount is true
      */
     public static function getCoursesInCategory(
         $categoryId,
@@ -643,12 +689,58 @@ class CourseCategory
         $getCount = false
     ) {
         $repo = Container::getCourseCategoryRepository();
-        /** @var CourseCategoryEntity $category */
-        $category = $repo->find($categoryId);
+        $category = null;
+        if (is_int($categoryId) || (is_string($categoryId) && ctype_digit($categoryId))) {
+            $category = $repo->find((int) $categoryId);
+        } elseif (is_string($categoryId) && '' !== $categoryId) {
+            $category = $repo->findOneBy(['code' => $categoryId]);
+        }
 
-        // @todo add filters
+        $courses = null === $category ? new ArrayCollection() : $category->getCourses();
+        if (is_string($keyword) && '' !== $keyword) {
+            $courses = $courses->filter(
+                static fn ($course): bool => false !== mb_stripos((string) $course->getTitle(), $keyword)
+            );
+        }
 
-        return $category->getCourses();
+        if ($avoidCourses && !$courses->isEmpty()) {
+            // Same filters as the catalogue listing (searchAndSortCourses): never expose closed/hidden courses,
+            // the courses to avoid, the catalogue restrictions or the courses of another access URL.
+            $ids = array_map(static fn ($course): int => (int) $course->getId(), $courses->toArray());
+            $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+            $join = '';
+            $urlCondition = '';
+            if (api_is_multiple_url_enabled()) {
+                $join = ' INNER JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE).
+                    ' url_rel_course ON url_rel_course.c_id = course.id';
+                $urlCondition = ' AND url_rel_course.access_url_id = '.(int) api_get_current_access_url_id();
+            }
+            $sql = "SELECT DISTINCT course.id FROM $tblCourse course $join
+                    WHERE course.id IN (".implode(',', $ids).")
+                    $urlCondition
+                    ".CoursesAndSessionsCatalog::getAvoidCourseCondition().'
+                    '.CourseManager::getCourseVisibilitySQLCondition('course', true);
+            $allowed = array_map('intval', array_column(Database::store_result(Database::query($sql), 'ASSOC'), 'id'));
+            $courses = $courses->filter(static fn ($course): bool => in_array((int) $course->getId(), $allowed, true));
+        }
+
+        return $getCount ? count($courses) : $courses;
+    }
+
+    /**
+     * Row (id, title, code, category_code) of a Course entity, as the course search JSON expects it.
+     * category_code is the code of the first category of the course, or null.
+     */
+    public static function courseEntityToSearchRow(CourseEntity $course): array
+    {
+        $category = $course->getCategories()->first();
+
+        return [
+            'id' => (int) $course->getId(),
+            'title' => $course->getTitle(),
+            'code' => $course->getCode(),
+            'category_code' => $category ? $category->getCode() : null,
+        ];
     }
 
     /**

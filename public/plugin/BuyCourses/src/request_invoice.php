@@ -12,6 +12,7 @@ declare(strict_types=1);
 $cidReset = true;
 
 require_once '../config.php';
+require_once __DIR__.'/admin_token.lib.php';
 
 $plugin = BuyCoursesPlugin::create();
 $currentUserId = api_get_user_id();
@@ -24,6 +25,9 @@ if ($currentUserId <= 0) {
 if ('true' !== $plugin->get('invoicing_enable')) {
     api_not_allowed(true);
 }
+
+// A GET that creates an invoice: it must carry the token, or a link on another site could trigger it.
+buycoursesRequireAdminToken($panelUrl);
 
 $saleId = isset($_GET['sale_id']) ? (int) $_GET['sale_id'] : 0;
 $isService = isset($_GET['is_service']) ? (int) $_GET['is_service'] : 0;

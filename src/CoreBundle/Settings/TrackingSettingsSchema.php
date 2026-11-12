@@ -32,6 +32,7 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
                     'block_my_progress_page' => 'false',
                     'my_progress_course_tools_order' => '',
                     'maximum_inactive_time_to_consider' => '15',
+                    'max_time_spent_per_session_threshold' => '360',
                     'recycle_bin_retention_hours' => '720',
                 ]
             )
@@ -53,6 +54,9 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
             ->add('block_my_progress_page', YesNoType::class)
             ->add('my_progress_course_tools_order', TextareaType::class)
             ->add('maximum_inactive_time_to_consider')
+            ->add('max_time_spent_per_session_threshold', IntegerType::class, [
+                'constraints' => [new Range(min: 1, max: 525600)],
+            ])
             ->add('recycle_bin_retention_hours', IntegerType::class, [
                 'constraints' => [new Range(min: 1, max: 87600)],
             ])

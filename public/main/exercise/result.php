@@ -51,6 +51,12 @@ if (empty($track_exercise_info)) {
     api_not_allowed($show_headers);
 }
 
+// The attempt must belong to the course the access checks above were made for (cid may come from the request),
+// or a teacher of any course could read the answers of any attempt by its sequential exe_id.
+if (!ExerciseLib::attemptBelongsToCourse($id, api_get_course_int_id() ?: (int) $cid)) {
+    api_not_allowed($show_headers);
+}
+
 $exercise_id = $track_exercise_info['exe_exo_id'];
 $student_id = (int) $track_exercise_info['exe_user_id'];
 $current_user_id = api_get_user_id();

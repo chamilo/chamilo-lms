@@ -3971,6 +3971,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Minimum age in hours before deleted exercise attempts and learning path progress can be permanently purged. The cleanup command runs in preview mode unless --execute is provided.',
                 ],
                 [
+                    'name' => 'max_time_spent_per_session_threshold',
+                    'title' => 'Max time spent per session threshold (minutes)',
+                    'comment' => 'Sometimes, time tracking can escape the control of the platform, and reports could consider that a study time of 48 hours is totally legitimate. To avoid this issue, this setting allows you to set a maximum number of minutes that you consider is believable as student activity on the platform, in one single learning session. If they login and logout again, this is considered another session and time spent there is still summed up to the total study time.',
+                ],
+                [
                     'name' => 'maximum_inactive_time_to_consider',
                     'title' => 'Maximum inactive time to consider (minutes)',
                     'comment' => 'A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted.',

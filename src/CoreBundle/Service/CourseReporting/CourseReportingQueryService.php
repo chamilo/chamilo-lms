@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
+use Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit;
 use Chamilo\CoreBundle\Service\StudentSuccess\StudentSuccessAnalysisStorage;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
@@ -35,6 +36,7 @@ final class CourseReportingQueryService
         private readonly ExtraFieldRepository $extraFieldRepository,
         private readonly AiFeatureAccessHelper $aiFeatureAccessHelper,
         private readonly ReportIpVisibility $reportIpVisibility,
+        private readonly SessionTimeLimit $sessionTimeLimit,
     ) {}
 
     /**
@@ -957,7 +959,7 @@ final class CourseReportingQueryService
                     CASE
                         WHEN logout_course_date IS NOT NULL
                             AND logout_course_date >= login_course_date
-                        THEN TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date)
+                        THEN '.$this->sessionTimeLimit->sql('login_course_date', 'logout_course_date').'
                         ELSE 0
                     END
                 ) AS time_seconds,

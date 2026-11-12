@@ -1113,9 +1113,6 @@ switch ($action) {
     case 'report_quarterly_hours_of_training':
         // Close the session as we don't need it any further
         session_write_close();
-        // The maximum time spent, in number of hours, to be considered.
-        // Anything above that is considered a time registration error.
-        $maxTimeSpent = 6;
         $currentQuarterDates = getQuarterDates();
         $pre1QuarterDates = getQuarterDates(
             date_create($currentQuarterDates['quarter_start'])
@@ -1156,33 +1153,27 @@ switch ($action) {
         // Get data for the row
         $timeSpentCoursesCurrentQuarter = Tracking::getTotalTimeSpentInCourses(
             $currentQuarterDates['quarter_start'],
-            $currentQuarterDates['quarter_end'],
-            $maxTimeSpent
+            $currentQuarterDates['quarter_end']
         );
         $timeSpentCourses1PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre1QuarterDates['quarter_start'],
-            $pre1QuarterDates['quarter_end'],
-            $maxTimeSpent
+            $pre1QuarterDates['quarter_end']
         );
         $timeSpentCourses2PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre2QuarterDates['quarter_start'],
-            $pre2QuarterDates['quarter_end'],
-            $maxTimeSpent
+            $pre2QuarterDates['quarter_end']
         );
         $timeSpentCourses3PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre3QuarterDates['quarter_start'],
-            $pre3QuarterDates['quarter_end'],
-            $maxTimeSpent
+            $pre3QuarterDates['quarter_end']
         );
         $timeSpentCourses4PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre4QuarterDates['quarter_start'],
-            $pre4QuarterDates['quarter_end'],
-            $maxTimeSpent
+            $pre4QuarterDates['quarter_end']
         );
         $timeSpentCourses5PreQuarter = Tracking::getTotalTimeSpentInCourses(
             $pre5QuarterDates['quarter_start'],
-            $pre5QuarterDates['quarter_end'],
-            $maxTimeSpent
+            $pre5QuarterDates['quarter_end']
         );
         // Calculate percent for the row
         $percentIncrementTimeSpent = api_calculate_increment_percent(

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Service\GlobalReporting;
 
 use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
+use Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\DBAL\ArrayParameterType;
@@ -37,6 +38,7 @@ final readonly class GlobalReportingQueryService
     public function __construct(
         private Connection $connection,
         private AccessUrlScopeHelper $accessUrlScope,
+        private SessionTimeLimit $sessionTimeLimit,
     ) {}
 
     /**
@@ -756,7 +758,7 @@ final readonly class GlobalReportingQueryService
         );
 
         $totalTimeSpent = (int) $this->connection->fetchOne(
-            'SELECT COALESCE(SUM(TIMESTAMPDIFF(SECOND, login.login_date, login.logout_date)), 0)
+            'SELECT COALESCE(SUM('.$this->sessionTimeLimit->sql('login.login_date', 'login.logout_date').'), 0)
                FROM track_e_login login
                INNER JOIN access_url_rel_user access_user
                    ON access_user.user_id = login.login_user_id

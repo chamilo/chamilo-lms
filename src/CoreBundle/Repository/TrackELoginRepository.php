@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit;
 use DateTime;
 use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -16,8 +17,10 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class TrackELoginRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly SessionTimeLimit $sessionTimeLimit
+    ) {
         parent::__construct($registry, TrackELogin::class);
     }
 
@@ -78,7 +81,7 @@ class TrackELoginRepository extends ServiceEntityRepository
      */
     public function getTotalConnectionTime(int $userId, ?DateTime $from = null, ?DateTime $to = null): int
     {
-        $sql = 'SELECT COALESCE(SUM(TIMESTAMPDIFF(SECOND, login_date, logout_date)), 0)
+        $sql = 'SELECT COALESCE(SUM('.$this->sessionTimeLimit->sql('login_date', 'logout_date').'), 0)
                 FROM track_e_login
                 WHERE login_user_id = :userId';
         $params = ['userId' => $userId];

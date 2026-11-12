@@ -52,7 +52,7 @@ final class AdminStatisticsUserSystemTest extends KernelTestCase
     /**
      * @param array<int, array{label: string, value: int|float}> $stats
      *
-     * @return array<string, int|float>
+     * @return array<array-key, int|float> Numeric labels such as '07' or '19' become integer keys
      */
     private function byLabel(array $stats): array
     {

@@ -92,7 +92,7 @@ final class LearningPathTrackingRecycleBinTest extends KernelTestCase
     }
 
     /**
-     * @return array<string, mixed>
+     * @return list<array<string, mixed>>
      */
     private function archives(int $userId): array
     {

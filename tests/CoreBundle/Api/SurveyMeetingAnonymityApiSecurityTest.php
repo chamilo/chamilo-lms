@@ -95,7 +95,7 @@ class SurveyMeetingAnonymityApiSecurityTest extends AbstractApiTest
      * Three invited users: the first picks the first slot, the second picks the
      * second slot and the third has not answered.
      *
-     * @return array{0: Course, 1: CSurvey, 2: array<int, User>, 3: array<int, int>}
+     * @return array{0: Course, 1: CSurvey, 2: list<User|null>, 3: list<int>}
      */
     private function createMeetingPoll(string $anonymous): array
     {

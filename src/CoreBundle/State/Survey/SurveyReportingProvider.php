@@ -389,6 +389,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
     {
         $users = [];
         $isAnonymous = $this->isAnonymous($survey);
+        $showAnswered = $this->showsAnsweredDetails($survey);
         $anonymousIndex = 1;
 
         foreach ($invitations as $invitation) {
@@ -397,9 +398,9 @@ final readonly class SurveyReportingProvider implements ProviderInterface
             $users[$userKey] = [
                 'key' => $userKey,
                 'label' => $isAnonymous ? 'Anonymous '.$anonymousIndex : $user->getFullNameWithUsername(),
-                'answered' => 1 === (int) $invitation->getAnswered(),
+                'answered' => $showAnswered && 1 === (int) $invitation->getAnswered(),
                 'invitationDate' => $invitation->getInvitationDate()->format('Y-m-d H:i:s'),
-                'answeredAt' => $this->formatAnsweredAt($invitation),
+                'answeredAt' => $showAnswered ? $this->formatAnsweredAt($invitation) : null,
             ];
             $anonymousIndex++;
         }
@@ -468,6 +469,11 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
         if (0 === $answered && [] !== $answeredUsers) {
             $answered = \count($answeredUsers);
+        }
+
+        // Same rule as SurveyInvitationProvider: a tiny total would point at the respondent.
+        if (!$this->showsAnsweredDetails($survey) && $answered < 2) {
+            $answered = 0;
         }
 
         return [
@@ -1279,6 +1285,11 @@ final readonly class SurveyReportingProvider implements ProviderInterface
     private function isAnonymous(CSurvey $survey): bool
     {
         return '1' === (string) $survey->getAnonymous();
+    }
+
+    private function showsAnsweredDetails(CSurvey $survey): bool
+    {
+        return !$this->isAnonymous($survey) || $this->isSettingEnabled('survey.survey_anonymous_show_answered');
     }
 
     private function isReportingHidden(): bool

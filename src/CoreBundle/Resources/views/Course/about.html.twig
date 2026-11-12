@@ -246,6 +246,28 @@
                 border-radius: .5rem;
             }
 
+            .course-about-floor-plan-image {
+                position: relative;
+                width: 100%;
+                overflow: hidden;
+                border: 1px solid #e5e7eb;
+                border-radius: .5rem;
+            }
+
+            .course-about-floor-plan-image img {
+                display: block;
+                width: 100%;
+                height: auto;
+            }
+
+            .course-about-floor-plan-image svg {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+            }
+
             .course-about-room-name {
                 margin: .75rem 0 0;
                 color: #374151;
@@ -413,6 +435,37 @@
                         </div>
                     {% endif %}
                 </section>
+
+                {% if room_floor_plan %}
+                    <section class="course-about-descriptions" aria-labelledby="course-about-floor-plan-title">
+                        <h2 id="course-about-floor-plan-title" class="course-about-section-title">{{ 'Floor plan'|trans }}</h2>
+                        <div class="course-about-card course-about-description-item">
+                            <p class="course-about-room-name">{{ room_floor_plan.branchTitle }} — {{ room_floor_plan.roomTitle }}</p>
+                            <div class="course-about-floor-plan-image">
+                                <img
+                                    src="{{ path('room_floor_plan_course_image', {id: course.id}) }}"
+                                    alt="{{ 'Floor plan'|trans }}"
+                                    data-course-floor-plan-image
+                                    loading="lazy"
+                                />
+                                {% if room_floor_plan.polygonPoints %}
+                                    <svg viewBox="0 0 1000 1000" preserveAspectRatio="none" aria-hidden="true">
+                                        <polygon
+                                            points="{{ room_floor_plan.polygonPoints }}"
+                                            fill="#00897b"
+                                            fill-opacity="0.3"
+                                            stroke="#00897b"
+                                            stroke-width="5"
+                                        />
+                                    </svg>
+                                {% endif %}
+                            </div>
+                            <p class="course-about-room-name" data-course-floor-plan-error role="status" hidden>
+                                {{ 'Floor plan unavailable'|trans }}
+                            </p>
+                        </div>
+                    </section>
+                {% endif %}
             </main>
 
             <aside class="course-about-sidebar">
@@ -511,6 +564,17 @@
 
         <script>
           $(function() {
+            var planImage = document.querySelector('[data-course-floor-plan-image]');
+            if (planImage) {
+              var onPlanImageError = function() {
+                planImage.parentElement.hidden = true;
+                var error = document.querySelector('[data-course-floor-plan-error]');
+                if (error) error.hidden = false;
+              };
+              planImage.addEventListener('error', onPlanImageError);
+              if (planImage.complete && !planImage.naturalWidth) onPlanImageError();
+            }
+
             var cover = document.querySelector('.course-about-cover');
             if (cover && !cover.classList.contains('course-about-cover--vector')) {
               var updateCoverSize = function() {

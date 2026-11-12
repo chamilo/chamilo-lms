@@ -43600,3 +43600,9 @@ msgstr "Fortified castle"
 
 msgid "Visual guide only"
 msgstr "Visual guide only"
+
+msgid "Treasure stolen"
+msgstr "Treasure stolen"
+
+msgid "Attack blocked"
+msgstr "Attack blocked"

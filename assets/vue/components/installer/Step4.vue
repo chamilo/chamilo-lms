@@ -101,7 +101,7 @@
       v-if="installerData.stepData.dbExists"
       :closable="false"
       severity="warn"
-      style="margin-bottom: 8px"
+      class="mb-2"
     >
       <span
         v-html="

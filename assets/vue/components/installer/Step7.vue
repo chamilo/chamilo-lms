@@ -39,7 +39,7 @@
       <Message
         :closable="false"
         severity="warn"
-        style="margin-bottom: 8px;"
+        class="mb-4"
       >
         <strong v-text="t('Security advice')" />
         <i18n-t
@@ -60,6 +60,7 @@
         <div class="field">
           <BaseButton
             :label="t('Go to your newly created portal.')"
+            icon="home"
             to-url="../../"
             type="success"
           />

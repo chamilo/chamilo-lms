@@ -5,7 +5,10 @@
       class="RequirementHeading"
     />
 
-    <div v-if="'update' === installerData.installType">
+    <div
+      v-if="'update' === installerData.installType"
+      class="mt-8"
+    >
       <h3
         v-text="t('System')"
         class="mb-4"
@@ -38,7 +41,7 @@
       />
     </div>
 
-    <div>
+    <div class="mt-8">
       <h3
         v-text="t('Administrator')"
         class="mb-4"
@@ -131,7 +134,7 @@
       />
     </div>
 
-    <div>
+    <div class="mt-8">
       <h3
         v-text="t('Portal')"
         class="mb-4"

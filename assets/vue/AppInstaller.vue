@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-3 gap-4 rounded bg-white p-6 mb-4">
+  <div class="grid grid-cols-3 gap-4 rounded-lg bg-white p-6 mb-4">
     <aside class="install-steps col-span-3 md:col-span-1">
       <a
         class="logo-install"
@@ -45,17 +45,17 @@
       <h1
         v-if="'new' === installerData.installType"
         v-text="t('New installation')"
-        class="mb-4 text-center"
+        class="mb-4"
       />
       <h1
         v-else-if="'update' === installerData.installType"
         v-text="t('Update from Chamilo ' + (installerData.old_version || installerData.upgradeFromVersion[0]).split('.').slice(0, 2).join('.'))"
-        class="mb-4 text-center"
+        class="mb-4"
       />
       <h1
         v-else
         v-text="t('Chamilo installation wizard')"
-        class="mb-8 text-center"
+        class="mb-4"
       />
 
       <form

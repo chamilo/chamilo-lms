@@ -13,238 +13,88 @@
       class="RequirementContent mb-4"
     />
 
-    <div>
+    <section>
       <h3
         v-text="t('Administrator')"
         class="mb-4"
       />
+      <dl class="install-summary">
+        <template v-if="'new' === installerData.installType">
+          <dt v-text="t('Administrator login')" />
+          <dd v-text="installerData.stepData.loginForm" />
+          <dt v-text="t('Administrator password')" />
+          <dd>
+            <span class="inline-flex items-center gap-2">
+              <span v-text="showAdminPass ? installerData.stepData.passForm : '********'" />
+              <BaseButton
+                :icon="showAdminPass ? 'eye-off' : 'eye-on'"
+                :label="showAdminPass ? t('Hide password') : t('Show password')"
+                only-icon
+                size="small"
+                type="primary-text"
+                @click="toggleAdminPass"
+              />
+            </span>
+            <small
+              v-text="t('You may want to change this')"
+              class="block text-caption text-error"
+            />
+          </dd>
+        </template>
+        <template
+          v-for="row in adminRows"
+          :key="row.label"
+        >
+          <dt v-text="row.label" />
+          <dd v-text="row.value" />
+        </template>
+      </dl>
+    </section>
 
-      <div
-        v-if="'new' === installerData.installType"
-        class="formgroup-inline"
-      >
-        <div
-          v-text="t('Administrator login')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.loginForm"
-        />
-      </div>
+    <section class="mt-8">
+      <h3
+        v-text="t('Portal')"
+        class="mb-4"
+      />
+      <dl class="install-summary">
+        <template
+          v-for="row in portalRows"
+          :key="row.label"
+        >
+          <dt v-text="row.label" />
+          <dd v-text="row.value" />
+        </template>
+      </dl>
+    </section>
 
-      <div
-        v-if="'new' === installerData.installType"
-        class="formgroup-inline items-center gap-2"
-      >
-        <div
-          v-text="t('Administrator password')"
-          class="field text-body-2 font-semibold"
-        />
-        <div class="field text-body-2 flex items-center">
-          <span v-if="!showAdminPass">********</span>
-          <span v-else>{{ installerData.stepData.passForm }}</span>
-          <BaseButton
-            :icon="showAdminPass ? 'eye-off' : 'eye-on'"
-            :label="showAdminPass ? t('Hide password') : t('Show password')"
-            class="ms-2"
-            only-icon
-            size="small"
-            type="primary-text"
-            @click="toggleAdminPass"
-          />
-        </div>
-        <div
-          v-text="t('You may want to change this')"
-          class="field text-body-2 text-error"
-        />
-      </div>
+    <section class="mt-8">
+      <h3
+        v-text="t('Database')"
+        class="mb-4"
+      />
+      <dl class="install-summary">
+        <template
+          v-for="row in databaseRows"
+          :key="row.label"
+        >
+          <dt v-text="row.label" />
+          <dd v-text="row.value" />
+        </template>
+      </dl>
+    </section>
 
-      <div class="formgroup-inline">
-        <div
-          v-text="t('Administrator first name')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.adminFirstName"
-        />
-      </div>
-
-      <div class="formgroup-inline">
-        <div
-          v-text="t('Administrator last name')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.adminLastName"
-        />
-      </div>
-
-      <div class="formgroup-inline">
-        <div
-          v-text="t('Administrator e-mail')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.emailForm"
-        />
-      </div>
-
-      <div class="formgroup-inline">
-        <div
-          v-text="t('Administrator telephone')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.adminPhoneForm"
-        />
-      </div>
-
-      <div class="field">
-        <h3 v-text="t('Portal')" />
-      </div>
-
-      <div class="formgroup-inline">
-        <div
-          v-text="t('Your portal name')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.campusForm"
-        />
-      </div>
-
-      <div class="formgroup-inline">
-        <div
-          v-text="t('Main language')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.languageForm"
-        />
-      </div>
-
-      <div class="formgroup-inline">
-        <div
-          v-text="t('Allow self-registration')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.allowSelfRegistrationLiteral"
-        />
-      </div>
-
-      <div class="formgroup-inline">
-        <div
-          v-text="t('Your company short name')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.institutionForm"
-        />
-      </div>
-
-      <div class="formgroup-inline">
-        <div
-          v-text="t('URL of this company')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.institutionUrlForm"
-        />
-      </div>
-
-      <div class="formgroup-inline">
-        <div
-          v-text="t('Encryption method')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.encryptPassForm"
-        />
-      </div>
-
-      <div class="field">
-        <h3 v-text="t('Database')" />
-      </div>
-
-      <div class="formgroup-inline">
-        <div
-          v-text="t('Database Host')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.dbHostForm"
-        />
-      </div>
-
-      <div class="formgroup-inline">
-        <div
-          v-text="t('Port')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.dbPortForm"
-        />
-      </div>
-
-      <div class="formgroup-inline">
-        <div
-          v-text="t('Database user')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.dbUsernameForm"
-        />
-      </div>
-
-      <div class="formgroup-inline">
-        <div
-          v-text="t('Database Password')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="installerData.stepData.dbPassForm"
-        />
-      </div>
-
-      <div class="formgroup-inline">
-        <div
-          v-text="t('Database name')"
-          class="field text-body-2 font-semibold"
-        />
-        <div
-          class="field text-body-2"
-          v-text="sanitizedDbName"
-        />
-      </div>
-
-      <Message
-        v-if="'new' === installerData.installType"
-        :closable="false"
-        severity="warn"
-      >
-        {{
-          t(
-            "The install script will erase all tables of the selected database. We heavily recommend you do a full backup of them before confirming this last install step.",
-          )
-        }}
-      </Message>
-    </div>
+    <Message
+      v-if="'new' === installerData.installType"
+      :closable="false"
+      class="mt-8"
+      severity="warn"
+    >
+      {{
+        t(
+          "The install script will erase all tables of the selected database. We heavily recommend you do a full backup of them before confirming this last install step.",
+        )
+      }}
+    </Message>
 
     <hr />
 
@@ -286,15 +136,12 @@
     v-show="loading"
     class="install-step"
   >
-    <h2
-      v-if="'update' !== installerData.installType"
-      v-text="t('Step 7 - Installation process execution')"
-      class="RequirementHeading mb-8"
-    />
-    <h2
-      v-else
-      v-text="t('Step 7 - Update process execution')"
-      class="RequirementHeading mb-8"
+    <SectionHeader
+      :title="
+        'update' !== installerData.installType
+          ? t('Step 7 - Installation process execution')
+          : t('Step 7 - Update process execution')
+      "
     />
 
     <Message
@@ -308,30 +155,29 @@
       />
     </Message>
 
-    <div v-if="'update' === installerData.installType">
+    <div
+      v-if="'update' === installerData.installType"
+      class="mt-4"
+    >
       <ProgressBar
         :value="progressPercentage"
-        style="height: 22px"
+        class="h-6"
         >{{ progressPercentage }}%</ProgressBar
       >
-      <p class="current-migration">
+      <p class="current-migration mt-4">
         <strong>{{ t("Verifying migration:") }}</strong> {{ currentMigration }}
       </p>
     </div>
   </div>
 
-  <Dialog
-    v-model:visible="successDialogVisible"
-    :closable="false"
-    :modal="true"
-    :show-header="false"
+  <BaseDialog
+    v-model:is-visible="successDialogVisible"
+    :breakpoints="{ '575px': '90vw' }"
+    :style="{ width: '32rem' }"
+    :show-close-button="false"
+    :show-header-close-button="false"
+    :title="t('Migration completed successfully!')"
   >
-    <div class="flex items-center justify-center">
-      <h3
-        v-text="t('Migration completed successfully!')"
-        class="mb-4"
-      />
-    </div>
     <Message
       v-if="upgradeFlagWarning"
       :closable="false"
@@ -343,7 +189,6 @@
     <Message
       :closable="false"
       severity="info"
-      class="mb-4"
     >
       {{
         t(
@@ -351,51 +196,43 @@
         )
       }}
     </Message>
-    <div class="formgroup-inline">
-      <div class="field">
-        <BaseButton
-          :label="t('Go to your newly created portal.')"
-          type="success"
-          @click="btnFinishOnClick"
-        />
-      </div>
-    </div>
-  </Dialog>
-
-  <Dialog
-    v-model:visible="errorDialogVisible"
-    :closable="false"
-    :modal="true"
-    :show-header="false"
-  >
-    <div class="flex items-center justify-center">
-      <h3
-        v-text="t('Migration failed!')"
-        class="mb-4 text-error"
+    <template #footer>
+      <BaseButton
+        :label="t('Go to your newly created portal.')"
+        icon="home"
+        type="success"
+        @click="btnFinishOnClick"
       />
-    </div>
-    <div class="flex items-center justify-center">
-      <p class="text-error">{{ errorMessage }}</p>
-    </div>
-    <div
+    </template>
+  </BaseDialog>
+
+  <BaseDialog
+    v-model:is-visible="errorDialogVisible"
+    :breakpoints="{ '575px': '90vw' }"
+    :style="{ width: '32rem' }"
+    :show-close-button="false"
+    :show-header-close-button="false"
+    :title="t('Migration failed!')"
+  >
+    <p
+      class="text-error"
+      v-text="errorMessage"
+    />
+    <p
       v-if="currentMigration"
-      class="flex items-center justify-center mt-4"
+      class="mt-4 text-body-2"
     >
-      <p class="text-body-2">
-        {{ t("The last migration executed successfully was:") }} <br /><strong>{{ currentMigration }}</strong>
-      </p>
-    </div>
-    <div class="formgroup-inline">
-      <div class="field">
-        <BaseButton
-          :label="t('Contact support')"
-          class="mt-4"
-          type="danger"
-          @click="btnSupportOnClick"
-        />
-      </div>
-    </div>
-  </Dialog>
+      {{ t("The last migration executed successfully was:") }} <br /><strong>{{ currentMigration }}</strong>
+    </p>
+    <template #footer>
+      <BaseButton
+        :label="t('Contact support')"
+        icon="help"
+        type="danger"
+        @click="btnSupportOnClick"
+      />
+    </template>
+  </BaseDialog>
 </template>
 
 <script setup>
@@ -404,9 +241,9 @@ import { useI18n } from "vue-i18n"
 
 import Message from "primevue/message"
 import ProgressBar from "primevue/progressbar"
-import Dialog from "primevue/dialog"
 import SectionHeader from "../layout/SectionHeader.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
+import BaseDialog from "../basecomponents/BaseDialog.vue"
 
 const { t } = useI18n()
 
@@ -423,6 +260,43 @@ const sanitizedDbName = computed(() => {
 
   // Same rule as backend: only letters, digits and underscore are kept.
   return raw.replace(/[^a-zA-Z0-9_]/g, "")
+})
+
+// Rows of the summary. The administrator login and password are rendered apart, before these.
+const adminRows = computed(() => {
+  const data = installerData.value.stepData
+
+  return [
+    { label: t("Administrator first name"), value: data.adminFirstName },
+    { label: t("Administrator last name"), value: data.adminLastName },
+    { label: t("Administrator e-mail"), value: data.emailForm },
+    { label: t("Administrator telephone"), value: data.adminPhoneForm },
+  ]
+})
+
+const portalRows = computed(() => {
+  const data = installerData.value.stepData
+
+  return [
+    { label: t("Your portal name"), value: data.campusForm },
+    { label: t("Main language"), value: data.languageForm },
+    { label: t("Allow self-registration"), value: data.allowSelfRegistrationLiteral },
+    { label: t("Your company short name"), value: data.institutionForm },
+    { label: t("URL of this company"), value: data.institutionUrlForm },
+    { label: t("Encryption method"), value: data.encryptPassForm },
+  ]
+})
+
+const databaseRows = computed(() => {
+  const data = installerData.value.stepData
+
+  return [
+    { label: t("Database Host"), value: data.dbHostForm },
+    { label: t("Port"), value: data.dbPortForm },
+    { label: t("Database user"), value: data.dbUsernameForm },
+    { label: t("Database Password"), value: data.dbPassForm },
+    { label: t("Database name"), value: sanitizedDbName.value },
+  ]
 })
 
 const loading = ref(false)

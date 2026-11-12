@@ -32,8 +32,8 @@
       {{ t("to know what's new and what has been changed.") }}
     </p>
 
-    <h2
-      class="install-subtitle mb-8"
+    <h3
+      class="install-subtitle mt-8 mb-4"
       v-text="t('Server requirements')"
     />
 
@@ -87,19 +87,15 @@
           v-text="extension.title"
         />
         <BaseTag
-          :icon="{
-            'mdi mdi-check': 'success' === extension.status.severity,
-            'mdi mdi-alert': 'warning' === extension.status.severity,
-            'mdi mdi-close': 'danger' === extension.status.severity,
-          }"
+          :icon="SEVERITY_ICONS[extension.status.severity]"
           :label="extension.status.message"
           :type="extension.status.severity"
         />
       </p>
     </div>
 
-    <h4
-      class="install-subtitle mb-4"
+    <h3
+      class="install-subtitle mt-8 mb-4"
       v-text="t('Recommended settings')"
     />
     <p
@@ -138,15 +134,15 @@
               v-text="title"
             />
             <td class="requirements-recommended">
-              <Tag
-                :value="recommended"
-                severity="success"
+              <BaseTag
+                :label="String(recommended)"
+                type="success"
               />
             </td>
             <td class="requirements-value">
-              <Tag
-                :severity="current.severity"
-                :value="current.value"
+              <BaseTag
+                :label="String(current.value)"
+                :type="current.severity"
               />
             </td>
           </tr>
@@ -154,8 +150,8 @@
       </table>
     </div>
 
-    <h4
-      class="install-subtitle mb-4"
+    <h3
+      class="install-subtitle mt-8 mb-4"
       v-text="t('Directory and files permissions')"
     />
     <p
@@ -176,20 +172,20 @@
           >
             <td v-text="item" />
             <td>
-              <Tag
+              <BaseTag
                 v-if="true === status"
-                :value="t('Writable')"
-                severity="success"
+                :label="t('Writable')"
+                type="success"
               />
-              <Tag
+              <BaseTag
                 v-else-if="false === status"
-                :value="t('Not writable')"
-                severity="danger"
+                :label="t('Not writable')"
+                type="danger"
               />
-              <Tag
+              <BaseTag
                 v-else
-                :value="status"
-                severity="info"
+                :label="String(status)"
+                type="info"
               />
             </td>
           </tr>
@@ -373,7 +369,6 @@ import { useI18n } from "vue-i18n"
 import { inject, ref, watch } from "vue"
 
 import Message from "primevue/message"
-import Tag from "primevue/tag"
 import SectionHeader from "../layout/SectionHeader.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseInputText from "../basecomponents/BaseInputText.vue"
@@ -382,6 +377,13 @@ import BaseTag from "../basecomponents/BaseTag.vue"
 const { t } = useI18n()
 
 const installerData = inject("installerData")
+
+// Icon of each extension status, keyed by the severity the server sends.
+const SEVERITY_ICONS = {
+  success: "mdi mdi-check",
+  warning: "mdi mdi-alert",
+  danger: "mdi mdi-close",
+}
 const updatePathInput = ref(installerData.value?.updatePath || "")
 
 watch(

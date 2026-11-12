@@ -25,7 +25,36 @@
   }
 }
 
+// Label and value pairs of the last check before install (step 6).
+.install-summary {
+  @apply grid grid-cols-1 items-baseline gap-x-6 text-body-2 sm:grid-cols-[minmax(0,16rem)_1fr] sm:gap-y-3;
+
+  dt {
+    @apply font-semibold text-gray-90;
+  }
+
+  dd {
+    @apply m-0 mb-3 break-words sm:mb-0;
+  }
+}
+
+// BaseTable always adds a paginator, which these short fixed lists do not need.
 table.requirements-list {
+  @apply w-full text-body-2;
+
+  th,
+  td {
+    @apply border-0 border-b border-solid border-gray-25 px-3 py-2;
+  }
+
+  th {
+    @apply font-semibold text-gray-90;
+  }
+
+  tbody tr:last-child td {
+    @apply border-b-0;
+  }
+
   .requirements-item {
     @apply text-start;
   }

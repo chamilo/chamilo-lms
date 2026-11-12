@@ -629,14 +629,22 @@ final readonly class CourseUserManager
             return;
         }
 
+        if (!$this->isEnabled($this->settingsManager->getSetting('course.profiling_filter_adding_users', true))) {
+            return;
+        }
+
         $qb->andWhere('EXISTS (
             SELECT 1
             FROM '.ExtraFieldValues::class.' efv_filter
+            JOIN efv_filter.field ef_filter
             WHERE efv_filter.itemId = u.id
-              AND IDENTITY(efv_filter.field) = :extraFieldId
+              AND ef_filter.id = :extraFieldId
+              AND ef_filter.itemType = :filterItemType
+              AND ef_filter.filter = true
               AND efv_filter.fieldValue = :extraFieldValue
         )')
-            ->setParameter('extraFieldId', $extraFieldId, Types::INTEGER)
+            ->setParameter('extraFieldId', $extraFieldId)
+            ->setParameter('filterItemType', ExtraFieldEntity::USER_FIELD_TYPE)
             ->setParameter('extraFieldValue', $extraFieldValue, Types::STRING)
         ;
     }

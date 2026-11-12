@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Message;
@@ -1570,5 +1571,195 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             'username' => 'admin',
             'email' => 'admin@example.com',
         ];
+    }
+
+    /**
+     * Builds a SQL-level filter for users available to subscribe.
+     * Pagination, sorting, keyword search and membership exclusion all happen in the database
+     * so large portals (5k+ users) do not load every row into PHP memory.
+     */
+    public function createAvailableForCourseSubscriptionQueryBuilder(
+        Course $course,
+        ?Session $session,
+        int $type,
+        string $keyword,
+        int $extraFieldId,
+        string $extraFieldValue,
+        ?AccessUrl $accessUrl,
+        bool $profilingEnabled,
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('u')
+            ->andWhere('u.active != :softDeleted')
+            ->setParameter('softDeleted', User::SOFT_DELETED, Types::INTEGER)
+        ;
+
+        // Role checks always use the persisted roles JSON, never user.status.
+        $this->applyPersistedPlatformRoleFilter($qb);
+
+        if (null !== $accessUrl) {
+            $qb->innerJoin('u.portals', 'p')
+                ->andWhere('p.url = :currentUrlId')
+                ->setParameter('currentUrlId', (int) $accessUrl->getId(), Types::INTEGER)
+            ;
+        }
+
+        $courseId = (int) $course->getId();
+        if ($session instanceof Session) {
+            $qb->andWhere('NOT EXISTS (
+                SELECT 1
+                FROM '.SessionRelCourseRelUser::class.' scru
+                WHERE scru.user = u
+                  AND scru.course = :courseId
+                  AND scru.session = :sessionId
+            )')
+                ->setParameter('courseId', $courseId, Types::INTEGER)
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $qb->andWhere('NOT EXISTS (
+                SELECT 1
+                FROM '.CourseRelUser::class.' cru
+                WHERE cru.user = u
+                  AND cru.course = :courseId
+            )')
+                ->setParameter('courseId', $courseId, Types::INTEGER)
+            ;
+        }
+
+        if (CourseRelUser::TEACHER === $type) {
+            $this->applyTeacherRoleFilter($qb);
+        }
+
+        if (CourseRelUser::STUDENT === $type || $session instanceof Session) {
+            $qb->andWhere('u.officialCode IS NULL OR UPPER(u.officialCode) != :adminCode')
+                ->setParameter('adminCode', 'ADMIN', Types::STRING)
+            ;
+        }
+
+        $this->applyAvailableKeywordFilter($qb, $keyword, $profilingEnabled);
+        $this->applyAvailableExtraFieldFilter($qb, $extraFieldId, $extraFieldValue, $profilingEnabled);
+
+        return $qb;
+    }
+
+    /**
+     * Keep only users that have a real platform role in the roles column.
+     * System accounts (anonymous / fallback) typically have an empty roles array or ROLE_ANONYMOUS.
+     */
+    private function applyPersistedPlatformRoleFilter(QueryBuilder $qb): void
+    {
+        $qb->andWhere('u.roles NOT LIKE :roleAnonymous')
+            ->andWhere(
+                $qb->expr()->orX(
+                    'u.roles LIKE :roleStudent',
+                    'u.roles LIKE :roleTeacher',
+                    'u.roles LIKE :roleAdmin',
+                    'u.roles LIKE :roleGlobalAdmin',
+                    'u.roles LIKE :roleSessionManager',
+                    'u.roles LIKE :roleHr',
+                    'u.roles LIKE :roleStudentBoss',
+                    'u.roles LIKE :roleInvitee',
+                    'u.roles LIKE :roleQuestionManager',
+                )
+            )
+            ->setParameter('roleAnonymous', '%"ROLE_ANONYMOUS"%', Types::STRING)
+            ->setParameter('roleStudent', '%"ROLE_STUDENT"%', Types::STRING)
+            ->setParameter('roleTeacher', '%"ROLE_TEACHER"%', Types::STRING)
+            ->setParameter('roleAdmin', '%"ROLE_ADMIN"%', Types::STRING)
+            ->setParameter('roleGlobalAdmin', '%"ROLE_GLOBAL_ADMIN"%', Types::STRING)
+            ->setParameter('roleSessionManager', '%"ROLE_SESSION_MANAGER"%', Types::STRING)
+            ->setParameter('roleHr', '%"ROLE_HR"%', Types::STRING)
+            ->setParameter('roleStudentBoss', '%"ROLE_STUDENT_BOSS"%', Types::STRING)
+            ->setParameter('roleInvitee', '%"ROLE_INVITEE"%', Types::STRING)
+            ->setParameter('roleQuestionManager', '%"ROLE_QUESTION_MANAGER"%', Types::STRING)
+        ;
+    }
+
+    private function applyTeacherRoleFilter(QueryBuilder $qb): void
+    {
+        $qb->andWhere(
+            $qb->expr()->orX(
+                'u.roles LIKE :roleTeacher',
+                'u.roles LIKE :roleAdmin',
+                'u.roles LIKE :roleGlobalAdmin',
+                'u.roles LIKE :roleSessionManager',
+            )
+        )
+            ->setParameter('roleTeacher', '%"ROLE_TEACHER"%', Types::STRING)
+            ->setParameter('roleAdmin', '%"ROLE_ADMIN"%', Types::STRING)
+            ->setParameter('roleGlobalAdmin', '%"ROLE_GLOBAL_ADMIN"%', Types::STRING)
+            ->setParameter('roleSessionManager', '%"ROLE_SESSION_MANAGER"%', Types::STRING)
+        ;
+    }
+
+    private function applyAvailableKeywordFilter(QueryBuilder $qb, string $keyword, bool $profilingEnabled): void
+    {
+        if ('' === $keyword) {
+            return;
+        }
+
+        $terms = array_values(array_filter(array_map('trim', preg_split('/\s+/', $keyword) ?: [])));
+        if ([] === $terms) {
+            return;
+        }
+
+        $nameMatchParts = [];
+        foreach ($terms as $index => $term) {
+            $param = 'kw'.$index;
+            $nameMatchParts[] = '(
+                u.firstname LIKE :'.$param.' OR
+                u.lastname LIKE :'.$param.' OR
+                u.username LIKE :'.$param.' OR
+                u.email LIKE :'.$param.' OR
+                u.officialCode LIKE :'.$param.'
+            )';
+            $qb->setParameter($param, '%'.$term.'%', Types::STRING);
+        }
+
+        $nameMatch = implode(' AND ', $nameMatchParts);
+        if (!$profilingEnabled) {
+            $qb->andWhere($nameMatch);
+
+            return;
+        }
+
+        $qb->andWhere('('.$nameMatch.' OR EXISTS (
+            SELECT 1
+            FROM '.ExtraFieldValues::class.' efv_kw
+            JOIN efv_kw.field ef_kw
+            WHERE efv_kw.itemId = u.id
+              AND ef_kw.itemType = :userItemType
+              AND ef_kw.filter = true
+              AND efv_kw.fieldValue LIKE :kwFull
+        ))')
+            ->setParameter('userItemType', ExtraField::USER_FIELD_TYPE, Types::INTEGER)
+            ->setParameter('kwFull', '%'.$keyword.'%', Types::STRING)
+        ;
+    }
+
+    private function applyAvailableExtraFieldFilter(
+        QueryBuilder $qb,
+        int $extraFieldId,
+        string $extraFieldValue,
+        bool $profilingEnabled,
+    ): void {
+        if (!$profilingEnabled || $extraFieldId <= 0 || '' === $extraFieldValue) {
+            return;
+        }
+
+        $qb->andWhere('EXISTS (
+            SELECT 1
+            FROM '.ExtraFieldValues::class.' efv_filter
+            JOIN efv_filter.field ef_filter
+            WHERE efv_filter.itemId = u.id
+              AND ef_filter.id = :extraFieldId
+              AND ef_filter.itemType = :filterItemType
+              AND ef_filter.filter = true
+              AND efv_filter.fieldValue = :extraFieldValue
+        )')
+            ->setParameter('extraFieldId', $extraFieldId)
+            ->setParameter('filterItemType', ExtraField::USER_FIELD_TYPE)
+            ->setParameter('extraFieldValue', $extraFieldValue, Types::STRING)
+        ;
     }
 }

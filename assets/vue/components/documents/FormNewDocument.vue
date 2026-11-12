@@ -20,15 +20,19 @@
         auto-resize
       />
 
-      <BaseTinyEditor
+      <div
         v-if="showContentEditor"
-        id="item_content"
-        v-model="item.contentFile"
-        :full-page="fullPage"
-        :title="t('Content')"
-        :editor-config="tinyEditorConfig"
-        editor-id="item_content"
-      />
+        class="chamilo-document-tinymce"
+      >
+        <BaseTinyEditor
+          id="item_content"
+          v-model="item.contentFile"
+          :full-page="fullPage"
+          :title="t('Content')"
+          :editor-config="tinyEditorConfig"
+          editor-id="item_content"
+        />
+      </div>
     </div>
     <div
       v-if="showContentEditor && editorDrafts.length > 0"
@@ -390,6 +394,8 @@ export default {
     tinyEditorConfig() {
       const config = {
         content_style: this.getDocumentEditorContentStyle(),
+        // Preserve the document-specific Save button through the shared TinyMCE config merge.
+        chamiloDocumentSave: true,
         removeToolbarButtons: "save preview print code fullscreen fullpage visualblocks visualchars ltr rtl",
         visualblocks_default_state: false,
         visualchars_default_state: false,
@@ -585,7 +591,7 @@ export default {
       editor.ui.registry.addIcon(
         "chamiloSave",
         `
-        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <svg class="chamilo-document-save-icon" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M5 3H17L21 7V21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3Z" fill="#2563EB"/>
           <path d="M7 5H15V10H7V5Z" fill="#FFFFFF"/>
           <path d="M8 14H16C16.6 14 17 14.4 17 15V21H7V15C7 14.4 7.4 14 8 14Z" fill="#DBEAFE"/>
@@ -1253,3 +1259,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+/* Document Save is available in TinyMCE only while fullscreen is active. */
+.chamilo-document-tinymce :deep(.tox.tox-tinymce:not(.tox-fullscreen) .tox-tbtn:has(.chamilo-document-save-icon)) {
+  display: none;
+}
+</style>

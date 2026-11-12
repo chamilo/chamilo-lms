@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Service\CourseReporting;
 
 use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
+use Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit;
 use DateTimeImmutable;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
@@ -48,6 +49,7 @@ final class CourseReportingSectionQueryService
     public function __construct(
         private readonly Connection $connection,
         private readonly ReportIpVisibility $reportIpVisibility,
+        private readonly SessionTimeLimit $sessionTimeLimit,
     ) {}
 
     /**
@@ -1761,11 +1763,7 @@ final class CourseReportingSectionQueryService
                         CASE
                             WHEN access_log.logout_course_date IS NOT NULL
                             THEN GREATEST(
-                                TIMESTAMPDIFF(
-                                    SECOND,
-                                    access_log.login_course_date,
-                                    access_log.logout_course_date
-                                ),
+                                '.$this->sessionTimeLimit->sql('access_log.login_course_date', 'access_log.logout_course_date').',
                                 0
                             )
                             ELSE 0
@@ -2156,7 +2154,7 @@ final class CourseReportingSectionQueryService
             'SELECT COALESCE(SUM(
                     CASE
                         WHEN access_log.logout_course_date IS NOT NULL
-                        THEN GREATEST(TIMESTAMPDIFF(SECOND, access_log.login_course_date, access_log.logout_course_date), 0)
+                        THEN GREATEST('.$this->sessionTimeLimit->sql('access_log.login_course_date', 'access_log.logout_course_date').', 0)
                         ELSE 0
                     END
                 ), 0)
@@ -2277,7 +2275,7 @@ final class CourseReportingSectionQueryService
                     CASE
                         WHEN logout_course_date IS NOT NULL
                         THEN GREATEST(
-                            TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date),
+                            '.$this->sessionTimeLimit->sql('login_course_date', 'logout_course_date').',
                             0
                         )
                         ELSE 0
@@ -2306,7 +2304,7 @@ final class CourseReportingSectionQueryService
             'SELECT COALESCE(SUM(
                     CASE
                         WHEN logout_course_date IS NOT NULL
-                        THEN GREATEST(TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date), 0)
+                        THEN GREATEST('.$this->sessionTimeLimit->sql('login_course_date', 'logout_course_date').', 0)
                         ELSE 0
                     END
                 ), 0)

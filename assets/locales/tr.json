@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Veritaban\u0131 sunucusu y\u00fck\u00fc metriklerini g\u00f6stermek i\u00e7in t\u0131klay\u0131n",
     "Threads connected": "Ba\u011fl\u0131 i\u015f par\u00e7ac\u0131klar\u0131",
     "Temporary tables on disk": "Diskteki ge\u00e7ici tablolar",
-    "Privilege scope": "Yetki kapsam\u0131",
-    "Not measurable with the current database user": "Mevcut veritaban\u0131 kullan\u0131c\u0131s\u0131yla \u00f6l\u00e7\u00fclemez",
     "Uptime": "\u00c7al\u0131\u015fma s\u00fcresi",
     "Queries per second": "Saniyedeki sorgu say\u0131s\u0131",
     "Slow queries": "Yava\u015f sorgular",
@@ -4616,5 +4614,7 @@
     "Saved.": "Kaydedildi.",
     "You have tried to resolve this exercise earlier": "Bu al\u0131\u015ft\u0131rmay\u0131 daha \u00f6nce \u00e7\u00f6zmeye \u00e7al\u0131\u015ft\u0131n\u0131z",
     "Disable new test attempts": "Yeni test denemelerini devre d\u0131\u015f\u0131 b\u0131rak",
-    "This skill cannot be acquired": "Bu beceri kazan\u0131lamaz"
+    "This skill cannot be acquired": "Bu beceri kazan\u0131lamaz",
+    "Validated": "Onayland\u0131",
+    "Not validated": "Onaylanmad\u0131"
 }

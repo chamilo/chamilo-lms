@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Haga clic para mostrar las m\u00e9tricas de carga del servidor de base de datos",
     "Threads connected": "Hilos conectados",
     "Temporary tables on disk": "Tablas temporales en disco",
-    "Privilege scope": "\u00c1mbito de privilegios",
-    "Not measurable with the current database user": "No medible con el usuario actual de la base de datos",
     "Uptime": "Tiempo de actividad",
     "Queries per second": "Consultas por segundo",
     "Slow queries": "Consultas lentas",
@@ -4616,5 +4614,7 @@
     "Saved.": "Guardado.",
     "You have tried to resolve this exercise earlier": "Ya has intentado resolver este ejercicio anteriormente",
     "Disable new test attempts": "Deshabilitar nuevos intentos de prueba",
-    "This skill cannot be acquired": "Esta competencia no se puede adquirir"
+    "This skill cannot be acquired": "Esta competencia no se puede adquirir",
+    "Validated": "Validado",
+    "Not validated": "No validado"
 }

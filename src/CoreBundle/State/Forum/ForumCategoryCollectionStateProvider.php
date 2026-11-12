@@ -79,9 +79,7 @@ final class ForumCategoryCollectionStateProvider implements ProviderInterface
     {
         $this->assertForumMemberAccess($this->security, 'You are not allowed to access forum categories.');
 
-        $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
+        [$course, $session, $group] = $this->getForumContext($this->entityManager, $this->cidReqHelper, $this->security);
         $parentNode = $this->getParentNode($this->entityManager, $request);
         $showHidden = $this->isAllowedToEditHelper->check(coach: true);
         $languageField = $this->getForumCategoryLanguageField();

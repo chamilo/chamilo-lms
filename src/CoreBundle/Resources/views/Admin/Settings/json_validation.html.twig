@@ -1,0 +1,83 @@
+{# Shared by the settings category and search pages. Only JSON-specific textareas are marked. #}
+<script>
+  (() => {
+    const invalidJsonMessage = '{{ 'Invalid JSON syntax'|trans|e('js') }}';
+    const validationDelay = 3000;
+
+    function initialize() {
+      const fields = Array.from(document.querySelectorAll('textarea[data-json-setting="true"]'));
+      const forms = new Map();
+
+      for (const field of fields) {
+        if (field.disabled || !field.form) {
+          continue;
+        }
+
+        const errorElement = document.getElementById(`${field.id}_json_validation_error`);
+        if (!errorElement) {
+          continue;
+        }
+
+        const originalDescription = field.getAttribute('aria-describedby');
+        let timer;
+
+        function validate() {
+          clearTimeout(timer);
+
+          try {
+            if (field.value.trim()) {
+              JSON.parse(field.value);
+            }
+
+            errorElement.textContent = '';
+            errorElement.classList.add('hidden');
+            field.removeAttribute('aria-invalid');
+            if (originalDescription === null) {
+              field.removeAttribute('aria-describedby');
+            } else {
+              field.setAttribute('aria-describedby', originalDescription);
+            }
+
+            return true;
+          } catch (error) {
+            errorElement.textContent = `${invalidJsonMessage}: ${error.message}`;
+            errorElement.classList.remove('hidden');
+            field.setAttribute('aria-invalid', 'true');
+            field.setAttribute('aria-describedby', [originalDescription, errorElement.id].filter(Boolean).join(' '));
+
+            return false;
+          }
+        }
+
+        field.addEventListener('input', () => {
+          clearTimeout(timer);
+          timer = setTimeout(validate, validationDelay);
+        });
+
+        if (!forms.has(field.form)) {
+          forms.set(field.form, []);
+        }
+        forms.get(field.form).push({ field, validate });
+
+        // Show invalid values already stored in settings, without validating on every keypress.
+        timer = setTimeout(validate, validationDelay);
+      }
+
+      for (const [form, validators] of forms) {
+        form.addEventListener('submit', (event) => {
+          const invalid = validators.filter(({ field, validate }) => !field.disabled && !validate());
+          if (invalid.length) {
+            event.preventDefault();
+            invalid[0].field.focus();
+          }
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initialize, { once: true });
+    } else {
+      initialize();
+    }
+  })();
+</script>

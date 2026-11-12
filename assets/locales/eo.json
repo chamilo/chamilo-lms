@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Klaku por montri datumbazajn servilajn \u015dar\u011dajn metrikojn",
     "Threads connected": "Konektitaj fadenoj",
     "Temporary tables on disk": "Provizoraj tabeloj sur disko",
-    "Privilege scope": "Privilegia amplekso",
-    "Not measurable with the current database user": "Ne mezurebla kun la nuna datumbaza uzanto",
     "Uptime": "Funkciada tempo",
     "Queries per second": "Demandoj por sekundo",
     "Slow queries": "Malrapidaj demandoj",
@@ -4616,5 +4614,7 @@
     "Saved.": "Konservita.",
     "You have tried to resolve this exercise earlier": "Vi provis solvi \u0109i tiun ekzercon pli frue",
     "Disable new test attempts": "Malhelpi novajn provojn de testoj",
-    "This skill cannot be acquired": "\u0108i tiu kapablo ne povas esti akirita"
+    "This skill cannot be acquired": "\u0108i tiu kapablo ne povas esti akirita",
+    "Validated": "Validita",
+    "Not validated": "Ne validita"
 }

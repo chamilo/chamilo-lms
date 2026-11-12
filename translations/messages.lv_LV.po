@@ -39122,12 +39122,6 @@ msgstr "Savienotās pavedienu"
 msgid "Temporary tables on disk"
 msgstr "Pagaidu tabulas diskā"
 
-msgid "Privilege scope"
-msgstr "Privileģiju apjoms"
-
-msgid "Not measurable with the current database user"
-msgstr "Nav izmērāms ar pašreizējo datu bāzes lietotāju"
-
 msgid "Uptime"
 msgstr "Darbības laiks"
 

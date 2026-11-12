@@ -39117,12 +39117,6 @@ msgstr "Nyuzi zilizounganishwa"
 msgid "Temporary tables on disk"
 msgstr "Majedwali ya muda kwenye diski"
 
-msgid "Privilege scope"
-msgstr "Wigo wa haki"
-
-msgid "Not measurable with the current database user"
-msgstr "Haiwezi kupimwa na mtumiaji wa hifadhidata wa sasa"
-
 msgid "Uptime"
 msgstr "Muda wa kufanya kazi"
 

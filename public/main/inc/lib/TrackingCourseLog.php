@@ -1495,6 +1495,8 @@ class TrackingCourseLog
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $userCondition = self::buildUserIdCondition($userIds, 'ca.user_id');
 
+        $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
+        $durationSql = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::sqlForSeconds('ca.login_course_date', 'ca.logout_course_date', $maxSeconds);
         $sql = "SELECT
                     u.id AS user_id,
                     u.firstname,
@@ -1506,7 +1508,7 @@ class TrackingCourseLog
                     SUM(
                         CASE
                             WHEN UNIX_TIMESTAMP(ca.logout_course_date) > UNIX_TIMESTAMP(ca.login_course_date)
-                            THEN UNIX_TIMESTAMP(ca.logout_course_date) - UNIX_TIMESTAMP(ca.login_course_date)
+                            THEN $durationSql
                             ELSE 0
                         END
                     ) AS total_seconds

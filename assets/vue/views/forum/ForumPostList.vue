@@ -65,6 +65,15 @@
         </select>
       </label>
       <BaseButton
+        v-if="canManageThread && !isLearningPathContext"
+        :label="'desc' === postsOrder ? t('Oldest first') : t('Newest first')"
+        icon="swap-vertical"
+        only-icon
+        size="small"
+        type="primary-text"
+        @click="togglePostsOrder"
+      />
+      <BaseButton
         v-if="thread?.canToggleSticky"
         :label="thread?.threadSticky ? t('Remove sticky') : t('Make sticky')"
         icon="tag-outline"
@@ -609,10 +618,14 @@ const baseQuery = computed(() => ({
 const chosenViewType = ref(
   ["flat", "threaded", "nested"].includes(String(route.query.view || "")) ? String(route.query.view) : null,
 )
+// Teachers can list the posts from the newest, to follow the latest activity of a long thread
+const postsOrder = ref("asc")
+const canManageThread = ref(false)
 const threadPostsQuery = computed(() => ({
   ...baseQuery.value,
   origin: isLearningPathContext.value ? "learnpath" : null,
   view: chosenViewType.value,
+  order: "desc" === postsOrder.value ? "desc" : null,
 }))
 const hasEditMessage = computed(() => stripTags(editForm.text).trim().length > 0)
 const viewType = ref(
@@ -667,6 +680,11 @@ function getDisplayParentId(post) {
  */
 function changeViewType() {
   chosenViewType.value = viewType.value
+  loadPosts()
+}
+
+function togglePostsOrder() {
+  postsOrder.value = "desc" === postsOrder.value ? "asc" : "desc"
   loadPosts()
 }
 
@@ -1063,6 +1081,7 @@ async function loadPosts() {
 
     forum.value = data.forum
     thread.value = { ...(data.thread || {}), canReply: Boolean(data.canReply) }
+    canManageThread.value = Boolean(data.canManageThread)
     posts.value = data.posts || []
     updatePagination(data, 1)
     if (!route.query.view && forum.value?.defaultView) {

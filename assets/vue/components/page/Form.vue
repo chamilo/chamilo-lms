@@ -75,6 +75,8 @@
       />
     </div>
 
+    <PageLayoutSchema class="mt-8" />
+
     <Dialog
       v-model:visible="previewVisible"
       :header="t('Preview')"
@@ -147,6 +149,7 @@ import isEmpty from "lodash/isEmpty"
 import { useI18n } from "vue-i18n"
 import pageCategoryService from "../../services/pageCategoryService"
 import BaseTinyEditor from "../basecomponents/BaseTinyEditor.vue"
+import PageLayoutSchema from "./PageLayoutSchema.vue"
 
 const props = defineProps({
   modelValue: { type: Object, default: () => ({}) },

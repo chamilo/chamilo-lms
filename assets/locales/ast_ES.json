@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Calca pa amosar les m\u00e9tricas de carga del sirvidor de base de datos",
     "Threads connected": "Filos conectaos",
     "Temporary tables on disk": "Tables temporales en discu",
-    "Privilege scope": "\u00c1mbitu de privilexos",
-    "Not measurable with the current database user": "Nun se pue midir col usuariu actual de la base de datos",
     "Uptime": "Tiempu d'activid\u00e1",
     "Queries per second": "Consultes per segundu",
     "Slow queries": "Consultes lentes",
@@ -4616,5 +4614,7 @@
     "Saved.": "Guard\u00e1u.",
     "You have tried to resolve this exercise earlier": "Ya intentesti resolver esti exerciciu enantes",
     "Disable new test attempts": "Desactivar nuevos env\u00edos de proba",
-    "This skill cannot be acquired": "Esta competencia nun se pue adquirir"
+    "This skill cannot be acquired": "Esta competencia nun se pue adquirir",
+    "Validated": "Valid\u00e1u",
+    "Not validated": "En valid\u00e1u"
 }

@@ -5463,8 +5463,10 @@ class UserManager
             $whereConditions["AND logout_course_date <= DATE_ADD('?', INTERVAL 1 DAY)) "] = $until;
         }
 
+        $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
+        $durationSql = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::sqlForSeconds('login_course_date', 'logout_course_date', $maxSeconds);
         $trackResult = Database::select(
-            'SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as total_time',
+            "SUM($durationSql) as total_time",
             $trackCourseAccessTable,
             [
                 'where' => $whereConditions,

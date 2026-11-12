@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Service\BuyCoursesPayPalIpnValidation;
+
 /**
  * PayPal IPN endpoint for BuyCourses recurring service payments.
  *
@@ -28,13 +30,14 @@ $respond = static function (string $message, int $statusCode = 200): void {
     http_response_code($statusCode);
     header('Content-Type: text/plain; charset=UTF-8');
     echo $message;
+
     exit;
 };
 
 $log = static function (string $message, array $context = []): void {
     $suffix = '';
     if (!empty($context)) {
-        $suffix = ' | '.json_encode($context, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $suffix = ' | '.json_encode($context, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
     }
 
     error_log('[BuyCourses][Recurring IPN] '.$message.$suffix);
@@ -45,13 +48,10 @@ if (empty($postData)) {
     $respond('EMPTY', 400);
 }
 
-$verifyBody = 'cmd=_notify-validate';
-foreach ($postData as $key => $value) {
-    if (is_array($value)) {
-        continue;
-    }
-
-    $verifyBody .= '&'.urlencode((string) $key).'='.urlencode((string) $value);
+$verifyBody = BuyCoursesPayPalIpnValidation::buildPostback($rawBody);
+if (null === $verifyBody) {
+    $log('Missing original IPN body; cannot authenticate PayPal notification.');
+    $respond('EMPTY', 400);
 }
 
 $verifyUrl = $isSandbox
@@ -59,16 +59,16 @@ $verifyUrl = $isSandbox
     : 'https://ipnpb.paypal.com/cgi-bin/webscr';
 
 $ch = curl_init($verifyUrl);
-curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $verifyBody);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
-curl_setopt($ch, CURLOPT_FORBID_REUSE, true);
-curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-curl_setopt($ch, CURLOPT_HTTPHEADER, ['Connection: Close']);
+curl_setopt($ch, \CURLOPT_HTTP_VERSION, \CURL_HTTP_VERSION_1_1);
+curl_setopt($ch, \CURLOPT_POST, true);
+curl_setopt($ch, \CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, \CURLOPT_POSTFIELDS, $verifyBody);
+curl_setopt($ch, \CURLOPT_SSL_VERIFYPEER, true);
+curl_setopt($ch, \CURLOPT_SSL_VERIFYHOST, 2);
+curl_setopt($ch, \CURLOPT_FORBID_REUSE, true);
+curl_setopt($ch, \CURLOPT_CONNECTTIMEOUT, 30);
+curl_setopt($ch, \CURLOPT_TIMEOUT, 60);
+curl_setopt($ch, \CURLOPT_HTTPHEADER, ['Connection: Close']);
 
 $verificationResponse = curl_exec($ch);
 $curlError = curl_error($ch);
@@ -139,7 +139,7 @@ $profileIdSql = Database::escape_string($profileId);
 $txnIdSql = Database::escape_string($txnId);
 $txnTypeSql = Database::escape_string($txnType);
 $paymentStatusSql = Database::escape_string($paymentStatus);
-$rawPayloadSql = Database::escape_string(json_encode($postData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+$rawPayloadSql = Database::escape_string(json_encode($postData, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE));
 $nowSql = Database::escape_string(api_get_utc_datetime());
 
 $insertResult = Database::query(
@@ -158,7 +158,7 @@ if (false === $insertResult) {
     $respond('LOG_ERROR', 500);
 }
 
-$duplicateCheck = Database::query("SELECT ROW_COUNT() AS inserted_count");
+$duplicateCheck = Database::query('SELECT ROW_COUNT() AS inserted_count');
 $duplicateRow = $duplicateCheck ? Database::fetch_array($duplicateCheck, 'ASSOC') : ['inserted_count' => 1];
 if (0 === (int) ($duplicateRow['inserted_count'] ?? 1)) {
     $log('Duplicate IPN event ignored.', [
@@ -210,6 +210,23 @@ if (empty($sale)) {
 $serviceSaleId = (int) ($sale['id'] ?? 0);
 $durationDays = max(1, (int) ($sale['duration_days'] ?? 1));
 
+// Delayed profile status events must not undo an explicit cancellation.
+$isRenewalCancelled = BuyCoursesPayPalIpnValidation::hasCancelledRenewal(
+    (int) ($sale['recurring_payment'] ?? 0),
+    $sale['cancelled_at'] ?? null,
+    BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED
+);
+if ($isRenewalCancelled && (in_array($txnType, [
+    'recurring_payment_failed',
+    'recurring_payment_skipped',
+    'recurring_payment_profile_created',
+], true) || 'suspended' === $profileStatus)) {
+    $log('Delayed PayPal profile status ignored for explicitly cancelled renewal.', [
+        'service_sale_id' => $serviceSaleId,
+        'event_key' => $eventKey,
+    ]);
+    $respond('IGNORED');
+}
 
 $decodeContext = static function (?string $contextJson): array {
     if (empty($contextJson)) {
@@ -222,7 +239,7 @@ $decodeContext = static function (?string $contextJson): array {
 };
 
 $encodeContextForSql = static function (array $context): string {
-    return Database::escape_string(json_encode($context, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+    return Database::escape_string(json_encode($context, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE));
 };
 
 $reactivateCoursesForSubscriptionSale = static function (
@@ -341,13 +358,22 @@ $extendServiceSale = static function (array $saleRow) use ($plugin, $serviceSale
     $newEnd = $baseDate->modify('+'.$durationDays.' days');
     $newEndSql = $newEnd->format('Y-m-d H:i:s');
 
+    $renewalWasCancelled = BuyCoursesPayPalIpnValidation::hasCancelledRenewal(
+        (int) ($saleRow['recurring_payment'] ?? 0),
+        $saleRow['cancelled_at'] ?? null,
+        BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_CANCELLED
+    );
+
     $updateValues = [
         'date_end' => $newEndSql,
         'next_charge_date' => $newEndSql,
-        'recurring_payment' => BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED,
-        'cancelled_at' => null,
         'status' => BuyCoursesPlugin::SERVICE_STATUS_COMPLETED,
     ];
+
+    if (!$renewalWasCancelled) {
+        $updateValues['recurring_payment'] = BuyCoursesPlugin::SERVICE_RECURRING_PAYMENT_ENABLED;
+        $updateValues['cancelled_at'] = null;
+    }
 
     if ('' !== $txnId) {
         $updateValues['gateway_transaction_id'] = $txnId;
@@ -444,6 +470,91 @@ $buildGatewayAuditData = static function () use ($eventKey, $txnType, $paymentSt
 };
 
 if ('recurring_payment' === $txnType && 'completed' === $paymentStatus) {
+    $merchantUser = trim((string) ($paypalParams['username'] ?? ''));
+    $merchantPassword = trim((string) ($paypalParams['password'] ?? ''));
+    $merchantSignature = trim((string) ($paypalParams['signature'] ?? ''));
+    $currency = $plugin->getCurrency((int) ($sale['currency_id'] ?? 0));
+    $expectedCurrency = (string) ($currency['iso_code'] ?? '');
+    $expectedAmount = (string) ($sale['recurring_amount'] ?? $sale['price'] ?? '');
+
+    if ('' === $txnId || '' === $merchantUser || '' === $merchantPassword || '' === $merchantSignature
+        || '' === $expectedCurrency || '' === $expectedAmount
+    ) {
+        $releaseEventForRetry();
+        $log('Cannot verify recurring payment: missing transaction, gateway configuration or sale pricing.', [
+            'service_sale_id' => $serviceSaleId,
+            'event_key' => $eventKey,
+        ]);
+        $respond('PAYMENT_VERIFICATION_UNAVAILABLE', 503);
+    }
+
+    // Use merchant API credentials to confirm that the transaction belongs to this
+    // merchant, independently of the verified IPN message. No PHP session is opened.
+    $detailsEndpoint = $isSandbox
+        ? 'https://api-3t.sandbox.paypal.com/nvp'
+        : 'https://api-3t.paypal.com/nvp';
+    $detailsRequest = http_build_query([
+        'METHOD' => 'GetTransactionDetails',
+        'VERSION' => '93',
+        'USER' => $merchantUser,
+        'PWD' => $merchantPassword,
+        'SIGNATURE' => $merchantSignature,
+        'TRANSACTIONID' => $txnId,
+    ], '', '&', \PHP_QUERY_RFC1738);
+    $detailsHandle = curl_init($detailsEndpoint);
+    curl_setopt($detailsHandle, \CURLOPT_HTTP_VERSION, \CURL_HTTP_VERSION_1_1);
+    curl_setopt($detailsHandle, \CURLOPT_POST, true);
+    curl_setopt($detailsHandle, \CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($detailsHandle, \CURLOPT_POSTFIELDS, $detailsRequest);
+    curl_setopt($detailsHandle, \CURLOPT_SSL_VERIFYPEER, true);
+    curl_setopt($detailsHandle, \CURLOPT_SSL_VERIFYHOST, 2);
+    curl_setopt($detailsHandle, \CURLOPT_CONNECTTIMEOUT, 10);
+    curl_setopt($detailsHandle, \CURLOPT_TIMEOUT, 20);
+    $detailsResponse = curl_exec($detailsHandle);
+    $detailsHttpStatus = (int) curl_getinfo($detailsHandle, \CURLINFO_HTTP_CODE);
+    curl_close($detailsHandle);
+
+    if (false === $detailsResponse || 200 !== $detailsHttpStatus) {
+        $releaseEventForRetry();
+        $log('Cannot retrieve recurring payment transaction from PayPal merchant API.', [
+            'service_sale_id' => $serviceSaleId,
+            'event_key' => $eventKey,
+            'http_status' => $detailsHttpStatus,
+        ]);
+        $respond('PAYMENT_VERIFICATION_UNAVAILABLE', 503);
+    }
+
+    $transactionDetails = [];
+    parse_str((string) $detailsResponse, $transactionDetails);
+    if (!in_array(strtoupper(trim((string) ($transactionDetails['ACK'] ?? ''))), [
+        'SUCCESS',
+        'SUCCESSWITHWARNING',
+    ], true)) {
+        $releaseEventForRetry();
+        $log('PayPal merchant API did not confirm recurring payment details.', [
+            'service_sale_id' => $serviceSaleId,
+            'event_key' => $eventKey,
+            'api_error_code' => (string) ($transactionDetails['L_ERRORCODE0'] ?? 'unknown'),
+        ]);
+        $respond('PAYMENT_VERIFICATION_UNAVAILABLE', 503);
+    }
+
+    $validationError = BuyCoursesPayPalIpnValidation::validateRecurringPayment(
+        $postData,
+        $transactionDetails,
+        $expectedAmount,
+        $expectedCurrency
+    );
+    if (null !== $validationError) {
+        $releaseEventForRetry();
+        $log('Verified IPN rejected because merchant transaction details did not match.', [
+            'service_sale_id' => $serviceSaleId,
+            'event_key' => $eventKey,
+            'reason' => $validationError,
+        ]);
+        $respond('PAYMENT_MISMATCH', 422);
+    }
+
     if (!$extendServiceSale($sale)) {
         $releaseEventForRetry();
         $respond('PROCESSING_ERROR', 500);

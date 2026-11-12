@@ -3671,8 +3671,6 @@
     "Click to show database server load metrics": "Klikk for \u00e5 vise database-serverbelastningsm\u00e5linger",
     "Threads connected": "Tilkoblede tr\u00e5der",
     "Temporary tables on disk": "Midlertidige tabeller p\u00e5 disk",
-    "Privilege scope": "Rettighetsomfang",
-    "Not measurable with the current database user": "Ikke m\u00e5lbart med gjeldende databasebruker",
     "Uptime": "Oppetid",
     "Queries per second": "Sp\u00f8rringer per sekund",
     "Slow queries": "Tregere sp\u00f8rringer",

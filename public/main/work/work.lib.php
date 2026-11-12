@@ -4422,23 +4422,31 @@ function deleteCommentFile($id, $courseInfo = [])
  */
 function addWorkComment($courseInfo, $userId, $parentWork, CStudentPublication $studentPublication, $data)
 {
-    $fileData = isset($data['attachment']) ? $data['attachment'] : null;
-    // If no attachment and no comment then don't save comment
-    if (empty($fileData['name']) && empty($data['comment'])) {
-        return false;
-    }
-    $courseId = $courseInfo['real_id'];
-    $courseEntity = api_get_course_entity($courseId);
-
     $request = Container::getRequest();
     $file = $request->files->get('attachment');
     if (is_array($file)) {
-        $file = $file[0];
+        $file = $file[0] ?? null;
     }
 
+    $canAttach = api_is_platform_admin() || api_is_coach() || api_is_allowed_to_edit(false, false, true);
+    if ($file && !$canAttach) {
+        api_not_allowed(true);
+    }
+
+    $commentText = (string) ($data['comment'] ?? '');
+    if (!$canAttach) {
+        $commentText = strip_tags($commentText);
+    }
+
+    if (!$file && '' === trim($commentText)) {
+        return false;
+    }
+
+    $courseId = $courseInfo['real_id'];
+    $courseEntity = api_get_course_entity($courseId);
     $em = Database::getManager();
     $comment = (new CStudentPublicationComment())
-        ->setComment($data['comment'])
+        ->setComment($commentText)
         ->setUser(api_get_user_entity($userId))
         ->setPublication($studentPublication)
         ->setParent($studentPublication)
@@ -4485,7 +4493,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, CStudentPublication $
             api_get_session_entity(),
             api_get_group_entity(),
             api_get_user_entity($userId),
-            (string) ($data['comment'] ?? '')
+            $commentText
         );
     }
 
@@ -4575,8 +4583,12 @@ function getWorkCommentForm(CStudentPublication $work, $workParent)
         $work->getUser()->getId(),
         $id
     );
-    $form->addHtmlEditor('comment', get_lang('Comment'), false);
-    $form->addFile('attachment', get_lang('Attachment'));
+    if ($isCourseManager) {
+        $form->addHtmlEditor('comment', get_lang('Comment'), false);
+        $form->addFile('attachment', get_lang('Attachment'));
+    } else {
+        $form->addTextarea('comment', get_lang('Comment'), ['rows' => 5]);
+    }
     $form->addElement('hidden', 'iid', $id);
     $form->addElement('hidden', 'work_sec_token', workActionToken());
 

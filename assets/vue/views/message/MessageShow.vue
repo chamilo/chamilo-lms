@@ -114,6 +114,7 @@
     <p v-text="abbreviatedDatetime(item.sendDate)" />
 
     <div
+      ref="messageBody"
       class="tiny-content"
       dir="auto"
       v-html="sanitizeHtml(item.content)"
@@ -155,7 +156,7 @@
 <script setup>
 import { useStore } from "vuex"
 import Loading from "../../components/Loading.vue"
-import { computed, ref } from "vue"
+import { computed, nextTick, ref, watch } from "vue"
 import isEmpty from "lodash/isEmpty"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -176,6 +177,7 @@ import { useNotification } from "../../composables/notification"
 import { useMessageReceiverFormatter } from "../../composables/message/messageFormatter"
 import { MESSAGE_TYPE_INBOX } from "../../constants/entity/message"
 import { sanitizeHtml } from "../../utils/sanitizeHtml"
+import { renderMessageFunctionGraphs } from "../../utils/messageFunctionGraph"
 
 const { requireConfirmation } = useConfirmation()
 const { t } = useI18n()
@@ -199,6 +201,15 @@ if (isEmpty(id)) {
 const isLoading = computed(() => store.state.message.isLoading)
 
 const item = ref(null)
+
+const messageBody = ref(null)
+watch(
+  () => item.value?.content,
+  async () => {
+    await nextTick()
+    renderMessageFunctionGraphs(messageBody.value)
+  },
+)
 const myReceiver = ref(null)
 const notification = useNotification()
 

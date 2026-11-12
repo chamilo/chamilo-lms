@@ -137,7 +137,7 @@
         <template #body="{ data }">
           <div class="flex justify-center gap-2">
             <BaseButton
-              v-if="getSubmissionPreviewUrl(data)"
+              v-if="isHtmlSubmission(data) || getSubmissionPreviewUrl(data)"
               icon="link-external"
               size="small"
               only-icon
@@ -246,12 +246,12 @@
     v-model="showMoveDialog"
     :submission="selectedSubmission"
     :currentAssignmentId="props.assignmentId"
-    @moved="loadData"
+    @moved="onSubmissionsChanged"
   />
 </template>
 
 <script setup>
-import { nextTick, watch, reactive, ref, computed, onMounted } from "vue"
+import { nextTick, watch, reactive, ref, computed } from "vue"
 import { useI18n } from "vue-i18n"
 import Column from "primevue/column"
 import BaseButton from "../basecomponents/BaseButton.vue"
@@ -260,7 +260,6 @@ import { useFormatDate } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import UppyModalUploader from "./UppyModalUploader.vue"
-import resourceLinkService from "../../services/resourcelink"
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import EditStudentSubmissionForm from "./EditStudentSubmissionForm.vue"
 import CorrectAndRateModal from "./CorrectAndRateModal.vue"
@@ -270,13 +269,25 @@ import { storeToRefs } from "pinia"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import { useSecurityStore } from "../../store/securityStore"
+import { getCourseContext } from "../../utils/courseContext"
+import {
+  getAssignmentSortStorageKey,
+  loadAssignmentSort,
+  saveAssignmentSort,
+} from "../../utils/assignmentSubmissionSort"
 
 const props = defineProps({
   assignmentId: {
     type: Number,
     required: true,
   },
+  userId: {
+    type: Number,
+    default: null,
+  },
 })
+
+const emit = defineEmits(["submissions-changed"])
 
 const { t } = useI18n()
 const { abbreviatedDatetime } = useFormatDate()
@@ -306,7 +317,22 @@ const { course, session } = storeToRefs(cidReqStore)
 const platform = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 const securityStore = useSecurityStore()
+const sortableFields = ["user.fullName", "title", "sentDate"]
+const sortStorageKey = computed(() =>
+  getAssignmentSortStorageKey("files", securityStore.user?.id, getCourseContext()),
+)
 
+watch(
+  sortStorageKey,
+  (key) => {
+    if (!key) return
+    const saved = loadAssignmentSort(key, sortableFields, "sentDate", -1)
+    sortField.value = saved.field
+    sortOrder.value = saved.order
+    if (loadParams.itemsPerPage) loadData()
+  },
+  { immediate: true },
+)
 
 const aiHelpersEnabled = computed(() => {
   const v = String(platform.getSetting("ai_helpers.enable_ai_helpers"))
@@ -324,7 +350,6 @@ const canUseAiTaskGrader = computed(() => {
   const notStudentView = !platform.isStudentViewActive
   return !!(canEdit && notStudentView && aiHelpersEnabled.value && taskGraderEnabled.value)
 })
-
 
 watch(
   loadParams,
@@ -348,6 +373,7 @@ async function loadData() {
       page: loadParams.page,
       itemsPerPage: loadParams.itemsPerPage,
       order: buildOrderFromSort(),
+      userId: props.userId,
     })
 
     submissions.value = response["hydra:member"]
@@ -359,18 +385,26 @@ async function loadData() {
   }
 }
 
+async function onSubmissionsChanged() {
+  await loadData()
+  emit("submissions-changed")
+}
+
 function onPage(event) {
   loadParams.page = event.page + 1
   loadParams.itemsPerPage = event.rows
 }
 
 function onSort(event) {
-  sortField.value = event.sortField ?? sortField.value
-  sortOrder.value = event.sortOrder ?? sortOrder.value
+  if (!sortableFields.includes(event.sortField)) return
+
+  sortField.value = event.sortField
+  sortOrder.value = event.sortOrder === -1 ? -1 : 1
+  saveAssignmentSort(sortStorageKey.value, sortField.value, sortOrder.value)
+
+  const isFirstPage = loadParams.page === 1
   loadParams.page = 1
-  if (loadParams.itemsPerPage) {
-    loadData()
-  }
+  if (isFirstPage && loadParams.itemsPerPage) loadData()
 }
 
 /**
@@ -436,43 +470,40 @@ function closeUploader() {
 }
 
 async function viewSubmission(item) {
-  if (!item || !item.firstResourceLink) {
-    notification.showErrorNotification(t("Invalid submission"))
-    return
-  }
-
-  const resourceLink = item.firstResourceLink
-
-  if (!resourceLink["@id"]) {
-    if (item.resourceLinkListFromEntity?.length) {
-      const firstLink = item.resourceLinkListFromEntity[0]
-      if (firstLink.id) {
-        resourceLink["@id"] = `/api/resource_links/${firstLink.id}`
-      } else {
-        notification.showErrorNotification(t("Invalid resource link ID"))
-        return
-      }
-    } else {
-      notification.showErrorNotification(t("No resource link entity found"))
-      return
-    }
-  }
-
-  if (RESOURCE_LINK_PUBLISHED === resourceLink.visibility) {
-    resourceLink.visibility = RESOURCE_LINK_DRAFT
-  } else if (RESOURCE_LINK_DRAFT === resourceLink.visibility) {
-    resourceLink.visibility = RESOURCE_LINK_PUBLISHED
-  } else {
+  const link = item?.firstResourceLink
+  const currentVisibility = Number(link?.visibility)
+  if (![RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED].includes(currentVisibility)) {
     notification.showErrorNotification(t("Can not change visibility"))
     return
   }
 
+  const linkIri = String(link?.["@id"] || "")
+  const iriId = linkIri.match(/\/resource_links\/(\d+)$/)?.[1]
+  const resourceLinkId = Number(iriId || link?.id || item?.resourceLinkListFromEntity?.[0]?.id)
+  if (!Number.isSafeInteger(resourceLinkId) || resourceLinkId <= 0) {
+    notification.showErrorNotification(t("Invalid resource link ID"))
+    return
+  }
+
+  const submissionId = Number(item?.iid)
+  if (!Number.isSafeInteger(submissionId) || submissionId <= 0) {
+    notification.showErrorNotification(t("Invalid submission"))
+    return
+  }
+
+  const nextVisibility = currentVisibility === RESOURCE_LINK_PUBLISHED ? RESOURCE_LINK_DRAFT : RESOURCE_LINK_PUBLISHED
+
   try {
-    await resourceLinkService.update(resourceLink)
+    await cStudentPublicationService.updateSubmissionVisibility(
+      props.assignmentId,
+      submissionId,
+      resourceLinkId,
+      nextVisibility,
+    )
     notification.showSuccessNotification(t("Visibility updated successfully!"))
     await loadData()
-  } catch (e) {
-    notification.showErrorNotification(e)
+  } catch (error) {
+    notification.showErrorNotification(error)
   }
 }
 
@@ -490,7 +521,16 @@ function getSubmissionPreviewUrl(item) {
   return downloadUrl.replace(/\/download(\?.*)?$/, "/view$1")
 }
 
+function isHtmlSubmission(item) {
+  return /\.html?$/i.test(String(item?.title || "").trim())
+}
+
 function openSubmissionPreview(item) {
+  if (isHtmlSubmission(item)) {
+    openCorrectAndRate(item)
+    return
+  }
+
   const previewUrl = getSubmissionPreviewUrl(item)
 
   if (!previewUrl) {
@@ -529,7 +569,7 @@ async function deleteSubmission(item) {
   try {
     await cStudentPublicationService.deleteAssignmentSubmission(item.iid)
     notification.showSuccessNotification(t("Submission deleted successfully!"))
-    await loadData()
+    await onSubmissionsChanged()
   } catch (error) {
     notification.showErrorNotification(error)
   }

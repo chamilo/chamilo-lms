@@ -43,7 +43,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
+use const ENT_HTML5;
+use const ENT_QUOTES;
 use const FILTER_VALIDATE_BOOLEAN;
 use const JSON_THROW_ON_ERROR;
 
@@ -77,12 +80,14 @@ final class ForumPostProcessor implements ProcessorInterface
         private readonly CidReqHelper $cidReqHelper,
         private readonly GradebookLinkManager $gradebookLinkManager,
         private readonly CourseSettingPolicyManager $courseSettingPolicyManager,
+        private readonly TranslatorInterface $translator,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): JsonResponse
     {
-        $request = $this->getCurrentRequest();
+        $request = $this->getCurrentRequest($this->requestStack);
         $operationName = (string) $operation->getName();
+        $this->assertGroupForumAccess($this->security, $this->cidReqHelper->getDoctrineGroupEntity());
 
         return match ($operationName) {
             'create_forum_reply' => $this->createReply($request),
@@ -130,10 +135,8 @@ final class ForumPostProcessor implements ProcessorInterface
 
         $title = $this->getRequiredText($data, 'title', 250);
         $text = $this->getRequiredHtmlText($data, 'text');
-        $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        [$course, $session, $group] = $this->getForumContext($this->entityManager, $this->cidReqHelper, $this->security);
         $this->assertSessionBelongsToCourse($session, $course);
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $this->assertResourceNodeInForumContext(
             $forum->getResourceNode(),
             $course,
@@ -239,12 +242,24 @@ final class ForumPostProcessor implements ProcessorInterface
             $user
         );
 
-        $minimum = $previousPosts >= 1
-            ? $subsequentMinimum
-            : $firstMinimum;
+        $isFirstPost = 0 === $previousPosts;
+        $minimum = $isFirstPost ? $firstMinimum : $subsequentMinimum;
 
-        if ($minimum > 0 && str_word_count($text) < $minimum) {
-            throw new BadRequestHttpException(\sprintf('%d word minimum requirement not met', $minimum));
+        if (0 === $minimum) {
+            return;
+        }
+
+        // Count the words the user wrote, not the HTML tags and attributes around them, and keep
+        // accented letters inside their word
+        $plainText = html_entity_decode(strip_tags(str_replace('<', ' <', $text)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $wordCount = (int) preg_match_all("/[\\p{L}\\p{N}]+(?:['’-][\\p{L}\\p{N}]+)*/u", $plainText);
+
+        if ($wordCount < $minimum) {
+            $message = $isFirstPost
+                ? 'Your first message in this thread must contain at least %d words (currently %d).'
+                : 'Your next messages in this thread must contain at least %d words (currently %d).';
+
+            throw new BadRequestHttpException(\sprintf($this->translator->trans($message), $minimum, $wordCount));
         }
     }
 
@@ -597,10 +612,9 @@ final class ForumPostProcessor implements ProcessorInterface
         $this->assertEditableForumResource($sourceThread->getResourceNode(), $this->security);
         $this->assertEditableForumResource($sourceForum->getResourceNode(), $this->security);
 
-        $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        [$course, $session, $group] = $this->getForumContext($this->entityManager, $this->cidReqHelper, $this->security);
+
         $this->assertSessionBelongsToCourse($session, $course);
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
         $this->assertResourceNodeInForumContext(
             $sourceForum->getResourceNode(),
             $course,
@@ -1233,15 +1247,5 @@ final class ForumPostProcessor implements ProcessorInterface
             array_map('intval', $userIds),
             static fn (int $userId): bool => $userId > 0,
         )));
-    }
-
-    private function getCurrentRequest(): Request
-    {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
-
-        return $request;
     }
 }

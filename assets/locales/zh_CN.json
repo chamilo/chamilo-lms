@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "\u70b9\u51fb\u67e5\u770b\u6570\u636e\u5e93\u670d\u52a1\u5668\u8d1f\u8f7d\u6307\u6807",
     "Threads connected": "\u5df2\u8fde\u63a5\u7ebf\u7a0b",
     "Temporary tables on disk": "\u78c1\u76d8\u4e0a\u7684\u4e34\u65f6\u8868",
-    "Privilege scope": "\u6743\u9650\u8303\u56f4",
-    "Not measurable with the current database user": "\u5f53\u524d\u6570\u636e\u5e93\u7528\u6237\u65e0\u6cd5\u6d4b\u91cf",
     "Uptime": "\u8fd0\u884c\u65f6\u95f4",
     "Queries per second": "\u6bcf\u79d2\u67e5\u8be2\u6570",
     "Slow queries": "\u6162\u67e5\u8be2",
@@ -4616,5 +4614,7 @@
     "Saved.": "\u5df2\u4fdd\u5b58\u3002",
     "You have tried to resolve this exercise earlier": "\u60a8\u4e4b\u524d\u5df2\u5c1d\u8bd5\u5b8c\u6210\u6b64\u7ec3\u4e60",
     "Disable new test attempts": "\u7981\u7528\u65b0\u6d4b\u8bd5\u5c1d\u8bd5",
-    "This skill cannot be acquired": "\u6b64\u6280\u80fd\u65e0\u6cd5\u83b7\u5f97"
+    "This skill cannot be acquired": "\u6b64\u6280\u80fd\u65e0\u6cd5\u83b7\u5f97",
+    "Validated": "\u5df2\u9a8c\u8bc1",
+    "Not validated": "\u672a\u9a8c\u8bc1"
 }

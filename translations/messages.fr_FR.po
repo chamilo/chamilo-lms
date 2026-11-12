@@ -41001,12 +41001,6 @@ msgstr "Threads connectés"
 msgid "Temporary tables on disk"
 msgstr "Tables temporaires sur disque"
 
-msgid "Privilege scope"
-msgstr "Portée des privilèges"
-
-msgid "Not measurable with the current database user"
-msgstr "Non mesurable avec l’utilisateur de base de données actuel"
-
 msgid "Uptime"
 msgstr "Temps de disponibilité"
 
@@ -45147,3 +45141,54 @@ msgstr "Thème de couleurs (aperçu)"
 
 msgid "The themes storage is not writable. Check its file permissions before saving."
 msgstr "Le stockage des thèmes n'est pas accessible en écriture. Vérifiez les permissions des fichiers avant d'enregistrer."
+
+msgid "Your first message in this thread must contain at least %d words (currently %d)."
+msgstr "Votre premier message dans ce fil de discussion doit contenir au moins %d mots (actuellement %d)."
+
+msgid "Your next messages in this thread must contain at least %d words (currently %d)."
+msgstr "Vos messages suivants dans ce fil de discussion doivent contenir au moins %d mots (actuellement %d)."
+
+msgid "Share of the thread's posts"
+msgstr "Part des messages du fil"
+
+msgid "Conversations"
+msgstr "Conversations"
+
+msgid "Published and archived trees are read-only. To make changes, duplicate the tree, edit the new draft, and publish it. Publishing a new tree automatically archives the previously published tree for the same portal."
+msgstr "Les arbres publiés et archivés sont en lecture seule. Pour les modifier, dupliquez l’arbre, modifiez le nouveau brouillon, puis publiez-le. La publication d’un nouvel arbre archive automatiquement l’arbre précédemment publié pour le même portail."
+
+msgid "Use View conversations on any tree to review its conversation logs, even when the count is zero."
+msgstr "Utilisez « Voir les conversations » sur chaque arbre pour consulter son historique, même si aucune conversation n’a encore été enregistrée."
+
+msgid "Download an example file, edit its questions and options, then import it. The examples work without an existing ticket project; add ticket escalation after importing if needed."
+msgstr "Téléchargez un fichier d’exemple, modifiez ses questions et ses options, puis importez-le. Les exemples fonctionnent sans projet de tickets existant ; ajoutez l’escalade vers les tickets après l’importation si nécessaire."
+
+msgid "Download JSON example"
+msgstr "Télécharger l’exemple JSON"
+
+msgid "Download CSV example"
+msgstr "Télécharger l’exemple CSV"
+
+msgid "Page backgrounds"
+msgstr "Arrière-plans des pages"
+
+msgid "Images shown at the bottom of some pages, repeated horizontally. Upload a PNG, JPEG or WebP image (2 MB maximum) to replace one, or hide it."
+msgstr "Images affichées en bas de certaines pages, répétées horizontalement. Importez une image PNG, JPEG ou WebP (2 Mo maximum) pour en remplacer une, ou masquez-la."
+
+msgid "Uploaded image"
+msgstr "Image importée"
+
+msgid "Image of the theme"
+msgstr "Image du thème"
+
+msgid "Restore the image of the theme"
+msgstr "Rétablir l'image du thème"
+
+msgid "Select a PNG, JPEG or WebP image smaller than 2 MB."
+msgstr "Sélectionnez une image PNG, JPEG ou WebP de moins de 2 Mo."
+
+msgid "Delete the uploaded image and restore the image of the theme?"
+msgstr "Supprimer l'image importée et rétablir l'image du thème ?"
+
+msgid "Theme image restored"
+msgstr "Image du thème rétablie"

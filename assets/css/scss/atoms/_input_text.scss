@@ -1,6 +1,7 @@
 .p-inputtext {
   @apply text-body-2 text-gray-90 bg-white border border-solid border-gray-50 transition-colors appearance-none rounded-lg outline-transparent w-full;
-  padding: calc(0.625rem - 1px) calc(0.75rem - 1px);
+  // 42 px tall, like .p-select and the Figma input.
+  padding: calc(0.8125rem - 1px) calc(0.75rem - 1px);
 
   &:enabled {
     @apply hover:border-primary
@@ -48,5 +49,19 @@
 
   &-fluid {
     @apply w-full
+  }
+}
+
+// Firefox gives the text of an input 1 px more than its line-height, so the padding alone does
+// not keep it as tall as .p-select. An input has one line, so a fixed height is safe.
+input.p-inputtext {
+  height: 2.625rem;
+
+  &.p-inputtext-sm {
+    height: 1.75rem;
+  }
+
+  &.p-inputtext-lg {
+    height: 2.5rem;
   }
 }

@@ -210,6 +210,27 @@ final class GradebookLinkSecurityTest extends AbstractApiTest
         $this->assertSame($countBefore, $this->getEntityManager()->getRepository(GradebookLink::class)->count([]));
     }
 
+    /**
+     * The node is viewable by the teacher (it belongs to their own course) but it is not a quiz: only the
+     * check of the linked resource against the link's type and course can refuse it.
+     */
+    public function testTeacherCannotLinkAnOwnCourseNodeThatIsNotOfTheLinkType(): void
+    {
+        $ctx = $this->bootstrap('post_wrong_type');
+        $countBefore = $this->getEntityManager()->getRepository(GradebookLink::class)->count([]);
+
+        $this->request($ctx['teacherB'], 'POST', '/api/gradebook_links?cid='.$ctx['courseB']->getId(), [
+            'type' => 1,
+            'weight' => 5,
+            'course' => '/api/courses/'.$ctx['courseB']->getId(),
+            'category' => '/api/gradebook_categories/'.$ctx['category']->getId(),
+            'resourceNode' => '/api/resource_nodes/'.$ctx['courseB']->getResourceNode()->getId(),
+        ]);
+
+        $this->assertContains(self::getClient()->getResponse()->getStatusCode(), [400, 403]);
+        $this->assertSame($countBefore, $this->getEntityManager()->getRepository(GradebookLink::class)->count([]));
+    }
+
     public function testTeacherCanLinkAResourceOfTheLinkCourse(): void
     {
         $ctx = $this->bootstrap('post_own_resource');

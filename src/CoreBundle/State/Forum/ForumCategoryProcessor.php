@@ -44,26 +44,17 @@ final class ForumCategoryProcessor implements ProcessorInterface
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): CForumCategory|JsonResponse
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
+        $request = $this->getCurrentRequest($this->requestStack);
 
         $payload = $this->getJsonData($request);
         $this->assertTeacher($this->security);
 
         if ('create_forum_category' === $operation->getName()) {
-            $course = $this->getCourse($this->cidReqHelper);
-            $session = $this->cidReqHelper->getDoctrineSessionEntity();
-            $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
-            $parentResourceNodeId = $this->getRequiredInt($payload, 'parentResourceNodeId');
-            $this->assertParentResourceNodeIsWritableInForumContext(
+            [$course, $session, $group, $parentResourceNodeId] = $this->getForumCreationContext(
                 $this->entityManager,
+                $this->cidReqHelper,
                 $this->security,
-                $parentResourceNodeId,
-                $course,
-                $session,
-                $group,
+                $payload,
             );
 
             $category = (new CForumCategory())
@@ -140,10 +131,7 @@ final class ForumCategoryProcessor implements ProcessorInterface
     {
         $this->assertEditableForumResource($category->getResourceNode(), $this->security);
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
+        $request = $this->getCurrentRequest($this->requestStack);
 
         $course = $this->getCourse($this->cidReqHelper);
         $session = $this->cidReqHelper->getDoctrineSessionEntity();
@@ -167,14 +155,9 @@ final class ForumCategoryProcessor implements ProcessorInterface
     {
         $this->assertEditableForumResource($category->getResourceNode(), $this->security);
 
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            throw new BadRequestHttpException('Request is missing.');
-        }
+        $request = $this->getCurrentRequest($this->requestStack);
 
-        $course = $this->getCourse($this->cidReqHelper);
-        $session = $this->cidReqHelper->getDoctrineSessionEntity();
-        $group = $this->getGroup($this->entityManager, $this->cidReqHelper);
+        [$course, $session, $group] = $this->getForumContext($this->entityManager, $this->cidReqHelper, $this->security);
         $position = $this->moveForumResource($category, $course, $session, $group, (string) ($payload['direction'] ?? ''));
         $this->entityManager->flush();
 

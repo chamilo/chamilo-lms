@@ -19,6 +19,9 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 use const DIRECTORY_SEPARATOR;
+use const JSON_PRETTY_PRINT;
+use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_SLASHES;
 
 final class ThemeHelper
 {
@@ -27,6 +30,12 @@ final class ThemeHelper
      * Kept for backward compatibility.
      */
     public const string DEFAULT_THEME = 'chamilo';
+
+    /**
+     * The decorative images at the bottom of some pages. Each theme ships one per slot, as
+     * images/bg-<slot>.png, which the administrator can replace or remove.
+     */
+    public const array PAGE_BACKGROUND_SLOTS = ['landscape', 'cityscape', 'fieldscape', 'seascape'];
 
     /**
      * Fallback palette (rgba) if no palette file is available in the theme FS.
@@ -50,6 +59,11 @@ final class ThemeHelper
         'rgba(241,148,138,0.9)',
         'rgba(127,140,141,0.9)',
     ];
+
+    /**
+     * The choices of the administrator for the page backgrounds, inside the theme directory.
+     */
+    private const string PAGE_BACKGROUNDS_FILE = 'page-backgrounds.json';
 
     public function __construct(
         private readonly AccessUrlHelper $accessUrlHelper,
@@ -310,6 +324,93 @@ final class ThemeHelper
         }
 
         return '';
+    }
+
+    /**
+     * What the administrator chose for each page background of a theme: an uploaded image ("file",
+     * with a "version" that makes browsers load it again) and whether the image is removed
+     * ("hidden"). A slot without a choice shows the image the theme ships.
+     *
+     * @return array<string, array{file?: string, version?: int, hidden?: bool}>
+     */
+    public function getPageBackgroundChoices(string $theme): array
+    {
+        try {
+            $path = $theme.DIRECTORY_SEPARATOR.self::PAGE_BACKGROUNDS_FILE;
+            $choices = $this->filesystem->fileExists($path) ? json_decode($this->filesystem->read($path), true) : [];
+        } catch (FilesystemException) {
+            return [];
+        }
+
+        $valid = [];
+        foreach (\is_array($choices) ? $choices : [] as $slot => $choice) {
+            if (!\in_array($slot, self::PAGE_BACKGROUND_SLOTS, true) || !\is_array($choice)) {
+                continue;
+            }
+
+            $file = $choice['file'] ?? null;
+            // Only the images the upload writes, never another file of the theme
+            if (\is_string($file) && 1 === preg_match('#^images/bg-'.$slot.'-custom\.(png|jpg|webp)$#D', $file)) {
+                $valid[$slot]['file'] = $file;
+                $valid[$slot]['version'] = (int) ($choice['version'] ?? 0);
+            }
+            if (true === ($choice['hidden'] ?? false)) {
+                $valid[$slot]['hidden'] = true;
+            }
+        }
+
+        return $valid;
+    }
+
+    /**
+     * @param array<string, array{file?: string, version?: int, hidden?: bool}> $choices
+     *
+     * @throws FilesystemException
+     */
+    public function savePageBackgroundChoices(string $theme, array $choices): void
+    {
+        $path = $theme.DIRECTORY_SEPARATOR.self::PAGE_BACKGROUNDS_FILE;
+        $choices = array_filter($choices);
+
+        if ([] === $choices) {
+            if ($this->filesystem->fileExists($path)) {
+                $this->filesystem->delete($path);
+            }
+
+            return;
+        }
+
+        $this->filesystem->write($path, json_encode($choices, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR));
+    }
+
+    /**
+     * The URL of the image at the bottom of the pages of each slot, or null when the administrator
+     * removed it. Without an uploaded image, the theme asset route serves the image of the theme,
+     * or the one of the default theme. With $includeHidden, the removed images keep their URL, for
+     * the administrator to see what showing them again would restore.
+     *
+     * @return array<string, string|null>
+     */
+    public function getPageBackgroundUrls(?string $theme = null, bool $includeHidden = false): array
+    {
+        $theme ??= $this->getVisualTheme();
+        $choices = $this->getPageBackgroundChoices($theme);
+
+        $urls = [];
+        foreach (self::PAGE_BACKGROUND_SLOTS as $slot) {
+            $choice = $choices[$slot] ?? [];
+            $url = $this->router->generate('theme_asset', [
+                'name' => $theme,
+                'path' => $choice['file'] ?? 'images/bg-'.$slot.'.png',
+            ]);
+            // The theme assets are cached for a day: a new version is a new URL
+            if (isset($choice['file'])) {
+                $url .= '?v='.$choice['version'];
+            }
+            $urls[$slot] = $includeHidden || empty($choice['hidden']) ? $url : null;
+        }
+
+        return $urls;
     }
 
     /**

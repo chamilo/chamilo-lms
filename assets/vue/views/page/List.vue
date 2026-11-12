@@ -33,6 +33,19 @@
     </Column>
 
     <Column
+      :header="t('Friendly URL')"
+      field="slug"
+    >
+      <template #body="{ data }">
+        <span
+          v-if="data?.slug"
+          :title="data.slug.length > 20 ? data.slug : null"
+        >
+          {{ data.slug.length > 20 ? `${data.slug.slice(0, 20)}...` : data.slug }}
+        </span>
+      </template>
+    </Column>
+    <Column
       :header="t('Language')"
       field="locale"
     >
@@ -48,14 +61,16 @@
       :header="t('Enabled')"
       field="enabled"
     >
-      <template #body="slotProps">
-        <span
-          v-if="slotProps.data.enabled"
-          v-text="t('Yes')"
-        />
-        <span
-          v-else
-          v-text="t('No')"
+      <template #body="{ data }">
+        <BaseButton
+          :class="{ '!text-gray-400': !data.enabled }"
+          :icon="data.enabled ? 'toggle-switch' : 'toggle-switch-off'"
+          :is-loading="togglingId === data['@id']"
+          :label="data.enabled ? t('Enabled') : t('Disabled')"
+          :type="data.enabled ? 'success-text' : 'tertiary-text'"
+          name="cms-page-toggle-enabled"
+          only-icon
+          @click="toggleEnabled(data)"
         />
       </template>
     </Column>
@@ -502,6 +517,22 @@ async function deleteSelectedLanguagePages() {
     showErrorNotification(error)
   } finally {
     isDeletingLanguages.value = false
+  }
+}
+
+const togglingId = ref(null)
+
+async function toggleEnabled(item) {
+  if (togglingId.value) return
+
+  togglingId.value = item["@id"]
+  try {
+    await pageService.updatePage(item["@id"], { enabled: !item.enabled })
+    item.enabled = !item.enabled
+  } catch (error) {
+    showErrorNotification(error)
+  } finally {
+    togglingId.value = null
   }
 }
 

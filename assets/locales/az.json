@@ -3671,8 +3671,6 @@
     "Click to show database server load metrics": "Veril\u0259nl\u0259r bazas\u0131 serverinin y\u00fck g\u00f6st\u0259ricil\u0259rini g\u00f6st\u0259rm\u0259k \u00fc\u00e7\u00fcn klikl\u0259yin",
     "Threads connected": "Qo\u015fulmu\u015f ax\u0131nlar",
     "Temporary tables on disk": "Diskd\u0259ki m\u00fcv\u0259qq\u0259ti c\u0259dv\u0259ll\u0259r",
-    "Privilege scope": "S\u0259lahiyy\u0259t dair\u0259si",
-    "Not measurable with the current database user": "Cari veril\u0259nl\u0259r bazas\u0131 istifad\u0259\u00e7isi il\u0259 \u00f6l\u00e7\u00fcl\u0259 bilmir",
     "Uptime": "Fasil\u0259siz i\u015fl\u0259m\u0259 m\u00fcdd\u0259ti",
     "Queries per second": "Saniy\u0259d\u0259 sor\u011fu say\u0131",
     "Slow queries": "Yava\u015f sor\u011fular",

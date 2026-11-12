@@ -427,7 +427,6 @@ $strings['Invoicing'] = 'Facturación';
 $strings['Teachers'] = 'Docentes';
 $strings['TermsAndConditions'] = 'Términos y condiciones';
 
-
 $strings['GrantedBenefits'] = 'Beneficios otorgados';
 $strings['BenefitMaxCoursesTitle'] = 'Número de cursos con estos beneficios';
 $strings['BenefitMaxCoursesDescription'] = 'Número de cursos que pueden usar estos beneficios mientras el servicio esté vigente.';
@@ -738,7 +737,6 @@ $strings['SubscriptionPeriodsRequired'] = 'Debes añadir al menos un período de
 $strings['FrequencyNotRemoved'] = 'No se pudo eliminar el período de suscripción.';
 $strings['CourseSessionBlock'] = 'Cursos/Sesiones';
 
-
 // Service upgrade.
 $strings['Upsale'] = 'Venta adicional';
 $strings['UpsaleHelp'] = 'Selecciona el servicio desde el cual se puede subir a este servicio. Deja Ninguno para una compra normal.';
@@ -761,6 +759,7 @@ $strings['UpsaleRecurringDurationMustMatch'] = 'Los servicios renovables de orig
 $strings['UpsaleTargetDurationMustNotBeShorter'] = 'La duración del servicio mejorado debe ser igual o mayor que la duración del servicio de origen.';
 $strings['UpsaleCycleNotAllowed'] = 'Esta relación de upsale crearía un ciclo entre servicios.';
 $strings['UpgradePriceMustBePositive'] = 'El precio calculado para mejorar el plan debe ser mayor que cero.';
+$strings['PayPalUpgradeRequiresSameBillingSchedule'] = 'Esta suscripción de PayPal solo puede mejorarse a un servicio con el mismo intervalo de cobro y moneda.';
 $strings['UpgradeMustUseExistingPaymentGateway'] = 'Esta mejora debe usar la pasarela de pago de la suscripción recurrente actual.';
 $strings['UpgradeSourceNoLongerAvailable'] = 'El servicio actual ya no está disponible para esta mejora. Recarga el catálogo e inténtalo de nuevo.';
 $strings['UpgradeRecurringTransitionFailed'] = 'No se pudo trasladar la suscripción recurrente al servicio mejorado. No se aplicó ningún cambio local.';

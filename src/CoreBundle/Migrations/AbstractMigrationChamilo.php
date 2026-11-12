@@ -44,6 +44,8 @@ use const PATHINFO_EXTENSION;
 abstract class AbstractMigrationChamilo extends AbstractMigration
 {
     public const int BATCH_SIZE = 20;
+    // resource_file.size is a signed INT column
+    private const int RESOURCE_FILE_MAX_SIZE = 2147483647;
 
     protected ?EntityManagerInterface $entityManager = null;
     protected ?ContainerInterface $container = null;
@@ -287,6 +289,12 @@ SQL,
 
         if (!is_file($filePath) || !is_readable($filePath)) {
             $this->warnIf(true, "Cannot migrate {$class} #{$id} file not found: {$documentPath}");
+
+            return false;
+        }
+
+        if (filesize($filePath) > self::RESOURCE_FILE_MAX_SIZE) {
+            $this->warnIf(true, "Cannot migrate {$class} #{$id} file larger than 2 GB: {$filePath}");
 
             return false;
         }

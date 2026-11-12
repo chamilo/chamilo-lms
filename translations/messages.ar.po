@@ -39135,12 +39135,6 @@ msgstr "الخيوط المتصلة"
 msgid "Temporary tables on disk"
 msgstr "الجداول المؤقتة على القرص"
 
-msgid "Privilege scope"
-msgstr "نطاق الامتياز"
-
-msgid "Not measurable with the current database user"
-msgstr "غير قابل للقياس بمستخدم قاعدة البيانات الحالي"
-
 msgid "Uptime"
 msgstr "مدة التشغيل"
 

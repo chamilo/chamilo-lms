@@ -712,6 +712,13 @@
       merged.toolbar = removeToolbarCommands(merged.toolbar, ["save"])
     }
 
+    // Only the document form owns this custom Save action. The base toolbar policy
+    // discards locally appended buttons, including on the second TinyMCE init merge.
+    // Keep the native save plugin disabled for Vue forms: it bypasses Vue persistence.
+    if (toBool(localConfig.chamiloVueEditor) && toBool(localConfig.chamiloDocumentSave)) {
+      merged.toolbar = appendToolbarCommand(merged.toolbar, "chamiloSave")
+    }
+
     // Always allow lang on span/div, regardless of whether the translatehtml
     // AUTHORING plugin/toolbar button is enabled: rendering already-authored
     // multi-language content (translatehtml.js's own DOM-based show/hide

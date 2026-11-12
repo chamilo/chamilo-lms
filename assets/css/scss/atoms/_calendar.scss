@@ -32,7 +32,8 @@
   }
 
   &-input-icon-container {
-    @apply cursor-pointer absolute top-3 end-4 text-gray-90;
+    // Centred on the input whatever its height.
+    @apply cursor-pointer absolute top-1/2 -translate-y-1/2 end-4 flex items-center text-gray-90;
   }
 
   &:has(&-input:disabled) &-input-icon-container {

@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Kliknite za prikaz metrik obremenitve stre\u017enika baze podatkov",
     "Threads connected": "Povezane niti",
     "Temporary tables on disk": "Za\u010dasne tabele na disku",
-    "Privilege scope": "Obseg pravic",
-    "Not measurable with the current database user": "Ni mogo\u010de izmeriti s trenutnim uporabnikom baze podatkov",
     "Uptime": "\u010cas delovanja",
     "Queries per second": "Poizvedbe na sekundo",
     "Slow queries": "Po\u010dasne poizvedbe",
@@ -4616,5 +4614,7 @@
     "Saved.": "Shranjeno.",
     "You have tried to resolve this exercise earlier": "Ta test ste predhodno \u017ee poskusili re\u0161iti",
     "Disable new test attempts": "Onemogo\u010di nove poskuse testov",
-    "This skill cannot be acquired": "Te spretnosti ni mogo\u010de pridobiti"
+    "This skill cannot be acquired": "Te spretnosti ni mogo\u010de pridobiti",
+    "Validated": "Pregledan",
+    "Not validated": "Ni pregledan"
 }

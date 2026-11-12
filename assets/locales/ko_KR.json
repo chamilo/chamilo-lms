@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "\ub370\uc774\ud130\ubca0\uc774\uc2a4 \uc11c\ubc84 \ubd80\ud558 \uc9c0\ud45c\ub97c \ubcf4\ub824\uba74 \ud074\ub9ad\ud558\uc138\uc694",
     "Threads connected": "\uc5f0\uacb0\ub41c \uc2a4\ub808\ub4dc",
     "Temporary tables on disk": "\ub514\uc2a4\ud06c\uc758 \uc784\uc2dc \ud14c\uc774\ube14",
-    "Privilege scope": "\uad8c\ud55c \ubc94\uc704",
-    "Not measurable with the current database user": "\ud604\uc7ac \ub370\uc774\ud130\ubca0\uc774\uc2a4 \uc0ac\uc6a9\uc790\ub85c\ub294 \uce21\uc815\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4",
     "Uptime": "\uac00\ub3d9 \uc2dc\uac04",
     "Queries per second": "\ucd08\ub2f9 \ucffc\ub9ac \uc218",
     "Slow queries": "\ub290\ub9b0 \ucffc\ub9ac",
@@ -4616,5 +4614,7 @@
     "Saved.": "\uc800\uc7a5\ub418\uc5c8\uc2b5\ub2c8\ub2e4.",
     "You have tried to resolve this exercise earlier": "\uc774 \uc5f0\uc2b5\uc744 \uc774\uc804\uc5d0 \uc2dc\ub3c4\ud55c \uc801\uc774 \uc788\uc2b5\ub2c8\ub2e4",
     "Disable new test attempts": "\uc0c8 \uc2dc\ud5d8 \uc2dc\ub3c4 \ube44\ud65c\uc131\ud654",
-    "This skill cannot be acquired": "\uc774 \uc5ed\ub7c9\uc740 \ud68d\ub4dd\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4"
+    "This skill cannot be acquired": "\uc774 \uc5ed\ub7c9\uc740 \ud68d\ub4dd\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4",
+    "Validated": "\uc2b9\uc778\ub428",
+    "Not validated": "\uc2b9\uc778\ub418\uc9c0 \uc54a\uc74c"
 }

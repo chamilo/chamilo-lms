@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Kliknite za prikaz mjernih podataka o optere\u0107enju poslu\u017eitelja baze podataka",
     "Threads connected": "Povezane niti",
     "Temporary tables on disk": "Privremene tablice na disku",
-    "Privilege scope": "Opseg privilegija",
-    "Not measurable with the current database user": "Nije mogu\u0107e izmjeriti s trenutnim korisnikom baze podataka",
     "Uptime": "Vrijeme rada",
     "Queries per second": "Upiti u sekundi",
     "Slow queries": "Spori upiti",
@@ -4616,5 +4614,7 @@
     "Saved.": "Spremljeno.",
     "You have tried to resolve this exercise earlier": "Poku\u0161ali ste rije\u0161iti ovu vje\u017ebu ranije",
     "Disable new test attempts": "Onemogu\u0107i nove poku\u0161aje testa",
-    "This skill cannot be acquired": "Ova vje\u0161tina ne mo\u017ee se ste\u0107i"
+    "This skill cannot be acquired": "Ova vje\u0161tina ne mo\u017ee se ste\u0107i",
+    "Validated": "Potvr\u0111eno",
+    "Not validated": "Nije potvr\u0111eno"
 }

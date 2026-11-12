@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Tr\u00fdst fyri at v\u00edsa d\u00e1tugrunnur lastur m\u00e6lingar",
     "Threads connected": "Tr\u00e1\u00f0ir sambundnir",
     "Temporary tables on disk": "Fyribils talvur \u00e1 diski",
-    "Privilege scope": "R\u00e6ttindi \u00f8ki",
-    "Not measurable with the current database user": "Ikki m\u00e1til vi\u00f0 n\u00faverandi d\u00e1tugrunnur br\u00fakara",
     "Uptime": "Uppit\u00ed\u00f0",
     "Queries per second": "Fyrispurningar per sekund",
     "Slow queries": "Seinir fyrispurningar",
@@ -4616,5 +4614,7 @@
     "Saved.": "Goymt.",
     "You have tried to resolve this exercise earlier": "T\u00fa hevur gj\u00f8rt hesa royndina \u00e1\u00f0ur",
     "Disable new test attempts": "\u00d3gild n\u00fdggjar royndir av pr\u00f3vum",
-    "This skill cannot be acquired": "Henda f\u00f8rleiki kann ikki vinnast"
+    "This skill cannot be acquired": "Henda f\u00f8rleiki kann ikki vinnast",
+    "Validated": "Go\u00f0koytt",
+    "Not validated": "Ikki v\u00e1tta\u00f0"
 }

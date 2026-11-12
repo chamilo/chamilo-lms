@@ -39123,12 +39123,6 @@ msgstr "Qillqaykuna huñusqa"
 msgid "Temporary tables on disk"
 msgstr "Q'aylla q'utu q'ayllapi"
 
-msgid "Privilege scope"
-msgstr "Qaylla q'aylla"
-
-msgid "Not measurable with the current database user"
-msgstr "Mana yupaychan kunan yupay sirwiqwan"
-
 msgid "Uptime"
 msgstr "Qhipaq p'unchay"
 

@@ -39134,12 +39134,6 @@ msgstr "חיבורי תהליכונים"
 msgid "Temporary tables on disk"
 msgstr "טבלאות זמניות בדיסק"
 
-msgid "Privilege scope"
-msgstr "היקף הרשאות"
-
-msgid "Not measurable with the current database user"
-msgstr "לא ניתן למדוד עם משתמש מסד הנתונים הנוכחי"
-
 msgid "Uptime"
 msgstr "זמן פעולה"
 

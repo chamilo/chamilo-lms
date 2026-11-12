@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Clic\u00e2 par mostr\u00e2 lis metriche di cjariament dal servid\u00f4r de base di d\u00e2ts",
     "Threads connected": "Thread coleg\u00e2ts",
     "Temporary tables on disk": "Tabelis temporaniis sul disc",
-    "Privilege scope": "Ambit dai privile\u00e7s",
-    "Not measurable with the current database user": "No misurabil cul utent de base di d\u00e2ts atu\u00e2l",
     "Uptime": "Timp di ativazion",
     "Queries per second": "Interogazions par secont",
     "Slow queries": "Interogazions lentis",
@@ -4616,5 +4614,7 @@
     "Saved.": "Salv\u00e2t.",
     "You have tried to resolve this exercise earlier": "Tu \u00e2s za prov\u00e2t a risolvi chest esercizi pi\u00ea cem\u00fbt",
     "Disable new test attempts": "Disativ\u00e2 gjeni tentat\u00eefs di test",
-    "This skill cannot be acquired": "Cheste competence no pues jessi acuistade"
+    "This skill cannot be acquired": "Cheste competence no pues jessi acuistade",
+    "Validated": "Valid\u00e2t",
+    "Not validated": "No valid\u00e2t"
 }

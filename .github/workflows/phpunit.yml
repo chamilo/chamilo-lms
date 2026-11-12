@@ -31,6 +31,27 @@ jobs:
             DATABASE_USER: 'root'
             DATABASE_PASSWORD: 'root'
 
+        # The runner image stopped shipping MySQL with ubuntu-26.04, so the old
+        # `sudo /etc/init.d/mysql start` step now fails with "command not found".
+        # A service container replaces it and pins the server version instead of
+        # inheriting whatever the image happens to carry. Host must stay
+        # 127.0.0.1, never localhost: PDO reads localhost as a Unix socket, and
+        # the container only publishes a TCP port.
+        services:
+            mysql:
+                image: mysql:8.4
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+                ports:
+                    - 3306:3306
+                # Without a health check the job starts before the server
+                # accepts connections.
+                options: >-
+                    --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=10
+
         steps:
             - name: Checkout
               uses: actions/checkout@v7
@@ -42,10 +63,6 @@ jobs:
                   extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, gd, json, soap, zip, bcmath
                   ini-values: post_max_size=256M, max_execution_time=600, memory_limit=4096M, date.timezone=Europe/Paris
                   coverage: pcov
-
-            - name: Start mysql service
-              run: |
-                  sudo /etc/init.d/mysql start
 
             - name: Get composer cache directory
               id: composer-cache

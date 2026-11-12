@@ -46,7 +46,7 @@ const findAllPages = () => {
     .dispatch("page/findAll", {
       "category.title": "index",
       enabled: "1",
-      locale: locale.value,
+      locale: [locale.value, "all"],
     })
     .then((response) => (pages.value = response))
 }

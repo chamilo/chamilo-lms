@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Spustel\u0117kite, kad pamatytum\u0117te duomen\u0173 baz\u0117s serverio apkrovos metrik\u0105",
     "Threads connected": "Prijungti si\u016blai",
     "Temporary tables on disk": "Laikinosios lentel\u0117s diske",
-    "Privilege scope": "Privilegij\u0173 apimtis",
-    "Not measurable with the current database user": "Negalima i\u0161matuoti esamu duomen\u0173 baz\u0117s naudotoju",
     "Uptime": "Veikimo laikas",
     "Queries per second": "U\u017eklausos per sekund\u0119",
     "Slow queries": "L\u0117tos u\u017eklausos",
@@ -4616,5 +4614,7 @@
     "Saved.": "\u012era\u0161yta.",
     "You have tried to resolve this exercise earlier": "J\u016bs jau band\u0117te i\u0161spr\u0119sti \u0161i\u0105 u\u017eduot\u012f anks\u010diau",
     "Disable new test attempts": "I\u0161jungti naujus testo bandymus",
-    "This skill cannot be acquired": "\u0160io geb\u0117jimo negalima \u012fgyti"
+    "This skill cannot be acquired": "\u0160io geb\u0117jimo negalima \u012fgyti",
+    "Validated": "Patvirtinta",
+    "Not validated": "Nepatvirtinta"
 }

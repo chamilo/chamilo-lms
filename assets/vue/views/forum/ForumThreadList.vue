@@ -404,10 +404,16 @@
             class="flex flex-col gap-2 border-b border-gray-20 p-3 last:border-b-0 md:flex-row md:items-center md:justify-between"
           >
             <div>
-              <div class="text-sm font-medium text-gray-800">{{ student.fullName }}</div>
+              <BaseButton
+                :label="student.fullName"
+                class="!p-0 text-sm font-medium"
+                size="small"
+                type="primary-text"
+                @click="openParticipant(student)"
+              />
               <div class="text-xs text-gray-500">{{ student.username }}</div>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-end gap-2 [&_.field]:mb-0">
               <BaseInputText
                 :id="`forum-thread-score-${student.userId}`"
                 v-model="student.scoreInput"
@@ -458,6 +464,126 @@
           @click="saveThreadGradingSettings"
         />
       </template>
+    </BaseDialog>
+
+    <BaseDialog
+      v-model:is-visible="participantDialogVisible"
+      :title="participantStudent?.fullName || ''"
+      header-icon="account"
+    >
+      <div
+        v-if="isLoadingParticipant"
+        class="rounded-lg border border-gray-20 bg-gray-10 p-3 text-sm text-gray-600"
+      >
+        {{ t("Loading") }}
+      </div>
+
+      <div
+        v-else-if="participant && participantStudent"
+        class="flex flex-col gap-4"
+      >
+        <dl class="grid gap-x-4 gap-y-2 text-sm md:grid-cols-2">
+          <dt class="font-semibold text-gray-800">{{ t("Thread") }}</dt>
+          <dd>{{ participant.threadTitle }}</dd>
+          <dt class="font-semibold text-gray-800">{{ t("Course users") }}</dt>
+          <dd>{{ participant.courseUserCount }}</dd>
+          <dt class="font-semibold text-gray-800">{{ t("Number of posts") }}</dt>
+          <dd>{{ participant.threadPostCount }}</dd>
+          <dt class="font-semibold text-gray-800">{{ t("Number of posts for this user") }}</dt>
+          <dd>{{ participant.userPostCount }}</dd>
+          <dt class="font-semibold text-gray-800">{{ t("Share of the thread's posts") }}</dt>
+          <dd>{{ participant.postShare }}%</dd>
+        </dl>
+
+        <div class="flex flex-col gap-2">
+          <strong class="text-sm text-gray-800">{{ t("Posts") }}</strong>
+          <div
+            v-if="!participant.posts.length"
+            class="text-sm text-gray-500"
+          >
+            {{ t("No posts") }}
+          </div>
+          <article
+            v-for="post in participant.posts"
+            :key="post.iid"
+            :class="post.visible ? 'border-gray-20' : 'border-warning bg-gray-10'"
+            class="rounded-lg border p-3"
+          >
+            <div class="flex flex-wrap items-baseline justify-between gap-2">
+              <strong class="text-sm text-gray-800">{{ post.title }}</strong>
+              <div class="flex items-center gap-2">
+                <span class="text-xs text-gray-500">{{ formatHistoryDate(post.date) }}</span>
+                <BaseButton
+                  v-if="post.canDelete"
+                  :label="t('Delete')"
+                  icon="delete"
+                  only-icon
+                  size="small"
+                  type="danger-text"
+                  @click="confirmDeleteParticipantPost(post)"
+                />
+              </div>
+            </div>
+            <div
+              class="mt-2 text-sm text-gray-700"
+              v-html="sanitizeHtml(post.text || '')"
+            />
+            <ul
+              v-if="post.attachments.length"
+              class="mt-2 text-sm"
+            >
+              <li
+                v-for="attachment in post.attachments"
+                :key="attachment.iid"
+              >
+                <a
+                  :href="attachment.downloadUrl"
+                  class="text-primary underline"
+                >
+                  {{ attachment.filename }}
+                </a>
+              </li>
+            </ul>
+          </article>
+        </div>
+
+        <div
+          v-if="gradingForm.enabled"
+          class="flex items-end gap-2 [&_.field]:mb-0"
+        >
+          <BaseInputText
+            id="forum-thread-participant-score"
+            v-model="participantStudent.scoreInput"
+            :label="`${t('Score')} (${t('Max score')} ${gradingForm.maxScore})`"
+            name="participant_score"
+            type="number"
+          />
+          <BaseButton
+            :disabled="participantStudent.isSaving"
+            :is-loading="participantStudent.isSaving"
+            :label="t('Save')"
+            icon="save"
+            type="success"
+            @click="saveStudentScore(participantStudent)"
+          />
+        </div>
+
+        <div
+          v-if="canManage && participantStudent.history?.length"
+          class="rounded-lg border border-gray-20 bg-gray-10 p-3 text-xs text-gray-600"
+        >
+          <div class="mb-2 font-semibold text-gray-800">{{ t("Score changes history") }}</div>
+          <div
+            v-for="(entry, index) in participantStudent.history"
+            :key="`participant-history-${index}`"
+            class="grid gap-2 border-t border-gray-20 py-2 first:border-t-0 md:grid-cols-3"
+          >
+            <span>{{ entry.qualifyUserName || t("Who changed") }}</span>
+            <span>{{ entry.score }}</span>
+            <span>{{ formatHistoryDate(entry.date) }}</span>
+          </div>
+        </div>
+      </div>
     </BaseDialog>
 
     <BaseDialog
@@ -517,6 +643,7 @@ import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import forumService from "../../services/forumService"
 import { useSecurityStore } from "../../store/securityStore"
 import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const { t, d } = useI18n()
 const route = useRoute()
@@ -548,6 +675,10 @@ const isLoadingGrading = ref(false)
 const isSavingGrading = ref(false)
 const gradingFormSubmitted = ref(false)
 const gradingFilter = ref("all")
+const participantDialogVisible = ref(false)
+const participantStudent = ref(null)
+const participant = ref(null)
+const isLoadingParticipant = ref(false)
 const gradingForm = reactive({
   enabled: false,
   categoryId: null,
@@ -1035,6 +1166,69 @@ async function saveStudentScore(student) {
     notifications.showErrorNotification(t("Could not save thread score"))
   } finally {
     student.isSaving = false
+  }
+}
+
+// The posts of one learner and their share of the thread, to read before giving them a score
+async function openParticipant(student) {
+  if (!gradingThread.value) {
+    return
+  }
+
+  participantStudent.value = student
+  participant.value = null
+  participantDialogVisible.value = true
+  isLoadingParticipant.value = true
+
+  try {
+    const data = await forumService.getThreadGrading(gradingThread.value.iid, {
+      ...baseQuery.value,
+      userId: Number(student.userId),
+    })
+    participant.value = data.participant || null
+  } catch (error) {
+    console.error("Error loading forum thread participant:", error)
+    notifications.showErrorNotification(t("Could not retrieve thread grading"))
+    participantDialogVisible.value = false
+  } finally {
+    isLoadingParticipant.value = false
+  }
+}
+
+function confirmDeleteParticipantPost(post) {
+  requireConfirmation({
+    message: t("Are you sure you want to delete this post?"),
+    accept: () => deleteParticipantPost(post),
+  })
+}
+
+// The post changes the counts of the thread and the learners who posted, so both are read again
+async function deleteParticipantPost(post) {
+  try {
+    const response = await forumService.deletePost(post.iid, baseQuery.value, {})
+
+    notifications.showSuccessNotification(response.threadDeleted ? t("Thread deleted") : t("Post deleted"))
+
+    if (response.threadDeleted) {
+      participantDialogVisible.value = false
+      gradingDialogVisible.value = false
+      await loadThreads()
+      return
+    }
+
+    const userId = Number(participantStudent.value.userId)
+    await Promise.all([loadThreadGrading(gradingThread.value), loadThreads()])
+
+    // A learner without any post left is no longer listed for grading
+    const student = gradingData.value.students.find((item) => Number(item.userId) === userId)
+    if (student) {
+      await openParticipant(student)
+    } else {
+      participantDialogVisible.value = false
+    }
+  } catch (error) {
+    console.error("Error deleting forum post:", error)
+    notifications.showErrorNotification(t("Could not delete post"))
   }
 }
 

@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Helpers\AccessUrlHierarchyHelper;
 use Chamilo\CoreBundle\Helpers\AccessUrlScopeHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit;
 use Chamilo\CoreBundle\Service\Update\InstalledChamiloVersionProvider;
 use DateTimeImmutable;
 use Doctrine\DBAL\ArrayParameterType;
@@ -57,6 +58,7 @@ class AccessUrlListController extends AbstractController
         private readonly AccessUrlScopeHelper $accessUrlScope,
         private readonly AccessUrlHierarchyHelper $accessUrlHierarchy,
         private readonly UserHelper $userHelper,
+        private readonly SessionTimeLimit $sessionTimeLimit,
     ) {}
 
     private function currentUser(): User
@@ -672,10 +674,11 @@ class AccessUrlListController extends AbstractController
             $scopeTypes
         );
 
+        $durationSql = $this->sessionTimeLimit->sql('login_course_date', 'logout_course_date');
         $totalTimeSeconds = (int) $connection->fetchOne(
             "SELECT COALESCE(SUM(
                 CASE WHEN logout_course_date IS NOT NULL AND logout_course_date >= login_course_date
-                     THEN TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date)
+                     THEN $durationSql
                      ELSE 0 END
             ), 0) FROM track_e_course_access WHERE c_id = :courseId{$userScopeSql}",
             ['courseId' => $id, ...$scopeParams],
@@ -738,7 +741,7 @@ class AccessUrlListController extends AbstractController
         $rows = $connection->fetchAllAssociative(
             'SELECT COALESCE(session_id, 0) AS sessionKey, COALESCE(SUM(
                 CASE WHEN logout_course_date IS NOT NULL AND logout_course_date >= login_course_date
-                     THEN TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date)
+                     THEN '.$this->sessionTimeLimit->sql('login_course_date', 'logout_course_date').'
                      ELSE 0 END
             ), 0) AS timeSeconds
                FROM track_e_course_access

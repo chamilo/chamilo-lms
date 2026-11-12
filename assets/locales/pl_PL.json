@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Kliknij, aby wy\u015bwietli\u0107 metryki obci\u0105\u017cenia serwera bazy danych",
     "Threads connected": "Po\u0142\u0105czone w\u0105tki",
     "Temporary tables on disk": "Tymczasowe tabele na dysku",
-    "Privilege scope": "Zakres uprawnie\u0144",
-    "Not measurable with the current database user": "Nie mo\u017cna zmierzy\u0107 przy obecnym u\u017cytkowniku bazy danych",
     "Uptime": "Czas pracy",
     "Queries per second": "Zapytania na sekund\u0119",
     "Slow queries": "Wolne zapytania",
@@ -4616,5 +4614,7 @@
     "Saved.": "Zapisane.",
     "You have tried to resolve this exercise earlier": "Pr\u00f3bowa\u0142e\u015b rozwi\u0105za\u0107 to \u0107wiczenie wcze\u015bniej",
     "Disable new test attempts": "Wy\u0142\u0105cz nowe pr\u00f3by test\u00f3w",
-    "This skill cannot be acquired": "Tej umiej\u0119tno\u015bci nie mo\u017cna naby\u0107"
+    "This skill cannot be acquired": "Tej umiej\u0119tno\u015bci nie mo\u017cna naby\u0107",
+    "Validated": "Zatwierdzone",
+    "Not validated": "Nie zatwierdzone"
 }

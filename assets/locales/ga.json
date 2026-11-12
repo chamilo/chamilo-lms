@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Clice\u00e1il chun m\u00e9adrachta\u00ed ualaigh freastala\u00ed bunachar sonra\u00ed a thaispe\u00e1int",
     "Threads connected": "Sn\u00e1itheanna ceangailte",
     "Temporary tables on disk": "T\u00e1bla\u00ed sealadacha ar dhiosca",
-    "Privilege scope": "Sc\u00f3ip pribhl\u00e9id\u00ed",
-    "Not measurable with the current database user": "N\u00ed f\u00e9idir a thomhas leis an \u00fas\u00e1ideoir bunachar sonra\u00ed reatha",
     "Uptime": "Am suas",
     "Queries per second": "Ceisteanna in aghaidh an tsoicind",
     "Slow queries": "Ceisteanna mall",
@@ -4616,5 +4614,7 @@
     "Saved.": "S\u00e1bh\u00e1ilte.",
     "You have tried to resolve this exercise earlier": "Bhain t\u00fa triail as an cleachtadh seo n\u00edos luaithe",
     "Disable new test attempts": "D\u00edchumasaigh iarrachta\u00ed trialach nua",
-    "This skill cannot be acquired": "N\u00ed f\u00e9idir an scil seo a fh\u00e1il"
+    "This skill cannot be acquired": "N\u00ed f\u00e9idir an scil seo a fh\u00e1il",
+    "Validated": "Bail\u00edochtaithe",
+    "Not validated": "Gan bail\u00edocht\u00fa"
 }

@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Klik for at vise database-serverbelastningsm\u00e5linger",
     "Threads connected": "Forbundne tr\u00e5de",
     "Temporary tables on disk": "Midlertidige tabeller p\u00e5 disk",
-    "Privilege scope": "Rettighedsomfang",
-    "Not measurable with the current database user": "Kan ikke m\u00e5les med den aktuelle databasebruger",
     "Uptime": "Driftstid",
     "Queries per second": "Foresp\u00f8rgsler pr. sekund",
     "Slow queries": "Langsomme foresp\u00f8rgsler",
@@ -4616,5 +4614,7 @@
     "Saved.": "Gemt.",
     "You have tried to resolve this exercise earlier": "Du har tidligere fors\u00f8gt at l\u00f8se denne opgave",
     "Disable new test attempts": "Deaktiv\u00e9r nye testfors\u00f8g",
-    "This skill cannot be acquired": "Denne f\u00e6rdighed kan ikke erhverves"
+    "This skill cannot be acquired": "Denne f\u00e6rdighed kan ikke erhverves",
+    "Validated": "Valideret",
+    "Not validated": "Ikke valideret"
 }

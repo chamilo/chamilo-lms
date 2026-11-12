@@ -34,11 +34,12 @@ class MessageRepositoryTest extends AbstractApiTest
 
         $this->createUser('to');
         $receiverUserIri = $this->findIriBy(User::class, ['username' => 'to']);
+        // Second argument: getUserToken() caches the first token it issues and
+        // returns it for every later call, so without it this is the sender's.
         $receiverUserToken = $this->getUserToken(['username' => 'to', 'password' => 'to'], true);
 
         $this->createUser('cc');
         $receiverCopyUserIri = $this->findIriBy(User::class, ['username' => 'cc']);
-        $receiverCopyUserToken = $this->getUserToken(['username' => 'cc', 'password' => 'cc'], true);
 
         $response = $this
             ->createClientWithCredentials($fromUserToken)
@@ -100,7 +101,9 @@ class MessageRepositoryTest extends AbstractApiTest
         $this->assertEmailCount(2);
 
         $messageArray = $response->toArray();
-        $messageRelUserIri = $messageArray['firstReceiver']['@id'];
+        // The TO relation by type, not firstReceiver: that one is first() over
+        // an unordered collection, and only its owner may patch the row.
+        $messageRelUserIri = $messageArray['receiversTo'][0]['@id'];
 
         // PATCH, not PUT: receiver is not writable and a PUT replaces the whole
         // representation, so it would arrive null. The Vue service does the same.

@@ -201,6 +201,8 @@ Feature: Work tool
     And I follow "Work 1 Test Edited"
     And wait for the page to be loaded when ready
     Then I should see "Work description"
+    And the assignment list should contain 1 distinct submitters
+    And I press "View"
     And I should see "favicon"
 
   Scenario: Edit maximum score
@@ -227,7 +229,8 @@ Feature: Work tool
     And wait for the page to be loaded when ready
     And I follow "Work 1 Test Edited"
     And wait for the page to be loaded when ready
-    Then I should see "favicon"
+    Then I press "View"
+    And I should see "favicon"
     Then I press "Correct and grade"
     And wait for the page to be loaded when ready
     When I fill in the following:
@@ -257,7 +260,24 @@ Feature: Work tool
     And I follow "Work 1 Test Edited"
     And wait for the page to be loaded when ready
     Then I should see "Work 1 Test Edited"
+    And I press "View"
     And I should see "10.0 / 20.0"
+
+  Scenario: Submission sorting survives reloading and reopening a student's files
+    Given I am a platform administrator
+    And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    And I follow "Assignments"
+    And wait for the page to be loaded when ready
+    And I follow "Work 1 Test Edited"
+    And wait for the page to be loaded when ready
+    When I sort the assignment submitters by number submitted descending
+    Then the assignment submitters should keep that sort after reloading
+    When I press "View"
+    And I sort the selected student's submissions by title descending
+    And I press "Close"
+    And I press "View"
+    Then the selected student's submissions should retain title descending
 
   Scenario: Admin deletes Work 1 from assignments list
     Given I am a platform administrator

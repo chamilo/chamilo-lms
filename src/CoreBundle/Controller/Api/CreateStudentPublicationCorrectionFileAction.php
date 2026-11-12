@@ -70,8 +70,7 @@ class CreateStudentPublicationCorrectionFileAction extends BaseResourceFileActio
 
         $correction->setTitle($result['title']);
 
-        $submission->setDescription('Correction uploaded');
-        $submission->setQualification(0);
+        // A correction attachment must not overwrite the student's submitted HTML or score.
         $submission->setDateOfQualification(new DateTime());
         $submission->setAccepted(true);
 

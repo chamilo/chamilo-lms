@@ -121,7 +121,17 @@ class Version20180319145700 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE c_survey_invitation ADD user_id INT DEFAULT NULL');
 
             $this->addSql('ALTER TABLE c_survey_invitation CHANGE user user VARCHAR(255) DEFAULT NULL');
-            $this->addSql('UPDATE c_survey_invitation SET user_id = user WHERE user IN (SELECT id FROM user)');
+        }
+
+        // The legacy user column also holds the e-mail or hash of invitees without an account: compared
+        // as text, they match no user instead of failing the numeric cast in strict mode. Outside the
+        // check above, so that a retry after a failure still fills user_id.
+        if ($table->hasColumn('user')) {
+            $this->addSql(
+                'UPDATE c_survey_invitation SET user_id = user
+                 WHERE user_id IS NULL
+                   AND user IN (SELECT CAST(id AS CHAR) FROM user)'
+            );
         }
 
         if (!$table->hasForeignKey('FK_D0BC7C2A76ED395')) {

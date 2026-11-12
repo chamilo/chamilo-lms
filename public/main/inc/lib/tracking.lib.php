@@ -1731,6 +1731,8 @@ class Tracking
         $end_date = null,
         $returnAllRecords = false
     ) {
+        $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
+        $durationSql = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::sqlForSeconds('login_date', 'logout_date', $maxSeconds);
         $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $condition_time = '';
 
@@ -1790,7 +1792,7 @@ class Tracking
         }
 
         if ($returnAllRecords) {
-            $sql = "SELECT login_date, logout_date, TIMESTAMPDIFF(SECOND, login_date, logout_date) diff
+            $sql = "SELECT login_date, logout_date, $durationSql diff
                     FROM $tbl_track_login u $url_table
                     WHERE $userCondition $condition_time $url_condition
                     ORDER BY login_date";
@@ -1799,7 +1801,7 @@ class Tracking
             return Database::store_result($rs, 'ASSOC');
         }
 
-        $sql = "SELECT SUM(TIMESTAMPDIFF(SECOND, login_date, logout_date)) diff
+        $sql = "SELECT SUM($durationSql) diff
     	        FROM $tbl_track_login u $url_table
                 WHERE $userCondition $condition_time $url_condition";
         $rs = Database::query($sql);
@@ -1828,6 +1830,8 @@ class Tracking
         $startDate = '',
         $endDate = ''
     ) {
+        $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
+        $durationSql = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::sqlForSeconds('login_date', 'logout_date', $maxSeconds);
         $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
@@ -1846,7 +1850,7 @@ class Tracking
             $endDate = Database::escape_string($endDate);
             $condition_time = ' (login_date >= "'.$startDate.'" AND logout_date <= "'.$endDate.'" ) ';
         }
-        $sql = "SELECT SUM(TIMESTAMPDIFF(SECOND, login_date, logout_date)) diff
+        $sql = "SELECT SUM($durationSql) diff
     	        FROM $tbl_track_login u $url_table
                 WHERE $condition_time $url_condition";
         $rs = Database::query($sql);
@@ -1937,9 +1941,11 @@ class Tracking
             }
         }
 
+        $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
+        $durationSql = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::sqlForSeconds('login_course_date', 'logout_course_date', $maxSeconds);
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $sql = "SELECT
-                SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
+                SUM($durationSql) as nb_seconds
                 FROM $table
                 WHERE
                     UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) AND
@@ -8404,8 +8410,10 @@ class Tracking
     public static function getTotalTimeSpentInCourses(
         string $dateFrom = '',
         string $dateUntil = '',
-        ?int $maxTimeSpent = 6
+        ?int $maxTimeSpent = null
     ): int {
+        $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
+        $durationSql = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::sqlForSeconds('login_course_date', 'logout_course_date', $maxSeconds);
         $tableTrackLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $tableUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $tableUrl = null;
@@ -8422,25 +8430,14 @@ class Tracking
             $dateUntil = Database::escape_string($dateUntil);
             $conditionTime = " (login_course_date >= '$dateFrom' AND logout_course_date <= '$dateUntil' ) ";
         }
-        $sql = "SELECT TIMESTAMPDIFF(HOUR, login_course_date, logout_course_date) diff
-    	        FROM $tableTrackLogin u $tableUrl
+        $sql = "SELECT SUM($durationSql) diff
+                FROM $tableTrackLogin u $tableUrl
                 WHERE $conditionTime $urlCondition";
         $rs = Database::query($sql);
-        $diff = 0;
-        if (!empty($rs)) {
-            while ($row = Database::fetch_array($rs)) {
-                // Anything above $maxTimeSpent is rounded down to $maxTimeSpent hours
-                if ($row['diff'] <= $maxTimeSpent) {
-                    $diff += $row['diff'];
-                } else {
-                    $diff += $maxTimeSpent;
-                }
-            }
-        }
-        if ($diff >= 0 and !empty($diff)) {
-            return $diff;
-        }
-        return 0;
+        $row = $rs ? Database::fetch_assoc($rs) : null;
+        $seconds = (int) ($row['diff'] ?? 0);
+
+        return intdiv(max(0, $seconds), 3600);
     }
     public static function countSessionsPerStudent(int $userId): int
     {

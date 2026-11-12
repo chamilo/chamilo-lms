@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseNotificationManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -88,6 +89,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         private UserHelper $userHelper,
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
         private ExerciseNotificationManager $exerciseNotificationManager,
+        private TrackEExerciseRepository $trackEExerciseRepository,
     ) {}
 
     /**
@@ -180,7 +182,12 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             );
         }
 
-        $incompleteAttempt = $this->findIncompleteAttempt($quiz, $course, $session, $user, $request);
+        // Resolve the learning-path triple once, from a validated lookup instead of the raw URL,
+        // and feed the same value to the counting, the resume lookup and the new row. This closes
+        // the forged-counter bypass of the attempt limit.
+        $lpContext = $this->exerciseLearnpathVisibilityHelper->resolveValidatedAttemptTriple($quiz, $course, $session, $user);
+
+        $incompleteAttempt = $this->findIncompleteAttempt($quiz, $course, $session, $user, $lpContext);
         if ($incompleteAttempt instanceof TrackEExercise) {
             return $this->normalizeAttemptResponse($operation, $quiz, $course, $session, $request, $incompleteAttempt, 'Attempt resumed');
         }
@@ -197,7 +204,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             );
         }
 
-        if (!$this->canCreateNewAttempt($quiz, $course, $session, $user, $request)) {
+        if (!$this->canCreateNewAttempt($quiz, $course, $session, $user, $lpContext)) {
             return $this->createLegacyRequiredResponse(
                 $operation,
                 $quiz,
@@ -231,9 +238,9 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             ->setDataTracking(implode(',', $questionIds))
             ->setUser($user)
             ->setUserIp((string) ($request->getClientIp() ?? ''))
-            ->setOrigLpId($request->query->getInt('learnpath_id'))
-            ->setOrigLpItemId($request->query->getInt('learnpath_item_id'))
-            ->setOrigLpItemViewId($request->query->getInt('learnpath_item_view_id'))
+            ->setOrigLpId($lpContext['lpId'])
+            ->setOrigLpItemId($lpContext['lpItemId'])
+            ->setOrigLpItemViewId($lpContext['lpItemViewId'])
             ->setExpiredTimeControl($expiredAt)
             ->setQuiz($quiz)
         ;
@@ -366,7 +373,10 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         return array_values(array_filter($relations, static fn (mixed $relation): bool => $relation instanceof CQuizRelQuestion));
     }
 
-    private function findIncompleteAttempt(CQuiz $quiz, Course $course, ?Session $session, User $user, Request $request): ?TrackEExercise
+    /**
+     * @param array{lpId: int, lpItemId: int, lpItemViewId: int} $lpContext
+     */
+    private function findIncompleteAttempt(CQuiz $quiz, Course $course, ?Session $session, User $user, array $lpContext): ?TrackEExercise
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('attempt')
@@ -382,9 +392,9 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
             ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
             ->setParameter('status', self::STATUS_INCOMPLETE)
-            ->setParameter('lpId', $request->query->getInt('learnpath_id'), Types::INTEGER)
-            ->setParameter('lpItemId', $request->query->getInt('learnpath_item_id'), Types::INTEGER)
-            ->setParameter('lpItemViewId', $request->query->getInt('learnpath_item_view_id'), Types::INTEGER)
+            ->setParameter('lpId', $lpContext['lpId'], Types::INTEGER)
+            ->setParameter('lpItemId', $lpContext['lpItemId'], Types::INTEGER)
+            ->setParameter('lpItemViewId', $lpContext['lpItemViewId'], Types::INTEGER)
             ->orderBy('attempt.exeId', 'DESC')
             ->setMaxResults(1)
         ;
@@ -403,40 +413,23 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         return $attempt instanceof TrackEExercise ? $attempt : null;
     }
 
-    private function canCreateNewAttempt(CQuiz $quiz, Course $course, ?Session $session, User $user, Request $request): bool
+    /**
+     * @param array{lpId: int, lpItemId: int, lpItemViewId: int} $lpContext
+     */
+    private function canCreateNewAttempt(CQuiz $quiz, Course $course, ?Session $session, User $user, array $lpContext): bool
     {
         $maxAttempt = (int) $quiz->getMaxAttempt();
         if ($maxAttempt <= 0) {
             return true;
         }
 
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('COUNT(attempt.exeId)')
-            ->from(TrackEExercise::class, 'attempt')
-            ->andWhere('IDENTITY(attempt.quiz) = :exerciseId')
-            ->andWhere('IDENTITY(attempt.course) = :courseId')
-            ->andWhere('IDENTITY(attempt.user) = :userId')
-            ->andWhere('attempt.origLpId = :lpId')
-            ->andWhere('attempt.origLpItemId = :lpItemId')
-            ->andWhere('attempt.origLpItemViewId = :lpItemViewId')
-            ->setParameter('exerciseId', (int) $quiz->getIid(), Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
-            ->setParameter('lpId', $request->query->getInt('learnpath_id'), Types::INTEGER)
-            ->setParameter('lpItemId', $request->query->getInt('learnpath_item_id'), Types::INTEGER)
-            ->setParameter('lpItemViewId', $request->query->getInt('learnpath_item_view_id'), Types::INTEGER)
-        ;
-
-        if (null !== $session) {
-            $queryBuilder
-                ->andWhere('IDENTITY(attempt.session) = :sessionId')
-                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
-            ;
-        } else {
-            $queryBuilder->andWhere('attempt.session IS NULL');
-        }
-
-        return (int) $queryBuilder->getQuery()->getSingleScalarResult() < $maxAttempt;
+        return $this->trackEExerciseRepository->countUserAttemptsInContext(
+            (int) $quiz->getIid(),
+            (int) $course->getId(),
+            null !== $session ? (int) $session->getId() : null,
+            (int) $user->getId(),
+            $lpContext,
+        ) < $maxAttempt;
     }
 
     /**

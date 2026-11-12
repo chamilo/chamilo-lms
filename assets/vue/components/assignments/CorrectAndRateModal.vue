@@ -21,7 +21,7 @@
 
       <!-- Student submission (text) -->
       <div
-        v-if="flags.allowText && props.item.description"
+        v-if="(flags.allowText || isHtmlSubmissionFile) && submissionRaw"
         class="rounded-lg border bg-white p-4"
       >
         <div class="flex items-center justify-between gap-2 mb-2">
@@ -313,7 +313,10 @@
       </div>
 
       <!-- Attach correction file -->
-      <div class="flex flex-col gap-2">
+      <div
+        v-if="!forceStudentView"
+        class="flex flex-col gap-2"
+      >
         <label class="text-sm font-medium text-gray-900">
           {{ t("Attach file (optional)") }}
         </label>
@@ -332,7 +335,7 @@
       <!-- Send mail -->
       <div class="flex items-center gap-2">
         <BaseCheckbox
-          v-if="props.flags.allowText"
+          v-if="!forceStudentView && props.flags.allowText"
           id="sendmail"
           v-model="sendMail"
           :label="t('Send mail to student')"
@@ -437,8 +440,6 @@ import DOMPurify from "dompurify"
 // Settings gating
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
-import { useCidReqStore } from "../../store/cidReq"
-import { storeToRefs } from "pinia"
 
 const props = defineProps({
   modelValue: Boolean,
@@ -522,7 +523,8 @@ const safeParentDescription = computed(() => {
 // ----------------------------
 // Submission rendering helpers
 // ----------------------------
-const submissionRaw = computed(() => String(props.item?.description || ""))
+const htmlFilePreview = ref("")
+const submissionRaw = computed(() => htmlFilePreview.value || String(props.item?.description || ""))
 
 const isFullHtmlDocument = computed(() => {
   const s = submissionRaw.value.trim().toLowerCase()
@@ -569,6 +571,7 @@ const submissionExt = computed(() => {
 })
 
 const submissionHasFile = computed(() => submissionFilename.value.length > 0 && submissionExt.value.length > 0)
+const isHtmlSubmissionFile = computed(() => ["html", "htm"].includes(submissionExt.value))
 
 const submissionHasText = computed(() => {
   const txt = submissionRaw.value
@@ -611,8 +614,6 @@ const maxHelpText = computed(() => {
 // AI Task Grader state
 // ----------------------------
 const courseSettingsStore = useCourseSettings()
-const cidReqStore = useCidReqStore()
-const { course, session } = storeToRefs(cidReqStore)
 
 const providers = ref([])
 const aiProvider = ref("") // provider key
@@ -702,7 +703,6 @@ const aiCanGenerate = computed(() => {
   if (aiBlockingReason.value) return false
   return true
 })
-
 
 async function loadAiProviders() {
   try {
@@ -823,6 +823,29 @@ function clearAiFeedback() {
   aiLastError.value = ""
 }
 
+// The file is read through a teacher-authorized JSON endpoint; never render
+// a student's raw HTML file from the course origin in an unsandboxed frame.
+let htmlPreviewRequest = 0
+watch(
+  () => [props.modelValue, props.item?.iid],
+  async ([isOpen, id]) => {
+    const requestId = ++htmlPreviewRequest
+    htmlFilePreview.value = ""
+    if (!isOpen || !id || !isHtmlSubmissionFile.value) return
+
+    try {
+      const preview = await cStudentPublicationService.getSubmissionHtmlPreview(id)
+      if (requestId === htmlPreviewRequest && props.modelValue && props.item?.iid === id) {
+        htmlFilePreview.value = String(preview?.html || "")
+      }
+    } catch (error) {
+      if (requestId === htmlPreviewRequest) {
+        notification.showErrorNotification(error)
+      }
+    }
+  },
+)
+
 // ----------------------------
 // Modal lifecycle
 // ----------------------------
@@ -861,7 +884,6 @@ watch(
   },
 )
 
-
 function onHide() {
   emit("update:modelValue", false)
 }
@@ -880,7 +902,7 @@ async function submit() {
 
   const trimmed = comment.value.trim()
   const hasComment = trimmed.length > 0
-  const hasFile = !!selectedFile.value
+  const hasFile = !forceStudentView.value && !!selectedFile.value
 
   const currentQ =
     qualification.value === null || qualification.value === undefined || qualification.value === ""
@@ -892,7 +914,7 @@ async function submit() {
       ? null
       : Number(props.item.qualification)
 
-  const hasQualificationChange = currentQ !== originalQ
+  const hasQualificationChange = !forceStudentView.value && currentQ !== originalQ
 
   if (!hasComment && !hasFile && !hasQualificationChange) {
     notification.showErrorNotification(t("Please add a comment, a grade or a file"))
@@ -924,9 +946,11 @@ async function submit() {
   try {
     const formData = new FormData()
     formData.append("submissionId", props.item.iid)
-    formData.append("qualification", currentQ === null ? "" : String(currentQ))
+    if (!forceStudentView.value) {
+      formData.append("qualification", currentQ === null ? "" : String(currentQ))
+    }
 
-    if (selectedFile.value) {
+    if (hasFile) {
       formData.append("uploadFile", selectedFile.value)
     }
 

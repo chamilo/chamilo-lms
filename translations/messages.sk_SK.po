@@ -39136,12 +39136,6 @@ msgstr "Pripojené vlákna"
 msgid "Temporary tables on disk"
 msgstr "Dočasné tabuľky na disku"
 
-msgid "Privilege scope"
-msgstr "Rozsah oprávnení"
-
-msgid "Not measurable with the current database user"
-msgstr "Nedá sa merať s aktuálnym používateľom databázy"
-
 msgid "Uptime"
 msgstr "Doba prevádzky"
 

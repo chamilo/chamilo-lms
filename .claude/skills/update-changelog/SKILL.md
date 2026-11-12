@@ -284,6 +284,22 @@ Correct any obvious typos in commit messages when formatting for publication
 (the HTML is user-facing; the git history is not changed). Note corrections in
 the final report.
 
+**Every entry must carry a prefix.** Many commit subjects have none
+(`Add users by language statistics report`, `Fix login username input border
+spacing`, `Normalize course language relation`). Before writing the `<li>`, make
+sure the message starts with `Tool:` taken from the **"Tools/features
+terminology"** list in the `<h3>Tools/features terminology</h3>` section of
+`public/documentation/changelog.html` — read it each time, it is the source of
+truth and can change. Singular term, even for plurals. When the subject has no
+prefix, infer the tool from the subject (and the files the commit touched, via
+`git show --stat`, if the subject is ambiguous) and prepend it; if no term in the
+list fits, ask the user rather than inventing one. Apply this to every entry,
+including those moved to Security fixes or Breaking changes (`Security: Tool: ...`),
+and do it **before** Step 4, since the category and the "Add" fallback are read
+from the prefix. Mention in the Step 8 report which entries received an inferred
+prefix. If the terminology list and the `sanitizeCategory()` table disagree on a
+name, the terminology list wins.
+
 **Additional cleanup learned in practice:**
 - If the raw message ends with body-only content that leaked into the subject
   (advisory IDs like `See advisory GHSA-xxxx-xxxx-xxxx`, `Author: Name

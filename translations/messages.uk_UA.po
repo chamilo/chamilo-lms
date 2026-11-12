@@ -39117,12 +39117,6 @@ msgstr "Підключені потоки"
 msgid "Temporary tables on disk"
 msgstr "Тимчасові таблиці на диску"
 
-msgid "Privilege scope"
-msgstr "Обсяг привілеїв"
-
-msgid "Not measurable with the current database user"
-msgstr "Неможливо виміряти поточним користувачем бази даних"
-
 msgid "Uptime"
 msgstr "Час безперервної роботи"
 

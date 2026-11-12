@@ -18,6 +18,27 @@ jobs:
             matrix:
                 operating-system: [ubuntu-latest]
                 php-versions: ['8.3']
+
+        # The runner image stopped shipping MySQL with ubuntu-26.04, so the old
+        # `sudo /etc/init.d/mysql start` step now fails with "command not found".
+        # A service container replaces it. The DATABASE_HOST of .env.test is
+        # 127.0.0.1, which is what this container needs: PDO reads localhost as
+        # a Unix socket, and the container only publishes a TCP port.
+        services:
+            mysql:
+                image: mysql:8.4
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+                ports:
+                    - 3306:3306
+                # Without a health check the job starts before the server
+                # accepts connections.
+                options: >-
+                    --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=10
+
         steps:
             - name: Checkout
               uses: actions/checkout@v7
@@ -59,9 +80,6 @@ jobs:
             - name: Psalm
               id: psalm
               run: vendor/bin/psalm --show-info=false --output-format=github --shepherd
-
-            - name: Start MySQL service
-              run: sudo /etc/init.d/mysql start
 
             - name: Create test database
               run: php bin/console --env=test doctrine:database:create

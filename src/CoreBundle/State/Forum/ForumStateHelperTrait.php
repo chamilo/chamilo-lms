@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumThread;
@@ -23,6 +24,7 @@ use Doctrine\ORM\QueryBuilder;
 use Event;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -73,9 +75,72 @@ trait ForumStateHelperTrait
         throw new AccessDeniedHttpException('The requested session is not linked to this course.');
     }
 
-    private function getGroup(EntityManagerInterface $entityManager, CidReqHelper $cidReqHelper): ?CGroup
+    private function getCurrentRequest(RequestStack $requestStack): Request
     {
-        return $cidReqHelper->getDoctrineGroupEntity();
+        return $requestStack->getCurrentRequest()
+            ?? throw new BadRequestHttpException('Request is missing.');
+    }
+
+    /**
+     * The course, the session and the group of the current request, resolved together because
+     * every forum endpoint works with the three of them.
+     *
+     * @return array{Course, ?Session, ?CGroup}
+     */
+    private function getForumContext(EntityManagerInterface $entityManager, CidReqHelper $cidReqHelper, Security $security): array
+    {
+        return [
+            $this->getCourse($cidReqHelper),
+            $cidReqHelper->getDoctrineSessionEntity(),
+            $this->getGroup($entityManager, $cidReqHelper, $security),
+        ];
+    }
+
+    /**
+     * GroupVoter decides group tool privacy by matching the request URI against the /main/ and
+     * /resources/ paths, so no /api/ call ever reaches it and the group forum setting was never
+     * applied. Enforce it here, where every forum endpoint resolves its group.
+     */
+    private function getGroup(EntityManagerInterface $entityManager, CidReqHelper $cidReqHelper, Security $security): ?CGroup
+    {
+        $group = $cidReqHelper->getDoctrineGroupEntity();
+        $this->assertGroupForumAccess($security, $group);
+
+        return $group;
+    }
+
+    /**
+     * Same shape as WikiHelper::userCanAccessGroupWiki(): teachers and tutors always pass, the
+     * four tool states decide for everybody else, and TOOL_NOT_AVAILABLE denies even a member.
+     */
+    private function assertGroupForumAccess(Security $security, ?CGroup $group): void
+    {
+        if (!$group instanceof CGroup) {
+            return;
+        }
+
+        $user = $security->getUser();
+
+        if ($security->isGranted('ROLE_ADMIN')
+            || $security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+            || $security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+            || $security->isGranted('ROLE_CURRENT_COURSE_GROUP_TEACHER')
+            || ($user instanceof User && $group->hasTutor($user))
+        ) {
+            return;
+        }
+
+        $allowed = match ($group->getForumState()) {
+            CGroup::TOOL_NOT_AVAILABLE => false,
+            CGroup::TOOL_PUBLIC => true,
+            CGroup::TOOL_PRIVATE,
+            CGroup::TOOL_PRIVATE_BETWEEN_USERS => $user instanceof User && $group->hasMember($user),
+            default => false,
+        };
+
+        if (!$allowed) {
+            throw new AccessDeniedHttpException('You are not allowed to access this group forum.');
+        }
     }
 
     private function getParentNode(EntityManagerInterface $entityManager, Request $request): ResourceNode

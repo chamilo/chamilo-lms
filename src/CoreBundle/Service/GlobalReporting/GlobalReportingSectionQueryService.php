@@ -26,6 +26,7 @@ use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Repository\SkillRepository;
 use Chamilo\CoreBundle\Security\Authorization\LoginAsAuthorizationChecker;
 use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
+use Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\DBAL\ArrayParameterType;
@@ -128,6 +129,7 @@ final readonly class GlobalReportingSectionQueryService
         private AssetRepository $assetRepository,
         private ReportIpVisibility $reportIpVisibility,
         private SessionRepository $sessionRepository,
+        private SessionTimeLimit $sessionTimeLimit,
     ) {}
 
     /**
@@ -437,11 +439,7 @@ final readonly class GlobalReportingSectionQueryService
                     SUM(CASE
                         WHEN access_log.logout_course_date IS NOT NULL
                          AND access_log.logout_course_date >= access_log.login_course_date
-                        THEN TIMESTAMPDIFF(
-                            SECOND,
-                            access_log.login_course_date,
-                            access_log.logout_course_date
-                        )
+                        THEN '.$this->sessionTimeLimit->sql('access_log.login_course_date', 'access_log.logout_course_date').'
                         ELSE 0
                     END) AS timeSeconds,
                     MAX(access_log.login_course_date) AS lastAccess
@@ -782,7 +780,7 @@ final readonly class GlobalReportingSectionQueryService
                          WHERE subscription.user_id = usr.id
                     ) AS sessionCount,
                     COALESCE((
-                        SELECT SUM(TIMESTAMPDIFF(SECOND, login.login_date, COALESCE(login.logout_date, login.login_date)))
+                        SELECT SUM('.$this->sessionTimeLimit->sql('login.login_date', 'COALESCE(login.logout_date, login.login_date)').')
                           FROM track_e_login login
                          WHERE login.login_user_id = usr.id
                     ), 0) AS timeSeconds
@@ -933,7 +931,7 @@ final readonly class GlobalReportingSectionQueryService
                                CASE
                                    WHEN logout_course_date IS NOT NULL
                                     AND logout_course_date >= login_course_date
-                                   THEN TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date)
+                                   THEN '.$this->sessionTimeLimit->sql('login_course_date', 'logout_course_date').'
                                    ELSE 0
                                END
                            ) AS timeSeconds,
@@ -1213,7 +1211,7 @@ final readonly class GlobalReportingSectionQueryService
                                CASE
                                    WHEN logout_course_date IS NOT NULL
                                     AND logout_course_date >= login_course_date
-                                   THEN TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date)
+                                   THEN '.$this->sessionTimeLimit->sql('login_course_date', 'logout_course_date').'
                                    ELSE 0
                                END
                            ) AS timeSeconds,
@@ -3173,7 +3171,7 @@ final readonly class GlobalReportingSectionQueryService
             ? 'COALESCE(SUM(CASE
                     WHEN access_log.logout_course_date IS NOT NULL
                      AND access_log.logout_course_date >= access_log.login_course_date
-                    THEN TIMESTAMPDIFF(SECOND, access_log.login_course_date, access_log.logout_course_date)
+                    THEN '.$this->sessionTimeLimit->sql('access_log.login_course_date', 'access_log.logout_course_date').'
                     ELSE 0
                 END) / NULLIF(COUNT(DISTINCT relation.user_id), 0), 0)'
             : '0';
@@ -4139,7 +4137,7 @@ final readonly class GlobalReportingSectionQueryService
                     usr.email, usr.status, usr.active, usr.last_login AS lastLogin,
                     (SELECT COUNT(*) FROM course_rel_user relation WHERE relation.user_id = usr.id) AS courseCount,
                     (SELECT COUNT(DISTINCT session_id) FROM session_rel_course_rel_user relation WHERE relation.user_id = usr.id) AS sessionCount,
-                    COALESCE((SELECT SUM(TIMESTAMPDIFF(SECOND, login_date, COALESCE(logout_date, login_date))) FROM track_e_login login WHERE login.login_user_id = usr.id), 0) AS timeSeconds
+                    COALESCE((SELECT SUM('.$this->sessionTimeLimit->sql('login_date', 'COALESCE(logout_date, login_date)').') FROM track_e_login login WHERE login.login_user_id = usr.id), 0) AS timeSeconds
                FROM user usr
               WHERE '.implode(' AND ', $where).'
            ORDER BY usr.lastname ASC, usr.firstname ASC
@@ -4366,11 +4364,7 @@ final readonly class GlobalReportingSectionQueryService
                     CASE
                         WHEN access_log.logout_course_date IS NOT NULL
                          AND access_log.logout_course_date >= access_log.login_course_date
-                        THEN TIMESTAMPDIFF(
-                            SECOND,
-                            access_log.login_course_date,
-                            access_log.logout_course_date
-                        )
+                        THEN '.$this->sessionTimeLimit->sql('access_log.login_course_date', 'access_log.logout_course_date').'
                         ELSE 0
                     END AS durationSeconds
                FROM track_e_course_access access_log
@@ -5300,7 +5294,7 @@ final readonly class GlobalReportingSectionQueryService
                    ON access_course.c_id = course.id AND access_course.access_url_id = :accessUrlId
                LEFT JOIN (
                     SELECT user_id, c_id,
-                           SUM(TIMESTAMPDIFF(SECOND, login_course_date, COALESCE(logout_course_date, login_course_date))) AS timeSeconds
+                           SUM('.$this->sessionTimeLimit->sql('login_course_date', 'COALESCE(logout_course_date, login_course_date)').') AS timeSeconds
                       FROM track_e_course_access
                   GROUP BY user_id, c_id
                ) access_metrics ON access_metrics.user_id = usr.id AND access_metrics.c_id = course.id
@@ -6080,11 +6074,7 @@ final readonly class GlobalReportingSectionQueryService
                             CASE
                                 WHEN access_log.logout_course_date IS NOT NULL
                                  AND access_log.logout_course_date >= access_log.login_course_date
-                                THEN TIMESTAMPDIFF(
-                                    SECOND,
-                                    access_log.login_course_date,
-                                    access_log.logout_course_date
-                                )
+                                THEN '.$this->sessionTimeLimit->sql('access_log.login_course_date', 'access_log.logout_course_date').'
                                 ELSE 0
                             END
                         )

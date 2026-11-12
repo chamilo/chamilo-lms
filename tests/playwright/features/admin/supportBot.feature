@@ -31,8 +31,33 @@ Feature: Support Bot administration
     When I rename the disposable Support Bot draft
     And I open the Support Bot tree list
     Then the disposable Support Bot draft should be listed
+    And the disposable Support Bot draft should have a conversation log link
     When I delete the disposable Support Bot draft
     Then the disposable Support Bot draft should no longer be listed
+
+  Scenario: Administrator can download the Support Bot JSON and CSV examples
+    Given I am a platform administrator
+    And the Support Bot setting is enabled for this scenario
+    When I open the Support Bot tree list
+    And I open the Support Bot import dialog
+    Then the Support Bot JSON and CSV examples should be downloadable
+
+  Scenario Outline: Administrator can import a Support Bot example as a draft
+    Given I am a platform administrator
+    And the Support Bot setting is enabled for this scenario
+    When I open the Support Bot tree list
+    And I open the Support Bot import dialog
+    And I import the Support Bot <format> example
+    Then the disposable Support Bot draft should be editable
+    When I open the Support Bot tree list
+    Then the disposable Support Bot draft should be listed
+    When I delete the disposable Support Bot draft
+    Then the disposable Support Bot draft should no longer be listed
+
+    Examples:
+      | format |
+      | json   |
+      | csv    |
 
   Scenario: Non-administrators cannot access Support Bot administration
     Given I am not logged

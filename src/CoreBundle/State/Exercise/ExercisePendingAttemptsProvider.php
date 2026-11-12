@@ -9,11 +9,14 @@ namespace Chamilo\CoreBundle\State\Exercise;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExercisePendingAttempts;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use CourseManager;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,13 +37,14 @@ use const ENT_QUOTES;
  */
 final readonly class ExercisePendingAttemptsProvider implements ProviderInterface
 {
-    private const STATUS_ALL = 1;
-    private const STATUS_VALIDATED = 2;
-    private const STATUS_NOT_VALIDATED = 3;
-    private const STATUS_UNCLOSED = 4;
-    private const STATUS_ONGOING = 5;
-    private const QUESTION_TYPE_WITHOUT_AUTOMATIC_CORRECTION = 1;
-    private const DEFAULT_LIMIT = 1000;
+    private const int STATUS_ALL = 1;
+    private const int STATUS_VALIDATED = 2;
+    private const int STATUS_NOT_VALIDATED = 3;
+    private const int STATUS_UNCLOSED = 4;
+    private const int STATUS_ONGOING = 5;
+    private const int STATUS_PENDING_CORRECTION = 6;
+    private const int QUESTION_TYPE_WITHOUT_AUTOMATIC_CORRECTION = 1;
+    private const int DEFAULT_LIMIT = 1000;
 
     public function __construct(
         private RequestStack $requestStack,
@@ -48,6 +52,8 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
         private Security $security,
         private SettingsManager $settingsManager,
         private ReportIpVisibility $reportIpVisibility,
+        private CourseRepository $courseRepository,
+        private AccessUrlHelper $accessUrlHelper,
     ) {}
 
     /**
@@ -192,19 +198,7 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
 
     private function isGlobalExerciseManager(): bool
     {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return true;
-        }
-
-        if (\function_exists('api_is_platform_admin') && api_is_platform_admin()) {
-            return true;
-        }
-
-        if (\function_exists('api_is_teacher') && api_is_teacher()) {
-            return true;
-        }
-
-        return \function_exists('api_is_session_admin') && api_is_session_admin();
+        return $this->security->isGranted('ROLE_TEACHER') || $this->security->isGranted('ROLE_SESSION_MANAGER');
     }
 
     /**
@@ -234,6 +228,7 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
             self::STATUS_NOT_VALIDATED,
             self::STATUS_UNCLOSED,
             self::STATUS_ONGOING,
+            self::STATUS_PENDING_CORRECTION,
         ], true) ? $status : self::STATUS_NOT_VALIDATED;
     }
 
@@ -247,6 +242,8 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
      * @param array<int, int>           $allowedCourseIds
      *
      * @return array<int, array<string, mixed>>
+     *
+     * @throws Exception
      */
     private function getPendingAttempts(array $filters, bool $includeSessions, array $allowedCourseIds): array
     {
@@ -315,10 +312,12 @@ final readonly class ExercisePendingAttemptsProvider implements ProviderInterfac
             $where[] = "te.status = 'incomplete'";
         } elseif (self::STATUS_ONGOING === $status) {
             $where[] = "(te.exe_date IS NULL OR te.exe_date = '0000-00-00 00:00:00')";
+        } elseif (self::STATUS_PENDING_CORRECTION === $status) {
+            $where[] = $this->pendingCorrectionPredicateSql();
         }
 
         if (self::QUESTION_TYPE_WITHOUT_AUTOMATIC_CORRECTION === (int) $filters['questionTypeId']) {
-            $where[] = "te.status = 'incomplete'";
+            $where[] = $this->pendingCorrectionPredicateSql();
         }
 
         $whereSql = [] === $where ? '1 = 1' : implode("\n AND ", $where);
@@ -340,6 +339,7 @@ SELECT DISTINCT
     te.start_date AS start_date,
     te.exe_date AS end_date,
     te.status AS attempt_status,
+    te.questions_to_check AS pending_questions_to_check,
     te.exe_duration AS duration,
     te.user_ip AS user_ip,
     {$this->revisedSelectSql()} AS revised,
@@ -378,6 +378,11 @@ SQL;
         }
 
         return $items;
+    }
+
+    private function pendingCorrectionPredicateSql(): string
+    {
+        return "te.status <> 'incomplete' AND TRIM(te.questions_to_check) <> ''";
     }
 
     private function existsQualifiedAttemptSql(): string
@@ -452,7 +457,9 @@ SQL;
     private function normalizeRow(array $row): array
     {
         $revised = (int) ($row['revised'] ?? 0);
-        $statusLabel = match ($revised) {
+        $pendingCorrection = 'incomplete' !== (string) ($row['attempt_status'] ?? '')
+            && '' !== trim((string) ($row['pending_questions_to_check'] ?? ''));
+        $statusLabel = $pendingCorrection ? 'Pending correction' : match ($revised) {
             1 => 'Validated',
             -1 => 'Unclosed',
             default => 'Not validated',
@@ -493,6 +500,7 @@ SQL;
             'userIp' => $this->reportIpVisibility->isExerciseHidden() ? '' : (string) ($row['user_ip'] ?? ''),
             'status' => $revised,
             'statusLabel' => $statusLabel,
+            'pendingCorrection' => $pendingCorrection,
             'qualificatorFullName' => (string) ($row['qualificator_fullname'] ?? ''),
             'qualificationDate' => $this->formatDateValue($row['date_of_qualification'] ?? null),
             'resultQuery' => [
@@ -531,6 +539,8 @@ SQL;
      * @param array<int, int> $allowedCourseIds
      *
      * @return array<int, array<string, int|string>>
+     *
+     * @throws Exception
      */
     private function getExerciseOptions(int $courseId, array $allowedCourseIds): array
     {
@@ -554,7 +564,10 @@ WHERE rl.c_id = :courseId
 ORDER BY q.title ASC
 SQL;
 
-        $rows = $this->connection->executeQuery($sql, ['courseId' => $courseId], ['courseId' => ParameterType::INTEGER])->fetchAllAssociative();
+        $rows = $this->connection
+            ->executeQuery($sql, ['courseId' => $courseId], ['courseId' => ParameterType::INTEGER])
+            ->fetchAllAssociative()
+        ;
         $items = [];
 
         foreach ($rows as $row) {
@@ -583,8 +596,8 @@ SQL;
             if (class_exists('CourseManager')) {
                 $courses = CourseManager::get_courses_list();
             }
-        } elseif (class_exists('CourseManager')) {
-            $courses = CourseManager::get_courses_list_by_user_id($this->getCurrentUserId(), $includeSessions, false, false);
+        } else {
+            $courses = $this->getManagedCourses($includeSessions);
         }
 
         $options = [];
@@ -618,25 +631,28 @@ SQL;
             return [];
         }
 
-        if (!class_exists('CourseManager')) {
+        return array_map(
+            static fn (array $course): int => $course['id'],
+            $this->getManagedCourses($includeSessions)
+        );
+    }
+
+    /**
+     * @return array<int, array{id: int, title: string}>
+     */
+    private function getManagedCourses(bool $includeSessions): array
+    {
+        $userId = $this->getCurrentUserId();
+        if ($userId <= 0) {
             return [];
         }
 
-        $courses = CourseManager::get_courses_list_by_user_id($this->getCurrentUserId(), $includeSessions, false, false);
-        $courseIds = [];
-
-        foreach ($courses as $course) {
-            if (!\is_array($course)) {
-                continue;
-            }
-
-            $courseId = (int) ($course['real_id'] ?? $course['id'] ?? 0);
-            if ($courseId > 0) {
-                $courseIds[$courseId] = $courseId;
-            }
+        $accessUrl = $this->accessUrlHelper->getCurrent();
+        if (null === $accessUrl) {
+            return [];
         }
 
-        return array_values($courseIds);
+        return $this->courseRepository->getCoursesManagedByUser($userId, (int) $accessUrl->getId(), $includeSessions);
     }
 
     private function getCurrentUserId(): int
@@ -675,6 +691,9 @@ SQL;
         return true === $value || 1 === $value || '1' === (string) $value || 'true' === (string) $value;
     }
 
+    /**
+     * @throws Exception
+     */
     private function tableHasColumn(string $table, string $column): bool
     {
         $rows = $this->connection
@@ -690,13 +709,9 @@ SQL;
      */
     private function buildQueryString(array $filters): string
     {
-        $params = [];
-
-        foreach ($filters as $key => $value) {
-            if ('' !== (string) $value && '0' !== (string) $value) {
-                $params[$key] = $value;
-            }
-        }
+        $params = array_filter($filters, function ($value) {
+            return '' !== (string) $value && '0' !== (string) $value;
+        });
 
         return http_build_query($params);
     }

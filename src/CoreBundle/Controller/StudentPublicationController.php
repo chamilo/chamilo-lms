@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\AiProvider\AiTaskGraderService;
 use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -21,6 +22,7 @@ use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\Assignment\AssignmentGroupCategoryResolver;
+use Chamilo\CoreBundle\Service\Assignment\AssignmentHtmlSubmission;
 use Chamilo\CoreBundle\Service\Assignment\AssignmentSessionCoachAccess;
 use Chamilo\CoreBundle\Service\Assignment\MobileAssignmentSubmissionAccess;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -290,6 +292,40 @@ class StudentPublicationController extends AbstractController
         ]);
     }
 
+    #[Route('/{assignmentId}/submissions/teacher/groups', name: 'chamilo_core_assignment_teacher_submission_groups', methods: ['GET'])]
+    public function getAssignmentSubmissionGroupsForTeacher(
+        int $assignmentId,
+        Request $request,
+        CStudentPublicationRepository $repo,
+    ): JsonResponse {
+        $assignment = $repo->find($assignmentId);
+        if (!$assignment instanceof CStudentPublication || 'folder' !== $assignment->getFiletype()) {
+            return new JsonResponse(['error' => 'Assignment not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $course = $this->cidReqHelper->getCourseEntity();
+        $session = $this->cidReqHelper->getSessionEntity();
+        $contextLink = $assignment->getFirstResourceLinkFromCourseSession($course, $session);
+        if (null === $contextLink && null !== $session) {
+            $contextLink = $assignment->getResourceNode()?->getResourceLinkByContext($course);
+        }
+        if (null === $contextLink) {
+            return new JsonResponse(['error' => 'Assignment not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
+        $page = max(1, $request->query->getInt('page', 1));
+        $itemsPerPage = min(100, max(1, $request->query->getInt('itemsPerPage', 20)));
+        $order = $request->query->all('order');
+        [$groups, $total] = $repo->findSubmissionGroupsByAssignment($assignmentId, $page, $itemsPerPage, $order);
+
+        return new JsonResponse([
+            'hydra:member' => $groups,
+            'hydra:totalItems' => $total,
+        ]);
+    }
+
     #[Route('/{assignmentId}/submissions/teacher', name: 'chamilo_core_assignment_teacher_submission_list', methods: ['GET'])]
     public function getAssignmentSubmissionsForTeacher(
         int $assignmentId,
@@ -308,11 +344,14 @@ class StudentPublicationController extends AbstractController
         $itemsPerPage = (int) $request->query->get('itemsPerPage', '10');
         $order = $request->query->all('order');
 
+        // Optional filter is only used after the existing teacher EDIT check.
+        $userId = $request->query->getInt('userId', 0);
         [$submissions, $total] = $repo->findAllSubmissionsByAssignment(
             $assignmentId,
             $page,
             $itemsPerPage,
-            $order
+            $order,
+            $userId > 0 ? $userId : null,
         );
 
         $data = json_decode($serializer->serialize(
@@ -325,6 +364,176 @@ class StudentPublicationController extends AbstractController
             'hydra:member' => $data,
             'hydra:totalItems' => $total,
         ]);
+    }
+
+    #[Route('/{assignmentId}/submissions/{submissionId}/visibility', name: 'chamilo_core_assignment_submission_visibility', methods: ['PATCH'])]
+    public function updateSubmissionVisibility(
+        int $assignmentId,
+        int $submissionId,
+        Request $request,
+        CStudentPublicationRepository $repo,
+        EntityManagerInterface $entityManager,
+    ): JsonResponse {
+        $assignment = $repo->find($assignmentId);
+        $submission = $repo->find($submissionId);
+        $parent = $submission instanceof CStudentPublication ? $submission->getPublicationParent() : null;
+
+        if (!$assignment instanceof CStudentPublication || 'folder' !== $assignment->getFiletype()
+            || !$submission instanceof CStudentPublication || 'file' !== $submission->getFiletype()
+            || !$parent instanceof CStudentPublication || $parent->getIid() !== $assignment->getIid()
+        ) {
+            throw $this->createNotFoundException('Assignment submission not found.');
+        }
+
+        $course = $this->cidReqHelper->getCourseEntity();
+        $session = $this->cidReqHelper->getSessionEntity();
+        $assignmentNode = $assignment->getResourceNode();
+        $submissionNode = $submission->getResourceNode();
+
+        if (null === $assignmentNode || null === $submissionNode
+            || null === $assignmentNode->getResourceLinkByContext($course, $session)
+        ) {
+            throw $this->createNotFoundException('Assignment not found in the current course context.');
+        }
+
+        // Permissions are checked on both resources, not on an arbitrary ResourceLink ID.
+        $this->denyAccessUnlessGranted('EDIT', $assignmentNode);
+        $this->denyAccessUnlessGranted('EDIT', $submissionNode);
+
+        $data = json_decode($request->getContent(), true);
+        $visibility = \is_array($data) ? ($data['visibility'] ?? null) : null;
+        $resourceLinkId = \is_array($data) ? ($data['resourceLinkId'] ?? null) : null;
+
+        if (!\is_int($visibility) || !\in_array($visibility, [ResourceLink::VISIBILITY_DRAFT, ResourceLink::VISIBILITY_PUBLISHED], true)
+            || !\is_int($resourceLinkId) || $resourceLinkId <= 0
+        ) {
+            throw new BadRequestHttpException('Invalid submission visibility request.');
+        }
+
+        $link = $entityManager->getRepository(ResourceLink::class)->find($resourceLinkId);
+
+        if (!$link instanceof ResourceLink
+            || $link->getResourceNode()->getId() !== $submissionNode->getId()
+            || $link->getCourse()?->getId() !== $course->getId()
+            || (int) ($link->getSession()?->getId() ?? 0) !== (int) ($session?->getId() ?? 0)
+        ) {
+            throw $this->createNotFoundException('Submission resource link not found in the current course context.');
+        }
+
+        $groupId = (int) ($this->cidReqHelper->getGroupEntity()?->getIid() ?? 0);
+        if (null !== $link->getGroup() && (int) $link->getGroup()->getIid() !== $groupId) {
+            throw $this->createNotFoundException('Submission resource link not found in the current group context.');
+        }
+
+        if (!\in_array($link->getVisibility(), [ResourceLink::VISIBILITY_DRAFT, ResourceLink::VISIBILITY_PUBLISHED], true)) {
+            throw new BadRequestHttpException('This submission visibility cannot be changed.');
+        }
+
+        $link->setVisibility($visibility);
+        $entityManager->flush();
+
+        return new JsonResponse(['visibility' => $link->getVisibility()]);
+    }
+
+    #[Route('/submissions/{id}/html-preview', name: 'chamilo_core_assignment_submission_html_preview', methods: ['GET'])]
+    public function previewHtmlSubmission(
+        int $id,
+        CStudentPublicationRepository $repo,
+        ResourceNodeRepository $resourceNodeRepository,
+        AssignmentHtmlSubmission $htmlSubmission,
+        EntityManagerInterface $entityManager,
+    ): JsonResponse {
+        $submission = $repo->find($id);
+        $assignment = $submission instanceof CStudentPublication ? $submission->getPublicationParent() : null;
+
+        if (!$submission instanceof CStudentPublication || !$assignment instanceof CStudentPublication
+            || 'file' !== $submission->getFiletype() || 'folder' !== $assignment->getFiletype()
+        ) {
+            throw $this->createNotFoundException('Assignment submission not found.');
+        }
+
+        $assignmentNode = $assignment->getResourceNode();
+        $submissionNode = $submission->getResourceNode();
+        if (null === $assignmentNode || null === $submissionNode) {
+            throw $this->createNotFoundException('Assignment submission not found.');
+        }
+
+        $this->denyAccessUnlessGranted('VIEW', $submissionNode);
+
+        if (!$this->isGranted('EDIT', $assignmentNode)) {
+            // Learners may preview only their own submission, never a classmate's work.
+            $this->denyAccessUnlessGranted('VIEW', $assignmentNode);
+            $user = $this->getUser();
+            if (!$user instanceof User || $submission->getUser()->getId() !== $user->getId()) {
+                throw new AccessDeniedHttpException('You can only preview your own assignment submission.');
+            }
+
+            // Resolve the managed request context rather than comparing detached session entities.
+            $course = $this->cidReqHelper->requireDoctrineCourseEntity();
+            $session = $this->cidReqHelper->getDoctrineSessionEntity();
+            $group = $this->cidReqHelper->getDoctrineGroupEntity();
+
+            // Match the same persisted resource-link context used by assignment listing.
+            // An owned node's VIEW permission alone is not enough to authorize a foreign cid.
+            $linkRepository = $entityManager->getRepository(ResourceLink::class);
+            $submissionLink = $linkRepository->findOneBy([
+                'resourceNode' => $submissionNode,
+                'course' => $course,
+                'session' => $session,
+                'group' => $group,
+            ]);
+            if (null === $submissionLink) {
+                throw $this->createNotFoundException('Assignment submission not found in the current course context.');
+            }
+
+            // A base-course assignment is also valid in an authorized session or group.
+            // Scoped assignments must match the requested session/group exactly.
+            $assignmentInContext = false;
+            foreach ($linkRepository->findBy([
+                'resourceNode' => $assignmentNode,
+                'course' => $course,
+            ]) as $link) {
+                if ((null !== $link->getSession() && $link->getSession()->getId() !== $session?->getId())
+                    || (null !== $link->getGroup() && $link->getGroup()->getIid() !== $group?->getIid())
+                ) {
+                    continue;
+                }
+
+                $assignmentInContext = true;
+
+                break;
+            }
+
+            if (!$assignmentInContext) {
+                throw $this->createNotFoundException('Assignment not found in the current course context.');
+            }
+        }
+
+        $resourceFile = $submission->getResourceNode()?->getFirstResourceFile();
+        if (null === $resourceFile || 1 !== preg_match('/\.html?$/i', (string) $resourceFile->getOriginalName())) {
+            throw $this->createNotFoundException('The submission does not contain an HTML file.');
+        }
+
+        if ((int) $resourceFile->getSize() > 512000) {
+            throw new BadRequestHttpException('Submission HTML is too large to preview.');
+        }
+
+        try {
+            $path = $resourceNodeRepository->getFilename($resourceFile);
+            $content = $resourceNodeRepository->getFileSystem()->read($path);
+        } catch (Throwable) {
+            throw $this->createNotFoundException('Submission HTML could not be read.');
+        }
+
+        if (\strlen($content) > 512000) {
+            throw new BadRequestHttpException('Submission HTML is too large to preview.');
+        }
+
+        $response = new JsonResponse(['html' => $htmlSubmission->sanitizeFragment($content)]);
+        $response->headers->set('Cache-Control', 'private, no-store');
+        $response->headers->set('X-Content-Type-Options', 'nosniff');
+
+        return $response;
     }
 
     #[Route('/submissions/{id}/download', name: 'chamilo_core_assignment_submission_download', methods: ['GET'])]

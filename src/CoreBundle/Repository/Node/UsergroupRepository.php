@@ -184,22 +184,43 @@ class UsergroupRepository extends ResourceRepository
 
     public function findGroupById($id)
     {
-        return $this->createQueryBuilder('ug')
+        $qb = $this->createQueryBuilder('ug')
             ->where('ug.id = :id')
             ->setParameter('id', $id)
-            ->getQuery()
-            ->getOneOrNullResult()
         ;
+
+        if ($this->accessUrlHelper->isMultiple()) {
+            $accessUrl = $this->accessUrlHelper->getCurrent();
+
+            $qb->innerJoin('ug.urls', 'u')
+                ->andWhere('u.url = :urlId')
+                ->setParameter('urlId', $accessUrl->getId())
+            ;
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function searchGroups(string $searchTerm): array
+    public function searchGroups(string $searchTerm, int $limit = 50): array
     {
-        $queryBuilder = $this->createQueryBuilder('g');
-        $queryBuilder->where('g.title LIKE :searchTerm')
+        $qb = $this->createQueryBuilder('g')
+            ->where('g.groupType = :socialClass')
+            ->setParameter('socialClass', Usergroup::SOCIAL_CLASS)
+            ->andWhere('g.title LIKE :searchTerm')
             ->setParameter('searchTerm', '%'.$searchTerm.'%')
+            ->setMaxResults($limit)
         ;
 
-        return $queryBuilder->getQuery()->getResult();
+        if ($this->accessUrlHelper->isMultiple()) {
+            $accessUrl = $this->accessUrlHelper->getCurrent();
+
+            $qb->innerJoin('g.urls', 'u')
+                ->andWhere('u.url = :urlId')
+                ->setParameter('urlId', $accessUrl->getId())
+            ;
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     public function getUsersByGroup(int $groupID, bool $includeNormalClass = false): array
@@ -365,24 +386,27 @@ class UsergroupRepository extends ResourceRepository
             $qb->select('g.id, g.title, g.description, g.url, g.picture');
         }
 
+        $qb->where('g.groupType = :socialClass')
+            ->setParameter('socialClass', Usergroup::SOCIAL_CLASS)
+            ->andWhere(
+                $qb->expr()->orX(
+                    $qb->expr()->like('g.title', ':tag'),
+                    $qb->expr()->like('g.description', ':tag'),
+                    $qb->expr()->like('g.url', ':tag')
+                )
+            )
+            ->setParameter('tag', '%'.$tag.'%')
+        ;
+
+        // After the where() above, which would otherwise drop the portal condition.
         if ($this->accessUrlHelper->isMultiple()) {
             $accessUrl = $this->accessUrlHelper->getCurrent();
 
-            $qb->innerJoin('g.accessUrls', 'a', 'WITH', 'g.id = a.usergroup')
-                ->andWhere('a.url = :urlId')
+            $qb->innerJoin('g.urls', 'u')
+                ->andWhere('u.url = :urlId')
                 ->setParameter('urlId', $accessUrl->getId())
             ;
         }
-
-        $qb->where(
-            $qb->expr()->orX(
-                $qb->expr()->like('g.title', ':tag'),
-                $qb->expr()->like('g.description', ':tag'),
-                $qb->expr()->like('g.url', ':tag')
-            )
-        )
-            ->setParameter('tag', '%'.$tag.'%')
-        ;
 
         if (!$getCount) {
             $qb->orderBy('g.title', 'ASC')

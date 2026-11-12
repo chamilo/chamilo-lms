@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Klikoni p\u00ebr t\u00eb shfaqur metrikat e ngarkes\u00ebs s\u00eb serverit t\u00eb baz\u00ebs s\u00eb t\u00eb dh\u00ebnave",
     "Threads connected": "Thread-et e lidhur",
     "Temporary tables on disk": "Tabela t\u00eb p\u00ebrkohshme n\u00eb disk",
-    "Privilege scope": "Fusha e privilegjit",
-    "Not measurable with the current database user": "Nuk matet me p\u00ebrdoruesin aktual t\u00eb baz\u00ebs s\u00eb t\u00eb dh\u00ebnave",
     "Uptime": "Koha e funksionimit",
     "Queries per second": "K\u00ebrkesa p\u00ebr sekond\u00eb",
     "Slow queries": "K\u00ebrkesa t\u00eb ngadalta",
@@ -4616,5 +4614,7 @@
     "Saved.": "Ruajtur.",
     "You have tried to resolve this exercise earlier": "Keni provuar t\u00eb zgjidhni k\u00ebt\u00eb ushtrim m\u00eb her\u00ebt",
     "Disable new test attempts": "\u00c7aktivizo p\u00ebrpjekjet e reja t\u00eb testit",
-    "This skill cannot be acquired": "Kjo aft\u00ebsi nuk mund t\u00eb p\u00ebrfohet"
+    "This skill cannot be acquired": "Kjo aft\u00ebsi nuk mund t\u00eb p\u00ebrfohet",
+    "Validated": "E v\u00ebrtetuar",
+    "Not validated": "E pav\u00ebrtetuar"
 }

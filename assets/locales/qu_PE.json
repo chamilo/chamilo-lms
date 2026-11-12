@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Q'aylla yupaykuna qhawayta q'aylla",
     "Threads connected": "Qillqaykuna hu\u00f1usqa",
     "Temporary tables on disk": "Q'aylla q'utu q'ayllapi",
-    "Privilege scope": "Qaylla q'aylla",
-    "Not measurable with the current database user": "Mana yupaychan kunan yupay sirwiqwan",
     "Uptime": "Qhipaq p'unchay",
     "Queries per second": "Tapukuna sapa segundo",
     "Slow queries": "Lentas consultas",
@@ -4616,5 +4614,7 @@
     "Saved.": "Kamarisqa.",
     "You have tried to resolve this exercise earlier": "Ya has intentado resolver este ejercicio antes",
     "Disable new test attempts": "Willakuy new attempts hark'ay",
-    "This skill cannot be acquired": "Kay yachayta mana chaskiyta atikunchu"
+    "This skill cannot be acquired": "Kay yachayta mana chaskiyta atikunchu",
+    "Validated": "Kanchisqan",
+    "Not validated": "Mana kanchisqan"
 }

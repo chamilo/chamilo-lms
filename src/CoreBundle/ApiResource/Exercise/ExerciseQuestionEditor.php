@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\ApiResource\Exercise;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\QueryParameter;
 use ApiPlatform\OpenApi\Model\Operation;
@@ -46,6 +47,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Get(
             uriTemplate: '/exercise/questions/global/editor/{questionId}',
             requirements: ['questionId' => '\d+'],
+            // Without it, the operation expects the "exerciseId" a global question does not have, and answers 404
+            uriVariables: [
+                'questionId' => new Link(
+                    identifiers: ['questionId'],
+                    compositeIdentifier: false,
+                    schema: ['type' => 'integer'],
+                ),
+            ],
             openapi: new Operation(
                 summary: 'Exercise question editor for an existing global question',
                 parameters: [
@@ -140,6 +149,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Post(
             uriTemplate: '/exercise/questions/global/editor/{questionId}',
             requirements: ['questionId' => '\d+'],
+            // Without it, the operation expects the "exerciseId" a global question does not have, and answers 404
+            uriVariables: [
+                'questionId' => new Link(
+                    identifiers: ['questionId'],
+                    compositeIdentifier: false,
+                    schema: ['type' => 'integer'],
+                ),
+            ],
             openapi: new Operation(
                 summary: 'Update a global exercise question',
                 parameters: [

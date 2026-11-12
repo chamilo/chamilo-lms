@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Component\Badge\OpenBadge2;
 use Chamilo\CoreBundle\Component\Badge\OpenBadgePng;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Level;
 use Chamilo\CoreBundle\Entity\Skill;
@@ -1915,11 +1916,40 @@ class SkillModel extends Model
 
         $allGradeBooks = $objGradebook->find('all');
 
-        // This procedure is for check if there is already a Skill with no Parent (Root by default)
+        // Resolve course names in one query so categories with identical titles remain distinguishable.
+        $courseIds = [];
+        foreach ($allGradeBooks as $gradebook) {
+            $courseId = (int) ($gradebook['c_id'] ?? 0);
+            if ($courseId > 0) {
+                $courseIds[$courseId] = $courseId;
+            }
+        }
+
+        $courseTitles = [];
+        if (!empty($courseIds)) {
+            $courses = Database::getManager()
+                ->getRepository(Course::class)
+                ->findBy(['id' => array_values($courseIds)])
+            ;
+            foreach ($courses as $course) {
+                $courseTitles[(int) $course->getId()] = $course->getTitle();
+            }
+        }
+
         $gradeBookList = [];
         foreach ($allGradeBooks as $gradebook) {
-            $gradeBookList[$gradebook['id']] = $gradebook['title'];
+            $gradebookId = (int) $gradebook['id'];
+            $courseId = (int) ($gradebook['c_id'] ?? 0);
+            $courseTitle = $courseTitles[$courseId] ?? '';
+            $categoryTitle = trim((string) ($gradebook['title'] ?? ''));
+            if ('' === $categoryTitle) {
+                $categoryTitle = (string) $gradebookId;
+            }
+
+            $gradeBookList[$gradebookId] = ('' !== $courseTitle ? $courseTitle.' — ' : '')
+                .$categoryTitle.' (#'.$gradebookId.')';
         }
+        natcasesort($gradeBookList);
 
         $translateUrl = api_get_path(WEB_CODE_PATH).'skills/skill_translate.php?';
         $translateNameButton = '';
@@ -1953,9 +1983,15 @@ class SkillModel extends Model
 
         $form->addSelect(
             'gradebook_id',
-            [get_lang('Assessments'), get_lang('With Certificate')],
+            get_lang('Assessments'),
             $gradeBookList,
-            ['id' => 'gradebook_id', 'multiple' => 'multiple', 'size' => 10]
+            [
+                'id' => 'gradebook_id',
+                'multiple' => 'multiple',
+                'class' => 'w-full',
+                'data-placeholder' => get_lang('Please select an option'),
+                'size' => 10,
+            ]
         );
         $form->addTextarea('description', get_lang('Description'), ['id' => 'description', 'rows' => 7]);
         $form->addCheckBox('acquirable', get_lang('Acquirable'), get_lang('Yes'));
@@ -1964,6 +2000,18 @@ class SkillModel extends Model
         // EXTRA FIELDS
         $extraField = new ExtraField('skill');
         $returnParams = $extraField->addElements($form, $skillId);
+
+        // Both legacy skill forms already render this code on document ready.
+        $returnParams['jquery_ready_content'] = ($returnParams['jquery_ready_content'] ?? '').'
+            var $gradebookSelect = $("#gradebook_id");
+            if ($gradebookSelect.length && $.fn.select2 && !$gradebookSelect.data("select2")) {
+                $gradebookSelect.select2({
+                    width: "100%",
+                    closeOnSelect: false,
+                    placeholder: $gradebookSelect.attr("data-placeholder")
+                });
+            }
+        ';
 
         if (empty($skillInfo)) {
             $form->addButtonCreate(get_lang('Add'));

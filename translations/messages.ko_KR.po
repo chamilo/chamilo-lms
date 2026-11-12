@@ -39121,12 +39121,6 @@ msgstr "연결된 스레드"
 msgid "Temporary tables on disk"
 msgstr "디스크의 임시 테이블"
 
-msgid "Privilege scope"
-msgstr "권한 범위"
-
-msgid "Not measurable with the current database user"
-msgstr "현재 데이터베이스 사용자로는 측정할 수 없습니다"
-
 msgid "Uptime"
 msgstr "가동 시간"
 

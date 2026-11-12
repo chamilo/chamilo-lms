@@ -39117,12 +39117,6 @@ msgstr "Àwọn ìsopọ̀ àkọ́lé"
 msgid "Temporary tables on disk"
 msgstr "Àwọn tábìlì ìgbàlódì lórí dísìkì"
 
-msgid "Privilege scope"
-msgstr "Ààyè ààyè ààyè"
-
-msgid "Not measurable with the current database user"
-msgstr "Kò ṣeé ṣe láti wọn pẹ̀lú olùmúlò ibùdó data lọ́wọ́lọ́wọ́"
-
 msgid "Uptime"
 msgstr "Àkókò ìṣiṣẹ́"
 

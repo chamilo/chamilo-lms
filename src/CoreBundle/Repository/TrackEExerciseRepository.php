@@ -58,6 +58,53 @@ class TrackEExerciseRepository extends ServiceEntityRepository
     }
 
     /**
+     * Count a user's attempts at one exercise within a single learning-path context.
+     *
+     * Attempts are grouped per (origLpId, origLpItemId, origLpItemViewId): the exercise-tool
+     * context is (0, 0, 0), each real lesson item has its own triple. Callers resolve and validate
+     * that triple first, so this never trusts raw request ids. With a status it counts only the
+     * matching rows (e.g. the resumable incomplete one).
+     *
+     * @param array{lpId: int, lpItemId: int, lpItemViewId: int} $lpContext
+     */
+    public function countUserAttemptsInContext(
+        int $exerciseId,
+        int $courseId,
+        ?int $sessionId,
+        int $userId,
+        array $lpContext,
+        ?string $status = null,
+    ): int {
+        $qb = $this->createQueryBuilder('te')
+            ->select('COUNT(te.exeId)')
+            ->andWhere('te.quiz = :exerciseId')
+            ->andWhere('te.course = :courseId')
+            ->andWhere('te.user = :userId')
+            ->andWhere('te.origLpId = :lpId')
+            ->andWhere('te.origLpItemId = :lpItemId')
+            ->andWhere('te.origLpItemViewId = :lpItemViewId')
+            ->setParameter('exerciseId', $exerciseId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $userId)
+            ->setParameter('lpId', $lpContext['lpId'])
+            ->setParameter('lpItemId', $lpContext['lpItemId'])
+            ->setParameter('lpItemViewId', $lpContext['lpItemViewId'])
+        ;
+
+        if (null !== $status) {
+            $qb->andWhere('te.status = :status')->setParameter('status', $status);
+        }
+
+        if (null !== $sessionId) {
+            $qb->andWhere('te.session = :sessionId')->setParameter('sessionId', $sessionId);
+        } else {
+            $qb->andWhere('te.session IS NULL');
+        }
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
      * Restricts a collection to the attempts $scope may read, i.e. the predicate of
      * TrackEExerciseVoter::VIEW written as a WHERE.
      *

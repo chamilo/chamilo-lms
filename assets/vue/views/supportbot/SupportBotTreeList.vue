@@ -163,7 +163,19 @@ onMounted(loadTrees)
     </SectionHeader>
 
     <div class="rounded-xl border border-gray-20 bg-white p-4 text-sm text-gray-600 shadow-sm">
-      {{ t("Build a fixed decision tree that guides users through support questions and can escalate to Tickets.") }}
+      <p>
+        {{ t("Build a fixed decision tree that guides users through support questions and can escalate to Tickets.") }}
+      </p>
+      <p class="mt-2">
+        {{
+          t(
+            "Published and archived trees are read-only. To make changes, duplicate the tree, edit the new draft, and publish it. Publishing a new tree automatically archives the previously published tree for the same portal.",
+          )
+        }}
+      </p>
+      <p class="mt-2">
+        {{ t("Use View conversations on any tree to review its conversation logs, even when the count is zero.") }}
+      </p>
     </div>
 
     <BaseTable
@@ -201,6 +213,11 @@ onMounted(loadTrees)
       <Column :header="t('Updated at')">
         <template #body="{ data }">
           {{ formatDate(data.updatedAt) }}
+        </template>
+      </Column>
+      <Column :header="t('Conversations')">
+        <template #body="{ data }">
+          {{ Number(data.conversationCount || 0) }}
         </template>
       </Column>
       <Column
@@ -248,7 +265,6 @@ onMounted(loadTrees)
               @click="runAction(data, 'archive')"
             />
             <BaseButton
-              v-if="Number(data.conversationCount || 0) > 0"
               :label="t('View conversations')"
               :route="{ name: 'SupportBotConversationList', params: { id: data.id } }"
               icon="preview"
@@ -288,6 +304,29 @@ onMounted(loadTrees)
         <p class="text-sm text-gray-600">
           {{ t("Import a JSON export or a CSV decision tree. The imported tree is always created as a new draft.") }}
         </p>
+        <p class="text-sm text-gray-600">
+          {{
+            t(
+              "Download an example file, edit its questions and options, then import it. The examples work without an existing ticket project; add ticket escalation after importing if needed.",
+            )
+          }}
+        </p>
+        <div class="flex flex-wrap gap-4 text-sm">
+          <a
+            class="text-primary underline hover:no-underline"
+            download="support-bot-example.json"
+            href="/assets/support-bot-example.json"
+          >
+            {{ t("Download JSON example") }}
+          </a>
+          <a
+            class="text-primary underline hover:no-underline"
+            download="support-bot-example.csv"
+            href="/assets/support-bot-example.csv"
+          >
+            {{ t("Download CSV example") }}
+          </a>
+        </div>
         <BaseFileUpload
           id="support_bot_import_file"
           accept=".json,.csv,application/json,text/csv"

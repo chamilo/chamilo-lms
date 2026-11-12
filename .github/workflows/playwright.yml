@@ -59,12 +59,48 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                operating-system: [ ubuntu-latest ]
+                # Pinned, where the other workflows still say ubuntu-latest: this
+                # job is the only one installing PHP with apt, from the
+                # ondrej/php PPA, because it needs a real Apache and
+                # libapache2-mod-php. That PPA publishes nothing for Ubuntu
+                # 26.04 ("resolute"), which ubuntu-latest became on 2026-11-06,
+                # so `apt-get update` answers 404 and the whole step dies before
+                # anything is installed. Moving to packages.sury.org/php, which
+                # the PPA itself now names as the canonical channel, is what
+                # lifts this pin — the other workflows need none of it, since
+                # shivammathur/setup-php works on 26.04.
+                operating-system: [ ubuntu-24.04 ]
                 # 8.4/8.5 temporarily disabled: focusing on getting the full suite green on
                 # 8.3 first, then re-enabling the rest — that split also makes any future
                 # failure easier to read as "version-specific" instead of muddying it with
                 # whatever's still being worked out on 8.3 alone. Re-enable by uncommenting.
                 php-versions: [ '8.3' ] # , '8.4', '8.5'
+
+        # Declared per job, not in the shared composite action: `services:` only
+        # exists at job level, so the action cannot carry it (see that file's own
+        # description). It replaces the former `sudo /etc/init.d/mysql start`
+        # step, which fails with "command not found" since the runner image moved
+        # to ubuntu-26.04 and stopped shipping MySQL.
+        #
+        # The web installer must reach this container over TCP, so
+        # actionInstall.feature fills the database host with 127.0.0.1 instead of
+        # the installer's own `localhost` default — PDO reads localhost as a Unix
+        # socket, which no longer exists.
+        services:
+            mysql:
+                image: mysql:8.4
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+                ports:
+                    - 3306:3306
+                # Without a health check the job starts before the server
+                # accepts connections.
+                options: >-
+                    --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=10
+
         steps:
             -   name: Checkout
                 uses: actions/checkout@v7
@@ -130,8 +166,26 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                operating-system: [ ubuntu-latest ]
+                # Pinned for the same reason as the "build" job above.
+                operating-system: [ ubuntu-24.04 ]
                 php-versions: [ '8.3' ] # , '8.4', '8.5'
+
+        # Same service container as the "build" job above, for the same reason —
+        # see that job's own comment. Each job installs its own Chamilo, so each
+        # one needs its own database server.
+        services:
+            mysql:
+                image: mysql:8.4
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+                ports:
+                    - 3306:3306
+                options: >-
+                    --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=10
+
         steps:
             -   name: Checkout
                 uses: actions/checkout@v7

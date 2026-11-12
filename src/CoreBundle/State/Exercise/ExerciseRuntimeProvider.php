@@ -23,6 +23,7 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -98,6 +99,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         private SettingsManager $settingsManager,
         private UserHelper $userHelper,
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
+        private TrackEExerciseRepository $trackEExerciseRepository,
     ) {}
 
     /**
@@ -160,7 +162,9 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
 
         $response->canManage = $canManage;
         $response->attempt = $attempt instanceof TrackEExercise ? $this->normalizeAttempt($operation, $attempt, $questions, $quiz) : null;
-        $response->canStartAttempt = $runsAsLearner && $hasRuntimeQuestions;
+        $response->canStartAttempt = $runsAsLearner
+            && $hasRuntimeQuestions
+            && $this->canStartOrResumeAttempt($quiz, $course, $session);
         $response->canSubmit = $canSubmit;
         $response->usesLegacySubmit = $requiresLegacyRuntime;
 
@@ -248,6 +252,37 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
         $attempt = $queryBuilder->getQuery()->getOneOrNullResult();
 
         return $attempt instanceof TrackEExercise ? $attempt : null;
+    }
+
+    /**
+     * Whether the learner may still open the player, so the "Start test" button stays hidden once
+     * the limit is spent. It mirrors the attempt processor: an incomplete attempt for the validated
+     * learning-path context always reopens, otherwise a new one is allowed only while the counter
+     * for that same context is below the maximum.
+     */
+    private function canStartOrResumeAttempt(CQuiz $quiz, Course $course, ?Session $session): bool
+    {
+        $user = $this->security->getUser();
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        $lpContext = $this->exerciseLearnpathVisibilityHelper->resolveValidatedAttemptTriple($quiz, $course, $session, $user);
+        $exerciseId = (int) $quiz->getIid();
+        $courseId = (int) $course->getId();
+        $sessionId = null !== $session ? (int) $session->getId() : null;
+        $userId = (int) $user->getId();
+
+        if ($this->trackEExerciseRepository->countUserAttemptsInContext($exerciseId, $courseId, $sessionId, $userId, $lpContext, self::STATUS_INCOMPLETE) > 0) {
+            return true;
+        }
+
+        $maxAttempt = (int) $quiz->getMaxAttempt();
+        if ($maxAttempt <= 0) {
+            return true;
+        }
+
+        return $this->trackEExerciseRepository->countUserAttemptsInContext($exerciseId, $courseId, $sessionId, $userId, $lpContext) < $maxAttempt;
     }
 
     /**
@@ -966,7 +1001,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             'trueFalseOptions' => $this->getQuestionOptions($question),
             'fillBlanks' => $this->getFillBlanksRuntime($question),
             'matching' => $this->getMatchingRuntime($question, $shuffleAnswers, $answerShuffleSeed),
-            'draggable' => $this->getDraggableRuntime($question, $shuffleAnswers, $answerShuffleSeed),
+            'draggable' => $this->getDraggableRuntime($question, $shuffleAnswers, $answerShuffleSeed, $canManage),
             'dropdown' => $this->getDropdownRuntime($question, $shuffleAnswers, $answerShuffleSeed),
             'calculated' => $this->getCalculatedRuntime($question, $attempt),
             'annotation' => $this->getImageRuntime($operation, $question, $course, $session, [20]),
@@ -1522,7 +1557,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
     /**
      * @return array<string, mixed>|null
      */
-    private function getDraggableRuntime(CQuizQuestion $question, bool $shuffleAnswers = false, string $shuffleSeed = ''): ?array
+    private function getDraggableRuntime(CQuizQuestion $question, bool $shuffleAnswers, string $shuffleSeed, bool $canManage): ?array
     {
         if (18 !== (int) $question->getType()) {
             return null;
@@ -1535,13 +1570,18 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
                 continue;
             }
 
-            $items[] = [
+            $item = [
                 'id' => (int) $answer->getIid(),
                 'answer' => $answer->getAnswer(),
                 'position' => (int) $answer->getPosition(),
-                'targetPosition' => $targetPosition,
-                'score' => (float) $answer->getPonderation(),
             ];
+
+            if ($canManage) {
+                $item['targetPosition'] = $targetPosition;
+                $item['score'] = (float) $answer->getPonderation();
+            }
+
+            $items[] = $item;
         }
 
         return [

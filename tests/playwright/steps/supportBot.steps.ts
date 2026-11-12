@@ -1,3 +1,4 @@
+import { resolve } from "node:path"
 import { expect, Page } from "@playwright/test"
 import { createBdd } from "playwright-bdd"
 
@@ -18,13 +19,13 @@ async function saveSettings(page: Page): Promise<void> {
 }
 
 async function findDisposableTreeRow(page: Page) {
-  if (!disposableTreeTitle) {
-    throw new Error("No disposable Support Bot tree title is currently recorded.")
+  if (!disposableTreeId) {
+    throw new Error("No disposable Support Bot tree id is currently recorded.")
   }
 
   return page
     .locator("tr")
-    .filter({ has: page.getByText(disposableTreeTitle, { exact: true }) })
+    .filter({ has: page.locator(`a[href$="/admin/support-bot/${disposableTreeId}/edit"]`) })
     .first()
 }
 
@@ -51,7 +52,7 @@ async function deleteDisposableTreeIfPresent(page: Page): Promise<void> {
   await expect(buttons).toHaveCount(2)
   await buttons.last().click()
 
-  await expect(page.getByText(disposableTreeTitle, { exact: true })).toHaveCount(0)
+  await expect(row).toHaveCount(0)
 }
 
 Given("the Support Bot setting is enabled for this scenario", async ({ page }) => {
@@ -141,6 +142,77 @@ Then("the disposable Support Bot draft should be listed", async ({ page }) => {
   }
 
   await expect(page.getByText(disposableTreeTitle, { exact: true })).toBeVisible()
+})
+
+Then("the disposable Support Bot draft should have a conversation log link", async ({ page }) => {
+  if (!disposableTreeId) {
+    throw new Error("The disposable Support Bot tree has not been created yet.")
+  }
+
+  const row = await findDisposableTreeRow(page)
+  const link = row.locator(`a[href$="/admin/support-bot/${disposableTreeId}/conversations"]`)
+  await expect(link).toBeVisible()
+  await expect(link).toHaveAttribute("href", new RegExp(`/admin/support-bot/${disposableTreeId}/conversations$`))
+})
+
+When("I open the Support Bot import dialog", async ({ page }) => {
+  await page.locator("button:has(.mdi-import)").first().click()
+  await expect(page.locator(".p-dialog:visible")).toBeVisible()
+})
+
+Then("the Support Bot JSON and CSV examples should be downloadable", async ({ page }) => {
+  for (const extension of ["json", "csv"]) {
+    const link = page.locator(`a[download="support-bot-example.${extension}"]`)
+    await expect(link).toBeVisible()
+    await expect(link).toHaveAttribute("href", `/assets/support-bot-example.${extension}`)
+
+    const response = await page.request.get(`/assets/support-bot-example.${extension}`)
+    expect(response.status()).toBe(200)
+    const content = await response.text()
+    if (extension === "json") {
+      const example = JSON.parse(content)
+      expect(example.entryNode).toBe("n1")
+      expect(example.nodes.length).toBeGreaterThan(1)
+    } else {
+      expect(content).toContain("node_ref,node_content,option_label,option_action")
+      expect(content).toContain("end_conversation")
+    }
+  }
+})
+
+When("I import the Support Bot {word} example", async ({ page }, format: string) => {
+  if (!["json", "csv"].includes(format)) {
+    throw new Error(`Unsupported Support Bot sample format: ${format}`)
+  }
+
+  const upload = page.locator("#support_bot_import_file")
+  await upload.setInputFiles(resolve(`public/assets/support-bot-example.${format}`))
+
+  const requestCompleted = page.waitForResponse(
+    (response) =>
+      response.request().method() === "POST" && response.url().includes("/api/support-bot/admin/trees/import"),
+  )
+  await page.locator(".p-dialog:visible button:has(.mdi-import)").click()
+  const response = await requestCompleted
+  expect(response.status()).toBe(201)
+  const created = await response.json()
+  disposableTreeId = Number(created.id)
+  disposableTreeTitle = "Support Bot Example - Login and Video Help"
+  expect(disposableTreeId).toBeGreaterThan(0)
+
+  await page.waitForURL(new RegExp(`/admin/support-bot/${disposableTreeId}/edit$`))
+  const title = page.locator("#support_bot_tree_title")
+  await expect(title).toHaveValue("Support Bot Example - Login and Video Help")
+  disposableTreeTitle = `Playwright Support Bot import ${format} ${Date.now()}`
+  await title.fill(disposableTreeTitle)
+  const saved = page.waitForResponse(
+    (response) =>
+      response.request().method() === "PATCH" &&
+      response.url().includes(`/api/support-bot/admin/trees/${disposableTreeId}`),
+  )
+  await page.locator("button:has(.mdi-content-save)").first().click()
+  expect((await saved).ok()).toBeTruthy()
+  await expect(title).toHaveValue(disposableTreeTitle)
 })
 
 When("I delete the disposable Support Bot draft", async ({ page }) => {

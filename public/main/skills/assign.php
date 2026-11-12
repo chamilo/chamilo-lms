@@ -165,7 +165,7 @@ if ($profile) {
     ]);
     $profileLevels = [];
     foreach ($levels as $level) {
-        $profileLevels[$level->getPosition()][$level->getId()] = get_lang($level->getTitle());
+        $profileLevels[$level->getPosition()][$level->getId()] = $level->getTitle();
     }
 
     ksort($profileLevels); // Sort the array by Position.
@@ -189,7 +189,7 @@ $form->addText('user_name', '', false);
 $levelName = get_lang('Skill');
 if (!empty($skillLevels)) {
     if (isset($skillLevels['levels'][1])) {
-        $levelName = get_lang($skillLevels['levels'][1]);
+        $levelName = (string) $skillLevels['levels'][1];
     }
 }
 
@@ -223,7 +223,7 @@ if (!empty($skillIdFromGet)) {
         $levelName = get_lang('Sub-skill');
         if (!empty($skillLevels)) {
             if (isset($skillLevels['levels'][$counter + 2])) {
-                $levelName = get_lang($skillLevels['levels'][$counter + 2]);
+                $levelName = (string) $skillLevels['levels'][$counter + 2];
             }
         }
 

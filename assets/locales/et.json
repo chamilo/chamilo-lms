@@ -3671,8 +3671,6 @@
     "Click to show database server load metrics": "Kl\u00f5psa andmebaasiserveri koormuse m\u00f5\u00f5dikute kuvamiseks",
     "Threads connected": "\u00dchendatud l\u00f5imed",
     "Temporary tables on disk": "Ajutised tabelid kettal",
-    "Privilege scope": "\u00d5iguste ulatus",
-    "Not measurable with the current database user": "Praeguse andmebaasi kasutajaga ei ole m\u00f5\u00f5detav",
     "Uptime": "T\u00f6\u00f6aeg",
     "Queries per second": "P\u00e4ringuid sekundis",
     "Slow queries": "Aeglased p\u00e4ringud",

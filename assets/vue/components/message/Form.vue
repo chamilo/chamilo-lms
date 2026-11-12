@@ -25,11 +25,53 @@
 
       <BaseTinyEditor
         v-model="messagePayload.content"
+        :editor-config="graphEditorConfig"
         :enable-translate-html="false"
         :full-page="false"
         editor-id="message"
         required
       />
+
+      <Dialog
+        v-model:visible="graphDialogVisible"
+        :header="t('Insert graph')"
+        :style="{ width: '30rem', maxWidth: '95vw' }"
+        modal
+      >
+        <label
+          for="message-graph-expression"
+          class="mb-2 block"
+        >
+          {{ t("Function") }}: y = f(x)
+        </label>
+        <input
+          id="message-graph-expression"
+          v-model="graphExpression"
+          class="w-full rounded border border-gray-300 p-2"
+          name="message-graph-expression"
+          placeholder="x^3"
+          @keydown.enter.prevent="insertGraph"
+        />
+        <small class="mt-1 block text-gray-500">x^3, sin(x), cos(x), sqrt(abs(x))</small>
+        <p
+          v-if="graphError"
+          class="mt-2 text-red-600"
+          role="alert"
+          v-text="graphError"
+        />
+        <template #footer>
+          <BaseButton
+            :label="t('Cancel')"
+            type="black"
+            @click="graphDialogVisible = false"
+          />
+          <BaseButton
+            :label="t('Insert graph')"
+            type="primary"
+            @click="insertGraph"
+          />
+        </template>
+      </Dialog>
 
       <slot></slot>
 
@@ -89,6 +131,13 @@
 import BaseInputText from "../basecomponents/BaseInputText.vue"
 import { useI18n } from "vue-i18n"
 import { computed, onBeforeUnmount, ref, watch } from "vue"
+import Dialog from "primevue/dialog"
+import {
+  compileMessageGraph,
+  getMessageGraphSegments,
+  renderMessageFunctionGraphs,
+  stripMessageFunctionGraphPreviews,
+} from "../../utils/messageFunctionGraph"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
 import BaseUploader from "../basecomponents/BaseUploader.vue"
 import resourceFileService from "../../services/resourceFileService"
@@ -151,6 +200,88 @@ const messagePayload = ref({
 const usersTo = ref([])
 const usersCc = ref([])
 const resourceFileList = ref([])
+
+const graphDialogVisible = ref(false)
+const graphExpression = ref("x^3")
+const graphError = ref("")
+let messageEditor = null
+
+function setupGraphEditor(editor) {
+  messageEditor = editor
+
+  // Register a native TinyMCE toolbar button only for the message editor.
+  editor.ui.registry.addButton("chmessagegraph", {
+    text: "Graph",
+    tooltip: t("Insert graph"),
+    onAction: () => {
+      graphDialogVisible.value = true
+    },
+  })
+
+  // The theme reapplies its base toolbar during TinyMCE initialization.
+  // Restore this editor-scoped button after that final configuration merge,
+  // before TinyMCE constructs the toolbar.
+  const toolbar = editor.settings.toolbar
+  const rows = Array.isArray(toolbar) ? [...toolbar] : [String(toolbar || "")]
+  const existing = rows.some((row) => /(?:^|[\s|])chmessagegraph(?:$|[\s|])/.test(String(row)))
+  if (!existing) {
+    const mathRow = rows.findIndex((row) => /\bmathjax\b/i.test(String(row)))
+    if (mathRow >= 0) {
+      rows[mathRow] = String(rows[mathRow]).replace(/\bmathjax\b/i, "$& chmessagegraph")
+    } else {
+      const lastIndex = rows.length - 1
+      const lastRow = String(rows[lastIndex] || "").trim()
+      rows[lastIndex] = lastRow ? `${lastRow} | chmessagegraph` : "chmessagegraph"
+    }
+    editor.settings.toolbar = Array.isArray(toolbar) ? rows : rows[0]
+  }
+
+  const render = () => renderMessageFunctionGraphs(editor.getBody())
+  editor.on("init", render)
+  editor.on("SetContent", () => window.setTimeout(render, 0))
+  editor.on("GetContent", (event) => {
+    if (event.content && event.content.includes("ch-message-function-graph")) {
+      event.content = stripMessageFunctionGraphPreviews(event.content)
+    }
+  })
+  editor.on("remove", () => {
+    if (messageEditor === editor) messageEditor = null
+  })
+}
+
+const graphEditorConfig = {
+  appendToolbar: "chmessagegraph",
+  extended_valid_elements: "span[class|contenteditable|data-expression]",
+  setup: setupGraphEditor,
+}
+
+function insertGraph() {
+  graphError.value = ""
+  try {
+    const graph = compileMessageGraph(graphExpression.value)
+    if (!getMessageGraphSegments(graph).length) {
+      throw new Error("The function has no visible points in the graph range.")
+    }
+    const editor = messageEditor
+    if (!editor) {
+      throw new Error("The message editor is not ready.")
+    }
+    // The parser guarantees the value contains no HTML metacharacters.
+    const formula = graph.expression
+    editor.insertContent(
+      `<span class="ch-message-function-graph" contenteditable="false" data-expression="${formula}">Graph: y = ${formula}</span>&nbsp;`,
+    )
+    renderMessageFunctionGraphs(editor.getBody())
+    // Programmatic insertion must notify TinyMCE's Vue model listeners.
+    // Without change/input, the message body can remain empty and Send stays disabled.
+    editor.fire("change")
+    editor.fire("input")
+    editor.save()
+    graphDialogVisible.value = false
+  } catch (error) {
+    graphError.value = error.message || "Invalid function."
+  }
+}
 
 watch(
   () => props.title,
@@ -280,6 +411,7 @@ function onSubmit() {
 }
 
 onBeforeUnmount(() => {
+  messageEditor = null
   resourceFileList.value.forEach((resourceFile) => {
     revokePreviewUrl(resourceFile.previewUrl)
   })

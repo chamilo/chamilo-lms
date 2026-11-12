@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Doctrine\ORM\EntityManagerInterface;
@@ -63,6 +64,37 @@ trait ForumActionStateHelperTrait
         if (!$security->isGranted('EDIT', $resourceNode)) {
             throw new AccessDeniedHttpException($message);
         }
+    }
+
+    /**
+     * Context a forum resource is created in: the course, session and group of the request, plus
+     * the parent resource node the payload names, already proven writable there.
+     *
+     * Requires ForumStateHelperTrait (getForumContext()) and ForumWriteHelperTrait
+     * (getRequiredInt()) in the using class.
+     *
+     * @param array<string, mixed> $payload
+     *
+     * @return array{Course, ?Session, ?CGroup, int}
+     */
+    private function getForumCreationContext(
+        EntityManagerInterface $entityManager,
+        CidReqHelper $cidReqHelper,
+        Security $security,
+        array $payload,
+    ): array {
+        [$course, $session, $group] = $this->getForumContext($entityManager, $cidReqHelper, $security);
+        $parentResourceNodeId = $this->getRequiredInt($payload, 'parentResourceNodeId');
+        $this->assertParentResourceNodeIsWritableInForumContext(
+            $entityManager,
+            $security,
+            $parentResourceNodeId,
+            $course,
+            $session,
+            $group,
+        );
+
+        return [$course, $session, $group, $parentResourceNodeId];
     }
 
     private function assertParentResourceNodeIsWritableInForumContext(

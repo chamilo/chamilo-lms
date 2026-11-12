@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Klik untuk menunjukkan metrik beban pelayan pangkalan data",
     "Threads connected": "Benang disambungkan",
     "Temporary tables on disk": "Jadual sementara pada cakera",
-    "Privilege scope": "Skop keistimewaan",
-    "Not measurable with the current database user": "Tidak boleh diukur dengan pengguna pangkalan data semasa",
     "Uptime": "Masa hidup",
     "Queries per second": "Pertanyaan per saat",
     "Slow queries": "Pertanyaan perlahan",
@@ -4616,5 +4614,7 @@
     "Saved.": "Disimpan.",
     "You have tried to resolve this exercise earlier": "Anda telah cuba menyelesaikan latihan ini sebelum ini",
     "Disable new test attempts": "Lumpuhkan percubaan ujian baru",
-    "This skill cannot be acquired": "Kemahiran ini tidak boleh diperoleh"
+    "This skill cannot be acquired": "Kemahiran ini tidak boleh diperoleh",
+    "Validated": "Disahkan",
+    "Not validated": "Belum disahkan"
 }

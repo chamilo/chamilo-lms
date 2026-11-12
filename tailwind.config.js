@@ -97,10 +97,10 @@ module.exports = {
         sans: ["Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
       },
       fontSize: {
-        "body-1": ["16px", "24px"],
-        "body-2": ["14px", "16px"],
-        caption: ["13px", "16px"],
-        tiny: ["11px", "16px"],
+        "body-1": ["1rem", "1.5rem"],
+        "body-2": ["0.875rem", "1rem"],
+        caption: ["0.8125rem", "1rem"],
+        tiny: ["0.6875rem", "1rem"],
       },
       boxShadow: {
         xl: "0 4px 12px 0 rgb(0, 0, 0, 0.2)",

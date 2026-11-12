@@ -39187,12 +39187,6 @@ msgstr "接続中のスレッド"
 msgid "Temporary tables on disk"
 msgstr "ディスク上のテンポラリテーブル"
 
-msgid "Privilege scope"
-msgstr "権限範囲"
-
-msgid "Not measurable with the current database user"
-msgstr "現在のデータベースユーザーでは測定できません"
-
 msgid "Uptime"
 msgstr "稼働時間"
 

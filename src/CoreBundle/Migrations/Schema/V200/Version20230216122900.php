@@ -8,13 +8,20 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\DataFixtures\SettingsCurrentFixtures;
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\DBAL\Schema\Schema;
+use Sylius\Bundle\SettingsBundle\Schema\SettingsBuilder;
 
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
 
 class Version20230216122900 extends AbstractMigrationChamilo
 {
+    /**
+     * @var array<string, string>|null
+     */
+    private ?array $schemaDefaults = null;
+
     public function getDescription(): string
     {
         return 'Migrate configuration values to settings';
@@ -392,6 +399,16 @@ class Version20230216122900 extends AbstractMigrationChamilo
             include_once $oldConfigPath;
         }
 
+        // An option that configuration.php does not set used to be stored as 'false': right for a boolean, and for a
+        // legacy option that the code reads as disabled, but a number or a JSON list then cannot be read back (the
+        // settings form fails with "Expected a numeric"). These take the default of their settings schema instead.
+        if (!isset($_configuration[$variable])) {
+            $default = $this->getSchemaDefaults()[$variable] ?? null;
+            if (null !== $default && (is_numeric($default) || \in_array(substr($default, 0, 1), ['[', '{'], true))) {
+                return $default;
+            }
+        }
+
         $selectedValue = '';
         $settingValue = $this->getConfigurationValue($variable, $_configuration);
         if (\is_array($settingValue)) {
@@ -403,5 +420,35 @@ class Version20230216122900 extends AbstractMigrationChamilo
         }
 
         return $selectedValue;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function getSchemaDefaults(): array
+    {
+        if (null !== $this->schemaDefaults) {
+            return $this->schemaDefaults;
+        }
+
+        $this->schemaDefaults = [];
+        foreach ($this->container->get(SettingsManager::class)->getSchemas() as $settingsSchema) {
+            $settingsBuilder = new SettingsBuilder();
+            $settingsSchema->buildSettings($settingsBuilder);
+
+            foreach ($settingsBuilder->resolve([]) as $name => $value) {
+                if (\is_bool($value)) {
+                    $value = var_export($value, true);
+                } elseif (\is_array($value)) {
+                    $value = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                }
+
+                if (\is_scalar($value)) {
+                    $this->schemaDefaults[$name] = (string) $value;
+                }
+            }
+        }
+
+        return $this->schemaDefaults;
     }
 }

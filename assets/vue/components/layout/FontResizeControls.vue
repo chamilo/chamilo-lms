@@ -120,7 +120,7 @@ const currentStepLabel = computed(() => {
 watch(
   settingValue,
   (value) => {
-    if (null === value) {
+    if (null === value || undefined === value) {
       return
     }
 

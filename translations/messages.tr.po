@@ -39123,12 +39123,6 @@ msgstr "Bağlı iş parçacıkları"
 msgid "Temporary tables on disk"
 msgstr "Diskteki geçici tablolar"
 
-msgid "Privilege scope"
-msgstr "Yetki kapsamı"
-
-msgid "Not measurable with the current database user"
-msgstr "Mevcut veritabanı kullanıcısıyla ölçülemez"
-
 msgid "Uptime"
 msgstr "Çalışma süresi"
 

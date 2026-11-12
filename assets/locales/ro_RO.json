@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Clic pentru a afi\u0219a metricile de \u00eenc\u0103rcare ale serverului de baze de date",
     "Threads connected": "Fire conectate",
     "Temporary tables on disk": "Tabele temporare pe disc",
-    "Privilege scope": "Domeniu de privilegii",
-    "Not measurable with the current database user": "Nu se poate m\u0103sura cu utilizatorul curent al bazei de date",
     "Uptime": "Timp de func\u021bionare",
     "Queries per second": "Interog\u0103ri pe secund\u0103",
     "Slow queries": "Interog\u0103ri lente",
@@ -4616,5 +4614,7 @@
     "Saved.": "Pastrat.",
     "You have tried to resolve this exercise earlier": "A incercat sa rezolve aceasta intrebare inainte",
     "Disable new test attempts": "Dezactiva\u021bi noile \u00eencerc\u0103ri de test",
-    "This skill cannot be acquired": "Aceast\u0103 competen\u021b\u0103 nu poate fi dob\u00e2ndit\u0103"
+    "This skill cannot be acquired": "Aceast\u0103 competen\u021b\u0103 nu poate fi dob\u00e2ndit\u0103",
+    "Validated": "Corectat",
+    "Not validated": "Necorectat"
 }

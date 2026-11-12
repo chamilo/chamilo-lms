@@ -18,6 +18,11 @@ final class Version20250925215200 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        // Version20250310215800 adds it first on a migration from 1.11
+        if ($schema->getTable('conference_activity')->hasColumn('metrics')) {
+            return;
+        }
+
         $this->addSql("ALTER TABLE conference_activity ADD metrics JSON DEFAULT NULL COMMENT '(DC2Type:json)'");
     }
 

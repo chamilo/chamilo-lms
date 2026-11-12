@@ -47,19 +47,33 @@ async function getAssignmentDetail({ assignmentId, page = 1, itemsPerPage = 10, 
   return baseService.get(`/assignments/${assignmentId}/submissions`, params)
 }
 
-async function getAssignmentDetailForTeacher({ assignmentId, page = 1, itemsPerPage = 10, order = {} }) {
+async function getAssignmentDetailForTeacher({ assignmentId, page = 1, itemsPerPage = 10, order = {}, userId = null }) {
   const params = {
     ...buildCidParams(),
     page,
     itemsPerPage,
+    ...(userId != null ? { userId } : {}),
     ...Object.fromEntries(Object.entries(order).map(([key, val]) => [`order[${key}]`, val])),
   }
 
   return baseService.get(`/assignments/${assignmentId}/submissions/teacher`, params)
 }
 
+async function getAssignmentSubmissionGroupsForTeacher({ assignmentId, page = 1, itemsPerPage = 20, order = {} }) {
+  return baseService.get(`/assignments/${assignmentId}/submissions/teacher/groups`, {
+    ...buildCidParams(),
+    page,
+    itemsPerPage,
+    ...Object.fromEntries(Object.entries(order).map(([key, value]) => [`order[${key}]`, value])),
+  })
+}
+
 async function uploadStudentAssignment(formData, queryParams) {
   return baseService.post(`/api/c_student_publications/upload?${queryParams}`, formData)
+}
+
+async function getSubmissionHtmlPreview(submissionId) {
+  return baseService.get(`/assignments/submissions/${submissionId}/html-preview`, buildCidParams())
 }
 
 async function getStudentProgress(queryParams = {}) {
@@ -70,6 +84,14 @@ async function deleteAssignmentSubmission(submissionId) {
   await baseService.delete(`/assignments/submissions/${submissionId}`, { params: buildCidParams() })
 }
 
+async function updateSubmissionVisibility(assignmentId, submissionId, resourceLinkId, visibility) {
+  return baseService.patch(
+    `/assignments/${assignmentId}/submissions/${submissionId}/visibility`,
+    { resourceLinkId, visibility },
+    { params: buildCidParams() },
+  )
+}
+
 async function updateSubmission(id, data) {
   await baseService.patch(`/assignments/submissions/${id}/edit`, data, {
     headers: { "Content-Type": "application/json" },
@@ -78,15 +100,12 @@ async function updateSubmission(id, data) {
 }
 
 async function uploadComment(submissionId, parentResourceNodeId, formData, sendMail = false) {
-  const params = {
-    submissionId,
-    parentResourceNodeId,
-    filetype: "file",
-    sendMail: sendMail ? "1" : "0",
-    ...buildCidParams(),
-  }
+  formData.set("submissionId", String(submissionId))
+  formData.set("parentResourceNodeId", String(parentResourceNodeId))
+  formData.set("filetype", "file")
+  formData.set("sendMail", sendMail ? "1" : "0")
 
-  return baseService.post(`/api/c_student_publication_comments/upload`, formData, {}, { params })
+  return baseService.post(`/api/c_student_publication_comments/upload`, formData, {}, { params: buildCidParams() })
 }
 
 async function loadComments(submissionId) {
@@ -257,6 +276,11 @@ async function removeRelDocument(relId, params = {}) {
 
 /** Uploads a teacher correction file for a submission. */
 async function uploadCorrection(formData, { parentResourceNodeId, submissionId } = {}) {
+  // The correction action reads these values from the multipart request body.
+  formData.set("submissionId", String(submissionId))
+  formData.set("parentResourceNodeId", String(parentResourceNodeId))
+  formData.set("filetype", "file")
+
   return baseService.post(
     `/api/c_student_publication_corrections/upload`,
     formData,
@@ -271,10 +295,13 @@ export default {
   getAssignmentMetadata,
   getAssignmentDetail,
   getAssignmentDetailForTeacher,
+  getAssignmentSubmissionGroupsForTeacher,
   uploadStudentAssignment,
+  getSubmissionHtmlPreview,
   getStudentProgress,
   deleteAssignmentSubmission,
   updateSubmission,
+  updateSubmissionVisibility,
   uploadComment,
   loadComments,
   deleteComment,

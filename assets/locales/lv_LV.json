@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Noklik\u0161\u0137iniet, lai par\u0101d\u012btu datub\u0101zes servera noslodzes r\u0101d\u012bt\u0101jus",
     "Threads connected": "Savienot\u0101s pavedienu",
     "Temporary tables on disk": "Pagaidu tabulas disk\u0101",
-    "Privilege scope": "Privile\u0123iju apjoms",
-    "Not measurable with the current database user": "Nav izm\u0113r\u0101ms ar pa\u0161reiz\u0113jo datu b\u0101zes lietot\u0101ju",
     "Uptime": "Darb\u012bbas laiks",
     "Queries per second": "Vaic\u0101jumi sekund\u0113",
     "Slow queries": "L\u0113nie vaic\u0101jumi",
@@ -4616,5 +4614,7 @@
     "Saved.": "Saglab\u0101ts",
     "You have tried to resolve this exercise earlier": "J\u016bs jau m\u0113\u0123in\u0101j\u0101t atbild\u0113t uz \u0161o jaut\u0101jumu agr\u0101k",
     "Disable new test attempts": "Atsp\u0113jot jaunus testa m\u0113\u0123in\u0101jumus",
-    "This skill cannot be acquired": "\u0160o prasmi nevar ieg\u016bt"
+    "This skill cannot be acquired": "\u0160o prasmi nevar ieg\u016bt",
+    "Validated": "Apstiprin\u0101ts",
+    "Not validated": "Nav apstiprin\u0101ts"
 }

@@ -39122,12 +39122,6 @@ msgstr "Tengdir þræðir"
 msgid "Temporary tables on disk"
 msgstr "Tímabundnar töflur á diski"
 
-msgid "Privilege scope"
-msgstr "Réttindasvið"
-
-msgid "Not measurable with the current database user"
-msgstr "Ekki mælanlegt með núverandi gagnagrunnsnotanda"
-
 msgid "Uptime"
 msgstr "Uppitími"
 

@@ -39122,12 +39122,6 @@ msgstr "Povezane niti"
 msgid "Temporary tables on disk"
 msgstr "Privremene tablice na disku"
 
-msgid "Privilege scope"
-msgstr "Opseg privilegija"
-
-msgid "Not measurable with the current database user"
-msgstr "Nije moguće izmjeriti s trenutnim korisnikom baze podataka"
-
 msgid "Uptime"
 msgstr "Vrijeme rada"
 

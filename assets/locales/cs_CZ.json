@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Kliknut\u00edm zobraz\u00edte metriky z\u00e1t\u011b\u017ee datab\u00e1zov\u00e9ho serveru",
     "Threads connected": "P\u0159ipojen\u00e1 vl\u00e1kna",
     "Temporary tables on disk": "Do\u010dasn\u00e9 tabulky na disku",
-    "Privilege scope": "Rozsah opr\u00e1vn\u011bn\u00ed",
-    "Not measurable with the current database user": "Nelze m\u011b\u0159it s aktu\u00e1ln\u00edm u\u017eivatelem datab\u00e1ze",
     "Uptime": "Doba provozu",
     "Queries per second": "Dotazy za sekundu",
     "Slow queries": "Pomal\u00e9 dotazy",
@@ -4616,5 +4614,7 @@
     "Saved.": "Ulo\u017eeno.",
     "You have tried to resolve this exercise earlier": "Toto cvi\u010den\u00ed jste ji\u017e d\u0159\u00edve \u0159e\u0161ili",
     "Disable new test attempts": "Vypnout nov\u00e9 pokusy test\u016f",
-    "This skill cannot be acquired": "Tuto dovednost nelze z\u00edskat"
+    "This skill cannot be acquired": "Tuto dovednost nelze z\u00edskat",
+    "Validated": "Ov\u011b\u0159eno",
+    "Not validated": "Neov\u011b\u0159eno"
 }

@@ -11,10 +11,12 @@ declare(strict_types=1);
  * It marks expired recurring service sales as suspended when no successful IPN extended them,
  * closes only courses created under the expired subscription, hides them after the configured
  * grace period and reactivates them when the subscription becomes active again.
+ * Permanent deletion is opt-in through the Symfony console command, not this script.
  *
  * Usage:
  *   php public/plugin/BuyCourses/src/process_recurring_subscriptions.php
- *   php public/plugin/BuyCourses/src/process_recurring_subscriptions.php --dry-run
+ *   php bin/console chamilo:buycourses:process-recurring-subscriptions --dry-run
+ *   php bin/console chamilo:buycourses:process-recurring-subscriptions --delete-expired
  */
 
 $cidReset = true;
@@ -194,6 +196,10 @@ $closeCoursesForSubscriptionSale = static function (
         );
 
         if ($isDryRun) {
+            if ('cli' === PHP_SAPI) {
+                echo \sprintf('PLAN close course_id=%d service_sale_id=%d', $courseId, $serviceSaleId).PHP_EOL;
+            }
+
             continue;
         }
 
@@ -330,6 +336,10 @@ $hideClosedCoursesForSubscriptionSale = static function (
         );
 
         if ($isDryRun) {
+            if ('cli' === PHP_SAPI) {
+                echo \sprintf('PLAN hide course_id=%d service_sale_id=%d', $courseId, $serviceSaleId).PHP_EOL;
+            }
+
             continue;
         }
 
@@ -464,6 +474,10 @@ $reactivateCoursesForSubscriptionSale = static function (
         );
 
         if ($isDryRun) {
+            if ('cli' === PHP_SAPI) {
+                echo \sprintf('PLAN reactivate course_id=%d service_sale_id=%d', $courseId, $serviceSaleId).PHP_EOL;
+            }
+
             continue;
         }
 
@@ -630,23 +644,40 @@ while ($sale = Database::fetch_assoc($expiredResult)) {
         );
     }
 
-    $closeResult = $closeCoursesForSubscriptionSale(
-        $saleId,
-        $subscriptionCourseTable,
-        $courseTable,
-        $closedCourseVisibility,
-        $now,
-        $isDryRun,
-        $decodeContext,
-        $encodeContextForSql,
-        is_array($reassignResult['reassigned_subscription_course_ids'] ?? null)
-            ? $reassignResult['reassigned_subscription_course_ids']
-            : []
-    );
+    // Start the closing countdown at the end of the paid service period, not at
+    // the moment the customer requests cancellation (access remains paid until date_end).
+    $closeAfterDays = $behavior['close_after_days'];
+    $closeDue = false;
+    if (null !== $closeAfterDays) {
+        try {
+            $closeDue = (new DateTimeImmutable($dateEnd, new DateTimeZone('UTC')))
+                ->modify('+'.(int) $closeAfterDays.' days')
+                <= new DateTimeImmutable($now, new DateTimeZone('UTC'));
+        } catch (Throwable $exception) {
+            ++$errors;
+            error_log('[BuyCourses][Recurring Cron] Invalid service end date for closing. service_sale_id='.$saleId);
+        }
+    }
 
-    $coursesFound += (int) $closeResult['found'];
-    $coursesClosed += (int) $closeResult['closed'];
-    $errors += (int) $closeResult['errors'];
+    if ($closeDue) {
+        $closeResult = $closeCoursesForSubscriptionSale(
+            $saleId,
+            $subscriptionCourseTable,
+            $courseTable,
+            $closedCourseVisibility,
+            $now,
+            $isDryRun,
+            $decodeContext,
+            $encodeContextForSql,
+            is_array($reassignResult['reassigned_subscription_course_ids'] ?? null)
+                ? $reassignResult['reassigned_subscription_course_ids']
+                : []
+        );
+
+        $coursesFound += (int) $closeResult['found'];
+        $coursesClosed += (int) $closeResult['closed'];
+        $errors += (int) $closeResult['errors'];
+    }
 
     if (null !== $behavior['hide_after_days']) {
         $hideResult = $hideClosedCoursesForSubscriptionSale(
@@ -666,13 +697,10 @@ while ($sale = Database::fetch_assoc($expiredResult)) {
         $errors += (int) $hideResult['errors'];
     }
 
-    if (null !== $behavior['delete_after_days']) {
-        error_log(
-            '[BuyCourses][Recurring Cron] delete_after_days is configured but delete action is intentionally not implemented yet. service_sale_id='.
-            $saleId.
-            ' delete_after_days='.
-            (int) $behavior['delete_after_days']
-        );
+    // Permanent deletion is performed only by the Symfony command's explicit
+    // --delete-expired option, after closing/hiding/reassignment have succeeded.
+    if (null !== $behavior['delete_after_days'] && $isCli && !$isDryRun) {
+        echo 'INFO service_sale_id='.$saleId.' deletion requires --delete-expired'.PHP_EOL;
     }
 }
 

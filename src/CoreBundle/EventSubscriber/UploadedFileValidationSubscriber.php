@@ -35,7 +35,11 @@ final class UploadedFileValidationSubscriber implements EventSubscriberInterface
         }
 
         $files = $request->files->all();
-        $sanitized = $this->sanitizeRecursive($files);
+        // The Support Bot importer reads JSON in memory and never stores the upload.
+        // Its dedicated validation remains responsible for the file contents.
+        $supportBotImport = $request->isMethod('POST')
+            && '/api/support-bot/admin/trees/import' === $request->getPathInfo();
+        $sanitized = $this->sanitizeRecursive($files, $supportBotImport);
 
         $request->files->replace($sanitized);
     }
@@ -45,10 +49,10 @@ final class UploadedFileValidationSubscriber implements EventSubscriberInterface
      *
      * @return mixed
      */
-    private function sanitizeRecursive($value)
+    private function sanitizeRecursive($value, bool $supportBotImport = false)
     {
         if ($value instanceof UploadedFile) {
-            return $this->sanitizeUploadedFile($value);
+            return $this->sanitizeUploadedFile($value, $supportBotImport);
         }
 
         // FileBag may contain null for UPLOAD_ERR_NO_FILE after conversion.
@@ -61,7 +65,10 @@ final class UploadedFileValidationSubscriber implements EventSubscriberInterface
             $out = [];
 
             foreach ($value as $k => $v) {
-                $san = $this->sanitizeRecursive($v);
+                $san = $this->sanitizeRecursive(
+                    $v,
+                    $supportBotImport && 'file' === $k && $v instanceof UploadedFile
+                );
 
                 // Drop nulls entirely, otherwise FileBag->replace() will throw.
                 if (null === $san) {
@@ -78,7 +85,7 @@ final class UploadedFileValidationSubscriber implements EventSubscriberInterface
         return null;
     }
 
-    private function sanitizeUploadedFile(UploadedFile $file): UploadedFile
+    private function sanitizeUploadedFile(UploadedFile $file, bool $supportBotImport = false): UploadedFile
     {
         // Keep invalid uploads untouched; controllers usually handle isValid()/getError().
         if (!$file->isValid()) {
@@ -88,6 +95,21 @@ final class UploadedFileValidationSubscriber implements EventSubscriberInterface
         $originalName = (string) $file->getClientOriginalName();
 
         $decision = $this->policy->filter($originalName);
+
+        // Whitelist-only exception for the administrator's in-memory JSON import.
+        // Explicit blacklist denials and all other routes retain the global policy.
+        // Restrict filenames to one .json extension to prevent double-extension tricks.
+        if (
+            $supportBotImport
+            && 1 === preg_match('/\A[\pL\pN][\pL\pN _-]{0,127}\.json\z/uiD', $originalName)
+            && \in_array(
+                $decision['reason'] ?? '',
+                ['Extension not in whitelist', 'Extension replaced (whitelist)'],
+                true
+            )
+        ) {
+            return $file;
+        }
 
         if (!($decision['allowed'] ?? false)) {
             throw new BadRequestHttpException('File upload rejected by extension policy.');

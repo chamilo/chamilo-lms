@@ -306,6 +306,17 @@
       />
 
       <Column
+        v-if="permissions.canManage"
+        field="subscriptionDate"
+        :header="t('Subscription date')"
+        sortable
+      >
+        <template #body="{ data }">
+          {{ formatSubscriptionDate(data.subscriptionDate) }}
+        </template>
+      </Column>
+
+      <Column
         v-if="!isHidden('groups')"
         :header="t('Group')"
       >
@@ -685,6 +696,20 @@ async function exportFile(format) {
     console.error("[CourseUser] Failed to export course users", error)
     errorMessage.value = error?.response?.data?.detail || error?.message || t("An error occurred")
   }
+}
+
+function formatSubscriptionDate(value) {
+  if (!value) {
+    return "—"
+  }
+
+  // Display the stored calendar date without a browser timezone shift.
+  const date = new Date(`${value.slice(0, 10)}T12:00:00`)
+  if (Number.isNaN(date.getTime())) {
+    return "—"
+  }
+
+  return new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(date)
 }
 
 function isHidden(field) {

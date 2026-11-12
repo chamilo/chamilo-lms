@@ -39038,12 +39038,6 @@ msgstr ""
 msgid "Temporary tables on disk"
 msgstr ""
 
-msgid "Privilege scope"
-msgstr ""
-
-msgid "Not measurable with the current database user"
-msgstr ""
-
 msgid "Uptime"
 msgstr ""
 
@@ -43382,4 +43376,114 @@ msgid "By default (off), the admin or moderator of a social group can only invit
 msgstr ""
 
 msgid "Some of the selected users cannot be invited and were skipped"
+
+msgid "Your first message in this thread must contain at least %d words (currently %d)."
+msgstr ""
+
+msgid "Your next messages in this thread must contain at least %d words (currently %d)."
+msgstr ""
+
+msgid "Share of the thread's posts"
+msgstr ""
+
+msgid "AI course analyzer is disabled for this course."
+msgstr ""
+
+msgid "AI-assisted skills mapping"
+msgstr ""
+
+msgid "Add selected skills to referential and Gradebook"
+msgstr ""
+
+msgid "Analyzing course, please wait…"
+msgstr ""
+
+msgid "Back to AI course analyzer"
+msgstr ""
+
+msgid "Course content and existing skills may be sent to an external AI provider. Only continue if sharing is authorized."
+msgstr ""
+
+msgid "Criteria"
+msgstr ""
+
+msgid "Existing skill"
+msgstr ""
+
+msgid "Match course content with existing skills or propose new skills for administrator approval."
+msgstr ""
+
+msgid "New skill"
+msgstr ""
+
+msgid "Only a platform administrator can create new skills."
+msgstr ""
+
+msgid "Parent skill"
+msgstr ""
+
+msgid "Review all suggestions before adding skills. AI suggestions never change the referential automatically."
+msgstr ""
+
+msgid "Review suggested skills"
+msgstr ""
+
+msgid "Suggest skills for this course"
+msgstr ""
+
+msgid "The selected session is used for analysis. Approved skills are attached to the main course Gradebook."
+msgstr ""
+
+msgid "You can review suggestions, but you do not have permission to assign skills to Gradebook."
+msgstr ""
+
+msgid "Invalid JSON syntax"
+msgstr ""
+
+msgid "Conversations"
+msgstr ""
+
+msgid "Published and archived trees are read-only. To make changes, duplicate the tree, edit the new draft, and publish it. Publishing a new tree automatically archives the previously published tree for the same portal."
+msgstr ""
+
+msgid "Use View conversations on any tree to review its conversation logs, even when the count is zero."
+msgstr ""
+
+msgid "Download an example file, edit its questions and options, then import it. The examples work without an existing ticket project; add ticket escalation after importing if needed."
+msgstr ""
+
+msgid "Download JSON example"
+msgstr ""
+
+msgid "Download CSV example"
+msgstr ""
+
+msgid "Page backgrounds"
+msgstr ""
+
+msgid "Images shown at the bottom of some pages, repeated horizontally. Upload a PNG, JPEG or WebP image (2 MB maximum) to replace one, or hide it."
+msgstr ""
+
+msgid "Uploaded image"
+msgstr ""
+
+msgid "Image of the theme"
+msgstr ""
+
+msgid "Restore the image of the theme"
+msgstr ""
+
+msgid "Select a PNG, JPEG or WebP image smaller than 2 MB."
+msgstr ""
+
+msgid "Delete the uploaded image and restore the image of the theme?"
+msgstr ""
+
+msgid "Theme image restored"
+msgstr ""
+
+msgid "Login page (visitors who are not signed in)"
+msgstr ""
+
+msgid "Interface of signed-in users"
 msgstr ""

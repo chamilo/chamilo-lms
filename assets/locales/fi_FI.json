@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Napsauta n\u00e4ytt\u00e4\u00e4ksesi tietokantapalvelimen kuormitusmittarit",
     "Threads connected": "Yhdistetyt s\u00e4ikeet",
     "Temporary tables on disk": "V\u00e4liaikaiset taulut levyll\u00e4",
-    "Privilege scope": "K\u00e4ytt\u00f6oikeuksien laajuus",
-    "Not measurable with the current database user": "Ei mitattavissa nykyisell\u00e4 tietokantak\u00e4ytt\u00e4j\u00e4ll\u00e4",
     "Uptime": "K\u00e4ynniss\u00e4oloaika",
     "Queries per second": "Kyselyt sekunnissa",
     "Slow queries": "Hitaat kyselyt",
@@ -4616,5 +4614,7 @@
     "Saved.": "Tallennettu",
     "You have tried to resolve this exercise earlier": "Olet yritt\u00e4nyt ratkaista t\u00e4m\u00e4n harjoituksen aiemmin",
     "Disable new test attempts": "Poista k\u00e4yt\u00f6st\u00e4 uudet testiyritykset",
-    "This skill cannot be acquired": "T\u00e4t\u00e4 taitoa ei voi hankkia"
+    "This skill cannot be acquired": "T\u00e4t\u00e4 taitoa ei voi hankkia",
+    "Validated": "Vahvistettu",
+    "Not validated": "Ei vahvistettu"
 }

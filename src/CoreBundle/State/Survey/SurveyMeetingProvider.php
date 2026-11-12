@@ -142,8 +142,13 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
         $response->availableUntil = $this->formatDate($survey->getAvailTill());
         $response->slots = $this->getSlots($survey);
         $response->selectedSlots = $selectedSlots;
-        $response->participants = $this->getParticipants($survey, $course, $session);
-        $response->matrix = $this->getMatrix($survey, $response->participants, $session);
+        $participants = $this->getParticipants($survey, $course, $session);
+        $matrix = $this->getMatrix($survey, $participants, $session);
+        if ('1' === (string) $survey->getAnonymous()) {
+            [$participants, $matrix] = $this->anonymize($participants, $matrix);
+        }
+        $response->participants = $participants;
+        $response->matrix = $matrix;
         $response->canEdit = $canManage;
         $response->canSubmit = null !== $invitation;
         $response->isAnswered = null !== $invitation && 1 === (int) $invitation->getAnswered();
@@ -427,6 +432,33 @@ final readonly class SurveyMeetingProvider implements ProviderInterface
             'answers' => $answers,
             'totals' => $totals,
         ];
+    }
+
+    /**
+     * Replaces the user ids with per-response surrogates, in a random order, so
+     * that neither the id nor the row position identifies a respondent.
+     *
+     * @param array<int, array<string, mixed>> $participants
+     * @param array<string, mixed>             $matrix
+     *
+     * @return array{0: array<int, array<string, mixed>>, 1: array<string, mixed>}
+     */
+    private function anonymize(array $participants, array $matrix): array
+    {
+        shuffle($participants);
+
+        $answers = [];
+        foreach ($participants as $index => $participant) {
+            $surrogateId = $index + 1;
+            $userId = (int) $participant['id'];
+            if (isset($matrix['answers'][$userId])) {
+                $answers[$surrogateId] = $matrix['answers'][$userId];
+            }
+            $participants[$index]['id'] = $surrogateId;
+        }
+        $matrix['answers'] = $answers;
+
+        return [$participants, $matrix];
     }
 
     private function getUserName(User $user, CSurvey $survey): string

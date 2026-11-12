@@ -3667,8 +3667,6 @@
     "Click to show database server load metrics": "Klikk for \u00e5 vise database-serverbelastningsm\u00e5lingar",
     "Threads connected": "Tilkopla tr\u00e5dar",
     "Temporary tables on disk": "Mellombelse tabellar p\u00e5 disk",
-    "Privilege scope": "Rettaromfang",
-    "Not measurable with the current database user": "Ikkje m\u00e5lbart med gjeldande databasebrukar",
     "Uptime": "Oppetid",
     "Queries per second": "F\u00f8respurnader per sekund",
     "Slow queries": "Trege f\u00f8respurnader",
@@ -4616,5 +4614,7 @@
     "Saved.": "Lagra.",
     "You have tried to resolve this exercise earlier": "Du har pr\u00f8vd \u00e5 l\u00f8yse denne oppg\u00e5va tidlegare",
     "Disable new test attempts": "Deaktiver nye testfors\u00f8k",
-    "This skill cannot be acquired": "Denne ferdigheita kan ikkje oppn\u00e5ast"
+    "This skill cannot be acquired": "Denne ferdigheita kan ikkje oppn\u00e5ast",
+    "Validated": "Godkjent",
+    "Not validated": "Ikkje godkjent"
 }

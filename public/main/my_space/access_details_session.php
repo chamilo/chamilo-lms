@@ -8,19 +8,22 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
+// The section (for the tabs)
+$this_section = SECTION_TRACKING;
+
+$userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
+
+// General coaches of a session the student belongs to may open this report (issue #4981).
 $isAllowedToTrack = api_is_platform_admin(true, true) ||
     api_is_teacher() ||
-    api_is_course_tutor();
+    api_is_course_tutor() ||
+    ($userId > 0 && Tracking::is_allowed_to_coach_student(api_get_user_id(), $userId));
 
 if (!$isAllowedToTrack) {
     api_not_allowed(true);
     exit;
 }
 
-// The section (for the tabs)
-$this_section = SECTION_TRACKING;
-
-$userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
 $userInfo = api_get_user_info($userId);
 
 if (empty($userInfo)) {

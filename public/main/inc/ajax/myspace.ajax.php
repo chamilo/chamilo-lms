@@ -9,9 +9,28 @@ require_once __DIR__.'/../global.inc.php';
 
 $action = $_GET['a'];
 
-// Access restrictions.
+// Access restrictions. A general coach may only track the session they coach
+// (issue #4981). When a session id is in the request, that id is the only
+// grant: coaching the same student in another session must not open this one.
+// Actions without a session id (e.g. lp_global_report) use the student-scoped
+// Tracking::is_allowed_to_coach_student() check.
+$sessionIdForAuth = (int) ($_REQUEST['session_id'] ?? $_REQUEST['id_session'] ?? 0);
+$studentIdForAuth = (int) ($_REQUEST['student'] ?? $_REQUEST['user_id'] ?? 0);
+$currentUserId = api_get_user_id();
+
 $is_allowedToTrack = api_is_platform_admin(true, true) ||
     api_is_allowed_to_create_course() || api_is_course_tutor();
+
+if (!$is_allowedToTrack) {
+    if ($sessionIdForAuth > 0) {
+        $is_allowedToTrack = SessionManager::sessionHasGeneralCoach($sessionIdForAuth, $currentUserId);
+        if ($is_allowedToTrack && $studentIdForAuth > 0) {
+            $is_allowedToTrack = Tracking::is_allowed_to_coach_student($currentUserId, $studentIdForAuth);
+        }
+    } elseif ($studentIdForAuth > 0) {
+        $is_allowedToTrack = Tracking::is_allowed_to_coach_student($currentUserId, $studentIdForAuth);
+    }
+}
 
 if (!$is_allowedToTrack) {
     exit;

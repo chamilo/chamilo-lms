@@ -11211,6 +11211,30 @@ class SessionManager
     }
 
     /**
+     * Whether $userId is a general coach of the given session.
+     * A missing or zero session/user id is never a match: this must not grant
+     * blanket tracking access across sessions.
+     */
+    public static function sessionHasGeneralCoach(int $sessionId, int $userId): bool
+    {
+        if ($sessionId <= 0 || $userId <= 0) {
+            return false;
+        }
+
+        $session = api_get_session_entity($sessionId);
+        if (null === $session) {
+            return false;
+        }
+
+        $coachIds = $session
+            ->getGeneralCoaches()
+            ->map(fn (User $user) => $user->getId())
+            ->getValues();
+
+        return in_array($userId, $coachIds, true);
+    }
+
+    /**
      * Retrieves all user IDs associated with a session including coaches and students.
      *
      * @param int $sessionId The session ID.

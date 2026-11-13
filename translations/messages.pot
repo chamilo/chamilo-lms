@@ -41489,7 +41489,28 @@ msgstr ""
 msgid "JSON configuration for search prefilter fields."
 msgstr ""
 
-msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgid "Fill in the migration history"
+msgstr ""
+
+msgid "Fill in the history"
+msgstr ""
+
+msgid "Doctrine, which runs the updates of Chamilo, needs a record in the version table for every migration applied to the database. Chamilo 2.0 and 3.0.0 created the database without these records, so the next update would try to apply every migration again over your current database."
+msgstr ""
+
+msgid "Your database structure already includes the changes of %s migrations."
+msgstr ""
+
+msgid "The changes of %s newer migrations are not applied yet."
+msgstr ""
+
+msgid "This action adds the %s missing records to the version table. These migrations are not executed again, and your data is not modified."
+msgstr ""
+
+msgid "After this action, the update applies only the %s pending migrations."
+msgstr ""
+
+msgid "After this action, your platform is up to date, and future updates work normally."
 msgstr ""
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
@@ -41498,7 +41519,16 @@ msgstr ""
 msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
 msgstr ""
 
-msgid "Migration history not recorded yet: click to record it"
+msgid "Migration history is empty: fill in the missing records"
+msgstr ""
+
+msgid "Migration history is inconsistent: %s. Review it before you run the update"
+msgstr ""
+
+msgid "%s migrations older than the last executed one are not recorded"
+msgstr ""
+
+msgid "%s records match no migration of this version"
 msgstr ""
 
 msgid "Migration history is recorded"

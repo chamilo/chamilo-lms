@@ -20,11 +20,10 @@
     hill: '#2c5460', hillFar: '#263c56', ground: '#244a42',
     wall: '#aab1c5', wallDark: '#5e6887', wallLight: '#e2d7cb',
     wood: '#a97855', woodDark: '#523e51', rope: '#e4c2a3', water: '#327c9b',
-    ripple: '#9be4d9', banner: '#e58a76', stars: '#eff0df', leaf: '#73c5a7',
+    ripple: '#9be4d9', banner: '#23558c', stars: '#eff0df', leaf: '#73c5a7',
     leafDark: '#318a86', ember: '#ffc26e', fire: '#f17d65',
     gold: '#f5cd75', dust: '#e4c2a3', grass: '#39775c',
     stoneDeep: '#414e6f', stoneMid: '#8996b0', brick: '#d3c6c1',
-    roof: '#964b64', roofLight: '#dc8491', moss: '#487a73',
     spruce: '#1b4a50', spruceLight: '#326a66', outline: '#25334e',
     light: '#ffdc90', cloud: '#34425d',
     rim: '#fff4d8', stoneShade: '#485672', copper: '#eea775',
@@ -113,7 +112,7 @@
       pieces.push(piece(82 + i * 29, 73, 12, 7, COLOR.wallLight));
     }
 
-    // Level 4: side towers, central keep, roof, windows and flag.
+    // Level 4: stone towers, gatehouse and crenellated battlements.
     for (i = 0; i < 5; i++) {
       pieces.push(piece(70, 94 - i * 9, 23, 9, i % 2 ? COLOR.wall : COLOR.wallDark, 'brick'));
       pieces.push(piece(162, 94 - i * 9, 23, 9, i % 2 ? COLOR.wall : COLOR.wallDark, 'brick'));
@@ -124,15 +123,17 @@
     pieces.push(piece(103, 40, 50, 5, COLOR.wallLight));
     pieces.push(piece(110, 30, 37, 12, COLOR.wallDark));
     pieces.push(piece(115, 24, 28, 6, COLOR.wall));
-    pieces.push(piece(126, 15, 2, 18, COLOR.woodDark));
-    pieces.push(piece(128, 17, 17, 8, COLOR.banner));
-    pieces.push(piece(128, 25, 11, 3, COLOR.banner));
+    pieces.push(piece(109, 36, 7, 8, COLOR.wallLight));
+    pieces.push(piece(123, 36, 7, 8, COLOR.wallLight));
+    pieces.push(piece(137, 36, 7, 8, COLOR.wallLight));
     pieces.push(piece(121, 62, 13, 13, COLOR.woodDark));
 
-    // Level 5: golden sparks gather before the dragon appears above the keep.
-    for (i = 0; i < 14; i++) {
-      pieces.push(piece(145 + (i * 13) % 44, 12 + (i * 7) % 29, 2, 2,
-        i % 3 ? COLOR.gold : COLOR.leaf, 'spark'));
+    // Level 5: reinforce the defenses; the chameleon appears on the battlements.
+    for (i = 0; i < 8; i++) {
+      pieces.push(piece(101 + i * 7, 89, 3, 18, COLOR.stoneDeep));
+    }
+    for (i = 0; i < 6; i++) {
+      pieces.push(piece(77 + i * 21, 97, 9, 9, i % 2 ? COLOR.wall : COLOR.wallDark));
     }
 
     return pieces;
@@ -245,152 +246,131 @@
     }
   }
 
-  function torch(ctx, x, y, seconds) {
-    glow(ctx, x + 1, y - 3, 18, '#ffab57', 0.42);
-    rect(ctx, x - 1, y + 4, 4, 2, COLOR.outline);
-    rect(ctx, x, y + 1, 2, 5, COLOR.wood);
-    rect(ctx, x - 2, y - 3, 5, 5, COLOR.ember);
-    rect(ctx, x - 1, y - 5 - (Math.sin(seconds * 8 + x) > 0 ? 1 : 0), 3, 5, '#ffec9b');
-    rect(ctx, x, y - 2, 1, 3, '#fff4c9');
+  function arrowSlit(ctx, x, y, height) {
+    rect(ctx, x - 1, y - 1, 4, height + 2, COLOR.wallLight);
+    rect(ctx, x, y, 2, height, COLOR.outline);
+    rect(ctx, x + 1, y + 1, 1, height - 2, COLOR.stoneDeep);
+    rect(ctx, x - 2, y + Math.floor(height / 2), 6, 2, COLOR.outline);
   }
 
-  function tower(ctx, x, y, seconds, side) {
-    // Slate outline, inset masonry, shaped roof, narrow golden windows.
-    rect(ctx, x - 2, y - 2, 27, 55, COLOR.outline);
-    rect(ctx, x, y, 23, 51, COLOR.stoneMid);
-    rect(ctx, x + 2, y + 2, 5, 47, '#b8bdc8');
-    rect(ctx, x + 18, y + 2, 3, 48, COLOR.wallDark);
-    // A beveled right face and stone cap give each tower a 2.5D volume.
-    polygon(ctx, [[x + 21, y + 2], [x + 26, y - 2],
-      [x + 26, y + 45], [x + 23, y + 51], [x + 21, y + 51]], COLOR.stoneShade);
-    polygon(ctx, [[x - 4, y - 5], [x + 1, y - 9],
-      [x + 28, y - 9], [x + 27, y - 5]], COLOR.stoneTop);
-    rect(ctx, x + 1, y + 2, 1, 46, '#f4eadd');
-    brickwork(ctx, x + 1, y + 5, 3, 7, 7, 6);
-    rect(ctx, x - 4, y - 5, 31, 5, COLOR.outline);
-    for (var i = 0; i < 4; i++) {
-      rect(ctx, x - 3 + i * 8, y - 10, 5, 7, COLOR.wallLight);
-      rect(ctx, x - 2 + i * 8, y - 9, 4, 2, '#fbebe0');
+  function battlements(ctx, x, y, count, spacing) {
+    rect(ctx, x - 2, y + 6, count * spacing + 5, 4, COLOR.outline);
+    rect(ctx, x - 2, y + 7, count * spacing + 4, 2, COLOR.stoneTop);
+    for (var i = 0; i < count; i++) {
+      rect(ctx, x + i * spacing - 1, y - 1, spacing - 1, 9, COLOR.outline);
+      rect(ctx, x + i * spacing, y, spacing - 3, 7, COLOR.wallLight);
+      rect(ctx, x + i * spacing + 1, y, spacing - 4, 2, COLOR.stoneTop);
+      rect(ctx, x + i * spacing + spacing - 4, y + 2, 1, 5, COLOR.wallDark);
     }
-    polygon(ctx, [[x - 4, y - 10], [x + 11, y - 25], [x + 27, y - 10]], COLOR.outline);
-    polygon(ctx, [[x, y - 11], [x + 11, y - 22], [x + 23, y - 11]], COLOR.roof);
-    polygon(ctx, [[x + 7, y - 17], [x + 11, y - 22], [x + 16, y - 17]], COLOR.roofLight);
-    polygon(ctx, [[x + 23, y - 11], [x + 28, y - 12],
-      [x + 14, y - 27], [x + 11, y - 22]], '#683b5a');
-    rect(ctx, x + 4, y - 12, 18, 1, '#f2a6a0');
-    for (var j = 0; j < 3; j++) rect(ctx, x + 3 + j * 6, y - 12 - j * 2, 3, 2, '#c47784');
-    rect(ctx, x + 10, y + 17, 6, 13, COLOR.outline);
-    glow(ctx, x + 13, y + 22, 13, COLOR.light, 0.25);
-    rect(ctx, x + 11, y + 18, 4, 10, COLOR.light);
-    rect(ctx, x + 11, y + 18, 1, 9, '#fff5c3');
-    rect(ctx, x + 10, y + 24, 6, 2, COLOR.outline);
-    rect(ctx, x - 3, y + 30, 28, 3, COLOR.outline);
-    rect(ctx, x - 3, y + 33, 28, 2, COLOR.wallLight);
-    if (side === 'left') torch(ctx, x + 25, y + 36, seconds);
-    else torch(ctx, x - 3, y + 36, seconds);
   }
 
-  function finishedCastle(ctx, seconds) {
-    // Deliberate complete silhouette after the last construction piece settles.
-    // The outlines, roofs, grout and lighting turn the wireframe into pixel-art.
-    rect(ctx, 82, 70, 93, 36, COLOR.outline);
-    rect(ctx, 84, 72, 89, 33, COLOR.stoneMid);
-    rect(ctx, 86, 74, 4, 29, COLOR.wallLight);
-    rect(ctx, 168, 73, 4, 31, COLOR.wallDark);
-    polygon(ctx, [[175, 70], [182, 64], [182, 102],
-      [175, 106], [171, 101]], COLOR.stoneShade);
-    polygon(ctx, [[82, 70], [88, 64], [183, 64],
-      [175, 70]], COLOR.stoneTop);
-    brickwork(ctx, 87, 78, 11, 4, 8, 6);
-
-    // Central keep with a stepped roof and masonry pilasters.
-    rect(ctx, 105, 43, 48, 56, COLOR.outline);
-    rect(ctx, 108, 45, 42, 52, COLOR.wall);
-    rect(ctx, 110, 46, 5, 51, COLOR.wallLight);
-    rect(ctx, 145, 46, 4, 51, COLOR.wallDark);
-    polygon(ctx, [[150, 45], [157, 40], [157, 93],
-      [151, 100], [149, 97]], '#58627d');
-    polygon(ctx, [[105, 43], [112, 38], [157, 38],
-      [153, 43]], COLOR.stoneTop);
-    rect(ctx, 111, 47, 1, 47, COLOR.rim);
-    brickwork(ctx, 116, 51, 4, 7, 8, 6);
-    rect(ctx, 102, 42, 54, 5, COLOR.outline);
-    for (var i = 0; i < 6; i++) {
-      rect(ctx, 103 + i * 9, 35, 6, 9, COLOR.wallLight);
-      rect(ctx, 104 + i * 9, 35, 4, 2, '#f5e8df');
+  function tower(ctx, x, y, side) {
+    // Thick tower shafts, corner buttresses, arrow slits and walkable battlements.
+    rect(ctx, x - 3, y - 8, 29, 61, COLOR.outline);
+    rect(ctx, x - 1, y - 6, 25, 58, COLOR.stoneMid);
+    rect(ctx, x + 1, y - 4, 5, 54, '#b7bdca');
+    rect(ctx, x + 20, y - 5, 4, 56, COLOR.stoneShade);
+    polygon(ctx, [[x + 23, y - 6], [x + 29, y - 11],
+      [x + 29, y + 46], [x + 24, y + 53]], COLOR.stoneShade);
+    brickwork(ctx, x + 2, y + 1, 3, 7, 7, 7);
+    battlements(ctx, x - 3, y - 18, 4, 8);
+    arrowSlit(ctx, x + 10, y + 9, 16);
+    arrowSlit(ctx, x + 10, y + 34, 10);
+    rect(ctx, x - 6, y + 48, 33, 5, COLOR.outline);
+    rect(ctx, x - 6, y + 49, 33, 3, COLOR.stoneTop);
+    // Exterior masonry is wider at ground level to deflect direct attacks.
+    if (side === 'left') {
+      polygon(ctx, [[x - 4, y + 40], [x + 3, y + 41],
+        [x + 1, y + 53], [x - 10, y + 53]], COLOR.wallDark);
+      rect(ctx, x - 7, y + 51, 9, 3, COLOR.stoneTop);
+    } else {
+      polygon(ctx, [[x + 20, y + 41], [x + 27, y + 40],
+        [x + 33, y + 53], [x + 23, y + 53]], COLOR.wallDark);
+      rect(ctx, x + 23, y + 51, 9, 3, COLOR.stoneTop);
     }
-    polygon(ctx, [[109, 35], [128, 15], [149, 35]], COLOR.outline);
-    polygon(ctx, [[114, 34], [128, 18], [144, 34]], COLOR.roof);
-    polygon(ctx, [[119, 29], [128, 18], [133, 24]], COLOR.roofLight);
-    polygon(ctx, [[144, 34], [151, 33], [133, 15],
-      [128, 18]], '#6b395a');
-    rect(ctx, 117, 33, 23, 1, '#f0a19e');
-    for (var j = 0; j < 4; j++) {
-      rect(ctx, 120 + j * 6, 31 - j % 2 * 2, 4, 2, '#b35d72');
-    }
-    rect(ctx, 128, 10, 2, 10, COLOR.outline);
-    rect(ctx, 130, 10, 13, 7, COLOR.banner);
-    rect(ctx, 130, 16, 9, 3, COLOR.roofLight);
-    rect(ctx, 132, 12, 3, 3, COLOR.gold);
+  }
 
-    // Keep: arch windows and warm light suggest an inhabited stronghold.
-    for (var w = 0; w < 2; w++) {
-      var wx = 118 + w * 22;
-      rect(ctx, wx - 1, 55, 9, 17, COLOR.outline);
-      glow(ctx, wx + 3, 64, 17, COLOR.light, 0.18);
-      rect(ctx, wx, 58, 7, 13, '#f4bc77');
-      rect(ctx, wx + 1, 57, 5, 2, COLOR.gold);
-      rect(ctx, wx + 3, 57, 1, 14, COLOR.outline);
-      rect(ctx, wx, 64, 7, 1, COLOR.outline);
-      rect(ctx, wx - 2, 71, 10, 3, COLOR.wallLight);
-    }
-    rect(ctx, 112, 77, 34, 4, COLOR.outline);
-    rect(ctx, 114, 81, 31, 3, '#dad0ce');
-    rect(ctx, 114, 85, 31, 13, COLOR.wallDark);
-    brickwork(ctx, 114, 87, 4, 2, 8, 5);
+  function finishedCastle(ctx) {
+    // A defensive medieval fortress: no decorative roofs, glass or torches.
+    // Outer curtain wall, stone masonry and a projecting parapet.
+    rect(ctx, 80, 68, 99, 39, COLOR.outline);
+    rect(ctx, 82, 70, 95, 35, COLOR.stoneMid);
+    rect(ctx, 84, 71, 5, 34, COLOR.wallLight);
+    rect(ctx, 172, 71, 5, 34, COLOR.stoneShade);
+    polygon(ctx, [[177, 68], [184, 62], [184, 103],
+      [178, 107], [175, 101]], COLOR.stoneShade);
+    brickwork(ctx, 87, 73, 11, 5, 8, 6);
+    battlements(ctx, 82, 59, 12, 8);
 
-    tower(ctx, 72, 55, seconds, 'left');
-    tower(ctx, 163, 55, seconds, 'right');
+    // Central stone keep and raised gatehouse, with no pitched roof.
+    rect(ctx, 103, 42, 54, 64, COLOR.outline);
+    rect(ctx, 106, 44, 48, 61, COLOR.wall);
+    rect(ctx, 108, 45, 5, 58, COLOR.wallLight);
+    rect(ctx, 151, 44, 3, 60, COLOR.wallDark);
+    polygon(ctx, [[154, 44], [160, 38], [160, 97],
+      [155, 106]], COLOR.stoneShade);
+    brickwork(ctx, 116, 48, 4, 8, 9, 7);
+    battlements(ctx, 105, 32, 6, 9);
+    // Very narrow arrow slits replace the large, illuminated palace windows.
+    arrowSlit(ctx, 115, 56, 14);
+    arrowSlit(ctx, 145, 56, 14);
+    arrowSlit(ctx, 92, 80, 12);
+    arrowSlit(ctx, 168, 80, 12);
 
-    // Outer crenellations and a readable arched gate with brass hinges.
-    rect(ctx, 76, 94, 108, 4, COLOR.outline);
-    for (var c = 0; c < 12; c++) {
-      rect(ctx, 77 + c * 9, 88, 6, 8, COLOR.wallLight);
-      rect(ctx, 78 + c * 9, 88, 3, 2, '#f8e5d8');
-    }
-    rect(ctx, 76, 101, 107, 5, COLOR.stoneDeep);
-    rect(ctx, 116, 85, 29, 22, COLOR.outline);
-    rect(ctx, 119, 89, 23, 18, COLOR.woodDark);
-    rect(ctx, 122, 87, 17, 20, '#825765');
-    rect(ctx, 126, 87, 9, 19, '#a16a6a');
-    rect(ctx, 122, 89, 2, 14, '#c68f74');
-    rect(ctx, 129, 89, 2, 18, COLOR.outline);
-    rect(ctx, 124, 96, 3, 3, COLOR.gold);
-    rect(ctx, 134, 96, 3, 3, COLOR.gold);
-    rect(ctx, 119, 103, 23, 3, COLOR.outline);
+    tower(ctx, 71, 55, 'left');
+    tower(ctx, 164, 55, 'right');
 
-    // Bridge leading out over the moat: weathered planks and rope detail.
-    rect(ctx, 115, 106, 34, 9, COLOR.outline);
-    polygon(ctx, [[117, 107], [147, 107], [152, 111],
-      [121, 111]], '#d5a478');
-    rect(ctx, 117, 111, 30, 4, COLOR.wood);
-    for (var p = 0; p < 5; p++) {
-      rect(ctx, 118 + p * 6, 107, 1, 7, '#d39b72');
-      rect(ctx, 118 + p * 6, 112, 4, 1, COLOR.woodDark);
+    // Stone-buttressed gateway with a clearly visible treasure under a portcullis.
+    rect(ctx, 113, 80, 36, 27, COLOR.outline);
+    rect(ctx, 116, 83, 30, 24, COLOR.wallDark);
+    rect(ctx, 120, 84, 22, 23, COLOR.outline);
+    rect(ctx, 122, 87, 18, 20, '#263146');
+    treasureChest(ctx, 123, 92);
+    for (var bar = 0; bar < 6; bar++) {
+      rect(ctx, 122 + bar * 4, 85, 2, 22, COLOR.stoneTop);
     }
-    rect(ctx, 112, 99, 2, 14, COLOR.woodDark);
-    rect(ctx, 150, 99, 2, 14, COLOR.woodDark);
-    rect(ctx, 113, 100, 38, 1, COLOR.gold);
+    for (var rung = 0; rung < 3; rung++) {
+      rect(ctx, 122, 89 + rung * 6, 20, 2, COLOR.wallDark);
+    }
+    rect(ctx, 117, 81, 30, 4, COLOR.stoneTop);
+    rect(ctx, 115, 103, 34, 4, COLOR.outline);
+    rect(ctx, 115, 105, 34, 2, COLOR.wallLight);
+    // Additional stone shoulders and dry stone foundations surround the gate.
+    polygon(ctx, [[80, 96], [86, 99], [83, 107], [74, 107]], COLOR.wallDark);
+    polygon(ctx, [[177, 96], [172, 99], [175, 107], [185, 107]], COLOR.wallDark);
+    rect(ctx, 73, 105, 112, 3, COLOR.stoneDeep);
+    // Short, utilitarian drawbridge over the moat.
+    rect(ctx, 117, 108, 30, 7, COLOR.outline);
+    rect(ctx, 119, 109, 27, 5, COLOR.wood);
+    for (var plank = 0; plank < 5; plank++) {
+      rect(ctx, 120 + plank * 5, 110, 1, 5, COLOR.woodDark);
+    }
+  }
 
-    // Small foliage and glowing flowers soften the stone-heavy palette.
-    for (var f = 0; f < 6; f++) {
-      var fx = f < 3 ? 63 + f * 7 : 185 + (f - 3) * 6;
-      rect(ctx, fx, 101 - f % 2 * 2, 8, 5, COLOR.spruce);
-      rect(ctx, fx + 2, 98 - f % 2 * 2, 5, 5, COLOR.grass);
-      rect(ctx, fx + 4, 100 - f % 2 * 2, 2, 2, f % 2 ? '#e9b5a7' : COLOR.gold);
+  function fortifiedCastle(ctx, count) {
+    var reveal = range(count, TARGET_PIECES[4], TARGET_PIECES[5]);
+    if (!reveal) return;
+    ctx.save();
+    ctx.globalAlpha = reveal;
+    // Sloped stone bastions, extra cross-bracing and stronger forward portcullis.
+    polygon(ctx, [[72, 91], [79, 96], [77, 107], [63, 107]], COLOR.wallDark);
+    polygon(ctx, [[188, 91], [181, 96], [184, 107], [198, 107]], COLOR.wallDark);
+    rect(ctx, 64, 106, 15, 3, COLOR.stoneTop);
+    rect(ctx, 182, 106, 16, 3, COLOR.stoneTop);
+    rect(ctx, 109, 99, 41, 7, COLOR.outline);
+    rect(ctx, 111, 100, 37, 4, COLOR.wall);
+    for (var bar = 0; bar < 7; bar++) {
+      rect(ctx, 117 + bar * 4, 82, 2, 25, COLOR.wallLight);
     }
-    torch(ctx, 111, 96, seconds);
-    torch(ctx, 149, 96, seconds);
+    rect(ctx, 117, 91, 28, 2, COLOR.wallDark);
+    rect(ctx, 117, 99, 28, 2, COLOR.wallDark);
+    // Blue field standard, rather than the former dragon and red palace roof.
+    rect(ctx, 163, 33, 2, 19, COLOR.outline);
+    polygon(ctx, [[165, 34], [182, 37], [178, 43],
+      [165, 42]], COLOR.banner);
+    rect(ctx, 169, 37, 4, 2, COLOR.guardianRim);
+    rect(ctx, 173, 39, 2, 2, COLOR.guardianRim);
+    ctx.restore();
   }
 
   function finishedWall(ctx) {
@@ -413,74 +393,11 @@
     rect(ctx, 128, 95, 2, 12, COLOR.woodDark);
   }
 
-  function dragon(ctx, count, seconds) {
-    var reveal = range(count, TARGET_PIECES[4], TARGET_PIECES[5]);
-    if (reveal <= 0) return;
-    var bob = Math.round(Math.sin(seconds * 2.7) * 2);
-    var flap = Math.round(Math.sin(seconds * 6.2) * 5);
-    ctx.save();
-    ctx.translate(0, 5 + bob - Math.round((1 - reveal) * 12));
-    // Tail and swept wings are drawn first to retain a clear dragon silhouette.
-    polygon(ctx, [[147, 23], [134, 29], [132, 35], [127, 35], [128, 29],
-      [137, 18], [149, 17]], COLOR.outline);
-    polygon(ctx, [[147, 22], [137, 28], [133, 33], [132, 28], [142, 19]], COLOR.leafDark);
-    polygon(ctx, [[153, 27], [140, 13], [142, 2 + flap], [150, 8 + flap], [157, 2 + flap],
-      [166, 9 + flap], [172, 4 + flap], [173, 20], [162, 31]], COLOR.outline);
-    polygon(ctx, [[155, 26], [143, 13], [144, 7 + flap], [152, 13 + flap], [157, 6 + flap],
-      [165, 15 + flap], [170, 9 + flap], [170, 19], [162, 29]], '#327d84');
-    polygon(ctx, [[153, 20], [149, 11 + flap], [156, 15], [164, 17], [164, 24]], '#b0e3b6');
-    polygon(ctx, [[156, 24], [147, 16], [152, 15], [159, 19], [166, 15],
-      [164, 27]], COLOR.leaf);
-    // Scaled torso, belly and little spines.
-    polygon(ctx, [[147, 21], [156, 15], [176, 17], [183, 23],
-      [175, 33], [156, 33], [145, 28]], COLOR.outline);
-    polygon(ctx, [[149, 22], [157, 17], [175, 19], [181, 24],
-      [173, 30], [156, 31], [147, 27]], COLOR.leafDark);
-    rect(ctx, 158, 26, 17, 5, COLOR.leaf);
-    microRect(ctx, 160.5, 25.5, 4, 1, '#c4f0bf');
-    microRect(ctx, 169.5, 22.5, 3, 1, '#bde9ba');
-    for (var i = 0; i < 4; i++) {
-      polygon(ctx, [[150 + i * 6, 19], [153 + i * 6, 13],
-        [156 + i * 6, 19]], COLOR.gold);
-    }
-    rect(ctx, 156, 30, 4, 7, COLOR.outline);
-    rect(ctx, 158, 34, 5, 2, COLOR.leafDark);
-    rect(ctx, 172, 29, 4, 7, COLOR.outline);
-    rect(ctx, 174, 34, 6, 2, COLOR.leafDark);
-    // Profile head, horn, amber eye, articulated jaw and nostrils.
-    polygon(ctx, [[177, 19], [183, 14], [194, 14], [196, 21],
-      [207, 23], [209, 27], [198, 32], [187, 30], [181, 27]], COLOR.outline);
-    polygon(ctx, [[180, 20], [185, 16], [193, 17], [194, 23],
-      [205, 25], [205, 27], [198, 29], [187, 27]], COLOR.leaf);
-    polygon(ctx, [[185, 16], [186, 9], [191, 15]], COLOR.gold);
-    polygon(ctx, [[192, 17], [197, 10], [199, 23]], COLOR.leafDark);
-    rect(ctx, 190, 20, 4, 4, COLOR.outline);
-    rect(ctx, 191, 20, 2, 2, COLOR.gold);
-    rect(ctx, 203, 24, 2, 2, COLOR.outline);
-    rect(ctx, 194, 29, 10, 2, '#d4a77c');
-    rect(ctx, 198, 30, 2, 2, '#fff3d2');
-    if (seconds > 0) {
-      var breath = Math.sin(seconds * 3.7);
-      if (breath > 0.35) {
-        glow(ctx, 209, 27, 14, '#fcaa63', (breath - 0.35) * 0.34);
-        rect(ctx, 210, 24, 3, 3, COLOR.ember);
-        rect(ctx, 214, 23, 2, 2, '#ffe9aa');
-      }
-    }
-    ctx.restore();
-    if (reveal < 1) {
-      for (var s = 0; s < 5; s++) {
-        rect(ctx, 143 + s * 12, 5 + (s * 13) % 34,
-          2, 2, s % 2 ? COLOR.gold : '#c4f9d3');
-      }
-    }
-  }
-
-  function castleDetails(ctx, count, seconds) {
+  function castleDetails(ctx, count) {
     if (count >= TARGET_PIECES[4] - 4) {
       ctx.save();
       ctx.globalAlpha = range(count, TARGET_PIECES[4] - 4, TARGET_PIECES[4]);
-      finishedCastle(ctx, seconds);
+      finishedCastle(ctx);
       ctx.restore();
     } else if (count >= TARGET_PIECES[3] - 2) {
       ctx.save();
@@ -488,7 +405,7 @@
       finishedWall(ctx);
       ctx.restore();
     }
-    if (count > TARGET_PIECES[4]) dragon(ctx, count, seconds);
+    fortifiedCastle(ctx, count);
   }
 
   function drawPiece(ctx, part, drop) {
@@ -635,10 +552,10 @@
     // A larger front ear and a smaller rear ear make the fox silhouette unambiguous.
     polygon(ctx, [[7, 0], [9, -12], [17, -6], [19, 1]], COLOR.outline);
     polygon(ctx, [[10, -2], [11, -9], [16, -5], [17, 1]], COLOR.fox);
-    polygon(ctx, [[12, -6], [14, -4], [13, -1]], COLOR.roofLight);
+    polygon(ctx, [[12, -6], [14, -4], [13, -1]], '#e7a9a0');
     polygon(ctx, [[18, 0], [21, -11], [27, -5], [28, 4]], COLOR.outline);
     polygon(ctx, [[21, 0], [22, -7], [25, -4], [26, 3]], COLOR.foxLight);
-    polygon(ctx, [[22, -4], [24, -2], [23, 1]], COLOR.roofLight);
+    polygon(ctx, [[22, -4], [24, -2], [23, 1]], '#e7a9a0');
 
     polygon(ctx, [[12, 2], [15, -4], [25, -5], [30, 0], [30, 5],
       [36, 7], [36, 12], [26, 14], [15, 12]], COLOR.outline);
@@ -672,14 +589,15 @@
     ctx.restore();
   }
 
-  function guardianChameleon(ctx, x, y, seconds, alert) {
+  function guardianChameleon(ctx, x, y, seconds, alert, scale) {
     // Original 2.5D pixel-art guardian: blue scales, amber eye and orange crest.
     // Photo-inspired palette, not the Chamilo logo or an embedded external image.
     var breath = Math.round(Math.sin(seconds * 2.2) * 0.8);
     ctx.save();
     ctx.translate(Math.round(x), Math.round(y + breath));
+    ctx.scale(scale || 1, scale || 1);
 
-    // Grounding shadow and silhouette; the curled tail stays clearly separate from the fox.
+    // Battlement contact shadow; the curled tail stays separate from the fox.
     ctx.save();
     ctx.globalAlpha = 0.35;
     rect(ctx, -25, 19, 69, 3, COLOR.outline);
@@ -731,7 +649,7 @@
         scale % 3 === 0 ? '#a2edf4' : '#378ab9');
     }
 
-    // Clawed feet keep the defender securely planted beside the gate.
+    // Clawed feet keep the defender securely planted on the battlements.
     rect(ctx, -1, 14, 7, 6, COLOR.guardianDark);
     rect(ctx, 0, 15, 5, 4, COLOR.guardian);
     rect(ctx, 1, 19, 7, 2, COLOR.guardianLight);
@@ -782,7 +700,7 @@
     }
 
     if (alert) {
-      // An understated protective shimmer accompanies the castle's existing arrow.
+      // A subtle warning shimmer accompanies the castle's final defense.
       for (var shine = 0; shine < 4; shine++) {
         var phase = seconds * 3.5 + shine * 2.4;
         rect(ctx, -22 + shine * 19, -20 - Math.sin(phase) * 3,
@@ -800,20 +718,26 @@
     rect(ctx, x, y - 2, 2, 6, COLOR.banner);
   }
 
-  function fire(ctx, progress) {
-    // A curved ember stream from the dragon, safely contained in the canvas.
-    if (progress > 0) glow(ctx, 209, 38 + progress * 29, 22, '#ff9558', 0.34);
-    for (var i = 0; i < 11; i++) {
-      var t = range(progress * 13, i, i + 1);
-      if (!t) continue;
-      var x = 203 + i * 2 + Math.sin(i * 2.1) * 3;
-      var y = 28 + i * 5 + Math.sin(i * 1.6) * 3;
-      var radius = 5 + i % 3;
-      rect(ctx, x - 1, y - 1, radius + 2, radius + 2, COLOR.fire);
-      rect(ctx, x + 1, y, Math.max(3, radius - 2), radius, COLOR.ember);
-      rect(ctx, x + 2, y + 2, 2, 3, '#fff1aa');
-      rect(ctx, x + Math.sin(i * 3) * 5, y - 7, 1, 2, COLOR.sparkle);
+  function guardianWarning(ctx, progress) {
+    // A brief turquoise signal from the rooftop guardian scares the fox away.
+    if (progress <= 0) return;
+    var x = lerp(151, 192, progress);
+    var y = lerp(30, 79, progress);
+    ctx.save();
+    ctx.globalAlpha = 0.85 * (1 - 0.3 * progress);
+    ctx.strokeStyle = COLOR.guardianLight;
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(151, 30);
+    ctx.quadraticCurveTo(178, 36, x, y);
+    ctx.stroke();
+    for (var i = 0; i < 4; i++) {
+      var px = x + Math.cos(i * Math.PI / 2) * 5 * progress;
+      var py = y + Math.sin(i * Math.PI / 2) * 5 * progress;
+      rect(ctx, px, py, 2, 2, i % 2 ? COLOR.guardianCrestLight : COLOR.ripple);
     }
+    ctx.restore();
   }
 
   function raid(ctx, level, ms) {
@@ -934,7 +858,7 @@
     else if (t < 2.6) {
       x = 191;
       options.walk = false;
-      if (t > 1.3) fire(ctx, range(t, 1.3, 2.2));
+      if (t > 1.3) guardianWarning(ctx, range(t, 1.3, 2.2));
     } else {
       x = lerp(191, 226, (t - 2.6) / 1.2);
       options.facing = 'right';
@@ -1054,13 +978,15 @@
       background(ctx, state.seconds);
       building(ctx, state.built,
         canAnimate() && Math.abs(state.built - state.target) > 0.001);
-      castleDetails(ctx, state.built, state.seconds);
+      castleDetails(ctx, state.built);
       if (state.level <= 2 && !chestTaken(state.level, state.attackMs, state.chestStolen)) {
         treasureChest(ctx, 123, 93);
       }
       drawRevealBurst(ctx, state.level, state.pulseMs);
-      if (state.level >= 4 && state.built >= TARGET_PIECES[4] - 4) {
-        guardianChameleon(ctx, 66, 86, state.seconds, state.attackMs >= 0 && state.attackMs > 950);
+      if (state.level === 5 && state.built >= TARGET_PIECES[5] - 2) {
+        // The final guardian replaces the dragon, perched on the keep's battlements.
+        guardianChameleon(ctx, 120, 25, state.seconds,
+          state.attackMs >= 0 && state.attackMs > 950, 0.61);
       }
       if (state.attackMs >= 0) raid(ctx, state.level, state.attackMs);
       else if (state.level > 0) fox(ctx, state.chestStolen ? 195 : 212, 88, state.seconds, {

@@ -25,6 +25,10 @@ $session = api_get_session_entity();
 $course = api_get_course_entity();
 $user = api_get_user_entity(api_get_user_id());
 
+if (!$course || !ImsLtiPlugin::existsToolInCourse($tool->getId(), $course)) {
+    api_not_allowed(true);
+}
+
 $pluginPath = api_get_path(WEB_PLUGIN_PATH).'ImsLti/';
 $toolUserId = ImsLtiPlugin::getLaunchUserIdClaim($tool, $user);
 $platformDomain = str_replace(['https://', 'http://'], '', api_get_setting('InstitutionUrl'));

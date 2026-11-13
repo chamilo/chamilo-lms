@@ -103,6 +103,10 @@ try {
         throw LtiAuthException::invalidRequest();
     }
 
+    if (!ImsLtiPlugin::existsToolInCourse($tool->getId(), $course)) {
+        throw LtiAuthException::accessDenied();
+    }
+
     $isPlatformAdmin = api_is_platform_admin_by_id($user->getId());
     $isSubscribed = CourseManager::is_user_subscribed_in_course($user->getId(), $course->getCode());
 

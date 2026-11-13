@@ -34,7 +34,7 @@ $gradebook = isset($_GET['gradebook']) ? (int) $_GET['gradebook'] : 0;
 /** @var Course|null $course */
 $course = $courseId > 0 ? $em->find(Course::class, $courseId) : null;
 
-if (!$course) {
+if (!$course || !ImsLtiPlugin::existsToolInCourse($tool->getId(), $course)) {
     api_not_allowed(true);
 }
 

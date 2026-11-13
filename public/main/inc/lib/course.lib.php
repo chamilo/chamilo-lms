@@ -110,34 +110,6 @@ class CourseManager
     }
 
     /**
-     * Returns all the information of a given course code.
-     *
-     * @param string $course_code , the course code
-     *
-     * @return array with all the fields of the course table
-     *
-     * @deprecated Use api_get_course_info() instead
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @assert ('') === false
-     */
-    public static function get_course_information($course_code)
-    {
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-
-        return Database::fetch_array(
-            Database::query(
-                "SELECT course.*, language.isocode AS course_language, course.id as real_id
-                FROM $courseTable course
-                INNER JOIN $languageTable language ON language.id = course.language_id
-                WHERE course.code = '".Database::escape_string($course_code)."'"
-            ),
-            'ASSOC'
-        );
-    }
-
-    /**
      * Returns a list of courses. Should work with quickform syntax.
      *
      * @param int    $from               Offset (from the 7th = '6'). Optional.
@@ -3613,14 +3585,6 @@ class CourseManager
         }
 
         return $affected_rows;
-    }
-
-    /**
-     * @deprecated Use subscribeCoursesToHrmManager().
-     */
-    public static function subscribeCoursesToDrhManager($hr_manager_id, $courses_list)
-    {
-        return self::subscribeCoursesToHrmManager($hr_manager_id, $courses_list);
     }
 
     /**

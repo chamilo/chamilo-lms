@@ -119,16 +119,47 @@ final class MigrationHistoryRecorder
     }
 
     /**
-     * Number of shipped migrations the history does not list as executed.
+     * Compares a non-empty history with the shipped migrations.
+     *
+     * A migration without a record sorted after the last executed one is a normal pending
+     * update. One sorted before it is a gap: it was skipped, or applied without being
+     * recorded, and running it again may fail or duplicate data. Records that match no
+     * shipped migration usually come from renamed classes.
+     *
+     * @return array{pending: int, gaps: int, unavailable: int}
      */
-    public function countPending(): int
+    public function inspectHistory(): array
     {
+        $report = ['pending' => 0, 'gaps' => 0, 'unavailable' => 0];
+
         try {
-            return \count($this->dependencyFactory->getMigrationStatusCalculator()->getNewMigrations()->getItems());
+            $executed = $this->dependencyFactory->getMetadataStorage()->getExecutedMigrations();
+            $missing = [];
+            $lastExecuted = -1;
+            $position = 0;
+
+            // Sorted in execution order.
+            foreach ($this->dependencyFactory->getMigrationPlanCalculator()->getMigrations()->getItems() as $migration) {
+                if ($executed->hasMigration($migration->getVersion())) {
+                    $lastExecuted = $position;
+                } else {
+                    $missing[] = $position;
+                }
+                ++$position;
+            }
+
+            foreach ($missing as $missingPosition) {
+                ++$report[$missingPosition < $lastExecuted ? 'gaps' : 'pending'];
+            }
+
+            $report['unavailable'] = \count(
+                $this->dependencyFactory->getMigrationStatusCalculator()->getExecutedUnavailableMigrations()->getItems()
+            );
         } catch (Throwable) {
             // The metadata table does not exist yet.
-            return 0;
         }
+
+        return $report;
     }
 
     /**

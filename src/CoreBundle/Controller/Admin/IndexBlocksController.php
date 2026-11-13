@@ -1174,33 +1174,61 @@ class IndexBlocksController extends BaseController
         // correct schema, so only the bookkeeping is missing.
         $historyIsEmpty = $this->migrationHistoryRecorder->isEmpty();
 
-        $migrationHistoryItem = [
-            'class' => 'item-health-check-migration-history '.($historyIsEmpty ? 'text-warning' : 'text-success'),
-            'label' => $this->translator->trans(
-                $historyIsEmpty
-                    ? 'Migration history not recorded yet: click to record it'
-                    : 'Migration history is recorded'
-            ),
-        ];
-
         if ($historyIsEmpty) {
-            $migrationHistoryItem['action'] = 'record-migration-history';
-        }
-
-        // A recorded history can still lack migrations the code ships: files replaced
-        // without running the update, or rows removed by hand. Only the update executes
-        // them, so the item points there and carries no action of its own.
-        $pendingMigrations = $historyIsEmpty ? 0 : $this->migrationHistoryRecorder->countPending();
-
-        if ($pendingMigrations > 0) {
+            // The counts let the confirmation dialog report what the click will do.
             $migrationHistoryItem = [
                 'class' => 'item-health-check-migration-history text-warning',
-                'url' => '/documentation/installation_guide.html#cli-upgrade-pending-migrations',
-                'label' => \sprintf(
-                    $this->translator->trans('%s migrations pending: execute them from the command line'),
-                    $pendingMigrations
-                ),
+                'label' => $this->translator->trans('Migration history is empty: fill in the missing records'),
+                'action' => 'record-migration-history',
+                'recordable' => $this->migrationHistoryRecorder->countRecordable(),
+                'pendingAfterRecording' => $this->migrationHistoryRecorder->countPendingAfterRecording(),
             ];
+        } else {
+            $history = $this->migrationHistoryRecorder->inspectHistory();
+
+            if ($history['gaps'] > 0 || $history['unavailable'] > 0) {
+                // Running the update here may replay migrations already applied, so the
+                // item asks for a review instead of pointing at the update.
+                $problems = [];
+
+                if ($history['gaps'] > 0) {
+                    $problems[] = \sprintf(
+                        $this->translator->trans('%s migrations older than the last executed one are not recorded'),
+                        $history['gaps']
+                    );
+                }
+
+                if ($history['unavailable'] > 0) {
+                    $problems[] = \sprintf(
+                        $this->translator->trans('%s records match no migration of this version'),
+                        $history['unavailable']
+                    );
+                }
+
+                $migrationHistoryItem = [
+                    'class' => 'item-health-check-migration-history text-error',
+                    'url' => '/documentation/installation_guide.html#cli-upgrade-inconsistent-history',
+                    'label' => \sprintf(
+                        $this->translator->trans('Migration history is inconsistent: %s. Review it before you run the update'),
+                        implode('; ', $problems)
+                    ),
+                ];
+            } elseif ($history['pending'] > 0) {
+                // Files replaced without running the update: the update executes them.
+                $migrationHistoryItem = [
+                    'class' => 'item-health-check-migration-history text-warning',
+                    'url' => '/documentation/installation_guide.html#cli-upgrade-pending-migrations',
+                    'label' => \sprintf(
+                        $this->translator->trans('%s migrations pending: execute them from the command line'),
+                        $history['pending']
+                    ),
+                ];
+            } else {
+                $migrationHistoryItem = [
+                    'class' => 'item-health-check-migration-history text-success',
+                    'label' => $this->translator->trans('Migration history is recorded'),
+                ];
+            }
         }
 
         $items[] = $migrationHistoryItem;

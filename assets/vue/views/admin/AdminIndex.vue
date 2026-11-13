@@ -167,6 +167,63 @@
       @item-action="onHealthCheckAction"
     />
 
+    <BaseDialogConfirmCancel
+      v-model:is-visible="migrationHistoryDialog.visible"
+      :title="t('Fill in the migration history')"
+      :confirm-label="t('Fill in the history')"
+      :cancel-label="t('Cancel')"
+      confirm-type="success"
+      @confirm-clicked="recordMigrationHistory"
+      @cancel-clicked="migrationHistoryDialog.visible = false"
+    >
+      <div class="flex flex-col gap-3">
+        <p>
+          {{
+            t(
+              "Doctrine, which runs the updates of Chamilo, needs a record in the version table for every migration applied to the database. Chamilo 2.0 and 3.0.0 created the database without these records, so the next update would try to apply every migration again over your current database.",
+            )
+          }}
+        </p>
+        <ul class="list-disc ps-6">
+          <li>
+            {{
+              t("Your database structure already includes the changes of {0} migrations.", [
+                migrationHistoryDialog.recordable,
+              ])
+            }}
+          </li>
+          <li v-if="migrationHistoryDialog.pending > 0">
+            {{ t("The changes of {0} newer migrations are not applied yet.", [migrationHistoryDialog.pending]) }}
+          </li>
+        </ul>
+        <p>
+          {{
+            t(
+              "This action adds the {0} missing records to the version table. These migrations are not executed again, and your data is not modified.",
+              [migrationHistoryDialog.recordable],
+            )
+          }}
+        </p>
+        <p v-if="migrationHistoryDialog.pending > 0">
+          {{
+            t("After this action, the update applies only the {0} pending migrations.", [
+              migrationHistoryDialog.pending,
+            ])
+          }}
+        </p>
+        <p v-else>
+          {{ t("After this action, your platform is up to date, and future updates work normally.") }}
+        </p>
+        <a
+          href="/documentation/installation_guide.html#cli-upgrade-history-recovery"
+          target="_blank"
+          rel="noopener"
+          class="underline"
+          v-text="t('Installation guide')"
+        />
+      </div>
+    </BaseDialogConfirmCancel>
+
     <!-- Small / secondary blocks: sent to the bottom -->
     <AdminBlock
       v-if="blockChamilo"
@@ -331,13 +388,13 @@ import { useIndexBlocks } from "../../composables/admin/indexBlocks"
 import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import baseService from "../../services/baseService"
-import { useConfirmation } from "../../composables/useConfirmation"
+import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue"
 import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
 
 const securityStore = useSecurityStore()
-const { requireConfirmation } = useConfirmation()
+const migrationHistoryDialog = ref({ visible: false, recordable: 0, pending: 0 })
 const { showErrorNotification, showSuccessNotification } = useNotification()
 
 const doNotListCampus = ref(false)
@@ -371,7 +428,7 @@ function checkVersionOnSubmit() {
 /**
  * Runs the action a health check item carries, if any is known here.
  *
- * @param {{action: string}} item the clicked item
+ * @param {{action: string, recordable?: number, pendingAfterRecording?: number}} item the clicked item
  * @returns {void}
  */
 function onHealthCheckAction(item) {
@@ -379,20 +436,21 @@ function onHealthCheckAction(item) {
     return
   }
 
-  requireConfirmation({
-    message: t(
-      "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified.",
-    ),
-    accept: recordMigrationHistory,
-  })
+  migrationHistoryDialog.value = {
+    visible: true,
+    recordable: item.recordable ?? 0,
+    pending: item.pendingAfterRecording ?? 0,
+  }
 }
 
 /**
- * Records the migration history, then reloads the blocks so the item turns green.
+ * Records the migration history, then reloads the blocks so the item reports the new state.
  *
  * @returns {Promise<void>}
  */
 async function recordMigrationHistory() {
+  migrationHistoryDialog.value.visible = false
+
   try {
     const result = await baseService.post("/admin/system-status-migration-history", {})
     showSuccessNotification(result.message)

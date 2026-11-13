@@ -41557,8 +41557,29 @@ msgstr "User extra field key to use when searching and naming sessions from /adm
 msgid "JSON configuration for search prefilter fields."
 msgstr "JSON configuration for search prefilter fields."
 
-msgid "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
-msgstr "This records the migrations your database already carries, and leaves the newer ones pending so the update can execute them. Your data is not modified."
+msgid "Fill in the migration history"
+msgstr "Fill in the migration history"
+
+msgid "Fill in the history"
+msgstr "Fill in the history"
+
+msgid "Doctrine, which runs the updates of Chamilo, needs a record in the version table for every migration applied to the database. Chamilo 2.0 and 3.0.0 created the database without these records, so the next update would try to apply every migration again over your current database."
+msgstr "Doctrine, which runs the updates of Chamilo, needs a record in the version table for every migration applied to the database. Chamilo 2.0 and 3.0.0 created the database without these records, so the next update would try to apply every migration again over your current database."
+
+msgid "Your database structure already includes the changes of %s migrations."
+msgstr "Your database structure already includes the changes of %s migrations."
+
+msgid "The changes of %s newer migrations are not applied yet."
+msgstr "The changes of %s newer migrations are not applied yet."
+
+msgid "This action adds the %s missing records to the version table. These migrations are not executed again, and your data is not modified."
+msgstr "This action adds the %s missing records to the version table. These migrations are not executed again, and your data is not modified."
+
+msgid "After this action, the update applies only the %s pending migrations."
+msgstr "After this action, the update applies only the %s pending migrations."
+
+msgid "After this action, your platform is up to date, and future updates work normally."
+msgstr "After this action, your platform is up to date, and future updates work normally."
 
 msgid "%s migrations recorded. Your platform can now be updated normally."
 msgstr "%s migrations recorded. Your platform can now be updated normally."
@@ -41566,8 +41587,17 @@ msgstr "%s migrations recorded. Your platform can now be updated normally."
 msgid "%s migrations recorded, and %s are still pending. Run the update to execute them."
 msgstr "%s migrations recorded, and %s are still pending. Run the update to execute them."
 
-msgid "Migration history not recorded yet: click to record it"
-msgstr "Migration history not recorded yet: click to record it"
+msgid "Migration history is empty: fill in the missing records"
+msgstr "Migration history is empty: fill in the missing records"
+
+msgid "Migration history is inconsistent: %s. Review it before you run the update"
+msgstr "Migration history is inconsistent: %s. Review it before you run the update"
+
+msgid "%s migrations older than the last executed one are not recorded"
+msgstr "%s migrations older than the last executed one are not recorded"
+
+msgid "%s records match no migration of this version"
+msgstr "%s records match no migration of this version"
 
 msgid "Migration history is recorded"
 msgstr "Migration history is recorded"

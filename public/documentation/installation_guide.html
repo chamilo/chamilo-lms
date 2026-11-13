@@ -418,7 +418,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
       <ul>
         <li>delete the <em>vendor</em> folder from your Chamilo 1.11.* system (before overwriting with the new Chamilo package)</li>
         <li>delete the <em>var/cache/</em> folder from your Chamilo 1.11.* system</li>
-	<li>seed the Doctrine migration history, which a 2.0 installation never received. With a shell, run the <em>doctrine:migrations:version</em> commands below <em>while your current version is still deployed</em>. Without a shell, copy the new code first and then use the <em>No migration history</em> link of the <em>Health check</em> block of the administration page: it records only what your database proves it already carries, and leaves the newer migrations pending for the update to execute</li>
+	<li>seed the Doctrine migration history, which a 2.0 installation never received. With a shell, run the <em>doctrine:migrations:version</em> commands below <em>while your current version is still deployed</em>. Without a shell, copy the new code first and then use the <em>Migration history is empty</em> item of the <em>Health check</em> block of the administration page: it records only what your database proves it already carries, and leaves the newer migrations pending for the update to execute</li>
       </ul>
       The <em>vendor</em> folder contains PHP libraries and autoload configurations from Chamilo 1.11 which might leave folders that conflict with other folders in later versions of Chamilo.<br />
 
@@ -457,7 +457,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
       create.<br>
       There are two ways out, and the first one needs no shell at all.<br>
       <em>Way one, from the administration page.</em> Open the <em>Health check</em> block and use the
-      <em>No migration history</em> link. It reads your schema, records only the migration namespaces
+      <em>Migration history is empty</em> item. It reads your schema, records only the migration namespaces
       your database proves it already carries, and leaves the newer ones pending. The notification
       reports both counts: with the Chamilo 3.0.0 code over a 2.0.x database, 347 recorded and 46 still
       pending. Then run the upgrade, either through the wizard of section 5.4 or with the command of
@@ -512,6 +512,37 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
       Afterwards, doctrine:migrations:status must report "New" 0, and the <em>Health check</em> block
       reports the migration history as recorded.
 
+    <h3>4.9. Inconsistent migration history</h3>
+    <a id="cli-upgrade-inconsistent-history" class="anchor"></a>
+      This section is for a platform whose history misses migrations that are older than the last
+      one it recorded, or holds records that match no migration of the deployed code. The
+      <em>Health check</em> block then reports the migration history as inconsistent. It happens on
+      platforms installed from a development version, where migrations were applied by hand or
+      renamed afterwards.<br>
+      Do <em>not</em> run doctrine:migrations:migrate yet. It executes every migration without a
+      record, whatever its date, so it would apply again changes your database already has. A
+      migration that checks the schema first does nothing; one that does not fails, or silently
+      duplicates data.<br>
+      Make a backup of your database and of the <em>var/</em> directory, and work on a copy if you
+      can. Then compare the history with the code:
+    <pre>
+        cd [/var/www/chamilo]
+        php bin/console doctrine:migrations:status
+        php bin/console doctrine:migrations:list
+    </pre>
+      In the status output, "Executed Unavailable" counts the records that match no migration,
+      usually migrations renamed since they ran. In the list, the "not migrated" migrations dated
+      before the last "migrated" one are the gaps. Read each of them and check whether its changes
+      are already in your database. If they are, record it without running it; if they are not,
+      run it:
+    <pre>
+        php bin/console doctrine:migrations:version 'Chamilo\CoreBundle\Migrations\Schema\V200\Version20170523110000' --add --no-interaction
+        php bin/console doctrine:migrations:execute 'Chamilo\CoreBundle\Migrations\Schema\V200\Version20170523110000' --up
+    </pre>
+      Do not rely on doctrine:migrations:migrate --dry-run to check them: many migrations read and
+      write the database directly while they run, so a dry run is not free of changes.<br>
+      Once no gap is left, run the remaining migrations as in section 4.8.
+
   <h2>5. Web panel upgrade from 1.11.*</h2>
   <a id="web-upgrade" class="anchor"></a>
 
@@ -563,7 +594,7 @@ sudo chown -R www-data:www-data var/ config/ .env</pre>
     If the wizard refuses your request and you expected an upgrade, run
     <em>php bin/console doctrine:migrations:status</em>. If "Executed" is 0 on a platform that works,
     the history is the cause. You are then in the case of section 4.7. The shortest way out needs no
-    shell: the <em>No migration history</em> link of the administration page records what your schema
+    shell: the <em>Migration history is empty</em> item of the administration page records what your schema
     proves and leaves the rest pending, after which the wizard opens.
 
   <h2>6. Installing on Windows with WAMP</h2>

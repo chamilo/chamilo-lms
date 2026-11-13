@@ -100,7 +100,7 @@ if (null !== $contentLength) {
     header('Content-Length: '.(string) $contentLength);
 }
 
-header('Cache-Control: public, max-age=31536000');
+header('Cache-Control: private, max-age=31536000');
 header('X-Content-Type-Options: nosniff');
 
 fpassthru($stream);

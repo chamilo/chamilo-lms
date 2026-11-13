@@ -134,7 +134,7 @@ if ('set_finished' === $action) {
             /** @var CLpItem|null $lpItem */
             $lpItem = $em->find(CLpItem::class, $lpItemView->getLpItemId());
 
-            if ($lpItem instanceof CLpItem && 'h5p' === $lpItem->getItemType()) {
+            if ($lpItem instanceof CLpItem && H5pImportPlugin::isLpItemOfContent($lpItem, $h5pImport)) {
                 $lpItemView->setScore((int) $score);
                 $lpItemView->setMaxScore((int) $maxScore);
                 $lpItemView->setStatus('completed');

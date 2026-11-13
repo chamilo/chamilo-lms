@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImport;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImportLibrary;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImportResults;
@@ -113,6 +114,14 @@ class H5pImportPlugin extends Plugin
     public static function isValidScore(int $score, int $maxScore): bool
     {
         return $score >= 0 && $score <= $maxScore;
+    }
+
+    /**
+     * Whether a learning path item is the one that launches this content.
+     */
+    public static function isLpItemOfContent(CLpItem $lpItem, H5pImport $h5pImport): bool
+    {
+        return 'h5p' === $lpItem->getItemType() && (int) $lpItem->getPath() === $h5pImport->getIid();
     }
 
     /**

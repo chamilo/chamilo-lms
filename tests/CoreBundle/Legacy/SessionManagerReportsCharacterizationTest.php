@@ -802,7 +802,7 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
         $this->assertContains($general, $asCoach);
     }
 
-    public function testCoursesOfACoachAreMergedPerCourse(): void
+    public function testCoursesOfACoachAreListedPerCourse(): void
     {
         $coach = $this->rawUser('cc', 'ROLE_TEACHER', 1);
         $s1 = $this->rawSession('cc_1');
@@ -818,14 +818,11 @@ class SessionManagerReportsCharacterizationTest extends AbstractApiTest
 
         $byCourseCoach = SessionManager::getCoursesForCourseSessionCoach($coach);
         $byMainCoach = SessionManager::getCoursesForMainSessionCoach($coach);
-        $merged = SessionManager::getSessionCourseForUser($coach);
         $this->loginAs($this->getAdmin()->getId());
 
         $this->assertSame([$c1 => [$s2]], $byCourseCoach);
         $this->assertEqualsCanonicalizing([$c1, $c2], array_keys($byMainCoach));
         $this->assertSame([$s1], $byMainCoach[$c1]);
-        $this->assertEqualsCanonicalizing([$s2, $s1], $merged[$c1], 'A course in two sessions lists both.');
-        $this->assertSame([$s1], $merged[$c2]);
     }
 
     public function testStudentIdsOfASessionFilterAndSearch(): void

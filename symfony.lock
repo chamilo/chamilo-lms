@@ -22,6 +22,9 @@
     "chamilo/google-map-form-type-bundle": {
         "version": "v1.7"
     },
+    "chamilo/settings-bundle": {
+        "version": "v1.5.0"
+    },
     "dama/doctrine-test-bundle": {
         "version": "6.7",
         "recipe": {

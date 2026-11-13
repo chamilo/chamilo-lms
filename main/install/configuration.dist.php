@@ -1591,6 +1591,12 @@ $_configuration['required_extra_fields_in_profile'] = [
 // which also checks that the requester is allowed to read the owner personal files.
 //$_configuration['block_my_files_access'] = false;
 
+// Restore the access to the personal files (my_files) of every user for everyone,
+// including anonymous users, as it was before 1.11.42. By default (false), only the owner,
+// the administrators, the reviewers of the related exercise attempts and the teachers or
+// HR managers of the owner can access these files.
+//$_configuration['restore_access_my_file_for_all'] = false;
+
 // Allow .htaccess files in SCORM packages
 //$_configuration['allow_htaccess_import_from_scorm'] = false;
 

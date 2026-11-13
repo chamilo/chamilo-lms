@@ -84,9 +84,14 @@ function isAllowedToDownloadMyFile($ownerId, $relativePath)
     return false;
 }
 
-// Personal files are private: anonymous access is never allowed, whatever the
-// value of the "block_my_files_access" setting is.
-api_block_anonymous_users();
+// Restores the pre-1.11.42 behaviour: anyone, even anonymous users, can read the
+// personal files of every user (see "restore_access_my_file_for_all" in configuration.php).
+$allowAccessForAll = true === api_get_configuration_value('restore_access_my_file_for_all');
+
+// Personal files are private: anonymous access is not allowed.
+if (!$allowAccessForAll) {
+    api_block_anonymous_users();
+}
 
 $userId = isset($_GET['user_id']) ? (int) $_GET['user_id'] : 0;
 $file = $_GET['file'] ?? '';
@@ -101,7 +106,7 @@ if (empty($dir)) {
 }
 
 // The "user_id" parameter is attacker controlled: never trust it to grant access.
-if (!isAllowedToDownloadMyFile($userId, $file)) {
+if (!$allowAccessForAll && !isAllowedToDownloadMyFile($userId, $file)) {
     api_not_allowed(true);
 }
 

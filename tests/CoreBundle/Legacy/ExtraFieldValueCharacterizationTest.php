@@ -24,7 +24,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  * Liveness: LIVE (callers under public/ src/ plugin/) are saveFieldValues, save, get_values_by_handler_and_field_id,
  * get_values_by_handler_and_field_variable, get_item_id_from_field_variable_and_field_value, getValuesByFieldId,
  * getAllValuesByItemAndField, getAllValuesByItem, getAllValuesForAnItem, deleteValuesByItem,
- * deleteValuesByHandlerAndFieldAndValue, copy, get_count. DEAD: searchValuesByField (no caller),
+ * deleteValuesByHandlerAndFieldAndValue, copy, get_count. DEAD:
  * delete_all_values_by_field_id (only ExtraField::delete), getAllValuesByItemAndFieldAndValue (only save() of tags).
  *
  * Fixtures are raw prepared statements; fields and values use the "xf_" prefix and item ids 4242+ that no
@@ -259,22 +259,6 @@ class ExtraFieldValueCharacterizationTest extends AbstractApiTest
     }
 
     // ---------------------------------------------------------------- search / count
-
-    public function testSearchValuesByFieldReturnsDistinctMatchingValuesSortedAndLimited(): void
-    {
-        $f = $this->field(self::COURSE, 'search');
-        $this->value($f, 424331, 'xf-pear');
-        $this->value($f, 424332, 'xf-apple');
-        $this->value($f, 424333, 'xf-apple');
-        $this->value($f, 424334, 'xf-grape');
-        $this->value($this->field(self::USER, 'search'), 424335, 'xf-apple-user');
-        $efv = new ExtraFieldValue('course');
-
-        $this->assertSame(['xf-apple', 'xf-grape', 'xf-pear'], array_column($efv->searchValuesByField('xf-', $f), 'field_value'));
-        $this->assertSame(['xf-apple'], array_column($efv->searchValuesByField('app', $f), 'field_value'));
-        $this->assertSame(['xf-apple', 'xf-grape'], array_column($efv->searchValuesByField('xf-', $f, 2), 'field_value'));
-        $this->assertSame([], $efv->searchValuesByField("xf' OR '1'='1", $f));
-    }
 
     public function testGetCountCountsTheValuesStoredForTheItemType(): void
     {

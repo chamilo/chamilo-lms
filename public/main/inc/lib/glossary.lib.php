@@ -297,61 +297,6 @@ class GlossaryManager
     }
 
     /**
-     * Get the maximum display order of the glossary item.
-     *
-     * @deprecated No caller left: the glossary has no display order any more (the tool is Vue/API Platform).
-     *
-     * @return int Maximum glossary display order
-     */
-    public static function get_max_glossary_item()
-    {
-        // @todo get max by orm
-        /*
-        $repo = Container::getGlossaryRepository();
-
-        $findArray  = [
-            'cId' => api_get_course_int_id(),
-            'sessionId' => api_get_session_id(),
-            'title' => $term,
-        ];
-        $glossary = $repo->findBy($findArray);
-        */
-        // Database table definition
-
-        $repo = Container::getGlossaryRepository();
-
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
-
-        $course = api_get_course_entity($courseId);
-        $session = api_get_session_entity($sessionId);
-        $qb = $repo->getResourcesByCourse($course, $session);
-
-        try {
-            $count = $qb->select('COUNT(resource)')->getQuery()->getSingleScalarResult();
-        } catch (NoResultException $e) {
-            $count = 0;
-        }
-
-        return $count;
-
-        $table = Database::get_course_table(TABLE_GLOSSARY);
-        $course_id = api_get_course_int_id();
-        $get_max = "SELECT MAX(display_order) FROM $table
-                    WHERE c_id = $course_id ";
-        $res_max = Database::query($get_max);
-        if (0 == Database::num_rows($res_max)) {
-            return 0;
-        }
-        $row = Database::fetch_array($res_max);
-        if (!empty($row[0])) {
-            return $row[0];
-        }
-
-        return 0;
-    }
-
-    /**
      * check if the glossary term exists or not.
      *
      * @param string $term   Term to look for
@@ -858,36 +803,6 @@ class GlossaryManager
                 }
             }
         </script>";
-    }
-
-    /**
-     * Re-order glossary.
-     *
-     * @deprecated CGlossary no longer has a display order (terms are sorted by title in the Vue tool), so there is
-     *             nothing to renumber. The former body iterated a QueryBuilder and never did anything; it no
-     *             longer pretends to. No caller remains.
-     */
-    public static function reorder_glossary(): void
-    {
-        return;
-
-        /*
-        // Database table definition
-        $table = Database::get_course_table(TABLE_GLOSSARY);
-        $course_id = api_get_course_int_id();
-        $sql = "SELECT * FROM $table
-                WHERE c_id = $course_id
-                ORDER by display_order ASC";
-        $res = Database::query($sql);
-
-        $i = 1;
-        while ($data = Database::fetch_array($res)) {
-            $sql = "UPDATE $table SET display_order = $i
-                    WHERE c_id = $course_id AND glossary_id = '".intval($data['glossary_id'])."'";
-            Database::query($sql);
-            $i++;
-        }
-        */
     }
 
     /**

@@ -2069,31 +2069,6 @@ class ExtraField extends Model
     }
 
     /**
-     * @deprecated No caller left in the codebase.
-     *
-     * @param string $type
-     *
-     * @return array
-     */
-    public function get_all_extra_field_by_type($type)
-    {
-        // all the information of the field
-        $sql = "SELECT * FROM {$this->table}
-                WHERE
-                    value_type = '".Database::escape_string($type)."' AND
-                    item_type = $this->itemType
-                ";
-        $result = Database::query($sql);
-
-        $return = [];
-        while ($row = Database::fetch_array($result)) {
-            $return[] = $row['id'];
-        }
-
-        return $return;
-    }
-
-    /**
      * @param int $id
      */
     public function get_field_type_by_id($id)

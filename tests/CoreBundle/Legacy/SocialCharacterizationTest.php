@@ -26,11 +26,10 @@ use Throwable;
  * LIVE and working (user_rel_user based): get_relation_between_contacts() (chat, video signalling, vCard export:
  * it decides who may contact / see whom), get_friends() (social.ajax, profile pages).
  *
- * BROKEN/DEAD: everything that reads the `message` table through user_receiver_id/msg_status
- * (getCountMessagesSent/Received, getCountWallPostedMessages, the invitation list/count/accept/deny helpers,
- * getWallMessages): those two columns no longer exist (recipients live in message_rel_user, the status column is
- * `status`), so each call throws. Their callers are `if (false)` blocks, an AJAX action behind the abandoned wall,
- * or nothing at all; the wall itself is the Vue SocialPost feature. Pinned cheaply and marked @deprecated.
+ * BROKEN: the two helpers that still read the `message` table through user_receiver_id/msg_status
+ * (get_list_invitation_of_friends_by_user_id, getWallMessages): those two columns no longer exist (recipients live in
+ * message_rel_user, the status column is `status`), so each call throws. They are still reached by AJAX actions
+ * (message.ajax.php, social.ajax.php); the wall itself is the Vue SocialPost feature. Pinned cheaply.
  *
  * Fixtures: users 1 (admin), 2 (anonymous), 3 (soft deleted fallback_user) and raw user_rel_user rows (sc_).
  */
@@ -209,7 +208,7 @@ final class SocialCharacterizationTest extends KernelTestCase
      */
     public function testMessageTableHelpersThrowBecauseTheirColumnsAreGone(callable $call): void
     {
-        // DEAD (all @deprecated; the only admin caller, user_information.php, is inside `if (false)`): user_receiver_id / msg_status do not exist on `message` any more, so the query fails.
+        // BROKEN (the remaining callers are an AJAX action behind the abandoned wall and the notifications poll): user_receiver_id / msg_status do not exist on `message` any more, so the query fails.
         // Intended (if ever revived): counts and lists computed through message_rel_user and message.status.
         $this->expectException(Throwable::class);
         $call();
@@ -217,21 +216,7 @@ final class SocialCharacterizationTest extends KernelTestCase
 
     public static function brokenMessageQueries(): iterable
     {
-        yield 'messages sent' => [static fn () => SocialManager::getCountMessagesSent(1)];
-
-        yield 'messages received' => [static fn () => SocialManager::getCountMessagesReceived(1)];
-
-        yield 'wall posts' => [static fn () => SocialManager::getCountWallPostedMessages(1)];
-
         yield 'invitations received' => [static fn () => SocialManager::get_list_invitation_of_friends_by_user_id(1, 3)];
-
-        yield 'invitations sent' => [static fn () => SocialManager::get_list_invitation_sent_by_user_id(1)];
-
-        yield 'invitation count' => [static fn () => SocialManager::getCountInvitationSent(1)];
-
-        yield 'accept invitation' => [static fn () => SocialManager::invitation_accepted(1, 2)];
-
-        yield 'deny invitation' => [static fn () => SocialManager::invitation_denied(1, 2)];
 
         yield 'wall messages' => [static fn () => SocialManager::getWallMessages(1)];
     }
@@ -239,11 +224,6 @@ final class SocialCharacterizationTest extends KernelTestCase
     public function testInvitationHelpersRejectEmptyIdsBeforeTouchingTheDatabase(): void
     {
         $this->assertSame([], SocialManager::get_list_invitation_of_friends_by_user_id(0));
-        $this->assertSame([], SocialManager::get_list_invitation_sent_by_user_id(0));
-        $this->assertSame(0, SocialManager::getCountInvitationSent(0));
-        $this->assertSame(0, SocialManager::getCountWallPostedMessages(0));
-        $this->assertFalse(SocialManager::invitation_accepted(0, 2));
-        $this->assertFalse(SocialManager::invitation_denied(1, 0));
         $this->assertSame([], SocialManager::getThreadList(1));
     }
 

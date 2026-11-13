@@ -5,6 +5,10 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 api_protect_admin_script();
 
+$interbreadcrumb[] = ['url' => '/admin', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/platform', 'name' => get_lang('Platform management')];
+
+
 $tool = 'notification_event';
 
 $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;

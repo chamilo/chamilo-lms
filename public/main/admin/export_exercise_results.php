@@ -14,6 +14,7 @@ api_protect_admin_script(true);
 $this_section = SECTION_PLATFORM_ADMIN;
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/sessions', 'name' => get_lang('Sessions management')];
 
 $toolName = get_lang('Export all test results');
 

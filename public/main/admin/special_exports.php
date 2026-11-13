@@ -18,6 +18,7 @@ api_set_more_memory_and_time_limits();
 
 $this_section = SECTION_PLATFORM_ADMIN;
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/analytics', 'name' => get_lang('Analytics')];
 
 $nameTools = get_lang('Special exports');
 $export = '';

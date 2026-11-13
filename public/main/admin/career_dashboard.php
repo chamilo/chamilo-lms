@@ -23,6 +23,7 @@ $interbreadcrumb[] = [
     'url' => 'index.php',
     'name' => get_lang('Administration'),
 ];
+$interbreadcrumb[] = ['url' => '/admin/sessions', 'name' => get_lang('Sessions management')];
 $interbreadcrumb[] = [
     'url' => 'career_dashboard.php',
     'name' => get_lang('Careers and promotions'),
@@ -77,7 +78,7 @@ $actionLeft = Display::url(
         ICON_SIZE_MEDIUM,
         get_lang('Back to').' '.get_lang('Administration')
     ),
-    '../admin/index.php'
+    '/admin/sessions'
 );
 
 $actionLeft .= Display::url(

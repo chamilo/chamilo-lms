@@ -30,6 +30,7 @@ $interbreadcrumb[] = [
     'url' => 'index.php',
     'name' => get_lang('Administration'),
 ];
+$interbreadcrumb[] = ['url' => '/admin/analytics', 'name' => get_lang('Analytics')];
 
 Display::display_header($toolName);
 echo Display::page_header($toolName);
@@ -61,7 +62,7 @@ $actionBar = Display::toolbarAction(
         ]),
         Display::toolbarButton(
             get_lang('Back'),
-            api_get_path(WEB_CODE_PATH).'admin/index.php',
+            api_get_path(WEB_PATH).'admin/analytics',
             'arrow-left',
             'secondary-outline'
         ),

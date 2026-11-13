@@ -102,7 +102,7 @@ function course_copy_page_close(): string
  */
 function course_copy_actions_bar(): string
 {
-    $backUrl = api_get_path(WEB_CODE_PATH).'admin/index.php';
+    $backUrl = api_get_path(WEB_PATH).'admin/sessions';
 
     return '
         <div class="flex items-center justify-between">
@@ -156,6 +156,7 @@ $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
     'name' => get_lang('Administration'),
 ];
+$interbreadcrumb[] = ['url' => '/admin/sessions', 'name' => get_lang('Sessions management')];
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);

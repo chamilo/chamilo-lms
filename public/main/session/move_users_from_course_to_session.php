@@ -20,6 +20,10 @@ if (file_exists($workLib)) {
 $current_course_tool = TOOL_COURSE_MAINTENANCE;
 
 api_protect_admin_script();
+
+$interbreadcrumb[] = ['url' => '/admin', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/sessions', 'name' => get_lang('Sessions management')];
+
 api_protect_limit_for_session_admin();
 api_set_more_memory_and_time_limits();
 
@@ -257,15 +261,15 @@ echo '<p class="mt-2 max-w-3xl text-sm leading-6 text-gray-70">'.
     '</p>';
 echo '</div>';
 echo '</div>';
-echo '<a href="../admin/index.php" class="inline-flex items-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2 text-sm font-semibold text-gray-90 shadow-sm transition hover:bg-gray-15 focus:outline-none focus:ring-2 focus:ring-primary/30">';
+echo '<a href="/admin/sessions" class="inline-flex items-center gap-2 rounded-xl border border-gray-25 bg-white px-4 py-2 text-sm font-semibold text-gray-90 shadow-sm transition hover:bg-gray-15 focus:outline-none focus:ring-2 focus:ring-primary/30">';
 echo Display::getMdiIcon(
     ActionIcon::BACK,
     'ch-tool-icon',
     null,
     ICON_SIZE_SMALL,
-    get_lang('Back to').' '.get_lang('Administration')
+    get_lang('Back to').' '.get_lang('Sessions management')
 );
-echo '<span>'.api_htmlentities(get_lang('Back to').' '.get_lang('Administration')).'</span>';
+echo '<span>'.api_htmlentities(get_lang('Back to').' '.get_lang('Sessions management')).'</span>';
 echo '</a>';
 echo '</div>';
 

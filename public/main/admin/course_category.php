@@ -160,6 +160,7 @@ $interbreadcrumb[] = [
     'url' => 'index.php',
     'name' => get_lang('Administration'),
 ];
+$interbreadcrumb[] = ['url' => '/admin/courses', 'name' => get_lang('Course management')];
 
 Display::display_header($tool_name);
 

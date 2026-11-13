@@ -217,6 +217,7 @@ if (isset($extAuthSource) && is_array($extAuthSource)) {
 $tool_name = get_lang('Import courses list').' CSV';
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/courses', 'name' => get_lang('Course management')];
 
 set_time_limit(0);
 

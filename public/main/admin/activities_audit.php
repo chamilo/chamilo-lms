@@ -18,7 +18,9 @@ require_once __DIR__.'/../inc/lib/reports.lib.php';
 api_protect_admin_script();
 ReportRegistry::assertCurrentUserCanAccessReport('security_activities_audit');
 
+$securitySectionUrl = api_get_path(WEB_PATH).'admin/security';
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => $securitySectionUrl, 'name' => get_lang('Security')];
 
 $tool_name = get_lang('Activities audit');
 
@@ -37,7 +39,7 @@ Display::display_header($tool_name);
 echo Display::page_header($tool_name);
 echo ReportRegistry::renderReportActionBar(
     'security_activities_audit',
-    api_get_path(WEB_CODE_PATH).'admin/index.php'
+    $securitySectionUrl
 );
 echo Statistics::printActivitiesStats();
 Display::display_footer();

@@ -77,3 +77,14 @@
         {% endif %}
     </div>
 {% endblock %}
+
+{% block javascripts %}
+    <script>
+      window.breadcrumb = [
+        { name: "{{ 'Administration'|trans|e('js') }}", url: "/admin" },
+        { name: "{{ 'System'|trans|e('js') }}", url: "/admin/system" },
+        { name: "{{ 'Resources by type'|trans|e('js') }}" }
+      ];
+    </script>
+    {{ parent() }}
+{% endblock %}

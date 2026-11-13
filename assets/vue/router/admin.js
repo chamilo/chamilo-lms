@@ -1,12 +1,55 @@
 import { activeReportLabelKey } from "../utils/statisticsReports"
+import { useSecurityStore } from "../store/securityStore"
 
 // Fixed breadcrumb ancestors, shared by the pages that hang from a list page.
 // Labels are translation keys; the breadcrumb component translates them.
 const adminCrumb = { label: "Administration", route: { name: "AdminIndex" } }
-const classesCrumbs = [adminCrumb, { label: "Classes", route: { name: "AdminUsergroupList" } }]
-const surveyTemplateCrumbs = [adminCrumb, { label: "Survey templates", route: { name: "SurveyTemplateList" } }]
-const supportBotCrumbs = [adminCrumb, { label: "Support bot", route: { name: "SupportBotTreeList" } }]
-const multiUrlCrumbs = [adminCrumb, { label: "Multi URLs", route: { name: "AdminMultiUrlList" } }]
+// Keep these route declarations literal so the breadcrumb-route checker can evaluate them.
+// Section page content and icons are configured separately in utils/adminSections.js.
+const sectionDefinitions = {
+  users: { name: "AdminUsersSection", path: "users", title: "User management", allowSessionAdmin: true },
+  courses: { name: "AdminCoursesSection", path: "courses", title: "Course management" },
+  sessions: { name: "AdminSessionsSection", path: "sessions", title: "Sessions management", allowSessionAdmin: true },
+  platform: { name: "AdminPlatformSection", path: "platform", title: "Platform management" },
+  tracking: { name: "AdminAnalyticsSection", path: "analytics", title: "Analytics" },
+  gradebook: { name: "AdminAssessmentsSection", path: "assessments", title: "Assessments" },
+  skills: { name: "AdminSkillsSection", path: "skills", title: "Skills" },
+  settings: { name: "AdminSystemSection", path: "system", title: "System" },
+  rooms: { name: "AdminRoomsSection", path: "rooms", title: "Rooms" },
+  security: { name: "AdminSecuritySection", path: "security", title: "Security" },
+  data_privacy: { name: "AdminPrivacySection", path: "privacy", title: "Personal data protection" },
+  plugins: { name: "AdminPluginsSection", path: "plugins", title: "Plugins" },
+  health_check: { name: "AdminHealthCheckSection", path: "health-check", title: "Health check" },
+  chamilo: { name: "AdminChamiloSection", path: "chamilo", title: "Chamilo.org" },
+}
+
+const sectionCrumbs = (section) => [
+  adminCrumb,
+  { label: sectionDefinitions[section].title, route: { name: sectionDefinitions[section].name } },
+]
+
+// Question managers and session admins can access a few tools but not their admin-only blocks.
+const adminOnlyCrumbs = (section) => () =>
+  useSecurityStore().isAdmin ? sectionCrumbs(section) : [adminCrumb]
+
+const sectionRoutes = Object.entries(sectionDefinitions).map(([section, config]) => ({
+  name: config.name,
+  path: config.path,
+  meta: {
+    requiresAdmin: true,
+    ...(config.allowSessionAdmin ? { requiresSessionAdmin: true } : {}),
+    showBreadcrumb: true,
+    breadcrumb: config.title,
+    breadcrumbParents: [adminCrumb],
+  },
+  component: () => import("../views/admin/AdminSection.vue"),
+  props: { section },
+}))
+const classesCrumbs = [...sectionCrumbs("users"), { label: "Classes", route: { name: "AdminUsergroupList" } }]
+const surveyTemplateCrumbs = [...sectionCrumbs("platform"), { label: "Survey templates", route: { name: "SurveyTemplateList" } }]
+const supportBotCrumbs = [...sectionCrumbs("tracking"), { label: "Support bot", route: { name: "SupportBotTreeList" } }]
+const termsCrumbs = [...sectionCrumbs("platform"), { label: "Terms and conditions", route: { name: "TermsConditionsList" } }]
+const multiUrlCrumbs = [...sectionCrumbs("platform"), { label: "Multi URLs", route: { name: "AdminMultiUrlList" } }]
 const accessUrlCrumbs = [
   ...multiUrlCrumbs,
   { label: "Multiple access URL / Branding", route: { name: "AccessUrlManage" } },
@@ -24,6 +67,7 @@ export default {
       meta: { requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: false },
       component: () => import("../views/admin/AdminIndex.vue"),
     },
+    ...sectionRoutes,
     {
       name: "SurveyTemplateList",
       path: "survey-templates",
@@ -31,7 +75,7 @@ export default {
         requiresAdmin: true,
         showBreadcrumb: true,
         breadcrumb: "Survey templates",
-        breadcrumbParents: [adminCrumb],
+        breadcrumbParents: sectionCrumbs("platform"),
       },
       component: () => import("../views/surveytemplate/SurveyTemplateList.vue"),
     },
@@ -75,7 +119,7 @@ export default {
         requiresAdmin: true,
         showBreadcrumb: true,
         breadcrumb: "Support bot",
-        breadcrumbParents: [adminCrumb],
+        breadcrumbParents: sectionCrumbs("tracking"),
       },
       component: () => import("../views/supportbot/SupportBotTreeList.vue"),
     },
@@ -126,55 +170,62 @@ export default {
     {
       name: "AdminConfigurationColors",
       path: "configuration/colors",
-      meta: { requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true, breadcrumb: "Colors" },
+      meta: {
+        requiresAdmin: true,
+        requiresSessionAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Colors",
+        breadcrumbParents: adminOnlyCrumbs("settings"),
+      },
       component: () => import("../views/admin/AdminConfigureColors.vue"),
     },
     {
       path: "gdpr/third-parties",
       name: "ThirdPartyManager",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Third parties" },
+      meta: { breadcrumbParents: sectionCrumbs("data_privacy"), requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Third parties" },
       component: () => import("../views/admin/ThirdPartyManager.vue"),
     },
     {
       path: "gdpr/data-exchanges/:thirdPartyId?",
       name: "DataExchangeManager",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Data exchanges" },
+      meta: { breadcrumbParents: sectionCrumbs("data_privacy"), requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Data exchanges" },
       component: () => import("../views/admin/DataExchangeManager.vue"),
     },
     {
       name: "TermsConditionsList",
       path: "terms-conditions",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Terms and conditions" },
+      meta: { breadcrumbParents: sectionCrumbs("platform"), requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Terms and conditions" },
       component: () => import("../views/terms/TermsList.vue"),
     },
     {
       name: "TermsConditionsEdit",
       path: "terms-conditions/edit",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Edit" },
+      meta: { breadcrumbParents: termsCrumbs, requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Edit" },
       component: () => import("../views/terms/TermsEdit.vue"),
     },
     {
       name: "TermsConditionsView",
       path: "terms-conditions/view",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Show" },
+      meta: { breadcrumbParents: termsCrumbs, requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Show" },
       component: () => import("../views/terms/Terms.vue"),
     },
     {
       name: "AdminUserList",
       path: "user-list",
-      meta: { requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true, breadcrumb: "User list" },
+      meta: { breadcrumbParents: sectionCrumbs("users"), requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true, breadcrumb: "User list" },
       component: () => import("../views/admin/UserList.vue"),
     },
     {
       name: "AdminUserAdd",
       path: "user-add",
-      meta: { requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true, breadcrumb: "Add a user" },
+      meta: { breadcrumbParents: sectionCrumbs("users"), requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true, breadcrumb: "Add a user" },
       component: () => import("../views/admin/UserAdd.vue"),
     },
     {
       name: "AdminUserEdit",
       path: "user-edit/:userId",
       meta: {
+        breadcrumbParents: sectionCrumbs("users"),
         requiresAdmin: true,
         requiresSessionAdmin: true,
         showBreadcrumb: true,
@@ -185,7 +236,12 @@ export default {
     {
       name: "AdminQuestionBank",
       path: "questions",
-      meta: { requiresQuestionManager: true, showBreadcrumb: true, breadcrumb: "Questions" },
+      meta: {
+        requiresQuestionManager: true,
+        showBreadcrumb: true,
+        breadcrumb: "Questions",
+        breadcrumbParents: adminOnlyCrumbs("courses"),
+      },
       component: () => import("../views/admin/QuestionBank.vue"),
     },
     {
@@ -195,20 +251,20 @@ export default {
         requiresAdmin: true,
         showBreadcrumb: true,
         breadcrumb: "Course lifecycle",
-        breadcrumbParents: [adminCrumb],
+        breadcrumbParents: sectionCrumbs("courses"),
       },
       component: () => import("../views/admin/BuyCoursesCourseLifecycle.vue"),
     },
     {
       name: "AdminCourseList",
       path: "course-list",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Course list" },
+      meta: { breadcrumbParents: sectionCrumbs("courses"), requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Course list" },
       component: () => import("../views/admin/CourseList.vue"),
     },
     {
       name: "AdminListIcons",
       path: "list-icons",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Icons" },
+      meta: { breadcrumbParents: sectionCrumbs("settings"), requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Icons" },
       component: () => import("../views/admin/ListIcons.vue"),
     },
     {
@@ -220,32 +276,32 @@ export default {
         requiresAdmin: true,
         showBreadcrumb: true,
         breadcrumb: (route) => activeReportLabelKey(route),
-        breadcrumbParents: [adminCrumb, { label: "Statistics", route: { name: "AdminStatistics" } }],
+        breadcrumbParents: [...sectionCrumbs("tracking"), { label: "Statistics", route: { name: "AdminStatistics" } }],
       },
       component: () => import("../views/admin/AdminStatisticsView.vue"),
     },
     {
       name: "AdminSystemStatus",
       path: "system-status",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "System status" },
+      meta: { breadcrumbParents: sectionCrumbs("settings"), requiresAdmin: true, showBreadcrumb: true, breadcrumb: "System status" },
       component: () => import("../views/admin/SystemStatus.vue"),
     },
     {
       name: "AdminSystemUpdate",
       path: "system-update",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "System update" },
+      meta: { breadcrumbParents: sectionCrumbs("settings"), requiresAdmin: true, showBreadcrumb: true, breadcrumb: "System update" },
       component: () => import("../views/admin/SystemUpdate.vue"),
     },
     {
       name: "AdminSessionList",
       path: "session-list",
-      meta: { requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true, breadcrumb: "Session list" },
+      meta: { breadcrumbParents: sectionCrumbs("sessions"), requiresAdmin: true, requiresSessionAdmin: true, showBreadcrumb: true, breadcrumb: "Session list" },
       component: () => import("../views/admin/SessionList.vue"),
     },
     {
       name: "AdminUsergroupList",
       path: "usergroups",
-      meta: { requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Classes" },
+      meta: { breadcrumbParents: sectionCrumbs("users"), requiresAdmin: true, showBreadcrumb: true, breadcrumb: "Classes" },
       component: () => import("../views/admin/UsergroupList.vue"),
     },
     {
@@ -328,7 +384,7 @@ export default {
     {
       name: "AdminMultiUrlList",
       path: "urls",
-      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Multi URLs" },
+      meta: { requiresGlobalAdmin: true, showBreadcrumb: true, breadcrumb: "Multi URLs", breadcrumbParents: sectionCrumbs("platform") },
       component: () => import("../views/admin/MultiUrlList.vue"),
     },
     {

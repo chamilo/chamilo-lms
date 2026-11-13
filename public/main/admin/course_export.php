@@ -14,6 +14,7 @@ api_protect_admin_script();
 
 $tool_name = get_lang('Export courses');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/courses', 'name' => get_lang('Course management')];
 
 set_time_limit(0);
 

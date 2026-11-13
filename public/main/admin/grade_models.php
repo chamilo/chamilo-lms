@@ -17,6 +17,7 @@ if ('true' != api_get_setting('gradebook_enable_grade_model')) {
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/courses', 'name' => get_lang('Course management')];
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 

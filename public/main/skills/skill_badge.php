@@ -30,6 +30,10 @@ $interbreadcrumb = [
         'name' => get_lang('Administration'),
     ],
 ];
+if (api_is_platform_admin()) {
+    $interbreadcrumb[] = ['url' => '/admin/skills', 'name' => get_lang('Skills')];
+}
+
 
 $toolbar = Display::url(
     Display::getMdiIcon(ObjectIcon::LIST, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Manage skills')),

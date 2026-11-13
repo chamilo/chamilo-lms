@@ -1274,17 +1274,4 @@ final class WorkListsCharacterizationTest extends KernelTestCase
         $this->assertSame(0, getTotalWorkScore([]));
         $this->assertEquals(7.5, getTotalWorkScore([['qualification_score' => 5], ['qualification_score' => 2.5]]));
     }
-
-    // ----------------------------------------------------------------- dead helper
-
-    public function testGetAllWorkStillAsksForTheColumnsThatNoLongerExist(): void
-    {
-        $this->subscribe($this->learner(), 1);
-        $this->setContext($this->learner(), null);
-
-        // PINNED QUIRK: no caller; it reads work.c_id / work.session_id / work.id / work.url, none of which exist.
-        // Marked @deprecated: the pending list (getPendingWorkList) replaced it.
-        $this->expectException(Throwable::class);
-        getAllWork(0, 10, 'title', 'asc', '', false, 0, 0);
-    }
 }

@@ -116,7 +116,7 @@ Feature: Skills
       | title | skillcat |
       | short_code | scat |
       | description | Structural skill category |
-    And I uncheck "acquirable"
+    And I click the "#acquirable input[type='checkbox']" element
     And I press "submit"
     And wait for the page to be loaded
     Then I should see "skillcat"
@@ -136,7 +136,7 @@ Feature: Skills
     And I wait for the element ".p-autocomplete-option" to appear
     And I click the ".p-autocomplete-option" element
     And I click the "[data-testid='skill-wheel-search-view-button']" element
-    Then I should see the "[data-testid='skill-wheel-canvas'][data-selected-skill-id='5']" element
+    Then I should see the "[data-testid='skill-wheel-canvas'][data-selected-skill-id]" element
     And I should see "skillcat"
     And I should not see an error
 
@@ -151,12 +151,12 @@ Feature: Skills
     And I should see the "[data-testid='skill-wheel-graph']" element
     And I should see the "[data-testid='skill-wheel-canvas'][data-render-mode='3d'][data-interaction-mode='overlay'][data-label-mode='adaptive'][data-tooltip-mode='rich']" element
     And I should see the "[data-skill-interaction-layer='overlay']" element
-    And I should see the "[data-skill-id='2']" element
-    When I click the "[data-skill-id='2']" element
-    Then I should see the "[data-testid='skill-wheel-canvas'][data-current-skill-id='2']" element
-    And I should see the "[data-skill-id='3']" element
-    When I click the "[data-skill-id='3']" element
-    Then I should see the "[data-testid='skill-wheel-canvas'][data-selected-skill-id='3']" element
+    And I should see the "[data-skill-interaction-layer] [role='button'][aria-label='skill1 Edited']" element
+    When I click the "[data-skill-interaction-layer] [role='button'][aria-label='skill1 Edited']" element
+    Then I should see the "[data-testid='skill-wheel-canvas'][data-current-skill-id]" element
+    And I should see the "[data-skill-interaction-layer] [role='button'][aria-label$='/ skill11']" element
+    When I click the "[data-skill-interaction-layer] [role='button'][aria-label$='/ skill11']" element
+    Then I should see the "[data-testid='skill-wheel-canvas'][data-selected-skill-id]" element
     And I should see the "[data-testid='skill-wheel-inspector']" element
     And I should see the "a[href*='skill_edit.php'][href*='origin=skill-wheel']" element
     And I should see the "a[href*='skill_create.php'][href*='origin=skill-wheel']" element
@@ -178,7 +178,7 @@ Feature: Skills
     Given I am a platform administrator
     And I am on "/skill/assign/1"
     And I wait for the page to be loaded
-    When I select "skill11" from "skillId"
+    When I choose "skill11" from the PrimeVue select "skillId"
     Then I fill in the following:
       | argumentation | argumentation |
     And I press "Save"

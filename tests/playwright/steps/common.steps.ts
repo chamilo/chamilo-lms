@@ -5140,3 +5140,14 @@ Then("the GH1712 announcement controls should match the available recipients", a
     form.sendToSessionsAvailable ? 1 : 0,
   )
 })
+
+// Not ported — new, for skill.feature. A PrimeVue Select (BaseSelect) is not a native <select>:
+// the field's name/id sit on a role="combobox" span, and the options live in an overlay
+// appended to the body. Opens it, then clicks the option whose text is exactly the given one.
+When("I choose {string} from the PrimeVue select {string}", async ({ page }, optionText: string, field: string) => {
+  await page.locator(`[name="${field}"][role="combobox"]`).click()
+  await page
+    .locator('[role="option"]', { hasText: new RegExp(`^\\s*${escapeRegExp(optionText)}\\s*$`) })
+    .first()
+    .click()
+})

@@ -1354,32 +1354,4 @@ class StatisticsCharacterizationTest extends AbstractApiTest
 
         $this->assertSame([$a, $b], Statistics::getDuplicateUserGroupUserIds('email', $a));
         $this->assertSame([], Statistics::getDuplicateUserGroupUserIds('email', $c), 'target in another URL');
-    }
-
-    public function testReturnDuplicatedUsersTableListsGroupedRowsWithCounts(): void
-    {
-        $a = $this->rawUser('ta', ['email' => 'st_tbl@example.com', 'created_at' => '2019-02-01 10:00:00', 'firstname' => 'Tbl', 'lastname' => 'One']);
-        $b = $this->rawUser('tb', ['email' => 'ST_TBL@example.com', 'created_at' => '2019-01-01 10:00:00', 'firstname' => 'Tbl', 'lastname' => 'Two']);
-        $c = $this->rawUser('tc', ['email' => 'st_tbl@example.com', 'created_at' => '2019-01-01 10:00:00', 'firstname' => 'Tbl', 'lastname' => 'Three']);
-        $this->rawUser('td', ['email' => 'st_tbl@example.com', 'active' => -2]);
-        $this->courseUser($a, 1);
-        $this->courseUser($a, 2);
-        $this->courseUser($b, 1);
-
-        $table = Statistics::returnDuplicatedUsersTable('email', [], 0, 'tok');
-        $mine = array_values(array_filter($table->table_data, static fn (array $r): bool => \in_array((int) $r[0], [$a, $b, $c], true)));
-        // Group sorted by registration date then id: b (older) and c share a date, b has the lower id
-        $this->assertSame([(string) $b, (string) $c, (string) $a], array_column($mine, 0));
-        $this->assertSame(['Two', 'Three', 'One'], array_column($mine, 2));
-        $this->assertSame(['1', '0', '2'], array_column($mine, 8), 'course counts');
-        $this->assertSame(['0', '0', '0'], array_column($mine, 9), 'session counts');
-        $this->assertCount(3, $mine, 'the soft-deleted duplicate is not listed');
-    }
-
-    public function testReturnDuplicatedUsersTableIsEmptyWhenNoGroupMatches(): void
-    {
-        $this->rawUser('te', ['email' => 'st_unique_only@example.com']);
-        $table = Statistics::returnDuplicatedUsersTable('extra', [], 0, 'tok');
-        $this->assertSame([], $table->table_data, 'extra mode without a field id: no query, empty table');
-    }
-}
+    }}

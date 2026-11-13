@@ -18,6 +18,7 @@ use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -121,7 +122,8 @@ class CourseUserManagerTest extends AbstractApiTest
                 ->setUser($student)
                 ->setStatus(CourseRelUser::STUDENT)
                 ->setRelationType(0)
-                ->setSubscriptionDate(null === $date ? null : new DateTimeImmutable($date))
+                // The list returns the stored UTC value.
+                ->setSubscriptionDate(null === $date ? null : new DateTimeImmutable($date, new DateTimeZone('UTC')))
             ;
             $em->persist($subscription);
         }

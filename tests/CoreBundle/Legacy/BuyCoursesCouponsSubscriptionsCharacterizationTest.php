@@ -408,7 +408,8 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $this->assertEquals(60, (float) $sale['price']);
         $this->assertEquals(20, (float) $sale['discount_amount']);
         $this->assertEquals(80, (float) $sale['price_without_discount']);
-        $days = (strtotime($sale['subscription_end']) - time()) / 86400;
+        // subscription_end is stored in UTC, whatever the PHP timezone.
+        $days = (strtotime($sale['subscription_end'].' UTC') - time()) / 86400;
         $this->assertEqualsWithDelta(30, $days, 0.01);
     }
 

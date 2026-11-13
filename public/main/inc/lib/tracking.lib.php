@@ -4377,11 +4377,8 @@ class Tracking
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_array($rs);
-            $date_time = api_convert_and_format_date(
-                $row['access_date'],
-                null,
-                date_default_timezone_get()
-            );
+            // access_date is stored in UTC, the default source timezone.
+            $date_time = api_convert_and_format_date($row['access_date']);
         }
 
         return $date_time;

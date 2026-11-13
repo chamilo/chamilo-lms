@@ -1608,8 +1608,9 @@ class Statistics
             return false;
         }
 
-        $startTimestamp = strtotime($startDate);
-        $endTimestamp = strtotime($endDate);
+        // UTC midnight, the clock api_get_utc_datetime() formats the keys with.
+        $startTimestamp = strtotime($startDate.' UTC');
+        $endTimestamp = strtotime($endDate.' UTC');
 
         $list = [];
         for ($time = $startTimestamp; $time <= $endTimestamp; $time += 86400) {

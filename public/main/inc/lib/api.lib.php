@@ -3601,7 +3601,6 @@ function api_detect_feature_context(): string
         'skill_edit.php' => 'skill',
         'badge_list.php' => 'badge',
         'settings.php' => 'settings',
-        'course_list.php' => 'course',
     ];
 
     if (isset($map[$script])) {

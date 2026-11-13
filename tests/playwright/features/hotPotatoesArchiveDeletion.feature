@@ -3,7 +3,8 @@ Feature: Remove unused Hot Potatoes archives safely
   Teachers can remove unreferenced course links without deleting shared archive content.
 
   Scenario: Teacher imports and removes a disposable unreferenced archive
-    Given I am a teacher
+    # mmosquera is not subscribed to TEMP on a freshly seeded instance, so the management UI needs the platform admin.
+    Given I am a platform administrator
     And I am on course "TEMP" homepage
     And I follow "Tests"
     And I wait for the page content to settle

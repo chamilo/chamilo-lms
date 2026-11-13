@@ -3,7 +3,8 @@ Feature: Track ungraded Hot Potatoes attempts
   Course teachers can inspect launches and learner-acknowledged completions without creating grades.
 
   Scenario: Teacher launches an activity, finishes it, and sees the recorded attempt
-    Given I am a teacher
+    # mmosquera is not subscribed to TEMP on a freshly seeded instance, so the management UI needs the platform admin.
+    Given I am a platform administrator
     And I am on course "TEMP" homepage
     And I follow "Tests"
     And I wait for the page content to settle

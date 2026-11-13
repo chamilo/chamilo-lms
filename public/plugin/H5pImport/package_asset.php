@@ -8,6 +8,12 @@ use Chamilo\PluginBundle\H5pImport\H5pImporter\H5pPackageTools;
 use Symfony\Component\Mime\MimeTypes;
 
 api_block_anonymous_users();
+api_protect_course_script();
+
+if (!h5pimport_is_plugin_active()) {
+    header('HTTP/1.1 404 Not Found');
+    exit;
+}
 
 $rawPath = isset($_GET['path']) ? (string) $_GET['path'] : '';
 
@@ -50,6 +56,15 @@ if (null === $relativePath) {
 $pluginStoragePath = H5pPackageTools::normalizePluginStorageRelativePath($relativePath);
 
 if (null === $pluginStoragePath) {
+    header('HTTP/1.1 404 Not Found');
+    exit;
+}
+
+// Only serve files of the course and session the request runs in.
+$course = api_get_course_entity(api_get_course_int_id());
+$session = api_get_session_entity(api_get_session_id());
+
+if (null === $course || !H5pPackageTools::isStoragePathInContext($pluginStoragePath, $course, $session)) {
     header('HTTP/1.1 404 Not Found');
     exit;
 }
@@ -102,7 +117,7 @@ if (false === $stream) {
         header('Content-Length: '.(string) $contentLength);
     }
 
-    header('Cache-Control: public, max-age=31536000');
+    header('Cache-Control: private, max-age=31536000');
     header('X-Content-Type-Options: nosniff');
 
     readfile($realAbsolutePath);
@@ -121,7 +136,7 @@ if (null !== $contentLength) {
     header('Content-Length: '.(string) $contentLength);
 }
 
-header('Cache-Control: public, max-age=31536000');
+header('Cache-Control: private, max-age=31536000');
 header('X-Content-Type-Options: nosniff');
 
 fpassthru($stream);

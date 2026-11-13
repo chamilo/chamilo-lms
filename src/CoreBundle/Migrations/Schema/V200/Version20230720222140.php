@@ -35,54 +35,44 @@ final class Version20230720222140 extends AbstractMigrationChamilo
         foreach ($q->toIterable() as $socialPost) {
             $content = $socialPost->getContent();
 
-            // Define the regular expression pattern to match URLs containing "my_files/"
-            $pattern = '/(href|src)="[^"]*\/users\/(\d+)\/\d+\/my_files\/([^"]+)"/i';
-            preg_match_all($pattern, $content, $matches);
+            // Each link is replaced by the URL of its own file, so a post with several files keeps them all
+            $pattern = '/(href|src)="[^"]*(\/upload\/users\/(?:\d+\/)?(\d+)\/my_files\/([^\/"]+))"/i';
+            $updatedContent = preg_replace_callback(
+                $pattern,
+                function (array $matches) use ($userRepo, $personalRepo, $fallbackUser): string {
+                    $userId = (int) $matches[3];
+                    // Links are URL-encoded ("LOGO%20TRANSPARENT.jpg"), the file and its title are not
+                    $filename = urldecode($matches[4]);
 
-            // Combine the URLs found in href and src attributes
-            $allUrls = array_merge($matches[0]);
-
-            if (!empty($allUrls)) {
-                foreach ($allUrls as $url) {
-                    // Define a regular expression to search for the "/upload/users" part, numeric values, and filename in the URL
-                    $pattern = '/\/upload\/users\/(\d+)\/(\d+)\/my_files\/([^\/"]+)/i';
-
-                    // Perform the regular expression search in the URL
-                    if (preg_match($pattern, $url, $matches)) {
-                        $folderId = (int) $matches[1];
-                        $userId = (int) $matches[2];
-                        $filename = $matches[3];
-
-                        // Get the full file path
-                        $filePath = $this->getUpdateRootPath()."/app/upload/users/{$folderId}/{$userId}/my_files/{$filename}";
-
-                        // Check if the path corresponds to a file
-                        if (is_file($filePath)) {
-                            // Output the user id, folder id, and filename
-                            error_log('User ID: '.$userId.', Folder ID: '.$folderId.', Filename: '.$filename);
-                            $user = $userRepo->find($userId);
-
-                            if (!$user) {
-                                $user = $fallbackUser;
-                            }
-
-                            $personalFile = $personalRepo->getResourceByCreatorFromTitle(
-                                $filename,
-                                $user,
-                                $user->getResourceNode()
-                            );
-
-                            $newUrl = $personalRepo->getResourceFileUrl($personalFile);
-                            if (!empty($newUrl)) {
-                                // Perform the replacement of the old URL with the new URL in the content
-                                $content = preg_replace('/(src|href)="[^"]*\/users\/(\d+)\/\d+\/my_files\/([^"]+)"/i', '$1="'.$newUrl.'"', $content);
-                            }
-                        }
+                    if (!is_file($this->getUpdateRootPath().'/app'.urldecode($matches[2]))) {
+                        return $matches[0];
                     }
-                }
 
+                    error_log('User ID: '.$userId.', Filename: '.$filename);
+                    $user = $userRepo->find($userId) ?? $fallbackUser;
+
+                    $personalFile = $personalRepo->getResourceByCreatorFromTitle(
+                        $filename,
+                        $user,
+                        $user->getResourceNode()
+                    );
+                    if (null === $personalFile) {
+                        return $matches[0];
+                    }
+
+                    $newUrl = $personalRepo->getResourceFileUrl($personalFile);
+                    if (empty($newUrl)) {
+                        return $matches[0];
+                    }
+
+                    return $matches[1].'="'.$newUrl.'"';
+                },
+                $content
+            );
+
+            if (null !== $updatedContent && $updatedContent !== $content) {
                 // Set the updated content back to the social post entity
-                $socialPost->setContent($content);
+                $socialPost->setContent($updatedContent);
 
                 // Persist the updated social post entity
                 $this->entityManager->persist($socialPost);

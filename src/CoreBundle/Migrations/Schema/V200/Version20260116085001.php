@@ -89,7 +89,7 @@ final class Version20260116085001 extends AbstractMigrationChamilo
 
     private function replaceUserFilePaths(string $content): string
     {
-        $pattern = '/(src|href)=["\']?(https?:\/\/[^\/]+)?(\/app\/upload\/users\/(\d+)\/(\d+)\/my_files\/([^\/"\']+))["\']?/i';
+        $pattern = '/(src|href)=["\']?(https?:\/\/[^\/]+)?(\/app\/upload\/users\/(?:(\d+)\/)?(\d+)\/my_files\/([^\/"\']+))["\']?/i';
         preg_match_all($pattern, $content, $matches, PREG_SET_ORDER);
 
         foreach ($matches as $match) {

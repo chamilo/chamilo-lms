@@ -38,6 +38,12 @@ $sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : (int) api_get_session_id
 $groupId = isset($_GET['gid']) ? (int) $_GET['gid'] : (int) api_get_group_id();
 $gradebook = isset($_GET['gradebook']) ? (int) $_GET['gradebook'] : 0;
 
+$course = api_get_course_entity($courseId);
+
+if (!$course || !ImsLtiPlugin::existsToolInCourse($tool->getId(), $course)) {
+    api_not_allowed(true);
+}
+
 $contextParams = [
     'id' => $tool->getId(),
     'cid' => $courseId,

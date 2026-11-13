@@ -10,11 +10,9 @@ use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Gradebook\GradebookMyCertificates;
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\GradebookCertificateCredential;
-use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
@@ -86,24 +84,8 @@ final readonly class GradebookMyCertificatesProvider implements ProviderInterfac
                 continue;
             }
 
-            $session = $category->getSession();
-            if (null === $session) {
-                $subscription = $this->entityManager->getRepository(CourseRelUser::class)->findOneBy([
-                    'course' => $course,
-                    'user' => $user,
-                ]);
-                if (!$subscription instanceof CourseRelUser) {
-                    continue;
-                }
-            } else {
-                $subscription = $this->entityManager->getRepository(SessionRelCourseRelUser::class)->findOneBy([
-                    'course' => $course,
-                    'session' => $session,
-                    'user' => $user,
-                ]);
-                if (!$subscription instanceof SessionRelCourseRelUser) {
-                    continue;
-                }
+            if (!$this->certificateGenerator->isUserSubscribedToCategory($user, $category)) {
+                continue;
             }
 
             $summary = $this->certificateGenerator->normalizeCertificate($certificate, !$allowExport);
@@ -120,30 +102,14 @@ final readonly class GradebookMyCertificatesProvider implements ProviderInterfac
             $summary['credentialStatus'] = $proof instanceof GradebookCertificateCredential
                 ? (null !== $proof->getRevokedAt() ? 'revoked' : (null === $certificate->getUserPublicationApprovalDate() ? 'consent_withdrawn' : 'issued')) : '';
             $summary['credentialTxHash'] = $proof instanceof GradebookCertificateCredential ? $proof->getTxHash() : null;
-            $row = [
-                'id' => (int) $certificate->getId(),
-                'course' => [
-                    'id' => (int) $course->getId(),
-                    'code' => (string) $course->getCode(),
-                    'title' => (string) $course->getTitle(),
-                ],
-                'score' => (float) $certificate->getScoreCertificate(),
-                'issuedAt' => $certificate->getCreatedAt()->format(DATE_ATOM),
-                'certificate' => $summary,
-            ];
-
-            if (null === $session) {
-                $resource->courseCertificates[] = $row;
+            $row = $this->certificateGenerator->normalizeCertificateRow($certificate, $category, $summary);
+            if (isset($row['session'])) {
+                $resource->sessionCertificates[] = $row;
 
                 continue;
             }
 
-            $row['session'] = [
-                'id' => (int) $session->getId(),
-                'title' => (string) $session->getTitle(),
-            ];
-            $row['certificate']['downloadUrl'] = '';
-            $resource->sessionCertificates[] = $row;
+            $resource->courseCertificates[] = $row;
         }
 
         return $resource;

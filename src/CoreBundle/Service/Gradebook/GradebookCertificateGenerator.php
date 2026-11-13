@@ -381,6 +381,95 @@ final readonly class GradebookCertificateGenerator
         ];
     }
 
+    /**
+     * Row of a certificate list. It carries a "session" key for a session certificate.
+     *
+     * @param array<string, mixed> $summary
+     *
+     * @return array<string, mixed>
+     */
+    public function normalizeCertificateRow(
+        GradebookCertificate $certificate,
+        GradebookCategory $category,
+        array $summary,
+    ): array {
+        $course = $category->getCourse();
+        $row = [
+            'id' => (int) $certificate->getId(),
+            'course' => [
+                'id' => (int) $course->getId(),
+                'code' => (string) $course->getCode(),
+                'title' => (string) $course->getTitle(),
+            ],
+            'score' => (float) $certificate->getScoreCertificate(),
+            'issuedAt' => $certificate->getCreatedAt()->format(DATE_ATOM),
+            'certificate' => $summary,
+        ];
+
+        $session = $category->getSession();
+        if (null === $session) {
+            return $row;
+        }
+
+        $row['session'] = [
+            'id' => (int) $session->getId(),
+            'title' => (string) $session->getTitle(),
+        ];
+        $row['certificate']['downloadUrl'] = '';
+
+        return $row;
+    }
+
+    /**
+     * Whether the user is subscribed to the course of the category, or to its session course.
+     */
+    public function isUserSubscribedToCategory(User $user, GradebookCategory $category): bool
+    {
+        $session = $category->getSession();
+        if (null === $session) {
+            return null !== $this->entityManager->getRepository(CourseRelUser::class)->findOneBy([
+                'course' => $category->getCourse(),
+                'user' => $user,
+            ]);
+        }
+
+        return null !== $this->entityManager->getRepository(SessionRelCourseRelUser::class)->findOneBy([
+            'course' => $category->getCourse(),
+            'session' => $session,
+            'user' => $user,
+        ]);
+    }
+
+    public function isPublicCertificateEnabledForCourse(Course $course): bool
+    {
+        $settings = $this->entityManager->getRepository(CCourseSetting::class)->findBy(
+            [
+                'cId' => (int) $course->getId(),
+                'variable' => 'allow_public_certificates',
+            ],
+            ['iid' => 'ASC'],
+        );
+
+        $courseValue = null;
+        foreach ($settings as $setting) {
+            if ($setting instanceof CCourseSetting && null !== $setting->getValue()
+                && '-1' !== $setting->getValue()) {
+                $courseValue = $setting->getValue();
+
+                break;
+            }
+        }
+
+        // Historically, a missing course override leaves public certificates enabled.
+        $value = strtolower(trim((string) $this->courseSettingPolicyManager->effectiveValue(
+            'allow_public_certificates',
+            $courseValue,
+            '1',
+        )));
+
+        return !\in_array($value, ['', '0', 'false', 'no', 'off'], true);
+    }
+
     private function meetsEvaluationMinimumScores(GradebookCategory $category, User $user): bool
     {
         foreach ($category->getEvaluations() as $evaluation) {

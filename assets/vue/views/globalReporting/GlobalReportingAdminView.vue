@@ -210,7 +210,7 @@
             v-if="report.meta.supportsReset !== false"
             :label="t('Reset')"
             icon="refresh"
-            type="plain"
+            type="black"
             @click="resetFilters"
           />
           <BaseButton

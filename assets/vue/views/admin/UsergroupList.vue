@@ -471,7 +471,7 @@ onMounted(() => {
         <div class="flex justify-end gap-3 border-t px-6 py-4">
           <BaseButton
             :label="t('Cancel')"
-            type="plain"
+            type="black"
             @click="showDialog = false"
           />
           <BaseButton

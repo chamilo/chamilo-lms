@@ -279,6 +279,7 @@ if (isset($extAuthSource) && is_array($extAuthSource)) {
 
 $tool_name = get_lang('Update user list from XML/CSV');
 $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/users', 'name' => get_lang('User management')];
 
 set_time_limit(0);
 $extra_fields = UserManager::get_extra_fields();

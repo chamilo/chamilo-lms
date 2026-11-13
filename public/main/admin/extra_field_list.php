@@ -7,6 +7,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_global_admin_script();
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/platform', 'name' => get_lang('Platform management')];
 
 $template = new Template(get_lang('Extra fields'));
 
@@ -53,10 +54,10 @@ $content = '
             </div>
         </div>
 
-        <a href="index.php"
+        <a href="/admin/platform"
            class="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-semibold
                   bg-white border border-gray-25 text-gray-90 hover:bg-gray-15">
-            '.get_lang('Back to').' '.get_lang('Administration').'
+            '.get_lang('Back to').' '.get_lang('Platform management').'
         </a>
     </div>
 

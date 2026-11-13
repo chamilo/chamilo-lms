@@ -1,11 +1,17 @@
 <template>
-  <div class="flex flex-col">
-    <label
+  <div
+    :aria-labelledby="title ? titleId : undefined"
+    class="flex flex-col"
+    role="radiogroup"
+  >
+    <!-- Not a <label>: the title names the whole group, not one input. -->
+    <span
       v-if="title"
-      :for="name"
+      :id="titleId"
       class="mb-2"
-      >{{ title }}</label
     >
+      {{ title }}
+    </span>
     <div
       v-for="(option, index) in options"
       :key="option.value"
@@ -20,15 +26,16 @@
       <label
         :for="`${name}-${index}`"
         class="ms-2 cursor-pointer"
-        >{{ option.label }}</label
       >
+        {{ option.label }}
+      </label>
     </div>
   </div>
 </template>
 
 <script setup>
 import RadioButton from "primevue/radiobutton"
-import { ref, watch } from "vue"
+import { computed, ref, watch } from "vue"
 
 const props = defineProps({
   modelValue: {
@@ -50,6 +57,7 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(["update:modelValue"])
+const titleId = computed(() => `${props.name}-title`)
 const value = ref(props.modelValue)
 watch(
   () => props.modelValue,

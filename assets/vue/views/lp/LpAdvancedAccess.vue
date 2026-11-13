@@ -357,7 +357,7 @@ onMounted(loadData)
       <BaseButton
         :label="t('Back to learning paths')"
         icon="back"
-        type="plain"
+        type="black"
         @click="goBack"
       />
     </SectionHeader>

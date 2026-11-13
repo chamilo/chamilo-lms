@@ -20,8 +20,10 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CourseCatalogueHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Helpers\CourseStudentInfoHelper;
+use Chamilo\CoreBundle\Helpers\RoomAccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
@@ -973,7 +975,10 @@ class CourseController extends ToolBaseController
         IllustrationRepository $illustrationRepository,
         CCourseDescriptionRepository $courseDescriptionRepository,
         EntityManagerInterface $em,
-        Request $request
+        Request $request,
+        RoomAccessUrlHelper $roomAccessUrlHelper,
+        CourseCatalogueHelper $courseCatalogueHelper,
+        SettingsManager $settingsManager,
     ): Response {
         $courseId = $course->getId();
 
@@ -1121,6 +1126,9 @@ class CourseController extends ToolBaseController
             'base_url' => $request->getSchemeAndHttpHost(),
             'allow_subscribe' => $allowSubscribe,
             'room_location' => $this->buildCourseRoomLocation($course),
+            'room_floor_plan' => $this->canViewCatalogueRoomFloorPlan($course, $courseCatalogueHelper, $settingsManager)
+                ? $this->buildCourseRoomFloorPlan($course, $roomAccessUrlHelper)
+                : null,
         ];
 
         $metaInfo = '<meta property="og:url" content="'.htmlspecialchars($urlCourse, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'" />';
@@ -1133,6 +1141,66 @@ class CourseController extends ToolBaseController
         $htmlHeadXtra[] = api_get_asset('readmore-js/readmore.js');
 
         return $this->render('@ChamiloCore/Course/about.html.twig', $params);
+    }
+
+    private function canViewCatalogueRoomFloorPlan(
+        Course $course,
+        CourseCatalogueHelper $courseCatalogueHelper,
+        SettingsManager $settingsManager,
+    ): bool {
+        return $this->isGranted('IS_AUTHENTICATED_FULLY')
+            || ($course->isPublic()
+                && 'true' === (string) $settingsManager->getSetting('catalog.course_catalog_published', true)
+                && $courseCatalogueHelper->isCourseInPublicCatalogue($course));
+    }
+
+    private function buildCourseRoomFloorPlan(Course $course, RoomAccessUrlHelper $roomAccessUrlHelper): ?array
+    {
+        $room = $course->getRoom();
+        if (null === $room || !$roomAccessUrlHelper->isRoomAllowed($room)) {
+            return null;
+        }
+
+        $branch = $room->getBranch();
+        if (null === $branch?->getFloorPlan()) {
+            return null;
+        }
+
+        $polygonPoints = [];
+        $roomMap = $room->getRoomMap();
+        if ('polygon' === ($roomMap['type'] ?? null)
+            && isset($roomMap['points'])
+            && \is_array($roomMap['points'])
+            && \count($roomMap['points']) >= 3
+            && \count($roomMap['points']) <= 100
+        ) {
+            foreach ($roomMap['points'] as $point) {
+                if (!\is_array($point) || 2 !== \count($point)) {
+                    $polygonPoints = [];
+
+                    break;
+                }
+
+                foreach ($point as $coordinate) {
+                    if ((!\is_float($coordinate) && !\is_int($coordinate))
+                        || !is_finite((float) $coordinate)
+                        || $coordinate < 0 || $coordinate > 1
+                    ) {
+                        $polygonPoints = [];
+
+                        break 2;
+                    }
+                }
+
+                $polygonPoints[] = (1000 * $point[0]).','.(1000 * $point[1]);
+            }
+        }
+
+        return [
+            'branchTitle' => $branch->getTitle(),
+            'roomTitle' => $room->getTitle(),
+            'polygonPoints' => \count($polygonPoints) >= 3 ? implode(' ', $polygonPoints) : '',
+        ];
     }
 
     private function buildCourseRoomLocation(Course $course): ?array

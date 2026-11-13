@@ -777,7 +777,7 @@ onMounted(() => loadReporting(selectedStudentId.value))
             icon="close"
             only-icon
             size="small"
-            type="plain"
+            type="black"
             @click="closeLearnerDetail"
           />
         </div>

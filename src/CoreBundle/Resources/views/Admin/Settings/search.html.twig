@@ -321,3 +321,15 @@
     </script>
     {% include '@ChamiloCore/Admin/Settings/json_validation.html.twig' %}
 {% endblock %}
+
+{% block javascripts %}
+    <script>
+      window.breadcrumb = [
+        { name: "{{ 'Administration'|trans|e('js') }}", url: "/admin" },
+        { name: "{{ 'Platform management'|trans|e('js') }}", url: "/admin/platform" },
+        { name: "{{ 'Settings'|trans|e('js') }}", url: "/admin/settings" },
+        { name: "{{ 'Search'|trans|e('js') }}" }
+      ];
+    </script>
+    {{ parent() }}
+{% endblock %}

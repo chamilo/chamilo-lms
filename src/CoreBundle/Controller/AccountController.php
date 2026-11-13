@@ -274,6 +274,7 @@ class AccountController extends BaseController
             'is_first_login' => $isFirstLogin,
             'is_forced_password_change' => $isForcedPasswordChange,
             'password_check_enabled' => 'true' === $settingsManager->getSetting('security.check_password', true),
+            'password_castle_enabled' => 'true' === $settingsManager->getSetting('security.allow_strength_pass_checker', true),
             'password_requirements' => Security::getPasswordRequirements()['min'],
         ]);
     }

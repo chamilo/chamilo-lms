@@ -1,9 +1,14 @@
+// The global calendar opened from Administration has a Platform ancestor.
+// Course and personal agendas must retain their existing breadcrumb behavior.
+const isAdminGlobalCalendar = (route) =>
+  route.query.type === "global" && route.query.admin_origin === "platform"
+
 export default {
   path: "/resources/ccalendarevent",
   meta: {
     requiresAuth: true,
     // The personal agenda has no trail to show: it hangs from no course.
-    showBreadcrumb: (route) => Number(route.query?.cid || 0) > 0,
+    showBreadcrumb: (route) => Number(route.query?.cid || 0) > 0 || isAdminGlobalCalendar(route),
     // The agenda is named after the context it is opened in.
     breadcrumb: (route) => {
       const gid = Number(route.query?.gid || 0)
@@ -33,7 +38,16 @@ export default {
       path: "",
       component: () => import("../views/ccalendarevent/CCalendarEventList.vue"),
       props: (route) => ({ type: route.query.type }),
-      meta: { breadcrumb: "" },
+      meta: {
+        breadcrumb: (route) => (isAdminGlobalCalendar(route) ? "Agenda" : ""),
+        breadcrumbParents: (route) =>
+          isAdminGlobalCalendar(route)
+            ? [
+                { label: "Administration", route: { name: "AdminIndex" } },
+                { label: "Platform management", route: { name: "AdminPlatformSection" } },
+              ]
+            : [],
+      },
     },
     {
       name: "CCalendarEventListView",

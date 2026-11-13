@@ -32,6 +32,8 @@ $archivePath = api_get_path(SYS_ARCHIVE_PATH);
 $archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive=';
 
 $tool_name = get_lang('Export sessions list');
+$interbreadcrumb[] = ['url' => '/admin', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/sessions', 'name' => get_lang('Sessions management')];
 $interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
 set_time_limit(0);
 if (isset($_POST['formSent'])) {

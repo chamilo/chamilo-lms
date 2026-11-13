@@ -183,6 +183,7 @@ if ($hrm) {
 }
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/users', 'name' => get_lang('User management')];
 
 $toolName = get_lang('Student linking requests');
 

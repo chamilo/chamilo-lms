@@ -111,6 +111,9 @@ api_protect_admin_script(true, 'true' === api_get_setting('allow_hr_skills_manag
 
 $tool_name = get_lang('Import skills from a CSV file');
 $interbreadcrumb[] = ["url" => api_get_path(WEB_CODE_PATH).'admin/index.php', "name" => get_lang('Administration')];
+if (api_is_platform_admin()) {
+    $interbreadcrumb[] = ['url' => '/admin/skills', 'name' => get_lang('Skills')];
+}
 
 set_time_limit(0);
 $extra_fields = UserManager::get_extra_fields();

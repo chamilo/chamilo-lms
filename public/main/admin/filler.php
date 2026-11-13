@@ -24,6 +24,9 @@ $nameTools = get_lang('Administration');
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => $nameTools];
+if (api_is_platform_admin()) {
+    $interbreadcrumb[] = ['url' => '/admin/system', 'name' => get_lang('System')];
+}
 
 // setting the name of the tool
 $nameTools = get_lang('Data filler');

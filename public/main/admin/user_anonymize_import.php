@@ -17,6 +17,7 @@ api_protect_admin_script(true, null);
 
 $tool_name = get_lang('Anonymise users list');
 $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/users', 'name' => get_lang('User management')];
 
 set_time_limit(0);
 ini_set('memory_limit', -1);

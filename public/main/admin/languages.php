@@ -192,6 +192,7 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
 $tool_name = get_lang('Chamilo Portal Languages');
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/platform', 'name' => get_lang('Platform management')];
 
 Display::addFlash(
     Display::return_message(

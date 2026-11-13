@@ -27,6 +27,7 @@ $annee_base = date('Y');
 $tool_name = get_lang('LDAP Import');
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/sessions', 'name' => get_lang('Sessions management')];
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 var buttoncheck = 1;

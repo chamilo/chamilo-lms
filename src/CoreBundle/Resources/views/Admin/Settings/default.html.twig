@@ -637,7 +637,8 @@ sudo systemctl restart apache2
     %}
     <script>
       window.breadcrumb = [
-        { name: "{{ 'Admin'|trans|e('js') }}",    url: "/admin" },
+        { name: "{{ 'Administration'|trans|e('js') }}", url: "/admin" },
+        { name: "{{ 'Platform management'|trans|e('js') }}", url: "/admin/platform" },
         { name: "{{ 'Settings'|trans|e('js') }}", url: "/admin/settings" },
         { name: "{{ sectionLabel|e('js') }}" }
       ];

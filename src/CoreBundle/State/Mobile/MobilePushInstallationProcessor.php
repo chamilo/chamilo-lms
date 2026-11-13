@@ -61,6 +61,9 @@ final readonly class MobilePushInstallationProcessor implements ProcessorInterfa
         $token = trim($data->token);
         $tokenHash = hash('sha256', $token);
 
+        // One row per device: the last user to sign in on it takes the row over, so the device
+        // stops receiving the previous user's notifications. Hence no user filter here, unlike
+        // removeOwnedInstallation(); the unique keys on (access_url, installation_id|token_hash) agree.
         $byInstallation = $this->repository->findOneByAccessUrlAndInstallationId(
             $accessUrl,
             $data->installationId

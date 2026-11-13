@@ -1,6 +1,6 @@
 <template>
-  <div class="grid grid-cols-3 gap-4 rounded bg-white p-6 mb-4">
-    <aside class="install-steps hidden md:block">
+  <div class="grid grid-cols-3 gap-4 rounded-lg bg-white p-6 mb-4">
+    <aside class="install-steps col-span-3 md:col-span-1">
       <a
         class="logo-install"
         href="index.php"
@@ -11,10 +11,15 @@
         />
       </a>
       <ol>
+        <!-- On small screens, only the current step is listed, to keep the form near the top. -->
         <li
           v-for="{ step, stepTitle } in steps"
           :key="step"
-          :class="{ 'install-steps__step--active': step === installerData.currentStep }"
+          :class="{
+            'install-steps__step--active': step === installerData.currentStep,
+            'hidden md:list-item': step !== installerData.currentStep,
+          }"
+          :value="step"
           class="install-steps__step"
         >
           {{ stepTitle }}
@@ -28,12 +33,10 @@
           url="../../documentation/installation_guide.html"
           target="_blank"
           rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 text-body-2 font-semibold text-primary hover:underline"
         >
-          <BaseButton
-            type="primary"
-            icon="courses"
-            :label="t('Read the installation guide')"
-          />
+          <BaseIcon icon="courses" />
+          {{ t("Read the installation guide") }}
         </BaseAppLink>
       </div>
     </aside>
@@ -42,17 +45,17 @@
       <h1
         v-if="'new' === installerData.installType"
         v-text="t('New installation')"
-        class="mb-4 text-center"
+        class="mb-4"
       />
       <h1
         v-else-if="'update' === installerData.installType"
         v-text="t('Update from Chamilo ' + (installerData.old_version || installerData.upgradeFromVersion[0]).split('.').slice(0, 2).join('.'))"
-        class="mb-4 text-center"
+        class="mb-4"
       />
       <h1
         v-else
         v-text="t('Chamilo installation wizard')"
-        class="mb-8 text-center"
+        class="mb-4"
       />
 
       <form
@@ -254,7 +257,7 @@ import { computed, onMounted, provide, ref, watch } from "vue"
 
 import { setLocale } from "./i18n"
 import BaseAppLink from "./components/basecomponents/BaseAppLink.vue"
-import BaseButton from "./components/basecomponents/BaseButton.vue"
+import BaseIcon from "./components/basecomponents/BaseIcon.vue"
 import Step1 from "./components/installer/Step1"
 import Step2 from "./components/installer/Step2"
 import Step3 from "./components/installer/Step3"

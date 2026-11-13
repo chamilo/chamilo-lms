@@ -18,8 +18,10 @@ use DateTimeZone;
 use Diagnoser;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
+use Psr\Cache\CacheItemPoolInterface;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -129,6 +131,8 @@ final class SystemStatusController extends AbstractController
         private readonly SettingsManager $settingsManager,
         private readonly TranslatorInterface $translator,
         private readonly MigrationHistoryRecorder $migrationHistoryRecorder,
+        #[Autowire(service: 'chamilo.admin_index_blocks')]
+        private readonly CacheItemPoolInterface $adminIndexBlocksCache,
     ) {}
 
     /**
@@ -146,6 +150,9 @@ final class SystemStatusController extends AbstractController
         } catch (Throwable $e) {
             return new JsonResponse(['success' => false, 'message' => $e->getMessage()], 500);
         }
+
+        // The health check item is cached; without this it keeps offering the action.
+        $this->adminIndexBlocksCache->clear();
 
         // The code on disk is often newer than the database, so a recording that leaves
         // migrations pending is the normal outcome of an upgrade in progress. Say so:

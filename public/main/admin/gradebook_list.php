@@ -17,6 +17,9 @@ if (false == $allow) {
     api_not_allowed(true);
 }
 
+$interbreadcrumb[] = ['url' => '/admin', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/assessments', 'name' => get_lang('Assessments')];
+
 $em = Database::getManager();
 $repo = $em->getRepository(GradebookCategory::class);
 

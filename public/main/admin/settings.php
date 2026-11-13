@@ -34,6 +34,7 @@ $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS);
 
 // Setting breadcrumbs.
 $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'admin', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/platform', 'name' => get_lang('Platform management')];
 
 // Setting the name of the tool.
 $tool_name = get_lang('Configuration settings');

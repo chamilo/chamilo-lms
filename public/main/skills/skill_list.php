@@ -148,6 +148,9 @@ switch ($action) {
             'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
             'name' => get_lang('Administration'),
         ];
+        if (api_is_platform_admin()) {
+            $interbreadcrumb[] = ['url' => '/admin/skills', 'name' => get_lang('Skills')];
+        }
 
         $toolbar = Display::url(
             Display::getMdiIcon(ActionIcon::ADD, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Create skill')),

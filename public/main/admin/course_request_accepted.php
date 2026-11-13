@@ -145,6 +145,7 @@ function modify_filter($id)
 }
 
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/courses', 'name' => get_lang('Course management')];
 $interbreadcrumb[] = ['url' => '/admin/course-list', 'name' => get_lang('Course list')];
 $tool_name = get_lang('Accepted course requests');
 

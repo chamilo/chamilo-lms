@@ -404,7 +404,7 @@
           icon="back"
           :label="t('Cancel')"
           :route="listRoute"
-          type="plain"
+          type="black"
         />
         <BaseButton
           icon="eye-on"

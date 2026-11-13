@@ -1854,7 +1854,7 @@ if ($form->validate()) {
             $user = api_get_user_entity();
 
             if ($introPage) {
-                header('Location: '.api_get_path(WEB_PATH).'resources/pages/edit?id=/api/pages/'.$introPage->getId());
+                header('Location: '.api_get_path(WEB_PATH).'resources/pages/edit?id=/api/pages/'.$introPage->getId().'&admin_origin=platform');
                 exit;
             }
 
@@ -1883,7 +1883,7 @@ if ($form->validate()) {
             $em->persist($page);
             $em->flush();
 
-            header('Location: '.api_get_path(WEB_PATH).'resources/pages/edit?id=/api/pages/'.$page->getId());
+            header('Location: '.api_get_path(WEB_PATH).'resources/pages/edit?id=/api/pages/'.$page->getId().'&admin_origin=platform');
             exit;
         }
         $tpl->assign('inscription_header', $inscriptionHeader);

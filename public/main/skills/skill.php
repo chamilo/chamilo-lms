@@ -53,6 +53,9 @@ if (!empty($item)) {
 $formToDisplay = $form->returnForm();
 
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('Administration')];
+if (api_is_platform_admin()) {
+    $interbreadcrumb[] = ['url' => '/admin/skills', 'name' => get_lang('Skills')];
+}
 $interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Manage skills levels')];
 
 // Use a stable page title instead of the raw action name.

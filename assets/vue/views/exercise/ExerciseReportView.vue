@@ -172,7 +172,7 @@
       <BaseButton
         :label="t('Cancel')"
         :icon="safeIcon('close', 'information')"
-        type="plain"
+        type="black"
         @click.prevent="toggleCleanForm"
       />
     </form>

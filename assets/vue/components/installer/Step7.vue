@@ -39,7 +39,7 @@
       <Message
         :closable="false"
         severity="warn"
-        style="margin-bottom: 8px;"
+        class="mb-4"
       >
         <strong v-text="t('Security advice')" />
         <i18n-t
@@ -52,19 +52,18 @@
         <!-- The installer never asks for write permission on its own directory, so it cannot
              remove it. Give the commands instead, and leave the step to the administrator. -->
         <pre
-          class="mt-2 overflow-x-auto rounded bg-white px-4 py-3 text-xs text-gray-700"
+          class="mt-2 overflow-x-auto rounded bg-white px-4 py-3 text-xs text-gray-90"
           v-text="cleanupCommands"
         />
       </Message>
       <div class="formgroup-inline">
         <div class="field">
-          <BaseAppLink url="../../">
-            <Button
-              :label="t('Go to your newly created portal.')"
-              class="p-button-success"
-              type="button"
-            />
-          </BaseAppLink>
+          <BaseButton
+            :label="t('Go to your newly created portal.')"
+            icon="home"
+            to-url="../../"
+            type="success"
+          />
         </div>
       </div>
     </div>
@@ -75,9 +74,8 @@
 import { inject } from "vue"
 import { useI18n } from "vue-i18n"
 import Message from "primevue/message"
-import Button from "primevue/button"
 import SectionHeader from "../layout/SectionHeader.vue"
-import BaseAppLink from "../basecomponents/BaseAppLink.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
 
 const { t } = useI18n()
 

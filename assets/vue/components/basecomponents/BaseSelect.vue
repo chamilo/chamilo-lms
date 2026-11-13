@@ -14,6 +14,7 @@
         :placeholder="placeholder"
         :required="required"
         :show-clear="allowClear"
+        :filter="filter"
         @change="emit('change', $event)"
       >
         <template #emptyfilter>--</template>
@@ -110,6 +111,11 @@ const props = defineProps({
     default: false,
   },
   allowClear: {
+    type: Boolean,
+    default: false,
+  },
+  // Shows a search box above the options, for long lists.
+  filter: {
     type: Boolean,
     default: false,
   },

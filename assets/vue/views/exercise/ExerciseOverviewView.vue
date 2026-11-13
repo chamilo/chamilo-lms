@@ -189,7 +189,7 @@
                   }"
                   icon="information"
                   size="small"
-                  type="plain"
+                  type="black"
                 />
                 <span
                   v-if="data.showValidationStatus"

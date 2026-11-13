@@ -24,6 +24,18 @@ $type = $httpRequest->query->has('type')
     ? $httpRequest->query->getInt('type', SequenceResource::SESSION_TYPE)
     : $httpRequest->request->getInt('type', SequenceResource::SESSION_TYPE);
 
+$sequenceSection = match ($type) {
+    SequenceResource::COURSE_TYPE => ['courses', 'Course management'],
+    SequenceResource::SESSION_TYPE => ['sessions', 'Sessions management'],
+    default => null,
+};
+if (null !== $sequenceSection) {
+    $interbreadcrumb[] = [
+        'url' => '/admin/'.$sequenceSection[0],
+        'name' => get_lang($sequenceSection[1]),
+    ];
+}
+
 $tpl = new Template(get_lang('Resources sequencing'));
 $em = Database::getManager();
 $sequenceRepository = $em->getRepository(Sequence::class);

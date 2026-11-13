@@ -245,7 +245,7 @@
             <BaseButton
               v-if="activeReport === 'user_session'"
               :label="t('Last week')"
-              type="plain"
+              type="black"
               @click="setUserSessionLastWeek"
             />
             <BaseButton
@@ -542,7 +542,7 @@
               :is-loading="exporting"
               :label="t('Export to XLS')"
               icon="file-excel"
-              type="plain"
+              type="black"
               @click="downloadCurrentReport('xls')"
             />
           </section>
@@ -931,7 +931,7 @@
                           :label="t('Details')"
                           :to-url="data.detailsUrl"
                           size="small"
-                          type="plain"
+                          type="black"
                         />
                         <BaseButton
                           :is-loading="maintenanceLoading"
@@ -944,7 +944,7 @@
                           :is-loading="maintenanceLoading"
                           :label="t('Unify')"
                           size="small"
-                          type="plain"
+                          type="black"
                           @click="confirmDuplicateUnify(data)"
                         />
                       </div>
@@ -1162,7 +1162,7 @@
                 :is-loading="exporting"
                 :label="t('Export to XLS')"
                 icon="file-excel"
-                type="plain"
+                type="black"
                 @click="downloadCurrentReport('xls')"
               />
             </div>

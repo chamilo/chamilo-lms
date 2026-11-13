@@ -126,3 +126,14 @@
       });
     </script>
 {% endblock %}
+
+{% block javascripts %}
+    <script>
+      window.breadcrumb = [
+        { name: "{{ 'Administration'|trans|e('js') }}", url: "/admin" },
+        { name: "{{ 'System'|trans|e('js') }}", url: "/admin/system" },
+        { name: "{{ 'Clean temporary files'|trans|e('js') }}" }
+      ];
+    </script>
+    {{ parent() }}
+{% endblock %}

@@ -547,6 +547,7 @@ $defined_auth_sources = $authenticationConfigHelper->getAuthSourceAuthentication
 
 $tool_name = get_lang('Import users list');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/users', 'name' => get_lang('User management')];
 $reloadImport = (isset($_REQUEST['reload_import']) && 1 === (int) $_REQUEST['reload_import']);
 
 $extra_fields = UserManager::get_extra_fields();

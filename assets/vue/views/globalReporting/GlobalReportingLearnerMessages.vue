@@ -80,7 +80,7 @@
           <BaseButton
             :label="t('Cancel')"
             icon="close"
-            type="plain"
+            type="black"
             @click="composing = false"
           />
         </div>

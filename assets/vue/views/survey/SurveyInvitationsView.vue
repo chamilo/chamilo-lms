@@ -12,7 +12,7 @@
           :label="t('Back to surveys')"
           :route="buildListRoute()"
           icon="back"
-          type="plain"
+          type="black"
         />
         <BaseButton
           :label="t('Preview')"
@@ -63,13 +63,13 @@
                 <BaseButton
                   :label="t('Select all')"
                   size="small"
-                  type="plain"
+                  type="black"
                   @click="selectAllUsers"
                 />
                 <BaseButton
                   :label="t('Clear')"
                   size="small"
-                  type="plain"
+                  type="black"
                   @click="selectedUserIds = []"
                 />
               </div>
@@ -113,7 +113,7 @@
               <BaseButton
                 :label="t('Clear')"
                 size="small"
-                type="plain"
+                type="black"
                 @click="selectedGroupIds = []"
               />
             </div>
@@ -262,20 +262,20 @@
         <div class="flex flex-wrap gap-2">
           <BaseButton
             :label="t('Invited')"
-            :type="activeTab === 'invited' ? 'primary' : 'plain'"
+            :type="activeTab === 'invited' ? 'primary' : 'black'"
             size="small"
             @click="activeTab = 'invited'"
           />
           <BaseButton
             v-if="canShowAnsweredDetails"
             :label="t('Answered')"
-            :type="activeTab === 'answered' ? 'primary' : 'plain'"
+            :type="activeTab === 'answered' ? 'primary' : 'black'"
             size="small"
             @click="activeTab = 'answered'"
           />
           <BaseButton
             :label="t('Pending')"
-            :type="activeTab === 'pending' ? 'primary' : 'plain'"
+            :type="activeTab === 'pending' ? 'primary' : 'black'"
             size="small"
             @click="activeTab = 'pending'"
           />

@@ -1,6 +1,7 @@
 // This tool lives under Administration. Labels are translation keys.
 const adminCrumb = { label: "Administration", route: { name: "AdminIndex" } }
-const roomCrumbs = [adminCrumb, { label: "Rooms", route: { name: "RoomList" } }]
+const sectionCrumb = { label: "Rooms", route: { name: "AdminRoomsSection" } }
+const roomCrumbs = [adminCrumb, sectionCrumb, { label: "List", route: { name: "RoomList" } }]
 
 export default {
   path: "/resources/rooms",
@@ -12,7 +13,7 @@ export default {
     {
       name: "RoomList",
       path: "",
-      meta: { breadcrumb: "Rooms", breadcrumbParents: [adminCrumb] },
+      meta: { breadcrumb: "List", breadcrumbParents: [adminCrumb, sectionCrumb] },
       component: () => import("../views/room/List.vue"),
     },
     {

@@ -8,10 +8,12 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Room;
+use Chamilo\CoreBundle\Helpers\CourseCatalogueHelper;
 use Chamilo\CoreBundle\Helpers\ResourceFileHelper;
 use Chamilo\CoreBundle\Helpers\RoomAccessUrlHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Security\FloorPlanSvgValidator;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,12 +28,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * Access to a floor plan is granted through the actual course or attendance,
  * never by knowing a branch or room ID.
  */
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
 final class RoomFloorPlanViewController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly RoomAccessUrlHelper $roomAccessUrlHelper,
+        private readonly CourseCatalogueHelper $courseCatalogueHelper,
+        private readonly SettingsManager $settingsManager,
         private readonly ResourceFileHelper $resourceFiles,
         private readonly ResourceNodeRepository $nodes,
         private readonly FloorPlanSvgValidator $svgValidator,
@@ -49,12 +52,14 @@ final class RoomFloorPlanViewController extends AbstractController
         return $this->image($this->courseRoom($id));
     }
 
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/api/room-floor-plans/attendance-calendars/{id}', name: 'room_floor_plan_attendance_data', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function attendanceData(int $id): JsonResponse
     {
         return $this->data($this->calendarRoom($id));
     }
 
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/api/room-floor-plans/attendance-calendars/{id}/image', name: 'room_floor_plan_attendance_image', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function attendanceImage(int $id): Response
     {
@@ -68,6 +73,16 @@ final class RoomFloorPlanViewController extends AbstractController
             throw $this->createNotFoundException('Course not found.');
         }
         if (!$this->isGranted('VIEW', $course)) {
+            throw new AccessDeniedHttpException();
+        }
+
+        // Preserve the existing fully authenticated access for private courses.
+        // Anonymous viewers may only see plans of publicly catalogued courses.
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')
+            && (!$course->isPublic()
+                || 'true' !== (string) $this->settingsManager->getSetting('catalog.course_catalog_published', true)
+                || !$this->courseCatalogueHelper->isCourseInPublicCatalogue($course))
+        ) {
             throw new AccessDeniedHttpException();
         }
 

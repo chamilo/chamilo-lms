@@ -96,7 +96,7 @@
         <BaseButton
           :label="t('Cancel')"
           icon="close"
-          type="plain"
+          type="black"
           @click="cancelForm"
         />
       </div>
@@ -139,7 +139,7 @@
         <BaseButton
           :label="t('Cancel')"
           icon="close"
-          type="plain"
+          type="black"
           @click="cancelImport"
         />
       </div>

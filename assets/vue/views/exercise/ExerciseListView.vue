@@ -425,7 +425,7 @@
                 :disabled="true"
                 only-icon
                 size="small"
-                type="plain"
+                type="black"
               />
               <BaseButton
                 v-if="data.canToggleVisibility"
@@ -443,7 +443,7 @@
                 :disabled="true"
                 only-icon
                 size="small"
-                type="plain"
+                type="black"
               />
               <BaseButton
                 v-if="data.canExport"
@@ -474,7 +474,7 @@
                 icon="delete"
                 only-icon
                 size="small"
-                type="plain"
+                type="black"
               />
             </div>
           </template>
@@ -498,7 +498,7 @@
             :label="t('Deselect all')"
             icon="close"
             size="small"
-            type="plain"
+            type="black"
             @click="deselectAllExercises"
           />
           <BaseSelect

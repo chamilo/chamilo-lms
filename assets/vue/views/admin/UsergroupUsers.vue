@@ -67,7 +67,7 @@ onMounted(() => {
       <BaseButton
         :label="t('Back')"
         icon="arrow-left"
-        type="plain"
+        type="black"
         :route="{ name: 'AdminUsergroupList' }"
       />
     </SectionHeader>

@@ -34,7 +34,7 @@
           :disabled="saving"
           :label="t('Cancel')"
           icon="close"
-          type="plain"
+          type="black"
           @click="cancel"
         />
       </div>

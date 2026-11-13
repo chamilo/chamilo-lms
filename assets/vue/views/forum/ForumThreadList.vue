@@ -9,7 +9,7 @@
         icon="back"
         only-icon
         size="small"
-        type="plain"
+        type="black"
       />
       <BaseButton
         v-if="canCreateThread"
@@ -34,7 +34,7 @@
         icon="back"
         only-icon
         size="small"
-        type="plain"
+        type="black"
         @click="goBackToLearningPath"
       />
     </BaseToolbar>

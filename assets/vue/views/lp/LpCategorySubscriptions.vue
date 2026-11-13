@@ -155,7 +155,7 @@ onMounted(loadSubscriptions)
       <BaseButton
         :label="t('Back to learning paths')"
         icon="back"
-        type="plain"
+        type="black"
         @click="goBack"
       />
     </SectionHeader>
@@ -182,7 +182,7 @@ onMounted(loadSubscriptions)
             v-for="section in sections"
             :key="section.id"
             :label="section.label"
-            :type="activeSection === section.id ? 'primary' : 'plain'"
+            :type="activeSection === section.id ? 'primary' : 'black'"
             @click="activeSection = section.id"
           />
         </div>
@@ -224,7 +224,7 @@ onMounted(loadSubscriptions)
           <div class="flex justify-end gap-2">
             <BaseButton
               :label="t('Cancel')"
-              type="plain"
+              type="black"
               @click="goBack"
             />
             <BaseButton

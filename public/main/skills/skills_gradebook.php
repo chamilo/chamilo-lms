@@ -19,6 +19,9 @@ $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
     'name' => get_lang('Administration'),
 ];
+if (api_is_platform_admin()) {
+    $interbreadcrumb[] = ['url' => '/admin/skills', 'name' => get_lang('Skills')];
+}
 if ('add_skill' === $action) {
     $interbreadcrumb[] = ['url' => 'skills_gradebook.php', 'name' => get_lang('Skills and assessments')];
     $tool_name = get_lang('Add');

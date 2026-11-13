@@ -432,10 +432,12 @@ function status_filter($status)
 
 if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
     $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+    $interbreadcrumb[] = ['url' => '/admin/privacy', 'name' => get_lang('Personal data protection')];
     $interbreadcrumb[] = ['url' => 'user_list_consent.php', 'name' => get_lang('User list')];
     $tool_name = get_lang('Search users');
 } else {
     $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+    $interbreadcrumb[] = ['url' => '/admin/privacy', 'name' => get_lang('Personal data protection')];
     $tool_name = get_lang('User list');
 }
 

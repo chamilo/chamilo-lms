@@ -29,7 +29,7 @@
       <BaseButton
         :label="t('Back to learning paths')"
         :route="{ name: 'LpList', query: route.query }"
-        type="plain"
+        type="black"
       />
     </div>
 

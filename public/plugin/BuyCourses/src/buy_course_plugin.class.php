@@ -2107,31 +2107,6 @@ class BuyCoursesPlugin extends Plugin
         return sprintf($this->get_lang('BenefitSummaryValueUntil'), $value.' '.$definition['unit'], $expiry);
     }
 
-    /**
-     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
-     */
-    public function getServiceBenefitSummaries(int $serviceId, int $userId = 0): array
-    {
-        $summaries = [];
-        foreach ($this->getServiceBenefitConfigurations($serviceId) as $configuration) {
-            $summary = [
-                'title' => $configuration['title'],
-                'description' => $configuration['description'],
-                'granted_value' => (int) $configuration['granted_value'],
-                'unit' => $configuration['unit'],
-            ];
-
-            if ($userId > 0) {
-                $summary['active_payload'] = $this->getActiveBenefitPayload($userId, $configuration['variable']);
-                $summary['active_summary'] = $this->formatBenefitPayloadSummary($configuration['variable'], $summary['active_payload']);
-            }
-
-            $summaries[] = $summary;
-        }
-
-        return $summaries;
-    }
-
     private function getServiceSaleAuditPaymentRows(int $serviceSaleId): array
     {
         if ($serviceSaleId <= 0 || !$this->hasPluginTable(self::TABLE_AUDIT)) {
@@ -4469,41 +4444,6 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Get a list of sales by the payment type.
-     *
-     * @param int $paymentType The payment type to filter (default : Paypal)
-     *
-     * @return array The sale list. Otherwise, return false
-     *
-     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
-     */
-    public function getSaleListByPaymentType(int $paymentType = self::PAYMENT_TYPE_PAYPAL)
-    {
-        $saleTable = Database::get_main_table(self::TABLE_SALE);
-        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
-        $userTable = Database::get_main_table(TABLE_MAIN_USER);
-
-        $innerJoins = "
-            INNER JOIN $currencyTable c ON s.currency_id = c.id
-            INNER JOIN $userTable u ON s.user_id = u.id
-        ";
-
-        return Database::select(
-            ['c.iso_code', 'u.firstname', 'u.lastname', 's.*'],
-            "$saleTable s $innerJoins",
-            [
-                'where' => [
-                    's.payment_type = ? AND s.status = ?' => [
-                        $paymentType,
-                        self::SALE_STATUS_COMPLETED,
-                    ],
-                ],
-                'order' => 'id DESC',
-            ]
-        );
-    }
-
-    /**
      * Get data of sales.
      *
      * @param int $saleId    The sale id
@@ -4818,107 +4758,6 @@ class BuyCoursesPlugin extends Plugin
                 'order' => 'id DESC',
             ]
         );
-    }
-
-    /**
-     * Get the list statuses for sales.
-     *
-     * @return array
-     *
-     * @throws Exception
-     *
-     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
-     */
-    public function getSaleListReport(?string $dateStart = null, ?string $dateEnd = null)
-    {
-        $saleTable = Database::get_main_table(self::TABLE_SALE);
-        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
-        $userTable = Database::get_main_table(TABLE_MAIN_USER);
-        $innerJoins = "
-            INNER JOIN $currencyTable c ON s.currency_id = c.id
-            INNER JOIN $userTable u ON s.user_id = u.id
-        ";
-        $list = Database::select(
-            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
-            "$saleTable s $innerJoins",
-            [
-                'order' => 'id DESC',
-            ]
-        );
-        $listExportTemp = [];
-        $listExport = [];
-        $textStatus = null;
-        $paymentTypes = $this->getPaymentTypes();
-        $productTypes = $this->getProductTypes();
-        foreach ($list as $item) {
-            $statusSaleOrder = $item['status'];
-
-            switch ($statusSaleOrder) {
-                case 0:
-                    $textStatus = $this->get_lang('SaleStatusPending');
-
-                    break;
-
-                case 1:
-                    $textStatus = $this->get_lang('SaleStatusCompleted');
-
-                    break;
-
-                case -1:
-                    $textStatus = $this->get_lang('SaleStatusCanceled');
-
-                    break;
-            }
-            $dateFilter = new DateTime($item['date']);
-            $listExportTemp[] = [
-                'id' => $item['id'],
-                'reference' => $item['reference'],
-                'status' => $textStatus,
-                'status_filter' => $item['status'],
-                'date' => $dateFilter->format('Y-m-d'),
-                'order_time' => $dateFilter->format('H:i:s'),
-                'price' => $item['iso_code'].' '.$item['price'],
-                'product_type' => $productTypes[$item['product_type']],
-                'product_name' => $item['product_name'],
-                'payment_type' => $paymentTypes[$item['payment_type']],
-                'complete_user_name' => api_get_person_name($item['firstname'], $item['lastname']),
-                'email' => $item['email'],
-            ];
-        }
-        $listExport[] = [
-            get_lang('Number'),
-            $this->get_lang('OrderStatus'),
-            $this->get_lang('OrderDate'),
-            $this->get_lang('OrderTime'),
-            $this->get_lang('PaymentMethod'),
-            $this->get_lang('SalePrice'),
-            $this->get_lang('ProductType'),
-            $this->get_lang('ProductName'),
-            $this->get_lang('UserName'),
-            get_lang('Email'),
-        ];
-        // Validation Export
-        $dateStart = strtotime($dateStart);
-        $dateEnd = strtotime($dateEnd);
-        foreach ($listExportTemp as $item) {
-            $dateFilter = strtotime($item['date']);
-            if (($dateFilter >= $dateStart) && ($dateFilter <= $dateEnd)) {
-                $listExport[] = [
-                    'id' => $item['id'],
-                    'status' => $item['status'],
-                    'date' => $item['date'],
-                    'order_time' => $item['order_time'],
-                    'payment_type' => $item['payment_type'],
-                    'price' => $item['price'],
-                    'product_type' => $item['product_type'],
-                    'product_name' => $item['product_name'],
-                    'complete_user_name' => $item['complete_user_name'],
-                    'email' => $item['email'],
-                ];
-            }
-        }
-
-        return $listExport;
     }
 
     /**
@@ -7108,87 +6947,6 @@ class BuyCoursesPlugin extends Plugin
                 ? $this->getPriceWithCurrencyFromIsoCode($recurringAmount, $isoCode)
                 : null,
         ];
-    }
-
-    /**
-     * Set the external recurring profile ID for a service sale.
-     *
-     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
-     */
-    public function updateRecurringProfileId(int $serviceSaleId, string $recurringProfileId): bool
-    {
-        if ($serviceSaleId <= 0) {
-            return false;
-        }
-
-        $servicesSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
-
-        return false !== Database::update(
-            $servicesSaleTable,
-            ['recurring_profile_id' => $recurringProfileId],
-            ['id = ?' => $serviceSaleId]
-        );
-    }
-
-    /**
-     * Update the recurring payment status for a service sale.
-     *
-     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
-     */
-    public function updateRecurringPayments(int $serviceSaleId, int $recurringPaymentStatus): bool
-    {
-        if ($serviceSaleId <= 0) {
-            return false;
-        }
-
-        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
-
-        return false !== Database::update(
-            $serviceSaleTable,
-            ['recurring_payment' => $recurringPaymentStatus],
-            ['id = ?' => $serviceSaleId]
-        );
-    }
-
-    /**
-     * Update recurring payment metadata for a service sale.
-     *
-     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
-     */
-    public function updateServiceSaleRecurringData(
-        int $serviceSaleId,
-        int $recurringPaymentStatus,
-        ?string $recurringProfileId = null,
-        ?string $nextChargeDate = null,
-        ?string $cancelledAt = null
-    ): bool {
-        if ($serviceSaleId <= 0) {
-            return false;
-        }
-
-        $allowedValues = [
-            'recurring_payment' => $recurringPaymentStatus,
-        ];
-
-        if (null !== $recurringProfileId) {
-            $allowedValues['recurring_profile_id'] = $recurringProfileId;
-        }
-
-        if (null !== $nextChargeDate) {
-            $allowedValues['next_charge_date'] = $nextChargeDate;
-        }
-
-        if (null !== $cancelledAt) {
-            $allowedValues['cancelled_at'] = $cancelledAt;
-        }
-
-        $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
-
-        return false !== Database::update(
-            $serviceSaleTable,
-            $allowedValues,
-            ['id = ?' => $serviceSaleId]
-        );
     }
 
     public function updateServiceSaleGatewayData(int $serviceSaleId, array $gatewayData): bool
@@ -10655,42 +10413,6 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Get a list of subscription sales by the user id.
-     *
-     * @param int $id The user id
-     *
-     * @return array The sale list. Otherwise, return false
-     *
-     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
-     */
-    public function getSubscriptionSaleListByUserId(int $id)
-    {
-        if (empty($id)) {
-            return [];
-        }
-
-        $saleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
-        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
-        $userTable = Database::get_main_table(TABLE_MAIN_USER);
-
-        $innerJoins = "
-            INNER JOIN $currencyTable c ON s.currency_id = c.id
-            INNER JOIN $userTable u ON s.user_id = u.id
-        ";
-
-        return Database::select(
-            ['c.iso_code', 'u.firstname', 'u.lastname', 's.*'],
-            "$saleTable s $innerJoins",
-            [
-                'where' => [
-                    'u.id = ? AND s.status = ?' => [$id, self::SALE_STATUS_COMPLETED],
-                ],
-                'order' => 'id DESC',
-            ]
-        );
-    }
-
-    /**
      * Get a list of subscription sales by date range.
      *
      * @param int    $first      Pagination offset
@@ -10794,80 +10516,6 @@ class BuyCoursesPlugin extends Plugin
             "$saleTable s $innerJoins",
             $conditions,
             $typeResult
-        );
-    }
-
-    /**
-     * Get subscription sale data by ID.
-     *
-     * @param string $date The date
-     *
-     * @return array
-     *
-     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
-     */
-    public function getSubscriptionsDue(string $date)
-    {
-        return Database::select(
-            'id, user_id, product_id, product_type',
-            Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE),
-            [
-                'where' => ['subscription_end < ? AND status <> ? AND (expired is NULL OR expired <> ?)' => [
-                    $date,
-                    self::SALE_STATUS_COMPLETED,
-                    1,
-                ],
-                ],
-            ],
-            'first'
-        );
-    }
-
-    /**
-     * Get subscription sale data by ID.
-     *
-     * @param int $userId      The user ID
-     * @param int $productId   The product ID
-     * @param int $productType The product type
-     *
-     * @return array
-     *
-     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
-     */
-    public function checkItemSubscriptionActive(int $userId, int $productId, int $productType)
-    {
-        return Database::select(
-            '*',
-            Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE),
-            [
-                'where' => ['subscription_end >= ? AND userId = ? AND productId = ? AND productType = ? AND status <> ?' => [
-                    api_get_utc_datetime(),
-                    $userId,
-                    $productId,
-                    $productType,
-                    self::SALE_STATUS_COMPLETED,
-                ],
-                ],
-            ],
-            'first'
-        );
-    }
-
-    /**
-     * Get subscription sale data by ID.
-     *
-     * @return array
-     *
-     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
-     */
-    public function updateSubscriptionSaleExpirationStatus(int $id)
-    {
-        $saleTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_SALE);
-
-        return Database::update(
-            $saleTable,
-            ['expired' => 1],
-            ['id = ?' => $id]
         );
     }
 
@@ -12495,74 +12143,6 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Activate the benefits granted by a completed service sale.
-     *
-     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
-     */
-    public function activateServiceBenefitsForSale(int $serviceSaleId): void
-    {
-        $serviceSaleId = (int) $serviceSaleId;
-        $sale = $this->getServiceSale($serviceSaleId);
-
-        if (empty($sale)) {
-            error_log('BuyCourses activateServiceBenefitsForSale: sale not found for ID '.$serviceSaleId);
-
-            return;
-        }
-
-        $serviceId = (int) ($sale['service_id'] ?? 0);
-        $buyerId = (int) ($sale['buyer']['id'] ?? 0);
-
-        if ($serviceId <= 0 || $buyerId <= 0) {
-            error_log('BuyCourses activateServiceBenefitsForSale: invalid sale data for ID '.$serviceSaleId);
-
-            return;
-        }
-
-        $service = $this->getService($serviceId);
-
-        if (empty($service)) {
-            error_log('BuyCourses activateServiceBenefitsForSale: service not found for service ID '.$serviceId);
-
-            return;
-        }
-
-        $durationDays = max(0, (int) ($service['duration_days'] ?? 0));
-
-        $baseDate = !empty($sale['buy_date'])
-            ? new DateTimeImmutable((string) $sale['buy_date'])
-            : new DateTimeImmutable('now');
-
-        $expiry = $durationDays > 0
-            ? $baseDate->modify('+'.$durationDays.' days')->format('Y-m-d H:i:s')
-            : '9999-12-31 23:59:59';
-
-        $relations = $this->getServiceBenefitRelations($serviceId);
-        error_log('BuyCourses benefit relations for service '.$serviceId.': '.json_encode($relations));
-
-        foreach ($relations as $relation) {
-            $payload = $this->buildBenefitPayloadFromRelation($relation, $expiry);
-
-            if (null === $payload) {
-                continue;
-            }
-
-            error_log(
-                'BuyCourses writing benefit for user '.$buyerId.
-                ', field '.$relation['extra_field_id'].
-                ', variable '.$relation['variable'].
-                ', payload '.json_encode($payload)
-            );
-
-            $this->saveUserExtraFieldJsonValue(
-                $buyerId,
-                (int) $relation['extra_field_id'],
-                $payload
-            );
-        }
-    }
-
-    /**
      * Return a decoded payload by extra field variable.
      */
     public function getUserBenefitPayloadByVariable(int $userId, string $variable): ?array
@@ -12803,21 +12383,6 @@ class BuyCoursesPlugin extends Plugin
     }
 
     /**
-     * Return whether the user can create one more course.
-     *
-     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
-     */
-    public function canUserCreateMoreCourses(int $userId): bool
-    {
-        $limit = $this->getEffectiveMaxCoursesLimitForUser($userId);
-        if ($limit <= 0) {
-            return true;
-        }
-
-        return $this->countManagedCoursesByUser($userId) < $limit;
-    }
-
-    /**
      * Return a detailed status for course creation capability.
      */
     public function getCourseCreationCapabilityStatus(int $userId): array
@@ -12878,16 +12443,6 @@ class BuyCoursesPlugin extends Plugin
             'limitSource' => $source,
             'message' => $message,
         ];
-    }
-
-    /**
-     * Return a clear user-facing message for course creation limit.
-     *
-     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
-     */
-    public function getCourseCreationLimitMessage(int $userId): string
-    {
-        return (string) ($this->getCourseCreationCapabilityStatus($userId)['message'] ?? '');
     }
 
     /**
@@ -14148,22 +13703,6 @@ class BuyCoursesPlugin extends Plugin
                 );
             }
         }
-    }
-
-    /**
-     * @deprecated No caller found in public/, src/, assets/ or plugin pages (2026-11 audit); candidate for removal.
-     */
-    private function shouldApplyCourseCreationLimitForUser(int $userId): bool
-    {
-        if ($userId <= 0) {
-            return false;
-        }
-
-        if (function_exists('api_is_platform_admin_by_id') && api_is_platform_admin_by_id($userId)) {
-            return false;
-        }
-
-        return true;
     }
 
     private function isPlatformAdminUser(int $userId): bool

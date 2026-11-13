@@ -519,22 +519,6 @@ final class BuyCoursesCouponsSubscriptionsCharacterizationTest extends BuyCourse
         $this->assertSame(1, (int) $this->plugin->getSubscriptionSale($saleId)['status']);
     }
 
-    public function testSubscriptionSaleListByUserIdOnlyCompleted(): void
-    {
-        $base = [
-            'currency_id' => (int) $this->conn->fetchOne('SELECT id FROM plugin_buycourses_currency WHERE status = 1'),
-            'date' => '2026-01-15 10:00:00', 'user_id' => 2, 'product_type' => 1, 'product_name' => 'bc_p', 'product_id' => 1,
-            'price' => 10, 'payment_type' => 2, 'invoice' => 0, 'price_without_discount' => 0, 'discount_amount' => 0,
-            'subscription_end' => '2026-02-14 10:00:00', 'expired' => 0,
-        ];
-        $this->conn->insert('plugin_buycourses_subscription_rel_sale', $base + ['reference' => 'bc_s1', 'status' => 1]);
-        $this->conn->insert('plugin_buycourses_subscription_rel_sale', $base + ['reference' => 'bc_s2', 'status' => 0]);
-        $this->conn->insert('plugin_buycourses_subscription_rel_sale', array_merge($base, ['user_id' => 1]) + ['reference' => 'bc_s3', 'status' => 1]);
-
-        $refs = array_column($this->plugin->getSubscriptionSaleListByUserId(2), 'reference');
-        $this->assertSame(['bc_s1'], array_values(array_filter($refs, static fn ($r) => str_starts_with($r, 'bc_s'))));
-    }
-
     // ------------------------------------------------------------------ helpers
 
     private function serviceRow(string $name, array $override = []): array

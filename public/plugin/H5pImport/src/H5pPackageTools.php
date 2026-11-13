@@ -317,6 +317,48 @@ class H5pPackageTools
         return 'course_'.$course->getId();
     }
 
+    /**
+     * Whether a stored file belongs to the given course and session.
+     *
+     * Libraries are shared by the whole course. A content package belongs to the session it was imported in,
+     * the same rule view.php applies to the content itself.
+     */
+    public static function isStoragePathInContext(string $path, Course $course, ?Session $session): bool
+    {
+        $normalizedPath = self::normalizePluginStorageRelativePath($path);
+
+        if (null === $normalizedPath) {
+            return false;
+        }
+
+        // H5pImport/course_<id>/<content|libraries>/<name>/<file>
+        $segments = explode('/', $normalizedPath);
+        $coursePrefix = self::buildCourseRelativePrefix($course);
+
+        if (count($segments) < 5 || $coursePrefix !== $segments[1]) {
+            return false;
+        }
+
+        if ('libraries' === $segments[2]) {
+            return true;
+        }
+
+        if ('content' !== $segments[2]) {
+            return false;
+        }
+
+        $h5pImport = \Database::getManager()->getRepository(H5pImport::class)->findOneBy([
+            'relativePath' => $coursePrefix.'/content/'.$segments[3],
+            'course' => $course,
+        ]);
+
+        if (!$h5pImport instanceof H5pImport) {
+            return false;
+        }
+
+        return $session?->getId() === $h5pImport->getSession()?->getId();
+    }
+
     public static function getCourseTemporaryStoragePath(Course $course): string
     {
         $path = rtrim(self::getTemporaryStorageBasePath(), '/').'/'.self::buildCourseRelativePrefix($course);

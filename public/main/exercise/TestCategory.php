@@ -160,24 +160,6 @@ class TestCategory
     }
 
     /**
-     * Gets the number of question of category id=in_id.
-     *
-     * @deprecated no caller; kept only as a pin of its behaviour
-     */
-    public function getCategoryQuestionsNumber()
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $id = (int) $this->id;
-        $sql = "SELECT count(*) AS nb
-                FROM $table
-                WHERE category_id = $id";
-        $res = Database::query($sql);
-        $row = Database::fetch_array($res);
-
-        return $row['nb'];
-    }
-
-    /**
      * Return the TestCategory id for question with question_id = $questionId
      * In this version, a question has only 1 TestCategory.
      * Return the TestCategory id, 0 if none.

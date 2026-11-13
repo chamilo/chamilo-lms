@@ -9562,12 +9562,14 @@ class CourseRestorer
                     $rel = $resolvedRel;
                 }
 
-                $depAbs = rtrim($srcRoot, '/').'/'.$rel;
-                if (!is_file($depAbs) || !is_readable($depAbs)) {
+                // Security: the asset path comes from the (untrusted) HTML of the backup and may
+                // still carry traversal. Confine the source file to the extracted backup, so a
+                // crafted reference cannot publish a file of the server as a course document.
+                $depAbs = $this->resolveFileInsideBackup(rtrim($srcRoot, '/').'/'.$rel);
+                if (null === $depAbs) {
                     $misses++;
                     $DBG('html.rewrite.fallback.missing', [
                         'rel' => $rel,
-                        'abs' => $depAbs,
                         'fullUrl' => $fullUrl,
                     ]);
 

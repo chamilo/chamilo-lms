@@ -14,7 +14,9 @@ use Chamilo\CoreBundle\Service\CourseAutomation\CourseAutomationManager;
 /** @implements ProviderInterface<CourseAutomationConfiguration> */
 final readonly class CourseAutomationProvider implements ProviderInterface
 {
-    public function __construct(private CourseAutomationManager $manager) {}
+    public function __construct(
+        private CourseAutomationManager $manager
+    ) {}
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): CourseAutomationConfiguration
     {

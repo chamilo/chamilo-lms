@@ -87,7 +87,9 @@ final class CourseAutomationConfiguration
     #[Groups(['course_automation:read', 'course_automation:write'])]
     public string $actionType = '';
 
-    /** @var list<int> */
+    /**
+     * @var list<int>
+     */
     #[Groups(['course_automation:write'])]
     public array $targetIds = [];
 

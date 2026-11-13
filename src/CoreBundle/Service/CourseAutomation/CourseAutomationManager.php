@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Service\CourseAutomation;
 
 use ApiPlatform\Metadata\Post;
 use Chamilo\CoreBundle\ApiResource\CourseAutomation\CourseAutomationConfiguration;
+use Chamilo\CoreBundle\ApiResource\Survey\SurveyInvitation;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseAutomationAction;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
@@ -17,13 +18,13 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Repository\GradebookCertificateRepository;
 use Chamilo\CoreBundle\Service\CourseReporting\CourseReportingContext;
 use Chamilo\CoreBundle\Service\CourseReporting\CourseReportingContextResolver;
 use Chamilo\CoreBundle\State\CourseSettings\CourseSettingsManager;
 use Chamilo\CoreBundle\State\Survey\SurveyInvitationProcessor;
 use Chamilo\CoreBundle\State\Survey\SurveyInvitationProvider;
-use Chamilo\CoreBundle\ApiResource\Survey\SurveyInvitation;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,14 +33,18 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
-use Chamilo\CoreBundle\Helpers\MailHelper;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Throwable;
+
+use const DATE_ATOM;
+use const FILTER_VALIDATE_EMAIL;
+use const FILTER_VALIDATE_INT;
+use const PATHINFO_FILENAME;
 
 /**
  * Configured, manually triggered actions. Execution is claimed atomically before
@@ -128,11 +133,11 @@ final readonly class CourseAutomationManager
         if (!\in_array($type, $allowedTypes, true)) {
             throw new BadRequestHttpException('Unsupported automation action.');
         }
-        if (($type === self::PUBLISH && $event !== self::EVENT_START)
-            || (($type === self::HIDE || $type === self::CERTIFICATES) && $event !== self::EVENT_END)) {
+        if ((self::PUBLISH === $type && self::EVENT_START !== $event)
+            || ((self::HIDE === $type || self::CERTIFICATES === $type) && self::EVENT_END !== $event)) {
             throw new BadRequestHttpException('The selected action is not valid for this event.');
         }
-        if ($type === self::COURSE_VISIBILITY && !$this->canChangeVisibility($context)) {
+        if (self::COURSE_VISIBILITY === $type && !$this->canChangeVisibility($context)) {
             throw new AccessDeniedHttpException('Course visibility cannot be changed in this context.');
         }
 
@@ -144,7 +149,7 @@ final readonly class CourseAutomationManager
             }
             $ids = [];
             foreach ($payload->targetIds as $value) {
-                if ((!\is_int($value) && !\is_string($value)) || filter_var($value, FILTER_VALIDATE_INT) === false || (int) $value <= 0) {
+                if ((!\is_int($value) && !\is_string($value)) || false === filter_var($value, FILTER_VALIDATE_INT) || (int) $value <= 0) {
                     throw new BadRequestHttpException('Invalid course resource identifier.');
                 }
                 $ids[] = (int) $value;
@@ -160,11 +165,11 @@ final readonly class CourseAutomationManager
                 }
                 $targets[] = $available[$id];
             }
-        } elseif ($type === self::SURVEY) {
+        } elseif (self::SURVEY === $type) {
             $id = (int) ($payload->targetId ?? 0);
             $survey = $this->surveyInvitationProvider->getSurveyFromCurrentContext($id, $context->course, $context->session);
             $targets[] = (int) $survey->getIid();
-        } elseif ($type === self::CERTIFICATES) {
+        } elseif (self::CERTIFICATES === $type) {
             $id = (int) ($payload->targetId ?? 0);
             $category = $this->findGradebook($id, $context);
             $targets[] = (int) $category->getId();
@@ -173,7 +178,7 @@ final readonly class CourseAutomationManager
             if (!\in_array($setting, [Course::CLOSED, Course::REGISTERED, Course::OPEN_PLATFORM, Course::OPEN_WORLD, Course::HIDDEN], true)) {
                 throw new BadRequestHttpException('Invalid destination course visibility.');
             }
-            if ($setting === Course::HIDDEN && !$context->isAdministrator) {
+            if (Course::HIDDEN === $setting && !$context->isAdministrator) {
                 throw new AccessDeniedHttpException('Only administrators can hide a course.');
             }
             $targets[] = 0;
@@ -182,9 +187,9 @@ final readonly class CourseAutomationManager
         $existing = $this->actions($context);
         foreach ($targets as $target) {
             $linkId = $target instanceof ResourceLink ? (int) $target->getId() : null;
-            $targetId = $target instanceof ResourceLink || $type === self::COURSE_VISIBILITY ? null : $target;
+            $targetId = $target instanceof ResourceLink || self::COURSE_VISIBILITY === $type ? null : $target;
             foreach ($existing as $item) {
-                if ($type === self::COURSE_VISIBILITY && $item->getEventType() === $event && $item->getActionType() === $type) {
+                if (self::COURSE_VISIBILITY === $type && $item->getEventType() === $event && $item->getActionType() === $type) {
                     throw new ConflictHttpException('Only one course visibility action is allowed per event.');
                 }
                 if ($item->getEventType() === $event && $item->getActionType() === $type
@@ -200,7 +205,7 @@ final readonly class CourseAutomationManager
             $action = new CourseAutomationAction($context->course, $context->session, $event, $type, $context->currentUser);
             if ($target instanceof ResourceLink) {
                 $action->setResourceLink($target);
-            } elseif ($type !== self::COURSE_VISIBILITY) {
+            } elseif (self::COURSE_VISIBILITY !== $type) {
                 $action->setTargetId($target);
             }
             $action->setSettingValue($setting);
@@ -227,7 +232,7 @@ final readonly class CourseAutomationManager
         if (!$action instanceof CourseAutomationAction || !$this->belongsToContext($action, $context)) {
             throw new NotFoundHttpException('Automation action not found in this context.');
         }
-        if ($action->getStatus() === 'running') {
+        if ('running' === $action->getStatus()) {
             throw new ConflictHttpException('An executing action cannot be deleted.');
         }
         $this->entityManager->remove($action);
@@ -252,13 +257,15 @@ final readonly class CourseAutomationManager
                 'UPDATE course_automation_action SET status = :running WHERE id = :id AND status IN (:pending, :failed)',
                 ['running' => 'running', 'id' => (int) $action->getId(), 'pending' => 'pending', 'failed' => 'failed'],
             );
-            if ($claimed !== 1) {
+            if (1 !== $claimed) {
                 ++$skipped;
+
                 continue;
             }
 
             $action->markRunning($context->currentUser);
             $this->entityManager->flush();
+
             try {
                 $this->executeAction($action, $context);
                 $action->markSuccess();
@@ -288,40 +295,42 @@ final readonly class CourseAutomationManager
     private function executeAction(CourseAutomationAction $action, CourseReportingContext $context): void
     {
         $type = $action->getActionType();
-        if ($type === self::PUBLISH || $type === self::HIDE) {
+        if (self::PUBLISH === $type || self::HIDE === $type) {
             $link = $action->getResourceLink();
             if (!$link instanceof ResourceLink || !$this->resourceBelongsToContext($link, $context)) {
                 throw new AccessDeniedHttpException('Resource context has changed.');
             }
-            $link->setVisibility($type === self::PUBLISH ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT);
+            $link->setVisibility(self::PUBLISH === $type ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT);
             $this->entityManager->flush();
+
             return;
         }
 
-        if ($type === self::COURSE_VISIBILITY) {
+        if (self::COURSE_VISIBILITY === $type) {
             if (!$this->canChangeVisibility($context)) {
                 throw new AccessDeniedHttpException('Course visibility can no longer be changed in this context.');
             }
             $visibility = $action->getSettingValue();
             if (!\in_array($visibility, [Course::CLOSED, Course::REGISTERED, Course::OPEN_PLATFORM, Course::OPEN_WORLD, Course::HIDDEN], true)
-                || ($visibility === Course::HIDDEN && !$context->isAdministrator)) {
+                || (Course::HIDDEN === $visibility && !$context->isAdministrator)) {
                 throw new AccessDeniedHttpException('Destination visibility is not permitted.');
             }
             $this->courseSettingsManager->changeVisibilityForAutomation($context->course, $visibility);
+
             return;
         }
 
-        if ($type === self::SURVEY) {
+        if (self::SURVEY === $type) {
             $survey = $this->surveyInvitationProvider->getSurveyFromCurrentContext((int) $action->getTargetId(), $context->course, $context->session);
             $subject = trim($survey->getMailSubject());
             $body = trim($survey->getInviteMail());
-            if ($subject === '' || $body === '') {
+            if ('' === $subject || '' === $body) {
                 throw new BadRequestHttpException('Configure the survey invitation subject and body before using automation.');
             }
             $dto = new SurveyInvitation();
             $dto->surveyId = (int) $survey->getIid();
             $dto->selectedUserIds = $this->studentIds($context);
-            if ($dto->selectedUserIds === []) {
+            if ([] === $dto->selectedUserIds) {
                 throw new BadRequestHttpException('The course has no eligible learners to invite.');
             }
             $dto->mailSubject = $subject;
@@ -329,10 +338,11 @@ final readonly class CourseAutomationManager
             $dto->sendMail = true;
             $dto->resendToAll = false;
             $this->surveyInvitationProcessor->process($dto, new Post(name: 'post_survey_invitations_publish'), ['surveyId' => (int) $survey->getIid()]);
+
             return;
         }
 
-        if ($type === self::CERTIFICATES) {
+        if (self::CERTIFICATES === $type) {
             $category = $this->findGradebook((int) $action->getTargetId(), $context);
             $eligible = 0;
             foreach ($this->students($context) as $student) {
@@ -342,7 +352,7 @@ final readonly class CourseAutomationManager
                 }
                 $path = trim((string) $certificate->getPathCertificate());
                 $hash = pathinfo(basename($path), PATHINFO_FILENAME);
-                if (preg_match('/^[A-Za-z0-9_-]+$/', $hash) !== 1) {
+                if (1 !== preg_match('/^[A-Za-z0-9_-]+$/', $hash)) {
                     continue;
                 }
                 ++$eligible;
@@ -354,12 +364,12 @@ final readonly class CourseAutomationManager
                     'INSERT IGNORE INTO course_automation_delivery (action_id, user_id, status, created_at) VALUES (:actionId, :userId, :status, NOW())',
                     ['actionId' => $actionId, 'userId' => $userId, 'status' => 'sending'],
                 );
-                if ($inserted === 0) {
+                if (0 === $inserted) {
                     $claimedRetry = $this->connection->executeStatement(
                         'UPDATE course_automation_delivery SET status = :sending, last_error = NULL WHERE action_id = :actionId AND user_id = :userId AND status = :failed',
                         ['sending' => 'sending', 'actionId' => $actionId, 'userId' => $userId, 'failed' => 'failed'],
                     );
-                    if ($claimedRetry === 0) {
+                    if (0 === $claimedRetry) {
                         continue;
                     }
                 }
@@ -369,7 +379,9 @@ final readonly class CourseAutomationManager
                     ->from($this->mailHelper->getPlatformFromAddress())
                     ->to(new Address((string) $student->getEmail(), $student->getFullName()))
                     ->subject('Your course certificate')
-                    ->text('Your certificate for '.$context->course->getTitle().' is available at: '.$url);
+                    ->text('Your certificate for '.$context->course->getTitle().' is available at: '.$url)
+                ;
+
                 try {
                     $this->mailer->send($email);
                     $this->connection->executeStatement(
@@ -381,10 +393,11 @@ final readonly class CourseAutomationManager
                         'UPDATE course_automation_delivery SET status = :failed, last_error = :error WHERE action_id = :actionId AND user_id = :userId',
                         ['failed' => 'failed', 'error' => 'Mail delivery failed.', 'actionId' => $actionId, 'userId' => $userId],
                     );
+
                     throw $exception;
                 }
             }
-            if ($eligible === 0) {
+            if (0 === $eligible) {
                 throw new BadRequestHttpException('No generated certificates with valid recipient addresses were found.');
             }
             $unconfirmed = (int) $this->connection->fetchOne(
@@ -394,6 +407,7 @@ final readonly class CourseAutomationManager
             if ($unconfirmed > 0) {
                 throw new ConflictHttpException('Some certificate deliveries need manual review before this action can complete.');
             }
+
             return;
         }
 
@@ -402,7 +416,7 @@ final readonly class CourseAutomationManager
 
     private function canManage(CourseReportingContext $context): bool
     {
-        return $context->groupId === 0 && ($context->isAdministrator || $context->isTeacher);
+        return 0 === $context->groupId && ($context->isAdministrator || $context->isTeacher);
     }
 
     private function requireManage(): CourseReportingContext
@@ -411,15 +425,17 @@ final readonly class CourseAutomationManager
         if (!$this->canManage($context)) {
             throw new AccessDeniedHttpException('You are not allowed to manage course automation.');
         }
+
         return $context;
     }
 
     private function canChangeVisibility(CourseReportingContext $context): bool
     {
-        if ($context->session !== null) {
+        if (null !== $context->session) {
             // A session course has no independent course visibility field.
             return false;
         }
+
         return $this->courseSettingsManager->canChangeVisibilityForAutomation($context->course);
     }
 
@@ -428,6 +444,7 @@ final readonly class CourseAutomationManager
         if (!\in_array($event, [self::EVENT_START, self::EVENT_END], true)) {
             throw new BadRequestHttpException('Only start and end events are supported.');
         }
+
         return $event;
     }
 
@@ -449,12 +466,14 @@ final readonly class CourseAutomationManager
     {
         return $link->getCourse()?->getId() === $context->course->getId()
             && $link->getSession()?->getId() === $context->session?->getId()
-            && $link->getGroup() === null && $link->getUser() === null && $link->getUserGroup() === null
+            && null === $link->getGroup() && null === $link->getUser() && null === $link->getUserGroup()
             && $link->getResourceNode()->getId() !== $context->courseResourceNodeId()
             && $this->security->isGranted('EDIT', $link->getResourceNode());
     }
 
-    /** @return list<ResourceLink> */
+    /**
+     * @return list<ResourceLink>
+     */
     private function resourceLinks(CourseReportingContext $context): array
     {
         $qb = $this->entityManager->createQueryBuilder()
@@ -467,19 +486,23 @@ final readonly class CourseAutomationManager
             ->setParameter('course', $context->course)
             ->setParameter('courseNode', $context->courseResourceNodeId())
             ->orderBy('node.title', 'ASC')
-            ->setMaxResults(1000);
-        if ($context->session === null) {
+            ->setMaxResults(1000)
+        ;
+        if (null === $context->session) {
             $qb->andWhere('link.session IS NULL');
         } else {
             $qb->andWhere('link.session = :session')->setParameter('session', $context->session);
         }
+
         return array_values(array_filter(
             $qb->getQuery()->getResult(),
             fn (ResourceLink $link): bool => $this->resourceBelongsToContext($link, $context),
         ));
     }
 
-    /** @return list<CSurvey> */
+    /**
+     * @return list<CSurvey>
+     */
     private function surveys(CourseReportingContext $context): array
     {
         $qb = $this->entityManager->createQueryBuilder()
@@ -489,8 +512,9 @@ final readonly class CourseAutomationManager
             ->innerJoin('node.resourceLinks', 'link')
             ->andWhere('link.course = :course')
             ->setParameter('course', $context->course)
-            ->setMaxResults(200);
-        if ($context->session === null) {
+            ->setMaxResults(200)
+        ;
+        if (null === $context->session) {
             $qb->andWhere('link.session IS NULL');
         }
         $result = [];
@@ -499,10 +523,13 @@ final readonly class CourseAutomationManager
                 $result[] = $survey;
             }
         }
+
         return $result;
     }
 
-    /** @return list<GradebookCategory> */
+    /**
+     * @return list<GradebookCategory>
+     */
     private function gradebooks(CourseReportingContext $context): array
     {
         return array_values(array_filter(
@@ -521,10 +548,13 @@ final readonly class CourseAutomationManager
                 return $category;
             }
         }
+
         throw new AccessDeniedHttpException('The Gradebook category is not available in this course context.');
     }
 
-    /** @return list<User> */
+    /**
+     * @return list<User>
+     */
     private function students(CourseReportingContext $context): array
     {
         $isSessionCourse = null !== $context->session;
@@ -537,7 +567,8 @@ final readonly class CourseAutomationManager
             ->andWhere('user.active = :active')
             ->setParameter('course', $context->course)
             ->setParameter('student', $isSessionCourse ? Session::STUDENT : CourseRelUser::STUDENT)
-            ->setParameter('active', User::ACTIVE);
+            ->setParameter('active', User::ACTIVE)
+        ;
 
         if ($isSessionCourse) {
             $qb->andWhere('relation.session = :session')->setParameter('session', $context->session);
@@ -556,7 +587,9 @@ final readonly class CourseAutomationManager
         return array_values($students);
     }
 
-    /** @return list<int> */
+    /**
+     * @return list<int>
+     */
     private function studentIds(CourseReportingContext $context): array
     {
         return array_map(static fn (User $user): int => (int) $user->getId(), $this->students($context));

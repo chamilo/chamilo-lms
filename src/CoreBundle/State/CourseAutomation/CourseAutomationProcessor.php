@@ -15,7 +15,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 /** @implements ProcessorInterface<CourseAutomationConfiguration, CourseAutomationConfiguration> */
 final readonly class CourseAutomationProcessor implements ProcessorInterface
 {
-    public function __construct(private CourseAutomationManager $manager) {}
+    public function __construct(
+        private CourseAutomationManager $manager
+    ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): ?CourseAutomationConfiguration
     {

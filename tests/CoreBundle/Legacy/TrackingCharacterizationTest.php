@@ -8,6 +8,7 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Database;
@@ -312,29 +313,49 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         $this->assertSame(0, Tracking::getNumberOfCourseAccessDates($this->carol->getId(), $cid, 0));
     }
 
-    public function testTotalTimeSpentInCoursesTruncatesToHoursAndCapsEachAccess(): void
+    public function testTotalTimeSpentInCoursesSumsTheCappedSecondsThenTruncatesToHours(): void
     {
         $from = '2001-04-01 00:00:00';
         $until = '2001-04-30 23:59:59';
-        $before = Tracking::getTotalTimeSpentInCourses($from, $until);
-        $beforeCap3 = Tracking::getTotalTimeSpentInCourses($from, $until, 3);
-        $beforeAll = Tracking::getTotalTimeSpentInCourses();
+        // Exact capped seconds already in the table (the function truncates the SUM once, so a before/after difference of
+        // truncated hours would be off by one depending on what the fixtures already hold).
+        $seconds = fn (string $where, int $cap): int => (int) $this->conn->fetchOne(
+            'SELECT COALESCE(SUM(LEAST(GREATEST(TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date), 0), '.$cap.')), 0)
+             FROM track_e_course_access WHERE '.$where
+        );
+        $window = "login_course_date >= '".$from."' AND logout_course_date <= '".$until."'";
+        $before = $seconds($window, 21600);
+        $before180 = $seconds($window, 10800);
+        $beforeAll = $seconds('1 = 1', 21600);
 
         $cid = $this->course->getId();
         $uid = $this->alice->getId();
-        // 2h30 -> 2 (TIMESTAMPDIFF HOUR truncates), 59 min -> 0, 10h -> capped to 6.
+        // 2h30 = 9000 s, 59 min = 3540 s, 10h capped to the platform threshold (360 min by default) = 21600 s.
         $this->insertCourseAccess($uid, $cid, '2001-04-02 08:00:00', '2001-04-02 10:30:00');
         $this->insertCourseAccess($uid, $cid, '2001-04-03 08:00:00', '2001-04-03 08:59:00');
         $this->insertCourseAccess($uid, $cid, '2001-04-04 08:00:00', '2001-04-04 18:00:00');
         // Partly outside the window: ignored.
         $this->insertCourseAccess($uid, $cid, '2001-03-31 22:00:00', '2001-04-01 06:00:00');
 
-        $this->assertSame(8, Tracking::getTotalTimeSpentInCourses($from, $until) - $before);
-        // A lower cap applies to every row (2 stays 2, 10 -> 3): 5 instead of 8.
-        $this->assertSame(5, Tracking::getTotalTimeSpentInCourses($from, $until, 3) - $beforeCap3);
-        // Fixed: without both dates the WHERE clause was empty (invalid SQL). It now spans every access:
-        // the three in-window rows (2+0+6) plus the 8h one only partly in the window (capped to 6).
-        $this->assertSame(8 + 6, Tracking::getTotalTimeSpentInCourses() - $beforeAll);
+        // Since the cap became the setting tracking.max_time_spent_per_session_threshold (in seconds, per access), the
+        // capped seconds are summed FIRST and truncated to hours once: 34140 s = 9 h. The older per-row truncation
+        // (TIMESTAMPDIFF HOUR) gave 2 + 0 + 6 = 8.
+        $this->assertSame(intdiv($before + 34140, 3600), Tracking::getTotalTimeSpentInCourses($from, $until));
+
+        // PINNED QUIRK: the third argument ($maxTimeSpent) is no longer used; the cap comes from the platform setting.
+        $this->assertSame(
+            Tracking::getTotalTimeSpentInCourses($from, $until),
+            Tracking::getTotalTimeSpentInCourses($from, $until, 3)
+        );
+
+        // The setting drives the cap: 180 minutes -> 9000 + 3540 + 10800 = 23340 s -> 6 h (rolled back with the test).
+        Container::getSettingsManager()->updateSetting('tracking.max_time_spent_per_session_threshold', '180');
+        $this->assertSame(intdiv($before180 + 23340, 3600), Tracking::getTotalTimeSpentInCourses($from, $until));
+        Container::getSettingsManager()->updateSetting('tracking.max_time_spent_per_session_threshold', '360');
+
+        // Without both dates the WHERE clause spans every access: the three in-window rows plus the 8h one only partly in
+        // the window (28800 s, capped to 21600): 34140 + 21600 = 55740 s.
+        $this->assertSame(intdiv($beforeAll + 55740, 3600), Tracking::getTotalTimeSpentInCourses());
         $this->assertSame(
             Tracking::getTotalTimeSpentInCourses(),
             Tracking::getTotalTimeSpentInCourses($from, '')

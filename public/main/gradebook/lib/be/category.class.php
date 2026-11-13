@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\GradebookCalculationMode;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\GradebookCategoryGradeModelGuard;
 use ChamiloSession as Session;
 
 /**
@@ -682,6 +683,10 @@ class Category implements GradebookItem
         $category->setVisible($this->visible);
         $category->setCertifMinScore($this->certificate_min_score);
         $category->setGenerateCertificates($this->generateCertificates);
+        $currentGradeModelId = (int) ($category->getGradeModel()?->getId() ?? 0);
+        $existingSubcategoryCount = $category->getSubCategories()->count();
+        $existingLinkCount = $category->getLinks()->count();
+
         if (!empty($this->grade_model_id)) {
             $model = $em->getRepository(\Chamilo\CoreBundle\Entity\GradeModel::class)->find($this->grade_model_id);
             $category->setGradeModel($model);
@@ -708,10 +713,20 @@ class Category implements GradebookItem
         if (!empty($this->id)) {
             $parent_id = $this->get_parent_id();
             $grade_model_id = $this->get_grade_model_id();
+            $targetGradeModelId = (int) $grade_model_id;
+            if ('-1' == $grade_model_id) {
+                $targetGradeModelId = 0;
+            }
             if (0 == $parent_id) {
-                if (!empty($grade_model_id) &&
-                    '-1' != $grade_model_id
-                ) {
+                // Leftover of #3387 / #9458: only insert children when the model
+                // actually changed and the root has no subcategories or links yet
+                // (same rule as GradebookCategoryActionProcessor::updateGradeModel()).
+                if (GradebookCategoryGradeModelGuard::shouldCreateChildrenFromModel(
+                    $currentGradeModelId,
+                    $targetGradeModelId,
+                    $existingSubcategoryCount,
+                    $existingLinkCount
+                )) {
                     $obj = new GradeModel();
                     $components = $obj->get_components($grade_model_id);
                     $default_weight_setting = api_get_setting('gradebook_default_weight');

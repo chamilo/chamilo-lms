@@ -203,7 +203,7 @@ class SocialManager extends UserManager
      *
      * @return array
      *
-     * @deprecated Queries message.user_receiver_id/msg_status, columns that no longer exist: it always fails and has no working caller.
+     * Queries message.user_receiver_id/msg_status, columns that no longer exist: it always fails. Still called from inc/ajax/message.ajax.php (get_notifications_friends).
      */
     public static function get_list_invitation_of_friends_by_user_id($userId, $limit = 0)
     {
@@ -455,7 +455,7 @@ class SocialManager extends UserManager
      *
      * @author Yannick Warnier
      *
-     * @deprecated Queries message.user_receiver_id/msg_status, columns that no longer exist: it always fails and has no working caller.
+     * Queries message.user_receiver_id/msg_status, columns that no longer exist: it always fails. Still called from inc/ajax/social.ajax.php (list_wall_message).
      */
     public static function getWallMessages(
         $userId,

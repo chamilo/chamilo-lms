@@ -4841,7 +4841,7 @@ function api_set_settings_category($category, $value = null, $access_url = 1, $f
 /**
  * Gets all available access urls in an array (as in the database).
  *
- * @deprecated No caller left in the codebase.
+ * Still used by the maintenance script tests/scripts/synchronize_user_base_from_csv.php.
  *
  * @return array An array of database records
  */

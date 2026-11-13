@@ -18,7 +18,7 @@ When("I import a disposable Hot Potatoes archive", async ({ page }) => {
   const requestFinished = page.waitForResponse((response) =>
     response.url().includes("/api/hotpotatoes/archives/import") && response.request().method() === "POST",
   )
-  await page.getByRole("button", { name: "Import", exact: true }).click()
+  await page.getByRole("button", { name: /(^|\s)Import$/ }).click()
   const response = await requestFinished
   expect(response.status()).toBe(201)
   const result = await response.json()
@@ -32,7 +32,7 @@ Then("the disposable Hot Potatoes archive should be listed", async ({ page }) =>
 
 When("I remove the disposable Hot Potatoes archive", async ({ page }) => {
   await row(page).getByRole("button", { name: "Delete" }).click()
-  await page.getByRole("button", { name: "Yes", exact: true }).click()
+  await page.getByRole("button", { name: /(^|\s)Yes$/ }).click()
 })
 
 Then("the disposable Hot Potatoes archive should no longer be listed", async ({ page }) => {

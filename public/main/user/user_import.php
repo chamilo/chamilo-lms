@@ -13,6 +13,11 @@ if ('false' == api_get_setting('workflows.allow_user_course_subscription_by_cour
     }
 }
 
+// Access restriction: only users with course-edit rights may import subscriptions.
+if (!api_is_allowed_to_edit(null, true)) {
+    api_not_allowed(true);
+}
+
 // Make sure we know if we're importing students or teachers into the course
 $userType = STUDENT;
 if (!empty($_REQUEST['type']) && COURSEMANAGER == $_REQUEST['type']) {

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
+use Chamilo\CoreBundle\Service\Survey\SurveyPersonalityManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -61,6 +62,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
         private CSurveyRepository $surveyRepository,
         private Security $security,
         private SettingsManager $settingsManager,
+        private SurveyPersonalityManager $personalityManager,
     ) {}
 
     /**
@@ -209,6 +211,13 @@ final readonly class SurveyReportingProvider implements ProviderInterface
         $response->counts = $this->buildCounts($survey, $invitations, $answers);
         $response->reportTypes = $this->getReportTypes();
         $response->questionReports = $this->buildQuestionReports($questions, $optionsByQuestion, $answers);
+        if (1 === $survey->getSurveyType()) {
+            $response->personalityProfile = $this->personalityManager->profile(
+                $survey,
+                null,
+                null !== $session ? (int) $session->getId() : null,
+            );
+        }
         $response->users = array_values($users);
         $response->selectedUser = $this->buildSelectedUser($selectedUserKey, $users);
         $response->userAnswers = $this->buildUserAnswers($selectedUserKey, $questions, $optionsByQuestion, $answers);

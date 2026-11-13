@@ -25,9 +25,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  * LIVE (callers under public/): getAllSkills, getGradebooksBySkill, getUserSkills, getUserSkillRanking,
  * getCoursesBySkill, getSessionsBySkill, userHasSkill, listAchievedByCourse, listUsersWhoAchieved,
  * isSearched (through getSkillToJson), isToolAvailable, isAllowed, hasAccessToUserSkill, userCanAddFeedbackToUser, sanitizeInternalUrl.
- * DEAD (no caller, marked @deprecated in the source): getUserListSkillRanking,
- * getUserListSkillRankingCount, getCountSkillsByCourse. The remaining methods (tree
- * building, add/edit/delete, saveSkills*, getItemInfo, ...) go through Doctrine entities, not raw SQL.
+ * The remaining methods (tree building, add/edit/delete, saveSkills*, getItemInfo, ...) go through Doctrine entities, not raw SQL.
  *
  * Fixtures: skills (title sk_...) and their relations, gradebook categories, sessions and acquired
  * skills are raw INSERTs; users 1 (admin) and 2 (anonymous), courses 1 (AIACT) and 2 (USINGCHAMILO).
@@ -428,36 +426,6 @@ final class SkillModelCharacterizationTest extends KernelTestCase
 
         // INNER JOIN on course: an issue with no course (e.g. a badge assigned by hand) is not listed.
         $this->assertSame([], (new SkillModel())->listUsersWhoAchieved($a));
-    }
-
-    // ---------------------------------------------------------------- dead helpers
-
-    public function testGetCountSkillsByCourseCountsTheSkillGradebookLinksOfTheCourse(): void
-    {
-        $s = $this->skill('s');
-        $t = $this->skill('t');
-        $this->link($s, $this->gradebook(1));
-        $this->link($t, $this->gradebook(1));
-        $this->link($s, $this->gradebook(2));
-        $model = new SkillModel();
-        $c1 = (int) $model->getCountSkillsByCourse('AIACT');
-
-        $this->assertGreaterThanOrEqual(2, $c1);
-        $this->assertSame(0, (int) $model->getCountSkillsByCourse('SK_NO_SUCH_COURSE'));
-    }
-
-    public function testGetUserListSkillRankingOrdersUsersByAcquiredSkills(): void
-    {
-        $this->acquire(1, $this->skill('a'));
-        $this->acquire(1, $this->skill('b'));
-        $this->acquire(2, $this->skill('c'));
-
-        $rows = (new SkillModel())->getUserListSkillRanking(0, 10, 'user_id', 'desc', '');
-
-        $this->assertSame(1, (int) $rows[0]['user_id']);
-        $this->assertSame(2, (int) $rows[0]['skills_acquired']);
-        $this->assertSame(1, (int) $rows[0]['rank']);
-        $this->assertGreaterThanOrEqual(2, (int) (new SkillModel())->getUserListSkillRankingCount());
     }
 
     public function testIsSearchedLooksAtTheSkillProfiles(): void

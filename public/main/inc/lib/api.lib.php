@@ -2956,18 +2956,6 @@ function api_get_settings_params_simple($params)
 }
 
 /**
- * Returns the value of a setting from the web-adjustable admin config settings.
- *
- * @deprecated No caller left in the codebase.
- */
-function api_delete_settings_params($params)
-{
-    $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
-
-    return Database::delete($table, $params);
-}
-
-/**
  * Returns an escaped version of $_SERVER['PHP_SELF'] to avoid XSS injection.
  *
  * @return string Escaped version of $_SERVER['PHP_SELF']
@@ -3303,40 +3291,6 @@ function api_is_teacher()
 function api_is_invitee()
 {
     return api_user_has_role('ROLE_INVITEE');
-}
-
-/**
- * This function checks whether a session is assigned into a category.
- *
- * @deprecated No caller left in the codebase.
- *
- * @param int       - session id
- * @param string    - category name
- *
- * @return bool - true if is found, otherwise false
- */
-function api_is_session_in_category($session_id, $category_name)
-{
-    $session_id = (int) $session_id;
-    $category_name = Database::escape_string($category_name);
-    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-    $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-
-    $sql = "SELECT 1
-            FROM $tbl_session
-            WHERE $session_id IN (
-                SELECT s.id FROM $tbl_session s, $tbl_session_category sc
-                WHERE
-                  s.session_category_id = sc.id AND
-                  sc.title LIKE '%$category_name'
-            )";
-    $rs = Database::query($sql);
-
-    if (Database::num_rows($rs) > 0) {
-        return true;
-    }
-
-    return false;
 }
 
 /**
@@ -4685,21 +4639,6 @@ function api_get_settings_options($var)
     }
 
     return $settings_options_array;
-}
-
-/**
- * @deprecated No caller left in the codebase.
- *
- * @param array $params
- */
-function api_set_setting_option($params)
-{
-    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
-    if (empty($params['id'])) {
-        Database::insert($table, $params);
-    } else {
-        Database::update($table, $params, ['id = ? ' => $params['id']]);
-    }
 }
 
 /**
@@ -6412,97 +6351,6 @@ function api_is_global_chat_enabled()
 }
 
 /**
- * @param int   $item_id
- * @param int   $tool_id
- * @param int   $group_id   id
- * @param array $courseInfo
- * @param int   $sessionId
- * @param int   $userId
- *
- * @deprecated
- */
-function api_set_default_visibility(
-    $item_id,
-    $tool_id,
-    $group_id = 0,
-    $courseInfo = [],
-    $sessionId = 0,
-    $userId = 0
-) {
-    $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
-    $courseId = $courseInfo['real_id'];
-    $courseCode = $courseInfo['code'];
-    $sessionId = empty($sessionId) ? api_get_session_id() : $sessionId;
-    $userId = empty($userId) ? api_get_user_id() : $userId;
-
-    // if group is null force group_id = 0, this force is needed to create a LP folder with group = 0
-    if (is_null($group_id)) {
-        $group_id = 0;
-    } else {
-        $group_id = empty($group_id) ? api_get_group_id() : $group_id;
-    }
-
-    $groupInfo = [];
-    if (!empty($group_id)) {
-        $groupInfo = GroupManager::get_group_properties($group_id);
-    }
-    $original_tool_id = $tool_id;
-
-    switch ($tool_id) {
-        case TOOL_LINK:
-        case TOOL_LINK_CATEGORY:
-            $tool_id = 'links';
-            break;
-        case TOOL_DOCUMENT:
-            $tool_id = 'documents';
-            break;
-        case TOOL_LEARNPATH:
-            $tool_id = 'learning';
-            break;
-        case TOOL_ANNOUNCEMENT:
-            $tool_id = 'announcements';
-            break;
-        case TOOL_FORUM:
-        case TOOL_FORUM_CATEGORY:
-        case TOOL_FORUM_THREAD:
-            $tool_id = 'forums';
-            break;
-        case TOOL_QUIZ:
-            $tool_id = 'quiz';
-            break;
-    }
-
-    $tools = api_get_setting('course.active_tools_on_create', true);
-    $setting = array_fill_keys($tools, 'true');
-
-    if (isset($setting[$tool_id])) {
-        $visibility = 'visible';
-    } else {
-        $visibility = 'invisible';
-    }
-
-    if ('documents' === $tool_id) {
-        $visibility = DocumentManager::getDocumentDefaultVisibility($courseInfo);
-    }
-
-    switch ($original_tool_id) {
-        case TOOL_QUIZ:
-            if (empty($sessionId)) {
-                $objExerciseTmp = new Exercise($courseId);
-                $objExerciseTmp->read($item_id);
-                if ('visible' === $visibility) {
-                    $objExerciseTmp->enable();
-                    $objExerciseTmp->save();
-                } else {
-                    $objExerciseTmp->disable();
-                    $objExerciseTmp->save();
-                }
-            }
-            break;
-    }
-}
-
-/**
  * Returns available role codes => translated labels.
  * Uses DI PermissionHelper and caches results.
  */
@@ -7672,28 +7520,6 @@ function api_get_relative_path($from, $to)
 function api_find_template($template)
 {
     return Template::findTemplateFilePath($template);
-}
-
-/**
- * @deprecated No caller left in the codebase.
- *
- * @return array
- */
-function api_get_language_list_for_flag()
-{
-    $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = "SELECT english_name, isocode FROM $table
-            ORDER BY original_name ASC";
-    static $languages = [];
-    if (empty($languages)) {
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
-            $languages[$row['english_name']] = $row['isocode'];
-        }
-        $languages['english'] = 'gb';
-    }
-
-    return $languages;
 }
 
 function api_create_zip(string $name): ZipStream

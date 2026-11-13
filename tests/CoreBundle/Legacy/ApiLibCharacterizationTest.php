@@ -39,8 +39,8 @@ use const SORT_STRING;
  *   api_set_settings_category, api_delete_setting_option, api_register_campus, api_is_explicit_course_student
  *   (through api_is_allowed_to_edit), api_is_admin_in_all_active_urls (api_get_active_urls and
  *   api_get_access_url_from_user), api_get_tool_information_by_name (api_protect_course_script).
- *  DEAD: api_is_session_in_category, api_get_access_urls, api_delete_settings_params, api_set_setting_option,
- *   api_get_language_list_for_flag; api_is_course_visible_for_user only survives through the search tool processors.
+ *  api_is_course_visible_for_user only survives through the search tool processors; api_get_access_urls only through
+ *   the tests/scripts maintenance scripts.
  */
 class ApiLibCharacterizationTest extends AbstractApiTest
 {
@@ -1074,21 +1074,6 @@ class ApiLibCharacterizationTest extends AbstractApiTest
         self::getContainer()->get('security.token_storage')->getToken()->getUser()->addTemporaryRole('ROLE_CURRENT_COURSE_TEACHER');
 
         $this->assertTrue(api_protect_course_script(false, false, 'group'));
-    }
-
-    // ---------------------------------------------------------------- dead helpers (cheap pins)
-
-    public function testIsSessionInCategoryMatchesTheCategoryTitleSuffix(): void
-    {
-        $this->conn()->executeStatement("INSERT INTO session_category (access_url_id, title) VALUES (1, 'ap_category')");
-        $cat = (int) $this->conn()->lastInsertId();
-        $sid = $this->rawSession('incat', null, null, ['category' => $cat]);
-        $out = $this->rawSession('outcat', null, null);
-
-        $this->assertTrue(api_is_session_in_category($sid, 'ap_category'));
-        $this->assertTrue(api_is_session_in_category($sid, 'category'), 'LIKE %name: a suffix of the title matches.');
-        $this->assertFalse(api_is_session_in_category($sid, 'ap_cat'), 'A prefix does not.');
-        $this->assertFalse(api_is_session_in_category($out, 'ap_category'));
     }
 
     // ---------------------------------------------------------------- course visibility (search processors only)

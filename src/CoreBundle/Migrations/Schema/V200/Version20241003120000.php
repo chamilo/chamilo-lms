@@ -219,7 +219,7 @@ final class Version20241003120000 extends AbstractMigrationChamilo
         ?int $fallbackUserId,
         PersonalFileRepository $personalRepo
     ): string {
-        $pattern = '/(href|src)="[^"]*\/app\/upload\/users\/(\d+)\/(\d+)\/my_files\/([^\/"]+)"/i';
+        $pattern = '/(href|src)="[^"]*\/app\/upload\/users\/(?:(\d+)\/)?(\d+)\/my_files\/([^\/"]+)"/i';
 
         $result = preg_replace_callback(
             $pattern,

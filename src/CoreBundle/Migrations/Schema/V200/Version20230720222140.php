@@ -36,7 +36,7 @@ final class Version20230720222140 extends AbstractMigrationChamilo
             $content = $socialPost->getContent();
 
             // Define the regular expression pattern to match URLs containing "my_files/"
-            $pattern = '/(href|src)="[^"]*\/users\/(\d+)\/\d+\/my_files\/([^"]+)"/i';
+            $pattern = '/(href|src)="[^"]*\/users\/(?:\d+\/)?(\d+)\/my_files\/([^"]+)"/i';
             preg_match_all($pattern, $content, $matches);
 
             // Combine the URLs found in href and src attributes
@@ -45,7 +45,7 @@ final class Version20230720222140 extends AbstractMigrationChamilo
             if (!empty($allUrls)) {
                 foreach ($allUrls as $url) {
                     // Define a regular expression to search for the "/upload/users" part, numeric values, and filename in the URL
-                    $pattern = '/\/upload\/users\/(\d+)\/(\d+)\/my_files\/([^\/"]+)/i';
+                    $pattern = '/\/upload\/users\/(?:(\d+)\/)?(\d+)\/my_files\/([^\/"]+)/i';
 
                     // Perform the regular expression search in the URL
                     if (preg_match($pattern, $url, $matches)) {
@@ -54,7 +54,7 @@ final class Version20230720222140 extends AbstractMigrationChamilo
                         $filename = $matches[3];
 
                         // Get the full file path
-                        $filePath = $this->getUpdateRootPath()."/app/upload/users/{$folderId}/{$userId}/my_files/{$filename}";
+                        $filePath = $this->getUpdateRootPath().'/app'.$matches[0];
 
                         // Check if the path corresponds to a file
                         if (is_file($filePath)) {
@@ -75,7 +75,7 @@ final class Version20230720222140 extends AbstractMigrationChamilo
                             $newUrl = $personalRepo->getResourceFileUrl($personalFile);
                             if (!empty($newUrl)) {
                                 // Perform the replacement of the old URL with the new URL in the content
-                                $content = preg_replace('/(src|href)="[^"]*\/users\/(\d+)\/\d+\/my_files\/([^"]+)"/i', '$1="'.$newUrl.'"', $content);
+                                $content = preg_replace('/(src|href)="[^"]*\/users\/(?:\d+\/)?(\d+)\/my_files\/([^"]+)"/i', '$1="'.$newUrl.'"', $content);
                             }
                         }
                     }

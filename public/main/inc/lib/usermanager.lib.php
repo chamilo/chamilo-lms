@@ -1679,10 +1679,11 @@ class UserManager
      * Get a list (or a count) of non-anonymous users matching equality conditions.
      *
      * @param array       $conditions      field => value, compared with =
-     * @param string      $extraConditions @deprecated Free-form SQL fragment. It is now fully escaped (quotes
+     * @param string      $extraConditions Free-form SQL fragment, discouraged. It is now fully escaped (quotes
      *                                     included), so it can no longer break out of a string literal; a
      *                                     fragment containing quotes will fail instead of being executed.
      *                                     Use $createdBetween for the only filter the callers need.
+     *                                     The function itself is live (inc/ajax/statistics.ajax.php).
      * @param array|null  $createdBetween  [start, end] as YYYY-MM-DD, filters on user.created_at (inclusive);
      *                                     an InvalidArgumentException is thrown on any other format
      *

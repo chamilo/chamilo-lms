@@ -16,6 +16,7 @@ api_protect_course_script(true);
 $plugin = H5pImportPlugin::create();
 if (!$plugin->isToolEnabled()) {
     H5PCore::ajaxError(get_lang('NotAllowed'));
+    exit;
 }
 
 $action = $_REQUEST['action'] ?? null;
@@ -37,6 +38,7 @@ if (
     || (($session && $h5pImport->getSession()) && $session->getId() !== $h5pImport->getSession()->getId())
 ) {
     H5PCore::ajaxError($plugin->get_lang('ContentNotFound'));
+    exit;
 }
 
 $launchSessionKey = 'h5p_import_launch_id_'.$h5pId;
@@ -44,6 +46,7 @@ $launchSessionKey = 'h5p_import_launch_id_'.$h5pId;
 if ('set_finished' === $action) {
     if (!H5PCore::validToken('result', (string) filter_input(INPUT_GET, 'token'))) {
         H5PCore::ajaxError($plugin->get_lang('h5p_error_invalid_token'));
+        exit;
     }
 
     $score = filter_input(INPUT_POST, 'score', FILTER_VALIDATE_INT);
@@ -52,6 +55,7 @@ if ('set_finished' === $action) {
 
     if (false === $score || false === $maxScore || false === $opened) {
         H5PCore::ajaxError();
+        exit;
     }
 
     $resultsRepo = $em->getRepository(H5pImportResults::class);
@@ -143,11 +147,13 @@ if ('set_finished' === $action) {
     Session::write($launchSessionKey, $h5pImportResults->getIid());
 
     H5PCore::ajaxSuccess();
+    exit;
 }
 
 if ('content_user_data' === $action) {
     if (!H5PCore::validToken('content', (string) filter_input(INPUT_GET, 'token'))) {
         H5PCore::ajaxError($plugin->get_lang('h5p_error_invalid_token'));
+        exit;
     }
 
     H5PCore::ajaxSuccess([
@@ -155,6 +161,7 @@ if ('content_user_data' === $action) {
             'state' => '{}',
         ],
     ]);
+    exit;
 }
 
 H5PCore::ajaxError(get_lang('InvalidAction'));

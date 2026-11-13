@@ -43636,3 +43636,57 @@ msgstr "Treasure stolen"
 
 msgid "Attack blocked"
 msgstr "Attack blocked"
+
+msgid "Automation"
+msgstr "Automation"
+
+msgid "Configure actions to run when the course opens or closes."
+msgstr "Configure actions to run when the course opens or closes."
+
+msgid "Course opens now"
+msgstr "Course opens now"
+
+msgid "Course ends now"
+msgstr "Course ends now"
+
+msgid "Add action"
+msgstr "Add action"
+
+msgid "Configured actions"
+msgstr "Configured actions"
+
+msgid "No actions configured"
+msgstr "No actions configured"
+
+msgid "Make content visible"
+msgstr "Make content visible"
+
+msgid "Make content invisible"
+msgstr "Make content invisible"
+
+msgid "Send survey invitation"
+msgstr "Send survey invitation"
+
+msgid "Send certificates to students"
+msgstr "Send certificates to students"
+
+msgid "Change course visibility"
+msgstr "Change course visibility"
+
+msgid "Execute the configured course actions now? Completed actions will not run again."
+msgstr "Execute the configured course actions now? Completed actions will not run again."
+
+msgid "Unable to load automation"
+msgstr "Unable to load automation"
+
+msgid "Automation action failed"
+msgstr "Automation action failed"
+
+msgid "pending"
+msgstr "pending"
+
+msgid "running"
+msgstr "running"
+
+msgid "success"
+msgstr "success"

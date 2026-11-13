@@ -43565,3 +43565,57 @@ msgstr ""
 
 msgid "Attack blocked"
 msgstr ""
+
+msgid "Automation"
+msgstr ""
+
+msgid "Configure actions to run when the course opens or closes."
+msgstr ""
+
+msgid "Course opens now"
+msgstr ""
+
+msgid "Course ends now"
+msgstr ""
+
+msgid "Add action"
+msgstr ""
+
+msgid "Configured actions"
+msgstr ""
+
+msgid "No actions configured"
+msgstr ""
+
+msgid "Make content visible"
+msgstr ""
+
+msgid "Make content invisible"
+msgstr ""
+
+msgid "Send survey invitation"
+msgstr ""
+
+msgid "Send certificates to students"
+msgstr ""
+
+msgid "Change course visibility"
+msgstr ""
+
+msgid "Execute the configured course actions now? Completed actions will not run again."
+msgstr ""
+
+msgid "Unable to load automation"
+msgstr ""
+
+msgid "Automation action failed"
+msgstr ""
+
+msgid "pending"
+msgstr ""
+
+msgid "running"
+msgstr ""
+
+msgid "success"
+msgstr ""

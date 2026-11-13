@@ -66,6 +66,8 @@ if ($frmSearch->validate()) {
     $keyword = Security::remove_XSS($frmSearch->exportValues()['keyword']);
 }
 
+$interbreadcrumb[] = ['url' => '/admin', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/sessions', 'name' => get_lang('Sessions management')];
 $interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
 
 if (isset($_GET['search']) && 'advanced' === $_GET['search']) {

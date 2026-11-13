@@ -24,6 +24,7 @@ $interbreadcrumb[] = [
     'url' => 'index.php',
     'name' => get_lang('Administration'),
 ];
+$interbreadcrumb[] = ['url' => '/admin/analytics', 'name' => get_lang('Analytics')];
 $toolName = get_lang('Teachers time report');
 
 // Access restrictions.

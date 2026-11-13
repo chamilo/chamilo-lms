@@ -18,6 +18,7 @@
     <AdminBlock
       v-if="blockUsers"
       :id="blockUsers.id"
+      :section-route="{ name: 'AdminUsersSection' }"
       v-model:extra-content="blockUsers.extraContent"
       :description="t('Here you can manage registered users within your platform')"
       :editable="blockUsers.editable"
@@ -31,6 +32,7 @@
     <AdminBlock
       v-if="blockCourses"
       :id="blockCourses.id"
+      :section-route="{ name: 'AdminCoursesSection' }"
       v-model:extra-content="blockCourses.extraContent"
       :description="t('Create and manage your courses in a simple way')"
       :editable="blockCourses.editable"
@@ -44,6 +46,7 @@
     <AdminBlock
       v-if="blockSessions"
       :id="blockSessions.id"
+      :section-route="{ name: 'AdminSessionsSection' }"
       v-model:extra-content="blockSessions.extraContent"
       :description="t('Create course packages for a certain time with training sessions')"
       :editable="blockSessions.editable"
@@ -57,6 +60,7 @@
     <AdminBlock
       v-if="blockPlatform"
       :id="blockPlatform.id"
+      :section-route="{ name: 'AdminPlatformSection' }"
       v-model:extra-content="blockPlatform.extraContent"
       :description="t('Configure your platform, view reports, publish and send announcements globally')"
       :editable="blockPlatform.editable"
@@ -70,6 +74,7 @@
     <AdminBlock
       v-if="blockTracking"
       :id="blockTracking.id"
+      :section-route="{ name: 'AdminAnalyticsSection' }"
       v-model:extra-content="blockTracking.extraContent"
       :description="t('View reports, statistics and tracking data')"
       :editable="blockTracking.editable"
@@ -82,6 +87,7 @@
     <AdminBlock
       v-if="blockGradebook"
       :id="blockGradebook.id"
+      :section-route="{ name: 'AdminAssessmentsSection' }"
       v-model:extra-content="blockGradebook.extraContent"
       :editable="blockGradebook.editable"
       :items="blockGradebook.items"
@@ -93,6 +99,7 @@
     <AdminBlock
       v-if="blockSkills"
       :id="blockSkills.id"
+      :section-route="{ name: 'AdminSkillsSection' }"
       v-model:extra-content="blockSkills.extraContent"
       :description="t('Manage the skills of your users, through courses and badges')"
       :editable="blockSkills.editable"
@@ -105,6 +112,7 @@
     <AdminBlock
       v-if="blockSettings"
       :id="blockSettings.id"
+      :section-route="{ name: 'AdminSystemSection' }"
       v-model:extra-content="blockSettings.extraContent"
       :description="t('View the status of your server, perform performance tests')"
       :editable="blockSettings.editable"
@@ -117,6 +125,7 @@
     <AdminBlock
       v-if="blockRooms"
       :id="blockRooms.id"
+      :section-route="{ name: 'AdminRoomsSection' }"
       v-model:extra-content="blockRooms.extraContent"
       :editable="blockRooms.editable"
       :items="blockRooms.items"
@@ -128,6 +137,7 @@
     <AdminBlock
       v-if="blockSecurity"
       :id="blockSecurity.id"
+      :section-route="{ name: 'AdminSecuritySection' }"
       v-model:extra-content="blockSecurity.extraContent"
       :description="t('Security tools and reports')"
       :editable="blockSecurity.editable"
@@ -140,6 +150,7 @@
     <AdminBlock
       v-if="blockPrivacy"
       :id="blockPrivacy.id"
+      :section-route="{ name: 'AdminPrivacySection' }"
       v-model:extra-content="blockPrivacy.extraContent"
       :editable="blockPrivacy.editable"
       :items="blockPrivacy.items"
@@ -151,6 +162,7 @@
     <AdminBlock
       v-if="blockPlugins.items.length > 0"
       :id="blockPlugins.id"
+      :section-route="{ name: 'AdminPluginsSection' }"
       :items="blockPlugins.items"
       :title="t('Plugins')"
       :bg-index="11"
@@ -160,6 +172,7 @@
     <AdminBlock
       v-if="blockHealthCheck && blockHealthCheck.items.length > 0"
       :id="blockHealthCheck.id"
+      :section-route="{ name: 'AdminHealthCheckSection' }"
       :items="blockHealthCheck.items"
       :title="t('Health check')"
       :bg-index="12"
@@ -171,6 +184,7 @@
     <AdminBlock
       v-if="blockChamilo"
       :id="blockChamilo.id"
+      :section-route="{ name: 'AdminChamiloSection' }"
       v-model:extra-content="blockChamilo.extraContent"
       :description="t('Learn more about Chamilo and its use, official references links')"
       :editable="blockChamilo.editable"

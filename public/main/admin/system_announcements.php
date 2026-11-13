@@ -32,6 +32,9 @@ $interbreadcrumb[] = [
     'url' => 'index.php',
     'name' => get_lang('Administration'),
 ];
+if (api_is_platform_admin()) {
+    $interbreadcrumb[] = ['url' => '/admin/platform', 'name' => get_lang('Platform management')];
+}
 
 $repo = Container::getSysAnnouncementRepository();
 

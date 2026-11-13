@@ -22,6 +22,8 @@ $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)
 
 $toolName = get_lang('Import sessions list');
 
+$interbreadcrumb[] = ['url' => '/admin', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/sessions', 'name' => get_lang('Sessions management')];
 $interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
 
 set_time_limit(0);

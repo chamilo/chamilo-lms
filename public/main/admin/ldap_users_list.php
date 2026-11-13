@@ -40,6 +40,7 @@ if (($_GET['action']=="add_user") && ($_GET['id_session'] == strval(intval($_GET
 */
 
 $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/users', 'name' => get_lang('User management')];
 $tool_name = get_lang('Search for LDAP users');
 //Display::display_header($tool_name); //cannot display now as we need to redirect
 //Display::page_subheader2($tool_name);

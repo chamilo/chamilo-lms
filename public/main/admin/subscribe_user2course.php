@@ -31,6 +31,7 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 /* Header */
 $tool_name = get_lang('Add users to course');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/courses', 'name' => get_lang('Course management')];
 
 $htmlHeadXtra[] = '<script>
 function validate_filter() {

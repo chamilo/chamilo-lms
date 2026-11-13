@@ -7,6 +7,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
 
+$interbreadcrumb[] = ['url' => '/admin', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/platform', 'name' => get_lang('Platform management')];
+
+
 $mailTemplate = new MailTemplateManager();
 $action = $_REQUEST['action'] ?? 'list';
 $allowedActions = ['add', 'edit', 'delete', 'set_default', 'list'];

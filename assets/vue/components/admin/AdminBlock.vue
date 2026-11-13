@@ -4,8 +4,18 @@
     class="admin-index__block-container"
   >
     <template #title>
-      <BaseIcon :icon="icon" />
-      {{ title }}
+      <BaseAppLink
+        v-if="sectionRoute"
+        :to="sectionRoute"
+        class="admin-block__section-link"
+      >
+        <BaseIcon :icon="icon" />
+        {{ title }}
+      </BaseAppLink>
+      <template v-else>
+        <BaseIcon :icon="icon" />
+        {{ title }}
+      </template>
     </template>
 
     <template
@@ -147,6 +157,7 @@ const props = defineProps({
     required: false,
     default: false,
   },
+  sectionRoute: { type: Object, required: false, default: null },
   icon: { type: String, required: false, default: () => "admin-settings" },
   title: { type: String, require: true, default: () => "" },
   description: { type: String, required: false, default: () => null },

@@ -15,6 +15,8 @@ api_protect_limit_for_session_admin();
 $form_sent = 0;
 $tool_name = get_lang('Import list of HR directors into sessions');
 
+$interbreadcrumb[] = ['url' => '/admin', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/sessions', 'name' => get_lang('Sessions management')];
 $interbreadcrumb[] = ['url' => '/admin/session-list', 'name' => get_lang('Session list')];
 
 set_time_limit(0);

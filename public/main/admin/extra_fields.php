@@ -25,6 +25,20 @@ if (!in_array($extraFieldType, ExtraField::getValidExtraFieldTypes())) {
     api_not_allowed(true);
 }
 
+// Preserve the section that owns this extra-field type.
+$extraFieldSection = match ($extraFieldType) {
+    'user' => ['users', 'User management'],
+    'course' => ['courses', 'Course management'],
+    'session' => ['sessions', 'Sessions management'],
+    default => null,
+};
+if (null !== $extraFieldSection) {
+    $interbreadcrumb[] = [
+        'url' => '/admin/'.$extraFieldSection[0],
+        'name' => get_lang($extraFieldSection[1]),
+    ];
+}
+
 $check = Security::check_token('request');
 $token = Security::get_token();
 

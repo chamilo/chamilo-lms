@@ -24,6 +24,8 @@ api_protect_limit_for_session_admin();
 $formSent = 0;
 $errorMsg = '';
 
+$interbreadcrumb[] = ['url' => '/admin', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/sessions', 'name' => get_lang('Sessions management')];
 $interbreadcrumb[] = [
     'url' => '/admin/session-list',
     'name' => get_lang('Session list'),

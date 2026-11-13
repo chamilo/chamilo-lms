@@ -26,6 +26,7 @@ $annee_base = date('Y');
 $tool_name = get_lang('LDAP Import');
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => '/admin/courses', 'name' => get_lang('Course management')];
 
 $htmlHeadXtra[] = '<script>
 var buttoncheck = 1;

@@ -526,7 +526,7 @@ class IndexBlocksController extends BaseController
         ];
         $items[] = [
             'class' => 'item-global-agenda',
-            'route' => ['name' => 'CCalendarEventList', 'query' => ['type' => 'global']],
+            'route' => ['name' => 'CCalendarEventList', 'query' => ['type' => 'global', 'admin_origin' => 'platform']],
             'label' => $this->translator->trans('Global agenda'),
         ];
         // Disabled until it is reemplemented to work with Chamilo 2
@@ -539,7 +539,7 @@ class IndexBlocksController extends BaseController
         */
         $items[] = [
             'class' => 'item-pages-list',
-            'route' => ['name' => 'PageList'],
+            'route' => ['name' => 'PageList', 'query' => ['admin_origin' => 'platform']],
             'label' => $this->translator->trans('Pages'),
         ];
         /*
@@ -805,7 +805,7 @@ class IndexBlocksController extends BaseController
         ];
 
         /*$items[] = [
-            'url' => '/main/admin/skill_badge.php',
+            'url' => '/main/skills/skill_badge.php',
             'label' => $this->translator->trans('Badges'),
         ];*/
 

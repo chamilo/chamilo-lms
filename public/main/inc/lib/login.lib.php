@@ -232,16 +232,6 @@ class Login
     }
 
     /**
-     * Gets the secret word.
-     *
-     * @deprecated Use generateResetToken() instead
-     */
-    public static function get_secret_word($add)
-    {
-        return sha1($add);
-    }
-
-    /**
      * Resets a password using a secure, time-limited token.
      *
      * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University

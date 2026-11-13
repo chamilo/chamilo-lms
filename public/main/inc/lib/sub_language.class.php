@@ -50,7 +50,7 @@ class SubLanguageManager
      *
      * @return array All file of lang folder
      *
-     * @deprecated Only used by the gettext migration scripts under tests/scripts.
+     * Used by the gettext migration scripts under tests/scripts.
      */
     public static function get_lang_folder_files_list($path, $only_main_name = false)
     {
@@ -393,7 +393,7 @@ class SubLanguageManager
      * @param int $languageId
      * @return array [childIsoCode, parentIsoCode]
      *
-     * @deprecated Only called by searchTranslations(), which nothing calls.
+     * Called by searchTranslations(), which public/main/admin/sub_language.php uses.
      */
     public static function getIsoCodes($languageId)
     {
@@ -425,7 +425,7 @@ class SubLanguageManager
      *
      * @return array An array of matched translations.
      *
-     * @deprecated No caller left in public/ or src/.
+     * Called by public/main/admin/sub_language.php (search_language_term()).
      */
     public static function searchTranslations($term, $languageId): array
     {

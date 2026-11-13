@@ -210,12 +210,13 @@ final class LearningCalendarPluginCharacterizationTest extends PluginCharacteriz
         $this->assertSame(2, $list[1]['type']);
     }
 
-    public function testEventsOfAnUnknownTypeFallBackToTheFreeColourAndNullEndDateToTheStartDate(): void
+    public function testEventsOfAnUnknownTypeFallBackToTheFreeColour(): void
     {
         $cal = $this->calendar('ev_unknown');
         $this->conn->executeStatement(
             'INSERT INTO learning_calendar_events (title, calendar_id, start_date, end_date, type) VALUES (?, ?, ?, ?, ?)',
-            ['', $cal, '2026-04-01', '0000-00-00', 9]
+            // end_date is NOT NULL and strict MySQL rejects a zero date, so the event gets a real one.
+            ['', $cal, '2026-04-01', '2026-04-01', 9]
         );
 
         $list = $this->plugin->getEvents($cal);

@@ -1358,7 +1358,8 @@ class SkillModel extends Model
         $limit = (int) $limit;
 
         /*  ORDER BY $sidx $sord */
-        $sql = "SELECT *, @rownum:=@rownum+1 rank FROM (
+        // RANK is a reserved word in MySQL 8 (not in MariaDB).
+        $sql = "SELECT *, @rownum:=@rownum+1 `rank` FROM (
                     SELECT u.id as user_id, firstname, lastname, count(username) skills_acquired
                     FROM {$this->table} s INNER JOIN {$this->table_skill_rel_user} su
                     ON (s.id = su.skill_id)

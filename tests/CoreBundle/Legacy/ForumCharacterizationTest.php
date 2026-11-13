@@ -236,7 +236,8 @@ final class ForumCharacterizationTest extends KernelTestCase
             'thread_id' => $threadId,
             'qualify_user_id' => $graderId,
             'c_id' => $courseId,
-            'qualify' => $score,
+            // Quoted: QUALIFY is a reserved word in MySQL 8.4 (not in MariaDB).
+            '`qualify`' => $score,
             'qualify_time' => self::T0,
         ]);
 
@@ -611,7 +612,7 @@ final class ForumCharacterizationTest extends KernelTestCase
         $thread = $this->thread($forum);
         foreach ([[1, 'b', '2020-02-01 00:00:00'], [1, 'a', '2020-01-01 00:00:00'], [2, 'c', '2020-03-01 00:00:00']] as [$cid, , $time]) {
             $this->conn->insert('c_forum_thread_qualify_log', [
-                'c_id' => $cid, 'user_id' => 2, 'thread_id' => $thread, 'qualify' => 1, 'qualify_user_id' => 1, 'qualify_time' => $time,
+                'c_id' => $cid, 'user_id' => 2, 'thread_id' => $thread, '`qualify`' => 1, 'qualify_user_id' => 1, 'qualify_time' => $time,
             ]);
         }
         $this->setContext(1, 1);

@@ -120,8 +120,13 @@ class ColorThemeApiSecurityTest extends AbstractApiTest
 
         $css = $this->themesFilesystem()->read($slug.'/colors.css');
 
-        // The stylesheet holds exactly the :root block for the palette, nothing else.
-        $this->assertSame(ColorThemeArchive::colorCss($palette), $css);
+        // The stylesheet holds exactly the :root block for the palette, nothing else. The line order is not
+        // compared: a MySQL JSON column reorders the keys of the stored variables (MariaDB keeps them).
+        $expectedLines = explode("\n", ColorThemeArchive::colorCss($palette));
+        $actualLines = explode("\n", $css);
+        sort($expectedLines);
+        sort($actualLines);
+        $this->assertSame($expectedLines, $actualLines);
         $this->assertStringNotContainsString('body', $css);
         $this->assertStringNotContainsString('url(', $css);
     }

@@ -8398,7 +8398,9 @@ class Tracking
     }
 
     /**
-     * Return the total time spent in courses (no the total in platform).
+     * Return the total time spent in courses (no the total in platform), in whole hours.
+     *
+     * @param int|null $maxTimeSpent cap of each access in hours; null uses tracking.max_time_spent_per_session_threshold
      *
      * @return int
      * @throws \Doctrine\DBAL\Exception
@@ -8409,7 +8411,9 @@ class Tracking
         string $dateUntil = '',
         ?int $maxTimeSpent = null
     ): int {
-        $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
+        $maxSeconds = null !== $maxTimeSpent
+            ? max(0, $maxTimeSpent) * 3600
+            : \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
         $durationSql = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::sqlForSeconds('login_course_date', 'logout_course_date', $maxSeconds);
         $tableTrackLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $tableUrlRelUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);

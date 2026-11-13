@@ -316,25 +316,26 @@ final class TrackingCharacterizationTest extends AbstractApiTest
     {
         $from = '2001-04-01 00:00:00';
         $until = '2001-04-30 23:59:59';
-        $before = Tracking::getTotalTimeSpentInCourses($from, $until);
-        $beforeCap3 = Tracking::getTotalTimeSpentInCourses($from, $until, 3);
+        $this->assertSame(0, Tracking::getTotalTimeSpentInCourses($from, $until), 'nothing else in the window');
         $beforeAll = Tracking::getTotalTimeSpentInCourses();
 
         $cid = $this->course->getId();
         $uid = $this->alice->getId();
-        // 2h30 -> 2 (TIMESTAMPDIFF HOUR truncates), 59 min -> 0, 10h -> capped to 6.
+        // Each access is capped (the threshold setting, 6h by default), the seconds are summed and only the total is
+        // truncated to hours: 2h30 + 59 min + 6h (10h capped) = 9h29 -> 9.
         $this->insertCourseAccess($uid, $cid, '2001-04-02 08:00:00', '2001-04-02 10:30:00');
         $this->insertCourseAccess($uid, $cid, '2001-04-03 08:00:00', '2001-04-03 08:59:00');
         $this->insertCourseAccess($uid, $cid, '2001-04-04 08:00:00', '2001-04-04 18:00:00');
         // Partly outside the window: ignored.
         $this->insertCourseAccess($uid, $cid, '2001-03-31 22:00:00', '2001-04-01 06:00:00');
 
-        $this->assertSame(8, Tracking::getTotalTimeSpentInCourses($from, $until) - $before);
-        // A lower cap applies to every row (2 stays 2, 10 -> 3): 5 instead of 8.
-        $this->assertSame(5, Tracking::getTotalTimeSpentInCourses($from, $until, 3) - $beforeCap3);
-        // Fixed: without both dates the WHERE clause was empty (invalid SQL). It now spans every access:
-        // the three in-window rows (2+0+6) plus the 8h one only partly in the window (capped to 6).
-        $this->assertSame(8 + 6, Tracking::getTotalTimeSpentInCourses() - $beforeAll);
+        $this->assertSame(9, Tracking::getTotalTimeSpentInCourses($from, $until));
+        // An explicit cap in hours replaces the setting: 2h30 + 59 min + 3h = 6h29 -> 6.
+        $this->assertSame(6, Tracking::getTotalTimeSpentInCourses($from, $until, 3));
+        // Fixed: without both dates the WHERE clause was empty (invalid SQL). It now spans every access: the 9h29
+        // above plus the 8h one only partly in the window (capped to 6h) = 15h29. The total is truncated once, so the
+        // hours already in the table move the difference by at most one.
+        $this->assertContains(Tracking::getTotalTimeSpentInCourses() - $beforeAll, [15, 16]);
         $this->assertSame(
             Tracking::getTotalTimeSpentInCourses(),
             Tracking::getTotalTimeSpentInCourses($from, '')

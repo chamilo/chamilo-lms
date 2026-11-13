@@ -298,6 +298,8 @@ class CourseUserManagerTest extends AbstractApiTest
         $this->assertSame(['Amir', 'Bella'], array_column($data['items'], 'firstname'));
 
         // A session course has independent dates, not those from direct course memberships.
+        // The request rebooted the kernel, so the manager fetched above no longer writes anything.
+        $em = $this->getEntityManager();
         $subscriptions = $em->getRepository(SessionRelCourseRelUser::class)->findBy([
             'course' => $course,
             'session' => $session,
@@ -316,9 +318,10 @@ class CourseUserManagerTest extends AbstractApiTest
 
         $byDate = $this->createClientWithCredentials($token)->request(
             'GET',
-            '/api/course-users/list?cid='.$course->getId().'&sid='.$session->getId().'&sort=subscriptionDate&order=desc',
+            '/api/course-users/list?cid='.$course->getId().'&sid='.$session->getId().'&sort=subscriptionDate&order=asc',
         );
         $this->assertResponseIsSuccessful();
-        $this->assertSame(['Bella', 'Amir'], array_column($byDate->toArray()['items'], 'firstname'));
+        // Ascending: Amir was subscribed after Bella, so only the dates set above can put him first.
+        $this->assertSame(['Amir', 'Bella'], array_column($byDate->toArray()['items'], 'firstname'));
     }
 }

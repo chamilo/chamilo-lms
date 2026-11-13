@@ -206,7 +206,8 @@ final class StudentLearningActivityCollectorTest extends KernelTestCase
         $this->assertSame([$inSession], array_column($sessionItems, 'attemptId'));
         $this->assertSame(90.0, $sessionItems[0]['percentage']);
         $this->assertSame(1, $sessionItems[0]['exerciseId']);
-        $this->assertSame('Mini-test 1', $sessionItems[0]['title']);
+        // The title of the attempt's quiz; which demo quiz gets iid 1 depends on the fixture load order.
+        $this->assertSame((string) $this->conn()->fetchOne('SELECT title FROM c_quiz WHERE iid = 1'), $sessionItems[0]['title']);
         $this->assertSame(90, $sessionItems[0]['durationSeconds']);
     }
 

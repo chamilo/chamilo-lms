@@ -78,13 +78,8 @@
     </div>
 {% endblock %}
 
-{% block javascripts %}
-    <script>
-      window.breadcrumb = [
-        { name: "{{ 'Administration'|trans|e('js') }}", url: "/admin" },
-        { name: "{{ 'System'|trans|e('js') }}", url: "/admin/system" },
-        { name: "{{ 'Resources by type'|trans|e('js') }}" }
-      ];
-    </script>
-    {{ parent() }}
-{% endblock %}
+{% set legacy_breadcrumb = [
+    { name: 'Administration'|trans, url: '/admin' },
+    { name: 'System'|trans, url: '/admin/system' },
+    { name: 'Resources by type'|trans },
+]|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_HEX_AMP')) %}

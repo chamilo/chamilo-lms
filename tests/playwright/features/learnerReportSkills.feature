@@ -113,8 +113,6 @@ Feature: Learner report skills
     And I am on "/reporting/learners/USER_ID" with the resolved user id
     And I wait up to 90 seconds for the element "text=Tree child skill" to appear
     When I click the "a:has-text('Tree child skill')" element
-    And I wait up to 90 seconds for the element "a:has-text('Remove')" to appear
-    And I follow "Remove"
     And I wait up to 90 seconds for the element "text=Skill acquired" to appear
     And I press "Remove"
     And I press "Yes"

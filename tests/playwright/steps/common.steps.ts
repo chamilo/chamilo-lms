@@ -4995,7 +4995,8 @@ When("I exercise temporary branch and room polygon CRUD", async ({ page }) => {
       })
       check(clear.status === 200, `Clear polygon PUT: ${clear.status} ${clear.detail}`)
       const cleared = await request(`/api/rooms/${roomId}`, "GET")
-      check(cleared.status === 200 && cleared.data.roomMap === null, "Cleared polygon remains stored")
+      // API Platform omits null properties from the JSON-LD output, so a cleared polygon is absent, not null.
+      check(cleared.status === 200 && (cleared.data.roomMap ?? null) === null, "Cleared polygon remains stored")
     } catch (error) {
       problems.push(String(error))
     } finally {

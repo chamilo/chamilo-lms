@@ -32,10 +32,9 @@ use const SORT_STRING;
  * check_if_language_is_sub_language / _used / _father, make_(un)available_language,
  * set_platform_language, removeSubLanguage, addSubLanguage, languageExistsById, isParentOfSubLanguage,
  * getAllInformationOfSubLanguage, checkIfLanguageExists), getParentLocale (internationalization.lib.php),
- * get_platform_language_id (Onlyoffice plugin). DEAD (no caller, marked @deprecated in the source):
- * get_parent_language_path, getLanguageFromIsocode and getLanguageFromBrowserPreference (only call
- * each other), getIsoCodes/searchTranslations (only each other), get_lang_folder_files_list
- * (only tests/scripts), the file helpers get_all_language_variable_in_file, add_file_in_language_directory
+ * get_platform_language_id (Onlyoffice plugin), searchTranslations/getIsoCodes (sub_language.php search),
+ * get_lang_folder_files_list (tests/scripts maintenance scripts). DEAD (no caller, marked @deprecated in the
+ * source): the file helpers get_all_language_variable_in_file, add_file_in_language_directory
  * and write_data_in_file.
  *
  * All the operations are admin-only pages (api_protect_admin_script()); the class itself does no role
@@ -300,40 +299,6 @@ final class SubLanguageCharacterizationTest extends KernelTestCase
         Container::getSettingsManager()->updateSetting('language.platform_language', 'en_US');
 
         $this->assertSame($english, SubLanguageManager::get_platform_language_id());
-    }
-
-    // ---------------------------------------------------------------- legacy lookups (dead callers)
-
-    public function testGetParentLanguagePathQueriesAColumnThatNoLongerExists(): void
-    {
-        // PINNED QUIRK (dead, @deprecated): dokeos_folder was dropped from `language`.
-        $this->expectException(Throwable::class);
-
-        SubLanguageManager::get_parent_language_path('sl_nothing');
-    }
-
-    public function testGetLanguageFromIsocodeReturnsTheLatestAvailableLanguage(): void
-    {
-        $old = $this->language('old', null, 1, 'slz');
-        $new = $this->language('new', null, 1, 'slz');
-        $hidden = $this->language('hidden', null, 0, 'slz');
-
-        $this->assertSame($this->row($new)['english_name'], SubLanguageManager::getLanguageFromIsocode('slz'));
-        $this->assertNotSame($this->row($hidden)['english_name'], SubLanguageManager::getLanguageFromIsocode('slz'));
-        $this->assertNotSame($this->row($old)['english_name'], SubLanguageManager::getLanguageFromIsocode('slz'));
-        $this->assertFalse(SubLanguageManager::getLanguageFromIsocode('slnone'));
-    }
-
-    public function testGetLanguageFromBrowserPreferencePicksTheFirstKnownCode(): void
-    {
-        $id = $this->language('known', null, 1, 'slq');
-
-        $this->assertSame(
-            $this->row($id)['english_name'],
-            SubLanguageManager::getLanguageFromBrowserPreference('slnone,slq;q=0.7')
-        );
-        $this->assertFalse(SubLanguageManager::getLanguageFromBrowserPreference('slnone'));
-        $this->assertFalse(SubLanguageManager::getLanguageFromBrowserPreference(''));
     }
 
     // ---------------------------------------------------------------- Doctrine based operations

@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\SurveyHelper;
+use Chamilo\CoreBundle\Service\Survey\SurveyPersonalityManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -48,6 +49,10 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
         'percentage',
         'multiplechoiceother',
         'selectivedisplay',
+        'personality_choice',
+        'personality_agreement',
+        'personality_scale',
+        'personality_order',
     ];
 
     public function __construct(
@@ -57,6 +62,7 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
         private CSurveyRepository $surveyRepository,
         private SettingsManager $settingsManager,
         private SurveyHelper $surveyHelper,
+        private SurveyPersonalityManager $personalityManager,
     ) {}
 
     /**
@@ -280,6 +286,22 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
      */
     private function getChoices(CSurvey $survey): array
     {
+        if (1 === $survey->getSurveyType()) {
+            return [
+                'types' => [
+                    ['value' => 'personality_choice', 'label' => 'Category choice'],
+                    ['value' => 'personality_agreement', 'label' => 'Most / least agreement'],
+                    ['value' => 'personality_scale', 'label' => 'Agreement scale'],
+                    ['value' => 'personality_order', 'label' => 'Preference ranking'],
+                    ['value' => 'pagebreak', 'label' => 'Page break'],
+                ],
+                'display' => [],
+                'parentQuestions' => [],
+                'parentOptions' => [],
+                'personalityCategories' => $this->personalityManager->normalizeCategories($survey),
+            ];
+        }
+
         return [
             'types' => [
                 ['value' => 'yesno', 'label' => 'Yes / No'],
@@ -430,6 +452,10 @@ final readonly class SurveyQuestionProvider implements ProviderInterface
             'percentage' => 'Percentage',
             'multiplechoiceother' => 'Multiple choice with free text',
             'selectivedisplay' => 'Selective display',
+            'personality_choice' => 'Category choice',
+            'personality_agreement' => 'Most / least agreement',
+            'personality_scale' => 'Agreement scale',
+            'personality_order' => 'Preference ranking',
             'personality' => 'Personality',
             default => ucfirst($type),
         };

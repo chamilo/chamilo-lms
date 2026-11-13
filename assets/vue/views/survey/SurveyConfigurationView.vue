@@ -69,7 +69,7 @@
       @submit.prevent="submitForm"
     >
       <div
-        v-if="!isEditMode && templateOptions.length > 0"
+        v-if="!isEditMode && form.surveyType !== 1 && templateOptions.length > 0"
         class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm"
       >
         <div class="mb-5 flex items-center gap-3">
@@ -189,6 +189,19 @@
           <h2 class="text-lg font-semibold text-gray-90">{{ t("Survey behavior") }}</h2>
         </div>
 
+        <BaseSelect
+          v-if="!isEditMode && options.surveyTypes?.length > 1"
+          id="survey_type"
+          v-model="form.surveyType"
+          :label="t('Survey type')"
+          :options="surveyTypeOptions"
+          name="survey_type"
+          class="mb-5 max-w-md"
+        />
+        <p v-if="form.surveyType === 1" class="mb-5 text-sm text-gray-600">
+          {{ t("Personality surveys use preference categories and do not generate grades.") }}
+        </p>
+
         <div class="grid gap-4 md:grid-cols-2">
           <BaseCheckbox
             id="anonymous"
@@ -306,7 +319,7 @@
           />
 
           <div
-            v-if="gradebookCategoryOptions.length > 0"
+            v-if="form.surveyType !== 1 && gradebookCategoryOptions.length > 0"
             class="rounded-xl border border-gray-20 bg-white p-4 md:col-span-2"
           >
             <div class="mb-4 flex items-center gap-3">
@@ -482,6 +495,7 @@ const isGradebookCategoryInvalid = computed(
 )
 
 const visibleResultOptions = computed(() => translateOptions(options.value.visibleResults || []))
+const surveyTypeOptions = computed(() => translateOptions(options.value.surveyTypes || []))
 const languageOptions = computed(() => translateOptions(options.value.languages || []))
 const parentSurveyOptions = computed(() => normalizeOptions(options.value.parentSurveys || []))
 const gradebookCategoryOptions = computed(() => normalizeOptions(options.value.gradebookCategories || []))
@@ -865,6 +879,7 @@ function buildPayload() {
   const payload = {
     ...form.value,
     duration: durationValue.value > 0 ? durationValue.value : null,
+    gradebookEnabled: form.value.surveyType === 1 ? false : form.value.gradebookEnabled,
     availableFrom: toPayloadDate(form.value.availableFrom),
     availableUntil: toPayloadDate(form.value.availableUntil),
   }
@@ -878,7 +893,7 @@ function buildPayload() {
     delete payload.resultsHiddenFromTeacher
   }
 
-  if (!isEditMode.value && Number(selectedTemplateId.value || 0) > 0) {
+  if (!isEditMode.value && form.value.surveyType !== 1 && Number(selectedTemplateId.value || 0) > 0) {
     payload.templateId = Number(selectedTemplateId.value)
   }
 

@@ -13,9 +13,11 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\SurveyHelper;
+use Chamilo\CoreBundle\Service\Survey\SurveyPersonalityManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
+use Chamilo\CourseBundle\Entity\CSurveyPersonalityCategory;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
@@ -49,6 +51,10 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
         'percentage',
         'multiplechoiceother',
         'selectivedisplay',
+        'personality_choice',
+        'personality_agreement',
+        'personality_scale',
+        'personality_order',
     ];
 
     /**
@@ -63,6 +69,10 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
         'percentage',
         'multiplechoiceother',
         'selectivedisplay',
+        'personality_choice',
+        'personality_agreement',
+        'personality_scale',
+        'personality_order',
     ];
 
     /**
@@ -236,6 +246,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
     private function createQuestion(CSurvey $survey, array $payload): CSurveyQuestion
     {
         $this->validateQuestionPayload($payload, false);
+        $this->assertPersonalityQuestion($survey, $payload);
         $type = (string) $payload['type'];
 
         $question = new CSurveyQuestion();
@@ -248,7 +259,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
             ->setMaxValue($this->getMaxValue($type, $payload))
             ->setSort($this->getNextSort($survey))
             ->setSharedQuestionId(0)
-            ->setIsMandatory($this->getRequiredValue($payload))
+            ->setIsMandatory(\in_array($type, SurveyPersonalityManager::QUESTION_TYPES, true) || $this->getRequiredValue($payload))
         ;
         $this->applyParentDependency($survey, $question, $payload);
 
@@ -267,6 +278,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
         $question = $this->getQuestion($survey, $questionId);
         $payload['type'] = $question->getType();
         $this->validateQuestionPayload($payload, true);
+        $this->assertPersonalityQuestion($survey, $payload);
         $type = $question->getType();
 
         $question
@@ -274,7 +286,7 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
             ->setSurveyQuestionComment((string) ($payload['comment'] ?? ''))
             ->setDisplay($this->getDisplayValue($type, (string) ($payload['display'] ?? 'vertical')))
             ->setMaxValue($this->getMaxValue($type, $payload))
-            ->setIsMandatory($this->getRequiredValue($payload))
+            ->setIsMandatory(\in_array($type, SurveyPersonalityManager::QUESTION_TYPES, true) || $this->getRequiredValue($payload))
         ;
         $this->applyParentDependency($survey, $question, $payload);
 
@@ -360,6 +372,41 @@ final readonly class SurveyQuestionProcessor implements ProcessorInterface
         $targetQuestion->setSort($currentSort);
         $this->entityManager->persist($currentQuestion);
         $this->entityManager->persist($targetQuestion);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function assertPersonalityQuestion(CSurvey $survey, array $payload): void
+    {
+        $type = (string) ($payload['type'] ?? '');
+        $personalityType = \in_array($type, SurveyPersonalityManager::QUESTION_TYPES, true);
+        if (1 !== $survey->getSurveyType()) {
+            if ($personalityType) {
+                throw new BadRequestHttpException('Personality questions require a personality survey.');
+            }
+
+            return;
+        }
+        if (!$personalityType && 'pagebreak' !== $type) {
+            throw new BadRequestHttpException('Only personality questions and page breaks can be added to this survey.');
+        }
+        if (!$personalityType) {
+            return;
+        }
+        $validCategories = [];
+        foreach ($this->entityManager->getRepository(CSurveyPersonalityCategory::class)->findBy(['survey' => $survey]) as $category) {
+            $validCategories[(int) $category->getIid()] = true;
+        }
+        if (\count($validCategories) < 2) {
+            throw new BadRequestHttpException('Please create at least two personality categories first.');
+        }
+        $options = $this->normalizePayloadOptions((array) ($payload['options'] ?? []), $type);
+        foreach ($options as $option) {
+            if (!isset($validCategories[(int) ($option['value'] ?? 0)])) {
+                throw new BadRequestHttpException('Every personality option must belong to a category in this survey.');
+            }
+        }
     }
 
     /**

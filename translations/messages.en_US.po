@@ -43693,3 +43693,66 @@ msgstr "success"
 
 msgid "This action is already configured."
 msgstr "This action is already configured."
+
+msgid "Personality survey"
+msgstr "Personality survey"
+
+msgid "Personality surveys use preference categories and do not generate grades."
+msgstr "Personality surveys use preference categories and do not generate grades."
+
+msgid "Personality categories"
+msgstr "Personality categories"
+
+msgid "Define preference categories before adding personality questions. Each answer option must belong to a category."
+msgstr "Define preference categories before adding personality questions. Each answer option must belong to a category."
+
+msgid "Personality category"
+msgstr "Personality category"
+
+msgid "Select a personality category for every answer option. The survey will display a preference profile, not a grade."
+msgstr "Select a personality category for every answer option. The survey will display a preference profile, not a grade."
+
+msgid "Every personality option must have a valid category."
+msgstr "Every personality option must have a valid category."
+
+msgid "Could not add category"
+msgstr "Could not add category"
+
+msgid "Category choice"
+msgstr "Category choice"
+
+msgid "Most / least agreement"
+msgstr "Most / least agreement"
+
+msgid "Agreement scale"
+msgstr "Agreement scale"
+
+msgid "Preference ranking"
+msgstr "Preference ranking"
+
+msgid "Survey type"
+msgstr "Survey type"
+
+msgid "Preference scores are descriptive, not grades or a clinical assessment."
+msgstr "Preference scores are descriptive, not grades or a clinical assessment."
+
+msgid "Preference score"
+msgstr "Preference score"
+
+msgid "Your personality profile"
+msgstr "Your personality profile"
+
+msgid "Personality profile — all learners"
+msgstr "Personality profile — all learners"
+
+msgid "Most like me"
+msgstr "Most like me"
+
+msgid "Least like me"
+msgstr "Least like me"
+
+msgid "Use the arrows to rank these options from most to least preferred."
+msgstr "Use the arrows to rank these options from most to least preferred."
+
+msgid "Select rating"
+msgstr "Select rating"

@@ -43622,3 +43622,66 @@ msgstr ""
 
 msgid "This action is already configured."
 msgstr ""
+
+msgid "Personality survey"
+msgstr ""
+
+msgid "Personality surveys use preference categories and do not generate grades."
+msgstr ""
+
+msgid "Personality categories"
+msgstr ""
+
+msgid "Define preference categories before adding personality questions. Each answer option must belong to a category."
+msgstr ""
+
+msgid "Personality category"
+msgstr ""
+
+msgid "Select a personality category for every answer option. The survey will display a preference profile, not a grade."
+msgstr ""
+
+msgid "Every personality option must have a valid category."
+msgstr ""
+
+msgid "Could not add category"
+msgstr ""
+
+msgid "Category choice"
+msgstr ""
+
+msgid "Most / least agreement"
+msgstr ""
+
+msgid "Agreement scale"
+msgstr ""
+
+msgid "Preference ranking"
+msgstr ""
+
+msgid "Survey type"
+msgstr ""
+
+msgid "Preference scores are descriptive, not grades or a clinical assessment."
+msgstr ""
+
+msgid "Preference score"
+msgstr ""
+
+msgid "Your personality profile"
+msgstr ""
+
+msgid "Personality profile — all learners"
+msgstr ""
+
+msgid "Most like me"
+msgstr ""
+
+msgid "Least like me"
+msgstr ""
+
+msgid "Use the arrows to rank these options from most to least preferred."
+msgstr ""
+
+msgid "Select rating"
+msgstr ""

@@ -14,8 +14,10 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\SurveyHelper;
+use Chamilo\CoreBundle\Service\Survey\SurveyPersonalityManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Entity\CSurveyPersonalityCategory;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
@@ -314,7 +316,16 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
 
         $this->surveyRepository->create($survey);
         $this->entityManager->flush();
-        $this->copyQuestions($source, $survey);
+        $categoryMap = [];
+        if (1 === $source->getSurveyType()) {
+            foreach ($this->entityManager->getRepository(CSurveyPersonalityCategory::class)->findBy(['survey' => $source]) as $sourceCategory) {
+                $newCategory = new CSurveyPersonalityCategory($survey, $sourceCategory->getLabel(), $sourceCategory->getSort());
+                $this->entityManager->persist($newCategory);
+                $this->entityManager->flush();
+                $categoryMap[(int) $sourceCategory->getIid()] = (int) $newCategory->getIid();
+            }
+        }
+        $this->copyQuestions($source, $survey, $categoryMap);
 
         return $survey;
     }
@@ -362,7 +373,10 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
         ;
     }
 
-    private function copyQuestions(CSurvey $sourceSurvey, CSurvey $targetSurvey): void
+    /**
+     * @param array<int, int> $categoryMap
+     */
+    private function copyQuestions(CSurvey $sourceSurvey, CSurvey $targetSurvey, array $categoryMap): void
     {
         $questionMap = [];
         $optionMap = [];
@@ -402,7 +416,9 @@ final readonly class SurveyCopyProcessor implements ProcessorInterface
                     ->setQuestion($question)
                     ->setOptionText($sourceOption->getOptionText())
                     ->setSort($sourceOption->getSort())
-                    ->setValue($sourceOption->getValue())
+                    ->setValue(\in_array($sourceQuestion->getType(), SurveyPersonalityManager::QUESTION_TYPES, true)
+                        ? ($categoryMap[(int) $sourceOption->getValue()] ?? 0)
+                        : $sourceOption->getValue())
                 ;
                 $this->entityManager->persist($option);
                 $this->entityManager->flush();

@@ -9,8 +9,8 @@ use ChamiloSession as Session;
  * functions in the init files also but I have moved them over
  * to one file -- Patrick Cool <patrick.cool@UGent.be>, Ghent University.
  *
- * @deprecated The dropbox tool is served by the Vue views (assets/vue/views/dropbox) and the API; this legacy
- *             code still uses removed columns and the undefined SYS_COURSE_PATH and is kept only for reference.
+ * The dropbox tool is served by the Vue views (assets/vue/views/dropbox) and the API; this legacy code still
+ * uses removed columns and the undefined SYS_COURSE_PATH, but it is still included by dropbox_init.inc.php.
  *
  * @author Julio Montoya adding c_id support
  */
@@ -1366,7 +1366,7 @@ function zip_download($fileList)
  *
  * @version march 2006
  *
- * @deprecated no caller.
+ * Passed by name as the PclZip pre-add callback of zip_download().
  */
 function my_pre_add_callback($p_event, &$p_header)
 {

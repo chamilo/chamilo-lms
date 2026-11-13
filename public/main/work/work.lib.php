@@ -845,9 +845,8 @@ function deleteDirWork($id, $courseId = 0)
  *
  * @return string Path (or -1 on error)
  *
- * @deprecated Works no longer have id/url columns, so the query always throws. Its only caller is
- *   public/main/plagiarism/compilatio/upload.php, itself tied to the removed file-url model. Use the
- *   resource node file path instead.
+ * Works no longer have id/url columns, so the query always throws. Its only caller is
+ * public/main/plagiarism/compilatio/upload.php; the resource node file path is the replacement.
  */
 function get_work_path($id)
 {

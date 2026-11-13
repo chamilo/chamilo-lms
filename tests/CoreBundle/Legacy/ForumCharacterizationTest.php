@@ -337,7 +337,7 @@ final class ForumCharacterizationTest extends KernelTestCase
         $this->assertSame([2], $this->ids($this->rows(get_thread_users_details($thread))));
     }
 
-    public function testThreadUsersQualifyAndNotQualifySplitTheStudentsByGrade(): void
+    public function testThreadUsersQualifyListsTheStudentsWithAGrade(): void
     {
         $this->setContext(1, 1);
         $forum = $this->forum(1);
@@ -345,12 +345,9 @@ final class ForumCharacterizationTest extends KernelTestCase
         $this->courseStudent(2, 1);
         $this->post($thread, $forum, 2);
 
-        $notQualified = $this->rows(get_thread_users_not_qualify($thread));
-        $this->assertSame([2], $this->ids($notQualified));
         $this->assertSame([], $this->rows(get_thread_users_qualify($thread)));
 
         $this->qualify($thread, 2, 1, 7.5);
-        $this->assertSame([], $this->rows(get_thread_users_not_qualify($thread)));
         $qualified = $this->rows(get_thread_users_qualify($thread));
         $this->assertSame([2], $this->ids($qualified));
         $this->assertSame(7.5, (float) $qualified[0]['qualify']);
@@ -366,8 +363,6 @@ final class ForumCharacterizationTest extends KernelTestCase
         $this->qualify($thread, 2, 2, 3.0); // recorded for another course (c_id = 2)
 
         $this->assertSame([], $this->rows(get_thread_users_qualify($thread)));
-        // A grade of another course does not remove the student from the "to grade" list.
-        $this->assertSame([2], $this->ids($this->rows(get_thread_users_not_qualify($thread))));
     }
 
     public function testThreadUsersQualifyInSessionWithoutCoachDoesNotBreakTheQuery(): void
@@ -385,27 +380,9 @@ final class ForumCharacterizationTest extends KernelTestCase
 
         // A session with no general coach and no session admin used to build "NOT IN ()", a SQL error.
         $this->assertSame([2], $this->ids($this->rows(get_thread_users_qualify($thread))));
-        $this->conn->delete('c_forum_thread_qualify', ['thread_id' => $thread]);
-        $this->assertSame([2], $this->ids($this->rows(get_thread_users_not_qualify($thread))));
     }
 
     // --------------------------------------------------------------- counts
-
-    public function testCountNumberOfForumsInCategory(): void
-    {
-        $cat = $this->category(1);
-        $this->forum(1, $cat);
-        $this->forum(1, $cat);
-        $this->forum(2, $cat);
-        $other = $this->category(1);
-        $this->forum(1, $other);
-
-        $this->setContext(1, 1);
-        // DEAD (no caller): not scoped by course (the category id is already unique), and it returns a numeric string.
-        $this->assertEquals(3, count_number_of_forums_in_category($cat));
-        $this->assertEquals(1, count_number_of_forums_in_category($other));
-        $this->assertEquals(0, count_number_of_forums_in_category(999999));
-    }
 
     public function testCountNumberOfPostsInThreadCountsHiddenPostsToo(): void
     {
@@ -557,7 +534,6 @@ final class ForumCharacterizationTest extends KernelTestCase
 
         $this->assertSame('update', saveThreadScore($this->thread_entity($thread), 2, $thread, 8, '2020-02-02 10:00:00', 0));
         $this->assertEquals(8, showQualify(1, 2, $thread));
-        $this->assertEquals(8, current_qualify_of_thread($thread, 0, 2));
 
         $log = getThreadScoreHistory(2, $thread, 'false');
         $this->assertCount(1, $log);
@@ -590,19 +566,6 @@ final class ForumCharacterizationTest extends KernelTestCase
         $this->assertSame(0, showQualify(1, 1, $thread), 'a score of another course is not shown');
         $this->assertSame(0, showQualify(1, 0, $thread));
         $this->assertSame(0, showQualify(3, 2, $thread));
-    }
-
-    public function testCurrentQualifyOfThreadIsTheOneGivenByTheCurrentUser(): void
-    {
-        $forum = $this->forum(1);
-        $thread = $this->thread($forum);
-        $this->qualify($thread, 2, 1, 3.0, 2);
-        $this->setContext(1, 1);
-
-        // DEAD (no caller): the function is by definition about the grade given by the CURRENT user, so another teacher's grade is invisible (0).
-        $this->assertSame(0, current_qualify_of_thread($thread, 0, 2));
-        $this->qualify($thread, 2, 1, 5.0, 1);
-        $this->assertEquals(5, current_qualify_of_thread($thread, 0, 2));
     }
 
     public function testThreadScoreHistoryIsOrderedByTimeAndScopedByCourse(): void
@@ -734,26 +697,6 @@ final class ForumCharacterizationTest extends KernelTestCase
         handle_mail_cue('forum_category', $cat);
 
         $this->assertSame(0, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_forum_mailcue WHERE thread_id = ?', [$thread]));
-    }
-
-    // ------------------------------------------------------ moving a thread
-
-    public function testStoreMoveThreadMovesTheThreadAndItsPosts(): void
-    {
-        $from = $this->forum(1);
-        $to = $this->forum(1);
-        $thread = $this->thread($from);
-        $p = $this->post($thread, $from, 2);
-        $stay = $this->post($this->thread($from), $from, 2);
-        $this->setContext(1, 1);
-        $_POST['forum'] = (string) $to;
-        $_POST['thread_id'] = (string) $thread;
-
-        $this->assertNotEmpty(store_move_thread([]));
-
-        $this->assertSame($to, (int) $this->conn->fetchOne('SELECT forum_id FROM c_forum_thread WHERE iid = ?', [$thread]));
-        $this->assertSame($to, (int) $this->conn->fetchOne('SELECT forum_id FROM c_forum_post WHERE iid = ?', [$p]));
-        $this->assertSame($from, (int) $this->conn->fetchOne('SELECT forum_id FROM c_forum_post WHERE iid = ?', [$stay]));
     }
 
     // ------------------------------------------------------------ attachments

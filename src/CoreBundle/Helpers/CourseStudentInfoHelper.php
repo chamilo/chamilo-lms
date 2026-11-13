@@ -1083,59 +1083,6 @@ final class CourseStudentInfoHelper
     }
 
     /**
-     * Checks if there exists any resource_link entry newer than $since.
-     *
-     * @deprecated No caller (only named in a debug list): computeHasNewContent() replaced it
-     */
-    private function existsNewResourceLinkSince(int $courseId, int $userId, int $sessionId, DateTimeImmutable $since): bool
-    {
-        $sinceStr = $since->format('Y-m-d H:i:s');
-        $nowSql = 'NOW()';
-
-        $sessionSql = ($sessionId > 0)
-            ? ' AND (rl.session_id IS NULL OR rl.session_id = 0 OR rl.session_id = :sid)'
-            : ' AND (rl.session_id IS NULL OR rl.session_id = 0)';
-
-        $sql = 'SELECT 1
-        FROM '.self::RESOURCE_LINK_TABLE.' rl
-        INNER JOIN resource_node rn ON rn.id = rl.resource_node_id
-        WHERE rl.c_id = :cid
-          AND rl.deleted_at IS NULL
-          AND rl.visibility = 2
-          AND (rl.start_visibility_at IS NULL OR rl.start_visibility_at <= '.$nowSql.')
-          AND (rl.end_visibility_at IS NULL OR rl.end_visibility_at > '.$nowSql.')
-          AND (
-                COALESCE(rl.updated_at, rl.created_at) > :since
-             OR COALESCE(rn.updated_at, rn.created_at) > :since
-          )
-          AND (rl.user_id IS NULL OR rl.user_id = 0 OR rl.user_id = :uid)
-          AND (rl.group_id IS NULL OR rl.group_id = 0)
-          AND (rl.usergroup_id IS NULL OR rl.usergroup_id = 0)
-          '.$sessionSql.'
-        LIMIT 1';
-
-        try {
-            $row = $this->connection->fetchOne($sql, [
-                'cid' => $courseId,
-                'uid' => $userId,
-                'sid' => $sessionId,
-                'since' => $sinceStr,
-            ]);
-
-            return false !== $row && null !== $row;
-        } catch (Throwable $e) {
-            $this->log('existsNewResourceLinkSince: query failed (returning false)', [
-                'course_id' => $courseId,
-                'session_id' => $sessionId,
-                'since' => $sinceStr,
-                'exception' => $e->getMessage(),
-            ]);
-
-            return false;
-        }
-    }
-
-    /**
      * Reads the last course access date for a user.
      *
      * Strategy:
@@ -1452,7 +1399,6 @@ final class CourseStudentInfoHelper
     {
         $needles = [
             'computeHasNewContent',
-            'existsNewResourceLinkSince',
             'getLastCourseAccessDateTime',
             'track_e_lastaccess',
             'track_e_course_access',

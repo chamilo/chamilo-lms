@@ -58,6 +58,11 @@ if ('set_finished' === $action) {
         exit;
     }
 
+    if (!H5pImportPlugin::isValidScore((int) $score, (int) $maxScore)) {
+        H5PCore::ajaxError();
+        exit;
+    }
+
     $resultsRepo = $em->getRepository(H5pImportResults::class);
     $launchId = Session::read($launchSessionKey);
 

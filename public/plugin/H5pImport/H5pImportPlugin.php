@@ -108,6 +108,14 @@ class H5pImportPlugin extends Plugin
     }
 
     /**
+     * The browser computes the score, so the only thing to hold it to is its own maximum.
+     */
+    public static function isValidScore(int $score, int $maxScore): bool
+    {
+        return $score >= 0 && $score <= $maxScore;
+    }
+
+    /**
      * Create only the plugin schema.
      *
      * Course tool propagation is handled by the Chamilo 2 course-plugin flow.

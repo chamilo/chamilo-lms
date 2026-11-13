@@ -73,7 +73,8 @@ Feature: Skills
     And I am on "main/skills/skill_list.php"
     And wait for the page to be loaded
     Then I should see "skilldis"
-    Then I am on "/main/skills/skill_list.php?id=4&action=disable"
+    When I remember the id of the skill "skilldis"
+    Then I am on "/main/skills/skill_list.php?id=SKILL_ID&action=disable" with the remembered skill id
     And wait for the page to be loaded
     Then I should not see an error
 
@@ -88,7 +89,8 @@ Feature: Skills
     And I am on "main/skills/skill_list.php"
     And wait for the page to be loaded
     Then I should see "skilldis"
-    Then I am on "/main/skills/skill_list.php?id=4&action=enable"
+    When I remember the id of the skill "skilldis"
+    Then I am on "/main/skills/skill_list.php?id=SKILL_ID&action=enable" with the remembered skill id
     And wait for the page to be loaded
     Then I should not see an error
 
@@ -154,8 +156,8 @@ Feature: Skills
     And I should see the "[data-skill-interaction-layer] [role='button'][aria-label='skill1 Edited']" element
     When I click the "[data-skill-interaction-layer] [role='button'][aria-label='skill1 Edited']" element
     Then I should see the "[data-testid='skill-wheel-canvas'][data-current-skill-id]" element
-    And I should see the "[data-skill-interaction-layer] [role='button'][aria-label$='/ skill11']" element
-    When I click the "[data-skill-interaction-layer] [role='button'][aria-label$='/ skill11']" element
+    And I should see the "[data-skill-interaction-layer] [role='button'][aria-label='skill1 Edited / skill11']" element
+    When I activate the skills wheel node "skill1 Edited / skill11"
     Then I should see the "[data-testid='skill-wheel-canvas'][data-selected-skill-id]" element
     And I should see the "[data-testid='skill-wheel-inspector']" element
     And I should see the "a[href*='skill_edit.php'][href*='origin=skill-wheel']" element
@@ -176,9 +178,9 @@ Feature: Skills
 
   Scenario: Assign skill11 to user 1
     Given I am a platform administrator
-    And I am on "/skill/assign/1"
+    And I remember the id of the skill "skill11"
+    And I am on "/skill/assign/1?skillId=SKILL_ID" with the remembered skill id
     And I wait for the page to be loaded
-    When I choose "skill11" from the PrimeVue select "skillId"
     Then I fill in the following:
       | argumentation | argumentation |
     And I press "Save"
@@ -188,7 +190,8 @@ Feature: Skills
 
   Scenario: Remove manually assigned skill11 from user 1
     Given I am a platform administrator
-    And I am on "/skill/assign/1?skillId=3"
+    And I remember the id of the skill "skill11"
+    And I am on "/skill/assign/1?skillId=SKILL_ID" with the remembered skill id
     And I wait for the page to be loaded
     Then I should see "Skill acquired"
     And I should see "Remove"
@@ -200,7 +203,8 @@ Feature: Skills
 
   Scenario: Reassign removed skill11 to user 1
     Given I am a platform administrator
-    And I am on "/skill/assign/1?skillId=3"
+    And I remember the id of the skill "skill11"
+    And I am on "/skill/assign/1?skillId=SKILL_ID" with the remembered skill id
     And I wait for the page to be loaded
     Then the field "argumentation" should have value "argumentation"
     When I press "Save"
@@ -210,7 +214,8 @@ Feature: Skills
 
   Scenario: View assigned skill skill11 to user 1
     Given I am a platform administrator
-    And I am on "/badge/3/user/1"
+    And I remember the id of the skill "skill11"
+    And I am on "/badge/SKILL_ID/user/1" with the remembered skill id
     And I wait for the page to be loaded
     Then I should see "Skill acquired"
     And I should see "John Doe"
@@ -219,7 +224,8 @@ Feature: Skills
   # learner report it was opened from, instead of sending the user to the assignment page.
   Scenario: Remove skill11 from user 1 on the issued badge page
     Given I am a platform administrator
-    And I am on "/main/skills/issued_all.php?skill=3&user=1&origin=%2Freporting%2Flearners%2F1"
+    And I remember the id of the skill "skill11"
+    And I am on "/main/skills/issued_all.php?skill=SKILL_ID&user=1&origin=%2Freporting%2Flearners%2F1" with the remembered skill id
     And I wait for the page to be loaded
     When I press "Remove"
     And I press "Yes"

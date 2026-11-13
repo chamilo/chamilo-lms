@@ -43690,3 +43690,6 @@ msgstr "running"
 
 msgid "success"
 msgstr "success"
+
+msgid "This action is already configured."
+msgstr "This action is already configured."

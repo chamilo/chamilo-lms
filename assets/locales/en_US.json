@@ -4775,5 +4775,6 @@
     "pending": "pending",
     "running": "running",
     "success": "success",
-    "failed": "failed"
+    "failed": "failed",
+    "This action is already configured.": "This action is already configured."
 }

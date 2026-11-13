@@ -90,6 +90,14 @@
           @click="addAction"
         />
       </div>
+      <Message
+        v-if="duplicateSelection"
+        severity="warn"
+        :closable="false"
+        class="lg:col-span-2"
+      >
+        {{ t("This action is already configured.") }}
+      </Message>
     </div>
 
     <div class="mt-5">
@@ -181,6 +189,18 @@ const actionOptions = computed(() => {
     .map((name) => ({ value: name, label: t(types[name]) }))
 })
 const isResourceAction = computed(() => ["publish_resources", "hide_resources"].includes(actionType.value))
+const duplicateSelection = computed(() => {
+  const existing = configuration.actions.filter(
+    (action) => action.eventType === eventType.value && action.actionType === actionType.value,
+  )
+  if (actionType.value === "course_visibility") {
+    return settingValue.value !== null && existing.length > 0
+  }
+  if (isResourceAction.value) {
+    return resourceIds.value.some((id) => existing.some((action) => Number(action.targetId) === Number(id)))
+  }
+  return Number(targetId.value) > 0 && existing.some((action) => Number(action.targetId) === Number(targetId.value))
+})
 const resourceOptions = computed(() => configuration.resources
   .filter((resource) => eventType.value === "start" ? resource.visibility !== 2 : resource.visibility === 2)
   .map((resource) => ({ id: resource.id, label: `${resource.title} (${resource.type})` })))
@@ -194,7 +214,7 @@ const visibilityOptions = computed(() => [
   ...(configuration.canUseHiddenVisibility ? [{ label: t("Hidden"), value: 4 }] : []),
 ])
 const canAddAction = computed(() => {
-  if (!actionType.value || !eventType.value) return false
+  if (!actionType.value || !eventType.value || duplicateSelection.value) return false
   if (isResourceAction.value) return resourceIds.value.length > 0
   if (actionType.value === "course_visibility") return settingValue.value !== null
   return Number(targetId.value) > 0
@@ -232,7 +252,7 @@ async function load() {
   try {
     Object.assign(configuration, await courseAutomationService.getConfiguration(context.value))
   } catch (e) {
-    error.value = e?.response?.data?.detail || e?.message || t("Unable to load automation")
+    error.value = e?.response?.data?.detail || e?.response?.data?.error || e?.message || t("Unable to load automation")
   } finally {
     busy.value = false
   }
@@ -246,7 +266,7 @@ async function run(operation) {
     if (response) Object.assign(configuration, response)
     notice.value = response?.message || t("Updated")
   } catch (e) {
-    error.value = e?.response?.data?.detail || e?.message || t("Automation action failed")
+    error.value = e?.response?.data?.detail || e?.response?.data?.error || e?.message || t("Automation action failed")
   } finally {
     busy.value = false
   }

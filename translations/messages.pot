@@ -43619,3 +43619,6 @@ msgstr ""
 
 msgid "success"
 msgstr ""
+
+msgid "This action is already configured."
+msgstr ""

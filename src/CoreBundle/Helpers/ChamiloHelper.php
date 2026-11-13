@@ -965,7 +965,19 @@ class ChamiloHelper
             // Convert "document/..." (package rel) to destination rel "/..."
             $dstRel = '/'.ltrim(substr($rel, \strlen('document/')), '/'); // e.g. "/Videos/img.png"
             $depTitle = basename($dstRel);
-            $depAbs = rtrim($srcRoot, '/').'/'.$rel;
+
+            // Security: $rel is derived from the (untrusted) HTML of the backup and may carry
+            // traversal; confine the resolved source file to $srcRoot so a crafted reference
+            // cannot read a file outside the extracted backup and publish it as a document.
+            $srcRootReal = realpath($srcRoot);
+            $depAbs = realpath(rtrim($srcRoot, '/').'/'.$rel);
+            if (false === $srcRootReal || false === $depAbs
+                || !str_starts_with($depAbs.'/', rtrim($srcRootReal, '/').'/')
+            ) {
+                $DBG('helper.dep.unsafe', ['rel' => $rel]);
+
+                continue;
+            }
 
             // Destination parent folder (no "/document" prefix in destination)
             $parentRelPath = rtrim(\dirname($dstRel), '/');

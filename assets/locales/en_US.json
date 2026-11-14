@@ -4799,5 +4799,7 @@
     "Most like me": "Most like me",
     "Least like me": "Least like me",
     "Use the arrows to rank these options from most to least preferred.": "Use the arrows to rank these options from most to least preferred.",
-    "Select rating": "Select rating"
+    "Select rating": "Select rating",
+    "Download configuration for debugging": "Download configuration for debugging",
+    "The download excludes confidential values. Review the file before sharing it.": "The download excludes confidential values. Review the file before sharing it."
 }

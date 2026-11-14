@@ -1042,6 +1042,30 @@ class Plugin
         return $cTool;
     }
 
+    /**
+     * Export policy for stored plugin configuration fields.
+     * Only public boolean fields and explicitly public values are exported.
+     * Unclassified values remain confidential by default.
+     *
+     * @return array<string, bool> True means confidential.
+     */
+    public function getConfigurationExportPolicy(): array
+    {
+        $policy = [];
+
+        foreach ($this->fields as $name => $definition) {
+            $type = is_array($definition) ? ($definition['type'] ?? '') : $definition;
+            if (is_array($definition) && array_key_exists('confidential', $definition)) {
+                $policy[$name] = true === $definition['confidential'];
+                continue;
+            }
+
+            $policy[$name] = !in_array($type, ['boolean', 'checkbox'], true);
+        }
+
+        return $policy;
+    }
+
     public function getFieldNames(): array
     {
         return array_keys($this->fields);

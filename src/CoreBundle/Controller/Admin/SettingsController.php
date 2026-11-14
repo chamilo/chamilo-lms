@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SettingsValueTemplate;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Search\Xapian\SearchIndexPathResolver;
+use Chamilo\CoreBundle\Service\ConfigurationDumpExporter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Collator;
@@ -26,6 +27,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\Json;
@@ -34,6 +36,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
 use const DIRECTORY_SEPARATOR;
+use const JSON_PRETTY_PRINT;
+use const JSON_THROW_ON_ERROR;
+use const JSON_UNESCAPED_SLASHES;
+use const JSON_UNESCAPED_UNICODE;
 use const SORT_REGULAR;
 
 #[Route('/admin')]
@@ -53,6 +59,48 @@ class SettingsController extends BaseController
     public function index(): Response
     {
         return $this->redirectToRoute('chamilo_platform_settings', ['namespace' => 'platform']);
+    }
+
+    /**
+     * Export a sanitized configuration report for the current access URL.
+     */
+    #[IsGranted('ROLE_ADMIN')]
+    #[Route('/settings/export', name: 'admin_configuration_dump', methods: ['GET'])]
+    public function exportConfigurationDump(
+        Request $request,
+        AccessUrlHelper $accessUrlHelper,
+        ConfigurationDumpExporter $exporter,
+    ): Response {
+        $url = $accessUrlHelper->getCurrent();
+        if (!$url instanceof AccessUrl) {
+            return new Response('Access URL could not be resolved.', Response::HTTP_SERVICE_UNAVAILABLE);
+        }
+
+        // The helper falls back to the main URL on an unknown host. For an
+        // administrative export, such a fallback must never reveal main-URL data.
+        if ($accessUrlHelper->isMultiple()
+            && rtrim((string) $url->getUrl(), '/').'/' !== rtrim($request->getSchemeAndHttpHost(), '/').'/'
+        ) {
+            return new Response('Access URL does not match the request host.', Response::HTTP_FORBIDDEN);
+        }
+
+        $json = json_encode(
+            $exporter->export($url),
+            JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+        );
+
+        $response = new Response($json);
+        $response->headers->set('Content-Type', 'application/json; charset=UTF-8');
+        $response->headers->set('Content-Disposition', $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'chamilo-configuration-dump.json',
+        ));
+        $response->headers->set('Cache-Control', 'private, no-store, no-cache, must-revalidate');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('X-Content-Type-Options', 'nosniff');
+        $response->headers->set('Referrer-Policy', 'no-referrer');
+
+        return $response;
     }
 
     /**

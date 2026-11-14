@@ -12,6 +12,6 @@ Feature: Track ungraded Hot Potatoes attempts
     When I import a disposable Hot Potatoes archive
     Then the disposable Hot Potatoes archive should be listed
     When I complete and inspect the disposable Hot Potatoes attempt
-    Then I should see "Ungraded activity attempts (latest 100)"
+    Then I should see "Activity attempts and teacher-assessed scores (latest 100)"
     When I remove the disposable Hot Potatoes archive
     Then the disposable Hot Potatoes archive should no longer be listed

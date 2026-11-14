@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
@@ -62,6 +63,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
     private const LP_STATUS_PASSED = 'passed';
     private const FEEDBACK_TYPE_DIRECT = 1;
     private const AUDIO_OPERATION = 'post_exercise_runtime_correction_audio';
+    private const QUESTION_SCORE_OPERATION = 'post_exercise_runtime_question_score';
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
@@ -71,6 +73,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         private Security $security,
         private GradebookLinkManager $gradebookLinkManager,
         private SettingsManager $settingsManager,
+        private IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -85,6 +88,10 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
 
         if (!$data instanceof ExerciseRuntimeCorrection) {
             throw new BadRequestHttpException('Invalid exercise runtime correction payload.');
+        }
+
+        if (self::QUESTION_SCORE_OPERATION === $operation->getName()) {
+            return $this->processQuestionScore($data, $uriVariables);
         }
 
         [$course, $session, $exerciseId, $attemptId, $questionId, $quiz, $attempt, $question] = $this->resolveCorrectionTarget(
@@ -146,6 +153,73 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         $response->success = true;
         $response->notificationSent = $notificationSent;
         $response->message = $final ? 'Correction saved' : 'Draft saved';
+        $response->score = (float) $attempt->getScore();
+        $response->maxScore = (float) $attempt->getMaxScore();
+        $response->questionsToCheck = $this->parseQuestionIds((string) $attempt->getQuestionsToCheck());
+
+        return $response;
+    }
+
+    /**
+     * Saves only the score of one answer, for the grade-by-question screen. The teacher comment is kept,
+     * the question stays in questions_to_check (so the attempt is still pending review), the learning
+     * path item is left alone and no notification is sent: the full review releases the result later.
+     * The draft history row (final = false) records who scored the answer without marking it reviewed.
+     *
+     * @param array<string, mixed> $uriVariables
+     */
+    private function processQuestionScore(ExerciseRuntimeCorrection $data, array $uriVariables): ExerciseRuntimeCorrection
+    {
+        // Same guard as the exercise report this screen is opened from.
+        if (!$this->isAllowedToEditHelper->check(coach: true)) {
+            throw new AccessDeniedHttpException('You are not allowed to grade this exercise.');
+        }
+
+        [, $session, $exerciseId, $attemptId, $questionId, $quiz, $attempt, $question] = $this->resolveCorrectionTarget(
+            (int) ($uriVariables['exerciseId'] ?? 0),
+            (int) ($uriVariables['attemptId'] ?? 0),
+            (int) ($data->questionId ?? 0),
+        );
+
+        $maxScore = (float) $question->getPonderation();
+        $marks = (float) $data->marks;
+        if (!is_finite($marks) || $marks < 0.0 || $marks > $maxScore) {
+            throw new BadRequestHttpException('The score must be between zero and the question maximum score.');
+        }
+
+        $rows = $this->getAttemptRows($attemptId, $questionId);
+        if ([] === $rows) {
+            $rows[] = $this->createEmptyAttemptRow($attempt, $questionId);
+        }
+
+        $previousMarks = $this->getCurrentQuestionMarks($rows);
+        $teacherComment = (string) $rows[0]->getTeacherComment();
+
+        foreach ($rows as $row) {
+            $row
+                ->setMarks($marks)
+                ->setTms(new DateTime())
+            ;
+        }
+
+        if ($this->hasScoreChanged($previousMarks, $marks)) {
+            $this->recordQuestionScoreUpdateEvent($attempt, $questionId, $previousMarks, $marks);
+        }
+
+        $this->recordCorrectionHistory($attempt, $questionId, $marks, $teacherComment, (int) ($session?->getId() ?? 0), false);
+        $this->entityManager->flush();
+
+        $this->recalculateAttemptScore($attempt, $quiz);
+        $this->entityManager->flush();
+
+        $response = new ExerciseRuntimeCorrection();
+        $response->exerciseId = $exerciseId;
+        $response->attemptId = $attemptId;
+        $response->questionId = $questionId;
+        $response->marks = $marks;
+        $response->teacherComment = $teacherComment;
+        $response->success = true;
+        $response->message = 'Score saved';
         $response->score = (float) $attempt->getScore();
         $response->maxScore = (float) $attempt->getMaxScore();
         $response->questionsToCheck = $this->parseQuestionIds((string) $attempt->getQuestionsToCheck());

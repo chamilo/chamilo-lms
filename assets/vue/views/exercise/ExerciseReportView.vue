@@ -40,6 +40,15 @@
         type="primary-text"
       />
       <BaseButton
+        class="exercise-report-toolbar__button"
+        :label="t('Grade by question')"
+        :route="{ name: 'ExerciseGradeByQuestion', params: getExerciseRouteParams(), query: getContextParams() }"
+        :icon="safeIcon('order-bool-ascending-variant', 'check')"
+        only-icon
+        size="small"
+        type="primary-text"
+      />
+      <BaseButton
         v-if="actionUrls.exportCsv"
         class="exercise-report-toolbar__button"
         :label="t('Export CSV')"

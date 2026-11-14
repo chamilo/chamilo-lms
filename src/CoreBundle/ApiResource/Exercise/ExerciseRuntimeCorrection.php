@@ -118,6 +118,48 @@ use Symfony\Component\Serializer\Attribute\Groups;
                 ),
             ],
         ),
+        new Post(
+            uriTemplate: '/exercise/runtime/{exerciseId}/attempt/{attemptId}/question-score',
+            uriVariables: [
+                'exerciseId' => new Link(
+                    identifiers: ['exerciseId'],
+                    compositeIdentifier: false,
+                    schema: ['type' => 'integer'],
+                ),
+                'attemptId' => new Link(
+                    identifiers: ['attemptId'],
+                    compositeIdentifier: false,
+                    schema: ['type' => 'integer'],
+                ),
+            ],
+            read: false,
+            requirements: [
+                'exerciseId' => '\d+',
+                'attemptId' => '\d+',
+            ],
+            openapi: new Operation(
+                summary: 'Save the score of one manually graded answer without validating the review',
+                description: 'Used by the grade-by-question screen. Only the marks of the answer and the attempt total change: the teacher comment is kept, the question stays pending review and no notification is sent.',
+                parameters: [
+                    new Parameter(name: 'exerciseId', in: 'path', required: true, schema: ['type' => 'integer']),
+                    new Parameter(name: 'attemptId', in: 'path', required: true, schema: ['type' => 'integer']),
+                ],
+            ),
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
+            name: 'post_exercise_runtime_question_score',
+            processor: ExerciseRuntimeCorrectionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
+        ),
     ],
     normalizationContext: ['groups' => ['exercise_runtime_correction:read']],
     denormalizationContext: ['groups' => ['exercise_runtime_correction:write']],

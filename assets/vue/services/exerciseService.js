@@ -367,6 +367,25 @@ export default {
     )
   },
 
+  async getExerciseRuntimeQuestionGrading(params = {}, exerciseId) {
+    return await baseService.get(
+      `/api/exercise/runtime/${exerciseId}/question-grading`,
+      cleanParams(params),
+      exerciseRequestConfig(),
+    )
+  },
+
+  async saveExerciseRuntimeQuestionScore(payload = {}, params = {}, exerciseId, attemptId) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.post(
+      `/api/exercise/runtime/${exerciseId}/attempt/${attemptId}/question-score${queryString}`,
+      payload,
+      {},
+      exerciseRequestConfig(),
+    )
+  },
+
   async getExerciseGlobalQuestionEditor(params = {}, questionType = null) {
     const queryParams = { ...params }
 

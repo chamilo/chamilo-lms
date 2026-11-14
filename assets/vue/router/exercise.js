@@ -132,6 +132,12 @@ export default {
       component: () => import("../views/exercise/ExerciseReportByQuestionView.vue"),
     },
     {
+      name: "ExerciseGradeByQuestion",
+      path: ":exerciseId/grade-by-question",
+      meta: { breadcrumb: "Grade by question" },
+      component: () => import("../views/exercise/ExerciseGradeByQuestionView.vue"),
+    },
+    {
       name: "ExerciseLiveResults",
       path: ":exerciseId/live-results",
       meta: { breadcrumb: "Live results" },

@@ -43685,3 +43685,51 @@ msgstr ""
 
 msgid "Select rating"
 msgstr ""
+
+msgid "All answers to this question have a score."
+msgstr ""
+
+msgid "Could not load the answers to grade"
+msgstr ""
+
+msgid "Grade by question"
+msgstr ""
+
+msgid "No answer to this question yet."
+msgstr ""
+
+msgid "Not scored yet"
+msgstr ""
+
+msgid "Open the full review to see this answer."
+msgstr ""
+
+msgid "Page {0} of {1}"
+msgstr ""
+
+msgid "Score saved"
+msgstr ""
+
+msgid "Scores saved here only update the answer and the attempt total. Learners are not notified and the attempts stay pending until you validate the full review."
+msgstr ""
+
+msgid "Submission date"
+msgstr ""
+
+msgid "Submitted on"
+msgstr ""
+
+msgid "This exercise has no question to grade manually."
+msgstr ""
+
+msgid "This exercise is locked by gradebook."
+msgstr ""
+
+msgid "Full review"
+msgstr ""
+
+msgid "Only answers not scored yet"
+msgstr ""
+
+msgid "Save score"
+msgstr ""

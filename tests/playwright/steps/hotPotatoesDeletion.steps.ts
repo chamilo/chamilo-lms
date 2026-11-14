@@ -75,7 +75,7 @@ When("I complete and inspect the disposable Hot Potatoes attempt", async ({ page
   const listResponse = await listResponsePromise
   expect(listResponse.ok()).toBeTruthy()
   const listed = await listResponse.json()
-  expect(listed.graded).toBe(false)
+  expect(listed.automaticallyGraded).toBe(false)
   expect(listed.items.some((record: { id: number; status: string }) =>
     record.id === Number(attempt.id) && record.status === "completed",
   )).toBeTruthy()

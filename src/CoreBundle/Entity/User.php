@@ -2613,7 +2613,8 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     public function getFullName(): string
     {
         if (empty($this->fullName)) {
-            return \sprintf('%s %s', $this->getFirstname(), $this->getLastname());
+            // Either name can be empty (registration.firstname_required = false): no stray space then.
+            return trim(trim((string) $this->getFirstname()).' '.trim((string) $this->getLastname()));
         }
 
         return $this->fullName;

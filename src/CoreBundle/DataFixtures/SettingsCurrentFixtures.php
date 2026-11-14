@@ -3679,6 +3679,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Allow registration via course invitation links',
                     'comment' => 'When enabled, a teacher/admin can send a one-time invitation link from a course\'s Users tool that lets an unregistered person reach the registration form and register even while general self-registration (allow_registration) is disabled.',
                 ],
+                [
+                    'name' => 'firstname_required',
+                    'title' => 'First name required',
+                    'comment' => 'When disabled, users can register, edit their profile and be created by administrators without a first name, for people who only have one name. The last name stays required.',
+                ],
             ],
             'work' => [
                 [

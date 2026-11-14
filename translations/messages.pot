@@ -43685,3 +43685,9 @@ msgstr ""
 
 msgid "Select rating"
 msgstr ""
+
+msgid "Download configuration for debugging"
+msgstr ""
+
+msgid "The download excludes confidential values. Review the file before sharing it."
+msgstr ""

@@ -4680,5 +4680,7 @@
     "Fortified castle": "Château fortifié",
     "Visual guide only": "Indicateur visuel uniquement",
     "Treasure stolen": "Trésor volé",
-    "Attack blocked": "Attaque repoussée"
+    "Attack blocked": "Attaque repoussée",
+    "Download configuration for debugging": "Télécharger la configuration pour le diagnostic",
+    "The download excludes confidential values. Review the file before sharing it.": "Le téléchargement exclut les valeurs confidentielles. Vérifiez le fichier avant de le partager."
 }

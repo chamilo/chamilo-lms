@@ -43756,3 +43756,9 @@ msgstr "Use the arrows to rank these options from most to least preferred."
 
 msgid "Select rating"
 msgstr "Select rating"
+
+msgid "Download configuration for debugging"
+msgstr "Download configuration for debugging"
+
+msgid "The download excludes confidential values. Review the file before sharing it."
+msgstr "The download excludes confidential values. Review the file before sharing it."

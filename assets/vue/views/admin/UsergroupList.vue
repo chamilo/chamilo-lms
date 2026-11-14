@@ -6,6 +6,7 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
+import UsergroupMembersDialog from "../../components/usergroup/UsergroupMembersDialog.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
 
 const { t } = useI18n()
@@ -20,6 +21,11 @@ const currentPage = ref(1)
 const pageSize = ref(20)
 
 const showDialog = ref(false)
+const membersDialog = ref({ visible: false, id: null, title: "" })
+
+function openMembersDialog(item) {
+  membersDialog.value = { visible: true, id: item.id, title: item.title }
+}
 const isEditing = ref(false)
 const errorMessage = ref("")
 const successMessage = ref("")
@@ -259,12 +265,23 @@ onMounted(() => {
       />
       <Column :header="t('Users')">
         <template #body="{ data }">
-          <router-link
-            :to="{ name: 'AdminUsergroupUsers', params: { id: data.id } }"
-            class="text-blue-600 hover:underline"
-          >
-            {{ data.userCount }}
-          </router-link>
+          <div class="flex items-center gap-1">
+            <router-link
+              :to="{ name: 'AdminUsergroupUsers', params: { id: data.id } }"
+              class="text-blue-600 hover:underline"
+            >
+              {{ data.userCount }}
+            </router-link>
+            <BaseButton
+              v-if="data.userCount > 0"
+              :label="t('Class members')"
+              icon="account-group"
+              only-icon
+              size="small"
+              type="primary-text"
+              @click="openMembersDialog(data)"
+            />
+          </div>
         </template>
       </Column>
       <Column
@@ -337,6 +354,12 @@ onMounted(() => {
         </template>
       </Column>
     </BaseTable>
+
+    <UsergroupMembersDialog
+      v-model:is-visible="membersDialog.visible"
+      :title="membersDialog.title"
+      :usergroup-id="membersDialog.id"
+    />
 
     <!-- Create / Edit dialog -->
     <div

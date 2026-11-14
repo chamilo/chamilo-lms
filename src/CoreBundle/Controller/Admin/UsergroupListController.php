@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Repository\Node\UsergroupRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -33,6 +34,7 @@ class UsergroupListController extends AbstractController
         private readonly EntityManagerInterface $em,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly IllustrationRepository $illustrationRepository,
+        private readonly UsergroupRepository $usergroupRepository,
     ) {}
 
     #[Route('', name: 'admin_usergroups_data', methods: ['GET'])]
@@ -78,18 +80,7 @@ class UsergroupListController extends AbstractController
         $sessionCounts = [];
 
         if (!empty($ids)) {
-            $userCountRows = $this->em->createQueryBuilder()
-                ->select('IDENTITY(ru.usergroup) AS ugId, COUNT(ru.id) AS cnt')
-                ->from(UsergroupRelUser::class, 'ru')
-                ->where('ru.usergroup IN (:ids)')
-                ->setParameter('ids', $ids)
-                ->groupBy('ru.usergroup')
-                ->getQuery()
-                ->getArrayResult()
-            ;
-            foreach ($userCountRows as $row) {
-                $userCounts[(int) $row['ugId']] = (int) $row['cnt'];
-            }
+            $userCounts = $this->usergroupRepository->countMembersByUsergroups($ids);
 
             $courseCountRows = $this->em->createQueryBuilder()
                 ->select('IDENTITY(rc.usergroup) AS ugId, COUNT(rc.id) AS cnt')

@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Repository\Node;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
@@ -15,6 +16,8 @@ use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
@@ -120,6 +123,87 @@ class UsergroupRepository extends ResourceRepository
         ;
 
         return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Member counts of several classes at once, keyed by class id. Counts the same members as
+     * UserGroupModel::getUserGroupUsers() and findMembersPage(): on a multi-URL portal, only the
+     * members registered in the current URL.
+     *
+     * @param list<int> $usergroupIds
+     *
+     * @return array<int, int>
+     */
+    public function countMembersByUsergroups(array $usergroupIds): array
+    {
+        if ([] === $usergroupIds) {
+            return [];
+        }
+
+        $qb = $this->membersQueryBuilder()
+            ->select('IDENTITY(ru.usergroup) AS usergroupId, COUNT(ru.id) AS members')
+            ->andWhere('ru.usergroup IN (:usergroupIds)')
+            ->setParameter('usergroupIds', $usergroupIds)
+            ->groupBy('ru.usergroup')
+        ;
+
+        $counts = array_fill_keys($usergroupIds, 0);
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $counts[(int) $row['usergroupId']] = (int) $row['members'];
+        }
+
+        return $counts;
+    }
+
+    /**
+     * One page of a class' members, ordered by last name, first name. Only the fields the class
+     * lists already show (name and username) are returned.
+     *
+     * @return list<array{id: int, firstname: string, lastname: string, username: string}>
+     */
+    public function findMembersPage(int $usergroupId, int $offset, int $limit): array
+    {
+        $rows = $this->membersQueryBuilder()
+            ->select('u.id', 'u.firstname', 'u.lastname', 'u.username')
+            ->andWhere('ru.usergroup = :usergroupId')
+            ->setParameter('usergroupId', $usergroupId, Types::INTEGER)
+            ->orderBy('u.lastname', 'ASC')
+            ->addOrderBy('u.firstname', 'ASC')
+            ->addOrderBy('u.id', 'ASC')
+            ->setFirstResult(max(0, $offset))
+            ->setMaxResults(max(1, $limit))
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return array_map(
+            static fn (array $row): array => [
+                'id' => (int) $row['id'],
+                'firstname' => (string) ($row['firstname'] ?? ''),
+                'lastname' => (string) ($row['lastname'] ?? ''),
+                'username' => (string) ($row['username'] ?? ''),
+            ],
+            $rows
+        );
+    }
+
+    private function membersQueryBuilder(): QueryBuilder
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->from(UsergroupRelUser::class, 'ru')
+            ->innerJoin('ru.user', 'u')
+        ;
+
+        if ($this->accessUrlHelper->isMultiple()) {
+            $accessUrl = $this->accessUrlHelper->getCurrent();
+            if (null !== $accessUrl) {
+                $qb->innerJoin(AccessUrlRelUser::class, 'urlUser', 'WITH', 'urlUser.user = u AND urlUser.url = :accessUrlId')
+                    ->setParameter('accessUrlId', $accessUrl->getId(), Types::INTEGER)
+                ;
+            }
+        }
+
+        return $qb;
     }
 
     public function getNewestGroups(int $limit = 30, string $query = ''): array

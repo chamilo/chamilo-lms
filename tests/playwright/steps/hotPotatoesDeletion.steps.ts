@@ -46,7 +46,8 @@ When("I complete and inspect the disposable Hot Potatoes attempt", async ({ page
     /\/api\/hotpotatoes\/archives\/\d+\/attempts\?/.test(response.url()) &&
     response.request().method() === "POST",
   )
-  await row(page).getByRole("button", { name: "Open" }).click()
+  // The icon-only "Open" control is a router link without an accessible name.
+  await row(page).locator(`a[href*="/hotpotatoes/${importedIds.get(page)}"]`).click()
   const startResponse = await started
   expect(startResponse.status()).toBe(201)
   const attempt = await startResponse.json()

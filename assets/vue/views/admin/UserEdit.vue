@@ -58,8 +58,8 @@
               v-model="form.firstname"
               :label="t('First name')"
               name="firstname"
-              required
-              show-required-marker
+              :required="data.firstnameRequired"
+              :show-required-marker="data.firstnameRequired"
             />
             <BaseInputText
               id="lastname"
@@ -84,8 +84,8 @@
               v-model="form.firstname"
               :label="t('First name')"
               name="firstname"
-              required
-              show-required-marker
+              :required="data.firstnameRequired"
+              :show-required-marker="data.firstnameRequired"
             />
           </template>
 
@@ -430,6 +430,7 @@ const data = ref({
   westernNameOrder: true,
   loginIsEmail: false,
   emailRequired: false,
+  firstnameRequired: true,
   hideNeverExpireOption: false,
   adminsCanSetUsersPass: false,
   hideFields: false,

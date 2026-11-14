@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\LanguageHelper;
+use Chamilo\CoreBundle\Helpers\NameConventionHelper;
 use ChamiloSession as Session;
 use Westsworld\TimeAgo;
 
@@ -2095,7 +2096,7 @@ function _api_validate_person_name_format($format)
  */
 function _api_clean_person_name($person_name)
 {
-    return preg_replace(['/\s+/', '/, ,/', '/,+/', '/^[ ,]/', '/[ ,]$/'], [' ', ', ', ',', '', ''], $person_name);
+    return NameConventionHelper::cleanPersonName((string) $person_name);
 }
 
 /**

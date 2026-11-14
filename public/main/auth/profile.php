@@ -136,7 +136,9 @@ $form->applyFilter(['lastname', 'firstname'], 'stripslashes');
 $form->applyFilter(['lastname', 'firstname'], 'trim');
 $form->applyFilter(['lastname', 'firstname'], 'html_filter');
 $form->addRule('lastname', get_lang('Required field'), 'required');
-$form->addRule('firstname', get_lang('Required field'), 'required');
+if ('false' !== api_get_setting('registration.firstname_required')) {
+    $form->addRule('firstname', get_lang('Required field'), 'required');
+}
 
 //    USERNAME
 $form->addElement(

@@ -788,7 +788,9 @@ EOD;
     }
     $form->applyFilter(['lastname', 'firstname'], 'trim');
     $form->addRule('lastname', get_lang('Required field'), 'required');
-    $form->addRule('firstname', get_lang('Required field'), 'required');
+    if ('false' !== api_get_setting('registration.firstname_required')) {
+        $form->addRule('firstname', get_lang('Required field'), 'required');
+    }
 
     if ('true' === api_get_setting('login_is_email')) {
         $form->applyFilter('email', 'trim');

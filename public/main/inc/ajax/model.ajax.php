@@ -2628,22 +2628,34 @@ switch ($action) {
         $isAllow = api_is_allowed_to_edit();
         if (!empty($result)) {
             $urlUserGroup = '/admin/usergroup-users/';
+            // Admins and session admins may preview any class; course editors only the classes
+            // linked to this course (see UsergroupMembersController, which enforces the same rule).
+            $canPreviewAnyClass = api_is_platform_admin()
+                || (api_is_session_admin() && 'true' !== api_get_setting('session.limit_session_admin_role'));
             foreach ($result as $group) {
-                $countUsers = count($obj->get_users_by_usergroup($group['id']));
+                // Same members, and so the same number, as the members preview.
+                $countUsers = (int) $obj->getUserGroupUsers($group['id'], true);
                 $group['users'] = $countUsers;
-
-                if (!empty($countUsers)) {
-                    $group['users'] = Display::url(
-                        $countUsers,
-                        $urlUserGroup.'&id='.$group['id']
-                    );
-                }
-
-                if ($obj->usergroup_was_added_in_course(
+                $wasAddedInCourse = $obj->usergroup_was_added_in_course(
                     $group['id'],
                     $course_id,
                     api_get_session_id()
-                )) {
+                );
+
+                if ($countUsers > 0 && ($wasAddedInCourse || $canPreviewAnyClass)) {
+                    $group['users'] = Display::url(
+                        (string) $countUsers,
+                        '#',
+                        [
+                            'class' => 'usergroup-members-link',
+                            'data-usergroup-id' => (int) $group['id'],
+                            'data-usergroup-title' => htmlspecialchars((string) $group['title'], ENT_QUOTES, 'UTF-8'),
+                            'title' => get_lang('Class members'),
+                        ]
+                    );
+                }
+
+                if ($wasAddedInCourse) {
                     $actions = [
                         [
                             'icon' => Display::getMdiIcon(ActionIcon::VIEW_LIST, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Overview students subscribed to the class')),

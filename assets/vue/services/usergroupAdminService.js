@@ -47,6 +47,17 @@ export default {
   },
 
   /**
+   * One page of the class members (name and username only).
+   *
+   * @param {number|string} id
+   * @param {{page?: number, limit?: number}} params
+   * @returns {Promise<{items: Array<{id: number, name: string, username: string}>, totalItems: number}>}
+   */
+  members(id, params = {}) {
+    return baseService.get(`/usergroup-members-data/${id}`, params)
+  },
+
+  /**
    * @param {FormData} formData
    * @returns {Promise<Object>}
    */

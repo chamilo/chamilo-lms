@@ -1,6 +1,7 @@
 Feature: Submit assignments as HTML
   Online text submissions should be stored as HTML and reviewable without downloading.
 
+  @long-scenario
   Scenario: Student submits rich HTML and the teacher reviews it online
     Given I am a platform administrator
     And I am on course "TEMP" homepage
@@ -41,6 +42,8 @@ Feature: Submit assignments as HTML
     And wait for the page to be loaded when ready
     And I follow "HTML Submission 8287"
     And wait for the page to be loaded when ready
+    And I press "View"
+    And wait for the page to be loaded when ready
     Then I should see "HTML Submission 8287.html"
     And I press "Correct and grade"
     Then I should see "Formatted HTML answer 8287"
@@ -55,4 +58,4 @@ Feature: Submit assignments as HTML
     And I press "Delete selected"
     And I press "Yes"
     And wait for the page to be loaded when ready
-    Then I should not see "HTML Submission 8287"
+    Then I wait until I no longer see "HTML Submission 8287"

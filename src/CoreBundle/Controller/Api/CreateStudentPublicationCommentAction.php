@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
+use Chamilo\CoreBundle\Helpers\StudentPublicationCommentVisibilityHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\Service\Assignment\AssignmentFeedbackNotifier;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
@@ -108,6 +109,16 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
             throw new BadRequestHttpException('A comment, file, or qualification is required.');
         }
 
+        // Teacher-only notes are written by the teachers, tutors and coaches of the submission.
+        // Anybody else asking for one is refused rather than silently given a public comment.
+        $teacherOnly = $this->normalizeBoolean($request->request->get('teacherOnly', ''));
+        if ($teacherOnly
+            && !$canGrade
+            && !StudentPublicationCommentVisibilityHelper::canSeeTeacherOnlyComments($submission, $securityUser)
+        ) {
+            throw new AccessDeniedHttpException('You are not allowed to write teacher-only comments.');
+        }
+
         if ($hasFile || $hasComment) {
             $result = $this->handleCreateCommentRequest(
                 $commentEntity,
@@ -127,6 +138,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
             $commentEntity->setUser($managedUser);
             $commentEntity->setPublication($submission);
             $commentEntity->setComment($commentText ?? '');
+            $commentEntity->setTeacherOnly($teacherOnly);
 
             $em->persist($commentEntity);
         }
@@ -153,7 +165,8 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         }
 
         // Existing mail logic (unchanged)
-        if ($sendMail && $canGrade && $submission->getUser() instanceof User) {
+        // A teacher-only comment is never announced: the learner must not learn it exists.
+        if ($sendMail && $canGrade && !$teacherOnly && $submission->getUser() instanceof User) {
             /** @var User $receiverUser */
             $receiverUser = $submission->getUser();
             $senderUserId = $managedUser->getId() ?? 0;
@@ -181,6 +194,7 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
         if (($hasFile || $hasComment)
             && $submissionCourse instanceof Course
             && !$canGrade
+            && !$teacherOnly
         ) {
             $feedbackNotifier->notifyLearnerFeedback(
                 $submission,

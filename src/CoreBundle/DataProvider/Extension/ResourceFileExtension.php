@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -34,7 +35,8 @@ use Symfony\Bundle\SecurityBundle\Security;
  *      * it has at least one ResourceLink whose linked course they belong to
  *        (teacher or student via CourseRelUser),
  *      * it has at least one published ResourceLink whose linked course is
- *        OPEN_WORLD (public to any authenticated platform user).
+ *        OPEN_WORLD (public to any authenticated platform user);
+ *  - files of teacher-only assignment comments are listed to their uploader only.
  */
 final class ResourceFileExtension implements QueryCollectionExtensionInterface
 {
@@ -82,6 +84,14 @@ final class ResourceFileExtension implements QueryCollectionExtensionInterface
                         'rf_acl_course.visibility = :rf_acl_open_world',
                         'rf_acl_link.visibility = :rf_acl_published'
                     )
+                )
+            )
+            // Files attached to a teacher-only assignment comment stay with their uploader here.
+            ->andWhere(
+                $queryBuilder->expr()->orX(
+                    'rf_acl_node.creator = :rf_acl_user',
+                    'NOT EXISTS (SELECT rf_acl_private_comment.iid FROM '.CStudentPublicationComment::class.' rf_acl_private_comment'
+                    .' WHERE rf_acl_private_comment.resourceNode = rf_acl_node AND rf_acl_private_comment.teacherOnly = true)'
                 )
             )
             ->setParameter('rf_acl_user', $user->getId())

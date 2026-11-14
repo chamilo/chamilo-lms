@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\StudentPublicationCommentVisibilityHelper;
 use Chamilo\CoreBundle\Service\Assignment\AssignmentFeedbackNotifier;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
@@ -2235,7 +2236,7 @@ function get_work_user_list(
                 }
 
                 $feedback = '';
-                $count = count($assignment->getComments()); // getWorkCommentCount($item_id, $course_info);
+                $count = count(getVisibleWorkComments($assignment));
                 if (null !== $count && !empty($count)) {
                     if ($qualification_exists) {
                         $feedback .= ' ';
@@ -4046,9 +4047,34 @@ function getWorkDescriptionToolbar()
     ];
 }
 
+/**
+ * Tells whether the current user may read the teacher-only comments of the submission $work: its teachers,
+ * tutors and coaches, and the platform admins.
+ */
+function workCanSeeTeacherOnlyComments(CStudentPublication $work): bool
+{
+    return StudentPublicationCommentVisibilityHelper::canSeeTeacherOnlyComments($work, api_get_user_entity());
+}
+
+/**
+ * @return CStudentPublicationComment[] the comments of $work the current user may read
+ */
+function getVisibleWorkComments(CStudentPublication $work): array
+{
+    $showTeacherOnly = workCanSeeTeacherOnlyComments($work);
+    $comments = [];
+    foreach ($work->getComments() as $comment) {
+        if ($showTeacherOnly || !$comment->isTeacherOnly()) {
+            $comments[] = $comment;
+        }
+    }
+
+    return $comments;
+}
+
 function getWorkComments(CStudentPublication $work)
 {
-    $comments = $work->getComments();
+    $comments = getVisibleWorkComments($work);
     $commentList = [];
     if (!empty($comments)) {
         foreach ($comments as $comment) {
@@ -4119,10 +4145,16 @@ function getWorkCommentCount($id, $courseInfo = [])
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
     $id = (int) $id;
 
+    // Teacher-only comments are counted for the teachers of the submission only.
+    $work = Container::getStudentPublicationRepository()->find($id);
+    $teacherOnlyCondition = $work instanceof CStudentPublication && workCanSeeTeacherOnlyComments($work)
+        ? ''
+        : ' AND teacher_only = 0';
+
     // The comment table has no c_id column any more: the work iid is unique platform-wide.
     $sql = "SELECT count(*) as count
             FROM $commentTable
-            WHERE work_id = $id";
+            WHERE work_id = $id $teacherOnlyCondition";
 
     $result = Database::query($sql);
     if (Database::num_rows($result)) {

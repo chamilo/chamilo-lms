@@ -43685,3 +43685,12 @@ msgstr ""
 
 msgid "Select rating"
 msgstr ""
+
+msgid "Private (teachers only)"
+msgstr ""
+
+msgid "The learner will not see this comment and will not be notified."
+msgstr ""
+
+msgid "Only the teachers of this course can see this comment"
+msgstr ""

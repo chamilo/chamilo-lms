@@ -81,6 +81,14 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     #[ORM\Column(name: 'sent_at', type: 'datetime', nullable: false)]
     protected DateTime $sentAt;
 
+    /**
+     * A private note between the teachers, tutors and coaches of the submission: the learner who
+     * sent it never sees it. Only CreateStudentPublicationCommentAction sets it, for those teachers.
+     */
+    #[Groups(['student_publication_comment:read'])]
+    #[ORM\Column(name: 'teacher_only', type: 'boolean', nullable: false, options: ['default' => false])]
+    protected bool $teacherOnly = false;
+
     public function __construct()
     {
         $this->sentAt = new DateTime();
@@ -132,6 +140,18 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
         return $this;
     }
 
+    public function isTeacherOnly(): bool
+    {
+        return $this->teacherOnly;
+    }
+
+    public function setTeacherOnly(bool $teacherOnly): self
+    {
+        $this->teacherOnly = $teacherOnly;
+
+        return $this;
+    }
+
     public function getPublication(): CStudentPublication
     {
         return $this->publication;
@@ -153,7 +173,8 @@ class CStudentPublicationComment extends AbstractResource implements ResourceInt
     {
         $comment = trim((string) $this->getComment());
 
-        if ('' === $comment) {
+        // The node title is listed in places the comment itself is not: keep private text out of it.
+        if ('' === $comment || $this->teacherOnly) {
             return 'comment-'.(new DateTime())->format('Ymd-His');
         }
 

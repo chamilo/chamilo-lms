@@ -5,12 +5,16 @@
 </h3>
 <hr>
 <ul>
-{% for comment in work.comments %}
+{# visible_comments leaves out the teacher-only comments the current user may not read. #}
+{% for comment in visible_comments|default([]) %}
     <li>
         <div class="page-header">
             <img height="24" src="{{ comment.user | illustration }}"/> {{ comment.user.username }}
 
             - {{ comment.sentAt | date_to_time_ago }}
+            {% if comment.teacherOnly %}
+                <span class="ml-2 inline-flex items-center rounded-full border border-warning/40 bg-warning/15 px-2 py-0.5 text-xs font-semibold text-gray-90">{{ 'Private (teachers only)'|trans }}</span>
+            {% endif %}
         </div>
         <p>
             {% if comment.comment is not empty %}

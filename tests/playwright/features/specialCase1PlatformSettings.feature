@@ -743,13 +743,11 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I press "user_field_submit"
     And I wait for the page to be loaded
 
-    # 6) City (Geolocalization)
-    Given I am on "/main/admin/extra_fields.php?type=user&action=add"
+    # 6) City (Geolocalization). The installer already creates this field, hidden: "add" would be refused as a
+    # duplicate variable and the registration form would never show it, so edit the existing one.
+    Given I am on the edit page of the user extra field "terms_ville"
     And I wait for the page to be loaded
-    And I fill in the following:
-      | user_field_display_text | Ville |
-      | user_field_variable     | terms_ville |
-    And I select "Geolocalization" from "field_type"
+    And I fill in "user_field_display_text" with "Ville"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_yes" element
     And I click the "#changeable_yes" element
@@ -834,13 +832,10 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I press "user_field_submit"
     And I wait for the page to be loaded
 
-    # 12) Internship city (Geolocalization)
-    Given I am on "/main/admin/extra_fields.php?type=user&action=add"
+    # 12) Internship city (Geolocalization): created hidden by the installer too, edit the existing field
+    Given I am on the edit page of the user extra field "terms_villedustage"
     And I wait for the page to be loaded
-    And I fill in the following:
-      | user_field_display_text | Ville du stage |
-      | user_field_variable     | terms_villedustage |
-    And I select "Geolocalization" from "field_type"
+    And I fill in "user_field_display_text" with "Ville du stage"
     And I click the "#visible_to_self_yes" element
     And I click the "#visible_to_others_yes" element
     And I click the "#changeable_yes" element

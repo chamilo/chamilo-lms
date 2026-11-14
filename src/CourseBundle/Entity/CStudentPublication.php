@@ -38,6 +38,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_student_publication')]
@@ -183,8 +184,13 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
      * @var Collection<int, CStudentPublicationComment>
      */
     #[ORM\OneToMany(mappedBy: 'publication', targetEntity: CStudentPublicationComment::class)]
-    #[Groups(['student_publication:read'])]
     protected Collection $comments;
+
+    /**
+     * Not persisted. Serialized submissions leave out teacher-only comments unless the caller,
+     * after checking the reader is one of the submission's teachers, turns this on.
+     */
+    private bool $teacherOnlyCommentsExposed = false;
 
     #[Groups(['c_student_publication:write', 'student_publication:read', 'student_publication_comment:read'])]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
@@ -590,6 +596,33 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     public function getComments(): Collection
     {
         return $this->comments;
+    }
+
+    /**
+     * The comments as serialized with the submission: teacher-only ones are dropped unless
+     * exposeTeacherOnlyComments() was called for a reader allowed to see them.
+     *
+     * @return list<CStudentPublicationComment>
+     */
+    #[Groups(['student_publication:read'])]
+    #[SerializedName('comments')]
+    public function getSerializedComments(): array
+    {
+        $comments = [];
+        foreach ($this->comments as $comment) {
+            if ($this->teacherOnlyCommentsExposed || !$comment->isTeacherOnly()) {
+                $comments[] = $comment;
+            }
+        }
+
+        return $comments;
+    }
+
+    public function exposeTeacherOnlyComments(bool $exposed = true): self
+    {
+        $this->teacherOnlyCommentsExposed = $exposed;
+
+        return $this;
     }
 
     public function setComments(Collection $comments): self

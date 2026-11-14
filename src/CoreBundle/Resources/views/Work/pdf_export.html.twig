@@ -32,7 +32,7 @@
             </td>
             <td>
                 {% for comment in submission.comments %}
-                    <p><strong>{{ comment.user.fullName }}</strong>: {{ comment.comment }}</p>
+                    <p><strong>{{ comment.user.fullName }}</strong>{% if comment.teacherOnly %} ({{ 'Private (teachers only)'|trans }}){% endif %}: {{ comment.comment }}</p>
                 {% endfor %}
             </td>
         </tr>

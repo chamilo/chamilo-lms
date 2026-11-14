@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Helpers\PageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceAclHelper;
+use Chamilo\CoreBundle\Helpers\StudentPublicationCommentVisibilityHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Service\Assignment\AssignmentGroupCategoryResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -129,6 +130,12 @@ class ResourceNodeVoter extends Voter
         // Checking admin role.
         if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
+        }
+
+        // A teacher-only comment (and its attached file) is out of reach of everyone but the
+        // teachers, tutors and coaches of its submission, whatever the links below would grant.
+        if ('student_publications_comments' === $resourceTypeName && !$this->canSeeStudentPublicationComment($resourceNode, $token)) {
+            return false;
         }
 
         if (self::VIEW === $attribute && $this->canViewOwnStudentPublicationRelatedResource($resourceNode, $token)) {
@@ -952,6 +959,22 @@ class ResourceNodeVoter extends Voter
         }
 
         return false;
+    }
+
+    private function canSeeStudentPublicationComment(ResourceNode $resourceNode, TokenInterface $token): bool
+    {
+        $comment = $this->entityManager
+            ->getRepository(CStudentPublicationComment::class)
+            ->findOneBy(['resourceNode' => $resourceNode])
+        ;
+
+        if (!$comment instanceof CStudentPublicationComment || !$comment->isTeacherOnly()) {
+            return true;
+        }
+
+        $user = $token->getUser();
+
+        return StudentPublicationCommentVisibilityHelper::canSeeComment($comment, $user instanceof User ? $user : null);
     }
 
     private function canViewOwnStudentPublicationRelatedResource(ResourceNode $resourceNode, TokenInterface $token): bool

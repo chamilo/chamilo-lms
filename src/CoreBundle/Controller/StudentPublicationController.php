@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\MessageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceHelper;
+use Chamilo\CoreBundle\Helpers\StudentPublicationCommentVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
@@ -353,6 +354,18 @@ class StudentPublicationController extends AbstractController
             $order,
             $userId > 0 ? $userId : null,
         );
+
+        $currentUser = $this->getUser();
+        foreach ($submissions as $submission) {
+            if ($submission instanceof CStudentPublication
+                && StudentPublicationCommentVisibilityHelper::canSeeTeacherOnlyComments(
+                    $submission,
+                    $currentUser instanceof User ? $currentUser : null
+                )
+            ) {
+                $submission->exposeTeacherOnlyComments();
+            }
+        }
 
         $data = json_decode($serializer->serialize(
             $submissions,

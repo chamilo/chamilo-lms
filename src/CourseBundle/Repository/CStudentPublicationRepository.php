@@ -166,7 +166,7 @@ final class CStudentPublicationRepository extends ResourceRepository
 
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
-            ->addSelect('(SELECT COUNT(comment.iid) FROM '.CStudentPublicationComment::class.' comment WHERE comment.publication = resource) AS commentsCount')
+            ->addSelect('(SELECT COUNT(comment.iid) FROM '.CStudentPublicationComment::class.' comment WHERE comment.publication = resource AND comment.teacherOnly = false) AS commentsCount')
             ->addSelect('(SELECT COUNT(c1.iid) FROM '.CStudentPublication::class.' c1 WHERE c1.publicationParent = resource AND c1.extensions IS NOT NULL AND c1.extensions <> \'\') AS correctionsCount')
             ->addSelect('(SELECT MAX(c2.sentDate) FROM '.CStudentPublication::class.' c2 WHERE c2.publicationParent = resource) AS lastUpload')
             ->join('resource.resourceNode', 'rn')

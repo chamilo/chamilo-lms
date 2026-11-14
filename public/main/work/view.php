@@ -356,6 +356,7 @@ $isReviewed = !empty($work->getQualificatorId());
 $tpl = new Template();
 $tpl->assign('work', $work);
 $tpl->assign('comments', $comments);
+$tpl->assign('visible_comments', getVisibleWorkComments($work));
 $tpl->assign('form', ($allowEdition || api_is_allowed_to_session_edit()) ? $commentForm : '');
 $tpl->assign('folder_data', $folderData);
 $tpl->assign('student_name', $userInfo['complete_name'] ?? '');

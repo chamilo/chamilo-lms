@@ -338,9 +338,29 @@
           v-if="!forceStudentView && props.flags.allowText"
           id="sendmail"
           v-model="sendMail"
+          :disabled="teacherOnly"
           :label="t('Send mail to student')"
           name=""
         />
+      </div>
+
+      <!-- Teacher-only (private) comment -->
+      <div
+        v-if="!forceStudentView"
+        class="flex flex-col gap-1"
+      >
+        <BaseCheckbox
+          id="assignment-teacher-only"
+          v-model="teacherOnly"
+          :label="t('Private (teachers only)')"
+          name="teacherOnly"
+        />
+        <small
+          v-if="teacherOnly"
+          class="text-xs text-gray-600"
+        >
+          {{ t("The learner will not see this comment and will not be notified.") }}
+        </small>
       </div>
 
       <!-- Actions -->
@@ -374,6 +394,18 @@
           <div class="flex items-center gap-2">
             <span class="font-semibold text-sm">
               {{ commentItem.user?.fullName || commentItem.user?.fullname || "Unknown User" }}
+            </span>
+
+            <span
+              v-if="commentItem.teacherOnly"
+              class="inline-flex items-center gap-1 rounded-full border border-warning/40 bg-warning/15 px-2 py-0.5 text-xs font-semibold text-gray-90"
+              :title="t('Only the teachers of this course can see this comment')"
+            >
+              <i
+                class="mdi mdi-lock-outline"
+                aria-hidden="true"
+              />
+              <span>{{ t("Private (teachers only)") }}</span>
             </span>
 
             <span
@@ -457,6 +489,7 @@ const notification = useNotification()
 const visible = ref(false)
 const comment = ref("")
 const sendMail = ref(false)
+const teacherOnly = ref(false)
 const selectedFile = ref(null)
 const qualification = ref(null)
 const submitting = ref(false)
@@ -857,6 +890,7 @@ watch(
 
     comment.value = ""
     sendMail.value = false
+    teacherOnly.value = false
     selectedFile.value = null
 
     // Reset AI-related state each time the modal opens.
@@ -960,11 +994,23 @@ async function submit() {
 
     formData.append("ai_assisted_raw", aiAssistedRaw.value ? "1" : "0")
 
-    await cStudentPublicationService.uploadComment(props.item.iid, parentResourceNodeId, formData, sendMail.value)
+    // A private comment is never mailed: the server ignores sendMail for it as well.
+    const isTeacherOnly = !forceStudentView.value && teacherOnly.value
+    if (isTeacherOnly) {
+      formData.append("teacherOnly", "1")
+    }
+
+    await cStudentPublicationService.uploadComment(
+      props.item.iid,
+      parentResourceNodeId,
+      formData,
+      sendMail.value && !isTeacherOnly,
+    )
 
     notification.showSuccessNotification(t("Comment added successfully"))
     comments.value = await cStudentPublicationService.loadComments(props.item.iid)
     comment.value = ""
+    teacherOnly.value = false
     selectedFile.value = null
     emit("commentSent")
     close()

@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -33,7 +34,8 @@ use Symfony\Bundle\SecurityBundle\Security;
  *      * it has at least one ResourceLink whose linked course they belong to
  *        (teacher or student via CourseRelUser),
  *      * it has at least one published ResourceLink whose linked course is
- *        OPEN_WORLD (public to any authenticated platform user).
+ *        OPEN_WORLD (public to any authenticated platform user);
+ *  - teacher-only assignment comments are listed to their creator only.
  */
 final class ResourceNodeExtension implements QueryCollectionExtensionInterface
 {
@@ -80,6 +82,15 @@ final class ResourceNodeExtension implements QueryCollectionExtensionInterface
                         'rn_acl_course.visibility = :rn_acl_open_world',
                         'rn_acl_link.visibility = :rn_acl_published'
                     )
+                )
+            )
+            // A teacher-only assignment comment is shared with the course through its links but
+            // must not be listed to the course learners. Teachers read it through its own endpoint.
+            ->andWhere(
+                $queryBuilder->expr()->orX(
+                    "$rootAlias.creator = :rn_acl_user",
+                    'NOT EXISTS (SELECT rn_acl_private_comment.iid FROM '.CStudentPublicationComment::class.' rn_acl_private_comment'
+                    ." WHERE rn_acl_private_comment.resourceNode = $rootAlias AND rn_acl_private_comment.teacherOnly = true)"
                 )
             )
             ->setParameter('rn_acl_user', $user->getId())

@@ -67,7 +67,76 @@ final class ExerciseQuestionGradingApiTest extends AbstractApiTest
         $all = $this->fetchGrading($ctx['teacher'], $ctx, '&sort=date');
         $this->assertTrue($all['items'][0]['scored']);
         $this->assertTrue($all['items'][0]['awaitingReview'], 'A score alone does not complete the review.');
+        $this->assertTrue($all['items'][0]['scoreIsPartial']);
+        $this->assertSame(3.0 + 4.0, (float) $all['items'][0]['score']);
+        $this->assertSame(13.0, (float) $all['items'][0]['maxScore']);
         $this->assertFalse($all['items'][1]['scored']);
+        $this->assertTrue($all['items'][1]['scoreIsPartial']);
+    }
+
+    public function testPartialScoreFlagStaysUntilTheAttemptIsReviewed(): void
+    {
+        $ctx = $this->createScenario('partial');
+        $adamsId = $ctx['attempts']['adams'];
+        $zolaId = $ctx['attempts']['zola'];
+
+        $grading = $this->fetchGrading($ctx['teacher'], $ctx, '&sort=lastname');
+        $this->assertSame([true, true], array_column($grading['items'], 'scoreIsPartial'));
+        $this->assertSame([3.0, 3.0], array_map('floatval', array_column($grading['items'], 'score')));
+        $this->assertSame([13.0, 13.0], array_map('floatval', array_column($grading['items'], 'maxScore')));
+
+        $report = $this->fetchReport($ctx['teacher'], $ctx);
+        $reportById = array_column($report['attempts'], null, 'attemptId');
+        $this->assertTrue($reportById[$adamsId]['scoreIsPartial']);
+        $this->assertTrue($reportById[$zolaId]['scoreIsPartial']);
+        $this->assertSame(3.0, (float) $reportById[$adamsId]['score']);
+
+        $result = $this->fetchResult($ctx['teacher'], $ctx, $adamsId);
+        $this->assertTrue($result['attempt']['scoreIsPartial']);
+        $this->assertSame(3.0, (float) $result['attempt']['score']);
+        $this->assertSame(13.0, (float) $result['attempt']['maxScore']);
+
+        $payload = $this->postScore($ctx['teacher'], $ctx, $adamsId, 7.5);
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->assertTrue($payload['scoreIsPartial']);
+        $this->assertSame(10.5, (float) $payload['score']);
+
+        $grading = $this->fetchGrading($ctx['teacher'], $ctx, '&sort=lastname');
+        $gradingById = array_column($grading['items'], null, 'attemptId');
+        $this->assertTrue($gradingById[$adamsId]['scoreIsPartial'], 'The total stays partial until the full review.');
+        $this->assertSame(10.5, (float) $gradingById[$adamsId]['score']);
+
+        $report = $this->fetchReport($ctx['teacher'], $ctx);
+        $reportById = array_column($report['attempts'], null, 'attemptId');
+        $this->assertTrue($reportById[$adamsId]['scoreIsPartial']);
+        $this->assertSame(10.5, (float) $reportById[$adamsId]['score']);
+        $this->assertTrue($reportById[$zolaId]['scoreIsPartial']);
+
+        $result = $this->fetchResult($ctx['teacher'], $ctx, $adamsId);
+        $this->assertTrue($result['attempt']['scoreIsPartial']);
+        $this->assertSame(10.5, (float) $result['attempt']['score']);
+
+        $em = $this->getEntityManager();
+        $em->clear();
+        $attempt = $em->find(TrackEExercise::class, $adamsId);
+        $this->assertInstanceOf(TrackEExercise::class, $attempt);
+        $attempt->setQuestionsToCheck('');
+        $em->flush();
+
+        $grading = $this->fetchGrading($ctx['teacher'], $ctx, '&sort=lastname');
+        $gradingById = array_column($grading['items'], null, 'attemptId');
+        $this->assertFalse($gradingById[$adamsId]['scoreIsPartial'], 'Clearing questions_to_check means the total is no longer partial.');
+        $this->assertTrue($gradingById[$zolaId]['scoreIsPartial']);
+
+        $report = $this->fetchReport($ctx['teacher'], $ctx);
+        $reportById = array_column($report['attempts'], null, 'attemptId');
+        $this->assertFalse($reportById[$adamsId]['scoreIsPartial']);
+        $this->assertTrue($reportById[$zolaId]['scoreIsPartial']);
+
+        $result = $this->fetchResult($ctx['teacher'], $ctx, $adamsId);
+        $this->assertFalse($result['attempt']['scoreIsPartial']);
+        $zolaResult = $this->fetchResult($ctx['teacher'], $ctx, $zolaId);
+        $this->assertTrue($zolaResult['attempt']['scoreIsPartial']);
     }
 
     public function testScoreIsSavedWithoutReviewOrNotificationAndTotalIsRecomputed(): void
@@ -81,6 +150,7 @@ final class ExerciseQuestionGradingApiTest extends AbstractApiTest
         $this->assertTrue($payload['success']);
         $this->assertSame(10.5, (float) $payload['score'], 'Total = 3 (auto-graded) + 7.5 (open question).');
         $this->assertSame([$ctx['openQuestionId']], $payload['questionsToCheck']);
+        $this->assertTrue($payload['scoreIsPartial'], 'A score alone does not make the attempt total final.');
 
         $em = $this->getEntityManager();
         $em->clear();
@@ -215,6 +285,38 @@ final class ExerciseQuestionGradingApiTest extends AbstractApiTest
             ->getQuery()
             ->getSingleScalarResult()
         ;
+    }
+
+    /**
+     * @param array<string, mixed> $ctx
+     *
+     * @return array<string, mixed>
+     */
+    private function fetchReport(User $user, array $ctx): array
+    {
+        $response = $this->createClientWithCredentials($this->getUserTokenFromUser($user))->request(
+            'GET',
+            '/api/exercise/runtime/'.$ctx['quiz']->getIid().'/attempts?cid='.$ctx['course']->getId().'&sid=0'
+        );
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        return $response->toArray();
+    }
+
+    /**
+     * @param array<string, mixed> $ctx
+     *
+     * @return array<string, mixed>
+     */
+    private function fetchResult(User $user, array $ctx, int $attemptId): array
+    {
+        $response = $this->createClientWithCredentials($this->getUserTokenFromUser($user))->request(
+            'GET',
+            '/api/exercise/runtime/'.$ctx['quiz']->getIid().'/attempt/'.$attemptId.'/result?cid='.$ctx['course']->getId().'&sid=0'
+        );
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        return $response->toArray();
     }
 
     /**

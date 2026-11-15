@@ -220,6 +220,12 @@ final class ExerciseRuntimeCorrection
     #[Groups(['exercise_runtime_correction:read'])]
     public array $questionsToCheck = [];
 
+    /**
+     * True when the attempt total is shown before every manually graded answer has been reviewed.
+     */
+    #[Groups(['exercise_runtime_correction:read'])]
+    public bool $scoreIsPartial = false;
+
     public function getExerciseId(): ?int
     {
         return $this->exerciseId;

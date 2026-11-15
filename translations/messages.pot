@@ -43733,3 +43733,6 @@ msgstr ""
 
 msgid "Save score"
 msgstr ""
+
+msgid "Partial score: some answers have not been reviewed yet."
+msgstr ""

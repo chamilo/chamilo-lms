@@ -317,6 +317,9 @@ final readonly class ExerciseRuntimeQuestionGradingProvider implements ProviderI
                 'lastName' => (string) $learner->getLastname(),
                 'submittedAt' => $attempt->getExeDate()->format(DateTimeInterface::ATOM),
                 'marks' => $row instanceof TrackEAttempt ? (float) $row->getMarks() : 0.0,
+                'score' => (float) $attempt->getScore(),
+                'maxScore' => (float) $attempt->getMaxScore(),
+                'scoreIsPartial' => [] !== $this->parseQuestionIds((string) $attempt->getQuestionsToCheck()),
                 'scored' => isset($scoredAttemptIds[$attemptId]),
                 'awaitingReview' => \in_array($questionId, $this->parseQuestionIds((string) $attempt->getQuestionsToCheck()), true),
                 'answer' => [

@@ -487,7 +487,13 @@
       >
         <template #body="{ data }">
           <span class="font-semibold text-gray-90">
-            {{ formatNumber(data.percentage) }} % ({{ formatNumber(data.score) }} / {{ formatNumber(data.maxScore) }})
+            {{ formatNumber(data.percentage) }} % ({{ formatNumber(data.score) }} /
+            {{ formatNumber(data.maxScore) }})<sup
+              v-if="data.scoreIsPartial"
+              class="ms-0.5 text-xs font-semibold"
+              :title="t('Partial score: some answers have not been reviewed yet.')"
+              >*</sup
+            >
           </span>
         </template>
       </Column>
@@ -593,6 +599,13 @@
         </template>
       </Column>
     </BaseTable>
+    <p
+      v-if="hasPartialAttemptScore"
+      id="exercise-partial-score-footnote"
+      class="text-xs text-gray-600"
+    >
+      * {{ t("Partial score: some answers have not been reviewed yet.") }}
+    </p>
   </section>
 </template>
 
@@ -666,6 +679,7 @@ const exportFormatOptions = computed(() => [
   { label: t("Excel export"), value: "xlsx" },
 ])
 const pendingCorrectionCount = computed(() => attempts.value.filter((attempt) => attempt.pendingCorrection).length)
+const hasPartialAttemptScore = computed(() => attempts.value.some((attempt) => attempt.scoreIsPartial))
 const selectedAttemptIds = computed(() =>
   selectedAttempts.value
     .map((attempt) => Number(attempt.attemptId || attempt.id || 0))

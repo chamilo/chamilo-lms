@@ -105,6 +105,15 @@
             <div>
               <h2 class="text-base font-semibold text-gray-90">{{ item.lastName }}, {{ item.firstName }}</h2>
               <p class="text-xs text-gray-500">{{ t("Submitted on") }} {{ formatDate(item.submittedAt) }}</p>
+              <p class="mt-1 text-sm font-semibold text-gray-90">
+                {{ t("Score") }}: {{ formatNumber(item.score) }} / {{ formatNumber(item.maxScore)
+                }}<sup
+                  v-if="item.scoreIsPartial"
+                  class="ms-0.5 text-xs font-semibold"
+                  :title="t('Partial score: some answers have not been reviewed yet.')"
+                  >*</sup
+                >
+              </p>
             </div>
             <span
               class="w-fit rounded-full px-3 py-1 text-xs font-semibold"
@@ -195,6 +204,14 @@
           </div>
         </article>
 
+        <p
+          v-if="hasPartialAttemptScore"
+          id="exercise-partial-score-footnote"
+          class="text-xs text-gray-600"
+        >
+          * {{ t("Partial score: some answers have not been reviewed yet.") }}
+        </p>
+
         <div
           v-if="pageCount > 1"
           class="flex items-center justify-center gap-3"
@@ -270,6 +287,8 @@ const questionOptions = computed(() =>
 const currentQuestion = computed(() => questions.value.find((question) => question.id === selectedQuestionId.value))
 
 const pageCount = computed(() => Math.max(1, Math.ceil(totalItems.value / ITEMS_PER_PAGE)))
+
+const hasPartialAttemptScore = computed(() => items.value.some((item) => item.scoreIsPartial))
 
 function safeIcon(icon, fallback = "information") {
   if (icon && availableIcons.includes(icon)) {
@@ -381,7 +400,7 @@ async function saveScore(item) {
   savingAttemptId.value = item.attemptId
 
   try {
-    await exerciseService.saveExerciseRuntimeQuestionScore(
+    const response = await exerciseService.saveExerciseRuntimeQuestionScore(
       { questionId: selectedQuestionId.value, marks },
       getContextParams(),
       getExerciseId(),
@@ -396,6 +415,15 @@ async function saveScore(item) {
       }
     }
     item.marks = marks
+    if (response && typeof response.score === "number") {
+      item.score = response.score
+    }
+    if (response && typeof response.maxScore === "number") {
+      item.maxScore = response.maxScore
+    }
+    if (response && typeof response.scoreIsPartial === "boolean") {
+      item.scoreIsPartial = response.scoreIsPartial
+    }
     showSuccessNotification(t("Score saved"))
   } catch (error) {
     showErrorNotification(error)

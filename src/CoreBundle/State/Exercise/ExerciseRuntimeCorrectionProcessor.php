@@ -156,6 +156,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         $response->score = (float) $attempt->getScore();
         $response->maxScore = (float) $attempt->getMaxScore();
         $response->questionsToCheck = $this->parseQuestionIds((string) $attempt->getQuestionsToCheck());
+        $response->scoreIsPartial = [] !== $response->questionsToCheck;
 
         return $response;
     }
@@ -223,6 +224,7 @@ final readonly class ExerciseRuntimeCorrectionProcessor implements ProcessorInte
         $response->score = (float) $attempt->getScore();
         $response->maxScore = (float) $attempt->getMaxScore();
         $response->questionsToCheck = $this->parseQuestionIds((string) $attempt->getQuestionsToCheck());
+        $response->scoreIsPartial = [] !== $response->questionsToCheck;
 
         return $response;
     }

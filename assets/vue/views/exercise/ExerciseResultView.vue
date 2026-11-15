@@ -155,7 +155,13 @@
                     v-if="visibility.showTotalScore"
                     class="mt-1 text-xl font-semibold text-gray-90"
                   >
-                    {{ formatNumber(attempt.score) }} / {{ formatNumber(attempt.maxScore) }}
+                    {{ formatNumber(attempt.score) }} / {{ formatNumber(attempt.maxScore)
+                    }}<sup
+                      v-if="attempt.scoreIsPartial"
+                      class="ms-0.5 text-xs font-semibold"
+                      :title="t('Partial score: some answers have not been reviewed yet.')"
+                      >*</sup
+                    >
                   </div>
                   <div
                     v-else
@@ -178,7 +184,12 @@
                     v-if="visibility.showTotalScore"
                     class="mt-1 text-xl font-semibold text-gray-90"
                   >
-                    {{ formatNumber(attempt.percentage) }}%
+                    {{ formatNumber(attempt.percentage) }}%<sup
+                      v-if="attempt.scoreIsPartial"
+                      class="ms-0.5 text-xs font-semibold"
+                      :title="t('Partial score: some answers have not been reviewed yet.')"
+                      >*</sup
+                    >
                   </div>
                   <div
                     v-else
@@ -211,6 +222,14 @@
               </div>
             </div>
           </div>
+
+          <p
+            v-if="visibility.showTotalScore && attempt.scoreIsPartial"
+            id="exercise-partial-score-footnote"
+            class="mt-3 text-xs text-gray-600"
+          >
+            * {{ t("Partial score: some answers have not been reviewed yet.") }}
+          </p>
 
           <div
             v-if="!visibility.showCorrections"

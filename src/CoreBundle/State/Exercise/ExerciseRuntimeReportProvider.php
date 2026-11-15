@@ -248,6 +248,7 @@ final readonly class ExerciseRuntimeReportProvider implements ProviderInterface
             'statusLabel' => $statusLabel,
             'pendingCorrection' => $pendingCorrection,
             'questionsToCheck' => $questionsToCheck,
+            'scoreIsPartial' => self::STATUS_INCOMPLETE !== (string) $attempt->getStatus() && $pendingCorrection,
             'learningPath' => $this->formatLearningPath($attempt),
             'canReview' => self::STATUS_INCOMPLETE !== $status,
             'canClose' => self::STATUS_INCOMPLETE === $status && !$lockedByGradebook,

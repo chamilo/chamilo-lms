@@ -703,6 +703,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $passPercentage = (int) ($quiz->getPassPercentage() ?? 0);
         $hasPassPercentage = $passPercentage > 0;
         $passed = $hasPassPercentage ? $percentage >= (float) $passPercentage : null;
+        $questionsToCheck = $this->parseQuestionIds((string) $attempt->getQuestionsToCheck());
 
         return [
             'attemptId' => (int) $attempt->getExeId(),
@@ -715,7 +716,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'startedAt' => $attempt->getStartDate()->format(DateTimeInterface::ATOM),
             'completedAt' => $attempt->getExeDate()->format(DateTimeInterface::ATOM),
             'duration' => (int) $attempt->getExeDuration(),
-            'questionsToCheck' => $this->parseQuestionIds((string) $attempt->getQuestionsToCheck()),
+            'questionsToCheck' => $questionsToCheck,
+            'scoreIsPartial' => self::STATUS_COMPLETED === (string) $attempt->getStatus() && [] !== $questionsToCheck,
             'textWhenFinished' => $this->getFinishedText($quiz, $passed),
         ];
     }

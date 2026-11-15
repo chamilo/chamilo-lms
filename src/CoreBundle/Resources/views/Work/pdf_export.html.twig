@@ -15,7 +15,8 @@
     </tr>
     </thead>
     <tbody>
-    {% for submission in submissions %}
+    {% for item in submissions %}
+        {% set submission = item.submission %}
         <tr>
             <td>{{ submission.user.fullName }}</td>
             <td>{{ submission.sentDate|date('Y-m-d H:i') }}</td>
@@ -31,7 +32,7 @@
                 {% endif %}
             </td>
             <td>
-                {% for comment in submission.comments %}
+                {% for comment in item.comments %}
                     <p><strong>{{ comment.user.fullName }}</strong>{% if comment.teacherOnly %} ({{ 'Private (teachers only)'|trans }}){% endif %}: {{ comment.comment }}</p>
                 {% endfor %}
             </td>

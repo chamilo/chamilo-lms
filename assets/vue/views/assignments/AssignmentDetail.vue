@@ -89,6 +89,8 @@
             only-icon
             size="small"
             type="black"
+            :is-loading="exportPdfBusy"
+            data-testid="assignment-export-pdf"
             @click="exportPdf"
           />
           <BaseButton
@@ -180,6 +182,24 @@
       </div>
     </div>
   </div>
+
+  <BaseDialogConfirmCancel
+    v-model:is-visible="exportPdfDialogVisible"
+    :title="t('Export to PDF')"
+    :confirm-label="t('Export to PDF')"
+    :cancel-label="t('Cancel')"
+    confirm-icon="file-pdf"
+    @confirm-clicked="confirmExportPdf"
+    @cancel-clicked="cancelExportPdf"
+  >
+    <BaseCheckbox
+      id="assignment-export-include-teacher-only"
+      v-model="includeTeacherOnlyComments"
+      name="includeTeacherOnlyComments"
+      :label="t('Include teacher-only comments')"
+      data-testid="assignment-export-include-teacher-only"
+    />
+  </BaseDialogConfirmCancel>
 </template>
 <script setup>
 import { ref, computed, onMounted } from "vue"
@@ -191,6 +211,8 @@ import { usePlatformConfig } from "../../store/platformConfig"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import { useNotification } from "../../composables/notification"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseCheckbox from "../../components/basecomponents/BaseCheckbox.vue"
+import BaseDialogConfirmCancel from "../../components/basecomponents/BaseDialogConfirmCancel.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import StudentSubmissionList from "../../components/assignments/StudentSubmissionList.vue"
 import TeacherSubmissionGroupList from "../../components/assignments/TeacherSubmissionGroupList.vue"
@@ -220,6 +242,9 @@ const studentSubmissionCount = ref(0)
 // null until loaded: the toggle stays hidden rather than showing a wrong state.
 const following = ref(null)
 const followBusy = ref(false)
+const exportPdfBusy = ref(false)
+const exportPdfDialogVisible = ref(false)
+const includeTeacherOnlyComments = ref(false)
 
 const oneSubmissionPerUser = computed(
   () => platformConfigStore.getSetting("work.allow_only_one_student_publication_per_user") === "true",
@@ -347,19 +372,51 @@ function showUnsubmittedUsers() {
   router.push({ name: "AssignmentMissing", params: { id: assignmentId }, query: { cid, sid, gid } })
 }
 async function exportPdf() {
-  if (!isTeacherUI.value) return
+  if (!isTeacherUI.value || exportPdfBusy.value || exportPdfDialogVisible.value) return
+  exportPdfBusy.value = true
+  includeTeacherOnlyComments.value = false
   try {
-    const data = await cStudentPublicationService.exportAssignmentPdf(assignmentId, cid, sid, gid)
-    const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }))
-    const link = document.createElement("a")
-    link.href = url
-    link.setAttribute("download", `assignment_${assignmentId}.pdf`)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    const options = await cStudentPublicationService.getAssignmentPdfExportOptions(assignmentId, cid, sid, gid)
+    if (options.hasTeacherOnlyComments) {
+      exportPdfDialogVisible.value = true
+      return
+    }
+    await downloadAssignmentPdf(false)
   } catch {
     notification.showErrorNotification(t("Failed to export PDF"))
+  } finally {
+    exportPdfBusy.value = false
   }
+}
+
+async function confirmExportPdf() {
+  exportPdfDialogVisible.value = false
+  if (exportPdfBusy.value) return
+  exportPdfBusy.value = true
+  try {
+    await downloadAssignmentPdf(includeTeacherOnlyComments.value)
+  } catch {
+    notification.showErrorNotification(t("Failed to export PDF"))
+  } finally {
+    exportPdfBusy.value = false
+    includeTeacherOnlyComments.value = false
+  }
+}
+
+function cancelExportPdf() {
+  exportPdfDialogVisible.value = false
+  includeTeacherOnlyComments.value = false
+}
+
+async function downloadAssignmentPdf(includePrivate) {
+  const data = await cStudentPublicationService.exportAssignmentPdf(assignmentId, cid, sid, gid, includePrivate)
+  const url = window.URL.createObjectURL(new Blob([data], { type: "application/pdf" }))
+  const link = document.createElement("a")
+  link.href = url
+  link.setAttribute("download", `assignment_${assignmentId}.pdf`)
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 async function downloadAssignments() {
   if (!isTeacherUI.value) return

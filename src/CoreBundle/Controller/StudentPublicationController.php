@@ -905,6 +905,22 @@ class StudentPublicationController extends AbstractController
         return $eligible;
     }
 
+    #[Route('/{id}/export/pdf/options', name: 'chamilo_core_assignment_export_pdf_options', methods: ['GET'])]
+    public function exportPdfOptions(
+        int $id,
+        CStudentPublicationRepository $repo
+    ): JsonResponse {
+        [, $submissions] = $this->assignmentSubmissionsForTeacherExport($id, $repo);
+        $user = $this->getUser();
+
+        return new JsonResponse([
+            'hasTeacherOnlyComments' => StudentPublicationCommentVisibilityHelper::exportContainsVisibleTeacherOnlyComment(
+                $submissions,
+                $user instanceof User ? $user : null
+            ),
+        ]);
+    }
+
     #[Route('/{id}/export/pdf', name: 'chamilo_core_assignment_export_pdf', methods: ['GET'])]
     public function exportPdf(
         int $id,
@@ -914,26 +930,30 @@ class StudentPublicationController extends AbstractController
         $course = $this->cidReqHelper->getCourseEntity();
         $session = $this->cidReqHelper->getSessionEntity();
 
-        $assignment = $repo->find($id);
+        [$assignment, $submissions] = $this->assignmentSubmissionsForTeacherExport($id, $repo);
+        $user = $this->getUser();
+        $includeTeacherOnlyComments = $request->query->getBoolean('includeTeacherOnlyComments');
 
-        if (!$assignment) {
-            throw $this->createNotFoundException('Assignment not found');
+        $rows = [];
+        foreach ($submissions as $submission) {
+            if (!$submission instanceof CStudentPublication) {
+                continue;
+            }
+            $rows[] = [
+                'submission' => $submission,
+                'comments' => StudentPublicationCommentVisibilityHelper::commentsForPdfExport(
+                    $submission,
+                    $user instanceof User ? $user : null,
+                    $includeTeacherOnlyComments
+                ),
+            ];
         }
-
-        // Teacher-only export: must be allowed to edit the assignment's course resource.
-        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
-
-        [$submissions] = $repo->findAllSubmissionsByAssignment(
-            assignmentId: $assignment->getIid(),
-            page: 1,
-            itemsPerPage: 10000
-        );
 
         $html = $this->renderView('@ChamiloCore/Work/pdf_export.html.twig', [
             'assignment' => $assignment,
             'course' => $course,
             'session' => $session,
-            'submissions' => $submissions,
+            'submissions' => $rows,
         ]);
 
         try {
@@ -943,7 +963,7 @@ class StudentPublicationController extends AbstractController
             $mpdf->WriteHTML($html);
 
             return new Response(
-                $mpdf->Output('', Destination::INLINE),
+                $mpdf->Output('', Destination::STRING_RETURN),
                 200,
                 ['Content-Type' => 'application/pdf']
             );
@@ -1681,5 +1701,35 @@ class StudentPublicationController extends AbstractController
         }
 
         return $n;
+    }
+
+    /**
+     * @return array{0: CStudentPublication, 1: list<CStudentPublication>}
+     */
+    private function assignmentSubmissionsForTeacherExport(int $id, CStudentPublicationRepository $repo): array
+    {
+        $assignment = $repo->find($id);
+
+        if (!$assignment instanceof CStudentPublication) {
+            throw $this->createNotFoundException('Assignment not found');
+        }
+
+        // Teacher-only export: must be allowed to edit the assignment's course resource.
+        $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
+
+        [$submissions] = $repo->findAllSubmissionsByAssignment(
+            assignmentId: $assignment->getIid(),
+            page: 1,
+            itemsPerPage: 10000
+        );
+
+        $list = [];
+        foreach ($submissions as $submission) {
+            if ($submission instanceof CStudentPublication) {
+                $list[] = $submission;
+            }
+        }
+
+        return [$assignment, $list];
     }
 }

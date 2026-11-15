@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\StudentPublicationCommentVisibilityHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -260,6 +261,94 @@ final class CStudentPublicationTeacherOnlyCommentTest extends AbstractApiTest
         $this->assertCount(2, $teacherView['comments']);
     }
 
+    public function testPdfExportExcludesTeacherOnlyCommentsByDefault(): void
+    {
+        $ctx = $this->courseScenario('pdf_default');
+        $this->postComment($ctx['teacher'], $ctx['submission'], self::PRIVATE_TEXT, $ctx['cidReq'], true);
+        $this->postComment($ctx['teacher'], $ctx['submission'], self::PUBLIC_TEXT, $ctx['cidReq'], false);
+        $assignmentId = $this->assignmentId($ctx);
+
+        $text = $this->exportPdfText($ctx['teacher'], $assignmentId, $ctx['cidReq']);
+        $this->assertStringContainsString('good structure', $text);
+        $this->assertStringNotContainsString('suspected copy of last year', $text);
+        $this->assertStringNotContainsString('Private (teachers only)', $text);
+    }
+
+    public function testPdfExportIncludesTeacherOnlyCommentsWhenRequestedByATeacher(): void
+    {
+        $ctx = $this->courseScenario('pdf_include');
+        $this->postComment($ctx['teacher'], $ctx['submission'], self::PRIVATE_TEXT, $ctx['cidReq'], true);
+        $this->postComment($ctx['teacher'], $ctx['submission'], self::PUBLIC_TEXT, $ctx['cidReq'], false);
+        $assignmentId = $this->assignmentId($ctx);
+
+        $text = $this->exportPdfText(
+            $ctx['teacher'],
+            $assignmentId,
+            $ctx['cidReq'].'&includeTeacherOnlyComments=1'
+        );
+        $this->assertStringContainsString('good structure', $text);
+        $this->assertStringContainsString('suspected copy of last year', $text);
+        $this->assertStringContainsString('Private (teachers only)', $text);
+    }
+
+    public function testPdfExportIgnoresTeacherOnlyCommentsParameterForLearners(): void
+    {
+        $ctx = $this->courseScenario('pdf_learner');
+        $this->postComment($ctx['teacher'], $ctx['submission'], self::PRIVATE_TEXT, $ctx['cidReq'], true);
+        $this->postComment($ctx['teacher'], $ctx['submission'], self::PUBLIC_TEXT, $ctx['cidReq'], false);
+        $assignmentId = $this->assignmentId($ctx);
+
+        $client = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['student']));
+        $client->request(
+            'GET',
+            '/assignments/'.$assignmentId.'/export/pdf'.$ctx['cidReq'].'&includeTeacherOnlyComments=1'
+        );
+        $this->assertResponseStatusCodeSame(403);
+
+        $client->request('GET', '/assignments/'.$assignmentId.'/export/pdf/options'.$ctx['cidReq']);
+        $this->assertResponseStatusCodeSame(403);
+
+        $em = $this->getEntityManager();
+        $em->clear();
+        $submission = $em->getRepository(CStudentPublication::class)->find($ctx['submission']->getIid());
+        $student = $em->find(User::class, $ctx['student']->getId());
+        $this->assertInstanceOf(CStudentPublication::class, $submission);
+        $this->assertInstanceOf(User::class, $student);
+
+        $texts = array_map(
+            static fn (CStudentPublicationComment $comment): string => (string) $comment->getComment(),
+            StudentPublicationCommentVisibilityHelper::commentsForPdfExport($submission, $student, true)
+        );
+        $this->assertSame([self::PUBLIC_TEXT], $texts);
+    }
+
+    public function testPdfExportOptionsFlagFollowsPresenceOfTeacherOnlyComments(): void
+    {
+        $ctx = $this->courseScenario('pdf_options');
+        $assignmentId = $this->assignmentId($ctx);
+        $teacherToken = $this->getUserTokenFromUser($ctx['teacher']);
+
+        $before = $this->createClientWithCredentials($teacherToken)
+            ->request('GET', '/assignments/'.$assignmentId.'/export/pdf/options'.$ctx['cidReq'])
+            ->toArray()
+        ;
+        $this->assertFalse($before['hasTeacherOnlyComments']);
+
+        $this->postComment($ctx['teacher'], $ctx['submission'], self::PUBLIC_TEXT, $ctx['cidReq'], false);
+        $publicOnly = $this->createClientWithCredentials($teacherToken)
+            ->request('GET', '/assignments/'.$assignmentId.'/export/pdf/options'.$ctx['cidReq'])
+            ->toArray()
+        ;
+        $this->assertFalse($publicOnly['hasTeacherOnlyComments']);
+
+        $this->postComment($ctx['teacher'], $ctx['submission'], self::PRIVATE_TEXT, $ctx['cidReq'], true);
+        $withPrivate = $this->createClientWithCredentials($teacherToken)
+            ->request('GET', '/assignments/'.$assignmentId.'/export/pdf/options'.$ctx['cidReq'])
+            ->toArray()
+        ;
+        $this->assertTrue($withPrivate['hasTeacherOnlyComments']);
+    }
+
     /**
      * @return array{course: Course, teacher: User, tutor: User, student: User, submission: CStudentPublication, cidReq: string}
      */
@@ -477,5 +566,36 @@ final class CStudentPublicationTeacherOnlyCommentTest extends AbstractApiTest
             ->getRepository(Message::class)
             ->count(['title' => \sprintf('New feedback for your submission "%s"', $submission->getTitle())])
         ;
+    }
+
+    /**
+     * @param array{submission: CStudentPublication} $ctx
+     */
+    private function assignmentId(array $ctx): int
+    {
+        $assignmentId = (int) $ctx['submission']->getPublicationParent()?->getIid();
+        $this->assertGreaterThan(0, $assignmentId);
+
+        return $assignmentId;
+    }
+
+    private function exportPdfText(User $user, int $assignmentId, string $query): string
+    {
+        $response = $this->createClientWithCredentials($this->getUserTokenFromUser($user))
+            ->request('GET', '/assignments/'.$assignmentId.'/export/pdf'.$query)
+        ;
+        $this->assertResponseIsSuccessful();
+        $contentType = $response->getHeaders(false)['content-type'][0] ?? '';
+        $this->assertStringStartsWith('application/pdf', $contentType);
+
+        $tmp = tempnam(sys_get_temp_dir(), 'asgn-pdf-');
+        $this->assertNotFalse($tmp);
+        file_put_contents($tmp, $response->getContent());
+        $text = (string) shell_exec('pdftotext -layout '.escapeshellarg($tmp).' -');
+        unlink($tmp);
+        $this->assertNotSame('', $text, 'pdftotext should extract the PDF text');
+
+        // pdftotext keeps table layout, so a comment can be split across lines.
+        return preg_replace('/\s+/', ' ', $text) ?? $text;
     }
 }

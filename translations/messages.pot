@@ -43694,3 +43694,6 @@ msgstr ""
 
 msgid "Only the teachers of this course can see this comment"
 msgstr ""
+
+msgid "Include teacher-only comments"
+msgstr ""

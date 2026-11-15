@@ -156,8 +156,17 @@ async function deleteAllCorrections(assignmentId, cid, sid = 0) {
   await baseService.delete(`/assignments/${assignmentId}/corrections/delete`, { params })
 }
 
-async function exportAssignmentPdf(assignmentId, cid, sid = 0, gid = 0) {
+async function getAssignmentPdfExportOptions(assignmentId, cid, sid = 0, gid = 0) {
   const params = { ...buildCidParams(), cid, ...(sid && { sid }), ...(gid && { gid }) }
+
+  return baseService.get(`/assignments/${assignmentId}/export/pdf/options`, params)
+}
+
+async function exportAssignmentPdf(assignmentId, cid, sid = 0, gid = 0, includeTeacherOnlyComments = false) {
+  const params = { ...buildCidParams(), cid, ...(sid && { sid }), ...(gid && { gid }) }
+  if (includeTeacherOnlyComments) {
+    params.includeTeacherOnlyComments = 1
+  }
 
   const response = await baseService.getRaw(`/assignments/${assignmentId}/export/pdf`, {
     params,
@@ -309,6 +318,7 @@ export default {
   getUnsubmittedUsers,
   sendEmailToUnsubmitted,
   deleteAllCorrections,
+  getAssignmentPdfExportOptions,
   exportAssignmentPdf,
   downloadAssignments,
   uploadCorrectionsPackage,

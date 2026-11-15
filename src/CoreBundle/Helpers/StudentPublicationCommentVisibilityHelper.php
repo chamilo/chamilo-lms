@@ -68,4 +68,58 @@ final class StudentPublicationCommentVisibilityHelper
         return !$comment->isTeacherOnly()
             || self::canSeeTeacherOnlyComments($comment->getPublication(), $user);
     }
+
+    /**
+     * Whether the PDF export of these submissions should offer to include private comments.
+     * The flag is true only when the user may see them and at least one is present.
+     *
+     * @param iterable<CStudentPublication> $submissions
+     */
+    public static function exportContainsVisibleTeacherOnlyComment(iterable $submissions, ?User $user): bool
+    {
+        foreach ($submissions as $submission) {
+            if (!self::canSeeTeacherOnlyComments($submission, $user)) {
+                continue;
+            }
+            foreach ($submission->getComments() as $comment) {
+                if ($comment instanceof CStudentPublicationComment && $comment->isTeacherOnly()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Comments that belong in a PDF export of one submission.
+     *
+     * Teacher-only comments are included only when the caller asked for them and
+     * the user is one of the submission's teachers. Learners never receive them,
+     * even if the include parameter is set.
+     *
+     * @return list<CStudentPublicationComment>
+     */
+    public static function commentsForPdfExport(
+        CStudentPublication $submission,
+        ?User $user,
+        bool $includeTeacherOnlyComments
+    ): array {
+        $comments = [];
+        foreach ($submission->getComments() as $comment) {
+            if (!$comment instanceof CStudentPublicationComment) {
+                continue;
+            }
+            if (!$comment->isTeacherOnly()) {
+                $comments[] = $comment;
+
+                continue;
+            }
+            if ($includeTeacherOnlyComments && self::canSeeTeacherOnlyComments($submission, $user)) {
+                $comments[] = $comment;
+            }
+        }
+
+        return $comments;
+    }
 }

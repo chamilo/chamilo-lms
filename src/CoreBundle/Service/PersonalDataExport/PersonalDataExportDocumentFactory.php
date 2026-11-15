@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
 use Chamilo\CourseBundle\Entity\CAttendanceSheet;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CLpView;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use DateInterval;
@@ -282,7 +283,10 @@ final class PersonalDataExportDocumentFactory
                     'scaled' => round($raw / $max, 4),
                 ];
                 if ($completed) {
-                    $result['success'] = $raw >= $max;
+                    $success = $this->exerciseAttemptSuccess($quiz, $raw, $max);
+                    if (null !== $success) {
+                        $result['success'] = $success;
+                    }
                 }
             }
             $object = $this->activity(
@@ -819,6 +823,28 @@ final class PersonalDataExportDocumentFactory
         }
 
         return $values;
+    }
+
+    /**
+     * Decide the xAPI result.success flag for a completed exercise attempt.
+     *
+     * When the quiz has a pass percentage greater than zero, success is
+     * whether (score / max) * 100 meets that mark. When no pass mark is set,
+     * a perfect score is reported as success; any other score omits the flag
+     * rather than claiming failure without a criterion.
+     */
+    private function exerciseAttemptSuccess(?CQuiz $quiz, float $raw, float $max): ?bool
+    {
+        if ($max <= 0) {
+            return null;
+        }
+
+        $passPercentage = $quiz instanceof CQuiz ? $quiz->getPassPercentage() : null;
+        if (null !== $passPercentage && $passPercentage > 0) {
+            return $raw * 100 >= $passPercentage * $max;
+        }
+
+        return $raw >= $max ? true : null;
     }
 
     private function looksLikeSecretField(string $variable): bool

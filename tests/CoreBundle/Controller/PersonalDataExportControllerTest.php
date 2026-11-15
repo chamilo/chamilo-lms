@@ -6,9 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ThirdPartyDataExchange;
 use Chamilo\CoreBundle\Entity\ThirdPartyDataExchangeUser;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Service\PersonalDataExport\DnsHostResolver;
@@ -33,6 +35,7 @@ use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+use const ENT_XML1;
 use const JSON_THROW_ON_ERROR;
 
 final class PersonalDataExportControllerTest extends WebTestCase
@@ -140,6 +143,7 @@ final class PersonalDataExportControllerTest extends WebTestCase
         $this->assertSame(20.0, $exerciseStatement['result']['score']['max']);
         $this->assertSame(0.8, $exerciseStatement['result']['score']['scaled']);
         $this->assertTrue($exerciseStatement['result']['completion']);
+        $this->assertArrayNotHasKey('success', $exerciseStatement['result']);
         $this->assertSame('PT1H', $exerciseStatement['result']['duration']);
         $this->assertArrayHasKey('timestamp', $exerciseStatement);
         $this->assertSame($course->getCode(), $exerciseStatement['context']['contextActivities']['parent'][0]['definition']['name']['en-US'] === $course->getTitle() ? $exerciseStatement['context']['extensions'][PersonalDataExportDocumentFactory::EXTENSION_COURSE_CODE] : $course->getCode());
@@ -149,6 +153,87 @@ final class PersonalDataExportControllerTest extends WebTestCase
         $this->assertArrayHasKey('messages', $document);
         $this->assertArrayHasKey('consents', $document);
         $this->assertArrayHasKey('logs', $document);
+    }
+
+    public function testExerciseSuccessUsesQuizPassMark(): void
+    {
+        $client = self::createClient();
+        $suffix = substr(bin2hex(random_bytes(4)), 0, 8);
+        $alice = $this->createUser('pd_pass_'.$suffix, 'AliceSecret1', 'pass-'.$suffix.'@example.com');
+        $course = $this->createCourse('Pass Mark Course '.$suffix);
+        $course->addUserAsStudent($alice);
+        self::getContainer()->get(CourseRepository::class)->update($course);
+
+        $reached = $this->createQuizWithAttempt(
+            $course,
+            $alice,
+            'Pass reached '.$suffix,
+            16.0,
+            20.0,
+            70
+        );
+        $missed = $this->createQuizWithAttempt(
+            $course,
+            $alice,
+            'Pass missed '.$suffix,
+            16.0,
+            20.0,
+            85
+        );
+        $noMark = $this->createQuizWithAttempt(
+            $course,
+            $alice,
+            'No pass mark '.$suffix,
+            16.0,
+            20.0,
+            null
+        );
+        $perfect = $this->createQuizWithAttempt(
+            $course,
+            $alice,
+            'Perfect no mark '.$suffix,
+            20.0,
+            20.0,
+            null
+        );
+
+        $document = self::getContainer()->get(PersonalDataExportDocumentFactory::class)
+            ->buildExportDocument($alice)
+        ;
+
+        $byTitle = [];
+        foreach ($document['learning_activities'] as $statement) {
+            if (!str_contains((string) $statement['object']['id'], 'exercise')) {
+                continue;
+            }
+            $title = $statement['object']['definition']['name']['en-US'] ?? '';
+            $byTitle[$title] = $statement['result'] ?? [];
+        }
+
+        $this->assertTrue($byTitle[$reached->getTitle()]['success']);
+        $this->assertFalse($byTitle[$missed->getTitle()]['success']);
+        $this->assertArrayNotHasKey('success', $byTitle[$noMark->getTitle()]);
+        $this->assertTrue($byTitle[$perfect->getTitle()]['success']);
+
+        $xml = self::getContainer()->get(PersonalDataExportDocumentFactory::class)
+            ->buildExportXml($alice)
+        ;
+        $dom = new DOMDocument();
+        $this->assertTrue($dom->loadXML($xml), 'The XML export must be well-formed.');
+        $xpath = new DOMXPath($dom);
+
+        $this->assertSame('true', $xpath->evaluate(
+            'string(//statement[object/definition/name/value="'.htmlspecialchars($reached->getTitle(), ENT_XML1).'"]/result/success)'
+        ));
+        $this->assertSame('false', $xpath->evaluate(
+            'string(//statement[object/definition/name/value="'.htmlspecialchars($missed->getTitle(), ENT_XML1).'"]/result/success)'
+        ));
+        $this->assertSame(0, (int) $xpath->evaluate(
+            'count(//statement[object/definition/name/value="'.htmlspecialchars($noMark->getTitle(), ENT_XML1).'"]/result/success)'
+        ));
+        $this->assertSame('true', $xpath->evaluate(
+            'string(//statement[object/definition/name/value="'.htmlspecialchars($perfect->getTitle(), ENT_XML1).'"]/result/success)'
+        ));
     }
 
     public function testDownloadRequiresPasswordAndReturnsOnlyTheCurrentUser(): void
@@ -437,6 +522,50 @@ final class PersonalDataExportControllerTest extends WebTestCase
             ], JSON_THROW_ON_ERROR)
         );
         $this->assertSame(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
+    }
+
+    private function createQuizWithAttempt(
+        Course $course,
+        User $user,
+        string $title,
+        float $score,
+        float $maxScore,
+        ?int $passPercentage,
+    ): CQuiz {
+        $quiz = (new CQuiz())
+            ->setTitle($title)
+            ->setCreator($this->getAdmin())
+            ->setParent($course)
+            ->addCourseLink($course)
+        ;
+        if (null !== $passPercentage) {
+            $quiz->setPassPercentage($passPercentage);
+        }
+        self::getContainer()->get(CQuizRepository::class)->create($quiz);
+
+        $attempt = (new TrackEExercise())
+            ->setQuiz($quiz)
+            ->setCourse($course)
+            ->setUser($user)
+            ->setUserIp('203.0.113.10')
+            ->setScore($score)
+            ->setMaxScore($maxScore)
+            ->setStatus('completed')
+            ->setDataTracking('')
+            ->setStartDate(new DateTime('-2 hours'))
+            ->setExeDate(new DateTime('-1 hour'))
+            ->setExeDuration(60)
+            ->setStepsCounter(1)
+            ->setOrigLpId(0)
+            ->setOrigLpItemId(0)
+            ->setOrigLpItemViewId(0)
+            ->setQuestionsToCheck('')
+        ;
+        $em = $this->getEntityManager();
+        $em->persist($attempt);
+        $em->flush();
+
+        return $quiz;
     }
 
     private function enableGdpr(): void

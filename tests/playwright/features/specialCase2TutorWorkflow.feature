@@ -109,6 +109,122 @@ Feature: Special case 2 — tutor workflow
     # the id now, as administrator, and the later scenarios reuse it.
     And I resolve the user id for "parkur01"
 
+    # ---- SESSIONS THE LEARNER CAN BE SUBSCRIBED TO ----
+    # The learner's diagnosis (specialCase2Registration.feature) lists the sessions that match its answers, and the
+    # "assigned sessions" step in the next scenario subscribes the learner to five of them. specialCase1Sessions.feature
+    # deletes its own sessions in its teardown, and four would not be enough anyway, so this file creates the five it
+    # needs, with the extra field values the learner chose (domaine "vie-quotidienne", theme "theme1"), and deletes
+    # them in its own teardown scenario.
+    When I am on "/main/session/session_add.php"
+    And I wait for the page to be loaded
+    And I fill in the following:
+      | title | TutorSession 1 |
+    And I press "submit"
+    And I wait for the page to be loaded
+    Then I should see "Add courses to this session"
+    When I select "TEMP" from the ajax select "courses"
+    And I press "submit"
+    And I wait for the page to be loaded
+    And I press "submit"
+    And I wait for the page to be loaded
+    Then I should not see an error
+    When I click the "i.mdi-pencil" element
+    And I wait for the page to be loaded
+    And I press "Advanced settings"
+    And I select "vie-quotidienne" from "extra_domaine"
+    And I select "theme1" from the ajax select "extra_theme_fr"
+    And I press "Edit this session"
+    And I wait for the page to be loaded
+    Then I should not see an error
+
+    When I am on "/main/session/session_add.php"
+    And I wait for the page to be loaded
+    And I fill in the following:
+      | title | TutorSession 2 |
+    And I press "submit"
+    And I wait for the page to be loaded
+    Then I should see "Add courses to this session"
+    When I select "TEMP" from the ajax select "courses"
+    And I press "submit"
+    And I wait for the page to be loaded
+    And I press "submit"
+    And I wait for the page to be loaded
+    Then I should not see an error
+    When I click the "i.mdi-pencil" element
+    And I wait for the page to be loaded
+    And I press "Advanced settings"
+    And I select "vie-quotidienne" from "extra_domaine"
+    And I select "theme1" from the ajax select "extra_theme_fr"
+    And I press "Edit this session"
+    And I wait for the page to be loaded
+    Then I should not see an error
+
+    When I am on "/main/session/session_add.php"
+    And I wait for the page to be loaded
+    And I fill in the following:
+      | title | TutorSession 3 |
+    And I press "submit"
+    And I wait for the page to be loaded
+    Then I should see "Add courses to this session"
+    When I select "TEMP" from the ajax select "courses"
+    And I press "submit"
+    And I wait for the page to be loaded
+    And I press "submit"
+    And I wait for the page to be loaded
+    Then I should not see an error
+    When I click the "i.mdi-pencil" element
+    And I wait for the page to be loaded
+    And I press "Advanced settings"
+    And I select "vie-quotidienne" from "extra_domaine"
+    And I select "theme1" from the ajax select "extra_theme_fr"
+    And I press "Edit this session"
+    And I wait for the page to be loaded
+    Then I should not see an error
+
+    When I am on "/main/session/session_add.php"
+    And I wait for the page to be loaded
+    And I fill in the following:
+      | title | TutorSession 4 |
+    And I press "submit"
+    And I wait for the page to be loaded
+    Then I should see "Add courses to this session"
+    When I select "TEMP" from the ajax select "courses"
+    And I press "submit"
+    And I wait for the page to be loaded
+    And I press "submit"
+    And I wait for the page to be loaded
+    Then I should not see an error
+    When I click the "i.mdi-pencil" element
+    And I wait for the page to be loaded
+    And I press "Advanced settings"
+    And I select "vie-quotidienne" from "extra_domaine"
+    And I select "theme1" from the ajax select "extra_theme_fr"
+    And I press "Edit this session"
+    And I wait for the page to be loaded
+    Then I should not see an error
+
+    When I am on "/main/session/session_add.php"
+    And I wait for the page to be loaded
+    And I fill in the following:
+      | title | TutorSession 5 |
+    And I press "submit"
+    And I wait for the page to be loaded
+    Then I should see "Add courses to this session"
+    When I select "TEMP" from the ajax select "courses"
+    And I press "submit"
+    And I wait for the page to be loaded
+    And I press "submit"
+    And I wait for the page to be loaded
+    Then I should not see an error
+    When I click the "i.mdi-pencil" element
+    And I wait for the page to be loaded
+    And I press "Advanced settings"
+    And I select "vie-quotidienne" from "extra_domaine"
+    And I select "theme1" from the ajax select "extra_theme_fr"
+    And I press "Edit this session"
+    And I wait for the page to be loaded
+    Then I should not see an error
+
   Scenario: Tuteur_fr opens diagnosis page and sends finalization message
     # tuteur_fr's own interface language is French (set at creation above),
     # so every assertion below is the FRENCH string actually rendered —
@@ -378,6 +494,26 @@ Feature: Special case 2 — tutor workflow
     # Same delete-icon-then-confirm sequence specialCase1Sessions.feature's
     # own teardown already uses.
     Given I am a platform administrator
+    When I am on "/admin/session-list?keyword=TutorSession+1"
+    And I wait for the page to be loaded
+    And I delete the session "TutorSession 1" if present
+
+    When I am on "/admin/session-list?keyword=TutorSession+2"
+    And I wait for the page to be loaded
+    And I delete the session "TutorSession 2" if present
+
+    When I am on "/admin/session-list?keyword=TutorSession+3"
+    And I wait for the page to be loaded
+    And I delete the session "TutorSession 3" if present
+
+    When I am on "/admin/session-list?keyword=TutorSession+4"
+    And I wait for the page to be loaded
+    And I delete the session "TutorSession 4" if present
+
+    When I am on "/admin/session-list?keyword=TutorSession+5"
+    And I wait for the page to be loaded
+    And I delete the session "TutorSession 5" if present
+
     When I am on "/admin/user-list?keyword=tuteur_fr"
     And I wait for the page to be loaded
     And I click the "[title='Delete']" icon in the row for "tuteur.fr@example.test"

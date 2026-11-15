@@ -3295,6 +3295,10 @@ Then("I delete the learning path I just created", async ({ page }) => {
 // same either way.
 Then("I delete the document {string} if present", async ({ page }, rowText: string) => {
   const row = page.locator("tr", { hasText: rowText })
+  // The Documents table is filled by an async request that lands after "the page is loaded": a bare count() right away
+  // read zero rows, skipped the delete and left the document behind on every run. Give the row a bounded time to
+  // show up before deciding it is absent (an absent row then costs this wait, nothing more).
+  await row.first().waitFor({ state: "visible", timeout: 10_000 }).catch(() => {})
   if ((await row.count()) === 0) {
     return
   }

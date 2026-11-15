@@ -3673,6 +3673,8 @@ class Exercise
         }
 
         $real_answers = [];
+        // An Exact combination question can only be answered right if at least one answer is correct.
+        $exactCombinationHasCorrectAnswer = false;
         $quiz_question_options = Question::readQuestionOption($questionId, $course_id);
 
         $organs_at_risk_hit = 0;
@@ -3988,6 +3990,9 @@ class Exercise
 
                     break;
                 case MULTIPLE_ANSWER_COMBINATION:
+                    if (1 == $answerCorrect) {
+                        $exactCombinationHasCorrectAnswer = true;
+                    }
                     if ($from_database) {
                         $choice = [];
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
@@ -5934,6 +5939,10 @@ class Exercise
             if (!$my_answer) {
                 $final_answer = false;
             }
+        }
+        if (MULTIPLE_ANSWER_COMBINATION == $answerType && !$exactCombinationHasCorrectAnswer) {
+            // Ticking nothing on a question without any correct answer is not a right answer.
+            $final_answer = false;
         }
 
         if (FILL_IN_BLANKS_COMBINATION === $answerType) {

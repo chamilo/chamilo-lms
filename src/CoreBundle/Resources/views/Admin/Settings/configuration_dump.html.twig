@@ -1,0 +1,12 @@
+<div class="mt-8 border-t border-gray-25 pt-5" data-configuration-dump>
+    <a id="configuration-dump-download"
+       href="{{ path('admin_configuration_dump') }}"
+       title="{{ 'Download configuration for debugging'|trans }}"
+       class="btn btn--primary inline-flex items-center gap-2">
+        <i class="mdi mdi-download" aria-hidden="true"></i>
+        {{ 'Download configuration for debugging'|trans }}
+    </a>
+    <p class="mt-2 text-body-2 text-gray-50">
+        {{ 'The download excludes confidential values. Review the file before sharing it.'|trans }}
+    </p>
+</div>

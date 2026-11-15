@@ -129,6 +129,12 @@ final class SurveyAnswer
      * @var array<int, array<string, mixed>>
      */
     #[Groups(['survey_answer:read'])]
+    public array $personalityProfile = [];
+
+    /**
+     * @var array<int, array<string, mixed>>
+     */
+    #[Groups(['survey_answer:read'])]
     public array $profileFields = [];
 
     /**

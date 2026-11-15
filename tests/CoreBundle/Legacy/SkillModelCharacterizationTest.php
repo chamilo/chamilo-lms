@@ -25,8 +25,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  * LIVE (callers under public/): getAllSkills, getGradebooksBySkill, getUserSkills, getUserSkillRanking,
  * getCoursesBySkill, getSessionsBySkill, userHasSkill, listAchievedByCourse, listUsersWhoAchieved,
  * isSearched (through getSkillToJson), isToolAvailable, isAllowed, hasAccessToUserSkill, userCanAddFeedbackToUser, sanitizeInternalUrl.
- * The remaining methods (tree
- * building, add/edit/delete, saveSkills*, getItemInfo, ...) go through Doctrine entities, not raw SQL.
+ * The remaining methods (tree building, add/edit/delete, saveSkills*, getItemInfo, ...) go through Doctrine entities, not raw SQL.
  *
  * Fixtures: skills (title sk_...) and their relations, gradebook categories, sessions and acquired
  * skills are raw INSERTs; users 1 (admin) and 2 (anonymous), courses 1 (AIACT) and 2 (USINGCHAMILO).

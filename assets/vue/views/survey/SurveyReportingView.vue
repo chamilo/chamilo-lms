@@ -89,6 +89,11 @@
     </div>
 
     <template v-if="!reportAccessDenied">
+      <PersonalityProfileChart
+        v-if="report.personalityProfile?.length"
+        :profile="report.personalityProfile"
+        :title="t('Personality profile — all learners')"
+      />
       <div class="grid gap-4 md:grid-cols-4">
         <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
           <p class="text-sm text-gray-500">{{ t("Invited") }}</p>
@@ -236,6 +241,7 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
+import PersonalityProfileChart from "../../components/survey/PersonalityProfileChart.vue"
 
 const { t } = useI18n()
 const route = useRoute()

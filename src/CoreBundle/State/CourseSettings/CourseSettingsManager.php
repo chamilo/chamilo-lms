@@ -405,6 +405,45 @@ final readonly class CourseSettingsManager
         return [$course, $session];
     }
 
+    /**
+     * Course automation must follow the same edit/visibility policy as Course Settings.
+     */
+    public function canChangeVisibilityForAutomation(Course $course): bool
+    {
+        try {
+            $this->assertCanEdit($course);
+        } catch (AccessDeniedHttpException) {
+            return false;
+        }
+
+        return (bool) $this->getPermissions($course)['canChangeVisibility'];
+    }
+
+    /**
+     * Change only course visibility, retaining the regular hosting limit and
+     * administrator-only hidden-course rules without saving unrelated settings.
+     */
+    public function changeVisibilityForAutomation(Course $course, int $visibility): void
+    {
+        $this->assertCanEdit($course);
+        $permissions = $this->getPermissions($course);
+        if (!\in_array($visibility, [Course::CLOSED, Course::REGISTERED, Course::OPEN_PLATFORM, Course::OPEN_WORLD, Course::HIDDEN], true)) {
+            throw new BadRequestHttpException('Invalid course visibility.');
+        }
+        if (Course::HIDDEN === $visibility && empty($permissions['canUseHiddenVisibility'])) {
+            throw new AccessDeniedHttpException('Only platform administrators can hide a course.');
+        }
+        if ($visibility !== $course->getVisibility() && empty($permissions['canChangeVisibility'])) {
+            throw new AccessDeniedHttpException('You are not allowed to change course visibility.');
+        }
+        $this->validateActiveCourseLimit($course, $visibility);
+
+        if ($visibility !== $course->getVisibility()) {
+            $course->setVisibility($visibility);
+            $this->entityManager->flush();
+        }
+    }
+
     public function assertCanEdit(Course $course): void
     {
         if ($this->security->isGranted('ROLE_ADMIN')) {

@@ -242,7 +242,7 @@ final readonly class SurveyConfigurationProvider implements ProviderInterface
         ];
 
         if ($this->isPersonalitySurveySupported()) {
-            $types[] = ['value' => 1, 'label' => 'Conditional'];
+            $types[] = ['value' => 1, 'label' => 'Personality survey'];
         }
 
         return $types;

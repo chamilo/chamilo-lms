@@ -46,11 +46,12 @@ abstract class PluginCharacterizationTestCase extends KernelTestCase
         ?string $schemaScript = null
     ): void {
         // A plain PDO connection: booting the kernel here would make DAMA open its transaction too early.
+        // Same database as Doctrine, which adds the dbname_suffix of the test environment (doctrine.yaml).
         $dsn = \sprintf(
             'mysql:host=%s;port=%s;dbname=%s',
             $_SERVER['DATABASE_HOST'] ?? '127.0.0.1',
             $_SERVER['DATABASE_PORT'] ?? '3306',
-            $_SERVER['DATABASE_NAME'] ?? 'chamilo'
+            ($_SERVER['DATABASE_NAME'] ?? 'chamilo').'_test'.($_SERVER['TEST_TOKEN'] ?? '')
         );
         $pdo = new PDO($dsn, $_SERVER['DATABASE_USER'] ?? 'root', $_SERVER['DATABASE_PASSWORD'] ?? '');
         $missing = false;

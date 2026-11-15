@@ -61,6 +61,52 @@
     </div>
 
     <div
+      v-if="isPersonalitySurvey"
+      class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm"
+    >
+      <h2 class="mb-2 text-lg font-semibold text-gray-90">{{ t("Personality categories") }}</h2>
+      <p class="mb-4 text-sm text-gray-600">
+        {{ t("Define preference categories before adding personality questions. Each answer option must belong to a category.") }}
+      </p>
+      <div class="flex flex-wrap gap-2">
+        <div
+          v-for="category in personalityCategories"
+          :key="category.id"
+          class="flex items-center gap-2 rounded-lg border border-gray-20 px-3 py-2 text-sm"
+        >
+          <span>{{ category.label }}</span>
+          <BaseButton
+            v-if="canEdit"
+            :label="t('Delete')"
+            icon="delete"
+            only-icon
+            type="danger-text"
+            size="small"
+            @click="confirmDeleteCategory(category)"
+          />
+        </div>
+      </div>
+      <div v-if="canEdit" class="mt-4 flex max-w-xl items-end gap-2">
+        <div class="flex-1">
+          <BaseInputText
+            id="personality_category_label"
+            v-model="newCategoryLabel"
+            :label="t('Category name')"
+            name="personality_category_label"
+            maxlength="120"
+          />
+        </div>
+        <BaseButton
+          :disabled="!newCategoryLabel.trim() || isSaving"
+          :label="t('Add category')"
+          icon="plus"
+          type="success"
+          @click="addCategory"
+        />
+      </div>
+    </div>
+
+    <div
       v-if="canEdit"
       class="rounded-2xl border border-gray-20 bg-white p-6 shadow-sm"
     >
@@ -220,7 +266,8 @@
           <div
             v-for="(option, index) in editableOptions"
             :key="option.localId"
-            class="grid gap-3 rounded-lg border border-gray-20 bg-white p-3 md:grid-cols-[1fr_auto]"
+            class="grid gap-3 rounded-lg border border-gray-20 bg-white p-3"
+            :class="isPersonalityQuestionType ? 'md:grid-cols-[1fr_16rem_auto]' : 'md:grid-cols-[1fr_auto]'"
           >
             <BaseInputText
               v-if="usesPlainOptionInput"
@@ -236,6 +283,14 @@
               :editor-config="optionEditorConfig"
               :full-page="false"
               :title="t('Option') + ' ' + (index + 1)"
+            />
+            <BaseSelect
+              v-if="isPersonalityQuestionType"
+              :id="`personality_option_category_${index}`"
+              v-model="option.value"
+              :label="t('Personality category')"
+              :options="personalityCategoryOptions"
+              :name="`personality_option_category_${index}`"
             />
             <div class="flex items-center justify-end gap-1">
               <BaseButton
@@ -467,9 +522,16 @@ const isFormVisible = ref(false)
 const isEditing = ref(false)
 const errorMessage = ref("")
 const form = ref(createEmptyForm())
+const newCategoryLabel = ref("")
 const formSection = ref(null)
 
 const surveyId = computed(() => Number(route.params.surveyId || 0))
+const isPersonalitySurvey = computed(() => Number(survey.value.surveyType || 0) === 1)
+const personalityCategories = computed(() => choices.value.personalityCategories || [])
+const personalityCategoryOptions = computed(() =>
+  personalityCategories.value.map((category) => ({ value: category.id, label: category.label })),
+)
+const isPersonalityQuestionType = computed(() => form.value.type.startsWith("personality_"))
 const questionTypeOptions = computed(() => translateOptions(choices.value.types || []))
 const questionTypeCards = computed(() =>
   questionTypeOptions.value.map((questionType) => ({
@@ -483,9 +545,9 @@ const parentOptionMap = computed(() => choices.value.parentOptions || {})
 const needsOptions = computed(() => optionTypes.includes(form.value.type) && form.value.type !== "percentage")
 const requiresDisplay = computed(() => displayTypes.includes(form.value.type))
 const requiresMaxValue = computed(() => form.value.type === "score")
-const allowsParent = computed(() => form.value.type !== "pagebreak")
+const allowsParent = computed(() => form.value.type !== "pagebreak" && !isPersonalityQuestionType.value)
 const showsMandatoryField = computed(() => ["yesno", "multiplechoice"].includes(form.value.type))
-const usesPlainOptionInput = computed(() => form.value.type === "dropdown")
+const usesPlainOptionInput = computed(() => form.value.type === "dropdown" || isPersonalityQuestionType.value)
 const editableOptions = computed(() => form.value.options.filter((option) => !option.isOther))
 const canAddOptions = computed(() => !["yesno", "percentage", "selectivedisplay"].includes(form.value.type))
 const canRemoveOptions = computed(() => !["yesno", "percentage", "selectivedisplay"].includes(form.value.type) && editableOptions.value.length > 2)
@@ -512,6 +574,10 @@ const availableParentOptions = computed(() => {
   return translateOptions(parentOptionMap.value[parentQuestionId] || [])
 })
 const typeHelpText = computed(() => {
+  if (isPersonalityQuestionType.value) {
+    return t("Select a personality category for every answer option. The survey will display a preference profile, not a grade.")
+  }
+
   if (form.value.type === "open") {
     return t("You can use the tags {{class_name}} and {{student_full_name}} in the question.")
   }
@@ -540,6 +606,10 @@ const optionTypes = [
   "percentage",
   "multiplechoiceother",
   "selectivedisplay",
+  "personality_choice",
+  "personality_agreement",
+  "personality_scale",
+  "personality_order",
 ]
 const displayTypes = ["yesno", "multiplechoice", "multipleresponse", "multiplechoiceother", "selectivedisplay"]
 const smallEditorConfig = {
@@ -712,6 +782,40 @@ async function loadQuestions() {
     errorMessage.value = error?.response?.data?.detail || t("Could not load survey questions")
   } finally {
     isLoading.value = false
+  }
+}
+
+function confirmDeleteCategory(category) {
+  requireConfirmation({
+    message: t("Are you sure you want to delete this category?"),
+    accept: () => deleteCategory(category),
+  })
+}
+
+async function deleteCategory(category) {
+  errorMessage.value = ""
+  try {
+    await surveyService.deletePersonalityCategory(getContextParams(), surveyId.value, category.id)
+    await loadQuestions()
+    showSuccessNotification(t("Deleted"))
+  } catch (error) {
+    errorMessage.value = error?.response?.data?.detail || error?.response?.data?.error || t("Could not delete category")
+  }
+}
+
+async function addCategory() {
+  if (!newCategoryLabel.value.trim()) return
+  isSaving.value = true
+  errorMessage.value = ""
+  try {
+    await surveyService.addPersonalityCategory(getContextParams(), surveyId.value, newCategoryLabel.value.trim())
+    newCategoryLabel.value = ""
+    await loadQuestions()
+    showSuccessNotification(t("Category added"))
+  } catch (error) {
+    errorMessage.value = error?.response?.data?.detail || error?.response?.data?.error || t("Could not add category")
+  } finally {
+    isSaving.value = false
   }
 }
 
@@ -889,6 +993,13 @@ function validateForm() {
     return false
   }
 
+  if (isPersonalityQuestionType.value && editableOptions.value.some(
+    (option) => !personalityCategories.value.some((category) => category.id === Number(option.value)),
+  )) {
+    errorMessage.value = t("Every personality option must have a valid category.")
+    return false
+  }
+
   if (needsOptions.value) {
     const filledOptions = editableOptions.value.filter((option) => stripHtml(option.text).trim())
     const minimumOptions = form.value.type === "score" ? 1 : 2
@@ -996,8 +1107,15 @@ function questionTypeIcon(type) {
   switch (type) {
     case "yesno":
     case "personality":
+    case "personality_agreement":
     case "selectivedisplay":
       return "thumbs-up-down"
+    case "personality_choice":
+      return "format-list-bulleted"
+    case "personality_scale":
+      return "format-annotation-plus"
+    case "personality_order":
+      return "format-list-bulleted-square"
     case "multiplechoice":
       return "format-list-bulleted"
     case "multipleresponse":

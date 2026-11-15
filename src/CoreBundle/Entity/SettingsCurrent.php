@@ -43,6 +43,9 @@ class SettingsCurrent
     #[ORM\Column(name: 'selected_value', type: 'text', nullable: true)]
     protected ?string $selectedValue = null;
 
+    #[ORM\Column(name: 'confidential', type: 'boolean', options: ['default' => false])]
+    protected bool $confidential = false;
+
     #[Assert\NotBlank]
     #[ORM\Column(name: 'title', type: 'text', nullable: false)]
     protected string $title;
@@ -127,6 +130,18 @@ class SettingsCurrent
     public function setSelectedValue(float|int|string|null $selectedValue): self
     {
         $this->selectedValue = $selectedValue;
+
+        return $this;
+    }
+
+    public function isConfidential(): bool
+    {
+        return $this->confidential;
+    }
+
+    public function setConfidential(bool $confidential): self
+    {
+        $this->confidential = $confidential;
 
         return $this;
     }

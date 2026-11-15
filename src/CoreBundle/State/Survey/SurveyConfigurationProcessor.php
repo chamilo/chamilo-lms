@@ -111,11 +111,20 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
             throw new BadRequestHttpException('This survey code already exists in this language.');
         }
 
-        if (1 === $data->surveyType) {
+        if (1 === $data->surveyType && !$this->isPersonalitySurveySupported()) {
             throw new BadRequestHttpException($this->getUnsupportedPersonalitySurveyMessage());
+        }
+        if (!\in_array($data->surveyType, [0, 1], true)) {
+            throw new BadRequestHttpException('The selected survey type is invalid.');
+        }
+        if (1 === $data->surveyType && $data->gradebookEnabled) {
+            throw new BadRequestHttpException('Personality surveys cannot be linked to the Gradebook.');
         }
 
         $templateId = (int) ($data->templateId ?? 0);
+        if (1 === $data->surveyType && $templateId > 0) {
+            throw new BadRequestHttpException('Personality surveys cannot be created from a regular survey template.');
+        }
         if ($templateId > 0) {
             $user = $this->security->getUser();
             if (!$user instanceof User) {
@@ -148,7 +157,7 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
             ->setLang($language)
             ->setIsShared('0')
             ->setTemplate('template')
-            ->setSurveyType(0)
+            ->setSurveyType($data->surveyType)
             ->setParent($course)
             ->addCourseLink($course, $session)
         ;
@@ -170,6 +179,9 @@ final readonly class SurveyConfigurationProcessor implements ProcessorInterface
         }
 
         $this->validatePayload($data, true);
+        if (1 === $survey->getSurveyType() && $data->gradebookEnabled) {
+            throw new BadRequestHttpException('Personality surveys cannot be linked to the Gradebook.');
+        }
         $language = $this->getSurveyLanguage($data, $course);
         if ($this->surveyCodeExists((string) $survey->getCode(), $language, $surveyId, $course, $session)) {
             throw new BadRequestHttpException('This survey code already exists in this language.');

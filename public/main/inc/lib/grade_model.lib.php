@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Helpers\GradeModelComponentLimit;
 
 /**
  * Class GradeModel.
@@ -100,7 +101,7 @@ class GradeModel extends Model
 
         // Get components
         $nr_items = 2;
-        $max = 10;
+        $existingCount = 0;
 
         // Setting the defaults
         $defaults = $this->get($id);
@@ -111,8 +112,12 @@ class GradeModel extends Model
         if ('edit' == $action) {
             if (!empty($components)) {
                 $nr_items = count($components);
+                $existingCount = count($components);
             }
         }
+
+        // #9457 / leftover of #3387: named cap (40) instead of a hard-coded 11 slots.
+        $max = GradeModelComponentLimit::slotCount($existingCount);
 
         $form->addElement('hidden', 'maxvalue', '100');
         $form->addElement('hidden', 'minvalue', '0');
@@ -120,7 +125,7 @@ class GradeModel extends Model
 
         $component_array = [];
 
-        for ($i = 0; $i <= $max; $i++) {
+        for ($i = 0; $i < $max; $i++) {
             $counter = $i;
             $form->addElement('text', 'components['.$i.'][percentage]', null);
             $form->addElement('text', 'components['.$i.'][acronym]', null);
@@ -217,6 +222,10 @@ class GradeModel extends Model
     {
         $id = parent::save($params, $showQuery);
         if (!empty($id)) {
+            $params['components'] = GradeModelComponentLimit::postedComponents(
+                $params['components'] ?? [],
+                0
+            );
             foreach ($params['components'] as $component) {
                 if (!empty($component['title']) && !empty($component['percentage']) && !empty($component['acronym'])) {
                     $obj = new GradeModelComponents();
@@ -238,6 +247,11 @@ class GradeModel extends Model
         parent::update($params, $showQuery);
 
         if (!empty($params['id'])) {
+            $existing = $this->get_components($params['id']);
+            $params['components'] = GradeModelComponentLimit::postedComponents(
+                $params['components'] ?? [],
+                \is_array($existing) ? \count($existing) : 0
+            );
             foreach ($params['components'] as $component) {
                 $obj = new GradeModelComponents();
                 $component['grade_model_id'] = $params['id'];

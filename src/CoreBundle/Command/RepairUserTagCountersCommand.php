@@ -97,8 +97,9 @@ final class RepairUserTagCountersCommand extends Command
      */
     private function findDriftedTags(): array
     {
+        // Not "AS stored": STORED is a reserved word in MySQL (not in MariaDB).
         $rows = $this->connection->fetchAllAssociative(
-            'SELECT t.id, t.tag, t.count AS stored, ('.self::ACTUAL_COUNT_SQL.') AS actual
+            'SELECT t.id, t.tag, t.count AS stored_count, ('.self::ACTUAL_COUNT_SQL.') AS actual
              FROM tag t
              WHERE t.count <> ('.self::ACTUAL_COUNT_SQL.')
              ORDER BY t.id'
@@ -108,7 +109,7 @@ final class RepairUserTagCountersCommand extends Command
             static fn (array $row): array => [
                 'id' => (int) $row['id'],
                 'tag' => (string) $row['tag'],
-                'stored' => (int) $row['stored'],
+                'stored' => (int) $row['stored_count'],
                 'actual' => (int) $row['actual'],
             ],
             $rows

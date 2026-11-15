@@ -43636,3 +43636,129 @@ msgstr "Treasure stolen"
 
 msgid "Attack blocked"
 msgstr "Attack blocked"
+
+msgid "Automation"
+msgstr "Automation"
+
+msgid "Configure actions to run when the course opens or closes."
+msgstr "Configure actions to run when the course opens or closes."
+
+msgid "Course opens now"
+msgstr "Course opens now"
+
+msgid "Course ends now"
+msgstr "Course ends now"
+
+msgid "Add action"
+msgstr "Add action"
+
+msgid "Configured actions"
+msgstr "Configured actions"
+
+msgid "No actions configured"
+msgstr "No actions configured"
+
+msgid "Make content visible"
+msgstr "Make content visible"
+
+msgid "Make content invisible"
+msgstr "Make content invisible"
+
+msgid "Send survey invitation"
+msgstr "Send survey invitation"
+
+msgid "Send certificates to students"
+msgstr "Send certificates to students"
+
+msgid "Change course visibility"
+msgstr "Change course visibility"
+
+msgid "Execute the configured course actions now? Completed actions will not run again."
+msgstr "Execute the configured course actions now? Completed actions will not run again."
+
+msgid "Unable to load automation"
+msgstr "Unable to load automation"
+
+msgid "Automation action failed"
+msgstr "Automation action failed"
+
+msgid "pending"
+msgstr "pending"
+
+msgid "running"
+msgstr "running"
+
+msgid "success"
+msgstr "success"
+
+msgid "This action is already configured."
+msgstr "This action is already configured."
+
+msgid "Personality survey"
+msgstr "Personality survey"
+
+msgid "Personality surveys use preference categories and do not generate grades."
+msgstr "Personality surveys use preference categories and do not generate grades."
+
+msgid "Personality categories"
+msgstr "Personality categories"
+
+msgid "Define preference categories before adding personality questions. Each answer option must belong to a category."
+msgstr "Define preference categories before adding personality questions. Each answer option must belong to a category."
+
+msgid "Personality category"
+msgstr "Personality category"
+
+msgid "Select a personality category for every answer option. The survey will display a preference profile, not a grade."
+msgstr "Select a personality category for every answer option. The survey will display a preference profile, not a grade."
+
+msgid "Every personality option must have a valid category."
+msgstr "Every personality option must have a valid category."
+
+msgid "Could not add category"
+msgstr "Could not add category"
+
+msgid "Category choice"
+msgstr "Category choice"
+
+msgid "Most / least agreement"
+msgstr "Most / least agreement"
+
+msgid "Agreement scale"
+msgstr "Agreement scale"
+
+msgid "Preference ranking"
+msgstr "Preference ranking"
+
+msgid "Survey type"
+msgstr "Survey type"
+
+msgid "Preference scores are descriptive, not grades or a clinical assessment."
+msgstr "Preference scores are descriptive, not grades or a clinical assessment."
+
+msgid "Preference score"
+msgstr "Preference score"
+
+msgid "Your personality profile"
+msgstr "Your personality profile"
+
+msgid "Personality profile — all learners"
+msgstr "Personality profile — all learners"
+
+msgid "Most like me"
+msgstr "Most like me"
+
+msgid "Least like me"
+msgstr "Least like me"
+
+msgid "Use the arrows to rank these options from most to least preferred."
+msgstr "Use the arrows to rank these options from most to least preferred."
+
+msgid "Select rating"
+msgstr "Select rating"
+
+msgid "Download configuration for debugging"
+msgstr "Download configuration for debugging"
+
+msgid "The download excludes confidential values. Review the file before sharing it."
+msgstr "The download excludes confidential values. Review the file before sharing it."

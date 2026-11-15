@@ -1150,7 +1150,7 @@ class StatisticsCharacterizationTest extends AbstractApiTest
         $base = '2020-08-10 10:00:00';
         $durations = [0, 300, 301, 600, 601, 900, 901, 1800, 1801, 3600, 3601, 90000];
         foreach ($durations as $d) {
-            $this->rawLogin($u, $base, gmdate('Y-m-d H:i:s', strtotime($base) + $d));
+            $this->rawLogin($u, $base, gmdate('Y-m-d H:i:s', strtotime($base.' UTC') + $d));
         }
         // outside: NULL logout, login before range, logout after range
         $this->rawLogin($u, $base, null);

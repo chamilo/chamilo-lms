@@ -15,6 +15,7 @@ use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
+use DateTimeZone;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -132,7 +133,8 @@ final class SurveyReportingAnonymityApiSecurityTest extends AbstractApiTest
                 ->setAnswered($answered ? 1 : 0)
             ;
             if ($answered) {
-                $invitation->setAnsweredAt(new DateTime(self::ANSWERED_AT));
+                // The report returns the stored UTC value.
+                $invitation->setAnsweredAt(new DateTime(self::ANSWERED_AT, new DateTimeZone('UTC')));
             }
             $em->persist($invitation);
         }

@@ -15,14 +15,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-$allowToTrack = api_is_platform_admin(true, true) ||
-    api_is_teacher() || api_is_course_tutor();
-
-if (!$allowToTrack) {
-    api_not_allowed(true);
-    exit;
-}
-
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
 
@@ -30,6 +22,21 @@ $user_id = isset($_REQUEST['student']) ? (int) $_REQUEST['student'] : 0;
 $session_id = isset($_REQUEST['id_session']) ? (int) $_REQUEST['id_session'] : 0;
 $type = isset($_REQUEST['type']) ? Security::remove_XSS((string) $_REQUEST['type']) : 'day';
 $course_code = isset($_REQUEST['course']) ? Security::remove_XSS((string) $_REQUEST['course']) : '';
+
+// A general coach may only open this page for a session they coach (issue #4981).
+// The PHP session flag api_is_session_general_coach() is not session-scoped and
+// may be unset outside a course context, so the check is against the requested id.
+$allowToTrack = api_is_platform_admin(true, true) ||
+    api_is_teacher() || api_is_course_tutor() ||
+    (
+        SessionManager::sessionHasGeneralCoach($session_id, api_get_user_id())
+        && Tracking::is_allowed_to_coach_student(api_get_user_id(), $user_id)
+    );
+
+if (!$allowToTrack) {
+    api_not_allowed(true);
+    exit;
+}
 
 $courseInfo = api_get_course_info($course_code);
 if (empty($courseInfo)) {

@@ -11,6 +11,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Survey\SurveyAnswer;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Service\Survey\SurveyPersonalityManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathSurveyCompletionManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -82,6 +83,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         $questions = $this->surveyAnswerProvider->getOrderedQuestions($survey);
 
         $this->validateMandatoryAnswers($questions, $answers, $otherAnswers);
+        $this->validatePersonalityResponses($survey, $questions, $answers);
         if ($user instanceof User) {
             $this->applySurveyProfileValues($survey, $user, $profileValues);
         }
@@ -182,13 +184,17 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
 
     private function isRequiredQuestionType(string $type): bool
     {
-        return \in_array($type, ['yesno', 'multiplechoice'], true);
+        return \in_array($type, ['yesno', 'multiplechoice', ...SurveyPersonalityManager::QUESTION_TYPES], true);
     }
 
     private function hasAnswerValue(string $type, mixed $value): bool
     {
         if ('open' === $type || 'comment' === $type) {
             return null !== $value && '' !== trim((string) $value);
+        }
+
+        if (\in_array($type, ['personality_agreement', 'personality_scale', 'personality_order'], true)) {
+            return \is_array($value) && [] !== $value;
         }
 
         if ('score' === $type) {
@@ -271,6 +277,12 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             return;
         }
 
+        if (\in_array($type, SurveyPersonalityManager::QUESTION_TYPES, true)) {
+            $this->savePersonalityAnswer($operation, $survey, $question, $answerUserKey, $value, $request);
+
+            return;
+        }
+
         if ('multiplechoiceother' === $type) {
             $this->saveMultipleChoiceOtherAnswer($operation, $survey, $question, $answerUserKey, $answers, $otherAnswers, $request);
 
@@ -322,6 +334,108 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         }
 
         $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) $optionId, $optionValue, $request);
+    }
+
+    /**
+     * Validate all answers before removing previously submitted data. Every submitted option
+     * must belong to its question; missing, duplicate and out-of-range values are rejected.
+     *
+     * @param array<int, CSurveyQuestion> $questions
+     * @param array<string, mixed>        $answers
+     */
+    private function validatePersonalityResponses(CSurvey $survey, array $questions, array $answers): void
+    {
+        if (1 !== $survey->getSurveyType()) {
+            return;
+        }
+        foreach ($questions as $question) {
+            $type = $question->getType();
+            if (!\in_array($type, SurveyPersonalityManager::QUESTION_TYPES, true)) {
+                continue;
+            }
+            $questionId = (string) $question->getIid();
+            $value = $answers[$questionId] ?? null;
+            $optionIds = [];
+            foreach ($this->surveyAnswerProvider->getSortedOptions($question) as $option) {
+                $optionIds[] = (int) $option->getIid();
+            }
+            if (\count($optionIds) < 2) {
+                throw new BadRequestHttpException('A personality question requires at least two options.');
+            }
+            $allowed = array_fill_keys($optionIds, true);
+            if ('personality_choice' === $type) {
+                if (!\is_scalar($value) || !isset($allowed[(int) $value])) {
+                    throw new BadRequestHttpException('Please select one valid personality option.');
+                }
+            } elseif ('personality_agreement' === $type) {
+                if (!\is_array($value) || !isset($value['most'], $value['least'])) {
+                    throw new BadRequestHttpException('Select the most and least preferred options.');
+                }
+                $most = (int) $value['most'];
+                $least = (int) $value['least'];
+                if ($most === $least || !isset($allowed[$most], $allowed[$least])) {
+                    throw new BadRequestHttpException('Most and least must be distinct options in the question.');
+                }
+            } elseif ('personality_scale' === $type) {
+                if (!\is_array($value) || \count($value) !== \count($optionIds)) {
+                    throw new BadRequestHttpException('Please rate every personality statement.');
+                }
+                foreach ($value as $optionId => $score) {
+                    if (!isset($allowed[(int) $optionId]) || !is_numeric($score) || !\in_array((int) $score, [1, 2, 3, 4, 5], true)
+                        || (string) (int) $score !== (string) $score) {
+                        throw new BadRequestHttpException('Personality ratings must be integers from 1 to 5.');
+                    }
+                }
+            } elseif ('personality_order' === $type) {
+                if (!\is_array($value) || \count($value) !== \count($optionIds)) {
+                    throw new BadRequestHttpException('Please rank all personality options.');
+                }
+                $rankedIds = array_map('intval', array_values($value));
+                if (\count(array_unique($rankedIds)) !== \count($optionIds)) {
+                    throw new BadRequestHttpException('Each personality ranking option must appear once.');
+                }
+                sort($rankedIds);
+                sort($optionIds);
+                if ($rankedIds !== $optionIds) {
+                    throw new BadRequestHttpException('Ranking options must belong to the current question.');
+                }
+            }
+        }
+    }
+
+    private function savePersonalityAnswer(
+        Operation $operation,
+        CSurvey $survey,
+        CSurveyQuestion $question,
+        string $answerUserKey,
+        mixed $value,
+        Request $request,
+    ): void {
+        $type = $question->getType();
+        if ('personality_choice' === $type) {
+            $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $value, 1, $request);
+
+            return;
+        }
+        if ('personality_agreement' === $type) {
+            $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $value['most'], 1, $request);
+            $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $value['least'], -1, $request);
+
+            return;
+        }
+        if ('personality_scale' === $type) {
+            foreach ($value as $optionId => $rating) {
+                $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $optionId, (int) $rating - 3, $request);
+            }
+
+            return;
+        }
+        if ('personality_order' === $type) {
+            $count = \count($value);
+            foreach (array_values($value) as $rank => $optionId) {
+                $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $optionId, $count - $rank, $request);
+            }
+        }
     }
 
     /**

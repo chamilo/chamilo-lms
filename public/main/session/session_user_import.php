@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Helpers\SessionUserImportUsernameHelper;
 
 $cidReset = true;
 
@@ -41,7 +42,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             $users = Import::csvToArray($_FILES['import_file']['tmp_name'], ',');
             $user_list = [];
             foreach ($users as $user_data) {
-                $username = $user_data['username'] ?? null;
+                $username = SessionUserImportUsernameHelper::fromCsvRow($user_data);
                 if ($username) {
                     $user_id = UserManager::get_user_id_from_username($username);
                     if ($user_id) {

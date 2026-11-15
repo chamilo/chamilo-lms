@@ -115,6 +115,26 @@ export default {
     )
   },
 
+  async getPersonalityCategories(params = {}, surveyId) {
+    return await baseService.get(`/api/survey/personality/${surveyId}/categories`, cleanParams(params), surveyRequestConfig())
+  },
+
+  async addPersonalityCategory(params = {}, surveyId, label) {
+    return await baseService.post(
+      `/api/survey/personality/${surveyId}/categories${buildQueryString(params)}`,
+      { label },
+      {},
+      surveyRequestConfig(),
+    )
+  },
+
+  async deletePersonalityCategory(params = {}, surveyId, categoryId) {
+    return await baseService.delete(
+      `/api/survey/personality/${surveyId}/categories/${categoryId}${buildQueryString(params)}`,
+      surveyRequestConfig(),
+    )
+  },
+
   async getSurveyQuestions(params = {}, surveyId) {
     return await baseService.get(`/api/survey/questions/${surveyId}`, cleanParams(params), surveyRequestConfig())
   },

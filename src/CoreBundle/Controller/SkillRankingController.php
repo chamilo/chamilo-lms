@@ -124,11 +124,18 @@ class SkillRankingController extends AbstractController
             $skillsPerCourse[(int) $row['courseId']] = (int) $row['cnt'];
         }
 
-        $map = [];
+        // A course the user follows both directly and through a session counts once.
+        $coursesByUser = [];
         foreach ($enrolmentRows as $row) {
-            $uid = (int) $row['userId'];
-            $cid = (int) $row['courseId'];
-            $map[$uid] = ($map[$uid] ?? 0) + ($skillsPerCourse[$cid] ?? 0);
+            $coursesByUser[(int) $row['userId']][(int) $row['courseId']] = true;
+        }
+
+        $map = [];
+        foreach ($coursesByUser as $uid => $courses) {
+            $map[$uid] = 0;
+            foreach (array_keys($courses) as $cid) {
+                $map[$uid] += $skillsPerCourse[$cid] ?? 0;
+            }
         }
 
         return $map;

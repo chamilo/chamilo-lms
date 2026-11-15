@@ -15,7 +15,7 @@ trait SurveyPersonalitySupportTrait
     private function isPersonalitySurveySupported(): bool
     {
         try {
-            return $this->entityManager->getConnection()->createSchemaManager()->tablesExist(['c_survey_group']);
+            return $this->entityManager->getConnection()->createSchemaManager()->tablesExist(['c_survey_personality_category']);
         } catch (Throwable) {
             return false;
         }
@@ -28,7 +28,7 @@ trait SurveyPersonalitySupportTrait
 
     private function getUnsupportedPersonalitySurveyMessage(): string
     {
-        return 'Personality surveys require the legacy survey_group table and cannot be managed in this installation.';
+        return 'Personality surveys require the modern personality category migration.';
     }
 
     private function assertPersonalitySurveySupported(CSurvey $survey): void

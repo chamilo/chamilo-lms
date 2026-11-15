@@ -47,6 +47,12 @@
       {{ t("Preview mode does not save answers.") }}
     </div>
 
+    <PersonalityProfileChart
+      v-if="isAnswered && personalityProfile.length > 0 && !previewMode"
+      :profile="personalityProfile"
+      :title="t('Your personality profile')"
+    />
+
     <div
       v-if="isFinished"
       class="rounded-2xl border border-green-200 bg-green-50 p-6 text-green-800"
@@ -216,7 +222,84 @@
             </div>
           </div>
 
-          <div v-if="['yesno', 'multiplechoice', 'selectivedisplay'].includes(question.type)">
+          <div v-if="question.type === 'personality_agreement'" class="grid gap-4 md:grid-cols-2">
+            <label class="block text-sm font-medium text-gray-800">
+              {{ t('Most like me') }}
+              <select
+                :name="`question_${question.iid}_most`"
+                :value="agreementValue(question, 'most')"
+                :disabled="!canInteract"
+                class="mt-2 w-full rounded-lg border border-gray-30 px-3 py-2"
+                @change="setAgreementValue(question, 'most', $event.target.value)"
+              >
+                <option value="">{{ t('Select an option') }}</option>
+                <option v-for="option in question.options" :key="option.iid" :value="option.iid">
+                  {{ displayText(option.text, option.label) }}
+                </option>
+              </select>
+            </label>
+            <label class="block text-sm font-medium text-gray-800">
+              {{ t('Least like me') }}
+              <select
+                :name="`question_${question.iid}_least`"
+                :value="agreementValue(question, 'least')"
+                :disabled="!canInteract"
+                class="mt-2 w-full rounded-lg border border-gray-30 px-3 py-2"
+                @change="setAgreementValue(question, 'least', $event.target.value)"
+              >
+                <option value="">{{ t('Select an option') }}</option>
+                <option v-for="option in question.options" :key="option.iid" :value="option.iid">
+                  {{ displayText(option.text, option.label) }}
+                </option>
+              </select>
+            </label>
+          </div>
+
+          <div v-else-if="question.type === 'personality_order'" class="space-y-2">
+            <p class="text-xs text-gray-500">{{ t('Use the arrows to rank these options from most to least preferred.') }}</p>
+            <div
+              v-for="(option, index) in rankedOptions(question)"
+              :key="option.iid"
+              class="flex items-center gap-3 rounded-lg border border-gray-20 px-3 py-2"
+            >
+              <span class="w-6 font-semibold">{{ index + 1 }}.</span>
+              <span class="flex-1">{{ displayText(option.text, option.label) }}</span>
+              <BaseButton
+                :disabled="!canInteract || index === 0"
+                :label="t('Move up')"
+                icon="up"
+                only-icon
+                type="secondary-text"
+                @click="moveRankedOption(question, index, -1)"
+              />
+              <BaseButton
+                :disabled="!canInteract || index === question.options.length - 1"
+                :label="t('Move down')"
+                icon="down"
+                only-icon
+                type="secondary-text"
+                @click="moveRankedOption(question, index, 1)"
+              />
+            </div>
+          </div>
+
+          <div v-else-if="question.type === 'personality_scale'" class="space-y-3">
+            <label v-for="option in question.options" :key="option.iid" class="flex flex-col gap-2 rounded-lg border border-gray-20 px-3 py-2 md:flex-row md:items-center">
+              <span class="flex-1">{{ displayText(option.text, option.label) }}</span>
+              <select
+                :name="`question_${question.iid}_${option.iid}`"
+                :value="scoreValue(question, option)"
+                :disabled="!canInteract"
+                class="rounded-lg border border-gray-30 px-3 py-2"
+                @change="setScoreValue(question, option, $event.target.value)"
+              >
+                <option value="">{{ t('Select rating') }}</option>
+                <option v-for="rating in [1, 2, 3, 4, 5]" :key="rating" :value="rating">{{ rating }}</option>
+              </select>
+            </label>
+          </div>
+
+          <div v-else-if="['yesno', 'multiplechoice', 'selectivedisplay', 'personality_choice'].includes(question.type)">
             <div :class="question.display === 'horizontal' ? 'flex flex-wrap gap-4' : 'space-y-2'">
               <label
                 v-for="option in question.options"
@@ -385,6 +468,7 @@ import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import PersonalityProfileChart from "../../components/survey/PersonalityProfileChart.vue"
 import { useTranslatedHtml } from "../../composables/useTranslatedHtml"
 import surveyService from "../../services/surveyService"
 import { useNotification } from "../../composables/notification"
@@ -401,6 +485,7 @@ const pages = ref([[]])
 const answers = ref({})
 const otherAnswers = ref({})
 const profileFields = ref([])
+const personalityProfile = ref([])
 const profileValues = ref({})
 const settings = ref({})
 const canSubmit = ref(false)
@@ -504,7 +589,13 @@ function normalizeResponse(data) {
   isFinished.value = true === data.isFinished
   message.value = data.message || ""
   answers.value = data.answers || {}
+  for (const question of questions.value) {
+    if (question.type === "personality_order" && !Array.isArray(answers.value[String(question.iid)])) {
+      answers.value[String(question.iid)] = question.options.map((option) => Number(option.iid))
+    }
+  }
   otherAnswers.value = extractOtherAnswers(data.answers || {})
+  personalityProfile.value = Array.isArray(data.personalityProfile) ? data.personalityProfile : []
   profileFields.value = Array.isArray(data.profileFields) ? data.profileFields : []
   profileValues.value = buildProfileValues(profileFields.value)
 }
@@ -648,6 +739,35 @@ function toggleMultipleAnswer(question, option, checked) {
   answers.value[questionId] = values
 }
 
+function agreementValue(question, key) {
+  return answers.value[String(question.iid)]?.[key] || ""
+}
+
+function setAgreementValue(question, key, value) {
+  const questionId = String(question.iid)
+  const previous = answers.value[questionId] || {}
+  answers.value[questionId] = { ...previous, [key]: Number(value || 0) }
+}
+
+function rankedOptions(question) {
+  const currentOrder = answers.value[String(question.iid)]
+  if (!Array.isArray(currentOrder) || currentOrder.length !== question.options.length) {
+    return question.options
+  }
+  const mapping = Object.fromEntries(question.options.map((option) => [option.iid, option]))
+  return currentOrder.map((id) => mapping[Number(id)]).filter(Boolean)
+}
+
+function moveRankedOption(question, index, offset) {
+  const options = rankedOptions(question).map((option) => Number(option.iid))
+  const target = index + offset
+  if (target < 0 || target >= options.length) return
+  const previous = options[index]
+  options[index] = options[target]
+  options[target] = previous
+  answers.value[String(question.iid)] = options
+}
+
 function scoreValue(question, option) {
   const questionId = String(question.iid)
   const values = answers.value[questionId] || {}
@@ -682,7 +802,7 @@ function isOtherSelected(question) {
 }
 
 function isMandatoryQuestionType(type) {
-  return ["yesno", "multiplechoice"].includes(type)
+  return ["yesno", "multiplechoice", "personality_choice", "personality_agreement", "personality_scale", "personality_order"].includes(type)
 }
 
 function validateProfileFields() {
@@ -747,6 +867,18 @@ function hasAnswerValue(type, value) {
 
   if (type === "multipleresponse") {
     return Array.isArray(value) && value.length > 0
+  }
+
+  if (type === "personality_agreement") {
+    return value && Number(value.most || 0) > 0 && Number(value.least || 0) > 0 && Number(value.most) !== Number(value.least)
+  }
+
+  if (type === "personality_scale") {
+    return value && typeof value === "object" && Object.values(value).some((rating) => Number(rating || 0) > 0)
+  }
+
+  if (type === "personality_order") {
+    return Array.isArray(value) && value.length > 1
   }
 
   if (type === "score") {
@@ -826,6 +958,10 @@ function questionTypeIcon(type) {
   switch (type) {
     case "yesno":
     case "selectivedisplay":
+    case "personality_choice":
+    case "personality_agreement":
+    case "personality_scale":
+    case "personality_order":
       return "thumbs-up-down"
     case "multiplechoice":
       return "format-list-bulleted"

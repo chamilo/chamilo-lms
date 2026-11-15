@@ -1735,7 +1735,8 @@ class Attendance
         $calendar = new CAttendanceCalendar();
         $calendar
             ->setAttendance($attendance)
-            ->setDateTime(new Datetime($this->date_time))
+            // date_time is already UTC (api_get_utc_datetime), as attendance_calendar_edit() stores it.
+            ->setDateTime(new DateTime($this->date_time, new DateTimeZone('UTC')))
             ->setDoneAttendance(false)
             ->setBlocked(false);
 

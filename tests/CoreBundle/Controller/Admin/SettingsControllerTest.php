@@ -10,9 +10,34 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+use const JSON_THROW_ON_ERROR;
+
 class SettingsControllerTest extends WebTestCase
 {
     use ChamiloTestTrait;
+
+    public function testOnlyAnAuthenticatedAdministratorCanExportConfiguration(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/admin/settings/export');
+        self::assertContains($client->getResponse()->getStatusCode(), [302, 401, 403]);
+    }
+
+    public function testAdministratorCanDownloadSanitizedConfiguration(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->getUser('admin'));
+        $client->request('GET', '/admin/settings/export');
+
+        $this->assertResponseIsSuccessful();
+        self::assertStringContainsString('application/json', (string) $client->getResponse()->headers->get('Content-Type'));
+        self::assertStringContainsString('attachment', (string) $client->getResponse()->headers->get('Content-Disposition'));
+        self::assertStringContainsString('no-store', (string) $client->getResponse()->headers->get('Cache-Control'));
+        $export = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        self::assertSame('current_access_url_only', $export['scope']);
+        self::assertArrayHasKey('settings', $export);
+        self::assertArrayHasKey('plugins', $export);
+    }
 
     public function testIndex(): void
     {
@@ -22,6 +47,61 @@ class SettingsControllerTest extends WebTestCase
 
         $client->request('GET', '/admin/settings');
         $this->assertResponseRedirects('/admin/settings/platform');
+    }
+
+    public function testConfigurationDumpIsAvailableFromSettingsAndSearch(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->getUser('admin'));
+
+        foreach (['/admin/settings/platform', '/admin/settings/search_settings?keyword=allow'] as $path) {
+            $client->request('GET', $path);
+            $this->assertResponseIsSuccessful();
+            $this->assertSelectorExists('a#configuration-dump-download[href="/admin/settings/export"]');
+        }
+
+        $client->request('GET', '/admin/settings/export');
+        $this->assertResponseIsSuccessful();
+        self::assertStringContainsString('application/json', (string) $client->getResponse()->headers->get('Content-Type'));
+        self::assertStringContainsString('attachment', (string) $client->getResponse()->headers->get('Content-Disposition'));
+        self::assertStringContainsString('no-store', (string) $client->getResponse()->headers->get('Cache-Control'));
+        $content = json_decode((string) $client->getResponse()->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        self::assertSame('chamilo-configuration-dump', $content['format']);
+        self::assertSame('current_access_url_only', $content['scope']);
+        self::assertIsArray($content['settings']);
+        self::assertIsArray($content['plugins']);
+        // Security credentials must remain hidden. Ordinary switches such as
+        // check_password and password_rotation_days are valid diagnostic data.
+        $secretVariables = [
+            'administrator_email',
+            'etherpad_api_key',
+            'inbound_mail_dsn',
+            'mailer_dkim',
+            'mailer_dsn',
+            'mailer_dsn_massmailing',
+            'messaging_gdc_api_key',
+        ];
+        foreach ($content['settings'] as $setting) {
+            if (!\in_array($setting['variable'] ?? null, $secretVariables, true)) {
+                continue;
+            }
+
+            self::assertSame('[REDACTED]', $setting['value'], (string) $setting['variable']);
+            self::assertTrue($setting['redacted'], (string) $setting['variable']);
+        }
+    }
+
+    public function testConfigurationDumpRequiresAdministrator(): void
+    {
+        $client = static::createClient();
+        // ChamiloTestTrait creates users in the isolated PHPUnit transaction.
+        $nonAdmin = $this->createUser('configuration_dump_non_admin');
+        self::assertNotNull($nonAdmin);
+        self::assertNotContains('ROLE_ADMIN', $nonAdmin->getRoles());
+
+        $client->loginUser($nonAdmin);
+        $client->request('GET', '/admin/settings/export');
+        self::assertContains($client->getResponse()->getStatusCode(), [302, 403]);
     }
 
     public function testAdminSettings(): void

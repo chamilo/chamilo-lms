@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\SurveyHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Service\Survey\SurveyPersonalityManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
@@ -32,6 +33,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+use const SORT_NUMERIC;
 
 /**
  * @implements ProviderInterface<SurveyAnswer>
@@ -56,6 +59,10 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         'percentage',
         'multiplechoiceother',
         'selectivedisplay',
+        'personality_choice',
+        'personality_agreement',
+        'personality_scale',
+        'personality_order',
     ];
 
     public function __construct(
@@ -67,6 +74,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         private SettingsManager $settingsManager,
         private SurveyHelper $surveyHelper,
         private UserHelper $userHelper,
+        private SurveyPersonalityManager $personalityManager,
     ) {}
 
     /**
@@ -133,7 +141,16 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             $response->invitationCode = $invitation->getInvitationCode();
             $response->isAnswered = 1 === (int) $invitation->getAnswered();
             $response->canSubmit = !$response->isAnswered || $this->isSettingEnabled('survey.survey_allow_answered_question_edit');
-            $response->answers = $this->getExistingAnswers($operation, $survey, $this->getAnswerUserKey($survey, $user, $request), $request);
+            $answerUserKey = $this->getAnswerUserKey($survey, $user, $request);
+            $response->answers = $this->getExistingAnswers($operation, $survey, $answerUserKey, $request);
+            if (1 === $survey->getSurveyType() && (1 === (int) $invitation->getAnswered() || $isFinished)) {
+                $response->personalityProfile = $this->personalityManager->profile(
+                    $survey,
+                    $answerUserKey,
+                    null !== $session ? (int) $session->getId() : null,
+                    $request->query->getInt('lpItemId'),
+                );
+            }
         } else {
             $response->canSubmit = false;
         }
@@ -391,7 +408,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
 
     private function isRequiredQuestionType(string $type): bool
     {
-        return \in_array($type, ['yesno', 'multiplechoice'], true);
+        return \in_array($type, ['yesno', 'multiplechoice', ...SurveyPersonalityManager::QUESTION_TYPES], true);
     }
 
     private function normalizeOptions(CSurveyQuestion $question): array
@@ -533,6 +550,16 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             if ('multipleresponse' === $type) {
                 $answers[$questionId] ??= [];
                 $answers[$questionId][] = (int) $optionId;
+            } elseif ('personality_agreement' === $type) {
+                $answers[$questionId] ??= [];
+                $answers[$questionId][$answer->getValue() > 0 ? 'most' : 'least'] = (int) $optionId;
+            } elseif ('personality_order' === $type) {
+                $answers[$questionId] ??= [];
+                $answers[$questionId][(string) $optionId] = $answer->getValue();
+            } elseif ('personality_scale' === $type) {
+                $answers[$questionId] ??= [];
+                // Persisted scores are centered on zero; the form displays a 1-to-5 rating.
+                $answers[$questionId][(string) $optionId] = $answer->getValue() + 3;
             } elseif ('score' === $type) {
                 $answers[$questionId] ??= [];
                 $answers[$questionId][(string) $optionId] = $answer->getValue();
@@ -543,6 +570,17 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
                 if ('' !== $otherText) {
                     $answers['other_'.$questionId] = $otherText;
                 }
+            }
+        }
+
+        foreach ($answers as $questionId => $value) {
+            if (!\is_array($value)) {
+                continue;
+            }
+            $question = $this->entityManager->getRepository(CSurveyQuestion::class)->find((int) $questionId);
+            if ($question instanceof CSurveyQuestion && 'personality_order' === $question->getType()) {
+                arsort($value, SORT_NUMERIC);
+                $answers[$questionId] = array_map('intval', array_keys($value));
             }
         }
 
@@ -680,6 +718,10 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             'percentage' => 'Percentage',
             'multiplechoiceother' => 'Multiple choice with free text',
             'selectivedisplay' => 'Selective display',
+            'personality_choice' => 'Category choice',
+            'personality_agreement' => 'Most / least agreement',
+            'personality_scale' => 'Agreement scale',
+            'personality_order' => 'Preference ranking',
             'personality' => 'Personality',
             default => ucfirst($type),
         };

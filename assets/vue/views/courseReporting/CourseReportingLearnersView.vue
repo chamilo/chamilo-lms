@@ -535,6 +535,11 @@
         </table>
       </div>
     </section>
+  <CourseAutomationPanel
+    v-if="!configurationLoading && Number(gid || 0) === 0"
+    :course-id="Number(configuration.courseId || cid || 0)"
+    :session-id="Number(configuration.sessionId || 0)"
+  />
   <StudentSuccessAiCoachDialog
     v-model:visible="studentSuccessDialogVisible"
     :learner="selectedStudentSuccessLearner"
@@ -562,6 +567,7 @@ import BaseUserAvatar from "../../components/basecomponents/BaseUserAvatar.vue"
 import { useRouteCourseContext } from "../../composables/useRouteCourseContext"
 import courseReportingService from "../../services/courseReportingService"
 import CourseReportingTabs from "./CourseReportingTabs.vue"
+import CourseAutomationPanel from "../../components/courseReporting/CourseAutomationPanel.vue"
 import StudentSuccessAiCoachDialog from "../../components/courseReporting/StudentSuccessAiCoachDialog.vue"
 
 const { t } = useI18n()

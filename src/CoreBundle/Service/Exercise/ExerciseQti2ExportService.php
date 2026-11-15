@@ -298,7 +298,9 @@ final readonly class ExerciseQti2ExportService
             return $this->exportMatchingInteraction($question, $questionIdent);
         }
 
-        $xml = '    <choiceInteraction responseIdentifier="'.$questionIdent.'" >'."\n";
+        // Multiple answer: any number of choices can be ticked (the QTI default is a single one).
+        $maxChoices = self::MULTIPLE_ANSWER === (int) $question->getType() ? ' maxChoices="0"' : '';
+        $xml = '    <choiceInteraction responseIdentifier="'.$questionIdent.'"'.$maxChoices.' >'."\n";
         $xml .= '      <prompt><![CDATA['.$this->escapeCdata($this->formatText($question->getQuestion())).']]></prompt>'."\n";
         foreach ($this->getSortedAnswers($question) as $answer) {
             $answerId = (int) $answer->getIid();

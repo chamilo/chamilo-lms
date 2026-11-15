@@ -23,6 +23,8 @@ final class PrivacySettingsSchema extends AbstractSettingsSchema
             'data_protection_officer_role' => '',
             'data_protection_officer_email' => '',
             'hide_user_field_from_list' => '',
+            'allow_personal_data_export_to_url' => 'false',
+            'personal_data_export_hmac_secret' => '',
         ]);
     }
 
@@ -35,6 +37,8 @@ final class PrivacySettingsSchema extends AbstractSettingsSchema
             ->add('data_protection_officer_role', TextType::class)
             ->add('data_protection_officer_email', TextType::class)
             ->add('hide_user_field_from_list', TextareaType::class)
+            ->add('allow_personal_data_export_to_url', YesNoType::class)
+            ->add('personal_data_export_hmac_secret', TextType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

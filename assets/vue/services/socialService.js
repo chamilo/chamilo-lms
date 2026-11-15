@@ -168,7 +168,6 @@ async function getGroupDiscussionMessages(groupId, discussionId) {
   return baseService.get(`${API_URL}/group/${groupId}/discussion/${discussionId}/messages`)
 }
 
-
 /**
  * Fetches the Social map configuration exposed by the map plugin.
  * @returns {Promise<Object>}
@@ -185,7 +184,65 @@ async function getMapMarkers() {
   return baseService.get(`${API_URL}/map/markers`)
 }
 
+async function readExportError(error) {
+  const data = error?.response?.data
+  if (data instanceof Blob) {
+    try {
+      const parsed = JSON.parse(await data.text())
+      return new Error(parsed.message || "The export could not be completed.")
+    } catch {
+      return new Error("The export could not be completed.")
+    }
+  }
+
+  return new Error(data?.message || error.message || "The export could not be completed.")
+}
+
 export default {
+  async fetchPersonalDataExportOptions() {
+    return await baseService.get(`${API_URL}/personal-data/export-options`)
+  },
+
+  async downloadPersonalData({ password, csrfToken, format = "json" }) {
+    try {
+      const response = await baseService.postRaw(
+        `${API_URL}/personal-data/export-download`,
+        { password, csrf_token: csrfToken, format },
+        { responseType: "blob" },
+      )
+
+      const disposition = response.headers["content-disposition"] || response.headers["Content-Disposition"] || ""
+      let filename = format === "xml" ? "chamilo-personal-data.xml" : "chamilo-personal-data.json"
+      const match = /filename\*?=(?:UTF-8'')?"?([^";]+)"?/i.exec(disposition)
+      if (match) {
+        filename = decodeURIComponent(match[1])
+      }
+
+      const url = URL.createObjectURL(response.data)
+      const link = document.createElement("a")
+      link.href = url
+      link.download = filename
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      URL.revokeObjectURL(url)
+    } catch (error) {
+      throw await readExportError(error)
+    }
+  },
+
+  async sendPersonalDataToUrl({ password, csrfToken, url }) {
+    try {
+      return await baseService.post(`${API_URL}/personal-data/export-to-url`, {
+        password,
+        csrf_token: csrfToken,
+        url,
+      })
+    } catch (error) {
+      throw await readExportError(error)
+    }
+  },
+
   async fetchPersonalData(userId) {
     try {
       const data = await baseService.get(`${API_URL}/personal-data/${userId}`)

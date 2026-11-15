@@ -75,10 +75,18 @@ const configuredScoresByPrerequisite = computed(() => {
   return result
 })
 
+// The selection follows the saved prerequisite only when the item (or its saved prerequisite) changes: the builder
+// reloads the tree after unrelated actions, and resetting it there silently discarded what the user had just picked.
+watch(
+  () => [props.item?.id, props.item?.prerequisiteId],
+  () => {
+    prerequisiteId.value = Number(props.item?.prerequisiteId || 0)
+  },
+  { immediate: true },
+)
 watch(
   () => [props.item, candidates.value, configuredScoresByPrerequisite.value],
   () => {
-    prerequisiteId.value = Number(props.item?.prerequisiteId || 0)
     candidates.value.forEach((candidate) => {
       const selected = Number(candidate.id) === prerequisiteId.value
       const configuredScores = configuredScoresByPrerequisite.value[Number(candidate.id)]

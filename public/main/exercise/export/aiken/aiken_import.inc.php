@@ -240,6 +240,11 @@ function setExerciseInfoFromAikenText($aikenText, &$exerciseInfo): void
             }
             continue;
         }
+
+        if (preg_match('/^SCORE:\s?(.*)/', $line, $matches)) {
+            $currentQuestion['score'] = (float) $matches[1];
+            continue;
+        }
     }
 
     $totalQuestions = count($exerciseInfo['question']);
@@ -547,7 +552,9 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir, ?arra
 
             if (isset($questionData['score'])) {
                 $scoreFromFile = (float) $questionData['score'];
-                $answer->new_weighting[$answerIndex] = $scoreFromFile;
+                if (1 === $answer->new_correct[$answerIndex]) {
+                    $answer->new_weighting[$answerIndex] = $scoreFromFile;
+                }
             }
 
             $params = [
@@ -1507,5 +1514,6 @@ function aiken_is_question_title_line(string $line): bool
 {
     return !preg_match('/^[A-Z]\.\s/', $line)
         && !preg_match('/^ANSWER:\s?[A-Z]/', $line)
-        && !preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $line);
+        && !preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $line)
+        && !preg_match('/^SCORE:\s?(.*)/', $line);
 }

@@ -140,7 +140,7 @@ Feature: Special case 2 — tutor workflow
     And I should see "Statut"
     And I should see "Code officiel"
     And I should see "Tél"
-    And I should see "Zone horaire"
+    And I should see "Fuseau horaire"
 
     # ---- DIAGNOSTIC PAGE ----
     When I am on "/main/search/load_search.php"
@@ -311,19 +311,13 @@ Feature: Special case 2 — tutor workflow
     Then I should see "Assigner la compétence"
 
     # ---- SELECT A SKILL ----
-    # "NewSkill" (the Behat source's own literal option) no longer exists —
-    # confirmed live: "skill" is now the top of a 4-level cascading
-    # picker (category -> capacité -> dimension -> a single terminal
-    # leaf), each level a plain native <select> whose 'change' event
-    # triggers a full page reload carrying the choice made so far in its
-    # own query string (?current=sub_skill_id_N&sub_skill_list=...). Picks
-    # one concrete, real leaf skill instead of a fixture name that was
-    # never going to exist on this platform.
-    And I select "Compétences linguistiques" from "skill"
-    And I wait for the page to be loaded
-    And I select "Savoir agir dans la langue cible" from "sub_skill_id_1"
-    And I wait for the page to be loaded
-    And I select "Se faire comprendre au quotidien" from "sub_skill_id_2"
+    # "NewSkill" (the Behat source's own literal option) is a top-level
+    # skill of the platform that specialCase1PlatformSettings creates
+    # earlier in the chain (the 4-level "Compétences linguistiques" tree
+    # this step used before was a customer fixture no installation has).
+    # Confirmed live: assigning a skill needs only the "skill" select, the
+    # sub-skill selects are optional (assign.php).
+    And I select "NewSkill" from "skill"
     And I wait for the page to be loaded
     And I fill in "argumentation" with "test skills"
     And I press "assign_skill_save"
@@ -341,9 +335,9 @@ Feature: Special case 2 — tutor workflow
   Scenario: Tuteur deletes legal agreement and generates document
     # "Delete legal agreement" only appears once the learner has actually
     # ACCEPTED the agreement — confirmed live: myStudents.php showed
-    # "Envoyer le contrat d'apprentissage" (Send) both before AND right
+    # "Envoyer l'accord légal" (Send) both before AND right
     # after the tutor sends it in the earlier scenario, and only switches
-    # to "Supprimer le contrat d'apprentissage" (Delete) once parkur01 goes
+    # to "Supprimer l'accord légal" (Delete) once parkur01 goes
     # through this exact acceptance flow. This is the missing half of that
     # earlier scenario's own skipped portion (see its own header comment):
     # accepting via tc.php needs no course/session/LP at all, unlike the
@@ -363,7 +357,7 @@ Feature: Special case 2 — tutor workflow
     And I resolve the user id for "parkur01"
     When I am on "/main/my_space/myStudents.php?student=USER_ID" with the resolved user id
     And I wait for the page to be loaded
-    Then I should see "Supprimer le contrat d’apprentissage"
+    Then I should see "Supprimer l'accord légal"
 
     # "Générer" — confirmed live as the Certificate row's own action
     # (generate_certificate), matching the Behat source's own "Generate"

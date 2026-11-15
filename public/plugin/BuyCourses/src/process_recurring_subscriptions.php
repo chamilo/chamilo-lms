@@ -147,7 +147,7 @@ $closeCoursesForSubscriptionSale = static function (
 
     $sql = "SELECT sc.id, sc.course_id, sc.status, sc.context_json, c.visibility AS current_visibility
         FROM $subscriptionCourseTable sc
-        INNER JOIN $courseTable c ON c.id = sc.course_id
+        INNER JOIN $courseTable c ON c.id = sc.course_id AND c.deleted_at IS NULL
         WHERE sc.service_sale_id = $serviceSaleId
           AND sc.status = 'active'
           $excludedSql
@@ -285,7 +285,7 @@ $hideClosedCoursesForSubscriptionSale = static function (
 
     $sql = "SELECT sc.id, sc.course_id, sc.closed_at, sc.context_json, c.visibility AS current_visibility
         FROM $subscriptionCourseTable sc
-        INNER JOIN $courseTable c ON c.id = sc.course_id
+        INNER JOIN $courseTable c ON c.id = sc.course_id AND c.deleted_at IS NULL
         WHERE sc.service_sale_id = $serviceSaleId
           AND sc.status = 'closed'
           AND sc.closed_at IS NOT NULL

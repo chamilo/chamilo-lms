@@ -30,7 +30,8 @@ function validate_data($users_courses)
                 // 2.1.1 Check whether course with this code exists in the system.
                 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
                 $sql = "SELECT * FROM $course_table
-                        WHERE code = '".Database::escape_string($user_course['CourseCode'])."'";
+                        WHERE code = '".Database::escape_string($user_course['CourseCode'])."'
+                        AND deleted_at IS NULL";
                 $res = Database::query($sql);
                 if (0 == Database::num_rows($res)) {
                     $user_course['error'] = get_lang('This code does not exist');

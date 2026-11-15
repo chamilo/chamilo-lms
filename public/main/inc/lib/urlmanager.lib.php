@@ -1463,7 +1463,8 @@ class UrlManager
         $sql = "
         SELECT id, code, title
         FROM $tbl
-        WHERE title LIKE '$needle%' OR code LIKE '$needle%'
+        WHERE (title LIKE '$needle%' OR code LIKE '$needle%')
+        AND deleted_at IS NULL
         ORDER BY title, code
         LIMIT 11
     ";

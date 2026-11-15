@@ -131,7 +131,8 @@ class CourseManager
                 "SELECT course.*, language.isocode AS course_language, course.id as real_id
                 FROM $courseTable course
                 INNER JOIN $languageTable language ON language.id = course.language_id
-                WHERE course.code = '".Database::escape_string($course_code)."'"
+                WHERE course.code = '".Database::escape_string($course_code)."'
+                AND course.deleted_at IS NULL"
             ),
             'ASSOC'
         );
@@ -195,6 +196,9 @@ class CourseManager
                 $sql .= " AND visibility = $visibility ";
             }
         }
+
+        // Deleted courses keep their row (to never reuse their id), but are not listed.
+        $sql .= ' AND course.deleted_at IS NULL ';
 
         if (!empty($urlId)) {
             $urlId = (int) $urlId;
@@ -2961,7 +2965,7 @@ class CourseManager
     {
         $courseCode = Database::escape_string($courseCode);
         $sql = "SELECT 1 FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE code = '$courseCode'";
+                WHERE code = '$courseCode' AND deleted_at IS NULL";
 
         return Database::num_rows(Database::query($sql));
     }
@@ -3040,7 +3044,7 @@ class CourseManager
         $courseList = [];
 
         // Get list of special courses (appear to all)
-        $sql = "SELECT id FROM $courseTable WHERE sticky = 1";
+        $sql = "SELECT id FROM $courseTable WHERE sticky = 1 AND deleted_at IS NULL";
         $result = Database::query($sql);
         while ($row = Database::fetch_assoc($result)) {
             $courseList[] = $row['id'];
@@ -3299,7 +3303,7 @@ class CourseManager
     {
         $path = Database::escape_string(str_replace('.', '', str_replace('/', '', $path)));
         $res = Database::query("SELECT code FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE directory LIKE BINARY '$path'");
+                WHERE directory LIKE BINARY '$path' AND deleted_at IS NULL");
         if (false === $res) {
             return false;
         }
@@ -3326,7 +3330,8 @@ class CourseManager
         $sql_result = Database::query("SELECT course.*, language.isocode AS course_language
                 FROM $courseTable course
                 INNER JOIN $languageTable language ON language.id = course.language_id
-                WHERE course.visual_code = '".Database::escape_string($code)."'");
+                WHERE course.visual_code = '".Database::escape_string($code)."'
+                AND course.deleted_at IS NULL");
         while ($virtual_course = Database::fetch_array($sql_result)) {
             $result[] = $virtual_course;
         }
@@ -4666,8 +4671,8 @@ class CourseManager
                 $row = Database::fetch_array($result);
                 $count = $row['count'] + 1;
                 $wanted_code = $wanted_code.'_'.$count;
-                $result = api_get_course_info($wanted_code);
-                if (empty($result)) {
+                // course_code_exists() also sees deleted courses, whose code stays reserved.
+                if (!self::course_code_exists($wanted_code)) {
                     return $wanted_code;
                 }
             }
@@ -5266,9 +5271,10 @@ class CourseManager
                 $sql .= " AND visibility = $visibility ";
             }
         } else {
+            $sql .= ' WHERE c.deleted_at IS NULL ';
             if (null !== $visibility && '' !== $visibility) {
                 $visibility = intval($visibility);
-                $sql .= " WHERE visibility = $visibility ";
+                $sql .= " AND visibility = $visibility ";
             }
         }
 
@@ -5299,7 +5305,7 @@ class CourseManager
                         u.access_url_id = $urlId AND
                         visibility <> ".Course::HIDDEN;
         } else {
-            $sql .= " WHERE visibility <> ".Course::HIDDEN;
+            $sql .= " WHERE c.deleted_at IS NULL AND visibility <> ".Course::HIDDEN;
         }
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
@@ -6270,7 +6276,8 @@ class CourseManager
             Database::query(
                 "SELECT course.*, language.isocode AS course_language, course.id as real_id
                 FROM $table course
-                INNER JOIN $languageTable language ON language.id = course.language_id"
+                INNER JOIN $languageTable language ON language.id = course.language_id
+                WHERE course.deleted_at IS NULL"
             )
         );
     }
@@ -6314,7 +6321,7 @@ class CourseManager
 
         $sql = "SELECT id, code, title
                 FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE $visibility id NOT IN (
+                WHERE deleted_at IS NULL AND $visibility id NOT IN (
                     SELECT DISTINCT c_id
                     FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE).$dateConditional."
                 )
@@ -6820,7 +6827,7 @@ class CourseManager
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "SELECT count(id) count
                 FROM $table
-                WHERE visibility IN (".implode(',', $visibility).")";
+                WHERE deleted_at IS NULL AND visibility IN (".implode(',', $visibility).")";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 

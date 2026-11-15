@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle;
 
+use Chamilo\CoreBundle\DependencyInjection\Compiler\DeletedCourseFilterSluggablePass;
 use Chamilo\CoreBundle\DependencyInjection\Compiler\PluginEntityPass;
 use Chamilo\CoreBundle\DependencyInjection\Compiler\PluginEventSubscriberPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,6 +21,7 @@ class ChamiloCoreBundle extends Bundle
         $container
             ->addCompilerPass(new PluginEventSubscriberPass())
             ->addCompilerPass(new PluginEntityPass())
+            ->addCompilerPass(new DeletedCourseFilterSluggablePass())
         ;
     }
 }

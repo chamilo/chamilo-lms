@@ -186,6 +186,7 @@ final readonly class SurveyCopyProvider implements ProviderInterface
             SELECT c.id AS courseId, c.code AS courseCode, c.title AS courseTitle, 0 AS sessionId, NULL AS sessionTitle, 'course' AS targetType
             FROM course c
             WHERE NOT (c.id = :currentCourseId AND 0 = :currentSessionId)
+            AND c.deleted_at IS NULL
             $searchSql
             UNION
             SELECT c.id AS courseId, c.code AS courseCode, c.title AS courseTitle, s.id AS sessionId, s.title AS sessionTitle, 'session' AS targetType

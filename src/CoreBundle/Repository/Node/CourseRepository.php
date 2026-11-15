@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Repository\Node;
 
+use Chamilo\CoreBundle\Doctrine\Filter\DeletedCourseFilter;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
@@ -24,6 +25,8 @@ use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use RuntimeException;
+use Throwable;
 
 /**
  * Class CourseRepository.
@@ -39,23 +42,61 @@ class CourseRepository extends ResourceRepository
         parent::__construct($registry, Course::class);
     }
 
+    /**
+     * Deletes a course but keeps its row, so that its id is never given to another course and the
+     * logs that still point to it (track_e_default, ...) never attach to a new course.
+     *
+     * The course goes through the normal ORM removal, so every cascade still runs exactly as for a
+     * hard delete: ORM cascades and entity listeners, and the database ON DELETE CASCADE / SET NULL
+     * of the tables that point to the course (subscriptions, URL links, resource node and content,
+     * gradebook, ...). In the same transaction, the row is then written back with the same id, code
+     * and title, without resource node, and with deleted_at set. DeletedCourseFilter hides it from
+     * the ORM, and the code stays reserved.
+     */
     public function deleteCourse(Course $course): void
     {
         $em = $this->getEntityManager();
+        $connection = $em->getConnection();
+        $courseId = (int) $course->getId();
 
-        // Deleting all nodes connected to the course:
-        // $node = $course->getResourceNode();
-        // $children = $node->getChildren();
-        // /* var ResourceNode $child
-        /*foreach ($children as $child) {
-            var_dump($child->getId().'-'.$child->getTitle().'<br />');
-            var_dump(get_class($child));
-            $em->remove($child);
-        }*/
+        $row = $connection->fetchAssociative('SELECT * FROM course WHERE id = ?', [$courseId]);
+        if (false === $row) {
+            throw new RuntimeException('Course '.$courseId.' not found.');
+        }
 
-        $em->remove($course);
-        $em->flush();
+        $row['resource_node_id'] = null;
+        $row['deleted_at'] = gmdate('Y-m-d H:i:s');
+
+        $connection->beginTransaction();
+
+        try {
+            $em->remove($course);
+            $em->flush();
+            $connection->insert('course', $row);
+            $connection->commit();
+        } catch (Throwable $exception) {
+            if ($connection->isTransactionActive()) {
+                $connection->rollBack();
+            }
+
+            throw $exception;
+        }
+
         $em->clear();
+    }
+
+    /**
+     * Same as findBy(), but deleted courses are included. Used by the UniqueEntity constraints on
+     * the code and visual code, which must stay reserved after a course is deleted.
+     *
+     * @return Course[]
+     */
+    public function findByIncludingDeleted(array $criteria): array
+    {
+        return DeletedCourseFilter::withDeletedCourses(
+            $this->getEntityManager(),
+            fn (): array => $this->findBy($criteria)
+        );
     }
 
     public function findOneByCode(string $code): ?Course
@@ -286,6 +327,9 @@ class CourseRepository extends ResourceRepository
         return $queryBuilder;
     }
 
+    /**
+     * Deleted courses are included: their code stays reserved.
+     */
     public function courseCodeExists(string $code): bool
     {
         $qb = $this->createQueryBuilder('c')
@@ -295,7 +339,10 @@ class CourseRepository extends ResourceRepository
             ->getQuery()
         ;
 
-        return (int) $qb->getSingleScalarResult() > 0;
+        return DeletedCourseFilter::withDeletedCourses(
+            $this->getEntityManager(),
+            static fn (): bool => (int) $qb->getSingleScalarResult() > 0
+        );
     }
 
     public function findCourseAsArray($id)

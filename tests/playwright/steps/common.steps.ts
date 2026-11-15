@@ -3708,16 +3708,34 @@ When(
 // ATTENDANCE_ID.
 let lastResolvedUserId: string | null = null
 
-When("I resolve the user id for {string}", async ({ page }, username: string) => {
+// find_users only returns every user to an administrator (or when the platform allows sending messages to all users):
+// anyone else finds their friends only. A tutor looking up a learner would therefore find nobody, so an id resolved once
+// (while an administrator is logged in) is remembered by username and reused by every later lookup of that username.
+const resolvedUserIds = new Map<string, string>()
+
+async function findUserIdByUsername(page: Page, username: string): Promise<string> {
+  const cached = resolvedUserIds.get(username)
+  if (cached) {
+    return cached
+  }
   const response = await page.request.get(
     `/main/inc/ajax/message.ajax.php?a=find_users&q=${encodeURIComponent(username)}&page_limit=10`,
   )
   const { items } = await response.json()
   const id = items?.[0]?.id
   if (!id) {
-    throw new Error(`find_users returned no match for username "${username}"`)
+    throw new Error(
+      `find_users returned no match for username "${username}" (it only lists friends to a non-administrator: ` +
+        'resolve the id while an administrator is logged in)',
+    )
   }
-  lastResolvedUserId = String(id)
+  resolvedUserIds.set(username, String(id))
+
+  return String(id)
+}
+
+When("I resolve the user id for {string}", async ({ page }, username: string) => {
+  lastResolvedUserId = await findUserIdByUsername(page, username)
 })
 
 Given("I am on {string} with the resolved user id", async ({ page }, pathTemplate: string) => {
@@ -3769,14 +3787,7 @@ When("I trigger the download at {string} with the resolved user id", async ({ pa
 When(
   "I subscribe the learner {string} to the first {int} available sessions",
   async ({ page }, learnerUsername: string, count: number) => {
-    const searchResponse = await page.request.get(
-      `/main/inc/ajax/message.ajax.php?a=find_users&q=${encodeURIComponent(learnerUsername)}&page_limit=10`,
-    )
-    const { items } = await searchResponse.json()
-    const learnerId = items?.[0]?.id
-    if (!learnerId) {
-      throw new Error(`find_users returned no match for username "${learnerUsername}"`)
-    }
+    const learnerId = await findUserIdByUsername(page, learnerUsername)
     await gotoReliably(page, `/main/search/load_search.php?user_id=${learnerId}&save=&_qf__load=`)
     await page.waitForLoadState("networkidle")
     const hrefs = await page.evaluate(() =>

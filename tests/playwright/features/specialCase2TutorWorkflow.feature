@@ -105,6 +105,9 @@ Feature: Special case 2 — tutor workflow
     And I assign the learner "parkur01" to the student's superior "tuteur_fr"
     And I wait for the page to be loaded
     Then I should not see an error
+    # The tutors cannot look the learner up themselves (find_users lists friends only to a non-administrator): resolve
+    # the id now, as administrator, and the later scenarios reuse it.
+    And I resolve the user id for "parkur01"
 
   Scenario: Tuteur_fr opens diagnosis page and sends finalization message
     # tuteur_fr's own interface language is French (set at creation above),

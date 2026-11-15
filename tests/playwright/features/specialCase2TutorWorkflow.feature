@@ -153,7 +153,7 @@ Feature: Special case 2 — tutor workflow
     # selected in the "Utilisateur" field.
     And I press "Afficher le diagnostic"
     And I wait for the page content to settle
-    And I click element "div.display-panel-collapse__header" containing text "Les thèmes qui m’intéressent"
+    And I click element "div.display-panel-collapse__header" containing text "Mes objectifs d'apprentissage"
     And I wait for the page content to settle
     # A native <select>'s own currently-selected <option> is not exposed as
     # visible DOM text the way a rendered div/span is (confirmed live: even

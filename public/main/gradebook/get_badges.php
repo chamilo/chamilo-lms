@@ -6,6 +6,8 @@
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
+use Chamilo\CoreBundle\Entity\SkillRelUser;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $userId = isset($_GET['user']) ? (int) $_GET['user'] : 0;
@@ -19,25 +21,31 @@ SkillModel::isAllowed($userId);
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
-$objSkillRelUser = new SkillRelUserModel();
-$userSkills = $objSkillRelUser->getUserSkills($userId, $courseId, $sessionId);
-
-if (empty($userSkills)) {
-    api_not_allowed(true);
+$criteria = [
+    'user' => $userId,
+    'status' => SkillRelUser::STATUS_ACQUIRED,
+];
+if ($courseId > 0) {
+    $criteria['course'] = $courseId;
+    $criteria['session'] = $sessionId > 0 ? $sessionId : null;
 }
 
+$issues = Database::getManager()->getRepository(SkillRelUser::class)->findBy($criteria, ['id' => 'ASC']);
 $assertions = [];
-foreach ($userSkills as $skill) {
-    $skillId = current($skill);
-    $assertionUrl = api_get_path(WEB_CODE_PATH).'skills/assertion.php?';
-    $assertionUrl .= http_build_query([
-        'user' => $userId,
-        'skill' => $skillId,
-        'course' => $courseId,
-        'session' => $sessionId,
-    ]);
+foreach ($issues as $issue) {
+    if (!$issue instanceof SkillRelUser
+        || null === $issue->getId()
+        || null === $issue->getSkill()?->getId()
+        || $issue->getSkill()->getAccessUrlId() !== api_get_current_access_url_id()
+    ) {
+        continue;
+    }
 
-    $assertions[] = $assertionUrl;
+    $assertions[] = $issue->getAssertionUrl();
+}
+
+if ([] === $assertions) {
+    api_not_allowed(true);
 }
 
 $backpack = 'https://backpack.openbadges.org/';
@@ -54,13 +62,24 @@ $htmlHeadXtra[] = '<script src="'.$backpack.'issuer.js"></script>';
 
 $tpl = new Template(get_lang('Badges'), false, false);
 
+// Hosted assertion URLs remain usable when the configured backpack is unavailable.
+$links = '<ul>';
+foreach ($assertions as $index => $assertionUrl) {
+    $safeUrl = htmlspecialchars($assertionUrl, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    $links .= '<li><a href="'.$safeUrl.'" target="_blank" rel="noopener noreferrer">'
+        .htmlspecialchars(get_lang('Badge'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').' '.($index + 1).'</a></li>';
+}
+$links .= '</ul>';
+
 $tpl->assign(
     'content',
-    "<script>
+    $links.'<script>
     $(function() {
-        OpenBadges.issue_no_modal(".json_encode($assertions).");
+        if (window.OpenBadges && typeof window.OpenBadges.issue_no_modal === "function") {
+            window.OpenBadges.issue_no_modal('.json_encode($assertions, JSON_THROW_ON_ERROR).');
+        }
     });
-    </script>"
+    </script>'
 );
 
 $tpl->display_one_col_template();

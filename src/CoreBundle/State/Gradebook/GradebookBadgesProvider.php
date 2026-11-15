@@ -61,15 +61,10 @@ final readonly class GradebookBadgesProvider implements ProviderInterface
         ]);
         $assertions = [];
         foreach ($issues as $issue) {
-            if (!$issue instanceof SkillRelUser || null === $issue->getSkill()?->getId()) {
+            if (!$issue instanceof SkillRelUser || null === $issue->getId() || null === $issue->getSkill()?->getId()) {
                 continue;
             }
-            $assertions[] = '/main/skills/assertion.php?'.http_build_query([
-                'user' => (int) $learner->getId(),
-                'skill' => (int) $issue->getSkill()->getId(),
-                'course' => (int) $resolved->course->getId(),
-                'session' => (int) ($resolved->session?->getId() ?? 0),
-            ]);
+            $assertions[] = $issue->getAssertionUrl();
         }
 
         $resource = new GradebookBadges();

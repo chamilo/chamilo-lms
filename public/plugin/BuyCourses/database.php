@@ -769,6 +769,48 @@ if (false === $sm->tablesExist($subscriptionCourseTableName)) {
     $subscriptionCourseTable->addIndex(['status'], 'idx_buycourses_subscription_course_status');
 }
 
+
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_REMINDER))) {
+    $reminderTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_REMINDER));
+    $reminderTable->addColumn('id', Types::INTEGER, ['autoincrement' => true, 'unsigned' => true]);
+    $reminderTable->addColumn('days_after', Types::INTEGER, ['unsigned' => true]);
+    $reminderTable->addColumn('subject', Types::TEXT);
+    $reminderTable->addColumn('body', Types::TEXT);
+    $reminderTable->addColumn('discount_type', Types::INTEGER, ['unsigned' => true, 'notnull' => false]);
+    $reminderTable->addColumn('discount_amount', Types::DECIMAL, ['precision' => 10, 'scale' => 2, 'notnull' => false]);
+    $reminderTable->addColumn('discount_valid_days', Types::INTEGER, ['unsigned' => true, 'notnull' => false]);
+    $reminderTable->addColumn('active', Types::BOOLEAN, ['default' => true]);
+    $reminderTable->addColumn('created_at', Types::DATETIME_MUTABLE);
+    $reminderTable->addColumn('updated_at', Types::DATETIME_MUTABLE);
+    $reminderTable->setPrimaryKey(['id']);
+    $reminderTable->addIndex(['days_after'], 'idx_buycourses_reminder_days');
+    $reminderTable->addIndex(['active'], 'idx_buycourses_reminder_active');
+}
+
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_REMINDER_ITEM))) {
+    $reminderItemTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_REMINDER_ITEM));
+    $reminderItemTable->addColumn('id', Types::INTEGER, ['autoincrement' => true, 'unsigned' => true]);
+    $reminderItemTable->addColumn('reminder_id', Types::INTEGER, ['unsigned' => true]);
+    $reminderItemTable->addColumn('product_type', Types::INTEGER, ['unsigned' => true]);
+    $reminderItemTable->addColumn('product_id', Types::INTEGER, ['unsigned' => true]);
+    $reminderItemTable->setPrimaryKey(['id']);
+    $reminderItemTable->addUniqueIndex(['reminder_id', 'product_type', 'product_id'], 'uniq_buycourses_reminder_item');
+    $reminderItemTable->addIndex(['product_type', 'product_id'], 'idx_buycourses_reminder_item_product');
+}
+
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_REMINDER_SENT))) {
+    $reminderSentTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_REMINDER_SENT));
+    $reminderSentTable->addColumn('id', Types::INTEGER, ['autoincrement' => true, 'unsigned' => true]);
+    $reminderSentTable->addColumn('reminder_id', Types::INTEGER, ['unsigned' => true]);
+    $reminderSentTable->addColumn('sale_kind', Types::STRING, ['length' => 16]);
+    $reminderSentTable->addColumn('sale_id', Types::INTEGER, ['unsigned' => true]);
+    $reminderSentTable->addColumn('coupon_id', Types::INTEGER, ['unsigned' => true, 'notnull' => false]);
+    $reminderSentTable->addColumn('sent_at', Types::DATETIME_MUTABLE);
+    $reminderSentTable->setPrimaryKey(['id']);
+    $reminderSentTable->addUniqueIndex(['reminder_id', 'sale_kind', 'sale_id'], 'uniq_buycourses_reminder_sent');
+    $reminderSentTable->addIndex(['sale_kind', 'sale_id'], 'idx_buycourses_reminder_sent_sale');
+}
+
 $queries = $pluginSchema->toSql($platform);
 
 foreach ($queries as $query) {

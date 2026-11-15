@@ -69,8 +69,12 @@ abstract class BuyCoursesCharacterizationTestCase extends KernelTestCase
             : false;
         $hasCents = false !== $priceColumn && str_contains((string) $priceColumn['Type'], ',2)')
             && false !== $couponColumn && str_contains((string) $couponColumn['Type'], ',2)');
-        // The installer creates 30 plugin tables.
-        if ($count >= 30 && $hasVatColumns && $hasCents) {
+        $hasReminders = $count > 0
+            && (bool) $pdo->query("SHOW TABLES LIKE 'plugin_buycourses_reminder'")->fetch();
+        $hasCouponRestrict = $count > 0
+            && (bool) $pdo->query("SHOW COLUMNS FROM plugin_buycourses_coupon LIKE 'restricted_user_id'")->fetch();
+        // The installer creates the plugin tables (including purchase reminders).
+        if ($count >= 30 && $hasVatColumns && $hasCents && $hasReminders && $hasCouponRestrict) {
             return;
         }
 

@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use PhpZip\ZipFile;
 
 /**
  * Best-effort: fetch AiDisclosureHelper from Symfony container (legacy context).
@@ -259,30 +260,26 @@ function setExerciseInfoFromAikenText($aikenText, &$exerciseInfo): void
 function aiken_import_exercise(string $file = null, ?array $request = [])
 {
     $exerciseInfo = [];
-    $fileIsSet = false;
-    $baseWorkDir = api_get_path(SYS_ARCHIVE_PATH) . 'aiken/';
-    $uploadPath = 'aiken_' . api_get_unique_id();
-
     $aiMeta = null;
 
     if ($file) {
-        $fileIsSet = true;
-
-        if (!is_dir($baseWorkDir . $uploadPath)) {
-            mkdir($baseWorkDir . $uploadPath, api_get_permissions_for_new_directories(), true);
-        }
-
         $exerciseInfo['name'] = preg_replace('/\.(zip|txt)$/i', '', basename($file));
+        $exerciseInfo['total_weight'] = !empty($_POST['total_weight']) ? (int) $_POST['total_weight'] : 20;
         $exerciseInfo['question'] = [];
 
         if (!preg_match('/\.(zip|txt)$/i', $file)) {
             return get_lang('You must upload a .txt or .zip file');
         }
 
-        $result = aiken_parse_file($exerciseInfo, $file);
+        $aikenText = aiken_read_file_text($file);
+        if (null === $aikenText) {
+            return get_lang('No .txt file found in zip');
+        }
 
-        if ($result !== true) {
-            return $result;
+        setExerciseInfoFromAikenText($aikenText, $exerciseInfo);
+
+        if (empty($exerciseInfo['question'])) {
+            return get_lang('No questions found');
         }
     } elseif (!empty($request)) {
         $exerciseTitle = trim((string) ($request['exercise_title'] ?? ''));
@@ -305,7 +302,106 @@ function aiken_import_exercise(string $file = null, ?array $request = [])
         $aiMeta = aiken_build_ai_meta_from_request($request);
     }
 
-    return create_exercise_from_aiken($exerciseInfo, $fileIsSet ? $baseWorkDir . $uploadPath : null, $aiMeta);
+    return create_exercise_from_aiken($exerciseInfo, null, $aiMeta);
+}
+
+/**
+ * Handles the file sent by the Aiken import form (aiken.php) and creates the exercise.
+ *
+ * @param array<string,mixed> $fileData One entry of $_FILES
+ *
+ * @return int|false The new exercise ID, or false on failure (an error flash message is added)
+ */
+function aiken_import_file(array $fileData): false|int
+{
+    if (!process_uploaded_file($fileData, false)) {
+        Display::addFlash(Display::return_message(get_lang('The file upload has failed.'), 'error'));
+
+        return false;
+    }
+
+    $fileName = basename((string) $fileData['name']);
+    if (!preg_match('/\.(zip|txt)$/i', $fileName)) {
+        Display::addFlash(Display::return_message(get_lang('You must upload a .txt or .zip file'), 'error'));
+
+        return false;
+    }
+
+    // Keep the original file name: it becomes the test title.
+    $uploadDir = api_get_path(SYS_ARCHIVE_PATH).'aiken/upload_'.api_get_unique_id().'/';
+    mkdir($uploadDir, api_get_permissions_for_new_directories(), true);
+    $filePath = $uploadDir.$fileName;
+
+    if (!move_uploaded_file($fileData['tmp_name'], $filePath)) {
+        rmdirr($uploadDir);
+        Display::addFlash(Display::return_message(get_lang('The file upload has failed.'), 'error'));
+
+        return false;
+    }
+
+    $imported = aiken_import_exercise($filePath);
+    rmdirr($uploadDir);
+
+    if (is_numeric($imported) && !empty($imported)) {
+        Display::addFlash(Display::return_message(get_lang('Uploaded.')));
+
+        return (int) $imported;
+    }
+
+    Display::addFlash(Display::return_message(is_string($imported) ? $imported : get_lang('The file upload has failed.'), 'error'));
+
+    return false;
+}
+
+/**
+ * Returns the Aiken text of a .txt file, or of all the .txt files of a .zip file.
+ *
+ * @return string|null Null when the file cannot be read or the zip has no .txt file
+ */
+function aiken_read_file_text(string $file): ?string
+{
+    if (!is_file($file)) {
+        return null;
+    }
+
+    if (preg_match('/\.txt$/i', $file)) {
+        $text = file_get_contents($file);
+    } else {
+        $texts = [];
+        $zipFile = new ZipFile();
+
+        try {
+            $zipFile->openFile($file);
+            foreach ($zipFile->getListFiles() as $entryName) {
+                if (preg_match('/\.txt$/i', $entryName) && !str_starts_with(basename($entryName), '.')) {
+                    $texts[] = $zipFile->getEntryContents($entryName);
+                }
+            }
+        } catch (Throwable $e) {
+            error_log('Aiken import: could not read zip file: '.$e->getMessage());
+
+            return null;
+        } finally {
+            $zipFile->close();
+        }
+
+        if (empty($texts)) {
+            return null;
+        }
+
+        $text = implode("\n\n", $texts);
+    }
+
+    if (false === $text) {
+        return null;
+    }
+
+    // Files saved by older editors are often ISO-8859-1.
+    if (!mb_check_encoding($text, 'UTF-8')) {
+        $text = mb_convert_encoding($text, 'UTF-8', 'ISO-8859-1');
+    }
+
+    return $text;
 }
 
 /**
@@ -483,7 +579,7 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir, ?arra
     }
 
     if ($workDir) {
-        my_delete($workDir);
+        rmdirr($workDir);
     }
 
     return $lastExerciseId;

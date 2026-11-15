@@ -34,7 +34,7 @@
             {% if allow_export %}
                 <hr class="my-4">
                 <p class="text-center">
-                    <a href="#" class="btn btn--success" id="badge-export-button">
+                    <a href="{{ issue_info.badge_assertion }}" class="btn btn--success" id="badge-export-button" target="_blank" rel="noopener noreferrer">
                         <em class="fa fa-external-link-square fa-fw"></em> {{ 'Export badge'|trans }}
                     </a>
                 </p>
@@ -129,8 +129,17 @@
     <script>
       $(function() {
         $("#badge-export-button").on("click", function(e) {
+          if (!window.OpenBadges || typeof window.OpenBadges.issue !== "function") {
+            return
+          }
+
           e.preventDefault()
-          OpenBadges.issue({{ issue_info.badge_assertion|json_encode() }})
+          const assertionUrl = {{ issue_info.badge_assertion|json_encode|raw }}
+          try {
+            window.OpenBadges.issue(assertionUrl)
+          } catch (error) {
+            window.open(assertionUrl, "_blank", "noopener,noreferrer")
+          }
         })
       })
     </script>

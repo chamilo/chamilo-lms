@@ -9,7 +9,14 @@
     </div>
 
     <div class="flex w-fit flex-wrap items-center gap-1 rounded-xl border border-gray-20 bg-white px-2 py-1 shadow-sm">
-      <BaseButton :label="t('Back')" :route="backRoute" icon="back" only-icon size="normal" type="primary-text" />
+      <BaseButton
+        :label="t('Back')"
+        :route="backRoute"
+        icon="back"
+        only-icon
+        size="normal"
+        type="primary-text"
+      />
     </div>
 
     <div class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
@@ -17,14 +24,35 @@
       <p class="mt-1 text-sm text-gray-600">{{ badges?.learner?.fullName || "-" }}</p>
     </div>
 
-    <div v-if="isLoading" class="rounded-xl border border-gray-20 bg-white p-6 text-sm text-gray-600 shadow-sm">
+    <div
+      v-if="isLoading"
+      class="rounded-xl border border-gray-20 bg-white p-6 text-sm text-gray-600 shadow-sm"
+    >
       {{ t("Loading...") }}
     </div>
 
-    <div v-else class="rounded-xl border border-gray-20 bg-white p-6 shadow-sm">
+    <div
+      v-else
+      class="rounded-xl border border-gray-20 bg-white p-6 shadow-sm"
+    >
       <p class="mb-4 text-sm text-gray-600">
         {{ badges?.assertions?.length ? `${badges.assertions.length} ${t("Badges")}` : t("No results found") }}
       </p>
+      <div
+        v-if="badges?.assertions?.length"
+        class="mb-4 space-y-2"
+      >
+        <a
+          v-for="(assertion, index) in badges.assertions"
+          :key="assertion"
+          :href="assertion"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="block underline"
+        >
+          {{ t("Badge") }} {{ index + 1 }}
+        </a>
+      </div>
       <BaseButton
         v-if="badges?.assertions?.length"
         :disabled="isIssuing"
@@ -76,7 +104,8 @@ async function loadBadges() {
       userId: Number(route.params.userId || 0) || undefined,
     })
   } catch (error) {
-    errorMessage.value = error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("No data available")
+    errorMessage.value =
+      error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("No data available")
   } finally {
     isLoading.value = false
   }
@@ -86,33 +115,91 @@ function loadExternalScript(url) {
   return new Promise((resolve, reject) => {
     const existing = Array.from(document.scripts).find((script) => script.dataset.gradebookOpenbadges === url)
     if (existing) {
-      if (window.OpenBadges) resolve()
-      else existing.addEventListener("load", resolve, { once: true })
-      return
+      if (typeof window.OpenBadges?.issue_no_modal === "function") {
+        resolve()
+        return
+      }
+      // A previously failed script cannot emit another load event.
+      existing.remove()
     }
     const script = document.createElement("script")
     script.src = url
     script.async = true
     script.dataset.gradebookOpenbadges = url
     script.addEventListener("load", resolve, { once: true })
-    script.addEventListener("error", reject, { once: true })
+    script.addEventListener(
+      "error",
+      () => {
+        script.remove()
+        reject(new Error("Badge backpack script could not be loaded"))
+      },
+      { once: true },
+    )
     document.head.appendChild(script)
   })
 }
 
+async function downloadHostedAssertions() {
+  const assertions = []
+  for (const rawUrl of badges.value.assertions) {
+    const url = new URL(rawUrl, window.location.href)
+    const issueId = url.searchParams.get("issue")
+    if (
+      url.hostname !== window.location.hostname ||
+      !url.pathname.endsWith("/main/skills/assertion.php") ||
+      !/^[1-9]\d*$/.test(issueId || "")
+    ) {
+      throw new Error("Invalid badge assertion URL")
+    }
+
+    // Use the local origin even if the site's configured public URL has a different scheme.
+    const response = await fetch(`${url.pathname}${url.search}`, {
+      credentials: "same-origin",
+      headers: { Accept: "application/json" },
+    })
+    if (!response.ok) {
+      throw new Error("Unable to retrieve badge assertion")
+    }
+    const assertion = await response.json()
+    if (assertion?.type !== "Assertion") {
+      throw new Error("Invalid badge assertion")
+    }
+    assertions.push(assertion)
+  }
+
+  // Each array entry is a full Open Badges v2 Assertion, not a standardized batch credential.
+  const blob = new Blob([JSON.stringify(assertions, null, 2)], { type: "application/json" })
+  const downloadUrl = URL.createObjectURL(blob)
+  const link = document.createElement("a")
+  link.href = downloadUrl
+  link.download = "openbadges-assertions.json"
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 1000)
+}
+
 async function issueBadges() {
-  if (!badges.value?.assertions?.length || !badges.value?.backpackScriptUrl) {
+  if (!badges.value?.assertions?.length) {
     errorMessage.value = t("No data available")
     return
   }
   isIssuing.value = true
   errorMessage.value = ""
   try {
-    await loadExternalScript(badges.value.backpackScriptUrl)
-    if (!window.OpenBadges || typeof window.OpenBadges.issue_no_modal !== "function") {
-      throw new Error("OpenBadges issuer is unavailable")
+    if (badges.value.backpackScriptUrl) {
+      try {
+        await loadExternalScript(badges.value.backpackScriptUrl)
+        if (typeof window.OpenBadges?.issue_no_modal !== "function") {
+          throw new Error("OpenBadges issuer is unavailable")
+        }
+        window.OpenBadges.issue_no_modal(badges.value.assertions)
+        return
+      } catch (error) {
+        console.warn("Badge backpack unavailable; exporting hosted assertions locally.", error)
+      }
     }
-    window.OpenBadges.issue_no_modal(badges.value.assertions)
+    await downloadHostedAssertions()
   } catch (error) {
     errorMessage.value = error?.message || t("No data available")
   } finally {

@@ -5185,6 +5185,7 @@ Then("the GH1712 announcement controls should match the available recipients", a
 // by title: this remembers the id of the NEWEST skill with exactly that title (the one the running
 // feature just created) and "I am on ... with the remembered skill id" substitutes it for SKILL_ID.
 let lastRememberedSkillId: string | null = null
+const rememberedSkillIds: Record<string, string> = {}
 
 When("I remember the id of the skill {string}", async ({ page }, title: string) => {
   const response = await page.request.get(`/api/skills?title=${encodeURIComponent(title)}&itemsPerPage=100`, {
@@ -5198,6 +5199,7 @@ When("I remember the id of the skill {string}", async ({ page }, title: string) 
     throw new Error(`No skill titled "${title}" found`)
   }
   lastRememberedSkillId = String(Math.max(...ids))
+  rememberedSkillIds[title] = lastRememberedSkillId
 })
 
 Given("I am on {string} with the remembered skill id", async ({ page }, pathTemplate: string) => {
@@ -5207,12 +5209,27 @@ Given("I am on {string} with the remembered skill id", async ({ page }, pathTemp
   await gotoReliably(page, pathTemplate.replace("SKILL_ID", lastRememberedSkillId))
 })
 
-// Not ported — new, for skill.feature. A skills-wheel segment that is its parent's only child is a
-// full ring, so the middle of its bounding box lies on the wheel's centre (the "go back" circle)
-// and a pointer click on the segment lands on that circle instead. The segment is a role="button"
-// that also reacts to Enter, which is how a keyboard user activates it.
-When("I activate the skills wheel node {string}", async ({ page }, label: string) => {
-  const node = page.locator(`[data-skill-interaction-layer] [role="button"][aria-label="${label}"]`).first()
+// Not ported — new, for skill.feature. The wheel's segments carry data-skill-id, which is how a
+// scenario addresses ITS OWN skill (remembered by its original title, before a rename) instead of a
+// title other features may share ("skill1 Edited" vs the learner report's tree skills).
+// A segment that is its parent's only child is a full ring, so the middle of its bounding box lies
+// on the wheel's centre (the "go back" circle) and a pointer click lands on that circle instead;
+// the segment is a role="button" that also reacts to Enter, which is how a keyboard user activates it.
+function skillsWheelNode(page: Page, title: string) {
+  const id = rememberedSkillIds[title]
+  if (!id) {
+    throw new Error(`No skill id remembered for "${title}" — run "I remember the id of the skill ..." first.`)
+  }
+
+  return page.locator(`[data-skill-interaction-layer] [role="button"][data-skill-id="${id}"]`).first()
+}
+
+Then("I should see the skills wheel node of the skill {string}", async ({ page }, title: string) => {
+  await expect(skillsWheelNode(page, title)).toBeVisible()
+})
+
+When("I activate the skills wheel node of the skill {string}", async ({ page }, title: string) => {
+  const node = skillsWheelNode(page, title)
   await node.focus()
   await page.keyboard.press("Enter")
 })

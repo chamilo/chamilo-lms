@@ -37,14 +37,14 @@ Feature: Skills
 
   Scenario: Create a second level skill
     Given I am a platform administrator
-    And I am on "main/skills/skill_create.php"
+    And I remember the id of the skill "skill1"
+    And I am on "main/skills/skill_create.php?parent=SKILL_ID" with the remembered skill id
     And wait very long for the page to be loaded
     When I fill in the following:
       | title | skill11 |
       | short_code | s11 |
       | description | description 11 |
       | criteria | criteria 11 |
-    Then I select "skill1" from "parent_id"
     And I press "submit"
     And wait for the page to be loaded
     Then I should see "skill11"
@@ -96,12 +96,15 @@ Feature: Skills
 
   # This scenario works but it needs to be adapted
   # because it does not update skill1 but the first in the list
+  # The legacy list does not identify rows, so the skill is edited through its own edit page
+  # (its id is looked up by title), not through whichever row happens to come first.
   Scenario: Update a skill skill1
     Given I am a platform administrator
     And I am on "main/skills/skill_list.php"
     And wait for the page to be loaded
     Then I should see "skill1"
-    Then I follow "Edit"
+    When I remember the id of the skill "skill1"
+    And I am on "/main/skills/skill_edit.php?id=SKILL_ID" with the remembered skill id
     And wait very long for the page to be loaded
     When I fill in the following:
       | title | skill1 Edited |
@@ -153,11 +156,12 @@ Feature: Skills
     And I should see the "[data-testid='skill-wheel-graph']" element
     And I should see the "[data-testid='skill-wheel-canvas'][data-render-mode='3d'][data-interaction-mode='overlay'][data-label-mode='adaptive'][data-tooltip-mode='rich']" element
     And I should see the "[data-skill-interaction-layer='overlay']" element
-    And I should see the "[data-skill-interaction-layer] [role='button'][aria-label='skill1 Edited']" element
-    When I click the "[data-skill-interaction-layer] [role='button'][aria-label='skill1 Edited']" element
+    And I remember the id of the skill "skill11"
+    Then I should see the skills wheel node of the skill "skill1"
+    When I activate the skills wheel node of the skill "skill1"
     Then I should see the "[data-testid='skill-wheel-canvas'][data-current-skill-id]" element
-    And I should see the "[data-skill-interaction-layer] [role='button'][aria-label='skill1 Edited / skill11']" element
-    When I activate the skills wheel node "skill1 Edited / skill11"
+    And I should see the skills wheel node of the skill "skill11"
+    When I activate the skills wheel node of the skill "skill11"
     Then I should see the "[data-testid='skill-wheel-canvas'][data-selected-skill-id]" element
     And I should see the "[data-testid='skill-wheel-inspector']" element
     And I should see the "a[href*='skill_edit.php'][href*='origin=skill-wheel']" element

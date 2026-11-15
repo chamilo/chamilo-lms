@@ -42,6 +42,7 @@ final readonly class ExerciseQti2ImportService
     private const FILL_IN_BLANKS = 3;
     private const MATCHING = 4;
     private const FREE_ANSWER = 5;
+    private const MULTIPLE_ANSWER_COMBINATION = 9;
 
     /**
      * @var array<int, string>
@@ -52,6 +53,7 @@ final readonly class ExerciseQti2ImportService
         self::FREE_ANSWER => 'Free answer',
         self::FILL_IN_BLANKS => 'Fill in blanks',
         self::MATCHING => 'Matching',
+        self::MULTIPLE_ANSWER_COMBINATION => 'Exact combination',
     ];
 
     public function __construct(
@@ -434,6 +436,20 @@ final readonly class ExerciseQti2ImportService
 
                     break;
 
+                case 'responseProcessing':
+                    // A multiple response scored all or nothing on its correct response is an Exact combination.
+                    if ($this->hasCurrentQuestion($package, $currentQuestionIdent)
+                        && self::MULTIPLE_ANSWER === ($package['questions'][$currentQuestionIdent]['type'] ?? null)
+                    ) {
+                        $combinationScore = Qti2ExactCombinationWriter::readScore($node);
+                        if (null !== $combinationScore) {
+                            $package['questions'][$currentQuestionIdent]['type'] = self::MULTIPLE_ANSWER_COMBINATION;
+                            $package['questions'][$currentQuestionIdent]['combination_score'] = $combinationScore;
+                        }
+                    }
+
+                    break;
+
                 case 'order':
                     $orderType = $node->getAttribute('order_type');
                     if ('' !== $orderType) {
@@ -769,6 +785,8 @@ final readonly class ExerciseQti2ImportService
                 $question->setPonderation($this->scoreFromValue($questionData['weighting'][0] ?? 0));
             } elseif (null !== $matchingRows) {
                 $this->createMatchingAnswers($question, $matchingRows);
+            } elseif (self::MULTIPLE_ANSWER_COMBINATION === $questionType) {
+                $this->createExactCombinationAnswers($question, $questionData);
             } else {
                 $this->createChoiceAnswers($question, $questionData);
             }
@@ -853,6 +871,35 @@ final readonly class ExerciseQti2ImportService
         }
 
         $question->setPonderation($totalCorrectWeight);
+    }
+
+    /**
+     * Exact combination answers: the whole question score is stored on the first answer, the others weigh 0.
+     *
+     * @param array<string, mixed> $questionData
+     */
+    private function createExactCombinationAnswers(CQuizQuestion $question, array $questionData): void
+    {
+        $answerList = \is_array($questionData['answer'] ?? null) ? $questionData['answer'] : [];
+        $correctAnswersRaw = $questionData['correct_answers'] ?? null;
+        $correctAnswerIds = array_map('strval', \is_array($correctAnswersRaw) ? array_values($correctAnswersRaw) : []);
+        $score = $this->scoreFromValue($questionData['combination_score'] ?? 0);
+        $position = 1;
+
+        foreach ($answerList as $key => $answerData) {
+            $answerData = \is_array($answerData) ? $answerData : [];
+            $this->createSingleAnswer(
+                $question,
+                $this->formatHtml((string) ($answerData['value'] ?? '')),
+                \in_array((string) $key, $correctAnswerIds, true) ? 1 : 0,
+                $this->formatHtml((string) ($answerData['feedback'] ?? '')),
+                1 === $position ? $score : 0.0,
+                $position
+            );
+            ++$position;
+        }
+
+        $question->setPonderation($score);
     }
 
     /**

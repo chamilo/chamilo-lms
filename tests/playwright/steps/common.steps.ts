@@ -1,4 +1,5 @@
 import fs from "node:fs"
+import os from "node:os"
 import path from "node:path"
 import { expect, Page, Response, Route, test } from "@playwright/test"
 import { createBdd, DataTable } from "playwright-bdd"
@@ -3711,7 +3712,26 @@ let lastResolvedUserId: string | null = null
 // find_users only returns every user to an administrator (or when the platform allows sending messages to all users):
 // anyone else finds their friends only. A tutor looking up a learner would therefore find nobody, so an id resolved once
 // (while an administrator is logged in) is remembered by username and reused by every later lookup of that username.
+// Playwright starts a new worker process after a failed test, which loses module state: the ids are therefore also
+// persisted in a small JSON file, used only as a fallback when find_users returns nothing.
+const resolvedUserIdsFile = path.join(os.tmpdir(), "chamilo-playwright-resolved-user-ids.json")
 const resolvedUserIds = new Map<string, string>()
+
+function readPersistedUserIds(): Record<string, string> {
+  try {
+    return JSON.parse(fs.readFileSync(resolvedUserIdsFile, "utf8"))
+  } catch {
+    return {}
+  }
+}
+
+function persistUserId(username: string, id: string): void {
+  try {
+    fs.writeFileSync(resolvedUserIdsFile, JSON.stringify({ ...readPersistedUserIds(), [username]: id }))
+  } catch {
+    // best effort: the in-memory cache still works
+  }
+}
 
 async function findUserIdByUsername(page: Page, username: string): Promise<string> {
   const cached = resolvedUserIds.get(username)
@@ -3724,12 +3744,19 @@ async function findUserIdByUsername(page: Page, username: string): Promise<strin
   const { items } = await response.json()
   const id = items?.[0]?.id
   if (!id) {
+    const persisted = readPersistedUserIds()[username]
+    if (persisted) {
+      resolvedUserIds.set(username, persisted)
+
+      return persisted
+    }
     throw new Error(
       `find_users returned no match for username "${username}" (it only lists friends to a non-administrator: ` +
         'resolve the id while an administrator is logged in)',
     )
   }
   resolvedUserIds.set(username, String(id))
+  persistUserId(username, String(id))
 
   return String(id)
 }

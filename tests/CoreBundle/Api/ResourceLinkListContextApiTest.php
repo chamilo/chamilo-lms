@@ -153,6 +153,44 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
         $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['foreignLinkId']));
     }
 
+    public function testHidingFolderAlsoHidesItsChildren(): void
+    {
+        $ctx = $this->bootstrapDocumentScenario('hide');
+        $folderLinkId = (int) $ctx['document']->getResourceNode()->getResourceLinks()->first()->getId();
+        $childLinkIds = $this->createChildFolder($ctx, 'hide', [
+            [$ctx['course'], ResourceLink::VISIBILITY_PUBLISHED],
+        ]);
+
+        $this->putDocument($ctx, [
+            'resourceLinkListFromEntity' => [['id' => $folderLinkId, 'visibility' => ResourceLink::VISIBILITY_DRAFT]],
+        ]);
+        $this->assertResponseStatusCodeSame(200);
+
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($childLinkIds[(int) $ctx['course']->getId()]));
+    }
+
+    public function testHidingSharedFolderOnlyHidesChildrenInTheCurrentCourse(): void
+    {
+        $ctx = $this->bootstrapSharedDocumentScenario('hideshared');
+        $childLinkIds = $this->createChildFolder($ctx, 'hideshared', [
+            [$ctx['course'], ResourceLink::VISIBILITY_PUBLISHED],
+            [$ctx['foreignCourse'], ResourceLink::VISIBILITY_PUBLISHED],
+        ]);
+
+        // The form sends back the other course's link unchanged, after the one that changes.
+        $this->putDocument($ctx, [
+            'resourceLinkListFromEntity' => [
+                ['id' => $ctx['localLinkId'], 'visibility' => ResourceLink::VISIBILITY_DRAFT],
+                ['id' => $ctx['foreignLinkId'], 'visibility' => ResourceLink::VISIBILITY_DRAFT],
+            ],
+        ]);
+        $this->assertResponseStatusCodeSame(200);
+
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($childLinkIds[(int) $ctx['course']->getId()]));
+        // The other course decides the visibility of its own children.
+        $this->assertSame(ResourceLink::VISIBILITY_PUBLISHED, $this->getLinkVisibility($childLinkIds[(int) $ctx['foreignCourse']->getId()]));
+    }
+
     public function testTeacherCannotMoveOwnDocumentIntoAnotherCourse(): void
     {
         $ctx = $this->bootstrapDocumentScenario('move');
@@ -275,6 +313,41 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
         $this->assertGreaterThan(0, $foreignLinkId);
 
         return $ctx + ['localLinkId' => $localLinkId, 'foreignLinkId' => $foreignLinkId];
+    }
+
+    /**
+     * Creates a folder inside the scenario's folder, with one link per given course.
+     *
+     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument} $ctx
+     * @param array<int, array{0: Course, 1: int}>                                             $links
+     *
+     * @return array<int, int> link id by course id
+     */
+    private function createChildFolder(array $ctx, string $suffix, array $links): array
+    {
+        /** @var CDocumentRepository $documentRepo */
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+
+        $child = (new CDocument())
+            ->setFiletype('folder')
+            ->setTitle('rllc-child-'.$suffix)
+            ->setTemplate(false)
+            ->setReadonly(false)
+            ->setParent($ctx['document'])
+            ->setCreator($ctx['teacher'])
+        ;
+        foreach ($links as [$course, $visibility]) {
+            $child->addCourseLink($course, null, null, $visibility);
+        }
+        $documentRepo->create($child);
+
+        $linkIds = [];
+        foreach ($child->getResourceNode()->getResourceLinks() as $link) {
+            $linkIds[(int) $link->getCourse()?->getId()] = (int) $link->getId();
+        }
+        $this->assertCount(\count($links), $linkIds);
+
+        return $linkIds;
     }
 
     private function getLinkVisibility(int $linkId): int

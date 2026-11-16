@@ -431,6 +431,9 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             return;
         }
         if ('personality_order' === $type) {
+            if (!\is_array($value)) {
+                throw new BadRequestHttpException('A ranking must be a list of option ids.');
+            }
             $count = \count($value);
             foreach (array_values($value) as $rank => $optionId) {
                 $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $optionId, $count - $rank, $request);

@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Form;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\PasswordPolicyValidator;
 use OTPHP\TOTP;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -38,6 +39,7 @@ class ChangePasswordType extends AbstractType
     public function __construct(
         private readonly TranslatorInterface $translator,
         private readonly PasswordPolicyValidator $passwordPolicyValidator,
+        private readonly ClockInterface $clock,
     ) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -140,11 +142,21 @@ class ChangePasswordType extends AbstractType
                             return;
                         }
 
-                        $totp = TOTP::create($decryptedSecret);
+                        $totp = TOTP::create($decryptedSecret, clock: $this->clock);
                         $portal = $options['portal_name'] ?? 'Chamilo';
                         $totp->setLabel($portal.' - '.$user->getEmail());
 
                         if (!$totp->verify((string) $code)) {
+                            $form->get('confirm2FACode')->addError(new FormError(
+                                $this->translator->trans('The 2FA code is invalid or expired.')
+                            ));
+                        }
+                    } elseif ($enable2FA) {
+                        // First activation: the new secret only lives in the session until the
+                        // user proves, with a valid code, that their authenticator app holds it.
+                        $pendingSecret = (string) ($options['pending_mfa_secret'] ?? '');
+
+                        if ('' === $pendingSecret || !TOTP::create($pendingSecret, clock: $this->clock)->verify((string) $code)) {
                             $form->get('confirm2FACode')->addError(new FormError(
                                 $this->translator->trans('The 2FA code is invalid or expired.')
                             ));
@@ -166,6 +178,8 @@ class ChangePasswordType extends AbstractType
             'user' => null,
             'portal_name' => 'Chamilo',
             'password_hasher' => null,
+            // Secret generated for a first 2FA activation, not saved yet (see AccountController).
+            'pending_mfa_secret' => null,
         ]);
     }
 

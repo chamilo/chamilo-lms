@@ -2917,8 +2917,17 @@ class DocumentManager
                             $origin_filepath = $orig_course_path.$document_file;
                             $destination_filepath = $dest_course_path.$document_file;
 
+                            // The document path comes from the HTML content, which may be crafted: only copy
+                            // a file that really is inside the origin course directory.
+                            $origin_course_real_path = !empty($orig_course_path) ? realpath($orig_course_path) : false;
+                            $origin_real_path = realpath($origin_filepath);
+                            $is_origin_inside_course = false !== $origin_course_real_path
+                                && false !== $origin_real_path
+                                && false === strpos($document_file, '..')
+                                && 0 === strpos($origin_real_path.'/', rtrim($origin_course_real_path, '/').'/');
+
                             // copy origin file inside destination course
-                            if (file_exists($origin_filepath)) {
+                            if ($is_origin_inside_course && file_exists($origin_filepath)) {
                                 $filepath_dir = dirname($destination_filepath);
 
                                 if (!is_dir($filepath_dir)) {

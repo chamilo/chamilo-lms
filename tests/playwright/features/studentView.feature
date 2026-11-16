@@ -31,51 +31,27 @@ Feature: Student view
   # TEMP is a shared fixture, but the seed only subscribes the administrator, so the
   # teacher and student scenarios below subscribe their own users first — the same
   # subscribe-before-using-the-tool convention toolExerciseTeacher.feature and
-  # toolReporting.feature follow. These two are NOT idempotent: run against a user who is
-  # already subscribed, the Users tool takes a different path and they fail. They are setup,
-  # so run them once on a fresh TEMP, or skip them when the subscriptions already exist.
+  # toolReporting.feature follow. The teacher's subscription is idempotent (see its scenario); the student's is only
+  # asserted, because she is already subscribed by the time this file runs.
+  # Idempotent: other features (the Hot Potatoes ones, which sort before this file) subscribe the same teacher to TEMP
+  # first, and the Users tool's own Add flow finds nobody to register once she is subscribed. So subscribe her through
+  # the direct page ("Register" is not shown when she already is), then check her ROLE in the Users tool.
   Scenario: Subscribe the teacher to the course
     Given I am a platform administrator
-    And I wait for the page to be loaded
+    And I am on "/main/user/subscribe_user.php?keyword=mmosquera&type=1&cid=3"
+    And wait for the page to be loaded
+    Then I follow "Register" if it is visible
+    And wait very long for the page to be loaded
+    # Verify the ROLE, not merely that a subscription happened. A learner subscription would satisfy a bare
+    # "subscribed" check just as well, which is how this fixture once spent a whole CI run doing the wrong thing while
+    # reporting success (2026-08-26): all 22 teacher scenarios below then failed on a missing "Switch to student view".
     And I am on course "TEMP" homepage
     And I wait for the page to be loaded
     And I follow the course tool "Users"
     And I wait for the page to be loaded
     And I press "Teachers"
-    # Gate on the tab having ACTUALLY switched before touching "Add".
-    #
-    # CourseUserListView.vue builds the Add link as buildSubscribeRoute() ->
-    # { query: { type: userType.value } }, so the role a new subscription gets is
-    # decided by whichever tab is active AT CLICK TIME. Pressing "Teachers" and
-    # then waiting for "page content to settle" does not establish that:
-    # that wait is networkidle-based, and this app's background polling makes it
-    # resolve on a lull rather than on the re-render.
-    #
-    # The CI run of 2026-08-26 proved the consequence, and it was silent:
-    # mmosquera was subscribed as a LEARNER. The course API reported TEMP's
-    # teachers as [admin] only while listing her under users, so she never got
-    # ROLE_CURRENT_COURSE_TEACHER, and all 22 teacher scenarios below failed on
-    # a missing "Switch to student view" — pointing at the button, the selector
-    # and the tools, none of which were at fault. Asserting type=1 in the URL is
-    # the deterministic signal that the tab is live.
-    Then the URL should contain "type=1"
-    And I click the "[title='Add']" element
-    And I wait for the page to be loaded
-    And I fill in the following:
-      | search | mmosquera |
-    And I press "Search"
-    And I wait for the page to be loaded
-    Then I should see "Mosquera"
-    And I click the "[title='Register']" element
-    And I wait for the page to be loaded
-    Then I should see "subscribed to the course"
-    # Verify the ROLE, not merely that a subscription happened. The assertion
-    # above is satisfied identically by a learner subscription, which is exactly
-    # how this fixture spent a whole CI run doing the wrong thing while
-    # reporting success. A fixture that cannot detect its own failure mode is
-    # what turns one silent mistake into 22 misleading ones.
-    And I click the "[title='Back']" element
-    And I wait for the page to be loaded
+    # Gate on the tab having ACTUALLY switched before reading the list: networkidle resolves on a lull, not on the
+    # re-render, and the role a subscription gets is decided by the active tab.
     Then the URL should contain "type=1"
     And I should see "Mosquera"
 

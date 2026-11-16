@@ -1,31 +1,39 @@
 <template>
   <BaseInputText
-    :id="id"
+    :id="inputId"
+    :aria-describedby="vuelidateProperty.$error ? errorId : undefined"
+    :aria-invalid="vuelidateProperty.$error ? 'true' : 'false'"
     :is-invalid="vuelidateProperty.$error"
     :label="labelWithRequiredIfNeeded"
     :model-value="modelValue"
     @update:model-value="emit('update:modelValue', $event)"
   >
     <template #errors>
-      <p
-        v-for="error in vuelidateProperty.$errors"
-        :key="error.$uid"
+      <div
+        v-if="vuelidateProperty.$error"
+        :id="errorId"
         class="mt-1 text-error"
+        role="alert"
       >
-        {{ error.$message }}
-      </p>
+        <p
+          v-for="error in vuelidateProperty.$errors"
+          :key="error.$uid"
+        >
+          {{ error.$message }}
+        </p>
+      </div>
     </template>
   </BaseInputText>
 </template>
 
 <script setup>
 import BaseInputText from "./BaseInputText.vue"
-import { computed } from "vue"
+import { computed, useId } from "vue"
 
 const props = defineProps({
   id: {
     type: String,
-    require: true,
+    required: false,
     default: "",
   },
   label: {
@@ -44,6 +52,10 @@ const props = defineProps({
 })
 
 const emit = defineEmits(["update:modelValue"])
+
+const generatedId = useId()
+const inputId = computed(() => props.id || generatedId)
+const errorId = computed(() => `${inputId.value}-errors`)
 
 const labelWithRequiredIfNeeded = computed(() => {
   if (Object.hasOwn(props.vuelidateProperty, "required")) {

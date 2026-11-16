@@ -64,6 +64,7 @@
           <div class="flex items-center">
             <img
               :src="user.avatar"
+              alt=""
               class="w-16 h-16 rounded-full me-4"
             />
             <span>{{ user.name }}</span>
@@ -244,7 +245,7 @@ const showMessageModal = ref(false)
 const messageSubject = ref("")
 const messageContent = ref("")
 const invitationMessage = ref("")
-const { user, groupInfo, isGroup, loadGroup, isLoading } = useSocialInfo()
+const { user } = useSocialInfo()
 const searchOptions = [
   { name: "User", code: "user" },
   { name: "Group", code: "group" },

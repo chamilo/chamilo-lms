@@ -168,14 +168,34 @@
           @file-selected="selectedFile = $event"
         />
         <div class="p-field mt-2">
-          <label for="groupPermissions">{{ t("Group permissions") }}</label>
+          <label for="groupPermissions">
+            {{ t("Group permissions") }}
+            <span
+              aria-hidden="true"
+              class="text-red-500"
+            >
+              *
+            </span>
+          </label>
           <Dropdown
-            id="groupPermissions"
             v-model="groupForm.permissions"
+            input-id="groupPermissions"
+            name="permissions"
+            :invalid="v$.groupForm.permissions.$error"
+            :aria-invalid="v$.groupForm.permissions.$error ? 'true' : 'false'"
+            :aria-describedby="v$.groupForm.permissions.$error ? 'groupPermissions-error' : undefined"
             :options="permissionsOptions"
             option-label="label"
             :placeholder="t('Select permission')"
           />
+          <small
+            v-if="v$.groupForm.permissions.$error"
+            id="groupPermissions-error"
+            class="mt-1 block text-error"
+            role="alert"
+          >
+            {{ t("Value is required") }}
+          </small>
         </div>
         <div class="p-field-checkbox mt-2">
           <BaseCheckbox
@@ -205,7 +225,6 @@
 </template>
 
 <script setup>
-import Button from "primevue/button"
 import { onMounted, ref } from "vue"
 import useVuelidate from "@vuelidate/core"
 import { required } from "@vuelidate/validators"
@@ -216,6 +235,8 @@ import { useI18n } from "vue-i18n"
 import usergroupService from "../../services/usergroupService"
 import GroupSearch from "../../components/usergroup/GroupSearch.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+
+defineOptions({ name: "SocialGroupList" })
 
 const { t } = useI18n()
 const newestGroups = ref([])
@@ -230,6 +251,8 @@ const groupForm = ref({
   description: "",
   url: "",
   picture: null,
+  permissions: null,
+  allowLeave: false,
 })
 const v$ = useVuelidate(
   {
@@ -237,6 +260,7 @@ const v$ = useVuelidate(
       name: { required },
       description: {},
       url: {},
+      permissions: { required },
     },
   },
   { groupForm },
@@ -284,23 +308,17 @@ const extractGroupId = (group) => {
   const match = group["@id"].match(/\/api\/usergroup\/(\d+)/)
   return match ? match[1] : null
 }
-const redirectToGroupDetails = (groupId) => {
-  router.push({ name: "UserGroupShow", params: { group_id: groupId } })
-}
 onMounted(async () => {
   updateGroupsList()
 })
 
-const closeDialog = () => {
-  showCreateGroupDialog.value = false
-}
 const resetForm = () => {
   groupForm.value = {
     name: "",
     description: "",
     url: "",
     picture: null,
-    permissions: "",
+    permissions: null,
     allowLeave: false,
   }
   selectedFile.value = null

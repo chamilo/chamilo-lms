@@ -24,6 +24,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
     {
         $builder->setDefaults([
             'filter_terms' => '',
+            'teacher_use_js' => 'true',
             'encrypted_user_fields' => [],
             'admins_can_set_users_pass' => 'true',
             'allow_strength_pass_checker' => 'true',
@@ -93,6 +94,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 'required' => false,
             ])
             ->add('filter_terms', TextareaType::class)
+            ->add('teacher_use_js', YesNoType::class)
             ->add('admins_can_set_users_pass', YesNoType::class)
             ->add('allow_strength_pass_checker', YesNoType::class)
             ->add('allow_captcha', YesNoType::class)

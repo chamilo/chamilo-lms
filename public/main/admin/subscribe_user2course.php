@@ -289,6 +289,7 @@ unset($result);
 $sql = "SELECT code,visual_code,title
         FROM $tbl_course
         WHERE visual_code LIKE '".$first_letter_course."%'
+        AND deleted_at IS NULL
         ORDER BY ".(count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
 
 if (api_is_multiple_url_enabled()) {

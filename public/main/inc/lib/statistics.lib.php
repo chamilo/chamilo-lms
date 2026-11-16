@@ -74,7 +74,7 @@ class Statistics
         } else {
             $sql = "SELECT COUNT(*) AS number
                     FROM $courseTable AS c
-                    WHERE 1 = 1";
+                    WHERE c.deleted_at IS NULL";
         }
         if (isset($categoryCode)) {
             // A course can sit in several categories: filter with a sub-select so it is counted once.
@@ -142,7 +142,7 @@ class Statistics
         } else {
             $sql = "SELECT COUNT(*) AS number
                     FROM $courseTable AS c
-                    WHERE 1 = 1";
+                    WHERE c.deleted_at IS NULL";
         }
         $sql .= " AND visibility IN ($visibilityString) ";
         if (!empty($dateFrom)) {
@@ -995,6 +995,7 @@ class Statistics
             $sql = "SELECT l.isocode AS course_language, count(c.code) AS number_of_courses
                    FROM $table c
                    INNER JOIN $languageTable l ON l.id = c.language_id
+                   WHERE c.deleted_at IS NULL
                    GROUP BY l.id, l.isocode
                    ORDER BY number_of_courses DESC";
         }

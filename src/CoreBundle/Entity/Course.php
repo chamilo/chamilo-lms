@@ -85,8 +85,9 @@ use const SORT_NATURAL;
 ]
 #[ORM\Table(name: 'course')]
 #[ORM\Index(columns: ['sticky'], name: 'idx_course_sticky')]
-#[UniqueEntity('code')]
-#[UniqueEntity('visualCode')]
+// The repository method also sees deleted courses: their code stays reserved.
+#[UniqueEntity(fields: ['code'], repositoryMethod: 'findByIncludingDeleted')]
+#[UniqueEntity(fields: ['visualCode'], repositoryMethod: 'findByIncludingDeleted')]
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
 #[ORM\EntityListeners([ResourceListener::class, CourseListener::class])]
 class Course extends AbstractResource implements ResourceInterface, ResourceWithAccessUrlInterface, ResourceIllustrationInterface, ExtraFieldItemInterface, Stringable
@@ -365,6 +366,13 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[Groups(['course:read', 'course_rel_user:read', 'course:write'])]
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $duration = null;
+
+    /**
+     * Set when the course is deleted. The row is kept so that its id and code are never reused,
+     * and DeletedCourseFilter hides it from every ORM query. Not exposed through the API.
+     */
+    #[ORM\Column(name: 'deleted_at', type: 'datetime', nullable: true)]
+    private ?DateTime $deletedAt = null;
 
     public function __construct()
     {
@@ -1206,6 +1214,16 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         $this->duration = $duration;
 
         return $this;
+    }
+
+    public function getDeletedAt(): ?DateTime
+    {
+        return $this->deletedAt;
+    }
+
+    public function isDeleted(): bool
+    {
+        return null !== $this->deletedAt;
     }
 
     public function getPopularity(): int

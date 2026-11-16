@@ -1879,7 +1879,7 @@ function api_get_course_int_id(?string $code = null): int
         $row = Database::select(
             'id',
             Database::get_main_table(TABLE_MAIN_COURSE),
-            ['where' => ['code = ?' => [$code]]],
+            ['where' => ['code = ? AND deleted_at IS NULL' => [$code]]],
             'first'
         );
 

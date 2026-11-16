@@ -104,6 +104,10 @@ doctrine:
             softdeleteable:
                 class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
                 enabled: true
+            # Hides deleted courses (course.deleted_at set) from ORM queries; see DeletedCourseFilter.
+            deleted_course:
+                class: Chamilo\CoreBundle\Doctrine\Filter\DeletedCourseFilter
+                enabled: true
 
 when@test:
     parameters:

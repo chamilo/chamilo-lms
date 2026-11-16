@@ -294,6 +294,7 @@ class SearchCourseWidget
                 visibility
             FROM $courseTable
             WHERE ($whereVisibility)
+              AND deleted_at IS NULL
               AND (
                     code LIKE '%$searchTerm%'
                  OR visual_code LIKE '%$searchTerm%'

@@ -88,6 +88,7 @@ function search_courses($needle, $type)
                     FROM $tbl_course c
                     WHERE
                         c.code LIKE '$needle%'
+                        AND c.deleted_at IS NULL
                         $without_assigned_courses ";
         }
 
@@ -278,7 +279,7 @@ if (api_is_multiple_url_enabled()) {
 } else {
     $sql = " SELECT c.code, c.title
             FROM $tbl_course c
-            WHERE  c.code LIKE '$needle' $without_assigned_courses
+            WHERE  c.code LIKE '$needle' AND c.deleted_at IS NULL $without_assigned_courses
             ORDER BY c.title";
 }
 

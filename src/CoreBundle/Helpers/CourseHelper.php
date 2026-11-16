@@ -1758,9 +1758,13 @@ class CourseHelper
             error_log('[Xapian] purgeCourseIndex: failed for courseId='.$course->getId().': '.$e->getMessage());
         }
 
-        $this->entityManager->remove($course);
-        $this->entityManager->flush();
-        $this->entityManager->clear();
+        // The ORM clears the id of a removed entity: keep it for the steps below.
+        $courseId = (int) $course->getId();
+        $courseCode = $course->getCode();
+
+        // Removes everything that depends on the course, but keeps the course row (marked as
+        // deleted) so that its id and code are never reused.
+        $this->courseRepository->deleteCourse($course);
 
         // Delete documents that were exclusively used by this course,
         // if the administrator explicitly requested it.
@@ -1770,16 +1774,16 @@ class CourseHelper
 
         // Delete extra course fields
         $extraFieldValues = new ExtraFieldValue('course');
-        $extraFieldValues->deleteValuesByItem($course->getId());
+        $extraFieldValues->deleteValuesByItem($courseId);
 
         // Add event to system log
         Event::addEvent(
             LOG_COURSE_DELETE,
             LOG_COURSE_CODE,
-            $course->getCode(),
+            $courseCode,
             api_get_utc_datetime(),
             api_get_user_id(),
-            $course->getId()
+            $courseId
         );
 
         return true;

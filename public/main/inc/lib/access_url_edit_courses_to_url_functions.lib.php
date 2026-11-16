@@ -42,7 +42,7 @@ class Accessurleditcoursestourl
             $sql = 'SELECT code, title FROM '.$tbl_course.' u '.
                    ' WHERE (title LIKE "'.$needle.'%" '.
                    ' OR code LIKE "'.$needle.'%" '.
-                   ' ) '.
+                   ' ) AND deleted_at IS NULL '.
                    ' ORDER BY title, code '.
                    ' LIMIT 11';
             $rs = Database::query($sql);

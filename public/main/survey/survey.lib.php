@@ -2200,7 +2200,7 @@ class SurveyManager
         }
 
         $connection = Database::getManager()->getConnection();
-        if (false === $connection->fetchOne('SELECT id FROM course WHERE id = ?', [$courseId])) {
+        if (false === $connection->fetchOne('SELECT id FROM course WHERE id = ? AND deleted_at IS NULL', [$courseId])) {
             return false;
         }
 

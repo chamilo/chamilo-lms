@@ -119,13 +119,14 @@ class CoursesAndSessionsCatalog
     public static function getAvoidCourseCondition()
     {
         $courseListToAvoid = self::getCoursesToAvoid();
-        $condition = '';
+        // Deleted courses keep their row (so that their id is never reused) but are never listed.
+        $condition = ' AND course.deleted_at IS NULL';
         if (!empty($courseListToAvoid)) {
             $courses = [];
             foreach ($courseListToAvoid as $courseId) {
                 $courses[] = '"'.$courseId.'"';
             }
-            $condition = ' AND course.id NOT IN ('.implode(',', $courses).')';
+            $condition .= ' AND course.id NOT IN ('.implode(',', $courses).')';
         }
 
         return $condition;

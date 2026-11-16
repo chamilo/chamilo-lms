@@ -1013,6 +1013,7 @@ class Diagnoser
             INNER JOIN resource_node rn ON rn.id = rl.resource_node_id
             INNER JOIN resource_file rf ON rf.resource_node_id = rn.id
         ) u ON u.course_id = c.id
+        WHERE c.deleted_at IS NULL
         GROUP BY c.id, c.code, c.disk_quota, c.last_visit
         ORDER BY c.last_visit DESC, c.code ASC
         LIMIT 1000
@@ -1200,7 +1201,7 @@ class Diagnoser
         $em = Database::getManager();
         $conn = $em->getConnection();
 
-        $sql = 'SELECT COUNT(*) AS cnt FROM course';
+        $sql = 'SELECT COUNT(*) AS cnt FROM course WHERE deleted_at IS NULL';
 
         return (int) $conn->executeQuery($sql)->fetchOne();
     }

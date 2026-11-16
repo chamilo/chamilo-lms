@@ -489,6 +489,9 @@ final readonly class AdminStatisticsQueryService
             ->setFirstResult(($page - 1) * $itemsPerPage)
             ->setMaxResults($itemsPerPage)
         ;
+        foreach ([$countBuilder, $listBuilder] as $builder) {
+            $builder->andWhere('course.deleted_at IS NULL');
+        }
         if (null !== $currentUrlId) {
             foreach ([$countBuilder, $listBuilder] as $builder) {
                 $builder

@@ -31,7 +31,7 @@ $coursesSessions = array_merge($coursesSessions, $allCoursesFromSessions);
 
 $courses = [];
 $courses[''] = '--';
-$sql = "SELECT code,visual_code,title FROM $course_table ORDER BY visual_code";
+$sql = "SELECT code,visual_code,title FROM $course_table WHERE deleted_at IS NULL ORDER BY visual_code";
 
 if (api_is_multiple_url_enabled()) {
     $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);

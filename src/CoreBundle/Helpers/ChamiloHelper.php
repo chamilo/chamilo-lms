@@ -283,7 +283,7 @@ class ChamiloHelper
                 Database::get_main_table(TABLE_MAIN_COURSE),
                 [
                     'where' => [
-                        'directory = ?' => [$directory],
+                        'directory = ? AND deleted_at IS NULL' => [$directory],
                     ],
                 ],
                 'first'

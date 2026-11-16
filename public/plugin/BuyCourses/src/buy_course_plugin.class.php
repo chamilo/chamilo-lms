@@ -11666,9 +11666,12 @@ class BuyCoursesPlugin extends Plugin
     {
         $couponItemTable = Database::get_main_table(self::TABLE_COUPON_ITEM);
 
+        // Deleted courses keep their row: leave them out like a course that no longer exists.
+        $deletedCourseCondition = '';
         if (self::PRODUCT_TYPE_COURSE == $productType) {
             $itemTable = Database::get_main_table(TABLE_MAIN_COURSE);
             $select = ['ci.product_id as id', 'it.title'];
+            $deletedCourseCondition = ' and it.deleted_at IS NULL';
         } elseif (self::PRODUCT_TYPE_SESSION == $productType) {
             $itemTable = Database::get_main_table(TABLE_MAIN_SESSION);
             $select = ['ci.product_id as id', 'it.title'];
@@ -11677,7 +11680,7 @@ class BuyCoursesPlugin extends Plugin
         $couponFrom = "
             $couponItemTable ci
             INNER JOIN $itemTable it
-                on it.id = ci.product_id and ci.product_type = $productType
+                on it.id = ci.product_id and ci.product_type = $productType$deletedCourseCondition
         ";
 
         return Database::select(
@@ -13346,7 +13349,7 @@ class BuyCoursesPlugin extends Plugin
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "SELECT COUNT(DISTINCT sc.course_id) AS total
             FROM $subscriptionCourseTable sc
-            INNER JOIN $courseTable c ON c.id = sc.course_id
+            INNER JOIN $courseTable c ON c.id = sc.course_id AND c.deleted_at IS NULL
             WHERE sc.service_sale_id = $serviceSaleId
               AND sc.status <> 'deleted'
               AND sc.deleted_at IS NULL";

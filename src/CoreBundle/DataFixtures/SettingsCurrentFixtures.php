@@ -35,6 +35,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
         'multiple_url_hide_disabled_settings',
         'login_is_email',
         'proxy_settings',
+        'encrypted_user_fields',
         'login_max_attempt_before_blocking_account',
         'permanently_remove_deleted_files',
         'allow_use_sub_language',
@@ -3267,6 +3268,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'security' => [
+                [
+                    'name' => 'encrypted_user_fields',
+                    'title' => 'Encrypt selected user profile fields at rest',
+                    'comment' => 'Select supported user fields for new Doctrine writes. Requires a private key and the user column migration. Existing records require an explicit backfill. Legacy SQL queries and exports must be reviewed before enabling phone or address. Disabling a field does not decrypt stored values. This setting is global for all access URLs.',
+                ],
                 [
                     'name' => 'remember_me_days',
                     'title' => 'Remember me duration (days)',

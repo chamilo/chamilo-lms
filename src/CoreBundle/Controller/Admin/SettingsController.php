@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\SettingsValueTemplate;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Search\Xapian\SearchIndexPathResolver;
 use Chamilo\CoreBundle\Service\ConfigurationDumpExporter;
+use Chamilo\CoreBundle\Service\Security\UserAtRestEncryptionPolicy;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Collator;
@@ -404,7 +405,7 @@ class SettingsController extends BaseController
      */
     #[IsGranted('ROLE_ADMIN')]
     #[Route('/settings/{namespace}', name: 'chamilo_platform_settings')]
-    public function updateSetting(Request $request, AccessUrlHelper $accessUrlHelper, string $namespace): Response
+    public function updateSetting(Request $request, AccessUrlHelper $accessUrlHelper, string $namespace, UserAtRestEncryptionPolicy $encryptionPolicy): Response
     {
         $manager = $this->getSettingsManager();
         $url = $accessUrlHelper->getCurrent();
@@ -480,6 +481,22 @@ class SettingsController extends BaseController
             $messageType = 'success';
 
             try {
+                if ('security' === $namespace && 1 === $currentUrlId) {
+                    $selected = $form->getData()->get('encrypted_user_fields');
+                    $previous = $manager->getSetting('security.encrypted_user_fields', true);
+                    $previousFields = \is_array($previous) ? $previous : (
+                        \is_string($previous) ? UserAtRestEncryptionPolicy::parseFields($previous) : []
+                    );
+                    $added = array_diff(\is_array($selected) ? $selected : [], $previousFields);
+                    if ([] !== $added) {
+                        try {
+                            $encryptionPolicy->assertFieldsReady($added);
+                        } catch (Throwable) {
+                            throw new ValidatorException('Encryption configuration is not ready. Check the private key and required database migration.');
+                        }
+                    }
+                }
+
                 $manager->save($form->getData());
                 // Many /admin blocks depend on settings; don't serve them stale for up to 120 s.
                 $this->adminIndexBlocksCache->clear();

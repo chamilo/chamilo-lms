@@ -7,15 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Service\Security\AtRestCrypto;
-use Chamilo\CoreBundle\Service\Security\AtRestKeyVerifier;
+use Chamilo\CoreBundle\Service\Security\UserAtRestEncryptionPolicy;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
 
@@ -28,11 +26,7 @@ final class EncryptUserProfileFieldsCommand extends Command
     public function __construct(
         private readonly Connection $connection,
         private readonly AtRestCrypto $crypto,
-        private readonly AtRestKeyVerifier $keyVerifier,
-        #[Autowire('%env(bool:CHAMILO_ENCRYPT_USER_PHONE)%')]
-        private readonly bool $encryptPhone,
-        #[Autowire('%env(bool:CHAMILO_ENCRYPT_USER_ADDRESS)%')]
-        private readonly bool $encryptAddress,
+        private readonly UserAtRestEncryptionPolicy $encryptionPolicy,
     ) {
         parent::__construct();
     }
@@ -94,20 +88,13 @@ final class EncryptUserProfileFieldsCommand extends Command
 
                 return Command::SUCCESS;
             }
-            if (!('phone' === $field ? $this->encryptPhone : $this->encryptAddress)) {
-                $output->writeln('<error>Enable the corresponding CHAMILO_ENCRYPT_USER_* flag before applying.</error>');
+            if (!$this->encryptionPolicy->isEnabled($field)) {
+                $output->writeln('<error>Select the field in Administration > Settings > Security before applying.</error>');
 
                 return Command::FAILURE;
             }
 
-            $columns = $this->connection->createSchemaManager()->listTableColumns('user');
-            $column = $columns[$field] ?? null;
-            if (null === $column || !$column->getType() instanceof TextType) {
-                $output->writeln('<error>Apply the dedicated V310 column expansion migration before encrypting.</error>');
-
-                return Command::FAILURE;
-            }
-            $this->keyVerifier->assertKeyMatchesStoredUserData();
+            $this->encryptionPolicy->assertFieldsReady([$field]);
 
             $lastId = 0;
             $encrypted = 0;

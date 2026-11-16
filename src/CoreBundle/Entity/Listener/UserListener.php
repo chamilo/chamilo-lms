@@ -12,12 +12,12 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\DateTimeHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Service\Security\AtRestCrypto;
+use Chamilo\CoreBundle\Service\Security\UserAtRestEncryptionPolicy;
 use Doctrine\ORM\Event\PostLoadEventArgs;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -30,12 +30,7 @@ class UserListener
         private AccessUrlHelper $accessUrlHelper,
         private readonly DateTimeHelper $dateTimeHelper,
         private readonly AtRestCrypto $atRestCrypto,
-        #[Autowire('%env(bool:CHAMILO_ENCRYPT_USER_BIOGRAPHY)%')]
-        private readonly bool $encryptNewBiographies,
-        #[Autowire('%env(bool:CHAMILO_ENCRYPT_USER_PHONE)%')]
-        private readonly bool $encryptNewPhones,
-        #[Autowire('%env(bool:CHAMILO_ENCRYPT_USER_ADDRESS)%')]
-        private readonly bool $encryptNewAddresses,
+        private readonly UserAtRestEncryptionPolicy $encryptionPolicy,
     ) {}
 
     /**
@@ -46,8 +41,8 @@ class UserListener
         $this->userRepository->updateCanonicalFields($user);
         $this->userRepository->updatePassword($user);
         $this->prepareBiographyForInsert($user);
-        $this->preparePrivateFieldForInsert($user, 'phone', $this->encryptNewPhones);
-        $this->preparePrivateFieldForInsert($user, 'address', $this->encryptNewAddresses);
+        $this->preparePrivateFieldForInsert($user, 'phone');
+        $this->preparePrivateFieldForInsert($user, 'address');
 
         if ($user->getPortals()->isEmpty()) {
             $currentUrl = $this->accessUrlHelper->getCurrent();
@@ -110,8 +105,8 @@ class UserListener
     {
         $this->userRepository->updatePassword($user);
         $this->userRepository->updateCanonicalFields($user);
-        $this->preparePrivateFieldForUpdate($user, $args, 'phone', $this->encryptNewPhones);
-        $this->preparePrivateFieldForUpdate($user, $args, 'address', $this->encryptNewAddresses);
+        $this->preparePrivateFieldForUpdate($user, $args, 'phone');
+        $this->preparePrivateFieldForUpdate($user, $args, 'address');
 
         if (!$args->hasChangedField('biography')) {
             return;
@@ -124,8 +119,8 @@ class UserListener
         }
 
         // Once a value was encrypted, edits must never downgrade it to plaintext,
-        // even if the rollout switch was subsequently disabled.
-        if (!$this->encryptNewBiographies && !(\is_string($oldValue) && $this->atRestCrypto->isEncrypted($oldValue))) {
+        // even if the administrator later disables the field.
+        if (!$this->encryptionPolicy->isEnabled('biography') && !(\is_string($oldValue) && $this->atRestCrypto->isEncrypted($oldValue))) {
             return;
         }
 
@@ -137,7 +132,7 @@ class UserListener
     private function prepareBiographyForInsert(User $user): void
     {
         $plaintext = $user->biographyStorageValue();
-        if (!$this->encryptNewBiographies || null === $plaintext || '' === $plaintext) {
+        if (null === $plaintext || '' === $plaintext || !$this->encryptionPolicy->isEnabled('biography')) {
             return;
         }
 
@@ -164,13 +159,10 @@ class UserListener
         }
     }
 
-    private function preparePrivateFieldForInsert(User $user, string $field, bool $enabled): void
+    private function preparePrivateFieldForInsert(User $user, string $field): void
     {
-        if (!$enabled) {
-            return;
-        }
         $plaintext = 'phone' === $field ? $user->phoneStorageValue() : $user->addressStorageValue();
-        if (null === $plaintext || '' === $plaintext) {
+        if (null === $plaintext || '' === $plaintext || !$this->encryptionPolicy->isEnabled($field)) {
             return;
         }
         $this->setPrivateFieldStorage(
@@ -180,7 +172,7 @@ class UserListener
         );
     }
 
-    private function preparePrivateFieldForUpdate(User $user, PreUpdateEventArgs $args, string $field, bool $enabled): void
+    private function preparePrivateFieldForUpdate(User $user, PreUpdateEventArgs $args, string $field): void
     {
         if (!$args->hasChangedField($field)) {
             return;
@@ -191,8 +183,8 @@ class UserListener
         if (null === $plaintext || '' === $plaintext) {
             return;
         }
-        // An existing encrypted value must never downgrade when the flag is disabled.
-        if (!$enabled && !(\is_string($oldValue) && $this->atRestCrypto->isEncrypted($oldValue))) {
+        // An existing encrypted value must never downgrade when the setting is disabled.
+        if (!$this->encryptionPolicy->isEnabled($field) && !(\is_string($oldValue) && $this->atRestCrypto->isEncrypted($oldValue))) {
             return;
         }
 

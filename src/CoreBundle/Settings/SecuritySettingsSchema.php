@@ -8,7 +8,9 @@ namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
 use Chamilo\CoreBundle\Security\RememberMeLifetime;
+use Chamilo\CoreBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -22,6 +24,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
     {
         $builder->setDefaults([
             'filter_terms' => '',
+            'encrypted_user_fields' => [],
             'admins_can_set_users_pass' => 'true',
             'allow_strength_pass_checker' => 'true',
             'allow_captcha' => 'false',
@@ -65,9 +68,12 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'confidential_reporting_min_reporters' => '2',
             'confidential_reporting_attachments_enabled' => 'true',
             'confidential_reporting_notifications_enabled' => 'false',
-        ]);
+        ])
+            ->setTransformer('encrypted_user_fields', new ArrayToIdentifierTransformer())
+        ;
 
         $allowedTypes = [
+            'encrypted_user_fields' => ['array'],
             'allow_strength_pass_checker' => ['string'],
         ];
         $this->setMultipleAllowedTypes($allowedTypes, $builder);
@@ -76,6 +82,16 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
     public function buildForm(FormBuilderInterface $builder): void
     {
         $builder
+            ->add('encrypted_user_fields', ChoiceType::class, [
+                'choices' => [
+                    'Biography' => 'biography',
+                    'Phone' => 'phone',
+                    'Address' => 'address',
+                ],
+                'multiple' => true,
+                'expanded' => true,
+                'required' => false,
+            ])
             ->add('filter_terms', TextareaType::class)
             ->add('admins_can_set_users_pass', YesNoType::class)
             ->add('allow_strength_pass_checker', YesNoType::class)

@@ -68,7 +68,7 @@ final class AtRestCrypto
             substr($raw, 0, $nonceLength),
             $this->key(),
         );
-        if (false === $plaintext) {
+        if (!\is_string($plaintext)) {
             throw new RuntimeException('Encrypted data authentication failed.');
         }
 

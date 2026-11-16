@@ -7,7 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Command;
 
 use Chamilo\CoreBundle\Service\Security\AtRestCrypto;
-use Chamilo\CoreBundle\Service\Security\AtRestKeyVerifier;
+use Chamilo\CoreBundle\Service\Security\UserAtRestEncryptionPolicy;
 use Doctrine\DBAL\Connection;
 use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -15,7 +15,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Uid\Uuid;
 use Throwable;
 
@@ -28,9 +27,7 @@ final class EncryptUserBiographiesCommand extends Command
     public function __construct(
         private readonly Connection $connection,
         private readonly AtRestCrypto $crypto,
-        private readonly AtRestKeyVerifier $keyVerifier,
-        #[Autowire('%env(bool:CHAMILO_ENCRYPT_USER_BIOGRAPHY)%')]
-        private readonly bool $encryptionEnabled,
+        private readonly UserAtRestEncryptionPolicy $encryptionPolicy,
     ) {
         parent::__construct();
     }
@@ -88,15 +85,15 @@ final class EncryptUserBiographiesCommand extends Command
 
                 return Command::SUCCESS;
             }
-            if (!$this->encryptionEnabled) {
+            if (!$this->encryptionPolicy->isEnabled('biography')) {
                 $output->writeln(
-                    '<error>CHAMILO_ENCRYPT_USER_BIOGRAPHY must be enabled before applying the backfill.</error>'
+                    '<error>Select Biography in Administration > Settings > Security before applying.</error>'
                 );
 
                 return Command::FAILURE;
             }
 
-            $this->keyVerifier->assertKeyMatchesStoredUserData();
+            $this->encryptionPolicy->assertFieldsReady(['biography']);
 
             $lastId = 0;
             $updated = 0;

@@ -12,13 +12,16 @@ use Chamilo\CoreBundle\Helpers\ResourceHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManager;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 final class UpdateDocumentFileAction extends BaseResourceFileAction
 {
     public function __construct(
         private readonly ResourceHelper $trackHelper,
         private readonly AiDisclosureHelper $aiDisclosureHelper,
+        private readonly Security $security,
     ) {}
 
     public function __invoke(
@@ -33,7 +36,16 @@ final class UpdateDocumentFileAction extends BaseResourceFileAction
             $repo,
             $request,
             $em,
-            fn (array $links) => $this->assertResourceLinksInCurrentContext($links, $cidReqHelper),
+            function (array $links) use ($cidReqHelper): void {
+                // The creator of a node keeps EDIT on it in every course it is shared with.
+                if (!$this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+                    && !$this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+                ) {
+                    throw new AccessDeniedHttpException('Only a teacher of the current course can change its resource links.');
+                }
+
+                $this->assertResourceLinksInCurrentContext($links, $cidReqHelper);
+            },
         );
         $this->applyResourceLanguageFromRequest($document, $request, $em);
 

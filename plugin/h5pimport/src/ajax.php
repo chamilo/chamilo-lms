@@ -24,9 +24,16 @@ $user = api_get_user_entity(api_get_user_id());
 if ('set_finished' === $action && 0 !== $h5pId) {
     if (!H5PCore::validToken('result', filter_input(INPUT_GET, 'token'))) {
         H5PCore::ajaxError($plugin->get_lang('h5p_error_invalid_token'));
+        exit;
     }
 
-    if (is_numeric($_POST['score']) && is_numeric($_POST['maxScore'])) {
+    // The browser computes the score, so the only thing to hold it to is its own maximum.
+    if (
+        is_numeric($_POST['score'] ?? null)
+        && is_numeric($_POST['maxScore'] ?? null)
+        && (int) $_POST['score'] >= 0
+        && (int) $_POST['score'] <= (int) $_POST['maxScore']
+    ) {
         /** @var H5pImport|null $h5pImport */
         $h5pImport = $h5pImportRepo->find($h5pId);
         $entityManager = Database::getManager();
@@ -57,34 +64,40 @@ if ('set_finished' === $action && 0 !== $h5pId) {
             );
 
             /** @var CLpItem|null $lpItem */
-            $lpItem = $entityManager->find('ChamiloCourseBundle:CLpItem', $lpItemView->getLpItemId());
-            if ('h5p' !== $lpItem->getItemType()) {
-                return null;
-            }
+            $lpItem = $lpItemView
+                ? $entityManager->find('ChamiloCourseBundle:CLpItem', $lpItemView->getLpItemId())
+                : null;
 
-            $lpItemView->setScore($_POST['score']);
-            $lpItemView->setMaxScore($_POST['maxScore']);
-            $lpItemView->setStatus('completed');
-            $lpItemView->setTotalTime($lpItemView->getTotalTime() + $h5pImportResults->getTotalTime());
-            $lpItem->setMaxScore($_POST['maxScore']);
-            $h5pImportResults->setCLpItemView($lpItemView);
-            $entityManager->persist($h5pImportResults);
-            $entityManager->persist($lpItem);
-            $entityManager->persist($lpItemView);
+            // Only the item that launches this very content takes its result.
+            if ($lpItem && 'h5p' === $lpItem->getItemType() && (int) $lpItem->getPath() === $h5pId) {
+                $lpItemView->setScore((int) $_POST['score']);
+                $lpItemView->setMaxScore((int) $_POST['maxScore']);
+                $lpItemView->setStatus('completed');
+                $lpItemView->setTotalTime($lpItemView->getTotalTime() + $h5pImportResults->getTotalTime());
+                $lpItem->setMaxScore((int) $_POST['maxScore']);
+                $h5pImportResults->setCLpItemView($lpItemView);
+                $entityManager->persist($h5pImportResults);
+                $entityManager->persist($lpItem);
+                $entityManager->persist($lpItemView);
+            }
         }
         $entityManager->flush();
 
         H5PCore::ajaxSuccess();
+        exit;
     } else {
         H5PCore::ajaxError();
+        exit;
     }
 } elseif ('content_user_data' === $action && 0 !== $h5pId) {
     if (!H5PCore::validToken('content', filter_input(INPUT_GET, 'token'))) {
         H5PCore::ajaxError($plugin->get_lang('h5p_error_invalid_token'));
+        exit;
     }
 
     /** @var H5pImport|null $h5pImport */
     $h5pImport = $h5pImportRepo->find($h5pId);
 } else {
     H5PCore::ajaxError(get_lang('InvalidAction'));
+    exit;
 }

@@ -4804,5 +4804,9 @@
     "The download excludes confidential values. Review the file before sharing it.": "The download excludes confidential values. Review the file before sharing it.",
     "Badge": "Badge",
     "Badges": "Badges",
-    "Export badges": "Export badges"
+    "Export badges": "Export badges",
+    "The selected file is empty.": "The selected file is empty.",
+    "ZIP uploads are unavailable on this server.": "ZIP uploads are unavailable on this server.",
+    "The selected ZIP file is invalid.": "The selected ZIP file is invalid.",
+    "The selected ZIP file contains no non-empty files.": "The selected ZIP file contains no non-empty files."
 }

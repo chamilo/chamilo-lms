@@ -201,6 +201,10 @@ const uppy = new Uppy({
       showErrorNotification(t("The submission deadline has passed. You can no longer submit."))
       return false
     }
+    if (currentFile.size === 0) {
+      showErrorNotification(t("The selected file is empty."))
+      return false
+    }
     if (!isFileExtensionAllowed(currentFile.name)) {
       showErrorNotification(
         t("File type not allowed. Allowed extensions: {0}", [
@@ -234,8 +238,16 @@ uppy.on("upload-success", () => {
     query: returnQuery(),
   })
 })
-uppy.on("upload-error", () => {
-  showErrorNotification(t("Failed to upload file"))
+const translatedUploadErrors = new Set([
+  "The selected file is empty.",
+  "ZIP uploads are unavailable on this server.",
+  "The selected ZIP file is invalid.",
+  "The selected ZIP file contains no non-empty files.",
+])
+uppy.on("upload-error", (file, error, response) => {
+  const detail = response?.status === 422 && typeof response?.body?.detail === "string" ? response.body.detail : null
+  const message = detail && translatedUploadErrors.has(detail) ? t(detail) : detail || t("Failed to upload file")
+  showErrorNotification(message)
 })
 async function submitText() {
   if (isDeadlinePassed()) {

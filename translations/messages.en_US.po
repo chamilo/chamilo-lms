@@ -43762,3 +43762,15 @@ msgstr "Download configuration for debugging"
 
 msgid "The download excludes confidential values. Review the file before sharing it."
 msgstr "The download excludes confidential values. Review the file before sharing it."
+
+msgid "The selected file is empty."
+msgstr "The selected file is empty."
+
+msgid "ZIP uploads are unavailable on this server."
+msgstr "ZIP uploads are unavailable on this server."
+
+msgid "The selected ZIP file is invalid."
+msgstr "The selected ZIP file is invalid."
+
+msgid "The selected ZIP file contains no non-empty files."
+msgstr "The selected ZIP file contains no non-empty files."

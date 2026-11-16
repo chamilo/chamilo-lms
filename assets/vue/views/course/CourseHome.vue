@@ -86,131 +86,159 @@
 
       <CourseThematicProgress />
 
-      <div class="flex flex-col lg:flex-row gap-6">
-        <div :class="showCourseSequence ? 'w-full lg:w-[80%]' : 'w-full'">
+      <div
+        class="course-home__layout"
+        :class="[
+          'course-home__layout--' + appliedIntroductionPosition,
+          { 'course-home__layout--with-sequence': showCourseSequence },
+        ]"
+      >
+        <div class="course-home__intro">
+          <IntroductionPositionPicker
+            v-if="isAllowedToEdit"
+            v-model="introductionPosition"
+            :disabled="isSavingIntroductionPosition"
+            :error="introductionPositionError"
+            @change="saveIntroductionPosition"
+          />
           <CourseIntroduction ref="courseIntroEl" />
         </div>
+
+        <div class="course-home__tools-area">
+          <div
+            v-if="isAllowedToEdit"
+            class="section-header section-header--h6"
+          >
+            <h6 v-text="t('Tools')" />
+
+            <div class="ms-auto">
+              <BaseToggleButton
+                :disabled="
+                  isCourseLoading ||
+                  courseToolsLoadError ||
+                  isSorting ||
+                  isCustomizing ||
+                  !allowEditToolVisibilityInSession
+                "
+                :model-value="false"
+                :off-label="t('Show all')"
+                :on-label="t('Show all')"
+                class="ms-auto"
+                off-icon="eye-on"
+                on-icon="eye-on"
+                size="small"
+                without-borders
+                @click="onClickShowAll"
+              />
+              <BaseToggleButton
+                :disabled="
+                  isCourseLoading ||
+                  courseToolsLoadError ||
+                  isSorting ||
+                  isCustomizing ||
+                  !allowEditToolVisibilityInSession
+                "
+                :model-value="false"
+                :off-label="t('Hide all')"
+                :on-label="t('Hide all')"
+                off-icon="eye-off"
+                on-icon="eye-off"
+                size="small"
+                without-borders
+                @click="onClickHideAll"
+              />
+              <BaseToggleButton
+                v-model="isSorting"
+                :disabled="isCourseLoading || courseToolsLoadError || isCustomizing"
+                :off-label="t('Sort')"
+                :on-label="t('Sort')"
+                off-icon="swap-vertical"
+                on-icon="swap-vertical"
+                size="small"
+                without-borders
+              />
+              <BaseToggleButton
+                v-model="isCustomizing"
+                :disabled="isCourseLoading || courseToolsLoadError || isSorting || !!session?.id"
+                :off-label="t('Customize')"
+                :on-label="t('Customize')"
+                off-icon="customize"
+                on-icon="customize"
+                size="small"
+                without-borders
+              />
+            </div>
+          </div>
+
+          <div
+            v-if="courseToolsLoadError && !isCourseLoading"
+            role="alert"
+            class="flex items-center gap-3 py-3"
+          >
+            <span>{{ t("An error occurred") }}</span>
+            <BaseButton
+              :label="t('Try again')"
+              type="secondary"
+              @click="loadCourseTools(true, true)"
+            />
+          </div>
+
+          <div
+            v-if="isCourseLoading"
+            aria-busy="true"
+            class="course-home__tools"
+          >
+            <div
+              v-for="item in COURSE_TOOL_SKELETON_COUNT"
+              :key="`course-tool-skeleton-${item}`"
+              aria-hidden="true"
+              class="course-tool"
+            >
+              <Skeleton
+                class="aspect-square"
+                height="auto"
+                width="7.5rem"
+              />
+              <Skeleton
+                class="mt-2"
+                height="1rem"
+                width="5.5rem"
+              />
+            </div>
+          </div>
+
+          <div
+            v-else
+            id="course-tools"
+            class="course-home__tools"
+          >
+            <CourseTool
+              v-for="(tool, index) in toolsForDisplay"
+              :key="'tool-' + index.toString()"
+              :change-visibility="changeVisibility"
+              :data-index="index"
+              :data-tool="tool.title"
+              :go-to-setting-course-tool="goToSettingCourseTool"
+              :is-allowed-to-edit="isAllowedToEdit"
+              :tool="tool"
+              @customize="openCustomizeDialog"
+            />
+
+            <ShortCutList
+              v-for="(shortcut, index) in shortcuts"
+              :key="'shortcut-' + index.toString()"
+              :change-visibility="changeVisibility"
+              :shortcut="shortcut"
+            />
+          </div>
+        </div>
+
         <div
           v-if="showCourseSequence"
-          class="w-full lg:w-[20%] lg:border-s lg:ps-4"
+          class="course-home__sequence"
         >
           <NextCourseSequence />
         </div>
-      </div>
-
-      <div
-        v-if="isAllowedToEdit"
-        class="section-header section-header--h6"
-      >
-        <h6 v-text="t('Tools')" />
-
-        <div class="ms-auto">
-          <BaseToggleButton
-            :disabled="isCourseLoading || courseToolsLoadError || isSorting || isCustomizing || !allowEditToolVisibilityInSession"
-            :model-value="false"
-            :off-label="t('Show all')"
-            :on-label="t('Show all')"
-            class="ms-auto"
-            off-icon="eye-on"
-            on-icon="eye-on"
-            size="small"
-            without-borders
-            @click="onClickShowAll"
-          />
-          <BaseToggleButton
-            :disabled="isCourseLoading || courseToolsLoadError || isSorting || isCustomizing || !allowEditToolVisibilityInSession"
-            :model-value="false"
-            :off-label="t('Hide all')"
-            :on-label="t('Hide all')"
-            off-icon="eye-off"
-            on-icon="eye-off"
-            size="small"
-            without-borders
-            @click="onClickHideAll"
-          />
-          <BaseToggleButton
-            v-model="isSorting"
-            :disabled="isCourseLoading || courseToolsLoadError || isCustomizing"
-            :off-label="t('Sort')"
-            :on-label="t('Sort')"
-            off-icon="swap-vertical"
-            on-icon="swap-vertical"
-            size="small"
-            without-borders
-          />
-          <BaseToggleButton
-            v-model="isCustomizing"
-            :disabled="isCourseLoading || courseToolsLoadError || isSorting || !!session?.id"
-            :off-label="t('Customize')"
-            :on-label="t('Customize')"
-            off-icon="customize"
-            on-icon="customize"
-            size="small"
-            without-borders
-          />
-        </div>
-      </div>
-
-      <div
-        v-if="courseToolsLoadError && !isCourseLoading"
-        role="alert"
-        class="flex items-center gap-3 py-3"
-      >
-        <span>{{ t("An error occurred") }}</span>
-        <BaseButton
-          :label="t('Try again')"
-          type="secondary"
-          @click="loadCourseTools(true, true)"
-        />
-      </div>
-
-      <div
-        v-if="isCourseLoading"
-        aria-busy="true"
-        class="course-home__tools"
-      >
-        <div
-          v-for="item in COURSE_TOOL_SKELETON_COUNT"
-          :key="`course-tool-skeleton-${item}`"
-          aria-hidden="true"
-          class="course-tool"
-        >
-          <Skeleton
-            class="aspect-square"
-            height="auto"
-            width="7.5rem"
-          />
-          <Skeleton
-            class="mt-2"
-            height="1rem"
-            width="5.5rem"
-          />
-        </div>
-      </div>
-
-      <div
-        v-else
-        id="course-tools"
-        class="course-home__tools"
-      >
-        <CourseTool
-          v-for="(tool, index) in toolsForDisplay"
-          :key="'tool-' + index.toString()"
-          :change-visibility="changeVisibility"
-          :data-index="index"
-          :data-tool="tool.title"
-          :go-to-setting-course-tool="goToSettingCourseTool"
-          :is-allowed-to-edit="isAllowedToEdit"
-          :tool="tool"
-          @customize="openCustomizeDialog"
-        />
-
-        <ShortCutList
-          v-for="(shortcut, index) in shortcuts"
-          :key="'shortcut-' + index.toString()"
-          :change-visibility="changeVisibility"
-          :shortcut="shortcut"
-        />
       </div>
 
       <BaseDialog
@@ -235,7 +263,8 @@
             <label
               for="course-tool-custom-icon"
               class="mb-1 block text-sm font-medium"
-            >{{ t('Icon') }}</label>
+              >{{ t("Icon") }}</label
+            >
             <input
               id="course-tool-custom-icon"
               name="icon"
@@ -245,13 +274,15 @@
               class="block w-full"
               @change="onCustomizeIconChange"
             />
-            <p class="mt-1 text-xs text-gray-600">{{ t('SVG only (maximum 256 KB)') }}</p>
+            <p class="mt-1 text-xs text-gray-600">{{ t("SVG only (maximum 256 KB)") }}</p>
           </div>
           <p
             v-if="customizeError"
             role="alert"
             class="text-red-600 text-sm"
-          >{{ customizeError }}</p>
+          >
+            {{ customizeError }}
+          </p>
         </form>
         <template #footer>
           <BaseButton
@@ -299,10 +330,17 @@ import { storeToRefs } from "pinia"
 import courseService from "../../services/courseService"
 import baseService from "../../services/baseService"
 import CourseIntroduction from "../../components/course/CourseIntroduction.vue"
+import IntroductionPositionPicker from "../../components/course/IntroductionPositionPicker.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
 import { useCourseHomeToolsStore } from "../../store/courseHomeToolsStore"
 import NextCourseSequence from "../../components/course/NextCourseSequence.vue"
+import courseSettingsService from "../../services/courseSettingsService"
+import {
+  INTRODUCTION_POSITION_DEFAULT,
+  normalizeIntroductionPosition,
+  resolveIntroductionLayout,
+} from "../../utils/introductionPosition"
 import CourseThematicProgress from "../../components/course/CourseThematicProgress.vue"
 import PluginRegion from "../../components/layout/PluginRegion.vue"
 import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
@@ -361,21 +399,13 @@ async function saveToolCustomization() {
   try {
     const tool = selectedTool.value
     const displayTitle = tool.customTitle || t(tool.tool.titleToShow)
-    const titleToSave = !tool.customTitle && customToolTitle.value.trim() === displayTitle
-      ? tool.tool.title
-      : customToolTitle.value
-    const result = await courseService.customizeTool(
-      course.value.id,
-      tool.iid,
-      titleToSave,
-      customToolIcon.value,
-    )
+    const titleToSave =
+      !tool.customTitle && customToolTitle.value.trim() === displayTitle ? tool.tool.title : customToolTitle.value
+    const result = await courseService.customizeTool(course.value.id, tool.iid, titleToSave, customToolIcon.value)
 
     // Update only the edited tool, then refresh the role-scoped cache.
     tools.value = tools.value.map((item) =>
-      item.iid === tool.iid
-        ? { ...item, customTitle: result.customTitle, customIconUrl: result.customIconUrl }
-        : item,
+      item.iid === tool.iid ? { ...item, customTitle: result.customTitle, customIconUrl: result.customIconUrl } : item,
     )
     courseHomeToolsStore.setEntry(course.value.id, 0, cacheRole.value, {
       tools: tools.value,
@@ -384,7 +414,7 @@ async function saveToolCustomization() {
     courseHomeToolsStore.invalidate(course.value.id, 0, "view")
     showCustomizeDialog.value = false
   } catch (error) {
-    customizeError.value = error?.response?.data?.detail || t('An error occurred')
+    customizeError.value = error?.response?.data?.detail || t("An error occurred")
   } finally {
     isSavingCustomization.value = false
   }
@@ -426,6 +456,42 @@ const routerTools = [
   "wiki",
 ]
 const courseSettingsStore = useCourseSettings()
+
+const introductionPosition = ref(INTRODUCTION_POSITION_DEFAULT)
+const introductionPositionError = ref("")
+const isSavingIntroductionPosition = ref(false)
+
+watch(
+  () => courseSettingsStore.getSetting("introduction_position"),
+  (value) => {
+    introductionPosition.value = normalizeIntroductionPosition(value)
+  },
+  { immediate: true },
+)
+
+async function saveIntroductionPosition(position) {
+  const next = normalizeIntroductionPosition(position)
+  const previous = normalizeIntroductionPosition(courseSettingsStore.getSetting("introduction_position"))
+
+  introductionPositionError.value = ""
+  introductionPosition.value = next
+  isSavingIntroductionPosition.value = true
+
+  try {
+    const result = await courseSettingsService.saveIntroductionPosition(next, {
+      cid: course.value.id,
+      sid: session.value?.id || 0,
+    })
+    const saved = normalizeIntroductionPosition(result?.introduction_position ?? next)
+    introductionPosition.value = saved
+    courseSettingsStore.setSetting("introduction_position", saved)
+  } catch (error) {
+    introductionPosition.value = previous
+    introductionPositionError.value = error?.response?.data?.detail || t("An error occurred")
+  } finally {
+    isSavingIntroductionPosition.value = false
+  }
+}
 
 function getCourseSettingInt(variable) {
   return parseInt(courseSettingsStore.getSetting(variable), 10) || 0
@@ -816,6 +882,13 @@ const showCourseSequence = computed(() => {
   return platformConfigStore.getSetting("course.resource_sequence_show_dependency_in_course_intro") === "true"
 })
 
+const appliedIntroductionPosition = computed(() => {
+  return resolveIntroductionLayout(introductionPosition.value, {
+    showSequence: showCourseSequence.value,
+    isDesktop: true,
+  })
+})
+
 onMounted(() => {
   enforceCourseLegalAgreement()
 })
@@ -828,3 +901,95 @@ const allowEditToolVisibilityInSession = computed(() => {
   return isInASession ? "true" === getSetting.value("session.allow_edit_tool_visibility_in_session") : true
 })
 </script>
+
+<style scoped>
+.course-home__layout {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.course-home__intro {
+  grid-area: intro;
+  min-width: 0;
+}
+
+.course-home__tools-area {
+  grid-area: tools;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.course-home__sequence {
+  grid-area: sequence;
+  min-width: 0;
+}
+
+.course-home__layout--above,
+.course-home__layout--left,
+.course-home__layout--right {
+  grid-template-areas:
+    "intro"
+    "tools";
+}
+
+.course-home__layout--above.course-home__layout--with-sequence,
+.course-home__layout--left.course-home__layout--with-sequence,
+.course-home__layout--right.course-home__layout--with-sequence {
+  grid-template-areas:
+    "intro"
+    "sequence"
+    "tools";
+}
+
+.course-home__layout--below {
+  grid-template-areas:
+    "tools"
+    "intro";
+}
+
+.course-home__layout--below.course-home__layout--with-sequence {
+  grid-template-areas:
+    "tools"
+    "sequence"
+    "intro";
+}
+
+@media (min-width: 1024px) {
+  .course-home__layout--above.course-home__layout--with-sequence {
+    grid-template-columns: minmax(0, 1fr) 20%;
+    grid-template-areas:
+      "intro sequence"
+      "tools tools";
+  }
+
+  .course-home__layout--below.course-home__layout--with-sequence {
+    grid-template-columns: minmax(0, 1fr) 20%;
+    grid-template-areas:
+      "tools sequence"
+      "intro intro";
+  }
+
+  .course-home__layout--left {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    grid-template-areas: "intro tools";
+  }
+
+  .course-home__layout--left.course-home__layout--with-sequence {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) 20%;
+    grid-template-areas: "intro tools sequence";
+  }
+
+  .course-home__layout--right {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-areas: "tools intro";
+  }
+
+  .course-home__sequence {
+    border-inline-start-width: 1px;
+    padding-inline-start: 1rem;
+  }
+}
+</style>

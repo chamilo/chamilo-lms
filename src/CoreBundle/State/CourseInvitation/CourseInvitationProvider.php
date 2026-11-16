@@ -48,7 +48,7 @@ final readonly class CourseInvitationProvider implements ProviderInterface
 
         if ($operation instanceof CollectionOperationInterface) {
             $items = [];
-            foreach ($this->invitationRepository->findAllForCourse($course) as $invitation) {
+            foreach ($this->invitationRepository->findAllForContext($course, $session) as $invitation) {
                 $items[] = $this->toItem($invitation);
             }
 

@@ -11,10 +11,13 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\DateTimeHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Service\Security\AtRestCrypto;
+use Doctrine\ORM\Event\PostLoadEventArgs;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -25,7 +28,14 @@ class UserListener
         private Security $security,
         private readonly TranslatorInterface $translator,
         private AccessUrlHelper $accessUrlHelper,
-        private readonly DateTimeHelper $dateTimeHelper
+        private readonly DateTimeHelper $dateTimeHelper,
+        private readonly AtRestCrypto $atRestCrypto,
+        #[Autowire('%env(bool:CHAMILO_ENCRYPT_USER_BIOGRAPHY)%')]
+        private readonly bool $encryptNewBiographies,
+        #[Autowire('%env(bool:CHAMILO_ENCRYPT_USER_PHONE)%')]
+        private readonly bool $encryptNewPhones,
+        #[Autowire('%env(bool:CHAMILO_ENCRYPT_USER_ADDRESS)%')]
+        private readonly bool $encryptNewAddresses,
     ) {}
 
     /**
@@ -35,6 +45,9 @@ class UserListener
     {
         $this->userRepository->updateCanonicalFields($user);
         $this->userRepository->updatePassword($user);
+        $this->prepareBiographyForInsert($user);
+        $this->preparePrivateFieldForInsert($user, 'phone', $this->encryptNewPhones);
+        $this->preparePrivateFieldForInsert($user, 'address', $this->encryptNewAddresses);
 
         if ($user->getPortals()->isEmpty()) {
             $currentUrl = $this->accessUrlHelper->getCurrent();
@@ -76,12 +89,135 @@ class UserListener
     }
 
     /**
-     * This code is executed when a user is updated.
+     * Restore the transient plaintext value without marking Doctrine fields dirty.
+     */
+    public function postLoad(User $user, PostLoadEventArgs $args): void
+    {
+        $stored = $user->biographyStorageValue();
+        $user->hydrateBiography(
+            null !== $stored && $this->atRestCrypto->isEncrypted($stored)
+                ? $this->atRestCrypto->decrypt($stored, $this->biographyContext($user))
+                : $stored
+        );
+        $this->hydratePrivateField($user, 'phone');
+        $this->hydratePrivateField($user, 'address');
+    }
+
+    /**
+     * Encrypt changed biography content before Doctrine writes its change set.
      */
     public function preUpdate(User $user, PreUpdateEventArgs $args): void
     {
         $this->userRepository->updatePassword($user);
         $this->userRepository->updateCanonicalFields($user);
+        $this->preparePrivateFieldForUpdate($user, $args, 'phone', $this->encryptNewPhones);
+        $this->preparePrivateFieldForUpdate($user, $args, 'address', $this->encryptNewAddresses);
+
+        if (!$args->hasChangedField('biography')) {
+            return;
+        }
+
+        $oldValue = $args->getOldValue('biography');
+        $plaintext = $user->biographyStorageValue();
+        if (null === $plaintext || '' === $plaintext) {
+            return;
+        }
+
+        // Once a value was encrypted, edits must never downgrade it to plaintext,
+        // even if the rollout switch was subsequently disabled.
+        if (!$this->encryptNewBiographies && !(\is_string($oldValue) && $this->atRestCrypto->isEncrypted($oldValue))) {
+            return;
+        }
+
+        $ciphertext = $this->atRestCrypto->encrypt($plaintext, $this->biographyContext($user));
+        $user->setBiographyStorageValue($ciphertext);
+        $args->setNewValue('biography', $ciphertext);
+    }
+
+    private function prepareBiographyForInsert(User $user): void
+    {
+        $plaintext = $user->biographyStorageValue();
+        if (!$this->encryptNewBiographies || null === $plaintext || '' === $plaintext) {
+            return;
+        }
+
+        $user->setBiographyStorageValue(
+            $this->atRestCrypto->encrypt($plaintext, $this->biographyContext($user))
+        );
+    }
+
+    /**
+     * Keep the mapped Doctrine property names untouched for hydration and DQL.
+     * The non-persistent plaintext fields are populated in postLoad.
+     */
+    private function hydratePrivateField(User $user, string $field): void
+    {
+        $stored = 'phone' === $field ? $user->phoneStorageValue() : $user->addressStorageValue();
+        $plaintext = null !== $stored && $this->atRestCrypto->isEncrypted($stored)
+            ? $this->atRestCrypto->decrypt($stored, $this->privateFieldContext($user, $field))
+            : $stored;
+
+        if ('phone' === $field) {
+            $user->hydratePhone($plaintext);
+        } else {
+            $user->hydrateAddress($plaintext);
+        }
+    }
+
+    private function preparePrivateFieldForInsert(User $user, string $field, bool $enabled): void
+    {
+        if (!$enabled) {
+            return;
+        }
+        $plaintext = 'phone' === $field ? $user->phoneStorageValue() : $user->addressStorageValue();
+        if (null === $plaintext || '' === $plaintext) {
+            return;
+        }
+        $this->setPrivateFieldStorage(
+            $user,
+            $field,
+            $this->atRestCrypto->encrypt($plaintext, $this->privateFieldContext($user, $field))
+        );
+    }
+
+    private function preparePrivateFieldForUpdate(User $user, PreUpdateEventArgs $args, string $field, bool $enabled): void
+    {
+        if (!$args->hasChangedField($field)) {
+            return;
+        }
+
+        $oldValue = $args->getOldValue($field);
+        $plaintext = 'phone' === $field ? $user->phoneStorageValue() : $user->addressStorageValue();
+        if (null === $plaintext || '' === $plaintext) {
+            return;
+        }
+        // An existing encrypted value must never downgrade when the flag is disabled.
+        if (!$enabled && !(\is_string($oldValue) && $this->atRestCrypto->isEncrypted($oldValue))) {
+            return;
+        }
+
+        $ciphertext = $this->atRestCrypto->encrypt($plaintext, $this->privateFieldContext($user, $field));
+        $this->setPrivateFieldStorage($user, $field, $ciphertext);
+        $args->setNewValue($field, $ciphertext);
+    }
+
+    private function setPrivateFieldStorage(User $user, string $field, string $value): void
+    {
+        if ('phone' === $field) {
+            $user->setPhoneStorageValue($value);
+        } else {
+            $user->setAddressStorageValue($value);
+        }
+    }
+
+    private function privateFieldContext(User $user, string $field): string
+    {
+        return 'user.'.$field.':'.$user->getUuid();
+    }
+
+    private function biographyContext(User $user): string
+    {
+        return 'user.biography:'.$user->getUuid();
     }
 
     public function preRemove(User $user, PreRemoveEventArgs $eventArgs): void

@@ -43,6 +43,8 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\ReadableCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use InvalidArgumentException;
+use LogicException;
 use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\EquatableInterface;
@@ -269,7 +271,13 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     protected ?string $website;
     #[Groups(['user:read', 'user:write'])]
     #[ORM\Column(name: 'biography', type: 'text', nullable: true)]
-    protected ?string $biography;
+    protected ?string $biography = null;
+
+    /**
+     * Non-persistent plaintext for API and PHP consumers.
+     * Keep the original Doctrine property name for DQL and hydration compatibility.
+     */
+    private ?string $biographyPlaintext = null;
     #[Groups(['user:read', 'user:write', 'user_json:read'])]
     #[ORM\Column(name: 'locale', type: 'string', length: 10)]
     protected string $locale;
@@ -304,11 +312,21 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
     #[ORM\Column(name: 'expires_at', type: 'datetime', nullable: true)]
     protected ?DateTime $expiresAt;
     #[Groups(['user:read', 'user:write'])]
-    #[ORM\Column(name: 'phone', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'phone', type: 'text', nullable: true)]
     protected ?string $phone = null;
+
+    /**
+     * Transient value recovered by the Doctrine postLoad event.
+     */
+    private ?string $phonePlaintext = null;
     #[Groups(['user:read', 'user:write'])]
-    #[ORM\Column(name: 'address', type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(name: 'address', type: 'text', nullable: true)]
     protected ?string $address = null;
+
+    /**
+     * Transient value recovered by the Doctrine postLoad event.
+     */
+    private ?string $addressPlaintext = null;
     #[ORM\Column(type: 'string', length: 255)]
     protected string $salt;
     #[ORM\Column(name: 'gender', type: 'string', length: 1, nullable: true)]
@@ -1010,26 +1028,78 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function getPhone(): ?string
     {
+        if (null !== $this->phonePlaintext) {
+            return $this->phonePlaintext;
+        }
+        if (null !== $this->phone && str_starts_with($this->phone, 'chamilo-encrypted:')) {
+            throw new LogicException('Encrypted phone was not hydrated.');
+        }
+
         return $this->phone;
     }
 
     public function setPhone(?string $phone): self
     {
+        if (null !== $phone && str_starts_with($phone, 'chamilo-encrypted:')) {
+            throw new InvalidArgumentException('The phone begins with a reserved encryption storage prefix.');
+        }
+        $this->phonePlaintext = $phone;
         $this->phone = $phone;
 
         return $this;
     }
 
+    public function phoneStorageValue(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhoneStorageValue(?string $value): void
+    {
+        $this->phone = $value;
+    }
+
+    public function hydratePhone(?string $value): void
+    {
+        $this->phonePlaintext = $value;
+    }
+
     public function getAddress(): ?string
     {
+        if (null !== $this->addressPlaintext) {
+            return $this->addressPlaintext;
+        }
+        if (null !== $this->address && str_starts_with($this->address, 'chamilo-encrypted:')) {
+            throw new LogicException('Encrypted address was not hydrated.');
+        }
+
         return $this->address;
     }
 
     public function setAddress(?string $address): self
     {
+        if (null !== $address && str_starts_with($address, 'chamilo-encrypted:')) {
+            throw new InvalidArgumentException('The address begins with a reserved encryption storage prefix.');
+        }
+        $this->addressPlaintext = $address;
         $this->address = $address;
 
         return $this;
+    }
+
+    public function addressStorageValue(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddressStorageValue(?string $value): void
+    {
+        $this->address = $value;
+    }
+
+    public function hydrateAddress(?string $value): void
+    {
+        $this->addressPlaintext = $value;
     }
 
     public function getCreatorId(): ?int
@@ -1736,14 +1806,45 @@ class User implements UserInterface, EquatableInterface, ResourceInterface, Reso
 
     public function getBiography(): ?string
     {
+        if (null !== $this->biographyPlaintext) {
+            return $this->biographyPlaintext;
+        }
+
+        // Never return ciphertext to a serializer if a partial hydration skipped postLoad.
+        if (null !== $this->biography && str_starts_with($this->biography, 'chamilo-encrypted:')) {
+            throw new LogicException('Encrypted biography was not hydrated.');
+        }
+
         return $this->biography;
     }
 
     public function setBiography(string $biography): self
     {
+        if (str_starts_with($biography, 'chamilo-encrypted:')) {
+            throw new InvalidArgumentException('Biography begins with a reserved encryption storage prefix.');
+        }
+
+        $this->biographyPlaintext = $biography;
+        // Keep the mapped value dirty so Doctrine invokes preUpdate even when
+        // the biography is the only changed field.
         $this->biography = $biography;
 
         return $this;
+    }
+
+    public function biographyStorageValue(): ?string
+    {
+        return $this->biography;
+    }
+
+    public function setBiographyStorageValue(?string $value): void
+    {
+        $this->biography = $value;
+    }
+
+    public function hydrateBiography(?string $value): void
+    {
+        $this->biographyPlaintext = $value;
     }
 
     public function getDateOfBirth(): ?DateTime

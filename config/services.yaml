@@ -31,6 +31,12 @@ parameters:
     # to store sessions in the shared php_session table instead.
     env(SESSION_STORED_IN_DB): '0'
     chamilo.session.stored_in_db: '%env(bool:SESSION_STORED_IN_DB)%'
+    # Opt-in encryption of user biographies. Provision var/data-at-rest/master.key
+    # before enabling it; existing rows require the explicit batch migration command.
+    env(CHAMILO_ENCRYPT_USER_BIOGRAPHY): '0'
+    # Phase 2: profile fields (requires the dedicated V310 column-expansion migration).
+    env(CHAMILO_ENCRYPT_USER_PHONE): '0'
+    env(CHAMILO_ENCRYPT_USER_ADDRESS): '0'
     # Ed25519 issuer key of signed certificate credentials and official transcripts.
     # Outside public/ and to be backed up: losing it loses the institution identity.
     chamilo.certificate_issuer_dir: '%kernel.project_dir%/var/certificate-issuer'

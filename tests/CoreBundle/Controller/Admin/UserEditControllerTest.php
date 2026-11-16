@@ -467,4 +467,82 @@ class UserEditControllerTest extends WebTestCase
         $em->clear();
         $this->assertNotContains('ROLE_ADMIN', $em->getRepository(User::class)->find($sessionManager->getId())->getRoles());
     }
+
+    public function testSessionAdminCannotOpenAnAdministratorAccount(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->createUser('user_edit_ctrl_sm_open_admin', '', '', 'ROLE_SESSION_MANAGER'));
+        $adminTarget = $this->createUser('user_edit_ctrl_admin_open_target', '', '', 'ROLE_ADMIN');
+
+        $client->request('GET', '/admin/user-edit-data', ['user_id' => $adminTarget->getId()], [], ['HTTP_ACCEPT' => 'application/json']);
+
+        $this->assertResponseStatusCodeSame(403);
+    }
+
+    public function testSessionAdminCannotUpdateAnAdministratorAccount(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->createUser('user_edit_ctrl_sm_update_admin', '', '', 'ROLE_SESSION_MANAGER'));
+        $adminTarget = $this->createUser('user_edit_ctrl_admin_update_target', '', '', 'ROLE_ADMIN');
+        $passwordBefore = $adminTarget->getPassword();
+
+        $client->request(
+            'POST',
+            '/admin/user-edit-action',
+            [
+                'user_id' => $adminTarget->getId(),
+                'firstname' => $adminTarget->getFirstname(),
+                'lastname' => $adminTarget->getLastname(),
+                'email' => $adminTarget->getEmail(),
+                'username' => $adminTarget->getUsername(),
+                'authSource' => ['platform'],
+                'roles' => ['ROLE_TEACHER'],
+                'locale' => 'en_US',
+                'sendMail' => '0',
+                'active' => '1',
+                'resetPassword' => '1',
+            ],
+            [],
+            ['HTTP_SEC_FETCH_SITE' => 'same-origin']
+        );
+
+        $this->assertResponseStatusCodeSame(403);
+        $em = $this->getEntityManager();
+        $em->clear();
+        $refreshed = $em->getRepository(User::class)->find($adminTarget->getId());
+        $this->assertContains('ROLE_ADMIN', $refreshed->getRoles());
+        $this->assertSame($passwordBefore, $refreshed->getPassword());
+    }
+
+    public function testSessionAdminCanStillUpdateARegularUser(): void
+    {
+        $client = static::createClient();
+        $client->loginUser($this->createUser('user_edit_ctrl_sm_update_regular', '', '', 'ROLE_SESSION_MANAGER'));
+        $target = $this->createUser('user_edit_ctrl_regular_update_target', '', '', 'ROLE_STUDENT');
+
+        $client->request(
+            'POST',
+            '/admin/user-edit-action',
+            [
+                'user_id' => $target->getId(),
+                'firstname' => 'EditedBySessionAdmin',
+                'lastname' => $target->getLastname(),
+                'email' => $target->getEmail(),
+                'username' => $target->getUsername(),
+                'authSource' => ['platform'],
+                'roles' => ['ROLE_STUDENT'],
+                'locale' => 'en_US',
+                'sendMail' => '0',
+                'active' => '1',
+                'resetPassword' => '0',
+            ],
+            [],
+            ['HTTP_SEC_FETCH_SITE' => 'same-origin']
+        );
+
+        $this->assertResponseIsSuccessful();
+        $em = $this->getEntityManager();
+        $em->clear();
+        $this->assertSame('EditedBySessionAdmin', $em->getRepository(User::class)->find($target->getId())->getFirstname());
+    }
 }

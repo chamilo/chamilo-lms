@@ -85,6 +85,11 @@ final class EncryptUserBiographiesCommand extends Command
 
                 return Command::SUCCESS;
             }
+            if (0 === $pending) {
+                $output->writeln('<info>Nothing to encrypt; no records were changed.</info>');
+
+                return Command::SUCCESS;
+            }
             if (!$this->encryptionPolicy->isEnabled('biography')) {
                 $output->writeln(
                     '<error>Select Biography in Administration > Settings > Security before applying.</error>'

@@ -843,14 +843,14 @@ class BaseResourceFileAction
      * @template TResource of object
      *
      * @param ResourceRepository<TResource>                    $repo
-     * @param callable(array<int, array<string, mixed>>): void $assertNewLinksAllowed throws when the caller may not add these links
+     * @param callable(array<int, array<string, mixed>>): void $assertLinksAllowed throws when the caller may not add or change these links
      */
     protected function handleUpdateRequest(
         AbstractResource $resource,
         ResourceRepository $repo,
         Request $request,
         EntityManager $em,
-        callable $assertNewLinksAllowed,
+        callable $assertLinksAllowed,
         bool $keepParentInTree = true,
     ): AbstractResource {
         $contentData = $request->getContent();
@@ -936,10 +936,17 @@ class BaseResourceFileAction
                     )->first();
 
                     if ($candidate instanceof ResourceLink) {
-                        $link = $candidate;
-                        $link->setVisibility((int) $linkArray['visibility']);
+                        $visibility = (int) ($linkArray['visibility'] ?? $candidate->getVisibility());
 
-                        $em->persist($link);
+                        // The form sends back every link it loaded, so only a real change needs to be authorized.
+                        if ($visibility !== $candidate->getVisibility()) {
+                            $assertLinksAllowed([$this->describeResourceLink($candidate)]);
+
+                            $link = $candidate;
+                            $link->setVisibility($visibility);
+
+                            $em->persist($link);
+                        }
                     }
 
                     // An id that is not one of this node's links never becomes a new link.
@@ -950,7 +957,7 @@ class BaseResourceFileAction
 
             $resourceLinkList = array_values($resourceLinkList);
             if (!empty($resourceLinkList)) {
-                $assertNewLinksAllowed($resourceLinkList);
+                $assertLinksAllowed($resourceLinkList);
             }
 
             $resource->setResourceLinkArray($resourceLinkList);
@@ -1973,5 +1980,22 @@ class BaseResourceFileAction
         @fclose($stream);
 
         return is_file($targetPath);
+    }
+
+    /**
+     * Describes an existing link with the keys of a link sent in a request body, so the same
+     * checks decide whether the caller may change it.
+     *
+     * @return array<string, int|null>
+     */
+    private function describeResourceLink(ResourceLink $link): array
+    {
+        return [
+            'cid' => $link->getCourse()?->getId(),
+            'sid' => $link->getSession()?->getId(),
+            'gid' => $link->getGroup()?->getIid(),
+            'uid' => $link->getUser()?->getId(),
+            'ugid' => $link->getUserGroup()?->getId(),
+        ];
     }
 }

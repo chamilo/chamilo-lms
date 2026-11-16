@@ -69,7 +69,8 @@ use Symfony\Component\Validator\Constraints as Assert;
             openapi: new Operation(
                 summary: 'Change document visibility (visible/invisible to learners)'
             ),
-            security: "is_granted('EDIT', object.resourceNode)",
+            // EDIT alone also lets the creator of a node shared with another course act there.
+            security: "is_granted('EDIT', object.resourceNode) and (is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER'))",
             deserialize: false
         ),
         new Patch(

@@ -63,6 +63,11 @@ final class RememberMeSubscriber implements EventSubscriberInterface
             return;
         }
 
+        // The authenticator did not keep the user logged in (e.g. a TOTP step is still pending).
+        if (null === $this->tokenStorage->getToken()) {
+            return;
+        }
+
         if (!$this->isRememberMeRequested($request) || !$this->isRequestSecure($request)) {
             return;
         }

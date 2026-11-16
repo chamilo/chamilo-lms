@@ -115,6 +115,44 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
         $this->assertSame(0, $this->countCourseLinks(CDocument::class, $ctx['foreignCourse']));
     }
 
+    public function testTeacherCannotChangeVisibilityOfDocumentLinkInAnotherCourse(): void
+    {
+        $ctx = $this->bootstrapSharedDocumentScenario('shared');
+
+        $this->putDocument($ctx, [
+            'resourceLinkListFromEntity' => [
+                ['id' => $ctx['foreignLinkId'], 'visibility' => ResourceLink::VISIBILITY_PUBLISHED],
+            ],
+        ]);
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['foreignLinkId']));
+
+        // The same teacher still manages the link of the course that authorized the request.
+        $this->putDocument($ctx, [
+            'resourceLinkListFromEntity' => [
+                ['id' => $ctx['localLinkId'], 'visibility' => ResourceLink::VISIBILITY_DRAFT],
+            ],
+        ]);
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['localLinkId']));
+    }
+
+    public function testTeacherCanSaveDocumentSharedWithAnotherCourseWithoutChangingItsLink(): void
+    {
+        $ctx = $this->bootstrapSharedDocumentScenario('keep');
+
+        // The edit form sends back every link it loaded, the other course's included.
+        $this->putDocument($ctx, [
+            'title' => 'rllc-renamed-keep',
+            'resourceLinkListFromEntity' => [
+                ['id' => $ctx['localLinkId'], 'visibility' => ResourceLink::VISIBILITY_PUBLISHED],
+                ['id' => $ctx['foreignLinkId'], 'visibility' => ResourceLink::VISIBILITY_DRAFT],
+            ],
+        ]);
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['foreignLinkId']));
+    }
+
     public function testTeacherCannotMoveOwnDocumentIntoAnotherCourse(): void
     {
         $ctx = $this->bootstrapDocumentScenario('move');
@@ -206,6 +244,45 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
             'foreignCourse' => $foreignCourse,
             'document' => $document,
         ];
+    }
+
+    /**
+     * A document whose node is linked to the teacher's course (published) and to another
+     * course (draft).
+     *
+     * @return array{teacher: User, course: Course, foreignCourse: Course, document: CDocument, localLinkId: int, foreignLinkId: int}
+     */
+    private function bootstrapSharedDocumentScenario(string $suffix): array
+    {
+        $ctx = $this->bootstrapDocumentScenario($suffix);
+
+        /** @var CDocumentRepository $documentRepo */
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+
+        $ctx['document']->addCourseLink($ctx['foreignCourse'], null, null, ResourceLink::VISIBILITY_DRAFT);
+        $documentRepo->update($ctx['document']);
+
+        $localLinkId = 0;
+        $foreignLinkId = 0;
+        foreach ($ctx['document']->getResourceNode()->getResourceLinks() as $link) {
+            if ($link->getCourse()?->getId() === $ctx['course']->getId()) {
+                $localLinkId = (int) $link->getId();
+            } elseif ($link->getCourse()?->getId() === $ctx['foreignCourse']->getId()) {
+                $foreignLinkId = (int) $link->getId();
+            }
+        }
+        $this->assertGreaterThan(0, $localLinkId);
+        $this->assertGreaterThan(0, $foreignLinkId);
+
+        return $ctx + ['localLinkId' => $localLinkId, 'foreignLinkId' => $foreignLinkId];
+    }
+
+    private function getLinkVisibility(int $linkId): int
+    {
+        $em = $this->getEntityManager();
+        $em->clear();
+
+        return (int) $em->find(ResourceLink::class, $linkId)->getVisibility();
     }
 
     /**

@@ -6,6 +6,7 @@ namespace Chamilo\LtiBundle\EventSubscriber;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\LtiBundle\Security\LtiProviderLaunchToken;
 use CourseManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -55,6 +56,7 @@ final class LtiProviderRequestSubscriber implements EventSubscriberInterface
         private readonly EntityManagerInterface $entityManager,
         private readonly TokenStorageInterface $tokenStorage,
         private readonly LoggerInterface $logger,
+        private readonly AccessUrlHelper $accessUrlHelper,
     ) {}
 
     public static function getSubscribedEvents(): array
@@ -201,6 +203,14 @@ final class LtiProviderRequestSubscriber implements EventSubscriberInterface
                 $payload = $this->launchToken->parseToken($token);
 
                 if (\is_array($payload)) {
+                    if (!$this->isIssuedForCurrentAccessUrl($payload)) {
+                        $this->logger->warning('[LtiProvider subscriber] Launch token was not issued for this Access URL.', [
+                            'launch_id' => $launchId,
+                        ]);
+
+                        return [];
+                    }
+
                     return $this->normalizeContext($payload, $token, $launchId, 'token');
                 }
             } catch (Throwable $throwable) {
@@ -228,6 +238,17 @@ final class LtiProviderRequestSubscriber implements EventSubscriberInterface
         }
 
         return [];
+    }
+
+    /**
+     * A launch token is only valid on the Access URL that issued it. Tokens without the binding are refused.
+     */
+    private function isIssuedForCurrentAccessUrl(array $payload): bool
+    {
+        $tokenAccessUrlId = (int) ($payload['access_url_id'] ?? 0);
+        $currentAccessUrlId = (int) $this->accessUrlHelper->getCurrent()?->getId();
+
+        return $tokenAccessUrlId > 0 && $tokenAccessUrlId === $currentAccessUrlId;
     }
 
     private function resolveTokenFromRequest(Request $request): ?string

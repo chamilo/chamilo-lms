@@ -1149,23 +1149,6 @@ foreach ($studentBossList as $boss) {
 }
 $userInfoExtra['boss_list'] = $bossList;
 
-if (!empty($courseCode)) {
-    $userInfoExtra['url_access'] = Display::url(
-        get_lang('See accesses'),
-        'access_details.php?'
-        .http_build_query(
-            [
-                'student' => $studentId,
-                'course' => $courseCode,
-                'origin' => $origin,
-                'cid' => $courseId,
-                'sid' => $sessionId,
-            ]
-        ),
-        ['class' => 'btn btn--plain']
-    );
-}
-
 // Display timezone if the user selected one and if the admin allows the use of user's timezone
 $timezone = null;
 $timezone_user = $user->getTimezone();

@@ -273,7 +273,6 @@ import { mapFields } from "vuex-map-fields"
 import ListMixin from "../../mixins/ListMixin"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import resourceNodeService from "../../services/resourcenode"
-import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
@@ -710,9 +709,8 @@ export default {
 
       try {
         this.item.filetype = "folder"
+        // Course context and default visibility derived server-side from the gated session course.
         this.item.parentResourceNodeId = this.getCurrentNodeId()
-        // Course context derived server-side from the gated session course.
-        this.item.resourceLinkList = JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 
         await this.create(this.item)
 
@@ -760,9 +758,8 @@ export default {
         title: file.name,
         filetype: "file",
         uploadFile: file,
+        // Course context and default visibility derived server-side from the gated session course.
         parentResourceNodeId: this.getCurrentNodeId(),
-        // Course context derived server-side from the gated session course.
-        resourceLinkList: JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }]),
       }
 
       try {

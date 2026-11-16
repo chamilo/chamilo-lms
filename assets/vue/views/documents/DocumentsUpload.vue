@@ -249,7 +249,6 @@ import { Dashboard } from "@uppy/vue"
 import XHRUpload from "@uppy/xhr-upload"
 import ImageEditor from "@uppy/image-editor"
 import { useRoute, useRouter } from "vue-router"
-import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { getCourseContext } from "../../utils/courseContext"
 import { useUpload } from "../../composables/upload"
 import { useI18n } from "vue-i18n"
@@ -460,16 +459,6 @@ function buildSearchFieldMeta(values, fields) {
   return meta
 }
 
-// The course context (cid/sid/gid) is derived server-side from the gated
-// session course, so the link list only needs to carry the visibility.
-function buildResourceLinkList() {
-  return JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
-}
-
-function buildResourceLinkArray() {
-  return [{ visibility: RESOURCE_LINK_PUBLISHED }]
-}
-
 async function saveCloudLink() {
   cloudLinkError.value = ""
 
@@ -499,7 +488,6 @@ async function saveCloudLink() {
       title,
       comment: url,
       parentResourceNodeId: parentNodeId,
-      resourceLinkList: buildResourceLinkArray(),
       language: selectedLanguage.value,
     })
 
@@ -691,7 +679,6 @@ uppy
 uppy.setMeta({
   filetype,
   parentResourceNodeId: parentResourceNodeId.value,
-  resourceLinkList: buildResourceLinkList(),
   isUncompressZipEnabled: isUncompressZipEnabled.value,
   fileExistsOption: fileExistsOption.value,
   indexDocumentContent: indexDocumentContent.value,

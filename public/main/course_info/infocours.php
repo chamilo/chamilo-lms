@@ -757,10 +757,10 @@ $form->addPanelOption(
 
 // Documents
 $globalGroup = [];
-if ('true' === api_get_setting('documents_default_visibility_defined_in_course')) {
+if ('true' === api_get_setting('document.document_default_visibility_can_be_modified_in_course')) {
     $group = [
-        $form->createElement('radio', 'documents_default_visibility', null, get_lang('Visible'), 'visible'),
-        $form->createElement('radio', 'documents_default_visibility', null, get_lang('invisible'), 'invisible'),
+        $form->createElement('radio', 'document_default_visibility_on_creation', null, get_lang('Visible'), 'visible'),
+        $form->createElement('radio', 'document_default_visibility_on_creation', null, get_lang('invisible'), 'invisible'),
     ];
     $globalGroup[get_lang('Default visibility of new documents')] = $group;
 }
@@ -1733,7 +1733,7 @@ $normalizeQuizNotificationSetting = static function ($value) use ($validQuizNoti
 // ---------------------------------------------------------------------
 $defaultCourseSettings = [
     // Documents (only used if the corresponding platform setting enables these fields)
-    'documents_default_visibility' => 'visible',
+    'document_default_visibility_on_creation' => api_get_setting('document.document_default_visibility_on_creation'),
     'show_system_folders' => 1,
 
     // E-mail notifications (default to disabled)

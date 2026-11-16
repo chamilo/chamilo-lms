@@ -74,7 +74,6 @@ import TemplateList from "../../components/documents/TemplateList.vue"
 import { useDocumentCreate } from "../../composables/useDocumentCreate"
 import { useCertificateTags } from "../../composables/useCertificateTags"
 import { useDocumentTemplates } from "../../composables/useDocumentTemplates"
-import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import Panel from "primevue/panel"
 import { usePlatformConfig } from "../../store/platformConfig"
 
@@ -125,10 +124,9 @@ watch(created, (val) => {
   redirectToDocumentsList()
 })
 
+// Course context (cid/sid/gid) and the default visibility of new documents are
+// derived server-side from the gated session course.
 item.value.parentResourceNodeId = route.params.node ?? route.params.id ?? null
-// Course context (cid/sid/gid) is derived server-side from the gated session
-// course; only the visibility needs to travel in the body.
-item.value.resourceLinkList = JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
 
 onMounted(async () => {
   await fetchTemplates()

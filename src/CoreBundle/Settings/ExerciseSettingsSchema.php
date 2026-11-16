@@ -30,6 +30,8 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             'exercise_max_editors_in_page' => '0',
             'configure_exercise_visibility_in_course' => 'false',
             'exercise_invisible_in_session' => 'false',
+            'exercise_default_visibility_on_creation' => 'visible',
+            'exercise_default_visibility_can_be_modified_in_course' => 'false',
             'exercise_hide_label' => 'false',
             'block_quiz_mail_notification_general_coach' => 'false',
             'allow_quiz_question_feedback' => 'false',
@@ -109,6 +111,13 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             ->add('exercise_max_editors_in_page')
             ->add('configure_exercise_visibility_in_course', YesNoType::class)
             ->add('exercise_invisible_in_session', YesNoType::class)
+            ->add('exercise_default_visibility_on_creation', ChoiceType::class, [
+                'choices' => [
+                    'Visible' => 'visible',
+                    'Invisible' => 'invisible',
+                ],
+            ])
+            ->add('exercise_default_visibility_can_be_modified_in_course', YesNoType::class)
             ->add('exercise_hide_label', YesNoType::class)
             ->add('block_quiz_mail_notification_general_coach', YesNoType::class)
             ->add('allow_quiz_question_feedback', YesNoType::class)

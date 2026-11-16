@@ -19,6 +19,8 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
     {
         $builder->setDefaults([
             'show_invisible_exercise_in_lp_toc' => 'false',
+            'lp_default_visibility_on_creation' => 'invisible',
+            'lp_default_visibility_can_be_modified_in_course' => 'false',
             'add_all_files_in_lp_export' => 'false',
             'show_prerequisite_as_blocked' => 'false',
             'hide_lp_time' => 'false',
@@ -80,6 +82,13 @@ class LearningPathSettingsSchema extends AbstractSettingsSchema
     {
         $builder
             ->add('show_invisible_exercise_in_lp_toc', YesNoType::class)
+            ->add('lp_default_visibility_on_creation', ChoiceType::class, [
+                'choices' => [
+                    'Visible' => 'visible',
+                    'Invisible' => 'invisible',
+                ],
+            ])
+            ->add('lp_default_visibility_can_be_modified_in_course', YesNoType::class)
             ->add('add_all_files_in_lp_export', YesNoType::class)
             ->add('show_prerequisite_as_blocked', YesNoType::class)
             ->add('hide_lp_time', YesNoType::class)

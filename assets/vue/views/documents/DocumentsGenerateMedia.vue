@@ -323,7 +323,6 @@ import aiService from "../../services/aiService"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { getCourseContext } from "../../utils/courseContext"
-import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseAdvancedSettingsButton from "../../components/basecomponents/BaseAdvancedSettingsButton.vue"
@@ -699,11 +698,6 @@ function base64ToFile(base64, filename, mime) {
   return new File([blob], filename, { type: mime })
 }
 
-// Course context derived server-side from the gated session course.
-function buildResourceLinkList() {
-  return JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
-}
-
 function canvasMimeFromContentType(contentType) {
   const ct = String(contentType || "").toLowerCase()
   if (ct.includes("jpeg") || ct.includes("jpg")) return "image/jpeg"
@@ -806,7 +800,6 @@ async function saveToDocuments(file) {
   formData.append("filetype", "file")
 
   formData.append("parentResourceNodeId", String(selectedFolderId.value))
-  formData.append("resourceLinkList", buildResourceLinkList())
   formData.append("fileExistsOption", "rename")
   formData.append("language", selectedLanguage.value)
 

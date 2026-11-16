@@ -4261,5 +4261,7 @@
     "Course tracking details": "Course tracking details",
     "Learner details in course": "Learner details in course",
     "Start test": "Start test",
-    "Proceed with the test": "Proceed with the test"
+    "Proceed with the test": "Proceed with the test",
+    "Default visibility for new learning paths": "Default visibility for new learning paths",
+    "Default visibility for new tests": "Default visibility for new tests"
 }

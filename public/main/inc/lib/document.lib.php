@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -2918,26 +2919,10 @@ jQuery(function ($) {
      */
     public static function getDocumentDefaultVisibility($courseCode)
     {
-        $settings = api_get_setting('tool_visible_by_default_at_creation');
-        $defaultVisibility = 'visible';
+        $course = Container::getCourseRepository()->findOneByCode((string) $courseCode);
 
-        if (isset($settings['documents'])) {
-            $portalDefaultVisibility = 'invisible';
-            if ('true' == $settings['documents']) {
-                $portalDefaultVisibility = 'visible';
-            }
-
-            $defaultVisibility = $portalDefaultVisibility;
-        }
-
-        if ('true' === api_get_setting('documents_default_visibility_defined_in_course')) {
-            $courseVisibility = api_get_course_setting('documents_default_visibility', $courseCode);
-            if (!empty($courseVisibility) && in_array($courseVisibility, ['visible', 'invisible'])) {
-                $defaultVisibility = $courseVisibility;
-            }
-        }
-
-        return $defaultVisibility;
+        return Container::$container->get(ResourceDefaultVisibilityHelper::class)
+            ->getVisibility(ResourceDefaultVisibilityHelper::DOCUMENT, $course);
     }
 
     /**

@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\EventLoggerHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
+use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
@@ -72,7 +73,7 @@ final readonly class CourseSettingsManager
     ];
     private const array COURSE_SETTING_CATEGORIES = [
         'show_course_in_user_language' => '',
-        'documents_default_visibility' => 'document',
+        'document_default_visibility_on_creation' => 'document',
         'show_system_folders' => 'document',
         'email_alert_to_teacher_on_new_user_in_course' => 'registration',
         'email_alert_student_on_manual_subscription' => 'registration',
@@ -90,6 +91,8 @@ final readonly class CourseSettingsManager
         'allow_learning_path_theme' => 'theme',
         'lp_return_link' => 'learning_path',
         'exercise_invisible_in_session' => 'exercise',
+        'exercise_default_visibility_on_creation' => 'exercise',
+        'lp_default_visibility_on_creation' => 'learning_path',
         'display_info_advance_inside_homecourse' => 'thematic_advance',
         'allow_public_certificates' => 'certificates',
         'customcertificate_course_enable' => '',
@@ -118,9 +121,17 @@ final readonly class CourseSettingsManager
         'video_generator' => 'ai_helpers',
         'course_analyser' => 'ai_helpers',
     ];
+
+    /**
+     * The course setting holding the default visibility of each tool's new resources.
+     */
+    private const array DEFAULT_VISIBILITY_SETTINGS = [
+        'document_default_visibility_on_creation' => ResourceDefaultVisibilityHelper::DOCUMENT,
+        'exercise_default_visibility_on_creation' => ResourceDefaultVisibilityHelper::EXERCISE,
+        'lp_default_visibility_on_creation' => ResourceDefaultVisibilityHelper::LEARNING_PATH,
+    ];
     private const array DEFAULT_VALUES = [
         'show_course_in_user_language' => 2,
-        'documents_default_visibility' => 'visible',
         'show_system_folders' => 1,
         'email_alert_to_teacher_on_new_user_in_course' => 0,
         'email_alert_student_on_manual_subscription' => 0,
@@ -297,6 +308,7 @@ final readonly class CourseSettingsManager
         private ParameterBagInterface $parameterBag,
         private MailerInterface $mailer,
         private EventLoggerHelper $eventLoggerHelper,
+        private ResourceDefaultVisibilityHelper $resourceDefaultVisibilityHelper,
         private LoggerInterface $logger,
         #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
         private FilesystemOperator $themesFilesystem,
@@ -435,6 +447,11 @@ final readonly class CourseSettingsManager
 
         foreach (self::DEFAULT_VALUES as $variable => $defaultValue) {
             $values[$variable] = $this->getCourseSettingValue($course, $variable, $defaultValue);
+        }
+
+        // Without a choice of the course, the form shows the platform default it applies.
+        foreach (self::DEFAULT_VISIBILITY_SETTINGS as $variable => $tool) {
+            $values[$variable] = $this->resourceDefaultVisibilityHelper->getVisibility($tool, $course);
         }
 
         foreach (self::COURSE_BLOCK_SETTINGS as $variable) {
@@ -651,11 +668,8 @@ final readonly class CourseSettingsManager
         ]);
 
         $documentFields = [];
-        if ($this->settingEnabled('documents_default_visibility_defined_in_course')) {
-            $documentFields[] = $this->field('documents_default_visibility', 'Default visibility for new documents', 'radio', options: [
-                ['label' => 'Visible', 'value' => 'visible'],
-                ['label' => 'Invisible', 'value' => 'invisible'],
-            ]);
+        if ($this->resourceDefaultVisibilityHelper->canBeModifiedInCourse(ResourceDefaultVisibilityHelper::DOCUMENT)) {
+            $documentFields[] = $this->defaultVisibilityField('document_default_visibility_on_creation', 'Default visibility for new documents');
         }
         if ($this->settingEnabled('show_default_folders')) {
             $documentFields[] = $this->field('show_system_folders', 'Show system folders', 'radio', options: $this->yesNoOptions(1, 2));
@@ -717,7 +731,16 @@ final readonly class CourseSettingsManager
         if ($this->settingEnabled('exercise_invisible_in_session') && $this->settingEnabled('configure_exercise_visibility_in_course')) {
             $learningPathFields[] = $this->field('exercise_invisible_in_session', 'Exercises invisible in session', 'radio', options: $this->yesNoOptions(1, 0));
         }
+        if ($this->resourceDefaultVisibilityHelper->canBeModifiedInCourse(ResourceDefaultVisibilityHelper::LEARNING_PATH)) {
+            $learningPathFields[] = $this->defaultVisibilityField('lp_default_visibility_on_creation', 'Default visibility for new learning paths');
+        }
         $sections[] = $this->section('learning_path', 'Learning path settings', 'learning-paths', $learningPathFields, collapsed: true);
+
+        if ($this->resourceDefaultVisibilityHelper->canBeModifiedInCourse(ResourceDefaultVisibilityHelper::EXERCISE)) {
+            $sections[] = $this->section('tests', 'Tests', 'order-bool-ascending-variant', [
+                $this->defaultVisibilityField('exercise_default_visibility_on_creation', 'Default visibility for new tests'),
+            ], collapsed: true);
+        }
 
         $sections[] = $this->section('thematic', 'Thematic advance configuration', 'tracking', [
             $this->field('display_info_advance_inside_homecourse', 'Information on thematic advance on course homepage', 'radio', options: [
@@ -896,12 +919,9 @@ final readonly class CourseSettingsManager
                 : $defaultValue;
         }
 
-        $documentVisibility = (string) ($values['documents_default_visibility'] ?? '');
-        $values['documents_default_visibility'] = \in_array(
-            $documentVisibility,
-            ['visible', 'invisible'],
-            true,
-        ) ? $documentVisibility : 'visible';
+        foreach (self::DEFAULT_VISIBILITY_SETTINGS as $variable => $tool) {
+            $values[$variable] = $this->normalizeDefaultVisibility($values[$variable] ?? '', $tool);
+        }
 
         foreach (self::AI_FEATURES as $key => $_label) {
             if (!\array_key_exists($key, $values)) {
@@ -982,9 +1002,9 @@ final readonly class CourseSettingsManager
             }
         }
 
-        $normalized['documents_default_visibility'] = 'invisible' === ($values['documents_default_visibility'] ?? '')
-            ? 'invisible'
-            : 'visible';
+        foreach (self::DEFAULT_VISIBILITY_SETTINGS as $variable => $tool) {
+            $normalized[$variable] = $this->normalizeDefaultVisibility($values[$variable] ?? '', $tool);
+        }
         $normalized['email_alert_manager_on_new_quiz'] = $this->normalizeStringList(
             $values['email_alert_manager_on_new_quiz'] ?? [],
             ['1', '2', '3', '4'],
@@ -1801,7 +1821,9 @@ final readonly class CourseSettingsManager
         }
 
         return match ($variable) {
-            'documents_default_visibility' => $this->settingEnabled('documents_default_visibility_defined_in_course'),
+            'document_default_visibility_on_creation' => $this->resourceDefaultVisibilityHelper->canBeModifiedInCourse(ResourceDefaultVisibilityHelper::DOCUMENT),
+            'exercise_default_visibility_on_creation' => $this->resourceDefaultVisibilityHelper->canBeModifiedInCourse(ResourceDefaultVisibilityHelper::EXERCISE),
+            'lp_default_visibility_on_creation' => $this->resourceDefaultVisibilityHelper->canBeModifiedInCourse(ResourceDefaultVisibilityHelper::LEARNING_PATH),
             'show_system_folders' => $this->settingEnabled('show_default_folders'),
             'course_theme', 'allow_learning_path_theme' => $this->settingEnabled('allow_course_theme'),
             'lp_return_link' => $this->settingEnabled('lp.allow_lp_return_link'),
@@ -1818,6 +1840,24 @@ final readonly class CourseSettingsManager
     {
         return $this->settingEnabled('ai_helpers.enable_ai_helpers')
             && $this->aiFeatureAccessHelper->isFeatureConfigurableForCourse($feature, $courseId);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function defaultVisibilityField(string $name, string $label): array
+    {
+        return $this->field($name, $label, 'radio', options: [
+            ['label' => 'Visible', 'value' => ResourceDefaultVisibilityHelper::VISIBLE],
+            ['label' => 'Invisible', 'value' => ResourceDefaultVisibilityHelper::INVISIBLE],
+        ]);
+    }
+
+    private function normalizeDefaultVisibility(mixed $value, string $tool): string
+    {
+        return \in_array($value, [ResourceDefaultVisibilityHelper::VISIBLE, ResourceDefaultVisibilityHelper::INVISIBLE], true)
+            ? $value
+            : $this->resourceDefaultVisibilityHelper->getPlatformVisibility($tool);
     }
 
     private function settingEnabled(string $key): bool

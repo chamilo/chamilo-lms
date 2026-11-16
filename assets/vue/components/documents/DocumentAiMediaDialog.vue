@@ -294,7 +294,6 @@ import InputText from "primevue/inputtext"
 import { useI18n } from "vue-i18n"
 import { useRoute } from "vue-router"
 import { getCourseContext } from "../../utils/courseContext"
-import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useCourseSettings } from "../../store/courseSettingStore"
@@ -579,11 +578,6 @@ function base64ToFile(base64, filename, mime) {
   return new File([blob], filename, { type: mime })
 }
 
-// Course context derived server-side from the gated session course.
-function buildResourceLinkList() {
-  return JSON.stringify([{ visibility: RESOURCE_LINK_PUBLISHED }])
-}
-
 function canvasMimeFromContentType(contentType) {
   const ct = String(contentType || "").toLowerCase()
   if (ct.includes("jpeg") || ct.includes("jpg")) return "image/jpeg"
@@ -743,7 +737,6 @@ async function createFolder(title, parentNodeId) {
   formData.append("title", title)
   formData.append("filetype", "folder")
   formData.append("parentResourceNodeId", String(parentNodeId))
-  formData.append("resourceLinkList", buildResourceLinkList())
 
   const data = await documentsService.uploadDocumentFile(formData)
 
@@ -863,7 +856,6 @@ async function saveToDocuments(file) {
   formData.append("title", titleNoExt)
   formData.append("filetype", "file")
   formData.append("parentResourceNodeId", String(selectedFolderId.value))
-  formData.append("resourceLinkList", buildResourceLinkList())
   formData.append("fileExistsOption", "rename")
   formData.append("ai_assisted", "1")
 

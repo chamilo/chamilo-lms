@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
@@ -68,6 +69,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         private SettingsManager $settingsManager,
         private GradebookLinkManager $gradebookLinkManager,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private ResourceDefaultVisibilityHelper $resourceDefaultVisibilityHelper,
     ) {}
 
     /**
@@ -164,7 +166,11 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         $this->applyCommonFields($quiz, $data, $course);
         $quiz
             ->setParent($course)
-            ->addCourseLink($course, $session)
+            ->addCourseLink(
+                $course,
+                $session,
+                visibility: $this->resourceDefaultVisibilityHelper->getResourceLinkVisibility(ResourceDefaultVisibilityHelper::EXERCISE, $course),
+            )
         ;
 
         $this->quizRepository->create($quiz);

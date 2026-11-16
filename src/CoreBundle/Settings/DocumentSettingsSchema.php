@@ -37,7 +37,8 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
                 'show_users_folders' => 'true',
                 'show_default_folders' => 'true',
                 'show_documents_preview' => 'false',
-                'documents_default_visibility_defined_in_course' => 'false',
+                'document_default_visibility_on_creation' => 'visible',
+                'document_default_visibility_can_be_modified_in_course' => 'false',
                 'send_notification_when_document_added' => 'false',
                 'thematic_pdf_orientation' => 'landscape',
                 'group_document_access' => 'false',
@@ -94,6 +95,13 @@ class DocumentSettingsSchema extends AbstractSettingsSchema
             ->add('show_users_folders', YesNoType::class)
             ->add('show_default_folders', YesNoType::class)
             ->add('show_documents_preview', YesNoType::class)
+            ->add('document_default_visibility_on_creation', ChoiceType::class, [
+                'choices' => [
+                    'Visible' => 'visible',
+                    'Invisible' => 'invisible',
+                ],
+            ])
+            ->add('document_default_visibility_can_be_modified_in_course', YesNoType::class)
             ->add('send_notification_when_document_added', YesNoType::class)
             ->add('thematic_pdf_orientation', ChoiceType::class, [
                 'choices' => [

@@ -17,6 +17,23 @@ if (!$is_allowedToTrack) {
     exit;
 }
 
+// The access details of a course are only for its teachers and tutors, for the coaches
+// of the requested session and for its general coach.
+if (in_array($action, ["access_detail", "access_detail_by_date"], true) && !api_is_platform_admin(true, true)) {
+    $courseInfoForAuth = api_get_course_info(isset($_REQUEST["course"]) ? $_REQUEST["course"] : "");
+    $courseIdForAuth = (int) (isset($courseInfoForAuth["real_id"]) ? $courseInfoForAuth["real_id"] : 0);
+    $sessionIdOfAction = isset($_REQUEST["session_id"]) ? (int) $_REQUEST["session_id"] : 0;
+    $currentUserId = api_get_user_id();
+
+    if (!CourseManager::is_course_teacher($currentUserId, isset($courseInfoForAuth["code"]) ? $courseInfoForAuth["code"] : "") &&
+        1 != CourseManager::get_tutor_in_course_status($currentUserId, $courseIdForAuth) &&
+        !api_is_course_session_coach($currentUserId, $courseIdForAuth, $sessionIdOfAction) &&
+        !SessionManager::user_is_general_coach($currentUserId, $sessionIdOfAction)
+    ) {
+        exit;
+    }
+}
+
 switch ($action) {
     case 'lp_global_report':
         $userId = (int) $_REQUEST['user_id'];

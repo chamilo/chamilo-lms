@@ -22,8 +22,50 @@ $exercises = isset($_REQUEST['exercises']) ? $_REQUEST['exercises'] : [];
 $courseOptions = [];
 $exerciseList = [];
 $selectedExercises = [];
+
+/**
+ * Whether the current user teaches, tutors or coaches (in any session) the given course.
+ *
+ * @param int $courseId
+ *
+ * @return bool
+ */
+function isUserLinkedToCourse($courseId)
+{
+    $userId = api_get_user_id();
+    $courseId = (int) $courseId;
+
+    if (1 == CourseManager::get_tutor_in_course_status($userId, $courseId)) {
+        return true;
+    }
+
+    $courseInfo = api_get_course_info_by_id($courseId);
+    if (!empty($courseInfo) && CourseManager::is_course_teacher($userId, $courseInfo['code'])) {
+        return true;
+    }
+
+    $result = Database::query(
+        "SELECT 1
+        FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
+        WHERE user_id = $userId AND c_id = $courseId AND status = 2
+        UNION
+        SELECT 1
+        FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." s
+        INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." sc ON sc.session_id = s.id
+        WHERE s.id_coach = $userId AND sc.c_id = $courseId"
+    );
+
+    return Database::num_rows($result) > 0;
+}
+
 if (!empty($courseIdList)) {
+    $isUnrestricted = api_is_platform_admin(true, true);
     foreach ($courseIdList as $courseId) {
+        // Only the courses the user teaches, tutors or coaches may be reported on.
+        if (!$isUnrestricted && !isUserLinkedToCourse($courseId)) {
+            continue;
+        }
+
         $courseInfo = api_get_course_info_by_id($courseId);
         $courseExerciseList = ExerciseLib::get_all_exercises(
             $courseInfo,

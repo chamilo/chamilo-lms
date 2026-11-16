@@ -35,6 +35,21 @@ if (empty($courseInfo)) {
     api_not_allowed(true);
 }
 $courseId = (!empty($courseInfo['real_id']) ? $courseInfo['real_id'] : null);
+
+// A teacher or a tutor may only open this page for a course they teach or tutor,
+// a course coach for a course of the requested session and a general coach for a session they coach.
+$currentUserId = api_get_user_id();
+if (!api_is_platform_admin(true, true) &&
+    !CourseManager::is_course_teacher($currentUserId, $course_code) &&
+    1 != CourseManager::get_tutor_in_course_status($currentUserId, $courseId) &&
+    !api_is_course_session_coach($currentUserId, $courseId, $session_id) &&
+    !(
+        SessionManager::user_is_general_coach($currentUserId, $session_id) &&
+        Tracking::is_allowed_to_coach_student($currentUserId, $user_id)
+    )
+) {
+    api_not_allowed(true);
+}
 $quote_simple = "'";
 
 $form = new FormValidator(

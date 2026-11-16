@@ -58,6 +58,7 @@ class UserListActionController extends AbstractController
         $userRepo = $this->em->getRepository(User::class);
         $affected = 0;
         $failedIds = [];
+        $deniedIds = [];
 
         foreach ($userIds as $userId) {
             if ($userId <= 0 || $userId === $currentUserId) {
@@ -66,6 +67,12 @@ class UserListActionController extends AbstractController
 
             $user = $userRepo->find($userId);
             if (!$user) {
+                continue;
+            }
+
+            if (!$this->canManageUser($userId, (int) $currentUserId)) {
+                $deniedIds[] = $userId;
+
                 continue;
             }
 
@@ -114,14 +121,24 @@ class UserListActionController extends AbstractController
         $this->em->flush();
 
         $response = ['success' => true, 'affected' => $affected];
+        $errors = [];
 
         if ([] !== $failedIds) {
             $response['failedIds'] = $failedIds;
-            $response['error'] = \sprintf(
+            $errors[] = \sprintf(
                 '%d user(s) could not be permanently deleted: they are still an active member of a course, '
                     .'or user deletion is disabled on this platform.',
                 \count($failedIds)
             );
+        }
+
+        if ([] !== $deniedIds) {
+            $response['deniedIds'] = $deniedIds;
+            $errors[] = \sprintf('%d user(s) were skipped: you are not allowed to manage them.', \count($deniedIds));
+        }
+
+        if ([] !== $errors) {
+            $response['error'] = implode(' ', $errors);
         }
 
         return $this->json($response);
@@ -143,6 +160,10 @@ class UserListActionController extends AbstractController
 
         if (!$user) {
             return $this->json(['error' => 'User not found.'], Response::HTTP_NOT_FOUND);
+        }
+
+        if (!$this->canManageUser($userId, (int) $currentUserId)) {
+            return $this->json(['error' => 'Access denied.'], Response::HTTP_FORBIDDEN);
         }
 
         switch ($action) {
@@ -190,5 +211,14 @@ class UserListActionController extends AbstractController
         }
 
         return $this->json(['success' => true]);
+    }
+
+    /**
+     * Same rule as the other admin user pages: global administrator accounts are left to
+     * global administrators.
+     */
+    private function canManageUser(int $targetId, int $currentUserId): bool
+    {
+        return api_global_admin_can_edit_admin($targetId, $currentUserId);
     }
 }

@@ -60,6 +60,7 @@
     >
       {{ errorText }}
     </small>
+    <slot name="errors" />
     <small
       v-if="helpText"
       class="form-text text-muted"

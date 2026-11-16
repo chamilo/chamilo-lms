@@ -81,7 +81,7 @@
                         </h2>
 
                         <div class="prose max-w-none text-sm text-gray-70">
-                            {{ work.description }}
+                            {{ work.description|remove_xss(constant('STUDENT')) }}
                         </div>
                     </div>
                 {% endif %}

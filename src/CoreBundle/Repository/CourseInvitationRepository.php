@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseInvitation;
+use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -28,21 +29,31 @@ class CourseInvitationRepository extends ServiceEntityRepository
     }
 
     /**
-     * All invitations sent from a given course's Users tool page, newest
-     * first — this includes whole-session invitations sent from that page
-     * (course is stored as the informational "sent from" reference in that
-     * case), not just plain course invitations.
+     * Invitations sent from a given course's Users tool page, newest first,
+     * restricted to the requested context: the invitations of that session
+     * when a session is given, the plain course invitations otherwise.
+     * Whole-session invitations keep the course they were sent from as an
+     * informational reference, so the course alone does not identify the
+     * session they belong to.
      *
      * @return list<CourseInvitation>
      */
-    public function findAllForCourse(Course $course): array
+    public function findAllForContext(Course $course, ?Session $session): array
     {
-        return $this->createQueryBuilder('invitation')
+        $qb = $this->createQueryBuilder('invitation')
             ->andWhere('invitation.course = :course')
-            ->setParameter('course', $course->getId())
+            ->setParameter('course', (int) $course->getId())
             ->orderBy('invitation.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult()
         ;
+
+        if ($session instanceof Session) {
+            $qb->andWhere('invitation.session = :session')
+                ->setParameter('session', (int) $session->getId())
+            ;
+        } else {
+            $qb->andWhere('invitation.session IS NULL');
+        }
+
+        return $qb->getQuery()->getResult();
     }
 }

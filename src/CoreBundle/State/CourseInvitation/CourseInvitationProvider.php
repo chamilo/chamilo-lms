@@ -48,7 +48,7 @@ final readonly class CourseInvitationProvider implements ProviderInterface
 
         if ($operation instanceof CollectionOperationInterface) {
             $items = [];
-            foreach ($this->invitationRepository->findAllForCourse($course) as $invitation) {
+            foreach ($this->invitationRepository->findAllForContext($course, $session) as $invitation) {
                 $items[] = $this->toItem($invitation);
             }
 
@@ -57,7 +57,7 @@ final readonly class CourseInvitationProvider implements ProviderInterface
 
         if (isset($uriVariables['id'])) {
             $invitation = $this->invitationRepository->find((int) $uriVariables['id']);
-            if (!$invitation instanceof CourseInvitation || $invitation->getCourse()?->getId() !== $course->getId()) {
+            if (!$invitation instanceof CourseInvitation || !$this->invitationBelongsToContext($invitation, $course, $session)) {
                 throw new NotFoundHttpException('The requested invitation was not found.');
             }
 

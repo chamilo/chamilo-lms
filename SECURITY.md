@@ -32,14 +32,14 @@ person who can trigger it. The default trust levels are:
 
 Teachers are expected to publish rich content, so by default **a teacher can store HTML, including
 JavaScript, in the content they author** (for example course descriptions, documents, portfolio and
-wiki content). The relevant code passes the `COURSEMANAGERLOWSECURITY` status to
-`Security::remove_XSS()`, which returns the content **unfiltered**. This is the intended default
-behaviour. It is not a setting that an administrator has to turn on, and the content is stored and
-served as submitted.
+wiki content). Selected code paths pass the `COURSEMANAGERLOWSECURITY` status to
+`Security::remove_XSS()`. With `security.teacher_use_js` enabled (the default), those calls return the
+content **unfiltered**, preserving existing installations' behaviour.
 
-Consequence: script written by a teacher runs in the browser of every user who opens that content,
-with that user's session. This includes administrators who browse the course. Install Chamilo in
-contexts where you know who your teachers are, or reduce this exposure as described below.
+Consequence when `security.teacher_use_js` is enabled: script written by a teacher can run in the
+browser of every user who opens that content, with that user's session. This includes administrators
+who browse the course. Install Chamilo in contexts where you know who your teachers are, or reduce
+this exposure as described below.
 
 A report that only shows that a teacher can store active HTML or JavaScript in their own course content
 is therefore treated as **a hardening request, not as a vulnerability**. The following are still
@@ -49,15 +49,25 @@ vulnerabilities:
   users, or a teacher editing a course they do not manage);
 - script execution in a place that is not teacher content, or content that bypasses the access checks of
   the course;
-- any filtering that is documented as being active but does not work.
+- any filtering that is documented as being active but does not work, including content covered by
+  `security.teacher_use_js` when it is disabled.
 
 ### Reducing the exposure
 
-There is no platform setting that switches off unfiltered teacher HTML. It is decided in the code, where
-`COURSEMANAGERLOWSECURITY` is passed to `Security::remove_XSS()`. To filter teacher content through
-HTMLPurifier, replace it with `COURSEMANAGER` (or pass no status, so that the role of the current user
-selects the profile) in the tools you want to restrict. Expect the editor to lose some content, such as
-scripts, event-handler attributes and some embeds.
+Administrators can set **Administration > Configuration settings > Security > Teachers can use
+JavaScript in WYSIWYG editors** (`security.teacher_use_js`) to **No**. This global policy applies to
+all access URLs. When disabled, calls to `Security::remove_XSS()` that explicitly pass
+`COURSEMANAGERLOWSECURITY` instead run the regular `COURSEMANAGER` HTMLPurifier profile. Calls made
+with other statuses are unaffected. Expect HTML to lose some content, such as scripts, event-handler
+attributes, and some embeds. The setting defaults to **Yes** to preserve existing course content.
+
+This hardening affects only code paths that actually call `remove_XSS()` with the low-security status.
+It does not rewrite previously saved content. Course Description now filters previously stored
+HTML through its list and edit-form APIs while the setting is **No**, without changing database
+records. Other output paths must be reviewed separately; this setting is **not** a guarantee that
+every HTML output path is filtered. Review custom themes, plugins, externally hosted HTML files,
+and other output sinks separately; a Content Security Policy can provide additional defense in
+depth. Test both setting values on a staging system before enforcing the restriction.
 
 The administration settings below limit what the editor offers, but they do not filter stored content:
 

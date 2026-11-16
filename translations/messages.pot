@@ -43703,3 +43703,9 @@ msgstr ""
 
 msgid "The selected ZIP file contains no non-empty files."
 msgstr ""
+
+msgid "Teachers can use JavaScript in WYSIWYG editors"
+msgstr ""
+
+msgid "When disabled, apply the teacher HTMLPurifier profile to content that was explicitly marked as trusted teacher HTML. Scripts and unsafe HTML attributes are removed from those paths. This is a global setting for all access URLs."
+msgstr ""

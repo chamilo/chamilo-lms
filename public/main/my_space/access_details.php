@@ -37,6 +37,23 @@ if (empty($courseInfo)) {
     exit;
 }
 
+// A teacher or a course coach may only open this page for a course they teach or coach,
+// and a general coach only for a session they coach.
+$sessionOfRequest = api_get_session_entity($session_id);
+$allowToTrack = api_is_platform_admin(true, true) ||
+    CourseManager::isCourseTeacher(api_get_user_id(), $courseInfo['real_id']) ||
+    api_is_course_session_coach(api_get_user_id(), $courseInfo['real_id'], $session_id) ||
+    (
+        $sessionOfRequest
+        && $sessionOfRequest->hasUserAsGeneralCoach(api_get_user_entity())
+        && Tracking::is_allowed_to_coach_student(api_get_user_id(), $user_id)
+    );
+
+if (!$allowToTrack) {
+    api_not_allowed(true);
+    exit;
+}
+
 $userInfo = api_get_user_info($user_id);
 if (empty($userInfo)) {
     api_not_allowed(true);

@@ -37,15 +37,10 @@ final class UpdateDocumentFileAction extends BaseResourceFileAction
             $request,
             $em,
             function (array $links) use ($cidReqHelper): void {
-                // The creator of a node keeps EDIT on it in every course it is shared with.
-                if (!$this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
-                    && !$this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
-                ) {
-                    throw new AccessDeniedHttpException('Only a teacher of the current course can change its resource links.');
-                }
-
+                $this->assertTeacherOfCurrentContext();
                 $this->assertResourceLinksInCurrentContext($links, $cidReqHelper);
             },
+            assertMoveAllowed: fn () => $this->assertTeacherOfCurrentContext(),
         );
         $this->applyResourceLanguageFromRequest($document, $request, $em);
 
@@ -65,6 +60,19 @@ final class UpdateDocumentFileAction extends BaseResourceFileAction
         }
 
         return $document;
+    }
+
+    /**
+     * The creator of a node keeps EDIT on it in every course it is shared with, so managing
+     * where the document lives in the course of the request needs a teacher of that course.
+     */
+    private function assertTeacherOfCurrentContext(): void
+    {
+        if (!$this->security->isGranted('ROLE_CURRENT_COURSE_TEACHER')
+            && !$this->security->isGranted('ROLE_CURRENT_COURSE_SESSION_TEACHER')
+        ) {
+            throw new AccessDeniedHttpException('Only a teacher of the current course can change where this document is published.');
+        }
     }
 
     private function normalizeBoolean(mixed $value): bool

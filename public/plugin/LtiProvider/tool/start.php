@@ -4,6 +4,7 @@
 declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\LtiBundle\Security\LtiProviderLaunchToken;
 use ChamiloSession as Session;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -110,6 +111,7 @@ lti_provider_store_authenticated_user_in_session($resolvedUser, $courseInfo);
 
 $signingSecret = lti_provider_get_signing_secret();
 $tokenHelper = new LtiProviderLaunchToken($signingSecret);
+$accessUrlId = (int) Container::getAccessUrlUtil()->getCurrent()?->getId();
 
 $launchToken = $tokenHelper->createToken([
     'user_id' => (int) $resolvedUser->getId(),
@@ -118,6 +120,7 @@ $launchToken = $tokenHelper->createToken([
     'tool_name' => (string) $toolName,
     'tool_id' => (string) $toolId,
     'launch_id' => (string) $launchId,
+    'access_url_id' => $accessUrlId,
     'exp' => time() + 600,
 ]);
 

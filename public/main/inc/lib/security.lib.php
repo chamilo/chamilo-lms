@@ -304,13 +304,22 @@ class Security
      *
      * @return mixed Filtered string or array
      */
+    /**
+     * Only an explicitly disabled setting activates strict teacher filtering.
+     * Unknown values retain the legacy behavior for existing installations.
+     */
+    public static function shouldFilterTeacherHtml(mixed $setting): bool
+    {
+        return false === $setting || 0 === $setting || 'false' === $setting || '0' === $setting;
+    }
+
     public static function remove_XSS($var, int $user_status = null, bool $filter_terms = false)
     {
         if (null === $var) {
             return '';
         }
 
-	if ($filter_terms) {
+        if ($filter_terms) {
             $var = self::filter_terms($var);
         }
 
@@ -327,7 +336,13 @@ class Security
         }
 
         if (COURSEMANAGERLOWSECURITY == $user_status) {
-            return $var; // No filtering.
+            // Preserve the trusted-teacher default, but allow administrators to
+            // enforce the standard teacher HTMLPurifier profile on these calls.
+            if (!self::shouldFilterTeacherHtml(api_get_setting('security.teacher_use_js'))) {
+                return $var;
+            }
+
+            $user_status = COURSEMANAGER;
         }
 
         static $purifier = [];

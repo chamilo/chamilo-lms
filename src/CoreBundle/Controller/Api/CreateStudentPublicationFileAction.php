@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Service\Assignment\AssignmentFileUploadValidator;
 use Chamilo\CoreBundle\Service\Assignment\AssignmentHtmlSubmission;
 use Chamilo\CoreBundle\Service\Assignment\MobileAssignmentSubmissionAccess;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -19,6 +20,7 @@ use DateTime;
 use Doctrine\ORM\EntityManager;
 use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -39,6 +41,7 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
         CidReqHelper $cidReqHelper,
         SettingsManager $settingsManager,
         AssignmentHtmlSubmission $htmlSubmission,
+        AssignmentFileUploadValidator $uploadValidator,
         MobileAssignmentSubmissionAccess $submissionAccess,
     ): CStudentPublication {
         $cid = (int) $request->query->get('cid', '0');
@@ -97,6 +100,11 @@ class CreateStudentPublicationFileAction extends BaseResourceFileAction
             $request->request->set('contentFile', $prepared['document']);
             $request->request->set('contentFileExtension', 'html');
             $request->request->set('contentFileMimeType', 'text/html');
+        }
+
+        $uploadedFile = $request->files->get('uploadFile');
+        if ($uploadedFile instanceof UploadedFile) {
+            $uploadValidator->validate($uploadedFile);
         }
 
         $fileExistsOption = $request->request->get('fileExistsOption', 'rename');

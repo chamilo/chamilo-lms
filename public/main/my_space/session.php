@@ -32,6 +32,23 @@ switch ($action) {
             api_not_allowed(true);
         }
         $courses = Tracking::get_courses_list_from_session($sessionToExport);
+
+        // A teacher may only export a session they coach, or one with a course they teach,
+        // and only for the learners of that session.
+        if (!api_is_platform_admin(true, true)) {
+            $isLinkedToSession = $sessionEntity->hasCoach(api_get_user_entity());
+            foreach ($courses as $sessionCourseInfo) {
+                $isLinkedToSession = $isLinkedToSession
+                    || CourseManager::isCourseTeacher(api_get_user_id(), $sessionCourseInfo['c_id']);
+            }
+
+            if (!$isLinkedToSession
+                || (!$allStudents && !SessionManager::isUserSubscribedAsStudent($sessionToExport, $studentId))
+            ) {
+                api_not_allowed(true);
+            }
+        }
+
         /** @var array<int, Course> $courseEntityList */
         $courseEntityList = array_map(fn(array $courseInfo) => api_get_course_entity($courseInfo['c_id']), $courses);
         $studentList = [$studentId];

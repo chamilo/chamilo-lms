@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\State\CourseInvitation;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseInvitation;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
@@ -60,5 +61,19 @@ trait CourseInvitationAccessHelperTrait
         }
 
         return $user->isSessionAdmin() || $session->hasUserAsGeneralCoach($user);
+    }
+
+    /**
+     * An invitation belongs to the requested context only when it was issued for the same course
+     * and for the same session (or for no session when the request has none): whole-session
+     * invitations keep the course they were sent from, so the course alone is not enough.
+     */
+    private function invitationBelongsToContext(CourseInvitation $invitation, Course $course, ?Session $session): bool
+    {
+        if ($invitation->getCourse()?->getId() !== $course->getId()) {
+            return false;
+        }
+
+        return $invitation->getSession()?->getId() === $session?->getId();
     }
 }

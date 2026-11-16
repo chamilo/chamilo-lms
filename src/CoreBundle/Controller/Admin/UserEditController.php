@@ -430,7 +430,7 @@ final class UserEditController extends AbstractController
             '',
             (bool) $sendMail,
             $resetPassword,
-            null,
+            $user->getAddress(),
             $emailTemplate
         );
 

@@ -160,6 +160,50 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
         $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['foreignLinkId']));
     }
 
+    public function testCreatorCannotMoveDocumentInAnotherCourseByRequestingItsContext(): void
+    {
+        $ctx = $this->bootstrapSharedDocumentScenario('mvswitch');
+        $childLinkIds = $this->createChildFolder($ctx, 'mvswitch', [
+            [$ctx['course'], ResourceLink::VISIBILITY_PUBLISHED],
+            [$ctx['foreignCourse'], ResourceLink::VISIBILITY_PUBLISHED],
+        ]);
+        $foreignChildLinkId = $childLinkIds[(int) $ctx['foreignCourse']->getId()];
+
+        $em = $this->getEntityManager();
+        // In the other course, the child sits in the shared folder.
+        $em->find(ResourceLink::class, $foreignChildLinkId)
+            ->setParent($em->find(ResourceLink::class, $ctx['foreignLinkId']))
+        ;
+        $em->flush();
+
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $ctx['foreignCourse']->addUserAsStudent($ctx['teacher']);
+        $courseRepo->update($ctx['foreignCourse']);
+
+        /** @var CDocumentRepository $documentRepo */
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $child = $documentRepo->findOneBy([
+            'resourceNode' => $em->find(ResourceLink::class, $foreignChildLinkId)->getResourceNode(),
+        ]);
+        $this->assertInstanceOf(CDocument::class, $child);
+        $childCtx = ['document' => $child] + $ctx;
+        $payload = ['parentResourceNodeId' => (int) $ctx['course']->getResourceNode()->getId()];
+
+        $this->requestDocument($childCtx, 'PUT', '', $ctx['foreignCourse'], $payload);
+        $this->assertResponseStatusCodeSame(403);
+
+        $em->clear();
+        $this->assertSame(
+            $ctx['foreignLinkId'],
+            $em->find(ResourceLink::class, $foreignChildLinkId)->getParent()?->getId(),
+        );
+
+        // The same teacher still moves it in the course that authorized the request.
+        $this->requestDocument($childCtx, 'PUT', '', $ctx['course'], $payload);
+        $this->assertResponseStatusCodeSame(200);
+    }
+
     public function testTeacherCanToggleVisibilityOfDocumentInOwnCourse(): void
     {
         $ctx = $this->bootstrapSharedDocumentScenario('toggleown');

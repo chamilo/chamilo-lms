@@ -74,7 +74,6 @@ $sql = "SELECT
             ".(('none' !== $encryption) ? " " : "u.password AS Password, ")."
             u.status		AS Status,
             u.official_code	AS OfficialCode,
-            u.phone		AS Phone,
             u.created_at AS RegistrationDate";
 if (strlen($course_code) > 0) {
     $sql .= "   FROM $userTable u
@@ -167,6 +166,8 @@ if ('1' == $export['addcsvheader'] && 'csv' === $export['file_type']) {
 $res = Database::query($sql);
 while ($user = Database::fetch_assoc($res)) {
     $userEntity = api_get_user_entity($user['UserId']);
+    // Read through Doctrine so encrypted phone values never appear in exports.
+    $user['Phone'] = $userEntity->getPhone();
     $studentData = UserManager:: get_extra_user_data(
         $user['UserId'],
         true,

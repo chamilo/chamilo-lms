@@ -106,6 +106,7 @@ yarn build                # Production build
 ```bash
 composer install                              # Install PHP dependencies
 php bin/console doctrine:migrations:migrate   # Run database migrations
+php bin/console chamilo:install-demo-courses-on-update  # After migrating an existing platform from the CLI
 php bin/console doctrine:fixtures:load        # Load test fixtures
 php bin/console cache:clear                   # Clear Symfony cache
 ```
@@ -170,6 +171,13 @@ column; makes one `NOT NULL`; adds a relation or a table the entity needs), do t
 5. The reverse case works the same way: when the ORM stops writing a column that the old schema
    requires (`NOT NULL`, no default), relax it before the first migration that creates rows through
    the ORM, then let the real migration drop it.
+6. **Content that is created through the ORM does not belong in a migration of an older directory.**
+   Importing courses, documents or other resources touches many entities, so every later column
+   breaks it on a platform that skips the earlier directories, one early add at a time. Do it in a
+   console command run after the migrations instead. `V300/Version20260822212700` used to install the
+   bundled demo courses this way; it now does nothing, and `chamilo:install-demo-courses-on-update`
+   installs them. The web update runs that command right after `doctrine:migrations:migrate`
+   (`public/main/install/install.lib.php`); from the CLI, run it yourself after migrating.
 
 The table below lists only the first cases, as examples of how it was done; it is not an
 exhaustive list of early migrations.

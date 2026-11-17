@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Service\Exercise\Qti2ExactCombinationWriter;
+use Chamilo\CoreBundle\Service\Exercise\Qti2MatchingTypeMarker;
 
 /**
  * @author Claro Team <cvs@claroline.net>
@@ -59,13 +60,16 @@ class ImsAssessmentItem
             }
         }
 
+        $label = MATCHING_DRAGGABLE === (int) $this->question->type
+            ? '                label="'.Qti2MatchingTypeMarker::DRAGGABLE_LABEL.'"'."\n"
+            : '';
+
         return '<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd"
                 identifier="'.$this->questionIdent.'"
                 title = "'.htmlspecialchars(formatExerciseQtiText($this->question->selectTitle())).'"
-                category = "'.$categoryTitle.'"
-        >'."\n";
+                category = "'.$categoryTitle.'"'."\n".$label.'        >'."\n";
     }
 
     /**

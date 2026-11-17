@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Service\Exercise\Qti2ExactCombinationWriter;
+use Chamilo\CoreBundle\Service\Exercise\Qti2MatchingTypeMarker;
 use Chamilo\CoreBundle\Service\Exercise\QtiImportHtmlSanitizer;
 use PhpZip\ZipFile;
 
@@ -193,12 +194,12 @@ function import_exercise($file)
                     continue;
                 }
 
-                if (!in_array($question_array['type'], [UNIQUE_ANSWER, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, FREE_ANSWER, FIB, MATCHING], true)) {
+                if (!in_array($question_array['type'], [UNIQUE_ANSWER, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, FREE_ANSWER, FIB, MATCHING, MATCHING_DRAGGABLE], true)) {
                     continue;
                 }
 
                 $matchingRows = [];
-                if (MATCHING == $question_array['type']) {
+                if (in_array($question_array['type'], [MATCHING, MATCHING_DRAGGABLE], true)) {
                     $matchingRows = buildMatchingAnswerRows($question_array);
                     if (empty($matchingRows)) {
                         Display::addFlash(Display::return_message('QTI import: a matching question without associations was skipped.', 'warning'));
@@ -300,7 +301,7 @@ function import_exercise($file)
                 // Normalize positions 1..N
                 $pos = 1;
 
-                if (MATCHING == $question->type) {
+                if (in_array($question->type, [MATCHING, MATCHING_DRAGGABLE], true)) {
                     // Options first (correct = 0), then the items whose "correct" is the position of their option.
                     // Answer::save() turns that position into the option iid.
                     foreach ($matchingRows as $row) {
@@ -490,6 +491,7 @@ function parseQti2($xmlData)
         switch ($node->nodeName) {
             case 'assessmentItem':
                 $currentQuestionIdent = $node->getAttribute('identifier');
+                $currentMatchSet = null;
 
                 $exerciseInfo['question'][$currentQuestionIdent] = [
                     'answer' => [],
@@ -497,6 +499,7 @@ function parseQti2($xmlData)
                     'title' => $node->getAttribute('title'),
                     'category' => $node->getAttribute('category'),
                     'type' => '',
+                    'matching_draggable' => Qti2MatchingTypeMarker::isDraggable($node->getAttribute('label')),
                     'subtype' => null,
                     'tempdir' => $questionTempDir,
                     'description' => null,
@@ -575,8 +578,11 @@ function parseQti2($xmlData)
 
                 break;
             case 'matchInteraction':
-                // QTI does not tell Matching and Matching draggable apart, so both are imported as Matching.
-                $exerciseInfo['question'][$currentQuestionIdent]['type'] = MATCHING;
+                // Preserve Chamilo draggable matching; unmarked QTI remains ordinary matching.
+                $exerciseInfo['question'][$currentQuestionIdent]['type'] =
+                    !empty($exerciseInfo['question'][$currentQuestionIdent]['matching_draggable'])
+                        ? MATCHING_DRAGGABLE
+                        : MATCHING;
 
                 break;
             case 'extendedTextInteraction':

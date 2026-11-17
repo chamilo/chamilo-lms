@@ -237,6 +237,9 @@ final readonly class ExerciseQti2ExportService
         $xml .= '                identifier="'.$questionIdent.'"'."\n";
         $xml .= '                title = "'.$this->escapeAttribute($this->formatText($question->getQuestion())).'"'."\n";
         $xml .= '                category = "'.$this->escapeAttribute($this->formatText($categoryTitle)).'"'."\n";
+        if (self::MATCHING_DRAGGABLE === (int) $question->getType()) {
+            $xml .= '                label="'.Qti2MatchingTypeMarker::DRAGGABLE_LABEL.'"'."\n";
+        }
         $xml .= '        >'."\n";
         if (self::FILL_IN_BLANKS === (int) $question->getType()) {
             return $xml.$this->exportFillBlanksItem($question).'</assessmentItem>'."\n";

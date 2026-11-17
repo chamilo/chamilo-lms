@@ -69,6 +69,7 @@
         "public/main/upload/upload.scorm.php",
         "public/main/upload/upload_ppt.php",
         "public/main/upload/upload_word.php",
+        "public/plugin/LtiProvider/src/LtiProviderLegacyContext.php",
         "public/plugin/Pens/lib/pens_server_test.php",
         "public/plugin/Pens/lib/tests/test_pens_package_handler.php",
         "public/plugin/Pens/lib/tests/test_pens_request.php",

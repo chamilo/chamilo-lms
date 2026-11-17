@@ -3008,6 +3008,16 @@ Then("the row for {string} should contain {string}", async ({ page }, rowText: s
   await expect(row.first()).toContainText(expected)
 })
 
+// Not ported — new, for toolExerciseListExamMode.feature: checks that a value is absent from the
+// row of one item while other rows of the same page may legitimately show it (the exercise list
+// shows "Latest attempt : 100 %" for a normal test next to the exam mode test that must not).
+// The row must be visible first, or a missing row would make the check pass for nothing.
+Then("the row for {string} should not contain {string}", async ({ page }, rowText: string, unexpected: string) => {
+  const row = page.locator("tr").filter({ has: page.getByText(rowText, { exact: true }) })
+  await expect(row.first()).toBeVisible()
+  await expect(row.first()).not.toContainText(unexpected)
+})
+
 // Not ported — new, for toolExerciseQti2Import.feature (#1377): saves the file behind a link
 // of a table row (e.g. the exercise list's "Export QTI2" icon, an <a> to /api/exercise/{id}/qti2-export)
 // so a later step can upload it again. The file is fetched with the page's own session rather than

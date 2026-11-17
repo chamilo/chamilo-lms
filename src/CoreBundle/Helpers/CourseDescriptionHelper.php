@@ -29,6 +29,7 @@ readonly class CourseDescriptionHelper
         private SettingsManager $settingsManager,
         private CourseSettingPolicyManager $courseSettingPolicyManager,
         private UserHelper $userHelper,
+        private SessionManagerApiScope $sessionManagerApiScope,
     ) {}
 
     public function assertToolEnabled(Course $course): void
@@ -74,9 +75,19 @@ readonly class CourseDescriptionHelper
             return true;
         }
 
+        // Integration reads without sid are allowed only for courses in sessions managed
+        // by this actor on the current access URL. Supplying sid must not widen the scope.
+        if ($this->security->isGranted('ROLE_SESSION_MANAGER')
+            && $this->sessionManagerApiScope->canReadCourse($user, $course)
+            && (null === $session || $this->sessionManagerApiScope->canReadSession($user, $session))
+        ) {
+            return true;
+        }
+
         return $session instanceof Session
             && $user->isSessionAdmin()
-            && $this->isSettingEnabled('session.session_admins_access_all_content');
+            && $this->isSettingEnabled('session.session_admins_access_all_content')
+            && $this->sessionManagerApiScope->canReadSession($user, $session);
     }
 
     private function isToolEnabled(Course $course): bool

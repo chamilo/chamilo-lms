@@ -33,7 +33,7 @@ $sleepingDays = isset($_GET['sleeping_days']) ? (int) $_GET['sleeping_days'] : n
 $webCodePath = api_get_path(WEB_CODE_PATH);
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_PATH).'reporting',
+    'url' => '/reporting',
     'name' => get_lang('Reporting'),
 ];
 
@@ -248,7 +248,7 @@ $actionsLeft .= Display::url(
         32,
         get_lang('View my progress')
     ),
-    $webCodePath.'auth/my_progress.php'
+    '/reporting/my-progress'
 );
 // 1) Main MySpace navigation with "Teachers" as current section.
 $actionsLeft .= Display::mySpaceMenu('teachers');

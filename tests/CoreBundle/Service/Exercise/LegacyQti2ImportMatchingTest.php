@@ -6,8 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Service\Exercise;
 
+use Chamilo\CoreBundle\Service\Exercise\Qti2ExactCombinationWriter;
 use Chamilo\CoreBundle\Service\Exercise\Qti2FillBlanksWriter;
+use Chamilo\CoreBundle\Service\Exercise\Qti2MatchingTypeMarker;
+use DOMDocument;
+use ImsAssessmentItem;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * Covers the parsing half of the legacy QTI2 importer (main/exercise/qti2.php), which used to
@@ -18,6 +23,8 @@ final class LegacyQti2ImportMatchingTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         require_once \dirname(__DIR__, 4).'/public/main/exercise/export/exercise_import.inc.php';
+
+        require_once \dirname(__DIR__, 4).'/public/main/exercise/export/qti2/qti2_export.php';
     }
 
     public function testMatchingItemsAreTurnedIntoChamiloMatchingAnswerRows(): void
@@ -55,6 +62,75 @@ final class LegacyQti2ImportMatchingTest extends TestCase
         );
     }
 
+    public function testLegacyParserPreservesDraggableMatchingWithChamiloLabel(): void
+    {
+        $item = $this->buildMatchingItem(
+            'QST_1',
+            'Capitals',
+            ['left_0' => 'France'],
+            ['right_0' => 'Paris'],
+            ['left_0 right_0' => 2.5]
+        );
+        $item = str_replace(
+            '<assessmentItem identifier="QST_1"',
+            '<assessmentItem identifier="QST_1" label="'.Qti2MatchingTypeMarker::DRAGGABLE_LABEL.'"',
+            $item
+        );
+
+        $questions = $this->parse($item);
+
+        self::assertSame(MATCHING_DRAGGABLE, $questions['QST_1']['type']);
+        self::assertSame(
+            [
+                ['answer' => 'Paris', 'correct' => 0, 'weight' => 0.0],
+                ['answer' => 'France', 'correct' => 1, 'weight' => 2.5],
+            ],
+            buildMatchingAnswerRows($questions['QST_1'])
+        );
+    }
+
+    public function testLegacyParserDoesNotLeakDraggableLabelToOtherItems(): void
+    {
+        $first = $this->buildMatchingItem('QST_1', 'Drag', ['left_0' => 'A'], ['right_0' => 'B'], ['left_0 right_0' => 2]);
+        $first = str_replace(
+            '<assessmentItem identifier="QST_1"',
+            '<assessmentItem identifier="QST_1" label="'.Qti2MatchingTypeMarker::DRAGGABLE_LABEL.'"',
+            $first
+        );
+        $second = $this->buildMatchingItem('QST_2', 'Match', ['left_0' => 'C'], ['right_0' => 'D'], ['left_0 right_0' => 3]);
+
+        $questions = $this->parse($first.$second);
+
+        self::assertSame(MATCHING_DRAGGABLE, $questions['QST_1']['type']);
+        self::assertSame(MATCHING, $questions['QST_2']['type']);
+        self::assertSame(2.0, buildMatchingAnswerRows($questions['QST_1'])[1]['weight']);
+        self::assertSame(3.0, buildMatchingAnswerRows($questions['QST_2'])[1]['weight']);
+    }
+
+    public function testLegacyExporterMarksOnlyDraggableMatching(): void
+    {
+        $item = (new ReflectionClass(ImsAssessmentItem::class))->newInstanceWithoutConstructor();
+        $question = new class {
+            public int $type = MATCHING_DRAGGABLE;
+            public ?int $category = null;
+
+            public function selectTitle(): string
+            {
+                return 'Match by dragging';
+            }
+        };
+        $item->question = $question;
+        $item->questionIdent = 'QST_123';
+
+        $document = new DOMDocument();
+        self::assertTrue($document->loadXML($item->start_item().'</assessmentItem>'));
+        self::assertSame(Qti2MatchingTypeMarker::DRAGGABLE_LABEL, $document->documentElement->getAttribute('label'));
+
+        $question->type = MATCHING;
+        self::assertTrue($document->loadXML($item->start_item().'</assessmentItem>'));
+        self::assertFalse($document->documentElement->hasAttribute('label'));
+    }
+
     public function testEachMatchingItemOfAFileKeepsItsOwnMatchSets(): void
     {
         $questions = $this->parse(
@@ -69,6 +145,47 @@ final class LegacyQti2ImportMatchingTest extends TestCase
             ],
             buildMatchingAnswerRows($questions['QST_2'])
         );
+    }
+
+    /**
+     * Independent QTI question types must survive a single legacy import without leaking state.
+     */
+    public function testMixedMultipleExactMatchingAndDraggableItemsStayDistinct(): void
+    {
+        $multiple = '<assessmentItem identifier="QST_10" title="Multiple answer" category="">'
+            .'<responseDeclaration identifier="QST_10" cardinality="multiple" baseType="identifier">'
+            .'<correctResponse><value>m1</value></correctResponse>'
+            .'<mapping><mapEntry mapKey="m1" mappedValue="2"/><mapEntry mapKey="m2" mappedValue="0"/></mapping>'
+            .'</responseDeclaration><itemBody><choiceInteraction responseIdentifier="QST_10" maxChoices="0">'
+            .'<simpleChoice identifier="m1">Correct</simpleChoice><simpleChoice identifier="m2">Incorrect</simpleChoice>'
+            .'</choiceInteraction></itemBody>'
+            .'<responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_response"/>'
+            .'</assessmentItem>';
+        $exact = '<assessmentItem identifier="QST_20" title="Exact combination" category="">'
+            .Qti2ExactCombinationWriter::declarations('QST_20', ['x1', 'x3'], 4.5)
+            .'<itemBody><choiceInteraction responseIdentifier="QST_20" maxChoices="0">'
+            .'<simpleChoice identifier="x1">First</simpleChoice>'
+            .'<simpleChoice identifier="x2">Second</simpleChoice>'
+            .'<simpleChoice identifier="x3">Third</simpleChoice>'
+            .'</choiceInteraction></itemBody>'
+            .Qti2ExactCombinationWriter::responseProcessing('QST_20', 4.5)
+            .'</assessmentItem>';
+        $matching = $this->buildMatchingItem('QST_30', 'Matching', ['left_0' => 'A'], ['right_0' => 'B'], ['left_0 right_0' => 3]);
+        $draggable = $this->buildMatchingItem('QST_40', 'Draggable', ['left_0' => 'C'], ['right_0' => 'D'], ['left_0 right_0' => 5]);
+        $draggable = str_replace(
+            '<assessmentItem identifier="QST_40"',
+            '<assessmentItem identifier="QST_40" label="'.Qti2MatchingTypeMarker::DRAGGABLE_LABEL.'"',
+            $draggable
+        );
+        $questions = $this->parse($multiple.$exact.$matching.$draggable);
+
+        self::assertSame(MCMA, $questions['QST_10']['type']);
+        self::assertSame(MULTIPLE_ANSWER_COMBINATION, $questions['QST_20']['type']);
+        self::assertSame(4.5, (float) $questions['QST_20']['combination_score']);
+        self::assertSame(MATCHING, $questions['QST_30']['type']);
+        self::assertSame(MATCHING_DRAGGABLE, $questions['QST_40']['type']);
+        self::assertSame(3.0, buildMatchingAnswerRows($questions['QST_30'])[1]['weight']);
+        self::assertSame(5.0, buildMatchingAnswerRows($questions['QST_40'])[1]['weight']);
     }
 
     public function testMatchingItemWithoutAssociationsYieldsNoRows(): void

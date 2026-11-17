@@ -11,6 +11,7 @@ use Category;
 use Chamilo\CoreBundle\Controller\LegalAgreementController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\Session;
@@ -1053,12 +1054,74 @@ final readonly class GlobalReportingSectionQueryService
                     'lastLogin' => $user['lastLogin'],
                 ],
                 'isSelfProgress' => true,
+                'careers' => $this->myProgressCareers($context, $userId),
                 'selectedCourse' => $selectedCourse,
                 'supportsKeyword' => true,
                 'canExportCsv' => true,
                 'canExportXlsx' => true,
             ],
         );
+    }
+
+    /**
+     * Careers of the user, as the legacy my_progress.php listed them. The diagram is identified by the
+     * external career id when the platform says so, and a career without one has no diagram.
+     *
+     * @return array<int, array{id: int, title: string, diagramUrl: ?string}>
+     */
+    private function myProgressCareers(GlobalReportingContext $context, int $userId): array
+    {
+        if (!$this->getBooleanSetting($context, 'allow_career_users')
+            || !$this->hasTables(['user_career', 'career'])
+        ) {
+            return [];
+        }
+
+        $rows = $this->connection->fetchAllAssociative(
+            'SELECT career.id, career.title
+               FROM user_career
+               INNER JOIN career ON career.id = user_career.career_id
+              WHERE user_career.user_id = :userId
+           ORDER BY user_career.created_at ASC, user_career.id ASC',
+            ['userId' => $userId],
+        );
+
+        $useExternalId = $this->getBooleanSetting($context, 'use_career_external_id_as_identifier_in_diagrams');
+        $externalIds = [];
+        // DESC so that the oldest value wins, like ExtraFieldValue::get_values_by_handler_and_field_variable().
+        if ([] !== $rows && $useExternalId) {
+            $externalIds = $this->connection->fetchAllKeyValue(
+                'SELECT field_value.item_id, field_value.field_value
+                   FROM extra_field_values field_value
+                   INNER JOIN extra_field field ON field.id = field_value.field_id
+                  WHERE field.variable = :variable
+                    AND field.item_type = :itemType
+                    AND field_value.item_id IN (:careerIds)
+               ORDER BY field_value.id DESC',
+                [
+                    'variable' => 'external_career_id',
+                    'itemType' => ExtraField::CAREER_FIELD_TYPE,
+                    'careerIds' => array_map(static fn (array $row): int => (int) $row['id'], $rows),
+                ],
+                ['careerIds' => ArrayParameterType::INTEGER],
+            );
+        }
+
+        $careers = [];
+        foreach ($rows as $row) {
+            $careerId = (int) $row['id'];
+            $identifier = $useExternalId ? (string) ($externalIds[$careerId] ?? '') : (string) $careerId;
+
+            $careers[] = [
+                'id' => $careerId,
+                'title' => (string) $row['title'],
+                'diagramUrl' => '' === $identifier
+                    ? null
+                    : '/main/user/career_diagram.php?'.http_build_query(['career_id' => $identifier]),
+            ];
+        }
+
+        return $careers;
     }
 
     private function getLearnerDetail(

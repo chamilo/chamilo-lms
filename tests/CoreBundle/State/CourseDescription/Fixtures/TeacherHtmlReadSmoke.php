@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 /* For licensing terms, see /license.txt */
 
+/**
+ * @psalm-suppress-file DuplicateClass
+ * @psalm-suppress-file DuplicateFunction
+ */
+
 namespace ApiPlatform\Metadata {
     class Operation {}
 }

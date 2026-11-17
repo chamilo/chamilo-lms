@@ -213,7 +213,7 @@ if (api_is_hrm()) {
     $menu_items = [
         Display::url(
             Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress')),
-            $webCodePath.'auth/my_progress.php'
+            '/reporting/my-progress'
         ),
         Display::url(
             Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Learners')),
@@ -229,7 +229,7 @@ if (api_is_hrm()) {
         ),
         Display::url(
             Display::getMdiIcon(ObjectIcon::SESSION, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Course sessions')),
-            api_get_path(WEB_PATH).'reporting/sessions'
+            '/reporting/sessions'
         ),
         Display::url(
             Display::getMdiIcon(ObjectIcon::BADGE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Skills')),
@@ -246,7 +246,7 @@ if (api_is_hrm()) {
 } elseif (api_is_student_boss()) {
     $actionsLeft .= Display::url(
         Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress')),
-        $webCodePath.'auth/my_progress.php'
+        '/reporting/my-progress'
     );
     $actionsLeft .= Display::url(
         Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon-disabled', null, ICON_SIZE_MEDIUM, get_lang('Learners')),
@@ -262,7 +262,7 @@ if (api_is_hrm()) {
     );
     $actionsLeft .= Display::url(
         Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('See list of learner certificates')),
-        api_get_path(WEB_PATH).'reporting/certificates'
+        '/reporting/certificates'
     );
 }
 

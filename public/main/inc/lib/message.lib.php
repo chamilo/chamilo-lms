@@ -49,12 +49,13 @@ class MessageManager
                         Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete message')).'</a>';
                 }
 
-                $content = '<div class="custom-message">' . $message->getContent().'<br />'.$date.'<br />'.
+                // Same filter as the API (MessageNormalizer): readers include student bosses and HR managers.
+                $content = '<div class="custom-message">'.Security::remove_XSS($message->getContent(), STUDENT).'<br />'.$date.'<br />'.
                     get_lang('Author').': '.$sender->getUsername().
                     '<br /></div>';
 
                 $html .= Display::panelCollapse(
-                    $localTime.' '.UserManager::formatUserFullName($sender).' '.$message->getTitle().$deleteLink,
+                    $localTime.' '.UserManager::formatUserFullName($sender).' '.htmlspecialchars($message->getTitle(), ENT_QUOTES).$deleteLink,
                     $content,
                     $tag,
                     null,

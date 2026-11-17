@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\PermissionHelper;
 use Chamilo\CoreBundle\Helpers\SessionVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
@@ -275,6 +276,7 @@ final class IsAllowedToEditHelperTest extends TestCase
             $studentViewHelper,
             new UserHelper($security),
             $extraFieldValues,
+            $this->createMock(PermissionHelper::class),
         );
     }
 

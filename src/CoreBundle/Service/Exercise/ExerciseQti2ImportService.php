@@ -42,6 +42,8 @@ final readonly class ExerciseQti2ImportService
     private const FILL_IN_BLANKS = 3;
     private const MATCHING = 4;
     private const FREE_ANSWER = 5;
+    private const MULTIPLE_ANSWER_COMBINATION = 9;
+    private const MATCHING_DRAGGABLE = 19;
 
     /**
      * @var array<int, string>
@@ -52,6 +54,8 @@ final readonly class ExerciseQti2ImportService
         self::FREE_ANSWER => 'Free answer',
         self::FILL_IN_BLANKS => 'Fill in blanks',
         self::MATCHING => 'Matching',
+        self::MULTIPLE_ANSWER_COMBINATION => 'Exact combination',
+        self::MATCHING_DRAGGABLE => 'Matching draggable',
     ];
 
     public function __construct(
@@ -235,6 +239,7 @@ final readonly class ExerciseQti2ImportService
                         'title' => $node->getAttribute('title'),
                         'category' => $node->getAttribute('category'),
                         'type' => null,
+                        'matching_draggable' => Qti2MatchingTypeMarker::isDraggable($node->getAttribute('label')),
                         'subtype' => null,
                         'description' => null,
                         'response_text' => null,
@@ -332,8 +337,11 @@ final readonly class ExerciseQti2ImportService
 
                 case 'matchInteraction':
                     if ($this->hasCurrentQuestion($package, $currentQuestionIdent)) {
-                        // QTI does not tell Matching and Matching draggable apart, so both are imported as Matching.
-                        $package['questions'][$currentQuestionIdent]['type'] = self::MATCHING;
+                        // Restore type 19 only when the exporter included Chamilo's QTI item label.
+                        $package['questions'][$currentQuestionIdent]['type'] =
+                            !empty($package['questions'][$currentQuestionIdent]['matching_draggable'])
+                                ? self::MATCHING_DRAGGABLE
+                                : self::MATCHING;
                     }
 
                     break;
@@ -430,6 +438,20 @@ final readonly class ExerciseQti2ImportService
                         }
                     } else {
                         $package['questions'][$currentQuestionIdent]['statement'] = $currentQuestionItemBody;
+                    }
+
+                    break;
+
+                case 'responseProcessing':
+                    // A multiple response scored all or nothing on its correct response is an Exact combination.
+                    if ($this->hasCurrentQuestion($package, $currentQuestionIdent)
+                        && self::MULTIPLE_ANSWER === ($package['questions'][$currentQuestionIdent]['type'] ?? null)
+                    ) {
+                        $combinationScore = Qti2ExactCombinationWriter::readScore($node);
+                        if (null !== $combinationScore) {
+                            $package['questions'][$currentQuestionIdent]['type'] = self::MULTIPLE_ANSWER_COMBINATION;
+                            $package['questions'][$currentQuestionIdent]['combination_score'] = $combinationScore;
+                        }
                     }
 
                     break;
@@ -741,7 +763,7 @@ final readonly class ExerciseQti2ImportService
             }
 
             $matchingRows = null;
-            if (self::MATCHING === $questionType) {
+            if (\in_array($questionType, [self::MATCHING, self::MATCHING_DRAGGABLE], true)) {
                 $matchingRows = $this->buildMatchingAnswerRows($questionData);
                 if ([] === $matchingRows['items']) {
                     ++$skippedCount;
@@ -769,6 +791,8 @@ final readonly class ExerciseQti2ImportService
                 $question->setPonderation($this->scoreFromValue($questionData['weighting'][0] ?? 0));
             } elseif (null !== $matchingRows) {
                 $this->createMatchingAnswers($question, $matchingRows);
+            } elseif (self::MULTIPLE_ANSWER_COMBINATION === $questionType) {
+                $this->createExactCombinationAnswers($question, $questionData);
             } else {
                 $this->createChoiceAnswers($question, $questionData);
             }
@@ -853,6 +877,35 @@ final readonly class ExerciseQti2ImportService
         }
 
         $question->setPonderation($totalCorrectWeight);
+    }
+
+    /**
+     * Exact combination answers: the whole question score is stored on the first answer, the others weigh 0.
+     *
+     * @param array<string, mixed> $questionData
+     */
+    private function createExactCombinationAnswers(CQuizQuestion $question, array $questionData): void
+    {
+        $answerList = \is_array($questionData['answer'] ?? null) ? $questionData['answer'] : [];
+        $correctAnswersRaw = $questionData['correct_answers'] ?? null;
+        $correctAnswerIds = array_map('strval', \is_array($correctAnswersRaw) ? array_values($correctAnswersRaw) : []);
+        $score = $this->scoreFromValue($questionData['combination_score'] ?? 0);
+        $position = 1;
+
+        foreach ($answerList as $key => $answerData) {
+            $answerData = \is_array($answerData) ? $answerData : [];
+            $this->createSingleAnswer(
+                $question,
+                $this->formatHtml((string) ($answerData['value'] ?? '')),
+                \in_array((string) $key, $correctAnswerIds, true) ? 1 : 0,
+                $this->formatHtml((string) ($answerData['feedback'] ?? '')),
+                1 === $position ? $score : 0.0,
+                $position
+            );
+            ++$position;
+        }
+
+        $question->setPonderation($score);
     }
 
     /**

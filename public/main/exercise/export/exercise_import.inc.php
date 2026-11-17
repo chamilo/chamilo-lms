@@ -3,6 +3,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
+use Chamilo\CoreBundle\Service\Exercise\Qti2ExactCombinationWriter;
+use Chamilo\CoreBundle\Service\Exercise\Qti2MatchingTypeMarker;
 use Chamilo\CoreBundle\Service\Exercise\QtiImportHtmlSanitizer;
 use PhpZip\ZipFile;
 
@@ -192,12 +194,12 @@ function import_exercise($file)
                     continue;
                 }
 
-                if (!in_array($question_array['type'], [UNIQUE_ANSWER, MULTIPLE_ANSWER, FREE_ANSWER, FIB, MATCHING], true)) {
+                if (!in_array($question_array['type'], [UNIQUE_ANSWER, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, FREE_ANSWER, FIB, MATCHING, MATCHING_DRAGGABLE], true)) {
                     continue;
                 }
 
                 $matchingRows = [];
-                if (MATCHING == $question_array['type']) {
+                if (in_array($question_array['type'], [MATCHING, MATCHING_DRAGGABLE], true)) {
                     $matchingRows = buildMatchingAnswerRows($question_array);
                     if (empty($matchingRows)) {
                         Display::addFlash(Display::return_message('QTI import: a matching question without associations was skipped.', 'warning'));
@@ -299,7 +301,7 @@ function import_exercise($file)
                 // Normalize positions 1..N
                 $pos = 1;
 
-                if (MATCHING == $question->type) {
+                if (in_array($question->type, [MATCHING, MATCHING_DRAGGABLE], true)) {
                     // Options first (correct = 0), then the items whose "correct" is the position of their option.
                     // Answer::save() turns that position into the option iid.
                     foreach ($matchingRows as $row) {
@@ -325,6 +327,10 @@ function import_exercise($file)
                         if (isset($question_array['weighting']) && is_array($question_array['weighting']) && isset($question_array['weighting'][$key])) {
                             $weight = (float) $question_array['weighting'][$key];
                         }
+                        if (MULTIPLE_ANSWER_COMBINATION == $question->type) {
+                            // Exact combination: the whole score is stored on the first answer.
+                            $weight = 1 === $pos ? (float) ($question_array['combination_score'] ?? 0) : 0.0;
+                        }
 
                         $answer->new_answer[$pos] = $answerValue;
                         $answer->new_comment[$pos] = (string) $answerFeedback; // never null
@@ -344,6 +350,9 @@ function import_exercise($file)
 
                 if (FREE_ANSWER == $question->type) {
                     $totalCorrectWeight = isset($question_array['weighting'][0]) ? (float) $question_array['weighting'][0] : 0.0;
+                }
+                if (MULTIPLE_ANSWER_COMBINATION == $question->type) {
+                    $totalCorrectWeight = (float) ($question_array['combination_score'] ?? 0);
                 }
 
                 $question->updateWeighting($totalCorrectWeight);
@@ -482,6 +491,7 @@ function parseQti2($xmlData)
         switch ($node->nodeName) {
             case 'assessmentItem':
                 $currentQuestionIdent = $node->getAttribute('identifier');
+                $currentMatchSet = null;
 
                 $exerciseInfo['question'][$currentQuestionIdent] = [
                     'answer' => [],
@@ -489,6 +499,7 @@ function parseQti2($xmlData)
                     'title' => $node->getAttribute('title'),
                     'category' => $node->getAttribute('category'),
                     'type' => '',
+                    'matching_draggable' => Qti2MatchingTypeMarker::isDraggable($node->getAttribute('label')),
                     'subtype' => null,
                     'tempdir' => $questionTempDir,
                     'description' => null,
@@ -567,8 +578,11 @@ function parseQti2($xmlData)
 
                 break;
             case 'matchInteraction':
-                // QTI does not tell Matching and Matching draggable apart, so both are imported as Matching.
-                $exerciseInfo['question'][$currentQuestionIdent]['type'] = MATCHING;
+                // Preserve Chamilo draggable matching; unmarked QTI remains ordinary matching.
+                $exerciseInfo['question'][$currentQuestionIdent]['type'] =
+                    !empty($exerciseInfo['question'][$currentQuestionIdent]['matching_draggable'])
+                        ? MATCHING_DRAGGABLE
+                        : MATCHING;
 
                 break;
             case 'extendedTextInteraction':
@@ -733,6 +747,19 @@ function parseQti2($xmlData)
                 break;
             case 'img':
                 $exerciseInfo['question'][$currentQuestionIdent]['attached_file_url'] = $node->getAttribute('src');
+
+                break;
+            case 'responseProcessing':
+                // A multiple response scored all or nothing on its correct response is an Exact combination.
+                if (isset($exerciseInfo['question'][$currentQuestionIdent])
+                    && MCMA === ($exerciseInfo['question'][$currentQuestionIdent]['type'] ?? null)
+                ) {
+                    $combinationScore = Qti2ExactCombinationWriter::readScore($node);
+                    if (null !== $combinationScore) {
+                        $exerciseInfo['question'][$currentQuestionIdent]['type'] = MULTIPLE_ANSWER_COMBINATION;
+                        $exerciseInfo['question'][$currentQuestionIdent]['combination_score'] = $combinationScore;
+                    }
+                }
 
                 break;
             case 'order':

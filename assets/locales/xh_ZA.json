@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Esi sakhono asinakufunyanwa",
     "Validated": "Kugxininiswe",
     "Not validated": "Akagxininiswanga",
-    "Not attempted": "Ayazange lingenwe"
+    "Not attempted": "Ayazange lingenwe",
+    "The session is read only": "Iseshini ifundwa kuphela"
 }

@@ -14,11 +14,11 @@ $this_section = SECTION_PLATFORM_ADMIN; // TODO: Platform admin section?
 $tool_name = get_lang('Import users list');
 api_block_anonymous_users();
 
-$interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting', 'name' => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => '/reporting', 'name' => get_lang('Reporting')];
 $id_session = '';
 if (isset($_GET['id_session']) && '' != $_GET['id_session']) {
     $id_session = intval($_GET['id_session']);
-    $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting/sessions', 'name' => get_lang('Course sessions')];
+    $interbreadcrumb[] = ['url' => '/reporting/sessions', 'name' => get_lang('Course sessions')];
     $interbreadcrumb[] = ['url' => 'course.php?id_session='.$id_session.'', 'name' => get_lang('Course')];
 }
 

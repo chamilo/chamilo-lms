@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Te spretnosti ni mogo\u010de pridobiti",
     "Validated": "Pregledan",
     "Not validated": "Ni pregledan",
-    "Not attempted": "Brez poskusa"
+    "Not attempted": "Brez poskusa",
+    "The session is read only": "Seja je zgolj bralna"
 }

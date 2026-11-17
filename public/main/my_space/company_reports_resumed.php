@@ -89,7 +89,7 @@ $actions = null;
 if (api_is_student_boss()) {
     $actions .= Display::url(
         Display::getMdiIcon(ToolIcon::TRACKING, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('View my progress')),
-        api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
+        '/reporting/my-progress'
     );
     $actions .= Display::url(
         Display::getMdiIcon(ObjectIcon::USER, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Learners')),
@@ -101,7 +101,7 @@ if (api_is_student_boss()) {
     );
     $actions .= Display::url(
         Display::getMdiIcon(ObjectIcon::CERTIFICATE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('See list of learner certificates')),
-        api_get_path(WEB_PATH).'reporting/certificates'
+        '/reporting/certificates'
     );
 }
 

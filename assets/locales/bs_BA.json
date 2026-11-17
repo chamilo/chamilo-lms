@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Ova vje\u0161tina se ne mo\u017ee ste\u0107i",
     "Validated": "Validirano",
     "Not validated": "Nije validirano",
-    "Not attempted": "Nije poku\u0161ano"
+    "Not attempted": "Nije poku\u0161ano",
+    "The session is read only": "Sesija je samo za \u010ditanje"
 }

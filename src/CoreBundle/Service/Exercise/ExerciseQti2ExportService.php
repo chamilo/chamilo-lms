@@ -38,8 +38,9 @@ use const LIBXML_NOWARNING;
  * Modern IMS/QTI 2 exporter for the same exercise-level subset exported by legacy Chamilo.
  *
  * The legacy exercise QTI2 action only exported Unique answer, Multiple answer and Free answer
- * questions through export_question_qti(). Matching questions are exported as a matchInteraction.
- * Other question types are skipped.
+ * questions through export_question_qti(). Matching questions are exported as a matchInteraction and
+ * Exact combination questions as a multiple choiceInteraction scored all-or-nothing
+ * (Qti2ExactCombinationWriter). Other question types are skipped.
  */
 final readonly class ExerciseQti2ExportService
 {
@@ -48,6 +49,7 @@ final readonly class ExerciseQti2ExportService
     private const FILL_IN_BLANKS = 3;
     private const MATCHING = 4;
     private const FREE_ANSWER = 5;
+    private const MULTIPLE_ANSWER_COMBINATION = 9;
     private const MATCHING_DRAGGABLE = 19;
     private const VISIBILITY_PUBLISHED = 2;
 
@@ -217,7 +219,7 @@ final readonly class ExerciseQti2ExportService
 
     private function isLegacyExportableQuestion(CQuizQuestion $question): bool
     {
-        return \in_array((int) $question->getType(), [self::UNIQUE_ANSWER, self::MULTIPLE_ANSWER, self::FILL_IN_BLANKS, self::FREE_ANSWER, self::MATCHING, self::MATCHING_DRAGGABLE], true);
+        return \in_array((int) $question->getType(), [self::UNIQUE_ANSWER, self::MULTIPLE_ANSWER, self::MULTIPLE_ANSWER_COMBINATION, self::FILL_IN_BLANKS, self::FREE_ANSWER, self::MATCHING, self::MATCHING_DRAGGABLE], true);
     }
 
     private function isMatchingQuestion(CQuizQuestion $question): bool
@@ -235,9 +237,15 @@ final readonly class ExerciseQti2ExportService
         $xml .= '                identifier="'.$questionIdent.'"'."\n";
         $xml .= '                title = "'.$this->escapeAttribute($this->formatText($question->getQuestion())).'"'."\n";
         $xml .= '                category = "'.$this->escapeAttribute($this->formatText($categoryTitle)).'"'."\n";
+        if (self::MATCHING_DRAGGABLE === (int) $question->getType()) {
+            $xml .= '                label="'.Qti2MatchingTypeMarker::DRAGGABLE_LABEL.'"'."\n";
+        }
         $xml .= '        >'."\n";
         if (self::FILL_IN_BLANKS === (int) $question->getType()) {
             return $xml.$this->exportFillBlanksItem($question).'</assessmentItem>'."\n";
+        }
+        if (self::MULTIPLE_ANSWER_COMBINATION === (int) $question->getType()) {
+            return $xml.$this->exportExactCombinationItem($question, $questionIdent).'</assessmentItem>'."\n";
         }
         $xml .= $this->exportQuestionResponseDeclaration($question, $questionIdent);
         $xml .= "  <itemBody>\n";
@@ -284,7 +292,7 @@ final readonly class ExerciseQti2ExportService
         return $xml;
     }
 
-    private function exportQuestionResponses(CQuizQuestion $question, string $questionIdent): string
+    private function exportQuestionResponses(CQuizQuestion $question, string $questionIdent, string $interactionAttributes = ''): string
     {
         if (self::FREE_ANSWER === (int) $question->getType()) {
             return '<extendedTextInteraction responseIdentifier="'.$questionIdent.'" >
@@ -298,7 +306,11 @@ final readonly class ExerciseQti2ExportService
             return $this->exportMatchingInteraction($question, $questionIdent);
         }
 
-        $xml = '    <choiceInteraction responseIdentifier="'.$questionIdent.'" >'."\n";
+        // Multiple answer requires maxChoices=0; exact combination already supplies it.
+        $maxChoices = self::MULTIPLE_ANSWER === (int) $question->getType()
+            ? ' maxChoices="0"'
+            : $interactionAttributes;
+        $xml = '    <choiceInteraction responseIdentifier="'.$questionIdent.'"'.$maxChoices.' >'."\n";
         $xml .= '      <prompt><![CDATA['.$this->escapeCdata($this->formatText($question->getQuestion())).']]></prompt>'."\n";
         foreach ($this->getSortedAnswers($question) as $answer) {
             $answerId = (int) $answer->getIid();
@@ -315,6 +327,30 @@ final readonly class ExerciseQti2ExportService
         $xml .= '    </choiceInteraction>'."\n";
 
         return $xml;
+    }
+
+    /**
+     * Any number of choices can be ticked (maxChoices="0"); the whole score is only granted for exactly
+     * the set of correct choices.
+     */
+    private function exportExactCombinationItem(CQuizQuestion $question, string $questionIdent): string
+    {
+        $answers = $this->getSortedAnswers($question);
+        $correctIdentifiers = [];
+        $weights = [];
+        foreach ($answers as $answer) {
+            $weights[] = (float) $answer->getPonderation();
+            if (1 === (int) ($answer->getCorrect() ?? 0)) {
+                $correctIdentifiers[] = 'answer_'.(int) $answer->getIid();
+            }
+        }
+        $score = Qti2ExactCombinationWriter::score($weights, (float) $question->getPonderation());
+
+        return Qti2ExactCombinationWriter::declarations($questionIdent, $correctIdentifiers, $score)
+            ."  <itemBody>\n"
+            .$this->exportQuestionResponses($question, $questionIdent, ' maxChoices="0"')
+            ."  </itemBody>\n"
+            .Qti2ExactCombinationWriter::responseProcessing($questionIdent, $score);
     }
 
     /**

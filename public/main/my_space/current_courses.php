@@ -443,7 +443,7 @@ if (isset($_GET['export'])) {
 $pageTitle = get_lang('Current courses report');
 $pageSubtitle = get_lang('This table summarizes learner progress and activity per learning path in your current courses.');
 
-$interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting', 'name' => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => '/reporting', 'name' => get_lang('Reporting')];
 Display::display_header($pageTitle);
 
 // ------------------------------------------------------------------------
@@ -457,7 +457,7 @@ $actionsLeft = Display::url(
         32,
         get_lang('View my progress')
     ),
-    api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
+    '/reporting/my-progress'
 );
 $actionsLeft .= Display::mySpaceMenu('current_courses');
 
@@ -469,7 +469,7 @@ $actionsRight = Display::url(
         ICON_SIZE_MEDIUM,
         get_lang('Back')
     ),
-    api_get_path(WEB_PATH).'reporting'
+    '/reporting'
 );
 
 $actionsRight .= Display::url(

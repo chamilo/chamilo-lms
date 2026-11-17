@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Ez a k\u00e9szs\u00e9g nem szerezhet\u0151 meg",
     "Validated": "\u00c9rv\u00e9nyes\u00edtve",
     "Not validated": "Nem \u00e9rv\u00e9nyes\u00edtve",
-    "Not attempted": "Nincs pr\u00f3b\u00e1lkoz\u00e1s."
+    "Not attempted": "Nincs pr\u00f3b\u00e1lkoz\u00e1s.",
+    "The session is read only": "A munkamenet csak olvashat\u00f3"
 }

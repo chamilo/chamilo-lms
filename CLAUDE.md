@@ -106,6 +106,7 @@ yarn build                # Production build
 ```bash
 composer install                              # Install PHP dependencies
 php bin/console doctrine:migrations:migrate   # Run database migrations
+php bin/console chamilo:install-demo-courses-on-update  # After migrating an existing platform from the CLI
 php bin/console doctrine:fixtures:load        # Load test fixtures
 php bin/console cache:clear                   # Clear Symfony cache
 ```
@@ -136,10 +137,21 @@ column; makes one `NOT NULL`; adds a relation or a table the entity needs), do t
    ```
    Then read the hits that go through `entityManager`/`container->get`; a plain `addSql()` or
    `$this->connection` query is not affected.
+
+   This search only finds the migrations that **name** the entity. It misses the ones that load it
+   **indirectly**, through a shared service, a listener or legacy code. The worst case is
+   `SettingsCurrent`: any `SettingsManager::getSetting()` or `api_get_setting()` loads it, and many
+   services and listeners read settings (`CourseListener`, `ResourceNodeRepository`, ...). For an
+   entity like that, assume that **every** migration that uses the ORM may load it, and place the
+   early add at the start of each directory (see step 3).
 2. If none use the entity through the ORM, nothing else is needed.
 3. If one does, add an **early-add migration** that applies your change before the **first** of
    them, in that migration's directory and namespace, with a timestamp just below it. Before creating
-   it, check that the file name is free: never overwrite an existing migration. Rules:
+   it, check that the version name is free on disk **and has never existed in the history**
+   (`git log --all --oneline -- <path>` must print nothing): never overwrite or reuse an existing
+   migration. A platform that ran a deleted migration keeps its version marked as executed, so
+   Doctrine never runs the new content under the same name. `V200/Version20240112103359` is such a
+   reused name. Rules:
    - Same guard as the real migration (`hasTable`/`hasColumn`/column type check), so whichever runs
      second does nothing.
    - Only what the ORM needs to work. Data refills and constraints stay in the real migration,
@@ -149,13 +161,25 @@ column; makes one `NOT NULL`; adds a relation or a table the entity needs), do t
      starting with "Add early …".
    - If several columns of the same period are missing, extend the existing early-add migration
      instead of adding another one: `V200/Version20201218132718.php` already gathers some.
+   - **Not every platform runs every directory.** One that has already done `V200` and only runs the
+     newer directories (`V300` and `V310`, or `V210` onwards for one coming from 2.0) never runs an
+     early add placed in `V200`. When a later directory also loads the entity through the ORM before
+     the real migration, put the same early add at the start of that directory too, before its first
+     migration. `SettingsCurrent.confidential` has one in `V200`, `V210` and `V300`.
 4. Make the **real** migration tolerate the early add: its guard must skip what is already there,
    with a comment pointing to the early migration (e.g. `// Version20250310215800 adds it first on a migration from 1.11`).
 5. The reverse case works the same way: when the ORM stops writing a column that the old schema
    requires (`NOT NULL`, no default), relax it before the first migration that creates rows through
    the ORM, then let the real migration drop it.
+6. **Content that is created through the ORM does not belong in a migration of an older directory.**
+   Importing courses, documents or other resources touches many entities, so every later column
+   breaks it on a platform that skips the earlier directories, one early add at a time. Do it in a
+   console command run after the migrations instead. `V300/Version20260822212700` used to install the
+   bundled demo courses this way; it now does nothing, and `chamilo:install-demo-courses-on-update`
+   installs them. The web update runs that command right after `doctrine:migrations:migrate`
+   (`public/main/install/install.lib.php`); from the CLI, run it yourself after migrating.
 
-The table below lists only the first three cases, as examples of how it was done; it is not an
+The table below lists only the first cases, as examples of how it was done; it is not an
 exhaustive list of early migrations.
 
 | Early migration | Needed by | Real migration |
@@ -163,6 +187,7 @@ exhaustive list of early migrations.
 | `V200/Version20201212114907` (`subscription_date`) | `V200/Version20201212114912` (users), `V200/Version20230204150030` (sessions) | `V310/Version20261109180000` |
 | `V200/Version20250310215800` (`conference_activity.metrics`) | `V200/Version20250310215900` (BBB/Zoom) | `V200/Version20250925215200` |
 | `V300/Version20260822212650` (makes `course.course_language` optional) | `V300/Version20260822212700` (demo courses) | `V310/Version20261005120000` |
+| `V200/Version20240112103359`, `V210/Version20260419000000`, `V300/Version20260726000000` (`settings.confidential`) | any migration that reads a setting | `V310/Version20261113193000` |
 
 ### Code Quality
 ```bash

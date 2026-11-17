@@ -2571,6 +2571,8 @@
     "Can learners edit their own posts?": "Can learners edit their own posts?",
     "Cancel renewal": "Cancel renewal",
     "Career": "Career",
+    "Careers": "Careers",
+    "Diagram": "Diagram",
     "Category links will be removed from {0} Wiki pages.": "Category links will be removed from {0} Wiki pages.",
     "Change": "Change",
     "Channel": "Channel",
@@ -4812,5 +4814,6 @@
     "The selected ZIP file is invalid.": "The selected ZIP file is invalid.",
     "The selected ZIP file contains no non-empty files.": "The selected ZIP file contains no non-empty files.",
     "Not attempted": "Not attempted",
-    "Already attempted": "Already attempted"
+    "Already attempted": "Already attempted",
+    "The session is read only": "The session is read only"
 }

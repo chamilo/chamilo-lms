@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CreateUploadedFileHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
+use Chamilo\CoreBundle\Helpers\SessionVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
@@ -72,6 +73,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         private CidReqHelper $cidReqHelper,
         private UserHelper $userHelper,
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
+        private SessionVisibilityHelper $sessionVisibilityHelper,
         private ExerciseAttemptLogService $attemptLogService,
     ) {}
 
@@ -375,6 +377,14 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
 
             if (null !== $quiz->getEndTime() && $quiz->getEndTime() < $now) {
                 throw new AccessDeniedHttpException('The requested exercise is closed.');
+            }
+
+            // A finished session left in read only mode lets learners see their tests, not take them
+            $user = $this->userHelper->getCurrent();
+            if (null !== $session && null !== $user
+                && Session::READ_ONLY === $this->sessionVisibilityHelper->getSessionVisibility($session, $user)
+            ) {
+                throw new AccessDeniedHttpException('The session is read only');
             }
         }
 

@@ -28,10 +28,10 @@ if (!$allowToTrack) {
 
 $session = api_get_session_entity($sessionId);
 
-$interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting', 'name' => get_lang('Reporting')];
+$interbreadcrumb[] = ['url' => '/reporting', 'name' => get_lang('Reporting')];
 
 if (isset($_GET['id_session']) && '' != $_GET['id_session']) {
-    $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'reporting/sessions', 'name' => get_lang('Course sessions')];
+    $interbreadcrumb[] = ['url' => '/reporting/sessions', 'name' => get_lang('Course sessions')];
 }
 
 if (isset($_GET['user_id']) && '' != $_GET['user_id'] && isset($_GET['type']) && 'coach' == $_GET['type']) {
@@ -111,7 +111,7 @@ if (api_is_platform_admin(true, true)) {
                 ICON_SIZE_MEDIUM,
                 get_lang('View my progress')
             ),
-            api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
+            '/reporting/my-progress'
         );
         $menu_items[] = Display::url(
             Display::getMdiIcon(
@@ -121,7 +121,7 @@ if (api_is_platform_admin(true, true)) {
                 ICON_SIZE_MEDIUM,
                 get_lang('Global view')
             ),
-            api_get_path(WEB_PATH).'reporting'
+            '/reporting'
         );
         $menu_items[] = Display::url(
             Display::getMdiIcon(
@@ -161,7 +161,7 @@ if (api_is_platform_admin(true, true)) {
                 ICON_SIZE_MEDIUM,
                 get_lang('Sessions')
             ),
-            api_get_path(WEB_PATH).'reporting/sessions'
+            '/reporting/sessions'
         );
 
         // Question stats tabs (pill-style buttons)

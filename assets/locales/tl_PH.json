@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Hindi maaaring makuha ang kasanayang ito",
     "Validated": "Na-validate",
     "Not validated": "Hindi na-validate",
-    "Not attempted": "Hindi sinubukan"
+    "Not attempted": "Hindi sinubukan",
+    "The session is read only": "Read only ang session"
 }

@@ -156,7 +156,7 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
 }
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_PATH).'reporting',
+    'url' => '/reporting',
     'name' => get_lang('Reporting'),
 ];
 

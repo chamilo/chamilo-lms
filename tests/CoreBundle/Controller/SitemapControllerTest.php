@@ -246,6 +246,7 @@ class SitemapControllerTest extends WebTestCase
 
         $locations = [];
         foreach ($nodes as $node) {
+            /** @var \DOMElement $node */
             $locations[] = trim($node->textContent);
         }
 

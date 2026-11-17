@@ -3019,6 +3019,23 @@ Then("the row for {string} should not contain {string}", async ({ page }, rowTex
   await expect(row.first()).not.toContainText(unexpected)
 })
 
+// Not ported — new, for toolExerciseReadOnlySession.feature: hiding the "Start test" button is not
+// enough, the server must refuse the attempt too, or the learner reaches the test by opening the
+// /player URL. Called from an exercise overview page (/resources/exercise/{node}/{id}/overview?cid=..),
+// it asks the runtime API to start an attempt in that same context, with the browser's session. The
+// Origin header is what CsrfProtectionListener checks on a POST.
+Then("starting the exercise of this page should be refused with {string}", async ({ page }, message: string) => {
+  const url = new URL(page.url())
+  const match = url.pathname.match(/\/resources\/exercise\/\d+\/(\d+)\/overview/)
+  expect(match, `not an exercise overview page: ${url.pathname}`).toBeTruthy()
+  const response = await page.request.post(`/api/exercise/runtime/${match![1]}/attempt${url.search}`, {
+    data: {},
+    headers: { Accept: "application/json", Origin: url.origin },
+  })
+  expect(response.status()).toBe(403)
+  expect(await response.text()).toContain(message)
+})
+
 // Not ported — new, for toolExerciseQti2Import.feature (#1377): saves the file behind a link
 // of a table row (e.g. the exercise list's "Export QTI2" icon, an <a> to /api/exercise/{id}/qti2-export)
 // so a later step can upload it again. The file is fetched with the page's own session rather than

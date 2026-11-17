@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Service\Exercise\Qti2ExactCombinationWriter;
+use Chamilo\CoreBundle\Service\Exercise\Qti2MatchingTypeMarker;
+
 /**
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
@@ -57,13 +60,16 @@ class ImsAssessmentItem
             }
         }
 
+        $label = MATCHING_DRAGGABLE === (int) $this->question->type
+            ? '                label="'.Qti2MatchingTypeMarker::DRAGGABLE_LABEL.'"'."\n"
+            : '';
+
         return '<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd"
                 identifier="'.$this->questionIdent.'"
                 title = "'.htmlspecialchars(formatExerciseQtiText($this->question->selectTitle())).'"
-                category = "'.$categoryTitle.'"
-        >'."\n";
+                category = "'.$categoryTitle.'"'."\n".$label.'        >'."\n";
     }
 
     /**
@@ -95,6 +101,14 @@ class ImsAssessmentItem
      */
     public function add_response_processing()
     {
+        if ($this->answer instanceof ImsAnswerMultipleChoice && MULTIPLE_ANSWER_COMBINATION == $this->question->type) {
+            // All or nothing: the whole score only for exactly the set of correct answers.
+            return Qti2ExactCombinationWriter::responseProcessing(
+                $this->questionIdent,
+                $this->answer->getExactCombinationScore($this->question)
+            );
+        }
+
         if ($this->answer instanceof ImsAnswerFillInBlanks) {
             // Each blank is scored with the mapping of its own response.
             return '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_response"/>'."\n";
@@ -460,8 +474,9 @@ function export_question_qti($questionId, $standalone = true)
         return '';
     }
 
+    // Exact combination is checked by type: the True/false/Don't know variant extends its class.
     $isValid = $qst instanceof UniqueAnswer || $qst instanceof MultipleAnswer || $qst instanceof FreeAnswer
-        || in_array((int) $qst->type, [FILL_IN_BLANKS, MATCHING, MATCHING_DRAGGABLE], true);
+        || in_array((int) $qst->type, [FILL_IN_BLANKS, MATCHING, MATCHING_DRAGGABLE, MULTIPLE_ANSWER_COMBINATION], true);
     if (!$isValid) {
         return '';
     }

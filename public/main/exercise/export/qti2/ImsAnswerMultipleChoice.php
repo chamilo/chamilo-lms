@@ -2,8 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Service\Exercise\Qti2ExactCombinationWriter;
+
 /**
- * Class.
+ * Unique answer, Multiple answer, True/false and Exact combination questions as a QTI2 choiceInteraction.
  */
 class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
 {
@@ -21,7 +23,11 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
     {
         // @todo getAnswersList() converts the answers using api_html_entity_decode()
         $this->answerList = $this->getAnswersList(true);
-        $out = '    <choiceInteraction responseIdentifier="'.$questionIdent.'" >'."\n";
+        // Both multiple answer and exact combination allow selecting more than one option.
+        $maxChoices = \in_array((int) $this->getQuestionType(), [MCMA, MULTIPLE_ANSWER_COMBINATION], true)
+            ? ' maxChoices="0"'
+            : '';
+        $out = '    <choiceInteraction responseIdentifier="'.$questionIdent.'"'.$maxChoices.' >'."\n";
         $out .= '      <prompt><![CDATA['.formatExerciseQtiText($questionStatment).']]></prompt>'."\n";
         if (is_array($this->answerList)) {
             foreach ($this->answerList as $current_answer) {
@@ -47,6 +53,17 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
     {
         $this->answerList = $this->getAnswersList(true);
         $type = $this->getQuestionType();
+        if (MULTIPLE_ANSWER_COMBINATION == $type) {
+            $correct = [];
+            foreach (is_array($this->answerList) ? $this->answerList : [] as $current_answer) {
+                if (1 == $current_answer['correct']) {
+                    $correct[] = 'answer_'.$current_answer['id'];
+                }
+            }
+
+            return Qti2ExactCombinationWriter::declarations($questionIdent, $correct, $this->getExactCombinationScore($question));
+        }
+
         if (MCMA == $type) {
             $cardinality = 'multiple';
         } else {
@@ -80,5 +97,17 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
         $out .= '  </responseDeclaration>'."\n";
 
         return $out;
+    }
+
+    /**
+     * The score of an Exact combination question: Chamilo grants the weight of the first answer when the
+     * exact set of correct answers is ticked (Exercise::manage_answer()).
+     */
+    public function getExactCombinationScore(?Question $question = null): float
+    {
+        return Qti2ExactCombinationWriter::score(
+            [(float) ($this->weighting[1] ?? 0)],
+            null !== $question ? (float) $question->weighting : 0.0
+        );
     }
 }

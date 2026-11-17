@@ -58,11 +58,12 @@ use Symfony\Component\Validator\Constraints as Assert;
             normalizationContext: [
                 'groups' => ['session:basic', 'session:read'],
             ],
-            security: "is_granted('ROLE_ADMIN') or is_granted('VIEW', object)"
+            security: "is_granted('ROLE_ADMIN') or is_granted('VIEW', object) or is_granted('SESSION_MANAGER_API_READ', object)"
         ),
         new Put(security: "is_granted('ROLE_ADMIN')"),
         new Patch(security: "is_granted('ROLE_ADMIN')"), new GetCollection(
-            security: "is_granted('ROLE_ADMIN')",
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')",
+            extraProperties: ['sessionManagerScoped' => true],
             filters: [
                 'session.search_filter',
                 'session.property_filter',

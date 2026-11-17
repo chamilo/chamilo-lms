@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\CoreBundle\ApiResource\CourseDescription\CourseDescriptionList;
 use Chamilo\CoreBundle\Controller\EditorController;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
@@ -14,6 +15,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CourseAccessActivityHelper;
 use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Helpers\RequestExpectsJsonHelper;
+use Chamilo\CoreBundle\Helpers\SessionManagerApiScope;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\LegalRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
@@ -78,6 +80,7 @@ class CidReqListener
         private readonly LegalRepository $legalRepository,
         private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
         private readonly CourseAccessActivityHelper $courseAccessActivityHelper,
+        private readonly SessionManagerApiScope $sessionManagerApiScope,
     ) {}
 
     /**
@@ -229,7 +232,9 @@ class CidReqListener
                 }
             }
 
-            if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
+            $scopedDescriptionRead = $this->isScopedCourseDescriptionRead($request, $course, $sessionId);
+
+            if (!$scopedDescriptionRead && false === $checker->isGranted(CourseVoter::VIEW, $course)) {
                 $this->denyRequest($event, $request, $this->translator->trans("You're not allowed in this course"));
 
                 return;
@@ -247,7 +252,7 @@ class CidReqListener
                 if (null !== $session) {
                     $session->setCurrentCourse($course);
 
-                    if (false === $checker->isGranted(SessionVoter::VIEW, $session)) {
+                    if (!$scopedDescriptionRead && false === $checker->isGranted(SessionVoter::VIEW, $session)) {
                         $this->denyRequest($event, $request, $this->translator->trans("You're not allowed in this session"));
 
                         return;
@@ -518,6 +523,36 @@ class CidReqListener
         $returnUrl = '/course/'.$course->getId().'/home'.($sessionId > 0 ? '?sid='.$sessionId : '');
 
         return new RedirectResponse('/main/auth/tc.php?return='.urlencode($returnUrl));
+    }
+
+    /**
+     * The integration endpoint has a narrower read policy than course navigation.
+     * Never apply this exception to other tools, routes or write operations.
+     */
+    private function isScopedCourseDescriptionRead(Request $request, Course $course, int $sessionId): bool
+    {
+        if (!$request->isMethod('GET')
+            || '/api/course-description/list' !== $request->getPathInfo()
+            || CourseDescriptionList::class !== $request->attributes->get('_api_resource_class')
+            || !$this->authorizationChecker->isGranted('ROLE_SESSION_MANAGER')
+        ) {
+            return false;
+        }
+
+        $user = $this->tokenStorage->getToken()?->getUser();
+        if (!$user instanceof User || !$this->sessionManagerApiScope->canReadCourse($user, $course)) {
+            return false;
+        }
+
+        if ($sessionId <= 0) {
+            return true;
+        }
+
+        $session = $this->entityManager->find(Session::class, $sessionId);
+
+        return $session instanceof Session
+            && $session->hasCourse($course)
+            && $this->sessionManagerApiScope->canReadSession($user, $session);
     }
 
     private function denyRequest(RequestEvent $event, Request $request, string $message): void

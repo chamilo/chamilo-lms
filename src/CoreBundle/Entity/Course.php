@@ -44,7 +44,7 @@ use const SORT_NATURAL;
 #[ApiResource(
     types: ['https://schema.org/Course'],
     operations: [
-        new Get(security: "is_granted('VIEW', object)"),
+        new Get(security: "is_granted('VIEW', object) or is_granted('SESSION_MANAGER_API_READ', object)"),
         new Post(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
         // Updating and deleting are administrator-only: they let an integration (such as an ERP) keep its courses in
         // sync. Teachers keep editing their own course through the course settings screens. Only the course:write
@@ -53,7 +53,8 @@ use const SORT_NATURAL;
         new Delete(security: "is_granted('ROLE_ADMIN')", processor: CourseDeleteProcessor::class),
         new GetCollection(
             paginationClientEnabled: true,
-            security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"
+            security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')",
+            extraProperties: ['sessionManagerScoped' => true],
         ),
         new GetCollection(
             uriTemplate: '/public_courses.{_format}',

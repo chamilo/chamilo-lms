@@ -32,7 +32,6 @@ use const ENT_QUOTES;
 use const FILTER_VALIDATE_URL;
 use const PATHINFO_EXTENSION;
 use const PHP_ROUND_HALF_UP;
-use const PHP_SAPI;
 use const PHP_URL_PATH;
 use const PHP_URL_SCHEME;
 

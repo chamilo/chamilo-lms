@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Uid\Uuid;
-use Throwable;
 
 /**
  * Second pass over work.lib.php: the list functions now built on the repository QueryBuilder (teacher, student,

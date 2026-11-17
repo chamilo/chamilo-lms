@@ -1354,4 +1354,5 @@ class StatisticsCharacterizationTest extends AbstractApiTest
 
         $this->assertSame([$a, $b], Statistics::getDuplicateUserGroupUserIds('email', $a));
         $this->assertSame([], Statistics::getDuplicateUserGroupUserIds('email', $c), 'target in another URL');
-    }}
+    }
+}

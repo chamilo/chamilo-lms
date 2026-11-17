@@ -110,6 +110,7 @@ class CourseHelper
         private readonly ExtraFieldValuesRepository $extraFieldValuesRepository,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly PluginHelper $pluginHelper,
+        private readonly PermissionHelper $permissionHelper,
     ) {}
 
     public function createCourse(array $params): ?Course
@@ -1885,16 +1886,23 @@ class CourseHelper
 
         // An active service extends benefits, not the right to create a course.
         $currentActor = $this->security->getUser();
+        if ($currentActor instanceof User && !$this->hasCourseCreationRole($currentActor)) {
+            throw new RuntimeException($this->translator->trans('You do not have permission to create courses.'));
+        }
+
+        // A delegated role may create its own courses, not assign ownership to another user.
         if ($currentActor instanceof User
             && !$this->isCourseCreationAdmin($currentActor)
             && !$this->isCourseCreationTeacher($currentActor)
+            && !empty($params['user_id'])
+            && (int) $params['user_id'] !== $currentActor->getId()
         ) {
-            throw new RuntimeException($this->translator->trans('Only trainers and administrators can create courses.'));
+            throw new RuntimeException($this->translator->trans('You cannot create courses for another user.'));
         }
 
         if (!$this->isCourseCreationAdmin($ownerUser)) {
-            if (!$this->isCourseCreationTeacher($ownerUser)) {
-                throw new RuntimeException($this->translator->trans('Only trainers and administrators can create courses.'));
+            if (!$this->hasCourseCreationRole($ownerUser)) {
+                throw new RuntimeException($this->translator->trans('You do not have permission to create courses.'));
             }
             if ('true' !== $this->settingsManager->getSetting('workflows.allow_users_to_create_courses', true)) {
                 throw new RuntimeException($this->translator->trans('Course creation by trainers is disabled on this platform.'));
@@ -1940,7 +1948,7 @@ class CourseHelper
             ];
         }
 
-        if (!$this->isCourseCreationTeacher($user)) {
+        if (!$this->hasCourseCreationRole($user)) {
             return [
                 'canCreate' => false,
                 'currentCount' => 0,
@@ -2027,6 +2035,15 @@ class CourseHelper
     private function isCourseCreationTeacher(User $user): bool
     {
         return \in_array('ROLE_TEACHER', $user->getRoles(), true);
+    }
+
+    private function hasCourseCreationRole(User $user): bool
+    {
+        // Preserve the existing administrator and trainer behavior. Other roles
+        // require an explicit course:create grant in the permissions matrix.
+        return $this->isCourseCreationAdmin($user)
+            || $this->isCourseCreationTeacher($user)
+            || $this->permissionHelper->hasPermissionForUser('course:create', $user);
     }
 
     private function resolveBuyCoursesServiceSaleCourseCreationSelection(User $user, int $serviceSaleId): array

@@ -8,6 +8,7 @@ import { useCidReqStore } from "../store/cidReq"
 import { useSecurityStore } from "../store/securityStore"
 import { useNotification } from "./notification"
 import baseService from "../services/baseService"
+import courseService from "../services/courseService"
 import { useWelfareAvailability } from "./useWelfareAvailability"
 
 const ROLE_MAP = {
@@ -287,9 +288,8 @@ export function useTopbarLoggedIn(props) {
     isSettingEnabled(platformConfigStore, "workflows.allow_users_to_create_courses"),
   )
 
-  const canCreateCourseFromTopbar = computed(
-    () => isAdmin.value || (isTeacher.value && allowUsersToCreateCourses.value),
-  )
+  const serverAllowsCourseCreation = ref(false)
+  const canCreateCourseFromTopbar = computed(() => isAdmin.value || serverAllowsCourseCreation.value)
 
   const hideLogoutButton = computed(() => isSettingEnabled(platformConfigStore, "display.hide_logout_button"))
 
@@ -615,6 +615,15 @@ export function useTopbarLoggedIn(props) {
 
   onMounted(async () => {
     fetchJustificationMenu()
+
+    if (!isAnonymous.value && !isAdmin.value) {
+      try {
+        const capability = await courseService.getCreateCourseCapability()
+        serverAllowsCourseCreation.value = capability?.canCreate === true
+      } catch (error) {
+        console.warn("Unable to verify course creation permission.", error)
+      }
+    }
 
     if (!isAnonymous.value && externalLogoutPluginEnabled.value) {
       externalLogoutBehaviour.value = await fetchExternalLogoutBehaviour()

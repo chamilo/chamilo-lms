@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -36,6 +37,10 @@ class PermissionsController extends AbstractController
         $roles = $roleRepo->findAll();
 
         if ($request->isMethod('POST')) {
+            if (!$this->isCsrfTokenValid('manage_role_permissions', (string) $request->request->get('_token', ''))) {
+                throw new AccessDeniedHttpException('Invalid permissions form token.');
+            }
+
             $data = $request->request->all('permissions');
 
             foreach ($permissions as $permission) {

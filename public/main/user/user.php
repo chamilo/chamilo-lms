@@ -270,6 +270,14 @@ if (isset($_GET['action'])) {
                 $counter = 1;
 
                 while ($user = Database::fetch_assoc($rs)) {
+                    // Raw SQL bypasses Doctrine; resolve ciphertext before exporting.
+                    if (str_starts_with((string) ($user['phone'] ?? ''), 'chamilo-encrypted:')) {
+                        $phoneUser = api_get_user_entity((int) $user['user_id']);
+                        if (null === $phoneUser) {
+                            throw new RuntimeException('Unable to load user for encrypted phone export.');
+                        }
+                        $user['phone'] = $phoneUser->getPhone();
+                    }
                     if (isset($user['legal_agreement'])) {
                         if (1 == $user['legal_agreement']) {
                             $user['legal_agreement'] = get_lang('Yes');
@@ -358,6 +366,14 @@ if (isset($_GET['action'])) {
                 $rs = Database::query($sql);
                 $counter = 1;
                 while ($user = Database::fetch_assoc($rs)) {
+                    // Raw SQL bypasses Doctrine; resolve ciphertext before exporting.
+                    if (str_starts_with((string) ($user['phone'] ?? ''), 'chamilo-encrypted:')) {
+                        $phoneUser = api_get_user_entity((int) $user['user_id']);
+                        if (null === $phoneUser) {
+                            throw new RuntimeException('Unable to load user for encrypted phone export.');
+                        }
+                        $user['phone'] = $phoneUser->getPhone();
+                    }
                     if (isset($user['legal_agreement'])) {
                         if (1 == $user['legal_agreement']) {
                             $user['legal_agreement'] = get_lang('Yes');

@@ -24,9 +24,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
     operations: [
-        new Get(security: "is_granted('ROLE_ADMIN')"),
+        new Get(security: "is_granted('ROLE_ADMIN') or is_granted('SESSION_MANAGER_API_READ', object)"),
         new Put(security: "is_granted('ROLE_ADMIN')"),
-        new Patch(security: "is_granted('ROLE_ADMIN')"), new GetCollection(security: "is_granted('ROLE_ADMIN')"),
+        new Patch(security: "is_granted('ROLE_ADMIN')"), new GetCollection(
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')",
+            extraProperties: ['sessionManagerScoped' => true],
+        ),
         new Post(security: "is_granted('ROLE_ADMIN')"),
     ],
     normalizationContext: [

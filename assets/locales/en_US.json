@@ -1,4 +1,6 @@
 {
+    "Teachers can use JavaScript in WYSIWYG editors": "Teachers can use JavaScript in WYSIWYG editors",
+    "When disabled, apply the teacher HTMLPurifier profile to content that was explicitly marked as trusted teacher HTML. Scripts and unsafe HTML attributes are removed from those paths. This is a global setting for all access URLs.": "When disabled, apply the teacher HTMLPurifier profile to content that was explicitly marked as trusted teacher HTML. Scripts and unsafe HTML attributes are removed from those paths. This is a global setting for all access URLs.",
     "Invalid JSON syntax": "Invalid JSON syntax",
     "AI course analyzer is disabled for this course.": "AI course analyzer is disabled for this course.",
     "AI-assisted skills mapping": "AI-assisted skills mapping",
@@ -4804,5 +4806,11 @@
     "The download excludes confidential values. Review the file before sharing it.": "The download excludes confidential values. Review the file before sharing it.",
     "Badge": "Badge",
     "Badges": "Badges",
-    "Export badges": "Export badges"
+    "Export badges": "Export badges",
+    "The selected file is empty.": "The selected file is empty.",
+    "ZIP uploads are unavailable on this server.": "ZIP uploads are unavailable on this server.",
+    "The selected ZIP file is invalid.": "The selected ZIP file is invalid.",
+    "The selected ZIP file contains no non-empty files.": "The selected ZIP file contains no non-empty files.",
+    "Not attempted": "Not attempted",
+    "Already attempted": "Already attempted"
 }

@@ -4616,5 +4616,6 @@
     "Disable new test attempts": "Onemogo\u010di nove poskuse testov",
     "This skill cannot be acquired": "Te spretnosti ni mogo\u010de pridobiti",
     "Validated": "Pregledan",
-    "Not validated": "Ni pregledan"
+    "Not validated": "Ni pregledan",
+    "Not attempted": "Brez poskusa"
 }

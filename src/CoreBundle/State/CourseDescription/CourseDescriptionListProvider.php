@@ -103,8 +103,8 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
 
         return [
             'iid' => (int) $description->getIid(),
-            'title' => $this->sanitizeHtmlTitle((string) $description->getTitle()),
-            'content' => (string) $description->getContent(),
+            'title' => $this->sanitizeHtmlForDisplay((string) $description->getTitle()),
+            'content' => $this->sanitizeHtmlForDisplay((string) $description->getContent()),
             'descriptionType' => (int) $description->getDescriptionType(),
             'progress' => (int) $description->getProgress(),
             'resourceNodeId' => null !== $resourceNode?->getId() ? (int) $resourceNode->getId() : null,
@@ -116,13 +116,13 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         ];
     }
 
-    private function sanitizeHtmlTitle(string $title): string
+    private function sanitizeHtmlForDisplay(string $html): string
     {
         if (class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
-            return (string) \Security::remove_XSS($title, COURSEMANAGERLOWSECURITY);
+            return (string) \Security::remove_XSS($html, COURSEMANAGERLOWSECURITY);
         }
 
-        return htmlspecialchars($title, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        return htmlspecialchars($html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     /**

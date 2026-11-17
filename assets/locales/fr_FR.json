@@ -4685,5 +4685,7 @@
     "The download excludes confidential values. Review the file before sharing it.": "Le téléchargement exclut les valeurs confidentielles. Vérifiez le fichier avant de le partager.",
     "Badge": "Badge",
     "Badges": "Badges",
-    "Export badges": "Exporter badges"
+    "Export badges": "Exporter badges",
+    "Not attempted": "Non tent\u00e9e",
+    "Already attempted": "D\u00e9j\u00e0 tent\u00e9"
 }

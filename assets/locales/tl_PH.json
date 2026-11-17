@@ -4616,5 +4616,6 @@
     "Disable new test attempts": "Hindi i-enable ang mga bagong attempt ng pagsusulit",
     "This skill cannot be acquired": "Hindi maaaring makuha ang kasanayang ito",
     "Validated": "Na-validate",
-    "Not validated": "Hindi na-validate"
+    "Not validated": "Hindi na-validate",
+    "Not attempted": "Hindi sinubukan"
 }

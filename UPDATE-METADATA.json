@@ -76,6 +76,7 @@
         "public/main/upload/upload_word.php",
         "public/main/wiki/diff.inc.php",
         "public/main/wiki/wiki.inc.php",
+        "public/plugin/LtiProvider/src/LtiProviderLegacyContext.php",
         "public/plugin/Pens/lib/pens_server_test.php",
         "public/plugin/Pens/lib/tests/test_pens_package_handler.php",
         "public/plugin/Pens/lib/tests/test_pens_request.php",

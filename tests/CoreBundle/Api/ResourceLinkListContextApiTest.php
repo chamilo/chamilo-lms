@@ -115,6 +115,160 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
         $this->assertSame(0, $this->countCourseLinks(CDocument::class, $ctx['foreignCourse']));
     }
 
+    public function testTeacherCannotChangeVisibilityOfDocumentLinkInAnotherCourse(): void
+    {
+        $ctx = $this->bootstrapSharedDocumentScenario('shared');
+
+        $this->putDocument($ctx, [
+            'resourceLinkListFromEntity' => [
+                ['id' => $ctx['foreignLinkId'], 'visibility' => ResourceLink::VISIBILITY_PUBLISHED],
+            ],
+        ]);
+        $this->assertResponseStatusCodeSame(403);
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['foreignLinkId']));
+
+        // The same teacher still manages the link of the course that authorized the request.
+        $this->putDocument($ctx, [
+            'resourceLinkListFromEntity' => [
+                ['id' => $ctx['localLinkId'], 'visibility' => ResourceLink::VISIBILITY_DRAFT],
+            ],
+        ]);
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['localLinkId']));
+    }
+
+    public function testCreatorCannotChangeVisibilityInAnotherCourseByRequestingItsContext(): void
+    {
+        $ctx = $this->bootstrapSharedDocumentScenario('ctxswitch');
+
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        // Any member of the other course, or any user if the course is open, may request its context.
+        $ctx['foreignCourse']->addUserAsStudent($ctx['teacher']);
+        $courseRepo->update($ctx['foreignCourse']);
+
+        $this->requestDocument($ctx, 'PUT', '', $ctx['foreignCourse'], [
+            'resourceLinkListFromEntity' => [
+                ['id' => $ctx['foreignLinkId'], 'visibility' => ResourceLink::VISIBILITY_PUBLISHED],
+            ],
+        ]);
+        $this->assertResponseStatusCodeSame(403);
+
+        $this->requestDocument($ctx, 'PATCH', '/toggle_visibility', $ctx['foreignCourse'], []);
+        $this->assertResponseStatusCodeSame(403);
+
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['foreignLinkId']));
+    }
+
+    public function testCreatorCannotMoveDocumentInAnotherCourseByRequestingItsContext(): void
+    {
+        $ctx = $this->bootstrapSharedDocumentScenario('mvswitch');
+        $childLinkIds = $this->createChildFolder($ctx, 'mvswitch', [
+            [$ctx['course'], ResourceLink::VISIBILITY_PUBLISHED],
+            [$ctx['foreignCourse'], ResourceLink::VISIBILITY_PUBLISHED],
+        ]);
+        $foreignChildLinkId = $childLinkIds[(int) $ctx['foreignCourse']->getId()];
+
+        $em = $this->getEntityManager();
+        // In the other course, the child sits in the shared folder.
+        $em->find(ResourceLink::class, $foreignChildLinkId)
+            ->setParent($em->find(ResourceLink::class, $ctx['foreignLinkId']))
+        ;
+        $em->flush();
+
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $ctx['foreignCourse']->addUserAsStudent($ctx['teacher']);
+        $courseRepo->update($ctx['foreignCourse']);
+
+        /** @var CDocumentRepository $documentRepo */
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $child = $documentRepo->findOneBy([
+            'resourceNode' => $em->find(ResourceLink::class, $foreignChildLinkId)->getResourceNode(),
+        ]);
+        $this->assertInstanceOf(CDocument::class, $child);
+        $childCtx = ['document' => $child] + $ctx;
+        $payload = ['parentResourceNodeId' => (int) $ctx['course']->getResourceNode()->getId()];
+
+        $this->requestDocument($childCtx, 'PUT', '', $ctx['foreignCourse'], $payload);
+        $this->assertResponseStatusCodeSame(403);
+
+        $em->clear();
+        $this->assertSame(
+            $ctx['foreignLinkId'],
+            $em->find(ResourceLink::class, $foreignChildLinkId)->getParent()?->getId(),
+        );
+
+        // The same teacher still moves it in the course that authorized the request.
+        $this->requestDocument($childCtx, 'PUT', '', $ctx['course'], $payload);
+        $this->assertResponseStatusCodeSame(200);
+    }
+
+    public function testTeacherCanToggleVisibilityOfDocumentInOwnCourse(): void
+    {
+        $ctx = $this->bootstrapSharedDocumentScenario('toggleown');
+
+        $this->requestDocument($ctx, 'PATCH', '/toggle_visibility', $ctx['course'], []);
+        $this->assertResponseStatusCodeSame(200);
+
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['localLinkId']));
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['foreignLinkId']));
+    }
+
+    public function testTeacherCanSaveDocumentSharedWithAnotherCourseWithoutChangingItsLink(): void
+    {
+        $ctx = $this->bootstrapSharedDocumentScenario('keep');
+
+        // The edit form sends back every link it loaded, the other course's included.
+        $this->putDocument($ctx, [
+            'title' => 'rllc-renamed-keep',
+            'resourceLinkListFromEntity' => [
+                ['id' => $ctx['localLinkId'], 'visibility' => ResourceLink::VISIBILITY_PUBLISHED],
+                ['id' => $ctx['foreignLinkId'], 'visibility' => ResourceLink::VISIBILITY_DRAFT],
+            ],
+        ]);
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['foreignLinkId']));
+    }
+
+    public function testHidingFolderAlsoHidesItsChildren(): void
+    {
+        $ctx = $this->bootstrapDocumentScenario('hide');
+        $folderLinkId = (int) $ctx['document']->getResourceNode()->getResourceLinks()->first()->getId();
+        $childLinkIds = $this->createChildFolder($ctx, 'hide', [
+            [$ctx['course'], ResourceLink::VISIBILITY_PUBLISHED],
+        ]);
+
+        $this->putDocument($ctx, [
+            'resourceLinkListFromEntity' => [['id' => $folderLinkId, 'visibility' => ResourceLink::VISIBILITY_DRAFT]],
+        ]);
+        $this->assertResponseStatusCodeSame(200);
+
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($childLinkIds[(int) $ctx['course']->getId()]));
+    }
+
+    public function testHidingSharedFolderOnlyHidesChildrenInTheCurrentCourse(): void
+    {
+        $ctx = $this->bootstrapSharedDocumentScenario('hideshared');
+        $childLinkIds = $this->createChildFolder($ctx, 'hideshared', [
+            [$ctx['course'], ResourceLink::VISIBILITY_PUBLISHED],
+            [$ctx['foreignCourse'], ResourceLink::VISIBILITY_PUBLISHED],
+        ]);
+
+        // The form sends back the other course's link unchanged, after the one that changes.
+        $this->putDocument($ctx, [
+            'resourceLinkListFromEntity' => [
+                ['id' => $ctx['localLinkId'], 'visibility' => ResourceLink::VISIBILITY_DRAFT],
+                ['id' => $ctx['foreignLinkId'], 'visibility' => ResourceLink::VISIBILITY_DRAFT],
+            ],
+        ]);
+        $this->assertResponseStatusCodeSame(200);
+
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($childLinkIds[(int) $ctx['course']->getId()]));
+        // The other course decides the visibility of its own children.
+        $this->assertSame(ResourceLink::VISIBILITY_PUBLISHED, $this->getLinkVisibility($childLinkIds[(int) $ctx['foreignCourse']->getId()]));
+    }
+
     public function testTeacherCannotMoveOwnDocumentIntoAnotherCourse(): void
     {
         $ctx = $this->bootstrapDocumentScenario('move');
@@ -209,8 +363,82 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
     }
 
     /**
-     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument} $ctx
-     * @param array<string, mixed>                                                             $payload
+     * A document whose node is linked to the teacher's course (published) and to another
+     * course (draft).
+     *
+     * @return array{teacher: User, course: Course, foreignCourse: Course, document: CDocument, localLinkId: int, foreignLinkId: int}
+     */
+    private function bootstrapSharedDocumentScenario(string $suffix): array
+    {
+        $ctx = $this->bootstrapDocumentScenario($suffix);
+
+        /** @var CDocumentRepository $documentRepo */
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+
+        $ctx['document']->addCourseLink($ctx['foreignCourse'], null, null, ResourceLink::VISIBILITY_DRAFT);
+        $documentRepo->update($ctx['document']);
+
+        $localLinkId = 0;
+        $foreignLinkId = 0;
+        foreach ($ctx['document']->getResourceNode()->getResourceLinks() as $link) {
+            if ($link->getCourse()?->getId() === $ctx['course']->getId()) {
+                $localLinkId = (int) $link->getId();
+            } elseif ($link->getCourse()?->getId() === $ctx['foreignCourse']->getId()) {
+                $foreignLinkId = (int) $link->getId();
+            }
+        }
+        $this->assertGreaterThan(0, $localLinkId);
+        $this->assertGreaterThan(0, $foreignLinkId);
+
+        return $ctx + ['localLinkId' => $localLinkId, 'foreignLinkId' => $foreignLinkId];
+    }
+
+    /**
+     * Creates a folder inside the scenario's folder, with one link per given course.
+     *
+     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument, ...} $ctx
+     * @param array<int, array{0: Course, 1: int}>                                                  $links
+     *
+     * @return array<int, int> link id by course id
+     */
+    private function createChildFolder(array $ctx, string $suffix, array $links): array
+    {
+        /** @var CDocumentRepository $documentRepo */
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+
+        $child = (new CDocument())
+            ->setFiletype('folder')
+            ->setTitle('rllc-child-'.$suffix)
+            ->setTemplate(false)
+            ->setReadonly(false)
+            ->setParent($ctx['document'])
+            ->setCreator($ctx['teacher'])
+        ;
+        foreach ($links as [$course, $visibility]) {
+            $child->addCourseLink($course, null, null, $visibility);
+        }
+        $documentRepo->create($child);
+
+        $linkIds = [];
+        foreach ($child->getResourceNode()->getResourceLinks() as $link) {
+            $linkIds[(int) $link->getCourse()?->getId()] = (int) $link->getId();
+        }
+        $this->assertCount(\count($links), $linkIds);
+
+        return $linkIds;
+    }
+
+    private function getLinkVisibility(int $linkId): int
+    {
+        $em = $this->getEntityManager();
+        $em->clear();
+
+        return (int) $em->find(ResourceLink::class, $linkId)->getVisibility();
+    }
+
+    /**
+     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument, ...} $ctx
+     * @param array<string, mixed>                                                                  $payload
      */
     private function putDocument(array $ctx, array $payload): void
     {
@@ -218,6 +446,24 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
             'PUT',
             '/api/documents/'.$ctx['document']->getIid().'?cid='.$ctx['course']->getId().'&sid=0&gid=0',
             ['json' => $payload],
+        );
+    }
+
+    /**
+     * Sends a request on the scenario's document as its teacher, in the context of the given course.
+     *
+     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument, ...} $ctx
+     * @param array<string, mixed>                                                                  $payload
+     */
+    private function requestDocument(array $ctx, string $method, string $suffix, Course $course, array $payload): void
+    {
+        $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacher']))->request(
+            $method,
+            '/api/documents/'.$ctx['document']->getIid().$suffix.'?cid='.$course->getId().'&sid=0&gid=0',
+            [
+                'headers' => ['Content-Type' => 'PATCH' === $method ? 'application/merge-patch+json' : 'application/json'],
+                'json' => $payload,
+            ],
         );
     }
 

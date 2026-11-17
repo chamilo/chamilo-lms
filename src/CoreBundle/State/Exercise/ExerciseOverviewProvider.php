@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
+use Chamilo\CoreBundle\Helpers\ExerciseScoreVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
@@ -66,6 +67,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         private IsAllowedToEditHelper $isAllowedToEditHelper,
         private UserHelper $userHelper,
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
+        private ExerciseScoreVisibilityHelper $exerciseScoreVisibilityHelper,
         private CQuizRepository $quizRepository,
         private ReportIpVisibility $reportIpVisibility,
     ) {}
@@ -156,7 +158,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         $overview->availabilityStatus = $availabilityStatus;
         $overview->currentUserAttempts = $currentUserAttempts;
         $overview->showAttemptsTable = !$hideAttemptsTable && [] !== $currentUserAttempts;
-        $overview->showScoreColumn = $this->shouldShowScoreColumn($quiz, $currentUserAttemptCount);
+        $overview->showScoreColumn = $this->exerciseScoreVisibilityHelper->isScoreVisible($quiz, $currentUserAttemptCount);
         $overview->showDetailsColumn = $this->shouldShowDetailsColumn($quiz, $currentUserAttemptCount);
         $overview->attemptLimitReached = $attemptLimitReached;
         // As in 1.11, only an unfinished attempt is proceeded with; after finished ones, a new one starts
@@ -388,37 +390,6 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         return $currentUserAttemptCount > 0 ? 'You have tried to resolve this exercise earlier' : '';
     }
 
-    private function shouldShowScoreColumn(CQuiz $quiz, int $attemptCount): bool
-    {
-        $resultMode = (int) $quiz->getResultsDisabled();
-        if (self::RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS === $resultMode) {
-            return false;
-        }
-
-        if (
-            self::RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK === $resultMode
-            && !$this->canShowLastAttemptAnswers($quiz, $attemptCount)
-        ) {
-            return false;
-        }
-
-        return \in_array(
-            $resultMode,
-            [
-                self::RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
-                self::RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
-                self::RESULT_DISABLE_SHOW_SCORE_ONLY,
-                self::RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES,
-                self::RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
-                self::RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT_NO_FEEDBACK,
-                self::RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
-                self::RESULT_DISABLE_RANKING,
-                self::RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
-            ],
-            true
-        );
-    }
-
     private function shouldShowDetailsColumn(CQuiz $quiz, int $attemptCount): bool
     {
         $resultMode = (int) $quiz->getResultsDisabled();
@@ -435,7 +406,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         }
 
         if (self::RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK === $resultMode) {
-            return $this->canShowLastAttemptAnswers($quiz, $attemptCount);
+            return $this->exerciseScoreVisibilityHelper->canShowLastAttemptAnswers($quiz, $attemptCount);
         }
 
         return \in_array(
@@ -449,13 +420,6 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
             ],
             true
         );
-    }
-
-    private function canShowLastAttemptAnswers(CQuiz $quiz, int $attemptCount): bool
-    {
-        $maxAttempt = (int) $quiz->getMaxAttempt();
-
-        return $maxAttempt <= 0 || $attemptCount >= $maxAttempt;
     }
 
     private function getAvailabilityStatus(?DateTimeInterface $startTime, ?DateTimeInterface $endTime): string

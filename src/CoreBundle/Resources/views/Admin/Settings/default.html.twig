@@ -53,7 +53,7 @@ For transparency, future releases may show non-intrusive end-user tags indicatin
                         method="post"
                         novalidate
                 >
-                    {% set verticalChoiceFields = ['active_tools_on_create', 'course_hide_tools'] %}
+                    {% set verticalChoiceFields = ['active_tools_on_create', 'course_hide_tools', 'encrypted_user_fields'] %}
 
                     {% for field in form %}
                         {% set fieldName = field.vars.name %}

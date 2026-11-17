@@ -4616,5 +4616,6 @@
     "Disable new test attempts": "D\u00edchumasaigh iarrachta\u00ed trialach nua",
     "This skill cannot be acquired": "N\u00ed f\u00e9idir an scil seo a fh\u00e1il",
     "Validated": "Bail\u00edochtaithe",
-    "Not validated": "Gan bail\u00edocht\u00fa"
+    "Not validated": "Gan bail\u00edocht\u00fa",
+    "Not attempted": "Gan iarracht"
 }

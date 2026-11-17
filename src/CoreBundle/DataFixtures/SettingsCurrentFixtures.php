@@ -35,6 +35,8 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
         'multiple_url_hide_disabled_settings',
         'login_is_email',
         'proxy_settings',
+        'encrypted_user_fields',
+        'teacher_use_js',
         'login_max_attempt_before_blocking_account',
         'permanently_remove_deleted_files',
         'allow_use_sub_language',
@@ -3267,6 +3269,17 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             'security' => [
+                [
+                    'name' => 'teacher_use_js',
+                    'title' => 'Teachers can use JavaScript in WYSIWYG editors',
+                    'comment' => 'When disabled, apply the teacher HTMLPurifier profile to content that was explicitly marked as trusted teacher HTML. Scripts and unsafe HTML attributes are removed from those paths. This is a global setting for all access URLs.',
+                    'selected_value' => 'true',
+                ],
+                [
+                    'name' => 'encrypted_user_fields',
+                    'title' => 'Encrypt selected user profile fields at rest',
+                    'comment' => 'Select supported user fields for new Doctrine writes. Requires a private key and the user column migration. Existing records require an explicit backfill. Legacy SQL queries and exports must be reviewed before enabling phone or address. Disabling a field does not decrypt stored values. This setting is global for all access URLs.',
+                ],
                 [
                     'name' => 'remember_me_days',
                     'title' => 'Remember me duration (days)',

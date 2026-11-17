@@ -59,7 +59,7 @@ final readonly class CourseInvitationRevokeProcessor implements ProcessorInterfa
         }
 
         $invitation = $this->invitationRepository->find($invitationId);
-        if (!$invitation instanceof CourseInvitation || $invitation->getCourse()?->getId() !== $course->getId()) {
+        if (!$invitation instanceof CourseInvitation || !$this->invitationBelongsToContext($invitation, $course, $session)) {
             throw new NotFoundHttpException('The requested invitation was not found.');
         }
 

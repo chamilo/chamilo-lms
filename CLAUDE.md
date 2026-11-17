@@ -441,7 +441,12 @@ So a new setting needs both:
 | `V310`    | **none yet** |
 
 **Check the current directory first**, since the table above goes stale:
-- If one already exists there, **don't create a second one**. Just add the fixture entry from step 1; whoever needs the DB updated re-executes the existing migration manually (`doctrine:migrations:execute '<FQCN>' --up`), since Doctrine won't automatically re-run a migration already marked as executed. Developers/ops are expected to know this and re-run it after pulling changes that add settings.
+- If one already exists there, **don't create a second one**. Just add the fixture entry from step 1; whoever needs the DB updated re-executes the existing migration manually, since Doctrine won't automatically re-run a migration already marked as executed. Developers/ops are expected to know this and re-run it after pulling changes that add settings. Remove its executed mark first, then run it:
+  ```bash
+  php bin/console doctrine:migrations:version '<FQCN>' --delete --no-interaction
+  php bin/console doctrine:migrations:execute '<FQCN>' --up --no-interaction
+  ```
+  `execute --up` alone on an executed migration runs it, then fails on inserting its row into the `version` table again (`Duplicate entry ... for key 'PRIMARY'`), so the command ends in an error after the migration ran, and whether its changes were kept is not guaranteed.
 - Only create a **new** migration if it doesn't. Copy the newest existing one's body verbatim into a freshly dated `Version<timestamp>` class **in the current directory, under that directory's own namespace** (`Chamilo\CoreBundle\Migrations\Schema\V310`) — not the namespace of the file you copied from.
 
 `AbstractMigrationChamilo::addSettingCurrent()` (`src/CoreBundle/Migrations/AbstractMigrationChamilo.php`) exists as a single-setting-insert helper but has zero callers repo-wide — the fixtures-upsert migration above is the actual convention to copy, not that helper.

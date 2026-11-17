@@ -4616,5 +4616,6 @@
     "Disable new test attempts": "Vypnout nov\u00e9 pokusy test\u016f",
     "This skill cannot be acquired": "Tuto dovednost nelze z\u00edskat",
     "Validated": "Ov\u011b\u0159eno",
-    "Not validated": "Neov\u011b\u0159eno"
+    "Not validated": "Neov\u011b\u0159eno",
+    "Not attempted": "Nezkou\u0161eno"
 }

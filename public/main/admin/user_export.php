@@ -95,7 +95,6 @@ if ($form->validate()) {
                 ".(('none' != api_get_configuration_value('password_encryption')) ? " " : "u.password AS Password, ")."
                 u.status		AS Status,
                 u.official_code	AS OfficialCode,
-                u.phone		AS PhoneNumber,
                 u.created_at AS RegistrationDate";
     if (strlen($course_code) > 0) {
         $sql .= " FROM $user_table u, $course_user_table cu
@@ -172,6 +171,8 @@ if ($form->validate()) {
     $res = Database::query($sql);
     while ($user = Database::fetch_assoc($res)) {
         $userEntity = api_get_user_entity($user['UserId']);
+        // Read through Doctrine so encrypted phone values never appear in exports.
+        $user['PhoneNumber'] = $userEntity->getPhone();
         $user['LastName'] = $userEntity->getLastname();
         $user['FirstName'] = $userEntity->getFirstname();
         $user['UserName'] = $userEntity->getUsername();

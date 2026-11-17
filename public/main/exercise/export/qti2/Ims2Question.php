@@ -34,6 +34,7 @@ class Ims2Question extends Question
             case TF:
             case MCUA:
             case MCMA:
+            case MULTIPLE_ANSWER_COMBINATION:
                 $answer = new ImsAnswerMultipleChoice($questionId);
                 break;
 

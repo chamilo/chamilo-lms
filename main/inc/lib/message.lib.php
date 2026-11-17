@@ -449,9 +449,10 @@ class MessageManager
                         )."'".')) return false;" >&nbsp;&nbsp;&nbsp;&nbsp;'.
                         Display::returnFontAwesomeIcon('trash', 1).'</a>';
                 }
+                // Same filter as the API (MessageNormalizer): readers include student bosses and HR managers.
                 $html .= Display::panelCollapse(
-                    $localTime.' '.$senderInfo['complete_name'].' '.$message->getTitle().$deleteLink,
-                    $message->getContent().'<br />'.$date.'<br />'.get_lang(
+                    $localTime.' '.$senderInfo['complete_name'].' '.Security::remove_XSS($message->getTitle()).$deleteLink,
+                    Security::remove_XSS($message->getContent()).'<br />'.$date.'<br />'.get_lang(
                         'Author'
                     ).': '.$senderInfo['complete_name_with_message_link'],
                     $tag,

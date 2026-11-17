@@ -23,8 +23,10 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
     {
         // @todo getAnswersList() converts the answers using api_html_entity_decode()
         $this->answerList = $this->getAnswersList(true);
-        // Exact combination: any number of choices can be ticked (the QTI default is a single one).
-        $maxChoices = MULTIPLE_ANSWER_COMBINATION == $this->getQuestionType() ? ' maxChoices="0"' : '';
+        // Both multiple answer and exact combination allow selecting more than one option.
+        $maxChoices = \in_array((int) $this->getQuestionType(), [MCMA, MULTIPLE_ANSWER_COMBINATION], true)
+            ? ' maxChoices="0"'
+            : '';
         $out = '    <choiceInteraction responseIdentifier="'.$questionIdent.'"'.$maxChoices.' >'."\n";
         $out .= '      <prompt><![CDATA['.formatExerciseQtiText($questionStatment).']]></prompt>'."\n";
         if (is_array($this->answerList)) {

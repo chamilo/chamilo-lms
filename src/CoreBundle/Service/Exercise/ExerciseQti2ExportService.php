@@ -303,7 +303,11 @@ final readonly class ExerciseQti2ExportService
             return $this->exportMatchingInteraction($question, $questionIdent);
         }
 
-        $xml = '    <choiceInteraction responseIdentifier="'.$questionIdent.'"'.$interactionAttributes.' >'."\n";
+        // Multiple answer requires maxChoices=0; exact combination already supplies it.
+        $maxChoices = self::MULTIPLE_ANSWER === (int) $question->getType()
+            ? ' maxChoices="0"'
+            : $interactionAttributes;
+        $xml = '    <choiceInteraction responseIdentifier="'.$questionIdent.'"'.$maxChoices.' >'."\n";
         $xml .= '      <prompt><![CDATA['.$this->escapeCdata($this->formatText($question->getQuestion())).']]></prompt>'."\n";
         foreach ($this->getSortedAnswers($question) as $answer) {
             $answerId = (int) $answer->getIid();

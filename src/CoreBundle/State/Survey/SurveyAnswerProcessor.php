@@ -433,6 +433,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         if ('personality_order' === $type) {
             $count = \count($value);
             foreach (array_values($value) as $rank => $optionId) {
+                /** @psalm-suppress InvalidCast The value is validated as an array of integers in validatePersonalityAnswer before reaching this branch */
                 $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $optionId, $count - $rank, $request);
             }
         }

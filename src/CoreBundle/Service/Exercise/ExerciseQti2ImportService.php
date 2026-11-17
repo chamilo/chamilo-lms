@@ -43,6 +43,7 @@ final readonly class ExerciseQti2ImportService
     private const MATCHING = 4;
     private const FREE_ANSWER = 5;
     private const MULTIPLE_ANSWER_COMBINATION = 9;
+    private const MATCHING_DRAGGABLE = 19;
 
     /**
      * @var array<int, string>
@@ -54,6 +55,7 @@ final readonly class ExerciseQti2ImportService
         self::FILL_IN_BLANKS => 'Fill in blanks',
         self::MATCHING => 'Matching',
         self::MULTIPLE_ANSWER_COMBINATION => 'Exact combination',
+        self::MATCHING_DRAGGABLE => 'Matching draggable',
     ];
 
     public function __construct(
@@ -237,6 +239,7 @@ final readonly class ExerciseQti2ImportService
                         'title' => $node->getAttribute('title'),
                         'category' => $node->getAttribute('category'),
                         'type' => null,
+                        'matching_draggable' => Qti2MatchingTypeMarker::isDraggable($node->getAttribute('label')),
                         'subtype' => null,
                         'description' => null,
                         'response_text' => null,
@@ -334,8 +337,11 @@ final readonly class ExerciseQti2ImportService
 
                 case 'matchInteraction':
                     if ($this->hasCurrentQuestion($package, $currentQuestionIdent)) {
-                        // QTI does not tell Matching and Matching draggable apart, so both are imported as Matching.
-                        $package['questions'][$currentQuestionIdent]['type'] = self::MATCHING;
+                        // Restore type 19 only when the exporter included Chamilo's QTI item label.
+                        $package['questions'][$currentQuestionIdent]['type'] =
+                            !empty($package['questions'][$currentQuestionIdent]['matching_draggable'])
+                                ? self::MATCHING_DRAGGABLE
+                                : self::MATCHING;
                     }
 
                     break;
@@ -757,7 +763,7 @@ final readonly class ExerciseQti2ImportService
             }
 
             $matchingRows = null;
-            if (self::MATCHING === $questionType) {
+            if (\in_array($questionType, [self::MATCHING, self::MATCHING_DRAGGABLE], true)) {
                 $matchingRows = $this->buildMatchingAnswerRows($questionData);
                 if ([] === $matchingRows['items']) {
                     ++$skippedCount;

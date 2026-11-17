@@ -137,6 +137,84 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
         $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['localLinkId']));
     }
 
+    public function testCreatorCannotChangeVisibilityInAnotherCourseByRequestingItsContext(): void
+    {
+        $ctx = $this->bootstrapSharedDocumentScenario('ctxswitch');
+
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        // Any member of the other course, or any user if the course is open, may request its context.
+        $ctx['foreignCourse']->addUserAsStudent($ctx['teacher']);
+        $courseRepo->update($ctx['foreignCourse']);
+
+        $this->requestDocument($ctx, 'PUT', '', $ctx['foreignCourse'], [
+            'resourceLinkListFromEntity' => [
+                ['id' => $ctx['foreignLinkId'], 'visibility' => ResourceLink::VISIBILITY_PUBLISHED],
+            ],
+        ]);
+        $this->assertResponseStatusCodeSame(403);
+
+        $this->requestDocument($ctx, 'PATCH', '/toggle_visibility', $ctx['foreignCourse'], []);
+        $this->assertResponseStatusCodeSame(403);
+
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['foreignLinkId']));
+    }
+
+    public function testCreatorCannotMoveDocumentInAnotherCourseByRequestingItsContext(): void
+    {
+        $ctx = $this->bootstrapSharedDocumentScenario('mvswitch');
+        $childLinkIds = $this->createChildFolder($ctx, 'mvswitch', [
+            [$ctx['course'], ResourceLink::VISIBILITY_PUBLISHED],
+            [$ctx['foreignCourse'], ResourceLink::VISIBILITY_PUBLISHED],
+        ]);
+        $foreignChildLinkId = $childLinkIds[(int) $ctx['foreignCourse']->getId()];
+
+        $em = $this->getEntityManager();
+        // In the other course, the child sits in the shared folder.
+        $em->find(ResourceLink::class, $foreignChildLinkId)
+            ->setParent($em->find(ResourceLink::class, $ctx['foreignLinkId']))
+        ;
+        $em->flush();
+
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+        $ctx['foreignCourse']->addUserAsStudent($ctx['teacher']);
+        $courseRepo->update($ctx['foreignCourse']);
+
+        /** @var CDocumentRepository $documentRepo */
+        $documentRepo = self::getContainer()->get(CDocumentRepository::class);
+        $child = $documentRepo->findOneBy([
+            'resourceNode' => $em->find(ResourceLink::class, $foreignChildLinkId)->getResourceNode(),
+        ]);
+        $this->assertInstanceOf(CDocument::class, $child);
+        $childCtx = ['document' => $child] + $ctx;
+        $payload = ['parentResourceNodeId' => (int) $ctx['course']->getResourceNode()->getId()];
+
+        $this->requestDocument($childCtx, 'PUT', '', $ctx['foreignCourse'], $payload);
+        $this->assertResponseStatusCodeSame(403);
+
+        $em->clear();
+        $this->assertSame(
+            $ctx['foreignLinkId'],
+            $em->find(ResourceLink::class, $foreignChildLinkId)->getParent()?->getId(),
+        );
+
+        // The same teacher still moves it in the course that authorized the request.
+        $this->requestDocument($childCtx, 'PUT', '', $ctx['course'], $payload);
+        $this->assertResponseStatusCodeSame(200);
+    }
+
+    public function testTeacherCanToggleVisibilityOfDocumentInOwnCourse(): void
+    {
+        $ctx = $this->bootstrapSharedDocumentScenario('toggleown');
+
+        $this->requestDocument($ctx, 'PATCH', '/toggle_visibility', $ctx['course'], []);
+        $this->assertResponseStatusCodeSame(200);
+
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['localLinkId']));
+        $this->assertSame(ResourceLink::VISIBILITY_DRAFT, $this->getLinkVisibility($ctx['foreignLinkId']));
+    }
+
     public function testTeacherCanSaveDocumentSharedWithAnotherCourseWithoutChangingItsLink(): void
     {
         $ctx = $this->bootstrapSharedDocumentScenario('keep');
@@ -318,8 +396,8 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
     /**
      * Creates a folder inside the scenario's folder, with one link per given course.
      *
-     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument} $ctx
-     * @param array<int, array{0: Course, 1: int}>                                             $links
+     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument, ...} $ctx
+     * @param array<int, array{0: Course, 1: int}>                                                  $links
      *
      * @return array<int, int> link id by course id
      */
@@ -359,8 +437,8 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
     }
 
     /**
-     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument} $ctx
-     * @param array<string, mixed>                                                             $payload
+     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument, ...} $ctx
+     * @param array<string, mixed>                                                                  $payload
      */
     private function putDocument(array $ctx, array $payload): void
     {
@@ -368,6 +446,24 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
             'PUT',
             '/api/documents/'.$ctx['document']->getIid().'?cid='.$ctx['course']->getId().'&sid=0&gid=0',
             ['json' => $payload],
+        );
+    }
+
+    /**
+     * Sends a request on the scenario's document as its teacher, in the context of the given course.
+     *
+     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument, ...} $ctx
+     * @param array<string, mixed>                                                                  $payload
+     */
+    private function requestDocument(array $ctx, string $method, string $suffix, Course $course, array $payload): void
+    {
+        $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacher']))->request(
+            $method,
+            '/api/documents/'.$ctx['document']->getIid().$suffix.'?cid='.$course->getId().'&sid=0&gid=0',
+            [
+                'headers' => ['Content-Type' => 'PATCH' === $method ? 'application/merge-patch+json' : 'application/json'],
+                'json' => $payload,
+            ],
         );
     }
 

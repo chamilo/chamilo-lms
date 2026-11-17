@@ -844,6 +844,7 @@ class BaseResourceFileAction
      *
      * @param ResourceRepository<TResource>                    $repo
      * @param callable(array<int, array<string, mixed>>): void $assertLinksAllowed throws when the caller may not add or change these links
+     * @param (callable(): void)|null                          $assertMoveAllowed  throws when the caller may not move the resource
      */
     protected function handleUpdateRequest(
         AbstractResource $resource,
@@ -852,6 +853,7 @@ class BaseResourceFileAction
         EntityManager $em,
         callable $assertLinksAllowed,
         bool $keepParentInTree = true,
+        ?callable $assertMoveAllowed = null,
     ): AbstractResource {
         $contentData = $request->getContent();
         $resourceLinkList = [];
@@ -970,6 +972,10 @@ class BaseResourceFileAction
         }
 
         if ($parentResourceNodeId > 0) {
+            if (null !== $assertMoveAllowed) {
+                $assertMoveAllowed();
+            }
+
             $parentResourceNode = $em->getRepository(ResourceNode::class)->find($parentResourceNodeId);
 
             if ($parentResourceNode instanceof ResourceNode) {

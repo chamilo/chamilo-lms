@@ -25,7 +25,7 @@ $this_section = SECTION_TRACKING;
 $interbreadcrumb[] = [
     'url' => api_is_student_boss()
         ? '#'
-        : api_get_path(WEB_PATH).'reporting',
+        : '/reporting',
     'name' => get_lang('Reporting'),
 ];
 
@@ -416,7 +416,7 @@ $actionsLeft .= Display::url(
         32,
         get_lang('View my progress')
     ),
-    api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
+    '/reporting/my-progress'
 );
 // Main MySpace navigation icons.
 $actionsLeft .= Display::mySpaceMenu('certificate_report');

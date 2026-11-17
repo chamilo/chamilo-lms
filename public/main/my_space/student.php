@@ -275,7 +275,7 @@ $actionsLeft .= Display::url(
         32,
         get_lang('View my progress')
     ),
-    $webCodePath.'auth/my_progress.php'
+    '/reporting/my-progress'
 );
 
 // 1) Main MySpace navigation with "Learners" as the current section.
@@ -316,7 +316,7 @@ if (api_is_student_boss()) {
             32,
             get_lang('See list of learner certificates')
         ),
-        api_get_path(WEB_PATH).'reporting/certificates'
+        '/reporting/certificates'
     );
 }
 

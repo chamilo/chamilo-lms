@@ -21,5 +21,5 @@ $sections = [
 
 $display = (string) ($_GET['display'] ?? '');
 
-header('Location: '.api_get_path(WEB_PATH).'reporting/admin'.($sections[$display] ?? ''));
+header('Location: /reporting/admin'.($sections[$display] ?? ''));
 exit;

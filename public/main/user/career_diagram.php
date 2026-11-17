@@ -40,7 +40,7 @@ if (false === $allow) {
 }
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_CODE_PATH).'auth/my_progress.php',
+    'url' => '/reporting/my-progress',
     'name' => get_lang('Progress'),
 ];
 

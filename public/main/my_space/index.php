@@ -143,7 +143,7 @@ if (!empty($session_id) &&
             32,
             get_lang('View my progress')
         ),
-        api_get_path(WEB_CODE_PATH).'auth/my_progress.php'
+        '/reporting/my-progress'
     );
 
     // 1) Show main MySpace navigation.

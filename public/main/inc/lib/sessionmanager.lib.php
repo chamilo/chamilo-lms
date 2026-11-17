@@ -1569,7 +1569,7 @@ class SessionManager
             // Overall Total
             $overall_total = ($course_description_progress + $exercises_progress + $forums_progress + $assignments_progress + $wiki_progress + $surveys_progress) / 6;
 
-            $link = '<a href="'.api_get_path(WEB_PATH).'reporting/learners/'.(int) $user[0].'/courses/'.(int) $course['real_id'].'?'.http_build_query([
+            $link = '<a href="/reporting/learners/'.(int) $user[0].'/courses/'.(int) $course['real_id'].'?'.http_build_query([
                 'sid' => (int) $sessionId,
             ]).'"> %s </a>';
             $linkForum = '<a href="'.getForumToolUrl((int) $course['real_id'], (int) $sessionId).'"> %s </a>';

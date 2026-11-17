@@ -107,6 +107,9 @@ final class LegacyQti2ImportMatchingTest extends TestCase
         self::assertSame(3.0, buildMatchingAnswerRows($questions['QST_2'])[1]['weight']);
     }
 
+    /**
+     * @psalm-suppress InvalidPropertyAssignmentValue the anonymous class stands in for Ims2Question
+     */
     public function testLegacyExporterMarksOnlyDraggableMatching(): void
     {
         $item = (new ReflectionClass(ImsAssessmentItem::class))->newInstanceWithoutConstructor();
@@ -253,9 +256,9 @@ final class LegacyQti2ImportMatchingTest extends TestCase
     /**
      * Same structure as ImsAnswerMatching output.
      *
-     * @param array<string, string> $left
-     * @param array<string, string> $right
-     * @param array<string, int>    $pairs
+     * @param array<string, string>    $left
+     * @param array<string, string>    $right
+     * @param array<string, float|int> $pairs
      */
     private function buildMatchingItem(string $ident, string $title, array $left, array $right, array $pairs): string
     {

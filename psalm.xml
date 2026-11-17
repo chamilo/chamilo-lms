@@ -154,6 +154,8 @@
             <directory name="src/CoreBundle/Component/Editor"/>
             <directory name="src/CourseBundle/Component/CourseCopy"/>
             <directory name="src/LtiBundle"/>
+            <!-- Standalone script run in a subprocess; it redeclares real classes and functions on purpose as stubs. -->
+            <directory name="tests/CoreBundle/State/CourseDescription/Fixtures"/>
 
             <directory name="src/CoreBundle/Search/Xapian" />
 

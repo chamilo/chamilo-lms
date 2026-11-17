@@ -161,6 +161,40 @@
       </article>
     </section>
 
+    <section
+      v-if="isMyProgress && report.meta.careers?.length"
+      id="global-reporting-careers"
+      class="rounded-xl border border-gray-25 bg-white shadow-sm"
+    >
+      <header class="border-b border-gray-25 p-4">
+        <h2 class="text-lg font-semibold">{{ t("Careers") }}</h2>
+      </header>
+      <div class="overflow-x-auto p-4">
+        <BaseTable
+          :values="report.meta.careers"
+          :total-items="report.meta.careers.length"
+          data-key="id"
+        >
+          <Column
+            field="title"
+            :header="t('Career')"
+          />
+          <Column :header="t('Diagram')">
+            <template #body="{ data }">
+              <a
+                v-if="data.diagramUrl"
+                :href="data.diagramUrl"
+                class="text-primary hover:underline"
+              >
+                {{ t("Diagram") }}
+              </a>
+              <span v-else>{{ t("No data available") }}</span>
+            </template>
+          </Column>
+        </BaseTable>
+      </div>
+    </section>
+
     <section class="rounded-xl border border-gray-25 bg-white shadow-sm">
       <header
         v-if="!isListPage && !isMyProgress"

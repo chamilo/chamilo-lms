@@ -396,8 +396,8 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
     /**
      * Creates a folder inside the scenario's folder, with one link per given course.
      *
-     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument} $ctx
-     * @param array<int, array{0: Course, 1: int}>                                             $links
+     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument, ...} $ctx
+     * @param array<int, array{0: Course, 1: int}>                                                  $links
      *
      * @return array<int, int> link id by course id
      */
@@ -437,8 +437,8 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
     }
 
     /**
-     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument} $ctx
-     * @param array<string, mixed>                                                             $payload
+     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument, ...} $ctx
+     * @param array<string, mixed>                                                                  $payload
      */
     private function putDocument(array $ctx, array $payload): void
     {
@@ -452,8 +452,8 @@ final class ResourceLinkListContextApiTest extends AbstractApiTest
     /**
      * Sends a request on the scenario's document as its teacher, in the context of the given course.
      *
-     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument} $ctx
-     * @param array<string, mixed>                                                             $payload
+     * @param array{teacher: User, course: Course, foreignCourse: Course, document: CDocument, ...} $ctx
+     * @param array<string, mixed>                                                                  $payload
      */
     private function requestDocument(array $ctx, string $method, string $suffix, Course $course, array $payload): void
     {

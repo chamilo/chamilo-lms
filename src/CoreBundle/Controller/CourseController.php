@@ -1675,7 +1675,7 @@ class CourseController extends ToolBaseController
                         $effectiveLimit
                     );
                 } elseif ('role' === $limitSource) {
-                    $message = $translator->trans('Only trainers and administrators can create courses.');
+                    $message = $translator->trans('You do not have permission to create courses.');
                 } elseif ('setting' === $limitSource) {
                     $message = $translator->trans('Course creation by trainers is disabled on this platform.');
                 } else {

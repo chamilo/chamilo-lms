@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Questa competenza non pu\u00f2 essere acquisita",
     "Validated": "Convalidato",
     "Not validated": "Non convalidato",
-    "Not attempted": "Non affrontato"
+    "Not attempted": "Non affrontato",
+    "The session is read only": "La sessione \u00e8 di sola lettura"
 }

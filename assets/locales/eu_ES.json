@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Trebetasun hau ezin da lortu",
     "Validated": "Zuzendua",
     "Not validated": "Zuzendu gabe",
-    "Not attempted": "Saiatu gabe"
+    "Not attempted": "Saiatu gabe",
+    "The session is read only": "Irakurtzeko bakarrik da saioa"
 }

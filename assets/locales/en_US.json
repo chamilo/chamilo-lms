@@ -4812,5 +4812,6 @@
     "The selected ZIP file is invalid.": "The selected ZIP file is invalid.",
     "The selected ZIP file contains no non-empty files.": "The selected ZIP file contains no non-empty files.",
     "Not attempted": "Not attempted",
-    "Already attempted": "Already attempted"
+    "Already attempted": "Already attempted",
+    "The session is read only": "The session is read only"
 }

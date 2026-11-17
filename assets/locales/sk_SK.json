@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "T\u00fato zru\u010dnos\u0165 nie je mo\u017en\u00e9 z\u00edska\u0165",
     "Validated": "Overen\u00e9",
     "Not validated": "Neoveren\u00e9",
-    "Not attempted": "Bez pokusu"
+    "Not attempted": "Bez pokusu",
+    "The session is read only": "Stretnutie je iba na \u010d\u00edtanie"
 }

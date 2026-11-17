@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "N\u00ed f\u00e9idir an scil seo a fh\u00e1il",
     "Validated": "Bail\u00edochtaithe",
     "Not validated": "Gan bail\u00edocht\u00fa",
-    "Not attempted": "Gan iarracht"
+    "Not attempted": "Gan iarracht",
+    "The session is read only": "T\u00e1 an seisi\u00fan l\u00e9ite amh\u00e1in"
 }

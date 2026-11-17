@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Aquesta compet\u00e9ncia se p\u00f2t pas aquerir",
     "Validated": "Validat",
     "Not validated": "Pas validat",
-    "Not attempted": "Pas ensajatz"
+    "Not attempted": "Pas ensajatz",
+    "The session is read only": "La session es en lutz de lectura"
 }

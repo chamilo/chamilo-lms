@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Denne ferdigheita kan ikkje oppn\u00e5ast",
     "Validated": "Godkjent",
     "Not validated": "Ikkje godkjent",
-    "Not attempted": "Ikkje pr\u00f8vd"
+    "Not attempted": "Ikkje pr\u00f8vd",
+    "The session is read only": "\u00d8ktinga er skriveverna"
 }

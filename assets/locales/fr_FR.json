@@ -4687,5 +4687,6 @@
     "Badges": "Badges",
     "Export badges": "Exporter badges",
     "Not attempted": "Non tent\u00e9e",
-    "Already attempted": "D\u00e9j\u00e0 tent\u00e9"
+    "Already attempted": "D\u00e9j\u00e0 tent\u00e9",
+    "The session is read only": "La session est en mode de lecture seule"
 }

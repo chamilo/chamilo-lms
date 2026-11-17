@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "\u3053\u306e\u30b9\u30ad\u30eb\u306f\u7fd2\u5f97\u3067\u304d\u307e\u305b\u3093",
     "Validated": "\u78ba\u8a8d\u6e08\u307f",
     "Not validated": "\u672a\u78ba\u8a8d",
-    "Not attempted": "\u672a\u8a66\u884c"
+    "Not attempted": "\u672a\u8a66\u884c",
+    "The session is read only": "\u30bb\u30c3\u30b7\u30e7\u30f3\u306f\u8aad\u307f\u53d6\u308a\u5c02\u7528\u3067\u3059"
 }

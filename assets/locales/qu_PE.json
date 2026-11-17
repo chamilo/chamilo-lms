@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Kay yachayta mana chaskiyta atikunchu",
     "Validated": "Kanchisqan",
     "Not validated": "Mana kanchisqan",
-    "Not attempted": "Mana mallichisqa"
+    "Not attempted": "Mana mallichisqa",
+    "The session is read only": "Sesion qhawarinaq"
 }

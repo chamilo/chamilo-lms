@@ -4810,5 +4810,7 @@
     "The selected file is empty.": "The selected file is empty.",
     "ZIP uploads are unavailable on this server.": "ZIP uploads are unavailable on this server.",
     "The selected ZIP file is invalid.": "The selected ZIP file is invalid.",
-    "The selected ZIP file contains no non-empty files.": "The selected ZIP file contains no non-empty files."
+    "The selected ZIP file contains no non-empty files.": "The selected ZIP file contains no non-empty files.",
+    "Not attempted": "Not attempted",
+    "Already attempted": "Already attempted"
 }

@@ -4616,5 +4616,6 @@
     "Disable new test attempts": "Nonaktifkan upaya tes baru",
     "This skill cannot be acquired": "Keterampilan ini tidak dapat diperoleh",
     "Validated": "Tervalidasi",
-    "Not validated": "Belum divalidasi"
+    "Not validated": "Belum divalidasi",
+    "Not attempted": "Belum diupayakan"
 }

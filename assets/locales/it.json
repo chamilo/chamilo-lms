@@ -4616,5 +4616,6 @@
     "Disable new test attempts": "Disabilita nuovi tentativi test",
     "This skill cannot be acquired": "Questa competenza non pu\u00f2 essere acquisita",
     "Validated": "Convalidato",
-    "Not validated": "Non convalidato"
+    "Not validated": "Non convalidato",
+    "Not attempted": "Non affrontato"
 }

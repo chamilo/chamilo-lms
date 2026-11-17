@@ -960,6 +960,10 @@ function studentStatusLabel(exercise) {
     return t("Not attempted")
   }
 
+  if (latestAttempt.scoreHidden) {
+    return t("Already attempted")
+  }
+
   return `${t("Latest attempt")} : ${formatScore(latestAttempt.percentage)} % (${formatScore(latestAttempt.score)} / ${formatScore(latestAttempt.maxScore)})`
 }
 

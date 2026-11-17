@@ -3,6 +3,7 @@
 {% block content %}
     <h1>{{ 'Permissions Management'|trans }}</h1>
     <form method="post">
+        <input type="hidden" name="_token" value="{{ csrf_token('manage_role_permissions') }}">
         <button type="submit" class="save-button btn btn--primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer mt-4 mb-4">{{ 'Save permissions'|trans }}</button>
         <div style="overflow-x: auto;">
             <table class="permissions-table">

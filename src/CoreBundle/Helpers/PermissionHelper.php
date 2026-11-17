@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\PermissionRelRoleRepository;
 use Chamilo\CoreBundle\Repository\RoleRepository;
 
@@ -15,6 +16,23 @@ class PermissionHelper
         private PermissionRelRoleRepository $permissionRelRoleRepository,
         private RoleRepository $roleRepository
     ) {}
+
+    /**
+     * Evaluate explicitly assigned platform roles, without inheriting Symfony's role hierarchy.
+     * An HR manager must not receive a teacher's permissions merely because ROLE_HR
+     * inherits ROLE_TEACHER for other purposes.
+     */
+    public function hasPermissionForUser(string $permissionSlug, User $user): bool
+    {
+        $roles = [];
+        foreach ($user->getRoles() as $role) {
+            if (str_starts_with($role, 'ROLE_') && !str_starts_with($role, 'ROLE_CURRENT_')) {
+                $roles[] = substr($role, 5);
+            }
+        }
+
+        return [] !== $roles && $this->hasPermission($permissionSlug, $roles);
+    }
 
     /**
      * Returns the list of role codes currently stored in the 'role' table,

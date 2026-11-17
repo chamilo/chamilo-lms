@@ -16,8 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Input for POST /api/enrollment-notifications — a standalone action, not tied to
  * any Doctrine entity, that explicitly triggers EnrollmentNotificationService.
- * ROLE_ADMIN-only, same as every other endpoint the WordPress storefront plugin's
- * service account uses. output: false — the response carries no body; the HTTP
+ * ROLE_ADMIN or a scoped ROLE_SESSION_MANAGER may invoke it. output: false — the HTTP
  * status code alone (200 success, 4xx on a bad/unenrolled combination) is all a
  * caller needs.
  */
@@ -26,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(
             uriTemplate: '/enrollment-notifications',
             controller: NotifyEnrollmentAction::class,
-            security: "is_granted('ROLE_ADMIN')",
+            security: "is_granted('ROLE_ADMIN') or is_granted('ROLE_SESSION_MANAGER')",
             output: false,
             name: 'notify_enrollment',
         ),

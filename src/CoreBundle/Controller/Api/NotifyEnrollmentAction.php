@@ -13,9 +13,12 @@ use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\SessionManagerApiScope;
 use Chamilo\CoreBundle\Service\Enrollment\EnrollmentNotificationService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Attribute\AsController;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -33,6 +36,8 @@ readonly class NotifyEnrollmentAction
         private ValidatorInterface $validator,
         private EntityManagerInterface $em,
         private EnrollmentNotificationService $enrollmentNotificationService,
+        private Security $security,
+        private SessionManagerApiScope $scope,
     ) {}
 
     public function __invoke(EnrollmentNotificationInput $data): void
@@ -49,6 +54,8 @@ readonly class NotifyEnrollmentAction
             if (!$session instanceof Session) {
                 throw new NotFoundHttpException('Session not found.');
             }
+
+            $this->assertCanNotify($session);
 
             $enrolled = null !== $this->em->getRepository(SessionRelUser::class)->findOneBy([
                 'user' => $user,
@@ -68,6 +75,8 @@ readonly class NotifyEnrollmentAction
             throw new NotFoundHttpException('Course not found.');
         }
 
+        $this->assertCanNotify($course);
+
         $enrolled = null !== $this->em->getRepository(CourseRelUser::class)->findOneBy([
             'user' => $user,
             'course' => $course,
@@ -77,5 +86,22 @@ readonly class NotifyEnrollmentAction
         }
 
         $this->enrollmentNotificationService->notifyEnrollment($user, 'course', (string) $course->getTitle());
+    }
+
+    private function assertCanNotify(Course|Session $target): void
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return;
+        }
+
+        $actor = $this->security->getUser();
+        if (!$this->security->isGranted('ROLE_SESSION_MANAGER')
+            || !$actor instanceof User
+            || !($target instanceof Course
+                ? $this->scope->canReadCourse($actor, $target)
+                : $this->scope->canReadSession($actor, $target))
+        ) {
+            throw new AccessDeniedHttpException('Not authorized to notify enrollment for this resource.');
+        }
     }
 }

@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\ExerciseScoreVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
@@ -52,6 +53,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
         private GradebookLinkManager $gradebookLinkManager,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
         private UserHelper $userHelper,
+        private ExerciseScoreVisibilityHelper $exerciseScoreVisibilityHelper,
     ) {}
 
     /**
@@ -186,6 +188,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
         $attemptCounts = $this->getAttemptCounts($quizIds, $course, $session);
         $learningPathUsage = $this->getLearningPathUsage($quizIds);
         $latestAttempts = $canManage ? [] : $this->getLatestAttempts($quizIds, $course, $session);
+        $finishedAttemptCounts = $canManage ? [] : $this->getCurrentUserFinishedAttemptCounts($quizIds, $course, $session);
         $forceEditLearningPathExercises = $this->isSettingEnabled('lp.force_edit_exercise_in_lp');
         $items = [];
 
@@ -205,6 +208,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
                 $course,
                 $session,
                 $latestAttempts[$quizId] ?? null,
+                $finishedAttemptCounts[$quizId] ?? 0,
                 $isLinkedToLearningPath,
                 $forceEditLearningPathExercises,
                 (int) ($learningPathUsage[$quizId]['count'] ?? 0),
@@ -320,6 +324,58 @@ final readonly class ExerciseListProvider implements ProviderInterface
         $rows = $queryBuilder->getQuery()->getArrayResult();
         $counts = [];
         foreach ($rows as $row) {
+            $counts[(int) $row['quizId']] = (int) $row['attemptCount'];
+        }
+
+        return $counts;
+    }
+
+    /**
+     * Finished attempts of the current user made from the exercise tool, counted as the exercise
+     * page counts them.
+     *
+     * @param array<int, int> $quizIds
+     *
+     * @return array<int, int>
+     */
+    private function getCurrentUserFinishedAttemptCounts(array $quizIds, Course $course, ?Session $session): array
+    {
+        if ([] === $quizIds) {
+            return [];
+        }
+
+        $user = $this->security->getUser();
+        if (!$user instanceof User || null === $user->getId()) {
+            return [];
+        }
+
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('IDENTITY(attempt.quiz) AS quizId')
+            ->addSelect('COUNT(attempt.exeId) AS attemptCount')
+            ->from(TrackEExercise::class, 'attempt')
+            ->andWhere('IDENTITY(attempt.quiz) IN (:quizIds)')
+            ->andWhere('IDENTITY(attempt.course) = :courseId')
+            ->andWhere('IDENTITY(attempt.user) = :userId')
+            ->andWhere("(attempt.status = '' OR attempt.status = 'completed')")
+            ->andWhere('attempt.origLpId = 0')
+            ->andWhere('attempt.origLpItemId = 0')
+            ->setParameter('quizIds', $quizIds, ArrayParameterType::INTEGER)
+            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
+            ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
+            ->groupBy('attempt.quiz')
+        ;
+
+        if (null !== $session) {
+            $queryBuilder
+                ->andWhere('IDENTITY(attempt.session) = :sessionId')
+                ->setParameter('sessionId', (int) $session->getId(), Types::INTEGER)
+            ;
+        } else {
+            $queryBuilder->andWhere('attempt.session IS NULL');
+        }
+
+        $counts = [];
+        foreach ($queryBuilder->getQuery()->getArrayResult() as $row) {
             $counts[(int) $row['quizId']] = (int) $row['attemptCount'];
         }
 
@@ -449,6 +505,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
         Course $course,
         ?Session $session,
         ?TrackEExercise $latestAttempt = null,
+        int $finishedAttemptCount = 0,
         bool $isLinkedToLearningPath = false,
         bool $forceEditLearningPathExercises = false,
         int $learningPathUsageCount = 0,
@@ -478,7 +535,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
             'passPercentage' => $quiz->getPassPercentage(),
             'questionCount' => $questionCount,
             'attemptCount' => $attemptCount,
-            'latestAttempt' => $this->normalizeLatestAttempt($latestAttempt),
+            'latestAttempt' => $this->normalizeLatestAttempt($latestAttempt, $quiz, $finishedAttemptCount),
             'isLinkedToLearningPath' => $isLinkedToLearningPath,
             'isReadOnlyFromLearningPath' => $isReadOnlyFromLearningPath,
             'learningPathUsageCount' => $learningPathUsageCount,
@@ -506,10 +563,20 @@ final readonly class ExerciseListProvider implements ProviderInterface
     /**
      * @return array<string, mixed>|null
      */
-    private function normalizeLatestAttempt(?TrackEExercise $attempt): ?array
+    private function normalizeLatestAttempt(?TrackEExercise $attempt, CQuiz $quiz, int $finishedAttemptCount): ?array
     {
         if (null === $attempt) {
             return null;
+        }
+
+        // Same rule as the exercise page: a score its results mode hides must not reach the list, not even the API
+        if (!$this->exerciseScoreVisibilityHelper->isScoreVisible($quiz, $finishedAttemptCount)) {
+            return [
+                'id' => $attempt->getExeId(),
+                'scoreHidden' => true,
+                'date' => $this->formatDate($attempt->getExeDate()),
+                'status' => $attempt->getStatus(),
+            ];
         }
 
         $maxScore = $attempt->getMaxScore();
@@ -522,6 +589,7 @@ final readonly class ExerciseListProvider implements ProviderInterface
 
         return [
             'id' => $attempt->getExeId(),
+            'scoreHidden' => false,
             'score' => $score,
             'maxScore' => $maxScore,
             'percentage' => $percentage,

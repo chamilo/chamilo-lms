@@ -4616,5 +4616,6 @@
     "Disable new test attempts": "Poista k\u00e4yt\u00f6st\u00e4 uudet testiyritykset",
     "This skill cannot be acquired": "T\u00e4t\u00e4 taitoa ei voi hankkia",
     "Validated": "Vahvistettu",
-    "Not validated": "Ei vahvistettu"
+    "Not validated": "Ei vahvistettu",
+    "Not attempted": "Aloittamatta"
 }

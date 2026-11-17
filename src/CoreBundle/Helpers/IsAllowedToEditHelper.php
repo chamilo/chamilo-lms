@@ -32,6 +32,7 @@ readonly class IsAllowedToEditHelper
         private StudentViewHelper $studentViewHelper,
         private UserHelper $userHelper,
         private ExtraFieldValuesRepository $extraFieldValuesRepository,
+        private PermissionHelper $permissionHelper,
     ) {}
 
     /**
@@ -128,15 +129,13 @@ readonly class IsAllowedToEditHelper
             return false;
         }
 
-        // Literal role checks on purpose: isGranted() would let the hierarchy in, and
-        // ROLE_HR implies ROLE_TEACHER, which would hand HR managers course creation the
-        // moment allow_users_to_create_courses is turned on. Whether that is desirable is a
-        // separate decision from this helper's editing rules.
+        // Check literal teacher/admin roles or explicit grants, not the Symfony
+        // role hierarchy (which lets ROLE_HR inherit ROLE_TEACHER).
         if ($user->isAdmin()) {
             return true;
         }
 
-        if ($user->isTeacher()) {
+        if ($user->isTeacher() || $this->permissionHelper->hasPermissionForUser('course:create', $user)) {
             return 'true' === $this->settingsManager->getSetting('workflows.allow_users_to_create_courses', true);
         }
 

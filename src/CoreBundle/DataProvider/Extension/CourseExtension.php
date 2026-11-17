@@ -30,7 +30,7 @@ final class CourseExtension implements QueryCollectionExtensionInterface
         ?Operation $operation = null,
         array $context = []
     ): void {
-        $this->addWhere($queryBuilder, $resourceClass);
+        $this->addWhere($queryBuilder, $resourceClass, $operation);
     }
 
     /*public function applyToItem(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, array $identifiers, string $operationName = null, array $context = []): void
@@ -39,13 +39,16 @@ final class CourseExtension implements QueryCollectionExtensionInterface
         $this->addWhere($queryBuilder, $resourceClass);
     }*/
 
-    private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
+    private function addWhere(QueryBuilder $queryBuilder, string $resourceClass, ?Operation $operation): void
     {
         if (Course::class !== $resourceClass) {
             return;
         }
 
-        if ($this->security->isGranted('ROLE_ADMIN')) {
+        if ($this->security->isGranted('ROLE_ADMIN')
+            || ($this->security->isGranted('ROLE_SESSION_MANAGER')
+                && true === ($operation?->getExtraProperties()['sessionManagerScoped'] ?? false))
+        ) {
             return;
         }
 

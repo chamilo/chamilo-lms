@@ -4616,5 +4616,6 @@
     "Disable new test attempts": "Yeni test denemelerini devre d\u0131\u015f\u0131 b\u0131rak",
     "This skill cannot be acquired": "Bu beceri kazan\u0131lamaz",
     "Validated": "Onayland\u0131",
-    "Not validated": "Onaylanmad\u0131"
+    "Not validated": "Onaylanmad\u0131",
+    "Not attempted": "\u00c7al\u0131\u015fmad\u0131"
 }

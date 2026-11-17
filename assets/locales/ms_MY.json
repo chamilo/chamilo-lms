@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Kemahiran ini tidak boleh diperoleh",
     "Validated": "Disahkan",
     "Not validated": "Belum disahkan",
-    "Not attempted": "Belum dicuba"
+    "Not attempted": "Belum dicuba",
+    "The session is read only": "Sesi ini hanya boleh dibaca"
 }

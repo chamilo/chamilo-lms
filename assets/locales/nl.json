@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Deze vaardigheid kan niet worden verworven",
     "Validated": "Nagezien",
     "Not validated": "Niet nagezien",
-    "Not attempted": "Niet geprobeerd"
+    "Not attempted": "Niet geprobeerd",
+    "The session is read only": "De sessie is 'alleen-lezen'"
 }

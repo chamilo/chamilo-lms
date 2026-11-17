@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Ujuzi huu hauwezi kupatikana",
     "Validated": "Imethibitishwa",
     "Not validated": "Haijathibitishwa",
-    "Not attempted": "Haijajaribiwa"
+    "Not attempted": "Haijajaribiwa",
+    "The session is read only": "Mkutano ni wa kusoma tu"
 }

@@ -24,6 +24,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseHotspotGeometryHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
+use Chamilo\CoreBundle\Helpers\SessionVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptLogService;
@@ -95,6 +96,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         private ResourceNodeRepository $resourceNodeRepository,
         private UserHelper $userHelper,
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
+        private SessionVisibilityHelper $sessionVisibilityHelper,
         private ExerciseHotspotGeometryHelper $exerciseHotspotGeometryHelper,
         private ExerciseAttemptLogService $attemptLogService,
     ) {}
@@ -603,6 +605,14 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
 
             if (null !== $quiz->getEndTime() && $quiz->getEndTime() < $now) {
                 throw new AccessDeniedHttpException('The requested exercise is closed.');
+            }
+
+            // A finished session left in read only mode lets learners see their tests, not take them
+            $user = $this->userHelper->getCurrent();
+            if (null !== $session && null !== $user
+                && Session::READ_ONLY === $this->sessionVisibilityHelper->getSessionVisibility($session, $user)
+            ) {
+                throw new AccessDeniedHttpException('The session is read only');
             }
         }
 

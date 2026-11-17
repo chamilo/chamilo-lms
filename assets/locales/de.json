@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Diese Kompetenz kann nicht erworben werden",
     "Validated": "Best\u00e4tigt",
     "Not validated": "Nicht best\u00e4tigt",
-    "Not attempted": "Nicht versucht"
+    "Not attempted": "Nicht versucht",
+    "The session is read only": "Sitzung  / Kurs-Session ist nur lesend"
 }

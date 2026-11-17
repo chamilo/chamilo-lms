@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "\u0108i tiu kapablo ne povas esti akirita",
     "Validated": "Validita",
     "Not validated": "Ne validita",
-    "Not attempted": "Ne provita"
+    "Not attempted": "Ne provita",
+    "The session is read only": "La seanco estas nur legebla"
 }

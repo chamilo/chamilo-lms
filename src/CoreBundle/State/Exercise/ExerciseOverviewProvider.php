@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseScoreVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\SessionVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -68,6 +69,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         private UserHelper $userHelper,
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
         private ExerciseScoreVisibilityHelper $exerciseScoreVisibilityHelper,
+        private SessionVisibilityHelper $sessionVisibilityHelper,
         private CQuizRepository $quizRepository,
         private ReportIpVisibility $reportIpVisibility,
     ) {}
@@ -127,7 +129,11 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
 
         $availabilityStatus = $this->getAvailabilityStatus($quiz->getStartTime(), $quiz->getEndTime());
         $canOpen = $canManage || ($effectiveVisible && 'open' === $availabilityStatus);
-        $canStart = $canOpen && !$attemptLimitReached && (!$newAttemptsDisabled || $hasIncompleteAttempt || $canManage);
+        // A finished session left in read only mode lets learners see their tests, not take them
+        $sessionReadOnly = !$canManage
+            && null !== $session
+            && Session::READ_ONLY === $this->sessionVisibilityHelper->getSessionVisibility($session, $user);
+        $canStart = $canOpen && !$sessionReadOnly && !$attemptLimitReached && (!$newAttemptsDisabled || $hasIncompleteAttempt || $canManage);
 
         $overview = new ExerciseOverview();
         $overview->exerciseId = (int) $quiz->getIid();
@@ -164,7 +170,9 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         // As in 1.11, only an unfinished attempt is proceeded with; after finished ones, a new one starts
         $overview->startButtonLabel = $hasIncompleteAttempt ? 'Proceed with the test' : 'Start test';
         $overview->browserCheckEnabled = $this->isSettingEnabled('exercise.quiz_check_button_enable');
-        $overview->notice = $this->getOverviewNotice($currentUserAttemptCount, $newAttemptsDisabled, $hasIncompleteAttempt, $canManage);
+        $overview->notice = $sessionReadOnly
+            ? 'The session is read only'
+            : $this->getOverviewNotice($currentUserAttemptCount, $newAttemptsDisabled, $hasIncompleteAttempt, $canManage);
 
         return $overview;
     }

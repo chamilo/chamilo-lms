@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Henda f\u00f8rleiki kann ikki vinnast",
     "Validated": "Go\u00f0koytt",
     "Not validated": "Ikki v\u00e1tta\u00f0",
-    "Not attempted": "Ikki roynd"
+    "Not attempted": "Ikki roynd",
+    "The session is read only": "Se\u00f0an er einans at lesa"
 }

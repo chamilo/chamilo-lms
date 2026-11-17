@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Denne f\u00e6rdighed kan ikke erhverves",
     "Validated": "Valideret",
     "Not validated": "Ikke valideret",
-    "Not attempted": "Ikke fors\u00f8gt"
+    "Not attempted": "Ikke fors\u00f8gt",
+    "The session is read only": "Sessionen er kun til l\u00e6sning"
 }

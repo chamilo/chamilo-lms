@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Tej umiej\u0119tno\u015bci nie mo\u017cna naby\u0107",
     "Validated": "Zatwierdzone",
     "Not validated": "Nie zatwierdzone",
-    "Not attempted": "Nie pr\u00f3bowano"
+    "Not attempted": "Nie pr\u00f3bowano",
+    "The session is read only": "Sesja tylko do odczytu"
 }

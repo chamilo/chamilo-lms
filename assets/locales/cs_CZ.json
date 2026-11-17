@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Tuto dovednost nelze z\u00edskat",
     "Validated": "Ov\u011b\u0159eno",
     "Not validated": "Neov\u011b\u0159eno",
-    "Not attempted": "Nezkou\u0161eno"
+    "Not attempted": "Nezkou\u0161eno",
+    "The session is read only": "Relace je pouze pro \u010dten\u00ed"
 }

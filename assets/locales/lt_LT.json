@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "\u0160io geb\u0117jimo negalima \u012fgyti",
     "Validated": "Patvirtinta",
     "Not validated": "Nepatvirtinta",
-    "Not attempted": "Neprad\u0117tas"
+    "Not attempted": "Neprad\u0117tas",
+    "The session is read only": "Sesija yra tik skaitymui"
 }

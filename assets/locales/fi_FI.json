@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "T\u00e4t\u00e4 taitoa ei voi hankkia",
     "Validated": "Vahvistettu",
     "Not validated": "Ei vahvistettu",
-    "Not attempted": "Aloittamatta"
+    "Not attempted": "Aloittamatta",
+    "The session is read only": "Istunto on vain luku-tila"
 }

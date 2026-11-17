@@ -4617,5 +4617,6 @@
     "This skill cannot be acquired": "Xirfaddan lama heli karo",
     "Validated": "La xaqiijiyay",
     "Not validated": "Ma xaqiijin",
-    "Not attempted": "Ma la isku dayin"
+    "Not attempted": "Ma la isku dayin",
+    "The session is read only": "Fadhigu waa akhri-kiray"
 }

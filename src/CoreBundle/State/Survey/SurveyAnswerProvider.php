@@ -25,6 +25,7 @@ use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use DateTime;
 use DateTimeInterface;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -80,6 +81,8 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
     /**
      * @param array<string, mixed> $uriVariables
      * @param array<string, mixed> $context
+     *
+     * @throws Exception
      */
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): SurveyAnswer
     {
@@ -94,17 +97,19 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         }
 
         $survey = $this->getSurvey($surveyId);
-        $course = $this->getCourse($operation, $request, $survey);
-        $session = $this->getSession($operation, $request);
+        $course = $this->getCourse($request, $survey);
+        $session = $this->getSession($request);
         $survey = $this->getSurveyFromCurrentContext($surveyId, $course, $session);
         $this->assertPersonalitySurveySupported($survey);
         $preview = $request->query->getBoolean('preview');
 
-        return $this->buildResponse($operation, $survey, $course, $session, $preview, $request);
+        return $this->buildResponse($survey, $course, $session, $preview, $request);
     }
 
+    /**
+     * @throws Exception
+     */
     public function buildResponse(
-        Operation $operation,
         CSurvey $survey,
         Course $course,
         ?Session $session,
@@ -139,11 +144,11 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
 
         if (null !== $invitation) {
             $response->invitationCode = $invitation->getInvitationCode();
-            $response->isAnswered = 1 === (int) $invitation->getAnswered();
+            $response->isAnswered = 1 === $invitation->getAnswered();
             $response->canSubmit = !$response->isAnswered || $this->isSettingEnabled('survey.survey_allow_answered_question_edit');
             $answerUserKey = $this->getAnswerUserKey($survey, $user, $request);
-            $response->answers = $this->getExistingAnswers($operation, $survey, $answerUserKey, $request);
-            if (1 === $survey->getSurveyType() && (1 === (int) $invitation->getAnswered() || $isFinished)) {
+            $response->answers = $this->getExistingAnswers($survey, $answerUserKey, $request);
+            if (1 === $survey->getSurveyType() && (1 === $invitation->getAnswered() || $isFinished)) {
                 $response->personalityProfile = $this->personalityManager->profile(
                     $survey,
                     $answerUserKey,
@@ -172,7 +177,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         return $survey;
     }
 
-    public function getCourse(Operation $operation, Request $request, ?CSurvey $survey = null): Course
+    public function getCourse(Request $request, ?CSurvey $survey = null): Course
     {
         $courseId = (int) $this->cidReqHelper->getCourseId();
         if ($courseId <= 0) {
@@ -189,7 +194,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         return $this->cidReqHelper->requireDoctrineCourseEntity();
     }
 
-    public function getSession(Operation $operation, Request $request): ?Session
+    public function getSession(Request $request): ?Session
     {
         $sessionId = (int) $this->cidReqHelper->getSessionId();
         if ($sessionId <= 0) {
@@ -236,11 +241,14 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         throw new AccessDeniedHttpException('The requested survey does not belong to the current course context.');
     }
 
+    /**
+     * @throws Exception
+     */
     public function getInvitation(CSurvey $survey, Course $course, ?Session $session, ?User $user, Request $request): CSurveyInvitation
     {
         $invitationCode = $this->getInvitationCode($request);
         if ('auto' === $invitationCode) {
-            if ('1' === (string) $survey->getAnonymous() && !$user instanceof User) {
+            if ('1' === $survey->getAnonymous() && !$user instanceof User) {
                 return $this->getOrCreateAnonymousAutoInvitation($survey, $course, $session, $request);
             }
 
@@ -250,7 +258,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
 
             // The auto code mints an invitation on the spot. Outside the anonymous link, which
             // exists to be shared, only members of the course context may obtain one.
-            if ('1' !== (string) $survey->getAnonymous() && !$this->userHelper->isMemberOfCurrentCourse()) {
+            if ('1' !== $survey->getAnonymous() && !$this->userHelper->isMemberOfCurrentCourse()) {
                 throw new AccessDeniedHttpException('You are not allowed to answer this survey.');
             }
 
@@ -275,7 +283,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             ;
         }
 
-        if ('1' !== (string) $survey->getAnonymous()) {
+        if ('1' !== $survey->getAnonymous()) {
             if (!$user instanceof User) {
                 throw new AccessDeniedHttpException('A valid user is required.');
             }
@@ -312,7 +320,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
 
     public function getAnswerUserKey(CSurvey $survey, ?User $user, Request $request): string
     {
-        if ('1' !== (string) $survey->getAnonymous()) {
+        if ('1' !== $survey->getAnonymous()) {
             if (!$user instanceof User) {
                 throw new AccessDeniedHttpException('A valid user is required.');
             }
@@ -396,8 +404,8 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
                 'sort' => $question->getSort(),
                 'maxValue' => $question->getMaxValue(),
                 'isRequired' => $this->isRequiredQuestionType($type) && $question->isMandatory(),
-                'parentQuestionId' => null !== $question->getParent() ? (int) $question->getParent()->getIid() : 0,
-                'parentOptionId' => null !== $question->getParentOption() ? (int) $question->getParentOption()->getIid() : 0,
+                'parentQuestionId' => (int) $question->getParent()?->getIid(),
+                'parentOptionId' => (int) $question->getParentOption()?->getIid(),
                 'options' => $this->normalizeOptions($question),
                 'isSupported' => \in_array($type, self::SUPPORTED_TYPES, true),
             ];
@@ -478,7 +486,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             'code' => (string) $survey->getCode(),
             'intro' => (string) $survey->getIntro(),
             'thanks' => (string) $survey->getSurveythanks(),
-            'anonymous' => '1' === (string) $survey->getAnonymous(),
+            'anonymous' => '1' === $survey->getAnonymous(),
             'oneQuestionPerPage' => $survey->getOneQuestionPerPage(),
             'shuffle' => $survey->getShuffle(),
             'displayQuestionNumber' => $survey->isDisplayQuestionNumber(),
@@ -509,7 +517,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
     /**
      * @return array<string, mixed>
      */
-    private function getExistingAnswers(Operation $operation, CSurvey $survey, string $answerUserKey, Request $request): array
+    private function getExistingAnswers(CSurvey $survey, string $answerUserKey, Request $request): array
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('answer')
@@ -592,6 +600,9 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         return trim((string) ($request->query->get('invitationCode') ?? $request->query->get('invitationcode') ?? ''));
     }
 
+    /**
+     * @throws Exception
+     */
     private function getOrCreateAnonymousAutoInvitation(CSurvey $survey, Course $course, ?Session $session, Request $request): CSurveyInvitation
     {
         $sessionStorage = $request->getSession();
@@ -599,7 +610,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         $code = (string) $sessionStorage->get($sessionKey, '');
 
         if ('' === $code) {
-            $code = 'auto-ANONY_'.sha1(uniqid('', true)).'-'.(string) $survey->getCode();
+            $code = 'auto-ANONY_'.sha1(uniqid('', true)).'-'.$survey->getCode();
             $sessionStorage->set($sessionKey, $code);
         }
 
@@ -623,9 +634,12 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         }
     }
 
+    /**
+     * @throws Exception
+     */
     private function getOrCreateAutoInvitation(CSurvey $survey, Course $course, ?Session $session, User $user): CSurveyInvitation
     {
-        $code = 'auto-'.(int) $user->getId().'-'.(string) $survey->getCode();
+        $code = 'auto-'.(int) $user->getId().'-'.$survey->getCode();
         $request = $this->requestStack->getCurrentRequest();
         if (null === $request) {
             throw new BadRequestHttpException('The current request is required.');

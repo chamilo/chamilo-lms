@@ -19,6 +19,7 @@ use Chamilo\CourseBundle\Entity\CSurveyAnswer as CSurveyAnswerEntity;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 use DateTime;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,6 +47,8 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
     /**
      * @param array<string, mixed> $uriVariables
      * @param array<string, mixed> $context
+     *
+     * @throws Exception
      */
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): SurveyAnswer
     {
@@ -62,8 +65,8 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         $payload = $this->getPayload($request, $data);
 
         $survey = $this->surveyAnswerProvider->getSurvey($surveyId);
-        $course = $this->surveyAnswerProvider->getCourse($operation, $request, $survey);
-        $session = $this->surveyAnswerProvider->getSession($operation, $request);
+        $course = $this->surveyAnswerProvider->getCourse($request, $survey);
+        $session = $this->surveyAnswerProvider->getSession($request);
         $user = $this->surveyAnswerProvider->getCurrentUserOrNull();
         $survey = $this->surveyAnswerProvider->getSurveyFromCurrentContext($surveyId, $course, $session);
         $this->assertPersonalitySurveySupported($survey);
@@ -73,7 +76,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             throw new BadRequestHttpException('Meeting poll answers must be submitted from the meeting view.');
         }
 
-        if (1 === (int) $invitation->getAnswered() && !$this->isAnsweredQuestionEditAllowed()) {
+        if (1 === $invitation->getAnswered() && !$this->isAnsweredQuestionEditAllowed()) {
             throw new AccessDeniedHttpException('You already filled this survey.');
         }
 
@@ -88,17 +91,17 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             $this->applySurveyProfileValues($survey, $user, $profileValues);
         }
         $answerUserKey = $this->surveyAnswerProvider->getAnswerUserKey($survey, $user, $request);
-        $this->removeExistingAnswers($operation, $survey, $answerUserKey, $request);
+        $this->removeExistingAnswers($survey, $answerUserKey, $request);
 
         foreach ($questions as $question) {
             if (!$this->isQuestionVisible($question, $answers)) {
                 continue;
             }
 
-            $this->saveQuestionAnswer($operation, $survey, $question, $answerUserKey, $answers, $otherAnswers, $request);
+            $this->saveQuestionAnswer($survey, $question, $answerUserKey, $answers, $otherAnswers, $request);
         }
 
-        $wasAnswered = 1 === (int) $invitation->getAnswered();
+        $wasAnswered = 1 === $invitation->getAnswered();
         $invitation
             ->setAnswered(1)
             ->setAnsweredAt(new DateTime())
@@ -117,7 +120,6 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         );
 
         return $this->surveyAnswerProvider->buildResponse(
-            $operation,
             $survey,
             $course,
             $session,
@@ -231,7 +233,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         return $expectedOptionId === (int) $parentAnswer;
     }
 
-    private function removeExistingAnswers(Operation $operation, CSurvey $survey, string $answerUserKey, Request $request): void
+    private function removeExistingAnswers(CSurvey $survey, string $answerUserKey, Request $request): void
     {
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->delete(CSurveyAnswerEntity::class, 'answer')
@@ -261,7 +263,6 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
      * @param array<string, mixed> $otherAnswers
      */
     private function saveQuestionAnswer(
-        Operation $operation,
         CSurvey $survey,
         CSurveyQuestion $question,
         string $answerUserKey,
@@ -278,13 +279,13 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         }
 
         if (\in_array($type, SurveyPersonalityManager::QUESTION_TYPES, true)) {
-            $this->savePersonalityAnswer($operation, $survey, $question, $answerUserKey, $value, $request);
+            $this->savePersonalityAnswer($survey, $question, $answerUserKey, $value, $request);
 
             return;
         }
 
         if ('multiplechoiceother' === $type) {
-            $this->saveMultipleChoiceOtherAnswer($operation, $survey, $question, $answerUserKey, $answers, $otherAnswers, $request);
+            $this->saveMultipleChoiceOtherAnswer($survey, $question, $answerUserKey, $answers, $otherAnswers, $request);
 
             return;
         }
@@ -296,7 +297,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         if ('multipleresponse' === $type && \is_array($value)) {
             foreach ($value as $optionId) {
                 if ((int) $optionId > 0) {
-                    $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $optionId, 0, $request);
+                    $this->persistAnswer($survey, $question, $answerUserKey, (string) (int) $optionId, 0, $request);
                 }
             }
 
@@ -306,7 +307,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         if ('score' === $type && \is_array($value)) {
             foreach ($value as $optionId => $score) {
                 if ((int) $optionId > 0 && '' !== (string) $score) {
-                    $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $optionId, (int) $score, $request);
+                    $this->persistAnswer($survey, $question, $answerUserKey, (string) (int) $optionId, (int) $score, $request);
                 }
             }
 
@@ -316,7 +317,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         if ('open' === $type || 'comment' === $type) {
             $text = trim((string) $value);
             if ('' !== $text) {
-                $this->persistAnswer($operation, $survey, $question, $answerUserKey, $text, 0, $request);
+                $this->persistAnswer($survey, $question, $answerUserKey, $text, 0, $request);
             }
 
             return;
@@ -333,7 +334,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             $optionValue = null !== $option ? (int) strip_tags($option->getOptionText()) : 0;
         }
 
-        $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) $optionId, $optionValue, $request);
+        $this->persistAnswer($survey, $question, $answerUserKey, (string) $optionId, $optionValue, $request);
     }
 
     /**
@@ -404,7 +405,6 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
     }
 
     private function savePersonalityAnswer(
-        Operation $operation,
         CSurvey $survey,
         CSurveyQuestion $question,
         string $answerUserKey,
@@ -413,19 +413,19 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
     ): void {
         $type = $question->getType();
         if ('personality_choice' === $type) {
-            $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $value, 1, $request);
+            $this->persistAnswer($survey, $question, $answerUserKey, (string) (int) $value, 1, $request);
 
             return;
         }
         if ('personality_agreement' === $type) {
-            $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $value['most'], 1, $request);
-            $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $value['least'], -1, $request);
+            $this->persistAnswer($survey, $question, $answerUserKey, (string) (int) $value['most'], 1, $request);
+            $this->persistAnswer($survey, $question, $answerUserKey, (string) (int) $value['least'], -1, $request);
 
             return;
         }
         if ('personality_scale' === $type) {
             foreach ($value as $optionId => $rating) {
-                $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $optionId, (int) $rating - 3, $request);
+                $this->persistAnswer($survey, $question, $answerUserKey, (string) (int) $optionId, (int) $rating - 3, $request);
             }
 
             return;
@@ -433,8 +433,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         if ('personality_order' === $type) {
             $count = \count($value);
             foreach (array_values($value) as $rank => $optionId) {
-                /** @psalm-suppress InvalidCast The value is validated as an array of integers in validatePersonalityAnswer before reaching this branch */
-                $this->persistAnswer($operation, $survey, $question, $answerUserKey, (string) (int) $optionId, $count - $rank, $request);
+                $this->persistAnswer($survey, $question, $answerUserKey, (string) (int) $optionId, $count - $rank, $request);
             }
         }
     }
@@ -444,7 +443,6 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
      * @param array<string, mixed> $otherAnswers
      */
     private function saveMultipleChoiceOtherAnswer(
-        Operation $operation,
         CSurvey $survey,
         CSurveyQuestion $question,
         string $answerUserKey,
@@ -473,11 +471,10 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             $storedOptionId .= '@:@'.$otherText;
         }
 
-        $this->persistAnswer($operation, $survey, $question, $answerUserKey, $storedOptionId, 0, $request);
+        $this->persistAnswer($survey, $question, $answerUserKey, $storedOptionId, 0, $request);
     }
 
     private function persistAnswer(
-        Operation $operation,
         CSurvey $survey,
         CSurveyQuestion $question,
         string $answerUserKey,

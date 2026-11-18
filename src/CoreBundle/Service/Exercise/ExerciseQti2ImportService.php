@@ -43,6 +43,7 @@ final readonly class ExerciseQti2ImportService
     private const MATCHING = 4;
     private const FREE_ANSWER = 5;
     private const MULTIPLE_ANSWER_COMBINATION = 9;
+    private const DRAGGABLE = 18;
     private const MATCHING_DRAGGABLE = 19;
 
     /**
@@ -56,6 +57,7 @@ final readonly class ExerciseQti2ImportService
         self::MATCHING => 'Matching',
         self::MULTIPLE_ANSWER_COMBINATION => 'Exact combination',
         self::MATCHING_DRAGGABLE => 'Matching draggable',
+        self::DRAGGABLE => 'Sequence ordering',
     ];
 
     public function __construct(
@@ -213,6 +215,7 @@ final readonly class ExerciseQti2ImportService
             'textEntryInteraction',
             'feedbackInline',
             'matchInteraction',
+            'orderInteraction',
             'extendedTextInteraction',
             'itemBody',
             'br',
@@ -332,6 +335,15 @@ final readonly class ExerciseQti2ImportService
                     $package['questions'][$currentQuestionIdent]['type'] = self::FILL_IN_BLANKS;
                     $package['questions'][$currentQuestionIdent]['subtype'] = 'TEXTFIELD_FILL';
                     $package['questions'][$currentQuestionIdent]['response_text'] = $currentQuestionItemBody;
+
+                    break;
+
+                case 'orderInteraction':
+                    if ($this->hasCurrentQuestion($package, $currentQuestionIdent)) {
+                        $rows = Qti2OrderingItem::read($node);
+                        $package['questions'][$currentQuestionIdent]['type'] = self::DRAGGABLE;
+                        $package['questions'][$currentQuestionIdent]['ordered_items'] = $rows;
+                    }
 
                     break;
 
@@ -762,6 +774,13 @@ final readonly class ExerciseQti2ImportService
                 continue;
             }
 
+            if (self::DRAGGABLE === $questionType && !\is_array($questionData['ordered_items'] ?? null)) {
+                ++$skippedCount;
+                $errors[] = \sprintf('QTI question %s skipped because its orderInteraction is invalid.', (string) $identifier);
+
+                continue;
+            }
+
             $matchingRows = null;
             if (\in_array($questionType, [self::MATCHING, self::MATCHING_DRAGGABLE], true)) {
                 $matchingRows = $this->buildMatchingAnswerRows($questionData);
@@ -791,6 +810,8 @@ final readonly class ExerciseQti2ImportService
                 $question->setPonderation($this->scoreFromValue($questionData['weighting'][0] ?? 0));
             } elseif (null !== $matchingRows) {
                 $this->createMatchingAnswers($question, $matchingRows);
+            } elseif (self::DRAGGABLE === $questionType) {
+                $this->createDraggableAnswers($question, $questionData['ordered_items']);
             } elseif (self::MULTIPLE_ANSWER_COMBINATION === $questionType) {
                 $this->createExactCombinationAnswers($question, $questionData);
             } else {
@@ -877,6 +898,26 @@ final readonly class ExerciseQti2ImportService
         }
 
         $question->setPonderation($totalCorrectWeight);
+    }
+
+    /**
+     * @param array{orientation: string, items: list<array{answer: string, target: int, weight: float}>} $data
+     */
+    private function createDraggableAnswers(CQuizQuestion $question, array $data): void
+    {
+        $items = $data['items'];
+        $count = \count($items);
+        $question->setExtra($data['orientation']);
+        for ($position = 1; $position <= $count; ++$position) {
+            $this->createSingleAnswer($question, (string) $position, 0, '', 0.0, $position);
+        }
+        $score = 0.0;
+        foreach ($items as $index => $item) {
+            $weight = $item['weight'];
+            $this->createSingleAnswer($question, $item['answer'], $item['target'], '', $weight, $count + $index + 1);
+            $score += $weight;
+        }
+        $question->setPonderation($score);
     }
 
     /**

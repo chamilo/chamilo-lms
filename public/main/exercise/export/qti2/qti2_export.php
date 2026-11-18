@@ -109,6 +109,10 @@ class ImsAssessmentItem
             );
         }
 
+        if ($this->answer instanceof ImsAnswerOrdering) {
+            return $this->answer->getOrderingResponseProcessing();
+        }
+
         if ($this->answer instanceof ImsAnswerFillInBlanks) {
             // Each blank is scored with the mapping of its own response.
             return '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_response"/>'."\n";
@@ -136,9 +140,14 @@ class ImsAssessmentItem
             return $head;
         }
 
+        $declarations = $this->answer->imsExportResponsesDeclaration($this->questionIdent, $this->question);
+        if ($this->answer instanceof ImsAnswerOrdering && !$this->answer->isValidOrdering()) {
+            return '';
+        }
+
         return $head
             .$this->start_item()
-            .$this->answer->imsExportResponsesDeclaration($this->questionIdent, $this->question)
+            .$declarations
             .$this->start_item_body()
             .$this->answer->imsExportResponses(
                 $this->questionIdent,
@@ -476,7 +485,7 @@ function export_question_qti($questionId, $standalone = true)
 
     // Exact combination is checked by type: the True/false/Don't know variant extends its class.
     $isValid = $qst instanceof UniqueAnswer || $qst instanceof MultipleAnswer || $qst instanceof FreeAnswer
-        || in_array((int) $qst->type, [FILL_IN_BLANKS, MATCHING, MATCHING_DRAGGABLE, MULTIPLE_ANSWER_COMBINATION], true);
+        || in_array((int) $qst->type, [FILL_IN_BLANKS, MATCHING, MATCHING_DRAGGABLE, MULTIPLE_ANSWER_COMBINATION, DRAGGABLE], true);
     if (!$isValid) {
         return '';
     }

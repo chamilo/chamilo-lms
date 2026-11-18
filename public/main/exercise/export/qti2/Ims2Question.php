@@ -42,6 +42,11 @@ class Ims2Question extends Question
                 $answer = new ImsAnswerFillInBlanks($questionId);
                 break;
 
+            case DRAGGABLE:
+                require_once __DIR__.'/ImsAnswerOrdering.php';
+                $answer = new ImsAnswerOrdering($questionId);
+                break;
+
             case MATCHING:
             case MATCHING_DRAGGABLE:
                 $answer = new ImsAnswerMatching($questionId);

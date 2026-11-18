@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Service\Exercise\Qti2ExactCombinationWriter;
 use Chamilo\CoreBundle\Service\Exercise\Qti2MatchingTypeMarker;
+use Chamilo\CoreBundle\Service\Exercise\Qti2TrueFalseItem;
 use Chamilo\CoreBundle\Service\Exercise\Qti2UniqueAnswerUnknownMarker;
 
 /**
@@ -66,6 +67,8 @@ class ImsAssessmentItem
             : '';
         if (UNIQUE_ANSWER_NO_OPTION === (int) $this->question->type) {
             $label = '                label="'.Qti2UniqueAnswerUnknownMarker::LABEL.'"'."\n";
+        } elseif (MULTIPLE_ANSWER_DROPDOWN === (int) $this->question->type) {
+            $label = '                label="chamilo:multiple-answer-dropdown"'."\n";
         }
 
         return '<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
@@ -117,7 +120,7 @@ class ImsAssessmentItem
             return $this->answer->getOrderingResponseProcessing();
         }
 
-        if (UNIQUE_ANSWER_NO_OPTION === (int) $this->question->type) {
+        if (\in_array((int) $this->question->type, [UNIQUE_ANSWER_NO_OPTION, MULTIPLE_ANSWER_DROPDOWN], true)) {
             return Qti2UniqueAnswerUnknownMarker::responseProcessing($this->questionIdent);
         }
 
@@ -491,9 +494,18 @@ function export_question_qti($questionId, $standalone = true)
         return '';
     }
 
+    if (\in_array((int) $qst->type, [MULTIPLE_ANSWER_TRUE_FALSE, MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE, MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY], true)) {
+        $questionEntity = Database::getManager()->getRepository(\Chamilo\CourseBundle\Entity\CQuizQuestion::class)->find((int) $questionId);
+        if (null === $questionEntity) {
+            return '';
+        }
+
+        return Qti2TrueFalseItem::write($questionEntity, 'QST_'.(int) $questionId) ?? '';
+    }
+
     // Exact combination is checked by type: the True/false/Don't know variant extends its class.
     $isValid = $qst instanceof UniqueAnswer || $qst instanceof MultipleAnswer || $qst instanceof FreeAnswer
-        || in_array((int) $qst->type, [FILL_IN_BLANKS, MATCHING, MATCHING_DRAGGABLE, MULTIPLE_ANSWER_COMBINATION, UNIQUE_ANSWER_NO_OPTION, DRAGGABLE], true);
+        || in_array((int) $qst->type, [FILL_IN_BLANKS, MATCHING, MATCHING_DRAGGABLE, MULTIPLE_ANSWER_COMBINATION, UNIQUE_ANSWER_NO_OPTION, MULTIPLE_ANSWER_DROPDOWN, DRAGGABLE], true);
     if (!$isValid) {
         return '';
     }

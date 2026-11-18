@@ -25,7 +25,7 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
         // @todo getAnswersList() converts the answers using api_html_entity_decode()
         $this->answerList = $this->getAnswersList(true);
         // Both multiple answer and exact combination allow selecting more than one option.
-        $maxChoices = \in_array((int) $this->getQuestionType(), [MCMA, MULTIPLE_ANSWER_COMBINATION], true)
+        $maxChoices = \in_array((int) $this->getQuestionType(), [MCMA, MULTIPLE_ANSWER_COMBINATION, MULTIPLE_ANSWER_DROPDOWN], true)
             ? ' maxChoices="0"'
             : '';
         $out = '    <choiceInteraction responseIdentifier="'.$questionIdent.'"'.$maxChoices.' >'."\n";
@@ -68,7 +68,7 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
             return Qti2ExactCombinationWriter::declarations($questionIdent, $correct, $this->getExactCombinationScore($question));
         }
 
-        if (MCMA == $type) {
+        if (\in_array((int) $type, [MCMA, MULTIPLE_ANSWER_DROPDOWN], true)) {
             $cardinality = 'multiple';
         } else {
             $cardinality = 'single';
@@ -102,7 +102,7 @@ class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
         }
 
         $out .= '  </responseDeclaration>'."\n";
-        if (UNIQUE_ANSWER_NO_OPTION === $type) {
+        if (\in_array((int) $type, [UNIQUE_ANSWER_NO_OPTION, MULTIPLE_ANSWER_DROPDOWN], true)) {
             $out .= '  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float">'
                 .'<defaultValue><value>0</value></defaultValue></outcomeDeclaration>'."\n";
         }

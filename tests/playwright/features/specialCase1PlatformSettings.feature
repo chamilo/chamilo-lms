@@ -315,11 +315,11 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I press "Save settings"
     And I wait for the page to be loaded
 
-    # As a student, verify mdi-chart-box button is visible on my_progress page
+    # As a student, verify mdi-chart-box button is visible on my progress page
     Given I am not logged
     And I am logged as "acostea"
     And I wait for the page to be loaded
-    And I am on "/main/auth/my_progress.php"
+    And I am on "/reporting/my-progress"
     And I wait for the page to be loaded
     Then I wait for the element "i.mdi-chart-box" to appear
     Given I am not logged

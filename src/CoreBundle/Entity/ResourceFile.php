@@ -145,8 +145,8 @@ class ResourceFile implements Stringable
     #[ORM\Column(type: 'simple_array', nullable: true)]
     protected ?array $dimensions;
     #[Groups(['resource_file:read', 'resource_node:read', 'document:read', 'message:read', 'personal_file:read'])]
-    #[ORM\Column(type: 'integer')]
-    protected ?int $size = 0;
+    #[ORM\Column(type: 'bigint')]
+    protected ?string $size = '0';
 
     /**
      * Optional language for the file variant.
@@ -201,7 +201,7 @@ class ResourceFile implements Stringable
 
     public function __construct()
     {
-        $this->size = 0;
+        $this->size = '0';
         $this->metadata = [];
         $this->dimensions = [];
     }
@@ -310,12 +310,12 @@ class ResourceFile implements Stringable
 
     public function getSize(): ?int
     {
-        return $this->size;
+        return null === $this->size ? null : (int) $this->size;
     }
 
     public function setSize(?int $size): self
     {
-        $this->size = $size;
+        $this->size = null === $size ? null : (string) $size;
 
         return $this;
     }

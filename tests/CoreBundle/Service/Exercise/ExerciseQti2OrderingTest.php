@@ -29,6 +29,8 @@ use ZipArchive;
 /**
  * #9285: Sequence ordering (18) uses QTI 2.1 orderInteraction while retaining each item's
  * target position, position-specific weight and orientation across modern and legacy flows.
+ *
+ * @psalm-suppress UndefinedMethod, UndefinedPropertyFetch the XPath results are DOMElement nodes, which Psalm types as DOMNode
  */
 final class ExerciseQti2OrderingTest extends KernelTestCase
 {
@@ -139,9 +141,9 @@ final class ExerciseQti2OrderingTest extends KernelTestCase
                     ['id' => 6, 'correct' => 2, 'answer' => 'Third', 'grade' => 3.0],
                 ];
             }
-            public function selectAutoId($position)
+            public function selectAutoId($id)
             {
-                return $position + 100;
+                return $id + 100;
             }
         };
         $decl = $adapter->imsExportResponsesDeclaration('QST_1', null);
@@ -173,9 +175,9 @@ final class ExerciseQti2OrderingTest extends KernelTestCase
                     ['id' => 4, 'correct' => 101, 'answer' => 'Second', 'grade' => 2],
                 ];
             }
-            public function selectAutoId($position)
+            public function selectAutoId($id)
             {
-                return $position + 100;
+                return $id + 100;
             }
         };
         $decl = $adapter->imsExportResponsesDeclaration('QST_1', null);

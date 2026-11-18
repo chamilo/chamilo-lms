@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use DOMDocument;
+use DOMElement;
 use DOMXPath;
 use ImsAnswerOrdering;
 use ReflectionClass;
@@ -69,14 +70,14 @@ final class ExerciseQti2OrderingTest extends KernelTestCase
     {
         $xml = $this->exportQuestion($this->buildQuestion());
         $xpath = $this->xpath($xml);
-        self::assertSame('ordered', $xpath->query('//q:responseDeclaration')->item(0)->getAttribute('cardinality'));
-        self::assertSame('identifier', $xpath->query('//q:responseDeclaration')->item(0)->getAttribute('baseType'));
-        self::assertSame('vertical', $xpath->query('//q:orderInteraction')->item(0)->getAttribute('orientation'));
+        self::assertSame('ordered', $this->attributes($xpath, '//q:responseDeclaration', 'cardinality')[0] ?? null);
+        self::assertSame('identifier', $this->attributes($xpath, '//q:responseDeclaration', 'baseType')[0] ?? null);
+        self::assertSame('vertical', $this->attributes($xpath, '//q:orderInteraction', 'orientation')[0] ?? null);
         self::assertSame(['answer_202', 'answer_203', 'answer_201'], $this->nodeTexts($xpath, '//q:correctResponse/q:value'));
         self::assertSame(['answer_201', 'answer_202', 'answer_203'], $this->attributes($xpath, '//q:orderInteraction/q:simpleChoice', 'identifier'));
         self::assertSame(['3', '1', '2'], $this->attributes($xpath, '//q:responseIf/q:match/q:index', 'n'));
         self::assertSame(['1.5', '2', '3'], $this->nodeTexts($xpath, '//q:responseIf/q:setOutcomeValue/q:sum/q:baseValue'));
-        self::assertSame('6.5', $xpath->query('//q:outcomeDeclaration')->item(0)->getAttribute('normalMaximum'));
+        self::assertSame('6.5', $this->attributes($xpath, '//q:outcomeDeclaration', 'normalMaximum')[0] ?? null);
     }
 
     public function testApiRoundTripPreservesQuestionTypePositionsWeightsAndOrientation(): void
@@ -139,9 +140,9 @@ final class ExerciseQti2OrderingTest extends KernelTestCase
                     ['id' => 6, 'correct' => 2, 'answer' => 'Third', 'grade' => 3.0],
                 ];
             }
-            public function selectAutoId($position)
+            public function selectAutoId($id)
             {
-                return $position + 100;
+                return $id + 100;
             }
         };
         $decl = $adapter->imsExportResponsesDeclaration('QST_1', null);
@@ -173,9 +174,9 @@ final class ExerciseQti2OrderingTest extends KernelTestCase
                     ['id' => 4, 'correct' => 101, 'answer' => 'Second', 'grade' => 2],
                 ];
             }
-            public function selectAutoId($position)
+            public function selectAutoId($id)
             {
-                return $position + 100;
+                return $id + 100;
             }
         };
         $decl = $adapter->imsExportResponsesDeclaration('QST_1', null);
@@ -332,7 +333,9 @@ final class ExerciseQti2OrderingTest extends KernelTestCase
     {
         $values = [];
         foreach ($xpath->query($query) as $node) {
-            $values[] = trim($node->textContent);
+            if ($node instanceof DOMElement) {
+                $values[] = trim($node->textContent);
+            }
         }
 
         return $values;
@@ -345,7 +348,9 @@ final class ExerciseQti2OrderingTest extends KernelTestCase
     {
         $values = [];
         foreach ($xpath->query($query) as $node) {
-            $values[] = $node->getAttribute($attribute);
+            if ($node instanceof DOMElement) {
+                $values[] = $node->getAttribute($attribute);
+            }
         }
 
         return $values;

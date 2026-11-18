@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use DOMDocument;
+use DOMElement;
 use DOMXPath;
 use Ims2Question;
 use ImsAnswerMultipleChoice;
@@ -326,7 +327,9 @@ final class ExerciseQti2UniqueUnknownTest extends KernelTestCase
     {
         $values = [];
         foreach ($xpath->query($query) as $node) {
-            $values[] = $node->getAttribute($attribute);
+            if ($node instanceof DOMElement) {
+                $values[] = $node->getAttribute($attribute);
+            }
         }
 
         return $values;
@@ -339,7 +342,9 @@ final class ExerciseQti2UniqueUnknownTest extends KernelTestCase
     {
         $values = [];
         foreach ($xpath->query($query) as $node) {
-            $values[] = trim($node->textContent);
+            if ($node instanceof DOMElement) {
+                $values[] = trim($node->textContent);
+            }
         }
 
         return $values;

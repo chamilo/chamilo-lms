@@ -4,7 +4,11 @@
 
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
 use ChamiloSession as Session;
 
 /**
@@ -41,15 +45,18 @@ class TestCategory
      */
     public function getCategory($id, $courseId = 0)
     {
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $id = (int) $id;
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
-        $sql = "SELECT * FROM $table
-                WHERE iid = $id";
-        $res = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('c.iid AS iid', 'c.title AS title', 'c.description AS description')
+            ->from(CQuizQuestionCategory::class, 'c')
+            ->where('c.iid = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getArrayResult();
 
-        if (Database::num_rows($res)) {
-            $row = Database::fetch_array($res);
+        if ([] !== $rows) {
+            $row = $rows[0];
 
             $this->id = $row['iid'];
             $this->name = $row['title'];
@@ -114,6 +121,7 @@ class TestCategory
 
         if ($category) {
             // remove link between question and category
+            // TODO(db-neutral): c_quiz_question_rel_category is a many-to-many join table without an entity, DQL cannot delete from it
             $sql = "DELETE FROM $tbl_question_rel_cat
                     WHERE category_id = $id ";
             Database::query($sql);
@@ -193,16 +201,19 @@ class TestCategory
             return 0;
         }
 
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $sql = "SELECT *
-                FROM $table
-                WHERE question_id = $questionId";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            return Database::fetch_assoc($res);
-        }
+        // The question/category link is a many-to-many join table, read through the association.
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('q.iid AS question_id', 'c.iid AS category_id')
+            ->from(CQuizQuestion::class, 'q')
+            ->innerJoin('q.categories', 'c')
+            ->where('q.iid = :questionId')
+            ->orderBy('c.iid', 'ASC')
+            ->setMaxResults(1)
+            ->setParameter('questionId', $questionId)
+            ->getQuery()
+            ->getArrayResult();
 
-        return [];
+        return $rows[0] ?? [];
     }
 
     /**
@@ -221,18 +232,15 @@ class TestCategory
         }
         $courseId = (int) $courseId;
         $categoryId = self::getCategoryForQuestion($questionId, $courseId);
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $sql = "SELECT title
-                FROM $table
-                WHERE iid = $categoryId ";
-        $res = Database::query($sql);
-        $data = Database::fetch_array($res);
-        $result = '';
-        if (Database::num_rows($res) > 0) {
-            $result = $data['title'];
-        }
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('c.title AS title')
+            ->from(CQuizQuestionCategory::class, 'c')
+            ->where('c.iid = :categoryId')
+            ->setParameter('categoryId', (int) $categoryId)
+            ->getQuery()
+            ->getArrayResult();
 
-        return $result;
+        return [] === $rows ? '' : $rows[0]['title'];
     }
 
     /**
@@ -432,32 +440,23 @@ class TestCategory
         array $categoriesAddedInExercise = [],
         $onlyMandatory = false
     ): array {
-        $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $tblExerciseQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $tblQuestionRelCategory = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $exerciseId = (int) $exerciseId;
 
-        $mandatoryCondition = '';
+        // The question/category link is a many-to-many join table, read through the association.
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('q.iid AS question_id', 'c.iid AS category_id')
+            ->distinct()
+            ->from(CQuizQuestion::class, 'q')
+            ->innerJoin('q.categories', 'c')
+            ->innerJoin(CQuizRelQuestion::class, 'eq', 'WITH', 'IDENTITY(eq.question) = q.iid')
+            ->where('IDENTITY(eq.quiz) = :exerciseId')
+            ->setParameter('exerciseId', $exerciseId);
         if ($onlyMandatory) {
-            $mandatoryCondition = ' AND q.mandatory = 1';
+            $qb->andWhere('q.mandatory = 1');
         }
-        $sql = "SELECT DISTINCT qrc.question_id, qrc.category_id
-                FROM $tblQuestionRelCategory qrc
-                INNER JOIN $tblExerciseQuestion eq
-                ON (eq.question_id = qrc.question_id)
-                INNER JOIN $categoryTable c
-                ON (c.iid = qrc.category_id)
-                INNER JOIN $tableQuestion q
-                ON (q.iid = qrc.question_id)
-                WHERE
-                    quiz_id = $exerciseId
-                    $mandatoryCondition
-                ";
 
-        $res = Database::query($sql);
         $categories = [];
-        while ($data = Database::fetch_array($res)) {
+        foreach ($qb->getQuery()->getArrayResult() as $data) {
             if (!empty($checkInQuestionList) && !in_array($data['question_id'], $checkInQuestionList)) {
                 continue;
             }
@@ -808,32 +807,53 @@ class TestCategory
             return [];
         }
 
-        $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
-        $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         $exercise->id = (int) $exercise->id;
 
-        $sql = "SELECT * FROM $table qc
-                LEFT JOIN $categoryTable c
-                ON (qc.category_id = c.iid)
-                WHERE exercise_id = {$exercise->id} ";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'c.iid AS iid',
+                'IDENTITY(qc.category) AS category_id',
+                'IDENTITY(qc.quiz) AS exercise_id',
+                'qc.countQuestions AS count_questions',
+                'qc.destinations AS destinations',
+                'IDENTITY(c.resourceNode) AS resource_node_id',
+                'c.title AS title',
+                'c.description AS description'
+            )
+            ->from(CQuizRelQuestionCategory::class, 'qc')
+            ->leftJoin('qc.category', 'c')
+            ->where('IDENTITY(qc.quiz) = :exerciseId')
+            ->setParameter('exerciseId', $exercise->id);
 
         if (!empty($order)) {
-            $order = Database::escape_string($order);
-            $sql .= "ORDER BY $order";
+            // "column [ASC|DESC], ..." : only these columns can be used, anything else is refused.
+            $orderFields = [
+                'title' => 'c.title',
+                'description' => 'c.description',
+                'iid' => 'c.iid',
+                'category_id' => 'qc.category',
+                'count_questions' => 'qc.countQuestions',
+                'destinations' => 'qc.destinations',
+            ];
+            foreach (explode(',', $order) as $orderItem) {
+                if (1 !== preg_match('/^\s*(?:\w+\.)?(\w+)(?:\s+(ASC|DESC))?\s*$/i', $orderItem, $matches)
+                    || !isset($orderFields[strtolower($matches[1])])
+                ) {
+                    throw new InvalidArgumentException('Unsupported category order: '.$orderItem);
+                }
+                $qb->addOrderBy($orderFields[strtolower($matches[1])], strtoupper($matches[2] ?? 'ASC'));
+            }
         }
 
         $categories = [];
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            while ($row = Database::fetch_assoc($result)) {
-                if ($excludeCategoryWithNoQuestions && 0 == $row['count_questions']) {
-                    continue;
-                }
-                if (empty($row['title']) && empty($row['category_id'])) {
-                    $row['title'] = get_lang('General');
-                }
-                $categories[$row['category_id']] = $row;
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            if ($excludeCategoryWithNoQuestions && 0 == $row['count_questions']) {
+                continue;
             }
+            if (empty($row['title']) && empty($row['category_id'])) {
+                $row['title'] = get_lang('General');
+            }
+            $categories[$row['category_id']] = $row;
         }
 
         if ($shuffle) {
@@ -1017,18 +1037,22 @@ class TestCategory
     {
         $out_res = 0;
         $courseId = empty($courseId) ? (int) api_get_course_int_id() : (int) $courseId;
-        $tableCategory = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
         // The course of a category is the resource link of its resource node.
-        $sql = "SELECT c.iid FROM $tableCategory c
-                INNER JOIN resource_link link ON link.resource_node_id = c.resource_node_id
-                WHERE c.title = '".Database::escape_string($title)."'
-                    AND link.c_id = $courseId
-                    AND link.deleted_at IS NULL
-                ORDER BY c.iid ASC";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $data = Database::fetch_array($res);
-            $out_res = $data['iid'];
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('c.iid AS iid')
+            ->from(CQuizQuestionCategory::class, 'c')
+            ->innerJoin(ResourceLink::class, 'link', 'WITH', 'link.resourceNode = c.resourceNode')
+            ->where('c.title = :title')
+            ->andWhere('IDENTITY(link.course) = :courseId')
+            ->andWhere('link.deletedAt IS NULL')
+            ->orderBy('c.iid', 'ASC')
+            ->setMaxResults(1)
+            ->setParameter('title', (string) $title)
+            ->setParameter('courseId', $courseId)
+            ->getQuery()
+            ->getArrayResult();
+        if ([] !== $rows) {
+            $out_res = $rows[0]['iid'];
         }
 
         return $out_res;
@@ -1052,6 +1076,7 @@ class TestCategory
             $questionId > 0 &&
             $courseId > 0
         ) {
+            // TODO(db-neutral): INSERT into the entity-less join table c_quiz_question_rel_category (DQL has no INSERT)
             $sql = "INSERT INTO $table (question_id, category_id)
                     VALUES (".intval($questionId).", ".intval($categoryId).")";
             Database::query($sql);

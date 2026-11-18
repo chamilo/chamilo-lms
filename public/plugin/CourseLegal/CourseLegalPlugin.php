@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\DBAL\ParameterType;
+
 /**
  * Class CourseLegalPlugin.
  */
@@ -70,16 +73,17 @@ class CourseLegalPlugin extends Plugin
         $sessionId = (int) $sessionId;
 
         $table = Database::get_main_table('session_rel_course_rel_user_legal');
-        $sql = "SELECT *
-                FROM $table
-                WHERE user_id = $userId AND c_id = $courseId AND session_id = $sessionId";
-        $result = Database::query($sql);
-        $data = [];
-        if (Database::num_rows($result) > 0) {
-            $data = Database::fetch_assoc($result);
-        }
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $row = $qb
+            ->select('*')
+            ->from($table)
+            ->where('user_id = '.$qb->createNamedParameter($userId, ParameterType::INTEGER))
+            ->andWhere('c_id = '.$qb->createNamedParameter($courseId, ParameterType::INTEGER))
+            ->andWhere('session_id = '.$qb->createNamedParameter($sessionId, ParameterType::INTEGER))
+            ->executeQuery()
+            ->fetchAssociative();
 
-        return $data;
+        return false === $row ? [] : $row;
     }
 
     /**
@@ -314,21 +318,32 @@ class CourseLegalPlugin extends Plugin
 
         $table = Database::get_main_table('session_rel_course_rel_user_legal');
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT *
-                FROM $table s INNER JOIN $userTable u
-                ON u.id = s.user_id
-                WHERE c_id = $courseId AND session_id = $sessionId ";
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $qb
+            ->select('*')
+            ->from($table, 's')
+            ->innerJoin('s', $userTable, 'u', 'u.id = s.user_id')
+            ->where('s.c_id = '.$qb->createNamedParameter($courseId, ParameterType::INTEGER))
+            ->andWhere('s.session_id = '.$qb->createNamedParameter($sessionId, ParameterType::INTEGER));
 
-        if (!empty($order)) {
-            $sql .= $order;
-        }
-        $result = Database::query($sql);
-        $data = [];
-        if (Database::num_rows($result) > 0) {
-            $data = Database::store_result($result, 'ASSOC');
+        // The legacy caller passes a raw " ORDER BY a, b DESC" fragment: only allowlisted columns are honoured.
+        $sortable = [
+            'firstname' => 'u.firstname',
+            'lastname' => 'u.lastname',
+            'username' => 'u.username',
+            'web_agreement_date' => 's.web_agreement_date',
+            'mail_agreement_date' => 's.mail_agreement_date',
+        ];
+        $orderBy = preg_replace('/^\s*ORDER\s+BY\s+/i', '', (string) $order);
+        foreach (explode(',', $orderBy) as $part) {
+            if (1 === preg_match('/^\s*(\w+)(?:\s+(ASC|DESC))?\s*$/i', $part, $matches)
+                && isset($sortable[strtolower($matches[1])])
+            ) {
+                $qb->addOrderBy($sortable[strtolower($matches[1])], strtoupper($matches[2] ?? 'ASC'));
+            }
         }
 
-        return $data;
+        return $qb->executeQuery()->fetchAllAssociative();
     }
 
     /**
@@ -340,9 +355,12 @@ class CourseLegalPlugin extends Plugin
         $table = Database::get_main_table('session_rel_course_rel_user_legal');
         $sessionId = (int) $sessionId;
         $courseId = (int) $courseId;
-        $sql = "DELETE FROM $table
-                WHERE c_id = '$courseId' AND session_id = $sessionId ";
-        Database::query($sql);
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $qb
+            ->delete($table)
+            ->where('c_id = '.$qb->createNamedParameter($courseId, ParameterType::INTEGER))
+            ->andWhere('session_id = '.$qb->createNamedParameter($sessionId, ParameterType::INTEGER))
+            ->executeStatement();
     }
 
     /**

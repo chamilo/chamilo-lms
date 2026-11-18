@@ -2,7 +2,11 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Ticket;
+use Chamilo\CoreBundle\Entity\TicketAssignedLog;
+use Chamilo\CoreBundle\Entity\TicketCategory;
+use Chamilo\CoreBundle\Entity\TicketCategoryRelUser;
 use Chamilo\CoreBundle\Entity\TicketMessage;
 use Chamilo\CoreBundle\Entity\TicketMessageAttachment;
 use Chamilo\CoreBundle\Entity\TicketPriority;
@@ -52,28 +56,57 @@ class TicketManager
      */
     public static function get_all_tickets_categories($projectId, $order = '')
     {
-        $table_support_category = Database::get_main_table(TABLE_TICKET_CATEGORY);
-        $table_support_project = Database::get_main_table(TABLE_TICKET_PROJECT);
-
-        $order = empty($order) ? 'category.total_tickets DESC' : $order;
-        $order = Database::escape_string($order);
+        // The order is a "[category.]column [ASC|DESC]" string: only these columns are accepted, anything else
+        // falls back to the default order.
+        $orderFields = [
+            'id' => 'category.id',
+            'title' => 'category.title',
+            'description' => 'category.description',
+            'total_tickets' => 'category.totalTickets',
+        ];
+        $orderField = 'category.totalTickets';
+        $orderDirection = 'DESC';
+        if (
+            !empty($order)
+            && 1 === preg_match('/^\s*(?:category\.)?(\w+)(?:\s+(ASC|DESC))?\s*$/i', $order, $matches)
+            && isset($orderFields[strtolower($matches[1])])
+        ) {
+            $orderField = $orderFields[strtolower($matches[1])];
+            $orderDirection = strtoupper($matches[2] ?? 'ASC');
+        }
         $projectId = (int) $projectId;
         $accessUrlId = Container::getAccessUrlUtil()->getCurrent()->getId();
 
-        $sql = "SELECT
-                    category.*,
-                    category.id category_id,
-                    project.other_area,
-                    project.email
-                FROM
-                $table_support_category category
-                INNER JOIN $table_support_project project
-                ON project.id = category.project_id
-                WHERE project.id = $projectId
-                ORDER BY $order";
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'category.id AS id',
+                'IDENTITY(category.project) AS project_id',
+                'category.title AS title',
+                'category.description AS description',
+                'category.totalTickets AS total_tickets',
+                'category.courseRequired AS course_required',
+                'category.insertUserId AS sys_insert_user_id',
+                'category.insertDateTime AS sys_insert_datetime',
+                'category.lastEditUserId AS sys_lastedit_user_id',
+                'category.lastEditDateTime AS sys_lastedit_datetime',
+                'category.id AS category_id',
+                'project.otherArea AS other_area',
+                'project.email AS email'
+            )
+            ->from(TicketCategory::class, 'category')
+            ->innerJoin('category.project', 'project')
+            ->where('project.id = :projectId')
+            ->orderBy($orderField, $orderDirection)
+            ->setParameter('projectId', $projectId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
         $types = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
+            $row['course_required'] = (int) $row['course_required'];
+            $row['sys_insert_datetime'] = self::toLegacyDate($row['sys_insert_datetime']);
+            $row['sys_lastedit_datetime'] = self::toLegacyDate($row['sys_lastedit_datetime']);
             $types[] = $row;
         }
 
@@ -90,13 +123,19 @@ class TicketManager
      */
     public static function getCategories($from, $numberItems, $column, $direction)
     {
-        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
-        $sql = "SELECT id, title, description, total_tickets
-                FROM $table";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'category.id AS id',
+                'category.title AS title',
+                'category.description AS description',
+                'category.totalTickets AS total_tickets'
+            )
+            ->from(TicketCategory::class, 'category')
+        ;
 
         $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
         if (!empty($projectId)) {
-            $sql .= " WHERE project_id = $projectId ";
+            $qb->where('IDENTITY(category.project) = :projectId')->setParameter('projectId', $projectId);
         }
 
         if (!in_array($direction, ['ASC', 'DESC'])) {
@@ -106,13 +145,11 @@ class TicketManager
         $from = (int) $from;
         $numberItems = (int) $numberItems;
 
-        //$sql .= " ORDER BY col$column $direction ";
-        $sql .= " LIMIT $from,$numberItems";
+        $qb->setFirstResult($from)->setMaxResults($numberItems);
 
-        $result = Database::query($sql);
         $types = [];
-        while ($row = Database::fetch_array($result)) {
-            $types[] = $row;
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $types[] = self::withNumericKeys($row);
         }
 
         return $types;
@@ -126,15 +163,22 @@ class TicketManager
      */
     public static function getCategory($id)
     {
-        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
-        $id = (int) $id;
-        $sql = "SELECT id, title, title as name, description, total_tickets
-                FROM $table WHERE id = $id";
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'category.id AS id',
+                'category.title AS title',
+                'category.title AS name',
+                'category.description AS description',
+                'category.totalTickets AS total_tickets'
+            )
+            ->from(TicketCategory::class, 'category')
+            ->where('category.id = :id')
+            ->setParameter('id', (int) $id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        $result = Database::query($sql);
-        $category = Database::fetch_array($result);
-
-        return $category;
+        return [] === $rows ? [] : self::withNumericKeys($rows[0]);
     }
 
     /**
@@ -142,18 +186,16 @@ class TicketManager
      */
     public static function getCategoriesCount()
     {
-        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
-
-        $sql = "SELECT count(id) count
-                FROM $table ";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(category.id)')
+            ->from(TicketCategory::class, 'category')
+        ;
         $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
         if (!empty($projectId)) {
-            $sql .= " WHERE project_id = ".$projectId;
+            $qb->where('IDENTITY(category.project) = :projectId')->setParameter('projectId', $projectId);
         }
-        $result = Database::query($sql);
-        $category = Database::fetch_array($result);
 
-        return $category['count'];
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -188,13 +230,23 @@ class TicketManager
             return false;
         }
 
-        $table = Database::get_main_table(TABLE_TICKET_TICKET);
-        $sql = "UPDATE $table SET category_id = NULL WHERE category_id = $id";
-        Database::query($sql);
+        $em = Container::getEntityManager();
+        $em->createQueryBuilder()
+            ->update(Ticket::class, 'ticket')
+            ->set('ticket.category', 'NULL')
+            ->where('IDENTITY(ticket.category) = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->execute()
+        ;
 
-        $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
-        $sql = "DELETE FROM $table WHERE id = $id";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->delete(TicketCategory::class, 'category')
+            ->where('category.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->execute()
+        ;
 
         return true;
     }
@@ -233,14 +285,18 @@ class TicketManager
      */
     public static function userIsAssignedToCategory($userId, $categoryId)
     {
-        $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
-        $userId = (int) $userId;
-        $categoryId = (int) $categoryId;
-        $sql = "SELECT * FROM $table
-                WHERE category_id = $categoryId AND user_id = $userId";
-        $result = Database::query($sql);
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(rel.id)')
+            ->from(TicketCategoryRelUser::class, 'rel')
+            ->where('IDENTITY(rel.category) = :categoryId')
+            ->andWhere('IDENTITY(rel.user) = :userId')
+            ->setParameter('categoryId', (int) $categoryId)
+            ->setParameter('userId', (int) $userId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-        return Database::num_rows($result) > 0;
+        return (int) $count > 0;
     }
 
     /**
@@ -250,12 +306,18 @@ class TicketManager
      */
     public static function getUsersInCategory($categoryId)
     {
-        $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
-        $categoryId = (int) $categoryId;
-        $sql = "SELECT * FROM $table WHERE category_id = $categoryId";
-        $result = Database::query($sql);
-
-        return Database::store_result($result);
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'rel.id AS id',
+                'IDENTITY(rel.category) AS category_id',
+                'IDENTITY(rel.user) AS user_id'
+            )
+            ->from(TicketCategoryRelUser::class, 'rel')
+            ->where('IDENTITY(rel.category) = :categoryId')
+            ->setParameter('categoryId', (int) $categoryId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
     }
 
     /**
@@ -263,10 +325,13 @@ class TicketManager
      */
     public static function deleteAllUserInCategory($categoryId)
     {
-        $table = Database::get_main_table(TABLE_TICKET_CATEGORY_REL_USER);
-        $categoryId = (int) $categoryId;
-        $sql = "DELETE FROM $table WHERE category_id = $categoryId";
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->delete(TicketCategoryRelUser::class, 'rel')
+            ->where('IDENTITY(rel.category) = :categoryId')
+            ->setParameter('categoryId', (int) $categoryId)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -276,15 +341,18 @@ class TicketManager
      */
     public static function get_all_tickets_status()
     {
-        $table = Database::get_main_table(TABLE_TICKET_STATUS);
-        $sql = "SELECT * FROM $table";
-        $result = Database::query($sql);
-        $types = [];
-        while ($row = Database::fetch_assoc($result)) {
-            $types[] = $row;
-        }
-
-        return $types;
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'status.id AS id',
+                'IDENTITY(status.accessUrl) AS access_url_id',
+                'status.code AS code',
+                'status.title AS title',
+                'status.description AS description'
+            )
+            ->from(TicketStatus::class, 'status')
+            ->getQuery()
+            ->getArrayResult()
+        ;
     }
 
     /**
@@ -452,16 +520,26 @@ class TicketManager
             }
 
             // Update code
-            $sql = "UPDATE $table_support_tickets
-                    SET code = '$ticket_code'
-                    WHERE id = '$ticketId'";
-            Database::query($sql);
+            $em = Container::getEntityManager();
+            $em->createQueryBuilder()
+                ->update(Ticket::class, 'ticket')
+                ->set('ticket.code', ':code')
+                ->where('ticket.id = :id')
+                ->setParameter('code', $ticket_code)
+                ->setParameter('id', (int) $ticketId)
+                ->getQuery()
+                ->execute()
+            ;
 
             // Update total
-            $sql = "UPDATE $table_support_category
-                    SET total_tickets = total_tickets + 1
-                    WHERE id = $category_id";
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->update(TicketCategory::class, 'category')
+                ->set('category.totalTickets', 'category.totalTickets + 1')
+                ->where('category.id = :id')
+                ->setParameter('id', $category_id)
+                ->getQuery()
+                ->execute()
+            ;
 
             $helpDeskMessage =
                 '<table>
@@ -624,11 +702,15 @@ class TicketManager
         $ticket = self::get_ticket_detail_by_id($ticketId);
 
         if ($ticket) {
-            $table = Database::get_main_table(TABLE_TICKET_TICKET);
-            $sql = "UPDATE $table
-                    SET assigned_last_user = $userId
-                    WHERE id = $ticketId";
-            Database::query($sql);
+            Container::getEntityManager()->createQueryBuilder()
+                ->update(Ticket::class, 'ticket')
+                ->set('ticket.assignedLastUser', ':userId')
+                ->where('ticket.id = :id')
+                ->setParameter('userId', $userId)
+                ->setParameter('id', $ticketId)
+                ->getQuery()
+                ->execute()
+            ;
 
             $table = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
             $params = [
@@ -709,17 +791,22 @@ class TicketManager
         $messageId = Database::insert($table_support_messages, $params);
         if ($messageId) {
             // update_total_message
-            $sql = "UPDATE $table_support_tickets
-                    SET
-                        sys_lastedit_user_id = $userId,
-                        sys_lastedit_datetime = '$now',
-                        total_messages = (
-                            SELECT COUNT(*) as total_messages
-                            FROM $table_support_messages
-                            WHERE ticket_id = $ticketId
-                        )
-                    WHERE id = $ticketId ";
-            Database::query($sql);
+            $em = Container::getEntityManager();
+            $em->createQueryBuilder()
+                ->update(Ticket::class, 'ticket')
+                ->set('ticket.lastEditUserId', ':userId')
+                ->set('ticket.lastEditDateTime', ':now')
+                ->set(
+                    'ticket.totalMessages',
+                    '(SELECT COUNT(message.id) FROM '.TicketMessage::class.' message WHERE IDENTITY(message.ticket) = :id)'
+                )
+                ->where('ticket.id = :id')
+                ->setParameter('userId', $userId)
+                ->setParameter('now', $now)
+                ->setParameter('id', $ticketId)
+                ->getQuery()
+                ->execute()
+            ;
 
             if (is_array($fileAttachments)) {
                 foreach ($fileAttachments as $file_attach) {
@@ -1129,6 +1216,30 @@ class TicketManager
     }
 
     /**
+     * The day after a "Y-m-d" date, as "Y-m-d".
+     */
+    private static function dayAfter(string $date): string
+    {
+        return (new DateTime($date))->modify('+1 day')->format('Y-m-d');
+    }
+
+    /**
+     * DQL hydrates datetime columns as DateTime objects, while the raw rows used to carry "Y-m-d H:i:s" strings.
+     */
+    private static function toLegacyDate(?DateTimeInterface $date): ?string
+    {
+        return $date?->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * Same shape as Database::fetch_array(): the associative row followed by the same values under numeric keys.
+     */
+    private static function withNumericKeys(array $row): array
+    {
+        return array_merge($row, array_values($row));
+    }
+
+    /**
      * Converts a dd/mm/YYYY string to YYYY-mm-dd, or null when it is empty or not a real date.
      */
     private static function parseTicketFilterDate(string $value): ?string
@@ -1201,26 +1312,54 @@ class TicketManager
         $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
 
-        $sql = "SELECT
-                    ticket.*,
-                    cat.title,
-                    status.title as status,
-                    priority.title priority
-                FROM $table_support_tickets ticket
-                LEFT JOIN $table_support_category cat
-                ON (cat.id = ticket.category_id)
-                INNER JOIN $table_support_priority priority
-                ON (priority.id = ticket.priority_id)
-                INNER JOIN $table_support_status status
-                ON (status.id = ticket.status_id)
-		        WHERE
-                    ticket.id = $ticketId ";
-        $result = Database::query($sql);
+        $em = Container::getEntityManager();
+        $rows = $em->createQueryBuilder()
+            ->select(
+                'ticket.id AS id',
+                'IDENTITY(ticket.project) AS project_id',
+                'IDENTITY(ticket.category) AS category_id',
+                'IDENTITY(ticket.priority) AS priority_id',
+                'IDENTITY(ticket.course) AS course_id',
+                'IDENTITY(ticket.session) AS session_id',
+                'IDENTITY(ticket.assignedLastUser) AS assigned_last_user',
+                'IDENTITY(ticket.status) AS status_id',
+                'IDENTITY(ticket.accessUrl) AS access_url_id',
+                'ticket.code AS code',
+                'ticket.subject AS subject',
+                'ticket.message AS message',
+                'ticket.personalEmail AS personal_email',
+                'ticket.totalMessages AS total_messages',
+                'ticket.keyword AS keyword',
+                'ticket.source AS source',
+                'ticket.startDate AS start_date',
+                'ticket.endDate AS end_date',
+                'ticket.insertUserId AS sys_insert_user_id',
+                'ticket.insertDateTime AS sys_insert_datetime',
+                'ticket.lastEditUserId AS sys_lastedit_user_id',
+                'ticket.lastEditDateTime AS sys_lastedit_datetime',
+                'ticket.exerciseId AS exercise_id',
+                'ticket.lpId AS lp_id',
+                'cat.title AS title',
+                'ticketStatus.title AS status',
+                'ticketPriority.title AS priority'
+            )
+            ->from(Ticket::class, 'ticket')
+            ->leftJoin('ticket.category', 'cat')
+            ->innerJoin('ticket.priority', 'ticketPriority')
+            ->innerJoin('ticket.status', 'ticketStatus')
+            ->where('ticket.id = :id')
+            ->setParameter('id', $ticketId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $ticket = [];
 
         $repo = Container::getLpRepository();
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_assoc($result)) {
+        if ([] !== $rows) {
+            foreach ($rows as $row) {
+                foreach (['start_date', 'end_date', 'sys_insert_datetime', 'sys_lastedit_datetime'] as $dateField) {
+                    $row[$dateField] = self::toLegacyDate($row[$dateField]);
+                }
                 $row['course'] = null;
                 $row['start_date_from_db'] = $row['start_date'];
                 $row['start_date'] = api_convert_and_format_date(
@@ -1291,17 +1430,37 @@ class TicketManager
                 $ticket['ticket'] = $row;
             }
 
-            $sql = "SELECT message.*, message.id AS message_id, user.id AS user_id
-                    FROM $table_support_messages message
-                    INNER JOIN $table_main_user user
-                    ON (message.sys_insert_user_id = user.id)
-                    WHERE user.active <> ".USER_SOFT_DELETED." AND
-                        message.ticket_id = '$ticketId' ";
-            $result = Database::query($sql);
+            $messageRows = $em->createQueryBuilder()
+                ->select(
+                    'ticketMessage.id AS id',
+                    'IDENTITY(ticketMessage.ticket) AS ticket_id',
+                    'ticketMessage.subject AS subject',
+                    'ticketMessage.message AS message',
+                    'ticketMessage.status AS status',
+                    'ticketMessage.ipAddress AS ip_address',
+                    'ticketMessage.insertUserId AS sys_insert_user_id',
+                    'ticketMessage.lastEditUserId AS sys_lastedit_user_id',
+                    'ticketMessage.insertDateTime AS sys_insert_datetime',
+                    'ticketMessage.lastEditDateTime AS sys_lastedit_datetime',
+                    'ticketMessage.id AS message_id',
+                    'usr.id AS user_id'
+                )
+                ->from(TicketMessage::class, 'ticketMessage')
+                ->innerJoin(User::class, 'usr', 'WITH', 'ticketMessage.insertUserId = usr.id')
+                ->where('usr.active <> :softDeleted')
+                ->andWhere('IDENTITY(ticketMessage.ticket) = :ticketId')
+                ->setParameter('softDeleted', USER_SOFT_DELETED)
+                ->setParameter('ticketId', $ticketId)
+                ->getQuery()
+                ->getArrayResult()
+            ;
             $ticket['messages'] = [];
             $attach_icon = Display::getMdiIcon(ObjectIcon::ATTACHMENT, 'ch-tool-icon', null, ICON_SIZE_SMALL);
 
-            while ($row = Database::fetch_assoc($result)) {
+            foreach ($messageRows as $row) {
+                foreach (['sys_insert_datetime', 'sys_lastedit_datetime'] as $dateField) {
+                    $row[$dateField] = self::toLegacyDate($row[$dateField]);
+                }
                 $message = $row;
                 $message['admin'] = UserManager::is_admin($message['user_id']);
                 $message['user_info'] = api_get_user_info($message['user_id']);
@@ -1338,24 +1497,38 @@ class TicketManager
         $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
-        $sql = "UPDATE $table_support_messages
-            SET
-                status = 'LEI',
-                sys_lastedit_user_id = " . (int) api_get_user_id() . ",
-                sys_lastedit_datetime = '$now'
-            WHERE ticket_id = $ticketId";
+        $em = Container::getEntityManager();
+        $qb = $em->createQueryBuilder()
+            ->update(TicketMessage::class, 'message')
+            ->set('message.status', ':read')
+            ->set('message.lastEditUserId', ':editor')
+            ->set('message.lastEditDateTime', ':now')
+            ->where('IDENTITY(message.ticket) = :ticketId')
+            ->setParameter('read', 'LEI')
+            ->setParameter('editor', (int) api_get_user_id())
+            ->setParameter('now', $now)
+            ->setParameter('ticketId', $ticketId)
+        ;
 
         if (api_is_platform_admin()) {
-            $sql .= " AND sys_insert_user_id = $userId";
+            $qb->andWhere('message.insertUserId = :userId');
         } else {
-            $sql .= " AND sys_insert_user_id != $userId";
+            $qb->andWhere('message.insertUserId <> :userId');
         }
-        $result = Database::query($sql);
-        if (Database::affected_rows($result) > 0) {
-            $sql2 = "UPDATE $table_support_tickets
-                 SET status_id = " . self::STATUS_PENDING . "
-                 WHERE id = $ticketId AND status_id = " . self::STATUS_NEW;
-            Database::query($sql2);
+        $affected = $qb->setParameter('userId', $userId)->getQuery()->execute();
+        if ($affected > 0) {
+            $em->createQueryBuilder()
+                ->update(Ticket::class, 'ticket')
+                ->set('ticket.status', ':pending')
+                ->where('ticket.id = :ticketId')
+                ->andWhere('IDENTITY(ticket.status) = :newStatus')
+                ->setParameter('pending', self::STATUS_PENDING)
+                ->setParameter('ticketId', $ticketId)
+                ->setParameter('newStatus', self::STATUS_NEW)
+                ->getQuery()
+                ->execute()
+            ;
+
             return true;
         }
 
@@ -1516,15 +1689,21 @@ class TicketManager
         $userId = (int) $userId;
         $now = api_get_utc_datetime();
 
-        $sql = "UPDATE $table_support_tickets
-                SET
-                    status_id = '$status_id',
-                    sys_lastedit_user_id ='$userId',
-                    sys_lastedit_datetime ='".$now."'
-                WHERE id ='$ticketId'";
-        $result = Database::query($sql);
+        $affected = Container::getEntityManager()->createQueryBuilder()
+            ->update(Ticket::class, 'ticket')
+            ->set('ticket.status', ':statusId')
+            ->set('ticket.lastEditUserId', ':userId')
+            ->set('ticket.lastEditDateTime', ':now')
+            ->where('ticket.id = :id')
+            ->setParameter('statusId', $status_id)
+            ->setParameter('userId', $userId)
+            ->setParameter('now', $now)
+            ->setParameter('id', $ticketId)
+            ->getQuery()
+            ->execute()
+        ;
 
-        if (Database::affected_rows($result) > 0) {
+        if ($affected > 0) {
             self::sendNotification(
                 $ticketId,
                 get_lang('Ticket updated'),
@@ -1546,32 +1725,41 @@ class TicketManager
      */
     public static function getNumberOfMessages()
     {
-        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
-        $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
-        $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
         $userId = (int) api_get_user_id();
-        $sql = "SELECT COUNT(DISTINCT ticket.id) AS unread
-                FROM $table_support_tickets ticket,
-                $table_support_messages message ,
-                $table_main_user user
-                WHERE
-                    ticket.id = message.ticket_id AND
-                    message.status = 'NOL' AND
-                    user.id = message.sys_insert_user_id ";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(DISTINCT ticket.id)')
+            ->from(Ticket::class, 'ticket')
+            ->from(TicketMessage::class, 'message')
+            ->from(User::class, 'usr')
+            ->where('ticket.id = IDENTITY(message.ticket)')
+            ->andWhere('message.status = :unread')
+            ->andWhere('usr.id = message.insertUserId')
+            ->setParameter('unread', 'NOL')
+        ;
         if (!api_is_platform_admin()) {
-            $sql .= " AND ticket.sys_insert_user_id = $userId
-                      AND (user.roles LIKE '%ROLE_ADMIN%' OR user.roles LIKE '%ROLE_GLOBAL_ADMIN%') ";
+            $qb
+                ->andWhere('ticket.insertUserId = :userId')
+                ->andWhere('(usr.roles LIKE :roleAdmin OR usr.roles LIKE :roleGlobalAdmin)')
+                ->setParameter('userId', $userId)
+            ;
         } else {
-            $sql .= " AND user.roles NOT LIKE '%ROLE_ADMIN%'
-                      AND user.roles NOT LIKE '%ROLE_GLOBAL_ADMIN%'
-                      AND ticket.status_id != '".self::STATUS_FORWARDED."'";
+            $qb
+                ->andWhere('usr.roles NOT LIKE :roleAdmin')
+                ->andWhere('usr.roles NOT LIKE :roleGlobalAdmin')
+                ->andWhere('IDENTITY(ticket.status) <> :forwarded')
+                ->setParameter('forwarded', self::STATUS_FORWARDED)
+            ;
         }
-        $sql .= ' AND ticket.access_url_id = '.(int) Container::getAccessUrlUtil()->getCurrent()->getId();
-        $sql .= "  AND ticket.project_id != '' ";
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
+        $qb
+            ->andWhere('IDENTITY(ticket.accessUrl) = :accessUrlId')
+            // The raw "project_id != ''" compared the id with 0.
+            ->andWhere('IDENTITY(ticket.project) <> 0')
+            ->setParameter('roleAdmin', '%ROLE_ADMIN%')
+            ->setParameter('roleGlobalAdmin', '%ROLE_GLOBAL_ADMIN%')
+            ->setParameter('accessUrlId', (int) Container::getAccessUrlUtil()->getCurrent()->getId())
+        ;
 
-        return (int) $obj->unread;
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -1586,12 +1774,19 @@ class TicketManager
         $ticketId = (int) $ticketId;
         $userId = (int) $userId;
 
-        $sql = "UPDATE $table_support_tickets SET
-                  priority_id = '".self::PRIORITY_HIGH."',
-                  sys_lastedit_user_id = $userId,
-                  sys_lastedit_datetime = '$now'
-                WHERE id = $ticketId";
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(Ticket::class, 'ticket')
+            ->set('ticket.priority', ':priority')
+            ->set('ticket.lastEditUserId', ':userId')
+            ->set('ticket.lastEditDateTime', ':now')
+            ->where('ticket.id = :id')
+            ->setParameter('priority', self::PRIORITY_HIGH)
+            ->setParameter('userId', $userId)
+            ->setParameter('now', $now)
+            ->setParameter('id', $ticketId)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -1605,13 +1800,20 @@ class TicketManager
 
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
-        $sql = "UPDATE $table_support_tickets SET
-                    status_id = ".self::STATUS_CLOSED.",
-                    sys_lastedit_user_id = $userId,
-                    sys_lastedit_datetime = '$now',
-                    end_date ='$now'
-                WHERE id = $ticketId";
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(Ticket::class, 'ticket')
+            ->set('ticket.status', ':closed')
+            ->set('ticket.lastEditUserId', ':userId')
+            ->set('ticket.lastEditDateTime', ':now')
+            ->set('ticket.endDate', ':now')
+            ->where('ticket.id = :id')
+            ->setParameter('closed', self::STATUS_CLOSED)
+            ->setParameter('userId', $userId)
+            ->setParameter('now', $now)
+            ->setParameter('id', $ticketId)
+            ->getQuery()
+            ->execute()
+        ;
 
         self::sendNotification(
             $ticketId,
@@ -1630,20 +1832,26 @@ class TicketManager
         $userId = api_get_user_id();
         $accessUrlId = (int) Container::getAccessUrlUtil()->getCurrent()->getId();
 
-        $sql = "UPDATE $table
-            SET
-                status_id = '".self::STATUS_CLOSED."',
-                sys_lastedit_user_id ='$userId',
-                sys_lastedit_datetime ='$now',
-                end_date = '$now'
-            WHERE
-                DATEDIFF('$now', sys_lastedit_datetime) > 7 AND
-                status_id != '".self::STATUS_CLOSED."' AND
-                status_id != '".self::STATUS_NEW."' AND
-                status_id != '".self::STATUS_FORWARDED."' AND
-                access_url_id = $accessUrlId";
-
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(Ticket::class, 'ticket')
+            ->set('ticket.status', ':closed')
+            ->set('ticket.lastEditUserId', ':userId')
+            ->set('ticket.lastEditDateTime', ':now')
+            ->set('ticket.endDate', ':now')
+            ->where('DATE_DIFF(:now, ticket.lastEditDateTime) > 7')
+            ->andWhere('IDENTITY(ticket.status) <> :closed')
+            ->andWhere('IDENTITY(ticket.status) <> :newStatus')
+            ->andWhere('IDENTITY(ticket.status) <> :forwarded')
+            ->andWhere('IDENTITY(ticket.accessUrl) = :accessUrlId')
+            ->setParameter('closed', self::STATUS_CLOSED)
+            ->setParameter('newStatus', self::STATUS_NEW)
+            ->setParameter('forwarded', self::STATUS_FORWARDED)
+            ->setParameter('userId', (int) $userId)
+            ->setParameter('now', $now)
+            ->setParameter('accessUrlId', $accessUrlId)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -1653,16 +1861,25 @@ class TicketManager
      */
     public static function get_assign_log($ticketId)
     {
-        $table = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
-        $ticketId = (int) $ticketId;
-
-        $sql = "SELECT * FROM $table
-                WHERE ticket_id = $ticketId
-                ORDER BY assigned_date DESC";
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'assignLog.id AS id',
+                'IDENTITY(assignLog.ticket) AS ticket_id',
+                'IDENTITY(assignLog.user) AS user_id',
+                'assignLog.insertUserId AS sys_insert_user_id',
+                'assignLog.assignedDate AS assigned_date'
+            )
+            ->from(TicketAssignedLog::class, 'assignLog')
+            ->where('IDENTITY(assignLog.ticket) = :ticketId')
+            ->orderBy('assignLog.assignedDate', 'DESC')
+            ->setParameter('ticketId', (int) $ticketId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $history = [];
         $webpath = api_get_path(WEB_PATH);
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
+            $row['assigned_date'] = self::toLegacyDate($row['assigned_date']);
             if (0 != $row['user_id']) {
                 $assignuser = api_get_user_info($row['user_id']);
                 $row['assignuser'] = '<a href="'.$webpath.'main/admin/user_information.php?user_id='.$row['user_id'].'"  target="_blank">'.
@@ -1698,15 +1915,6 @@ class TicketManager
     ) {
         $from = (int) $from;
         $number_of_items = (int) $number_of_items;
-        $table_support_category = Database::get_main_table(
-            TABLE_TICKET_CATEGORY
-        );
-        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
-        $table_support_priority = Database::get_main_table(TABLE_TICKET_PRIORITY);
-        $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
-        $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
-        $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
-
         if (is_null($direction)) {
             $direction = 'DESC';
         }
@@ -1714,152 +1922,151 @@ class TicketManager
             $userId = api_get_user_id();
         }
 
-        $sql = "SELECT
-                    ticket.code,
-                    ticket.sys_insert_datetime,
-                    ticket.sys_lastedit_datetime,
-                    cat.title as category,
-                    CONCAT(user.lastname,' ', user.firstname) AS fullname,
-                    status.title as status,
-                    ticket.total_messages as messages,
-                    ticket.assigned_last_user as responsable
-                FROM $table_support_tickets ticket,
-                $table_support_category cat ,
-                $table_support_priority priority,
-                $table_support_status status ,
-                $table_main_user user
-                WHERE
-                    cat.id = ticket.category_id
-                    AND ticket.priority_id = priority.id
-                    AND ticket.status_id = status.id
-                    AND user.id = ticket.sys_insert_user_id ";
-        $sql .= ' AND ticket.access_url_id = '.(int) Container::getAccessUrlUtil()->getCurrent()->getId();
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'ticket.code AS code',
+                'ticket.insertDateTime AS sys_insert_datetime',
+                'ticket.lastEditDateTime AS sys_lastedit_datetime',
+                'cat.title AS category',
+                "CONCAT(usr.lastname, ' ', usr.firstname) AS fullname",
+                'ticketStatus.title AS status',
+                'ticket.totalMessages AS messages',
+                'IDENTITY(ticket.assignedLastUser) AS responsable'
+            )
+            ->from(Ticket::class, 'ticket')
+            ->from(TicketCategory::class, 'cat')
+            ->from(TicketPriority::class, 'ticketPriority')
+            ->from(TicketStatus::class, 'ticketStatus')
+            ->from(User::class, 'usr')
+            ->where('IDENTITY(ticket.category) = cat.id')
+            ->andWhere('IDENTITY(ticket.priority) = ticketPriority.id')
+            ->andWhere('IDENTITY(ticket.status) = ticketStatus.id')
+            ->andWhere('usr.id = ticket.insertUserId')
+            ->andWhere('IDENTITY(ticket.accessUrl) = :accessUrlId')
+            ->setParameter('accessUrlId', (int) Container::getAccessUrlUtil()->getCurrent()->getId())
+        ;
 
         // Search simple
         if (isset($_GET['submit_simple'])) {
             if ('' !== $_GET['keyword']) {
-                $keyword = Database::escape_string(trim($_GET['keyword']));
-                $sql .= " AND (ticket.code = '$keyword'
-                          OR user.firstname LIKE '%$keyword%'
-                          OR user.lastname LIKE '%$keyword%'
-                          OR concat(user.firstname,' ',user.lastname) LIKE '%$keyword%'
-                          OR concat(user.lastname,' ',user.firstname) LIKE '%$keyword%'
-                          OR user.username LIKE '%$keyword%')  ";
+                $keyword = trim($_GET['keyword']);
+                $qb
+                    ->andWhere(
+                        '(ticket.code = :keyword
+                          OR usr.firstname LIKE :keywordLike
+                          OR usr.lastname LIKE :keywordLike
+                          OR CONCAT(usr.firstname, \' \', usr.lastname) LIKE :keywordLike
+                          OR CONCAT(usr.lastname, \' \', usr.firstname) LIKE :keywordLike
+                          OR usr.username LIKE :keywordLike)'
+                    )
+                    ->setParameter('keyword', $keyword)
+                    ->setParameter('keywordLike', '%'.$keyword.'%')
+                ;
             }
         }
         // Search advanced
         if (isset($_GET['submit_advanced'])) {
-            $keyword_category = Database::escape_string(
-                trim($_GET['keyword_category'])
-            );
-            $keyword_request_user = Database::escape_string(
-                trim($_GET['keyword_request_user'])
-            );
+            $keyword_category = trim($_GET['keyword_category']);
+            $keyword_request_user = trim($_GET['keyword_request_user']);
             $keywordAssignedTo = (int) $_GET['keyword_assigned_to'];
-            $keyword_start_date_start = Database::escape_string(
-                trim($_GET['keyword_start_date_start'])
-            );
-            $keyword_start_date_end = Database::escape_string(
-                trim($_GET['keyword_start_date_end'])
-            );
-            $keyword_status = Database::escape_string(
-                trim($_GET['keyword_status'])
-            );
-            $keyword_source = Database::escape_string(
-                trim($_GET['keyword_source'])
-            );
-            $keyword_priority = Database::escape_string(
-                trim($_GET['keyword_priority'])
-            );
-            $keyword_range = Database::escape_string(
-                trim($_GET['keyword_dates'])
-            );
-            $keyword_unread = Database::escape_string(
-                trim($_GET['keyword_unread'])
-            );
-            $keyword_course = Database::escape_string(
-                trim($_GET['keyword_course'])
-            );
+            $keyword_start_date_start = trim($_GET['keyword_start_date_start']);
+            $keyword_start_date_end = trim($_GET['keyword_start_date_end']);
+            $keyword_status = trim($_GET['keyword_status']);
+            $keyword_source = trim($_GET['keyword_source']);
+            $keyword_priority = trim($_GET['keyword_priority']);
+            $keyword_range = trim($_GET['keyword_dates']);
+            $keyword_unread = trim($_GET['keyword_unread']);
+            $keyword_course = trim($_GET['keyword_course']);
 
             if ('' != $keyword_category) {
-                $sql .= " AND ticket.category_id = '$keyword_category'  ";
+                $qb->andWhere('IDENTITY(ticket.category) = :keywordCategory')
+                    ->setParameter('keywordCategory', $keyword_category);
             }
             if ('' != $keyword_request_user) {
-                $sql .= " AND (ticket.sys_insert_user_id = '$keyword_request_user'
-                          OR user.firstname LIKE '%$keyword_request_user%'
-                          OR user.official_code LIKE '%$keyword_request_user%'
-                          OR user.lastname LIKE '%$keyword_request_user%'
-                          OR concat(user.firstname,' ',user.lastname) LIKE '%$keyword_request_user%'
-                          OR concat(user.lastname,' ',user.firstname) LIKE '%$keyword_request_user%'
-                          OR user.username LIKE '%$keyword_request_user%') ";
+                $qb
+                    ->andWhere(
+                        '(ticket.insertUserId = :requestUser
+                          OR usr.firstname LIKE :requestUserLike
+                          OR usr.officialCode LIKE :requestUserLike
+                          OR usr.lastname LIKE :requestUserLike
+                          OR CONCAT(usr.firstname, \' \', usr.lastname) LIKE :requestUserLike
+                          OR CONCAT(usr.lastname, \' \', usr.firstname) LIKE :requestUserLike
+                          OR usr.username LIKE :requestUserLike)'
+                    )
+                    ->setParameter('requestUser', $keyword_request_user)
+                    ->setParameter('requestUserLike', '%'.$keyword_request_user.'%')
+                ;
             }
             if (!empty($keywordAssignedTo)) {
-                $sql .= " AND ticket.assigned_last_user = $keywordAssignedTo ";
+                $qb->andWhere('IDENTITY(ticket.assignedLastUser) = :assignedTo')
+                    ->setParameter('assignedTo', $keywordAssignedTo);
             }
             if ('' != $keyword_status) {
-                $sql .= " AND ticket.status_id = '$keyword_status'  ";
+                $qb->andWhere('IDENTITY(ticket.status) = :keywordStatus')
+                    ->setParameter('keywordStatus', $keyword_status);
             }
-            // dd/mm/YYYY input compared as real dates (a value that is not a date is ignored).
+            // dd/mm/YYYY input compared as real dates (a value that is not a date is ignored). A day is the
+            // half-open range [00:00:00 of that day, 00:00:00 of the next one).
             $dateStart = self::parseTicketFilterDate($keyword_start_date_start);
             $dateEnd = self::parseTicketFilterDate($keyword_start_date_end);
             if ('' == $keyword_range && null !== $dateStart) {
-                $sql .= " AND DATE(ticket.start_date) = '$dateStart' ";
+                $qb->andWhere('ticket.startDate >= :dateStart AND ticket.startDate < :dayAfterDateStart')
+                    ->setParameter('dateStart', $dateStart.' 00:00:00')
+                    ->setParameter('dayAfterDateStart', self::dayAfter($dateStart).' 00:00:00');
             }
             if ('1' == $keyword_range && null !== $dateStart && null !== $dateEnd) {
-                $sql .= " AND DATE(ticket.start_date) >= '$dateStart'
-                          AND DATE(ticket.start_date) <= '$dateEnd'";
+                $qb->andWhere('ticket.startDate >= :rangeStart AND ticket.startDate < :dayAfterRangeEnd')
+                    ->setParameter('rangeStart', $dateStart.' 00:00:00')
+                    ->setParameter('dayAfterRangeEnd', self::dayAfter($dateEnd).' 00:00:00');
             }
             if ('' != $keyword_priority) {
-                $sql .= " AND ticket.priority_id = '$keyword_priority'  ";
+                $qb->andWhere('IDENTITY(ticket.priority) = :keywordPriority')
+                    ->setParameter('keywordPriority', $keyword_priority);
             }
             if ('' != $keyword_source) {
-                $sql .= " AND ticket.source = '$keyword_source' ";
-            }
-            if ('' != $keyword_priority) {
-                $sql .= " AND ticket.priority_id = '$keyword_priority' ";
+                $qb->andWhere('ticket.source = :keywordSource')
+                    ->setParameter('keywordSource', $keyword_source);
             }
             if ('' != $keyword_course) {
-                $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-                $sql .= " AND ticket.course_id IN ( ";
-                $sql .= "SELECT id
-                         FROM $course_table
-                         WHERE (title LIKE '%$keyword_course%'
-                         OR code LIKE '%$keyword_course%'
-                         OR visual_code LIKE '%$keyword_course%' )) ";
+                $qb->andWhere(
+                    'IDENTITY(ticket.course) IN (
+                        SELECT course.id
+                        FROM '.Course::class.' course
+                        WHERE (course.title LIKE :keywordCourse
+                            OR course.code LIKE :keywordCourse
+                            OR course.visualCode LIKE :keywordCourse))'
+                )->setParameter('keywordCourse', '%'.$keyword_course.'%');
             }
-            if ('yes' == $keyword_unread) {
-                $sql .= " AND ticket.id IN (
-                          SELECT ticket.id
-                          FROM $table_support_tickets ticket,
-                          $table_support_messages message,
-                          $table_main_user user
-                          WHERE ticket.id = message.ticket_id
-                          AND message.status = 'NOL'
-                          AND message.sys_insert_user_id = user.id
-                          AND user.roles NOT LIKE '%ROLE_ADMIN%' AND user.roles NOT LIKE '%ROLE_GLOBAL_ADMIN%'
-                          AND ticket.status_id != '".self::STATUS_FORWARDED."'
-                          GROUP BY ticket.id)";
-            } else {
-                if ('no' == $keyword_unread) {
-                    $sql .= " AND ticket.id NOT IN (
-                              SELECT ticket.id
-                              FROM  $table_support_tickets ticket,
-                              $table_support_messages message,
-                              $table_main_user user
-                              WHERE ticket.id = message.ticket_id
-                              AND message.status = 'NOL'
-                              AND message.sys_insert_user_id = user.id
-                              AND user.roles NOT LIKE '%ROLE_ADMIN%' AND user.roles NOT LIKE '%ROLE_GLOBAL_ADMIN%'
-                              AND ticket.status_id != '".self::STATUS_FORWARDED."'
-                             GROUP BY ticket.id)";
-                }
+            if ('yes' == $keyword_unread || 'no' == $keyword_unread) {
+                $qb->andWhere(
+                    'ticket.id '.('yes' == $keyword_unread ? 'IN' : 'NOT IN').' (
+                        SELECT unreadTicket.id
+                        FROM '.Ticket::class.' unreadTicket,
+                            '.TicketMessage::class.' unreadMessage,
+                            '.User::class.' unreadUser
+                        WHERE unreadTicket.id = IDENTITY(unreadMessage.ticket)
+                            AND unreadMessage.status = :unreadStatus
+                            AND unreadMessage.insertUserId = unreadUser.id
+                            AND unreadUser.roles NOT LIKE :roleAdmin
+                            AND unreadUser.roles NOT LIKE :roleGlobalAdmin
+                            AND IDENTITY(unreadTicket.status) <> :forwarded
+                        GROUP BY unreadTicket.id)'
+                )
+                    ->setParameter('unreadStatus', 'NOL')
+                    ->setParameter('roleAdmin', '%ROLE_ADMIN%')
+                    ->setParameter('roleGlobalAdmin', '%ROLE_GLOBAL_ADMIN%')
+                    ->setParameter('forwarded', self::STATUS_FORWARDED)
+                ;
             }
         }
 
-        $sql .= !str_contains($sql, 'WHERE') ? ' WHERE user.active <> '.USER_SOFT_DELETED : ' AND user.active <> '.USER_SOFT_DELETED;
-        $sql .= " LIMIT $from,$number_of_items";
+        $qb->andWhere('usr.active <> :softDeleted')
+            ->setParameter('softDeleted', USER_SOFT_DELETED)
+            ->setFirstResult($from)
+            ->setMaxResults($number_of_items)
+        ;
 
-        $result = Database::query($sql);
+        $result = $qb->getQuery()->getArrayResult();
         $tickets[0] = [
             utf8_decode('Ticket#'),
             utf8_decode('Fecha'),
@@ -1872,7 +2079,9 @@ class TicketManager
             utf8_decode('Programa'),
         ];
 
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($result as $row) {
+            $row['sys_insert_datetime'] = self::toLegacyDate($row['sys_insert_datetime']);
+            $row['sys_lastedit_datetime'] = self::toLegacyDate($row['sys_lastedit_datetime']);
             if (0 != $row['responsable']) {
                 $row['responsable'] = api_get_user_info($row['responsable']);
                 $row['responsable'] = $row['responsable']['firstname'].' '.$row['responsable']['lastname'];

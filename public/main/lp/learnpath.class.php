@@ -32,7 +32,10 @@ use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CLpIvInteraction;
+use Chamilo\CourseBundle\Entity\CLpIvObjective;
 use Chamilo\CourseBundle\Entity\CLpRelUser;
+use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -41,6 +44,7 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CLpRelUserRepository;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\QueryBuilder;
 use PhpZip\ZipFile;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -218,17 +222,15 @@ class learnpath
             $lp_table = Database::get_course_table(TABLE_LP_VIEW);
 
             // Selecting by view_count descending allows to get the highest view_count first.
-            $sql = "SELECT * FROM $lp_table
-                    WHERE
-                        c_id = $course_id AND
-                        lp_id = $lp_id AND
-                        user_id = $user_id
-                        $session
-                    ORDER BY view_count DESC";
-            $res = Database::query($sql);
+            $rows = self::lpViewQueryBuilder((int) $course_id, [(int) $lp_id], (int) $user_id, (int) $session_id)
+                ->addSelect('v.viewCount AS view_count', 'v.lastItem AS last_item', 'v.progress AS progress')
+                ->addSelect('IDENTITY(v.session) AS session_id')
+                ->orderBy('v.viewCount', 'DESC')
+                ->getQuery()
+                ->getArrayResult();
 
-            if (Database::num_rows($res) > 0) {
-                $row = Database::fetch_array($res);
+            if (!empty($rows)) {
+                $row = $rows[0];
                 $this->attempt = $row['view_count'];
                 $this->lp_view_id = $row['iid'];
                 $this->last_item_seen = $row['last_item'];
@@ -314,15 +316,18 @@ class learnpath
                     // Get last viewing vars.
                     $itemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
                     // This query should only return one or zero result.
-                    $sql = "SELECT lp_item_id, status
-                            FROM $itemViewTable
-                            WHERE
-                                lp_view_id = ".$this->get_view_id()." AND
-                                lp_item_id IN ('".$lp_item_id_list_to_string."')
-                            ORDER BY view_count DESC ";
+                    $itemViewRows = Container::getEntityManager()->createQueryBuilder()
+                        ->select('IDENTITY(iv.item) AS lp_item_id', 'iv.status AS status')
+                        ->from(CLpItemView::class, 'iv')
+                        ->where('IDENTITY(iv.view) = :viewId')
+                        ->andWhere('IDENTITY(iv.item) IN (:itemIds)')
+                        ->setParameter('viewId', (int) $this->get_view_id())
+                        ->setParameter('itemIds', array_map('intval', $lp_item_id_list))
+                        ->orderBy('iv.viewCount', 'DESC')
+                        ->getQuery()
+                        ->getArrayResult();
                     $status_list = [];
-                    $res = Database::query($sql);
-                    while ($row = Database:: fetch_array($res)) {
+                    foreach ($itemViewRows as $row) {
                         // Rows come by view_count descending: keep the first one (the latest attempt).
                         if (!isset($status_list[$row['lp_item_id']])) {
                             $status_list[$row['lp_item_id']] = $row['status'];
@@ -916,15 +921,25 @@ class learnpath
         if (empty($id) || empty($course_id)) {
             return false;
         }
-        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $lp_item
-                WHERE parent_item_id = $id";
-        $res = Database::query($sql);
-        while ($row = Database::fetch_array($res)) {
-            $num += $this->delete_children_items($row['iid']);
-            $sql = "DELETE FROM $lp_item
-                    WHERE iid = ".$row['iid'];
-            Database::query($sql);
+        $em = Container::getEntityManager();
+        $childIds = array_column(
+            $em->createQueryBuilder()
+                ->select('i.iid AS iid')
+                ->from(CLpItem::class, 'i')
+                ->where('IDENTITY(i.parent) = :parentId')
+                ->setParameter('parentId', $id)
+                ->getQuery()
+                ->getArrayResult(),
+            'iid'
+        );
+        foreach ($childIds as $childId) {
+            $num += $this->delete_children_items($childId);
+            $em->createQueryBuilder()
+                ->delete(CLpItem::class, 'i')
+                ->where('i.iid = :itemId')
+                ->setParameter('itemId', (int) $childId)
+                ->getQuery()
+                ->execute();
             $num++;
         }
 
@@ -961,12 +976,16 @@ class learnpath
         $em = Database::getManager();
         $repo->removeFromTree($item);
         $em->flush();
-        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
         //Removing prerequisites since the item will not longer exist
-        $sql_all = "UPDATE $lp_item SET prerequisite = ''
-                    WHERE prerequisite = '$id'";
-        Database::query($sql_all);
+        $em->createQueryBuilder()
+            ->update(CLpItem::class, 'i')
+            ->set('i.prerequisite', ':empty')
+            ->where('i.prerequisite = :itemId')
+            ->setParameter('empty', '')
+            ->setParameter('itemId', (string) $id)
+            ->getQuery()
+            ->execute();
 
         // previous_item_id is the left value of the nested tree (Gedmo TreeLeft), maintained by removeFromTree()
         // above: it must not be overwritten with an item id here (it used to be set to getLastInFirstLevel()).
@@ -1240,27 +1259,21 @@ class learnpath
             return [];
         }
 
-        $lpTable = Database::get_course_table(TABLE_LP_MAIN);
-        $resourceNodeTable = 'resource_node';
-
-        $sql = "
-            SELECT DISTINCT candidate_lp.iid, candidate_lp.title
-            FROM $lpTable current_lp
-            INNER JOIN $resourceNodeTable current_rn
-                ON current_rn.id = current_lp.resource_node_id
-            INNER JOIN $resourceNodeTable candidate_rn
-                ON candidate_rn.parent_id = current_rn.parent_id
-            INNER JOIN $lpTable candidate_lp
-                ON candidate_lp.resource_node_id = candidate_rn.id
-            WHERE current_lp.iid = $lpId
-                AND candidate_lp.iid <> $lpId
-            ORDER BY candidate_lp.title ASC
-        ";
-
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT candidate_lp.iid AS iid', 'candidate_lp.title AS title')
+            ->from(CLp::class, 'current_lp')
+            ->innerJoin('current_lp.resourceNode', 'current_rn')
+            ->innerJoin(ResourceNode::class, 'candidate_rn', 'WITH', 'IDENTITY(candidate_rn.parent) = IDENTITY(current_rn.parent)')
+            ->innerJoin(CLp::class, 'candidate_lp', 'WITH', 'IDENTITY(candidate_lp.resourceNode) = candidate_rn.id')
+            ->where('current_lp.iid = :lpId')
+            ->andWhere('candidate_lp.iid <> :lpId')
+            ->setParameter('lpId', $lpId)
+            ->orderBy('candidate_lp.title', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
         $options = [];
 
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             $options[(int) $row['iid']] = $row['title'];
         }
 
@@ -1885,19 +1898,14 @@ class learnpath
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
 
-        $sessionCondition = api_get_session_condition($sessionId);
-        $table = Database::get_course_table(TABLE_LP_VIEW);
-        $sql = "SELECT progress FROM $table
-                WHERE
-                    c_id = $courseId AND
-                    lp_id = $lpId AND
-                    user_id = $userId $sessionCondition ";
-        $res = Database::query($sql);
+        $rows = self::lpViewQueryBuilder($courseId, [$lpId], $userId, $sessionId)
+            ->addSelect('v.progress AS progress')
+            ->getQuery()
+            ->getArrayResult();
 
         $progress = 0;
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_array($res);
-            $progress = (int) $row['progress'];
+        if (!empty($rows)) {
+            $progress = (int) $rows[0]['progress'];
         }
 
         return $progress;
@@ -1918,24 +1926,18 @@ class learnpath
             return [];
         }
 
-        $lpList = implode("','", $lpList);
-
         $userId = (int) $userId;
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
 
-        $sessionCondition = api_get_session_condition($sessionId);
-        $table = Database::get_course_table(TABLE_LP_VIEW);
-        $sql = "SELECT lp_id, progress FROM $table
-                WHERE
-                    c_id = $courseId AND
-                    lp_id IN ('".$lpList."') AND
-                    user_id = $userId $sessionCondition ";
-        $res = Database::query($sql);
+        $rows = self::lpViewQueryBuilder($courseId, $lpList, $userId, $sessionId)
+            ->addSelect('IDENTITY(v.lp) AS lp_id', 'v.progress AS progress')
+            ->getQuery()
+            ->getArrayResult();
 
-        if (Database::num_rows($res) > 0) {
+        if (!empty($rows)) {
             $list = [];
-            while ($row = Database::fetch_array($res)) {
+            foreach ($rows as $row) {
                 $list[$row['lp_id']] = $row['progress'];
             }
 
@@ -2244,20 +2246,18 @@ class learnpath
      */
     public static function get_interactions_count_from_db($lp_iv_id, $course_id)
     {
-        $table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
         $lp_iv_id = (int) $lp_iv_id;
         $course_id = (int) $course_id;
 
-        $sql = "SELECT count(*) FROM $table
-                WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id";
-        $res = Database::query($sql);
-        $num = 0;
-        if (Database::num_rows($res)) {
-            $row = Database::fetch_array($res);
-            $num = $row[0];
-        }
-
-        return $num;
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(i.iid)')
+            ->from(CLpIvInteraction::class, 'i')
+            ->where('i.cId = :courseId')
+            ->andWhere('i.lpIvId = :lpIvId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('lpIvId', $lp_iv_id)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
@@ -2274,19 +2274,31 @@ class learnpath
     {
         $course_id = empty($course_id) ? api_get_course_int_id() : (int) $course_id;
         $list = [];
-        $table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
         $lp_iv_id = (int) $lp_iv_id;
 
         if (empty($lp_iv_id) || empty($course_id)) {
             return [];
         }
 
-        $sql = "SELECT * FROM $table
-                WHERE c_id = ".$course_id." AND lp_iv_id = $lp_iv_id
-                ORDER BY order_id ASC";
-        $res = Database::query($sql);
-        $num = Database::num_rows($res);
-        if ($num > 0) {
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'i.orderId AS order_id',
+                'i.interactionId AS interaction_id',
+                'i.interactionType AS interaction_type',
+                'i.completionTime AS completion_time',
+                'i.studentResponse AS student_response',
+                'i.result AS result',
+                'i.latency AS latency'
+            )
+            ->from(CLpIvInteraction::class, 'i')
+            ->where('i.cId = :courseId')
+            ->andWhere('i.lpIvId = :lpIvId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('lpIvId', $lp_iv_id)
+            ->orderBy('i.orderId', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+        if (!empty($rows)) {
             $list[] = [
                 'order_id' => api_htmlentities(get_lang('Order'), ENT_QUOTES),
                 'id' => api_htmlentities(get_lang('Interaction ID'), ENT_QUOTES),
@@ -2298,7 +2310,7 @@ class learnpath
                 'latency' => api_htmlentities(get_lang('Time spent'), ENT_QUOTES),
                 'student_response_formatted' => '',
             ];
-            while ($row = Database::fetch_array($res)) {
+            foreach ($rows as $row) {
                 $studentResponseFormatted = urldecode($row['student_response']);
                 $content_student_response = explode('__|', $studentResponseFormatted);
                 if (count($content_student_response) > 0) {
@@ -2337,20 +2349,19 @@ class learnpath
      */
     public static function get_objectives_count_from_db($lp_iv_id, $course_id)
     {
-        $table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
         $course_id = (int) $course_id;
         $lp_iv_id = (int) $lp_iv_id;
-        $sql = "SELECT count(*) FROM $table
-                WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id";
-        //@todo seems that this always returns 0
-        $res = Database::query($sql);
-        $num = 0;
-        if (Database::num_rows($res)) {
-            $row = Database::fetch_array($res);
-            $num = $row[0];
-        }
 
-        return $num;
+        //@todo seems that this always returns 0
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(o.iid)')
+            ->from(CLpIvObjective::class, 'o')
+            ->where('o.cId = :courseId')
+            ->andWhere('o.lpIvId = :lpIvId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('lpIvId', $lp_iv_id)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
@@ -2373,14 +2384,25 @@ class learnpath
             return [];
         }
 
-        $table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
-        $sql = "SELECT * FROM $table
-                WHERE c_id = $course_id AND lp_iv_id = $lpItemViewId
-                ORDER BY order_id ASC";
-        $res = Database::query($sql);
-        $num = Database::num_rows($res);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'o.orderId AS order_id',
+                'o.objectiveId AS objective_id',
+                'o.scoreRaw AS score_raw',
+                'o.scoreMax AS score_max',
+                'o.scoreMin AS score_min',
+                'o.status AS status'
+            )
+            ->from(CLpIvObjective::class, 'o')
+            ->where('o.cId = :courseId')
+            ->andWhere('o.lpIvId = :lpIvId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('lpIvId', $lpItemViewId)
+            ->orderBy('o.orderId', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
         $list = [];
-        if ($num > 0) {
+        if (!empty($rows)) {
             $list[] = [
                 'order_id' => api_htmlentities(get_lang('Order'), ENT_QUOTES),
                 'objective_id' => api_htmlentities(get_lang('Objective ID'), ENT_QUOTES),
@@ -2389,7 +2411,7 @@ class learnpath
                 'score_min' => api_htmlentities(get_lang('Objective min score'), ENT_QUOTES),
                 'status' => api_htmlentities(get_lang('Objective status'), ENT_QUOTES),
             ];
-            while ($row = Database::fetch_array($res)) {
+            foreach ($rows as $row) {
                 $list[] = [
                     'order_id' => $row['order_id'] + 1,
                     'objective_id' => urldecode($row['objective_id']), // urldecode() because they often have %2F
@@ -2489,20 +2511,19 @@ class learnpath
      */
     public static function get_type_static($lp_id = 0)
     {
-        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = (int) $lp_id;
-        $sql = "SELECT lp_type FROM $tbl_lp
-                WHERE iid = $lp_id";
-        $res = Database::query($sql);
-        if (false === $res) {
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('l.lpType AS lp_type')
+            ->from(CLp::class, 'l')
+            ->where('l.iid = :lpId')
+            ->setParameter('lpId', $lp_id)
+            ->getQuery()
+            ->getArrayResult();
+        if (empty($rows)) {
             return null;
         }
-        if (Database::num_rows($res) <= 0) {
-            return null;
-        }
-        $row = Database::fetch_array($res);
 
-        return $row['lp_type'];
+        return $rows[0]['lp_type'];
     }
 
     /**
@@ -2749,26 +2770,24 @@ class learnpath
         }
 
         $file = '';
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
-        $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-
-        $sql = "SELECT
-                    l.lp_type as ltype,
-                    l.path as lpath,
-                    li.item_type as litype,
-                    li.path as lipath,
-                    li.parameters as liparams
-        		FROM $lp_table l
-                INNER JOIN $lp_item_table li
-                ON (li.lp_id = l.iid)
-        		WHERE
-        		    li.iid = $item_id AND
-        		    l.iid = ".(int) $this->get_id()."
-        		";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_array($res);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'l.lpType AS ltype',
+                'l.path AS lpath',
+                'li.itemType AS litype',
+                'li.path AS lipath',
+                'li.parameters AS liparams'
+            )
+            ->from(CLp::class, 'l')
+            ->innerJoin(CLpItem::class, 'li', 'WITH', 'IDENTITY(li.lp) = l.iid')
+            ->where('li.iid = :itemId')
+            ->andWhere('l.iid = :lpId')
+            ->setParameter('itemId', (int) $item_id)
+            ->setParameter('lpId', (int) $this->get_id())
+            ->getQuery()
+            ->getArrayResult();
+        if (!empty($rows)) {
+            $row = $rows[0];
             $lp_type = $row['ltype'];
             $lp_path = $row['lpath'];
             $lp_item_type = $row['litype'];
@@ -3020,14 +3039,17 @@ class learnpath
                             if ($type_quiz) {
                                 $lp_item_id = (int) $lp_item_id;
                                 $lp_view_id = (int) $lp_view_id;
-                                $sql = "SELECT count(*) FROM $lp_item_view_table
-                                        WHERE
-                                            lp_item_id='".$lp_item_id."' AND
-                                            lp_view_id ='".$lp_view_id."' AND
-                                            status='completed'";
-                                $result = Database::query($sql);
-                                $row_count = Database:: fetch_row($result);
-                                $count_item_view = (int) $row_count[0];
+                                $count_item_view = (int) Container::getEntityManager()->createQueryBuilder()
+                                    ->select('COUNT(iv.iid)')
+                                    ->from(CLpItemView::class, 'iv')
+                                    ->where('IDENTITY(iv.item) = :itemId')
+                                    ->andWhere('IDENTITY(iv.view) = :viewId')
+                                    ->andWhere('iv.status = :status')
+                                    ->setParameter('itemId', $lp_item_id)
+                                    ->setParameter('viewId', $lp_view_id)
+                                    ->setParameter('status', 'completed')
+                                    ->getQuery()
+                                    ->getSingleScalarResult();
                                 $not_multiple_attempt = 0;
                                 if (1 === $prevent_reinit && $count_item_view > 0) {
                                     $not_multiple_attempt = 1;
@@ -3144,12 +3166,7 @@ class learnpath
      */
     public function get_view($attempt_num = 0, $userId = null)
     {
-        $search = '';
         $attempt_num = (int) $attempt_num;
-        // Use $attempt_num to enable multi-views management (disabled so far).
-        if (!empty($attempt_num)) {
-            $search = 'AND view_count = '.$attempt_num;
-        }
 
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
@@ -3165,22 +3182,18 @@ class learnpath
             }
         }
         $userId = (int) $userId;
-        $sessionCondition = api_get_session_condition($sessionId);
 
         // When missing $attempt_num, search for a unique lp_view record for this lp and user.
         $table = Database::get_course_table(TABLE_LP_VIEW);
-        $sql = "SELECT iid FROM $table
-        		WHERE
-        		    c_id = $course_id AND
-        		    lp_id = ".$this->get_id()." AND
-        		    user_id = ".$userId."
-        		    $sessionCondition
-        		    $search
-                ORDER BY view_count DESC";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_array($res);
-            $this->lp_view_id = $row['iid'];
+        $viewQb = self::lpViewQueryBuilder((int) $course_id, [(int) $this->get_id()], $userId, (int) $sessionId);
+        // Use $attempt_num to enable multi-views management (disabled so far).
+        if (!empty($attempt_num)) {
+            $viewQb->andWhere('v.viewCount = :attemptNum')
+                ->setParameter('attemptNum', $attempt_num);
+        }
+        $rows = $viewQb->orderBy('v.viewCount', 'DESC')->getQuery()->getArrayResult();
+        if (!empty($rows)) {
+            $this->lp_view_id = $rows[0]['iid'];
         } elseif (!api_is_invitee() && !empty($userId)) {
             $params = [
                 'c_id' => $course_id,
@@ -3431,6 +3444,43 @@ class learnpath
         }
 
         return true;
+    }
+
+    /**
+     * Views (c_lp_view) of one user on some learning paths in a course, restricted like api_get_session_condition()
+     * does: the given session only, or no session at all when $sessionId is empty. Selects the view iid.
+     */
+    private static function lpViewQueryBuilder(int $courseId, array $lpIds, int $userId, int $sessionId): QueryBuilder
+    {
+        return self::scopeLpViews(
+            Container::getEntityManager()->createQueryBuilder()->select('v.iid AS iid')->from(CLpView::class, 'v'),
+            $courseId,
+            $lpIds,
+            $userId,
+            $sessionId
+        );
+    }
+
+    /**
+     * Adds the course / learning paths / user / session conditions on the CLpView aliased "v" (select or update).
+     */
+    private static function scopeLpViews(QueryBuilder $qb, int $courseId, array $lpIds, int $userId, int $sessionId): QueryBuilder
+    {
+        $qb->where('IDENTITY(v.course) = :courseId')
+            ->andWhere('IDENTITY(v.lp) IN (:lpIds)')
+            ->andWhere('IDENTITY(v.user) = :userId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('lpIds', $lpIds)
+            ->setParameter('userId', $userId);
+
+        if (empty($sessionId)) {
+            $qb->andWhere('(IDENTITY(v.session) = 0 OR v.session IS NULL)');
+        } else {
+            $qb->andWhere('IDENTITY(v.session) = :sessionId')
+                ->setParameter('sessionId', $sessionId);
+        }
+
+        return $qb;
     }
 
     /**
@@ -3897,12 +3947,7 @@ class learnpath
         if ($debug) {
             error_log('In learnpath::save_last()', 0);
         }
-        $session_condition = api_get_session_condition(
-            api_get_session_id(),
-            true,
-            false
-        );
-        $table = Database::get_course_table(TABLE_LP_VIEW);
+        $sessionId = (int) api_get_session_id();
 
         $userId = $this->get_user_id();
         if (empty($userId)) {
@@ -3915,17 +3960,19 @@ class learnpath
             if ($debug) {
                 error_log('Saving current item ('.$this->current.') for later review', 0);
             }
-            $sql = "UPDATE $table SET
-                        last_item = ".$this->get_current_item_id()."
-                    WHERE
-                        c_id = $course_id AND
-                        lp_id = ".$this->get_id()." AND
-                        user_id = ".$userId." ".$session_condition;
-
             if ($debug) {
-                error_log('Saving last item seen : '.$sql, 0);
+                error_log('Saving last item seen : '.$this->get_current_item_id(), 0);
             }
-            Database::query($sql);
+            self::scopeLpViews(
+                Container::getEntityManager()->createQueryBuilder()
+                    ->update(CLpView::class, 'v')
+                    ->set('v.lastItem', ':lastItem')
+                    ->setParameter('lastItem', (int) $this->get_current_item_id()),
+                (int) $course_id,
+                [(int) $this->get_id()],
+                (int) $userId,
+                $sessionId
+            )->getQuery()->execute();
         }
 
         if (!api_is_invitee()) {
@@ -3961,14 +4008,17 @@ class learnpath
             }
             if ($progress >= 0 && $progress <= 100) {
                 $progress = (int) $progress;
-                $sql = "UPDATE $table SET
-                            progress = $progress
-                        WHERE
-                            c_id = $course_id AND
-                            lp_id = ".$this->get_id()." AND
-                            user_id = ".$userId." ".$session_condition;
                 // Ignore errors as some tables might not have the progress field just yet.
-                Database::query($sql);
+                self::scopeLpViews(
+                    Container::getEntityManager()->createQueryBuilder()
+                        ->update(CLpView::class, 'v')
+                        ->set('v.progress', ':progress')
+                        ->setParameter('progress', $progress),
+                    (int) $course_id,
+                    [(int) $this->get_id()],
+                    (int) $userId,
+                    $sessionId
+                )->getQuery()->execute();
                 $this->progress_db = $progress;
 
                 if (100 == $progress) {
@@ -4045,11 +4095,14 @@ class learnpath
     public function set_modified_on()
     {
         $this->modified_on = api_get_utc_datetime();
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $lp_id = $this->get_id();
-        $sql = "UPDATE $table SET modified_on = '".$this->modified_on."'
-                WHERE iid = $lp_id";
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(CLp::class, 'l')
+            ->set('l.modifiedOn', ':modifiedOn')
+            ->where('l.iid = :lpId')
+            ->setParameter('modifiedOn', $this->modified_on)
+            ->setParameter('lpId', (int) $this->get_id())
+            ->getQuery()
+            ->execute();
 
         return true;
     }
@@ -4179,13 +4232,15 @@ class learnpath
      */
     public function update_default_view_mode()
     {
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT * FROM $table
-                WHERE iid = ".$this->get_id();
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_array($res);
-            $default_view_mode = $row['default_view_mod'];
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('l.defaultViewMod AS default_view_mod')
+            ->from(CLp::class, 'l')
+            ->where('l.iid = :lpId')
+            ->setParameter('lpId', (int) $this->get_id())
+            ->getQuery()
+            ->getArrayResult();
+        if (!empty($rows)) {
+            $default_view_mode = $rows[0]['default_view_mod'];
             $view_mode = $default_view_mode;
             switch ($default_view_mode) {
                 case 'fullscreen': // default with popup
@@ -4201,9 +4256,14 @@ class learnpath
                     $view_mode = 'fullscreen';
                     break;
             }
-            $sql = "UPDATE $table SET default_view_mod = '$view_mode'
-                    WHERE iid = ".$this->get_id();
-            Database::query($sql);
+            Container::getEntityManager()->createQueryBuilder()
+                ->update(CLp::class, 'l')
+                ->set('l.defaultViewMod', ':viewMode')
+                ->where('l.iid = :lpId')
+                ->setParameter('viewMode', $view_mode)
+                ->setParameter('lpId', (int) $this->get_id())
+                ->getQuery()
+                ->execute();
             $this->mode = $view_mode;
 
             return $view_mode;
@@ -4219,13 +4279,15 @@ class learnpath
      */
     public function update_default_scorm_commit()
     {
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT * FROM $lp_table
-                WHERE iid = ".$this->get_id();
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_array($res);
-            $force = $row['force_commit'];
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('l.forceCommit AS force_commit')
+            ->from(CLp::class, 'l')
+            ->where('l.iid = :lpId')
+            ->setParameter('lpId', (int) $this->get_id())
+            ->getQuery()
+            ->getArrayResult();
+        if (!empty($rows)) {
+            $force = $rows[0]['force_commit'];
             if (1 == $force) {
                 $force = 0;
                 $force_return = false;
@@ -4233,9 +4295,14 @@ class learnpath
                 $force = 1;
                 $force_return = true;
             }
-            $sql = "UPDATE $lp_table SET force_commit = $force
-                    WHERE iid = ".$this->get_id();
-            Database::query($sql);
+            Container::getEntityManager()->createQueryBuilder()
+                ->update(CLp::class, 'l')
+                ->set('l.forceCommit', ':force')
+                ->where('l.iid = :lpId')
+                ->setParameter('force', (bool) $force)
+                ->setParameter('lpId', (int) $this->get_id())
+                ->getQuery()
+                ->execute();
             $this->force_commit = $force_return;
 
             return $force_return;
@@ -4258,10 +4325,14 @@ class learnpath
             $force = 1;
         }
 
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "UPDATE $table SET prevent_reinit = $force
-                WHERE iid = ".$this->get_id();
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(CLp::class, 'l')
+            ->set('l.preventReinit', ':force')
+            ->where('l.iid = :lpId')
+            ->setParameter('force', (bool) $force)
+            ->setParameter('lpId', (int) $this->get_id())
+            ->getQuery()
+            ->execute();
         $this->prevent_reinit = $force;
 
         return $force;
@@ -4328,17 +4399,18 @@ class learnpath
         }
         $this->prevent_reinit = $prevent_reinit;
         $this->seriousgame_mode = $sg_mode;
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "UPDATE $table SET
-                prevent_reinit = $prevent_reinit ,
-                seriousgame_mode = $sg_mode
-                WHERE iid = ".$this->get_id();
-        $res = Database::query($sql);
-        if ($res) {
-            return true;
-        } else {
-            return false;
-        }
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(CLp::class, 'l')
+            ->set('l.preventReinit', ':preventReinit')
+            ->set('l.seriousgameMode', ':seriousgameMode')
+            ->where('l.iid = :lpId')
+            ->setParameter('preventReinit', (bool) $prevent_reinit)
+            ->setParameter('seriousgameMode', (bool) $sg_mode)
+            ->setParameter('lpId', (int) $this->get_id())
+            ->getQuery()
+            ->execute();
+
+        return true;
     }
 
     /**
@@ -4374,16 +4446,20 @@ class learnpath
      */
     public function set_seriousgame_mode()
     {
-        $table = Database::get_course_table(TABLE_LP_MAIN);
         $force = $this->seriousgame_mode;
         if (1 == $force) {
             $force = 0;
         } elseif (0 == $force) {
             $force = 1;
         }
-        $sql = "UPDATE $table SET seriousgame_mode = $force
-                WHERE iid = ".$this->get_id();
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(CLp::class, 'l')
+            ->set('l.seriousgameMode', ':force')
+            ->where('l.iid = :lpId')
+            ->setParameter('force', (bool) $force)
+            ->setParameter('lpId', (int) $this->get_id())
+            ->getQuery()
+            ->execute();
         $this->seriousgame_mode = $force;
 
         return $force;
@@ -4396,16 +4472,20 @@ class learnpath
      */
     public function update_scorm_debug()
     {
-        $table = Database::get_course_table(TABLE_LP_MAIN);
         $force = $this->scorm_debug;
         if (1 == $force) {
             $force = 0;
         } elseif (0 == $force) {
             $force = 1;
         }
-        $sql = "UPDATE $table SET debug = $force
-                WHERE iid = ".$this->get_id();
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(CLp::class, 'l')
+            ->set('l.debug', ':force')
+            ->where('l.iid = :lpId')
+            ->setParameter('force', (bool) $force)
+            ->setParameter('lpId', (int) $this->get_id())
+            ->getQuery()
+            ->execute();
         $this->scorm_debug = $force;
 
         return $force;
@@ -5981,13 +6061,6 @@ document.addEventListener("DOMContentLoaded", function () {
         $return .= 'child_name[0] = new Array();'."\n";
         $return .= 'child_value[0] = new Array();'."\n\n";
 
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM ".$tbl_lp_item."
-                WHERE
-                    lp_id = ".$this->lp_id." AND
-                    parent_item_id = 0
-                ORDER BY display_order ASC";
-        Database::query($sql);
         $i = 0;
 
         $list = $this->getItemsForForm(true);
@@ -6004,20 +6077,29 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         $return .= "\n";
-        $sql = "SELECT * FROM $tbl_lp_item
-                WHERE lp_id = ".$this->lp_id;
-        $res = Database::query($sql);
-        while ($row = Database::fetch_array($res)) {
-            $sql_parent = "SELECT * FROM ".$tbl_lp_item."
-                           WHERE
-                                parent_item_id = ".$row['iid']."
-                           ORDER BY display_order ASC";
-            $res_parent = Database::query($sql_parent);
+        $em = Container::getEntityManager();
+        $lpItemRows = $em->createQueryBuilder()
+            ->select('i.iid AS iid')
+            ->from(CLpItem::class, 'i')
+            ->where('IDENTITY(i.lp) = :lpId')
+            ->setParameter('lpId', (int) $this->lp_id)
+            ->orderBy('i.iid', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+        foreach ($lpItemRows as $row) {
+            $parentRows = $em->createQueryBuilder()
+                ->select('i.iid AS iid', 'i.title AS title')
+                ->from(CLpItem::class, 'i')
+                ->where('IDENTITY(i.parent) = :parentId')
+                ->setParameter('parentId', (int) $row['iid'])
+                ->orderBy('i.displayOrder', 'ASC')
+                ->getQuery()
+                ->getArrayResult();
             $i = 0;
             $return .= 'child_name['.$row['iid'].'] = new Array();'."\n";
             $return .= 'child_value['.$row['iid'].'] = new Array();'."\n\n";
 
-            while ($row_parent = Database::fetch_array($res_parent)) {
+            foreach ($parentRows as $row_parent) {
                 $js_var = json_encode(get_lang('After').' '.$this->cleanItemTitle($row_parent['title']));
                 $return .= 'child_name['.$row['iid'].']['.$i.'] =   '.$js_var.' ;'."\n";
                 $return .= 'child_value['.$row['iid'].']['.$i++.'] = "'.$row_parent['iid'].'";'."\n";
@@ -6068,15 +6150,26 @@ document.addEventListener("DOMContentLoaded", function () {
         $title = get_lang('Add/edit prerequisites').' '.$lpItem->getTitle();
 
         // Load scores
-        $tblLpItem = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $tblLpItem WHERE lp_id = ".$this->lp_id;
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'i.iid AS iid',
+                'i.prerequisite AS prerequisite',
+                'i.prerequisiteMinScore AS prerequisite_min_score',
+                'i.prerequisiteMaxScore AS prerequisite_max_score',
+                'i.masteryScore AS mastery_score'
+            )
+            ->from(CLpItem::class, 'i')
+            ->where('IDENTITY(i.lp) = :lpId')
+            ->setParameter('lpId', (int) $this->lp_id)
+            ->orderBy('i.iid', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
 
         $selectedMinScore = [];
         $selectedMaxScore = [];
         $masteryScore = [];
 
-        while ($row = Database::fetch_array($result)) {
+        foreach ($rows as $row) {
             if ($row['iid'] == $currentItemId) {
                 $selectedMinScore[$row['prerequisite']] = $row['prerequisite_min_score'];
                 $selectedMaxScore[$row['prerequisite']] = $row['prerequisite_max_score'];
@@ -7532,19 +7625,21 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     public function select_previous_item_id()
     {
-        $table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-
         // c_lp_item has no c_id column: the items belong to the course through their learning path. The last item
         // is the one with the highest display order (the most recently created one on a tie).
-        $sql = "SELECT iid AS previous FROM $table_lp_item
-                WHERE lp_id = ".(int) $this->lp_id."
-                ORDER BY display_order DESC, iid DESC
-                LIMIT 1";
-        $rs_max = Database::query($sql);
-        $row_max = Database::fetch_object($rs_max);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('i.iid AS previous')
+            ->from(CLpItem::class, 'i')
+            ->where('IDENTITY(i.lp) = :lpId')
+            ->setParameter('lpId', (int) $this->lp_id)
+            ->orderBy('i.displayOrder', 'DESC')
+            ->addOrderBy('i.iid', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult();
 
         // Return the previous item ID
-        return $row_max ? $row_max->previous : 0;
+        return $rows[0]['previous'] ?? 0;
     }
 
     /**
@@ -7703,22 +7798,32 @@ document.addEventListener("DOMContentLoaded", function () {
     public function clearPrerequisites()
     {
         $course_id = $this->get_course_int_id();
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $lp_id = $this->get_id();
+        $lp_id = (int) $this->get_id();
+        $em = Container::getEntityManager();
         // Cleaning prerequisites
-        $sql = "UPDATE $tbl_lp_item SET prerequisite = ''
-                WHERE lp_id = $lp_id";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->update(CLpItem::class, 'i')
+            ->set('i.prerequisite', ':empty')
+            ->where('IDENTITY(i.lp) = :lpId')
+            ->setParameter('empty', '')
+            ->setParameter('lpId', $lp_id)
+            ->getQuery()
+            ->execute();
 
         // Cleaning mastery score for exercises
-        $sql = "UPDATE $tbl_lp_item SET mastery_score = NULL
-                WHERE lp_id = $lp_id AND item_type = 'quiz'";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->update(CLpItem::class, 'i')
+            ->set('i.masteryScore', 'NULL')
+            ->where('IDENTITY(i.lp) = :lpId')
+            ->andWhere('i.itemType = :itemType')
+            ->setParameter('lpId', $lp_id)
+            ->setParameter('itemType', 'quiz')
+            ->getQuery()
+            ->execute();
     }
 
     public function set_previous_step_as_prerequisite_for_all_items()
     {
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $course_id = $this->get_course_int_id();
         $lp_id = $this->get_id();
 
@@ -7739,14 +7844,28 @@ document.addEventListener("DOMContentLoaded", function () {
                         // Current item is not a folder, so it qualifies to get a prerequisites
                         if ('quiz' == $last_item_not_dir_type) {
                             // if previous is quiz, mark its max score as default score to be achieved
-                            $sql = "UPDATE $tbl_lp_item SET mastery_score = '$last_item_not_dir_max'
-                                    WHERE lp_id = $lp_id AND iid = $last_item_not_dir";
-                            Database::query($sql);
+                            Container::getEntityManager()->createQueryBuilder()
+                                ->update(CLpItem::class, 'i')
+                                ->set('i.masteryScore', ':masteryScore')
+                                ->where('IDENTITY(i.lp) = :lpId')
+                                ->andWhere('i.iid = :itemId')
+                                ->setParameter('masteryScore', (string) $last_item_not_dir_max)
+                                ->setParameter('lpId', (int) $lp_id)
+                                ->setParameter('itemId', (int) $last_item_not_dir)
+                                ->getQuery()
+                                ->execute();
                         }
                         // now simply update the prerequisite to set it to the last non-chapter item
-                        $sql = "UPDATE $tbl_lp_item SET prerequisite = '$last_item_not_dir'
-                                WHERE lp_id = $lp_id AND iid = $current_item_id";
-                        Database::query($sql);
+                        Container::getEntityManager()->createQueryBuilder()
+                            ->update(CLpItem::class, 'i')
+                            ->set('i.prerequisite', ':prerequisite')
+                            ->where('IDENTITY(i.lp) = :lpId')
+                            ->andWhere('i.iid = :itemId')
+                            ->setParameter('prerequisite', (string) $last_item_not_dir)
+                            ->setParameter('lpId', (int) $lp_id)
+                            ->setParameter('itemId', (int) $current_item_id)
+                            ->getQuery()
+                            ->execute();
                         // record item as 'non-chapter' reference
                         $last_item_not_dir = $item->get_id();
                         $last_item_not_dir_type = $item->get_type();
@@ -8352,13 +8471,16 @@ document.addEventListener("DOMContentLoaded", function () {
         // Read stored ref from THIS lp_item row
         $storedRef = 0;
         if ($finalItemIid > 0) {
-            $sql = "SELECT ref
-            FROM $tableLpItem
-            WHERE iid = $finalItemIid
-            LIMIT 1";
-            $res = Database::query($sql);
-            if ($res && Database::num_rows($res) > 0) {
-                $row = Database::fetch_array($res);
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select('i.ref AS ref')
+                ->from(CLpItem::class, 'i')
+                ->where('i.iid = :itemId')
+                ->setParameter('itemId', $finalItemIid)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getArrayResult();
+            if (!empty($rows)) {
+                $row = $rows[0];
                 if (isset($row['ref']) && is_numeric($row['ref'])) {
                     $storedRef = (int) $row['ref'];
                 }
@@ -9420,14 +9542,15 @@ document.addEventListener("DOMContentLoaded", function () {
     public static function getAccumulateWorkTimePrerequisite($lpId, $courseId)
     {
         $lpId = (int) $lpId;
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT accumulate_work_time
-                FROM $table
-                WHERE iid = $lpId";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select('l.accumulateWorkTime AS accumulate_work_time')
+            ->from(CLp::class, 'l')
+            ->where('l.iid = :lpId')
+            ->setParameter('lpId', $lpId)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-        return $row['accumulate_work_time'];
+        return $row['accumulate_work_time'] ?? null;
     }
 
     /**
@@ -9437,21 +9560,25 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     public static function getAccumulateWorkTimeTotal($courseId)
     {
-        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $em = Container::getEntityManager();
         $courseId = (int) $courseId;
         // c_lp has no c_id column: a learning path belongs to a course through the link of its resource node.
-        $sql = "SELECT SUM(accumulate_work_time) AS total
-                FROM $table
-                WHERE EXISTS (
-                    SELECT 1 FROM resource_link rl
-                    WHERE rl.resource_node_id = $table.resource_node_id
-                        AND rl.c_id = $courseId
-                        AND rl.deleted_at IS NULL
-                )";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
+        $linked = $em->createQueryBuilder()
+            ->select('rl.id')
+            ->from(ResourceLink::class, 'rl')
+            ->where('IDENTITY(rl.resourceNode) = IDENTITY(l.resourceNode)')
+            ->andWhere('IDENTITY(rl.course) = :courseId')
+            ->andWhere('rl.deletedAt IS NULL');
 
-        return (int) $row['total'];
+        $total = $em->createQueryBuilder()
+            ->select('SUM(l.accumulateWorkTime)')
+            ->from(CLp::class, 'l')
+            ->where('EXISTS ('.$linked->getDQL().')')
+            ->setParameter('courseId', $courseId)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return (int) $total;
     }
 
     /**
@@ -9548,21 +9675,39 @@ document.addEventListener("DOMContentLoaded", function () {
      */
     public function getItemsForForm($addParentCondition = false)
     {
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-
-        $sql = "SELECT * FROM $tbl_lp_item
-                WHERE path <> 'root' AND lp_id = ".$this->lp_id;
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'i.iid AS iid',
+                'i.itemType AS item_type',
+                'i.title AS title',
+                'i.path AS path',
+                'i.description AS description',
+                'IDENTITY(i.parent) AS parent_item_id',
+                'i.previousItemId AS previous_item_id',
+                'i.nextItemId AS next_item_id',
+                'i.displayOrder AS display_order',
+                'i.maxScore AS max_score',
+                'i.minScore AS min_score',
+                'i.masteryScore AS mastery_score',
+                'i.prerequisite AS prerequisite',
+                'i.maxTimeAllowed AS max_time_allowed',
+                'i.prerequisiteMinScore AS prerequisite_min_score',
+                'i.prerequisiteMaxScore AS prerequisite_max_score'
+            )
+            ->from(CLpItem::class, 'i')
+            ->where("i.path <> 'root'")
+            ->andWhere('IDENTITY(i.lp) = :lpId')
+            ->setParameter('lpId', (int) $this->lp_id);
 
         if ($addParentCondition) {
             // First-level items hang from the root item (only the root has no parent).
             $root = Container::getLpItemRepository()->getRootItem((int) $this->lp_id);
-            $sql .= ' AND parent_item_id = '.(null !== $root ? (int) $root->getIid() : 0).' ';
+            $qb->andWhere('IDENTITY(i.parent) = :parentId')
+                ->setParameter('parentId', null !== $root ? (int) $root->getIid() : 0);
         }
-        $sql .= ' ORDER BY display_order ASC';
 
-        $result = Database::query($sql);
         $arrLP = [];
-        while ($row = Database::fetch_array($result)) {
+        foreach ($qb->orderBy('i.displayOrder', 'ASC')->getQuery()->getArrayResult() as $row) {
             $arrLP[] = [
                 'iid' => $row['iid'],
                 'id' => $row['iid'],

@@ -41,8 +41,19 @@ class ValidationTokenController extends AbstractController
         $userId = $this->requestStack->getCurrentRequest()->query->get('user_id');
         $userId = null !== $userId ? (int) $userId : null;
 
+        $typeId = $this->validationTokenHelper->getTypeId($type);
+
+        // Ticket tokens are bound to the user the link was sent to.
+        if (ValidationTokenHelper::TYPE_TICKET === $typeId) {
+            if (!$userId) {
+                throw $this->createNotFoundException('Invalid token.');
+            }
+
+            $hash = ValidationTokenHelper::bindHashToUser($hash, $userId);
+        }
+
         $token = $this->tokenRepository->findOneBy([
-            'type' => $this->validationTokenHelper->getTypeId($type),
+            'type' => $typeId,
             'hash' => $hash,
         ]);
 

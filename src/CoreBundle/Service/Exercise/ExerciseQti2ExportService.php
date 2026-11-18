@@ -50,6 +50,7 @@ final readonly class ExerciseQti2ExportService
     private const MATCHING = 4;
     private const FREE_ANSWER = 5;
     private const MULTIPLE_ANSWER_COMBINATION = 9;
+    private const DRAGGABLE = 18;
     private const MATCHING_DRAGGABLE = 19;
     private const VISIBILITY_PUBLISHED = 2;
 
@@ -219,7 +220,7 @@ final readonly class ExerciseQti2ExportService
 
     private function isLegacyExportableQuestion(CQuizQuestion $question): bool
     {
-        return \in_array((int) $question->getType(), [self::UNIQUE_ANSWER, self::MULTIPLE_ANSWER, self::MULTIPLE_ANSWER_COMBINATION, self::FILL_IN_BLANKS, self::FREE_ANSWER, self::MATCHING, self::MATCHING_DRAGGABLE], true);
+        return \in_array((int) $question->getType(), [self::UNIQUE_ANSWER, self::MULTIPLE_ANSWER, self::MULTIPLE_ANSWER_COMBINATION, self::FILL_IN_BLANKS, self::FREE_ANSWER, self::MATCHING, self::MATCHING_DRAGGABLE, self::DRAGGABLE], true);
     }
 
     private function isMatchingQuestion(CQuizQuestion $question): bool
@@ -243,6 +244,9 @@ final readonly class ExerciseQti2ExportService
         $xml .= '        >'."\n";
         if (self::FILL_IN_BLANKS === (int) $question->getType()) {
             return $xml.$this->exportFillBlanksItem($question).'</assessmentItem>'."\n";
+        }
+        if (self::DRAGGABLE === (int) $question->getType()) {
+            return $xml.$this->exportOrderingItem($question, $questionIdent).'</assessmentItem>'."\n";
         }
         if (self::MULTIPLE_ANSWER_COMBINATION === (int) $question->getType()) {
             return $xml.$this->exportExactCombinationItem($question, $questionIdent).'</assessmentItem>'."\n";
@@ -351,6 +355,40 @@ final readonly class ExerciseQti2ExportService
             .$this->exportQuestionResponses($question, $questionIdent, ' maxChoices="0"')
             ."  </itemBody>\n"
             .Qti2ExactCombinationWriter::responseProcessing($questionIdent, $score);
+    }
+
+    /**
+     * Serializes Chamilo positional answers without changing its partial-credit rules.
+     */
+    private function exportOrderingItem(CQuizQuestion $question, string $responseId): string
+    {
+        $answers = $this->getSortedAnswers($question);
+        $optionIids = [];
+        $items = [];
+        foreach ($answers as $answer) {
+            if (0 === (int) ($answer->getCorrect() ?? 0)) {
+                $optionIids[(int) $answer->getIid()] = \count($optionIids) + 1;
+            }
+        }
+        foreach ($answers as $answer) {
+            $correct = (int) ($answer->getCorrect() ?? 0);
+            if ($correct <= 0) {
+                continue;
+            }
+            $items[] = [
+                'identifier' => 'answer_'.(int) $answer->getIid(),
+                'text' => $answer->getAnswer(),
+                'target' => $optionIids[$correct] ?? $correct,
+                'weight' => (float) $answer->getPonderation(),
+            ];
+        }
+
+        $xml = Qti2OrderingItem::write($responseId, $question->getQuestion(), $items, (string) $question->getExtra());
+        if (null === $xml) {
+            throw new BadRequestHttpException('Sequence ordering question has invalid target positions or scores.');
+        }
+
+        return $xml;
     }
 
     /**

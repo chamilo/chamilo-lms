@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\DataFixtures\LanguageFixtures;
+use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\LanguageHelper;
 use ChamiloSession as Session;
@@ -179,14 +180,14 @@ function api_get_language_isocode()
 function api_get_platform_isocodes()
 {
     $list = [];
-    $sql = "SELECT isocode
-            FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)."
-            ORDER BY isocode ";
-    $result = Database::query($sql);
-    if (Database::num_rows($result)) {
-        while ($row = Database::fetch_array($result)) {
-            $list[] = trim($row['isocode']);
-        }
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select('l.isocode AS isocode')
+        ->from(Language::class, 'l')
+        ->orderBy('l.isocode', 'ASC')
+        ->getQuery()
+        ->getArrayResult();
+    foreach ($rows as $row) {
+        $list[] = trim($row['isocode']);
     }
 
     return $list;

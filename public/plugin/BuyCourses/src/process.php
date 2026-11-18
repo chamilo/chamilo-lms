@@ -25,6 +25,11 @@ if ($btcpayEnable) {
     require_once __DIR__.'/btcpay_client.php';
     $btcpayEnable = BuyCoursesBtcPayClient::isConfigured($plugin);
 }
+$nanoEnable = 'true' === $plugin->get('nano_enable');
+if ($nanoEnable) {
+    require_once __DIR__.'/nano_client.php';
+    $nanoEnable = BuyCoursesNanoClient::isConfigured($plugin);
+}
 $tpvCecabankEnable = 'true' === $plugin->get('cecabank_enable');
 
 $registrationUrl = api_get_path(WEB_CODE_PATH).'auth/registration.php';
@@ -47,6 +52,7 @@ if (
     !$tpvRedsysEnable &&
     !$stripeEnable &&
     !$btcpayEnable &&
+    !$nanoEnable &&
     !$tpvCecabankEnable
 ) {
     api_not_allowed(true);
@@ -143,7 +149,7 @@ if ($form->validate()) {
     $paymentType = isset($formValues['payment_type']) ? (int) $formValues['payment_type'] : 0;
     $submittedCouponId = isset($formValues['c']) ? (int) $formValues['c'] : null;
 
-    if (!array_key_exists($paymentType, $plugin->getPaymentTypes(true, true))) {
+    if (!array_key_exists($paymentType, $plugin->getPaymentTypes(true, true, true))) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('NeedToSelectPaymentType'), 'error', false)
         );
@@ -185,7 +191,7 @@ if ($form->validate()) {
     exit;
 }
 
-$paymentTypesOptions = $plugin->getPaymentTypes(true, true);
+$paymentTypesOptions = $plugin->getPaymentTypes(true, true, true);
 
 $count = count($paymentTypesOptions);
 if (0 === $count) {

@@ -707,6 +707,114 @@ switch ($sale['payment_type']) {
             exit;
         }
 
+    case BuyCoursesPlugin::PAYMENT_TYPE_NANO:
+        require_once __DIR__.'/nano_client.php';
+
+        if (
+            'true' !== $plugin->get('nano_enable')
+            || !BuyCoursesNanoClient::isConfigured($plugin)
+            || BuyCoursesPlugin::SALE_STATUS_PENDING !== (int) $sale['status']
+            || !in_array(
+                (int) $sale['product_type'],
+                [BuyCoursesPlugin::PRODUCT_TYPE_COURSE, BuyCoursesPlugin::PRODUCT_TYPE_SESSION],
+                true
+            )
+        ) {
+            api_not_allowed(true);
+        }
+
+        $nano = BuyCoursesNanoClient::fromParams($plugin->getNanoParams());
+        $nanoRaw = $nano->rawFor($sale);
+        $nanoForm = new FormValidator('nano_confirm', 'POST', api_get_self());
+        $terms = (string) ($globalParameters['terms_and_conditions'] ?? '');
+
+        if ('' !== trim($terms)) {
+            $nanoForm->addCheckBox('accept_terms', null, $plugin->get_lang('IConfirmIReadAndAcceptTermsAndCondition'));
+        }
+
+        $nanoForm->addText('block_hash', $plugin->get_lang('NanoBlockHash'), false, ['maxlength' => 64]);
+        $nanoForm->addButton('confirm', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
+        $nanoForm->addButtonCancel($plugin->get_lang('CancelOrder'), 'cancel');
+
+        if (!$nanoForm->validate()) {
+            $template = new Template();
+            $template->assign('sale', $sale);
+            $template->assign('currency', $currency);
+            $template->assign('terms', $terms);
+            $template->assign('nano_pay_to', $nano->account);
+            $template->assign('nano_raw', $nanoRaw);
+            $template->assign('nano_xno', BuyCoursesNanoAmount::rawToXno($nanoRaw));
+            $template->assign('nano_representative', $nano->representativeFor($sale));
+            $template->assign('form', $nanoForm->returnForm());
+            $template->assign('content', $template->fetch('BuyCourses/view/nano_confirm.tpl'));
+            $template->display_one_col_template();
+            break;
+        }
+
+        $formValues = $nanoForm->getSubmitValues();
+
+        if (isset($formValues['cancel'])) {
+            // The buyer may already have sent the payment from their wallet, so the sale stays pending (as a
+            // BTCPay sale with an invoice does) and that send can still complete it.
+            unset($_SESSION['bc_sale_id'], $_SESSION['bc_coupon_id']);
+            header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/course_catalog.php');
+            exit;
+        }
+
+        if ('' !== trim($terms) && empty($formValues['accept_terms'])) {
+            Display::addFlash(
+                Display::return_message($plugin->get_lang('IConfirmIReadAndAcceptTermsAndCondition'), 'error', false)
+            );
+            header('Location: '.api_get_self());
+            exit;
+        }
+
+        $blockHash = trim((string) ($formValues['block_hash'] ?? ''));
+
+        if (!BuyCoursesNanoClaims::isBlockHash($blockHash)) {
+            Display::addFlash(Display::return_message($plugin->get_lang('NanoBlockHashInvalid'), 'error', false));
+            header('Location: '.api_get_self());
+            exit;
+        }
+
+        $blockInfo = $nano->blockInfo($blockHash);
+
+        if (null === $blockInfo) {
+            Display::addFlash(Display::return_message($plugin->get_lang('NanoNodeUnavailable'), 'warning', false));
+            header('Location: '.api_get_self());
+            exit;
+        }
+
+        // The amount (in raw, derived from the sale price), the account and the binding to this sale are all
+        // checked before the block is claimed and before the sale is completed.
+        $refusal = $nano->refusalFor($sale, $blockInfo);
+
+        if ('' !== $refusal) {
+            Display::addFlash(
+                Display::return_message(sprintf($plugin->get_lang('NanoPaymentRefused'), $refusal), 'error', false)
+            );
+            header('Location: '.api_get_self());
+            exit;
+        }
+
+        if (!$plugin->claimNanoBlock($blockHash, $saleId)) {
+            Display::addFlash(Display::return_message($plugin->get_lang('NanoBlockAlreadyUsed'), 'error', false));
+            header('Location: '.api_get_self());
+            exit;
+        }
+
+        if (!$plugin->completeSale($saleId)) {
+            error_log('[BuyCourses][Nano] Claimed block '.$blockHash.' could not complete sale '.$saleId.'.');
+            Display::addFlash(Display::return_message($plugin->get_lang('NanoNeedsReviewMessage'), 'warning', false));
+            header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/course_catalog.php');
+            exit;
+        }
+
+        unset($_SESSION['bc_sale_id'], $_SESSION['bc_coupon_id']);
+        Display::addFlash(Display::return_message($plugin->get_lang('NanoCompletedMessage'), 'success', false));
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/course_catalog.php');
+        exit;
+
     case BuyCoursesPlugin::PAYMENT_TYPE_TPV_CECABANK:
         $buyingCourse = false;
         $buyingSession = false;

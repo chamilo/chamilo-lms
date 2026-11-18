@@ -692,6 +692,29 @@ if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_B
     $btcpayTable->setPrimaryKey(['id']);
 }
 
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_NANO))) {
+    $nanoTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_NANO));
+    $nanoTable->addColumn(
+        'id',
+        Types::INTEGER,
+        ['autoincrement' => true, 'unsigned' => true]
+    );
+    $nanoTable->addColumn('account', Types::STRING, ['length' => 128]);
+    $nanoTable->addColumn('node_url', Types::STRING, ['length' => 2048]);
+    $nanoTable->addColumn('xno_per_unit', Types::STRING, ['length' => 64]);
+    $nanoTable->setPrimaryKey(['id']);
+}
+
+if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_NANO_CLAIM))) {
+    // One row per Nano send block that completed a sale: a block pays one sale, a sale is paid by one block.
+    $nanoClaimTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_NANO_CLAIM));
+    $nanoClaimTable->addColumn('block_hash', Types::STRING, ['length' => 64, 'fixed' => true]);
+    $nanoClaimTable->addColumn('sale_id', Types::INTEGER, ['unsigned' => true]);
+    $nanoClaimTable->addColumn('claimed_at', Types::INTEGER, ['unsigned' => true]);
+    $nanoClaimTable->setPrimaryKey(['block_hash']);
+    $nanoClaimTable->addUniqueIndex(['sale_id']);
+}
+
 if (false === $sm->tablesExist(buycourses_plugin_table(BuyCoursesPlugin::TABLE_TPV_CECABANK))) {
     $tpvCecabankTable = $pluginSchema->createTable(buycourses_plugin_table(BuyCoursesPlugin::TABLE_TPV_CECABANK));
     $tpvCecabankTable->addColumn(
@@ -792,6 +815,7 @@ $globalTable = Database::get_main_table(BuyCoursesPlugin::TABLE_GLOBAL_CONFIG);
 $tpvRedsysTable = Database::get_main_table(BuyCoursesPlugin::TABLE_TPV_REDSYS);
 $stripeTable = Database::get_main_table(BuyCoursesPlugin::TABLE_STRIPE);
 $btcpayTable = Database::get_main_table(BuyCoursesPlugin::TABLE_BTCPAY);
+$nanoTable = Database::get_main_table(BuyCoursesPlugin::TABLE_NANO);
 
 $paypalExtraField = Database::select(
     '*',
@@ -886,6 +910,17 @@ if (!buycourses_plugin_table_has_rows($btcpayTable)) {
             'store_id' => '',
             'api_key' => '',
             'webhook_secret' => '',
+        ]
+    );
+}
+
+if (!buycourses_plugin_table_has_rows($nanoTable)) {
+    Database::insert(
+        $nanoTable,
+        [
+            'account' => '',
+            'node_url' => '',
+            'xno_per_unit' => '',
         ]
     );
 }

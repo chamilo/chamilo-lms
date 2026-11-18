@@ -170,6 +170,7 @@ if (file_exists($envFile)) {
     if ($appInstalled && $installerVersion) {
         $dbVersion = null;
         $dbLooksInitialized = false;
+        $dbReachable = false;
 
         try {
             $dbHost = (string) ($_SERVER['DATABASE_HOST'] ?? $_ENV['DATABASE_HOST'] ?? getenv('DATABASE_HOST') ?? 'localhost');
@@ -182,6 +183,14 @@ if (file_exists($envFile)) {
             connectToDatabase($dbHost, $dbUser, $dbPass, $dbName, $dbPort);
 
             $conn = Database::getManager()->getConnection();
+
+            // The connection is lazy, so a dead database still hands back an object; a
+            // bare SELECT is the first thing that truly reaches the server. Proving it
+            // is reachable here is what tells an outage apart from an empty database,
+            // which the settings probes below cannot: both throw and read as "not
+            // initialized", and an outage must not open a fresh install (see below).
+            $conn->executeQuery('SELECT 1');
+            $dbReachable = true;
 
             // Fast "is initialized?" proof:
             // - if settings_current (or settings) exists AND has at least 1 row, we treat it as initialized.
@@ -232,7 +241,24 @@ if (file_exists($envFile)) {
             exit;
         }
 
-        // If APP_INSTALLED=1 but DB is NOT initialized, we intentionally allow the wizard to run.
+        // Installed, but the database is unreachable. The wizard must not open here: a
+        // fresh install would drop tables on, and point .env at, whatever database the
+        // form supplies, which would overwrite .env during an outage. An administrator
+        // recovers by restoring the connection in .env on the server, after which a
+        // reachable but empty database reopens the wizard below.
+        if (!$dbReachable) {
+            header('HTTP/1.1 409 Conflict');
+            echo '<!doctype html><meta charset="utf-8"><title>Installer unavailable</title>';
+            echo '<div style="font-family:system-ui;max-width:760px;margin:64px auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">';
+            echo '<h1>The installer is unavailable</h1>';
+            echo '<p>Chamilo is installed and the installer cannot run right now.</p>';
+            echo '<p>Check the server and its database connection, then reload this page.</p>';
+            echo '</div>';
+            exit;
+        }
+
+        // If APP_INSTALLED=1 but the database is reachable yet NOT initialized, we
+        // intentionally allow the wizard to run: that is an interrupted install.
     }
 }
 

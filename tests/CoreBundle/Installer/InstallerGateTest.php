@@ -248,15 +248,41 @@ final class InstallerGateTest extends TestCase
     }
 
     /**
-     * An unreachable database proves nothing, so it must not lock an administrator out
-     * of a recovery. resolve() receives null for that case.
+     * An outage on an installed platform must not open a fresh install to an anonymous
+     * caller: a fresh install there overwrites .env and seizes the platform. The live
+     * connection is lazy, so the gate sees a real Connection whose first query fails, not
+     * null — the same shape as production. Without the on-server flag it locks the wizard.
      */
-    public function testUnreachableDatabaseAllowsTheWizard(): void
+    public function testUnreachableDatabaseWithoutTheFlagFileLocksTheWizard(): void
     {
-        $state = InstallerGate::resolve(true, true, null, self::MIGRATIONS);
+        $state = InstallerGate::resolve(true, true, $this->unreachableDatabase(), self::MIGRATIONS, false);
+
+        $this->assertSame(InstallerState::RecoveryNotAuthorised, $state);
+        $this->assertTrue($state->isLocked());
+    }
+
+    /**
+     * With the flag file an administrator has proven their presence on the server, so
+     * the wizard opens for a recovery, to repair or repoint the unreachable database.
+     */
+    public function testUnreachableDatabaseWithTheFlagFileAllowsRecovery(): void
+    {
+        $state = InstallerGate::resolve(true, true, $this->unreachableDatabase(), self::MIGRATIONS, true);
 
         $this->assertSame(InstallerState::FreshInstall, $state);
         $this->assertFalse($state->isLocked());
+    }
+
+    /**
+     * A null connection (the manager could not be built at all) is the same outage, and
+     * the gate must not fall through its instance check into a fresh install.
+     */
+    public function testNullConnectionWithoutTheFlagFileLocksTheWizard(): void
+    {
+        $state = InstallerGate::resolve(true, true, null, self::MIGRATIONS, false);
+
+        $this->assertSame(InstallerState::RecoveryNotAuthorised, $state);
+        $this->assertTrue($state->isLocked());
     }
 
     /**
@@ -332,6 +358,30 @@ final class InstallerGateTest extends TestCase
 
         return DriverManager::getConnection(
             ['driver' => 'pdo_sqlite', 'memory' => true],
+            $configuration
+        );
+    }
+
+    /**
+     * A lazy connection to a closed port: a real Connection object whose platform resolves
+     * from the pinned server version without a socket, but whose first query fails. This is
+     * the exact shape the live installer holds during a database outage.
+     */
+    private function unreachableDatabase(): Connection
+    {
+        $configuration = new Configuration();
+        $configuration->setSchemaManagerFactory(new DefaultSchemaManagerFactory());
+
+        return DriverManager::getConnection(
+            [
+                'driver' => 'pdo_mysql',
+                'host' => '127.0.0.1',
+                'port' => 1,
+                'dbname' => 'chamilo',
+                'user' => 'nobody',
+                'password' => '',
+                'serverVersion' => '8.0',
+            ],
             $configuration
         );
     }

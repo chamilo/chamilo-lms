@@ -2666,10 +2666,15 @@ class TicketManager
      */
     public static function generateUnsubscribeLink($ticketId, $userId): string
     {
-        $token = new ValidationToken(ValidationTokenHelper::TYPE_TICKET, $ticketId);
+        $secret = bin2hex(random_bytes(32));
+        $token = new ValidationToken(
+            ValidationTokenHelper::TYPE_TICKET,
+            (int) $ticketId,
+            ValidationTokenHelper::bindHashToUser($secret, (int) $userId)
+        );
         Database::getManager()->persist($token);
         Database::getManager()->flush();
 
-        return api_get_path(WEB_PATH).'validate/ticket/'.$token->getHash().'?user_id='.$userId;
+        return api_get_path(WEB_PATH).'validate/ticket/'.$secret.'?user_id='.(int) $userId;
     }
 }

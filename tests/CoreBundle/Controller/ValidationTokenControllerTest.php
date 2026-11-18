@@ -6,7 +6,9 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\ValidationToken;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use Chamilo\Tests\ChamiloTestTrait;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -26,6 +28,8 @@ use const PHP_URL_QUERY;
 class ValidationTokenControllerTest extends WebTestCase
 {
     use ChamiloTestTrait;
+
+    private const EXPIRED_MESSAGE = 'This link has expired.';
 
     private KernelBrowser $client;
     private Connection $conn;
@@ -60,7 +64,7 @@ class ValidationTokenControllerTest extends WebTestCase
 
         $this->assertTrue($this->isSubscribed($ticketId, $victim), 'another user must not be unsubscribed');
         $this->assertTrue($this->isSubscribed($ticketId, $holder));
-        self::assertResponseStatusCodeSame(404);
+        $this->assertExpiredLinkRedirect();
     }
 
     public function testUnsubscribeLinkWithoutUserIsRejected(): void
@@ -73,7 +77,7 @@ class ValidationTokenControllerTest extends WebTestCase
 
         $this->client->request('GET', $path);
 
-        self::assertResponseStatusCodeSame(404);
+        $this->assertExpiredLinkRedirect();
         $this->assertTrue($this->isSubscribed($ticketId, $holder));
     }
 
@@ -94,8 +98,40 @@ class ValidationTokenControllerTest extends WebTestCase
         TicketManager::subscribeUserToTicket($ticketId, $holder);
         $this->client->request('GET', $path, $query);
 
-        self::assertResponseStatusCodeSame(404);
+        $this->assertExpiredLinkRedirect();
         $this->assertTrue($this->isSubscribed($ticketId, $holder));
+    }
+
+    /**
+     * Links mailed before tokens were bound to a user stored the raw hash. They must stop working,
+     * since accepting them would accept any user_id again, and must tell the user why.
+     */
+    public function testLinkMailedBeforeUserBindingRedirectsWithExpiredWarning(): void
+    {
+        $holder = (int) $this->createUser('vt_legacy')->getId();
+        $ticketId = $this->createTicket();
+        TicketManager::subscribeUserToTicket($ticketId, $holder);
+
+        $token = new ValidationToken(ValidationTokenHelper::TYPE_TICKET, $ticketId);
+        $em = self::getContainer()->get('doctrine')->getManager();
+        $em->persist($token);
+        $em->flush();
+
+        $this->client->request('GET', '/validate/ticket/'.$token->getHash(), ['user_id' => (string) $holder]);
+
+        $this->assertExpiredLinkRedirect();
+        $this->assertTrue($this->isSubscribed($ticketId, $holder));
+    }
+
+    /**
+     * The user is sent to the home page with a warning instead of a bare error page.
+     */
+    private function assertExpiredLinkRedirect(): void
+    {
+        self::assertResponseRedirects('/');
+
+        $warnings = $this->client->getRequest()->getSession()->getFlashBag()->peek('warning');
+        $this->assertStringContainsString(self::EXPIRED_MESSAGE, implode(' ', $warnings));
     }
 
     /**

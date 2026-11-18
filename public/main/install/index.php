@@ -168,7 +168,7 @@ if (isInstallerLocked()) {
     if ($needsUpgradeFlag) {
         $title = 'Upgrade not enabled';
     } elseif ($needsRecoveryFlag) {
-        $title = 'Database unreachable';
+        $title = 'Installer unavailable';
     }
     echo '<title>'.$title.'</title>';
     echo '<div style="font-family:system-ui;max-width:760px;margin:64px auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">';
@@ -180,12 +180,9 @@ if (isInstallerLocked()) {
         echo ' <code>.env</code>, then reload this page. The installer deletes it once the upgrade';
         echo ' is over.</p>';
     } elseif ($needsRecoveryFlag) {
-        echo '<h1>This platform is installed, but its database is unreachable</h1>';
-        echo '<p>The install wizard stays closed so an outage cannot be used to re-run a fresh';
-        echo ' install and overwrite <code>.env</code>. First restore the database connection.</p>';
-        echo '<p>If you must reach the wizard to repair or repoint the database, create an empty';
-        echo ' <code>'.InstallerGate::UPGRADE_FLAG_FILE.'</code> file next to <code>.env</code> on the';
-        echo ' server, then reload this page. Delete it once the platform is back.</p>';
+        echo '<h1>The installer is unavailable</h1>';
+        echo '<p>Chamilo is installed and the installer cannot run right now.</p>';
+        echo '<p>Check the server and its database connection, then reload this page.</p>';
     } else {
         echo '<h1>Chamilo is already installed</h1>';
         echo '<p>The install wizard is disabled because the platform is already installed and up-to-date.</p>';

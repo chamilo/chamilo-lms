@@ -21,7 +21,7 @@ if (isInstallerLocked()) {
         'status' => false,
         'message' => match (resolveInstallerState()) {
             InstallerState::UpgradeNotAuthorised => 'No '.InstallerGate::UPGRADE_FLAG_FILE.' found in the project root.',
-            InstallerState::RecoveryNotAuthorised => 'The database is unreachable. Restore it, or create '.InstallerGate::UPGRADE_FLAG_FILE.' to recover.',
+            InstallerState::RecoveryNotAuthorised => 'The installer is unavailable.',
             default => 'Chamilo is already installed.',
         },
         'progress_percentage' => 0,

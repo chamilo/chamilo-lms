@@ -61,9 +61,9 @@ final class InstallerGate
      *
      * A null connection means the database is unreachable. On a tree that was never
      * configured that is simply a fresh install, but on an installed platform it is an
-     * outage, and a fresh install there overwrites .env and seizes the platform. The
-     * wizard must not open to an anonymous caller on an outage alone, so recovery is
-     * gated behind the same on-server flag the upgrade uses.
+     * outage, and a fresh install there would overwrite .env and repoint the platform at
+     * another database. The wizard must not open on an outage alone, so recovery is gated
+     * behind the same on-server flag the upgrade uses.
      *
      * @param list<string> $availableMigrations every migration class the code tree ships
      * @param bool         $upgradeAuthorised   whether the flag file is present
@@ -83,9 +83,9 @@ final class InstallerGate
         // Installed, but the database that would prove it is unreachable. The connection
         // is lazy, so a dead database still hands back a Connection object; only a query
         // tells them apart, and every check below swallows its failure and reads as
-        // "empty", which would open the wizard. An outage here is not a greenfield
-        // server: a fresh install would overwrite .env and seize the platform, so an
-        // administrator must authorise recovery on the server, exactly as the upgrade is.
+        // "empty", which would open the wizard. An outage here is not a greenfield server:
+        // a fresh install would overwrite .env, so an administrator must authorise recovery
+        // on the server, exactly as the upgrade is.
         if (!$connection instanceof Connection || !self::isDatabaseReachable($connection)) {
             return $upgradeAuthorised
                 ? InstallerState::FreshInstall

@@ -40,8 +40,8 @@ enum InstallerState: string
      * APP_INSTALLED is 1 and .env is present, but the database is unreachable, so the
      * wizard cannot tell a transient outage from a greenfield server. It stays closed
      * unless an administrator authorises recovery on the server with the flag file,
-     * exactly as the upgrade does. Without this, any anonymous caller could run a fresh
-     * install during an outage and overwrite .env to seize the platform.
+     * exactly as the upgrade does. Otherwise an outage would let the wizard re-run a fresh
+     * install and overwrite .env.
      */
     case RecoveryNotAuthorised = 'recovery_not_authorised';
 

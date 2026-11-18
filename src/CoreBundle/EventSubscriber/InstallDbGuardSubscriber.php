@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\EventSubscriber;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Throwable;
@@ -116,7 +117,12 @@ final class InstallDbGuardSubscriber implements EventSubscriberInterface
 
             $isHealthy = true;
         } catch (Throwable) {
-            $this->redirectToInstaller($event);
+            // The database is unreachable on an installed platform: an outage, not a
+            // greenfield server. Show a self-contained error page in place instead of
+            // sending every visitor to the installer, which would be needless and, during
+            // an outage, is the path a fresh install could abuse. The reachable but
+            // not-initialized states above keep their own redirect to the installer.
+            $this->serveDatabaseOutagePage($event);
         }
     }
 
@@ -136,6 +142,29 @@ final class InstallDbGuardSubscriber implements EventSubscriberInterface
     private function redirectToInstaller(RequestEvent $event): void
     {
         $event->setResponse(new RedirectResponse('/main/install/index.php', 302));
+        $event->stopPropagation();
+    }
+
+    /**
+     * Serves a self-contained error page for a database outage: no database, no settings,
+     * no theme and no Twig, so it renders when nothing else can. It stays in place at the
+     * requested URL rather than redirecting to the installer.
+     */
+    private function serveDatabaseOutagePage(RequestEvent $event): void
+    {
+        $html = '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+            .'<meta name="viewport" content="width=device-width, initial-scale=1">'
+            .'<meta name="robots" content="noindex,nofollow">'
+            .'<title>Something seems to have gone wrong</title>'
+            .'<style>body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;'
+            .'background:#f7f8fa;color:#2c3e50;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;'
+            .'line-height:1.5}.box{max-width:32rem;margin:1.5rem;padding:2.5rem 2rem;background:#fff;'
+            .'border-radius:.75rem;box-shadow:0 1px 3px rgba(0,0,0,.08);text-align:center}'
+            .'h1{font-size:1.25rem;margin:.5rem 0}p{color:#6b7280;margin:.25rem 0}</style></head>'
+            .'<body><div class="box"><h1>Something seems to have gone wrong</h1>'
+            .'<p>Please try again later.</p></div></body></html>';
+
+        $event->setResponse(new Response($html, Response::HTTP_SERVICE_UNAVAILABLE));
         $event->stopPropagation();
     }
 }

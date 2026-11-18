@@ -158,11 +158,19 @@ $installerVersion = $versionInfo['new_version'] ?? null;
 // still has work to do: a fresh install, a half-installed instance, or an installed
 // platform with pending migrations (the 1.11.x and 2.x upgrades).
 if (isInstallerLocked()) {
-    $needsUpgradeFlag = InstallerState::UpgradeNotAuthorised === resolveInstallerState();
+    $lockedState = resolveInstallerState();
+    $needsUpgradeFlag = InstallerState::UpgradeNotAuthorised === $lockedState;
+    $needsRecoveryFlag = InstallerState::RecoveryNotAuthorised === $lockedState;
 
     header('HTTP/1.1 409 Conflict');
     echo '<!doctype html><meta charset="utf-8">';
-    echo '<title>'.($needsUpgradeFlag ? 'Upgrade not enabled' : 'Chamilo already installed').'</title>';
+    $title = 'Chamilo already installed';
+    if ($needsUpgradeFlag) {
+        $title = 'Upgrade not enabled';
+    } elseif ($needsRecoveryFlag) {
+        $title = 'Database unreachable';
+    }
+    echo '<title>'.$title.'</title>';
     echo '<div style="font-family:system-ui;max-width:760px;margin:64px auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">';
 
     if ($needsUpgradeFlag) {
@@ -171,6 +179,13 @@ if (isInstallerLocked()) {
         echo '<p>Create an empty <code>'.InstallerGate::UPGRADE_FLAG_FILE.'</code> file next to';
         echo ' <code>.env</code>, then reload this page. The installer deletes it once the upgrade';
         echo ' is over.</p>';
+    } elseif ($needsRecoveryFlag) {
+        echo '<h1>This platform is installed, but its database is unreachable</h1>';
+        echo '<p>The install wizard stays closed so an outage cannot be used to re-run a fresh';
+        echo ' install and overwrite <code>.env</code>. First restore the database connection.</p>';
+        echo '<p>If you must reach the wizard to repair or repoint the database, create an empty';
+        echo ' <code>'.InstallerGate::UPGRADE_FLAG_FILE.'</code> file next to <code>.env</code> on the';
+        echo ' server, then reload this page. Delete it once the platform is back.</p>';
     } else {
         echo '<h1>Chamilo is already installed</h1>';
         echo '<p>The install wizard is disabled because the platform is already installed and up-to-date.</p>';

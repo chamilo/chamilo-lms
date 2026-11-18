@@ -59,9 +59,11 @@ final class InstallerGate
     /**
      * Resolves what the installer may do for the given environment and database.
      *
-     * A null connection means the database is unreachable. Nothing then proves the
-     * platform is installed, so the wizard stays open rather than locking an
-     * administrator out of a recovery.
+     * A null connection means the database is unreachable. On a tree that was never
+     * configured that is simply a fresh install, but on an installed platform it is an
+     * outage, and a fresh install there overwrites .env and seizes the platform. The
+     * wizard must not open to an anonymous caller on an outage alone, so recovery is
+     * gated behind the same on-server flag the upgrade uses.
      *
      * @param list<string> $availableMigrations every migration class the code tree ships
      * @param bool         $upgradeAuthorised   whether the flag file is present
@@ -73,8 +75,21 @@ final class InstallerGate
         array $availableMigrations,
         bool $upgradeAuthorised = true
     ): InstallerState {
-        if (!$envFileExists || !$appInstalled || !$connection instanceof Connection) {
+        // Nothing was ever configured: a genuine first install.
+        if (!$envFileExists || !$appInstalled) {
             return InstallerState::FreshInstall;
+        }
+
+        // Installed, but the database that would prove it is unreachable. The connection
+        // is lazy, so a dead database still hands back a Connection object; only a query
+        // tells them apart, and every check below swallows its failure and reads as
+        // "empty", which would open the wizard. An outage here is not a greenfield
+        // server: a fresh install would overwrite .env and seize the platform, so an
+        // administrator must authorise recovery on the server, exactly as the upgrade is.
+        if (!$connection instanceof Connection || !self::isDatabaseReachable($connection)) {
+            return $upgradeAuthorised
+                ? InstallerState::FreshInstall
+                : InstallerState::RecoveryNotAuthorised;
         }
 
         if (!self::isDatabaseInitialized($connection)) {
@@ -139,6 +154,23 @@ final class InstallerGate
      * Row presence is preferred over schema introspection: it is cheaper, and it also
      * answers for a 1.11.x database, whose settings table carries the other name.
      */
+    /**
+     * Tells whether the database answers at all. The platform is resolved from the pinned
+     * server version, so this builds no connection by itself; the bare SELECT is the first
+     * thing that truly reaches the server, and it needs no table to exist. A failure here
+     * is an outage, which the table checks below cannot tell from an empty database.
+     */
+    public static function isDatabaseReachable(Connection $connection): bool
+    {
+        try {
+            $connection->executeQuery($connection->getDatabasePlatform()->getDummySelectSQL());
+
+            return true;
+        } catch (Throwable) {
+            return false;
+        }
+    }
+
     public static function isDatabaseInitialized(Connection $connection): bool
     {
         foreach (self::SETTINGS_TABLES as $table) {

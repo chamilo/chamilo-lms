@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Service\Exercise\Qti2ExactCombinationWriter;
 use Chamilo\CoreBundle\Service\Exercise\Qti2MatchingTypeMarker;
+use Chamilo\CoreBundle\Service\Exercise\Qti2UniqueAnswerUnknownMarker;
 use Chamilo\CoreBundle\Service\Exercise\Qti2OrderingItem;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CoreBundle\Service\Exercise\QtiImportHtmlSanitizer;
@@ -196,7 +197,7 @@ function import_exercise($file)
                     continue;
                 }
 
-                if (!in_array($question_array['type'], [UNIQUE_ANSWER, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, FREE_ANSWER, FIB, MATCHING, MATCHING_DRAGGABLE, DRAGGABLE], true)) {
+                if (!in_array($question_array['type'], [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, FREE_ANSWER, FIB, MATCHING, MATCHING_DRAGGABLE, DRAGGABLE], true)) {
                     continue;
                 }
 
@@ -214,6 +215,14 @@ function import_exercise($file)
 
                         continue;
                     }
+                }
+
+                if (!empty($question_array['unique_unknown'])
+                    && (UNIQUE_ANSWER_NO_OPTION !== $question_array['type']
+                        || !Qti2UniqueAnswerUnknownMarker::hasValidUnknownChoice($question_array))) {
+                    Display::addFlash(Display::return_message('QTI import: a single-choice question with an invalid fixed unknown answer was skipped.', 'warning'));
+
+                    continue;
                 }
 
                 // Create question
@@ -371,7 +380,14 @@ function import_exercise($file)
 
                         $answer->new_answer[$pos] = $answerValue;
                         $answer->new_comment[$pos] = (string) $answerFeedback; // never null
-                        $answer->new_position[$pos] = $pos;
+                        $unknown = UNIQUE_ANSWER_NO_OPTION === $question->type
+                            && Qti2UniqueAnswerUnknownMarker::UNKNOWN_IDENTIFIER === (string) $key;
+                        if ($unknown) {
+                            $answer->new_answer[$pos] = QtiImportHtmlSanitizer::sanitize($answerValue);
+                            $isCorrect = false;
+                            $weight = 0.0;
+                        }
+                        $answer->new_position[$pos] = $unknown ? Qti2UniqueAnswerUnknownMarker::UNKNOWN_POSITION : $pos;
                         $answer->new_correct[$pos] = $isCorrect ? 1 : 0; // never null
                         $answer->new_weighting[$pos] = $weight;
 
@@ -538,6 +554,7 @@ function parseQti2($xmlData)
                     'category' => $node->getAttribute('category'),
                     'type' => '',
                     'matching_draggable' => Qti2MatchingTypeMarker::isDraggable($node->getAttribute('label')),
+                    'unique_unknown' => Qti2UniqueAnswerUnknownMarker::isMarked($node->getAttribute('label')),
                     'subtype' => null,
                     'tempdir' => $questionTempDir,
                     'description' => null,
@@ -571,7 +588,9 @@ function parseQti2($xmlData)
                     $exerciseInfo['question'][$currentQuestionIdent]['type'] = MCMA;
                     $cardinality = 'multiple';
                 } elseif ('single' === $cardinalityAttr) {
-                    $exerciseInfo['question'][$currentQuestionIdent]['type'] = MCUA;
+                    $exerciseInfo['question'][$currentQuestionIdent]['type'] = !empty($exerciseInfo['question'][$currentQuestionIdent]['unique_unknown'])
+                        ? UNIQUE_ANSWER_NO_OPTION
+                        : MCUA;
                     $cardinality = 'single';
                 }
                 break;

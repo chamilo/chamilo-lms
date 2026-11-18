@@ -4618,5 +4618,6 @@
     "Validated": "Corectat",
     "Not validated": "Necorectat",
     "Not attempted": "F\u0103r\u0103 \u00eencercari",
-    "The session is read only": "Sesiunea este doar de citire"
+    "The session is read only": "Sesiunea este doar de citire",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

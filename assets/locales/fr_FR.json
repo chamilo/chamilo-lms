@@ -4688,5 +4688,6 @@
     "Export badges": "Exporter badges",
     "Not attempted": "Non tent\u00e9e",
     "Already attempted": "D\u00e9j\u00e0 tent\u00e9",
-    "The session is read only": "La session est en mode de lecture seule"
+    "The session is read only": "La session est en mode de lecture seule",
+    "Show learners the time spent in the course": "Afficher aux apprenants le temps pass\u00e9 dans le cours"
 }

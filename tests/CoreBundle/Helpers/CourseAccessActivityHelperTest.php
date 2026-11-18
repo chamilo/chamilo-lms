@@ -42,6 +42,17 @@ class CourseAccessActivityHelperTest extends TestCase
         $this->assertFalse($helper->isBackgroundRequest($this->requestForRoute('chamilo_core_chat_api_ack')));
     }
 
+    /**
+     * The time spent clock refreshes itself on a timer: counted as activity, a course page left
+     * open with the clock would keep the learner "in the course" for as long as the tab stays open.
+     */
+    public function testTimeSpentClockRefreshIsNotCourseActivity(): void
+    {
+        $helper = new CourseAccessActivityHelper($this->createMock(SettingsManager::class));
+
+        $this->assertTrue($helper->isBackgroundRequest($this->requestForRoute('chamilo_core_course_time_spent_clock')));
+    }
+
     private function requestForRoute(string $route): Request
     {
         $request = Request::create('/account/chat/api/x?cid=1&sid=1');

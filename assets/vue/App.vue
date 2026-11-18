@@ -25,6 +25,9 @@
 
     <!-- Do not show docked chat in embedded contexts (iframes/pickers/dialogs) -->
     <DockedChat v-if="showGlobalChat" />
+
+    <!-- Also in the learning path player; not in embedded contexts, which would duplicate it -->
+    <CourseTimeSpentClock v-if="showTimeSpentClock" />
   </component>
 
   <!-- Toasts -->
@@ -477,6 +480,7 @@ onMounted(async () => {
 })
 
 const DockedChat = defineAsyncComponent(() => import("./components/chat/DockedChat.vue"))
+const CourseTimeSpentClock = defineAsyncComponent(() => import("./components/course/CourseTimeSpentClock.vue"))
 const allowGlobalChat = computed(() => {
   if (platformConfigurationStore.isLoading) {
     return false
@@ -489,6 +493,8 @@ const showGlobalChat = computed(() => {
   // Do not render global chat when the app is embedded (iframe/dialog/picker).
   return securityStore.isAuthenticated && allowGlobalChat.value && !isEmbeddedContext.value && !hideGlobalUi.value
 })
+
+const showTimeSpentClock = computed(() => securityStore.isAuthenticated && !isEmbeddedContext.value)
 
 /**
  * Whether a denied request was for the page being displayed, as opposed to a

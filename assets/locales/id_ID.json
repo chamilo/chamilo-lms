@@ -4618,5 +4618,6 @@
     "Validated": "Tervalidasi",
     "Not validated": "Belum divalidasi",
     "Not attempted": "Belum diupayakan",
-    "The session is read only": "Sesi hanya baca"
+    "The session is read only": "Sesi hanya baca",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

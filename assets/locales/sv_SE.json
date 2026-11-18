@@ -4618,5 +4618,6 @@
     "Validated": "Validerad",
     "Not validated": "Inte validerad",
     "Not attempted": "ej f\u00f6rs\u00f6kt",
-    "The session is read only": "Sessionen \u00e4r skrivskyddad"
+    "The session is read only": "Sessionen \u00e4r skrivskyddad",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

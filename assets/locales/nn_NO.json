@@ -4618,5 +4618,6 @@
     "Validated": "Godkjent",
     "Not validated": "Ikkje godkjent",
     "Not attempted": "Ikkje pr\u00f8vd",
-    "The session is read only": "\u00d8ktinga er skriveverna"
+    "The session is read only": "\u00d8ktinga er skriveverna",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

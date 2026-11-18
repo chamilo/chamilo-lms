@@ -4618,5 +4618,6 @@
     "Validated": "Pregledan",
     "Not validated": "Ni pregledan",
     "Not attempted": "Brez poskusa",
-    "The session is read only": "Seja je zgolj bralna"
+    "The session is read only": "Seja je zgolj bralna",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

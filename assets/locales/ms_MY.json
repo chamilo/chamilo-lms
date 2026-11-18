@@ -4618,5 +4618,6 @@
     "Validated": "Disahkan",
     "Not validated": "Belum disahkan",
     "Not attempted": "Belum dicuba",
-    "The session is read only": "Sesi ini hanya boleh dibaca"
+    "The session is read only": "Sesi ini hanya boleh dibaca",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

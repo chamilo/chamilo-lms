@@ -4618,5 +4618,6 @@
     "Validated": "Validado",
     "Not validated": "No validado",
     "Not attempted": "Sin intentar",
-    "The session is read only": "La sesi\u00f3n es de solo lectura"
+    "The session is read only": "La sesi\u00f3n es de solo lectura",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

@@ -4618,5 +4618,6 @@
     "Validated": "Zuzendua",
     "Not validated": "Zuzendu gabe",
     "Not attempted": "Saiatu gabe",
-    "The session is read only": "Irakurtzeko bakarrik da saioa"
+    "The session is read only": "Irakurtzeko bakarrik da saioa",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

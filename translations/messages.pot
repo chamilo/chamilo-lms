@@ -43712,3 +43712,15 @@ msgstr ""
 
 msgid "Already attempted"
 msgstr ""
+
+msgid "Show learners the time spent in the course"
+msgstr ""
+
+msgid "Time spent clock can be changed by course"
+msgstr ""
+
+msgid "Display, on every page of a course including the learning paths, a clock showing learners the total time they have spent in the course, as counted by the course tracking. It keeps running while the learner is active and stops after the maximum inactivity time considered by the tracking."
+msgstr ""
+
+msgid "When enabled, teachers can choose in the course settings whether their course shows learners the time spent in the course, instead of following the platform setting."
+msgstr ""

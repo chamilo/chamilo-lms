@@ -4618,5 +4618,6 @@
     "Validated": "Nagezien",
     "Not validated": "Niet nagezien",
     "Not attempted": "Niet geprobeerd",
-    "The session is read only": "De sessie is 'alleen-lezen'"
+    "The session is read only": "De sessie is 'alleen-lezen'",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

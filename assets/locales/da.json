@@ -4618,5 +4618,6 @@
     "Validated": "Valideret",
     "Not validated": "Ikke valideret",
     "Not attempted": "Ikke fors\u00f8gt",
-    "The session is read only": "Sessionen er kun til l\u00e6sning"
+    "The session is read only": "Sessionen er kun til l\u00e6sning",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

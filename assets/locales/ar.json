@@ -4618,5 +4618,6 @@
     "Validated": "\u062a\u0645 \u0627\u0644\u062a\u062d\u0642\u0642 \u0645\u0646\u0647",
     "Not validated": "\u0644\u0645 \u064a\u062a\u0645 \u0627\u0644\u062a\u062d\u0642\u0642 \u0645\u0646\u0647",
     "Not attempted": "\u0644\u0645 \u062a\u062a\u0645 \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0629",
-    "The session is read only": "\u0647\u0630\u0627 \u0644\u0644\u0642\u0631\u0627\u0621\u0629 \u0641\u0642\u0637"
+    "The session is read only": "\u0647\u0630\u0627 \u0644\u0644\u0642\u0631\u0627\u0621\u0629 \u0641\u0642\u0637",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

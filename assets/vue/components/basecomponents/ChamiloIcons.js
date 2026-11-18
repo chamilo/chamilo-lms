@@ -34,6 +34,7 @@ export const chamiloIconToClass = {
   "checkbox-multiple-blank-outline": "",
   "chevron-left": "mdi mdi-chevron-left rtl:rotate-180",
   "chevron-right": "mdi mdi-chevron-right rtl:rotate-180",
+  "clock": "mdi mdi-clock-outline",
   "unfold": "mdi mdi-chevron-down",
   "fold": "mdi mdi-chevron-up",
   "close": "mdi mdi-close",

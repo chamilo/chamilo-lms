@@ -1797,6 +1797,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Show courses duration',
                     'comment' => 'Display the course duration next to the course title in the course catalogue and the courses list.',
                 ],
+                [
+                    'name' => 'show_clock_time_spent_on_all_course_page_for_learner',
+                    'title' => 'Show learners the time spent in the course',
+                    'comment' => 'Display, on every page of a course including the learning paths, a clock showing learners the total time they have spent in the course, as counted by the course tracking. It keeps running while the learner is active and stops after the maximum inactivity time considered by the tracking.',
+                ],
+                [
+                    'name' => 'show_clock_time_spent_can_be_modified_in_course',
+                    'title' => 'Time spent clock can be changed by course',
+                    'comment' => 'When enabled, teachers can choose in the course settings whether their course shows learners the time spent in the course, instead of following the platform setting.',
+                ],
             ],
             'certificate' => [
                 [

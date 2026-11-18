@@ -4618,5 +4618,6 @@
     "Validated": "Convalidato",
     "Not validated": "Non convalidato",
     "Not attempted": "Non affrontato",
-    "The session is read only": "La sessione \u00e8 di sola lettura"
+    "The session is read only": "La sessione \u00e8 di sola lettura",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

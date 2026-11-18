@@ -4618,5 +4618,6 @@
     "Validated": "Na-validate",
     "Not validated": "Hindi na-validate",
     "Not attempted": "Hindi sinubukan",
-    "The session is read only": "Read only ang session"
+    "The session is read only": "Read only ang session",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

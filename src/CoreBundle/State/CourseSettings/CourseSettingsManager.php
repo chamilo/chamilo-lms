@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\CourseTimeSpentClockHelper;
 use Chamilo\CoreBundle\Helpers\EventLoggerHelper;
 use Chamilo\CoreBundle\Helpers\ForumParticipationSettingsHelper;
 use Chamilo\CoreBundle\Helpers\PluginHelper;
@@ -50,6 +51,16 @@ use const FILTER_VALIDATE_URL;
 
 final readonly class CourseSettingsManager
 {
+    /**
+     * The form value of "Use the platform setting", stored as an empty value. PrimeVue never shows
+     * a radio button with an empty value as checked, so the form cannot use the stored value.
+     */
+    private const string PLATFORM_DEFAULT_CHOICE = 'platform';
+    private const array PLATFORM_DEFAULT_YES_NO_SETTINGS = [
+        ForumParticipationSettingsHelper::REPLIES_AFTER_PARTICIPATION,
+        ForumParticipationSettingsHelper::CATEGORY_DESCRIPTION,
+        CourseTimeSpentClockHelper::SETTING,
+    ];
     private const array EXTRA_FIELD_VARIABLES = [
         'tags',
         'video_url',
@@ -107,6 +118,7 @@ final readonly class CourseSettingsManager
         'subscribe_users_to_forum_notifications' => 'forum',
         'student_delete_own_publication' => 'work',
         'student_validate_own_attendance' => 'attendance',
+        CourseTimeSpentClockHelper::SETTING => CourseTimeSpentClockHelper::COURSE_SETTING_CATEGORY,
         'enable_document_auto_launch' => 'document',
         'enable_lp_auto_launch' => 'learning_path',
         'enable_exercise_auto_launch' => 'exercise',
@@ -317,6 +329,7 @@ final readonly class CourseSettingsManager
         private EventLoggerHelper $eventLoggerHelper,
         private ResourceDefaultVisibilityHelper $resourceDefaultVisibilityHelper,
         private ForumParticipationSettingsHelper $forumParticipationSettingsHelper,
+        private CourseTimeSpentClockHelper $courseTimeSpentClockHelper,
         private LoggerInterface $logger,
         #[Autowire(service: 'oneup_flysystem.themes_filesystem')]
         private FilesystemOperator $themesFilesystem,
@@ -365,6 +378,7 @@ final readonly class CourseSettingsManager
                 $values[$variable] = ['true', 'false', ''];
             }
         }
+        $values[CourseTimeSpentClockHelper::SETTING] = ['true', 'false', ''];
 
         return $values;
     }
@@ -551,6 +565,13 @@ final readonly class CourseSettingsManager
         // An empty value means the course follows the platform setting.
         foreach (ForumParticipationSettingsHelper::SETTINGS as $variable) {
             $values[$variable] = $this->forumParticipationSettingsHelper->getCourseValue($variable, $course);
+        }
+        $values[CourseTimeSpentClockHelper::SETTING] = $this->courseTimeSpentClockHelper->getCourseValue($course);
+        // Saving turns the choice back into an empty value: both helpers only keep "true" and "false".
+        foreach (self::PLATFORM_DEFAULT_YES_NO_SETTINGS as $variable) {
+            if ('' === $values[$variable]) {
+                $values[$variable] = self::PLATFORM_DEFAULT_CHOICE;
+            }
         }
 
         foreach (self::COURSE_BLOCK_SETTINGS as $variable) {
@@ -931,6 +952,12 @@ final readonly class CourseSettingsManager
             $this->field('student_validate_own_attendance', 'Allow learners to validate their own attendance', 'radio', options: $this->yesNoOptions(1, 0)),
         ], collapsed: true);
 
+        if ($this->courseTimeSpentClockHelper->canBeModifiedInCourse()) {
+            $sections[] = $this->section('time_spent_clock', 'Time spent in the course', 'tracking', [
+                $this->platformDefaultYesNoField(CourseTimeSpentClockHelper::SETTING, 'Show learners the time spent in the course'),
+            ], collapsed: true);
+        }
+
         $sections[] = $this->section('autolaunch', 'Autolaunch settings', 'rocket-launch', [
             $this->field('auto_launch_option', 'Auto-launch', 'radio', options: [
                 ['label' => 'Documents list', 'value' => 'enable_document_auto_launch'],
@@ -1146,6 +1173,7 @@ final readonly class CourseSettingsManager
         foreach (ForumParticipationSettingsHelper::SETTINGS as $variable) {
             $normalized[$variable] = ForumParticipationSettingsHelper::normalizeCourseValue($variable, $values[$variable] ?? '');
         }
+        $normalized[CourseTimeSpentClockHelper::SETTING] = CourseTimeSpentClockHelper::normalizeCourseValue($values[CourseTimeSpentClockHelper::SETTING] ?? '');
         $normalized['email_alert_manager_on_new_quiz'] = $this->normalizeStringList(
             $values['email_alert_manager_on_new_quiz'] ?? [],
             ['1', '2', '3', '4'],
@@ -1982,6 +2010,7 @@ final readonly class CourseSettingsManager
             ForumParticipationSettingsHelper::REPLIES_AFTER_PARTICIPATION,
             ForumParticipationSettingsHelper::CATEGORY_DESCRIPTION,
             ForumParticipationSettingsHelper::PROGRESS_POSTS => $this->forumParticipationSettingsHelper->canBeModifiedInCourse(),
+            CourseTimeSpentClockHelper::SETTING => $this->courseTimeSpentClockHelper->canBeModifiedInCourse(),
             'show_system_folders' => $this->settingEnabled('show_default_folders'),
             'course_theme', 'allow_learning_path_theme' => $this->settingEnabled('allow_course_theme'),
             'lp_return_link' => $this->settingEnabled('lp.allow_lp_return_link'),
@@ -2019,7 +2048,7 @@ final readonly class CourseSettingsManager
     private function platformDefaultYesNoField(string $name, string $label): array
     {
         return $this->field($name, $label, 'radio', options: [
-            ['label' => 'Use the platform setting', 'value' => ''],
+            ['label' => 'Use the platform setting', 'value' => self::PLATFORM_DEFAULT_CHOICE],
             ['label' => 'Yes', 'value' => 'true'],
             ['label' => 'No', 'value' => 'false'],
         ]);

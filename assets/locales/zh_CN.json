@@ -4618,5 +4618,6 @@
     "Validated": "\u5df2\u9a8c\u8bc1",
     "Not validated": "\u672a\u9a8c\u8bc1",
     "Not attempted": "\u672a\u5c1d\u8bd5",
-    "The session is read only": "\u4f1a\u8bdd\u4e3a\u53ea\u8bfb"
+    "The session is read only": "\u4f1a\u8bdd\u4e3a\u53ea\u8bfb",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

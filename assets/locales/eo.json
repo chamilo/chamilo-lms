@@ -4618,5 +4618,6 @@
     "Validated": "Validita",
     "Not validated": "Ne validita",
     "Not attempted": "Ne provita",
-    "The session is read only": "La seanco estas nur legebla"
+    "The session is read only": "La seanco estas nur legebla",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

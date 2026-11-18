@@ -4618,5 +4618,6 @@
     "Validated": "Patvirtinta",
     "Not validated": "Nepatvirtinta",
     "Not attempted": "Neprad\u0117tas",
-    "The session is read only": "Sesija yra tik skaitymui"
+    "The session is read only": "Sesija yra tik skaitymui",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

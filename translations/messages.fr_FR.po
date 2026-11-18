@@ -45246,3 +45246,15 @@ msgstr "Le téléchargement exclut les valeurs confidentielles. Vérifiez le fic
 
 msgid "Already attempted"
 msgstr "Déjà tenté"
+
+msgid "Show learners the time spent in the course"
+msgstr "Afficher aux apprenants le temps passé dans le cours"
+
+msgid "Time spent clock can be changed by course"
+msgstr "Le compteur de temps passé peut être modifié par cours"
+
+msgid "Display, on every page of a course including the learning paths, a clock showing learners the total time they have spent in the course, as counted by the course tracking. It keeps running while the learner is active and stops after the maximum inactivity time considered by the tracking."
+msgstr "Affiche, sur toutes les pages d'un cours, y compris dans les parcours, un compteur indiquant aux apprenants le temps total qu'ils ont passé dans le cours, tel que comptabilisé par le suivi du cours. Il avance tant que l'apprenant est actif et s'arrête après la durée d'inactivité maximale prise en compte par le suivi."
+
+msgid "When enabled, teachers can choose in the course settings whether their course shows learners the time spent in the course, instead of following the platform setting."
+msgstr "Si cette option est activée, les enseignants peuvent choisir dans les paramètres du cours si leur cours affiche aux apprenants le temps passé dans le cours, au lieu de suivre le paramètre de la plateforme."

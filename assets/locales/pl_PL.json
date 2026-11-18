@@ -4618,5 +4618,6 @@
     "Validated": "Zatwierdzone",
     "Not validated": "Nie zatwierdzone",
     "Not attempted": "Nie pr\u00f3bowano",
-    "The session is read only": "Sesja tylko do odczytu"
+    "The session is read only": "Sesja tylko do odczytu",
+    "Show learners the time spent in the course": "Show learners the time spent in the course"
 }

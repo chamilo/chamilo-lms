@@ -233,7 +233,9 @@ final class AttendanceTier2CharacterizationTest extends KernelTestCase
         $entities = array_map(static fn (int $id): CAttendance => $em->find(CAttendance::class, $id), $attendanceIds);
 
         return new class($entities) extends Attendance {
-            public function __construct(private array $entities) {}
+            public function __construct(
+                private array $entities
+            ) {}
 
             public function getAttendanceList(Course $course, ?Session $session = null)
             {

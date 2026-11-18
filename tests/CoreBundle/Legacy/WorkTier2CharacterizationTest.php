@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Uid\Uuid;
-use Throwable;
 
 /**
  * Extra pins for work.lib.php that WorkCharacterizationTest leaves loose: the student view of get_count_work()

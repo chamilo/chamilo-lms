@@ -134,7 +134,7 @@ final class UrlManagerTier2CharacterizationTest extends KernelTestCase
         $this->assertSame(['UM2ZA', 'UM2ZB'], array_column(UrlManager::searchCoursesByTitleOrCode('Um2SameTitle'), 'code'));
 
         for ($i = 1; $i <= 12; ++$i) {
-            $this->course('Um2Many'.sprintf('%02d', $i), 'UM2MANY'.$i);
+            $this->course('Um2Many'.\sprintf('%02d', $i), 'UM2MANY'.$i);
         }
         $rows = UrlManager::searchCoursesByTitleOrCode('Um2Many');
 

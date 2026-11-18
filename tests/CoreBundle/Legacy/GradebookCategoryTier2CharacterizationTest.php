@@ -267,8 +267,8 @@ final class GradebookCategoryTier2CharacterizationTest extends KernelTestCase
         $this->assertSame('weighted_average', $info['calculation_mode']);
         $this->assertSame('gc2_full', $info['title']);
         $this->assertSame($info['id'], $info[0]);
-        $this->assertSame($info['calculation_mode'], $info[count($columns) - 1]);
-        $this->assertCount(2 * count($columns), $info);
+        $this->assertSame($info['calculation_mode'], $info[\count($columns) - 1]);
+        $this->assertCount(2 * \count($columns), $info);
 
         $loaded = Category::load($id)[0];
         $this->assertSame($model, (int) $loaded->get_grade_model_id());

@@ -210,6 +210,7 @@ final class LearnpathItemTier2CharacterizationTest extends KernelTestCase
     protected function tearDown(): void
     {
         Container::getSession()->remove('sid');
+
         try {
             self::getContainer()->get(SettingsManager::class)->updateSetting('lp.lp_prerequisite_on_quiz_unblock_if_max_attempt_reached', 'false');
         } catch (Throwable) {

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -17,6 +18,8 @@ use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+
+use const SORT_STRING;
 
 /**
  * Second characterization pass over public/main/inc/lib/api.lib.php: the branches the first pass
@@ -222,9 +225,9 @@ final class ApiLibTier2CharacterizationTest extends AbstractApiTest
              VALUES (1, 'ap_q', NULL, 'textfield', 'ap_catq', 'old', 'ap', 0)"
         );
 
-        api_set_setting('ap_q', 'it\'s "quoted" \\ back', null, 'ap_catq');
+        api_set_setting('ap_q', 'it\'s "quoted" \ back', null, 'ap_catq');
 
-        $this->assertSame('it\'s "quoted" \\ back', $this->conn()->fetchOne("SELECT selected_value FROM settings WHERE variable = 'ap_q'"));
+        $this->assertSame('it\'s "quoted" \ back', $this->conn()->fetchOne("SELECT selected_value FROM settings WHERE variable = 'ap_q'"));
     }
 
     public function testSetSettingFiltersOnSubkeyAndCategoryAndUsesAccessUrlOneByDefault(): void
@@ -310,7 +313,7 @@ final class ApiLibTier2CharacterizationTest extends AbstractApiTest
                 'subkeytext' => 'sk text',
                 'access_url_changeable' => 1,
             ],
-            array_map(static fn ($v) => is_numeric($v) && !is_string($v) ? (int) $v : $v, $rows[1])
+            array_map(static fn ($v) => is_numeric($v) && !\is_string($v) ? (int) $v : $v, $rows[1])
         );
     }
 
@@ -379,16 +382,21 @@ final class ApiLibTier2CharacterizationTest extends AbstractApiTest
     {
         $node = $this->newNode();
         $title = 'ap2_'.$kind.'_'.(++$this->seq);
+
         switch ($kind) {
             case 'announcement':
                 $this->conn()->executeStatement('INSERT INTO c_announcement (resource_node_id, title) VALUES (?, ?)', [$node, $title]);
+
                 break;
+
             case 'agenda':
                 $this->conn()->executeStatement(
                     'INSERT INTO c_calendar_event (resource_node_id, title, all_day, collective, subscription_visibility, max_attendees) VALUES (?, ?, 0, 0, 0, 0)',
                     [$node, $title]
                 );
+
                 break;
+
             case 'group':
                 $this->conn()->executeStatement(
                     'INSERT INTO c_group_info (resource_node_id, title, status, max_student, doc_state, calendar_state, work_state,
@@ -396,13 +404,17 @@ final class ApiLibTier2CharacterizationTest extends AbstractApiTest
                      VALUES (?, ?, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)',
                     [$node, $title]
                 );
+
                 break;
+
             case 'attendance':
                 $this->conn()->executeStatement(
                     'INSERT INTO c_attendance (resource_node_id, title, active, attendance_qualify_max, attendance_weight, locked) VALUES (?, ?, 1, 0, 0, 0)',
                     [$node, $title]
                 );
+
                 break;
+
             case 'lp':
                 $this->conn()->executeStatement(
                     "INSERT INTO c_lp (resource_node_id, lp_type, title, path, force_commit, content_maker, content_license, js_lib, debug, theme,
@@ -410,7 +422,9 @@ final class ApiLibTier2CharacterizationTest extends AbstractApiTest
                      VALUES (?, 1, ?, '', 0, '', '', '', 0, '', '', 0, 0, 0, 0, 0, 0, NOW(), NOW())",
                     [$node, $title]
                 );
+
                 break;
+
             case 'work':
                 $this->conn()->executeStatement(
                     "INSERT INTO c_student_publication (resource_node_id, title, post_group_id, filetype, has_properties, qualification,
@@ -418,14 +432,18 @@ final class ApiLibTier2CharacterizationTest extends AbstractApiTest
                      VALUES (?, ?, 0, 'folder', 0, 0, 0, 0, 0, 0, 0)",
                     [$node, $title]
                 );
+
                 break;
+
             case 'thread':
                 $this->conn()->executeStatement(
                     'INSERT INTO c_forum_thread (resource_node_id, title, thread_date, thread_sticky, locked, thread_qualify_max, thread_weight, thread_peer_qualify)
                      VALUES (?, ?, NOW(), 0, 0, 0, 0, 0)',
                     [$node, $title]
                 );
+
                 break;
+
             case 'survey':
                 $this->conn()->executeStatement(
                     "INSERT INTO c_survey (resource_node_id, title, creation_date, invited, answered, invite_mail, reminder_mail, mail_subject,
@@ -433,6 +451,7 @@ final class ApiLibTier2CharacterizationTest extends AbstractApiTest
                      VALUES (?, ?, NOW(), 0, 0, '', '', '', '0', 0, 0, '', 0, 0, '')",
                     [$node, $title]
                 );
+
                 break;
         }
 
@@ -514,8 +533,8 @@ final class ApiLibTier2CharacterizationTest extends AbstractApiTest
         $sessionAdmin = $this->rawUser('vis_admin', 5);
         $stranger = $this->rawUser('vis_stranger', 5);
         $sid = $this->rawSession('vis', null, null);
-        $this->sessionUser($sid, $coach, \Chamilo\CoreBundle\Entity\Session::GENERAL_COACH);
-        $this->sessionUser($sid, $sessionAdmin, \Chamilo\CoreBundle\Entity\Session::SESSION_ADMIN);
+        $this->sessionUser($sid, $coach, Session::GENERAL_COACH);
+        $this->sessionUser($sid, $sessionAdmin, Session::SESSION_ADMIN);
         $this->conn()->executeStatement('INSERT INTO session_rel_course (session_id, c_id, position, nbr_users) VALUES (?, 1, 0, 0)', [$sid]);
         $code1 = (string) $this->conn()->fetchOne('SELECT code FROM course WHERE id = 1');
         $code2 = (string) $this->conn()->fetchOne('SELECT code FROM course WHERE id = 2');
@@ -531,7 +550,7 @@ final class ApiLibTier2CharacterizationTest extends AbstractApiTest
         $this->conn()->executeStatement('UPDATE course SET visibility = 1 WHERE id IN (1, 2)');
         $courseCoach = $this->rawUser('vis_cc', 5);
         $sid = $this->rawSession('viscc', null, null);
-        $this->sessionCourseUser($sid, 1, $courseCoach, \Chamilo\CoreBundle\Entity\Session::COURSE_COACH);
+        $this->sessionCourseUser($sid, 1, $courseCoach, Session::COURSE_COACH);
         $code1 = (string) $this->conn()->fetchOne('SELECT code FROM course WHERE id = 1');
         $code2 = (string) $this->conn()->fetchOne('SELECT code FROM course WHERE id = 2');
 
@@ -559,15 +578,15 @@ final class ApiLibTier2CharacterizationTest extends AbstractApiTest
         $all = array_map('intval', $this->conn()->fetchFirstColumn('SELECT id FROM access_url ORDER BY id'));
 
         $page = api_get_access_urls(1, 2, 'id', 'ASC');
-        $this->assertSame(array_slice($all, 1, 2), array_map(static fn (array $r): int => $r['id'], $page));
+        $this->assertSame(\array_slice($all, 1, 2), array_map(static fn (array $r): int => $r['id'], $page));
         $this->assertSame(['id', 'url', 'description', 'active', 'created_by', 'tms'], array_keys($page[0]));
-        $this->assertSame('ap2', $page[count($page) - 1]['description'] ?? $page[0]['description']);
+        $this->assertSame('ap2', $page[\count($page) - 1]['description'] ?? $page[0]['description']);
         $this->assertIsInt($page[0]['active']);
         $this->assertIsInt($page[0]['created_by']);
 
         $desc = api_get_access_urls(0, 100, 'id', 'DESC');
         $this->assertSame(array_reverse($all), array_map(static fn (array $r): int => $r['id'], $desc));
-        $this->assertSame([$b, $a], array_slice(array_map(static fn (array $r): int => $r['id'], $desc), 0, 2));
+        $this->assertSame([$b, $a], \array_slice(array_map(static fn (array $r): int => $r['id'], $desc), 0, 2));
         $this->assertSame($all, array_map(static fn (array $r): int => $r['id'], api_get_access_urls(0, 100, 'id', 'bogus')), 'Unknown direction means ascending.');
         $byUrl = api_get_access_urls(0, 100);
         $urls = array_column($byUrl, 'url');

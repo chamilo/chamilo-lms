@@ -174,7 +174,6 @@ class UserManagerTier2CharacterizationTest extends AbstractApiTest
         ];
     }
 
-
     // ---------------------------------------------------------------- tests
 
     public function testCanDeleteUserRefusesTheOnlyTeacherOfACourse(): void
@@ -339,7 +338,7 @@ class UserManagerTier2CharacterizationTest extends AbstractApiTest
                 [$field, $value, $value, $order]
             );
         }
-        $position = fn (array $ids, int $id): int|false => array_search($id, $ids);
+        $position = fn (array $ids, int $id): false|int => array_search($id, $ids);
 
         // Column 0 is the id, 1 the variable, 5 the field order.
         $ids = array_keys(UserManager::get_extra_fields(0, 0, 1, 'ASC'));

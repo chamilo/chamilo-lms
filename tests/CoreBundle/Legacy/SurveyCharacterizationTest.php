@@ -761,6 +761,104 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame(1, SurveyManager::getCountPages($this->survey($none)));
     }
 
+    public function testSaveQuestionSortsAfterTheHighestExistingSortNotTheLowest(): void
+    {
+        $s = $this->insertSurvey();
+        $this->insertQuestion($s, 'sv high', 'yesno', 9);
+        $this->insertQuestion($s, 'sv low', 'yesno', 2);
+
+        SurveyManager::saveQuestion($this->survey($s), [
+            'question' => 'sv appended',
+            'type' => 'open',
+            'horizontalvertical' => 'vertical',
+            'shared_question_id' => 0,
+            'survey_id' => $s,
+            'question_id' => 0,
+        ], false);
+
+        $this->assertSame(
+            10,
+            (int) $this->conn->fetchOne('SELECT sort FROM c_survey_question WHERE survey_id = ? AND survey_question = ?', [$s, 'sv appended'])
+        );
+    }
+
+    public function testGetCountPagesCountsEveryPlainPageBreak(): void
+    {
+        $s = $this->insertSurvey();
+        $this->insertQuestion($s, 'sv q1', 'yesno', 1);
+        $this->insertQuestion($s, 'sv break one', 'pagebreak', 2);
+        $this->insertQuestion($s, 'sv q2', 'yesno', 3);
+        $this->insertQuestion($s, 'sv break two', 'pagebreak', 4);
+        $this->insertQuestion($s, 'sv q3', 'yesno', 5);
+
+        $this->assertSame(3, SurveyManager::getCountPages($this->survey($s)));
+    }
+
+    public function testEmptySurveyInASessionCountsTheSurvivingAnsweringUsersOnce(): void
+    {
+        $sid = $this->insertSession();
+        $s = $this->insertSurvey(['invited' => 3, 'answered' => 3]);
+        $q1 = $this->insertQuestion($s, 'sv q1');
+        $q2 = $this->insertQuestion($s, 'sv q2', 'yesno', 2);
+        $this->insertAnswer($s, $q1, '2', 'a', 0, ['session_id' => $sid]);
+        $this->insertAnswer($s, $q1, '2', 'a');
+        $this->insertAnswer($s, $q2, '2', 'a');
+        $this->setContext(1, 1, $sid);
+
+        SurveyManager::empty_survey($s);
+
+        $this->assertSame(1, (int) $this->surveyRow($s)['answered'], 'one user answered two questions: counted once');
+    }
+
+    public function testUpdateSurveyAnsweredInASessionOnlyFlagsTheInvitationOfThatSession(): void
+    {
+        $sid = $this->insertSession();
+        $other = $this->insertSession();
+        $s = $this->insertSurvey();
+        $base = $this->insertInvitation($s, 1);
+        $inSession = $this->insertInvitation($s, 1, ['session_id' => $sid]);
+        $inOther = $this->insertInvitation($s, 1, ['session_id' => $other]);
+        $this->setContext(1, 1, $sid);
+
+        SurveyManager::updateSurveyAnswered($this->survey($s), 1);
+
+        $rows = $this->conn->fetchAllKeyValue('SELECT iid, answered FROM c_survey_invitation WHERE survey_id = ?', [$s]);
+        $this->assertSame(0, (int) $rows[$base]);
+        $this->assertSame(1, (int) $rows[$inSession]);
+        $this->assertSame(0, (int) $rows[$inOther]);
+    }
+
+    public function testGetPeopleWhoFilledSurveyWithUserInfoFollowsTheNameConventionOfTheLanguage(): void
+    {
+        $firstNameLocale = null;
+        $lastNameLocale = null;
+        foreach (['en_US', 'fr_FR', 'es_ES', 'de_DE', 'ja_JP', 'ko_KR', 'zh_CN', 'hu_HU', 'vi_VN'] as $iso) {
+            if (api_sort_by_first_name($iso)) {
+                $firstNameLocale ??= $iso;
+            } else {
+                $lastNameLocale ??= $iso;
+            }
+        }
+        if (null === $firstNameLocale || null === $lastNameLocale) {
+            $this->markTestSkipped('The name conventions of the known locales do not cover both sort orders.');
+        }
+
+        $this->conn->executeStatement("UPDATE user SET firstname = 'Zed', lastname = 'Aaa' WHERE id = 1");
+        $this->conn->executeStatement("UPDATE user SET firstname = 'Amy', lastname = 'Zzz' WHERE id = 2");
+        $s = $this->insertSurvey();
+        $q = $this->insertQuestion($s, 'sv q');
+        $this->insertAnswer($s, $q, '1', 'a');
+        $this->insertAnswer($s, $q, '2', 'a');
+
+        Container::getRequest()->setLocale($firstNameLocale);
+        $byFirst = array_map(static fn (array $p): int => (int) $p['user_id'], SurveyManager::get_people_who_filled_survey($s, true));
+        Container::getRequest()->setLocale($lastNameLocale);
+        $byLast = array_map(static fn (array $p): int => (int) $p['user_id'], SurveyManager::get_people_who_filled_survey($s, true));
+
+        $this->assertSame([2, 1], $byFirst);
+        $this->assertSame([1, 2], $byLast);
+    }
+
     // ---------------------------------------------------------------- SurveyManager: copy
 
     public function testCopySurveyIntoAnExistingSurveyCopiesQuestionsAndOptionsWithNewIds(): void

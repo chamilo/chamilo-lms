@@ -152,6 +152,22 @@ class ExtraFieldValueCharacterizationTest extends AbstractApiTest
         $this->assertFalse((new ExtraFieldValue('session'))->get_values_by_handler_and_field_variable(self::ITEM, "x' OR '1'='1"));
     }
 
+    public function testGetValuesByHandlerAndFieldVariableTakesTheLowestIdAndKeepsTheRawRowShape(): void
+    {
+        $f = $this->field(self::SESSION, 'twice');
+        $first = $this->value($f, self::ITEM, 'zzz first inserted');
+        $this->value($f, self::ITEM, 'aaa second inserted');
+
+        $row = (new ExtraFieldValue('session'))->get_values_by_handler_and_field_variable(self::ITEM, 'xf_twice');
+
+        $this->assertSame($first, $row['id'], 'ORDER BY id: the first stored row wins, not the first by value.');
+        $this->assertSame('zzz first inserted', $row['field_value']);
+        $this->assertSame($f, $row['field_id']);
+        $this->assertNull($row['asset_id']);
+        $this->assertSame('2020-01-01 00:00:00', $row['created_at'], 'Dates are strings, as in the table.');
+        $this->assertSame('2020-01-01 00:00:00', $row['updated_at']);
+    }
+
     public function testGetValuesByVariableFiltersOnVisibleToSelfEqualToTheGivenFlag(): void
     {
         $visible = $this->field(self::SESSION, 'vis_on', ExtraField::FIELD_TYPE_TEXT, ['visible_to_self' => 1]);

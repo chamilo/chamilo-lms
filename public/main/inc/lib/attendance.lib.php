@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
@@ -11,8 +12,13 @@ use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAttendance;
 use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
+use Chamilo\CourseBundle\Entity\CAttendanceCalendarRelGroup;
+use Chamilo\CourseBundle\Entity\CAttendanceResult;
+use Chamilo\CourseBundle\Entity\CAttendanceSheet;
+use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CourseBundle\Entity\CAttendanceSheetLog;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\QueryBuilder;
 
 class Attendance
 {
@@ -32,6 +38,141 @@ class Attendance
     {
         return 'true' === api_get_setting('attendance.attendance_add_official_code')
             || true === api_get_configuration_value('attendance_add_official_code');
+    }
+
+    /**
+     * Every column of the attendance calendar table, aliased to the snake_case keys the legacy callers read.
+     */
+    private static function calendarRowsQueryBuilder(): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'c.iid AS iid',
+                'IDENTITY(c.attendance) AS attendance_id',
+                'IDENTITY(c.room) AS room_id',
+                'c.dateTime AS date_time',
+                'c.doneAttendance AS done_attendance',
+                'c.blocked AS blocked',
+                'c.duration AS duration'
+            )
+            ->from(CAttendanceCalendar::class, 'c')
+        ;
+    }
+
+    /**
+     * The raw table row used to come back with integer flags and the stored 'Y-m-d H:i:s' date string.
+     */
+    private static function toLegacyCalendarRow(array $row): array
+    {
+        $row['iid'] = (int) $row['iid'];
+        $row['attendance_id'] = (int) $row['attendance_id'];
+        $row['room_id'] = null === $row['room_id'] ? null : (int) $row['room_id'];
+        $row['date_time'] = $row['date_time']->format('Y-m-d H:i:s');
+        $row['done_attendance'] = (int) $row['done_attendance'];
+        $row['blocked'] = (int) $row['blocked'];
+
+        return $row;
+    }
+
+    /**
+     * Database::fetch_array() style row: the named keys followed by the same values under numeric keys.
+     */
+    private static function withNumericKeys(array $row): array
+    {
+        foreach ($row as $value) {
+            $row[] = $value;
+        }
+
+        return $row;
+    }
+
+    /**
+     * Inserts one row and returns the number of affected rows. DQL has no INSERT: the DBAL QueryBuilder keeps the
+     * error handling of the raw query (Database::handleError).
+     */
+    private static function insertAttendanceRow(string $table, array $values): int
+    {
+        $qb = Database::getManager()->getConnection()->createQueryBuilder()->insert($table);
+        foreach ($values as $column => $value) {
+            $qb->setValue($column, ':'.$column)->setParameter($column, $value);
+        }
+
+        try {
+            return (int) $qb->executeStatement();
+        } catch (Exception $e) {
+            Database::handleError($e);
+
+            return 0;
+        }
+    }
+
+    private static function reactivateAttendance(int $attendanceId): int
+    {
+        return (int) Container::getEntityManager()
+            ->createQuery('UPDATE '.CAttendance::class.' a SET a.active = 1 WHERE a.iid = :attendanceId')
+            ->setParameter('attendanceId', $attendanceId)
+            ->execute()
+        ;
+    }
+
+    private static function attendanceSheetRowExists(int $userId, int $calendarId): bool
+    {
+        return 0 < (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(s.iid)')
+            ->from(CAttendanceSheet::class, 's')
+            ->where('IDENTITY(s.user) = :userId')
+            ->andWhere('IDENTITY(s.attendanceCalendar) = :calendarId')
+            ->setParameter('userId', $userId)
+            ->setParameter('calendarId', $calendarId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    private static function setAttendanceSheetPresence(int $userId, int $calendarId, int $presence): int
+    {
+        return (int) Container::getEntityManager()
+            ->createQuery(
+                'UPDATE '.CAttendanceSheet::class.' s SET s.presence = :presence
+                 WHERE s.user = :userId AND s.attendanceCalendar = :calendarId'
+            )
+            ->setParameter('presence', $presence)
+            ->setParameter('userId', $userId)
+            ->setParameter('calendarId', $calendarId)
+            ->execute()
+        ;
+    }
+
+    /**
+     * Stored result (number of presences) of a user in an attendance, 0 when there is no result row.
+     */
+    private static function getAttendanceResultScore(int $userId, int $attendanceId)
+    {
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select('r.score AS score')
+            ->from(CAttendanceResult::class, 'r')
+            ->where('IDENTITY(r.user) = :userId')
+            ->andWhere('IDENTITY(r.attendance) = :attendanceId')
+            ->setParameter('userId', $userId)
+            ->setParameter('attendanceId', $attendanceId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
+
+        return null === $row ? 0 : $row['score'];
+    }
+
+    private static function deleteCalendarWithSheet(int $calendarId): void
+    {
+        $em = Container::getEntityManager();
+        $em->createQuery('DELETE FROM '.CAttendanceSheet::class.' s WHERE s.attendanceCalendar = :calendarId')
+            ->setParameter('calendarId', $calendarId)
+            ->execute()
+        ;
+        $em->createQuery('DELETE FROM '.CAttendanceCalendar::class.' c WHERE c.iid = :calendarId')
+            ->setParameter('calendarId', $calendarId)
+            ->execute()
+        ;
     }
 
     /**
@@ -319,20 +460,35 @@ class Attendance
      */
     public function get_attendance_by_id($attendanceId)
     {
-        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
-        $attendanceId = (int) $attendanceId;
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'a.iid AS iid',
+                'IDENTITY(a.resourceNode) AS resource_node_id',
+                'IDENTITY(a.room) AS room_id',
+                'a.title AS title',
+                'a.description AS description',
+                'a.active AS active',
+                'a.attendanceQualifyTitle AS attendance_qualify_title',
+                'a.attendanceQualifyMax AS attendance_qualify_max',
+                'a.attendanceWeight AS attendance_weight',
+                'a.locked AS locked',
+                'a.requireUnique AS require_unique'
+            )
+            ->from(CAttendance::class, 'a')
+            ->where('a.iid = :attendanceId')
+            ->setParameter('attendanceId', (int) $attendanceId)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-        $attendance_data = [];
-        $sql = "SELECT * FROM $tbl_attendance
-                WHERE iid = $attendanceId";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_array($res)) {
-                $attendance_data = $row;
-            }
+        if (null === $row) {
+            return [];
         }
+        foreach (['iid', 'resource_node_id', 'room_id'] as $key) {
+            $row[$key] = null === $row[$key] ? null : (int) $row[$key];
+        }
+        $row['require_unique'] = (int) $row['require_unique'];
 
-        return $attendance_data;
+        return self::withNumericKeys($row);
     }
 
     /**
@@ -566,46 +722,13 @@ class Attendance
      */
     public function attendance_restore($attendanceId)
     {
-        $_course = api_get_course_info();
-        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
-        $user_id = api_get_user_id();
-        $course_id = $_course['real_id'];
         $affected_rows = 0;
         if (is_array($attendanceId)) {
             foreach ($attendanceId as $id) {
-                $id = (int) $id;
-                $sql = "UPDATE $tbl_attendance SET active = 1
-                        WHERE iid = '$id'";
-                $result = Database::query($sql);
-                $rows = Database::affected_rows($result);
-                $affected_rows += $rows;
-                if (!empty($rows)) {
-                    // update row item property table
-                    /*api_item_property_update(
-                        $_course,
-                        TOOL_ATTENDANCE,
-                        $id,
-                        'restore',
-                        $user_id
-                    );*/
-                }
+                $affected_rows += self::reactivateAttendance((int) $id);
             }
         } else {
-            $attendanceId = (int) $attendanceId;
-            $sql = "UPDATE $tbl_attendance SET active = 1
-                    WHERE iid = '$attendanceId'";
-            $result = Database::query($sql);
-            $affected_rows = Database::affected_rows($result);
-            if (!empty($affected_rows)) {
-                // update row item property table
-                /*api_item_property_update(
-                    $_course,
-                    TOOL_ATTENDANCE,
-                    $attendanceId,
-                    'restore',
-                    $user_id
-                );*/
-            }
+            $affected_rows = self::reactivateAttendance((int) $attendanceId);
         }
 
         return $affected_rows;
@@ -845,7 +968,6 @@ class Attendance
     public function attendance_sheet_add($calendar_id, $users_present, CAttendance $attendance)
     {
         $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
-        $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 
         $calendar_id = (int) $calendar_id;
         if (!self::attendanceCalendarBelongsToAttendance($calendar_id, (int) $attendance->getIid())) {
@@ -865,63 +987,33 @@ class Attendance
             $lastedit_type = self::UPDATED_ATTENDANCE_LOG_TYPE;
         }
 
-        // save users present in class
-        foreach ($users_present as $user_present) {
-            $uid = (int) $user_present;
-            // check if user already was registered with the $calendar_id
-            $sql = "SELECT user_id FROM $tbl_attendance_sheet
-                    WHERE user_id = $uid AND attendance_calendar_id = $calendar_id";
-            $rs = Database::query($sql);
-            if (0 == Database::num_rows($rs)) {
-                $sql = "INSERT INTO $tbl_attendance_sheet SET
-                        user_id = '$uid',
-                        attendance_calendar_id = '$calendar_id',
-                        presence = 1,
-                        signature = ''";
-                $result = Database::query($sql);
-
-                $affected_rows += Database::affected_rows($result);
-            } else {
-                $sql = "UPDATE $tbl_attendance_sheet
-                        SET presence = 1
-                        WHERE
-                            user_id = $uid AND
-                            attendance_calendar_id = $calendar_id
-                        ";
-                $result = Database::query($sql);
-                $affected_rows += Database::affected_rows($result);
-            }
-        }
-
-        // save users absent in class
-        foreach ($users_absent as $user_absent) {
-            $uid = (int) $user_absent;
-            // check if user already was registered with the $calendar_id
-            $sql = "SELECT user_id FROM $tbl_attendance_sheet
-                    WHERE user_id = $uid AND attendance_calendar_id = '$calendar_id'";
-            $rs = Database::query($sql);
-            if (0 == Database::num_rows($rs)) {
-                $sql = "INSERT INTO $tbl_attendance_sheet SET
-                        user_id ='$uid',
-                        attendance_calendar_id = '$calendar_id',
-                        presence = 0,
-                        signature = ''";
-                $result = Database::query($sql);
-                $affected_rows += Database::affected_rows($result);
-            } else {
-                $sql = "UPDATE $tbl_attendance_sheet SET presence = 0
-                        WHERE
-                            user_id ='$uid' AND
-                            attendance_calendar_id = '$calendar_id'";
-                $result = Database::query($sql);
-                $affected_rows += Database::affected_rows($result);
+        // save users present in class, then users absent in class
+        foreach ([1 => $users_present, 0 => $users_absent] as $presence => $uids) {
+            foreach ($uids as $uid) {
+                $uid = (int) $uid;
+                // check if user already was registered with the $calendar_id
+                if (!self::attendanceSheetRowExists($uid, $calendar_id)) {
+                    $affected_rows += self::insertAttendanceRow(
+                        $tbl_attendance_sheet,
+                        [
+                            'user_id' => $uid,
+                            'attendance_calendar_id' => $calendar_id,
+                            'presence' => $presence,
+                            'signature' => '',
+                        ]
+                    );
+                } else {
+                    $affected_rows += self::setAttendanceSheetPresence($uid, $calendar_id, $presence);
+                }
             }
         }
 
         // update done_attendance inside attendance calendar table
-        $sql = "UPDATE $tbl_attendance_calendar SET done_attendance = 1
-                WHERE  iid = '$calendar_id'";
-        Database::query($sql);
+        Container::getEntityManager()
+            ->createQuery('UPDATE '.CAttendanceCalendar::class.' c SET c.doneAttendance = true WHERE c.iid = :calendarId')
+            ->setParameter('calendarId', $calendar_id)
+            ->execute()
+        ;
 
         // save users' results
         $this->updateUsersResults($user_ids, $attendance);
@@ -947,9 +1039,8 @@ class Attendance
      */
     public function updateUsersResults($user_ids, CAttendance $attendance)
     {
-        $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
         $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
-        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
+        $em = Container::getEntityManager();
         $attendanceId = $attendance->getIid();
         // fill results about presence of students
         $attendance_calendar = $this->get_attendance_calendar(
@@ -962,7 +1053,7 @@ class Attendance
         $calendar_ids = [];
         // get all dates from calendar by current attendance
         foreach ($attendance_calendar as $cal) {
-            $calendar_ids[] = $cal['iid'];
+            $calendar_ids[] = (int) $cal['iid'];
         }
 
         // get count of presences by users inside current attendance and save like results
@@ -971,50 +1062,65 @@ class Attendance
                 $uid = (int) $uid;
                 $count_presences = 0;
                 if (count($calendar_ids) > 0) {
-                    $sql = "SELECT count(presence) as count_presences
-                            FROM $tbl_attendance_sheet
-                            WHERE
-                                user_id = $uid AND
-                                attendance_calendar_id IN (".implode(',', $calendar_ids).') AND
-                                presence = 1';
-                    $rs_count = Database::query($sql);
-                    $row_count = Database::fetch_array($rs_count);
-                    $count_presences = $row_count['count_presences'];
+                    $count_presences = (int) $em->createQueryBuilder()
+                        ->select('COUNT(s.presence)')
+                        ->from(CAttendanceSheet::class, 's')
+                        ->where('IDENTITY(s.user) = :userId')
+                        ->andWhere('IDENTITY(s.attendanceCalendar) IN (:calendarIds)')
+                        ->andWhere('s.presence = 1')
+                        ->setParameter('userId', $uid)
+                        ->setParameter('calendarIds', $calendar_ids)
+                        ->getQuery()
+                        ->getSingleScalarResult()
+                    ;
                 }
 
                 // save results
-                $sql = "SELECT iid FROM $tbl_attendance_result
-                        WHERE
-                            user_id = '$uid' AND
-                            attendance_id = '$attendanceId' ";
-                $rs_check_result = Database::query($sql);
+                $resultExists = 0 < (int) $em->createQueryBuilder()
+                    ->select('COUNT(r.iid)')
+                    ->from(CAttendanceResult::class, 'r')
+                    ->where('IDENTITY(r.user) = :userId')
+                    ->andWhere('IDENTITY(r.attendance) = :attendanceId')
+                    ->setParameter('userId', $uid)
+                    ->setParameter('attendanceId', (int) $attendanceId)
+                    ->getQuery()
+                    ->getSingleScalarResult()
+                ;
 
-                if (Database::num_rows($rs_check_result) > 0) {
+                if ($resultExists) {
                     // update result
-                    $sql = "UPDATE $tbl_attendance_result SET
-                            score = '$count_presences'
-                            WHERE
-                                user_id='$uid' AND
-                                attendance_id='$attendanceId'";
-                    Database::query($sql);
+                    $em->createQuery(
+                        'UPDATE '.CAttendanceResult::class.' r SET r.score = :score
+                         WHERE r.user = :userId AND r.attendance = :attendanceId'
+                    )
+                        ->setParameter('score', $count_presences)
+                        ->setParameter('userId', $uid)
+                        ->setParameter('attendanceId', (int) $attendanceId)
+                        ->execute()
+                    ;
                 } else {
                     // insert new result
-                    $sql = "INSERT INTO $tbl_attendance_result SET
-                            user_id			= '$uid',
-                            attendance_id 	= '$attendanceId',
-                            score			= '$count_presences'";
-                    Database::query($sql);
-                    $insertId = Database::insert_id();
+                    self::insertAttendanceRow(
+                        $tbl_attendance_result,
+                        [
+                            'user_id' => $uid,
+                            'attendance_id' => (int) $attendanceId,
+                            'score' => $count_presences,
+                        ]
+                    );
                 }
             }
         }
 
         // update attendance qualify max
         $count_done_calendar = self::get_done_attendance_calendar($attendance);
-        $sql = "UPDATE $tbl_attendance SET
-                    attendance_qualify_max = '$count_done_calendar'
-                WHERE iid = '$attendanceId'";
-        Database::query($sql);
+        $em->createQuery(
+            'UPDATE '.CAttendance::class.' a SET a.attendanceQualifyMax = :qualifyMax WHERE a.iid = :attendanceId'
+        )
+            ->setParameter('qualifyMax', (int) $count_done_calendar)
+            ->setParameter('attendanceId', (int) $attendanceId)
+            ->execute()
+        ;
     }
 
     /**
@@ -1149,24 +1255,13 @@ class Attendance
             //$course_code = $course['code'];
             //$course_info = api_get_course_info($course_code);
             $course_id = $course['real_id'];
-            $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
             $attendances = $this->getAttendanceList(api_get_course_entity($course_id));
 
             foreach ($attendances as $attendance) {
                 $attendanceId = $attendance->getIid();
                 // get total faults and total weight
                 $total_done_attendance = $attendance->getAttendanceQualifyMax();
-                $sql = "SELECT score
-                        FROM $tbl_attendance_result
-                        WHERE
-                            user_id = $user_id AND
-                            attendance_id = ".$attendanceId;
-                $rs = Database::query($sql);
-                $score = 0;
-                if (Database::num_rows($rs) > 0) {
-                    $row = Database::fetch_array($rs);
-                    $score = $row['score'];
-                }
+                $score = self::getAttendanceResultScore($user_id, (int) $attendanceId);
                 $faults = $total_done_attendance - $score;
                 $faults = $faults > 0 ? $faults : 0;
                 $total_faults += $faults;
@@ -1192,7 +1287,6 @@ class Attendance
     {
         // Database tables and variables
         $courseId = $course->getId();
-        $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
         $user_id = (int) $user_id;
         $results = [];
         $total_faults = $total_weight = 0;
@@ -1202,16 +1296,7 @@ class Attendance
             $attendanceId = $attendance->getIid();
             // Get total faults and total weight
             $total_done_attendance = $attendance->getAttendanceQualifyMax();
-            $sql = "SELECT score FROM $tbl_attendance_result
-                    WHERE
-                        user_id = $user_id AND
-                        attendance_id=".$attendanceId;
-            $rs = Database::query($sql);
-            $score = 0;
-            if (Database::num_rows($rs) > 0) {
-                $row = Database::fetch_array($rs);
-                $score = $row['score'];
-            }
+            $score = self::getAttendanceResultScore($user_id, (int) $attendanceId);
             $faults = $total_done_attendance - $score;
             $faults = $faults > 0 ? $faults : 0;
             $total_faults += $faults;
@@ -1245,8 +1330,7 @@ class Attendance
     ) {
         //Get actual course or by course_id
         $course_id = (0 == $course_id) ? api_get_course_int_id() : (int) $course_id;
-        $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
-        $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+        $em = Container::getEntityManager();
         $attendance_calendar = $this->get_attendance_calendar(
             $attendanceId,
             'all',
@@ -1263,14 +1347,6 @@ class Attendance
             $calendar_ids[] = $cal['iid'];
         }
 
-        $whereDate = '';
-        if (!empty($startDate)) {
-            $whereDate .= " AND cal.date_time >= '".$startDate->format('Y-m-d H:i:s')."'";
-        }
-        if (!empty($endDate)) {
-            $whereDate .= " AND cal.date_time <= '".$endDate->format('Y-m-d H:i:s')."'";
-        }
-
         // moved at start of this function
         // $course_id = api_get_course_int_id();
 
@@ -1282,16 +1358,18 @@ class Attendance
             if (count($calendar_ids) > 0 && count($user_ids) > 0) {
                 foreach ($user_ids as $uid) {
                     $uid = (int) $uid;
-                    $sql = "SELECT * FROM $tbl_attendance_sheet
-                            WHERE
-                                user_id = '$uid' AND
-                                attendance_calendar_id IN(".implode(',', $calendar_ids).')
-                            ';
-                    $res = Database::query($sql);
-                    if (Database::num_rows($res) > 0) {
-                        while ($row = Database::fetch_array($res)) {
-                            $data[$uid][$row['attendance_calendar_id']]['presence'] = $row['presence'];
-                        }
+                    $rows = $em->createQueryBuilder()
+                        ->select('IDENTITY(s.attendanceCalendar) AS attendance_calendar_id', 's.presence AS presence')
+                        ->from(CAttendanceSheet::class, 's')
+                        ->where('IDENTITY(s.user) = :userId')
+                        ->andWhere('IDENTITY(s.attendanceCalendar) IN (:calendarIds)')
+                        ->setParameter('userId', $uid)
+                        ->setParameter('calendarIds', array_map('intval', $calendar_ids))
+                        ->getQuery()
+                        ->getArrayResult()
+                    ;
+                    foreach ($rows as $row) {
+                        $data[$uid][(int) $row['attendance_calendar_id']]['presence'] = $row['presence'];
                     }
                 }
             }
@@ -1299,21 +1377,28 @@ class Attendance
             // Get attendance for current user
             $user_id = (int) $user_id;
             if (count($calendar_ids) > 0) {
-                $sql = "SELECT cal.date_time, att.presence
-                        FROM $tbl_attendance_sheet att
-                        INNER JOIN  $tbl_attendance_calendar cal
-                        ON cal.iid = att.attendance_calendar_id
-                        WHERE
-                            att.user_id = $user_id AND
-                            att.attendance_calendar_id IN (".implode(',', $calendar_ids).")
-                            $whereDate
-                        ORDER BY date_time";
-                $res = Database::query($sql);
-                if (Database::num_rows($res) > 0) {
-                    while ($row = Database::fetch_array($res)) {
-                        $row['date_time'] = api_convert_and_format_date($row['date_time'], null, date_default_timezone_get());
-                        $data[$user_id][] = $row;
-                    }
+                $qb = $em->createQueryBuilder()
+                    ->select('cal.dateTime AS date_time', 'att.presence AS presence')
+                    ->from(CAttendanceSheet::class, 'att')
+                    ->innerJoin('att.attendanceCalendar', 'cal')
+                    ->where('IDENTITY(att.user) = :userId')
+                    ->andWhere('IDENTITY(att.attendanceCalendar) IN (:calendarIds)')
+                    ->setParameter('userId', $user_id)
+                    ->setParameter('calendarIds', array_map('intval', $calendar_ids))
+                    ->orderBy('cal.dateTime', 'ASC')
+                ;
+                if (!empty($startDate)) {
+                    $qb->andWhere('cal.dateTime >= :startDate')->setParameter('startDate', $startDate->format('Y-m-d H:i:s'));
+                }
+                if (!empty($endDate)) {
+                    $qb->andWhere('cal.dateTime <= :endDate')->setParameter('endDate', $endDate->format('Y-m-d H:i:s'));
+                }
+                foreach ($qb->getQuery()->getArrayResult() as $row) {
+                    $row['date_time'] = $row['date_time']->format('Y-m-d H:i:s');
+                    // fetch_array() style: the numeric keys keep the stored value, only the named date is formatted.
+                    $row = self::withNumericKeys($row);
+                    $row['date_time'] = api_convert_and_format_date($row['date_time'], null, date_default_timezone_get());
+                    $data[$user_id][] = $row;
                 }
             }
         }
@@ -1330,24 +1415,16 @@ class Attendance
      */
     public function get_next_attendance_calendar_id($attendanceId)
     {
-        $table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $attendanceId = (int) $attendanceId;
-        $course_id = api_get_course_int_id();
+        $row = self::calendarRowsQueryBuilder()
+            ->where('IDENTITY(c.attendance) = :attendanceId')
+            ->andWhere('c.doneAttendance = false')
+            ->orderBy('c.dateTime', 'ASC')
+            ->setParameter('attendanceId', (int) $attendanceId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-        $sql = "SELECT iid FROM $table
-                WHERE
-                    attendance_id = '$attendanceId' AND
-                    done_attendance = 0
-                ORDER BY date_time
-                LIMIT 1";
-        $rs = Database::query($sql);
-        $next_calendar_id = 0;
-        if (Database::num_rows($rs) > 0) {
-            $row = Database::fetch_array($rs);
-            $next_calendar_id = $row['iid'];
-        }
-
-        return $next_calendar_id;
+        return null === $row ? 0 : (int) $row['iid'];
     }
 
     /**
@@ -1359,23 +1436,16 @@ class Attendance
      */
     public function getNextAttendanceCalendarDatetime($attendanceId)
     {
-        $table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $course_id = api_get_course_int_id();
-        $attendanceId = (int) $attendanceId;
-        $sql = "SELECT iid, date_time FROM $table
-                WHERE
-                    attendance_id = '$attendanceId' AND
-                    done_attendance = 0
-                ORDER BY date_time
-                LIMIT 1";
-        $rs = Database::query($sql);
-        $next_calendar_datetime = 0;
-        if (Database::num_rows($rs) > 0) {
-            $row = Database::fetch_array($rs);
-            $next_calendar_datetime = api_get_local_time($row['date_time']);
-        }
+        $row = self::calendarRowsQueryBuilder()
+            ->where('IDENTITY(c.attendance) = :attendanceId')
+            ->andWhere('c.doneAttendance = false')
+            ->orderBy('c.dateTime', 'ASC')
+            ->setParameter('attendanceId', (int) $attendanceId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-        return $next_calendar_datetime;
+        return null === $row ? 0 : api_get_local_time($row['date_time']->format('Y-m-d H:i:s'));
     }
 
     /**
@@ -1389,44 +1459,36 @@ class Attendance
      */
     public function get_user_score($user_id, $attendanceId, $groupId = 0)
     {
-        $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
-        $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
-        $tbl_attendance_cal_rel_group = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
-        $tbl_attendance_cal = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
         $user_id = (int) $user_id;
         $attendanceId = (int) $attendanceId;
         $groupId = (int) $groupId;
-        $course_id = api_get_course_int_id();
 
         if (empty($groupId)) {
-            $sql = "SELECT score FROM $tbl_attendance_result
-                    WHERE
-                        user_id='$user_id' AND
-                        attendance_id='$attendanceId'";
-        } else {
-            $sql = "SELECT count(presence) as score
-                    FROM $tbl_attendance_sheet
-                    WHERE
-                        user_id = '$user_id' AND
-                        presence = 1 AND
-                        attendance_calendar_id IN (
-                            SELECT calendar_id FROM $tbl_attendance_cal_rel_group crg
-                            INNER JOIN $tbl_attendance_cal c
-                            ON (crg.calendar_id = c.iid)
-                            WHERE
-                                crg.group_id = $groupId AND
-                                c.attendance_id = $attendanceId
-                        )
-                    ";
-        }
-        $rs = Database::query($sql);
-        $score = 0;
-        if (Database::num_rows($rs) > 0) {
-            $row = Database::fetch_array($rs);
-            $score = $row['score'];
+            return self::getAttendanceResultScore($user_id, $attendanceId);
         }
 
-        return $score;
+        $em = Container::getEntityManager();
+        $groupCalendars = $em->createQueryBuilder()
+            ->select('IDENTITY(crg.attendanceCalendar)')
+            ->from(CAttendanceCalendarRelGroup::class, 'crg')
+            ->innerJoin('crg.attendanceCalendar', 'c')
+            ->where('IDENTITY(crg.group) = :groupId')
+            ->andWhere('IDENTITY(c.attendance) = :attendanceId')
+        ;
+        $qb = $em->createQueryBuilder();
+
+        return (int) $qb
+            ->select('COUNT(s.presence)')
+            ->from(CAttendanceSheet::class, 's')
+            ->where('IDENTITY(s.user) = :userId')
+            ->andWhere('s.presence = 1')
+            ->andWhere($qb->expr()->in('IDENTITY(s.attendanceCalendar)', $groupCalendars->getDQL()))
+            ->setParameter('userId', $user_id)
+            ->setParameter('groupId', $groupId)
+            ->setParameter('attendanceId', $attendanceId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -1438,19 +1500,18 @@ class Attendance
      */
     public function get_attendance_calendar_by_id($calendar_id)
     {
-        $table = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $calendar_id = (int) $calendar_id;
-        $course_id = api_get_course_int_id();
-        $sql = "SELECT * FROM $table
-                WHERE iid = '$calendar_id' ";
-        $rs = Database::query($sql);
-        $data = [];
-        if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_array($rs)) {
-                $row['date_time'] = api_get_local_time($row['date_time']);
-                $data = $row;
-            }
+        $row = self::calendarRowsQueryBuilder()
+            ->where('c.iid = :calendarId')
+            ->setParameter('calendarId', (int) $calendar_id)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
+
+        if (null === $row) {
+            return [];
         }
+        // fetch_array() style: the numeric keys keep the stored value, only the named date is localized.
+        $data = self::withNumericKeys(self::toLegacyCalendarRow($row));
+        $data['date_time'] = api_get_local_time($data['date_time']);
 
         return $data;
     }
@@ -1479,44 +1540,34 @@ class Attendance
         DateTime $startDate = null,
         DateTime $endDate = null
     ) {
-        $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $tbl_acrg = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
         $attendanceId = (int) $attendanceId;
         $course_id = 0 == $course_id ? api_get_course_int_id() : (int) $course_id;
-        $whereDate = '';
-        if (!empty($startDate)) {
-            $whereDate .= " AND c.date_time >= '".$startDate->format('Y-m-d H:i:s')."'";
-        }
-        if (!empty($endDate)) {
-            $whereDate .= " AND c.date_time <= '".$endDate->format('Y-m-d H:i:s')."'";
-        }
-        if ($showAll) {
-            $sql = "SELECT * FROM $tbl_attendance_calendar c
-                    WHERE
-                        attendance_id = '$attendanceId'
-                        $whereDate";
-        } else {
-            $sql = "SELECT * FROM $tbl_attendance_calendar c
-                    WHERE
-                        attendance_id = '$attendanceId' AND
-                        iid NOT IN (
-                            SELECT calendar_id FROM $tbl_acrg
-                            WHERE group_id != 0 AND group_id IS NOT NULL
-                        )
-                        $whereDate
-                    ";
-        }
+        $em = Container::getEntityManager();
+        $qb = self::calendarRowsQueryBuilder()
+            ->where('IDENTITY(c.attendance) = :attendanceId')
+            ->setParameter('attendanceId', $attendanceId)
+        ;
 
         if (!empty($groupId)) {
-            $groupId = (int) $groupId;
-            $sql = "SELECT c.* FROM $tbl_attendance_calendar c
-                    INNER JOIN $tbl_acrg g
-                    ON c.iid = g.calendar_id
-                    WHERE
-                        g.group_id = '$groupId' AND
-                        c.attendance_id = '$attendanceId'
-                        $whereDate
-                   ";
+            $qb
+                ->innerJoin(CAttendanceCalendarRelGroup::class, 'g', 'WITH', 'g.attendanceCalendar = c')
+                ->andWhere('IDENTITY(g.group) = :groupId')
+                ->setParameter('groupId', (int) $groupId)
+            ;
+        } elseif (!$showAll) {
+            $groupCalendars = $em->createQueryBuilder()
+                ->select('IDENTITY(x.attendanceCalendar)')
+                ->from(CAttendanceCalendarRelGroup::class, 'x')
+                ->where('IDENTITY(x.group) <> 0')
+                ->andWhere('x.group IS NOT NULL')
+            ;
+            $qb->andWhere($qb->expr()->notIn('c.iid', $groupCalendars->getDQL()));
+        }
+        if (!empty($startDate)) {
+            $qb->andWhere('c.dateTime >= :startDate')->setParameter('startDate', $startDate->format('Y-m-d H:i:s'));
+        }
+        if (!empty($endDate)) {
+            $qb->andWhere('c.dateTime <= :endDate')->setParameter('endDate', $endDate->format('Y-m-d H:i:s'));
         }
 
         if (!in_array($type, ['today', 'all', 'all_done', 'all_not_done', 'calendar_id'])) {
@@ -1527,40 +1578,38 @@ class Attendance
             case 'calendar_id':
                 $calendar_id = (int) $calendar_id;
                 if (!empty($calendar_id)) {
-                    $sql .= " AND c.iid = $calendar_id";
+                    $qb->andWhere('c.iid = :calendarId')->setParameter('calendarId', $calendar_id);
                 }
                 break;
             case 'today':
                 //$sql .= ' AND DATE_FORMAT(date_time,"%d-%m-%Y") = DATE_FORMAT("'.api_get_utc_datetime().'", "%d-%m-%Y" )';
                 break;
             case 'all_done':
-                $sql .= ' AND done_attendance = 1 ';
+                $qb->andWhere('c.doneAttendance = true');
                 break;
             case 'all_not_done':
-                $sql .= ' AND done_attendance = 0 ';
+                $qb->andWhere('c.doneAttendance = false');
                 break;
             case 'all':
             default:
                 break;
         }
-        $sql .= ' ORDER BY date_time ';
+        $qb->orderBy('c.dateTime', 'ASC');
 
-        $rs = Database::query($sql);
         $data = [];
-        if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_assoc($rs)) {
-                $row['db_date_time'] = $row['date_time'];
-                $row['date_time'] = api_get_local_time($row['date_time']);
-                $row['date'] = api_format_date($row['date_time'], DATE_FORMAT_SHORT);
-                $row['time'] = api_format_date($row['date_time'], TIME_NO_SEC_FORMAT);
-                $row['groups'] = $this->getGroupListByAttendanceCalendar($row['iid'], $course_id);
-                if ('today' === $type) {
-                    if (date('d-m-Y', api_strtotime($row['date_time'], 'UTC')) == date('d-m-Y', time())) {
-                        $data[] = $row;
-                    }
-                } else {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $row = self::toLegacyCalendarRow($row);
+            $row['db_date_time'] = $row['date_time'];
+            $row['date_time'] = api_get_local_time($row['date_time']);
+            $row['date'] = api_format_date($row['date_time'], DATE_FORMAT_SHORT);
+            $row['time'] = api_format_date($row['date_time'], TIME_NO_SEC_FORMAT);
+            $row['groups'] = $this->getGroupListByAttendanceCalendar($row['iid'], $course_id);
+            if ('today' === $type) {
+                if (date('d-m-Y', api_strtotime($row['date_time'], 'UTC')) == date('d-m-Y', time())) {
                     $data[] = $row;
                 }
+            } else {
+                $data[] = $row;
             }
         }
 
@@ -1583,79 +1632,49 @@ class Attendance
         $done_attendance = null,
         $userId = 0
     ) {
-        $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $calendarRelGroup = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR_REL_GROUP);
-        $tbl_groupRelUser = Database::get_course_table(TABLE_GROUP_USER);
         $attendanceId = (int) $attendanceId;
         $groupId = (int) $groupId;
-        $course_id = api_get_course_int_id();
+        $userId = (int) $userId;
+        $em = Container::getEntityManager();
 
-        $where_attendance = '';
+        $qb = $em->createQueryBuilder()
+            ->select('COUNT(a.iid)')
+            ->from(CAttendanceCalendar::class, 'a')
+            ->where('IDENTITY(a.attendance) = :attendanceId')
+            ->setParameter('attendanceId', $attendanceId)
+        ;
         if ($done_attendance) {
-            $where_attendance = ' done_attendance = 1 AND ';
+            $qb->andWhere('a.doneAttendance = true');
         }
-        if (empty($userId)) {
-            if (empty($groupId)) {
-                $sql = "SELECT count(a.iid)
-                        FROM $tbl_attendance_calendar a
-                        WHERE
-                            $where_attendance
-                            attendance_id = '$attendanceId' AND
-                            iid NOT IN (
-                                SELECT calendar_id FROM $calendarRelGroup
-                                WHERE
-                                    attendance_id = $attendanceId AND
-                                    group_id != 0 AND
-                                    group_id IS NOT NULL
-                            )
-                        ";
-            } else {
-                $sql = "SELECT count(a.iid)
-                        FROM $tbl_attendance_calendar a
-                        INNER JOIN $calendarRelGroup g
-                        ON (a.iid = g.calendar_id)
-                        WHERE
-                            $where_attendance
-                            attendance_id = '$attendanceId' AND
-                            group_id = $groupId
-                        ";
-            }
+
+        if (!empty($groupId)) {
+            // The dates linked to the group, whether or not a user is given.
+            $qb
+                ->innerJoin(CAttendanceCalendarRelGroup::class, 'g', 'WITH', 'g.attendanceCalendar = a')
+                ->andWhere('IDENTITY(g.group) = :groupId')
+                ->setParameter('groupId', $groupId)
+            ;
         } else {
-            if (empty($groupId)) {
-                $sql = "SELECT count(a.iid)
-                        FROM $tbl_attendance_calendar a
-                        WHERE
-                            $where_attendance
-                            attendance_id = '$attendanceId' AND
-                            iid NOT IN (
-                                SELECT calendar_id FROM $calendarRelGroup
-                                WHERE
-                                    group_id != 0 AND
-                                    group_id IS NOT NULL AND
-                                    group_id NOT IN (
-                                        SELECT group_id
-                                        FROM $tbl_groupRelUser
-                                        WHERE user_id = $userId
-                                    )
-                            )
-                        ";
-            } else {
-                $sql = "SELECT count(a.iid)
-                        FROM $tbl_attendance_calendar a
-                        INNER JOIN $calendarRelGroup g
-                        ON (a.iid = g.calendar_id)
-                        WHERE
-                            $where_attendance
-                            attendance_id = '$attendanceId' AND
-                            group_id = $groupId
-                        ";
+            // The dates that are not linked to a group (for a user: nor to a group he is not a member of).
+            $groupCalendars = $em->createQueryBuilder()
+                ->select('IDENTITY(x.attendanceCalendar)')
+                ->from(CAttendanceCalendarRelGroup::class, 'x')
+                ->where('IDENTITY(x.group) <> 0')
+                ->andWhere('x.group IS NOT NULL')
+            ;
+            if (!empty($userId)) {
+                $userGroups = $em->createQueryBuilder()
+                    ->select('IDENTITY(gu.group)')
+                    ->from(CGroupRelUser::class, 'gu')
+                    ->where('IDENTITY(gu.user) = :userId')
+                ;
+                $groupCalendars->andWhere($groupCalendars->expr()->notIn('IDENTITY(x.group)', $userGroups->getDQL()));
+                $qb->setParameter('userId', $userId);
             }
+            $qb->andWhere($qb->expr()->notIn('a.iid', $groupCalendars->getDQL()));
         }
 
-        $rs = Database::query($sql);
-        $row = Database::fetch_row($rs);
-
-        return $row[0];
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -1667,20 +1686,14 @@ class Attendance
      */
     public static function get_count_dates_inside_attendance_calendar($attendanceId)
     {
-        $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $attendanceId = (int) $attendanceId;
-        $course_id = api_get_course_int_id();
-        $sql = "SELECT count(iid) FROM $tbl_attendance_calendar
-                WHERE
-                    attendance_id = '$attendanceId'";
-        $rs = Database::query($sql);
-        $count = 0;
-        if (Database::num_rows($rs) > 0) {
-            $row = Database::fetch_row($rs);
-            $count = $row[0];
-        }
-
-        return $count;
+        return (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(c.iid)')
+            ->from(CAttendanceCalendar::class, 'c')
+            ->where('IDENTITY(c.attendance) = :attendanceId')
+            ->setParameter('attendanceId', (int) $attendanceId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -1923,28 +1936,34 @@ class Attendance
      */
     public function attendance_calendar_edit($calendar_id, $attendance)
     {
-        $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+        $em = Container::getEntityManager();
         $affected_rows = 0;
         $attendanceId = $attendance->getIid();
 
-        $course_id = api_get_course_int_id();
         // check if datetime already exists inside the table
         $calendar_id = (int) $calendar_id;
         if (!self::attendanceCalendarBelongsToAttendance($calendar_id, (int) $attendanceId)) {
             return 0;
         }
-        $sql = "SELECT iid FROM $tbl_attendance_calendar
-                WHERE
-                    date_time = '".Database::escape_string($this->date_time)."' AND
-                    attendance_id = '$attendanceId' AND
-                    iid != $calendar_id";
-        $rs = Database::query($sql);
+        $exists = 0 < (int) $em->createQueryBuilder()
+            ->select('COUNT(c.iid)')
+            ->from(CAttendanceCalendar::class, 'c')
+            ->where('c.dateTime = :dateTime')
+            ->andWhere('IDENTITY(c.attendance) = :attendanceId')
+            ->andWhere('c.iid <> :calendarId')
+            ->setParameter('dateTime', (string) $this->date_time)
+            ->setParameter('attendanceId', (int) $attendanceId)
+            ->setParameter('calendarId', $calendar_id)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-        if (0 == Database::num_rows($rs)) {
-            $sql = "UPDATE $tbl_attendance_calendar
-                    SET date_time='".Database::escape_string($this->date_time)."'
-                    WHERE iid = '".$calendar_id."'";
-            Database::query($sql);
+        if (!$exists) {
+            $em->createQuery('UPDATE '.CAttendanceCalendar::class.' c SET c.dateTime = :dateTime WHERE c.iid = :calendarId')
+                ->setParameter('dateTime', (string) $this->date_time)
+                ->setParameter('calendarId', $calendar_id)
+                ->execute()
+            ;
             $affected_rows = 1;
         }
 
@@ -1970,9 +1989,6 @@ class Attendance
      */
     public function attendance_calendar_delete($calendar_id, CAttendance $attendance, $all_delete = false)
     {
-        $tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $tbl_attendance_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
-
         $attendanceId = $attendance->getIid();
         $calendar_id = (int) $calendar_id;
         if (!$all_delete && !self::attendanceCalendarBelongsToAttendance($calendar_id, (int) $attendanceId)) {
@@ -1992,28 +2008,16 @@ class Attendance
                 foreach ($attendance_calendar as $cal) {
                     // the group links reference the calendar row: delete them first
                     $this->deleteAttendanceCalendarGroup($cal['iid'], $course_id);
-                    // delete all data from attendance sheet
-                    $sql = "DELETE FROM $tbl_attendance_sheet
-                            WHERE attendance_calendar_id = '".intval($cal['iid'])."'";
-                    Database::query($sql);
-                    // delete data from attendance calendar
-                    $sql = "DELETE FROM $tbl_attendance_calendar
-                            WHERE iid = '".intval($cal['iid'])."'";
-                    Database::query($sql);
+                    // delete all data from attendance sheet and from attendance calendar
+                    self::deleteCalendarWithSheet((int) $cal['iid']);
                     $affected_rows++;
                 }
             }
         } else {
             // the group links reference the calendar row: delete them first
             $this->deleteAttendanceCalendarGroup($calendar_id, $course_id);
-            // delete just one row from attendance sheet by the calendar id
-            $sql = "DELETE FROM $tbl_attendance_sheet
-                    WHERE attendance_calendar_id = '".$calendar_id."'";
-            Database::query($sql);
-            // delete data from attendance calendar
-            $sql = "DELETE FROM $tbl_attendance_calendar
-                    WHERE iid = '".$calendar_id."'";
-            Database::query($sql);
+            // delete just one row from attendance sheet by the calendar id, then the calendar
+            self::deleteCalendarWithSheet($calendar_id);
 
             $affected_rows++;
         }
@@ -2377,14 +2381,18 @@ class Attendance
             $courses['not_category'][$i]['attendanceSheet'] = $temp;
         }
 
-        $sql = "SELECT session_id, c_id FROM session_rel_course_rel_user
-                WHERE user_id = $studentId";
-
-        $rs = Database::query($sql);
+        $sessionCourses = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(scu.session) AS session_id', 'IDENTITY(scu.course) AS c_id')
+            ->from(SessionRelCourseRelUser::class, 'scu')
+            ->where('IDENTITY(scu.user) = :userId')
+            ->setParameter('userId', $studentId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         // get info from sessions
-        while ($row = Database::fetch_assoc($rs)) {
-            $courseId = $row['c_id'];
-            $sessionId = $row['session_id'];
+        foreach ($sessionCourses as $row) {
+            $courseId = (int) $row['c_id'];
+            $sessionId = (int) $row['session_id'];
             $courseItem = api_get_course_info_by_id($courseId);
             $attendanceList = $attendanceLib->getAttendanceList(
             api_get_course_entity($courseId),

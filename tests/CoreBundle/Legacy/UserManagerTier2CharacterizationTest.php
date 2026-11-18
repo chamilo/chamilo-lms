@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -396,5 +397,60 @@ class UserManagerTier2CharacterizationTest extends AbstractApiTest
         $admins = UserManager::get_all_administrators();
         $this->assertArrayHasKey($inUrl, $admins);
         $this->assertArrayNotHasKey($elsewhere, $admins, 'Administrators of other URLs are not listed.');
+    }
+
+    public function testGetUsersByNameMatchesPrefixesOnly(): void
+    {
+        $a = $this->rawUser('nm1');
+        $b = $this->rawUser('nm2');
+        $this->conn()->executeStatement('UPDATE user SET firstname = ?, lastname = ? WHERE id = ?', ['Zebulon', 'Quark', $a]);
+        $this->conn()->executeStatement('UPDATE user SET firstname = ?, lastname = ? WHERE id = ?', ['AZebulon', 'Quark', $b]);
+
+        $ids = array_map(static fn (object $user): int => (int) $user->id, UserManager::getUsersByName('Zeb', 'Qua'));
+        $this->assertSame([$a], $ids, 'The name must START with the given text: "AZebulon" does not match "Zeb".');
+        $ids = array_map(static fn (object $user): int => (int) $user->id, UserManager::getUsersByName('Zeb', 'ark'));
+        $this->assertSame([], $ids, 'Neither does a last name that merely contains the text.');
+    }
+
+    public function testCountUsersWhoFinishedCoursesInSessionsListsSessionsOfACourseByTitle(): void
+    {
+        $t = $this->fixedTimes();
+        $u = $this->rawUser('fs1');
+        $zz = $this->rawSession('fs_zz', $t['past_start'], $t['future_end']);
+        $aa = $this->rawSession('fs_aa', $t['past_start'], $t['future_end']);
+        foreach ([$zz, $aa] as $sid) {
+            $this->sessionCourse($sid, 1, 1);
+            $this->sessionCourseUser($sid, 1, $u);
+        }
+        $this->fresh();
+
+        $code = (string) $this->conn()->fetchOne('SELECT code FROM course WHERE id = 1');
+        $keys = array_values(array_filter(
+            array_keys(UserManager::countUsersWhoFinishedCoursesInSessions()),
+            static fn (string $key): bool => str_contains($key, 'us_fs_')
+        ));
+        $this->assertSame(["$code (us_fs_aa)", "$code (us_fs_zz)"], $keys, 'ORDER BY course code, then session title.');
+    }
+
+    public function testGetHrmListFromUserIsOrderedByTheNameConventionOfTheLanguage(): void
+    {
+        $student = $this->rawUser('hl0');
+        $h1 = $this->rawUser('hl1', 1);
+        $h2 = $this->rawUser('hl2', 1);
+        // First names and last names sort in opposite directions: h1 = Aaa Zzz, h2 = Bbb Yyy.
+        $this->conn()->executeStatement('UPDATE user SET firstname = ?, lastname = ? WHERE id = ?', ['Aaa', 'Zzz', $h1]);
+        $this->conn()->executeStatement('UPDATE user SET firstname = ?, lastname = ? WHERE id = ?', ['Bbb', 'Yyy', $h2]);
+        foreach ([$h1, $h2] as $hrm) {
+            $this->conn()->executeStatement(
+                'INSERT INTO user_rel_user (user_id, friend_user_id, relation_type, created_at, updated_at)
+                 VALUES (?, ?, ?, NOW(), NOW())',
+                [$student, $hrm, UserRelUser::USER_RELATION_TYPE_RRHH]
+            );
+        }
+
+        $expected = api_is_western_name_order() ? [$h1, $h2] : [$h2, $h1];
+        $rows = UserManager::getHrmListFromUser($student);
+        $this->assertSame($expected, array_map('intval', array_column($rows, 'id')));
+        $this->assertSame(['id', 'username', 'firstname', 'lastname'], array_keys($rows[0]));
     }
 }

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use Certificate;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
@@ -833,8 +834,8 @@ class ApiLibCharacterizationTest extends AbstractApiTest
 
     public function testGetCertificateByUserReturnsTheRawCertificateRowsOfThatUserOnly(): void
     {
-        $this->assertSame([], \Certificate::getCertificateByUser(0));
-        $this->assertSame([], \Certificate::getCertificateByUser(999999999));
+        $this->assertSame([], Certificate::getCertificateByUser(0));
+        $this->assertSame([], Certificate::getCertificateByUser(999999999));
 
         $this->conn()->executeStatement(
             "INSERT INTO gradebook_certificate (user_id, score_certificate, created_at, publish) VALUES (1, 7.5, '2026-01-02 03:04:05', 0)"
@@ -843,7 +844,7 @@ class ApiLibCharacterizationTest extends AbstractApiTest
             "INSERT INTO gradebook_certificate (user_id, score_certificate, created_at, publish) VALUES (2, 1, '2026-01-02 03:04:05', 0)"
         );
 
-        $rows = \Certificate::getCertificateByUser(1);
+        $rows = Certificate::getCertificateByUser(1);
 
         $this->assertCount(1, $rows);
         $this->assertSame(1, $rows[0]['user_id']);
@@ -851,7 +852,7 @@ class ApiLibCharacterizationTest extends AbstractApiTest
         $this->assertSame('2026-01-02 03:04:05', $rows[0]['created_at']);
         $this->assertSame(0, $rows[0]['publish']);
         $this->assertArrayHasKey('path_certificate', $rows[0]);
-        $this->assertCount(1, \Certificate::getCertificateByUser(2));
+        $this->assertCount(1, Certificate::getCertificateByUser(2));
     }
 
     // ---------------------------------------------------------------- settings tables

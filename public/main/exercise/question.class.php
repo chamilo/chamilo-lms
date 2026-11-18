@@ -1958,6 +1958,7 @@ abstract class Question
     ) {
         $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $tbl_quiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $em = Container::getEntityManager();
 
         $quiz_id = (int) $quiz_id;
         $max_score = (float) $max_score;
@@ -1965,15 +1966,15 @@ abstract class Question
         $level = (int) $level;
 
         // Get the max position
-        $sql = "SELECT max(position) as max_position
-                FROM $tbl_quiz_question q
-                INNER JOIN $tbl_quiz_rel_question r
-                ON
-                    q.iid = r.question_id AND
-                    quiz_id = $quiz_id";
-        $rs_max = Database::query($sql);
-        $row_max = Database::fetch_object($rs_max);
-        $max_position = $row_max->max_position + 1;
+        $maxPosition = $em->createQueryBuilder()
+            ->select('MAX(q.position)')
+            ->from(CQuizRelQuestion::class, 'r')
+            ->innerJoin('r.question', 'q')
+            ->where('IDENTITY(r.quiz) = :quizId')
+            ->setParameter('quizId', $quiz_id)
+            ->getQuery()
+            ->getSingleScalarResult();
+        $max_position = $maxPosition + 1;
 
         $params = [
             'question' => $question_name,
@@ -1988,16 +1989,22 @@ abstract class Question
 
         if ($question_id) {
             // Get the max question_order
-            $sql = "SELECT max(question_order) as max_order
-                    FROM $tbl_quiz_rel_question
-                    WHERE quiz_id = $quiz_id ";
-            $rs_max_order = Database::query($sql);
-            $row_max_order = Database::fetch_object($rs_max_order);
-            $max_order = $row_max_order->max_order + 1;
+            $maxOrder = $em->createQueryBuilder()
+                ->select('MAX(r.questionOrder)')
+                ->from(CQuizRelQuestion::class, 'r')
+                ->where('IDENTITY(r.quiz) = :quizId')
+                ->setParameter('quizId', $quiz_id)
+                ->getQuery()
+                ->getSingleScalarResult();
+            $max_order = $maxOrder + 1;
             // Attach questions to quiz
-            $sql = "INSERT INTO $tbl_quiz_rel_question (question_id, quiz_id, question_order)
-                    VALUES($question_id, $quiz_id, $max_order)";
-            Database::query($sql);
+            $em->getConnection()->createQueryBuilder()
+                ->insert($tbl_quiz_rel_question)
+                ->values(['question_id' => ':questionId', 'quiz_id' => ':quizId', 'question_order' => ':questionOrder'])
+                ->setParameter('questionId', (int) $question_id)
+                ->setParameter('quizId', $quiz_id)
+                ->setParameter('questionOrder', $max_order)
+                ->executeStatement();
         }
 
         return $question_id;

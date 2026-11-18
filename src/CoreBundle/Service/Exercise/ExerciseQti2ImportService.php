@@ -43,6 +43,7 @@ final readonly class ExerciseQti2ImportService
     private const MATCHING = 4;
     private const FREE_ANSWER = 5;
     private const MULTIPLE_ANSWER_COMBINATION = 9;
+    private const UNIQUE_ANSWER_NO_OPTION = 10;
     private const DRAGGABLE = 18;
     private const MATCHING_DRAGGABLE = 19;
 
@@ -56,6 +57,7 @@ final readonly class ExerciseQti2ImportService
         self::FILL_IN_BLANKS => 'Fill in blanks',
         self::MATCHING => 'Matching',
         self::MULTIPLE_ANSWER_COMBINATION => 'Exact combination',
+        self::UNIQUE_ANSWER_NO_OPTION => 'Unique answer with unknown',
         self::MATCHING_DRAGGABLE => 'Matching draggable',
         self::DRAGGABLE => 'Sequence ordering',
     ];
@@ -243,6 +245,7 @@ final readonly class ExerciseQti2ImportService
                         'category' => $node->getAttribute('category'),
                         'type' => null,
                         'matching_draggable' => Qti2MatchingTypeMarker::isDraggable($node->getAttribute('label')),
+                        'unique_unknown' => Qti2UniqueAnswerUnknownMarker::isMarked($node->getAttribute('label')),
                         'subtype' => null,
                         'description' => null,
                         'response_text' => null,
@@ -279,7 +282,9 @@ final readonly class ExerciseQti2ImportService
                     if ('multiple' === $cardinality) {
                         $package['questions'][$currentQuestionIdent]['type'] = self::MULTIPLE_ANSWER;
                     } elseif ('single' === $cardinality) {
-                        $package['questions'][$currentQuestionIdent]['type'] = self::UNIQUE_ANSWER;
+                        $package['questions'][$currentQuestionIdent]['type'] = !empty($package['questions'][$currentQuestionIdent]['unique_unknown'])
+                            ? self::UNIQUE_ANSWER_NO_OPTION
+                            : self::UNIQUE_ANSWER;
                     }
 
                     break;
@@ -760,6 +765,14 @@ final readonly class ExerciseQti2ImportService
 
         foreach ($questions as $identifier => $questionData) {
             $questionType = (int) ($questionData['type'] ?? 0);
+            if (!empty($questionData['unique_unknown'])
+                && (self::UNIQUE_ANSWER_NO_OPTION !== $questionType
+                    || !Qti2UniqueAnswerUnknownMarker::hasValidUnknownChoice($questionData))) {
+                ++$skippedCount;
+                $errors[] = \sprintf('QTI question %s skipped because its fixed unknown answer is invalid.', (string) $identifier);
+
+                continue;
+            }
             if (!isset(self::SUPPORTED_TYPES[$questionType])) {
                 ++$skippedCount;
 
@@ -890,11 +903,27 @@ final readonly class ExerciseQti2ImportService
                 $weight = $this->scoreFromValue($questionData['weighting'][(string) $key]);
             }
 
-            $this->createSingleAnswer($question, $answerValue, $isCorrect ? 1 : 0, $answerFeedback, $weight, $position);
+            $unknown = self::UNIQUE_ANSWER_NO_OPTION === (int) $question->getType()
+                && Qti2UniqueAnswerUnknownMarker::UNKNOWN_IDENTIFIER === (string) $key;
+            if ($unknown) {
+                $weight = 0.0;
+                $isCorrect = false;
+                $answerValue = QtiImportHtmlSanitizer::sanitize($answerValue);
+            }
+            $this->createSingleAnswer(
+                $question,
+                $answerValue,
+                $isCorrect ? 1 : 0,
+                $answerFeedback,
+                $weight,
+                $unknown ? Qti2UniqueAnswerUnknownMarker::UNKNOWN_POSITION : $position
+            );
             if ($isCorrect) {
                 $totalCorrectWeight += $weight;
             }
-            ++$position;
+            if (!$unknown) {
+                ++$position;
+            }
         }
 
         $question->setPonderation($totalCorrectWeight);

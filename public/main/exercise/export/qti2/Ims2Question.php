@@ -33,6 +33,7 @@ class Ims2Question extends Question
         switch ($this->type) {
             case TF:
             case MCUA:
+            case UNIQUE_ANSWER_NO_OPTION:
             case MCMA:
             case MULTIPLE_ANSWER_COMBINATION:
                 $answer = new ImsAnswerMultipleChoice($questionId);

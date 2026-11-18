@@ -50,6 +50,7 @@ final readonly class ExerciseQti2ExportService
     private const MATCHING = 4;
     private const FREE_ANSWER = 5;
     private const MULTIPLE_ANSWER_COMBINATION = 9;
+    private const UNIQUE_ANSWER_NO_OPTION = 10;
     private const DRAGGABLE = 18;
     private const MATCHING_DRAGGABLE = 19;
     private const VISIBILITY_PUBLISHED = 2;
@@ -220,7 +221,7 @@ final readonly class ExerciseQti2ExportService
 
     private function isLegacyExportableQuestion(CQuizQuestion $question): bool
     {
-        return \in_array((int) $question->getType(), [self::UNIQUE_ANSWER, self::MULTIPLE_ANSWER, self::MULTIPLE_ANSWER_COMBINATION, self::FILL_IN_BLANKS, self::FREE_ANSWER, self::MATCHING, self::MATCHING_DRAGGABLE, self::DRAGGABLE], true);
+        return \in_array((int) $question->getType(), [self::UNIQUE_ANSWER, self::MULTIPLE_ANSWER, self::MULTIPLE_ANSWER_COMBINATION, self::UNIQUE_ANSWER_NO_OPTION, self::FILL_IN_BLANKS, self::FREE_ANSWER, self::MATCHING, self::MATCHING_DRAGGABLE, self::DRAGGABLE], true);
     }
 
     private function isMatchingQuestion(CQuizQuestion $question): bool
@@ -240,6 +241,8 @@ final readonly class ExerciseQti2ExportService
         $xml .= '                category = "'.$this->escapeAttribute($this->formatText($categoryTitle)).'"'."\n";
         if (self::MATCHING_DRAGGABLE === (int) $question->getType()) {
             $xml .= '                label="'.Qti2MatchingTypeMarker::DRAGGABLE_LABEL.'"'."\n";
+        } elseif (self::UNIQUE_ANSWER_NO_OPTION === (int) $question->getType()) {
+            $xml .= '                label="'.Qti2UniqueAnswerUnknownMarker::LABEL.'"'."\n";
         }
         $xml .= '        >'."\n";
         if (self::FILL_IN_BLANKS === (int) $question->getType()) {
@@ -255,7 +258,9 @@ final readonly class ExerciseQti2ExportService
         $xml .= "  <itemBody>\n";
         $xml .= $this->exportQuestionResponses($question, $questionIdent);
         $xml .= "  </itemBody>\n";
-        $xml .= '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_correct"/>'."\n";
+        $xml .= self::UNIQUE_ANSWER_NO_OPTION === (int) $question->getType()
+            ? Qti2UniqueAnswerUnknownMarker::responseProcessing($questionIdent)
+            : '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_correct"/>'."\n";
         $xml .= '</assessmentItem>'."\n";
 
         return $xml;
@@ -281,17 +286,27 @@ final readonly class ExerciseQti2ExportService
         $xml = '  <responseDeclaration identifier="'.$questionIdent.'" cardinality="'.$cardinality.'" baseType="identifier">'."\n";
         $xml .= "    <correctResponse>\n";
         foreach ($answers as $answer) {
-            if ((int) ($answer->getCorrect() ?? 0) > 0) {
+            $unknown = self::UNIQUE_ANSWER_NO_OPTION === (int) $question->getType()
+                && Qti2UniqueAnswerUnknownMarker::UNKNOWN_POSITION === (int) $answer->getPosition();
+            if (!$unknown && (int) ($answer->getCorrect() ?? 0) > 0) {
                 $xml .= '      <value>answer_'.(int) $answer->getIid().'</value>'."\n";
             }
         }
         $xml .= "    </correctResponse>\n";
         $xml .= "    <mapping>\n";
         foreach ($answers as $answer) {
-            $xml .= ' <mapEntry mapKey="answer_'.(int) $answer->getIid().'" mappedValue="'.$this->formatScore($answer->getPonderation()).'" />'."\n";
+            $unknown = self::UNIQUE_ANSWER_NO_OPTION === (int) $question->getType()
+                && Qti2UniqueAnswerUnknownMarker::UNKNOWN_POSITION === (int) $answer->getPosition();
+            $identifier = $unknown ? Qti2UniqueAnswerUnknownMarker::UNKNOWN_IDENTIFIER : 'answer_'.(int) $answer->getIid();
+            $weight = $unknown ? 0.0 : (float) $answer->getPonderation();
+            $xml .= ' <mapEntry mapKey="'.$identifier.'" mappedValue="'.$this->formatScore($weight).'" />'."\n";
         }
         $xml .= "    </mapping>\n";
         $xml .= '  </responseDeclaration>'."\n";
+        if (self::UNIQUE_ANSWER_NO_OPTION === (int) $question->getType()) {
+            $xml .= '  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float">'
+                .'<defaultValue><value>0</value></defaultValue></outcomeDeclaration>'."\n";
+        }
 
         return $xml;
     }
@@ -318,11 +333,14 @@ final readonly class ExerciseQti2ExportService
         $xml .= '      <prompt><![CDATA['.$this->escapeCdata($this->formatText($question->getQuestion())).']]></prompt>'."\n";
         foreach ($this->getSortedAnswers($question) as $answer) {
             $answerId = (int) $answer->getIid();
-            $xml .= '<simpleChoice identifier="answer_'.$answerId.'" fixed="false">
+            $unknown = self::UNIQUE_ANSWER_NO_OPTION === (int) $question->getType()
+                && Qti2UniqueAnswerUnknownMarker::UNKNOWN_POSITION === (int) $answer->getPosition();
+            $identifier = $unknown ? Qti2UniqueAnswerUnknownMarker::UNKNOWN_IDENTIFIER : 'answer_'.$answerId;
+            $xml .= '<simpleChoice identifier="'.$identifier.'" fixed="'.($unknown ? 'true' : 'false').'">
                          <![CDATA['.$this->escapeCdata($this->formatText($answer->getAnswer())).']]>';
             $comment = (string) ($answer->getComment() ?? '');
             if ('' !== $comment) {
-                $xml .= '<feedbackInline identifier="answer_'.$answerId.'">
+                $xml .= '<feedbackInline identifier="'.$identifier.'">
                              <![CDATA['.$this->escapeCdata($this->formatText($comment)).']]>
                              </feedbackInline>';
             }

@@ -5321,7 +5321,8 @@ class UserManager
                 if ($insertId) {
                     if ($sendNotification) {
                         $name = $studentInfo['complete_name'];
-                        $url = '/reporting/learners/'.$studentId;
+                        // Absolute: the message is also sent by e-mail.
+                        $url = api_get_path(WEB_PATH).'reporting/learners/'.$studentId;
                         $url = Display::url($url, $url);
                         $subject = sprintf(get_lang('You have been assigned the learner %s', $bossLanguage), $name);
                         $message = sprintf(get_lang('You have been assigned the learner %s with url %s', $bossLanguage), $name, $url);

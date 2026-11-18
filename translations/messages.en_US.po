@@ -20597,6 +20597,9 @@ msgstr "Check your e-mail and follow the instructions."
 msgid "Link expired, please try again."
 msgstr "Link expired, please try again."
 
+msgid "This link has expired. Please use the link in the most recent notification email."
+msgstr "This link has expired. Please use the link in the most recent notification email."
+
 msgid "Instructions for the password change procedure"
 msgstr "Instructions for the password change procedure"
 

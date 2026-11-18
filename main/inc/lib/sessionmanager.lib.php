@@ -8352,10 +8352,16 @@ class SessionManager
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();
 
-        if (api_is_session_admin() &&
-            'false' == api_get_setting('allow_session_admins_to_see_all_sessions')
-        ) {
-            $where .= " WHERE s.session_admin_id = $user_id ";
+        if (!api_is_platform_admin()) {
+            if (api_is_session_admin() &&
+                'false' === api_get_setting('allow_session_admins_to_manage_all_sessions')
+            ) {
+                $where .= " AND s.session_admin_id = $user_id ";
+            }
+
+            if (api_is_teacher() && 'true' === api_get_setting('allow_teachers_to_create_sessions')) {
+                $where .= " AND s.id_coach = $user_id ";
+            }
         }
 
         $extraFieldTables = '';
@@ -8925,9 +8931,13 @@ class SessionManager
 
         if (!api_is_platform_admin()) {
             if (api_is_session_admin() &&
-                'false' == api_get_setting('allow_session_admins_to_manage_all_sessions')
+                'false' === api_get_setting('allow_session_admins_to_manage_all_sessions')
             ) {
                 $where .= " AND s.session_admin_id = $user_id ";
+            }
+
+            if (api_is_teacher() && 'true' === api_get_setting('allow_teachers_to_create_sessions')) {
+                $where .= " AND s.id_coach = $user_id ";
             }
         }
 

@@ -17,11 +17,11 @@ Feature: Searchable user extra fields in class assignment
     And I attach the file "/public/img/logo.png" to "picture"
     And I press "Add"
     Then I should see "GH9068 filter smoke test"
-    When I click the "button[aria-label='Subscribe users to class']" icon in the row for "GH9068 filter smoke test"
+    When I click the "a[title='Subscribe users to class']" icon in the row for "GH9068 filter smoke test"
     Then I should see "Users on platform"
     And I should see "Users in group"
     And I should not see an error
-    When I press "Back"
+    When I follow "Back"
     And I click the "button[aria-label='Delete']" icon in the row for "GH9068 filter smoke test"
     And I press "Yes"
     Then I should not see "GH9068 filter smoke test"

@@ -24,7 +24,6 @@ use FormValidator;
 use LegalManager;
 use MessageManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Template;
 use Throwable;
 use UserManager;
 
@@ -33,7 +32,6 @@ use const ENT_QUOTES;
 use const FILTER_VALIDATE_URL;
 use const PATHINFO_EXTENSION;
 use const PHP_ROUND_HALF_UP;
-use const PHP_SAPI;
 use const PHP_URL_PATH;
 use const PHP_URL_SCHEME;
 
@@ -85,75 +83,6 @@ class ChamiloHelper
             '1400x1050' => '1400x1050 (3/4)',
             '1600x900' => '1600x900 (16/9)',
         ];
-    }
-
-    /**
-     * Get the platform logo path.
-     *
-     * @deprecated
-     *
-     * @throws Exception
-     */
-    public static function getPlatformLogoPath(
-        string $theme = '',
-        bool $getSysPath = false,
-        bool $forcedGetter = false
-    ): ?string {
-        static $logoPath;
-
-        // If call from CLI it should be reloaded.
-        if ('cli' === PHP_SAPI) {
-            $logoPath = null;
-        }
-
-        if (!isset($logoPath) || $forcedGetter) {
-            $theme = empty($theme) ? api_get_visual_theme() : $theme;
-            $accessUrlId = api_get_current_access_url_id();
-            if ('cli' === PHP_SAPI) {
-                $accessUrl = api_get_configuration_value('access_url');
-                if (!empty($accessUrl)) {
-                    $accessUrlId = $accessUrl;
-                }
-            }
-            $themeDir = Template::getThemeDir($theme);
-            $customLogoPath = $themeDir.\sprintf('images/header-logo-custom%s.png', $accessUrlId);
-            $customLogoPathSVG = substr($customLogoPath, 0, -3).'svg';
-            if (file_exists(api_get_path(SYS_PUBLIC_PATH).\sprintf('css/%s', $customLogoPathSVG))) {
-                if ($getSysPath) {
-                    return api_get_path(SYS_PUBLIC_PATH).\sprintf('css/%s', $customLogoPathSVG);
-                }
-
-                return api_get_path(WEB_CSS_PATH).$customLogoPathSVG;
-            }
-            if (file_exists(api_get_path(SYS_PUBLIC_PATH).\sprintf('css/%s', $customLogoPath))) {
-                if ($getSysPath) {
-                    return api_get_path(SYS_PUBLIC_PATH).\sprintf('css/%s', $customLogoPath);
-                }
-
-                return api_get_path(WEB_CSS_PATH).$customLogoPath;
-            }
-
-            $originalLogoPath = $themeDir.'images/header-logo.png';
-            $originalLogoPathSVG = $themeDir.'images/header-logo.svg';
-            if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPathSVG)) {
-                if ($getSysPath) {
-                    return api_get_path(SYS_CSS_PATH).$originalLogoPathSVG;
-                }
-
-                return api_get_path(WEB_CSS_PATH).$originalLogoPathSVG;
-            }
-
-            if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPath)) {
-                if ($getSysPath) {
-                    return api_get_path(SYS_CSS_PATH).$originalLogoPath;
-                }
-
-                return api_get_path(WEB_CSS_PATH).$originalLogoPath;
-            }
-            $logoPath = '';
-        }
-
-        return $logoPath;
     }
 
     /**

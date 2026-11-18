@@ -36,7 +36,7 @@
         />
       </div>
       <div
-        v-if="visibility.firstname && visibility.lastname"
+        v-if="false !== visibility.firstname && false !== visibility.lastname"
         class="text-center text-xl font-bold text-gray-90"
       >
         {{ user.fullName }}

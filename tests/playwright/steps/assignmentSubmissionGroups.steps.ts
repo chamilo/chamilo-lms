@@ -9,10 +9,18 @@ Then("the assignment list should contain {int} distinct submitters", async ({ pa
 
 When("I sort the assignment submitters by number submitted descending", async ({ page }) => {
   const header = page.getByRole("columnheader", { name: "Number submitted" })
-  await header.click()
-  await expect(header).toHaveAttribute("aria-sort", "ascending")
-  await header.click()
-  await expect(header).toHaveAttribute("aria-sort", "descending")
+  // The header and the rows are on screen before the list has settled its sort storage key (it depends on the
+  // user and the course context, which load asynchronously). When the key arrives it reloads the saved sort and
+  // replaces the one just chosen, so a click can be wiped out. Click again until the sort sticks.
+  await expect(page.locator("tbody tr").first()).toBeVisible()
+  await expect(async () => {
+    await header.click()
+    await expect(header).toHaveAttribute("aria-sort", "ascending", { timeout: 2_000 })
+  }).toPass({ timeout: 20_000 })
+  await expect(async () => {
+    await header.click()
+    await expect(header).toHaveAttribute("aria-sort", "descending", { timeout: 2_000 })
+  }).toPass({ timeout: 20_000 })
 })
 
 Then("the assignment submitters should keep that sort after reloading", async ({ page }) => {

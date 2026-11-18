@@ -629,21 +629,16 @@ sudo systemctl restart apache2
 
     {% include '@ChamiloCore/Admin/Settings/json_validation.html.twig' %}
 {% endblock %}
-{% block javascripts %}
-    {% set ns = app.request.get('namespace')|default('') %}
-    {% set sectionLabel =
-        (namespace_labels is defined and namespace_labels[ns] is defined)
-        ? namespace_labels[ns]
-        : (ns == 'cas' ? 'CAS' : (ns == 'lp' ? 'Learning path'|trans : (ns|capitalize)|trans))
-    %}
-    <script>
-      window.breadcrumb = [
-        { name: "{{ 'Administration'|trans|e('js') }}", url: "/admin" },
-        { name: "{{ 'Platform management'|trans|e('js') }}", url: "/admin/platform" },
-        { name: "{{ 'Settings'|trans|e('js') }}", url: "/admin/settings" },
-        { name: "{{ sectionLabel|e('js') }}" }
-      ];
-    </script>
 
-    {{ parent() }}
-{% endblock %}
+{% set ns = app.request.get('namespace')|default('') %}
+{% set sectionLabel =
+    (namespace_labels is defined and namespace_labels[ns] is defined)
+    ? namespace_labels[ns]
+    : (ns == 'cas' ? 'CAS' : (ns == 'lp' ? 'Learning path'|trans : (ns|capitalize)|trans))
+%}
+{% set legacy_breadcrumb = [
+    { name: 'Administration'|trans, url: '/admin' },
+    { name: 'Platform management'|trans, url: '/admin/platform' },
+    { name: 'Settings'|trans, url: '/admin/settings' },
+    { name: sectionLabel },
+]|json_encode(constant('JSON_HEX_TAG') b-or constant('JSON_HEX_AMP')) %}

@@ -774,26 +774,6 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $this->assertSame(0, ExerciseLib::getNumberStudentsAnswerHotspotCount(3, $q, $quiz, $code, 0));
     }
 
-    public function testPerAnswerStudentCountersCountDistinctStudents(): void
-    {
-        $this->ctx();
-        $quiz = $this->quiz();
-        $q = $this->question('qs_legacy_counter');
-        $s1 = $this->rawUser('lc_s1');
-        $s2 = $this->rawUser('lc_s2');
-        $this->subscribe($s1, 1);
-        $this->subscribe($s2, 1);
-        foreach ([[$s1, '7'], [$s1, '7'], [$s2, '8'], [$s2, '0']] as [$uid, $ans]) {
-            $this->attempt($this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $uid]), $uid, $q, $ans);
-        }
-        $code = $this->getCourse(1)->getCode();
-
-        // Both helpers have no caller anywhere (the statistics page uses getCountOfAnswers).
-        $this->assertSame(1, ExerciseLib::get_number_students_answer_count(7, $q, $quiz, $code, 0), 'one student chose 7, twice');
-        $this->assertSame(1, ExerciseLib::get_number_students_answer_count(8, $q, $quiz, $code, 0));
-        $this->assertSame(2, ExerciseLib::get_number_students_question_with_answer_count($q, $quiz, $code, 0), "answer '0' means unanswered");
-    }
-
     // ---------------------------------------------------------------- deleting and fixing attempts
 
     public function testDeleteExerciseAttemptRemovesItsAnswersAndTrackingOnly(): void

@@ -66,15 +66,14 @@ Feature: Correction notification of a test attempt
     And I wait for the page content to settle
     Then I should see "Describe your correction"
 
-  # A new test is hidden from learners until it is activated.
-  Scenario: Make the test visible
+  # A new test is created visible by default (the platform's default visibility on creation): check that it is.
+  Scenario: The test is visible
     Given I am a platform administrator
     And I wait for the page to be loaded
     And I am on course "EXCORRMAIL" homepage
     And I wait for the page to be loaded
     And I follow "Tests"
     And I wait for the page content to settle
-    And I click the "[title='Activate']" icon in the row for "Correction mail test"
     Then I wait for the element "tr:has-text('Correction mail test') [title='Deactivate']" to appear
 
   Scenario: The learner answers the test in the Tests tool

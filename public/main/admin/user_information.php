@@ -282,29 +282,6 @@ foreach ($data as $label => $item) {
 }
 
 /**
- * Show social activity.
- */
-if (false) {
-    $data = [];
-    $messagesSent = '';
-    // Calculate values
-    if ('true' === api_get_setting('allow_message_tool')) {
-        $messagesSent = SocialManager::getCountMessagesSent($userId);
-        $data[] = [get_lang('Number of messages sent'), $messagesSent];
-        $messagesReceived = SocialManager::getCountMessagesReceived($userId);
-        $data[] = [get_lang('Number of messages received'), $messagesReceived];
-    }
-    $wallMessagesPosted = SocialManager::getCountWallPostedMessages($userId);
-    $data[] = [get_lang('Wall messages posted by him/herself'), $wallMessagesPosted];
-
-    $params['social'] = [
-        'messages_posted' => $wallMessagesPosted,
-        'messages_sent' => $messagesSent,
-        'messages_received' => $messagesReceived,
-    ];
-}
-
-/**
  * Show the sessions in which this user is subscribed.
  */
 //$sessions = SessionManager::get_sessions_by_user($userId, true);

@@ -75,11 +75,13 @@ When("I create a disposable Support Bot draft", async ({ page }) => {
   disposableTreeId = null
 
   await page.goto("/admin/support-bot/create")
-  await page.waitForLoadState("domcontentloaded")
+  // The editor hydrates its form from the API after mount and would overwrite anything typed before.
+  await page.waitForLoadState("networkidle")
 
   const title = page.locator("#support_bot_tree_title")
   await expect(title).toBeVisible()
   await title.fill(disposableTreeTitle)
+  await expect(title).toHaveValue(disposableTreeTitle)
 
   const nodeContent = page.locator("textarea[name^='node_'][name$='_content']").first()
   const optionLabel = page.locator("input[name^='option_'][name$='_label']").first()
@@ -156,7 +158,7 @@ Then("the disposable Support Bot draft should have a conversation log link", asy
 })
 
 When("I open the Support Bot import dialog", async ({ page }) => {
-  await page.locator("button:has(.mdi-import)").first().click()
+  await page.locator("button[aria-label='Import']").first().click()
   await expect(page.locator(".p-dialog:visible")).toBeVisible()
 })
 
@@ -192,7 +194,7 @@ When("I import the Support Bot {word} example", async ({ page }, format: string)
     (response) =>
       response.request().method() === "POST" && response.url().includes("/api/support-bot/admin/trees/import"),
   )
-  await page.locator(".p-dialog:visible button:has(.mdi-import)").click()
+  await page.locator(".p-dialog:visible .p-dialog-footer button").last().click()
   const response = await requestCompleted
   expect(response.status()).toBe(201)
   const created = await response.json()

@@ -691,12 +691,6 @@ switch ($action) {
             );
         }
         break;
-    case 'get_course_exercise_medias':
-        $course_id = api_get_course_int_id();
-        // Close the session as we don't need it any further
-        session_write_close();
-        $count = Question::get_count_course_medias($course_id);
-        break;
     case 'get_work_teacher':
         $countResult = getWorkListTeacher(0, $limit, null, null, $whereCondition, true);
         $count = is_array($countResult) ? count($countResult) : (int) $countResult;
@@ -1339,18 +1333,6 @@ switch ($action) {
             $sessionId,
             $group_id,
             'all',
-            $start,
-            $limit,
-            $sidx,
-            $sord,
-            $whereCondition
-        );
-        break;
-    case 'get_course_exercise_medias':
-        $columns = ['question'];
-        $sidx = in_array($sidx, $columns) ? $sidx : 'question';
-        $result = Question::get_course_medias(
-            $course_id,
             $start,
             $limit,
             $sidx,
@@ -2741,7 +2723,6 @@ $allowed_actions = [
     'get_grade_models',
     'get_extra_fields',
     'get_extra_field_options',
-    //'get_course_exercise_medias',
     'get_user_course_report',
     'get_user_course_report_resumed',
     'get_exercise_grade',

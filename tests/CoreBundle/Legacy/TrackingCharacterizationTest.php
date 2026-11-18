@@ -312,7 +312,7 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         $this->assertSame(0, Tracking::getNumberOfCourseAccessDates($this->carol->getId(), $cid, 0));
     }
 
-    public function testTotalTimeSpentInCoursesTruncatesToHoursAndCapsEachAccess(): void
+    public function testTotalTimeSpentInCoursesSumsTheCappedSecondsThenTruncatesToHours(): void
     {
         $from = '2001-04-01 00:00:00';
         $until = '2001-04-30 23:59:59';

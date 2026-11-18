@@ -116,21 +116,6 @@ class Database
     }
 
     /**
-     * Counts the number of rows in a table.
-     *
-     * @throws Exception
-     * @throws \Doctrine\DBAL\Exception
-     *
-     * @deprecated
-     */
-    public static function count_rows(string $table): int
-    {
-        $result = self::query("SELECT COUNT(*) AS n FROM $table");
-
-        return (int) $result->fetchOne();
-    }
-
-    /**
      * Returns the number of affected rows in the last database operation.
      *
      * @throws \Doctrine\DBAL\Exception

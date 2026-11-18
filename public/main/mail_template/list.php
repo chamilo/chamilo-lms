@@ -9,7 +9,7 @@ api_protect_admin_script();
 
 $interbreadcrumb[] = ['url' => '/admin', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => '/admin/platform', 'name' => get_lang('Platform management')];
-
+$interbreadcrumb[] = ['url' => '', 'name' => get_lang('Mail templates')];
 
 $mailTemplate = new MailTemplateManager();
 $action = $_REQUEST['action'] ?? 'list';

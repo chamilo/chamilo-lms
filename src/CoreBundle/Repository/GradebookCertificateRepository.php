@@ -23,7 +23,6 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use InvalidArgumentException;
 use RuntimeException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class GradebookCertificateRepository extends ResourceRepository
 {
@@ -302,45 +301,6 @@ class GradebookCertificateRepository extends ResourceRepository
         $text = strtolower($text);
 
         return $text ?: 'resource';
-    }
-
-    /**
-     * LEGACY (kept for backward-compatibility):
-     * Creates a PersonalFile under the user's personal files (old behavior).
-     *
-     * @deprecated prefer upsertCertificateResource()
-     */
-    public function generateCertificatePersonalFile(int $userId, string $fileName, string $certificateContent): ?PersonalFile
-    {
-        $em = $this->getEntityManager();
-        $userEntity = $em->getRepository(User::class)->find($userId);
-
-        $existingFile = $em->getRepository(PersonalFile::class)->findOneBy(['title' => $fileName]);
-
-        if (!$existingFile) {
-            $tempFilePath = tempnam(sys_get_temp_dir(), 'cert');
-            file_put_contents($tempFilePath, $certificateContent);
-
-            $mimeType = mime_content_type($tempFilePath);
-            $uploadedFile = new UploadedFile($tempFilePath, $fileName, $mimeType, null, true);
-
-            $personalFile = new PersonalFile();
-            $personalFile->setTitle($fileName);
-            $personalFile->setCreator($userEntity);
-            $personalFile->setParentResourceNode($userEntity->getResourceNode()->getId());
-            $personalFile->setResourceName($fileName);
-            $personalFile->setUploadFile($uploadedFile);
-            $personalFile->addUserLink($userEntity);
-
-            $em->persist($personalFile);
-            $em->flush();
-
-            @unlink($tempFilePath);
-
-            return $personalFile;
-        }
-
-        return $existingFile;
     }
 
     /**

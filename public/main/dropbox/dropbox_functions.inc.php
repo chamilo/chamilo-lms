@@ -9,8 +9,8 @@ use ChamiloSession as Session;
  * functions in the init files also but I have moved them over
  * to one file -- Patrick Cool <patrick.cool@UGent.be>, Ghent University.
  *
- * @deprecated The dropbox tool is served by the Vue views (assets/vue/views/dropbox) and the API; this legacy
- *             code still uses removed columns and the undefined SYS_COURSE_PATH and is kept only for reference.
+ * The dropbox tool is served by the Vue views (assets/vue/views/dropbox) and the API; this legacy code still
+ * uses removed columns and the undefined SYS_COURSE_PATH, but it is still included by dropbox_init.inc.php.
  *
  * @author Julio Montoya adding c_id support
  */
@@ -104,18 +104,6 @@ function handle_multiple_actions()
     if ('download_sent' == $_POST['action'] || 'download_received' == $_POST['action']) {
         zip_download($checked_file_ids);
     }
-}
-
-/**
- * Get conf settings.
- *
- * @return array
- *
- * @deprecated no caller; the dropbox_conf session value is never written.
- */
-function getDropboxConf()
-{
-    return Session::read('dropbox_conf');
 }
 
 /**
@@ -1378,7 +1366,7 @@ function zip_download($fileList)
  *
  * @version march 2006
  *
- * @deprecated no caller.
+ * Passed by name as the PclZip pre-add callback of zip_download().
  */
 function my_pre_add_callback($p_event, &$p_header)
 {
@@ -1386,65 +1374,6 @@ function my_pre_add_callback($p_event, &$p_header)
     $p_header['stored_filename'] = $files[$p_header['stored_filename']]['title'];
 
     return 1;
-}
-
-/**
- * @desc Generates the contents of a html file that gives an overview of all the files in the zip file.
- *       This is to know the information of the files that are inside the zip file (who send it, the comment, ...)
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, March 2006
- * @author Ivan Tcholakov, 2010, code for html metadata has been added.
- *
- * @deprecated no caller.
- */
-function generate_html_overview($files, $dont_show_columns = [], $make_link = [])
-{
-    $return = '<!DOCTYPE html'."\n";
-    $return .= "\t".'PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'."\n";
-    $return .= "\t".'"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
-    $return .= '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.api_get_language_isocode().'" lang="'.api_get_language_isocode().'">'."\n";
-
-    $return .= "<head>\n\t<title>".get_lang('Overview of files in this Zip')."</title>\n";
-    $return .= "\t".'<meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />'."\n";
-    $return .= "</head>\n\n";
-    $return .= '<body dir="'.api_get_text_direction().'">'."\n\n";
-    $return .= "<table border=\"1px\">\n";
-
-    $counter = 0;
-    foreach ($files as $value) {
-        // Adding the header.
-        if (0 == $counter) {
-            $columns_array = array_keys($value);
-            $return .= "\n<tr>";
-            foreach ($columns_array as $columns_array_key => $columns_array_value) {
-                if (!in_array($columns_array_value, $dont_show_columns)) {
-                    $return .= "\n\t<th>".$columns_array_value."</th>";
-                }
-                $column[] = $columns_array_value;
-            }
-            $return .= "\n</tr>\n";
-        }
-        $counter++;
-
-        // Adding the content.
-        $return .= "\n<tr>";
-        foreach ($column as $column_key => $column_value) {
-            if (!in_array($column_value, $dont_show_columns)) {
-                $return .= "\n\t<td>";
-                if (in_array($column_value, $make_link)) {
-                    $return .= '<a href="'.$value[$column_value].'">'.$value[$column_value].'</a>';
-                } else {
-                    $return .= $value[$column_value];
-                }
-                $return .= "</td>";
-            }
-        }
-        $return .= "\n</tr>\n";
-    }
-    $return .= "\n</table>\n\n</body>";
-    $return .= "\n</html>";
-
-    return $return;
 }
 
 /**

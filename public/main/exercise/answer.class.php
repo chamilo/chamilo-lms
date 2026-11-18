@@ -167,36 +167,6 @@ class Answer
     }
 
     /**
-     * returns all answer ids from this question Id.
-     *
-     * @author Yoselyn Castillo
-     *
-     * @deprecated no caller anywhere; kept only as a pin of its behaviour
-     *
-     * @return array - $id (answer ids)
-     */
-    public function selectAnswerId()
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $questionId = (int) $this->questionId;
-
-        $sql = "SELECT iid FROM
-              $table
-              WHERE question_id = $questionId";
-
-        $result = Database::query($sql);
-        $id = [];
-        // while a record is found
-        if (Database::num_rows($result) > 0) {
-            while ($object = Database::fetch_array($result)) {
-                $id[] = $object['iid'];
-            }
-        }
-
-        return $id;
-    }
-
-    /**
      * Reads answer information from the data base ordered by parameter.
      *
      * @param string $field Field we want to order by

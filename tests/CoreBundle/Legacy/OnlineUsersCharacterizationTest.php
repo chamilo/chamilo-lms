@@ -21,8 +21,7 @@ use Symfony\Component\Uid\UuidV4;
  *
  * LIVE (called from OnlineController, ajax/online.ajax.php, banner.lib.php, api.lib.php):
  * who_is_online, who_is_online_count, who_is_online_in_this_course, who_is_online_in_this_course_count,
- * whoIsOnlineInThisSessionCount, user_is_online. DEAD (no caller anywhere, marked @deprecated in the
- * source): LoginCheck, preventMultipleLogin.
+ * whoIsOnlineInThisSessionCount, user_is_online.
  *
  * What is pinned is WHICH users are listed: the time window, soft-deleted (status -2) and anonymous
  * accounts hidden, the course/session scoping and, in multi-URL mode, the URL scoping. Presence rows

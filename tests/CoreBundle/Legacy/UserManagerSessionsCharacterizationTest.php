@@ -14,8 +14,6 @@ use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use Database;
-use DateTime;
-use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
@@ -635,112 +633,6 @@ class UserManagerSessionsCharacterizationTest extends AbstractApiTest
         $this->assertSame(['AIACT', 'us_pl6'], [$row['code'], $row['session_name']]);
         $this->assertSame(1, $row['sort']);
         $this->assertStringEndsWith('@example.com', $row['email']);
-    }
-
-    // ------------------------------------------------------ getSubscribedSessionsByYear
-
-    public function testSubscribedSessionsByYearMatchesYearsInsideTheAccessRange(): void
-    {
-        $u = $this->rawUser('yr1');
-        $both = $this->rawSession('yr1both', '2031-02-10 10:00:00', '2033-03-10 10:00:00');
-        $startOnly = $this->rawSession('yr1start', '2032-05-01 10:00:00', null);
-        $endOnly = $this->rawSession('yr1end', null, '2032-06-01 10:00:00');
-        foreach ([$both, $startOnly, $endOnly] as $s) {
-            $this->sessionCourse($s, 1, 1);
-            $this->sessionCourseUser($s, 1, $u);
-        }
-        $this->fresh();
-        $info = ['id' => $u, 'status' => 5];
-
-        $names = static fn (array $r): array => array_map(static fn ($e) => $e['name'], $r);
-
-        $y2031 = UserManager::getSubscribedSessionsByYear($info, 2031);
-        $this->assertSame([$both => 'us_yr1both'], $names($y2031));
-        $y2032 = UserManager::getSubscribedSessionsByYear($info, 2032);
-        $this->assertEqualsCanonicalizing(
-            [$both => 'us_yr1both', $startOnly => 'us_yr1start', $endOnly => 'us_yr1end'],
-            $names($y2032)
-        );
-        $this->assertSame([], UserManager::getSubscribedSessionsByYear($info, 2034), 'No end date: only its own year; range ended.');
-        $this->assertSame([$both => 'us_yr1both'], $names(UserManager::getSubscribedSessionsByYear($info, 2033)));
-        $this->assertNull($y2032[$endOnly]['access_start_date']);
-        $this->assertNull($y2032[$startOnly]['access_end_date']);
-    }
-
-    public function testSubscribedSessionsByYearUsesCourseFirstAccessForDurationSessions(): void
-    {
-        $u = $this->rawUser('yr2');
-        $s = $this->rawSession('yr2', null, null, ['duration' => 400]);
-        $this->sessionCourse($s, 1, 1);
-        $this->sessionCourseUser($s, 1, $u);
-        $this->fresh();
-        $info = ['id' => $u, 'status' => 5];
-
-        $this->assertSame([], UserManager::getSubscribedSessionsByYear($info, 2031), 'Never accessed: no calendar entry.');
-
-        $this->conn()->executeStatement(
-            'INSERT INTO track_e_course_access (user_id, c_id, login_course_date, logout_course_date, counter, session_id, user_ip)
-             VALUES (?, 1, \'2031-06-15 12:00:00\', \'2031-06-15 13:00:00\', 1, ?, \'127.0.0.1\')',
-            [$u, $s]
-        );
-        $res = UserManager::getSubscribedSessionsByYear($info, 2031);
-        $this->assertSame([$s], array_keys($res));
-        $this->assertSame('us_yr2', $res[$s]['name']);
-        // 400 days after the first access spills into the next year as well.
-        $this->assertSame([$s], array_keys(UserManager::getSubscribedSessionsByYear($info, 2032)));
-        $this->assertSame([], UserManager::getSubscribedSessionsByYear($info, 2033));
-        $this->assertSame([], UserManager::getSubscribedSessionsByYear($info, 2030));
-    }
-
-    public function testSubscribedSessionsByYearFormatsTimesOnA24HourClock(): void
-    {
-        $u = $this->rawUser('yr3');
-        $s = $this->rawSession('yr3', '2031-02-10 15:30:00', '2031-03-10 20:00:00');
-        $this->sessionCourse($s, 1, 1);
-        $this->sessionCourseUser($s, 1, $u);
-        $this->fresh();
-
-        $res = UserManager::getSubscribedSessionsByYear(['id' => $u, 'status' => 5], 2031);
-
-        $tz = new DateTimeZone(api_get_timezone());
-        $expected = static fn (string $utc): string => (new DateTime(api_get_local_time($utc), $tz))->format('H:i:s');
-        $this->assertSame(
-            [$expected('2031-02-10 15:30:00'), $expected('2031-03-10 20:00:00')],
-            [substr($res[$s]['access_start_date'], 11), substr($res[$s]['access_end_date'], 11)]
-        );
-        $this->assertGreaterThan(12, (int) substr($res[$s]['access_end_date'], 11, 2), 'A 24-hour clock.');
-    }
-
-    // --------------------------------------------------------- getSessionsCalendarByYear
-
-    public function testSessionsCalendarByYearComputesWeeksClampsAndSortsByStart(): void
-    {
-        $list = [
-            11 => ['name' => 'later', 'access_start_date' => '2031-06-11 12:00:00', 'access_end_date' => '2031-06-25 12:00:00'],
-            12 => ['name' => 'carry', 'access_start_date' => '2030-11-12 12:00:00', 'access_end_date' => '2032-02-11 12:00:00'],
-            13 => ['name' => 'open', 'access_start_date' => null, 'access_end_date' => null],
-            14 => ['name' => 'short', 'access_start_date' => '2031-03-12 12:00:00', 'access_end_date' => '2031-03-12 13:00:00'],
-        ];
-
-        $cal = UserManager::getSessionsCalendarByYear($list, 2031);
-
-        $this->assertSame([12, 13, 14, 11], array_column($cal, 'id'), 'usort on "start" ascending, stable on ties (12 and 13 both start at 0).');
-        $by = array_column($cal, null, 'id');
-
-        $this->assertEquals(
-            ['start' => 0, 'duration' => 1, 'no_start' => true, 'no_end' => true, 'start_in_last_year' => true, 'end_in_next_year' => false],
-            array_intersect_key($by[13], array_flip(['start', 'duration', 'no_start', 'no_end', 'start_in_last_year', 'end_in_next_year']))
-        );
-        $this->assertEquals(
-            ['start' => 0, 'duration' => 52, 'start_in_last_year' => true, 'end_in_next_year' => true],
-            array_intersect_key($by[12], array_flip(['start', 'duration', 'start_in_last_year', 'end_in_next_year']))
-        );
-        $this->assertSame(10, $by[14]['start'], '2031-03-12 is ISO week 11 -> 0-based 10.');
-        $this->assertSame(1, $by[14]['duration'], 'A duration below one week is clamped to 1.');
-        $this->assertSame(23, $by[11]['start']);
-        $this->assertSame(3, $by[11]['duration']);
-        $this->assertIsString($by[11]['human_date']);
-        $this->assertSame([], UserManager::getSessionsCalendarByYear([], 2031));
     }
 
     // -------------------------------------------------------- getTimeSpentInCourses

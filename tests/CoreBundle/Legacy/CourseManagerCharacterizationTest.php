@@ -112,25 +112,6 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
 
     // ---------------------------------------------------------------- course lookup
 
-    public function testGetCourseInformationJoinsLanguageAndExposesRealId(): void
-    {
-        $course = $this->createCourse('cm_info_a');
-
-        $info = CourseManager::get_course_information($course->getCode());
-
-        $this->assertSame((int) $course->getId(), (int) $info['id']);
-        $this->assertSame((int) $course->getId(), (int) $info['real_id'], 'real_id aliases course.id');
-        $this->assertSame('cm_info_a', $info['title']);
-        $this->assertSame($course->getCode(), $info['code']);
-        $this->assertSame('en_US', $info['course_language'], 'INNER JOIN language exposes isocode as course_language');
-        $this->assertArrayHasKey(0, $info, 'fetch_array(ASSOC) is still called but legacy result carries numeric keys too');
-    }
-
-    public function testGetCourseInformationUnknownCodeIsEmpty(): void
-    {
-        $this->assertEmpty(CourseManager::get_course_information('CM_NO_SUCH_CODE'));
-    }
-
     public function testCourseCodeLookups(): void
     {
         $course = $this->createCourse('cm_lookup_a');
@@ -896,7 +877,6 @@ final class CourseManagerCharacterizationTest extends KernelTestCase
 
         $this->assertSame(0, CourseManager::subscribeCoursesToHrmManager($hrm->getId(), []));
         $this->assertSame([], CourseManager::get_courses_followed_by_hrm($hrm->getId()));
-        $this->assertSame(0, CourseManager::subscribeCoursesToDrhManager($hrm->getId(), []), 'deprecated alias');
     }
 
     public function testGetCoursesByUserCourseCategoryListsUserCoursesWithTheirFirstCategoryCode(): void

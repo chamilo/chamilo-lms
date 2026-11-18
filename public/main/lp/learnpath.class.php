@@ -989,33 +989,6 @@ class learnpath
     }
 
     /**
-     * Get the specific prefix index terms of this learning path.
-     *
-     * @param string $prefix
-     *
-     * @return array Array of terms
-     *
-     * @deprecated no caller; reads the legacy specific fields search index (only used by set_terms_by_prefix).
-     */
-    public function get_common_index_terms_by_prefix($prefix)
-    {
-        $terms = get_specific_field_values_list_by_prefix(
-            $prefix,
-            $this->cc,
-            TOOL_LEARNPATH,
-            $this->lp_id
-        );
-        $prefix_terms = [];
-        if (!empty($terms)) {
-            foreach ($terms as $term) {
-                $prefix_terms[] = $term['value'];
-            }
-        }
-
-        return $prefix_terms;
-    }
-
-    /**
      * Gets the number of items currently completed.
      *
      * @param bool Flag to determine the failed status is not considered progressed
@@ -3763,42 +3736,6 @@ class learnpath
     }
 
     /**
-     * Check if a learnpath category is published as course tool.
-     *
-     * @param int $courseId
-     *
-     * @return bool
-     *
-     * @deprecated no caller; always returns false (the CTool based lookup is unreachable).
-     */
-    public static function categoryIsPublished(CLpCategory $category, $courseId)
-    {
-        return false;
-        $link = self::getCategoryLinkForTool($category->getId());
-        $em = Database::getManager();
-
-        $tools = $em
-            ->createQuery("
-                SELECT t FROM Chamilo\CourseBundle\Entity\CTool t
-                WHERE t.course = :course AND
-                    t.name = :name AND
-                    t.image LIKE 'lp_category.%' AND
-                    t.link LIKE :link
-            ")
-            ->setParameters([
-                'course' => $courseId,
-                'name' => strip_tags($category->getTitle()),
-                'link' => "$link%",
-            ])
-            ->getResult();
-
-        /** @var CTool $tool */
-        $tool = current($tools);
-
-        return $tool ? $tool->getVisibility() : false;
-    }
-
-    /**
      * Restart the whole learnpath. Return the URL of the first element.
      * Make sure the results are saved with anoter method. This method should probably be redefined in children classes.
      * To use a similar method  statically, use the create_new_attempt() method.
@@ -4088,86 +4025,6 @@ class learnpath
     }
 
     /**
-     * Set index specified prefix terms for all items in this path.
-     *
-     * @param string $terms_string Comma-separated list of terms
-     * @param string $prefix       Xapian term prefix
-     *
-     * @return bool False on error, true otherwise
-     *
-     * @deprecated no caller; queries c_lp_item.c_id/id and search_engine_ref, which no longer exist.
-     */
-    public function set_terms_by_prefix($terms_string, $prefix)
-    {
-        $course_id = api_get_course_int_id();
-        if ('true' !== api_get_setting('search_enabled')) {
-            return false;
-        }
-
-        if (!extension_loaded('xapian')) {
-            return false;
-        }
-
-        $terms_string = trim($terms_string);
-        $terms = explode(',', $terms_string);
-        array_walk($terms, 'trim_value');
-        $stored_terms = $this->get_common_index_terms_by_prefix($prefix);
-
-        // Don't do anything if no change, verify only at DB, not the search engine.
-        if ((0 == count(array_diff($terms, $stored_terms))) && (0 == count(array_diff($stored_terms, $terms)))) {
-            return false;
-        }
-
-        require_once 'xapian.php'; // TODO: Try catch every xapian use or make wrappers on API.
-        require_once api_get_path(LIBRARY_PATH).'search/xapian/XapianQuery.php';
-
-        $items_table = Database::get_course_table(TABLE_LP_ITEM);
-        // TODO: Make query secure agains XSS : use member attr instead of post var.
-        $lp_id = (int) $_POST['lp_id'];
-        $sql = "SELECT * FROM $items_table WHERE c_id = $course_id AND lp_id = $lp_id";
-        $result = Database::query($sql);
-        $di = new ChamiloIndexer();
-
-        while ($lp_item = Database::fetch_array($result)) {
-            // Get search_did.
-            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
-            $sql = 'SELECT * FROM %s
-                    WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d
-                    LIMIT 1';
-            $sql = sprintf($sql, $tbl_se_ref, $this->cc, TOOL_LEARNPATH, $lp_id, $lp_item['id']);
-
-            //echo $sql; echo '<br>';
-            $res = Database::query($sql);
-            if (Database::num_rows($res) > 0) {
-                $se_ref = Database::fetch_array($res);
-                // Compare terms.
-                $doc = $di->get_document($se_ref['search_did']);
-                $xapian_terms = xapian_get_doc_terms($doc, $prefix);
-                $xterms = [];
-                foreach ($xapian_terms as $xapian_term) {
-                    $xterms[] = substr($xapian_term['name'], 1);
-                }
-
-                $dterms = $terms;
-                $missing_terms = array_diff($dterms, $xterms);
-                $deprecated_terms = array_diff($xterms, $dterms);
-
-                // Save it to search engine.
-                foreach ($missing_terms as $term) {
-                    $doc->add_term($prefix.$term, 1);
-                }
-                foreach ($deprecated_terms as $term) {
-                    $doc->remove_term($prefix.$term);
-                }
-                $di->getDb()->replace_document((int) $se_ref['search_did'], $doc);
-                $di->getDb()->flush();
-            }
-        }
-
-        return true;
-    }
-
-    /**
      * Sets the previous item ID to a given ID. Generally, this should be set to the previous 'current' item.
      *
      * @param int $id DB ID of the item
@@ -4385,45 +4242,6 @@ class learnpath
         }
 
         return -1;
-    }
-
-    /**
-     * Updates the order of learning paths (goes through all of them by order and fills the gaps).
-     *
-     * @return bool True on success, false on failure
-     *
-     * @deprecated no caller; returns immediately (the legacy c_lp.c_id query is unreachable).
-     */
-    public function update_display_order()
-    {
-        return;
-        $course_id = api_get_course_int_id();
-        $table = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT * FROM $table
-                WHERE c_id = $course_id
-                ORDER BY display_order";
-        $res = Database::query($sql);
-        if (false === $res) {
-            return false;
-        }
-
-        $num = Database::num_rows($res);
-        // First check the order is correct, globally (might be wrong because
-        // of versions < 1.8.4).
-        if ($num > 0) {
-            $i = 1;
-            while ($row = Database::fetch_array($res)) {
-                if ($row['display_order'] != $i) {
-                    // If we find a gap in the order, we need to fix it.
-                    $sql = "UPDATE $table SET display_order = $i
-                            WHERE iid = ".$row['iid'];
-                    Database::query($sql);
-                }
-                $i++;
-            }
-        }
-
-        return true;
     }
 
     /**
@@ -8483,31 +8301,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         return $src;
-    }
-
-    /**
-     * Check if this LP has a created forum in the basis course.
-     *
-     * @deprecated
-     *
-     * @return bool
-     */
-    public function lpHasForum()
-    {
-        // c_forum and c_item_property no longer exist: a forum is a resource linked to the course (and not deleted).
-        $qty = Database::getManager()->getConnection()->fetchOne(
-            'SELECT COUNT(f.iid) FROM c_forum_forum f
-             WHERE f.lp_id = ? AND EXISTS (
-                 SELECT 1 FROM resource_link rl
-                 WHERE rl.resource_node_id = f.resource_node_id
-                     AND rl.c_id = ?
-                     AND rl.session_id IS NULL
-                     AND rl.deleted_at IS NULL
-             )',
-            [(int) $this->lp_id, (int) $this->course_int_id]
-        );
-
-        return (int) $qty > 0;
     }
 
     /**

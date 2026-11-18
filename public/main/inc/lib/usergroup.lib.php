@@ -800,44 +800,6 @@ class UserGroupModel extends Model
     }
 
     /**
-     * @param int $course_id
-     *
-     * @deprecated  ?
-     *
-     * @return array
-     */
-    public function get_usergroup_by_course($course_id)
-    {
-        if ($this->getUseMultipleUrl()) {
-            $urlId = api_get_current_access_url_id();
-            $options = [
-                'where' => [
-                    'c.course_id = ? AND access_url_id = ?' => [
-                        $course_id,
-                        $urlId,
-                    ],
-                ],
-            ];
-            $from = " $this->usergroup_rel_course_table as c
-                    INNER JOIN $this->access_url_rel_usergroup a
-                    ON c.usergroup_id = a.usergroup_id ";
-        } else {
-            $options = ['where' => ['c.course_id = ?' => $course_id]];
-            $from = $this->usergroup_rel_course_table." c";
-        }
-
-        $results = Database::select('c.usergroup_id', $from, $options);
-        $array = [];
-        if (!empty($results)) {
-            foreach ($results as $row) {
-                $array[] = $row['usergroup_id'];
-            }
-        }
-
-        return $array;
-    }
-
-    /**
      * @param int $usergroup_id
      * @param int $course_id
      *
@@ -3125,47 +3087,6 @@ class UserGroupModel extends Model
                     (id = '$topic_id' OR parent_id = $topic_id)
                 ";
         Database::query($sql);
-    }
-
-    /**
-     * @param string $user_id
-     * @param int    $relation_type
-     * @param bool   $with_image
-     *
-     * @deprecated
-     *
-     * @return int
-     */
-    public function get_groups_by_user_count(
-        $user_id = '',
-        $relation_type = GROUP_USER_PERMISSION_READER,
-        $with_image = false
-    ) {
-        $table_group_rel_user = $this->usergroup_rel_user_table;
-        $tbl_group = $this->table;
-        $user_id = (int) $user_id;
-
-        if (0 == $relation_type) {
-            $where_relation_condition = '';
-        } else {
-            $relation_type = (int) $relation_type;
-            $where_relation_condition = "AND gu.relation_type = $relation_type ";
-        }
-
-        $sql = "SELECT count(g.id) as count
-				FROM $tbl_group g
-				INNER JOIN $table_group_rel_user gu
-				ON gu.usergroup_id = g.id
-				WHERE g.group_type = ".Usergroup::SOCIAL_CLASS." AND gu.user_id = $user_id $where_relation_condition ";
-
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            $row = Database::fetch_assoc($result);
-
-            return $row['count'];
-        }
-
-        return 0;
     }
 
     /**

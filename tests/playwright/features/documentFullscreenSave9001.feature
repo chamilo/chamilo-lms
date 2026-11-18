@@ -4,7 +4,7 @@ Feature: GH9001 Save HTML documents directly from TinyMCE fullscreen
   Scenario: Create and edit an HTML document without leaving fullscreen
     Given I am a platform administrator
     And I am on course "TEMP" homepage
-    And I follow "Documents"
+    And I follow the course tool "Documents"
     And I wait for the page to be loaded
     When I open the GH9001 document creation form
     And I fill in the following:
@@ -24,4 +24,4 @@ Feature: GH9001 Save HTML documents directly from TinyMCE fullscreen
     When I edit the GH9001 document "PW GH9001 fullscreen document"
     Then the GH9001 document editor contains "Updated GH9001 document content"
     When I return to the GH9001 document list
-    Then I delete the document "PW GH9001 fullscreen document" if present
+    Then I delete the GH9001 document "PW GH9001 fullscreen document"

@@ -86,6 +86,11 @@ if (
             $session = Container::getSession();
             if ($session) {
                 $session->set('_security_main', serialize($token));
+                // The login that required the terms discarded the session, and with it the user's language, which
+                // the interactive login event would have stored again.
+                if (null !== $userEntity->getLocale()) {
+                    $session->set('_locale_user', $userEntity->getLocale());
+                }
             }
         }
 

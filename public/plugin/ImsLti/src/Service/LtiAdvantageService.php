@@ -40,7 +40,7 @@ abstract class LtiAdvantageService
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      *
-     * @return LtiServiceResource
+     * @return LtiAdvantageServiceResource
      */
     abstract public static function getResource(Request $request, JsonResponse $response);
 }

@@ -93,7 +93,7 @@ final class SkillModelCharacterizationTest extends KernelTestCase
         $this->conn->executeStatement(
             "INSERT INTO gradebook_category (c_id, session_id, title, weight, visible, locked, generate_certificates,
                 is_requirement, calculation_mode)
-             VALUES (?, ?, ?, 100, 1, 0, 0, 0, 'weighted')",
+             VALUES (?, ?, ?, 100, 1, 0, 0, 0, 'weighted_average')",
             [$courseId, $sessionId, 'sk_gb_'.(++$this->seq)]
         );
 
@@ -243,6 +243,11 @@ final class SkillModelCharacterizationTest extends KernelTestCase
         $rows = (new SkillModel())->getGradebooksBySkill($s);
 
         $this->assertEqualsCanonicalizing([$g1, $g2], array_map(static fn (array $r): int => (int) $r['id'], $rows));
+        $row = (new SkillModel())->getGradebooksBySkill($s)[0];
+        $this->assertSame(1, $row['c_id']);
+        $this->assertSame(1, $row['visible']);
+        $this->assertSame('weighted_average', $row['calculation_mode']);
+        $this->assertArrayHasKey('session_id', $row);
         $this->assertSame([], (new SkillModel())->getGradebooksBySkill(999999));
     }
 

@@ -1,6 +1,11 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\JustificationDocument;
+use Chamilo\CoreBundle\Entity\JustificationDocumentRelUsers;
+use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\ORM\QueryBuilder;
+
 class Justification extends Plugin
 {
     public const TABLE_DOCUMENT = 'justification_document';
@@ -35,10 +40,11 @@ class Justification extends Plugin
     {
         $id = (int) $id;
 
-        $sql = 'SELECT * FROM '.self::TABLE_DOCUMENT.' WHERE id = '.$id;
-        $query = Database::query($sql);
-
-        $document = Database::fetch_assoc($query);
+        $document = $this->documentRowsQueryBuilder()
+            ->where('d.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getArrayResult()[0] ?? false;
         if ($document) {
             // Keep the legacy array key until all external plugin templates are updated.
             $document['name'] = $document['title'];
@@ -51,27 +57,34 @@ class Justification extends Plugin
     {
         $userId = (int) $userId;
 
-        $sql = 'SELECT * FROM '.self::TABLE_DOCUMENT_REL_USER." WHERE user_id = $userId ";
-        $query = Database::query($sql);
+        $rows = $this->userJustificationRowsQueryBuilder()
+            ->where('IDENTITY(j.user) = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getArrayResult();
 
-        return Database::store_result($query, 'ASSOC');
+        return array_map([$this, 'toLegacyUserJustificationRow'], $rows);
     }
 
     public function getUserJustification($id)
     {
         $id = (int) $id;
 
-        $sql = 'SELECT * FROM '.self::TABLE_DOCUMENT_REL_USER." WHERE id = $id ";
-        $query = Database::query($sql);
+        $row = $this->userJustificationRowsQueryBuilder()
+            ->where('j.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-        return Database::fetch_assoc($query);
+        return null === $row ? false : $this->toLegacyUserJustificationRow($row);
     }
 
     public function getList()
     {
-        $sql = 'SELECT * FROM '.self::TABLE_DOCUMENT.' ORDER BY title ';
-        $query = Database::query($sql);
-        $documents = Database::store_result($query, 'ASSOC');
+        $documents = $this->documentRowsQueryBuilder()
+            ->orderBy('d.title', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
 
         foreach ($documents as &$document) {
             // Keep the legacy array key until all external plugin templates are updated.
@@ -160,13 +173,16 @@ class Justification extends Plugin
         $userId = (int) $userId;
         $documentId = (int) $documentId;
 
-        $sql = 'SELECT * FROM '.self::TABLE_DOCUMENT_REL_USER."
-                WHERE user_id = $userId AND justification_document_id = $documentId
-                LIMIT 1";
-        $query = Database::query($sql);
-        $result = Database::fetch_assoc($query);
+        $result = $this->userJustificationRowsQueryBuilder()
+            ->where('IDENTITY(j.user) = :userId')
+            ->andWhere('IDENTITY(j.justificationDocument) = :documentId')
+            ->setParameter('userId', $userId)
+            ->setParameter('documentId', $documentId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-        return $result ?: null;
+        return $result ? $this->toLegacyUserJustificationRow($result) : null;
     }
 
     public function saveUploadedJustification(int $userId, int $documentId, array $file, ?string $manualValidityDate = null): bool
@@ -271,9 +287,64 @@ class Justification extends Plugin
             @unlink($filePath);
         }
 
-        Database::query('DELETE FROM '.self::TABLE_DOCUMENT_REL_USER.' WHERE id = '.$id);
+        Container::getEntityManager()->createQueryBuilder()
+            ->delete(JustificationDocumentRelUsers::class, 'j')
+            ->where('j.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->execute();
 
         return true;
+    }
+
+    /**
+     * Every column of the document table, aliased to the snake_case keys the legacy callers read.
+     */
+    private function documentRowsQueryBuilder(): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'd.id AS id',
+                'd.code AS code',
+                'd.title AS title',
+                'd.validityDuration AS validity_duration',
+                'd.comment AS comment',
+                'd.dateManualOn AS date_manual_on'
+            )
+            ->from(JustificationDocument::class, 'd');
+    }
+
+    /**
+     * Every column of the user justification table, aliased to the snake_case keys the legacy callers read.
+     */
+    private function userJustificationRowsQueryBuilder(): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'j.id AS id',
+                'IDENTITY(j.justificationDocument) AS justification_document_id',
+                'j.filePath AS file_path',
+                'IDENTITY(j.user) AS user_id',
+                'j.dateValidity AS date_validity'
+            )
+            ->from(JustificationDocumentRelUsers::class, 'j')
+            ->orderBy('j.id', 'ASC');
+    }
+
+    /**
+     * The raw table row held the date as a Y-m-d string and the foreign keys as integers: keep that shape.
+     */
+    private function toLegacyUserJustificationRow(array $row): array
+    {
+        $row['date_validity'] = $row['date_validity'] instanceof DateTimeInterface
+            ? $row['date_validity']->format('Y-m-d')
+            : $row['date_validity'];
+        $row['justification_document_id'] = null === $row['justification_document_id']
+            ? null
+            : (int) $row['justification_document_id'];
+        $row['user_id'] = null === $row['user_id'] ? null : (int) $row['user_id'];
+
+        return $row;
     }
 
     private function resolveValidityDate(array $document, ?string $manualValidityDate): string

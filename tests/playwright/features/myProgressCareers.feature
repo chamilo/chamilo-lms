@@ -26,6 +26,9 @@ Feature: Careers in my progress
     And I wait for the page to be loaded
     When I fill in "career_field_display_text" with "PW external career id"
     And I fill in "career_field_variable" with "external_career_id"
+    # Without these, the career form hides the field or shows it frozen.
+    And I click the "input#visible_to_self_yes" element
+    And I click the "input#changeable_yes" element
     And I press "career_field_submit"
     And I wait for the page to be loaded
     Then I should not see an error
@@ -37,11 +40,17 @@ Feature: Careers in my progress
     And I wait for the page to be loaded
     When I fill in "career_title" with "PW my progress career"
     And I fill in editor field "description" with "Career of the my progress test"
-    And I fill in "extra_external_career_id" with "PWCAREER EXT"
     And I press "submit"
     And I wait for the page to be loaded
     Then I should not see an error
     And I should see "PW my progress career"
+    # The career form shows the extra fields only when it edits an existing career.
+    When I click the "i.mdi-pencil" icon in the row for "PW my progress career"
+    And I wait for the page to be loaded
+    And I fill in "extra_external_career_id" with "PWCAREER EXT"
+    And I press "submit"
+    And I wait for the page to be loaded
+    Then I should not see an error
 
   Scenario: Admin creates the learner
     Given I am a platform administrator
@@ -67,7 +76,7 @@ Feature: Careers in my progress
     And I press "Import session(s)"
     And I wait very long for the page to be loaded
     Then I should not see an error
-    And I should see "PW my progress career"
+    And I should see "PW my progress careers"
 
   Scenario: The learner sees the career with a link to its diagram
     Given I am not logged
@@ -99,9 +108,9 @@ Feature: Careers in my progress
   @long-scenario
   Scenario: Teardown — delete the session and the learner
     Given I am a platform administrator
-    When I am on "/admin/session-list?keyword=PW my progress careers"
+    When I am on "/admin/session-list?keyword=PW+my+progress+careers"
     And I wait for the page to be loaded
-    And I click the "[title='Delete']" icon in the row for "PW my progress careers"
+    And I click the ".mdi-delete" icon in the row for "PW my progress careers"
     And I press "Yes"
     And I wait for the page to be loaded
     Then I should not see "PW my progress careers"

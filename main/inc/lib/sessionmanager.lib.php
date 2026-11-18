@@ -8345,6 +8345,10 @@ class SessionManager
         $tbl_session_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $tbl_session_field_options = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
 
+        if (!api_is_platform_admin() && !api_is_session_admin() && !api_is_teacher()) {
+            api_not_allowed(true);
+        }
+
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();
 
@@ -8911,6 +8915,10 @@ class SessionManager
         $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
         $tbl_session_field_values = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $tbl_session_field_options = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
+
+        if (!api_is_platform_admin() && !api_is_session_admin() && !api_is_teacher()) {
+            api_not_allowed(true);
+        }
 
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();

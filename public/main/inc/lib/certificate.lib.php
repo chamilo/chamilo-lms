@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradebookCertificate;
 use Chamilo\CoreBundle\Entity\PersonalFile;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
@@ -1089,12 +1090,40 @@ class Certificate extends Model
             return [];
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $sql = "SELECT * FROM $table
-                WHERE user_id= $userId";
-        $rs = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'c.id AS id',
+                'IDENTITY(c.resourceNode) AS resource_node_id',
+                'IDENTITY(c.category) AS cat_id',
+                'IDENTITY(c.user) AS user_id',
+                'c.scoreCertificate AS score_certificate',
+                'c.createdAt AS created_at',
+                'c.pathCertificate AS path_certificate',
+                'c.downloadedAt AS downloaded_at',
+                'c.publish AS publish',
+                'c.userPublicationApprovalDate AS user_publication_approval_date',
+                'c.userPublicationRevocationDate AS user_publication_revocation_date',
+                'c.expiryDate AS expiry_date',
+                'c.userPublicationConsentScope AS user_publication_consent_scope'
+            )
+            ->from(GradebookCertificate::class, 'c')
+            ->where('c.user = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getArrayResult();
 
-        return Database::store_result($rs, 'ASSOC');
+        // The raw table rows used to carry strings for dates and 0/1 for the flag: keep that shape.
+        foreach ($rows as &$row) {
+            foreach ($row as $column => $value) {
+                if ($value instanceof DateTimeInterface) {
+                    $row[$column] = $value->format('expiry_date' === $column ? 'Y-m-d' : 'Y-m-d H:i:s');
+                }
+            }
+            $row['publish'] = (int) $row['publish'];
+        }
+        unset($row);
+
+        return $rows;
     }
 
     /**

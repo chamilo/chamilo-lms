@@ -823,6 +823,37 @@ class ApiLibCharacterizationTest extends AbstractApiTest
         );
     }
 
+    public function testPlatformIsocodesListsEveryLanguageOrderedAndTrimmed(): void
+    {
+        $expected = array_map('trim', $this->conn()->fetchFirstColumn('SELECT isocode FROM language ORDER BY isocode'));
+
+        $this->assertNotEmpty($expected);
+        $this->assertSame($expected, api_get_platform_isocodes());
+    }
+
+    public function testGetCertificateByUserReturnsTheRawCertificateRowsOfThatUserOnly(): void
+    {
+        $this->assertSame([], \Certificate::getCertificateByUser(0));
+        $this->assertSame([], \Certificate::getCertificateByUser(999999999));
+
+        $this->conn()->executeStatement(
+            "INSERT INTO gradebook_certificate (user_id, score_certificate, created_at, publish) VALUES (1, 7.5, '2026-01-02 03:04:05', 0)"
+        );
+        $this->conn()->executeStatement(
+            "INSERT INTO gradebook_certificate (user_id, score_certificate, created_at, publish) VALUES (2, 1, '2026-01-02 03:04:05', 0)"
+        );
+
+        $rows = \Certificate::getCertificateByUser(1);
+
+        $this->assertCount(1, $rows);
+        $this->assertSame(1, $rows[0]['user_id']);
+        $this->assertEquals(7.5, $rows[0]['score_certificate']);
+        $this->assertSame('2026-01-02 03:04:05', $rows[0]['created_at']);
+        $this->assertSame(0, $rows[0]['publish']);
+        $this->assertArrayHasKey('path_certificate', $rows[0]);
+        $this->assertCount(1, \Certificate::getCertificateByUser(2));
+    }
+
     // ---------------------------------------------------------------- settings tables
 
     public function testSetSettingUpdatesTheSelectedValueOfTheMatchingRow(): void

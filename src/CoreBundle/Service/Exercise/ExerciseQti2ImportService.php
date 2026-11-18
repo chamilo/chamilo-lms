@@ -43,6 +43,9 @@ final readonly class ExerciseQti2ImportService
     private const MATCHING = 4;
     private const FREE_ANSWER = 5;
     private const MULTIPLE_ANSWER_COMBINATION = 9;
+    private const UNIQUE_ANSWER_NO_OPTION = 10;
+    private const DRAGGABLE = 18;
+    private const MATCHING_DRAGGABLE = 19;
 
     /**
      * @var array<int, string>
@@ -54,6 +57,9 @@ final readonly class ExerciseQti2ImportService
         self::FILL_IN_BLANKS => 'Fill in blanks',
         self::MATCHING => 'Matching',
         self::MULTIPLE_ANSWER_COMBINATION => 'Exact combination',
+        self::UNIQUE_ANSWER_NO_OPTION => 'Unique answer with unknown',
+        self::MATCHING_DRAGGABLE => 'Matching draggable',
+        self::DRAGGABLE => 'Sequence ordering',
     ];
 
     public function __construct(
@@ -211,6 +217,7 @@ final readonly class ExerciseQti2ImportService
             'textEntryInteraction',
             'feedbackInline',
             'matchInteraction',
+            'orderInteraction',
             'extendedTextInteraction',
             'itemBody',
             'br',
@@ -237,6 +244,8 @@ final readonly class ExerciseQti2ImportService
                         'title' => $node->getAttribute('title'),
                         'category' => $node->getAttribute('category'),
                         'type' => null,
+                        'matching_draggable' => Qti2MatchingTypeMarker::isDraggable($node->getAttribute('label')),
+                        'unique_unknown' => Qti2UniqueAnswerUnknownMarker::isMarked($node->getAttribute('label')),
                         'subtype' => null,
                         'description' => null,
                         'response_text' => null,
@@ -273,7 +282,9 @@ final readonly class ExerciseQti2ImportService
                     if ('multiple' === $cardinality) {
                         $package['questions'][$currentQuestionIdent]['type'] = self::MULTIPLE_ANSWER;
                     } elseif ('single' === $cardinality) {
-                        $package['questions'][$currentQuestionIdent]['type'] = self::UNIQUE_ANSWER;
+                        $package['questions'][$currentQuestionIdent]['type'] = !empty($package['questions'][$currentQuestionIdent]['unique_unknown'])
+                            ? self::UNIQUE_ANSWER_NO_OPTION
+                            : self::UNIQUE_ANSWER;
                     }
 
                     break;
@@ -332,10 +343,22 @@ final readonly class ExerciseQti2ImportService
 
                     break;
 
+                case 'orderInteraction':
+                    if ($this->hasCurrentQuestion($package, $currentQuestionIdent)) {
+                        $rows = Qti2OrderingItem::read($node);
+                        $package['questions'][$currentQuestionIdent]['type'] = self::DRAGGABLE;
+                        $package['questions'][$currentQuestionIdent]['ordered_items'] = $rows;
+                    }
+
+                    break;
+
                 case 'matchInteraction':
                     if ($this->hasCurrentQuestion($package, $currentQuestionIdent)) {
-                        // QTI does not tell Matching and Matching draggable apart, so both are imported as Matching.
-                        $package['questions'][$currentQuestionIdent]['type'] = self::MATCHING;
+                        // Restore type 19 only when the exporter included Chamilo's QTI item label.
+                        $package['questions'][$currentQuestionIdent]['type'] =
+                            !empty($package['questions'][$currentQuestionIdent]['matching_draggable'])
+                                ? self::MATCHING_DRAGGABLE
+                                : self::MATCHING;
                     }
 
                     break;
@@ -742,6 +765,14 @@ final readonly class ExerciseQti2ImportService
 
         foreach ($questions as $identifier => $questionData) {
             $questionType = (int) ($questionData['type'] ?? 0);
+            if (!empty($questionData['unique_unknown'])
+                && (self::UNIQUE_ANSWER_NO_OPTION !== $questionType
+                    || !Qti2UniqueAnswerUnknownMarker::hasValidUnknownChoice($questionData))) {
+                ++$skippedCount;
+                $errors[] = \sprintf('QTI question %s skipped because its fixed unknown answer is invalid.', (string) $identifier);
+
+                continue;
+            }
             if (!isset(self::SUPPORTED_TYPES[$questionType])) {
                 ++$skippedCount;
 
@@ -756,8 +787,15 @@ final readonly class ExerciseQti2ImportService
                 continue;
             }
 
+            if (self::DRAGGABLE === $questionType && !\is_array($questionData['ordered_items'] ?? null)) {
+                ++$skippedCount;
+                $errors[] = \sprintf('QTI question %s skipped because its orderInteraction is invalid.', (string) $identifier);
+
+                continue;
+            }
+
             $matchingRows = null;
-            if (self::MATCHING === $questionType) {
+            if (\in_array($questionType, [self::MATCHING, self::MATCHING_DRAGGABLE], true)) {
                 $matchingRows = $this->buildMatchingAnswerRows($questionData);
                 if ([] === $matchingRows['items']) {
                     ++$skippedCount;
@@ -785,6 +823,8 @@ final readonly class ExerciseQti2ImportService
                 $question->setPonderation($this->scoreFromValue($questionData['weighting'][0] ?? 0));
             } elseif (null !== $matchingRows) {
                 $this->createMatchingAnswers($question, $matchingRows);
+            } elseif (self::DRAGGABLE === $questionType) {
+                $this->createDraggableAnswers($question, $questionData['ordered_items']);
             } elseif (self::MULTIPLE_ANSWER_COMBINATION === $questionType) {
                 $this->createExactCombinationAnswers($question, $questionData);
             } else {
@@ -863,14 +903,50 @@ final readonly class ExerciseQti2ImportService
                 $weight = $this->scoreFromValue($questionData['weighting'][(string) $key]);
             }
 
-            $this->createSingleAnswer($question, $answerValue, $isCorrect ? 1 : 0, $answerFeedback, $weight, $position);
+            $unknown = self::UNIQUE_ANSWER_NO_OPTION === (int) $question->getType()
+                && Qti2UniqueAnswerUnknownMarker::UNKNOWN_IDENTIFIER === (string) $key;
+            if ($unknown) {
+                $weight = 0.0;
+                $isCorrect = false;
+                $answerValue = QtiImportHtmlSanitizer::sanitize($answerValue);
+            }
+            $this->createSingleAnswer(
+                $question,
+                $answerValue,
+                $isCorrect ? 1 : 0,
+                $answerFeedback,
+                $weight,
+                $unknown ? Qti2UniqueAnswerUnknownMarker::UNKNOWN_POSITION : $position
+            );
             if ($isCorrect) {
                 $totalCorrectWeight += $weight;
             }
-            ++$position;
+            if (!$unknown) {
+                ++$position;
+            }
         }
 
         $question->setPonderation($totalCorrectWeight);
+    }
+
+    /**
+     * @param array{orientation: string, items: list<array{answer: string, target: int, weight: float}>} $data
+     */
+    private function createDraggableAnswers(CQuizQuestion $question, array $data): void
+    {
+        $items = $data['items'];
+        $count = \count($items);
+        $question->setExtra($data['orientation']);
+        for ($position = 1; $position <= $count; ++$position) {
+            $this->createSingleAnswer($question, (string) $position, 0, '', 0.0, $position);
+        }
+        $score = 0.0;
+        foreach ($items as $index => $item) {
+            $weight = $item['weight'];
+            $this->createSingleAnswer($question, $item['answer'], $item['target'], '', $weight, $count + $index + 1);
+            $score += $weight;
+        }
+        $question->setPonderation($score);
     }
 
     /**

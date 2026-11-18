@@ -11,13 +11,11 @@ use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use DocumentManager;
-use PHPUnit\Framework\AssertionFailedError;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Uid\Uuid;
-use Throwable;
 
 /**
  * Characterization tests for DocumentManager (document.lib.php), the legacy document helpers.
@@ -27,8 +25,8 @@ use Throwable;
  *
  *   LIVE  get_document_data_by_id (35 callers), get_document_id (8), get_course_quota (9), enough_space (2),
  *         folderExists (3: upload and session AJAX), get_all_document_folders (2)
- *   DEAD  documentExists, is_visible, attach_gradebook_certificate, get_default_certificate_id,
- *         remove_attach_certificate, get_document_id_of_directory_certificate (no callers),
+ *   DEAD  attach_gradebook_certificate, get_default_certificate_id,
+ *         remove_attach_certificate (no callers),
  *         delete_document_from_search_engine (no callers, needs the search engine)
  *
  * Fixtures: documents are raw resource_node + c_document + resource_link rows under course 1 (no repository
@@ -214,32 +212,12 @@ final class DocumentLibCharacterizationTest extends KernelTestCase
         $this->assertTrue(DocumentManager::folderExists('/dl_session_folder', $info, $sessionId, 0));
     }
 
-    public function testFolderAndDocumentExistRejectAMissingCourse(): void
+    public function testFolderExistsRejectsAMissingCourse(): void
     {
         $this->assertFalse(DocumentManager::folderExists('/x', ['real_id' => 0], 0, 0));
-        $this->assertFalse(DocumentManager::documentExists('/x', ['real_id' => 0], 0, 0));
     }
 
     // ------------------------------------------------------------------ dead helpers on dropped columns
-
-    public function testDocumentExistsAndIsVisibleAndCertificateDirectoryHaveNoWorkingQuery(): void
-    {
-        $info = api_get_course_info('AIACT');
-        $calls = [
-            static fn () => DocumentManager::documentExists('dl_a.txt', $info, 0, 0),
-            static fn () => DocumentManager::is_visible('/dl_a.txt', $info),
-            static fn () => DocumentManager::get_document_id_of_directory_certificate(),
-        ];
-        // DEAD (no caller): c_id/path/session_id are gone from c_document, so each of these throws.
-        foreach ($calls as $call) {
-            try {
-                $call();
-                $this->fail('Expected the query to fail.');
-            } catch (Throwable $e) {
-                $this->assertNotInstanceOf(AssertionFailedError::class, $e);
-            }
-        }
-    }
 
     public function testCertificateAttachmentRoundTripsThroughTheGradebookCategory(): void
     {

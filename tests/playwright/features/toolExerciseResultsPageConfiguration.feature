@@ -184,15 +184,14 @@ Feature: Results page configuration of a test
     And I wait for the page content to settle
     Then I should see "Explain the results page"
 
-  # A new test is hidden from learners until it is activated.
-  Scenario: Make the test visible
+  # A new test is created visible by default (the platform's default visibility on creation): check that it is.
+  Scenario: The test is visible
     Given I am a platform administrator
     And I wait for the page to be loaded
     And I am on course "EXRESPAGE" homepage
     And I wait for the page to be loaded
     And I follow "Tests"
     And I wait for the page content to settle
-    And I click the "[title='Activate']" icon in the row for "Results page test"
     Then I wait for the element "tr:has-text('Results page test') [title='Deactivate']" to appear
 
   Scenario: The learner answers the test

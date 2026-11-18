@@ -804,8 +804,6 @@ class ExtraField extends Model
     /**
      * Return an array of all the extra fields available for this item.
      *
-     * @deprecated No caller left in the codebase.
-     *
      * @param int $itemId (session_id, question_id, course id)
      *
      * @return array
@@ -2066,31 +2064,6 @@ class ExtraField extends Model
         }
 
         return ['level1' => $level1, 'level2' => $level2, 'level3' => $level3];
-    }
-
-    /**
-     * @deprecated No caller left in the codebase.
-     *
-     * @param string $type
-     *
-     * @return array
-     */
-    public function get_all_extra_field_by_type($type)
-    {
-        // all the information of the field
-        $sql = "SELECT * FROM {$this->table}
-                WHERE
-                    value_type = '".Database::escape_string($type)."' AND
-                    item_type = $this->itemType
-                ";
-        $result = Database::query($sql);
-
-        $return = [];
-        while ($row = Database::fetch_array($result)) {
-            $return[] = $row['id'];
-        }
-
-        return $return;
     }
 
     /**

@@ -32,8 +32,7 @@ use Symfony\Component\Uid\UuidV4;
  * isResourceInCourseGradebook, get_course_id_by_link_id, get_list_users_certificates,
  * get_list_gradebook_certificates_by_user_id, get_users_in_course, get_user_array_from_sql_result,
  * get_all_users, updateLinkWeight, updateEvaluationWeight, getComment/saveComment,
- * create_default_course_gradebook. DEAD (no caller, marked @deprecated in the source): find_students,
- * character_data. Doctrine-only / UI-only methods (icons, tables, PDF export, certificates in courses and
+ * create_default_course_gradebook. Doctrine-only / UI-only methods (icons, tables, PDF export, certificates in courses and
  * sessions) are out of scope: they hold no raw SQL of their own.
  *
  * The page-level access control (block_students() + api_protect_course_script()) cannot be driven from a
@@ -525,15 +524,6 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
         // No logged-in user: api_is_allowed_to_edit() is false, so nothing is created, 0 is returned.
         $this->assertSame(0, GradebookUtils::create_default_course_gradebook(1));
         $this->assertSame($before, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM gradebook_category'));
-    }
-
-    public function testFindStudentsNeedsEditRightsAndAMask(): void
-    {
-        $this->user('findme', 'Findme', 'Fiona');
-
-        // Dead helper: refuses without edit rights (no user here) and for an empty mask.
-        $this->assertNull(GradebookUtils::find_students('Findme'));
-        $this->assertNull(GradebookUtils::find_students(''));
     }
 
     public function testGetTableTypeCourseRejectsUnknownTypes(): void

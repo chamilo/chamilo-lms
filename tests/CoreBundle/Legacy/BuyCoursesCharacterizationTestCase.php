@@ -47,12 +47,13 @@ abstract class BuyCoursesCharacterizationTestCase extends KernelTestCase
         self::$schemaChecked = true;
 
         // A plain PDO connection: booting the kernel here would make DAMA open its transaction too early.
-        // Same database as Doctrine, which adds the dbname_suffix of the test environment (doctrine.yaml).
+        // Same database as Doctrine, which adds the dbname_suffix of the test environment (doctrine.yaml): "_test" unless
+        // DATABASE_TEST_SUFFIX overrides it, the way a local setup with a differently named test database must do for Doctrine too.
         $dsn = \sprintf(
             'mysql:host=%s;port=%s;dbname=%s',
             $_SERVER['DATABASE_HOST'] ?? '127.0.0.1',
             $_SERVER['DATABASE_PORT'] ?? '3306',
-            ($_SERVER['DATABASE_NAME'] ?? 'chamilo').'_test'.($_SERVER['TEST_TOKEN'] ?? '')
+            ($_SERVER['DATABASE_NAME'] ?? 'chamilo').($_SERVER['DATABASE_TEST_SUFFIX'] ?? '_test').($_SERVER['TEST_TOKEN'] ?? '')
         );
         $pdo = new PDO($dsn, $_SERVER['DATABASE_USER'] ?? 'root', $_SERVER['DATABASE_PASSWORD'] ?? '');
         $count = (int) $pdo->query(

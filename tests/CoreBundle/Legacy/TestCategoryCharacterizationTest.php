@@ -31,7 +31,6 @@ use Throwable;
  * getListOfCategoriesIDForTest/ForTest/NameForTest/IDForTestObject, getNumberOfQuestionsInCategoryForTest,
  * getNumberOfQuestionRandomByCategory, getNumberMaxQuestionByCat, getQuestionsByCat, getCategoryExerciseTree,
  * get_category_id_for_title, addCategoryToQuestion, sortTabByBracketLabel, getNElementsFromArray.
- * DEAD (no caller, marked @deprecated): getCategoryQuestionsNumber (and it throws: c_id column gone).
  * Doctrine/UI-only (save, modifyCategory, getCategories, displayCategories, forms, tables) hold no raw SQL.
  *
  * Scoping: c_quiz_question_category has no course column any more (the course is the resource_link of its
@@ -307,21 +306,6 @@ final class TestCategoryCharacterizationTest extends KernelTestCase
         $this->assertSame($keep, TestCategory::getCategoryForQuestion($q2), 'other links untouched');
         $this->assertSame(0, TestCategory::getCategoryForQuestion($q1));
         $this->assertContains($ok, [true, null]);
-    }
-
-    public function testGetCategoryQuestionsNumberCountsTheLinkedQuestions(): void
-    {
-        $quiz = $this->quiz();
-        $cat = new TestCategory();
-        $cat->id = $this->category();
-        $this->question($quiz, 1, (int) $cat->id);
-        $this->question($quiz, 2, (int) $cat->id);
-        $this->question($quiz, 3, $this->category());
-
-        // Dead code (no caller, @deprecated). It used to filter on the c_id column the link table lost, which
-        // made it a SQL error.
-        $this->assertSame(2, (int) $cat->getCategoryQuestionsNumber());
-        $this->assertSame(0, (int) (new TestCategory())->getCategoryQuestionsNumber());
     }
 
     // ---------------------------------------------------------------- per exercise

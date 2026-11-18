@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Agenda;
-use Chamilo\CoreBundle\Exception\NotAllowedException;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
@@ -24,9 +23,8 @@ use Symfony\Component\Uid\UuidV4;
  *
  * The calendar tool runs on Vue + API Platform (CCalendarEvent resources); what survives of the class is the
  * write/read path used by course creation, the work tool deadline, the cron CSV import and the Bbb plugin:
- * constructor, addEvent(), editEvent(), get_event(), parseSendToArray(). Everything built on raw SQL against the
- * pre-2.0 tables (personal/global agenda, resize/move, attachments, repeats) is dead and broken, see the decisions
- * file; a few cheap pins document that. Fixtures are raw prepared inserts or addEvent() itself; tags "ag_".
+ * constructor, addEvent(), editEvent(), get_event(), parseSendToArray(). The dead methods built on the pre-2.0
+ * tables (personal/global agenda, resize/move, repeats) were removed. Fixtures are raw prepared inserts or addEvent() itself; tags "ag_".
  * The platform timezone is fixed to Asia/Tokyo (UTC+9, no DST) so local-to-UTC conversions are exact.
  */
 final class AgendaCharacterizationTest extends KernelTestCase
@@ -591,80 +589,6 @@ final class AgendaCharacterizationTest extends KernelTestCase
             static fn (array $l): int => (int) $l['user_id'],
             $this->links($iid)
         )));
-    }
-
-    // ---------------------------------------------------------------- dead and broken, pinned cheaply
-
-    public function testDeleteEventRemovesTheEventOnlyWhenEditable(): void
-    {
-        $id = $this->event();
-
-        $this->agenda('course', 1, false)->deleteEvent($id);
-        $this->assertSame(1, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_calendar_event WHERE iid = ?', [$id]));
-
-        // INTENTIONAL: deleteEvent() prints "1" on success (legacy AJAX protocol); the method is @deprecated, no caller.
-        ob_start();
-        $this->agenda()->deleteEvent($id);
-        $this->assertSame('1', ob_get_clean());
-        $this->assertSame(0, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_calendar_event WHERE iid = ?', [$id]));
-    }
-
-    public function testDeleteEventOfAnotherCourseIsRefused(): void
-    {
-        // Access control: deleteEvent() reads the course from the context but the event only by id.
-        $foreign = $this->event(2, 'ag_foreign');
-
-        ob_start();
-        $this->agenda('course', 1)->deleteEvent($foreign);
-        ob_end_clean();
-
-        $this->assertSame(1, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_calendar_event WHERE iid = ?', [$foreign]));
-    }
-
-    public function testDeleteWholeSeriesFailsBecauseOfTheOldRepeatQuery(): void
-    {
-        // DEAD (schema drift, @deprecated, no caller): getAllRepeatEvents() filters c_calendar_event on c_id, a column that no
-        // longer exists, so deleting a series throws before anything is removed.
-        $id = $this->event();
-
-        $this->expectException(NotAllowedException::class);
-
-        $this->agenda()->deleteEvent($id, true);
-    }
-
-    public function testResizeAndMoveEventFailBecauseOfTheOldTableLayout(): void
-    {
-        $id = $this->event();
-
-        foreach ([
-            fn () => $this->agenda()->resizeEvent($id, 30),
-            fn () => $this->agenda()->move_event($id, 30, 0),
-            fn () => $this->agenda()->getAllRepeatEvents($id),
-        ] as $call) {
-            try {
-                $call();
-                $this->fail('expected the query on c_calendar_event.c_id/id to fail');
-            } catch (NotAllowedException) {
-                $this->addToAssertionCount(1);
-            }
-        }
-        $this->assertSame('2030-06-14 01:00:00', $this->row($id)['end_date'], 'nothing was changed');
-    }
-
-    public function testPersonalAndPlatformEventsFailBecauseTheirTablesAreGone(): void
-    {
-        // The personal_agenda and sys_calendar tables do not exist any more.
-        foreach ([
-            fn () => $this->agenda('personal', null)->getPersonalEvents(0, 0),
-            fn () => $this->agenda('admin', null)->getPlatformEvents(0, 0),
-        ] as $call) {
-            try {
-                $call();
-                $this->fail('expected a missing table error');
-            } catch (NotAllowedException) {
-                $this->addToAssertionCount(1);
-            }
-        }
     }
 
     private function session(): int

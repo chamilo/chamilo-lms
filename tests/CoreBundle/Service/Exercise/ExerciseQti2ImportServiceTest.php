@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CoreBundle\Service\Exercise;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseQti2ExportService;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseQti2ImportService;
+use Chamilo\CoreBundle\Service\Exercise\Qti2ExactCombinationWriter;
 use Chamilo\CoreBundle\Service\Exercise\Qti2FillBlanksWriter;
 use Chamilo\CoreBundle\Service\Exercise\QtiImportHtmlSanitizer;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -16,6 +17,7 @@ use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
@@ -30,6 +32,7 @@ use ZipArchive;
 final class ExerciseQti2ImportServiceTest extends TestCase
 {
     private const MATCHING = 4;
+    private const MATCHING_DRAGGABLE = 19;
 
     /**
      * @var array<int, object>
@@ -122,6 +125,121 @@ final class ExerciseQti2ImportServiceTest extends TestCase
         self::assertSame($original->getQuestion(), $imported->getQuestion());
         self::assertSame($original->getPonderation(), $imported->getPonderation());
         self::assertSame($this->describeMatching($original), $this->describeMatching($imported));
+    }
+
+    public function testMatchingDraggableRoundTripsThroughTheQti2Export(): void
+    {
+        $original = $this->buildMatchingQuestion();
+        $original->setType(self::MATCHING_DRAGGABLE);
+
+        $exportService = (new ReflectionClass(ExerciseQti2ExportService::class))->newInstanceWithoutConstructor();
+        $exportQuestion = new ReflectionMethod(ExerciseQti2ExportService::class, 'exportQuestion');
+        $itemXml = $exportQuestion->invoke($exportService, $original);
+
+        $document = new DOMDocument();
+        self::assertTrue($document->loadXML($itemXml));
+        self::assertSame('chamilo:matching-draggable', $document->documentElement->getAttribute('label'));
+        self::assertSame(1, $document->getElementsByTagName('matchInteraction')->length);
+
+        $this->createImportService()->import($this->createZip($this->wrapItems($itemXml)), new Course(), null);
+
+        $imported = $this->getSingleQuestion();
+        self::assertSame(self::MATCHING_DRAGGABLE, $imported->getType());
+        self::assertSame($original->getQuestion(), $imported->getQuestion());
+        self::assertSame($original->getPonderation(), $imported->getPonderation());
+        self::assertSame($this->describeMatching($original), $this->describeMatching($imported));
+    }
+
+    public function testDraggableLabelDoesNotLeakToTheNextMatchingQuestion(): void
+    {
+        $draggable = str_replace(
+            'identifier="QST_1"',
+            'identifier="QST_1" label="chamilo:matching-draggable"',
+            $this->buildLegacyMatchingItem('multiple', 'directedPair')
+        );
+        $matching = str_replace('QST_1', 'QST_2', $this->buildLegacyMatchingItem('multiple', 'directedPair'));
+
+        $result = $this->createImportService()->import($this->createZip($this->wrapItems($draggable.$matching)), new Course(), null);
+
+        self::assertSame(2, $result['importedCount']);
+        $questions = array_values(array_filter($this->persisted, static fn (object $entity): bool => $entity instanceof CQuizQuestion));
+        self::assertSame(
+            [self::MATCHING_DRAGGABLE, self::MATCHING],
+            array_map(static fn (CQuizQuestion $question): int => $question->getType(), $questions)
+        );
+        self::assertSame([6.0, 6.0], array_map(static fn (CQuizQuestion $question): float => $question->getPonderation(), $questions));
+    }
+
+    public function testForeignMatchingLabelDoesNotTurnItIntoDraggableMatching(): void
+    {
+        $xml = str_replace(
+            'identifier="QST_1"',
+            'identifier="QST_1" label="foreign:drag-and-drop"',
+            $this->buildLegacyMatchingItem('multiple', 'directedPair')
+        );
+
+        $this->createImportService()->import($this->createZip($this->wrapItems($xml)), new Course(), null);
+
+        $imported = $this->getSingleQuestion();
+        self::assertSame(self::MATCHING, $imported->getType());
+        self::assertSame(6.0, $imported->getPonderation());
+        self::assertCount(7, $this->getAnswers($imported));
+    }
+
+    /**
+     * The QTI2 import must keep types 2, 9, 4 and 19 distinct inside the same archive.
+     */
+    public function testMixedMultipleExactMatchingAndDraggableItemsKeepTheirTypesAndScores(): void
+    {
+        $multiple = '<assessmentItem identifier="QST_10" title="Multiple answer" category="">'
+            .'<responseDeclaration identifier="QST_10" cardinality="multiple" baseType="identifier">'
+            .'<correctResponse><value>m1</value></correctResponse>'
+            .'<mapping><mapEntry mapKey="m1" mappedValue="2"/><mapEntry mapKey="m2" mappedValue="0"/></mapping>'
+            .'</responseDeclaration><itemBody><choiceInteraction responseIdentifier="QST_10" maxChoices="0">'
+            .'<simpleChoice identifier="m1">Correct</simpleChoice><simpleChoice identifier="m2">Incorrect</simpleChoice>'
+            .'</choiceInteraction></itemBody>'
+            .'<responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_response"/>'
+            .'</assessmentItem>';
+        $exact = '<assessmentItem identifier="QST_20" title="Exact combination" category="">'
+            .Qti2ExactCombinationWriter::declarations('QST_20', ['x1', 'x3'], 4.5)
+            .'<itemBody><choiceInteraction responseIdentifier="QST_20" maxChoices="0">'
+            .'<simpleChoice identifier="x1">First</simpleChoice>'
+            .'<simpleChoice identifier="x2">Second</simpleChoice>'
+            .'<simpleChoice identifier="x3">Third</simpleChoice>'
+            .'</choiceInteraction></itemBody>'
+            .Qti2ExactCombinationWriter::responseProcessing('QST_20', 4.5)
+            .'</assessmentItem>';
+        $matching = str_replace('QST_1', 'QST_30', $this->buildLegacyMatchingItem('multiple', 'directedPair'));
+        $draggable = str_replace('QST_1', 'QST_40', $this->buildLegacyMatchingItem('multiple', 'directedPair'));
+        $draggable = str_replace(
+            '                identifier="QST_40"',
+            '                identifier="QST_40" label="chamilo:matching-draggable"',
+            $draggable
+        );
+
+        $result = $this->createImportService()->import(
+            $this->createZip($this->wrapItems($multiple.$exact.$matching.$draggable)),
+            new Course(),
+            null
+        );
+
+        self::assertSame(4, $result['importedCount']);
+        self::assertSame(0, $result['skippedCount']);
+        self::assertSame([], $result['errors']);
+        $questions = array_values(array_filter(
+            $this->persisted,
+            static fn (object $entity): bool => $entity instanceof CQuizQuestion
+        ));
+        self::assertSame([2, 9, self::MATCHING, self::MATCHING_DRAGGABLE], array_map(
+            static fn (CQuizQuestion $question): int => $question->getType(),
+            $questions
+        ));
+        self::assertSame([2.0, 4.5, 6.0, 6.0], array_map(
+            static fn (CQuizQuestion $question): float => $question->getPonderation(),
+            $questions
+        ));
+        self::assertSame(4.5, $this->getAnswers($questions[1])[0]->getPonderation());
+        self::assertSame($this->describeMatching($questions[2]), $this->describeMatching($questions[3]));
     }
 
     public function testMatchingQuestionWithoutAssociationsIsReportedAsSkipped(): void

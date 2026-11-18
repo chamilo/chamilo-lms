@@ -297,6 +297,10 @@ class CourseUserManagerTest extends AbstractApiTest
         $this->assertCount(2, $data['items']);
         $this->assertSame(['Amir', 'Bella'], array_column($data['items'], 'firstname'));
 
+        // The request above restarted the kernel: the manager held in $em is stale and no longer owns the
+        // subscriptions the repository returns, so flushing it would silently save nothing. Take the current one.
+        $em = $this->getEntityManager();
+
         // A session course has independent dates, not those from direct course memberships.
         // The request rebooted the kernel, so the manager fetched above no longer writes anything.
         $em = $this->getEntityManager();

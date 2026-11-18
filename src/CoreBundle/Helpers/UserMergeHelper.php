@@ -817,6 +817,8 @@ final class UserMergeHelper
             ['table' => 'c_student_publication_follow', 'userField' => 'user_id', 'matchColumns' => ['publication_id']],
             ['table' => 'ticket_rel_user', 'userField' => 'user_id', 'matchColumns' => ['ticket_id']],
             ['table' => 'ticket_category_rel_user', 'userField' => 'user_id', 'matchColumns' => ['category_id']],
+            // Unique on (action_id, user_id): a recipient the target already received keeps the target's row.
+            ['table' => 'course_automation_delivery', 'userField' => 'user_id', 'matchColumns' => ['action_id']],
         ];
     }
 
@@ -847,6 +849,8 @@ final class UserMergeHelper
             ['table' => 'attempt_feedback', 'field' => 'user_id'],
             ['table' => 'chat', 'field' => 'to_user'],
             ['table' => 'chat_video', 'field' => 'to_user'],
+            ['table' => 'course_automation_action', 'field' => 'created_by_id'],
+            ['table' => 'course_automation_action', 'field' => 'last_executed_by_id'],
             ['table' => 'course_request', 'field' => 'user_id'],
             ['table' => 'c_forum_post', 'field' => 'poster_id'],
             ['table' => 'c_forum_thread', 'field' => 'thread_poster_id'],

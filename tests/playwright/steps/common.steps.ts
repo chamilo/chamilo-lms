@@ -1,4 +1,5 @@
 import fs from "node:fs"
+import os from "node:os"
 import path from "node:path"
 import { expect, Page, Response, Route, test } from "@playwright/test"
 import { createBdd, DataTable } from "playwright-bdd"
@@ -3321,6 +3322,10 @@ Then("I delete the learning path I just created", async ({ page }) => {
 // same either way.
 Then("I delete the document {string} if present", async ({ page }, rowText: string) => {
   const row = page.locator("tr", { hasText: rowText })
+  // The Documents table is filled by an async request that lands after "the page is loaded": a bare count() right away
+  // read zero rows, skipped the delete and left the document behind on every run. Give the row a bounded time to
+  // show up before deciding it is absent (an absent row then costs this wait, nothing more).
+  await row.first().waitFor({ state: "visible", timeout: 10_000 }).catch(() => {})
   if ((await row.count()) === 0) {
     return
   }
@@ -3735,16 +3740,60 @@ When(
 // ATTENDANCE_ID.
 let lastResolvedUserId: string | null = null
 
-When("I resolve the user id for {string}", async ({ page }, username: string) => {
+// find_users only returns every user to an administrator (or when the platform allows sending messages to all users):
+// anyone else finds their friends only. A tutor looking up a learner would therefore find nobody, so an id resolved once
+// (while an administrator is logged in) is remembered by username and reused by every later lookup of that username.
+// Playwright starts a new worker process after a failed test, which loses module state: the ids are therefore also
+// persisted in a small JSON file, used only as a fallback when find_users returns nothing.
+const resolvedUserIdsFile = path.join(os.tmpdir(), "chamilo-playwright-resolved-user-ids.json")
+const resolvedUserIds = new Map<string, string>()
+
+function readPersistedUserIds(): Record<string, string> {
+  try {
+    return JSON.parse(fs.readFileSync(resolvedUserIdsFile, "utf8"))
+  } catch {
+    return {}
+  }
+}
+
+function persistUserId(username: string, id: string): void {
+  try {
+    fs.writeFileSync(resolvedUserIdsFile, JSON.stringify({ ...readPersistedUserIds(), [username]: id }))
+  } catch {
+    // best effort: the in-memory cache still works
+  }
+}
+
+async function findUserIdByUsername(page: Page, username: string): Promise<string> {
+  const cached = resolvedUserIds.get(username)
+  if (cached) {
+    return cached
+  }
   const response = await page.request.get(
     `/main/inc/ajax/message.ajax.php?a=find_users&q=${encodeURIComponent(username)}&page_limit=10`,
   )
   const { items } = await response.json()
   const id = items?.[0]?.id
   if (!id) {
-    throw new Error(`find_users returned no match for username "${username}"`)
+    const persisted = readPersistedUserIds()[username]
+    if (persisted) {
+      resolvedUserIds.set(username, persisted)
+
+      return persisted
+    }
+    throw new Error(
+      `find_users returned no match for username "${username}" (it only lists friends to a non-administrator: ` +
+        'resolve the id while an administrator is logged in)',
+    )
   }
-  lastResolvedUserId = String(id)
+  resolvedUserIds.set(username, String(id))
+  persistUserId(username, String(id))
+
+  return String(id)
+}
+
+When("I resolve the user id for {string}", async ({ page }, username: string) => {
+  lastResolvedUserId = await findUserIdByUsername(page, username)
 })
 
 Given("I am on {string} with the resolved user id", async ({ page }, pathTemplate: string) => {
@@ -3796,14 +3845,7 @@ When("I trigger the download at {string} with the resolved user id", async ({ pa
 When(
   "I subscribe the learner {string} to the first {int} available sessions",
   async ({ page }, learnerUsername: string, count: number) => {
-    const searchResponse = await page.request.get(
-      `/main/inc/ajax/message.ajax.php?a=find_users&q=${encodeURIComponent(learnerUsername)}&page_limit=10`,
-    )
-    const { items } = await searchResponse.json()
-    const learnerId = items?.[0]?.id
-    if (!learnerId) {
-      throw new Error(`find_users returned no match for username "${learnerUsername}"`)
-    }
+    const learnerId = await findUserIdByUsername(page, learnerUsername)
     await gotoReliably(page, `/main/search/load_search.php?user_id=${learnerId}&save=&_qf__load=`)
     await page.waitForLoadState("networkidle")
     const hrefs = await page.evaluate(() =>
@@ -5022,7 +5064,8 @@ When("I exercise temporary branch and room polygon CRUD", async ({ page }) => {
       })
       check(clear.status === 200, `Clear polygon PUT: ${clear.status} ${clear.detail}`)
       const cleared = await request(`/api/rooms/${roomId}`, "GET")
-      check(cleared.status === 200 && cleared.data.roomMap === null, "Cleared polygon remains stored")
+      // API Platform omits null properties from the JSON-LD output, so a cleared polygon is absent, not null.
+      check(cleared.status === 200 && (cleared.data.roomMap ?? null) === null, "Cleared polygon remains stored")
     } catch (error) {
       problems.push(String(error))
     } finally {
@@ -5166,4 +5209,58 @@ Then("the GH1712 announcement controls should match the available recipients", a
   await expect(page.locator("#announcement_send_to_users_in_sessions")).toHaveCount(
     form.sendToSessionsAvailable ? 1 : 0,
   )
+})
+
+// Not ported — new, for skill.feature. Skill ids are never stable (the platform ships a Root skill,
+// other features create skills, earlier runs leave theirs behind), so the scenarios address a skill
+// by title: this remembers the id of the NEWEST skill with exactly that title (the one the running
+// feature just created) and "I am on ... with the remembered skill id" substitutes it for SKILL_ID.
+let lastRememberedSkillId: string | null = null
+const rememberedSkillIds: Record<string, string> = {}
+
+When("I remember the id of the skill {string}", async ({ page }, title: string) => {
+  const response = await page.request.get(`/api/skills?title=${encodeURIComponent(title)}&itemsPerPage=100`, {
+    headers: { Accept: "application/ld+json" },
+  })
+  expect(response.ok(), `GET /api/skills?title=${title} must succeed`).toBe(true)
+  const body = await response.json()
+  const members = (body["hydra:member"] ?? body.member ?? []) as Array<{ id: number; title: string }>
+  const ids = members.filter((skill) => skill.title === title).map((skill) => Number(skill.id))
+  if (!ids.length) {
+    throw new Error(`No skill titled "${title}" found`)
+  }
+  lastRememberedSkillId = String(Math.max(...ids))
+  rememberedSkillIds[title] = lastRememberedSkillId
+})
+
+Given("I am on {string} with the remembered skill id", async ({ page }, pathTemplate: string) => {
+  if (!lastRememberedSkillId) {
+    throw new Error('No skill id remembered — run "I remember the id of the skill ..." first.')
+  }
+  await gotoReliably(page, pathTemplate.replace("SKILL_ID", lastRememberedSkillId))
+})
+
+// Not ported — new, for skill.feature. The wheel's segments carry data-skill-id, which is how a
+// scenario addresses ITS OWN skill (remembered by its original title, before a rename) instead of a
+// title other features may share ("skill1 Edited" vs the learner report's tree skills).
+// A segment that is its parent's only child is a full ring, so the middle of its bounding box lies
+// on the wheel's centre (the "go back" circle) and a pointer click lands on that circle instead;
+// the segment is a role="button" that also reacts to Enter, which is how a keyboard user activates it.
+function skillsWheelNode(page: Page, title: string) {
+  const id = rememberedSkillIds[title]
+  if (!id) {
+    throw new Error(`No skill id remembered for "${title}" — run "I remember the id of the skill ..." first.`)
+  }
+
+  return page.locator(`[data-skill-interaction-layer] [role="button"][data-skill-id="${id}"]`).first()
+}
+
+Then("I should see the skills wheel node of the skill {string}", async ({ page }, title: string) => {
+  await expect(skillsWheelNode(page, title)).toBeVisible()
+})
+
+When("I activate the skills wheel node of the skill {string}", async ({ page }, title: string) => {
+  const node = skillsWheelNode(page, title)
+  await node.focus()
+  await page.keyboard.press("Enter")
 })

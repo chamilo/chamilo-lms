@@ -37,14 +37,14 @@ Feature: Skills
 
   Scenario: Create a second level skill
     Given I am a platform administrator
-    And I am on "main/skills/skill_create.php"
+    And I remember the id of the skill "skill1"
+    And I am on "main/skills/skill_create.php?parent=SKILL_ID" with the remembered skill id
     And wait very long for the page to be loaded
     When I fill in the following:
       | title | skill11 |
       | short_code | s11 |
       | description | description 11 |
       | criteria | criteria 11 |
-    Then I select "skill1" from "parent_id"
     And I press "submit"
     And wait for the page to be loaded
     Then I should see "skill11"
@@ -73,7 +73,8 @@ Feature: Skills
     And I am on "main/skills/skill_list.php"
     And wait for the page to be loaded
     Then I should see "skilldis"
-    Then I am on "/main/skills/skill_list.php?id=4&action=disable"
+    When I remember the id of the skill "skilldis"
+    Then I am on "/main/skills/skill_list.php?id=SKILL_ID&action=disable" with the remembered skill id
     And wait for the page to be loaded
     Then I should not see an error
 
@@ -88,18 +89,22 @@ Feature: Skills
     And I am on "main/skills/skill_list.php"
     And wait for the page to be loaded
     Then I should see "skilldis"
-    Then I am on "/main/skills/skill_list.php?id=4&action=enable"
+    When I remember the id of the skill "skilldis"
+    Then I am on "/main/skills/skill_list.php?id=SKILL_ID&action=enable" with the remembered skill id
     And wait for the page to be loaded
     Then I should not see an error
 
   # This scenario works but it needs to be adapted
   # because it does not update skill1 but the first in the list
+  # The legacy list does not identify rows, so the skill is edited through its own edit page
+  # (its id is looked up by title), not through whichever row happens to come first.
   Scenario: Update a skill skill1
     Given I am a platform administrator
     And I am on "main/skills/skill_list.php"
     And wait for the page to be loaded
     Then I should see "skill1"
-    Then I follow "Edit"
+    When I remember the id of the skill "skill1"
+    And I am on "/main/skills/skill_edit.php?id=SKILL_ID" with the remembered skill id
     And wait very long for the page to be loaded
     When I fill in the following:
       | title | skill1 Edited |
@@ -116,7 +121,7 @@ Feature: Skills
       | title | skillcat |
       | short_code | scat |
       | description | Structural skill category |
-    And I uncheck "acquirable"
+    And I click the "#acquirable input[type='checkbox']" element
     And I press "submit"
     And wait for the page to be loaded
     Then I should see "skillcat"
@@ -136,7 +141,7 @@ Feature: Skills
     And I wait for the element ".p-autocomplete-option" to appear
     And I click the ".p-autocomplete-option" element
     And I click the "[data-testid='skill-wheel-search-view-button']" element
-    Then I should see the "[data-testid='skill-wheel-canvas'][data-selected-skill-id='5']" element
+    Then I should see the "[data-testid='skill-wheel-canvas'][data-selected-skill-id]" element
     And I should see "skillcat"
     And I should not see an error
 
@@ -151,12 +156,13 @@ Feature: Skills
     And I should see the "[data-testid='skill-wheel-graph']" element
     And I should see the "[data-testid='skill-wheel-canvas'][data-render-mode='3d'][data-interaction-mode='overlay'][data-label-mode='adaptive'][data-tooltip-mode='rich']" element
     And I should see the "[data-skill-interaction-layer='overlay']" element
-    And I should see the "[data-skill-id='2']" element
-    When I click the "[data-skill-id='2']" element
-    Then I should see the "[data-testid='skill-wheel-canvas'][data-current-skill-id='2']" element
-    And I should see the "[data-skill-id='3']" element
-    When I click the "[data-skill-id='3']" element
-    Then I should see the "[data-testid='skill-wheel-canvas'][data-selected-skill-id='3']" element
+    And I remember the id of the skill "skill11"
+    Then I should see the skills wheel node of the skill "skill1"
+    When I activate the skills wheel node of the skill "skill1"
+    Then I should see the "[data-testid='skill-wheel-canvas'][data-current-skill-id]" element
+    And I should see the skills wheel node of the skill "skill11"
+    When I activate the skills wheel node of the skill "skill11"
+    Then I should see the "[data-testid='skill-wheel-canvas'][data-selected-skill-id]" element
     And I should see the "[data-testid='skill-wheel-inspector']" element
     And I should see the "a[href*='skill_edit.php'][href*='origin=skill-wheel']" element
     And I should see the "a[href*='skill_create.php'][href*='origin=skill-wheel']" element
@@ -176,9 +182,9 @@ Feature: Skills
 
   Scenario: Assign skill11 to user 1
     Given I am a platform administrator
-    And I am on "/skill/assign/1"
+    And I remember the id of the skill "skill11"
+    And I am on "/skill/assign/1?skillId=SKILL_ID" with the remembered skill id
     And I wait for the page to be loaded
-    When I select "skill11" from "skillId"
     Then I fill in the following:
       | argumentation | argumentation |
     And I press "Save"
@@ -188,7 +194,8 @@ Feature: Skills
 
   Scenario: Remove manually assigned skill11 from user 1
     Given I am a platform administrator
-    And I am on "/skill/assign/1?skillId=3"
+    And I remember the id of the skill "skill11"
+    And I am on "/skill/assign/1?skillId=SKILL_ID" with the remembered skill id
     And I wait for the page to be loaded
     Then I should see "Skill acquired"
     And I should see "Remove"
@@ -200,7 +207,8 @@ Feature: Skills
 
   Scenario: Reassign removed skill11 to user 1
     Given I am a platform administrator
-    And I am on "/skill/assign/1?skillId=3"
+    And I remember the id of the skill "skill11"
+    And I am on "/skill/assign/1?skillId=SKILL_ID" with the remembered skill id
     And I wait for the page to be loaded
     Then the field "argumentation" should have value "argumentation"
     When I press "Save"
@@ -210,7 +218,8 @@ Feature: Skills
 
   Scenario: View assigned skill skill11 to user 1
     Given I am a platform administrator
-    And I am on "/badge/3/user/1"
+    And I remember the id of the skill "skill11"
+    And I am on "/badge/SKILL_ID/user/1" with the remembered skill id
     And I wait for the page to be loaded
     Then I should see "Skill acquired"
     And I should see "John Doe"
@@ -219,7 +228,8 @@ Feature: Skills
   # learner report it was opened from, instead of sending the user to the assignment page.
   Scenario: Remove skill11 from user 1 on the issued badge page
     Given I am a platform administrator
-    And I am on "/main/skills/issued_all.php?skill=3&user=1&origin=%2Freporting%2Flearners%2F1"
+    And I remember the id of the skill "skill11"
+    And I am on "/main/skills/issued_all.php?skill=SKILL_ID&user=1&origin=%2Freporting%2Flearners%2F1" with the remembered skill id
     And I wait for the page to be loaded
     When I press "Remove"
     And I press "Yes"

@@ -692,17 +692,6 @@ class GradebookUtils
         return $return;
     }
 
-    /**
-     * XML-parser: handle character data.
-     *
-     * @deprecated No caller left in public/ or src/ (the XML import it served is gone).
-     */
-    public static function character_data($parser, $data)
-    {
-        global $current_value;
-        $current_value = $data;
-    }
-
     public static function overwritescore($resid, $importscore, $eval_max)
     {
         $result = Result::load($resid);
@@ -1310,46 +1299,6 @@ class GradebookUtils
         }
 
         return $users;
-    }
-
-    /**
-     * Search students matching a given last name and/or first name.
-     *
-     * @author Bert Steppé
-     *
-     * @deprecated No caller left in public/ or src/.
-     */
-    public static function find_students($mask = '')
-    {
-        if (!api_is_allowed_to_edit() || $mask === '') {
-            return null;
-        }
-
-        $mask = Database::escape_string($mask);
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_cru  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
-        $sql = 'SELECT DISTINCT user.id AS user_id, user.lastname, user.firstname, user.email, user.official_code
-            FROM '.$tbl_user.' user';
-
-        if (!api_is_platform_admin()) {
-            $sql .= ' INNER JOIN '.$tbl_cru.' cru ON (cru.user_id = user.id)
-                  AND cru.relation_type <> '.COURSE_RELATION_TYPE_RRHH.'
-                  AND cru.c_id IN (
-                        SELECT c_id FROM '.$tbl_cru.'
-                         WHERE user_id = '.api_get_user_id().' AND status = '.COURSEMANAGER.'
-                  )';
-        }
-
-        $sql .= ' WHERE user.status = '.STUDENT.'
-              AND (user.lastname LIKE \'%'.$mask.'%\' OR user.firstname LIKE \'%'.$mask.'%\')';
-
-        $orderBy = api_is_western_name_order() ? 'firstname, lastname' : 'lastname, firstname';
-        $sql .= ' ORDER BY '.$orderBy;
-
-        $result = Database::query($sql);
-
-        return Database::store_result($result);
     }
 
     /**

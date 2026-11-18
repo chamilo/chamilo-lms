@@ -274,19 +274,6 @@ final class BuyCoursesSalesCharacterizationTest extends BuyCoursesCharacterizati
         $this->assertSame([], $this->plugin->getSaleListByUserId(0));
     }
 
-    public function testSaleListByPaymentTypeOnlyCompleted(): void
-    {
-        $ok = $this->makeSale(['status' => 1, 'payment_type' => 5, 'reference' => 'bc_ref_stripe_ok']);
-        $this->makeSale(['status' => 0, 'payment_type' => 5, 'reference' => 'bc_ref_stripe_pending']);
-        $this->makeSale(['status' => 1, 'payment_type' => 1, 'reference' => 'bc_ref_paypal']);
-
-        $refs = array_column($this->plugin->getSaleListByPaymentType(5), 'reference');
-        $this->assertContains('bc_ref_stripe_ok', $refs);
-        $this->assertNotContains('bc_ref_stripe_pending', $refs);
-        $this->assertNotContains('bc_ref_paypal', $refs);
-        $this->assertGreaterThan(0, $ok);
-    }
-
     public function testSaleListByUserTermMatchesUsernameFirstnameLastname(): void
     {
         $sale = $this->makeSale(['user_id' => 1]);

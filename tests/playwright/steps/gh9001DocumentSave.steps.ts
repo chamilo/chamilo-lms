@@ -7,8 +7,9 @@ const saveButton = ".tox.tox-tinymce.tox-fullscreen button.tox-tbtn:has(.chamilo
 const editorId = "item_content"
 
 When("I open the GH9001 document creation form", async ({ page }) => {
+  // Clicking the course tool is a client-side route change: wait for the document list URL.
+  await page.waitForURL((u) => /^\/resources\/document\/\d+\/?$/.test(u.pathname))
   const url = new URL(page.url())
-  expect(url.pathname).toMatch(/^\/resources\/document\/\d+\/?$/)
   url.pathname = `${url.pathname.replace(/\/$/, "")}/create`
   await page.goto(url.toString())
   await expect(page.locator("#title")).toBeVisible()
@@ -69,4 +70,15 @@ When("I return to the GH9001 document list", async ({ page }) => {
   url.searchParams.delete("getFile")
   await page.goto(url.toString())
   await expect(page.locator(".p-datatable")).toBeVisible()
+})
+
+// The shared "I delete the document ... if present" reads count() right after the page loads, before the
+// Vue table has received its rows, so it silently skipped the delete and left one document behind per run
+// (confirmed from the request log: no DELETE was ever sent). This waits for the list before deciding.
+When("I delete the GH9001 document {string}", async ({ page }, title: string) => {
+  const row = page.locator(".p-datatable tbody tr").filter({ hasText: title })
+  await expect(row.first()).toBeVisible()
+  await row.first().getByTitle("Delete").click()
+  await page.getByRole("button", { name: "Yes" }).click()
+  await expect(row).toHaveCount(0)
 })

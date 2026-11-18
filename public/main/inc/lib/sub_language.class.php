@@ -50,7 +50,7 @@ class SubLanguageManager
      *
      * @return array All file of lang folder
      *
-     * @deprecated Only used by the gettext migration scripts under tests/scripts.
+     * Used by the gettext migration scripts under tests/scripts.
      */
     public static function get_lang_folder_files_list($path, $only_main_name = false)
     {
@@ -373,100 +373,6 @@ class SubLanguageManager
     }
 
     /**
-     * Get parent language path (or null if no parent).
-     *
-     * @deprecated
-     *
-     * @param string $language_path Children language path
-     *
-     * @return string Parent language path or null
-     */
-    public static function get_parent_language_path($language_path)
-    {
-        $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = "SELECT dokeos_folder
-                FROM ".$tbl_admin_languages."
-                WHERE id = (
-                    SELECT parent_id FROM ".$tbl_admin_languages."
-                    WHERE dokeos_folder = '".Database::escape_string($language_path)."'
-                )
-                ";
-        $result = Database::query($sql);
-        if (0 == Database::num_rows($result)) {
-            return null;
-        }
-        $row = Database::fetch_array($result);
-
-        return $row['dokeos_folder'];
-    }
-
-    /**
-     * Get language matching isocode.
-     *
-     * @param string $isocode The language isocode (en, es, fr, zh-TW, etc)
-     *
-     * @return mixed English name of the matching language, or false if no active language could be found
-     *
-     * @deprecated Only called by getLanguageFromBrowserPreference(), which nothing calls.
-     */
-    public static function getLanguageFromIsocode($isocode)
-    {
-        $isocode = Database::escape_string($isocode);
-        $adminLanguagesTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        // select language - if case several languages match, get the last (more recent) one
-        $sql = "SELECT english_name
-                FROM ".$adminLanguagesTable."
-                WHERE
-                    isocode ='$isocode' AND
-                    available = 1
-                ORDER BY id
-                DESC LIMIT 1";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) < 1) {
-            return false;
-        }
-        $row = Database::fetch_assoc($res);
-
-        return $row['english_name'];
-    }
-
-    /**
-     * Get best language in browser preferences.
-     *
-     * @param string $preferences The browser-configured language preferences (e.g. "en,es;q=0.7;en-us;q=0.3", etc)
-     *
-     * @return mixed English name of the matching language, or false if no active language could be found
-     *
-     * @deprecated No caller left in public/ or src/.
-     */
-    public static function getLanguageFromBrowserPreference($preferences)
-    {
-        if (empty($preferences)) {
-            return false;
-        }
-
-        $preferencesArray = explode(',', $preferences);
-
-        if (count($preferencesArray) > 0) {
-            foreach ($preferencesArray as $pref) {
-                $s = strpos($pref, ';');
-                if ($s >= 2) {
-                    $code = substr($pref, 0, $s);
-                } else {
-                    $code = $pref;
-                }
-                $name = self::getLanguageFromIsocode($code);
-
-                if (false !== $name) {
-                    return $name;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Convert a string to a valid PHP camelCase variable name.
      *
      * @param string $string
@@ -487,7 +393,7 @@ class SubLanguageManager
      * @param int $languageId
      * @return array [childIsoCode, parentIsoCode]
      *
-     * @deprecated Only called by searchTranslations(), which nothing calls.
+     * Called by searchTranslations(), which public/main/admin/sub_language.php uses.
      */
     public static function getIsoCodes($languageId)
     {
@@ -519,7 +425,7 @@ class SubLanguageManager
      *
      * @return array An array of matched translations.
      *
-     * @deprecated No caller left in public/ or src/.
+     * Called by public/main/admin/sub_language.php (search_language_term()).
      */
     public static function searchTranslations($term, $languageId): array
     {

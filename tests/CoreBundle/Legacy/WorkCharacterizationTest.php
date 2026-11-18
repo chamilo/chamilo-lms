@@ -741,24 +741,6 @@ final class WorkCharacterizationTest extends KernelTestCase
         $this->assertSame(1, (int) getWorkCommentCountFromParent($folder, ['real_id' => 2], 0));
     }
 
-    public function testLastWorkStudentFromParentReturnsAWorkThatHasCommentsInThatCourse(): void
-    {
-        $folder = $this->folder();
-        $commented = $this->work(['parent_id' => $folder]);
-        $silent = $this->work(['parent_id' => $folder]);
-        $elsewhere = $this->work(['parent_id' => $folder]);
-        $this->publish($commented, 1);
-        $this->publish($silent, 1);
-        $this->publish($elsewhere, 2);
-        $this->comment($commented);
-        $this->comment($elsewhere);
-
-        // DEAD: no caller; "last" is really the oldest commented work (ascending sent_date), see the @deprecated note.
-        $this->assertSame($commented, (int) getLastWorkStudentFromParent($folder, ['real_id' => 1], 0)['iid']);
-        $this->assertSame($elsewhere, (int) getLastWorkStudentFromParent($folder, ['real_id' => 2], 0)['iid']);
-        $this->assertSame([], getLastWorkStudentFromParent($this->folder(), ['real_id' => 1], 0));
-    }
-
     public function testLastWorkStudentFromParentByUserReturnsTheNewestOfThatUserWithRoundedScore(): void
     {
         $folder = $this->folder(['qualification' => 10]);
@@ -902,29 +884,6 @@ final class WorkCharacterizationTest extends KernelTestCase
         );
     }
 
-    public function testUpdateWorkUrlReturnsMinusOneForEmptyOrUnknownId(): void
-    {
-        $this->setContext($this->admin(), $this->course(1));
-
-        $this->assertSame(-1, updateWorkUrl(0, '/wk/', 0));
-        $this->assertSame(-1, updateWorkUrl(2147483000, '/wk/', 0));
-    }
-
-    public function testUpdateWorkUrlOfExistingWorkFailsOnMissingUrlColumn(): void
-    {
-        $this->setContext($this->admin(), $this->course(1));
-        $work = $this->work();
-
-        // Deprecated, not repaired: it is tied to the removed file-url model and nothing calls it, so it keeps
-        // failing on the missing "url" column (undefined array key) until it is removed.
-        try {
-            updateWorkUrl($work, '/wk/', 0);
-            $this->fail('Expected an undefined array key "url"');
-        } catch (Throwable $e) {
-            $this->assertStringContainsString('Undefined array key "url"', $e->getMessage());
-        }
-    }
-
     /**
      * @dataProvider brokenAgainstCurrentSchema
      */
@@ -932,9 +891,8 @@ final class WorkCharacterizationTest extends KernelTestCase
     {
         $this->setContext($this->admin(), $this->course(1));
 
-        // These four are @deprecated and left as is: they belong to the removed file-url model (url / id columns),
-        // nothing calls them but get_work_path() in the compilatio plugin, and there is no schema-faithful meaning to
-        // repair them to. They fail until removed.
+        // These belong to the removed file-url model (url / id columns) and there is no schema-faithful meaning to
+        // repair them to: they fail as long as they exist.
         $this->expectException(Throwable::class);
         $call();
     }
@@ -947,9 +905,7 @@ final class WorkCharacterizationTest extends KernelTestCase
     public static function brokenAgainstCurrentSchema(): array
     {
         return [
-            // c_student_publication has no "url" / "id" column any more.
-            'get_work_data_by_path' => [static fn () => get_work_data_by_path('/wk_x', 1)],
-            'is_work_exist_by_url' => [static fn () => is_work_exist_by_url('/wk_x')],
+            // c_student_publication has no "url" / "id" column any more; only the compilatio plugin calls it.
             'get_work_path' => [static fn () => get_work_path(1)],
         ];
     }

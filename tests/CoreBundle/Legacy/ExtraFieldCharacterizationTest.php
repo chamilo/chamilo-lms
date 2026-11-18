@@ -25,8 +25,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  * Liveness: LIVE are get_all, get_handler_field_info_by_field_variable, getFieldInfoByFieldId, save, update,
  * delete, get_max_field_order (through clean_parameters), getAllGrid, get_count, getDataAndFormattedValues,
  * getExtraFieldRules, get_where_clause, getAllUserPerTag, getAllSkillPerTag, searchOptionsFromTags,
- * get_handler_field_info_by_tags. DEAD (no caller under public/ src/ plugin/): get_all_extra_field_by_type,
- * get_handler_extra_data.
+ * get_handler_field_info_by_tags, get_handler_extra_data (through addElements).
  *
  * The test database already carries installer extra fields: every assertion filters on fixture variables
  * prefixed "xf_". Fixtures are raw prepared statements.
@@ -192,19 +191,6 @@ class ExtraFieldCharacterizationTest extends AbstractApiTest
         $this->assertSame(['x', 'y'], array_values(array_column($info['options'], 'option_value')));
         $this->assertFalse((new ExtraField('user'))->getFieldInfoByFieldId($id), 'Another item type: not found.');
         $this->assertFalse((new ExtraField('session'))->getFieldInfoByFieldId(999999999));
-    }
-
-    public function testGetAllExtraFieldByTypeReturnsTheIdsOfTheFieldsOfOneValueType(): void
-    {
-        $text = $this->field(self::COURSE, 'bytype_text', ExtraField::FIELD_TYPE_TEXT);
-        $date = $this->field(self::COURSE, 'bytype_date', ExtraField::FIELD_TYPE_DATE);
-        $otherType = $this->field(self::USER, 'bytype_user_date', ExtraField::FIELD_TYPE_DATE);
-
-        $ids = (new ExtraField('course'))->get_all_extra_field_by_type((string) ExtraField::FIELD_TYPE_DATE);
-
-        $this->assertContains((string) $date, array_map('strval', $ids));
-        $this->assertNotContains((string) $text, array_map('strval', $ids));
-        $this->assertNotContains((string) $otherType, array_map('strval', $ids));
     }
 
     public function testGetHandlerFieldInfoByTagsListsTheTagsOfTheFieldOrderedById(): void

@@ -676,43 +676,6 @@ class ExtraFieldValue extends Model
     }
 
     /**
-     * @deprecated No caller left in the codebase.
-     *
-     * @param string $tag
-     * @param int    $field_id
-     * @param int    $limit
-     *
-     * @return array
-     */
-    public function searchValuesByField($tag, $field_id, $limit = 10)
-    {
-        $field_id = (int) $field_id;
-        $limit = (int) $limit;
-        $tag = Database::escape_string($tag);
-
-        $extraFieldType = $this->getExtraField()->getItemType();
-
-        $sql = "SELECT DISTINCT s.field_value, s.field_id
-                FROM {$this->table} s
-                INNER JOIN {$this->table_handler_field} sf
-                ON (s.field_id = sf.id)
-                WHERE
-                    field_id = $field_id AND
-                    field_value LIKE '%$tag%' AND
-                    sf.item_type = ".$extraFieldType."
-                ORDER BY field_value
-                LIMIT 0, $limit
-                ";
-        $result = Database::query($sql);
-        $values = [];
-        if (Database::num_rows($result)) {
-            $values = Database::store_result($result, 'ASSOC');
-        }
-
-        return $values;
-    }
-
-    /**
      * Gets a structured array of the original item and its extra values, using
      * a specific original item and a field name (like "branch", or "birthdate").
      *

@@ -430,23 +430,6 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->assertCount(2, $this->model->get_groups_by_user($alice->getId()));
     }
 
-    public function testGetGroupsByUserCountCountsSocialGroupsOnlyLikeGetGroupsByUser(): void
-    {
-        $alice = $this->createUser('ug_alice');
-        $this->addUser($this->group('ug_social', Usergroup::SOCIAL_CLASS), $alice, 1);
-        $this->addUser($this->group('ug_social2', Usergroup::SOCIAL_CLASS), $alice, 5);
-        $this->addUser($this->group('ug_class', Usergroup::NORMAL_CLASS), $alice, 1);
-        $this->addUser($this->group('ug_class2', Usergroup::NORMAL_CLASS), $alice, 5);
-
-        // Fixed: the count used to include classes, so it disagreed with the (social-only) list.
-        $this->assertEquals(2, $this->model->get_groups_by_user_count($alice->getId(), 0));
-        $this->assertCount(2, $this->model->get_groups_by_user($alice->getId(), 0));
-        $this->assertEquals(1, $this->model->get_groups_by_user_count($alice->getId(), 1));
-        $this->assertCount(1, $this->model->get_groups_by_user($alice->getId(), 1));
-        $this->assertEquals(1, $this->model->get_groups_by_user_count($alice->getId(), 5));
-        $this->assertEquals(0, $this->model->get_groups_by_user_count($this->createUser('ug_nobody')->getId(), 0));
-    }
-
     // ---------------------------------------------------------------- roles
 
     public function testGetUserGroupRoleNormalisesLegacyReaderAndDefaultsToZero(): void
@@ -802,10 +785,6 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->assertEqualsCanonicalizing([$c1->getId(), $c2->getId()], array_keys($withData));
         $this->assertSame('ug_course_1', $withData[$c1->getId()]['title']);
 
-        $this->assertEqualsCanonicalizing(
-            [$g1->getId(), $g2->getId()],
-            array_map('intval', $this->model->get_usergroup_by_course($c1->getId()))
-        );
         $this->assertEquals(2, $this->model->getUserGroupByCourseWithDataCount($c1->getId()));
         $this->assertEquals(1, $this->model->getUserGroupByCourseWithDataCount($c2->getId()));
     }

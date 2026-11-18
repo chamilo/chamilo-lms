@@ -10,6 +10,7 @@ use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\QueryParameter;
 use Chamilo\CoreBundle\State\CourseAutomation\CourseAutomationProcessor;
@@ -44,6 +45,14 @@ use Symfony\Component\Serializer\Attribute\Groups;
         ),
         new Delete(
             uriTemplate: '/course-automation/actions/{actionId}',
+            // Without it, the operation expects an "id" variable that the URL does not have
+            uriVariables: [
+                'actionId' => new Link(
+                    identifiers: ['actionId'],
+                    compositeIdentifier: false,
+                    schema: ['type' => 'integer'],
+                ),
+            ],
             name: 'delete_course_automation_action',
             requirements: ['actionId' => '\d+'],
             read: false,

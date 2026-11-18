@@ -167,7 +167,8 @@ Supported import:
 - Multiple answer questions.
 - Fill in blanks questions.
 - Free answer questions.
-- Matching questions (imported as Matching, also when exported from Matching draggable).
+- Matching questions.
+- Matching draggable questions exported by Chamilo (requires the Chamilo QTI item label; otherwise imported as Matching).
 
 Unsupported QTI entries are skipped, matching the previous importer behavior.
 TEXT;

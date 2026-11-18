@@ -110,11 +110,17 @@ const sortStorageKey = computed(() =>
 )
 const sortField = ref("user.fullName")
 const sortOrder = ref(1)
+let userChoseSort = false
 
 watch(
   sortStorageKey,
   (key) => {
     if (!key) return
+    if (userChoseSort) {
+      // The key arrived after the user already sorted: keep that choice and store it under the key.
+      saveAssignmentSort(key, sortField.value, sortOrder.value)
+      return
+    }
     const saved = loadAssignmentSort(key, sortableFields, "user.fullName", 1)
     sortField.value = saved.field
     sortOrder.value = saved.order
@@ -162,6 +168,7 @@ function onPage(event) {
 function onSort(event) {
   if (!sortableFields.includes(event.sortField)) return
 
+  userChoseSort = true
   sortField.value = event.sortField
   sortOrder.value = event.sortOrder === -1 ? -1 : 1
   saveAssignmentSort(sortStorageKey.value, sortField.value, sortOrder.value)

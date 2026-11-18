@@ -18,7 +18,7 @@ When("I import a disposable Hot Potatoes archive", async ({ page }) => {
   const requestFinished = page.waitForResponse((response) =>
     response.url().includes("/api/hotpotatoes/archives/import") && response.request().method() === "POST",
   )
-  await page.getByRole("button", { name: "Import", exact: true }).click()
+  await page.getByRole("button", { name: /(^|\s)Import$/ }).click()
   const response = await requestFinished
   expect(response.status()).toBe(201)
   const result = await response.json()
@@ -32,7 +32,7 @@ Then("the disposable Hot Potatoes archive should be listed", async ({ page }) =>
 
 When("I remove the disposable Hot Potatoes archive", async ({ page }) => {
   await row(page).getByRole("button", { name: "Delete" }).click()
-  await page.getByRole("button", { name: "Yes", exact: true }).click()
+  await page.getByRole("button", { name: /(^|\s)Yes$/ }).click()
 })
 
 Then("the disposable Hot Potatoes archive should no longer be listed", async ({ page }) => {
@@ -46,7 +46,8 @@ When("I complete and inspect the disposable Hot Potatoes attempt", async ({ page
     /\/api\/hotpotatoes\/archives\/\d+\/attempts\?/.test(response.url()) &&
     response.request().method() === "POST",
   )
-  await row(page).getByRole("button", { name: "Open" }).click()
+  // The icon-only "Open" control is a router link without an accessible name.
+  await row(page).locator(`a[href*="/hotpotatoes/${importedIds.get(page)}"]`).click()
   const startResponse = await started
   expect(startResponse.status()).toBe(201)
   const attempt = await startResponse.json()
@@ -74,7 +75,7 @@ When("I complete and inspect the disposable Hot Potatoes attempt", async ({ page
   const listResponse = await listResponsePromise
   expect(listResponse.ok()).toBeTruthy()
   const listed = await listResponse.json()
-  expect(listed.graded).toBe(false)
+  expect(listed.automaticallyGraded).toBe(false)
   expect(listed.items.some((record: { id: number; status: string }) =>
     record.id === Number(attempt.id) && record.status === "completed",
   )).toBeTruthy()

@@ -121,10 +121,11 @@ class TestCategory
 
         if ($category) {
             // remove link between question and category
-            // TODO(db-neutral): c_quiz_question_rel_category is a many-to-many join table without an entity, DQL cannot delete from it
-            $sql = "DELETE FROM $tbl_question_rel_cat
-                    WHERE category_id = $id ";
-            Database::query($sql);
+            Container::getEntityManager()->getConnection()->createQueryBuilder()
+                ->delete($tbl_question_rel_cat)
+                ->where('category_id = :categoryId')
+                ->setParameter('categoryId', $id)
+                ->executeStatement();
 
             $repo = Container::getQuestionCategoryRepository();
             $category = $repo->find($id);
@@ -1076,10 +1077,12 @@ class TestCategory
             $questionId > 0 &&
             $courseId > 0
         ) {
-            // TODO(db-neutral): INSERT into the entity-less join table c_quiz_question_rel_category (DQL has no INSERT)
-            $sql = "INSERT INTO $table (question_id, category_id)
-                    VALUES (".intval($questionId).", ".intval($categoryId).")";
-            Database::query($sql);
+            Container::getEntityManager()->getConnection()->createQueryBuilder()
+                ->insert($table)
+                ->values(['question_id' => ':questionId', 'category_id' => ':categoryId'])
+                ->setParameter('questionId', (int) $questionId)
+                ->setParameter('categoryId', (int) $categoryId)
+                ->executeStatement();
             $id = Database::insert_id();
 
             return $id;

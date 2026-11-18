@@ -12,12 +12,14 @@ use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
+use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use ZipArchive;
@@ -44,6 +46,15 @@ final readonly class ExerciseQti2ImportService
     private const FREE_ANSWER = 5;
     private const MULTIPLE_ANSWER_COMBINATION = 9;
     private const UNIQUE_ANSWER_NO_OPTION = 10;
+    private const UNIQUE_ANSWER_IMAGE = 17;
+    private const HOTSPOT = 6;
+    private const GRAPHIC_ORDER = 7;
+    private const ORAL = 13;
+    private const UPLOAD = 23;
+    private const MULTIPLE_ANSWER_TRUE_FALSE = 11;
+    private const MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE = 12;
+    private const MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY = 22;
+    private const MULTIPLE_ANSWER_DROPDOWN = 29;
     private const DRAGGABLE = 18;
     private const MATCHING_DRAGGABLE = 19;
 
@@ -58,13 +69,23 @@ final readonly class ExerciseQti2ImportService
         self::MATCHING => 'Matching',
         self::MULTIPLE_ANSWER_COMBINATION => 'Exact combination',
         self::UNIQUE_ANSWER_NO_OPTION => 'Unique answer with unknown',
+        self::UNIQUE_ANSWER_IMAGE => 'Unique answer with images',
+        self::MULTIPLE_ANSWER_DROPDOWN => 'Multiple answer dropdown',
+        self::MULTIPLE_ANSWER_TRUE_FALSE => 'Multiple answer true/false',
+        self::MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE => 'Multiple answer combination true/false',
+        self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY => 'True false degree of certainty',
         self::MATCHING_DRAGGABLE => 'Matching draggable',
         self::DRAGGABLE => 'Sequence ordering',
+        self::HOTSPOT => 'Hotspot',
+        self::GRAPHIC_ORDER => 'Graphic ordering (legacy)',
+        self::ORAL => 'Oral expression',
+        self::UPLOAD => 'Upload answer',
     ];
 
     public function __construct(
         private EntityManagerInterface $entityManager,
         private CQuizQuestionCategoryRepository $questionCategoryRepository,
+        private ?Qti2QuestionImageMedia $questionImageMedia = null,
     ) {}
 
     /**
@@ -90,20 +111,66 @@ final readonly class ExerciseQti2ImportService
             throw new BadRequestHttpException('No valid QTI2 questions were found in the uploaded file.');
         }
 
-        $quiz = $this->createExercise(
-            '' !== $package['name'] ? $package['name'] : $this->buildExerciseTitle($uploadedFile),
-            $course,
-            $session,
-            (string) $package['description'],
-            'Random' === $package['orderType'],
-        );
-
-        $result = $this->createQuestions($quiz, $package['questions'], $course, $session);
-        if (0 === $result['importedCount']) {
-            throw new BadRequestHttpException('No valid QTI2 questions were imported.');
+        $archive = new ZipArchive();
+        if (true !== $archive->open($uploadedFile->getPathname())) {
+            throw new BadRequestHttpException('The uploaded ZIP file could not be opened.');
         }
 
-        $this->entityManager->flush();
+        try {
+            $mediaCount = 0;
+            $mediaBytes = 0;
+            for ($index = 0; $index < $archive->numFiles; ++$index) {
+                $entry = $archive->statIndex($index);
+                if (!\is_array($entry) || !str_starts_with((string) ($entry['name'] ?? ''), 'qti_media/')) {
+                    continue;
+                }
+                ++$mediaCount;
+                $mediaBytes += (int) ($entry['size'] ?? 0);
+                if ($mediaCount > 40 || $mediaBytes > 20 * 1024 * 1024) {
+                    throw new BadRequestHttpException('The QTI image archive exceeds supported limits.');
+                }
+            }
+            foreach ($package['questions'] as $questionData) {
+                $specialType = (int) ($questionData['type'] ?? 0);
+                if (\in_array($specialType, [self::HOTSPOT, self::GRAPHIC_ORDER], true)
+                    && \is_array($questionData['special_item'] ?? null)) {
+                    Qti2SpecialQuestionItem::validateImage($questionData['special_item'], $archive);
+                }
+                if (self::UNIQUE_ANSWER_IMAGE !== $specialType) {
+                    continue;
+                }
+                if (null === $this->questionImageMedia) {
+                    throw new BadRequestHttpException('QTI image import requires the image storage service.');
+                }
+                $hasImage = false;
+                foreach ($questionData['answer'] ?? [] as $answer) {
+                    $html = (string) ($answer['value'] ?? '');
+                    $hasImage = $hasImage || false !== stripos($html, '<img');
+                    $this->questionImageMedia->validateImportedHtml($html, $archive);
+                }
+                if (!$hasImage) {
+                    throw new BadRequestHttpException('A QTI image-choice question has no images.');
+                }
+            }
+            $quiz = $this->createExercise(
+                '' !== $package['name'] ? $package['name'] : $this->buildExerciseTitle($uploadedFile),
+                $course,
+                $session,
+                (string) $package['description'],
+                'Random' === $package['orderType'],
+            );
+
+            $result = $this->createQuestions($quiz, $package['questions'], $course, $session, $archive);
+            if (0 === $result['importedCount']) {
+                throw new BadRequestHttpException('No valid QTI2 questions were imported.');
+            }
+
+            $this->entityManager->flush();
+        } catch (InvalidArgumentException $error) {
+            throw new BadRequestHttpException('QTI image import failed: '.$error->getMessage(), $error);
+        } finally {
+            $archive->close();
+        }
 
         return [
             'quiz' => $quiz,
@@ -134,7 +201,7 @@ final readonly class ExerciseQti2ImportService
         try {
             for ($index = 0; $index < $zip->numFiles; ++$index) {
                 $name = (string) $zip->getNameIndex($index);
-                if ('' === $name || str_ends_with($name, '/')) {
+                if ('' === $name || str_ends_with($name, '/') || str_starts_with($name, 'qti_media/')) {
                     continue;
                 }
 
@@ -246,6 +313,9 @@ final readonly class ExerciseQti2ImportService
                         'type' => null,
                         'matching_draggable' => Qti2MatchingTypeMarker::isDraggable($node->getAttribute('label')),
                         'unique_unknown' => Qti2UniqueAnswerUnknownMarker::isMarked($node->getAttribute('label')),
+                        'unique_answer_image' => Qti2QuestionImageMedia::LABEL === $node->getAttribute('label'),
+                        'multiple_dropdown' => 'chamilo:multiple-answer-dropdown' === $node->getAttribute('label'),
+                        'true_false_type' => Qti2TrueFalseItem::type($node->getAttribute('label')),
                         'subtype' => null,
                         'description' => null,
                         'response_text' => null,
@@ -268,6 +338,10 @@ final readonly class ExerciseQti2ImportService
                     if (!$this->hasCurrentQuestion($package, $currentQuestionIdent)) {
                         break;
                     }
+                    if (self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === ($package['questions'][$currentQuestionIdent]['true_false_type'] ?? null)
+                        && str_ends_with($node->getAttribute('identifier'), Qti2TrueFalseItem::CERTAINTY_SUFFIX)) {
+                        break;
+                    }
 
                     $currentAnswerId = $node->getAttribute('identifier');
                     $cardinality = $node->getAttribute('cardinality');
@@ -280,11 +354,15 @@ final readonly class ExerciseQti2ImportService
                     }
 
                     if ('multiple' === $cardinality) {
-                        $package['questions'][$currentQuestionIdent]['type'] = self::MULTIPLE_ANSWER;
+                        $package['questions'][$currentQuestionIdent]['type'] = !empty($package['questions'][$currentQuestionIdent]['multiple_dropdown'])
+                            ? self::MULTIPLE_ANSWER_DROPDOWN
+                            : self::MULTIPLE_ANSWER;
                     } elseif ('single' === $cardinality) {
                         $package['questions'][$currentQuestionIdent]['type'] = !empty($package['questions'][$currentQuestionIdent]['unique_unknown'])
                             ? self::UNIQUE_ANSWER_NO_OPTION
-                            : self::UNIQUE_ANSWER;
+                            : (!empty($package['questions'][$currentQuestionIdent]['unique_answer_image'])
+                                ? self::UNIQUE_ANSWER_IMAGE
+                                : self::UNIQUE_ANSWER);
                     }
 
                     break;
@@ -354,11 +432,21 @@ final readonly class ExerciseQti2ImportService
 
                 case 'matchInteraction':
                     if ($this->hasCurrentQuestion($package, $currentQuestionIdent)) {
+                        if (self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === ($package['questions'][$currentQuestionIdent]['true_false_type'] ?? null)
+                            && str_ends_with($node->getAttribute('responseIdentifier'), Qti2TrueFalseItem::CERTAINTY_SUFFIX)) {
+                            break;
+                        }
                         // Restore type 19 only when the exporter included Chamilo's QTI item label.
-                        $package['questions'][$currentQuestionIdent]['type'] =
-                            !empty($package['questions'][$currentQuestionIdent]['matching_draggable'])
-                                ? self::MATCHING_DRAGGABLE
-                                : self::MATCHING;
+                        $markedType = $package['questions'][$currentQuestionIdent]['true_false_type'] ?? null;
+                        if (null !== $markedType) {
+                            $package['questions'][$currentQuestionIdent]['type'] = $markedType;
+                            $package['questions'][$currentQuestionIdent]['true_false_items'] = Qti2TrueFalseItem::read($node, $markedType);
+                        } else {
+                            $package['questions'][$currentQuestionIdent]['type'] =
+                                !empty($package['questions'][$currentQuestionIdent]['matching_draggable'])
+                                    ? self::MATCHING_DRAGGABLE
+                                    : self::MATCHING;
+                        }
                     }
 
                     break;
@@ -540,6 +628,26 @@ final readonly class ExerciseQti2ImportService
             }
         }
 
+        foreach ($document->getElementsByTagName('assessmentItem') as $item) {
+            if (!$item instanceof DOMElement) {
+                continue;
+            }
+            $identifier = $item->getAttribute('identifier');
+            if ('' === $identifier || !isset($package['questions'][$identifier])) {
+                continue;
+            }
+            $special = Qti2SpecialQuestionItem::read($item);
+            if (null !== $special) {
+                $package['questions'][$identifier]['type'] = $special['type'];
+                $package['questions'][$identifier]['special_item'] = $special;
+            } elseif (str_starts_with($item->getAttribute('label'), 'chamilo:hotspot')
+                || \in_array($item->getAttribute('label'), ['chamilo:oral-expression', 'chamilo:upload-answer'], true)
+                || $item->getElementsByTagName('hotspotInteraction')->length > 0
+                || $item->getElementsByTagName('graphicOrderInteraction')->length > 0
+                || $item->getElementsByTagName('uploadInteraction')->length > 0) {
+                $package['questions'][$identifier]['special_item_invalid'] = true;
+            }
+        }
         $this->postProcessFibQuestions($package['questions']);
     }
 
@@ -756,7 +864,7 @@ final readonly class ExerciseQti2ImportService
      *
      * @return array{importedCount: int, skippedCount: int, errors: array<int, string>}
      */
-    private function createQuestions(CQuiz $quiz, array $questions, Course $course, ?Session $session): array
+    private function createQuestions(CQuiz $quiz, array $questions, Course $course, ?Session $session, ?ZipArchive $archive = null): array
     {
         $importedCount = 0;
         $skippedCount = 0;
@@ -765,6 +873,32 @@ final readonly class ExerciseQti2ImportService
 
         foreach ($questions as $identifier => $questionData) {
             $questionType = (int) ($questionData['type'] ?? 0);
+            if (!empty($questionData['special_item_invalid'])) {
+                ++$skippedCount;
+                $errors[] = \sprintf('QTI question %s skipped because its special interaction is invalid.', (string) $identifier);
+
+                continue;
+            }
+            if (null !== ($questionData['true_false_type'] ?? null)
+                && (!\in_array($questionType, [self::MULTIPLE_ANSWER_TRUE_FALSE, self::MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE, self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY], true)
+                    || !\is_array($questionData['true_false_items'] ?? null))) {
+                ++$skippedCount;
+                $errors[] = \sprintf('QTI question %s skipped because its True/False item is invalid.', (string) $identifier);
+
+                continue;
+            }
+            if (!empty($questionData['unique_answer_image']) && self::UNIQUE_ANSWER_IMAGE !== $questionType) {
+                ++$skippedCount;
+                $errors[] = \sprintf('QTI question %s skipped because its image-choice structure is invalid.', (string) $identifier);
+
+                continue;
+            }
+            if (!empty($questionData['multiple_dropdown']) && self::MULTIPLE_ANSWER_DROPDOWN !== $questionType) {
+                ++$skippedCount;
+                $errors[] = \sprintf('QTI question %s skipped because its multiple-answer dropdown is invalid.', (string) $identifier);
+
+                continue;
+            }
             if (!empty($questionData['unique_unknown'])
                 && (self::UNIQUE_ANSWER_NO_OPTION !== $questionType
                     || !Qti2UniqueAnswerUnknownMarker::hasValidUnknownChoice($questionData))) {
@@ -805,6 +939,14 @@ final readonly class ExerciseQti2ImportService
                 }
             }
 
+            $special = $questionData['special_item'] ?? null;
+            if (\in_array($questionType, [self::HOTSPOT, self::GRAPHIC_ORDER, self::ORAL, self::UPLOAD], true)
+                && (!\is_array($special) || (int) ($special['type'] ?? 0) !== $questionType)) {
+                ++$skippedCount;
+                $errors[] = \sprintf('QTI question %s skipped because its graphic or upload interaction is invalid.', (string) $identifier);
+
+                continue;
+            }
             $description = (string) ($questionData['description'] ?? '');
             $question = $this->createQuestion($quiz, $course, $session, $title, $description, $questionType, 0.0, $questionOrder);
             $category = $this->findOrCreateQuestionCategory((string) ($questionData['category'] ?? ''), $course, $session);
@@ -821,13 +963,41 @@ final readonly class ExerciseQti2ImportService
                 $this->createSingleAnswer($question, $answerString, 0, '', $totalWeight, 1);
             } elseif (self::FREE_ANSWER === $questionType) {
                 $question->setPonderation($this->scoreFromValue($questionData['weighting'][0] ?? 0));
+            } elseif (\in_array($questionType, [self::ORAL, self::UPLOAD], true)) {
+                $question->setPonderation((float) $special['score']);
+            } elseif (\in_array($questionType, [self::HOTSPOT, self::GRAPHIC_ORDER], true)) {
+                if (null === $archive || null === $this->questionImageMedia) {
+                    throw new BadRequestHttpException('QTI hotspot import requires the question image storage service.');
+                }
+                $this->entityManager->flush();
+                $this->questionImageMedia->importQuestionImage($question, $archive, (string) $special['image']);
+                $totalWeight = 0.0;
+                foreach ($special['zones'] as $position => $zone) {
+                    $answer = $this->createSingleAnswer($question, $zone['answer'], 0, '', (float) $zone['score'], $position + 1);
+                    $answer->setHotspotType($zone['hotspotType'])->setHotspotCoordinates($zone['coordinates']);
+                    $totalWeight += (float) $zone['score'];
+                }
+                $question->setPonderation($totalWeight > 0 ? $totalWeight : (float) $special['score']);
             } elseif (null !== $matchingRows) {
                 $this->createMatchingAnswers($question, $matchingRows);
             } elseif (self::DRAGGABLE === $questionType) {
                 $this->createDraggableAnswers($question, $questionData['ordered_items']);
+            } elseif (\in_array($questionType, [self::MULTIPLE_ANSWER_TRUE_FALSE, self::MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE, self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY], true)) {
+                $this->createTrueFalseAnswers($question, $questionData['true_false_items']);
             } elseif (self::MULTIPLE_ANSWER_COMBINATION === $questionType) {
                 $this->createExactCombinationAnswers($question, $questionData);
             } else {
+                if (self::UNIQUE_ANSWER_IMAGE === $questionType) {
+                    if (null === $archive || null === $this->questionImageMedia) {
+                        throw new BadRequestHttpException('QTI image import requires the image storage service.');
+                    }
+                    $this->entityManager->flush();
+                    foreach ($questionData['answer'] ?? [] as $answerId => $answer) {
+                        $questionData['answer'][$answerId]['value'] = QtiImportHtmlSanitizer::sanitize(
+                            $this->questionImageMedia->importHtml((string) ($answer['value'] ?? ''), $archive, $question)
+                        );
+                    }
+                }
                 $this->createChoiceAnswers($question, $questionData);
             }
 
@@ -882,6 +1052,43 @@ final readonly class ExerciseQti2ImportService
     }
 
     /**
+     * @param array{items: list<array{answer: string, choice: int}>, scores: array{float, float, float}, score: float} $data
+     */
+    private function createTrueFalseAnswers(CQuizQuestion $question, array $data): void
+    {
+        $optionIds = [];
+        $certainty = self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === (int) $question->getType();
+        $titles = $certainty
+            ? [1 => 'True', 2 => 'False', 3 => '50%', 4 => '60%', 5 => '70%', 6 => '80%', 7 => '90%', 8 => '100%']
+            : [1 => 'True', 2 => 'False', 3 => "Don't know"];
+        foreach ($titles as $position => $title) {
+            $option = new CQuizQuestionOption();
+            $option->setQuestion($question)->setTitle($title)->setPosition($position);
+            $this->entityManager->persist($option);
+            $optionIds[$position] = $option;
+        }
+        // Answer.correct stores the actual option iid rather than its position.
+        $this->entityManager->flush();
+        $combination = self::MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE === (int) $question->getType();
+        $total = $combination ? $data['score'] : $data['scores'][0] * \count($data['items']);
+        $question->setPonderation($total);
+        if (!$combination) {
+            $question->setExtra(implode(':', array_map('strval', $data['scores'])));
+        }
+        foreach ($data['items'] as $index => $item) {
+            $choiceId = (int) $optionIds[$item['choice']]->getIid();
+            $this->createSingleAnswer(
+                $question,
+                $item['answer'],
+                $choiceId,
+                '',
+                $combination && 0 === $index ? $data['score'] : 0.0,
+                $index + 1
+            );
+        }
+    }
+
+    /**
      * @param array<string, mixed> $questionData
      */
     private function createChoiceAnswers(CQuizQuestion $question, array $questionData): void
@@ -895,7 +1102,9 @@ final readonly class ExerciseQti2ImportService
 
         foreach ($answerList as $key => $answerData) {
             $answerData = \is_array($answerData) ? $answerData : [];
-            $answerValue = $this->formatHtml((string) ($answerData['value'] ?? ''));
+            $answerValue = self::UNIQUE_ANSWER_IMAGE === (int) $question->getType()
+                ? QtiImportHtmlSanitizer::sanitize((string) ($answerData['value'] ?? ''))
+                : $this->formatHtml((string) ($answerData['value'] ?? ''));
             $answerFeedback = $this->formatHtml((string) ($answerData['feedback'] ?? ''));
             $isCorrect = \in_array((string) $key, array_map('strval', $correctAnswerIds), true);
             $weight = $defaultWeight;

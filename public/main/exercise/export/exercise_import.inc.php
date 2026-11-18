@@ -5,9 +5,11 @@
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Service\Exercise\Qti2ExactCombinationWriter;
 use Chamilo\CoreBundle\Service\Exercise\Qti2MatchingTypeMarker;
+use Chamilo\CoreBundle\Service\Exercise\Qti2TrueFalseItem;
 use Chamilo\CoreBundle\Service\Exercise\Qti2UniqueAnswerUnknownMarker;
 use Chamilo\CoreBundle\Service\Exercise\Qti2OrderingItem;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
 use Chamilo\CoreBundle\Service\Exercise\QtiImportHtmlSanitizer;
 use PhpZip\ZipFile;
 
@@ -197,7 +199,7 @@ function import_exercise($file)
                     continue;
                 }
 
-                if (!in_array($question_array['type'], [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, FREE_ANSWER, FIB, MATCHING, MATCHING_DRAGGABLE, DRAGGABLE], true)) {
+                if (!in_array($question_array['type'], [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, FREE_ANSWER, FIB, MATCHING, MATCHING_DRAGGABLE, DRAGGABLE, MULTIPLE_ANSWER_DROPDOWN, MULTIPLE_ANSWER_TRUE_FALSE, MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE, MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY], true)) {
                     continue;
                 }
 
@@ -217,6 +219,18 @@ function import_exercise($file)
                     }
                 }
 
+                if (null !== ($question_array['true_false_type'] ?? null)
+                    && (!in_array($question_array['type'], [MULTIPLE_ANSWER_TRUE_FALSE, MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE, MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY], true)
+                        || !is_array($question_array['true_false_items'] ?? null))) {
+                    Display::addFlash(Display::return_message('QTI import: an invalid True/False question was skipped.', 'warning'));
+
+                    continue;
+                }
+                if (!empty($question_array['multiple_dropdown']) && MULTIPLE_ANSWER_DROPDOWN !== $question_array['type']) {
+                    Display::addFlash(Display::return_message('QTI import: an invalid multiple-answer dropdown was skipped.', 'warning'));
+
+                    continue;
+                }
                 if (!empty($question_array['unique_unknown'])
                     && (UNIQUE_ANSWER_NO_OPTION !== $question_array['type']
                         || !Qti2UniqueAnswerUnknownMarker::hasValidUnknownChoice($question_array))) {
@@ -274,6 +288,45 @@ function import_exercise($file)
 
                 if ($last_question_id <= 0) {
                     Display::addFlash(Display::return_message('QTI import: question saved without a valid ID.', 'error'));
+                    continue;
+                }
+
+                if (in_array($question->type, [MULTIPLE_ANSWER_TRUE_FALSE, MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE, MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY], true)) {
+                    $data = $question_array['true_false_items'];
+                    $em = Database::getManager();
+                    $questionEntity = $em->getRepository(\Chamilo\CourseBundle\Entity\CQuizQuestion::class)->find($last_question_id);
+                    if (null === $questionEntity) {
+                        Display::addFlash(Display::return_message('QTI import: the True/False question could not be loaded.', 'error'));
+
+                        continue;
+                    }
+                    $optionIds = [];
+                    $optionTitles = MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === $question->type
+                        ? [1 => 'True', 2 => 'False', 3 => '50%', 4 => '60%', 5 => '70%', 6 => '80%', 7 => '90%', 8 => '100%']
+                        : [1 => 'True', 2 => 'False', 3 => "Don't know"];
+                    foreach ($optionTitles as $position => $title) {
+                        $option = new CQuizQuestionOption();
+                        $option->setQuestion($questionEntity)->setTitle($title)->setPosition($position);
+                        $em->persist($option);
+                        $optionIds[$position] = $option;
+                    }
+                    $em->flush();
+                    $combination = MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE === $question->type;
+                    $weight = $combination ? $data['score'] : $data['scores'][0] * count($data['items']);
+                    $questionEntity->setPonderation($weight);
+                    if (!$combination) {
+                        $questionEntity->setExtra(implode(':', array_map('strval', $data['scores'])));
+                    }
+                    foreach ($data['items'] as $index => $item) {
+                        $answerEntity = new CQuizAnswer();
+                        $answerEntity->setQuestion($questionEntity)
+                            ->setAnswer($item['answer'])->setCorrect((int) $optionIds[$item['choice']]->getIid())
+                            ->setComment('')->setPonderation($combination && 0 === $index ? $data['score'] : 0.0)
+                            ->setPosition($index + 1);
+                        $em->persist($answerEntity);
+                    }
+                    $em->flush();
+
                     continue;
                 }
 
@@ -555,6 +608,8 @@ function parseQti2($xmlData)
                     'type' => '',
                     'matching_draggable' => Qti2MatchingTypeMarker::isDraggable($node->getAttribute('label')),
                     'unique_unknown' => Qti2UniqueAnswerUnknownMarker::isMarked($node->getAttribute('label')),
+                    'multiple_dropdown' => 'chamilo:multiple-answer-dropdown' === $node->getAttribute('label'),
+                    'true_false_type' => Qti2TrueFalseItem::type($node->getAttribute('label')),
                     'subtype' => null,
                     'tempdir' => $questionTempDir,
                     'description' => null,
@@ -572,6 +627,10 @@ function parseQti2($xmlData)
 
                 break;
             case 'responseDeclaration':
+                if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === ($exerciseInfo['question'][$currentQuestionIdent]['true_false_type'] ?? null)
+                    && str_ends_with($node->getAttribute('identifier'), Qti2TrueFalseItem::CERTAINTY_SUFFIX)) {
+                    break;
+                }
                 $currentAnswerId = $node->getAttribute('identifier');
                 $cardinalityAttr = $node->getAttribute('cardinality');
                 $cardinality = $cardinalityAttr;
@@ -585,7 +644,9 @@ function parseQti2($xmlData)
                 }
 
                 if ('multiple' === $cardinalityAttr) {
-                    $exerciseInfo['question'][$currentQuestionIdent]['type'] = MCMA;
+                    $exerciseInfo['question'][$currentQuestionIdent]['type'] = !empty($exerciseInfo['question'][$currentQuestionIdent]['multiple_dropdown'])
+                        ? MULTIPLE_ANSWER_DROPDOWN
+                        : MCMA;
                     $cardinality = 'multiple';
                 } elseif ('single' === $cardinalityAttr) {
                     $exerciseInfo['question'][$currentQuestionIdent]['type'] = !empty($exerciseInfo['question'][$currentQuestionIdent]['unique_unknown'])
@@ -640,11 +701,20 @@ function parseQti2($xmlData)
 
                 break;
             case 'matchInteraction':
-                // Preserve Chamilo draggable matching; unmarked QTI remains ordinary matching.
-                $exerciseInfo['question'][$currentQuestionIdent]['type'] =
-                    !empty($exerciseInfo['question'][$currentQuestionIdent]['matching_draggable'])
-                        ? MATCHING_DRAGGABLE
-                        : MATCHING;
+                if (MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY === ($exerciseInfo['question'][$currentQuestionIdent]['true_false_type'] ?? null)
+                    && str_ends_with($node->getAttribute('responseIdentifier'), Qti2TrueFalseItem::CERTAINTY_SUFFIX)) {
+                    break;
+                }
+                $markedType = $exerciseInfo['question'][$currentQuestionIdent]['true_false_type'] ?? null;
+                if (null !== $markedType) {
+                    $exerciseInfo['question'][$currentQuestionIdent]['type'] = $markedType;
+                    $exerciseInfo['question'][$currentQuestionIdent]['true_false_items'] = Qti2TrueFalseItem::read($node, $markedType);
+                } else {
+                    $exerciseInfo['question'][$currentQuestionIdent]['type'] =
+                        !empty($exerciseInfo['question'][$currentQuestionIdent]['matching_draggable'])
+                            ? MATCHING_DRAGGABLE
+                            : MATCHING;
+                }
 
                 break;
             case 'extendedTextInteraction':

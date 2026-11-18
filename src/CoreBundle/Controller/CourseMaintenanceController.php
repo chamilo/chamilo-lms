@@ -32,6 +32,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Throwable;
 use UnserializeApi;
@@ -46,6 +47,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
 {
     private const array IMPORT_ALLOWED_EXTENSIONS = ['zip', 'mbz', 'gz', 'tgz'];
     private const array CC13_ALLOWED_EXTENSIONS = ['imscc', 'zip'];
+    private const string UPLOADED_BACKUPS_SESSION_KEY = 'course_maintenance_uploaded_backups';
 
     private const array LEGACY_SNAPSHOT_TOOLS = [
         'documents',
@@ -166,6 +168,11 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             return $this->jsonError('Archive directory is not writable', 500);
         }
 
+        $session = $req->getSession();
+        $uploaded = (array) $session->get($this->getUploadedBackupsSessionKey(), []);
+        $uploaded[] = $backupId;
+        $session->set($this->getUploadedBackupsSessionKey(), $uploaded);
+
         $this->logDebug('[importUpload] stored', ['backupId' => $backupId]);
 
         return $this->json([
@@ -175,7 +182,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/import/server', name: 'import_server_pick', methods: ['POST'])]
-    public function importServerPick(int $node, Request $req): JsonResponse
+    public function importServerPick(int $node, Request $req, EntityManagerInterface $em): JsonResponse
     {
         $this->setDebugFromRequest($req);
         $payload = $this->getJsonPayload($req);
@@ -200,6 +207,13 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             return $this->jsonError('File not found', 404);
         }
 
+        try {
+            $this->assertBackupSourceAccess($req, $filename, $em);
+        } catch (AccessDeniedException|NotFoundHttpException) {
+            // Same answer as a missing file, so the picker does not reveal which backups exist.
+            return $this->jsonError('File not found', 404);
+        }
+
         $this->logDebug('[importServerPick] ok', ['backupId' => $filename]);
 
         return $this->json(['backupId' => $filename, 'filename' => $filename]);
@@ -211,9 +225,10 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         requirements: ['backupId' => '.+'],
         methods: ['GET']
     )]
-    public function importResources(int $node, string $backupId, Request $req): JsonResponse
+    public function importResources(int $node, string $backupId, Request $req, EntityManagerInterface $em): JsonResponse
     {
         $this->setDebugFromRequest($req);
+        $this->assertBackupSourceAccess($req, $backupId, $em);
 
         $mode = strtolower((string) $req->query->get('mode', 'auto')); // 'auto' | 'dat' | 'moodle'
         $source = ('dat' === $mode) ? 'chamilo' : $mode;
@@ -244,6 +259,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     {
         $this->setDebugFromRequest($req);
         $this->logDebug('[importRestore] begin', ['node' => $node, 'backupId' => $backupId]);
+        $this->assertBackupSourceAccess($req, $backupId, $em);
 
         try {
             $payload = $this->getJsonPayload($req);
@@ -1105,10 +1121,11 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         requirements: ['backupId' => '.+'],
         methods: ['GET']
     )]
-    public function importDiagnose(int $node, string $backupId, Request $req): JsonResponse
+    public function importDiagnose(int $node, string $backupId, Request $req, EntityManagerInterface $em): JsonResponse
     {
         $this->setDebugFromRequest($req);
         $this->logDebug('[importDiagnose] begin', ['node' => $node, 'backupId' => $backupId]);
+        $this->assertBackupSourceAccess($req, $backupId, $em);
 
         try {
             $path = $this->resolveBackupPath($backupId);
@@ -1213,6 +1230,52 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         }
 
         $this->denyAccessUnlessGranted(CourseVoter::VIEW, $course);
+    }
+
+    /**
+     * Importing a backup copies its content into the destination course, so it is only allowed for
+     * a backup the user uploaded in this session, or for one made from a course the user can view
+     * (the copy flow's source-course check). The source course is read from the course code stored
+     * in the backup's course_info.dat, not from the file name. A backup whose source course cannot
+     * be resolved (a Moodle package, a course that no longer exists) is left to platform admins.
+     */
+    private function assertBackupSourceAccess(Request $req, string $backupId, EntityManagerInterface $em): void
+    {
+        $uploaded = (array) $req->getSession()->get($this->getUploadedBackupsSessionKey(), []);
+        if (\in_array(basename($backupId), $uploaded, true) || $this->isGranted('ROLE_ADMIN')) {
+            return;
+        }
+
+        $courseCode = $this->readBackupCourseCode($this->resolveBackupPath($backupId));
+        if ('' === $courseCode) {
+            throw $this->createAccessDeniedException('The source course of this backup cannot be verified.');
+        }
+
+        $this->assertSourceCourseAccess($courseCode, $em);
+    }
+
+    /**
+     * Per user, as the session survives a login (session fixation strategy "migrate").
+     */
+    private function getUploadedBackupsSessionKey(): string
+    {
+        return self::UPLOADED_BACKUPS_SESSION_KEY.'/'.$this->getUser()?->getUserIdentifier();
+    }
+
+    private function readBackupCourseCode(string $path): string
+    {
+        if (!is_file($path)) {
+            return '';
+        }
+
+        $ci = $this->readCourseInfoFromZip($path);
+        if (empty($ci['ok'])) {
+            return '';
+        }
+
+        $course = $this->decodeCourseInfo((string) $ci['data'])['value'] ?? null;
+
+        return \is_object($course) ? trim((string) ($course->code ?? '')) : '';
     }
 
     /**

@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Service\Exercise\Qti2ExactCombinationWriter;
 use Chamilo\CoreBundle\Service\Exercise\Qti2MatchingTypeMarker;
+use Chamilo\CoreBundle\Service\Exercise\Qti2UniqueAnswerUnknownMarker;
 
 /**
  * @author Claro Team <cvs@claroline.net>
@@ -63,6 +64,9 @@ class ImsAssessmentItem
         $label = MATCHING_DRAGGABLE === (int) $this->question->type
             ? '                label="'.Qti2MatchingTypeMarker::DRAGGABLE_LABEL.'"'."\n"
             : '';
+        if (UNIQUE_ANSWER_NO_OPTION === (int) $this->question->type) {
+            $label = '                label="'.Qti2UniqueAnswerUnknownMarker::LABEL.'"'."\n";
+        }
 
         return '<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -109,9 +113,17 @@ class ImsAssessmentItem
             );
         }
 
+        if ($this->answer instanceof ImsAnswerOrdering) {
+            return $this->answer->getOrderingResponseProcessing();
+        }
+
+        if (UNIQUE_ANSWER_NO_OPTION === (int) $this->question->type) {
+            return Qti2UniqueAnswerUnknownMarker::responseProcessing($this->questionIdent);
+        }
+
         if ($this->answer instanceof ImsAnswerFillInBlanks) {
             // Each blank is scored with the mapping of its own response.
-            return '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_response"/>'."\n";
+            return Qti2UniqueAnswerUnknownMarker::responseProcessing($this->questionIdent);
         }
 
         return '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_correct"/>'."\n";
@@ -136,9 +148,14 @@ class ImsAssessmentItem
             return $head;
         }
 
+        $declarations = $this->answer->imsExportResponsesDeclaration($this->questionIdent, $this->question);
+        if ($this->answer instanceof ImsAnswerOrdering && !$this->answer->isValidOrdering()) {
+            return '';
+        }
+
         return $head
             .$this->start_item()
-            .$this->answer->imsExportResponsesDeclaration($this->questionIdent, $this->question)
+            .$declarations
             .$this->start_item_body()
             .$this->answer->imsExportResponses(
                 $this->questionIdent,
@@ -476,7 +493,7 @@ function export_question_qti($questionId, $standalone = true)
 
     // Exact combination is checked by type: the True/false/Don't know variant extends its class.
     $isValid = $qst instanceof UniqueAnswer || $qst instanceof MultipleAnswer || $qst instanceof FreeAnswer
-        || in_array((int) $qst->type, [FILL_IN_BLANKS, MATCHING, MATCHING_DRAGGABLE, MULTIPLE_ANSWER_COMBINATION], true);
+        || in_array((int) $qst->type, [FILL_IN_BLANKS, MATCHING, MATCHING_DRAGGABLE, MULTIPLE_ANSWER_COMBINATION, UNIQUE_ANSWER_NO_OPTION, DRAGGABLE], true);
     if (!$isValid) {
         return '';
     }

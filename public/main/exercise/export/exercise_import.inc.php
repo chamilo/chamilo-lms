@@ -5,6 +5,9 @@
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Service\Exercise\Qti2ExactCombinationWriter;
 use Chamilo\CoreBundle\Service\Exercise\Qti2MatchingTypeMarker;
+use Chamilo\CoreBundle\Service\Exercise\Qti2UniqueAnswerUnknownMarker;
+use Chamilo\CoreBundle\Service\Exercise\Qti2OrderingItem;
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CoreBundle\Service\Exercise\QtiImportHtmlSanitizer;
 use PhpZip\ZipFile;
 
@@ -194,7 +197,13 @@ function import_exercise($file)
                     continue;
                 }
 
-                if (!in_array($question_array['type'], [UNIQUE_ANSWER, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, FREE_ANSWER, FIB, MATCHING, MATCHING_DRAGGABLE], true)) {
+                if (!in_array($question_array['type'], [UNIQUE_ANSWER, UNIQUE_ANSWER_NO_OPTION, MULTIPLE_ANSWER, MULTIPLE_ANSWER_COMBINATION, FREE_ANSWER, FIB, MATCHING, MATCHING_DRAGGABLE, DRAGGABLE], true)) {
+                    continue;
+                }
+
+                if (DRAGGABLE === $question_array['type'] && !is_array($question_array['ordered_items'] ?? null)) {
+                    Display::addFlash(Display::return_message('QTI import: a sequence ordering question with invalid positions was skipped.', 'warning'));
+
                     continue;
                 }
 
@@ -206,6 +215,14 @@ function import_exercise($file)
 
                         continue;
                     }
+                }
+
+                if (!empty($question_array['unique_unknown'])
+                    && (UNIQUE_ANSWER_NO_OPTION !== $question_array['type']
+                        || !Qti2UniqueAnswerUnknownMarker::hasValidUnknownChoice($question_array))) {
+                    Display::addFlash(Display::return_message('QTI import: a single-choice question with an invalid fixed unknown answer was skipped.', 'warning'));
+
+                    continue;
                 }
 
                 // Create question
@@ -257,6 +274,35 @@ function import_exercise($file)
 
                 if ($last_question_id <= 0) {
                     Display::addFlash(Display::return_message('QTI import: question saved without a valid ID.', 'error'));
+                    continue;
+                }
+
+                // Preserve position-based scoring without Answer::save() rewriting targets as option iids.
+                if (DRAGGABLE === $question->type) {
+                    $ordering = $question_array['ordered_items'];
+                    $question->extra = $ordering['orientation'];
+                    $weight = array_sum(array_column($ordering['items'], 'weight'));
+                    $question->updateWeighting($weight);
+                    $question->save($exercise);
+                    $em = Database::getManager();
+                    $questionEntity = $em->getRepository(\Chamilo\CourseBundle\Entity\CQuizQuestion::class)->find($last_question_id);
+                    if (null === $questionEntity) {
+                        Display::addFlash(Display::return_message('QTI import: failed to load the sequence ordering question.', 'error'));
+                        continue;
+                    }
+                    $count = count($ordering['items']);
+                    for ($i = 1; $i <= $count; ++$i) {
+                        $answerEntity = new CQuizAnswer();
+                        $answerEntity->setQuestion($questionEntity)->setAnswer((string) $i)->setCorrect(0)->setComment('')->setPonderation(0.0)->setPosition($i);
+                        $em->persist($answerEntity);
+                    }
+                    foreach ($ordering['items'] as $index => $item) {
+                        $answerEntity = new CQuizAnswer();
+                        $answerEntity->setQuestion($questionEntity)->setAnswer($item['answer'])->setCorrect($item['target'])->setComment('')->setPonderation($item['weight'])->setPosition($count + $index + 1);
+                        $em->persist($answerEntity);
+                    }
+                    $em->flush();
+
                     continue;
                 }
 
@@ -334,7 +380,14 @@ function import_exercise($file)
 
                         $answer->new_answer[$pos] = $answerValue;
                         $answer->new_comment[$pos] = (string) $answerFeedback; // never null
-                        $answer->new_position[$pos] = $pos;
+                        $unknown = UNIQUE_ANSWER_NO_OPTION === $question->type
+                            && Qti2UniqueAnswerUnknownMarker::UNKNOWN_IDENTIFIER === (string) $key;
+                        if ($unknown) {
+                            $answer->new_answer[$pos] = QtiImportHtmlSanitizer::sanitize($answerValue);
+                            $isCorrect = false;
+                            $weight = 0.0;
+                        }
+                        $answer->new_position[$pos] = $unknown ? Qti2UniqueAnswerUnknownMarker::UNKNOWN_POSITION : $pos;
                         $answer->new_correct[$pos] = $isCorrect ? 1 : 0; // never null
                         $answer->new_weighting[$pos] = $weight;
 
@@ -475,6 +528,7 @@ function parseQti2($xmlData)
         'textEntryInteraction',
         'feedbackInline',
         'matchInteraction',
+        'orderInteraction',
         'extendedTextInteraction',
         'itemBody',
         'br',
@@ -500,6 +554,7 @@ function parseQti2($xmlData)
                     'category' => $node->getAttribute('category'),
                     'type' => '',
                     'matching_draggable' => Qti2MatchingTypeMarker::isDraggable($node->getAttribute('label')),
+                    'unique_unknown' => Qti2UniqueAnswerUnknownMarker::isMarked($node->getAttribute('label')),
                     'subtype' => null,
                     'tempdir' => $questionTempDir,
                     'description' => null,
@@ -533,7 +588,9 @@ function parseQti2($xmlData)
                     $exerciseInfo['question'][$currentQuestionIdent]['type'] = MCMA;
                     $cardinality = 'multiple';
                 } elseif ('single' === $cardinalityAttr) {
-                    $exerciseInfo['question'][$currentQuestionIdent]['type'] = MCUA;
+                    $exerciseInfo['question'][$currentQuestionIdent]['type'] = !empty($exerciseInfo['question'][$currentQuestionIdent]['unique_unknown'])
+                        ? UNIQUE_ANSWER_NO_OPTION
+                        : MCUA;
                     $cardinality = 'single';
                 }
                 break;
@@ -575,6 +632,11 @@ function parseQti2($xmlData)
                 $exerciseInfo['question'][$currentQuestionIdent]['type'] = FIB;
                 $exerciseInfo['question'][$currentQuestionIdent]['subtype'] = 'TEXTFIELD_FILL';
                 $exerciseInfo['question'][$currentQuestionIdent]['response_text'] = $currentQuestionItemBody;
+
+                break;
+            case 'orderInteraction':
+                $exerciseInfo['question'][$currentQuestionIdent]['type'] = DRAGGABLE;
+                $exerciseInfo['question'][$currentQuestionIdent]['ordered_items'] = Qti2OrderingItem::read($node);
 
                 break;
             case 'matchInteraction':

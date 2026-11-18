@@ -408,6 +408,27 @@ function onPick(e, key, opts = {}) {
   files.value[key] = f
 }
 
+// The server answers 201 even when it refuses a file, with the outcome of each file in "results":
+// without this, a refused logo left the page unchanged with no explanation.
+function alertRejectedLogos(response) {
+  const messages = Object.entries(response?.results || {})
+    .filter(([, result]) => "uploaded" !== result && "skipped" !== result)
+    .map(([field, result]) => {
+      if ("invalid_dimensions_header_png" === result) {
+        return t("Header PNG must be ≤ {0}px.", ["190×60"])
+      }
+      if ("invalid_mime" === result || "invalid_image" === result) {
+        return field.endsWith("_svg") ? t("SVG format required") : t("PNG format required")
+      }
+
+      return t("Upload failed")
+    })
+
+  if (messages.length > 0) {
+    alert([...new Set(messages)].join("\n"))
+  }
+}
+
 async function uploadHeader() {
   if (!files.value.headerSvg && !files.value.headerPng) {
     alert(t("Select at least one file"))
@@ -415,10 +436,11 @@ async function uploadHeader() {
   }
   try {
     isSaving.value = true
-    await themeLogoService.upload(props.slug, {
+    const response = await themeLogoService.upload(props.slug, {
       headerSvg: files.value.headerSvg,
       headerPng: files.value.headerPng,
     })
+    alertRejectedLogos(response)
     clearLocal("header")
     bust()
   } catch (e) {
@@ -435,10 +457,11 @@ async function uploadEmail() {
   }
   try {
     isSaving.value = true
-    await themeLogoService.upload(props.slug, {
+    const response = await themeLogoService.upload(props.slug, {
       emailSvg: files.value.emailSvg,
       emailPng: files.value.emailPng,
     })
+    alertRejectedLogos(response)
     clearLocal("email")
     bust()
   } catch (e) {

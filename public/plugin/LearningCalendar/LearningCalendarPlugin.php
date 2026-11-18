@@ -2,7 +2,16 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\GradebookResult;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CLpView;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Class LearningCalendarPlugin.
@@ -662,24 +671,24 @@ class LearningCalendarPlugin extends Plugin
             return [];
         }
 
-        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'u.id AS id',
+                'u.username AS username',
+                'u.firstname AS firstname',
+                'u.lastname AS lastname'
+            )
+            ->from(User::class, 'u')
+            ->setMaxResults(1)
+        ;
 
         if (ctype_digit($identifier)) {
-            $userId = (int) $identifier;
-            $sql = "SELECT id, username, firstname, lastname
-                    FROM $userTable
-                    WHERE id = $userId
-                    LIMIT 1";
+            $qb->where('u.id = :id')->setParameter('id', (int) $identifier);
         } else {
-            $identifier = Database::escape_string($identifier);
-            $sql = "SELECT id, username, firstname, lastname
-                    FROM $userTable
-                    WHERE username = '$identifier'
-                    LIMIT 1";
+            $qb->where('u.username = :username')->setParameter('username', $identifier);
         }
 
-        $result = Database::query($sql);
-        $user = Database::fetch_assoc($result);
+        $user = $qb->getQuery()->getArrayResult()[0] ?? null;
 
         return $user ?: [];
     }
@@ -923,25 +932,23 @@ class LearningCalendarPlugin extends Plugin
             return 0;
         }
 
-        $courseIdsToString = implode(',', array_unique($courseIds));
-        $tableEvaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $tableResult = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = "SELECT DISTINCT e.title, e.id
-                FROM $tableEvaluation e
-                INNER JOIN $tableResult r
-                ON (r.evaluation_id = e.id)
-                WHERE
-                  e.type = 'evaluation' AND
-                  r.score >= 2 AND
-                  r.user_id = $userId AND
-                  e.c_id IN ($courseIdsToString)
-        ";
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT e.title AS title', 'e.id AS id')
+            ->from(GradebookEvaluation::class, 'e')
+            ->innerJoin(GradebookResult::class, 'r', Join::WITH, 'r.evaluation = e')
+            ->where('e.type = :type')
+            ->andWhere('r.score >= 2')
+            ->andWhere('r.user = :userId')
+            ->andWhere('e.course IN (:courseIds)')
+            ->setParameter('type', 'evaluation')
+            ->setParameter('userId', $userId)
+            ->setParameter('courseIds', array_values(array_unique($courseIds)))
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $list = [];
-        if (Database::num_rows($result)) {
-            while ($row = Database::fetch_assoc($result)) {
-                $list[$row['id']] = $row;
-            }
+        foreach ($rows as $row) {
+            $list[$row['id']] = $row;
         }
 
         return $list;
@@ -961,9 +968,6 @@ class LearningCalendarPlugin extends Plugin
             return 0;
         }
 
-        $tableItem = Database::get_course_table(TABLE_LP_ITEM);
-        $tableLpItemView = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $tableLpView = Database::get_course_table(TABLE_LP_VIEW);
         $extraField = new ExtraField('lp_item');
         $fieldInfo = $extraField->get_handler_field_info_by_field_variable('calendar');
 
@@ -972,6 +976,23 @@ class LearningCalendarPlugin extends Plugin
         }
 
         // The course and the session of an attempt are the ones of its learning path view.
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(DISTINCT i.iid)')
+            ->from(CLpItem::class, 'i')
+            ->innerJoin(CLpView::class, 'v', Join::WITH, 'v.lp = i.lp')
+            ->innerJoin(CLpItemView::class, 'iv', Join::WITH, 'iv.view = v AND iv.item = i')
+            ->innerJoin(
+                ExtraFieldValues::class,
+                'e',
+                Join::WITH,
+                "e.itemId = i.iid AND e.fieldValue = '1' AND e.field = :fieldId"
+            )
+            ->where('v.user = :userId')
+            ->andWhere("iv.status = 'completed'")
+            ->setParameter('fieldId', (int) $fieldInfo['id'])
+            ->setParameter('userId', $userId)
+        ;
+
         $courseAndSessionCondition = [];
         foreach ($coursesAndSessions as $sessionId => $courseList) {
             if (isset($courseList['course_list'])) {
@@ -981,16 +1002,16 @@ class LearningCalendarPlugin extends Plugin
                 continue;
             }
             $sessionId = (int) $sessionId;
-            $courseListToString = implode(',', array_map('intval', $courseList));
+            $index = count($courseAndSessionCondition);
+            $qb->setParameter('courses'.$index, array_map('intval', $courseList));
             if (empty($sessionId)) {
                 $courseAndSessionCondition[] =
-                    " ((v.session_id = 0 OR v.session_id IS NULL) AND v.c_id IN ($courseListToString))";
+                    '((v.session IS NULL OR IDENTITY(v.session) = 0) AND IDENTITY(v.course) IN (:courses'.$index.'))';
             } else {
-                $courseAndSessionCondition[] = "
-                    (
-                        ((v.session_id = 0 OR v.session_id IS NULL) OR v.session_id = $sessionId) AND
-                        v.c_id IN ($courseListToString)
-                    )";
+                $qb->setParameter('session'.$index, $sessionId);
+                $courseAndSessionCondition[] =
+                    '((v.session IS NULL OR IDENTITY(v.session) = 0 OR IDENTITY(v.session) = :session'.$index.') AND '
+                    .'IDENTITY(v.course) IN (:courses'.$index.'))';
             }
         }
 
@@ -998,30 +1019,9 @@ class LearningCalendarPlugin extends Plugin
             return 0;
         }
 
-        $courseSessionConditionToString = 'AND ('.implode(' OR ', $courseAndSessionCondition).') ';
-        $sql = "SELECT COUNT(DISTINCT i.iid) as count
-                FROM $tableItem i
-                INNER JOIN $tableLpView v
-                ON (v.lp_id = i.lp_id)
-                INNER JOIN $tableLpItemView iv
-                ON (iv.lp_view_id = v.iid AND iv.lp_item_id = i.iid)
-                INNER JOIN extra_field_values e
-                ON (e.item_id = i.iid AND e.field_value = '1' AND e.field_id = ".(int) $fieldInfo['id'].")
-                WHERE
-                    v.user_id = $userId AND
-                    iv.status = 'completed'
-                    $courseSessionConditionToString
-               ";
+        $qb->andWhere('('.implode(' OR ', $courseAndSessionCondition).')');
 
-        $result = Database::query($sql);
-
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_assoc($result);
-
-            return $row['count'];
-        }
-
-        return 0;
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function setJavaScript()

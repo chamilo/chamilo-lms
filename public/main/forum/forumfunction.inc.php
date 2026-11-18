@@ -15,6 +15,8 @@ use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Entity\CForumThreadQualify;
+use Chamilo\CourseBundle\Entity\CForumThreadQualifyLog;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -290,7 +292,6 @@ function store_forum(array $values, array $courseInfo = [], bool $returnId = fal
 
 function deletePost(CForumPost $post): void
 {
-    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $em = Database::getManager();
     $em
         ->createQuery('
@@ -323,30 +324,37 @@ function deletePost(CForumPost $post): void
 
     if (!empty($lastPostOfTheTread)) {
         // Decreasing the number of replies only if > 0
-        $threadReplies = Database::fetch_array(Database::query("SELECT thread_replies FROM $table_threads WHERE iid = $threadId"));
-        $replyCount = (int) $threadReplies['thread_replies'];
+        $threadReplies = $em->createQueryBuilder()
+            ->select('t.threadReplies AS thread_replies')
+            ->from(CForumThread::class, 't')
+            ->where('t.iid = :threadId')
+            ->setParameter('threadId', $threadId)
+            ->getQuery()
+            ->getArrayResult()[0] ?? false;
+        $replyCount = (int) ($threadReplies['thread_replies'] ?? 0);
 
+        $update = $em->createQueryBuilder()
+            ->update(CForumThread::class, 't')
+            ->set('t.threadLastPost', ':lastPost')
+            ->set('t.threadDate', ':threadDate')
+            ->where('t.iid = :threadId')
+            ->setParameter('lastPost', (int) $lastPostOfTheTread['iid'])
+            ->setParameter('threadDate', $lastPostOfTheTread['post_date'])
+            ->setParameter('threadId', $threadId);
         if ($replyCount > 0) {
-            $sql = "UPDATE $table_threads
-                    SET
-                        thread_replies = thread_replies - 1,
-                        thread_last_post = ".$lastPostOfTheTread['iid'].",
-                        thread_date = '".$lastPostOfTheTread['post_date']."'
-                    WHERE iid = $threadId";
-        } else {
-            $sql = "UPDATE $table_threads
-                    SET
-                        thread_last_post = ".$lastPostOfTheTread['iid'].",
-                        thread_date = '".$lastPostOfTheTread['post_date']."'
-                    WHERE iid = $threadId";
+            // Decreasing the number of replies only if > 0
+            $update->set('t.threadReplies', 't.threadReplies - 1');
         }
-
-        Database::query($sql);
+        $update->getQuery()->execute();
         Display::addFlash(Display::return_message(get_lang('Post has been deleted')));
     } else {
         // We deleted the very last post of the thread, so we need to delete the thread as well.
-        $sql = "DELETE FROM $table_threads WHERE iid = $threadId";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->delete(CForumThread::class, 't')
+            ->where('t.iid = :threadId')
+            ->setParameter('threadId', $threadId)
+            ->getQuery()
+            ->execute();
 
         Display::addFlash(Display::return_message(get_lang('Thread deleted')));
     }
@@ -1072,7 +1080,6 @@ function saveThread(
     $course_id = $courseInfo['real_id'];
     $courseCode = $courseInfo['code'];
     $sessionId = $sessionId ?: api_get_session_id();
-    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
 
     $post_date = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
     $visible = true;
@@ -1185,6 +1192,7 @@ function saveThread(
 
     // Now we have to update the thread table to fill the thread_last_post
     // field (so that we know when the thread has been updated for the last time).
+    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $sql = "UPDATE $table_threads
             SET thread_last_post = '".$postId."'
             WHERE
@@ -1896,6 +1904,7 @@ function saveThreadScore(
     $session_id
 ) {
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
+    $em = Database::getManager();
 
     $course_id = api_get_course_int_id();
     $session_id = (int) $session_id;
@@ -1903,30 +1912,40 @@ function saveThreadScore(
     $user_id = (int) $user_id;
     $thread_qualify = (float) $thread_qualify;
     $currentUserId = api_get_user_id();
-    $qualify_time = Database::escape_string($qualify_time);
 
     $max = $threadEntity->getThreadQualifyMax();
     if ($thread_qualify <= $max) {
+        $countQb = $em->createQueryBuilder()
+            ->select('COUNT(q.iid)')
+            ->from(CForumThreadQualify::class, 'q')
+            ->where('IDENTITY(q.user) = :userId')
+            ->andWhere('IDENTITY(q.thread) = :threadId')
+            ->setParameter('userId', $user_id)
+            ->setParameter('threadId', $thread_id);
         if ($threadEntity->isThreadPeerQualify()) {
-            $sql = "SELECT COUNT(*) FROM $table_threads_qualify
-                    WHERE
-                        user_id = $user_id AND
-                        qualify_user_id = $currentUserId AND
-                        thread_id = ".$thread_id;
-        } else {
-            $sql = "SELECT COUNT(*) FROM $table_threads_qualify
-                    WHERE
-                        user_id = $user_id AND
-                        thread_id = ".$thread_id;
+            $countQb->andWhere('IDENTITY(q.qualifyUser) = :qualifyUserId')
+                ->setParameter('qualifyUserId', (int) $currentUserId);
         }
 
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
-        if (0 == $row[0]) {
-            $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id, `qualify`, qualify_user_id, qualify_time)
-                    VALUES (".$course_id.", '".$user_id."','".$thread_id."',".$thread_qualify.", '".$currentUserId."','".$qualify_time."')";
-            Database::query($sql);
+        if (0 == $countQb->getQuery()->getSingleScalarResult()) {
+            $connection = $em->getConnection();
+            $connection->createQueryBuilder()
+                ->insert($table_threads_qualify)
+                ->values([
+                    'c_id' => ':courseId',
+                    'user_id' => ':userId',
+                    'thread_id' => ':threadId',
+                    $connection->quoteIdentifier('qualify') => ':qualify',
+                    'qualify_user_id' => ':qualifyUserId',
+                    'qualify_time' => ':qualifyTime',
+                ])
+                ->setParameter('courseId', (int) $course_id)
+                ->setParameter('userId', $user_id)
+                ->setParameter('threadId', $thread_id)
+                ->setParameter('qualify', $thread_qualify)
+                ->setParameter('qualifyUserId', (int) $currentUserId)
+                ->setParameter('qualifyTime', (string) $qualify_time)
+                ->executeStatement();
 
             return 'insert';
         } else {
@@ -1938,16 +1957,20 @@ function saveThreadScore(
             );
 
             // Update
-            $sql = "UPDATE $table_threads_qualify
-                    SET
-                        `qualify` = '".$thread_qualify."',
-                        qualify_time = '".$qualify_time."'
-                    WHERE
-                        user_id=".$user_id.' AND
-                        thread_id='.$thread_id." AND
-                        qualify_user_id = $currentUserId
-                    ";
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->update(CForumThreadQualify::class, 'q')
+                ->set('q.qualify', ':qualify')
+                ->set('q.qualifyTime', ':qualifyTime')
+                ->where('IDENTITY(q.user) = :userId')
+                ->andWhere('IDENTITY(q.thread) = :threadId')
+                ->andWhere('IDENTITY(q.qualifyUser) = :qualifyUserId')
+                ->setParameter('qualify', $thread_qualify)
+                ->setParameter('qualifyTime', (string) $qualify_time)
+                ->setParameter('userId', $user_id)
+                ->setParameter('threadId', $thread_id)
+                ->setParameter('qualifyUserId', (int) $currentUserId)
+                ->getQuery()
+                ->execute();
 
             return 'update';
         }
@@ -1972,9 +1995,6 @@ function saveThreadScore(
  */
 function showQualify($option, $user_id, $thread_id)
 {
-    $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
-    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
-
     $course_id = api_get_course_int_id();
     $user_id = (int) $user_id;
     $thread_id = (int) $thread_id;
@@ -1983,28 +2003,34 @@ function showQualify($option, $user_id, $thread_id)
         return 0;
     }
 
-    $sql = '';
+    $qb = null;
     switch ($option) {
         case 1:
-            $sql = "SELECT `qualify` FROM $table_threads_qualify
-                    WHERE
-                        c_id = $course_id AND
-                        user_id=".$user_id.' AND
-                        thread_id='.$thread_id;
+            $qb = Database::getManager()->createQueryBuilder()
+                ->select('q.qualify AS value')
+                ->from(CForumThreadQualify::class, 'q')
+                ->where('q.cId = :courseId')
+                ->andWhere('IDENTITY(q.user) = :userId')
+                ->andWhere('IDENTITY(q.thread) = :threadId')
+                ->setParameter('courseId', (int) $course_id)
+                ->setParameter('userId', $user_id)
+                ->setParameter('threadId', $thread_id);
 
             break;
         case 2:
-            $sql = "SELECT thread_qualify_max FROM $table_threads
-                    WHERE iid=".$thread_id;
+            $qb = Database::getManager()->createQueryBuilder()
+                ->select('t.threadQualifyMax AS value')
+                ->from(CForumThread::class, 't')
+                ->where('t.iid = :threadId')
+                ->setParameter('threadId', $thread_id);
 
             break;
     }
 
-    if (!empty($sql)) {
-        $rs = Database::query($sql);
-        $row = Database::fetch_array($rs);
+    if (null !== $qb) {
+        $row = $qb->setMaxResults(1)->getQuery()->getArrayResult()[0] ?? false;
         if ($row) {
-            return $row[0];
+            return $row['value'];
         }
     }
 
@@ -2030,27 +2056,33 @@ function getThreadScoreHistory($user_id, $thread_id, $opt)
     $user_id = (int) $user_id;
     $thread_id = (int) $thread_id;
 
-    $table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
     $course_id = api_get_course_int_id();
 
-    if ('false' == $opt) {
-        $sql = "SELECT * FROM $table_threads_qualify_log
-                WHERE
-                    c_id = $course_id AND
-                    thread_id='".$thread_id."' AND
-                    user_id='".$user_id."'
-                ORDER BY qualify_time";
-    } else {
-        $sql = "SELECT * FROM $table_threads_qualify_log
-                WHERE
-                    c_id = $course_id AND
-                    thread_id='".$thread_id."' AND
-                    user_id='".$user_id."'
-                ORDER BY qualify_time DESC";
-    }
-    $rs = Database::query($sql);
+    $rows = Database::getManager()->createQueryBuilder()
+        ->select(
+            'l.iid AS iid',
+            'l.cId AS c_id',
+            'l.userId AS user_id',
+            'l.threadId AS thread_id',
+            'l.qualify AS qualify',
+            'l.qualifyUserId AS qualify_user_id',
+            'l.qualifyTime AS qualify_time',
+            'l.sessionId AS session_id'
+        )
+        ->from(CForumThreadQualifyLog::class, 'l')
+        ->where('l.cId = :courseId')
+        ->andWhere('l.threadId = :threadId')
+        ->andWhere('l.userId = :userId')
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('threadId', $thread_id)
+        ->setParameter('userId', $user_id)
+        ->orderBy('l.qualifyTime', 'false' == $opt ? 'ASC' : 'DESC')
+        ->getQuery()
+        ->getArrayResult();
     $log = [];
-    while ($row = Database::fetch_assoc($rs)) {
+    foreach ($rows as $row) {
+        // The raw row used to carry the datetime as a string.
+        $row['qualify_time'] = $row['qualify_time']?->format('Y-m-d H:i:s');
         $log[] = $row;
     }
 
@@ -2081,7 +2113,6 @@ function saveThreadScoreHistory(
     $user_id,
     $thread_id
 ) {
-    $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
     $table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
 
     $thread_id = (int) $thread_id;
@@ -2091,28 +2122,48 @@ function saveThreadScoreHistory(
 
     if (1 == $option) {
         // Extract information of thread_qualify.
-        $sql = "SELECT `qualify`, qualify_time
-                FROM $table_threads_qualify
-                WHERE
-                    c_id = $course_id AND
-                    user_id = ".$user_id.' AND
-                    thread_id = '.$thread_id." AND
-                    qualify_user_id = $qualify_user_id
-                ";
-        $rs = Database::query($sql);
-        $row = Database::fetch_array($rs);
+        $em = Database::getManager();
+        $row = $em->createQueryBuilder()
+            ->select('q.qualify AS qualify', 'q.qualifyTime AS qualify_time')
+            ->from(CForumThreadQualify::class, 'q')
+            ->where('q.cId = :courseId')
+            ->andWhere('IDENTITY(q.user) = :userId')
+            ->andWhere('IDENTITY(q.thread) = :threadId')
+            ->andWhere('IDENTITY(q.qualifyUser) = :qualifyUserId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('userId', $user_id)
+            ->setParameter('threadId', $thread_id)
+            ->setParameter('qualifyUserId', (int) $qualify_user_id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()[0] ?? false;
 
         // Nothing to archive when this grader has not graded the thread before.
         if (empty($row)) {
             return;
         }
 
-        $qualifyTime = empty($row[1]) ? 'NULL' : "'".Database::escape_string($row[1])."'";
+        $qualifyTime = empty($row['qualify_time']) ? null : $row['qualify_time']->format('Y-m-d H:i:s');
 
         // Insert thread_historical.
-        $sql = "INSERT INTO $table_threads_qualify_log (c_id, user_id, thread_id, `qualify`, qualify_user_id, qualify_time)
-                VALUES(".$course_id.", ".$user_id.", ".$thread_id.", ".(float) $row[0].", ".(int) $qualify_user_id.", ".$qualifyTime.")";
-        Database::query($sql);
+        $connection = $em->getConnection();
+        $connection->createQueryBuilder()
+            ->insert($table_threads_qualify_log)
+            ->values([
+                'c_id' => ':courseId',
+                'user_id' => ':userId',
+                'thread_id' => ':threadId',
+                $connection->quoteIdentifier('qualify') => ':qualify',
+                'qualify_user_id' => ':qualifyUserId',
+                'qualify_time' => ':qualifyTime',
+            ])
+            ->setParameter('courseId', $course_id)
+            ->setParameter('userId', $user_id)
+            ->setParameter('threadId', $thread_id)
+            ->setParameter('qualify', (float) $row['qualify'])
+            ->setParameter('qualifyUserId', (int) $qualify_user_id)
+            ->setParameter('qualifyTime', $qualifyTime)
+            ->executeStatement();
     }
 }
 
@@ -2551,17 +2602,20 @@ function displayUserImage(User $user)
  */
 function updateThreadInfo($threadId, $lastPostId, $post_date)
 {
-    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $threadId = (int) $threadId;
     $lastPostId = (int) $lastPostId;
 
-    $sql = "UPDATE $table_threads SET
-            thread_replies = thread_replies+1,
-            thread_last_post = '".$lastPostId."',
-            thread_date = '".Database::escape_string($post_date)."'
-            WHERE
-                iid ='".$threadId."'"; // this needs to be cleaned first
-    Database::query($sql);
+    Database::getManager()->createQueryBuilder()
+        ->update(CForumThread::class, 't')
+        ->set('t.threadReplies', 't.threadReplies + 1')
+        ->set('t.threadLastPost', ':lastPostId')
+        ->set('t.threadDate', ':postDate')
+        ->where('t.iid = :threadId')
+        ->setParameter('lastPostId', $lastPostId)
+        ->setParameter('postDate', (string) $post_date)
+        ->setParameter('threadId', $threadId)
+        ->getQuery()
+        ->execute();
 }
 
 function approvePost(CForumPost $post, $action): string
@@ -2599,15 +2653,16 @@ function approvePost(CForumPost $post, $action): string
  */
 function get_unaproved_messages($forum_id)
 {
-    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-
     $return_array = [];
-    $sql = "SELECT DISTINCT thread_id FROM $table_posts
-            WHERE
-                forum_id = ".(int) $forum_id." AND
-                visible = 0";
-    $result = Database::query($sql);
-    while ($row = Database::fetch_array($result)) {
+    $rows = Database::getManager()->createQueryBuilder()
+        ->select('DISTINCT IDENTITY(p.thread) AS thread_id')
+        ->from(CForumPost::class, 'p')
+        ->where('IDENTITY(p.forum) = :forumId')
+        ->andWhere('p.visible = false')
+        ->setParameter('forumId', (int) $forum_id)
+        ->getQuery()
+        ->getArrayResult();
+    foreach ($rows as $row) {
         $return_array[] = $row['thread_id'];
     }
 

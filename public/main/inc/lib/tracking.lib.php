@@ -2780,17 +2780,20 @@ class Tracking
 
         $lpViewTable = Database::get_course_table(TABLE_LP_VIEW);
 
-        $conditions = [
-            //" c_id = {$courseInfo['real_id']} ",
-            " lp_view.lp_id IN (".implode(', ', $filteredLP).") ",
-        ];
+        $qbProgress = self::dbalQueryBuilder()
+            ->select('lp_id', 'user_id', 'view_count', 'progress')
+            ->from($lpViewTable, 'lp_view')
+            ->where('lp_view.lp_id IN (:lpIds)')
+            ->setParameter('lpIds', array_map('intval', $filteredLP), ArrayParameterType::INTEGER);
 
         if (is_array($studentId)) {
             $studentId = array_map('intval', $studentId);
-            $conditions[] = " lp_view.user_id IN (".implode(',', $studentId).")  ";
+            $qbProgress->andWhere('lp_view.user_id IN (:studentIds)')
+                ->setParameter('studentIds', $studentId, ArrayParameterType::INTEGER);
         } else {
             $studentId = (int) $studentId;
-            $conditions[] = " lp_view.user_id = '$studentId' ";
+            $qbProgress->andWhere('lp_view.user_id = :studentId')
+                ->setParameter('studentId', $studentId);
 
             if (empty($lpIdList)) {
                 $includeNotSubscribed =
@@ -2823,25 +2826,13 @@ class Tracking
             }
         }
 
-        if (!empty($sessionId)) {
-            $conditions[] = " session_id = $sessionId ";
-        } else {
-            $conditions[] = ' (session_id = 0 OR session_id IS NULL) ';
-        }
-
-        $conditionToString = implode('AND', $conditions);
-        $sql = "SELECT lp_id, user_id, view_count, progress
-                FROM $lpViewTable lp_view
-                WHERE
-                    $conditionToString
-                ORDER BY view_count DESC, iid ASC";
-
-        $result = Database::query($sql);
+        self::andSessionCondition($qbProgress, (int) $sessionId);
+        $qbProgress->orderBy('view_count', 'DESC')->addOrderBy('iid', 'ASC');
 
         // Latest view of each (learning path, student): the first row of the ordered list.
         $progress = [];
         $seen = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($qbProgress->executeQuery()->fetchAllAssociative() as $row) {
             $key = $row['lp_id'].'_'.$row['user_id'];
             if (!isset($seen[$key])) {
                 $seen[$key] = true;
@@ -2936,7 +2927,7 @@ class Tracking
         // Compose a filter based on optional learning paths list given
         $condition_lp = '';
         if (count($lp_ids) > 0) {
-            $condition_lp = " iid IN(".implode(',', $lp_ids).") ";
+            $condition_lp = true;
         }
 
         // Compose a filter based on optional session id
@@ -2944,7 +2935,6 @@ class Tracking
         if (null !== $session) {
             $sessionId = $session->getId();
         }
-        $sessionCondition = api_get_session_condition($sessionId);
 
         $lp_list = $use_max_score = [];
         if (empty($condition_lp)) {
@@ -2958,11 +2948,12 @@ class Tracking
                 $use_max_score[$lpId] = $lp->getUseMaxScore();
             }
         } else {
-            $sql = "SELECT DISTINCT(iid), use_max_score
-                    FROM $lp_table
-                    WHERE $condition_lp ";
-            $res_row_lp = Database::query($sql);
-            while ($row_lp = Database::fetch_array($res_row_lp)) {
+            $qbLp = self::dbalQueryBuilder()
+                ->select('DISTINCT(iid) AS iid', 'use_max_score')
+                ->from($lp_table)
+                ->where('iid IN (:lpIds)')
+                ->setParameter('lpIds', array_map('intval', $lp_ids), ArrayParameterType::INTEGER);
+            foreach ($qbLp->executeQuery()->fetchAllAssociative() as $row_lp) {
                 $lp_list[] = $row_lp['iid'];
                 $use_max_score[$row_lp['iid']] = $row_lp['use_max_score'];
             }
@@ -2973,29 +2964,29 @@ class Tracking
         }
 
         // prepare filter on users
-        if (is_array($student_id)) {
-            $student_id = array_map('intval', $student_id);
-            $condition_user1 = " AND user_id IN (".implode(',', $student_id).") ";
-        } else {
-            $condition_user1 = " AND user_id = $student_id ";
-        }
-
         // Getting latest LP result for a student
         //@todo problem when a  course have more than 1500 users
-        $sql = "SELECT MAX(view_count) as vc, iid, progress, lp_id, user_id
-                FROM $lp_view_table
-                WHERE
-                    lp_id IN (".implode(',', $lp_list).")
-                    $condition_user1
-                    $sessionCondition
-                GROUP BY lp_id, user_id";
-        //AND        session_id = $sessionId
+        $qbLastView = self::dbalQueryBuilder()
+            ->select('MAX(view_count) AS vc', 'iid', 'progress', 'lp_id', 'user_id')
+            ->from($lp_view_table)
+            ->where('lp_id IN (:lpList)')
+            ->setParameter('lpList', array_map('intval', $lp_list), ArrayParameterType::INTEGER);
+        if (is_array($student_id)) {
+            $student_id = array_map('intval', $student_id);
+            $qbLastView->andWhere('user_id IN (:studentIds)')
+                ->setParameter('studentIds', $student_id, ArrayParameterType::INTEGER);
+        } else {
+            $qbLastView->andWhere('user_id = :studentId')
+                ->setParameter('studentId', (int) $student_id);
+        }
+        self::andSessionCondition($qbLastView, (int) $sessionId);
+        $qbLastView->groupBy('lp_id', 'user_id');
 
-        $rs_last_lp_view_id = Database::query($sql);
+        $rowsLastLpView = $qbLastView->executeQuery()->fetchAllAssociative();
         $global_result = 0;
-        if (Database::num_rows($rs_last_lp_view_id) > 0) {
+        if (count($rowsLastLpView) > 0) {
             // Cycle through each line of the results (grouped by lp_id, user_id)
-            while ($row_lp_view = Database::fetch_array($rs_last_lp_view_id)) {
+            foreach ($rowsLastLpView as $row_lp_view) {
                 $count_items = 0;
                 $lpPartialTotal = 0;
                 $list = [];
@@ -3014,40 +3005,44 @@ class Tracking
                 $getOnlyBestAttempt = !$get_only_latest_attempt_results;
 
                 // Getting lp_items done by the user
-                $sql = "SELECT DISTINCT lp_item_id
-                        FROM $lp_item_view_table
-                        WHERE
-                            lp_view_id = $lp_view_id
-                        ORDER BY lp_item_id";
-                $res_lp_item = Database::query($sql);
+                $rowsLpItem = self::dbalQueryBuilder()
+                    ->select('DISTINCT lp_item_id')
+                    ->from($lp_item_view_table)
+                    ->where('lp_view_id = :lpViewId')
+                    ->setParameter('lpViewId', (int) $lp_view_id)
+                    ->orderBy('lp_item_id')
+                    ->executeQuery()
+                    ->fetchAllAssociative();
 
-                while ($row_lp_item = Database::fetch_assoc($res_lp_item)) {
+                foreach ($rowsLpItem as $row_lp_item) {
                     $my_lp_item_id = (int) $row_lp_item['lp_item_id'];
 
                     // All the attempts of the item, the most recent first
-                    $sql = "SELECT
-                                lp_iv.iid as lp_item_view_id,
-                                lp_iv.score as score,
-                                lp_i.max_score,
-                                lp_iv.max_score as max_score_item_view,
-                                lp_i.path,
-                                lp_i.item_type,
-                                lp_i.iid
-                            FROM $lp_item_view_table as lp_iv
-                            INNER JOIN $lp_item_table as lp_i
-                            ON (
-                                lp_i.iid = lp_iv.lp_item_id
-                            )
-                            WHERE
-                                lp_item_id = $my_lp_item_id AND
-                                lp_view_id = $lp_view_id AND
-                                (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."')
-                            ORDER BY lp_iv.view_count DESC, lp_iv.iid DESC";
-
-                    $res_lp_item_result = Database::query($sql);
+                    $rowsAttempt = self::dbalQueryBuilder()
+                        ->select(
+                            'lp_iv.iid AS lp_item_view_id',
+                            'lp_iv.score AS score',
+                            'lp_i.max_score',
+                            'lp_iv.max_score AS max_score_item_view',
+                            'lp_i.path',
+                            'lp_i.item_type',
+                            'lp_i.iid'
+                        )
+                        ->from($lp_item_view_table, 'lp_iv')
+                        ->innerJoin('lp_iv', $lp_item_table, 'lp_i', 'lp_i.iid = lp_iv.lp_item_id')
+                        ->where('lp_item_id = :lpItemId')
+                        ->andWhere('lp_view_id = :lpViewId')
+                        ->andWhere("(lp_i.item_type = 'sco' OR lp_i.item_type = :quizType)")
+                        ->setParameter('lpItemId', $my_lp_item_id)
+                        ->setParameter('lpViewId', (int) $lp_view_id)
+                        ->setParameter('quizType', TOOL_QUIZ)
+                        ->orderBy('lp_iv.view_count', 'DESC')
+                        ->addOrderBy('lp_iv.iid', 'DESC')
+                        ->executeQuery()
+                        ->fetchAllAssociative();
                     $bestRow = null;
                     $bestRatio = null;
-                    while ($row_attempt = Database::fetch_assoc($res_lp_item_result)) {
+                    foreach ($rowsAttempt as $row_attempt) {
                         if (!$getOnlyBestAttempt) {
                             $bestRow = $row_attempt;
                             break;
@@ -3111,59 +3106,61 @@ class Tracking
                         $item_path = $row_max_score['path'];
                         $lp_item_view_id = (int) $row_max_score['lp_item_view_id'];
 
-                        if (empty($lp_item_view_id)) {
-                            $lpItemCondition = ' (orig_lp_item_view_id = 0 OR orig_lp_item_view_id IS NULL) ';
-                        } else {
-                            $lpItemCondition = " orig_lp_item_view_id = $lp_item_view_id ";
-                        }
-
                         // Get last attempt to this exercise through
                         // the current lp for the current user
-                        $order = 'exe_date DESC';
+                        $qbLastAttempt = self::dbalQueryBuilder()
+                            ->select('exe_id', 'score')
+                            ->from($tbl_stats_exercices)
+                            ->where('exe_exo_id = :exerciseId')
+                            ->andWhere('exe_user_id = :userId')
+                            ->andWhere('orig_lp_item_id = :itemId')
+                            ->andWhere('c_id = :courseId')
+                            ->andWhere("status = ''")
+                            ->setParameter('exerciseId', (string) $item_path)
+                            ->setParameter('userId', (int) $user_id)
+                            ->setParameter('itemId', (int) $item_id)
+                            ->setParameter('courseId', (int) $courseId)
+                            ->orderBy('exe_date', 'DESC');
+                        if (empty($lp_item_view_id)) {
+                            $qbLastAttempt->andWhere('(orig_lp_item_view_id = 0 OR orig_lp_item_view_id IS NULL)');
+                        } else {
+                            $qbLastAttempt->andWhere('orig_lp_item_view_id = :lpItemViewId')
+                                ->setParameter('lpItemViewId', $lp_item_view_id);
+                        }
+                        self::andSessionCondition($qbLastAttempt, (int) $sessionId);
                         if ($getOnlyBestAttempt) {
                             // The best attempt is chosen below, by ratio: the latest ones come first for the ties.
-                            $order = 'exe_date DESC, exe_id DESC';
+                            $qbLastAttempt->addOrderBy('exe_id', 'DESC');
+                        } else {
+                            $qbLastAttempt->setMaxResults(1);
                         }
-                        $sql = "SELECT exe_id, score
-                                FROM $tbl_stats_exercices
-                                WHERE
-                                    exe_exo_id = '$item_path' AND
-                                    exe_user_id = $user_id AND
-                                    orig_lp_item_id = $item_id AND
-                                    $lpItemCondition AND
-                                    c_id = $courseId AND
-                                    status = ''
-                                    $sessionCondition
-                                ORDER BY $order
-                                ".($getOnlyBestAttempt ? '' : 'LIMIT 1');
 
-                        $result_last_attempt = Database::query($sql);
-                        $num = Database::num_rows($result_last_attempt);
+                        $rowsLastAttempt = $qbLastAttempt->executeQuery()->fetchAllAssociative();
+                        $num = count($rowsLastAttempt);
                         if ($num > 0) {
                             // Within an attempt, the sum of the max_scores of all questions that it was made of
                             // (this has to be dynamic because of random questions selection)
                             $attemptMaxScore = static function ($exeId) use ($tbl_stats_attempts, $tbl_quiz_questions) {
-                                $sql = "SELECT SUM(t.ponderation) as maxscore FROM
-                                            (
-                                                SELECT DISTINCT
-                                                    question_id,
-                                                    marks,
-                                                    ponderation
-                                                FROM $tbl_stats_attempts AS at
-                                                INNER JOIN $tbl_quiz_questions AS q
-                                                ON (q.iid = at.question_id)
-                                                WHERE
-                                                    exe_id ='$exeId'
-                                            )
-                                            AS t";
-                                $row = Database::fetch_array(Database::query($sql));
+                                // The derived table is the DISTINCT (question, marks, ponderation) of the attempt.
+                                $inner = self::dbalQueryBuilder()
+                                    ->select('DISTINCT question_id', 'marks', 'ponderation')
+                                    ->from($tbl_stats_attempts, 'at')
+                                    ->innerJoin('at', $tbl_quiz_questions, 'q', 'q.iid = at.question_id')
+                                    ->where('exe_id = :exeId')
+                                    ->getSQL();
+                                $row = self::dbalQueryBuilder()
+                                    ->select('SUM(t.ponderation) AS maxscore')
+                                    ->from('('.$inner.')', 't')
+                                    ->setParameter('exeId', (string) $exeId)
+                                    ->executeQuery()
+                                    ->fetchAssociative();
 
                                 return $row['maxscore'] ?? null;
                             };
 
                             $attemptResult = null;
                             $bestAttemptRatio = null;
-                            while ($candidate = Database::fetch_assoc($result_last_attempt)) {
+                            foreach ($rowsLastAttempt as $candidate) {
                                 if (!$getOnlyBestAttempt) {
                                     $attemptResult = $candidate;
                                     break;
@@ -3238,17 +3235,16 @@ class Tracking
         $lp_with_quiz = 0;
         foreach ($lp_list as $lp_id) {
             // Check if LP have a score we assume that all SCO have an score
-            $sql = "SELECT count(iid) as count
-                    FROM $lp_item_table
-                    WHERE
-                        (item_type = 'quiz' OR item_type = 'sco') AND
-                        lp_id = ".$lp_id;
-            $result_have_quiz = Database::query($sql);
-            if (Database::num_rows($result_have_quiz) > 0) {
-                $row = Database::fetch_assoc($result_have_quiz);
-                if (is_numeric($row['count']) && 0 != $row['count']) {
-                    $lp_with_quiz++;
-                }
+            $row = self::dbalQueryBuilder()
+                ->select('COUNT(iid) AS count')
+                ->from($lp_item_table)
+                ->where("(item_type = 'quiz' OR item_type = 'sco')")
+                ->andWhere('lp_id = :lpId')
+                ->setParameter('lpId', (int) $lp_id)
+                ->executeQuery()
+                ->fetchAssociative();
+            if (is_numeric($row['count']) && 0 != $row['count']) {
+                $lp_with_quiz++;
             }
         }
 
@@ -3340,6 +3336,7 @@ class Tracking
         }
 
         $conditionsToString = implode(' AND ', $conditions);
+        // TODO(db-neutral): null-safe equality (<=>) and LIMIT inside the correlated subquery
         $sql = "SELECT
                     SUM(lp_iv.score) sum_score,
                     SUM(lp_i.max_score) sum_max_score
@@ -3393,23 +3390,24 @@ class Tracking
         }
 
         $lpViewTable = Database::get_course_table(TABLE_LP_VIEW);
-        $studentIdListToString = implode(',', $studentIdList);
 
-        $sql = "SELECT user_progress.user_id, AVG(user_progress.progress) average_progress
-                FROM (
-                    SELECT user_id, c_id, session_id, lp_id, MAX(progress) progress
-                    FROM $lpViewTable
-                    WHERE
-                        user_id IN ($studentIdListToString) AND
-                        progress IS NOT NULL
-                    GROUP BY user_id, c_id, session_id, lp_id
-                ) user_progress
-                GROUP BY user_progress.user_id";
-
-        $result = Database::query($sql);
+        $inner = self::dbalQueryBuilder()
+            ->select('user_id', 'c_id', 'session_id', 'lp_id', 'MAX(progress) AS progress')
+            ->from($lpViewTable)
+            ->where('user_id IN (:studentIds)')
+            ->andWhere('progress IS NOT NULL')
+            ->groupBy('user_id', 'c_id', 'session_id', 'lp_id')
+            ->getSQL();
+        $rows = self::dbalQueryBuilder()
+            ->select('user_progress.user_id', 'AVG(user_progress.progress) AS average_progress')
+            ->from('('.$inner.')', 'user_progress')
+            ->groupBy('user_progress.user_id')
+            ->setParameter('studentIds', array_map('intval', $studentIdList), ArrayParameterType::INTEGER)
+            ->executeQuery()
+            ->fetchAllAssociative();
         $progressSum = 0.0;
 
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             $progressSum += (float) $row['average_progress'];
         }
 
@@ -3428,16 +3426,15 @@ class Tracking
         }
 
         $forumPostTable = Database::get_course_table(TABLE_FORUM_POST);
-        $studentIdListToString = implode(',', $studentIdList);
 
-        $sql = "SELECT COUNT(iid) total
-                FROM $forumPostTable
-                WHERE
-                    poster_id IN ($studentIdListToString) AND
-                    visible = 1";
-
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $row = self::dbalQueryBuilder()
+            ->select('COUNT(iid) AS total')
+            ->from($forumPostTable)
+            ->where('poster_id IN (:studentIds)')
+            ->andWhere('visible = 1')
+            ->setParameter('studentIds', array_map('intval', $studentIdList), ArrayParameterType::INTEGER)
+            ->executeQuery()
+            ->fetchAssociative();
 
         return (int) ($row['total'] ?? 0);
     }
@@ -3454,17 +3451,16 @@ class Tracking
         }
 
         $publicationTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        $studentIdListToString = implode(',', $studentIdList);
 
-        $sql = "SELECT COUNT(iid) total
-                FROM $publicationTable
-                WHERE
-                    user_id IN ($studentIdListToString) AND
-                    parent_id IS NOT NULL AND
-                    active IN (0, 1)";
-
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $row = self::dbalQueryBuilder()
+            ->select('COUNT(iid) AS total')
+            ->from($publicationTable)
+            ->where('user_id IN (:studentIds)')
+            ->andWhere('parent_id IS NOT NULL')
+            ->andWhere('active IN (0, 1)')
+            ->setParameter('studentIds', array_map('intval', $studentIdList), ArrayParameterType::INTEGER)
+            ->executeQuery()
+            ->fetchAssociative();
 
         return (int) ($row['total'] ?? 0);
     }

@@ -1170,8 +1170,13 @@ class CourseRestorer
                 );
 
                 if (!empty($params['forum_image'])) {
-                    $original_forum_image = $this->course->path.'upload/forum/images/'.$params['forum_image'];
-                    if (file_exists($original_forum_image)) {
+                    // Security: the image name and the course path come from the
+                    // backup. Read the image from the backup directory, as the other
+                    // tools do, and keep its name flat and not executable.
+                    $forumImage = $this->getSafeAttachmentPath($params['forum_image']);
+                    $params['forum_image'] = '' !== $forumImage ? disable_dangerous_file($forumImage) : '';
+                    $original_forum_image = $this->course->backup_path.'/upload/forum/images/'.$forumImage;
+                    if ('' !== $forumImage && is_file($original_forum_image)) {
                         $new_forum_image = api_get_path(SYS_COURSE_PATH).
                             $this->destination_course_info['path'].'/upload/forum/images/'.$params['forum_image'];
                         @copy($original_forum_image, $new_forum_image);

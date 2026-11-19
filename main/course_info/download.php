@@ -39,6 +39,16 @@ if (in_array($extension, ['xml', 'csv', 'imscc', 'mbz']) &&
     }
 }
 
+// Course exports and backups of every course share the same directories and are named
+// after their course: outside the platform admins, only serve the current course's ones.
+if (!empty($content_type) && in_array($extension, ['imscc', 'mbz', 'zip']) && !api_is_platform_admin(true)) {
+    $courseCode = preg_quote((string) api_get_course_id(), '/');
+    $courseFilePattern = '/^('.$courseCode.'_\d{8}-\d{6}\.imscc|moodle_export_'.$courseCode.'\.mbz|\d+_'.$courseCode.'_\d{8}-\d{6}\.zip)$/';
+    if ('' === $courseCode || !preg_match($courseFilePattern, $archive_file)) {
+        $content_type = '';
+    }
+}
+
 if (empty($content_type)) {
     api_not_allowed(true);
 }

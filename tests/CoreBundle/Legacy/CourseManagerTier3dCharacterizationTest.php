@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
@@ -300,5 +301,83 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
             [$gone->getResourceNode()->getId()]
         );
         $this->assertSame($before + 1, CourseManager::getCountExercisesFromOpenCourse(), 'soft-deleted links are skipped');
+    }
+
+    public function testWouldOperationExceedUsersPerCourseLimitCountsOnlyNewStudents(): void
+    {
+        $course = $this->createCourse('cm3d_limit_a');
+        $s1 = $this->createUser('cm3d_limit_s1');
+        $s2 = $this->createUser('cm3d_limit_s2');
+        $new1 = $this->createUser('cm3d_limit_n1');
+        $new2 = $this->createUser('cm3d_limit_n2');
+        $hrm = $this->createUser('cm3d_limit_hrm');
+        $viaSession = $this->createUser('cm3d_limit_sess');
+        $this->sub($s1, $course, STUDENT);
+        $this->sub($s2, $course, STUDENT);
+        $this->sub($hrm, $course, DRH, COURSE_RELATION_TYPE_RRHH);
+        $session = $this->createSession('cm3d_limit_session');
+        $this->sessionCourse($session->getId(), $course);
+        $this->sessionCourseUser($session->getId(), $course, $viaSession, 0);
+        $cid = (int) $course->getId();
+
+        $settings = self::getContainer()->get(SettingsManager::class);
+        try {
+            $settings->updateSetting('platform.hosting_limit_users_per_course', '4');
+            $this->assertSame(4, CourseManager::getEffectiveUsersPerCourseLimit($cid), 'the test relies on the global fallback setting');
+            $this->assertSame(3, CourseManager::countStudentsForUsersPerCourseLimit($cid));
+
+            // 3 students now, limit 4: one new user fits, two do not.
+            $this->assertFalse(CourseManager::wouldOperationExceedUsersPerCourseLimit($cid, [$new1->getId()]));
+            $this->assertTrue(CourseManager::wouldOperationExceedUsersPerCourseLimit($cid, [$new1->getId(), $new2->getId()]));
+            // Users that already have a (non-HR) relation in the course or session do not count as new.
+            $this->assertFalse(CourseManager::wouldOperationExceedUsersPerCourseLimit($cid, [$s1->getId(), $s2->getId(), $viaSession->getId(), $new1->getId()]));
+            // An HR relation is not a subscription: the HR manager is a new user.
+            $this->assertTrue(CourseManager::wouldOperationExceedUsersPerCourseLimit($cid, [$hrm->getId(), $new1->getId()]));
+            // Duplicates, zero and negative ids are ignored.
+            $this->assertFalse(CourseManager::wouldOperationExceedUsersPerCourseLimit($cid, [$new1->getId(), $new1->getId(), 0, -5]));
+            $this->assertFalse(CourseManager::wouldOperationExceedUsersPerCourseLimit($cid, []));
+        } finally {
+            $settings->updateSetting('platform.hosting_limit_users_per_course', '0');
+        }
+        $settings->updateSetting('platform.hosting_limit_users_per_course', '0');
+        $this->assertFalse(CourseManager::wouldOperationExceedUsersPerCourseLimit($cid, [$new1->getId(), $new2->getId()]), 'zero means unlimited');
+    }
+
+    public function testGetAccessCourseDateRangeIsInclusiveAtMidnightOfTheUtcDay(): void
+    {
+        $course = $this->createCourse('cm3d_acc_a');
+        $user = $this->createUser('cm3d_acc_user');
+        // The range is converted to UTC first, so the edge day is computed the way the function does it.
+        $edge = api_get_utc_datetime('2031-03-15', false, true)->format('Y-m-d');
+        foreach (['2031-01-01 00:00:00', $edge.' 00:00:00', '2031-06-01 00:00:00'] as $date) {
+            $this->conn()->executeStatement(
+                'INSERT INTO track_e_course_access (user_id, c_id, login_course_date, counter, session_id, user_ip) VALUES (?, ?, ?, 1, 0, ?)',
+                [$user->getId(), $course->getId(), $date, '127.0.0.1']
+            );
+        }
+        $cid = (int) $course->getId();
+        $uid = (int) $user->getId();
+        $days = fn (array $rows) => array_column($rows, 'login_course_date');
+
+        $this->assertSame([$edge, '2031-06-01'], $days(CourseManager::getAccessCourse($cid, 2, $uid, '2031-03-15')), 'start is inclusive');
+        $this->assertSame(['2031-01-01', $edge], $days(CourseManager::getAccessCourse($cid, 2, $uid, null, '2031-03-15')), 'end is inclusive');
+        $this->assertSame([$edge], $days(CourseManager::getAccessCourse($cid, 2, $uid, '2031-03-15', '2031-03-15')));
+    }
+
+    public function testCountStudentsForUsersPerCourseLimitCountsOnlyStudentsOfBothSources(): void
+    {
+        $course = $this->createCourse('cm3d_cnt_lim');
+        $session = $this->createSession('cm3d_cnt_lim_session');
+        $this->sessionCourse($session->getId(), $course);
+        foreach (['s1', 's2'] as $k) {
+            $this->sub($this->createUser('cm3d_lim_'.$k), $course, STUDENT);
+        }
+        $this->sub($this->createUser('cm3d_lim_teacher'), $course, COURSEMANAGER);
+        foreach (['x1', 'x2'] as $k) {
+            $this->sessionCourseUser($session->getId(), $course, $this->createUser('cm3d_lim_'.$k), 0);
+        }
+        $this->sessionCourseUser($session->getId(), $course, $this->createUser('cm3d_lim_coach'), 2);
+
+        $this->assertSame(4, CourseManager::countStudentsForUsersPerCourseLimit((int) $course->getId()), 'direct students + session students, no teacher, no coach');
     }
 }

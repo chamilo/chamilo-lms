@@ -7043,6 +7043,8 @@ class CourseManager
         // Secondly we select the courses that are in a category (user_course_cat<>0) and
         // sort these according to the sort of the category
         $user_id = (int) $user_id;
+        // TODO(db-neutral): SQL fragments built by CoursesAndSessionsCatalog::getAvoidCourseCondition() and
+        // self::getCourseVisibilitySQLCondition(), plus a LIMIT inside a scalar subquery
         $sql = "SELECT
                     course.code k,
                     course.visual_code vc,
@@ -7306,12 +7308,14 @@ class CourseManager
 
         $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-        $sql = "SELECT COUNT(*) AS total
-                FROM $table
-                WHERE c_id = $courseId
-                  AND relation_type <> ".COURSE_RELATION_TYPE_RRHH;
-
-        $res = Database::query($sql);
+        $res = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('COUNT(*) AS total')
+            ->from($table)
+            ->where('c_id = :courseId')
+            ->andWhere('relation_type <> :relationType')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('relationType', COURSE_RELATION_TYPE_RRHH)
+            ->executeQuery();
         $row = Database::fetch_array($res, 'ASSOC') ?: [];
 
         return (int) ($row['total'] ?? 0);
@@ -7339,53 +7343,49 @@ class CourseManager
         }
 
         $tblTrackECourse = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $conditions = [];
+        $qb = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select(
+                'DISTINCT CAST(course_access.login_course_date AS DATE) AS login_course_date',
+                'user_id',
+                'c_id',
+                'session_id'
+            )
+            ->from($tblTrackECourse, 'course_access');
 
         if (0 !== $courseId) {
-            $conditions[] = "course_access.c_id = $courseId";
+            $qb->andWhere('course_access.c_id = :courseId')
+                ->setParameter('courseId', $courseId);
         }
         if (0 !== $userId) {
-            $conditions[] = "course_access.user_id = $userId";
+            $qb->andWhere('course_access.user_id = :userId')
+                ->setParameter('userId', $userId);
         }
         if (!empty($startDate)) {
             $startDateObj = api_get_utc_datetime($startDate, false, true);
             if ($startDateObj) {
-                $safeStart = Database::escape_string($startDateObj->format('Y-m-d'));
-                $conditions[] = "course_access.login_course_date >= '$safeStart'";
+                $qb->andWhere('course_access.login_course_date >= :startDate')
+                    ->setParameter('startDate', $startDateObj->format('Y-m-d'));
             }
         }
         if (!empty($endDate)) {
             $endDateObj = api_get_utc_datetime($endDate, false, true);
             if ($endDateObj) {
-                $safeEnd = Database::escape_string($endDateObj->format('Y-m-d'));
-                $conditions[] = "course_access.login_course_date <= '$safeEnd'";
+                $qb->andWhere('course_access.login_course_date <= :endDate')
+                    ->setParameter('endDate', $endDateObj->format('Y-m-d'));
             }
         }
         if (0 === $withSession) {
-            $conditions[] = 'course_access.session_id = 0';
+            $qb->andWhere('course_access.session_id = 0');
         } elseif (1 === $withSession) {
-            $conditions[] = 'course_access.session_id != 0';
+            $qb->andWhere('course_access.session_id != 0');
         }
 
-        $where = '';
-        if (!empty($conditions)) {
-            $where = ' WHERE '.implode(' AND ', $conditions);
-        }
+        $qb->groupBy('c_id', 'session_id', 'CAST(course_access.login_course_date AS DATE)', 'user_id')
+            ->orderBy('c_id')
+            ->addOrderBy('login_course_date')
+            ->addOrderBy('session_id');
 
-        $sql = "SELECT DISTINCT
-                    CAST(course_access.login_course_date AS DATE) AS login_course_date,
-                    user_id,
-                    c_id,
-                    session_id
-                FROM $tblTrackECourse AS course_access
-                $where
-                GROUP BY c_id, session_id, CAST(course_access.login_course_date AS DATE), user_id
-                ORDER BY c_id, login_course_date, session_id";
-
-        $res = Database::query($sql);
-        $data = Database::store_result($res);
-
-        return $data;
+        return $qb->executeQuery()->fetchAllAssociative();
     }
 
     /**
@@ -7415,24 +7415,30 @@ class CourseManager
         $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $sql = "SELECT COUNT(DISTINCT user_id) AS total
-                FROM (
-                    SELECT user_id
-                    FROM $courseUserTable
-                    WHERE c_id = $courseId
-                      AND status = ".STUDENT."
-                      AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                    UNION
-                    SELECT user_id
-                    FROM $sessionCourseUserTable
-                    WHERE c_id = $courseId
-                      AND status = ".SessionEntity::STUDENT."
-                ) subscribed_users";
+        // No UNION in DBAL/DQL: the two sets are merged and deduplicated here.
+        $connection = Database::getManager()->getConnection();
+        $directStudents = $connection->createQueryBuilder()
+            ->select('user_id')
+            ->from($courseUserTable)
+            ->where('c_id = :courseId')
+            ->andWhere('status = :status')
+            ->andWhere('relation_type <> :relationType')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('status', STUDENT)
+            ->setParameter('relationType', COURSE_RELATION_TYPE_RRHH)
+            ->executeQuery()
+            ->fetchFirstColumn();
+        $sessionStudents = $connection->createQueryBuilder()
+            ->select('user_id')
+            ->from($sessionCourseUserTable)
+            ->where('c_id = :courseId')
+            ->andWhere('status = :status')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('status', SessionEntity::STUDENT)
+            ->executeQuery()
+            ->fetchFirstColumn();
 
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC') ?: [];
-
-        return (int) ($row['total'] ?? 0);
+        return count(array_unique(array_map('intval', array_merge($directStudents, $sessionStudents))));
     }
 
     /**
@@ -7489,25 +7495,29 @@ class CourseManager
 
         $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $idList = implode(',', $userIds);
-
-        $sql = "SELECT COUNT(DISTINCT user_id) AS already
-                FROM (
-                    SELECT user_id
-                    FROM $courseUserTable
-                    WHERE c_id = $courseId
-                      AND relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                      AND user_id IN ($idList)
-                    UNION
-                    SELECT user_id
-                    FROM $sessionCourseUserTable
-                    WHERE c_id = $courseId
-                      AND user_id IN ($idList)
-                ) existing_users";
-
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC') ?: [];
-        $already = (int) ($row['already'] ?? 0);
+        // No UNION in DBAL/DQL: the two sets are merged and deduplicated here.
+        $connection = Database::getManager()->getConnection();
+        $inCourse = $connection->createQueryBuilder()
+            ->select('user_id')
+            ->from($courseUserTable)
+            ->where('c_id = :courseId')
+            ->andWhere('relation_type <> :relationType')
+            ->andWhere('user_id IN (:userIds)')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('relationType', COURSE_RELATION_TYPE_RRHH)
+            ->setParameter('userIds', $userIds, ArrayParameterType::INTEGER)
+            ->executeQuery()
+            ->fetchFirstColumn();
+        $inSession = $connection->createQueryBuilder()
+            ->select('user_id')
+            ->from($sessionCourseUserTable)
+            ->where('c_id = :courseId')
+            ->andWhere('user_id IN (:userIds)')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userIds', $userIds, ArrayParameterType::INTEGER)
+            ->executeQuery()
+            ->fetchFirstColumn();
+        $already = count(array_unique(array_map('intval', array_merge($inCourse, $inSession))));
 
         $newCount = count($userIds) - $already;
         if ($newCount <= 0) {

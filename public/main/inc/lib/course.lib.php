@@ -26,6 +26,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\ArrayParameterType;
 
 /**
  * Class CourseManager.
@@ -395,13 +396,20 @@ class CourseManager
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
 
+        $unsubscribeConnection = Database::getManager()->getConnection();
+        $deleteUsersOfCourse = static function (string $table) use ($unsubscribeConnection, $course_id, $userList): void {
+            $unsubscribeConnection->createQueryBuilder()
+                ->delete($table)
+                ->where('c_id = :courseId')
+                ->andWhere('user_id IN (:userIds)')
+                ->setParameter('courseId', (int) $course_id)
+                ->setParameter('userIds', $userList, ArrayParameterType::INTEGER)
+                ->executeStatement();
+        };
+
         // Unsubscribe user from all groups in the course.
-        $sql = "DELETE FROM ".Database::get_course_table(TABLE_GROUP_USER)."
-                WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
-        Database::query($sql);
-        $sql = "DELETE FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)."
-                WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
-        Database::query($sql);
+        $deleteUsersOfCourse(Database::get_course_table(TABLE_GROUP_USER));
+        $deleteUsersOfCourse(Database::get_course_table(TABLE_GROUP_TUTOR));
 
         // Erase user student publications (works) in the course - by André Boivin
         // @todo this should be handled by doctrine.
@@ -433,13 +441,8 @@ class CourseManager
         Database::query($sql);*/
 
         // Deleting users in forum_notification and mailqueue course tables
-        $sql = "DELETE FROM  ".Database::get_course_table(TABLE_FORUM_NOTIFICATION)."
-                WHERE c_id = $course_id AND user_id IN ($user_ids)";
-        Database::query($sql);
-
-        $sql = "DELETE FROM ".Database::get_course_table(TABLE_FORUM_MAIL_QUEUE)."
-                WHERE c_id = $course_id AND user_id IN ($user_ids)";
-        Database::query($sql);
+        $deleteUsersOfCourse(Database::get_course_table(TABLE_FORUM_NOTIFICATION));
+        $deleteUsersOfCourse(Database::get_course_table(TABLE_FORUM_MAIL_QUEUE));
 
         // Unsubscribe user from the course.
         if (!empty($session_id)) {
@@ -447,11 +450,17 @@ class CourseManager
                 SessionManager::unSubscribeUserFromCourseSession($uid, $course_id, $session_id);
 
                 // check if a user is register in the session with other course
-                $sql = "SELECT user_id FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                        WHERE session_id = $session_id AND user_id = $uid";
-                $rs = Database::query($sql);
+                $registeredInSession = $unsubscribeConnection->createQueryBuilder()
+                    ->select('user_id')
+                    ->from(Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER))
+                    ->where('session_id = :sessionId')
+                    ->andWhere('user_id = :userId')
+                    ->setParameter('sessionId', $session_id)
+                    ->setParameter('userId', (int) $uid)
+                    ->executeQuery()
+                    ->fetchAssociative();
 
-                if (0 == Database::num_rows($rs)) {
+                if (false === $registeredInSession) {
                     SessionManager::unsubscribe_user_from_session($uid, $session_id);
                 }
             }
@@ -467,12 +476,15 @@ class CourseManager
                 $session_id
             );
         } else {
-            $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                    WHERE
-                        user_id IN ($user_ids) AND
-                        relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
-                        c_id = $course_id";
-            Database::query($sql);
+            $unsubscribeConnection->createQueryBuilder()
+                ->delete(Database::get_main_table(TABLE_MAIN_COURSE_USER))
+                ->where('user_id IN (:userIds)')
+                ->andWhere('relation_type <> :rrhh')
+                ->andWhere('c_id = :courseId')
+                ->setParameter('userIds', $userList, ArrayParameterType::INTEGER)
+                ->setParameter('rrhh', COURSE_RELATION_TYPE_RRHH)
+                ->setParameter('courseId', (int) $course_id)
+                ->executeStatement();
 
             // add event to system log
             $user_id = api_get_user_id();

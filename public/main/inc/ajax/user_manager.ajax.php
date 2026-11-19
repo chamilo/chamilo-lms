@@ -306,7 +306,9 @@ switch ($action) {
         $users = Container::getUserRepository()->findByRoleList(
             $roleList,
             $_REQUEST['q'],
-            $urlId
+            $urlId,
+            false,
+            100
         );
 
         if (!$users) {
@@ -342,7 +344,9 @@ switch ($action) {
         $users = Container::getUserRepository()->findByRoleList(
             $roleList,
             $_REQUEST['q'],
-            $urlId
+            $urlId,
+            false,
+            100
         );
 
         if (!$users) {

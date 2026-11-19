@@ -25,7 +25,6 @@ use Chamilo\CourseBundle\Repository\CAttendanceSheetRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Endroid\QrCode\Builder\Builder;
-use Exception;
 use Mpdf\Mpdf;
 use Mpdf\MpdfException;
 use Mpdf\Output\Destination;
@@ -38,7 +37,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -60,12 +61,12 @@ class AttendanceController extends AbstractController
         $attendanceId = (int) $request->query->get('attendanceId', '0');
 
         if (!$attendanceId) {
-            return $this->json(['error' => 'Attendance ID is required'], 400);
+            throw new BadRequestHttpException('Attendance ID is required');
         }
 
         $attendance = $this->em->getRepository(CAttendance::class)->find($attendanceId);
         if (!$attendance) {
-            return $this->json(['error' => 'Attendance not found'], 404);
+            throw $this->createNotFoundException('Attendance not found');
         }
         // Only members of the attendance's course may read it.
         $this->denyAccessUnlessGranted('VIEW', $attendance->getResourceNode());
@@ -89,7 +90,7 @@ class AttendanceController extends AbstractController
 
         $attendance = $this->em->getRepository(CAttendance::class)->find($id);
         if (!$attendance) {
-            return $this->json(['error' => 'Attendance not found'], 404);
+            throw $this->createNotFoundException('Attendance not found');
         }
         // Roster + PII: teacher of the attendance's course only.
         $this->denyAccessUnlessGranted('EDIT', $attendance->getResourceNode());
@@ -435,7 +436,7 @@ class AttendanceController extends AbstractController
         $data = json_decode($request->getContent(), true);
 
         if (empty($data['attendanceData']) || empty($data['courseId']) || empty($data['attendanceId'])) {
-            return $this->json(['error' => 'Missing required parameters'], 400);
+            throw new BadRequestHttpException('Missing required parameters');
         }
 
         $attendanceData = $data['attendanceData'];
@@ -447,20 +448,20 @@ class AttendanceController extends AbstractController
         // Resolve the exact modern course/session context before accepting any calendar IDs.
         $course = $this->em->getRepository(Course::class)->find($courseId);
         if (!$course instanceof Course) {
-            return $this->json(['error' => 'Course not found'], 404);
+            throw $this->createNotFoundException('Course not found');
         }
 
         $session = null;
         if (null !== $sessionId) {
             $session = $this->em->getRepository(Session::class)->find($sessionId);
             if (!$session instanceof Session || !$session->hasCourse($course)) {
-                return $this->json(['error' => 'Session not found in course'], 404);
+                throw $this->createNotFoundException('Session not found in course');
             }
         }
 
         $attendance = $this->attendanceRepository->find($attendanceId);
         if (!$attendance instanceof CAttendance) {
-            return $this->json(['error' => 'Attendance not found'], 404);
+            throw $this->createNotFoundException('Attendance not found');
         }
 
         $availableAttendanceIds = array_map(
@@ -468,7 +469,7 @@ class AttendanceController extends AbstractController
             $this->attendanceRepository->getAttendanceListForCourse($course, $session),
         );
         if (!\in_array($attendanceId, $availableAttendanceIds, true)) {
-            return $this->json(['error' => 'Attendance is not available in the requested course and session'], 403);
+            throw $this->createAccessDeniedException('Attendance is not available in the requested course and session');
         }
 
         $this->denyAccessUnlessGranted(CourseVoter::EDIT, $course);
@@ -479,142 +480,135 @@ class AttendanceController extends AbstractController
 
         $affectedRows = 0;
 
-        try {
-            foreach ($attendanceData as $entry) {
-                $userId = (int) $entry['userId'];
-                $calendarId = (int) $entry['calendarId'];
+        foreach ($attendanceData as $entry) {
+            $userId = (int) $entry['userId'];
+            $calendarId = (int) $entry['calendarId'];
 
-                // Never write attendance for a user who is not in the target course.
-                if (!\in_array($userId, $userIdsInCourse, true)) {
-                    continue;
-                }
-                $presence = \array_key_exists('presence', $entry) ? $entry['presence'] : null;
-                $signature = $entry['signature'] ?? null;
-                $comment = $entry['comment'] ?? null;
+            // Never write attendance for a user who is not in the target course.
+            if (!\in_array($userId, $userIdsInCourse, true)) {
+                continue;
+            }
+            $presence = \array_key_exists('presence', $entry) ? $entry['presence'] : null;
+            $signature = $entry['signature'] ?? null;
+            $comment = $entry['comment'] ?? null;
 
-                $calendar = $this->attendanceCalendarRepository->find($calendarId);
-                if (!$calendar || (int) $calendar->getAttendance()->getIid() !== $attendanceId) {
-                    return $this->json(['error' => "Attendance calendar with ID $calendarId not found"], 404);
-                }
-
-                $user = $this->em->getRepository(User::class)->find($userId);
-                if (!$user) {
-                    continue;
-                }
-
-                $sheet = $sheetRepository->findOneBy([
-                    'user' => $user,
-                    'attendanceCalendar' => $calendar,
-                ]);
-
-                if ($sheet && null === $presence) {
-                    $this->em->remove($sheet);
-
-                    continue;
-                }
-
-                if (!$sheet && null === $presence) {
-                    continue;
-                }
-
-                if (!$sheet) {
-                    $sheet = new CAttendanceSheet();
-                }
-
-                $sheet->setUser($user)
-                    ->setAttendanceCalendar($calendar)
-                    ->setPresence($presence)
-                    ->setSignature($signature)
-                ;
-
-                $this->em->persist($sheet);
-
-                $this->em->flush();
-
-                if (null !== $comment) {
-                    $existingComment = $this->em->getRepository(CAttendanceResultComment::class)->findOneBy([
-                        'attendanceSheetId' => $sheet->getIid(),
-                        'userId' => $user->getId(),
-                    ]);
-
-                    if (!$existingComment) {
-                        $existingComment = new CAttendanceResultComment();
-                        $existingComment->setAttendanceSheetId($sheet->getIid());
-                        $existingComment->setUserId($user->getId());
-                        $existingComment->setAuthorUserId($this->getUser()->getId());
-                    }
-
-                    $existingComment->setComment($comment);
-                    $existingComment->setUpdatedAt(new DateTime());
-
-                    $this->em->persist($existingComment);
-                }
+            $calendar = $this->attendanceCalendarRepository->find($calendarId);
+            if (!$calendar || (int) $calendar->getAttendance()->getIid() !== $attendanceId) {
+                throw $this->createNotFoundException("Attendance calendar with ID $calendarId not found");
             }
 
-            $calendarIds = array_unique(array_column($attendanceData, 'calendarId'));
-            foreach ($calendarIds as $calendarId) {
-                $calendar = $this->attendanceCalendarRepository->find($calendarId);
-                if ($calendar && !$calendar->getDoneAttendance()) {
-                    $calendar->setDoneAttendance(true);
-                    $this->em->persist($calendar);
-                }
+            $user = $this->em->getRepository(User::class)->find($userId);
+            if (!$user) {
+                continue;
             }
 
-            $calendars = $this->attendanceCalendarRepository->findBy(['iid' => $calendarIds]);
+            $sheet = $sheetRepository->findOneBy([
+                'user' => $user,
+                'attendanceCalendar' => $calendar,
+            ]);
 
-            // Legacy parity: Gradebook attendance maximum equals the number of
-            // attendance dates that have actually been marked as done. Count the
-            // managed collection so dates marked above are included before flush.
-            $doneCalendarCount = 0;
-            foreach ($attendance->getCalendars() as $attendanceCalendar) {
-                if ($attendanceCalendar->getDoneAttendance()) {
-                    ++$doneCalendarCount;
-                }
+            if ($sheet && null === $presence) {
+                $this->em->remove($sheet);
+
+                continue;
             }
-            $attendance->setAttendanceQualifyMax($doneCalendarCount);
-            $this->em->persist($attendance);
-            $this->updateAttendanceResults($attendance);
 
-            $lasteditType = $calendars[0]->getDoneAttendance()
-                ? 'UPDATED_ATTENDANCE_LOG_TYPE'
-                : 'DONE_ATTENDANCE_LOG_TYPE';
-
-            foreach ($calendars as $calendar) {
-                $this->saveAttendanceLog($attendance, $lasteditType, $calendar);
+            if (!$sheet && null === $presence) {
+                continue;
             }
+
+            if (!$sheet) {
+                $sheet = new CAttendanceSheet();
+            }
+
+            $sheet->setUser($user)
+                ->setAttendanceCalendar($calendar)
+                ->setPresence($presence)
+                ->setSignature($signature)
+            ;
+
+            $this->em->persist($sheet);
 
             $this->em->flush();
 
-            return $this->json([
-                'message' => $this->translator->trans('Attendance data and comments saved successfully'),
-                'affectedRows' => $affectedRows,
-            ]);
-        } catch (Exception $e) {
-            return $this->json(['error' => 'An error occurred: '.$e->getMessage()], 500);
+            if (null !== $comment) {
+                $existingComment = $this->em->getRepository(CAttendanceResultComment::class)->findOneBy([
+                    'attendanceSheetId' => $sheet->getIid(),
+                    'userId' => $user->getId(),
+                ]);
+
+                if (!$existingComment) {
+                    $existingComment = new CAttendanceResultComment();
+                    $existingComment->setAttendanceSheetId($sheet->getIid());
+                    $existingComment->setUserId($user->getId());
+                    $existingComment->setAuthorUserId($this->getUser()->getId());
+                }
+
+                $existingComment->setComment($comment);
+                $existingComment->setUpdatedAt(new DateTime());
+
+                $this->em->persist($existingComment);
+            }
         }
+
+        $calendarIds = array_unique(array_column($attendanceData, 'calendarId'));
+        foreach ($calendarIds as $calendarId) {
+            $calendar = $this->attendanceCalendarRepository->find($calendarId);
+            if ($calendar && !$calendar->getDoneAttendance()) {
+                $calendar->setDoneAttendance(true);
+                $this->em->persist($calendar);
+            }
+        }
+
+        $calendars = $this->attendanceCalendarRepository->findBy(['iid' => $calendarIds]);
+
+        // Legacy parity: Gradebook attendance maximum equals the number of
+        // attendance dates that have actually been marked as done. Count the
+        // managed collection so dates marked above are included before flush.
+        $doneCalendarCount = 0;
+        foreach ($attendance->getCalendars() as $attendanceCalendar) {
+            if ($attendanceCalendar->getDoneAttendance()) {
+                ++$doneCalendarCount;
+            }
+        }
+        $attendance->setAttendanceQualifyMax($doneCalendarCount);
+        $this->em->persist($attendance);
+        $this->updateAttendanceResults($attendance);
+
+        $lasteditType = $calendars[0]->getDoneAttendance()
+            ? 'UPDATED_ATTENDANCE_LOG_TYPE'
+            : 'DONE_ATTENDANCE_LOG_TYPE';
+
+        foreach ($calendars as $calendar) {
+            $this->saveAttendanceLog($attendance, $lasteditType, $calendar);
+        }
+
+        $this->em->flush();
+
+        return $this->json([
+            'message' => $this->translator->trans('Attendance data and comments saved successfully'),
+            'affectedRows' => $affectedRows,
+        ]);
     }
 
     #[Route('/sign-self', name: 'chamilo_core_attendance_sign_self', methods: ['POST'])]
     public function signSelf(
         Request $request,
-        CAttendanceSheetRepository $sheetRepository
+        CAttendanceSheetRepository $sheetRepository,
+        #[CurrentUser]
+        User $user,
     ): JsonResponse {
-        $user = $this->getUser();
-        if (!$user instanceof User) {
-            return $this->json(['error' => 'Unauthorized'], 401);
-        }
-
         $data = json_decode($request->getContent(), true);
         $calendarId = isset($data['calendarId']) ? (int) $data['calendarId'] : null;
         $signature = $data['signature'] ?? null;
 
         if (!$calendarId || !$signature) {
-            return $this->json(['error' => 'Missing required parameters'], 400);
+            throw new BadRequestHttpException('Missing required parameters');
         }
 
         $calendar = $this->attendanceCalendarRepository->find($calendarId);
         if (!$calendar) {
-            return $this->json(['error' => 'Attendance calendar not found'], 404);
+            throw $this->createNotFoundException('Attendance calendar not found');
         }
 
         $sheet = $sheetRepository->findOneBy([
@@ -623,7 +617,7 @@ class AttendanceController extends AbstractController
         ]);
 
         if (!$sheet) {
-            return $this->json(['error' => 'No attendance sheet found for this user and date'], 404);
+            throw $this->createNotFoundException('No attendance sheet found for this user and date');
         }
 
         $sheet->setSignature($signature);
@@ -635,29 +629,26 @@ class AttendanceController extends AbstractController
     #[Route('/validate-self', name: 'chamilo_core_attendance_validate_self', methods: ['POST'])]
     public function validateSelf(
         Request $request,
-        CAttendanceSheetRepository $sheetRepository
+        CAttendanceSheetRepository $sheetRepository,
+        #[CurrentUser]
+        User $user,
     ): JsonResponse {
-        $user = $this->getUser();
-        if (!$user instanceof User) {
-            return $this->json(['error' => 'Unauthorized'], 401);
-        }
-
         $data = json_decode($request->getContent(), true);
         $courseId = isset($data['courseId']) ? (int) $data['courseId'] : null;
         $entries = $data['entries'] ?? [];
 
         if (!$courseId || empty($entries)) {
-            return $this->json(['error' => 'Missing required parameters'], 400);
+            throw new BadRequestHttpException('Missing required parameters');
         }
 
         $course = $this->em->getRepository(Course::class)->find($courseId);
         if (!$course) {
-            return $this->json(['error' => 'Course not found'], 404);
+            throw $this->createNotFoundException('Course not found');
         }
 
         $setting = api_get_course_setting('student_validate_own_attendance', $course);
         if ('1' !== (string) $setting) {
-            return $this->json(['error' => 'This feature is not enabled for this course'], 403);
+            throw $this->createAccessDeniedException('This feature is not enabled for this course');
         }
 
         $presenceByCalendar = [];
@@ -680,7 +671,7 @@ class AttendanceController extends AbstractController
                 || null === $attendanceNode->getResourceLinkByContext($course)
                 || !$this->isGranted('VIEW', $attendanceNode)
             ) {
-                return $this->json(['error' => 'Attendance date not available in this course'], 403);
+                throw $this->createAccessDeniedException('Attendance date not available in this course');
             }
 
             $presenceByCalendar[] = [$calendar, $presence];
@@ -707,16 +698,11 @@ class AttendanceController extends AbstractController
     }
 
     #[Route('/{id}/student-dates', name: 'attendance_student_dates', methods: ['GET'])]
-    public function getStudentDates(int $id): JsonResponse
+    public function getStudentDates(int $id, #[CurrentUser] User $user): JsonResponse
     {
-        $user = $this->getUser();
-        if (!$user) {
-            return $this->json(['error' => 'Unauthorized'], 401);
-        }
-
         $attendance = $this->em->getRepository(CAttendance::class)->find($id);
         if (!$attendance) {
-            return $this->json(['error' => 'Attendance not found'], 404);
+            throw $this->createNotFoundException('Attendance not found');
         }
         // Self-view of the caller's own attendance; require course membership.
         $this->denyAccessUnlessGranted('VIEW', $attendance->getResourceNode());
@@ -788,7 +774,7 @@ class AttendanceController extends AbstractController
 
         $calendar = $calendarRepo->find($calendarId);
         if (!$calendar || $calendar->getAttendance()?->getIid() !== $attendanceId) {
-            return $this->json(['error' => 'Calendar not found'], 404);
+            throw $this->createNotFoundException('Calendar not found');
         }
         // Teacher-only: exposes every student's presence + signature for the date.
         $this->denyAccessUnlessGranted('EDIT', $calendar->getAttendance()->getResourceNode());

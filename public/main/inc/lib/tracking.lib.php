@@ -16,6 +16,7 @@ use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Query\QueryBuilder as DbalQueryBuilder;
 use Doctrine\ORM\QueryBuilder;
 use ExtraField as ExtraFieldModel;
@@ -33,6 +34,24 @@ class Tracking
     private static function dbalQueryBuilder(): DbalQueryBuilder
     {
         return Container::getEntityManager()->getConnection()->createQueryBuilder();
+    }
+
+    /**
+     * Bound equivalent of api_get_session_condition($sessionId): the base context (0) also matches NULL.
+     */
+    private static function andSessionCondition(
+        DbalQueryBuilder $qb,
+        int $sessionId,
+        string $sessionField = 'session_id'
+    ): void {
+        if (empty($sessionId)) {
+            $qb->andWhere("($sessionField = 0 OR $sessionField IS NULL)");
+
+            return;
+        }
+
+        $qb->andWhere("$sessionField = :sessionConditionId")
+            ->setParameter('sessionConditionId', $sessionId);
     }
 
     /**
@@ -2589,28 +2608,31 @@ class Tracking
         $lp_id = intval($lp_id);
         $lp_item_id = intval($lp_item_id);
         $tbl_stats_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $sessionCondition = api_get_session_condition($sessionId);
-        $sql = "SELECT COUNT(exe_id) as essais
-                FROM $tbl_stats_exercises
-                WHERE
-                    c_id = $courseId AND
-                    exe_exo_id = $exercise_id AND
-                    status = '' AND
-                    exe_user_id= $student_id
-                    $sessionCondition
-                    ";
+        $qb = self::dbalQueryBuilder()
+            ->select('COUNT(exe_id) AS essais')
+            ->from($tbl_stats_exercises)
+            ->where('c_id = :courseId')
+            ->andWhere('exe_exo_id = :exerciseId')
+            ->andWhere("status = ''")
+            ->andWhere('exe_user_id = :studentId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('exerciseId', $exercise_id)
+            ->setParameter('studentId', $student_id);
+        self::andSessionCondition($qb, $sessionId);
 
         if (1 == $find_all_lp) {
-            $sql .= "AND (orig_lp_id = $lp_id OR orig_lp_id = 0)
-                AND (orig_lp_item_id = $lp_item_id OR orig_lp_item_id = 0)";
+            $qb->andWhere('(orig_lp_id = :lpId OR orig_lp_id = 0)')
+                ->andWhere('(orig_lp_item_id = :lpItemId OR orig_lp_item_id = 0)')
+                ->setParameter('lpId', $lp_id)
+                ->setParameter('lpItemId', $lp_item_id);
         } elseif (0 == $find_all_lp) {
-            $sql .= "AND orig_lp_id = $lp_id
-                AND orig_lp_item_id = $lp_item_id";
+            $qb->andWhere('orig_lp_id = :lpId')
+                ->andWhere('orig_lp_item_id = :lpItemId')
+                ->setParameter('lpId', $lp_id)
+                ->setParameter('lpItemId', $lp_item_id);
         }
 
-        $rs = Database::query($sql);
-        $row = Database::fetch_row($rs);
-        $count_attempts = $row[0];
+        $count_attempts = $qb->executeQuery()->fetchOne();
 
         return $count_attempts;
     }
@@ -2641,26 +2663,21 @@ class Tracking
         $tbl_stats_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $exerciseIdList = [];
         foreach ($exerciseList as $exercise) {
-            $exerciseIdList[] = $exercise->getIid();
+            $exerciseIdList[] = (int) $exercise->getIid();
         }
-        $exercise_list_imploded = implode("' ,'", $exerciseIdList);
-        $sessionCondition = api_get_session_condition($sessionId);
-        $sql = "SELECT COUNT(DISTINCT exe_exo_id)
-                FROM $tbl_stats_exercises
-                WHERE
-                    c_id = $courseId AND
-                    exe_user_id = $user_id AND
-                    status = '' AND
-                    exe_exo_id IN ('$exercise_list_imploded')
-                    $sessionCondition
-                    ";
+        $qb = self::dbalQueryBuilder()
+            ->select('COUNT(DISTINCT exe_exo_id)')
+            ->from($tbl_stats_exercises)
+            ->where('c_id = :courseId')
+            ->andWhere('exe_user_id = :userId')
+            ->andWhere("status = ''")
+            ->andWhere('exe_exo_id IN (:exerciseIds)')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $user_id)
+            ->setParameter('exerciseIds', $exerciseIdList, ArrayParameterType::INTEGER);
+        self::andSessionCondition($qb, $sessionId);
 
-        $rs = Database::query($sql);
-        $count = 0;
-        if ($rs) {
-            $row = Database::fetch_row($rs);
-            $count = (int) $row[0];
-        }
+        $count = (int) $qb->executeQuery()->fetchOne();
         $count = (0 != $count) ? 100 * round($count / count($exerciseList), 2).'%' : '0%';
 
         return $count;

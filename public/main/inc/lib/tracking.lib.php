@@ -6996,36 +6996,42 @@ class Tracking
             return [];
         }
 
-        $sql = "SELECT MIN(date_reg) min, MAX(date_reg) max
-                FROM track_e_access_complete
-                WHERE
-                    user_id = $userId AND
-                    c_id = $courseId AND
-                    session_id = $sessionId AND
-                    login_as = 0
-                ORDER BY date_reg ASC
-                LIMIT 1";
-        $rs = Database::query($sql);
+        $value = self::dbalQueryBuilder()
+            ->select('MIN(date_reg) AS min', 'MAX(date_reg) AS max')
+            ->from('track_e_access_complete')
+            ->where('user_id = :userId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('login_as = 0')
+            ->setParameter('userId', $userId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->executeQuery()
+            ->fetchAssociative();
 
         $firstConnection = '';
         $lastConnection = '';
-        if (Database::num_rows($rs) > 0) {
-            $value = Database::fetch_array($rs);
+        if (false !== $value) {
             // MIN/MAX of no rows is a row of NULLs: keep the empty-string default.
             $firstConnection = $value['min'] ?? '';
             $lastConnection = $value['max'] ?? '';
         }
 
-        $sql = "SELECT * FROM track_e_access_complete
-                WHERE
-                    user_id = $userId AND
-                    c_id = $courseId AND
-                    session_id = $sessionId AND
-                    login_as = 0 AND current_id <> 0";
-
-        $res = Database::query($sql);
+        $rowsAccess = self::dbalQueryBuilder()
+            ->select('*')
+            ->from('track_e_access_complete')
+            ->where('user_id = :userId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('login_as = 0')
+            ->andWhere('current_id <> 0')
+            ->setParameter('userId', $userId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->executeQuery()
+            ->fetchAllAssociative();
         $reg = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($rowsAccess as $row) {
             $reg[$row['id']] = $row;
             $reg[$row['id']]['date_reg'] = strtotime($row['date_reg']);
         }
@@ -7170,16 +7176,20 @@ class Tracking
             return false;
         }
         $user_id = intval($user_id);
-        $event_date = Database::escape_string($event_date);
         $table_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $sql_ip = "SELECT login_date, user_ip
-                   FROM $table_login
-                   WHERE login_user_id = $user_id AND login_date < '$event_date'
-                   ORDER BY login_date DESC LIMIT 1";
         $ip = '';
-        $res_ip = Database::query($sql_ip);
-        if (false !== $res_ip && Database::num_rows($res_ip) > 0) {
-            $row_ip = Database::fetch_row($res_ip);
+        $row_ip = self::dbalQueryBuilder()
+            ->select('login_date', 'user_ip')
+            ->from($table_login)
+            ->where('login_user_id = :userId')
+            ->andWhere('login_date < :eventDate')
+            ->setParameter('userId', $user_id)
+            ->setParameter('eventDate', $event_date)
+            ->orderBy('login_date', 'DESC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchNumeric();
+        if (false !== $row_ip) {
             if ($return_as_link) {
                 $ip = Display::url(
                     (empty($body_replace) ? $row_ip[1] : $body_replace),
@@ -7311,17 +7321,16 @@ class Tracking
     public static function getNumberOfCourseAccessDates($userId, $courseId, $sessionId)
     {
         $tblTrackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sessionCondition = api_get_session_condition($sessionId);
-        $courseId = (int) $courseId;
-        $userId = (int) $userId;
+        $qb = self::dbalQueryBuilder()
+            ->select('COUNT(DISTINCT (DATE(login_course_date))) AS c')
+            ->from($tblTrackCourseAccess)
+            ->where('c_id = :courseId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('userId', (int) $userId);
+        self::andSessionCondition($qb, (int) $sessionId);
 
-        $sql = "SELECT COUNT(DISTINCT (DATE(login_course_date))) AS c
-            FROM $tblTrackCourseAccess
-            WHERE c_id = $courseId $sessionCondition AND user_id = $userId";
-
-        $result = Database::fetch_assoc(Database::query($sql));
-
-        return (int) $result['c'];
+        return (int) $qb->executeQuery()->fetchOne();
     }
 
     public static function processUserDataMove(
@@ -8349,6 +8358,7 @@ class Tracking
         // Outside a session the column is NULL (nullable FK), legacy rows may hold 0.
         $sessionCondition = api_get_session_condition($sessionId, true, false, 'lv.session_id');
 
+        // TODO(db-neutral): FROM_UNIXTIME
         $sql = "SELECT FROM_UNIXTIME(liv.start_time) as start_date
                 FROM $tblLpItemView liv
                 INNER JOIN
@@ -8391,19 +8401,18 @@ class Tracking
     ) {
         $tblTrackExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         // Outside a session the column is NULL (nullable FK), legacy rows may hold 0.
-        $sessionCondition = api_get_session_condition($sessionId, true, false, 'ex.session_id');
-
-        $sql = "SELECT ex.exe_date
-                FROM $tblTrackExercise AS ex
-                WHERE
-                    ex.c_id = $courseId AND
-                    ex.exe_user_id = $userId AND
-                    ex.status = ''
-                    $sessionCondition
-                ORDER BY ex.exe_date DESC
-                LIMIT 1";
-        $rs = Database::query($sql);
-        $exeDate = Database::result($rs, 0, 0);
+        $qb = self::dbalQueryBuilder()
+            ->select('ex.exe_date')
+            ->from($tblTrackExercise, 'ex')
+            ->where('ex.c_id = :courseId')
+            ->andWhere('ex.exe_user_id = :userId')
+            ->andWhere("ex.status = ''")
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $userId)
+            ->orderBy('ex.exe_date', 'DESC')
+            ->setMaxResults(1);
+        self::andSessionCondition($qb, $sessionId, 'ex.session_id');
+        $exeDate = $qb->executeQuery()->fetchOne();
 
         if (empty($exeDate)) {
             return false;
@@ -8450,6 +8459,7 @@ class Tracking
             $dateUntil = Database::escape_string($dateUntil);
             $conditionTime = " (login_course_date >= '$dateFrom' AND logout_course_date <= '$dateUntil' ) ";
         }
+        // TODO(db-neutral): SessionTimeLimit::sqlForSeconds() SQL fragment (LEAST/GREATEST/TIMESTAMPDIFF) spliced into the query
         $sql = "SELECT SUM($durationSql) diff
                 FROM $tableTrackLogin u $tableUrl
                 WHERE $conditionTime $urlCondition";

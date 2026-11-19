@@ -113,7 +113,12 @@ if (!$allowAccessForAll && !isAllowedToDownloadMyFile($userId, $file)) {
 $file = $dir.'/my_files/'.$file;
 
 if (Security::check_abs_path($file, $dir.'my_files/')) {
-    $result = DocumentManager::file_send_for_download($file);
+    // The browser would run the scripts of an HTML, SVG or XML file in the Chamilo origin,
+    // with the session of whoever opens it: deliver those files as a download.
+    $mimeType = DocumentManager::file_get_mime_type(basename($file));
+    $forceDownload = false !== stripos($mimeType, 'html') || false !== stripos($mimeType, 'xml');
+
+    $result = DocumentManager::file_send_for_download($file, $forceDownload);
     if ($result === false) {
         exit;
     }

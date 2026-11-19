@@ -2277,6 +2277,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Decide who can view the posts and comments of the portfolio.',
                 ],
                 [
+                    'name' => 'portfolio_order_post_by_alphabetical_order',
+                    'title' => 'Order portfolio posts alphabetically by default',
+                    'comment' => 'When enabled, portfolio posts are initially sorted by title instead of newest first. Users may still change the order using the portfolio filter.',
+                ],
+                [
                     'name' => 'portfolio_show_base_course_post_in_sessions',
                     'title' => 'Show base course posts in session course',
                     'comment' => 'Decide who can view the posts and comments of the portfolio.',

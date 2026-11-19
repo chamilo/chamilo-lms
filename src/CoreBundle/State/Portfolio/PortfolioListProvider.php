@@ -402,7 +402,9 @@ final readonly class PortfolioListProvider implements ProviderInterface
             $order = 'alphabetical';
         }
         if (!\in_array($order, ['chronological', 'alphabetical'], true)) {
-            $order = 'chronological';
+            $order = $this->portfolioBoolean(
+                $this->settingsManager->getSetting('platform.portfolio_order_post_by_alphabetical_order', true),
+            ) ? 'alphabetical' : 'chronological';
         }
 
         $date = trim($request->query->getString('date'));

@@ -16,6 +16,7 @@ use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
+use Doctrine\DBAL\Query\QueryBuilder as DbalQueryBuilder;
 use Doctrine\ORM\QueryBuilder;
 use ExtraField as ExtraFieldModel;
 
@@ -26,6 +27,14 @@ use ExtraField as ExtraFieldModel;
  */
 class Tracking
 {
+    /**
+     * DBAL query builder for the tracking tables read as raw rows (strings for dates, same types as before).
+     */
+    private static function dbalQueryBuilder(): DbalQueryBuilder
+    {
+        return Container::getEntityManager()->getConnection()->createQueryBuilder();
+    }
+
     /**
      * Get group reporting.
      *
@@ -1796,6 +1805,7 @@ class Tracking
                     FROM $tbl_track_login u $url_table
                     WHERE $userCondition $condition_time $url_condition
                     ORDER BY login_date";
+            // TODO(db-neutral): SessionTimeLimit::sqlForSeconds() SQL fragment (LEAST/GREATEST/TIMESTAMPDIFF) spliced into the query
             $rs = Database::query($sql);
 
             return Database::store_result($rs, 'ASSOC');
@@ -1804,6 +1814,7 @@ class Tracking
         $sql = "SELECT SUM($durationSql) diff
     	        FROM $tbl_track_login u $url_table
                 WHERE $userCondition $condition_time $url_condition";
+        // TODO(db-neutral): SessionTimeLimit::sqlForSeconds() SQL fragment (LEAST/GREATEST/TIMESTAMPDIFF) spliced into the query
         $rs = Database::query($sql);
         $row = Database::fetch_assoc($rs);
         $diff = $row['diff'];
@@ -1853,6 +1864,7 @@ class Tracking
         $sql = "SELECT SUM($durationSql) diff
     	        FROM $tbl_track_login u $url_table
                 WHERE $condition_time $url_condition";
+        // TODO(db-neutral): SessionTimeLimit::sqlForSeconds() SQL fragment (LEAST/GREATEST/TIMESTAMPDIFF) spliced into the query
         $rs = Database::query($sql);
         $row = Database::fetch_assoc($rs);
         $diff = $row['diff'];
@@ -1957,6 +1969,8 @@ class Tracking
 
         $sql .= $conditionUser;
 
+        // TODO(db-neutral): SessionTimeLimit::sqlForSeconds() SQL fragment (LEAST/GREATEST/TIMESTAMPDIFF) spliced into the query
+
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
 
@@ -1973,20 +1987,20 @@ class Tracking
     public static function get_first_connection_date($student_id)
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $sql = 'SELECT login_date
-                FROM '.$table.'
-                WHERE login_user_id = '.intval($student_id).'
-                ORDER BY login_date ASC
-                LIMIT 0,1';
-
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($first_login_date = Database::result($rs, 0, 0)) {
-                return api_convert_and_format_date(
-                    $first_login_date,
-                    DATE_FORMAT_SHORT
-                );
-            }
+        $first_login_date = self::dbalQueryBuilder()
+            ->select('login_date')
+            ->from($table)
+            ->where('login_user_id = :userId')
+            ->setParameter('userId', (int) $student_id)
+            ->orderBy('login_date', 'ASC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if ($first_login_date) {
+            return api_convert_and_format_date(
+                $first_login_date,
+                DATE_FORMAT_SHORT
+            );
         }
 
         return false;
@@ -2008,32 +2022,32 @@ class Tracking
         $return_timestamp = false
     ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $sql = 'SELECT login_date
-                FROM '.$table.'
-                WHERE login_user_id = '.intval($student_id).'
-                ORDER BY login_date
-                DESC LIMIT 0,1';
-
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($last_login_date = Database::result($rs, 0, 0)) {
-                $last_login_date = api_get_local_time($last_login_date);
-                if ($return_timestamp) {
-                    return api_strtotime($last_login_date, 'UTC');
+        $last_login_date = self::dbalQueryBuilder()
+            ->select('login_date')
+            ->from($table)
+            ->where('login_user_id = :userId')
+            ->setParameter('userId', (int) $student_id)
+            ->orderBy('login_date', 'DESC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if ($last_login_date) {
+            $last_login_date = api_get_local_time($last_login_date);
+            if ($return_timestamp) {
+                return api_strtotime($last_login_date, 'UTC');
+            } else {
+                if (!$warning_message) {
+                    return api_format_date($last_login_date, DATE_FORMAT_SHORT);
                 } else {
-                    if (!$warning_message) {
-                        return api_format_date($last_login_date, DATE_FORMAT_SHORT);
-                    } else {
-                        $timestamp = api_strtotime($last_login_date, 'UTC');
-                        $currentTimestamp = time();
+                    $timestamp = api_strtotime($last_login_date, 'UTC');
+                    $currentTimestamp = time();
 
-                        //If the last connection is > than 7 days, the text is red
-                        //345600 = 7 days in seconds
-                        if ($currentTimestamp - $timestamp > 604800) {
-                            return '<em style="color: #F00;">'.api_format_date($last_login_date, DATE_FORMAT_SHORT).'</em>';
-                        } else {
-                            return api_format_date($last_login_date, DATE_FORMAT_SHORT);
-                        }
+                    //If the last connection is > than 7 days, the text is red
+                    //345600 = 7 days in seconds
+                    if ($currentTimestamp - $timestamp > 604800) {
+                        return '<em style="color: #F00;">'.api_format_date($last_login_date, DATE_FORMAT_SHORT).'</em>';
+                    } else {
+                        return api_format_date($last_login_date, DATE_FORMAT_SHORT);
                     }
                 }
             }
@@ -2063,30 +2077,28 @@ class Tracking
         $sessionId = (int) $sessionId;
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = 'SELECT login_course_date
-                FROM '.$table.'
-                WHERE
-                    user_id = '.$student_id.' AND
-                    c_id = '.$courseId.' AND
-                    session_id = '.$sessionId.'
-                ORDER BY login_course_date ASC
-                LIMIT 0,1';
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($first_login_date = Database::result($rs, 0, 0)) {
-                if (empty($first_login_date)) {
-                    return false;
-                }
-
-                if ($convert_date) {
-                    return api_convert_and_format_date(
-                        $first_login_date,
-                        DATE_FORMAT_SHORT
-                    );
-                }
-
-                return $first_login_date;
+        $first_login_date = self::dbalQueryBuilder()
+            ->select('login_course_date')
+            ->from($table)
+            ->where('user_id = :userId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->setParameter('userId', $student_id)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->orderBy('login_course_date', 'ASC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if ($first_login_date) {
+            if ($convert_date) {
+                return api_convert_and_format_date(
+                    $first_login_date,
+                    DATE_FORMAT_SHORT
+                );
             }
+
+            return $first_login_date;
         }
 
         return false;
@@ -2126,95 +2138,97 @@ class Tracking
 
         if (self::minimumTimeAvailable($sessionId, $courseId)) {
             // Show the last date on which the user acceed the session when it was active
-            $where_condition = '';
+            $last_access = null;
             $userInfo = api_get_user_info($student_id);
             if (STUDENT == $userInfo['status'] && !empty($sessionId)) {
                 // fin de acceso a la sesión
                 $sessionInfo = SessionManager::fetch($sessionId);
                 $last_access = $sessionInfo['access_end_date'];
-                if (!empty($last_access)) {
-                    $where_condition = ' AND logout_course_date < "'.$last_access.'" ';
+                if (empty($last_access)) {
+                    $last_access = null;
                 }
             }
-            $sql = "SELECT logout_course_date
-                    FROM $table
-                    WHERE   user_id = $student_id AND
-                            c_id = $courseId AND
-                            session_id = $sessionId $where_condition
-                    ORDER BY logout_course_date DESC
-                    LIMIT 0,1";
+            $qb = self::dbalQueryBuilder()
+                ->select('logout_course_date')
+                ->from($table)
+                ->where('user_id = :userId')
+                ->andWhere('c_id = :courseId')
+                ->andWhere('session_id = :sessionId')
+                ->setParameter('userId', $student_id)
+                ->setParameter('courseId', $courseId)
+                ->setParameter('sessionId', $sessionId)
+                ->orderBy('logout_course_date', 'DESC')
+                ->setMaxResults(1);
+            if (null !== $last_access) {
+                $qb->andWhere('logout_course_date < :lastAccess')
+                    ->setParameter('lastAccess', $last_access);
+            }
 
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                if ($last_login_date = Database::result($rs, 0, 0)) {
-                    if (empty($last_login_date)) {
-                        return false;
+            $last_login_date = $qb->executeQuery()->fetchOne();
+            if ($last_login_date) {
+                if ($convert_date) {
+                    return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                }
+
+                return $last_login_date;
+            }
+        } else {
+            $last_login_date = self::dbalQueryBuilder()
+                ->select('logout_course_date')
+                ->from($table)
+                ->where('user_id = :userId')
+                ->andWhere('c_id = :courseId')
+                ->andWhere('session_id = :sessionId')
+                ->setParameter('userId', $student_id)
+                ->setParameter('courseId', $courseId)
+                ->setParameter('sessionId', $sessionId)
+                ->orderBy('logout_course_date', 'DESC')
+                ->setMaxResults(1)
+                ->executeQuery()
+                ->fetchOne();
+            if ($last_login_date) {
+                //see #5736
+                $last_login_date_timestamp = api_strtotime($last_login_date);
+                $now = time();
+                //If the last connection is > than 7 days, the text is red
+                //345600 = 7 days in seconds
+                if ($now - $last_login_date_timestamp > 604800) {
+                    if ($convert_date) {
+                        $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                        $icon = null;
+                        if (api_is_allowed_to_edit()) {
+                            $courseEntity = api_get_course_entity((int) $courseInfo['real_id']);
+                            $courseResourceNodeId = (int) ($courseEntity?->getResourceNode()?->getId() ?? 0);
+                            if ($courseResourceNodeId > 0) {
+                                $url = api_get_path(WEB_PATH).'resources/announcement/'.$courseResourceNodeId.'/add?'.http_build_query([
+                                    'cid' => (int) $courseInfo['real_id'],
+                                    'sid' => (int) $sessionId,
+                                    'remind_inactive' => (int) $student_id,
+                                ]);
+                            } else {
+                                $url = api_get_path(WEB_CODE_PATH).
+                                    'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cid='.$courseInfo['real_id'];
+                            }
+                            $icon = '<a href="'.$url.'" title="'.get_lang('Remind inactive user').'">
+                              '.Display::getMdiIcon(
+                                    StateIcon::WARNING,
+                                    'ch-tool-icon',
+                                    null,
+                                    ICON_SIZE_SMALL
+                                ).'
+                             </a>';
+                        }
+
+                        return $icon.Display::label($last_login_date, 'warning');
                     }
+
+                    return $last_login_date;
+                } else {
                     if ($convert_date) {
                         return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
                     }
 
                     return $last_login_date;
-                }
-            }
-        } else {
-            $sql = "SELECT logout_course_date
-                    FROM $table
-                    WHERE   user_id = $student_id AND
-                            c_id = $courseId AND
-                            session_id = $sessionId
-                    ORDER BY logout_course_date DESC
-                    LIMIT 0,1";
-
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                if ($last_login_date = Database::result($rs, 0, 0)) {
-                    if (empty($last_login_date)) {
-                        return false;
-                    }
-                    //see #5736
-                    $last_login_date_timestamp = api_strtotime($last_login_date);
-                    $now = time();
-                    //If the last connection is > than 7 days, the text is red
-                    //345600 = 7 days in seconds
-                    if ($now - $last_login_date_timestamp > 604800) {
-                        if ($convert_date) {
-                            $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                            $icon = null;
-                            if (api_is_allowed_to_edit()) {
-                                $courseEntity = api_get_course_entity((int) $courseInfo['real_id']);
-                                $courseResourceNodeId = (int) ($courseEntity?->getResourceNode()?->getId() ?? 0);
-                                if ($courseResourceNodeId > 0) {
-                                    $url = api_get_path(WEB_PATH).'resources/announcement/'.$courseResourceNodeId.'/add?'.http_build_query([
-                                        'cid' => (int) $courseInfo['real_id'],
-                                        'sid' => (int) $sessionId,
-                                        'remind_inactive' => (int) $student_id,
-                                    ]);
-                                } else {
-                                    $url = api_get_path(WEB_CODE_PATH).
-                                        'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cid='.$courseInfo['real_id'];
-                                }
-                                $icon = '<a href="'.$url.'" title="'.get_lang('Remind inactive user').'">
-                                  '.Display::getMdiIcon(
-                                        StateIcon::WARNING,
-                                        'ch-tool-icon',
-                                        null,
-                                        ICON_SIZE_SMALL
-                                    ).'
-                                 </a>';
-                            }
-
-                            return $icon.Display::label($last_login_date, 'warning');
-                        }
-
-                        return $last_login_date;
-                    } else {
-                        if ($convert_date) {
-                            return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                        }
-
-                        return $last_login_date;
-                    }
                 }
             }
         }
@@ -2231,15 +2245,16 @@ class Tracking
         }
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = "SELECT logout_course_date
-                FROM $table
-                WHERE user_id = $studentId
-                ORDER BY logout_course_date DESC
-                LIMIT 1";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result);
-
+        $row = self::dbalQueryBuilder()
+            ->select('logout_course_date')
+            ->from($table)
+            ->where('user_id = :userId')
+            ->setParameter('userId', $studentId)
+            ->orderBy('logout_course_date', 'DESC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAssociative();
+        if (false !== $row) {
             return $row['logout_course_date'];
         }
 
@@ -2257,20 +2272,19 @@ class Tracking
         $sessionId = (int) $sessionId;
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
-        $sql = "SELECT logout_course_date
-                FROM $table
-                WHERE
-                        c_id = $courseId AND
-                        session_id = $sessionId
-                ORDER BY logout_course_date DESC
-                LIMIT 0,1";
-
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result);
-            if ($row) {
-                return $row['logout_course_date'];
-            }
+        $row = self::dbalQueryBuilder()
+            ->select('logout_course_date')
+            ->from($table)
+            ->where('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->orderBy('logout_course_date', 'DESC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAssociative();
+        if (false !== $row) {
+            return $row['logout_course_date'];
         }
 
         return false;
@@ -2303,19 +2317,23 @@ class Tracking
         // to the lower minute
         $roundedStart = substr($start, 0, -2).'00';
         $roundedStop = substr($stop, 0, -2).'00';
-        $roundedStart = Database::escape_string($roundedStart);
-        $roundedStop = Database::escape_string($roundedStop);
-        $month_filter = " AND login_course_date > '$roundedStart' AND login_course_date < '$roundedStop' ";
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
         $count = 0;
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = "SELECT count(*) as count_connections
-                FROM $table
-                WHERE
-                    c_id = $courseId AND
-                    session_id = $sessionId
-                    $month_filter";
+        $countConnections = static fn () => self::dbalQueryBuilder()
+            ->select('COUNT(*) AS count_connections')
+            ->from($table)
+            ->where('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('login_course_date > :roundedStart')
+            ->andWhere('login_course_date < :roundedStop')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('roundedStart', $roundedStart)
+            ->setParameter('roundedStop', $roundedStop)
+            ->executeQuery()
+            ->fetchOne();
 
         //This query can be very slow (several seconds on an indexed table
         // with 14M rows). As such, we'll try to use APCu if it is
@@ -2330,20 +2348,12 @@ class Tracking
             ) {
                 $count = apcu_fetch($apc_var);
             } else {
-                $rs = Database::query($sql);
-                if (Database::num_rows($rs) > 0) {
-                    $row = Database::fetch_object($rs);
-                    $count = $row->count_connections;
-                }
+                $count = $countConnections();
                 apcu_clear_cache();
                 apcu_store($apc_var, $count, 60);
             }
         } else {
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                $row = Database::fetch_object($rs);
-                $count = $row->count_connections;
-            }
+            $count = $countConnections();
         }
 
         return $count;
@@ -2363,18 +2373,24 @@ class Tracking
         $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $sql = 'SELECT DISTINCT c_id
-                FROM '.$tbl_course_rel_user.'
-                WHERE user_id = '.$user_id.' AND relation_type<>'.COURSE_RELATION_TYPE_RRHH;
-        $rs = Database::query($sql);
-        $nb_courses = Database::num_rows($rs);
+        $nb_courses = (int) self::dbalQueryBuilder()
+            ->select('COUNT(DISTINCT c_id)')
+            ->from($tbl_course_rel_user)
+            ->where('user_id = :userId')
+            ->andWhere('relation_type <> :rrhh')
+            ->setParameter('userId', $user_id)
+            ->setParameter('rrhh', COURSE_RELATION_TYPE_RRHH)
+            ->executeQuery()
+            ->fetchOne();
 
         if ($include_sessions) {
-            $sql = 'SELECT DISTINCT c_id
-                    FROM '.$tbl_session_course_rel_user.'
-                    WHERE user_id = '.$user_id;
-            $rs = Database::query($sql);
-            $nb_courses += Database::num_rows($rs);
+            $nb_courses += (int) self::dbalQueryBuilder()
+                ->select('COUNT(DISTINCT c_id)')
+                ->from($tbl_session_course_rel_user)
+                ->where('user_id = :userId')
+                ->setParameter('userId', $user_id)
+                ->executeQuery()
+                ->fetchOne();
         }
 
         return $nb_courses;

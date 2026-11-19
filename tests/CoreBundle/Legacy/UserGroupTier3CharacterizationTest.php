@@ -120,6 +120,20 @@ final class UserGroupTier3CharacterizationTest extends KernelTestCase
         $this->assertEquals(3, $this->model->getUserGroupByCourseWithDataCount($course->getId()));
     }
 
+    public function testGetUsersByGroupOrdersByFirstnameWithinTheSameRelation(): void
+    {
+        $group = $this->group('ug3_order');
+        $zed = $this->createUser('ug3_zed');
+        $amy = $this->createUser('ug3_amy');
+        $this->conn()->executeStatement("UPDATE user SET firstname = 'Zed' WHERE id = ?", [$zed->getId()]);
+        $this->conn()->executeStatement("UPDATE user SET firstname = 'Amy' WHERE id = ?", [$amy->getId()]);
+        $this->addUser($group, $zed, 0);
+        $this->addUser($group, $amy, 0);
+
+        $this->assertSame([$amy->getId(), $zed->getId()], array_keys($this->model->get_users_by_group($group->getId())));
+        $this->assertSame([$amy->getId(), $zed->getId()], array_keys($this->model->get_all_users_by_group($group->getId())));
+    }
+
     public function testGroupsByPopularityAreSocialOrderedByMemberCountAndExcludePendingRoles(): void
     {
         $users = [];
@@ -192,6 +206,8 @@ final class UserGroupTier3CharacterizationTest extends KernelTestCase
             array_keys($this->model->get_all_group_tags('needle'))
         );
         $this->assertCount(1, $this->model->get_all_group_tags('needle', 1, 1));
+        // The offset skips rows: 4 matches in this URL's scope... only 3 remain with the join, so skip 2.
+        $this->assertCount(1, $this->model->get_all_group_tags('needle', 2, 10));
         $this->assertSame([], $this->model->get_all_group_tags('ug3_no_such_text'));
         $this->assertArrayNotHasKey($none->getId(), $this->model->get_all_group_tags('needle'));
     }
@@ -211,6 +227,8 @@ final class UserGroupTier3CharacterizationTest extends KernelTestCase
         $this->assertStringContainsString('ug3_ajax_19', $xml);
         $this->assertStringNotContainsString('ug3_ajax_20', $xml);
         $this->assertStringContainsString('...', $xml);
+        // Only the 11th row (the probe for "there is more") becomes an ellipsis, not the 12th.
+        $this->assertSame(1, substr_count($xml, '...<br'));
         $this->assertStringNotContainsString('ug3_other', $xml);
         $small = (string) UserGroupModel::searchUserGroupAjax('ug3_oth')->getXML();
         $this->assertSame(1, substr_count($small, 'add_user_to_url'));

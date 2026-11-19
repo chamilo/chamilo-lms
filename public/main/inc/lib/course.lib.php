@@ -2636,14 +2636,20 @@ class CourseManager
             $resourceLink = $course->getFirstResourceLink();
             $resourceLinkId = $resourceLink?->getId();
 
+            $deleteConnection = Database::getManager()->getConnection();
+            $deleteRowsOfCourse = static function (string $table, string $column = 'c_id') use ($deleteConnection, $courseId): void {
+                $deleteConnection->createQueryBuilder()
+                    ->delete($table)
+                    ->where($column.' = :courseId')
+                    ->setParameter('courseId', (int) $courseId)
+                    ->executeStatement();
+            };
+
             // Unsubscribe all users from the course
-            $sql = "DELETE FROM $table_course_user WHERE c_id = $courseId";
-            Database::query($sql);
+            $deleteRowsOfCourse($table_course_user);
             // Delete the course from the sessions tables
-            $sql = "DELETE FROM $table_session_course WHERE c_id = $courseId";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_session_course_user WHERE c_id = $courseId";
-            Database::query($sql);
+            $deleteRowsOfCourse($table_session_course);
+            $deleteRowsOfCourse($table_session_course_user);
 
             // Delete from Course - URL
             // Already deleted because of entities.
@@ -2651,34 +2657,33 @@ class CourseManager
             //Database::query($sql);
 
             // Delete the course from the stats tables
-            $sql = "DELETE FROM $table_stats_hotpots WHERE c_id = $courseId";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_access WHERE c_id = $courseId";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_lastaccess WHERE c_id = $courseId";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_course_access WHERE c_id = $courseId";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_online WHERE c_id = $courseId";
-            Database::query($sql);
+            $deleteRowsOfCourse($table_stats_hotpots);
+            $deleteRowsOfCourse($table_stats_access);
+            $deleteRowsOfCourse($table_stats_lastaccess);
+            $deleteRowsOfCourse($table_stats_course_access);
+            $deleteRowsOfCourse($table_stats_online);
             // Do not delete rows from track_e_default as these include course
             // creation and other important things that do not take much space
             // but give information on the course history
             //$sql = "DELETE FROM $table_stats_default WHERE c_id = $courseId";
             //Database::query($sql);
             if ($resourceLinkId) {
-                $sql = "DELETE FROM $table_stats_downloads WHERE resource_link_id = $resourceLinkId";
-                Database::query($sql);
+                $deleteConnection->createQueryBuilder()
+                    ->delete($table_stats_downloads)
+                    ->where('resource_link_id = :resourceLinkId')
+                    ->setParameter('resourceLinkId', (int) $resourceLinkId)
+                    ->executeStatement();
             }
-            $sql = "DELETE FROM $table_stats_links WHERE c_id = $courseId";
-            Database::query($sql);
-            $sql = "DELETE FROM $table_stats_uploads WHERE c_id = $courseId";
-            Database::query($sql);
+            $deleteRowsOfCourse($table_stats_links);
+            $deleteRowsOfCourse($table_stats_uploads);
 
             // Update ticket
-            $table = Database::get_main_table(TABLE_TICKET_TICKET);
-            $sql = "UPDATE $table SET course_id = NULL WHERE course_id = $courseId";
-            Database::query($sql);
+            $deleteConnection->createQueryBuilder()
+                ->update(Database::get_main_table(TABLE_TICKET_TICKET))
+                ->set('course_id', 'NULL')
+                ->where('course_id = :courseId')
+                ->setParameter('courseId', (int) $courseId)
+                ->executeStatement();
 
             $repo->deleteSequenceResource(
                 $courseId,
@@ -2686,22 +2691,22 @@ class CourseManager
             );
 
             // Class
-            $table = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
-            $sql = "DELETE FROM $table
-                WHERE course_id = $courseId";
-            Database::query($sql);
+            $deleteRowsOfCourse(Database::get_main_table(TABLE_USERGROUP_REL_COURSE), 'course_id');
 
             // Skills
-            $table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
-            $argumentation = Database::escape_string(
-                sprintf(
-                    get_lang('This skill was obtained through course %s which has been removed since then.'),
-                    $course->getCode()
-                )
+            $argumentation = sprintf(
+                get_lang('This skill was obtained through course %s which has been removed since then.'),
+                $course->getCode()
             );
-            $sql = "UPDATE $table SET course_id = NULL, session_id = NULL, argumentation = '$argumentation'
-                WHERE course_id = $courseId";
-            Database::query($sql);
+            $deleteConnection->createQueryBuilder()
+                ->update(Database::get_main_table(TABLE_MAIN_SKILL_REL_USER))
+                ->set('course_id', 'NULL')
+                ->set('session_id', 'NULL')
+                ->set('argumentation', ':argumentation')
+                ->where('course_id = :courseId')
+                ->setParameter('argumentation', $argumentation)
+                ->setParameter('courseId', (int) $courseId)
+                ->executeStatement();
 
             // Should be deleted by doctrine
             //$sql = "DELETE FROM skill_rel_course WHERE c_id = $courseId";

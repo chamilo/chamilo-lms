@@ -72,6 +72,22 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         );
     }
 
+    /** Gives the course's resource node a link (the fixture course has none) and returns its id. */
+    private function resourceLinkOf(Course $course): int
+    {
+        $node = $course->getResourceNode();
+        $this->assertNotNull($node, 'the fixture course has a resource node');
+        $this->conn()->executeStatement(
+            'INSERT INTO resource_link (resource_node_id, c_id, visibility, display_order, resource_type_group, created_at, updated_at)
+             VALUES (?, ?, 2, 0, 0, NOW(), NOW())',
+            [$node->getId(), $course->getId()]
+        );
+        $id = (int) $this->conn()->lastInsertId();
+        Database::getManager()->refresh($node);
+
+        return $id;
+    }
+
     private function rows(string $table, string $where, array $params): int
     {
         return (int) $this->conn()->fetchOne("SELECT COUNT(*) FROM $table WHERE $where", $params);
@@ -153,5 +169,69 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         // SessionManager::unsubscribe_user_from_session($uid, $session_id) with the arguments swapped
         // (its signature is ($session_id, $user_id)), so the session registration is never removed.
         $this->assertSame(1, $this->rows('session_rel_user', 'session_id = ? AND user_id = ?', [$sid, $uid]));
+    }
+
+    // ---------------------------------------------------------------- delete_course
+
+    public function testDeleteCourseClearsItsRowsInEveryTableItNamesAndLeavesOtherCoursesAlone(): void
+    {
+        $course = $this->createCourse('cm3b_del_a');
+        $other = $this->createCourse('cm3b_del_b');
+        $user = $this->createUser('cm3b_del_user');
+        $session = $this->createSession('cm3b_del_session');
+        $cid = (int) $course->getId();
+        $oid = (int) $other->getId();
+        $uid = (int) $user->getId();
+        $sid = (int) $session->getId();
+        $linkId = $this->resourceLinkOf($course);
+        $otherLinkId = $this->resourceLinkOf($other);
+        $this->assertNotSame(0, $linkId, 'the fixture course has a resource link');
+
+        $db = $this->conn();
+        $db->executeStatement('SET FOREIGN_KEY_CHECKS = 0');
+        foreach ([$cid, $oid] as $c) {
+            $linkOfCourse = $c === $cid ? $linkId : $otherLinkId;
+            $this->sub($user, $c === $cid ? $course : $other);
+            $db->executeStatement('INSERT INTO session_rel_course (session_id, c_id, position, nbr_users) VALUES (?, ?, 0, 0)', [$sid, $c]);
+            $db->executeStatement('INSERT INTO session_rel_course_rel_user (session_id, c_id, user_id, status, visibility, legal_agreement, progress) VALUES (?, ?, ?, 0, 1, 0, 0)', [$sid, $c, $uid]);
+            $db->executeStatement("INSERT INTO track_e_hotpotatoes (title, exe_date, c_id, score, max_score) VALUES ('t', NOW(), ?, 1, 1)", [$c]);
+            $db->executeStatement("INSERT INTO track_e_access (access_date, c_id, session_id, user_ip) VALUES (NOW(), ?, 0, '127.0.0.1')", [$c]);
+            $db->executeStatement('INSERT INTO track_e_lastaccess (access_date, c_id) VALUES (NOW(), ?)', [$c]);
+            $db->executeStatement("INSERT INTO track_e_course_access (c_id, login_course_date, counter, session_id, user_ip) VALUES (?, NOW(), 1, 0, '127.0.0.1')", [$c]);
+            $db->executeStatement("INSERT INTO track_e_online (login_user_id, login_date, user_ip, c_id, session_id, access_url_id) VALUES (?, NOW(), '127.0.0.1', ?, 0, 1)", [$c === $cid ? $uid : $uid + 1000000, $c]);
+            $db->executeStatement('INSERT INTO track_e_downloads (down_date, resource_link_id) VALUES (NOW(), ?)', [$linkOfCourse]);
+            $db->executeStatement('INSERT INTO track_e_links (links_date, c_id, links_link_id, session_id) VALUES (NOW(), ?, 1, 0)', [$c]);
+            $db->executeStatement('INSERT INTO track_e_uploads (upload_date, upload_work_id, session_id, c_id) VALUES (NOW(), 1, 0, ?)', [$c]);
+            $db->executeStatement("INSERT INTO ticket_ticket (code, subject, personal_email, total_messages, sys_insert_user_id, sys_insert_datetime, course_id) VALUES (CONCAT('cm3b', ?), 's', 'a@b.c', 0, ?, NOW(), ?)", [$c, $uid, $c]);
+            $db->executeStatement('INSERT INTO usergroup_rel_course (usergroup_id, course_id) VALUES (1, ?)', [$c]);
+            $db->executeStatement("INSERT INTO skill_rel_user (user_id, skill_id, acquired_skill_at, validation_status, argumentation, argumentation_author_id, course_id, session_id) VALUES (?, 1, NOW(), 0, 'orig', ?, ?, ?)", [$uid, $uid, $c, $sid]);
+        }
+
+        $this->assertTrue(CourseManager::delete_course($course->getCode()));
+
+        $gone = [
+            'course_rel_user' => 'c_id', 'session_rel_course' => 'c_id', 'session_rel_course_rel_user' => 'c_id',
+            'track_e_hotpotatoes' => 'c_id', 'track_e_access' => 'c_id', 'track_e_lastaccess' => 'c_id',
+            'track_e_course_access' => 'c_id', 'track_e_online' => 'c_id', 'track_e_links' => 'c_id',
+            'track_e_uploads' => 'c_id', 'usergroup_rel_course' => 'course_id',
+        ];
+        foreach ($gone as $table => $column) {
+            $this->assertSame(0, $this->rows($table, "$column = ?", [$cid]), "$table: rows of the deleted course are gone");
+            $this->assertSame(1, $this->rows($table, "$column = ?", [$oid]), "$table: rows of the other course are kept");
+        }
+        $this->assertSame(0, $this->rows('track_e_downloads', 'resource_link_id = ?', [$linkId]));
+        $this->assertSame(1, $this->rows('track_e_downloads', 'resource_link_id = ?', [$otherLinkId]));
+
+        // The ticket survives, detached from the course.
+        $this->assertSame(1, $this->rows('ticket_ticket', 'code = ? AND course_id IS NULL', ['cm3b'.$cid]));
+        $this->assertSame(1, $this->rows('ticket_ticket', 'code = ? AND course_id = ?', ['cm3b'.$oid, $oid]));
+
+        // The skill stays, detached from course and session, with an explanation.
+        $skill = $db->fetchAssociative('SELECT course_id, session_id, argumentation FROM skill_rel_user WHERE user_id = ? AND argumentation <> ?', [$uid, 'orig']);
+        $this->assertNotFalse($skill);
+        $this->assertNull($skill['course_id']);
+        $this->assertNull($skill['session_id']);
+        $this->assertStringContainsString($course->getCode(), $skill['argumentation']);
+        $this->assertSame(1, $this->rows('skill_rel_user', 'course_id = ? AND argumentation = ?', [$oid, 'orig']));
     }
 }

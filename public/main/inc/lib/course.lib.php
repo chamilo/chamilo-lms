@@ -3353,21 +3353,29 @@ class CourseManager
     public static function update_attributes($id, $attributes)
     {
         $id = (int) $id;
-        $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "UPDATE $table SET ";
+        $allowedFields = [
+            'language_id', 'room_id', 'title', 'code', 'visual_code', 'directory', 'description', 'introduction',
+            'visibility', 'show_score', 'tutor_name', 'department_name', 'department_url', 'video_url', 'sticky',
+            'disk_quota', 'last_visit', 'last_edit', 'creation_date', 'expiration_date', 'subscribe', 'unsubscribe',
+            'registration_code', 'legal', 'activate_legal', 'add_teachers_to_sessions_courses', 'course_type_id',
+            'popularity', 'duration',
+        ];
+        $qb = Database::getManager()->getConnection()->createQueryBuilder()
+            ->update(Database::get_main_table(TABLE_MAIN_COURSE))
+            ->where('id = :id')
+            ->setParameter('id', $id);
         $i = 0;
         foreach ($attributes as $name => $value) {
-            if ('' != $value) {
-                if ($i > 0) {
-                    $sql .= ", ";
-                }
-                $sql .= " $name = '".Database::escape_string($value)."'";
+            if ('' != $value && in_array($name, $allowedFields, true)) {
+                $qb->set($name, ':attr'.$i)->setParameter('attr'.$i, (string) $value);
                 $i++;
             }
         }
-        $sql .= " WHERE id = $id";
+        if (0 === $i) {
+            return null;
+        }
 
-        return Database::query($sql);
+        return $qb->executeStatement();
     }
 
     /**
@@ -3404,18 +3412,15 @@ class CourseManager
         if (empty($sessionId)) {
             return [];
         }
-        $sessionId = intval($sessionId);
-        $sql = 'SELECT sc.id session_category
-                FROM '.Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY).' sc
-                INNER JOIN '.Database::get_main_table(TABLE_MAIN_SESSION).' s
-                ON sc.id = s.session_category_id
-                WHERE s.id = '.$sessionId;
+        $result = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('sc.id AS session_category')
+            ->from(Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY), 'sc')
+            ->innerJoin('sc', Database::get_main_table(TABLE_MAIN_SESSION), 's', 'sc.id = s.session_category_id')
+            ->where('s.id = :sessionId')
+            ->setParameter('sessionId', (int) $sessionId)
+            ->executeQuery();
 
-        return Database::result(
-            Database::query($sql),
-            0,
-            'session_category'
-        );
+        return Database::result($result, 0, 'session_category');
     }
 
     /**

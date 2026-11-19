@@ -9099,6 +9099,7 @@ class SessionManager
             }
         }
 
+        // TODO(db-neutral): IF(), CAST AS CHAR, GROUP BY ... HAVING and a free-form where condition built by the jqGrid code
         $result = Database::query($query_rows);
         $num = 0;
         if (Database::num_rows($result)) {
@@ -9797,6 +9798,7 @@ class SessionManager
             $query .= ' ORDER BY '.$options['order'];
         }
 
+        // TODO(db-neutral): IF(), CAST AS CHAR, free-form where/order conditions built by the jqGrid code
         $result = Database::query($query);
 
         $acceptIcon = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Active'));

@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
@@ -981,24 +982,11 @@ class SurveyUtil
                 $addExtraFields = true,
                 $lpItemId = 0
     ) {
-        // DB tables
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $em = Container::getEntityManager();
 
         $surveyId = $survey->getIid();
         if (empty($surveyId)) {
             return '';
-        }
-
-        $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionId = api_get_session_id();
-            $sessionCondition = api_get_session_condition($sessionId);
-        }
-        $lpItemCondition = '';
-        if (!empty($lpItemId)) {
-            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
         }
 
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
@@ -1006,15 +994,17 @@ class SurveyUtil
 
         // Optional LP header
         if (!empty($lpItemId)) {
-            $tableLp = Database::get_course_table(TABLE_LP_MAIN);
-            $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT l.title as lptitle, li.title as lpititle
-                FROM $tableLpItem li
-                INNER JOIN $tableLp l ON l.iid = li.lp_id
-                WHERE li.iid = $lpItemId";
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                $row = Database::fetch_assoc($rs);
+            $rs = $em->createQueryBuilder()
+                ->select('l.title AS lptitle', 'li.title AS lpititle')
+                ->from(CLpItem::class, 'li')
+                ->innerJoin('li.lp', 'l')
+                ->where('li.iid = :lpItem')
+                ->setParameter('lpItem', (int) $lpItemId)
+                ->getQuery()
+                ->getArrayResult()
+            ;
+            if (count($rs) > 0) {
+                $row = $rs[0];
                 $content .= '<div class="sr-container"><div class="sr-card"><div class="sr-card__header">'
                     .get_lang('Learning path')
                     .'</div><div class="sr-card__body"><h3 style="margin:0">'.$row['lptitle'].' : '.$row['lpititle'].'</h3></div></div></div>';
@@ -1090,15 +1080,26 @@ class SurveyUtil
         }
 
         // Questions headers
-        $sql = "SELECT
-              q.iid question_id, q.type, q.survey_question, count(o.iid) as number_of_options
-            FROM $table_survey_question q
-            LEFT JOIN $table_survey_question_option o ON q.iid = o.question_id
-            WHERE survey_question NOT LIKE '%{{%' AND q.survey_id = '".$surveyId."'
-            GROUP BY q.iid ORDER BY q.sort ASC";
-        $result = Database::query($sql);
+        $headerRows = $em->createQueryBuilder()
+            ->select(
+                'q.iid AS question_id',
+                'q.type AS type',
+                'q.surveyQuestion AS survey_question',
+                'COUNT(o.iid) AS number_of_options'
+            )
+            ->from(CSurveyQuestion::class, 'q')
+            ->leftJoin(CSurveyQuestionOption::class, 'o', 'WITH', 'o.question = q')
+            ->where('q.surveyQuestion NOT LIKE :tagMarker')
+            ->andWhere('q.survey = :survey')
+            ->groupBy('q.iid')
+            ->orderBy('q.sort', 'ASC')
+            ->setParameter('tagMarker', '%{{%')
+            ->setParameter('survey', (int) $surveyId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $questions = [];
-        while ($row = Database::fetch_array($result)) {
+        foreach ($headerRows as $row) {
             if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
                 (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
             ) {
@@ -1128,18 +1129,28 @@ class SurveyUtil
             }
         }
 
-        $sql = "SELECT
-                sq.iid question_id, sq.survey_id, sq.survey_question, sq.display, sq.sort, sq.type,
-                sqo.iid question_option_id, sqo.option_text, sqo.sort as option_sort
-            FROM $table_survey_question sq
-            LEFT JOIN $table_survey_question_option sqo ON sq.iid = sqo.question_id
-            WHERE survey_question NOT LIKE '%{{%' AND sq.survey_id = $surveyId
-            ORDER BY sq.sort ASC, sqo.sort ASC";
-        $result = Database::query($sql);
+        $optionRows = $em->createQueryBuilder()
+            ->select(
+                'sq.iid AS question_id',
+                'sq.type AS type',
+                'sqo.iid AS question_option_id',
+                'sqo.optionText AS option_text'
+            )
+            ->from(CSurveyQuestion::class, 'sq')
+            ->leftJoin(CSurveyQuestionOption::class, 'sqo', 'WITH', 'sqo.question = sq')
+            ->where('sq.surveyQuestion NOT LIKE :tagMarker')
+            ->andWhere('sq.survey = :survey')
+            ->orderBy('sq.sort', 'ASC')
+            ->addOrderBy('sqo.sort', 'ASC')
+            ->setParameter('tagMarker', '%{{%')
+            ->setParameter('survey', (int) $surveyId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
         $display_percentage_header = 1;
         $possible_answers = [];
-        while ($row = Database::fetch_array($result)) {
+        foreach ($optionRows as $row) {
             if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
                 (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
             ) {
@@ -1162,25 +1173,34 @@ class SurveyUtil
         }
         $content .= '</tr>';
 
-        // User filter
-        $userCondition = '';
-        if (!empty($userId)) {
-            $userId = (int) $userId;
-            $userCondition = " AND user = $userId ";
-        }
-
         // Collect answers grouped by user
         $old_user = '';
         $answers_of_user = [];
-        $sql = "SELECT * FROM $table_survey_answer
-            WHERE survey_id = $surveyId
-              $userCondition
-              $sessionCondition
-              $lpItemCondition
-            ORDER BY iid, user ASC";
-        $result = Database::query($sql);
+        $answerQb = $em->createQueryBuilder()
+            ->select(
+                'IDENTITY(a.question) AS question_id',
+                'a.optionId AS option_id',
+                'a.value AS value',
+                'a.user AS user'
+            )
+            ->from(CSurveyAnswer::class, 'a')
+            ->where('a.survey = :survey')
+            ->orderBy('a.iid', 'ASC')
+            ->addOrderBy('a.user', 'ASC')
+            ->setParameter('survey', (int) $surveyId)
+        ;
+        // User filter
+        if (!empty($userId)) {
+            $answerQb->andWhere('a.user = :user')->setParameter('user', (int) $userId);
+        }
+        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+            self::addSessionCondition($answerQb, 'a.sessionId', api_get_session_id());
+        }
+        if (!empty($lpItemId)) {
+            $answerQb->andWhere('a.lpItemId = :lpItem')->setParameter('lpItem', (int) $lpItemId);
+        }
         $i = 1;
-        while ($row = Database::fetch_array($result)) {
+        foreach ($answerQb->getQuery()->getArrayResult() as $row) {
             if ($old_user != $row['user'] && '' != $old_user) {
                 $userParam = (0 != $survey->getAnonymous()) ? $i : $old_user;
                 if (0 != $survey->getAnonymous()) { $i++; }

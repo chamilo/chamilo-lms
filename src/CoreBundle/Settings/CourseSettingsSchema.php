@@ -126,6 +126,8 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                     'course_creation_user_course_extra_field_relation_to_prefill' => '',
                     'show_course_duration' => 'false',
                     'profiling_filter_adding_users' => 'false',
+                    'show_clock_time_spent_on_all_course_page_for_learner' => 'false',
+                    'show_clock_time_spent_can_be_modified_in_course' => 'false',
                     CourseSettingPolicy::SETTING => '{}',
                 ]
             )
@@ -259,6 +261,8 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             ])
             ->add('show_course_duration', YesNoType::class)
             ->add('profiling_filter_adding_users', YesNoType::class)
+            ->add('show_clock_time_spent_on_all_course_page_for_learner', YesNoType::class)
+            ->add('show_clock_time_spent_can_be_modified_in_course', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

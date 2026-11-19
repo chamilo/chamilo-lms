@@ -2119,6 +2119,10 @@ registerSettingsGuard("@settings-exerciseResultsPage", [
   { path: "/admin/settings/exercise", field: "form_allow_quiz_results_page_config" },
 ])
 
+registerSettingsGuard("@settings-finalExamAccessRule", [
+  { path: "/admin/settings/exercise", field: "form_allow_final_exam_access_rule" },
+])
+
 // Same snapshot-before/restore-after intent as registerSettingsGuard() above,
 // but for a single free-text <textarea> setting instead of a <select> —
 // courseCatalogue.feature's "course_catalog_settings" field (CatalogSettingsSchema,
@@ -2999,6 +3003,19 @@ Then("I click the {string} icon in the row for {string}", async ({ page }, selec
   }
   await page.locator("tr", { hasText: rowText }).locator(selector).first().click()
 })
+
+// Not ported — new, for toolExerciseAccessConditions.feature: a new test is visible or hidden
+// depending on the platform's default visibility on creation, so "make it visible" only clicks
+// Activate when the test is hidden.
+Then(
+  "I click the {string} icon in the row for {string} if it is visible",
+  async ({ page }, selector: string, rowText: string) => {
+    const icon = page.locator("tr").filter({ has: page.getByText(rowText, { exact: true }) }).locator(selector)
+    if (await isSoonVisible(icon, 5000)) {
+      await icon.first().click()
+    }
+  },
+)
 
 // Not ported — new, for toolExerciseQti2Import.feature (#1377): checks that a value sits on the
 // same <tr> as a label, e.g. that the imported matching item "France" is associated with "Paris"
@@ -4342,6 +4359,24 @@ Then("I move backward one page", async ({ page }) => {
 // confirm a save actually took effect.
 Then("the field {string} should have value {string}", async ({ page }, field: string, value: string) => {
   await expect(await resolveField(page, field)).toHaveValue(value)
+})
+
+// Not ported — new, for toolExerciseAccessConditions.feature: the JSON of the access
+// conditions is multi-line and pretty-printed, so only a part of it is asserted.
+Then("the field {string} should contain {string}", async ({ page }, field: string, value: string) => {
+  const escaped = value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  await expect(await resolveField(page, field)).toHaveValue(new RegExp(escaped))
+})
+
+// Not ported — new, for toolExerciseAccessConditions.feature: a field frozen while another
+// one is edited. Covers both disabled and read-only fields.
+Then(/^the field "([^"]*)" should( not)? be editable$/, async ({ page }, field: string, negated?: string) => {
+  const locator = await resolveField(page, field)
+  if (negated) {
+    await expect(locator).not.toBeEditable()
+  } else {
+    await expect(locator).toBeEditable()
+  }
 })
 
 // Not ported — new, companion to "I check the ... radio button with ...

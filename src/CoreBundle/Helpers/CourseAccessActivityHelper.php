@@ -27,6 +27,8 @@ final readonly class CourseAccessActivityHelper
      */
     private const BACKGROUND_ROUTES = [
         'sync_learning_path_runtime',
+        // The time spent clock refreshes itself while a course page is open.
+        'chamilo_core_course_time_spent_clock',
         'chamilo_core_chat_api_contacts',
         'chamilo_core_chat_api_heartbeat',
         'chamilo_core_chat_api_history_since',

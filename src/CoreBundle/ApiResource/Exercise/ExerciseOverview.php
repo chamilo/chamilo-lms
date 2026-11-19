@@ -153,6 +153,24 @@ final class ExerciseOverview
     #[Groups(['exercise_overview:read'])]
     public string $notice = '';
 
+    /**
+     * The access conditions of the test the learner has not met yet (minimum time in the course,
+     * required profile field), or null when the test sets none.
+     *
+     * @var array{
+     *     timeRequirementMet: bool,
+     *     requiredMinutes: int,
+     *     spentMinutes: int,
+     *     remainingMinutes: int,
+     *     userIdentifierPresent: bool,
+     *     userIdentifierLabel: string,
+     *     allowUserIdentifierOptOut: bool,
+     *     userIdentifierOptOutPrompt: string
+     * }|null
+     */
+    #[Groups(['exercise_overview:read'])]
+    public ?array $accessConditions = null;
+
     public function getExerciseId(): ?int
     {
         return $this->exerciseId;

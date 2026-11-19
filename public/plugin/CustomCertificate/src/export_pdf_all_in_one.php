@@ -12,7 +12,6 @@ $plugin = CustomCertificatePlugin::create();
 $enable = $plugin->isEnabled(true);
 $tblCourse = Database::get_main_table('course');
 $tblSessionRelCourse = Database::get_main_table('session_rel_course');
-$tblSessionRelAccessUrl = Database::get_main_table('access_url_rel_session');
 
 define('NO_DATE_FILTER', 0);
 define('DATE_BEGIN_FILTER', 1);
@@ -23,33 +22,21 @@ if (!$enable) {
     api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
 }
 
-if (!api_is_platform_admin() && !api_is_teacher()) {
+// Same access as the certificate report (main/my_space/session_filter.php) this export comes from.
+if (!api_is_allowed_to_create_course() && !api_is_hrm()) {
     api_not_allowed(true);
 }
 
 $currentLocalTime = api_get_local_time();
 $accessUrlId = api_get_current_access_url_id();
 
-$sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : null;
+$sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 $dateBegin = isset($_GET['date_begin']) ? strtotime($_GET['date_begin']) : null;
 $dateEnd = isset($_GET['date_end']) ? strtotime($_GET['date_end'].' 23:59:59') : null;
 
-if (api_is_multiple_url_enabled()) {
-    if (-1 != $accessUrlId) {
-        $result = Database::select(
-            '*',
-            "$tblSessionRelAccessUrl",
-            [
-                'where' => [
-                    "access_url_id = ? AND session_id = ?" => [$accessUrlId, $sessionId],
-                ],
-            ]
-        );
-
-        if (empty($result)) {
-            api_not_allowed();
-        }
-    }
+// The session must be one the report offers to this user, which also limits it to the current URL.
+if (!isset(SessionManager::getSessionsForCertificateReport()[$sessionId])) {
+    api_not_allowed(true);
 }
 
 $exportAllInOne = isset($_GET['export_pdf']) ? (int) $_GET['export_pdf'] : false;

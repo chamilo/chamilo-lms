@@ -45246,3 +45246,81 @@ msgstr "Le téléchargement exclut les valeurs confidentielles. Vérifiez le fic
 
 msgid "Already attempted"
 msgstr "Déjà tenté"
+
+msgid "Show learners the time spent in the course"
+msgstr "Afficher aux apprenants le temps passé dans le cours"
+
+msgid "Time spent clock can be changed by course"
+msgstr "Le compteur de temps passé peut être modifié par cours"
+
+msgid "Display, on every page of a course including the learning paths, a clock showing learners the total time they have spent in the course, as counted by the course tracking. It keeps running while the learner is active and stops after the maximum inactivity time considered by the tracking."
+msgstr "Affiche, sur toutes les pages d'un cours, y compris dans les parcours, un compteur indiquant aux apprenants le temps total qu'ils ont passé dans le cours, tel que comptabilisé par le suivi du cours. Il avance tant que l'apprenant est actif et s'arrête après la durée d'inactivité maximale prise en compte par le suivi."
+
+msgid "When enabled, teachers can choose in the course settings whether their course shows learners the time spent in the course, instead of following the platform setting."
+msgstr "Si cette option est activée, les enseignants peuvent choisir dans les paramètres du cours si leur cours affiche aux apprenants le temps passé dans le cours, au lieu de suivre le paramètre de la plateforme."
+
+msgid "Access conditions before a test"
+msgstr "Conditions d'accès avant un test"
+
+msgid "Lets teachers keep a test, such as a final exam, closed until the learner has spent a minimum time in the course and has filled in a required profile field."
+msgstr "Permet aux enseignants de garder un test, comme un examen final, fermé tant que l'apprenant n'a pas passé un temps minimum dans le cours et n'a pas rempli un champ de profil obligatoire."
+
+msgid "You do not meet the conditions to start this test yet."
+msgstr "Vous ne remplissez pas encore les conditions pour commencer ce test."
+
+msgid "Access conditions"
+msgstr "Conditions d'accès"
+
+msgid "The learner can only start the test once these conditions are met. Teachers are not concerned."
+msgstr "L'apprenant ne peut commencer le test qu'une fois ces conditions remplies. Les enseignants ne sont pas concernés."
+
+msgid "Time spent in the course, as the course reports count it. 0 sets no minimum."
+msgstr "Temps passé dans le cours, tel que le comptent les rapports du cours. 0 ne fixe aucun minimum."
+
+msgid "Minimum time in the course before starting the test (in minutes)"
+msgstr "Temps minimum dans le cours avant de commencer le test (en minutes)"
+
+msgid "Profile field required before starting the test"
+msgstr "Champ de profil obligatoire avant de commencer le test"
+
+msgid "The learner can choose not to fill in this field"
+msgstr "L'apprenant peut choisir de ne pas remplir ce champ"
+
+msgid "Question asked to the learner, answered with Yes or No. No starts the test without the field."
+msgstr "Question posée à l'apprenant, à laquelle il répond par Oui ou Non. Non permet de commencer le test sans remplir le champ."
+
+msgid "Question asked before filling in the field"
+msgstr "Question posée avant de remplir le champ"
+
+msgid "You must spend {0} more in this course before starting this test."
+msgstr "Vous devez encore passer {0} dans ce cours avant de commencer ce test."
+
+msgid "Time spent in the course: {0} of {1}"
+msgstr "Temps passé dans le cours : {0} sur {1}"
+
+msgid "Your {0} is required to start this test."
+msgstr "Votre {0} est obligatoire pour commencer ce test."
+
+msgid "Digits only"
+msgstr "Chiffres uniquement"
+
+msgid "Please enter at least 3 digits."
+msgstr "Veuillez saisir au moins 3 chiffres."
+
+msgid "The value could not be saved."
+msgstr "La valeur n'a pas pu être enregistrée."
+
+msgid "{0} h {1} min"
+msgstr "{0} h {1} min"
+
+msgid "Access conditions in JSON"
+msgstr "Conditions d'accès en JSON"
+
+msgid "The saved JSON is invalid. Edit it, or save the fields above to replace it."
+msgstr "Le JSON enregistré n'est pas valide. Modifiez-le, ou enregistrez les champs ci-dessus pour le remplacer."
+
+msgid "Edit the JSON"
+msgstr "Éditer le JSON"
+
+msgid "The JSON of the access conditions must be a JSON object."
+msgstr "Le JSON des conditions d'accès doit être un objet JSON."

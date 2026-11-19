@@ -154,6 +154,17 @@ export default {
     return await baseService.get(`/api/exercise/runtime/${exerciseId}`, cleanParams(params), exerciseRequestConfig())
   },
 
+  async saveExerciseUserIdentifier(value, params = {}, exerciseId) {
+    const queryString = buildQueryString(params)
+
+    return await baseService.post(
+      `/api/exercise/overview/${exerciseId}/user-identifier${queryString}`,
+      { value },
+      {},
+      exerciseRequestConfig(),
+    )
+  },
+
   async startExerciseAttempt(payload = {}, params = {}, exerciseId) {
     const queryString = buildQueryString(params)
 

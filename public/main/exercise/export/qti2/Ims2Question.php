@@ -36,6 +36,7 @@ class Ims2Question extends Question
             case UNIQUE_ANSWER_NO_OPTION:
             case MCMA:
             case MULTIPLE_ANSWER_COMBINATION:
+            case MULTIPLE_ANSWER_DROPDOWN:
                 $answer = new ImsAnswerMultipleChoice($questionId);
                 break;
 

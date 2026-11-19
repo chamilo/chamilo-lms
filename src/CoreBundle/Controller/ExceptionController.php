@@ -8,12 +8,10 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -24,35 +22,6 @@ class ExceptionController extends AbstractController
         private AccessUrlRepository $accessUrlRepository,
         private ThemeHelper $themeHelper,
     ) {}
-
-    public function show(Exception $exception): Response
-    {
-        // In dev, rethrow the exception so Symfony shows the debug page
-        if ('dev' === (string) $this->getParameter('app_env')) {
-            throw new HttpException($exception->getCode(), $exception->getMessage());
-        }
-
-        // Resolve best template to render for this exception
-        $name = 'exception';
-        $code = $exception->getCode();
-        $format = 'html';
-        $loader = $this->container->get('twig')->getLoader();
-        $templateToLoad = \sprintf('@ChamiloCore/Exception/%s.html.twig', 'exception_full');
-
-        $candidate = \sprintf('@ChamiloCore/Exception/%s%s.%s.twig', $name, $code, $format);
-        if ($loader->exists($candidate)) {
-            $templateToLoad = $candidate;
-        }
-
-        $candidate = \sprintf('@ChamiloCore/Exception/%s.%s.twig', $name, $format);
-        if ($loader->exists($candidate)) {
-            $templateToLoad = $candidate;
-        }
-
-        return $this->render($templateToLoad, [
-            'exception' => $exception,
-        ]);
-    }
 
     #[Route(path: '/error')]
     public function error(Request $request): Response

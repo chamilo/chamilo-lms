@@ -1797,6 +1797,16 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Show courses duration',
                     'comment' => 'Display the course duration next to the course title in the course catalogue and the courses list.',
                 ],
+                [
+                    'name' => 'show_clock_time_spent_on_all_course_page_for_learner',
+                    'title' => 'Show learners the time spent in the course',
+                    'comment' => 'Display, on every page of a course including the learning paths, a clock showing learners the total time they have spent in the course, as counted by the course tracking. It keeps running while the learner is active and stops after the maximum inactivity time considered by the tracking.',
+                ],
+                [
+                    'name' => 'show_clock_time_spent_can_be_modified_in_course',
+                    'title' => 'Time spent clock can be changed by course',
+                    'comment' => 'When enabled, teachers can choose in the course settings whether their course shows learners the time spent in the course, instead of following the platform setting.',
+                ],
             ],
             'certificate' => [
                 [
@@ -2772,6 +2782,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'quiz_check_button_enable',
                     'title' => 'Add answer-saving process check before test',
                     'comment' => 'Make sure users are all set to start the test by providing a simulation of the question-saving process before entering the test. This allows for early detection of some connection issues and reduces user experience frictions.',
+                ],
+                [
+                    'name' => 'allow_final_exam_access_rule',
+                    'title' => 'Access conditions before a test',
+                    'comment' => 'Lets teachers keep a test, such as a final exam, closed until the learner has spent a minimum time in the course and has filled in a required profile field.',
                 ],
                 [
                     'name' => 'quiz_confirm_saved_answers',

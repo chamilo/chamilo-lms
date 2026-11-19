@@ -19,9 +19,11 @@ if (isInstallerLocked()) {
     header('Content-Type: application/json');
     echo json_encode([
         'status' => false,
-        'message' => InstallerState::UpgradeNotAuthorised === resolveInstallerState()
-            ? 'No '.InstallerGate::UPGRADE_FLAG_FILE.' found in the project root.'
-            : 'Chamilo is already installed.',
+        'message' => match (resolveInstallerState()) {
+            InstallerState::UpgradeNotAuthorised => 'No '.InstallerGate::UPGRADE_FLAG_FILE.' found in the project root.',
+            InstallerState::RecoveryNotAuthorised => 'The installer is unavailable.',
+            default => 'Chamilo is already installed.',
+        },
         'progress_percentage' => 0,
         'current_migration' => '',
         'redirect_to_step7' => false,

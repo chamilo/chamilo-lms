@@ -519,6 +519,80 @@
               name="preventBackwards"
             />
           </div>
+
+          <div
+            v-if="settings.allowFinalExamAccessRule"
+            id="exercise-final-exam-access-rule"
+            class="space-y-3 rounded-lg border border-gray-20 bg-gray-5 p-3"
+          >
+            <h3 class="text-sm font-semibold text-gray-90">{{ t("Access conditions") }}</h3>
+            <p class="text-sm text-gray-50">
+              {{ t("The learner can only start the test once these conditions are met. Teachers are not concerned.") }}
+            </p>
+            <div class="grid gap-6 md:grid-cols-2">
+              <BaseInputNumber
+                id="exercise-final-exam-minimum-minutes"
+                v-model="form.finalExamAccessRule.minimumMinutes"
+                :help-text="t('Time spent in the course, as the course reports count it. 0 sets no minimum.')"
+                :label="t('Minimum time in the course before starting the test (in minutes)')"
+                name="finalExamMinimumMinutes"
+                :disabled="form.finalExamAccessRule.editJson"
+                :min="0"
+              />
+              <BaseSelect
+                id="exercise-final-exam-user-identifier-field"
+                v-model="form.finalExamAccessRule.userIdentifierFieldVariable"
+                :label="t('Profile field required before starting the test')"
+                :options="finalExamUserIdentifierFieldOptions"
+                :disabled="form.finalExamAccessRule.editJson"
+                hast-empty-value
+                name="finalExamUserIdentifierField"
+                option-label="label"
+                option-value="value"
+              />
+            </div>
+            <template v-if="form.finalExamAccessRule.userIdentifierFieldVariable">
+              <BaseCheckbox
+                id="exercise-final-exam-allow-opt-out"
+                v-model="form.finalExamAccessRule.allowUserIdentifierOptOut"
+                :disabled="form.finalExamAccessRule.editJson"
+                :label="t('The learner can choose not to fill in this field')"
+                name="finalExamAllowOptOut"
+              />
+              <BaseInputText
+                v-if="form.finalExamAccessRule.allowUserIdentifierOptOut"
+                id="exercise-final-exam-opt-out-prompt"
+                v-model="form.finalExamAccessRule.userIdentifierOptOutPrompt"
+                :disabled="form.finalExamAccessRule.editJson"
+                :help-text="
+                  t('Question asked to the learner, answered with Yes or No. No starts the test without the field.')
+                "
+                :label="t('Question asked before filling in the field')"
+              />
+            </template>
+            <BaseTextArea
+              id="exercise-final-exam-json"
+              v-model="finalExamAccessRuleJson"
+              :label="t('Access conditions in JSON')"
+              :readonly="!form.finalExamAccessRule.editJson"
+              class="font-mono text-sm"
+              name="finalExamAccessRuleJson"
+              rows="8"
+            />
+            <p
+              v-if="finalExamStoredRuleInvalid && !form.finalExamAccessRule.editJson"
+              class="text-sm text-warning"
+            >
+              {{ t("The saved JSON is invalid. Edit it, or save the fields above to replace it.") }}
+            </p>
+            <BaseCheckbox
+              id="exercise-final-exam-edit-json"
+              :model-value="form.finalExamAccessRule.editJson"
+              :label="t('Edit the JSON')"
+              name="finalExamEditJson"
+              @update:model-value="setFinalExamJsonEdition"
+            />
+          </div>
         </section>
 
         <section class="space-y-4 rounded-xl border border-gray-20 bg-white p-4 shadow-sm">
@@ -962,6 +1036,7 @@ const form = reactive({
   gradebookVisible: true,
   notifications: [],
   accessCondition: "",
+  finalExamAccessRule: buildFinalExamAccessRule(),
   sound: "",
   feedbackType: 0,
   resultsDisabled: 0,
@@ -1022,6 +1097,41 @@ const categoryOptions = computed(() => [
     label: option.label,
   })),
 ])
+const finalExamUserIdentifierFieldOptions = computed(() => options.value.finalExamUserIdentifierFieldOptions || [])
+// Saved rule, whose keys the fields do not edit are kept, as the server does when saving the fields
+const finalExamStoredRule = ref({})
+const finalExamStoredRuleInvalid = ref(false)
+const finalExamAccessRulePreview = computed(() => {
+  const rule = form.finalExamAccessRule
+  const minimumMinutes = Math.max(0, Math.trunc(Number(rule.minimumMinutes || 0)))
+  const fieldVariable = String(rule.userIdentifierFieldVariable || "").trim()
+  if (0 === minimumMinutes && "" === fieldVariable) {
+    return ""
+  }
+
+  const allowOptOut = "" !== fieldVariable && true === rule.allowUserIdentifierOptOut
+
+  return JSON.stringify(
+    {
+      ...finalExamStoredRule.value,
+      minimum_minutes_before_exam: minimumMinutes,
+      user_identifier_field_variable: fieldVariable,
+      allow_user_identifier_opt_out: allowOptOut,
+      user_identifier_opt_out_prompt: allowOptOut ? String(rule.userIdentifierOptOutPrompt || "").trim() : "",
+    },
+    null,
+    4,
+  )
+})
+const finalExamAccessRuleJson = computed({
+  get: () => (form.finalExamAccessRule.editJson ? form.finalExamAccessRule.json : finalExamAccessRulePreview.value),
+  set: (value) => {
+    if (form.finalExamAccessRule.editJson) {
+      form.finalExamAccessRule.json = value
+    }
+  },
+})
+
 const gradebookCategoryOptions = computed(() =>
   (options.value.gradebookCategoryOptions || []).map((option) => ({
     value: Number(option.value),
@@ -1107,6 +1217,62 @@ function removeCategoryDestinationRule(row, index) {
   row.destinationRules.splice(index, 1)
 }
 const effectiveLockedFields = computed(() => lockedFields.value)
+
+function buildFinalExamAccessRule(rule = {}) {
+  return {
+    minimumMinutes: Math.max(0, Number(rule?.minimumMinutes || 0)),
+    userIdentifierFieldVariable: rule?.userIdentifierFieldVariable || "",
+    allowUserIdentifierOptOut: true === rule?.allowUserIdentifierOptOut,
+    userIdentifierOptOutPrompt: rule?.userIdentifierOptOutPrompt || "",
+    json: rule?.json || "",
+    editJson: false,
+  }
+}
+
+// null for an empty JSON, undefined when it is not a JSON object
+function parseFinalExamJson(json) {
+  const value = String(json || "").trim()
+  if ("" === value) {
+    return null
+  }
+
+  try {
+    const rule = JSON.parse(value)
+
+    return rule && "object" === typeof rule && !Array.isArray(rule) ? rule : undefined
+  } catch {
+    return undefined
+  }
+}
+
+function loadFinalExamStoredRule(json) {
+  const rule = parseFinalExamJson(json)
+  finalExamStoredRuleInvalid.value = undefined === rule
+  finalExamStoredRule.value = rule || {}
+}
+
+// The JSON starts from what the fields show. Back to the fields, they take the values of a valid
+// JSON; an invalid one is dropped.
+function setFinalExamJsonEdition(editJson) {
+  const rule = form.finalExamAccessRule
+  if (editJson) {
+    rule.json = finalExamStoredRuleInvalid.value ? rule.json : finalExamAccessRulePreview.value
+    rule.editJson = true
+
+    return
+  }
+
+  const edited = parseFinalExamJson(rule.json)
+  if (undefined !== edited) {
+    finalExamStoredRule.value = edited || {}
+    finalExamStoredRuleInvalid.value = false
+    rule.minimumMinutes = Math.max(0, Math.trunc(Number(edited?.minimum_minutes_before_exam || 0)))
+    rule.userIdentifierFieldVariable = String(edited?.user_identifier_field_variable || "")
+    rule.allowUserIdentifierOptOut = true === edited?.allow_user_identifier_opt_out
+    rule.userIdentifierOptOutPrompt = String(edited?.user_identifier_opt_out_prompt || "")
+  }
+  rule.editJson = false
+}
 
 function mapTranslatedOptions(items) {
   return items.map((option) => ({
@@ -1218,6 +1384,8 @@ function fillForm(data) {
   form.gradebookVisible = false !== data.gradebookVisible
   form.notifications = normalizeNotificationValues(data.notifications || [])
   form.accessCondition = data.accessCondition || ""
+  form.finalExamAccessRule = buildFinalExamAccessRule(data.finalExamAccessRule)
+  loadFinalExamStoredRule(form.finalExamAccessRule.json)
   form.sound = data.sound || ""
   form.feedbackType = Number(data.feedbackType || 0)
   form.resultsDisabled = Number(data.resultsDisabled || 0)
@@ -1522,6 +1690,14 @@ function buildPayload() {
     gradebookVisible: form.gradebookVisible,
     notifications: normalizeNotificationValues(form.notifications),
     accessCondition: form.accessCondition,
+    finalExamAccessRule: {
+      minimumMinutes: Math.max(0, Number(form.finalExamAccessRule.minimumMinutes || 0)),
+      userIdentifierFieldVariable: form.finalExamAccessRule.userIdentifierFieldVariable || "",
+      allowUserIdentifierOptOut: true === form.finalExamAccessRule.allowUserIdentifierOptOut,
+      userIdentifierOptOutPrompt: form.finalExamAccessRule.userIdentifierOptOutPrompt || "",
+      json: form.finalExamAccessRule.editJson ? form.finalExamAccessRule.json || "" : "",
+      editJson: true === form.finalExamAccessRule.editJson,
+    },
     sound: form.sound,
     feedbackType: Number(form.feedbackType || 0),
     resultsDisabled: Number(form.resultsDisabled || 0),
@@ -1573,6 +1749,11 @@ async function saveConfiguration() {
     return
   }
 
+  if (form.finalExamAccessRule.editJson && undefined === parseFinalExamJson(form.finalExamAccessRule.json)) {
+    errorMessage.value = t("The JSON of the access conditions must be a JSON object.")
+    return
+  }
+
   isSaving.value = true
 
   try {
@@ -1595,7 +1776,10 @@ async function saveConfiguration() {
   } catch (error) {
     console.error("Error saving exercise configuration", error)
     errorMessage.value =
-      error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("Could not save exercise")
+      error?.response?.data?.detail ||
+      error?.response?.data?.["hydra:description"] ||
+      error?.response?.data?.error ||
+      t("Could not save exercise")
   } finally {
     isSaving.value = false
   }

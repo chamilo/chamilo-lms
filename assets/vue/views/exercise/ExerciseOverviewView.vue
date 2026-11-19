@@ -96,6 +96,104 @@
         {{ t(overview.notice) }}
       </div>
 
+      <section
+        v-if="overview.accessConditions"
+        id="exercise-access-conditions"
+        class="space-y-3"
+      >
+        <div
+          v-if="!overview.accessConditions.timeRequirementMet"
+          :class="overviewAlertClass('warning')"
+        >
+          <p>
+            {{
+              t("You must spend {0} more in this course before starting this test.", [
+                formatMinutes(overview.accessConditions.remainingMinutes),
+              ])
+            }}
+          </p>
+          <p class="mt-1 font-normal">
+            {{
+              t("Time spent in the course: {0} of {1}", [
+                formatMinutes(overview.accessConditions.spentMinutes),
+                formatMinutes(overview.accessConditions.requiredMinutes),
+              ])
+            }}
+          </p>
+        </div>
+
+        <div
+          v-if="!overview.accessConditions.userIdentifierPresent"
+          class="space-y-3 rounded-xl border border-warning/30 bg-warning/10 p-4 text-sm"
+        >
+          <p class="font-medium text-warning">
+            {{ t("Your {0} is required to start this test.", [overview.accessConditions.userIdentifierLabel]) }}
+          </p>
+          <template v-if="overview.accessConditions.allowUserIdentifierOptOut && !userIdentifierAccepted">
+            <p
+              v-if="overview.accessConditions.userIdentifierOptOutPrompt"
+              class="text-gray-90"
+            >
+              {{ overview.accessConditions.userIdentifierOptOutPrompt }}
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <BaseButton
+                :label="t('Yes')"
+                icon="check"
+                size="normal"
+                type="primary"
+                @click="userIdentifierAccepted = true"
+              />
+              <BaseButton
+                :disabled="isSavingUserIdentifier"
+                :label="t('No')"
+                icon="close"
+                size="normal"
+                type="black"
+                @click="saveUserIdentifier(USER_IDENTIFIER_OPT_OUT_VALUE)"
+              />
+            </div>
+          </template>
+          <div
+            v-else
+            class="flex flex-wrap items-end gap-2"
+          >
+            <div class="flex flex-col gap-1">
+              <label
+                class="font-medium text-gray-90"
+                for="exercise-user-identifier"
+              >
+                {{ overview.accessConditions.userIdentifierLabel }}
+              </label>
+              <input
+                id="exercise-user-identifier"
+                v-model.trim="userIdentifier"
+                :placeholder="t('Digits only')"
+                class="rounded-md border border-gray-25 px-3 py-2"
+                inputmode="numeric"
+                pattern="[0-9]*"
+                type="text"
+                @keyup.enter="saveUserIdentifier(userIdentifier)"
+              />
+            </div>
+            <BaseButton
+              :disabled="isSavingUserIdentifier"
+              :label="t('Save')"
+              icon="save"
+              size="normal"
+              type="primary"
+              @click="saveUserIdentifier(userIdentifier)"
+            />
+          </div>
+          <p
+            v-if="userIdentifierError"
+            class="font-medium text-danger"
+          >
+            {{ userIdentifierError }}
+          </p>
+        </div>
+      </section>
+
       <div
         v-if="overview.maxAttempt > 0"
         :class="overviewAlertClass(overview.attemptLimitReached ? 'danger' : 'info')"
@@ -234,6 +332,11 @@ const isCheckingBrowser = ref(false)
 const browserCheckStatus = ref("idle")
 const browserCheckMessage = ref("")
 const errorMessage = ref("")
+const USER_IDENTIFIER_OPT_OUT_VALUE = "NONE"
+const userIdentifier = ref("")
+const userIdentifierAccepted = ref(false)
+const userIdentifierError = ref("")
+const isSavingUserIdentifier = ref(false)
 const overview = reactive({
   exerciseId: 0,
   title: "",
@@ -269,6 +372,7 @@ const overview = reactive({
   attemptLimitReached: false,
   startButtonLabel: "Start test",
   notice: "",
+  accessConditions: null,
 })
 
 function getQueryValue(value) {
@@ -482,6 +586,34 @@ async function startAndOpenPlayer() {
   }
 }
 
+async function saveUserIdentifier(value) {
+  if (value !== USER_IDENTIFIER_OPT_OUT_VALUE && !/^\d{3,}$/.test(value || "")) {
+    userIdentifierError.value = t("Please enter at least 3 digits.")
+
+    return
+  }
+
+  isSavingUserIdentifier.value = true
+  userIdentifierError.value = ""
+
+  try {
+    const response = await exerciseService.saveExerciseUserIdentifier(value, getContextParams(), getExerciseId())
+    if (!response?.success) {
+      userIdentifierError.value = t("The value could not be saved.")
+
+      return
+    }
+
+    userIdentifier.value = ""
+    await loadOverview()
+  } catch (error) {
+    console.error("Error saving the user identifier required by the exercise", error)
+    userIdentifierError.value = t("The value could not be saved.")
+  } finally {
+    isSavingUserIdentifier.value = false
+  }
+}
+
 let loadOverviewToken = 0
 
 async function loadOverview() {
@@ -506,7 +638,7 @@ async function loadOverview() {
     if (token !== loadOverviewToken) {
       return
     }
-    Object.assign(overview, response || {})
+    Object.assign(overview, { accessConditions: null }, response || {})
     overview.currentUserAttempts = Array.isArray(response?.currentUserAttempts) ? response.currentUserAttempts : []
     browserCheckStatus.value = "idle"
     browserCheckMessage.value = ""
@@ -549,6 +681,12 @@ function formatDate(date) {
   }
 
   return parsedDate.toLocaleString()
+}
+
+function formatMinutes(minutes) {
+  const total = Math.max(0, Number(minutes || 0))
+
+  return t("{0} h {1} min", [Math.floor(total / 60), String(total % 60).padStart(2, "0")])
 }
 
 function formatScore(score) {

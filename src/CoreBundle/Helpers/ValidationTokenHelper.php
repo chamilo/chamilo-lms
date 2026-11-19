@@ -36,6 +36,15 @@ class ValidationTokenHelper
         ], UrlGeneratorInterface::ABSOLUTE_URL);
     }
 
+    /**
+     * Hash stored for a token that only works for one user: the link carries the secret and the
+     * user id, so changing the user id in the link no longer matches any token.
+     */
+    public static function bindHashToUser(string $secret, int $userId): string
+    {
+        return hash('sha256', $secret.':'.$userId);
+    }
+
     public function getTypeId(string $type): int
     {
         return match ($type) {

@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Security as LegacySecurity;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -29,8 +30,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use const COURSEMANAGERLOWSECURITY;
-use const ENT_QUOTES;
-use const ENT_SUBSTITUTE;
 
 /**
  * @implements ProviderInterface<CourseDescriptionItem>
@@ -153,8 +152,8 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
 
         if ($description instanceof CCourseDescription) {
             $item->iid = $description->getIid();
-            $item->title = $this->sanitizeHtmlForDisplay((string) $description->getTitle());
-            $item->content = $this->sanitizeHtmlForDisplay((string) $description->getContent());
+            $item->title = (string) LegacySecurity::remove_XSS((string) $description->getTitle(), COURSEMANAGERLOWSECURITY);
+            $item->content = (string) LegacySecurity::remove_XSS((string) $description->getContent(), COURSEMANAGERLOWSECURITY);
             $item->progress = (int) $description->getProgress();
             $item->language = $this->getResourceLanguage($description);
         }
@@ -282,19 +281,6 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
             'searchEnabled' => $this->isSettingEnabled('search.search_enabled'),
             'saveTitlesAsHtml' => $this->isSettingEnabled('editor.save_titles_as_html'),
         ];
-    }
-
-    /**
-     * Apply the current teacher HTML policy to content stored before the setting changed.
-     * Do not modify the original database content when preparing the editor response.
-     */
-    private function sanitizeHtmlForDisplay(string $html): string
-    {
-        if (class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
-            return (string) \Security::remove_XSS($html, COURSEMANAGERLOWSECURITY);
-        }
-
-        return htmlspecialchars($html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     private function isSettingEnabled(string $name): bool

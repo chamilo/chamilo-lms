@@ -26,6 +26,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Security;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use const COURSEMANAGER;
 use const PATHINFO_FILENAME;
 
 #[IsGranted(new Expression('is_granted("ROLE_ADMIN") or is_granted("ROLE_SESSION_MANAGER")'))]
@@ -313,8 +315,8 @@ class SessionAdminController extends BaseController
 
         $descriptions = array_map(static function ($d) {
             return [
-                'title' => $d->getTitle(),
-                'content' => $d->getContent(),
+                'title' => Security::remove_XSS((string) $d->getTitle(), COURSEMANAGER),
+                'content' => Security::remove_XSS((string) $d->getContent(), COURSEMANAGER),
             ];
         }, $items);
 

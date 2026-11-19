@@ -485,6 +485,7 @@ class SessionManager
             }
         }
 
+        // TODO(db-neutral): IF(), GROUP BY ... HAVING and a free-form where condition built by the jqGrid code
         $result_rows = Database::query($sql);
         $row = Database::fetch_array($result_rows);
         $num = $row['total_rows'];
@@ -4442,6 +4443,7 @@ class SessionManager
         if ($getSql) {
             return $sql;
         }
+        // TODO(db-neutral): SQL fragments injected by ExtraField::parseConditions(), free-form ORDER BY and getSql mode
         $result = Database::query($sql);
 
         if ($getCount) {
@@ -4640,6 +4642,7 @@ class SessionManager
 		            src.session_id IN ($sessionsSQL)
 		            $keywordCondition
 		        ";
+        // TODO(db-neutral): the session filter is an SQL sub-select string built by get_sessions_followed_by_drh()
         if ($getCount) {
             $result = Database::query($sql);
             $row = Database::fetch_assoc($result);
@@ -7521,22 +7524,22 @@ class SessionManager
                 }
 
                 $sessionIdList = array_map('intval', $sessionIdList);
-                $sessionToString = implode("', '", $sessionIdList);
 
-                $course = Database::get_main_table(TABLE_MAIN_COURSE);
-                $sessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-                $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
-                // Select the teachers.
-                $sql = "SELECT DISTINCT(cu.user_id)
-                        FROM $course c
-                        INNER JOIN $sessionCourse src
-                        ON c.id = src.c_id
-                        INNER JOIN $courseUser cu
-                        ON (cu.c_id = c.id)
-		                WHERE src.session_id IN ('$sessionToString') AND cu.status = 1";
-                $result = Database::query($sql);
-                while ($row = Database::fetch_assoc($result)) {
+                // Select the teachers (an empty session list matches no row).
+                $teacherRows = [];
+                if (!empty($sessionIdList)) {
+                    $teacherRows = Container::getEntityManager()->getConnection()->createQueryBuilder()
+                        ->select('DISTINCT cu.user_id')
+                        ->from('course', 'c')
+                        ->innerJoin('c', 'session_rel_course', 'src', 'c.id = src.c_id')
+                        ->innerJoin('c', 'course_rel_user', 'cu', 'cu.c_id = c.id')
+                        ->where('src.session_id IN (:sessionIdList)')
+                        ->andWhere('cu.status = 1')
+                        ->setParameter('sessionIdList', $sessionIdList, ArrayParameterType::INTEGER)
+                        ->executeQuery()
+                        ->fetchAllAssociative();
+                }
+                foreach ($teacherRows as $row) {
                     $teacherListId[$row['user_id']] = $row['user_id'];
                 }
             } else {
@@ -7548,38 +7551,22 @@ class SessionManager
         }
 
         if (!empty($teacherListId)) {
-            $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+            // Wide user rows (legacy shape): DBAL QueryBuilder.
+            $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+                ->select($getCount ? 'count(DISTINCT(u.id)) AS count' : 'DISTINCT u.*')
+                ->from('user', 'u')
+                ->where('u.active = :active')
+                ->andWhere('u.id IN (:teacherListId)')
+                ->setParameter('active', (int) $active)
+                ->setParameter('teacherListId', array_map('intval', array_values($teacherListId)), ArrayParameterType::INTEGER);
 
-            $select = "SELECT DISTINCT u.* ";
-            if ($getCount) {
-                $select = "SELECT count(DISTINCT(u.id)) as count";
-            }
-
-            $sql = "$select FROM $tableUser u";
-
-            if (!empty($lastConnectionDate)) {
-                $tableLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-                //$sql .= " INNER JOIN $tableLogin l ON (l.login_user_id = u.user_id) ";
-            }
-            $active = intval($active);
-            $teacherListId = implode("','", $teacherListId);
-            $where = " WHERE u.active = $active AND u.id IN ('$teacherListId') ";
-
-            if (!empty($lastConnectionDate)) {
-                $lastConnectionDate = Database::escape_string($lastConnectionDate);
-                //$where .= " AND l.login_date <= '$lastConnectionDate' ";
-            }
-
-            $sql .= $where;
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
+            $rows = $qb->executeQuery()->fetchAllAssociative();
+            if (count($rows) > 0) {
                 if ($getCount) {
-                    $row = Database::fetch_array($result);
-
-                    return $row['count'];
-                } else {
-                    return Database::store_result($result, 'ASSOC');
+                    return $rows[0]['count'];
                 }
+
+                return $rows;
             }
         }
 

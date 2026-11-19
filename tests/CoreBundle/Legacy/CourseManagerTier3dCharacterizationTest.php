@@ -76,11 +76,11 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
         $this->assertEquals(1, CourseManager::get_users_count_in_course($course->getCode()));
     }
 
-    private function sessionCourse(int $sessionId, Course $course): void
+    private function sessionCourse(int $sessionId, Course $course, int $position = 0): void
     {
         $this->conn()->executeStatement(
-            'INSERT INTO session_rel_course (session_id, c_id, position, nbr_users) VALUES (?, ?, 0, 0)',
-            [$sessionId, $course->getId()]
+            'INSERT INTO session_rel_course (session_id, c_id, position, nbr_users) VALUES (?, ?, ?, 0)',
+            [$sessionId, $course->getId(), $position]
         );
     }
 
@@ -171,5 +171,39 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
             1,
             (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM course_rel_user WHERE user_id = ? AND c_id = ? AND relation_type = ?', [$otherHrm->getId(), $a->getId(), COURSE_RELATION_TYPE_RRHH])
         );
+    }
+
+    public function testGetCoursesFollowedByUserShowAllAssignedCoursesFiltersOnTheRelationType(): void
+    {
+        $byStatus = $this->createCourse('cm3d_fbu_status');
+        $byRelation = $this->createCourse('cm3d_fbu_relation');
+        $user = $this->createUser('cm3d_fbu_user');
+        $this->sub($user, $byStatus, COURSEMANAGER);
+        $this->sub($user, $byRelation, STUDENT, COURSE_RELATION_TYPE_COURSE_MANAGER);
+
+        $default = CourseManager::getCoursesFollowedByUser($user->getId(), COURSEMANAGER);
+        $this->assertSame([$byStatus->getCode()], array_keys($default), 'status teacher, whatever the relation type');
+
+        $all = CourseManager::getCoursesFollowedByUser($user->getId(), COURSEMANAGER, null, null, null, null, false, null, 0, true);
+        $this->assertSame([$byRelation->getCode()], array_keys($all), 'the relation type replaces the status condition');
+    }
+
+    public function testGetCoursesFollowedByUserInASessionIsOrderedByPositionAndPaginates(): void
+    {
+        $a = $this->createCourse('cm3d_fbo_a');
+        $b = $this->createCourse('cm3d_fbo_b');
+        $c = $this->createCourse('cm3d_fbo_c');
+        $session = $this->createSession('cm3d_fbo_session');
+        $user = $this->createUser('cm3d_fbo_user');
+        foreach ([[$a, 2], [$b, 3], [$c, 1]] as [$course, $position]) {
+            $this->sub($user, $course, COURSEMANAGER);
+            $this->sessionCourse($session->getId(), $course, $position);
+        }
+
+        $rows = CourseManager::getCoursesFollowedByUser($user->getId(), COURSEMANAGER, null, null, null, null, false, null, $session->getId());
+        $this->assertSame([$c->getCode(), $a->getCode(), $b->getCode()], array_keys($rows), 'session_rel_course.position ASC');
+
+        $page = CourseManager::getCoursesFollowedByUser($user->getId(), COURSEMANAGER, 1, 1, null, null, false, null, $session->getId());
+        $this->assertSame([$a->getCode()], array_keys($page), 'LIMIT from, limit');
     }
 }

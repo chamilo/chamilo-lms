@@ -3801,96 +3801,98 @@ class CourseManager
         $sessionId = (int) $sessionId;
         $user_id = (int) $user_id;
         $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $select = "SELECT DISTINCT c.*, language.isocode AS course_language, c.id as real_id ";
-
+        $qb = Database::getManager()->getConnection()->createQueryBuilder();
         if ($getCount) {
-            $select = "SELECT COUNT(DISTINCT c.id) as count";
+            $qb->select('COUNT(DISTINCT c.id) as count');
+        } else {
+            $qb->select('DISTINCT c.*', 'language.isocode AS course_language', 'c.id as real_id');
         }
+        $qb->from($tbl_course, 'c')
+            ->innerJoin('c', $languageTable, 'language', 'language.id = c.language_id');
 
-        $whereConditions = '';
+        $whereConditions = [];
         switch ($status) {
             case COURSEMANAGER:
-                $whereConditions .= " AND cru.user_id = $user_id";
+                $whereConditions[] = 'cru.user_id = :userId';
                 if (!$showAllAssignedCourses) {
-                    $whereConditions .= " AND cru.status = ".COURSEMANAGER;
+                    $whereConditions[] = 'cru.status = :courseManager';
+                    $qb->setParameter('courseManager', COURSEMANAGER);
                 } else {
-                    $whereConditions .= " AND relation_type = ".COURSE_RELATION_TYPE_COURSE_MANAGER;
+                    $whereConditions[] = 'relation_type = :relationTypeManager';
+                    $qb->setParameter('relationTypeManager', COURSE_RELATION_TYPE_COURSE_MANAGER);
                 }
                 break;
             case DRH:
-                $whereConditions .= " AND
-                    cru.user_id = $user_id AND
-                    cru.status = ".DRH." AND
-                    relation_type = '".COURSE_RELATION_TYPE_RRHH."'
-                ";
+                $whereConditions[] = 'cru.user_id = :userId';
+                $whereConditions[] = 'cru.status = :drh';
+                $whereConditions[] = 'relation_type = :relationTypeRrhh';
+                $qb->setParameter('drh', DRH)
+                    ->setParameter('relationTypeRrhh', COURSE_RELATION_TYPE_RRHH);
                 break;
             default:
                 // Without a known status, still restrict to the courses the user is related to.
-                $whereConditions .= " AND cru.user_id = $user_id";
+                $whereConditions[] = 'cru.user_id = :userId';
                 break;
         }
+        $qb->setParameter('userId', $user_id);
 
-        $keywordCondition = null;
-        if (!empty($keyword)) {
-            $keyword = Database::escape_string($keyword);
-            $keywordCondition = " AND (c.code LIKE '%$keyword%' OR c.title LIKE '%$keyword%' ) ";
-        }
-
-        $orderBy = null;
-        $extraInnerJoin = null;
-        $courseUserJoin = "INNER JOIN $tbl_course_rel_user cru
-                ON (cru.c_id = c.id)";
+        $courseUserJoinType = 'innerJoin';
+        $courseUserJoinCondition = 'cru.c_id = c.id';
+        $extraJoins = [];
 
         if (!empty($sessionId)) {
             if (COURSEMANAGER == $status) {
                 // A course coached in the session needs no base-course subscription row of this user.
-                $courseUserJoin = "LEFT JOIN $tbl_course_rel_user cru
-                ON (cru.c_id = c.id AND cru.user_id = $user_id)";
+                $courseUserJoinType = 'leftJoin';
+                $courseUserJoinCondition = 'cru.c_id = c.id AND cru.user_id = :userId';
                 // Teacher of course or teacher inside session
-                $whereConditions = " AND ((cru.user_id = $user_id AND cru.status = ".COURSEMANAGER.")
-                    OR srcru.status = ".SessionEntity::COURSE_COACH.") ";
+                $whereConditions = [
+                    '((cru.user_id = :userId AND cru.status = :courseManager) OR srcru.status = :courseCoach)',
+                ];
+                $qb->setParameter('courseManager', COURSEMANAGER)
+                    ->setParameter('courseCoach', SessionEntity::COURSE_COACH);
             }
             $courseList = SessionManager::get_course_list_by_session_id($sessionId);
             if (!empty($courseList)) {
-                $courseListToString = implode("','", array_keys($courseList));
-                $whereConditions .= " AND c.id IN ('".$courseListToString."')";
+                $whereConditions[] = 'c.id IN (:sessionCourseIds)';
+                $qb->setParameter('sessionCourseIds', array_map('intval', array_keys($courseList)), ArrayParameterType::INTEGER);
             }
             $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $tableSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-            $orderBy = ' ORDER BY position';
-            $sessionUserJoin = "INNER JOIN $tableSessionRelCourseRelUser srcru
-                                ON (src.session_id = srcru.session_id AND srcru.c_id = src.c_id)";
+            $qb->orderBy('position');
+            $sessionUserJoinType = 'innerJoin';
+            $sessionUserJoinCondition = 'src.session_id = srcru.session_id AND srcru.c_id = src.c_id';
             if (COURSEMANAGER == $status) {
                 // Only the session rows of this user count; LEFT so that base-course teachers need no session row.
-                $sessionUserJoin = "LEFT JOIN $tableSessionRelCourseRelUser srcru
-                                ON (src.session_id = srcru.session_id AND srcru.c_id = src.c_id AND srcru.user_id = $user_id)";
+                $sessionUserJoinType = 'leftJoin';
+                $sessionUserJoinCondition .= ' AND srcru.user_id = :userId';
             }
-            $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
-                                ON (c.id = src.c_id AND src.session_id = $sessionId)
-                                $sessionUserJoin
-                            ";
+            $extraJoins[] = ['innerJoin', $tableSessionRelCourse, 'src', 'c.id = src.c_id AND src.session_id = :sessionId'];
+            $extraJoins[] = [$sessionUserJoinType, $tableSessionRelCourseRelUser, 'srcru', $sessionUserJoinCondition];
+            $qb->setParameter('sessionId', $sessionId);
         }
 
-        $whereConditions .= $keywordCondition;
-        $sql = "$select
-                FROM $tbl_course c
-                INNER JOIN $languageTable language ON language.id = c.language_id
-                $courseUserJoin
-                INNER JOIN $tbl_course_rel_access_url a
-                ON (a.c_id = c.id)
-                $extraInnerJoin
-                WHERE
-                    access_url_id = ".api_get_current_access_url_id()."
-                    $whereConditions
-                $orderBy
-                ";
+        $qb->{$courseUserJoinType}('c', $tbl_course_rel_user, 'cru', $courseUserJoinCondition)
+            ->innerJoin('c', $tbl_course_rel_access_url, 'a', 'a.c_id = c.id');
+        foreach ($extraJoins as [$joinType, $joinTable, $joinAlias, $joinCondition]) {
+            $qb->{$joinType}('c', $joinTable, $joinAlias, $joinCondition);
+        }
+
+        if (!empty($keyword)) {
+            $whereConditions[] = '(c.code LIKE :keyword OR c.title LIKE :keyword)';
+            $qb->setParameter('keyword', '%'.$keyword.'%');
+        }
+
+        $qb->where('access_url_id = :accessUrlId')
+            ->setParameter('accessUrlId', (int) api_get_current_access_url_id());
+        foreach ($whereConditions as $whereCondition) {
+            $qb->andWhere($whereCondition);
+        }
         if (isset($from) && isset($limit)) {
-            $from = intval($from);
-            $limit = intval($limit);
-            $sql .= " LIMIT $from, $limit";
+            $qb->setFirstResult((int) $from)->setMaxResults((int) $limit);
         }
 
-        $result = Database::query($sql);
+        $result = $qb->executeQuery();
 
         if ($getCount) {
             $row = Database::fetch_array($result);

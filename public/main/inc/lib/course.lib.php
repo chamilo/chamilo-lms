@@ -3131,18 +3131,16 @@ class CourseManager
 
         if (api_get_multiple_access_url()) {
             // We filter the courses by the active URL
-            $coursesSelect = '';
-            if (1 == count($courseList)) {
-                $coursesSelect = $courseList[0];
-            } else {
-                $coursesSelect = implode(',', $courseList);
-            }
             $access_url_id = api_get_current_access_url_id();
             if (-1 != $access_url_id) {
-                $sql = "SELECT c_id FROM $tbl_url_course
-                    WHERE access_url_id = $access_url_id
-                    AND c_id IN ($coursesSelect)";
-                $result = Database::query($sql);
+                $result = Database::getManager()->getConnection()->createQueryBuilder()
+                    ->select('c_id')
+                    ->from($tbl_url_course)
+                    ->where('access_url_id = :accessUrlId')
+                    ->andWhere('c_id IN (:courseIds)')
+                    ->setParameter('accessUrlId', (int) $access_url_id)
+                    ->setParameter('courseIds', array_map('intval', $courseList), ArrayParameterType::INTEGER)
+                    ->executeQuery();
                 while ($row = Database::fetch_assoc($result)) {
                     $courseList[] = $row['c_id'];
                 }
@@ -3167,35 +3165,33 @@ class CourseManager
         $tblCourseRelUserCatalogue = Database::get_main_table(TABLE_MAIN_COURSE_CATALOGUE_USER);
         $visibility = $allowed ? 1 : 0;
 
-        // Restriction by user id
-        $currentUserRestriction = '';
+        $qb = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('DISTINCT(c.code)')
+            ->from($tblCourseRelUserCatalogue, 'tcruc')
+            ->innerJoin('tcruc', $courseTable, 'c', 'c.id = tcruc.c_id')
+            ->where('tcruc.visible = :visibility')
+            ->setParameter('visibility', $visibility);
 
+        // Restriction by user id
         $byUserId = (int) $byUserId;
         if ($byUserId > 0) {
-            $currentUserRestriction = " AND tcruc.user_id = $byUserId ";
+            $qb->andWhere('tcruc.user_id = :byUserId')
+                ->setParameter('byUserId', $byUserId);
         }
 
         //we filter the courses from the URL
-        $joinAccessUrl = '';
-        $whereAccessUrl = '';
         if (api_get_multiple_access_url()) {
             $accessUrlId = api_get_current_access_url_id();
             if (-1 != $accessUrlId) {
                 $tblUrlCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $joinAccessUrl = "LEFT JOIN $tblUrlCourse url_rel_course
-                                  ON url_rel_course.c_id = c.id ";
-                $whereAccessUrl = " AND access_url_id = $accessUrlId ";
+                $qb->leftJoin('c', $tblUrlCourse, 'url_rel_course', 'url_rel_course.c_id = c.id')
+                    ->andWhere('access_url_id = :accessUrlId')
+                    ->setParameter('accessUrlId', (int) $accessUrlId);
             }
         }
 
         // get course list auto-register
-        $sql = "SELECT DISTINCT(c.code)
-                FROM $tblCourseRelUserCatalogue tcruc
-                INNER JOIN $courseTable c
-                ON (c.id = tcruc.c_id) $joinAccessUrl
-                WHERE tcruc.visible = $visibility $currentUserRestriction $whereAccessUrl";
-
-        $result = Database::query($sql);
+        $result = $qb->executeQuery();
         $courseList = [];
 
         if (Database::num_rows($result) > 0) {

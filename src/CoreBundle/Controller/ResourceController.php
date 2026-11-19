@@ -748,9 +748,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
             true
         );
 
+        // The files a user attaches to an exercise answer are opened by the teachers who grade it.
+        // The node type is checked, not the type in the URL, because the node is found by its UUID only.
+        $isAttemptFile = 'attempt_file' === $resourceNode->getResourceType()?->getTitle();
+
         // Such files are always delivered as a neutral download, so the browser can never
         // execute them in the Chamilo origin, whatever the requested mode is.
-        $forceSocialHtmlDownload = $isSocialAttachment && str_contains($mimeType, 'html');
+        $forceSocialHtmlDownload = ($isSocialAttachment || $isAttemptFile) && str_contains($mimeType, 'html');
         if ($forceSocialHtmlDownload) {
             $mimeType = 'application/octet-stream';
         }

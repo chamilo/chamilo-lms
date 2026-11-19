@@ -2277,6 +2277,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Decide who can view the posts and comments of the portfolio.',
                 ],
                 [
+                    'name' => 'portfolio_order_post_by_alphabetical_order',
+                    'title' => 'Order portfolio posts alphabetically by default',
+                    'comment' => 'When enabled, portfolio posts are initially sorted by title instead of newest first. Users may still change the order using the portfolio filter.',
+                ],
+                [
                     'name' => 'portfolio_show_base_course_post_in_sessions',
                     'title' => 'Show base course posts in session course',
                     'comment' => 'Decide who can view the posts and comments of the portfolio.',
@@ -2782,6 +2787,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'quiz_check_button_enable',
                     'title' => 'Add answer-saving process check before test',
                     'comment' => 'Make sure users are all set to start the test by providing a simulation of the question-saving process before entering the test. This allows for early detection of some connection issues and reduces user experience frictions.',
+                ],
+                [
+                    'name' => 'allow_final_exam_access_rule',
+                    'title' => 'Access conditions before a test',
+                    'comment' => 'Lets teachers keep a test, such as a final exam, closed until the learner has spent a minimum time in the course and has filled in a required profile field.',
                 ],
                 [
                     'name' => 'quiz_confirm_saved_answers',

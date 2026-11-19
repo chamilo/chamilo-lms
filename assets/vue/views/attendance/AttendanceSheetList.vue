@@ -770,10 +770,13 @@ const saveStudentOwnAttendance = async () => {
       presence: attendanceData.value[`${currentUserId.value}-${date.id}`] ?? 0,
     }))
 
-    await attendanceService.saveStudentOwnAttendance({
-      courseId: parseInt(cid, 10),
-      entries,
-    })
+    await attendanceService.saveStudentOwnAttendance(
+      {
+        courseId: parseInt(cid, 10),
+        entries,
+      },
+      getAttendanceRequestContext(),
+    )
 
     alert(t("Attendance saved successfully"))
   } catch (error) {

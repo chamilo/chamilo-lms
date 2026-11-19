@@ -57,12 +57,16 @@ final class ExceptionListener
             return;
         }
 
+        // A JSON caller needs the 403 status: a redirect would reach it as a 200 carrying an HTML page.
+        if (RequestExpectsJsonHelper::expectsJson($request)) {
+            return;
+        }
+
         // The flash exists to explain the redirect below, so it is only queued
-        // when there is a redirect to explain. Queuing it for JSON callers left
-        // it unread in the session, surfacing later on an unrelated page.
+        // when there is a redirect to explain.
         $session = $request->hasSession() ? $request->getSession() : null;
 
-        if ($session instanceof FlashBagAwareSessionInterface && !RequestExpectsJsonHelper::expectsJson($request)) {
+        if ($session instanceof FlashBagAwareSessionInterface) {
             $session
                 ->getFlashBag()
                 ->add(

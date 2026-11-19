@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Exercise;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseConfiguration;
+use Chamilo\CoreBundle\Component\Exercise\FinalExamAccessRule;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
@@ -20,6 +21,7 @@ use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\FinalExamAccessRuleConfigurationHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
@@ -70,6 +72,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         private GradebookLinkManager $gradebookLinkManager,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
         private ResourceDefaultVisibilityHelper $resourceDefaultVisibilityHelper,
+        private FinalExamAccessRuleConfigurationHelper $finalExamAccessRuleConfigurationHelper,
     ) {}
 
     /**
@@ -95,6 +98,14 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         $this->getLanguageFromCode($data->language);
 
         $exerciseId = isset($uriVariables['exerciseId']) ? (int) $uriVariables['exerciseId'] : (int) ($data->exerciseId ?? 0);
+        $finalExamAccessRuleEnabled = $this->isSettingEnabled(FinalExamAccessRule::SETTING);
+        if ($finalExamAccessRuleEnabled) {
+            $this->finalExamAccessRuleConfigurationHelper->assertValid(
+                $exerciseId > 0 ? $this->quizRepository->findInCourseContext($exerciseId, $course, $session) : null,
+                $data->finalExamAccessRule,
+            );
+        }
+
         if ($exerciseId > 0) {
             $quiz = $this->updateExercise($exerciseId, $data, $course, $session);
         } else {
@@ -107,6 +118,10 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         $this->saveCategoryMatrix($quiz, $data);
         $this->saveExerciseSkills($quiz, $data, $course, $session);
         $this->saveExerciseExtraFields($quiz, $data);
+        // The form only shows the access conditions while the platform allows them
+        if ($finalExamAccessRuleEnabled) {
+            $this->finalExamAccessRuleConfigurationHelper->save($quiz, $data->finalExamAccessRule);
+        }
         $this->saveExerciseGradebookLink($quiz, $data, $course, $session);
         if ($exerciseId > 0) {
             $this->deleteCurrentEditorIncompleteAttempts($quiz, $course, $session);
@@ -511,6 +526,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
         $configuration->autoLaunch = $quiz->isAutoLaunch();
         $configuration->notifications = $this->parseNotifications($quiz->getNotifications());
         $configuration->accessCondition = (string) $quiz->getAccessCondition();
+        $configuration->finalExamAccessRule = $this->finalExamAccessRuleConfigurationHelper->getFormValues($quiz);
         $configuration->sound = (string) ($quiz->getSound() ?? '');
         $configuration->feedbackType = $quiz->getFeedbackType();
         $configuration->resultsDisabled = $quiz->getResultsDisabled();
@@ -936,6 +952,7 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             'allowHideQuestionNumberSetting' => $this->isSettingEnabled('exercise.quiz_hide_question_number'),
             'enableQuizScenario' => $this->isSettingEnabled('enable_quiz_scenario'),
             'quizQuestionCategoryDestinations' => $this->isProgressiveAdaptiveSettingEnabled(),
+            'allowFinalExamAccessRule' => $this->isSettingEnabled(FinalExamAccessRule::SETTING),
         ];
     }
 
@@ -953,6 +970,9 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             'languageOptions' => $this->getResourceLanguageOptions(),
             'skillOptions' => $this->getSkillOptions($quiz),
             'extraFieldDefinitions' => $this->getExtraFieldDefinitions(),
+            'finalExamUserIdentifierFieldOptions' => $this->isSettingEnabled(FinalExamAccessRule::SETTING)
+                ? $this->finalExamAccessRuleConfigurationHelper->getUserIdentifierFieldOptions($quiz)
+                : [],
             'extraNotificationOptions' => [],
             'feedbackOptions' => $this->getFeedbackOptions($quiz),
             'resultOptions' => [
@@ -1309,6 +1329,11 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
                 continue;
             }
 
+            // Edited by its own fields of the form, see FinalExamAccessRuleConfigurationHelper
+            if (FinalExamAccessRule::EXERCISE_RULE_FIELD_VARIABLE === $field->getVariable()) {
+                continue;
+            }
+
             $items[] = $field;
         }
 
@@ -1406,7 +1431,10 @@ final readonly class ExerciseConfigurationProcessor implements ProcessorInterfac
             }
 
             $field = $row->getField();
-            if ('notifications' === $field->getVariable() || !$this->isSupportedExtraFieldType((int) $field->getValueType())) {
+            if (
+                \in_array($field->getVariable(), ['notifications', FinalExamAccessRule::EXERCISE_RULE_FIELD_VARIABLE], true)
+                || !$this->isSupportedExtraFieldType((int) $field->getValueType())
+            ) {
                 continue;
             }
 

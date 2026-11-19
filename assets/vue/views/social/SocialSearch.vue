@@ -90,14 +90,14 @@
               icon="account"
               :label="t('Send invitation')"
               type="secondary"
-              @click="openInvitationModal(user)"
+              @click="openInvitationModal(user, $event)"
             />
 
             <BaseButton
               icon="email"
               :label="t('Send message')"
               type="primary"
-              @click="openMessageModal(user)"
+              @click="openMessageModal(user, $event)"
             />
           </div>
         </li>
@@ -149,11 +149,20 @@
       class="invitation-modal-overlay"
       @click.self="closeInvitationModal"
     >
-      <div class="invitation-modal">
+      <div
+        ref="invitationDialog"
+        class="invitation-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="social-invitation-dialog-title"
+        @keydown="handleDialogKeydown($event, closeInvitationModal)"
+      >
         <div class="invitation-modal-header">
-          <h3>Send invitation</h3>
+          <h3 id="social-invitation-dialog-title">{{ t("Send invitation") }}</h3>
           <button
             class="close-button"
+            type="button"
+            :aria-label="t('Close')"
             @click="closeInvitationModal"
           >
             ✕
@@ -162,10 +171,12 @@
         <textarea
           v-model="invitationMessage"
           class="invitation-modal-textarea"
+          :aria-label="t('Message')"
           placeholder="Add a personal message"
         ></textarea>
         <button
           class="invitation-modal-send"
+          type="button"
           @click="sendInvitation"
         >
           Send message
@@ -179,11 +190,20 @@
       class="message-modal-overlay"
       @click.self="closeMessageModal"
     >
-      <div class="message-modal">
+      <div
+        ref="messageDialog"
+        class="message-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="social-message-dialog-title"
+        @keydown="handleDialogKeydown($event, closeMessageModal)"
+      >
         <div class="message-modal-header">
-          <h3>{{ t("Send message") }}</h3>
+          <h3 id="social-message-dialog-title">{{ t("Send message") }}</h3>
           <button
             class="message-modal-close"
+            type="button"
+            :aria-label="t('Close')"
             @click="closeMessageModal"
           >
             ✕
@@ -201,16 +221,19 @@
           <input
             v-model="messageSubject"
             :placeholder="t('Subject')"
+            :aria-label="t('Subject')"
             class="message-modal-input"
             type="text"
           />
           <textarea
             v-model="messageContent"
             :placeholder="t('Message')"
+            :aria-label="t('Message')"
             class="message-modal-textarea"
           ></textarea>
           <button
             class="message-modal-send"
+            type="button"
             @click="sendMessage"
           >
             {{ t("Send message") }}
@@ -242,6 +265,9 @@ const notification = useNotification()
 const selectedUser = ref(null)
 const showInvitationModal = ref(false)
 const showMessageModal = ref(false)
+const invitationDialog = ref(null)
+const messageDialog = ref(null)
+let modalTrigger = null
 const messageSubject = ref("")
 const messageContent = ref("")
 const invitationMessage = ref("")
@@ -291,22 +317,68 @@ const performSearch = async () => {
     console.error("There has been a problem with your fetch operation:", error)
   }
 }
-const openMessageModal = (user) => {
+const rememberModalTrigger = (event) => {
+  modalTrigger = event.currentTarget
+}
+const restoreModalFocus = () => {
+  const trigger = modalTrigger
+  modalTrigger = null
+  nextTick(() => {
+    if (trigger?.isConnected) {
+      trigger.focus()
+    } else {
+      document.getElementById("search-query")?.focus()
+    }
+  })
+}
+const handleDialogKeydown = (event, closeDialog) => {
+  if (event.key === "Escape") {
+    event.preventDefault()
+    event.stopPropagation()
+    closeDialog()
+    return
+  }
+  if (event.key !== "Tab") {
+    return
+  }
+
+  const focusableElements = Array.from(
+    event.currentTarget.querySelectorAll("button:not(:disabled), input:not(:disabled), textarea:not(:disabled)"),
+  ).filter((element) => element.getClientRects().length > 0)
+  const first = focusableElements[0]
+  const last = focusableElements[focusableElements.length - 1]
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault()
+    last?.focus()
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault()
+    first?.focus()
+  }
+}
+const openMessageModal = async (user, event) => {
+  rememberModalTrigger(event)
   selectedUser.value = user
   showMessageModal.value = true
+  await nextTick()
+  messageDialog.value?.querySelector(".message-modal-input")?.focus()
 }
 const closeMessageModal = () => {
   showMessageModal.value = false
   messageSubject.value = ""
   messageContent.value = ""
+  restoreModalFocus()
 }
-const openInvitationModal = (user) => {
+const openInvitationModal = async (user, event) => {
+  rememberModalTrigger(event)
   selectedUser.value = user
   showInvitationModal.value = true
+  await nextTick()
+  invitationDialog.value?.querySelector(".invitation-modal-textarea")?.focus()
 }
 const closeInvitationModal = () => {
   showInvitationModal.value = false
   invitationMessage.value = ""
+  restoreModalFocus()
 }
 const sendInvitation = async () => {
   if (!selectedUser.value) {
@@ -335,8 +407,7 @@ const sendInvitation = async () => {
     console.error("Error sending invitation:", error)
   }
 
-  showInvitationModal.value = false
-  invitationMessage.value = ""
+  closeInvitationModal()
 }
 const sendMessage = async () => {
   if (!selectedUser.value) {

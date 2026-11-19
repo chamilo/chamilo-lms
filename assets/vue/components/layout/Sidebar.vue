@@ -1,5 +1,8 @@
 <template>
-  <aside class="app-sidebar">
+  <aside
+    id="app-sidebar"
+    class="app-sidebar"
+  >
     <div class="app-sidebar__container">
       <h3 class="app-sidebar__top">
         {{ t("Menu") }}
@@ -52,13 +55,19 @@
   </aside>
 
   <Teleport to=".app-topbar__end">
-    <a
+    <button
+      type="button"
       class="app-sidebar__topbar-button item-button"
-      tabindex="0"
+      :aria-label="t('Menu')"
+      :aria-expanded="sidebarIsOpen"
+      aria-controls="app-sidebar"
       @click="sidebarIsOpen = !sidebarIsOpen"
     >
-      <i class="mdi mdi-close" />
-    </a>
+      <i
+        class="mdi mdi-close"
+        aria-hidden="true"
+      />
+    </button>
   </Teleport>
 </template>
 

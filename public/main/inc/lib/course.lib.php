@@ -3630,10 +3630,15 @@ class CourseManager
     public static function get_course_category($code)
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $code = Database::escape_string($code);
-        $sql = "SELECT * FROM $table WHERE code = '$code'";
 
-        return Database::fetch_array(Database::query($sql));
+        return Database::fetch_array(
+            Database::getManager()->getConnection()->createQueryBuilder()
+                ->select('*')
+                ->from($table)
+                ->where('code = :code')
+                ->setParameter('code', (string) $code)
+                ->executeQuery()
+        );
     }
 
     /**
@@ -3653,27 +3658,37 @@ class CourseManager
         $affected_rows = 0;
 
         //Deleting assigned courses to hrm_id
+        $connection = Database::getManager()->getConnection();
+        $qb = $connection->createQueryBuilder();
         if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT s.c_id FROM $tbl_course_rel_user s
-                    INNER JOIN $tbl_course_rel_access_url a
-                    ON (a.c_id = s.c_id)
-                    WHERE
-                        user_id = $hr_manager_id AND
-                        relation_type = ".COURSE_RELATION_TYPE_RRHH." AND
-                        access_url_id = ".api_get_current_access_url_id();
+            $qb->select('s.c_id')
+                ->from($tbl_course_rel_user, 's')
+                ->innerJoin('s', $tbl_course_rel_access_url, 'a', 'a.c_id = s.c_id')
+                ->where('user_id = :hrManagerId')
+                ->andWhere('relation_type = :relationType')
+                ->andWhere('access_url_id = :accessUrlId')
+                ->setParameter('accessUrlId', (int) api_get_current_access_url_id());
         } else {
-            $sql = "SELECT c_id FROM $tbl_course_rel_user
-                    WHERE user_id = $hr_manager_id AND relation_type = ".COURSE_RELATION_TYPE_RRHH;
+            $qb->select('c_id')
+                ->from($tbl_course_rel_user)
+                ->where('user_id = :hrManagerId')
+                ->andWhere('relation_type = :relationType');
         }
-        $result = Database::query($sql);
+        $result = $qb
+            ->setParameter('hrManagerId', $hr_manager_id)
+            ->setParameter('relationType', COURSE_RELATION_TYPE_RRHH)
+            ->executeQuery();
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
-                $sql = "DELETE FROM $tbl_course_rel_user
-                        WHERE
-                            c_id = {$row['c_id']} AND
-                            user_id = $hr_manager_id AND
-                            relation_type = ".COURSE_RELATION_TYPE_RRHH;
-                Database::query($sql);
+                $connection->createQueryBuilder()
+                    ->delete($tbl_course_rel_user)
+                    ->where('c_id = :courseId')
+                    ->andWhere('user_id = :hrManagerId')
+                    ->andWhere('relation_type = :relationType')
+                    ->setParameter('courseId', (int) $row['c_id'])
+                    ->setParameter('hrManagerId', $hr_manager_id)
+                    ->setParameter('relationType', COURSE_RELATION_TYPE_RRHH)
+                    ->executeStatement();
             }
         }
 
@@ -3682,6 +3697,7 @@ class CourseManager
             foreach ($courses_list as $course_code) {
                 $courseInfo = api_get_course_info($course_code);
                 $courseId = $courseInfo['real_id'];
+                // TODO(db-neutral): INSERT IGNORE
                 $sql = "INSERT IGNORE INTO $tbl_course_rel_user(c_id, user_id, status, relation_type)
                         VALUES($courseId, $hr_manager_id, ".DRH.", ".COURSE_RELATION_TYPE_RRHH.")";
                 $result = Database::query($sql);

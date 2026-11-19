@@ -146,4 +146,30 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
         $outOfRange = CourseManager::get_student_list_from_course_code($course->getCode(), true, $one->getId(), '1995-01-01 00:00:00', '1995-12-31 00:00:00');
         $this->assertSame([], $outOfRange, 'the session dates must fall inside the range');
     }
+
+    public function testSubscribeCoursesToHrmManagerOnlyDeletesHrRelationsOfThatManager(): void
+    {
+        $a = $this->createCourse('cm3d_hrm_a');
+        $b = $this->createCourse('cm3d_hrm_b');
+        $hrm = $this->createUser('cm3d_hrm_user');
+        $otherHrm = $this->createUser('cm3d_hrm_other');
+        $this->sub($hrm, $a, STUDENT); // plain membership, must survive
+        $this->sub($hrm, $a, DRH, COURSE_RELATION_TYPE_RRHH);
+        $this->sub($otherHrm, $a, DRH, COURSE_RELATION_TYPE_RRHH); // another manager, must survive
+
+        $this->assertSame(1, CourseManager::subscribeCoursesToHrmManager($hrm->getId(), [$b->getCode()]));
+
+        $this->assertSame(
+            1,
+            (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM course_rel_user WHERE user_id = ? AND c_id = ? AND relation_type = 0', [$hrm->getId(), $a->getId()])
+        );
+        $this->assertSame(
+            0,
+            (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM course_rel_user WHERE user_id = ? AND c_id = ? AND relation_type = ?', [$hrm->getId(), $a->getId(), COURSE_RELATION_TYPE_RRHH])
+        );
+        $this->assertSame(
+            1,
+            (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM course_rel_user WHERE user_id = ? AND c_id = ? AND relation_type = ?', [$otherHrm->getId(), $a->getId(), COURSE_RELATION_TYPE_RRHH])
+        );
+    }
 }

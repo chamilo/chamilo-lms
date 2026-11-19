@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Security as LegacySecurity;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -29,8 +30,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use const COURSEMANAGERLOWSECURITY;
-use const ENT_QUOTES;
-use const ENT_SUBSTITUTE;
 
 /**
  * @implements ProviderInterface<CourseDescriptionItem>
@@ -290,11 +289,7 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
      */
     private function sanitizeHtmlForDisplay(string $html): string
     {
-        if (class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
-            return (string) \Security::remove_XSS($html, COURSEMANAGERLOWSECURITY);
-        }
-
-        return htmlspecialchars($html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        return (string) LegacySecurity::remove_XSS($html, COURSEMANAGERLOWSECURITY);
     }
 
     private function isSettingEnabled(string $name): bool

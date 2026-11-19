@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Security as LegacySecurity;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -198,11 +199,7 @@ final readonly class CourseDescriptionItemProcessor implements ProcessorInterfac
 
     private function sanitizeContent(string $content): string
     {
-        if (class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
-            return (string) \Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
-        }
-
-        return $content;
+        return (string) LegacySecurity::remove_XSS($content, COURSEMANAGERLOWSECURITY);
     }
 
     private function applyResourceLanguage(CCourseDescription $description, string $languageCode): void

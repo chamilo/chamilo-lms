@@ -726,12 +726,19 @@ class CourseManager
 
         $userId = api_get_user_id();
 
-        $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-            WHERE
-                user_id = $userId AND
-                relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
-                c_id = ".$course->getId();
-        if (Database::num_rows(Database::query($sql)) > 0) {
+        $alreadySubscribed = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('1')
+            ->from(Database::get_main_table(TABLE_MAIN_COURSE_USER))
+            ->where('user_id = :userId')
+            ->andWhere('relation_type <> :relationType')
+            ->andWhere('c_id = :courseId')
+            ->setParameter('userId', (int) $userId)
+            ->setParameter('relationType', COURSE_RELATION_TYPE_RRHH)
+            ->setParameter('courseId', (int) $course->getId())
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if (false !== $alreadySubscribed) {
             return false;
         }
 
@@ -1046,25 +1053,25 @@ class CourseManager
         $t_cfv = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $table_field = Database::get_main_table(TABLE_EXTRA_FIELD);
         $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
-        $original_course_id_value = Database::escape_string($original_course_id_value);
-        $original_course_id_name = Database::escape_string($original_course_id_name);
 
-        $sql = "SELECT item_id
-                FROM $table_field cf
-                INNER JOIN $t_cfv cfv
-                ON cfv.field_id=cf.id
-                WHERE
-                    variable = '$original_course_id_name' AND
-                    cfv.field_value = '$original_course_id_value' AND
-                    cf.item_type = $extraFieldType
-                ";
-        $res = Database::query($sql);
-        $row = Database::fetch_object($res);
-        if ($row) {
-            return $row->item_id;
-        } else {
-            return 0;
+        $itemId = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('cfv.item_id')
+            ->from($table_field, 'cf')
+            ->innerJoin('cf', $t_cfv, 'cfv', 'cfv.field_id = cf.id')
+            ->where('cf.variable = :variable')
+            ->andWhere('cfv.field_value = :value')
+            ->andWhere('cf.item_type = :itemType')
+            ->setParameter('variable', (string) $original_course_id_name)
+            ->setParameter('value', (string) $original_course_id_value)
+            ->setParameter('itemType', (int) $extraFieldType)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if (false !== $itemId) {
+            return $itemId;
         }
+
+        return 0;
     }
 
     /**
@@ -1121,19 +1128,35 @@ class CourseManager
         $courseInfo = api_get_course_info($courseCode);
         $courseId = $courseInfo['real_id'];
 
+        $connection = Database::getManager()->getConnection();
+
         // Check in advance whether the user has already been registered on the platform.
-        $sql = "SELECT status FROM ".$userTable." WHERE id = $userId ";
-        if (0 == Database::num_rows(Database::query($sql))) {
+        $userExists = $connection->createQueryBuilder()
+            ->select('status')
+            ->from($userTable)
+            ->where('id = :userId')
+            ->setParameter('userId', (int) $userId)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if (false === $userExists) {
             return false; // The user has not been registered to the platform.
         }
 
         // Check whether the user has already been registered to the course visibility in the catalogue.
-        $sql = "SELECT * FROM $courseUserTable
-                WHERE
-                    user_id = $userId AND
-                    visible = $visible AND
-                    c_id = $courseId";
-        if (Database::num_rows(Database::query($sql)) > 0) {
+        $alreadyVisible = $connection->createQueryBuilder()
+            ->select('1')
+            ->from($courseUserTable)
+            ->where('user_id = :userId')
+            ->andWhere('visible = :visible')
+            ->andWhere('c_id = :courseId')
+            ->setParameter('userId', (int) $userId)
+            ->setParameter('visible', $visible)
+            ->setParameter('courseId', (int) $courseId)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if (false !== $alreadyVisible) {
             return true; // The visibility of the user to the course in the catalogue does already exist.
         }
 
@@ -1175,12 +1198,19 @@ class CourseManager
         $courseId = $courseInfo['real_id'];
 
         // Check whether the user has already been registered to the course visibility in the catalogue.
-        $sql = "SELECT * FROM $courseUserTable
-                WHERE
-                    user_id = $userId AND
-                    visible = $visible AND
-                    c_id = $courseId";
-        if (Database::num_rows(Database::query($sql)) > 0) {
+        $registered = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('1')
+            ->from($courseUserTable)
+            ->where('user_id = :userId')
+            ->andWhere('visible = :visible')
+            ->andWhere('c_id = :courseId')
+            ->setParameter('userId', (int) $userId)
+            ->setParameter('visible', (int) $visible)
+            ->setParameter('courseId', (int) $courseId)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if (false !== $registered) {
             $cond = [
                 'user_id = ? AND c_id = ? AND visible = ? ' => [
                     $userId,
@@ -1259,13 +1289,18 @@ class CourseManager
         $courseId = intval($courseInfo['real_id']);
         $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-        $sql = "SELECT * FROM $table
-                WHERE
-                    user_id = $userId AND
-                    relation_type = ".COURSE_RELATION_TYPE_RRHH." AND
-                    c_id = $courseId";
-
-        $result = Database::fetch_array(Database::query($sql));
+        $result = Database::fetch_array(
+            Database::getManager()->getConnection()->createQueryBuilder()
+                ->select('*')
+                ->from($table)
+                ->where('user_id = :userId')
+                ->andWhere('relation_type = :relationType')
+                ->andWhere('c_id = :courseId')
+                ->setParameter('userId', $userId)
+                ->setParameter('relationType', COURSE_RELATION_TYPE_RRHH)
+                ->setParameter('courseId', $courseId)
+                ->executeQuery()
+        );
 
         if (!empty($result)) {
             // The user has been registered in this course.
@@ -1326,23 +1361,28 @@ class CourseManager
             $session_id = api_get_session_id();
         }
 
-        $condition_course = '';
+        $courseId = null;
         if (isset($course_code)) {
             $courseInfo = api_get_course_info($course_code);
             if (empty($courseInfo)) {
                 return false;
             }
-            $courseId = $courseInfo['real_id'];
-            $condition_course = " AND c_id = $courseId";
+            $courseId = (int) $courseInfo['real_id'];
         }
 
-        $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                WHERE
-                    user_id = $userId AND
-                    relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                    $condition_course ";
+        $connection = Database::getManager()->getConnection();
+        $qb = $connection->createQueryBuilder()
+            ->select('*')
+            ->from(Database::get_main_table(TABLE_MAIN_COURSE_USER))
+            ->where('user_id = :userId')
+            ->andWhere('relation_type <> :relationType')
+            ->setParameter('userId', $userId)
+            ->setParameter('relationType', COURSE_RELATION_TYPE_RRHH);
+        if (null !== $courseId) {
+            $qb->andWhere('c_id = :courseId')->setParameter('courseId', $courseId);
+        }
 
-        $result = Database::fetch_array(Database::query($sql));
+        $result = Database::fetch_array($qb->executeQuery());
 
         if (!empty($result)) {
             // The user has been registered in this course.
@@ -1355,30 +1395,52 @@ class CourseManager
         }
 
         $tableSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $sql = "SELECT 1 FROM $tableSessionCourseUser
-                WHERE user_id = $userId AND session_id = $session_id $condition_course";
+        $sessionCourseUserQb = static function () use ($connection, $tableSessionCourseUser, $userId, $session_id, $courseId) {
+            $qb = $connection->createQueryBuilder()
+                ->select('1')
+                ->from($tableSessionCourseUser)
+                ->where('user_id = :userId')
+                ->andWhere('session_id = :sessionId')
+                ->setParameter('userId', $userId)
+                ->setParameter('sessionId', $session_id)
+                ->setMaxResults(1);
+            if (null !== $courseId) {
+                $qb->andWhere('c_id = :courseId')->setParameter('courseId', $courseId);
+            }
 
-        if (Database::num_rows(Database::query($sql)) > 0) {
+            return $qb;
+        };
+
+        if (false !== $sessionCourseUserQb()->executeQuery()->fetchOne()) {
             return true;
         }
 
-        $sql = "SELECT 1 FROM $tableSessionCourseUser
-                WHERE user_id = $userId AND session_id = $session_id AND status = ".SessionEntity::COURSE_COACH." $condition_course";
-
-        if (Database::num_rows(Database::query($sql)) > 0) {
+        $coachQb = $sessionCourseUserQb()
+            ->andWhere('status = :courseCoach')
+            ->setParameter('courseCoach', SessionEntity::COURSE_COACH);
+        if (false !== $coachQb->executeQuery()->fetchOne()) {
             return true;
         }
 
-        $sql = "SELECT s.id FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." s
-                INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION_USER)." sru
-                ON (sru.session_id = s.id AND sru.relation_type = ".SessionEntity::GENERAL_COACH.")
-                WHERE sru.user_id = $userId AND s.id = $session_id";
+        $generalCoach = $connection->createQueryBuilder()
+            ->select('s.id')
+            ->from(Database::get_main_table(TABLE_MAIN_SESSION), 's')
+            ->innerJoin(
+                's',
+                Database::get_main_table(TABLE_MAIN_SESSION_USER),
+                'sru',
+                'sru.session_id = s.id AND sru.relation_type = :generalCoach'
+            )
+            ->where('sru.user_id = :userId')
+            ->andWhere('s.id = :sessionId')
+            ->setParameter('generalCoach', SessionEntity::GENERAL_COACH)
+            ->setParameter('userId', $userId)
+            ->setParameter('sessionId', $session_id)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
 
-        if (Database::num_rows(Database::query($sql)) > 0) {
-            return true;
-        }
-
-        return false;
+        return false !== $generalCoach;
     }
 
     /**
@@ -1398,15 +1460,18 @@ class CourseManager
             return false;
         }
 
-        $sql = "SELECT status FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                WHERE c_id = $courseId AND user_id = $userId ";
-        $result = Database::query($sql);
+        $status = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('status')
+            ->from(Database::get_main_table(TABLE_MAIN_COURSE_USER))
+            ->where('c_id = :courseId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $userId)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
 
-        if (Database::num_rows($result) > 0) {
-            return 1 == Database::result($result, 0, 'status');
-        }
-
-        return false;
+        return false !== $status && 1 == $status;
     }
 
     /**

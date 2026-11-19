@@ -44,6 +44,16 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         Container::setRequest($request);
     }
 
+    /**
+     * Two tests switch the foreign keys off to insert orphan rows. The session variable outlives the DAMA rollback, so
+     * leaving it at 0 silently disables every ON DELETE CASCADE of the tests that run afterwards.
+     */
+    protected function tearDown(): void
+    {
+        $this->conn()->executeStatement('SET FOREIGN_KEY_CHECKS = 1');
+        parent::tearDown();
+    }
+
     private function conn(): Connection
     {
         return Database::getManager()->getConnection();

@@ -257,4 +257,21 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
 
         $this->assertSame([], CourseManager::getCoursesFollowedByGroupAdmin($stranger->getId()), 'not the admin of any group');
     }
+
+    public function testGetCourseParamsForDisplayIgnoresTheRowsOfOtherUsers(): void
+    {
+        $course = $this->createCourse('cm3d_disp_b');
+        $teacher = $this->createUser('cm3d_disp_other_teacher');
+        $student = $this->createUser('cm3d_disp_mine');
+        $this->sub($teacher, $course, COURSEMANAGER);
+        $this->sub($student, $course, STUDENT);
+        $course->setVisibility(Course::CLOSED);
+        $this->getEntityManager()->flush();
+
+        // Logged as the student: the teacher's row must not leak into the status used for the link.
+        $this->loginAs($student);
+        $params = CourseManager::getCourseParamsForDisplay($course->getId());
+        $this->assertSame('', $params['link'], 'a student cannot open a closed course');
+        $this->assertStringContainsString('item_closed', $params['title']);
+    }
 }

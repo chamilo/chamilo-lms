@@ -6633,42 +6633,42 @@ class CourseManager
         // Get course list auto-register
         $special_course_list = self::get_special_course_list();
 
-        $without_special_courses = '';
-        if (!empty($special_course_list)) {
-            $without_special_courses = ' AND course.id NOT IN ("'.implode('","', $special_course_list).'")';
-        }
-
         //AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-        $sql = "SELECT
-                    course.id,
-                    course.title,
-                    course.code,
-                    course.subscribe subscr,
-                    course.unsubscribe unsubscr,
-                    course_rel_user.status status,
-                    course_rel_user.sort sort,
-                    course_rel_user.user_course_cat user_course_cat
-                FROM
-                $TABLECOURS course
-                INNER JOIN $TABLECOURSUSER course_rel_user
-                ON (course.id = course_rel_user.c_id)
-                INNER JOIN $TABLE_ACCESS_URL_REL_COURSE url
-                ON (url.c_id = course.id)
-                WHERE
-                    course.id = $courseId AND
-                    course_rel_user.user_id = $userId
-                    $without_special_courses
-                ";
+        $qb = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select(
+                'course.id',
+                'course.title',
+                'course.code',
+                'course.subscribe subscr',
+                'course.unsubscribe unsubscr',
+                'course_rel_user.status status',
+                'course_rel_user.sort sort',
+                'course_rel_user.user_course_cat user_course_cat'
+            )
+            ->from($TABLECOURS, 'course')
+            ->innerJoin('course', $TABLECOURSUSER, 'course_rel_user', 'course.id = course_rel_user.c_id')
+            ->innerJoin('course', $TABLE_ACCESS_URL_REL_COURSE, 'url', 'url.c_id = course.id')
+            ->where('course.id = :courseId')
+            ->andWhere('course_rel_user.user_id = :userId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', (int) $userId);
+        if (!empty($special_course_list)) {
+            $qb->andWhere('course.id NOT IN (:specialCourseIds)')
+                ->setParameter('specialCourseIds', array_map('intval', $special_course_list), ArrayParameterType::INTEGER);
+        }
 
         // If multiple URL access mode is enabled, only fetch courses
         // corresponding to the current URL.
         if (api_get_multiple_access_url() && -1 != $current_url_id) {
-            $sql .= " AND url.c_id = course.id AND access_url_id = $current_url_id";
+            $qb->andWhere('url.c_id = course.id')
+                ->andWhere('access_url_id = :accessUrlId')
+                ->setParameter('accessUrlId', (int) $current_url_id);
         }
         // Use user's classification for courses (if any).
-        $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
+        $qb->orderBy('course_rel_user.user_course_cat')
+            ->addOrderBy('course_rel_user.sort', 'ASC');
 
-        $result = Database::query($sql);
+        $result = $qb->executeQuery();
 
         // Browse through all courses. We can only have one course because
         // of the  course.id=".intval($courseId) in sql query

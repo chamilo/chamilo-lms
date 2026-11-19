@@ -2459,11 +2459,9 @@ class Tracking
             }
 
             // Compose a filter based on optional session id given
-            $sessionCondition = '';
             $session = null;
             if ($sessionId !== null) {
                 $session = api_get_session_entity($sessionId);
-                $sessionCondition = api_get_session_condition($sessionId);
             }
 
             $condition_active = '';
@@ -2471,13 +2469,6 @@ class Tracking
                 $condition_active = 'AND active <> -1';
             } elseif (0 == $active_filter) {
                 $condition_active = 'AND active <> 0';
-            }
-            $condition_into_lp = '';
-            $select_lp_id = '';
-            if (0 == $into_lp) {
-                $condition_into_lp = 'AND orig_lp_id = 0 AND orig_lp_item_id = 0';
-            } else {
-                $select_lp_id = ', orig_lp_id as lp_id ';
             }
 
             $quizRepo = Container::getQuizRepository();
@@ -2499,10 +2490,8 @@ class Tracking
             if (!empty($count_quiz) && !empty($student_id)) {
                 if (is_array($student_id)) {
                     $student_id = array_map('intval', $student_id);
-                    $condition_user = " AND exe_user_id IN (".implode(',', $student_id).") ";
                 } else {
                     $student_id = (int) $student_id;
-                    $condition_user = " AND exe_user_id = '$student_id' ";
                 }
 
                 if (empty($exercise_id)) {
@@ -2512,26 +2501,41 @@ class Tracking
                     $exercise_list = array_unique(array_map('intval', array_column($qbIds->getQuery()->getScalarResult(), 'iid')));
                     $exercise_id = null;
                     if (!empty($exercise_list)) {
-                        $exercise_id = implode("','", $exercise_list);
+                        $exercise_id = $exercise_list;
                     }
                 }
 
-                $sql = "SELECT
-                        SUM(score/max_score*100) as avg_score,
-                        COUNT(*) as num_attempts
-                        $select_lp_id
-                        FROM $tbl_stats_exercise
-                        WHERE
-                            exe_exo_id IN ('".$exercise_id."')
-                            $condition_user AND
-                            status = '' AND
-                            c_id = {$course_info['real_id']}
-                            $sessionCondition
-                            $condition_into_lp
-                        ORDER BY exe_date DESC";
+                $qbScore = self::dbalQueryBuilder()
+                    ->select('SUM(score/max_score*100) AS avg_score', 'COUNT(*) AS num_attempts')
+                    ->from($tbl_stats_exercise)
+                    // No quiz at all used to be IN ('') which matches the exercise id 0.
+                    ->where('exe_exo_id IN (:exerciseIds)')
+                    ->setParameter(
+                        'exerciseIds',
+                        null === $exercise_id ? [0] : array_map('intval', (array) $exercise_id),
+                        ArrayParameterType::INTEGER
+                    )
+                    ->andWhere("status = ''")
+                    ->andWhere('c_id = :courseId')
+                    ->setParameter('courseId', (int) $course_info['real_id'])
+                    ->orderBy('exe_date', 'DESC');
+                if (is_array($student_id)) {
+                    $qbScore->andWhere('exe_user_id IN (:studentIds)')
+                        ->setParameter('studentIds', $student_id, ArrayParameterType::INTEGER);
+                } else {
+                    $qbScore->andWhere('exe_user_id = :studentId')
+                        ->setParameter('studentId', $student_id);
+                }
+                if (null !== $sessionId) {
+                    self::andSessionCondition($qbScore, (int) $sessionId);
+                }
+                if (0 == $into_lp) {
+                    $qbScore->andWhere('orig_lp_id = 0')->andWhere('orig_lp_item_id = 0');
+                } else {
+                    $qbScore->addSelect('orig_lp_id AS lp_id');
+                }
 
-                $res = Database::query($sql);
-                $row = Database::fetch_array($res);
+                $row = $qbScore->executeQuery()->fetchAssociative();
                 $quiz_avg_score = null;
 
                 if (!empty($row['avg_score'])) {
@@ -2549,12 +2553,15 @@ class Tracking
                 } else {
                     if (!empty($row['lp_id'])) {
                         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-                        $sql = "SELECT title FROM $tbl_lp WHERE iid = ".(int) $row['lp_id'];
-                        $result = Database::query($sql);
-                        $row_lp = Database::fetch_row($result);
-                        $lp_name = null;
-                        if ($row_lp && isset($row_lp[0])) {
-                            $lp_name = $row_lp[0];
+                        $lp_name = self::dbalQueryBuilder()
+                            ->select('title')
+                            ->from($tbl_lp)
+                            ->where('iid = :lpId')
+                            ->setParameter('lpId', (int) $row['lp_id'])
+                            ->executeQuery()
+                            ->fetchOne();
+                        if (false === $lp_name) {
+                            $lp_name = null;
                         }
 
                         return [$quiz_avg_score, $lp_name];

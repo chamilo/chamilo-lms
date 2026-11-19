@@ -17,8 +17,11 @@ use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
 use ChamiloSession as Session;
+use Doctrine\ORM\QueryBuilder;
 
 
 /**
@@ -663,40 +666,24 @@ class Exercise
     ) {
         if (!empty($this->id)) {
             $category_list = TestCategory::getListOfCategoriesNameForTest($this->id);
-            $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-            $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+            $qb = $this->quizQuestionsQueryBuilder((int) $this->id)->select('q.iid AS iid');
 
-            $sql = "SELECT q.iid
-                    FROM $TBL_EXERCICE_QUESTION e
-                    INNER JOIN $TBL_QUESTIONS  q
-                    ON (e.question_id = q.iid)
-					WHERE e.quiz_id	= '".$this->id."' ";
-
-            $orderCondition = ' ORDER BY question_order ';
-
-            if (!empty($sidx) && !empty($sord)) {
-                if ('question' === $sidx) {
-                    if (in_array(strtolower($sord), ['desc', 'asc'])) {
-                        $orderCondition = " ORDER BY q.question $sord";
-                    }
-                }
+            if (!empty($sidx) && !empty($sord) && 'question' === $sidx && in_array(strtolower($sord), ['desc', 'asc'])) {
+                $qb->orderBy('q.question', 'desc' === strtolower($sord) ? 'DESC' : 'ASC');
+            } else {
+                $qb->orderBy('e.questionOrder', 'ASC');
             }
 
-            $sql .= $orderCondition;
-            $limitCondition = null;
             if (isset($start) && isset($limit)) {
-                $start = (int) $start;
-                $limit = (int) $limit;
-                $limitCondition = " LIMIT $start, $limit";
+                $qb->setFirstResult((int) $start)->setMaxResults((int) $limit);
             }
-            $sql .= $limitCondition;
-            $result = Database::query($sql);
+            $rows = $qb->getQuery()->getArrayResult();
             $questions = [];
-            if (Database::num_rows($result)) {
+            if ($rows) {
                 if (!empty($extraFields)) {
                     $extraFieldValue = new ExtraFieldValue('question');
                 }
-                while ($question = Database::fetch_assoc($result)) {
+                foreach ($rows as $question) {
                     /** @var Question $objQuestionTmp */
                     $objQuestionTmp = Question::read($question['iid']);
                     $category_labels = '';
@@ -766,23 +753,23 @@ class Exercise
      */
     public function getQuestionCount()
     {
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT count(q.iid) as count
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
-                WHERE
-                    e.quiz_id = ".$this->getId();
-        $result = Database::query($sql);
+        return (int) $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('COUNT(q.iid)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 
-        $count = 0;
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result);
-            $count = (int) $row['count'];
-        }
-
-        return $count;
+    /**
+     * Questions linked to the given quiz (c_quiz_rel_question e joined to c_quiz_question q), with no select.
+     */
+    private function quizQuestionsQueryBuilder(int $quizId): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->from(CQuizRelQuestion::class, 'e')
+            ->innerJoin('e.question', 'q')
+            ->where('IDENTITY(e.quiz) = :quizId')
+            ->setParameter('quizId', $quizId)
+        ;
     }
 
     /**
@@ -794,24 +781,12 @@ class Exercise
             return [];
         }
 
-        $exerciseQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
-
         // Getting question list from the order (question list drag n drop interface ).
-        $sql = "SELECT e.question_id
-                FROM $exerciseQuestionTable e
-                INNER JOIN $questionTable q
-                ON (e.question_id= q.iid)
-                WHERE
-                    e.quiz_id = '".$this->getId()."'
-                ORDER BY q.question";
-        $result = Database::query($sql);
-        $list = [];
-        if (Database::num_rows($result)) {
-            $list = Database::store_result($result, 'ASSOC');
-        }
-
-        return $list;
+        return $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('IDENTITY(e.question) AS question_id')
+            ->orderBy('q.question', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
@@ -1211,38 +1186,24 @@ class Exercise
     {
         $questionId = (int) $questionId;
 
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT q.iid
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
-                WHERE
-                    q.iid = $questionId AND
-                    e.quiz_id = ".$this->getId();
-
-        $result = Database::query($sql);
-
-        return Database::num_rows($result) > 0;
+        return [] !== $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('q.iid AS iid')
+            ->andWhere('q.iid = :questionId')
+            ->setParameter('questionId', $questionId)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     public function hasQuestionWithType($type)
     {
         $type = (int) $type;
 
-        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT q.iid
-                FROM $table e
-                INNER JOIN $tableQuestion q
-                ON (e.question_id = q.iid)
-                WHERE
-                    q.type = $type AND
-                    e.quiz_id = ".$this->getId();
-
-        $result = Database::query($sql);
-
-        return Database::num_rows($result) > 0;
+        return [] !== $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('q.iid AS iid')
+            ->andWhere('q.type = :type')
+            ->setParameter('type', $type)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     public function hasQuestionWithTypeNotInList(array $questionTypeList)
@@ -1251,22 +1212,12 @@ class Exercise
             return false;
         }
 
-        $questionTypeToString = implode("','", array_map('intval', $questionTypeList));
-
-        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT q.iid
-                FROM $table e
-                INNER JOIN $tableQuestion q
-                ON (e.question_id = q.iid)
-                WHERE
-                    q.type NOT IN ('$questionTypeToString')  AND
-
-                    e.quiz_id = ".$this->getId();
-
-        $result = Database::query($sql);
-
-        return Database::num_rows($result) > 0;
+        return [] !== $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('q.iid AS iid')
+            ->andWhere('q.type NOT IN (:types)')
+            ->setParameter('types', array_map('intval', $questionTypeList))
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
@@ -9013,22 +8964,17 @@ class Exercise
 
         $length = (int) $length;
 
-        $quizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $question = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT DISTINCT e.question_id
-                FROM $quizRelQuestion e
-                INNER JOIN $question q
-                ON (e.question_id = q.iid)
-                WHERE
-
-                    e.quiz_id = '".$this->getId()."'
-                ORDER BY question_order
-                LIMIT $start, $length
-            ";
-        $result = Database::query($sql);
+        $rows = $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('IDENTITY(e.question) AS question_id')
+            ->distinct()
+            ->orderBy('e.questionOrder', 'ASC')
+            ->setFirstResult($start)
+            ->setMaxResults($length)
+            ->getQuery()
+            ->getArrayResult();
         $questionList = [];
-        while ($object = Database::fetch_object($result)) {
-            $questionList[] = $object->question_id;
+        foreach ($rows as $object) {
+            $questionList[] = $object['question_id'];
         }
 
         return $questionList;
@@ -10905,35 +10851,29 @@ class Exercise
      */
     public function getQuestionOrderedList($adminView = false)
     {
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-
         // Getting question list from the order (question list drag n drop interface).
-        $sql = "SELECT DISTINCT e.question_id, e.question_order
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
-                WHERE
-
-                    e.quiz_id = '".$this->getId()."'
-                ORDER BY question_order";
-        $result = Database::query($sql);
+        $rows = $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('IDENTITY(e.question) AS question_id', 'e.questionOrder AS question_order')
+            ->distinct()
+            ->orderBy('e.questionOrder', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
 
         // Fills the array with the question ID for this exercise
         // the key of the array is the question position
         $temp_question_list = [];
         $counter = 1;
         $questionList = [];
-        while ($new_object = Database::fetch_object($result)) {
+        foreach ($rows as $new_object) {
             if (!$adminView) {
                 // Correct order.
-                $questionList[$new_object->question_order] = $new_object->question_id;
+                $questionList[$new_object['question_order']] = $new_object['question_id'];
             } else {
-                $questionList[$counter] = $new_object->question_id;
+                $questionList[$counter] = $new_object['question_id'];
             }
 
             // Just in case we save the order in other array
-            $temp_question_list[$counter] = $new_object->question_id;
+            $temp_question_list[$counter] = $new_object['question_id'];
             $counter++;
         }
 

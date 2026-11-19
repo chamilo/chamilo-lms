@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\BuyCoursesExpiryHelper;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -1556,6 +1557,7 @@ class BuyCoursesPlugin extends Plugin
             return;
         }
 
+        // TODO(db-neutral): SHOW COLUMNS (schema introspection)
         $columnsResult = Database::query("SHOW COLUMNS FROM $extraFieldTable");
         if (false === $columnsResult) {
             return;
@@ -1962,11 +1964,12 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $frozenTable = Database::get_main_table(self::TABLE_FROZEN_ENROLLMENT);
-        $courseIdsSql = implode(',', $courseIds);
 
-        Database::query(
-            "DELETE FROM $frozenTable WHERE course_id IN ($courseIdsSql)"
-        );
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $qb->delete($frozenTable)
+            ->where('course_id IN (:courseIds)')
+            ->setParameter('courseIds', $courseIds, ArrayParameterType::INTEGER)
+            ->executeStatement();
     }
 
     private function buildBenefitPayload(string $variable, int $grantedValue, string $expiry): ?array
@@ -2038,28 +2041,23 @@ class BuyCoursesPlugin extends Plugin
         $serviceRelTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
         $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
 
-        $fieldId = (int) $field['id'];
-        $userId = (int) $userId;
-        $status = (int) self::SERVICE_STATUS_COMPLETED;
-        $now = Database::escape_string(api_get_utc_datetime());
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $qb->select('rel.granted_value', 'ss.date_end')
+            ->from($serviceRelTable, 'rel')
+            ->innerJoin('rel', $serviceSaleTable, 'ss', 'rel.service_id = ss.service_id')
+            ->where('rel.extra_field_id = :fieldId')
+            ->andWhere('ss.buyer_id = :userId')
+            ->andWhere('ss.status = :status')
+            ->andWhere('ss.date_end >= :now')
+            ->orderBy('ss.date_end', 'DESC')
+            ->addOrderBy('ss.id', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('fieldId', (int) $field['id'])
+            ->setParameter('userId', (int) $userId)
+            ->setParameter('status', (int) self::SERVICE_STATUS_COMPLETED)
+            ->setParameter('now', api_get_utc_datetime());
 
-        $sql = "SELECT rel.granted_value, ss.date_end
-            FROM $serviceRelTable rel
-            INNER JOIN $serviceSaleTable ss
-                ON rel.service_id = ss.service_id
-            WHERE rel.extra_field_id = $fieldId
-              AND ss.buyer_id = $userId
-              AND ss.status = $status
-              AND ss.date_end >= '$now'
-            ORDER BY ss.date_end DESC, ss.id DESC
-            LIMIT 1";
-
-        $result = Database::query($sql);
-        if (false === $result) {
-            return null;
-        }
-
-        $row = Database::fetch_array($result);
+        $row = $qb->executeQuery()->fetchAssociative();
         if (empty($row)) {
             return null;
         }

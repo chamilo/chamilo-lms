@@ -315,7 +315,7 @@ final class TrackingCourseLogTier3C6CharacterizationTest extends KernelTestCase
         $rows = TrackingCourseLog::getCourseUserForumPosts($u, self::COURSE, 0, 100);
 
         $this->assertSame([$pOwn, $p2, $p1], array_map(fn (array $r): int => (int) $r['post_id'], $rows));
-        $rows = array_slice($rows, 1);
+        $rows = \array_slice($rows, 1);
         $this->assertSame(
             ['post_id', 'post_title', 'post_date', 'visible', 'status', 'thread_id', 'thread_title', 'forum_id', 'forum_title'],
             $this->named($rows[0])
@@ -510,7 +510,7 @@ final class TrackingCourseLogTier3C6CharacterizationTest extends KernelTestCase
         foreach ($names as $i => $name) {
             $this->assertSame($row[$name], $row[$i], 'numeric copy of '.$name);
         }
-        $this->assertCount(2 * count($names), $row);
+        $this->assertCount(2 * \count($names), $row);
 
         return $names;
     }
@@ -629,7 +629,7 @@ final class TrackingCourseLogTier3C6CharacterizationTest extends KernelTestCase
      * @param int|false|null $postLinkSession false: no resource link on the post itself; null: link in the base
      *                                        context; int: link in that session
      */
-    private function post(int $forumId, int $threadId, int $posterId, string $title, string $date, bool $linked, int|false|null $postLinkSession): int
+    private function post(int $forumId, int $threadId, int $posterId, string $title, string $date, bool $linked, false|int|null $postLinkSession): int
     {
         $node = $this->node(self::TYPE_FORUM_POSTS, $title);
         $this->conn->executeStatement(

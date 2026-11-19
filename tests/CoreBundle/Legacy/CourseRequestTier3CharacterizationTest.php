@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use TypeError;
 
 /**
  * Characterization tests for CourseRequestManager (public/main/inc/lib/course_request.lib.php).
@@ -58,9 +59,10 @@ final class CourseRequestTier3CharacterizationTest extends KernelTestCase
         set_error_handler(
             static fn (int $no, string $str): bool => str_contains($str, 'sender_name_teacher') || str_contains($str, 'sender_email_teacher')
         );
+
         try {
             return CourseRequestManager::create_course_request(...$args);
-        } catch (\TypeError) {
+        } catch (TypeError) {
             return (int) $this->conn()->fetchOne('SELECT MAX(id) FROM course_request');
         } finally {
             restore_error_handler();
@@ -145,11 +147,11 @@ final class CourseRequestTier3CharacterizationTest extends KernelTestCase
 
         // Value types as PDO/mysqli deliver them to legacy callers.
         $this->assertSame($this->row($noCat), array_intersect_key($info, $this->row($noCat)));
-        $this->assertSame(array_keys($this->row($noCat)), array_slice(array_keys($info), 0, 15));
+        $this->assertSame(array_keys($this->row($noCat)), \array_slice(array_keys($info), 0, 15));
 
         // Legacy callers get both the associative and the numeric keys.
         $this->assertArrayHasKey(0, $info);
-        $this->assertSame(count($info) / 2, count(array_filter(array_keys($info), 'is_string')));
+        $this->assertSame(\count($info) / 2, \count(array_filter(array_keys($info), 'is_string')));
 
         $this->assertFalse(CourseRequestManager::get_course_request_info(999999999));
     }
@@ -252,7 +254,7 @@ final class CourseRequestTier3CharacterizationTest extends KernelTestCase
             "Multi\nline description",
             '',
             'english',
-            'Objectives \\ here',
+            'Objectives \ here',
             'Audience',
             (int) $user->getId(),
             1
@@ -262,7 +264,7 @@ final class CourseRequestTier3CharacterizationTest extends KernelTestCase
         $this->assertNotFalse($row);
         $this->assertSame('A "quoted" \'title\'', $row['title']);
         $this->assertSame("Multi\nline description", $row['description']);
-        $this->assertSame('Objectives \\ here', $row['objetives']);
+        $this->assertSame('Objectives \ here', $row['objetives']);
         $this->assertSame('Audience', $row['target_audience']);
         $this->assertSame('english', $row['course_language']);
         $this->assertSame((int) $user->getId(), (int) $row['user_id']);

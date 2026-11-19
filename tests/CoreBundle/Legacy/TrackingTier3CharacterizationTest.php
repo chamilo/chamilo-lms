@@ -69,6 +69,7 @@ final class TrackingTier3CharacterizationTest extends AbstractApiTest
         $this->insertCourseAccess($alice, $cid, '2001-03-02 10:00:00', '2001-03-02 10:30:00');
 
         $previous = (string) Container::getSettingsManager()->getSetting('lp.lp_minimum_time');
+
         try {
             Container::getSettingsManager()->updateSetting('lp.lp_minimum_time', 'true');
             $fieldId = (int) $this->conn->fetchOne("SELECT id FROM extra_field WHERE item_type = 2 AND variable = 'new_tracking_system'");

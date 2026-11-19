@@ -7,8 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -237,7 +237,8 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
             ->setDescription('desc')
             ->setCreator($this->getUser('admin'))
             ->setGroupType(Usergroup::SOCIAL_CLASS)
-            ->addAccessUrl($this->getAccessUrl());
+            ->addAccessUrl($this->getAccessUrl())
+        ;
         $this->getEntityManager()->persist($group);
         $this->getEntityManager()->flush();
         foreach ([[$admin, GROUP_USER_PERMISSION_ADMIN], [$m1, GROUP_USER_PERMISSION_READER], [$m2, GROUP_USER_PERMISSION_READER]] as [$user, $relation]) {
@@ -289,7 +290,8 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
         $em = $this->getEntityManager();
         // Two live links to the same course (base course and session): the quiz is counted once.
         $twice = (new CQuiz())->setTitle('cm3d_quiz_twice')->setParent($open)->setCreator($teacher)
-            ->addCourseLink($open)->addCourseLink($open, $session);
+            ->addCourseLink($open)->addCourseLink($open, $session)
+        ;
         $gone = (new CQuiz())->setTitle('cm3d_quiz_gone')->setParent($open)->setCreator($teacher)->addCourseLink($open);
         $em->persist($twice);
         $em->persist($gone);
@@ -321,6 +323,7 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
         $cid = (int) $course->getId();
 
         $settings = self::getContainer()->get(SettingsManager::class);
+
         try {
             $settings->updateSetting('platform.hosting_limit_users_per_course', '4');
             $this->assertSame(4, CourseManager::getEffectiveUsersPerCourseLimit($cid), 'the test relies on the global fallback setting');

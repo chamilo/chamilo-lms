@@ -17,7 +17,10 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+
+use const E_WARNING;
 
 /**
  * Characterization tests for the functions of CourseManager (public/main/inc/lib/course.lib.php) that
@@ -72,7 +75,9 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         );
     }
 
-    /** Gives the course's resource node a link (the fixture course has none) and returns its id. */
+    /**
+     * Gives the course's resource node a link (the fixture course has none) and returns its id.
+     */
     private function resourceLinkOf(Course $course): int
     {
         $node = $course->getResourceNode();
@@ -260,15 +265,15 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
 
         CourseManager::email_to_tutor($student->getId(), $course->getId(), false);
         $this->assertEmailCount(1);
-        $this->assertSame(
-            'cm3b_mail_teacher@example.org',
-            self::getMailerMessage(0)->getTo()[0]->getAddress(),
-            'status 1 (teachers) of that course only'
-        );
+        $first = self::getMailerMessage(0);
+        $this->assertInstanceOf(Email::class, $first);
+        $this->assertSame('cm3b_mail_teacher@example.org', $first->getTo()[0]->getAddress(), 'status 1 (teachers) of that course only');
 
         CourseManager::email_to_tutor($student->getId(), $course->getId(), true);
         $this->assertEmailCount(2);
-        $this->assertSame('cm3b_mail_tutor@example.org', self::getMailerMessage(1)->getTo()[0]->getAddress(), 'is_tutor = 1 rows instead');
+        $second = self::getMailerMessage(1);
+        $this->assertInstanceOf(Email::class, $second);
+        $this->assertSame('cm3b_mail_tutor@example.org', $second->getTo()[0]->getAddress(), 'is_tutor = 1 rows instead');
     }
 
     // ---------------------------------------------------------------- get_courses_list_by_user_id
@@ -323,7 +328,7 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         }
         $this->assertSame(1, $byTitle['cm3b_stk_a']['special_course'], 'a sticky course comes first, flagged');
         $this->assertArrayNotHasKey('special_course', $byTitle['cm3b_stk_b']);
-        $this->assertSame(1, count(array_filter(CourseManager::get_courses_list_by_user_id($user->getId()), static fn ($r) => 'cm3b_stk_a' === $r['title'])), 'listed once');
+        $this->assertSame(1, \count(array_filter(CourseManager::get_courses_list_by_user_id($user->getId()), static fn ($r) => 'cm3b_stk_a' === $r['title'])), 'listed once');
 
         $this->assertSame(
             ['cm3b_stk_a', 'cm3b_stk_b'],
@@ -397,8 +402,8 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         $edge = $this->createCourse('cm3b_hot_edge');
         $closed = $this->createCourse('cm3b_hot_closed');
         $hidden = $this->createCourse('cm3b_hot_hidden');
-        $this->conn()->executeStatement('UPDATE course SET visibility = ? WHERE id = ?', [\Chamilo\CoreBundle\Entity\Course::CLOSED, $closed->getId()]);
-        $this->conn()->executeStatement('UPDATE course SET visibility = ? WHERE id = ?', [\Chamilo\CoreBundle\Entity\Course::HIDDEN, $hidden->getId()]);
+        $this->conn()->executeStatement('UPDATE course SET visibility = ? WHERE id = ?', [Course::CLOSED, $closed->getId()]);
+        $this->conn()->executeStatement('UPDATE course SET visibility = ? WHERE id = ?', [Course::HIDDEN, $hidden->getId()]);
         $this->courseAccess($busy, $recent, 3);
         $this->courseAccess($quiet, $recent, 1);
         $this->courseAccess($stale, $old, 5);

@@ -9,16 +9,16 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CSurvey;
-use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
+use ReflectionMethod;
 use SurveyUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use UserManager;
 
 /**
  * Characterization of the SurveyUtil functions that SurveyCharacterizationTest does not reach: the complete
@@ -397,6 +397,7 @@ final class SurveyTier3CharacterizationTest extends KernelTestCase
 
         $_POST['submit_question_filter'] = '1';
         $_POST['questions_filter'] = [$q2];
+
         try {
             $filtered = $this->report($s);
         } finally {
@@ -415,7 +416,7 @@ final class SurveyTier3CharacterizationTest extends KernelTestCase
 
     private function xlsRows(int $surveyId, int $userId = 0): array
     {
-        $method = new \ReflectionMethod(SurveyUtil::class, 'buildCompleteReportXlsRows');
+        $method = new ReflectionMethod(SurveyUtil::class, 'buildCompleteReportXlsRows');
         $method->setAccessible(true);
 
         return $method->invoke(null, $this->survey($surveyId), $userId);
@@ -423,7 +424,7 @@ final class SurveyTier3CharacterizationTest extends KernelTestCase
 
     private function skipIfThePlatformHasExtraUserFields(): void
     {
-        if (count(\UserManager::get_extra_fields(0, 0, 5, 'ASC', false, true)) > 0) {
+        if (\count(UserManager::get_extra_fields(0, 0, 5, 'ASC', false, true)) > 0) {
             $this->markTestSkipped('The expected xls columns assume a platform without extra user fields.');
         }
     }
@@ -496,6 +497,7 @@ final class SurveyTier3CharacterizationTest extends KernelTestCase
 
         $_POST['submit_question_filter'] = '1';
         $_POST['questions_filter'] = [$q2];
+
         try {
             $rows = $this->xlsRows($s);
         } finally {

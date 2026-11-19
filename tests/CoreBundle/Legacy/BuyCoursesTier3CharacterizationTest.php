@@ -35,18 +35,16 @@ final class BuyCoursesTier3CharacterizationTest extends BuyCoursesCharacterizati
 
     private function frozenCourseIds(): array
     {
-        $ids = array_map('intval', $this->conn->fetchFirstColumn(
+        return array_map('intval', $this->conn->fetchFirstColumn(
             'SELECT course_id FROM plugin_buycourses_frozen_enrollment ORDER BY course_id, user_id'
         ));
-
-        return $ids;
     }
 
     private function benefitFieldId(string $variable): int
     {
         $this->callPrivate('ensureUserExtraField', [$variable, $variable]);
 
-        return (int) $this->conn->fetchOne("SELECT id FROM extra_field WHERE variable = ? AND item_type = 1", [$variable]);
+        return (int) $this->conn->fetchOne('SELECT id FROM extra_field WHERE variable = ? AND item_type = 1', [$variable]);
     }
 
     private function makeBenefitServiceSale(int $fieldId, int $granted, array $sale): int

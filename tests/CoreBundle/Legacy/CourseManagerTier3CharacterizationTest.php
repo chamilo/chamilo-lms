@@ -17,7 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * Characterization tests for the functions of CourseManager (public/main/inc/lib/course.lib.php) that
@@ -116,7 +115,7 @@ final class CourseManagerTier3CharacterizationTest extends KernelTestCase
             );
         }
 
-        $row = CourseManager::getCourseSetting("cm3_var", $a->getId());
+        $row = CourseManager::getCourseSetting('cm3_var', $a->getId());
         $this->assertSame('A', $row['value']);
         $this->assertSame('cm3_var', $row['variable']);
         $this->assertSame('A', $row[1], 'fetch_array adds numeric keys');

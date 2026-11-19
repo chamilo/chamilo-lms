@@ -178,7 +178,7 @@ final class UserGroupTier3CharacterizationTest extends KernelTestCase
         // Roles 1 and 0 are counted; 3 (pending invitation) and 2 are not (so the small group is absent).
         $this->assertEquals(2, $rows[$big->getId()]['count']);
         $this->assertEquals(0, $this->memberCountOf($rows, $small->getId()));
-        $mine = array_values(array_filter(array_keys($rows), fn ($id) => in_array($id, [$big->getId(), $small->getId()], true)));
+        $mine = array_values(array_filter(array_keys($rows), fn ($id) => \in_array($id, [$big->getId(), $small->getId()], true)));
         $this->assertSame([$big->getId()], $mine);
         $this->assertCount(1, $this->model->get_groups_by_popularity(1, false));
     }
@@ -275,7 +275,9 @@ final class UserGroupTier3CharacterizationTest extends KernelTestCase
         $this->assertSame(1, $this->msgType($foreignReply));
     }
 
-    /** @param array<int, array<string, mixed>> $rows */
+    /**
+     * @param array<int, array<string, mixed>> $rows
+     */
     private function memberCountOf(array $rows, int $id): int
     {
         return isset($rows[$id]) ? (int) $rows[$id]['count'] : 0;

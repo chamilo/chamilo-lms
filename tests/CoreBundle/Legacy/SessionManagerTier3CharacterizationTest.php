@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Database;
-use DateTimeImmutable;
 use SessionManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;

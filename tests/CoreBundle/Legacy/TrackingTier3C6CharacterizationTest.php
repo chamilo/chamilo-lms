@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Uid\UuidV4;
 use Tracking;
 
+use const PREG_SET_ORDER;
+
 /**
  * Wave 3 characterization (part C6) of Tracking::processUserDataMove() and of the two private helpers it uses
  * (getSessionResourceRows, moveResourceLinksToSession).
@@ -121,7 +123,7 @@ final class TrackingTier3C6CharacterizationTest extends KernelTestCase
         foreach ($before['mine'] as $table => $rows) {
             foreach ($rows as $key => $row) {
                 $expected = $row;
-                $expected['session_id'] = in_array($table, $nullable, true) ? null : '0';
+                $expected['session_id'] = \in_array($table, $nullable, true) ? null : '0';
                 $this->assertSame($expected, $after['mine'][$table][$key], $table);
             }
         }

@@ -11,7 +11,6 @@ use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use Database;
 use Doctrine\DBAL\Connection;
-
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;

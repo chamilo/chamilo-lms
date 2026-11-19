@@ -11,6 +11,8 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use Database;
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use Tracking;
 
@@ -82,7 +84,7 @@ final class TrackingTier3C4CharacterizationTest extends AbstractApiTest
     {
         $cid = (int) $this->course->getId();
         $alice = (int) $this->alice->getId();
-        $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
+        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
         // One chat access a minute inside the 7 days window, one a minute outside, one now.
         foreach (['-7 days +1 minute', '-7 days -1 minute', '-1 hour'] as $offset) {
             $this->conn->insert('track_e_access', [

@@ -174,7 +174,7 @@ final class BuyCoursesTier3bCharacterizationTest extends BuyCoursesCharacterizat
         $this->assertSame(0, $row['document_quota_mb']);
         $this->assertSame([], $row['ai_features']);
         $named = array_values(array_filter(array_keys($row), 'is_string'));
-        $this->assertSame(['service_name', 'display_on_course_creation_page', 'applies_to', 'visibility', 'renewable', 'max_courses_with_benefits', 'hosting_limit', 'document_quota_mb', 'ai_features'], array_slice($named, -9));
+        $this->assertSame(['service_name', 'display_on_course_creation_page', 'applies_to', 'visibility', 'renewable', 'max_courses_with_benefits', 'hosting_limit', 'document_quota_mb', 'ai_features'], \array_slice($named, -9));
 
         $this->link($sale, $service, 1);
         $status = $this->plugin->getCourseCreationServiceSaleSelectionStatus(2, $sale);
@@ -387,7 +387,7 @@ final class BuyCoursesTier3bCharacterizationTest extends BuyCoursesCharacterizat
             );
         }
         $ids = array_map('intval', $this->conn->fetchFirstColumn('SELECT id FROM user ORDER BY id LIMIT 8'));
-        $this->assertGreaterThanOrEqual($minimum, count($ids));
+        $this->assertGreaterThanOrEqual($minimum, \count($ids));
 
         return $ids;
     }
@@ -643,18 +643,18 @@ final class BuyCoursesTier3bCharacterizationTest extends BuyCoursesCharacterizat
         $expected = [];
         foreach ($definitions as $feature) {
             $expected[$feature] = [
-                'variable' => $feature, 'value' => in_array($feature, ['toolbox', 'tutor_chatbot'], true) ? 'true' : 'false',
+                'variable' => $feature, 'value' => \in_array($feature, ['toolbox', 'tutor_chatbot'], true) ? 'true' : 'false',
                 'category' => 'ai_helpers', 'title' => '', 'subkey' => null, 'type' => null, 'comment' => null,
             ];
         }
         ksort($expected);
         $this->assertSame(array_values($expected), $rows());
-        $this->assertGreaterThanOrEqual(10, count($expected));
+        $this->assertGreaterThanOrEqual(10, \count($expected));
 
         // A second call updates the existing rows in place.
         $this->plugin->applyAiCourseFeatureSettingsToCourse(1, ['task_grader']);
         $after = $rows();
-        $this->assertCount(count($definitions), $after);
+        $this->assertCount(\count($definitions), $after);
         $values = array_column($after, 'value', 'variable');
         $this->assertSame('true', $values['task_grader']);
         $this->assertSame('false', $values['toolbox']);
@@ -701,7 +701,7 @@ final class BuyCoursesTier3bCharacterizationTest extends BuyCoursesCharacterizat
         $this->assertCount(1, $this->frozenUserIds(1), 'course 1 has a hosting limit of 1 for 2 students');
         $this->assertSame([max($s1, $s2)], $this->frozenUserIds(1));
         $aiSettings = $this->conn->fetchAllKeyValue("SELECT variable, value FROM c_course_setting WHERE c_id = 2 AND category = 'ai_helpers'");
-        $this->assertCount(count($this->plugin->getAiCourseFeatureDefinitions()), $aiSettings);
+        $this->assertCount(\count($this->plugin->getAiCourseFeatureDefinitions()), $aiSettings);
         $this->assertSame(['false'], array_values(array_unique($aiSettings)));
         $this->assertSame(0, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_course_setting WHERE c_id = 1'));
         $this->assertSame('ai_expired', $this->conn->fetchOne('SELECT last_action FROM plugin_buycourses_subscription_course WHERE id = ?', [$courseTwoLink]));

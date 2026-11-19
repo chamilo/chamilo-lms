@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
@@ -216,5 +217,44 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
         $this->assertGreaterThanOrEqual(2, $count);
 
         $this->assertSame($base.'_'.($count + 1), CourseManager::generate_nice_next_course_code($a->getCode()));
+    }
+
+    public function testGetCoursesFollowedByGroupAdminListsTheCoursesOfTheOtherGroupMembers(): void
+    {
+        $viaMembers = $this->createCourse('cm3d_gadm_members');
+        $hrOnly = $this->createCourse('cm3d_gadm_hr');
+        $outside = $this->createCourse('cm3d_gadm_outside');
+        $ownCourse = $this->createCourse('cm3d_gadm_own');
+        $admin = $this->createUser('cm3d_gadm_admin');
+        $m1 = $this->createUser('cm3d_gadm_m1');
+        $m2 = $this->createUser('cm3d_gadm_m2');
+        $stranger = $this->createUser('cm3d_gadm_stranger');
+
+        $group = (new Usergroup())
+            ->setTitle('cm3d_gadm_group')
+            ->setDescription('desc')
+            ->setCreator($this->getUser('admin'))
+            ->setGroupType(Usergroup::SOCIAL_CLASS)
+            ->addAccessUrl($this->getAccessUrl());
+        $this->getEntityManager()->persist($group);
+        $this->getEntityManager()->flush();
+        foreach ([[$admin, GROUP_USER_PERMISSION_ADMIN], [$m1, GROUP_USER_PERMISSION_READER], [$m2, GROUP_USER_PERMISSION_READER]] as [$user, $relation]) {
+            $this->conn()->insert('usergroup_rel_user', ['usergroup_id' => $group->getId(), 'user_id' => $user->getId(), 'relation_type' => $relation]);
+        }
+
+        $this->sub($m1, $viaMembers);
+        $this->sub($m2, $viaMembers); // same course twice: listed once
+        $this->sub($m1, $hrOnly, DRH, COURSE_RELATION_TYPE_RRHH); // only relation_type 0 counts
+        $this->sub($stranger, $outside);
+        $this->sub($admin, $ownCourse); // the admin himself is not part of the list of users
+
+        $rows = CourseManager::getCoursesFollowedByGroupAdmin($admin->getId());
+
+        $this->assertCount(1, $rows);
+        $this->assertSame((int) $viaMembers->getId(), (int) $rows[0]['id']);
+        $this->assertSame('cm3d_gadm_members', $rows[0]['title']);
+        $this->assertSame(['id', 'title'], array_keys($rows[0]));
+
+        $this->assertSame([], CourseManager::getCoursesFollowedByGroupAdmin($stranger->getId()), 'not the admin of any group');
     }
 }

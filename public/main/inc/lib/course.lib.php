@@ -6507,19 +6507,15 @@ class CourseManager
             return [];
         }
 
-        $sql = "SELECT DISTINCT(c.id), c.title
-                FROM $courseTable c
-                INNER JOIN $courseUserTable cru ON c.id = cru.c_id
-                WHERE (
-                    cru.user_id IN (".implode(', ', $userIdList).")
-                    AND cru.relation_type = 0
-                )";
-
+        $result = null;
         if (api_is_multiple_url_enabled()) {
             $courseAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $accessUrlId = api_get_current_access_url_id();
 
             if (-1 != $accessUrlId) {
+                // Pre-existing bug, not fixed: course_rel_user has no "id_user" column, so this query fails with
+                // "Unknown column 'cru.id_user'" when several access URLs are enabled.
+                // TODO(db-neutral): left raw, broken query
                 $sql = "SELECT DISTINCT(c.id), c.title
                         FROM $courseTable c
                         INNER JOIN $courseUserTable cru ON c.id = cru.c_id
@@ -6529,10 +6525,20 @@ class CourseManager
                             cru.id_user IN (".implode(', ', $userIdList).") AND
                             cru.relation_type = 0
                         )";
+                $result = Database::query($sql);
             }
         }
 
-        $result = Database::query($sql);
+        if (null === $result) {
+            $result = Database::getManager()->getConnection()->createQueryBuilder()
+                ->select('DISTINCT(c.id)', 'c.title')
+                ->from($courseTable, 'c')
+                ->innerJoin('c', $courseUserTable, 'cru', 'c.id = cru.c_id')
+                ->where('cru.user_id IN (:userIds)')
+                ->andWhere('cru.relation_type = 0')
+                ->setParameter('userIds', array_map('intval', $userIdList), ArrayParameterType::INTEGER)
+                ->executeQuery();
+        }
         while ($row = Database::fetch_assoc($result)) {
             $coursesList[] = $row;
         }

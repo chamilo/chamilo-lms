@@ -46,6 +46,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[Route('/attendance')]
 class AttendanceController extends AbstractController
 {
+    // Size of the signature column (TEXT): a longer value cannot be stored.
+    private const int MAX_SIGNATURE_LENGTH = 65535;
+
     public function __construct(
         private readonly CAttendanceCalendarRepository $attendanceCalendarRepository,
         private readonly CAttendanceRepository $attendanceRepository,
@@ -612,9 +615,25 @@ class AttendanceController extends AbstractController
             return $this->json(['error' => 'Missing required parameters'], 400);
         }
 
+        if ('true' !== $this->settingsManager->getSetting('attendance.enable_sign_attendance_sheet', true)) {
+            return $this->json(['error' => 'Attendance signatures are not enabled'], 403);
+        }
+
+        // The teacher's view draws the signature as an image: only accept what the signature pad produces.
+        if (!\is_string($signature)
+            || \strlen($signature) > self::MAX_SIGNATURE_LENGTH
+            || !preg_match('#^data:image/png;base64,[A-Za-z0-9+/]+=*$#', $signature)
+        ) {
+            return $this->json(['error' => 'Invalid signature'], 400);
+        }
+
         $calendar = $this->attendanceCalendarRepository->find($calendarId);
         if (!$calendar) {
             return $this->json(['error' => 'Attendance calendar not found'], 404);
+        }
+
+        if ($calendar->getBlocked()) {
+            return $this->json(['error' => 'This attendance date is blocked'], 403);
         }
 
         $sheet = $sheetRepository->findOneBy([

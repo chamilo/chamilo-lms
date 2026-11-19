@@ -19,12 +19,14 @@ use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use DOMDocument;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 use ZipArchive;
 
 use const ENT_HTML5;
@@ -51,6 +53,15 @@ final readonly class ExerciseQti2ExportService
     private const FREE_ANSWER = 5;
     private const MULTIPLE_ANSWER_COMBINATION = 9;
     private const UNIQUE_ANSWER_NO_OPTION = 10;
+    private const UNIQUE_ANSWER_IMAGE = 17;
+    private const HOTSPOT = 6;
+    private const GRAPHIC_ORDER = 7;
+    private const ORAL = 13;
+    private const UPLOAD = 23;
+    private const MULTIPLE_ANSWER_TRUE_FALSE = 11;
+    private const MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE = 12;
+    private const MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY = 22;
+    private const MULTIPLE_ANSWER_DROPDOWN = 29;
     private const DRAGGABLE = 18;
     private const MATCHING_DRAGGABLE = 19;
     private const VISIBILITY_PUBLISHED = 2;
@@ -60,21 +71,39 @@ final readonly class ExerciseQti2ExportService
         private CidReqHelper $cidReqHelper,
         private UserHelper $userHelper,
         private CQuizRepository $quizRepository,
+        private ?Qti2QuestionImageMedia $questionImageMedia = null,
     ) {}
 
     public function exportExerciseZip(int $exerciseId): BinaryFileResponse
     {
         $quiz = $this->getValidatedExercise($exerciseId);
-        $xml = $this->buildExerciseXml($quiz);
-        $this->assertXmlCanBeParsed($xml);
-
         $zipPath = $this->createZipFile();
         $zip = new ZipArchive();
         if (true !== $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
             throw new BadRequestHttpException('The QTI2 export archive could not be created.');
         }
 
-        $zip->addFromString(\sprintf('qti2export_%d.xml', $exerciseId), $xml);
+        try {
+            $xml = $this->buildExerciseXml(
+                $quiz,
+                $zip,
+                $this->cidReqHelper->requireDoctrineCourseEntity(),
+                $this->cidReqHelper->getDoctrineSessionEntity(),
+                new Qti2MediaArchive()
+            );
+            $this->assertXmlCanBeParsed($xml);
+            if (!$zip->addFromString(\sprintf('qti2export_%d.xml', $exerciseId), $xml)) {
+                throw new BadRequestHttpException('The QTI2 XML could not be written to the archive.');
+            }
+        } catch (Throwable $error) {
+            $zip->close();
+            @unlink($zipPath);
+            if ($error instanceof InvalidArgumentException) {
+                throw new BadRequestHttpException('QTI image export failed: '.$error->getMessage(), $error);
+            }
+
+            throw $error;
+        }
         if (!$zip->close()) {
             throw new BadRequestHttpException('The QTI2 export archive could not be finalized.');
         }
@@ -119,7 +148,7 @@ final readonly class ExerciseQti2ExportService
         return $context['quiz'];
     }
 
-    private function buildExerciseXml(CQuiz $quiz): string
+    private function buildExerciseXml(CQuiz $quiz, ?ZipArchive $archive = null, ?Course $course = null, ?Session $session = null, ?Qti2MediaArchive $media = null): string
     {
         $exerciseId = (int) $quiz->getIid();
         $xml = '<?xml version = "1.0" encoding = "UTF-8" standalone = "no"?>'."\n";
@@ -134,7 +163,7 @@ final readonly class ExerciseQti2ExportService
         $xml .= $this->exportOrdering($quiz);
 
         foreach ($this->getExerciseQuestions($quiz) as $question) {
-            $xml .= $this->exportQuestion($question);
+            $xml .= $this->exportQuestion($question, $archive, $course, $session, $media);
         }
 
         $xml .= '</section>'."\n";
@@ -221,7 +250,7 @@ final readonly class ExerciseQti2ExportService
 
     private function isLegacyExportableQuestion(CQuizQuestion $question): bool
     {
-        return \in_array((int) $question->getType(), [self::UNIQUE_ANSWER, self::MULTIPLE_ANSWER, self::MULTIPLE_ANSWER_COMBINATION, self::UNIQUE_ANSWER_NO_OPTION, self::FILL_IN_BLANKS, self::FREE_ANSWER, self::MATCHING, self::MATCHING_DRAGGABLE, self::DRAGGABLE], true);
+        return \in_array((int) $question->getType(), [self::UNIQUE_ANSWER, self::MULTIPLE_ANSWER, self::MULTIPLE_ANSWER_COMBINATION, self::UNIQUE_ANSWER_NO_OPTION, self::UNIQUE_ANSWER_IMAGE, self::HOTSPOT, self::GRAPHIC_ORDER, self::ORAL, self::UPLOAD, self::MULTIPLE_ANSWER_DROPDOWN, self::MULTIPLE_ANSWER_TRUE_FALSE, self::MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE, self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY, self::FILL_IN_BLANKS, self::FREE_ANSWER, self::MATCHING, self::MATCHING_DRAGGABLE, self::DRAGGABLE], true);
     }
 
     private function isMatchingQuestion(CQuizQuestion $question): bool
@@ -229,9 +258,17 @@ final readonly class ExerciseQti2ExportService
         return \in_array((int) $question->getType(), [self::MATCHING, self::MATCHING_DRAGGABLE], true);
     }
 
-    private function exportQuestion(CQuizQuestion $question): string
+    private function exportQuestion(CQuizQuestion $question, ?ZipArchive $archive = null, ?Course $course = null, ?Session $session = null, ?Qti2MediaArchive $media = null): string
     {
         $questionIdent = 'QST_'.(int) $question->getIid();
+        if (\in_array((int) $question->getType(), [self::MULTIPLE_ANSWER_TRUE_FALSE, self::MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE, self::MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY], true)) {
+            $xml = Qti2TrueFalseItem::write($question, $questionIdent);
+            if (null === $xml) {
+                throw new BadRequestHttpException('True/false question has invalid option references or scoring.');
+            }
+
+            return $xml;
+        }
         $categoryTitle = $this->getQuestionCategoryTitle($question);
         $xml = '<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"'."\n";
         $xml .= '                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'."\n";
@@ -243,8 +280,25 @@ final readonly class ExerciseQti2ExportService
             $xml .= '                label="'.Qti2MatchingTypeMarker::DRAGGABLE_LABEL.'"'."\n";
         } elseif (self::UNIQUE_ANSWER_NO_OPTION === (int) $question->getType()) {
             $xml .= '                label="'.Qti2UniqueAnswerUnknownMarker::LABEL.'"'."\n";
+        } elseif (self::MULTIPLE_ANSWER_DROPDOWN === (int) $question->getType()) {
+            $xml .= '                label="chamilo:multiple-answer-dropdown"'."\n";
+        } elseif (self::UNIQUE_ANSWER_IMAGE === (int) $question->getType()) {
+            $xml .= '                label="'.Qti2QuestionImageMedia::LABEL.'"'."\n";
+        } elseif ('' !== Qti2SpecialQuestionItem::label((int) $question->getType())) {
+            $xml .= '                label="'.Qti2SpecialQuestionItem::label((int) $question->getType()).'"'."\n";
         }
         $xml .= '        >'."\n";
+        if (\in_array((int) $question->getType(), [self::HOTSPOT, self::GRAPHIC_ORDER, self::ORAL, self::UPLOAD], true)) {
+            $image = null;
+            if (\in_array((int) $question->getType(), [self::HOTSPOT, self::GRAPHIC_ORDER], true)) {
+                if (null === $archive || null === $this->questionImageMedia) {
+                    throw new BadRequestHttpException('QTI hotspot export requires the question image storage service.');
+                }
+                $image = $this->questionImageMedia->exportQuestionImage($question, $archive, $media ??= new Qti2MediaArchive());
+            }
+
+            return $xml.Qti2SpecialQuestionItem::write($question, $questionIdent, $image).'</assessmentItem>'."\n";
+        }
         if (self::FILL_IN_BLANKS === (int) $question->getType()) {
             return $xml.$this->exportFillBlanksItem($question).'</assessmentItem>'."\n";
         }
@@ -256,9 +310,9 @@ final readonly class ExerciseQti2ExportService
         }
         $xml .= $this->exportQuestionResponseDeclaration($question, $questionIdent);
         $xml .= "  <itemBody>\n";
-        $xml .= $this->exportQuestionResponses($question, $questionIdent);
+        $xml .= $this->exportQuestionResponses($question, $questionIdent, '', $archive, $course, $session, $media);
         $xml .= "  </itemBody>\n";
-        $xml .= self::UNIQUE_ANSWER_NO_OPTION === (int) $question->getType()
+        $xml .= \in_array((int) $question->getType(), [self::UNIQUE_ANSWER_NO_OPTION, self::MULTIPLE_ANSWER_DROPDOWN], true)
             ? Qti2UniqueAnswerUnknownMarker::responseProcessing($questionIdent)
             : '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_correct"/>'."\n";
         $xml .= '</assessmentItem>'."\n";
@@ -282,7 +336,7 @@ final readonly class ExerciseQti2ExportService
         }
 
         $answers = $this->getSortedAnswers($question);
-        $cardinality = self::MULTIPLE_ANSWER === (int) $question->getType() ? 'multiple' : 'single';
+        $cardinality = \in_array((int) $question->getType(), [self::MULTIPLE_ANSWER, self::MULTIPLE_ANSWER_DROPDOWN], true) ? 'multiple' : 'single';
         $xml = '  <responseDeclaration identifier="'.$questionIdent.'" cardinality="'.$cardinality.'" baseType="identifier">'."\n";
         $xml .= "    <correctResponse>\n";
         foreach ($answers as $answer) {
@@ -303,7 +357,7 @@ final readonly class ExerciseQti2ExportService
         }
         $xml .= "    </mapping>\n";
         $xml .= '  </responseDeclaration>'."\n";
-        if (self::UNIQUE_ANSWER_NO_OPTION === (int) $question->getType()) {
+        if (\in_array((int) $question->getType(), [self::UNIQUE_ANSWER_NO_OPTION, self::MULTIPLE_ANSWER_DROPDOWN], true)) {
             $xml .= '  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float">'
                 .'<defaultValue><value>0</value></defaultValue></outcomeDeclaration>'."\n";
         }
@@ -311,7 +365,7 @@ final readonly class ExerciseQti2ExportService
         return $xml;
     }
 
-    private function exportQuestionResponses(CQuizQuestion $question, string $questionIdent, string $interactionAttributes = ''): string
+    private function exportQuestionResponses(CQuizQuestion $question, string $questionIdent, string $interactionAttributes = '', ?ZipArchive $archive = null, ?Course $course = null, ?Session $session = null, ?Qti2MediaArchive $media = null): string
     {
         if (self::FREE_ANSWER === (int) $question->getType()) {
             return '<extendedTextInteraction responseIdentifier="'.$questionIdent.'" >
@@ -326,7 +380,7 @@ final readonly class ExerciseQti2ExportService
         }
 
         // Multiple answer requires maxChoices=0; exact combination already supplies it.
-        $maxChoices = self::MULTIPLE_ANSWER === (int) $question->getType()
+        $maxChoices = \in_array((int) $question->getType(), [self::MULTIPLE_ANSWER, self::MULTIPLE_ANSWER_DROPDOWN], true)
             ? ' maxChoices="0"'
             : $interactionAttributes;
         $xml = '    <choiceInteraction responseIdentifier="'.$questionIdent.'"'.$maxChoices.' >'."\n";
@@ -336,8 +390,22 @@ final readonly class ExerciseQti2ExportService
             $unknown = self::UNIQUE_ANSWER_NO_OPTION === (int) $question->getType()
                 && Qti2UniqueAnswerUnknownMarker::UNKNOWN_POSITION === (int) $answer->getPosition();
             $identifier = $unknown ? Qti2UniqueAnswerUnknownMarker::UNKNOWN_IDENTIFIER : 'answer_'.$answerId;
+            $answerHtml = (string) $answer->getAnswer();
+            if (self::UNIQUE_ANSWER_IMAGE === (int) $question->getType()) {
+                if (null === $this->questionImageMedia || null === $archive || null === $course) {
+                    throw new BadRequestHttpException('QTI image export requires a media archive and course context.');
+                }
+                $answerHtml = $this->questionImageMedia->exportHtml(
+                    $answerHtml,
+                    $archive,
+                    $media ??= new Qti2MediaArchive(),
+                    $course,
+                    $session
+                );
+            }
+            $answerHtml = $this->formatText($answerHtml);
             $xml .= '<simpleChoice identifier="'.$identifier.'" fixed="'.($unknown ? 'true' : 'false').'">
-                         <![CDATA['.$this->escapeCdata($this->formatText($answer->getAnswer())).']]>';
+                         <![CDATA['.$this->escapeCdata($answerHtml).']]>';
             $comment = (string) ($answer->getComment() ?? '');
             if ('' !== $comment) {
                 $xml .= '<feedbackInline identifier="'.$identifier.'">

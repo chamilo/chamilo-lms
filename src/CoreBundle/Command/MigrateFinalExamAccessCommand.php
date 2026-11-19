@@ -32,6 +32,7 @@ final class MigrateFinalExamAccessCommand extends Command
     private const string USER_IDENTIFIER_FIELD_VARIABLE = 'fcdice_or_acadis_student_id';
     private const string FINAL_EXAM_TITLE = 'Final Exam';
     private const string SOURCE = 'legacy_final_exam_access_rule';
+    private const string ACCESS_RULES_SETTING = 'allow_final_exam_access_rule';
 
     /**
      * Legacy course timing values converted once into exercise configuration.
@@ -145,6 +146,7 @@ final class MigrateFinalExamAccessCommand extends Command
 
         try {
             $summary = $this->migrate($io, $requestedCodes);
+            $this->enableAccessRulesSetting($summary);
 
             if ($dryRun) {
                 $this->connection->rollBack();
@@ -363,6 +365,24 @@ final class MigrateFinalExamAccessCommand extends Command
         }
 
         return $summary;
+    }
+
+    /**
+     * The rules only apply while the platform setting allows them, so turn it on once tests hold
+     * some.
+     *
+     * @param array<string, int> $summary
+     */
+    private function enableAccessRulesSetting(array $summary): void
+    {
+        if ($summary['configured'] + $summary['already_configured'] <= 0) {
+            return;
+        }
+
+        $this->connection->executeStatement(
+            "UPDATE settings SET selected_value = 'true' WHERE variable = :variable AND category = 'exercise'",
+            ['variable' => self::ACCESS_RULES_SETTING]
+        );
     }
 
     private function hasUserIdentifierField(): bool

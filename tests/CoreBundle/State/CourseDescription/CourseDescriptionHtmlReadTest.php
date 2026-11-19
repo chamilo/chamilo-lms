@@ -18,6 +18,15 @@ final class CourseDescriptionHtmlReadTest extends TestCase
         $this->assertReadSmokePasses('policy');
     }
 
+    /**
+     * The list is rendered as HTML for every course member, so the stored HTML must be
+     * filtered with the reader's profile even when teachers may store JavaScript.
+     */
+    public function testListFiltersStoredHtmlWithTheReaderProfile(): void
+    {
+        $this->assertReadSmokePasses('reader');
+    }
+
     public function testReadContentPreservesHarmlessMarkup(): void
     {
         $this->assertReadSmokePasses('markup');

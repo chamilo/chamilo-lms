@@ -37,9 +37,10 @@ final class CStudentPublicationRepository extends ResourceRepository
         ?Session $session = null,
         ?string $title = null,
         ?int $active = null,
-        ?string $fileType = null
+        ?string $fileType = null,
+        ?bool $withBaseContentOverride = null
     ): QueryBuilder {
-        $qb = $this->getResourcesByCourse($course, $session);
+        $qb = $this->getResourcesByCourse($course, $session, withBaseContentOverride: $withBaseContentOverride);
 
         $this->addTitleQueryBuilder($title, $qb);
         $this->addActiveQueryBuilder($active, $qb);

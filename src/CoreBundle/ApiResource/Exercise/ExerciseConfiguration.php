@@ -228,6 +228,29 @@ final class ExerciseConfiguration
     #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
     public string $accessCondition = '';
 
+    /**
+     * What the learner must meet before starting the test (FinalExamAccessRule): 0 minutes and no
+     * field set no condition. With editJson, the JSON is saved as written instead of the fields.
+     *
+     * @var array{
+     *     minimumMinutes: int,
+     *     userIdentifierFieldVariable: string,
+     *     allowUserIdentifierOptOut: bool,
+     *     userIdentifierOptOutPrompt: string,
+     *     json: string,
+     *     editJson: bool
+     * }
+     */
+    #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
+    public array $finalExamAccessRule = [
+        'minimumMinutes' => 0,
+        'userIdentifierFieldVariable' => '',
+        'allowUserIdentifierOptOut' => false,
+        'userIdentifierOptOutPrompt' => '',
+        'json' => '',
+        'editJson' => false,
+    ];
+
     #[Groups(['exercise_configuration:read', 'exercise_configuration:write'])]
     public string $sound = '';
 

@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/validate')]
 class ValidationTokenController extends AbstractController
@@ -32,7 +33,8 @@ class ValidationTokenController extends AbstractController
         private readonly UserRepository $userRepository,
         private readonly TicketRelUserRepository $ticketRelUserRepository,
         private readonly TokenStorageInterface $tokenStorage,
-        private readonly RequestStack $requestStack
+        private readonly RequestStack $requestStack,
+        private readonly TranslatorInterface $translator,
     ) {}
 
     #[Route('/{type}/{hash}', name: 'chamilo_core_validate_token')]
@@ -41,12 +43,28 @@ class ValidationTokenController extends AbstractController
         $userId = $this->requestStack->getCurrentRequest()->query->get('user_id');
         $userId = null !== $userId ? (int) $userId : null;
 
+        $typeId = $this->validationTokenHelper->getTypeId($type);
+
+        // Ticket tokens are bound to the user the link was sent to.
+        if (ValidationTokenHelper::TYPE_TICKET === $typeId) {
+            if (!$userId) {
+                return $this->redirectExpiredLink();
+            }
+
+            $hash = ValidationTokenHelper::bindHashToUser($hash, $userId);
+        }
+
         $token = $this->tokenRepository->findOneBy([
-            'type' => $this->validationTokenHelper->getTypeId($type),
+            'type' => $typeId,
             'hash' => $hash,
         ]);
 
         if (!$token) {
+            // Links mailed before tokens were bound to a user, or already used, end here.
+            if (ValidationTokenHelper::TYPE_TICKET === $typeId) {
+                return $this->redirectExpiredLink();
+            }
+
             throw $this->createNotFoundException('Invalid token.');
         }
 
@@ -68,6 +86,16 @@ class ValidationTokenController extends AbstractController
         return $this->render('@ChamiloCore/Validation/success.html.twig', [
             'type' => $type,
         ]);
+    }
+
+    private function redirectExpiredLink(): Response
+    {
+        $this->addFlash(
+            'warning',
+            $this->translator->trans('This link has expired. Please use the link in the most recent notification email.')
+        );
+
+        return $this->redirect('/');
     }
 
     /**

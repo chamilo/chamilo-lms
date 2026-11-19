@@ -42,6 +42,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             'quiz_generate_certificate_ending' => 'false',
             'quiz_open_question_decimal_score' => 'false',
             'quiz_check_button_enable' => 'false',
+            'allow_final_exam_access_rule' => 'false',
             'allow_notification_setting_per_exercise' => 'false',
             'hide_free_question_score' => 'false',
             'hide_user_info_in_quiz_result' => 'false',
@@ -128,6 +129,7 @@ class ExerciseSettingsSchema extends AbstractSettingsSchema
             ->add('quiz_generate_certificate_ending', YesNoType::class)
             ->add('quiz_open_question_decimal_score', YesNoType::class)
             ->add('quiz_check_button_enable', YesNoType::class)
+            ->add('allow_final_exam_access_rule', YesNoType::class)
             ->add('allow_notification_setting_per_exercise', YesNoType::class)
             ->add('hide_free_question_score', YesNoType::class)
             ->add('hide_user_info_in_quiz_result', YesNoType::class)

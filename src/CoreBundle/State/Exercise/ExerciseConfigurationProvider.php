@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\State\Exercise;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseConfiguration;
+use Chamilo\CoreBundle\Component\Exercise\FinalExamAccessRule;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
@@ -21,6 +22,7 @@ use Chamilo\CoreBundle\Entity\SkillRelItem;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Helpers\FinalExamAccessRuleConfigurationHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookLinkManager;
@@ -64,6 +66,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         private IsAllowedToEditHelper $isAllowedToEditHelper,
         private AiFeatureAccessHelper $aiFeatureAccessHelper,
         private CourseHelper $courseHelper,
+        private FinalExamAccessRuleConfigurationHelper $finalExamAccessRuleConfigurationHelper,
     ) {}
 
     /**
@@ -127,6 +130,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->gradebookVisible = true;
         $configuration->notifications = [];
         $configuration->accessCondition = '';
+        $configuration->finalExamAccessRule = $this->finalExamAccessRuleConfigurationHelper->getFormValues(null);
         $configuration->sound = '';
 
         return $configuration;
@@ -169,6 +173,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
         $configuration->gradebookVisible = !$gradebookLink instanceof GradebookLink || 1 === (int) $gradebookLink->getVisible();
         $configuration->notifications = $this->normalizeNotifications($quiz->getNotifications());
         $configuration->accessCondition = (string) $quiz->getAccessCondition();
+        $configuration->finalExamAccessRule = $this->finalExamAccessRuleConfigurationHelper->getFormValues($quiz);
         $configuration->sound = (string) ($quiz->getSound() ?? '');
         $configuration->feedbackType = $quiz->getFeedbackType();
         $configuration->resultsDisabled = $quiz->getResultsDisabled();
@@ -222,6 +227,7 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             'allowHideQuestionNumberSetting' => $this->isSettingEnabled('exercise.quiz_hide_question_number'),
             'enableQuizScenario' => $this->isSettingEnabled('enable_quiz_scenario'),
             'quizQuestionCategoryDestinations' => $this->isProgressiveAdaptiveSettingEnabled(),
+            'allowFinalExamAccessRule' => $this->isSettingEnabled(FinalExamAccessRule::SETTING),
         ];
     }
 
@@ -240,6 +246,9 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             'languageOptions' => $this->getResourceLanguageOptions(),
             'skillOptions' => $this->getSkillOptions($quiz),
             'extraFieldDefinitions' => $this->getExtraFieldDefinitions(),
+            'finalExamUserIdentifierFieldOptions' => $this->isSettingEnabled(FinalExamAccessRule::SETTING)
+                ? $this->finalExamAccessRuleConfigurationHelper->getUserIdentifierFieldOptions($quiz)
+                : [],
             'extraNotificationOptions' => [],
             'feedbackOptions' => $this->getFeedbackOptions($quiz),
             'resultOptions' => [
@@ -636,6 +645,11 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
                 continue;
             }
 
+            // Edited by its own fields of the form, see FinalExamAccessRuleConfigurationHelper
+            if (FinalExamAccessRule::EXERCISE_RULE_FIELD_VARIABLE === $field->getVariable()) {
+                continue;
+            }
+
             $items[] = $field;
         }
 
@@ -742,7 +756,10 @@ final readonly class ExerciseConfigurationProvider implements ProviderInterface
             }
 
             $field = $row->getField();
-            if ('notifications' === $field->getVariable() || !$this->isSupportedExtraFieldType((int) $field->getValueType())) {
+            if (
+                \in_array($field->getVariable(), ['notifications', FinalExamAccessRule::EXERCISE_RULE_FIELD_VARIABLE], true)
+                || !$this->isSupportedExtraFieldType((int) $field->getValueType())
+            ) {
                 continue;
             }
 

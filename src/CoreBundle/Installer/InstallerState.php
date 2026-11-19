@@ -37,6 +37,15 @@ enum InstallerState: string
     case UpgradeNotAuthorised = 'upgrade_not_authorised';
 
     /**
+     * APP_INSTALLED is 1 and .env is present, but the database is unreachable, so the
+     * wizard cannot tell a transient outage from a greenfield server. It stays closed
+     * unless an administrator authorises recovery on the server with the flag file,
+     * exactly as the upgrade does. Otherwise an outage would let the wizard re-run a fresh
+     * install and overwrite .env.
+     */
+    case RecoveryNotAuthorised = 'recovery_not_authorised';
+
+    /**
      * The platform is installed and nothing is pending. The installer must refuse
      * the request: it has no authentication of its own.
      */
@@ -47,7 +56,9 @@ enum InstallerState: string
      */
     public function isLocked(): bool
     {
-        return self::UpToDate === $this || self::UpgradeNotAuthorised === $this;
+        return self::UpToDate === $this
+            || self::UpgradeNotAuthorised === $this
+            || self::RecoveryNotAuthorised === $this;
     }
 
     /**

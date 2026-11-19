@@ -2807,23 +2807,16 @@ class Exercise
 
         // Update title in all LPs that have this quiz added
         if (1 == $form->getSubmitValue('update_title_in_lps')) {
-            $table = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT iid FROM $table
-                    WHERE
-                        item_type = 'quiz' AND
-                        path = '".$this->getId()."'
-                    ";
-            $result = Database::query($sql);
-            $items = Database::store_result($result);
-            if (!empty($items)) {
-                foreach ($items as $item) {
-                    $itemId = $item['iid'];
-                    $sql = "UPDATE $table
-                            SET title = '".$this->title."'
-                            WHERE iid = $itemId ";
-                    Database::query($sql);
-                }
-            }
+            Container::getEntityManager()->createQueryBuilder()
+                ->update(CLpItem::class, 'lpi')
+                ->set('lpi.title', ':title')
+                ->where('lpi.itemType = :itemType')
+                ->andWhere('lpi.path = :path')
+                ->setParameter('title', (string) $this->title)
+                ->setParameter('itemType', 'quiz')
+                ->setParameter('path', (string) $this->getId())
+                ->getQuery()
+                ->execute();
         }
 
         $iId = $this->save();
@@ -8971,10 +8964,14 @@ class Exercise
      */
     public function enableAutoLaunch()
     {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $table SET autolaunch = 1
-                WHERE iid = ".$this->iId;
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(CQuiz::class, 'q')
+            ->set('q.autoLaunch', ':autoLaunch')
+            ->where('q.iid = :iid')
+            ->setParameter('autoLaunch', true)
+            ->setParameter('iid', (int) $this->iId)
+            ->getQuery()
+            ->execute();
     }
 
     /**
@@ -9093,16 +9090,17 @@ class Exercise
             exit;
         }
 
-        $tblStats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
         $studentIdList = [];
         if (!empty($studentList)) {
             $studentIdList = array_column($studentList, 'user_id');
         }
 
         $sessionCondition = api_get_session_condition($sessionId);
+        $rows = [];
         if (false == $this->exercise_was_added_in_lp) {
-            $sql = "SELECT * FROM $tblStats
+            $tblStats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            // TODO(db-neutral): the session condition is an SQL fragment built by api_get_session_condition()
+            $sql = "SELECT exe_user_id, score, max_score FROM $tblStats
                         WHERE
                             exe_exo_id = $exerciseId AND
                             orig_lp_id = 0 AND
@@ -9110,7 +9108,11 @@ class Exercise
                             status <> 'incomplete' AND
                             c_id = $courseId
                             $sessionCondition
-                        ";
+                        ORDER BY exe_id DESC";
+            $result = Database::query($sql);
+            while ($data = Database::fetch_assoc($result)) {
+                $rows[] = $data;
+            }
         } else {
             $lpId = null;
             if (!empty($this->lpList)) {
@@ -9119,25 +9121,33 @@ class Exercise
                 $lpId = $lpId['lp_id'];
             }
 
-            $sql = "SELECT *
-                        FROM $tblStats
-                        WHERE
-                            exe_exo_id = $exerciseId AND
-                            orig_lp_id = $lpId AND
-                            status <> 'incomplete' AND
-                            session_id = $sessionId AND
-                            c_id = $courseId ";
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select(
+                    'IDENTITY(t.user) AS exe_user_id',
+                    't.score AS score',
+                    't.maxScore AS max_score'
+                )
+                ->from(TrackEExercise::class, 't')
+                ->where('IDENTITY(t.quiz) = :exerciseId')
+                ->andWhere('t.origLpId = :lpId')
+                ->andWhere("t.status <> 'incomplete'")
+                ->andWhere('IDENTITY(t.session) = :sessionId')
+                ->andWhere('IDENTITY(t.course) = :courseId')
+                ->orderBy('t.exeId', 'DESC')
+                ->setParameter('exerciseId', $exerciseId)
+                ->setParameter('lpId', (int) $lpId)
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('courseId', (int) $courseId)
+                ->getQuery()
+                ->getArrayResult();
         }
-
-        $sql .= ' ORDER BY exe_id DESC';
 
         $studentCount = 0;
         $sum = 0;
         $bestResult = 0;
         $sumResult = 0;
         $students = [];
-        $result = Database::query($sql);
-        while ($data = Database::fetch_assoc($result)) {
+        foreach ($rows as $data) {
             // Only take into account users in the current student list.
             if (!empty($studentIdList)) {
                 if (!in_array($data['exe_user_id'], $studentIdList)) {

@@ -1726,6 +1726,7 @@ class CourseManager
         $sql .= $whereExtraField;
         $sql .= " $order_by $limit";
 
+        // TODO(db-neutral): free-form order_by/limit strings from callers and ExtraField::parseConditions() SQL fragments
         $rs = Database::query($sql);
         $users = [];
 

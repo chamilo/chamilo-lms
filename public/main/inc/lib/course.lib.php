@@ -262,20 +262,21 @@ class CourseManager
             return false;
         }
 
-        $result = Database::fetch_array(
-            Database::query(
-                "SELECT status FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                WHERE
-                    c_id  = $courseId AND
-                    user_id = $userId"
-            )
-        );
+        $status = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('status')
+            ->from(Database::get_main_table(TABLE_MAIN_COURSE_USER))
+            ->where('c_id = :courseId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $userId)
+            ->executeQuery()
+            ->fetchOne();
 
-        if (empty($result['status'])) {
+        if (empty($status)) {
             return false;
         }
 
-        return $result['status'];
+        return $status;
     }
 
     /**
@@ -286,12 +287,16 @@ class CourseManager
      */
     public static function getUserCourseInfo($userId, $courseId)
     {
-        $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                WHERE
-                    c_id  = ".intval($courseId)." AND
-                    user_id = ".intval($userId);
+        $result = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from(Database::get_main_table(TABLE_MAIN_COURSE_USER))
+            ->where('c_id = :courseId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('userId', (int) $userId)
+            ->executeQuery();
 
-        return Database::fetch_array(Database::query($sql));
+        return Database::fetch_array($result);
     }
 
     /**
@@ -303,23 +308,17 @@ class CourseManager
      */
     public static function updateUserCourseTutor($userId, $courseId, $isTutor)
     {
-        $table = Database::escape_string(TABLE_MAIN_COURSE_USER);
+        $affected = Database::getManager()->getConnection()->createQueryBuilder()
+            ->update(Database::get_main_table(TABLE_MAIN_COURSE_USER))
+            ->set('is_tutor', ':isTutor')
+            ->where('user_id = :userId')
+            ->andWhere('c_id = :courseId')
+            ->setParameter('isTutor', (int) $isTutor)
+            ->setParameter('userId', (int) $userId)
+            ->setParameter('courseId', (int) $courseId)
+            ->executeStatement();
 
-        $courseId = (int) $courseId;
-        $isTutor = (int) $isTutor;
-
-        $sql = "UPDATE $table SET is_tutor = '".$isTutor."'
-			    WHERE
-				    user_id = ".$userId." AND
-				    c_id = ".$courseId;
-
-        $result = Database::query($sql);
-
-        if (Database::affected_rows($result) > 0) {
-            return true;
-        }
-
-        return false;
+        return $affected > 0;
     }
 
     /**
@@ -330,16 +329,15 @@ class CourseManager
      */
     public static function get_tutor_in_course_status($userId, $courseId)
     {
-        $userId = intval($userId);
-        $courseId = intval($courseId);
         $result = Database::fetch_array(
-            Database::query(
-                "SELECT is_tutor
-                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                WHERE
-                    c_id = $courseId AND
-                    user_id = $userId"
-            )
+            Database::getManager()->getConnection()->createQueryBuilder()
+                ->select('is_tutor')
+                ->from(Database::get_main_table(TABLE_MAIN_COURSE_USER))
+                ->where('c_id = :courseId')
+                ->andWhere('user_id = :userId')
+                ->setParameter('courseId', (int) $courseId)
+                ->setParameter('userId', (int) $userId)
+                ->executeQuery()
         );
 
         return $result['is_tutor'];
@@ -1060,16 +1058,20 @@ class CourseManager
      */
     public static function get_course_code_from_course_id($id)
     {
-        $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $id = intval($id);
-        $sql = "SELECT code FROM $table WHERE id = $id ";
-        $res = Database::query($sql);
-        $row = Database::fetch_object($res);
-        if ($row) {
-            return $row->code;
-        } else {
-            return null;
+        $code = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('code')
+            ->from(Database::get_main_table(TABLE_MAIN_COURSE))
+            ->where('id = :id')
+            ->setParameter('id', (int) $id)
+            ->executeQuery()
+            ->fetchOne();
+
+        // fetchOne() gives false when there is no row (a NULL code also reads as "not found", as before)
+        if (false !== $code && null !== $code) {
+            return $code;
         }
+
+        return null;
     }
 
     /**
@@ -1184,11 +1186,14 @@ class CourseManager
      */
     public static function course_code_exists($code)
     {
-        $code = Database::escape_string($code);
-        $sql = "SELECT COUNT(*) as number
-                FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE code = '$code' OR visual_code = '$code'";
-        $result = Database::fetch_array(Database::query($sql));
+        $qb = Database::getManager()->getConnection()->createQueryBuilder();
+        $result = Database::fetch_array(
+            $qb->select('COUNT(*) AS number')
+                ->from(Database::get_main_table(TABLE_MAIN_COURSE))
+                ->where($qb->expr()->or('code = :code', 'visual_code = :code'))
+                ->setParameter('code', (string) $code)
+                ->executeQuery()
+        );
 
         return $result['number'] > 0;
     }
@@ -2931,11 +2936,14 @@ class CourseManager
      */
     public static function course_exists($courseCode)
     {
-        $courseCode = Database::escape_string($courseCode);
-        $sql = "SELECT 1 FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE code = '$courseCode'";
-
-        return Database::num_rows(Database::query($sql));
+        return Database::num_rows(
+            Database::getManager()->getConnection()->createQueryBuilder()
+                ->select('1')
+                ->from(Database::get_main_table(TABLE_MAIN_COURSE))
+                ->where('code = :code')
+                ->setParameter('code', (string) $courseCode)
+                ->executeQuery()
+        );
     }
 
     /**
@@ -3270,6 +3278,7 @@ class CourseManager
     public static function getCourseCodeFromDirectory($path)
     {
         $path = Database::escape_string(str_replace('.', '', str_replace('/', '', $path)));
+        // TODO(db-neutral): LIKE BINARY (case-sensitive match)
         $res = Database::query("SELECT code FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
                 WHERE directory LIKE BINARY '$path'");
         if (false === $res) {
@@ -3295,10 +3304,13 @@ class CourseManager
         $result = [];
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql_result = Database::query("SELECT course.*, language.isocode AS course_language
-                FROM $courseTable course
-                INNER JOIN $languageTable language ON language.id = course.language_id
-                WHERE course.visual_code = '".Database::escape_string($code)."'");
+        $sql_result = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('course.*', 'language.isocode AS course_language')
+            ->from($courseTable, 'course')
+            ->innerJoin('course', $languageTable, 'language', 'language.id = course.language_id')
+            ->where('course.visual_code = :code')
+            ->setParameter('code', (string) $code)
+            ->executeQuery();
         while ($virtual_course = Database::fetch_array($sql_result)) {
             $result[] = $virtual_course;
         }
@@ -5947,12 +5959,12 @@ class CourseManager
      */
     public static function getCourseNameFromCode($code)
     {
-        $tbl_main_categories = Database::get_main_table(TABLE_MAIN_COURSE);
-        $code = Database::escape_string($code);
-        $sql = "SELECT title
-                FROM $tbl_main_categories
-                WHERE code = '$code'";
-        $result = Database::query($sql);
+        $result = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('title')
+            ->from(Database::get_main_table(TABLE_MAIN_COURSE))
+            ->where('code = :code')
+            ->setParameter('code', (string) $code)
+            ->executeQuery();
         if ($col = Database::fetch_array($result)) {
             return $col['title'];
         }

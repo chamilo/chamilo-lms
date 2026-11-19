@@ -116,6 +116,44 @@ class SessionManager
     }
 
     /**
+     * Gets the sessions whose certificates the current user can list in the certificate reports:
+     * an HR manager only gets the sessions assigned to them, and everybody only the sessions of
+     * the current access URL.
+     *
+     * @return array<int, string> Session titles, indexed by session id
+     */
+    public static function getSessionsForCertificateReport(): array
+    {
+        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        $joins = '';
+        $where = 'WHERE 1 = 1';
+
+        if (api_is_hrm()) {
+            $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+            $joins .= " INNER JOIN $tblSessionRelUser session_rel_user ON (s.id = session_rel_user.session_id)";
+            $where .= ' AND session_rel_user.user_id = '.api_get_user_id();
+        }
+
+        if (api_is_multiple_url_enabled()) {
+            $accessUrlId = api_get_current_access_url_id();
+            if (-1 != $accessUrlId) {
+                $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+                $joins .= " INNER JOIN $tblSessionRelAccessUrl session_rel_url ON (s.id = session_rel_url.session_id)";
+                $where .= ' AND session_rel_url.access_url_id = '.(int) $accessUrlId;
+            }
+        }
+
+        $result = Database::query("SELECT DISTINCT s.id, s.title FROM $tblSession s $joins $where ORDER BY s.title");
+
+        $sessions = [];
+        while ($row = Database::fetch_assoc($result)) {
+            $sessions[(int) $row['id']] = $row['title'];
+        }
+
+        return $sessions;
+    }
+
+    /**
      * Create a session.
      *
      * @author Carlos Vargas <carlos.vargas@beeznest.com>, from existing code

@@ -20,9 +20,7 @@ $allowCustomCertificate = 'true' === api_get_plugin_setting('customcertificate',
 $plugin = CustomCertificatePlugin::create();
 
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
 $tblSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
 define('NO_DATE_FILTER', 0);
 define('DATE_BEGIN_FILTER', 1);
@@ -32,42 +30,8 @@ define('ALL_DATE_FILTER', 3);
 $certificateList = [];
 $urlParam = '';
 $form = new FormValidator('search_user', 'GET', api_get_self());
-$innerJoinSessionRelUser = '';
-$whereCondictionDRH = '';
-$whereCondictionMultiUrl = '';
-if (api_is_hrm()) {
-    $innerJoinSessionRelUser = "INNER JOIN $tblSessionRelUser as session_rel_user
-                                ON (s.id = session_rel_user.session_id)";
-    $whereCondictionDRH = "WHERE session_rel_user.user_id = ".api_get_user_id();
-    $whereCondictionMultiUrl = " AND session_rel_user.user_id = ".api_get_user_id();
-}
-
-// Select of sessions.
-$sql = "SELECT s.id, s.title FROM $tblSession s
-        $innerJoinSessionRelUser
-        $whereCondictionDRH
-        ORDER BY s.title";
-
-if (api_is_multiple_url_enabled()) {
-    $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-    $accessUrlId = api_get_current_access_url_id();
-    if (-1 != $accessUrlId) {
-        $sql = "SELECT s.id, s.title FROM $tblSession s
-                INNER JOIN $tblSessionRelAccessUrl as session_rel_url
-                ON (s.id = session_rel_url.session_id)
-                $innerJoinSessionRelUser
-                WHERE access_url_id = $accessUrlId
-                $whereCondictionMultiUrl
-                ORDER BY s.title";
-    }
-}
-$result = Database::query($sql);
-$Sessions = Database::store_result($result);
-$options = [];
-$options['0'] = '';
-foreach ($Sessions as $enreg) {
-    $options[$enreg['id']] = $enreg['title'];
-}
+// Sessions the user can see, which are the only ones the report may be built for.
+$options = [0 => ''] + SessionManager::getSessionsForCertificateReport();
 
 $form->addSelect('session_id', get_lang('Session list'), $options, ['id' => 'session-id']);
 $form->addDatePicker('date_begin', get_lang('Start date'), ['id' => 'date-begin']);

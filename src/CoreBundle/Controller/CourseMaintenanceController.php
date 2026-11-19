@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
@@ -945,7 +946,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/cc13/export/execute', name: 'cc13_export_execute', methods: ['POST'])]
-    public function cc13ExportExecute(int $node, Request $req): JsonResponse
+    public function cc13ExportExecute(int $node, Request $req, CidReqHelper $cidReqHelper): JsonResponse
     {
         $this->setDebugFromRequest($req);
 
@@ -1031,8 +1032,8 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 [
                     'node' => $node,
                     'file' => $fileName,
-                    'cid' => api_get_course_int_id(),
-                    'sid' => api_get_session_id(),
+                    'cid' => $cidReqHelper->getCourseId(),
+                    'sid' => $cidReqHelper->getSessionId(),
                 ],
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
@@ -1053,7 +1054,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/cc13/export/download', name: 'cc13_export_download', methods: ['GET'])]
-    public function cc13ExportDownload(int $node, Request $req): BinaryFileResponse|JsonResponse
+    public function cc13ExportDownload(int $node, Request $req, CidReqHelper $cidReqHelper): BinaryFileResponse|JsonResponse
     {
         $file = basename((string) $req->query->get('file', ''));
 
@@ -1063,7 +1064,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         }
 
         // Exports of every course share the temp directory: only serve the current course's ones.
-        $courseCode = (string) api_get_course_id();
+        $courseCode = (string) $cidReqHelper->getCourseEntity()?->getCode();
         if ('' === $courseCode || !preg_match('/^'.preg_quote($courseCode, '/').'_cc13_\d{8}_\d{6}\.imscc$/', $file)) {
             return $this->jsonError('File not found', 404);
         }

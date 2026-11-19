@@ -99,7 +99,7 @@ final readonly class CourseDescriptionItemProcessor implements ProcessorInterfac
 
         $description
             ->setTitle($this->sanitizeTitle($title))
-            ->setContent($this->sanitizeContent($content))
+            ->setContent((string) LegacySecurity::remove_XSS($content, COURSEMANAGERLOWSECURITY))
             ->setProgress($data->progress)
         ;
 
@@ -191,15 +191,10 @@ final readonly class CourseDescriptionItemProcessor implements ProcessorInterfac
     private function sanitizeTitle(string $title): string
     {
         if ($this->isSettingEnabled('editor.save_titles_as_html')) {
-            return $this->sanitizeContent($title);
+            return (string) LegacySecurity::remove_XSS($title, COURSEMANAGERLOWSECURITY);
         }
 
         return trim(strip_tags($title));
-    }
-
-    private function sanitizeContent(string $content): string
-    {
-        return (string) LegacySecurity::remove_XSS($content, COURSEMANAGERLOWSECURITY);
     }
 
     private function applyResourceLanguage(CCourseDescription $description, string $languageCode): void

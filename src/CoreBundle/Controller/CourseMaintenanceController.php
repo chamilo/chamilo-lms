@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CourseBundle\Component\CourseCopy\BackupArchive;
@@ -368,16 +369,16 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/copy/options', name: 'copy_options', methods: ['GET'])]
-    public function copyOptions(int $node, Request $req): JsonResponse
+    public function copyOptions(int $node, Request $req, CidReqHelper $cidReqHelper, UserHelper $userHelper): JsonResponse
     {
         $this->setDebugFromRequest($req);
 
-        $current = api_get_course_info();
-        $courseList = CourseManager::getCoursesFollowedByUser(api_get_user_id());
+        $currentCourseId = (int) $cidReqHelper->getCourseEntity()?->getId();
+        $courseList = CourseManager::getCoursesFollowedByUser((int) $userHelper->getCurrent()?->getId());
 
         $courses = [];
         foreach ($courseList as $c) {
-            if ((int) $c['real_id'] === (int) ($current['real_id'] ?? 0)) {
+            if ((int) $c['real_id'] === $currentCourseId) {
                 continue;
             }
             $courses[] = [
@@ -423,7 +424,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/copy/execute', name: 'copy_execute', methods: ['POST'])]
-    public function copyExecute(int $node, Request $req, EntityManagerInterface $em): JsonResponse
+    public function copyExecute(int $node, Request $req, EntityManagerInterface $em, CidReqHelper $cidReqHelper): JsonResponse
     {
         $this->setDebugFromRequest($req);
 
@@ -465,8 +466,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
 
             $restorer->restore();
 
-            $dest = api_get_course_info();
-            $redirectUrl = \sprintf('/course/%d/home', (int) ($dest['real_id'] ?? 0));
+            $redirectUrl = \sprintf('/course/%d/home', (int) $cidReqHelper->getCourseEntity()?->getId());
 
             return $this->json([
                 'ok' => true,
@@ -572,9 +572,9 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 }
             }
 
-            $courseCode = (string) $cidReqHelper->getCourseEntity()?->getCode();
-            $courseInfo = api_get_course_info($courseCode);
-            $courseId = (int) ($courseInfo['real_id'] ?? 0);
+            $currentCourse = $cidReqHelper->getCourseEntity();
+            $courseCode = (string) $currentCourse?->getCode();
+            $courseId = (int) $currentCourse?->getId();
             if ($courseId <= 0) {
                 return $this->jsonError('Invalid course id', 400);
             }
@@ -619,25 +619,24 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             $deleteDocsRaw = $payload['delete_docs'] ?? 0;
             $deleteDocs = (bool) filter_var($deleteDocsRaw, FILTER_VALIDATE_BOOL);
 
-            $courseInfo = api_get_course_info();
-            if (empty($courseInfo)) {
+            $currentCourse = $cidReqHelper->getCourseEntity();
+            if (null === $currentCourse) {
                 return $this->jsonError('Unable to resolve current course', 400);
             }
 
-            $officialCode = (string) ($courseInfo['official_code'] ?? '');
-            $runtimeCode = (string) $cidReqHelper->getCourseEntity()?->getCode();
-            $sysCode = (string) ($courseInfo['sysCode'] ?? '');
+            $officialCode = (string) $currentCourse->getVisualCode();
+            $sysCode = $currentCourse->getCode();
 
             if ('' === $sysCode) {
                 return $this->jsonError('Invalid course system code', 400);
             }
 
-            $matches = hash_equals($officialCode, $confirm) || hash_equals($runtimeCode, $confirm);
+            $matches = hash_equals($officialCode, $confirm) || hash_equals($sysCode, $confirm);
             if (!$matches) {
                 return $this->jsonError('Course code confirmation mismatch', 400);
             }
 
-            $courseId = (int) ($courseInfo['real_id'] ?? 0);
+            $courseId = (int) $currentCourse->getId();
             $course = $courseId > 0 ? $em->getRepository(CourseEntity::class)->find($courseId) : null;
             if (!$course instanceof CourseEntity) {
                 return $this->jsonError('Course not found', 404);

@@ -19,12 +19,13 @@ use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Repository\CCourseDescriptionRepository;
+use Security as LegacySecurity;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
-use const COURSEMANAGERLOWSECURITY;
-use const ENT_QUOTES;
-use const ENT_SUBSTITUTE;
+use const ANONYMOUS;
+use const COURSEMANAGER;
+use const STUDENT;
 
 /**
  * @implements ProviderInterface<CourseDescriptionList>
@@ -68,6 +69,7 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         $list->types = $this->getTypes();
         $list->settings = $this->getSettings();
 
+        $readerProfile = $this->getReaderHtmlProfile($canManage);
         $descriptions = $this->courseDescriptionRepository->findAllInCourse($course, $session);
 
         foreach ($descriptions as $description) {
@@ -75,7 +77,7 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
                 continue;
             }
 
-            $list->items[] = $this->normalizeDescription($description, $course, $session);
+            $list->items[] = $this->normalizeDescription($description, $course, $session, $readerProfile);
         }
 
         $list->totalItems = \count($list->items);
@@ -90,6 +92,7 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         CCourseDescription $description,
         Course $course,
         ?Session $session,
+        int $readerProfile,
     ): array {
         $resourceNode = $description->getResourceNode();
         $contextLink = $description->getFirstResourceLinkFromCourseSession($course, $session);
@@ -103,8 +106,8 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
 
         return [
             'iid' => (int) $description->getIid(),
-            'title' => $this->sanitizeHtmlForDisplay((string) $description->getTitle()),
-            'content' => $this->sanitizeHtmlForDisplay((string) $description->getContent()),
+            'title' => $this->sanitizeHtmlForDisplay((string) $description->getTitle(), $readerProfile),
+            'content' => $this->sanitizeHtmlForDisplay((string) $description->getContent(), $readerProfile),
             'descriptionType' => (int) $description->getDescriptionType(),
             'progress' => (int) $description->getProgress(),
             'resourceNodeId' => null !== $resourceNode?->getId() ? (int) $resourceNode->getId() : null,
@@ -116,13 +119,22 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         ];
     }
 
-    private function sanitizeHtmlForDisplay(string $html): string
+    /**
+     * The stored HTML is filtered with the reader's profile, as the remove_xss filter of 1.11.x did.
+     * The editor form loads it unfiltered through CourseDescriptionItemProvider.
+     */
+    private function getReaderHtmlProfile(bool $canManage): int
     {
-        if (class_exists('Security') && \defined('COURSEMANAGERLOWSECURITY')) {
-            return (string) \Security::remove_XSS($html, COURSEMANAGERLOWSECURITY);
+        if (!$this->security->isGranted('IS_AUTHENTICATED')) {
+            return ANONYMOUS;
         }
 
-        return htmlspecialchars($html, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        return $canManage ? COURSEMANAGER : STUDENT;
+    }
+
+    private function sanitizeHtmlForDisplay(string $html, int $profile): string
+    {
+        return (string) LegacySecurity::remove_XSS($html, $profile);
     }
 
     /**

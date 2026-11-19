@@ -115,41 +115,59 @@ namespace {
     };
 
     $scenario = $argv[1] ?? '';
-    if (!in_array($scenario, ['policy', 'markup'], true)) {
-        fwrite(\STDERR, "ERROR: expected 'policy' or 'markup' scenario.\n");
+    if (!in_array($scenario, ['policy', 'markup', 'reader'], true)) {
+        fwrite(\STDERR, "ERROR: expected 'policy', 'markup' or 'reader' scenario.\n");
 
         exit(2);
     }
 
     $input = '<p onclick="alert(1)">Hello <strong>teacher</strong><script>alert(2)</script></p>';
+    $safe = '<p>Safe <strong>formatting</strong></p>';
 
-    foreach ([CourseDescriptionListProvider::class, CourseDescriptionItemProvider::class] as $providerType) {
-        $providerClass = new ReflectionClass($providerType);
-        $provider = $providerClass->newInstanceWithoutConstructor();
-        $filter = $providerClass->getMethod('sanitizeHtmlForDisplay');
+    // The editor form (item provider) loads the stored HTML with the teacher policy.
+    $itemClass = new ReflectionClass(CourseDescriptionItemProvider::class);
+    $itemProvider = $itemClass->newInstanceWithoutConstructor();
+    $itemFilter = $itemClass->getMethod('sanitizeHtmlForDisplay');
 
-        if ('policy' === $scenario) {
-            $GLOBALS['teacher_js_setting'] = 'true';
-            $unrestricted = $filter->invoke($provider, $input);
-            $assert($unrestricted === $input, "$providerType: Yes must preserve existing HTML read behavior.");
+    // The list is what every course member reads, so it is filtered with the reader's profile.
+    $listClass = new ReflectionClass(CourseDescriptionListProvider::class);
+    $listProvider = $listClass->newInstanceWithoutConstructor();
+    $listFilter = $listClass->getMethod('sanitizeHtmlForDisplay');
+    $readerProfiles = ['student' => STUDENT, 'teacher' => COURSEMANAGER, 'anonymous' => ANONYMOUS];
 
-            $GLOBALS['teacher_js_setting'] = 'false';
-            $restricted = $filter->invoke($provider, $input);
-            $assert(!str_contains($restricted, '<script'), "$providerType: No must remove stored scripts.");
-            $assert(!str_contains($restricted, 'onclick='), "$providerType: No must remove stored event handlers.");
-            $assert(str_contains($restricted, '<strong>teacher</strong>'), "$providerType: No must retain safe formatting.");
-            $assert($input !== $restricted, "$providerType: Read filtering must not modify its source.");
+    if ('policy' === $scenario) {
+        $GLOBALS['teacher_js_setting'] = 'true';
+        $unrestricted = $itemFilter->invoke($itemProvider, $input);
+        $assert($unrestricted === $input, 'Editor: Yes must preserve the stored HTML for the teacher.');
 
-            $GLOBALS['teacher_js_setting'] = 'true';
-            $restored = $filter->invoke($provider, $input);
-            $assert($restored === $input, "$providerType: Switching back to Yes must preserve original markup.");
-        } else {
-            $safe = '<p>Safe <strong>formatting</strong></p>';
-            foreach (['true', 'false'] as $setting) {
-                $GLOBALS['teacher_js_setting'] = $setting;
-                $result = $filter->invoke($provider, $safe);
-                $assert(str_contains($result, 'Safe'), "$providerType: Safe text must survive ($setting).");
-                $assert(str_contains($result, '<strong>formatting</strong>'), "$providerType: Harmless formatting must survive ($setting).");
+        $GLOBALS['teacher_js_setting'] = 'false';
+        $restricted = $itemFilter->invoke($itemProvider, $input);
+        $assert(!str_contains($restricted, '<script'), 'Editor: No must remove stored scripts.');
+        $assert(!str_contains($restricted, 'onclick='), 'Editor: No must remove stored event handlers.');
+        $assert(str_contains($restricted, '<strong>teacher</strong>'), 'Editor: No must retain safe formatting.');
+
+        $GLOBALS['teacher_js_setting'] = 'true';
+        $restored = $itemFilter->invoke($itemProvider, $input);
+        $assert($restored === $input, 'Editor: Switching back to Yes must preserve original markup.');
+    } elseif ('reader' === $scenario) {
+        // Even when teachers may store JavaScript, readers of the list never receive it.
+        $GLOBALS['teacher_js_setting'] = 'true';
+        foreach ($readerProfiles as $reader => $profile) {
+            $result = $listFilter->invoke($listProvider, $input, $profile);
+            $assert(!str_contains($result, '<script'), "List ($reader): stored scripts must be removed.");
+            $assert(!str_contains($result, 'onclick='), "List ($reader): stored event handlers must be removed.");
+            $assert(str_contains($result, '<strong>teacher</strong>'), "List ($reader): safe formatting must survive.");
+        }
+    } else {
+        foreach (['true', 'false'] as $setting) {
+            $GLOBALS['teacher_js_setting'] = $setting;
+            $results = ['editor' => $itemFilter->invoke($itemProvider, $safe)];
+            foreach ($readerProfiles as $reader => $profile) {
+                $results["list ($reader)"] = $listFilter->invoke($listProvider, $safe, $profile);
+            }
+            foreach ($results as $path => $result) {
+                $assert(str_contains($result, 'Safe'), "$path: Safe text must survive ($setting).");
+                $assert(str_contains($result, '<strong>formatting</strong>'), "$path: Harmless formatting must survive ($setting).");
             }
         }
     }

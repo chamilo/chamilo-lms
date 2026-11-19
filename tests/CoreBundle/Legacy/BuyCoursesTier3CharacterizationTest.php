@@ -139,4 +139,88 @@ final class BuyCoursesTier3CharacterizationTest extends BuyCoursesCharacterizati
         $this->callPrivate('lockUserExtraFieldVisibility', [0]);
         $this->assertSame('1', (string) $this->conn->fetchOne('SELECT changeable FROM extra_field WHERE id = ?', [$otherId]));
     }
+
+    private function makeCatalogService(string $name, string $price, int $days, int $appliesTo, array $override = []): int
+    {
+        $this->conn->insert('plugin_buycourses_services', array_merge([
+            'name' => $name, 'description' => 'bc_desc', 'price' => $price, 'duration_days' => $days,
+            'applies_to' => $appliesTo, 'owner_id' => 1, 'active' => 1, 'visibility' => 1, 'video_url' => '',
+            'image' => '', 'service_information' => '',
+        ], $override));
+
+        return (int) $this->conn->lastInsertId();
+    }
+
+    public function testGetCatalogServiceListFiltersCountsAndPaginates(): void
+    {
+        $this->selectCurrency('EUR');
+        $this->setGlobalConfig(0, 0);
+        $this->setPluginSettings(['tax_enable' => 'false']);
+        $this->conn->executeStatement('DELETE FROM plugin_buycourses_services');
+
+        $a = $this->makeCatalogService('bc_alpha', '10.00', 30, 1);
+        $b = $this->makeCatalogService('bc_beta', '50.00', 31, 2);
+        $c = $this->makeCatalogService('bc_gamma', '90.00', 365, 3);
+        $this->makeCatalogService('bc_inactive', '20.00', 30, 1, ['active' => 0]);
+        $this->makeCatalogService('bc_hidden', '20.00', 30, 1, ['visibility' => 0]);
+        $this->makeCatalogService('bc_noowner', '20.00', 30, 1, ['owner_id' => 999999]);
+        $d = $this->makeCatalogService('bc_zero_days', '30.00', 0, 1);
+
+        $ids = fn (array $list): array => array_map(static fn (array $s): int => (int) $s['id'], $list);
+
+        $this->assertSame(4 + 0, $this->plugin->getCatalogServiceList(0, 100, null, 0, 0, '', 'count'));
+        $this->assertSame([$a, $b, $c, $d], $ids($this->plugin->getCatalogServiceList(0, 100)));
+        // LIMIT offset, count semantic of (start, end)
+        $this->assertSame([$b, $c], $ids($this->plugin->getCatalogServiceList(1, 2)));
+        $this->assertSame([$a], $ids($this->plugin->getCatalogServiceList(-5, 0)), 'start floors at 0, end at 1');
+        $this->assertSame([$b], $ids($this->plugin->getCatalogServiceList(0, 100, 'beta')));
+        $this->assertSame(1, $this->plugin->getCatalogServiceList(0, 100, 'beta', 0, 0, '', 'count'));
+        $this->assertSame([$b, $c, $d], $ids($this->plugin->getCatalogServiceList(0, 100, null, 30, 0)), 'min is inclusive');
+        $this->assertSame([$a, $b, $d], $ids($this->plugin->getCatalogServiceList(0, 100, null, 0, 50)), 'max is inclusive');
+        $this->assertSame([$b], $ids($this->plugin->getCatalogServiceList(0, 100, null, 0, 0, 2)));
+        $this->assertSame([$b], $ids($this->plugin->getCatalogServiceList(0, 100, null, 0, 0, '2')));
+        $this->assertSame([$a, $b], $ids($this->plugin->getCatalogServiceList(0, 100, null, 0, 0, '', 'all', 'monthly')), 'monthly: 0 < days <= 31');
+        $this->assertSame([$c], $ids($this->plugin->getCatalogServiceList(0, 100, null, 0, 0, '', 'all', 'yearly')));
+        $this->assertSame(2, $this->plugin->getCatalogServiceList(0, 100, null, 0, 0, '', 'count', 'monthly'));
+        $this->assertSame([], $this->plugin->getCatalogServiceList(0, 100, "x' OR '1'='1"));
+    }
+
+    public function testFilterSessionListFiltersByTitlePriceAndCategoryAndSortsByTitle(): void
+    {
+        $this->conn->insert('session_category', ['title' => 'bc_cat']);
+        $cat = (int) $this->conn->lastInsertId();
+        $make = function (string $title, ?int $category, ?string $price, int $type = BuyCoursesPlugin::PRODUCT_TYPE_SESSION): int {
+            $this->conn->insert('session', [
+                'title' => $title, 'session_category_id' => $category, 'nbr_courses' => 0, 'nbr_users' => 0,
+                'nbr_classes' => 0, 'visibility' => 1, 'status' => 0,
+            ]);
+            $id = (int) $this->conn->lastInsertId();
+            if (null !== $price) {
+                $this->makeItem($id, (float) $price, null, $type);
+            }
+
+            return $id;
+        };
+        $make('bc_s_zeta', null, '10.00');
+        $make('bc_s_alpha', $cat, '60.00');
+        $mid = $make('bc_s_mid', $cat, '30.00');
+        $make('bc_s_noitem', null, null);
+        $make('bc_s_course_item', null, '20.00', BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
+        // a second item of the same session must not duplicate it
+        $this->makeItem($mid, 31.0, null, BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
+
+        $call = fn (...$args): array|int => $this->callPrivate('filterSessionList', $args);
+        $titles = fn (array $sessions): array => array_map(static fn ($s): string => $s->getTitle(), $sessions);
+
+        $this->assertSame(['bc_s_alpha', 'bc_s_mid', 'bc_s_zeta'], $titles($call(0, 100, 'bc_s_')));
+        $this->assertSame(3, $call(0, 100, 'bc_s_', 0, 0, 'count'), 'count is DISTINCT');
+        $this->assertSame(['bc_s_mid', 'bc_s_zeta'], $titles($call(1, 2, 'bc_s_')));
+        $this->assertSame(['bc_s_alpha'], $titles($call(0, 100, 'alpha')));
+        $this->assertSame(['bc_s_alpha', 'bc_s_mid'], $titles($call(0, 100, 'bc_s_', 30, 0)));
+        $this->assertSame(['bc_s_zeta'], $titles($call(0, 100, 'bc_s_', 0, 10)));
+        $this->assertSame(['bc_s_alpha'], $titles($call(0, 100, 'bc_s_', 60, 0)), 'min is inclusive');
+        $this->assertSame(['bc_s_alpha', 'bc_s_mid'], $titles($call(0, 100, 'bc_s_', 0, 0, 'all', $cat)));
+        $this->assertSame(2, $call(0, 100, 'bc_s_', 0, 0, 'count', $cat));
+        $this->assertSame([], $call(0, 100, "x' OR '1'='1"));
+    }
 }

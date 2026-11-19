@@ -7815,53 +7815,51 @@ class BuyCoursesPlugin extends Plugin
     ) {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-        $whereConditions = [
-            's.active = 1',
-            's.visibility <> 0',
-        ];
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $qb->from($servicesTable, 's')
+            ->innerJoin('s', $userTable, 'u', 's.owner_id = u.id')
+            ->where('s.active = 1')
+            ->andWhere('s.visibility <> 0');
 
         if (!empty($name)) {
-            $safeName = Database::escape_string($name);
-            $whereConditions[] = "s.name LIKE '%$safeName%'";
+            $qb->andWhere('s.name LIKE :name')->setParameter('name', '%'.$name.'%');
         }
 
         if ($min > 0) {
-            $whereConditions[] = 's.price >= '.(int) $min;
+            $qb->andWhere('s.price >= :min')->setParameter('min', (int) $min);
         }
 
         if ($max > 0) {
-            $whereConditions[] = 's.price <= '.(int) $max;
+            $qb->andWhere('s.price <= :max')->setParameter('max', (int) $max);
         }
 
         if ('' !== (string) $appliesTo) {
-            $whereConditions[] = 's.applies_to = '.(int) $appliesTo;
+            $qb->andWhere('s.applies_to = :appliesTo')->setParameter('appliesTo', (int) $appliesTo);
         }
 
         if ('monthly' === $billingCycle) {
-            $whereConditions[] = 's.duration_days > 0';
-            $whereConditions[] = 's.duration_days <= 31';
+            $qb->andWhere('s.duration_days > 0')->andWhere('s.duration_days <= 31');
         } elseif ('yearly' === $billingCycle) {
-            $whereConditions[] = 's.duration_days >= 365';
+            $qb->andWhere('s.duration_days >= 365');
         }
 
-        $from = "$servicesTable s INNER JOIN $userTable u ON s.owner_id = u.id";
-        $where = implode(' AND ', $whereConditions);
-
         if ('count' === $typeResult) {
-            $result = Database::query("SELECT COUNT(*) AS total FROM $from WHERE $where");
-            $row = Database::fetch_assoc($result);
+            $total = $qb->select('COUNT(*) AS total')->executeQuery()->fetchAssociative();
 
-            return (int) ($row['total'] ?? 0);
+            return (int) ($total['total'] ?? 0);
         }
 
         $start = max(0, $start);
         $end = max(1, $end);
-        $result = Database::query(
-            "SELECT s.id FROM $from WHERE $where ORDER BY s.id ASC LIMIT $start, $end"
-        );
+        $rows = $qb->select('s.id')
+            ->orderBy('s.id', 'ASC')
+            ->setFirstResult($start)
+            ->setMaxResults($end)
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $services = [];
-        while ($service = Database::fetch_assoc($result)) {
+        foreach ($rows as $service) {
             $serviceId = (int) ($service['id'] ?? 0);
             if ($serviceId <= 0) {
                 continue;
@@ -10984,65 +10982,45 @@ class BuyCoursesPlugin extends Plugin
         $itemTable = Database::get_main_table(self::TABLE_ITEM);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $where = [];
-        $where[] = 'i.product_type = '.self::PRODUCT_TYPE_SESSION;
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $qb->from($sessionTable, 's')
+            ->innerJoin('s', $itemTable, 'i', 's.id = i.product_id')
+            ->where('i.product_type = :productType')
+            ->setParameter('productType', self::PRODUCT_TYPE_SESSION);
 
         if (!empty($name)) {
-            $safeName = Database::escape_string($name);
-            $where[] = "s.title LIKE '%$safeName%'";
+            $qb->andWhere('s.title LIKE :name')->setParameter('name', '%'.$name.'%');
         }
 
         if ($min > 0) {
-            $where[] = 'i.price >= '.(int) $min;
+            $qb->andWhere('i.price >= :min')->setParameter('min', (int) $min);
         }
 
         if ($max > 0) {
-            $where[] = 'i.price <= '.(int) $max;
+            $qb->andWhere('i.price <= :max')->setParameter('max', (int) $max);
         }
 
         if ($sessionCategory > 0) {
-            $where[] = 's.session_category_id = '.(int) $sessionCategory;
-        }
-
-        $whereSql = '';
-        if (!empty($where)) {
-            $whereSql = ' WHERE '.implode(' AND ', $where);
+            $qb->andWhere('s.session_category_id = :category')->setParameter('category', (int) $sessionCategory);
         }
 
         if ('count' === $typeResult) {
-            $countSql = "
-            SELECT COUNT(DISTINCT s.id) AS count
-            FROM $sessionTable s
-            INNER JOIN $itemTable i
-                ON s.id = i.product_id
-            $whereSql
-        ";
-
-            $countResult = Database::query($countSql);
-            $countRow = $countResult ? Database::fetch_array($countResult) : [];
+            $countRow = $qb->select('COUNT(DISTINCT s.id) AS count')->executeQuery()->fetchAssociative();
 
             return (int) ($countRow['count'] ?? 0);
         }
 
-        $listSql = "
-        SELECT DISTINCT s.id
-        FROM $sessionTable s
-        INNER JOIN $itemTable i
-            ON s.id = i.product_id
-        $whereSql
-        ORDER BY s.title ASC
-        LIMIT ".(int) $start.', '.(int) $end;
-
-        $result = Database::query($listSql);
-
-        if (!$result) {
-            return [];
-        }
+        $rows = $qb->select('DISTINCT s.id')
+            ->orderBy('s.title', 'ASC')
+            ->setFirstResult((int) $start)
+            ->setMaxResults((int) $end)
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $entityManager = Database::getManager();
         $sessions = [];
 
-        while ($row = Database::fetch_array($result)) {
+        foreach ($rows as $row) {
             $sessionId = isset($row['id']) ? (int) $row['id'] : 0;
 
             if ($sessionId <= 0) {

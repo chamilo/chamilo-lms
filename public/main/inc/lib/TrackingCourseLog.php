@@ -6,7 +6,10 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Enums\ToolIcon;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Query\QueryBuilder as DbalQueryBuilder;
 
 class TrackingCourseLog
 {
@@ -37,38 +40,32 @@ class TrackingCourseLog
             'thematic_advance',
             'thematic_plan',
         ];
-        $typesList = "'".implode("','", $allowedTypes)."'";
 
-        $sql = "SELECT COUNT(*) AS total_number_of_items
-            FROM $tableResourceLink rl
-            INNER JOIN $tableResourceNode rn ON rn.id = rl.resource_node_id
-            INNER JOIN $tableResourceType rt ON rt.id = rn.resource_type_id
-            LEFT JOIN $tableUser u ON u.id = rn.creator_id
-            LEFT JOIN $tableSession s ON s.id = rl.session_id
-            WHERE rl.c_id = $courseId";
+        $qb = self::dbalQueryBuilder()
+            ->select('COUNT(*) AS total_number_of_items')
+            ->from($tableResourceLink, 'rl')
+            ->innerJoin('rl', $tableResourceNode, 'rn', 'rn.id = rl.resource_node_id')
+            ->innerJoin('rn', $tableResourceType, 'rt', 'rt.id = rn.resource_type_id')
+            ->leftJoin('rn', $tableUser, 'u', 'u.id = rn.creator_id')
+            ->leftJoin('rl', $tableSession, 's', 's.id = rl.session_id')
+            ->where('rl.c_id = :courseId')
+            ->setParameter('courseId', (int) $courseId);
 
         if (empty($sessionId)) {
-            $sql .= ' AND rl.session_id IS NULL';
+            $qb->andWhere('rl.session_id IS NULL');
         } else {
-            $sessionId = (int) $sessionId;
-            $sql .= " AND rl.session_id = $sessionId";
+            $qb->andWhere('rl.session_id = :sessionId')->setParameter('sessionId', (int) $sessionId);
         }
 
-        $sql .= " AND rt.title IN ($typesList)";
+        $qb->andWhere('rt.title IN (:allowedTypes)')
+            ->setParameter('allowedTypes', $allowedTypes, ArrayParameterType::STRING);
 
         if (!empty($_GET['keyword'])) {
-            $keyword = Database::escape_string(trim((string) $_GET['keyword']));
-            $sql .= " AND (
-            u.username LIKE '%$keyword%' OR
-            rn.title   LIKE '%$keyword%' OR
-            rt.title   LIKE '%$keyword%'
-        )";
+            $qb->andWhere('(u.username LIKE :keyword OR rn.title LIKE :keyword OR rt.title LIKE :keyword)')
+                ->setParameter('keyword', '%'.trim((string) $_GET['keyword']).'%');
         }
 
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
-
-        return $obj ? (int) $obj->total_number_of_items : 0;
+        return (int) $qb->executeQuery()->fetchOne();
     }
 
     /**
@@ -108,44 +105,43 @@ class TrackingCourseLog
             'thematic_advance',
             'thematic_plan',
         ];
-        $typesList = "'".implode("','", $allowedTypes)."'";
 
-        $sql = "SELECT
-                rl.id            AS ref,
-                rl.created_at    AS col6,
-                rl.visibility    AS col7,
-                rn.title         AS document_title,
-                rn.parent_id     AS parent_resource_node_id,
-                rt.title         AS resource_type_title,
-                creator.id       AS user_id,
-                creator.username AS col3,
-                s.title           AS session_name,
-                coach.username   AS coach_username
-            FROM $tableResourceLink rl
-            INNER JOIN $tableResourceNode rn ON rn.id = rl.resource_node_id
-            INNER JOIN $tableResourceType rt ON rt.id = rn.resource_type_id
-            LEFT JOIN $tableUser creator ON creator.id = rn.creator_id
-            LEFT JOIN $tableSession s ON s.id = rl.session_id
-            LEFT JOIN $tableSessionUser su ON su.session_id = rl.session_id
-            LEFT JOIN $tableUser coach ON coach.id = su.user_id
-            WHERE rl.c_id = $courseId";
+        $qb = self::dbalQueryBuilder()
+            ->select(
+                'rl.id AS ref',
+                'rl.created_at AS col6',
+                'rl.visibility AS col7',
+                'rn.title AS document_title',
+                'rn.parent_id AS parent_resource_node_id',
+                'rt.title AS resource_type_title',
+                'creator.id AS user_id',
+                'creator.username AS col3',
+                's.title AS session_name',
+                'coach.username AS coach_username'
+            )
+            ->from($tableResourceLink, 'rl')
+            ->innerJoin('rl', $tableResourceNode, 'rn', 'rn.id = rl.resource_node_id')
+            ->innerJoin('rn', $tableResourceType, 'rt', 'rt.id = rn.resource_type_id')
+            ->leftJoin('rn', $tableUser, 'creator', 'creator.id = rn.creator_id')
+            ->leftJoin('rl', $tableSession, 's', 's.id = rl.session_id')
+            ->leftJoin('rl', $tableSessionUser, 'su', 'su.session_id = rl.session_id')
+            ->leftJoin('su', $tableUser, 'coach', 'coach.id = su.user_id')
+            ->where('rl.c_id = :courseId')
+            ->setParameter('courseId', (int) $courseId);
 
         if (empty($sessionId)) {
-            $sql .= ' AND rl.session_id IS NULL';
+            $qb->andWhere('rl.session_id IS NULL');
         } else {
             $sessionId = (int) $sessionId;
-            $sql .= " AND rl.session_id = $sessionId";
+            $qb->andWhere('rl.session_id = :sessionId')->setParameter('sessionId', $sessionId);
         }
 
-        $sql .= " AND rt.title IN ($typesList)";
+        $qb->andWhere('rt.title IN (:allowedTypes)')
+            ->setParameter('allowedTypes', $allowedTypes, ArrayParameterType::STRING);
 
         if (!empty($_GET['keyword'])) {
-            $keyword = Database::escape_string(trim((string) $_GET['keyword']));
-            $sql .= " AND (
-                creator.username LIKE '%$keyword%' OR
-                rn.title         LIKE '%$keyword%' OR
-                rt.title         LIKE '%$keyword%'
-            )";
+            $qb->andWhere('(creator.username LIKE :keyword OR rn.title LIKE :keyword OR rt.title LIKE :keyword)')
+                ->setParameter('keyword', '%'.trim((string) $_GET['keyword']).'%');
         }
 
         // Decide ORDER BY based on requested column.
@@ -177,18 +173,16 @@ class TrackingCourseLog
                 break;
         }
 
-        $sql .= " ORDER BY $orderBy $direction";
+        $qb->orderBy($orderBy, strtoupper($direction));
 
         $from = (int) $from;
         if ($from) {
-            $numberOfItems = (int) $numberOfItems;
-            $sql .= " LIMIT $from, $numberOfItems";
+            $qb->setFirstResult($from)->setMaxResults((int) $numberOfItems);
         }
 
-        $res = Database::query($sql);
         $resources = [];
 
-        while ($row = Database::fetch_array($res)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
             $legacyTool = self::mapResourceTypeTitleToLegacyTool((string) $row['resource_type_title']);
 
             if (null === $legacyTool) {
@@ -485,6 +479,9 @@ class TrackingCourseLog
                             v.field_id=".(int) $fieldId." AND
                             user.user_id IN ($users)";
 
+                // Already broken: user.user_id and v.value do not exist (the columns are user.id and v.field_value),
+                // so this raises an SQL error. Left raw until the owner decides between fixing and removing it.
+                // TODO(db-neutral): broken raw SQL, not migrated
                 $result = Database::query($sql);
                 while ($row = Database::fetch_array($result)) {
                     // get option value for field type double select by id
@@ -686,6 +683,7 @@ class TrackingCourseLog
         $numberOfItems = (int) $numberOfItems;
 
         if ($getCount) {
+            // TODO(db-neutral): the joins/where/extra-fields fragments are SQL strings injected by the callers
             $res = Database::query($sql);
             $row = Database::fetch_array($res);
 
@@ -705,6 +703,7 @@ class TrackingCourseLog
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from, $numberOfItems";
 
+        // TODO(db-neutral): the joins/where/extra-fields fragments are SQL strings injected by the callers
         $res = Database::query($sql);
         $users = [];
 
@@ -1169,6 +1168,9 @@ class TrackingCourseLog
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from,$numberOfItems";
 
+        // Already broken: user.user_id does not exist (the column is user.id), so this raises an SQL error.
+        // Left raw until the owner decides between fixing and removing it.
+        // TODO(db-neutral): broken raw SQL, not migrated
         $res = Database::query($sql);
         $users = [];
 
@@ -1263,33 +1265,33 @@ class TrackingCourseLog
         $resourceNodeTable = Database::get_main_table('resource_node');
         $documentTable = Database::get_course_table(TABLE_DOCUMENT);
 
-        $sessionCondition = self::getResourceLinkSessionCondition('rl', $sessionId);
+        $qb = self::dbalQueryBuilder()
+            ->select(
+                't.down_id',
+                't.down_date',
+                't.down_doc_path',
+                'rl.id AS resource_link_id',
+                'rn.id AS resource_node_id',
+                'rn.title AS resource_title',
+                'rn.path AS resource_path',
+                'd.iid AS document_id',
+                'd.title AS document_title',
+                'd.filetype AS document_filetype'
+            )
+            ->from($trackDownloadsTable, 't')
+            ->innerJoin('t', $resourceLinkTable, 'rl', 'rl.id = t.resource_link_id')
+            ->innerJoin('rl', $resourceNodeTable, 'rn', 'rn.id = rl.resource_node_id')
+            ->leftJoin('rn', $documentTable, 'd', 'd.resource_node_id = rn.id')
+            ->where('t.down_user_id = :userId')
+            ->andWhere('rl.c_id = :courseId')
+            ->andWhere(self::resourceLinkSessionCondition('rl', $sessionId))
+            ->orderBy('t.down_date', 'DESC')
+            ->setMaxResults($limit)
+            ->setParameter('userId', $userId)
+            ->setParameter('courseId', $courseId);
+        self::bindSessionParameter($qb, $sessionId);
 
-        $sql = "SELECT
-                    t.down_id,
-                    t.down_date,
-                    t.down_doc_path,
-                    rl.id AS resource_link_id,
-                    rn.id AS resource_node_id,
-                    rn.title AS resource_title,
-                    rn.path AS resource_path,
-                    d.iid AS document_id,
-                    d.title AS document_title,
-                    d.filetype AS document_filetype
-                FROM $trackDownloadsTable t
-                INNER JOIN $resourceLinkTable rl
-                    ON rl.id = t.resource_link_id
-                INNER JOIN $resourceNodeTable rn
-                    ON rn.id = rl.resource_node_id
-                LEFT JOIN $documentTable d
-                    ON d.resource_node_id = rn.id
-                WHERE t.down_user_id = $userId
-                    AND rl.c_id = $courseId
-                    $sessionCondition
-                ORDER BY t.down_date DESC
-                LIMIT $limit";
-
-        return self::fetchAllAssoc($sql);
+        return self::fetchRows($qb);
     }
 
     /**
@@ -1311,41 +1313,45 @@ class TrackingCourseLog
         $forumTable = Database::get_course_table(TABLE_FORUM);
         $resourceLinkTable = Database::get_main_table('resource_link');
 
-        $postSessionCondition = self::getResourceLinkSessionCondition('rl_post', $sessionId);
-        $threadSessionCondition = self::getResourceLinkSessionCondition('rl_thread', $sessionId);
+        $postSessionCondition = self::resourceLinkSessionCondition('rl_post', $sessionId);
+        $threadSessionCondition = self::resourceLinkSessionCondition('rl_thread', $sessionId);
 
-        $sql = "SELECT
-                    p.iid AS post_id,
-                    p.title AS post_title,
-                    p.post_date,
-                    p.visible,
-                    p.status,
-                    t.iid AS thread_id,
-                    t.title AS thread_title,
-                    f.iid AS forum_id,
-                    f.title AS forum_title
-                FROM $postTable p
-                LEFT JOIN $threadTable t
-                    ON t.iid = p.thread_id
-                LEFT JOIN $forumTable f
-                    ON f.iid = p.forum_id
-                LEFT JOIN $resourceLinkTable rl_post
-                    ON rl_post.resource_node_id = p.resource_node_id
-                    AND rl_post.c_id = $courseId
-                    $postSessionCondition
-                LEFT JOIN $resourceLinkTable rl_thread
-                    ON rl_thread.resource_node_id = t.resource_node_id
-                    AND rl_thread.c_id = $courseId
-                    $threadSessionCondition
-                WHERE p.poster_id = $userId
-                    AND (
-                        rl_post.id IS NOT NULL
-                        OR rl_thread.id IS NOT NULL
-                    )
-                ORDER BY p.post_date DESC
-                LIMIT $limit";
+        $qb = self::dbalQueryBuilder()
+            ->select(
+                'p.iid AS post_id',
+                'p.title AS post_title',
+                'p.post_date',
+                'p.visible',
+                'p.status',
+                't.iid AS thread_id',
+                't.title AS thread_title',
+                'f.iid AS forum_id',
+                'f.title AS forum_title'
+            )
+            ->from($postTable, 'p')
+            ->leftJoin('p', $threadTable, 't', 't.iid = p.thread_id')
+            ->leftJoin('p', $forumTable, 'f', 'f.iid = p.forum_id')
+            ->leftJoin(
+                'p',
+                $resourceLinkTable,
+                'rl_post',
+                "rl_post.resource_node_id = p.resource_node_id AND rl_post.c_id = :courseId AND $postSessionCondition"
+            )
+            ->leftJoin(
+                't',
+                $resourceLinkTable,
+                'rl_thread',
+                "rl_thread.resource_node_id = t.resource_node_id AND rl_thread.c_id = :courseId AND $threadSessionCondition"
+            )
+            ->where('p.poster_id = :userId')
+            ->andWhere('(rl_post.id IS NOT NULL OR rl_thread.id IS NOT NULL)')
+            ->orderBy('p.post_date', 'DESC')
+            ->setMaxResults($limit)
+            ->setParameter('userId', $userId)
+            ->setParameter('courseId', $courseId);
+        self::bindSessionParameter($qb, $sessionId);
 
-        return self::fetchAllAssoc($sql);
+        return self::fetchRows($qb);
     }
 
     /**
@@ -1366,28 +1372,29 @@ class TrackingCourseLog
         $forumTable = Database::get_course_table(TABLE_FORUM);
         $resourceLinkTable = Database::get_main_table('resource_link');
 
-        $sessionCondition = self::getResourceLinkSessionCondition('rl', $sessionId);
+        $qb = self::dbalQueryBuilder()
+            ->select(
+                't.iid AS thread_id',
+                't.title AS thread_title',
+                't.thread_date',
+                't.thread_replies',
+                't.thread_views',
+                'f.iid AS forum_id',
+                'f.title AS forum_title'
+            )
+            ->from($threadTable, 't')
+            ->leftJoin('t', $forumTable, 'f', 'f.iid = t.forum_id')
+            ->innerJoin('t', $resourceLinkTable, 'rl', 'rl.resource_node_id = t.resource_node_id')
+            ->where('t.thread_poster_id = :userId')
+            ->andWhere('rl.c_id = :courseId')
+            ->andWhere(self::resourceLinkSessionCondition('rl', $sessionId))
+            ->orderBy('t.thread_date', 'DESC')
+            ->setMaxResults($limit)
+            ->setParameter('userId', $userId)
+            ->setParameter('courseId', $courseId);
+        self::bindSessionParameter($qb, $sessionId);
 
-        $sql = "SELECT
-                    t.iid AS thread_id,
-                    t.title AS thread_title,
-                    t.thread_date,
-                    t.thread_replies,
-                    t.thread_views,
-                    f.iid AS forum_id,
-                    f.title AS forum_title
-                FROM $threadTable t
-                LEFT JOIN $forumTable f
-                    ON f.iid = t.forum_id
-                INNER JOIN $resourceLinkTable rl
-                    ON rl.resource_node_id = t.resource_node_id
-                WHERE t.thread_poster_id = $userId
-                    AND rl.c_id = $courseId
-                    $sessionCondition
-                ORDER BY t.thread_date DESC
-                LIMIT $limit";
-
-        return self::fetchAllAssoc($sql);
+        return self::fetchRows($qb);
     }
 
     /**
@@ -1406,20 +1413,19 @@ class TrackingCourseLog
 
         $courseAccessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
-        $sql = "SELECT
-                    course_access_id,
-                    login_course_date,
-                    logout_course_date,
-                    counter,
-                    user_ip
-                FROM $courseAccessTable
-                WHERE user_id = $userId
-                    AND c_id = $courseId
-                    AND session_id = $sessionId
-                ORDER BY login_course_date DESC
-                LIMIT $limit";
+        $qb = self::dbalQueryBuilder()
+            ->select('course_access_id', 'login_course_date', 'logout_course_date', 'counter', 'user_ip')
+            ->from($courseAccessTable)
+            ->where('user_id = :userId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->orderBy('login_course_date', 'DESC')
+            ->setMaxResults($limit)
+            ->setParameter('userId', $userId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId);
 
-        return self::fetchAllAssoc($sql);
+        return self::fetchRows($qb);
     }
 
     /**
@@ -1438,28 +1444,62 @@ class TrackingCourseLog
 
         $accessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
-        $sql = "SELECT
-                    access_id,
-                    access_date,
-                    access_tool,
-                    user_ip
-                FROM $accessTable
-                WHERE access_user_id = $userId
-                    AND c_id = $courseId
-                    AND session_id = $sessionId
-                ORDER BY access_date DESC
-                LIMIT $limit";
+        $qb = self::dbalQueryBuilder()
+            ->select('access_id', 'access_date', 'access_tool', 'user_ip')
+            ->from($accessTable)
+            ->where('access_user_id = :userId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->orderBy('access_date', 'DESC')
+            ->setMaxResults($limit)
+            ->setParameter('userId', $userId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId);
 
-        return self::fetchAllAssoc($sql);
+        return self::fetchRows($qb);
     }
 
-    private static function getResourceLinkSessionCondition(string $alias, int $sessionId): string
+    private static function dbalQueryBuilder(): DbalQueryBuilder
+    {
+        return Container::getEntityManager()->getConnection()->createQueryBuilder();
+    }
+
+    /**
+     * Condition on the session of a resource link (the base context also matches NULL). Bind the :sessionId
+     * parameter with bindSessionParameter().
+     */
+    private static function resourceLinkSessionCondition(string $alias, int $sessionId): string
     {
         if ($sessionId > 0) {
-            return " AND $alias.session_id = $sessionId";
+            return "$alias.session_id = :sessionId";
         }
 
-        return " AND ($alias.session_id IS NULL OR $alias.session_id = 0)";
+        return "($alias.session_id IS NULL OR $alias.session_id = 0)";
+    }
+
+    private static function bindSessionParameter(DbalQueryBuilder $qb, int $sessionId): void
+    {
+        if ($sessionId > 0) {
+            $qb->setParameter('sessionId', $sessionId);
+        }
+    }
+
+    /**
+     * Rows as Database::fetch_array() returned them: the named columns, each value repeated under a numeric key.
+     */
+    private static function fetchRows(DbalQueryBuilder $qb): array
+    {
+        $rows = [];
+
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $data) {
+            $row = $data;
+            foreach ($data as $value) {
+                $row[] = $value;
+            }
+            $rows[] = $row;
+        }
+
+        return $rows;
     }
 
     private static function fetchAllAssoc(string $sql): array
@@ -1496,6 +1536,7 @@ class TrackingCourseLog
         $userCondition = self::buildUserIdCondition($userIds, 'ca.user_id');
 
         $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
+        // TODO(db-neutral): SessionTimeLimit::sqlForSeconds() SQL fragment (LEAST/GREATEST/TIMESTAMPDIFF) spliced into the query, and UNIX_TIMESTAMP()
         $durationSql = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::sqlForSeconds('ca.login_course_date', 'ca.logout_course_date', $maxSeconds);
         $sql = "SELECT
                     u.id AS user_id,
@@ -1540,19 +1581,18 @@ class TrackingCourseLog
         $sessionId = (int) $sessionId;
 
         $courseAccessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $userCondition = self::buildUserIdCondition($userIds, 'user_id');
 
-        $sql = "SELECT
-                    user_id,
-                    MAX(login_course_date) AS last_access,
-                    COUNT(course_access_id) AS connection_count
-                FROM $courseAccessTable
-                WHERE c_id = $courseId
-                    AND session_id = $sessionId
-                    $userCondition
-                GROUP BY user_id";
+        $qb = self::dbalQueryBuilder()
+            ->select('user_id', 'MAX(login_course_date) AS last_access', 'COUNT(course_access_id) AS connection_count')
+            ->from($courseAccessTable)
+            ->where('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->groupBy('user_id')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId);
+        self::andUserIdIn($qb, $userIds, 'user_id');
 
-        $rows = self::fetchAllAssoc($sql);
+        $rows = self::fetchRows($qb);
         $map = [];
 
         foreach ($rows as $row) {
@@ -1651,24 +1691,29 @@ class TrackingCourseLog
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
         $limit = max(1, min(500, (int) $limit));
-        $sinceDate = Database::escape_string($since->format('Y-m-d H:i:s'));
 
         $accessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
 
-        $sql = "SELECT
-                    access_tool,
-                    COUNT(access_id) AS event_count,
-                    COUNT(DISTINCT access_user_id) AS user_count,
-                    MAX(access_date) AS last_access
-                FROM $accessTable
-                WHERE c_id = $courseId
-                    AND session_id = $sessionId
-                    AND access_date >= '$sinceDate'
-                GROUP BY access_tool
-                ORDER BY event_count DESC, access_tool ASC
-                LIMIT $limit";
+        $qb = self::dbalQueryBuilder()
+            ->select(
+                'access_tool',
+                'COUNT(access_id) AS event_count',
+                'COUNT(DISTINCT access_user_id) AS user_count',
+                'MAX(access_date) AS last_access'
+            )
+            ->from($accessTable)
+            ->where('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('access_date >= :sinceDate')
+            ->groupBy('access_tool')
+            ->orderBy('COUNT(access_id)', 'DESC')
+            ->addOrderBy('access_tool', 'ASC')
+            ->setMaxResults($limit)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('sinceDate', $since->format('Y-m-d H:i:s'));
 
-        return self::fetchAllAssoc($sql);
+        return self::fetchRows($qb);
     }
 
     /**
@@ -1682,21 +1727,43 @@ class TrackingCourseLog
     ): int {
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
-        $sinceDate = Database::escape_string($since->format('Y-m-d H:i:s'));
-        $userCondition = self::buildUserIdCondition($userIds, 'user_id');
         $courseAccessTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
-        $sql = "SELECT COUNT(DISTINCT user_id) AS total
-                FROM $courseAccessTable
-                WHERE c_id = $courseId
-                    AND session_id = $sessionId
-                    AND login_course_date >= '$sinceDate'
-                    $userCondition";
+        $qb = self::dbalQueryBuilder()
+            ->select('COUNT(DISTINCT user_id) AS total')
+            ->from($courseAccessTable)
+            ->where('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('login_course_date >= :sinceDate')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('sinceDate', $since->format('Y-m-d H:i:s'));
+        self::andUserIdIn($qb, $userIds, 'user_id');
 
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
+        return (int) ($qb->executeQuery()->fetchOne() ?: 0);
+    }
 
-        return (int) ($row['total'] ?? 0);
+    /**
+     * Same filter as buildUserIdCondition() on a QueryBuilder: positive ids only, no filter when none is left.
+     *
+     * @param int[] $userIds
+     */
+    private static function andUserIdIn(DbalQueryBuilder $qb, array $userIds, string $field): void
+    {
+        $ids = array_values(
+            array_unique(
+                array_filter(
+                    array_map('intval', $userIds),
+                    static fn (int $id): bool => $id > 0
+                )
+            )
+        );
+
+        if (empty($ids)) {
+            return;
+        }
+
+        $qb->andWhere($field.' IN (:userIds)')->setParameter('userIds', $ids, ArrayParameterType::INTEGER);
     }
 
     /**

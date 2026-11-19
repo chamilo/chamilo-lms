@@ -102,4 +102,47 @@ final class CourseManagerTier3CharacterizationTest extends KernelTestCase
 
         $this->assertEquals($catId, CourseManager::get_session_category_id_by_session_id($sid));
     }
+
+    // ---------------------------------------------------------------- settings and sort
+
+    public function testGetCourseSettingReturnsTheRowOfThatCourseAndVariable(): void
+    {
+        $a = $this->createCourse('cm3_setting_a');
+        $b = $this->createCourse('cm3_setting_b');
+        foreach ([[$a, 'cm3_var', 'A'], [$b, 'cm3_var', 'B'], [$a, 'cm3_other', 'O']] as [$course, $variable, $value]) {
+            $this->conn()->executeStatement(
+                "INSERT INTO c_course_setting (c_id, variable, value, type, category, title) VALUES (?, ?, ?, 'checkbox', 'cm3', 'cm3')",
+                [$course->getId(), $variable, $value]
+            );
+        }
+
+        $row = CourseManager::getCourseSetting("cm3_var", $a->getId());
+        $this->assertSame('A', $row['value']);
+        $this->assertSame('cm3_var', $row['variable']);
+        $this->assertSame('A', $row[1], 'fetch_array adds numeric keys');
+        $this->assertSame([], CourseManager::getCourseSetting("cm3_var'x", $a->getId()), 'no row gives an empty array');
+    }
+
+    public function testUserCourseSortWithoutAlphabeticalPlaceMovesEveryUncategorizedCourseDown(): void
+    {
+        $z1 = $this->createCourse('cm3_sort_z1');
+        $z2 = $this->createCourse('cm3_sort_z2');
+        $hr = $this->createCourse('cm3_sort_hr');
+        $cat = $this->createCourse('cm3_sort_cat');
+        $new = $this->createCourse('cm3_sort_a');
+        $user = $this->createUser('cm3_sort_user');
+        $this->sub($user, $z1, STUDENT, 0, 1);
+        $this->sub($user, $z2, STUDENT, 0, 2);
+        $this->sub($user, $hr, STUDENT, COURSE_RELATION_TYPE_RRHH, 5);
+        $this->sub($user, $cat, STUDENT, 0, 9, 7);
+
+        // The new course sorts before all of them: it takes the lowest sort value and the others are pushed down.
+        $this->assertSame(1, CourseManager::userCourseSort($user->getId(), $new->getCode()));
+
+        $sorts = $this->conn()->fetchAllKeyValue('SELECT c_id, sort FROM course_rel_user WHERE user_id = ?', [$user->getId()]);
+        $this->assertSame(2, (int) $sorts[$z1->getId()]);
+        $this->assertSame(3, (int) $sorts[$z2->getId()]);
+        $this->assertSame(6, (int) $sorts[$hr->getId()], 'the HR relation is shifted too in this branch');
+        $this->assertSame(9, (int) $sorts[$cat->getId()], 'a course inside a user category is not shifted');
+    }
 }

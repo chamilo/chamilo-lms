@@ -2848,14 +2848,17 @@ class CourseManager
             return 0;
         }
 
-        $course_code = Database::escape_string($course_code);
         $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $connection = Database::getManager()->getConnection();
 
         $course_title = Database::result(
-            Database::query(
-                "SELECT title FROM $TABLECOURSE WHERE code = '$course_code'"
-            ),
+            $connection->createQueryBuilder()
+                ->select('title')
+                ->from($TABLECOURSE)
+                ->where('code = :code')
+                ->setParameter('code', (string) $course_code)
+                ->executeQuery(),
             0,
             0
         );
@@ -2863,13 +2866,17 @@ class CourseManager
             $course_title = '';
         }
 
-        $sql = "SELECT course.code as code, course.title as title, cu.sort as sort
-                FROM $TABLECOURSUSER as cu, $TABLECOURSE as course
-                WHERE   course.id = cu.c_id AND user_id = $user_id AND
-                        cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
-                        user_course_cat = 0
-                ORDER BY cu.sort";
-        $result = Database::query($sql);
+        $result = $connection->createQueryBuilder()
+            ->select('course.code AS code', 'course.title AS title', 'cu.sort AS sort')
+            ->from($TABLECOURSUSER, 'cu')
+            ->innerJoin('cu', $TABLECOURSE, 'course', 'course.id = cu.c_id')
+            ->where('cu.user_id = :userId')
+            ->andWhere('cu.relation_type <> :rrhh')
+            ->andWhere('cu.user_course_cat = 0')
+            ->orderBy('cu.sort')
+            ->setParameter('userId', $user_id)
+            ->setParameter('rrhh', COURSE_RELATION_TYPE_RRHH)
+            ->executeQuery();
 
         $course_title_precedent = '';
         $counter = 0;
@@ -2887,23 +2894,29 @@ class CourseManager
                         $course_sort = $courses['sort'];
                     }
                     if (0 == $counter) {
-                        $sql = "UPDATE $TABLECOURSUSER
-                                SET sort = sort+1
-                                WHERE
-                                    user_id= $user_id AND
-                                    relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                                    AND user_course_cat = 0
-                                    AND sort > $course_sort";
+                        $connection->createQueryBuilder()
+                            ->update($TABLECOURSUSER)
+                            ->set('sort', 'sort + 1')
+                            ->where('user_id = :userId')
+                            ->andWhere('relation_type <> :rrhh')
+                            ->andWhere('user_course_cat = 0')
+                            ->andWhere('sort > :sort')
+                            ->setParameter('userId', $user_id)
+                            ->setParameter('rrhh', COURSE_RELATION_TYPE_RRHH)
+                            ->setParameter('sort', (int) $course_sort)
+                            ->executeStatement();
                         $course_sort++;
                     } else {
+                        // Not pinned by a test: this branch cannot be reached, the title compared is always the first one
+                        // TODO(db-neutral): left raw, unreachable and untested
                         $sql = "UPDATE $TABLECOURSUSER SET sort = sort+1
                                 WHERE
                                     user_id= $user_id AND
                                     relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
                                     user_course_cat = 0 AND
                                     sort >= $course_sort";
+                        Database::query($sql);
                     }
-                    Database::query($sql);
                     break;
                 } else {
                     $course_title_precedent = $courses['title'];
@@ -2914,13 +2927,23 @@ class CourseManager
             // We must register the course in the beginning of the list
             if (!$course_found) {
                 $course_sort = Database::result(
-                    Database::query(
-                        'SELECT min(sort) as min_sort FROM '.$TABLECOURSUSER.' WHERE user_id = "'.$user_id.'" AND user_course_cat="0"'
-                    ),
+                    $connection->createQueryBuilder()
+                        ->select('MIN(sort) AS min_sort')
+                        ->from($TABLECOURSUSER)
+                        ->where('user_id = :userId')
+                        ->andWhere('user_course_cat = 0')
+                        ->setParameter('userId', $user_id)
+                        ->executeQuery(),
                     0,
                     0
                 );
-                Database::query("UPDATE $TABLECOURSUSER SET sort = sort+1 WHERE user_id = $user_id AND user_course_cat = 0");
+                $connection->createQueryBuilder()
+                    ->update($TABLECOURSUSER)
+                    ->set('sort', 'sort + 1')
+                    ->where('user_id = :userId')
+                    ->andWhere('user_course_cat = 0')
+                    ->setParameter('userId', $user_id)
+                    ->executeStatement();
             }
         }
 
@@ -3020,8 +3043,11 @@ class CourseManager
         $courseList = [];
 
         // Get list of special courses (appear to all)
-        $sql = "SELECT id FROM $courseTable WHERE sticky = 1";
-        $result = Database::query($sql);
+        $result = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('id')
+            ->from($courseTable)
+            ->where('sticky = 1')
+            ->executeQuery();
         while ($row = Database::fetch_assoc($result)) {
             $courseList[] = $row['id'];
         }
@@ -5752,12 +5778,14 @@ class CourseManager
      */
     public static function getCourseSetting($variable, $courseId)
     {
-        $courseSetting = Database::get_course_table(TABLE_COURSE_SETTING);
-        $courseId = (int) $courseId;
-        $variable = Database::escape_string($variable);
-        $sql = "SELECT variable, value FROM $courseSetting
-                WHERE c_id = $courseId AND variable = '$variable'";
-        $result = Database::query($sql);
+        $result = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('variable', 'value')
+            ->from(Database::get_course_table(TABLE_COURSE_SETTING))
+            ->where('c_id = :courseId')
+            ->andWhere('variable = :variable')
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('variable', (string) $variable)
+            ->executeQuery();
 
         return Database::fetch_array($result);
     }

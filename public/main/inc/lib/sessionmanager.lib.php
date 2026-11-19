@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
@@ -1847,19 +1848,19 @@ class SessionManager
     {
         $session_name_ok = !self::sessionNameExists($session_name);
         if (!$session_name_ok) {
-            $table = Database::get_main_table(TABLE_MAIN_SESSION);
-            $session_name = Database::escape_string($session_name);
-            $sql = "SELECT count(*) as count FROM $table
-                    WHERE title LIKE '$session_name%'";
-            $result = Database::query($sql);
-            if (Database::num_rows($result) > 0) {
-                $row = Database::fetch_array($result);
-                $count = $row['count'] + 1;
-                $session_name = $session_name.'_'.$count;
-                $result = self::sessionNameExists($session_name);
-                if (!$result) {
-                    return $session_name;
-                }
+            $session_name = (string) $session_name;
+            $count = (int) Container::getEntityManager()->createQueryBuilder()
+                ->select('COUNT(s.id)')
+                ->from(Session::class, 's')
+                ->where('s.title LIKE :prefix')
+                ->setParameter('prefix', $session_name.'%')
+                ->getQuery()
+                ->getSingleScalarResult();
+            $count++;
+            $session_name = $session_name.'_'.$count;
+            $result = self::sessionNameExists($session_name);
+            if (!$result) {
+                return $session_name;
             }
 
             return false;
@@ -4679,33 +4680,22 @@ class SessionManager
      */
     public static function getCourseCountBySessionId($session_id, $keyword = '')
     {
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $session_id = (int) $session_id;
 
         // select the courses
-        $sql = "SELECT COUNT(c.code) count
-                FROM $tbl_course c
-                INNER JOIN $tbl_session_rel_course src
-                ON c.id = src.c_id
-		        WHERE src.session_id = '$session_id' ";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(c.code)')
+            ->from(SessionRelCourse::class, 'src')
+            ->innerJoin('src.course', 'c')
+            ->where('IDENTITY(src.session) = :sessionId')
+            ->setParameter('sessionId', $session_id);
 
-        $keywordCondition = null;
         if (!empty($keyword)) {
-            $keyword = Database::escape_string($keyword);
-            $keywordCondition = " AND (c.code LIKE '%$keyword%' OR c.title LIKE '%$keyword%' ) ";
-        }
-        $sql .= $keywordCondition;
-
-        $result = Database::query($sql);
-        $num_rows = Database::num_rows($result);
-        if ($num_rows > 0) {
-            $row = Database::fetch_assoc($result);
-
-            return $row['count'];
+            $qb->andWhere('(c.code LIKE :keyword OR c.title LIKE :keyword)')
+                ->setParameter('keyword', '%'.$keyword.'%');
         }
 
-        return null;
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -5244,18 +5234,18 @@ class SessionManager
      */
     public static function count_sessions($access_url_id = 0)
     {
-        $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $access_url_rel_session_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $access_url_id = (int) $access_url_id;
-        $sql = "SELECT count(s.id) FROM $session_table s";
+        $qb = Container::getEntityManager()->createQueryBuilder()->select('COUNT(s.id)');
         if (!empty($access_url_id)) {
-            $sql .= ", $access_url_rel_session_table u ".
-                " WHERE s.id = u.session_id AND u.access_url_id = $access_url_id";
+            $qb->from(AccessUrlRelSession::class, 'u')
+                ->innerJoin('u.session', 's')
+                ->where('IDENTITY(u.url) = :urlId')
+                ->setParameter('urlId', $access_url_id);
+        } else {
+            $qb->from(Session::class, 's');
         }
-        $res = Database::query($sql);
-        $row = Database::fetch_row($res);
 
-        return $row[0];
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     public static function cantEditSession(?Session $session = null, bool $checkSession = true): bool
@@ -10784,11 +10774,14 @@ class SessionManager
     public static function getListOfParentSessions(): array
     {
         $sessions = [];
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $sql = "SELECT id, title FROM $tbl_session ORDER BY title";
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('s.id AS id', 's.title AS title')
+            ->from(Session::class, 's')
+            ->orderBy('s.title', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
 
-        while ($row = Database::fetch_array($result)) {
+        foreach ($rows as $row) {
             $sessions[$row['id']] = $row['title'];
         }
 
@@ -11022,17 +11015,18 @@ class SessionManager
             return [];
         }
 
-        $tableSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-
-        $sql = "SELECT user_id
-            FROM $tableSessionRelUser
-            WHERE session_id = $sessionId
-              AND relation_type = ".Session::STUDENT;
-
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(sru.user) AS user_id')
+            ->from(SessionRelUser::class, 'sru')
+            ->where('IDENTITY(sru.session) = :sessionId')
+            ->andWhere('sru.relationType = :relationType')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('relationType', Session::STUDENT)
+            ->getQuery()
+            ->getArrayResult();
         $userIds = [];
 
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             $userId = (int) $row['user_id'];
             $userIds[$userId] = $userId;
         }

@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldOptionsRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use ChamiloSession as Session;
 use Doctrine\ORM\Exception\NotSupported;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -695,30 +696,24 @@ class ExtraFieldValue extends Model
         $filterByVisibility = false,
         $visibility = 0
     ) {
-        $item_id = (int) $item_id;
-        $field_variable = Database::escape_string($field_variable);
-        $extraFieldType = $this->getExtraField()->getItemType();
-
-        $sql = "SELECT s.*, value_type
-                FROM {$this->table} s
-                INNER JOIN {$this->table_handler_field} sf
-                ON (s.field_id = sf.id)
-                WHERE
-                    item_id = '$item_id'  AND
-                    variable = '".$field_variable."' AND
-                    sf.item_type = $extraFieldType
-                ";
+        $qb = $this->valueRowsQueryBuilder()
+            ->addSelect('sf.valueType AS value_type')
+            ->andWhere('s.itemId = :itemId')
+            ->andWhere('sf.variable = :variable')
+            ->setParameter('itemId', (int) $item_id)
+            ->setParameter('variable', (string) $field_variable)
+            ->orderBy('s.id')
+            ->setMaxResults(1)
+        ;
         if ($filterByVisibility) {
-            $visibility = (int) $visibility;
-            $sql .= " AND visible_to_self = $visibility ";
+            $qb->andWhere('sf.visibleToSelf = :visibility')->setParameter('visibility', (int) $visibility);
         }
-        $sql .= ' ORDER BY id';
 
         $repo = Container::getAssetRepository();
 
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $result = Database::fetch_assoc($result);
+        $result = $qb->getQuery()->getArrayResult()[0] ?? null;
+        if (null !== $result) {
+            $result = $this->toLegacyValueRow($result);
             $result['value'] = $result['field_value'];
             if ($transform) {
                 $fieldType = $result['value_type'];
@@ -780,6 +775,44 @@ class ExtraFieldValue extends Model
     }
 
     /**
+     * The value rows of the fields of this handler's item type, with every column of the values table aliased to
+     * the snake_case keys the legacy callers read. The field is joined as "sf".
+     */
+    private function valueRowsQueryBuilder(): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                's.id AS id',
+                'IDENTITY(s.field) AS field_id',
+                'IDENTITY(s.asset) AS asset_id',
+                's.fieldValue AS field_value',
+                's.itemId AS item_id',
+                's.comment AS comment',
+                's.createdAt AS created_at',
+                's.updatedAt AS updated_at'
+            )
+            ->from(ExtraFieldValues::class, 's')
+            ->innerJoin('s.field', 'sf')
+            ->where('sf.itemType = :extraFieldType')
+            ->setParameter('extraFieldType', (int) $this->getExtraField()->getItemType())
+        ;
+    }
+
+    /**
+     * The raw table row used to come back with the dates as strings: keep that shape.
+     */
+    private function toLegacyValueRow(array $row): array
+    {
+        foreach (['created_at', 'updated_at'] as $date) {
+            if (($row[$date] ?? null) instanceof DateTimeInterface) {
+                $row[$date] = $row[$date]->format('Y-m-d H:i:s');
+            }
+        }
+
+        return $row;
+    }
+
+    /**
      * Gets the ID from the item (course, session, etc) for which
      * the given field is defined with the given value.
      *
@@ -800,40 +833,28 @@ class ExtraFieldValue extends Model
         $all = false,
         $useLike = false
     ) {
-        $value = Database::escape_string($value);
-        $variable = Database::escape_string($variable);
-
-        $valueCondition = " field_value  = '$value' AND ";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('s.itemId AS item_id')
+            ->from(ExtraFieldValues::class, 's')
+            ->innerJoin('s.field', 'sf')
+            ->where('sf.variable = :variable')
+            ->andWhere('sf.itemType = :extraFieldType')
+            ->setParameter('variable', (string) $variable)
+            ->setParameter('extraFieldType', (int) $this->getExtraField()->getItemType())
+            ->orderBy('s.itemId', $last ? 'DESC' : 'ASC')
+        ;
         if ($useLike) {
-            $valueCondition = " field_value LIKE '%".$value."%' AND ";
+            $qb->andWhere('s.fieldValue LIKE :value')->setParameter('value', '%'.$value.'%');
+        } else {
+            $qb->andWhere('s.fieldValue = :value')->setParameter('value', (string) $value);
         }
-        $extraFieldType = $this->getExtraField()->getItemType();
-
-        $sql = "SELECT item_id FROM {$this->table} s
-                INNER JOIN {$this->table_handler_field} sf
-                ON (s.field_id = sf.id)
-                WHERE
-                    $valueCondition
-                    variable = '".$variable."' AND
-                    sf.item_type = $extraFieldType
-                ORDER BY item_id
-                ";
-
-        if ($last) {
-            // If we want the last element instead of the first
-            // This is useful in special cases where there might
-            // (erroneously) be more than one row for an item
-            $sql .= ' DESC';
+        if (!$all) {
+            $qb->setMaxResults(1);
         }
-        $result = Database::query($sql);
-        if (false !== $result && Database::num_rows($result)) {
-            if ($all) {
-                $result = Database::store_result($result, 'ASSOC');
-            } else {
-                $result = Database::fetch_assoc($result);
-            }
 
-            return $result;
+        $rows = $qb->getQuery()->getArrayResult();
+        if ([] !== $rows) {
+            return $all ? $rows : $rows[0];
         }
 
         return false;
@@ -848,23 +869,15 @@ class ExtraFieldValue extends Model
      */
     public function getValuesByFieldId($fieldId)
     {
-        $fieldId = (int) $fieldId;
-        $extraFieldType = $this->getExtraField()->getItemType();
+        $rows = $this->valueRowsQueryBuilder()
+            ->andWhere('IDENTITY(s.field) = :fieldId')
+            ->setParameter('fieldId', (int) $fieldId)
+            ->orderBy('s.fieldValue')
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        $sql = "SELECT s.* FROM {$this->table} s
-                INNER JOIN {$this->table_handler_field} sf
-                ON (s.field_id = sf.id)
-                WHERE
-                    field_id = '".$fieldId."' AND
-                    sf.item_type = $extraFieldType
-                ORDER BY s.field_value";
-        $result = Database::query($sql);
-
-        if (Database::num_rows($result)) {
-            return Database::store_result($result, 'ASSOC');
-        }
-
-        return false;
+        return [] === $rows ? false : array_map([$this, 'toLegacyValueRow'], $rows);
     }
 
     /**
@@ -875,25 +888,17 @@ class ExtraFieldValue extends Model
      */
     public function getAllValuesByItemAndField($itemId, $fieldId)
     {
-        $fieldId = (int) $fieldId;
-        $itemId = (int) $itemId;
-        $extraFieldType = $this->getExtraField()->getItemType();
+        $rows = $this->valueRowsQueryBuilder()
+            ->andWhere('IDENTITY(s.field) = :fieldId')
+            ->andWhere('s.itemId = :itemId')
+            ->setParameter('fieldId', (int) $fieldId)
+            ->setParameter('itemId', (int) $itemId)
+            ->orderBy('s.fieldValue')
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        $sql = "SELECT s.* FROM {$this->table} s
-                INNER JOIN {$this->table_handler_field} sf
-                ON (s.field_id = sf.id)
-                WHERE
-                    field_id = $fieldId AND
-                    item_id = $itemId AND
-                    sf.item_type = $extraFieldType
-                ORDER BY s.field_value";
-        $result = Database::query($sql);
-
-        if (Database::num_rows($result)) {
-            return Database::store_result($result, 'ASSOC');
-        }
-
-        return false;
+        return [] === $rows ? false : array_map([$this, 'toLegacyValueRow'], $rows);
     }
 
     /**
@@ -904,21 +909,29 @@ class ExtraFieldValue extends Model
     public function getAllValuesByItem($itemId)
     {
         $itemId = (int) $itemId;
-        $extraFieldType = $this->getExtraField()->getItemType();
 
-        $sql = "SELECT s.field_value, s.field_value as value, sf.variable, sf.value_type, sf.id, sf.display_text, s.asset_id
-                FROM {$this->table} s
-                INNER JOIN {$this->table_handler_field} sf
-                ON (s.field_id = sf.id)
-                WHERE
-                    item_id = '$itemId' AND
-                    sf.item_type = $extraFieldType
-                ORDER BY s.field_value";
-
-        $result = Database::query($sql);
+        $result = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                's.fieldValue AS field_value',
+                's.fieldValue AS value',
+                'sf.variable AS variable',
+                'sf.valueType AS value_type',
+                'sf.id AS id',
+                'sf.displayText AS display_text',
+                'IDENTITY(s.asset) AS asset_id'
+            )
+            ->from(ExtraFieldValues::class, 's')
+            ->innerJoin('s.field', 'sf')
+            ->where('s.itemId = :itemId')
+            ->andWhere('sf.itemType = :extraFieldType')
+            ->setParameter('itemId', $itemId)
+            ->setParameter('extraFieldType', (int) $this->getExtraField()->getItemType())
+            ->orderBy('s.fieldValue')
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $idList = [];
-        if (Database::num_rows($result)) {
-            $result = Database::store_result($result, 'ASSOC');
+        if ([] !== $result) {
             $finalResult = [];
 
             $repo = Container::getAssetRepository();
@@ -990,27 +1003,19 @@ class ExtraFieldValue extends Model
      */
     public function getAllValuesByItemAndFieldAndValue($itemId, $fieldId, $fieldValue)
     {
-        $fieldId = (int) $fieldId;
-        $itemId = (int) $itemId;
-        $extraFieldType = $this->getExtraField()->getItemType();
+        $rows = $this->valueRowsQueryBuilder()
+            ->andWhere('IDENTITY(s.field) = :fieldId')
+            ->andWhere('s.itemId = :itemId')
+            ->andWhere('s.fieldValue = :fieldValue')
+            ->setParameter('fieldId', (int) $fieldId)
+            ->setParameter('itemId', (int) $itemId)
+            ->setParameter('fieldValue', (string) $fieldValue)
+            ->orderBy('s.fieldValue')
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        $fieldValue = Database::escape_string($fieldValue);
-        $sql = "SELECT s.* FROM {$this->table} s
-                INNER JOIN {$this->table_handler_field} sf
-                ON (s.field_id = sf.id)
-                WHERE
-                    field_id = '$fieldId' AND
-                    item_id = '$itemId' AND
-                    field_value = '$fieldValue' AND
-                    sf.item_type = $extraFieldType
-                ORDER BY field_value";
-
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            return Database::store_result($result, 'ASSOC');
-        }
-
-        return false;
+        return [] === $rows ? false : array_map([$this, 'toLegacyValueRow'], $rows);
     }
 
     /**
@@ -1022,11 +1027,13 @@ class ExtraFieldValue extends Model
      */
     public function delete_all_values_by_field_id($field_id)
     {
-        $field_id = (int) $field_id;
-        $sql = "DELETE FROM {$this->table}
-                WHERE
-                    field_id = $field_id ";
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->delete(ExtraFieldValues::class, 's')
+            ->where('IDENTITY(s.field) = :fieldId')
+            ->setParameter('fieldId', (int) $field_id)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -1038,13 +1045,19 @@ class ExtraFieldValue extends Model
     public function deleteValuesByItem($itemId)
     {
         $itemId = (int) $itemId;
-        $extraFieldType = $this->getExtraField()->getItemType();
-        $sql = "SELECT DISTINCT fv.id, field_value, value_type FROM {$this->table} fv
-                INNER JOIN {$this->table_handler_field} f
-                ON (fv.field_id = f.id)
-                WHERE item_type = $extraFieldType AND item_id = $itemId";
-        $result = Database::query($sql);
-        $result = Database::store_result($result, 'ASSOC');
+        $extraFieldType = (int) $this->getExtraField()->getItemType();
+        $result = Container::getEntityManager()->createQueryBuilder()
+            ->select('fv.id AS id', 'fv.fieldValue AS field_value', 'f.valueType AS value_type')
+            ->distinct()
+            ->from(ExtraFieldValues::class, 'fv')
+            ->innerJoin('fv.field', 'f')
+            ->where('f.itemType = :extraFieldType')
+            ->andWhere('fv.itemId = :itemId')
+            ->setParameter('extraFieldType', $extraFieldType)
+            ->setParameter('itemId', $itemId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $em = Database::getManager();
         $repo = Container::getAssetRepository();
         foreach ($result as $item) {
@@ -1060,15 +1073,21 @@ class ExtraFieldValue extends Model
         }
         $em->flush();
 
-        $sql = "DELETE FROM {$this->table}
-                WHERE
-                    item_id = '$itemId' AND
-                    field_id IN (
-                        SELECT id FROM {$this->table_handler_field}
-                        WHERE item_type = $extraFieldType
-                    )
-                ";
-        Database::query($sql);
+        $fieldIds = Container::getEntityManager()->createQueryBuilder()
+            ->select('ef.id')
+            ->from(EntityExtraField::class, 'ef')
+            ->where('ef.itemType = :extraFieldType')
+            ->getDQL()
+        ;
+        Container::getEntityManager()->createQueryBuilder()
+            ->delete(ExtraFieldValues::class, 's')
+            ->where('s.itemId = :itemId')
+            ->andWhere('IDENTITY(s.field) IN ('.$fieldIds.')')
+            ->setParameter('itemId', $itemId)
+            ->setParameter('extraFieldType', $extraFieldType)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -1084,15 +1103,17 @@ class ExtraFieldValue extends Model
         $fieldId = (int) $fieldId;
         $fieldData = $this->getExtraField()->get($fieldId);
         if ($fieldData) {
-            $fieldValue = Database::escape_string($fieldValue);
-
-            $sql = "DELETE FROM {$this->table}
-                    WHERE
-                        item_id = '$itemId' AND
-                        field_id = '$fieldId' AND
-                        field_value = '$fieldValue'
-                    ";
-            Database::query($sql);
+            Container::getEntityManager()->createQueryBuilder()
+                ->delete(ExtraFieldValues::class, 's')
+                ->where('s.itemId = :itemId')
+                ->andWhere('IDENTITY(s.field) = :fieldId')
+                ->andWhere('s.fieldValue = :fieldValue')
+                ->setParameter('itemId', $itemId)
+                ->setParameter('fieldId', $fieldId)
+                ->setParameter('fieldValue', (string) $fieldValue)
+                ->getQuery()
+                ->execute()
+            ;
 
             // Delete file from uploads.
             if (isset($fieldData['asset_id']) &&

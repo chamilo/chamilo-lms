@@ -125,7 +125,7 @@ final class GradebookUtilsCharacterizationTest extends KernelTestCase
         $this->conn->executeStatement(
             "INSERT INTO gradebook_category (c_id, session_id, title, weight, visible, locked, generate_certificates,
                 is_requirement, calculation_mode)
-             VALUES (?, ?, ?, 100, 1, 0, 0, 0, 'weighted')",
+             VALUES (?, ?, ?, 100, 1, 0, 0, 0, 'weighted_average')",
             [$courseId, $sessionId, 'gu_cat_'.(++$this->seq)]
         );
 

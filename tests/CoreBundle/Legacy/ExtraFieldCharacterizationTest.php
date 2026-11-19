@@ -170,6 +170,51 @@ class ExtraFieldCharacterizationTest extends AbstractApiTest
         $this->assertSame('A', $info['options'][$first]['display_text']);
     }
 
+    public function testGetHandlerFieldInfoKeepsTheRawRowShapeWithIntFlagsDateStringAndFetchArrayOptions(): void
+    {
+        $id = $this->field(self::USER, 'shape', ExtraField::FIELD_TYPE_SELECT);
+        $option = $this->option($id, 'a', 'A', 1);
+
+        $info = (new ExtraField('user'))->get_handler_field_info_by_field_variable('xf_shape');
+
+        foreach (['visible_to_self', 'visible_to_others', 'changeable', 'filter', 'auto_remove'] as $flag) {
+            $this->assertIsInt($info[$flag], $flag);
+        }
+        $this->assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $info['created_at']);
+        $this->assertSame('a', $info['options'][$option]['option_value']);
+        $this->assertSame($option, $info['options'][$option][0], 'Options are fetch_array() rows: numeric keys too.');
+    }
+
+    public function testSearchOptionsFromTagsOrdersByOptionOrderThenTagAndCollapsesDuplicates(): void
+    {
+        $from = $this->field(self::USER, 'ord_select', ExtraField::FIELD_TYPE_SELECT);
+        $tagField = $this->field(self::USER, 'ord_tag', ExtraField::FIELD_TYPE_TAG);
+        $this->option($from, 'xf_p2', 'Second', 2);
+        $this->option($from, 'xf_p1', 'First', 1);
+        $tags = [];
+        foreach (['xf_tz', 'xf_ta'] as $tag) {
+            $this->conn()->executeStatement('INSERT INTO tag (tag, field_id, count) VALUES (?, ?, 1)', [$tag, $tagField]);
+            $tags[$tag] = (int) $this->conn()->lastInsertId();
+        }
+        foreach ([$tags['xf_tz'], $tags['xf_ta'], $tags['xf_ta']] as $tagId) {
+            $this->conn()->executeStatement('INSERT INTO extra_field_rel_tag (field_id, tag_id, item_id) VALUES (?, ?, 7)', [$tagField, $tagId]);
+        }
+        foreach (['xf_p2', 'xf_p1'] as $value) {
+            $this->conn()->executeStatement(
+                'INSERT INTO extra_field_values (field_id, field_value, item_id, created_at, updated_at) VALUES (?, ?, 7, NOW(), NOW())',
+                [$from, $value]
+            );
+        }
+
+        $rows = (new ExtraField('user'))->searchOptionsFromTags('extra_xf_ord_select', 'extra_xf_ord_tag', ['xf_p1', 'xf_p2']);
+
+        $this->assertSame(
+            [['xf_p1', 'xf_ta'], ['xf_p1', 'xf_tz'], ['xf_p2', 'xf_ta'], ['xf_p2', 'xf_tz']],
+            array_map(static fn (array $r): array => [$r['value'], $r['tag']], $rows),
+            'DISTINCT collapses the duplicated tag link; rows are ordered by option_order, then tag.'
+        );
+    }
+
     public function testGetHandlerFieldInfoByVariableIsScopedByItemTypeAndFalseWhenMissing(): void
     {
         $this->field(self::COURSE, 'scoped');

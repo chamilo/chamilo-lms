@@ -3,10 +3,20 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Entity\SessionRelCourse;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\CoreBundle\Entity\SettingsOptions;
+use Chamilo\CoreBundle\Entity\Tool;
+use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserCourseCategory;
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -17,9 +27,19 @@ use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Helpers\MailHelper;
 use Chamilo\CoreBundle\Helpers\PermissionHelper;
 use Chamilo\CoreBundle\Helpers\ThemeHelper;
+use Chamilo\CourseBundle\Entity\CAnnouncement;
+use Chamilo\CourseBundle\Entity\CAttendance;
+use Chamilo\CourseBundle\Entity\CCalendarEvent;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
+use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CStudentPublication;
+use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Entity\CTool;
 use ChamiloSession as Session;
+use Doctrine\ORM\QueryBuilder;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -1117,13 +1137,16 @@ function api_block_inactive_user()
         return $data;
     }
 
-    $sql = "SELECT active FROM ".Database::get_main_table(TABLE_MAIN_USER)."
-            WHERE id = $userId";
-
-    $result = Database::query($sql);
-    if (Database::num_rows($result) > 0) {
-        $result_array = Database::fetch_array($result);
-        $data = (bool) $result_array['active'];
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select('u.active AS active')
+        ->from(User::class, 'u')
+        ->where('u.id = :userId')
+        ->setParameter('userId', (int) $userId)
+        ->getQuery()
+        ->getArrayResult()
+    ;
+    if ([] !== $rows) {
+        $data = (bool) $rows[0]['active'];
     }
     if (false == $data) {
         $tpl = new Template(null, true, true, false, true, false, true, 0);
@@ -1547,11 +1570,10 @@ function api_get_user_info(
         return false;
     }
 
-    $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
-            WHERE id = $user_id";
-    $result = Database::query($sql);
-    if (Database::num_rows($result) > 0) {
-        $result_array = Database::fetch_array($result);
+    $result_array = _api_user_row(
+        _api_user_rows_query_builder()->where('u.id = :userId')->setParameter('userId', $user_id)
+    );
+    if (null !== $result_array) {
         $result_array['auth_sources'] = api_get_user_entity($result_array['id'])
             ->getAuthSourcesAuthentications(
                 Container::getAccessUrlUtil()->getCurrent()
@@ -1821,12 +1843,10 @@ function api_get_user_info_from_username($username)
     }
     $username = trim($username);
 
-    $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
-            WHERE username='".Database::escape_string($username)."'";
-    $result = Database::query($sql);
-    if (Database::num_rows($result) > 0) {
-        $resultArray = Database::fetch_array($result);
-
+    $resultArray = _api_user_row(
+        _api_user_rows_query_builder()->where('u.username = :username')->setParameter('username', $username)
+    );
+    if (null !== $resultArray) {
         return _api_format_user($resultArray);
     }
 
@@ -1845,12 +1865,10 @@ function api_get_user_info_from_email($email = '')
     if (empty($email)) {
         return false;
     }
-    $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
-            WHERE email ='".Database::escape_string($email)."' LIMIT 1";
-    $result = Database::query($sql);
-    if (Database::num_rows($result) > 0) {
-        $resultArray = Database::fetch_array($result);
-
+    $resultArray = _api_user_row(
+        _api_user_rows_query_builder()->where('u.email = :email')->setParameter('email', $email)
+    );
+    if (null !== $resultArray) {
         return _api_format_user($resultArray);
     }
 
@@ -1934,14 +1952,17 @@ function api_get_course_setting($settingName, $courseInfo = null, $force = false
     }
 
     if (!isset($courseSettingInfo[$courseId])) {
-        $table = Database::get_course_table(TABLE_COURSE_SETTING);
         $settingName = Database::escape_string($settingName);
 
-        $sql = "SELECT variable, value FROM $table
-                WHERE c_id = $courseId ";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $result = Database::store_result($res, 'ASSOC');
+        $result = Container::getEntityManager()->createQueryBuilder()
+            ->select('s.variable AS variable', 's.value AS value')
+            ->from(CCourseSetting::class, 's')
+            ->where('s.cId = :courseId')
+            ->setParameter('courseId', (int) $courseId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if ([] !== $result) {
             $courseSettingInfo[$courseId] = array_column($result, 'value', 'variable');
 
             if (isset($courseSettingInfo[$courseId]['email_alert_manager_on_new_quiz'])) {
@@ -2000,20 +2021,23 @@ function api_get_course_plugin_setting($plugin, $settingName, $courseInfo = [])
 function api_get_anonymous_id()
 {
     // Find if another anon is connected now
-    $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-    $tableU = Database::get_main_table(TABLE_MAIN_USER);
-    $ip = Database::escape_string(api_get_real_ip());
+    $ip = api_get_real_ip();
     $max = (int) api_get_setting('admin.max_anonymous_users');
     if ($max >= 2) {
-        $sql = "SELECT * FROM $table as TEL
-                JOIN $tableU as U
-                ON U.id = TEL.login_user_id
-                WHERE TEL.user_ip = '$ip'
-                    AND U.status = ".ANONYMOUS."
-                    AND U.id != 2 ";
-
-        $result = Database::query($sql);
-        if (empty(Database::num_rows($result))) {
+        $connected = Container::getEntityManager()->createQueryBuilder()
+            ->select('u.id AS id')
+            ->from(TrackELogin::class, 'tel')
+            ->innerJoin('tel.user', 'u')
+            ->where('tel.userIp = :ip')
+            ->andWhere('u.status = :anonymous')
+            ->andWhere('u.id <> 2')
+            ->setMaxResults(1)
+            ->setParameter('ip', $ip)
+            ->setParameter('anonymous', ANONYMOUS)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if ([] === $connected) {
             $login = uniqid('anon_');
             $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['created_at ASC']);
             if (count($anonList) >= $max) {
@@ -2032,21 +2056,21 @@ function api_get_anonymous_id()
                 $login
             );
         } else {
-            $row = Database::fetch_assoc($result);
-
-            return $row['id'];
+            return $connected[0]['id'];
         }
     }
 
-    $table = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = "SELECT id
-            FROM $table
-            WHERE status = ".ANONYMOUS." ";
-    $res = Database::query($sql);
-    if (Database::num_rows($res) > 0) {
-        $row = Database::fetch_assoc($res);
-
-        return $row['id'];
+    $anonymous = Container::getEntityManager()->createQueryBuilder()
+        ->select('u.id AS id')
+        ->from(User::class, 'u')
+        ->where('u.status = :anonymous')
+        ->setMaxResults(1)
+        ->setParameter('anonymous', ANONYMOUS)
+        ->getQuery()
+        ->getArrayResult()
+    ;
+    if ([] !== $anonymous) {
+        return $anonymous[0]['id'];
     }
 
     // No anonymous user was found.
@@ -2499,15 +2523,17 @@ function api_get_session_name($session_id = 0)
             return null;
         }
     }
-    $t = Database::get_main_table(TABLE_MAIN_SESSION);
-    $s = "SELECT title FROM $t WHERE id = ".(int) $session_id;
-    $r = Database::query($s);
-    $c = Database::num_rows($r);
-    if ($c > 0) {
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select('s.title AS title')
+        ->from(SessionEntity::class, 's')
+        ->where('s.id = :id')
+        ->setParameter('id', (int) $session_id)
+        ->getQuery()
+        ->getArrayResult()
+    ;
+    if ([] !== $rows) {
         //technically, there can be only one, but anyway we take the first
-        $rec = Database::fetch_array($r);
-
-        return $rec['title'];
+        return $rows[0]['title'];
     }
 
     return null;
@@ -2559,15 +2585,31 @@ function api_get_session_visibility(
     }
 
     $session_id = (int) $session_id;
-    $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select(
+            's.visibility AS visibility',
+            's.duration AS duration',
+            's.accessStartDate AS access_start_date',
+            's.accessEndDate AS access_end_date',
+            's.coachAccessStartDate AS coach_access_start_date',
+            's.coachAccessEndDate AS coach_access_end_date'
+        )
+        ->from(SessionEntity::class, 's')
+        ->where('s.id = :id')
+        ->setParameter('id', $session_id)
+        ->getQuery()
+        ->getArrayResult()
+    ;
 
-    $result = Database::query("SELECT * FROM $tbl_session WHERE id = $session_id");
-
-    if (Database::num_rows($result) <= 0) {
+    if ([] === $rows) {
         return SESSION_INVISIBLE;
     }
 
-    $row = Database::fetch_assoc($result);
+    // The session dates used to come back as 'Y-m-d H:i:s' strings: keep that.
+    $row = array_map(
+        static fn ($value) => $value instanceof DateTimeInterface ? $value->format('Y-m-d H:i:s') : $value,
+        $rows[0]
+    );
     $visibility = $row['visibility'];
 
     // I don't care the session visibility.
@@ -3024,12 +3066,18 @@ function api_is_platform_admin_by_id($user_id = null, $url = null)
     }
     // We get here only if $url is set
     $url = (int) $url;
-    $url_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $sql = "SELECT * FROM $url_user_table
-            WHERE access_url_id = $url AND user_id = ".$user->getId();
-    $res = Database::query($sql);
+    $count = Container::getEntityManager()->createQueryBuilder()
+        ->select('COUNT(r.id)')
+        ->from(AccessUrlRelUser::class, 'r')
+        ->where('r.url = :url')
+        ->andWhere('r.user = :userId')
+        ->setParameter('url', $url)
+        ->setParameter('userId', (int) $user->getId())
+        ->getQuery()
+        ->getSingleScalarResult()
+    ;
 
-    return 1 === Database::num_rows($res);
+    return 1 === (int) $count;
 }
 
 /**
@@ -3111,25 +3159,28 @@ function api_is_course_tutor()
  */
 function api_is_course_session_coach($user_id, $courseId, $session_id)
 {
-    $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
-    $session_rel_course_rel_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
     $user_id = (int) $user_id;
     $session_id = (int) $session_id;
     $courseId = (int) $courseId;
 
-    $sql = "SELECT DISTINCT session.id
-            FROM $session_table
-            INNER JOIN $session_rel_course_rel_user_table session_rc_ru
-            ON session.id = session_rc_ru.session_id
-            WHERE
-                session_rc_ru.user_id = '".$user_id."'  AND
-                session_rc_ru.c_id = '$courseId' AND
-                session_rc_ru.status = ".SessionEntity::COURSE_COACH." AND
-                session_rc_ru.session_id = '$session_id'";
-    $result = Database::query($sql);
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select('s.id AS id')
+        ->distinct()
+        ->from(SessionEntity::class, 's')
+        ->innerJoin(SessionRelCourseRelUser::class, 'rc', 'WITH', 'rc.session = s')
+        ->where('rc.user = :userId')
+        ->andWhere('rc.course = :courseId')
+        ->andWhere('rc.status = :status')
+        ->andWhere('rc.session = :sessionId')
+        ->setParameter('userId', $user_id)
+        ->setParameter('courseId', $courseId)
+        ->setParameter('status', SessionEntity::COURSE_COACH)
+        ->setParameter('sessionId', $session_id)
+        ->getQuery()
+        ->getArrayResult()
+    ;
 
-    return Database::num_rows($result) > 0;
+    return [] !== $rows;
 }
 
 /**
@@ -3152,43 +3203,45 @@ function api_is_coach(int $session_id = 0, ?int $courseId = null, bool $check_st
         $courseId = api_get_course_int_id();
     }
 
-    $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
-    $session_rel_course_rel_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+    $em = Container::getEntityManager();
     $sessionIsCoach = [];
 
     if (!empty($courseId)) {
-        $sql = "SELECT DISTINCT s.id, title, access_start_date, access_end_date
-                FROM $session_table s
-                INNER JOIN $session_rel_course_rel_user_table session_rc_ru
-                ON session_rc_ru.session_id = s.id AND session_rc_ru.user_id = '".$userId."'
-                WHERE
-                    session_rc_ru.c_id = '$courseId' AND
-                    session_rc_ru.status =".SessionEntity::COURSE_COACH." AND
-                    session_rc_ru.session_id = '$session_id'";
-        $result = Database::query($sql);
-        $sessionIsCoach = Database::store_result($result);
+        $sessionIsCoach = $em->createQueryBuilder()
+            ->select('s.id AS id', 's.title AS title', 's.accessStartDate AS access_start_date', 's.accessEndDate AS access_end_date')
+            ->distinct()
+            ->from(SessionEntity::class, 's')
+            ->innerJoin(SessionRelCourseRelUser::class, 'rc', 'WITH', 'rc.session = s AND rc.user = :userId')
+            ->where('rc.course = :courseId')
+            ->andWhere('rc.status = :status')
+            ->andWhere('rc.session = :sessionId')
+            ->setParameter('userId', (int) $userId)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('status', SessionEntity::COURSE_COACH)
+            ->setParameter('sessionId', (int) $session_id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
     }
 
     if (!empty($session_id)) {
-        $sql = "SELECT DISTINCT s.id
-                FROM $session_table AS s
-                INNER JOIN $tblSessionRelUser sru
-                ON s.id = sru.session_id
-                WHERE
-                    sru.user_id = $userId AND
-                    s.id = $session_id AND
-                    sru.relation_type = ".SessionEntity::GENERAL_COACH."
-                ORDER BY s.access_start_date, s.access_end_date, s.title";
-        $result = Database::query($sql);
-        if (!empty($sessionIsCoach)) {
-            $sessionIsCoach = array_merge(
-                $sessionIsCoach,
-                Database::store_result($result)
-            );
-        } else {
-            $sessionIsCoach = Database::store_result($result);
-        }
+        // Only whether there is a row matters here, so the former ORDER BY is gone.
+        $sessionIsCoach = array_merge(
+            $sessionIsCoach,
+            $em->createQueryBuilder()
+                ->select('s.id AS id')
+                ->distinct()
+                ->from(SessionEntity::class, 's')
+                ->innerJoin(SessionRelUser::class, 'sru', 'WITH', 'sru.session = s')
+                ->where('sru.user = :userId')
+                ->andWhere('s.id = :sessionId')
+                ->andWhere('sru.relationType = :relationType')
+                ->setParameter('userId', (int) $userId)
+                ->setParameter('sessionId', (int) $session_id)
+                ->setParameter('relationType', SessionEntity::GENERAL_COACH)
+                ->getQuery()
+                ->getArrayResult()
+        );
     }
 
     return count($sessionIsCoach) > 0;
@@ -3523,17 +3576,19 @@ function api_is_explicit_course_student(?int $userId = null, ?int $courseIntId =
     }
 
     $studentStatus = defined('STUDENT') ? (int) STUDENT : 5;
-    $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $sql = "SELECT status
-            FROM $table
-            WHERE c_id = ".((int) $courseIntId)."
-              AND user_id = ".((int) $userId)."
-            LIMIT 1";
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select('cu.status AS status')
+        ->from(CourseRelUser::class, 'cu')
+        ->where('cu.course = :courseId')
+        ->andWhere('cu.user = :userId')
+        ->setMaxResults(1)
+        ->setParameter('courseId', (int) $courseIntId)
+        ->setParameter('userId', (int) $userId)
+        ->getQuery()
+        ->getArrayResult()
+    ;
 
-    $res = Database::query($sql);
-    $row = Database::fetch_array($res, 'ASSOC');
-
-    return !empty($row) && (int) $row['status'] === $studentStatus;
+    return [] !== $rows && (int) $rows[0]['status'] === $studentStatus;
 }
 
 /**
@@ -3808,12 +3863,16 @@ function languageToCountryIsoCode($languageIsoCode)
  */
 function api_get_languages()
 {
-    $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = "SELECT * FROM $table WHERE available='1'
-            ORDER BY original_name ASC";
-    $result = Database::query($sql);
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select('l.isocode AS isocode', 'l.originalName AS original_name')
+        ->from(Language::class, 'l')
+        ->where('l.available = true')
+        ->orderBy('l.originalName', 'ASC')
+        ->getQuery()
+        ->getArrayResult()
+    ;
     $languages = [];
-    while ($row = Database::fetch_assoc($result)) {
+    foreach ($rows as $row) {
         $languages[$row['isocode']] = $row['original_name'];
     }
 
@@ -3857,27 +3916,36 @@ function api_get_platform_default_isocode(): ?string
  */
 function api_get_languages_with_platform_default(): array
 {
-    $langTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+    $em = Container::getEntityManager();
 
-    $sql = "SELECT isocode, original_name
-            FROM $langTable
-            WHERE available = '1'
-            ORDER BY original_name ASC";
-    $res = Database::query($sql);
+    $rows = $em->createQueryBuilder()
+        ->select('l.isocode AS isocode', 'l.originalName AS original_name')
+        ->from(Language::class, 'l')
+        ->where('l.available = true')
+        ->orderBy('l.originalName', 'ASC')
+        ->getQuery()
+        ->getArrayResult()
+    ;
 
     $languages = [];
-    while ($row = Database::fetch_assoc($res)) {
+    foreach ($rows as $row) {
         $languages[$row['isocode']] = $row['original_name'];
     }
 
     // Ensure platform default is present even if not available
     $defaultIso = api_get_platform_default_isocode();
     if ($defaultIso && !isset($languages[$defaultIso])) {
-        $safe   = Database::escape_string($defaultIso);
-        $sqlDef = "SELECT isocode, original_name FROM $langTable WHERE isocode = '$safe' LIMIT 1";
-        $resDef = Database::query($sqlDef);
-        if ($row = Database::fetch_assoc($resDef)) {
-            $languages[$row['isocode']] = $row['original_name'];
+        $defaultRows = $em->createQueryBuilder()
+            ->select('l.isocode AS isocode', 'l.originalName AS original_name')
+            ->from(Language::class, 'l')
+            ->where('l.isocode = :isocode')
+            ->setMaxResults(1)
+            ->setParameter('isocode', $defaultIso)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if ([] !== $defaultRows) {
+            $languages[$defaultRows[0]['isocode']] = $defaultRows[0]['original_name'];
         }
     }
 
@@ -3893,7 +3961,6 @@ function api_get_languages_with_platform_default(): array
  */
 function api_get_language_id($language)
 {
-    $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     if (empty($language)) {
         return null;
     }
@@ -3904,13 +3971,17 @@ function api_get_language_id($language)
         return $langInfo->getId();
     }
 
-    $language = Database::escape_string($language);
-    $sql = "SELECT id FROM $tbl_language
-            WHERE english_name = '$language' LIMIT 1";
-    $result = Database::query($sql);
-    $row = Database::fetch_array($result);
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select('l.id AS id')
+        ->from(Language::class, 'l')
+        ->where('l.englishName = :englishName')
+        ->setMaxResults(1)
+        ->setParameter('englishName', $language)
+        ->getQuery()
+        ->getArrayResult()
+    ;
 
-    return $row['id'];
+    return $rows[0]['id'] ?? null;
 }
 
 /**
@@ -4627,18 +4698,15 @@ function api_get_status_langvars()
  */
 function api_get_settings_options($var)
 {
-    $table_settings_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
-    $var = Database::escape_string($var);
-    $sql = "SELECT * FROM $table_settings_options
-            WHERE variable = '$var'
-            ORDER BY id";
-    $result = Database::query($sql);
-    $settings_options_array = [];
-    while ($row = Database::fetch_assoc($result)) {
-        $settings_options_array[] = $row;
-    }
-
-    return $settings_options_array;
+    return Container::getEntityManager()->createQueryBuilder()
+        ->select('o.id AS id', 'o.variable AS variable', 'o.value AS value', 'o.displayText AS display_text')
+        ->from(SettingsOptions::class, 'o')
+        ->where('o.variable = :variable')
+        ->orderBy('o.id', 'ASC')
+        ->setParameter('variable', (string) $var)
+        ->getQuery()
+        ->getArrayResult()
+    ;
 }
 
 /**
@@ -4686,85 +4754,99 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
         return false;
     }
     $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS);
-    $var = Database::escape_string($var);
-    $value = Database::escape_string($value);
     $access_url = (int) $access_url;
     if (empty($access_url)) {
         $access_url = 1;
     }
-    $select = "SELECT id FROM $t_settings WHERE variable = '$var' ";
-    if (!empty($subvar)) {
-        $subvar = Database::escape_string($subvar);
-        $select .= " AND subkey = '$subvar'";
-    }
-    if (!empty($cat)) {
-        $cat = Database::escape_string($cat);
-        $select .= " AND category = '$cat'";
-    }
-    if ($access_url > 1) {
-        $select .= " AND access_url = $access_url";
-    } else {
-        $select .= " AND access_url = 1 ";
-    }
+    $conditions = static function (QueryBuilder $qb) use ($var, $subvar, $cat): QueryBuilder {
+        $qb->where('s.variable = :variable')->setParameter('variable', (string) $var);
+        if (!empty($subvar)) {
+            $qb->andWhere('s.subkey = :subkey')->setParameter('subkey', (string) $subvar);
+        }
+        if (!empty($cat)) {
+            $qb->andWhere('s.category = :category')->setParameter('category', (string) $cat);
+        }
 
-    $res = Database::query($select);
-    if (Database::num_rows($res) > 0) {
+        return $qb;
+    };
+    $em = Container::getEntityManager();
+    $found = $conditions($em->createQueryBuilder()->select('s.id AS id')->from(SettingsCurrent::class, 's'))
+        ->andWhere('IDENTITY(s.url) = :accessUrl')
+        ->setParameter('accessUrl', $access_url > 1 ? $access_url : 1)
+        ->getQuery()
+        ->getArrayResult()
+    ;
+    // The legacy "SELECT * ... access_url = 1" source row, with the columns copied to a new access url.
+    $sourceRow = static fn (): ?array => $conditions(
+        $em->createQueryBuilder()
+            ->select(
+                's.variable AS variable',
+                's.subkey AS subkey',
+                's.type AS type',
+                's.category AS category',
+                's.title AS title',
+                's.comment AS comment',
+                's.scope AS scope',
+                's.subkeytext AS subkeytext',
+                's.accessUrlChangeable AS access_url_changeable'
+            )
+            ->from(SettingsCurrent::class, 's')
+    )
+        ->andWhere('IDENTITY(s.url) = 1')
+        ->getQuery()
+        ->getArrayResult()[0] ?? null;
+    $copyRow = static function (array $row, int $accessUrl, string $value, bool $withChangeable) use ($t_settings): void {
+        $values = [
+            'variable' => $row['variable'],
+            'subkey' => !empty($row['subkey']) ? $row['subkey'] : null,
+            'type' => $row['type'],
+            'category' => $row['category'],
+            'selected_value' => $value,
+            'title' => $row['title'],
+            'comment' => !empty($row['comment']) ? $row['comment'] : null,
+            'scope' => !empty($row['scope']) ? $row['scope'] : null,
+            'subkeytext' => !empty($row['subkeytext']) ? $row['subkeytext'] : null,
+            'access_url' => $accessUrl,
+        ];
+        if ($withChangeable) {
+            $values['access_url_changeable'] = $row['access_url_changeable'];
+        }
+        $qb = Database::getManager()->getConnection()->createQueryBuilder()->insert($t_settings);
+        foreach ($values as $column => $columnValue) {
+            $qb->setValue($column, ':'.$column)->setParameter($column, $columnValue);
+        }
+        $qb->executeStatement();
+    };
+
+    if ([] !== $found) {
         // Found item for this access_url.
-        $row = Database::fetch_array($res);
-        $sql = "UPDATE $t_settings SET selected_value = '$value'
-                WHERE id = ".$row['id'];
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->update(SettingsCurrent::class, 's')
+            ->set('s.selectedValue', ':value')
+            ->where('s.id = :id')
+            ->setParameter('value', (string) $value)
+            ->setParameter('id', (int) $found[0]['id'])
+            ->getQuery()
+            ->execute()
+        ;
     } else {
         // Item not found for this access_url, we have to check if it exist with access_url = 1
-        $select = "SELECT * FROM $t_settings
-                   WHERE variable = '$var' AND access_url = 1 ";
+        $row = $sourceRow();
         // Just in case
         if (1 == $access_url) {
-            if (!empty($subvar)) {
-                $select .= " AND subkey = '$subvar'";
-            }
-            if (!empty($cat)) {
-                $select .= " AND category = '$cat'";
-            }
-            $res = Database::query($select);
-            if (Database::num_rows($res) > 0) {
+            if (null !== $row) {
                 // We have a setting for access_url 1, but none for the current one, so create one.
-                $row = Database::fetch_array($res);
-                $insert = "INSERT INTO $t_settings (variable, subkey, type,category, selected_value, title, comment, scope, subkeytext, access_url)
-                        VALUES
-                        ('".$row['variable']."',".(!empty($row['subkey']) ? "'".$row['subkey']."'" : "NULL").",".
-                    "'".$row['type']."','".$row['category']."',".
-                    "'$value','".$row['title']."',".
-                    "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".(!empty($row['scope']) ? "'".$row['scope']."'" : "NULL").",".
-                    "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url)";
-                Database::query($insert);
+                $copyRow($row, $access_url, (string) $value, false);
             } else {
                 // Such a setting does not exist.
                 //error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all', 0);
             }
         } else {
             // Other access url.
-            if (!empty($subvar)) {
-                $select .= " AND subkey = '$subvar'";
-            }
-            if (!empty($cat)) {
-                $select .= " AND category = '$cat'";
-            }
-            $res = Database::query($select);
-
-            if (Database::num_rows($res) > 0) {
+            if (null !== $row) {
                 // We have a setting for access_url 1, but none for the current one, so create one.
-                $row = Database::fetch_array($res);
                 if (1 == $row['access_url_changeable']) {
-                    $insert = "INSERT INTO $t_settings (variable,subkey, type,category, selected_value,title, comment,scope, subkeytext,access_url, access_url_changeable) VALUES
-                            ('".$row['variable']."',".
-                        (!empty($row['subkey']) ? "'".$row['subkey']."'" : "NULL").",".
-                        "'".$row['type']."','".$row['category']."',".
-                        "'$value','".$row['title']."',".
-                        "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".
-                        (!empty($row['scope']) ? "'".$row['scope']."'" : "NULL").",".
-                        "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url,".$row['access_url_changeable'].")";
-                    Database::query($insert);
+                    $copyRow($row, $access_url, (string) $value, true);
                 }
             } else { // Such a setting does not exist.
                 //error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all. The access_url is: '.$access_url.' ',0);
@@ -4790,52 +4872,28 @@ function api_set_settings_category($category, $value = null, $access_url = 1, $f
     if (empty($category)) {
         return false;
     }
-    $category = Database::escape_string($category);
-    $t_s = Database::get_main_table(TABLE_MAIN_SETTINGS);
     $access_url = (int) $access_url;
     if (empty($access_url)) {
         $access_url = 1;
     }
-    if (isset($value)) {
-        $value = Database::escape_string($value);
-        $sql = "UPDATE $t_s SET selected_value = '$value'
-                WHERE category = '$category' AND access_url = $access_url";
-        if (is_array($fieldtype) && count($fieldtype) > 0) {
-            $sql .= " AND ( ";
-            $i = 0;
-            foreach ($fieldtype as $type) {
-                if ($i > 0) {
-                    $sql .= ' OR ';
-                }
-                $type = Database::escape_string($type);
-                $sql .= " type='".$type."' ";
-                $i++;
-            }
-            $sql .= ")";
-        }
-        $res = Database::query($sql);
-
-        return false !== $res;
-    } else {
-        $sql = "UPDATE $t_s SET selected_value = NULL
-                WHERE category = '$category' AND access_url = $access_url";
-        if (is_array($fieldtype) && count($fieldtype) > 0) {
-            $sql .= " AND ( ";
-            $i = 0;
-            foreach ($fieldtype as $type) {
-                if ($i > 0) {
-                    $sql .= ' OR ';
-                }
-                $type = Database::escape_string($type);
-                $sql .= " type='".$type."' ";
-                $i++;
-            }
-            $sql .= ")";
-        }
-        $res = Database::query($sql);
-
-        return false !== $res;
+    $qb = Container::getEntityManager()->createQueryBuilder()
+        ->update(SettingsCurrent::class, 's')
+        ->where('s.category = :category')
+        ->andWhere('s.url = :accessUrl')
+        ->setParameter('category', (string) $category)
+        ->setParameter('accessUrl', $access_url)
+    ;
+    if (is_array($fieldtype) && count($fieldtype) > 0) {
+        $qb->andWhere('s.type IN (:types)')->setParameter('types', array_map('strval', array_values($fieldtype)));
     }
+    if (isset($value)) {
+        $qb->set('s.selectedValue', ':value')->setParameter('value', (string) $value);
+    } else {
+        $qb->set('s.selectedValue', 'NULL');
+    }
+    $qb->getQuery()->execute();
+
+    return true;
 }
 
 /**
@@ -4847,19 +4905,40 @@ function api_set_settings_category($category, $value = null, $access_url = 1, $f
  */
 function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $direction = 'ASC')
 {
-    $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $from = (int) $from;
     $to = (int) $to;
-    $order = Database::escape_string($order);
-    $direction = Database::escape_string($direction);
-    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
-    $sql = "SELECT id, url, description, active, created_by, tms
-            FROM $table
-            ORDER BY `$order` $direction
-            LIMIT $to OFFSET $from";
-    $res = Database::query($sql);
+    // The sort column is one of the selected ones.
+    $orderProperties = [
+        'id' => 'a.id',
+        'url' => 'a.url',
+        'description' => 'a.description',
+        'active' => 'a.active',
+        'created_by' => 'a.createdBy',
+        'tms' => 'a.tms',
+    ];
+    $order = trim((string) $order);
+    if (!isset($orderProperties[$order])) {
+        throw new InvalidArgumentException('Invalid sort column: '.$order);
+    }
+    $direction = 'desc' === strtolower(trim((string) $direction)) ? 'DESC' : 'ASC';
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select(
+            'a.id AS id',
+            'a.url AS url',
+            'a.description AS description',
+            'a.active AS active',
+            'a.createdBy AS created_by',
+            'a.tms AS tms'
+        )
+        ->from(AccessUrl::class, 'a')
+        ->orderBy($orderProperties[$order], $direction)
+        ->setMaxResults($to)
+        ->setFirstResult($from)
+        ->getQuery()
+        ->getArrayResult()
+    ;
 
-    return Database::store_result($res);
+    return array_map('_api_row_with_string_dates', $rows);
 }
 
 /**
@@ -4881,12 +4960,22 @@ function api_get_access_url($id, $returnDefault = true)
     if (isset($staticResult[$id])) {
         $result = $staticResult[$id];
     } else {
-        // Calling the Database:: library dont work this is handmade.
-        $table_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT url, description, active, created_by, tms
-                FROM $table_access_url WHERE id = '$id' ";
-        $res = Database::query($sql);
-        $result = @Database::fetch_array($res);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'a.url AS url',
+                'a.description AS description',
+                'a.active AS active',
+                'a.createdBy AS created_by',
+                'a.tms AS tms'
+            )
+            ->from(AccessUrl::class, 'a')
+            ->where('a.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        // Database::fetch_array() gave every value under its name and under its position, [] when there was no row.
+        $result = [] === $rows ? [] : _api_row_with_numeric_keys(_api_row_with_string_dates($rows[0]));
         $staticResult[$id] = $result;
     }
 
@@ -4924,33 +5013,53 @@ function api_get_access_url($id, $returnDefault = true)
  */
 function &api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0)
 {
-    $table = Database::get_main_table(TABLE_MAIN_SETTINGS);
     $access_url = (int) $access_url;
-    $where_condition = '';
-    if (1 == $url_changeable) {
-        $where_condition = " AND access_url_changeable= '1' ";
-    }
     if (empty($access_url) || -1 == $access_url) {
         $access_url = 1;
     }
-    $sql = "SELECT * FROM $table
-            WHERE access_url = $access_url  $where_condition ";
-
+    $qb = Container::getEntityManager()->createQueryBuilder()
+        ->select(
+            's.id AS id',
+            'IDENTITY(s.url) AS access_url',
+            'IDENTITY(s.valueTemplate) AS value_template_id',
+            's.variable AS variable',
+            's.subkey AS subkey',
+            's.type AS type',
+            's.category AS category',
+            's.selectedValue AS selected_value',
+            's.title AS title',
+            's.comment AS comment',
+            's.scope AS scope',
+            's.subkeytext AS subkeytext',
+            's.accessUrlLocked AS access_url_locked',
+            's.accessUrlChangeable AS access_url_changeable',
+            's.confidential AS confidential'
+        )
+        ->from(SettingsCurrent::class, 's')
+        ->where('s.url = :accessUrl')
+        ->setParameter('accessUrl', $access_url)
+    ;
+    if (1 == $url_changeable) {
+        $qb->andWhere('s.accessUrlChangeable = 1');
+    }
     if (!empty($cat)) {
-        $cat = Database::escape_string($cat);
-        $sql .= " AND category='$cat' ";
+        $qb->andWhere('s.category = :category')->setParameter('category', (string) $cat);
     }
     if ('group' == $ordering) {
-        $sql .= " ORDER BY id ASC";
+        $qb->orderBy('s.id', 'ASC');
     } else {
-        $sql .= " ORDER BY 1,2 ASC";
+        // Former "ORDER BY 1,2": the first two columns of the table, id and access_url.
+        $qb->orderBy('s.id', 'ASC')->addOrderBy('s.url', 'ASC');
     }
-    $result = Database::query($sql);
-    if (null === $result) {
-        $result = [];
-        return $result;
-    }
-    $result = Database::store_result($result, 'ASSOC');
+    $result = array_map(
+        static function (array $row): array {
+            // The raw row carried the tinyint(1) flag as 0/1.
+            $row['confidential'] = (int) $row['confidential'];
+
+            return $row;
+        },
+        $qb->getQuery()->getArrayResult()
+    );
 
     return $result;
 }
@@ -5067,18 +5176,19 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
     $courseId = $courseInfo['real_id'];
     $is_platformAdmin = api_is_platform_admin();
 
-    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+    $em = Container::getEntityManager();
+    $courseRows = $em->createQueryBuilder()
+        ->select('c.visibility AS visibility')
+        ->from(Course::class, 'c')
+        ->where('c.code = :code')
+        ->setMaxResults(1)
+        ->setParameter('code', $cid)
+        ->getQuery()
+        ->getArrayResult()
+    ;
 
-    $sql = "SELECT visibility
-            FROM $course_table
-            WHERE code = '$cid'
-            LIMIT 1";
-
-    $result = Database::query($sql);
-
-    if (Database::num_rows($result) > 0) {
-        $visibility = Database::fetch_array($result);
-        $visibility = (int) $visibility['visibility'];
+    if ([] !== $courseRows) {
+        $visibility = (int) $courseRows[0]['visibility'];
     } else {
         $visibility = 0;
     }
@@ -5087,47 +5197,44 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
         return true;
     }
 
-    $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $is_courseMember = false;
     $is_courseAdmin = false;
 
-    $sql = "SELECT
-                is_tutor, status
-            FROM $tbl_course_user
-            WHERE
-                user_id  = '$userid' AND
-                relation_type <> '".COURSE_RELATION_TYPE_RRHH."' AND
-                c_id = $courseId
-            LIMIT 1";
+    $cuRows = $em->createQueryBuilder()
+        ->select('cu.tutor AS is_tutor', 'cu.status AS status')
+        ->from(CourseRelUser::class, 'cu')
+        ->where('cu.user = :userId')
+        ->andWhere('cu.relationType <> :relationType')
+        ->andWhere('cu.course = :courseId')
+        ->setMaxResults(1)
+        ->setParameter('userId', (int) $userid)
+        ->setParameter('relationType', COURSE_RELATION_TYPE_RRHH)
+        ->setParameter('courseId', (int) $courseId)
+        ->getQuery()
+        ->getArrayResult()
+    ;
 
-    $result = Database::query($sql);
-
-    if (Database::num_rows($result) > 0) {
+    if ([] !== $cuRows) {
         // This user has got a recorded state for this course.
-        $cuData = Database::fetch_array($result);
         $is_courseMember = true;
-        $is_courseAdmin = (1 == $cuData['status']);
+        $is_courseAdmin = (1 == $cuRows[0]['status']);
     }
 
     if (!$is_courseAdmin) {
         // This user has no status related to this course.
         // Is it the session coach or the session admin?
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-        $sql = "SELECT sru_2.user_id AS session_admin_id, sru_1.user_id AS session_coach_id
-                FROM $tbl_session AS s
-                INNER JOIN $tblSessionRelUser sru_1
-                ON (sru_1.session_id = s.id AND sru_1.relation_type = ".SessionEntity::GENERAL_COACH.")
-                INNER JOIN $tblSessionRelUser sru_2
-                ON (sru_2.session_id = s.id AND sru_2.relation_type = ".SessionEntity::SESSION_ADMIN.")
-                INNER JOIN $tbl_session_course src
-                ON (src.session_id = s.id AND src.c_id = $courseId)";
-
-        $result = Database::query($sql);
-        $row = Database::store_result($result);
+        $row = $em->createQueryBuilder()
+            ->select('IDENTITY(sru_2.user) AS session_admin_id', 'IDENTITY(sru_1.user) AS session_coach_id')
+            ->from(SessionEntity::class, 's')
+            ->innerJoin(SessionRelUser::class, 'sru_1', 'WITH', 'sru_1.session = s AND sru_1.relationType = :coachType')
+            ->innerJoin(SessionRelUser::class, 'sru_2', 'WITH', 'sru_2.session = s AND sru_2.relationType = :adminType')
+            ->innerJoin(SessionRelCourse::class, 'src', 'WITH', 'src.session = s AND src.course = :courseId')
+            ->setParameter('coachType', SessionEntity::GENERAL_COACH)
+            ->setParameter('adminType', SessionEntity::SESSION_ADMIN)
+            ->setParameter('courseId', (int) $courseId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $sessionAdminsId = array_column($row, 'session_admin_id');
         $sessionCoachesId = array_column($row, 'session_coach_id');
 
@@ -5139,48 +5246,41 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
             $is_courseAdmin = false;
         } else {
             // Check if the current user is the course coach.
-            $sql = "SELECT 1
-                    FROM $tbl_session_course_user
-                    WHERE c_id = '$courseId'
-                    AND user_id = '$userid'
-                    AND status = ".SessionEntity::COURSE_COACH."
-                    LIMIT 1";
+            $courseCoach = $em->createQueryBuilder()
+                ->select('rc.id AS id')
+                ->from(SessionRelCourseRelUser::class, 'rc')
+                ->where('rc.course = :courseId')
+                ->andWhere('rc.user = :userId')
+                ->andWhere('rc.status = :status')
+                ->setMaxResults(1)
+                ->setParameter('courseId', (int) $courseId)
+                ->setParameter('userId', (int) $userid)
+                ->setParameter('status', SessionEntity::COURSE_COACH)
+                ->getQuery()
+                ->getArrayResult()
+            ;
 
-            $result = Database::query($sql);
-
-            //if ($row = Database::fetch_array($result)) {
-            if (Database::num_rows($result) > 0) {
+            if ([] !== $courseCoach) {
                 $is_courseMember = true;
-                $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
-                $sql = "SELECT status FROM $tbl_user
-                        WHERE id = $userid
-                        LIMIT 1";
+                $statusRows = $em->createQueryBuilder()
+                    ->select('u.status AS status')
+                    ->from(User::class, 'u')
+                    ->where('u.id = :userId')
+                    ->setMaxResults(1)
+                    ->setParameter('userId', (int) $userid)
+                    ->getQuery()
+                    ->getArrayResult()
+                ;
 
-                $result = Database::query($sql);
-
-                if (1 == Database::result($result, 0, 0)) {
+                if ([] !== $statusRows && 1 == $statusRows[0]['status']) {
                     $is_courseAdmin = true;
                 } else {
                     $is_courseAdmin = false;
                 }
-            } else {
-                // Check if the user is a student is this session.
-                $sql = "SELECT  id
-                        FROM $tbl_session_course_user
-                        WHERE
-                            user_id  = '$userid' AND
-                            c_id = '$courseId'
-                        LIMIT 1";
-
-                if (Database::num_rows($result) > 0) {
-                    // This user haa got a recorded state for this course.
-                    while ($row = Database::fetch_array($result)) {
-                        $is_courseMember = true;
-                        $is_courseAdmin = false;
-                    }
-                }
             }
+            // The former else branch ("is the user a student of this session") could never run: it tested the
+            // empty result of the course coach query above, so it is gone with that result.
         }
     }
 
@@ -5192,7 +5292,15 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
             if ($isAnonymousVisitor) {
                 return false;
             }
-            $userStatus = Database::query('SELECT status FROM user WHERE id = '.(int) $userid)->fetchOne();
+            $userStatusRows = $em->createQueryBuilder()
+                ->select('u.status AS status')
+                ->from(User::class, 'u')
+                ->where('u.id = :userId')
+                ->setParameter('userId', (int) $userid)
+                ->getQuery()
+                ->getArrayResult()
+            ;
+            $userStatus = $userStatusRows[0]['status'] ?? false;
 
             return false !== $userStatus && ANONYMOUS != (int) $userStatus;
         case Course::REGISTERED:
@@ -5230,16 +5338,16 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
     // Get information to build query depending of the tool.
     switch ($tool) {
         case TOOL_SURVEY:
-            $table_tool = Database::get_course_table(TABLE_SURVEY);
+            $toolClass = CSurvey::class;
             break;
         case TOOL_ANNOUNCEMENT:
-            $table_tool = Database::get_course_table(TABLE_ANNOUNCEMENT);
+            $toolClass = CAnnouncement::class;
             break;
         case TOOL_AGENDA:
-            $table_tool = Database::get_course_table(TABLE_AGENDA);
+            $toolClass = CCalendarEvent::class;
             break;
         case TOOL_GROUP:
-            $table_tool = Database::get_course_table(TABLE_GROUP);
+            $toolClass = CGroup::class;
             break;
         default:
             return false;
@@ -5247,17 +5355,23 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
     $course_id = api_get_course_int_id();
 
     // The course and the session of a resource live in its resource links.
-    $sql = "SELECT rl.id
-            FROM $table_tool t
-            INNER JOIN resource_link rl ON rl.resource_node_id = t.resource_node_id
-            WHERE t.iid = $element_id
-                AND rl.c_id = $course_id
-                AND rl.session_id = $session_id
-                AND rl.deleted_at IS NULL
-            LIMIT 1";
-    $rs = Database::query($sql);
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select('rl.id AS id')
+        ->from($toolClass, 't')
+        ->innerJoin(ResourceLink::class, 'rl', 'WITH', 'rl.resourceNode = t.resourceNode')
+        ->where('t.iid = :elementId')
+        ->andWhere('rl.course = :courseId')
+        ->andWhere('rl.session = :sessionId')
+        ->andWhere('rl.deletedAt IS NULL')
+        ->setMaxResults(1)
+        ->setParameter('elementId', $element_id)
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('sessionId', $session_id)
+        ->getQuery()
+        ->getArrayResult()
+    ;
 
-    return Database::num_rows($rs) > 0;
+    return [] !== $rows;
 }
 
 /**
@@ -5345,15 +5459,16 @@ function api_get_current_access_url_id(): int
         return $id;
     }
 
-    $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-    $path = Database::escape_string(api_get_path(WEB_PATH));
-    $sql = "SELECT id FROM $table WHERE url = '".$path."'";
-    $result = Database::query($sql);
-    if (Database::num_rows($result) > 0) {
-        $id = Database::result($result, 0, 0);
-        if (false === $id) {
-            return -1;
-        }
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select('a.id AS id')
+        ->from(AccessUrl::class, 'a')
+        ->where('a.url = :url')
+        ->setParameter('url', api_get_path(WEB_PATH))
+        ->getQuery()
+        ->getArrayResult()
+    ;
+    if ([] !== $rows) {
+        $id = $rows[0]['id'];
 
         return (int) $id;
     }
@@ -5379,16 +5494,17 @@ function api_get_current_access_url_id(): int
  */
 function api_get_access_url_from_user(int $user_id): array
 {
-    $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    $table_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-    $sql = "SELECT access_url_id
-            FROM $table_url_rel_user url_rel_user
-            INNER JOIN $table_url u
-            ON (url_rel_user.access_url_id = u.id)
-            WHERE user_id = ".$user_id;
-    $result = Database::query($sql);
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select('IDENTITY(r.url) AS access_url_id')
+        ->from(AccessUrlRelUser::class, 'r')
+        ->innerJoin(AccessUrl::class, 'u', 'WITH', 'r.url = u')
+        ->where('r.user = :userId')
+        ->setParameter('userId', $user_id)
+        ->getQuery()
+        ->getArrayResult()
+    ;
     $list = [];
-    while ($row = Database::fetch_assoc($result)) {
+    foreach ($rows as $row) {
         $list[] = $row['access_url_id'];
     }
 
@@ -5426,12 +5542,41 @@ function api_is_admin_in_all_active_urls(): bool
  */
 function api_get_active_urls(): array
 {
-    $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-    $sql = "SELECT * FROM $table WHERE active = 1";
-    $result = Database::query($sql);
-    // Fetch all rows as associative arrays
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select(
+            'a.id AS id',
+            'IDENTITY(a.resourceNode) AS resource_node_id',
+            'IDENTITY(a.parent) AS parent_id',
+            'IDENTITY(a.root) AS tree_root',
+            'a.lft AS lft',
+            'a.lvl AS lvl',
+            'a.rgt AS rgt',
+            'a.url AS url',
+            'a.description AS description',
+            'a.active AS active',
+            'a.createdBy AS created_by',
+            'a.tms AS tms',
+            'a.urlType AS url_type',
+            'a.limitCourses AS limit_courses',
+            'a.limitActiveCourses AS limit_active_courses',
+            'a.limitSessions AS limit_sessions',
+            'a.limitUsers AS limit_users',
+            'a.limitTeachers AS limit_teachers',
+            'a.limitDiskSpace AS limit_disk_space',
+            'a.email AS email',
+            'a.isLoginOnly AS is_login_only'
+        )
+        ->from(AccessUrl::class, 'a')
+        ->where('a.active = 1')
+        ->getQuery()
+        ->getArrayResult()
+    ;
+    // The tinyint(1) columns came back as 0/1 and the date as a string.
     $urls = [];
-    while ($row = Database::fetch_assoc($result)) {
+    foreach ($rows as $row) {
+        $row = _api_row_with_string_dates($row);
+        $row['url_type'] = null === $row['url_type'] ? null : (int) $row['url_type'];
+        $row['is_login_only'] = (int) $row['is_login_only'];
         $urls[] = $row;
     }
     return $urls;
@@ -5628,35 +5773,73 @@ function api_check_term_condition($userId)
  */
 function api_get_tool_information_by_name($name)
 {
-    $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
     $course_id = api_get_course_int_id();
     $courseToolName = TOOL_USER === $name ? 'member' : $name;
 
-    $sql = "SELECT id FROM tool
-            WHERE title = '".Database::escape_string($courseToolName)."' ";
-    $rs = Database::query($sql);
-    $data = Database::fetch_array($rs);
-    if ($data) {
-        $tool = $data['id'];
+    $em = Container::getEntityManager();
+    $toolRows = $em->createQueryBuilder()
+        ->select('t.id AS id')
+        ->from(Tool::class, 't')
+        ->where('t.title = :title')
+        ->setMaxResults(1)
+        ->setParameter('title', (string) $courseToolName)
+        ->getQuery()
+        ->getArrayResult()
+    ;
+    if ([] !== $toolRows) {
+        $tool = $toolRows[0]['id'];
         // The visibility of a course tool lives in the resource link of its resource node: the link of the
         // current session when there is one, the base course link otherwise.
         $session_id = api_get_session_id();
-        $sql = "SELECT ct.*, rl.visibility
-                FROM $t_tool ct
-                LEFT JOIN resource_link rl
-                    ON rl.resource_node_id = ct.resource_node_id
-                    AND rl.c_id = ct.c_id
-                    AND rl.group_id IS NULL
-                    AND rl.usergroup_id IS NULL
-                    AND rl.user_id IS NULL
-                    AND rl.deleted_at IS NULL
-                    AND (rl.session_id IS NULL OR rl.session_id = $session_id)
-                WHERE ct.c_id = $course_id AND ct.tool_id = ".(int) $tool."
-                ORDER BY (rl.session_id IS NULL) ASC, ct.iid ASC
-                LIMIT 1";
-        $rs = Database::query($sql);
+        $rows = $em->createQueryBuilder()
+            ->select(
+                'ct.iid AS iid',
+                'IDENTITY(ct.resourceNode) AS resource_node_id',
+                'IDENTITY(ct.course) AS c_id',
+                'IDENTITY(ct.session) AS session_id',
+                'IDENTITY(ct.tool) AS tool_id',
+                'ct.title AS title',
+                'ct.position AS position',
+                'rl.visibility AS visibility',
+                'IDENTITY(rl.session) AS link_session_id'
+            )
+            ->from(CTool::class, 'ct')
+            ->leftJoin(
+                ResourceLink::class,
+                'rl',
+                'WITH',
+                'rl.resourceNode = ct.resourceNode
+                    AND rl.course = ct.course
+                    AND rl.group IS NULL
+                    AND rl.userGroup IS NULL
+                    AND rl.user IS NULL
+                    AND rl.deletedAt IS NULL
+                    AND (rl.session IS NULL OR rl.session = :sessionId)'
+            )
+            ->where('ct.course = :courseId')
+            ->andWhere('ct.tool = :toolId')
+            ->setParameter('sessionId', (int) $session_id)
+            ->setParameter('courseId', (int) $course_id)
+            ->setParameter('toolId', (int) $tool)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        return Database::fetch_assoc($rs);
+        // Former "ORDER BY (rl.session_id IS NULL) ASC, ct.iid ASC LIMIT 1": the link of the session wins over the
+        // base course link, then the lowest tool id.
+        usort(
+            $rows,
+            static fn (array $a, array $b): int => [null === $a['link_session_id'], $a['iid']]
+                <=> [null === $b['link_session_id'], $b['iid']]
+        );
+        if ([] === $rows) {
+            return false;
+        }
+
+        $row = $rows[0];
+        unset($row['link_session_id']);
+
+        return $row;
     }
 
     return [];
@@ -6097,24 +6280,32 @@ function api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code 
             $course_code = api_get_course_id();
         }
 
-        $resourceTable = match ((int) $link_type) {
-            LINK_EXERCISE, LINK_HOTPOTATOES => Database::get_course_table(TABLE_QUIZ_TEST),
-            LINK_STUDENTPUBLICATION => Database::get_course_table(TABLE_STUDENT_PUBLICATION),
-            LINK_LEARNPATH => Database::get_course_table(TABLE_LP_MAIN),
-            LINK_FORUM_THREAD, LINK_FORUM_PARTICIPATION => Database::get_course_table(TABLE_FORUM_THREAD),
-            LINK_ATTENDANCE => Database::get_course_table(TABLE_ATTENDANCE),
-            LINK_SURVEY => Database::get_course_table(TABLE_SURVEY),
+        $resourceClass = match ((int) $link_type) {
+            LINK_EXERCISE, LINK_HOTPOTATOES => CQuiz::class,
+            LINK_STUDENTPUBLICATION => CStudentPublication::class,
+            LINK_LEARNPATH => CLp::class,
+            LINK_FORUM_THREAD, LINK_FORUM_PARTICIPATION => CForumThread::class,
+            LINK_ATTENDANCE => CAttendance::class,
+            LINK_SURVEY => CSurvey::class,
             default => null,
         };
-        if (null === $resourceTable) {
+        if (null === $resourceClass) {
             return false;
         }
 
         $item_id = (int) $item_id;
         $link_type = (int) $link_type;
-        $resourceSql = "SELECT resource_node_id FROM $resourceTable WHERE iid = $item_id";
-        $resourceResult = Database::query($resourceSql);
-        $resourceNodeId = (int) (Database::fetch_row($resourceResult)[0] ?? 0);
+        $em = Container::getEntityManager();
+        $resourceRows = $em->createQueryBuilder()
+            ->select('IDENTITY(t.resourceNode) AS resource_node_id')
+            ->from($resourceClass, 't')
+            ->where('t.iid = :itemId')
+            ->setMaxResults(1)
+            ->setParameter('itemId', $item_id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        $resourceNodeId = (int) ($resourceRows[0]['resource_node_id'] ?? 0);
         if ($resourceNodeId <= 0) {
             return false;
         }
@@ -6125,11 +6316,20 @@ function api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code 
             return false;
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $sql = "SELECT locked FROM $table
-                WHERE locked = 1 AND ref_id = $resourceNodeId AND type = $link_type AND c_id = $courseId";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
+        $lockedLinks = $em->createQueryBuilder()
+            ->select('l.locked AS locked')
+            ->from(GradebookLink::class, 'l')
+            ->where('l.locked = 1')
+            ->andWhere('l.resourceNode = :resourceNodeId')
+            ->andWhere('l.type = :linkType')
+            ->andWhere('l.course = :courseId')
+            ->setParameter('resourceNodeId', $resourceNodeId)
+            ->setParameter('linkType', $link_type)
+            ->setParameter('courseId', $courseId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if ([] !== $lockedLinks) {
             return true;
         }
     }
@@ -6606,12 +6806,10 @@ function api_get_user_info_from_official_code($officialCode)
     if (empty($officialCode)) {
         return false;
     }
-    $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
-            WHERE official_code ='".Database::escape_string($officialCode)."'";
-    $result = Database::query($sql);
-    if (Database::num_rows($result) > 0) {
-        $result_array = Database::fetch_array($result);
-
+    $result_array = _api_user_row(
+        _api_user_rows_query_builder()->where('u.officialCode = :officialCode')->setParameter('officialCode', $officialCode)
+    );
+    if (null !== $result_array) {
         return _api_format_user($result_array);
     }
 
@@ -7115,14 +7313,19 @@ function api_get_supported_image_extensions($supportVectors = true)
  */
 function api_register_campus($listCampus = true)
 {
-    $tbl_settings = Database::get_main_table(TABLE_MAIN_SETTINGS);
-
-    $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
-    Database::query($sql);
-
+    $variables = ['registered'];
     if (!$listCampus) {
-        $sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
-        Database::query($sql);
+        $variables[] = 'donotlistcampus';
+    }
+    foreach ($variables as $variable) {
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(SettingsCurrent::class, 's')
+            ->set('s.selectedValue', "'true'")
+            ->where('s.variable = :variable')
+            ->setParameter('variable', $variable)
+            ->getQuery()
+            ->execute()
+        ;
     }
 }
 
@@ -7873,3 +8076,83 @@ function api_get_video_context_menu_hidden_script(): string
     HTML;
 }
 
+/**
+ * The columns of the user table that _api_format_user() reads (and the password), aliased to the column names.
+ */
+function _api_user_rows_query_builder(): QueryBuilder
+{
+    return Container::getEntityManager()->createQueryBuilder()
+        ->select(
+            'u.id AS id',
+            'u.firstname AS firstname',
+            'u.lastname AS lastname',
+            'u.email AS email',
+            'u.username AS username',
+            'u.phone AS phone',
+            'u.address AS address',
+            'u.pictureUri AS picture_uri',
+            'u.officialCode AS official_code',
+            'u.status AS status',
+            'u.active AS active',
+            'u.theme AS theme',
+            'u.locale AS locale',
+            'u.creatorId AS creator_id',
+            'u.createdAt AS created_at',
+            'u.hrDeptId AS hr_dept_id',
+            'u.expirationDate AS expiration_date',
+            'u.lastLogin AS last_login',
+            'u.profileCompleted AS profile_completed',
+            'u.competences AS competences',
+            'u.diplomas AS diplomas',
+            'u.teach AS teach',
+            'u.openarea AS openarea',
+            'u.password AS password'
+        )
+        ->from(User::class, 'u')
+    ;
+}
+
+/**
+ * The first row of a _api_user_rows_query_builder() query, in the shape of the raw table row (dates as
+ * 'Y-m-d H:i:s' strings, the profile_completed flag as 0/1), or null when there is none.
+ */
+function _api_user_row(QueryBuilder $qb): ?array
+{
+    $rows = $qb->setMaxResults(1)->getQuery()->getArrayResult();
+    if ([] === $rows) {
+        return null;
+    }
+
+    $row = _api_row_with_string_dates($rows[0]);
+    if (null !== $row['profile_completed']) {
+        $row['profile_completed'] = (int) $row['profile_completed'];
+    }
+
+    return $row;
+}
+
+/**
+ * Raw table rows carried datetimes as 'Y-m-d H:i:s' strings.
+ */
+function _api_row_with_string_dates(array $row): array
+{
+    foreach ($row as $key => $value) {
+        if ($value instanceof DateTimeInterface) {
+            $row[$key] = $value->format('Y-m-d H:i:s');
+        }
+    }
+
+    return $row;
+}
+
+/**
+ * Database::fetch_array() gave every value under its name and under its position.
+ */
+function _api_row_with_numeric_keys(array $row): array
+{
+    foreach ($row as $value) {
+        $row[] = $value;
+    }
+
+    return $row;
+}

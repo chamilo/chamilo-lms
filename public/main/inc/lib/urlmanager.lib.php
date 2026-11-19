@@ -11,6 +11,8 @@ use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup;
 use Chamilo\CoreBundle\Entity\Branch;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
@@ -180,6 +182,31 @@ class UrlManager
     }
 
     /**
+     * Inserts one row of an access_url_rel_* join table and returns its new id, or null on failure.
+     * DQL has no INSERT: the DBAL QueryBuilder keeps the raw query's error handling (Database::handleError).
+     *
+     * @param array<string, int|string> $values column => id
+     */
+    private static function insertRelation(string $table, array $values): ?int
+    {
+        $conn = Database::getManager()->getConnection();
+        $qb = $conn->createQueryBuilder()->insert($table);
+        foreach ($values as $column => $value) {
+            $qb->setValue($column, ':'.$column)->setParameter($column, (int) $value);
+        }
+
+        try {
+            $qb->executeStatement();
+        } catch (Exception $e) {
+            Database::handleError($e);
+
+            return null;
+        }
+
+        return (int) $conn->lastInsertId();
+    }
+
+    /**
      * This function get the quantity of URLs.
      *
      * @author Julio Montoya
@@ -188,13 +215,12 @@ class UrlManager
      * */
     public static function url_count()
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT count(id) as count_result FROM $table";
-        $res = Database::query($sql);
-        $url = Database::fetch_assoc($res);
-        $result = $url['count_result'];
-
-        return $result;
+        return (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(u.id)')
+            ->from(AccessUrl::class, 'u')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -208,14 +234,23 @@ class UrlManager
      * */
     public static function get_url_data_from_id($urlId)
     {
-        $urlId = (int) $urlId;
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT id, url, description, active
-                FROM $table
-                WHERE id = ".$urlId;
-        $res = Database::query($sql);
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select('u.id AS id', 'u.url AS url', 'u.description AS description', 'u.active AS active')
+            ->from(AccessUrl::class, 'u')
+            ->where('u.id = :id')
+            ->setParameter('id', (int) $urlId)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-        return Database::fetch_array($res);
+        // Database::fetch_array() semantics: named keys then numeric keys, empty array when there is no row.
+        if (null === $row) {
+            return [];
+        }
+        foreach ($row as $value) {
+            $row[] = $value;
+        }
+
+        return $row;
     }
 
     /**
@@ -231,26 +266,48 @@ class UrlManager
     public static function get_url_rel_user_data($urlId = 0, $order_by = null)
     {
         $urlId = (int) $urlId;
-        $where = ' WHERE u.active <> '.USER_SOFT_DELETED.' ';
-        $table_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'u.id AS user_id',
+                'u.lastname AS lastname',
+                'u.firstname AS firstname',
+                'u.username AS username',
+                'u.officialCode AS official_code',
+                'IDENTITY(r.url) AS access_url_id'
+            )
+            ->from(AccessUrlRelUser::class, 'r')
+            ->innerJoin('r.user', 'u')
+            ->where('u.active <> :softDeleted')
+            ->setParameter('softDeleted', USER_SOFT_DELETED)
+        ;
         if (!empty($urlId)) {
-            $where .= " AND $table_url_rel_user.access_url_id = ".$urlId;
+            $qb->andWhere('IDENTITY(r.url) = :urlId')->setParameter('urlId', $urlId);
         }
-        if (empty($order_by)) {
-            $order_clause = api_sort_by_first_name(
-            ) ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-        } else {
-            $order_clause = $order_by;
-        }
-        $sql = "SELECT u.id as user_id, lastname, firstname, username, official_code, access_url_id
-                FROM $tbl_user u
-                INNER JOIN $table_url_rel_user
-                ON $table_url_rel_user.user_id = u.id
-                $where  $order_clause";
-        $result = Database::query($sql);
 
-        return Database::store_result($result);
+        // $order_by used to be a raw SQL fragment; only the two orders the platform really uses are accepted.
+        $lastNameFirst = ['u.lastname', 'u.firstname', 'u.username'];
+        $firstNameFirst = ['u.firstname', 'u.lastname', 'u.username'];
+        $orderFields = api_sort_by_first_name() ? $firstNameFirst : $lastNameFirst;
+        if (!empty($order_by)) {
+            $wanted = strtolower(preg_replace('/\s+/', ' ', trim((string) $order_by)));
+            if ('order by lastname, firstname, username' === $wanted) {
+                $orderFields = $lastNameFirst;
+            } elseif ('order by firstname, lastname, username' === $wanted) {
+                $orderFields = $firstNameFirst;
+            }
+        }
+        foreach ($orderFields as $field) {
+            $qb->addOrderBy($field, 'ASC');
+        }
+
+        return array_map(
+            static function (array $row): array {
+                $row['access_url_id'] = (int) $row['access_url_id'];
+
+                return $row;
+            },
+            $qb->getQuery()->getArrayResult()
+        );
     }
 
     /**
@@ -264,26 +321,27 @@ class UrlManager
      */
     public static function get_url_rel_course_data($urlId = 0)
     {
-        $where = '';
         $urlId = (int) $urlId;
-        $table_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('c.id AS id', 'IDENTITY(uc.course) AS c_id', 'c.title AS title', 'IDENTITY(uc.url) AS access_url_id')
+            ->from(AccessUrlRelCourse::class, 'uc')
+            ->innerJoin('uc.course', 'c')
+            ->orderBy('c.title', 'ASC')
+            ->addOrderBy('c.code', 'ASC')
+        ;
         if (!empty($urlId)) {
-            $where = " WHERE uc.access_url_id = $urlId ";
+            $qb->where('IDENTITY(uc.url) = :urlId')->setParameter('urlId', $urlId);
         }
 
-        $sql = "SELECT u.id, c_id, title, uc.access_url_id
-                FROM $tbl_course u
-                INNER JOIN $table_url_rel_course uc
-                ON uc.c_id = u.id
-                $where
-                ORDER BY title, code";
+        return array_map(
+            static function (array $row): array {
+                $row['c_id'] = (int) $row['c_id'];
+                $row['access_url_id'] = (int) $row['access_url_id'];
 
-        $result = Database::query($sql);
-        $courses = Database::store_result($result);
-
-        return $courses;
+                return $row;
+            },
+            $qb->getQuery()->getArrayResult()
+        );
     }
 
     /**
@@ -297,14 +355,14 @@ class UrlManager
      */
     public static function getCountUrlRelCourse($courseId)
     {
-        $courseId = (int) $courseId;
-        $tableUrlRelCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT *
-                FROM $tableUrlRelCourse
-                WHERE c_id = '$courseId'";
-        $res = Database::query($sql);
-
-        return Database::num_rows($res);
+        return (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(r.id)')
+            ->from(AccessUrlRelCourse::class, 'r')
+            ->where('IDENTITY(r.course) = :courseId')
+            ->setParameter('courseId', (int) $courseId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -319,25 +377,25 @@ class UrlManager
     public static function get_url_rel_session_data($urlId = 0)
     {
         $urlId = (int) $urlId;
-        $where = '';
-        $table_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('s.id AS id', 's.title AS name', 'IDENTITY(r.url) AS access_url_id')
+            ->from(AccessUrlRelSession::class, 'r')
+            ->innerJoin('r.session', 's')
+            ->orderBy('s.title', 'ASC')
+            ->addOrderBy('s.id', 'ASC')
+        ;
         if (!empty($urlId)) {
-            $where = "WHERE $table_url_rel_session.access_url_id = ".$urlId;
+            $qb->where('IDENTITY(r.url) = :urlId')->setParameter('urlId', $urlId);
         }
 
-        $sql = "SELECT u.id, u.title AS name, access_url_id
-                FROM $tbl_session u
-                INNER JOIN $table_url_rel_session
-                ON $table_url_rel_session.session_id = u.id
-                $where
-                ORDER BY u.title, u.id";
+        return array_map(
+            static function (array $row): array {
+                $row['access_url_id'] = (int) $row['access_url_id'];
 
-        $result = Database::query($sql);
-        $sessions = Database::store_result($result);
-
-        return $sessions;
+                return $row;
+            },
+            $qb->getQuery()->getArrayResult()
+        );
     }
 
     /**
@@ -351,26 +409,25 @@ class UrlManager
      */
     public static function get_url_rel_usergroup_data($urlId = 0)
     {
-        $where = '';
-        $table_url_rel_usergroup = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
-        $table_user_group = Database::get_main_table(TABLE_USERGROUP);
-
         $urlId = (int) $urlId;
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('g.id AS id', 'g.title AS title', 'IDENTITY(r.url) AS access_url_id')
+            ->from(AccessUrlRelUserGroup::class, 'r')
+            ->innerJoin('r.userGroup', 'g')
+            ->orderBy('g.title', 'ASC')
+        ;
         if (!empty($urlId)) {
-            $where = " WHERE $table_url_rel_usergroup.access_url_id = ".$urlId;
+            $qb->where('IDENTITY(r.url) = :urlId')->setParameter('urlId', $urlId);
         }
 
-        $sql = "SELECT u.id, u.title, access_url_id
-                FROM $table_user_group u
-                INNER JOIN $table_url_rel_usergroup
-                ON $table_url_rel_usergroup.usergroup_id = u.id
-                $where
-                ORDER BY u.title";
+        return array_map(
+            static function (array $row): array {
+                $row['access_url_id'] = (int) $row['access_url_id'];
 
-        $result = Database::query($sql);
-        $courses = Database::store_result($result);
-
-        return $courses;
+                return $row;
+            },
+            $qb->getQuery()->getArrayResult()
+        );
     }
 
     /**
@@ -384,27 +441,26 @@ class UrlManager
      */
     public static function getUrlRelCourseCategory($urlId = 0)
     {
-        $table_url_rel = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $where = ' WHERE 1=1 ';
-
         $urlId = (int) $urlId;
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('c.id AS id', 'c.title AS title', 'IDENTITY(r.url) AS access_url_id')
+            ->from(AccessUrlRelCourseCategory::class, 'r')
+            ->innerJoin('r.courseCategory', 'c')
+            ->where('c.parent IS NULL')
+            ->orderBy('c.title', 'ASC')
+        ;
         if (!empty($urlId)) {
-            $where .= " AND $table_url_rel.access_url_id = ".$urlId;
+            $qb->andWhere('IDENTITY(r.url) = :urlId')->setParameter('urlId', $urlId);
         }
-        $where .= ' AND (parent_id IS NULL) ';
 
-        $sql = "SELECT u.id, u.title, access_url_id
-                FROM $table u
-                INNER JOIN $table_url_rel
-                ON $table_url_rel.course_category_id = u.id
-                $where
-                ORDER BY u.title";
+        return array_map(
+            static function (array $row): array {
+                $row['access_url_id'] = (int) $row['access_url_id'];
 
-        $result = Database::query($sql);
-        $courses = Database::store_result($result, 'ASSOC');
-
-        return $courses;
+                return $row;
+            },
+            $qb->getQuery()->getArrayResult()
+        );
     }
 
     /**
@@ -417,7 +473,6 @@ class UrlManager
      * */
     public static function set_url_status($status, $urlId)
     {
-        $url_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
         if ('lock' == $status) {
             $status_db = '0';
         }
@@ -425,9 +480,12 @@ class UrlManager
             $status_db = '1';
         }
         if (('1' == $status_db || '0' == $status_db) && is_numeric($urlId)) {
-            $sql = "UPDATE $url_table SET active='".intval($status_db)."'
-                    WHERE id='".intval($urlId)."'";
-            Database::query($sql);
+            Container::getEntityManager()
+                ->createQuery('UPDATE '.AccessUrl::class.' u SET u.active = :active WHERE u.id = :id')
+                ->setParameter('active', (int) $status_db)
+                ->setParameter('id', (int) $urlId)
+                ->execute()
+            ;
         }
     }
 
@@ -443,13 +501,16 @@ class UrlManager
      * */
     public static function relation_url_user_exist($user_id, $urlId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $sql = "SELECT user_id FROM $table
-               WHERE access_url_id = ".intval($urlId)." AND user_id = ".intval($user_id)." ";
-        $result = Database::query($sql);
-        $num = Database::num_rows($result);
-
-        return $num;
+        return (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(r.id)')
+            ->from(AccessUrlRelUser::class, 'r')
+            ->where('IDENTITY(r.url) = :urlId')
+            ->andWhere('IDENTITY(r.user) = :relId')
+            ->setParameter('urlId', (int) $urlId)
+            ->setParameter('relId', (int) $user_id)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -464,15 +525,16 @@ class UrlManager
      * */
     public static function relation_url_course_exist($courseId, $urlId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT c_id FROM $table
-               WHERE
-                    access_url_id = ".intval($urlId)." AND
-                    c_id = '".intval($courseId)."'";
-        $result = Database::query($sql);
-        $num = Database::num_rows($result);
-
-        return $num;
+        return (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(r.id)')
+            ->from(AccessUrlRelCourse::class, 'r')
+            ->where('IDENTITY(r.url) = :urlId')
+            ->andWhere('IDENTITY(r.course) = :relId')
+            ->setParameter('urlId', (int) $urlId)
+            ->setParameter('relId', (int) $courseId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -488,15 +550,16 @@ class UrlManager
      * */
     public static function relationUrlUsergroupExist($userGroupId, $urlId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
-        $sql = "SELECT usergroup_id FROM $table
-               WHERE
-                    access_url_id = ".intval($urlId)." AND
-                    usergroup_id = ".intval($userGroupId);
-        $result = Database::query($sql);
-        $num = Database::num_rows($result);
-
-        return $num;
+        return (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(r.id)')
+            ->from(AccessUrlRelUserGroup::class, 'r')
+            ->where('IDENTITY(r.url) = :urlId')
+            ->andWhere('IDENTITY(r.userGroup) = :relId')
+            ->setParameter('urlId', (int) $urlId)
+            ->setParameter('relId', (int) $userGroupId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -511,17 +574,16 @@ class UrlManager
      * */
     public static function relation_url_session_exist($sessionId, $urlId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $sessionId = (int) $sessionId;
-        $urlId = (int) $urlId;
-        $sql = "SELECT session_id FROM $table
-                WHERE
-                    access_url_id = $urlId AND
-                    session_id = $sessionId ";
-        $result = Database::query($sql);
-        $num = Database::num_rows($result);
-
-        return $num;
+        return (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(r.id)')
+            ->from(AccessUrlRelSession::class, 'r')
+            ->where('IDENTITY(r.url) = :urlId')
+            ->andWhere('IDENTITY(r.session) = :relId')
+            ->setParameter('urlId', (int) $urlId)
+            ->setParameter('relId', (int) $sessionId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -601,10 +663,8 @@ class UrlManager
 
                     $count = self::relation_url_course_exist($courseId, $urlId);
                     if (0 == $count) {
-                        $sql = "INSERT INTO $table
-                                SET c_id = '".$courseId."', access_url_id = ".intval($urlId);
-                        $result = Database::query($sql);
-                        if ($result) {
+                        $result = self::insertRelation($table, ['c_id' => $courseId, 'access_url_id' => $urlId]);
+                        if (null !== $result) {
                             $result_array[$urlId][$course_code] = 1;
                         } else {
                             $result_array[$urlId][$course_code] = 0;
@@ -724,15 +784,16 @@ class UrlManager
      * */
     public static function relationUrlCourseCategoryExist($categoryCourseId, $urlId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $sql = "SELECT course_category_id FROM $table
-                WHERE
-                    access_url_id = ".intval($urlId)." AND
-                    course_category_id = ".intval($categoryCourseId);
-        $result = Database::query($sql);
-        $num = Database::num_rows($result);
-
-        return $num;
+        return (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(r.id)')
+            ->from(AccessUrlRelCourseCategory::class, 'r')
+            ->where('IDENTITY(r.url) = :urlId')
+            ->andWhere('IDENTITY(r.courseCategory) = :relId')
+            ->setParameter('urlId', (int) $urlId)
+            ->setParameter('relId', (int) $categoryCourseId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -743,14 +804,9 @@ class UrlManager
      */
     public static function addUserGroupToUrl($userGroupId, $urlId)
     {
-        $urlRelUserGroupTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
-        $sql = "INSERT INTO $urlRelUserGroupTable
-                SET
-                usergroup_id = '".intval($userGroupId)."',
-                access_url_id = ".intval($urlId);
-        Database::query($sql);
+        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
 
-        return Database::insert_id();
+        return (int) self::insertRelation($table, ['usergroup_id' => $userGroupId, 'access_url_id' => $urlId]);
     }
 
     /**
@@ -765,13 +821,7 @@ class UrlManager
         if (empty($exists)) {
             $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
 
-            $sql = "INSERT INTO $table
-                    SET
-                    course_category_id = '".intval($categoryId)."',
-                    access_url_id = ".intval($urlId);
-            Database::query($sql);
-
-            return Database::insert_id();
+            return (int) self::insertRelation($table, ['course_category_id' => $categoryId, 'access_url_id' => $urlId]);
         }
 
         return 0;
@@ -798,12 +848,8 @@ class UrlManager
                     $count = self::relation_url_session_exist($session_id, $urlId);
 
                     if (0 == $count) {
-                        $sql = "INSERT INTO $table
-                                SET
-                                session_id = ".intval($session_id).",
-                                access_url_id = ".intval($urlId);
-                        $result = Database::query($sql);
-                        if ($result) {
+                        $result = self::insertRelation($table, ['session_id' => $session_id, 'access_url_id' => $urlId]);
+                        if (null !== $result) {
                             $result_array[$urlId][$session_id] = 1;
                         } else {
                             $result_array[$urlId][$session_id] = 0;
@@ -837,9 +883,7 @@ class UrlManager
         $count = self::relation_url_user_exist($user_id, $urlId);
         $result = true;
         if (empty($count)) {
-            $sql = "INSERT INTO $table (user_id, access_url_id)
-                    VALUES ('".intval($user_id)."', '".intval($urlId)."') ";
-            $result = Database::query($sql);
+            $result = null !== self::insertRelation($table, ['user_id' => $user_id, 'access_url_id' => $urlId]);
         }
 
         if ($addAuthSource && $result) {
@@ -880,9 +924,7 @@ class UrlManager
         }
         $count = self::relation_url_course_exist($courseId, $urlId);
         if (empty($count)) {
-            $sql = "INSERT INTO $table
-                    SET c_id = ".intval($courseId).", access_url_id = ".intval($urlId);
-            Database::query($sql);
+            self::insertRelation($table, ['c_id' => $courseId, 'access_url_id' => $urlId]);
         }
 
         return true;
@@ -908,10 +950,8 @@ class UrlManager
         $result = false;
         $count = self::relation_url_session_exist($session_id, $urlId);
         if (empty($count) && !empty($session_id)) {
-            $sql = "INSERT INTO $table
-                    SET session_id = ".$session_id.", access_url_id = ".$urlId;
             try {
-                Database::query($sql);
+                self::insertRelation($table, ['session_id' => $session_id, 'access_url_id' => $urlId]);
             } catch (Exception $e) {
                 return false;
             }
@@ -934,14 +974,14 @@ class UrlManager
      * */
     public static function delete_url_rel_user($user_id, $urlId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $result = true;
         if (!empty($user_id) && !empty($urlId)) {
-            $sql = "DELETE FROM $table
-                   WHERE
-                        user_id = ".intval($user_id)." AND
-                        access_url_id = ".intval($urlId);
-            $result = Database::query($sql);
+            Container::getEntityManager()
+                ->createQuery('DELETE FROM '.AccessUrlRelUser::class.' r WHERE r.user = :user AND r.url = :url')
+                    ->setParameter('user', (int) $user_id)
+                    ->setParameter('url', (int) $urlId)
+                ->execute()
+            ;
         }
 
         return $result;
@@ -958,12 +998,13 @@ class UrlManager
      * */
     public static function deleteUserFromAllUrls($userId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $result = true;
         if (!empty($userId)) {
-            $sql = "DELETE FROM $table
-                   WHERE user_id = ".intval($userId);
-            Database::query($sql);
+            Container::getEntityManager()
+                ->createQuery('DELETE FROM '.AccessUrlRelUser::class.' r WHERE r.user = :user')
+                    ->setParameter('user', (int) $userId)
+                ->execute()
+            ;
         }
 
         return $result;
@@ -981,12 +1022,14 @@ class UrlManager
      * */
     public static function delete_url_rel_course($courseId, $urlId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "DELETE FROM $table
-               WHERE c_id = '".intval($courseId)."' AND access_url_id=".intval($urlId)."  ";
-        $result = Database::query($sql);
+        Container::getEntityManager()
+            ->createQuery('DELETE FROM '.AccessUrlRelCourse::class.' r WHERE r.course = :course AND r.url = :url')
+                ->setParameter('course', (int) $courseId)
+                ->setParameter('url', (int) $urlId)
+            ->execute()
+        ;
 
-        return $result;
+        return true;
     }
 
     /**
@@ -1001,13 +1044,14 @@ class UrlManager
      * */
     public static function delete_url_rel_usergroup($userGroupId, $urlId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
-        $sql = "DELETE FROM $table
-                WHERE usergroup_id = '".intval($userGroupId)."' AND
-                     access_url_id = ".intval($urlId);
-        $result = Database::query($sql);
+        Container::getEntityManager()
+            ->createQuery('DELETE FROM '.AccessUrlRelUserGroup::class.' r WHERE r.userGroup = :userGroup AND r.url = :url')
+                ->setParameter('userGroup', (int) $userGroupId)
+                ->setParameter('url', (int) $urlId)
+            ->execute()
+        ;
 
-        return $result;
+        return true;
     }
 
     /**
@@ -1022,14 +1066,14 @@ class UrlManager
      * */
     public static function deleteUrlRelCourseCategory($userGroupId, $urlId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $sql = "DELETE FROM $table
-                WHERE
-                    course_category_id = '".intval($userGroupId)."' AND
-                    access_url_id=".intval($urlId)."  ";
-        $result = Database::query($sql);
+        Container::getEntityManager()
+            ->createQuery('DELETE FROM '.AccessUrlRelCourseCategory::class.' r WHERE r.courseCategory = :category AND r.url = :url')
+                ->setParameter('category', (int) $userGroupId)
+                ->setParameter('url', (int) $urlId)
+            ->execute()
+        ;
 
-        return $result;
+        return true;
     }
 
     /**
@@ -1044,14 +1088,14 @@ class UrlManager
      * */
     public static function delete_url_rel_session($session_id, $urlId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $sql = "DELETE FROM $table
-                WHERE
-                    session_id = ".intval($session_id)." AND
-                    access_url_id=".intval($urlId)."  ";
-        $result = Database::query($sql, 'ASSOC');
+        Container::getEntityManager()
+            ->createQuery('DELETE FROM '.AccessUrlRelSession::class.' r WHERE r.session = :session AND r.url = :url')
+                ->setParameter('session', (int) $session_id)
+                ->setParameter('url', (int) $urlId)
+            ->execute()
+        ;
 
-        return $result;
+        return true;
     }
 
     /**
@@ -1066,19 +1110,21 @@ class UrlManager
      */
     public static function update_urls_rel_user($user_list, $urlId, bool $updateAuthSource = false)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $urlId = (int) $urlId;
 
-        $sql = "SELECT user_id
-                FROM $table
-                WHERE access_url_id = $urlId";
-        $result = Database::query($sql);
-        $existing_users = [];
-
-        // Getting all users
-        while ($row = Database::fetch_array($result)) {
-            $existing_users[] = $row['user_id'];
-        }
+        $existing_users = array_map(
+            'intval',
+            array_column(
+                Container::getEntityManager()->createQueryBuilder()
+                    ->select('IDENTITY(r.user) AS user_id')
+                    ->from(AccessUrlRelUser::class, 'r')
+                    ->where('IDENTITY(r.url) = :urlId')
+                    ->setParameter('urlId', $urlId)
+                    ->getQuery()
+                    ->getArrayResult(),
+                'user_id'
+            )
+        );
 
         // Adding users
         $users_added = [];
@@ -1122,16 +1168,19 @@ class UrlManager
      * */
     public static function update_urls_rel_course($course_list, $urlId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-
-        $sql = "SELECT c_id FROM $table
-                WHERE access_url_id = ".intval($urlId);
-        $result = Database::query($sql);
-
-        $existing_courses = [];
-        while ($row = Database::fetch_array($result)) {
-            $existing_courses[] = $row['c_id'];
-        }
+        $existing_courses = array_map(
+            'intval',
+            array_column(
+                Container::getEntityManager()->createQueryBuilder()
+                    ->select('IDENTITY(r.course) AS c_id')
+                    ->from(AccessUrlRelCourse::class, 'r')
+                    ->where('IDENTITY(r.url) = :urlId')
+                    ->setParameter('urlId', (int) $urlId)
+                    ->getQuery()
+                    ->getArrayResult(),
+                'c_id'
+            )
+        );
 
         // Adding courses
         foreach ($course_list as $courseId) {
@@ -1162,14 +1211,18 @@ class UrlManager
             return;
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
-
-        $sql = "SELECT usergroup_id FROM $table WHERE access_url_id = ".intval($urlId);
-        $result = Database::query($sql);
-
         $existingItems = array_map(
-            fn ($row) => $row['usergroup_id'],
-            Database::store_result($result)
+            'intval',
+            array_column(
+                Container::getEntityManager()->createQueryBuilder()
+                    ->select('IDENTITY(r.userGroup) AS usergroup_id')
+                    ->from(AccessUrlRelUserGroup::class, 'r')
+                    ->where('IDENTITY(r.url) = :urlId')
+                    ->setParameter('urlId', $urlId)
+                    ->getQuery()
+                    ->getArrayResult(),
+                'usergroup_id'
+            )
         );
 
         foreach ($userGroupList as $userGroupId) {
@@ -1195,16 +1248,19 @@ class UrlManager
      */
     public static function updateUrlRelCourseCategory($list, $urlId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $sql = "SELECT course_category_id
-                FROM $table
-                WHERE access_url_id = ".intval($urlId);
-        $result = Database::query($sql);
-        $existingItems = [];
-
-        while ($row = Database::fetch_array($result)) {
-            $existingItems[] = $row['course_category_id'];
-        }
+        $existingItems = array_map(
+            'intval',
+            array_column(
+                Container::getEntityManager()->createQueryBuilder()
+                    ->select('IDENTITY(r.courseCategory) AS course_category_id')
+                    ->from(AccessUrlRelCourseCategory::class, 'r')
+                    ->where('IDENTITY(r.url) = :urlId')
+                    ->setParameter('urlId', (int) $urlId)
+                    ->getQuery()
+                    ->getArrayResult(),
+                'course_category_id'
+            )
+        );
 
         // Adding
         foreach ($list as $id) {
@@ -1232,13 +1288,20 @@ class UrlManager
      */
     private static function getCourseCategoryDescendantIds(int $categoryId): array
     {
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $em = Container::getEntityManager();
         $descendants = [];
         $pending = [$categoryId];
         while (!empty($pending)) {
             $parentId = array_pop($pending);
-            $result = Database::query("SELECT id FROM $table WHERE parent_id = ".$parentId);
-            while ($row = Database::fetch_assoc($result)) {
+            $rows = $em->createQueryBuilder()
+                ->select('c.id AS id')
+                ->from(CourseCategory::class, 'c')
+                ->where('IDENTITY(c.parent) = :parentId')
+                ->setParameter('parentId', $parentId)
+                ->getQuery()
+                ->getArrayResult()
+            ;
+            foreach ($rows as $row) {
                 $childId = (int) $row['id'];
                 if (!in_array($childId, $descendants, true)) {
                     $descendants[] = $childId;
@@ -1260,16 +1323,19 @@ class UrlManager
      * */
     public static function update_urls_rel_session($session_list, $urlId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-
-        $sql = "SELECT session_id FROM $table
-                WHERE access_url_id=".intval($urlId);
-        $result = Database::query($sql);
-        $existing_sessions = [];
-
-        while ($row = Database::fetch_array($result)) {
-            $existing_sessions[] = $row['session_id'];
-        }
+        $existing_sessions = array_map(
+            'intval',
+            array_column(
+                Container::getEntityManager()->createQueryBuilder()
+                    ->select('IDENTITY(r.session) AS session_id')
+                    ->from(AccessUrlRelSession::class, 'r')
+                    ->where('IDENTITY(r.url) = :urlId')
+                    ->setParameter('urlId', (int) $urlId)
+                    ->getQuery()
+                    ->getArrayResult(),
+                'session_id'
+            )
+        );
 
         // Adding users
         foreach ($session_list as $session) {
@@ -1300,16 +1366,21 @@ class UrlManager
      */
     public static function get_access_url_from_user($user_id)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $table_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT url, access_url_id
-                FROM $table url_rel_user
-                INNER JOIN $table_url u
-                ON (url_rel_user.access_url_id = u.id)
-                WHERE user_id = ".intval($user_id);
-        $result = Database::query($sql);
+        return array_map(
+            static function (array $row): array {
+                $row['access_url_id'] = (int) $row['access_url_id'];
 
-        return Database::store_result($result, 'ASSOC');
+                return $row;
+            },
+            Container::getEntityManager()->createQueryBuilder()
+                ->select('u.url AS url', 'IDENTITY(r.url) AS access_url_id')
+                ->from(AccessUrlRelUser::class, 'r')
+                ->innerJoin('r.url', 'u')
+                ->where('IDENTITY(r.user) = :userId')
+                ->setParameter('userId', (int) $user_id)
+                ->getQuery()
+                ->getArrayResult()
+        );
     }
 
     /**
@@ -1319,37 +1390,34 @@ class UrlManager
      */
     public static function get_access_url_from_course($courseId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $table_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $courseId = (int) $courseId;
-        $sql = "SELECT url, access_url_id FROM $table c
-                INNER JOIN $table_url u
-                ON (c.access_url_id = u.id)
-                WHERE c_id = $courseId";
+        return array_map(
+            static function (array $row): array {
+                $row['access_url_id'] = (int) $row['access_url_id'];
 
-        $result = Database::query($sql);
-
-        return Database::store_result($result, 'ASSOC');
+                return $row;
+            },
+            Container::getEntityManager()->createQueryBuilder()
+                ->select('u.url AS url', 'IDENTITY(c.url) AS access_url_id')
+                ->from(AccessUrlRelCourse::class, 'c')
+                ->innerJoin('c.url', 'u')
+                ->where('IDENTITY(c.course) = :courseId')
+                ->setParameter('courseId', (int) $courseId)
+                ->getQuery()
+                ->getArrayResult()
+        );
     }
 
     public static function getCountAccessUrlFromCourse($courseId)
     {
-        $courseId = (int) $courseId;
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $table_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT count(u.id) count FROM $table c
-                INNER JOIN $table_url u
-                ON (c.access_url_id = u.id)
-                WHERE c_id = $courseId ";
-
-        $result = Database::query($sql);
-        if ($result) {
-            $row = Database::fetch_assoc($result);
-
-            return (int) $row['count'];
-        }
-
-        return 0;
+        return (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(u.id)')
+            ->from(AccessUrlRelCourse::class, 'c')
+            ->innerJoin('c.url', 'u')
+            ->where('IDENTITY(c.course) = :courseId')
+            ->setParameter('courseId', (int) $courseId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -1359,17 +1427,21 @@ class UrlManager
      */
     public static function get_access_url_from_session($sessionId)
     {
-        $table_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $table_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT url, access_url_id
-                FROM $table_url_rel_session url_rel_session
-                INNER JOIN $table_url u
-                ON (url_rel_session.access_url_id = u.id)
-                WHERE session_id = ".intval($sessionId);
-        $result = Database::query($sql);
-        $url_list = Database::store_result($result);
+        return array_map(
+            static function (array $row): array {
+                $row['access_url_id'] = (int) $row['access_url_id'];
 
-        return $url_list;
+                return $row;
+            },
+            Container::getEntityManager()->createQueryBuilder()
+                ->select('u.url AS url', 'IDENTITY(r.url) AS access_url_id')
+                ->from(AccessUrlRelSession::class, 'r')
+                ->innerJoin('r.url', 'u')
+                ->where('IDENTITY(r.session) = :sessionId')
+                ->setParameter('sessionId', (int) $sessionId)
+                ->getQuery()
+                ->getArrayResult()
+        );
     }
 
     /**
@@ -1379,13 +1451,16 @@ class UrlManager
      */
     public static function get_url_id($url)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-        $sql = "SELECT id FROM $table
-                WHERE url = '".Database::escape_string($url)."'";
-        $result = Database::query($sql);
-        $urlId = Database::result($result, 0, 0);
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select('u.id AS id')
+            ->from(AccessUrl::class, 'u')
+            ->where('u.url = :url')
+            ->setParameter('url', (string) $url)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-        return $urlId;
+        return null === $row ? null : $row['id'];
     }
 
     /**
@@ -1455,19 +1530,19 @@ class UrlManager
 
     public static function searchCoursesByTitleOrCode(string $needle): array
     {
-        $tbl = Database::get_main_table(TABLE_MAIN_COURSE);
         $charset = api_get_system_encoding();
         $needle = api_convert_encoding($needle, $charset, 'utf-8');
-        $needle = Database::escape_string($needle);
 
-        $sql = "
-        SELECT id, code, title
-        FROM $tbl
-        WHERE title LIKE '$needle%' OR code LIKE '$needle%'
-        ORDER BY title, code
-        LIMIT 11
-    ";
-
-        return Database::store_result(Database::query($sql));
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select('c.id AS id', 'c.code AS code', 'c.title AS title')
+            ->from(Course::class, 'c')
+            ->where('c.title LIKE :needle OR c.code LIKE :needle')
+            ->setParameter('needle', $needle.'%')
+            ->orderBy('c.title', 'ASC')
+            ->addOrderBy('c.code', 'ASC')
+            ->setMaxResults(11)
+            ->getQuery()
+            ->getArrayResult()
+        ;
     }
 }

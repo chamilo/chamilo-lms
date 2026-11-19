@@ -700,4 +700,21 @@ final class ExerciseTier3CharacterizationTest extends KernelTestCase
         $this->assertEquals(1.0, (float) $this->conn->fetchOne('SELECT score FROM track_e_exercises WHERE exe_id = ?', [$other]));
         $this->assertEquals(1.0, (float) $this->conn->fetchOne('SELECT score FROM track_e_exercises WHERE exe_id = ?', [$exe]) - 5.0, 'other attempts are untouched');
     }
+
+    public function testManageAnswerHotSpotFallsBackOnTheLegacyAnswerNumbers(): void
+    {
+        $this->newQuiz();
+        $q = $this->makeQuestion('x3_hot_legacy', HOT_SPOT, 4.0);
+        $this->makeAnswer($q, 'Zone 1', 1, 2.0, 1, ['hotspot_coordinates' => '0;0|10|10', 'hotspot_type' => 'square']);
+        $this->makeAnswer($q, 'Zone 2', 2, 2.0, 2, ['hotspot_coordinates' => '20;20|10|10', 'hotspot_type' => 'square']);
+        // Attempts saved by older versions: hotspot_answer_id is the position of the answer (1, 2), not its iid.
+        $exe = $this->newAttemptRow();
+        $this->hotspotRow($exe, $q, 1, 1);
+        $this->hotspotRow($exe, $q, 2, 0);
+        $this->assertEquals(2.0, $this->fromDatabase($exe, $q)['score']);
+        $both = $this->newAttemptRow();
+        $this->hotspotRow($both, $q, 1, 1);
+        $this->hotspotRow($both, $q, 2, 1);
+        $this->assertEquals(4.0, $this->fromDatabase($both, $q)['score']);
+    }
 }

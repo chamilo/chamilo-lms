@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
@@ -3578,7 +3579,6 @@ class Exercise
         $questionId = (int) $questionId;
         $exeId = (int) $exeId;
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $studentChoiceDegree = null;
         $listCorrectAnswers = [];
 
@@ -3645,13 +3645,8 @@ class Exercise
 
         $user_answer = '';
         // Get answer list for matching
-        $sql = "SELECT iid, answer
-                FROM $table_ans
-                WHERE question_id = $questionId";
-        $res_answer = Database::query($sql);
-
         $answerMatching = [];
-        while ($real_answer = Database::fetch_array($res_answer)) {
+        foreach ($this->getQuestionAnswerRows($questionId) as $real_answer) {
             $answerMatching[$real_answer['iid']] = $real_answer['answer'];
         }
 
@@ -3660,14 +3655,18 @@ class Exercise
         if (MULTIPLE_ANSWER_COMBINATION == $answerType ||
             MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE == $answerType
         ) {
-            $sql = "SELECT *
-                    FROM $table_ans
-                    WHERE question_id = $questionId
-                    ORDER BY position
-                    LIMIT 1";
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
-                $firstAnswer = Database::fetch_array($result);
+            $firstAnswerRow = Container::getEntityManager()->createQueryBuilder()
+                ->select(self::legacyRowSelect(CQuizAnswer::class, 'a'))
+                ->from(CQuizAnswer::class, 'a')
+                ->where('IDENTITY(a.question) = :questionId')
+                ->orderBy('a.position')
+                ->addOrderBy('a.iid')
+                ->setMaxResults(1)
+                ->setParameter('questionId', $questionId)
+                ->getQuery()
+                ->getArrayResult()[0] ?? null;
+            if (null !== $firstAnswerRow) {
+                $firstAnswer = self::legacyRowNormalize(CQuizAnswer::class, $firstAnswerRow);
             }
         }
 
@@ -3694,13 +3693,7 @@ class Exercise
             }
             // Load student's selected choices
             if ($from_database) {
-                $studentChoices = Database::store_result(
-                    Database::query(
-                        "SELECT answer FROM $TBL_TRACK_ATTEMPT WHERE exe_id = $exeId AND question_id = $questionId"
-                    ),
-                    'ASSOC'
-                );
-                $studentChoices = array_column($studentChoices, 'answer');
+                $studentChoices = array_column($this->getTrackedAttemptRows($exeId, $questionId), 'answer');
             } else {
                 $studentChoices = array_values((array) $choice);
             }
@@ -3783,12 +3776,7 @@ class Exercise
                 case UNIQUE_ANSWER_NO_OPTION:
                 case READING_COMPREHENSION:
                     if ($from_database) {
-                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                WHERE
-                                    exe_id = $exeId AND
-                                    question_id = $questionId";
-                        $result = Database::query($sql);
-                        $choice = Database::result($result, 0, 'answer');
+                        $choice = $this->getTrackedAttemptRows($exeId, $questionId)[0]['answer'] ?? null;
 
                         if (false === $userAnsweredQuestion) {
                             $userAnsweredQuestion = !empty($choice);
@@ -3812,13 +3800,7 @@ class Exercise
                 case MULTIPLE_ANSWER_TRUE_FALSE:
                     if ($from_database) {
                         $choice = [];
-                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                WHERE
-                                    exe_id = $exeId AND
-                                    question_id = ".$questionId;
-
-                        $result = Database::query($sql);
-                        while ($row = Database::fetch_array($result)) {
+                        foreach ($this->getTrackedAttemptRows($exeId, $questionId) as $row) {
                             $values = explode(':', $row['answer']);
                             $my_answer_id = isset($values[0]) ? $values[0] : '';
                             $option = isset($values[1]) ? $values[1] : '';
@@ -3853,12 +3835,7 @@ class Exercise
                     if ($from_database) {
                         $choice = [];
                         $choiceDegreeCertainty = [];
-                        $sql = "SELECT answer
-                                FROM $TBL_TRACK_ATTEMPT
-                                WHERE exe_id = $exeId AND question_id = $questionId";
-
-                        $result = Database::query($sql);
-                        while ($row = Database::fetch_array($result)) {
+                        foreach ($this->getTrackedAttemptRows($exeId, $questionId) as $row) {
                             $ind = $row['answer'];
                             $values = explode(':', $ind);
                             $myAnswerId = $values[0] ?? null;
@@ -3903,10 +3880,7 @@ class Exercise
                 case MULTIPLE_ANSWER_DROPDOWN:
                     if ($from_database) {
                         $choice = [];
-                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                WHERE exe_id = $exeId AND question_id = $questionId ";
-                        $resultans = Database::query($sql);
-                        while ($row = Database::fetch_array($resultans)) {
+                        foreach ($this->getTrackedAttemptRows($exeId, $questionId) as $row) {
                             $choice[$row['answer']] = 1;
                         }
 
@@ -3933,10 +3907,7 @@ class Exercise
                 case GLOBAL_MULTIPLE_ANSWER:
                     if ($from_database) {
                         $choice = [];
-                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                WHERE exe_id = $exeId AND question_id = $questionId ";
-                        $resultans = Database::query($sql);
-                        while ($row = Database::fetch_array($resultans)) {
+                        foreach ($this->getTrackedAttemptRows($exeId, $questionId) as $row) {
                             $choice[$row['answer']] = 1;
                         }
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
@@ -3960,10 +3931,7 @@ class Exercise
                 case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
                     if ($from_database) {
                         $choice = [];
-                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                WHERE exe_id = $exeId AND question_id = $questionId";
-                        $resultans = Database::query($sql);
-                        while ($row = Database::fetch_array($resultans)) {
+                        foreach ($this->getTrackedAttemptRows($exeId, $questionId) as $row) {
                             $result = explode(':', $row['answer']);
                             if (isset($result[0])) {
                                 $my_answer_id = isset($result[0]) ? $result[0] : '';
@@ -3989,10 +3957,7 @@ class Exercise
                 case MULTIPLE_ANSWER_COMBINATION:
                     if ($from_database) {
                         $choice = [];
-                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                WHERE exe_id = $exeId AND question_id = $questionId";
-                        $resultans = Database::query($sql);
-                        while ($row = Database::fetch_array($resultans)) {
+                        foreach ($this->getTrackedAttemptRows($exeId, $questionId) as $row) {
                             $choice[$row['answer']] = 1;
                         }
 
@@ -4029,13 +3994,7 @@ class Exercise
                     $str = '';
                     $answerFromDatabase = '';
                     if ($from_database) {
-                        $sql = "SELECT answer
-                                FROM $TBL_TRACK_ATTEMPT
-                                WHERE
-                                    exe_id = $exeId AND
-                                    question_id= $questionId ";
-                        $result = Database::query($sql);
-                        $str = $answerFromDatabase = Database::result($result, 0, 'answer');
+                        $str = $answerFromDatabase = $this->getTrackedAttemptRows($exeId, $questionId)[0]['answer'] ?? null;
                     }
 
                     // if ($saved_results == false && strpos($answerFromDatabase, 'font color') !== false) {
@@ -4350,6 +4309,7 @@ class Exercise
                             }
 
                             if ($from_database) {
+                                // TODO(db-neutral): left raw, dead code (unreachable branch), not pinned by any test
                                 $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                         WHERE
                                             exe_id = $exeId AND
@@ -4426,13 +4386,7 @@ class Exercise
                         }
                     } else {
                         if ($from_database) {
-                            $sql = "SELECT *
-                                    FROM $TBL_TRACK_ATTEMPT
-                                    WHERE
-                                        exe_id = $exeId AND
-                                        question_id = $questionId ";
-                            $result = Database::query($sql);
-                            $resultData = Database::fetch_assoc($result);
+                            $resultData = $this->getTrackedAttemptRows($exeId, $questionId)[0] ?? false;
                             $answer = $resultData['answer'];
                             $questionScore = $resultData['marks'];
                         }
@@ -4442,12 +4396,7 @@ class Exercise
                 case UPLOAD_ANSWER:
                 case FREE_ANSWER:
                     if ($from_database) {
-                        $sql = "SELECT answer, marks FROM $TBL_TRACK_ATTEMPT
-                                 WHERE
-                                    exe_id = $exeId AND
-                                    question_id= ".$questionId;
-                        $result = Database::query($sql);
-                        $data = Database::fetch_array($result);
+                        $data = $this->getTrackedAttemptRows($exeId, $questionId)[0] ?? false;
                         $choice = '';
                         $questionScore = 0;
                         if ($data) {
@@ -4480,14 +4429,7 @@ class Exercise
                     break;
                 case ORAL_EXPRESSION:
                     if ($from_database) {
-                        $query = "SELECT answer, marks
-                                  FROM $TBL_TRACK_ATTEMPT
-                                  WHERE
-                                        exe_id = $exeId AND
-                                        question_id = $questionId
-                                 ";
-                        $resq = Database::query($query);
-                        $row = Database::fetch_assoc($resq);
+                        $row = $this->getTrackedAttemptRows($exeId, $questionId)[0] ?? false;
                         $choice = '';
                         $questionScore = 0;
 
@@ -4526,34 +4468,20 @@ class Exercise
                 case MATCHING_DRAGGABLE:
                 case MATCHING:
                     if ($from_database) {
-                        $sql = "SELECT iid, answer
-                                FROM $table_ans
-                                WHERE
-                                    question_id = $questionId AND
-                                    correct = 0
-                                ";
-                        $result = Database::query($sql);
                         // Getting the real answer
                         $real_list = [];
-                        while ($realAnswer = Database::fetch_array($result)) {
+                        foreach ($this->getQuestionAnswerRows($questionId, 'a.correct = 0') as $realAnswer) {
                             $real_list[$realAnswer['iid']] = $realAnswer['answer'];
                         }
 
-                        $orderBy = ' ORDER BY iid ';
-                        if (DRAGGABLE == $answerType) {
-                            $orderBy = ' ORDER BY correct ';
-                        }
-
-                        $sql = "SELECT iid, answer, correct, ponderation
-                                FROM $table_ans
-                                WHERE
-                                    question_id = $questionId AND
-                                    correct <> 0
-                                $orderBy";
-                        $result = Database::query($sql);
                         $options = [];
                         $correctAnswers = [];
-                        while ($row = Database::fetch_assoc($result)) {
+                        $optionRows = $this->getQuestionAnswerRows(
+                            $questionId,
+                            'a.correct <> 0',
+                            DRAGGABLE == $answerType ? 'a.correct' : 'a.iid'
+                        );
+                        foreach ($optionRows as $row) {
                             $options[] = $row;
                             $correctAnswers[$row['correct']] = $row['answer'];
                         }
@@ -4566,16 +4494,11 @@ class Exercise
                             $i_answer_correct_answer = $a_answers['correct']; //1 - 2
                             $i_answer_id_auto = $a_answers['iid']; // 3 - 4
 
-                            $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                    WHERE
-                                        exe_id = '$exeId' AND
-                                        question_id = '$questionId' AND
-                                        position = '$i_answer_id_auto'";
-                            $result = Database::query($sql);
                             $s_user_answer = 0;
-                            if (Database::num_rows($result) > 0) {
+                            $userAnswerRows = $this->getTrackedAttemptRows($exeId, $questionId, (int) $i_answer_id_auto);
+                            if (!empty($userAnswerRows)) {
                                 //  rich - good looking
-                                $s_user_answer = Database::result($result, 0, 0);
+                                $s_user_answer = $userAnswerRows[0]['answer'];
                             }
                             $i_answerWeighting = $a_answers['ponderation'];
                             $user_answer = '';
@@ -4799,47 +4722,19 @@ class Exercise
                 case HOT_SPOT:
                 case HOT_SPOT_COMBINATION:
                     if ($from_database) {
-                        $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                         // Check auto id
                         $foundAnswerId = $answerAutoId;
-                        $sql = "SELECT hotspot_correct
-                                FROM $TBL_TRACK_HOTSPOT
-                                WHERE
-                                    hotspot_exe_id = $exeId AND
-                                    hotspot_question_id= $questionId AND
-                                    hotspot_answer_id = $answerAutoId
-                                ORDER BY hotspot_id ASC";
-                        $result = Database::query($sql);
-                        if (Database::num_rows($result)) {
-                            $studentChoice = Database::result(
-                                $result,
-                                0,
-                                'hotspot_correct'
-                            );
-
+                        $studentChoice = $this->getFirstHotspotCorrect($exeId, $questionId, (int) $answerAutoId);
+                        if (null !== $studentChoice) {
                             if ($studentChoice) {
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;
                             }
                         } else {
                             // If answer.id is different:
-                            $sql = "SELECT hotspot_correct
-                                FROM $TBL_TRACK_HOTSPOT
-                                WHERE
-                                    hotspot_exe_id = $exeId AND
-                                    hotspot_question_id= $questionId AND
-                                    hotspot_answer_id = ".(int) $answerId.'
-                                ORDER BY hotspot_id ASC';
-                            $result = Database::query($sql);
-
                             $foundAnswerId = $answerId;
-                            if (Database::num_rows($result)) {
-                                $studentChoice = Database::result(
-                                    $result,
-                                    0,
-                                    'hotspot_correct'
-                                );
-
+                            $studentChoice = $this->getFirstHotspotCorrect($exeId, $questionId, (int) $answerId);
+                            if (null !== $studentChoice) {
                                 if ($studentChoice) {
                                     $questionScore += $answerWeighting;
                                     $totalScore += $answerWeighting;
@@ -4847,21 +4742,8 @@ class Exercise
                             } else {
                                 // check answer.iid
                                 if (!empty($answerIid)) {
-                                    $sql = "SELECT hotspot_correct
-                                            FROM $TBL_TRACK_HOTSPOT
-                                            WHERE
-                                                hotspot_exe_id = $exeId AND
-                                                hotspot_question_id= $questionId AND
-                                                hotspot_answer_id = $answerIid
-                                            ORDER BY hotspot_id ASC";
-                                    $result = Database::query($sql);
-
                                     $foundAnswerId = $answerIid;
-                                    $studentChoice = Database::result(
-                                        $result,
-                                        0,
-                                        'hotspot_correct'
-                                    );
+                                    $studentChoice = $this->getFirstHotspotCorrect($exeId, $questionId, (int) $answerIid);
 
                                     if ($studentChoice) {
                                         $questionScore += $answerWeighting;
@@ -4934,6 +4816,7 @@ class Exercise
                     if ($from_database) {
                         // getting the user answer
                         $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                        // TODO(db-neutral): left raw, the delineation answer is only shown in the result HTML, not pinned by a test
                         $query = "SELECT hotspot_correct, hotspot_coordinate
                                     FROM $TBL_TRACK_HOTSPOT
                                     WHERE
@@ -4981,6 +4864,7 @@ class Exercise
                 case FILL_IN_BLANKS_COMBINATION:
                         $answerFromDatabase = '';
                         if ($from_database) {
+                            // TODO(db-neutral): left raw, dead code (unreachable branch), not pinned by any test
                             $sql = "SELECT answer
                             FROM $TBL_TRACK_ATTEMPT
                             WHERE exe_id = $exeId AND question_id = $questionId";
@@ -5084,6 +4968,7 @@ class Exercise
                         if ($from_database) {
                             $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                             // Try by auto id
+                            // TODO(db-neutral): left raw, dead code (unreachable branch), not pinned by any test
                             $sql = "SELECT hotspot_correct
                                 FROM $TBL_TRACK_HOTSPOT
                                 WHERE hotspot_exe_id = $exeId
@@ -5098,6 +4983,7 @@ class Exercise
                                 // Fallback to legacy ids
                                 $studentChoice = 0;
                                 if (!empty($answerIid)) {
+                                    // TODO(db-neutral): left raw, dead code (unreachable branch), not pinned by any test
                                     $sql = "SELECT hotspot_correct
                                         FROM $TBL_TRACK_HOTSPOT
                                         WHERE hotspot_exe_id = $exeId
@@ -5151,13 +5037,7 @@ class Exercise
                     break;
                 case ANNOTATION:
                     if ($from_database) {
-                        $sql = "SELECT answer, marks
-                                FROM $TBL_TRACK_ATTEMPT
-                                WHERE
-                                  exe_id = $exeId AND
-                                  question_id = $questionId ";
-                        $resq = Database::query($sql);
-                        $data = Database::fetch_array($resq);
+                        $data = $this->getTrackedAttemptRows($exeId, $questionId)[0] ?? false;
 
                         $questionScore = empty($data['marks']) ? 0 : $data['marks'];
                         $arrques = $questionName;
@@ -6554,11 +6434,14 @@ class Exercise
         }
 
         if ($save_results) {
-            $statsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-            $sql = "UPDATE $statsTable SET
-                        score = score + ".(float) $questionScore."
-                    WHERE exe_id = $exeId";
-            Database::query($sql);
+            Container::getEntityManager()->createQueryBuilder()
+                ->update(TrackEExercise::class, 't')
+                ->set('t.score', 't.score + :questionScore')
+                ->where('t.exeId = :exeId')
+                ->setParameter('questionScore', (float) $questionScore)
+                ->setParameter('exeId', $exeId)
+                ->getQuery()
+                ->execute();
         }
 
         return [
@@ -8486,6 +8369,69 @@ class Exercise
             static fn (array $row): array => self::legacyRowNormalize(CQuiz::class, $row),
             $rows
         );
+    }
+
+    /**
+     * Rows of track_e_attempt of one question of an attempt, oldest first, as the legacy queries gave them.
+     *
+     * @return array<int, array{answer: string, marks: float, position: int|null}>
+     */
+    private function getTrackedAttemptRows(int $exeId, int $questionId, ?int $position = null): array
+    {
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('a.answer AS answer', 'a.marks AS marks', 'a.position AS position')
+            ->from(TrackEAttempt::class, 'a')
+            ->where('IDENTITY(a.trackExercise) = :exeId')
+            ->andWhere('a.questionId = :questionId')
+            ->orderBy('a.id')
+            ->setParameter('exeId', $exeId)
+            ->setParameter('questionId', $questionId);
+        if (null !== $position) {
+            $qb->andWhere('a.position = :position')
+                ->setParameter('position', $position);
+        }
+
+        return $qb->getQuery()->getArrayResult();
+    }
+
+    /**
+     * Answers of a question: iid, answer, correct and ponderation. $condition is a fixed DQL condition on the
+     * correct column of the "a" alias chosen by the caller (never user input).
+     *
+     * @return array<int, array{iid: int, answer: string, correct: int|null, ponderation: float}>
+     */
+    private function getQuestionAnswerRows(int $questionId, ?string $condition = null, string $orderBy = 'a.iid'): array
+    {
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('a.iid AS iid', 'a.answer AS answer', 'a.correct AS correct', 'a.ponderation AS ponderation')
+            ->from(CQuizAnswer::class, 'a')
+            ->where('IDENTITY(a.question) = :questionId')
+            ->orderBy($orderBy)
+            ->setParameter('questionId', $questionId);
+        if (null !== $condition) {
+            $qb->andWhere($condition);
+        }
+
+        return $qb->getQuery()->getArrayResult();
+    }
+
+    private function getFirstHotspotCorrect(int $exeId, int $questionId, int $answerId): ?int
+    {
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select('h.hotspotCorrect AS hotspot_correct')
+            ->from(TrackEHotspot::class, 'h')
+            ->where('h.hotspotExeId = :exeId')
+            ->andWhere('h.hotspotQuestionId = :questionId')
+            ->andWhere('h.hotspotAnswerId = :answerId')
+            ->orderBy('h.hotspotId', 'ASC')
+            ->setMaxResults(1)
+            ->setParameter('exeId', $exeId)
+            ->setParameter('questionId', $questionId)
+            ->setParameter('answerId', $answerId)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
+
+        return null === $row ? null : (int) $row['hotspot_correct'];
     }
 
     /**

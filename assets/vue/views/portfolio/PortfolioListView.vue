@@ -190,9 +190,7 @@
           <div class="font-semibold text-gray-90">
             {{ data.selectedUser.fullName }}
           </div>
-          <div class="text-sm text-gray-500">
-            {{ data.totalItems }} {{ t("Portfolio items") }}
-          </div>
+          <div class="text-sm text-gray-500">{{ data.totalItems }} {{ t("Portfolio items") }}</div>
         </div>
       </div>
 
@@ -219,9 +217,7 @@
           <p class="text-sm text-gray-700">
             {{ comment.excerpt }}
           </p>
-          <div class="mt-2 text-xs text-gray-500">
-            {{ comment.author?.fullName }} · {{ formatDate(comment.date) }}
-          </div>
+          <div class="mt-2 text-xs text-gray-500">{{ comment.author?.fullName }} · {{ formatDate(comment.date) }}</div>
         </BaseCard>
       </div>
 
@@ -390,12 +386,8 @@
               />
               {{ item.commentsCount }} {{ t("Comments") }}
             </span>
-            <span v-if="item.updatedAt">
-              {{ t("Updated at") }}: {{ formatDate(item.updatedAt) }}
-            </span>
-            <span v-if="item.score !== null && item.score !== undefined">
-              {{ t("Score") }}: {{ item.score }}
-            </span>
+            <span v-if="item.updatedAt"> {{ t("Updated at") }}: {{ formatDate(item.updatedAt) }} </span>
+            <span v-if="item.score !== null && item.score !== undefined"> {{ t("Score") }}: {{ item.score }} </span>
           </div>
         </BaseCard>
       </div>
@@ -506,7 +498,7 @@ function filtersFromQuery(query) {
     date: parseFilterDate(firstQueryValue(query.date)),
     order: ["chronological", "alphabetical"].includes(String(firstQueryValue(query.order)))
       ? String(firstQueryValue(query.order))
-      : "chronological",
+      : null,
     user: Number(firstQueryValue(query.user) || 0) || null,
     categoryId: Number(firstQueryValue(query.categoryId) || 0) || null,
     subCategoryIds: numberArray(firstQueryValue(query.subCategoryIds)),
@@ -516,8 +508,8 @@ function filtersFromQuery(query) {
 }
 
 function hasActiveQueryFilters(query) {
-  return ["text", "date", "order", "user", "categoryId", "subCategoryIds", "tags", "highlighted"].some(
-    (key) => Object.prototype.hasOwnProperty.call(query, key),
+  return ["text", "date", "order", "user", "categoryId", "subCategoryIds", "tags", "highlighted"].some((key) =>
+    Object.prototype.hasOwnProperty.call(query, key),
   )
 }
 
@@ -537,7 +529,7 @@ function listParams() {
     ...contextParams(),
     text: filters.text.trim(),
     date: formatFilterDate(filters.date),
-    order: filters.order,
+    order: filters.order || undefined,
     user: filters.user || undefined,
     categoryId: filters.categoryId || undefined,
     subCategoryIds: filters.subCategoryIds.length ? filters.subCategoryIds.join(",") : undefined,
@@ -618,7 +610,7 @@ function clearFilters() {
   Object.assign(filters, {
     text: "",
     date: null,
-    order: "chronological",
+    order: null,
     user: null,
     categoryId: null,
     subCategoryIds: [],
@@ -650,6 +642,9 @@ async function loadPortfolio() {
   try {
     const response = await portfolioService.getList(listParams())
     Object.assign(data, emptyData(), response)
+    if (!filters.order && ["chronological", "alphabetical"].includes(response?.filters?.order)) {
+      filters.order = response.filters.order
+    }
   } catch (error) {
     console.error("Error loading Portfolio", error)
     errorMessage.value =

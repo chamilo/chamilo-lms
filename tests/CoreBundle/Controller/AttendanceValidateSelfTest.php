@@ -7,6 +7,8 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Entity\CAttendance;
@@ -68,6 +70,40 @@ class AttendanceValidateSelfTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         $this->assertNull($this->findSheet($stranger, $calendar));
+    }
+
+    public function testHiddenAttendanceCannotBeMarked(): void
+    {
+        [$client, $student, $own] = $this->setUpCourses();
+        // The teacher has not published this attendance yet.
+        $calendar = $this->createCalendar($own['course'], $own['teacher'], visibility: ResourceLink::VISIBILITY_DRAFT);
+
+        foreach ([true, false] as $withCidInUrl) {
+            $this->validateSelf($client, $student, $own['course'], $withCidInUrl, [$calendar]);
+            $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        }
+
+        $this->assertNull($this->findSheet($student, $calendar));
+    }
+
+    public function testAttendanceOfASessionTheStudentDoesNotBelongToCannotBeMarked(): void
+    {
+        [$client, $student, $own] = $this->setUpCourses();
+
+        // The same course is also given in a session, without this student.
+        $session = $this->createSession('Validate self session');
+        $session->addCourse($own['course']);
+        $this->getEntityManager()->flush();
+
+        $calendar = $this->createCalendar($own['course'], $own['teacher'], $session);
+
+        // The base course allows it and the student belongs to it, but the date is only in the session.
+        foreach ([true, false] as $withCidInUrl) {
+            $this->validateSelf($client, $student, $own['course'], $withCidInUrl, [$calendar]);
+            $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        }
+
+        $this->assertNull($this->findSheet($student, $calendar));
     }
 
     public function testPresenceOtherThanPresentOrAbsentIsRejected(): void
@@ -134,8 +170,12 @@ class AttendanceValidateSelfTest extends WebTestCase
         $em->flush();
     }
 
-    private function createCalendar(Course $course, User $teacher): CAttendanceCalendar
-    {
+    private function createCalendar(
+        Course $course,
+        User $teacher,
+        ?Session $session = null,
+        int $visibility = ResourceLink::VISIBILITY_PUBLISHED,
+    ): CAttendanceCalendar {
         $em = $this->getEntityManager();
 
         $attendance = (new CAttendance())
@@ -143,7 +183,7 @@ class AttendanceValidateSelfTest extends WebTestCase
             ->setLocked(0)
             ->setParent($course)
             ->setCreator($teacher)
-            ->addCourseLink($course)
+            ->addCourseLink($course, $session, null, $visibility)
         ;
         $em->persist($attendance);
         $em->flush();

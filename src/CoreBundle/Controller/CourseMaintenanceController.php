@@ -959,6 +959,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
 
         $tools = ['documents', 'links', 'forums'];
         $cb = new CourseBuilder();
+        $courseCode = (string) $cidReqHelper->getCourseEntity()?->getCode();
 
         $selectionMode = false;
 
@@ -969,7 +970,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             if ('selected' === $scope) {
                 $cbFull = new CourseBuilder();
                 $cbFull->set_tools_to_build($tools);
-                $courseFull = $cbFull->build(0, api_get_course_id());
+                $courseFull = $cbFull->build(0, $courseCode);
 
                 $expanded = $this->expandCc13SelectionFromCategories($courseFull, $normSel);
 
@@ -995,7 +996,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 $cb->set_tools_to_build($tools);
             }
 
-            $course = $cb->build(0, api_get_course_id());
+            $course = $cb->build(0, $courseCode);
 
             if ($selectionMode) {
                 $safeSelected = [
@@ -1024,7 +1025,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             }
 
             $exporter = new Cc13Export($course, $selectionMode, /* debug */ false);
-            $imsccPath = $exporter->export((string) $cidReqHelper->getCourseEntity()?->getCode());
+            $imsccPath = $exporter->export($courseCode);
 
             $fileName = basename($imsccPath);
             $downloadUrl = $this->generateUrl(

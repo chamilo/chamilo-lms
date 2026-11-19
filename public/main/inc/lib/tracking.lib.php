@@ -49,6 +49,46 @@ class Tracking
     }
 
     /**
+     * The non incomplete exercise attempts of a user on one learning path item (the session is added by the caller).
+     */
+    private static function lpExerciseAttemptsQueryBuilder(
+        string $statsExercisesTable,
+        $quizId,
+        int $userId,
+        int $lpId,
+        $lpItemId,
+        $courseId
+    ): DbalQueryBuilder {
+        return self::dbalQueryBuilder()
+            ->from($statsExercisesTable)
+            ->where('exe_exo_id = :quizId')
+            ->andWhere('exe_user_id = :userId')
+            ->andWhere('orig_lp_id = :lpId')
+            ->andWhere('orig_lp_item_id = :lpItemId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere("status <> 'incomplete'")
+            ->setParameter('quizId', (string) $quizId)
+            ->setParameter('userId', $userId)
+            ->setParameter('lpId', $lpId)
+            ->setParameter('lpItemId', (string) $lpItemId)
+            ->setParameter('courseId', (int) $courseId);
+    }
+
+    /**
+     * The results_disabled setting of the quiz a learning path item points to (the path is compared as a string).
+     */
+    private static function quizResultsDisabled(string $quizTable, string $quizId): int
+    {
+        return (int) self::dbalQueryBuilder()
+            ->select('results_disabled')
+            ->from($quizTable)
+            ->where('iid = :quizId')
+            ->setParameter('quizId', $quizId)
+            ->executeQuery()
+            ->fetchOne();
+    }
+
+    /**
      * Bound equivalent of api_get_session_condition($sessionId): the base context (0) also matches NULL.
      */
     private static function andSessionCondition(
@@ -210,8 +250,6 @@ class Tracking
         $list = learnpath::get_flat_ordered_items_list($lp);
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $courseId = $course->getId();
-        $session_condition = api_get_session_condition($sessionId);
-
         // Extend all button
         $output = '';
         $extra = '<script>
@@ -332,19 +370,17 @@ class Tracking
         $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tbl_stats_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $sql = "SELECT max(view_count)
-                FROM $TBL_LP_VIEW
-                WHERE
-                    c_id = $courseId AND
-                    lp_id = $lp_id AND
-                    user_id = $user_id
-                    $session_condition";
-        $res = Database::query($sql);
-        $view = 0;
-        if (Database::num_rows($res) > 0) {
-            $myrow = Database::fetch_array($res);
-            $view = (int) $myrow[0];
-        }
+        $viewQb = self::dbalQueryBuilder()
+            ->select('max(view_count)')
+            ->from($TBL_LP_VIEW)
+            ->where('c_id = :courseId')
+            ->andWhere('lp_id = :lpId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('lpId', $lp_id)
+            ->setParameter('userId', $user_id);
+        self::andSessionCondition($viewQb, $sessionId);
+        $view = (int) $viewQb->executeQuery()->fetchOne();
 
         $counter = 0;
         $total_time = 0;
@@ -385,41 +421,40 @@ class Tracking
                 }
 
                 // Prepare statement to go through each attempt.
-                $viewCondition = null;
+                $itemViewQb = self::dbalQueryBuilder()
+                    ->select(
+                        'iv.status as mystatus',
+                        'v.view_count as mycount',
+                        'iv.score as myscore',
+                        'iv.total_time as mytime',
+                        'i.iid as myid',
+                        'i.lp_id as mylpid',
+                        'iv.lp_view_id as mylpviewid',
+                        'i.title as mytitle',
+                        'i.max_score as mymaxscore',
+                        'iv.max_score as myviewmaxscore',
+                        'i.item_type as item_type',
+                        'iv.view_count as iv_view_count',
+                        'iv.iid as iv_id',
+                        'path'
+                    )
+                    ->from($TBL_LP_ITEM, 'i')
+                    ->innerJoin('i', $TBL_LP_ITEM_VIEW, 'iv', 'i.iid = iv.lp_item_id')
+                    ->innerJoin('iv', $TBL_LP_VIEW, 'v', 'iv.lp_view_id = v.iid')
+                    ->where('i.iid = :itemId')
+                    ->andWhere('i.lp_id = :lpId')
+                    ->andWhere('v.user_id = :userId')
+                    ->setParameter('itemId', (int) $my_item_id)
+                    ->setParameter('lpId', $lp_id)
+                    ->setParameter('userId', $user_id)
+                    ->orderBy('iv.view_count', $order);
+                self::andSessionCondition($itemViewQb, $sessionId, 'v.session_id');
                 if (!empty($view)) {
-                    $viewCondition = " AND v.view_count = $view  ";
+                    $itemViewQb->andWhere('v.view_count = :view')->setParameter('view', $view);
                 }
 
-                $sql = "SELECT
-                    iv.status as mystatus,
-                    v.view_count as mycount,
-                    iv.score as myscore,
-                    iv.total_time as mytime,
-                    i.iid as myid,
-                    i.lp_id as mylpid,
-                    iv.lp_view_id as mylpviewid,
-                    i.title as mytitle,
-                    i.max_score as mymaxscore,
-                    iv.max_score as myviewmaxscore,
-                    i.item_type as item_type,
-                    iv.view_count as iv_view_count,
-                    iv.iid as iv_id,
-                    path
-                FROM $TBL_LP_ITEM as i
-                INNER JOIN $TBL_LP_ITEM_VIEW as iv
-                ON (i.iid = iv.lp_item_id)
-                INNER JOIN $TBL_LP_VIEW as v
-                ON (iv.lp_view_id = v.iid)
-                WHERE
-                    i.iid = $my_item_id AND
-                    i.lp_id = $lp_id  AND
-                    v.user_id = $user_id
-                    $session_condition
-                    $viewCondition
-                ORDER BY iv.view_count $order ";
-
-                $result = Database::query($sql);
-                $num = Database::num_rows($result);
+                $itemViewRows = $itemViewQb->executeQuery()->fetchAllAssociative();
+                $num = count($itemViewRows);
                 $time_for_total = 0;
                 $attemptResult = 0;
 
@@ -434,21 +469,11 @@ class Tracking
 
                 // Extend all
                 if (($extend_this || $extend_all) && $num > 0) {
-                    $row = Database::fetch_array($result);
+                    $row = array_shift($itemViewRows);
                     $result_disabled_ext_all = false;
                     if ('quiz' === $row['item_type']) {
                         // Check results_disabled in quiz table.
-                        $my_path = Database::escape_string($row['path']);
-                        $sql = "SELECT results_disabled
-                                FROM $TBL_QUIZ
-                                WHERE
-                                    iid ='".$my_path."'";
-                        $res_result_disabled = Database::query($sql);
-                        $row_result_disabled = Database::fetch_row($res_result_disabled);
-
-                        if (Database::num_rows($res_result_disabled) > 0 &&
-                            1 === (int) $row_result_disabled[0]
-                        ) {
+                        if (1 === self::quizResultsDisabled($TBL_QUIZ, (string) $row['path'])) {
                             $result_disabled_ext_all = true;
                         }
                     }
@@ -767,10 +792,10 @@ class Tracking
                                 $counter++;
                             }
                         }
-                    } while ($row = Database::fetch_array($result));
+                    } while ($row = array_shift($itemViewRows));
                 } elseif ($num > 0) {
                     // Not extended.
-                    $row = Database::fetch_assoc($result);
+                    $row = array_shift($itemViewRows);
                     $my_id = $row['myid'];
                     $my_lp_id = $row['mylpid'];
                     $my_lp_view_id = $row['mylpviewid'];
@@ -778,16 +803,7 @@ class Tracking
                     $result_disabled_ext_all = false;
                     if ('quiz' === $row['item_type']) {
                         // Check results_disabled in quiz table.
-                        $my_path = Database::escape_string($my_path);
-                        $sql = "SELECT results_disabled
-                                FROM $TBL_QUIZ
-                                WHERE iid = '$my_path' ";
-                        $res_result_disabled = Database::query($sql);
-                        $row_result_disabled = Database::fetch_row($res_result_disabled);
-
-                        if (Database::num_rows($res_result_disabled) > 0 &&
-                            1 === (int) $row_result_disabled[0]
-                        ) {
+                        if (1 === self::quizResultsDisabled($TBL_QUIZ, (string) $my_path)) {
                             $result_disabled_ext_all = true;
                         }
                     }
@@ -849,32 +865,27 @@ class Tracking
                     $lesson_status = $row['mystatus'];
                     $score = $row['myscore'];
                     $subtotal_time = $row['mytime'];
-                    while ($tmp_row = Database::fetch_array($result)) {
+                    foreach ($itemViewRows as $tmp_row) {
                         $subtotal_time += $tmp_row['mytime'];
                     }
 
                     $title = $row['mytitle'];
-                    $sessionCondition = api_get_session_condition($sessionId);
                     // Selecting the exe_id from stats attempts tables in order to look the max score value.
-                    $sql = 'SELECT * FROM '.$tbl_stats_exercices.'
-                            WHERE
-                                exe_exo_id="'.$row['path'].'" AND
-                                exe_user_id="'.$user_id.'" AND
-                                orig_lp_id = "'.$lp_id.'" AND
-                                orig_lp_item_id = "'.$row['myid'].'" AND
-                                c_id = '.$courseId.' AND
-                                status <> "incomplete"
-                                '.$sessionCondition.'
-                             ORDER BY exe_date DESC
-                             LIMIT 1';
-
-                    $resultLastAttempt = Database::query($sql);
-                    $num = Database::num_rows($resultLastAttempt);
-                    $id_last_attempt = null;
-                    if ($num > 0) {
-                        while ($rowLA = Database::fetch_array($resultLastAttempt)) {
-                            $id_last_attempt = $rowLA['exe_id'];
-                        }
+                    $lastAttemptQb = self::lpExerciseAttemptsQueryBuilder(
+                        $tbl_stats_exercices,
+                        $row['path'],
+                        $user_id,
+                        $lp_id,
+                        $row['myid'],
+                        $courseId
+                    )
+                        ->select('exe_id')
+                        ->orderBy('exe_date', 'DESC')
+                        ->setMaxResults(1);
+                    self::andSessionCondition($lastAttemptQb, $sessionId);
+                    $id_last_attempt = $lastAttemptQb->executeQuery()->fetchOne();
+                    if (false === $id_last_attempt) {
+                        $id_last_attempt = null;
                     }
 
                     switch ($row['item_type']) {
@@ -889,61 +900,62 @@ class Tracking
                             break;
                         case 'quiz':
                             // Get score and total time from last attempt of a exercise en lp.
-                            $sql = "SELECT iid, score
-                                    FROM $TBL_LP_ITEM_VIEW
-                                    WHERE
-                                        lp_item_id = '".(int) $my_id."' AND
-                                        lp_view_id = '".(int) $my_lp_view_id."'
-                                    ORDER BY view_count DESC
-                                    LIMIT 1";
-                            $res_score = Database::query($sql);
-                            $row_score = Database::fetch_array($res_score);
+                            $row_score = self::dbalQueryBuilder()
+                                ->select('iid', 'score')
+                                ->from($TBL_LP_ITEM_VIEW)
+                                ->where('lp_item_id = :itemId')
+                                ->andWhere('lp_view_id = :viewId')
+                                ->setParameter('itemId', (int) $my_id)
+                                ->setParameter('viewId', (int) $my_lp_view_id)
+                                ->orderBy('view_count', 'DESC')
+                                ->setMaxResults(1)
+                                ->executeQuery()
+                                ->fetchAssociative();
 
-                            $sql = "SELECT SUM(total_time) as total_time
-                                    FROM $TBL_LP_ITEM_VIEW
-                                    WHERE
-                                        lp_item_id = '".(int) $my_id."' AND
-                                        lp_view_id = '".(int) $my_lp_view_id."'";
-                            $res_time = Database::query($sql);
-                            $row_time = Database::fetch_array($res_time);
+                            $totalTime = self::dbalQueryBuilder()
+                                ->select('SUM(total_time) as total_time')
+                                ->from($TBL_LP_ITEM_VIEW)
+                                ->where('lp_item_id = :itemId')
+                                ->andWhere('lp_view_id = :viewId')
+                                ->setParameter('itemId', (int) $my_id)
+                                ->setParameter('viewId', (int) $my_lp_view_id)
+                                ->executeQuery()
+                                ->fetchOne();
 
                             $score = 0;
                             $subtotal_time = 0;
-                            if (Database::num_rows($res_score) > 0 &&
-                                Database::num_rows($res_time) > 0
-                            ) {
+                            if (false !== $row_score) {
                                 $score = (float) $row_score['score'];
-                                $subtotal_time = (int) $row_time['total_time'];
+                                $subtotal_time = (int) $totalTime;
                             }
                             // Selecting the max score from an attempt.
-                            $sql = "SELECT SUM(t.ponderation) as maxscore
-                                    FROM (
-                                        SELECT DISTINCT
-                                            question_id, marks, ponderation
-                                        FROM $tbl_stats_attempts as at
-                                        INNER JOIN $tbl_quiz_questions as q
-                                        ON (q.iid = at.question_id)
-                                        WHERE exe_id ='$id_last_attempt'
-                                    ) as t";
-
-                            $result = Database::query($sql);
-                            $row_max_score = Database::fetch_array($result);
-                            $maxscore = $row_max_score['maxscore'];
+                            $distinctQuestionsSql = self::dbalQueryBuilder()
+                                ->select('DISTINCT question_id', 'marks', 'ponderation')
+                                ->from($tbl_stats_attempts, 'at')
+                                ->innerJoin('at', $tbl_quiz_questions, 'q', 'q.iid = at.question_id')
+                                ->where('exe_id = :lastAttemptId')
+                                ->getSQL();
+                            $maxscore = self::dbalQueryBuilder()
+                                ->select('SUM(t.ponderation) as maxscore')
+                                ->from('('.$distinctQuestionsSql.')', 't')
+                                ->setParameter('lastAttemptId', $id_last_attempt)
+                                ->executeQuery()
+                                ->fetchOne();
 
                             // Get duration time from track_e_exercises.exe_duration instead of lp_view_item.total_time
-                            $sql = 'SELECT SUM(exe_duration) exe_duration
-                                    FROM '.$tbl_stats_exercices.'
-                                    WHERE
-                                        exe_exo_id="'.$row['path'].'" AND
-                                        exe_user_id="'.$user_id.'" AND
-                                        orig_lp_id = "'.$lp_id.'" AND
-                                        orig_lp_item_id = "'.$row['myid'].'" AND
-                                        c_id = '.$courseId.' AND
-                                        status <> "incomplete" AND
-                                        session_id = '.$sessionId.'
-                                     ORDER BY exe_date DESC ';
-                            $sumScoreResult = Database::query($sql);
-                            $durationRow = Database::fetch_assoc($sumScoreResult);
+                            $durationRow = self::lpExerciseAttemptsQueryBuilder(
+                                $tbl_stats_exercices,
+                                $row['path'],
+                                $user_id,
+                                $lp_id,
+                                $row['myid'],
+                                $courseId
+                            )
+                                ->select('SUM(exe_duration) exe_duration')
+                                ->andWhere('session_id = :sessionId')
+                                ->setParameter('sessionId', $sessionId)
+                                ->executeQuery()
+                                ->fetchAssociative();
                             if (!empty($durationRow['exe_duration'])) {
                                 $exeDuration = $durationRow['exe_duration'];
                                 if ($exeDuration != $subtotal_time &&
@@ -952,9 +964,13 @@ class Tracking
                                 ) {
                                     $subtotal_time = $exeDuration;
                                     // Update c_lp_item_view.total_time
-                                    $sqlUpdate = "UPDATE $TBL_LP_ITEM_VIEW SET total_time = '$exeDuration'
-                                                  WHERE iid = ".$row_score['iid'];
-                                    Database::query($sqlUpdate);
+                                    self::dbalQueryBuilder()
+                                        ->update($TBL_LP_ITEM_VIEW)
+                                        ->set('total_time', ':totalTime')
+                                        ->where('iid = :iid')
+                                        ->setParameter('totalTime', $exeDuration)
+                                        ->setParameter('iid', (int) $row_score['iid'])
+                                        ->executeStatement();
                                 }
                             }
                             break;
@@ -992,19 +1008,19 @@ class Tracking
                         $showRowspan = false;
                         if ('quiz' === $row['item_type']) {
                             $my_url_suffix = '&cid='.$courseId.'&student_id='.$user_id.'&lp_id='.intval($row['mylpid']).'&origin='.$origin;
-                            $sql = 'SELECT * FROM '.$tbl_stats_exercices.'
-                                     WHERE
-                                        exe_exo_id="'.$row['path'].'" AND
-                                        exe_user_id="'.$user_id.'" AND
-                                        orig_lp_id = "'.$lp_id.'" AND
-                                        orig_lp_item_id = "'.$row['myid'].'" AND
-                                        c_id = '.$courseId.' AND
-                                        status <> "incomplete" AND
-                                        session_id = '.$sessionId.'
-                                     ORDER BY exe_date DESC ';
-
-                            $resultLastAttempt = Database::query($sql);
-                            $num = Database::num_rows($resultLastAttempt);
+                            $num = (int) self::lpExerciseAttemptsQueryBuilder(
+                                $tbl_stats_exercices,
+                                $row['path'],
+                                $user_id,
+                                $lp_id,
+                                $row['myid'],
+                                $courseId
+                            )
+                                ->select('COUNT(*)')
+                                ->andWhere('session_id = :sessionId')
+                                ->setParameter('sessionId', $sessionId)
+                                ->executeQuery()
+                                ->fetchOne();
                             $showRowspan = false;
                             if ($num > 0) {
                                 $linkId = 'link_'.$my_id;
@@ -1182,29 +1198,35 @@ class Tracking
                             !empty($lp_item_id) &&
                             'quiz' === $row['item_type']
                         ) {
-                            $sql = "SELECT path FROM $TBL_LP_ITEM
-                                    WHERE
-                                        iid = '$lp_item_id' AND
-                                        lp_id = '$lp_id'";
-                            $res_path = Database::query($sql);
-                            $row_path = Database::fetch_array($res_path);
+                            $row_path = self::dbalQueryBuilder()
+                                ->select('path')
+                                ->from($TBL_LP_ITEM)
+                                ->where('iid = :itemId')
+                                ->andWhere('lp_id = :lpId')
+                                ->setParameter('itemId', (string) $lp_item_id)
+                                ->setParameter('lpId', (string) $lp_id)
+                                ->executeQuery()
+                                ->fetchAssociative();
 
-                            if (Database::num_rows($res_path) > 0) {
-                                $sql = 'SELECT * FROM '.$tbl_stats_exercices.'
-                                        WHERE
-                                            exe_exo_id="'.(int) $row_path['path'].'" AND
-                                            status <> "incomplete" AND
-                                            exe_user_id="'.$user_id.'" AND
-                                            orig_lp_id = "'.(int) $lp_id.'" AND
-                                            orig_lp_item_id = "'.(int) $lp_item_id.'" AND
-                                            c_id = '.$courseId.'  AND
-                                            session_id = '.$sessionId.'
-                                        ORDER BY exe_date';
-                                $res_attempts = Database::query($sql);
-                                $num_attempts = Database::num_rows($res_attempts);
+                            if (false !== $row_path) {
+                                $attemptRows = self::lpExerciseAttemptsQueryBuilder(
+                                    $tbl_stats_exercices,
+                                    (int) $row_path['path'],
+                                    $user_id,
+                                    $lp_id,
+                                    $lp_item_id,
+                                    $courseId
+                                )
+                                    ->select('*')
+                                    ->andWhere('session_id = :sessionId')
+                                    ->setParameter('sessionId', $sessionId)
+                                    ->orderBy('exe_date')
+                                    ->executeQuery()
+                                    ->fetchAllAssociative();
+                                $num_attempts = count($attemptRows);
                                 if ($num_attempts > 0) {
                                     $n = 1;
-                                    while ($row_attempts = Database::fetch_array($res_attempts)) {
+                                    foreach ($attemptRows as $row_attempts) {
                                         $my_score = $row_attempts['score'];
                                         $my_maxscore = $row_attempts['max_score'];
                                         $my_exe_id = $row_attempts['exe_id'];

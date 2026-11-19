@@ -18,6 +18,7 @@ use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 use ChamiloSession as Session;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * This class offers a series of general utility functions for survey querying and display.
@@ -35,20 +36,22 @@ class SurveyUtil
      */
     public static function check_first_last_question($survey_id, $continue = true)
     {
-        // Table definitions
-        $tbl_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $course_id = api_get_course_int_id();
         $survey_id = (int) $survey_id;
 
         // Getting the information of the question
-        $sql = "SELECT * FROM $tbl_survey_question
-                WHERE survey_id='".$survey_id."'
-                ORDER BY sort ASC";
-        $result = Database::query($sql);
-        $total = Database::num_rows($result);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('q.type AS type')
+            ->from(CSurveyQuestion::class, 'q')
+            ->where('q.survey = :survey')
+            ->orderBy('q.sort', 'ASC')
+            ->setParameter('survey', $survey_id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        $total = count($rows);
         $counter = 1;
         $error = false;
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             if (1 == $counter && 'pagebreak' === $row['type']) {
                 echo Display::return_message(get_lang('The page break cannot be the first'), 'error', false);
                 $error = true;
@@ -81,26 +84,23 @@ class SurveyUtil
     public static function remove_answer($user, $survey_id, $question_id, $lpItemId = 0): void
     {
         $sessionId = api_get_session_id();
-        // table definition
-        $table = Database::get_course_table(TABLE_SURVEY_ANSWER);
-
-        $lpItemCondition = '';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->delete(CSurveyAnswer::class, 'a')
+            ->where('a.user = :user')
+            ->andWhere('a.survey = :survey')
+            ->andWhere('a.question = :question')
+            ->setParameter('user', (string) $user)
+            ->setParameter('survey', (int) $survey_id)
+            ->setParameter('question', (int) $question_id)
+        ;
         if (!empty($lpItemId)) {
-            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+            $qb->andWhere('a.lpItemId = :lpItem')->setParameter('lpItem', (int) $lpItemId);
         }
-        $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionCondition = api_get_session_condition($sessionId);
+            self::addSessionCondition($qb, 'a.sessionId', $sessionId);
         }
 
-        $sql = "DELETE FROM $table
-				WHERE
-                    user = '".Database::escape_string($user)."' AND
-                    survey_id = '".intval($survey_id)."' AND
-                    question_id = '".intval($question_id)."'
-                    $sessionCondition
-                    $lpItemCondition";
-        Database::query($sql);
+        $qb->getQuery()->execute();
     }
 
     public static function saveAnswer(
@@ -296,38 +296,43 @@ class SurveyUtil
      */
     public static function delete_user_report($survey_id, $user_id)
     {
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
-
         $course_id = api_get_course_int_id();
         $survey_id = (int) $survey_id;
-        $user_id = Database::escape_string($user_id);
         $result = false;
 
         if (!empty($survey_id) && !empty($user_id)) {
-
-            $sessionCondition = '';
-            if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-                $sessionId = api_get_session_id();
-                $sessionCondition = api_get_session_condition($sessionId);
-            }
+            $em = Container::getEntityManager();
+            $sessionId = api_get_session_id();
+            $baseInSessions = true === api_get_configuration_value('show_surveys_base_in_sessions');
 
             // delete data from survey_answer by user_id and survey_id
-            $sql = "DELETE FROM $table_survey_answer
-			        WHERE survey_id = '".$survey_id."' AND user = '".$user_id."' $sessionCondition";
-            Database::query($sql);
+            $qb = $em->createQueryBuilder()
+                ->delete(CSurveyAnswer::class, 'a')
+                ->where('a.survey = :survey')
+                ->andWhere('a.user = :user')
+                ->setParameter('survey', $survey_id)
+                ->setParameter('user', (string) $user_id)
+            ;
+            if ($baseInSessions) {
+                self::addSessionCondition($qb, 'a.sessionId', $sessionId);
+            }
+            $qb->getQuery()->execute();
+
             // update field answered from survey_invitation by user_id and survey_id
-            $sql = "UPDATE $table_survey_invitation SET answered = '0'
-			        WHERE
-			            c_id = $course_id AND
-			            survey_id = (
-                            SELECT iid FROM $table_survey
-                            WHERE
-                                iid = '".$survey_id."'
-                        ) AND
-			            user_id = '".$user_id."'  $sessionCondition";
-            $result = Database::query($sql);
+            $qb = $em->createQueryBuilder()
+                ->update(CSurveyInvitation::class, 'i')
+                ->set('i.answered', 0)
+                ->where('i.course = :course')
+                ->andWhere('i.survey = :survey')
+                ->andWhere('i.user = :user')
+                ->setParameter('course', $course_id)
+                ->setParameter('survey', $survey_id)
+                ->setParameter('user', (int) $user_id)
+            ;
+            if ($baseInSessions) {
+                self::addSessionCondition($qb, 'i.session', $sessionId);
+            }
+            $result = $qb->getQuery()->execute();
         }
 
         if (false !== $result) {
@@ -2133,29 +2138,23 @@ class SurveyUtil
      */
     public static function get_answers_of_question_by_user($survey_id, $question_id, $lpItemId = 0)
     {
-        $course_id = api_get_course_int_id();
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-
-        $sessionCondition = '';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('a.user AS user', 'a.optionId AS option_id', 'a.value AS value')
+            ->from(CSurveyAnswer::class, 'a')
+            ->where('a.survey = :survey')
+            ->andWhere('a.question = :question')
+            ->orderBy('a.user', 'ASC')
+            ->setParameter('survey', (int) $survey_id)
+            ->setParameter('question', (int) $question_id)
+        ;
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionId = api_get_session_id();
-            $sessionCondition = api_get_session_condition($sessionId);
+            self::addSessionCondition($qb, 'a.sessionId', api_get_session_id());
         }
-        $lpItemCondition = '';
         if (!empty($lpItemId)) {
-            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+            $qb->andWhere('a.lpItemId = :lpItem')->setParameter('lpItem', (int) $lpItemId);
         }
-
-        $sql = "SELECT * FROM $table_survey_answer
-                WHERE
-                  survey_id='".intval($survey_id)."' AND
-                  question_id='".intval($question_id)."'
-                  $sessionCondition
-                  $lpItemCondition
-                ORDER BY USER ASC";
-        $result = Database::query($sql);
         $return = [];
-        while ($row = Database::fetch_array($result)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
             if (0 == $row['value']) {
                 $return[$row['user']][] = $row['option_id'];
             } else {
@@ -2465,25 +2464,32 @@ class SurveyUtil
      */
     public static function invitationExists($courseId, $sessionId, $groupId, $surveyId)
     {
-        $table = Database::get_course_table(TABLE_SURVEY_INVITATION);
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
         $groupId = (int) $groupId;
         $surveyId = (int) $surveyId;
+
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('i.iid AS iid')
+            ->from(CSurveyInvitation::class, 'i')
+            ->where('i.course = :course')
+            ->andWhere('i.survey = :survey')
+            ->setParameter('course', $courseId)
+            ->setParameter('survey', $surveyId)
+        ;
         // The base course and plain users are stored as NULL, not 0 (foreign keys forbid 0).
-        $sessionCondition = $sessionId > 0 ? "session_id = $sessionId" : '(session_id IS NULL OR session_id = 0)';
-        $groupCondition = $groupId > 0 ? "group_id = $groupId" : '(group_id IS NULL OR group_id = 0)';
+        if ($sessionId > 0) {
+            $qb->andWhere('i.session = :session')->setParameter('session', $sessionId);
+        } else {
+            $qb->andWhere('(i.session IS NULL OR i.session = 0)');
+        }
+        if ($groupId > 0) {
+            $qb->andWhere('i.group = :group')->setParameter('group', $groupId);
+        } else {
+            $qb->andWhere('(i.group IS NULL OR i.group = 0)');
+        }
 
-        $sql = "SELECT iid FROM $table
-                WHERE
-                    c_id = $courseId AND
-                    ".$sessionCondition." AND
-                    ".$groupCondition." AND
-                    survey_id = $surveyId
-                ";
-        $result = Database::query($sql);
-
-        return Database::num_rows($result);
+        return count($qb->getQuery()->getArrayResult());
     }
 
     /**
@@ -2563,32 +2569,30 @@ class SurveyUtil
 
         $courseId = $courseId ?: api_get_course_int_id();
         $sessionId = $sessionId ?: api_get_session_id();
-        $sessionCondition = api_get_session_condition($sessionId);
-
-        // Database table definition
-        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
+        $em = Container::getEntityManager();
 
         // Counting the number of people that are invited
-        $sql = "SELECT count(user_id) as total
-                FROM $table_survey_invitation
-		        WHERE
-		            c_id = $courseId AND
-		            survey_id = '".$surveyId."' AND
-		            user_id <> ''
-		            $sessionCondition
-                ";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-        $total_invited = $row['total'];
+        $qb = $em->createQueryBuilder()
+            ->select('COUNT(i.user)')
+            ->from(CSurveyInvitation::class, 'i')
+            ->where('i.course = :course')
+            ->andWhere('i.survey = :survey')
+            ->setParameter('course', $courseId)
+            ->setParameter('survey', (int) $surveyId)
+        ;
+        self::addSessionCondition($qb, 'i.session', $sessionId);
+        $total_invited = (int) $qb->getQuery()->getSingleScalarResult();
 
         // Updating the field in the survey table
-        $sql = "UPDATE $table_survey
-		        SET invited = '".Database::escape_string($total_invited)."'
-		        WHERE
-		            iid = '".$surveyId."'
-                ";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->update(CSurvey::class, 's')
+            ->set('s.invited', ':invited')
+            ->where('s.iid = :survey')
+            ->setParameter('invited', $total_invited)
+            ->setParameter('survey', (int) $surveyId)
+            ->getQuery()
+            ->execute()
+        ;
 
         return $total_invited;
     }
@@ -2617,27 +2621,25 @@ class SurveyUtil
             $session_id = api_get_session_id();
         }
 
-        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sessionCondition = api_get_session_condition($session_id);
+        $em = Container::getEntityManager();
 
         // Selecting all the invitations of this survey AND the additional emailaddresses (the left join)
-        $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-        $sql = "SELECT user_id, group_id
-				FROM $table_survey_invitation as table_invitation
-				WHERE
-				    table_invitation.c_id = $course_id AND
-                    survey_id = ".$surveyId."
-                    $sessionCondition
-                ";
+        $qb = $em->createQueryBuilder()
+            ->select('IDENTITY(i.user) AS user_id', 'IDENTITY(i.group) AS group_id')
+            ->from(CSurveyInvitation::class, 'i')
+            ->where('i.course = :course')
+            ->andWhere('i.survey = :survey')
+            ->setParameter('course', (int) $course_id)
+            ->setParameter('survey', (int) $surveyId)
+        ;
+        self::addSessionCondition($qb, 'i.session', (int) $session_id);
 
         $defaults = [];
         $defaults['course_users'] = [];
         $defaults['additional_users'] = ''; // Textarea
         $defaults['users'] = []; // user and groups
 
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
             if (is_numeric($row['user_id'])) {
                 $defaults['course_users'][] = $row['user_id'];
                 $defaults['users'][] = 'USER:'.$row['user_id'];
@@ -2653,11 +2655,19 @@ class SurveyUtil
         }
 
         if (!empty($defaults['course_users'])) {
-            $user_ids = implode("','", $defaults['course_users']);
-            $sql = "SELECT id FROM $table_user WHERE id IN ('$user_ids') $order_clause";
-            $result = Database::query($sql);
+            $userQb = $em->createQueryBuilder()
+                ->select('u.id AS id')
+                ->from(User::class, 'u')
+                ->where('u.id IN (:ids)')
+                ->setParameter('ids', array_map('intval', $defaults['course_users']))
+            ;
+            if (api_sort_by_first_name()) {
+                $userQb->orderBy('u.firstname', 'ASC')->addOrderBy('u.lastname', 'ASC');
+            } else {
+                $userQb->orderBy('u.lastname', 'ASC')->addOrderBy('u.firstname', 'ASC');
+            }
             $fixed_users = [];
-            while ($row = Database::fetch_array($result)) {
+            foreach ($userQb->getQuery()->getArrayResult() as $row) {
                 $fixed_users[] = $row['id'];
             }
             $defaults['course_users'] = $fixed_users;
@@ -2685,17 +2695,23 @@ class SurveyUtil
     {
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
-        // Database table definition
-        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-
-        $sql = "SELECT * FROM $table_survey_invitation
-		        WHERE
-		            c_id = $course_id AND
-                    survey_id = '".(int) $surveyId."'".
-                    api_get_session_condition($sessionId);
-        $result = Database::query($sql);
+        // Raw table rows (the callers read the snake_case columns): DBAL keeps their shape and string dates.
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('survey_invitation.*')
+            ->from(Database::get_course_table(TABLE_SURVEY_INVITATION), 'survey_invitation')
+            ->where('survey_invitation.c_id = :course')
+            ->andWhere('survey_invitation.survey_id = :survey')
+            ->setParameter('course', (int) $course_id)
+            ->setParameter('survey', (int) $surveyId)
+        ;
+        if (empty($sessionId)) {
+            $qb->andWhere('(survey_invitation.session_id = :session OR survey_invitation.session_id IS NULL)');
+        } else {
+            $qb->andWhere('survey_invitation.session_id = :session');
+        }
+        $qb->setParameter('session', (int) $sessionId);
         $return = [];
-        while ($row = Database::fetch_array($result)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
             $return[$row['user_id']] = $row;
         }
 
@@ -3567,42 +3583,40 @@ class SurveyUtil
         $sessionId = api_get_session_id();
         $mandatoryAllowed = ('true' === api_get_setting('survey.allow_mandatory_survey'));
 
-        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
-
         /** @var \DateTime $now */
         $now = api_get_utc_datetime(null, false, true);
         $filterDate = $now->format('Y-m-d H:i');
-        $sessionCondition = api_get_session_condition($sessionId, true, false, 'survey_invitation.session_id');
 
-        $sql = "SELECT
-                    survey_invitation.answered,
-                    survey_invitation.invitation_code,
-                    survey_invitation.session_id,
-                    survey.title,
-                    survey.visible_results,
-                    survey.iid,
-                    survey.anonymous
-                FROM $table_survey survey
-                INNER JOIN $table_survey_invitation survey_invitation
-                ON (
-                    survey.iid = survey_invitation.survey_id
-                )
-                WHERE
-                    survey_invitation.user_id = $user_id AND
-                    survey.avail_from <= '$filterDate' AND
-                    survey.avail_till >= '$filterDate' AND
-                    survey_invitation.c_id = $course_id
-                    $sessionCondition
-                ORDER BY survey.title ASC";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'i.answered AS answered',
+                'i.invitationCode AS invitation_code',
+                'IDENTITY(i.session) AS session_id',
+                's.title AS title',
+                's.visibleResults AS visible_results',
+                's.iid AS iid',
+                's.anonymous AS anonymous'
+            )
+            ->from(CSurvey::class, 's')
+            ->innerJoin(CSurveyInvitation::class, 'i', 'WITH', 'i.survey = s')
+            ->where('i.user = :user')
+            ->andWhere('s.availFrom <= :filterDate')
+            ->andWhere('s.availTill >= :filterDate')
+            ->andWhere('i.course = :course')
+            ->orderBy('s.title', 'ASC')
+            ->setParameter('user', $user_id)
+            ->setParameter('filterDate', $filterDate)
+            ->setParameter('course', (int) $course_id)
+        ;
+        self::addSessionCondition($qb, 'i.session', (int) $sessionId);
 
-        $result = Database::query($sql);
+        $rows = $qb->getQuery()->getArrayResult();
         $efv = new ExtraFieldValue('survey');
         $surveyIds = [];
         $repo = Container::getSurveyRepository();
         $items = [];
 
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             $surveyId = (int) $row['iid'];
 
             if (in_array($surveyId, $surveyIds, true)) {
@@ -4079,20 +4093,20 @@ class SurveyUtil
      */
     public static function checkIfSurveyHasAnswers(int $surveyId): bool
     {
-        $tableSurveyAnswer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-
         if (empty($surveyId)) {
             return false;
         }
 
-        $sql = "SELECT * FROM $tableSurveyAnswer
-                WHERE
-                    survey_id = '".$surveyId."'
-                ORDER BY iid, user ASC";
-        $result = Database::query($sql);
-        $response = Database::affected_rows($result);
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(a.iid)')
+            ->from(CSurveyAnswer::class, 'a')
+            ->where('a.survey = :survey')
+            ->setParameter('survey', $surveyId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-        return $response > 0;
+        return (int) $count > 0;
     }
 
     /**
@@ -4104,25 +4118,32 @@ class SurveyUtil
      */
     public static function getSentInvitations($surveyId, $courseId, $sessionId = 0)
     {
-        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
-        $tblSurveyInvitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-
-        $sessionCondition = api_get_session_condition($sessionId);
         $surveyId = (int) $surveyId;
         $courseId = (int) $courseId;
 
-        $sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email
-                FROM $tblSurveyInvitation survey_invitation
-                LEFT JOIN $tblUser user
-                ON (survey_invitation.user_id = user.id AND survey_invitation.c_id = $courseId)
-                WHERE
-                    survey_invitation.survey_id = $surveyId AND
-                    survey_invitation.c_id = $courseId
-                    $sessionCondition";
+        // Raw table rows (the callers read the snake_case columns): DBAL keeps their shape and string dates.
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('survey_invitation.*', 'user.firstname', 'user.lastname', 'user.email')
+            ->from(Database::get_course_table(TABLE_SURVEY_INVITATION), 'survey_invitation')
+            ->leftJoin(
+                'survey_invitation',
+                Database::get_main_table(TABLE_MAIN_USER),
+                'user',
+                'survey_invitation.user_id = user.id AND survey_invitation.c_id = :course'
+            )
+            ->where('survey_invitation.survey_id = :survey')
+            ->andWhere('survey_invitation.c_id = :course')
+            ->setParameter('course', $courseId)
+            ->setParameter('survey', $surveyId)
+        ;
+        if (empty($sessionId)) {
+            $qb->andWhere('(survey_invitation.session_id = :session OR survey_invitation.session_id IS NULL)');
+        } else {
+            $qb->andWhere('survey_invitation.session_id = :session');
+        }
+        $qb->setParameter('session', (int) $sessionId);
 
-        $query = Database::query($sql);
-
-        return Database::store_result($query);
+        return $qb->executeQuery()->fetchAllAssociative();
     }
 
     /**
@@ -4216,5 +4237,21 @@ class SurveyUtil
             $route,
             http_build_query($params)
         );
+    }
+
+    /**
+     * Restricts a query to one session the way api_get_session_condition() did: the base course (session 0)
+     * also matches rows stored with a NULL session.
+     *
+     * @param string $field DQL path of the session, e.g. 'a.sessionId' or 'i.session'
+     */
+    private static function addSessionCondition(QueryBuilder $qb, string $field, int $sessionId): void
+    {
+        if (empty($sessionId)) {
+            $qb->andWhere("($field = :surveySessionId OR $field IS NULL)");
+        } else {
+            $qb->andWhere("$field = :surveySessionId");
+        }
+        $qb->setParameter('surveySessionId', $sessionId);
     }
 }

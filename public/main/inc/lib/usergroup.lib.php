@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Entity\UserGroupRelUserGroup;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Entity\UsergroupRelCourse;
 use Chamilo\CoreBundle\Entity\UsergroupRelSession;
@@ -267,6 +268,7 @@ class UserGroupModel extends Model
                     $extraCondition
             ";
 
+            // TODO(db-neutral): get_count() receives a free-form SQL condition from its callers
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
@@ -280,6 +282,7 @@ class UserGroupModel extends Model
                     $authorCondition
                     $extraCondition
             ";
+            // TODO(db-neutral): get_count() receives a free-form SQL condition from its callers
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
@@ -601,10 +604,12 @@ class UserGroupModel extends Model
 
         $conditions = Database::parse_conditions($options);
         if (true == $withClasses) {
+            // TODO(db-neutral): free-form WHERE options parsed by Database::parse_conditions() (callers pass SQL fragments)
             $resultClasess = Database::query($sqlClasses);
         } else {
             $sql .= $conditions;
 
+            // TODO(db-neutral): free-form WHERE options parsed by Database::parse_conditions() (callers pass SQL fragments)
             $result = Database::query($sql);
         }
 
@@ -745,14 +750,17 @@ class UserGroupModel extends Model
         $conditions = Database::parse_conditions($options);
 
         if (true == $withClasses) {
+            // TODO(db-neutral): free-form WHERE options parsed by Database::parse_conditions() (callers pass SQL fragments)
             $resultClasess = Database::query($sqlClasses);
         } else {
             $sql .= $conditions;
+            // TODO(db-neutral): free-form WHERE options parsed by Database::parse_conditions() (callers pass SQL fragments)
             $result = Database::query($sql);
         }
 
         if ($getCount) {
             if (!empty($result)) {
+                // TODO(db-neutral): free-form WHERE options parsed by Database::parse_conditions() (callers pass SQL fragments)
                 $result = Database::query($sql);
                 $array = Database::fetch_assoc($result);
 
@@ -1585,6 +1593,7 @@ class UserGroupModel extends Model
         }
 
         $result = Database::store_result(
+            // TODO(db-neutral): free-form $extraWhereCondition SQL fragment from the jqGrid caller
             Database::query("SELECT DISTINCT u.* FROM $sqlFrom WHERE $sqlWhere ORDER BY title ".('DESC' === strtoupper((string) $sord) ? 'DESC' : 'ASC')." LIMIT $start, $limit")
         );
 
@@ -1998,6 +2007,7 @@ class UserGroupModel extends Model
             $orderBy = Database::escape_string($orderBy);
             $sql .= " ORDER BY $orderBy ";
         }
+        // TODO(db-neutral): SELECT u.* of the wide user table with a free-form ORDER BY from the caller
         $result = Database::query($sql);
 
         return Database::store_result($result);
@@ -3107,31 +3117,21 @@ class UserGroupModel extends Model
      */
     public static function get_parent_groups($group_id)
     {
-        $t_rel_group = Database::get_main_table(TABLE_USERGROUP_REL_USERGROUP);
         $group_id = (int) $group_id;
 
         $max_level = 10;
-        $select_part = 'SELECT ';
-        $cond_part = '';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->from(UserGroupRelUserGroup::class, 'rg0')
+            ->where('rg0.subgroupId = :groupId')
+            ->setParameter('groupId', $group_id)
+            ->setMaxResults(1)
+        ;
         for ($i = 1; $i <= $max_level; $i++) {
             $rg_number = $i - 1;
-            if ($i == $max_level) {
-                $select_part .= "rg$rg_number.group_id as id_$rg_number ";
-            } else {
-                $select_part .= "rg$rg_number.group_id as id_$rg_number, ";
-            }
-            if (1 == $i) {
-                $cond_part .= "FROM $t_rel_group rg0
-                               LEFT JOIN $t_rel_group rg$i
-                               ON rg$rg_number.group_id = rg$i.subgroup_id ";
-            } else {
-                $cond_part .= " LEFT JOIN $t_rel_group rg$i
-                                ON rg$rg_number.group_id = rg$i.subgroup_id ";
-            }
+            $qb->addSelect("rg$rg_number.groupId AS id_$rg_number");
+            $qb->leftJoin(UserGroupRelUserGroup::class, "rg$i", 'WITH', "rg$rg_number.groupId = rg$i.subgroupId");
         }
-        $sql = $select_part.' '.$cond_part."WHERE rg0.subgroup_id='$group_id'";
-        $res = Database::query($sql);
-        $temp_arr = Database::fetch_assoc($res);
+        $temp_arr = $qb->getQuery()->getArrayResult()[0] ?? null;
         $toReturn = [];
         if (is_array($temp_arr)) {
             foreach ($temp_arr as $elt) {
@@ -3211,32 +3211,28 @@ class UserGroupModel extends Model
         $groups = [];
         $groupId = (int) $groupId;
 
-        $groupTable = Database::get_main_table(TABLE_USERGROUP);
-        $groupRelGroupTable = Database::get_main_table(TABLE_USERGROUP_REL_USERGROUP);
-
-        $select = 'SELECT ';
-        $from = "FROM $groupTable g1 ";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->from(Usergroup::class, 'g1')
+            ->innerJoin(
+                UserGroupRelUserGroup::class,
+                'gg0',
+                'WITH',
+                'g1.id = gg0.subgroupId AND gg0.groupId = :groupId'
+            )
+            ->setParameter('groupId', $groupId)
+        ;
 
         for ($i = 1; $i <= $levels; $i++) {
-            $tableIndexNumber = $i;
-            $tableIndexJoinNumber = $i - 1;
-            $select .= "g$i.id as id_$i ";
-            $select .= $i != $levels ? ', ' : null;
+            $qb->addSelect("g$i.id AS id_$i");
 
-            if (1 == $i) {
-                $from .= " INNER JOIN $groupRelGroupTable gg0
-                           ON g1.id = gg0.subgroup_id and gg0.group_id = $groupId ";
-            } else {
-                $from .= "LEFT JOIN $groupRelGroupTable gg$tableIndexJoinNumber ";
-                $from .= " ON g$tableIndexJoinNumber.id = gg$tableIndexJoinNumber.group_id ";
-                $from .= "LEFT JOIN $groupTable g$tableIndexNumber ";
-                $from .= " ON gg$tableIndexJoinNumber.subgroup_id = g$tableIndexNumber.id ";
+            if ($i > 1) {
+                $joinNumber = $i - 1;
+                $qb->leftJoin(UserGroupRelUserGroup::class, "gg$joinNumber", 'WITH', "g$joinNumber.id = gg$joinNumber.groupId");
+                $qb->leftJoin(Usergroup::class, "g$i", 'WITH', "gg$joinNumber.subgroupId = g$i.id");
             }
         }
 
-        $result = Database::query("$select $from");
-
-        while ($item = Database::fetch_assoc($result)) {
+        foreach ($qb->getQuery()->getArrayResult() as $item) {
             foreach ($item as $myGroupId) {
                 if (!empty($myGroupId)) {
                     $groups[] = $myGroupId;
@@ -3254,33 +3250,56 @@ class UserGroupModel extends Model
      * @param int $parent_group_id if 0, we delete the parent_group association
      * @param int $relation_type
      *
-     * @return \Doctrine\DBAL\Statement
+     * @return bool
      */
     public function setParentGroup($group_id, $parent_group_id, $relation_type = 1)
     {
-        $table = Database::get_main_table(TABLE_USERGROUP_REL_USERGROUP);
         $group_id = (int) $group_id;
         $parent_group_id = (int) $parent_group_id;
+        $em = Container::getEntityManager();
         if (0 == $parent_group_id) {
-            $sql = "DELETE FROM $table WHERE subgroup_id = $group_id";
-        } else {
-            $sql = "SELECT group_id FROM $table WHERE subgroup_id = $group_id";
-            $res = Database::query($sql);
-            if (0 == Database::num_rows($res)) {
-                $sql = "INSERT INTO $table SET
-                        group_id = $parent_group_id,
-                        subgroup_id = $group_id,
-                        relation_type = $relation_type";
-            } else {
-                $sql = "UPDATE $table SET
-                        group_id = $parent_group_id,
-                        relation_type = $relation_type
-                        WHERE subgroup_id = $group_id";
-            }
-        }
-        $res = Database::query($sql);
+            $em->createQueryBuilder()
+                ->delete(UserGroupRelUserGroup::class, 'r')
+                ->where('r.subgroupId = :groupId')
+                ->setParameter('groupId', $group_id)
+                ->getQuery()
+                ->execute()
+            ;
 
-        return $res;
+            return true;
+        }
+
+        $existing = $em->createQueryBuilder()
+            ->select('r.groupId AS group_id')
+            ->from(UserGroupRelUserGroup::class, 'r')
+            ->where('r.subgroupId = :groupId')
+            ->setParameter('groupId', $group_id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if ([] === $existing) {
+            $em->getConnection()->insert(Database::get_main_table(TABLE_USERGROUP_REL_USERGROUP), [
+                'group_id' => $parent_group_id,
+                'subgroup_id' => $group_id,
+                'relation_type' => (int) $relation_type,
+            ]);
+
+            return true;
+        }
+
+        $em->createQueryBuilder()
+            ->update(UserGroupRelUserGroup::class, 'r')
+            ->set('r.groupId', ':parentGroupId')
+            ->set('r.relationType', ':relationType')
+            ->where('r.subgroupId = :groupId')
+            ->setParameter('parentGroupId', $parent_group_id)
+            ->setParameter('relationType', (int) $relation_type)
+            ->setParameter('groupId', $group_id)
+            ->getQuery()
+            ->execute()
+        ;
+
+        return true;
     }
 
     /**
@@ -3382,6 +3401,7 @@ class UserGroupModel extends Model
                     lp_id = $lpId
                     $sessionCondition
                     ";
+        // TODO(db-neutral): SQL fragment built by api_get_session_condition()
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');
@@ -3401,6 +3421,7 @@ class UserGroupModel extends Model
                     lp_category_id = $categoryId
                     $sessionCondition
                 ";
+        // TODO(db-neutral): SQL fragment built by api_get_session_condition()
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

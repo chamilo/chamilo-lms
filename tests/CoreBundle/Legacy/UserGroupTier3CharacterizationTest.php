@@ -134,6 +134,28 @@ final class UserGroupTier3CharacterizationTest extends KernelTestCase
         $this->assertSame([$amy->getId(), $zed->getId()], array_keys($this->model->get_all_users_by_group($group->getId())));
     }
 
+    public function testSetParentGroupStoresTheRelationTypeOnInsertAndOnUpdate(): void
+    {
+        $parent = $this->group('ug3_parent');
+        $child = $this->group('ug3_child');
+
+        $this->model->setParentGroup($child->getId(), $parent->getId());
+        $this->assertSame(1, $this->relationOfSubgroup($child));
+        $this->model->setParentGroup($child->getId(), $parent->getId(), 3);
+        $this->assertSame(3, $this->relationOfSubgroup($child));
+
+        $other = $this->group('ug3_other_child');
+        $this->model->setParentGroup($other->getId(), $parent->getId(), 4);
+        $this->assertSame(4, $this->relationOfSubgroup($other));
+        // Re-parenting one child must not touch its sibling.
+        $this->assertSame(3, $this->relationOfSubgroup($child));
+    }
+
+    private function relationOfSubgroup(Usergroup $group): int
+    {
+        return (int) $this->conn()->fetchOne('SELECT relation_type FROM usergroup_rel_usergroup WHERE subgroup_id = ?', [$group->getId()]);
+    }
+
     public function testGroupsByPopularityAreSocialOrderedByMemberCountAndExcludePendingRoles(): void
     {
         $users = [];

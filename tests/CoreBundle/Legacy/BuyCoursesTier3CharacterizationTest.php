@@ -223,4 +223,131 @@ final class BuyCoursesTier3CharacterizationTest extends BuyCoursesCharacterizati
         $this->assertSame(2, $call(0, 100, 'bc_s_', 0, 0, 'count', $cat));
         $this->assertSame([], $call(0, 100, "x' OR '1'='1"));
     }
+
+    private function teach(int $userId, int $courseId, int $relation = 0, int $status = 1): void
+    {
+        $this->conn->insert('course_rel_user', [
+            'user_id' => $userId, 'c_id' => $courseId, 'relation_type' => $relation, 'status' => $status, 'progress' => 0,
+        ]);
+    }
+
+    private function efValues(int $fieldId, int $userId): array
+    {
+        return $this->conn->fetchFirstColumn('SELECT field_value FROM extra_field_values WHERE field_id = ? AND item_id = ? ORDER BY id', [$fieldId, $userId]);
+    }
+
+    public function testSaveUserExtraFieldTextValueInsertsThenUpdatesTheSingleRow(): void
+    {
+        $fieldId = $this->benefitFieldId(BuyCoursesPlugin::EXTRA_FIELD_MAX_COURSES);
+        $this->conn->executeStatement('DELETE FROM extra_field_values WHERE field_id = ?', [$fieldId]);
+
+        $this->callPrivate('saveUserExtraFieldTextValue', [3, $fieldId, "first 'quoted' \\ value"]);
+        $this->assertSame(["first 'quoted' \\ value"], $this->efValues($fieldId, 3));
+
+        $this->callPrivate('saveUserExtraFieldTextValue', [3, $fieldId, 'second']);
+        $this->assertSame(['second'], $this->efValues($fieldId, 3), 'updated in place, no second row');
+
+        $this->callPrivate('saveUserExtraFieldTextValue', [1, $fieldId, 'other user']);
+        $this->assertSame(['second'], $this->efValues($fieldId, 3));
+        $this->assertSame(['other user'], $this->efValues($fieldId, 1));
+
+        $this->callPrivate('saveUserExtraFieldTextValue', [0, $fieldId, 'nobody']);
+        $this->callPrivate('saveUserExtraFieldTextValue', [3, 0, 'nofield']);
+        $this->assertSame(2, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM extra_field_values WHERE field_id = ?', [$fieldId]));
+    }
+
+    public function testSaveUserExtraFieldJsonValueAndGetUserBenefitPayloadByVariable(): void
+    {
+        $variable = BuyCoursesPlugin::EXTRA_FIELD_DOCUMENT_QUOTA;
+        $fieldId = $this->benefitFieldId($variable);
+        $this->conn->executeStatement('DELETE FROM extra_field_values WHERE field_id = ?', [$fieldId]);
+
+        $this->assertNull($this->plugin->getUserBenefitPayloadByVariable(3, $variable));
+
+        $this->plugin->saveUserExtraFieldJsonValue(3, $fieldId, ['quota_mb' => 250, 'expiry' => '2099-01-01 00:00:00', 'n' => 'é/x']);
+        $this->assertSame(['{"quota_mb":250,"expiry":"2099-01-01 00:00:00","n":"é/x"}'], $this->efValues($fieldId, 3));
+        $this->assertSame(
+            ['quota_mb' => 250, 'expiry' => '2099-01-01 00:00:00', 'n' => 'é/x'],
+            $this->plugin->getUserBenefitPayloadByVariable(3, $variable)
+        );
+
+        $this->plugin->saveUserExtraFieldJsonValue(3, $fieldId, ['quota_mb' => 5]);
+        $this->assertSame(['{"quota_mb":5}'], $this->efValues($fieldId, 3));
+        $this->assertSame(5, $this->plugin->getActiveDocumentQuotaMb(3) ?? 5, 'expired payload (no expiry) yields null');
+        $this->assertNull($this->plugin->getActiveDocumentQuotaMb(3));
+
+        $this->assertNull($this->plugin->getUserBenefitPayloadByVariable(1, $variable), 'other user');
+        $this->assertNull($this->plugin->getUserBenefitPayloadByVariable(3, "x' OR '1'='1"));
+        $this->assertNull($this->plugin->getUserBenefitPayloadByVariable(3, BuyCoursesPlugin::EXTRA_FIELD_MAX_COURSES));
+
+        $this->callPrivate('saveUserExtraFieldTextValue', [3, $fieldId, 'not json']);
+        $this->assertNull($this->plugin->getUserBenefitPayloadByVariable(3, $variable));
+    }
+
+    public function testManagedCourseCountsIgnoreHrmAndStudentRelationsAndServiceLinkedCourses(): void
+    {
+        $this->teach(3, 1);
+        $this->teach(3, 2, 1); // HRM relation: not managed
+        $this->assertSame(1, $this->plugin->countManagedCoursesByUser(3));
+        $this->teach(3, 1); // duplicate row of the same course
+        $this->assertSame(1, $this->plugin->countManagedCoursesByUser(3));
+        $this->assertSame(0, $this->plugin->countManagedCoursesByUser(0));
+        $this->assertSame(2, $this->plugin->countManagedCoursesByUser(1));
+
+        $this->conn->executeStatement('DELETE FROM course_rel_user WHERE user_id = 3 AND relation_type = 1');
+        $this->teach(3, 2);
+        $this->assertSame(2, $this->plugin->countStandardManagedCoursesByUser(3));
+
+        $linkInsert = fn (int $course, string $status, ?string $deletedAt) => $this->conn->insert('plugin_buycourses_subscription_course', [
+            'service_sale_id' => 1, 'service_id' => 1, 'course_id' => $course, 'user_id' => 3, 'status' => $status,
+            'created_at' => '2026-01-01 00:00:00', 'deleted_at' => $deletedAt,
+        ]);
+        $this->conn->executeStatement('DELETE FROM plugin_buycourses_subscription_course WHERE course_id IN (1, 2)');
+        $linkInsert(1, 'active', null);
+        $this->assertSame(1, $this->plugin->countStandardManagedCoursesByUser(3));
+        $this->conn->executeStatement("UPDATE plugin_buycourses_subscription_course SET status = 'deleted' WHERE course_id = 1");
+        $this->assertSame(2, $this->plugin->countStandardManagedCoursesByUser(3), 'a deleted link does not count');
+        $this->conn->executeStatement("UPDATE plugin_buycourses_subscription_course SET status = 'active', deleted_at = '2026-01-02 00:00:00' WHERE course_id = 1");
+        $this->assertSame(2, $this->plugin->countStandardManagedCoursesByUser(3));
+        $this->conn->executeStatement('UPDATE plugin_buycourses_subscription_course SET deleted_at = NULL WHERE course_id = 1');
+        $linkInsert(2, 'closed', null);
+        $this->assertSame(0, $this->plugin->countStandardManagedCoursesByUser(3));
+        $this->assertSame(0, $this->plugin->countStandardManagedCoursesByUser(0));
+
+        // Only the rows of the requested user count: user 1 still manages course 1, which has no link any more.
+        $this->conn->executeStatement('DELETE FROM plugin_buycourses_subscription_course WHERE course_id = 1');
+        $this->conn->executeStatement('DELETE FROM course_rel_user WHERE user_id = 3 AND c_id = 1');
+        $this->assertSame(0, $this->plugin->countStandardManagedCoursesByUser(3));
+        $this->assertSame(1, $this->plugin->countStandardManagedCoursesByUser(1));
+    }
+
+    public function testGetManagedCourseServiceLabelsForUserReturnsTheServiceNamePerManagedCourse(): void
+    {
+        $this->teach(3, 1);
+        $this->teach(3, 2, 1);
+        $this->conn->insert('plugin_buycourses_services', [
+            'name' => '  bc_label_service ', 'description' => 'd', 'price' => '1.00', 'duration_days' => 1, 'applies_to' => 1,
+            'owner_id' => 1, 'active' => 1, 'visibility' => 1, 'video_url' => '', 'image' => '', 'service_information' => '',
+        ]);
+        $serviceId = (int) $this->conn->lastInsertId();
+        $this->conn->executeStatement('DELETE FROM plugin_buycourses_subscription_course WHERE course_id IN (1, 2)');
+        foreach ([1, 2] as $course) {
+            $this->conn->insert('plugin_buycourses_subscription_course', [
+                'service_sale_id' => 1, 'service_id' => $serviceId, 'course_id' => $course, 'user_id' => 3,
+                'status' => 'active', 'created_at' => '2026-01-01 00:00:00',
+            ]);
+        }
+
+        $this->assertSame([1 => ['serviceName' => 'bc_label_service']], $this->plugin->getManagedCourseServiceLabelsForUser(3, [1, 2, 0, 1, 77]));
+        $this->assertSame([], $this->plugin->getManagedCourseServiceLabelsForUser(1 + 1, [1, 2]), 'not a manager');
+        $this->assertSame([], $this->plugin->getManagedCourseServiceLabelsForUser(3, []));
+        $this->conn->executeStatement('UPDATE course_rel_user SET relation_type = 0 WHERE user_id = 3 AND c_id = 2');
+        $this->assertSame(
+            [1 => ['serviceName' => 'bc_label_service'], 2 => ['serviceName' => 'bc_label_service']],
+            $this->plugin->getManagedCourseServiceLabelsForUser(3, [2, 1])
+        );
+        $this->assertSame([1, 2], array_keys($this->plugin->getManagedCourseServiceLabelsForUser(3, [2, 1])));
+        $this->conn->executeStatement("UPDATE plugin_buycourses_subscription_course SET status = 'deleted' WHERE course_id = 1");
+        $this->assertSame([2 => ['serviceName' => 'bc_label_service']], $this->plugin->getManagedCourseServiceLabelsForUser(3, [1, 2]));
+    }
 }

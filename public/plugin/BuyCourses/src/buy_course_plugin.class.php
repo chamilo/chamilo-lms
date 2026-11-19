@@ -8759,16 +8759,8 @@ class BuyCoursesPlugin extends Plugin
 
         $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $valueColumn = $this->getExtraFieldValueColumn();
-        $escapedValue = Database::escape_string($value);
 
-        $checkSql = "SELECT id
-            FROM $table
-            WHERE field_id = $extraFieldId
-              AND item_id = $userId
-            LIMIT 1";
-        $checkResult = Database::query($checkSql);
-
-        if ($checkResult && Database::num_rows($checkResult) > 0) {
+        if ($this->hasExtraFieldValueRow($table, $extraFieldId, $userId)) {
             $updateData = [
                 $valueColumn => $value,
             ];
@@ -11926,6 +11918,22 @@ class BuyCoursesPlugin extends Plugin
         return 'NO';
     }
 
+    private function hasExtraFieldValueRow(string $table, int $extraFieldId, int $userId): bool
+    {
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $id = $qb->select('id')
+            ->from($table)
+            ->where('field_id = :fieldId')
+            ->andWhere('item_id = :userId')
+            ->setMaxResults(1)
+            ->setParameter('fieldId', $extraFieldId)
+            ->setParameter('userId', $userId)
+            ->executeQuery()
+            ->fetchOne();
+
+        return false !== $id;
+    }
+
     /**
      * Return the value column used by extra_field_values in the current schema.
      */
@@ -11938,6 +11946,7 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        // TODO(db-neutral): SHOW COLUMNS (schema introspection)
         $result = Database::query("SHOW COLUMNS FROM $table");
 
         while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -11975,6 +11984,7 @@ class BuyCoursesPlugin extends Plugin
 
         $columns = [];
         $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        // TODO(db-neutral): SHOW COLUMNS (schema introspection)
         $result = Database::query("SHOW COLUMNS FROM $table");
 
         while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -11998,6 +12008,7 @@ class BuyCoursesPlugin extends Plugin
         $relationTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
         $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
 
+        // Left raw: no caller anywhere (dead code), and its rows carry the numeric keys of Database::fetch_array().
         $sql = "SELECT
                 rel.service_id,
                 rel.extra_field_id,
@@ -12033,14 +12044,7 @@ class BuyCoursesPlugin extends Plugin
         $valueColumn = $this->getExtraFieldValueColumn();
         $jsonValue = json_encode($payload, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
 
-        $checkSql = "SELECT id
-                 FROM $table
-                 WHERE field_id = $extraFieldId
-                   AND item_id = $userId
-                 LIMIT 1";
-        $checkResult = Database::query($checkSql);
-
-        if ($checkResult && Database::num_rows($checkResult) > 0) {
+        if ($this->hasExtraFieldValueRow($table, $extraFieldId, $userId)) {
             $updateData = [
                 $valueColumn => $jsonValue,
             ];
@@ -12124,27 +12128,27 @@ class BuyCoursesPlugin extends Plugin
     public function getUserBenefitPayloadByVariable(int $userId, string $variable): ?array
     {
         $userId = (int) $userId;
-        $variable = Database::escape_string($variable);
 
         $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
         $valueTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $valueColumn = $this->getExtraFieldValueColumn();
 
-        $sql = "SELECT efv.$valueColumn AS benefit_value
-            FROM $extraFieldTable ef
-            INNER JOIN $valueTable efv
-                ON efv.field_id = ef.id
-            WHERE ef.variable = '$variable'
-              AND efv.item_id = $userId
-            LIMIT 1";
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $row = $qb->select('efv.'.$valueColumn.' AS benefit_value')
+            ->from($extraFieldTable, 'ef')
+            ->innerJoin('ef', $valueTable, 'efv', 'efv.field_id = ef.id')
+            ->where('ef.variable = :variable')
+            ->andWhere('efv.item_id = :userId')
+            ->setMaxResults(1)
+            ->setParameter('variable', $variable)
+            ->setParameter('userId', $userId)
+            ->executeQuery()
+            ->fetchAssociative();
 
-        $result = Database::query($sql);
-
-        if (!$result || 0 === Database::num_rows($result)) {
+        if (false === $row) {
             return null;
         }
 
-        $row = Database::fetch_array($result, 'ASSOC');
         $decoded = json_decode((string) ($row['benefit_value'] ?? ''), true);
 
         return is_array($decoded) ? $decoded : null;
@@ -12223,14 +12227,17 @@ class BuyCoursesPlugin extends Plugin
 
         $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-        $sql = "SELECT COUNT(DISTINCT c_id) AS total
-            FROM $table
-            WHERE user_id = $userId
-              AND status = ".COURSEMANAGER.'
-              AND (relation_type IS NULL OR relation_type <> '.COURSE_RELATION_TYPE_HRM.')';
-
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $row = $qb->select('COUNT(DISTINCT c_id) AS total')
+            ->from($table)
+            ->where('user_id = :userId')
+            ->andWhere('status = :status')
+            ->andWhere('(relation_type IS NULL OR relation_type <> :hrm)')
+            ->setParameter('userId', $userId)
+            ->setParameter('status', COURSEMANAGER)
+            ->setParameter('hrm', COURSE_RELATION_TYPE_HRM)
+            ->executeQuery()
+            ->fetchAssociative();
 
         return (int) ($row['total'] ?? 0);
     }
@@ -12252,19 +12259,19 @@ class BuyCoursesPlugin extends Plugin
         $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
 
-        $sql = "SELECT COUNT(DISTINCT cru.c_id) AS total
-            FROM $courseUserTable cru
-            LEFT JOIN $subscriptionCourseTable sc
-                ON sc.course_id = cru.c_id
-                AND sc.status <> 'deleted'
-                AND sc.deleted_at IS NULL
-            WHERE cru.user_id = $userId
-              AND cru.status = ".COURSEMANAGER.'
-              AND (cru.relation_type IS NULL OR cru.relation_type <> '.COURSE_RELATION_TYPE_HRM.')
-              AND sc.id IS NULL';
-
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $row = $qb->select('COUNT(DISTINCT cru.c_id) AS total')
+            ->from($courseUserTable, 'cru')
+            ->leftJoin('cru', $subscriptionCourseTable, 'sc', "sc.course_id = cru.c_id AND sc.status <> 'deleted' AND sc.deleted_at IS NULL")
+            ->where('cru.user_id = :userId')
+            ->andWhere('cru.status = :status')
+            ->andWhere('(cru.relation_type IS NULL OR cru.relation_type <> :hrm)')
+            ->andWhere('sc.id IS NULL')
+            ->setParameter('userId', $userId)
+            ->setParameter('status', COURSEMANAGER)
+            ->setParameter('hrm', COURSE_RELATION_TYPE_HRM)
+            ->executeQuery()
+            ->fetchAssociative();
 
         return (int) ($row['total'] ?? 0);
     }
@@ -12289,33 +12296,36 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $courseIds = array_slice($courseIds, 0, 100);
-        $courseIdsSql = implode(',', $courseIds);
         $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-        $sql = "SELECT sc.course_id, s.name AS service_name
-            FROM $subscriptionCourseTable sc
-            INNER JOIN $servicesTable s ON s.id = sc.service_id
-            INNER JOIN $courseTable c ON c.id = sc.course_id
-            INNER JOIN $courseUserTable cru
-                ON cru.c_id = sc.course_id
-                AND cru.user_id = $userId
-                AND cru.status = ".COURSEMANAGER.'
-                AND (cru.relation_type IS NULL OR cru.relation_type <> '.COURSE_RELATION_TYPE_HRM.")
-            WHERE sc.course_id IN ($courseIdsSql)
-              AND sc.status <> 'deleted'
-              AND sc.deleted_at IS NULL
-            ORDER BY sc.course_id ASC";
-
-        $result = Database::query($sql);
-        if (false === $result) {
-            return [];
-        }
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $rows = $qb->select('sc.course_id', 's.name AS service_name')
+            ->from($subscriptionCourseTable, 'sc')
+            ->innerJoin('sc', $servicesTable, 's', 's.id = sc.service_id')
+            ->innerJoin('sc', $courseTable, 'c', 'c.id = sc.course_id')
+            ->innerJoin(
+                'sc',
+                $courseUserTable,
+                'cru',
+                'cru.c_id = sc.course_id AND cru.user_id = :userId AND cru.status = :status'
+                .' AND (cru.relation_type IS NULL OR cru.relation_type <> :hrm)'
+            )
+            ->where('sc.course_id IN (:courseIds)')
+            ->andWhere("sc.status <> 'deleted'")
+            ->andWhere('sc.deleted_at IS NULL')
+            ->orderBy('sc.course_id', 'ASC')
+            ->setParameter('userId', $userId)
+            ->setParameter('status', COURSEMANAGER)
+            ->setParameter('hrm', COURSE_RELATION_TYPE_HRM)
+            ->setParameter('courseIds', $courseIds, ArrayParameterType::INTEGER)
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $labels = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        foreach ($rows as $row) {
             $courseId = (int) ($row['course_id'] ?? 0);
             $serviceName = trim((string) ($row['service_name'] ?? ''));
 

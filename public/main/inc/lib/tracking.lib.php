@@ -4877,86 +4877,70 @@ class Tracking
         $urlId = -1;
 
         $accessUrlUtil = Container::getAccessUrlUtil();
-        if ($accessUrlUtil->isMultiple()) {
+        $isMultipleUrl = $accessUrlUtil->isMultiple();
+        if ($isMultipleUrl) {
             $urlId = $accessUrlUtil->getCurrent()->getId();
-            $sql = "SELECT c.id, c.code, title
-                FROM $tbl_course_user cu
-                INNER JOIN $tbl_course c
-                ON (cu.c_id = c.id)
-                INNER JOIN $tbl_access_rel_course a
-                ON (a.c_id = c.id)
-                WHERE
-                    cu.user_id = $user_id AND
-                    relation_type<> ".COURSE_RELATION_TYPE_RRHH." AND
-                    access_url_id = $urlId
-                ORDER BY title";
-        } else {
-            $sql = "SELECT c.id, c.code, title
-                FROM $tbl_course_user cu
-                INNER JOIN $tbl_course c
-                ON (cu.c_id = c.id)
-                WHERE
-                    cu.user_id = $user_id AND
-                    relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                ORDER BY title";
         }
 
-        $rs = Database::query($sql);
+        $courseQb = self::dbalQueryBuilder()
+            ->select('c.id', 'c.code', 'title')
+            ->from($tbl_course_user, 'cu')
+            ->innerJoin('cu', $tbl_course, 'c', 'cu.c_id = c.id')
+            ->where('cu.user_id = :userId')
+            ->andWhere('relation_type <> :hrRelation')
+            ->setParameter('userId', $user_id)
+            ->setParameter('hrRelation', COURSE_RELATION_TYPE_RRHH)
+            ->orderBy('title');
+        if ($isMultipleUrl) {
+            $courseQb->innerJoin('c', $tbl_access_rel_course, 'a', 'a.c_id = c.id')
+                ->andWhere('access_url_id = :urlId')
+                ->setParameter('urlId', $urlId);
+        }
+
         $courses = $course_in_session = $temp_course_in_session = [];
         $courseIdList = [];
-        while ($row = Database::fetch_assoc($rs)) {
+        foreach ($courseQb->executeQuery()->fetchAllAssociative() as $row) {
             $courses[$row['id']] = $row['title'];
             $courseIdList[] = $row['id'];
         }
 
-        $orderBy = ' ORDER BY title ';
-        $extraInnerJoin = null;
+        // Get the list of sessions where the user is subscribed as student
+        $sessionQb = self::dbalQueryBuilder()
+            ->select('DISTINCT c.code', 's.id as session_id', 's.title')
+            ->from($tbl_session_course_user, 'cu');
+        if ($isMultipleUrl) {
+            $sessionQb->innerJoin('cu', $tbl_access_rel_session, 'a', 'a.session_id = cu.session_id')
+                ->innerJoin('a', $tbl_session, 's', 's.id = a.session_id');
+        } else {
+            $sessionQb->innerJoin('cu', $tbl_session, 's', 's.id = cu.session_id');
+        }
+        $sessionQb->innerJoin('cu', $tbl_course, 'c', 'c.id = cu.c_id');
 
         if (SessionManager::orderCourseIsEnabled() && !empty($session_id)) {
-            $orderBy = ' ORDER BY s.id, src.position ';
             $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-            $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
-                            ON (cu.c_id = src.c_id AND src.session_id = $session_id) ";
-        }
-
-        $sessionCondition = '';
-        if (!empty($session_id)) {
-            $sessionCondition = " AND s.id = $session_id";
-        }
-
-        // Get the list of sessions where the user is subscribed as student
-        if ($accessUrlUtil->isMultiple()) {
-            $sql = "SELECT DISTINCT c.code, s.id as session_id, s.title
-                FROM $tbl_session_course_user cu
-                INNER JOIN $tbl_access_rel_session a
-                ON (a.session_id = cu.session_id)
-                INNER JOIN $tbl_session s
-                ON (s.id = a.session_id)
-                INNER JOIN $tbl_course c
-                ON (c.id = cu.c_id)
-                $extraInnerJoin
-                WHERE
-                    cu.user_id = $user_id AND
-                    access_url_id = $urlId
-                    $sessionCondition
-                $orderBy ";
+            $sessionQb->innerJoin(
+                'cu',
+                $tableSessionRelCourse,
+                'src',
+                'cu.c_id = src.c_id AND src.session_id = :orderSessionId'
+            )
+                ->setParameter('orderSessionId', $session_id)
+                ->orderBy('s.id')
+                ->addOrderBy('src.position');
         } else {
-            $sql = "SELECT DISTINCT c.code, s.id as session_id, s.title
-                FROM $tbl_session_course_user cu
-                INNER JOIN $tbl_session s
-                ON (s.id = cu.session_id)
-                INNER JOIN $tbl_course c
-                ON (c.id = cu.c_id)
-                $extraInnerJoin
-                WHERE
-                    cu.user_id = $user_id
-                    $sessionCondition
-                $orderBy ";
+            $sessionQb->orderBy('title');
         }
 
-        $rs = Database::query($sql);
+        $sessionQb->where('cu.user_id = :userId')->setParameter('userId', $user_id);
+        if ($isMultipleUrl) {
+            $sessionQb->andWhere('access_url_id = :urlId')->setParameter('urlId', $urlId);
+        }
+        if (!empty($session_id)) {
+            $sessionQb->andWhere('s.id = :sessionId')->setParameter('sessionId', $session_id);
+        }
+
         $simple_session_array = [];
-        while ($row = Database::fetch_assoc($rs)) {
+        foreach ($sessionQb->executeQuery()->fetchAllAssociative() as $row) {
             $course_info = api_get_course_info($row['code']);
             $temp_course_in_session[$row['session_id']]['course_list'][$course_info['real_id']] = $course_info;
             $temp_course_in_session[$row['session_id']]['title'] = $row['title'];

@@ -3196,110 +3196,105 @@ class CourseManager
         $tableCourseUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
-        $languageCondition = '';
+        // null: no language filter; 0: nothing matches; otherwise the language id the courses must have.
+        $languageFilter = null;
         $onlyInUserLanguage = ('true' === api_get_setting('course.my_courses_show_courses_in_user_language_only'));
         if ($useUserLanguageFilterIfAvailable && $onlyInUserLanguage) {
             $userInfo = api_get_user_info(api_get_user_id());
             if (!empty($userInfo['language'])) {
                 $languageId = (int) api_get_language_id($userInfo['language']);
-                $languageCondition = $languageId > 0
-                    ? " AND course.language_id = $languageId "
-                    : ' AND 1 = 0 ';
+                $languageFilter = $languageId > 0 ? $languageId : 0;
             }
         }
+        $applyLanguageFilter = static function ($query) use ($languageFilter): void {
+            if (null === $languageFilter) {
+                return;
+            }
+            if ($languageFilter > 0) {
+                $query->andWhere('course.language_id = :languageId')->setParameter('languageId', $languageFilter);
+            } else {
+                $query->andWhere('1 = 0');
+            }
+        };
+        $connection = Database::getManager()->getConnection();
 
         if ($adminGetsAllCourses && UserManager::is_admin($user_id)) {
             // get the whole courses list
-            $sql = "SELECT DISTINCT(course.code), course.id as real_id, course.title
-                    FROM $tbl_course course
-                    INNER JOIN $tableCourseUrl url
-                    ON (course.id = url.c_id)
-                    WHERE
-                        url.access_url_id = $urlId
-                        $languageCondition
-                ";
+            $coursesQuery = $connection->createQueryBuilder()
+                ->select('DISTINCT course.code', 'course.id AS real_id', 'course.title')
+                ->from($tbl_course, 'course')
+                ->innerJoin('course', $tableCourseUrl, 'url', 'course.id = url.c_id')
+                ->where('url.access_url_id = :urlId')
+                ->setParameter('urlId', (int) $urlId);
+            $applyLanguageFilter($coursesQuery);
         } else {
-            $withSpecialCourses = $withoutSpecialCourses = '';
+            $specialCourseIds = [];
 
             if ($loadSpecialCourses) {
-                $specialCourseList = self::get_special_course_list();
-                if (!empty($specialCourseList)) {
-                    $specialCourseToString = '"'.implode('","', $specialCourseList).'"';
-                    $withSpecialCourses = ' AND course.id IN ('.$specialCourseToString.')';
-                    $withoutSpecialCourses = ' AND course.id NOT IN ('.$specialCourseToString.')';
-                }
+                $specialCourseIds = array_map('intval', self::get_special_course_list());
 
-                if (!empty($withSpecialCourses)) {
-                    $sql = "SELECT DISTINCT (course.code),
-                            course.id as real_id,
-                            course.title
-                            FROM $tbl_course_user course_rel_user
-                            LEFT JOIN $tbl_course course
-                            ON course.id = course_rel_user.c_id
-                            INNER JOIN $tableCourseUrl url
-                            ON (course.id = url.c_id)
-                            WHERE url.access_url_id = $urlId
-                            $withSpecialCourses
-                            $languageCondition
-                            GROUP BY course.code
-                            ORDER BY course.title, course_rel_user.sort ASC
-                    ";
-                    $result = Database::query($sql);
-                    if (Database::num_rows($result) > 0) {
-                        while ($result_row = Database::fetch_assoc($result)) {
-                            $result_row['special_course'] = 1;
-                            $course_list[] = $result_row;
-                            $codes[] = $result_row['real_id'];
-                        }
+                if (!empty($specialCourseIds)) {
+                    $specialQuery = $connection->createQueryBuilder()
+                        ->select('DISTINCT course.code', 'course.id AS real_id', 'course.title')
+                        ->from($tbl_course_user, 'course_rel_user')
+                        ->leftJoin('course_rel_user', $tbl_course, 'course', 'course.id = course_rel_user.c_id')
+                        ->innerJoin('course', $tableCourseUrl, 'url', 'course.id = url.c_id')
+                        ->where('url.access_url_id = :urlId')
+                        ->andWhere('course.id IN (:specialIds)')
+                        ->groupBy('course.code')
+                        ->orderBy('course.title')
+                        ->addOrderBy('course_rel_user.sort', 'ASC')
+                        ->setParameter('urlId', (int) $urlId)
+                        ->setParameter('specialIds', $specialCourseIds, ArrayParameterType::INTEGER);
+                    $applyLanguageFilter($specialQuery);
+                    $specialResult = $specialQuery->executeQuery();
+                    while ($result_row = Database::fetch_assoc($specialResult)) {
+                        $result_row['special_course'] = 1;
+                        $course_list[] = $result_row;
+                        $codes[] = $result_row['real_id'];
                     }
                 }
             }
 
             // get course list not auto-register. Use Distinct to avoid multiple
             // entries when a course is assigned to a HRD (DRH) as watcher
-            $sql = "SELECT
-                        DISTINCT(course.code),
-                        course.id as real_id,
-                        course.title
-                    FROM $tbl_course course
-                    INNER JOIN $tbl_course_user cru
-                    ON (course.id = cru.c_id)
-                    INNER JOIN $tableCourseUrl url
-                    ON (course.id = url.c_id)
-                    WHERE
-                        url.access_url_id = $urlId AND
-                        cru.user_id = $user_id
-                        $withoutSpecialCourses
-                        $languageCondition
-                    ORDER BY course.title
-                    ";
-        }
-        $result = Database::query($sql);
-
-        if (Database::num_rows($result)) {
-            while ($row = Database::fetch_assoc($result)) {
-                if (!empty($skipCourseList)) {
-                    if (in_array($row['real_id'], $skipCourseList)) {
-                        continue;
-                    }
-                }
-                $course_list[] = $row;
-                $codes[] = $row['real_id'];
+            $coursesQuery = $connection->createQueryBuilder()
+                ->select('DISTINCT course.code', 'course.id AS real_id', 'course.title')
+                ->from($tbl_course, 'course')
+                ->innerJoin('course', $tbl_course_user, 'cru', 'course.id = cru.c_id')
+                ->innerJoin('course', $tableCourseUrl, 'url', 'course.id = url.c_id')
+                ->where('url.access_url_id = :urlId')
+                ->andWhere('cru.user_id = :userId')
+                ->setParameter('urlId', (int) $urlId)
+                ->setParameter('userId', $user_id);
+            if (!empty($specialCourseIds)) {
+                $coursesQuery->andWhere('course.id NOT IN (:specialIds)')
+                    ->setParameter('specialIds', $specialCourseIds, ArrayParameterType::INTEGER);
             }
+            $applyLanguageFilter($coursesQuery);
+            $coursesQuery->orderBy('course.title');
+        }
+        $result = $coursesQuery->executeQuery();
+
+        while ($row = Database::fetch_assoc($result)) {
+            if (!empty($skipCourseList)) {
+                if (in_array($row['real_id'], $skipCourseList)) {
+                    continue;
+                }
+            }
+            $course_list[] = $row;
+            $codes[] = $row['real_id'];
         }
 
         if (true === $include_sessions) {
-            $sql = "SELECT DISTINCT (c.code),
-                        c.id as real_id,
-                        s.id as session_id,
-                        s.title as session_name
-                    FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu
-                    INNER JOIN $tbl_course c
-                    ON (scu.c_id = c.id)
-                    INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)." s
-                    ON (s.id = scu.session_id)
-                    WHERE user_id = $user_id ";
-            $r = Database::query($sql);
+            $r = $connection->createQueryBuilder()
+                ->select('DISTINCT c.code', 'c.id AS real_id', 's.id AS session_id', 's.title AS session_name')
+                ->from(Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER), 'scu')
+                ->innerJoin('scu', $tbl_course, 'c', 'scu.c_id = c.id')
+                ->innerJoin('scu', Database::get_main_table(TABLE_MAIN_SESSION), 's', 's.id = scu.session_id')
+                ->where('user_id = :userId')
+                ->setParameter('userId', $user_id)
+                ->executeQuery();
             while ($row = Database::fetch_assoc($r)) {
                 if (!empty($skipCourseList)) {
                     if (in_array($row['real_id'], $skipCourseList)) {

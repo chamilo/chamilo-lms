@@ -264,4 +264,105 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         $this->assertEmailCount(2);
         $this->assertSame('cm3b_mail_tutor@example.org', self::getMailerMessage(1)->getTo()[0]->getAddress(), 'is_tutor = 1 rows instead');
     }
+
+    // ---------------------------------------------------------------- get_courses_list_by_user_id
+
+    public function testCoursesListByUserIdIsOrderedByTitleAndScopedToTheUser(): void
+    {
+        $b = $this->createCourse('cm3b_lst_b');
+        $a = $this->createCourse('cm3b_lst_a');
+        $notMine = $this->createCourse('cm3b_lst_c');
+        $user = $this->createUser('cm3b_lst_user');
+        $stranger = $this->createUser('cm3b_lst_stranger');
+        $this->sub($user, $b);
+        $this->sub($user, $a, STUDENT, COURSE_RELATION_TYPE_RRHH);
+        $this->sub($stranger, $notMine);
+
+        $list = CourseManager::get_courses_list_by_user_id($user->getId());
+
+        $this->assertSame(['cm3b_lst_a', 'cm3b_lst_b'], array_column($list, 'title'), 'ordered by title, HR-manager link included, strangers\' courses left out');
+        $this->assertSame([$a->getCode(), $b->getCode()], array_column($list, 'code'));
+        $this->assertSame([(int) $a->getId(), (int) $b->getId()], array_map('intval', array_column($list, 'real_id')));
+        $this->assertSame(['code', 'real_id', 'title'], array_keys($list[0]));
+        $this->assertSame([], CourseManager::get_courses_list_by_user_id(999999999));
+    }
+
+    public function testCoursesListByUserIdSkipsTheGivenCourseIds(): void
+    {
+        $a = $this->createCourse('cm3b_skip_a');
+        $b = $this->createCourse('cm3b_skip_b');
+        $user = $this->createUser('cm3b_skip_user');
+        $this->sub($user, $a);
+        $this->sub($user, $b);
+
+        $list = CourseManager::get_courses_list_by_user_id($user->getId(), false, false, true, [$a->getId()]);
+
+        $this->assertSame(['cm3b_skip_b'], array_column($list, 'title'));
+    }
+
+    public function testCoursesListByUserIdSeparatesStickyCoursesAndCanIgnoreThem(): void
+    {
+        $sticky = $this->createCourse('cm3b_stk_a');
+        $normal = $this->createCourse('cm3b_stk_b');
+        $subscriber = $this->createUser('cm3b_stk_sub');
+        $user = $this->createUser('cm3b_stk_user');
+        $this->sub($subscriber, $sticky);
+        $this->sub($user, $normal);
+        $this->sub($user, $sticky);
+        $this->conn()->executeStatement('UPDATE course SET sticky = 1 WHERE id = ?', [$sticky->getId()]);
+
+        $byTitle = [];
+        foreach (CourseManager::get_courses_list_by_user_id($user->getId()) as $row) {
+            $byTitle[$row['title']] = $row;
+        }
+        $this->assertSame(1, $byTitle['cm3b_stk_a']['special_course'], 'a sticky course comes first, flagged');
+        $this->assertArrayNotHasKey('special_course', $byTitle['cm3b_stk_b']);
+        $this->assertSame(1, count(array_filter(CourseManager::get_courses_list_by_user_id($user->getId()), static fn ($r) => 'cm3b_stk_a' === $r['title'])), 'listed once');
+
+        $this->assertSame(
+            ['cm3b_stk_a', 'cm3b_stk_b'],
+            array_column(CourseManager::get_courses_list_by_user_id($user->getId(), false, false, false), 'title'),
+            'without special-course handling it is a plain subscription'
+        );
+
+        // A sticky course is shown to a user even if he is not subscribed, as long as somebody is.
+        $this->assertContains('cm3b_stk_a', array_column(CourseManager::get_courses_list_by_user_id($this->createUser('cm3b_stk_nobody')->getId()), 'title'));
+    }
+
+    public function testCoursesListByUserIdAdminGetsEveryCourseOfTheUrl(): void
+    {
+        $course = $this->createCourse('cm3b_adm_a');
+        $admin = $this->getUser('admin');
+
+        $without = array_column(CourseManager::get_courses_list_by_user_id($admin->getId()), 'title');
+        $with = array_column(CourseManager::get_courses_list_by_user_id($admin->getId(), false, true), 'title');
+
+        $this->assertNotContains('cm3b_adm_a', $without);
+        $this->assertContains('cm3b_adm_a', $with);
+        $this->assertSame($with, array_values(array_unique($with)));
+    }
+
+    public function testCoursesListByUserIdAddsSessionCoursesOnlyWhenAsked(): void
+    {
+        $own = $this->createCourse('cm3b_ses_own');
+        $viaSession = $this->createCourse('cm3b_ses_via');
+        $session = $this->createSession('cm3b_ses_session');
+        $user = $this->createUser('cm3b_ses_user');
+        $this->sub($user, $own);
+        $this->sessionCourse((int) $session->getId(), $own);
+        $this->sessionCourse((int) $session->getId(), $viaSession);
+        $this->sessionCourseUser((int) $session->getId(), $own, $user);
+        $this->sessionCourseUser((int) $session->getId(), $viaSession, $user);
+
+        $this->assertSame(['cm3b_ses_own'], array_column(CourseManager::get_courses_list_by_user_id($user->getId()), 'title'));
+
+        $list = CourseManager::get_courses_list_by_user_id($user->getId(), true);
+        $this->assertSame([$own->getCode(), $viaSession->getCode()], array_column($list, 'code'), 'a course already listed is not repeated');
+        $this->assertSame(['code', 'real_id', 'session_id', 'session_name'], array_keys($list[1]));
+        $this->assertSame('cm3b_ses_session', $list[1]['session_name']);
+
+        $different = CourseManager::get_courses_list_by_user_id($user->getId(), true, false, true, [], true, true);
+        $this->assertCount(3, $different, 'with the different-key flag the session row of an own course is kept too');
+        $this->assertCount(0, CourseManager::get_courses_list_by_user_id($user->getId(), true, false, true, [$own->getId(), $viaSession->getId()]));
+    }
 }

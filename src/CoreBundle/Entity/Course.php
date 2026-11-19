@@ -30,6 +30,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Stringable;
@@ -476,17 +477,16 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function getSubscriptionByUser(User $user): ?CourseRelUser
     {
-        $users = $this->getUsers();
+        // Let the database look up the single row instead of hydrating the whole course roster
+        // (Collection::matching() filters in memory when the collection is already loaded).
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('user', $user))
+            ->setMaxResults(1)
+        ;
 
-        if (0 === $users->count()) {
-            return null;
-        }
+        $matching = $this->users->matching($criteria)->first();
 
-        $matching = $users->filter(
-            fn (CourseRelUser $subscription) => $subscription->getUser()->getId() === $user->getId()
-        );
-
-        return $matching->count() > 0 ? $matching->first() : null;
+        return $matching instanceof CourseRelUser ? $matching : null;
     }
 
     /**
@@ -513,9 +513,14 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function hasUserAsStudent(User $user): bool
     {
-        $criteria = Criteria::create()->where(Criteria::expr()->eq('user', $user));
+        // Single criteria on the subscriptions: matching() on top of getStudentSubscriptions() would
+        // first load every learner of the course and then filter them in PHP.
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('user', $user))
+            ->andWhere(Criteria::expr()->eq('status', CourseRelUser::STUDENT))
+        ;
 
-        return $this->getStudentSubscriptions()->matching($criteria)->count() > 0;
+        return $this->users->matching($criteria)->count() > 0;
     }
 
     public function getStudentSubscriptions(): Collection
@@ -580,17 +585,15 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function hasUserAsTeacher(User $user): bool
     {
-        $users = $this->getTeachersSubscriptions();
+        // This is called by voters on almost every course request: ask the database (COUNT on
+        // course_rel_user) instead of loading every subscription of the course, which is what
+        // made course pages slow in courses with thousands of learners.
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('user', $user))
+            ->andWhere(Criteria::expr()->eq('status', CourseRelUser::TEACHER))
+        ;
 
-        if (0 === $users->count()) {
-            return false;
-        }
-
-        $matching = $users->filter(
-            fn (CourseRelUser $subscription) => $subscription->getUser()->getId() === $user->getId()
-        );
-
-        return $matching->count() > 0;
+        return $this->users->matching($criteria)->count() > 0;
     }
 
     /**
@@ -603,16 +606,13 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     ])]
     public function getTeachersSubscriptions(): Collection
     {
-        /** @var ArrayCollection<int, CourseRelUser> $teacherSubscriptions */
-        $teacherSubscriptions = new ArrayCollection();
+        // Only the teacher rows are fetched; the learners of the course are not hydrated.
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('status', CourseRelUser::TEACHER))
+            ->orderBy(['id' => Order::Ascending])
+        ;
 
-        foreach ($this->users as $subscription) {
-            if (CourseRelUser::TEACHER === $subscription->getStatus()) {
-                $teacherSubscriptions->add($subscription);
-            }
-        }
-
-        return $teacherSubscriptions;
+        return new ArrayCollection(array_values($this->users->matching($criteria)->toArray()));
     }
 
     public function addUserAsTeacher(User $user): self

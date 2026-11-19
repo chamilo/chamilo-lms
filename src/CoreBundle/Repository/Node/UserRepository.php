@@ -658,7 +658,8 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         array $roleList,
         string $keyword,
         int $accessUrlId = 0,
-        bool $useCache = false
+        bool $useCache = false,
+        ?int $limit = null
     ) {
         $qb = $this->createQueryBuilder('u');
 
@@ -666,6 +667,11 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
         $this->addAccessUrlQueryBuilder($accessUrlId, $qb);
         $this->addRoleListQueryBuilder($roleList, $qb);
         $this->addSearchByKeywordQueryBuilder($keyword, $qb);
+
+        // Autocomplete callers only need the first matches: do not hydrate every matching user.
+        if (null !== $limit && $limit > 0) {
+            $qb->setMaxResults($limit);
+        }
 
         if ($useCache) {
             return $this->queryCacheHelper->run(
@@ -675,6 +681,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
                     'roles' => $roleList,
                     'keyword' => $keyword,
                     'accessUrlId' => $accessUrlId,
+                    'limit' => $limit,
                 ]
             );
         }

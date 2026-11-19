@@ -229,4 +229,6 @@ export const chamiloIconToClass = {
   "bell-off-outline": "mdi mdi-bell-off-outline",
   "lock-outline": "mdi mdi-lock-outline",
   "shield-key-outline": "mdi mdi-shield-key-outline",
+  // Same icon as the attendance course tool (Tool\Attendance::getIcon()).
+  "attendance": "mdi mdi-av-timer",
 }

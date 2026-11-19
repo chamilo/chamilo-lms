@@ -1,20 +1,20 @@
 <template>
-  <LayoutFormGeneric>
-    <template #header>
-      <BaseIcon icon="plus" />
-      {{ t("Add attendance") }}
-    </template>
+  <section>
+    <SectionHeader
+      :show-student-view-button="false"
+      :title="t('Add attendance')"
+      icon="plus"
+    />
 
     <AttendanceForm @back-pressed="goBack" />
-  </LayoutFormGeneric>
+  </section>
 </template>
 
 <script setup>
 import AttendanceForm from "../../components/attendance/AttendanceForm.vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
-import LayoutFormGeneric from "../../components/layout/LayoutFormGeneric.vue"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
 
 const { t } = useI18n()
 const router = useRouter()

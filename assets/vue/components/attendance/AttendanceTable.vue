@@ -1,6 +1,9 @@
 <template>
   <BaseTable
+    :aria-busy="loading ? 'true' : undefined"
     :is-loading="loading"
+    :style="loading ? { minHeight: `${TABLE_LOADING_HEIGHT}px` } : undefined"
+    :text-for-empty="loading ? '' : t('No data available')"
     :total-items="totalRecords"
     :values="attendances"
     data-key="id"
@@ -26,7 +29,7 @@
               gid: route.query.gid,
             },
           }"
-          class="text-blue-500 underline"
+          class="text-body-2 font-semibold text-primary hover:underline"
         >
           {{ slotProps.data.title }}
         </BaseAppLink>
@@ -58,31 +61,36 @@
       </template>
     </Column>
 
-    <!-- Detail -->
+    <!-- Actions -->
     <Column
       v-if="showActions"
-      :header="t('Dates')"
+      :header="t('Actions')"
     >
       <template #body="slotProps">
-        <div class="flex gap-2 justify-center">
-          <Button
-            icon="mdi mdi-pencil"
-            class="p-button-rounded p-button-sm p-button-info"
+        <div class="flex justify-center gap-2">
+          <BaseButton
+            :label="t('Edit')"
+            icon="pencil"
+            only-icon
+            size="small"
+            type="secondary-text"
             @click="onEdit(slotProps.data)"
-            tooltip="Edit"
           />
-          <Button
+          <BaseButton
             :icon="getVisibilityIcon(slotProps.data)"
-            class="p-button-rounded p-button-sm"
-            :class="getVisibilityClass(slotProps.data)"
+            :label="getVisibilityTooltip(slotProps.data)"
+            only-icon
+            size="small"
+            type="primary-text"
             @click="onView(slotProps.data)"
-            :tooltip="getVisibilityTooltip(slotProps.data)"
           />
-          <Button
-            icon="mdi mdi-delete"
-            class="p-button-rounded p-button-sm p-button-danger"
+          <BaseButton
+            :label="t('Delete')"
+            icon="delete"
+            only-icon
+            size="small"
+            type="danger-text"
             @click="onDelete(slotProps.data)"
-            tooltip="Delete"
           />
         </div>
       </template>
@@ -94,8 +102,12 @@ import { useRoute } from "vue-router"
 import { computed, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import BaseTable from "../basecomponents/BaseTable.vue"
+import BaseButton from "../basecomponents/BaseButton.vue"
 import DOMPurify from "dompurify"
 import { useLocale } from "../../composables/locale"
+
+// Measured at 1440 px with the local portal: header, one row and the paginator.
+const TABLE_LOADING_HEIGHT = 155
 
 const route = useRoute()
 
@@ -127,17 +139,12 @@ const sanitizeHtml = (html, options = {}) => {
 
 const getVisibilityIcon = (attendance) => {
   const visibility = attendance.resourceLinkListFromEntity?.[0]?.visibility || 0
-  return visibility === 2 ? "mdi mdi-eye" : "mdi mdi-eye-off"
-}
-
-const getVisibilityClass = (attendance) => {
-  const visibility = attendance.resourceLinkListFromEntity?.[0]?.visibility || 0
-  return visibility === 2 ? "p-button-success" : "p-button-secondary opacity-50"
+  return visibility === 2 ? "eye-on" : "eye-off"
 }
 
 const getVisibilityTooltip = (attendance) => {
   const visibility = attendance.resourceLinkListFromEntity?.[0]?.visibility || 0
-  return visibility === 2 ? "Visible" : "Hidden"
+  return visibility === 2 ? t("Visible") : t("Hidden")
 }
 
 const { t } = useI18n()

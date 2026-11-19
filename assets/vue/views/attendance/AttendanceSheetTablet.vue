@@ -1,77 +1,84 @@
 <template>
-  <SectionHeader :title="t('Attendances (tablet)')" />
+  <section class="space-y-4">
+    <SectionHeader
+      :title="t('Attendances (tablet)')"
+      icon="attendance"
+    />
 
-  <div class="p-4 space-y-4">
-    <!-- Loading state -->
-    <div
-      v-if="isLoading"
-      class="flex items-center justify-center py-10 text-gray-600"
-    >
-      {{ t("Loading...") }}
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <BaseButton
+          :label="t('Exit tablet mode')"
+          :title="t('Go back to standard view')"
+          icon="back"
+          type="black"
+          @click="goBack"
+        />
+        <Skeleton
+          v-if="isLoading"
+          height="24px"
+          width="20rem"
+        />
+        <p
+          v-else
+          class="text-body-1 font-semibold text-gray-90"
+        >
+          {{ attendanceTitle }} — {{ dateLabel }}
+        </p>
+      </div>
+
+      <div class="flex items-start gap-2">
+        <BaseInputText
+          id="attendance-tablet-search"
+          v-model="search"
+          :label="t('Search for student...')"
+          name="search"
+        />
+        <BaseButton
+          v-if="canEdit && !isLocked"
+          :disabled="isLoading || isSaving || !isDirty"
+          :label="isSaving ? t('Saving...') : t('Save')"
+          icon="save"
+          type="success"
+          @click="save"
+        />
+      </div>
     </div>
 
-    <!-- Main content -->
-    <div
-      v-else
-      class="space-y-4"
-    >
-      <div class="flex items-center justify-between">
-        <!-- Left side: back to standard view -->
-        <div class="flex items-center gap-3">
-          <BaseButton
-            icon="back"
-            type="black"
-            :label="t('Exit tablet mode')"
-            :title="t('Go back to standard view')"
-            @click="goBack"
-          />
-          <div class="text-lg font-semibold">{{ attendanceTitle }} — {{ dateLabel }}</div>
-        </div>
+    <Skeleton
+      v-if="isLoading"
+      :height="`${TABLE_LOADING_HEIGHT}px`"
+      aria-busy="true"
+    />
 
-        <!-- Right side: search + save -->
-        <div class="flex items-center gap-2">
-          <input
-            v-model="search"
-            type="text"
-            class="border rounded px-3 py-2"
-            :placeholder="t('Search for student...')"
-          />
-          <BaseButton
-            v-if="canEdit && !isLocked"
-            :label="isSaving ? t('Saving...') : t('Save')"
-            icon="check"
-            type="success"
-            :disabled="isSaving || !isDirty"
-            @click="save"
-          />
-        </div>
-      </div>
-
-      <div
+    <template v-else>
+      <Message
         v-if="isLocked"
-        class="p-3 rounded border bg-gray-15 text-gray-700"
+        :closable="false"
+        icon="mdi mdi-lock"
+        severity="info"
       >
         {{ t("This date is locked or read-only.") }}
-      </div>
+      </Message>
 
-      <div class="border rounded overflow-hidden">
-        <table class="w-full border-collapse">
+      <div class="overflow-x-auto rounded-lg border border-gray-25 bg-white shadow-sm">
+        <table class="w-full border-collapse text-body-2 text-gray-90">
           <thead>
-            <tr class="bg-gray-15">
+            <tr class="border-b border-gray-25 bg-gray-15 text-start font-semibold">
               <th class="p-3 text-start">#</th>
               <th class="p-3 text-start">{{ t("Photo") }}</th>
               <th class="p-3 text-start">{{ t("Last name") }}</th>
               <th class="p-3 text-start">{{ t("First name") }}</th>
               <th class="p-3 text-center">{{ t("Attended") }}</th>
               <th
-                class="p-3 text-center"
                 v-if="allowComments"
+                class="p-3 text-center"
               >
                 {{ t("Comment") }}
               </th>
               <th
-                class="p-3 text-center"
                 v-if="enableSignature"
+                class="p-3 text-center"
               >
                 {{ t("Signature") }}
               </th>
@@ -81,63 +88,66 @@
             <tr
               v-for="(user, idx) in filteredUsers"
               :key="user.id"
-              class="hover:bg-gray-10"
+              class="border-b border-gray-25 last:border-b-0 hover:bg-gray-15"
             >
               <td class="p-3">{{ idx + 1 }}</td>
               <td class="p-3">
                 <img
                   :src="user.photo"
-                  alt="User"
-                  class="w-10 h-10 rounded-full"
+                  alt=""
+                  class="h-10 w-10 rounded-full"
                 />
               </td>
               <td class="p-3">{{ user.lastName }}</td>
               <td class="p-3">{{ user.firstName }}</td>
 
               <td class="p-3 text-center">
-                <template v-if="allowMultilevelGrading">
-                  <div
-                    :class="getStateClass(value(user.id))"
-                    class="w-10 h-10 rounded-full inline-block cursor-pointer"
-                    :title="getStateLabel(value(user.id))"
-                    @click="cycle(user.id)"
-                  ></div>
-                </template>
-                <template v-else>
-                  <input
-                    type="checkbox"
-                    class="w-6 h-6 cursor-pointer"
-                    :checked="value(user.id) === 1"
-                    :disabled="!canEdit || isLocked"
-                    @change="toggle(user.id)"
-                  />
-                </template>
+                <button
+                  v-if="allowMultilevelGrading"
+                  :aria-label="getStateLabel(value(user.id))"
+                  :class="getStateClass(value(user.id))"
+                  :disabled="!canEdit || isLocked"
+                  :title="getStateLabel(value(user.id))"
+                  class="inline-block h-10 w-10 cursor-pointer rounded-full disabled:cursor-not-allowed"
+                  type="button"
+                  @click="cycle(user.id)"
+                />
+                <Checkbox
+                  v-else
+                  :aria-label="`${user.firstName} ${user.lastName}`"
+                  :disabled="!canEdit || isLocked"
+                  :model-value="value(user.id) === 1"
+                  binary
+                  @update:model-value="toggle(user.id)"
+                />
               </td>
 
               <td
-                class="p-3 text-center"
                 v-if="allowComments"
+                class="p-3 text-center"
               >
                 <BaseButton
-                  icon="comment"
-                  size="small"
-                  type="info"
-                  :title="t('Add comment')"
                   :disabled="!canEdit || isLocked"
+                  :label="t('Add comment')"
+                  icon="comment"
+                  only-icon
+                  size="small"
+                  type="primary-text"
                   @click="openComment(user.id)"
                 />
               </td>
 
               <td
-                class="p-3 text-center"
                 v-if="enableSignature"
+                class="p-3 text-center"
               >
                 <BaseButton
-                  icon="drawing"
-                  size="small"
-                  type="secondary"
-                  :title="t('Sign')"
                   :disabled="!canEdit || isLocked"
+                  :label="t('Sign')"
+                  icon="drawing"
+                  only-icon
+                  size="small"
+                  type="primary-text"
                   @click="openSignature(user.id)"
                 />
               </td>
@@ -145,57 +155,56 @@
           </tbody>
         </table>
       </div>
+    </template>
 
-      <!-- Comment Dialog -->
-      <BaseDialog
-        v-model:isVisible="showCommentDialog"
-        :title="t('Add comment')"
-      >
-        <textarea
-          class="w-full h-32 border rounded p-2"
-          v-model="currentComment"
-        ></textarea>
-        <template #footer>
-          <BaseButton
-            v-if="canEdit && !isLocked"
-            :label="t('Save')"
-            icon="save"
-            type="success"
-            @click="saveComment"
-          />
-        </template>
-      </BaseDialog>
+    <BaseDialog
+      v-model:is-visible="showCommentDialog"
+      :title="t('Add comment')"
+      header-icon="comment"
+    >
+      <BaseTextArea
+        id="attendance-tablet-comment"
+        v-model="currentComment"
+        :label="t('Comment')"
+      />
+      <template #footer>
+        <BaseButton
+          v-if="canEdit && !isLocked"
+          :label="t('Save')"
+          icon="save"
+          type="success"
+          @click="saveComment"
+        />
+      </template>
+    </BaseDialog>
 
-      <!-- Signature Dialog -->
-      <BaseDialog
-        v-model:isVisible="showSignatureDialog"
-        :title="t('Signature')"
-      >
-        <div class="relative w-full h-48">
-          <canvas
-            ref="signaturePad"
-            class="border rounded w-full h-full"
-          ></canvas>
-          <button
-            v-if="canEdit && !isLocked"
-            class="mt-2 text-primary"
-            @click="clearSignature"
-          >
-            {{ t("Clear") }}
-          </button>
-        </div>
-        <template #footer>
-          <BaseButton
-            v-if="canEdit && !isLocked"
-            :label="t('Save')"
-            icon="save"
-            type="success"
-            @click="saveSignature"
-          />
-        </template>
-      </BaseDialog>
-    </div>
-  </div>
+    <BaseDialog
+      v-model:is-visible="showSignatureDialog"
+      :title="t('Signature')"
+      header-icon="drawing"
+    >
+      <canvas
+        ref="signatureCanvas"
+        class="h-48 w-full rounded-lg border border-gray-25"
+      ></canvas>
+      <template #footer>
+        <BaseButton
+          v-if="canEdit && !isLocked"
+          :label="t('Clear')"
+          icon="clear-all"
+          type="black"
+          @click="clearSignature"
+        />
+        <BaseButton
+          v-if="canEdit && !isLocked"
+          :label="t('Save')"
+          icon="save"
+          type="success"
+          @click="saveSignature"
+        />
+      </template>
+    </BaseDialog>
+  </section>
 </template>
 
 <script setup>
@@ -205,6 +214,12 @@ import { useI18n } from "vue-i18n"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
+import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
+import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
+import Checkbox from "primevue/checkbox"
+import Message from "primevue/message"
+import Skeleton from "primevue/skeleton"
+import { useNotification } from "../../composables/notification"
 import attendanceService, { ATTENDANCE_STATES } from "../../services/attendanceService"
 import SignaturePad from "signature_pad"
 import { useSecurityStore } from "../../store/securityStore"
@@ -217,6 +232,10 @@ const route = useRoute()
 const router = useRouter()
 const { cid, sid, gid } = getCourseContext()
 const { abbreviatedDatetime } = useFormatDate()
+const { showSuccessNotification, showErrorNotification, showInfoNotification } = useNotification()
+
+// One-date sheet of the local portal at 1440 px: table header and one student row.
+const TABLE_LOADING_HEIGHT = 107
 
 // --------------------------- Permissions / flags -----------------------------
 const securityStore = useSecurityStore()
@@ -344,13 +363,14 @@ const saveComment = () => {
 }
 
 const showSignatureDialog = ref(false)
+const signatureCanvas = ref(null)
 const signaturePad = ref(null)
 
 const openSignature = (uid) => {
   dialogUserId.value = uid
   showSignatureDialog.value = true
   nextTick(() => {
-    const canvas = document.querySelector("canvas")
+    const canvas = signatureCanvas.value
     if (!canvas) return
     canvas.width = canvas.offsetWidth
     canvas.height = canvas.offsetHeight
@@ -437,6 +457,7 @@ const load = async () => {
   } catch (e) {
     console.error("[AttendanceTablet] load failed", e)
     loadError.value = t("Failed to load attendance. Please try again later.")
+    showErrorNotification(loadError.value)
   } finally {
     isLoading.value = false
   }
@@ -448,7 +469,7 @@ onMounted(load)
 const save = async () => {
   if (!canEdit.value || isLocked.value) return
   if (!isDirty.value) {
-    alert(t("Nothing to save"))
+    showInfoNotification(t("Nothing to save"))
     return
   }
   isSaving.value = true
@@ -469,11 +490,11 @@ const save = async () => {
       attendanceData: prepared,
     })
 
-    alert(t("Attendance saved successfully"))
+    showSuccessNotification(t("Attendance saved successfully"))
     snapshot()
   } catch (e) {
     console.error("[AttendanceTablet] save failed", e)
-    alert(t("Failed to save attendance. Please try again."))
+    showErrorNotification(t("Failed to save attendance. Please try again."))
   } finally {
     isSaving.value = false
   }

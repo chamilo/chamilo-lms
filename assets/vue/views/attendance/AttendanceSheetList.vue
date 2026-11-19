@@ -1,561 +1,601 @@
 <template>
-  <SectionHeader :title="t('Attendance')" />
-
-  <div class="attendance-page p-4">
-    <!-- Toolbar -->
-    <BaseToolbar class="flex justify-between items-center mb-4">
-      <template #start>
-        <BaseButton
-          icon="back"
-          size="normal"
-          type="black"
-          @click="redirectToAttendanceList"
-          :title="t('Go back')"
-        />
-        <template v-if="isTeacherUI">
-          <BaseButton
-            icon="calendar-plus"
-            size="normal"
-            type="info"
-            @click="redirectToCalendarList"
-            :title="t('Go to calendar')"
-          />
-          <BaseButton
-            icon="file-pdf"
-            type="danger"
-            :title="t('Export to PDF')"
-            @click="exportToPdf"
-          />
-          <BaseButton
-            icon="file-excel"
-            type="success"
-            :title="t('Export to Excel')"
-            @click="exportToXls"
-          />
-          <BaseButton
-            icon="qrcode"
-            type="secondary"
-            :title="t('Generate QR code')"
-            @click="generateQrCode"
-          />
-        </template>
-      </template>
-      <template #end>
-        <div class="flex items-center gap-4">
-          <select
-            v-if="isTeacherUI"
-            v-model="selectedFilter"
-            @change="filterAttendanceSheets"
-            class="p-2 border border-gray-300 rounded focus:ring-primary focus:border-primary w-64"
-          >
-            <option
-              v-for="filter in availableFilters"
-              :key="filter.value"
-              :value="filter.value"
-            >
-              {{ filter.label }}
-            </option>
-          </select>
-          <div
-            v-if="!isLoading"
-            class="text-lg font-semibold text-gray-800 whitespace-nowrap"
-          >
-            {{ attendanceTitle }}
-          </div>
-        </div>
-      </template>
-    </BaseToolbar>
-
-    <div
-      v-if="isLoading"
-      class="flex justify-center items-center h-64"
+  <section class="space-y-4">
+    <SectionHeader
+      :title="t('Attendance')"
+      icon="attendance"
     >
-      <div class="loader"></div>
-      <span class="ms-4 text-lg text-primary">{{ t("Loading attendance data") }}</span>
+      <BaseButton
+        :label="t('Go back')"
+        icon="back"
+        only-icon
+        type="black"
+        @click="redirectToAttendanceList"
+      />
+      <template v-if="isTeacherUI">
+        <BaseButton
+          :label="t('Go to calendar')"
+          icon="calendar-plus"
+          type="secondary"
+          @click="redirectToCalendarList"
+        />
+        <BaseButton
+          :label="t('Export to PDF')"
+          icon="file-pdf"
+          only-icon
+          type="primary"
+          @click="exportToPdf"
+        />
+        <BaseButton
+          :label="t('Export to Excel')"
+          icon="file-excel"
+          only-icon
+          type="primary"
+          @click="exportToXls"
+        />
+        <BaseButton
+          :label="t('Generate QR code')"
+          icon="qrcode"
+          only-icon
+          type="primary"
+          @click="generateQrCode"
+        />
+      </template>
+    </SectionHeader>
+
+    <div class="flex flex-wrap items-start justify-between gap-4">
+      <Skeleton
+        v-if="isLoading"
+        height="24px"
+        width="16rem"
+      />
+      <h3
+        v-else
+        class="text-body-1 font-semibold text-gray-90"
+      >
+        {{ attendanceTitle }}
+      </h3>
+      <BaseSelect
+        v-if="isTeacherUI"
+        id="attendance-filter"
+        v-model="selectedFilter"
+        :disabled="isLoading"
+        :label="t('Filter')"
+        :options="availableFilters"
+        class="w-64"
+        name="attendance-filter"
+        @change="filterAttendanceSheets"
+      />
+    </div>
+
+    <!-- Loading: student UI -->
+    <div
+      v-if="isLoading && isStudentUI"
+      aria-busy="true"
+      class="space-y-4"
+    >
+      <Skeleton
+        height="16px"
+        width="10rem"
+      />
+      <div class="flex flex-col gap-2">
+        <Skeleton
+          v-for="index in STUDENT_SKELETON.items"
+          :key="index"
+          :height="`${STUDENT_SKELETON.itemHeight}px`"
+        />
+      </div>
+      <Skeleton
+        v-if="studentCanValidateOwnAttendance"
+        height="40px"
+        width="100px"
+      />
+    </div>
+
+    <!-- Loading: teacher UI -->
+    <div
+      v-else-if="isLoading"
+      aria-busy="true"
+      class="space-y-4"
+    >
+      <Skeleton
+        height="16px"
+        width="40rem"
+      />
+      <Skeleton :height="`${TEACHER_SKELETON.rowHeight * (TEACHER_SKELETON.rows + 1) + TEACHER_SKELETON.borders}px`" />
     </div>
 
     <!-- Student UI -->
-    <div v-else>
-      <div v-if="isStudentUI">
-        <h2 class="text-xl font-semibold mb-4">{{ t("Report of attendance sheets") }}</h2>
+    <div
+      v-else-if="isStudentUI"
+      class="space-y-4"
+    >
+      <p
+        v-if="filteredDates.length > 0"
+        class="text-body-2 text-gray-90"
+      >
+        {{ t("To attend") }}
+        <span class="ms-2 rounded-lg bg-support-1 px-2 py-1 font-semibold text-primary">
+          {{ signedCount }}/{{ totalCount }} ({{ Math.round((signedCount / totalCount) * 100) }}%)
+        </span>
+      </p>
 
-        <div
-          v-if="filteredDates.length > 0"
-          class="mb-4 text-sm text-gray-700"
-        >
-          {{ t("To attend") }}
-          <span class="bg-orange-500 text-white px-2 py-1 rounded ms-2">
-            {{ signedCount }}/{{ totalCount }} ({{ Math.round((signedCount / totalCount) * 100) }}%)
-          </span>
-        </div>
+      <p
+        v-else
+        class="text-body-2 text-gray-50"
+      >
+        {{ t("No attendance assigned yet") }}
+      </p>
 
-        <div
-          v-if="filteredDates.length === 0"
-          class="p-4 mb-4 text-yellow-900 bg-yellow-100 border border-yellow-300 rounded"
-        >
-          {{ t("No attendance assigned yet") }}
-        </div>
-
-        <div
+      <ul
+        v-if="filteredDates.length > 0"
+        class="flex flex-col gap-2"
+      >
+        <li
           v-for="date in filteredDates"
           :key="date.id"
-          class="flex items-center justify-between bg-gray-10 border rounded p-3 mb-2"
+          class="flex items-center justify-between gap-4 rounded-lg border border-gray-25 bg-white p-4 shadow-sm"
         >
-          <div class="flex items-center">
-            <template v-if="allowMultilevelGrading">
-              <div
-                :class="getStateClass(attendanceData[`${currentUserId}-${date.id}`])"
-                class="w-10 h-10 rounded-full me-2"
-                :title="getStateLabel(parseInt(attendanceData[`${currentUserId}-${date.id}`]))"
-              ></div>
-            </template>
-            <template v-else>
-              <input
-                type="checkbox"
-                class="me-2"
-                :checked="attendanceData[`${currentUserId}-${date.id}`] === 1"
-                :disabled="!studentCanValidateOwnAttendance"
-                @change="(e) => onStudentAttendanceChange(date.id, e.target.checked)"
-              />
-            </template>
-            <div class="flex flex-col">
-              <span>{{ formatAttendanceDate(date.dateTime) }}</span>
+          <div class="flex items-center gap-4">
+            <div
+              v-if="allowMultilevelGrading"
+              :class="getStateClass(attendanceData[`${currentUserId}-${date.id}`])"
+              :title="getStateLabel(parseInt(attendanceData[`${currentUserId}-${date.id}`]))"
+              class="h-10 w-10 shrink-0 rounded-full"
+            ></div>
+            <Checkbox
+              v-else
+              :aria-label="formatAttendanceDate(date.dateTime)"
+              :disabled="!studentCanValidateOwnAttendance"
+              :model-value="attendanceData[`${currentUserId}-${date.id}`] === 1"
+              binary
+              @update:model-value="(checked) => onStudentAttendanceChange(date.id, checked)"
+            />
+            <div class="flex flex-col gap-1">
+              <span class="text-body-1 text-gray-90">{{ formatAttendanceDate(date.dateTime) }}</span>
               <span
                 v-if="date.effectiveRoom"
-                class="text-xs text-gray-600"
+                class="text-body-2 text-gray-50"
               >
                 {{ t("Room") }}: {{ formatRoom(date.effectiveRoom) }}
               </span>
-              <RoomFloorPlanViewer v-if="date.effectiveRoom" :calendar-id="date.id" />
+              <RoomFloorPlanViewer
+                v-if="date.effectiveRoom"
+                :calendar-id="date.id"
+              />
             </div>
           </div>
-          <div class="flex gap-2">
+          <div class="flex shrink-0 gap-2">
             <BaseButton
               v-if="allowComments"
+              :label="t('View comment')"
               icon="comment"
+              only-icon
               size="small"
-              type="info"
-              :title="t('View comment')"
+              type="primary-text"
               @click="openCommentDialog(currentUserId, date.id)"
             />
             <BaseButton
               v-if="enableSignature"
+              :label="t('Sign')"
               icon="drawing"
+              only-icon
               size="small"
-              type="info"
-              :title="t('Sign')"
+              type="primary-text"
               @click="openSignatureDialog(currentUserId, date.id)"
             />
           </div>
-        </div>
+        </li>
+      </ul>
 
-        <div
-          v-if="studentCanValidateOwnAttendance && filteredDates.length > 0"
-          class="mt-4"
-        >
-          <BaseButton
-            :label="t('Save')"
-            icon="save"
-            type="success"
-            :disabled="isSavingStudentAttendance"
-            @click="saveStudentOwnAttendance"
-          />
-        </div>
-      </div>
-
-      <!-- Teacher UI -->
-      <div v-else>
-        <div
-          v-if="!isTodayScheduled"
-          class="p-4 mb-4 text-yellow-900 bg-warning border rounded"
-        >
-          {{
-            t(
-              "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons",
-            )
-          }}
-        </div>
-
-        <div class="p-4 mb-4 text-primary bg-gray-15 border border-gray-25 rounded">
-          <p>
-            {{
-              t(
-                "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)",
-              )
-            }}
-          </p>
-        </div>
-
-        <!-- Attendance Sheet Table -->
-        <div class="relative flex">
-          <!-- Fixed user column -->
-          <div
-            class="overflow-hidden flex-shrink-0"
-            style="width: 520px"
-          >
-            <table class="w-full border-collapse">
-              <thead>
-                <tr class="bg-gray-15 h-28">
-                  <th class="p-3 border border-gray-25 text-start">#</th>
-                  <th class="p-3 border border-gray-25 text-start">{{ t("Photo") }}</th>
-                  <th
-                    v-if="showOfficialCode"
-                    class="p-3 border border-gray-25 text-start"
-                  >
-                    {{ t("Official code") }}
-                  </th>
-                  <th class="p-3 border border-gray-25 text-start">{{ t("Last name") }}</th>
-                  <th class="p-3 border border-gray-25 text-start w-32">{{ t("First name") }}</th>
-                  <th class="p-3 border border-gray-25 text-start">{{ t("Not attended") }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(user, index) in filteredAttendanceSheets"
-                  :key="user.id"
-                  class="hover:bg-gray-10 h-28"
-                >
-                  <td class="p-3 border border-gray-25">{{ index + 1 }}</td>
-                  <td class="p-3 border border-gray-25">
-                    <img
-                      :src="user.photo"
-                      alt="User photo"
-                      class="w-10 h-10 rounded-full"
-                    />
-                  </td>
-                  <td
-                    v-if="showOfficialCode"
-                    class="p-3 border border-gray-25 truncate"
-                    :title="user.officialCode"
-                  >
-                    {{ user.officialCode }}
-                  </td>
-                  <td
-                    class="p-3 border border-gray-25 truncate"
-                    :title="user.lastName"
-                  >
-                    {{ user.lastName }}
-                  </td>
-                  <td
-                    class="p-3 border border-gray-25 truncate"
-                    :title="user.firstName"
-                  >
-                    {{ user.firstName }}
-                  </td>
-                  <td class="p-3 border border-gray-25 text-center">{{ user.notAttended }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Scrollable dates -->
-          <div class="overflow-x-auto flex-1">
-            <table class="w-full border-collapse">
-              <thead>
-                <tr class="bg-gray-15 h-28">
-                  <template v-if="filteredDates.length === 0 && selectedFilter === 'today'">
-                    <th
-                      colspan="100"
-                      class="text-center bg-yellow-50 text-warning font-medium border border-yellow-300 py-6"
-                    >
-                      <div class="flex justify-center items-center gap-4">
-                        <BaseIcon
-                          icon="calendar"
-                          class="text-warning"
-                        />
-                        <span>{{
-                          t(
-                            "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons",
-                          )
-                        }}</span>
-                        <BaseButton
-                          icon="calendar-plus"
-                          type="info"
-                          size="small"
-                          @click="redirectToCalendarList"
-                        />
-                      </div>
-                    </th>
-                  </template>
-                  <template v-else>
-                    <th
-                      v-for="date in filteredDates"
-                      :key="date.id"
-                      class="p-3 border border-gray-25 text-center align-middle"
-                      :class="{ 'bg-gray-200 cursor-not-allowed': isColumnLocked(date.id) }"
-                    >
-                      <div class="flex flex-col items-center">
-                        <span class="font-bold">
-                          {{ formatAttendanceDate(date.dateTime) }}
-                        </span>
-                        <span
-                          v-if="date.duration !== undefined && date.duration !== null"
-                          class="text-xs text-gray-600 mt-1"
-                        >
-                          {{ t("{0} min", [date.duration]) }}
-                        </span>
-
-                        <span
-                          v-if="date.effectiveRoom"
-                          class="text-xs text-gray-600 mt-1"
-                        >
-                          {{ t("Room") }}: {{ formatRoom(date.effectiveRoom) }}
-                        </span>
-
-                        <div
-                          class="flex gap-2 mt-1"
-                          v-if="isTeacherUI"
-                        >
-                          <BaseButton
-                            :label="t('View for tablet')"
-                            icon="view-table"
-                            only-icon
-                            size="small"
-                            type="black"
-                            @click="viewForTablet(date.id)"
-                          />
-                          <BaseButton
-                            v-if="canManageLocks"
-                            :icon="isColumnLocked(date.id) ? 'lock' : 'unlock'"
-                            :label="isColumnLocked(date.id) ? t('Unlock column') : t('Lock column')"
-                            only-icon
-                            size="small"
-                            type="warning"
-                            @click="toggleLock(date.id)"
-                          />
-                          <BaseButton
-                            :label="t('Set all Present')"
-                            icon="account-check"
-                            only-icon
-                            size="small"
-                            type="success"
-                            @click="setAllAttendance(date.id, 1)"
-                          />
-                          <BaseButton
-                            :label="t('Set all Absent')"
-                            icon="account-cancel"
-                            only-icon
-                            size="small"
-                            type="danger"
-                            @click="setAllAttendance(date.id, 0)"
-                          />
-                        </div>
-                      </div>
-                    </th>
-                  </template>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-if="filteredDates.length === 0 && selectedFilter === 'today'">
-                  <td
-                    colspan="100"
-                    class="text-center text-gray-500 border border-gray-25 py-6"
-                  >
-                    {{ t("No attendance data for today") }}
-                  </td>
-                </tr>
-                <template v-else>
-                  <tr
-                    v-for="user in filteredAttendanceSheets"
-                    :key="user.id + '-' + selectedFilter"
-                    class="hover:bg-gray-10 h-28"
-                  >
-                    <td
-                      v-for="date in filteredDates"
-                      :key="date.id"
-                      class="p-3 border border-gray-25 text-center relative"
-                      :class="{ 'bg-gray-200': isColumnLocked(date.id) || !canEdit }"
-                    >
-                      <div
-                        v-if="isColumnLocked(date.id) || !canEdit"
-                        class="cursor-not-allowed opacity-50"
-                        :title="t('Column is locked or read-only')"
-                      >
-                        <template v-if="!allowMultilevelGrading">
-                          <input
-                            type="checkbox"
-                            class="w-5 h-5 cursor-not-allowed"
-                            :checked="attendanceData[`${user.id}-${date.id}`] === 1"
-                            disabled
-                          />
-                        </template>
-                        <template v-else>
-                          <div
-                            :class="getStateClass(attendanceData[`${user.id}-${date.id}`])"
-                            class="w-10 h-10 rounded-full mx-auto"
-                          ></div>
-                        </template>
-                      </div>
-                      <div v-else>
-                        <template v-if="!allowMultilevelGrading">
-                          <input
-                            type="checkbox"
-                            :checked="attendanceData[`${user.id}-${date.id}`] === 1"
-                            @change="toggleAttendanceState(user.id, date.id)"
-                            class="w-5 h-5 cursor-pointer"
-                          />
-                        </template>
-                        <template v-else>
-                          <div
-                            :class="getStateClass(attendanceData[`${user.id}-${date.id}`])"
-                            @click="openMenu(user.id, date.id)"
-                            class="w-10 h-10 rounded-full cursor-pointer mx-auto"
-                            :title="getStateLabel(attendanceData[`${user.id}-${date.id}`])"
-                          ></div>
-                        </template>
-                      </div>
-                      <div
-                        v-if="
-                          allowMultilevelGrading &&
-                          contextMenu.show &&
-                          contextMenu.userId === user.id &&
-                          contextMenu.dateId === date.id
-                        "
-                        class="absolute bg-white border border-gray-300 rounded shadow-lg z-10 p-2"
-                        style="top: 40px; left: 50%; transform: translateX(-50%)"
-                      >
-                        <div
-                          v-for="(state, key) in ATTENDANCE_STATES"
-                          :key="key"
-                          class="flex items-center gap-2 p-2 cursor-pointer hover:bg-gray-100 rounded"
-                          @click="selectState(user.id, date.id, state.id)"
-                        >
-                          <div
-                            :class="getStateClass(state.id)"
-                            class="w-5 h-5 rounded-full"
-                          ></div>
-                          <span>{{ state.label }}</span>
-                        </div>
-                        <div
-                          class="flex items-center gap-2 p-2 cursor-pointer hover:bg-gray-100 rounded"
-                          @click="selectState(user.id, date.id, null)"
-                        >
-                          <div class="w-5 h-5 rounded-full bg-gray-30"></div>
-                          <span>{{ t("Remove state") }}</span>
-                        </div>
-                      </div>
-                      <div
-                        v-if="canEdit"
-                        class="absolute top-2 end-2 flex gap-3"
-                      >
-                        <BaseButton
-                          v-if="allowComments && !isColumnLocked(date.id)"
-                          :label="t('Comment')"
-                          icon="comment"
-                          only-icon
-                          size="small"
-                          type="info"
-                          @click="openCommentDialog(user.id, date.id)"
-                        />
-                        <BaseButton
-                          v-if="enableSignature && !isColumnLocked(date.id)"
-                          :label="t('Sign')"
-                          icon="drawing"
-                          only-icon
-                          size="small"
-                          type="success"
-                          @click="openSignatureDialog(user.id, date.id)"
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                </template>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Save Button -->
-        <div class="mt-2 flex justify-end">
-          <BaseButton
-            v-if="canEdit && filteredDates.some((date) => !isColumnLocked(date.id))"
-            :label="isSaving ? t('Saving...') : t('Save attendance')"
-            icon="check"
-            type="success"
-            @click="saveAttendanceSheet"
-            :disabled="isSaving"
-          />
-          <div
-            v-if="isSaving"
-            class="ms-2 loader"
-          ></div>
-        </div>
-      </div>
-
-      <!-- Comment Dialog -->
-      <BaseDialog
-        v-model:isVisible="showCommentDialog"
-        title="Add Comment"
-      >
-        <textarea
-          v-model="currentComment"
-          class="w-full h-32 border border-gray-300 rounded"
-          placeholder="Write your comment..."
-          :readonly="isStudentUI && !canEdit"
-        />
-        <template #footer>
-          <BaseButton
-            v-if="isTeacherUI && canEdit"
-            :label="t('Save')"
-            icon="save"
-            type="success"
-            @click="saveComment"
-          />
-        </template>
-      </BaseDialog>
-
-      <!-- Signature Dialog -->
-      <BaseDialog
-        v-model:isVisible="showSignatureDialog"
-        :title="t('Signature')"
-      >
-        <div class="relative w-full h-48">
-          <canvas
-            ref="signaturePadCanvas"
-            class="border border-gray-300 rounded w-full h-full"
-          ></canvas>
-          <button
-            @click="clearSignature"
-            class="mt-2 text-primary"
-          >
-            {{ t("Clear") }}
-          </button>
-        </div>
-        <template #footer>
-          <BaseButton
-            :label="t('Save')"
-            icon="save"
-            type="success"
-            @click="saveSignature"
-          />
-        </template>
-      </BaseDialog>
-      <BaseDialog
-        v-model:isVisible="showQrDialog"
-        title="QR Code"
-        :close-label="t('Close')"
-      >
-        <div class="flex justify-center items-center p-4">
-          <img
-            v-if="qrImageUrl"
-            :src="qrImageUrl"
-            alt="QR Code"
-            class="w-64 h-64 object-contain"
-          />
-        </div>
-      </BaseDialog>
+      <BaseButton
+        v-if="studentCanValidateOwnAttendance && filteredDates.length > 0"
+        :disabled="isSavingStudentAttendance"
+        :is-loading="isSavingStudentAttendance"
+        :label="t('Save')"
+        icon="save"
+        type="success"
+        @click="saveStudentOwnAttendance"
+      />
     </div>
-  </div>
+
+    <!-- Teacher UI -->
+    <div
+      v-else
+      class="space-y-4"
+    >
+      <Message
+        v-if="!isTodayScheduled"
+        :closable="false"
+        icon="mdi mdi-calendar-alert"
+        severity="warn"
+      >
+        {{
+          t(
+            "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons",
+          )
+        }}
+      </Message>
+
+      <p class="text-body-2 text-gray-50">
+        {{
+          t(
+            "The attendance calendar allows you to register attendance lists (one per real session the students need to attend)",
+          )
+        }}
+      </p>
+
+      <!-- Attendance Sheet Table -->
+      <div
+        class="relative flex overflow-hidden rounded-lg border border-gray-25 bg-white text-body-2 text-gray-90 shadow-sm"
+      >
+        <!-- Fixed user column -->
+        <div
+          class="flex-shrink-0 overflow-hidden border-e border-gray-25"
+          style="width: 520px"
+        >
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="h-28 border-b border-gray-25 bg-gray-15 font-semibold">
+                <th class="p-3 text-start">#</th>
+                <th class="p-3 text-start">{{ t("Photo") }}</th>
+                <th
+                  v-if="showOfficialCode"
+                  class="p-3 text-start"
+                >
+                  {{ t("Official code") }}
+                </th>
+                <th class="p-3 text-start">{{ t("Last name") }}</th>
+                <th class="w-32 p-3 text-start">{{ t("First name") }}</th>
+                <th class="p-3 text-start">{{ t("Not attended") }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="(user, index) in filteredAttendanceSheets"
+                :key="user.id"
+                class="h-28 border-b border-gray-25 last:border-b-0 hover:bg-gray-15"
+              >
+                <td class="p-3">{{ index + 1 }}</td>
+                <td class="p-3">
+                  <img
+                    :src="user.photo"
+                    alt=""
+                    class="h-10 w-10 rounded-full"
+                  />
+                </td>
+                <td
+                  v-if="showOfficialCode"
+                  :title="user.officialCode"
+                  class="truncate p-3"
+                >
+                  {{ user.officialCode }}
+                </td>
+                <td
+                  :title="user.lastName"
+                  class="truncate p-3"
+                >
+                  {{ user.lastName }}
+                </td>
+                <td
+                  :title="user.firstName"
+                  class="truncate p-3"
+                >
+                  {{ user.firstName }}
+                </td>
+                <td class="p-3 text-center">{{ user.notAttended }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Scrollable dates -->
+        <div class="flex-1 overflow-x-auto">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="h-28 border-b border-gray-25 bg-gray-15">
+                <template v-if="filteredDates.length === 0 && selectedFilter === 'today'">
+                  <th
+                    class="bg-warning/10 py-6 text-center font-normal"
+                    colspan="100"
+                  >
+                    <div class="flex items-center justify-center gap-4">
+                      <BaseIcon
+                        class="text-warning"
+                        icon="calendar-clock"
+                      />
+                      <span>{{
+                        t(
+                          "There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons",
+                        )
+                      }}</span>
+                      <BaseButton
+                        :label="t('Go to calendar')"
+                        icon="calendar-plus"
+                        only-icon
+                        size="small"
+                        type="secondary"
+                        @click="redirectToCalendarList"
+                      />
+                    </div>
+                  </th>
+                </template>
+                <template v-else>
+                  <th
+                    v-for="date in filteredDates"
+                    :key="date.id"
+                    :class="{ 'cursor-not-allowed bg-gray-20': isColumnLocked(date.id) }"
+                    class="border-e border-gray-25 p-3 text-center align-middle last:border-e-0"
+                  >
+                    <div class="flex flex-col items-center gap-1">
+                      <span class="font-semibold">
+                        {{ formatAttendanceDate(date.dateTime) }}
+                      </span>
+                      <span
+                        v-if="date.duration !== undefined && date.duration !== null"
+                        class="text-caption font-normal text-gray-50"
+                      >
+                        {{ t("{0} min", [date.duration]) }}
+                      </span>
+
+                      <span
+                        v-if="date.effectiveRoom"
+                        class="text-caption font-normal text-gray-50"
+                      >
+                        {{ t("Room") }}: {{ formatRoom(date.effectiveRoom) }}
+                      </span>
+
+                      <div
+                        v-if="isTeacherUI"
+                        class="flex gap-1"
+                      >
+                        <BaseButton
+                          :label="t('View for tablet')"
+                          icon="view-table"
+                          only-icon
+                          size="small"
+                          type="primary-text"
+                          @click="viewForTablet(date.id)"
+                        />
+                        <BaseButton
+                          v-if="canManageLocks"
+                          :icon="isColumnLocked(date.id) ? 'lock' : 'unlock'"
+                          :label="isColumnLocked(date.id) ? t('Unlock column') : t('Lock column')"
+                          only-icon
+                          size="small"
+                          type="secondary-text"
+                          @click="toggleLock(date.id)"
+                        />
+                        <BaseButton
+                          :label="t('Set all Present')"
+                          icon="account-check"
+                          only-icon
+                          size="small"
+                          type="success-text"
+                          @click="setAllAttendance(date.id, 1)"
+                        />
+                        <BaseButton
+                          :label="t('Set all Absent')"
+                          icon="account-cancel"
+                          only-icon
+                          size="small"
+                          type="danger-text"
+                          @click="setAllAttendance(date.id, 0)"
+                        />
+                      </div>
+                    </div>
+                  </th>
+                </template>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-if="filteredDates.length === 0 && selectedFilter === 'today'">
+                <td
+                  class="py-6 text-center text-gray-50"
+                  colspan="100"
+                >
+                  {{ t("No attendance data for today") }}
+                </td>
+              </tr>
+              <template v-else>
+                <tr
+                  v-for="user in filteredAttendanceSheets"
+                  :key="user.id + '-' + selectedFilter"
+                  class="h-28 border-b border-gray-25 last:border-b-0 hover:bg-gray-15"
+                >
+                  <td
+                    v-for="date in filteredDates"
+                    :key="date.id"
+                    :class="{ 'bg-gray-20': isColumnLocked(date.id) || !canEdit }"
+                    class="relative border-e border-gray-25 p-3 text-center last:border-e-0"
+                  >
+                    <div
+                      v-if="isColumnLocked(date.id) || !canEdit"
+                      :title="t('Column is locked or read-only')"
+                      class="cursor-not-allowed opacity-50"
+                    >
+                      <Checkbox
+                        v-if="!allowMultilevelGrading"
+                        :aria-label="`${user.firstName} ${user.lastName}`"
+                        :model-value="attendanceData[`${user.id}-${date.id}`] === 1"
+                        binary
+                        disabled
+                      />
+                      <div
+                        v-else
+                        :class="getStateClass(attendanceData[`${user.id}-${date.id}`])"
+                        class="mx-auto h-10 w-10 rounded-full"
+                      ></div>
+                    </div>
+                    <div v-else>
+                      <Checkbox
+                        v-if="!allowMultilevelGrading"
+                        :aria-label="`${user.firstName} ${user.lastName}`"
+                        :model-value="attendanceData[`${user.id}-${date.id}`] === 1"
+                        binary
+                        @update:model-value="toggleAttendanceState(user.id, date.id)"
+                      />
+                      <div
+                        v-else
+                        :class="getStateClass(attendanceData[`${user.id}-${date.id}`])"
+                        :title="getStateLabel(attendanceData[`${user.id}-${date.id}`])"
+                        class="mx-auto h-10 w-10 cursor-pointer rounded-full"
+                        @click="openMenu(user.id, date.id)"
+                      ></div>
+                    </div>
+                    <div
+                      v-if="
+                        allowMultilevelGrading &&
+                        contextMenu.show &&
+                        contextMenu.userId === user.id &&
+                        contextMenu.dateId === date.id
+                      "
+                      class="absolute z-10 rounded-lg border border-gray-25 bg-white p-2 text-start shadow-lg"
+                      style="top: 40px; left: 50%; transform: translateX(-50%)"
+                    >
+                      <div
+                        v-for="(state, key) in ATTENDANCE_STATES"
+                        :key="key"
+                        class="flex cursor-pointer items-center gap-2 rounded-lg p-2 hover:bg-gray-15"
+                        @click="selectState(user.id, date.id, state.id)"
+                      >
+                        <div
+                          :class="getStateClass(state.id)"
+                          class="h-5 w-5 rounded-full"
+                        ></div>
+                        <span>{{ state.label }}</span>
+                      </div>
+                      <div
+                        class="flex cursor-pointer items-center gap-2 rounded-lg p-2 hover:bg-gray-15"
+                        @click="selectState(user.id, date.id, null)"
+                      >
+                        <div class="h-5 w-5 rounded-full bg-gray-30"></div>
+                        <span>{{ t("Remove state") }}</span>
+                      </div>
+                    </div>
+                    <div
+                      v-if="canEdit"
+                      class="absolute end-2 top-2 flex gap-1"
+                    >
+                      <BaseButton
+                        v-if="allowComments && !isColumnLocked(date.id)"
+                        :label="t('Comment')"
+                        icon="comment"
+                        only-icon
+                        size="small"
+                        type="primary-text"
+                        @click="openCommentDialog(user.id, date.id)"
+                      />
+                      <BaseButton
+                        v-if="enableSignature && !isColumnLocked(date.id)"
+                        :label="t('Sign')"
+                        icon="drawing"
+                        only-icon
+                        size="small"
+                        type="primary-text"
+                        @click="openSignatureDialog(user.id, date.id)"
+                      />
+                    </div>
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div
+        v-if="canEdit && filteredDates.some((date) => !isColumnLocked(date.id))"
+        class="flex justify-end"
+      >
+        <BaseButton
+          :disabled="isSaving"
+          :is-loading="isSaving"
+          :label="isSaving ? t('Saving...') : t('Save attendance')"
+          icon="save"
+          type="success"
+          @click="saveAttendanceSheet"
+        />
+      </div>
+    </div>
+
+    <BaseDialog
+      v-model:is-visible="showCommentDialog"
+      :title="t('Add comment')"
+      header-icon="comment"
+    >
+      <BaseTextArea
+        id="attendance-comment"
+        v-model="currentComment"
+        :label="t('Comment')"
+        :readonly="isStudentUI && !canEdit"
+      />
+      <template #footer>
+        <BaseButton
+          v-if="isTeacherUI && canEdit"
+          :label="t('Save')"
+          icon="save"
+          type="success"
+          @click="saveComment"
+        />
+      </template>
+    </BaseDialog>
+
+    <BaseDialog
+      v-model:is-visible="showSignatureDialog"
+      :title="t('Signature')"
+      header-icon="drawing"
+    >
+      <canvas
+        ref="signaturePadCanvas"
+        class="h-48 w-full rounded-lg border border-gray-25"
+      ></canvas>
+      <template #footer>
+        <BaseButton
+          :label="t('Clear')"
+          icon="clear-all"
+          type="black"
+          @click="clearSignature"
+        />
+        <BaseButton
+          :label="t('Save')"
+          icon="save"
+          type="success"
+          @click="saveSignature"
+        />
+      </template>
+    </BaseDialog>
+
+    <BaseDialog
+      v-model:is-visible="showQrDialog"
+      :close-label="t('Close')"
+      :title="t('Generate QR code')"
+      header-icon="qrcode"
+    >
+      <div class="flex items-center justify-center p-4">
+        <img
+          v-if="qrImageUrl"
+          :src="qrImageUrl"
+          alt=""
+          class="h-64 w-64 object-contain"
+        />
+      </div>
+    </BaseDialog>
+  </section>
 </template>
 <script setup>
 import { computed, nextTick, onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import SignaturePad from "signature_pad"
-import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
+import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
+import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
+import Checkbox from "primevue/checkbox"
+import Message from "primevue/message"
+import Skeleton from "primevue/skeleton"
+import { useNotification } from "../../composables/notification"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import attendanceService, { ATTENDANCE_STATES } from "../../services/attendanceService"
 import RoomFloorPlanViewer from "../../components/room/RoomFloorPlanViewer.vue"
@@ -573,6 +613,12 @@ const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const { abbreviatedDatetime, getCurrentTimezone } = useFormatDate()
+const { showSuccessNotification, showErrorNotification, showWarningNotification } = useNotification()
+
+// Measured at 1440 px with the local portal (one student, four dates). The teacher sheet rows
+// are h-28 (112 px), header included, plus the 2 px of the table border.
+const TEACHER_SKELETON = { rows: 1, rowHeight: 112, borders: 2 }
+const STUDENT_SKELETON = { items: 4, itemHeight: 58 }
 
 const formatAttendanceDate = (dateTimeStr) => abbreviatedDatetime(dateTimeStr) || dateTimeStr
 const formatRoom = (room) => {
@@ -713,7 +759,7 @@ const saveAttendanceSheet = async () => {
   if (!canEdit.value) return
 
   if (!attendanceData.value || Object.keys(attendanceData.value).length === 0) {
-    alert(t("No attendance data to save"))
+    showWarningNotification(t("No attendance data to save"))
     return
   }
 
@@ -748,10 +794,10 @@ const saveAttendanceSheet = async () => {
 
     // Refresh "Not attended" column after saving
     await fetchAttendanceSheetUsers(route.params.id)
-    alert(t("Attendance saved successfully"))
+    showSuccessNotification(t("Attendance saved successfully"))
   } catch (error) {
     console.error("Error saving attendance data:", error)
-    alert(t("Failed to save attendance. Please try again."))
+    showErrorNotification(t("Failed to save attendance. Please try again."))
   } finally {
     isSaving.value = false
   }
@@ -778,10 +824,10 @@ const saveStudentOwnAttendance = async () => {
       getAttendanceRequestContext(),
     )
 
-    alert(t("Attendance saved successfully"))
+    showSuccessNotification(t("Attendance saved successfully"))
   } catch (error) {
     console.error("Error saving student attendance:", error)
-    alert(t("Failed to save attendance. Please try again."))
+    showErrorNotification(t("Failed to save attendance. Please try again."))
   } finally {
     isSavingStudentAttendance.value = false
   }
@@ -794,7 +840,6 @@ const signaturePadCanvas = ref(null)
 const signaturePad = ref(null)
 
 const fetchAttendanceSheetUsers = async (attendanceId) => {
-  isLoading.value = true
   try {
     const params = { courseId: cid, sessionId: sid || null, groupId: gid || null }
     const users = await attendanceService.getAttendanceSheetUsers(attendanceId, params)
@@ -809,13 +854,11 @@ const fetchAttendanceSheetUsers = async (attendanceId) => {
     }))
   } catch (error) {
     console.error("Failed to fetch attendance sheet users:", error)
-  } finally {
-    isLoading.value = false
+    showErrorNotification(error)
   }
 }
 
 const fetchFullAttendanceData = async (attendanceId) => {
-  isLoading.value = true
   try {
     const data = await attendanceService.getFullAttendanceData(attendanceId, getAttendanceRequestContext())
     attendanceDates.value = data.attendanceDates
@@ -824,13 +867,11 @@ const fetchFullAttendanceData = async (attendanceId) => {
     signatures.value = data.signatureData || {}
   } catch (error) {
     console.error("Failed to fetch attendance data:", error)
-  } finally {
-    isLoading.value = false
+    showErrorNotification(error)
   }
 }
 
 const fetchStudentAttendanceData = async (attendanceId) => {
-  isLoading.value = true
   try {
     const data = await attendanceService.getStudentAttendanceData(attendanceId, getAttendanceRequestContext())
     attendanceDates.value = data.attendanceDates
@@ -839,22 +880,18 @@ const fetchStudentAttendanceData = async (attendanceId) => {
     signatures.value = data.signatureData || {}
   } catch (error) {
     console.error("Failed to fetch student attendance data:", error)
-  } finally {
-    isLoading.value = false
+    showErrorNotification(error)
   }
 }
 
 const fetchAttendanceTitle = async () => {
   try {
-    isLoading.value = true
     const attendanceId = route.params.id
     const response = await attendanceService.getAttendance(attendanceId, getAttendanceRequestContext())
     attendanceTitle.value = response.title || t("Unknown attendance")
   } catch (error) {
     console.error("Error fetching attendance title:", error)
     attendanceTitle.value = t("Unknown attendance")
-  } finally {
-    isLoading.value = false
   }
 }
 
@@ -930,6 +967,7 @@ const toggleLock = (dateId) => {
 }
 
 onMounted(async () => {
+  isLoading.value = true
   await fetchAttendanceTitle()
 
   await loadAttendanceDataForCurrentMode()
@@ -942,10 +980,12 @@ onMounted(async () => {
   } else {
     filteredDates.value = attendanceDates.value
   }
+  isLoading.value = false
 })
 
 // Recompute when the global Student View toggle changes
 useStudentViewRefresh(async () => {
+  isLoading.value = true
   await loadAttendanceDataForCurrentMode()
   updateAvailableFilters()
 
@@ -955,6 +995,7 @@ useStudentViewRefresh(async () => {
   } else {
     filteredDates.value = attendanceDates.value
   }
+  isLoading.value = false
 })
 
 const ATTENDANCE_STATES_BY_ID = Object.values(ATTENDANCE_STATES).reduce((acc, state) => {
@@ -1080,7 +1121,7 @@ const saveSignature = async () => {
       })
     } catch (error) {
       console.error("Error saving student signature:", error)
-      alert(t("Failed to save signature. Please try again."))
+      showErrorNotification(t("Failed to save signature. Please try again."))
       return
     }
   }
@@ -1105,7 +1146,7 @@ const closeSignatureDialog = () => {
 const viewForTablet = (dateId) => {
   if (!router.hasRoute("AttendanceSheetTablet")) {
     console.error("[Attendance] Missing route: AttendanceSheetTablet")
-    alert("Tablet route is not registered. Check router config.")
+    showErrorNotification("Tablet route is not registered. Check router config.")
     return
   }
 
@@ -1140,7 +1181,7 @@ const exportToPdf = async () => {
     document.body.appendChild(link)
     link.click()
   } catch (error) {
-    alert(t("Error exporting to PDF"))
+    showErrorNotification(t("Error exporting to PDF"))
     console.error(error)
   }
 }
@@ -1160,7 +1201,7 @@ const exportToXls = async () => {
     document.body.appendChild(link)
     link.click()
   } catch (error) {
-    alert(t("Error exporting to Excel"))
+    showErrorNotification(t("Error exporting to Excel"))
     console.error(error)
   }
 }
@@ -1176,7 +1217,7 @@ const generateQrCode = async () => {
     qrImageUrl.value = window.URL.createObjectURL(new Blob([response], { type: "image/png" }))
     showQrDialog.value = true
   } catch (error) {
-    alert(t("Failed to generate QR code"))
+    showErrorNotification(t("Failed to generate QR code"))
     console.error(error)
   }
 }

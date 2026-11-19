@@ -75,4 +75,75 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
         $this->conn()->executeStatement('UPDATE user SET active = ? WHERE id = ?', [USER_SOFT_DELETED, $gone->getId()]);
         $this->assertEquals(1, CourseManager::get_users_count_in_course($course->getCode()));
     }
+
+    private function sessionCourse(int $sessionId, Course $course): void
+    {
+        $this->conn()->executeStatement(
+            'INSERT INTO session_rel_course (session_id, c_id, position, nbr_users) VALUES (?, ?, 0, 0)',
+            [$sessionId, $course->getId()]
+        );
+    }
+
+    private function sessionCourseUser(int $sessionId, Course $course, User $user, int $status): void
+    {
+        $this->conn()->executeStatement(
+            'INSERT INTO session_rel_course_rel_user (session_id, c_id, user_id, status, visibility, legal_agreement, progress)
+             VALUES (?, ?, ?, ?, 1, 0, 0)',
+            [$sessionId, $course->getId(), $user->getId(), $status]
+        );
+    }
+
+    public function testStudentListSkipsSoftDeletedUsersAndPaginates(): void
+    {
+        $course = $this->createCourse('cm3d_stu_a');
+        $users = [];
+        foreach (['a', 'b', 'c'] as $k) {
+            $users[$k] = $this->createUser('cm3d_stu_'.$k);
+            $this->sub($users[$k], $course);
+        }
+        $gone = $this->createUser('cm3d_stu_gone');
+        $this->sub($gone, $course);
+        $this->conn()->executeStatement('UPDATE user SET active = ? WHERE id = ?', [USER_SOFT_DELETED, $gone->getId()]);
+
+        $all = CourseManager::get_student_list_from_course_code($course->getCode());
+        $this->assertEqualsCanonicalizing(array_map(static fn ($u) => $u->getId(), $users), array_keys($all));
+        $this->assertSame(3, CourseManager::get_student_list_from_course_code($course->getCode(), false, 0, null, null, true, 0, true));
+
+        $this->assertCount(2, CourseManager::get_student_list_from_course_code($course->getCode(), false, 0, null, null, true, 0, false, 0, 2));
+        $this->assertCount(1, CourseManager::get_student_list_from_course_code($course->getCode(), false, 0, null, null, true, 0, false, 2, 2));
+    }
+
+    public function testStudentListByDirectSessionAndDateRange(): void
+    {
+        $course = $this->createCourse('cm3d_stus_a');
+        $one = $this->createSession('cm3d_stus_s1');
+        $two = $this->createSession('cm3d_stus_s2');
+        $u1 = $this->createUser('cm3d_stus_u1');
+        $u2 = $this->createUser('cm3d_stus_u2');
+        $gone = $this->createUser('cm3d_stus_gone');
+        foreach ([$one, $two] as $sess) {
+            $this->sessionCourse($sess->getId(), $course);
+        }
+        $this->sessionCourseUser($one->getId(), $course, $u1, 0);
+        $this->sessionCourseUser($two->getId(), $course, $u2, 0);
+        $this->sessionCourseUser($one->getId(), $course, $gone, 0);
+        $this->conn()->executeStatement('UPDATE user SET active = ? WHERE id = ?', [USER_SOFT_DELETED, $gone->getId()]);
+        $this->conn()->executeStatement(
+            "UPDATE session SET access_start_date = '1990-01-01 00:00:00', access_end_date = '1990-12-31 00:00:00' WHERE id = ?",
+            [$one->getId()]
+        );
+
+        $bySession = CourseManager::get_student_list_from_course_code($course->getCode(), true, $one->getId());
+        $this->assertSame([$u1->getId()], array_keys($bySession), 'only the students of that session, soft-deleted skipped');
+
+        $inRange = CourseManager::get_student_list_from_course_code($course->getCode(), true, $one->getId(), '1990-01-01 00:00:00', '1990-12-31 00:00:00');
+        $this->assertSame([$u1->getId()], array_keys($inRange));
+        $this->assertSame(
+            1,
+            CourseManager::get_student_list_from_course_code($course->getCode(), true, $one->getId(), '1990-01-01 00:00:00', '1990-12-31 00:00:00', true, 0, true)
+        );
+
+        $outOfRange = CourseManager::get_student_list_from_course_code($course->getCode(), true, $one->getId(), '1995-01-01 00:00:00', '1995-12-31 00:00:00');
+        $this->assertSame([], $outOfRange, 'the session dates must fall inside the range');
+    }
 }

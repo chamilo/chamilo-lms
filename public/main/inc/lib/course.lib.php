@@ -2079,9 +2079,16 @@ class CourseManager
         $users = [];
 
         // We get the coach for the given course in a given session.
-        $sql = 'SELECT user_id FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
-               " WHERE session_id = $session_id AND c_id = $courseId AND status = ".SessionEntity::COURSE_COACH;
-        $rs = Database::query($sql);
+        $rs = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('user_id')
+            ->from(Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER))
+            ->where('session_id = :sessionId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('status = :status')
+            ->setParameter('sessionId', $session_id)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('status', SessionEntity::COURSE_COACH)
+            ->executeQuery();
         while ($user = Database::fetch_array($rs)) {
             $userInfo = api_get_user_info($user['user_id']);
             if ($userInfo) {
@@ -2141,11 +2148,11 @@ class CourseManager
         $courseId = $courseInfo['real_id'];
         $students = [];
 
-        $limitCondition = '';
+        $applyLimit = false;
         if (isset($start) && isset($limit) && !empty($limit)) {
             $start = (int) $start;
             $limit = (int) $limit;
-            $limitCondition = " LIMIT $start, $limit";
+            $applyLimit = true;
         }
 
         $select = '*';
@@ -2156,17 +2163,25 @@ class CourseManager
         if (empty($sessionId)) {
             if (empty($groupId)) {
                 // students directly subscribed to the course
-                $sql = "SELECT $select
-                        FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
-                        INNER JOIN $userTable u
-                        ON cu.user_id = u.id
-                        WHERE u.active <> ".USER_SOFT_DELETED." AND c_id = $courseId AND cu.status = ".STUDENT;
+                $qb = Database::getManager()->getConnection()->createQueryBuilder()
+                    ->select($select)
+                    ->from(Database::get_main_table(TABLE_MAIN_COURSE_USER), 'cu')
+                    ->innerJoin('cu', $userTable, 'u', 'cu.user_id = u.id')
+                    ->where('u.active <> :softDeleted')
+                    ->andWhere('c_id = :courseId')
+                    ->andWhere('cu.status = :status')
+                    ->setParameter('softDeleted', USER_SOFT_DELETED)
+                    ->setParameter('courseId', (int) $courseId)
+                    ->setParameter('status', STUDENT);
 
                 if (!$includeInvitedUsers) {
-                    $sql .= " AND u.status != ".INVITEE;
+                    $qb->andWhere('u.status != :invitee')
+                        ->setParameter('invitee', INVITEE);
                 }
-                $sql .= $limitCondition;
-                $rs = Database::query($sql);
+                if ($applyLimit) {
+                    $qb->setFirstResult($start)->setMaxResults($limit);
+                }
+                $rs = $qb->executeQuery();
 
                 if ($getCount) {
                     $row = Database::fetch_array($rs);
@@ -2192,35 +2207,42 @@ class CourseManager
 
         // students subscribed to the course through a session
         if ($with_session) {
-            $joinSession = '';
-            //Session creation date
+            $qb = Database::getManager()->getConnection()->createQueryBuilder()
+                ->select($select)
+                ->from(Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER), 'scu');
             if (!empty($date_from) && !empty($date_to)) {
-                $joinSession = "INNER JOIN ".Database::get_main_table(TABLE_MAIN_SESSION)." s";
+                // Session creation date
+                $qb->innerJoin('scu', Database::get_main_table(TABLE_MAIN_SESSION), 's', '1 = 1');
             }
-
-            $sql = "SELECT $select
-                      FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu
-                      $joinSession
-                      INNER JOIN $userTable u
-                      ON scu.user_id = u.id
-                      WHERE u.active <> ".USER_SOFT_DELETED." AND scu.c_id = $courseId AND scu.status = ".SessionEntity::STUDENT;
+            $qb->innerJoin('scu', $userTable, 'u', 'scu.user_id = u.id')
+                ->where('u.active <> :softDeleted')
+                ->andWhere('scu.c_id = :courseId')
+                ->andWhere('scu.status = :status')
+                ->setParameter('softDeleted', USER_SOFT_DELETED)
+                ->setParameter('courseId', (int) $courseId)
+                ->setParameter('status', SessionEntity::STUDENT);
 
             if (!empty($date_from) && !empty($date_to)) {
-                $date_from = Database::escape_string($date_from);
-                $date_to = Database::escape_string($date_to);
-                $sql .= " AND s.access_start_date >= '$date_from' AND s.access_end_date <= '$date_to'";
+                $qb->andWhere('s.access_start_date >= :dateFrom')
+                    ->andWhere('s.access_end_date <= :dateTo')
+                    ->setParameter('dateFrom', $date_from)
+                    ->setParameter('dateTo', $date_to);
             }
 
             if (0 != $sessionId) {
-                $sql .= " AND scu.session_id = $sessionId";
+                $qb->andWhere('scu.session_id = :sessionId')
+                    ->setParameter('sessionId', $sessionId);
             }
 
             if (!$includeInvitedUsers) {
-                $sql .= " AND u.status != ".INVITEE;
+                $qb->andWhere('u.status != :invitee')
+                    ->setParameter('invitee', INVITEE);
             }
-            $sql .= $limitCondition;
+            if ($applyLimit) {
+                $qb->setFirstResult($start)->setMaxResults($limit);
+            }
 
-            $rs = Database::query($sql);
+            $rs = $qb->executeQuery();
 
             if ($getCount) {
                 $row = Database::fetch_array($rs);
@@ -2252,20 +2274,14 @@ class CourseManager
             return false;
         }
 
-        $sql = "SELECT DISTINCT
-                    u.id as user_id,
-                    u.lastname,
-                    u.firstname,
-                    u.email,
-                    u.username,
-                    u.status
-                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
-                INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." u
-                ON (cu.user_id = u.id)
-                WHERE
-                    cu.c_id = $courseId AND
-                    cu.status = 1 ";
-        $rs = Database::query($sql);
+        $rs = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('DISTINCT u.id as user_id', 'u.lastname', 'u.firstname', 'u.email', 'u.username', 'u.status')
+            ->from(Database::get_main_table(TABLE_MAIN_COURSE_USER), 'cu')
+            ->innerJoin('cu', Database::get_main_table(TABLE_MAIN_USER), 'u', 'cu.user_id = u.id')
+            ->where('cu.c_id = :courseId')
+            ->andWhere('cu.status = 1')
+            ->setParameter('courseId', (int) $courseId)
+            ->executeQuery();
         $teachers = [];
         while ($teacher = Database::fetch_array($rs)) {
             $teachers[$teacher['user_id']] = $teacher;
@@ -2291,20 +2307,14 @@ class CourseManager
             return false;
         }
 
-        $sql = "SELECT DISTINCT
-                    u.id as user_id,
-                    u.lastname,
-                    u.firstname,
-                    u.email,
-                    u.username,
-                    u.status
-                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
-                INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." u
-                ON (cu.user_id = u.id)
-                WHERE
-                    cu.c_id = $courseId AND
-                    cu.status = 1 ";
-        $rs = Database::query($sql);
+        $rs = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('DISTINCT u.id as user_id', 'u.lastname', 'u.firstname', 'u.email', 'u.username', 'u.status')
+            ->from(Database::get_main_table(TABLE_MAIN_COURSE_USER), 'cu')
+            ->innerJoin('cu', Database::get_main_table(TABLE_MAIN_USER), 'u', 'cu.user_id = u.id')
+            ->where('cu.c_id = :courseId')
+            ->andWhere('cu.status = 1')
+            ->setParameter('courseId', (int) $courseId)
+            ->executeQuery();
         $listTeachers = [];
         $teachers = [];
         $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&course_id='.$courseId;
@@ -2411,19 +2421,17 @@ class CourseManager
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $sql = "SELECT DISTINCT
-                    u.id as user_id,
-                    u.lastname,
-                    u.firstname,
-                    u.username
-                FROM $tbl_user u
-                INNER JOIN $tbl_session_course_user scu
-                ON (u.id = scu.user_id)
-                WHERE
-                    scu.session_id = $session_id AND
-                    scu.c_id = $courseId AND
-                    scu.status = ".SessionEntity::COURSE_COACH;
-        $rs = Database::query($sql);
+        $rs = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('DISTINCT u.id as user_id', 'u.lastname', 'u.firstname', 'u.username')
+            ->from($tbl_user, 'u')
+            ->innerJoin('u', $tbl_session_course_user, 'scu', 'u.id = scu.user_id')
+            ->where('scu.session_id = :sessionId')
+            ->andWhere('scu.c_id = :courseId')
+            ->andWhere('scu.status = :status')
+            ->setParameter('sessionId', (int) $session_id)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('status', SessionEntity::COURSE_COACH)
+            ->executeQuery();
 
         $coaches = [];
         if (Database::num_rows($rs) > 0) {

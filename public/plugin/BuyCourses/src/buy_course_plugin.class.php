@@ -5888,10 +5888,15 @@ class BuyCoursesPlugin extends Plugin
     public function deleteService(int $id)
     {
         // The history of paid sales must survive: a service with a completed sale is refused (disable it instead).
-        $completedSales = (int) Database::fetch_row(Database::query(
-            'SELECT COUNT(*) FROM '.Database::get_main_table(self::TABLE_SERVICES_SALE).'
-             WHERE service_id = '.(int) $id.' AND status = '.self::SERVICE_STATUS_COMPLETED
-        ))[0];
+        $completedSales = (int) Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('COUNT(*)')
+            ->from(Database::get_main_table(self::TABLE_SERVICES_SALE))
+            ->where('service_id = :serviceId')
+            ->andWhere('status = :status')
+            ->setParameter('serviceId', $id)
+            ->setParameter('status', self::SERVICE_STATUS_COMPLETED)
+            ->executeQuery()
+            ->fetchOne();
         if ($completedSales > 0) {
             return false;
         }
@@ -9566,11 +9571,12 @@ class BuyCoursesPlugin extends Plugin
     {
         $couponTable = Database::get_main_table(self::TABLE_COUPON);
 
-        $sql = "UPDATE $couponTable
-        SET delivered = delivered+1
-        WHERE id = $couponId";
-
-        Database::query($sql);
+        Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->update($couponTable)
+            ->set('delivered', 'delivered + 1')
+            ->where('id = :couponId')
+            ->setParameter('couponId', $couponId)
+            ->executeStatement();
     }
 
     /**
@@ -13649,18 +13655,21 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $table = Database::get_main_table(self::TABLE_SERVICES_SALE);
-        $now = Database::escape_string(api_get_utc_datetime());
 
-        $sql = "SELECT DISTINCT buyer_id
-            FROM $table
-            WHERE status = ".self::SERVICE_STATUS_COMPLETED."
-              AND date_end IS NOT NULL
-              AND date_end < '$now'";
-        $result = Database::query($sql);
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $rows = $qb->select('DISTINCT buyer_id')
+            ->from($table)
+            ->where('status = :status')
+            ->andWhere('date_end IS NOT NULL')
+            ->andWhere('date_end < :now')
+            ->setParameter('status', self::SERVICE_STATUS_COMPLETED)
+            ->setParameter('now', api_get_utc_datetime())
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $processedUsers = 0;
 
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        foreach ($rows as $row) {
             $userId = (int) ($row['buyer_id'] ?? 0);
 
             if ($userId <= 0) {
@@ -13695,14 +13704,16 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $excessCourseIds = array_slice($courseIds, $limit);
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
+        $em = Container::getEntityManager();
 
         foreach ($excessCourseIds as $courseId) {
-            Database::query(
-                "UPDATE $courseTable
-             SET visibility = 0
-             WHERE id = ".(int) $courseId
-            );
+            $em->createQueryBuilder()
+                ->update(Course::class, 'c')
+                ->set('c.visibility', 0)
+                ->where('c.id = :courseId')
+                ->setParameter('courseId', (int) $courseId)
+                ->getQuery()
+                ->execute();
         }
     }
 
@@ -13727,23 +13738,23 @@ class BuyCoursesPlugin extends Plugin
 
         $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
         $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
-        $now = Database::escape_string(api_get_utc_datetime());
 
-        $sql = "SELECT sc.id, sc.course_id
-            FROM $subscriptionCourseTable sc
-            INNER JOIN $serviceSaleTable ss ON ss.id = sc.service_sale_id
-            WHERE sc.user_id = $userId
-              AND sc.status = 'active'
-              AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
-              AND ss.date_end IS NOT NULL
-              AND ss.date_end < '$now'";
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $rows = $qb->select('sc.id', 'sc.course_id')
+            ->from($subscriptionCourseTable, 'sc')
+            ->innerJoin('sc', $serviceSaleTable, 'ss', 'ss.id = sc.service_sale_id')
+            ->where('sc.user_id = :userId')
+            ->andWhere("sc.status = 'active'")
+            ->andWhere('ss.status = :status')
+            ->andWhere('ss.date_end IS NOT NULL')
+            ->andWhere('ss.date_end < :now')
+            ->setParameter('userId', $userId)
+            ->setParameter('status', self::SERVICE_STATUS_COMPLETED)
+            ->setParameter('now', api_get_utc_datetime())
+            ->executeQuery()
+            ->fetchAllAssociative();
 
-        $result = Database::query($sql);
-        if (false === $result) {
-            return;
-        }
-
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        foreach ($rows as $row) {
             $subscriptionCourseId = (int) ($row['id'] ?? 0);
             $courseId = (int) ($row['course_id'] ?? 0);
 

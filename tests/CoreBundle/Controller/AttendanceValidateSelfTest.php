@@ -34,7 +34,7 @@ class AttendanceValidateSelfTest extends WebTestCase
         [$client, $student, $own] = $this->setUpCourses();
         $calendar = $this->createCalendar($own['course'], $own['teacher']);
 
-        $this->validateSelf($client, $student, $own['course'], true, $calendar);
+        $this->validateSelf($client, $student, $own['course'], true, [$calendar]);
 
         $this->assertResponseIsSuccessful();
         $this->assertSame(1, $this->findSheet($student, $calendar)?->getPresence());
@@ -48,7 +48,7 @@ class AttendanceValidateSelfTest extends WebTestCase
 
         // With or without the course in the URL, which the caller chooses.
         foreach ([true, false] as $withCidInUrl) {
-            $this->validateSelf($client, $student, $own['course'], $withCidInUrl, $ownCalendar, $foreignCalendar);
+            $this->validateSelf($client, $student, $own['course'], $withCidInUrl, [$ownCalendar, $foreignCalendar]);
             $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         }
 
@@ -64,10 +64,22 @@ class AttendanceValidateSelfTest extends WebTestCase
         $stranger = $this->createUser('validate_self_stranger');
 
         // Without the course in the URL, so that the course context listener does not stop the request first.
-        $this->validateSelf($client, $stranger, $own['course'], false, $calendar);
+        $this->validateSelf($client, $stranger, $own['course'], false, [$calendar]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         $this->assertNull($this->findSheet($stranger, $calendar));
+    }
+
+    public function testPresenceOtherThanPresentOrAbsentIsRejected(): void
+    {
+        [$client, $student, $own] = $this->setUpCourses();
+        $calendar = $this->createCalendar($own['course'], $own['teacher']);
+
+        // The attendance score adds up the presence values, so any other value would inflate the grade.
+        $this->validateSelf($client, $student, $own['course'], true, [$calendar], 5);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+        $this->assertNull($this->findSheet($student, $calendar));
     }
 
     /**
@@ -148,10 +160,13 @@ class AttendanceValidateSelfTest extends WebTestCase
         return $calendar;
     }
 
-    private function validateSelf(KernelBrowser $client, User $user, Course $course, bool $withCidInUrl, CAttendanceCalendar ...$calendars): void
+    /**
+     * @param CAttendanceCalendar[] $calendars
+     */
+    private function validateSelf(KernelBrowser $client, User $user, Course $course, bool $withCidInUrl, array $calendars, int $presence = 1): void
     {
         $entries = array_map(
-            static fn (CAttendanceCalendar $calendar): array => ['calendarId' => $calendar->getIid(), 'presence' => 1],
+            static fn (CAttendanceCalendar $calendar): array => ['calendarId' => $calendar->getIid(), 'presence' => $presence],
             $calendars,
         );
 

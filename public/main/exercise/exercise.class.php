@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
@@ -3038,6 +3039,7 @@ class Exercise
                        orig_lp_item_view_id =  $lp_item_view_id
 					   ";
 
+        // TODO(db-neutral): the session condition is an SQL fragment built by api_get_session_condition()
         $sql_track = " SELECT * FROM  $track_exercises $condition $sessionCondition LIMIT 1 ";
 
         $result = Database::query($sql_track);
@@ -7537,13 +7539,42 @@ class Exercise
      */
     public function get_stat_track_exercise_info_by_exe_id($exe_id)
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $exe_id = (int) $exe_id;
-        $sql_track = "SELECT * FROM $table WHERE exe_id = $exe_id ";
-        $result = Database::query($sql_track);
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                't.exeId AS exe_id',
+                'IDENTITY(t.user) AS exe_user_id',
+                'IDENTITY(t.course) AS c_id',
+                'IDENTITY(t.session) AS session_id',
+                't.exeDate AS exe_date',
+                'IDENTITY(t.quiz) AS exe_exo_id',
+                't.score AS score',
+                't.maxScore AS max_score',
+                't.userIp AS user_ip',
+                't.status AS status',
+                't.dataTracking AS data_tracking',
+                't.startDate AS start_date',
+                't.stepsCounter AS steps_counter',
+                't.origLpId AS orig_lp_id',
+                't.origLpItemId AS orig_lp_item_id',
+                't.exeDuration AS exe_duration',
+                't.expiredTimeControl AS expired_time_control',
+                't.origLpItemViewId AS orig_lp_item_view_id',
+                't.questionsToCheck AS questions_to_check',
+                't.blockedCategories AS blocked_categories'
+            )
+            ->from(TrackEExercise::class, 't')
+            ->where('t.exeId = :exeId')
+            ->setParameter('exeId', $exe_id)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
         $new_array = [];
-        if (Database::num_rows($result) > 0) {
-            $new_array = Database::fetch_assoc($result);
+        if (null !== $row) {
+            // The raw row gave the dates as 'Y-m-d H:i:s' strings: keep that shape.
+            foreach (['exe_date', 'start_date', 'expired_time_control'] as $date) {
+                $row[$date] = $row[$date] instanceof DateTimeInterface ? $row[$date]->format('Y-m-d H:i:s') : null;
+            }
+            $new_array = $row;
             $start_date = api_get_utc_datetime($new_array['start_date'], true);
             $end_date = api_get_utc_datetime($new_array['exe_date'], true);
             $new_array['duration_formatted'] = '';
@@ -7563,15 +7594,11 @@ class Exercise
      */
     public function removeAllQuestionToRemind($exeId)
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $exeId = (int) $exeId;
         if (empty($exeId)) {
             return false;
         }
-        $sql = "UPDATE $table
-                SET questions_to_check = ''
-                WHERE exe_id = $exeId ";
-        Database::query($sql);
+        $this->setQuestionsToCheck($exeId, '');
 
         return true;
     }
@@ -7589,14 +7616,7 @@ class Exercise
             return false;
         }
 
-        $questionListToString = implode(',', $questionList);
-        $questionListToString = Database::escape_string($questionListToString);
-
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $sql = "UPDATE $table
-                SET questions_to_check = '$questionListToString'
-                WHERE exe_id = $exeId";
-        Database::query($sql);
+        $this->setQuestionsToCheck($exeId, implode(',', $questionList));
 
         return true;
     }
@@ -7613,13 +7633,9 @@ class Exercise
         $exeId = (int) $exeId;
 
         if ($exercise_info) {
-            $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             if (empty($exercise_info['questions_to_check'])) {
                 if ('add' == $action) {
-                    $sql = "UPDATE $track_exercises
-                            SET questions_to_check = '$questionId'
-                            WHERE exe_id = $exeId ";
-                    Database::query($sql);
+                    $this->setQuestionsToCheck($exeId, (string) $questionId);
                 }
             } else {
                 $remind_list = array_map('intval', explode(',', $exercise_info['questions_to_check']));
@@ -7648,13 +7664,21 @@ class Exercise
                         sort($newRemindList);
                     }
                 }
-                $value = Database::escape_string(implode(',', $newRemindList));
-                $sql = "UPDATE $track_exercises
-                        SET questions_to_check = '$value'
-                        WHERE exe_id = $exeId ";
-                Database::query($sql);
+                $this->setQuestionsToCheck($exeId, implode(',', $newRemindList));
             }
         }
+    }
+
+    private function setQuestionsToCheck(int $exeId, string $value): void
+    {
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(TrackEExercise::class, 't')
+            ->set('t.questionsToCheck', ':value')
+            ->where('t.exeId = :exeId')
+            ->setParameter('value', $value)
+            ->setParameter('exeId', $exeId)
+            ->getQuery()
+            ->execute();
     }
 
     /**
@@ -10435,35 +10459,29 @@ class Exercise
 
     public static function getLpListFromExercise($exerciseId, $courseId)
     {
-        $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
-        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
-        $tableResourceLink = Database::get_main_table('resource_link');
-
         $exerciseId = (int) $exerciseId;
         $courseId = (int) $courseId;
 
-        $sql = "SELECT DISTINCT
-                    lp.title,
-                    lpi.lp_id,
-                    lpi.iid AS item_id,
-                    lpi.max_score
-                FROM $tableLpItem lpi
-                INNER JOIN $tblLp lp
-                    ON lpi.lp_id = lp.iid
-                INNER JOIN $tableResourceLink resource_link
-                    ON resource_link.resource_node_id = lp.resource_node_id
-                WHERE
-                    resource_link.c_id = $courseId AND
-                    resource_link.deleted_at IS NULL AND
-                    lpi.item_type = '".TOOL_QUIZ."' AND
-                    lpi.path = '$exerciseId'";
-        $result = Database::query($sql);
-        $lpList = [];
-        if (Database::num_rows($result) > 0) {
-            $lpList = Database::store_result($result, 'ASSOC');
-        }
-
-        return $lpList;
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'lp.title AS title',
+                'IDENTITY(lpi.lp) AS lp_id',
+                'lpi.iid AS item_id',
+                'lpi.maxScore AS max_score'
+            )
+            ->distinct()
+            ->from(CLpItem::class, 'lpi')
+            ->innerJoin('lpi.lp', 'lp')
+            ->innerJoin(ResourceLink::class, 'rl', 'WITH', 'rl.resourceNode = lp.resourceNode')
+            ->where('IDENTITY(rl.course) = :courseId')
+            ->andWhere('rl.deletedAt IS NULL')
+            ->andWhere('lpi.itemType = :itemType')
+            ->andWhere('lpi.path = :path')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('itemType', TOOL_QUIZ)
+            ->setParameter('path', (string) $exerciseId)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**

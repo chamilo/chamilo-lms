@@ -176,19 +176,65 @@ class Exercise
      */
     public function read($id, $parseQuestionList = true)
     {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
-
         $id = (int) $id;
         if (empty($this->course_id) || empty($id)) {
             return false;
         }
 
-        $sql = "SELECT * FROM $table
-                WHERE iid = $id";
-        $result = Database::query($sql);
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'q.iid AS iid',
+                'q.title AS title',
+                'q.description AS description',
+                'q.sound AS sound',
+                'q.type AS type',
+                'q.random AS random',
+                'q.randomAnswers AS random_answers',
+                'q.resultsDisabled AS results_disabled',
+                'q.maxAttempt AS max_attempt',
+                'q.feedbackType AS feedback_type',
+                'q.propagateNeg AS propagate_neg',
+                'q.saveCorrectAnswers AS save_correct_answers',
+                'q.randomByCategory AS random_by_category',
+                'q.textWhenFinished AS text_when_finished',
+                'q.textWhenFinishedFailure AS text_when_finished_failure',
+                'q.displayCategoryName AS display_category_name',
+                'q.passPercentage AS pass_percentage',
+                'q.reviewAnswers AS review_answers',
+                'q.questionSelectionType AS question_selection_type',
+                'q.hideQuestionTitle AS hide_question_title',
+                'q.showQuestionMaxScore AS show_question_max_score',
+                'q.autoLaunch AS autolaunch',
+                'IDENTITY(q.quizCategory) AS quiz_category_id',
+                'q.preventBackwards AS prevent_backwards',
+                'q.notifications AS notifications',
+                'q.pageResultConfiguration AS page_result_configuration',
+                'q.hideQuestionNumber AS hide_question_number',
+                'q.showPreviousButton AS show_previous_button',
+                'q.endTime AS end_time',
+                'q.startTime AS start_time',
+                'q.expiredTime AS expired_time'
+            )
+            ->from(CQuiz::class, 'q')
+            ->where('q.iid = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
         // if the exercise has been found
-        if ($object = Database::fetch_object($result)) {
+        if (null !== $row) {
+            // The raw row used to give integers for flags, strings for dates and the JSON text: keep that shape.
+            foreach (['random_answers', 'hide_question_title', 'show_question_max_score', 'show_previous_button'] as $flag) {
+                $row[$flag] = null === $row[$flag] ? null : (int) $row[$flag];
+            }
+            $row['autolaunch'] = null === $row['autolaunch'] ? null : (int) $row['autolaunch'];
+            foreach (['end_time', 'start_time'] as $date) {
+                $row[$date] = $row[$date] instanceof DateTimeInterface ? $row[$date]->format('Y-m-d H:i:s') : null;
+            }
+            $row['page_result_configuration'] = empty($row['page_result_configuration'])
+                ? null
+                : json_encode($row['page_result_configuration']);
+            $object = (object) $row;
             $this->id = $this->iId = (int) $object->iid;
             $this->exercise = $object->title;
             $this->name = $object->title;
@@ -1140,6 +1186,7 @@ class Exercise
             $randomLimit = 'ORDER BY e.question_order';
         }
 
+        // TODO(db-neutral): ORDER BY RAND() has no DQL/DBAL equivalent
         $sql = "SELECT e.question_id
                 FROM $quizRelQuestion e
                 INNER JOIN $question q
@@ -1626,7 +1673,6 @@ class Exercise
      */
     public function update_question_positions()
     {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         if (empty($this->getId())) {
             return false;
         }
@@ -1639,12 +1685,16 @@ class Exercise
             foreach ($questionList as $position => $questionId) {
                 $position = (int) $position;
                 $questionId = (int) $questionId;
-                $sql = "UPDATE $table SET
-                            question_order = $position
-                        WHERE
-                            question_id = $questionId AND
-                            quiz_id= ".$this->getId();
-                Database::query($sql);
+                Container::getEntityManager()->createQueryBuilder()
+                    ->update(CQuizRelQuestion::class, 'e')
+                    ->set('e.questionOrder', ':position')
+                    ->where('IDENTITY(e.question) = :questionId')
+                    ->andWhere('IDENTITY(e.quiz) = :quizId')
+                    ->setParameter('position', $position)
+                    ->setParameter('questionId', $questionId)
+                    ->setParameter('quizId', (int) $this->getId())
+                    ->getQuery()
+                    ->execute();
             }
         }
 
@@ -1817,21 +1867,16 @@ class Exercise
 
     private function isQuestionUsedInOtherExercises(int $questionId, int $exerciseId): bool
     {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-
-        $questionId = (int) $questionId;
-        $exerciseId = (int) $exerciseId;
-
-        $sql = "SELECT 1
-            FROM $table
-            WHERE
-                question_id = $questionId AND
-                quiz_id <> $exerciseId
-            LIMIT 1";
-
-        $result = Database::query($sql);
-
-        return Database::num_rows($result) > 0;
+        return [] !== Container::getEntityManager()->createQueryBuilder()
+            ->select('e.iid AS iid')
+            ->from(CQuizRelQuestion::class, 'e')
+            ->where('IDENTITY(e.question) = :questionId')
+            ->andWhere('IDENTITY(e.quiz) <> :exerciseId')
+            ->setParameter('questionId', $questionId)
+            ->setParameter('exerciseId', $exerciseId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
@@ -7685,19 +7730,26 @@ class Exercise
      */
     public function getCategoriesInExercise()
     {
-        $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         if (!empty($this->getId())) {
-            $sql = "SELECT * FROM $table
-                    WHERE exercise_id = {$this->getId()} ";
-            $result = Database::query($sql);
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select(
+                    'rc.iid AS iid',
+                    'IDENTITY(rc.category) AS category_id',
+                    'IDENTITY(rc.quiz) AS exercise_id',
+                    'rc.countQuestions AS count_questions',
+                    'rc.destinations AS destinations'
+                )
+                ->from(CQuizRelQuestionCategory::class, 'rc')
+                ->where('IDENTITY(rc.quiz) = :exerciseId')
+                ->setParameter('exerciseId', (int) $this->getId())
+                ->getQuery()
+                ->getArrayResult();
             $list = [];
-            if (Database::num_rows($result)) {
-                while ($row = Database::fetch_assoc($result)) {
-                    $list[$row['category_id']] = $row;
-                }
-
-                return $list;
+            foreach ($rows as $row) {
+                $list[$row['category_id']] = $row;
             }
+
+            return $list;
         }
 
         return [];
@@ -7710,17 +7762,14 @@ class Exercise
      */
     public function getNumberQuestionExerciseCategory()
     {
-        $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         if (!empty($this->getId())) {
-            $sql = "SELECT SUM(count_questions) count_questions
-                    FROM $table
-                    WHERE exercise_id = {$this->getId()}";
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
-                $row = Database::fetch_array($result);
-
-                return (int) $row['count_questions'];
-            }
+            return (int) Container::getEntityManager()->createQueryBuilder()
+                ->select('SUM(rc.countQuestions)')
+                ->from(CQuizRelQuestionCategory::class, 'rc')
+                ->where('IDENTITY(rc.quiz) = :exerciseId')
+                ->setParameter('exerciseId', (int) $this->getId())
+                ->getQuery()
+                ->getSingleScalarResult();
         }
 
         return 0;
@@ -7737,9 +7786,12 @@ class Exercise
         // An empty array is an explicit "no categories" and clears the existing ones.
         if (is_array($categories) && !empty($this->getId())) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
-            $sql = "DELETE FROM $table
-                    WHERE exercise_id = {$this->getId()}";
-            Database::query($sql);
+            Container::getEntityManager()->createQueryBuilder()
+                ->delete(CQuizRelQuestionCategory::class, 'rc')
+                ->where('IDENTITY(rc.quiz) = :exerciseId')
+                ->setParameter('exerciseId', (int) $this->getId())
+                ->getQuery()
+                ->execute();
             foreach ($categories as $categoryId => $countQuestions) {
                 if ($categoryId !== 0) {
                     $params = [

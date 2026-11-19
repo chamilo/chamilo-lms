@@ -2,6 +2,9 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
+use Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup;
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
@@ -124,40 +127,37 @@ class UserGroupModel extends Model
         $start = (int) $start;
         $limit = (int) $limit;
 
-        $select = ' u.* ';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->from(UsergroupRelUser::class, 'u')
+            ->where('IDENTITY(u.usergroup) = :id')
+            ->setParameter('id', $id)
+        ;
         if ($getCount) {
-            $select = 'COUNT(u.id) count ';
+            $qb->select('COUNT(u.id) AS count');
+        } else {
+            $qb->select(
+                'u.id AS id',
+                'IDENTITY(u.user) AS user_id',
+                'IDENTITY(u.usergroup) AS usergroup_id',
+                'u.relationType AS relation_type'
+            );
         }
 
         if ($this->getUseMultipleUrl()) {
-            $urlId = api_get_current_access_url_id();
-            $sql = "SELECT $select
-                    FROM $this->usergroup_rel_user_table u
-                    INNER JOIN $this->access_url_rel_user a
-                    ON (u.user_id = a.user_id)
-                    WHERE u.usergroup_id = $id AND access_url_id = $urlId ";
-        } else {
-            $sql = "SELECT $select
-                    FROM $this->usergroup_rel_user_table u
-                    WHERE u.usergroup_id = $id";
+            $qb
+                ->innerJoin(AccessUrlRelUser::class, 'a', 'WITH', 'IDENTITY(a.user) = IDENTITY(u.user)')
+                ->andWhere('IDENTITY(a.url) = :urlId')
+                ->setParameter('urlId', (int) api_get_current_access_url_id())
+            ;
         }
-        $limitCondition = '';
         if (!empty($limit) && !$getCount) {
-            $limitCondition = " LIMIT $start, $limit";
+            $qb->setFirstResult($start)->setMaxResults($limit);
         }
 
-        $sql .= $limitCondition;
-
-        $result = Database::query($sql);
+        $rows = $qb->getQuery()->getArrayResult();
 
         if ($getCount) {
-            if (Database::num_rows($result)) {
-                $row = Database::fetch_array($result);
-
-                return $row['count'];
-            }
-
-            return 0;
+            return $rows[0]['count'] ?? 0;
         } else {
             $list = [];
             $showCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enabled');
@@ -166,7 +166,7 @@ class UserGroupModel extends Model
                 $calendarPlugin = LearningCalendarPlugin::create();
             }
             $url = api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/calendar.php?';
-            while ($data = Database::fetch_array($result)) {
+            foreach ($rows as $data) {
                 $userId = $data['user_id'];
                 $userInfo = api_get_user_info($userId);
                 $userTitle = $userInfo['complete_name_with_username'];
@@ -299,46 +299,28 @@ class UserGroupModel extends Model
      */
     public function getUserGroupByCourseWithDataCount($course_id, $type = -1)
     {
+        $course_id = (int) $course_id;
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(c.id) AS count')
+            ->from(UsergroupRelCourse::class, 'c')
+            ->where('IDENTITY(c.course) = :courseId')
+            ->setParameter('courseId', $course_id)
+        ;
         if ($this->getUseMultipleUrl()) {
-            $course_id = (int) $course_id;
-            $urlId = api_get_current_access_url_id();
-            $sql = "SELECT count(c.usergroup_id) as count
-                    FROM {$this->usergroup_rel_course_table} c
-                    INNER JOIN {$this->access_url_rel_usergroup} a
-                    ON (c.usergroup_id = a.usergroup_id)
-                    WHERE access_url_id = $urlId AND course_id = $course_id
-            ";
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
-                $row = Database::fetch_array($result);
-
-                return $row['count'];
-            }
-
-            return 0;
+            // The group type is not applied in multi-URL mode.
+            $qb
+                ->innerJoin(AccessUrlRelUserGroup::class, 'a', 'WITH', 'IDENTITY(a.userGroup) = IDENTITY(c.usergroup)')
+                ->andWhere('IDENTITY(a.url) = :urlId')
+                ->setParameter('urlId', (int) api_get_current_access_url_id())
+            ;
         } else {
-            $typeCondition = '';
+            $qb->innerJoin(Usergroup::class, 'a', 'WITH', 'a.id = IDENTITY(c.usergroup)');
             if (-1 != $type) {
-                $type = (int) $type;
-                $typeCondition = " AND group_type = $type ";
+                $qb->andWhere('a.groupType = :groupType')->setParameter('groupType', (int) $type);
             }
-            $sql = "SELECT count(c.usergroup_id) as count
-                    FROM {$this->usergroup_rel_course_table} c
-                    INNER JOIN {$this->table} a
-                    ON (c.usergroup_id = a.id)
-                    WHERE
-                        course_id = $course_id
-                        $typeCondition
-            ";
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
-                $row = Database::fetch_array($result);
-
-                return $row['count'];
-            }
-
-            return 0;
         }
+
+        return $qb->getQuery()->getArrayResult()[0]['count'] ?? 0;
     }
 
     /**
@@ -1527,20 +1509,22 @@ class UserGroupModel extends Model
      */
     public function usergroup_exists(string $title): bool
     {
-        $title = Database::escape_string($title);
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('u.id')
+            ->from(Usergroup::class, 'u')
+            ->where('u.title = :title')
+            ->setParameter('title', $title)
+            ->setMaxResults(1)
+        ;
         if ($this->getUseMultipleUrl()) {
-            $urlId = api_get_current_access_url_id();
-            $sql = "SELECT * FROM $this->table u
-                    INNER JOIN {$this->access_url_rel_usergroup} a
-                    ON (a.usergroup_id = u.id)
-                    WHERE title = '".$title."' AND access_url_id = $urlId";
-        } else {
-            $sql = "SELECT * FROM $this->table WHERE title = '".$title."'";
+            $qb
+                ->innerJoin(AccessUrlRelUserGroup::class, 'a', 'WITH', 'IDENTITY(a.userGroup) = u.id')
+                ->andWhere('IDENTITY(a.url) = :urlId')
+                ->setParameter('urlId', (int) api_get_current_access_url_id())
+            ;
         }
 
-        $res = Database::query($sql);
-
-        return 0 != Database::num_rows($res);
+        return [] !== $qb->getQuery()->getArrayResult();
     }
 
     private function isWorkflowSettingEnabled(string $variable): bool
@@ -2266,13 +2250,19 @@ class UserGroupModel extends Model
         if (empty($user_id)) {
             return [];
         }
-        $result = Database::query(
-            'SELECT DISTINCT friend_user_id FROM '.Database::get_main_table(TABLE_MAIN_USER_REL_USER).'
-             WHERE user_id = '.$user_id.' AND friend_user_id <> '.$user_id.'
-             AND relation_type IN ('.UserRelUser::USER_RELATION_TYPE_FRIEND.', '.UserRelUser::USER_RELATION_TYPE_GOODFRIEND.')'
-        );
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT IDENTITY(r.friend) AS friend_user_id')
+            ->from(UserRelUser::class, 'r')
+            ->where('IDENTITY(r.user) = :userId')
+            ->andWhere('IDENTITY(r.friend) <> :userId')
+            ->andWhere('r.relationType IN (:types)')
+            ->setParameter('userId', $user_id)
+            ->setParameter('types', [UserRelUser::USER_RELATION_TYPE_FRIEND, UserRelUser::USER_RELATION_TYPE_GOODFRIEND])
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $ids = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             $ids[] = (int) $row['friend_user_id'];
         }
 
@@ -2305,12 +2295,18 @@ class UserGroupModel extends Model
         }
 
         if ('true' === api_get_setting('group.allow_invite_non_friends_to_social_groups')) {
-            $result = Database::query(
-                'SELECT id FROM '.Database::get_main_table(TABLE_MAIN_USER).'
-                 WHERE id IN ('.implode(',', $user_ids).') AND active <> '.USER_SOFT_DELETED
-            );
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select('u.id AS id')
+                ->from(User::class, 'u')
+                ->where('u.id IN (:ids)')
+                ->andWhere('u.active <> :deleted')
+                ->setParameter('ids', $user_ids)
+                ->setParameter('deleted', USER_SOFT_DELETED)
+                ->getQuery()
+                ->getArrayResult()
+            ;
             $allowed = [];
-            while ($row = Database::fetch_assoc($result)) {
+            foreach ($rows as $row) {
                 $allowed[(int) $row['id']] = true;
             }
         } else {

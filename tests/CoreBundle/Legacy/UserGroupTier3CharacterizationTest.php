@@ -95,6 +95,31 @@ final class UserGroupTier3CharacterizationTest extends KernelTestCase
         $this->assertEquals(0, $this->model->getUserGroupByCourseWithDataCount($course->getId() + 100000));
     }
 
+    public function testGetUserGroupUsersPaginationSkipsTheFirstRows(): void
+    {
+        $group = $this->group('ug3_page');
+        foreach (['a', 'b', 'c'] as $n) {
+            $this->addUser($group, $this->createUser('ug3_p'.$n));
+        }
+
+        $this->assertCount(3, $this->model->getUserGroupUsers($group->getId()));
+        $this->assertCount(1, $this->model->getUserGroupUsers($group->getId(), false, 2, 5));
+        $this->assertCount(0, $this->model->getUserGroupUsers($group->getId(), false, 3, 5));
+    }
+
+    public function testGetUserGroupByCourseWithDataCountAppliesTheTypeInSingleUrlMode(): void
+    {
+        $course = $this->createCourse('ug3_course_type');
+        foreach (['a', 'b'] as $n) {
+            $this->addCourse($this->group('ug3_class_'.$n, Usergroup::NORMAL_CLASS), $course);
+        }
+        $this->addCourse($this->group('ug3_social_x', Usergroup::SOCIAL_CLASS), $course);
+
+        $this->assertEquals(2, $this->model->getUserGroupByCourseWithDataCount($course->getId(), 0));
+        $this->assertEquals(1, $this->model->getUserGroupByCourseWithDataCount($course->getId(), 1));
+        $this->assertEquals(3, $this->model->getUserGroupByCourseWithDataCount($course->getId()));
+    }
+
     public function testGroupsByPopularityAreSocialOrderedByMemberCountAndExcludePendingRoles(): void
     {
         $users = [];

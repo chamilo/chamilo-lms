@@ -43,22 +43,22 @@ if (api_is_hrm()) {
 }
 
 // Select of sessions.
-$sql = "SELECT s.id, name FROM $tblSession s
+$sql = "SELECT s.id, s.title FROM $tblSession s
         $innerJoinSessionRelUser
         $whereCondictionDRH
-        ORDER BY name";
+        ORDER BY s.title";
 
 if (api_is_multiple_url_enabled()) {
     $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
     $accessUrlId = api_get_current_access_url_id();
     if (-1 != $accessUrlId) {
-        $sql = "SELECT s.id, name FROM $tblSession s
+        $sql = "SELECT s.id, s.title FROM $tblSession s
                 INNER JOIN $tblSessionRelAccessUrl as session_rel_url
                 ON (s.id = session_rel_url.session_id)
                 $innerJoinSessionRelUser
                 WHERE access_url_id = $accessUrlId
                 $whereCondictionMultiUrl
-                ORDER BY name";
+                ORDER BY s.title";
     }
 }
 $result = Database::query($sql);
@@ -66,7 +66,7 @@ $Sessions = Database::store_result($result);
 $options = [];
 $options['0'] = '';
 foreach ($Sessions as $enreg) {
-    $options[$enreg['id']] = $enreg['name'];
+    $options[$enreg['id']] = $enreg['title'];
 }
 
 $form->addSelect('session_id', get_lang('Session list'), $options, ['id' => 'session-id']);

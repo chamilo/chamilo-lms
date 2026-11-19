@@ -3502,22 +3502,22 @@ class SessionManager
      */
     public static function get_session_by_name($name)
     {
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $name = Database::escape_string(trim($name));
+        $name = trim((string) $name);
         if (empty($name)) {
             return false;
         }
 
-        $sql = 'SELECT *
-		        FROM '.$tbl_session.'
-		        WHERE title = "'.$name.'"';
-        $result = Database::query($sql);
-        $num = Database::num_rows($result);
-        if ($num > 0) {
-            return Database::fetch_array($result);
-        } else {
-            return false;
-        }
+        // Wide table read as is (legacy row shape): DBAL QueryBuilder; callers only read named keys.
+        $row = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from('session')
+            ->where('title = :name')
+            ->setParameter('name', $name)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAssociative();
+
+        return false === $row ? false : $row;
     }
 
     /**
@@ -7987,16 +7987,17 @@ class SessionManager
             return false;
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $sql = "SELECT * FROM $table
-                WHERE session_id = $sessionId AND user_id = $userId";
-        $result = Database::query($sql);
-        $values = [];
-        if (Database::num_rows($result)) {
-            $values = Database::fetch_assoc($result);
-        }
+        $values = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from('session_rel_user')
+            ->where('session_id = :sessionId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('userId', $userId)
+            ->executeQuery()
+            ->fetchAssociative();
 
-        return $values;
+        return false === $values ? [] : $values;
     }
 
     /**

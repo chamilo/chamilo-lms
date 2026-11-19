@@ -126,29 +126,31 @@ class SessionManager
      */
     public static function getSessionsForCertificateReport(): array
     {
-        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
-        $joins = '';
-        $where = 'WHERE 1 = 1';
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('s.id', 's.title')
+            ->distinct()
+            ->from('session', 's')
+            ->orderBy('s.title');
 
         if (api_is_hrm()) {
-            $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-            $joins .= " INNER JOIN $tblSessionRelUser session_rel_user ON (s.id = session_rel_user.session_id)";
-            $where .= ' AND session_rel_user.user_id = '.api_get_user_id();
+            $qb
+                ->innerJoin('s', 'session_rel_user', 'session_rel_user', 's.id = session_rel_user.session_id')
+                ->andWhere('session_rel_user.user_id = :userId')
+                ->setParameter('userId', (int) api_get_user_id());
         }
 
         if (api_is_multiple_url_enabled()) {
             $accessUrlId = api_get_current_access_url_id();
             if (-1 != $accessUrlId) {
-                $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-                $joins .= " INNER JOIN $tblSessionRelAccessUrl session_rel_url ON (s.id = session_rel_url.session_id)";
-                $where .= ' AND session_rel_url.access_url_id = '.(int) $accessUrlId;
+                $qb
+                    ->innerJoin('s', 'access_url_rel_session', 'session_rel_url', 's.id = session_rel_url.session_id')
+                    ->andWhere('session_rel_url.access_url_id = :accessUrlId')
+                    ->setParameter('accessUrlId', (int) $accessUrlId);
             }
         }
 
-        $result = Database::query("SELECT DISTINCT s.id, s.title FROM $tblSession s $joins $where ORDER BY s.title");
-
         $sessions = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
             $sessions[(int) $row['id']] = $row['title'];
         }
 
@@ -609,6 +611,7 @@ class SessionManager
                 $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
                 $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
                 $sql = "SELECT id FROM $tblExtraField WHERE item_type = $extraFieldType AND variable = 'multiple_language'";
+                // TODO(db-neutral): free-form jqGrid where/order/limit fragments, string-built conditions; the main queries and the language/user-count helpers are not pinned (all queries of this function)
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $fieldId = Database::result($rs, 0, 0);
@@ -1118,6 +1121,7 @@ class SessionManager
 
         $sql_query = sprintf($sql, Database::escape_string($course['real_id']), $sessionId);
 
+        // TODO(db-neutral): free-form jqGrid where/order/limit fragments, sprintf-built SQL and numeric result keys; not pinned by a test (all queries of this function)
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs)) {
             $users[$user['user_id']] = $user;
@@ -1236,6 +1240,7 @@ class SessionManager
                 $where $order $limit";
 
         $sql_query = sprintf($sql, intval($course['real_id']), $sessionId);
+        // TODO(db-neutral): free-form jqGrid where/order/limit fragments, sprintf-built SQL; not pinned by a test (all queries of this function)
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs)) {
             $users[$user['user_id']] = $user;
@@ -1367,6 +1372,7 @@ class SessionManager
         }
 
         $sql_query = vsprintf($sql, $queryVariables);
+        // TODO(db-neutral): free-form jqGrid where/order/limit fragments, sprintf-built SQL; not pinned by a test (all queries of this function)
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs)) {
             $users[$user['user_id']] = $user;
@@ -1770,6 +1776,7 @@ class SessionManager
             INNER JOIN $user u ON a.user_id = u.id
             INNER JOIN $course c ON a.c_id = c.id
             $where $order $limit";
+        // TODO(db-neutral): free-form jqGrid where/order/limit fragments, sprintf-built SQL; not pinned by a test (all queries of this function)
         $result = Database::query(sprintf($sql, $sessionId, $courseId));
 
         $data = [];
@@ -3674,7 +3681,6 @@ class SessionManager
         $smonth_end,
         $sday_end
     ) {
-        $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $name = trim((string) $sname);
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
@@ -3705,23 +3711,19 @@ class SessionManager
 
             return $msg;
         }
-        if (null != $date_end) {
-            $sql = "UPDATE $tbl_session_category
-                    SET
-                        title = '".Database::escape_string($name)."',
-                        date_start = '$date_start' ,
-                        date_end = '$date_end'
-                    WHERE id= $id";
-        } else {
-            $sql = "UPDATE $tbl_session_category SET
-                        title = '".Database::escape_string($name)."',
-                        date_start = '$date_start',
-                        date_end = NULL
-                    WHERE id= $id";
-        }
-        $result = Database::query($sql);
+        Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->update('session_category')
+            ->set('title', ':title')
+            ->set('date_start', ':dateStart')
+            ->set('date_end', ':dateEnd')
+            ->where('id = :id')
+            ->setParameter('title', $name)
+            ->setParameter('dateStart', $date_start)
+            ->setParameter('dateEnd', $date_end)
+            ->setParameter('id', $id)
+            ->executeStatement();
 
-        return $result ? true : false;
+        return true;
     }
 
     /**
@@ -3738,31 +3740,41 @@ class SessionManager
      */
     public static function delete_session_category($categoryId, $deleteSessions = false, $fromWs = false)
     {
-        $tblSessionCategory = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        $connection = Container::getEntityManager()->getConnection();
 
         if (is_array($categoryId)) {
-            $categoryId = array_map('intval', $categoryId);
+            $categoryIds = array_map('intval', $categoryId);
         } else {
-            $categoryId = [(int) $categoryId];
+            $categoryIds = [(int) $categoryId];
         }
 
-        $categoryId = implode(', ', $categoryId);
+        $categoryId = implode(', ', $categoryIds);
 
         if ($deleteSessions) {
-            $sql = "SELECT id FROM $tblSession WHERE session_category_id IN ($categoryId)";
-            $result = Database::query($sql);
-            while ($rows = Database::fetch_array($result)) {
-                $sessionId = $rows['id'];
+            $sessionIds = $connection->createQueryBuilder()
+                ->select('id')
+                ->from('session')
+                ->where('session_category_id IN (:categoryIds)')
+                ->setParameter('categoryIds', $categoryIds, ArrayParameterType::INTEGER)
+                ->executeQuery()
+                ->fetchFirstColumn();
+            foreach ($sessionIds as $sessionId) {
                 self::delete($sessionId, $fromWs);
             }
         } else {
-            $sql = "UPDATE $tblSession SET session_category_id = NULL WHERE session_category_id IN ($categoryId)";
-            Database::query($sql);
+            $connection->createQueryBuilder()
+                ->update('session')
+                ->set('session_category_id', 'NULL')
+                ->where('session_category_id IN (:categoryIds)')
+                ->setParameter('categoryIds', $categoryIds, ArrayParameterType::INTEGER)
+                ->executeStatement();
         }
 
-        $sql = "DELETE FROM $tblSessionCategory WHERE id IN ($categoryId)";
-        Database::query($sql);
+        $connection->createQueryBuilder()
+            ->delete('session_category')
+            ->where('id IN (:categoryIds)')
+            ->setParameter('categoryIds', $categoryIds, ArrayParameterType::INTEGER)
+            ->executeStatement();
 
         // Add event to system log
         Event::addEvent(
@@ -4088,10 +4100,6 @@ class SessionManager
         $sendEmail = false,
         $removeSessionsFromUser = true
     ) {
-        // Database Table Definitions
-        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-
         if (empty($userInfo)) {
             return 0;
         }
@@ -4120,32 +4128,32 @@ class SessionManager
         $touchedSessionIds = [];
         // Deleting assigned sessions to hrm_id.
         if ($removeSessionsFromUser) {
+            $connection = Container::getEntityManager()->getConnection();
+            $drhSessionsQb = $connection->createQueryBuilder()
+                ->select('s.session_id')
+                ->from('session_rel_user', 's')
+                ->where('s.user_id = :userId')
+                ->andWhere('s.relation_type = :relationType')
+                ->setParameter('userId', $userId)
+                ->setParameter('relationType', Session::DRH);
             if (api_is_multiple_url_enabled()) {
-                $sql = "SELECT s.session_id
-                        FROM $tbl_session_rel_user s
-                        INNER JOIN $tbl_session_rel_access_url a
-                        ON (a.session_id = s.session_id)
-                        WHERE
-                            s.user_id = $userId AND
-                            relation_type = ".Session::DRH." AND
-                            access_url_id = ".api_get_current_access_url_id();
-            } else {
-                $sql = "SELECT s.session_id
-                        FROM $tbl_session_rel_user s
-                        WHERE user_id = $userId AND relation_type=".Session::DRH;
+                $drhSessionsQb
+                    ->innerJoin('s', 'access_url_rel_session', 'a', 'a.session_id = s.session_id')
+                    ->andWhere('a.access_url_id = :accessUrlId')
+                    ->setParameter('accessUrlId', (int) api_get_current_access_url_id());
             }
-            $result = Database::query($sql);
 
-            if (Database::num_rows($result) > 0) {
-                while ($row = Database::fetch_array($result)) {
-                    $sql = "DELETE FROM $tbl_session_rel_user
-                            WHERE
-                                session_id = {$row['session_id']} AND
-                                user_id = $userId AND
-                                relation_type =".Session::DRH;
-                    Database::query($sql);
-                    $touchedSessionIds[] = (int) $row['session_id'];
-                }
+            foreach ($drhSessionsQb->executeQuery()->fetchFirstColumn() as $drhSessionId) {
+                $connection->createQueryBuilder()
+                    ->delete('session_rel_user')
+                    ->where('session_id = :sessionId')
+                    ->andWhere('user_id = :userId')
+                    ->andWhere('relation_type = :relationType')
+                    ->setParameter('sessionId', (int) $drhSessionId)
+                    ->setParameter('userId', $userId)
+                    ->setParameter('relationType', Session::DRH)
+                    ->executeStatement();
+                $touchedSessionIds[] = (int) $drhSessionId;
             }
         }
 
@@ -4169,10 +4177,12 @@ class SessionManager
             Database::getManager()->flush();
         }
         foreach (array_unique($touchedSessionIds) as $touchedSessionId) {
-            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)."
-                    SET nbr_users = (SELECT COUNT(user_id) FROM $tbl_session_rel_user WHERE session_id = $touchedSessionId)
-                    WHERE id = $touchedSessionId";
-            Database::query($sql);
+            Container::getEntityManager()->getConnection()->createQueryBuilder()
+                ->update('session')
+                ->set('nbr_users', '(SELECT COUNT(user_id) FROM session_rel_user WHERE session_id = :sessionId)')
+                ->where('id = :sessionId')
+                ->setParameter('sessionId', $touchedSessionId)
+                ->executeStatement();
         }
 
         return $affected_rows;
@@ -5328,13 +5338,18 @@ class SessionManager
             return false;
         }
 
-        $row = Database::fetch_row(Database::query(
-            'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION).'
-             WHERE session_id = '.(int) $session->getId().' AND access_url_id IN ('.implode(',', array_map('intval', $urlIds)).')
-             LIMIT 1'
-        ));
+        $found = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('1')
+            ->from('access_url_rel_session')
+            ->where('session_id = :sessionId')
+            ->andWhere('access_url_id IN (:urlIds)')
+            ->setParameter('sessionId', (int) $session->getId())
+            ->setParameter('urlIds', array_map('intval', $urlIds), ArrayParameterType::INTEGER)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
 
-        return !empty($row);
+        return false !== $found;
     }
 
     /**
@@ -5366,12 +5381,17 @@ class SessionManager
         }
 
         if (api_get_multiple_access_url()) {
-            $inUrl = Database::fetch_row(Database::query(
-                'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION).'
-                 WHERE session_id = '.$sessionId.' AND access_url_id = '.(int) api_get_current_access_url_id().'
-                 LIMIT 1'
-            ));
-            if (empty($inUrl)) {
+            $inUrl = Container::getEntityManager()->getConnection()->createQueryBuilder()
+                ->select('1')
+                ->from('access_url_rel_session')
+                ->where('session_id = :sessionId')
+                ->andWhere('access_url_id = :accessUrlId')
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('accessUrlId', (int) api_get_current_access_url_id())
+                ->setMaxResults(1)
+                ->executeQuery()
+                ->fetchOne();
+            if (false === $inUrl) {
                 return false;
             }
         }
@@ -5427,19 +5447,29 @@ class SessionManager
             return false;
         }
 
-        $tblCategory = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
-        $inUrl = Database::fetch_row(Database::query(
-            "SELECT id FROM $tblCategory
-             WHERE id = $categoryId AND access_url_id = ".(int) api_get_current_access_url_id()
-        ));
-        if (empty($inUrl)) {
+        $connection = Container::getEntityManager()->getConnection();
+        $inUrl = $connection->createQueryBuilder()
+            ->select('id')
+            ->from('session_category')
+            ->where('id = :categoryId')
+            ->andWhere('access_url_id = :accessUrlId')
+            ->setParameter('categoryId', $categoryId)
+            ->setParameter('accessUrlId', (int) api_get_current_access_url_id())
+            ->executeQuery()
+            ->fetchOne();
+        if (false === $inUrl) {
             return false;
         }
 
-        $result = Database::query("SELECT id FROM $tblSession WHERE session_category_id = $categoryId");
-        while ($row = Database::fetch_assoc($result)) {
-            $session = api_get_session_entity((int) $row['id']);
+        $sessionIds = $connection->createQueryBuilder()
+            ->select('id')
+            ->from('session')
+            ->where('session_category_id = :categoryId')
+            ->setParameter('categoryId', $categoryId)
+            ->executeQuery()
+            ->fetchFirstColumn();
+        foreach ($sessionIds as $sessionId) {
+            $session = api_get_session_entity((int) $sessionId);
             if (null === $session || !self::cantEditSession($session)) {
                 return false;
             }
@@ -5777,6 +5807,7 @@ class SessionManager
                     }
                     $sql = 'SELECT id FROM '.$tbl_session.'
                                 WHERE title = "'.Database::escape_string($session_name).$suffix.'"';
+                    // TODO(db-neutral): not pinned by a test beyond the update-existing guard (all queries of this function)
                     $rs = Database::query($sql);
                     if (Database::result($rs, 0, 0)) {
                         $i++;
@@ -6744,6 +6775,7 @@ class SessionManager
                         'session_category_id' => $sessionCategoryId,
                     ], ['id = ?' => $sessionId]);
 
+                    // TODO(db-neutral): not pinned by a test (all queries of this function)
                     Database::query("DELETE FROM $tblSessionUser WHERE session_id = $sessionId");
                     Database::query("DELETE FROM $tblSessionCourse WHERE session_id = $sessionId");
                     Database::query("DELETE FROM $tblSessionCourseUser WHERE session_id = $sessionId");
@@ -7220,6 +7252,7 @@ class SessionManager
                 ";
 
         if ($getCount) {
+            // TODO(db-neutral): UNION and SQL fragments built by the caller; not pinned by a test
             $result = Database::query($sql);
 
             $count = 0;
@@ -8534,7 +8567,6 @@ class SessionManager
         }
 
         // Database Table Definitions
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
         $form->addText(
             'title',
@@ -8558,37 +8590,40 @@ class SessionManager
                 'getFullname'
             );
         } else {
-            $sql = "SELECT COUNT(1) FROM $tbl_user WHERE active <> ".USER_SOFT_DELETED." AND status = 1";
-            $rs = Database::query($sql);
-            $countUsers = (int) Database::result($rs, 0, '0');
+            $connection = Container::getEntityManager()->getConnection();
+            $countUsers = (int) $connection->createQueryBuilder()
+                ->select('COUNT(1)')
+                ->from('user')
+                ->where('active <> :softDeleted')
+                ->andWhere('status = 1')
+                ->setParameter('softDeleted', USER_SOFT_DELETED)
+                ->executeQuery()
+                ->fetchOne();
 
             if ($countUsers < 1) {
-                $orderClause = 'ORDER BY ';
-                $orderClause .= api_sort_by_first_name() ? 'firstname, lastname, username' : 'lastname, firstname, username';
-
-                $sql = "SELECT id as user_id, lastname, firstname, username
-                        FROM $tbl_user
-                        WHERE active <> -1 AND status = '1' ".
-                        $orderClause;
+                $coachesQb = $connection->createQueryBuilder()
+                    ->select('u.id AS user_id', 'u.lastname', 'u.firstname', 'u.username')
+                    ->from('user', 'u')
+                    ->where('u.active <> -1')
+                    ->andWhere('u.status = 1');
 
                 if (api_is_multiple_url_enabled()) {
-                    $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
                     $accessUrlId = api_get_current_access_url_id();
                     if (-1 != $accessUrlId) {
-                        $sql = "SELECT user.id as user_id, username, lastname, firstname
-                        FROM $tbl_user user
-                        INNER JOIN $userRelAccessUrlTable url_user
-                        ON (url_user.user_id = user.id)
-                        WHERE
-                            user.active <> -1 AND
-                            access_url_id = $accessUrlId AND
-                            status = 1 "
-                            .$orderClause;
+                        $coachesQb
+                            ->innerJoin('u', 'access_url_rel_user', 'url_user', 'url_user.user_id = u.id')
+                            ->andWhere('url_user.access_url_id = :accessUrlId')
+                            ->setParameter('accessUrlId', (int) $accessUrlId);
                     }
                 }
 
-                $result = Database::query($sql);
-                $coachesList = Database::store_result($result);
+                if (api_sort_by_first_name()) {
+                    $coachesQb->orderBy('u.firstname')->addOrderBy('u.lastname')->addOrderBy('u.username');
+                } else {
+                    $coachesQb->orderBy('u.lastname')->addOrderBy('u.firstname')->addOrderBy('u.username');
+                }
+
+                $coachesList = $coachesQb->executeQuery()->fetchAllAssociative();
                 $coachesOptions = [];
                 foreach ($coachesList as $coachItem) {
                     $coachesOptions[$coachItem['user_id']] =

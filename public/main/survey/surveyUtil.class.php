@@ -1700,6 +1700,21 @@ class SurveyUtil
             return false;
         }
 
+        $list = self::buildCompleteReportXlsRows($survey, $user_id);
+
+        Export::arrayToXls($list, $filename);
+
+        return null;
+    }
+
+    /**
+     * Builds the rows of the xls export of the complete report: question line, option line, then one line per
+     * user (or per answer run).
+     */
+    private static function buildCompleteReportXlsRows(CSurvey $survey, int $user_id): array
+    {
+        $surveyId = $survey->getIid();
+
         // Show extra fields blank space (enough for extra fields on next line)
         // Show user fields section with a big th colspan that spans over all fields
         $extra_user_fields = UserManager::get_extra_fields(
@@ -1718,31 +1733,31 @@ class SurveyUtil
 
         $display_extra_user_fields = true;
 
-        // Database table definitions
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $em = Container::getEntityManager();
 
         // First line (questions)
-        $sql = "SELECT
-                    questions.iid as question_id,
-                    questions.type,
-                    questions.survey_question,
-                    count(options.iid) as number_of_options
-				FROM $table_survey_question questions
-				LEFT JOIN $table_survey_question_option options
-                ON
-                  questions.iid = options.question_id
-				WHERE
-				    survey_question NOT LIKE '%{{%' AND
-				    questions.type <> 'pagebreak' AND
-				    questions.survey_id = $surveyId
-				GROUP BY questions.iid
-				ORDER BY questions.sort ASC";
-        $result = Database::query($sql);
+        $questionRows = $em->createQueryBuilder()
+            ->select(
+                'questions.iid AS question_id',
+                'questions.type AS type',
+                'questions.surveyQuestion AS survey_question',
+                'COUNT(options.iid) AS number_of_options'
+            )
+            ->from(CSurveyQuestion::class, 'questions')
+            ->leftJoin(CSurveyQuestionOption::class, 'options', 'WITH', 'options.question = questions')
+            ->where('questions.surveyQuestion NOT LIKE :tagMarker')
+            ->andWhere("questions.type <> 'pagebreak'")
+            ->andWhere('questions.survey = :survey')
+            ->groupBy('questions.iid')
+            ->orderBy('questions.sort', 'ASC')
+            ->setParameter('tagMarker', '%{{%')
+            ->setParameter('survey', (int) $surveyId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $line = 1;
         $column = 1;
-        while ($row = Database::fetch_array($result)) {
+        foreach ($questionRows as $row) {
             // We show the questions if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
@@ -1783,29 +1798,33 @@ class SurveyUtil
         }
 
         // Getting all the questions and options (second line)
-        $sql = "SELECT
-                    survey_question.iid question_id,
-                    survey_question.survey_id,
-                    survey_question.survey_question,
-                    survey_question.display,
-                    survey_question.sort,
-                    survey_question.type,
-                    survey_question_option.iid question_option_id,
-                    survey_question_option.option_text,
-                    survey_question_option.sort as option_sort
-				FROM $table_survey_question survey_question
-				LEFT JOIN $table_survey_question_option survey_question_option
-				ON
-				    survey_question.iid = survey_question_option.question_id
-				WHERE
-				    survey_question NOT LIKE '%{{%' AND
-				    survey_question.type <> 'pagebreak' AND
-				    survey_question.survey_id = $surveyId
-				ORDER BY survey_question.sort ASC, survey_question_option.sort ASC";
-        $result = Database::query($sql);
+        $optionRows = $em->createQueryBuilder()
+            ->select(
+                'survey_question.iid AS question_id',
+                'survey_question.type AS type',
+                'survey_question_option.iid AS question_option_id',
+                'survey_question_option.optionText AS option_text'
+            )
+            ->from(CSurveyQuestion::class, 'survey_question')
+            ->leftJoin(
+                CSurveyQuestionOption::class,
+                'survey_question_option',
+                'WITH',
+                'survey_question_option.question = survey_question'
+            )
+            ->where('survey_question.surveyQuestion NOT LIKE :tagMarker')
+            ->andWhere("survey_question.type <> 'pagebreak'")
+            ->andWhere('survey_question.survey = :survey')
+            ->orderBy('survey_question.sort', 'ASC')
+            ->addOrderBy('survey_question_option.sort', 'ASC')
+            ->setParameter('tagMarker', '%{{%')
+            ->setParameter('survey', (int) $surveyId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $possible_answers = [];
         $possible_answers_type = [];
-        while ($row = Database::fetch_array($result)) {
+        foreach ($optionRows as $row) {
             // We show the options if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
@@ -1831,16 +1850,24 @@ class SurveyUtil
         $column = 0;
         $old_user = '';
         $answers_of_user = [];
-        $sql = "SELECT * FROM $table_survey_answer
-                WHERE survey_id = $surveyId";
+        $answerQb = $em->createQueryBuilder()
+            ->select(
+                'IDENTITY(a.question) AS question_id',
+                'a.optionId AS option_id',
+                'a.value AS value',
+                'a.user AS user'
+            )
+            ->from(CSurveyAnswer::class, 'a')
+            ->where('a.survey = :survey')
+            ->orderBy('a.user', 'ASC')
+            ->setParameter('survey', (int) $surveyId)
+        ;
         if (0 != $user_id) {
-            $sql .= " AND user='".$user_id."' ";
+            $answerQb->andWhere('a.user = :user')->setParameter('user', (string) $user_id);
         }
-        $sql .= ' ORDER BY user ASC';
 
         $open_question_iterator = 1;
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        foreach ($answerQb->getQuery()->getArrayResult() as $row) {
             if ($old_user != $row['user'] && '' != $old_user) {
                 $return = self::export_complete_report_row_xls(
                     $survey,
@@ -1883,9 +1910,7 @@ class SurveyUtil
             }
         }
 
-        Export::arrayToXls($list, $filename);
-
-        return null;
+        return $list;
     }
 
     /**

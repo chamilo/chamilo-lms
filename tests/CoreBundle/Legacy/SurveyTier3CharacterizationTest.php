@@ -412,4 +412,98 @@ final class SurveyTier3CharacterizationTest extends KernelTestCase
     {
         $this->assertSame('', SurveyUtil::displayCompleteReport(new CSurvey(), 0, false, false, false));
     }
+
+    private function xlsRows(int $surveyId, int $userId = 0): array
+    {
+        $method = new \ReflectionMethod(SurveyUtil::class, 'buildCompleteReportXlsRows');
+        $method->setAccessible(true);
+
+        return $method->invoke(null, $this->survey($surveyId), $userId);
+    }
+
+    private function skipIfThePlatformHasExtraUserFields(): void
+    {
+        if (count(\UserManager::get_extra_fields(0, 0, 5, 'ASC', false, true)) > 0) {
+            $this->markTestSkipped('The expected xls columns assume a platform without extra user fields.');
+        }
+    }
+
+    // ---------------------------------------------------------------- SurveyUtil::export_complete_report_xls (rows)
+
+    public function testXlsRowsHaveTheQuestionLineTheOptionLineAndOneLinePerUser(): void
+    {
+        $this->skipIfThePlatformHasExtraUserFields();
+        $s = $this->insertSurvey();
+        $multi = $this->insertQuestion($s, 'sv multi q', 'multiplechoice', 2);
+        $b = $this->insertOption($s, $multi, 'opt B', 1);
+        $a = $this->insertOption($s, $multi, 'opt A', 2);
+        $open = $this->insertQuestion($s, 'sv <b>open</b> q', 'open', 1);
+        $this->insertQuestion($s, 'sv choice without options', 'yesno', 3);
+        $this->insertQuestion($s, 'sv break q', 'pagebreak', 4);
+        $this->insertQuestion($s, 'sv {{tag}} q', 'open', 5);
+        $this->insertAnswer($s, $multi, '2', (string) $b, 3);
+        $this->insertAnswer($s, $multi, '1', (string) $a);
+        $this->insertAnswer($s, $open, '1', 'free <i>text</i>');
+
+        $rows = $this->xlsRows($s);
+
+        // Questions by sort, one cell per option (one for an open question), tags stripped, no tag/pagebreak question.
+        $this->assertSame([1 => 'sv open q', 2 => 'sv multi q', 3 => 'sv multi q'], $rows[1]);
+        // A choice question without options still gets one (empty) option cell.
+        $this->assertSame([1 => '', 2 => 'opt B', 3 => 'opt A', 4 => ''], $rows[2]);
+        // One line per user, by user: v for a plain option, the value otherwise, the open text stripped.
+        $this->assertSame(['Joe Doe (admin)', 'free text', '', 'v', ''], $rows[3]);
+        $this->assertSame(['Anonymous Joe (anon)', '', 3, '', ''], $rows[4]);
+        $this->assertCount(4, $rows);
+    }
+
+    public function testXlsRowsOfAnAnonymousSurveyHideTheUser(): void
+    {
+        $this->skipIfThePlatformHasExtraUserFields();
+        $s = $this->insertSurvey(['anonymous' => '1']);
+        $q = $this->insertQuestion($s, 'sv q', 'yesno');
+        $o = $this->insertOption($s, $q, 'yes', 1);
+        $this->insertAnswer($s, $q, '1', (string) $o);
+
+        $this->assertSame(['-', 'v'], $this->xlsRows($s)[3]);
+    }
+
+    public function testXlsRowsCanBeLimitedToOneUser(): void
+    {
+        $this->skipIfThePlatformHasExtraUserFields();
+        $s = $this->insertSurvey();
+        $q = $this->insertQuestion($s, 'sv q', 'yesno');
+        $o = $this->insertOption($s, $q, 'yes', 1);
+        $this->insertAnswer($s, $q, '1', (string) $o);
+        $this->insertAnswer($s, $q, '2', (string) $o, 4);
+
+        $rows = $this->xlsRows($s, 2);
+
+        $this->assertCount(3, $rows);
+        $this->assertSame(['Anonymous Joe (anon)', 4], $rows[3]);
+    }
+
+    public function testXlsRowsQuestionFilterKeepsOnlyTheSelectedQuestions(): void
+    {
+        $this->skipIfThePlatformHasExtraUserFields();
+        $s = $this->insertSurvey();
+        $q1 = $this->insertQuestion($s, 'sv first q', 'yesno', 1);
+        $this->insertOption($s, $q1, 'sv yes', 1);
+        $q2 = $this->insertQuestion($s, 'sv second q', 'yesno', 2);
+        $o2 = $this->insertOption($s, $q2, 'sv no', 1);
+        // (An answer to a filtered-out question would raise an undefined-key warning in the answers loop.)
+        $this->insertAnswer($s, $q2, '1', (string) $o2);
+
+        $_POST['submit_question_filter'] = '1';
+        $_POST['questions_filter'] = [$q2];
+        try {
+            $rows = $this->xlsRows($s);
+        } finally {
+            unset($_POST['submit_question_filter'], $_POST['questions_filter']);
+        }
+
+        $this->assertSame([1 => 'sv second q'], $rows[1]);
+        $this->assertSame([1 => 'sv no'], $rows[2]);
+        $this->assertSame(['Joe Doe (admin)', 'v'], $rows[3]);
+    }
 }

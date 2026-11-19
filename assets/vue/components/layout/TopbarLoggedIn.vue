@@ -66,14 +66,22 @@
       </BaseAppLink>
     </div>
     <div class="app-topbar__end">
-      <Avatar
+      <button
         v-if="!isAnonymous"
-        :image="currentUser?.illustrationUrl"
-        class="user-avatar"
-        shape="circle"
-        unstyled
+        type="button"
+        class="user-avatar inline-flex items-center justify-center p-0"
+        :aria-label="`${t('Menu')}: ${t('My account')}`"
+        aria-haspopup="menu"
+        aria-controls="user-submenu"
         @click="toggleUserMenu"
-      />
+      >
+        <Avatar
+          :image="currentUser?.illustrationUrl"
+          shape="circle"
+          unstyled
+          aria-hidden="true"
+        />
+      </button>
       <BaseAppLink
         v-else
         class="item-button"

@@ -6408,13 +6408,12 @@ class CourseManager
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
 
-        return Database::store_result(
-            Database::query(
-                "SELECT course.*, language.isocode AS course_language, course.id as real_id
-                FROM $table course
-                INNER JOIN $languageTable language ON language.id = course.language_id"
-            )
-        );
+        return Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('course.*', 'language.isocode AS course_language', 'course.id as real_id')
+            ->from($table, 'course')
+            ->innerJoin('course', $languageTable, 'language', 'language.id = course.language_id')
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 
     /**
@@ -6428,9 +6427,14 @@ class CourseManager
     public static function get_course_by_category(int $category_id): ?int
     {
         $category_id = (int) $category_id;
-        $sql = 'SELECT c_id FROM '.Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).'
-                WHERE id='.$category_id;
-        $info = Database::fetch_array(Database::query($sql));
+        $info = Database::fetch_array(
+            Database::getManager()->getConnection()->createQueryBuilder()
+                ->select('c_id')
+                ->from(Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY))
+                ->where('id = :categoryId')
+                ->setParameter('categoryId', $category_id)
+                ->executeQuery()
+        );
 
         return $info ? $info['c_id'] : null;
     }
@@ -6449,20 +6453,33 @@ class CourseManager
         $endDate = null,
         $includeClosed = false
     ) {
-        $dateConditional = ($startDate && $endDate) ?
-            " WHERE session_id IN (SELECT id FROM ".Database::get_main_table(TABLE_MAIN_SESSION).
-            " WHERE access_start_date = '$startDate' AND access_end_date = '$endDate')" : null;
-        $visibility = ($includeClosed ? '' : 'visibility NOT IN (0, 4) AND ');
+        $connection = Database::getManager()->getConnection();
+        $sessionCourses = $connection->createQueryBuilder()
+            ->select('DISTINCT c_id')
+            ->from(Database::get_main_table(TABLE_MAIN_SESSION_COURSE));
+        if ($startDate && $endDate) {
+            $sessionsInPeriod = $connection->createQueryBuilder()
+                ->select('id')
+                ->from(Database::get_main_table(TABLE_MAIN_SESSION))
+                ->where('access_start_date = :startDate')
+                ->andWhere('access_end_date = :endDate');
+            $sessionCourses->where('session_id IN ('.$sessionsInPeriod->getSQL().')');
+        }
 
-        $sql = "SELECT id, code, title
-                FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE $visibility id NOT IN (
-                    SELECT DISTINCT c_id
-                    FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE).$dateConditional."
-                )
-                ORDER BY id";
+        $qb = $connection->createQueryBuilder()
+            ->select('id', 'code', 'title')
+            ->from(Database::get_main_table(TABLE_MAIN_COURSE));
+        if (!$includeClosed) {
+            $qb->where('visibility NOT IN (0, 4)');
+        }
+        $qb->andWhere('id NOT IN ('.$sessionCourses->getSQL().')')
+            ->orderBy('id');
+        if ($startDate && $endDate) {
+            $qb->setParameter('startDate', $startDate)
+                ->setParameter('endDate', $endDate);
+        }
 
-        $result = Database::query($sql);
+        $result = $qb->executeQuery();
         $courses = [];
         while ($row = Database::fetch_array($result)) {
             $courses[] = $row;

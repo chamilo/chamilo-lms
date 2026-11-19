@@ -163,4 +163,26 @@ class SessionManagerTier3CharacterizationTest extends AbstractApiTest
         $this->assertSame([$a, $b], array_keys(SessionManager::get_sessions_list([], ['title'], null, null, 0, [$a, $b])));
         $this->assertSame([$b, $a], array_keys(SessionManager::get_sessions_list([], ['title', 'DESC'], null, null, 0, [$a, $b])));
     }
+
+    public function testUnsubscribingACourseRemovesOnlyItsOwnUserRows(): void
+    {
+        $a = $this->createUser('sm3_uc_a');
+        [$c1, $code1] = $this->newCourse('sm3_uc_course1');
+        [$c2, $code2] = $this->newCourse('sm3_uc_course2');
+        $sid = $this->newSession('sm3_s_uc');
+        SessionManager::add_courses_to_session($sid, [$c1, $c2]);
+        $this->getEntityManager()->clear();
+        SessionManager::subscribe_users_to_session_course([$a->getId()], $sid, $code1);
+        SessionManager::subscribe_users_to_session_course([$a->getId()], $sid, $code2);
+        $this->getEntityManager()->clear();
+
+        $this->assertTrue(SessionManager::unsubscribe_course_from_session($sid, $c1));
+        $this->getEntityManager()->clear();
+
+        $conn = Database::getConnection();
+        $this->assertSame(0, (int) $conn->fetchOne('SELECT COUNT(*) FROM session_rel_course_rel_user WHERE session_id = ? AND c_id = ?', [$sid, $c1]));
+        $this->assertSame(1, (int) $conn->fetchOne('SELECT COUNT(*) FROM session_rel_course_rel_user WHERE session_id = ? AND c_id = ?', [$sid, $c2]));
+        $this->assertSame(1, (int) $conn->fetchOne('SELECT COUNT(*) FROM session_rel_course WHERE session_id = ?', [$sid]));
+        $this->assertSame(1, (int) $conn->fetchOne('SELECT nbr_courses FROM session WHERE id = ?', [$sid]));
+    }
 }

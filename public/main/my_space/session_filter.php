@@ -95,7 +95,11 @@ $form->addButtonExport(get_lang('CSV export'), 'export');
 if ($form->validate()) {
     $values = $form->getSubmitValues();
     $exportToCsv = isset($values['export']);
-    $sessionId = (int) $_REQUEST['session_id'];
+    $sessionId = (int) $values['session_id'];
+    // Only the sessions offered in the selector, which are already scoped to the HRM and the URL.
+    if (0 !== $sessionId && !isset($options[$sessionId])) {
+        api_not_allowed(true);
+    }
     $dateBegin = isset($_REQUEST['date_begin']) ? strtotime($_REQUEST['date_begin']) : null;
     $dateEnd = isset($_REQUEST['date_end']) ? strtotime($_REQUEST['date_end'].' 23:59:59') : null;
 
@@ -225,7 +229,7 @@ if ($form->validate()) {
     }
 
     $params = [
-        'session_id' => (int) $_REQUEST['session_id'],
+        'session_id' => $sessionId,
         'date_begin' => Security::remove_XSS($_REQUEST['date_begin']),
         'date_end' => Security::remove_XSS($_REQUEST['date_end']),
     ];

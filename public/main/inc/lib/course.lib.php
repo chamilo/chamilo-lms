@@ -6897,13 +6897,15 @@ class CourseManager
         $registered_users_with_extra_field = 0;
         if (!empty($name) && '-' != $name) {
             $extraFieldType = EntityExtraField::COURSE_FIELD_TYPE;
-            $name = Database::escape_string($name);
-            $sql = "SELECT count(v.item_id) as count
-                    FROM $tableUserFieldValues v
-                    INNER JOIN $tableExtraFields f
-                    ON (f.id = v.field_id)
-                    WHERE v.field_value = '$name' AND item_type = $extraFieldType";
-            $result_count = Database::query($sql);
+            $result_count = Database::getManager()->getConnection()->createQueryBuilder()
+                ->select('count(v.item_id) as count')
+                ->from($tableUserFieldValues, 'v')
+                ->innerJoin('v', $tableExtraFields, 'f', 'f.id = v.field_id')
+                ->where('v.field_value = :name')
+                ->andWhere('item_type = :itemType')
+                ->setParameter('name', (string) $name)
+                ->setParameter('itemType', (int) $extraFieldType)
+                ->executeQuery();
             if (Database::num_rows($result_count)) {
                 $row_count = Database::fetch_array($result_count);
                 $registered_users_with_extra_field = $row_count['count'];
@@ -6983,10 +6985,12 @@ class CourseManager
         ];
 
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT count(id) count
-                FROM $table
-                WHERE visibility IN (".implode(',', $visibility).")";
-        $result = Database::query($sql);
+        $result = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('count(id) count')
+            ->from($table)
+            ->where('visibility IN (:visibility)')
+            ->setParameter('visibility', $visibility, ArrayParameterType::INTEGER)
+            ->executeQuery();
         $row = Database::fetch_array($result);
 
         return (int) $row['count'];
@@ -7007,12 +7011,14 @@ class CourseManager
         $tableExercise = Database::get_course_table(TABLE_QUIZ_TEST);
         $tableLink = Database::get_main_table('resource_link');
         // Quizzes no longer carry c_id/active: they reach their course through resource_link (soft-deleted links are skipped).
-        $sql = "SELECT count(DISTINCT e.iid) count
-                FROM $table c
-                INNER JOIN $tableLink l ON (l.c_id = c.id AND l.deleted_at IS NULL)
-                INNER JOIN $tableExercise e ON (e.resource_node_id = l.resource_node_id)
-                WHERE c.visibility IN (".implode(',', $visibility).")";
-        $result = Database::query($sql);
+        $result = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('count(DISTINCT e.iid) count')
+            ->from($table, 'c')
+            ->innerJoin('c', $tableLink, 'l', 'l.c_id = c.id AND l.deleted_at IS NULL')
+            ->innerJoin('l', $tableExercise, 'e', 'e.resource_node_id = l.resource_node_id')
+            ->where('c.visibility IN (:visibility)')
+            ->setParameter('visibility', $visibility, ArrayParameterType::INTEGER)
+            ->executeQuery();
         $row = Database::fetch_array($result);
 
         return (int) $row['count'];

@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use CourseManager;
@@ -273,5 +274,31 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
         $params = CourseManager::getCourseParamsForDisplay($course->getId());
         $this->assertSame('', $params['link'], 'a student cannot open a closed course');
         $this->assertStringContainsString('item_closed', $params['title']);
+    }
+
+    public function testGetCountExercisesFromOpenCourseCountsAQuizOnceAndSkipsSoftDeletedLinks(): void
+    {
+        $before = CourseManager::getCountExercisesFromOpenCourse();
+
+        $teacher = $this->createUser('cm3d_quiz_teacher');
+        $open = $this->createCourse('cm3d_quiz_open');
+        $open->setVisibility(Course::OPEN_WORLD);
+        $session = $this->createSession('cm3d_quiz_session');
+
+        $em = $this->getEntityManager();
+        // Two live links to the same course (base course and session): the quiz is counted once.
+        $twice = (new CQuiz())->setTitle('cm3d_quiz_twice')->setParent($open)->setCreator($teacher)
+            ->addCourseLink($open)->addCourseLink($open, $session);
+        $gone = (new CQuiz())->setTitle('cm3d_quiz_gone')->setParent($open)->setCreator($teacher)->addCourseLink($open);
+        $em->persist($twice);
+        $em->persist($gone);
+        $em->flush();
+        $this->assertSame($before + 2, CourseManager::getCountExercisesFromOpenCourse());
+
+        $this->conn()->executeStatement(
+            'UPDATE resource_link SET deleted_at = NOW() WHERE resource_node_id = ?',
+            [$gone->getResourceNode()->getId()]
+        );
+        $this->assertSame($before + 1, CourseManager::getCountExercisesFromOpenCourse(), 'soft-deleted links are skipped');
     }
 }

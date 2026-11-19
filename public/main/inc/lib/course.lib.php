@@ -27,6 +27,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * Class CourseManager.
@@ -5512,69 +5513,89 @@ class CourseManager
         $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $alreadyAddedTeachers = self::get_teacher_list_from_course_code($course_code);
 
+        $connection = Database::getManager()->getConnection();
+        $courseId = (int) $courseId;
+
         if ($deleteTeachersNotInList) {
             // Delete only teacher relations that doesn't match the selected teachers
-            $cond = null;
-            if (count($teachers) > 0) {
-                foreach ($teachers as $key) {
-                    $key = Database::escape_string($key);
-                    $cond .= " AND user_id <> '".$key."'";
+            $restrictToTeachersNotInList = static function (QueryBuilder $query) use ($courseId, $teachers): QueryBuilder {
+                $query->where('c_id = :courseId')
+                    ->andWhere('status = 1')
+                    ->andWhere('relation_type = 0')
+                    ->setParameter('courseId', $courseId);
+                if (count($teachers) > 0) {
+                    $query->andWhere('user_id NOT IN (:keptUserIds)')
+                        ->setParameter('keptUserIds', array_map('intval', array_values($teachers)), ArrayParameterType::INTEGER);
                 }
-            }
+
+                return $query;
+            };
 
             // Recover user categories
-            $sql = "SELECT * FROM $course_user_table
-                    WHERE c_id = $courseId AND status = 1 AND relation_type = 0 ".$cond;
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
-                $teachersToDelete = Database::store_result($result, 'ASSOC');
-                foreach ($teachersToDelete as $data) {
-                    $userId = $data['user_id'];
-                    $teacherBackup[$userId][$course_code] = $data;
-                }
+            $teachersToDelete = $restrictToTeachersNotInList(
+                $connection->createQueryBuilder()->select('*')->from($course_user_table)
+            )->executeQuery()->fetchAllAssociative();
+            foreach ($teachersToDelete as $data) {
+                $userId = $data['user_id'];
+                $teacherBackup[$userId][$course_code] = $data;
             }
 
-            $sql = "DELETE FROM $course_user_table
-                    WHERE c_id = $courseId AND status = 1 AND relation_type = 0 ".$cond;
-
-            Database::query($sql);
+            $restrictToTeachersNotInList(
+                $connection->createQueryBuilder()->delete($course_user_table)
+            )->executeStatement();
         }
 
         if (count($teachers) > 0) {
             foreach ($teachers as $userId) {
                 $userId = intval($userId);
                 // We check if the teacher is already subscribed in this course
-                $sql = "SELECT 1 FROM $course_user_table
-                        WHERE user_id = $userId AND c_id = $courseId";
-                $result = Database::query($sql);
-                if (Database::num_rows($result)) {
-                    $sql = "UPDATE $course_user_table
-                            SET status = 1
-                            WHERE c_id = $courseId AND user_id = $userId ";
+                $alreadySubscribed = $connection->createQueryBuilder()
+                    ->select('1')
+                    ->from($course_user_table)
+                    ->where('user_id = :userId')
+                    ->andWhere('c_id = :courseId')
+                    ->setParameter('userId', $userId)
+                    ->setParameter('courseId', $courseId)
+                    ->executeQuery()
+                    ->fetchOne();
+                if (false !== $alreadySubscribed) {
+                    $connection->createQueryBuilder()
+                        ->update($course_user_table)
+                        ->set('status', '1')
+                        ->where('c_id = :courseId')
+                        ->andWhere('user_id = :userId')
+                        ->setParameter('courseId', $courseId)
+                        ->setParameter('userId', $userId)
+                        ->executeStatement();
                 } else {
-                    $userCourseCategory = '0';
+                    $userCourseCategory = 0;
                     if (isset($teacherBackup[$userId]) &&
                         isset($teacherBackup[$userId][$course_code])
                     ) {
                         $courseUserData = $teacherBackup[$userId][$course_code];
-                        $userCourseCategory = $courseUserData['user_course_cat'];
+                        $userCourseCategory = (int) $courseUserData['user_course_cat'];
                         if ($logger) {
                             $logger->debug("Recovering user_course_cat: $userCourseCategory");
                         }
                     }
 
-                    $sql = "INSERT INTO $course_user_table SET
-                            c_id = $courseId,
-                            user_id = $userId,
-                            status = 1,
-                            is_tutor = 0,
-                            sort = 0,
-                            relation_type = 0,
-                            user_course_cat = $userCourseCategory,
-                            progress = 0
-                    ";
+                    $connection->createQueryBuilder()
+                        ->insert($course_user_table)
+                        ->values([
+                            'c_id' => ':courseId',
+                            'user_id' => ':userId',
+                            'status' => '1',
+                            'is_tutor' => '0',
+                            'sort' => '0',
+                            'relation_type' => '0',
+                            'user_course_cat' => ':userCourseCategory',
+                            'progress' => '0',
+                        ])
+                        ->setParameter('courseId', $courseId)
+                        ->setParameter('userId', $userId)
+                        ->setParameter('userCourseCategory', $userCourseCategory)
+                        ->executeStatement();
                 }
-                Database::query($sql);
             }
         }
 

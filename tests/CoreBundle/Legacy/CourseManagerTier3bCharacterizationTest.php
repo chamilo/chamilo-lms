@@ -453,4 +453,72 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         restore_error_handler();
         $this->assertSame(STUDENT, (int) $forStranger[0]['status'], 'not subscribed: shown as a student');
     }
+
+    // ---------------------------------------------------------------- updateTeachers
+
+    private function teacherRow(Course $course, User $user): array|false
+    {
+        return $this->conn()->fetchAssociative(
+            'SELECT status, is_tutor, sort, relation_type, user_course_cat, progress FROM course_rel_user WHERE c_id = ? AND user_id = ?',
+            [$course->getId(), $user->getId()]
+        );
+    }
+
+    public function testUpdateTeachersReplacesOnlyTheTeacherRelationsOfThatCourse(): void
+    {
+        $course = $this->createCourse('cm3b_upt_a');
+        $other = $this->createCourse('cm3b_upt_b');
+        $keep = $this->createUser('cm3b_upt_keep');
+        $drop = $this->createUser('cm3b_upt_drop');
+        $hrm = $this->createUser('cm3b_upt_hrm');
+        $student = $this->createUser('cm3b_upt_student');
+        $fresh = $this->createUser('cm3b_upt_fresh');
+        $bystander = $this->createUser('cm3b_upt_bystander');
+        $this->sub($keep, $course, COURSEMANAGER);
+        $this->sub($drop, $course, COURSEMANAGER);
+        $this->sub($hrm, $course, COURSEMANAGER, COURSE_RELATION_TYPE_RRHH);
+        $this->sub($student, $course, STUDENT);
+        $this->sub($drop, $other, COURSEMANAGER);
+        $this->sub($bystander, $course, STUDENT);
+
+        CourseManager::updateTeachers(
+            ['real_id' => $course->getId(), 'code' => $course->getCode()],
+            [$keep->getId(), $student->getId(), $fresh->getId()],
+            true,
+            false,
+            false,
+            [$fresh->getId() => [$course->getCode() => ['user_course_cat' => 7]]]
+        );
+
+        $this->assertFalse($this->teacherRow($course, $drop), 'a teacher not in the list is removed');
+        $this->assertNotFalse($this->teacherRow($course, $hrm), 'an HR-manager relation is not a teacher relation');
+        $this->assertNotFalse($this->teacherRow($other, $drop), 'other courses are untouched');
+        $this->assertSame(STUDENT, (int) $this->teacherRow($course, $bystander)['status'], 'a learner who is not listed stays a learner');
+        $this->assertSame(COURSEMANAGER, (int) $this->teacherRow($course, $keep)['status']);
+        $this->assertSame(COURSEMANAGER, (int) $this->teacherRow($course, $student)['status'], 'a listed learner becomes a teacher');
+
+        $new = $this->teacherRow($course, $fresh);
+        $this->assertSame(
+            ['status' => 1, 'is_tutor' => 0, 'sort' => 0, 'relation_type' => 0, 'user_course_cat' => 7, 'progress' => 0],
+            array_map('intval', $new),
+            'a new teacher row; its category is recovered from the backup'
+        );
+    }
+
+    public function testUpdateTeachersCanKeepTheTeachersNotInTheListAndWithoutBackupUsesCategoryZero(): void
+    {
+        $course = $this->createCourse('cm3b_upk_a');
+        $old = $this->createUser('cm3b_upk_old');
+        $fresh = $this->createUser('cm3b_upk_fresh');
+        $this->sub($old, $course, COURSEMANAGER);
+
+        CourseManager::updateTeachers(['real_id' => $course->getId(), 'code' => $course->getCode()], [$fresh->getId()], false);
+
+        $this->assertNotFalse($this->teacherRow($course, $old), 'nobody is deleted when asked not to');
+        $this->assertSame(0, (int) $this->teacherRow($course, $fresh)['user_course_cat']);
+
+        CourseManager::updateTeachers(['real_id' => $course->getId(), 'code' => $course->getCode()], [], true);
+        $this->assertSame(0, $this->rows('course_rel_user', 'c_id = ? AND status = 1 AND relation_type = 0', [$course->getId()]), 'an empty list removes every teacher');
+        $this->assertFalse(CourseManager::updateTeachers([], [1]));
+    }
 }

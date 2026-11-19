@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
+use Chamilo\CoreBundle\Helpers\FinalExamAccessHelper;
 use Chamilo\CoreBundle\Helpers\SessionVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
@@ -92,6 +93,7 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         private SessionVisibilityHelper $sessionVisibilityHelper,
         private ExerciseNotificationManager $exerciseNotificationManager,
         private TrackEExerciseRepository $trackEExerciseRepository,
+        private FinalExamAccessHelper $finalExamAccessHelper,
     ) {}
 
     /**
@@ -132,6 +134,19 @@ final readonly class ExerciseRuntimeAttemptProcessor implements ProcessorInterfa
         $user = $this->security->getUser();
         if (!$user instanceof User) {
             throw new AccessDeniedHttpException('A valid authenticated user is required.');
+        }
+
+        // Checked here too so that the API cannot start a test the overview keeps closed
+        if (!$this->finalExamAccessHelper->evaluate($quiz, $user, $course, $session)['allowed']) {
+            return $this->createBlockedResponse(
+                $operation,
+                $quiz,
+                $course,
+                $session,
+                $request,
+                'You do not meet the conditions to start this test yet.',
+                []
+            );
         }
 
         $questionIds = $this->buildQuestionList($quiz);

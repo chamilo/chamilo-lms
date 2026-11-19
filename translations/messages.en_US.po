@@ -43798,3 +43798,69 @@ msgstr "Display, on every page of a course including the learning paths, a clock
 
 msgid "When enabled, teachers can choose in the course settings whether their course shows learners the time spent in the course, instead of following the platform setting."
 msgstr "When enabled, teachers can choose in the course settings whether their course shows learners the time spent in the course, instead of following the platform setting."
+
+msgid "Access conditions before a test"
+msgstr "Access conditions before a test"
+
+msgid "Lets teachers keep a test, such as a final exam, closed until the learner has spent a minimum time in the course and has filled in a required profile field."
+msgstr "Lets teachers keep a test, such as a final exam, closed until the learner has spent a minimum time in the course and has filled in a required profile field."
+
+msgid "You do not meet the conditions to start this test yet."
+msgstr "You do not meet the conditions to start this test yet."
+
+msgid "Access conditions"
+msgstr "Access conditions"
+
+msgid "The learner can only start the test once these conditions are met. Teachers are not concerned."
+msgstr "The learner can only start the test once these conditions are met. Teachers are not concerned."
+
+msgid "Time spent in the course, as the course reports count it. 0 sets no minimum."
+msgstr "Time spent in the course, as the course reports count it. 0 sets no minimum."
+
+msgid "Minimum time in the course before starting the test (in minutes)"
+msgstr "Minimum time in the course before starting the test (in minutes)"
+
+msgid "Profile field required before starting the test"
+msgstr "Profile field required before starting the test"
+
+msgid "The learner can choose not to fill in this field"
+msgstr "The learner can choose not to fill in this field"
+
+msgid "Question asked to the learner, answered with Yes or No. No starts the test without the field."
+msgstr "Question asked to the learner, answered with Yes or No. No starts the test without the field."
+
+msgid "Question asked before filling in the field"
+msgstr "Question asked before filling in the field"
+
+msgid "You must spend {0} more in this course before starting this test."
+msgstr "You must spend {0} more in this course before starting this test."
+
+msgid "Time spent in the course: {0} of {1}"
+msgstr "Time spent in the course: {0} of {1}"
+
+msgid "Your {0} is required to start this test."
+msgstr "Your {0} is required to start this test."
+
+msgid "Digits only"
+msgstr "Digits only"
+
+msgid "Please enter at least 3 digits."
+msgstr "Please enter at least 3 digits."
+
+msgid "The value could not be saved."
+msgstr "The value could not be saved."
+
+msgid "{0} h {1} min"
+msgstr "{0} h {1} min"
+
+msgid "Access conditions in JSON"
+msgstr "Access conditions in JSON"
+
+msgid "The saved JSON is invalid. Edit it, or save the fields above to replace it."
+msgstr "The saved JSON is invalid. Edit it, or save the fields above to replace it."
+
+msgid "Edit the JSON"
+msgstr "Edit the JSON"
+
+msgid "The JSON of the access conditions must be a JSON object."
+msgstr "The JSON of the access conditions must be a JSON object."

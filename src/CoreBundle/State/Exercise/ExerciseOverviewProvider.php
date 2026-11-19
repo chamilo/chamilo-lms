@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseScoreVisibilityHelper;
+use Chamilo\CoreBundle\Helpers\FinalExamAccessHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\SessionVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
@@ -72,6 +73,7 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         private SessionVisibilityHelper $sessionVisibilityHelper,
         private CQuizRepository $quizRepository,
         private ReportIpVisibility $reportIpVisibility,
+        private FinalExamAccessHelper $finalExamAccessHelper,
     ) {}
 
     /**
@@ -133,7 +135,10 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         $sessionReadOnly = !$canManage
             && null !== $session
             && Session::READ_ONLY === $this->sessionVisibilityHelper->getSessionVisibility($session, $user);
-        $canStart = $canOpen && !$sessionReadOnly && !$attemptLimitReached && (!$newAttemptsDisabled || $hasIncompleteAttempt || $canManage);
+        $finalExamAccess = $canManage ? null : $this->finalExamAccessHelper->evaluate($quiz, $user, $course, $session);
+        $finalExamAccessAllowed = null === $finalExamAccess || $finalExamAccess['allowed'];
+        $canStart = $canOpen && !$sessionReadOnly && !$attemptLimitReached && (!$newAttemptsDisabled || $hasIncompleteAttempt || $canManage)
+            && $finalExamAccessAllowed;
 
         $overview = new ExerciseOverview();
         $overview->exerciseId = (int) $quiz->getIid();
@@ -173,6 +178,18 @@ final readonly class ExerciseOverviewProvider implements ProviderInterface
         $overview->notice = $sessionReadOnly
             ? 'The session is read only'
             : $this->getOverviewNotice($currentUserAttemptCount, $newAttemptsDisabled, $hasIncompleteAttempt, $canManage);
+        if (null !== $finalExamAccess && !$finalExamAccessAllowed) {
+            $overview->accessConditions = [
+                'timeRequirementMet' => $finalExamAccess['time_requirement_met'],
+                'requiredMinutes' => $finalExamAccess['required_minutes'],
+                'spentMinutes' => $finalExamAccess['spent_minutes'],
+                'remainingMinutes' => $finalExamAccess['remaining_minutes'],
+                'userIdentifierPresent' => $finalExamAccess['user_identifier_present'],
+                'userIdentifierLabel' => $finalExamAccess['user_identifier_label'],
+                'allowUserIdentifierOptOut' => $finalExamAccess['allow_user_identifier_opt_out'],
+                'userIdentifierOptOutPrompt' => $finalExamAccess['user_identifier_opt_out_prompt'],
+            ];
+        }
 
         return $overview;
     }

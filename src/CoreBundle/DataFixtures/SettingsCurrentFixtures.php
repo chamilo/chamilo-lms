@@ -2784,6 +2784,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Make sure users are all set to start the test by providing a simulation of the question-saving process before entering the test. This allows for early detection of some connection issues and reduces user experience frictions.',
                 ],
                 [
+                    'name' => 'allow_final_exam_access_rule',
+                    'title' => 'Access conditions before a test',
+                    'comment' => 'Lets teachers keep a test, such as a final exam, closed until the learner has spent a minimum time in the course and has filled in a required profile field.',
+                ],
+                [
                     'name' => 'quiz_confirm_saved_answers',
                     'title' => 'Add checkbox for answers count confirmation',
                     'comment' => 'This option adds a checkbox at the end of each test asking the user to confirm the number of answers saved. This provides better auditing data for critical tests.',

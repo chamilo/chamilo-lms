@@ -6,6 +6,9 @@ use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Entity\UsergroupRelCourse;
+use Chamilo\CoreBundle\Entity\UsergroupRelSession;
+use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
@@ -1290,18 +1293,22 @@ class UserGroupModel extends Model
             return false;
         }
 
-        $sql = "SELECT 1
-                FROM {$this->usergroup_rel_user_table} uru
-                INNER JOIN {$this->usergroup_rel_course_table} ugc
-                    ON ugc.usergroup_id = uru.usergroup_id
-                WHERE uru.user_id = ".(int) $userId."
-                    AND ugc.course_id = ".(int) $courseId."
-                    AND uru.usergroup_id <> ".(int) $excludedUsergroupId."
-                LIMIT 1";
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('uru.id')
+            ->from(UsergroupRelUser::class, 'uru')
+            ->innerJoin(UsergroupRelCourse::class, 'ugc', 'WITH', 'ugc.usergroup = uru.usergroup')
+            ->where('IDENTITY(uru.user) = :userId')
+            ->andWhere('IDENTITY(ugc.course) = :courseId')
+            ->andWhere('IDENTITY(uru.usergroup) <> :excludedUsergroupId')
+            ->setParameter('userId', $userId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('excludedUsergroupId', $excludedUsergroupId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        $result = Database::query($sql);
-
-        return Database::num_rows($result) > 0;
+        return [] !== $rows;
     }
 
     /**
@@ -1907,17 +1914,16 @@ class UserGroupModel extends Model
             $this->unsubscribeToUrl($id, api_get_current_access_url_id());
         }
 
-        $sql = "DELETE FROM $this->usergroup_rel_user_table
-                WHERE usergroup_id = $id";
-        Database::query($sql);
-
-        $sql = "DELETE FROM $this->usergroup_rel_course_table
-                WHERE usergroup_id = $id";
-        Database::query($sql);
-
-        $sql = "DELETE FROM $this->usergroup_rel_session_table
-                WHERE usergroup_id = $id";
-        Database::query($sql);
+        $em = Container::getEntityManager();
+        foreach ([UsergroupRelUser::class, UsergroupRelCourse::class, UsergroupRelSession::class] as $relationClass) {
+            $em->createQueryBuilder()
+                ->delete($relationClass, 'r')
+                ->where('IDENTITY(r.usergroup) = :id')
+                ->setParameter('id', $id)
+                ->getQuery()
+                ->execute()
+            ;
+        }
 
         $repo = Container::getUsergroupRepository();
         $userGroup = $repo->find($id);
@@ -2330,13 +2336,27 @@ class UserGroupModel extends Model
         if (empty($user_id) || empty($group_id)) {
             return false;
         }
-        $result = Database::query(
-            "SELECT 1 FROM $this->usergroup_rel_user_table
-             WHERE usergroup_id = $group_id AND user_id = $user_id
-             LIMIT 1"
-        );
+        return $this->usergroupRelUserExists($group_id, $user_id);
+    }
 
-        return Database::num_rows($result) > 0;
+    /**
+     * Whether a usergroup_rel_user row exists for this group and user, whatever its role.
+     */
+    private function usergroupRelUserExists(int $groupId, int $userId): bool
+    {
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('uru.id')
+            ->from(UsergroupRelUser::class, 'uru')
+            ->where('IDENTITY(uru.usergroup) = :groupId')
+            ->andWhere('IDENTITY(uru.user) = :userId')
+            ->setParameter('groupId', $groupId)
+            ->setParameter('userId', $userId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return [] !== $rows;
     }
 
     /**
@@ -2393,13 +2413,8 @@ class UserGroupModel extends Model
             if (empty($user_id) || empty($group_id)) {
                 return false;
             }
-            $result = Database::query(
-                "SELECT 1 FROM $this->usergroup_rel_user_table
-                 WHERE usergroup_id = $group_id AND user_id = $user_id
-                 LIMIT 1"
-            );
 
-            return Database::num_rows($result) > 0;
+            return $this->usergroupRelUserExists($group_id, $user_id);
         }
 
         return true;
@@ -2423,15 +2438,21 @@ class UserGroupModel extends Model
         $group_id = (int) $group_id;
 
         if (!empty($user_id) && !empty($group_id)) {
-            $sql = "SELECT relation_type
-                    FROM $table_group_rel_user
-                    WHERE
-                        usergroup_id = $group_id AND
-                        user_id = $user_id";
-            $result = Database::query($sql);
-            if (Database::num_rows($result) > 0) {
-                $row = Database::fetch_assoc($result);
-                $relationType = (int) $row['relation_type'];
+            // The first row found (ordered by id, as the table scan was) decides the role.
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select('uru.relationType AS relation_type')
+                ->from(UsergroupRelUser::class, 'uru')
+                ->where('IDENTITY(uru.usergroup) = :groupId')
+                ->andWhere('IDENTITY(uru.user) = :userId')
+                ->orderBy('uru.id', 'ASC')
+                ->setParameter('groupId', $group_id)
+                ->setParameter('userId', $user_id)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getArrayResult()
+            ;
+            if ([] !== $rows) {
+                $relationType = (int) $rows[0]['relation_type'];
 
                 // Normalize legacy reader (2) to the canonical reader role
                 if (2 === $relationType) {
@@ -2501,12 +2522,7 @@ class UserGroupModel extends Model
                     $group_id = (int) $group_id;
 
                     // A reader has role 0 like "no relation": look for the row itself.
-                    $exists = Database::query(
-                        "SELECT 1 FROM $table_url_rel_group
-                         WHERE usergroup_id = $group_id AND user_id = $user_id
-                         LIMIT 1"
-                    );
-                    if (0 == Database::num_rows($exists)) {
+                    if (!$this->usergroupRelUserExists($group_id, $user_id)) {
                         $sql = "INSERT INTO $table_url_rel_group
 		               			SET
 		               			    user_id = $user_id ,
@@ -2551,15 +2567,17 @@ class UserGroupModel extends Model
             return false;
         }
 
-        $table = $this->usergroup_rel_user_table;
-        $sql = "DELETE FROM $table
-                WHERE
-                    user_id = $userId AND
-                    usergroup_id = $groupId";
+        Container::getEntityManager()->createQueryBuilder()
+            ->delete(UsergroupRelUser::class, 'uru')
+            ->where('IDENTITY(uru.user) = :userId')
+            ->andWhere('IDENTITY(uru.usergroup) = :groupId')
+            ->setParameter('userId', $userId)
+            ->setParameter('groupId', $groupId)
+            ->getQuery()
+            ->execute()
+        ;
 
-        $result = Database::query($sql);
-
-        return $result;
+        return true;
     }
 
     /**
@@ -2644,10 +2662,17 @@ class UserGroupModel extends Model
         $user_id = (int) $user_id;
         $relation_type = (int) $relation_type;
 
-        $sql = "UPDATE $table_group_rel_user
-   				SET relation_type = $relation_type
-                WHERE user_id = $user_id AND usergroup_id = $group_id";
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(UsergroupRelUser::class, 'uru')
+            ->set('uru.relationType', ':relationType')
+            ->where('IDENTITY(uru.user) = :userId')
+            ->andWhere('IDENTITY(uru.usergroup) = :groupId')
+            ->setParameter('relationType', $relation_type)
+            ->setParameter('userId', $user_id)
+            ->setParameter('groupId', $group_id)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**

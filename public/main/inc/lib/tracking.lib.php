@@ -6807,6 +6807,7 @@ class Tracking
                 $where .= sprintf(" AND (te.start_date BETWEEN '%s 00:00:00' AND '%s 23:59:59')", $date_from, $date_to);
             }
 
+            // TODO(db-neutral): CONCAT and the free-form $options['where'|'order'|'limit'] fragments passed by callers
             $sql = "SELECT
                 te.session_id,
                 ta.id as attempt_id,
@@ -8473,13 +8474,15 @@ class Tracking
     {
         $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-        $sql = 'SELECT DISTINCT id
-            FROM '.$tblSessionUser.'
-            WHERE relation_type = '.SessionEntity::STUDENT.' AND user_id = '.$userId;
-
-        $rs = Database::query($sql);
-
-        return Database::num_rows($rs);
+        return (int) self::dbalQueryBuilder()
+            ->select('COUNT(DISTINCT id)')
+            ->from($tblSessionUser)
+            ->where('relation_type = :student')
+            ->andWhere('user_id = :userId')
+            ->setParameter('student', SessionEntity::STUDENT)
+            ->setParameter('userId', $userId)
+            ->executeQuery()
+            ->fetchOne();
     }
 
     private static function cleanUserIdList(array $userIdList): array

@@ -4237,16 +4237,17 @@ class Tracking
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
 
-        $sql = "SELECT DISTINCT code, c_id
-                FROM $tbl_session_course sc
-                INNER JOIN $courseTable c
-                ON sc.c_id = c.id
-                WHERE session_id= $sessionId";
-
-        $result = Database::query($sql);
+        $rows = self::dbalQueryBuilder()
+            ->select('DISTINCT code', 'c_id')
+            ->from($tbl_session_course, 'sc')
+            ->innerJoin('sc', $courseTable, 'c', 'sc.c_id = c.id')
+            ->where('session_id = :sessionId')
+            ->setParameter('sessionId', $sessionId)
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $courses = [];
-        while ($row = Database::fetch_array($result)) {
+        foreach ($rows as $row) {
             $courses[$row['code']] = $row;
         }
 
@@ -4392,21 +4393,24 @@ class Tracking
         $tbl_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
         $now = api_get_utc_datetime();
 
-        $sql = "SELECT count(*) FROM $tbl_stats_access
-                WHERE
-                    DATE_SUB('$now',INTERVAL $last_days DAY) <= access_date AND
-                    c_id = '$courseId' AND
-                    access_tool='".TOOL_CHAT."' AND
-                    session_id = '$session_id' ";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_row($result);
-            $count = $row[0];
+        // DATE_SUB($now, INTERVAL $last_days DAY) computed on the UTC date, bound as a parameter.
+        $since = (new DateTimeImmutable($now, new DateTimeZone('UTC')))
+            ->modify('-'.$last_days.' days')
+            ->format('Y-m-d H:i:s');
 
-            return $count;
-        }
-
-        return 0;
+        return self::dbalQueryBuilder()
+            ->select('COUNT(*)')
+            ->from($tbl_stats_access)
+            ->where('access_date >= :since')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('access_tool = :chatTool')
+            ->andWhere('session_id = :sessionId')
+            ->setParameter('since', $since)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('chatTool', TOOL_CHAT)
+            ->setParameter('sessionId', $session_id)
+            ->executeQuery()
+            ->fetchOne();
     }
 
     /**
@@ -4430,19 +4434,24 @@ class Tracking
 
         // table definition
         $tbl_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        $sql = "SELECT access_date
-                FROM $tbl_stats_access
-                WHERE
-                     access_tool='".TOOL_CHAT."' AND
-                     access_user_id='$student_id' AND
-                     c_id = $courseId AND
-                     session_id = '$session_id'
-                ORDER BY access_date DESC limit 1";
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            $row = Database::fetch_array($rs);
+        $accessDate = self::dbalQueryBuilder()
+            ->select('access_date')
+            ->from($tbl_stats_access)
+            ->where('access_tool = :chatTool')
+            ->andWhere('access_user_id = :studentId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->setParameter('chatTool', TOOL_CHAT)
+            ->setParameter('studentId', $student_id)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $session_id)
+            ->orderBy('access_date', 'DESC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if (false !== $accessDate) {
             // access_date is stored in UTC, the default source timezone.
-            $date_time = api_convert_and_format_date($row['access_date']);
+            $date_time = api_convert_and_format_date($accessDate);
         }
 
         return $date_time;
@@ -4466,16 +4475,17 @@ class Tracking
         // table definition
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
 
-        $sql = 'SELECT 1
-                FROM '.$table.'
-                WHERE
-                    links_user_id= '.$student_id.' AND
-                    c_id = "'.$courseId.'" AND
-                    session_id = '.$session_id.' ';
-
-        $rs = Database::query($sql);
-
-        return Database::num_rows($rs);
+        return (int) self::dbalQueryBuilder()
+            ->select('COUNT(*)')
+            ->from($table)
+            ->where('links_user_id = :studentId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->setParameter('studentId', $student_id)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $session_id)
+            ->executeQuery()
+            ->fetchOne();
     }
 
     public static function countStudentDownloadedDocuments(int $studentId, int $courseId, int $sessionId = 0): int

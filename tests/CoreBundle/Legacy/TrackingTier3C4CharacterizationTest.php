@@ -78,6 +78,27 @@ final class TrackingTier3C4CharacterizationTest extends AbstractApiTest
         );
     }
 
+    public function testChatConnectionsOfTheLastDaysUseAWindowEndingNow(): void
+    {
+        $cid = (int) $this->course->getId();
+        $alice = (int) $this->alice->getId();
+        $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
+        // One chat access a minute inside the 7 days window, one a minute outside, one now.
+        foreach (['-7 days +1 minute', '-7 days -1 minute', '-1 hour'] as $offset) {
+            $this->conn->insert('track_e_access', [
+                'access_user_id' => $alice,
+                'access_date' => $now->modify($offset)->format('Y-m-d H:i:s'),
+                'c_id' => $cid,
+                'access_tool' => 'chat',
+                'session_id' => 0,
+                'user_ip' => '127.0.0.1',
+            ]);
+        }
+
+        $this->assertEquals(2, Tracking::chat_connections_during_last_x_days_by_course($this->course->getCode(), 7));
+        $this->assertEquals(1, Tracking::chat_connections_during_last_x_days_by_course($this->course->getCode(), 1));
+    }
+
     private function insertQuiz(string $title): int
     {
         $this->conn->insert('c_quiz', [

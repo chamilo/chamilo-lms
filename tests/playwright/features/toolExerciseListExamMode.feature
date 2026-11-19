@@ -110,6 +110,7 @@ Feature: Score of the latest attempt in the exercise list
     When I fill in "question" with "Question of <test>"
     And I fill in the answer 1 text with "Answer true"
     And I fill in the answer 2 text with "Answer false"
+    And I mark answer 1 as correct
     And I fill in "exercise-answer-score-0" with "10"
     And I press "Save the question"
     And I wait for the page content to settle
@@ -154,7 +155,9 @@ Feature: Score of the latest attempt in the exercise list
     And I check the "Answer true" radio button
     And I press "Finish test"
     And I wait for the page content to settle
-    Then I should not see an error
+    # The attempt is only completed once the result page is shown: the next scenario reads it from the list.
+    Then I should see "Exercise completed"
+    And I should not see an error
 
     Examples:
       | test             |

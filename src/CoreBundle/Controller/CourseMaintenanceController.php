@@ -1028,9 +1028,14 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             $fileName = basename($imsccPath);
             $downloadUrl = $this->generateUrl(
                 'cm_cc13_export_download',
-                ['node' => $node],
+                [
+                    'node' => $node,
+                    'file' => $fileName,
+                    'cid' => api_get_course_int_id(),
+                    'sid' => api_get_session_id(),
+                ],
                 UrlGeneratorInterface::ABSOLUTE_URL
-            ).'?file='.rawurlencode($fileName);
+            );
 
             return $this->json([
                 'ok' => true,
@@ -1055,6 +1060,12 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
         // Example pattern: ABC123_cc13_20251017_195455.imscc
         if ('' === $file || !preg_match('/^[A-Za-z0-9_-]+_cc13_\d{8}_\d{6}\.imscc$/', $file)) {
             return $this->jsonError('Invalid file', 400);
+        }
+
+        // Exports of every course share the temp directory: only serve the current course's ones.
+        $courseCode = (string) api_get_course_id();
+        if ('' === $courseCode || !preg_match('/^'.preg_quote($courseCode, '/').'_cc13_\d{8}_\d{6}\.imscc$/', $file)) {
+            return $this->jsonError('File not found', 404);
         }
 
         $abs = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$file;

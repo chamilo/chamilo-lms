@@ -1,6 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\CourseCategory as CourseCategoryEntity;
+use Chamilo\CoreBundle\Entity\CourseRequest;
+use Chamilo\CoreBundle\Entity\User;
+use Doctrine\ORM\AbstractQuery;
+
 /**
  * Course request manager.
  *
@@ -27,16 +32,16 @@ class CourseRequestManager
         if ($code_exists = CourseManager::course_code_exists($wanted_course_code)) {
             return $code_exists;
         }
-        $table_course_request = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
-        $wanted_course_code = Database::escape_string($wanted_course_code);
-        $sql = sprintf(
-            'SELECT COUNT(id) AS number FROM %s WHERE visual_code = "%s"',
-            $table_course_request,
-            $wanted_course_code
-        );
-        $result = Database::fetch_array(Database::query($sql));
+        $number = (int) Database::getManager()
+            ->createQueryBuilder()
+            ->select('COUNT(cr.id)')
+            ->from(CourseRequest::class, 'cr')
+            ->where('cr.visualCode = :visualCode')
+            ->setParameter('visualCode', (string) $wanted_course_code)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        return $result['number'] > 0;
+        return $number > 0;
     }
 
     /**
@@ -145,42 +150,27 @@ class CourseRequestManager
         $code = $keys['currentCourseId'];
         $db_name = isset($keys['currentCourseDbName']) ? $keys['currentCourseDbName'] : null;
         $directory = $keys['currentCourseRepository'];
-        // @todo user entity
-        $sql = sprintf(
-            'INSERT INTO %s (
-                code, user_id,
-                course_language, title, description, category_id,
-                tutor_name, visual_code, request_date,
-                objetives, target_audience, status, info, exemplary_content)
-            VALUES (
-                "%s", "%d", "%s", "%s",
-                "%s", %s, "%s", "%s",
-                "%s", "%s", "%s",
-                "%s", "%s", "%d");',
-            Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
-            Database::escape_string($code),
-            $user_id,
-            Database::escape_string($course_language),
-            Database::escape_string($title),
-            Database::escape_string($description),
-            null === $categoryId ? 'NULL' : (string) $categoryId,
-            Database::escape_string($tutor_name),
-            Database::escape_string($visual_code),
-            Database::escape_string($request_date),
-            Database::escape_string($objectives),
-            Database::escape_string($target_audience),
-            Database::escape_string($status),
-            Database::escape_string($info),
-            $exemplary_content
-        );
+        $em = Database::getManager();
+        $courseRequest = (new CourseRequest())
+            ->setCode((string) $code)
+            ->setCourseLanguage((string) $course_language)
+            ->setTitle((string) $title)
+            ->setDescription((string) $description)
+            ->setCategory(null !== $categoryId ? $em->getReference(CourseCategoryEntity::class, $categoryId) : null)
+            ->setTutorName((string) $tutor_name)
+            ->setVisualCode((string) $visual_code)
+            ->setRequestDate(new DateTime((string) $request_date, new DateTimeZone('UTC')))
+            ->setObjetives((string) $objectives)
+            ->setTargetAudience((string) $target_audience)
+            ->setStatus((int) $status)
+            ->setInfo((int) $info)
+            ->setExemplaryContent($exemplary_content)
+        ;
+        $courseRequest->setUser($em->getReference(User::class, $user_id));
+        $em->persist($courseRequest);
+        $em->flush();
 
-        $result_sql = Database::query($sql);
-
-        if (!$result_sql) {
-            return false;
-        }
-
-        $last_insert_id = Database::insert_id();
+        $last_insert_id = $courseRequest->getId();
 
         // E-mail notifications.
 
@@ -401,11 +391,15 @@ class CourseRequestManager
     public static function delete_course_request($id)
     {
         $id = (int) $id;
-        $sql = "DELETE FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
-                WHERE id = ".$id;
-        $result = Database::query($sql);
+        Database::getManager()
+            ->createQueryBuilder()
+            ->delete(CourseRequest::class, 'cr')
+            ->where('cr.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->execute();
 
-        return false !== $result;
+        return true;
     }
 
     /**
@@ -417,20 +411,17 @@ class CourseRequestManager
      */
     public static function count_course_requests($status = null)
     {
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
-        if (is_null($status)) {
-            $sql = "SELECT COUNT(id) AS number FROM ".$course_table;
-        } else {
-            $status = (int) $status;
-            $sql = "SELECT COUNT(id) AS number FROM ".$course_table."
-                    WHERE status = ".$status;
-        }
-        $result = Database::fetch_array(Database::query($sql));
-        if (is_array($result)) {
-            return $result['number'];
+        $qb = Database::getManager()
+            ->createQueryBuilder()
+            ->select('COUNT(cr.id)')
+            ->from(CourseRequest::class, 'cr');
+        if (!is_null($status)) {
+            $qb
+                ->where('cr.status = :status')
+                ->setParameter('status', (int) $status);
         }
 
-        return false;
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -443,18 +434,47 @@ class CourseRequestManager
     public static function get_course_request_info($id)
     {
         $id = (int) $id;
-        $courseRequestTable = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
-        $courseCategoryTable = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT cr.*, cc.code AS category_code
-                FROM $courseRequestTable cr
-                LEFT JOIN $courseCategoryTable cc ON cc.id = cr.category_id
-                WHERE cr.id = ".$id;
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            return Database::fetch_array($result);
+        $row = Database::getManager()
+            ->createQueryBuilder()
+            ->select(
+                'cr.id AS id',
+                'IDENTITY(cr.user) AS user_id',
+                'IDENTITY(cr.category) AS category_id',
+                'cr.code AS code',
+                'cr.courseLanguage AS course_language',
+                'cr.title AS title',
+                'cr.description AS description',
+                'cr.tutorName AS tutor_name',
+                'cr.visualCode AS visual_code',
+                'cr.requestDate AS request_date',
+                'cr.objetives AS objetives',
+                'cr.targetAudience AS target_audience',
+                'cr.status AS status',
+                'cr.info AS info',
+                'cr.exemplaryContent AS exemplary_content',
+                'cc.code AS category_code'
+            )
+            ->from(CourseRequest::class, 'cr')
+            ->leftJoin('cr.category', 'cc')
+            ->where('cr.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_SCALAR);
+        if (null === $row) {
+            return false;
         }
 
-        return false;
+        $row['id'] = (int) $row['id'];
+        $row['user_id'] = null === $row['user_id'] ? null : (int) $row['user_id'];
+        $row['category_id'] = null === $row['category_id'] ? null : (int) $row['category_id'];
+
+        // Same shape as Database::fetch_array(): associative keys, then the numeric ones.
+        $result = $row;
+        foreach ($row as $value) {
+            $result[] = $value;
+        }
+
+        return $result;
     }
 
     /**
@@ -467,18 +487,16 @@ class CourseRequestManager
     public static function get_course_request_code($id)
     {
         $id = (int) $id;
-        $sql = "SELECT code
-                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
-                WHERE id = ".$id;
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            $result_array = Database::fetch_array($result, 'NUM');
-            if (is_array($result_array)) {
-                return $result_array[0];
-            }
-        }
+        $code = Database::getManager()
+            ->createQueryBuilder()
+            ->select('cr.code')
+            ->from(CourseRequest::class, 'cr')
+            ->where('cr.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
-        return false;
+        return null === $code ? false : $code;
     }
 
     /**
@@ -530,10 +548,7 @@ class CourseRequestManager
         $course = CourseManager::create_course($params);
         if (null !== $course) {
             // Mark the request as accepted.
-            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
-                    SET status = ".COURSE_REQUEST_ACCEPTED."
-                    WHERE id = ".$id;
-            Database::query($sql);
+            self::updateColumn($id, 'status', COURSE_REQUEST_ACCEPTED);
 
             // E-mail notification.
 
@@ -624,12 +639,7 @@ class CourseRequestManager
 
         $code = $course_request_info['code'];
 
-        $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
-                SET status = ".COURSE_REQUEST_REJECTED."
-                WHERE id = ".$id;
-        if (false === Database::query($sql)) {
-            return false;
-        }
+        self::updateColumn($id, 'status', COURSE_REQUEST_REJECTED);
 
         // E-mail notification.
 
@@ -737,11 +747,9 @@ class CourseRequestManager
         }
 
         // Marking the fact that additional information about the request has been asked.
-        $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
-                SET info = 1 WHERE id = ".$id;
-        $result = false !== Database::query($sql);
+        self::updateColumn($id, 'info', 1);
 
-        return $result;
+        return true;
     }
 
     /**
@@ -754,10 +762,32 @@ class CourseRequestManager
     public static function additional_info_asked($id)
     {
         $id = (int) $id;
-        $sql = "SELECT id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_REQUEST)."
-                WHERE (id = ".$id." AND info > 0)";
-        $result = Database::num_rows(Database::query($sql));
+        $result = (int) Database::getManager()
+            ->createQueryBuilder()
+            ->select('COUNT(cr.id)')
+            ->from(CourseRequest::class, 'cr')
+            ->where('cr.id = :id')
+            ->andWhere('cr.info > 0')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getSingleScalarResult();
 
         return !empty($result);
+    }
+
+    /**
+     * Sets one integer column ("status" or "info") of a course request.
+     */
+    private static function updateColumn(int $id, string $property, int $value): void
+    {
+        Database::getManager()
+            ->createQueryBuilder()
+            ->update(CourseRequest::class, 'cr')
+            ->set('cr.'.('info' === $property ? 'info' : 'status'), ':value')
+            ->where('cr.id = :id')
+            ->setParameter('value', $value)
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->execute();
     }
 }

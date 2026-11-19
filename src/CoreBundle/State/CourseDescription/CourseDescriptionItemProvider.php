@@ -152,8 +152,8 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
 
         if ($description instanceof CCourseDescription) {
             $item->iid = $description->getIid();
-            $item->title = $this->sanitizeHtmlForDisplay((string) $description->getTitle());
-            $item->content = $this->sanitizeHtmlForDisplay((string) $description->getContent());
+            $item->title = (string) LegacySecurity::remove_XSS((string) $description->getTitle(), COURSEMANAGERLOWSECURITY);
+            $item->content = (string) LegacySecurity::remove_XSS((string) $description->getContent(), COURSEMANAGERLOWSECURITY);
             $item->progress = (int) $description->getProgress();
             $item->language = $this->getResourceLanguage($description);
         }
@@ -281,15 +281,6 @@ final readonly class CourseDescriptionItemProvider implements ProviderInterface
             'searchEnabled' => $this->isSettingEnabled('search.search_enabled'),
             'saveTitlesAsHtml' => $this->isSettingEnabled('editor.save_titles_as_html'),
         ];
-    }
-
-    /**
-     * Apply the current teacher HTML policy to content stored before the setting changed.
-     * Do not modify the original database content when preparing the editor response.
-     */
-    private function sanitizeHtmlForDisplay(string $html): string
-    {
-        return (string) LegacySecurity::remove_XSS($html, COURSEMANAGERLOWSECURITY);
     }
 
     private function isSettingEnabled(string $name): bool

@@ -106,8 +106,8 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
 
         return [
             'iid' => (int) $description->getIid(),
-            'title' => $this->sanitizeHtmlForDisplay((string) $description->getTitle(), $readerProfile),
-            'content' => $this->sanitizeHtmlForDisplay((string) $description->getContent(), $readerProfile),
+            'title' => (string) LegacySecurity::remove_XSS((string) $description->getTitle(), $readerProfile),
+            'content' => (string) LegacySecurity::remove_XSS((string) $description->getContent(), $readerProfile),
             'descriptionType' => (int) $description->getDescriptionType(),
             'progress' => (int) $description->getProgress(),
             'resourceNodeId' => null !== $resourceNode?->getId() ? (int) $resourceNode->getId() : null,
@@ -130,11 +130,6 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         }
 
         return $canManage ? COURSEMANAGER : STUDENT;
-    }
-
-    private function sanitizeHtmlForDisplay(string $html, int $profile): string
-    {
-        return (string) LegacySecurity::remove_XSS($html, $profile);
     }
 
     /**

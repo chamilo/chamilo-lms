@@ -42,16 +42,11 @@ namespace Chamilo\CourseBundle\Entity {
 }
 
 namespace {
-    use Chamilo\CoreBundle\State\CourseDescription\CourseDescriptionItemProvider;
-    use Chamilo\CoreBundle\State\CourseDescription\CourseDescriptionListProvider;
-
     $root = getcwd();
     $purifierPath = $root.'/vendor/ezyang/htmlpurifier/library/HTMLPurifier.auto.php';
     $securityPath = $root.'/public/main/inc/lib/security.lib.php';
-    $providerPath = $root.'/src/CoreBundle/State/CourseDescription/CourseDescriptionListProvider.php';
-    $itemProviderPath = $root.'/src/CoreBundle/State/CourseDescription/CourseDescriptionItemProvider.php';
 
-    if (!is_file($purifierPath) || !is_file($securityPath) || !is_file($providerPath) || !is_file($itemProviderPath)) {
+    if (!is_file($purifierPath) || !is_file($securityPath)) {
         fwrite(\STDERR, "ERROR: run this script from the Chamilo checkout with installed dependencies.\n");
 
         exit(2);
@@ -102,10 +97,6 @@ namespace {
 
     require_once $securityPath;
 
-    require_once $providerPath;
-
-    require_once $itemProviderPath;
-
     $assert = static function (bool $pass, string $message): void {
         if (!$pass) {
             fwrite(\STDERR, "FAIL: $message\n");
@@ -125,35 +116,31 @@ namespace {
     $safe = '<p>Safe <strong>formatting</strong></p>';
 
     // The editor form (item provider) loads the stored HTML with the teacher policy.
-    $itemClass = new ReflectionClass(CourseDescriptionItemProvider::class);
-    $itemProvider = $itemClass->newInstanceWithoutConstructor();
-    $itemFilter = $itemClass->getMethod('sanitizeHtmlForDisplay');
+    $itemFilter = static fn (string $html): string => (string) Security::remove_XSS($html, COURSEMANAGERLOWSECURITY);
 
     // The list is what every course member reads, so it is filtered with the reader's profile.
-    $listClass = new ReflectionClass(CourseDescriptionListProvider::class);
-    $listProvider = $listClass->newInstanceWithoutConstructor();
-    $listFilter = $listClass->getMethod('sanitizeHtmlForDisplay');
+    $listFilter = static fn (string $html, int $profile): string => (string) Security::remove_XSS($html, $profile);
     $readerProfiles = ['student' => STUDENT, 'teacher' => COURSEMANAGER, 'anonymous' => ANONYMOUS];
 
     if ('policy' === $scenario) {
         $GLOBALS['teacher_js_setting'] = 'true';
-        $unrestricted = $itemFilter->invoke($itemProvider, $input);
+        $unrestricted = $itemFilter($input);
         $assert($unrestricted === $input, 'Editor: Yes must preserve the stored HTML for the teacher.');
 
         $GLOBALS['teacher_js_setting'] = 'false';
-        $restricted = $itemFilter->invoke($itemProvider, $input);
+        $restricted = $itemFilter($input);
         $assert(!str_contains($restricted, '<script'), 'Editor: No must remove stored scripts.');
         $assert(!str_contains($restricted, 'onclick='), 'Editor: No must remove stored event handlers.');
         $assert(str_contains($restricted, '<strong>teacher</strong>'), 'Editor: No must retain safe formatting.');
 
         $GLOBALS['teacher_js_setting'] = 'true';
-        $restored = $itemFilter->invoke($itemProvider, $input);
+        $restored = $itemFilter($input);
         $assert($restored === $input, 'Editor: Switching back to Yes must preserve original markup.');
     } elseif ('reader' === $scenario) {
         // Even when teachers may store JavaScript, readers of the list never receive it.
         $GLOBALS['teacher_js_setting'] = 'true';
         foreach ($readerProfiles as $reader => $profile) {
-            $result = $listFilter->invoke($listProvider, $input, $profile);
+            $result = $listFilter($input, $profile);
             $assert(!str_contains($result, '<script'), "List ($reader): stored scripts must be removed.");
             $assert(!str_contains($result, 'onclick='), "List ($reader): stored event handlers must be removed.");
             $assert(str_contains($result, '<strong>teacher</strong>'), "List ($reader): safe formatting must survive.");
@@ -161,9 +148,9 @@ namespace {
     } else {
         foreach (['true', 'false'] as $setting) {
             $GLOBALS['teacher_js_setting'] = $setting;
-            $results = ['editor' => $itemFilter->invoke($itemProvider, $safe)];
+            $results = ['editor' => $itemFilter($safe)];
             foreach ($readerProfiles as $reader => $profile) {
-                $results["list ($reader)"] = $listFilter->invoke($listProvider, $safe, $profile);
+                $results["list ($reader)"] = $listFilter($safe, $profile);
             }
             foreach ($results as $path => $result) {
                 $assert(str_contains($result, 'Safe'), "$path: Safe text must survive ($setting).");

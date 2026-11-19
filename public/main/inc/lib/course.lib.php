@@ -3860,8 +3860,12 @@ class CourseManager
     {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
 
-        $sql = "SELECT sticky FROM $courseTable WHERE id = " . intval($courseId);
-        $result = Database::query($sql);
+        $result = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('sticky')
+            ->from($courseTable)
+            ->where('id = :courseId')
+            ->setParameter('courseId', (int) $courseId)
+            ->executeQuery();
         $row = Database::fetch_assoc($result);
 
         if (!empty($row) &&  1 === (int) $row['sticky']) {
@@ -3896,31 +3900,28 @@ class CourseManager
             return [];
         }
 
+        $specialCoursesQuery = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('id', 'code', 'subscribe AS subscr', 'unsubscribe AS unsubscr')
+            ->from($table)
+            ->where('id IN (:specialIds)')
+            ->groupBy('code')
+            ->setParameter('specialIds', array_map('intval', $specialCourseList), ArrayParameterType::INTEGER);
+
         // Filter by language
-        $languageCondition = '';
         $onlyInUserLanguage = ('true' === api_get_setting('course.my_courses_show_courses_in_user_language_only'));
         if ($useUserLanguageFilterIfAvailable && $onlyInUserLanguage) {
             $userInfo = api_get_user_info(api_get_user_id());
             if (!empty($userInfo['language'])) {
                 $languageId = (int) api_get_language_id($userInfo['language']);
-                $languageCondition = $languageId > 0
-                    ? " AND language_id = $languageId "
-                    : ' AND 1 = 0 ';
+                if ($languageId > 0) {
+                    $specialCoursesQuery->andWhere('language_id = :languageId')->setParameter('languageId', $languageId);
+                } else {
+                    $specialCoursesQuery->andWhere('1 = 0');
+                }
             }
         }
 
-        $sql = "SELECT
-                    id,
-                    code,
-                    subscribe subscr,
-                    unsubscribe unsubscr
-                FROM $table
-                WHERE
-                    id IN ('".implode("','", $specialCourseList)."')
-                    $languageCondition
-                GROUP BY code";
-
-        $rs_special_course = Database::query($sql);
+        $rs_special_course = $specialCoursesQuery->executeQuery();
         $number_of_courses = Database::num_rows($rs_special_course);
         $showCustomIcon = api_get_setting('course_images_in_courses_list');
 
@@ -5032,24 +5033,29 @@ class CourseManager
         $urlId = api_get_current_access_url_id();
         //$table_course_access table uses the now() and interval ...
         $now = api_get_utc_datetime();
-        $sql = "SELECT COUNT(course_access_id) course_count, a.c_id, visibility
-                FROM $table_course c
-                INNER JOIN $table_course_access a
-                ON (c.id = a.c_id)
-                INNER JOIN $table_course_url u
-                ON u.c_id = c.id
-                WHERE
-                    u.access_url_id = $urlId AND
-                    login_course_date <= '$now' AND
-                    login_course_date > DATE_SUB('$now', INTERVAL $days DAY) AND
-                    visibility <> ".Course::CLOSED." AND
-                    visibility <> ".Course::HIDDEN."
-                GROUP BY a.c_id
-                ORDER BY course_count DESC
-                LIMIT $limit
-            ";
-
-        $result = Database::query($sql);
+        // The start of the window is computed here (UTC, like $now) instead of with the MySQL-only DATE_SUB().
+        $since = (new DateTime($now, new DateTimeZone('UTC')))
+            ->modify('-'.(int) $days.' days')
+            ->format('Y-m-d H:i:s');
+        $result = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('COUNT(course_access_id) AS course_count', 'a.c_id', 'visibility')
+            ->from($table_course, 'c')
+            ->innerJoin('c', $table_course_access, 'a', 'c.id = a.c_id')
+            ->innerJoin('c', $table_course_url, 'u', 'u.c_id = c.id')
+            ->where('u.access_url_id = :urlId')
+            ->andWhere('login_course_date <= :now')
+            ->andWhere('login_course_date > :since')
+            ->andWhere('visibility <> :closed')
+            ->andWhere('visibility <> :hidden')
+            ->groupBy('a.c_id')
+            ->orderBy('COUNT(course_access_id)', 'DESC')
+            ->setMaxResults($limit)
+            ->setParameter('urlId', (int) $urlId)
+            ->setParameter('now', (string) $now)
+            ->setParameter('since', $since)
+            ->setParameter('closed', Course::CLOSED)
+            ->setParameter('hidden', Course::HIDDEN)
+            ->executeQuery();
         $courses = [];
         if (Database::num_rows($result)) {
             $courses = Database::store_result($result, 'ASSOC');

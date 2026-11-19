@@ -88,6 +88,12 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         return $id;
     }
 
+    private function loginAs(User $user): void
+    {
+        $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
+        self::getContainer()->get('security.token_storage')->setToken($token);
+    }
+
     private function rows(string $table, string $where, array $params): int
     {
         return (int) $this->conn()->fetchOne("SELECT COUNT(*) FROM $table WHERE $where", $params);
@@ -364,5 +370,87 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         $different = CourseManager::get_courses_list_by_user_id($user->getId(), true, false, true, [], true, true);
         $this->assertCount(3, $different, 'with the different-key flag the session row of an own course is kept too');
         $this->assertCount(0, CourseManager::get_courses_list_by_user_id($user->getId(), true, false, true, [$own->getId(), $viaSession->getId()]));
+    }
+
+    // ---------------------------------------------------------------- return_hot_courses / returnSpecialCourses
+
+    private function courseAccess(Course $course, string $date, int $times = 1): void
+    {
+        for ($i = 0; $i < $times; ++$i) {
+            $this->conn()->executeStatement(
+                "INSERT INTO track_e_course_access (c_id, login_course_date, counter, session_id, user_ip, user_id) VALUES (?, ?, 1, 0, '127.0.0.1', ?)",
+                [$course->getId(), $date, $this->getUser('admin')->getId()]
+            );
+        }
+    }
+
+    public function testReturnHotCoursesRanksByAccessesInTheWindowAndSkipsClosedAndHiddenCourses(): void
+    {
+        $user = $this->createUser('cm3b_hot_user');
+        $this->loginAs($user);
+        $recent = gmdate('Y-m-d H:i:s', time() - 3600);
+        $old = gmdate('Y-m-d H:i:s', time() - 40 * 86400);
+
+        $busy = $this->createCourse('cm3b_hot_busy');
+        $quiet = $this->createCourse('cm3b_hot_quiet');
+        $stale = $this->createCourse('cm3b_hot_stale');
+        $edge = $this->createCourse('cm3b_hot_edge');
+        $closed = $this->createCourse('cm3b_hot_closed');
+        $hidden = $this->createCourse('cm3b_hot_hidden');
+        $this->conn()->executeStatement('UPDATE course SET visibility = ? WHERE id = ?', [\Chamilo\CoreBundle\Entity\Course::CLOSED, $closed->getId()]);
+        $this->conn()->executeStatement('UPDATE course SET visibility = ? WHERE id = ?', [\Chamilo\CoreBundle\Entity\Course::HIDDEN, $hidden->getId()]);
+        $this->courseAccess($busy, $recent, 3);
+        $this->courseAccess($quiet, $recent, 1);
+        $this->courseAccess($stale, $old, 5);
+        $this->courseAccess($edge, gmdate('Y-m-d H:i:s', time() - 30 * 86400 - 43200), 2);
+        $this->courseAccess($closed, $recent, 9);
+        $this->courseAccess($hidden, $recent, 9);
+
+        $titles = array_column(CourseManager::return_hot_courses(30, 500), 'title');
+        $mine = array_values(array_filter($titles, static fn ($t) => str_starts_with($t, 'cm3b_hot_')));
+        $this->assertSame(['cm3b_hot_busy', 'cm3b_hot_quiet'], $mine, 'most accessed first; outside the window (half a day beyond 30 days too), closed and hidden left out');
+
+        $wider = array_values(array_filter(array_column(CourseManager::return_hot_courses(60, 500), 'title'), static fn ($t) => str_starts_with($t, 'cm3b_hot_')));
+        $this->assertSame(['cm3b_hot_stale', 'cm3b_hot_busy', 'cm3b_hot_edge', 'cm3b_hot_quiet'], $wider, 'a wider window brings the stale course in, ranked by its 5 accesses');
+
+        $this->assertCount(1, CourseManager::return_hot_courses(60, 1), 'the limit applies');
+        $this->assertSame('cm3b_hot_stale', CourseManager::return_hot_courses(60, 1)[0]['title'] ?? null, 'only if nothing else in the test database is busier');
+    }
+
+    public function testReturnSpecialCoursesListsStickyCoursesOnceAndSkipsHiddenOnes(): void
+    {
+        $user = $this->createUser('cm3b_spc_user');
+        $this->loginAs($user);
+        $sticky = $this->createCourse('cm3b_spc_a');
+        $hiddenSticky = $this->createCourse('cm3b_spc_hidden');
+        $plain = $this->createCourse('cm3b_spc_plain');
+        $this->conn()->executeStatement('UPDATE course SET sticky = 1 WHERE id IN (?, ?)', [$sticky->getId(), $hiddenSticky->getId()]);
+        // Through the entity: the legacy course info is read from the managed Course, which a raw UPDATE leaves stale.
+        $hiddenSticky->setVisibility(Course::HIDDEN);
+        Database::getManager()->flush();
+        // Two subscribers: the GROUP BY code keeps one row per course.
+        $this->sub($user, $sticky, COURSEMANAGER);
+        $this->sub($this->createUser('cm3b_spc_other'), $sticky);
+        $this->sub($user, $plain);
+
+        // A course without category makes returnSpecialCourses() read undefined "categoryName"/"categoryCode" keys.
+        set_error_handler(static fn (int $no, string $str): bool => str_contains($str, 'Undefined array key'), E_WARNING);
+        $mine = array_values(array_filter(
+            CourseManager::returnSpecialCourses($user->getId()),
+            static fn ($row) => str_starts_with((string) $row['title'], 'cm3b_spc_')
+        ));
+
+        $this->assertSame(['cm3b_spc_a'], array_column($mine, 'title'));
+        $this->assertSame((int) $sticky->getId(), (int) $mine[0]['c_id']);
+        $this->assertTrue($mine[0]['is_special_course']);
+        $this->assertSame(COURSEMANAGER, (int) $mine[0]['status'], 'status comes from the user\'s own subscription');
+
+        $stranger = $this->createUser('cm3b_spc_stranger');
+        $forStranger = array_values(array_filter(
+            CourseManager::returnSpecialCourses($stranger->getId()),
+            static fn ($row) => 'cm3b_spc_a' === $row['title']
+        ));
+        restore_error_handler();
+        $this->assertSame(STUDENT, (int) $forStranger[0]['status'], 'not subscribed: shown as a student');
     }
 }

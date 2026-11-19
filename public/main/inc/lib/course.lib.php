@@ -143,42 +143,41 @@ class CourseManager
     ) {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = "SELECT course.*, language.isocode AS course_language, course.id as real_id
-                FROM $courseTable course
-                INNER JOIN $languageTable language ON language.id = course.language_id ";
+        $qb = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('course.*', 'language.isocode AS course_language', 'course.id AS real_id')
+            ->from($courseTable, 'course')
+            ->innerJoin('course', $languageTable, 'language', 'language.id = course.language_id');
 
         if (!empty($urlId)) {
             $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-            $sql .= " INNER JOIN $table url ON (url.c_id = course.id) ";
+            $qb->innerJoin('course', $table, 'url', 'url.c_id = course.id');
         }
 
         $visibility = (int) $visibility;
 
         if (!empty($startwith)) {
-            $sql .= "WHERE (title LIKE '".Database::escape_string($startwith)."%' ";
+            $startCondition = 'title LIKE :startwith';
             if ($alsoSearchCode) {
-                $sql .= "OR code LIKE '".Database::escape_string($startwith)."%' ";
+                $startCondition .= ' OR code LIKE :startwith';
             }
-            $sql .= ') ';
-            if (-1 !== $visibility) {
-                $sql .= " AND visibility = $visibility ";
-            }
+            $qb->where('('.$startCondition.')')
+                ->setParameter('startwith', $startwith.'%');
         } else {
-            $sql .= 'WHERE 1 ';
-            if (-1 !== $visibility) {
-                $sql .= " AND visibility = $visibility ";
-            }
+            $qb->where('1 = 1');
+        }
+        if (-1 !== $visibility) {
+            $qb->andWhere('visibility = :visibility')
+                ->setParameter('visibility', $visibility);
         }
 
         if (!empty($urlId)) {
-            $urlId = (int) $urlId;
-            $sql .= " AND access_url_id = $urlId";
+            $qb->andWhere('access_url_id = :urlId')
+                ->setParameter('urlId', (int) $urlId);
         }
 
         if (!empty($onlyThisCourseList)) {
-            $onlyThisCourseList = array_map('intval', $onlyThisCourseList);
-            $onlyThisCourseList = implode("','", $onlyThisCourseList);
-            $sql .= " AND course.id IN ('$onlyThisCourseList') ";
+            $qb->andWhere('course.id IN (:onlyThisCourseList)')
+                ->setParameter('onlyThisCourseList', array_map('intval', $onlyThisCourseList), ArrayParameterType::INTEGER);
         }
 
         $allowedFields = [
@@ -186,66 +185,24 @@ class CourseManager
             'code',
         ];
 
-        if (count($conditionsLike) > 0) {
-            $temp_conditions = [];
-            foreach ($conditionsLike as $field => $value) {
-                if (!in_array($field, $allowedFields)) {
-                    continue;
-                }
-                $field = Database::escape_string($field);
-                $value = Database::escape_string($value);
-                $simple_like = false;
-                if ($simple_like) {
-                    $temp_conditions[] = $field." LIKE '$value%'";
-                } else {
-                    $temp_conditions[] = $field.' LIKE \'%'.$value.'%\'';
-                }
+        $likeIndex = 0;
+        foreach ($conditionsLike as $field => $value) {
+            if (!in_array($field, $allowedFields)) {
+                continue;
             }
-            $condition = ' AND ';
-            if (!empty($temp_conditions)) {
-                $sql .= ' AND '.implode(' '.$condition.' ', $temp_conditions);
-            }
+            $qb->andWhere($field.' LIKE :conditionLike'.$likeIndex)
+                ->setParameter('conditionLike'.$likeIndex, '%'.$value.'%');
+            $likeIndex++;
         }
 
-        if (empty($orderby)) {
-            $sql .= ' ORDER BY title ';
-        } else {
-            if (in_array($orderby, ['title'])) {
-                $sql .= " ORDER BY `".Database::escape_string($orderby)."` ";
-            } else {
-                $sql .= ' ORDER BY title ';
-            }
-        }
-
-        $orderdirection = strtoupper($orderdirection);
-        if (!in_array($orderdirection, ['ASC', 'DESC'])) {
-            $sql .= 'ASC';
-        } else {
-            $sql .= 'ASC' === $orderdirection ? 'ASC' : 'DESC';
-        }
+        // Only "title" is a valid order column, anything else falls back to the title.
+        $qb->orderBy('title', 'DESC' === strtoupper($orderdirection) ? 'DESC' : 'ASC');
 
         $howmany = (int) $howmany;
-        if (!empty($howmany)) {
-            $sql .= ' LIMIT '.$howmany;
-        } else {
-            $sql .= ' LIMIT 1000000'; //virtually no limit
-        }
-        if (!empty($from)) {
-            $from = intval($from);
-            $sql .= ' OFFSET '.intval($from);
-        } else {
-            $sql .= ' OFFSET 0';
-        }
+        $qb->setMaxResults(!empty($howmany) ? $howmany : 1000000); // virtually no limit
+        $qb->setFirstResult(!empty($from) ? (int) $from : 0);
 
-        $data = [];
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_assoc($res)) {
-                $data[] = $row;
-            }
-        }
-
-        return $data;
+        return $qb->executeQuery()->fetchAllAssociative();
     }
 
     /**

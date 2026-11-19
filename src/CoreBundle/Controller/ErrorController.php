@@ -72,13 +72,14 @@ class ErrorController
                         ['status_code' => $statusCode]
                     );
                 }
+                $headers = [];
             } else {
+                // Keep the Content-Type of the requested format (e.g. application/json).
                 $exception = $this->errorRenderer->render($exception);
 
                 $content = $exception->getAsString();
+                $headers = $exception->getHeaders();
             }
-
-            $headers = [];
         }
 
         return new Response($content, $statusCode, $headers);

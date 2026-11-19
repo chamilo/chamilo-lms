@@ -142,7 +142,9 @@ final readonly class GradebookLinkResourceResolver
             throw new BadRequestHttpException('A valid resource node id is required.');
         }
 
-        foreach ($this->getResources($type, $course, $session) as $resource) {
+        // An existing link may point to an assignment of the base course from a session: the gradebook
+        // copied into the session keeps it, and learners submit to it from a learning path there
+        foreach ($this->getResources($type, $course, $session, true) as $resource) {
             if ($this->getResourceNodeId($resource) === $resourceNodeId) {
                 return $resource;
             }
@@ -293,7 +295,7 @@ final readonly class GradebookLinkResourceResolver
     /**
      * @return list<object>
      */
-    private function getResources(int $type, Course $course, ?Session $session): array
+    private function getResources(int $type, Course $course, ?Session $session, bool $withBaseAssignments = false): array
     {
         return match ($type) {
             self::LINK_EXERCISE => $this->quizRepository
@@ -301,7 +303,7 @@ final readonly class GradebookLinkResourceResolver
                 ->getQuery()
                 ->getResult(),
             self::LINK_STUDENT_PUBLICATION => $this->studentPublicationRepository
-                ->findAllByCourse($course, $session, null, 1, 'folder')
+                ->findAllByCourse($course, $session, null, 1, 'folder', $withBaseAssignments ?: null)
                 ->getQuery()
                 ->getResult(),
             self::LINK_LEARNING_PATH => $this->lpRepository

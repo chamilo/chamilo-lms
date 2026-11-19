@@ -122,15 +122,15 @@ Feature: Score of the latest attempt in the exercise list
       | Score shown test |
       | Untried test     |
 
-  # A new test is hidden from learners until it is activated.
-  Scenario Outline: Make "<test>" visible
+  # A new test is visible to learners from the start: "Default visibility of new tests" is "visible"
+  # by default (ResourceDefaultVisibilityHelper). Check it instead of activating it.
+  Scenario Outline: "<test>" is visible
     Given I am a platform administrator
     And I wait for the page to be loaded
     And I am on course "EXAMLIST" homepage
     And I wait for the page to be loaded
     And I follow "Tests"
     And I wait for the page content to settle
-    And I click the "[title='Activate']" icon in the row for "<test>"
     Then I wait for the element "tr:has-text('<test>') [title='Deactivate']" to appear
 
     Examples:

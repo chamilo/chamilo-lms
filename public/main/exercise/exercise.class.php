@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
@@ -2873,7 +2874,6 @@ class Exercise
     {
         $sessionId = api_get_session_id();
         $table_track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $table_track_e_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $sql_where = '  AND
                         orig_lp_id = 0 AND
@@ -2896,6 +2896,7 @@ class Exercise
         }
 
         $sessionCondition = api_get_session_condition($sessionId);
+        // TODO(db-neutral): the session condition is an SQL fragment built by api_get_session_condition()
         $sql = "SELECT exe_id
                 FROM $table_track_e_exercises
                 WHERE
@@ -2912,14 +2913,18 @@ class Exercise
         $i = 0;
         if (is_array($exe_list) && count($exe_list) > 0) {
             foreach ($exe_list as $item) {
-                $sql = "DELETE FROM $table_track_e_attempt
-                        WHERE exe_id = '".$item['exe_id']."'";
-                Database::query($sql);
+                Container::getEntityManager()->createQueryBuilder()
+                    ->delete(TrackEAttempt::class, 'a')
+                    ->where('IDENTITY(a.trackExercise) = :exeId')
+                    ->setParameter('exeId', (int) $item['exe_id'])
+                    ->getQuery()
+                    ->execute();
                 $i++;
             }
         }
 
         // delete TRACK_E_EXERCISES table
+        // TODO(db-neutral): the session condition is an SQL fragment built by api_get_session_condition()
         $sql = "DELETE FROM $table_track_e_exercises
                 WHERE
                   c_id = ".api_get_course_int_id().' AND
@@ -2958,7 +2963,6 @@ class Exercise
         $courseId = api_get_course_int_id();
         $exerciseObject->save();
         $newId = $exerciseObject->getId();
-        $exerciseRelQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
         $count = 1;
         $batchSize = 20;
@@ -2973,9 +2977,12 @@ class Exercise
                 if ($newQuestionId) {
                     $newQuestionObj = Question::read($newQuestionId, null, false);
                     if (isset($newQuestionObj) && $newQuestionObj) {
-                        $sql = "INSERT INTO $exerciseRelQuestionTable (question_id, quiz_id, question_order)
-                                VALUES (".$newQuestionId.", ".$newId.", '$count')";
-                        Database::query($sql);
+                        $relation = (new CQuizRelQuestion())
+                            ->setQuestion($em->getReference(CQuizQuestion::class, (int) $newQuestionId))
+                            ->setQuiz($em->getReference(CQuiz::class, (int) $newId))
+                            ->setQuestionOrder($count);
+                        $em->persist($relation);
+                        $em->flush();
                         $count++;
                         if (!empty($oldQuestionObj->category)) {
                             $newQuestionObj->saveCategory($oldQuestionObj->category);

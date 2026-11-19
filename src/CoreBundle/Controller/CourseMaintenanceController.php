@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Builder\Cc13Capabilities;
@@ -869,7 +870,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/cc13/export/execute', name: 'cc13_export_execute', methods: ['POST'])]
-    public function cc13ExportExecute(int $node, Request $req): JsonResponse
+    public function cc13ExportExecute(int $node, Request $req, CidReqHelper $cidReqHelper): JsonResponse
     {
         $this->setDebugFromRequest($req);
 
@@ -952,9 +953,14 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             $fileName = basename($imsccPath);
             $downloadUrl = $this->generateUrl(
                 'cm_cc13_export_download',
-                ['node' => $node],
+                [
+                    'node' => $node,
+                    'file' => $fileName,
+                    'cid' => $cidReqHelper->getCourseId(),
+                    'sid' => $cidReqHelper->getSessionId(),
+                ],
                 UrlGeneratorInterface::ABSOLUTE_URL
-            ).'?file='.rawurlencode($fileName);
+            );
 
             return $this->json([
                 'ok' => true,
@@ -972,13 +978,19 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/cc13/export/download', name: 'cc13_export_download', methods: ['GET'])]
-    public function cc13ExportDownload(int $node, Request $req): BinaryFileResponse|JsonResponse
+    public function cc13ExportDownload(int $node, Request $req, CidReqHelper $cidReqHelper): BinaryFileResponse|JsonResponse
     {
         $file = basename((string) $req->query->get('file', ''));
 
         // Example pattern: ABC123_cc13_20251017_195455.imscc
         if ('' === $file || !preg_match('/^[A-Za-z0-9_-]+_cc13_\d{8}_\d{6}\.imscc$/', $file)) {
             return $this->jsonError('Invalid file', 400);
+        }
+
+        // Exports of every course share the temp directory: only serve the current course's ones.
+        $courseCode = (string) $cidReqHelper->getCourseEntity()?->getCode();
+        if ('' === $courseCode || !preg_match('/^'.preg_quote($courseCode, '/').'_cc13_\d{8}_\d{6}\.imscc$/', $file)) {
+            return $this->jsonError('File not found', 404);
         }
 
         $abs = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$file;

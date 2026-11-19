@@ -1987,49 +1987,64 @@ class CourseManager
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
 
-        $sql = "
-            SELECT DISTINCT count(user.id) as count
-            FROM $tblUser as user
-        ";
-        $where = [];
+        $qb = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('DISTINCT count(user.id) as count')
+            ->from($tblUser, 'user');
+        $where = '';
         $statusCondition = '';
         if (!empty($session_id)) {
-            $sql .= "
-                LEFT JOIN $tblSessionCourseUser as session_course_user
-                ON user.id = session_course_user.user_id
-                    AND session_course_user.c_id = $courseId
-                    AND session_course_user.session_id = $session_id
-            ";
+            $qb->leftJoin(
+                'user',
+                $tblSessionCourseUser,
+                'session_course_user',
+                'user.id = session_course_user.user_id'
+                    .' AND session_course_user.c_id = :courseId'
+                    .' AND session_course_user.session_id = :sessionId'
+            )
+                ->setParameter('courseId', (int) $courseId)
+                ->setParameter('sessionId', $session_id);
 
-            $where[] = ' session_course_user.c_id IS NOT NULL ';
+            $where = 'session_course_user.c_id IS NOT NULL';
             if (null !== $status) {
-                $statusCondition = ' AND session_course_user.status = '.(int) $status;
+                $statusCondition = 'session_course_user.status = :status';
             }
         } else {
-            $sql .= "
-                LEFT JOIN $tblCourseUser as course_rel_user
-                    ON user.id = course_rel_user.user_id
-                    AND course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                    AND course_rel_user.c_id = $courseId
-            ";
-            $where[] = ' course_rel_user.c_id IS NOT NULL ';
+            $qb->leftJoin(
+                'user',
+                $tblCourseUser,
+                'course_rel_user',
+                'user.id = course_rel_user.user_id'
+                    .' AND course_rel_user.relation_type <> :relationType'
+                    .' AND course_rel_user.c_id = :courseId'
+            )
+                ->setParameter('relationType', COURSE_RELATION_TYPE_RRHH)
+                ->setParameter('courseId', (int) $courseId);
+            $where = 'course_rel_user.c_id IS NOT NULL';
             if (null !== $status) {
-                $statusCondition = ' AND course_rel_user.status = '.(int) $status;
+                $statusCondition = 'course_rel_user.status = :status';
             }
+        }
+        if (null !== $status) {
+            $qb->setParameter('status', (int) $status);
         }
 
         $multiple_access_url = api_get_multiple_access_url();
         if ($multiple_access_url) {
-            $sql .= " LEFT JOIN $tblUrlUser au ON (au.user_id = user.id) ";
+            $qb->leftJoin('user', $tblUrlUser, 'au', 'au.user_id = user.id');
         }
 
-        $sql .= ' WHERE user.active <> '.USER_SOFT_DELETED.' AND '.implode(' OR ', $where).$statusCondition;
+        $qb->where('user.active <> :softDeleted')
+            ->andWhere($where)
+            ->setParameter('softDeleted', USER_SOFT_DELETED);
+        if ('' !== $statusCondition) {
+            $qb->andWhere($statusCondition);
+        }
 
         if ($multiple_access_url) {
-            $current_access_url_id = api_get_current_access_url_id();
-            $sql .= " AND (access_url_id =  $current_access_url_id ) ";
+            $qb->andWhere('access_url_id = :accessUrlId')
+                ->setParameter('accessUrlId', (int) api_get_current_access_url_id());
         }
-        $rs = Database::query($sql);
+        $rs = $qb->executeQuery();
         $count = 0;
         if (Database::num_rows($rs)) {
             $user = Database::fetch_array($rs);

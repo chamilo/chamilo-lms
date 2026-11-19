@@ -2268,10 +2268,7 @@ class SessionManager
             }
         }
 
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $session = api_get_session_entity($sessionId);
 
@@ -2287,21 +2284,18 @@ class SessionManager
             $session_visibility = SESSION_VISIBLE_READ_ONLY;
         }
 
-        $sql = "SELECT user_id FROM $tbl_session_rel_course_rel_user
-                WHERE session_id = $sessionId AND status = ".Session::STUDENT;
-        $result = Database::query($sql);
-        $existingUsers = [];
-        while ($row = Database::fetch_array($result)) {
-            $existingUsers[] = $row['user_id'];
-        }
+        $connection = Container::getEntityManager()->getConnection();
 
-        $sql = "SELECT c_id FROM $tbl_session_rel_course
-                WHERE session_id = $sessionId";
-        $result = Database::query($sql);
-        $course_list = [];
-        while ($row = Database::fetch_array($result)) {
-            $course_list[] = $row['c_id'];
-        }
+        $course_list = array_column(
+            $connection->createQueryBuilder()
+                ->select('c_id')
+                ->from('session_rel_course')
+                ->where('session_id = :sessionId')
+                ->setParameter('sessionId', $sessionId)
+                ->executeQuery()
+                ->fetchAllAssociative(),
+            'c_id'
+        );
 
         if ($session->getSendSubscriptionNotification() && is_array($userList)) {
             $showUsername = 'true' === api_get_setting(
@@ -2426,17 +2420,20 @@ class SessionManager
                 $nbr_users = 0;
                 $courseId = (int) $courseId;
 
-                $sql = "SELECT DISTINCT user_id
-                        FROM $tbl_session_rel_course_rel_user
-                        WHERE
-                            session_id = $sessionId AND
-                            c_id = $courseId AND
-                            status = ".Session::STUDENT;
-                $result = Database::query($sql);
-                $existingUsers = [];
-                while ($row = Database::fetch_array($result)) {
-                    $existingUsers[] = $row['user_id'];
-                }
+                $existingUsers = array_column(
+                    $connection->createQueryBuilder()
+                        ->select('DISTINCT user_id')
+                        ->from('session_rel_course_rel_user')
+                        ->where('session_id = :sessionId')
+                        ->andWhere('c_id = :courseId')
+                        ->andWhere('status = :status')
+                        ->setParameter('sessionId', $sessionId)
+                        ->setParameter('courseId', $courseId)
+                        ->setParameter('status', Session::STUDENT)
+                        ->executeQuery()
+                        ->fetchAllAssociative(),
+                    'user_id'
+                );
 
                 // Delete existing users
                 if ($empty_users) {
@@ -2466,14 +2463,16 @@ class SessionManager
 
         // Delete users from the session
         if (true === $empty_users) {
-            $sql = "DELETE FROM $tbl_session_rel_user
-                    WHERE
-                      session_id = $sessionId AND
-                      relation_type = ".Session::STUDENT;
+            $deleteQb = $connection->createQueryBuilder()
+                ->delete('session_rel_user')
+                ->where('session_id = :sessionId')
+                ->andWhere('relation_type = :relationType')
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('relationType', Session::STUDENT);
             // Don't reset session_rel_user.registered_at of users that will be registered later anyways.
             if (!empty($userList)) {
-                $avoidDeleteThisUsers = " AND user_id NOT IN ('".implode("','", $userList)."')";
-                $sql .= $avoidDeleteThisUsers;
+                $deleteQb->andWhere('user_id NOT IN (:avoidDeleteThisUsers)')
+                    ->setParameter('avoidDeleteThisUsers', array_map('intval', $userList), ArrayParameterType::INTEGER);
             }
             Event::addEvent(
                 LOG_SESSION_DELETE_USER,
@@ -2484,7 +2483,7 @@ class SessionManager
                 null,
                 $sessionId
             );
-            Database::query($sql);
+            $deleteQb->executeStatement();
         }
 
         // Insert missing users into session
@@ -2492,6 +2491,7 @@ class SessionManager
             $isUserSubscribed = self::isUserSubscribedAsStudent($sessionId, $enreg_user);
             if (false === $isUserSubscribed) {
                 $enreg_user = (int) $enreg_user;
+                // TODO(db-neutral): INSERT IGNORE (both statements below)
                 if ($session->getDuration() > 0) {
                     $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, duration, registered_at)
                         VALUES (".Session::STUDENT.", $sessionId, $enreg_user, 0, '".api_get_utc_datetime()."')";
@@ -2523,10 +2523,12 @@ class SessionManager
         }
 
         // update number of users in the session
-        $sql = "UPDATE $tbl_session
-                SET nbr_users = (SELECT count(user_id) FROM $tbl_session_rel_user WHERE session_id = $sessionId)
-                WHERE id = $sessionId";
-        Database::query($sql);
+        $connection->createQueryBuilder()
+            ->update('session')
+            ->set('nbr_users', '(SELECT COUNT(user_id) FROM session_rel_user WHERE session_id = :sessionId)')
+            ->where('id = :sessionId')
+            ->setParameter('sessionId', $sessionId)
+            ->executeStatement();
 
         return true;
     }
@@ -2682,32 +2684,30 @@ class SessionManager
         $status = null,
         $updateTotal = true
     ) {
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tableSessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $connection = Container::getEntityManager()->getConnection();
         $sessionId = (int) $sessionId;
 
         if (empty($sessionId) || empty($userList) || empty($courseInfo)) {
             return false;
         }
 
-        $courseId = is_array($courseInfo) ? $courseInfo['real_id'] : $courseInfo;
-
-        $statusCondition = null;
-        if (isset($status) && !is_null($status)) {
-            $status = (int) $status;
-            $statusCondition = " AND status = $status";
-        }
+        $courseId = (int) (is_array($courseInfo) ? $courseInfo['real_id'] : $courseInfo);
 
         foreach ($userList as $userId) {
             $userId = (int) $userId;
-            $sql = "DELETE FROM $table
-                    WHERE
-                        session_id = $sessionId AND
-                        c_id = $courseId AND
-                        user_id = $userId
-                        $statusCondition
-                    ";
-            Database::query($sql);
+            $deleteQb = $connection->createQueryBuilder()
+                ->delete('session_rel_course_rel_user')
+                ->where('session_id = :sessionId')
+                ->andWhere('c_id = :courseId')
+                ->andWhere('user_id = :userId')
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('courseId', $courseId)
+                ->setParameter('userId', $userId);
+            if (isset($status)) {
+                $deleteQb->andWhere('status = :status')
+                    ->setParameter('status', (int) $status);
+            }
+            $deleteQb->executeStatement();
 
             Event::addEvent(
                 LOG_SESSION_DELETE_USER_COURSE,
@@ -2722,22 +2722,28 @@ class SessionManager
 
         if ($updateTotal) {
             // Count users in this session-course relation
-            $sql = "SELECT COUNT(user_id) as nbUsers
-                    FROM $table
-                    WHERE
-                        session_id = $sessionId AND
-                        c_id = $courseId AND
-                        status = ".Session::STUDENT;
-            $result = Database::query($sql);
-            [$userCount] = Database::fetch_array($result);
+            $userCount = (int) $connection->createQueryBuilder()
+                ->select('COUNT(user_id) AS nbUsers')
+                ->from('session_rel_course_rel_user')
+                ->where('session_id = :sessionId')
+                ->andWhere('c_id = :courseId')
+                ->andWhere('status = :status')
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('courseId', $courseId)
+                ->setParameter('status', Session::STUDENT)
+                ->executeQuery()
+                ->fetchOne();
 
             // update the session-course relation to add the users total
-            $sql = "UPDATE $tableSessionCourse
-                    SET nbr_users = $userCount
-                    WHERE
-                        session_id = $sessionId AND
-                        c_id = $courseId";
-            Database::query($sql);
+            $connection->createQueryBuilder()
+                ->update('session_rel_course')
+                ->set('nbr_users', ':userCount')
+                ->where('session_id = :sessionId')
+                ->andWhere('c_id = :courseId')
+                ->setParameter('userCount', $userCount)
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('courseId', $courseId)
+                ->executeStatement();
         }
     }
 
@@ -3095,43 +3101,42 @@ class SessionManager
         }
         $sessionVisibility = $session->getVisibility();
 
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $connection = Container::getEntityManager()->getConnection();
 
         // Get list of courses subscribed to this session
-        $sql = "SELECT c_id
-                FROM $tbl_session_rel_course
-                WHERE session_id = $sessionId";
-        $rs = Database::query($sql);
-        $existingCourses = Database::store_result($rs);
+        $existingCourses = $connection->createQueryBuilder()
+            ->select('c_id')
+            ->from('session_rel_course')
+            ->where('session_id = :sessionId')
+            ->setParameter('sessionId', $sessionId)
+            ->executeQuery()
+            ->fetchAllAssociative();
         $nbr_courses = count($existingCourses);
 
         // Get list of users subscribed to this session
-        $sql = "SELECT user_id
-                FROM $tbl_session_rel_user
-                WHERE
-                    session_id = $sessionId AND
-                    relation_type = ".Session::STUDENT;
-        $result = Database::query($sql);
-        $user_list = Database::store_result($result);
+        $user_list = $connection->createQueryBuilder()
+            ->select('user_id')
+            ->from('session_rel_user')
+            ->where('session_id = :sessionId')
+            ->andWhere('relation_type = :relationType')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('relationType', Session::STUDENT)
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         // Remove existing courses from the session.
         if (true === $removeExistingCoursesWithUsers && !empty($existingCourses)) {
             foreach ($existingCourses as $existingCourse) {
                 if (!in_array($existingCourse['c_id'], $courseList)) {
-                    $sql = "DELETE FROM $tbl_session_rel_course
-                            WHERE
-                                c_id = ".$existingCourse['c_id']." AND
-                                session_id = $sessionId";
-                    Database::query($sql);
-
-                    $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                            WHERE
-                                c_id = ".$existingCourse['c_id']." AND
-                                session_id = $sessionId";
-                    Database::query($sql);
+                    foreach (['session_rel_course', 'session_rel_course_rel_user'] as $relationTable) {
+                        $connection->createQueryBuilder()
+                            ->delete($relationTable)
+                            ->where('c_id = :courseId')
+                            ->andWhere('session_id = :sessionId')
+                            ->setParameter('courseId', (int) $existingCourse['c_id'])
+                            ->setParameter('sessionId', $sessionId)
+                            ->executeStatement();
+                    }
 
                     Event::addEvent(
                         LOG_SESSION_DELETE_COURSE,
@@ -3308,9 +3313,17 @@ class SessionManager
                     }
                 }
                 // If the course isn't subscribed yet
-                $sql = "INSERT INTO $tbl_session_rel_course (session_id, c_id, nbr_users, position)
-                        VALUES ($sessionId, $courseId, 0, 0)";
-                Database::query($sql);
+                $connection->createQueryBuilder()
+                    ->insert('session_rel_course')
+                    ->values([
+                        'session_id' => ':sessionId',
+                        'c_id' => ':courseId',
+                        'nbr_users' => '0',
+                        'position' => '0',
+                    ])
+                    ->setParameter('sessionId', $sessionId)
+                    ->setParameter('courseId', (int) $courseId)
+                    ->executeStatement();
 
                 Event::addEvent(
                     LOG_SESSION_ADD_COURSE,
@@ -3352,8 +3365,13 @@ class SessionManager
             }
         }
 
-        $sql = "UPDATE $tbl_session SET nbr_courses = $nbr_courses WHERE id = $sessionId";
-        Database::query($sql);
+        $connection->createQueryBuilder()
+            ->update('session')
+            ->set('nbr_courses', ':nbrCourses')
+            ->where('id = :sessionId')
+            ->setParameter('nbrCourses', $nbr_courses)
+            ->setParameter('sessionId', $sessionId)
+            ->executeStatement();
 
         return true;
     }

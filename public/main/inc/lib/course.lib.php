@@ -4747,11 +4747,12 @@ class CourseManager
         if (!$course_code_ok) {
             $wanted_code = self::generate_course_code($wanted_code);
             $table = Database::get_main_table(TABLE_MAIN_COURSE);
-            $wanted_code = Database::escape_string($wanted_code);
-            $sql = "SELECT count(id) as count
-                    FROM $table
-                    WHERE code LIKE '$wanted_code%'";
-            $result = Database::query($sql);
+            $result = Database::getManager()->getConnection()->createQueryBuilder()
+                ->select('count(id) as count')
+                ->from($table)
+                ->where('code LIKE :code')
+                ->setParameter('code', $wanted_code.'%')
+                ->executeQuery();
             if (Database::num_rows($result) > 0) {
                 $row = Database::fetch_array($result);
                 $count = $row['count'] + 1;
@@ -4799,9 +4800,14 @@ class CourseManager
 
         if (empty($session_id)) {
             $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-            $sql = "SELECT legal_agreement FROM $table
-                    WHERE user_id = $user_id AND c_id = $courseId ";
-            $result = Database::query($sql);
+            $result = Database::getManager()->getConnection()->createQueryBuilder()
+                ->select('legal_agreement')
+                ->from($table)
+                ->where('user_id = :userId')
+                ->andWhere('c_id = :courseId')
+                ->setParameter('userId', $user_id)
+                ->setParameter('courseId', (int) $courseId)
+                ->executeQuery();
             if (Database::num_rows($result) > 0) {
                 $result = Database::fetch_array($result);
                 if (1 == $result['legal_agreement']) {
@@ -4812,9 +4818,16 @@ class CourseManager
             return false;
         } else {
             $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-            $sql = "SELECT legal_agreement FROM $table
-                    WHERE user_id = $user_id AND c_id = $courseId AND session_id = $session_id";
-            $result = Database::query($sql);
+            $result = Database::getManager()->getConnection()->createQueryBuilder()
+                ->select('legal_agreement')
+                ->from($table)
+                ->where('user_id = :userId')
+                ->andWhere('c_id = :courseId')
+                ->andWhere('session_id = :sessionId')
+                ->setParameter('userId', $user_id)
+                ->setParameter('courseId', (int) $courseId)
+                ->setParameter('sessionId', $session_id)
+                ->executeQuery();
             if (Database::num_rows($result) > 0) {
                 $result = Database::fetch_array($result);
                 if (1 == $result['legal_agreement']) {
@@ -4859,14 +4872,26 @@ class CourseManager
 
         if (empty($session_id)) {
             $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-            $sql = "UPDATE $table SET legal_agreement = '1'
-                    WHERE user_id = $user_id AND c_id  = $courseId ";
-            Database::query($sql);
+            Database::getManager()->getConnection()->createQueryBuilder()
+                ->update($table)
+                ->set('legal_agreement', '1')
+                ->where('user_id = :userId')
+                ->andWhere('c_id = :courseId')
+                ->setParameter('userId', $user_id)
+                ->setParameter('courseId', (int) $courseId)
+                ->executeStatement();
         } else {
             $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-            $sql = "UPDATE  $table SET legal_agreement = '1'
-                    WHERE user_id = $user_id AND c_id = $courseId AND session_id = $session_id";
-            Database::query($sql);
+            Database::getManager()->getConnection()->createQueryBuilder()
+                ->update($table)
+                ->set('legal_agreement', '1')
+                ->where('user_id = :userId')
+                ->andWhere('c_id = :courseId')
+                ->andWhere('session_id = :sessionId')
+                ->setParameter('userId', $user_id)
+                ->setParameter('courseId', (int) $courseId)
+                ->setParameter('sessionId', $session_id)
+                ->executeStatement();
         }
 
         return true;

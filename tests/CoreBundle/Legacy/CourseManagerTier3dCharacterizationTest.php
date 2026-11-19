@@ -206,4 +206,15 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
         $page = CourseManager::getCoursesFollowedByUser($user->getId(), COURSEMANAGER, 1, 1, null, null, false, null, $session->getId());
         $this->assertSame([$a->getCode()], array_keys($page), 'LIMIT from, limit');
     }
+
+    public function testGenerateNiceNextCourseCodeCountsTheCodesStartingWithTheBase(): void
+    {
+        $a = $this->createCourse('cm3d_nxt');
+        $this->createCourse('cm3d_nxtmore'); // starts with the same base, so it is counted too
+        $base = CourseManager::generate_course_code($a->getCode());
+        $count = (int) $this->conn()->fetchOne('SELECT COUNT(id) FROM course WHERE code LIKE ?', [$base.'%']);
+        $this->assertGreaterThanOrEqual(2, $count);
+
+        $this->assertSame($base.'_'.($count + 1), CourseManager::generate_nice_next_course_code($a->getCode()));
+    }
 }

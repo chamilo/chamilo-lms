@@ -145,4 +145,50 @@ final class CourseManagerTier3CharacterizationTest extends KernelTestCase
         $this->assertSame(6, (int) $sorts[$hr->getId()], 'the HR relation is shifted too in this branch');
         $this->assertSame(9, (int) $sorts[$cat->getId()], 'a course inside a user category is not shifted');
     }
+
+    // ---------------------------------------------------------------- course access tracking
+
+    private function access(User $user, Course $course, string $date, int $sessionId): void
+    {
+        $this->conn()->executeStatement(
+            'INSERT INTO track_e_course_access (user_id, c_id, login_course_date, counter, session_id, user_ip) VALUES (?, ?, ?, 1, ?, ?)',
+            [$user->getId(), $course->getId(), $date, $sessionId, '127.0.0.1']
+        );
+    }
+
+    public function testCourseAccessPerCourseAndSessionIsBoundedByTheDatesInclusive(): void
+    {
+        $course = $this->createCourse('cm3_acc_a');
+        $other = $this->createCourse('cm3_acc_b');
+        $user = $this->createUser('cm3_acc_user');
+        $this->access($user, $course, '2032-03-01 00:00:00', 0);
+        $this->access($user, $course, '2032-03-05 12:00:00', 0);
+        $this->access($user, $course, '2032-03-31 23:59:59', 0);
+        $this->access($user, $course, '2032-04-02 00:00:00', 0);
+        $this->access($user, $course, '2032-03-05 12:00:00', 9);
+        $this->access($user, $other, '2032-03-05 12:00:00', 0);
+
+        $rows = CourseManager::getCourseAccessPerCourseAndSession($course->getId(), 0, '2032-03-01 00:00:00', '2032-03-31 23:59:59');
+
+        $dates = array_column($rows, 'login_course_date');
+        sort($dates);
+        $this->assertSame(['2032-03-01 00:00:00', '2032-03-05 12:00:00', '2032-03-31 23:59:59'], $dates, 'BETWEEN is inclusive; other course, other session and later dates are left out');
+        $this->assertSame((string) $course->getId(), (string) $rows[0]['c_id']);
+    }
+
+    public function testFirstCourseAccessPerSessionAndUserIsTheEarliestOne(): void
+    {
+        $course = $this->createCourse('cm3_first_a');
+        $user = $this->createUser('cm3_first_user');
+        $other = $this->createUser('cm3_first_other');
+        $this->access($user, $course, '2032-05-09 10:00:00', 4);
+        $this->access($user, $course, '2032-05-02 10:00:00', 4);
+        $this->access($user, $course, '2032-05-01 10:00:00', 0);
+        $this->access($other, $course, '2032-04-01 10:00:00', 4);
+
+        $row = CourseManager::getFirstCourseAccessPerSessionAndUser(4, $user->getId());
+
+        $this->assertSame('2032-05-02 10:00:00', $row['login_course_date']);
+        $this->assertSame([], CourseManager::getFirstCourseAccessPerSessionAndUser(4, 999999999), 'no row gives an empty array');
+    }
 }

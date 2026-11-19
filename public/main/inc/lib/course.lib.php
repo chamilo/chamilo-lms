@@ -5264,25 +5264,23 @@ class CourseManager
     {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT count(c.id) FROM $table_course c";
+        $qb = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('COUNT(c.id)')
+            ->from($table_course, 'c');
         if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
-            $sql .= ", $table_course_rel_access_url u
-                    WHERE c.id = u.c_id AND u.access_url_id = $access_url_id";
+            $qb->innerJoin('c', $table_course_rel_access_url, 'u', 'c.id = u.c_id')
+                ->where('u.access_url_id = :urlId')
+                ->setParameter('urlId', (int) $access_url_id);
             if (null !== $visibility && '' !== $visibility) {
-                $visibility = intval($visibility);
-                $sql .= " AND visibility = $visibility ";
+                $qb->andWhere('c.visibility = :visibility')->setParameter('visibility', (int) $visibility);
             }
         } else {
             if (null !== $visibility && '' !== $visibility) {
-                $visibility = intval($visibility);
-                $sql .= " WHERE visibility = $visibility ";
+                $qb->where('c.visibility = :visibility')->setParameter('visibility', (int) $visibility);
             }
         }
 
-        $res = Database::query($sql);
-        $row = Database::fetch_row($res);
-
-        return $row[0];
+        return $qb->executeQuery()->fetchOne();
     }
 
     /**
@@ -5297,21 +5295,18 @@ class CourseManager
     {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT count(c.id) FROM $table_course c";
+        $qb = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('COUNT(c.id)')
+            ->from($table_course, 'c')
+            ->where('c.visibility <> :hidden')
+            ->setParameter('hidden', Course::HIDDEN);
         if (!empty($urlId)) {
-            $urlId = (int) $urlId;
-            $sql .= ", $table_course_rel_access_url u
-                    WHERE
-                        c.id = u.c_id AND
-                        u.access_url_id = $urlId AND
-                        visibility <> ".Course::HIDDEN;
-        } else {
-            $sql .= " WHERE visibility <> ".Course::HIDDEN;
+            $qb->innerJoin('c', $table_course_rel_access_url, 'u', 'c.id = u.c_id')
+                ->andWhere('u.access_url_id = :urlId')
+                ->setParameter('urlId', (int) $urlId);
         }
-        $res = Database::query($sql);
-        $row = Database::fetch_row($res);
 
-        return $row[0];
+        return $qb->executeQuery()->fetchOne();
     }
 
     /**
@@ -5841,17 +5836,18 @@ class CourseManager
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
-        $startDate = Database::escape_string($startDate);
-        $endDate = Database::escape_string($endDate);
 
-        $sql = "SELECT * FROM $table
-                WHERE
-                    c_id = $courseId AND
-                    session_id = $sessionId AND
-                    login_course_date BETWEEN '$startDate' AND '$endDate'
-                ";
-
-        $result = Database::query($sql);
+        $result = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from($table)
+            ->where('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('login_course_date BETWEEN :startDate AND :endDate')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('startDate', (string) $startDate)
+            ->setParameter('endDate', (string) $endDate)
+            ->executeQuery();
 
         return Database::store_result($result);
     }
@@ -5871,12 +5867,16 @@ class CourseManager
         $userId = (int) $userId;
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = "SELECT * FROM $table
-                WHERE session_id = $sessionId AND user_id = $userId
-                ORDER BY login_course_date ASC
-                LIMIT 1";
-
-        $result = Database::query($sql);
+        $result = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from($table)
+            ->where('session_id = :sessionId')
+            ->andWhere('user_id = :userId')
+            ->orderBy('login_course_date', 'ASC')
+            ->setMaxResults(1)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('userId', $userId)
+            ->executeQuery();
         $courseAccess = [];
         if (Database::num_rows($result)) {
             $courseAccess = Database::fetch_assoc($result);

@@ -55,9 +55,9 @@ const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 const { showErrorNotification } = useNotification()
 
-// Editable only for users who can manage the current course (course/session
-// teacher or admin), matching CAttendance's write security. The student view
-// forces read-only even for them.
+// Editable only for teachers of the course or session and admins (CAttendance's
+// write security), outside the student view. The rows do not depend on it: the API
+// already leaves the hidden attendances out for the users who cannot edit them.
 const readonly = computed(() => !securityStore.isCourseAdmin || platformConfigStore.isStudentViewActive)
 
 const attendances = ref([])
@@ -126,7 +126,7 @@ const fetchAttendances = async ({ page = 1, rows = 10 } = {}) => {
     }
     const data = await attendanceService.getAttendances(params)
 
-    let attendanceList = data["hydra:member"].map((item) => ({
+    attendances.value = data["hydra:member"].map((item) => ({
       id: item.iid,
       title: item.title,
       description: item.description,
@@ -137,11 +137,6 @@ const fetchAttendances = async ({ page = 1, rows = 10 } = {}) => {
       resourceNode: item.resourceNode,
     }))
 
-    if (readonly.value) {
-      attendanceList = attendanceList.filter((i) => (i.resourceLinkListFromEntity?.[0]?.visibility || 0) === 2)
-    }
-
-    attendances.value = attendanceList
     totalAttendances.value = data.total || 0
   } catch (error) {
     showErrorNotification(error)

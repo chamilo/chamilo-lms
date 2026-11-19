@@ -2,6 +2,7 @@
   <BaseTable
     :aria-busy="loading ? 'true' : undefined"
     :is-loading="loading"
+    :row-class="getRowClass"
     :style="loading ? { minHeight: `${TABLE_LOADING_HEIGHT}px` } : undefined"
     :text-for-empty="loading ? '' : t('No data available')"
     :total-items="totalRecords"
@@ -105,6 +106,7 @@ import BaseTable from "../basecomponents/BaseTable.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import DOMPurify from "dompurify"
 import { useLocale } from "../../composables/locale"
+import { RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 
 // Measured at 1440 px with the local portal: header, one row and the paginator.
 const TABLE_LOADING_HEIGHT = 155
@@ -137,15 +139,32 @@ const sanitizeHtml = (html, options = {}) => {
   })
 }
 
-const getVisibilityIcon = (attendance) => {
-  const visibility = attendance.resourceLinkListFromEntity?.[0]?.visibility || 0
-  return visibility === 2 ? "eye-on" : "eye-off"
-}
+/**
+ * @param {Object} attendance
+ * @returns {boolean}
+ */
+const isVisible = (attendance) => RESOURCE_LINK_PUBLISHED === attendance.resourceLinkListFromEntity?.[0]?.visibility
 
-const getVisibilityTooltip = (attendance) => {
-  const visibility = attendance.resourceLinkListFromEntity?.[0]?.visibility || 0
-  return visibility === 2 ? t("Visible") : t("Hidden")
-}
+/**
+ * @param {Object} attendance
+ * @returns {string}
+ */
+const getVisibilityIcon = (attendance) => (isVisible(attendance) ? "eye-on" : "eye-off")
+
+/**
+ * @param {Object} attendance
+ * @returns {string}
+ */
+const getVisibilityTooltip = (attendance) => (isVisible(attendance) ? t("Visible") : t("Hidden"))
+
+/**
+ * Greys out a hidden attendance in the read-only table. Only a teacher in the student
+ * view gets one: the API leaves them out for the users who cannot edit them.
+ *
+ * @param {Object} attendance
+ * @returns {string}
+ */
+const getRowClass = (attendance) => (props.readonly && !isVisible(attendance) ? "opacity-50" : "")
 
 const { t } = useI18n()
 const { appLocale } = useLocale()

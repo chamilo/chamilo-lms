@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
@@ -10271,15 +10272,21 @@ class Exercise
         $userId = (int) api_get_user_id();
         $viewId = (int) $viewId;
 
-        $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
-
-        $sql = "SELECT start_date, exe_date, score, max_score, exe_exo_id, exe_duration
-                FROM $TBL_TRACK_EXERCICES
-                WHERE exe_id = $safe_exe_id AND exe_user_id = $userId";
-        $res = Database::query($sql);
-        $row_dates = Database::fetch_array($res);
+        $em = Container::getEntityManager();
+        $row_dates = $em->createQueryBuilder()
+            ->select(
+                'IDENTITY(t.quiz) AS exe_exo_id',
+                't.score AS score',
+                't.maxScore AS max_score',
+                't.exeDuration AS exe_duration'
+            )
+            ->from(TrackEExercise::class, 't')
+            ->where('t.exeId = :exeId')
+            ->andWhere('IDENTITY(t.user) = :userId')
+            ->setParameter('exeId', $safe_exe_id)
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
         if (empty($row_dates)) {
             return false;
@@ -10289,22 +10296,29 @@ class Exercise
         $score = (float) $row_dates['score'];
         $max_score = (float) $row_dates['max_score'];
 
-        $sql = "UPDATE $TBL_LP_ITEM SET
-                    max_score = '$max_score'
-                WHERE iid = $safe_item_id";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->update(CLpItem::class, 'lpi')
+            ->set('lpi.maxScore', ':maxScore')
+            ->where('lpi.iid = :itemId')
+            ->setParameter('maxScore', $max_score)
+            ->setParameter('itemId', $safe_item_id)
+            ->getQuery()
+            ->execute();
 
-        $sql = "SELECT iid FROM $TBL_LP_ITEM_VIEW
-                WHERE
-                    lp_item_id = $safe_item_id AND
-                    lp_view_id = $viewId
-                ORDER BY iid DESC
-                LIMIT 1";
-        $res_last_attempt = Database::query($sql);
+        $lp_item_view_id = $em->createQueryBuilder()
+            ->select('liv.iid')
+            ->from(CLpItemView::class, 'liv')
+            ->where('IDENTITY(liv.item) = :itemId')
+            ->andWhere('IDENTITY(liv.view) = :viewId')
+            ->orderBy('liv.iid', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('itemId', $safe_item_id)
+            ->setParameter('viewId', $viewId)
+            ->getQuery()
+            ->getOneOrNullResult()['iid'] ?? null;
 
-        if (Database::num_rows($res_last_attempt) && !api_is_invitee()) {
-            $row_last_attempt = Database::fetch_row($res_last_attempt);
-            $lp_item_view_id = $row_last_attempt[0];
+        if (null !== $lp_item_view_id && !api_is_invitee()) {
+            $lp_item_view_id = (int) $lp_item_view_id;
 
             $exercise = new Exercise($course_id);
             $exercise->read($row_dates['exe_exo_id']);
@@ -10325,17 +10339,27 @@ class Exercise
                 }
             }
 
-            $sql = "UPDATE $TBL_LP_ITEM_VIEW SET
-                        status = '$status',
-                        score = '$score',
-                        total_time = '$duration'
-                    WHERE iid = $lp_item_view_id";
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->update(CLpItemView::class, 'liv')
+                ->set('liv.status', ':status')
+                ->set('liv.score', ':score')
+                ->set('liv.totalTime', ':totalTime')
+                ->where('liv.iid = :iid')
+                ->setParameter('status', $status)
+                ->setParameter('score', $score)
+                ->setParameter('totalTime', $duration)
+                ->setParameter('iid', $lp_item_view_id)
+                ->getQuery()
+                ->execute();
 
-            $sql = "UPDATE $TBL_TRACK_EXERCICES SET
-                        orig_lp_item_view_id = '$lp_item_view_id'
-                    WHERE exe_id = ".$safe_exe_id;
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->update(TrackEExercise::class, 't')
+                ->set('t.origLpItemViewId', ':itemViewId')
+                ->where('t.exeId = :exeId')
+                ->setParameter('itemViewId', $lp_item_view_id)
+                ->setParameter('exeId', $safe_exe_id)
+                ->getQuery()
+                ->execute();
         }
     }
 

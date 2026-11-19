@@ -660,6 +660,11 @@ class AttendanceController extends AbstractController
                 continue;
             }
 
+            // The attendance score adds up the presence values, so a student only marks present or absent.
+            if (!\in_array($presence, [0, 1], true)) {
+                throw new BadRequestHttpException('Invalid presence value');
+            }
+
             $calendar = $this->attendanceCalendarRepository->find($calendarId);
             if (!$calendar) {
                 continue;

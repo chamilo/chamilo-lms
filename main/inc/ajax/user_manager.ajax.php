@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
+use Chamilo\CourseBundle\Entity\CAttendanceSheet;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
@@ -16,29 +18,68 @@ $isRequestByAjax = $request->isXmlHttpRequest();
 
 $action = $_REQUEST['a'];
 
+$attendanceActions = [
+    'comment_attendance',
+    'get_attendance_comment',
+    'block_attendance_calendar',
+    'get_attendance_sign',
+    'remove_attendance_sign',
+    'sign_attendance',
+];
+
+if (in_array($action, $attendanceActions)) {
+    api_block_anonymous_users(false);
+}
+
+/**
+ * Returns the attendance calendar when it belongs to the given course (the current one by default).
+ *
+ * @return CAttendanceCalendar|null
+ */
+function getAttendanceCalendarInCourse($calendarId, $courseId = 0)
+{
+    $courseId = (int) (!empty($courseId) ? $courseId : api_get_course_int_id());
+    if (empty($courseId) || empty($calendarId)) {
+        return null;
+    }
+
+    /** @var CAttendanceCalendar|null $calendar */
+    $calendar = Database::getManager()->find('ChamiloCourseBundle:CAttendanceCalendar', (int) $calendarId);
+    if (null === $calendar || (int) $calendar->getCId() !== $courseId) {
+        return null;
+    }
+
+    return $calendar;
+}
+
 switch ($action) {
     case 'comment_attendance':
         $selected = $_REQUEST['selected'];
         $comment = $_REQUEST['comment'];
-        $attendanceId = (int) $_REQUEST['attendance_id'];
-        if (!empty($selected)) {
+        if (!empty($selected) && api_is_allowed_to_edit(null, true)) {
             list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
-            $attendance = new Attendance();
-            $attendance->saveComment(
-                (int) $userId,
-                (int) $attendanceCalendarId,
-                $comment,
-                $attendanceId
-            );
-            echo 1;
-            exit;
+            $calendar = getAttendanceCalendarInCourse($attendanceCalendarId);
+            if (null !== $calendar) {
+                $attendance = new Attendance();
+                $attendance->saveComment(
+                    (int) $userId,
+                    (int) $attendanceCalendarId,
+                    $comment,
+                    (int) $calendar->getAttendanceId()
+                );
+                echo 1;
+                exit;
+            }
         }
         echo 0;
         break;
     case 'get_attendance_comment':
         $selected = $_REQUEST['selected'];
-        if (!empty($selected)) {
+        if (!empty($selected) && api_is_allowed_to_edit(null, true)) {
             list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
+            if (null === getAttendanceCalendarInCourse($attendanceCalendarId)) {
+                exit;
+            }
             $attendance = new Attendance();
             $commentInfo = $attendance->getComment(
                 (int) $userId,
@@ -54,6 +95,9 @@ switch ($action) {
         break;
     case 'block_attendance_calendar':
         $calendarId = (int) $_REQUEST['calendar_id'];
+        if (!api_is_allowed_to_edit(null, true) || null === getAttendanceCalendarInCourse($calendarId)) {
+            exit;
+        }
         $attendance = new Attendance();
         $attendance->updateCalendarBlocked($calendarId);
         echo (int) $attendance->isCalendarBlocked($calendarId);
@@ -62,31 +106,76 @@ switch ($action) {
         $selected = $_REQUEST['selected'];
         if (!empty($selected)) {
             list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
+            $userId = (int) $userId;
+            // Teachers see any signature of their course, other users only their own.
+            if ((!api_is_allowed_to_edit(null, true) && $userId !== api_get_user_id())
+                || null === getAttendanceCalendarInCourse($attendanceCalendarId)
+            ) {
+                exit;
+            }
             $attendance = new Attendance();
-            $signature = $attendance->getSignature($userId, $attendanceCalendarId);
+            $signature = $attendance->getSignature($userId, (int) $attendanceCalendarId);
             echo $signature;
         }
         break;
     case 'remove_attendance_sign':
         $selected = $_REQUEST['selected'];
-        $attendanceId = (int) $_REQUEST['attendance_id'];
         if (!empty($selected)) {
             list($prefix, $userId, $attendanceCalendarId) = explode('-', $selected);
+            $userId = (int) $userId;
+            if (!api_is_allowed_to_edit(null, true) && $userId !== api_get_user_id()) {
+                exit;
+            }
+            $calendar = getAttendanceCalendarInCourse($attendanceCalendarId);
+            if (null === $calendar) {
+                exit;
+            }
             $attendance = new Attendance();
-            $attendance->deleteSignature($userId, $attendanceCalendarId, $attendanceId);
+            $attendance->deleteSignature($userId, (int) $attendanceCalendarId, (int) $calendar->getAttendanceId());
         }
         break;
     case 'sign_attendance':
         $selected = $_REQUEST['selected'];
         $file = isset($_REQUEST['file']) ? $_REQUEST['file'] : '';
         $file = str_replace(' ', '+', $file);
-        $attendanceId = $_REQUEST['attendance_id'];
         if (!empty($selected)) {
             list($prefix, $userId, $attendanceCalendarId, $courseId) = explode('-', $selected);
-            $attendance = new Attendance();
-            $attendance->saveSignature($userId, $attendanceCalendarId, $file, $attendanceId, $courseId);
-            echo 1;
-            exit;
+            $userId = (int) $userId;
+            $attendanceCalendarId = (int) $attendanceCalendarId;
+            // A teacher signs for any user of the current course.
+            $calendar = api_is_allowed_to_edit(null, true) ? getAttendanceCalendarInCourse($attendanceCalendarId) : null;
+            if (null !== $calendar) {
+                $courseId = api_get_course_int_id();
+            } elseif ($userId === api_get_user_id()) {
+                // Other users only sign their own sheet, once marked present, while the date is open to signatures.
+                $courseId = !empty($courseId) ? (int) $courseId : api_get_course_int_id();
+                $calendar = getAttendanceCalendarInCourse($attendanceCalendarId, $courseId);
+                /** @var CAttendanceSheet|null $sheet */
+                $sheet = Database::getManager()
+                    ->getRepository('ChamiloCourseBundle:CAttendanceSheet')
+                    ->findOneBy(
+                        [
+                            'userId' => $userId,
+                            'attendanceCalendarId' => $attendanceCalendarId,
+                            'cId' => $courseId,
+                        ]
+                    );
+                if (null === $calendar || $calendar->getBlocked() || null === $sheet || 1 !== (int) $sheet->getPresence()) {
+                    $calendar = null;
+                }
+            }
+            if (null !== $calendar) {
+                $attendance = new Attendance();
+                $attendance->saveSignature(
+                    $userId,
+                    $attendanceCalendarId,
+                    $file,
+                    (int) $calendar->getAttendanceId(),
+                    $courseId
+                );
+                echo 1;
+                exit;
+            }
         }
         echo 0;
         break;

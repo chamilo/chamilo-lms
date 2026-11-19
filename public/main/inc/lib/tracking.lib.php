@@ -7350,13 +7350,13 @@ class Tracking
     ) {
         // Begin with the import process
         $origin_course_code = $course_info['code'];
-        $course_id = $course_info['real_id'];
+        $course_id = (int) $course_info['real_id'];
         $user_id = (int) $user_id;
         $origin_session_id = (int) $origin_session_id;
         $new_session_id = (int) $new_session_id;
         // "No session" is NULL in the nullable session columns (they are foreign keys to session.id) and 0 in the
         // NOT NULL ones.
-        $newSessionNullable = empty($new_session_id) ? 'NULL' : (string) $new_session_id;
+        $newSessionNullable = empty($new_session_id) ? null : $new_session_id;
         $courseEntity = api_get_course_entity((int) $course_id);
         $originSessionEntity = empty($origin_session_id) ? null : api_get_session_entity($origin_session_id);
         $newSessionEntity = empty($new_session_id) ? null : api_get_session_entity($new_session_id);
@@ -7379,12 +7379,16 @@ class Tracking
 
         //1. track_e_exercises
         //ORIGINAL COURSE
-        $sessionCondition = api_get_session_condition($origin_session_id);
-        $sql = "SELECT * FROM $TABLETRACK_EXERCICES
-                WHERE c_id = $course_id AND exe_user_id = $user_id  $sessionCondition";
-        $res = Database::query($sql);
+        $qb = self::dbalQueryBuilder()
+            ->select('*')
+            ->from($TABLETRACK_EXERCICES)
+            ->where('c_id = :courseId')
+            ->andWhere('exe_user_id = :userId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('userId', $user_id);
+        self::andSessionCondition($qb, $origin_session_id);
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
             $list[$row['exe_id']] = $row;
         }
 
@@ -7393,16 +7397,12 @@ class Tracking
         if (!empty($list)) {
             foreach ($list as $exe_id => $data) {
                 if ($update_database) {
-                    $sql = "UPDATE $TABLETRACK_EXERCICES SET session_id = $newSessionNullable WHERE exe_id = $exe_id";
-                    Database::query($sql);
+                    self::updateSessionOfRow($TABLETRACK_EXERCICES, 'exe_id', (int) $exe_id, $newSessionNullable);
 
                     //$sql = "UPDATE $TBL_TRACK_ATTEMPT SET session_id = '$new_session_id' WHERE exe_id = $exe_id";
                     //Database::query($sql);
 
-                    $sql = "UPDATE $TBL_TRACK_ATTEMPT_QUALIFY
-                            SET session_id = $new_session_id
-                            WHERE exe_id = $exe_id";
-                    Database::query($sql);
+                    self::updateSessionOfRow($TBL_TRACK_ATTEMPT_QUALIFY, 'exe_id', (int) $exe_id, $new_session_id);
 
                     if (!isset($result_message[$TABLETRACK_EXERCICES])) {
                         $result_message[$TABLETRACK_EXERCICES] = 0;
@@ -7420,23 +7420,23 @@ class Tracking
 
         // DESTINY COURSE
         if (!$update_database) {
-            $sql = "SELECT * FROM $TABLETRACK_EXERCICES
-                    WHERE
-                        c_id = $course_id AND
-                        exe_user_id = $user_id ".api_get_session_condition($new_session_id);
-            $res = Database::query($sql);
+            $qb = self::dbalQueryBuilder()
+                ->select('*')
+                ->from($TABLETRACK_EXERCICES)
+                ->where('c_id = :courseId')
+                ->andWhere('exe_user_id = :userId')
+                ->setParameter('courseId', $course_id)
+                ->setParameter('userId', $user_id);
+            self::andSessionCondition($qb, $new_session_id);
             $list = [];
-            while ($row = Database::fetch_assoc($res)) {
+            foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
                 $list[$row['exe_id']] = $row;
             }
 
             if (!empty($list)) {
                 foreach ($list as $exe_id => $data) {
                     if ($update_database) {
-                        $sql = "UPDATE $TABLETRACK_EXERCICES
-                                SET session_id = $newSessionNullable
-                                WHERE exe_id = $exe_id";
-                        Database::query($sql);
+                        self::updateSessionOfRow($TABLETRACK_EXERCICES, 'exe_id', (int) $exe_id, $newSessionNullable);
                         $result_message[$TABLETRACK_EXERCICES]++;
                     } else {
                         if (!empty($data['orig_lp_id']) && !empty($data['orig_lp_item_id'])) {
@@ -7452,24 +7452,26 @@ class Tracking
         // 2.track_e_attempt, track_e_attempt_recording, track_e_downloads
         // Nothing to do because there are not relationship with a session
         // 3. track_e_course_access
-        $sql = "SELECT * FROM $TBL_TRACK_E_COURSE_ACCESS
-                WHERE c_id = $course_id AND session_id = $origin_session_id  AND user_id = $user_id ";
-        $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        $rows = self::dbalQueryBuilder()
+            ->select('*')
+            ->from($TBL_TRACK_E_COURSE_ACCESS)
+            ->where('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('sessionId', $origin_session_id)
+            ->setParameter('userId', $user_id)
+            ->executeQuery()
+            ->fetchAllAssociative();
+        foreach ($rows as $row) {
             $list[$row['course_access_id']] = $row;
         }
 
         if (!empty($list)) {
             foreach ($list as $id => $data) {
                 if ($update_database) {
-                    $sql = "UPDATE $TBL_TRACK_E_COURSE_ACCESS
-                            SET session_id = $new_session_id
-                            WHERE course_access_id = $id";
-                    if ($debug) {
-                        echo $sql;
-                    }
-                    Database::query($sql);
+                    self::updateSessionOfRow($TBL_TRACK_E_COURSE_ACCESS, 'course_access_id', (int) $id, $new_session_id, null, $debug);
                     if (!isset($result_message[$TBL_TRACK_E_COURSE_ACCESS])) {
                         $result_message[$TBL_TRACK_E_COURSE_ACCESS] = 0;
                     }
@@ -7479,26 +7481,23 @@ class Tracking
         }
 
         // 4. track_e_lastaccess
-        $sql = "SELECT access_id FROM $TBL_TRACK_E_LAST_ACCESS
-                WHERE
-                    c_id = $course_id AND
-                    access_user_id = $user_id ".api_get_session_condition($origin_session_id);
-        $res = Database::query($sql);
+        $qb = self::dbalQueryBuilder()
+            ->select('access_id')
+            ->from($TBL_TRACK_E_LAST_ACCESS)
+            ->where('c_id = :courseId')
+            ->andWhere('access_user_id = :userId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('userId', $user_id);
+        self::andSessionCondition($qb, $origin_session_id);
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
             $list[] = $row['access_id'];
         }
 
         if (!empty($list)) {
             foreach ($list as $id) {
                 if ($update_database) {
-                    $sql = "UPDATE $TBL_TRACK_E_LAST_ACCESS
-                            SET session_id = $newSessionNullable
-                            WHERE access_id = $id";
-                    if ($debug) {
-                        echo $sql;
-                    }
-                    Database::query($sql);
+                    self::updateSessionOfRow($TBL_TRACK_E_LAST_ACCESS, 'access_id', (int) $id, $newSessionNullable, null, $debug);
                     if (!isset($result_message[$TBL_TRACK_E_LAST_ACCESS])) {
                         $result_message[$TBL_TRACK_E_LAST_ACCESS] = 0;
                     }
@@ -7509,15 +7508,21 @@ class Tracking
 
         // 5. lp_item_view
         // CHECK ORIGIN
-        $sql = "SELECT * FROM $TBL_LP_VIEW
-                WHERE user_id = $user_id AND c_id = $course_id ".api_get_session_condition($origin_session_id);
-        $res = Database::query($sql);
+        $qb = self::dbalQueryBuilder()
+            ->select('*')
+            ->from($TBL_LP_VIEW)
+            ->where('user_id = :userId')
+            ->andWhere('c_id = :courseId')
+            ->setParameter('userId', $user_id)
+            ->setParameter('courseId', $course_id);
+        self::andSessionCondition($qb, $origin_session_id);
+        $rows = $qb->executeQuery()->fetchAllAssociative();
 
         // Getting the list of LPs in the new session
         $lp_list = new LearnpathList($user_id, $course_info, $new_session_id);
         $flat_list = $lp_list->get_flat_list();
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($rows as $row) {
             // Checking if the LP exist in the new session
             //if (in_array($row['lp_id'], array_keys($flat_list))) {
             $list[$row['iid']] = $row;
@@ -7527,16 +7532,7 @@ class Tracking
         if (!empty($list)) {
             foreach ($list as $id => $data) {
                 if ($update_database) {
-                    $sql = "UPDATE $TBL_LP_VIEW
-                            SET session_id = $newSessionNullable
-                            WHERE c_id = $course_id AND iid = $id ";
-                    if ($debug) {
-                        var_dump($sql);
-                    }
-                    $res = Database::query($sql);
-                    if ($debug) {
-                        var_dump($res);
-                    }
+                    self::updateSessionOfRow($TBL_LP_VIEW, 'iid', (int) $id, $newSessionNullable, $course_id, $debug);
                     if (!isset($result_message[$TBL_LP_VIEW])) {
                         $result_message[$TBL_LP_VIEW] = 0;
                     }
@@ -7565,16 +7561,22 @@ class Tracking
 
         // Check destination.
         if (!$update_database) {
-            $sql = "SELECT * FROM $TBL_LP_VIEW
-                    WHERE user_id = $user_id AND c_id = $course_id ".api_get_session_condition($new_session_id);
-            $res = Database::query($sql);
+            $qb = self::dbalQueryBuilder()
+                ->select('*')
+                ->from($TBL_LP_VIEW)
+                ->where('user_id = :userId')
+                ->andWhere('c_id = :courseId')
+                ->setParameter('userId', $user_id)
+                ->setParameter('courseId', $course_id);
+            self::andSessionCondition($qb, $new_session_id);
+            $rows = $qb->executeQuery()->fetchAllAssociative();
 
             // Getting the list of LPs in the new session
             $lp_list = new LearnpathList($user_id, $course_info, $new_session_id);
             $flat_list = $lp_list->get_flat_list();
 
             $list = [];
-            while ($row = Database::fetch_assoc($res)) {
+            foreach ($rows as $row) {
                 //Checking if the LP exist in the new session
                 //if (in_array($row['lp_id'], array_keys($flat_list))) {
                 $list[$row['iid']] = $row;
@@ -7696,32 +7698,23 @@ class Tracking
 
         //9. Survey   Pending
         //10. Dropbox - not neccesary to move categories (no presence of session_id)
-        $sql = "SELECT iid FROM $TBL_DROPBOX_FILE
-                WHERE uploader_id = $user_id AND session_id = $origin_session_id AND c_id = $course_id";
+        $qb = self::dbalQueryBuilder()
+            ->select('iid')
+            ->from($TBL_DROPBOX_FILE)
+            ->where('uploader_id = :userId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('c_id = :courseId')
+            ->setParameter('userId', $user_id)
+            ->setParameter('sessionId', $origin_session_id)
+            ->setParameter('courseId', $course_id);
         if ($debug) {
-            var_dump($sql);
+            var_dump($qb->getSQL());
         }
-        $res = Database::query($sql);
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
             $id = (int) $row['iid'];
             if ($update_database) {
-                $sql = "UPDATE $TBL_DROPBOX_FILE SET session_id = $new_session_id WHERE c_id = $course_id AND iid = $id";
-                if ($debug) {
-                    var_dump($sql);
-                }
-                Database::query($sql);
-                if ($debug) {
-                    var_dump($res);
-                }
-
-                $sql = "UPDATE $TBL_DROPBOX_POST SET session_id = $new_session_id WHERE file_id = $id";
-                if ($debug) {
-                    var_dump($sql);
-                }
-                Database::query($sql);
-                if ($debug) {
-                    var_dump($res);
-                }
+                self::updateSessionOfRow($TBL_DROPBOX_FILE, 'iid', $id, $new_session_id, $course_id, $debug);
+                self::updateSessionOfRow($TBL_DROPBOX_POST, 'file_id', $id, $new_session_id, null, $debug);
                 if (!isset($result_message[$TBL_DROPBOX_FILE])) {
                     $result_message[$TBL_DROPBOX_FILE] = 0;
                 }
@@ -7804,26 +7797,20 @@ class Tracking
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
         $ownerField = 'user' === $ownerField ? 'r.user_id' : 'rn.creator_id';
-        $sessionCondition = self::getResourceLinkSessionCondition($sessionId, 'rl');
 
-        $sql = "SELECT
-                    rl.id AS resource_link_id,
-                    r.iid AS item_id,
-                    rn.title AS title
-                FROM $resourceTable r
-                    INNER JOIN $resourceNodeTable rn
-                    ON rn.id = r.resource_node_id
-                    INNER JOIN $resourceLinkTable rl
-                    ON rl.resource_node_id = rn.id
-                WHERE
-                    rl.c_id = $courseId AND
-                    $sessionCondition AND
-                    $ownerField = $userId";
-
-        $result = Database::query($sql);
+        $qb = self::dbalQueryBuilder()
+            ->select('rl.id AS resource_link_id', 'r.iid AS item_id', 'rn.title AS title')
+            ->from($resourceTable, 'r')
+            ->innerJoin('r', $resourceNodeTable, 'rn', 'rn.id = r.resource_node_id')
+            ->innerJoin('rn', $resourceLinkTable, 'rl', 'rl.resource_node_id = rn.id')
+            ->where('rl.c_id = :courseId')
+            ->andWhere("$ownerField = :userId")
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $userId);
+        self::andSessionCondition($qb, $sessionId, 'rl.session_id');
         $rows = [];
 
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
             $rows[(int) $row['resource_link_id']] = [
                 'resource_link_id' => (int) $row['resource_link_id'],
                 'item_id' => (int) $row['item_id'],
@@ -7841,7 +7828,7 @@ class Tracking
         }
 
         $table = Database::get_main_table('resource_link');
-        $sessionValue = empty($newSessionId) ? 'NULL' : (string) (int) $newSessionId;
+        $sessionValue = empty($newSessionId) ? null : (int) $newSessionId;
         $updatedRows = 0;
 
         foreach ($rows as $row) {
@@ -7851,28 +7838,37 @@ class Tracking
                 continue;
             }
 
-            $sql = "UPDATE $table
-                    SET session_id = $sessionValue
-                    WHERE id = $resourceLinkId";
-
-            if ($debug) {
-                var_dump($sql);
-            }
-
-            Database::query($sql);
+            self::updateSessionOfRow($table, 'id', $resourceLinkId, $sessionValue, null, $debug);
             $updatedRows++;
         }
 
         return $updatedRows;
     }
 
-    private static function getResourceLinkSessionCondition(int $sessionId, string $alias = 'rl'): string
-    {
-        if (empty($sessionId)) {
-            return "($alias.session_id IS NULL OR $alias.session_id = 0)";
+    /**
+     * Sets the session of one row of a tracking/resource table (NULL for the base context where the column allows it).
+     */
+    private static function updateSessionOfRow(
+        string $table,
+        string $keyField,
+        int $keyValue,
+        ?int $sessionId,
+        ?int $courseId = null,
+        bool $debug = false
+    ): void {
+        $qb = self::dbalQueryBuilder()
+            ->update($table)
+            ->set('session_id', ':sessionId')
+            ->where("$keyField = :keyValue")
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('keyValue', $keyValue);
+        if (null !== $courseId) {
+            $qb->andWhere('c_id = :courseId')->setParameter('courseId', $courseId);
         }
-
-        return "$alias.session_id = $sessionId";
+        if ($debug) {
+            var_dump($qb->getSQL());
+        }
+        $qb->executeStatement();
     }
 
     public static function compareUserData($result_message)

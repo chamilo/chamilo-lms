@@ -3512,22 +3512,20 @@ class Tracking
             }
 
             // Compose a filter based on optional learning paths list given
-            $condition_lp = '';
-            if (!empty($lp_ids)) {
-                $condition_lp = " AND iid IN(".implode(',', $lp_ids).") ";
-            }
-
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
-            $sql = "SELECT DISTINCT(iid) FROM $lpTable
-                WHERE 1=1 $condition_lp";
-            $result = Database::query($sql);
-            $sessionCondition = api_get_session_condition($sessionId);
-            $vSessionCondition = api_get_session_condition($sessionId, true, false, 'v.session_id');
+            $qbLpIds = self::dbalQueryBuilder()
+                ->select('DISTINCT(iid) AS iid')
+                ->from($lpTable);
+            if (!empty($lp_ids)) {
+                $qbLpIds->where('iid IN (:lpIds)')
+                    ->setParameter('lpIds', array_map('intval', $lp_ids), ArrayParameterType::INTEGER);
+            }
+            $lpRows = $qbLpIds->executeQuery()->fetchAllAssociative();
 
             // calculates time
-            if (Database::num_rows($result) > 0) {
-                while ($row = Database::fetch_array($result)) {
+            if (count($lpRows) > 0) {
+                foreach ($lpRows as $row) {
                     $lp_id = (int) $row['iid'];
                     $lp = Container::getLpRepository()->find($lp_id);
                     // Start Exercise in LP total_time
@@ -3539,64 +3537,68 @@ class Tracking
                             continue;
                         }
 
-                        $sql = "SELECT max(view_count)
-                            FROM $lpViewTable
-                            WHERE
-                                c_id = $courseId AND
-                                lp_id = $lp_id AND
-                                user_id = $student_id
-                                $sessionCondition";
-                        $res = Database::query($sql);
-                        $view = '';
-                        if (Database::num_rows($res) > 0) {
-                            $myrow = Database::fetch_array($res);
-                            $view = $myrow[0];
+                        $qbView = self::dbalQueryBuilder()
+                            ->select('MAX(view_count)')
+                            ->from($lpViewTable)
+                            ->where('c_id = :courseId')
+                            ->andWhere('lp_id = :lpId')
+                            ->andWhere('user_id = :studentId')
+                            ->setParameter('courseId', (int) $courseId)
+                            ->setParameter('lpId', $lp_id)
+                            ->setParameter('studentId', $student_id);
+                        self::andSessionCondition($qbView, $sessionId);
+                        $view = $qbView->executeQuery()->fetchOne();
+                        if (false === $view) {
+                            $view = '';
                         }
-                        $viewCondition = '';
+                        $qbQuizView = self::dbalQueryBuilder()
+                            ->select(
+                                'iv.iid',
+                                'iv.total_time AS mytime',
+                                'i.iid AS myid',
+                                'iv.view_count AS iv_view_count',
+                                'path'
+                            )
+                            ->from($lpItemTable, 'i')
+                            ->innerJoin('i', $lpItemViewTable, 'iv', 'i.iid = iv.lp_item_id')
+                            ->innerJoin('iv', $lpViewTable, 'v', 'iv.lp_view_id = v.iid')
+                            ->where('v.c_id = :courseId')
+                            ->andWhere('i.iid = :itemId')
+                            ->andWhere('i.lp_id = :lpId')
+                            ->andWhere('v.user_id = :studentId')
+                            ->andWhere("item_type = 'quiz'")
+                            ->andWhere("path <> ''")
+                            ->setParameter('courseId', (int) $courseId)
+                            ->setParameter('itemId', $itemId)
+                            ->setParameter('lpId', $lp_id)
+                            ->setParameter('studentId', $student_id);
+                        self::andSessionCondition($qbQuizView, $sessionId, 'v.session_id');
                         if (!empty($view)) {
-                            $viewCondition = " AND v.view_count = $view  ";
+                            $qbQuizView->andWhere('v.view_count = :viewCount')
+                                ->setParameter('viewCount', (int) $view);
                         }
-                        $sql = "SELECT
-                                iv.iid,
-                                iv.total_time as mytime,
-                                i.iid as myid,
-                                iv.view_count as iv_view_count,
-                                path
-                            FROM $lpItemTable as i
-                            INNER JOIN $lpItemViewTable as iv
-                                ON (i.iid = iv.lp_item_id)
-                            INNER JOIN $lpViewTable as v
-                                ON (iv.lp_view_id = v.iid)
-                            WHERE
-                                v.c_id = $courseId AND
-                                i.iid = $itemId AND
-                                i.lp_id = $lp_id  AND
-                                v.user_id = $student_id AND
-                                item_type = 'quiz' AND
-                                path <> ''
-                                $vSessionCondition
-                                $viewCondition
-                            ORDER BY iv.view_count DESC ";
+                        $qbQuizView->orderBy('iv.view_count', 'DESC');
 
-                        $resultRow = Database::query($sql);
-                        if (Database::num_rows($resultRow)) {
-                            $row = Database::fetch_array($resultRow);
+                        $row = $qbQuizView->executeQuery()->fetchAssociative();
+                        if (false !== $row) {
                             $totalTimeInLpItemView = $row['mytime'];
                             $lpItemViewId = $row['iid'];
-                            $sql = 'SELECT SUM(exe_duration) exe_duration
-                                FROM '.$trackExercises.'
-                                WHERE
-                                    exe_exo_id="'.Database::escape_string($row['path']).'" AND
-                                    exe_user_id="'.$student_id.'" AND
-                                    orig_lp_id = "'.$lp_id.'" AND
-                                    orig_lp_item_id = "'.$row['myid'].'" AND
-                                    c_id = '.$courseId.' AND
-                                    status <> "incomplete"
-                                    '.$sessionCondition.'
-                                 ORDER BY exe_date DESC ';
-
-                            $sumScoreResult = Database::query($sql);
-                            $durationRow = Database::fetch_assoc($sumScoreResult);
+                            $qbDuration = self::dbalQueryBuilder()
+                                ->select('SUM(exe_duration) AS exe_duration')
+                                ->from($trackExercises)
+                                ->where('exe_exo_id = :quizId')
+                                ->andWhere('exe_user_id = :studentId')
+                                ->andWhere('orig_lp_id = :lpId')
+                                ->andWhere('orig_lp_item_id = :itemId')
+                                ->andWhere('c_id = :courseId')
+                                ->andWhere("status <> 'incomplete'")
+                                ->setParameter('quizId', (string) $row['path'])
+                                ->setParameter('studentId', $student_id)
+                                ->setParameter('lpId', $lp_id)
+                                ->setParameter('itemId', (int) $row['myid'])
+                                ->setParameter('courseId', (int) $courseId);
+                            self::andSessionCondition($qbDuration, $sessionId);
+                            $durationRow = $qbDuration->executeQuery()->fetchAssociative();
                             if (!empty($durationRow['exe_duration'])) {
                                 $exeDuration = $durationRow['exe_duration'];
                                 if (
@@ -3605,10 +3607,13 @@ class Tracking
                                     !empty($exeDuration)
                                 ) {
                                     // Update c_lp_item_view.total_time
-                                    $sqlUpdate = "UPDATE $lpItemViewTable
-                                              SET total_time = '".Database::escape_string($exeDuration)."'
-                                              WHERE iid = ".$lpItemViewId;
-                                    Database::query($sqlUpdate);
+                                    self::dbalQueryBuilder()
+                                        ->update($lpItemViewTable)
+                                        ->set('total_time', ':exeDuration')
+                                        ->where('iid = :lpItemViewId')
+                                        ->setParameter('exeDuration', (string) $exeDuration)
+                                        ->setParameter('lpItemViewId', (int) $lpItemViewId)
+                                        ->executeStatement();
                                 }
                             }
                         }
@@ -3617,20 +3622,20 @@ class Tracking
                     // End total_time fix
 
                     // Calculate total time
-                    $sql = "SELECT SUM(total_time)
-                        FROM $lpItemViewTable AS item_view
-                        INNER JOIN $lpViewTable AS view
-                            ON (item_view.lp_view_id = view.iid)
-                        WHERE
-                            view.c_id = $courseId AND
-                            view.lp_id = $lp_id AND
-                            view.user_id = $student_id
-                            $sessionCondition";
-
-                    $rs = Database::query($sql);
-                    if (Database::num_rows($rs) > 0) {
-                        $total_time += (int) Database::result($rs, 0, 0);
-                    }
+                    // The session condition is unqualified: it applies to the view table (session_id of the item
+                    // view table does not exist).
+                    $qbTotal = self::dbalQueryBuilder()
+                        ->select('SUM(total_time)')
+                        ->from($lpItemViewTable, 'item_view')
+                        ->innerJoin('item_view', $lpViewTable, 'view', 'item_view.lp_view_id = view.iid')
+                        ->where('view.c_id = :courseId')
+                        ->andWhere('view.lp_id = :lpId')
+                        ->andWhere('view.user_id = :studentId')
+                        ->setParameter('courseId', (int) $courseId)
+                        ->setParameter('lpId', $lp_id)
+                        ->setParameter('studentId', $student_id);
+                    self::andSessionCondition($qbTotal, $sessionId);
+                    $total_time += (int) $qbTotal->executeQuery()->fetchOne();
                 }
             }
         }
@@ -3666,23 +3671,25 @@ class Tracking
         $lastTime = 0;
 
         if (self::minimumTimeAvailable($sessionId, $courseId)) {
-            $sql = "SELECT MAX(date_reg) max
-                    FROM track_e_access_complete
-                    WHERE
-                        user_id = $student_id AND
-                        c_id = $courseId AND
-                        session_id = $sessionId AND
-                        tool = 'learnpath' AND
-                        tool_id = $lp_id AND
-                        action = 'view' AND
-                        login_as = 0
-                    ORDER BY date_reg ASC
-                    LIMIT 1";
-            $rs = Database::query($sql);
+            $value = self::dbalQueryBuilder()
+                ->select('MAX(date_reg) AS max')
+                ->from('track_e_access_complete')
+                ->where('user_id = :studentId')
+                ->andWhere('c_id = :courseId')
+                ->andWhere('session_id = :sessionId')
+                ->andWhere("tool = 'learnpath'")
+                ->andWhere('tool_id = :lpId')
+                ->andWhere("action = 'view'")
+                ->andWhere('login_as = 0')
+                ->setParameter('studentId', $student_id)
+                ->setParameter('courseId', (int) $courseId)
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('lpId', $lp_id)
+                ->executeQuery()
+                ->fetchAssociative();
 
             $lastConnection = 0;
-            if (Database::num_rows($rs) > 0) {
-                $value = Database::fetch_array($rs);
+            if (false !== $value) {
                 if (isset($value['max']) && !empty($value['max'])) {
                     $lastConnection = api_strtotime($value['max'], 'UTC');
                 }
@@ -3699,27 +3706,29 @@ class Tracking
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
-            $sql = "SELECT iid FROM $lp_table
-                    WHERE iid = $lp_id ";
-            $row = Database::query($sql);
-            $count = Database::num_rows($row);
+            $lpExists = self::dbalQueryBuilder()
+                ->select('iid')
+                ->from($lp_table)
+                ->where('iid = :lpId')
+                ->setParameter('lpId', $lp_id)
+                ->executeQuery()
+                ->fetchOne();
 
             // calculates last connection time
-            if ($count > 0) {
-                $sql = 'SELECT MAX(start_time)
-                        FROM '.$t_lpiv.' AS item_view
-                        INNER JOIN '.$t_lpv.' AS view
-                        ON (item_view.lp_view_id = view.iid)
-                        WHERE
-                            status != "not attempted" AND
-                            view.c_id = '.$courseId.' AND
-                            view.lp_id = '.$lp_id.' AND
-                            view.user_id = '.$student_id.
-                            api_get_session_condition($sessionId, true, false, 'view.session_id');
-                $rs = Database::query($sql);
-                if (Database::num_rows($rs) > 0) {
-                    $lastTime = Database::result($rs, 0, 0);
-                }
+            if (false !== $lpExists) {
+                $qbTime = self::dbalQueryBuilder()
+                    ->select('MAX(start_time)')
+                    ->from($t_lpiv, 'item_view')
+                    ->innerJoin('item_view', $t_lpv, 'view', 'item_view.lp_view_id = view.iid')
+                    ->where("status != 'not attempted'")
+                    ->andWhere('view.c_id = :courseId')
+                    ->andWhere('view.lp_id = :lpId')
+                    ->andWhere('view.user_id = :studentId')
+                    ->setParameter('courseId', (int) $courseId)
+                    ->setParameter('lpId', $lp_id)
+                    ->setParameter('studentId', $student_id);
+                self::andSessionCondition($qbTime, $sessionId, 'view.session_id');
+                $lastTime = $qbTime->executeQuery()->fetchOne();
             }
         }
 
@@ -3746,27 +3755,29 @@ class Tracking
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
-            $sql = "SELECT iid FROM $lp_table
-                    WHERE iid = $lp_id ";
-            $row = Database::query($sql);
-            $count = Database::num_rows($row);
+            $lpExists = self::dbalQueryBuilder()
+                ->select('iid')
+                ->from($lp_table)
+                ->where('iid = :lpId')
+                ->setParameter('lpId', $lp_id)
+                ->executeQuery()
+                ->fetchOne();
 
             // calculates first connection time
-            if ($count > 0) {
-                $sql = 'SELECT MIN(start_time)
-                        FROM '.$t_lpiv.' AS item_view
-                        INNER JOIN '.$t_lpv.' AS view
-                        ON (item_view.lp_view_id = view.iid)
-                        WHERE
-                            status != "not attempted" AND
-                            view.c_id = '.$courseId.' AND
-                            view.lp_id = '.$lp_id.' AND
-                            view.user_id = '.$student_id.
-                            api_get_session_condition($sessionId, true, false, 'view.session_id');
-                $rs = Database::query($sql);
-                if (Database::num_rows($rs) > 0) {
-                    $time = Database::result($rs, 0, 0);
-                }
+            if (false !== $lpExists) {
+                $qbTime = self::dbalQueryBuilder()
+                    ->select('MIN(start_time)')
+                    ->from($t_lpiv, 'item_view')
+                    ->innerJoin('item_view', $t_lpv, 'view', 'item_view.lp_view_id = view.iid')
+                    ->where("status != 'not attempted'")
+                    ->andWhere('view.c_id = :courseId')
+                    ->andWhere('view.lp_id = :lpId')
+                    ->andWhere('view.user_id = :studentId')
+                    ->setParameter('courseId', (int) $courseId)
+                    ->setParameter('lpId', $lp_id)
+                    ->setParameter('studentId', $student_id);
+                self::andSessionCondition($qbTime, $sessionId, 'view.session_id');
+                $time = $qbTime->executeQuery()->fetchOne();
             }
         }
 

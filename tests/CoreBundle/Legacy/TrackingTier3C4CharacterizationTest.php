@@ -50,6 +50,120 @@ final class TrackingTier3C4CharacterizationTest extends AbstractApiTest
         $this->assertEqualsWithDelta(50.0, Tracking::getAverageLearningPathProgressForStudentList([$alice]), 0.0001);
     }
 
+    public function testTimeSpentInLpTakesTheQuizDurationFromTheExerciseAttemptsAndSyncsTheItemView(): void
+    {
+        $cid = (int) $this->course->getId();
+        $alice = (int) $this->alice->getId();
+        $lp = $this->insertLp('c4_lp_quiz');
+        $quizId = $this->insertQuiz('c4_quiz');
+        // The flat ordered list of the learning path only knows the children of its root item.
+        $root = $this->insertLpItem($lp, 'root', 0, 0, 'root');
+        $quizItem = $this->insertLpItem($lp, 'quiz', 20, 1, (string) $quizId, $root);
+        $docItem = $this->insertLpItem($lp, 'document', 0, 2, '', $root);
+        $view = $this->insertLpView($alice, $lp, $cid, 10);
+        $quizItemView = $this->insertLpItemView($quizItem, $view, 100);
+        $this->insertLpItemView($docItem, $view, 30);
+        // Two attempts of the quiz of this learning path item: 250 + 50 seconds; an incomplete one and another
+        // learner's are not summed.
+        $this->insertExercise($alice, $cid, $quizId, $lp, $quizItem, 250, 'completed');
+        $this->insertExercise($alice, $cid, $quizId, $lp, $quizItem, 50, '');
+        $this->insertExercise($alice, $cid, $quizId, $lp, $quizItem, 999, 'incomplete');
+        $this->insertExercise((int) $this->bob->getId(), $cid, $quizId, $lp, $quizItem, 888, 'completed');
+
+        // The item view time (100) is replaced by the attempts duration (300) and persisted, the document keeps 30.
+        $this->assertSame(330, Tracking::get_time_spent_in_lp($alice, $this->course, [$lp], 0));
+        $this->assertSame(
+            '300',
+            (string) $this->conn->fetchOne('SELECT total_time FROM c_lp_item_view WHERE iid = ?', [$quizItemView])
+        );
+    }
+
+    private function insertQuiz(string $title): int
+    {
+        $this->conn->insert('c_quiz', [
+            'title' => $title,
+            'type' => 1,
+            'random' => 0,
+            'random_answers' => 0,
+            'results_disabled' => 0,
+            'max_attempt' => 0,
+            'feedback_type' => 0,
+            'expired_time' => 0,
+            'propagate_neg' => 0,
+            'review_answers' => 0,
+            'random_by_category' => 0,
+            'display_category_name' => 0,
+            'hide_question_title' => 0,
+            'page_result_configuration' => '{}',
+        ]);
+
+        return (int) $this->conn->lastInsertId();
+    }
+
+    private function insertLpItem(int $lpId, string $type, float $maxScore, int $order, string $path, ?int $parent = null): int
+    {
+        $this->conn->insert('c_lp_item', [
+            'lp_id' => $lpId,
+            'title' => 'c4_item_'.$order,
+            'item_type' => $type,
+            'ref' => '',
+            'path' => $path,
+            'parent_item_id' => $parent,
+            'min_score' => 0,
+            'max_score' => $maxScore,
+            'display_order' => $order,
+            'launch_data' => '',
+            'lvl' => 1,
+        ]);
+
+        return (int) $this->conn->lastInsertId();
+    }
+
+    private function insertLpItemView(int $itemId, int $viewId, int $total): int
+    {
+        $this->conn->insert('c_lp_item_view', [
+            'lp_item_id' => $itemId,
+            'lp_view_id' => $viewId,
+            'view_count' => 1,
+            'start_time' => 1000000,
+            'total_time' => $total,
+            'score' => 0,
+            'status' => 'completed',
+        ]);
+
+        return (int) $this->conn->lastInsertId();
+    }
+
+    private function insertExercise(
+        int $userId,
+        int $courseId,
+        int $quizId,
+        int $lpId,
+        int $lpItemId,
+        int $duration,
+        string $status
+    ): void {
+        $this->conn->insert('track_e_exercises', [
+            'exe_user_id' => $userId,
+            'c_id' => $courseId,
+            'session_id' => null,
+            'exe_exo_id' => $quizId,
+            'exe_date' => '2001-01-01 10:00:00',
+            'score' => 1,
+            'max_score' => 2,
+            'user_ip' => '127.0.0.1',
+            'status' => $status,
+            'data_tracking' => '',
+            'start_date' => '2001-01-01 10:00:00',
+            'steps_counter' => 0,
+            'orig_lp_id' => $lpId,
+            'orig_lp_item_id' => $lpItemId,
+            'exe_duration' => $duration,
+            'orig_lp_item_view_id' => 0,
+            'questions_to_check' => '',
+        ]);
+    }
+
     private function insertLp(string $title): int
     {
         $this->conn->insert('c_lp', [

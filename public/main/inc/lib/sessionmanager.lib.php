@@ -358,12 +358,15 @@ class SessionManager
      */
     public static function sessionNameExists($name)
     {
-        $name = Database::escape_string($name);
-        $sql = "SELECT COUNT(*) as count FROM ".Database::get_main_table(TABLE_MAIN_SESSION)."
-                WHERE title = '$name'";
-        $result = Database::fetch_array(Database::query($sql));
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(s.id)')
+            ->from(Session::class, 's')
+            ->where('s.title = :title')
+            ->setParameter('title', (string) $name)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        return $result['count'] > 0;
+        return $count > 0;
     }
 
     /**
@@ -3476,19 +3479,17 @@ class SessionManager
      * */
     public static function relation_session_course_exist($session_id, $courseId)
     {
-        $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $return_value = false;
-        $sql = "SELECT c_id FROM $tbl_session_course
-                WHERE
-                  session_id = ".intval($session_id)." AND
-                  c_id = ".intval($courseId);
-        $result = Database::query($sql);
-        $num = Database::num_rows($result);
-        if ($num > 0) {
-            $return_value = true;
-        }
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(src.id)')
+            ->from(SessionRelCourse::class, 'src')
+            ->where('IDENTITY(src.session) = :sessionId')
+            ->andWhere('IDENTITY(src.course) = :courseId')
+            ->setParameter('sessionId', (int) $session_id)
+            ->setParameter('courseId', (int) $courseId)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        return $return_value;
+        return $count > 0;
     }
 
     /**
@@ -3526,24 +3527,24 @@ class SessionManager
      */
     public static function sessionNameExistBesidesMySession($sessionId, $name)
     {
-        $table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $name = Database::escape_string(trim($name));
+        $name = trim((string) $name);
         $sessionId = (int) $sessionId;
 
         if (empty($name)) {
             return false;
         }
 
-        $sql = "SELECT *
-		        FROM $table
-		        WHERE title = '$name' AND id <> $sessionId ";
-        $result = Database::query($sql);
-        $num = Database::num_rows($result);
-        if ($num > 0) {
-            return true;
-        }
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(s.id)')
+            ->from(Session::class, 's')
+            ->where('s.title = :title')
+            ->andWhere('s.id <> :id')
+            ->setParameter('title', $name)
+            ->setParameter('id', $sessionId)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        return false;
+        return $count > 0;
     }
 
     /**
@@ -7996,25 +7997,22 @@ class SessionManager
      */
     public static function isUserSubscribedAsStudent($sessionId, $userId)
     {
-        $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $sessionId = (int) $sessionId;
         $userId = (int) $userId;
 
-        // COUNT(1) actually returns the number of rows from the table (as if
-        // counting the results from the first column)
-        $sql = "SELECT COUNT(1) AS qty FROM $sessionRelUserTable
-                WHERE
-                    session_id = $sessionId AND
-                    user_id = $userId AND
-                    relation_type = ".Session::STUDENT;
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(sru.id)')
+            ->from(SessionRelUser::class, 'sru')
+            ->where('IDENTITY(sru.session) = :sessionId')
+            ->andWhere('IDENTITY(sru.user) = :userId')
+            ->andWhere('sru.relationType = :relationType')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('userId', $userId)
+            ->setParameter('relationType', Session::STUDENT)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $result = Database::fetch_assoc(Database::query($sql));
-
-        if (!empty($result) && $result['qty'] > 0) {
-            return true;
-        }
-
-        return false;
+        return $count > 0;
     }
 
     /**
@@ -8027,26 +8025,22 @@ class SessionManager
      */
     public static function isUserSubscribedAsHRM($sessionId, $userId)
     {
-        $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-
         $sessionId = (int) $sessionId;
         $userId = (int) $userId;
 
-        // COUNT(1) actually returns the number of rows from the table (as if
-        // counting the results from the first column)
-        $sql = "SELECT COUNT(1) AS qty FROM $sessionRelUserTable
-                WHERE
-                    session_id = $sessionId AND
-                    user_id = $userId AND
-                    relation_type = ".Session::DRH;
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(sru.id)')
+            ->from(SessionRelUser::class, 'sru')
+            ->where('IDENTITY(sru.session) = :sessionId')
+            ->andWhere('IDENTITY(sru.user) = :userId')
+            ->andWhere('sru.relationType = :relationType')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('userId', $userId)
+            ->setParameter('relationType', Session::DRH)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $result = Database::fetch_assoc(Database::query($sql));
-
-        if (!empty($result) && $result['qty'] > 0) {
-            return true;
-        }
-
-        return false;
+        return $count > 0;
     }
 
     /**
@@ -8117,29 +8111,18 @@ class SessionManager
      */
     public static function sessionHasCourse($sessionId, $courseCode)
     {
-        $sessionId = (int) $sessionId;
-        $courseCode = Database::escape_string($courseCode);
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sessionRelCourseTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(src.id)')
+            ->from(SessionRelCourse::class, 'src')
+            ->innerJoin('src.course', 'c')
+            ->where('IDENTITY(src.session) = :sessionId')
+            ->andWhere('c.code = :code')
+            ->setParameter('sessionId', (int) $sessionId)
+            ->setParameter('code', (string) $courseCode)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $sql = "SELECT COUNT(1) AS qty
-                FROM $courseTable c
-                INNER JOIN $sessionRelCourseTable src
-                ON c.id = src.c_id
-                WHERE src.session_id = $sessionId
-                AND c.code = '$courseCode'  ";
-
-        $result = Database::query($sql);
-
-        if (false !== $result) {
-            $data = Database::fetch_assoc($result);
-
-            if ($data['qty'] > 0) {
-                return true;
-            }
-        }
-
-        return false;
+        return $count > 0;
     }
 
     /**

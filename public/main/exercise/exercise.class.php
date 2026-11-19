@@ -8466,25 +8466,73 @@ class Exercise
 
         // Quizzes are resource nodes: they belong to a course/session through resource_link, not through
         // c_quiz columns. Like the legacy filter, base-course quizzes are listed for a session too.
-        $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-        $tblResourceLink = Database::get_main_table('resource_link');
-        $sql = "SELECT DISTINCT cq.*, cq.iid AS id FROM $tbl_quiz cq
-                INNER JOIN $tblResourceLink rl
-                    ON rl.resource_node_id = cq.resource_node_id
-                WHERE
-                    rl.c_id = $courseId AND
-                    rl.deleted_at IS NULL AND
-                    (rl.session_id = $sessionId OR rl.session_id IS NULL)
-                ORDER BY cq.iid";
+        $qb = Container::getEntityManager()->createQueryBuilder();
+        $rows = $qb
+            ->select(self::legacyRowSelect(CQuiz::class, 'cq'))
+            ->addSelect('cq.iid AS id')
+            ->distinct()
+            ->from(CQuiz::class, 'cq')
+            ->innerJoin(ResourceLink::class, 'rl', 'WITH', 'rl.resourceNode = cq.resourceNode')
+            ->where('IDENTITY(rl.course) = :courseId')
+            ->andWhere('rl.deletedAt IS NULL')
+            ->andWhere('(IDENTITY(rl.session) = :sessionId OR rl.session IS NULL)')
+            ->orderBy('cq.iid')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->getQuery()
+            ->getArrayResult();
 
-        $result = Database::query($sql);
+        return array_map(
+            static fn (array $row): array => self::legacyRowNormalize(CQuiz::class, $row),
+            $rows
+        );
+    }
 
-        $rows = [];
-        while ($row = Database::fetch_assoc($result)) {
-            $rows[] = $row;
+    /**
+     * Select list (scalar columns aliased with their SQL column name) that gives back, through DQL, the row
+     * shape of a legacy "SELECT *" on the table of $class: one key per column, foreign keys as raw ids.
+     *
+     * @return string[]
+     */
+    private static function legacyRowSelect(string $class, string $alias): array
+    {
+        $metadata = Container::getEntityManager()->getClassMetadata($class);
+        $select = [];
+        foreach ($metadata->fieldNames as $column => $field) {
+            $select[] = $alias.'.'.$field.' AS '.$column;
+        }
+        foreach ($metadata->associationMappings as $field => $mapping) {
+            foreach ($mapping['joinColumns'] ?? [] as $joinColumn) {
+                $select[] = 'IDENTITY('.$alias.'.'.$field.') AS '.$joinColumn['name'];
+            }
         }
 
-        return $rows;
+        return $select;
+    }
+
+    /**
+     * Gives back the scalar types a PDO "SELECT *" row had: dates as 'Y-m-d H:i:s' strings, booleans as 0/1,
+     * JSON columns as their encoded text.
+     */
+    private static function legacyRowNormalize(string $class, array $row): array
+    {
+        $metadata = Container::getEntityManager()->getClassMetadata($class);
+        foreach ($metadata->fieldNames as $column => $field) {
+            $value = $row[$column] ?? null;
+            if (null === $value) {
+                continue;
+            }
+            $type = $metadata->getFieldMapping($field)->type;
+            if ($value instanceof DateTimeInterface) {
+                $row[$column] = $value->format('Y-m-d H:i:s');
+            } elseif (is_bool($value)) {
+                $row[$column] = (int) $value;
+            } elseif (is_array($value) && in_array($type, ['json', 'array'], true)) {
+                $row[$column] = json_encode($value);
+            }
+        }
+
+        return $row;
     }
 
     /**
@@ -8505,35 +8553,30 @@ class Exercise
 
         $ids = is_array($quizId) ? $quizId : [$quizId];
         $ids = array_map('intval', $ids);
-        $ids = implode(',', $ids);
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(self::legacyRowSelect(TrackEExercise::class, 'te'))
+            ->addSelect(self::legacyRowSelect(CQuiz::class, 'cq'))
+            ->from(TrackEExercise::class, 'te')
+            ->innerJoin(CQuiz::class, 'cq', 'WITH', 'cq.iid = IDENTITY(te.quiz)')
+            ->where('IDENTITY(te.course) = :courseId')
+            ->andWhere('cq.iid IN (:ids)')
+            ->orderBy('cq.iid')
+            ->addOrderBy('te.exeId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('ids', $ids);
         if (0 != $sessionId) {
-            $sql = "SELECT * FROM $track_exercises te
-              INNER JOIN c_quiz cq
-              ON cq.iid = te.exe_exo_id
-              WHERE
-              te.c_id = %d AND
-              te.session_id = %s AND
-              cq.iid IN (%s)
-              ORDER BY cq.iid";
-
-            $sql = sprintf($sql, $courseId, $sessionId, $ids);
-        } else {
-            $sql = "SELECT * FROM $track_exercises te
-              INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id
-              WHERE
-              te.c_id = %d AND
-              cq.iid IN (%s)
-              ORDER BY cq.iid";
-            $sql = sprintf($sql, $courseId, $ids);
-        }
-        $result = Database::query($sql);
-        $rows = [];
-        while ($row = Database::fetch_assoc($result)) {
-            $rows[] = $row;
+            $qb->andWhere('IDENTITY(te.session) = :sessionId')
+                ->setParameter('sessionId', $sessionId);
         }
 
-        return $rows;
+        return array_map(
+            static fn (array $row): array => self::legacyRowNormalize(
+                CQuiz::class,
+                self::legacyRowNormalize(TrackEExercise::class, $row)
+            ),
+            $qb->getQuery()->getArrayResult()
+        );
     }
 
     /**
@@ -9789,6 +9832,7 @@ class Exercise
                     }
 
                     $sessionCondition = api_get_session_condition(api_get_session_id());
+                    // TODO(db-neutral): the session condition is an SQL fragment built by api_get_session_condition()
                     $sql = "SELECT * FROM $TBL_TRACK_EXERCISES
                         WHERE
                             exe_exo_id = ".$exerciseId." AND

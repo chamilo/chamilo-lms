@@ -286,4 +286,47 @@ final class ExerciseTier3CharacterizationTest extends KernelTestCase
         $this->assertSame(6.0, (float) $link['average_score']);
         $this->assertEquals([2 => 6], json_decode((string) $link['user_score_list'], true));
     }
+
+    // ---------------------------------------------------------------- wide "SELECT *" row shapes
+
+    public function testGetExercisesByCourseSessionReturnsTheWholeQuizRowPlusId(): void
+    {
+        $e = $this->savedExercise('x3_wide_row');
+        $id = $e->getId();
+        $raw = $this->conn->fetchAssociative('SELECT * FROM c_quiz WHERE iid = ?', [$id]);
+        $raw['id'] = $raw['iid'];
+
+        $rows = (new Exercise())->getExercisesByCourseSession(1, 0);
+        $mine = array_values(array_filter($rows, static fn (array $r): bool => (int) $r['iid'] === $id));
+
+        $this->assertCount(1, $mine);
+        $this->assertEqualsCanonicalizing(array_keys($raw), array_keys($mine[0]), 'same columns as SELECT *');
+        $this->assertEquals($raw, $mine[0], 'same values as SELECT *');
+        $this->assertSame('x3_wide_row', $mine[0]['title']);
+    }
+
+    public function testGetExerciseAndResultReturnsTheWholeAttemptAndQuizColumns(): void
+    {
+        $e = $this->savedExercise('x3_wide_join');
+        $id = $e->getId();
+        $this->conn->insert('track_e_exercises', [
+            'exe_user_id' => 2, 'c_id' => 1, 'session_id' => null, 'exe_exo_id' => $id,
+            'exe_date' => '2020-01-02 10:00:00', 'score' => 4.5, 'max_score' => 10.0, 'user_ip' => '10.0.0.1',
+            'status' => 'completed', 'data_tracking' => '1,2', 'start_date' => '2020-01-02 09:00:00', 'steps_counter' => 0,
+            'orig_lp_id' => 0, 'orig_lp_item_id' => 0, 'exe_duration' => 12, 'orig_lp_item_view_id' => 0,
+            'questions_to_check' => '',
+        ]);
+        $raw = $this->conn->fetchAssociative(
+            'SELECT * FROM track_e_exercises te INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id WHERE cq.iid = ?',
+            [$id]
+        );
+
+        $rows = (new Exercise())->getExerciseAndResult(1, 0, [$id]);
+
+        $this->assertCount(1, $rows);
+        $this->assertEqualsCanonicalizing(array_keys($raw), array_keys($rows[0]), 'same columns as SELECT *');
+        $this->assertEquals($raw, $rows[0], 'same values as SELECT *');
+        $this->assertSame(2, (int) $rows[0]['exe_user_id']);
+        $this->assertEquals(4.5, $rows[0]['score']);
+    }
 }

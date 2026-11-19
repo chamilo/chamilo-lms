@@ -3807,75 +3807,74 @@ class Tracking
         }
         $students = [];
         // At first, courses where $coach_id is coach of the course //
-        $sql = 'SELECT session_id, c_id
-                FROM '.$tbl_session_course_user.'
-                WHERE user_id='.$coach_id.' AND status = '.SessionEntity::COURSE_COACH;
+        $qbCoachCourses = self::dbalQueryBuilder()
+            ->select('scu.session_id', 'scu.c_id')
+            ->from($tbl_session_course_user, 'scu')
+            ->where('scu.user_id = :coachId')
+            ->andWhere('scu.status = :courseCoach')
+            ->setParameter('coachId', $coach_id)
+            ->setParameter('courseCoach', SessionEntity::COURSE_COACH);
 
         if (-1 != $access_url_id) {
-            $sql = 'SELECT scu.session_id, scu.c_id
-                    FROM '.$tbl_session_course_user.' scu
-                    INNER JOIN '.$tbl_session_rel_access_url.'  sru
-                    ON (scu.session_id=sru.session_id)
-                    WHERE
-                        scu.user_id='.$coach_id.' AND
-                        scu.status = '.SessionEntity::COURSE_COACH.' AND
-                        sru.access_url_id = '.$access_url_id;
+            $qbCoachCourses
+                ->innerJoin('scu', $tbl_session_rel_access_url, 'sru', 'scu.session_id = sru.session_id')
+                ->andWhere('sru.access_url_id = :accessUrlId')
+                ->setParameter('accessUrlId', (int) $access_url_id);
         }
 
-        $result = Database::query($sql);
-
-        while ($a_courses = Database::fetch_array($result)) {
+        foreach ($qbCoachCourses->executeQuery()->fetchAllAssociative() as $a_courses) {
             $courseId = $a_courses['c_id'];
             $sessionId = $a_courses['session_id'];
 
-            $sql = "SELECT DISTINCT srcru.user_id
-                    FROM $tbl_session_course_user AS srcru
-                    INNER JOIN $tbl_session_user sru
-                    ON (srcru.user_id = sru.user_id AND srcru.session_id = sru.session_id)
-                    WHERE
-                        sru.relation_type = ".SessionEntity::STUDENT." AND
-                        srcru.c_id = '$courseId' AND
-                        srcru.session_id = '$sessionId'";
-
-            $rs = Database::query($sql);
-            while ($row = Database::fetch_array($rs)) {
+            $rows = self::dbalQueryBuilder()
+                ->select('DISTINCT srcru.user_id')
+                ->from($tbl_session_course_user, 'srcru')
+                ->innerJoin(
+                    'srcru',
+                    $tbl_session_user,
+                    'sru',
+                    'srcru.user_id = sru.user_id AND srcru.session_id = sru.session_id'
+                )
+                ->where('sru.relation_type = :student')
+                ->andWhere('srcru.c_id = :courseId')
+                ->andWhere('srcru.session_id = :sessionId')
+                ->setParameter('student', SessionEntity::STUDENT)
+                ->setParameter('courseId', (int) $courseId)
+                ->setParameter('sessionId', (int) $sessionId)
+                ->executeQuery()
+                ->fetchAllAssociative();
+            foreach ($rows as $row) {
                 $students[$row['user_id']] = $row['user_id'];
             }
         }
 
         // Then, courses where $coach_id is coach of the session
-        $sql = "SELECT srcru.user_id
-            FROM $tbl_session_course_user srcru
-            INNER JOIN $tbl_session_course src
-            ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
-            INNER JOIN $tbl_session s
-            ON srcru.session_id = s.id AND src.session_id = s.id
-            INNER JOIN $tbl_session_user sru on s.id = sru.session_id
-            WHERE
-               srcru.status = ".SessionEntity::STUDENT." AND
-               sru.relation_type = ".SessionEntity::GENERAL_COACH." AND
-               sru.user_id = $coach_id";
+        $qbCoachSessions = self::dbalQueryBuilder()
+            ->select('srcru.user_id')
+            ->from($tbl_session_course_user, 'srcru')
+            ->innerJoin(
+                'srcru',
+                $tbl_session_course,
+                'src',
+                'srcru.c_id = src.c_id AND srcru.session_id = src.session_id'
+            )
+            ->innerJoin('srcru', $tbl_session, 's', 'srcru.session_id = s.id AND src.session_id = s.id')
+            ->innerJoin('s', $tbl_session_user, 'sru', 's.id = sru.session_id')
+            ->where('srcru.status = :student')
+            ->andWhere('sru.relation_type = :generalCoach')
+            ->andWhere('sru.user_id = :coachId')
+            ->setParameter('student', SessionEntity::STUDENT)
+            ->setParameter('generalCoach', SessionEntity::GENERAL_COACH)
+            ->setParameter('coachId', $coach_id);
 
         if (-1 != $access_url_id) {
-            $sql = "SELECT srcru.user_id
-                    FROM $tbl_session_course_user srcru
-                    INNER JOIN $tbl_session_course src
-                    ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
-                    INNER JOIN $tbl_session s
-                    ON srcru.session_id = s.id AND src.session_id = s.id
-                    INNER JOIN $tbl_session_user sru
-                    ON s.id = sru.session_id
-                    INNER JOIN $tbl_session_rel_access_url aurs
-                    ON s.id = aurs.session_id
-                    WHERE
-                        srcru.status = ".SessionEntity::STUDENT." AND
-                        sru.relation_type = ".SessionEntity::GENERAL_COACH." AND
-                        sru.user_id = $coach_id AND
-                        aurs.access_url_id = $access_url_id";
+            $qbCoachSessions
+                ->innerJoin('s', $tbl_session_rel_access_url, 'aurs', 's.id = aurs.session_id')
+                ->andWhere('aurs.access_url_id = :accessUrlId')
+                ->setParameter('accessUrlId', (int) $access_url_id);
         }
 
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        foreach ($qbCoachSessions->executeQuery()->fetchAllAssociative() as $row) {
             $students[$row['user_id']] = $row['user_id'];
         }
 
@@ -3902,37 +3901,59 @@ class Tracking
 
         // At first, courses where $coach_id is coach of the course: the student must be a student of the
         // same course in the same session (the same rule as get_student_followed_by_coach()).
-        $sql = 'SELECT 1
-                FROM '.$tbl_session_course_user.' coach
-                INNER JOIN '.$tbl_session_course_user.' student
-                ON (student.session_id = coach.session_id AND student.c_id = coach.c_id)
-                INNER JOIN '.$tblSessionRelUser.' sru
-                ON (sru.session_id = student.session_id AND sru.user_id = student.user_id)
-                WHERE
-                    coach.user_id = '.$coach_id.' AND
-                    coach.status = '.SessionEntity::COURSE_COACH.' AND
-                    student.user_id = '.$student_id.' AND
-                    sru.relation_type = '.SessionEntity::STUDENT.'
-                LIMIT 1';
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
+        $isCourseCoach = self::dbalQueryBuilder()
+            ->select('1')
+            ->from($tbl_session_course_user, 'coach')
+            ->innerJoin(
+                'coach',
+                $tbl_session_course_user,
+                'student',
+                'student.session_id = coach.session_id AND student.c_id = coach.c_id'
+            )
+            ->innerJoin(
+                'student',
+                $tblSessionRelUser,
+                'sru',
+                'sru.session_id = student.session_id AND sru.user_id = student.user_id'
+            )
+            ->where('coach.user_id = :coachId')
+            ->andWhere('coach.status = :courseCoach')
+            ->andWhere('student.user_id = :studentId')
+            ->andWhere('sru.relation_type = :student')
+            ->setParameter('coachId', $coach_id)
+            ->setParameter('courseCoach', SessionEntity::COURSE_COACH)
+            ->setParameter('studentId', $student_id)
+            ->setParameter('student', SessionEntity::STUDENT)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if (false !== $isCourseCoach) {
             return true;
         }
 
         // Then, courses where $coach_id is coach of the session
-        $sql = "SELECT srcru.user_id
-            FROM $tbl_session_course_user srcru
-            INNER JOIN $tbl_session_course src
-            ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
-            INNER JOIN $tbl_session s
-            ON srcru.session_id = s.id AND src.session_id = s.id
-            INNER JOIN $tblSessionRelUser sru
-            ON s.id = sru.session_id
-            WHERE
-                (srcru.status = ".SessionEntity::STUDENT." AND srcru.user_id = $student_id) AND
-                (sru.relation_type = ".SessionEntity::GENERAL_COACH." AND sru.user_id = $coach_id)";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
+        $isSessionCoach = self::dbalQueryBuilder()
+            ->select('srcru.user_id')
+            ->from($tbl_session_course_user, 'srcru')
+            ->innerJoin(
+                'srcru',
+                $tbl_session_course,
+                'src',
+                'srcru.c_id = src.c_id AND srcru.session_id = src.session_id'
+            )
+            ->innerJoin('srcru', $tbl_session, 's', 'srcru.session_id = s.id AND src.session_id = s.id')
+            ->innerJoin('s', $tblSessionRelUser, 'sru', 's.id = sru.session_id')
+            ->where('srcru.status = :student')
+            ->andWhere('srcru.user_id = :studentId')
+            ->andWhere('sru.relation_type = :generalCoach')
+            ->andWhere('sru.user_id = :coachId')
+            ->setParameter('student', SessionEntity::STUDENT)
+            ->setParameter('studentId', $student_id)
+            ->setParameter('generalCoach', SessionEntity::GENERAL_COACH)
+            ->setParameter('coachId', $coach_id)
+            ->executeQuery()
+            ->fetchOne();
+        if (false !== $isSessionCoach) {
             return true;
         }
 
@@ -3962,85 +3983,80 @@ class Tracking
         $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         // At first, courses where $coach_id is coach of the course.
-        $sql = 'SELECT DISTINCT c.code
-                FROM '.$tbl_session_course_user.' sc
-                INNER JOIN '.$tbl_course.' c
-                ON (c.id = sc.c_id)
-                WHERE sc.user_id = '.$coach_id.' AND sc.status = '.SessionEntity::COURSE_COACH;
+        $qbCoachCourses = self::dbalQueryBuilder()
+            ->select('DISTINCT c.code')
+            ->from($tbl_session_course_user, 'sc')
+            ->innerJoin('sc', $tbl_course, 'c', 'c.id = sc.c_id')
+            ->where('sc.user_id = :coachId')
+            ->andWhere('sc.status = :courseCoach')
+            ->setParameter('coachId', $coach_id)
+            ->setParameter('courseCoach', SessionEntity::COURSE_COACH);
 
         $accessUrlUtil = Container::getAccessUrlUtil();
         if ($accessUrlUtil->isMultiple()) {
             $access_url_id = $accessUrlUtil->getCurrent()->getId();
             if (-1 != $access_url_id) {
-                $sql = 'SELECT DISTINCT c.code
-                        FROM '.$tbl_session_course_user.' scu
-                        INNER JOIN '.$tbl_course.' c
-                        ON (c.id = scu.c_id)
-                        INNER JOIN '.$tbl_course_rel_access_url.' cru
-                        ON (c.id = cru.c_id)
-                        WHERE
-                            scu.user_id='.$coach_id.' AND
-                            scu.status = '.SessionEntity::COURSE_COACH.' AND
-                            cru.access_url_id = '.$access_url_id;
+                $qbCoachCourses
+                    ->innerJoin('c', $tbl_course_rel_access_url, 'cru', 'c.id = cru.c_id')
+                    ->andWhere('cru.access_url_id = :accessUrlId')
+                    ->setParameter('accessUrlId', (int) $access_url_id);
             }
         }
 
         if (!empty($sessionId)) {
-            $sql .= ' AND session_id='.$sessionId;
+            $qbCoachCourses->andWhere('session_id = :sessionId')
+                ->setParameter('sessionId', (int) $sessionId);
         }
 
         $courseList = [];
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        foreach ($qbCoachCourses->executeQuery()->fetchAllAssociative() as $row) {
             $courseList[$row['code']] = $row['code'];
         }
 
         // Then, courses where $coach_id is coach of the session
-        $sql = "SELECT DISTINCT course.code
-                FROM $tbl_session_course as session_course
-                INNER JOIN $tbl_session as session
-                    ON (session.id = session_course.session_id)
-                INNER JOIN $tblSessionRelUser session_user
-                    ON (session.id = session_user.session_id
-                    AND session_user.user_id = $coach_id
-                    AND session_user.relation_type = ".SessionEntity::GENERAL_COACH.")
-                INNER JOIN $tbl_course as course
-                    ON course.id = session_course.c_id";
+        $qbSessionCourses = self::dbalQueryBuilder()
+            ->select('DISTINCT course.code')
+            ->from($tbl_session_course, 'session_course')
+            ->innerJoin('session_course', $tbl_session, 'session', 'session.id = session_course.session_id')
+            ->innerJoin(
+                'session',
+                $tblSessionRelUser,
+                'session_user',
+                'session.id = session_user.session_id'
+                .' AND session_user.user_id = :coachId'
+                .' AND session_user.relation_type = :generalCoach'
+            )
+            ->innerJoin('session_course', $tbl_course, 'course', 'course.id = session_course.c_id')
+            ->setParameter('coachId', $coach_id)
+            ->setParameter('generalCoach', SessionEntity::GENERAL_COACH);
 
         if ($accessUrlUtil->isMultiple()) {
             $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $access_url_id = $accessUrlUtil->getCurrent()->getId();
             if (-1 != $access_url_id) {
-                $sql = "SELECT DISTINCT c.code
-                    FROM $tbl_session_course as session_course
-                    INNER JOIN $tbl_course c
-                    ON (c.id = session_course.c_id)
-                    INNER JOIN $tbl_session as session
-                    ON session.id = session_course.session_id
-                    INNER JOIN $tblSessionRelUser session_user
-                        ON (session.id = session_user.session_id
-                        AND session_user.user_id = $coach_id
-                        AND session_user.relation_type = ".SessionEntity::GENERAL_COACH.")
-                    INNER JOIN $tbl_course as course
-                        ON course.id = session_course.c_id
-                     INNER JOIN $tbl_course_rel_access_url course_rel_url
-                    ON (course_rel_url.c_id = c.id)";
+                // The original query joined the course table twice (c and course) and selected c.code.
+                $qbSessionCourses
+                    ->select('DISTINCT c.code')
+                    ->innerJoin('session_course', $tbl_course, 'c', 'c.id = session_course.c_id')
+                    ->innerJoin('c', $tbl_course_rel_access_url, 'course_rel_url', 'course_rel_url.c_id = c.id');
             }
         }
 
         if (!empty($sessionId)) {
-            $sql .= ' WHERE session_course.session_id='.$sessionId;
+            $qbSessionCourses->where('session_course.session_id = :sessionId')
+                ->setParameter('sessionId', (int) $sessionId);
             if ($accessUrlUtil->isMultiple()) {
-                $sql .= ' AND access_url_id = '.$access_url_id;
+                $qbSessionCourses->andWhere('access_url_id = :accessUrlId')
+                    ->setParameter('accessUrlId', (int) $access_url_id);
             }
         } else {
             if ($accessUrlUtil->isMultiple()) {
-                $sql .= ' WHERE access_url_id = '.$access_url_id;
+                $qbSessionCourses->where('access_url_id = :accessUrlId')
+                    ->setParameter('accessUrlId', (int) $access_url_id);
             }
         }
 
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        foreach ($qbSessionCourses->executeQuery()->fetchAllAssociative() as $row) {
             $courseList[$row['code']] = $row['code'];
         }
 
@@ -4120,6 +4136,7 @@ class Tracking
             }
         }
 
+        // TODO(db-neutral): UNION in a derived table and SQL fragments built by ExtraField::parseConditions()
         $sql = "
             $select
             (

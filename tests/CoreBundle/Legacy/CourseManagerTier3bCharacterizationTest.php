@@ -234,4 +234,34 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         $this->assertStringContainsString($course->getCode(), $skill['argumentation']);
         $this->assertSame(1, $this->rows('skill_rel_user', 'course_id = ? AND argumentation = ?', [$oid, 'orig']));
     }
+
+    // ---------------------------------------------------------------- email_to_tutor
+
+    public function testEmailToTutorMailsTheTeachersOfThatCourseOrTheTutors(): void
+    {
+        $this->conn()->executeStatement("UPDATE settings SET selected_value = 'noreply@example.org' WHERE variable = 'mailer_from_email'");
+        $course = $this->createCourse('cm3b_mail_a');
+        $other = $this->createCourse('cm3b_mail_b');
+        $teacher = $this->createUser('cm3b_mail_teacher', '', 'cm3b_mail_teacher@example.org');
+        $tutor = $this->createUser('cm3b_mail_tutor', '', 'cm3b_mail_tutor@example.org');
+        $otherTeacher = $this->createUser('cm3b_mail_otherteacher', '', 'cm3b_mail_otherteacher@example.org');
+        $student = $this->createUser('cm3b_mail_student', '', 'cm3b_mail_student@example.org');
+        $this->sub($teacher, $course, COURSEMANAGER);
+        $this->sub($tutor, $course, STUDENT);
+        $this->conn()->executeStatement('UPDATE course_rel_user SET is_tutor = 1 WHERE user_id = ?', [$tutor->getId()]);
+        $this->sub($otherTeacher, $other, COURSEMANAGER);
+        $this->sub($student, $course, STUDENT);
+
+        CourseManager::email_to_tutor($student->getId(), $course->getId(), false);
+        $this->assertEmailCount(1);
+        $this->assertSame(
+            'cm3b_mail_teacher@example.org',
+            self::getMailerMessage(0)->getTo()[0]->getAddress(),
+            'status 1 (teachers) of that course only'
+        );
+
+        CourseManager::email_to_tutor($student->getId(), $course->getId(), true);
+        $this->assertEmailCount(2);
+        $this->assertSame('cm3b_mail_tutor@example.org', self::getMailerMessage(1)->getTo()[0]->getAddress(), 'is_tutor = 1 rows instead');
+    }
 }

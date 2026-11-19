@@ -3012,20 +3012,23 @@ class CourseManager
         $student = api_get_user_info($user_id);
 
         $name_course = $information['title'];
-        $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                WHERE c_id = $courseId";
+        $tutorsQuery = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from(Database::get_main_table(TABLE_MAIN_COURSE_USER))
+            ->where('c_id = :courseId')
+            ->setParameter('courseId', $courseId);
 
         // TODO: Ivan: This is a mistake, please, have a look at it. Intention here is diffcult to be guessed.
         //if ($send_to_tutor_also = true)
         // Proposed change:
         if ($send_to_tutor_also) {
-            $sql .= ' AND is_tutor = 1';
+            $tutorsQuery->andWhere('is_tutor = 1');
         } else {
-            $sql .= ' AND status = 1';
+            $tutorsQuery->andWhere('status = 1');
         }
 
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        $result = $tutorsQuery->executeQuery();
+        while ($row = $result->fetchAssociative()) {
             $tutor = api_get_user_info($row['user_id']);
             $emailto = $tutor['email'];
             $emailsubject = get_lang('New user in the course').': '.$name_course;

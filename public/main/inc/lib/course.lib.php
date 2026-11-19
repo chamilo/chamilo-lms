@@ -881,12 +881,18 @@ class CourseManager
             );
         }
 
-        $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                WHERE
-                    user_id = $userId AND
-                    relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
-                    c_id = $courseId";
-        if (Database::num_rows(Database::query($sql)) > 0) {
+        $alreadySubscribed = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from(Database::get_main_table(TABLE_MAIN_COURSE_USER))
+            ->where('user_id = :userId')
+            ->andWhere('relation_type <> :rrhh')
+            ->andWhere('c_id = :courseId')
+            ->setParameter('userId', $userId)
+            ->setParameter('rrhh', COURSE_RELATION_TYPE_RRHH)
+            ->setParameter('courseId', $courseId)
+            ->executeQuery()
+            ->fetchAssociative();
+        if (false !== $alreadySubscribed) {
             return $finish(
                 false,
                 get_lang('Already registered in course')

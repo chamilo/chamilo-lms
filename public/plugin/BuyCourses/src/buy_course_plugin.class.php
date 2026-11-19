@@ -12621,19 +12621,24 @@ class BuyCoursesPlugin extends Plugin
         $serviceRelTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
         $greaterThan = max(0, $greaterThan);
 
-        $sql = "SELECT 1
-            FROM $servicesTable s
-            INNER JOIN $serviceRelTable rel ON rel.service_id = s.id
-            WHERE s.display_on_course_creation_page = 1
-              AND s.applies_to = ".self::SERVICE_TYPE_USER."
-              AND s.visibility = 1
-              AND s.active = 1
-              AND rel.extra_field_id = $extraFieldId
-              AND rel.granted_value > $greaterThan
-            LIMIT 1";
-        $result = Database::query($sql);
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $found = $qb->select('1')
+            ->from($servicesTable, 's')
+            ->innerJoin('s', $serviceRelTable, 'rel', 'rel.service_id = s.id')
+            ->where('s.display_on_course_creation_page = 1')
+            ->andWhere('s.applies_to = :appliesTo')
+            ->andWhere('s.visibility = 1')
+            ->andWhere('s.active = 1')
+            ->andWhere('rel.extra_field_id = :extraFieldId')
+            ->andWhere('rel.granted_value > :greaterThan')
+            ->setMaxResults(1)
+            ->setParameter('appliesTo', self::SERVICE_TYPE_USER)
+            ->setParameter('extraFieldId', $extraFieldId)
+            ->setParameter('greaterThan', $greaterThan)
+            ->executeQuery()
+            ->fetchOne();
 
-        return false !== $result && Database::num_rows($result) > 0;
+        return false !== $found;
     }
 
     /**
@@ -12649,20 +12654,20 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
-        $sql = "SELECT ai_course_features_json
-            FROM $servicesTable
-            WHERE display_on_course_creation_page = 1
-              AND applies_to = ".self::SERVICE_TYPE_USER.'
-              AND visibility = 1
-              AND active = 1
-            ORDER BY id ASC';
-        $result = Database::query($sql);
-        if (false === $result) {
-            return false;
-        }
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $rows = $qb->select('ai_course_features_json')
+            ->from($servicesTable)
+            ->where('display_on_course_creation_page = 1')
+            ->andWhere('applies_to = :appliesTo')
+            ->andWhere('visibility = 1')
+            ->andWhere('active = 1')
+            ->orderBy('id', 'ASC')
+            ->setParameter('appliesTo', self::SERVICE_TYPE_USER)
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $feature = $features[0];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        foreach ($rows as $row) {
             $serviceFeatures = $this->normalizeAiCourseFeatures($row['ai_course_features_json'] ?? []);
             if (in_array($feature, $serviceFeatures, true)) {
                 return true;
@@ -12760,38 +12765,34 @@ class BuyCoursesPlugin extends Plugin
 
         $salesTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
-        $now = Database::escape_string(api_get_utc_datetime());
+        $now = api_get_utc_datetime();
 
-        $sql = "SELECT
-                ss.*,
-                s.name AS service_name,
-                s.display_on_course_creation_page,
-                s.applies_to,
-                s.visibility,
-                s.renewable
-            FROM $salesTable ss
-            INNER JOIN $servicesTable s ON s.id = ss.service_id
-            WHERE
-                ss.id = $serviceSaleId
-                AND ss.buyer_id = $userId
-                AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
-                AND ss.date_end >= '$now'
-                AND s.display_on_course_creation_page = 1
-                AND s.applies_to = ".self::SERVICE_TYPE_USER.'
-                AND s.visibility = 1
-            LIMIT 1';
-
-        $result = Database::query($sql);
-        if (false === $result || 0 === Database::num_rows($result)) {
-            return [
-                'valid' => false,
-                'message' => $this->get_lang('SelectedServiceUnavailableForCourseCreation'),
-                'reason' => 'service_sale_unavailable',
-                'sale' => null,
-            ];
-        }
-
-        $sale = Database::fetch_array($result, 'ASSOC');
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $sale = $qb->select(
+            'ss.*',
+            's.name AS service_name',
+            's.display_on_course_creation_page',
+            's.applies_to',
+            's.visibility',
+            's.renewable'
+        )
+            ->from($salesTable, 'ss')
+            ->innerJoin('ss', $servicesTable, 's', 's.id = ss.service_id')
+            ->where('ss.id = :serviceSaleId')
+            ->andWhere('ss.buyer_id = :userId')
+            ->andWhere('ss.status = :status')
+            ->andWhere('ss.date_end >= :now')
+            ->andWhere('s.display_on_course_creation_page = 1')
+            ->andWhere('s.applies_to = :appliesTo')
+            ->andWhere('s.visibility = 1')
+            ->setMaxResults(1)
+            ->setParameter('serviceSaleId', $serviceSaleId)
+            ->setParameter('userId', $userId)
+            ->setParameter('status', self::SERVICE_STATUS_COMPLETED)
+            ->setParameter('now', $now)
+            ->setParameter('appliesTo', self::SERVICE_TYPE_USER)
+            ->executeQuery()
+            ->fetchAssociative();
         if (!is_array($sale)) {
             return [
                 'valid' => false,
@@ -12847,20 +12848,26 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $servicesSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
-        $now = Database::escape_string(api_get_utc_datetime());
 
-        $sql = "SELECT *
-            FROM $servicesSaleTable
-            WHERE buyer_id = $userId
-              AND service_id = $serviceId
-              AND status = ".self::SERVICE_STATUS_COMPLETED."
-              AND date_end >= '$now'
-            ORDER BY date_end DESC, id DESC";
-        $result = Database::query($sql);
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $rows = $qb->select('*')
+            ->from($servicesSaleTable)
+            ->where('buyer_id = :userId')
+            ->andWhere('service_id = :serviceId')
+            ->andWhere('status = :status')
+            ->andWhere('date_end >= :now')
+            ->orderBy('date_end', 'DESC')
+            ->addOrderBy('id', 'DESC')
+            ->setParameter('userId', $userId)
+            ->setParameter('serviceId', $serviceId)
+            ->setParameter('status', self::SERVICE_STATUS_COMPLETED)
+            ->setParameter('now', api_get_utc_datetime())
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $bestSale = null;
         $bestRemaining = -1;
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        foreach ($rows as $row) {
             $usedCourses = $this->countCoursesLinkedToServiceSale((int) $row['id']);
             $remaining = $maxCourses <= 0 ? \PHP_INT_MAX : max(0, $maxCourses - $usedCourses);
 
@@ -12885,14 +12892,16 @@ class BuyCoursesPlugin extends Plugin
 
         $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT COUNT(DISTINCT sc.course_id) AS total
-            FROM $subscriptionCourseTable sc
-            INNER JOIN $courseTable c ON c.id = sc.course_id
-            WHERE sc.service_sale_id = $serviceSaleId
-              AND sc.status <> 'deleted'
-              AND sc.deleted_at IS NULL";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC');
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $row = $qb->select('COUNT(DISTINCT sc.course_id) AS total')
+            ->from($subscriptionCourseTable, 'sc')
+            ->innerJoin('sc', $courseTable, 'c', 'c.id = sc.course_id')
+            ->where('sc.service_sale_id = :serviceSaleId')
+            ->andWhere("sc.status <> 'deleted'")
+            ->andWhere('sc.deleted_at IS NULL')
+            ->setParameter('serviceSaleId', $serviceSaleId)
+            ->executeQuery()
+            ->fetchAssociative();
 
         return (int) ($row['total'] ?? 0);
     }
@@ -12919,18 +12928,20 @@ class BuyCoursesPlugin extends Plugin
         $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
         $serviceRelExtraFieldTable = Database::get_main_table(self::TABLE_SERVICE_REL_EXTRA_FIELD);
         $extraFieldTable = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $now = Database::escape_string(api_get_utc_datetime());
+        $now = api_get_utc_datetime();
+        $connection = Container::getEntityManager()->getConnection();
 
         // Keep the recurring cron independent from UI/session language. getServiceSale()
         // enriches the sale with translated benefit labels, which can fail in CLI when
         // no user language is present. Only buyer/service IDs are needed here.
-        $sourceResult = Database::query(
-            "SELECT buyer_id, service_id
-             FROM $serviceSaleTable
-             WHERE id = $expiredServiceSaleId
-             LIMIT 1"
-        );
-        $sourceSale = Database::fetch_array($sourceResult, 'ASSOC') ?: [];
+        $sourceSale = $connection->createQueryBuilder()
+            ->select('buyer_id', 'service_id')
+            ->from($serviceSaleTable)
+            ->where('id = :expiredServiceSaleId')
+            ->setMaxResults(1)
+            ->setParameter('expiredServiceSaleId', $expiredServiceSaleId)
+            ->executeQuery()
+            ->fetchAssociative() ?: [];
         $buyerId = (int) ($sourceSale['buyer_id'] ?? 0);
         $serviceId = (int) ($sourceSale['service_id'] ?? 0);
         if ($buyerId <= 0 || $serviceId <= 0) {
@@ -12953,20 +12964,27 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $replacementSales = [];
-        $result = Database::query(
-            "SELECT id, date_start, date_end, recurring_profile_id, gateway_subscription_id
-             FROM $serviceSaleTable
-             WHERE buyer_id = $buyerId
-               AND service_id = $serviceId
-               AND status = ".self::SERVICE_STATUS_COMPLETED."
-               AND id <> $expiredServiceSaleId
-               AND (date_start IS NULL OR date_start <= '$now')
-               AND date_end IS NOT NULL
-               AND date_end >= '$now'
-             ORDER BY date_end DESC, id DESC"
-        );
+        $replacementRows = $connection->createQueryBuilder()
+            ->select('id', 'date_start', 'date_end', 'recurring_profile_id', 'gateway_subscription_id')
+            ->from($serviceSaleTable)
+            ->where('buyer_id = :buyerId')
+            ->andWhere('service_id = :serviceId')
+            ->andWhere('status = :status')
+            ->andWhere('id <> :expiredServiceSaleId')
+            ->andWhere('(date_start IS NULL OR date_start <= :now)')
+            ->andWhere('date_end IS NOT NULL')
+            ->andWhere('date_end >= :now')
+            ->orderBy('date_end', 'DESC')
+            ->addOrderBy('id', 'DESC')
+            ->setParameter('buyerId', $buyerId)
+            ->setParameter('serviceId', $serviceId)
+            ->setParameter('status', self::SERVICE_STATUS_COMPLETED)
+            ->setParameter('expiredServiceSaleId', $expiredServiceSaleId)
+            ->setParameter('now', $now)
+            ->executeQuery()
+            ->fetchAllAssociative();
 
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        foreach ($replacementRows as $row) {
             $replacementSaleId = (int) ($row['id'] ?? 0);
             if ($replacementSaleId <= 0) {
                 continue;
@@ -12984,18 +13002,20 @@ class BuyCoursesPlugin extends Plugin
         // getServiceCourseCreationBenefitValues(), which also resolves translated
         // labels and other UI-facing service data. Zero means unlimited.
         $maxCourses = 0;
-        $maxCoursesVariable = Database::escape_string(self::EXTRA_FIELD_MAX_COURSES);
-        $benefitResult = Database::query(
-            "SELECT rel.granted_value
-             FROM $serviceRelExtraFieldTable rel
-             INNER JOIN $extraFieldTable ef ON ef.id = rel.extra_field_id
-             WHERE rel.service_id = $serviceId
-               AND ef.variable = '$maxCoursesVariable'
-               AND ef.item_type = ".ExtraField::USER_FIELD_TYPE.'
-             LIMIT 1'
-        );
-        if (false !== $benefitResult && Database::num_rows($benefitResult) > 0) {
-            $benefitRow = Database::fetch_array($benefitResult, 'ASSOC') ?: [];
+        $benefitRow = $connection->createQueryBuilder()
+            ->select('rel.granted_value')
+            ->from($serviceRelExtraFieldTable, 'rel')
+            ->innerJoin('rel', $extraFieldTable, 'ef', 'ef.id = rel.extra_field_id')
+            ->where('rel.service_id = :serviceId')
+            ->andWhere('ef.variable = :variable')
+            ->andWhere('ef.item_type = :itemType')
+            ->setMaxResults(1)
+            ->setParameter('serviceId', $serviceId)
+            ->setParameter('variable', self::EXTRA_FIELD_MAX_COURSES)
+            ->setParameter('itemType', ExtraField::USER_FIELD_TYPE)
+            ->executeQuery()
+            ->fetchAssociative();
+        if (false !== $benefitRow) {
             $maxCourses = max(0, (int) ($benefitRow['granted_value'] ?? 0));
         }
 

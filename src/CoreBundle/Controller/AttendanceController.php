@@ -660,6 +660,7 @@ class AttendanceController extends AbstractController
             return $this->json(['error' => 'This feature is not enabled for this course'], 403);
         }
 
+        $presenceByCalendar = [];
         foreach ($entries as $entry) {
             $calendarId = isset($entry['calendarId']) ? (int) $entry['calendarId'] : null;
             $presence = isset($entry['presence']) ? (int) $entry['presence'] : null;
@@ -673,6 +674,19 @@ class AttendanceController extends AbstractController
                 continue;
             }
 
+            // The course setting checked above only applies to the dates of that course.
+            $attendanceNode = $calendar->getAttendance()?->getResourceNode();
+            if (null === $attendanceNode
+                || null === $attendanceNode->getResourceLinkByContext($course)
+                || !$this->isGranted('VIEW', $attendanceNode)
+            ) {
+                return $this->json(['error' => 'Attendance date not available in this course'], 403);
+            }
+
+            $presenceByCalendar[] = [$calendar, $presence];
+        }
+
+        foreach ($presenceByCalendar as [$calendar, $presence]) {
             $sheet = $sheetRepository->findOneBy([
                 'user' => $user,
                 'attendanceCalendar' => $calendar,

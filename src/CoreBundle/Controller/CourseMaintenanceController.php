@@ -1024,7 +1024,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             }
 
             $exporter = new Cc13Export($course, $selectionMode, /* debug */ false);
-            $imsccPath = $exporter->export(api_get_course_id());
+            $imsccPath = $exporter->export((string) $cidReqHelper->getCourseEntity()?->getCode());
 
             $fileName = basename($imsccPath);
             $downloadUrl = $this->generateUrl(

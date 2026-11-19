@@ -8359,28 +8359,12 @@ class Exercise
      */
     public function getQuestionWithCategories()
     {
-        $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $categoryRelTable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT DISTINCT cat.*
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
-                INNER JOIN $categoryRelTable catRel
-                ON (catRel.question_id = e.question_id)
-                INNER JOIN $categoryTable cat
-                ON (cat.iid = catRel.category_id)
-                WHERE
-                  e.quiz_id	= ".(int) ($this->getId());
-
-        $result = Database::query($sql);
-        $categoriesInExercise = [];
-        if (Database::num_rows($result)) {
-            $categoriesInExercise = Database::store_result($result, 'ASSOC');
-        }
-
-        return $categoriesInExercise;
+        return $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('cat.iid AS iid', 'cat.title AS title', 'cat.description AS description')
+            ->distinct()
+            ->innerJoin('q.categories', 'cat')
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**

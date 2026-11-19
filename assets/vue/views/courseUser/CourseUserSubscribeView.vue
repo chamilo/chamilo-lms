@@ -65,7 +65,7 @@
         <BaseInputText
           id="available-user-search"
           v-model="searchDraft"
-          :label="t('Search users')"
+          :label="t('Search')"
           name="search"
         />
         <BaseSelect

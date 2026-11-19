@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\BuyCoursesExpiryHelper;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
@@ -13120,18 +13121,23 @@ class BuyCoursesPlugin extends Plugin
 
         $enabledFeatures = $this->normalizeAiCourseFeatures($enabledFeatures);
         $table = Database::get_course_table(TABLE_COURSE_SETTING);
+        $em = Container::getEntityManager();
 
         foreach (array_keys($this->getAiCourseFeatureDefinitions()) as $feature) {
             $value = in_array($feature, $enabledFeatures, true) ? 'true' : 'false';
-            $featureEsc = Database::escape_string($feature);
-            $valueEsc = Database::escape_string($value);
-            $categoryEsc = Database::escape_string('ai_helpers');
 
-            $result = Database::query(
-                "SELECT 1 FROM $table WHERE c_id = $courseId AND variable = '$featureEsc' LIMIT 1"
-            );
+            $existing = $em->createQueryBuilder()
+                ->select('cs.iid')
+                ->from(CCourseSetting::class, 'cs')
+                ->where('cs.cId = :courseId')
+                ->andWhere('cs.variable = :variable')
+                ->setMaxResults(1)
+                ->setParameter('courseId', $courseId)
+                ->setParameter('variable', $feature)
+                ->getQuery()
+                ->getArrayResult();
 
-            if (false !== $result && Database::num_rows($result) > 0) {
+            if (!empty($existing)) {
                 Database::update(
                     $table,
                     [
@@ -13146,10 +13152,21 @@ class BuyCoursesPlugin extends Plugin
                 continue;
             }
 
-            Database::query(
-                "INSERT INTO $table (c_id, title, variable, value, category) ".
-                "VALUES ($courseId, '', '$featureEsc', '$valueEsc', '$categoryEsc')"
-            );
+            $em->getConnection()->createQueryBuilder()
+                ->insert($table)
+                ->values([
+                    'c_id' => ':courseId',
+                    'title' => ':title',
+                    'variable' => ':variable',
+                    'value' => ':value',
+                    'category' => ':category',
+                ])
+                ->setParameter('courseId', $courseId)
+                ->setParameter('title', '')
+                ->setParameter('variable', $feature)
+                ->setParameter('value', $value)
+                ->setParameter('category', 'ai_helpers')
+                ->executeStatement();
         }
     }
 
@@ -13164,19 +13181,22 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
-        $sql = "SELECT DISTINCT c_id
-            FROM $table
-            WHERE user_id = $userId
-              AND status = ".COURSEMANAGER.'
-              AND relation_type <> '.COURSE_RELATION_TYPE_HRM.'
-            ORDER BY c_id ASC';
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT IDENTITY(cru.course) AS courseId')
+            ->from(CourseRelUser::class, 'cru')
+            ->where('IDENTITY(cru.user) = :userId')
+            ->andWhere('cru.status = :status')
+            ->andWhere('cru.relationType <> :hrm')
+            ->orderBy('IDENTITY(cru.course)', 'ASC')
+            ->setParameter('userId', $userId)
+            ->setParameter('status', COURSEMANAGER)
+            ->setParameter('hrm', COURSE_RELATION_TYPE_HRM)
+            ->getQuery()
+            ->getArrayResult();
 
         $ids = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $ids[] = (int) $row['c_id'];
+        foreach ($rows as $row) {
+            $ids[] = (int) $row['courseId'];
         }
 
         return $ids;
@@ -13193,19 +13213,22 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
-        $sql = "SELECT DISTINCT user_id
-            FROM $table
-            WHERE c_id = $courseId
-              AND status = ".COURSEMANAGER.'
-              AND relation_type <> '.COURSE_RELATION_TYPE_HRM.'
-            ORDER BY user_id ASC';
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT IDENTITY(cru.user) AS userId')
+            ->from(CourseRelUser::class, 'cru')
+            ->where('IDENTITY(cru.course) = :courseId')
+            ->andWhere('cru.status = :status')
+            ->andWhere('cru.relationType <> :hrm')
+            ->orderBy('IDENTITY(cru.user)', 'ASC')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('status', COURSEMANAGER)
+            ->setParameter('hrm', COURSE_RELATION_TYPE_HRM)
+            ->getQuery()
+            ->getArrayResult();
 
         $ids = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $ids[] = (int) $row['user_id'];
+        foreach ($rows as $row) {
+            $ids[] = (int) $row['userId'];
         }
 
         return $ids;
@@ -13227,23 +13250,26 @@ class BuyCoursesPlugin extends Plugin
 
         $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
         $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
-        $now = Database::escape_string(api_get_utc_datetime());
 
-        $sql = "SELECT 1
-            FROM $subscriptionCourseTable sc
-            INNER JOIN $serviceSaleTable ss ON ss.id = sc.service_sale_id
-            WHERE sc.course_id = $courseId
-              AND sc.status = 'active'
-              AND sc.deleted_at IS NULL
-              AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
-              AND (ss.date_start IS NULL OR ss.date_start <= '$now')
-              AND ss.date_end IS NOT NULL
-              AND ss.date_end >= '$now'
-            LIMIT 1";
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $found = $qb->select('1')
+            ->from($subscriptionCourseTable, 'sc')
+            ->innerJoin('sc', $serviceSaleTable, 'ss', 'ss.id = sc.service_sale_id')
+            ->where('sc.course_id = :courseId')
+            ->andWhere("sc.status = 'active'")
+            ->andWhere('sc.deleted_at IS NULL')
+            ->andWhere('ss.status = :status')
+            ->andWhere('(ss.date_start IS NULL OR ss.date_start <= :now)')
+            ->andWhere('ss.date_end IS NOT NULL')
+            ->andWhere('ss.date_end >= :now')
+            ->setMaxResults(1)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('status', self::SERVICE_STATUS_COMPLETED)
+            ->setParameter('now', api_get_utc_datetime())
+            ->executeQuery()
+            ->fetchOne();
 
-        $result = Database::query($sql);
-
-        return false !== $result && Database::num_rows($result) > 0;
+        return false !== $found;
     }
 
     public function hasActiveAiCourseFeature(int $courseId, string $feature): bool
@@ -13259,27 +13285,28 @@ class BuyCoursesPlugin extends Plugin
         $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
         $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
         $serviceTable = Database::get_main_table(self::TABLE_SERVICES);
-        $now = Database::escape_string(api_get_utc_datetime());
 
-        $sql = "SELECT sc.context_json, s.ai_course_features_json
-            FROM $subscriptionCourseTable sc
-            INNER JOIN $serviceSaleTable ss ON ss.id = sc.service_sale_id
-            INNER JOIN $serviceTable s ON s.id = sc.service_id
-            WHERE sc.course_id = $courseId
-              AND sc.status = 'active'
-              AND sc.deleted_at IS NULL
-              AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
-              AND (ss.date_start IS NULL OR ss.date_start <= '$now')
-              AND ss.date_end IS NOT NULL
-              AND ss.date_end >= '$now'
-            ORDER BY ss.date_end DESC, sc.id DESC";
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $rows = $qb->select('sc.context_json', 's.ai_course_features_json')
+            ->from($subscriptionCourseTable, 'sc')
+            ->innerJoin('sc', $serviceSaleTable, 'ss', 'ss.id = sc.service_sale_id')
+            ->innerJoin('sc', $serviceTable, 's', 's.id = sc.service_id')
+            ->where('sc.course_id = :courseId')
+            ->andWhere("sc.status = 'active'")
+            ->andWhere('sc.deleted_at IS NULL')
+            ->andWhere('ss.status = :status')
+            ->andWhere('(ss.date_start IS NULL OR ss.date_start <= :now)')
+            ->andWhere('ss.date_end IS NOT NULL')
+            ->andWhere('ss.date_end >= :now')
+            ->orderBy('ss.date_end', 'DESC')
+            ->addOrderBy('sc.id', 'DESC')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('status', self::SERVICE_STATUS_COMPLETED)
+            ->setParameter('now', api_get_utc_datetime())
+            ->executeQuery()
+            ->fetchAllAssociative();
 
-        $result = Database::query($sql);
-        if (false === $result) {
-            return false;
-        }
-
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
+        foreach ($rows as $row) {
             $context = json_decode((string) ($row['context_json'] ?? ''), true);
             $hasStoredFeatures = is_array($context) && array_key_exists('ai_features', $context);
             $activeFeatures = $hasStoredFeatures
@@ -13307,25 +13334,28 @@ class BuyCoursesPlugin extends Plugin
 
         $subscriptionCourseTable = Database::get_main_table(self::TABLE_SUBSCRIPTION_COURSE);
         $serviceSaleTable = Database::get_main_table(self::TABLE_SERVICES_SALE);
-        $now = Database::escape_string(api_get_utc_datetime());
 
-        $sql = "SELECT sc.context_json
-            FROM $subscriptionCourseTable sc
-            INNER JOIN $serviceSaleTable ss ON ss.id = sc.service_sale_id
-            WHERE sc.course_id = $courseId
-              AND sc.status = 'active'
-              AND ss.status = ".self::SERVICE_STATUS_COMPLETED."
-              AND ss.date_end IS NOT NULL
-              AND ss.date_end >= '$now'
-            ORDER BY ss.date_end DESC, sc.id DESC
-            LIMIT 1";
-
-        $result = Database::query($sql);
-        if (!$result || 0 === Database::num_rows($result)) {
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $row = $qb->select('sc.context_json')
+            ->from($subscriptionCourseTable, 'sc')
+            ->innerJoin('sc', $serviceSaleTable, 'ss', 'ss.id = sc.service_sale_id')
+            ->where('sc.course_id = :courseId')
+            ->andWhere("sc.status = 'active'")
+            ->andWhere('ss.status = :status')
+            ->andWhere('ss.date_end IS NOT NULL')
+            ->andWhere('ss.date_end >= :now')
+            ->orderBy('ss.date_end', 'DESC')
+            ->addOrderBy('sc.id', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('status', self::SERVICE_STATUS_COMPLETED)
+            ->setParameter('now', api_get_utc_datetime())
+            ->executeQuery()
+            ->fetchAssociative();
+        if (false === $row) {
             return null;
         }
 
-        $row = Database::fetch_array($result, 'ASSOC') ?: [];
         $context = json_decode((string) ($row['context_json'] ?? ''), true);
 
         if (!is_array($context)) {
@@ -13349,27 +13379,34 @@ class BuyCoursesPlugin extends Plugin
             return 0;
         }
 
-        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $em = Container::getEntityManager();
 
-        $sql = "SELECT COUNT(DISTINCT user_id) AS total
-            FROM (
-                SELECT user_id
-                FROM $courseUserTable
-                WHERE c_id = $courseId
-                  AND status = ".STUDENT.'
-                  AND relation_type <> '.COURSE_RELATION_TYPE_HRM."
-                UNION
-                SELECT user_id
-                FROM $sessionCourseUserTable
-                WHERE c_id = $courseId
-                  AND status = ".STUDENT.'
-            ) subscribed_users';
+        // DQL has no UNION: the two lists of user ids are merged here.
+        $direct = $em->createQueryBuilder()
+            ->select('DISTINCT IDENTITY(cru.user) AS userId')
+            ->from(CourseRelUser::class, 'cru')
+            ->where('IDENTITY(cru.course) = :courseId')
+            ->andWhere('cru.status = :status')
+            ->andWhere('cru.relationType <> :hrm')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('status', STUDENT)
+            ->setParameter('hrm', COURSE_RELATION_TYPE_HRM)
+            ->getQuery()
+            ->getArrayResult();
+        $inSessions = $em->createQueryBuilder()
+            ->select('DISTINCT IDENTITY(srcru.user) AS userId')
+            ->from(SessionRelCourseRelUser::class, 'srcru')
+            ->where('IDENTITY(srcru.course) = :courseId')
+            ->andWhere('srcru.status = :status')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('status', STUDENT)
+            ->getQuery()
+            ->getArrayResult();
 
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC') ?: [];
-
-        return (int) ($row['total'] ?? 0);
+        return count(array_unique(array_map('intval', array_merge(
+            array_column($direct, 'userId'),
+            array_column($inSessions, 'userId')
+        ))));
     }
 
     /**
@@ -13403,27 +13440,33 @@ class BuyCoursesPlugin extends Plugin
             return false;
         }
 
-        $idList = implode(',', $userIds);
-        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $em = Container::getEntityManager();
 
-        $sql = "SELECT COUNT(DISTINCT user_id) AS already
-            FROM (
-                SELECT user_id
-                FROM $courseUserTable
-                WHERE c_id = $courseId
-                  AND relation_type <> ".COURSE_RELATION_TYPE_HRM."
-                  AND user_id IN ($idList)
-                UNION
-                SELECT user_id
-                FROM $sessionCourseUserTable
-                WHERE c_id = $courseId
-                  AND user_id IN ($idList)
-            ) existing_users";
-
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result, 'ASSOC') ?: [];
-        $already = (int) ($row['already'] ?? 0);
+        // DQL has no UNION: the two lists of user ids are merged here.
+        $direct = $em->createQueryBuilder()
+            ->select('DISTINCT IDENTITY(cru.user) AS userId')
+            ->from(CourseRelUser::class, 'cru')
+            ->where('IDENTITY(cru.course) = :courseId')
+            ->andWhere('cru.relationType <> :hrm')
+            ->andWhere('IDENTITY(cru.user) IN (:userIds)')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('hrm', COURSE_RELATION_TYPE_HRM)
+            ->setParameter('userIds', $userIds)
+            ->getQuery()
+            ->getArrayResult();
+        $inSessions = $em->createQueryBuilder()
+            ->select('DISTINCT IDENTITY(srcru.user) AS userId')
+            ->from(SessionRelCourseRelUser::class, 'srcru')
+            ->where('IDENTITY(srcru.course) = :courseId')
+            ->andWhere('IDENTITY(srcru.user) IN (:userIds)')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userIds', $userIds)
+            ->getQuery()
+            ->getArrayResult();
+        $already = count(array_unique(array_map('intval', array_merge(
+            array_column($direct, 'userId'),
+            array_column($inSessions, 'userId')
+        ))));
         $newCount = count($userIds) - $already;
 
         if ($newCount <= 0) {
@@ -13504,14 +13547,18 @@ class BuyCoursesPlugin extends Plugin
 
         $table = Database::get_main_table(self::TABLE_FROZEN_ENROLLMENT);
 
-        $sql = "SELECT id
-            FROM $table
-            WHERE course_id = $courseId
-              AND user_id = $userId
-            LIMIT 1";
-        $result = Database::query($sql);
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder();
+        $id = $qb->select('id')
+            ->from($table)
+            ->where('course_id = :courseId')
+            ->andWhere('user_id = :userId')
+            ->setMaxResults(1)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $userId)
+            ->executeQuery()
+            ->fetchOne();
 
-        return $result && Database::num_rows($result) > 0;
+        return false !== $id;
     }
 
     /**
@@ -13526,7 +13573,11 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $table = Database::get_main_table(self::TABLE_FROZEN_ENROLLMENT);
-        Database::query("DELETE FROM $table WHERE course_id = $courseId");
+        Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->delete($table)
+            ->where('course_id = :courseId')
+            ->setParameter('courseId', $courseId)
+            ->executeStatement();
     }
 
     /**
@@ -13548,20 +13599,24 @@ class BuyCoursesPlugin extends Plugin
             return;
         }
 
-        $courseUserTable = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $frozenTable = Database::get_main_table(self::TABLE_FROZEN_ENROLLMENT);
 
-        $sql = "SELECT user_id
-            FROM $courseUserTable
-            WHERE c_id = $courseId
-              AND status = ".STUDENT.'
-              AND relation_type <> '.COURSE_RELATION_TYPE_HRM.'
-            ORDER BY user_id ASC';
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(cru.user) AS userId')
+            ->from(CourseRelUser::class, 'cru')
+            ->where('IDENTITY(cru.course) = :courseId')
+            ->andWhere('cru.status = :status')
+            ->andWhere('cru.relationType <> :hrm')
+            ->orderBy('IDENTITY(cru.user)', 'ASC')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('status', STUDENT)
+            ->setParameter('hrm', COURSE_RELATION_TYPE_HRM)
+            ->getQuery()
+            ->getArrayResult();
 
         $studentIds = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $studentIds[] = (int) $row['user_id'];
+        foreach ($rows as $row) {
+            $studentIds[] = (int) $row['userId'];
         }
 
         $this->clearFrozenEnrollmentsForCourse($courseId);

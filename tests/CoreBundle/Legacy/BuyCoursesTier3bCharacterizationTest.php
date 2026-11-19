@@ -369,4 +369,304 @@ final class BuyCoursesTier3bCharacterizationTest extends BuyCoursesCharacterizat
         $context = json_decode((string) $this->conn->fetchOne('SELECT context_json FROM plugin_buycourses_subscription_course WHERE id = ?', [$l2]), true);
         $this->assertSame($replacement, $context['service_sale_id']);
     }
+
+    /**
+     * @return int[] ids of the first 8 users of the test database in id order (fixture users are completed with
+     *               throwaway ones, rolled back by DAMA)
+     */
+    private function userIds(int $minimum): array
+    {
+        $count = (int) $this->conn->fetchOne('SELECT COUNT(*) FROM user');
+        for ($i = $count; $i < 8; ++$i) {
+            $username = 'bc_t3b_'.$i.'_'.getmypid();
+            $this->conn->executeStatement(
+                "INSERT INTO user (username, username_canonical, email, email_canonical, firstname, lastname, locale, password,
+                    timezone, locked, expired, credentials_expired, salt, roles, status, active, uuid, created_at, updated_at)
+                 VALUES (?, ?, ?, ?, 'bc', 'bc', 'en_US', 'x', 'UTC', 0, 0, 0, '', '[]', 5, 1, ?, '2020-01-01 00:00:00', '2020-01-01 00:00:00')",
+                [$username, $username, $username.'@example.com', $username.'@example.com', random_bytes(16)]
+            );
+        }
+        $ids = array_map('intval', $this->conn->fetchFirstColumn('SELECT id FROM user ORDER BY id LIMIT 8'));
+        $this->assertGreaterThanOrEqual($minimum, count($ids));
+
+        return $ids;
+    }
+
+    private function subscribe(int $userId, int $courseId, int $status = 5, int $relation = 0): void
+    {
+        $this->conn->insert('course_rel_user', [
+            'user_id' => $userId, 'c_id' => $courseId, 'relation_type' => $relation, 'status' => $status, 'progress' => 0,
+        ]);
+    }
+
+    private function frozenUserIds(int $courseId): array
+    {
+        return array_map('intval', $this->conn->fetchFirstColumn(
+            'SELECT user_id FROM plugin_buycourses_frozen_enrollment WHERE course_id = ? ORDER BY user_id',
+            [$courseId]
+        ));
+    }
+
+    public function testManagedCourseIdsAndCourseManagerIdsIgnoreHrmAndStudentRelations(): void
+    {
+        [$a, $b, $c] = $this->userIds(3);
+        $this->conn->executeStatement('DELETE FROM course_rel_user WHERE c_id IN (1, 2)');
+        $this->subscribe($b, 2, 1);
+        $this->subscribe($b, 1, 1);
+        $this->subscribe($b, 1, 1);
+        $this->subscribe($b, 2, 1, 1); // HRM link: not managed
+        $this->subscribe($c, 1, 5);    // student: not a manager
+        $this->subscribe($a, 1, 1);
+        $this->subscribe($c, 2, 1, 1);
+
+        $this->assertSame([1, 2], $this->plugin->getManagedCourseIdsByUser($b), 'distinct, ascending');
+        $this->assertSame([1], $this->plugin->getManagedCourseIdsByUser($a));
+        $this->assertSame([], $this->plugin->getManagedCourseIdsByUser($c));
+        $this->assertSame([], $this->plugin->getManagedCourseIdsByUser(0));
+
+        $this->assertSame([min($a, $b), max($a, $b)], $this->plugin->getCourseManagerIdsForCourse(1));
+        $this->assertSame([$b], $this->plugin->getCourseManagerIdsForCourse(2));
+        $this->assertSame([], $this->plugin->getCourseManagerIdsForCourse(0));
+        $this->assertSame([], $this->plugin->getCourseManagerIdsForCourse(987654));
+    }
+
+    public function testHasActiveSubscriptionCourseNeedsAnActiveLinkOnARunningCompletedSale(): void
+    {
+        $this->clearLinks();
+        $service = $this->makeService();
+        $sale = $this->makeServiceSale($service);
+        $link = $this->link($sale, $service, 1);
+
+        $this->assertTrue($this->plugin->hasActiveSubscriptionCourse(1));
+        $this->assertFalse($this->plugin->hasActiveSubscriptionCourse(2));
+        $this->assertFalse($this->plugin->hasActiveSubscriptionCourse(0));
+
+        $break = function (string $table, string $column, string $value, int $id): void {
+            $this->assertFalse($this->plugin->hasActiveSubscriptionCourse(1), "$column $value");
+        };
+        $steps = [
+            ['plugin_buycourses_service_sale', $sale, 'status = 0'],
+            ['plugin_buycourses_service_sale', $sale, "date_end = '2000-01-01 00:00:00'"],
+            ['plugin_buycourses_service_sale', $sale, "date_start = '2099-01-01 00:00:00'"],
+            ['plugin_buycourses_subscription_course', $link, "status = 'closed'"],
+            ['plugin_buycourses_subscription_course', $link, "deleted_at = '2026-01-02 00:00:00'"],
+        ];
+        foreach ($steps as [$table, $id, $set]) {
+            $saved = $this->conn->fetchAssociative("SELECT * FROM $table WHERE id = ?", [$id]);
+            $this->conn->executeStatement("UPDATE $table SET $set WHERE id = ?", [$id]);
+            $this->assertFalse($this->plugin->hasActiveSubscriptionCourse(1), $set);
+            $this->conn->update($table, $saved, ['id' => $id]);
+            $this->assertTrue($this->plugin->hasActiveSubscriptionCourse(1), 'restored after '.$set);
+        }
+
+        // A sale without a start date is running.
+        $this->conn->executeStatement('UPDATE plugin_buycourses_service_sale SET date_start = NULL WHERE id = ?', [$sale]);
+        $this->assertTrue($this->plugin->hasActiveSubscriptionCourse(1));
+        unset($break);
+    }
+
+    public function testHasActiveAiCourseFeatureReadsTheContextOfTheLinkBeforeTheServiceFeatures(): void
+    {
+        $this->clearLinks();
+        $service = $this->makeService(['ai_course_features_json' => '["tutor_chatbot","toolbox"]']);
+        $sale = $this->makeServiceSale($service);
+        $link = $this->link($sale, $service, 1);
+        $tutor = BuyCoursesPlugin::AI_COURSE_FEATURE_TUTOR_CHATBOT;
+
+        // No stored feature list in the context: the service's list applies.
+        $this->assertTrue($this->plugin->hasActiveAiCourseFeature(1, $tutor));
+        $this->assertTrue($this->plugin->hasActiveAiCourseFeature(1, 'toolbox'));
+        $this->assertFalse($this->plugin->hasActiveAiCourseFeature(1, 'task_grader'));
+        $this->assertFalse($this->plugin->hasActiveAiCourseFeature(1, 'bogus'));
+        $this->assertFalse($this->plugin->hasActiveAiCourseFeature(2, $tutor));
+        $this->assertFalse($this->plugin->hasActiveAiCourseFeature(0, $tutor));
+
+        $this->conn->executeStatement('UPDATE plugin_buycourses_subscription_course SET context_json = ? WHERE id = ?', ['{"ai_features":["task_grader"]}', $link]);
+        $this->assertTrue($this->plugin->hasActiveAiCourseFeature(1, 'task_grader'));
+        $this->assertFalse($this->plugin->hasActiveAiCourseFeature(1, $tutor), 'the stored list replaces the service list');
+        $this->conn->executeStatement('UPDATE plugin_buycourses_subscription_course SET context_json = ? WHERE id = ?', ['{"ai_features":[]}', $link]);
+        $this->assertFalse($this->plugin->hasActiveAiCourseFeature(1, $tutor));
+        $this->conn->executeStatement('UPDATE plugin_buycourses_subscription_course SET context_json = ? WHERE id = ?', ['garbage', $link]);
+        $this->assertTrue($this->plugin->hasActiveAiCourseFeature(1, $tutor));
+
+        foreach (['status = 0', "date_end = '2000-01-01 00:00:00'", "date_start = '2099-01-01 00:00:00'"] as $set) {
+            $this->conn->executeStatement("UPDATE plugin_buycourses_service_sale SET $set WHERE id = ?", [$sale]);
+            $this->assertFalse($this->plugin->hasActiveAiCourseFeature(1, $tutor), $set);
+            $this->conn->executeStatement("UPDATE plugin_buycourses_service_sale SET status = 1, date_start = '2026-01-10 08:00:00', date_end = '2099-02-09 08:00:00' WHERE id = ?", [$sale]);
+        }
+        $this->conn->executeStatement("UPDATE plugin_buycourses_subscription_course SET status = 'closed' WHERE id = ?", [$link]);
+        $this->assertFalse($this->plugin->hasActiveAiCourseFeature(1, $tutor));
+        $this->conn->executeStatement("UPDATE plugin_buycourses_subscription_course SET status = 'active', deleted_at = '2026-01-02 00:00:00' WHERE id = ?", [$link]);
+        $this->assertFalse($this->plugin->hasActiveAiCourseFeature(1, $tutor));
+    }
+
+    public function testActiveSubscriptionCourseHostingLimitReadsTheLinkContext(): void
+    {
+        $this->clearLinks();
+        $service = $this->makeService();
+        $sale = $this->makeServiceSale($service);
+        $link = $this->link($sale, $service, 1, ['context_json' => '{"hosting_limit":25}']);
+
+        $this->assertSame(25, $this->plugin->getActiveSubscriptionCourseHostingLimit(1));
+        $this->assertNull($this->plugin->getActiveSubscriptionCourseHostingLimit(2));
+        $this->assertNull($this->plugin->getActiveSubscriptionCourseHostingLimit(0));
+        $this->assertSame(25, $this->plugin->getEffectiveUsersPerCourseLimitForCourse(1));
+
+        // Unlike hasActiveSubscriptionCourse(), neither deleted_at nor date_start is looked at.
+        $this->conn->executeStatement("UPDATE plugin_buycourses_subscription_course SET deleted_at = '2026-01-02 00:00:00' WHERE id = ?", [$link]);
+        $this->conn->executeStatement("UPDATE plugin_buycourses_service_sale SET date_start = '2099-01-01 00:00:00' WHERE id = ?", [$sale]);
+        $this->assertSame(25, $this->plugin->getActiveSubscriptionCourseHostingLimit(1));
+
+        foreach (['{"hosting_limit":0}', '{"hosting_limit":-3}', '{}', 'garbage', '[1]'] as $context) {
+            $this->conn->executeStatement('UPDATE plugin_buycourses_subscription_course SET context_json = ? WHERE id = ?', [$context, $link]);
+            $this->assertNull($this->plugin->getActiveSubscriptionCourseHostingLimit(1), $context);
+        }
+        $this->conn->executeStatement('UPDATE plugin_buycourses_subscription_course SET context_json = ? WHERE id = ?', ['{"hosting_limit":"7"}', $link]);
+        $this->assertSame(7, $this->plugin->getActiveSubscriptionCourseHostingLimit(1));
+
+        foreach (['status = 0', "date_end = '2000-01-01 00:00:00'"] as $set) {
+            $this->conn->executeStatement("UPDATE plugin_buycourses_service_sale SET $set WHERE id = ?", [$sale]);
+            $this->assertNull($this->plugin->getActiveSubscriptionCourseHostingLimit(1), $set);
+            $this->conn->executeStatement("UPDATE plugin_buycourses_service_sale SET status = 1, date_end = '2099-02-09 08:00:00' WHERE id = ?", [$sale]);
+        }
+        $this->conn->executeStatement("UPDATE plugin_buycourses_subscription_course SET status = 'closed' WHERE id = ?", [$link]);
+        $this->assertNull($this->plugin->getActiveSubscriptionCourseHostingLimit(1));
+    }
+
+    public function testStudentCountAndHostingLimitCheckCountDirectAndSessionStudentsOnce(): void
+    {
+        [$a, $b, $c, $d, $e] = $this->userIds(5);
+        $this->conn->executeStatement('DELETE FROM course_rel_user WHERE c_id IN (1, 2)');
+        $this->conn->insert('session', [
+            'title' => 'bc_hosting_session', 'nbr_courses' => 0, 'nbr_users' => 0, 'nbr_classes' => 0, 'visibility' => 1, 'status' => 0,
+        ]);
+        $sessionId = (int) $this->conn->lastInsertId();
+        $sessionStudent = function (int $user, int $course, int $status = 5) use ($sessionId): void {
+            $this->conn->insert('session_rel_course_rel_user', [
+                'session_id' => $sessionId, 'c_id' => $course, 'user_id' => $user, 'status' => $status,
+                'visibility' => 0, 'legal_agreement' => 0, 'progress' => 0,
+            ]);
+        };
+
+        $this->assertSame(0, $this->plugin->countStudentsForCourseHostingLimit(1));
+        $this->assertSame(0, $this->plugin->countStudentsForCourseHostingLimit(0));
+
+        $this->subscribe($a, 1, 5);
+        $this->subscribe($b, 1, 5, 1); // HRM relation
+        $this->subscribe($c, 1, 1);    // teacher
+        $this->subscribe($d, 2, 5);    // other course
+        $this->assertSame(1, $this->plugin->countStudentsForCourseHostingLimit(1));
+        $sessionStudent($a, 1);        // same student in a session: counted once
+        $sessionStudent($e, 1);
+        $sessionStudent($b, 1, 2);     // session coach status: not a student
+        $sessionStudent($c, 1, 0);     // status 0 is not STUDENT (5) either
+        $this->assertSame(2, $this->plugin->countStudentsForCourseHostingLimit(1));
+        $this->assertSame(1, $this->plugin->countStudentsForCourseHostingLimit(2));
+
+        // Effective limit 3 through a service linked to course 1.
+        $this->clearLinks();
+        $service = $this->makeService();
+        $sale = $this->makeServiceSale($service);
+        $this->link($sale, $service, 1, ['context_json' => '{"hosting_limit":3}']);
+
+        $this->assertFalse($this->plugin->wouldCourseUserSubscriptionExceedHostingLimit(1, [$d]), '2 + 1 = 3 is not above the limit');
+        $this->assertTrue($this->plugin->wouldCourseUserSubscriptionExceedHostingLimit(1, [$d, $this->userIds(6)[5]]), '2 + 2 = 4');
+        $this->assertFalse($this->plugin->wouldCourseUserSubscriptionExceedHostingLimit(1, [$a, $e, $d]), 'two are already subscribed, only one is new');
+        $this->assertFalse($this->plugin->wouldCourseUserSubscriptionExceedHostingLimit(1, [$a, $a, 0, -4]));
+        $this->assertFalse($this->plugin->wouldCourseUserSubscriptionExceedHostingLimit(1, []));
+        $this->assertFalse($this->plugin->wouldCourseUserSubscriptionExceedHostingLimit(0, [$d]));
+        // An HRM link, a teacher link or a session coach row all count as "already there", so those users are not new.
+        $this->assertFalse($this->plugin->wouldCourseUserSubscriptionExceedHostingLimit(1, [$b, $c, $d, $a]), 'only $d is new');
+        $this->subscribe($d, 1, 5);
+        $this->assertSame(3, $this->plugin->countStudentsForCourseHostingLimit(1));
+        $this->assertTrue($this->plugin->wouldCourseUserSubscriptionExceedHostingLimit(1, [$this->userIds(6)[5]]), '3 + 1 = 4');
+        $this->assertFalse($this->plugin->wouldCourseUserSubscriptionExceedHostingLimit(1, [$d]));
+    }
+
+    public function testFrozenEnrollmentChecksAndFreezeExcessKeepsTheLowestUserIdsOfTheStudents(): void
+    {
+        [$a, $b, $c, $d] = $this->userIds(4);
+        $this->conn->executeStatement('DELETE FROM course_rel_user WHERE c_id IN (1, 2)');
+        $this->conn->executeStatement('DELETE FROM plugin_buycourses_frozen_enrollment');
+        foreach ([$d, $b, $a, $c] as $student) {
+            $this->subscribe($student, 1, 5);
+        }
+        $teacher = $this->userIds(5)[4];
+        $this->subscribe($teacher, 1, 1);
+        $hrm = $this->userIds(6)[5];
+        $this->subscribe($hrm, 1, 5, 1);
+        $this->subscribe($a, 2, 5);
+        $sorted = [$a, $b, $c, $d];
+        sort($sorted);
+
+        $this->assertFalse($this->plugin->isFrozenEnrollment(1, $a));
+        $this->plugin->freezeExcessEnrollmentsForCourse(1, 2);
+        $this->assertSame([$sorted[2], $sorted[3]], $this->frozenUserIds(1), 'students beyond the limit, highest ids; no teacher, no HRM');
+        $this->assertTrue($this->plugin->isFrozenEnrollment(1, $sorted[3]));
+        $this->assertFalse($this->plugin->isFrozenEnrollment(1, $sorted[0]));
+        $this->assertFalse($this->plugin->isFrozenEnrollment(2, $sorted[3]));
+        $this->assertFalse($this->plugin->isFrozenEnrollment(0, $sorted[3]));
+        $this->assertFalse($this->plugin->isFrozenEnrollment(1, 0));
+
+        // A new run rebuilds the list from scratch.
+        $this->plugin->freezeExcessEnrollmentsForCourse(1, 3);
+        $this->assertSame([$sorted[3]], $this->frozenUserIds(1));
+        // Not above the limit: the list is cleared.
+        $this->plugin->freezeExcessEnrollmentsForCourse(1, 4);
+        $this->assertSame([], $this->frozenUserIds(1));
+        $this->plugin->freezeExcessEnrollmentsForCourse(1, 1);
+        $this->assertCount(3, $this->frozenUserIds(1));
+        // A limit of zero or less clears.
+        $this->plugin->freezeExcessEnrollmentsForCourse(1, 0);
+        $this->assertSame([], $this->frozenUserIds(1));
+
+        $this->conn->insert('plugin_buycourses_frozen_enrollment', ['course_id' => 2, 'user_id' => $a, 'frozen_since' => '2026-01-01 00:00:00']);
+        $this->conn->insert('plugin_buycourses_frozen_enrollment', ['course_id' => 1, 'user_id' => $a, 'frozen_since' => '2026-01-01 00:00:00']);
+        $this->plugin->clearFrozenEnrollmentsForCourse(1);
+        $this->assertSame([], $this->frozenUserIds(1));
+        $this->assertSame([$a], $this->frozenUserIds(2), 'only the requested course is cleared');
+        $this->plugin->clearFrozenEnrollmentsForCourse(0);
+        $this->assertSame([$a], $this->frozenUserIds(2));
+        $this->plugin->freezeExcessEnrollmentsForCourse(0, 1);
+        $this->assertSame([$a], $this->frozenUserIds(2));
+    }
+
+    public function testApplyAiCourseFeatureSettingsWritesOneSettingRowPerFeature(): void
+    {
+        $definitions = array_keys($this->plugin->getAiCourseFeatureDefinitions());
+        $this->conn->executeStatement('DELETE FROM c_course_setting WHERE c_id = 1');
+        $rows = fn (): array => $this->conn->fetchAllAssociative(
+            'SELECT variable, value, category, title, subkey, type, comment FROM c_course_setting WHERE c_id = 1 ORDER BY variable'
+        );
+
+        $this->plugin->applyAiCourseFeatureSettingsToCourse(1, ['toolbox', 'tutor_chatbot', 'bogus']);
+        $expected = [];
+        foreach ($definitions as $feature) {
+            $expected[$feature] = [
+                'variable' => $feature, 'value' => in_array($feature, ['toolbox', 'tutor_chatbot'], true) ? 'true' : 'false',
+                'category' => 'ai_helpers', 'title' => '', 'subkey' => null, 'type' => null, 'comment' => null,
+            ];
+        }
+        ksort($expected);
+        $this->assertSame(array_values($expected), $rows());
+        $this->assertGreaterThanOrEqual(10, count($expected));
+
+        // A second call updates the existing rows in place.
+        $this->plugin->applyAiCourseFeatureSettingsToCourse(1, ['task_grader']);
+        $after = $rows();
+        $this->assertCount(count($definitions), $after);
+        $values = array_column($after, 'value', 'variable');
+        $this->assertSame('true', $values['task_grader']);
+        $this->assertSame('false', $values['toolbox']);
+
+        // A setting of the same name in another category is taken over; other courses are not touched.
+        $this->conn->executeStatement("UPDATE c_course_setting SET category = 'other', title = 'kept' WHERE c_id = 1 AND variable = 'toolbox'");
+        $this->plugin->applyAiCourseFeatureSettingsToCourse(1, ['toolbox']);
+        $toolbox = $this->conn->fetchAssociative("SELECT value, category, title FROM c_course_setting WHERE c_id = 1 AND variable = 'toolbox'");
+        $this->assertSame(['value' => 'true', 'category' => 'ai_helpers', 'title' => 'kept'], $toolbox);
+        $this->assertSame(0, (int) $this->conn->fetchOne("SELECT COUNT(*) FROM c_course_setting WHERE c_id = 0 AND category = 'ai_helpers'"));
+
+        $this->plugin->applyAiCourseFeatureSettingsToCourse(0, ['toolbox']);
+        $this->assertSame(0, (int) $this->conn->fetchOne("SELECT COUNT(*) FROM c_course_setting WHERE c_id = 0 AND category = 'ai_helpers'"));
+    }
 }

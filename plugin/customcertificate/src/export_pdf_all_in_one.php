@@ -15,7 +15,6 @@ $enable = $plugin->get('enable_plugin_customcertificate') === 'true';
 $tblProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 $tblSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
 define('NO_DATE_FILTER', 0);
 define('DATE_BEGIN_FILTER', 1);
@@ -77,22 +76,16 @@ if (!empty($dateEnd)) {
     $filterDate += DATE_END_FILTER;
 }
 
-// Multi-URL protection: every session must belong to the current URL.
-if (api_is_multiple_url_enabled() && $accessUrlId != -1) {
-    foreach ($sessionIds as $sessionId) {
-        $result = Database::select(
-            '*',
-            $tblSessionRelAccessUrl,
-            [
-                'where' => [
-                    'access_url_id = ? AND session_id = ?' => [$accessUrlId, $sessionId],
-                ],
-            ]
-        );
+// Same access as the certificate report (main/mySpace/session_filter.php) this export comes from:
+// every session must be one the report offers to this user, which also limits it to the current URL.
+if (!api_is_allowed_to_create_course() && !api_is_drh()) {
+    api_not_allowed(true);
+}
 
-        if (empty($result)) {
-            api_not_allowed();
-        }
+$allowedSessions = SessionManager::getSessionsForCertificateReport();
+foreach ($sessionIds as $sessionId) {
+    if (!isset($allowedSessions[$sessionId])) {
+        api_not_allowed(true);
     }
 }
 

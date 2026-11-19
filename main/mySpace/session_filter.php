@@ -26,9 +26,7 @@ if ($allowCustomCertificate) {
 }
 
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
 $tblSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
 define('NO_DATE_FILTER', 0);
 define('DATE_BEGIN_FILTER', 1);
@@ -38,43 +36,9 @@ define('ALL_DATE_FILTER', 3);
 $certificateList = [];
 $urlParam = '';
 $form = new FormValidator('search_user', 'POST', api_get_self());
-$innerJoinSessionRelUser = '';
-$whereCondictionDRH = '';
-$whereCondictionMultiUrl = '';
-if (api_is_drh()) {
-    $innerJoinSessionRelUser = "INNER JOIN $tblSessionRelUser as session_rel_user
-                                ON (s.id = session_rel_user.session_id)";
-    $whereCondictionDRH = "WHERE session_rel_user.user_id = ".api_get_user_id();
-    $whereCondictionMultiUrl = " AND session_rel_user.user_id = ".api_get_user_id();
-}
 
-// Select sessions the user can see.
-$sql = "SELECT s.id, name FROM $tblSession s
-        $innerJoinSessionRelUser
-        $whereCondictionDRH
-        ORDER BY name";
-
-if (api_is_multiple_url_enabled()) {
-    $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-    $accessUrlId = api_get_current_access_url_id();
-    if ($accessUrlId != -1) {
-        $sql = "SELECT s.id, name FROM $tblSession s
-                INNER JOIN $tblSessionRelAccessUrl as session_rel_url
-                    ON (s.id = session_rel_url.session_id)
-                $innerJoinSessionRelUser
-                WHERE access_url_id = $accessUrlId
-                $whereCondictionMultiUrl
-                ORDER BY name";
-    }
-}
-$result = Database::query($sql);
-$Sessions = Database::store_result($result);
-
-// Build choices array for the advanced multi-select.
-$sessionChoices = [];
-foreach ($Sessions as $row) {
-    $sessionChoices[$row['id']] = $row['name'];
-}
+// Sessions the user can see, which are the only ones the report may be built for.
+$sessionChoices = SessionManager::getSessionsForCertificateReport();
 
 $sessionMultiSelect = $form->addElement(
     'advmultiselect',
@@ -145,6 +109,16 @@ if (!empty($values)) {
             }
         }
     }
+
+    // The submitted ids are not trusted: keep only the sessions offered to this user.
+    $sessionIds = array_values(
+        array_filter(
+            $sessionIds,
+            function ($sessionId) use ($sessionChoices) {
+                return isset($sessionChoices[$sessionId]);
+            }
+        )
+    );
 
     $dateBeginRaw = isset($values['date_begin']) ? $values['date_begin'] : null;
     $dateEndRaw = isset($values['date_end']) ? $values['date_end'] : null;

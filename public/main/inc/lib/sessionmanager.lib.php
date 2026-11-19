@@ -3875,18 +3875,41 @@ class SessionManager
      */
     public static function get_session_category($id)
     {
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $id = (int) $id;
-        $sql = "SELECT id, title, date_start, date_end
-                FROM $table
-                WHERE id= $id";
-        $result = Database::query($sql);
-        $num = Database::num_rows($result);
-        if ($num > 0) {
-            return Database::fetch_array($result);
-        } else {
-            return false;
+        $row = self::sessionCategoryRowsQueryBuilder(false)
+            ->where('sc.id = :id')
+            ->setParameter('id', (int) $id)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
+
+        // Only the named keys are returned: no caller reads the numeric indexes fetch_array() used to add.
+        return null === $row ? false : self::toLegacySessionCategoryRow($row);
+    }
+
+    /**
+     * The session_category columns, aliased to the snake_case keys the legacy callers read.
+     */
+    private static function sessionCategoryRowsQueryBuilder(bool $withAccessUrl = true): \Doctrine\ORM\QueryBuilder
+    {
+        $qb = Container::getEntityManager()->createQueryBuilder()->select('sc.id AS id');
+        if ($withAccessUrl) {
+            $qb->addSelect('IDENTITY(sc.url) AS access_url_id');
         }
+
+        return $qb
+            ->addSelect('sc.title AS title', 'sc.dateStart AS date_start', 'sc.dateEnd AS date_end')
+            ->from(SessionCategory::class, 'sc');
+    }
+
+    /**
+     * The raw table row used to carry the two date columns as Y-m-d strings (or NULL).
+     */
+    private static function toLegacySessionCategoryRow(array $row): array
+    {
+        foreach (['date_start', 'date_end'] as $key) {
+            $row[$key] = $row[$key] instanceof \DateTimeInterface ? $row[$key]->format('Y-m-d') : null;
+        }
+
+        return $row;
     }
 
     /**
@@ -3896,19 +3919,18 @@ class SessionManager
      */
     public static function get_all_session_category()
     {
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $id = api_get_current_access_url_id();
-        $sql = 'SELECT * FROM '.$table.'
-                WHERE access_url_id = '.$id.'
-                ORDER BY title ASC';
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            $data = Database::store_result($result, 'ASSOC');
+        $rows = self::sessionCategoryRowsQueryBuilder()
+            ->where('IDENTITY(sc.url) = :urlId')
+            ->setParameter('urlId', (int) api_get_current_access_url_id())
+            ->orderBy('sc.title', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
 
-            return $data;
+        if ([] === $rows) {
+            return false;
         }
 
-        return false;
+        return array_map([self::class, 'toLegacySessionCategoryRow'], $rows);
     }
 
     /**

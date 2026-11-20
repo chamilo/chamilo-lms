@@ -278,6 +278,28 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
         $this->assertStringContainsString('item_closed', $params['title']);
     }
 
+    public function testGetCourseParamsForDisplayLinksTheCourseAndItsSettingsForTeachersAndAdministrators(): void
+    {
+        $course = $this->createCourse('cm3d_disp_c');
+        $teacher = $this->createUser('cm3d_disp_teacher');
+        $admin = $this->createUser('cm3d_disp_admin', '', '', 'ROLE_ADMIN');
+        $this->sub($teacher, $course, COURSEMANAGER);
+        $this->sub($admin, $course, COURSEMANAGER);
+        $id = (int) $course->getId();
+
+        foreach ([$teacher, $admin] as $user) {
+            $this->loginAs($user);
+            $params = CourseManager::getCourseParamsForDisplay($id);
+            $this->assertStringContainsString('course-settings/'.$id.'"', $params['right_actions'], 'the edit link names the course');
+            $this->assertSame('/course/'.$id.'/home?sid=0', $params['link'], 'the title links to the course home, outside any session');
+            $this->assertStringContainsString('href="/course/'.$id.'/home', $params['title']);
+        }
+
+        $this->loginAs($admin);
+        $withDirs = CourseManager::getCourseParamsForDisplay($id, true);
+        $this->assertStringContainsString('course-settings/'.$id.'"', $withDirs['right_actions'], 'also with the document quick-loader');
+    }
+
     public function testGetCountExercisesFromOpenCourseCountsAQuizOnceAndSkipsSoftDeletedLinks(): void
     {
         $before = CourseManager::getCountExercisesFromOpenCourse();

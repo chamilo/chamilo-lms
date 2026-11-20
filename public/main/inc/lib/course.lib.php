@@ -6390,7 +6390,7 @@ class CourseManager
         if (api_is_platform_admin()) {
             if ($loadDirs) {
                 $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::getMdiIcon(ObjectIcon::FOLDER, 'ch-tool-icon', 'align: absmiddle;', ICON_SIZE_SMALL, get_lang('Documents')).'</a>';
-                $params['right_actions'] .= '<a href="'.api_get_path(WEB_PATH).'course-settings/'.$course['real_id'].'">'.
+                $params['right_actions'] .= '<a href="'.api_get_path(WEB_PATH).'course-settings/'.$course_info['real_id'].'">'.
                     Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', 'align: absmiddle;', ICON_SIZE_SMALL, get_lang('Edit')).
                     '</a>';
                 $params['right_actions'] .= Display::div(
@@ -6402,7 +6402,7 @@ class CourseManager
                 );
             } else {
                 $params['right_actions'] .=
-                    '<a class="btn btn--plain btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_PATH).'course-settings/'.$course['real_id'].'">'.
+                    '<a class="btn btn--plain btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_PATH).'course-settings/'.$course_info['real_id'].'">'.
                     Display::getMdiIcon('pencil').'</a>';
             }
         } else {
@@ -6420,7 +6420,7 @@ class CourseManager
                 } else {
                     if (COURSEMANAGER == $course_info['status']) {
                         $params['right_actions'] .= '<a
-                            class="btn btn--plain btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_PATH).'course-settings/'.$course['real_id'].'">'.
+                            class="btn btn--plain btn-sm" title="'.get_lang('Edit').'" href="'.api_get_path(WEB_PATH).'course-settings/'.$course_info['real_id'].'">'.
                             Display::getMdiIcon('pencil').'</a>';
                     }
                 }
@@ -6429,7 +6429,7 @@ class CourseManager
 
         $course_title_url = '';
         if (Course::CLOSED != $course_info['visibility'] || COURSEMANAGER == $course['status']) {
-            $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session=0';
+            $course_title_url = $course_info['course_public_url'].'?sid=0';
             $course_title = Display::url($course_info['title'], $course_title_url);
         } else {
             $course_title = $course_info['title'].' '.Display::tag(

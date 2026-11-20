@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -239,6 +240,9 @@ final class SessionManagerTier3cCharacterizationTest extends KernelTestCase
         $page = SessionManager::get_session_progress($session->getId(), $course->getId(), '', '', ['order' => 'username ASC', 'limit' => '1 , 1']);
         $this->assertSame(['sm3c_opt_b'], array_column($page, 'username'));
 
+        $searched = SessionManager::get_session_progress($session->getId(), $course->getId(), '', '', ['where' => " 1 = 1 AND (  (u.username LIKE '%opt_c%') ) "]);
+        $this->assertSame(['sm3c_opt_c'], array_column($searched, 'username'), 'the bare fragment of a grid search, with a percent sign');
+
         $filtered = SessionManager::get_session_progress($session->getId(), $course->getId(), '', '', ['where' => "AND u.username = 'sm3c_opt_c'"]);
         $this->assertSame(['sm3c_opt_c'], array_column($filtered, 'username'));
     }
@@ -250,5 +254,118 @@ final class SessionManagerTier3cCharacterizationTest extends KernelTestCase
         $this->sessionCourse($session->getId(), $course);
 
         $this->assertSame([], SessionManager::get_session_progress($session->getId(), $course->getId(), '', '', []));
+    }
+
+    private function access(Course $course, SessionEntity $session, User $user, string $login, string $logout, int $counter): void
+    {
+        $this->conn()->executeStatement(
+            "INSERT INTO track_e_course_access (user_id, c_id, login_course_date, logout_course_date, counter, session_id, user_ip)
+             VALUES (?, ?, ?, ?, ?, ?, '')",
+            [$user->getId(), $course->getId(), $login, $logout, $counter, $session->getId()]
+        );
+    }
+
+    private function platformLogin(User $user, string $date, string $ip): void
+    {
+        $this->conn()->executeStatement(
+            'INSERT INTO track_e_login (login_user_id, login_date, user_ip) VALUES (?, ?, ?)',
+            [$user->getId(), $date, $ip]
+        );
+    }
+
+    public function testGetUserDataAccessTrackingOverviewListsTheCourseAccessesWithDurationSessionAndIp(): void
+    {
+        $course = $this->createCourse('sm3c_ov_course');
+        $session = $this->createSession('sm3c_ov_session');
+        $student = $this->createUser('sm3c_ov_student');
+        $other = $this->createUser('sm3c_ov_other');
+        $this->access($course, $session, $student, '2026-03-02 10:00:00', '2026-03-02 11:30:15', 7);
+        $this->access($course, $session, $student, '2026-03-05 09:00:00', '2026-03-05 09:00:01', 1);
+        $this->access($course, $session, $other, '2026-03-03 08:00:00', '2026-03-03 08:10:00', 2);
+        $this->access($course, $session, $other, '2026-03-04 23:30:00', '2026-03-04 23:40:00', 1);
+        // An access to another course of the session is not listed for this course.
+        $otherCourse = $this->createCourse('sm3c_ov_other_course');
+        $this->access($otherCourse, $session, $student, '2026-03-06 09:00:00', '2026-03-06 09:10:00', 1);
+        // The closest earlier platform login gives the address; with none earlier the closest later one does.
+        $this->platformLogin($student, '2026-03-01 08:00:00', '10.0.0.1');
+        $this->platformLogin($student, '2026-03-02 09:55:00', '10.0.0.2');
+        $this->platformLogin($student, '2026-03-04 09:00:00', '10.0.0.3');
+        $this->platformLogin($other, '2026-03-09 09:00:00', '10.0.0.9');
+
+        $settings = self::getContainer()->get(SettingsManager::class);
+        $settings->updateSetting('tracking.hide_ip_address', 'true');
+        $hidden = SessionManager::get_user_data_access_tracking_overview($session->getId(), $course->getId(), $student->getId());
+        $this->assertSame(['', ''], array_column($hidden, 'ip'), 'the setting hides the addresses');
+
+        $settings->updateSetting('tracking.hide_ip_address', 'false');
+        $rows = SessionManager::get_user_data_access_tracking_overview(
+            $session->getId(),
+            $course->getId(),
+            $student->getId(),
+            '',
+            '',
+            '',
+            ['order' => 'logindate ASC']
+        );
+
+        $this->assertSame(['2026-03-02 10:00:00', '2026-03-05 09:00:00'], array_column($rows, 'logindate'));
+        $this->assertSame(['sm3c_ov_student', 'sm3c_ov_student'], array_column($rows, 'username'));
+        $this->assertEquals([7, 1], array_column($rows, 'clicks'));
+        $this->assertSame(['01:30:15', '00:00:01'], array_column($rows, 'timeLoggedIn'));
+        $this->assertSame(['sm3c_ov_session', 'sm3c_ov_session'], array_column($rows, 'session'));
+        $this->assertSame(['10.0.0.2', '10.0.0.3'], array_column($rows, 'ip'));
+
+        $withoutStudent = SessionManager::get_user_data_access_tracking_overview($session->getId(), $course->getId());
+        $this->assertCount(4, $withoutStudent);
+        $this->assertSame(['10.0.0.9'], array_values(array_unique(array_column(array_filter($withoutStudent, static fn ($r) => 'sm3c_ov_other' === $r['username']), 'ip'))));
+
+        $dated = SessionManager::get_user_data_access_tracking_overview($session->getId(), $course->getId(), 0, '', '2026-03-03', '2026-03-04');
+        $this->assertSame(['sm3c_ov_other', 'sm3c_ov_other'], array_column($dated, 'username'), 'both ends of the range are whole days');
+    }
+
+    public function testGetUserDataAccessTrackingOverviewAcceptsTheSortFieldsOfTheGrid(): void
+    {
+        $course = $this->createCourse('sm3c_ovs_course');
+        $session = $this->createSession('sm3c_ovs_session');
+        $student = $this->createUser('sm3c_ovs_student');
+        $this->access($course, $session, $student, '2026-03-02 10:00:00', '2026-03-02 11:00:00', 1);
+        $this->access($course, $session, $student, '2026-03-05 10:00:00', '2026-03-05 11:00:00', 1);
+
+        // model.ajax.php sorts by "logindate" unless the grid asks for another column.
+        $rows = SessionManager::get_user_data_access_tracking_overview(
+            $session->getId(),
+            $course->getId(),
+            0,
+            '',
+            '',
+            '',
+            ['order' => 'logindate DESC', 'limit' => '0 , 10']
+        );
+
+        $this->assertSame(['2026-03-05 10:00:00', '2026-03-02 10:00:00'], array_column($rows, 'logindate'));
+
+        $byUnknown = SessionManager::get_user_data_access_tracking_overview($session->getId(), $course->getId(), 0, '', '', '', ['order' => 'ip; DROP TABLE user']);
+        $this->assertCount(2, $byUnknown, 'an unknown sort field falls back to the login date instead of reaching the SQL');
+
+        $searched = SessionManager::get_user_data_access_tracking_overview(
+            $session->getId(),
+            $course->getId(),
+            0,
+            '',
+            '',
+            '',
+            ['where' => " 1 = 1 AND (  (u.username LIKE '%ovs_stu%') ) "]
+        );
+        $this->assertCount(2, $searched, 'the bare fragment of a grid search');
+        $none = SessionManager::get_user_data_access_tracking_overview($session->getId(), $course->getId(), 0, '', '', '', ['where' => "AND u.username = 'nobody'"]);
+        $this->assertSame([], $none);
+    }
+
+    public function testGetUserDataAccessTrackingOverviewOfASessionWithoutAccessesIsEmpty(): void
+    {
+        $course = $this->createCourse('sm3c_ove_course');
+        $session = $this->createSession('sm3c_ove_session');
+
+        $this->assertSame([], SessionManager::get_user_data_access_tracking_overview($session->getId(), $course->getId()));
     }
 }

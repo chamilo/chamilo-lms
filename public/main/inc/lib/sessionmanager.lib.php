@@ -1341,8 +1341,10 @@ class SessionManager
             $limit = " LIMIT ".$options['limit'];
         }
 
-        if (!empty($options['where'])) {
-            $where .= ' '.$options['where'];
+        // The grid filter fragment is built by model.ajax.php: either bare ("1 = 1 AND (...)") or starting with AND.
+        $gridWhere = trim((string) ($options['where'] ?? ''));
+        if ('' !== $gridWhere) {
+            $where .= preg_match('/^(AND|OR)\b/i', $gridWhere) ? ' '.$gridWhere : ' AND ('.$gridWhere.')';
         }
 
         $order = null;
@@ -1693,12 +1695,10 @@ class SessionManager
         $date_to = '',
         $options = []
     ) {
-        $sessionId = intval($sessionId);
-        $courseId = intval($courseId);
-        $studentId = intval($studentId);
-        $profile = intval($profile);
-        $date_from = Database::escape_string($date_from);
-        $date_to = Database::escape_string($date_to);
+        $sessionId = (int) $sessionId;
+        $courseId = (int) $courseId;
+        $studentId = (int) $studentId;
+        $profile = (int) $profile;
 
         // database table definition
         $user = Database::get_main_table(TABLE_MAIN_USER);
@@ -1706,6 +1706,7 @@ class SessionManager
         $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+        $connection = Database::getManager()->getConnection();
 
         global $export_csv;
         if ($export_csv) {
@@ -1714,40 +1715,50 @@ class SessionManager
             $is_western_name_order = api_is_western_name_order();
         }
 
-        $where = null;
-        if (isset($sessionId) && !empty($sessionId)) {
-            $where = sprintf(" WHERE a.session_id = %d", $sessionId);
+        $conditions = [];
+        if (!empty($sessionId)) {
+            $conditions[] = 'a.session_id = '.$sessionId;
         }
-        if (isset($courseId) && !empty($courseId)) {
-            $where .= sprintf(" AND c.id = %d", $courseId);
+        if (!empty($courseId)) {
+            $conditions[] = 'c.id = '.$courseId;
         }
-        if (isset($studentId) && !empty($studentId)) {
-            $where .= sprintf(" AND u.id = %d", $studentId);
+        if (!empty($studentId)) {
+            $conditions[] = 'u.id = '.$studentId;
         }
-        if (isset($profile) && !empty($profile)) {
-            $where .= sprintf(" AND u.status = %d", $profile);
+        if (!empty($profile)) {
+            $conditions[] = 'u.status = '.$profile;
         }
-        if (!empty($date_to) && !empty($date_from)) {
-            $where .= sprintf(
-                " AND a.login_course_date >= '%s 00:00:00'
-                 AND a.login_course_date <= '%s 23:59:59'",
-                $date_from,
-                $date_to
-            );
+        $dateFormat = '/^\d{4}-\d{2}-\d{2}$/';
+        if (preg_match($dateFormat, (string) $date_from) && preg_match($dateFormat, (string) $date_to)) {
+            $conditions[] = "a.login_course_date >= '$date_from 00:00:00' AND a.login_course_date <= '$date_to 23:59:59'";
         }
 
-        $limit = null;
-        if (!empty($options['limit'])) {
-            $limit = " LIMIT ".$options['limit'];
+        // The grid filter fragment is built by model.ajax.php: either bare ("1 = 1 AND (...)") or starting with AND.
+        $gridWhere = trim((string) ($options['where'] ?? ''));
+        if ('' !== $gridWhere) {
+            $conditions[] = preg_match('/^(AND|OR)\b/i', $gridWhere) ? '1 = 1 '.$gridWhere : '('.$gridWhere.')';
+        }
+        $where = empty($conditions) ? '' : ' WHERE '.implode(' AND ', $conditions);
+
+        $limit = '';
+        if (!empty($options['limit']) && preg_match('/^\s*(\d+)\s*,\s*(\d+)\s*$/', (string) $options['limit'], $limitMatches)) {
+            $limit = ' LIMIT '.(int) $limitMatches[1].', '.(int) $limitMatches[2];
         }
 
-        if (!empty($options['where'])) {
-            $where .= ' '.$options['where'];
-        }
-
-        $order = null;
+        // The grid sorts by the names of its columns, which are not all columns of the query.
+        $orderColumns = [
+            'logindate' => 'a.login_course_date',
+            'username' => 'u.username',
+            'lastname' => 'u.lastname',
+            'firstname' => 'u.firstname',
+            'clicks' => 'a.counter',
+        ];
+        $order = '';
         if (!empty($options['order'])) {
-            $order = " ORDER BY ".$options['order'];
+            $orderParts = preg_split('/\s+/', trim((string) $options['order']));
+            $orderColumn = $orderColumns[$orderParts[0]] ?? $orderColumns['logindate'];
+            $orderDirection = 'DESC' === strtoupper($orderParts[1] ?? '') ? 'DESC' : 'ASC';
+            $order = ' ORDER BY '.$orderColumn.' '.$orderDirection;
         }
 
         //TODO add course name
@@ -1771,22 +1782,23 @@ class SessionManager
             INNER JOIN $user u ON a.user_id = u.id
             INNER JOIN $course c ON a.c_id = c.id
             $where $order $limit";
-        // TODO(db-neutral): free-form jqGrid where/order/limit fragments, sprintf-built SQL; not pinned by a test (all queries of this function)
-        $result = Database::query(sprintf($sql, $sessionId, $courseId));
+        // TODO(db-neutral): the grid filter fragment is SQL built by model.ajax.php
+        $result = Database::query($sql);
 
         $data = [];
         while ($user = Database::fetch_assoc($result)) {
             $data[] = $user;
         }
 
-        foreach ($data as $key => $info) {
-            $sql = "SELECT
-                    title
-                    FROM $sessionTable
-                    WHERE
-                    id = {$info['session_id']}";
-            $result = Database::query($sql);
-            $session = Database::fetch_assoc($result);
+        $return = [];
+        foreach ($data as $info) {
+            $sessionTitle = $connection->createQueryBuilder()
+                ->select('title')
+                ->from($sessionTable)
+                ->where('id = :sessionId')
+                ->setParameter('sessionId', (int) $info['session_id'])
+                ->executeQuery()
+                ->fetchOne();
 
             // building array to display
             $return[] = [
@@ -1798,34 +1810,43 @@ class SessionManager
                 'clicks' => $info['counter'], //+ $clicks[$info['user_id']],
                 'ip' => '',
                 'timeLoggedIn' => gmdate("H:i:s", strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])),
-                'session' => $session['title'],
+                'session' => false === $sessionTitle ? '' : $sessionTitle,
             ];
         }
 
+        if ('true' === api_get_setting('tracking.hide_ip_address')) {
+            return $return;
+        }
+
         foreach ($return as $key => $info) {
-            if ('true' === api_get_setting('tracking.hide_ip_address')) {
-                continue;
-            }
             //Search for ip, we do less querys if we iterate the final array
-            $sql = sprintf(
-                "SELECT user_ip FROM $track_e_login WHERE login_user_id = %d AND login_date < '%s' ORDER BY login_date DESC LIMIT 1",
-                $info['user_id'],
-                $info['logindate']
-            ); //TODO add select by user too
-            $result = Database::query($sql);
-            $ip = Database::fetch_assoc($result);
+            $ip = $connection->createQueryBuilder()
+                ->select('user_ip')
+                ->from($track_e_login)
+                ->where('login_user_id = :userId')
+                ->andWhere('login_date < :loginDate')
+                ->orderBy('login_date', 'DESC')
+                ->setMaxResults(1)
+                ->setParameter('userId', (int) $info['user_id'])
+                ->setParameter('loginDate', $info['logindate'])
+                ->executeQuery()
+                ->fetchOne();
             //if no ip founded, we search the closest higher ip
-            if (empty($ip['user_ip'])) {
-                $sql = sprintf(
-                    "SELECT user_ip FROM $track_e_login WHERE login_user_id = %d AND login_date > '%s'  ORDER BY login_date ASC LIMIT 1",
-                    $info['user_id'],
-                    $info['logindate']
-                ); //TODO add select by user too
-                $result = Database::query($sql);
-                $ip = Database::fetch_assoc($result);
+            if (empty($ip)) {
+                $ip = $connection->createQueryBuilder()
+                    ->select('user_ip')
+                    ->from($track_e_login)
+                    ->where('login_user_id = :userId')
+                    ->andWhere('login_date > :loginDate')
+                    ->orderBy('login_date', 'ASC')
+                    ->setMaxResults(1)
+                    ->setParameter('userId', (int) $info['user_id'])
+                    ->setParameter('loginDate', $info['logindate'])
+                    ->executeQuery()
+                    ->fetchOne();
             }
             //add ip to final array
-            $return[$key]['ip'] = $ip['user_ip'];
+            $return[$key]['ip'] = false === $ip ? '' : $ip;
         }
 
         return $return;

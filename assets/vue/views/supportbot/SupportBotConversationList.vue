@@ -100,7 +100,7 @@ onMounted(loadConversations)
         :route="{ name: 'SupportBotTreeList' }"
         icon="back"
         only-icon
-        type="secondary-text"
+        type="black-text"
       />
     </SectionHeader>
 

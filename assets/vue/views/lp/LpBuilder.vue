@@ -748,7 +748,7 @@ function goBack() {
         :label="t('Back')"
         icon="back"
         only-icon
-        type="primary-text"
+        type="black-text"
         @click="goBack"
       />
       <BaseButton

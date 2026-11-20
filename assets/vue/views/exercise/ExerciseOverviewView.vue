@@ -11,7 +11,7 @@
           icon="back"
           only-icon
           size="small"
-          type="primary-text"
+          type="black-text"
         />
         <BaseButton
           v-if="overview.canManage"

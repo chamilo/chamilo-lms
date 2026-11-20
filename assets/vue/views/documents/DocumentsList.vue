@@ -9,7 +9,7 @@
       :route="gradebookReturnRoute"
       icon="back"
       only-icon
-      type="primary-text"
+      type="black-text"
     />
     <BaseButton
       v-if="showNewCertificateButton"
@@ -42,7 +42,7 @@
       :label="t('Back')"
       icon="back"
       only-icon
-      type="gray"
+      type="black-text"
       @click="back"
     />
     <BaseButton

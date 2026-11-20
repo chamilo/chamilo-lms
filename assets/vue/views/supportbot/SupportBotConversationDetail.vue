@@ -51,7 +51,7 @@ onMounted(loadConversation)
           :route="{ name: 'SupportBotConversationList', params: { id: treeId } }"
           icon="back"
           only-icon
-          type="secondary-text"
+          type="black-text"
         />
         <BaseButton
           v-if="detail?.ticketId"

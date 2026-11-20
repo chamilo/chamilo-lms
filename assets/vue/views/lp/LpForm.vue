@@ -9,7 +9,7 @@
         :label="t('Back')"
         icon="back"
         only-icon
-        type="primary-text"
+        type="black-text"
         @click="cancel"
       />
     </SectionHeader>

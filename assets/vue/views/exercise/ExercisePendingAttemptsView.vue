@@ -11,7 +11,7 @@
         :route="{ name: 'MyCourses' }"
         icon="back"
         only-icon
-        type="black"
+        type="black-text"
       />
       <BaseButton
         v-if="actionUrls.exportCsv"

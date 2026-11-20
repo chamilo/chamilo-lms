@@ -2,7 +2,7 @@
   <SectionHeader :title="t('Edit layout template')">
     <BaseButton
       icon="back"
-      type="gray"
+      type="black-text"
       only-icon
       :label="t('Back')"
       @click="goBack"

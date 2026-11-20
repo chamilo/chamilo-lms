@@ -489,7 +489,7 @@ onMounted(() => loadReporting(selectedStudentId.value))
           icon="back"
           only-icon
           size="small"
-          type="primary-text"
+          type="black-text"
           @click="goBack"
         />
         <BaseButton

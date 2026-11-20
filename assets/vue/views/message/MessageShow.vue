@@ -16,7 +16,7 @@
         :label="t('Back')"
         icon="back"
         only-icon
-        type="black"
+        type="black-text"
         @click="goBackToList"
       />
 

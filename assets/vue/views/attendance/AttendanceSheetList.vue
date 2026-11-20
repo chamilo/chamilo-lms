@@ -8,7 +8,7 @@
         :label="t('Go back')"
         icon="back"
         only-icon
-        type="black"
+        type="black-text"
         @click="redirectToAttendanceList"
       />
       <template v-if="isTeacherUI">

@@ -5609,6 +5609,53 @@ class SessionManager
     }
 
     /**
+     * Clears what an "update existing session" CSV import rewrites: the students of the session, its courses
+     * and the course students, plus the course coaches when asked to (or when the file lists a single course).
+     */
+    private static function importClearSessionRelations(
+        int $sessionId,
+        bool $updateCourseCoaches,
+        bool $deleteOnlyCourseCoaches
+    ): void {
+        $connection = Container::getEntityManager()->getConnection();
+
+        // Delete session-user relation only for students
+        $connection->createQueryBuilder()
+            ->delete('session_rel_user')
+            ->where('session_id = :sessionId')
+            ->andWhere('relation_type = :relationType')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('relationType', Session::STUDENT)
+            ->executeStatement();
+
+        $connection->createQueryBuilder()
+            ->delete('session_rel_course')
+            ->where('session_id = :sessionId')
+            ->setParameter('sessionId', $sessionId)
+            ->executeStatement();
+
+        // Delete session-course-user relationships students and coaches, or *only* students.
+        $statuses = $updateCourseCoaches ? [Session::STUDENT, Session::COURSE_COACH] : [Session::STUDENT];
+        $connection->createQueryBuilder()
+            ->delete('session_rel_course_rel_user')
+            ->where('session_id = :sessionId')
+            ->andWhere('status IN (:statuses)')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('statuses', $statuses, ArrayParameterType::INTEGER)
+            ->executeStatement();
+
+        if ($deleteOnlyCourseCoaches) {
+            $connection->createQueryBuilder()
+                ->delete('session_rel_course_rel_user')
+                ->where('session_id = :sessionId')
+                ->andWhere('status = :status')
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('status', Session::COURSE_COACH)
+                ->executeStatement();
+        }
+    }
+
+    /**
      * Imports sessions from a CSV file, creating or updating sessions with related users and courses.
      *
      * @return array Contains the import result with errors, counters, and session IDs.
@@ -5654,7 +5701,6 @@ class SessionManager
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $rows = Import::csvToArray($file);
         if (empty($rows) || !is_array($rows)) {
@@ -5821,11 +5867,14 @@ class SessionManager
                     if ($i > 1) {
                         $suffix = ' - '.$i;
                     }
-                    $sql = 'SELECT id FROM '.$tbl_session.'
-                                WHERE title = "'.Database::escape_string($session_name).$suffix.'"';
-                    // TODO(db-neutral): not pinned by a test beyond the update-existing guard (all queries of this function)
-                    $rs = Database::query($sql);
-                    if (Database::result($rs, 0, 0)) {
+                    $existingId = Container::getEntityManager()->getConnection()->createQueryBuilder()
+                        ->select('id')
+                        ->from('session')
+                        ->where('title = :title')
+                        ->setParameter('title', $session_name.$suffix)
+                        ->executeQuery()
+                        ->fetchOne();
+                    if ($existingId) {
                         $i++;
                     } else {
                         $unique_name = true;
@@ -5945,30 +5994,7 @@ class SessionManager
                             $logger->debug("Sessions - #$session_id created: $session_name");
                         }
 
-                        // Delete session-user relation only for students
-                        $sql = "DELETE FROM $tbl_session_user
-                                    WHERE session_id = '$session_id' AND relation_type = ".Session::STUDENT;
-                        Database::query($sql);
-
-                        $sql = "DELETE FROM $tbl_session_course WHERE session_id = '$session_id'";
-                        Database::query($sql);
-
-                        // Delete session-course-user relationships students and coaches.
-                        if ($updateCourseCoaches) {
-                            $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status in (".Session::STUDENT.", ".Session::COURSE_COACH.")";
-                            Database::query($sql);
-                        } else {
-                            // Delete session-course-user relation ships *only* for students.
-                            $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status =".Session::STUDENT;
-                            Database::query($sql);
-                        }
-                        if ($deleteOnlyCourseCoaches) {
-                            $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status = ".Session::COURSE_COACH;
-                            Database::query($sql);
-                        }
+                        self::importClearSessionRelations((int) $session_id, $updateCourseCoaches, $deleteOnlyCourseCoaches);
                     }
                 } else {
                     // Updating the session.
@@ -6002,9 +6028,13 @@ class SessionManager
                         if (!empty($enreg['SessionName'])) {
                             $sessionExistsWithName = self::get_session_by_name($session_name);
                             if (false === $sessionExistsWithName) {
-                                $sessionName = Database::escape_string($enreg['SessionName']);
-                                $sql = "UPDATE $tbl_session SET title = '$sessionName' WHERE id = $session_id";
-                                Database::query($sql);
+                                Container::getEntityManager()->getConnection()->createQueryBuilder()
+                                    ->update('session')
+                                    ->set('title', ':title')
+                                    ->where('id = :id')
+                                    ->setParameter('title', $enreg['SessionName'])
+                                    ->setParameter('id', (int) $session_id)
+                                    ->executeStatement();
                                 $logger->debug(
                                     "Session #$session_id name IS updated with: '$session_name' External id: ".$enreg['extra_'.$extraFieldId]
                                 );
@@ -6083,31 +6113,7 @@ class SessionManager
                             $logger->debug("Session updated #$session_id");
                         }
 
-                        // Delete session-user relation only for students
-                        $sql = "DELETE FROM $tbl_session_user
-                                    WHERE session_id = '$session_id' AND relation_type = ".Session::STUDENT;
-                        Database::query($sql);
-
-                        $sql = "DELETE FROM $tbl_session_course WHERE session_id = '$session_id'";
-                        Database::query($sql);
-
-                        // Delete session-course-user relationships students and coaches.
-                        if ($updateCourseCoaches) {
-                            $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status in (".Session::STUDENT.", ".Session::COURSE_COACH.")";
-                            Database::query($sql);
-                        } else {
-                            // Delete session-course-user relation ships *only* for students.
-                            $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status = ".Session::STUDENT;
-                            Database::query($sql);
-                        }
-
-                        if ($deleteOnlyCourseCoaches) {
-                            $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status = ".Session::COURSE_COACH;
-                            Database::query($sql);
-                        }
+                        self::importClearSessionRelations((int) $session_id, $updateCourseCoaches, $deleteOnlyCourseCoaches);
                     } else {
                         if ($debug) {
                             $logger->debug(
@@ -6200,6 +6206,7 @@ class SessionManager
                     $courseId = $courseInfo['real_id'];
 
                     // Adding the course to a session.
+                    // TODO(db-neutral): INSERT IGNORE ... SET (a repeated course in the file is a no-op)
                     $sql = "INSERT IGNORE INTO $tbl_session_course
                                 SET c_id = '$courseId', session_id='$session_id'";
                     Database::query($sql);
@@ -6600,9 +6607,15 @@ class SessionManager
             }
             $access_url_id = api_get_current_access_url_id();
             UrlManager::add_session_to_url($session_id, $access_url_id);
-            $sql = "UPDATE $tbl_session SET nbr_users = '$user_counter', nbr_courses = '$course_counter'
-                        WHERE id = '$session_id'";
-            Database::query($sql);
+            Container::getEntityManager()->getConnection()->createQueryBuilder()
+                ->update('session')
+                ->set('nbr_users', ':users')
+                ->set('nbr_courses', ':courses')
+                ->where('id = :id')
+                ->setParameter('users', $user_counter)
+                ->setParameter('courses', $course_counter)
+                ->setParameter('id', (int) $session_id)
+                ->executeStatement();
 
             self::addClassesByName($session_id, $classes, false);
 
@@ -6791,10 +6804,14 @@ class SessionManager
                         'session_category_id' => $sessionCategoryId,
                     ], ['id = ?' => $sessionId]);
 
-                    // TODO(db-neutral): not pinned by a test (all queries of this function)
-                    Database::query("DELETE FROM $tblSessionUser WHERE session_id = $sessionId");
-                    Database::query("DELETE FROM $tblSessionCourse WHERE session_id = $sessionId");
-                    Database::query("DELETE FROM $tblSessionCourseUser WHERE session_id = $sessionId");
+                    $connection = Container::getEntityManager()->getConnection();
+                    foreach (['session_rel_user', 'session_rel_course', 'session_rel_course_rel_user'] as $relationTable) {
+                        $connection->createQueryBuilder()
+                            ->delete($relationTable)
+                            ->where('session_id = :sessionId')
+                            ->setParameter('sessionId', (int) $sessionId)
+                            ->executeStatement();
+                    }
                 } else {
                     $sessionId = Database::insert($tblSession, [
                         'title' => $sessionName,

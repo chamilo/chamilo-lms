@@ -302,10 +302,74 @@ if (4 == $step && 3 != $process) {
         $tmpZip = tempnam(sys_get_temp_dir(), 'scorm');
         $zip->open($tmpZip, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
+        // Older generated folders can still contain font files from before the H5P
+        // templates started sharing FontAwesome. Keep these files on disk, but do
+        // not package redundant copies when the exported CSS uses the shared fonts.
+        $h5pFontFolders = [
+            'oel-plug/hvpdragthewords/dragthewords/FontAwesome-4.5/',
+            'oel-plug/hvpfillintheblanks/fill-in-the-missing-words/FontAwesome-4.5/',
+            'oel-plug/hvpmarkthewords/mark-the-words/FontAwesome-4.5/',
+        ];
+        $sharedFontFolder = 'oel-plug/_shared/FontAwesome-4.5/';
+        $h5pFontFiles = [
+            'FontAwesome.otf',
+            'fontawesome-webfont.eot',
+            'fontawesome-webfont.svg',
+            'fontawesome-webfont.ttf',
+            'fontawesome-webfont.woff',
+            'fontawesome-webfont.woff2',
+        ];
+        $canOmitLegacyFonts = true;
+
+        foreach ($h5pFontFolders as $fontFolder) {
+            $stylesheet = $scormfolder.'/'.$fontFolder.'h5p-font-awesome.min.css';
+            if (!$pluginFileSystem->fileExists($stylesheet)) {
+                $canOmitLegacyFonts = false;
+                break;
+            }
+
+            $css = $pluginFileSystem->read($stylesheet);
+            foreach (['eot', 'svg', 'ttf', 'woff', 'woff2'] as $extension) {
+                if (!str_contains($css, '../../../_shared/FontAwesome-4.5/fontawesome-webfont.'.$extension)) {
+                    $canOmitLegacyFonts = false;
+                    break 2;
+                }
+            }
+        }
+
+        if ($canOmitLegacyFonts) {
+            foreach ($h5pFontFiles as $fontFile) {
+                if (!$pluginFileSystem->fileExists($scormfolder.'/'.$sharedFontFolder.$fontFile)) {
+                    $canOmitLegacyFonts = false;
+                    break;
+                }
+            }
+        }
+
         foreach ($pluginFileSystem->listContents($scormfolder, true) as $item) {
             if ($item->isFile()) {
                 $relativePath = substr($item->path(), strlen($scormfolder) + 1);
                 $relativePath = str_replace('\\', '/', $relativePath);
+
+                if ($canOmitLegacyFonts) {
+                    foreach ($h5pFontFolders as $fontFolder) {
+                        if (!str_starts_with($relativePath, $fontFolder)) {
+                            continue;
+                        }
+
+                        $fontFile = substr($relativePath, strlen($fontFolder));
+                        if (!in_array($fontFile, $h5pFontFiles, true)) {
+                            continue;
+                        }
+
+                        // Never omit non-identical or independently required files.
+                        $sharedFile = $scormfolder.'/'.$sharedFontFolder.$fontFile;
+                        if ($pluginFileSystem->read($item->path()) === $pluginFileSystem->read($sharedFile)) {
+                            continue 2;
+                        }
+                    }
+                }
+
                 $zip->addFromString($relativePath, $pluginFileSystem->read($item->path()));
             }
         }

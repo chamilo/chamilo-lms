@@ -23,8 +23,6 @@ use Symfony\Component\Uid\Uuid;
 
 /**
  * Second pass over forumfunction.inc.php: the functions and branches ForumCharacterizationTest leaves unpinned.
- * Not covered on purpose: getAttachedFiles() has no caller; get_thread_users_details() / get_thread_users_qualify()
- * have no caller either and return a statement handle.
  */
 final class ForumTier2CharacterizationTest extends KernelTestCase
 {

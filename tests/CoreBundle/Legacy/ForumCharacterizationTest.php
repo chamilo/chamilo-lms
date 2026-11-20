@@ -13,7 +13,6 @@ use Chamilo\CourseBundle\Entity\CForumThread;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
-use Database;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -244,143 +243,12 @@ final class ForumCharacterizationTest extends KernelTestCase
         return (int) $this->conn->lastInsertId();
     }
 
-    private function courseStudent(int $userId, int $courseId): void
-    {
-        $this->conn->insert('course_rel_user', [
-            'c_id' => $courseId,
-            'user_id' => $userId,
-            'status' => 5,
-            'relation_type' => 0,
-            'sort' => 0, 'progress' => 0,
-            'user_course_cat' => 0,
-            'legal_agreement' => 0,
-        ]);
-    }
-
-    /**
-     * @param mixed $result
-     *
-     * @return list<array<string, mixed>>
-     */
-    private function rows($result): array
-    {
-        $out = [];
-        while ($row = Database::fetch_assoc($result)) {
-            $out[] = $row;
-        }
-
-        return $out;
-    }
-
-    private function ids(array $rows, string $key = 'id'): array
-    {
-        return array_map(static fn (array $r) => (int) $r[$key], $rows);
-    }
-
     private function titles(array $entities): array
     {
         $t = array_map(static fn ($e) => $e->getTitle(), $entities);
         sort($t);
 
         return $t;
-    }
-
-    // ------------------------------------------------- thread participants
-
-    public function testThreadUsersDetailsListsOnlyValidatedStudentPostersOfTheCourse(): void
-    {
-        $this->setContext(1, 1);
-        $forum = $this->forum(1);
-        $thread = $this->thread($forum);
-        $this->courseStudent(2, 1);
-        // admin is a teacher of course 1 (fixture) and anon a student: only the student is a participant.
-        $this->post($thread, $forum, 2);
-        $this->post($thread, $forum, 1);
-
-        $this->assertSame([2], $this->ids($this->rows(get_thread_users_details($thread))));
-    }
-
-    public function testThreadUsersDetailsIgnoresPostsWaitingForModerationAndOtherCourses(): void
-    {
-        $this->setContext(1, 1);
-        $forum = $this->forum(1);
-        $thread = $this->thread($forum);
-        $this->courseStudent(2, 2);
-        $this->post($thread, $forum, 2, ['status' => CForumPost::STATUS_WAITING_MODERATION]);
-
-        // Not a student of course 1, and its only post is not validated.
-        $this->assertSame([], $this->rows(get_thread_users_details($thread)));
-
-        $this->courseStudent(2, 1);
-        $this->assertSame([], $this->rows(get_thread_users_details($thread)), 'a post waiting for moderation does not count');
-
-        $this->post($thread, $forum, 2, ['status' => null]);
-        $rows = $this->rows(get_thread_users_details($thread));
-        $this->assertSame([2], $this->ids($rows), 'a NULL status counts as validated');
-        $this->assertSame($thread, (int) $rows[0]['thread_id']);
-    }
-
-    public function testThreadUsersDetailsInSessionUsesTheSessionSubscriptions(): void
-    {
-        $sid = $this->sessionRow();
-        $this->setContext(1, 1, $sid);
-        $forum = $this->forum(1);
-        $thread = $this->thread($forum);
-        $this->post($thread, $forum, 2);
-        // Subscribed to the base course only: not a participant of the session.
-        $this->courseStudent(2, 1);
-        $this->assertSame([], $this->rows(get_thread_users_details($thread)));
-
-        $this->conn->insert('session_rel_course_rel_user', [
-            'user_id' => 2, 'session_id' => $sid, 'c_id' => 1, 'status' => 0,
-            'visibility' => 1, 'legal_agreement' => 0, 'progress' => 0,
-        ]);
-        $this->assertSame([2], $this->ids($this->rows(get_thread_users_details($thread))));
-    }
-
-    public function testThreadUsersQualifyListsTheStudentsWithAGrade(): void
-    {
-        $this->setContext(1, 1);
-        $forum = $this->forum(1);
-        $thread = $this->thread($forum);
-        $this->courseStudent(2, 1);
-        $this->post($thread, $forum, 2);
-
-        $this->assertSame([], $this->rows(get_thread_users_qualify($thread)));
-
-        $this->qualify($thread, 2, 1, 7.5);
-        $qualified = $this->rows(get_thread_users_qualify($thread));
-        $this->assertSame([2], $this->ids($qualified));
-        $this->assertSame(7.5, (float) $qualified[0]['qualify']);
-    }
-
-    public function testThreadUsersQualifyOnlyKeepsTheQualificationsOfTheCurrentCourse(): void
-    {
-        $this->setContext(1, 1);
-        $forum = $this->forum(1);
-        $thread = $this->thread($forum);
-        $this->courseStudent(2, 1);
-        $this->post($thread, $forum, 2);
-        $this->qualify($thread, 2, 2, 3.0); // recorded for another course (c_id = 2)
-
-        $this->assertSame([], $this->rows(get_thread_users_qualify($thread)));
-    }
-
-    public function testThreadUsersQualifyInSessionWithoutCoachDoesNotBreakTheQuery(): void
-    {
-        $sid = $this->sessionRow();
-        $this->setContext(1, 1, $sid);
-        $forum = $this->forum(1);
-        $thread = $this->thread($forum);
-        $this->post($thread, $forum, 2);
-        $this->conn->insert('session_rel_course_rel_user', [
-            'user_id' => 2, 'session_id' => $sid, 'c_id' => 1, 'status' => 0,
-            'visibility' => 1, 'legal_agreement' => 0, 'progress' => 0,
-        ]);
-        $this->qualify($thread, 2, 1, 5.0);
-
-        // A session with no general coach and no session admin used to build "NOT IN ()", a SQL error.
-        $this->assertSame([2], $this->ids($this->rows(get_thread_users_qualify($thread))));
     }
 
     // --------------------------------------------------------------- counts

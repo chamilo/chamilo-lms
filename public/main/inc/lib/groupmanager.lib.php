@@ -398,8 +398,6 @@ class GroupManager
      */
     public static function create_subgroups($group_id, $number_of_groups)
     {
-        $courseId = api_get_course_int_id();
-        $table_group = Database::get_course_table(TABLE_GROUP);
         $category_id = self::create_category(
             get_lang('Subgroups'),
             '',
@@ -429,15 +427,20 @@ class GroupManager
                 $user_id,
                 api_get_group_entity($groupId)
             );
-            $members[$group_ids[$groupId]]++;
+            $members[$groupId] = ($members[$groupId] ?? 0) + 1;
         }
 
-        foreach ($members as $group_id => $places) {
-            // TODO(db-neutral): left raw on purpose, the query is already broken (c_group_info has no c_id nor id
-            // column, and $members is indexed by a group id taken from $group_ids): nothing can pin it.
-            $sql = "UPDATE $table_group SET max_student = $places
-                    WHERE c_id = $courseId  AND id = $group_id";
-            Database::query($sql);
+        $em = Container::getEntityManager();
+        foreach ($members as $subgroupId => $places) {
+            $em->createQueryBuilder()
+                ->update(CGroup::class, 'g')
+                ->set('g.maxStudent', ':places')
+                ->where('g.iid = :groupId')
+                ->setParameter('places', (int) $places)
+                ->setParameter('groupId', (int) $subgroupId)
+                ->getQuery()
+                ->execute()
+            ;
         }
     }
 

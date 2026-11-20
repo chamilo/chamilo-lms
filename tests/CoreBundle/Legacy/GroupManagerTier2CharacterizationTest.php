@@ -17,6 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * Characterization tests for the GroupManager methods whose SQL the main characterization test never reached:
@@ -174,6 +175,58 @@ final class GroupManagerTier2CharacterizationTest extends KernelTestCase
 
         GroupManager::synchronizeGroupUsers($group, 0, [$a]);
         $this->assertSame([], $this->memberIds($g), 'Course 0 means nothing to do.');
+    }
+
+    public function testCreateSubgroupsDistributesTheBaseGroupUsersRoundRobinAndSetsTheirCapacity(): void
+    {
+        // create_group() persists resources, whose listener needs a logged-in creator.
+        $admin = $this->getAdmin();
+        self::getContainer()->get('security.token_storage')
+            ->setToken(new UsernamePasswordToken($admin, 'main', $admin->getRoles()))
+        ;
+        ChamiloSession::write('_user', ['id' => $admin->getId()]);
+
+        $baseId = GroupManager::create_group('gm_base_'.getmypid(), 0, 0, 0);
+        $this->assertGreaterThan(0, $baseId);
+        $users = [];
+        for ($i = 1; $i <= 7; ++$i) {
+            $users[] = $this->makeUser('sub'.$i);
+        }
+        $base = $this->entity($baseId);
+        GroupManager::subscribeUsers($users, $base);
+        $baseMembers = array_map('intval', GroupManager::get_users($baseId));
+        $this->assertCount(7, $baseMembers, 'Fixture: the base group holds the 7 users.');
+
+        $before = array_map('intval', $this->conn()->fetchFirstColumn('SELECT iid FROM c_group_info'));
+
+        GroupManager::create_subgroups($baseId, 3);
+
+        $after = array_map('intval', $this->conn()->fetchFirstColumn('SELECT iid FROM c_group_info ORDER BY iid'));
+        $subIds = array_values(array_diff($after, $before));
+        $this->assertCount(3, $subIds, 'Three subgroups are created.');
+
+        $expected = [[], [], []];
+        foreach ($baseMembers as $index => $userId) {
+            $expected[$index % 3][] = $userId;
+        }
+        $seen = [];
+        foreach ($subIds as $n => $subId) {
+            $members = array_map('intval', $this->memberIds($subId));
+            sort($members);
+            $want = $expected[$n];
+            sort($want);
+            $this->assertSame($want, $members, 'Round-robin distribution of the base group users.');
+            $seen = array_merge($seen, $members);
+            $this->assertSame(
+                \count($members),
+                (int) $this->conn()->fetchOne('SELECT max_student FROM c_group_info WHERE iid = ?', [$subId]),
+                'max_student of a subgroup equals its member count.'
+            );
+        }
+        sort($seen);
+        $all = $baseMembers;
+        sort($all);
+        $this->assertSame($all, $seen, 'Each user is in exactly one subgroup.');
     }
 
     public function testGroupRowsKeepTheRawTableRowValues(): void

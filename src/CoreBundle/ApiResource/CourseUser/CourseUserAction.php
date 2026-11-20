@@ -67,6 +67,24 @@ use Symfony\Component\Serializer\Attribute\Groups;
             ],
         ),
         new Post(
+            uriTemplate: '/course-users/actions/access',
+            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            read: false,
+            name: 'post_course_user_access',
+            processor: CourseUserActionProcessor::class,
+            parameters: [
+                'cid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Course identifier',
+                    required: true,
+                ),
+                'sid' => new QueryParameter(
+                    schema: ['type' => 'integer'],
+                    description: 'Session identifier',
+                ),
+            ],
+        ),
+        new Post(
             uriTemplate: '/course-users/actions/tutor',
             openapi: new Operation(
                 summary: 'Enable or disable the course tutor role for a student',
@@ -108,6 +126,9 @@ final class CourseUserAction
 
     #[Groups(['course_user_action:write'])]
     public bool $tutor = false;
+
+    #[Groups(['course_user_action:write'])]
+    public bool $accessEnabled = true;
 
     #[Groups(['course_user_action:read'])]
     public bool $success = false;

@@ -48,6 +48,15 @@ export default {
     )
   },
 
+  async setCourseAccess(userId, accessEnabled, params = {}) {
+    return await baseService.post(
+      "/api/course-users/actions/access",
+      { userIds: [userId], accessEnabled },
+      {},
+      { params: cleanParams(params) },
+    )
+  },
+
   async getImport(params = {}) {
     return await baseService.get("/api/course-users/import", cleanParams(params))
   },

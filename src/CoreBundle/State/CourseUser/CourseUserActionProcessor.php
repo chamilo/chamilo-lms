@@ -62,6 +62,19 @@ final readonly class CourseUserActionProcessor implements ProcessorInterface
             return $data;
         }
 
+        if ('post_course_user_access' === $operationName) {
+            $userId = (int) ($data->userIds[0] ?? 0);
+            if (1 !== \count($data->userIds) || $userId <= 0) {
+                throw new BadRequestHttpException('Exactly one valid student id is required.');
+            }
+
+            $data->success = $this->writeManager->setCourseAccess($course, $session, $userId, $data->accessEnabled);
+            $data->affectedIds = $data->success ? [$userId] : [];
+            $data->message = get_lang('Update successful');
+
+            return $data;
+        }
+
         if ('post_course_user_tutor' === $operationName) {
             $userId = (int) ($data->userIds[0] ?? 0);
             if ($userId <= 0) {

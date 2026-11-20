@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
@@ -581,8 +582,11 @@ class IndexManager
                 WHERE
                     course.id = course_rel_user.c_id AND
                     course_rel_user.user_id = '".$user_id."' AND
-                    course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                ORDER BY course_rel_user.sort ASC";
+                    course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."";
+        if (filter_var(api_get_setting('workflows.teacher_defined_student_access_to_course'), FILTER_VALIDATE_BOOLEAN)) {
+            $sql .= ' AND (course_rel_user.status <> '.CourseRelUser::STUDENT.' OR course_rel_user.visibility = 1)';
+        }
+        $sql .= ' ORDER BY course_rel_user.sort ASC';
         $result = Database::query($sql);
         $courses = [];
         while ($row = Database::fetch_array($result)) {

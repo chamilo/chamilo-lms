@@ -6859,8 +6859,11 @@ class CourseManager
                     course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
                     course_rel_user.user_id = '".$user_id."'
                     $avoidCoursesCondition
-                    $visibilityCondition
-                ORDER BY course_rel_user.sort ASC";
+                    $visibilityCondition";
+        if (filter_var(api_get_setting('workflows.teacher_defined_student_access_to_course'), FILTER_VALIDATE_BOOLEAN)) {
+            $sql .= ' AND (course_rel_user.status <> '.CourseRelUser::STUDENT.' OR course_rel_user.visibility = 1)';
+        }
+        $sql .= ' ORDER BY course_rel_user.sort ASC';
 
         $result = Database::query($sql);
         $courses = [];

@@ -27,6 +27,7 @@ class WorkflowsSettingsSchema extends AbstractSettingsSchema
             'go_to_course_after_login' => 'false',
             'allow_users_to_create_courses' => 'false',
             'allow_user_course_subscription_by_course_admin' => 'true',
+            'teacher_defined_student_access_to_course' => 'false',
             'teacher_can_select_course_template' => 'true',
             'disabled_edit_session_coaches_course_editing_course' => 'false',
             'course_visibility_change_only_admin' => 'false',
@@ -59,6 +60,7 @@ class WorkflowsSettingsSchema extends AbstractSettingsSchema
             ->add('go_to_course_after_login', YesNoType::class)
             ->add('allow_users_to_create_courses', YesNoType::class)
             ->add('allow_user_course_subscription_by_course_admin', YesNoType::class)
+            ->add('teacher_defined_student_access_to_course', YesNoType::class)
             ->add('teacher_can_select_course_template', YesNoType::class)
             ->add('disabled_edit_session_coaches_course_editing_course', YesNoType::class)
             ->add('course_visibility_change_only_admin', YesNoType::class)

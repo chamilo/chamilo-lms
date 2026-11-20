@@ -31,6 +31,17 @@
       @apply mb-4;
     }
   }
+
+  @media (max-width: 767px) {
+    &__section {
+      @apply flex-col;
+    }
+
+    &__content-side,
+    &__details-side {
+      @apply w-full min-w-0;
+    }
+  }
 }
 
 .filemanager-container .mdi-icon {

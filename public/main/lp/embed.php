@@ -43,8 +43,8 @@ switch ($type) {
             api_not_allowed();
         }
         $videoUrl = 'https://www.youtube.com/embed/'.$videoId.'?enablejsapi=1&playsinline=1';
-        $iframe .= '<div id="content" style="width: 700px ;margin-left:auto; margin-right:auto;"><br />';
-        $iframe .= '<iframe class="youtube-player" type="text/html" width="640" height="385" src="'.Security::remove_XSS($videoUrl).'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
+        $iframe .= '<div id="content" style="width:100%;max-width:700px;margin-left:auto;margin-right:auto;"><br />';
+        $iframe .= '<iframe class="youtube-player" type="text/html" width="640" height="385" style="display:block;width:100%;max-width:640px;height:auto;aspect-ratio:640/385;margin:0 auto;" src="'.Security::remove_XSS($videoUrl).'" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>';
         $iframe .= '</div>';
         break;
     case 'vimeo':
@@ -53,8 +53,8 @@ switch ($type) {
             api_not_allowed();
         }
         $videoUrl = 'https://player.vimeo.com/video/'.$videoId.'?api=1';
-        $iframe .= '<div id="content" style="width: 700px ;margin-left:auto; margin-right:auto;"><br />';
-        $iframe .= '<iframe src="'.Security::remove_XSS($videoUrl).'" width="640" height="385" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+        $iframe .= '<div id="content" style="width:100%;max-width:700px;margin-left:auto;margin-right:auto;"><br />';
+        $iframe .= '<iframe src="'.Security::remove_XSS($videoUrl).'" width="640" height="385" style="display:block;width:100%;max-width:640px;height:auto;aspect-ratio:640/385;margin:0 auto;" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
         $iframe .= '</div>';
         break;
     case 'nonhttps':

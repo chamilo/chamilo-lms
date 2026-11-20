@@ -559,6 +559,7 @@ import lpService from "../../services/lpService"
 import permissionService from "../../services/permissionService"
 import platformConfigService from "../../services/platformConfigService"
 import { createScormRuntimeApi } from "../../services/scormRuntimeApi"
+import { makeEmbeddedVideosResponsive } from "../../utils/responsiveEmbeddedVideos"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -593,6 +594,7 @@ const previewImageFailed = ref(false)
 const errorMessage = ref("")
 const menuOpen = ref(false)
 const tocCollapsed = ref(false)
+let mobileTocMediaQuery = null
 const initialized = ref(false)
 const impressActiveIsSection = ref(false)
 const collapsedSections = ref(new Set())
@@ -1096,6 +1098,18 @@ function expandCurrentAncestors() {
     parentId = Number(itemsById.value[parentId]?.parentId || 0)
   }
   collapsedSections.value = next
+}
+
+function collapseTocOnMobile() {
+  if (mobileTocMediaQuery?.matches) {
+    tocCollapsed.value = true
+  }
+}
+
+function handleMobileTocBreakpointChange(event) {
+  if (event.matches) {
+    tocCollapsed.value = true
+  }
 }
 
 function toggleToc() {
@@ -1679,7 +1693,7 @@ function applyRuntime(data, { contentChanged = false } = {}) {
 
   if (!initialized.value) {
     menuOpen.value = Boolean(data.showToolbarByDefault)
-    tocCollapsed.value = String(data.displayMode || "") === "embedframe"
+    tocCollapsed.value = Boolean(mobileTocMediaQuery?.matches) || String(data.displayMode || "") === "embedframe"
     // lp.lp_view_accordion: every chapter starts folded, the learner unfolds the ones they need
     if (data.accordionToc) {
       collapsedSections.value = new Set(
@@ -1808,6 +1822,7 @@ async function openItem(itemId) {
     return
   }
 
+  collapseTocOnMobile()
   impressActiveIsSection.value = false
   stopCurrentVideoPlayback()
   hideVideoNextOverlay()
@@ -1847,6 +1862,9 @@ async function openItem(itemId) {
 function handleIframeLoad(event) {
   contentFrame.value = event?.target || contentFrame.value
   iframeLoading.value = false
+  if (["document", "readout_text", "link"].includes(String(currentItem.value?.itemType || "").toLowerCase())) {
+    makeEmbeddedVideosResponsive(contentFrame.value)
+  }
   void setupEmbeddedVideoWatchers(contentFrame.value)
   bindAiLearningHelperFrame()
   scormRuntimeContext?.logLms("Content iframe load event starts", 2)
@@ -1977,6 +1995,9 @@ onBeforeRouteLeave(async (to) => {
 })
 
 onMounted(() => {
+  mobileTocMediaQuery = window.matchMedia("(max-width: 767px)")
+  mobileTocMediaQuery.addEventListener("change", handleMobileTocBreakpointChange)
+  collapseTocOnMobile()
   exposeLegacyCidContext()
   document.documentElement.classList.add("lp-runtime-document")
   document.body.classList.add("lp-runtime-document")
@@ -1994,6 +2015,8 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  mobileTocMediaQuery?.removeEventListener("change", handleMobileTocBreakpointChange)
+  mobileTocMediaQuery = null
   document.documentElement.classList.remove("lp-runtime-document")
   document.body.classList.remove("lp-runtime-document")
   window.removeEventListener("message", handleRuntimeMessage)
@@ -2752,9 +2775,9 @@ button.lp-runtime-menu-link {
   .lp-runtime-collapse,
   .lp-view-collapsed .lp-runtime-collapse,
   .lp-runtime-collapse--closed {
-    top: 42px;
+    top: 16px;
     inset-inline-start: auto;
-    inset-inline-end: 12px;
+    inset-inline-end: 112px;
     transform: none;
   }
 
@@ -2768,9 +2791,8 @@ button.lp-runtime-menu-link {
     width: calc(100% - 24px);
   }
 
-  .lp-runtime-content,
-  .lp-view-collapsed .lp-runtime-content {
-    padding: 12px;
+  #learning_path_main.lp-runtime-player #learning_path_right_zone.lp-runtime-content {
+    padding: 64px 12px 12px !important;
   }
 }
 

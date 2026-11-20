@@ -58,6 +58,7 @@
           <iframe
             v-else-if="'text/html' === item.resourceNode.firstResourceFile.mimeType"
             :src="item['contentUrl']"
+            @load="handleHtmlDocumentLoad"
           />
         </div>
         <div v-else>
@@ -122,6 +123,7 @@ import { useFormatDate } from "../../composables/formatDate"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { storeToRefs } from "pinia"
+import { makeEmbeddedVideosResponsive } from "../../utils/responsiveEmbeddedVideos"
 
 const servicePrefix = "Documents"
 
@@ -169,6 +171,9 @@ export default {
     },
   },
   methods: {
+    handleHtmlDocumentLoad(event) {
+      makeEmbeddedVideosResponsive(event.target)
+    },
     ...mapActions("documents", {
       deleteItem: "del",
       reset: "resetShow",

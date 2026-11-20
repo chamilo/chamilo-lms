@@ -2033,26 +2033,6 @@ class Category implements GradebookItem
     }
 
     /**
-     * Get all the categories from with the same given direct parent.
-     *
-     * @param int $catId Category parent ID
-     *
-     * @return array Array of Category objects
-     */
-    public function getCategories($catId)
-    {
-        $catId = (int) $catId;
-        $tblGradeCategories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'SELECT * FROM '.$tblGradeCategories.'
-                WHERE parent_id = '.$catId;
-
-        $result = Database::query($sql);
-        $categories = self::create_category_objects_from_sql_result($result);
-
-        return $categories;
-    }
-
-    /**
      * Gets the type for the current object.
      *
      * @return string 'C' to represent "Category" object type

@@ -37,14 +37,14 @@
       </Column>
       <Column :header="t('Courses')">
         <template #body="slotProps">
-          <a
+          <BaseButton
             v-if="slotProps.data.courseCount > 0"
-            href="#"
-            class="text-primary underline cursor-pointer"
-            @click.prevent="showCourses(slotProps.data)"
-          >
-            {{ slotProps.data.courseCount }}
-          </a>
+            :label="String(slotProps.data.courseCount)"
+            icon="courses"
+            size="small"
+            type="primary-text"
+            @click="showCourses(slotProps.data)"
+          />
           <span v-else>0</span>
         </template>
       </Column>
@@ -144,6 +144,7 @@ import { useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import roomService from "../../services/roomService"
 import baseService from "../../services/baseService"
 

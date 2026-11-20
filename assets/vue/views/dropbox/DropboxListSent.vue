@@ -112,11 +112,13 @@
       <Column :header="t('Sent')">
         <template #body="{ data }">
           <template v-if="data.kind === 'folder'">
-            <a
-              class="font-semibold cursor-pointer hover:underline"
+            <BaseButton
+              :label="data.title"
+              icon="folder-generic"
+              size="small"
+              type="primary-text"
               @click="enterCat(data.catId)"
-              >{{ data.title }}</a
-            >
+            />
           </template>
           <template v-else>
             <BaseAppLink
@@ -239,19 +241,14 @@
               type="secondary-text"
               @click.stop="openMove(data)"
             />
-            <a
-              :href="downloadUrl(data.id)"
-              target="_blank"
-              rel="noopener"
-            >
-              <BaseButton
-                :label="t('Download')"
-                icon="download"
-                only-icon
-                size="small"
-                type="tertiary-text"
-              />
-            </a>
+            <BaseButton
+              :label="t('Download')"
+              :to-url="downloadUrl(data.id)"
+              icon="download"
+              only-icon
+              size="small"
+              type="tertiary-text"
+            />
             <BaseButton
               :label="t('Delete')"
               icon="delete"

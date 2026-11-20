@@ -95,6 +95,15 @@ services:
                 db_username: '%env(DATABASE_USER)%'
                 db_password: '%env(DATABASE_PASSWORD)%'
 
+    _instanceof:
+        Chamilo\CoreBundle\State\CourseSettings\CourseSettingsPluginInterface:
+            tags: ['chamilo.course_settings_plugin']
+
+    # Bundled plugins register course-settings sections as tagged Symfony services.
+    # Third-party plugins may register their own implementation in config/plugin.yaml.
+    Chamilo\PluginBundle\CourseSettings\:
+        resource: '../src/PluginBundle/CourseSettings/'
+
     # This Settings service is excluded from CoreBundle's automatic service scan.
     Chamilo\CoreBundle\Settings\CourseSettingPolicyManager: ~
 

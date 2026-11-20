@@ -20,8 +20,6 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-use const E_WARNING;
-
 /**
  * Characterization tests for the functions of CourseManager (public/main/inc/lib/course.lib.php) that
  * CourseManagerCharacterizationTest and CourseManagerTier3CharacterizationTest do not reach (subscribe, delete, tutors, lists). Same conventions: pin today's behaviour, fixtures start with "cm3_".
@@ -482,8 +480,7 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         $this->sub($this->createUser('cm3b_spc_other'), $sticky);
         $this->sub($user, $plain);
 
-        // A course without category makes returnSpecialCourses() read undefined "categoryName"/"categoryCode" keys.
-        set_error_handler(static fn (int $no, string $str): bool => str_contains($str, 'Undefined array key'), E_WARNING);
+        // A course without category must not make returnSpecialCourses() read undefined keys (PHPUnit turns the warning into a failure).
         $mine = array_values(array_filter(
             CourseManager::returnSpecialCourses($user->getId()),
             static fn ($row) => str_starts_with((string) $row['title'], 'cm3b_spc_')
@@ -492,6 +489,8 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         $this->assertSame(['cm3b_spc_a'], array_column($mine, 'title'));
         $this->assertSame((int) $sticky->getId(), (int) $mine[0]['c_id']);
         $this->assertTrue($mine[0]['is_special_course']);
+        $this->assertSame('', $mine[0]['category'], 'a course without category has an empty category name');
+        $this->assertSame('', $mine[0]['category_code'], 'a course without category has an empty category code');
         $this->assertSame(COURSEMANAGER, (int) $mine[0]['status'], 'status comes from the user\'s own subscription');
 
         $stranger = $this->createUser('cm3b_spc_stranger');
@@ -499,8 +498,23 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
             CourseManager::returnSpecialCourses($stranger->getId()),
             static fn ($row) => 'cm3b_spc_a' === $row['title']
         ));
-        restore_error_handler();
         $this->assertSame(STUDENT, (int) $forStranger[0]['status'], 'not subscribed: shown as a student');
+    }
+
+    public function testReturnSpecialCoursesGivesAnAdministratorTheSettingsLinkOfTheCourse(): void
+    {
+        $admin = $this->createUser('cm3b_spc_admin', '', '', 'ROLE_ADMIN');
+        $this->loginAs($admin);
+        $sticky = $this->createCourse('cm3b_spc_adm_course');
+        $this->conn()->executeStatement('UPDATE course SET sticky = 1 WHERE id = ?', [$sticky->getId()]);
+
+        $mine = array_values(array_filter(
+            CourseManager::returnSpecialCourses($admin->getId()),
+            static fn ($row) => 'cm3b_spc_adm_course' === $row['title']
+        ));
+
+        $this->assertCount(1, $mine);
+        $this->assertStringEndsWith('course-settings/'.$sticky->getId(), $mine[0]['edit_actions'], 'the link names the course, not an empty id');
     }
 
     // ---------------------------------------------------------------- updateTeachers

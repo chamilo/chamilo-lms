@@ -4046,7 +4046,7 @@ class CourseManager
                 $params['edit_actions'] = '';
                 $params['document'] = '';
                 if (api_is_platform_admin()) {
-                    $params['edit_actions'] .= api_get_path(WEB_PATH).'course-settings/'.$course['real_id'];
+                    $params['edit_actions'] .= api_get_path(WEB_PATH).'course-settings/'.$courseId;
                     if ($load_dirs) {
                         $params['document'] = '<a id="document_preview_'.$courseId.'_0" class="document_preview btn btn--secondary-outline btn-sm" href="javascript:void(0);">'
                            .Display::getMdiIcon('folder-open-outline').'</a>';
@@ -4062,8 +4062,8 @@ class CourseManager
 
                 $params['visibility'] = $course_info['visibility'];
                 $params['status'] = $course_info['status'];
-                $params['category'] = $course_info['categoryName'];
-                $params['category_code'] = $course_info['categoryCode'];
+                $params['category'] = $course_info['categoryName'] ?? '';
+                $params['category_code'] = $course_info['categoryCode'] ?? '';
                 $params['icon'] = Display::getMdiIcon(
                     ObjectIcon::PIN,
                     'ch-tool-icon',

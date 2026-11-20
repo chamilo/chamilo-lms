@@ -1453,6 +1453,50 @@ function store_feedback()
 }
 
 /**
+ * The files of the current course, among the given ids, that the current user sent or received, keyed by their
+ * stored filename. This is what zip_download() puts into the archive.
+ *
+ * @param array $fileList ids of the c_dropbox_file rows
+ */
+function dropbox_files_to_zip(array $fileList): array
+{
+    $course_id = api_get_course_int_id();
+    $fileList = array_map('intval', $fileList);
+
+    // note: we also have to add the check if the user has received or sent this file.
+    $userId = (int) api_get_user_id();
+    $rows = [];
+    if (!empty($fileList)) {
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT f.filename AS filename', 'f.title AS title', 'f.author AS author', 'f.description AS description')
+            ->from(CDropboxFile::class, 'f')
+            ->innerJoin(CDropboxPerson::class, 'person', 'WITH', 'person.fileId = f.iid AND person.cId = :courseId')
+            ->innerJoin(CDropboxPost::class, 'post', 'WITH', 'post.fileId = f.iid AND post.cId = :courseId')
+            ->where('f.cId = :courseId')
+            ->andWhere('f.iid IN (:fileIds)')
+            ->andWhere('person.userId = :userId OR post.destUserId = :userId')
+            ->setParameter('courseId', (int) $course_id)
+            ->setParameter('fileIds', $fileList)
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+    }
+
+    $files = [];
+    foreach ($rows as $row) {
+        $files[$row['filename']] = [
+            'filename' => $row['filename'],
+            'title' => $row['title'],
+            'author' => $row['author'],
+            'description' => $row['description'],
+        ];
+    }
+
+    return $files;
+}
+
+/**
  * This function downloads all the files of the input array into one zip.
  *
  * @param array $fileList containing all the ids of the files that have to be downloaded
@@ -1470,34 +1514,7 @@ function store_feedback()
 function zip_download($fileList)
 {
     $_course = api_get_course_info();
-    $course_id = api_get_course_int_id();
-    $fileList = array_map('intval', $fileList);
-
-    // note: we also have to add the check if the user has received or sent this file.
-    $sql = "SELECT DISTINCT file.filename, file.title, file.author, file.description
-            FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)." file
-            INNER JOIN ".Database::get_course_table(TABLE_DROPBOX_PERSON)." person
-            ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
-            INNER JOIN ".Database::get_course_table(TABLE_DROPBOX_POST)." post
-            ON (post.file_id = file.id AND post.c_id = $course_id AND file.c_id = $course_id)
-            WHERE
-                file.id IN (".implode(', ', $fileList).") AND
-                file.id = person.file_id AND
-                (
-                    person.user_id = '".api_get_user_id()."' OR
-                    post.dest_user_id = '".api_get_user_id()."'
-                ) ";
-    $result = Database::query($sql);
-
-    $files = [];
-    while ($row = Database::fetch_array($result)) {
-        $files[$row['filename']] = [
-            'filename' => $row['filename'],
-            'title' => $row['title'],
-            'author' => $row['author'],
-            'description' => $row['description'],
-        ];
-    }
+    $files = dropbox_files_to_zip($fileList);
 
     // Step 3: create the zip file and add all the files to it
     $temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";

@@ -19,8 +19,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  * Pins for dropbox_functions.inc.php that DropboxCharacterizationTest leaves out: the category form, which reads
  * the category it edits (by cat_id, in the current course) to prefill the name and the target.
  *
- * NOT covered, on purpose: zip_download() streams a zip archive and its query joins on a "file.id" column that
- * c_dropbox_file no longer has (it is "iid"), so it is an SQL error today.
+ * zip_download() streams a zip archive and exits, so only its file selection (dropbox_files_to_zip()) is tested.
  */
 final class DropboxTier2CharacterizationTest extends KernelTestCase
 {
@@ -104,6 +103,60 @@ final class DropboxTier2CharacterizationTest extends KernelTestCase
         $cat = fn (int $id): int => (int) $this->conn->fetchOne('SELECT cat_id FROM c_dropbox_file WHERE iid = ?', [$id]);
         $this->assertSame(7, $cat($moved));
         $this->assertSame(0, $cat($sibling), 'another file of the same uploader stays where it is');
+    }
+
+    public function testZipSelectionKeepsOnlyTheSelectedFilesTheUserSentOrReceived(): void
+    {
+        // Current user is id 1.
+        $sent = $this->file(1);
+        $received = $this->file(2);
+        $unrelated = $this->file(2);
+        $notSelected = $this->file(1);
+        $this->person($sent, 1);
+        $this->post($sent, 2);
+        $this->person($received, 2);
+        $this->post($received, 1);
+        $this->person($unrelated, 2);
+        $this->post($unrelated, 3);
+        $this->person($notSelected, 1);
+        $this->post($notSelected, 2);
+
+        $files = dropbox_files_to_zip([$sent, $received, $unrelated]);
+
+        $names = array_map(fn (array $f): string => $f['filename'], array_values($files));
+        $expected = array_map(
+            fn (int $id): string => (string) $this->conn->fetchOne('SELECT filename FROM c_dropbox_file WHERE iid = ?', [$id]),
+            [$sent, $received]
+        );
+        sort($names);
+        sort($expected);
+        $this->assertSame($expected, $names, 'only the selected files this user sent or received are zipped');
+        $one = $files[$expected[0]];
+        $this->assertSame(['filename', 'title', 'author', 'description'], array_keys($one));
+        $this->assertSame('db2_title', $one['title']);
+    }
+
+    public function testZipSelectionIgnoresFilesOfAnotherCourse(): void
+    {
+        $file = $this->file(1);
+        $this->conn->executeStatement('UPDATE c_dropbox_file SET c_id = 2 WHERE iid = ?', [$file]);
+        $this->person($file, 1);
+        $this->post($file, 2);
+
+        $this->assertSame([], dropbox_files_to_zip([$file]));
+    }
+
+    private function person(int $fileId, int $userId): void
+    {
+        $this->conn->executeStatement('INSERT INTO c_dropbox_person (c_id, file_id, user_id) VALUES (1, ?, ?)', [$fileId, $userId]);
+    }
+
+    private function post(int $fileId, int $destUserId): void
+    {
+        $this->conn->executeStatement(
+            "INSERT INTO c_dropbox_post (c_id, file_id, dest_user_id, feedback_date, feedback, cat_id, session_id) VALUES (1, ?, ?, '2020-01-01 10:00:00', '', 0, 0)",
+            [$fileId, $destUserId]
+        );
     }
 
     private function file(int $uploader): int

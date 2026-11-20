@@ -5082,7 +5082,7 @@ class learnpath
         $sessionId = api_get_session_id();
 
         // Generates folder
-        $this->generate_lp_folder($courseInfo);
+        $this->generate_lp_folder($courseInfo, '', $creatorId);
         // stripslashes() before calling api_replace_dangerous_char() because $_POST['title']
         // is already escaped twice when it gets here.
         $originalTitle = !empty($title) ? $title : $_POST['title'];

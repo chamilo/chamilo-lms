@@ -181,4 +181,25 @@ final class LearnpathFixCharacterizationTest extends KernelTestCase
 
         $this->assertSame('', $lp->get_mediaplayer($itemId, 'true'));
     }
+
+    public function testCreateDocumentWithoutALoggedUserUsesTheGivenCreator(): void
+    {
+        $lp = $this->newLp('fj_create_document_cli');
+        // CLI/import context (MigrationMoodle loaders): no logged user, the creator is passed explicitly.
+        Container::getSession()->remove('_user');
+        self::getContainer()->get('security.token_storage')->setToken(null);
+
+        $id = $lp->create_document(
+            api_get_course_info_by_id(self::COURSE_ID),
+            '<html><body><p>Hello</p></body></html>',
+            'fj cli page '.uniqid(),
+            'html',
+            0,
+            self::USER_ID
+        );
+
+        $this->assertGreaterThan(0, $id);
+        $document = $this->getEntityManager()->find(CDocument::class, $id);
+        $this->assertSame(self::USER_ID, $document->getResourceNode()->getCreator()->getId());
+    }
 }

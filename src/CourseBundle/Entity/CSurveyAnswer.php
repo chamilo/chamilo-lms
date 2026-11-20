@@ -6,10 +6,13 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Entity;
 
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'c_survey_answer')]
 #[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class CSurveyAnswer
 {
     #[ORM\Column(name: 'iid', type: 'integer')]
@@ -40,6 +43,23 @@ class CSurveyAnswer
     #[ORM\Column(name: 'c_lp_item_id', type: 'integer', nullable: false)]
     protected int $lpItemId;
 
+    // Historical answers have unknown creation and modification times.
+    #[ORM\Column(
+        name: 'created_at',
+        type: 'datetime',
+        nullable: true,
+        columnDefinition: 'DATETIME NULL DEFAULT CURRENT_TIMESTAMP',
+    )]
+    protected ?DateTime $createdAt = null;
+
+    #[ORM\Column(
+        name: 'updated_at',
+        type: 'datetime',
+        nullable: true,
+        columnDefinition: 'DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
+    )]
+    protected ?DateTime $updatedAt = null;
+
     public function __construct()
     {
         $this->lpItemId = 0;
@@ -48,6 +68,30 @@ class CSurveyAnswer
     public function getIid(): ?int
     {
         return $this->iid;
+    }
+
+    public function getCreatedAt(): ?DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    #[ORM\PrePersist]
+    public function setTimestampsOnCreate(): void
+    {
+        $now = new DateTime('now', new DateTimeZone('UTC'));
+        $this->createdAt ??= $now;
+        $this->updatedAt = $now;
+    }
+
+    #[ORM\PreUpdate]
+    public function setTimestampOnUpdate(): void
+    {
+        $this->updatedAt = new DateTime('now', new DateTimeZone('UTC'));
     }
 
     /**

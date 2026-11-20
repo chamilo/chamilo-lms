@@ -24,6 +24,7 @@ use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\SessionDeletedEvent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Doctrine\DBAL\ArrayParameterType;
@@ -1324,17 +1325,16 @@ class SessionManager
         //tables
         $session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $user = Database::get_main_table(TABLE_MAIN_USER);
-        $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-        $tbl_course_lp = Database::get_course_table(TABLE_LP_MAIN);
         $wiki = Database::get_course_table(TABLE_WIKI);
         $table_stats_default = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        $connection = Database::getManager()->getConnection();
 
         $course = api_get_course_info_by_id($courseId);
         $courseEntity = api_get_course_entity((int) $course['real_id']);
+        $courseRealId = (int) $course['real_id'];
         $wikiNodeId = (int) ($courseEntity?->getResourceNode()?->getId() ?? 0);
-        $where = " WHERE c_id = '%s' AND s.status = ".Session::STUDENT;
+        $where = ' WHERE s.c_id = '.$courseRealId.' AND s.status = '.(int) Session::STUDENT;
 
         $limit = null;
         if (!empty($options['limit'])) {
@@ -1351,123 +1351,69 @@ class SessionManager
         }
 
         //TODO, fix create report without session
-        $queryVariables = [$course['real_id']];
         if (!empty($sessionId)) {
-            $where .= ' AND session_id = %s';
-            $queryVariables[] = $sessionId;
-            $sql = "SELECT
-                        u.id as user_id, u.lastname, u.firstname, u.username,
-                        u.email, s.c_id, s.session_id
-                    FROM $session_course_user s
-                    INNER JOIN $user u
-                    ON u.id = s.user_id
-                    $where $order $limit";
-        } else {
-            $sql = "SELECT
-                        u.id as user_id, u.lastname, u.firstname, u.username,
-                        u.email, s.c_id, s.session_id
-                    FROM $session_course_user s
-                    INNER JOIN $user u ON u.id = s.user_id
-                    $where $order $limit";
+            $where .= ' AND s.session_id = '.$sessionId;
         }
+        $sql = "SELECT
+                    u.id as user_id, u.lastname, u.firstname, u.username,
+                    u.email, s.c_id, s.session_id
+                FROM $session_course_user s
+                INNER JOIN $user u ON u.id = s.user_id
+                $where $order $limit";
 
-        $sql_query = vsprintf($sql, $queryVariables);
-        // TODO(db-neutral): free-form jqGrid where/order/limit fragments, sprintf-built SQL; not pinned by a test (all queries of this function)
-        $rs = Database::query($sql_query);
+        // TODO(db-neutral): free-form jqGrid where/order/limit fragments built by model.ajax.php
+        $rs = Database::query($sql);
+        $users = [];
+        $table = [];
         while ($user = Database::fetch_array($rs)) {
             $users[$user['user_id']] = $user;
         }
 
-        /**
-         *  Lessons.
-         */
-        $sql = "SELECT * FROM $tbl_course_lp WHERE c_id = %s "; //AND session_id = %s
-        $sql_query = sprintf($sql, $course['real_id']);
-        $result = Database::query($sql_query);
-        $arrLesson = [[]];
-        while ($row = Database::fetch_array($result)) {
-            if (empty($arrLesson[$row['session_id']]['lessons_total'])) {
-                $arrLesson[$row['session_id']]['lessons_total'] = 1;
-            } else {
-                $arrLesson[$row['session_id']]['lessons_total']++;
-            }
+        // Lessons: the learning paths linked to the course, counted per session (see countCourseResources()).
+        $session = $sessionId > 0 ? api_get_session_entity($sessionId) : null;
+        $exercises = [];
+        if (null !== $courseEntity) {
+            $exercises = Container::getQuizRepository()->findAllByCourse($courseEntity, $session)->getQuery()->getResult();
         }
-        $session = api_get_session_entity($sessionId);
-        $qb = Container::getQuizRepository()->findAllByCourse($course, $session, null, 2);
-        $exercises = $qb->getQuery()->getResult();
         $exercises_total = count($exercises);
 
-        /*$exercises = ExerciseLib::get_all_exercises(
-            $course,
+        // Assignments: the root publications of the course (or of the session), not the deleted ones.
+        $assignments_total = self::countCourseResources(
+            CStudentPublication::class,
+            $courseRealId,
             $sessionId,
-            false,
-            '',
-            $getAllSessions
+            $getAllSessions,
+            ['r.publicationParent IS NULL', 'r.active IN (0, 1)']
         );
-        $exercises_total = count($exercises);*/
 
-        /**
-         *  Assignments.
-         */
-        //total
-        $params = [$course['real_id']];
-        if ($getAllSessions) {
-            $sql = "SELECT count(w.id) as count
-                    FROM $workTable w
-                    LEFT JOIN $workTableAssignment a
-                    ON (a.publication_id = w.id AND a.c_id = w.c_id)
-                    WHERE
-                        w.c_id = %s AND
-                        parent_id = 0 AND
-                        active IN (1, 0)";
-        } else {
-            $sql = "SELECT count(w.id) as count
-                    FROM $workTable w
-                    LEFT JOIN $workTableAssignment a
-                    ON (a.publication_id = w.id AND a.c_id = w.c_id)
-                    WHERE
-                        w.c_id = %s AND
-                        parent_id = 0 AND
-                        active IN (1, 0)";
-
-            if (empty($sessionId)) {
-                $sql .= ' AND w.session_id = NULL ';
-            } else {
-                $sql .= ' AND w.session_id = %s ';
-                $params[] = $sessionId;
-            }
+        // Wiki: distinct pages.
+        $wikiTotalQuery = $connection->createQueryBuilder()
+            ->select('COUNT(DISTINCT page_id)')
+            ->from($wiki)
+            ->where('c_id = :courseId')
+            ->setParameter('courseId', $courseRealId);
+        if (!$getAllSessions) {
+            $wikiTotalQuery->andWhere('session_id = :sessionId')->setParameter('sessionId', $sessionId);
         }
-
-        $sql_query = vsprintf($sql, $params);
-        $result = Database::query($sql_query);
-        $row = Database::fetch_array($result);
-        $assignments_total = $row['count'];
-
-        /**
-         * Wiki.
-         */
-        if ($getAllSessions) {
-            $sql = "SELECT count(distinct page_id)  as count FROM $wiki
-                    WHERE c_id = %s";
-        } else {
-            $sql = "SELECT count(distinct page_id)  as count FROM $wiki
-                    WHERE c_id = %s and session_id = %s";
-        }
-        $sql_query = sprintf($sql, $course['real_id'], $sessionId);
-        $result = Database::query($sql_query);
-        $row = Database::fetch_array($result);
-        $wiki_total = $row['count'];
+        $wiki_total = (int) $wikiTotalQuery->executeQuery()->fetchOne();
 
         /**
          * Surveys.
          */
         $survey_user_list = [];
-        $survey_list = SurveyManager::get_surveys($course['code'], $sessionId);
+        // Not SurveyManager::get_surveys(): it lists the surveys of the current course context, not of this course.
+        $survey_list = [];
+        if (null !== $courseEntity) {
+            $survey_list = Container::getSurveyRepository()
+                ->getResourcesByCourse($courseEntity, $session, null, null, true, true)
+                ->getQuery()
+                ->getResult();
+        }
 
         $surveys_total = count($survey_list);
         foreach ($survey_list as $survey) {
             $user_list = SurveyManager::get_people_who_filled_survey(
-                $survey['survey_id'],
+                $survey->getIid(),
                 false,
                 $course['real_id']
             );
@@ -1500,34 +1446,43 @@ class SessionManager
 
         //process table info
         foreach ($users as $user) {
+            // The session the learner is subscribed in: the requested one, or each own one in the all-sessions report.
+            $userId = (int) $user['user_id'];
+            $userSessionId = (int) $user['session_id'];
+            $userSession = $userSessionId > 0 ? api_get_session_entity($userSessionId) : null;
+            $userEntity = Database::getManager()->getRepository(User::class)->find($userId);
+
             //Course description
-            $sql = "SELECT count(*) as count
-                    FROM $table_stats_access
-                    WHERE access_tool = 'course_description'
-                    AND c_id = '%s'
-                    AND session_id = %s
-                    AND access_user_id = %s ";
-            $sql_query = sprintf($sql, $course['real_id'], $user['id_session'], $user['user_id']);
+            $courseDescriptionVisits = (int) $connection->createQueryBuilder()
+                ->select('COUNT(*)')
+                ->from($table_stats_access)
+                ->where("access_tool = 'course_description'")
+                ->andWhere('c_id = :courseId')
+                ->andWhere('session_id = :sessionId')
+                ->andWhere('access_user_id = :userId')
+                ->setParameter('courseId', $courseRealId)
+                ->setParameter('sessionId', $userSessionId)
+                ->setParameter('userId', $userId)
+                ->executeQuery()
+                ->fetchOne();
+            $course_description_progress = ($courseDescriptionVisits > 0) ? 100 : 0;
 
-            $result = Database::query($sql_query);
-            $row = Database::fetch_array($result);
-            $course_description_progress = ($row['count'] > 0) ? 100 : 0;
-
-            if (!empty($arrLesson[$user['id_session']]['lessons_total'])) {
-                $lessons_total = $arrLesson[$user['id_session']]['lessons_total'];
-            } else {
-                $lessons_total = !empty($arrLesson[0]['lessons_total']) ? $arrLesson[0]['lessons_total'] : 0;
+            // The learning paths of the session of the learner, or the ones of the base course when it has none.
+            $lessons_total = self::countCourseResources(CLp::class, $courseRealId, $userSessionId, false);
+            if (0 === $lessons_total && $userSessionId > 0) {
+                $lessons_total = self::countCourseResources(CLp::class, $courseRealId, 0, false);
             }
 
             //Lessons
             //TODO: Lessons done and left is calculated by progress per item in lesson,
             // maybe we should calculate it only per completed lesson?
-            $lessons_progress = Tracking::get_avg_student_progress(
-                $user['user_id'],
-                $course['code'],
-                [],
-                $user['id_session']
-            );
+            $lessons_progress = null !== $courseEntity
+                ? Tracking::get_avg_student_progress($userId, $courseEntity, [], $userSession)
+                : false;
+            // No learning path to follow: no progress.
+            if (false === $lessons_progress) {
+                $lessons_progress = 0;
+            }
             $lessons_done = ($lessons_progress * $lessons_total) / 100;
             $lessons_left = $lessons_total - $lessons_done;
 
@@ -1537,20 +1492,22 @@ class SessionManager
                 '',
                 Tracking::get_exercise_student_progress(
                     $exercises,
-                    $user['user_id'],
-                    $course['real_id'],
-                    $user['id_session']
+                    $userId,
+                    $courseRealId,
+                    $userSessionId
                 )
             );
             $exercises_done = round(($exercises_progress * $exercises_total) / 100);
             $exercises_left = $exercises_total - $exercises_done;
 
             //Assignments
-            $assignments_done = Container::getStudentPublicationRepository()->countUserPublications(
-                $user['user_id'],
-                $course['code'],
-                $user['id_session']
-            );
+            $assignments_done = (null !== $userEntity && null !== $courseEntity)
+                ? Container::getStudentPublicationRepository()->countUserPublications(
+                    $userEntity,
+                    $courseEntity,
+                    $userSession
+                )
+                : 0;
             $assignments_left = $assignments_total - $assignments_done;
             if (!empty($assignments_total)) {
                 $assignments_progress = round((($assignments_done * 100) / $assignments_total), 2);
@@ -1560,27 +1517,29 @@ class SessionManager
 
             // Wiki
             // total revisions per user
-            $sql = "SELECT count(*) as count
-                    FROM $wiki
-                    WHERE c_id = %s and session_id = %s and user_id = %s";
-            $sql_query = sprintf($sql, $course['real_id'], $user['id_session'], $user['user_id']);
-            $result = Database::query($sql_query);
-            $row = Database::fetch_array($result);
-            $wiki_revisions = $row['count'];
+            $wiki_revisions = (int) $connection->createQueryBuilder()
+                ->select('COUNT(*)')
+                ->from($wiki)
+                ->where('c_id = :courseId')
+                ->andWhere('session_id = :sessionId')
+                ->andWhere('user_id = :userId')
+                ->setParameter('courseId', $courseRealId)
+                ->setParameter('sessionId', $userSessionId)
+                ->setParameter('userId', $userId)
+                ->executeQuery()
+                ->fetchOne();
             //count visited wiki pages
-            $sql = "SELECT count(distinct default_value) as count
-                    FROM $table_stats_default
-                    WHERE
-                        default_user_id = %s AND
-                        default_event_type = 'wiki_page_view' AND
-                        default_value_type = 'wiki_page_id' AND
-                        c_id = %s
-                    ";
-            $sql_query = sprintf($sql, $user['user_id'], $course['real_id']);
-            $result = Database::query($sql_query);
-            $row = Database::fetch_array($result);
-
-            $wiki_read = $row['count'];
+            $wiki_read = (int) $connection->createQueryBuilder()
+                ->select('COUNT(DISTINCT default_value)')
+                ->from($table_stats_default)
+                ->where('default_user_id = :userId')
+                ->andWhere("default_event_type = 'wiki_page_view'")
+                ->andWhere("default_value_type = 'wiki_page_id'")
+                ->andWhere('c_id = :courseId')
+                ->setParameter('userId', $userId)
+                ->setParameter('courseId', $courseRealId)
+                ->executeQuery()
+                ->fetchOne();
             $wiki_unread = $wiki_total - $wiki_read;
             if (!empty($wiki_total)) {
                 $wiki_progress = round((($wiki_read * 100) / $wiki_total), 2);
@@ -1589,7 +1548,7 @@ class SessionManager
             }
 
             // Surveys
-            $surveys_done = isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0;
+            $surveys_done = $survey_user_list[$userId] ?? 0;
             $surveys_left = $surveys_total - $surveys_done;
             if (!empty($surveys_total)) {
                 $surveys_progress = round((($surveys_done * 100) / $surveys_total), 2);
@@ -1599,9 +1558,9 @@ class SessionManager
 
             //Forums
             $forums_done = CourseManager::getCountForumPerUser(
-                $user['user_id'],
-                $course['real_id'],
-                $user['id_session']
+                $userId,
+                $courseRealId,
+                $userSessionId
             );
             $forums_left = $forums_total - $forums_done;
             if (!empty($forums_total)) {
@@ -1613,7 +1572,7 @@ class SessionManager
             // Overall Total
             $overall_total = ($course_description_progress + $exercises_progress + $forums_progress + $assignments_progress + $wiki_progress + $surveys_progress) / 6;
 
-            $link = '<a href="/reporting/learners/'.(int) $user[0].'/courses/'.(int) $course['real_id'].'?'.http_build_query([
+            $link = '<a href="/reporting/learners/'.$userId.'/courses/'.(int) $course['real_id'].'?'.http_build_query([
                 'sid' => (int) $sessionId,
             ]).'"> %s </a>';
             $linkForum = '<a href="'.getForumToolUrl((int) $course['real_id'], (int) $sessionId).'"> %s </a>';
@@ -1629,9 +1588,9 @@ class SessionManager
                 : ' %s ';
 
             $table[] = [
-                'lastname' => $user[1],
-                'firstname' => $user[2],
-                'username' => $user[3],
+                'lastname' => $user['lastname'],
+                'firstname' => $user['firstname'],
+                'username' => $user['username'],
                 //'profile'   => '',
                 'total' => round($overall_total, 2).'%',
                 'courses' => sprintf($link, $course_description_progress.'%'),
@@ -1678,6 +1637,42 @@ class SessionManager
         }
 
         return $table;
+    }
+
+    /**
+     * Counts the course resources (learning paths, assignments...) that the resource links attach to a course:
+     * to its base content (session 0), to one session, or to any of them.
+     *
+     * @param class-string $entityClass
+     * @param string[]     $conditions  extra DQL conditions on the resource, whose alias is "r"
+     */
+    private static function countCourseResources(
+        string $entityClass,
+        int $courseId,
+        int $sessionId,
+        bool $getAllSessions,
+        array $conditions = []
+    ): int {
+        $queryBuilder = Database::getManager()->createQueryBuilder()
+            ->select('COUNT(DISTINCT r.iid)')
+            ->from($entityClass, 'r')
+            ->innerJoin('r.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->where('IDENTITY(links.course) = :courseId')
+            ->andWhere('links.deletedAt IS NULL')
+            ->setParameter('courseId', $courseId);
+        foreach ($conditions as $condition) {
+            $queryBuilder->andWhere($condition);
+        }
+        if (!$getAllSessions) {
+            if ($sessionId > 0) {
+                $queryBuilder->andWhere('IDENTITY(links.session) = :sessionId')->setParameter('sessionId', $sessionId);
+            } else {
+                $queryBuilder->andWhere('links.session IS NULL');
+            }
+        }
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**

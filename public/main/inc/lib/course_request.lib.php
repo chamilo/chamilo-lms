@@ -228,9 +228,14 @@ class CourseRequestManager
         $email_body_teacher .= get_lang('E-mail', $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
         $email_body_teacher .= "\n".get_lang('The information about this course request is considered protected; it can be used only to open a new course within our e-learning portal; it should not be revealed to third parties.', $email_language)."\n";
 
-        // Swap the sender and the recipient.
-        $recipient_name_teacher = $sender_name_teacher;
-        $recipient_email_teacher = $sender_email_teacher;
+        // The requesting teacher is the recipient of the confirmation.
+        $recipient_name_teacher = api_get_person_name(
+            $user_info['firstname'],
+            $user_info['lastname'],
+            null,
+            PERSON_NAME_EMAIL_ADDRESS
+        );
+        $recipient_email_teacher = $user_info['mail'];
 
         api_mail_html(
             $recipient_name_teacher,

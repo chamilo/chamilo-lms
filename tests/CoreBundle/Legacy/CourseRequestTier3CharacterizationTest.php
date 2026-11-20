@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use TypeError;
 
 /**
  * Characterization tests for CourseRequestManager (public/main/inc/lib/course_request.lib.php).
@@ -49,24 +48,11 @@ final class CourseRequestTier3CharacterizationTest extends KernelTestCase
     }
 
     /**
-     * create_course_request() reads $sender_name_teacher, which is never defined (pre-existing bug): PHP only
-     * warns in production, PHPUnit turns it into an exception. The mail to the teacher then fails with a
-     * TypeError (null recipient name), always, AFTER the INSERT: the row exists, the caller never gets the id.
-     * Tolerated here so the INSERT can be pinned; the id is the highest one in the table in that case.
+     * create_course_request() mails the requesting teacher after saving the row and must hand the new id back.
      */
-    private function createRequestIgnoringUndefinedSender(mixed ...$args): mixed
+    private function createRequest(mixed ...$args): mixed
     {
-        set_error_handler(
-            static fn (int $no, string $str): bool => str_contains($str, 'sender_name_teacher') || str_contains($str, 'sender_email_teacher')
-        );
-
-        try {
-            return CourseRequestManager::create_course_request(...$args);
-        } catch (TypeError) {
-            return (int) $this->conn()->fetchOne('SELECT MAX(id) FROM course_request');
-        } finally {
-            restore_error_handler();
-        }
+        return CourseRequestManager::create_course_request(...$args);
     }
 
     private function conn(): Connection
@@ -248,7 +234,7 @@ final class CourseRequestTier3CharacterizationTest extends KernelTestCase
         $this->loginAs($user);
         $this->enableMail();
 
-        $id = $this->createRequestIgnoringUndefinedSender(
+        $id = $this->createRequest(
             'cr3_new_a',
             'A "quoted" \'title\'',
             "Multi\nline description",
@@ -285,9 +271,9 @@ final class CourseRequestTier3CharacterizationTest extends KernelTestCase
 
         // Same code again is refused (the guard compares the generated visual_code, so the wanted code must be
         // given in its generated form; 'cr3_new_a' would reach the UNIQUE key instead), as are blank code and bad user.
-        $this->assertFalse($this->createRequestIgnoringUndefinedSender('CR3NEWA', 't', 'd', '', 'english', 'o', 'a', (int) $user->getId()));
-        $this->assertFalse($this->createRequestIgnoringUndefinedSender('  ', 't', 'd', '', 'english', 'o', 'a', (int) $user->getId()));
-        $this->assertFalse($this->createRequestIgnoringUndefinedSender('cr3_new_b', 't', 'd', '', 'english', 'o', 'a', 0));
+        $this->assertFalse($this->createRequest('CR3NEWA', 't', 'd', '', 'english', 'o', 'a', (int) $user->getId()));
+        $this->assertFalse($this->createRequest('  ', 't', 'd', '', 'english', 'o', 'a', (int) $user->getId()));
+        $this->assertFalse($this->createRequest('cr3_new_b', 't', 'd', '', 'english', 'o', 'a', 0));
     }
 
     public function testCreateCourseRequestWithCategoryByCodeAndById(): void
@@ -298,11 +284,11 @@ final class CourseRequestTier3CharacterizationTest extends KernelTestCase
         $cat = $this->conn()->fetchAssociative('SELECT id, code FROM course_category LIMIT 1');
         $this->assertNotFalse($cat);
 
-        $byCode = $this->createRequestIgnoringUndefinedSender('cr3_cat_a', 't', 'd', $cat['code'], 'english', 'o', 'a', (int) $user->getId());
+        $byCode = $this->createRequest('cr3_cat_a', 't', 'd', $cat['code'], 'english', 'o', 'a', (int) $user->getId());
         $this->assertNotFalse($byCode);
         $this->assertSame((int) $cat['id'], (int) $this->row((int) $byCode)['category_id']);
 
-        $this->assertFalse($this->createRequestIgnoringUndefinedSender('cr3_cat_b', 't', 'd', 'no_such_cat_zz', 'english', 'o', 'a', (int) $user->getId()));
+        $this->assertFalse($this->createRequest('cr3_cat_b', 't', 'd', 'no_such_cat_zz', 'english', 'o', 'a', (int) $user->getId()));
     }
 
     public function testAcceptCourseRequestMarksItAcceptedAndCreatesTheCourse(): void
@@ -326,5 +312,17 @@ final class CourseRequestTier3CharacterizationTest extends KernelTestCase
         $this->assertNotFalse($this->conn()->fetchOne('SELECT id FROM course WHERE code = ?', [$code]));
 
         $this->assertFalse(CourseRequestManager::accept_course_request(999999999));
+    }
+
+    public function testCreateCourseRequestReturnsTheIdOfTheSavedRow(): void
+    {
+        $user = $this->createUser('cr3_user_m');
+        $this->loginAs($user);
+        $this->enableMail();
+
+        $id = CourseRequestManager::create_course_request('cr3_ret_a', 't', 'd', '', 'english', 'o', 'a', (int) $user->getId());
+
+        $this->assertIsInt($id);
+        $this->assertSame((int) $this->conn()->fetchOne('SELECT id FROM course_request WHERE code = ?', ['CR3RETA']), $id);
     }
 }

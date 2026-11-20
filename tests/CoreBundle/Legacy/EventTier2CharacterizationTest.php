@@ -395,7 +395,6 @@ final class EventTier2CharacterizationTest extends KernelTestCase
 
         $this->enableNewTrackingSystem($cid);
 
-        // (Event::registerLog() is not used to create these: it stores '' in the integer login_as column.)
         foreach ([77, 78] as $work) {
             $this->seedAccessComplete($uid, $cid, 0, TOOL_STUDENTPUBLICATION, 0, 'add_work_start_'.$work, '01:30:00');
             $this->seedAccessComplete($uid, $cid, 0, TOOL_STUDENTPUBLICATION, 0, 'add_work_end_'.$work, '01:30:00');
@@ -435,5 +434,38 @@ final class EventTier2CharacterizationTest extends KernelTestCase
         $end = $this->seedAccessComplete($uid, $cid, 0, TOOL_STUDENTPUBLICATION, 0, 'add_work_end_5', '00:10:00');
         $this->assertTrue(Event::eventRemoveVirtualCourseTime($cid, $uid, 0, '00:10:00', 5));
         $this->assertCount(0, $this->rows('track_e_access_complete', 'id = ?', [$end]));
+    }
+
+    /**
+     * login_as is an integer NOT NULL column: registerLog() used to store '' in it (a boolean false sent
+     * through PDO), which strict SQL rejects, so no access log was ever written.
+     */
+    public function testRegisterLogStoresZeroInLoginAsOutsideALoginAsSession(): void
+    {
+        $user = $this->getUser('admin');
+        $course = $this->getCourse(1);
+        $this->setContext($user, $course);
+        $this->enableNewTrackingSystem($course->getId());
+
+        $this->assertTrue(Event::registerLog(['tool' => 'ev2_tool', 'action' => 'ev2_plain']));
+
+        $row = $this->rows('track_e_access_complete', 'user_id = ? AND action = ?', [$user->getId(), 'ev2_plain']);
+        $this->assertCount(1, $row);
+        $this->assertSame(0, (int) $row[0]['login_as']);
+    }
+
+    public function testRegisterLogStoresOneInLoginAsWhileAdminIsLoggedAsAnotherUser(): void
+    {
+        $user = $this->getUser('admin');
+        $course = $this->getCourse(1);
+        $this->setContext($user, $course);
+        $this->enableNewTrackingSystem($course->getId());
+        ChamiloSession::write('login_as', true);
+
+        $this->assertTrue(Event::registerLog(['tool' => 'ev2_tool', 'action' => 'ev2_loginas']));
+
+        $row = $this->rows('track_e_access_complete', 'user_id = ? AND action = ?', [$user->getId(), 'ev2_loginas']);
+        $this->assertCount(1, $row);
+        $this->assertSame(1, (int) $row[0]['login_as']);
     }
 }

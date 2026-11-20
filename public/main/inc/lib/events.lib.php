@@ -2356,7 +2356,8 @@ class Event
             return false;
         }
 
-        $loginAs = true === (int) Session::read('login_as');
+        // login_as is an integer NOT NULL column: store 1/0, never a boolean false (which PDO sends as '').
+        $loginAs = Session::read('login_as') ? 1 : 0;
 
         $logInfo['user_id'] = isset($logInfo['user_id']) ? $logInfo['user_id'] : api_get_user_id();
         $logInfo['date_reg'] = isset($logInfo['date_reg']) ? $logInfo['date_reg'] : api_get_utc_datetime();

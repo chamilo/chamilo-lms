@@ -444,14 +444,10 @@ class TrackingCourseLog
      */
     public static function getAdditionalProfileInformationOfFieldByUser($fieldId, $users): array
     {
-        // Database table definition
-        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-        $tableUserFieldValues = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $extraField = Database::get_main_table(TABLE_EXTRA_FIELD);
         $resultExtraField = UserManager::get_extra_field_information($fieldId);
         $return = [];
         if (!empty($users)) {
-            if (UserManager::USER_FIELD_TYPE_TAG == $resultExtraField['field_type']) {
+            if (UserManager::USER_FIELD_TYPE_TAG == $resultExtraField['value_type']) {
                 foreach ($users as $user_id) {
                     $userResult = UserManager::get_user_tags($user_id, $fieldId);
                     $tagList = [];
@@ -461,33 +457,24 @@ class TrackingCourseLog
                     $return[$user_id][] = implode(', ', $tagList);
                 }
             } else {
-                $newUserArray = [];
-                foreach ($users as $user_id) {
-                    $newUserArray[] = "'".$user_id."'";
-                }
-                $users = implode(',', $newUserArray);
-                $extraFieldType = EntityExtraField::USER_FIELD_TYPE;
-                // Selecting only the necessary information NOT ALL the user list
-                $sql = "SELECT user.user_id, v.value
-                        FROM $tableUser user
-                        INNER JOIN $tableUserFieldValues v
-                        ON (user.user_id = v.item_id)
-                        INNER JOIN $extraField f
-                        ON (f.id = v.field_id)
-                        WHERE
-                            f.extra_field_type = $extraFieldType AND
-                            v.field_id=".(int) $fieldId." AND
-                            user.user_id IN ($users)";
-
-                // Already broken: user.user_id and v.value do not exist (the columns are user.id and v.field_value),
-                // so this raises an SQL error. Left raw until the owner decides between fixing and removing it.
-                // TODO(db-neutral): broken raw SQL, not migrated
-                $result = Database::query($sql);
-                while ($row = Database::fetch_array($result)) {
+                $rows = Container::getEntityManager()->getConnection()->createQueryBuilder()
+                    ->select('user.id AS user_id', 'v.field_value AS value')
+                    ->from('user', 'user')
+                    ->innerJoin('user', 'extra_field_values', 'v', 'user.id = v.item_id')
+                    ->innerJoin('v', 'extra_field', 'f', 'f.id = v.field_id')
+                    ->where('f.item_type = :itemType')
+                    ->andWhere('v.field_id = :fieldId')
+                    ->andWhere('user.id IN (:userIds)')
+                    ->setParameter('itemType', (int) EntityExtraField::USER_FIELD_TYPE)
+                    ->setParameter('fieldId', (int) $fieldId)
+                    ->setParameter('userIds', array_map('intval', (array) $users), ArrayParameterType::INTEGER)
+                    ->executeQuery()
+                    ->fetchAllAssociative();
+                foreach ($rows as $row) {
                     // get option value for field type double select by id
                     if (!empty($row['value'])) {
                         if (ExtraField::FIELD_TYPE_DOUBLE_SELECT ==
-                            $resultExtraField['field_type']
+                            $resultExtraField['value_type']
                         ) {
                             $idDoubleSelect = explode(';', $row['value']);
                             if (is_array($idDoubleSelect)) {
@@ -497,7 +484,7 @@ class TrackingCourseLog
                             }
                         }
 
-                        if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $resultExtraField['field_type']) {
+                        if (ExtraField::FIELD_TYPE_SELECT_WITH_TEXT_FIELD == $resultExtraField['value_type']) {
                             $parsedValue = explode('::', $row['value']);
 
                             if ($parsedValue) {
@@ -508,7 +495,7 @@ class TrackingCourseLog
                             }
                         }
 
-                        if (ExtraField::FIELD_TYPE_TRIPLE_SELECT == $resultExtraField['field_type']) {
+                        if (ExtraField::FIELD_TYPE_TRIPLE_SELECT == $resultExtraField['value_type']) {
                             [$level1, $level2, $level3] = explode(';', $row['value']);
 
                             $row['value'] = $resultExtraField['options'][$level1]['display_text'].' / ';
@@ -1131,17 +1118,17 @@ class TrackingCourseLog
         // get all users data from a course for sortable with limit
         if (is_array($user_ids)) {
             $user_ids = array_map('intval', $user_ids);
-            $conditionUser = ' WHERE user.user_id IN ('.implode(',', $user_ids).') ';
+            $conditionUser = ' WHERE user.id IN ('.implode(',', $user_ids).') ';
         } else {
             $user_ids = (int) $user_ids;
-            $conditionUser = " WHERE user.user_id = $user_ids ";
+            $conditionUser = " WHERE user.id = $user_ids ";
         }
 
         $urlTable = null;
         $urlCondition = null;
         if (api_is_multiple_url_enabled()) {
             $urlTable = ', '.$tblUrlRelUser.' as url_users';
-            $urlCondition = " AND user.user_id = url_users.user_id AND access_url_id='$accessUrlId'";
+            $urlCondition = " AND user.id = url_users.user_id AND access_url_id='$accessUrlId'";
         }
 
         $invitedUsersCondition = '';
@@ -1149,7 +1136,7 @@ class TrackingCourseLog
             $invitedUsersCondition = ' AND user.status != '.INVITEE;
         }
 
-        $sql = "SELECT  user.user_id as user_id,
+        $sql = "SELECT  user.id as user_id,
                     user.official_code  as col0,
                     user.lastname       as col1,
                     user.firstname      as col2,
@@ -1168,9 +1155,7 @@ class TrackingCourseLog
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from,$numberOfItems";
 
-        // Already broken: user.user_id does not exist (the column is user.id), so this raises an SQL error.
-        // Left raw until the owner decides between fixing and removing it.
-        // TODO(db-neutral): broken raw SQL, not migrated
+        // TODO(db-neutral): LIMIT offset,count, dynamic ORDER BY and the optional url join are built as raw SQL
         $res = Database::query($sql);
         $users = [];
 

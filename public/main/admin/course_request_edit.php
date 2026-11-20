@@ -46,6 +46,7 @@ if ($course_validation_feature) {
             'post',
             'course_request_edit.php?id='.$id.'&caller='.$caller
         );
+        $form->protect();
 
         // Form title.
         $form->addElement('header', $tool_name);
@@ -124,7 +125,6 @@ if ($course_validation_feature) {
 
         // Hidden form fields.
         $form->addElement('hidden', 'user_id');
-        $form->addElement('hidden', 'directory');
         $form->addElement('hidden', 'visual_code');
         $form->addElement('hidden', 'request_date');
         $form->addElement('hidden', 'status');
@@ -133,7 +133,6 @@ if ($course_validation_feature) {
         // Set the default values based on the corresponding database record.
         $values['wanted_code'] = $course_request_info['code'];
         $values['user_id'] = $course_request_info['user_id'];
-        $values['directory'] = $course_request_info['directory'];
         $values['course_language'] = $course_request_info['course_language'];
         $values['title'] = $course_request_info['title'];
         $values['description'] = $course_request_info['description'];
@@ -173,12 +172,12 @@ if ($course_validation_feature) {
                     $course_request_values['wanted_code'],
                     $course_request_values['title'],
                     $course_request_values['description'],
-                    $course_request_values['category_code'],
+                    $course_request_values['category_code'] ?? '',
                     $course_request_values['course_language'],
                     $course_request_values['objetives'],
                     $course_request_values['target_audience'],
                     $course_request_values['user_id'],
-                    $course_request_values['exemplary_content']
+                    $course_request_values['exemplary_content'] ?? 0
                 );
 
                 if ($update_ok) {

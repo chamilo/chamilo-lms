@@ -325,4 +325,90 @@ final class CourseRequestTier3CharacterizationTest extends KernelTestCase
         $this->assertIsInt($id);
         $this->assertSame((int) $this->conn()->fetchOne('SELECT id FROM course_request WHERE code = ?', ['CR3RETA']), $id);
     }
+
+    public function testUpdateCourseRequestChangesOnlyTheEditableColumns(): void
+    {
+        $user = $this->createUser('cr3_user_n');
+        $other = $this->createUser('cr3_user_o');
+        $cat = $this->conn()->fetchAssociative('SELECT id, code FROM course_category LIMIT 1');
+        $this->assertNotFalse($cat);
+        $id = $this->insertRequest('cr3_upd_a', (int) $user->getId(), 1, 1);
+
+        $ok = CourseRequestManager::update_course_request(
+            $id,
+            'cr3_upd_b',
+            'New title',
+            'New desc',
+            $cat['code'],
+            'french',
+            'New obj',
+            'New aud',
+            (int) $other->getId(),
+            0
+        );
+
+        $this->assertTrue($ok);
+        $row = $this->row($id);
+        $this->assertSame('New title', $row['title']);
+        $this->assertSame('New desc', $row['description']);
+        $this->assertSame('New obj', $row['objetives']);
+        $this->assertSame('New aud', $row['target_audience']);
+        $this->assertSame('french', $row['course_language']);
+        $this->assertSame((int) $cat['id'], (int) $row['category_id']);
+        $this->assertSame((int) $other->getId(), (int) $row['user_id']);
+        $this->assertSame(0, (int) $row['exemplary_content']);
+        // A new wanted code regenerates the code and the visual code.
+        $this->assertSame('CR3UPDB', $row['code']);
+        $this->assertSame('CR3UPDB', $row['visual_code']);
+        // The tutor name follows the new teacher.
+        $this->assertStringContainsString('cr3_user_o', (string) $row['tutor_name']);
+        // Workflow state and date are not touched by an edit.
+        $this->assertSame(1, (int) $row['status']);
+        $this->assertSame(1, (int) $row['info']);
+        $this->assertSame('2026-03-04 05:06:07', $row['request_date']);
+    }
+
+    public function testUpdateCourseRequestKeepsTheCodeWhenUnchangedAndClearsTheCategory(): void
+    {
+        $user = $this->createUser('cr3_user_p');
+        $cat = $this->conn()->fetchAssociative('SELECT id FROM course_category LIMIT 1');
+        $id = $this->insertRequest('cr3_upd_c', (int) $user->getId(), 0, 0, (int) $cat['id']);
+
+        $this->assertTrue(CourseRequestManager::update_course_request($id, 'cr3_upd_c', 't', 'd', '', 'english', 'o', 'a', (int) $user->getId(), 1));
+
+        $row = $this->row($id);
+        $this->assertSame('cr3_upd_c', $row['code']);
+        $this->assertSame('CR3_UPD_C', $row['visual_code']);
+        $this->assertNull($row['category_id']);
+    }
+
+    public function testUpdateCourseRequestRefusesAnOccupiedCodeAndBadInput(): void
+    {
+        $user = $this->createUser('cr3_user_q');
+        $uid = (int) $user->getId();
+        $this->insertRequest('cr3_upd_taken', $uid);
+        $id = $this->insertRequest('cr3_upd_d', $uid);
+
+        $this->assertFalse(CourseRequestManager::update_course_request($id, 'CR3_UPD_TAKEN', 't', 'd', '', 'english', 'o', 'a', $uid, 0));
+        $this->assertFalse(CourseRequestManager::update_course_request($id, '  ', 't', 'd', '', 'english', 'o', 'a', $uid, 0));
+        $this->assertFalse(CourseRequestManager::update_course_request($id, 'cr3_upd_d', 't', 'd', 'no_such_cat_zz', 'english', 'o', 'a', $uid, 0));
+        $this->assertFalse(CourseRequestManager::update_course_request(999999999, 'cr3_upd_e', 't', 'd', '', 'english', 'o', 'a', $uid, 0));
+        $this->assertSame('cr3_upd_d', $this->row($id)['code']);
+    }
+
+    public function testUpdateCourseRequestRenamesTheTutorWhenOnlyTheTeacherChanges(): void
+    {
+        $user = $this->createUser('cr3_user_r');
+        $other = $this->createUser('cr3_user_s');
+        $id = $this->insertRequest('cr3_upd_f', (int) $user->getId());
+
+        $this->assertTrue(CourseRequestManager::update_course_request($id, 'cr3_upd_f', 't', 'd', '', 'english', 'o', 'a', (int) $other->getId(), 1));
+
+        $row = $this->row($id);
+        $this->assertSame((int) $other->getId(), (int) $row['user_id']);
+        $this->assertStringContainsString('cr3_user_s', (string) $row['tutor_name']);
+        // Unchanged teacher and language keep the stored tutor name.
+        $this->assertTrue(CourseRequestManager::update_course_request($id, 'cr3_upd_f', 't', 'd', '', 'english', 'o', 'a', (int) $other->getId(), 1));
+        $this->assertSame($row['tutor_name'], $this->row($id)['tutor_name']);
+    }
 }

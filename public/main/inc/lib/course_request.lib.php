@@ -306,28 +306,21 @@ class CourseRequestManager
 
         $code = $wanted_code;
         $tutor_name = $course_request_info['tutor_name'];
-        $directory = $course_request_info['directory'];
         $visual_code = $course_request_info['visual_code'];
-        $request_date = $course_request_info['request_date'];
-        $status = $course_request_info['status'];
-        $info = $course_request_info['info'];
 
         if ($wanted_code != $course_request_info['code']) {
             if (self::course_code_exists($wanted_code)) {
                 return false;
             }
             $keys = AddCourse::define_course_keys($wanted_code, '');
-            if (count($keys)) {
-                $visual_code = $keys['currentCourseCode'];
-                $code = $keys['currentCourseId'];
-                $db_name = $keys['currentCourseDbName'];
-                $directory = $keys['currentCourseRepository'];
-            } else {
+            if (!count($keys)) {
                 return false;
             }
+            $visual_code = $keys['currentCourseCode'];
+            $code = $keys['currentCourseId'];
         }
 
-        if ($user_id != $course_request_info['code']) {
+        if ($user_id != $course_request_info['user_id']) {
             $user_info = api_get_user_info($user_id);
             if (is_array($user_info)) {
                 $tutor_name = api_get_person_name(
@@ -338,7 +331,7 @@ class CourseRequestManager
                     $course_language
                 );
             } else {
-                $user_id = $course_request_info['code'];
+                $user_id = (int) $course_request_info['user_id'];
             }
         }
 
@@ -355,35 +348,28 @@ class CourseRequestManager
             }
         }
 
-        // @todo use entity
-        $sql = sprintf(
-            'UPDATE %s SET
-                code = "%s", user_id = "%s", directory = "%s", db_name = "%s",
-                course_language = "%s", title = "%s", description = "%s", category_id = %s,
-                tutor_name = "%s", visual_code = "%s", request_date = "%s",
-                objetives = "%s", target_audience = "%s", status = "%s", info = "%s", exemplary_content = "%s"
-            WHERE id = '.$id,
-            Database::get_main_table(TABLE_MAIN_COURSE_REQUEST),
-            Database::escape_string($code),
-            intval($user_id),
-            Database::escape_string($directory),
-            Database::escape_string($db_name),
-            Database::escape_string($course_language),
-            Database::escape_string($title),
-            Database::escape_string($description),
-            null === $categoryId ? 'NULL' : (string) $categoryId,
-            Database::escape_string($tutor_name),
-            Database::escape_string($visual_code),
-            Database::escape_string($request_date),
-            Database::escape_string($objectives),
-            Database::escape_string($target_audience),
-            Database::escape_string($status),
-            Database::escape_string($info),
-            Database::escape_string($exemplary_content)
-        );
-        $result_sql = Database::query($sql);
+        // The request date, the status and the "info asked" flag are workflow state: an edit never changes them.
+        $em = Database::getManager();
+        $courseRequest = $em->find(CourseRequest::class, $id);
+        if (null === $courseRequest) {
+            return false;
+        }
+        $courseRequest
+            ->setCode((string) $code)
+            ->setCourseLanguage((string) $course_language)
+            ->setTitle((string) $title)
+            ->setDescription((string) $description)
+            ->setCategory(null !== $categoryId ? $em->getReference(CourseCategoryEntity::class, $categoryId) : null)
+            ->setTutorName((string) $tutor_name)
+            ->setVisualCode((string) $visual_code)
+            ->setObjetives((string) $objectives)
+            ->setTargetAudience((string) $target_audience)
+            ->setExemplaryContent($exemplary_content)
+        ;
+        $courseRequest->setUser($em->getReference(User::class, $user_id));
+        $em->flush();
 
-        return false !== $result_sql;
+        return true;
     }
 
     /**

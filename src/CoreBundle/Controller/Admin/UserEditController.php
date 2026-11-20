@@ -504,7 +504,7 @@ final class UserEditController extends AbstractController
 
     /**
      * Combines the legacy escalation check (api_global_admin_can_edit_admin -- role-hierarchy
-     * based: a session admin may not edit a global admin, a subtree-scoped global admin may not
+     * based: a session admin may not edit an administrator, a subtree-scoped global admin may not
      * edit an unrestricted one) with AccessUrlScopeHelper::canEditUser() (multi-URL tenant
      * scoping: the two users must share at least one access URL). Both are required, per an
      * explicit decision to combine both models rather than pick one -- they close different

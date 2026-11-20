@@ -398,6 +398,12 @@ class GroupManager
      */
     public static function create_subgroups($group_id, $number_of_groups)
     {
+        // The users are distributed modulo the number of groups: nothing to create (and no division) below one.
+        $number_of_groups = (int) $number_of_groups;
+        if ($number_of_groups < 1) {
+            return;
+        }
+
         $category_id = self::create_category(
             get_lang('Subgroups'),
             '',

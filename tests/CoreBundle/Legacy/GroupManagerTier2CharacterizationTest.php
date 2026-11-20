@@ -248,4 +248,26 @@ final class GroupManagerTier2CharacterizationTest extends KernelTestCase
         ksort($batch[$u][0]);
         $this->assertSame($raw, $batch[$u][0]);
     }
+
+    public function testCreateSubgroupsWithANonPositiveCountCreatesNothingInsteadOfDividingByZero(): void
+    {
+        $admin = $this->getAdmin();
+        self::getContainer()->get('security.token_storage')
+            ->setToken(new UsernamePasswordToken($admin, 'main', $admin->getRoles()))
+        ;
+        ChamiloSession::write('_user', ['id' => $admin->getId()]);
+
+        $baseId = GroupManager::create_group('gm_zero_'.getmypid(), 0, 0, 0);
+        GroupManager::subscribeUsers([$this->makeUser('zero1')], $this->entity($baseId));
+        $groups = (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_group_info');
+        $categories = (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_group_category');
+
+        // The legacy form posts the count as a raw string: 0, '0', '' and negatives must all be refused quietly.
+        foreach ([0, '0', '', -2] as $count) {
+            GroupManager::create_subgroups($baseId, $count);
+        }
+
+        $this->assertSame($groups, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_group_info'));
+        $this->assertSame($categories, (int) $this->conn()->fetchOne('SELECT COUNT(*) FROM c_group_category'), 'no empty Subgroups category is left behind');
+    }
 }

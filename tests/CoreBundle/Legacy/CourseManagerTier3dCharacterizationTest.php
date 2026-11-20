@@ -8,15 +8,19 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CForum;
+use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use CourseManager;
 use Database;
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -303,6 +307,78 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
 
         $this->assertSame(['cm3d_gadmu_here'], array_column($rows, 'title'), 'only the courses of the current URL');
         $this->assertSame(['id', 'title'], array_keys($rows[0]));
+    }
+
+    private function forum(string $title, Course $course, ?SessionEntity $session = null): CForum
+    {
+        $forum = (new CForum())->setTitle($title)->setParent($course)->setCreator($this->getUser('admin'))->addCourseLink($course, $session);
+        $this->getEntityManager()->persist($forum);
+        $this->getEntityManager()->flush();
+
+        return $forum;
+    }
+
+    private function post(CForum $forum, User $author, Course $course, ?SessionEntity $session = null): void
+    {
+        $post = (new CForumPost())
+            ->setTitle('cm3d_post')
+            ->setPostText('text')
+            ->setForum($forum)
+            ->setUser($author)
+            ->setCreator($author)
+            ->setPostDate(new DateTime())
+            ->setVisible(true)
+            ->setStatus(CForumPost::STATUS_VALIDATED)
+            ->setParent($forum)
+            ->addCourseLink($course, $session)
+        ;
+        $this->getEntityManager()->persist($post);
+        $this->getEntityManager()->flush();
+    }
+
+    public function testGetCountForumCountsTheForumsOfTheCourseOrOfOneSession(): void
+    {
+        $course = $this->createCourse('cm3d_cf_course');
+        $other = $this->createCourse('cm3d_cf_other');
+        $session = $this->createSession('cm3d_cf_session');
+        $this->forum('cm3d_cf_base_1', $course);
+        $gone = $this->forum('cm3d_cf_base_2', $course);
+        $this->forum('cm3d_cf_in_session', $course, $session);
+        $this->forum('cm3d_cf_elsewhere', $other);
+        $this->conn()->executeStatement('UPDATE resource_link SET deleted_at = NOW() WHERE resource_node_id = ?', [$gone->getResourceNode()->getId()]);
+        $cid = (int) $course->getId();
+
+        $this->assertEquals(1, CourseManager::getCountForum($cid), 'base course: its own live forum only (session 0)');
+        $this->assertEquals(1, CourseManager::getCountForum($cid, (int) $session->getId()), 'one session: the forum linked to that session');
+        $this->assertEquals(2, CourseManager::getCountForum($cid, 0, true), 'all sessions: base course and session, soft-deleted link left out');
+        $this->assertEquals(0, CourseManager::getCountForum($cid, 999999), 'a session without forum');
+    }
+
+    public function testGetCountForumPerUserCountsTheForumsWhereTheUserPostedAtLeastOnce(): void
+    {
+        $course = $this->createCourse('cm3d_cfu_course');
+        $other = $this->createCourse('cm3d_cfu_other');
+        $session = $this->createSession('cm3d_cfu_session');
+        $writer = $this->createUser('cm3d_cfu_writer');
+        $reader = $this->createUser('cm3d_cfu_reader');
+        $f1 = $this->forum('cm3d_cfu_f1', $course);
+        $f2 = $this->forum('cm3d_cfu_f2', $course);
+        $f3 = $this->forum('cm3d_cfu_f3', $course);
+        $fs = $this->forum('cm3d_cfu_fs', $course, $session);
+        $fo = $this->forum('cm3d_cfu_fo', $other);
+        $this->post($f1, $writer, $course);
+        $this->post($f1, $writer, $course); // twice in the same forum: counted once
+        $this->post($f2, $writer, $course);
+        $this->post($f3, $reader, $course);
+        $this->post($fs, $writer, $course, $session);
+        $this->post($fo, $writer, $other);
+        $cid = (int) $course->getId();
+
+        $this->assertEquals(2, CourseManager::getCountForumPerUser($writer->getId(), $cid), 'two forums of the base course, however many posts');
+        $this->assertEquals(1, CourseManager::getCountForumPerUser($writer->getId(), $cid, (int) $session->getId()), 'the forum of the session');
+        $this->assertEquals(1, CourseManager::getCountForumPerUser($reader->getId(), $cid));
+        $this->assertEquals(0, CourseManager::getCountForumPerUser($reader->getId(), $cid, (int) $session->getId()));
+        $this->assertEquals(1, CourseManager::getCountForumPerUser($writer->getId(), (int) $other->getId()), 'forums of another course are not mixed in');
     }
 
     public function testGetCourseParamsForDisplayIgnoresTheRowsOfOtherUsers(): void

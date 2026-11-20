@@ -24,11 +24,14 @@ use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
 use Chamilo\CoreBundle\Search\Xapian\XapianIndexService;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
+use Chamilo\CourseBundle\Entity\CForum;
+use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CGroup;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\QueryBuilder as OrmQueryBuilder;
 
 /**
  * Class CourseManager.
@@ -5757,22 +5760,17 @@ class CourseManager
         $sessionId = 0,
         $getAllSessions = false
     ) {
-        $forum = Database::get_course_table(TABLE_FORUM);
-        if ($getAllSessions) {
-            $sql = "SELECT count(*) as count
-                    FROM $forum f
-                    WHERE f.c_id = %s";
-        } else {
-            $sql = "SELECT count(*) as count
-                    FROM $forum f
-                    WHERE f.c_id = %s and f.session_id = %s";
-        }
+        $queryBuilder = Database::getManager()->createQueryBuilder()
+            ->select('COUNT(DISTINCT f.iid)')
+            ->from(CForum::class, 'f')
+            ->innerJoin('f.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->where('IDENTITY(links.course) = :courseId')
+            ->andWhere('links.deletedAt IS NULL')
+            ->setParameter('courseId', (int) $courseId);
+        self::restrictLinksToSession($queryBuilder, (int) $sessionId, $getAllSessions);
 
-        $sql = sprintf($sql, intval($courseId), intval($sessionId));
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
-        return $row['count'];
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -5787,26 +5785,39 @@ class CourseManager
         $courseId,
         $sessionId = 0
     ) {
-        $forum = Database::get_course_table(TABLE_FORUM);
-        $forum_post = Database::get_course_table(TABLE_FORUM_POST);
+        $queryBuilder = Database::getManager()->createQueryBuilder()
+            ->select('COUNT(DISTINCT f.iid)')
+            ->from(CForumPost::class, 'p')
+            ->innerJoin('p.forum', 'f')
+            ->innerJoin('f.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->where('IDENTITY(p.user) = :userId')
+            ->andWhere('IDENTITY(links.course) = :courseId')
+            ->andWhere('links.deletedAt IS NULL')
+            ->setParameter('userId', (int) $userId)
+            ->setParameter('courseId', (int) $courseId);
+        self::restrictLinksToSession($queryBuilder, (int) $sessionId, false);
 
-        $sql = "SELECT count(distinct f.forum_id) as count
-                FROM $forum_post p
-                INNER JOIN $forum f
-                ON f.forum_id = p.forum_id AND f.c_id = p.c_id
-                WHERE p.poster_id = %s and f.session_id = %s and p.c_id = %s";
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
 
-        $sql = sprintf(
-            $sql,
-            intval($userId),
-            intval($sessionId),
-            intval($courseId)
-        );
+    /**
+     * Limits the "links" alias of a resource query to the base course (session 0), to one session, or to none
+     * of those restrictions when every session is wanted.
+     */
+    private static function restrictLinksToSession(OrmQueryBuilder $queryBuilder, int $sessionId, bool $getAllSessions): void
+    {
+        if ($getAllSessions) {
+            return;
+        }
 
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
+        if ($sessionId > 0) {
+            $queryBuilder->andWhere('IDENTITY(links.session) = :sessionId')->setParameter('sessionId', $sessionId);
 
-        return $row['count'];
+            return;
+        }
+
+        $queryBuilder->andWhere('links.session IS NULL');
     }
 
     /**

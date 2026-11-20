@@ -79,7 +79,12 @@ final class CourseContextRoleListener
             if ($group instanceof CGroup) {
                 $contextRoles = array_merge(
                     $contextRoles,
-                    $this->resolver->resolveGroupRoles($user, $course, $group),
+                    $this->resolver->resolveGroupRoles(
+                        $user,
+                        $course,
+                        $group,
+                        $courseSession instanceof Session ? $courseSession : null,
+                    ),
                 );
             }
         }

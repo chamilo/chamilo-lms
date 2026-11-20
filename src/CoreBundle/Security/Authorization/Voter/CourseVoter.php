@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Exception\NotAllowedException;
+use Chamilo\CoreBundle\Security\CourseStudentAccessChecker;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -39,6 +40,7 @@ class CourseVoter extends Voter
         private readonly AccessDecisionManagerInterface $accessDecisionManager,
         private readonly TranslatorInterface $translator,
         private readonly SettingsManager $settingsManager,
+        private readonly CourseStudentAccessChecker $studentAccessChecker,
         RequestStack $requestStack,
         EntityManagerInterface $entityManager,
     ) {
@@ -86,6 +88,10 @@ class CourseVoter extends Voter
 
         switch ($attribute) {
             case self::VIEW:
+                if ($user instanceof User && $this->studentAccessChecker->isDisabled($user, $course, $session)) {
+                    return false;
+                }
+
                 // Course is hidden, so it is not visible for anyone except admins.
                 if ($course->isHidden()) {
                     return false;

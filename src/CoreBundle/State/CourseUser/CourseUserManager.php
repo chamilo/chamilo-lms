@@ -19,6 +19,7 @@ use Chamilo\CoreBundle\Helpers\CourseHelper;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Security\CourseStudentAccessChecker;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use CourseManager;
 use DateTimeInterface;
@@ -46,6 +47,7 @@ final readonly class CourseUserManager
         private AccessUrlHelper $accessUrlHelper,
         private CourseHelper $courseHelper,
         private UserRepository $userRepository,
+        private CourseStudentAccessChecker $studentAccessChecker,
     ) {}
 
     /**
@@ -96,6 +98,10 @@ final readonly class CourseUserManager
 
         $user = $this->security->getUser();
         if (!$user instanceof User) {
+            return false;
+        }
+
+        if ($this->studentAccessChecker->isDisabled($user, $course, $session)) {
             return false;
         }
 
@@ -308,6 +314,27 @@ final readonly class CourseUserManager
         $totalItems = \count($rows);
         $pageRows = $this->paginate($rows, $request);
         $items = $this->normalizeMembers($course, $session, $type, $pageRows, $extraFields);
+        $canChangeCourseAccess = null === $session
+            && self::TYPE_STUDENT === $type
+            && $canManage
+            && $this->studentAccessChecker->isEnabled();
+        if ($canChangeCourseAccess && [] !== $items) {
+            $pageIds = array_column($items, 'id');
+            $subscriptions = $this->entityManager->getRepository(CourseRelUser::class)->findBy([
+                'course' => $course,
+                'user' => $pageIds,
+                'status' => CourseRelUser::STUDENT,
+            ]);
+            $accessByUser = [];
+            foreach ($subscriptions as $subscription) {
+                $accessByUser[(int) $subscription->getUser()->getId()] = 1 === $subscription->getVisibility();
+            }
+            foreach ($items as &$item) {
+                $item['courseAccessEnabled'] = $accessByUser[(int) $item['id']] ?? true;
+                $item['canChangeCourseAccess'] = isset($accessByUser[(int) $item['id']]);
+            }
+            unset($item);
+        }
         $currentUser = $this->security->getUser();
         $currentUserId = $currentUser instanceof User ? (int) $currentUser->getId() : 0;
         $limitState = self::TYPE_STUDENT === $type
@@ -325,6 +352,7 @@ final readonly class CourseUserManager
             'canUnsubscribe' => $this->canUnsubscribe($course, $session),
             'canImport' => $canManage && $this->canUnsubscribe($course, $session),
             'canSetTutor' => $this->canSetTutor($course, $session),
+            'canChangeCourseAccess' => $canChangeCourseAccess,
             'canSelfUnsubscribe' => $this->canSelfUnsubscribe($course, $session),
             'currentUserId' => $currentUserId,
             'extraFields' => array_map(

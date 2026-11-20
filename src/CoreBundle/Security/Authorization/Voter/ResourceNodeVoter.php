@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Helpers\PageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceAclHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Security\CourseStudentAccessChecker;
 use Chamilo\CoreBundle\Service\Assignment\AssignmentGroupCategoryResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -71,6 +72,7 @@ class ResourceNodeVoter extends Voter
         private readonly CourseFromRequestHelper $courseFromRequest,
         private readonly CLpItemRepository $lpItemRepository,
         private readonly AssignmentGroupCategoryResolver $assignmentGroupCategoryResolver,
+        private readonly CourseStudentAccessChecker $studentAccessChecker,
     ) {}
 
     public static function getReaderMask(): int
@@ -129,6 +131,12 @@ class ResourceNodeVoter extends Voter
         // Checking admin role.
         if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
             return true;
+        }
+
+        if ($token->getUser() instanceof User
+            && $this->isSuspendedCourseResource($resourceNode, $token->getUser())
+        ) {
+            return false;
         }
 
         if (self::VIEW === $attribute && $this->canViewOwnStudentPublicationRelatedResource($resourceNode, $token)) {
@@ -754,6 +762,37 @@ class ResourceNodeVoter extends Voter
         }
 
         return false;
+    }
+
+    /**
+     * Avoid public-resource fallbacks bypassing a direct-course suspension.
+     * A resource shared with another accessible course or a valid session stays available.
+     */
+    private function isSuspendedCourseResource(ResourceNode $resourceNode, User $user): bool
+    {
+        if (!$this->studentAccessChecker->isEnabled()) {
+            return false;
+        }
+
+        $foundCourseLink = false;
+        $sessionId = $this->requestStack->getCurrentRequest()?->query->getInt('sid', 0) ?? 0;
+        $session = $sessionId > 0
+            ? $this->entityManager->getRepository(Session::class)->find($sessionId)
+            : null;
+
+        foreach ($resourceNode->getResourceLinks() as $link) {
+            $course = $link->getCourse();
+            if (!$course instanceof Course) {
+                return false;
+            }
+
+            $foundCourseLink = true;
+            if (!$this->studentAccessChecker->isDisabled($user, $course, $session)) {
+                return false;
+            }
+        }
+
+        return $foundCourseLink;
     }
 
     /**

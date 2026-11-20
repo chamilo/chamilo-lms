@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Helpers\CourseStudentInfoHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\SequenceResourceRepository;
+use Chamilo\CoreBundle\Security\CourseStudentAccessChecker;
 use RuntimeException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
@@ -40,6 +41,7 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
         private readonly CourseStudentInfoHelper $courseStudentInfoHelper,
         private readonly SequenceResourceRepository $sequenceResourceRepository,
         private readonly NormalizerInterface $normalizer,
+        private readonly CourseStudentAccessChecker $studentAccessChecker,
         FilterExtension $filterExtension,
         PaginationExtension $paginationExtension,
         OrderExtension $orderExtension,
@@ -83,6 +85,12 @@ final class UserCourseSubscriptionsStateProvider implements ProviderInterface
             ->setParameter('user', $currentUser->getId())
             ->setParameter('url', $url->getId())
         ;
+
+        if ($this->studentAccessChecker->isEnabled()) {
+            $qb->andWhere('(cru.status != :studentStatus OR cru.visibility = 1)')
+                ->setParameter('studentStatus', CourseRelUser::STUDENT)
+            ;
+        }
 
         $queryNameGenerator = new QueryNameGenerator();
 

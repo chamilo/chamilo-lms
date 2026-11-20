@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CoreBundle\Security\Authorization\Voter;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Security\CourseStudentAccessChecker;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
 use Doctrine\ORM\EntityManagerInterface;
@@ -40,7 +41,7 @@ class CourseVoterTest extends WebTestCase
         ]);
         $accessDecisionManager = $this->getContainer()->get(AccessDecisionManagerInterface::class);
         $settingsManager = $this->getContainer()->get(SettingsManager::class);
-        $voter = new CourseVoter($accessDecisionManager, $translator, $settingsManager, $request_stack, $entity_manager);
+        $voter = new CourseVoter($accessDecisionManager, $translator, $settingsManager, $this->getContainer()->get(CourseStudentAccessChecker::class), $request_stack, $entity_manager);
         foreach ($tests as $message => $test) {
             [$expected, $user, $course] = $test;
             $client->loginUser($user);

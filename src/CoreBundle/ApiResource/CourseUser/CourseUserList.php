@@ -90,6 +90,9 @@ final class CourseUserList
     public bool $canSetTutor = false;
 
     #[Groups(['course_user_list:read'])]
+    public bool $canChangeCourseAccess = false;
+
+    #[Groups(['course_user_list:read'])]
     public bool $canSelfUnsubscribe = false;
 
     #[Groups(['course_user_list:read'])]

@@ -7,8 +7,10 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\State\CourseUser;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Security\CourseStudentAccessChecker;
 use CourseManager;
 use Doctrine\ORM\EntityManagerInterface;
 use SessionManager;
@@ -23,6 +25,7 @@ final readonly class CourseUserWriteManager
         private EntityManagerInterface $entityManager,
         private Security $security,
         private CourseUserManager $courseUserManager,
+        private CourseStudentAccessChecker $studentAccessChecker,
     ) {}
 
     /**
@@ -135,6 +138,40 @@ final readonly class CourseUserWriteManager
         }
 
         return $userIds;
+    }
+
+    public function setCourseAccess(Course $course, ?Session $session, int $userId, bool $accessEnabled): bool
+    {
+        if (null !== $session) {
+            throw new BadRequestHttpException('Direct course access cannot be changed in a session.');
+        }
+
+        if (!$this->studentAccessChecker->isEnabled()) {
+            throw new AccessDeniedHttpException('Course access management is disabled by the platform.');
+        }
+
+        if (!$this->courseUserManager->canManage($course, null)) {
+            throw new AccessDeniedHttpException('You are not allowed to manage this course.');
+        }
+
+        $subscription = $this->entityManager->getRepository(CourseRelUser::class)->findOneBy([
+            'course' => $course,
+            'user' => $userId,
+            'status' => CourseRelUser::STUDENT,
+        ]);
+        if (!$subscription instanceof CourseRelUser) {
+            throw new BadRequestHttpException('The requested student is not subscribed to this course.');
+        }
+
+        $newVisibility = $accessEnabled ? 1 : 0;
+        if ($subscription->getVisibility() === $newVisibility) {
+            return true;
+        }
+
+        $subscription->setVisibility($newVisibility);
+        $this->entityManager->flush();
+
+        return true;
     }
 
     public function setTutor(Course $course, ?Session $session, int $userId, bool $isTutor): bool

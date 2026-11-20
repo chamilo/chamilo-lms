@@ -4068,6 +4068,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Activate this option will allow course administrator to subscribe users inside a course',
                 ],
                 [
+                    'name' => 'teacher_defined_student_access_to_course',
+                    'title' => 'Allow teachers to disable individual student access to a course',
+                    'comment' => 'Let course teachers suspend and restore direct course access without unsubscribing students or deleting their progress. This is a global setting and does not affect session access.',
+                ],
+                [
                     'name' => 'teacher_can_select_course_template',
                     'title' => 'Teacher can select a course as template',
                     'comment' => 'Allow pick a course as template for the new course that teacher is creating',

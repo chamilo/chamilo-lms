@@ -15,19 +15,21 @@ use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use Database;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\Event\PostPersistEventArgs;
+use Doctrine\ORM\Events;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 /**
  * Pins for the Attendance methods AttendanceCharacterizationTest leaves out because they need a resource-linked
  * attendance: the faults averages (read the per-user results of the attendances of a course) and the session half
  * of getCoursesWithAttendance(). Titles start with "at2_" (sibling suites share the database).
  *
- * NOT covered, on purpose: attendance_add() / attendance_edit() only reach the Database::query() calls when the
- * attendance is already linked to the gradebook, and those two UPDATEs filter gradebook_link on a column called
- * "iid" which the table does not have (it is "id"): the branch cannot run without a SQL error.
+ * attendance_add() / attendance_edit() re-weight the gradebook link of an attendance that is already linked: the
+ * UPDATE filters gradebook_link on its key ("id"; it once used a column called "iid" the table does not have).
  */
 final class AttendanceTier2CharacterizationTest extends KernelTestCase
 {
@@ -109,6 +111,81 @@ final class AttendanceTier2CharacterizationTest extends KernelTestCase
         $this->assertSame(7, (int) $r['faults']);
         $this->assertSame(14, (int) $r['total']);
         $this->assertSame(50.0, (float) $r['percent']);
+    }
+
+    public function testAttendanceEditReweightsTheExistingGradebookLinkOnly(): void
+    {
+        $att = $this->att(0);
+        $category = $this->category();
+        $node = (int) $this->conn->fetchOne('SELECT resource_node_id FROM c_attendance WHERE iid = ?', [$att]);
+        $link = $this->link($node, $category, 1.0);
+        $otherAtt = $this->att(0);
+        $otherLink = $this->link(
+            (int) $this->conn->fetchOne('SELECT resource_node_id FROM c_attendance WHERE iid = ?', [$otherAtt]),
+            $category,
+            1.0
+        );
+
+        $lib = new Attendance();
+        $lib->category_id = $category;
+        $lib->set_title('at2_edited');
+        $lib->set_description('');
+        $lib->set_attendance_qualify_title('at2_edited_title');
+        $lib->set_attendance_weight(7);
+        $returned = $lib->attendance_edit($this->entity($att), true);
+
+        $this->assertSame($att, $returned);
+        $this->assertSame(7.0, (float) $this->conn->fetchOne('SELECT weight FROM gradebook_link WHERE id = ?', [$link]));
+        $this->assertSame(1.0, (float) $this->conn->fetchOne('SELECT weight FROM gradebook_link WHERE id = ?', [$otherLink]));
+        $this->assertSame(1, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM gradebook_link WHERE ref_id = ?', [$node]));
+    }
+
+    public function testAttendanceAddReweightsAGradebookLinkThatAlreadyPointsAtTheNewAttendance(): void
+    {
+        $admin = $this->getUser('admin');
+        self::getContainer()->get('security.token_storage')->setToken(new UsernamePasswordToken($admin, 'main', $admin->getRoles()));
+        $category = $this->category();
+        $links = [];
+        // A link to the attendance exists by the time attendance_add() looks for it (the node only exists once the
+        // attendance is persisted, so the fixture hooks into that persist).
+        $listener = new class($this->conn, $category, $links) {
+            public function __construct(
+                private Connection $conn,
+                private int $category,
+                public array &$links
+            ) {}
+
+            public function postPersist(PostPersistEventArgs $args): void
+            {
+                $object = $args->getObject();
+                if (!$object instanceof CAttendance) {
+                    return;
+                }
+                $this->conn->executeStatement(
+                    'INSERT INTO gradebook_link (ref_id, c_id, category_id, type, created_at, weight, visible, locked)
+                     VALUES (?, ?, ?, 7, NOW(), 1, 1, 0)',
+                    [$object->getResourceNode()->getId(), 1, $this->category]
+                );
+                $this->links[] = (int) $this->conn->lastInsertId();
+            }
+        };
+        Database::getManager()->getEventManager()->addEventListener(Events::postPersist, $listener);
+
+        try {
+            $lib = new Attendance();
+            $lib->category_id = $category;
+            $lib->set_title('at2_added');
+            $lib->set_description('');
+            $lib->set_attendance_qualify_title('at2_added_title');
+            $lib->set_attendance_weight(9);
+            $id = $lib->attendance_add(true);
+        } finally {
+            Database::getManager()->getEventManager()->removeEventListener(Events::postPersist, $listener);
+        }
+
+        $this->assertGreaterThan(0, $id);
+        $this->assertCount(1, $links);
+        $this->assertSame(9.0, (float) $this->conn->fetchOne('SELECT weight FROM gradebook_link WHERE id = ?', [$links[0]]));
     }
 
     public function testCoursesWithAttendanceReadsTheSessionsOfTheUser(): void
@@ -266,6 +343,29 @@ final class AttendanceTier2CharacterizationTest extends KernelTestCase
         );
 
         return $id;
+    }
+
+    private function category(): int
+    {
+        $this->conn->executeStatement(
+            "INSERT INTO gradebook_category (c_id, session_id, title, weight, visible, locked, generate_certificates,
+                is_requirement, calculation_mode)
+             VALUES (?, NULL, ?, 100, 1, 0, 0, 0, 'weighted_average')",
+            [self::COURSE, 'at2_cat_'.(++$this->seq)]
+        );
+
+        return (int) $this->conn->lastInsertId();
+    }
+
+    private function link(int $node, int $category, float $weight): int
+    {
+        $this->conn->executeStatement(
+            'INSERT INTO gradebook_link (ref_id, c_id, category_id, type, created_at, weight, visible, locked)
+             VALUES (?, ?, ?, 7, NOW(), ?, 1, 0)',
+            [$node, self::COURSE, $category, $weight]
+        );
+
+        return (int) $this->conn->lastInsertId();
     }
 
     private function cal(int $attId, string $dateTime): int

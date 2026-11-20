@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
@@ -104,6 +105,19 @@ class Attendance
 
             return 0;
         }
+    }
+
+    private static function updateGradebookLinkWeight(int $linkId, float $weight): void
+    {
+        Database::getManager()
+            ->createQueryBuilder()
+            ->update(GradebookLink::class, 'l')
+            ->set('l.weight', ':weight')
+            ->where('l.id = :id')
+            ->setParameter('weight', $weight)
+            ->setParameter('id', $linkId)
+            ->getQuery()
+            ->execute();
     }
 
     private static function reactivateAttendance(int $attendanceId): int
@@ -579,7 +593,6 @@ class Attendance
     public function attendance_add($link_to_gradebook = false)
     {
         $courseInfo = api_get_course_info();
-        $tableLink = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $sessionId = api_get_session_id();
         $courseCode = $courseInfo['code'];
         $titleGradebook = (string) $this->attendance_qualify_title;
@@ -609,7 +622,6 @@ class Attendance
                 $lastId,
                 $sessionId
             );
-            $linkId = $linkInfo['id'];
             if (!$linkInfo) {
                 GradebookUtils::add_resource_to_course_gradebook(
                     $this->category_id,
@@ -624,7 +636,7 @@ class Attendance
                     $sessionId
                 );
             } else {
-                Database::query("UPDATE $tableLink SET weight = $weightCalification WHERE iid = $linkId");
+                self::updateGradebookLinkWeight((int) $linkInfo['id'], $weightCalification);
             }
         }
 
@@ -642,7 +654,6 @@ class Attendance
     public function attendance_edit($attendance, $link_to_gradebook = false)
     {
         $_course = api_get_course_info();
-        $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $session_id = api_get_session_id();
         $course_code = $_course['code'];
         $title_gradebook = $this->attendance_qualify_title;
@@ -703,7 +714,7 @@ class Attendance
                         $session_id
                     );
                 } else {
-                    Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE iid='.$link_info['id']);
+                    self::updateGradebookLinkWeight((int) $link_info['id'], $weight_calification);
                 }
             }
 

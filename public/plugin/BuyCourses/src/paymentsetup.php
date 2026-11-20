@@ -411,7 +411,9 @@ $culqiEnable = 'true' === $plugin->get('culqi_enable');
 $stripeEnable = 'true' === $plugin->get('stripe_enable');
 $btcpayEnable = 'true' === $plugin->get('btcpay_enable');
 $cecabankEnable = 'true' === $plugin->get('cecabank_enable');
+$nanoEnable = 'true' === $plugin->get('nano_enable');
 require_once __DIR__.'/btcpay_client.php';
+require_once __DIR__.'/nano_client.php';
 $btcpayParams = $plugin->getBtcPayParams();
 $btcpayConfigured = BuyCoursesBtcPayClient::isConfigured($plugin);
 $btcpayConnectionTestResult = $_SESSION['buycourses_btcpay_connection_test_result'] ?? null;
@@ -1101,6 +1103,70 @@ $btcpayForm->setDefaults([
     'webhook_secret' => '',
 ]);
 
+$nanoForm = new FormValidator('nano_config');
+buycoursesAdminTokenField($nanoForm);
+
+if ($nanoForm->validate()) {
+    $nanoFormValues = $nanoForm->getSubmitValues();
+    $nanoValues = [
+        'account' => trim((string) ($nanoFormValues['account'] ?? '')),
+        'node_url' => rtrim(trim((string) ($nanoFormValues['node_url'] ?? '')), '/'),
+        'xno_per_unit' => trim((string) ($nanoFormValues['xno_per_unit'] ?? '')),
+    ];
+
+    try {
+        // Empty values are allowed (the method then stays hidden at checkout); a value that is set must be valid.
+        if ('' !== $nanoValues['account'] && !BuyCoursesNanoAddress::isValid($nanoValues['account'])) {
+            throw new RuntimeException($plugin->get_lang('NanoAccountHelp'));
+        }
+        if ('' !== $nanoValues['node_url'] && !BuyCoursesNanoClient::isValidNodeUrl($nanoValues['node_url'])) {
+            throw new RuntimeException($plugin->get_lang('NanoNodeUrlHelp'));
+        }
+        if ('' !== $nanoValues['xno_per_unit'] && !BuyCoursesNanoAmount::isValidRate($nanoValues['xno_per_unit'])) {
+            throw new RuntimeException($plugin->get_lang('NanoXnoPerUnitHelp'));
+        }
+
+        $plugin->saveNanoParameters($nanoValues);
+        Display::addFlash(Display::return_message(get_lang('Saved'), 'success'));
+    } catch (Throwable $exception) {
+        Display::addFlash(
+            Display::return_message(
+                htmlspecialchars(sprintf($plugin->get_lang('NanoConfigurationSaveFailed'), $exception->getMessage()), ENT_QUOTES, 'UTF-8'),
+                'error'
+            )
+        );
+    }
+
+    header('Location:'.api_get_self().'#nano-config');
+    exit;
+}
+
+$nanoForm->addText(
+    'account',
+    [$plugin->get_lang('NanoAccount'), $plugin->get_lang('NanoAccountHelp')],
+    false,
+    ['cols-size' => [3, 8, 1], 'placeholder' => 'nano_']
+);
+$nanoForm->addText(
+    'node_url',
+    [$plugin->get_lang('NanoNodeUrl'), $plugin->get_lang('NanoNodeUrlHelp')],
+    false,
+    ['cols-size' => [3, 8, 1], 'placeholder' => 'https://']
+);
+$nanoForm->addText(
+    'xno_per_unit',
+    [$plugin->get_lang('NanoXnoPerUnit'), $plugin->get_lang('NanoXnoPerUnitHelp')],
+    false,
+    ['cols-size' => [3, 8, 1]]
+);
+$nanoForm->addButtonSave(get_lang('Save'));
+$nanoParams = $plugin->getNanoParams();
+$nanoForm->setDefaults([
+    'account' => (string) ($nanoParams['account'] ?? ''),
+    'node_url' => (string) ($nanoParams['node_url'] ?? ''),
+    'xno_per_unit' => (string) ($nanoParams['xno_per_unit'] ?? ''),
+]);
+
 $cecabankForm = new FormValidator('cecabank_config');
 buycoursesAdminTokenField($cecabankForm);
 
@@ -1176,6 +1242,7 @@ $enabledPaymentMethods = array_filter([
     'Culqi' => $culqiEnable,
     'Stripe' => $stripeEnable,
     'BTCPay Server' => $btcpayEnable,
+    'Nano (XNO)' => $nanoEnable,
     'Cecabank' => $cecabankEnable,
 ]);
 
@@ -1225,6 +1292,7 @@ $tpl->assign('culqi_form', styleBuyCoursesFormHtml($culqiForm->returnForm()));
 $tpl->assign('tpv_redsys_form', styleBuyCoursesFormHtml($htmlTpvRedsys));
 $tpl->assign('stripe_form', styleBuyCoursesFormHtml($stripeForm->returnForm()));
 $tpl->assign('btcpay_form', styleBuyCoursesFormHtml($btcpayForm->returnForm()));
+$tpl->assign('nano_form', styleBuyCoursesFormHtml($nanoForm->returnForm()));
 $tpl->assign('cecabank_form', styleBuyCoursesFormHtml($cecabankForm->returnForm()));
 
 $tpl->assign('transfer_accounts', $transferAccounts);
@@ -1241,6 +1309,8 @@ $tpl->assign('btcpay_api_key_saved', '' !== trim((string) ($btcpayParams['api_ke
 $tpl->assign('btcpay_webhook_secret_saved', '' !== trim((string) ($btcpayParams['webhook_secret'] ?? '')));
 $tpl->assign('btcpay_connection_test_result', $btcpayConnectionTestResult);
 $tpl->assign('btcpay_webhook_url', api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/btcpay_webhook.php');
+$tpl->assign('nano_enable', $nanoEnable);
+$tpl->assign('nano_configured', BuyCoursesNanoClient::isConfiguredParams($nanoParams));
 $tpl->assign('cecabank_enable', $cecabankEnable);
 
 $content = $tpl->fetch('BuyCourses/view/paymentsetup.tpl');

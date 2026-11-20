@@ -71,6 +71,8 @@ class BuyCoursesPlugin extends Plugin
     public const TABLE_STRIPE = 'plugin_buycourses_stripe_account';
     public const TABLE_BTCPAY = 'plugin_buycourses_btcpay_account';
     public const TABLE_TPV_CECABANK = 'plugin_buycourses_cecabank_account';
+    public const TABLE_NANO = 'plugin_buycourses_nano_account';
+    public const TABLE_NANO_CLAIM = 'plugin_buycourses_nano_claim';
     public const PRODUCT_TYPE_COURSE = 1;
     public const PRODUCT_TYPE_SESSION = 2;
     public const PRODUCT_TYPE_SERVICE = 3;
@@ -81,6 +83,7 @@ class BuyCoursesPlugin extends Plugin
     public const PAYMENT_TYPE_STRIPE = 5;
     public const PAYMENT_TYPE_TPV_CECABANK = 6;
     public const PAYMENT_TYPE_BTCPAY = 7;
+    public const PAYMENT_TYPE_NANO = 8;
     public const PAYOUT_STATUS_CANCELED = 2;
     public const PAYOUT_STATUS_PENDING = 0;
     public const PAYOUT_STATUS_COMPLETED = 1;
@@ -194,6 +197,7 @@ class BuyCoursesPlugin extends Plugin
                 'stripe_enable' => 'boolean',
                 'btcpay_enable' => 'boolean',
                 'cecabank_enable' => 'boolean',
+                'nano_enable' => 'boolean',
             ]
         );
     }
@@ -487,6 +491,8 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_STRIPE,
             self::TABLE_BTCPAY,
             self::TABLE_TPV_CECABANK,
+            self::TABLE_NANO,
+            self::TABLE_NANO_CLAIM,
         ];
     }
 
@@ -544,7 +550,7 @@ class BuyCoursesPlugin extends Plugin
     public function isEnabled(): bool
     {
         // Settings are strings: 'false' is truthy, so only 'true' (or a real true) switches a method on.
-        foreach (['paypal_enable', 'transfer_enable', 'culqi_enable', 'stripe_enable', 'cecabank_enable', 'btcpay_enable'] as $method) {
+        foreach (['paypal_enable', 'transfer_enable', 'culqi_enable', 'stripe_enable', 'cecabank_enable', 'btcpay_enable', 'nano_enable'] as $method) {
             $value = $this->get($method);
             if (true === $value || 'true' === $value) {
                 return true;
@@ -1064,6 +1070,8 @@ class BuyCoursesPlugin extends Plugin
                 'webhook_secret' => '',
             ]);
         }
+
+        $this->ensureNanoTables();
 
         $table = Database::get_main_table(self::TABLE_TPV_CECABANK);
         $sql = "CREATE TABLE IF NOT EXISTS $table (
@@ -3099,12 +3107,18 @@ class BuyCoursesPlugin extends Plugin
             require_once __DIR__.'/btcpay_client.php';
             $btcpay = BuyCoursesBtcPayClient::isConfigured($this);
         }
+        $nano = 'true' === $this->get('nano_enable');
+
+        if ($nano) {
+            require_once __DIR__.'/nano_client.php';
+            $nano = BuyCoursesNanoClient::isConfigured($this);
+        }
         $culqi = 'true' === $this->get('culqi_enable');
         $cecabank = 'true' === $this->get('cecabank_enable');
         $tpv_redsys = 'true' === $this->get('tpv_redsys_enable');
         $hideFree = 'true' === $this->get('hide_free_text');
 
-        if ($paypal || $transfer || $stripe || $btcpay || $culqi || $cecabank || $tpv_redsys) {
+        if ($paypal || $transfer || $stripe || $btcpay || $nano || $culqi || $cecabank || $tpv_redsys) {
             $item = $this->getItemByProduct($productId, $productType);
             $html = '<div class="buycourses-price">';
             if ($item) {
@@ -3373,6 +3387,94 @@ class BuyCoursesPlugin extends Plugin
         );
 
         return is_array($params) ? $params : [];
+    }
+
+    /**
+     * Gets the stored Nano (XNO) params: the account that receives payments, the node URL the plugin reads
+     * blocks from, and the rate in XNO per one unit of the platform currency.
+     */
+    public function getNanoParams(): array
+    {
+        if (!$this->hasPluginTable(self::TABLE_NANO)) {
+            return ['id' => 0, 'account' => '', 'node_url' => '', 'xno_per_unit' => ''];
+        }
+
+        $params = Database::select(
+            '*',
+            Database::get_main_table(self::TABLE_NANO),
+            ['id = ?' => 1],
+            'first'
+        );
+
+        return is_array($params) ? $params : [];
+    }
+
+    /**
+     * Save the Nano (XNO) params. Nothing here is secret: the plugin holds no key or seed, it only reads blocks.
+     */
+    public function saveNanoParameters(array $params): int
+    {
+        $this->ensureNanoTables();
+
+        return Database::update(
+            Database::get_main_table(self::TABLE_NANO),
+            [
+                'account' => trim((string) ($params['account'] ?? '')),
+                'node_url' => rtrim(trim((string) ($params['node_url'] ?? '')), '/'),
+                'xno_per_unit' => trim((string) ($params['xno_per_unit'] ?? '')),
+            ],
+            ['id = ?' => 1]
+        );
+    }
+
+    /**
+     * Claim a Nano send block for a sale before the sale is completed. False when the block already paid
+     * another sale, or this sale was already paid by another block. The claim is a database row (block hash
+     * primary key, sale id unique), so a replayed block is refused after a restart as well.
+     */
+    public function claimNanoBlock(string $blockHash, int $saleId): bool
+    {
+        require_once __DIR__.'/nano_client.php';
+        $this->ensureNanoTables();
+
+        $pdo = Database::getManager()->getConnection()->getNativeConnection();
+        if (!$pdo instanceof PDO) {
+            return false;
+        }
+
+        $claims = new BuyCoursesNanoClaims($pdo, Database::get_main_table(self::TABLE_NANO_CLAIM));
+
+        return $claims->claim($blockHash, $saleId);
+    }
+
+    private function ensureNanoTables(): void
+    {
+        $table = Database::get_main_table(self::TABLE_NANO);
+        Database::query(
+            "CREATE TABLE IF NOT EXISTS $table (
+                id int unsigned NOT NULL AUTO_INCREMENT,
+                account varchar(128) NOT NULL,
+                node_url varchar(2048) NOT NULL,
+                xno_per_unit varchar(64) NOT NULL,
+                PRIMARY KEY (id)
+            )"
+        );
+
+        $res = Database::query("SELECT id FROM $table LIMIT 1");
+        if (0 === Database::num_rows($res)) {
+            Database::insert($table, ['account' => '', 'node_url' => '', 'xno_per_unit' => '']);
+        }
+
+        $claimTable = Database::get_main_table(self::TABLE_NANO_CLAIM);
+        Database::query(
+            "CREATE TABLE IF NOT EXISTS $claimTable (
+                block_hash char(64) NOT NULL,
+                sale_id int unsigned NOT NULL,
+                claimed_at int unsigned NOT NULL,
+                PRIMARY KEY (block_hash),
+                UNIQUE KEY sale_id (sale_id)
+            )"
+        );
     }
 
     private function ensureBtcPayAccountTable(): void
@@ -4292,6 +4394,7 @@ class BuyCoursesPlugin extends Plugin
                 self::PAYMENT_TYPE_STRIPE,
                 self::PAYMENT_TYPE_TPV_CECABANK,
                 self::PAYMENT_TYPE_BTCPAY,
+                self::PAYMENT_TYPE_NANO,
             ]
         )
         ) {
@@ -4309,6 +4412,14 @@ class BuyCoursesPlugin extends Plugin
             require_once __DIR__.'/btcpay_client.php';
 
             if ('true' !== $this->get('btcpay_enable') || !BuyCoursesBtcPayClient::isConfigured($this)) {
+                return null;
+            }
+        }
+
+        if (self::PAYMENT_TYPE_NANO === $paymentType) {
+            require_once __DIR__.'/nano_client.php';
+
+            if ('true' !== $this->get('nano_enable') || !BuyCoursesNanoClient::isConfigured($this)) {
                 return null;
             }
         }
@@ -4600,7 +4711,7 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get payment types.
      */
-    public function getPaymentTypes(bool $onlyActive = false, bool $includeBtcPay = false): array
+    public function getPaymentTypes(bool $onlyActive = false, bool $includeBtcPay = false, bool $includeNano = false): array
     {
         $types = [
             self::PAYMENT_TYPE_PAYPAL => 'PayPal',
@@ -4610,6 +4721,7 @@ class BuyCoursesPlugin extends Plugin
             self::PAYMENT_TYPE_STRIPE => 'Stripe',
             self::PAYMENT_TYPE_TPV_CECABANK => $this->get_lang('TpvCecabank'),
             self::PAYMENT_TYPE_BTCPAY => 'BTCPay Server',
+            self::PAYMENT_TYPE_NANO => 'Nano (XNO)',
         ];
 
         if (!$onlyActive) {
@@ -4649,6 +4761,16 @@ class BuyCoursesPlugin extends Plugin
 
             if (!BuyCoursesBtcPayClient::isConfigured($this)) {
                 unset($types[self::PAYMENT_TYPE_BTCPAY]);
+            }
+        }
+
+        if (!$includeNano || 'true' !== $this->get('nano_enable')) {
+            unset($types[self::PAYMENT_TYPE_NANO]);
+        } else {
+            require_once __DIR__.'/nano_client.php';
+
+            if (!BuyCoursesNanoClient::isConfigured($this)) {
+                unset($types[self::PAYMENT_TYPE_NANO]);
             }
         }
 

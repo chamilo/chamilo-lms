@@ -79,7 +79,7 @@ class SocialController extends AbstractController
         private readonly DateTimeHelper $dateTimeHelper,
     ) {}
 
-    #[Route('/personal-data/{userId}', name: 'chamilo_core_social_personal_data')]
+    #[Route('/personal-data/{userId}', name: 'chamilo_core_social_personal_data', requirements: ['userId' => '\d+'])]
     public function getPersonalData(
         int $userId,
         #[CurrentUser]

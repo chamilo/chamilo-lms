@@ -61,6 +61,10 @@ framework:
             policy: 'sliding_window'
             limit: 30
             interval: '1 minute'
+        personal_data_export_password:
+            policy: 'sliding_window'
+            limit: 5
+            interval: '15 minutes'
 
     # For legacy code (ending in ".php"), also edit public/main/inc/global.inc.php according to the changes you make here
 

@@ -567,6 +567,17 @@ final class UserToJsonNormalizer
 
     public function serializeUserData(int $userId): string
     {
+        return $this->serializer->serialize($this->collectPersonalData($userId), 'json');
+    }
+
+    /**
+     * Structured personal data already shown on the privacy page, grouped by category.
+     * Secrets such as password hashes, salts and API tokens are never included.
+     *
+     * @return array<string, list<array<string, mixed>>>
+     */
+    public function collectPersonalData(int $userId): array
+    {
         $em = $this->em;
         $dateFormat = DateTimeInterface::ATOM;
 
@@ -594,7 +605,6 @@ final class UserToJsonNormalizer
             'Gender' => $user->getGender(),
             'LastLogin' => $user->getLastLogin() ? $user->getLastLogin()->format($dateFormat) : null,
             'Roles' => $user->getRoles(),
-            'ApiToken' => $user->getApiToken(),
         ];
 
         // Courses (null-safe)
@@ -804,6 +814,6 @@ final class UserToJsonNormalizer
             ];
         }
 
-        return $this->serializer->serialize($personalData, 'json');
+        return $personalData;
     }
 }

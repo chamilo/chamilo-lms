@@ -527,6 +527,7 @@ final readonly class SurveyReportingProvider implements ProviderInterface
             $type = $question->getType();
             $questionAnswers = $answersByQuestion[$questionId] ?? [];
             $options = $optionsByQuestion[$questionId] ?? [];
+            $scoreReport = $this->buildScoreReport($question, $options, $questionAnswers);
 
             $reports[] = [
                 'id' => $questionId,
@@ -537,7 +538,9 @@ final readonly class SurveyReportingProvider implements ProviderInterface
                 'totalAnswers' => $this->countQuestionAnswerUsers($questionAnswers),
                 'options' => $this->buildOptionResults($question, $options, $questionAnswers),
                 'textAnswers' => $this->buildTextAnswers($question, $questionAnswers),
-                'scoreRows' => $this->buildScoreRows($question, $options, $questionAnswers),
+                'scoreRows' => $scoreReport['rows'],
+                'scoreAverage' => $scoreReport['average'],
+                'scoreMax' => 'score' === $type ? max(1, (int) $question->getMaxValue()) : null,
             ];
         }
 
@@ -636,19 +639,25 @@ final readonly class SurveyReportingProvider implements ProviderInterface
      * @param array<int, CSurveyQuestionOption> $options
      * @param array<int, CSurveyAnswer>         $answers
      *
-     * @return array<int, array<string, mixed>>
+     * @return array{rows: array<int, array<string, mixed>>, average: ?float}
      */
-    private function buildScoreRows(CSurveyQuestion $question, array $options, array $answers): array
+    private function buildScoreReport(CSurveyQuestion $question, array $options, array $answers): array
     {
         if ('score' !== $question->getType()) {
-            return [];
+            return ['rows' => [], 'average' => null];
+        }
+
+        $maxScore = max(1, (int) $question->getMaxValue());
+        $optionIds = [];
+        foreach ($options as $option) {
+            $optionIds[(int) $option->getIid()] = true;
         }
 
         $data = [];
         foreach ($answers as $answer) {
             $optionId = $this->getBaseOptionId($answer->getOptionId());
             $score = (int) $answer->getValue();
-            if ($optionId <= 0 || $score <= 0) {
+            if (!isset($optionIds[$optionId]) || $score < 1 || $score > $maxScore) {
                 continue;
             }
 
@@ -656,23 +665,38 @@ final readonly class SurveyReportingProvider implements ProviderInterface
         }
 
         $rows = [];
+        $totalScore = 0;
+        $totalCount = 0;
         foreach ($options as $option) {
+            $optionId = (int) $option->getIid();
             $distribution = [];
-            for ($score = 1; $score <= max(1, (int) $question->getMaxValue()); $score++) {
+            $scoreSum = 0;
+            $responseCount = 0;
+            for ($score = 1; $score <= $maxScore; $score++) {
+                $count = $data[$optionId][$score] ?? 0;
                 $distribution[] = [
                     'score' => $score,
-                    'count' => $data[(int) $option->getIid()][$score] ?? 0,
+                    'count' => $count,
                 ];
+                $scoreSum += $score * $count;
+                $responseCount += $count;
             }
 
+            $totalScore += $scoreSum;
+            $totalCount += $responseCount;
             $rows[] = [
-                'optionId' => (int) $option->getIid(),
+                'optionId' => $optionId,
                 'optionLabel' => $this->cleanOptionText($option->getOptionText()),
                 'distribution' => $distribution,
+                'responseCount' => $responseCount,
+                'averageScore' => $responseCount > 0 ? round($scoreSum / $responseCount, 2) : null,
             ];
         }
 
-        return $rows;
+        return [
+            'rows' => $rows,
+            'average' => $totalCount > 0 ? round($totalScore / $totalCount, 2) : null,
+        ];
     }
 
     /**

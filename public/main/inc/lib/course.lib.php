@@ -419,7 +419,7 @@ class CourseManager
                     ->fetchAssociative();
 
                 if (false === $registeredInSession) {
-                    SessionManager::unsubscribe_user_from_session($uid, $session_id);
+                    SessionManager::unsubscribe_user_from_session($session_id, $uid);
                 }
             }
 

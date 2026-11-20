@@ -186,10 +186,9 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
 
         CourseManager::unsubscribe_user($uid, $second->getCode(), $sid);
         $this->assertSame(0, $this->rows('session_rel_course_rel_user', 'session_id = ? AND user_id = ?', [$sid, $uid]));
-        // Today's behaviour, which looks like a bug: unsubscribe_user() calls
-        // SessionManager::unsubscribe_user_from_session($uid, $session_id) with the arguments swapped
-        // (its signature is ($session_id, $user_id)), so the session registration is never removed.
-        $this->assertSame(1, $this->rows('session_rel_user', 'session_id = ? AND user_id = ?', [$sid, $uid]));
+        // Once the user has no course left in the session, the session registration goes too
+        // (SessionManager::unsubscribe_user_from_session() takes ($session_id, $user_id)).
+        $this->assertSame(0, $this->rows('session_rel_user', 'session_id = ? AND user_id = ?', [$sid, $uid]));
     }
 
     // ---------------------------------------------------------------- delete_course

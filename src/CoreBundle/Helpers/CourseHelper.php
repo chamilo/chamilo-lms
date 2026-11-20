@@ -1121,11 +1121,12 @@ class CourseHelper
 
     private function fixDepartmentUrl(string $url): string
     {
-        if (!empty($url) && !str_starts_with($url, 'http://') && !str_starts_with($url, 'https://')) {
+        $url = Course::normalizeDepartmentUrl($url);
+        if ('' !== $url && !str_starts_with($url, 'http://') && !str_starts_with($url, 'https://')) {
             return 'http://'.$url;
         }
 
-        return 'http://' === $url ? '' : $url;
+        return $url;
     }
 
     private function getFutureExpirationDate(): string

@@ -540,7 +540,7 @@ final readonly class CourseSettingsManager
             'title' => $course->getTitle(),
             'course_language' => $course->getCourseLanguage(),
             'department_name' => $course->getDepartmentName() ?? '',
-            'department_url' => $course->getDepartmentUrl() ?? '',
+            'department_url' => Course::normalizeDepartmentUrl($course->getDepartmentUrl()),
             'room_id' => (int) ($course->getRoom()?->getId() ?? 0),
             'visibility' => $course->getVisibility(),
             'subscribe' => $course->getSubscribe(),
@@ -1146,6 +1146,9 @@ final readonly class CourseSettingsManager
             if (\array_key_exists($key, $values)) {
                 $normalized[$key] = trim((string) $values[$key]);
             }
+        }
+        if (isset($normalized['department_url'])) {
+            $normalized['department_url'] = Course::normalizeDepartmentUrl($normalized['department_url']);
         }
         foreach (self::INTEGER_VALUE_KEYS as $key) {
             if (\array_key_exists($key, $values)) {

@@ -4310,7 +4310,7 @@ class CourseManager
         $params['name'] = $course_info['name'];
         $params['edit_actions'] = '';
         $params['document'] = '';
-        $params['category'] = $course_info['categoryName'];
+        $params['category'] = $course_info['categoryName'] ?? '';
         if (Course::CLOSED != $course_visibility &&
             false === $is_coach && $allowUnsubscribe && '1' === $course_info['unsubscribe']) {
             $params['unregister_button'] =

@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
+use ChamiloSession;
 use CourseManager;
 use Database;
 use Doctrine\DBAL\Connection;
@@ -499,6 +500,22 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
             static fn ($row) => 'cm3b_spc_a' === $row['title']
         ));
         $this->assertSame(STUDENT, (int) $forStranger[0]['status'], 'not subscribed: shown as a student');
+    }
+
+    public function testGetLoggedUserCourseHtmlOfACourseWithoutCategoryReadsNoUndefinedKey(): void
+    {
+        // An administrator: any other user without session reaches SessionManager::sessionHasSessionAdmin(0), a separate bug.
+        $user = $this->createUser('cm3b_glu_user', '', '', 'ROLE_ADMIN');
+        $this->loginAs($user);
+        ChamiloSession::write('_user', ['id' => $user->getId()]);
+        $course = $this->createCourse('cm3b_glu_course');
+        $this->sub($user, $course, COURSEMANAGER);
+
+        // The legacy course info has no categoryName for a course without category: the warning would fail the test.
+        $output = CourseManager::get_logged_user_course_html(['real_id' => $course->getId()]);
+
+        $this->assertSame('', $output[1]['category'], 'a course without category has an empty category name');
+        $this->assertSame((int) $course->getId(), (int) $output[1]['real_id']);
     }
 
     public function testReturnSpecialCoursesGivesAnAdministratorTheSettingsLinkOfTheCourse(): void

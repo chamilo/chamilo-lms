@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
@@ -259,6 +260,49 @@ final class CourseManagerTier3dCharacterizationTest extends KernelTestCase
         $this->assertSame(['id', 'title'], array_keys($rows[0]));
 
         $this->assertSame([], CourseManager::getCoursesFollowedByGroupAdmin($stranger->getId()), 'not the admin of any group');
+    }
+
+    public function testGetCoursesFollowedByGroupAdminKeepsTheCoursesOfTheCurrentUrlWhenSeveralUrlsExist(): void
+    {
+        $here = $this->createCourse('cm3d_gadmu_here');
+        $elsewhere = $this->createCourse('cm3d_gadmu_elsewhere');
+        $admin = $this->createUser('cm3d_gadmu_admin');
+        $member = $this->createUser('cm3d_gadmu_member');
+        $hr = $this->createUser('cm3d_gadmu_hr');
+
+        // A second URL makes the platform "multiple URL": the query then also joins access_url_rel_course.
+        $second = (new AccessUrl())->setUrl('http://cm3d-second-url.test/')->setActive(1)->setCreator($this->getUser('admin'));
+        $this->getEntityManager()->persist($second);
+        $this->getEntityManager()->flush();
+        $this->assertTrue(api_get_multiple_access_url(), 'the second URL switches the multiple-URL mode on');
+        $currentUrlId = (int) api_get_current_access_url_id();
+        $this->conn()->executeStatement('DELETE FROM access_url_rel_course WHERE c_id = ?', [$elsewhere->getId()]);
+        $this->conn()->executeStatement(
+            'INSERT INTO access_url_rel_course (access_url_id, c_id) VALUES (?, ?)',
+            [(int) $second->getId() === $currentUrlId ? 1 : $second->getId(), $elsewhere->getId()]
+        );
+        $this->assertNotSame($currentUrlId, (int) $this->conn()->fetchOne('SELECT access_url_id FROM access_url_rel_course WHERE c_id = ?', [$elsewhere->getId()]));
+
+        $group = (new Usergroup())
+            ->setTitle('cm3d_gadmu_group')
+            ->setDescription('desc')
+            ->setCreator($this->getUser('admin'))
+            ->setGroupType(Usergroup::SOCIAL_CLASS)
+            ->addAccessUrl($this->getAccessUrl())
+        ;
+        $this->getEntityManager()->persist($group);
+        $this->getEntityManager()->flush();
+        foreach ([[$admin, GROUP_USER_PERMISSION_ADMIN], [$member, GROUP_USER_PERMISSION_READER]] as [$user, $relation]) {
+            $this->conn()->insert('usergroup_rel_user', ['usergroup_id' => $group->getId(), 'user_id' => $user->getId(), 'relation_type' => $relation]);
+        }
+        $this->sub($member, $here);
+        $this->sub($member, $elsewhere);
+        $this->sub($hr, $here, DRH, COURSE_RELATION_TYPE_RRHH);
+
+        $rows = CourseManager::getCoursesFollowedByGroupAdmin($admin->getId());
+
+        $this->assertSame(['cm3d_gadmu_here'], array_column($rows, 'title'), 'only the courses of the current URL');
+        $this->assertSame(['id', 'title'], array_keys($rows[0]));
     }
 
     public function testGetCourseParamsForDisplayIgnoresTheRowsOfOtherUsers(): void

@@ -159,14 +159,14 @@ onMounted(loadReport)
       class="rounded-3xl border border-gray-20 bg-white p-6 shadow-sm"
     >
       <h2 class="mb-4 text-lg font-semibold">
-        <a
-          :href="block.url"
+        <BaseAppLink
+          :url="block.url"
           target="_blank"
           rel="noopener noreferrer"
           class="text-primary hover:underline"
         >
           {{ block.url }}
-        </a>
+        </BaseAppLink>
       </h2>
 
       <dl class="mb-4 grid grid-cols-2 gap-4 sm:grid-cols-4">

@@ -88,11 +88,12 @@
             class="mdi mdi-account-group-outline text-4xl text-gray-500 me-4"
           ></i>
           <div class="group-details">
-            <a
-              :href="`/resources/usergroups/show/${extractGroupId(group)}`"
+            <BaseAppLink
+              :url="`/resources/usergroups/show/${extractGroupId(group)}`"
               class="text-lg font-semibold text-primary hover:underline"
-              >{{ group.title }}</a
             >
+              {{ group.title }}
+            </BaseAppLink>
             <div class="group-info text-gray-500">
               <span class="group-member-count">{{ group.memberCount }} {{ t("Members") }}</span>
               <span class="group-description">{{ group.description }}</span>
@@ -125,11 +126,12 @@
             class="mdi mdi-account-group-outline text-4xl text-gray-500 me-4"
           ></i>
           <div class="group-details">
-            <a
-              :href="`/resources/usergroups/show/${extractGroupId(group)}`"
+            <BaseAppLink
+              :url="`/resources/usergroups/show/${extractGroupId(group)}`"
               class="text-lg font-semibold text-primary hover:underline"
-              >{{ group.title }}</a
             >
+              {{ group.title }}
+            </BaseAppLink>
             <div class="group-info text-gray-500">
               <span class="group-member-count">{{ group.memberCount }} {{ t("Members") }}</span>
               <span class="group-description">{{ group.description }}</span>
@@ -162,11 +164,12 @@
             class="mdi mdi-account-group-outline text-4xl text-gray-500 me-4"
           ></i>
           <div class="group-details">
-            <a
-              :href="`/resources/usergroups/show/${extractGroupId(group)}`"
+            <BaseAppLink
+              :url="`/resources/usergroups/show/${extractGroupId(group)}`"
               class="text-lg font-semibold text-primary hover:underline"
-              >{{ group.title }}</a
             >
+              {{ group.title }}
+            </BaseAppLink>
             <div class="group-info text-gray-500">
               <span class="group-member-count">{{ group.memberCount }} {{ t("Members") }}</span>
               <span class="group-description">{{ group.description }}</span>

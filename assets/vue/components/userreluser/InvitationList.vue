@@ -26,11 +26,12 @@
           />
           <div class="ms-4 flex-grow">
             <h4 class="text-lg font-semibold">
-              <a
-                :href="'profile.php?u=' + invitation.itemId"
+              <BaseAppLink
+                :url="'profile.php?u=' + invitation.itemId"
                 class="text-primary hover:underline"
-                >{{ invitation.itemName }}</a
               >
+                {{ invitation.itemName }}
+              </BaseAppLink>
             </h4>
             <p class="text-gray-600">{{ invitation.content }}</p>
             <span class="text-sm text-gray-500">{{ invitation.date }}</span>

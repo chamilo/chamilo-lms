@@ -221,14 +221,14 @@ onMounted(() => {
       >
         <template #body="{ data }">
           <span :style="{ paddingLeft: `${data.depth * 24}px` }">
-            <a
-              :href="data.url"
+            <BaseAppLink
+              :url="data.url"
               target="_blank"
               rel="noopener noreferrer"
               class="text-primary hover:underline"
             >
               {{ data.url }}
-            </a>
+            </BaseAppLink>
           </span>
         </template>
       </Column>

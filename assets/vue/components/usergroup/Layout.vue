@@ -29,11 +29,12 @@
                 >
                   <div class="ms-4 flex-grow text-center">
                     <h4 class="m-0">
-                      <a
-                        :href="'profile.php?u=' + invitation.itemId"
+                      <BaseAppLink
+                        :url="'profile.php?u=' + invitation.itemId"
                         class="text-primary hover:underline"
-                        >{{ invitation.itemName }}</a
                       >
+                        {{ invitation.itemName }}
+                      </BaseAppLink>
                     </h4>
                     <span class="block mt-1 text-sm text-gray-500">{{ invitation.date }}</span>
                   </div>

@@ -70,12 +70,12 @@
 
       <Column :header="t('E-mail')">
         <template #body="slotProps">
-          <a
+          <BaseAppLink
             class="text-primary hover:underline"
-            :href="`mailto:${slotProps.data.email}`"
+            :url="`mailto:${slotProps.data.email}`"
           >
             {{ slotProps.data.email }}
-          </a>
+          </BaseAppLink>
         </template>
       </Column>
     </BaseTable>

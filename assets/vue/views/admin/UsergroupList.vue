@@ -259,12 +259,12 @@ onMounted(() => {
       />
       <Column :header="t('Users')">
         <template #body="{ data }">
-          <router-link
+          <BaseAppLink
             :to="{ name: 'AdminUsergroupUsers', params: { id: data.id } }"
             class="text-primary hover:underline"
           >
             {{ data.userCount }}
-          </router-link>
+          </BaseAppLink>
         </template>
       </Column>
       <Column

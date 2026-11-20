@@ -1626,8 +1626,15 @@ class learnpath
                     $autostart_audio = 'true';
             }
 
-            $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document'.$audio;
-            $url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$audio.'?'.api_get_cidreq();
+            // The audio is a document of the course: resolve it by its path (the old structure stored only the
+            // file name, kept in the "audio" folder) and use the URL of its resource file.
+            $audioDocument = $this->findAudioDocument($courseInfo, (string) $audio);
+            if (null === $audioDocument) {
+                return '';
+            }
+
+            $file = $audio;
+            $url = Container::getDocumentRepository()->getResourceFileUrl($audioDocument);
 
             $player = Display::getMediaPlayer(
                 $file,
@@ -1646,6 +1653,43 @@ class learnpath
         }
 
         return $output;
+    }
+
+    /**
+     * Finds the course document of an item audio by walking its path through the folders of the course
+     * (e.g. "/audio/file.mp3"); the old structure stored only the file name, kept in the "audio" folder.
+     */
+    private function findAudioDocument(array $courseInfo, string $audio): ?CDocument
+    {
+        $course = api_get_course_entity((int) $courseInfo['real_id']);
+        if (null === $course || !$course->hasResourceNode()) {
+            return null;
+        }
+        $session = api_get_session_entity(api_get_session_id());
+        $repo = Container::getDocumentRepository();
+
+        $candidates = [explode('/', trim($audio, '/'))];
+        if (!str_contains(trim($audio, '/'), '/')) {
+            $candidates[] = ['audio', trim($audio, '/')];
+        }
+
+        foreach ($candidates as $segments) {
+            $node = $course->getResourceNode();
+            $document = null;
+            foreach ($segments as $segment) {
+                $document = $repo->findCourseResourceByTitle($segment, $node, $course, $session);
+                if (!$document instanceof CDocument || !$document->hasResourceNode()) {
+                    $document = null;
+                    break;
+                }
+                $node = $document->getResourceNode();
+            }
+            if (null !== $document && $document->getResourceNode()->hasResourceFile()) {
+                return $document;
+            }
+        }
+
+        return null;
     }
 
     /**

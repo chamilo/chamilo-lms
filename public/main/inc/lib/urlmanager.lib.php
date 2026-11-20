@@ -1463,52 +1463,6 @@ class UrlManager
         return null === $row ? null : $row['id'];
     }
 
-    /**
-     * @param string $needle
-     *
-     * @return XajaxResponse
-     */
-    public static function searchCourseCategoryAjax($needle)
-    {
-        $response = new xajaxResponse();
-        $return = '';
-
-        if (!empty($needle)) {
-            // xajax send utf8 datas... datas in db can be non-utf8 datas
-            $charset = api_get_system_encoding();
-            $needle = api_convert_encoding($needle, $charset, 'utf-8');
-            $needle = Database::escape_string($needle);
-            // search courses where username or firstname or lastname begins likes $needle
-            $sql = 'SELECT id, u.title
-                    FROM '.Database::get_main_table(TABLE_MAIN_CATEGORY).' u
-                    WHERE
-                        u.title LIKE "'.$needle.'%" AND
-                        (parent_id IS NULL or parent_id = 0)
-                    ORDER BY u.title
-                    LIMIT 11';
-            $result = Database::query($sql);
-            $i = 0;
-            while ($data = Database::fetch_array($result)) {
-                $i++;
-                if ($i <= 10) {
-                    $return .= '<a
-                    href="javascript: void(0);"
-                    onclick="javascript: add_user_to_url(\''.addslashes($data['id']).'\',\''.addslashes($data['title']).' \')">'.$data['title'].' </a><br />';
-                } else {
-                    $return .= '...<br />';
-                }
-            }
-        }
-
-        $response->addAssign(
-            'ajax_list_courses',
-            'innerHTML',
-            api_utf8_encode($return)
-        );
-
-        return $response;
-    }
-
     public static function remove_courses_from_urls(array $courseCodes, array $urlIds): void
     {
         if (empty($courseCodes) || empty($urlIds)) {

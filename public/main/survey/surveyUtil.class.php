@@ -667,9 +667,16 @@ class SurveyUtil
 
         $list = self::buildCompleteReportXlsRows($survey, $user_id);
 
-        Export::arrayToXls($list, $filename);
+        if (!$returnFile) {
+            Export::arrayToXls($list, $filename);
 
-        return null;
+            return null;
+        }
+
+        // The file is written in the archive folder under the given name: keep the name from leaving it.
+        $safeName = preg_replace('/[^A-Za-z0-9._-]/', '_', basename(preg_replace('/\.xlsx$/', '', (string) $filename)));
+
+        return Export::arrayToXls($list, $safeName, true);
     }
 
     /**
@@ -833,6 +840,10 @@ class SurveyUtil
 
         $open_question_iterator = 1;
         foreach ($answerQb->getQuery()->getArrayResult() as $row) {
+            if (!isset($possible_answers_type[$row['question_id']])) {
+                // The question was left out by the question filter: its answers are not exported.
+                continue;
+            }
             if ($old_user != $row['user'] && '' != $old_user) {
                 $return = self::export_complete_report_row_xls(
                     $survey,

@@ -458,6 +458,46 @@ final class SurveyTier3CharacterizationTest extends KernelTestCase
         $this->assertCount(4, $rows);
     }
 
+    public function testXlsRowsIgnoreTheAnswersToQuestionsLeftOutByTheQuestionFilter(): void
+    {
+        $this->skipIfThePlatformHasExtraUserFields();
+        $s = $this->insertSurvey();
+        $kept = $this->insertQuestion($s, 'sv kept q', 'open', 1);
+        $left = $this->insertQuestion($s, 'sv left out q', 'open', 2);
+        $this->insertAnswer($s, $kept, '1', 'kept answer');
+        $this->insertAnswer($s, $left, '1', 'left out answer');
+        $this->insertAnswer($s, $left, '2', 'only a left out answer');
+
+        $_POST['submit_question_filter'] = '1';
+        $_POST['questions_filter'] = [$kept];
+
+        try {
+            $rows = $this->xlsRows($s);
+        } finally {
+            unset($_POST['submit_question_filter'], $_POST['questions_filter']);
+        }
+
+        $this->assertSame([1 => 'sv kept q'], $rows[1]);
+        // A user whose answers were all filtered out must not show up as an empty line.
+        $this->assertSame(['Joe Doe (admin)', 'kept answer'], $rows[3]);
+        $this->assertCount(3, $rows);
+    }
+
+    public function testXlsExportReturnsTheFileInsteadOfSendingItWhenAskedTo(): void
+    {
+        $this->skipIfThePlatformHasExtraUserFields();
+        $s = $this->insertSurvey();
+        $q = $this->insertQuestion($s, 'sv q', 'open', 1);
+        $this->insertAnswer($s, $q, '1', 'an answer');
+
+        $file = SurveyUtil::export_complete_report_xls($this->survey($s), 'sv_export_'.$s, 0, true);
+
+        $this->assertIsString($file);
+        $this->assertFileExists($file);
+        $this->assertStringEndsWith('sv_export_'.$s.'.xlsx', $file);
+        unlink($file);
+    }
+
     public function testXlsRowsOfAnAnonymousSurveyHideTheUser(): void
     {
         $this->skipIfThePlatformHasExtraUserFields();

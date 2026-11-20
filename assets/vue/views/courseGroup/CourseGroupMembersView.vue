@@ -7,7 +7,7 @@
           :route="detailRoute"
           icon="back"
           only-icon
-          type="black"
+          type="tertiary-alternative"
         />
       </template>
     </BaseToolbar>

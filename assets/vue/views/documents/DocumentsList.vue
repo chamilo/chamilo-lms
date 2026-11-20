@@ -9,7 +9,7 @@
       :route="gradebookReturnRoute"
       icon="back"
       only-icon
-      type="black-text"
+      type="tertiary-alternative-text"
     />
     <BaseButton
       v-if="showNewCertificateButton"
@@ -24,7 +24,7 @@
       :label="t('Upload')"
       icon="file-upload"
       only-icon
-      type="black"
+      type="tertiary-alternative"
       @click="goToUploadFile"
     />
     <BaseButton
@@ -42,7 +42,7 @@
       :label="t('Back')"
       icon="back"
       only-icon
-      type="black-text"
+      type="tertiary-alternative-text"
       @click="back"
     />
     <BaseButton
@@ -106,7 +106,7 @@
       :label="t('Slideshow')"
       icon="view-gallery"
       only-icon
-      type="black"
+      type="tertiary-alternative"
       @click="showSlideShowWithFirstImage"
     />
     <BaseButton
@@ -114,7 +114,7 @@
       :label="t('Usage')"
       icon="usage"
       only-icon
-      type="black"
+      type="tertiary-alternative"
       @click="showUsageDialog"
     />
     <BaseButton
@@ -131,7 +131,7 @@
       :label="t('Generate media')"
       icon="robot"
       only-icon
-      type="black"
+      type="tertiary-alternative"
       @click="goToGenerateMedia"
     />
   </SectionHeader>
@@ -337,7 +337,7 @@
               slotProps.data.iid === defaultCertificateId ? t('Default certificate') : t('Set as default certificate')
             "
             size="small"
-            type="slotProps.data.iid === defaultCertificateId ? 'success' : 'black'"
+            :type="slotProps.data.iid === defaultCertificateId ? 'success' : 'tertiary-alternative'"
             @click="selectAsDefaultCertificate(slotProps.data)"
           />
           <BaseButton

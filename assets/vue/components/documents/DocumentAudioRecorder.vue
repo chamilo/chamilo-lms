@@ -35,7 +35,7 @@
         :label="t('Start recording')"
         class="me-2"
         icon="restart"
-        type="black"
+        type="tertiary-alternative"
         @click="recordAudio"
       />
       <BaseButton

@@ -12,7 +12,7 @@
           @click="openCreate"
         />
         <BaseButton
-          type="black"
+          type="tertiary-alternative"
           icon="account-plus"
           :label="t('Assign task')"
           @click="showAssign = true"

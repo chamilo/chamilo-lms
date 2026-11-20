@@ -6,7 +6,7 @@
         icon="back"
         only-icon
         size="small"
-        type="black"
+        type="tertiary-alternative"
         @click="goBack"
       />
     </div>

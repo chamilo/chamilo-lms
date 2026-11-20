@@ -17,7 +17,7 @@
           :label="t('Back to survey list')"
           :route="buildListRoute()"
           icon="back"
-          type="black"
+          type="tertiary-alternative"
         />
         <BaseButton
           v-if="isLearningPathContext"
@@ -156,7 +156,7 @@
         <BaseButton
           :label="t('Cancel')"
           icon="close"
-          type="black"
+          type="tertiary-alternative"
           @click="cancelForm"
         />
       </div>
@@ -329,7 +329,7 @@
         <BaseButton
           :label="t('Cancel')"
           icon="close"
-          type="black"
+          type="tertiary-alternative"
           @click="cancelForm"
         />
         <BaseButton

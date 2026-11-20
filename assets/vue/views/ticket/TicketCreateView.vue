@@ -230,7 +230,7 @@
           icon="close"
           :label="t('Cancel')"
           :route="{ name: 'TicketList', query: listQuery }"
-          type="black"
+          type="tertiary-alternative"
         />
         <BaseButton
           icon="send"

@@ -328,7 +328,7 @@
             :disabled="isReviewFlagSaving"
             :label="t('Select all')"
             icon="checkbox-marked-outline"
-            type="black"
+            type="tertiary-alternative"
             @click="setAllReviewQuestions(true)"
           />
           <BaseButton
@@ -336,7 +336,7 @@
             :disabled="isReviewFlagSaving"
             :label="t('Unselect all')"
             icon="checkbox-blank-outline"
-            type="black"
+            type="tertiary-alternative"
             @click="setAllReviewQuestions(false)"
           />
           <BaseButton
@@ -1690,7 +1690,7 @@
               query: getContextParams(),
             }"
             icon="format-list-bulleted"
-            type="black"
+            type="tertiary-alternative"
           />
         </div>
       </section>
@@ -1728,7 +1728,7 @@
           <BaseButton
             :disabled="isSubmittingQuestionFeedbackReport"
             :label="t('Cancel')"
-            type="black"
+            type="tertiary-alternative"
             @click="closeQuestionFeedbackReport"
           />
           <BaseButton
@@ -1864,7 +1864,7 @@
             :disabled="isCategoryReminderProceeding"
             :label="t('Go back')"
             icon="back"
-            type="black"
+            type="tertiary-alternative"
             @click="closeCategoryReminder"
           />
           <BaseButton
@@ -1880,7 +1880,7 @@
             :disabled="isCategoryReminderProceeding"
             :label="t('Select all')"
             icon="checkbox-marked-outline"
-            type="black"
+            type="tertiary-alternative"
             @click="setCategoryReminderQuestions(true)"
           />
           <BaseButton
@@ -1888,7 +1888,7 @@
             :disabled="isCategoryReminderProceeding"
             :label="t('Unselect all')"
             icon="checkbox-blank-outline"
-            type="black"
+            type="tertiary-alternative"
             @click="setCategoryReminderQuestions(false)"
           />
           <BaseButton
@@ -1920,7 +1920,7 @@
       <template #footer>
         <BaseButton
           :label="t('Close')"
-          type="black"
+          type="tertiary-alternative"
           @click="isZoomDialogVisible = false"
         />
       </template>

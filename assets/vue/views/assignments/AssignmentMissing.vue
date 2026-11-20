@@ -6,7 +6,7 @@
         icon="back"
         only-icon
         size="small"
-        type="black"
+        type="tertiary-alternative"
         @click="goBack"
       />
       <BaseButton
@@ -14,7 +14,7 @@
         icon="email-unread"
         only-icon
         size="small"
-        type="black"
+        type="tertiary-alternative"
         :disabled="loading || sending || !users.length"
         :is-loading="sending"
         @click="sendEmailToAll"

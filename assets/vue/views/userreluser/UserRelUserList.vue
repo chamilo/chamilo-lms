@@ -17,7 +17,7 @@
       :disabled="loadingFriends"
       :label="t('Refresh')"
       icon="refresh"
-      type="black"
+      type="tertiary-alternative"
       @click="refreshHandler"
     />
   </BaseToolbar>

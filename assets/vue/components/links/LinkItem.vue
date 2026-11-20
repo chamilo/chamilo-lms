@@ -80,7 +80,7 @@
         icon="check"
         only-icon
         size="small"
-        type="black"
+        type="tertiary-alternative"
         @click="emit('check', link)"
       />
       <BaseButton
@@ -88,7 +88,7 @@
         icon="edit"
         only-icon
         size="small"
-        type="black"
+        type="tertiary-alternative"
         @click="emit('edit', link)"
       />
       <BaseButton
@@ -96,7 +96,7 @@
         :label="t('Toggle visibility')"
         only-icon
         size="small"
-        type="black"
+        type="tertiary-alternative"
         @click="emit('toggle', link)"
       />
       <BaseButton

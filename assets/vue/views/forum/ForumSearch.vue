@@ -9,7 +9,7 @@
         icon="back"
         only-icon
         size="small"
-        type="black"
+        type="tertiary-alternative"
       />
     </BaseToolbar>
 

@@ -143,7 +143,7 @@
       <BaseButton
         :label="t('Clear search')"
         icon="close"
-        type="black"
+        type="tertiary-alternative"
         @click="clearSearch"
       />
     </form>

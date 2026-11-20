@@ -20,7 +20,7 @@
       <BaseButton
         :label="t('Export to PDF')"
         icon="file-pdf"
-        type="black"
+        type="tertiary-alternative"
         @click="exportToPDF"
       />
       <BaseButton
@@ -183,7 +183,7 @@
                     :label="t('Change visibility')"
                     only-icon
                     size="small"
-                    type="black"
+                    type="tertiary-alternative"
                     @click="toggleCategoryVisibility(category)"
                   />
                   <BaseButton
@@ -283,7 +283,7 @@
                     icon="edit"
                     only-icon
                     size="small"
-                    type="black"
+                    type="tertiary-alternative"
                     @click="editCategory(category)"
                   />
                   <BaseButton
@@ -291,7 +291,7 @@
                     :label="t('Change visibility')"
                     only-icon
                     size="small"
-                    type="black"
+                    type="tertiary-alternative"
                     @click="toggleCategoryVisibility(category)"
                   />
                   <BaseButton

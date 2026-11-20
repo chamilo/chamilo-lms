@@ -113,7 +113,7 @@
             :label="t('Requirements')"
             icon="shield-check"
             onlyIcon
-            type="black"
+            type="tertiary-alternative"
             class="shrink-0"
             @click="openRequirementsModal"
           />
@@ -366,7 +366,7 @@
               :label="t('Close')"
               icon="close"
               size="small"
-              type="black"
+              type="tertiary-alternative"
               @click.stop="closeNotifications"
             />
             <BaseButton

@@ -7,7 +7,7 @@
         :label="t('Back')"
         icon="back"
         only-icon
-        type="black"
+        type="tertiary-alternative"
         @click="goBack"
       />
     </BaseToolbar>

@@ -387,7 +387,7 @@ onMounted(loadTree)
           :route="{ name: 'SupportBotTreeList' }"
           icon="back"
           only-icon
-          type="black-text"
+          type="tertiary-alternative-text"
         />
         <BaseButton
           v-if="form.editable"

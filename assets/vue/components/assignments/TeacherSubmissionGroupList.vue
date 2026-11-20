@@ -61,7 +61,7 @@
           icon="close"
           only-icon
           size="small"
-          type="black"
+          type="tertiary-alternative"
           @click="selectedStudent = null"
         />
       </div>

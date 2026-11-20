@@ -92,13 +92,13 @@
         <div class="flex flex-wrap gap-2">
           <BaseButton
             :label="t('Test from topic')"
-            :type="activeTab === 'topic' ? 'primary' : 'black'"
+            :type="activeTab === 'topic' ? 'primary' : 'tertiary-alternative'"
             @click="activeTab = 'topic'"
           />
           <BaseButton
             v-if="hasDocumentTab"
             :label="t('Test from document')"
-            :type="activeTab === 'document' ? 'primary' : 'black'"
+            :type="activeTab === 'document' ? 'primary' : 'tertiary-alternative'"
             @click="activeTab = 'document'"
           />
         </div>
@@ -356,7 +356,7 @@
           <BaseButton
             :label="t('Clear')"
             icon="close"
-            type="black"
+            type="tertiary-alternative"
             @click="clearGeneratedContent"
           />
           <BaseButton

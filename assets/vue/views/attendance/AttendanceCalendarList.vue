@@ -9,7 +9,7 @@
         :label="t('Back to attendance sheet')"
         icon="back"
         only-icon
-        type="black-text"
+        type="tertiary-alternative-text"
         @click="redirectToAttendanceSheet"
       />
       <BaseButton

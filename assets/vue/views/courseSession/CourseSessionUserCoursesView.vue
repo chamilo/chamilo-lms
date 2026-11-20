@@ -82,7 +82,7 @@
           :label="t('Cancel')"
           :route="buildOverviewRoute()"
           icon="close"
-          type="black"
+          type="tertiary-alternative"
         />
         <BaseButton
           :disabled="courses.length === 0"

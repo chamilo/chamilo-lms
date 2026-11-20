@@ -110,7 +110,7 @@ const emit = defineEmits(["searchProfile"])
           :label="t('Search')"
           icon="search"
           only-icon
-          type="black"
+          type="tertiary-alternative"
           @click="emit('searchProfile', profile)"
         />
         <BaseButton

@@ -62,7 +62,7 @@
         <template #footer>
           <BaseButton
             :label="t('Cancel')"
-            type="black"
+            type="tertiary-alternative"
             @click="graphDialogVisible = false"
           />
           <BaseButton

@@ -106,7 +106,7 @@
           icon="back"
           is-submit
           name="step4"
-          type="black"
+          type="tertiary-alternative"
         />
         <input
           id="is_executable"

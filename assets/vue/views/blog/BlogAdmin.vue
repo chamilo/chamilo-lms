@@ -95,7 +95,7 @@
             :icon="proj.visible ? 'eye-on' : 'eye-off'"
             :label="proj.visible ? t('Hide') : t('Show')"
             only-icon
-            type="black"
+            type="tertiary-alternative"
             @click="toggleVisibility(proj)"
           />
 

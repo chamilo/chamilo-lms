@@ -15,7 +15,7 @@
         <BaseButton
           :label="t('Advanced search')"
           icon="filter"
-          type="black"
+          type="tertiary-alternative"
           @click="showAdvancedSearch = !showAdvancedSearch"
         />
 

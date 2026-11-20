@@ -174,7 +174,7 @@
           icon="back"
           is-submit
           name="step2"
-          type="black"
+          type="tertiary-alternative"
         />
       </div>
       <BaseButton

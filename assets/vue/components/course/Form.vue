@@ -240,7 +240,7 @@
       <BaseButton
         :label="t('Back')"
         icon="back"
-        type="black"
+        type="tertiary-alternative"
         @click="goBack"
       />
       <BaseButton

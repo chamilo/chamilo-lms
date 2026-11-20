@@ -160,7 +160,7 @@ onMounted(() => {
       <BaseButton
         :label="t('Back')"
         icon="back"
-        type="black"
+        type="tertiary-alternative"
         :route="{ name: 'AccessUrlManage' }"
       />
     </SectionHeader>

@@ -12,7 +12,7 @@
           :label="t('Back to surveys')"
           :route="buildListRoute()"
           icon="back"
-          type="black"
+          type="tertiary-alternative"
         />
         <BaseButton
           :label="t('Preview')"
@@ -63,13 +63,13 @@
                 <BaseButton
                   :label="t('Select all')"
                   size="small"
-                  type="black"
+                  type="tertiary-alternative"
                   @click="selectAllUsers"
                 />
                 <BaseButton
                   :label="t('Clear')"
                   size="small"
-                  type="black"
+                  type="tertiary-alternative"
                   @click="selectedUserIds = []"
                 />
               </div>
@@ -113,7 +113,7 @@
               <BaseButton
                 :label="t('Clear')"
                 size="small"
-                type="black"
+                type="tertiary-alternative"
                 @click="selectedGroupIds = []"
               />
             </div>
@@ -262,20 +262,20 @@
         <div class="flex flex-wrap gap-2">
           <BaseButton
             :label="t('Invited')"
-            :type="activeTab === 'invited' ? 'primary' : 'black'"
+            :type="activeTab === 'invited' ? 'primary' : 'tertiary-alternative'"
             size="small"
             @click="activeTab = 'invited'"
           />
           <BaseButton
             v-if="canShowAnsweredDetails"
             :label="t('Answered')"
-            :type="activeTab === 'answered' ? 'primary' : 'black'"
+            :type="activeTab === 'answered' ? 'primary' : 'tertiary-alternative'"
             size="small"
             @click="activeTab = 'answered'"
           />
           <BaseButton
             :label="t('Pending')"
-            :type="activeTab === 'pending' ? 'primary' : 'black'"
+            :type="activeTab === 'pending' ? 'primary' : 'tertiary-alternative'"
             size="small"
             @click="activeTab = 'pending'"
           />

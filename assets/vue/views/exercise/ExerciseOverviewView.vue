@@ -11,7 +11,7 @@
           icon="back"
           only-icon
           size="small"
-          type="black-text"
+          type="tertiary-alternative-text"
         />
         <BaseButton
           v-if="overview.canManage"
@@ -149,7 +149,7 @@
                 :label="t('No')"
                 icon="close"
                 size="normal"
-                type="black"
+                type="tertiary-alternative"
                 @click="saveUserIdentifier(USER_IDENTIFIER_OPT_OUT_VALUE)"
               />
             </div>
@@ -287,7 +287,7 @@
                   }"
                   icon="information"
                   size="small"
-                  type="black"
+                  type="tertiary-alternative"
                 />
                 <span
                   v-if="data.showValidationStatus"

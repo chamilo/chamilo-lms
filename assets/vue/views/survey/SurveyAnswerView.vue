@@ -19,7 +19,7 @@
           :label="t('Back to survey list')"
           :route="buildListRoute()"
           icon="back"
-          type="black"
+          type="tertiary-alternative"
         />
         <BaseButton
           v-if="previewMode"
@@ -434,7 +434,7 @@
           v-if="canGoBack"
           :label="t('Previous')"
           icon="back"
-          type="black"
+          type="tertiary-alternative"
           @click="goToPreviousPage"
         />
         <span v-else />

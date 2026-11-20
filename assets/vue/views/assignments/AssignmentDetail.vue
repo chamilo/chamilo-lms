@@ -20,7 +20,7 @@
           icon="back"
           only-icon
           size="small"
-          type="black"
+          type="tertiary-alternative"
           @click="goBack"
         />
         <template v-if="forceStudentView && !isAfterEndDate && canSubmitMore">
@@ -61,7 +61,7 @@
             :label="following ? t('Following') : t('Follow')"
             :title="t('Get an e-mail when a learner comments on a submission of this assignment')"
             :icon="following ? 'bell' : 'bell-off-outline'"
-            :type="following ? 'primary' : 'black'"
+            :type="following ? 'primary' : 'tertiary-alternative'"
             size="small"
             data-testid="assignment-follow-toggle"
             :is-loading="followBusy"
@@ -88,7 +88,7 @@
             icon="file-pdf"
             only-icon
             size="small"
-            type="black"
+            type="tertiary-alternative"
             @click="exportPdf"
           />
           <BaseButton
@@ -96,7 +96,7 @@
             icon="edit"
             only-icon
             size="small"
-            type="black"
+            type="tertiary-alternative"
             @click="editAssignment"
           />
           <BaseButton
@@ -104,7 +104,7 @@
             icon="list"
             only-icon
             size="small"
-            type="black"
+            type="tertiary-alternative"
             @click="showUnsubmittedUsers"
           />
           <BaseButton

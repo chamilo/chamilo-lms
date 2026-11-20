@@ -35,7 +35,7 @@
         <BaseButton
           :label="t('Cancel')"
           icon="close"
-          type="black"
+          type="tertiary-alternative"
           @click="dialog = false"
         />
         <BaseButton
@@ -60,7 +60,7 @@
         <BaseButton
           :label="t('Cancel')"
           icon="close"
-          type="black"
+          type="tertiary-alternative"
           @click="dialogShow = false"
         />
 
@@ -68,14 +68,14 @@
           v-if="allowToUnsubscribe"
           :label="t('Unsubscribe')"
           icon="join-group"
-          type="black"
+          type="tertiary-alternative"
           @click="unsubscribeToEvent"
         />
         <BaseButton
           v-else-if="allowToSubscribe"
           :label="t('Subscribe')"
           icon="join-group"
-          type="black"
+          type="tertiary-alternative"
           @click="subscribeToEvent"
         />
 

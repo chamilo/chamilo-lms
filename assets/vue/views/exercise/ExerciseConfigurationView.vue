@@ -875,7 +875,7 @@
               : { name: 'ExerciseList', params: route.params, query: getContextParams() }
           "
           icon="close"
-          type="black"
+          type="tertiary-alternative"
         />
         <BaseButton
           :is-loading="isSaving"

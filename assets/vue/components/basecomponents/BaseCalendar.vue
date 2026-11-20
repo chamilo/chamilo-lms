@@ -263,7 +263,7 @@ const onCancelClick = () => {
               :label="t('Cancel')"
               icon="close"
               size="small"
-              type="black"
+              type="tertiary-alternative"
               @click="onCancelClick"
             />
             <BaseButton

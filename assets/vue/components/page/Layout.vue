@@ -5,7 +5,7 @@
       icon="dots-vertical"
       only-icon
       popup-identifier="page-menu"
-      type="black"
+      type="tertiary-alternative"
       @click="toggleMenu"
     />
 

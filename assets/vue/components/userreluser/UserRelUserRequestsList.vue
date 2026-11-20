@@ -52,7 +52,7 @@
         :label="t('Accept invitation')"
         icon="user-add"
         only-icon
-        type="black"
+        type="tertiary-alternative"
         @click="acceptFriendRequest(request)"
       />
       <BaseButton

@@ -43,7 +43,7 @@ const props = defineProps({
   },
   closeType: {
     type: String,
-    default: "black",
+    default: "tertiary-alternative",
     validator: buttonTypeValidator,
   },
   showHeaderCloseButton: {

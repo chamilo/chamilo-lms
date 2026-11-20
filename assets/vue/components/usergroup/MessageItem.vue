@@ -43,7 +43,7 @@
           icon="reply"
           only-icon
           size="small"
-          type="black"
+          type="tertiary-alternative"
           @click="$emit('replyMessage', message)"
         />
         <BaseButton
@@ -52,7 +52,7 @@
           icon="edit"
           only-icon
           size="small"
-          type="black"
+          type="tertiary-alternative"
           @click="$emit('editMessage', message)"
         />
         <BaseButton

@@ -11,7 +11,7 @@
           :label="t('Exit tablet mode')"
           :title="t('Go back to standard view')"
           icon="back"
-          type="black"
+          type="tertiary-alternative"
           @click="goBack"
         />
         <Skeleton
@@ -192,7 +192,7 @@
           v-if="canEdit && !isLocked"
           :label="t('Clear')"
           icon="clear-all"
-          type="black"
+          type="tertiary-alternative"
           @click="clearSignature"
         />
         <BaseButton

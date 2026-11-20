@@ -26,7 +26,7 @@
             :label="t('Back to survey list')"
             :route="buildListRoute()"
             icon="back"
-            type="black"
+            type="tertiary-alternative"
           />
           <BaseButton
             v-if="isEditMode"
@@ -420,7 +420,7 @@
           v-if="isLearningPathContext"
           :label="t('Cancel')"
           icon="close"
-          type="black"
+          type="tertiary-alternative"
           @click="goToLearningPathAddItem"
         />
         <BaseButton
@@ -428,7 +428,7 @@
           :label="t('Cancel')"
           :route="buildListRoute()"
           icon="close"
-          type="black"
+          type="tertiary-alternative"
         />
         <BaseButton
           :is-loading="isSaving"

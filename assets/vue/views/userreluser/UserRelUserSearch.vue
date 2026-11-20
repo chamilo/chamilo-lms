@@ -9,7 +9,7 @@
       <BaseButton
         :label="t('Go to friends list')"
         icon="back"
-        type="black"
+        type="tertiary-alternative"
         @click="goToBack"
       />
     </BaseToolbar>

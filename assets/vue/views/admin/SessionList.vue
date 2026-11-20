@@ -244,7 +244,7 @@
       <BaseButton
         :label="t('Refresh')"
         icon="refresh"
-        type="black"
+        type="tertiary-alternative"
         size="small"
         @click="load"
       />

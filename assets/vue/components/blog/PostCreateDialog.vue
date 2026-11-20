@@ -32,7 +32,7 @@
       >
         <p class="text-sm text-gray-600">{{ t('Drag & drop files here or click to select') }}</p>
         <input ref="fileInput" type="file" class="hidden" multiple @change="onPick" />
-        <BaseButton type="black" icon="paperclip" :label="t('Choose file')" @click="$refs.fileInput.click()" />
+        <BaseButton type="tertiary-alternative" icon="paperclip" :label="t('Choose file')" @click="$refs.fileInput.click()" />
       </div>
 
       <ul v-if="showFilesComputed && files.length" class="text-sm list-disc ps-5">

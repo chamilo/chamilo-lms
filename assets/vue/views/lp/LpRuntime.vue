@@ -29,7 +29,7 @@
       <BaseButton
         :label="t('Back to learning paths')"
         :route="{ name: 'LpList', query: route.query }"
-        type="black"
+        type="tertiary-alternative"
       />
     </div>
 
@@ -40,7 +40,7 @@
         :disabled="isReturningToCStudio"
         :label="t('Back')"
         icon="arrow-left"
-        type="black"
+        type="tertiary-alternative"
         @click="returnToCStudio"
       />
 
@@ -457,7 +457,7 @@
               />
               <BaseButton
                 :label="t('Close')"
-                type="black"
+                type="tertiary-alternative"
                 @click="hideVideoNextOverlay"
               />
             </div>

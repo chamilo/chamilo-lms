@@ -119,7 +119,7 @@
             v-for="item in reportTypes"
             :key="item.key"
             :label="t(item.label)"
-            :type="activeReport === item.key ? 'primary' : 'black'"
+            :type="activeReport === item.key ? 'primary' : 'tertiary-alternative'"
             @click="activeReport = item.key"
           />
         </div>

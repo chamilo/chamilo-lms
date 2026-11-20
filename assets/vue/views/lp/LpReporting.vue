@@ -489,7 +489,7 @@ onMounted(() => loadReporting(selectedStudentId.value))
           icon="back"
           only-icon
           size="small"
-          type="black-text"
+          type="tertiary-alternative-text"
           @click="goBack"
         />
         <BaseButton
@@ -777,7 +777,7 @@ onMounted(() => loadReporting(selectedStudentId.value))
             icon="close"
             only-icon
             size="small"
-            type="black"
+            type="tertiary-alternative"
             @click="closeLearnerDetail"
           />
         </div>

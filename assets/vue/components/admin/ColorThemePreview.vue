@@ -376,7 +376,7 @@ provide("isCustomizing", isCustomizing)
       <BaseButton
         :label="t('Show dialog')"
         icon="eye-on"
-        type="black"
+        type="tertiary-alternative"
         @click="isDialogVisible = true"
       />
       <BaseDialogConfirmCancel

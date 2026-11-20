@@ -8,7 +8,7 @@
         :label="t('Go back')"
         icon="back"
         only-icon
-        type="black-text"
+        type="tertiary-alternative-text"
         @click="redirectToAttendanceList"
       />
       <template v-if="isTeacherUI">
@@ -553,7 +553,7 @@
         <BaseButton
           :label="t('Clear')"
           icon="clear-all"
-          type="black"
+          type="tertiary-alternative"
           @click="clearSignature"
         />
         <BaseButton

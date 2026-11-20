@@ -8,7 +8,7 @@
             :label="t('Up')"
             icon="arrow-up"
             only-icon
-            type="black"
+            type="tertiary-alternative"
             @click="goRoot"
           />
           <BaseButton
@@ -42,7 +42,7 @@
       </div>
       <BaseButton
         icon="download"
-        type="black"
+        type="tertiary-alternative"
         :label="t('Download as ZIP')"
         @click="downloadCategoryZip(categoryId)"
       />

@@ -295,7 +295,7 @@
           icon="back"
           is-submit
           name="step3"
-          type="black"
+          type="tertiary-alternative"
         />
       </div>
 

@@ -96,7 +96,7 @@
         <BaseButton
           :label="t('Clear search')"
           icon="close"
-          type="black"
+          type="tertiary-alternative"
           @click="clearFilters"
         />
       </div>

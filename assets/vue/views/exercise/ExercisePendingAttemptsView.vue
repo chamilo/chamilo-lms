@@ -11,7 +11,7 @@
         :route="{ name: 'MyCourses' }"
         icon="back"
         only-icon
-        type="black-text"
+        type="tertiary-alternative-text"
       />
       <BaseButton
         v-if="actionUrls.exportCsv"
@@ -100,7 +100,7 @@
           <BaseButton
             :label="t('Reset')"
             icon="close"
-            type="black"
+            type="tertiary-alternative"
             @click="resetFilters"
           />
           <BaseButton

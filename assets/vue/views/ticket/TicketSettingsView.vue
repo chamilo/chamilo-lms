@@ -39,7 +39,7 @@
         :key="sectionOption.value"
         :id="`ticket-settings-section-${sectionOption.value}`"
         :label="sectionOption.label"
-        :type="section === sectionOption.value ? 'primary' : 'black'"
+        :type="section === sectionOption.value ? 'primary' : 'tertiary-alternative'"
         @click="changeSection(sectionOption.value)"
       />
     </div>
@@ -192,7 +192,7 @@
         <BaseButton
           icon="close"
           :label="t('Cancel')"
-          type="black"
+          type="tertiary-alternative"
           @click="isEditDialogVisible = false"
         />
         <BaseButton
@@ -223,7 +223,7 @@
         <BaseButton
           icon="close"
           :label="t('Cancel')"
-          type="black"
+          type="tertiary-alternative"
           @click="isUsersDialogVisible = false"
         />
         <BaseButton

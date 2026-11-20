@@ -120,7 +120,7 @@
           </div>
 
           <div class="mt-3 flex justify-end">
-            <BaseButton type="black" icon="close" :label="t('Close')" @click="closePicker" />
+            <BaseButton type="tertiary-alternative" icon="close" :label="t('Close')" @click="closePicker" />
           </div>
         </div>
       </div>

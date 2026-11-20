@@ -94,7 +94,7 @@
           v-else
           icon="close"
           :label="t('Cancel')"
-          type="black"
+          type="tertiary-alternative"
           @click="toggleSearch"
         />
       </div>

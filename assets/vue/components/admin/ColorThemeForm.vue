@@ -390,7 +390,7 @@ watch(colorDanger, (nv) => {
     <BaseButton
       :label="isAdvancedMode ? t('Hide advanced mode') : t('Show advanced mode')"
       icon="cog"
-      type="black"
+      type="tertiary-alternative"
       @click="isAdvancedMode = !isAdvancedMode"
     />
   </SectionHeader>

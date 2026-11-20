@@ -247,7 +247,7 @@
             icon="back"
             is-submit
             name="step1"
-            type="black"
+            type="tertiary-alternative"
           />
         </div>
         <BaseButton
@@ -332,7 +332,7 @@
             :label="t('Previous')"
             icon="back"
             name="step1"
-            type="black"
+            type="tertiary-alternative"
             @click.prevent="goToIndex"
           />
         </div>

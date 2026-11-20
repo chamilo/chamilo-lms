@@ -261,7 +261,7 @@
         <BaseButton
           icon="back"
           :label="t('Cancel')"
-          type="black"
+          type="tertiary-alternative"
           :route="listRoute"
         />
         <BaseButton

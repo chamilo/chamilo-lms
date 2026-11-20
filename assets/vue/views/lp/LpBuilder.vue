@@ -748,7 +748,7 @@ function goBack() {
         :label="t('Back')"
         icon="back"
         only-icon
-        type="black-text"
+        type="tertiary-alternative-text"
         @click="goBack"
       />
       <BaseButton
@@ -966,12 +966,20 @@ function goBack() {
               <div class="flex flex-wrap gap-2 border-b border-gray-20 pb-3">
                 <BaseButton
                   :label="t('Files')"
-                  :type="activeDocumentAction === 'list' && activeDocumentTab === 'files' ? 'primary' : 'black'"
+                  :type="
+                    activeDocumentAction === 'list' && activeDocumentTab === 'files'
+                      ? 'primary'
+                      : 'tertiary-alternative'
+                  "
                   @click="selectDocumentList('files')"
                 />
                 <BaseButton
                   :label="t('Videos')"
-                  :type="activeDocumentAction === 'list' && activeDocumentTab === 'videos' ? 'primary' : 'black'"
+                  :type="
+                    activeDocumentAction === 'list' && activeDocumentTab === 'videos'
+                      ? 'primary'
+                      : 'tertiary-alternative'
+                  "
                   @click="selectDocumentList('videos')"
                 />
                 <BaseButton

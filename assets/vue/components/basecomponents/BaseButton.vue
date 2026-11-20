@@ -135,7 +135,7 @@ const props = defineProps({
 defineEmits(["click"])
 
 const primeSeverityProperty = computed(() => {
-  let type = props.type.replace("-text", "")
+  const type = props.type.replace("-text", "")
 
   if (["primary", "secondary", "success", "danger", "info"].includes(type)) {
     return type
@@ -143,10 +143,6 @@ const primeSeverityProperty = computed(() => {
 
   if ("warning" === type) {
     return "warn"
-  }
-
-  if ("black" === type) {
-    type = "tertiary-alternative"
   }
 
   if ("tertiary-alternative" === type) {
@@ -168,7 +164,6 @@ const primerVariantProperty = computed(() => {
   switch (props.type) {
     case "primary-alternative":
     case "tertiary-alternative":
-    case "black":
       return "outlined"
     default:
       return undefined

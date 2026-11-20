@@ -106,6 +106,18 @@ if (isset($_REQUEST['c']) && '' !== trim((string) $_REQUEST['c'])) {
     }
 }
 
+if (is_array($coupon) && !empty($coupon['restricted_sale_id'])) {
+    $kind = (string) ($coupon['restricted_sale_kind'] ?? 'sale');
+    header(
+        'Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/purchase_reminder_link.php?'.http_build_query([
+            'k' => $kind,
+            's' => (int) $coupon['restricted_sale_id'],
+            'c' => (int) $coupon['id'],
+        ])
+    );
+    exit;
+}
+
 if (empty($currentUserId)) {
     $currentPath = $normalizeRelativePath(
         (string) ($_SERVER['REQUEST_URI'] ?? (api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/process.php?'.$queryString))

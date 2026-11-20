@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\BuyCoursesExpiryHelper;
+use Chamilo\CoreBundle\Helpers\BuyCoursesPurchaseReminderHelper;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Expr\Join;
@@ -40,6 +41,8 @@ class BuyCoursesPlugin extends Plugin
     private string $lastServiceSaleError = '';
     private bool $lastServiceSaleWasReused = false;
     private bool $stripeInvoiceReadPermissionDenied = false;
+
+    private ?string $translationLanguageOverride = null;
 
     public const TABLE_PAYPAL = 'plugin_buycourses_paypal_account';
     public const TABLE_CURRENCY = 'plugin_buycourses_currency';
@@ -71,6 +74,9 @@ class BuyCoursesPlugin extends Plugin
     public const TABLE_STRIPE = 'plugin_buycourses_stripe_account';
     public const TABLE_BTCPAY = 'plugin_buycourses_btcpay_account';
     public const TABLE_TPV_CECABANK = 'plugin_buycourses_cecabank_account';
+    public const TABLE_REMINDER = 'plugin_buycourses_reminder';
+    public const TABLE_REMINDER_ITEM = 'plugin_buycourses_reminder_rel_item';
+    public const TABLE_REMINDER_SENT = 'plugin_buycourses_reminder_sent';
     public const PRODUCT_TYPE_COURSE = 1;
     public const PRODUCT_TYPE_SESSION = 2;
     public const PRODUCT_TYPE_SERVICE = 3;
@@ -165,7 +171,7 @@ class BuyCoursesPlugin extends Plugin
     public function __construct()
     {
         parent::__construct(
-            '7.5',
+            '7.6',
             '
                 Jose Angel Ruiz - NoSoloRed (original author) <br/>
                 Francis Gonzales and Yannick Warnier - BeezNest (integration) <br/>
@@ -194,6 +200,7 @@ class BuyCoursesPlugin extends Plugin
                 'stripe_enable' => 'boolean',
                 'btcpay_enable' => 'boolean',
                 'cecabank_enable' => 'boolean',
+                'purchase_reminders_enable' => 'boolean',
             ]
         );
     }
@@ -207,6 +214,10 @@ class BuyCoursesPlugin extends Plugin
 
     private function getCurrentLanguageIsoCode(): string
     {
+        if (null !== $this->translationLanguageOverride && '' !== $this->translationLanguageOverride) {
+            return $this->translationLanguageOverride;
+        }
+
         $language = '';
         $userInfo = api_get_user_info();
 
@@ -233,7 +244,22 @@ class BuyCoursesPlugin extends Plugin
         return $this->normalizeServiceTranslationLanguageCode($language) ?: 'en_US';
     }
 
-    public function filterServiceMultilingualHtml(string $html): string
+    public function filterServiceMultilingualHtml(string $html, ?string $preferredLanguage = null): string
+    {
+        $previousLanguageOverride = $this->translationLanguageOverride;
+        if (null !== $preferredLanguage && '' !== trim($preferredLanguage)) {
+            $normalized = $this->normalizeServiceTranslationLanguageCode($preferredLanguage);
+            $this->translationLanguageOverride = '' !== $normalized ? $normalized : $preferredLanguage;
+        }
+
+        try {
+            return $this->doFilterServiceMultilingualHtml($html);
+        } finally {
+            $this->translationLanguageOverride = $previousLanguageOverride;
+        }
+    }
+
+    private function doFilterServiceMultilingualHtml(string $html): string
     {
         if ('' === trim($html) || 'true' !== api_get_setting('editor.translate_html')) {
             return $html;
@@ -487,6 +513,9 @@ class BuyCoursesPlugin extends Plugin
             self::TABLE_STRIPE,
             self::TABLE_BTCPAY,
             self::TABLE_TPV_CECABANK,
+            self::TABLE_REMINDER,
+            self::TABLE_REMINDER_ITEM,
+            self::TABLE_REMINDER_SENT,
         ];
     }
 
@@ -1081,6 +1110,7 @@ class BuyCoursesPlugin extends Plugin
         Database::query($sql);
 
         $this->ensureAuditTable();
+        $this->ensurePurchaseReminderInfrastructure();
 
         Display::addFlash(
             Display::return_message(
@@ -9629,7 +9659,9 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getCoupon(int $couponId, int $productType, int $productId, bool $checkUsageLimit = false)
     {
-        return $this->getDataCoupon($couponId, $productType, $productId, $checkUsageLimit);
+        return $this->rejectRestrictedCouponForCurrentUser(
+            $this->getDataCoupon($couponId, $productType, $productId, $checkUsageLimit)
+        );
     }
 
     /**
@@ -9643,7 +9675,12 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getCouponByCode(string $couponCode, ?int $productType = null, ?int $productId = null)
     {
-        return $this->getDataCouponByCode($couponCode, $productType, $productId);
+        $coupon = $this->getDataCouponByCode($couponCode, $productType, $productId);
+        if (null === $productType || null === $productId) {
+            return is_array($coupon) ? $coupon : [];
+        }
+
+        return $this->rejectRestrictedCouponForCurrentUser($coupon);
     }
 
     /**
@@ -9656,7 +9693,9 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getCouponService(int $couponId, int $serviceId, bool $checkUsageLimit = false)
     {
-        return $this->getDataCouponService($couponId, $serviceId, $checkUsageLimit);
+        return $this->rejectRestrictedCouponForCurrentUser(
+            $this->getDataCouponService($couponId, $serviceId, $checkUsageLimit)
+        );
     }
 
     /**
@@ -9669,7 +9708,9 @@ class BuyCoursesPlugin extends Plugin
      */
     public function getCouponServiceByCode(string $couponCode, int $serviceId)
     {
-        return $this->getDataCouponServiceByCode($couponCode, $serviceId);
+        return $this->rejectRestrictedCouponForCurrentUser(
+            $this->getDataCouponServiceByCode($couponCode, $serviceId)
+        );
     }
 
     public function getServiceSaleCouponUsage(int $serviceSaleId): array
@@ -13711,4 +13752,143 @@ class BuyCoursesPlugin extends Plugin
             && function_exists('api_is_platform_admin_by_id')
             && api_is_platform_admin_by_id($userId);
     }
+    public function getPurchaseReminderHelper(): BuyCoursesPurchaseReminderHelper
+    {
+        return Container::$container->get(BuyCoursesPurchaseReminderHelper::class);
+    }
+
+    public function performActionsAfterConfigure()
+    {
+        if (true === $this->get('purchase_reminders_enable') || 'true' === $this->get('purchase_reminders_enable')) {
+            $this->ensurePurchaseReminderInfrastructure();
+            $this->getPurchaseReminderHelper()->rememberActivationTimestamp();
+        }
+
+        return $this;
+    }
+
+    public function getSettingsForm()
+    {
+        $form = parent::getSettingsForm();
+        if ($this->getPurchaseReminderHelper()->cronIsStale()) {
+            $form->addHtml(
+                Display::return_message(
+                    sprintf(
+                        $this->get_lang('PurchaseRemindersCronMissing'),
+                        'php bin/console buycourses:send-purchase-reminders'
+                    ),
+                    'warning',
+                    false
+                )
+            );
+        }
+
+        return $form;
+    }
+
+    public function ensurePurchaseReminderInfrastructure(): void
+    {
+        $reminderTable = Database::get_main_table(self::TABLE_REMINDER);
+        Database::query("CREATE TABLE IF NOT EXISTS $reminderTable (
+            id int unsigned NOT NULL AUTO_INCREMENT,
+            days_after int unsigned NOT NULL,
+            subject longtext NOT NULL,
+            body longtext NOT NULL,
+            discount_type int unsigned DEFAULT NULL,
+            discount_amount decimal(10,2) DEFAULT NULL,
+            discount_valid_days int unsigned DEFAULT NULL,
+            active tinyint(1) NOT NULL DEFAULT 1,
+            created_at datetime NOT NULL,
+            updated_at datetime NOT NULL,
+            PRIMARY KEY (id),
+            KEY idx_buycourses_reminder_days (days_after),
+            KEY idx_buycourses_reminder_active (active)
+        )");
+
+        $itemTable = Database::get_main_table(self::TABLE_REMINDER_ITEM);
+        Database::query("CREATE TABLE IF NOT EXISTS $itemTable (
+            id int unsigned NOT NULL AUTO_INCREMENT,
+            reminder_id int unsigned NOT NULL,
+            product_type int unsigned NOT NULL,
+            product_id int unsigned NOT NULL,
+            PRIMARY KEY (id),
+            UNIQUE KEY uniq_buycourses_reminder_item (reminder_id, product_type, product_id),
+            KEY idx_buycourses_reminder_item_product (product_type, product_id)
+        )");
+
+        $sentTable = Database::get_main_table(self::TABLE_REMINDER_SENT);
+        Database::query("CREATE TABLE IF NOT EXISTS $sentTable (
+            id int unsigned NOT NULL AUTO_INCREMENT,
+            reminder_id int unsigned NOT NULL,
+            sale_kind varchar(16) NOT NULL,
+            sale_id int unsigned NOT NULL,
+            coupon_id int unsigned DEFAULT NULL,
+            sent_at datetime NOT NULL,
+            PRIMARY KEY (id),
+            UNIQUE KEY uniq_buycourses_reminder_sent (reminder_id, sale_kind, sale_id),
+            KEY idx_buycourses_reminder_sent_sale (sale_kind, sale_id)
+        )");
+
+        $couponTable = Database::get_main_table(self::TABLE_COUPON);
+        $restrictedColumns = [
+            'restricted_user_id' => 'INT UNSIGNED DEFAULT NULL',
+            'restricted_sale_kind' => 'VARCHAR(16) DEFAULT NULL',
+            'restricted_sale_id' => 'INT UNSIGNED DEFAULT NULL',
+        ];
+        foreach ($restrictedColumns as $field => $definition) {
+            $res = Database::query("SHOW COLUMNS FROM $couponTable WHERE Field = '$field'");
+            if (0 === Database::num_rows($res)) {
+                Database::query("ALTER TABLE $couponTable ADD $field $definition");
+            }
+        }
+        $indexRes = Database::query("SHOW INDEX FROM $couponTable WHERE Key_name = 'idx_buycourses_coupon_restricted_sale'");
+        if (0 === Database::num_rows($indexRes)) {
+            Database::query(
+                "ALTER TABLE $couponTable ADD INDEX idx_buycourses_coupon_restricted_sale (restricted_sale_kind, restricted_sale_id)"
+            );
+        }
+
+        $globalTable = Database::get_main_table(self::TABLE_GLOBAL_CONFIG);
+        foreach ([
+            'purchase_reminders_enabled_at' => 'DATETIME DEFAULT NULL',
+            'purchase_reminders_last_run_at' => 'DATETIME DEFAULT NULL',
+        ] as $field => $definition) {
+            $res = Database::query("SHOW COLUMNS FROM $globalTable WHERE Field = '$field'");
+            if (0 === Database::num_rows($res)) {
+                Database::query("ALTER TABLE $globalTable ADD $field $definition");
+            }
+        }
+    }
+
+    /**
+     * A reminder coupon can only be used by the buyer it was issued to.
+     */
+    public function couponIsAllowedForCurrentUser(array $coupon): bool
+    {
+        $restrictedUserId = (int) ($coupon['restricted_user_id'] ?? 0);
+        if ($restrictedUserId <= 0) {
+            return true;
+        }
+
+        $currentUserId = (int) api_get_user_id();
+
+        return $currentUserId > 0 && $currentUserId === $restrictedUserId;
+    }
+
+    /**
+     * @param mixed $coupon
+     */
+    private function rejectRestrictedCouponForCurrentUser($coupon): array
+    {
+        if (!is_array($coupon) || empty($coupon)) {
+            return [];
+        }
+
+        if ($this->couponIsAllowedForCurrentUser($coupon)) {
+            return $coupon;
+        }
+
+        return [];
+    }
+
 }

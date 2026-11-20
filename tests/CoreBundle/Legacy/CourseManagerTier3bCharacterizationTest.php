@@ -191,6 +191,41 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         $this->assertSame(0, $this->rows('session_rel_user', 'session_id = ? AND user_id = ?', [$sid, $uid]));
     }
 
+    // ---------------------------------------------------------------- setCategoryByCode
+
+    public function testSetCategoryByCodeReplacesTheCategoryRelationOfThatCourseOnly(): void
+    {
+        // import_csv.php applies the CourseCategory column of its CSV through this relation: the course table has no category column.
+        $course = $this->createCourse('cm3b_cat_a');
+        $other = $this->createCourse('cm3b_cat_b');
+        $cid = (int) $course->getId();
+        $oid = (int) $other->getId();
+        foreach (['CM3B_OLD', 'CM3B_NEW'] as $code) {
+            $this->conn()->executeStatement('INSERT INTO course_category (code, title, tree_pos, children_count) VALUES (?, ?, 0, 0)', [$code, $code]);
+        }
+        $oldId = (int) $this->conn()->fetchOne('SELECT id FROM course_category WHERE code = ?', ['CM3B_OLD']);
+        $newId = (int) $this->conn()->fetchOne('SELECT id FROM course_category WHERE code = ?', ['CM3B_NEW']);
+        $this->conn()->executeStatement('INSERT INTO course_rel_category (course_id, course_category_id) VALUES (?, ?)', [$cid, $oldId]);
+        $this->conn()->executeStatement('INSERT INTO course_rel_category (course_id, course_category_id) VALUES (?, ?)', [$oid, $oldId]);
+        Database::getManager()->clear();
+
+        $this->assertFalse(CourseManager::setCategoryByCode($cid, ''), 'an empty code changes nothing');
+        $this->assertFalse(CourseManager::setCategoryByCode($cid, 'CM3B_NO_SUCH'), 'an unknown code changes nothing');
+        $this->assertSame([$oldId], $this->categoryIdsOf($cid));
+
+        $this->assertTrue(CourseManager::setCategoryByCode($cid, 'CM3B_NEW'));
+        $this->assertSame([$newId], $this->categoryIdsOf($cid), 'the previous category is replaced');
+        $this->assertSame([$oldId], $this->categoryIdsOf($oid), 'another course is untouched');
+    }
+
+    /**
+     * @return list<int>
+     */
+    private function categoryIdsOf(int $courseId): array
+    {
+        return array_map('intval', $this->conn()->fetchFirstColumn('SELECT course_category_id FROM course_rel_category WHERE course_id = ? ORDER BY 1', [$courseId]));
+    }
+
     // ---------------------------------------------------------------- delete_course
 
     public function testDeleteCourseClearsItsRowsInEveryTableItNamesAndLeavesOtherCoursesAlone(): void

@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -3466,6 +3467,38 @@ class CourseManager
         }
 
         return $qb->executeStatement();
+    }
+
+    /**
+     * Make the course belong to the course category with the given code, replacing its current categories
+     * (the course/category relation is the course_rel_category join table). Nothing changes when the code
+     * is empty or matches no category.
+     *
+     * @param int    $courseId     Course id
+     * @param string $categoryCode Code of the course category
+     *
+     * @return bool True when the course now belongs to that category
+     */
+    public static function setCategoryByCode(int $courseId, string $categoryCode): bool
+    {
+        if ('' === $categoryCode) {
+            return false;
+        }
+
+        $em = Database::getManager();
+        $course = $em->getRepository(Course::class)->find($courseId);
+        $category = $em->getRepository(CourseCategory::class)->findOneBy(['code' => $categoryCode]);
+        if (null === $course || null === $category) {
+            return false;
+        }
+
+        foreach ($course->getCategories()->toArray() as $current) {
+            $course->removeCategory($current);
+        }
+        $course->addCategory($category);
+        $em->flush();
+
+        return true;
     }
 
     /**

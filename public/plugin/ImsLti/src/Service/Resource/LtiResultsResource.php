@@ -8,7 +8,6 @@ use Doctrine\ORM\ORMException;
 use Doctrine\ORM\TransactionRequiredException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
@@ -45,31 +44,13 @@ class LtiResultsResource extends LtiAdvantageServiceResource
      */
     public function validate()
     {
-        if (!$this->course) {
-            throw new BadRequestHttpException('Course not found.');
-        }
-
-        if (!$this->tool) {
-            throw new BadRequestHttpException('Tool not found.');
-        }
-
-        if ($this->tool->getCourse()->getId() !== $this->course->getId()) {
-            throw new AccessDeniedHttpException('Tool not found in course.');
-        }
+        $this->validateToolInCourse();
 
         if ($this->request->server->get('HTTP_ACCEPT') !== LtiAssignmentGradesService::TYPE_RESULT_CONTAINER) {
             throw new UnsupportedMediaTypeHttpException('Unsupported media type.');
         }
 
-        $parentTool = $this->tool->getParent();
-
-        if ($parentTool) {
-            $advServices = $parentTool->getAdvantageServices();
-
-            if (LtiAssignmentGradesService::AGS_NONE === $advServices['ags']) {
-                throw new AccessDeniedHttpException('Assigment and grade service is not enabled for this tool.');
-            }
-        }
+        $this->validateAssignmentGradesServiceEnabled();
 
         if (!$this->lineItem) {
             throw new NotFoundHttpException('Line item not found');
@@ -107,6 +88,7 @@ class LtiResultsResource extends LtiAdvantageServiceResource
         $this->setLinkHeaderToGet($userId, $limit, $page);
 
         $this->response->headers->set('Content-Type', LtiAssignmentGradesService::TYPE_RESULT_CONTAINER);
+        $this->response->setEncodingOptions(JSON_UNESCAPED_SLASHES);
         $this->response->setData($data);
     }
 
@@ -117,11 +99,11 @@ class LtiResultsResource extends LtiAdvantageServiceResource
         $limit = (int) $limit;
         $page = (int) $page;
 
-        $dql = 'SELECT r FROM Chamilo\CoreBundle\Entity\GradebookResult r WHERE r.evaluationId = :id';
+        $dql = 'SELECT r FROM Chamilo\CoreBundle\Entity\GradebookResult r WHERE r.evaluation = :id';
         $parameters = ['id' => $this->lineItem->getEvaluation()->getId()];
 
         if ($userId) {
-            $dql .= ' AND r.userId = :user';
+            $dql .= ' AND r.user = :user';
             $parameters['user'] = (int) $userId;
         }
 
@@ -157,9 +139,14 @@ class LtiResultsResource extends LtiAdvantageServiceResource
             );
 
             $data[] = [
-                'id' => "$lineItemEndPoint/results/{$result->getId()}",
+                'id' => LtiAssignmentGradesService::getResultUrl(
+                    $this->course->getId(),
+                    $this->lineItem->getId(),
+                    $this->tool->getId(),
+                    $result->getId()
+                ),
                 'scoreOf' => $lineItemEndPoint,
-                'userId' => (string) $result->getUserId(),
+                'userId' => (string) $result->getUser()->getId(),
                 'resultScore' => $result->getScore(),
                 'resultMaximum' => $this->lineItem->getEvaluation()->getMax(),
                 'comment' => null,
@@ -187,11 +174,11 @@ class LtiResultsResource extends LtiAdvantageServiceResource
 
         $em = Database::getManager();
 
-        $dql = 'SELECT COUNT(r) FROM Chamilo\CoreBundle\Entity\GradebookResult r WHERE r.evaluationId = :id';
+        $dql = 'SELECT COUNT(r) FROM Chamilo\CoreBundle\Entity\GradebookResult r WHERE r.evaluation = :id';
         $parameters = ['id' => $this->lineItem->getEvaluation()->getId()];
 
         if ($userId) {
-            $dql .= ' AND r.userId = :user';
+            $dql .= ' AND r.user = :user';
             $parameters['user'] = (int) $userId;
         }
 

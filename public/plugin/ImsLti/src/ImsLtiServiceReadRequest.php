@@ -38,9 +38,9 @@ class ImsLtiServiceReadRequest extends ImsLtiServiceRequest
 
         $em = Database::getManager();
         /** @var GradebookEvaluation $evaluation */
-        $evaluation = $em->find('Chamilo\CoreBundle\Entity\GradebookEvaluation', $sourcedParts['e']);
+        $evaluation = $em->find(GradebookEvaluation::class, $sourcedParts['e']);
         /** @var User $user */
-        $user = $em->find('ChamiloUserBundle:User', $sourcedParts['u']);
+        $user = $em->find(User::class, $sourcedParts['u']);
 
         if (empty($evaluation) || empty($user)) {
             $this->statusInfo

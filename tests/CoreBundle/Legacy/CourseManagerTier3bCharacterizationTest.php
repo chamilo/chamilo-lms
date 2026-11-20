@@ -518,6 +518,36 @@ final class CourseManagerTier3bCharacterizationTest extends KernelTestCase
         $this->assertSame((int) $course->getId(), (int) $output[1]['real_id']);
     }
 
+    public function testGetLoggedUserCourseHtmlOfAStudentOutsideASessionDoesNotFatal(): void
+    {
+        // A non-admin, non-teacher user outside a session used to reach SessionManager::sessionHasSessionAdmin(0, ...),
+        // which dereferenced the null session entity of session 0 and fataled the whole "my courses" listing.
+        $user = $this->createUser('cm3b_glu_student');
+        $this->loginAs($user);
+        ChamiloSession::write('_user', ['id' => $user->getId()]);
+        $course = $this->createCourse('cm3b_glu_student_course');
+        $this->sub($user, $course, STUDENT);
+
+        $output = CourseManager::get_logged_user_course_html(['real_id' => $course->getId()]);
+
+        $this->assertSame((int) $course->getId(), (int) $output[1]['real_id']);
+    }
+
+    public function testGetLoggedUserCourseHtmlOfATeacherOutsideASessionDoesNotFatal(): void
+    {
+        // The course status comes back from the database as a raw column value: it must be compared as an integer.
+        $user = $this->createUser('cm3b_glu_teacher');
+        $this->loginAs($user);
+        ChamiloSession::write('_user', ['id' => $user->getId()]);
+        $course = $this->createCourse('cm3b_glu_teacher_course');
+        $this->sub($user, $course, COURSEMANAGER);
+
+        $output = CourseManager::get_logged_user_course_html(['real_id' => $course->getId()]);
+
+        $this->assertSame((int) $course->getId(), (int) $output[1]['real_id']);
+        $this->assertTrue($output[1]['completed'], 'a course teacher is never blocked by the course sequence');
+    }
+
     public function testReturnSpecialCoursesGivesAnAdministratorTheSettingsLinkOfTheCourse(): void
     {
         $admin = $this->createUser('cm3b_spc_admin', '', '', 'ROLE_ADMIN');

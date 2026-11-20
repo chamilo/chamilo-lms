@@ -3383,7 +3383,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             ->setTitle($title)
             ->setComment($comment)
             ->setReadonly(1 === $readonly)
-            ->setCreator(api_get_user_entity())
+            ->setCreator($userEntity)
             ->setParent($parentResource)
             ->addCourseLink($courseEntity, $session, $group)
         ;

@@ -1644,6 +1644,8 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
         $this->assertCount(1, $base);
         $this->assertSame(1, (int) $base[0]['user_id']);
+        // survey_invitation.php once read a 'user' key that does not exist: the invited user is only in user_id.
+        $this->assertArrayNotHasKey('user', $base[0]);
         $this->assertSame('admin', strtolower((string) $this->conn->fetchOne('SELECT username FROM user WHERE id = 1')));
         $this->assertSame((string) $this->conn->fetchOne('SELECT firstname FROM user WHERE id = 1'), $base[0]['firstname']);
         $this->assertSame((string) $this->conn->fetchOne('SELECT email FROM user WHERE id = 1'), $base[0]['email']);

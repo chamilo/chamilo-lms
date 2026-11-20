@@ -943,7 +943,7 @@ class Tracking
                                 ->fetchOne();
 
                             // Get duration time from track_e_exercises.exe_duration instead of lp_view_item.total_time
-                            $durationRow = self::lpExerciseAttemptsQueryBuilder(
+                            $durationQb = self::lpExerciseAttemptsQueryBuilder(
                                 $tbl_stats_exercices,
                                 $row['path'],
                                 $user_id,
@@ -951,9 +951,10 @@ class Tracking
                                 $row['myid'],
                                 $courseId
                             )
-                                ->select('SUM(exe_duration) exe_duration')
-                                ->andWhere('session_id = :sessionId')
-                                ->setParameter('sessionId', $sessionId)
+                                ->select('SUM(exe_duration) exe_duration');
+                            // The base context is stored as NULL in track_e_exercises.session_id.
+                            self::andSessionCondition($durationQb, (int) $sessionId);
+                            $durationRow = $durationQb
                                 ->executeQuery()
                                 ->fetchAssociative();
                             if (!empty($durationRow['exe_duration'])) {
@@ -1008,7 +1009,7 @@ class Tracking
                         $showRowspan = false;
                         if ('quiz' === $row['item_type']) {
                             $my_url_suffix = '&cid='.$courseId.'&student_id='.$user_id.'&lp_id='.intval($row['mylpid']).'&origin='.$origin;
-                            $num = (int) self::lpExerciseAttemptsQueryBuilder(
+                            $numQb = self::lpExerciseAttemptsQueryBuilder(
                                 $tbl_stats_exercices,
                                 $row['path'],
                                 $user_id,
@@ -1016,9 +1017,9 @@ class Tracking
                                 $row['myid'],
                                 $courseId
                             )
-                                ->select('COUNT(*)')
-                                ->andWhere('session_id = :sessionId')
-                                ->setParameter('sessionId', $sessionId)
+                                ->select('COUNT(*)');
+                            self::andSessionCondition($numQb, (int) $sessionId);
+                            $num = (int) $numQb
                                 ->executeQuery()
                                 ->fetchOne();
                             $showRowspan = false;
@@ -1209,7 +1210,7 @@ class Tracking
                                 ->fetchAssociative();
 
                             if (false !== $row_path) {
-                                $attemptRows = self::lpExerciseAttemptsQueryBuilder(
+                                $attemptsQb = self::lpExerciseAttemptsQueryBuilder(
                                     $tbl_stats_exercices,
                                     (int) $row_path['path'],
                                     $user_id,
@@ -1217,9 +1218,9 @@ class Tracking
                                     $lp_item_id,
                                     $courseId
                                 )
-                                    ->select('*')
-                                    ->andWhere('session_id = :sessionId')
-                                    ->setParameter('sessionId', $sessionId)
+                                    ->select('*');
+                                self::andSessionCondition($attemptsQb, (int) $sessionId);
+                                $attemptRows = $attemptsQb
                                     ->orderBy('exe_date')
                                     ->executeQuery()
                                     ->fetchAllAssociative();

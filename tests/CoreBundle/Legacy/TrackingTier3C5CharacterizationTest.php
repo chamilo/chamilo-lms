@@ -224,19 +224,23 @@ final class TrackingTier3C5CharacterizationTest extends AbstractApiTest
         $this->assertSame('50', (string) $this->conn->fetchOne('SELECT total_time FROM c_lp_item_view WHERE iid = ?', [$f['quizView2']]));
     }
 
-    public function testLpStatsInTheBaseContextNeverMatchesTheStrictSessionZeroQueries(): void
+    public function testLpStatsInTheBaseContextMatchesTheExercisesStoredWithANullSession(): void
     {
-        // The base context stores NULL: the queries comparing session_id = 0 find no attempt (kept as is).
+        // The base context stores NULL in track_e_exercises.session_id: the duration, the attempts count and the
+        // attempts list must find the attempts of the base context, and only those (not the other session's one).
         $f = $this->lpFixture(null);
 
         $out = $this->lpStats($f);
         $this->assertStringContainsString('c5_quiz Completed 14.29 / 20', $this->flat($out));
-        // The exercise duration is not found, so the item view time is not rewritten and no attempts link is shown.
-        $this->assertSame('50', (string) $this->conn->fetchOne('SELECT total_time FROM c_lp_item_view WHERE iid = ?', [$f['quizView2']]));
-        $this->assertStringNotContainsString('extend_attempt=1', $out);
+        // The duration of the completed attempts of the base context (40 + 70) replaces the item views time (150).
+        $this->assertSame('110', (string) $this->conn->fetchOne('SELECT total_time FROM c_lp_item_view WHERE iid = ?', [$f['quizView2']]));
+        // The attempts link is shown because the exercise has attempts.
+        $this->assertStringContainsString('extend_attempt=1', $out);
 
         $attempts = $this->flat($this->lpStats($f, ['lp_item_id' => $f['quizItem'], 'extendedAttempt' => 1]));
-        $this->assertStringNotContainsString('Attempt 1', $attempts);
+        $this->assertMatchesRegularExpression('/Attempt 1 completed 10 \/ 20.*Attempt 2 completed 20 \/ 20/', $attempts);
+        $this->assertStringNotContainsString('Attempt 3', $attempts);
+        $this->assertMatchesRegularExpression('/Attempt 1.*00 : 00 : 40.*Attempt 2.*00 : 01 : 10/', $attempts);
     }
 
     /**

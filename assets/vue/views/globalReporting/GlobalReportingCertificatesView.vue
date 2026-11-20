@@ -211,16 +211,16 @@
             :header="t('Certificate')"
           >
             <template #body="{ data }">
-              <a
+              <BaseAppLink
                 v-if="data.certificateUrl"
-                :href="data.certificateUrl"
-                class="inline-flex items-center gap-1 text-primary hover:underline"
+                :url="data.certificateUrl"
+                class="table-link inline-flex items-center gap-1"
                 target="_blank"
                 rel="noopener"
               >
                 <BaseIcon icon="file-pdf-box" />
                 <span>{{ t("Open certificate") }}</span>
-              </a>
+              </BaseAppLink>
               <span
                 v-else
                 class="text-sm text-gray-50"

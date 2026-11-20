@@ -119,15 +119,15 @@
             >
           </template>
           <template v-else>
-            <a
+            <BaseAppLink
               class="me-2 inline-flex items-center"
               :title="t('Download')"
-              :href="downloadUrl(data.id)"
+              :url="downloadUrl(data.id)"
               target="_blank"
               rel="noopener"
             >
               <i :class="chamiloIconToClass['download']"></i>
-            </a>
+            </BaseAppLink>
             <span class="font-semibold">{{ data.title }}</span>
             <div
               v-if="data.description"

@@ -355,12 +355,12 @@
         <Column :header="t('Title')" :sortable="true" field="title">
           <template #body="slotProps">
             <div class="flex flex-col gap-1">
-              <router-link
-                class="font-medium text-primary hover:underline"
+              <BaseAppLink
+                class="table-link"
                 :to="getPageRoute(slotProps.data.reflink)"
               >
                 {{ slotProps.data.title }}
-              </router-link>
+              </BaseAppLink>
               <div
                 v-if="
                   reportData.categoriesEnabled &&
@@ -368,7 +368,7 @@
                 "
                 class="flex flex-wrap gap-1"
               >
-                <router-link
+                <BaseAppLink
                   v-for="category in slotProps.data.categories"
                   :key="category.id"
                   class="rounded-full border border-primary/20 bg-primary/5 px-2 py-0.5 text-xs font-medium text-primary hover:bg-primary/10"
@@ -376,7 +376,7 @@
                   :to="getCategorySearchRoute(category.id)"
                 >
                   {{ category.title }}
-                </router-link>
+                </BaseAppLink>
               </div>
             </div>
           </template>
@@ -559,12 +559,12 @@
         </Column>
         <Column :header="t('Title')" :sortable="true" field="title">
           <template #body="slotProps">
-            <router-link
-              class="font-medium text-primary hover:underline"
+            <BaseAppLink
+              class="table-link"
               :to="getPageRoute(slotProps.data.reflink)"
             >
               {{ slotProps.data.title }}
-            </router-link>
+            </BaseAppLink>
           </template>
         </Column>
         <Column

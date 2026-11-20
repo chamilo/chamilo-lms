@@ -106,7 +106,7 @@
           <BaseAppLink
             v-else
             :url="`/main/session/resume_session.php?id_session=${data.id}`"
-            class="text-primary hover:underline"
+            class="table-link"
           >
             {{ data.title }}
           </BaseAppLink>

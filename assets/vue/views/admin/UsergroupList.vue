@@ -261,7 +261,7 @@ onMounted(() => {
         <template #body="{ data }">
           <BaseAppLink
             :to="{ name: 'AdminUsergroupUsers', params: { id: data.id } }"
-            class="text-primary hover:underline"
+            class="table-link"
           >
             {{ data.userCount }}
           </BaseAppLink>

@@ -97,12 +97,12 @@
             :header="t('Name')"
           >
             <template #body="{ data }">
-              <a
-                class="text-primary hover:underline"
-                :href="data.url"
+              <BaseAppLink
+                class="table-link"
+                :url="data.url"
               >
                 {{ data.title }}
-              </a>
+              </BaseAppLink>
             </template>
           </Column>
           <Column
@@ -135,13 +135,13 @@
             :header="t('Name')"
           >
             <template #body="{ data }">
-              <a
+              <BaseAppLink
                 v-if="data.profileUrl"
-                class="text-primary hover:underline"
-                :href="data.profileUrl"
+                class="table-link"
+                :url="data.profileUrl"
               >
                 {{ data.fullname }}
-              </a>
+              </BaseAppLink>
               <span v-else>{{ data.fullname }}</span>
             </template>
           </Column>

@@ -261,12 +261,12 @@
                 size="small"
               />
               <div class="min-w-0">
-                <router-link
-                  class="break-words font-semibold text-primary hover:underline"
+                <BaseAppLink
+                  class="table-link break-words"
                   :to="{ name: 'TicketDetail', params: { id: data.id }, query: route.query }"
                 >
                   {{ data.code }}
-                </router-link>
+                </BaseAppLink>
                 <p class="mt-1 break-words text-sm text-gray-700">
                   {{ data.subject }}
                 </p>

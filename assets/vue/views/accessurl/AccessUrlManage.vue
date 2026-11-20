@@ -225,7 +225,7 @@ onMounted(() => {
               :url="data.url"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-primary hover:underline"
+              class="table-link"
             >
               {{ data.url }}
             </BaseAppLink>

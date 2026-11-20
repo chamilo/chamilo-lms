@@ -835,13 +835,13 @@
                 :sortable="zombieSortableColumns.includes(column.key)"
               >
                 <template #body="{ data }">
-                  <a
+                  <BaseAppLink
                     v-if="column.key === 'email' && data.email"
-                    :href="`mailto:${encodeURIComponent(data.email)}`"
-                    class="text-primary underline hover:text-primary/80"
+                    :url="`mailto:${encodeURIComponent(data.email)}`"
+                    class="table-link"
                   >
                     {{ data.email }}
-                  </a>
+                  </BaseAppLink>
                   <span v-else-if="['registeredDate', 'lastAccess'].includes(column.key)">
                     {{ formatLegacyShortDate(data[column.key]) }}
                   </span>
@@ -1043,13 +1043,13 @@
                           :header="column.label"
                         >
                           <template #body="{ data }">
-                            <a
+                            <BaseAppLink
                               v-if="column.key === 'course' && data.courseUrl"
-                              :href="data.courseUrl"
-                              class="text-primary underline hover:text-primary/80"
+                              :url="data.courseUrl"
+                              class="table-link"
                             >
                               {{ data[column.key] }}
-                            </a>
+                            </BaseAppLink>
                             <span v-else>{{ data[column.key] }}</span>
                           </template>
                         </Column>
@@ -1115,34 +1115,34 @@
                 :sortable="Boolean(column.sortable)"
               >
                 <template #body="{ data }">
-                  <a
+                  <BaseAppLink
                     v-if="activeReport === 'tool_usage' && column.key === 'toolName' && data.link && data.link !== '-'"
-                    :href="data.link"
-                    class="text-primary underline hover:text-primary/80"
+                    :url="data.link"
+                    class="table-link"
                   >
                     {{ data[column.key] }}
-                  </a>
-                  <router-link
+                  </BaseAppLink>
+                  <BaseAppLink
                     v-else-if="activeReport === 'courselastvisit' && column.key === 'courseTitle'"
                     :to="`/course/${Number(data.courseId)}/home`"
-                    class="text-primary underline hover:text-primary/80"
+                    class="table-link"
                   >
                     {{ data[column.key] }}
-                  </router-link>
-                  <a
+                  </BaseAppLink>
+                  <BaseAppLink
                     v-else-if="activeReport === 'user_session' && column.key === 'session' && data.sessionUrl"
-                    :href="data.sessionUrl"
-                    class="text-primary underline hover:text-primary/80"
+                    :url="data.sessionUrl"
+                    class="table-link"
                   >
                     {{ data[column.key] }}
-                  </a>
-                  <a
+                  </BaseAppLink>
+                  <BaseAppLink
                     v-else-if="activeReport === 'users_online' && column.key === 'fullName' && data.detailsUrl"
-                    :href="data.detailsUrl"
-                    class="text-primary underline hover:text-primary/80"
+                    :url="data.detailsUrl"
+                    class="table-link"
                   >
                     {{ data[column.key] }}
-                  </a>
+                  </BaseAppLink>
                   <span v-else-if="activeReport === 'tool_usage' && column.key === 'lastUpdated'">
                     {{ data[column.key] }}
                   </span>

@@ -18,7 +18,7 @@
       <template #body="slotProps">
         <BaseAppLink
           :to="getAssignmentDetailLink(slotProps.data)"
-          class="text-primary hover:underline flex items-center gap-1"
+          class="table-link flex items-center gap-1"
         >
           {{ slotProps.data.title }}
         </BaseAppLink>

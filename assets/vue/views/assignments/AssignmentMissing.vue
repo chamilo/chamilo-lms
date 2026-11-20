@@ -71,7 +71,7 @@
       <Column :header="t('E-mail')">
         <template #body="slotProps">
           <BaseAppLink
-            class="text-primary hover:underline"
+            class="table-link"
             :url="`mailto:${slotProps.data.email}`"
           >
             {{ slotProps.data.email }}

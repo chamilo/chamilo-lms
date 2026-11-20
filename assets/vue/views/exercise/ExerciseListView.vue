@@ -208,9 +208,9 @@
                   class="ch-tool-icon"
                   aria-hidden="true"
                 />
-                <router-link
+                <BaseAppLink
                   v-if="data.canOverview"
-                  class="font-semibold text-gray-90 hover:underline"
+                  class="table-link"
                   :to="{
                     name: 'ExerciseOverview',
                     params: { ...route.params, exerciseId: data.iid },
@@ -218,7 +218,7 @@
                   }"
                 >
                   {{ displayText(data.title, t("Untitled")) }}
-                </router-link>
+                </BaseAppLink>
                 <span
                   v-else
                   class="font-semibold text-gray-90"

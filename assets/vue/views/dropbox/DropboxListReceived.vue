@@ -129,10 +129,10 @@
 
           <!-- File row -->
           <template v-else>
-            <a
+            <BaseAppLink
               class="me-2 inline-flex items-center h-5 align-middle"
               :title="t('Download')"
-              :href="downloadUrl(data.id)"
+              :url="downloadUrl(data.id)"
               target="_blank"
               rel="noopener"
             >
@@ -140,7 +140,7 @@
                 :class="chamiloIconToClass['download']"
                 class="text-base leading-none"
               ></i>
-            </a>
+            </BaseAppLink>
 
             <span class="font-semibold align-middle">{{ data.title }}</span>
 

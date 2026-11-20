@@ -97,6 +97,11 @@
         @apply bg-support-1;
       }
     }
+
+    // A link in a BaseTable cell, e.g. the name that opens the item: <BaseAppLink class="table-link">.
+    .table-link {
+      @apply text-primary hover:underline;
+    }
   }
 
   &-tfoot {

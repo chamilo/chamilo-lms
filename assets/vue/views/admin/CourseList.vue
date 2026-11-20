@@ -209,7 +209,7 @@
         <template #body="{ data }">
           <BaseAppLink
             :to="{ name: 'CourseHome', params: { id: data.id } }"
-            class="text-primary hover:underline"
+            class="table-link"
           >
             {{ data.title }}
           </BaseAppLink>

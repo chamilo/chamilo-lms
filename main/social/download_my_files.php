@@ -42,6 +42,48 @@ function isAllowedToReviewExerciseAttempt($exeId, $ownerId)
 }
 
 /**
+ * Checks whether the owner of the files teaches the given user, either as a
+ * teacher of a course the user is subscribed to (directly or through a session)
+ * or as a coach of a session the user is subscribed to.
+ * Teachers often insert images from their personal folder into course content
+ * (quiz questions, documents...), so these must stay readable by their learners.
+ *
+ * @param int $ownerId Owner of the my_files folder
+ * @param int $userId  User requesting the file
+ *
+ * @return bool
+ */
+function isTeacherOfUser($ownerId, $userId)
+{
+    $ownerId = (int) $ownerId;
+    $userId = (int) $userId;
+    $tblCourseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+    $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+    $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+    $tblSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+    $sql = "SELECT 1 FROM $tblCourseUser teacher
+            WHERE teacher.user_id = $ownerId
+                AND teacher.status = ".COURSEMANAGER."
+                AND (
+                    teacher.c_id IN (SELECT c_id FROM $tblCourseUser WHERE user_id = $userId)
+                    OR teacher.c_id IN (SELECT c_id FROM $tblSessionCourseUser WHERE user_id = $userId)
+                )
+            UNION
+            SELECT 1 FROM $tblSessionCourseUser coach
+            INNER JOIN $tblSessionCourseUser learner
+                ON learner.session_id = coach.session_id AND learner.c_id = coach.c_id
+            WHERE coach.user_id = $ownerId AND coach.status = 2 AND learner.user_id = $userId
+            UNION
+            SELECT 1 FROM $tblSession s
+            INNER JOIN $tblSessionUser learner ON learner.session_id = s.id
+            WHERE s.id_coach = $ownerId AND learner.user_id = $userId
+            LIMIT 1";
+
+    return Database::num_rows(Database::query($sql)) > 0;
+}
+
+/**
  * Checks whether the current user may download a file stored in the personal
  * folder (my_files) of another user.
  *
@@ -78,6 +120,11 @@ function isAllowedToDownloadMyFile($ownerId, $relativePath)
     if (UserManager::isTeacherOfStudent($currentUserId, $ownerId)
         || UserManager::userIsBossOfStudent($currentUserId, $ownerId)
     ) {
+        return true;
+    }
+
+    // Learners must see the files their teachers inserted in the course content.
+    if (isTeacherOfUser($ownerId, $currentUserId)) {
         return true;
     }
 

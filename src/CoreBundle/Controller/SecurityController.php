@@ -20,12 +20,14 @@ use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
 use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
 use Chamilo\CoreBundle\Security\Authenticator\Ldap\LdapAuthenticator;
 use Chamilo\CoreBundle\Security\Authenticator\LoginTokenAuthenticator;
+use Chamilo\CoreBundle\Security\Authenticator\OAuth2\AbstractAuthenticator as OAuth2Authenticator;
 use Chamilo\CoreBundle\Security\RememberMeLifetime;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
@@ -35,16 +37,20 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use OTPHP\TOTP;
+use Psr\Clock\ClockInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -62,6 +68,7 @@ class SecurityController extends AbstractController
 
     private const int SESSION_EXPIRATION_WARNING_SECONDS = 180;
     private const string SESSION_KEEP_ALIVE_KEY = '_session_keep_alive_at';
+    private const int PENDING_2FA_MAX_ATTEMPTS = 5;
 
     public function __construct(
         private SerializerInterface $serializer,
@@ -76,6 +83,7 @@ class SecurityController extends AbstractController
         private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
         private readonly AccessUrlRepository $accessUrlRepo,
         private readonly RememberMeLifetime $rememberMeLifetime,
+        private readonly ClockInterface $clock,
     ) {}
 
     #[Route('/login_json', name: 'login_json', methods: ['POST'])]
@@ -495,6 +503,67 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * TOTP step of a login that the identity provider already confirmed, for users who
+     * turned on 2FA. The session stays anonymous until a valid code is entered.
+     *
+     * @see OAuth2Authenticator::onAuthenticationSuccess()
+     */
+    #[Route('/login/2fa', name: 'login_2fa', methods: ['GET', 'POST'])]
+    public function loginTwoFactor(
+        Request $request,
+        Security $security,
+        UserRepository $userRepository,
+        CsrfTokenManagerInterface $csrfTokenManager,
+        TranslatorInterface $translator,
+    ): Response {
+        $session = $request->getSession();
+        $pending = $session->get(OAuth2Authenticator::PENDING_2FA_SESSION_KEY);
+
+        $user = null;
+        if (\is_array($pending) && (int) ($pending['expires_at'] ?? 0) >= time()) {
+            $user = $userRepository->find((int) ($pending['user_id'] ?? 0));
+        }
+
+        if (!$user instanceof User || !$user->getMfaEnabled()) {
+            $session->remove(OAuth2Authenticator::PENDING_2FA_SESSION_KEY);
+
+            return new RedirectResponse($this->router->generate('login'));
+        }
+
+        $error = null;
+
+        if ($request->isMethod('POST')) {
+            $submittedToken = (string) $request->request->get('_token', '');
+            $code = trim((string) $request->request->get('totp', ''));
+
+            if ($csrfTokenManager->isTokenValid(new CsrfToken('login_2fa', $submittedToken))
+                && '' !== $code
+                && $this->isTOTPValid($user, $code)
+            ) {
+                $session->remove(OAuth2Authenticator::PENDING_2FA_SESSION_KEY);
+                $security->login($user, 'json_login', 'main');
+
+                return new RedirectResponse($this->router->generate('index'));
+            }
+
+            $pending['attempts'] = (int) ($pending['attempts'] ?? 0) + 1;
+
+            if ($pending['attempts'] >= self::PENDING_2FA_MAX_ATTEMPTS) {
+                $session->remove(OAuth2Authenticator::PENDING_2FA_SESSION_KEY);
+
+                return new RedirectResponse($this->router->generate('login'));
+            }
+
+            $session->set(OAuth2Authenticator::PENDING_2FA_SESSION_KEY, $pending);
+            $error = $translator->trans('The 2FA code is invalid or expired.');
+        }
+
+        return $this->render('@ChamiloCore/Security/login_2fa.html.twig', [
+            'error' => $error,
+        ]);
+    }
+
+    /**
      * Validates the provided TOTP code for the given user.
      *
      * @param mixed $user
@@ -508,7 +577,7 @@ class SecurityController extends AbstractController
             return false;
         }
 
-        $totp = TOTP::create($decryptedSecret);
+        $totp = TOTP::create($decryptedSecret, clock: $this->clock);
 
         return $totp->verify($totpCode);
     }

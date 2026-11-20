@@ -883,30 +883,4 @@ final class WorkCharacterizationTest extends KernelTestCase
             'the agenda entry linked by add_to_calendar is deleted (c_calendar_event has no "id" column)'
         );
     }
-
-    /**
-     * @dataProvider brokenAgainstCurrentSchema
-     */
-    public function testQueryThatReferencesDroppedColumnsIsAnSqlError(callable $call): void
-    {
-        $this->setContext($this->admin(), $this->course(1));
-
-        // These belong to the removed file-url model (url / id columns) and there is no schema-faithful meaning to
-        // repair them to: they fail as long as they exist.
-        $this->expectException(Throwable::class);
-        $call();
-    }
-
-    // ------------------------------------------------ queries broken by schema
-
-    /**
-     * @return array<string, array{0: callable}>
-     */
-    public static function brokenAgainstCurrentSchema(): array
-    {
-        return [
-            // c_student_publication has no "url" / "id" column any more; only the compilatio plugin calls it.
-            'get_work_path' => [static fn () => get_work_path(1)],
-        ];
-    }
 }

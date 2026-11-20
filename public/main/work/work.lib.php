@@ -908,29 +908,40 @@ function deleteDirWork($id, $courseId = 0)
 }
 
 /**
- * Get the path of a document in the student_publication table (path relative to the course directory).
+ * Get the path of the file of a work (the stored file of its resource node, in the resource storage).
  *
  * @param int $id
  *
- * @return string Path (or -1 on error)
+ * @return string|int The path ('' when the work has no file), or -1 when the work does not exist in the current course
  *
- * Works no longer have id/url columns, so the query always throws. Its only caller is
- * public/main/plagiarism/compilatio/upload.php; the resource node file path is the replacement.
+ * The works no longer have a url column: the file lives on the resource node of the work. Its only caller is
+ * public/main/plagiarism/compilatio/upload.php.
  */
 function get_work_path($id)
 {
-    $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $course_id = api_get_course_int_id();
-    $sql = 'SELECT url FROM '.$table.'
-            WHERE id='.(int) $id;
-    $res = Database::query($sql);
-    if (Database::num_rows($res)) {
-        $row = Database::fetch_array($res);
-
-        return $row['url'];
+    $work = Container::getEntityManager()->createQueryBuilder()
+        ->select('w')
+        ->from(CStudentPublication::class, 'w')
+        ->innerJoin('w.resourceNode', 'node')
+        ->innerJoin('node.resourceLinks', 'link')
+        ->where('w.iid = :id')
+        ->andWhere('IDENTITY(link.course) = :courseId')
+        ->setParameter('id', (int) $id)
+        ->setParameter('courseId', (int) api_get_course_int_id())
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getOneOrNullResult()
+    ;
+    if (!$work instanceof CStudentPublication) {
+        return -1;
     }
 
-    return -1;
+    $file = $work->getResourceNode()->getFirstResourceFile();
+    if (null === $file) {
+        return '';
+    }
+
+    return (string) Container::getResourceNodeRepository()->getFilename($file);
 }
 
 /**
@@ -1691,44 +1702,6 @@ function get_work_user_list_from_documents(
     $whereCondition = '',
     $getCount = false
 ) {
-    if ($getCount) {
-        $select1 = ' SELECT count(u.id) as count ';
-        $select2 = ' SELECT count(u.id) as count ';
-    } else {
-        $select1 = ' SELECT DISTINCT
-                        u.firstname,
-                        u.lastname,
-                        u.id as user_id,
-                        w.title,
-                        w.parent_id,
-                        w.document_id document_id,
-                        w.iid,
-                        qualification,
-                        qualificator_id,
-                        w.sent_date,
-                        w.contains_file,
-                        w.url
-                    ';
-        $select2 = ' SELECT DISTINCT
-                        u.firstname, u.lastname,
-                        u.id as user_id,
-                        d.title,
-                        w.parent_id,
-                        d.iid document_id,
-                        0,
-                        0,
-                        0,
-                        w.sent_date,
-                        w.contains_file,
-                        w.url
-                    ';
-    }
-
-    $documentTable = Database::get_course_table(TABLE_DOCUMENT);
-    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $workRelDocument = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_DOCUMENT);
-    $userTable = Database::get_main_table(TABLE_MAIN_USER);
-
     $courseId = api_get_course_int_id();
     $sessionId = api_get_session_id();
 
@@ -1739,62 +1712,123 @@ function get_work_user_list_from_documents(
     $studentId = (int) $studentId;
     $workId = (int) $workId;
 
-    $userCondition = " AND u.id = $studentId ";
-    $sessionCondition = api_get_session_condition($sessionId, true, false, 'w.session_id');
-    $workCondition = " AND w_rel.work_id = $workId";
-    $workParentCondition = " AND w.parent_id = $workId";
+    $em = Container::getEntityManager();
 
-    $sql = "(
-                $select1 FROM $userTable u
-                INNER JOIN $workTable w
-                ON (u.id = w.user_id AND w.active IN (0, 1) AND w.filetype = 'file')
-                WHERE
-                    w.c_id = $courseId
-                    $userCondition
-                    $sessionCondition
-                    $whereCondition
-                    $workParentCondition
-            ) UNION (
-                $select2 FROM $workTable w
-                INNER JOIN $workRelDocument w_rel
-                ON (w_rel.work_id = w.iid AND w.active IN (0, 1) AND w_rel.c_id = w.c_id)
-                INNER JOIN $documentTable d
-                ON (w_rel.document_id = d.iid AND d.c_id = w.c_id)
-                INNER JOIN $userTable u ON (u.id = $studentId)
-                WHERE
-                    w.c_id = $courseId
-                    $workCondition
-                    $sessionCondition AND
-                    d.iid NOT IN (
-                        SELECT w.document_id id
-                        FROM $workTable w
-                        WHERE
-                            user_id = $studentId AND
-                            c_id = $courseId AND
-                            filetype = 'file' AND
-                            active IN (0, 1)
-                            $sessionCondition
-                            $workParentCondition
-                    )
-            )";
+    // The submissions of the learner for this assignment. Course and session live on the resource link.
+    $submissionsQb = $em->createQueryBuilder()
+        ->select(
+            'DISTINCT u.firstname AS firstname',
+            'u.lastname AS lastname',
+            'u.id AS user_id',
+            'w.title AS title',
+            'IDENTITY(w.publicationParent) AS parent_id',
+            'w.documentId AS document_id',
+            'w.iid AS iid',
+            'w.qualification AS qualification',
+            'w.qualificatorId AS qualificator_id',
+            'w.sentDate AS sent_date',
+            'w.containsFile AS contains_file'
+        )
+        ->from(CStudentPublication::class, 'w')
+        ->innerJoin('w.user', 'u')
+        ->innerJoin('w.resourceNode', 'node')
+        ->innerJoin('node.resourceLinks', 'link')
+        ->where('u.id = :studentId')
+        ->andWhere('IDENTITY(w.publicationParent) = :workId')
+        ->andWhere("w.filetype = 'file'")
+        ->andWhere('w.active IN (0, 1)')
+        ->andWhere('IDENTITY(link.course) = :courseId')
+        ->setParameter('studentId', $studentId)
+        ->setParameter('workId', $workId)
+        ->setParameter('courseId', (int) $courseId)
+    ;
+    workAddLinkSessionCondition($submissionsQb, (int) $sessionId);
 
-    $start = (int) $start;
-    $limit = (int) $limit;
-
-    $direction = in_array(strtolower($direction), ['desc', 'asc']) ? $direction : 'desc';
-    $column = Database::escape_string($column);
-
-    if ($getCount) {
-        $result = Database::query($sql);
-        $result = Database::fetch_array($result);
-
-        return $result['count'];
+    $listRows = [];
+    $submittedDocuments = [];
+    foreach ($submissionsQb->getQuery()->getArrayResult() as $row) {
+        $submittedDocuments[] = (int) $row['document_id'];
+        $listRows[] = [
+            'firstname' => $row['firstname'],
+            'lastname' => $row['lastname'],
+            'user_id' => (int) $row['user_id'],
+            'title' => $row['title'],
+            'parent_id' => null === $row['parent_id'] ? null : (int) $row['parent_id'],
+            'document_id' => (int) $row['document_id'],
+            'iid' => (int) $row['iid'],
+            'qualification' => number_format((float) $row['qualification'], 2, '.', ''),
+            'qualificator_id' => (int) $row['qualificator_id'],
+            'sent_date' => $row['sent_date']?->format('Y-m-d H:i:s'),
+            'contains_file' => (int) $row['contains_file'],
+            'url' => '',
+        ];
     }
 
-    $sql .= " ORDER BY `$column` $direction";
-    $sql .= " LIMIT $start, $limit";
+    // The documents of the assignment the learner has not turned into a submission yet.
+    $documentsQb = $em->createQueryBuilder()
+        ->select(
+            'DISTINCT u.firstname AS firstname',
+            'u.lastname AS lastname',
+            'u.id AS user_id',
+            'd.title AS title',
+            'IDENTITY(w.publicationParent) AS parent_id',
+            'd.iid AS document_id',
+            'w.sentDate AS sent_date',
+            'w.containsFile AS contains_file'
+        )
+        ->from(CStudentPublication::class, 'w')
+        ->innerJoin(CStudentPublicationRelDocument::class, 'w_rel', 'WITH', 'w_rel.publication = w')
+        ->innerJoin('w_rel.document', 'd')
+        ->innerJoin(User::class, 'u', 'WITH', 'u.id = :studentId')
+        ->innerJoin('w.resourceNode', 'node')
+        ->innerJoin('node.resourceLinks', 'link')
+        ->where('w.iid = :workId')
+        ->andWhere('w.active IN (0, 1)')
+        ->andWhere('IDENTITY(link.course) = :courseId')
+        ->setParameter('studentId', $studentId)
+        ->setParameter('workId', $workId)
+        ->setParameter('courseId', (int) $courseId)
+    ;
+    workAddLinkSessionCondition($documentsQb, (int) $sessionId);
+    if (!empty($submittedDocuments)) {
+        $documentsQb->andWhere('d.iid NOT IN (:submittedDocuments)')
+            ->setParameter('submittedDocuments', $submittedDocuments);
+    }
+    foreach ($documentsQb->getQuery()->getArrayResult() as $row) {
+        $listRows[] = [
+            'firstname' => $row['firstname'],
+            'lastname' => $row['lastname'],
+            'user_id' => (int) $row['user_id'],
+            'title' => $row['title'],
+            'parent_id' => null === $row['parent_id'] ? null : (int) $row['parent_id'],
+            'document_id' => (int) $row['document_id'],
+            'iid' => 0,
+            'qualification' => 0,
+            'qualificator_id' => 0,
+            'sent_date' => $row['sent_date']?->format('Y-m-d H:i:s'),
+            'contains_file' => (int) $row['contains_file'],
+            'url' => '',
+        ];
+    }
 
-    $result = Database::query($sql);
+    if ($getCount) {
+        return count($listRows);
+    }
+
+    // The whereCondition of the grid is an SQL fragment on the old table columns: it is not applied (like in
+    // get_work_user_list()). The order column is an allowlist of the listed fields.
+    $direction = in_array(strtolower((string) $direction), ['desc', 'asc']) ? strtolower((string) $direction) : 'desc';
+    $sortable = ['firstname', 'lastname', 'user_id', 'title', 'parent_id', 'document_id', 'iid', 'qualification', 'qualificator_id', 'sent_date', 'contains_file', 'url'];
+    $column = in_array($column, $sortable, true) ? $column : 'title';
+    usort($listRows, static function (array $a, array $b) use ($column, $direction): int {
+        $left = is_string($a[$column]) ? mb_strtolower($a[$column]) : $a[$column];
+        $right = is_string($b[$column]) ? mb_strtolower($b[$column]) : $b[$column];
+        $result = $left <=> $right;
+
+        return 'desc' === $direction ? -$result : $result;
+    });
+
+    $listRows = array_slice($listRows, max(0, (int) $start), max(0, (int) $limit));
 
     $currentUserId = api_get_user_id();
     $work_data = get_work_data_by_id($workId);
@@ -1818,7 +1852,7 @@ function get_work_user_list_from_documents(
     $allowEdition = 1 == api_get_course_setting('student_delete_own_publication');
 
     $workList = [];
-    while ($row = Database::fetch_assoc($result)) {
+    foreach ($listRows as $row) {
         $userId = $row['user_id'];
         $documentId = $row['document_id'];
         $itemId = $row['iid'];
@@ -3034,8 +3068,6 @@ function user_is_author($itemId, $userId = null, $courseId = 0, $sessionId = 0)
  */
 function get_list_users_without_publication($task_id, $studentId = 0)
 {
-    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-
     $users = getAllUserToWork($task_id, api_get_course_int_id());
     $users = array_column($users, 'user_id');
 
@@ -3043,7 +3075,6 @@ function get_list_users_without_publication($task_id, $studentId = 0)
     $session_id = api_get_session_id();
     $course_id = api_get_course_int_id();
     $task_id = (int) $task_id;
-    $sessionCondition = api_get_session_condition($session_id);
 
     $em = Container::getEntityManager();
 
@@ -3062,14 +3093,18 @@ function get_list_users_without_publication($task_id, $studentId = 0)
             $users_with_tasks[] = $row['id'];
         }
     } else {
-        // Not migrated: this filters c_student_publication on a session_id column that no longer exists, so it is
-        // always an SQL error (there is no schema-faithful meaning to move it to).
-        $sql = "SELECT user_id as id FROM $work_table
-                WHERE
-                    parent_id = '$task_id' $sessionCondition AND
-                    active IN (0, 1)";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        // The session of a submission is the session of its resource link.
+        $qb = $em->createQueryBuilder()
+            ->select('DISTINCT IDENTITY(w.user) AS id')
+            ->from(CStudentPublication::class, 'w')
+            ->innerJoin('w.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'link')
+            ->where('IDENTITY(w.publicationParent) = :taskId')
+            ->andWhere('w.active IN (0, 1)')
+            ->setParameter('taskId', $task_id)
+        ;
+        workAddLinkSessionCondition($qb, (int) $session_id);
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
             $users_with_tasks[] = $row['id'];
         }
     }

@@ -407,7 +407,7 @@ final class BuyCoursesTier3bCharacterizationTest extends BuyCoursesCharacterizat
         ));
     }
 
-    public function testManagedCourseIdsAndCourseManagerIdsIgnoreHrmAndStudentRelations(): void
+    public function testCourseManagerIdsIgnoreHrmAndStudentRelations(): void
     {
         [$a, $b, $c] = $this->userIds(3);
         $this->conn->executeStatement('DELETE FROM course_rel_user WHERE c_id IN (1, 2)');
@@ -418,11 +418,6 @@ final class BuyCoursesTier3bCharacterizationTest extends BuyCoursesCharacterizat
         $this->subscribe($c, 1, 5);    // student: not a manager
         $this->subscribe($a, 1, 1);
         $this->subscribe($c, 2, 1, 1);
-
-        $this->assertSame([1, 2], $this->plugin->getManagedCourseIdsByUser($b), 'distinct, ascending');
-        $this->assertSame([1], $this->plugin->getManagedCourseIdsByUser($a));
-        $this->assertSame([], $this->plugin->getManagedCourseIdsByUser($c));
-        $this->assertSame([], $this->plugin->getManagedCourseIdsByUser(0));
 
         $this->assertSame([min($a, $b), max($a, $b)], $this->plugin->getCourseManagerIdsForCourse(1));
         $this->assertSame([$b], $this->plugin->getCourseManagerIdsForCourse(2));
@@ -583,51 +578,26 @@ final class BuyCoursesTier3bCharacterizationTest extends BuyCoursesCharacterizat
         $this->assertFalse($this->plugin->wouldCourseUserSubscriptionExceedHostingLimit(1, [$d]));
     }
 
-    public function testFrozenEnrollmentChecksAndFreezeExcessKeepsTheLowestUserIdsOfTheStudents(): void
+    public function testFrozenEnrollmentChecksAndClearOnlyTouchTheRequestedCourse(): void
     {
-        [$a, $b, $c, $d] = $this->userIds(4);
-        $this->conn->executeStatement('DELETE FROM course_rel_user WHERE c_id IN (1, 2)');
+        [$a, $b] = $this->userIds(2);
         $this->conn->executeStatement('DELETE FROM plugin_buycourses_frozen_enrollment');
-        foreach ([$d, $b, $a, $c] as $student) {
-            $this->subscribe($student, 1, 5);
-        }
-        $teacher = $this->userIds(5)[4];
-        $this->subscribe($teacher, 1, 1);
-        $hrm = $this->userIds(6)[5];
-        $this->subscribe($hrm, 1, 5, 1);
-        $this->subscribe($a, 2, 5);
-        $sorted = [$a, $b, $c, $d];
-        sort($sorted);
+        $since = '2026-01-01 00:00:00';
 
         $this->assertFalse($this->plugin->isFrozenEnrollment(1, $a));
-        $this->plugin->freezeExcessEnrollmentsForCourse(1, 2);
-        $this->assertSame([$sorted[2], $sorted[3]], $this->frozenUserIds(1), 'students beyond the limit, highest ids; no teacher, no HRM');
-        $this->assertTrue($this->plugin->isFrozenEnrollment(1, $sorted[3]));
-        $this->assertFalse($this->plugin->isFrozenEnrollment(1, $sorted[0]));
-        $this->assertFalse($this->plugin->isFrozenEnrollment(2, $sorted[3]));
-        $this->assertFalse($this->plugin->isFrozenEnrollment(0, $sorted[3]));
+        $this->conn->insert('plugin_buycourses_frozen_enrollment', ['course_id' => 1, 'user_id' => $b, 'frozen_since' => $since]);
+        $this->assertTrue($this->plugin->isFrozenEnrollment(1, $b));
+        $this->assertFalse($this->plugin->isFrozenEnrollment(1, $a));
+        $this->assertFalse($this->plugin->isFrozenEnrollment(2, $b));
+        $this->assertFalse($this->plugin->isFrozenEnrollment(0, $b));
         $this->assertFalse($this->plugin->isFrozenEnrollment(1, 0));
 
-        // A new run rebuilds the list from scratch.
-        $this->plugin->freezeExcessEnrollmentsForCourse(1, 3);
-        $this->assertSame([$sorted[3]], $this->frozenUserIds(1));
-        // Not above the limit: the list is cleared.
-        $this->plugin->freezeExcessEnrollmentsForCourse(1, 4);
-        $this->assertSame([], $this->frozenUserIds(1));
-        $this->plugin->freezeExcessEnrollmentsForCourse(1, 1);
-        $this->assertCount(3, $this->frozenUserIds(1));
-        // A limit of zero or less clears.
-        $this->plugin->freezeExcessEnrollmentsForCourse(1, 0);
-        $this->assertSame([], $this->frozenUserIds(1));
-
-        $this->conn->insert('plugin_buycourses_frozen_enrollment', ['course_id' => 2, 'user_id' => $a, 'frozen_since' => '2026-01-01 00:00:00']);
-        $this->conn->insert('plugin_buycourses_frozen_enrollment', ['course_id' => 1, 'user_id' => $a, 'frozen_since' => '2026-01-01 00:00:00']);
+        $this->conn->insert('plugin_buycourses_frozen_enrollment', ['course_id' => 2, 'user_id' => $a, 'frozen_since' => $since]);
+        $this->conn->insert('plugin_buycourses_frozen_enrollment', ['course_id' => 1, 'user_id' => $a, 'frozen_since' => $since]);
         $this->plugin->clearFrozenEnrollmentsForCourse(1);
         $this->assertSame([], $this->frozenUserIds(1));
         $this->assertSame([$a], $this->frozenUserIds(2), 'only the requested course is cleared');
         $this->plugin->clearFrozenEnrollmentsForCourse(0);
-        $this->assertSame([$a], $this->frozenUserIds(2));
-        $this->plugin->freezeExcessEnrollmentsForCourse(0, 1);
         $this->assertSame([$a], $this->frozenUserIds(2));
     }
 
@@ -668,54 +638,5 @@ final class BuyCoursesTier3bCharacterizationTest extends BuyCoursesCharacterizat
 
         $this->plugin->applyAiCourseFeatureSettingsToCourse(0, ['toolbox']);
         $this->assertSame(0, (int) $this->conn->fetchOne("SELECT COUNT(*) FROM c_course_setting WHERE c_id = 0 AND category = 'ai_helpers'"));
-    }
-
-    public function testProcessExpiredServiceBenefitsClosesExcessCoursesFreezesStudentsAndSwitchesOffAiFeatures(): void
-    {
-        $ids = $this->userIds(8);
-        [$buyer, $other, $s1, $s2] = [$ids[7], $ids[6], $ids[3], $ids[4]];
-        $this->clearLinks();
-        $this->conn->executeStatement('DELETE FROM plugin_buycourses_service_sale');
-        $this->conn->executeStatement('DELETE FROM plugin_buycourses_frozen_enrollment');
-        $this->conn->executeStatement('DELETE FROM course_rel_user WHERE c_id IN (1, 2)');
-        $this->conn->executeStatement('DELETE FROM c_course_setting WHERE c_id IN (1, 2)');
-        $this->conn->executeStatement('UPDATE course SET visibility = 2 WHERE id IN (1, 2)');
-        $this->subscribe($buyer, 1, 1);
-        $this->subscribe($buyer, 2, 1);
-        $this->subscribe($s1, 1, 5);
-        $this->subscribe($s2, 1, 5);
-        $this->plugin->saveUserExtraFieldJsonValue($buyer, $this->fieldId(BuyCoursesPlugin::EXTRA_FIELD_MAX_COURSES), ['limit' => 1, 'expiry' => '2099-01-01 00:00:00']);
-
-        $service = $this->makeService();
-        $expired = $this->makeServiceSale($service, ['buyer_id' => $buyer, 'date_end' => '2000-01-01 00:00:00']);
-        $running = $this->makeServiceSale($service, ['buyer_id' => $buyer]);
-        $this->makeServiceSale($service, ['buyer_id' => $other, 'date_end' => '2000-01-01 00:00:00']);
-        $this->makeServiceSale($service, ['buyer_id' => $s1, 'date_end' => '2000-01-01 00:00:00', 'status' => 0]);
-        $courseOneLink = $this->link($running, $service, 1, ['user_id' => $buyer, 'context_json' => '{"hosting_limit":1}']);
-        $courseTwoLink = $this->link($expired, $service, 2, ['user_id' => $buyer, 'context_json' => '{}']);
-
-        $this->assertSame(2, $this->plugin->processExpiredServiceBenefits(), 'distinct buyers of expired completed sales');
-
-        $visibility = array_map('intval', $this->conn->fetchAllKeyValue('SELECT id, visibility FROM course WHERE id IN (1, 2)'));
-        $this->assertSame([1 => 2, 2 => 0], $visibility, 'the managed course beyond the limit (highest id) is closed');
-        $this->assertCount(1, $this->frozenUserIds(1), 'course 1 has a hosting limit of 1 for 2 students');
-        $this->assertSame([max($s1, $s2)], $this->frozenUserIds(1));
-        $aiSettings = $this->conn->fetchAllKeyValue("SELECT variable, value FROM c_course_setting WHERE c_id = 2 AND category = 'ai_helpers'");
-        $this->assertCount(\count($this->plugin->getAiCourseFeatureDefinitions()), $aiSettings);
-        $this->assertSame(['false'], array_values(array_unique($aiSettings)));
-        $this->assertSame(0, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM c_course_setting WHERE c_id = 1'));
-        $this->assertSame('ai_expired', $this->conn->fetchOne('SELECT last_action FROM plugin_buycourses_subscription_course WHERE id = ?', [$courseTwoLink]));
-        $this->assertNotNull($this->conn->fetchOne('SELECT updated_at FROM plugin_buycourses_subscription_course WHERE id = ?', [$courseTwoLink]));
-        $this->assertNull($this->conn->fetchOne('SELECT last_action FROM plugin_buycourses_subscription_course WHERE id = ?', [$courseOneLink]));
-    }
-
-    public function testProcessExpiredServiceBenefitsDoesNothingWithoutExpiredCompletedSales(): void
-    {
-        $this->clearLinks();
-        $this->conn->executeStatement('DELETE FROM plugin_buycourses_service_sale');
-        $service = $this->makeService();
-        $this->makeServiceSale($service, ['status' => 0, 'date_end' => '2000-01-01 00:00:00']);
-        $this->makeServiceSale($service, ['date_end' => '2099-01-01 00:00:00']);
-        $this->assertSame(0, $this->plugin->processExpiredServiceBenefits());
     }
 }

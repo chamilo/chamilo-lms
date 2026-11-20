@@ -1590,27 +1590,6 @@ function zip_download($fileList)
 }
 
 /**
- * This is a callback function to decrypt the files in the zip file
- * to their normal filename (as stored in the database).
- *
- * @param array $p_event  a variable of PCLZip
- * @param array $p_header a variable of PCLZip
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version march 2006
- *
- * Passed by name as the PclZip pre-add callback of zip_download().
- */
-function my_pre_add_callback($p_event, &$p_header)
-{
-    $files = Session::read('dropbox_files_to_download');
-    $p_header['stored_filename'] = $files[$p_header['stored_filename']]['title'];
-
-    return 1;
-}
-
-/**
  * @desc This function retrieves the number of feedback messages on every
  * document. This function might become obsolete when
  *       the feedback becomes user individual.

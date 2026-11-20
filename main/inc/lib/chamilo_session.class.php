@@ -56,6 +56,20 @@ class ChamiloSession extends System\Session
     }
 
     /**
+     * Returns whether the current user is excluded from the configured session lifetime.
+     *
+     * @return bool
+     */
+    public static function is_lifetime_excluded(): bool
+    {
+        if (true !== api_get_configuration_value('session_lifetime_exclude_admins')) {
+            return false;
+        }
+
+        return api_is_platform_admin() || api_is_session_admin();
+    }
+
+    /**
      * Starts the Chamilo session.
      *
      * The default lifetime for session is set here. It is not possible to have it
@@ -118,7 +132,7 @@ class ChamiloSession extends System\Session
 
         // If the session time has expired, refresh the starttime value,
         //  so we're starting to count down from a later time
-        if (self::has('starttime') && $session->is_expired()) {
+        if (!self::is_lifetime_excluded() && self::has('starttime') && $session->is_expired()) {
             self::destroy();
         } else {
             //error_log('Time not expired, extend session for a bit more');
@@ -144,6 +158,10 @@ class ChamiloSession extends System\Session
      */
     public function end_time()
     {
+        if (self::is_lifetime_excluded()) {
+            return PHP_INT_MAX;
+        }
+
         $start_time = $this->start_time();
         $lifetime = self::session_lifetime();
 
@@ -157,6 +175,6 @@ class ChamiloSession extends System\Session
      */
     public function is_expired()
     {
-        return $this->end_time() < time();
+        return !self::is_lifetime_excluded() && $this->end_time() < time();
     }
 }

@@ -168,6 +168,8 @@ $_configuration['password_encryption'] = '{ENCRYPT_PASSWORD}';
 $_configuration['session_stored_in_db'] = false;
 // Session lifetime
 $_configuration['session_lifetime'] = SESSION_LIFETIME;
+// Exclude platform administrators and session administrators from the session lifetime limit
+//$_configuration['session_lifetime_exclude_admins'] = false;
 // Activation for multi-url access
 // When enabling multi-url, settings can be configured by multi-url using a simple
 // sub-element. E.g. $_configuration['session_lifetime'][1] = true; could be turned into

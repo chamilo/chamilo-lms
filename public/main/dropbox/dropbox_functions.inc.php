@@ -110,7 +110,7 @@ function handle_multiple_actions()
 
     // STEP 3D: downloading
     if ('download_sent' == $_POST['action'] || 'download_received' == $_POST['action']) {
-        zip_download($checked_file_ids);
+        return zip_download($checked_file_ids);
     }
 }
 
@@ -1511,24 +1511,75 @@ function dropbox_files_to_zip(array $fileList): array
  *
  * @version march 2006
  */
+function dropbox_build_zip(array $fileList): ?string
+{
+    $files = dropbox_files_to_zip($fileList);
+    if (empty($files)) {
+        return null;
+    }
+
+    $em = Container::getEntityManager();
+    $resourceNodeRepository = Container::getResourceNodeRepository();
+    $courseId = (int) api_get_course_int_id();
+
+    $temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
+    $zip = new ZipArchive();
+    if (true !== $zip->open($temp_zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
+        return null;
+    }
+
+    $usedNames = [];
+    foreach ($files as $value) {
+        // The stored filename is unique, and the selection above already limited it to this course.
+        $file = $em->getRepository(CDropboxFile::class)->findOneBy([
+            'filename' => $value['filename'],
+            'cId' => $courseId,
+        ]);
+        $resourceNode = $file?->getResourceNode();
+        if (null === $resourceNode) {
+            continue;
+        }
+
+        try {
+            $content = $resourceNodeRepository->getResourceNodeFileContent($resourceNode);
+        } catch (Throwable $e) {
+            continue;
+        }
+
+        // The title is user input: keep only its last path segment, without control characters.
+        $entryName = trim(basename(str_replace('\\', '/', (string) preg_replace('/[\x00-\x1F\x7F]/', '', (string) $value['title']))));
+        if ('' === $entryName || '.' === $entryName || '..' === $entryName) {
+            $entryName = basename((string) $value['filename']);
+        }
+        $info = pathinfo($entryName);
+        $base = $info['filename'];
+        $extension = isset($info['extension']) ? '.'.$info['extension'] : '';
+        $candidate = $entryName;
+        for ($i = 2; isset($usedNames[mb_strtolower($candidate)]); $i++) {
+            $candidate = $base.' ('.$i.')'.$extension;
+        }
+        $usedNames[mb_strtolower($candidate)] = true;
+
+        $zip->addFromString($candidate, $content);
+    }
+
+    $added = $zip->numFiles;
+    $zip->close();
+    if (0 === $added) {
+        @unlink($temp_zip_file);
+
+        return null;
+    }
+
+    return $temp_zip_file;
+}
+
 function zip_download($fileList)
 {
-    $_course = api_get_course_info();
-    $files = dropbox_files_to_zip($fileList);
-
-    // Step 3: create the zip file and add all the files to it
-    $temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
-    Session::write('dropbox_files_to_download', $files);
-    $zip = new PclZip($temp_zip_file);
-    foreach ($files as $value) {
-        $zip->add(
-            api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$value['filename'],
-            PCLZIP_OPT_REMOVE_ALL_PATH,
-            PCLZIP_CB_PRE_ADD,
-            'my_pre_add_callback'
-        );
+    $temp_zip_file = dropbox_build_zip($fileList);
+    if (null === $temp_zip_file) {
+        return get_lang('Check at least one file.');
     }
-    Session::erase('dropbox_files_to_download');
     $name = 'dropbox-'.api_get_utc_datetime().'.zip';
     $result = DocumentManager::file_send_for_download($temp_zip_file, true, $name);
     if (false === $result) {

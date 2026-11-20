@@ -6,20 +6,27 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CDropboxFile;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use ZipArchive;
 
 /**
  * Pins for dropbox_functions.inc.php that DropboxCharacterizationTest leaves out: the category form, which reads
  * the category it edits (by cat_id, in the current course) to prefill the name and the target.
  *
- * zip_download() streams a zip archive and exits, so only its file selection (dropbox_files_to_zip()) is tested.
+ * zip_download() streams a zip archive and exits, so the file selection (dropbox_files_to_zip()) and the archive
+ * building (dropbox_build_zip()) are tested instead.
  */
 final class DropboxTier2CharacterizationTest extends KernelTestCase
 {
@@ -144,6 +151,127 @@ final class DropboxTier2CharacterizationTest extends KernelTestCase
         $this->post($file, 2);
 
         $this->assertSame([], dropbox_files_to_zip([$file]));
+    }
+
+    public function testZipContainsTheSelectedFilesUnderTheirTitleWithTheirStoredContent(): void
+    {
+        // Current user is id 1. Files are stored the way the upload API stores them: a resource file.
+        $sent = $this->storedFile(1, 'db2_sent_title.txt', 'content of the sent file');
+        $received = $this->storedFile(2, 'db2_received_title.txt', 'content of the received file');
+        $this->person($sent, 1);
+        $this->post($sent, 2);
+        $this->person($received, 2);
+        $this->post($received, 1);
+
+        $path = dropbox_build_zip([$sent, $received]);
+
+        $this->assertIsString($path);
+        $this->assertFileExists($path);
+        $zip = new ZipArchive();
+        $this->assertTrue($zip->open($path));
+        $entries = $this->zipEntries($zip);
+        $zip->close();
+        @unlink($path);
+        $this->assertSame([
+            'db2_received_title.txt' => 'content of the received file',
+            'db2_sent_title.txt' => 'content of the sent file',
+        ], $entries);
+    }
+
+    public function testZipDoesNotContainAFileOfAnotherUserNorAnotherCourse(): void
+    {
+        $mine = $this->storedFile(1, 'db2_mine.txt', 'mine');
+        $foreign = $this->storedFile(2, 'db2_foreign.txt', 'foreign');
+        $otherCourse = $this->storedFile(1, 'db2_other_course.txt', 'other course');
+        $this->person($mine, 1);
+        $this->post($mine, 2);
+        $this->person($foreign, 2);
+        $this->post($foreign, 3);
+        $this->person($otherCourse, 1);
+        $this->post($otherCourse, 2);
+        $this->conn->executeStatement('UPDATE c_dropbox_file SET c_id = 2 WHERE iid = ?', [$otherCourse]);
+
+        $path = dropbox_build_zip([$mine, $foreign, $otherCourse]);
+
+        $zip = new ZipArchive();
+        $this->assertTrue($zip->open((string) $path));
+        $entries = $this->zipEntries($zip);
+        $zip->close();
+        @unlink((string) $path);
+        $this->assertSame(['db2_mine.txt' => 'mine'], $entries);
+    }
+
+    public function testZipEntryNamesCannotEscapeTheArchiveAndStayUnique(): void
+    {
+        $evil = $this->storedFile(1, '../../etc/db2_evil.txt', 'evil');
+        $twinA = $this->storedFile(1, 'db2_twin.txt', 'first twin');
+        $twinB = $this->storedFile(1, 'db2_twin.txt', 'second twin');
+        foreach ([$evil, $twinA, $twinB] as $id) {
+            $this->person($id, 1);
+            $this->post($id, 2);
+        }
+
+        $path = dropbox_build_zip([$evil, $twinA, $twinB]);
+
+        $zip = new ZipArchive();
+        $this->assertTrue($zip->open((string) $path));
+        $entries = $this->zipEntries($zip);
+        $zip->close();
+        @unlink((string) $path);
+        foreach (array_keys($entries) as $name) {
+            $this->assertStringNotContainsString('/', $name);
+            $this->assertStringNotContainsString('..', $name);
+        }
+        $this->assertCount(3, $entries, 'two files with the same title must not overwrite each other');
+        $this->assertContains('evil', $entries);
+        $this->assertContains('first twin', $entries);
+        $this->assertContains('second twin', $entries);
+    }
+
+    public function testZipOfAnEmptySelectionBuildsNothing(): void
+    {
+        $this->assertNull(dropbox_build_zip([]));
+    }
+
+    /**
+     * @return array<string, string> entry name => content, sorted by name
+     */
+    private function zipEntries(ZipArchive $zip): array
+    {
+        $entries = [];
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $entries[(string) $zip->getNameIndex($i)] = (string) $zip->getFromIndex($i);
+        }
+        ksort($entries);
+
+        return $entries;
+    }
+
+    /**
+     * A dropbox file stored like the upload API does: the content is a resource file of its resource node.
+     */
+    private function storedFile(int $uploader, string $title, string $content): int
+    {
+        $em = Container::getEntityManager();
+        $tmp = tempnam(sys_get_temp_dir(), 'db2');
+        file_put_contents($tmp, $content);
+        $upload = new UploadedFile($tmp, 'db2_original.txt', 'text/plain', null, true);
+
+        $file = (new CDropboxFile())
+            ->setTitle($title)
+            ->setFilename(uniqid('db2_', true).'.txt')
+            ->setFilesize(\strlen($content))
+            ->setUploaderId($uploader)
+            ->setLastUploadDate(new DateTime())
+            ->setParent($em->getReference(Course::class, 1))
+            ->setCreator($em->getReference(User::class, 1))
+            ->addCourseLink($em->getReference(Course::class, 1))
+            ->setCId(1)
+        ;
+        $file->setUploadFile($upload);
+        Container::getDropboxFileRepository()->create($file);
+
+        return (int) $file->getIid();
     }
 
     private function person(int $fileId, int $userId): void

@@ -323,6 +323,47 @@ final class SessionManagerTier3cCharacterizationTest extends KernelTestCase
         $this->assertSame(['sm3c_ov_other', 'sm3c_ov_other'], array_column($dated, 'username'), 'both ends of the range are whole days');
     }
 
+    public function testGetUserDataAccessTrackingOverviewFiltersOnTheDatesTheReportGridPasses(): void
+    {
+        $course = $this->createCourse('sm3c_ovd_course');
+        $session = $this->createSession('sm3c_ovd_session');
+        $student = $this->createUser('sm3c_ovd_student');
+        $this->access($course, $session, $student, '2026-03-02 10:00:00', '2026-03-02 11:00:00', 1);
+        $this->access($course, $session, $student, '2026-03-10 10:00:00', '2026-03-10 11:00:00', 1);
+
+        // What model.ajax.php used to pass: the dates swapped and cast to int, i.e. never a filter.
+        $old = SessionManager::get_user_data_access_tracking_overview(
+            $session->getId(),
+            $course->getId(),
+            0,
+            0,
+            (int) '2026-03-05',
+            (int) '2026-03-01'
+        );
+        $this->assertCount(2, $old, 'the old arguments left the date filter inactive');
+
+        // What it passes now: date_from then date_to, as the YYYY-MM-DD strings of the grid.
+        $new = SessionManager::get_user_data_access_tracking_overview(
+            $session->getId(),
+            $course->getId(),
+            0,
+            0,
+            '2026-03-01',
+            '2026-03-05'
+        );
+        $this->assertSame(['2026-03-02 10:00:00'], array_column($new, 'logindate'));
+
+        // Swapped strings select nothing: the order of the two arguments matters.
+        $this->assertSame([], SessionManager::get_user_data_access_tracking_overview(
+            $session->getId(),
+            $course->getId(),
+            0,
+            0,
+            '2026-03-05',
+            '2026-03-01'
+        ));
+    }
+
     public function testGetUserDataAccessTrackingOverviewAcceptsTheSortFieldsOfTheGrid(): void
     {
         $course = $this->createCourse('sm3c_ovs_course');

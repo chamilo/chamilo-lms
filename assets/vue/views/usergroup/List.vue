@@ -90,7 +90,7 @@
           <div class="group-details">
             <a
               :href="`/resources/usergroups/show/${extractGroupId(group)}`"
-              class="text-lg font-semibold text-blue-600 hover:underline"
+              class="text-lg font-semibold text-primary hover:underline"
               >{{ group.title }}</a
             >
             <div class="group-info text-gray-500">
@@ -127,7 +127,7 @@
           <div class="group-details">
             <a
               :href="`/resources/usergroups/show/${extractGroupId(group)}`"
-              class="text-lg font-semibold text-blue-600 hover:underline"
+              class="text-lg font-semibold text-primary hover:underline"
               >{{ group.title }}</a
             >
             <div class="group-info text-gray-500">
@@ -164,7 +164,7 @@
           <div class="group-details">
             <a
               :href="`/resources/usergroups/show/${extractGroupId(group)}`"
-              class="text-lg font-semibold text-blue-600 hover:underline"
+              class="text-lg font-semibold text-primary hover:underline"
               >{{ group.title }}</a
             >
             <div class="group-info text-gray-500">

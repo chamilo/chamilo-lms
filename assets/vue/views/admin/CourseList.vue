@@ -209,7 +209,7 @@
         <template #body="{ data }">
           <router-link
             :to="{ name: 'CourseHome', params: { id: data.id } }"
-            class="text-blue-600 hover:underline"
+            class="text-primary hover:underline"
           >
             {{ data.title }}
           </router-link>

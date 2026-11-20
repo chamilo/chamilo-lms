@@ -225,7 +225,7 @@ onMounted(() => {
               :href="data.url"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-blue-600 hover:underline"
+              class="text-primary hover:underline"
             >
               {{ data.url }}
             </a>

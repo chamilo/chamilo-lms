@@ -36,7 +36,7 @@
                 :href="cert.downloadUrl"
                 target="_blank"
                 rel="noopener"
-                class="text-blue-600 hover:underline"
+                class="text-primary hover:underline"
               >
                 <i class="mdi mdi-download" />
               </a>

@@ -154,7 +154,7 @@ onMounted(loadReport)
           :href="block.url"
           target="_blank"
           rel="noopener noreferrer"
-          class="text-blue-600 hover:underline"
+          class="text-primary hover:underline"
         >
           {{ block.url }}
         </a>

@@ -28,7 +28,7 @@
             <h4 class="text-lg font-semibold">
               <a
                 :href="'profile.php?u=' + invitation.itemId"
-                class="text-blue-600 hover:underline"
+                class="text-primary hover:underline"
                 >{{ invitation.itemName }}</a
               >
             </h4>

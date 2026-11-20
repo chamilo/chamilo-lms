@@ -71,7 +71,7 @@
       <Column :header="t('E-mail')">
         <template #body="slotProps">
           <a
-            class="text-blue-600 hover:underline"
+            class="text-primary hover:underline"
             :href="`mailto:${slotProps.data.email}`"
           >
             {{ slotProps.data.email }}

@@ -30,7 +30,7 @@
               gid: route.query.gid,
             },
           }"
-          class="text-body-2 font-semibold text-primary hover:underline"
+          class="text-primary hover:underline"
         >
           {{ slotProps.data.title }}
         </BaseAppLink>

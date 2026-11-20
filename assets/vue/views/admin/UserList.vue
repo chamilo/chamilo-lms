@@ -211,7 +211,7 @@
         <template #body="{ data }">
           <BaseAppLink
             :url="`/main/admin/user_information.php?user_id=${data.id}`"
-            class="text-blue-600 hover:underline"
+            class="text-primary hover:underline"
           >
             {{ data.firstname }}
           </BaseAppLink>
@@ -225,7 +225,7 @@
         <template #body="{ data }">
           <BaseAppLink
             :url="`/main/admin/user_information.php?user_id=${data.id}`"
-            class="text-blue-600 hover:underline"
+            class="text-primary hover:underline"
           >
             {{ data.lastname }}
           </BaseAppLink>

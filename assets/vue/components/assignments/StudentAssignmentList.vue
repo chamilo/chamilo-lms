@@ -17,7 +17,7 @@
     <Column :header="t('Title')">
       <template #body="slotProps">
         <a
-          class="text-blue-600 hover:underline cursor-pointer flex items-center gap-1"
+          class="text-primary hover:underline cursor-pointer flex items-center gap-1"
           @click="goToAssignmentDetail(slotProps.data)"
         >
           {{ slotProps.data.title }}

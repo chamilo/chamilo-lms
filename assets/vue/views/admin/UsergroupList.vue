@@ -261,7 +261,7 @@ onMounted(() => {
         <template #body="{ data }">
           <router-link
             :to="{ name: 'AdminUsergroupUsers', params: { id: data.id } }"
-            class="text-blue-600 hover:underline"
+            class="text-primary hover:underline"
           >
             {{ data.userCount }}
           </router-link>

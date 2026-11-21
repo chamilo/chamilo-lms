@@ -43826,3 +43826,36 @@ msgstr ""
 
 msgid "Download the migration report (global administrator login required)"
 msgstr ""
+
+msgid "Assign scores"
+msgstr ""
+
+msgid "Assign these scores to the selected questions?"
+msgstr ""
+
+msgid "Below-full-score attempts"
+msgstr ""
+
+msgid "Edit classification"
+msgstr ""
+
+msgid "Full-score attempts"
+msgstr ""
+
+msgid "Occurrences"
+msgstr ""
+
+msgid "Only unused single-answer questions owned by this context can receive bulk scores."
+msgstr ""
+
+msgid "Question classification updated"
+msgstr ""
+
+msgid "Question scores updated"
+msgstr ""
+
+msgid "Questions in test"
+msgstr ""
+
+msgid "Statistics count completed, graded attempts in this course and session, using the current maximum question score. Partial scores count as below full score."
+msgstr ""

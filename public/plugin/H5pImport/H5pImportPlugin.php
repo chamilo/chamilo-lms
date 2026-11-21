@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImport;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImportLibrary;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImportResults;
@@ -55,39 +56,54 @@ class H5pImportPlugin extends Plugin
         int $lpItemId,
         int $userId
     ): int {
-        $lpItemViewTable = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $em = Database::getManager();
 
-        $sql = "SELECT iid, score
-            FROM $lpItemViewTable
-            WHERE iid = $lpItemId
-            ORDER BY view_count DESC
-            LIMIT 1";
-        $responseItemView = Database::query($sql);
-        $lpItemView = Database::fetch_array($responseItemView);
+        $lpItemView = $em->createQueryBuilder()
+            ->select('v.iid AS iid', 'v.score AS score')
+            ->from(CLpItemView::class, 'v')
+            ->where('v.iid = :iid')
+            ->orderBy('v.viewCount', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('iid', $lpItemId)
+            ->getQuery()
+            ->getOneOrNullResult();
 
         if (empty($lpItemView['iid'])) {
             return 0;
         }
 
-        $sql = 'SELECT SUM(total_time) AS exe_duration
-            FROM '.self::TBL_H5P_IMPORT_RESULTS.'
-            WHERE user_id = '.$userId.' AND c_lp_item_view_id = '.$lpItemView['iid'];
-        $sumScoreResult = Database::query($sql);
-        $durationRow = Database::fetch_assoc($sumScoreResult);
+        $duration = $em->getConnection()->createQueryBuilder()
+            ->select('SUM(total_time) AS exe_duration')
+            ->from(self::TBL_H5P_IMPORT_RESULTS)
+            ->where('user_id = :userId')
+            ->andWhere('c_lp_item_view_id = :viewId')
+            ->setParameter('userId', $userId)
+            ->setParameter('viewId', (int) $lpItemView['iid'])
+            ->executeQuery()
+            ->fetchOne();
 
-        if (!empty($durationRow['exe_duration'])) {
-            $sqlUpdate = 'UPDATE '.$lpItemViewTable.'
-                SET total_time = '.$durationRow['exe_duration'].'
-                WHERE iid = '.$lpItemView['iid'];
-            Database::query($sqlUpdate);
+        if (!empty($duration)) {
+            $em->createQueryBuilder()
+                ->update(CLpItemView::class, 'v')
+                ->set('v.totalTime', ':totalTime')
+                ->where('v.iid = :iid')
+                ->setParameter('totalTime', (int) $duration)
+                ->setParameter('iid', (int) $lpItemView['iid'])
+                ->getQuery()
+                ->execute();
 
-            return (int) $durationRow['exe_duration'];
+            return (int) $duration;
         }
 
-        $sqlUpdate = 'UPDATE '.$lpItemViewTable.'
-            SET status = "not attempted", total_time = 0
-            WHERE iid = '.$lpItemView['iid'];
-        Database::query($sqlUpdate);
+        $em->createQueryBuilder()
+            ->update(CLpItemView::class, 'v')
+            ->set('v.status', ':status')
+            ->set('v.totalTime', '0')
+            ->where('v.iid = :iid')
+            ->setParameter('status', 'not attempted')
+            ->setParameter('iid', (int) $lpItemView['iid'])
+            ->getQuery()
+            ->execute();
 
         return 0;
     }
@@ -268,6 +284,7 @@ class H5pImportPlugin extends Plugin
         }
     }
 
+    // TODO(db-neutral): not migrated, no characterization test (uninstall-time filesystem cleanup)
     private function removeH5pDirectories(): void
     {
         $fs = new Filesystem();

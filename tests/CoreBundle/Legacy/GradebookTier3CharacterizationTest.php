@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use Doctrine\DBAL\Connection;
+use Evaluation;
 use GradebookUtils;
 use Result;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -650,5 +651,162 @@ final class GradebookTier3CharacterizationTest extends KernelTestCase
 
         $this->assertTrue($yes->exists());
         $this->assertFalse($no->exists());
+    }
+
+    // ---------------------------------------------------------------- Evaluation
+
+    private function evalRow(int $id): array
+    {
+        return $this->conn->fetchAssociative(
+            'SELECT title, description, c_id, category_id, weight, max, visible, locked FROM gradebook_evaluation WHERE id = ?',
+            [$id]
+        );
+    }
+
+    public function testEvaluationSaveRewritesTheEditableColumnsAndLogsTheOldState(): void
+    {
+        $cat = $this->category(1);
+        $other = $this->evaluation(1, $cat);
+        $id = $this->evaluation(1, $cat);
+        $this->conn->executeStatement(
+            "UPDATE gradebook_evaluation SET title = 'g3 old', description = 'old description', weight = 5, max = 20, visible = 1 WHERE id = ?",
+            [$id]
+        );
+        $eval = Evaluation::load($id)[0];
+        $eval->set_name("g3 new 'quoted'");
+        $eval->set_description('new description');
+        $eval->set_weight('37.5');
+        $eval->set_max(8.9);
+        $eval->set_visible(0);
+
+        $eval->save();
+
+        $row = $this->evalRow($id);
+        $this->assertSame("g3 new 'quoted'", $row['title']);
+        $this->assertSame('new description', $row['description']);
+        $this->assertSame(1, (int) $row['c_id']);
+        $this->assertSame($cat, (int) $row['category_id']);
+        $this->assertSame(37.5, (float) $row['weight']);
+        // intval(): the maximum is truncated.
+        $this->assertSame(8.0, (float) $row['max']);
+        $this->assertSame(0, (int) $row['visible']);
+        $this->assertSame('g3_eval_', substr($this->evalRow($other)['title'], 0, 8));
+        $this->assertSame(10.0, (float) $this->evalRow($other)['weight']);
+        // The history keeps the state before the update.
+        $log = $this->conn->fetchAssociative(
+            "SELECT title, description, weight, visible, type, user_id_log FROM gradebook_linkeval_log WHERE id_linkeval_log = ? AND type = 'evaluation'",
+            [$id]
+        );
+        $this->assertSame('g3 old', $log['title']);
+        $this->assertSame('old description', $log['description']);
+        $this->assertSame(5, (int) $log['weight']);
+        $this->assertSame(1, (int) $log['visible']);
+        $this->assertSame(1, (int) $log['user_id_log']);
+    }
+
+    public function testEvaluationHasResultsOnlyCountsScoredResults(): void
+    {
+        $withScore = $this->evaluation();
+        $onlyEmpty = $this->evaluation();
+        $none = $this->evaluation();
+        $a = $this->user('A', 'A');
+        $b = $this->user('B', 'B');
+        $this->resultRow($withScore, $a, 0.0);
+        $this->resultRow($onlyEmpty, $b, null);
+        $load = static fn (int $id): Evaluation => Evaluation::load($id)[0];
+
+        $this->assertTrue($load($withScore)->has_results());
+        $this->assertFalse($load($onlyEmpty)->has_results());
+        $this->assertFalse($load($none)->has_results());
+        $this->assertSame('evalnotempty', $load($withScore)->get_icon_name());
+        $this->assertSame('evalempty', $load($onlyEmpty)->get_icon_name());
+    }
+
+    public function testEvaluationDeleteResultsAndDeleteTouchOnlyThatEvaluation(): void
+    {
+        $e1 = $this->evaluation();
+        $e2 = $this->evaluation();
+        $a = $this->user('A', 'A');
+        $this->resultRow($e1, $a, 1.0);
+        $this->resultRow($e2, $a, 2.0);
+
+        Evaluation::load($e1)[0]->delete_results();
+
+        $this->assertSame([], $this->resultsOf($e1));
+        $this->assertCount(1, $this->resultsOf($e2));
+        $this->assertSame(1, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM gradebook_evaluation WHERE id = ?', [$e1]));
+
+        Evaluation::load($e1)[0]->delete();
+        $this->assertSame(0, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM gradebook_evaluation WHERE id = ?', [$e1]));
+        $this->assertSame(1, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM gradebook_evaluation WHERE id = ?', [$e2]));
+
+        Evaluation::load($e2)[0]->delete_with_results();
+        $this->assertSame(0, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM gradebook_evaluation WHERE id = ?', [$e2]));
+        $this->assertSame([], $this->resultsOf($e2));
+    }
+
+    public function testEvaluationLockLocksAndUnlocksOnlyThatEvaluation(): void
+    {
+        $e1 = $this->evaluation();
+        $e2 = $this->evaluation();
+
+        Evaluation::load($e1)[0]->lock(1);
+        $this->assertSame(1, (int) $this->evalRow($e1)['locked']);
+        $this->assertSame(0, (int) $this->evalRow($e2)['locked']);
+
+        Evaluation::load($e1)[0]->lock(0);
+        $this->assertSame(0, (int) $this->evalRow($e1)['locked']);
+    }
+
+    public function testEvaluationAddEvaluationLogStoresTheCurrentWeight(): void
+    {
+        $id = $this->evaluation();
+        $this->conn->executeStatement("UPDATE gradebook_evaluation SET weight = 42, description = 'g3 d', visible = 0 WHERE id = ?", [$id]);
+
+        (new Evaluation())->addEvaluationLog($id);
+
+        $rows = $this->conn->fetchAllAssociative(
+            'SELECT title, description, weight, visible, type, user_id_log FROM gradebook_linkeval_log WHERE id_linkeval_log = ?',
+            [$id]
+        );
+        $this->assertCount(1, $rows);
+        $this->assertSame('g3 d', $rows[0]['description']);
+        $this->assertSame(42, (int) $rows[0]['weight']);
+        $this->assertSame(0, (int) $rows[0]['visible']);
+        $this->assertSame('evaluation', $rows[0]['type']);
+    }
+
+    public function testEvaluationsWithResultForAStudentFilterByScoreVisibilityAndCategory(): void
+    {
+        $cat1 = $this->category(1);
+        $cat2 = $this->category(1);
+        $student = $this->user('S', 'S');
+        $other = $this->user('O', 'O');
+        $visible1 = $this->evaluation(1, $cat1);
+        $visible2 = $this->evaluation(1, $cat2);
+        $hidden = $this->evaluation(1, $cat1);
+        $noScore = $this->evaluation(1, $cat1);
+        $notMine = $this->evaluation(1, $cat1);
+        $uncategorised = $this->evaluation(1, null);
+        $this->conn->executeStatement('UPDATE gradebook_evaluation SET visible = 0 WHERE id = ?', [$hidden]);
+        foreach ([$visible1, $visible2, $hidden, $uncategorised] as $e) {
+            $this->resultRow($e, $student, 3.0);
+        }
+        $this->resultRow($noScore, $student, null);
+        $this->resultRow($notMine, $other, 3.0);
+        $ids = static fn (array $l): array => array_map(static fn (Evaluation $e): int => $e->get_id(), $l);
+
+        // Editing rights: hidden evaluations are listed too. With no category given, uncategorised ones are left out.
+        $asAdmin = $ids(Evaluation::get_evaluations_with_result_for_student($student));
+        sort($asAdmin);
+        $this->assertSame([$visible1, $visible2, $hidden], $asAdmin);
+        $this->assertSame([$visible2], $ids(Evaluation::get_evaluations_with_result_for_student($student, $cat2)));
+        $this->assertSame([], $ids(Evaluation::get_evaluations_with_result_for_student($other, $cat2)));
+
+        // A user without rights does not see the hidden one.
+        $this->context(2, 1);
+        $asStudent = $ids(Evaluation::get_evaluations_with_result_for_student($student));
+        sort($asStudent);
+        $this->assertSame([$visible1, $visible2], $asStudent);
     }
 }

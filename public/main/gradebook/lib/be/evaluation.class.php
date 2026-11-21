@@ -3,6 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\GradebookResult;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -238,6 +240,7 @@ class Evaluation implements GradebookItem
         ?int $locked = -1
     ): array {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+        // TODO(db-neutral): SQL fragment built by another class (GradebookUtils::taughtCoursesCondition) for the user filter
         $sql = 'SELECT * FROM '.$table;
         $parametersCount = 0;
 
@@ -360,16 +363,18 @@ class Evaluation implements GradebookItem
     public function addEvaluationLog($id)
     {
         if (!empty($id)) {
-            $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
             $tbl_grade_linkeval_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
             $eval = new Evaluation();
             $dateobject = $eval->load($id, null, null, null, null);
             $arreval = get_object_vars($dateobject[0]);
             if (!empty($arreval['id'])) {
-                $sql = 'SELECT weight from '.$tbl_grade_evaluations.'
-                        WHERE id='.$arreval['id'];
-                $rs = Database::query($sql);
-                $row_old_weight = Database::fetch_assoc($rs);
+                $row_old_weight = Container::getEntityManager()->createQueryBuilder()
+                    ->select('e.weight AS weight')
+                    ->from(GradebookEvaluation::class, 'e')
+                    ->where('e.id = :id')
+                    ->setParameter('id', (int) $arreval['id'])
+                    ->getQuery()
+                    ->getArrayResult()[0] ?? false;
                 $current_date = api_get_utc_datetime();
                 $params = [
                     'id_linkeval_log' => $arreval['id'],
@@ -392,36 +397,30 @@ class Evaluation implements GradebookItem
      */
     public function save()
     {
-        $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $sql = 'UPDATE '.$tbl_grade_evaluations
-            ." SET title = '".Database::escape_string($this->get_name())."'"
-            .', description = ';
-        if (isset($this->description)) {
-            $sql .= "'".Database::escape_string($this->get_description())."'";
-        } else {
-            $sql .= 'null';
-        }
-        $sql .= ', c_id = ';
-        if (isset($this->courseId)) {
-            $sql .= $this->getCourseId();
-        } else {
-            $sql .= 'null';
-        }
-        $sql .= ', category_id = ';
-        if (!empty($this->category)) {
-            $sql .= $this->get_category_id();
-        } else {
-            $sql .= 'null';
-        }
-        $sql .= ', weight = "'.Database::escape_string($this->get_weight()).'" '
-            .', max = '.intval($this->get_max())
-            .', visible = '.intval($this->is_visible())
-            .' WHERE id = '.intval($this->id);
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->update(GradebookEvaluation::class, 'e')
+            ->set('e.title', ':title')
+            ->set('e.description', ':description')
+            ->set('e.course', ':course')
+            ->set('e.category', ':category')
+            ->set('e.weight', ':weight')
+            ->set('e.max', ':max')
+            ->set('e.visible', ':visible')
+            ->where('e.id = :id')
+            ->setParameter('title', $this->get_name())
+            ->setParameter('description', isset($this->description) ? $this->get_description() : null)
+            ->setParameter('course', isset($this->courseId) ? (int) $this->getCourseId() : null)
+            ->setParameter('category', !empty($this->category) ? (int) $this->get_category_id() : null)
+            ->setParameter('weight', $this->get_weight())
+            ->setParameter('max', intval($this->get_max()))
+            ->setParameter('visible', intval($this->is_visible()))
+            ->setParameter('id', intval($this->id))
+        ;
         //recorded history
 
         $eval_log = new Evaluation();
         $eval_log->addEvaluationLog($this->id);
-        Database::query($sql);
+        $qb->getQuery()->execute();
     }
 
     /**
@@ -430,10 +429,13 @@ class Evaluation implements GradebookItem
      */
     public function delete(): void
     {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $sql = 'DELETE FROM '.$table.'
-                WHERE id = '.$this->get_id();
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->delete(GradebookEvaluation::class, 'e')
+            ->where('e.id = :id')
+            ->setParameter('id', $this->get_id())
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -451,6 +453,8 @@ class Evaluation implements GradebookItem
             $name = $this->name;
             $parent = $this->category;
         }
+        // BROKEN today (left raw on purpose): gradebook_evaluation has no user_id column, the query fails with
+        // "Unknown column 'user_id'". Callers: none found in public/main or src.
         $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = "SELECT count(id) AS number
                 FROM $tbl_grade_evaluations
@@ -494,14 +498,17 @@ class Evaluation implements GradebookItem
      */
     public function has_results(): bool
     {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = 'SELECT count(id) AS number
-                FROM '.$table.'
-                WHERE evaluation_id = '.$this->get_id().' AND score IS NOT NULL';
-        $result = Database::query($sql);
-        $number = Database::fetch_row($result);
+        $number = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(r.id)')
+            ->from(GradebookResult::class, 'r')
+            ->where('r.evaluation = :evaluation')
+            ->andWhere('r.score IS NOT NULL')
+            ->setParameter('evaluation', $this->get_id())
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-        return 0 != $number[0];
+        return 0 != $number;
     }
 
     /**
@@ -510,10 +517,13 @@ class Evaluation implements GradebookItem
      */
     public function delete_results(): void
     {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = 'DELETE FROM '.$table.'
-                WHERE evaluation_id = '.$this->get_id();
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->delete(GradebookResult::class, 'r')
+            ->where('r.evaluation = :evaluation')
+            ->setParameter('evaluation', $this->get_id())
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -753,26 +763,43 @@ class Evaluation implements GradebookItem
      */
     public static function get_evaluations_with_result_for_student(int $stud_id, ?int $cat_id = null): array
     {
-        $tbl_grade_evaluations = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-
-        $sql = 'SELECT * FROM '.$tbl_grade_evaluations.'
-                WHERE id IN (
-                    SELECT evaluation_id FROM '.$tbl_grade_results.'
-                    WHERE user_id = '.$stud_id.' AND score IS NOT NULL
-                )';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'e.id AS id',
+                'e.title AS title',
+                'e.description AS description',
+                'IDENTITY(e.course) AS c_id',
+                'IDENTITY(e.category) AS category_id',
+                'e.createdAt AS created_at',
+                'e.weight AS weight',
+                'e.max AS max',
+                'e.visible AS visible',
+                'e.type AS type',
+                'e.locked AS locked'
+            )
+            ->from(GradebookEvaluation::class, 'e')
+            ->where('e.id IN (SELECT IDENTITY(r.evaluation) FROM '.GradebookResult::class.' r WHERE r.user = :user AND r.score IS NOT NULL)')
+            ->setParameter('user', $stud_id)
+        ;
         if (!api_is_allowed_to_edit()) {
-            $sql .= ' AND visible = 1';
+            $qb->andWhere('e.visible = 1');
         }
         if (isset($cat_id)) {
-            $sql .= ' AND category_id = '.$cat_id;
+            $qb->andWhere('e.category = :category')->setParameter('category', (int) $cat_id);
         } else {
-            $sql .= ' AND category_id >= 0';
+            $qb->andWhere('IDENTITY(e.category) >= 0');
         }
 
-        $result = Database::query($sql);
+        $rows = [];
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            foreach (['c_id', 'category_id'] as $key) {
+                $row[$key] = null === $row[$key] ? null : (int) $row[$key];
+            }
+            $row['created_at'] = $row['created_at']->format('Y-m-d H:i:s');
+            $rows[] = $row;
+        }
 
-        return self::create_evaluation_objects_from_sql_result($result);
+        return self::createEvaluationObjectsFromRows($rows);
     }
 
     /**
@@ -784,6 +811,8 @@ class Evaluation implements GradebookItem
      */
     public function get_not_subscribed_students($first_letter_user = '')
     {
+        // BROKEN today (left raw on purpose): the user table has no user_id column, the query fails with
+        // "Unknown column 'user_id'". Callers: gradebook_add_user.php and fe/evalform.class.php.
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
@@ -846,11 +875,15 @@ class Evaluation implements GradebookItem
      */
     public function lock($locked)
     {
-        $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $sql = "UPDATE $table_evaluation
-                SET locked = '".intval($locked)."'
-                WHERE id='".$this->get_id()."'";
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(GradebookEvaluation::class, 'e')
+            ->set('e.locked', ':locked')
+            ->where('e.id = :id')
+            ->setParameter('locked', intval($locked))
+            ->setParameter('id', $this->get_id())
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     public function check_lock_permissions()
@@ -954,6 +987,18 @@ class Evaluation implements GradebookItem
      */
     private static function create_evaluation_objects_from_sql_result($result): array
     {
+        $rows = [];
+        if (Database::num_rows($result)) {
+            while ($data = Database::fetch_array($result)) {
+                $rows[] = $data;
+            }
+        }
+
+        return self::createEvaluationObjectsFromRows($rows);
+    }
+
+    private static function createEvaluationObjectsFromRows(array $rows): array
+    {
         $alleval = [];
         $allow = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
         if ($allow) {
@@ -961,28 +1006,26 @@ class Evaluation implements GradebookItem
             $repo = $em->getRepository(GradebookEvaluation::class);
         }
 
-        if (Database::num_rows($result)) {
-            while ($data = Database::fetch_array($result)) {
-                $eval = new Evaluation();
-                $eval->set_id($data['id']);
-                $eval->set_name($data['title']);
-                $eval->set_description($data['description']);
-                $eval->setCourseId($data['c_id']);
-                $eval->set_category_id($data['category_id']);
-                $eval->set_date(api_get_local_time($data['created_at']));
-                $eval->set_weight($data['weight']);
-                $eval->set_max($data['max']);
-                $eval->set_visible($data['visible']);
-                $eval->set_type($data['type'] ?? '');
-                $eval->set_locked($data['locked'] ?? 0);
-                $eval->setSessionId(api_get_session_id());
+        foreach ($rows as $data) {
+            $eval = new Evaluation();
+            $eval->set_id($data['id']);
+            $eval->set_name($data['title']);
+            $eval->set_description($data['description']);
+            $eval->setCourseId($data['c_id']);
+            $eval->set_category_id($data['category_id']);
+            $eval->set_date(api_get_local_time($data['created_at']));
+            $eval->set_weight($data['weight']);
+            $eval->set_max($data['max']);
+            $eval->set_visible($data['visible']);
+            $eval->set_type($data['type'] ?? '');
+            $eval->set_locked($data['locked'] ?? 0);
+            $eval->setSessionId(api_get_session_id());
 
-                if ($allow) {
-                    $eval->entity = $repo->find($data['id']);
-                }
-
-                $alleval[] = $eval;
+            if ($allow) {
+                $eval->entity = $repo->find($data['id']);
             }
+
+            $alleval[] = $eval;
         }
 
         return $alleval;

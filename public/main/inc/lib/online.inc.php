@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
@@ -27,9 +28,6 @@ function online_logout($user_id = null, $logout_redirect = false)
 {
     global $extAuthSource;
 
-    // Database table definition
-    $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-
     if (empty($user_id)) {
         $user_id = isset($_GET['uid']) ? intval($_GET['uid']) : 0;
     }
@@ -44,22 +42,34 @@ function online_logout($user_id = null, $logout_redirect = false)
     $chat->close();
 
     // selecting the last login of the user
-    $sql = "SELECT login_id, login_date
-    		FROM $tbl_track_login
-    		WHERE login_user_id = $user_id
-    		ORDER BY login_date DESC
-    		LIMIT 0,1";
-    $q_last_connection = Database::query($sql);
+    $entityManager = Container::getEntityManager();
+    $lastConnections = $entityManager->createQueryBuilder()
+        ->select('l.loginId AS login_id')
+        ->from(TrackELogin::class, 'l')
+        ->where('l.user = :userId')
+        ->orderBy('l.loginDate', 'DESC')
+        ->addOrderBy('l.loginId', 'DESC')
+        ->setMaxResults(1)
+        ->setParameter('userId', (int) $user_id)
+        ->getQuery()
+        ->getArrayResult()
+    ;
     $i_id_last_connection = 0;
-    if (Database::num_rows($q_last_connection) > 0) {
-        $i_id_last_connection = Database::result($q_last_connection, 0, "login_id");
+    if (count($lastConnections) > 0) {
+        $i_id_last_connection = $lastConnections[0]['login_id'];
     }
 
     if (!isset($_SESSION['login_as']) && !empty($i_id_last_connection)) {
         $current_date = api_get_utc_datetime();
-        $sql = "UPDATE $tbl_track_login SET logout_date='".$current_date."'
-        		WHERE login_id='$i_id_last_connection'";
-        Database::query($sql);
+        $entityManager->createQueryBuilder()
+            ->update(TrackELogin::class, 'l')
+            ->set('l.logoutDate', ':logoutDate')
+            ->where('l.loginId = :loginId')
+            ->setParameter('logoutDate', $current_date)
+            ->setParameter('loginId', (int) $i_id_last_connection)
+            ->getQuery()
+            ->execute()
+        ;
     }
     $logInfo = [
         'tool' => 'logout',

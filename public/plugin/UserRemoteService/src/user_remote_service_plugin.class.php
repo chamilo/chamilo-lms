@@ -30,6 +30,7 @@ class UserRemoteServicePlugin extends Plugin
 
     public function install()
     {
+        // TODO(db-neutral): DDL (CREATE TABLE IF NOT EXISTS), not expressible in DQL nor the DBAL query builder
         Database::query(
             sprintf(
                 'CREATE TABLE IF NOT EXISTS %s (
@@ -44,6 +45,7 @@ class UserRemoteServicePlugin extends Plugin
 
     public function uninstall()
     {
+        // TODO(db-neutral): DDL (DROP TABLE IF EXISTS), not expressible in DQL nor the DBAL query builder
         Database::query('DROP TABLE IF EXISTS '.Database::get_main_table(self::TABLE));
     }
 
@@ -64,11 +66,17 @@ class UserRemoteServicePlugin extends Plugin
 
     public function getServices()
     {
-        $table = Database::get_main_table(self::TABLE);
-        $result = Database::query("SELECT id, title, url FROM $table ORDER BY title ASC, id ASC");
+        $rows = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('id', 'title', 'url')
+            ->from(Database::get_main_table(self::TABLE))
+            ->orderBy('title', 'ASC')
+            ->addOrderBy('id', 'ASC')
+            ->executeQuery()
+            ->fetchAllAssociative()
+        ;
         $services = [];
 
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             $service = new UserRemoteService();
             $service
                 ->setId((int) $row['id'])
@@ -90,11 +98,13 @@ class UserRemoteServicePlugin extends Plugin
             return false;
         }
 
-        $table = Database::get_main_table(self::TABLE);
-        $title = Database::escape_string($title);
-        $url = Database::escape_string($url);
-
-        Database::query("INSERT INTO $table (title, url) VALUES ('$title', '$url')");
+        Database::getManager()->getConnection()->createQueryBuilder()
+            ->insert(Database::get_main_table(self::TABLE))
+            ->values(['title' => ':title', 'url' => ':url'])
+            ->setParameter('title', $title)
+            ->setParameter('url', $url)
+            ->executeStatement()
+        ;
 
         return true;
     }
@@ -111,8 +121,12 @@ class UserRemoteServicePlugin extends Plugin
             return false;
         }
 
-        $table = Database::get_main_table(self::TABLE);
-        Database::query("DELETE FROM $table WHERE id = $serviceId");
+        Database::getManager()->getConnection()->createQueryBuilder()
+            ->delete(Database::get_main_table(self::TABLE))
+            ->where('id = :id')
+            ->setParameter('id', $serviceId)
+            ->executeStatement()
+        ;
 
         return true;
     }
@@ -131,11 +145,16 @@ class UserRemoteServicePlugin extends Plugin
             return false;
         }
 
-        $table = Database::get_main_table(self::TABLE);
-        $title = Database::escape_string($title);
-        $url = Database::escape_string($url);
-
-        Database::query("UPDATE $table SET title = '$title', url = '$url' WHERE id = $serviceId");
+        Database::getManager()->getConnection()->createQueryBuilder()
+            ->update(Database::get_main_table(self::TABLE))
+            ->set('title', ':title')
+            ->set('url', ':url')
+            ->where('id = :id')
+            ->setParameter('title', $title)
+            ->setParameter('url', $url)
+            ->setParameter('id', $serviceId)
+            ->executeStatement()
+        ;
 
         return true;
     }
@@ -234,9 +253,15 @@ class UserRemoteServicePlugin extends Plugin
             return null;
         }
 
-        $table = Database::get_main_table(self::TABLE);
-        $result = Database::query("SELECT id, title, url FROM $table WHERE id = $id LIMIT 1");
-        $row = Database::fetch_assoc($result);
+        $row = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('id', 'title', 'url')
+            ->from(Database::get_main_table(self::TABLE))
+            ->where('id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAssociative()
+        ;
 
         if (empty($row)) {
             return null;

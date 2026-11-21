@@ -4841,5 +4841,17 @@
     "Recoverable data issues recorded:": "Recoverable data issues recorded:",
     "Review affected content before use. The full report is available on the server at:": "Review affected content before use. The full report is available on the server at:",
     "Unable to summarize migration data issues. Ask the server administrator to check var/log/migration-data-issues.": "Unable to summarize migration data issues. Ask the server administrator to check var/log/migration-data-issues.",
-    "Download the migration report (global administrator login required)": "Download the migration report (global administrator login required)"
+    "Download the migration report (global administrator login required)": "Download the migration report (global administrator login required)",
+    "Assign scores": "Assign scores",
+    "Assign these scores to the selected questions?": "Assign these scores to the selected questions?",
+    "Below-full-score attempts": "Below-full-score attempts",
+    "Edit classification": "Edit classification",
+    "Full-score attempts": "Full-score attempts",
+    "Incorrect score": "Incorrect score",
+    "Occurrences": "Occurrences",
+    "Only unused single-answer questions owned by this context can receive bulk scores.": "Only unused single-answer questions owned by this context can receive bulk scores.",
+    "Question classification updated": "Question classification updated",
+    "Question scores updated": "Question scores updated",
+    "Questions in test": "Questions in test",
+    "Statistics count completed, graded attempts in this course and session, using the current maximum question score. Partial scores count as below full score.": "Statistics count completed, graded attempts in this course and session, using the current maximum question score. Partial scores count as below full score."
 }

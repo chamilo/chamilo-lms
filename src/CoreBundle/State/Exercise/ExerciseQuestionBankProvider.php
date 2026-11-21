@@ -14,6 +14,9 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseQuestionBankClassification;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseQuestionBankMetrics;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseQuestionBankMutationGuard;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
@@ -43,6 +46,9 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private ExerciseQuestionBankClassification $classification,
+        private ExerciseQuestionBankMetrics $metrics,
+        private ExerciseQuestionBankMutationGuard $mutationGuard,
     ) {}
 
     /**
@@ -71,17 +77,21 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
             throw new AccessDeniedHttpException('Question recycling is not available in adaptive/direct feedback exercises.');
         }
 
+        $fields = $this->classification->getFields();
         $filters = $this->getFilters($request);
+        $filters['questionFields'] = $this->classification->getFilters($request, $fields);
         $page = max(1, (int) $filters['page']);
         $itemsPerPage = min(100, max(5, (int) $filters['itemsPerPage']));
         $existingQuestionIds = $quiz instanceof CQuiz ? $this->getExistingQuestionIds($quiz) : [];
         $totalItems = $this->countQuestions($quiz, $course, $session, $filters);
-        $items = $this->getQuestions($quiz, $course, $session, $filters, $existingQuestionIds, $page, $itemsPerPage);
+        $items = $this->getQuestions($quiz, $course, $session, $filters, $existingQuestionIds, $page, $itemsPerPage, $fields);
 
         $response = new ExerciseQuestionBank();
         $response->exerciseId = $exerciseId;
         $response->title = $quiz instanceof CQuiz ? $quiz->getTitle() : 'Recycle existing questions';
         $response->items = $items;
+        $response->questionFields = $this->classification->getDefinitions($fields);
+        $response->exerciseQuestionCount = \count(array_unique($existingQuestionIds));
         $response->categoryOptions = $this->getCategoryOptions($course, $session);
         $response->exerciseOptions = $this->getExerciseOptions($quiz, $course, $session);
         $response->difficultyOptions = $this->getDifficultyOptions();
@@ -103,7 +113,15 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
      */
     private function getFilters(Request $request): array
     {
+        $sortField = $request->query->getString('sortField', 'title');
+        $sortDirection = strtoupper($request->query->getString('sortDirection', 'ASC'));
+        if (!\in_array($sortField, ExerciseQuestionBankMetrics::SORT_FIELDS, true) || !\in_array($sortDirection, ['ASC', 'DESC'], true)) {
+            throw new BadRequestHttpException('Invalid question bank sort order.');
+        }
+
         return [
+            'sortField' => $sortField,
+            'sortDirection' => $sortDirection,
             'page' => max(1, $request->query->getInt('page', 1)),
             'itemsPerPage' => max(5, $request->query->getInt('itemsPerPage', 20)),
             'search' => trim((string) $request->query->get('search', '')),
@@ -155,18 +173,68 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         array $filters,
         array $existingQuestionIds,
         int $page,
-        int $itemsPerPage
+        int $itemsPerPage,
+        array $fields,
     ): array {
         $queryBuilder = $this->createQuestionQueryBuilder($quiz, $course, $session, $filters);
-        $queryBuilder
-            ->select('DISTINCT question')
-            ->addOrderBy('question.question', 'ASC')
-            ->setFirstResult(($page - 1) * $itemsPerPage)
-            ->setMaxResults($itemsPerPage)
+        $sortField = $filters['sortField'];
+        $direction = $filters['sortDirection'];
+        $offset = ($page - 1) * $itemsPerPage;
+        $queryBuilder->select('DISTINCT question.iid AS id');
+        if (\in_array($sortField, ExerciseQuestionBankMetrics::METRIC_FIELDS, true)) {
+            // Rank filtered identifiers using aggregated metrics before page slicing.
+            // Do not hydrate the entire bank or issue a query for each question.
+            $ids = array_map('intval', array_column($queryBuilder->getQuery()->getArrayResult(), 'id'));
+            $rankingMetrics = $this->metrics->getMetrics($ids, $course, $session, $sortField);
+            $ids = \array_slice(ExerciseQuestionBankMetrics::sortIds($ids, $rankingMetrics, $sortField, $direction), $offset, $itemsPerPage);
+            unset($rankingMetrics);
+        } else {
+            if ('category' === $sortField) {
+                $sortExpression = 'MIN(sortCategory.title)';
+                $queryBuilder->leftJoin('question.categories', 'sortCategory')
+                    ->addSelect($sortExpression.' AS HIDDEN sortValue')
+                    ->groupBy('question.iid')
+                ;
+            } else {
+                $sortExpression = match ($sortField) {
+                    'difficulty' => 'CASE WHEN question.level < 1 THEN 1 ELSE question.level END',
+                    'score' => 'question.ponderation',
+                    default => 'question.question',
+                };
+                $queryBuilder->addSelect($sortExpression.' AS HIDDEN sortValue');
+            }
+            $queryBuilder->orderBy($sortExpression, $direction)->addOrderBy('question.iid', 'ASC')
+                ->setFirstResult($offset)->setMaxResults($itemsPerPage)
+            ;
+            $ids = array_map('intval', array_column($queryBuilder->getQuery()->getArrayResult(), 'id'));
+        }
+        if ([] === $ids) {
+            return [];
+        }
+        $metrics = $this->metrics->getMetrics($ids, $course, $session);
+        $categoryRows = $this->entityManager->createQueryBuilder()
+            ->select('question.iid AS id', 'MIN(category.title) AS label')
+            ->from(CQuizQuestion::class, 'question')
+            ->leftJoin('question.categories', 'category')
+            ->where('question.iid IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->groupBy('question.iid')
+            ->getQuery()->getArrayResult()
         ;
+        $categoryLabels = array_column($categoryRows, 'label', 'id');
+        $byId = [];
+        foreach ($this->entityManager->getRepository(CQuizQuestion::class)->findBy(['iid' => $ids]) as $question) {
+            $byId[(int) $question->getIid()] = $question;
+        }
+        $values = $this->classification->getValues($ids, $fields);
+        $flags = null === $quiz && empty($this->cidReqHelper->getGroupId())
+            ? $this->mutationGuard->getFlags($ids, $course, $session) : [];
+        $canAssignScores = null === $quiz && $this->canRunRestrictedAction();
+        $canClassify = [] !== array_filter($fields, static fn ($field): bool => true === $field->isChangeable());
 
         $items = [];
-        foreach ($queryBuilder->getQuery()->getResult() as $question) {
+        foreach ($ids as $id) {
+            $question = $byId[$id] ?? null;
             if (!$question instanceof CQuizQuestion || null === $question->getIid()) {
                 continue;
             }
@@ -175,7 +243,9 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
             $type = (int) $question->getType();
             $alreadyInExercise = \in_array($questionId, $existingQuestionIds, true);
             $allowedByFeedback = $quiz instanceof CQuiz ? $this->isQuestionTypeAllowedByFeedback($type, (int) $quiz->getFeedbackType()) : true;
-            $usedInActiveQuiz = $this->isQuestionUsedInActiveQuiz($question, $course, $session);
+            $questionMetrics = $metrics[$questionId];
+            $usedInActiveQuiz = $questionMetrics['occurrences'] > 0;
+            $questionFlags = $flags[$questionId] ?? [];
             $items[] = [
                 'id' => $questionId,
                 'title' => $question->getQuestion(),
@@ -183,8 +253,14 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
                 'type' => $type,
                 'typeLabel' => $this->getQuestionTypeLabel($type),
                 'typeIcon' => $this->getQuestionTypeIcon($type),
-                'categoryLabel' => $this->getFirstCategoryTitle($question),
+                'categoryLabel' => (string) ($categoryLabels[$questionId] ?? ''),
                 'difficulty' => max(1, (int) $question->getLevel()),
+                'occurrences' => $questionMetrics['occurrences'],
+                'correctAttempts' => $questionMetrics['correctAttempts'],
+                'incorrectAttempts' => $questionMetrics['incorrectAttempts'],
+                'fieldValues' => $values[$questionId] ?? [],
+                'canClassify' => $canClassify && ($questionFlags['canClassify'] ?? false),
+                'canAssignScores' => $canAssignScores && 1 === $type && ($questionFlags['canAssignScores'] ?? false),
                 'score' => (float) $question->getPonderation(),
                 'alreadyInExercise' => $alreadyInExercise,
                 'usedInActiveTest' => $usedInActiveQuiz,
@@ -236,6 +312,7 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         );
 
         $this->applyQuestionFilters($queryBuilder, $quiz, $course, $session, $filters);
+        $this->classification->applyFilters($queryBuilder, $filters['questionFields']);
 
         if (null !== $session) {
             $queryBuilder->setParameter('sessionId', (int) $session->getId(), Types::INTEGER);
@@ -465,17 +542,6 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
         return $items;
     }
 
-    private function getFirstCategoryTitle(CQuizQuestion $question): string
-    {
-        foreach ($question->getCategories() as $category) {
-            if ($category instanceof CQuizQuestionCategory) {
-                return $category->getTitle();
-            }
-        }
-
-        return '';
-    }
-
     private function isQuestionTypeAllowedByFeedback(int $type, int $feedbackType): bool
     {
         if (1 === $feedbackType) {
@@ -506,36 +572,6 @@ final readonly class ExerciseQuestionBankProvider implements ProviderInterface
     private function isSettingEnabled(string $name): bool
     {
         return 'true' === $this->settingsManager->getSetting($name, true);
-    }
-
-    private function isQuestionUsedInActiveQuiz(CQuizQuestion $question, Course $course, ?Session $session): bool
-    {
-        $questionId = (int) ($question->getIid() ?? 0);
-        if ($questionId <= 0) {
-            return false;
-        }
-
-        $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('relQuestion.iid')
-            ->from(CQuizRelQuestion::class, 'relQuestion')
-            ->innerJoin('relQuestion.quiz', 'quiz')
-            ->innerJoin('quiz.resourceNode', 'node')
-            ->innerJoin('node.resourceLinks', 'links')
-            ->andWhere('IDENTITY(relQuestion.question) = :questionId')
-            ->andWhere('IDENTITY(links.course) = :courseId')
-            ->andWhere('links.deletedAt IS NULL')
-            ->andWhere('links.endVisibilityAt IS NULL')
-            ->setParameter('questionId', $questionId, Types::INTEGER)
-            ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setMaxResults(1)
-        ;
-
-        $this->applySessionFilter($queryBuilder, 'links', $session, true);
-        if (null !== $session) {
-            $queryBuilder->setParameter('sessionId', (int) $session->getId(), Types::INTEGER);
-        }
-
-        return null !== $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     private function getQuestionTypeLabel(int $type): string

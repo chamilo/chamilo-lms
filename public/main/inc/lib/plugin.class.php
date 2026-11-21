@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Chamilo\CourseBundle\Entity\CTool;
 use Doctrine\ORM\Exception\NotSupported;
 use Doctrine\ORM\Exception\ORMException;
@@ -583,15 +585,19 @@ class Plugin
 
                 if (isset($setting['group'])) {
                     $group = $setting['group'];
-                    $sql = "SELECT value
-                            FROM $t_course
-                            WHERE
-                                c_id = $courseId AND
-                                variable = '".Database::escape_string($group)."' AND
-                                subkey = '".Database::escape_string($variable)."'
-                            ";
-                    $result = Database::query($sql);
-                    if (!Database::num_rows($result)) {
+                    $exists = Container::getEntityManager()->createQueryBuilder()
+                        ->select('COUNT(cs.iid)')
+                        ->from(CCourseSetting::class, 'cs')
+                        ->where('cs.cId = :courseId')
+                        ->andWhere('cs.variable = :variable')
+                        ->andWhere('cs.subkey = :subkey')
+                        ->setParameter('courseId', $courseId)
+                        ->setParameter('variable', (string) $group)
+                        ->setParameter('subkey', (string) $variable)
+                        ->getQuery()
+                        ->getSingleScalarResult()
+                    ;
+                    if (!$exists) {
                         $params = [
                             'c_id' => $courseId,
                             'variable' => $group,
@@ -604,10 +610,17 @@ class Plugin
                         Database::insert($t_course, $params);
                     }
                 } else {
-                    $sql = "SELECT value FROM $t_course
-                            WHERE c_id = $courseId AND variable = '$variable' ";
-                    $result = Database::query($sql);
-                    if (!Database::num_rows($result)) {
+                    $exists = Container::getEntityManager()->createQueryBuilder()
+                        ->select('COUNT(cs.iid)')
+                        ->from(CCourseSetting::class, 'cs')
+                        ->where('cs.cId = :courseId')
+                        ->andWhere('cs.variable = :variable')
+                        ->setParameter('courseId', $courseId)
+                        ->setParameter('variable', (string) $variable)
+                        ->getQuery()
+                        ->getSingleScalarResult()
+                    ;
+                    if (!$exists) {
                         $params = [
                             'c_id' => $courseId,
                             'variable' => $variable,
@@ -649,33 +662,38 @@ class Plugin
         }
         $pluginName = $this->get_name();
 
-        $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
-        $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
+        $em = Container::getEntityManager();
 
         if (!empty($this->course_settings)) {
             foreach ($this->course_settings as $setting) {
-                $variable = Database::escape_string($setting['name']);
+                $variable = $setting['name'];
                 if (!empty($setting['group'])) {
-                    $variable = Database::escape_string($setting['group']);
+                    $variable = $setting['group'];
                 }
                 if (empty($variable)) {
                     continue;
                 }
-                $sql = "DELETE FROM $t_course
-                        WHERE c_id = $courseId AND variable = '$variable'";
-                Database::query($sql);
+                $em->createQueryBuilder()
+                    ->delete(CCourseSetting::class, 'cs')
+                    ->where('cs.cId = :courseId')
+                    ->andWhere('cs.variable = :variable')
+                    ->setParameter('courseId', $courseId)
+                    ->setParameter('variable', (string) $variable)
+                    ->getQuery()
+                    ->execute()
+                ;
             }
         }
 
-        $pluginName = Database::escape_string($pluginName);
-        $sql = "DELETE FROM $t_tool
-                WHERE c_id = $courseId AND
-                (
-                  title = '$pluginName' OR
-                  title = '$pluginName:student' OR
-                  title = '$pluginName:teacher'
-                )";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->delete(CTool::class, 't')
+            ->where('IDENTITY(t.course) = :courseId')
+            ->andWhere('t.title IN (:titles)')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('titles', [$pluginName, $pluginName.':student', $pluginName.':teacher'])
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -687,17 +705,9 @@ class Plugin
     {
         $accessUrlId = api_get_current_access_url_id();
 
-        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tableRel    = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-
-        $sql = "SELECT c.id
-            FROM $tableCourse c
-            INNER JOIN $tableRel r ON r.c_id = c.id
-            WHERE r.access_url_id = ".(int)$accessUrlId."
-            ORDER BY c.id";
-        $res = Database::query($sql);
-        while ($row = Database::fetch_assoc($res)) {
-            $this->install_course_fields((int)$row['id'], $add_tool_link);
+        $courseIds = $this->getCourseIdsOfAccessUrl((int) $accessUrlId);
+        foreach ($courseIds as $courseId) {
+            $this->install_course_fields($courseId, $add_tool_link);
         }
     }
 
@@ -708,19 +718,30 @@ class Plugin
     {
         $accessUrlId = api_get_current_access_url_id();
 
-        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tableRel    = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $courseIds = $this->getCourseIdsOfAccessUrl((int) $accessUrlId);
 
-        $sql = "SELECT c.id
-            FROM $tableCourse c
-            INNER JOIN $tableRel r ON r.c_id = c.id
-            WHERE r.access_url_id = ".(int)$accessUrlId."
-            ORDER BY c.id";
-
-        $res = Database::query($sql);
-        while ($row = Database::fetch_assoc($res)) {
-            $this->uninstall_course_fields((int)$row['id']);
+        foreach ($courseIds as $courseId) {
+            $this->uninstall_course_fields($courseId);
         }
+    }
+
+    /**
+     * @return int[] Ids of the courses of an access URL, ascending
+     */
+    private function getCourseIdsOfAccessUrl(int $accessUrlId): array
+    {
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('c.id AS id')
+            ->from(AccessUrlRelCourse::class, 'r')
+            ->innerJoin('r.course', 'c')
+            ->where('IDENTITY(r.url) = :accessUrlId')
+            ->orderBy('c.id', 'ASC')
+            ->setParameter('accessUrlId', $accessUrlId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return array_map(static fn (array $row): int => (int) $row['id'], $rows);
     }
 
     /**

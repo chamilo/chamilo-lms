@@ -7,10 +7,14 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\AiProvider;
 
 use Chamilo\CoreBundle\AiProvider\GrokProvider;
+use Chamilo\CoreBundle\Repository\AiRequestsRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class GrokProviderTest extends TestCase
 {
@@ -42,6 +46,29 @@ final class GrokProviderTest extends TestCase
 
         $invalid = $method->invoke($provider, ['timeout' => 0]);
         self::assertSame(180.0, $invalid['timeout']);
+    }
+
+    public function testVideoModelDefaultsToAnExistingXaiModelWhenNotConfigured(): void
+    {
+        $settings = $this->createMock(SettingsManager::class);
+        $settings->method('getSetting')->willReturn([
+            'grok' => [
+                'api_key' => 'test-key',
+                'text' => ['model' => 'grok-test'],
+                'video' => ['url' => 'https://api.x.ai/v1/videos/generations'],
+            ],
+        ]);
+
+        $provider = new GrokProvider(
+            $this->createMock(HttpClientInterface::class),
+            $settings,
+            $this->createMock(AiRequestsRepository::class),
+            $this->createMock(Security::class)
+        );
+
+        $property = new ReflectionProperty(GrokProvider::class, 'videoModel');
+
+        self::assertSame('grok-imagine-video', $property->getValue($provider));
     }
 
     private function setProperty(GrokProvider $provider, string $property, mixed $value): void

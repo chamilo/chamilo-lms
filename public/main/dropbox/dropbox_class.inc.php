@@ -480,6 +480,7 @@ class Dropbox_Person
                      p.user_id = ".intval($this->userId).' AND
                      r.dest_user_id = '.intval($this->userId)." $condition_session ";
 
+        // TODO(db-neutral): $condition_session is a caller-built SQL fragment (api_get_session_condition())
         $result = Database::query($sql);
         while ($res = Database::fetch_array($result)) {
             $temp = new Dropbox_Work($res['file_id']);
@@ -497,6 +498,7 @@ class Dropbox_Person
                     p.user_id       = '.intval($this->userId)."
                     $condition_session
                 ";
+        // TODO(db-neutral): $condition_session is a caller-built SQL fragment (api_get_session_condition())
         $result = Database::query($sql);
         while ($res = Database::fetch_array($result)) {
             $this->sentWork[] = new Dropbox_SentWork($res['iid']);

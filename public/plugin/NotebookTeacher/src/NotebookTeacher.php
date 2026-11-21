@@ -98,27 +98,28 @@ class NotebookTeacher
             return [];
         }
 
-        // Database table definition
-        $tableNotebook = Database::get_main_table(NotebookTeacherPlugin::TABLE_NOTEBOOKTEACHER);
-        $courseId = api_get_course_int_id();
-
-        $sql = "SELECT
-                id AS notebook_id,
-                title AS note_title,
-                description AS note_comment,
-                session_id AS session_id,
-                student_id AS student_id
-               FROM $tableNotebook
-               WHERE
-                    c_id = $courseId AND
-                    id = '".(int) $notebookId."' AND
-                    user_id = '".api_get_user_id()."' ";
-        $result = Database::query($sql);
-        if (1 != Database::num_rows($result)) {
+        $rows = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select(
+                'id AS notebook_id',
+                'title AS note_title',
+                'description AS note_comment',
+                'session_id AS session_id',
+                'student_id AS student_id'
+            )
+            ->from(NotebookTeacherPlugin::TABLE_NOTEBOOKTEACHER)
+            ->where('c_id = :courseId')
+            ->andWhere('id = :id')
+            ->andWhere('user_id = :userId')
+            ->setParameter('courseId', api_get_course_int_id())
+            ->setParameter('id', (int) $notebookId)
+            ->setParameter('userId', (int) api_get_user_id())
+            ->executeQuery()
+            ->fetchAllAssociative();
+        if (1 != count($rows)) {
             return [];
         }
 
-        return Database::fetch_array($result);
+        return $rows[0];
     }
 
     /**
@@ -176,18 +177,17 @@ class NotebookTeacher
             return false;
         }
 
-        // Database table definition
-        $tableNotebook = Database::get_main_table(NotebookTeacherPlugin::TABLE_NOTEBOOKTEACHER);
-        $courseId = api_get_course_int_id();
+        $affected = Database::getManager()->getConnection()->createQueryBuilder()
+            ->delete(NotebookTeacherPlugin::TABLE_NOTEBOOKTEACHER)
+            ->where('c_id = :courseId')
+            ->andWhere('id = :id')
+            ->andWhere('user_id = :userId')
+            ->setParameter('courseId', api_get_course_int_id())
+            ->setParameter('id', (int) $notebookId)
+            ->setParameter('userId', (int) api_get_user_id())
+            ->executeStatement();
 
-        $sql = "DELETE FROM $tableNotebook
-                WHERE
-                    c_id = $courseId AND
-                    id = '".(int) $notebookId."' AND
-                    user_id = '".api_get_user_id()."'";
-        $result = Database::query($sql);
-
-        if (1 != Database::affected_rows($result)) {
+        if (1 != $affected) {
             return false;
         }
 
@@ -391,6 +391,7 @@ class NotebookTeacher
         echo '</section>';
     }
 
+    // TODO(db-neutral): the session/student/extra conditions are SQL fragments built by the caller (api_get_session_condition())
     private static function countNotes($tableNotebook, $courseId, $conditionSession, $condExtra, $studentId)
     {
         $conditionStudent = $studentId > 0 ? " AND student_id = $studentId" : '';
@@ -406,6 +407,7 @@ class NotebookTeacher
         return isset($row['total']) ? (int) $row['total'] : 0;
     }
 
+    // TODO(db-neutral): the conditions and the ORDER BY are SQL fragments built by the caller
     private static function fetchNotes($tableNotebook, $courseId, $conditionSession, $conditionStudent, $condExtra, $orderBy)
     {
         $sql = "SELECT *

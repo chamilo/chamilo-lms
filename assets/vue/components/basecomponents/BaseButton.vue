@@ -15,9 +15,20 @@
         attrs.class,
       ]"
       :title="onlyIcon ? label : undefined"
+      :aria-label="onlyIcon ? label : undefined"
     >
+      <BaseIcon
+        v-if="hasIconBadge && iconPosition !== 'right'"
+        :icon="icon"
+        :badge-icon="badgeIcon"
+        :badge-position="badgePosition"
+        badge-compact
+        size="custom"
+        class="p-button-icon"
+        aria-hidden="true"
+      />
       <span
-        v-if="icon && iconPosition !== 'right'"
+        v-else-if="icon && iconPosition !== 'right'"
         class="p-button-icon"
         :class="chamiloIconToClass[icon]"
       />
@@ -26,8 +37,18 @@
         class="p-button-label"
         v-text="label"
       />
+      <BaseIcon
+        v-if="hasIconBadge && iconPosition === 'right'"
+        :icon="icon"
+        :badge-icon="badgeIcon"
+        :badge-position="badgePosition"
+        badge-compact
+        size="custom"
+        class="p-button-icon p-button-icon-right"
+        aria-hidden="true"
+      />
       <span
-        v-if="icon && iconPosition === 'right'"
+        v-else-if="icon && iconPosition === 'right'"
         class="p-button-icon p-button-icon-right"
         :class="chamiloIconToClass[icon]"
       />
@@ -49,7 +70,22 @@
     :name="name"
     :id="id"
     @click="$emit('click', $event)"
-  />
+  >
+    <template
+      v-if="hasIconBadge && !isLoading"
+      #icon="iconSlot"
+    >
+      <BaseIcon
+        :icon="icon"
+        :badge-icon="badgeIcon"
+        :badge-position="badgePosition"
+        badge-compact
+        size="custom"
+        :class="[iconSlot.class, { 'p-button-icon-right': iconPosition === 'right' }]"
+        aria-hidden="true"
+      />
+    </template>
+  </Button>
 </template>
 
 <script setup>
@@ -58,6 +94,7 @@ import { computed, useAttrs } from "vue"
 import { chamiloIconToClass } from "./ChamiloIcons"
 import { buttonTypeValidator, iconValidator, sizeValidator } from "./validators"
 import BaseAppLink from "./BaseAppLink.vue"
+import BaseIcon from "./BaseIcon.vue"
 
 const attrs = useAttrs()
 
@@ -76,6 +113,16 @@ const props = defineProps({
     type: String,
     required: true,
     validator: iconValidator,
+  },
+  badgeIcon: {
+    type: String,
+    default: "",
+    validator: (value) => value === "" || iconValidator(value),
+  },
+  badgePosition: {
+    type: String,
+    default: "bottom-right",
+    validator: (value) => ["top-left", "top-right", "bottom-left", "bottom-right"].includes(value),
   },
   iconPosition: {
     type: String,
@@ -133,6 +180,8 @@ const props = defineProps({
 })
 
 defineEmits(["click"])
+
+const hasIconBadge = computed(() => Boolean(chamiloIconToClass[props.icon] && chamiloIconToClass[props.badgeIcon]))
 
 const primeSeverityProperty = computed(() => {
   const type = props.type.replace("-text", "")

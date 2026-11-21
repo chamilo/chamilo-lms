@@ -6,7 +6,8 @@
           v-if="canManage && canCreate"
           :label="t('Create exercise')"
           :route="{ name: 'ExerciseCreate', params: route.params, query: getContextParams() }"
-          icon="plus"
+          icon="multiple-marked"
+          badge-icon="star"
           only-icon
           type="primary-text"
         />
@@ -62,6 +63,7 @@
           :label="t('Import Aiken quiz')"
           :route="{ name: 'ExerciseImportAiken', params: route.params, query: getContextParams() }"
           icon="file-text"
+          badge-icon="arrow-up"
           only-icon
           type="primary-text"
         />

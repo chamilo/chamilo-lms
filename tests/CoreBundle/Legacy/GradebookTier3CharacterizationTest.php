@@ -7,10 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use Doctrine\DBAL\Connection;
 use GradebookUtils;
+use Result;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
@@ -344,5 +346,309 @@ final class GradebookTier3CharacterizationTest extends KernelTestCase
         $this->assertSame($row['id'], $row[0]);
         $this->assertSame($row['comment'], $row[3]);
         $this->assertSame([], GradebookUtils::getComment($cat, 2));
+    }
+
+    // ---------------------------------------------------------------- Result
+
+    private function evaluation(?int $courseId = 1, ?int $categoryId = null): int
+    {
+        $this->conn->executeStatement(
+            "INSERT INTO gradebook_evaluation (c_id, category_id, title, created_at, weight, max, visible, type, locked)
+             VALUES (?, ?, ?, '2001-01-01 00:00:00', 10, 20, 1, 'evaluation', 0)",
+            [$courseId, $categoryId, 'g3_eval_'.(++$this->seq)]
+        );
+
+        return (int) $this->conn->lastInsertId();
+    }
+
+    private function subscribe(int $userId, int $courseId, int $status = 5): void
+    {
+        $this->conn->executeStatement(
+            'INSERT INTO course_rel_user (user_id, c_id, status, relation_type, sort, user_course_cat, is_tutor, progress)
+             VALUES (?, ?, ?, 0, 0, 0, 0, 0)',
+            [$userId, $courseId, $status]
+        );
+    }
+
+    private function resultRow(int $evaluationId, int $userId, ?float $score, string $createdAt = '2005-06-07 08:09:10'): int
+    {
+        $this->conn->executeStatement(
+            'INSERT INTO gradebook_result (evaluation_id, user_id, score, created_at) VALUES (?, ?, ?, ?)',
+            [$evaluationId, $userId, $score, $createdAt]
+        );
+
+        return (int) $this->conn->lastInsertId();
+    }
+
+    private function resultsOf(int $evaluationId): array
+    {
+        return $this->conn->fetchAllAssociative(
+            'SELECT user_id, score, created_at FROM gradebook_result WHERE evaluation_id = ? ORDER BY user_id',
+            [$evaluationId]
+        );
+    }
+
+    public function testResultLoadReturnsTheResultsOrderedByLastNameThenFirstName(): void
+    {
+        $eval = $this->evaluation();
+        $zed = $this->user('Zzz', 'Amy');
+        $abe = $this->user('Aaa', 'Bob');
+        $abc = $this->user('Aaa', 'Abe');
+        $zId = $this->resultRow($eval, $zed, 3.5);
+        $this->resultRow($eval, $abe, null);
+        $this->resultRow($eval, $abc, 7.0);
+
+        $results = Result::load(null, null, $eval);
+
+        $this->assertSame([$abc, $abe, $zed], array_map(static fn (Result $r) => $r->get_user_id(), $results));
+        $last = $results[2];
+        $this->assertSame($zId, $last->get_id());
+        $this->assertSame($eval, $last->get_evaluation_id());
+        $this->assertSame(3.5, $last->get_score());
+        $this->assertSame(api_get_local_time('2005-06-07 08:09:10'), $last->get_date());
+        $this->assertNull($results[1]->get_score());
+        $this->assertSame(7.0, $results[0]->get_score());
+    }
+
+    public function testResultLoadFiltersByIdUserAndEvaluation(): void
+    {
+        $e1 = $this->evaluation();
+        $e2 = $this->evaluation();
+        $a = $this->user('A', 'A');
+        $b = $this->user('B', 'B');
+        $r1 = $this->resultRow($e1, $a, 1.0);
+        $r2 = $this->resultRow($e1, $b, 2.0);
+        $r3 = $this->resultRow($e2, $a, 3.0);
+
+        $ids = static fn (array $l): array => array_map(static fn (Result $r) => $r->get_id(), $l);
+        $this->assertSame([$r2], $ids(Result::load($r2)));
+        $this->assertSame([$r1, $r3], $ids(Result::load(null, $a)));
+        $this->assertSame([$r3], $ids(Result::load(null, $a, $e2)));
+        $this->assertSame([], $ids(Result::load($r1, $b)));
+        $this->assertSame([], $ids(Result::load($r1, $a, $e2)));
+        $this->assertSame([$r1], $ids(Result::load($r1, $a, $e1)));
+    }
+
+    public function testResultLoadByEvaluationOnlyCreatesTheMissingRowsForTheStudentsOfTheCourse(): void
+    {
+        $eval = $this->evaluation();
+        $has = $this->user('Has', 'Has');
+        $missing = $this->user('Missing', 'Missing');
+        $teacher = $this->user('Teach', 'Teach');
+        $otherCourse = $this->user('Other', 'Other');
+        foreach ([$has, $missing] as $u) {
+            $this->subscribe($u, 1);
+        }
+        $this->subscribe($teacher, 1, 1);
+        $this->subscribe($otherCourse, 2);
+        $this->resultRow($eval, $has, 4.0);
+
+        $results = Result::load(null, null, $eval);
+
+        $rows = $this->resultsOf($eval);
+        $this->assertSame([$has, $missing], array_map(static fn (array $r): int => (int) $r['user_id'], $rows));
+        $this->assertNull($rows[1]['score']);
+        $this->assertSame(4.0, (float) $rows[0]['score']);
+        $this->assertEqualsWithDelta(time(), strtotime($rows[1]['created_at'].' UTC'), 120);
+        $this->assertSame([$has, $missing], array_map(static fn (Result $r) => $r->get_user_id(), $results));
+
+        // A second call adds nothing.
+        Result::load(null, null, $eval);
+        $this->assertCount(2, $this->resultsOf($eval));
+    }
+
+    public function testResultLoadWithoutAnyResultOnlyCreatesRowsWhenAskedTo(): void
+    {
+        $eval = $this->evaluation();
+        $student = $this->user('Stud', 'Stud');
+        $this->subscribe($student, 1);
+
+        $this->assertSame([], Result::load(null, null, $eval));
+        $this->assertSame([], $this->resultsOf($eval));
+
+        $results = Result::load(null, null, $eval, true);
+
+        $this->assertCount(1, $results);
+        $this->assertSame([$student], array_map(static fn (array $r): int => (int) $r['user_id'], $this->resultsOf($eval)));
+    }
+
+    public function testResultLoadInASessionCreatesRowsForTheSessionStudentsOnly(): void
+    {
+        $eval = $this->evaluation();
+        $inSession = $this->user('Sess', 'Sess');
+        $coach = $this->user('Coach', 'Coach');
+        $baseOnly = $this->user('Base', 'Base');
+        $session = $this->session();
+        foreach ([[$inSession, 0], [$coach, 2]] as [$u, $status]) {
+            $this->conn->executeStatement(
+                'INSERT INTO session_rel_course_rel_user (session_id, c_id, user_id, status, visibility, legal_agreement, progress)
+                 VALUES (?, 1, ?, ?, 1, 0, 0)',
+                [$session, $u, $status]
+            );
+        }
+        $this->subscribe($baseOnly, 1);
+        $this->context(1, 1, $session);
+
+        Result::load(null, null, $eval, true);
+
+        $this->assertSame([$inSession], array_map(static fn (array $r): int => (int) $r['user_id'], $this->resultsOf($eval)));
+    }
+
+    public function testResultAddStoresTheResultWithOrWithoutAScore(): void
+    {
+        $eval = $this->evaluation();
+        $a = $this->user('A', 'A');
+        $b = $this->user('B', 'B');
+
+        $withScore = new Result();
+        $withScore->set_user_id($a);
+        $withScore->set_evaluation_id($eval);
+        $withScore->set_date('2011-02-03 04:05:06');
+        $withScore->set_score(12.5);
+        $withScore->add();
+        $noScore = new Result();
+        $noScore->set_user_id($b);
+        $noScore->set_evaluation_id($eval);
+        $noScore->set_date('2012-03-04 05:06:07');
+        $noScore->add();
+
+        $rows = $this->resultsOf($eval);
+        $this->assertSame([$a, $b], array_map(static fn (array $r): int => (int) $r['user_id'], $rows));
+        $this->assertSame(12.5, (float) $rows[0]['score']);
+        $this->assertSame('2011-02-03 04:05:06', $rows[0]['created_at']);
+        $this->assertNull($rows[1]['score']);
+        $this->assertSame('2012-03-04 05:06:07', $rows[1]['created_at']);
+    }
+
+    public function testResultAddResultLogCopiesTheCurrentResultIntoTheLog(): void
+    {
+        $eval = $this->evaluation();
+        $a = $this->user('A', 'A');
+        $b = $this->user('B', 'B');
+        $ra = $this->resultRow($eval, $a, 9.5);
+        $rb = $this->resultRow($eval, $b, null);
+
+        (new Result())->addResultLog($a, $eval);
+        (new Result())->addResultLog($b, $eval);
+
+        $logs = $this->conn->fetchAllAssociative(
+            'SELECT result_id, user_id, evaluation_id, score, created_at FROM gradebook_result_log WHERE evaluation_id = ? ORDER BY user_id',
+            [$eval]
+        );
+        $this->assertCount(2, $logs);
+        $this->assertSame([$ra, $a, $eval], [(int) $logs[0]['result_id'], (int) $logs[0]['user_id'], (int) $logs[0]['evaluation_id']]);
+        $this->assertSame(9.5, (float) $logs[0]['score']);
+        $this->assertSame([$rb, $b], [(int) $logs[1]['result_id'], (int) $logs[1]['user_id']]);
+        $this->assertNull($logs[1]['score']);
+        $this->assertEqualsWithDelta(time(), strtotime($logs[0]['created_at'].' UTC'), 120);
+    }
+
+    public function testResultSaveUpdatesByIdAndByUserAndEvaluationWhenThereIsNoId(): void
+    {
+        $eval = $this->evaluation();
+        $a = $this->user('A', 'A');
+        $b = $this->user('B', 'B');
+        $ra = $this->resultRow($eval, $a, 1.0, '2005-06-07 08:09:10');
+        $this->resultRow($eval, $b, 2.0);
+
+        $byId = new Result();
+        $byId->set_id($ra);
+        $byId->set_user_id($a);
+        $byId->set_evaluation_id($eval);
+        $byId->set_score(15.25);
+        $byId->save();
+
+        $byPair = new Result();
+        $byPair->set_user_id($b);
+        $byPair->set_evaluation_id($eval);
+        $byPair->save();
+
+        $rows = $this->resultsOf($eval);
+        $this->assertSame(15.25, (float) $rows[0]['score']);
+        // The creation date is not rewritten.
+        $this->assertSame('2005-06-07 08:09:10', $rows[0]['created_at']);
+        // No score set: the stored score becomes NULL.
+        $this->assertNull($rows[1]['score']);
+    }
+
+    public function testResultSaveWithAnIdMovesTheRowToTheGivenUserAndEvaluation(): void
+    {
+        $e1 = $this->evaluation();
+        $e2 = $this->evaluation();
+        $a = $this->user('A', 'A');
+        $b = $this->user('B', 'B');
+        $ra = $this->resultRow($e1, $a, 1.0);
+
+        $result = new Result();
+        $result->set_id($ra);
+        $result->set_user_id($b);
+        $result->set_evaluation_id($e2);
+        $result->set_score(0.0);
+        $result->save();
+
+        $this->assertSame([], $this->resultsOf($e1));
+        $rows = $this->resultsOf($e2);
+        $this->assertSame([$b], array_map(static fn (array $r): int => (int) $r['user_id'], $rows));
+        $this->assertSame(0.0, (float) $rows[0]['score']);
+    }
+
+    public function testResultDeleteRemovesOnlyThatResult(): void
+    {
+        $eval = $this->evaluation();
+        $a = $this->user('A', 'A');
+        $b = $this->user('B', 'B');
+        $ra = $this->resultRow($eval, $a, 1.0);
+        $this->resultRow($eval, $b, 2.0);
+        $result = new Result();
+        $result->set_id($ra);
+        $result->set_evaluation_id($eval);
+
+        $result->delete();
+
+        $this->assertSame([$b], array_map(static fn (array $r): int => (int) $r['user_id'], $this->resultsOf($eval)));
+    }
+
+    public function testResultDeleteAlsoRemovesTheAttemptsWhenMultipleAttemptsAreAllowed(): void
+    {
+        $eval = $this->evaluation();
+        $a = $this->user('A', 'A');
+        $b = $this->user('B', 'B');
+        $ra = $this->resultRow($eval, $a, 1.0);
+        $rb = $this->resultRow($eval, $b, 2.0);
+        foreach ([$ra, $rb] as $rid) {
+            $this->conn->executeStatement(
+                "INSERT INTO gradebook_result_attempt (result_id, comment, score, created_at, updated_at)
+                 VALUES (?, 'g3', 1, '2001-01-01 00:00:00', '2001-01-01 00:00:00')",
+                [$rid]
+            );
+        }
+        $manager = self::getContainer()->get(SettingsManager::class);
+        $manager->updateSetting('gradebook.gradebook_multiple_evaluation_attempts', 'true');
+        $result = new Result();
+        $result->set_id($ra);
+        $result->set_evaluation_id($eval);
+
+        $result->delete();
+
+        $this->assertSame(0, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM gradebook_result_attempt WHERE result_id = ?', [$ra]));
+        $this->assertSame(1, (int) $this->conn->fetchOne('SELECT COUNT(*) FROM gradebook_result_attempt WHERE result_id = ?', [$rb]));
+    }
+
+    public function testResultExistsLooksForTheUserAndEvaluationPair(): void
+    {
+        $e1 = $this->evaluation();
+        $e2 = $this->evaluation();
+        $a = $this->user('A', 'A');
+        $this->resultRow($e1, $a, 1.0);
+
+        $yes = new Result();
+        $yes->set_user_id($a);
+        $yes->set_evaluation_id($e1);
+        $no = new Result();
+        $no->set_user_id($a);
+        $no->set_evaluation_id($e2);
+
+        $this->assertTrue($yes->exists());
+        $this->assertFalse($no->exists());
     }
 }

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use ForumThreadLink;
+use LearnpathLink;
 use Doctrine\DBAL\Connection;
 use ExerciseLink;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -494,5 +495,89 @@ final class GradebookLinksTier3CharacterizationTest extends KernelTestCase
         $value($rule);
         $this->assertFalse($this->exerciseLink($quiz, $course)->hasConfiguredCompletionTrackingIds());
         $this->resetCompletionCache();
+    }
+
+    // ------------------------------------------------------------ learnpath
+
+    private function lp(array $o = []): int
+    {
+        $this->conn->insert('c_lp', $o + [
+            'title' => 'gl_lp_'.(++$this->seq),
+            'description' => 'lp description',
+            'lp_type' => 1,
+            'path' => '',
+            'force_commit' => 0,
+            'content_maker' => '',
+            'content_license' => '',
+            'js_lib' => '',
+            'debug' => 0,
+            'theme' => '',
+            'author' => '',
+            'prerequisite' => 0,
+            'hide_toc_frame' => 0,
+            'seriousgame_mode' => 0,
+            'autolaunch' => 0,
+            'max_attempts' => 0,
+            'subscribe_users' => 0,
+            'created_on' => '2020-01-01 00:00:00',
+            'modified_on' => '2020-01-01 00:00:00',
+        ]);
+
+        return (int) $this->conn->lastInsertId();
+    }
+
+    private function lpView(int $lpId, int $userId, int $courseId, ?int $sessionId, int $progress = 0): void
+    {
+        $this->conn->insert('c_lp_view', [
+            'lp_id' => $lpId,
+            'user_id' => $userId,
+            'c_id' => $courseId,
+            'session_id' => $sessionId,
+            'view_count' => 1,
+            'last_item' => 0,
+            'progress' => $progress,
+        ]);
+    }
+
+    private function lpLink(int $lpId, int $courseId = 1, int $sessionId = 0): LearnpathLink
+    {
+        $link = new LearnpathLink();
+        $link->set_ref_id($lpId);
+        $link->course_id = $courseId;
+        $link->set_session_id($sessionId);
+
+        return $link;
+    }
+
+    public function testLearnpathIsValidLinkNameAndDescription(): void
+    {
+        $lp = $this->lp(['title' => 'LP title', 'description' => 'LP desc']);
+        $this->assertTrue($this->lpLink($lp)->is_valid_link());
+        $this->assertFalse($this->lpLink(999999999)->is_valid_link());
+        $this->assertSame('LP title', $this->lpLink($lp)->get_name());
+        $this->assertSame('LP desc', $this->lpLink($lp)->get_description());
+    }
+
+    public function testLearnpathHasResultsIsScopedByCourseLpAndSession(): void
+    {
+        $lp = $this->lp();
+        $other = $this->lp();
+        $session = (int) $this->conn->fetchOne('SELECT id FROM session ORDER BY id LIMIT 1');
+        if (0 === $session) {
+            $this->conn->executeStatement(
+                'INSERT INTO session (title, nbr_courses, nbr_users, nbr_classes, visibility, status, position) VALUES (?, 0, 0, 0, 1, 0, 0)',
+                ['gl_lp_session']
+            );
+            $session = (int) $this->conn->lastInsertId();
+        }
+        $this->assertFalse($this->lpLink($lp)->has_results());
+
+        $this->lpView($lp, $this->users[0], 1, null);
+        $this->assertFalse($this->lpLink($lp)->has_results(), 'a base-course view (NULL session) is not session 0');
+        $this->lpView($lp, $this->users[0], 1, $session);
+        $this->assertTrue($this->lpLink($lp, 1, $session)->has_results());
+        $this->assertFalse($this->lpLink($other, 1, $session)->has_results());
+        $this->assertFalse($this->lpLink($lp, 2, $session)->has_results());
+        $this->assertFalse($this->lpLink($lp)->has_results());
     }
 }

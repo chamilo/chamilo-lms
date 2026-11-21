@@ -10,6 +10,7 @@ use AttendanceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
+use ForumParticipationLink;
 use ForumThreadLink;
 use LearnpathLink;
 use Doctrine\DBAL\Connection;
@@ -579,5 +580,54 @@ final class GradebookLinksTier3CharacterizationTest extends KernelTestCase
         $this->assertFalse($this->lpLink($other, 1, $session)->has_results());
         $this->assertFalse($this->lpLink($lp, 2, $session)->has_results());
         $this->assertFalse($this->lpLink($lp)->has_results());
+    }
+
+    // --------------------------------------------------- forum participation
+
+    private function post(int $threadId, int $userId, int $visible = 1): void
+    {
+        $this->conn->insert('c_forum_post', [
+            'thread_id' => $threadId,
+            'poster_id' => $userId,
+            'title' => 'gl_post_'.(++$this->seq),
+            'post_date' => '2020-01-01 00:00:00',
+            'visible' => $visible,
+        ]);
+    }
+
+    private function participationLink(int $threadId): ForumParticipationLink
+    {
+        $link = new ForumParticipationLink();
+        $link->set_ref_id($threadId);
+        $link->set_points_one(2.0);
+        $link->set_points_many(5.0);
+
+        return $link;
+    }
+
+    public function testForumParticipationCountsVisiblePostsOfTheThreadPerStudent(): void
+    {
+        [$a, $b, $c] = $this->users;
+        $thread = $this->thread();
+        $other = $this->thread();
+        $this->post($thread, $a);
+        $this->post($thread, $b);
+        $this->post($thread, $b);
+        $this->post($thread, $b, 0);
+        $this->post($thread, $c, 0);
+        $this->post($other, $a);
+        $this->post($other, $a);
+        $this->post($other, $c);
+        $link = $this->participationLink($thread);
+
+        $this->assertSame([2.0, 5.0], $link->calc_score($a));
+        $this->assertSame([5.0, 5.0], $link->calc_score($b));
+        $this->assertSame([0.0, 5.0], $link->calc_score($c), 'only a hidden post in the thread');
+        $this->assertSame([null, null], $link->calc_score());
+        $this->assertTrue($link->has_results());
+        $this->assertFalse($this->participationLink($this->thread())->has_results());
+        $hidden = $this->thread();
+        $this->post($hidden, $a, 0);
+        $this->assertFalse($this->participationLink($hidden)->has_results());
     }
 }

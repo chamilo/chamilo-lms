@@ -20,7 +20,8 @@ class MigrationFactory implements DoctrineMigrationFactory
     public function __construct(
         DoctrineMigrationFactory $migrationFactory,
         ContainerInterface $container,
-        protected readonly EntityManagerInterface $entityManager
+        protected readonly EntityManagerInterface $entityManager,
+        private readonly MigrationIssueReporter $issueReporter
     ) {
         $this->migrationFactory = $migrationFactory;
         $this->container = $container;
@@ -33,6 +34,7 @@ class MigrationFactory implements DoctrineMigrationFactory
         if ($instance instanceof AbstractMigrationChamilo) {
             $instance->setContainer($this->container);
             $instance->setEntityManager($this->entityManager);
+            $instance->setIssueReporter($this->issueReporter);
         }
 
         return $instance;

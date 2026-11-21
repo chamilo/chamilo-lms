@@ -4836,5 +4836,10 @@
     "Access conditions in JSON": "Access conditions in JSON",
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
-    "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object."
+    "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
+    "Migration completed with warnings": "Migration completed with warnings",
+    "Recoverable data issues recorded:": "Recoverable data issues recorded:",
+    "Review affected content before use. The full report is available on the server at:": "Review affected content before use. The full report is available on the server at:",
+    "Unable to summarize migration data issues. Ask the server administrator to check var/log/migration-data-issues.": "Unable to summarize migration data issues. Ask the server administrator to check var/log/migration-data-issues.",
+    "Download the migration report (global administrator login required)": "Download the migration report (global administrator login required)"
 }

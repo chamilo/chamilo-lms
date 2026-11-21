@@ -176,8 +176,40 @@
     :style="{ width: '32rem' }"
     :show-close-button="false"
     :show-header-close-button="false"
-    :title="t('Migration completed successfully!')"
+    :title="
+      migrationIssueSummary || migrationIssueSummaryFailed
+        ? t('Migration completed with warnings')
+        : t('Migration completed successfully!')
+    "
   >
+    <Message
+      v-if="migrationIssueSummary"
+      :closable="false"
+      severity="warn"
+      class="mb-4"
+    >
+      <p>{{ t("Recoverable data issues recorded:") }} {{ migrationIssueSummary.count }}</p>
+      <p>{{ t("Review affected content before use. The full report is available on the server at:") }}</p>
+      <code class="break-all">{{ migrationIssueSummary.path }}</code>
+      <p class="mt-2">
+        <a
+          :href="`../../admin/migration-data-issues/${encodeURIComponent(migrationIssueSummary.report_id)}`"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline"
+        >
+          {{ t("Download the migration report (global administrator login required)") }}
+        </a>
+      </p>
+    </Message>
+    <Message
+      v-if="migrationIssueSummaryFailed"
+      :closable="false"
+      severity="warn"
+      class="mb-4"
+    >
+      {{ t("Unable to summarize migration data issues. Ask the server administrator to check var/log/migration-data-issues.") }}
+    </Message>
     <Message
       v-if="upgradeFlagWarning"
       :closable="false"
@@ -224,6 +256,24 @@
     >
       {{ t("The last migration executed successfully was:") }} <br /><strong>{{ currentMigration }}</strong>
     </p>
+    <Message
+      v-if="migrationIssueSummary"
+      :closable="false"
+      severity="warn"
+      class="mt-4"
+    >
+      <p>{{ t("Recoverable data issues recorded:") }} {{ migrationIssueSummary.count }}</p>
+      <p>{{ t("Review affected content before use. The full report is available on the server at:") }}</p>
+      <code class="break-all">{{ migrationIssueSummary.path }}</code>
+    </Message>
+    <Message
+      v-if="migrationIssueSummaryFailed"
+      :closable="false"
+      severity="warn"
+      class="mt-4"
+    >
+      {{ t("Unable to summarize migration data issues. Ask the server administrator to check var/log/migration-data-issues.") }}
+    </Message>
     <template #footer>
       <BaseButton
         :label="t('Contact support')"
@@ -313,6 +363,8 @@ const successDialogVisible = ref(false)
 const errorDialogVisible = ref(false)
 const errorMessage = ref("")
 const upgradeFlagWarning = ref("")
+const migrationIssueSummary = ref(null)
+const migrationIssueSummaryFailed = ref(false)
 
 const showAdminPass = ref(false)
 const toggleAdminPass = () => {
@@ -320,6 +372,8 @@ const toggleAdminPass = () => {
 }
 
 function btnStep6OnClick() {
+  migrationIssueSummary.value = null
+  migrationIssueSummaryFailed.value = false
   loading.value = true
   isButtonDisabled.value = true
 
@@ -362,6 +416,8 @@ function startMigration(updatePath) {
 
       progressPercentage.value = response.progress_percentage
       currentMigration.value = response.current_migration
+      migrationIssueSummary.value = response.migration_issue_summary || null
+      migrationIssueSummaryFailed.value = response.migration_issue_summary_failed === true
       loading.value = false
       isButtonDisabled.value = false
 
@@ -382,6 +438,9 @@ function startMigration(updatePath) {
 
     try {
       const response = JSON.parse(xhr.responseText)
+      migrationIssueSummary.value = response.migration_issue_summary || null
+      migrationIssueSummaryFailed.value = response.migration_issue_summary_failed === true
+      currentMigration.value = response.current_migration || ""
       errorMessage.value =
         response.message || `${t("Please check the following error:")} ${xhr.status} - ${xhr.statusText}`
     } catch {

@@ -2,6 +2,12 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CDropboxCategory;
+use Chamilo\CourseBundle\Entity\CDropboxFile;
+use Chamilo\CourseBundle\Entity\CDropboxPerson;
+use Chamilo\CourseBundle\Entity\CDropboxPost;
+
 /**
  * Dropbox module for Chamilo
  * Classes for the dropbox module.
@@ -509,17 +515,14 @@ class Dropbox_Person
         $course_id = api_get_course_int_id();
 
         $id = intval($id);
-        $sql = 'DELETE FROM '.Database::get_course_table(TABLE_DROPBOX_FILE)."
-                WHERE c_id = $course_id AND cat_id = '".$id."' ";
-        Database::query($sql);
-
-        $sql = 'DELETE FROM '.Database::get_course_table(TABLE_DROPBOX_CATEGORY)."
-                WHERE c_id = $course_id AND cat_id = '".$id."' ";
-        Database::query($sql);
-
-        $sql = 'DELETE FROM '.Database::get_course_table(TABLE_DROPBOX_POST)."
-                WHERE c_id = $course_id AND cat_id = '".$id."' ";
-        Database::query($sql);
+        $em = Container::getEntityManager();
+        foreach ([CDropboxFile::class, CDropboxCategory::class, CDropboxPost::class] as $entityClass) {
+            $em->createQuery('DELETE FROM '.$entityClass.' e WHERE e.cId = :courseId AND e.catId = :catId')
+                ->setParameter('courseId', (int) $course_id)
+                ->setParameter('catId', $id)
+                ->execute()
+            ;
+        }
 
         return true;
     }
@@ -549,9 +552,7 @@ class Dropbox_Person
             }
         }
         // Delete entries in person table concerning received works
-        $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
-                WHERE c_id = $course_id AND user_id = '".$this->userId."' AND file_id ='".$id."'";
-        Database::query($sql);
+        $this->deletePersonRow($course_id, $id);
         removeUnusedFiles(); // Check for unused files
     }
 
@@ -581,10 +582,19 @@ class Dropbox_Person
         }
         //$file_id = $this->sentWork[$index]->id;
         // Delete entries in person table concerning sent works
-        $sql = 'DELETE FROM '.Database::get_course_table(TABLE_DROPBOX_PERSON)."
-                WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$id."'";
-        Database::query($sql);
+        $this->deletePersonRow($course_id, $id);
         removeMoreIfMailing($id);
         removeUnusedFiles(); // Check for unused files
+    }
+
+    private function deletePersonRow(int $courseId, int $fileId): void
+    {
+        Container::getEntityManager()
+            ->createQuery('DELETE FROM '.CDropboxPerson::class.' p WHERE p.cId = :courseId AND p.userId = :userId AND p.fileId = :fileId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', (int) $this->userId)
+            ->setParameter('fileId', $fileId)
+            ->execute()
+        ;
     }
 }

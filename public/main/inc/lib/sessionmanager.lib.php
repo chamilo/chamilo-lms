@@ -5960,8 +5960,9 @@ class SessionManager
                 if ($session_id) {
 
                     $em = Database::getManager();
-                    $coach = $em->contains($coach) ? $coach : $em->merge($coach);
-                    $defaultUser = $em->contains($defaultUser) ? $defaultUser : $em->merge($defaultUser);
+                    // Processing a previous row can detach these entities (ORM 3 has no merge()): reload them.
+                    $coach = $em->contains($coach) ? $coach : $em->find(User::class, (int) $coach->getId());
+                    $defaultUser = $em->contains($defaultUser) ? $defaultUser : $em->find(User::class, (int) $defaultUser->getId());
 
                     $session->addUserInSession(Session::GENERAL_COACH, $coach);
                     $session->addUserInSession(Session::GENERAL_COACH, $defaultUser);
@@ -6152,7 +6153,7 @@ class SessionManager
                         );
 
                         $em = Database::getManager();
-                        $coach = $em->contains($coach) ? $coach : $em->merge($coach);
+                        $coach = $em->contains($coach) ? $coach : $em->find(User::class, (int) $coach->getId());
                         api_get_session_entity($session_id)->addUserInSession(Session::GENERAL_COACH, $coach);
                         $em->flush();
 

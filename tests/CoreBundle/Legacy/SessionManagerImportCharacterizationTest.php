@@ -436,6 +436,71 @@ final class SessionManagerImportCharacterizationTest extends AbstractApiTest
     }
 
     /**
+     * One file, several rows, the first with a course coach: every row is imported, each with its general
+     * coach and the default user as general coaches. Before the fix the second row fataled with
+     * "Call to undefined method EntityManager::merge()" once the default user was detached from the
+     * entity manager by the course coach processing of the first row.
+     */
+    public function testCsvCreateImportsEveryRowOfOneFileAfterARowWithACourseCoach(): void
+    {
+        $this->setUpPeople();
+        $tb = [];
+        $gb = [];
+        $result = $this->importCsvFile(
+            "SessionName,Coach,DateStart,DateEnd,Users,Courses\n".
+            'imp_multi_a,'.$this->coach.',2031-01-01,2031-06-30,'.$this->stu1.',"'.$this->code1.'['.$this->coach."]\"\n".
+            'imp_multi_b,'.$this->coach.',2031-02-01,2031-03-01,'.$this->stu2.",\n".
+            "imp_multi_c,,2031-04-01,2031-05-01,,\n",
+            ['teacherBackup' => &$tb, 'groupBackup' => &$gb]
+        );
+        $this->assertSame(3, $result['session_counter']);
+        $this->assertCount(3, $result['session_list']);
+        $adminId = $this->getAdmin()->getId();
+        $generalCoaches = [];
+        foreach (['imp_multi_a', 'imp_multi_b', 'imp_multi_c'] as $title) {
+            $generalCoaches[$title] = $this->conn()->fetchFirstColumn(
+                'SELECT srcu.user_id FROM session_rel_user srcu INNER JOIN session s ON s.id = srcu.session_id
+                 WHERE s.title = ? AND srcu.relation_type = 3 ORDER BY srcu.user_id',
+                [$title]
+            );
+        }
+        $coachId = $this->userId($this->coach);
+        $this->assertEquals([$adminId, $coachId], array_map('intval', $generalCoaches['imp_multi_a']), 'row 1');
+        $this->assertEquals([$adminId, $coachId], array_map('intval', $generalCoaches['imp_multi_b']), 'row 2');
+        $this->assertEquals([$adminId], array_map('intval', $generalCoaches['imp_multi_c']), 'row 3');
+    }
+
+    /**
+     * Same, in update mode: the existing session of the second row gets its general coach back.
+     */
+    public function testCsvUpdateImportsEveryRowOfOneFileAfterARowWithACourseCoach(): void
+    {
+        $this->setUpPeople();
+        $this->existingSession('imp_upd_a');
+        $this->existingSession('imp_upd_b');
+        $tb = [];
+        $gb = [];
+        $result = $this->importCsvFile(
+            "SessionName,Coach,DateStart,DateEnd,Users,Courses\n".
+            'imp_upd_a,'.$this->coach.',2031-01-01,2031-06-30,'.$this->stu2.',"'.$this->code1.'['.$this->coach."]\"\n".
+            'imp_upd_b,'.$this->coach.',2031-02-01,2031-03-01,'.$this->stu2.",\n",
+            ['update' => true, 'teacherBackup' => &$tb, 'groupBackup' => &$gb]
+        );
+        $this->assertSame(2, $result['session_counter']);
+        foreach (['imp_upd_a', 'imp_upd_b'] as $title) {
+            $this->assertSame(
+                [$this->userId($this->coach)],
+                array_map('intval', $this->conn()->fetchFirstColumn(
+                    'SELECT srcu.user_id FROM session_rel_user srcu INNER JOIN session s ON s.id = srcu.session_id
+                     WHERE s.title = ? AND srcu.relation_type = 3',
+                    [$title]
+                )),
+                $title
+            );
+        }
+    }
+
+    /**
      * A name that already exists is made unique with " - 2", " - 3" (the loop retries the plain name once);
      * a course listed twice is inserted once (INSERT IGNORE) but counted twice.
      */

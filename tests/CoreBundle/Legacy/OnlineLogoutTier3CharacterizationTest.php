@@ -15,6 +15,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
+use const E_NOTICE;
+use const E_WARNING;
+
 /**
  * Characterization of online_logout() (online.inc.php), the part that reads/closes the user's last track_e_login row.
  * Callers: main/auth/unsubscribe_account.php and UserPortal::logout().

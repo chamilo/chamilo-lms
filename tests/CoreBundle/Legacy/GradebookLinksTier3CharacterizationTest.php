@@ -10,11 +10,12 @@ use AttendanceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
+use Doctrine\DBAL\Connection;
+use ExerciseLink;
 use ForumParticipationLink;
 use ForumThreadLink;
 use LearnpathLink;
-use Doctrine\DBAL\Connection;
-use ExerciseLink;
+use ReflectionProperty;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
@@ -31,7 +32,10 @@ final class GradebookLinksTier3CharacterizationTest extends KernelTestCase
 
     private Connection $conn;
     private int $seq = 0;
-    /** @var int[] */
+
+    /**
+     * @var int[]
+     */
     private array $users = [];
 
     protected function setUp(): void
@@ -398,7 +402,7 @@ final class GradebookLinksTier3CharacterizationTest extends KernelTestCase
 
     private function resetCompletionCache(): void
     {
-        $prop = new \ReflectionProperty(ExerciseLink::class, 'completionTrackingIdsByCourse');
+        $prop = new ReflectionProperty(ExerciseLink::class, 'completionTrackingIdsByCourse');
         $prop->setAccessible(true);
         $prop->setValue(null, []);
     }

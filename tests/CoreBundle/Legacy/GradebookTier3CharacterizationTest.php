@@ -342,7 +342,7 @@ final class GradebookTier3CharacterizationTest extends KernelTestCase
         $row = GradebookUtils::getComment($cat, 1);
 
         $this->assertSame('g3 comment', $row['comment']);
-        $this->assertSame(['id', 'user_id', 'gradebook_id', 'comment', 'created_at', 'updated_at'], array_slice(array_keys($row), 0, 6));
+        $this->assertSame(['id', 'user_id', 'gradebook_id', 'comment', 'created_at', 'updated_at'], \array_slice(array_keys($row), 0, 6));
         $this->assertSame(12, \count($row));
         $this->assertSame($row['id'], $row[0]);
         $this->assertSame($row['comment'], $row[3]);

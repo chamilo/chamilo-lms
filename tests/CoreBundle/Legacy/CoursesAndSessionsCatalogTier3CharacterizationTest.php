@@ -119,6 +119,6 @@ final class CoursesAndSessionsCatalogTier3CharacterizationTest extends KernelTes
         $list = CoursesAndSessionsCatalog::getCoursesToAvoid();
 
         $rawType = \gettype($this->conn()->fetchOne('SELECT item_id FROM extra_field_values WHERE field_id = ?', [$field]));
-        $this->assertSame([$rawType], array_values(array_unique(array_map('gettype', array_slice($list, -1)))));
+        $this->assertSame([$rawType], array_values(array_unique(array_map('gettype', \array_slice($list, -1)))));
     }
 }

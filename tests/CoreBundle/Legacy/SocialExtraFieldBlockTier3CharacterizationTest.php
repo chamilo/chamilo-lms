@@ -79,8 +79,8 @@ final class SocialExtraFieldBlockTier3CharacterizationTest extends KernelTestCas
     private function value(int $fieldId, string $value): void
     {
         $this->conn->executeStatement(
-            "INSERT INTO extra_field_values (field_id, item_id, field_value, created_at, updated_at)
-             VALUES (?, 1, ?, NOW(), NOW())",
+            'INSERT INTO extra_field_values (field_id, item_id, field_value, created_at, updated_at)
+             VALUES (?, 1, ?, NOW(), NOW())',
             [$fieldId, $value]
         );
     }

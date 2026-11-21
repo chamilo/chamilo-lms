@@ -35,7 +35,7 @@ final class SettingsLibTier3CharacterizationTest extends KernelTestCase
         $request = Request::create('/main/admin/settings.lib.php');
         $request->setSession($session);
         Container::setRequest($request);
-        if (!function_exists('getNumberOfTemplates')) {
+        if (!\function_exists('getNumberOfTemplates')) {
             require_once __DIR__.'/../../../public/main/admin/settings.lib.php';
         }
     }

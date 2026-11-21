@@ -185,7 +185,7 @@ final class MessageTier3CharacterizationTest extends KernelTestCase
 
         $this->assertSame(self::BASE + 31, $row['id']);
         $this->assertSame('inbox', $row['title']);
-        $this->assertSame(13, count($row));
+        $this->assertSame(13, \count($row));
         $this->assertSame('', $echoed);
 
         ob_start();

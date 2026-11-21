@@ -7,13 +7,15 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Framework\Container;
-use Database;
 use DashboardManager;
+use Database;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+
+use const ARRAY_FILTER_USE_BOTH;
 
 /**
  * Characterization tests for DashboardManager::get_enabled_dashboard_blocks() (public/main/inc/lib/dashboard.lib.php).

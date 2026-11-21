@@ -6,10 +6,11 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use ArgumentCountError;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\Tests\ChamiloTestTrait;
-use Chat;
 use ChamiloSession;
+use Chat;
 use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -207,7 +208,7 @@ final class ChatTier3CharacterizationTest extends KernelTestCase
         try {
             (new Chat())->ackReadUpTo($this->peer, $this->me, $b);
             $this->fail('Expected ArgumentCountError.');
-        } catch (\ArgumentCountError) {
+        } catch (ArgumentCountError) {
         }
 
         $this->assertSame([2, 2, 1, 2, 0, 0], $this->recdOf([$a, $b, $c, $alreadyRead, $mine, $elsewhere]));

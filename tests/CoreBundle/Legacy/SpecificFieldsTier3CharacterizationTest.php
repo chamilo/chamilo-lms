@@ -31,7 +31,7 @@ final class SpecificFieldsTier3CharacterizationTest extends KernelTestCase
         $request = Request::create('/main/inc/lib/specific_fields_manager.lib.php');
         $request->setSession($session);
         Container::setRequest($request);
-        if (!function_exists('delete_specific_field')) {
+        if (!\function_exists('delete_specific_field')) {
             require_once api_get_path(SYS_CODE_PATH).'inc/lib/specific_fields_manager.lib.php';
         }
         $this->conn()->executeStatement('DELETE FROM search_engine_field');

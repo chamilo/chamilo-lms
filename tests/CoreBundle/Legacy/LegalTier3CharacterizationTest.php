@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
+use const STDERR;
+
 /**
  * Characterization tests for the read functions and sendLegal() of LegalManager (public/main/inc/lib/legal.lib.php).
  * Fixtures use language ids 900001/900002 (no such language exists, except the ones created here).
@@ -182,18 +184,19 @@ final class LegalTier3CharacterizationTest extends KernelTestCase
         );
         $this->assertSame(
             ['version', 'language', 'content', 'changes', 'type', 'FROM_UNIXTIME(date)'],
-            array_slice(array_keys($mine[1]), 0, 6)
+            \array_slice(array_keys($mine[1]), 0, 6)
         );
 
         $page = LegalManager::get_legal_data(1, 2, 0);
         $this->assertCount(2, $page);
-        $this->assertSame(array_column(array_slice($all, 1, 2), 2), array_column($page, 2));
+        $this->assertSame(array_column(\array_slice($all, 1, 2), 2), array_column($page, 2));
     }
 
     public function testSendLegalMarksTheProfileCompletedWhenNoTermIsMissing(): void
     {
         $user = $this->createUser('lgl3_send');
         $this->conn()->executeStatement('UPDATE user SET profile_completed = 0 WHERE id = ?', [$user->getId()]);
+
         /** @var SettingsManager $settings */
         $settings = self::getContainer()->get(SettingsManager::class);
         $settings->updateSetting('profile.show_terms_if_profile_completed', 'true');
@@ -211,6 +214,7 @@ final class LegalTier3CharacterizationTest extends KernelTestCase
     {
         $user = $this->createUser('lgl3_send_off');
         $this->conn()->executeStatement('UPDATE user SET profile_completed = 0 WHERE id = ?', [$user->getId()]);
+
         /** @var SettingsManager $settings */
         $settings = self::getContainer()->get(SettingsManager::class);
         $settings->updateSetting('profile.show_terms_if_profile_completed', 'false');

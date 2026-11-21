@@ -1262,12 +1262,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'cas_activate',
                     'title' => 'Enable CAS authentication',
-                    'comment' => "Enabling CAS authentication will allow users to authenticate with their CAS credentials.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'CAS Login' button for your Chamilo campus. Or you can force CAS authentication by setting cas[force_redirect] in app/config/auth.conf.php.",
+                    'comment' => 'Enable the CAS sign-in button when the server and portal URL are correctly configured.',
                 ],
                 [
                     'name' => 'cas_add_user_activate',
                     'title' => 'Enable CAS user addition',
-                    'comment' => 'Enable CAS user addition. To create the user account from the LDAP directory, the extldap_config and extldap_user_correspondance tables must be filled in in app/config/auth.conf.php',
+                    'comment' => 'Use false to disable automatic creation, platform to use CAS attributes, or extldap to use the configured LDAP directory.',
                 ],
                 [
                     'name' => 'cas_port',
@@ -1277,7 +1277,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'cas_protocol',
                     'title' => 'Main CAS server protocol',
-                    'comment' => 'The protocol with which we connect to the CAS server',
+                    'comment' => 'Select CAS1, CAS2 (default), or CAS3. TLS is always required. The legacy SAML 1.1 protocol is not supported.',
                 ],
                 [
                     'name' => 'cas_server',
@@ -1292,7 +1292,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'update_user_info_cas_with_ldap',
                     'title' => 'Update CAS-authenticated user account information from LDAP',
-                    'comment' => 'Makes sure the user firstname, lastname and email address are the same as current values in the LDAP directory',
+                    'comment' => 'Update the first name, last name and email from the configured LDAP directory over verified LDAPS. Roles and passwords are never synchronized by CAS.',
                 ],
             ],
             'exercise' => [

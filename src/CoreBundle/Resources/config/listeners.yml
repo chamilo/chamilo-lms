@@ -82,6 +82,12 @@ services:
               event: Symfony\Component\Security\Http\Event\LogoutEvent
               priority: 20
 
+    Chamilo\CoreBundle\EventListener\CasLogoutListener:
+        tags:
+            - name: kernel.event_listener
+              event: Symfony\Component\Security\Http\Event\LogoutEvent
+              priority: 10
+
     Chamilo\CoreBundle\EventListener\HTTPExceptionListener:
         tags:
             - {name: kernel.event_listener, event: kernel.exception}

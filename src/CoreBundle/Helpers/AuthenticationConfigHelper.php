@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
+use Chamilo\CoreBundle\Security\Authenticator\Cas\CasConfiguration;
 use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
@@ -16,6 +17,7 @@ readonly class AuthenticationConfigHelper
     public function __construct(
         private ParameterBagInterface $parameterBag,
         private AccessUrlHelper $accessUrlHelper,
+        private ?CasConfiguration $casConfiguration = null,
     ) {}
 
     public function getOAuthProviderConfig(string $providerName, ?AccessUrl $url = null): array
@@ -83,6 +85,10 @@ readonly class AuthenticationConfigHelper
     {
         $authentications = [UserAuthSource::PLATFORM];
 
+        if (null !== $this->casConfiguration?->get($url)) {
+            $authentications[] = UserAuthSource::CAS;
+        }
+
         if ($this->getLdapConfig($url)['enabled']) {
             $authentications[] = UserAuthSource::LDAP;
         }
@@ -96,6 +102,22 @@ readonly class AuthenticationConfigHelper
             $authentications,
             $oauthProviders
         );
+    }
+
+    /**
+     * @return array{force_as_login_method: bool, force_redirect: bool, skip_force_redirect_in: array, attributes: array}
+     */
+    public function getCasOptions(?AccessUrl $url = null): array
+    {
+        $sources = $this->getAuthSources($url);
+        $cas = \is_array($sources['cas'] ?? null) ? $sources['cas'] : [];
+
+        return [
+            'force_as_login_method' => true === ($cas['force_as_login_method'] ?? false),
+            'force_redirect' => true === ($cas['force_redirect'] ?? false),
+            'skip_force_redirect_in' => (array) ($cas['skip_force_redirect_in'] ?? []),
+            'attributes' => (array) ($cas['attributes'] ?? []),
+        ];
     }
 
     /**
@@ -240,11 +262,15 @@ readonly class AuthenticationConfigHelper
             }
         }
 
+        if ($this->getCasOptions($url)['force_as_login_method'] && null !== $this->casConfiguration?->get($url)) {
+            return 'cas';
+        }
+
         return null;
     }
 
     /**
-     * Returns the first enabled OAuth2 provider marked as "force_redirect", with the
+     * Returns the first enabled OAuth2 or CAS provider marked as "force_redirect", with the
      * URI fragments its "skip_force_redirect_in" list exempts.
      *
      * LDAP never appears here: it signs in through the local login form.
@@ -271,6 +297,16 @@ readonly class AuthenticationConfigHelper
             return ['name' => (string) $providerName, 'skip' => $fragments];
         }
 
+        $cas = $this->getCasOptions($url);
+        if ($cas['force_redirect'] && null !== $this->casConfiguration?->get($url)) {
+            $fragments = array_values(array_filter(array_map(
+                static fn (mixed $fragment): string => \is_string($fragment) ? trim($fragment) : '',
+                $cas['skip_force_redirect_in']
+            ), static fn (string $fragment): bool => '' !== $fragment));
+
+            return ['name' => 'cas', 'skip' => $fragments];
+        }
+
         return null;
     }
 
@@ -284,7 +320,13 @@ readonly class AuthenticationConfigHelper
     public function hasForcedRedirectProviderDeclared(): bool
     {
         foreach ($this->getAuthenticationParameter() as $authSources) {
-            if (!\is_array($authSources) || !\is_array($authSources['oauth2'] ?? null)) {
+            if (!\is_array($authSources)) {
+                continue;
+            }
+            if (\is_array($authSources['cas'] ?? null) && true === ($authSources['cas']['force_redirect'] ?? false)) {
+                return true;
+            }
+            if (!\is_array($authSources['oauth2'] ?? null)) {
                 continue;
             }
 

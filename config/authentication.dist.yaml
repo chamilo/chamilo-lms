@@ -80,6 +80,14 @@ parameters:
                     script_usergroups_delta: false
                     group_filter_regex: ''
 
+            # CAS is enabled and its server configured in Administration > Settings > CAS.
+            # These optional policies and attribute names are scoped like OAuth2/LDAP.
+            cas:
+                force_as_login_method: false
+                force_redirect: false
+                skip_force_redirect_in: []
+                attributes: {} # Optional overrides: firstname, lastname, email
+
             ldap:
                 enabled: false
                 title: 'LDAP'

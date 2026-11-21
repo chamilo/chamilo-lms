@@ -12,6 +12,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
   const pageBackgrounds = ref({})
   const oauth2Providers = ref([])
   const ldapAuth = ref(null)
+  const casAuth = ref(null)
   const forcedLoginMethod = ref(null)
 
   function isValidConfiguration(data) {
@@ -73,6 +74,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
       plugins.value = data.plugins
       oauth2Providers.value = data.oauth2_providers
       ldapAuth.value = data.ldap_auth
+      casAuth.value = data.cas_auth ?? null
       forcedLoginMethod.value = data.forced_login_method
     } catch (error) {
       // Keep the last successfully loaded configuration after a transient error.
@@ -108,6 +110,7 @@ export const usePlatformConfig = defineStore("platformConfig", () => {
     pageBackgrounds,
     oauth2Providers,
     ldapAuth,
+    casAuth,
     forcedLoginMethod,
     setStudentViewEnabled,
   }

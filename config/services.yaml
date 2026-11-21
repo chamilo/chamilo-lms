@@ -334,6 +334,11 @@ services:
             - ~
             - '@?translator'
 
+    # A dedicated, untraced client avoids putting CAS service tickets in HTTP client logs.
+    chamilo.cas_http_client:
+        class: Symfony\Contracts\HttpClient\HttpClientInterface
+        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
+
     Chamilo\CoreBundle\Security\Authenticator\Ldap\ExtAdapter: ~
 
     Symfony\Component\Ldap\Ldap:

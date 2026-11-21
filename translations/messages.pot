@@ -43793,3 +43793,21 @@ msgstr ""
 
 msgid "The JSON of the access conditions must be a JSON object."
 msgstr ""
+
+msgid "Enable the CAS sign-in button when the server and portal URL are correctly configured."
+msgstr ""
+
+msgid "Use false to disable automatic creation, platform to use CAS attributes, or extldap to use the configured LDAP directory."
+msgstr ""
+
+msgid "Select CAS1, CAS2 (default), or CAS3. TLS is always required. The legacy SAML 1.1 protocol is not supported."
+msgstr ""
+
+msgid "Update the first name, last name and email from the configured LDAP directory over verified LDAPS. Roles and passwords are never synchronized by CAS."
+msgstr ""
+
+msgid "User authentication method not allowed"
+msgstr ""
+
+msgid "Two-factor authentication is required for this account."
+msgstr ""

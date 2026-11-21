@@ -43811,3 +43811,18 @@ msgstr ""
 
 msgid "Two-factor authentication is required for this account."
 msgstr ""
+
+msgid "Migration completed with warnings"
+msgstr ""
+
+msgid "Recoverable data issues recorded:"
+msgstr ""
+
+msgid "Review affected content before use. The full report is available on the server at:"
+msgstr ""
+
+msgid "Unable to summarize migration data issues. Ask the server administrator to check var/log/migration-data-issues."
+msgstr ""
+
+msgid "Download the migration report (global administrator login required)"
+msgstr ""

@@ -43882,3 +43882,18 @@ msgstr "User authentication method not allowed"
 
 msgid "Two-factor authentication is required for this account."
 msgstr "Two-factor authentication is required for this account."
+
+msgid "Migration completed with warnings"
+msgstr "Migration completed with warnings"
+
+msgid "Recoverable data issues recorded:"
+msgstr "Recoverable data issues recorded:"
+
+msgid "Review affected content before use. The full report is available on the server at:"
+msgstr "Review affected content before use. The full report is available on the server at:"
+
+msgid "Unable to summarize migration data issues. Ask the server administrator to check var/log/migration-data-issues."
+msgstr "Unable to summarize migration data issues. Ask the server administrator to check var/log/migration-data-issues."
+
+msgid "Download the migration report (global administrator login required)"
+msgstr "Download the migration report (global administrator login required)"

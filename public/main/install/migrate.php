@@ -61,6 +61,8 @@ $response = [
     'progress_percentage' => $response['progress_percentage'],
     'message' => $response['message'],
     'upgrade_flag_warning' => $response['upgrade_flag_warning'] ?? '',
+    'migration_issue_summary' => $response['migration_issue_summary'] ?? null,
+    'migration_issue_summary_failed' => $response['migration_issue_summary_failed'] ?? false,
     'current_migration' => $response['current_migration'],
     'redirect_to_step7' => $response['status'] === true,
 ];

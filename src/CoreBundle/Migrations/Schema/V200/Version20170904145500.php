@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V200;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
+use RuntimeException;
 use Throwable;
 
 class Version20170904145500 extends AbstractMigrationChamilo
@@ -15,7 +16,7 @@ class Version20170904145500 extends AbstractMigrationChamilo
     private const int TRACKING_BATCH_SIZE = 1000;
     private const int ATTEMPT_BATCH_SIZE = 50000;
     private const string REFERENCE_STATE_TABLE = 'migration_v20170904145500_reference_state';
-    private const int LISTED_QUESTIONS_MAX = 100;
+    private const string MATCHING_RESOLUTION_TABLE = 'migration_v20170904145500_matching_resolution';
 
     public function getDescription(): string
     {
@@ -1026,172 +1027,142 @@ class Version20170904145500 extends AbstractMigrationChamilo
             return;
         }
 
-        // Chamilo 1.11.x stores matching-answer targets in id_auto. Older data sets can
-        // still carry the per-question legacy id, so use that only when no id_auto match
-        // exists. The choice comes from the legacy schema, never from numeric offsets.
-        if ($hasLegacyAutoId) {
-            $this->abortIfMatchingAnswersFound(
-                'INNER JOIN (
-                     SELECT c_id, id_auto
-                     FROM c_quiz_answer
-                     WHERE id_auto IS NOT NULL
-                       AND id_auto > 0
-                     GROUP BY c_id, id_auto
-                     HAVING COUNT(*) > 1
-                 ) duplicate_auto
-                    ON duplicate_auto.c_id = source_answer.c_id
-                   AND duplicate_auto.id_auto = source_answer.correct',
-                '',
-                'Cannot safely normalize %d matching-answer rows that reference a duplicated legacy id_auto.'
-            );
-        }
-
-        if ($hasLegacyId) {
-            $autoNotExistsCondition = $hasLegacyAutoId
-                ? 'AND NOT EXISTS (
-                       SELECT 1
-                       FROM c_quiz_answer auto_target
-                       WHERE auto_target.c_id = source_answer.c_id
-                         AND auto_target.id_auto = source_answer.correct
-                   )'
-                : '';
-
-            $this->abortIfMatchingAnswersFound(
-                'INNER JOIN (
-                     SELECT c_id, question_id, id
-                     FROM c_quiz_answer
-                     WHERE id IS NOT NULL
-                     GROUP BY c_id, question_id, id
-                     HAVING COUNT(*) > 1
-                 ) duplicate_local
-                    ON duplicate_local.c_id = source_answer.c_id
-                   AND duplicate_local.question_id = source_answer.question_id
-                   AND duplicate_local.id = source_answer.correct',
-                $autoNotExistsCondition,
-                'Cannot safely normalize %d matching-answer rows that reference a duplicated per-question legacy answer id.'
-            );
-        }
-
-        $resolutionChecks = [];
-        if ($hasLegacyAutoId) {
-            $resolutionChecks[] = 'EXISTS (
-                SELECT 1
-                FROM c_quiz_answer auto_target
-                WHERE auto_target.c_id = source_answer.c_id
-                  AND auto_target.id_auto = source_answer.correct
-            )';
-        }
-        if ($hasLegacyId) {
-            $resolutionChecks[] = 'EXISTS (
-                SELECT 1
-                FROM c_quiz_answer local_target
-                WHERE local_target.c_id = source_answer.c_id
-                  AND local_target.question_id = source_answer.question_id
-                  AND local_target.id = source_answer.correct
-            )';
-        }
-        $resolutionChecks[] = 'EXISTS (
-            SELECT 1
-            FROM c_quiz_answer normalized_target
-            WHERE normalized_target.c_id = source_answer.c_id
-              AND normalized_target.question_id = source_answer.question_id
-              AND normalized_target.iid = source_answer.correct
-        )';
-
-        $this->abortIfMatchingAnswersFound(
-            '',
-            'AND NOT ('.implode(' OR ', $resolutionChecks).')',
-            'Cannot safely normalize %d matching-answer references in c_quiz_answer.correct.'
+        // Resolve against an immutable snapshot before changing any answer. A
+        // duplicated legacy key must never turn into an arbitrary UPDATE JOIN match.
+        // The legacy id_auto namespace takes precedence over the per-question id,
+        // followed by an already-normalized iid. Destinations must be options of
+        // the same question (correct = 0), not another prompt or another question.
+        $resolutionTable = self::MATCHING_RESOLUTION_TABLE;
+        $this->connection->executeStatement('DROP TEMPORARY TABLE IF EXISTS '.$resolutionTable);
+        $this->connection->executeStatement(
+            'CREATE TEMPORARY TABLE '.$resolutionTable.' (
+                answer_iid BIGINT NOT NULL PRIMARY KEY,
+                target_iid BIGINT DEFAULT NULL,
+                reason VARCHAR(64) DEFAULT NULL
+            ) ENGINE=InnoDB'
         );
 
-        $joins = [];
-        $targets = [];
-        if ($hasLegacyAutoId) {
-            $joins[] = 'LEFT JOIN c_quiz_answer auto_target
-                ON auto_target.c_id = source_answer.c_id
-               AND auto_target.id_auto = source_answer.correct';
-            $targets[] = 'auto_target.iid';
-        }
-        if ($hasLegacyId) {
-            $autoMissing = $hasLegacyAutoId ? 'auto_target.iid IS NULL AND ' : '';
-            $joins[] = 'LEFT JOIN c_quiz_answer local_target
-                ON '.$autoMissing.'local_target.c_id = source_answer.c_id
-               AND local_target.question_id = source_answer.question_id
-               AND local_target.id = source_answer.correct';
-            $targets[] = 'local_target.iid';
-        }
-        $joins[] = 'LEFT JOIN c_quiz_answer normalized_target
-            ON normalized_target.c_id = source_answer.c_id
-           AND normalized_target.question_id = source_answer.question_id
-           AND normalized_target.iid = source_answer.correct';
-        $targets[] = 'normalized_target.iid';
-        $targetExpression = 'COALESCE('.implode(', ', $targets).')';
+        try {
+            $joins = [];
+            $targetCases = [];
+            $reasonCases = [];
 
-        $updatedRows = 0;
-        $this->runReferencePhase('matching_answers', function () use (&$updatedRows, $joins, $targetExpression): void {
-            $updatedRows = $this->connection->executeStatement(
-                'UPDATE c_quiz_answer source_answer
+            if ($hasLegacyAutoId) {
+                $joins[] = 'LEFT JOIN (
+                    SELECT c_id, id_auto, COUNT(*) AS candidate_count, MIN(iid) AS target_iid
+                    FROM c_quiz_answer WHERE id_auto > 0 GROUP BY c_id, id_auto
+                ) auto_key ON auto_key.c_id = source_answer.c_id AND auto_key.id_auto = source_answer.correct';
+                $joins[] = 'LEFT JOIN c_quiz_answer auto_target ON auto_target.iid = auto_key.target_iid';
+                $targetCases[] = 'WHEN auto_key.candidate_count IS NOT NULL THEN
+                    CASE WHEN auto_key.candidate_count = 1 AND auto_target.question_id = source_answer.question_id
+                        AND auto_target.correct = 0 THEN auto_target.iid ELSE NULL END';
+                $reasonCases[] = "WHEN auto_key.candidate_count > 1 THEN 'duplicate_legacy_auto_id'";
+                $reasonCases[] = "WHEN auto_key.candidate_count = 1 THEN
+                    CASE WHEN auto_target.question_id = source_answer.question_id AND auto_target.correct = 0
+                        THEN NULL ELSE 'invalid_legacy_auto_target' END";
+            }
+            if ($hasLegacyId) {
+                $joins[] = 'LEFT JOIN (
+                    SELECT c_id, question_id, id, COUNT(*) AS candidate_count, MIN(iid) AS target_iid
+                    FROM c_quiz_answer WHERE id IS NOT NULL GROUP BY c_id, question_id, id
+                ) local_key ON local_key.c_id = source_answer.c_id AND local_key.question_id = source_answer.question_id
+                    AND local_key.id = source_answer.correct';
+                $joins[] = 'LEFT JOIN c_quiz_answer local_target ON local_target.iid = local_key.target_iid';
+                $targetCases[] = 'WHEN local_key.candidate_count IS NOT NULL THEN
+                    CASE WHEN local_key.candidate_count = 1 AND local_target.correct = 0
+                        THEN local_target.iid ELSE NULL END';
+                $reasonCases[] = "WHEN local_key.candidate_count > 1 THEN 'duplicate_legacy_local_id'";
+                $reasonCases[] = "WHEN local_key.candidate_count = 1 THEN
+                    CASE WHEN local_target.correct = 0 THEN NULL ELSE 'invalid_legacy_local_target' END";
+            }
+            $joins[] = 'LEFT JOIN c_quiz_answer normalized_target
+                ON normalized_target.c_id = source_answer.c_id
+                AND normalized_target.question_id = source_answer.question_id
+                AND normalized_target.iid = source_answer.correct';
+            $targetCases[] = 'WHEN normalized_target.correct = 0 THEN normalized_target.iid';
+            $reasonCases[] = 'WHEN normalized_target.correct = 0 THEN NULL';
+            $reasonCases[] = "WHEN normalized_target.iid IS NOT NULL THEN 'invalid_normalized_target'";
+
+            $this->connection->executeStatement(
+                'INSERT INTO '.$resolutionTable.' (answer_iid, target_iid, reason)
+                 SELECT source_answer.iid,
+                    CASE '.implode(' ', $targetCases).' ELSE NULL END,
+                    CASE '.implode(' ', $reasonCases)." ELSE 'missing_matching_target' END
+                 FROM c_quiz_answer source_answer
                  INNER JOIN c_quiz_question question
                     ON question.c_id = source_answer.c_id
-                   AND question.iid = source_answer.question_id
-                   AND question.type = 4
-                 '.implode("\n                 ", $joins).'
-                 SET source_answer.correct = '.$targetExpression.'
-                 WHERE source_answer.correct > 0
-                   AND '.$targetExpression.' IS NOT NULL
-                   AND source_answer.correct <> '.$targetExpression
+                    AND question.iid = source_answer.question_id
+                    AND question.type = 4
+                 ".implode("\n                 ", $joins).'
+                 WHERE source_answer.correct > 0'
             );
-        });
 
-        $this->getLogger()->info('Normalized legacy matching-answer references.', [
-            'updated_rows' => $updatedRows,
-        ]);
-    }
+            $issueCount = (int) $this->connection->fetchOne('SELECT COUNT(*) FROM '.$resolutionTable.' WHERE reason IS NOT NULL');
+            if ($issueCount > 0) {
+                $liveAnswerTable = $this->connection->createSchemaManager()->introspectTable('c_quiz_answer');
+                if ($liveAnswerTable->getColumn('question_id')->getNotnull()) {
+                    // MySQL DDL commits implicitly. Prepare the nullable column
+                    // outside the resumable transaction (as for orphan answers).
+                    $this->connection->executeStatement('ALTER TABLE c_quiz_answer CHANGE question_id question_id INT DEFAULT NULL');
+                }
+            }
 
-    /**
-     * Stops the migration when a check finds matching answers it cannot convert, naming their
-     * questions: the administrator fixes c_quiz_answer.correct in those before retrying, which a
-     * mere count left them to find by writing the query of the check again.
-     */
-    private function abortIfMatchingAnswersFound(string $joins, string $conditions, string $message): void
-    {
-        $questions = $this->connection->fetchAllAssociative(
-            'SELECT COALESCE(course.code, CONCAT(\'c_id \', source_answer.c_id)) AS course_code,
-                    source_answer.question_id,
-                    COUNT(*) AS answers
-             FROM c_quiz_answer source_answer
-             INNER JOIN c_quiz_question question
-                ON question.c_id = source_answer.c_id
-               AND question.iid = source_answer.question_id
-             LEFT JOIN course
-                ON course.id = source_answer.c_id
-             '.$joins.'
-             WHERE question.type = 4
-               AND source_answer.correct > 0
-               '.$conditions.'
-             GROUP BY source_answer.c_id, course.code, source_answer.question_id
-             ORDER BY course_code, source_answer.question_id'
-        );
-        if ([] === $questions) {
-            return;
+            $updatedRows = 0;
+            $this->runReferencePhase('matching_answers', function () use ($resolutionTable, $hasLegacyId, $hasLegacyAutoId, $issueCount, &$updatedRows): void {
+                $legacyId = $hasLegacyId ? 'source_answer.id' : 'NULL';
+                $legacyAutoId = $hasLegacyAutoId ? 'source_answer.id_auto' : 'NULL';
+                $issues = $this->connection->executeQuery(
+                    'SELECT source_answer.c_id AS course_id, course.code AS course_code,
+                            source_answer.question_id AS question_iid, question.id AS legacy_question_id,
+                            source_answer.iid AS answer_iid, '.$legacyId.' AS legacy_answer_id,
+                            '.$legacyAutoId.' AS legacy_answer_auto_id, source_answer.correct AS original_reference,
+                            resolution.reason, \'c_quiz_answer\' AS table_name, \'detach_answer_from_question\' AS planned_action
+                     FROM '.$resolutionTable.' resolution
+                     INNER JOIN c_quiz_answer source_answer ON source_answer.iid = resolution.answer_iid
+                     INNER JOIN c_quiz_question question ON question.iid = source_answer.question_id
+                     LEFT JOIN course ON course.id = source_answer.c_id
+                     WHERE resolution.reason IS NOT NULL ORDER BY source_answer.iid'
+                );
+
+                try {
+                    $reported = $this->reportDataIssues('matching_answers', $issues->iterateAssociative());
+                } finally {
+                    $issues->free();
+                }
+                if ($reported !== $issueCount) {
+                    throw new RuntimeException('Matching-answer issue count changed before recovery.');
+                }
+
+                $updatedRows = $this->connection->executeStatement(
+                    'UPDATE c_quiz_answer source_answer
+                     INNER JOIN '.$resolutionTable.' resolution ON resolution.answer_iid = source_answer.iid
+                     SET source_answer.correct = resolution.target_iid
+                     WHERE resolution.reason IS NULL AND resolution.target_iid IS NOT NULL
+                     AND source_answer.correct <> resolution.target_iid'
+                );
+
+                // Preserve the entire broken row and its original correct value.
+                // Detaching it keeps it out of normal answer selection; correct=0
+                // would instead silently convert the prompt into a destination.
+                // Stored attempts and question weights are deliberately untouched.
+                $detached = $this->connection->executeStatement(
+                    'UPDATE c_quiz_answer source_answer
+                     INNER JOIN '.$resolutionTable.' resolution ON resolution.answer_iid = source_answer.iid
+                     SET source_answer.question_id = NULL
+                     WHERE resolution.reason IS NOT NULL AND source_answer.question_id IS NOT NULL'
+                );
+                if ($detached !== $issueCount) {
+                    throw new RuntimeException('Matching-answer recovery did not detach every reported row.');
+                }
+            });
+
+            $this->getLogger()->info('Normalized legacy matching-answer references.', [
+                'updated_rows' => $updatedRows,
+                'detached_invalid_answers' => $issueCount,
+            ]);
+        } finally {
+            $this->connection->executeStatement('DROP TEMPORARY TABLE IF EXISTS '.$resolutionTable);
         }
-
-        $questionsByCourse = [];
-        foreach (\array_slice($questions, 0, self::LISTED_QUESTIONS_MAX) as $question) {
-            $questionsByCourse[(string) $question['course_code']][] = $question['question_id'];
-        }
-        $list = [];
-        foreach ($questionsByCourse as $courseCode => $questionIds) {
-            $list[] = $courseCode.': '.implode(', ', $questionIds);
-        }
-        $unlisted = \count($questions) - self::LISTED_QUESTIONS_MAX;
-
-        $this->abortIf(
-            true,
-            \sprintf($message, array_sum(array_column($questions, 'answers')))
-            .' Matching questions to fix (course code: c_quiz_question.iid): '.implode('; ', $list)
-            .($unlisted > 0 ? \sprintf(' and %d more questions', $unlisted) : '').'.'
-        );
     }
 
     private function normalizeSimpleLegacyQuizReferences(Schema $schema): void
@@ -1430,7 +1401,31 @@ class Version20170904145500 extends AbstractMigrationChamilo
         }
 
         $updatedRows = 0;
-        $this->runReferencePhase('quiz_question_relations', function () use (&$updatedRows): void {
+        $this->runReferencePhase('quiz_question_relations', function () use ($orphanQuizRows, $orphanQuestionRows, &$updatedRows): void {
+            $issues = $orphanQuizRows + $orphanQuestionRows > 0 ? $this->connection->executeQuery(
+                'SELECT relation.c_id AS course_id, course.code AS course_code, relation.iid AS relation_iid,
+                        relation.exercice_id AS original_quiz_reference, relation.question_id AS original_question_reference,
+                        CASE WHEN legacy_quiz.iid IS NULL AND normalized_quiz.iid IS NULL THEN 1 ELSE 0 END AS missing_quiz,
+                        CASE WHEN legacy_question.iid IS NULL AND normalized_question.iid IS NULL THEN 1 ELSE 0 END AS missing_question,
+                        \'c_quiz_rel_question\' AS table_name, \'orphan_quiz_question_relation\' AS reason,
+                        \'clear_unresolved_references\' AS planned_action
+                 FROM c_quiz_rel_question relation
+                 LEFT JOIN course ON course.id = relation.c_id
+                 LEFT JOIN c_quiz legacy_quiz ON legacy_quiz.c_id = relation.c_id AND legacy_quiz.id = relation.exercice_id
+                 LEFT JOIN c_quiz normalized_quiz ON normalized_quiz.c_id = relation.c_id AND normalized_quiz.iid = relation.exercice_id
+                 LEFT JOIN c_quiz_question legacy_question ON legacy_question.c_id = relation.c_id AND legacy_question.id = relation.question_id
+                 LEFT JOIN c_quiz_question normalized_question ON normalized_question.c_id = relation.c_id AND normalized_question.iid = relation.question_id
+                 WHERE relation.exercice_id <> -1 AND (
+                    (relation.exercice_id IS NOT NULL AND legacy_quiz.iid IS NULL AND normalized_quiz.iid IS NULL)
+                    OR (relation.question_id IS NOT NULL AND legacy_question.iid IS NULL AND normalized_question.iid IS NULL)
+                 ) ORDER BY relation.iid'
+            ) : null;
+
+            try {
+                $this->reportDataIssues('quiz_question_relations', $issues?->iterateAssociative() ?? []);
+            } finally {
+                $issues?->free();
+            }
             $updatedRows = $this->connection->executeStatement(
                 'UPDATE c_quiz_rel_question relation
                  LEFT JOIN c_quiz legacy_quiz
@@ -1500,7 +1495,29 @@ class Version20170904145500 extends AbstractMigrationChamilo
         }
 
         $updatedRows = 0;
-        $this->runReferencePhase('quiz_answers', function () use ($orphanRows, &$updatedRows): void {
+        $this->runReferencePhase('quiz_answers', function () use ($orphanRows, $answerTable, &$updatedRows): void {
+            $legacyId = $answerTable->hasColumn('id') ? 'answer_row.id' : 'NULL';
+            $legacyAutoId = $answerTable->hasColumn('id_auto') ? 'answer_row.id_auto' : 'NULL';
+            $issues = $orphanRows > 0 ? $this->connection->executeQuery(
+                'SELECT answer_row.c_id AS course_id, course.code AS course_code, answer_row.iid AS answer_iid,
+                        '.$legacyId.' AS legacy_answer_id, '.$legacyAutoId.' AS legacy_answer_auto_id,
+                        answer_row.question_id AS original_reference, \'c_quiz_answer\' AS table_name,
+                        \'missing_question\' AS reason, \'detach_answer_from_question\' AS planned_action
+                 FROM c_quiz_answer answer_row
+                 LEFT JOIN course ON course.id = answer_row.c_id
+                 LEFT JOIN c_quiz_question legacy_question
+                    ON legacy_question.c_id = answer_row.c_id AND legacy_question.id = answer_row.question_id
+                 LEFT JOIN c_quiz_question normalized_question
+                    ON normalized_question.c_id = answer_row.c_id AND normalized_question.iid = answer_row.question_id
+                 WHERE answer_row.question_id IS NOT NULL AND legacy_question.iid IS NULL AND normalized_question.iid IS NULL
+                 ORDER BY answer_row.iid'
+            ) : null;
+
+            try {
+                $this->reportDataIssues('quiz_answers', $issues?->iterateAssociative() ?? []);
+            } finally {
+                $issues?->free();
+            }
             if ($orphanRows > 0) {
                 $this->connection->executeStatement(
                     'UPDATE c_quiz_answer answer_row

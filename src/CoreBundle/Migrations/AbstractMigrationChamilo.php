@@ -51,6 +51,8 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
 
     private LoggerInterface $logger;
 
+    private ?MigrationIssueReporter $issueReporter = null;
+
     /**
      * Cache to avoid repeated DB lookups for the same legacy token.
      *
@@ -98,6 +100,42 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
     protected function getLogger(): LoggerInterface
     {
         return $this->logger;
+    }
+
+    public function setIssueReporter(MigrationIssueReporter $issueReporter): void
+    {
+        $this->issueReporter = $issueReporter;
+    }
+
+    /**
+     * Record a recoverable data phase before mutating its rows. Never continue if
+     * its diagnostic snapshot cannot be persisted. Other migrations can reuse
+     * this method when they have an explicitly safe recovery strategy.
+     *
+     * @param iterable<array<string, mixed>> $issues
+     */
+    protected function reportDataIssues(string $phase, iterable $issues, bool $retainPrevious = false): int
+    {
+        // Directly constructed migrations with no warnings do not need a reporter.
+        if (null === $this->issueReporter) {
+            foreach ($issues as $issue) {
+                throw new RuntimeException('Migration issue reporting is not configured; refusing to modify inconsistent legacy data.');
+            }
+
+            return 0;
+        }
+
+        $count = $this->issueReporter->record($this->connection, static::class, $phase, $issues, $retainPrevious);
+        if ($count > 0) {
+            $this->warnIf(true, \sprintf(
+                '%d recoverable data issue(s) recorded in var/log/migration-data-issues (%s: %s). Review the report before using affected content.',
+                $count,
+                static::class,
+                $phase
+            ));
+        }
+
+        return $count;
     }
 
     public function setEntityManager(EntityManagerInterface $entityManager): void

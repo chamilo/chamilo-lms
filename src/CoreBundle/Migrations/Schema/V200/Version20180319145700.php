@@ -384,6 +384,31 @@ class Version20180319145700 extends AbstractMigrationChamilo
                    AND normalized_survey.iid IS NULL"
             );
 
+            // The existing migration clears these unresolved survey references. Keep
+            // the original identifiers even if a later non-transactional DDL fails.
+            // The whitelist above is fixed; no user-controlled SQL identifiers.
+            $issues = $orphanReferences > 0 ? $this->connection->executeQuery(
+                "SELECT survey_reference.c_id AS course_id, course.code AS course_code,
+                        survey_reference.iid AS row_iid, survey_reference.survey_id AS original_reference,
+                        '{$referenceTable}' AS table_name, 'missing_survey' AS reason,
+                        'clear_unresolved_survey_reference' AS planned_action
+                 FROM {$referenceTable} survey_reference
+                 LEFT JOIN course ON course.id = survey_reference.c_id
+                 LEFT JOIN c_survey legacy_survey
+                    ON legacy_survey.c_id = survey_reference.c_id
+                   AND legacy_survey.survey_id = survey_reference.survey_id
+                 LEFT JOIN c_survey normalized_survey ON normalized_survey.iid = survey_reference.survey_id
+                 WHERE survey_reference.survey_id IS NOT NULL
+                   AND legacy_survey.iid IS NULL AND normalized_survey.iid IS NULL
+                 ORDER BY survey_reference.iid"
+            ) : null;
+
+            try {
+                $this->reportDataIssues('orphan_'.$referenceTable, $issues?->iterateAssociative() ?? [], true);
+            } finally {
+                $issues?->free();
+            }
+
             if ($orphanReferences > 0) {
                 $this->getLogger()->warning(
                     'Preserving orphan legacy survey rows with a null survey reference before adding the foreign key.',

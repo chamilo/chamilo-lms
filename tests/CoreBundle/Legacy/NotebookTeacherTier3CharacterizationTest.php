@@ -49,6 +49,7 @@ final class NotebookTeacherTier3CharacterizationTest extends KernelTestCase
         ChamiloSession::write('_real_cid', self::COURSE);
 
         require_once api_get_path(SYS_PLUGIN_PATH).'NotebookTeacher/src/NotebookTeacherPlugin.php';
+
         require_once api_get_path(SYS_PLUGIN_PATH).'NotebookTeacher/src/NotebookTeacher.php';
     }
 

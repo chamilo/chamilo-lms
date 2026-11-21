@@ -28,7 +28,9 @@ final class UserRemoteServicePluginTier3CharacterizationTest extends PluginChara
     protected function setUp(): void
     {
         parent::setUp();
+
         require_once api_get_path(SYS_PLUGIN_PATH).'UserRemoteService/Entity/UserRemoteService.php';
+
         require_once api_get_path(SYS_PLUGIN_PATH).'UserRemoteService/src/user_remote_service_plugin.class.php';
     }
 

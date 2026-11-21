@@ -49,7 +49,7 @@ class PluginCourseFieldsTier3CharacterizationTest extends AbstractApiTest
 
     private function stub(array $settings): Plugin
     {
-        $plugin = new class() extends Plugin {
+        $plugin = new class extends Plugin {
             public function __construct()
             {
                 parent::__construct('1.0', 'test');
@@ -70,7 +70,7 @@ class PluginCourseFieldsTier3CharacterizationTest extends AbstractApiTest
     {
         return $this->conn()->fetchAllAssociative(
             'SELECT variable, subkey, value, category, type, title FROM c_course_setting
-             WHERE c_id = ? AND variable LIKE \'xp\\_%\' ORDER BY variable, subkey',
+             WHERE c_id = ? AND variable LIKE \'xp\_%\' ORDER BY variable, subkey',
             [$courseId]
         );
     }

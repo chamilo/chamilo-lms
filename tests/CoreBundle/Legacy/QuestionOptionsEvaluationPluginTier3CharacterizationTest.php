@@ -19,6 +19,7 @@ final class QuestionOptionsEvaluationPluginTier3CharacterizationTest extends Plu
     protected function setUp(): void
     {
         parent::setUp();
+
         require_once api_get_path(SYS_PLUGIN_PATH).'QuestionOptionsEvaluation/QuestionOptionsEvaluationPlugin.php';
         $this->call('createExtraField');
         $this->fieldId = (int) $this->call('getFormulaExtraFieldId');

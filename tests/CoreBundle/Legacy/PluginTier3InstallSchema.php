@@ -43,9 +43,11 @@ $plugins = [
     'NotebookTeacher' => ['NotebookTeacher/src/NotebookTeacherPlugin.php', 'NotebookTeacherPlugin'],
 ];
 if (!isset($plugins[$name])) {
-    fwrite(STDERR, "Unknown plugin $name\n");
+    fwrite(\STDERR, "Unknown plugin $name\n");
+
     exit(1);
 }
+
 require_once api_get_path(SYS_PLUGIN_PATH).$plugins[$name][0];
 if ('NotebookTeacher' === $name) {
     // install() also installs course fields in every course; only the table is needed.

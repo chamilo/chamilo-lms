@@ -9,6 +9,8 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 use PDO;
 use RuntimeException;
 
+use const PHP_BINARY;
+
 /**
  * Makes sure the table of a plugin without entity mapping exists, by running its installer in a child process
  * (PluginTier3InstallSchema.php): DDL cannot run inside a test, it breaks the DAMA savepoint.
@@ -18,7 +20,7 @@ trait PluginTier3SchemaTrait
     protected static function ensurePluginTable(string $plugin, string $table): void
     {
         $pdo = new PDO(
-            sprintf('mysql:host=%s;port=%s;dbname=%s', getenv('DATABASE_HOST') ?: '127.0.0.1', getenv('DATABASE_PORT') ?: '3306', getenv('DATABASE_NAME') ?: 'chamilotest'),
+            \sprintf('mysql:host=%s;port=%s;dbname=%s', getenv('DATABASE_HOST') ?: '127.0.0.1', getenv('DATABASE_PORT') ?: '3306', getenv('DATABASE_NAME') ?: 'chamilotest'),
             getenv('DATABASE_USER') ?: 'chamilotest',
             getenv('DATABASE_PASSWORD') ?: 'chamilotest'
         );

@@ -43,6 +43,7 @@ final class PositioningPluginTier3CharacterizationTest extends PluginCharacteriz
     protected function setUp(): void
     {
         parent::setUp();
+
         require_once api_get_path(SYS_PLUGIN_PATH).'Positioning/src/Positioning.php';
         $this->conn->executeStatement('DELETE FROM '.self::TABLE);
     }

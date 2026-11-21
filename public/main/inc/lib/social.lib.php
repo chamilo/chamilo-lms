@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\UserRelUser;
@@ -1123,7 +1124,6 @@ class SocialManager extends UserManager
             $fieldVisibilityKeys = array_keys($fieldVisibility);
         }
 
-        $t_ufo = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
         $extra_user_data = UserManager::get_extra_user_data($user_id);
 
         $extra_information = '';
@@ -1234,12 +1234,16 @@ class SocialManager extends UserManager
                             $value_options = [];
                             // get option display text from user_field_options table
                             foreach ($id_options as $id_option) {
-                                $sql = "SELECT display_text
-                                    FROM $t_ufo
-                                    WHERE id = '$id_option'";
-                                $res_options = Database::query($sql);
-                                $row_options = Database::fetch_row($res_options);
-                                $value_options[] = $row_options[0];
+                                $optionRows = Container::getEntityManager()->createQueryBuilder()
+                                    ->select('o.displayText AS display_text')
+                                    ->from(ExtraFieldOptions::class, 'o')
+                                    ->where('o.id = :optionId')
+                                    ->setParameter('optionId', (int) $id_option)
+                                    ->setMaxResults(1)
+                                    ->getQuery()
+                                    ->getArrayResult()
+                                ;
+                                $value_options[] = $optionRows[0]['display_text'] ?? null;
                             }
                             $extra_information_value .= '<li class="list-group-item">'.ucfirst($extraFieldInfo['display_text']).': '
                                 .' '.implode(' ', $value_options).'</li>';

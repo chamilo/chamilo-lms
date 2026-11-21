@@ -12,6 +12,7 @@ use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use ForumThreadLink;
 use Doctrine\DBAL\Connection;
+use ExerciseLink;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
@@ -357,5 +358,141 @@ final class GradebookLinksTier3CharacterizationTest extends KernelTestCase
         $none->set_ref_id(0);
         $none->delete_linked_data();
         $this->assertEquals(5, $this->conn->fetchOne('SELECT thread_qualify_max FROM c_forum_thread WHERE iid = ?', [$other]));
+    }
+
+    // -------------------------------------------------------------- exercise
+
+    private function quiz(array $o = []): int
+    {
+        $this->conn->insert('c_quiz', $o + [
+            'title' => 'gl_quiz_'.(++$this->seq),
+            'description' => 'quiz description',
+            'type' => 1,
+            'random' => 0,
+            'random_answers' => 0,
+            'results_disabled' => 0,
+            'max_attempt' => 0,
+            'feedback_type' => 0,
+            'expired_time' => 0,
+            'propagate_neg' => 0,
+            'review_answers' => 0,
+            'random_by_category' => 0,
+            'display_category_name' => 0,
+            'hide_question_title' => 0,
+            'page_result_configuration' => '[]',
+        ]);
+
+        return (int) $this->conn->lastInsertId();
+    }
+
+    private function exerciseLink(int $quizId, int $courseId = 1): ExerciseLink
+    {
+        $link = new ExerciseLink();
+        $link->set_ref_id($quizId);
+        $link->course_id = $courseId;
+
+        return $link;
+    }
+
+    private function resetCompletionCache(): void
+    {
+        $prop = new \ReflectionProperty(ExerciseLink::class, 'completionTrackingIdsByCourse');
+        $prop->setAccessible(true);
+        $prop->setValue(null, []);
+    }
+
+    public function testExerciseGetExerciseDataAndNameDescription(): void
+    {
+        $quiz = $this->quiz(['title' => 'Quiz data title', 'description' => 'Quiz data description']);
+        $link = $this->exerciseLink($quiz);
+        $data = $link->get_exercise_data();
+        $this->assertSame($quiz, (int) $data['iid']);
+        $this->assertSame('Quiz data title', $data['title']);
+        $this->assertSame('Quiz data description', $data['description']);
+        $this->assertSame('Quiz data title', $link->get_name());
+        $this->assertSame('Quiz data description', $link->get_description());
+
+        $this->assertFalse($this->exerciseLink(999999999)->get_exercise_data());
+    }
+
+    public function testExerciseGetAllLinksAddsTheQuizzesUsedAsLearningPathItems(): void
+    {
+        $quiz = $this->quiz(['title' => 'gl_quiz_in_lp']);
+        $plain = $this->quiz(['title' => 'gl_quiz_not_in_lp']);
+        foreach ([(string) $quiz, 'not-a-quiz-id'] as $path) {
+            $this->conn->insert('c_lp_item', [
+                'title' => 'gl_lp_item', 'item_type' => 'quiz', 'ref' => '', 'path' => $path, 'min_score' => 0,
+                'display_order' => 1, 'launch_data' => '', 'lvl' => 0,
+            ]);
+        }
+        $this->conn->insert('c_lp_item', [
+            'title' => 'gl_lp_item_doc', 'item_type' => 'document', 'ref' => '', 'path' => (string) $plain, 'min_score' => 0,
+            'display_order' => 1, 'launch_data' => '', 'lvl' => 0,
+        ]);
+
+        $cats = $this->exerciseLink($plain)->get_all_links();
+        $inLp = array_values(array_filter($cats, static fn (array $c): bool => str_starts_with((string) $c[1], 'gl_quiz_in_lp')));
+        $this->assertCount(1, array_filter($inLp, static fn (array $c): bool => str_contains((string) $c[1], '(')));
+        $lpEntry = array_values(array_filter($inLp, static fn (array $c): bool => str_contains((string) $c[1], '(')))[0];
+        $this->assertSame($quiz, (int) $lpEntry[0]);
+        $this->assertMatchesRegularExpression('/^gl_quiz_in_lp \(.+\)$/', $lpEntry[1]);
+        // A quiz listed only through a non-quiz LP item does not get the LP entry.
+        $this->assertSame([], array_filter($cats, static fn (array $c): bool => str_starts_with((string) $c[1], 'gl_quiz_not_in_lp ')));
+        $this->assertSame([], $this->exerciseLinkWithoutCourse()->get_all_links());
+    }
+
+    private function exerciseLinkWithoutCourse(): ExerciseLink
+    {
+        $link = new ExerciseLink();
+        $link->course_id = 0;
+
+        return $link;
+    }
+
+    public function testExerciseCompletionTrackingIdsComeFromTheCourseCompletionRule(): void
+    {
+        $fieldId = $this->conn->fetchOne("SELECT id FROM extra_field WHERE item_type = 2 AND variable = 'course_completion_rule'");
+        if (false === $fieldId) {
+            $this->conn->insert('extra_field', [
+                'item_type' => 2, 'value_type' => 1, 'variable' => 'course_completion_rule', 'created_at' => '2020-01-01 00:00:00',
+            ]);
+            $fieldId = (int) $this->conn->lastInsertId();
+        }
+        $course = 987650 + $this->seq++;
+        $quiz = $this->quiz();
+        $other = $this->quiz();
+        $rule = json_encode([
+            'version' => 1,
+            'migration_complete' => true,
+            'components' => [['type' => 'exercise', 'resource_id' => $quiz, 'tracking_resource_ids' => [$quiz + 1000]]],
+        ]);
+        $value = fn (string $v) => $this->conn->insert('extra_field_values', [
+            'field_id' => $fieldId, 'item_id' => $course, 'field_value' => $v,
+            'created_at' => '2020-01-01 00:00:00', 'updated_at' => '2020-01-01 00:00:00',
+        ]);
+
+        // No value for the course: nothing configured.
+        $this->resetCompletionCache();
+        $this->assertFalse($this->exerciseLink($quiz, $course)->hasConfiguredCompletionTrackingIds());
+
+        $value($rule);
+        $this->resetCompletionCache();
+        $this->assertTrue($this->exerciseLink($quiz, $course)->hasConfiguredCompletionTrackingIds());
+        $this->assertFalse($this->exerciseLink($other, $course)->hasConfiguredCompletionTrackingIds());
+        // Same rule on another course id does not leak.
+        $this->resetCompletionCache();
+        $this->assertFalse($this->exerciseLink($quiz, $course + 1)->hasConfiguredCompletionTrackingIds());
+
+        // An incomplete migration is ignored.
+        $this->resetCompletionCache();
+        $this->conn->update('extra_field_values', ['field_value' => str_replace('true', 'false', $rule)], ['item_id' => $course]);
+        $this->assertFalse($this->exerciseLink($quiz, $course)->hasConfiguredCompletionTrackingIds());
+
+        // Two values for the same course and field: ambiguous, ignored.
+        $this->resetCompletionCache();
+        $this->conn->update('extra_field_values', ['field_value' => $rule], ['item_id' => $course]);
+        $value($rule);
+        $this->assertFalse($this->exerciseLink($quiz, $course)->hasConfiguredCompletionTrackingIds());
+        $this->resetCompletionCache();
     }
 }

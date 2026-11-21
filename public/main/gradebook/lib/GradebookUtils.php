@@ -2,12 +2,22 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradebookCertificate;
+use Chamilo\CoreBundle\Entity\GradebookComment;
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\GradebookResult;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CAttendance;
+use Chamilo\CourseBundle\Entity\CForumThread;
 
 /**
  * Class GradebookUtils.
@@ -96,10 +106,17 @@ class GradebookUtils
     ): bool
     {
         if (!empty($link_id) && !empty($courseId)) {
-            $sql = 'UPDATE '.Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK).'
-                    SET weight = '.$weight.'
-                    WHERE c_id = '.$courseId.' AND id = '.$link_id;
-            Database::query($sql);
+            Container::getEntityManager()->createQueryBuilder()
+                ->update(GradebookLink::class, 'l')
+                ->set('l.weight', ':weight')
+                ->where('l.id = :id')
+                ->andWhere('l.course = :course')
+                ->setParameter('weight', $weight)
+                ->setParameter('id', $link_id)
+                ->setParameter('course', $courseId)
+                ->getQuery()
+                ->execute()
+            ;
         }
 
         return true;
@@ -119,9 +136,13 @@ class GradebookUtils
         }
 
         // TODO find the corresponding category (the first one for this course, ordered by ID)
-        $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $sql = "DELETE FROM $l WHERE id = ".(int) $link_id;
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->delete(GradebookLink::class, 'l')
+            ->where('l.id = :id')
+            ->setParameter('id', (int) $link_id)
+            ->getQuery()
+            ->execute()
+        ;
 
         return true;
     }
@@ -577,7 +598,6 @@ class GradebookUtils
         ?int $session_id
     ): array
     {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         if (empty($courseId) or empty($resource_type) or empty($resource_id)) {
             return [];
         }
@@ -587,18 +607,47 @@ class GradebookUtils
             return [];
         }
 
-        $sql = "SELECT * FROM $table l
-                WHERE
-                    c_id = $courseId AND
-                    type = $resource_type AND
-                    ref_id = $resourceNodeId";
-        $res = Database::query($sql);
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'l.id AS id',
+                'IDENTITY(l.resourceNode) AS ref_id',
+                'IDENTITY(l.course) AS c_id',
+                'IDENTITY(l.category) AS category_id',
+                'l.type AS type',
+                'l.createdAt AS created_at',
+                'l.weight AS weight',
+                'l.visible AS visible',
+                'l.locked AS locked',
+                'l.bestScore AS best_score',
+                'l.averageScore AS average_score',
+                'l.scoreWeight AS score_weight',
+                'l.userScoreList AS user_score_list',
+                'l.minScore AS min_score',
+                'l.pointsOne AS points_one',
+                'l.pointsMany AS points_many'
+            )
+            ->from(GradebookLink::class, 'l')
+            ->where('l.course = :course')
+            ->andWhere('l.type = :type')
+            ->andWhere('l.resourceNode = :node')
+            ->setParameter('course', (int) $courseId)
+            ->setParameter('type', (int) $resource_type)
+            ->setParameter('node', $resourceNodeId)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-        if (Database::num_rows($res) < 1) {
+        if (null === $row) {
             return [];
         }
 
-        return Database::fetch_assoc($res);
+        // The raw table row came back with these columns as they are stored: dates as strings, the JSON as text.
+        $row['created_at'] = $row['created_at'] instanceof DateTimeInterface ? $row['created_at']->format('Y-m-d H:i:s') : $row['created_at'];
+        $row['user_score_list'] = null === $row['user_score_list'] ? null : json_encode($row['user_score_list']);
+        foreach (['ref_id', 'c_id', 'category_id'] as $key) {
+            $row[$key] = null === $row[$key] ? null : (int) $row[$key];
+        }
+
+        return $row;
     }
 
     /**
@@ -610,18 +659,19 @@ class GradebookUtils
      */
     public static function get_course_id_by_link_id($id_link)
     {
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
         $id_link = (int) $id_link;
 
-        $sql = 'SELECT c.id FROM '.$course_table.' c
-                INNER JOIN '.$tbl_grade_links.' l
-                ON c.id = l.c_id
-                WHERE l.id='.intval($id_link).' OR l.category_id='.intval($id_link);
-        $res = Database::query($sql);
-        $array = Database::fetch_assoc($res);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('c.id AS id')
+            ->from(GradebookLink::class, 'l')
+            ->innerJoin('l.course', 'c')
+            ->where('l.id = :id OR l.category = :id')
+            ->setParameter('id', $id_link)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        return $array['id'];
+        return $rows[0]['id'] ?? null;
     }
 
     /**
@@ -758,32 +808,32 @@ class GradebookUtils
      */
     public static function get_list_users_certificates($cat_id = null, $userList = [])
     {
-        $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-
-        $sql = 'SELECT DISTINCT u.id AS user_id, u.lastname, u.firstname, u.username, gc.created_at
-            FROM '.$table_user.' u
-            INNER JOIN '.$table_certificate.' gc ON u.id = gc.user_id';
-
-        $where = [];
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'u.id AS user_id',
+                'u.lastname AS lastname',
+                'u.firstname AS firstname',
+                'u.username AS username',
+                'gc.createdAt AS created_at'
+            )
+            ->distinct()
+            ->from(GradebookCertificate::class, 'gc')
+            ->innerJoin('gc.user', 'u')
+        ;
 
         if (!is_null($cat_id) && $cat_id > 0) {
-            $where[] = 'gc.cat_id = '.(int) $cat_id;
+            $qb->andWhere('gc.category = :cat')->setParameter('cat', (int) $cat_id);
         }
         if (!empty($userList)) {
-            $ids = array_map('intval', $userList);
-            $where[] = 'u.id IN ('.implode(',', $ids).')';
-        }
-        if ($where) {
-            $sql .= ' WHERE '.implode(' AND ', $where);
+            $qb->andWhere('u.id IN (:users)')->setParameter('users', array_map('intval', $userList));
         }
 
-        $sql .= ' ORDER BY '.(api_sort_by_first_name() ? 'u.firstname' : 'u.lastname');
-        $rs = Database::query($sql);
+        $qb->orderBy(api_sort_by_first_name() ? 'u.firstname' : 'u.lastname');
 
         $list_users = [];
-        while ($row = Database::fetch_array($rs)) {
-            $list_users[] = $row;
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $row['created_at'] = self::formatDatabaseDate($row['created_at']);
+            $list_users[] = self::withNumericKeys($row);
         }
 
         return $list_users;
@@ -802,25 +852,32 @@ class GradebookUtils
         $cat_id = null
     ) {
         $user_id = (int) $user_id;
-        $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $sql = 'SELECT
-                    gc.score_certificate,
-                    gc.created_at,
-                    gc.path_certificate,
-                    gc.cat_id,
-                    gc.user_id,
-                    gc.id,
-                    gc.publish
-                FROM  '.$table_certificate.' gc
-                WHERE gc.user_id = "'.$user_id.'" ';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'gc.scoreCertificate AS score_certificate',
+                'gc.createdAt AS created_at',
+                'gc.pathCertificate AS path_certificate',
+                'IDENTITY(gc.category) AS cat_id',
+                'IDENTITY(gc.user) AS user_id',
+                'gc.id AS id',
+                'gc.publish AS publish'
+            )
+            ->from(GradebookCertificate::class, 'gc')
+            ->where('gc.user = :user')
+            ->setParameter('user', $user_id)
+        ;
         if (!is_null($cat_id) && $cat_id > 0) {
-            $sql .= ' AND cat_id='.intval($cat_id);
+            $qb->andWhere('gc.category = :cat')->setParameter('cat', (int) $cat_id);
         }
 
-        $rs = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_array($rs)) {
-            $list[] = $row;
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $row['created_at'] = self::formatDatabaseDate($row['created_at']);
+            foreach (['cat_id', 'user_id'] as $key) {
+                $row[$key] = null === $row[$key] ? null : (int) $row[$key];
+            }
+            $row['publish'] = (int) $row['publish'];
+            $list[] = self::withNumericKeys($row);
         }
 
         return $list;
@@ -910,17 +967,20 @@ class GradebookUtils
             }
             $session_id = api_get_session_id();
 
-            $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql = "SELECT * FROM $t
-                    WHERE c_id = $courseId ";
+            $qb = Container::getEntityManager()->createQueryBuilder()
+                ->select('c.id AS id')
+                ->from(GradebookCategory::class, 'c')
+                ->where('c.course = :course')
+                ->orderBy('c.id')
+                ->setParameter('course', (int) $courseId)
+            ;
             if (!empty($session_id)) {
-                $sql .= " AND session_id = ".$session_id;
+                $qb->andWhere('c.session = :session')->setParameter('session', (int) $session_id);
             } else {
-                $sql .= ' AND (session_id IS NULL OR session_id = 0) ';
+                $qb->andWhere('c.session IS NULL OR IDENTITY(c.session) = 0');
             }
-            $sql .= ' ORDER BY id ';
-            $res = Database::query($sql);
-            if (Database::num_rows($res) < 1) {
+            $existing = $qb->getQuery()->getArrayResult();
+            if (empty($existing)) {
                 //there is no unique category for this course+session combination,
                 $cat = new Category();
                 if (!empty($session_id)) {
@@ -945,8 +1005,7 @@ class GradebookUtils
                 $category_id = $cat->get_id();
                 unset($cat);
             } else {
-                $row = Database::fetch_array($res);
-                $category_id = $row['id'];
+                $category_id = $existing[0]['id'];
             }
 
             return $category_id;
@@ -1181,37 +1240,47 @@ class GradebookUtils
      */
     public static function get_users_in_course(?int $courseId = 0)
     {
-        $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname ASC' : ' ORDER BY lastname, firstname ASC';
         $current_session = api_get_session_id();
 
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'u.id AS user_id',
+                'u.username AS username',
+                'u.lastname AS lastname',
+                'u.firstname AS firstname',
+                'u.officialCode AS official_code'
+            )
+        ;
+
         if (!empty($current_session)) {
-            $sql = "SELECT user.id as user_id, user.username, lastname, firstname, official_code
-                    FROM $tbl_session_course_user as scru
-                    INNER JOIN $tbl_user as user
-                    ON (scru.user_id = user.id)
-                    WHERE
-                        scru.status = ".Session::STUDENT." AND
-                        scru.c_id = $courseId AND
-                        session_id = '$current_session'
-                    $order_clause
-                    ";
+            $qb
+                ->from(SessionRelCourseRelUser::class, 'scru')
+                ->innerJoin('scru.user', 'u')
+                ->where('scru.status = :status')
+                ->andWhere('scru.course = :course')
+                ->andWhere('scru.session = :session')
+                ->setParameter('status', Session::STUDENT)
+                ->setParameter('course', (int) $courseId)
+                ->setParameter('session', (int) $current_session)
+            ;
         } else {
-            $sql = 'SELECT user.id as user_id, user.username, lastname, firstname, official_code
-                    FROM '.$tbl_course_user.' as course_rel_user
-                    INNER JOIN '.$tbl_user.' as user
-                    ON (course_rel_user.user_id = user.id)
-                    WHERE
-                        course_rel_user.status = '.STUDENT.' AND
-                        course_rel_user.c_id = '.$courseId.' '.
-                    $order_clause;
+            $qb
+                ->from(CourseRelUser::class, 'cru')
+                ->innerJoin('cru.user', 'u')
+                ->where('cru.status = :status')
+                ->andWhere('cru.course = :course')
+                ->setParameter('status', STUDENT)
+                ->setParameter('course', (int) $courseId)
+            ;
         }
 
-        $result = Database::query($sql);
+        if (api_sort_by_first_name()) {
+            $qb->orderBy('u.firstname')->addOrderBy('u.lastname', 'ASC');
+        } else {
+            $qb->orderBy('u.lastname')->addOrderBy('u.firstname', 'ASC');
+        }
 
-        return self::get_user_array_from_sql_result($result);
+        return self::getUserArrayFromRows($qb->getQuery()->getArrayResult());
     }
 
     /**
@@ -1221,8 +1290,21 @@ class GradebookUtils
      */
     public static function get_user_array_from_sql_result($result)
     {
-        $a_students = [];
+        $rows = [];
         while ($user = Database::fetch_array($result)) {
+            $rows[] = $user;
+        }
+
+        return self::getUserArrayFromRows($rows);
+    }
+
+    /**
+     * Same as get_user_array_from_sql_result() for rows that are already fetched.
+     */
+    private static function getUserArrayFromRows(array $rows): array
+    {
+        $a_students = [];
+        foreach ($rows as $user) {
             if (!array_key_exists($user['user_id'], $a_students)) {
                 $a_current_student = [];
                 $a_current_student[] = $user['user_id'];
@@ -1262,25 +1344,28 @@ class GradebookUtils
                 }
             } else {
                 // course independent evaluation
-                $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-                $tbl_res = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-
-                $sql = 'SELECT user.id as user_id, user.username, lastname, firstname, user.official_code
-                        FROM '.$tbl_res.' as res, '.$tbl_user.' as user
-                        WHERE
-                            res.evaluation_id = '.$eval->get_id().' AND
-                            res.user_id = user.id
-                        ';
+                $qb = Container::getEntityManager()->createQueryBuilder()
+                    ->select(
+                        'u.id AS user_id',
+                        'u.username AS username',
+                        'u.lastname AS lastname',
+                        'u.firstname AS firstname',
+                        'u.officialCode AS official_code'
+                    )
+                    ->from(GradebookResult::class, 'res')
+                    ->innerJoin('res.user', 'u')
+                    ->where('res.evaluation = :evaluation')
+                    ->setParameter('evaluation', (int) $eval->get_id())
+                ;
                 if (api_is_western_name_order()) {
-                    $sql .= ' ORDER BY firstname, lastname';
+                    $qb->orderBy('u.firstname')->addOrderBy('u.lastname');
                 } else {
-                    $sql .= ' ORDER BY lastname, firstname';
+                    $qb->orderBy('u.lastname')->addOrderBy('u.firstname');
                 }
 
-                $result = Database::query($sql);
                 $users = array_merge(
                     $users,
-                    self::get_user_array_from_sql_result($result)
+                    self::getUserArrayFromRows($qb->getQuery()->getArrayResult())
                 );
             }
         }
@@ -1312,17 +1397,18 @@ class GradebookUtils
         $course_id = api_get_course_int_id();
 
         AbstractLink::add_link_log($linkId, $name);
-        $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
         $em = Database::getManager();
-        $tbl_forum_thread = Database::get_course_table(TABLE_FORUM_THREAD);
-        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
 
-        $sql = 'UPDATE '.$table_link.'
-                SET weight = '."'".Database::escape_string($weight)."'".'
-                WHERE id = '.$linkId;
-
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->update(GradebookLink::class, 'l')
+            ->set('l.weight', ':weight')
+            ->where('l.id = :id')
+            ->setParameter('weight', $weight)
+            ->setParameter('id', $linkId)
+            ->getQuery()
+            ->execute()
+        ;
 
         $links = LinkFactory::load($linkId);
         $legacyLink = $links[0] ?? null;
@@ -1334,17 +1420,27 @@ class GradebookUtils
         $linkType = (int) $legacyLink->get_type();
 
         if (LINK_ATTENDANCE === $linkType) {
-            $sql = 'UPDATE '.$tbl_attendance.' SET
-                    attendance_weight ='.api_float_val($weight).'
-                    WHERE iid = '.(int) $resourceId;
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->update(CAttendance::class, 'a')
+                ->set('a.attendanceWeight', ':weight')
+                ->where('a.iid = :id')
+                ->setParameter('weight', api_float_val($weight))
+                ->setParameter('id', (int) $resourceId)
+                ->getQuery()
+                ->execute()
+            ;
         }
 
         if (LINK_FORUM_THREAD === $linkType) {
-            $sql = 'UPDATE '.$tbl_forum_thread.' SET
-                    thread_weight = '.api_float_val($weight).'
-                    WHERE iid = '.(int) $resourceId;
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->update(CForumThread::class, 't')
+                ->set('t.threadWeight', ':weight')
+                ->where('t.iid = :id')
+                ->setParameter('weight', api_float_val($weight))
+                ->setParameter('id', (int) $resourceId)
+                ->getQuery()
+                ->execute()
+            ;
         }
 
         if (LINK_STUDENTPUBLICATION === $linkType) {
@@ -1367,14 +1463,18 @@ class GradebookUtils
      */
     public static function updateEvaluationWeight($id, $weight)
     {
-        $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $id = (int) $id;
         $evaluation = new Evaluation();
         $evaluation->addEvaluationLog($id);
-        $sql = 'UPDATE '.$table_evaluation.'
-               SET weight = '."'".Database::escape_string($weight)."'".'
-               WHERE id = '.$id;
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(GradebookEvaluation::class, 'e')
+            ->set('e.weight', ':weight')
+            ->where('e.id = :id')
+            ->setParameter('weight', $weight)
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -1687,12 +1787,54 @@ class GradebookUtils
         $gradeBookId = (int) $gradeBookId;
         $userId = (int) $userId;
 
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_COMMENT);
-        $sql = "SELECT * FROM $table
-                WHERE user_id = $userId AND gradebook_id = $gradeBookId";
-        $result = Database::query($sql);
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'c.id AS id',
+                'IDENTITY(c.user) AS user_id',
+                'IDENTITY(c.gradeBook) AS gradebook_id',
+                'c.comment AS comment',
+                'c.createdAt AS created_at',
+                'c.updatedAt AS updated_at'
+            )
+            ->from(GradebookComment::class, 'c')
+            ->where('c.user = :user')
+            ->andWhere('c.gradeBook = :gradebook')
+            ->setParameter('user', $userId)
+            ->setParameter('gradebook', $gradeBookId)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-        return Database::fetch_array($result);
+        if (null === $row) {
+            return [];
+        }
+
+        $row['user_id'] = (int) $row['user_id'];
+        $row['gradebook_id'] = (int) $row['gradebook_id'];
+        $row['created_at'] = self::formatDatabaseDate($row['created_at']);
+        $row['updated_at'] = self::formatDatabaseDate($row['updated_at']);
+
+        return self::withNumericKeys($row);
+    }
+
+    /**
+     * The raw table rows came back like Database::fetch_array(): every value under its column name, then again
+     * under its position.
+     */
+    private static function withNumericKeys(array $row): array
+    {
+        foreach ($row as $value) {
+            $row[] = $value;
+        }
+
+        return $row;
+    }
+
+    /**
+     * Dates of the raw table rows were strings in the database format.
+     */
+    private static function formatDatabaseDate(mixed $date): mixed
+    {
+        return $date instanceof DateTimeInterface ? $date->format('Y-m-d H:i:s') : $date;
     }
 
     public static function saveComment($gradeBookId, $userId, $comment)

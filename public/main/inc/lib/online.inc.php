@@ -1,7 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\TrackELogin;
+use Chamilo\CoreBundle\Entity\TrackEOnline;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
@@ -139,9 +142,6 @@ function online_logout($user_id = null, $logout_redirect = false)
  */
 function user_is_online($user_id)
 {
-    $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-    $table_user = Database::get_main_table(TABLE_MAIN_USER);
-
     $access_url_id = api_get_current_access_url_id();
     $time_limit = api_get_setting('time_limit_whosonline');
 
@@ -149,26 +149,30 @@ function user_is_online($user_id)
     $limit_date = api_get_utc_datetime($online_time);
     $user_id = (int) $user_id;
 
-    $query = " SELECT login_user_id, login_date
-               FROM $track_online_table track
-               INNER JOIN $table_user u
-               ON (u.id=track.login_user_id)
-               WHERE
-                    track.access_url_id =  $access_url_id AND
-                    login_date >= '".$limit_date."'  AND
-                    u.id =  $user_id
-               LIMIT 1 ";
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select('track.loginUserId AS login_user_id', 'track.loginDate AS login_date')
+        ->from(TrackEOnline::class, 'track')
+        ->innerJoin(User::class, 'u', 'WITH', 'u.id = track.loginUserId')
+        ->where('track.accessUrlId = :accessUrlId')
+        ->andWhere('track.loginDate >= :limitDate')
+        ->andWhere('u.id = :userId')
+        ->setMaxResults(1)
+        ->setParameter('accessUrlId', (int) $access_url_id)
+        ->setParameter('limitDate', $limit_date)
+        ->setParameter('userId', $user_id)
+        ->getQuery()
+        ->getArrayResult()
+    ;
 
-    $result = Database::query($query);
-    if (Database::num_rows($result)) {
-        return true;
-    }
-
-    return false;
+    return count($rows) > 0;
 }
 
 /**
  * Gives a list of people online now (and in the last $valid minutes).
+ *
+ * $column is one of login_date, login_user_id, login_id, user_ip, c_id, session_id, access_url_id or
+ * picture_uri (the last one only outside the friends mode, where the user table is not joined). Any other
+ * value is replaced by the default column (picture_uri, or login_date in friends mode).
  *
  * @param $from
  * @param $number_of_items
@@ -197,14 +201,24 @@ function who_is_online(
     $from = intval($from);
     $number_of_items = intval($number_of_items);
 
-    if (empty($column)) {
-        $column = 'picture_uri';
-        if ($friends) {
-            $column = 'login_date';
-        }
+    $columns = [
+        'login_id' => 'track.loginId',
+        'login_user_id' => 'track.loginUserId',
+        'login_date' => 'track.loginDate',
+        'user_ip' => 'track.userIp',
+        'c_id' => 'track.cId',
+        'session_id' => 'track.sessionId',
+        'access_url_id' => 'track.accessUrlId',
+    ];
+    if (!$friends) {
+        $columns['picture_uri'] = 'u.pictureUri';
+    }
+    $defaultColumn = $friends ? 'login_date' : 'picture_uri';
+    if (empty($column) || !is_string($column) || !isset($columns[$column])) {
+        $column = $defaultColumn;
     }
 
-    $direction = strtolower($direction);
+    $direction = strtolower((string) $direction);
     if (empty($direction)) {
         $direction = 'DESC';
     } else {
@@ -215,77 +229,72 @@ function who_is_online(
 
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
-    $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-    $friend_user_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-    $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
-    if ($friends) {
-        // 	who friends from social network is online
-        $query = "SELECT DISTINCT login_user_id, login_date
-                  FROM $track_online_table INNER JOIN $friend_user_table
-                  ON (friend_user_id = login_user_id)
-                  WHERE
-                    login_date >= '".$current_date."' AND
-                    friend_user_id <> '".api_get_user_id()."' AND
-                    relation_type='".UserRelUser::USER_RELATION_TYPE_FRIEND."' AND
-                    user_id = '".api_get_user_id()."'
-                  ORDER BY `$column` $direction
-                  LIMIT $from, $number_of_items";
-    } else {
-        $query = "SELECT DISTINCT login_user_id, login_date
-                    FROM ".$track_online_table." e
-                    INNER JOIN ".$table_user." u ON (u.id = e.login_user_id)
-                  WHERE u.active <> ".USER_SOFT_DELETED." AND u.status != ".ANONYMOUS." AND login_date >= '".$current_date."'
-                  ORDER BY `$column` $direction
-                  LIMIT $from, $number_of_items";
-    }
+    $qb = Container::getEntityManager()->createQueryBuilder()
+        ->select('track.loginUserId AS login_user_id', 'track.loginDate AS login_date')
+        ->from(TrackEOnline::class, 'track')
+        ->where('track.loginDate >= :currentDate')
+        ->setParameter('currentDate', $current_date)
+    ;
 
+    $access_url_id = -1;
     if (api_get_multiple_access_url()) {
         $access_url_id = api_get_current_access_url_id();
+    }
+
+    if ($friends) {
+        $qb
+            ->innerJoin(UserRelUser::class, 'rel', 'WITH', 'IDENTITY(rel.friend) = track.loginUserId')
+            ->andWhere('IDENTITY(rel.friend) <> :currentUserId')
+            ->andWhere('rel.relationType = :relationType')
+            ->setParameter('currentUserId', (int) api_get_user_id())
+            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_FRIEND)
+        ;
         if (-1 != $access_url_id) {
-            if ($friends) {
-                // 	friends from social network is online
-                $query = "SELECT distinct login_user_id, login_date
-                            FROM $track_online_table track INNER JOIN $friend_user_table
-                            ON (friend_user_id = login_user_id)
-                            WHERE   track.access_url_id =  $access_url_id AND
-                                    login_date >= '".$current_date."' AND
-                                    friend_user_id <> '".api_get_user_id()."' AND
-                                    relation_type='".UserRelUser::USER_RELATION_TYPE_FRIEND."'
-                            ORDER BY `$column` $direction
-                            LIMIT $from, $number_of_items";
-            } else {
-                // all users online
-                $query = "SELECT login_user_id, login_date
-                          FROM ".$track_online_table." track
-                          INNER JOIN ".$table_user." u
-                          ON (u.id=track.login_user_id)
-                          WHERE u.active <> ".USER_SOFT_DELETED." AND u.status != ".ANONYMOUS." AND track.access_url_id =  $access_url_id AND
-                                login_date >= '".$current_date."'
-                          ORDER BY `$column` $direction
-                          LIMIT $from, $number_of_items";
-            }
+            // friends from social network is online (multi-URL: no "user_id = me" condition, as before)
+            $qb
+                ->distinct()
+                ->andWhere('track.accessUrlId = :accessUrlId')
+                ->setParameter('accessUrlId', (int) $access_url_id)
+            ;
+        } else {
+            // who friends from social network is online
+            $qb
+                ->distinct()
+                ->andWhere('IDENTITY(rel.user) = :currentUserId')
+            ;
         }
-    }
-
-    //This query will show all registered users. Only for dev purposes.
-    /*$query = "SELECT DISTINCT u.id as login_user_id, login_date
-            FROM $track_online_table e, $table_user u
-            GROUP by u.id
-            ORDER BY $column $direction
-            LIMIT $from, $number_of_items";*/
-
-    $result = Database::query($query);
-    if ($result) {
-        $users_online = [];
-        while ($row = Database::fetch_row($result)) {
-            $users_online[] = $row[0];
-        }
-
-        return $users_online;
     } else {
-        return false;
+        $qb
+            ->innerJoin(User::class, 'u', 'WITH', 'u.id = track.loginUserId')
+            ->andWhere('u.active <> :softDeleted')
+            ->andWhere('u.status <> :anonymous')
+            ->setParameter('softDeleted', USER_SOFT_DELETED)
+            ->setParameter('anonymous', ANONYMOUS)
+        ;
+        if (-1 != $access_url_id) {
+            // all users online (multi-URL)
+            $qb
+                ->andWhere('track.accessUrlId = :accessUrlId')
+                ->setParameter('accessUrlId', (int) $access_url_id)
+            ;
+        } else {
+            $qb->distinct();
+        }
     }
+
+    $qb
+        ->orderBy($columns[$column], strtoupper($direction))
+        ->setFirstResult($from)
+        ->setMaxResults($number_of_items)
+    ;
+
+    $users_online = [];
+    foreach ($qb->getQuery()->getArrayResult() as $row) {
+        $users_online[] = $row['login_user_id'];
+    }
+
+    return $users_online;
 }
 
 /**
@@ -298,68 +307,57 @@ function who_is_online_count($time_limit = null, $friends = false)
     } else {
         $time_limit = intval($time_limit);
     }
-    $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-    $friend_user_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-    $table_user = Database::get_main_table(TABLE_MAIN_USER);
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
 
-    if ($friends) {
-        // who friends from social network is online
-        $query = "SELECT DISTINCT count(login_user_id) as count
-				  FROM $track_online_table INNER JOIN $friend_user_table
-                  ON (friend_user_id = login_user_id)
-				  WHERE
-				        login_date >= '$current_date' AND
-				        friend_user_id <> '".api_get_user_id()."' AND
-				        relation_type='".UserRelUser::USER_RELATION_TYPE_FRIEND."' AND
-				        user_id = '".api_get_user_id()."' ";
-    } else {
-        // All users online
-        $query = "SELECT count(login_id) as count
-                  FROM $track_online_table track INNER JOIN $table_user u
-                  ON (u.id=track.login_user_id)
-                  WHERE u.active <> ".USER_SOFT_DELETED." AND u.status != ".ANONYMOUS." AND login_date >= '$current_date'  ";
-    }
-
+    $access_url_id = -1;
     if (api_get_multiple_access_url()) {
         $access_url_id = api_get_current_access_url_id();
+    }
+
+    $qb = Container::getEntityManager()->createQueryBuilder()
+        ->from(TrackEOnline::class, 'track')
+        ->where('track.loginDate >= :currentDate')
+        ->setParameter('currentDate', $current_date)
+    ;
+
+    if ($friends) {
+        // who friends from social network is online (the multi-URL variant has no "user_id = me" condition)
+        $qb
+            ->select('COUNT(track.loginUserId)')
+            ->innerJoin(UserRelUser::class, 'rel', 'WITH', 'IDENTITY(rel.friend) = track.loginUserId')
+            ->andWhere('IDENTITY(rel.friend) <> :currentUserId')
+            ->andWhere('rel.relationType = :relationType')
+            ->setParameter('currentUserId', (int) api_get_user_id())
+            ->setParameter('relationType', UserRelUser::USER_RELATION_TYPE_FRIEND)
+        ;
         if (-1 != $access_url_id) {
-            if ($friends) {
-                // friends from social network is online
-                $query = "SELECT DISTINCT count(login_user_id) as count
-							FROM $track_online_table track
-							INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
-							WHERE
-							    track.access_url_id = $access_url_id AND
-							    login_date >= '".$current_date."' AND
-							    friend_user_id <> '".api_get_user_id()."' AND
-							    relation_type='".UserRelUser::USER_RELATION_TYPE_FRIEND."'  ";
-            } else {
-                // all users online
-                $query = "SELECT count(login_id) as count FROM $track_online_table  track
-                          INNER JOIN $table_user u ON (u.id=track.login_user_id)
-						  WHERE
-						    u.active <> ".USER_SOFT_DELETED." AND
-						    u.status != ".ANONYMOUS." AND
-						    track.access_url_id =  $access_url_id AND
-						    login_date >= '$current_date' ";
-            }
+            $qb
+                ->andWhere('track.accessUrlId = :accessUrlId')
+                ->setParameter('accessUrlId', (int) $access_url_id)
+            ;
+        } else {
+            $qb->andWhere('IDENTITY(rel.user) = :currentUserId');
+        }
+    } else {
+        // All users online
+        $qb
+            ->select('COUNT(track.loginId)')
+            ->innerJoin(User::class, 'u', 'WITH', 'u.id = track.loginUserId')
+            ->andWhere('u.active <> :softDeleted')
+            ->andWhere('u.status <> :anonymous')
+            ->setParameter('softDeleted', USER_SOFT_DELETED)
+            ->setParameter('anonymous', ANONYMOUS)
+        ;
+        if (-1 != $access_url_id) {
+            $qb
+                ->andWhere('track.accessUrlId = :accessUrlId')
+                ->setParameter('accessUrlId', (int) $access_url_id)
+            ;
         }
     }
 
-    // Dev purposes show all users online
-    /*$table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $query = "SELECT count(*)  as count FROM ".$table_user;*/
-
-    $result = Database::query($query);
-    if (Database::num_rows($result) > 0) {
-        $row = Database::fetch_array($result);
-
-        return $row['count'];
-    } else {
-        return false;
-    }
+    return (int) $qb->getQuery()->getSingleScalarResult();
 }
 
 /**
@@ -384,48 +382,41 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
 
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
-    $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-    $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-    $course_code = Database::escape_string($course_code);
     $courseInfo = api_get_course_info($course_code);
-    $courseId = $courseInfo['real_id'];
-
-    $from = (int) $from;
-    $number_of_items = (int) $number_of_items;
-
-    $urlCondition = '';
-    $urlJoin = '';
-    if (api_is_multiple_url_enabled()) {
-        $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $urlId = api_get_current_access_url_id();
-        $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
-        $urlCondition = " AND a.access_url_id = $urlId ";
-    }
-
-    $query = "SELECT o.login_user_id, o.login_date
-              FROM $track_online_table o
-              INNER JOIN $tableUser u
-              ON (o.login_user_id = u.id)
-              $urlJoin
-              WHERE
-                u.active <> ".USER_SOFT_DELETED." AND
-                u.status <> '".ANONYMOUS."' AND
-                o.c_id = $courseId AND
-                o.login_date >= '$current_date'
-                $urlCondition
-              LIMIT $from, $number_of_items ";
-
-    $result = Database::query($query);
-    if ($result) {
-        $users_online = [];
-        while ($row = Database::fetch_row($result)) {
-            $users_online[] = $row[0];
-        }
-
-        return $users_online;
-    } else {
+    if (empty($courseInfo['real_id'])) {
         return false;
     }
+    $courseId = (int) $courseInfo['real_id'];
+
+    $qb = Container::getEntityManager()->createQueryBuilder()
+        ->select('o.loginUserId AS login_user_id', 'o.loginDate AS login_date')
+        ->from(TrackEOnline::class, 'o')
+        ->innerJoin(User::class, 'u', 'WITH', 'o.loginUserId = u.id')
+        ->where('u.active <> :softDeleted')
+        ->andWhere('u.status <> :anonymous')
+        ->andWhere('o.cId = :courseId')
+        ->andWhere('o.loginDate >= :currentDate')
+        ->setFirstResult((int) $from)
+        ->setMaxResults((int) $number_of_items)
+        ->setParameter('softDeleted', USER_SOFT_DELETED)
+        ->setParameter('anonymous', ANONYMOUS)
+        ->setParameter('courseId', $courseId)
+        ->setParameter('currentDate', $current_date)
+    ;
+    if (api_is_multiple_url_enabled()) {
+        $qb
+            ->innerJoin(AccessUrlRelUser::class, 'a', 'WITH', 'IDENTITY(a.user) = u.id')
+            ->andWhere('IDENTITY(a.url) = :urlId')
+            ->setParameter('urlId', (int) api_get_current_access_url_id())
+        ;
+    }
+
+    $users_online = [];
+    foreach ($qb->getQuery()->getArrayResult() as $row) {
+        $users_online[] = $row['login_user_id'];
+    }
+
+    return $users_online;
 }
 
 /**
@@ -440,9 +431,7 @@ function who_is_online_in_this_course_count(
     if (empty($coursecode)) {
         return false;
     }
-    $track_online_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-    $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-    $time_limit = Database::escape_string($time_limit);
+    $time_limit = (int) $time_limit;
     $online_time = time() - $time_limit * 60;
     $current_date = api_get_utc_datetime($online_time);
     $courseId = api_get_course_int_id($coursecode);
@@ -451,35 +440,28 @@ function who_is_online_in_this_course_count(
         return false;
     }
 
-    $urlCondition = '';
-    $urlJoin = '';
+    $qb = Container::getEntityManager()->createQueryBuilder()
+        ->select('COUNT(o.loginUserId)')
+        ->from(TrackEOnline::class, 'o')
+        ->innerJoin(User::class, 'u', 'WITH', 'o.loginUserId = u.id')
+        ->where('u.active <> :softDeleted')
+        ->andWhere('u.status <> :anonymous')
+        ->andWhere('o.cId = :courseId')
+        ->andWhere('o.loginDate >= :currentDate')
+        ->setParameter('softDeleted', USER_SOFT_DELETED)
+        ->setParameter('anonymous', ANONYMOUS)
+        ->setParameter('courseId', (int) $courseId)
+        ->setParameter('currentDate', $current_date)
+    ;
     if (api_is_multiple_url_enabled()) {
-        $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $urlId = api_get_current_access_url_id();
-        $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
-        $urlCondition = " AND a.access_url_id = $urlId ";
+        $qb
+            ->innerJoin(AccessUrlRelUser::class, 'a', 'WITH', 'IDENTITY(a.user) = u.id')
+            ->andWhere('IDENTITY(a.url) = :urlId')
+            ->setParameter('urlId', (int) api_get_current_access_url_id())
+        ;
     }
 
-    $query = "SELECT count(login_user_id) as count
-              FROM $track_online_table o
-              INNER JOIN $tableUser u
-              ON (login_user_id = u.id)
-              $urlJoin
-              WHERE
-                u.active <> ".USER_SOFT_DELETED." AND
-                u.status <> '".ANONYMOUS."' AND
-                c_id = $courseId AND
-                login_date >= '$current_date'
-                $urlCondition
-                ";
-    $result = Database::query($query);
-    if (Database::num_rows($result) > 0) {
-        $row = Database::fetch_array($result);
-
-        return $row['count'];
-    } else {
-        return false;
-    }
+    return (int) $qb->getQuery()->getSingleScalarResult();
 }
 
 /**
@@ -495,41 +477,30 @@ function whoIsOnlineInThisSessionCount($timeLimit, $sessionId)
         return 0;
     }
 
-    $tblTrackOnline = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-    $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-
     $timeLimit = (int) $timeLimit;
     $online_time = time() - $timeLimit * 60;
     $current_date = api_get_utc_datetime($online_time);
 
-    $urlCondition = '';
-    $urlJoin = '';
+    $qb = Container::getEntityManager()->createQueryBuilder()
+        ->select('COUNT(o.loginUserId)')
+        ->from(TrackEOnline::class, 'o')
+        ->innerJoin(User::class, 'u', 'WITH', 'o.loginUserId = u.id')
+        ->where('u.active <> :softDeleted')
+        ->andWhere('u.status <> :anonymous')
+        ->andWhere('o.sessionId = :sessionId')
+        ->andWhere('o.loginDate >= :currentDate')
+        ->setParameter('softDeleted', USER_SOFT_DELETED)
+        ->setParameter('anonymous', ANONYMOUS)
+        ->setParameter('sessionId', $sessionId)
+        ->setParameter('currentDate', $current_date)
+    ;
     if (api_is_multiple_url_enabled()) {
-        $accessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $urlId = api_get_current_access_url_id();
-        $urlJoin = " INNER JOIN $accessUrlUser a ON (a.user_id = u.id) ";
-        $urlCondition = " AND a.access_url_id = $urlId ";
+        $qb
+            ->innerJoin(AccessUrlRelUser::class, 'a', 'WITH', 'IDENTITY(a.user) = u.id')
+            ->andWhere('IDENTITY(a.url) = :urlId')
+            ->setParameter('urlId', (int) api_get_current_access_url_id())
+        ;
     }
 
-    $query = "SELECT count(login_user_id) as count
-              FROM $tblTrackOnline o
-              INNER JOIN $tableUser u
-              ON (login_user_id = u.id)
-              $urlJoin
-              WHERE
-                    u.active <> ".USER_SOFT_DELETED." AND
-                    u.status <> '".ANONYMOUS."' AND
-                    session_id = $sessionId AND
-                    login_date >= '$current_date'
-                    $urlCondition
-            ";
-    $result = Database::query($query);
-
-    if (Database::num_rows($result) > 0) {
-        $row = Database::fetch_assoc($result);
-
-        return $row['count'];
-    }
-
-    return 0;
+    return (int) $qb->getQuery()->getSingleScalarResult();
 }

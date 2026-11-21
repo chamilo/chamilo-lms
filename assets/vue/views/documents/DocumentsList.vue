@@ -72,7 +72,8 @@
     <BaseButton
       v-if="showNewFolderButton"
       :label="t('New folder')"
-      icon="folder-plus"
+      icon="folder-generic"
+      badge-icon="star"
       only-icon
       type="success"
       @click="openNew"
@@ -81,6 +82,7 @@
       v-if="showNewDrawingButton"
       :label="t('New drawing')"
       icon="shape"
+      badge-icon="star"
       only-icon
       type="success"
       @click="goToNewDrawing"
@@ -121,7 +123,8 @@
       v-if="showDownloadAllButton && !hideDownloadIcon"
       :disabled="isDownloadingAll"
       :label="t('Download all')"
-      icon="download"
+      icon="folder-generic"
+      badge-icon="arrow-down"
       only-icon
       type="primary"
       @click="downloadAllItems"

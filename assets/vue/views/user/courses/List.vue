@@ -32,7 +32,11 @@
       v-else-if="courses.length > 0"
       class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
     >
-      <CourseCardList :courses="courses" />
+      <CourseCardList
+        :courses="courses"
+        :allow-self-unsubscribe="true"
+        @unsubscribed="handleUnsubscribed"
+      />
 
       <div class="col-span-full">
         <div
@@ -257,6 +261,7 @@ const buildMergedCourse = (cru) => {
   return {
     ...c,
     teachersLite,
+    subscriptionStatus: Number(cru?.status) || 0,
     session: cru?.session ?? c.session ?? null,
     sessionId: sid,
     studentInfo,
@@ -269,6 +274,14 @@ const buildMergedCourse = (cru) => {
     timeSpentSeconds: studentInfo.timeSpentSeconds,
     __key: `${cid || c._id || c.id}:${sid || 0}`,
   }
+}
+
+function handleUnsubscribed(courseId) {
+  const remaining = allCourses.value.filter((course) => getCourseNumericId(course) !== courseId)
+  allCourses.value = remaining
+  courses.value = remaining
+  uniqueKeys.clear()
+  remaining.forEach((course) => uniqueKeys.add(String(course.__key)))
 }
 
 const mergeCoursesFromProvider = (items, { reset = false } = {}) => {

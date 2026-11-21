@@ -180,6 +180,10 @@ services:
       bind:
         $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
 
+    Chamilo\CoreBundle\State\CourseCreationPolicyProcessor:
+      bind:
+        $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'
+
     Chamilo\CoreBundle\State\CourseRelUserStateProcessor:
       bind:
         $persistProcessor: '@api_platform.doctrine.orm.state.persist_processor'

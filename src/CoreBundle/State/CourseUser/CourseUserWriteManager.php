@@ -110,7 +110,8 @@ final readonly class CourseUserWriteManager
         }
 
         $canManage = $this->courseUserManager->canUnsubscribe($course, $session);
-        $isSelfRequest = 1 === \count($userIds)
+        $isSelfRequest = CourseUserManager::TYPE_STUDENT === $type
+            && 1 === \count($userIds)
             && (int) $currentUser->getId() === (int) reset($userIds)
             && $this->courseUserManager->canSelfUnsubscribe($course, $session);
 

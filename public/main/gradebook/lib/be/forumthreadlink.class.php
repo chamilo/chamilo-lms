@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Entity\CForumThreadQualify;
 
 /**
  * Class ForumThreadLink.
@@ -12,8 +13,6 @@ use Chamilo\CourseBundle\Entity\CForumThread;
  */
 class ForumThreadLink extends AbstractLink
 {
-    private $forum_thread_table;
-
     /**
      * Constructor.
      */
@@ -81,6 +80,7 @@ class ForumThreadLink extends AbstractLink
     {
         $table = Database::get_course_table(TABLE_FORUM_POST);
 
+        // TODO(db-neutral): broken today, the unterminated quote is a SQL syntax error (not migrated, not pinned).
         $sql = "SELECT count(*) AS number FROM $table
                 WHERE iid = '".$this->get_ref_id();
         $result = Database::query($sql);
@@ -98,7 +98,6 @@ class ForumThreadLink extends AbstractLink
     public function calc_score($studentId = null, $type = null)
     {
         $threadInfo = $this->getThreadData();
-        $thread_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
         $sessionId = $this->get_session_id();
         $sessionCondition = api_get_session_condition(
             $sessionId,
@@ -107,11 +106,13 @@ class ForumThreadLink extends AbstractLink
             'session_id'
         );
 
-        $sql = 'SELECT thread_qualify_max
-                FROM '.Database::get_course_table(TABLE_FORUM_THREAD).'
-                WHERE iid = '.$this->get_ref_id();
-        $query = Database::query($sql);
-        $assignment = Database::fetch_array($query);
+        $assignment = Container::getEntityManager()->createQueryBuilder()
+            ->select('t.threadQualifyMax AS thread_qualify_max')
+            ->from(CForumThread::class, 't')
+            ->where('t.iid = :threadId')
+            ->setParameter('threadId', $this->get_ref_id())
+            ->getQuery()
+            ->getOneOrNullResult();
         $threadPeerQualify = (int) (
             $threadInfo['thread_peer_qualify']
             ?? $threadInfo['threadPeerQualify']
@@ -124,21 +125,26 @@ class ForumThreadLink extends AbstractLink
             ?? 0.0
         );
 
-        $sql = "SELECT * FROM $thread_qualify
-                WHERE iid = ".$this->get_ref_id();
+        // The qualify table is filtered by its own iid, as the legacy query did.
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(q.user) AS user_id', 'q.qualify AS qualify')
+            ->from(CForumThreadQualify::class, 'q')
+            ->where('q.iid = :qualifyId')
+            ->setParameter('qualifyId', $this->get_ref_id());
         if (isset($studentId)) {
-            $sql .= ' AND user_id = '.intval($studentId);
+            $qb->andWhere('IDENTITY(q.user) = :studentId')
+                ->setParameter('studentId', (int) $studentId);
         }
 
         // order by id, that way the student's first attempt is accessed first
-        $sql .= ' ORDER BY qualify_time DESC';
-        $scores = Database::query($sql);
+        $qb->orderBy('q.qualifyTime', 'DESC');
+        $scores = $qb->getQuery()->getArrayResult();
 
         // for 1 student
         if (isset($studentId)) {
             if (0 === $threadPeerQualify) {
                 // Classic way of calculate score
-                if ($data = Database::fetch_array($scores)) {
+                if ($data = ($scores[0] ?? false)) {
                     return [
                         $data['qualify'],
                         $threadQualifyMax,
@@ -151,11 +157,9 @@ class ForumThreadLink extends AbstractLink
                 // Take average
                 $score = 0;
                 $counter = 0;
-                if (Database::num_rows($scores)) {
-                    while ($data = Database::fetch_assoc($scores)) {
-                        $score += $data['qualify'];
-                        $counter++;
-                    }
+                foreach ($scores as $data) {
+                    $score += $data['qualify'];
+                    $counter++;
                 }
                 // If no result
                 if (empty($counter) || $counter <= 2) {
@@ -174,7 +178,7 @@ class ForumThreadLink extends AbstractLink
             $weight = 0;
             $sumResult = 0;
 
-            while ($data = Database::fetch_array($scores)) {
+            foreach ($scores as $data) {
                 if (!(array_key_exists($data['user_id'], $students))) {
                     if (0 != $threadQualifyMax) {
                         $students[$data['user_id']] = $data['qualify'];
@@ -254,21 +258,27 @@ class ForumThreadLink extends AbstractLink
     public function is_valid_link()
     {
         $sessionId = $this->get_session_id();
-        $sql = 'SELECT count(iid) FROM '.$this->get_forum_thread_table().'
-                WHERE iid = '.$this->get_ref_id();
-        $result = Database::query($sql);
-        $number = Database::fetch_row($result);
+        $number = (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(t.iid)')
+            ->from(CForumThread::class, 't')
+            ->where('t.iid = :threadId')
+            ->setParameter('threadId', $this->get_ref_id())
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        return 0 != $number[0];
+        return 0 != $number;
     }
 
     public function get_link()
     {
         $sessionId = $this->get_session_id();
-        $sql = 'SELECT * FROM '.$this->get_forum_thread_table().'
-                WHERE iid = '.$this->get_ref_id();
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(t.forum) AS forum_id')
+            ->from(CForumThread::class, 't')
+            ->where('t.iid = :threadId')
+            ->setParameter('threadId', $this->get_ref_id())
+            ->getQuery()
+            ->getOneOrNullResult();
 
         if ($row) {
             $forum_id = (int) $row['forum_id'];
@@ -302,10 +312,14 @@ class ForumThreadLink extends AbstractLink
         $ref_id = $this->get_ref_id();
 
         if (!empty($ref_id)) {
-            $sql = 'UPDATE '.$this->get_forum_thread_table().' SET
-                    thread_weight='.api_float_val($weight).'
-                    WHERE iid = '.$ref_id;
-            Database::query($sql);
+            Container::getEntityManager()->createQueryBuilder()
+                ->update(CForumThread::class, 't')
+                ->set('t.threadWeight', ':weight')
+                ->where('t.iid = :threadId')
+                ->setParameter('weight', api_float_val($weight))
+                ->setParameter('threadId', $ref_id)
+                ->getQuery()
+                ->execute();
         }
     }
 
@@ -314,30 +328,36 @@ class ForumThreadLink extends AbstractLink
         $ref_id = $this->get_ref_id();
         if (!empty($ref_id)) {
             // Cleans forum
-            $sql = 'UPDATE '.$this->get_forum_thread_table().' SET
-                    thread_qualify_max = 0,
-                    thread_weight = 0,
-                    thread_title_qualify = ""
-                    WHERE iid = '.$ref_id;
-            Database::query($sql);
+            Container::getEntityManager()->createQueryBuilder()
+                ->update(CForumThread::class, 't')
+                ->set('t.threadQualifyMax', '0')
+                ->set('t.threadWeight', '0')
+                ->set('t.threadTitleQualify', "''")
+                ->where('t.iid = :threadId')
+                ->setParameter('threadId', $ref_id)
+                ->getQuery()
+                ->execute();
         }
-    }
-
-    /**
-     * Lazy load function to get the database table of the student publications.
-     */
-    private function get_forum_thread_table()
-    {
-        return $this->forum_thread_table = Database::get_course_table(TABLE_FORUM_THREAD);
     }
 
     private function getThreadData()
     {
         if (!isset($this->exercise_data)) {
-            $sql = 'SELECT * FROM '.$this->get_forum_thread_table().'
-                    WHERE iid = '.$this->get_ref_id();
-            $query = Database::query($sql);
-            $this->exercise_data = Database::fetch_array($query);
+            // Only the columns read through $this->exercise_data (get_name() and calc_score()).
+            $row = Container::getEntityManager()->createQueryBuilder()
+                ->select(
+                    't.iid AS iid',
+                    't.title AS title',
+                    't.threadTitleQualify AS thread_title_qualify',
+                    't.threadQualifyMax AS thread_qualify_max',
+                    't.threadPeerQualify AS thread_peer_qualify'
+                )
+                ->from(CForumThread::class, 't')
+                ->where('t.iid = :threadId')
+                ->setParameter('threadId', (int) $this->get_ref_id())
+                ->getQuery()
+                ->getOneOrNullResult();
+            $this->exercise_data = $row ?? false;
         }
 
         return $this->exercise_data;

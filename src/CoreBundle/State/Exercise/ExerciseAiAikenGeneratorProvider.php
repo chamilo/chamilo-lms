@@ -66,7 +66,7 @@ final readonly class ExerciseAiAikenGeneratorProvider implements ProviderInterfa
         $response->textProviders = $this->toOptionList($textProviders);
         $response->documentProviders = $this->toOptionList($documentProviders);
         $response->questionTypes = [
-            ['value' => 'multiple_choice', 'label' => 'Multiple answer'],
+            ['value' => 'multiple_choice', 'label' => 'Unique answer'],
         ];
         $response->documents = [] !== $documentProviders ? $this->getDocumentItems($course) : [];
         $response->message = $this->getStatusMessage($courseGeneratorEnabled, $aiHelpersEnabled, $textProviders);

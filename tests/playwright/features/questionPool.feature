@@ -206,6 +206,10 @@ Feature: Question pool management for QP scenarios
     When I follow "Recycle existing questions"
     And I wait for the page content to settle
     Then I should see "QPQUESTION2"
+    And I should see "Occurrences"
+    And I should see "Full-score attempts"
+    And I should see "Below-full-score attempts"
+    And I should see "Assign scores"
     And I click the "[title='Delete']" icon in the row for "QPQUESTION2"
     And I press "Yes"
     And I wait for the page content to settle

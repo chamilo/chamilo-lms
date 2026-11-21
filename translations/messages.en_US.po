@@ -43897,3 +43897,36 @@ msgstr "Unable to summarize migration data issues. Ask the server administrator 
 
 msgid "Download the migration report (global administrator login required)"
 msgstr "Download the migration report (global administrator login required)"
+
+msgid "Assign scores"
+msgstr "Assign scores"
+
+msgid "Assign these scores to the selected questions?"
+msgstr "Assign these scores to the selected questions?"
+
+msgid "Below-full-score attempts"
+msgstr "Below-full-score attempts"
+
+msgid "Edit classification"
+msgstr "Edit classification"
+
+msgid "Full-score attempts"
+msgstr "Full-score attempts"
+
+msgid "Occurrences"
+msgstr "Occurrences"
+
+msgid "Only unused single-answer questions owned by this context can receive bulk scores."
+msgstr "Only unused single-answer questions owned by this context can receive bulk scores."
+
+msgid "Question classification updated"
+msgstr "Question classification updated"
+
+msgid "Question scores updated"
+msgstr "Question scores updated"
+
+msgid "Questions in test"
+msgstr "Questions in test"
+
+msgid "Statistics count completed, graded attempts in this course and session, using the current maximum question score. Partial scores count as below full score."
+msgstr "Statistics count completed, graded attempts in this course and session, using the current maximum question score. Partial scores count as below full score."

@@ -14,6 +14,8 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseQuestionBankClassification;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseQuestionBankMutationGuard;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -21,6 +23,7 @@ use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
+use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
@@ -30,6 +33,8 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+use const SORT_NUMERIC;
+
 /**
  * @implements ProcessorInterface<ExerciseQuestionBank, ExerciseQuestionBank>
  */
@@ -37,6 +42,8 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
 {
     private const ACTION_REUSE = 'reuse';
     private const ACTION_DELETE = 'delete';
+    private const ACTION_ASSIGN_SCORES = 'assign_scores';
+    private const ACTION_CLASSIFY = 'classify';
     private const LP_ITEM_TYPE_QUIZ = 'quiz';
 
     public function __construct(
@@ -47,6 +54,8 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
         private Security $security,
         private SettingsManager $settingsManager,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private ExerciseQuestionBankClassification $classification,
+        private ExerciseQuestionBankMutationGuard $mutationGuard,
     ) {}
 
     /**
@@ -80,6 +89,13 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
         }
 
         $action = strtolower(trim($data->action));
+        if (\in_array($action, [self::ACTION_ASSIGN_SCORES, self::ACTION_CLASSIFY], true)) {
+            if (null !== $quiz || isset($uriVariables['exerciseId']) || !empty($this->cidReqHelper->getGroupId())) {
+                throw new AccessDeniedHttpException('Use the course question bank to update question scores or classification.');
+            }
+
+            return $this->updateBankQuestions($data, $action, $course, $session);
+        }
         if (!\in_array($action, [self::ACTION_REUSE, self::ACTION_DELETE], true)) {
             throw new BadRequestHttpException('Unsupported question bank action.');
         }
@@ -111,6 +127,86 @@ final readonly class ExerciseQuestionBankProcessor implements ProcessorInterface
         }
 
         $response->message = 1 === $addedCount ? 'Question added to the test' : 'Questions added to the test';
+
+        return $response;
+    }
+
+    private function updateBankQuestions(ExerciseQuestionBank $data, string $action, Course $course, ?Session $session): ExerciseQuestionBank
+    {
+        if (!array_is_list($data->questionIds) || \count($data->questionIds) > 100) {
+            throw new BadRequestHttpException('Invalid question selection.');
+        }
+        foreach ($data->questionIds as $id) {
+            if (!\is_int($id) || $id <= 0) {
+                throw new BadRequestHttpException('Invalid question selection.');
+            }
+        }
+        if (null !== $data->questionId && $data->questionId <= 0) {
+            throw new BadRequestHttpException('Invalid question selection.');
+        }
+        $ids = $this->getSubmittedQuestionIds($data);
+        $scoreAction = self::ACTION_ASSIGN_SCORES === $action;
+        if ([] === $ids || \count($ids) > 100 || (!$scoreAction && 1 !== \count($ids))) {
+            throw new BadRequestHttpException('Invalid question selection.');
+        }
+        if ($scoreAction) {
+            if (!$this->canRunRestrictedAction()) {
+                throw new AccessDeniedHttpException('You are not allowed to assign question scores in this context.');
+            }
+            ExerciseQuestionBankMutationGuard::validateScores($data->correctScore, $data->incorrectScore);
+        }
+        sort($ids, SORT_NUMERIC);
+        $this->entityManager->getConnection()->transactional(function () use ($ids, $scoreAction, $data, $course, $session): void {
+            $questions = [];
+            foreach ($ids as $id) {
+                // Acquire every lock before checking the mutation scope and historical usage.
+                $question = $this->entityManager->find(CQuizQuestion::class, $id, LockMode::PESSIMISTIC_WRITE);
+                if (!$question instanceof CQuizQuestion) {
+                    throw new NotFoundHttpException('The requested question was not found.');
+                }
+                $questions[$id] = $question;
+            }
+            foreach ($questions as $question) {
+                if (!$this->isQuestionInContext($question, $course, $session)) {
+                    throw new AccessDeniedHttpException('The requested question does not belong to the current course context.');
+                }
+            }
+            $flags = $this->mutationGuard->getFlags($ids, $course, $session);
+            $answersByQuestion = [];
+            foreach ($questions as $id => $question) {
+                $flag = $scoreAction ? 'canAssignScores' : 'canClassify';
+                if (!($flags[$id][$flag] ?? false)) {
+                    throw new AccessDeniedHttpException('The selected question cannot be updated safely in this context.');
+                }
+                if ($scoreAction) {
+                    $answers = $this->getAnswers($question);
+                    if (1 !== (int) $question->getType() || !ExerciseQuestionBankMutationGuard::hasValidSingleAnswer($answers)) {
+                        throw new BadRequestHttpException('Only unused, valid single-answer questions can receive bulk scores.');
+                    }
+                    $answersByQuestion[$id] = $answers;
+                }
+            }
+            // No entity is changed until every selected question has passed validation.
+            if ($scoreAction) {
+                foreach ($questions as $id => $question) {
+                    $question->setPonderation((float) $data->correctScore);
+                    foreach ($answersByQuestion[$id] as $answer) {
+                        $answer->setPonderation(1 === $answer->getCorrect() ? (float) $data->correctScore : (float) $data->incorrectScore);
+                    }
+                }
+            } else {
+                $this->classification->save($ids[0], $data->fieldValues);
+            }
+            $this->entityManager->flush();
+        });
+
+        $response = new ExerciseQuestionBank();
+        $response->exerciseId = 0;
+        $response->action = $action;
+        $response->questionIds = $ids;
+        $response->success = true;
+        $response->updatedCount = \count($ids);
+        $response->message = $scoreAction ? 'Question scores updated' : 'Question classification updated';
 
         return $response;
     }

@@ -362,22 +362,35 @@ class ExerciseSignaturePlugin extends Plugin
 
         $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $exeId = (int) $exeId;
-        $file = Database::escape_string($file);
-        $now = Database::escape_string(api_get_utc_datetime());
+        $file = (string) $file;
+        $now = api_get_utc_datetime();
+        $connection = Database::getManager()->getConnection();
 
-        $sql = "SELECT id FROM $table WHERE field_id = $fieldId AND item_id = $exeId ORDER BY id DESC LIMIT 1";
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $id = $connection->createQueryBuilder()
+            ->select('id')
+            ->from($table)
+            ->where('field_id = :fieldId')
+            ->andWhere('item_id = :exeId')
+            ->orderBy('id', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('fieldId', $fieldId)
+            ->setParameter('exeId', $exeId)
+            ->executeQuery()
+            ->fetchOne();
 
-        if (!empty($row['id'])) {
-            $assignments = ["field_value = '$file'"];
+        if (!empty($id)) {
+            $update = $connection->createQueryBuilder()
+                ->update($table)
+                ->set('field_value', ':file')
+                ->where('id = :id')
+                ->setParameter('file', $file)
+                ->setParameter('id', (int) $id);
 
             if (!empty($columns['updated_at'])) {
-                $assignments[] = "updated_at = '$now'";
+                $update->set('updated_at', ':now')->setParameter('now', $now);
             }
 
-            $id = (int) $row['id'];
-            Database::query("UPDATE $table SET ".implode(', ', $assignments)." WHERE id = $id");
+            $update->executeStatement();
 
             return self::isSignatureDataUrl(self::getSignatureValueDirectly($exeId));
         }
@@ -412,18 +425,13 @@ class ExerciseSignaturePlugin extends Plugin
             $insertValues[$columnName] = self::getDefaultValueForRequiredColumn($columnInfo);
         }
 
-        $insertColumns = [];
-        $insertSqlValues = [];
-
+        $insert = $connection->createQueryBuilder()->insert($table);
+        $position = 0;
         foreach ($insertValues as $columnName => $value) {
-            $insertColumns[] = $columnName;
-            $insertSqlValues[] = self::formatSqlValue($value, $columns[$columnName] ?? []);
+            $insert->setValue($columnName, ':v'.$position)->setParameter('v'.$position, $value);
+            $position++;
         }
-
-        Database::query(
-            "INSERT INTO $table (".implode(', ', $insertColumns).")
-             VALUES (".implode(', ', $insertSqlValues).")"
-        );
+        $insert->executeStatement();
 
         return self::isSignatureDataUrl(self::getSignatureValueDirectly($exeId));
     }
@@ -458,9 +466,17 @@ class ExerciseSignaturePlugin extends Plugin
 
         $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
         $itemId = (int) $itemId;
-        $sql = "SELECT ".implode(', ', $selectParts)." FROM $table WHERE field_id = $fieldId AND item_id = $itemId ORDER BY id DESC LIMIT 1";
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $row = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select(...$selectParts)
+            ->from($table)
+            ->where('field_id = :fieldId')
+            ->andWhere('item_id = :itemId')
+            ->orderBy('id', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('fieldId', $fieldId)
+            ->setParameter('itemId', $itemId)
+            ->executeQuery()
+            ->fetchAssociative();
 
         if (empty($row)) {
             return null;
@@ -487,6 +503,7 @@ class ExerciseSignaturePlugin extends Plugin
 
         $columns = [];
         $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        // TODO(db-neutral): SHOW COLUMNS (schema probing)
         $result = Database::query("SHOW COLUMNS FROM $table");
 
         while ($row = Database::fetch_assoc($result)) {
@@ -531,25 +548,6 @@ class ExerciseSignaturePlugin extends Plugin
         return '';
     }
 
-    private static function formatSqlValue($value, $columnInfo)
-    {
-        if (null === $value) {
-            return 'NULL';
-        }
-
-        $type = isset($columnInfo['Type']) ? strtolower((string) $columnInfo['Type']) : '';
-
-        if (is_int($value) || is_float($value)) {
-            return (string) $value;
-        }
-
-        if (is_numeric($value) && (false !== strpos($type, 'int') || false !== strpos($type, 'decimal') || false !== strpos($type, 'float') || false !== strpos($type, 'double'))) {
-            return (string) $value;
-        }
-
-        return "'".Database::escape_string((string) $value)."'";
-    }
-
     private static function getExtraFieldId($handler, $variable)
     {
         $extraField = new ExtraField($handler);
@@ -565,6 +563,7 @@ class ExerciseSignaturePlugin extends Plugin
     private function ensureSignatureStorageCanHoldDataUrl()
     {
         $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
+        // TODO(db-neutral): DDL (ALTER TABLE ... MODIFY COLUMN)
         $sql = "ALTER TABLE $table MODIFY COLUMN field_value LONGTEXT NULL";
         Database::query($sql);
     }

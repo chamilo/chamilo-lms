@@ -314,6 +314,17 @@ class Diagnoser
     }
 
     /**
+     * Whether a php.ini size value ("2G", "512M", "1048576", "-1") is at least $minMegabytes MB.
+     * -1 and 0 mean "unlimited" for the directives checked here.
+     */
+    private function iniSizeAtLeast(string $value, int $minMegabytes): bool
+    {
+        $bytes = api_get_bytes_memory_limit(trim($value));
+
+        return $bytes <= 0 || $bytes >= $minMegabytes * 1024 * 1024;
+    }
+
+    /**
      * Chamilo requirements snapshot.
      *
      * @return array<int,array>
@@ -637,7 +648,7 @@ class Diagnoser
         $setting = ini_get('memory_limit');
         $req_setting = '>= '.REQUIRED_MIN_MEMORY_LIMIT.'M';
         $status = self::STATUS_ERROR;
-        if ((float) $setting >= REQUIRED_MIN_MEMORY_LIMIT) {
+        if ($this->iniSizeAtLeast((string) $setting, (int) REQUIRED_MIN_MEMORY_LIMIT)) {
             $status = self::STATUS_OK;
         }
         $array[] = $this->build_setting(
@@ -654,7 +665,7 @@ class Diagnoser
         $setting = ini_get('post_max_size');
         $req_setting = '>= '.REQUIRED_MIN_POST_MAX_SIZE.'M';
         $status = self::STATUS_ERROR;
-        if ((float) $setting >= REQUIRED_MIN_POST_MAX_SIZE) {
+        if ($this->iniSizeAtLeast((string) $setting, (int) REQUIRED_MIN_POST_MAX_SIZE)) {
             $status = self::STATUS_OK;
         }
         $array[] = $this->build_setting(
@@ -671,7 +682,7 @@ class Diagnoser
         $setting = ini_get('upload_max_filesize');
         $req_setting = '>= '.REQUIRED_MIN_UPLOAD_MAX_FILESIZE.'M';
         $status = self::STATUS_ERROR;
-        if ((float) $setting >= REQUIRED_MIN_UPLOAD_MAX_FILESIZE) {
+        if ($this->iniSizeAtLeast((string) $setting, (int) REQUIRED_MIN_UPLOAD_MAX_FILESIZE)) {
             $status = self::STATUS_OK;
         }
         $array[] = $this->build_setting(

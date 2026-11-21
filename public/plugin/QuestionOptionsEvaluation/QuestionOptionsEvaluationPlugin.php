@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\AbstractQuery;
 
 /**
@@ -377,7 +378,7 @@ class QuestionOptionsEvaluationPlugin extends Plugin
                 ->set('v.updatedAt', ':now')
                 ->where('v.id = :id')
                 ->setParameter('formula', $formula)
-                ->setParameter('now', new DateTime($now))
+                ->setParameter('now', new DateTime($now), Types::DATETIME_MUTABLE)
                 ->setParameter('id', (int) $id)
                 ->getQuery()
                 ->execute()

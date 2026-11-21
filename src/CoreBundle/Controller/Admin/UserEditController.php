@@ -590,10 +590,7 @@ final class UserEditController extends AbstractController
             if (UserAuthSource::PLATFORM === $key) {
                 continue;
             }
-            if (UserAuthSource::CAS === $key && 'true' !== api_get_setting('cas_activate')) {
-                continue;
-            }
-            $map[$key] = $key;
+            $map[$key] = UserAuthSource::CAS === $key ? 'CAS' : $key;
         }
 
         return $map;

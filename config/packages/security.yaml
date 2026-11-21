@@ -180,6 +180,7 @@ security:
                 - Chamilo\CoreBundle\Security\Authenticator\OAuth2\KeycloakAuthenticator
                 - Chamilo\CoreBundle\Security\Authenticator\OAuth2\AzureAuthenticator
                 - Chamilo\CoreBundle\Security\Authenticator\Ldap\LdapAuthenticator
+                - Chamilo\CoreBundle\Security\Authenticator\Cas\CasAuthenticator
 
     access_control:
         - { path: '^/mcp$', roles: PUBLIC_ACCESS, methods: [OPTIONS] }
@@ -192,4 +193,5 @@ security:
         - { path: '^/mail/open/[a-f0-9]{64}\.gif$', roles: PUBLIC_ACCESS, methods: [GET] }
         - { path: ^/login/token/check, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: '^/connect/cas(?:/check)?$', roles: PUBLIC_ACCESS, methods: [GET] }
         - { path: ^/api/authentication_token, roles: PUBLIC_ACCESS }

@@ -187,7 +187,9 @@ final readonly class CourseUserManager
 
     public function canSelfUnsubscribe(Course $course, ?Session $session): bool
     {
-        return null === $session && $course->getUnsubscribe();
+        return null === $session
+            && $course->getUnsubscribe()
+            && $this->isEnabled($this->settingsManager->getSetting('course.enable_unsubscribe_button_on_my_course_page', true));
     }
 
     public function canSetTutor(Course $course, ?Session $session): bool

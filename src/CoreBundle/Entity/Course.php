@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Entity\Listener\CourseListener;
 use Chamilo\CoreBundle\Entity\Listener\ResourceListener;
 use Chamilo\CoreBundle\Filter\ExtraFieldFilter;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\State\CourseCreationPolicyProcessor;
 use Chamilo\CoreBundle\State\CourseDeleteProcessor;
 use Chamilo\CoreBundle\State\CourseRoomAssignmentProcessor;
 use Chamilo\CoreBundle\State\PublicCatalogueCourseStateProvider;
@@ -46,7 +47,7 @@ use const SORT_NATURAL;
     types: ['https://schema.org/Course'],
     operations: [
         new Get(security: "is_granted('VIEW', object) or is_granted('SESSION_MANAGER_API_READ', object)"),
-        new Post(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')"),
+        new Post(security: "is_granted('ROLE_TEACHER') or is_granted('ROLE_ADMIN')", processor: CourseCreationPolicyProcessor::class),
         // Updating and deleting are administrator-only: they let an integration (such as an ERP) keep its courses in
         // sync. Teachers keep editing their own course through the course settings screens. Only the course:write
         // properties can be patched, and the course code is not one of them.
@@ -333,6 +334,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
     #[Groups([
         'course:read',
         'course_catalogue:read',
+        'course_rel_user:read',
     ])]
     #[ORM\Column(name: 'unsubscribe', type: 'boolean', unique: false, nullable: false)]
     protected bool $unsubscribe;

@@ -471,8 +471,8 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name' => 'course_images_in_courses_list',
-                    'title' => 'Courses custom icons',
-                    'comment' => 'Use course images as the course icon in courses lists (instead of the default green blackboard icon).',
+                    'title' => 'Custom thumbnails for courses',
+                    'comment' => 'Show course-specific thumbnails in course lists. When disabled, use the default course image.',
                 ],
             ],
             'editor' => [

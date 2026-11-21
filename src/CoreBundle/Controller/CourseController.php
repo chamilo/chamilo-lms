@@ -8,7 +8,9 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\CourseRequest;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\SequenceResource;
@@ -75,6 +77,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -85,7 +89,10 @@ use UserManager;
 
 use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
+use const FILTER_VALIDATE_EMAIL;
+use const FILTER_VALIDATE_URL;
 use const PHP_QUERY_RFC3986;
+use const PHP_URL_SCHEME;
 
 /**
  * @author Julio Montoya <gugli100@gmail.com>
@@ -1349,11 +1356,14 @@ class CourseController extends ToolBaseController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/create', name: 'chamilo_core_course_create')]
+    #[Route('/create', name: 'chamilo_core_course_create', methods: ['POST'])]
     public function createCourse(
         Request $request,
         TranslatorInterface $translator,
-        CourseHelper $courseHelper
+        CourseHelper $courseHelper,
+        SettingsManager $settingsManager,
+        AccessUrlHelper $accessUrlHelper,
+        MailerInterface $mailer,
     ): JsonResponse {
         $courseData = json_decode($request->getContent(), true);
 
@@ -1393,7 +1403,11 @@ class CourseController extends ToolBaseController
             ['role', 'setting', 'error'],
             true
         );
-        if (!$capabilityStatus['canCreate'] && (null === $buyCoursesServiceSaleId || $cannotBypassPolicy)) {
+        $requiresApproval = !$this->isGranted('ROLE_ADMIN')
+            && 'true' === $settingsManager->getSetting('course.course_validation', true);
+        if (!$capabilityStatus['canCreate']
+            && ($cannotBypassPolicy || (!$requiresApproval && null === $buyCoursesServiceSaleId))
+        ) {
             return new JsonResponse(
                 [
                     'success' => false,
@@ -1518,6 +1532,19 @@ class CourseController extends ToolBaseController
         }
 
         try {
+            if ($requiresApproval) {
+                return $this->submitCourseRequest(
+                    $courseData,
+                    $params,
+                    $user,
+                    $courseHelper,
+                    $settingsManager,
+                    $accessUrlHelper,
+                    $translator,
+                    $mailer,
+                );
+            }
+
             $course = $courseHelper->createCourse($params);
             if ($course) {
                 return new JsonResponse([
@@ -1543,7 +1570,7 @@ class CourseController extends ToolBaseController
                 Response::HTTP_FORBIDDEN
             );
         } catch (UniqueConstraintViolationException $exception) {
-            if ($this->isCourseCodeUniqueConstraintViolation($exception)) {
+            if ($requiresApproval || $this->isCourseCodeUniqueConstraintViolation($exception)) {
                 return new JsonResponse(
                     [
                         'success' => false,
@@ -1565,6 +1592,115 @@ class CourseController extends ToolBaseController
             ],
             Response::HTTP_BAD_REQUEST
         );
+    }
+
+    /**
+     * Submit a teacher's course request without creating a course or granting course access.
+     */
+    private function submitCourseRequest(
+        array $courseData,
+        array $params,
+        User $user,
+        CourseHelper $courseHelper,
+        SettingsManager $settingsManager,
+        AccessUrlHelper $accessUrlHelper,
+        TranslatorInterface $translator,
+        MailerInterface $mailer,
+    ): JsonResponse {
+        $termsUrl = $this->getCourseRequestTermsUrl($settingsManager);
+        if ('' !== $termsUrl && true !== ($courseData['acceptedTerms'] ?? null)) {
+            return $this->json([
+                'success' => false,
+                'message' => $translator->trans('You have to accept our Terms and Conditions to proceed.'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $wantedCode = trim((string) ($params['wanted_code'] ?? ''));
+        if ('' === $wantedCode) {
+            $wantedCode = (string) ($params['title'] ?? '');
+        } elseif (!preg_match('/^[A-Za-z0-9]{1,40}$/', $wantedCode)) {
+            return $this->json([
+                'success' => false,
+                'message' => $translator->trans('Only letters (a-z) and numbers (0-9) are allowed.'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $keys = $courseHelper->defineCourseKeys($wantedCode);
+        $code = (string) ($keys['code'] ?? '');
+        if ('' === $code || \strlen($code) > 40) {
+            return $this->json([
+                'success' => false,
+                'message' => $translator->trans('A valid course code is required.'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        if (null !== $this->em->getRepository(Course::class)->findOneBy(['code' => $code])
+            || null !== $this->em->getRepository(CourseRequest::class)->findOneBy(['code' => $code])
+        ) {
+            return $this->json([
+                'success' => false,
+                'message' => $translator->trans('This course code already exists, please choose another code.'),
+            ], Response::HTTP_CONFLICT);
+        }
+
+        $language = trim((string) ($params['course_language'] ?? ''));
+        $title = trim((string) ($params['title'] ?? ''));
+        $description = trim((string) ($courseData['description'] ?? ''));
+        $objectives = trim((string) ($courseData['objectives'] ?? ''));
+        $audience = trim((string) ($courseData['targetAudience'] ?? ''));
+        if ('' === $language || \strlen($language) > 20 || mb_strlen($title) > 250
+            || '' === $description || '' === $objectives || '' === $audience
+            || mb_strlen($description) > 10000 || mb_strlen($objectives) > 10000 || mb_strlen($audience) > 10000
+        ) {
+            return $this->json([
+                'success' => false,
+                'message' => $translator->trans('The language, description, objectives and target audience are required.'),
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        $category = null;
+        $categoryId = (int) ($params['course_categories'][0] ?? 0);
+        if ($categoryId > 0) {
+            $urlId = (int) ($accessUrlHelper->getCurrent()?->getId() ?? 0);
+            if ($urlId <= 0) {
+                return $this->json(['success' => false, 'message' => 'Invalid access URL.'], Response::HTTP_BAD_REQUEST);
+            }
+            $categoryRepository = $this->em->getRepository(CourseCategory::class);
+            if (\in_array($categoryId, $categoryRepository->findIdsInAccessUrlTree([$urlId, 1]), true)) {
+                $category = $categoryRepository->find($categoryId);
+            }
+            if (null === $category) {
+                return $this->json(['success' => false, 'message' => 'Invalid course category.'], Response::HTTP_BAD_REQUEST);
+            }
+        }
+
+        $request = (new CourseRequest())
+            ->setUser($user)
+            ->setCode($code)
+            ->setVisualCode((string) ($keys['visual_code'] ?? $code))
+            ->setTitle($title)
+            ->setCourseLanguage($language)
+            ->setCategory($category)
+            ->setTutorName(trim($user->getFullName()) ?: $user->getUsername())
+            ->setDescription($description)
+            ->setObjetives($objectives)
+            ->setTargetAudience($audience)
+            ->setStatus(0)
+            ->setInfo(0)
+            ->setExemplaryContent(0)
+        ;
+
+        $this->em->persist($request);
+        $this->em->flush();
+
+        $this->notifyCourseRequest($request, $user, $mailer, $settingsManager, $accessUrlHelper);
+
+        return $this->json([
+            'success' => true,
+            'requiresApproval' => true,
+            'requestId' => $request->getId(),
+            'message' => $translator->trans('Your request for a new course has been sent successfully. You may receive a reply soon, within one or two days.'),
+        ], Response::HTTP_CREATED);
     }
 
     private function isCourseCodeUniqueConstraintViolation(UniqueConstraintViolationException $exception): bool
@@ -1612,6 +1748,7 @@ class CourseController extends ToolBaseController
     public function createCourseCapability(
         TranslatorInterface $translator,
         CourseHelper $courseHelper,
+        SettingsManager $settingsManager,
     ): JsonResponse {
         $user = $this->userHelper->getCurrent();
 
@@ -1626,10 +1763,19 @@ class CourseController extends ToolBaseController
         }
 
         $status = $this->resolveCourseCreateCapabilityStatus($user, $translator, $courseHelper);
+        $requiresApproval = !$this->isGranted('ROLE_ADMIN')
+            && 'true' === $settingsManager->getSetting('course.course_validation', true);
+        $canRequest = $requiresApproval && !\in_array(
+            (string) ($status['limitSource'] ?? ''),
+            ['role', 'setting', 'error'],
+            true,
+        );
 
         return new JsonResponse([
+            'requiresApproval' => $requiresApproval,
+            'termsAndConditionsUrl' => $requiresApproval ? $this->getCourseRequestTermsUrl($settingsManager) : '',
             'success' => 'error' !== (string) ($status['limitSource'] ?? ''),
-            'canCreate' => (bool) ($status['canCreate'] ?? false),
+            'canCreate' => (bool) ($status['canCreate'] ?? false) || $canRequest,
             'currentCount' => (int) ($status['currentCount'] ?? 0),
             'effectiveLimit' => (int) ($status['effectiveLimit'] ?? 0),
             'serviceLimit' => isset($status['serviceLimit']) ? (int) $status['serviceLimit'] : null,
@@ -1637,6 +1783,63 @@ class CourseController extends ToolBaseController
             'limitSource' => (string) ($status['limitSource'] ?? 'error'),
             'message' => (string) ($status['message'] ?? ''),
         ]);
+    }
+
+    private function getCourseRequestTermsUrl(SettingsManager $settingsManager): string
+    {
+        $url = trim((string) $settingsManager->getSetting('course.course_validation_terms_and_conditions_url', true));
+        if ('' !== $url) {
+            $scheme = strtolower((string) parse_url($url, PHP_URL_SCHEME));
+
+            return \in_array($scheme, ['http', 'https'], true) && filter_var($url, FILTER_VALIDATE_URL)
+                ? $url
+                : '';
+        }
+
+        return 'true' === $settingsManager->getSetting('registration.allow_terms_conditions', true)
+            ? '/main/auth/tc.php'
+            : '';
+    }
+
+    private function notifyCourseRequest(
+        CourseRequest $request,
+        User $teacher,
+        MailerInterface $mailer,
+        SettingsManager $settingsManager,
+        AccessUrlHelper $accessUrlHelper,
+    ): void {
+        $adminEmail = trim((string) $settingsManager->getSetting('admin.administrator_email', true));
+        $teacherEmail = trim((string) $teacher->getEmail());
+        if (!filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
+            return;
+        }
+
+        $subject = 'Course approval request: '.$request->getCode();
+        $message = "A new course approval request has been submitted.\n\n";
+        $message .= 'Course: '.$request->getTitle()."\n";
+        $message .= 'Code: '.$request->getCode()."\n";
+        $message .= 'Teacher: '.$teacher->getFullName()."\n";
+        $message .= 'Description: '.$request->getDescription()."\n";
+        $message .= 'Objectives: '.$request->getObjetives()."\n";
+        $message .= 'Target audience: '.$request->getTargetAudience()."\n";
+        $baseUrl = rtrim((string) ($accessUrlHelper->getCurrent()?->getUrl() ?? ''), '/');
+        $reviewUrl = $baseUrl.'/main/admin/course_request_edit.php?id='.$request->getId();
+        $message .= 'Review: '.$reviewUrl."\n";
+
+        try {
+            $mailer->send((new Email())->from($adminEmail)->to($adminEmail)->subject($subject)->text($message));
+            if (filter_var($teacherEmail, FILTER_VALIDATE_EMAIL)) {
+                $mailer->send(
+                    (new Email())
+                        ->from($adminEmail)
+                        ->to($teacherEmail)
+                        ->subject('Your course request has been received: '.$request->getCode())
+                        ->text('Your request for the course "'.$request->getTitle().'" was submitted for administrator review.')
+                );
+            }
+        } catch (Throwable $exception) {
+            error_log('[course.request] Unable to send course request notification: '.$exception->getMessage());
+        }
     }
 
     private function resolveCourseCreateCapabilityStatus(

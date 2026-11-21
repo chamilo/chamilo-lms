@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\CourseCategory;
@@ -24,6 +26,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 // Check access rights.
 if (!api_is_allowed_to_create_course()) {
     api_not_allowed(true);
+
     exit;
 }
 
@@ -31,6 +34,7 @@ if (!api_is_allowed_to_create_course()) {
 $this_section = SECTION_COURSES;
 
 $em = Database::getManager();
+
 /** @var CourseCategoryRepository $courseCategoriesRepo */
 $courseCategoriesRepo = $em->getRepository(CourseCategory::class);
 // Get all possible teachers.
@@ -40,8 +44,8 @@ $accessUrlId = api_get_current_access_url_id();
 // true  - the new course is requested only and it is created after approval;
 // false - the new course is created immediately, after filling this form.
 $course_validation_feature = false;
-if ('true' === api_get_setting('course_validation') &&
-    !api_is_platform_admin()
+if ('true' === api_get_setting('course_validation')
+    && !api_is_platform_admin()
 ) {
     $course_validation_feature = true;
 }
@@ -73,7 +77,8 @@ $form->addText(
         get_lang('Course name'),
         get_lang('Give your course a short and striking title, e.g. Innovation Management'),
     ],
-    true);
+    true
+);
 $form->applyFilter('title', 'html_filter');
 
 $form->addButtonAdvancedSettings('advanced_params');
@@ -337,7 +342,7 @@ if ($form->validate()) {
             $params['title'] = $title;
             $params['exemplary_content'] = $exemplary_content;
             $params['wanted_code'] = $wanted_code;
-            //$params['course_id'] = $category_code;
+            // $params['course_id'] = $category_code;
             $params['course_language'] = $course_language;
             $params['gradebook_model_id'] = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
             $params['course_template'] = isset($course_values['course_template']) ? $course_values['course_template'] : '';
@@ -362,28 +367,18 @@ if ($form->validate()) {
                     }
                 }
 
-                $splash = api_get_setting('course_creation_splash_screen');
-                if ('true' === $splash) {
-                    $url = Container::getRouter()->generate(
-                        'chamilo_core_course_welcome',
-                        ['cid' => $course->getId()]
-                    );
-                    header('Location: '.$url);
-                    exit;
-                } else {
-                    $url = api_get_course_url($course->getId());
-                    header('Location: '.$url);
-                    exit;
-                }
-            } else {
-                $message = Display::return_message(
-                    get_lang('The course has not been created due to an internal error.'),
-                    'error',
-                    false
-                );
-                // Display the form.
-                $formContent = $form->returnForm();
+                $url = api_get_course_url($course->getId());
+                header('Location: '.$url);
+
+                exit;
             }
+            $message = Display::return_message(
+                get_lang('The course has not been created due to an internal error.'),
+                'error',
+                false
+            );
+            // Display the form.
+            $formContent = $form->returnForm();
         } else {
             // Create a request for a new course.
             $request_id = CourseRequestManager::create_course_request(

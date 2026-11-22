@@ -158,10 +158,6 @@
               >
                 {{ t("Room") }}: {{ formatRoom(date.effectiveRoom) }}
               </span>
-              <RoomFloorPlanViewer
-                v-if="date.effectiveRoom"
-                :calendar-id="date.id"
-              />
             </div>
           </div>
           <div class="flex shrink-0 gap-2">
@@ -598,7 +594,6 @@ import Skeleton from "primevue/skeleton"
 import { useNotification } from "../../composables/notification"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import attendanceService, { ATTENDANCE_STATES } from "../../services/attendanceService"
-import RoomFloorPlanViewer from "../../components/room/RoomFloorPlanViewer.vue"
 import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"

@@ -5,6 +5,7 @@ declare(strict_types=1);
 /* For licensing terms, see /license.txt. */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Security\Upload\AntivirusGuard;
 use Chamilo\CoreBundle\Service\Pens\PensRemoteException;
 use Chamilo\CoreBundle\Service\Pens\PensRemoteTransport;
 use League\Flysystem\FilesystemOperator;
@@ -251,6 +252,7 @@ class PensProcessor
         $pluginsFilesystem = Container::getPluginsFileSystem();
         $filename = $this->buildUniqueArchiveFilename($pluginsFilesystem, $filename);
 
+        Container::$container->get(AntivirusGuard::class)->assertPath($temporaryPackagePath, $filename, 'pens');
         $stream = fopen($temporaryPackagePath, 'rb');
 
         if (false === $stream) {

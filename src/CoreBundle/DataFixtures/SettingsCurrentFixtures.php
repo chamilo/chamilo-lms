@@ -3290,6 +3290,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'security' => [
                 [
+                    'name' => 'antivirus_upload_enabled',
+                    'title' => 'Enable antivirus upload scanning',
+                    'comment' => 'Require a successful ClamAV scan for protected upload paths. Configure the daemon before enabling this setting. This setting is global for all access URLs.',
+                    'selected_value' => 'false',
+                ],
+                [
                     'name' => 'teacher_use_js',
                     'title' => 'Teachers can use JavaScript in WYSIWYG editors',
                     'comment' => 'When disabled, apply the teacher HTMLPurifier profile to content that was explicitly marked as trusted teacher HTML. Scripts and unsafe HTML attributes are removed from those paths. This is a global setting for all access URLs.',

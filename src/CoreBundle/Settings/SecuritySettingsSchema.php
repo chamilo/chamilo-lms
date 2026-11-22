@@ -23,6 +23,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
     public function buildSettings(AbstractSettingsBuilder $builder): void
     {
         $builder->setDefaults([
+            'antivirus_upload_enabled' => 'false',
             'filter_terms' => '',
             'teacher_use_js' => 'true',
             'encrypted_user_fields' => [],
@@ -93,6 +94,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
                 'expanded' => true,
                 'required' => false,
             ])
+            ->add('antivirus_upload_enabled', YesNoType::class)
             ->add('filter_terms', TextareaType::class)
             ->add('teacher_use_js', YesNoType::class)
             ->add('admins_can_set_users_pass', YesNoType::class)

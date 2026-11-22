@@ -43930,3 +43930,66 @@ msgstr "Questions in test"
 
 msgid "Statistics count completed, graded attempts in this course and session, using the current maximum question score. Partial scores count as below full score."
 msgstr "Statistics count completed, graded attempts in this course and session, using the current maximum question score. Partial scores count as below full score."
+
+msgid "Antivirus scan report"
+msgstr "Antivirus scan report"
+
+msgid "Enable antivirus upload scanning"
+msgstr "Enable antivirus upload scanning"
+
+msgid "Require a successful ClamAV scan for protected upload paths. Configure the daemon before enabling this setting. This setting is global for all access URLs."
+msgstr "Require a successful ClamAV scan for protected upload paths. Configure the daemon before enabling this setting. This setting is global for all access URLs."
+
+msgid "Infected"
+msgstr "Infected"
+
+msgid "Scan error"
+msgstr "Scan error"
+
+msgid "Threat"
+msgstr "Threat"
+
+msgid "Size (bytes)"
+msgstr "Size (bytes)"
+
+msgid "Export includes up to 10000 matching scans. Dates are in UTC."
+msgstr "Export includes up to 10000 matching scans. Dates are in UTC."
+
+msgid "File upload rejected by antivirus."
+msgstr "File upload rejected by antivirus."
+
+msgid "File upload rejected: antivirus scan could not be completed."
+msgstr "File upload rejected: antivirus scan could not be completed."
+
+msgid "File upload rejected: antivirus audit is unavailable."
+msgstr "File upload rejected: antivirus audit is unavailable."
+
+msgid "Session ID"
+msgstr "Session ID"
+
+msgid "Each row represents a scan, not necessarily a separate upload."
+msgstr "Each row represents a scan, not necessarily a separate upload."
+
+msgid "Total scans"
+msgstr "Total scans"
+
+msgid "No threat detected"
+msgstr "No threat detected"
+
+msgid "HTTP upload"
+msgstr "HTTP upload"
+
+msgid "Resource storage"
+msgstr "Resource storage"
+
+msgid "Asset storage"
+msgstr "Asset storage"
+
+msgid "ZIP entry"
+msgstr "ZIP entry"
+
+msgid "SCORM package"
+msgstr "SCORM package"
+
+msgid "SCORM entry"
+msgstr "SCORM entry"

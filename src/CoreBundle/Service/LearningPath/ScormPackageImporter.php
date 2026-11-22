@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Event\LearningPathCreatedEvent;
 use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Security\Upload\AntivirusGuard;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -54,6 +55,7 @@ final readonly class ScormPackageImporter
         private ScormManifestParser $manifestParser,
         private EventDispatcherInterface $eventDispatcher,
         private ResourceDefaultVisibilityHelper $resourceDefaultVisibilityHelper,
+        private AntivirusGuard $antivirusGuard,
     ) {}
 
     /**
@@ -71,6 +73,7 @@ final readonly class ScormPackageImporter
         bool $registerArchiveDocument = true,
     ): array {
         $this->assertValidUploadedPackage($package);
+        $this->antivirusGuard->assertPath($package->getPathname(), $package->getClientOriginalName(), 'scorm');
 
         $packagePath = $package->getPathname();
         $originalName = trim($package->getClientOriginalName());
@@ -199,6 +202,7 @@ final readonly class ScormPackageImporter
         }
 
         $this->assertValidUploadedPackage($package);
+        $this->antivirusGuard->assertPath($package->getPathname(), $package->getClientOriginalName(), 'scorm');
 
         $packagePath = $package->getPathname();
         $originalName = trim($package->getClientOriginalName());
@@ -687,6 +691,7 @@ final readonly class ScormPackageImporter
         }
 
         $entries = [];
+        $scanEntries = $this->antivirusGuard->isEnabled();
         $manifestCandidates = [];
         $seenEntries = [];
         $totalSize = 0;
@@ -719,6 +724,18 @@ final readonly class ScormPackageImporter
                 $totalSize += (int) ($stat['size'] ?? 0);
                 if ($totalSize > self::MAX_UNCOMPRESSED_SIZE) {
                     throw new RuntimeException('The uncompressed SCORM package is too large.');
+                }
+
+                if ($scanEntries && !$directory) {
+                    $stream = $archive->getStream($rawName);
+
+                    try {
+                        $this->antivirusGuard->assertStream($stream, basename($name), 'scorm-entry');
+                    } finally {
+                        if (\is_resource($stream)) {
+                            fclose($stream);
+                        }
+                    }
                 }
 
                 if (!$directory && 'imsmanifest.xml' === strtolower((string) basename($name))) {

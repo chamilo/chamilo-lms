@@ -61,7 +61,11 @@
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-      <div v-for="course in visibleCoursesBase" :key="course.id" class="min-w-0">
+      <div
+        v-for="course in visibleCoursesBase"
+        :key="course.id"
+        class="min-w-0"
+      >
         <CatalogueCourseCard
           :card-extra-fields="cardExtraFields"
           :course="course"
@@ -70,7 +74,6 @@
           @rate="onRatingChange"
           @subscribed="onUserSubscribed"
         />
-        <RoomFloorPlanViewer v-if="currentUserId" :course-id="course.id" />
       </div>
     </div>
 
@@ -89,7 +92,6 @@
 import { computed, onMounted, onUnmounted, ref, watch } from "vue"
 import api from "../../config/api"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import RoomFloorPlanViewer from "../../components/room/RoomFloorPlanViewer.vue"
 import Dropdown from "primevue/dropdown"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import { useNotification } from "../../composables/notification"
@@ -491,8 +493,8 @@ const visibleCoursesBase = computed(() => {
     const order = sortOpt.order
 
     list = list.slice().sort((a, b) => {
-      let valA = null
-      let valB = null
+      let valA
+      let valB
 
       if (sortOpt.type === "standard") {
         if (field.startsWith("point_info/")) {

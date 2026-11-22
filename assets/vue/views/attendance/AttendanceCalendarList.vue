@@ -83,10 +83,6 @@
             >
               {{ t("Room") }}: {{ formatRoom(event.effectiveRoom) }}
             </span>
-            <RoomFloorPlanViewer
-              v-if="event.effectiveRoom"
-              :calendar-id="event.id"
-            />
           </div>
         </div>
         <div class="flex shrink-0 gap-2">
@@ -169,7 +165,6 @@ import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import roomService from "../../services/roomService"
 import RoomFloorPlanPicker from "../../components/room/RoomFloorPlanPicker.vue"
-import RoomFloorPlanViewer from "../../components/room/RoomFloorPlanViewer.vue"
 
 // Date cards of the local portal at 1440 px (date, duration, no room).
 const CALENDAR_SKELETON = { items: 4, itemHeight: 74 }

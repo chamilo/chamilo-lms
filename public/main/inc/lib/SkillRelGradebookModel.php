@@ -106,6 +106,7 @@ class SkillRelGradebookModel extends Model
                 $attributes = [
                     'skill_id' => $skill_id,
                     'gradebook_id' => $gradebook_id,
+                    'type' => '',
                 ];
                 $this->save($attributes);
             }

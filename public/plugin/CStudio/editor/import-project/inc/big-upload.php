@@ -6,6 +6,8 @@ require_once __DIR__.'/../../../0_dal/dal.global_lib.php';
 require_once __DIR__.'/../../../inc/csrf_token.php';
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Security\Upload\AntivirusGuard;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class BigUpload
 {
@@ -223,11 +225,38 @@ class BigUpload
         }
 
         if (file_exists($tempFilePath)) {
-            $pluginFileSystem = Container::getPluginsFileSystem();
-            $fsDest = $this->mainDirectory.$finalName;
-            $stream = fopen($tempFilePath, 'rb');
-            $pluginFileSystem->writeStream($fsDest, $stream);
-            fclose($stream);
+            $guard = Container::$container->get(AntivirusGuard::class);
+            $snapshot = null;
+            $stream = null;
+            try {
+                $source = $tempFilePath;
+                if ($guard->isEnabled()) {
+                    $snapshot = tempnam(sys_get_temp_dir(), 'chamilo_av_');
+                    if (false === $snapshot || !copy($tempFilePath, $snapshot)) {
+                        throw new HttpException(503, 'File upload rejected: antivirus scan could not be completed.');
+                    }
+                    $source = $snapshot;
+                    $guard->assertPath($source, (string) $finalName, 'cstudio');
+                }
+                $pluginFileSystem = Container::getPluginsFileSystem();
+                $fsDest = $this->mainDirectory.$finalName;
+                $stream = fopen($source, 'rb');
+                if (false === $stream) {
+                    throw new HttpException(400, 'Unable to read uploaded file.');
+                }
+                $pluginFileSystem->writeStream($fsDest, $stream);
+            } catch (HttpException $exception) {
+                @unlink($tempFilePath);
+
+                return json_encode(['errorStatus' => 1, 'errorText' => $exception->getMessage()]);
+            } finally {
+                if (is_resource($stream)) {
+                    fclose($stream);
+                }
+                if (is_string($snapshot)) {
+                    @unlink($snapshot);
+                }
+            }
             unlink($tempFilePath);
 
             if ($pluginFileSystem->fileExists($fsDest)) {

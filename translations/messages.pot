@@ -43859,3 +43859,66 @@ msgstr ""
 
 msgid "Statistics count completed, graded attempts in this course and session, using the current maximum question score. Partial scores count as below full score."
 msgstr ""
+
+msgid "Antivirus scan report"
+msgstr ""
+
+msgid "Enable antivirus upload scanning"
+msgstr ""
+
+msgid "Require a successful ClamAV scan for protected upload paths. Configure the daemon before enabling this setting. This setting is global for all access URLs."
+msgstr ""
+
+msgid "Infected"
+msgstr ""
+
+msgid "Scan error"
+msgstr ""
+
+msgid "Threat"
+msgstr ""
+
+msgid "Size (bytes)"
+msgstr ""
+
+msgid "Export includes up to 10000 matching scans. Dates are in UTC."
+msgstr ""
+
+msgid "File upload rejected by antivirus."
+msgstr ""
+
+msgid "File upload rejected: antivirus scan could not be completed."
+msgstr ""
+
+msgid "File upload rejected: antivirus audit is unavailable."
+msgstr ""
+
+msgid "Session ID"
+msgstr ""
+
+msgid "Each row represents a scan, not necessarily a separate upload."
+msgstr ""
+
+msgid "Total scans"
+msgstr ""
+
+msgid "No threat detected"
+msgstr ""
+
+msgid "HTTP upload"
+msgstr ""
+
+msgid "Resource storage"
+msgstr ""
+
+msgid "Asset storage"
+msgstr ""
+
+msgid "ZIP entry"
+msgstr ""
+
+msgid "SCORM package"
+msgstr ""
+
+msgid "SCORM entry"
+msgstr ""

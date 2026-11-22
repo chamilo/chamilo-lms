@@ -23,6 +23,7 @@ use Chamilo\CoreBundle\Mcp\Dto\ResourceFileInput;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Security\Upload\AntivirusGuard;
 use Chamilo\CoreBundle\Security\Upload\UploadFilenamePolicy;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroup;
@@ -34,6 +35,7 @@ use DOMDocument;
 use DOMElement;
 use Exception;
 use InvalidArgumentException;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -1688,6 +1690,21 @@ class BaseResourceFileAction
         }
 
         $zip->close();
+
+        try {
+            $guard = Container::$container->get(AntivirusGuard::class);
+            if ($guard->isEnabled()) {
+                foreach ($extractedPaths as $extractedPath) {
+                    if (is_file($extractedPath)) {
+                        $guard->assertPath($extractedPath, basename($extractedPath), 'document-zip');
+                    }
+                }
+            }
+        } catch (Throwable $exception) {
+            (new Filesystem())->remove($extractPath);
+
+            throw $exception;
+        }
 
         $folderStructure = $this->buildFolderStructure($extractedPaths, $extractPath);
 

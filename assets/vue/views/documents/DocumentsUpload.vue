@@ -621,25 +621,28 @@ const uppy = new Uppy({
     endpoint: `/api/documents?cid=${cid}&sid=${sid}&gid=${gid}`,
     formData: true,
     fieldName: "uploadFile",
-    getResponseError: (responseText, xhr) => {
-      const status = xhr?.status
+    // A permanent validation rejection must not trigger three more uploads.
+    shouldRetry: (xhr) => xhr.status !== 422,
+    onAfterResponse: (xhr) => {
+      const status = xhr.status
+      if (status >= 200 && status < 300) return
 
       // If server returns common quota statuses, always map to the quota message.
       if (status === 507 || status === 413) {
-        return new Error(documentsService.getQuotaUploadErrorMessage(t))
+        throw new Error(documentsService.getQuotaUploadErrorMessage(t))
       }
 
-      const msg = documentsService.extractApiErrorMessageFromText(responseText)
+      const msg = documentsService.extractApiErrorMessageFromText(xhr.responseText)
 
       if (documentsService.isQuotaError(status, msg)) {
-        return new Error(documentsService.getQuotaUploadErrorMessage(t))
+        throw new Error(documentsService.getQuotaUploadErrorMessage(t))
       }
 
       if (!msg) {
-        return new Error(`Upload failed (HTTP ${status ?? "unknown"}).`)
+        throw new Error(`Upload failed (HTTP ${status ?? "unknown"}).`)
       }
 
-      return new Error(msg)
+      throw new Error(msg)
     },
   })
 
@@ -649,7 +652,12 @@ uppy.on("file-added", async (file) => {
 })
 
 uppy
-  .on("upload-error", async (file, error) => {
+  .on("upload-error", async (file, error, xhr) => {
+    if (xhr?.status === 422 && error?.message?.includes("File upload rejected by antivirus.")) {
+      uppy.info(t("File upload rejected by antivirus."), "error", 9000)
+      return
+    }
+
     // If Uppy shows a generic network error but quota says it doesn't fit, show the real message.
     const info = await refreshQuota(false)
     const availableBytes = Number(info?.availableBytes)
@@ -665,7 +673,9 @@ uppy
   .on("upload-success", (_item, response) => {
     onCreated(response.body)
   })
-  .on("complete", () => {
+  .on("complete", ({ failed }) => {
+    if (failed?.length) return
+
     const parentNodeId = parentResourceNodeId.value
     localStorage.setItem("isUploaded", "true")
     localStorage.setItem("uploadParentNodeId", parentNodeId)

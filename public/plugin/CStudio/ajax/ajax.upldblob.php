@@ -9,6 +9,8 @@ declare(strict_types=1);
  */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Security\Upload\AntivirusGuard;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use League\Flysystem\FilesystemOperator;
 
 require_once __DIR__.'/../0_dal/dal.global_lib.php';
@@ -108,6 +110,14 @@ function base64_to_jpeg_flysystem(string $base64_string, string $output_file_rel
         echo 'Error writing to output file.';
 
         return;
+    }
+    try {
+        Container::$container->get(AntivirusGuard::class)->assertContent($decoded, basename($output_file_rel), 'cstudio-blob');
+    } catch (HttpException $exception) {
+        http_response_code($exception->getStatusCode());
+        echo 'KO';
+
+        exit;
     }
     $fs->write($output_file_rel, $decoded);
 }

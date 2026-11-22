@@ -69,6 +69,17 @@ export default {
     },
     ...sectionRoutes,
     {
+      name: "AdminAntivirusScans",
+      path: "antivirus-scans",
+      meta: {
+        requiresAdmin: true,
+        showBreadcrumb: true,
+        breadcrumb: "Antivirus scan report",
+        breadcrumbParents: sectionCrumbs("security"),
+      },
+      component: () => import("../views/admin/AntivirusScans.vue"),
+    },
+    {
       name: "SurveyTemplateList",
       path: "survey-templates",
       meta: {

@@ -20,6 +20,8 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Security\Upload\AntivirusGuard;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
 use ChamiloSession as Session;
@@ -781,6 +783,13 @@ function resolveResourceNodeSourceFromC2(int $resourceNodeId): ?array
  */
 function writeResolvedDocumentContent(array $resolved, string $content): bool
 {
+    try {
+        Container::$container->get(AntivirusGuard::class)
+            ->assertContent($content, (string) ($resolved['title'] ?? 'document'), 'onlyoffice');
+    } catch (HttpException) {
+        return false;
+    }
+
     if (!empty($resolved['filePath'])) {
         $filePath = (string) $resolved['filePath'];
 

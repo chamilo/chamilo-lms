@@ -152,7 +152,7 @@ class Display
         Template::setVueParams($params);
         $content = Container::getTwig()->render($tpl, $params);
         $response->setContent($content);
-        $response->send();
+        Template::sendLegacyResponse($response);
         exit;
     }
 

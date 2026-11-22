@@ -19,6 +19,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 use const DIRECTORY_SEPARATOR;
+use const ENT_QUOTES;
 use const JSON_PRETTY_PRINT;
 use const JSON_THROW_ON_ERROR;
 use const JSON_UNESCAPED_SLASHES;
@@ -206,7 +207,7 @@ final class ThemeHelper
         return \sprintf('<link rel="stylesheet" href="%s">', $url);
     }
 
-    public function getThemeAssetScriptTag(string $path, bool $absoluteUrl = false): string
+    public function getThemeAssetScriptTag(string $path, bool $absoluteUrl = false, string $nonce = ''): string
     {
         $url = $this->getThemeAssetUrl($path, $absoluteUrl);
 
@@ -214,7 +215,9 @@ final class ThemeHelper
             return '';
         }
 
-        return \sprintf('<script src="%s"></script>', $url);
+        $nonceAttribute = '' === $nonce ? '' : ' nonce="'.htmlspecialchars($nonce, ENT_QUOTES, 'UTF-8').'"';
+
+        return \sprintf('<script src="%s"%s></script>', $url, $nonceAttribute);
     }
 
     /**

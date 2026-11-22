@@ -43922,3 +43922,21 @@ msgstr ""
 
 msgid "SCORM entry"
 msgstr ""
+
+msgid "Content Security Policy mode"
+msgstr ""
+
+msgid "Disabled preserves existing behavior. Report only observes violations without blocking. Enforce applies the configured policy. Start with Report only on a test portal. The policy applies to pages using the shared Chamilo layout."
+msgstr ""
+
+msgid "Policy used in Enforce mode. Configure and test it before enabling enforcement. Use 'nonce-{nonce}' to authorize explicitly marked core scripts with a fresh nonce per response. Leave blank to omit this header. Existing course content and plugins may need compatible directives."
+msgstr ""
+
+msgid "Policy used in Report only mode. Use 'nonce-{nonce}' to test nonce-based script protection. Violations can be inspected in browser developer tools or sent to a configured reporting endpoint. Leave blank to omit this header."
+msgstr ""
+
+msgid "Report only"
+msgstr ""
+
+msgid "Enforce"
+msgstr ""

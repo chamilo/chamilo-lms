@@ -76,6 +76,19 @@ The administration settings below limit what the editor offers, but they do not 
 - `editor.enabled_support_svg` (SVG uploads)
 - `editor.htmlpurifier_wiki` (HTMLPurifier in Wiki)
 
+### Optional Content Security Policy
+
+Chamilo 3.1 can apply a configurable Content Security Policy to HTML pages rendered with
+its shared application layout. `security.content_security_policy_mode` defaults to `disabled`.
+Start with `report_only`, review browser violations, then test `enforce` on a staging portal.
+The existing enforced and report-only policy values are preserved during upgrades.
+When a policy contains `'nonce-{nonce}'`, the application generates a fresh nonce for explicitly
+marked core scripts and prevents those responses from being cached. Arbitrary authored HTML and
+legacy script fragments do not receive a nonce. Dedicated resource policies are preserved.
+This is defense in depth, not comprehensive strict-CSP compatibility: raw files, standalone plugin
+pages and other rendering paths require independent review. Never replace an existing restrictive
+resource policy to make a feature work. See the Chamilo 3 administration documentation for setup.
+
 ## Reporting a Vulnerability
 
 Please follow the instructions at https://github.com/chamilo/chamilo-lms/wiki/security-issues to report vulnerabilities.

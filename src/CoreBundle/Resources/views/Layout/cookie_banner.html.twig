@@ -61,7 +61,8 @@
         </div>
     </div>
 
-    <script>
+    {% set csp_nonce = chamilo_csp_nonce() %}
+    <script{% if csp_nonce %} nonce="{{ csp_nonce|e('html_attr') }}"{% endif %}>
       (function () {
         "use strict";
 

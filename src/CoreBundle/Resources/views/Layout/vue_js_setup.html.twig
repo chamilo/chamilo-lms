@@ -1,4 +1,5 @@
-<script>
+{% set csp_nonce = chamilo_csp_nonce() %}
+<script{% if csp_nonce %} nonce="{{ csp_nonce|e('html_attr') }}"{% endif %}>
 window.user = {{ user_json is defined ? user_json | raw : '{}' }};
 window.is_login_url = {{ is_login_url }};
 window.access_url_id = {{ access_url_id | default(1) }};

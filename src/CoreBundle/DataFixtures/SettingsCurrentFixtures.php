@@ -57,6 +57,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
         'message_max_upload_filesize',
         'use_custom_pages',
         'security_strict_transport',
+        'content_security_policy_mode',
         'security_content_policy',
         'security_content_policy_report_only',
         'security_public_key_pins',
@@ -3365,14 +3366,20 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'comment' => 'Immediately block users who have been disabled by the admin through users management. Otherwise, users who have been disabled will keep their previous privileges until they logout.',
                 ],
                 [
+                    'name' => 'content_security_policy_mode',
+                    'title' => 'Content Security Policy mode',
+                    'comment' => 'Disabled preserves existing behavior. Report only observes violations without blocking. Enforce applies the configured policy. Start with Report only on a test portal. The policy applies to pages using the shared Chamilo layout.',
+                    'selected_value' => 'disabled',
+                ],
+                [
                     'name' => 'security_content_policy',
                     'title' => 'Content Security Policy',
-                    'comment' => "Content Security Policy is an effective measure to protect your site from XSS attacks. By whitelisting sources of approved content, you can prevent the browser from loading malicious assets. This setting is particularly complicated to set with WYSIWYG editors, but if you add all domains that you want to authorize for iframes inclusion in the child-src statement, this example should work for you. You can prevent JavaScript from executing from external sources (including inside SVG images) by using a strict list in the 'script-src' argument. Leave blank to disable. Example setting: default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;",
+                    'comment' => "Policy used in Enforce mode. Configure and test it before enabling enforcement. Use 'nonce-{nonce}' to authorize explicitly marked core scripts with a fresh nonce per response. Leave blank to omit this header. Existing course content and plugins may need compatible directives.",
                 ],
                 [
                     'name' => 'security_content_policy_report_only',
                     'title' => 'Content Security Policy report only',
-                    'comment' => 'This setting allows you to experiment by reporting but not enforcing some Content Security Policy.',
+                    'comment' => "Policy used in Report only mode. Use 'nonce-{nonce}' to test nonce-based script protection. Violations can be inspected in browser developer tools or sent to a configured reporting endpoint. Leave blank to omit this header.",
                 ],
                 [
                     'name' => 'security_public_key_pins',

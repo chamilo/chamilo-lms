@@ -1,4 +1,5 @@
-{{ encore_entry_script_tags('vue') }}
+{% set csp_nonce = chamilo_csp_nonce() %}
+{{ encore_entry_script_tags('vue', attributes=csp_nonce ? {'nonce': csp_nonce} : {}) }}
 
 {# tracking.footer_extra_content: inject raw HTML before </body> #}
 {% set tracking_footer_extra = chamilo_settings_get('tracking.footer_extra_content')|default('')|trim %}

@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Security\ContentSecurityPolicy;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -610,6 +611,32 @@ class Template
         $response = new Response();
         $content = Container::getTwig()->render($template, $params);
         $response->setContent($content);
+        self::sendLegacyResponse($response);
+    }
+
+    /**
+     * The two direct legacy Twig renderers bypass Symfony kernel.response.
+     */
+    public static function sendLegacyResponse(Response $response): void
+    {
+        $container = Container::$container;
+        $request = Container::getRequest();
+        if (null !== $container
+            && null !== $request
+            && null === $container->get('request_stack')->getCurrentRequest()
+            && $request->request->getBoolean('load_legacy')
+            && !headers_sent()
+        ) {
+            $hasExistingPolicy = false;
+            foreach (headers_list() as $header) {
+                $name = strtolower(trim(explode(':', $header, 2)[0]));
+                if (in_array($name, ['content-security-policy', 'content-security-policy-report-only'], true)) {
+                    $hasExistingPolicy = true;
+                    break;
+                }
+            }
+            $container->get(ContentSecurityPolicy::class)->apply($request, $response, $hasExistingPolicy);
+        }
         $response->send();
     }
 

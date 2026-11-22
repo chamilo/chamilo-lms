@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Settings;
 
 use Chamilo\CoreBundle\Form\Type\YesNoType;
+use Chamilo\CoreBundle\Security\ContentSecurityPolicy;
 use Chamilo\CoreBundle\Security\RememberMeLifetime;
 use Chamilo\CoreBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
@@ -16,7 +17,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Json;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Range;
+use Symfony\Component\Validator\Constraints\Regex;
 
 class SecuritySettingsSchema extends AbstractSettingsSchema
 {
@@ -37,6 +40,7 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             'prevent_multiple_simultaneous_login' => 'false',
             'check_password' => 'false',
             'security_strict_transport' => 'strict-transport-security: max-age=31536000; includeSubDomains',
+            'content_security_policy_mode' => ContentSecurityPolicy::MODE_DISABLED,
             'security_content_policy' => "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; child-src 'self' *.youtube.com yt.be *.vimeo.com *.slideshare.com;",
             'security_content_policy_report_only' => "default-src 'self'; script-src *://*.google.com:*",
             'security_public_key_pins' => '',
@@ -107,8 +111,26 @@ class SecuritySettingsSchema extends AbstractSettingsSchema
             ->add('prevent_multiple_simultaneous_login', YesNoType::class)
             ->add('check_password', YesNoType::class)
             ->add('security_strict_transport', TextType::class)
-            ->add('security_content_policy', TextType::class)
-            ->add('security_content_policy_report_only', TextType::class)
+            ->add('content_security_policy_mode', ChoiceType::class, [
+                'choices' => [
+                    'Disabled' => ContentSecurityPolicy::MODE_DISABLED,
+                    'Report only' => ContentSecurityPolicy::MODE_REPORT_ONLY,
+                    'Enforce' => ContentSecurityPolicy::MODE_ENFORCE,
+                ],
+                'placeholder' => false,
+            ])
+            ->add('security_content_policy', TextType::class, [
+                'constraints' => [
+                    new Length(max: ContentSecurityPolicy::MAX_POLICY_LENGTH),
+                    new Regex(pattern: ContentSecurityPolicy::POLICY_PATTERN),
+                ],
+            ])
+            ->add('security_content_policy_report_only', TextType::class, [
+                'constraints' => [
+                    new Length(max: ContentSecurityPolicy::MAX_POLICY_LENGTH),
+                    new Regex(pattern: ContentSecurityPolicy::POLICY_PATTERN),
+                ],
+            ])
             ->add('security_public_key_pins', TextType::class)
             ->add('security_public_key_pins_report_only', TextType::class)
             ->add('security_x_frame_options', TextType::class)

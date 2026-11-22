@@ -1,4 +1,5 @@
 <head>
+    {% set csp_nonce = chamilo_csp_nonce(true) %}
     <meta charset="utf-8">
     <meta name="generator" content="Chamilo">
     <link href="https://chamilo.org/chamilo-lms/" rel="help" />
@@ -50,7 +51,7 @@
     {% set mathjax_raw = chamilo_settings_get('editor.enabled_mathjax')|default('')|trim|lower %}
     {% set mathjax_enabled = mathjax_raw in ['true', '1', 'yes', 'on', 'enabled'] %}
 
-    <script>
+    <script{% if csp_nonce %} nonce="{{ csp_nonce|e('html_attr') }}"{% endif %}>
       window.CH_AI_DISCLOSURE_ENABLED = {{ ai_disclosure_enabled ? 'true' : 'false' }};
       window.CH_DISABLE_COPY_PASTE = {{ disable_copy_paste_enabled ? 'true' : 'false' }};
       window.Chamilo = window.Chamilo || {};
@@ -157,13 +158,13 @@
     {% endblock %}
 
     {# --- TinyMCE shared base config (load before any TinyMCE usage) --- #}
-    {{ theme_asset_script_tag('tiny-settings.js') }}
+    {{ theme_asset_script_tag('tiny-settings.js', false, csp_nonce) }}
 
-    {{ encore_entry_script_tags('legacy_free-jqgrid') }}
-    {{ encore_entry_script_tags('legacy_app') }}
-    {{ encore_entry_script_tags('legacy_lp') }}
-    {{ encore_entry_script_tags('legacy_exercise') }}
-    {{ encore_entry_script_tags('legacy_document') }}
+    {{ encore_entry_script_tags('legacy_free-jqgrid', attributes=csp_nonce ? {'nonce': csp_nonce} : {}) }}
+    {{ encore_entry_script_tags('legacy_app', attributes=csp_nonce ? {'nonce': csp_nonce} : {}) }}
+    {{ encore_entry_script_tags('legacy_lp', attributes=csp_nonce ? {'nonce': csp_nonce} : {}) }}
+    {{ encore_entry_script_tags('legacy_exercise', attributes=csp_nonce ? {'nonce': csp_nonce} : {}) }}
+    {{ encore_entry_script_tags('legacy_document', attributes=csp_nonce ? {'nonce': csp_nonce} : {}) }}
 
     {# Add third party js libraries that can't be loaded using webpack #}
     {# <script src="{{ asset('libs/readmore-js/readmore.js') }}"></script> #}

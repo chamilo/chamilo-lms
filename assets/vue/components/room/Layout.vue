@@ -5,7 +5,7 @@
       icon="dots-vertical"
       only-icon
       popup-identifier="room-menu"
-      type="black"
+      type="tertiary-alternative"
       @click="toggleMenu"
     />
 

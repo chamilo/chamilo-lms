@@ -255,7 +255,7 @@ onMounted(() => {
       <BaseButton
         :label="t('Back')"
         icon="back"
-        type="black"
+        type="tertiary-alternative"
         :route="{ name: 'AdminUsergroupList' }"
       />
       <BaseButton
@@ -301,7 +301,7 @@ onMounted(() => {
         <BaseButton
           :label="t('Clear')"
           icon="close"
-          type="black"
+          type="tertiary-alternative"
           size="small"
           :disabled="!keyword && (!firstLetter || firstLetter === '%') && !selectedExtraFieldId"
           @click="clearFilters"
@@ -519,7 +519,7 @@ onMounted(() => {
       <BaseButton
         :label="t('Cancel')"
         icon="back"
-        type="black"
+        type="tertiary-alternative"
         :route="{ name: 'AdminUsergroupList' }"
       />
       <BaseButton

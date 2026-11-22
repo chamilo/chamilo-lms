@@ -106,7 +106,7 @@
           <BaseAppLink
             v-else
             :url="`/main/session/resume_session.php?id_session=${data.id}`"
-            class="text-blue-600 hover:underline"
+            class="table-link"
           >
             {{ data.title }}
           </BaseAppLink>
@@ -244,7 +244,7 @@
       <BaseButton
         :label="t('Refresh')"
         icon="refresh"
-        type="black"
+        type="tertiary-alternative"
         size="small"
         @click="load"
       />

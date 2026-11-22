@@ -8,7 +8,7 @@
         icon="folder-plus"
         size="normal"
         @click="goToNewAssignment"
-        type="black"
+        type="tertiary-alternative"
         :label="t('Create Assignment')"
         :onlyIcon="true"
       />
@@ -17,7 +17,7 @@
         icon="account"
         size="normal"
         @click="openProgressDialog"
-        type="black"
+        type="tertiary-alternative"
         :label="t('Student progress')"
         :onlyIcon="true"
       />

@@ -22,13 +22,13 @@
       field="title"
     >
       <template #body="slotProps">
-        <a
+        <BaseAppLink
           v-if="slotProps.data"
-          class="cursor-pointer"
-          @click="onShowItem(slotProps.data)"
+          :to="{ name: 'PageShow', query: { ...route.query, id: slotProps.data['@id'] } }"
+          class="table-link"
         >
           {{ slotProps.data.title }}
-        </a>
+        </BaseAppLink>
       </template>
     </Column>
 
@@ -319,7 +319,7 @@ import { computed, inject, onMounted, reactive, ref } from "vue"
 import { useI18n } from "vue-i18n"
 import { useNotification } from "../../composables/notification"
 import { useSecurityStore } from "../../store/securityStore"
-import { useRouter } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useLocale } from "../../composables/locale"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -329,12 +329,13 @@ import FloatLabel from "primevue/floatlabel"
 import Message from "primevue/message"
 
 const router = useRouter()
+const route = useRoute()
 const store = useStore()
 const securityStore = useSecurityStore()
 
 const { t } = useI18n()
 
-const { filters, options, onUpdateOptions, onShowItem, goToEditItem, deleteItem } = useDatatableList("Page")
+const { filters, options, onUpdateOptions, goToEditItem, deleteItem } = useDatatableList("Page")
 const { getLanguageName, fetchLanguageNameFromApi } = useLocale()
 const langMap = reactive({})
 

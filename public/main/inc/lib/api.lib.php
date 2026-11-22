@@ -969,6 +969,27 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return true;
     }
 
+    // Direct-course suspension also applies to public courses, but never to sessions.
+    if (0 === (int) api_get_session_id()
+        && filter_var(api_get_setting('workflows.teacher_defined_student_access_to_course'), FILTER_VALIDATE_BOOLEAN)
+    ) {
+        $currentUserId = (int) api_get_user_id();
+        $courseId = (int) ($course_info['real_id'] ?? 0);
+        if ($currentUserId > 0 && $courseId > 0) {
+            $subscription = Database::getManager()->getRepository(CourseRelUser::class)->findOneBy([
+                'course' => $courseId,
+                'user' => $currentUserId,
+                'status' => CourseRelUser::STUDENT,
+            ]);
+
+            if ($subscription instanceof CourseRelUser && 0 === $subscription->getVisibility()) {
+                api_not_allowed($print_headers);
+
+                return false;
+            }
+        }
+    }
+
     $isAllowedInCourse = api_is_allowed_in_course();
     $is_visible = false;
     if (isset($course_info) && isset($course_info['visibility'])) {

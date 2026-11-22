@@ -102,7 +102,12 @@ if ($isCli) {
 
         $response = $event->getResponse();
         if (!$response) {
-            $response = new Response('An error occurred.', 500);
+            // Same as the exception handler below: keep the status of the exception (e.g. a 403 for a JSON caller).
+            try {
+                $response = $kernel->getContainer()->get(ErrorController::class)->show($request, $exception);
+            } catch (\Throwable) {
+                $response = new Response('An error occurred.', 500);
+            }
         }
 
         $response->send();

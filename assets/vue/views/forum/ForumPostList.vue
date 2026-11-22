@@ -10,7 +10,7 @@
         icon="back"
         only-icon
         size="small"
-        type="black"
+        type="tertiary-alternative"
       />
       <BaseButton
         v-if="canReply"
@@ -44,7 +44,7 @@
         icon="back"
         only-icon
         size="small"
-        type="black"
+        type="tertiary-alternative"
         @click="goBackToLearningPath"
       />
       <label class="flex items-center gap-2 text-xs text-gray-600">
@@ -463,7 +463,7 @@
           :label="t('Load more')"
           icon="plus"
           size="small"
-          type="black"
+          type="tertiary-alternative"
           @click="loadNextPage"
         />
       </div>

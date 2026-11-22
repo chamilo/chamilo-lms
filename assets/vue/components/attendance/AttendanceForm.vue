@@ -40,7 +40,7 @@
           :label="t('Require unique presence')"
           name="attendance_require_unique"
         />
-        <p class="text-xs text-gray-500">
+        <p class="text-caption text-gray-50">
           {{ t("If enabled, the gradebook will give a learner 100% when present at least once.") }}
         </p>
       </div>
@@ -91,7 +91,7 @@
       <BaseButton
         :label="t('Back')"
         icon="back"
-        type="black"
+        type="tertiary-alternative"
         @click="emit('backPressed', route.query)"
       />
       <BaseButton

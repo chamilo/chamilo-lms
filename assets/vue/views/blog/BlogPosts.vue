@@ -23,7 +23,7 @@
             :label="t('Search')"
             class="w-full"
             icon="search"
-            type="black"
+            type="tertiary-alternative"
             @click="reload()"
           />
         </div>
@@ -224,14 +224,14 @@
                 :disabled="page <= 1"
                 :label="t('Prev')"
                 icon="arrow-left"
-                type="black"
+                type="tertiary-alternative"
                 @click="page--"
               />
               <BaseButton
                 :disabled="page >= pages"
                 :label="t('Next')"
                 icon="arrow-right"
-                type="black"
+                type="tertiary-alternative"
                 @click="page++"
               />
             </div>

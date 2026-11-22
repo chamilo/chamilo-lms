@@ -1886,6 +1886,12 @@ class CourseHelper
 
         // An active service extends benefits, not the right to create a course.
         $currentActor = $this->security->getUser();
+        if ($currentActor instanceof User
+            && !$this->security->isGranted('ROLE_ADMIN')
+            && 'true' === $this->settingsManager->getSetting('course.course_validation', true)
+        ) {
+            throw new RuntimeException($this->translator->trans('Course creation requires administrator approval. Submit a course request instead.'));
+        }
         if ($currentActor instanceof User && !$this->hasCourseCreationRole($currentActor)) {
             throw new RuntimeException($this->translator->trans('You do not have permission to create courses.'));
         }

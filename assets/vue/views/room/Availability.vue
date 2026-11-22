@@ -45,7 +45,7 @@
           <template #body="slotProps">
             <BaseAppLink
               :to="{ name: 'RoomOccupation', params: { id: slotProps.data.id } }"
-              class="text-primary hover:underline"
+              class="table-link"
             >
               {{ slotProps.data.title }}
             </BaseAppLink>

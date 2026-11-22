@@ -1,7 +1,11 @@
 <template>
   <span
     class="base-icon"
-    :class="[size !== 'custom' && `base-icon--${size}`, { 'base-icon--has-tooltip': tooltip }]"
+    :class="[
+      size !== 'custom' && `base-icon--${size}`,
+      { 'base-icon--has-tooltip': tooltip },
+      badgeCompact && badgeIconClass && ['base-icon--compact-badge', `base-icon--compact-badge-${badgePosition}`],
+    ]"
     v-bind="attrs"
   >
     <i
@@ -11,7 +15,7 @@
 
     <!-- Optional badge: supports text or a chamilo icon -->
     <span
-      v-if="badge || badgeIcon"
+      v-if="badge || badgeIconClass"
       class="base-icon__badge"
       :class="[`base-icon__badge--${badgePosition}`, badgeClass]"
     >
@@ -64,6 +68,10 @@ const props = defineProps({
     type: String,
     default: "",
     validator: (value) => value === "" || Object.keys(chamiloIconToClass).includes(value),
+  },
+  badgeCompact: {
+    type: Boolean,
+    default: false,
   },
   badgeClass: {
     type: String,

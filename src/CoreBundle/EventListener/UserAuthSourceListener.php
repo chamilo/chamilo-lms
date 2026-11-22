@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Security\Authenticator\LoginTokenAuthenticator;
+use Chamilo\CoreBundle\Security\Badge\CasBadge;
 use Chamilo\CoreBundle\Security\Badge\OAuth2Badge;
 use Symfony\Component\Ldap\Security\LdapBadge;
 use Symfony\Component\Ldap\Security\LdapUser;
@@ -49,6 +50,14 @@ final readonly class UserAuthSourceListener
 
         $currentAccessUrl = $this->accessUrlHelper->getCurrent();
         $authenticationTypes = $user->getAuthSourcesAuthentications($currentAccessUrl);
+
+        if ($passport->hasBadge(CasBadge::class)) {
+            if (!\in_array(UserAuthSource::CAS, $authenticationTypes, true)) {
+                throw new CustomUserMessageAuthenticationException('User authentication method not allowed');
+            }
+
+            return;
+        }
 
         if ($oAuth2Badge = $passport->getBadge(OAuth2Badge::class)) {
             if (!\in_array($oAuth2Badge->getAuthentication(), $authenticationTypes)) {

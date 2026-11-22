@@ -94,7 +94,7 @@
           v-else
           icon="close"
           :label="t('Cancel')"
-          type="black"
+          type="tertiary-alternative"
           @click="toggleSearch"
         />
       </div>
@@ -179,12 +179,12 @@
       >
         <template #body="{ data }">
           <div class="flex min-w-0 items-center gap-2">
-            <router-link
-              class="min-w-0 break-words font-semibold text-primary hover:underline"
+            <BaseAppLink
+              class="table-link min-w-0 break-words"
               :to="getDetailRoute(data)"
             >
               {{ data.title }}
-            </router-link>
+            </BaseAppLink>
 
             <BaseIcon
               v-if="data.emailSent"

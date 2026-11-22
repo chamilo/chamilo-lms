@@ -143,12 +143,12 @@
             field="updatedAt"
           >
             <template #body="slotProps">
-              <router-link
-                class="font-medium text-primary hover:underline"
+              <BaseAppLink
+                class="table-link"
                 :to="getVersionRoute(slotProps.data.iid)"
               >
                 {{ formatDate(slotProps.data.updatedAt) }}
-              </router-link>
+              </BaseAppLink>
             </template>
           </Column>
 

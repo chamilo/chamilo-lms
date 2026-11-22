@@ -471,8 +471,8 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 ],
                 [
                     'name' => 'course_images_in_courses_list',
-                    'title' => 'Courses custom icons',
-                    'comment' => 'Use course images as the course icon in courses lists (instead of the default green blackboard icon).',
+                    'title' => 'Custom thumbnails for courses',
+                    'comment' => 'Show course-specific thumbnails in course lists. When disabled, use the default course image.',
                 ],
             ],
             'editor' => [
@@ -1262,12 +1262,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'cas_activate',
                     'title' => 'Enable CAS authentication',
-                    'comment' => "Enabling CAS authentication will allow users to authenticate with their CAS credentials.<br/>Go to <a href='settings.php?category=CAS'>Plugin</a> to add a configurable 'CAS Login' button for your Chamilo campus. Or you can force CAS authentication by setting cas[force_redirect] in app/config/auth.conf.php.",
+                    'comment' => 'Enable the CAS sign-in button when the server and portal URL are correctly configured.',
                 ],
                 [
                     'name' => 'cas_add_user_activate',
                     'title' => 'Enable CAS user addition',
-                    'comment' => 'Enable CAS user addition. To create the user account from the LDAP directory, the extldap_config and extldap_user_correspondance tables must be filled in in app/config/auth.conf.php',
+                    'comment' => 'Use false to disable automatic creation, platform to use CAS attributes, or extldap to use the configured LDAP directory.',
                 ],
                 [
                     'name' => 'cas_port',
@@ -1277,7 +1277,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'cas_protocol',
                     'title' => 'Main CAS server protocol',
-                    'comment' => 'The protocol with which we connect to the CAS server',
+                    'comment' => 'Select CAS1, CAS2 (default), or CAS3. TLS is always required. The legacy SAML 1.1 protocol is not supported.',
                 ],
                 [
                     'name' => 'cas_server',
@@ -1292,7 +1292,7 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                 [
                     'name' => 'update_user_info_cas_with_ldap',
                     'title' => 'Update CAS-authenticated user account information from LDAP',
-                    'comment' => 'Makes sure the user firstname, lastname and email address are the same as current values in the LDAP directory',
+                    'comment' => 'Update the first name, last name and email from the configured LDAP directory over verified LDAPS. Roles and passwords are never synchronized by CAS.',
                 ],
             ],
             'exercise' => [
@@ -2275,6 +2275,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'portfolio_advanced_sharing',
                     'title' => 'Enable portfolio advanced sharing',
                     'comment' => 'Decide who can view the posts and comments of the portfolio.',
+                ],
+                [
+                    'name' => 'portfolio_order_post_by_alphabetical_order',
+                    'title' => 'Order portfolio posts alphabetically by default',
+                    'comment' => 'When enabled, portfolio posts are initially sorted by title instead of newest first. Users may still change the order using the portfolio filter.',
                 ],
                 [
                     'name' => 'portfolio_show_base_course_post_in_sessions',
@@ -3285,6 +3290,12 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
             ],
             'security' => [
                 [
+                    'name' => 'antivirus_upload_enabled',
+                    'title' => 'Enable antivirus upload scanning',
+                    'comment' => 'Require a successful ClamAV scan for protected upload paths. Configure the daemon before enabling this setting. This setting is global for all access URLs.',
+                    'selected_value' => 'false',
+                ],
+                [
                     'name' => 'teacher_use_js',
                     'title' => 'Teachers can use JavaScript in WYSIWYG editors',
                     'comment' => 'When disabled, apply the teacher HTMLPurifier profile to content that was explicitly marked as trusted teacher HTML. Scripts and unsafe HTML attributes are removed from those paths. This is a global setting for all access URLs.',
@@ -4061,6 +4072,11 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'name' => 'allow_user_course_subscription_by_course_admin',
                     'title' => 'Allow User Course Subscription By Course Admininistrator',
                     'comment' => 'Activate this option will allow course administrator to subscribe users inside a course',
+                ],
+                [
+                    'name' => 'teacher_defined_student_access_to_course',
+                    'title' => 'Allow teachers to disable individual student access to a course',
+                    'comment' => 'Let course teachers suspend and restore direct course access without unsubscribing students or deleting their progress. This is a global setting and does not affect session access.',
                 ],
                 [
                     'name' => 'teacher_can_select_course_template',

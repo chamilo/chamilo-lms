@@ -44,7 +44,7 @@
           :route="reportingRoute"
           icon="tracking"
           only-icon
-          type="black"
+          type="tertiary-alternative"
         />
       </SectionHeader>
 

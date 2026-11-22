@@ -287,6 +287,47 @@ class CourseRepositoryTest extends AbstractApiTest
         $this->assertResponseIsSuccessful();
     }
 
+    public function testSubscriptionChecksDoNotLoadWholeRoster(): void
+    {
+        /** @var CourseRepository $courseRepo */
+        $courseRepo = self::getContainer()->get(CourseRepository::class);
+
+        $course = $this->createCourse('Roster course');
+        $teacher = $this->createUser('roster_teacher', 'roster_teacher');
+        $student = $this->createUser('roster_student', 'roster_student');
+        $other = $this->createUser('roster_other', 'roster_other');
+
+        $course->addSubscriptionForUser($teacher, 0, null, CourseRelUser::TEACHER);
+        $course->addSubscriptionForUser($student, 0, null, CourseRelUser::STUDENT);
+        $courseRepo->update($course);
+
+        $em = $this->getEntityManager();
+        $courseId = $course->getId();
+        $teacherId = $teacher->getId();
+        $studentId = $student->getId();
+        $otherId = $other->getId();
+        $em->clear();
+
+        // Fresh entities: the subscriptions collection of the course is not loaded.
+        $course = $em->find(Course::class, $courseId);
+        $teacher = $em->find($teacher::class, $teacherId);
+        $student = $em->find($student::class, $studentId);
+        $other = $em->find($other::class, $otherId);
+
+        $this->assertTrue($course->hasUserAsTeacher($teacher));
+        $this->assertFalse($course->hasUserAsTeacher($student));
+        $this->assertFalse($course->hasUserAsTeacher($other));
+        $this->assertTrue($course->hasUserAsStudent($student));
+        $this->assertFalse($course->hasUserAsStudent($teacher));
+        $this->assertNotNull($course->getSubscriptionByUser($student));
+        $this->assertNull($course->getSubscriptionByUser($other));
+        $this->assertCount(1, $course->getTeachersSubscriptions());
+        $this->assertSame($teacherId, $course->getTeachersSubscriptions()->first()->getUser()->getId());
+
+        // None of the checks above had to hydrate the whole roster.
+        $this->assertFalse($course->getUsers()->isInitialized());
+    }
+
     public function testCourseRegisteredVisibility(): void
     {
         /** @var CourseRepository $courseRepo */

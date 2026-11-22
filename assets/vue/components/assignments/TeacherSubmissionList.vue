@@ -37,15 +37,15 @@
               v-if="data.correctionTitle"
               class="text-green-600"
             >
-              <a
+              <BaseAppLink
                 v-if="data.correctionDownloadUrl"
-                :href="data.correctionDownloadUrl"
+                :url="data.correctionDownloadUrl"
                 target="_blank"
                 download
                 class="text-green-50 hover:underline"
               >
                 <i class="mdi mdi-check-circle"></i>
-              </a>
+              </BaseAppLink>
               <i
                 v-else
                 class="mdi mdi-check-circle"

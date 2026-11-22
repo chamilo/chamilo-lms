@@ -9,7 +9,7 @@
           only-icon
           size="normal"
           :tooltip="t('Back')"
-          type="black"
+          type="tertiary-alternative"
         />
       </template>
     </BaseToolbar>

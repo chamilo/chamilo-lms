@@ -1,91 +1,117 @@
 <template>
-  <div class="p-4">
-    <!-- Toolbar -->
-    <BaseToolbar>
-      <template #start>
-        <BaseButton
-          icon="back"
-          size="normal"
-          type="black"
-          @click="redirectToAttendanceSheet"
-          :title="t('Back to attendance sheet')"
-        />
-        <BaseButton
-          icon="plus"
-          size="normal"
-          type="black"
-          @click="redirectToAddCalendarEvent"
-          :title="t('Add calendar event')"
-        />
-        <BaseButton
-          icon="clear-all"
-          size="normal"
-          type="black"
-          @click="clearAllEvents"
-          :title="t('Clear all')"
-        />
-      </template>
-    </BaseToolbar>
+  <section class="space-y-4">
+    <SectionHeader
+      :show-student-view-button="false"
+      :title="t('Calendar')"
+      icon="calendar-clock"
+    >
+      <BaseButton
+        :label="t('Back to attendance sheet')"
+        icon="back"
+        only-icon
+        type="tertiary-alternative-text"
+        @click="redirectToAttendanceSheet"
+      />
+      <BaseButton
+        :label="t('Add calendar event')"
+        icon="plus"
+        type="success"
+        @click="redirectToAddCalendarEvent"
+      />
+      <BaseButton
+        :disabled="isLoading || calendarEvents.length === 0"
+        :label="t('Clear all')"
+        icon="clear-all"
+        type="danger"
+        @click="clearAllEvents"
+      />
+    </SectionHeader>
 
-    <!-- Informative Message -->
-    <div class="p-4 mb-4 text-primary bg-gray-15 border border-gray-25 rounded">
-      <p>
-        {{
-          t(
-            "The attendance calendar allows you to register attendance lists (one per real session the students need to attend). Add new attendance lists here.",
-          )
-        }}
-      </p>
+    <p class="text-body-2 text-gray-50">
+      {{
+        t(
+          "The attendance calendar allows you to register attendance lists (one per real session the students need to attend). Add new attendance lists here.",
+        )
+      }}
+    </p>
+
+    <div
+      v-if="isLoading"
+      aria-busy="true"
+      class="flex flex-col gap-4"
+    >
+      <Skeleton
+        v-for="index in CALENDAR_SKELETON.items"
+        :key="index"
+        :height="`${CALENDAR_SKELETON.itemHeight}px`"
+      />
     </div>
 
-    <!-- Calendar Events List -->
-    <div class="calendar-list flex flex-col gap-4">
-      <div
+    <p
+      v-else-if="calendarEvents.length === 0"
+      class="text-body-2 text-gray-50"
+    >
+      {{ t("No data available") }}
+    </p>
+
+    <ul
+      v-else
+      class="flex flex-col gap-4"
+    >
+      <li
         v-for="event in calendarEvents"
         :key="event.id"
-        class="calendar-item flex justify-between items-center border border-gray-25 rounded bg-gray-10 p-4"
+        class="flex items-center justify-between gap-4 rounded-lg border border-gray-25 bg-white p-4 shadow-sm"
       >
-        <div class="flex items-start gap-2">
-          <i class="mdi mdi-calendar text-primary text-lg mt-1"></i>
-          <div class="flex flex-col">
-            <span class="text-gray-90">
+        <div class="flex items-center gap-4">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-support-1 text-primary">
+            <BaseIcon icon="calendar-clock" />
+          </span>
+          <div class="flex flex-col gap-1">
+            <span class="text-body-1 font-semibold text-gray-90">
               {{ formatDateTime(event.dateTime) }}
-              <template v-if="event.duration !== null && event.duration !== undefined">
-                · {{ t("{0} min", [event.duration]) }}
-              </template>
+            </span>
+            <span
+              v-if="event.duration !== null && event.duration !== undefined"
+              class="text-body-2 text-gray-50"
+            >
+              {{ t("{0} min", [event.duration]) }}
             </span>
             <span
               v-if="event.effectiveRoom"
-              class="text-sm text-gray-600"
+              class="text-body-2 text-gray-50"
             >
               {{ t("Room") }}: {{ formatRoom(event.effectiveRoom) }}
             </span>
-            <RoomFloorPlanViewer v-if="event.effectiveRoom" :calendar-id="event.id" />
           </div>
         </div>
-        <div class="calendar-actions flex gap-2">
+        <div class="flex shrink-0 gap-2">
           <BaseButton
-            icon="edit"
-            type="warning"
+            :label="t('Edit')"
+            icon="pencil"
+            only-icon
+            size="small"
+            type="secondary-text"
             @click="openEditDialog(event)"
           />
           <BaseButton
+            :label="t('Delete')"
             icon="delete"
-            type="danger"
-            @click="openDeleteDialog(event.id)"
+            only-icon
+            size="small"
+            type="danger-text"
+            @click="confirmDeleteEvent(event.id)"
           />
         </div>
-      </div>
-    </div>
+      </li>
+    </ul>
 
-    <!-- Edit Dialog -->
-    <Dialog
-      v-model:visible="editDialogVisible"
-      :header="t('Edit calendar event')"
-      :modal="true"
-      :closable="false"
+    <BaseDialog
+      v-model:is-visible="editDialogVisible"
+      :title="t('Edit calendar event')"
+      header-icon="pencil"
     >
-      <div class="p-fluid flex flex-col gap-4">
+      <div class="flex flex-col gap-4">
         <BaseCalendar
           id="date_time"
           v-model="selectedEventDate"
@@ -93,22 +119,12 @@
           :show-time="true"
         />
 
-        <div class="field">
-          <label
-            class="block mb-1 text-gray-90"
-            :for="`duration-${selectedEvent?.id || ''}`"
-          >
-            {{ t("Duration") }}
-          </label>
-          <input
-            :id="`duration-${selectedEvent?.id || ''}`"
-            v-model.number="selectedEventDuration"
-            type="number"
-            min="0"
-            class="w-full rounded border border-gray-25 px-3 py-2 text-sm text-gray-90 focus:outline-none"
-            :placeholder="t('Duration in minutes')"
-          />
-        </div>
+        <BaseInputNumber
+          :id="`duration-${selectedEvent?.id || ''}`"
+          v-model="selectedEventDuration"
+          :label="t('Duration in minutes')"
+          :min="0"
+        />
 
         <BaseSelect
           id="attendance_calendar_room"
@@ -116,84 +132,67 @@
           :label="t('Room')"
           :options="roomOptions"
         />
-        <RoomFloorPlanPicker v-model="selectedEventRoom" :rooms="floorPlanRooms" />
+        <RoomFloorPlanPicker
+          v-model="selectedEventRoom"
+          :rooms="floorPlanRooms"
+        />
       </div>
-      <div class="dialog-actions mt-4">
+      <template #footer>
         <BaseButton
           :label="t('Save')"
-          icon="check"
+          icon="save"
           type="success"
           @click="updateCalendarEvent"
         />
-        <BaseButton
-          :label="t('Cancel')"
-          icon="times"
-          type="danger"
-          @click="closeEditDialog"
-        />
-      </div>
-    </Dialog>
-
-    <!-- Delete Dialog -->
-    <Dialog
-      v-model:visible="deleteDialogVisible"
-      :header="t('Delete calendar event')"
-      :modal="true"
-      :closable="false"
-    >
-      <p>{{ t("Are you sure you want to delete this event?") }}</p>
-      <div class="dialog-actions">
-        <BaseButton
-          :label="t('Yes')"
-          icon="check"
-          type="danger"
-          @click="deleteCalendarEventConfirmed"
-        />
-        <BaseButton
-          :label="t('No')"
-          icon="times"
-          type="secondary"
-          @click="closeDeleteDialog"
-        />
-      </div>
-    </Dialog>
-  </div>
+      </template>
+    </BaseDialog>
+  </section>
 </template>
 <script setup>
 import { computed, ref, onMounted } from "vue"
 import { useRouter, useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
 import attendanceService from "../../services/attendanceService"
-import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
-import Dialog from "primevue/dialog"
+import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
+import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import BaseInputNumber from "../../components/basecomponents/BaseInputNumber.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import Skeleton from "primevue/skeleton"
+import { useConfirmation } from "../../composables/useConfirmation"
+import { useNotification } from "../../composables/notification"
 import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import roomService from "../../services/roomService"
 import RoomFloorPlanPicker from "../../components/room/RoomFloorPlanPicker.vue"
-import RoomFloorPlanViewer from "../../components/room/RoomFloorPlanViewer.vue"
+
+// Date cards of the local portal at 1440 px (date, duration, no room).
+const CALENDAR_SKELETON = { items: 4, itemHeight: 74 }
 
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
+const { requireConfirmation } = useConfirmation()
+const { showErrorNotification } = useNotification()
 const calendarEvents = ref([])
-const isLoading = ref(false)
+const isLoading = ref(true)
 const editDialogVisible = ref(false)
-const deleteDialogVisible = ref(false)
 const selectedEvent = ref(null)
 
 const selectedEventDate = ref(null)
 const selectedEventDuration = ref(null)
 const selectedEventRoom = ref(null)
 const roomOptions = ref([])
-const floorPlanRooms = computed(() => roomOptions.value.filter((option) => option.room).map((option) => ({
-  id: option.value,
-  name: option.label,
-  branch: option.room.branch,
-  roomMap: option.room.roomMap,
-})))
-
-const eventIdToDelete = ref(null)
+const floorPlanRooms = computed(() =>
+  roomOptions.value
+    .filter((option) => option.room)
+    .map((option) => ({
+      id: option.value,
+      name: option.label,
+      branch: option.room.branch,
+      roomMap: option.room.roomMap,
+    })),
+)
 
 const formatDateTime = (dateTime) => {
   const date = dateTime instanceof Date ? dateTime : new Date(dateTime)
@@ -228,7 +227,7 @@ const fetchCalendarEvents = async () => {
       calendarEvents.value = []
     }
   } catch (error) {
-    console.error("Error fetching calendar events:", error)
+    showErrorNotification(error)
   } finally {
     isLoading.value = false
   }
@@ -269,7 +268,7 @@ const updateCalendarEvent = async () => {
     closeEditDialog()
     await fetchCalendarEvents()
   } catch (error) {
-    console.error("Error updating calendar event:", error)
+    showErrorNotification(error)
   }
 }
 
@@ -281,37 +280,43 @@ const closeEditDialog = () => {
   selectedEventRoom.value = null
 }
 
-const openDeleteDialog = (id) => {
-  eventIdToDelete.value = id
-  deleteDialogVisible.value = true
-}
-
-const deleteCalendarEventConfirmed = async () => {
-  try {
-    await attendanceService.deleteCalendarEvent(eventIdToDelete.value)
-    closeDeleteDialog()
-    await fetchCalendarEvents()
-  } catch (error) {
-    console.error("Error deleting calendar event:", error)
-  }
-}
-
-const clearAllEvents = async () => {
-  try {
-    if (confirm(t("Are you sure you want to delete all calendar events?"))) {
-      for (const event of calendarEvents.value) {
-        await attendanceService.deleteCalendarEvent(event.id)
+/**
+ * Ask for confirmation, then delete one calendar event and reload the list.
+ * @param {number|string} id
+ */
+const confirmDeleteEvent = (id) => {
+  requireConfirmation({
+    title: t("Delete calendar event"),
+    message: t("Are you sure you want to delete this event?"),
+    accept: async () => {
+      try {
+        await attendanceService.deleteCalendarEvent(id)
+        await fetchCalendarEvents()
+      } catch (error) {
+        showErrorNotification(error)
       }
-      calendarEvents.value = []
-    }
-  } catch (error) {
-    console.error("Error clearing all events:", error)
-  }
+    },
+  })
 }
 
-const closeDeleteDialog = () => {
-  deleteDialogVisible.value = false
-  eventIdToDelete.value = null
+/**
+ * Ask for confirmation, then delete every calendar event of the attendance.
+ */
+const clearAllEvents = () => {
+  requireConfirmation({
+    message: t("Are you sure you want to delete all calendar events?"),
+    accept: async () => {
+      try {
+        for (const event of calendarEvents.value) {
+          await attendanceService.deleteCalendarEvent(event.id)
+        }
+        calendarEvents.value = []
+      } catch (error) {
+        showErrorNotification(error)
+        await fetchCalendarEvents()
+      }
+    },
+  })
 }
 
 const redirectToAttendanceSheet = () => {
@@ -347,7 +352,7 @@ const loadRooms = async () => {
       capacityLabel: t("Capacity"),
     })
   } catch (error) {
-    console.error("Error loading rooms:", error)
+    showErrorNotification(error)
   }
 }
 
@@ -355,28 +360,3 @@ onMounted(async () => {
   await Promise.all([fetchCalendarEvents(), loadRooms()])
 })
 </script>
-<style scoped>
-.calendar-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.calendar-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border: 1px solid #ddd;
-  padding: 0.75rem;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
-.calendar-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-.dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
-</style>

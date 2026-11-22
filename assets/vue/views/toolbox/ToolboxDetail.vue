@@ -8,7 +8,7 @@
         :label="t('Back')"
         icon="back"
         only-icon
-        type="black"
+        type="tertiary-alternative-text"
         @click="goBack"
       />
       <BaseButton
@@ -16,7 +16,7 @@
         :label="t('Preview')"
         icon="preview"
         only-icon
-        type="black"
+        type="tertiary-alternative"
         @click="openUrl(item.previewUrl)"
       />
       <BaseButton
@@ -24,7 +24,7 @@
         :label="t('Download')"
         icon="download"
         only-icon
-        type="black"
+        type="tertiary-alternative"
         @click="openUrl(item.downloadUrl)"
       />
     </SectionHeader>
@@ -267,7 +267,7 @@
                 :label="t('Preview')"
                 icon="preview"
                 only-icon
-                type="black"
+                type="tertiary-alternative"
                 @click="openUrl(version.previewUrl)"
               />
               <BaseButton
@@ -275,7 +275,7 @@
                 :label="t('Reporting')"
                 icon="information"
                 only-icon
-                type="black"
+                type="tertiary-alternative"
                 @click="openUrl(version.reportingUrl)"
               />
               <BaseButton
@@ -283,7 +283,7 @@
                 :label="t('Download')"
                 icon="download"
                 only-icon
-                type="black"
+                type="tertiary-alternative"
                 @click="openUrl(version.downloadUrl)"
               />
               <BaseButton

@@ -113,7 +113,7 @@
             :label="t('Requirements')"
             icon="shield-check"
             onlyIcon
-            type="black"
+            type="tertiary-alternative"
             class="shrink-0"
             @click="openRequirementsModal"
           />
@@ -187,6 +187,19 @@
       </template>
       <template #footer>
         <div class="flex flex-col gap-2">
+          <div
+            v-if="showSelfUnsubscribe"
+            class="flex justify-end"
+          >
+            <BaseButton
+              :label="t('Unsubscribe')"
+              icon="delete"
+              onlyIcon
+              type="tertiary-alternative"
+              :disabled="unsubscribing"
+              @click.stop="confirmSelfUnsubscribe"
+            />
+          </div>
           <div
             v-if="ui.showAnyStudentInfo"
             class="mt-2 h-px w-full bg-gray-10"
@@ -366,7 +379,7 @@
               :label="t('Close')"
               icon="close"
               size="small"
-              type="black"
+              type="tertiary-alternative"
               @click.stop="closeNotifications"
             />
             <BaseButton
@@ -419,6 +432,9 @@ import { useUserSessionSubscription } from "../../composables/userPermissions"
 import { useLocale } from "../../composables/locale"
 import courseService from "../../services/courseService"
 import baseService from "../../services/baseService"
+import courseUserService from "../../services/courseUserService"
+import { useConfirmation } from "../../composables/useConfirmation"
+import { useNotification } from "../../composables/notification"
 
 function createStudentInfoBatcher() {
   const cache = shallowReactive(new Map()) // key -> studentInfo
@@ -550,7 +566,13 @@ const props = defineProps({
   sessionId: { type: Number, required: false, default: 0 },
   disabled: { type: Boolean, required: false, default: false },
   showSessionDisplayDate: { type: Boolean, required: false, default: true },
+  allowSelfUnsubscribe: { type: Boolean, default: false },
 })
+
+const emit = defineEmits(["unsubscribed"])
+const { requireConfirmation } = useConfirmation()
+const { showSuccessNotification, showErrorNotification } = useNotification()
+const unsubscribing = ref(false)
 
 const { t } = useI18n()
 const platformConfigStore = usePlatformConfig()
@@ -670,7 +692,48 @@ watch(showNotifications, (open) => {
 
 const { getOriginalLanguageName, getLanguageName } = useLocale()
 
-const courseTitle = computed(() => String(props.course?.title ?? ""))
+const courseCode = computed(() => String(props.course?.visualCode || props.course?.code || "").trim())
+const courseTitle = computed(() => {
+  const title = String(props.course?.title ?? "")
+  const showCode = platformConfigStore.getSetting("course.display_coursecode_in_courselist") === "true"
+  return showCode && courseCode.value ? `${title} (${courseCode.value})` : title
+})
+
+const showSelfUnsubscribe = computed(() => {
+  const roles = securityStore.user?.roles || []
+  return (
+    props.allowSelfUnsubscribe &&
+    Number(props.sessionId) === 0 &&
+    Number(props.course?.subscriptionStatus) === 5 &&
+    props.course?.unsubscribe === true &&
+    !roles.includes("ROLE_ADMIN") &&
+    !platformConfigStore.isStudentViewActive &&
+    platformConfigStore.getSetting("course.enable_unsubscribe_button_on_my_course_page") === "true"
+  )
+})
+
+function confirmSelfUnsubscribe() {
+  if (!showSelfUnsubscribe.value || unsubscribing.value) return
+  requireConfirmation({
+    message: t("Are you sure you want to unsubscribe from this course?"),
+    accept: async () => {
+      unsubscribing.value = true
+      try {
+        await courseUserService.unsubscribe([currentUserId.value], {
+          cid: courseNumericId.value,
+          sid: 0,
+          type: 5,
+        })
+        showSuccessNotification(t("You have been unsubscribed from the course"))
+        emit("unsubscribed", courseNumericId.value)
+      } catch (error) {
+        showErrorNotification(error?.response?.data?.detail || t("Unable to unsubscribe from this course"))
+      } finally {
+        unsubscribing.value = false
+      }
+    },
+  })
+}
 const buyCoursesServiceName = computed(() =>
   String(props.course?.buyCoursesServiceName ?? props.course?.buy_courses_service_name ?? "").trim(),
 )
@@ -933,14 +996,19 @@ async function loadRequirementsDetails() {
   }
 }
 
-const imageUrl = computed(
-  () =>
+const imageUrl = computed(() => {
+  if (platformConfigStore.getSetting("course.course_images_in_courses_list") === "false") {
+    return "/img/session_default.svg"
+  }
+
+  return (
     props.course?.illustrationUrl ||
     props.course?.image?.url ||
     props.course?.pictureUrl ||
     props.course?.thumbnail ||
-    "/img/session_default.svg",
-)
+    "/img/session_default.svg"
+  )
+})
 
 const studentInfoConfig = computed(() => {
   const raw = platformConfigStore.getSetting("course.course_student_info")

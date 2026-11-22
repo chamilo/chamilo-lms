@@ -43864,3 +43864,132 @@ msgstr "Edit the JSON"
 
 msgid "The JSON of the access conditions must be a JSON object."
 msgstr "The JSON of the access conditions must be a JSON object."
+
+msgid "Enable the CAS sign-in button when the server and portal URL are correctly configured."
+msgstr "Enable the CAS sign-in button when the server and portal URL are correctly configured."
+
+msgid "Use false to disable automatic creation, platform to use CAS attributes, or extldap to use the configured LDAP directory."
+msgstr "Use false to disable automatic creation, platform to use CAS attributes, or extldap to use the configured LDAP directory."
+
+msgid "Select CAS1, CAS2 (default), or CAS3. TLS is always required. The legacy SAML 1.1 protocol is not supported."
+msgstr "Select CAS1, CAS2 (default), or CAS3. TLS is always required. The legacy SAML 1.1 protocol is not supported."
+
+msgid "Update the first name, last name and email from the configured LDAP directory over verified LDAPS. Roles and passwords are never synchronized by CAS."
+msgstr "Update the first name, last name and email from the configured LDAP directory over verified LDAPS. Roles and passwords are never synchronized by CAS."
+
+msgid "User authentication method not allowed"
+msgstr "User authentication method not allowed"
+
+msgid "Two-factor authentication is required for this account."
+msgstr "Two-factor authentication is required for this account."
+
+msgid "Migration completed with warnings"
+msgstr "Migration completed with warnings"
+
+msgid "Recoverable data issues recorded:"
+msgstr "Recoverable data issues recorded:"
+
+msgid "Review affected content before use. The full report is available on the server at:"
+msgstr "Review affected content before use. The full report is available on the server at:"
+
+msgid "Unable to summarize migration data issues. Ask the server administrator to check var/log/migration-data-issues."
+msgstr "Unable to summarize migration data issues. Ask the server administrator to check var/log/migration-data-issues."
+
+msgid "Download the migration report (global administrator login required)"
+msgstr "Download the migration report (global administrator login required)"
+
+msgid "Assign scores"
+msgstr "Assign scores"
+
+msgid "Assign these scores to the selected questions?"
+msgstr "Assign these scores to the selected questions?"
+
+msgid "Below-full-score attempts"
+msgstr "Below-full-score attempts"
+
+msgid "Edit classification"
+msgstr "Edit classification"
+
+msgid "Full-score attempts"
+msgstr "Full-score attempts"
+
+msgid "Occurrences"
+msgstr "Occurrences"
+
+msgid "Only unused single-answer questions owned by this context can receive bulk scores."
+msgstr "Only unused single-answer questions owned by this context can receive bulk scores."
+
+msgid "Question classification updated"
+msgstr "Question classification updated"
+
+msgid "Question scores updated"
+msgstr "Question scores updated"
+
+msgid "Questions in test"
+msgstr "Questions in test"
+
+msgid "Statistics count completed, graded attempts in this course and session, using the current maximum question score. Partial scores count as below full score."
+msgstr "Statistics count completed, graded attempts in this course and session, using the current maximum question score. Partial scores count as below full score."
+
+msgid "Antivirus scan report"
+msgstr "Antivirus scan report"
+
+msgid "Enable antivirus upload scanning"
+msgstr "Enable antivirus upload scanning"
+
+msgid "Require a successful ClamAV scan for protected upload paths. Configure the daemon before enabling this setting. This setting is global for all access URLs."
+msgstr "Require a successful ClamAV scan for protected upload paths. Configure the daemon before enabling this setting. This setting is global for all access URLs."
+
+msgid "Infected"
+msgstr "Infected"
+
+msgid "Scan error"
+msgstr "Scan error"
+
+msgid "Threat"
+msgstr "Threat"
+
+msgid "Size (bytes)"
+msgstr "Size (bytes)"
+
+msgid "Export includes up to 10000 matching scans. Dates are in UTC."
+msgstr "Export includes up to 10000 matching scans. Dates are in UTC."
+
+msgid "File upload rejected by antivirus."
+msgstr "File upload rejected by antivirus."
+
+msgid "File upload rejected: antivirus scan could not be completed."
+msgstr "File upload rejected: antivirus scan could not be completed."
+
+msgid "File upload rejected: antivirus audit is unavailable."
+msgstr "File upload rejected: antivirus audit is unavailable."
+
+msgid "Session ID"
+msgstr "Session ID"
+
+msgid "Each row represents a scan, not necessarily a separate upload."
+msgstr "Each row represents a scan, not necessarily a separate upload."
+
+msgid "Total scans"
+msgstr "Total scans"
+
+msgid "No threat detected"
+msgstr "No threat detected"
+
+msgid "HTTP upload"
+msgstr "HTTP upload"
+
+msgid "Resource storage"
+msgstr "Resource storage"
+
+msgid "Asset storage"
+msgstr "Asset storage"
+
+msgid "ZIP entry"
+msgstr "ZIP entry"
+
+msgid "SCORM package"
+msgstr "SCORM package"
+
+msgid "SCORM entry"
+msgstr "SCORM entry"

@@ -7,7 +7,7 @@
         :tooltip="t('Back')"
         icon="back"
         only-icon
-        type="primary-text"
+        type="tertiary-alternative-text"
       />
 
       <BaseButton

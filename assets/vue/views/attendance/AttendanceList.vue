@@ -1,19 +1,19 @@
 <template>
-  <SectionHeader :title="t('Attendance')" />
+  <section class="space-y-6">
+    <SectionHeader
+      :title="t('Attendance')"
+      icon="attendance"
+    >
+      <BaseButton
+        v-if="!readonly"
+        :label="t('Add attendance')"
+        icon="plus"
+        name="add-attendance"
+        type="success"
+        @click="redirectToCreateAttendance"
+      />
+    </SectionHeader>
 
-  <div>
-    <BaseToolbar>
-      <template #start>
-        <BaseButton
-          v-if="!readonly"
-          icon="file-add"
-          size="normal"
-          type="black"
-          :title="t('Add attendance')"
-          @click="redirectToCreateAttendance"
-        />
-      </template>
-    </BaseToolbar>
     <AttendanceTable
       :attendances="attendances"
       :loading="isLoading"
@@ -31,14 +31,13 @@
       @confirm-clicked="deleteAttendance"
       @cancel-clicked="isDeleteDialogVisible = false"
     />
-  </div>
+  </section>
 </template>
 <script setup>
 import { ref, onMounted, computed } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import attendanceService from "../../services/attendanceService"
 import AttendanceTable from "../../components/attendance/AttendanceTable.vue"
-import BaseToolbar from "../../components/basecomponents/BaseToolbar.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseDialogDelete from "../../components/basecomponents/BaseDialogDelete.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
@@ -47,16 +46,18 @@ import { getCourseContext } from "../../utils/courseContext"
 import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
+import { useNotification } from "../../composables/notification"
 
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
+const { showErrorNotification } = useNotification()
 
-// Editable only for users who can manage the current course (course/session
-// teacher or admin), matching CAttendance's write security. The student view
-// forces read-only even for them.
+// Editable only for teachers of the course or session and admins (CAttendance's
+// write security), outside the student view. The rows do not depend on it: the API
+// already leaves the hidden attendances out for the users who cannot edit them.
 const readonly = computed(() => !securityStore.isCourseAdmin || platformConfigStore.isStudentViewActive)
 
 const attendances = ref([])
@@ -96,7 +97,7 @@ const deleteAttendance = async () => {
     await attendanceService.softDelete(attendanceToDelete.value.id)
     await fetchAttendances()
   } catch (error) {
-    console.error("Error deleting attendance:", error)
+    showErrorNotification(error)
   } finally {
     isDeleteDialogVisible.value = false
   }
@@ -107,7 +108,7 @@ const toggleResourceLinkVisibility = async (attendance) => {
     await attendanceService.toggleVisibility(attendance.id)
     await fetchAttendances()
   } catch (error) {
-    console.error("Error toggling visibility:", error)
+    showErrorNotification(error)
   }
 }
 
@@ -125,7 +126,7 @@ const fetchAttendances = async ({ page = 1, rows = 10 } = {}) => {
     }
     const data = await attendanceService.getAttendances(params)
 
-    let attendanceList = data["hydra:member"].map((item) => ({
+    attendances.value = data["hydra:member"].map((item) => ({
       id: item.iid,
       title: item.title,
       description: item.description,
@@ -136,14 +137,9 @@ const fetchAttendances = async ({ page = 1, rows = 10 } = {}) => {
       resourceNode: item.resourceNode,
     }))
 
-    if (readonly.value) {
-      attendanceList = attendanceList.filter((i) => (i.resourceLinkListFromEntity?.[0]?.visibility || 0) === 2)
-    }
-
-    attendances.value = attendanceList
     totalAttendances.value = data.total || 0
   } catch (error) {
-    console.error("Error fetching attendances:", error)
+    showErrorNotification(error)
   } finally {
     isLoading.value = false
   }

@@ -561,7 +561,7 @@ CRUD color convention (`type` prop):
 - Read/view/export/list → blue → `type="primary"`
 - Update/edit/configure/move → orange → `type="secondary"`
 - Delete/disable/remove → red → `type="danger"`
-- Cancel/dismiss/back → dark outline → `type="black"` (also the inactive buttons of a button-tab group). There is no `plain` type: `BaseButton` rejects it.
+- Cancel/dismiss/back → outline in the theme's tertiary colour → `type="tertiary-alternative"` (also the inactive buttons of a button-tab group; `tertiary-alternative-text` for an icon-only back button in a page header). There is no `black` type (an administrator can change the tertiary colour) and no `plain` type: `BaseButton` rejects both.
 - Buttons are for actions only — never style a non-action link as a button.
 
 Table row action convention:

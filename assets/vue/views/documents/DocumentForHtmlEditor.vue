@@ -19,7 +19,7 @@
           :title="t('Upload')"
           icon="file-upload"
           only-icon
-          type="black"
+          type="tertiary-alternative"
           class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !p-0"
           @click="uploadDocumentHandler"
         />
@@ -41,7 +41,7 @@
             <BaseButton
               icon="compass"
               only-icon
-              type="black"
+              type="tertiary-alternative"
               :disabled="isAtRoot"
               :title="t('Root')"
               class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !border !border-gray-25 !p-0"
@@ -51,7 +51,7 @@
             <BaseButton
               icon="back"
               only-icon
-              type="black"
+              type="tertiary-alternative"
               :disabled="!canGoUp"
               :title="t('Up')"
               class="!flex !h-10 !w-10 !items-center !justify-center !rounded-xl !border !border-gray-25 !p-0"

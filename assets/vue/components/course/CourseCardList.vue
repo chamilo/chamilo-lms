@@ -5,6 +5,8 @@
     :course="course"
     :session="course.session || null"
     :session-id="Number(course.sessionId || 0)"
+    :allow-self-unsubscribe="allowSelfUnsubscribe"
+    @unsubscribed="emit('unsubscribed', $event)"
   />
 </template>
 
@@ -16,5 +18,8 @@ defineProps({
     type: Array,
     default: () => [],
   },
+  allowSelfUnsubscribe: { type: Boolean, default: false },
 })
+
+const emit = defineEmits(["unsubscribed"])
 </script>

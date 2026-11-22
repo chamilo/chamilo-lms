@@ -231,6 +231,11 @@ class IndexBlocksController extends BaseController
     {
         return [
             [
+                'class' => 'item-security-antivirus',
+                'route' => ['name' => 'AdminAntivirusScans'],
+                'label' => $this->translator->trans('Antivirus scan report'),
+            ],
+            [
                 'class' => 'item-security-activities-audit',
                 'url' => '/main/admin/activities_audit.php',
                 'label' => $this->translator->trans('Activities audit'),

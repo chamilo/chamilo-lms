@@ -108,7 +108,7 @@ final class GrokProvider implements AiProviderInterface, AiImageProviderInterfac
         $videoCfg = $providerConfig['video'] ?? null;
         if (\is_array($videoCfg)) {
             $this->videoApiUrl = (string) ($videoCfg['url'] ?? 'https://api.x.ai/v1/videos/generations');
-            $this->videoModel = (string) ($videoCfg['model'] ?? 'grok-video');
+            $this->videoModel = (string) ($videoCfg['model'] ?? 'grok-imagine-video');
 
             $this->videoDefaultOptions = [
                 'duration' => (int) ($videoCfg['duration'] ?? 8),

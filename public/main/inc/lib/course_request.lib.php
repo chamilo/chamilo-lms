@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\CourseCategory as CourseCategoryEntity;
@@ -51,6 +53,8 @@ class CourseRequestManager
      * submits the integer ID. If a numeric value matches two different
      * categories (one by code and another by ID), fail instead of guessing.
      *
+     * @param mixed $categoryReference
+     *
      * @return array|null
      */
     private static function resolveCategoryReference($categoryReference)
@@ -88,7 +92,7 @@ class CourseRequestManager
     /**
      * Creates a new course request within the database.
      *
-     * @param string $wanted_code     the code for the created in the future course
+     * @param string $wanted_code       the code for the created in the future course
      * @param string $title
      * @param string $description
      * @param string $category_code
@@ -96,6 +100,7 @@ class CourseRequestManager
      * @param string $objectives
      * @param string $target_audience
      * @param int    $user_id
+     * @param mixed  $exemplary_content
      *
      * @return mixed the database id of the newly created course request or FALSE on failure
      */
@@ -217,12 +222,12 @@ class CourseRequestManager
         $email_body_teacher .= $email_body;
         $email_body_teacher .= "\n".get_lang('Formula', $email_language)."\n";
         $email_body_teacher .= api_get_person_name(
-                api_get_setting('administratorName'),
-                api_get_setting('administratorSurname'),
-                null,
-                null,
-                $email_language
-            )."\n";
+            api_get_setting('administratorName'),
+            api_get_setting('administratorSurname'),
+            null,
+            null,
+            $email_language
+        )."\n";
         $email_body_teacher .= get_lang('Teacher', $email_language).' '.api_get_setting('siteName')."\n";
         $email_body_teacher .= get_lang('Phone', $email_language).': '.api_get_setting('administratorTelephone')."\n";
         $email_body_teacher .= get_lang('E-mail', $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
@@ -255,8 +260,8 @@ class CourseRequestManager
     /**
      * Updates a given course request in the database.
      *
-     * @param int    $id              the id (an integer number) of the corresponding database record
-     * @param string $wanted_code     the code for the created in the future course
+     * @param int    $id                the id (an integer number) of the corresponding database record
+     * @param string $wanted_code       the code for the created in the future course
      * @param string $title
      * @param string $description
      * @param string $category_code
@@ -264,6 +269,7 @@ class CourseRequestManager
      * @param string $objectives
      * @param string $target_audience
      * @param int    $user_id
+     * @param mixed  $exemplary_content
      *
      * @return bool returns TRUE on success or FALSE on failure
      */
@@ -527,7 +533,7 @@ class CourseRequestManager
 
         $params['title'] = $course_request_info['title'];
         $params['course_language'] = $course_request_info['course_language'];
-        $params['exemplary_content'] = intval($course_request_info['exemplary_content']) > 0;
+        $params['exemplary_content'] = (int) $course_request_info['exemplary_content'] > 0;
         $params['wanted_code'] = $course_request_info['code'];
         $params['user_id'] = $course_request_info['user_id'];
         $params['tutor_name'] = api_get_person_name($user_info['firstname'], $user_info['lastname']);
@@ -553,29 +559,29 @@ class CourseRequestManager
 
             $email_body = get_lang('Dear', $email_language).' ';
             $email_body .= api_get_person_name(
-                    $user_info['firstname'],
-                    $user_info['lastname'],
-                    null,
-                    null,
-                    $email_language
-                ).",\n\n";
+                $user_info['firstname'],
+                $user_info['lastname'],
+                null,
+                null,
+                $email_language
+            ).",\n\n";
             $email_body .= sprintf(
-                    get_lang(
-                        'Your course request %s has been approved. A new course %s has been created and you are registered in it as a teacher.\n\nYou can access your newly created course from: %s',
-                        $email_language
-                    ),
-                    $course->getCode(),
-                    $course->getCode(),
-                    api_get_course_url($course->getId())
-                )."\n";
+                get_lang(
+                    'Your course request %s has been approved. A new course %s has been created and you are registered in it as a teacher.\n\nYou can access your newly created course from: %s',
+                    $email_language
+                ),
+                $course->getCode(),
+                $course->getCode(),
+                api_get_course_url($course->getId())
+            )."\n";
             $email_body .= "\n".get_lang('Formula', $email_language)."\n";
             $email_body .= api_get_person_name(
-                    api_get_setting('administratorName'),
-                    api_get_setting('administratorSurname'),
-                    null,
-                    null,
-                    $email_language
-                )."\n";
+                api_get_setting('administratorName'),
+                api_get_setting('administratorSurname'),
+                null,
+                null,
+                $email_language
+            )."\n";
             $email_body .= get_lang('Teacher', $email_language).' '.api_get_setting('siteName')."\n";
             $email_body .= get_lang('Phone', $email_language).': '.api_get_setting('administratorTelephone')."\n";
             $email_body .= get_lang('E-mail', $email_language).': '.api_get_setting('emailAdministrator', null, $email_language)."\n";
@@ -618,7 +624,7 @@ class CourseRequestManager
             return false;
         }
 
-        $user_id = intval($course_request_info['user_id']);
+        $user_id = (int) $course_request_info['user_id'];
         if ($user_id <= 0) {
             return false;
         }
@@ -684,7 +690,7 @@ class CourseRequestManager
             return false;
         }
 
-        $user_id = intval($course_request_info['user_id']);
+        $user_id = (int) $course_request_info['user_id'];
         if ($user_id <= 0) {
             return false;
         }
@@ -695,7 +701,7 @@ class CourseRequestManager
         }
 
         $code = $course_request_info['code'];
-        $info = intval($course_request_info['info']);
+        $info = (int) $course_request_info['info'];
 
         // Error is to be returned on a repeated attempt for asking additional information.
         if (!empty($info)) {

@@ -381,12 +381,12 @@
               :footer="t('Total')"
             >
               <template #body="{ data }">
-                <router-link
+                <BaseAppLink
                   :to="{ name: 'CourseHome', params: { id: data.id }, query: { sid: data.sessionId || undefined } }"
-                  class="hover:text-primary hover:underline"
+                  class="table-link"
                 >
                   {{ data.title }}
-                </router-link>
+                </BaseAppLink>
               </template>
             </Column>
             <Column

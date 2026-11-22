@@ -9,7 +9,7 @@
         :label="t('Back')"
         icon="back"
         only-icon
-        type="primary-text"
+        type="tertiary-alternative-text"
         @click="cancel"
       />
     </SectionHeader>
@@ -378,7 +378,7 @@
       <div class="flex justify-end gap-2">
         <BaseButton
           :label="t('Cancel')"
-          type="black"
+          type="tertiary-alternative"
           @click="cancel"
         />
         <BaseButton

@@ -6,7 +6,8 @@
           v-if="canManage && canCreate"
           :label="t('Create exercise')"
           :route="{ name: 'ExerciseCreate', params: route.params, query: getContextParams() }"
-          icon="plus"
+          icon="multiple-marked"
+          badge-icon="star"
           only-icon
           type="primary-text"
         />
@@ -62,6 +63,7 @@
           :label="t('Import Aiken quiz')"
           :route="{ name: 'ExerciseImportAiken', params: route.params, query: getContextParams() }"
           icon="file-text"
+          badge-icon="arrow-up"
           only-icon
           type="primary-text"
         />
@@ -208,9 +210,9 @@
                   class="ch-tool-icon"
                   aria-hidden="true"
                 />
-                <router-link
+                <BaseAppLink
                   v-if="data.canOverview"
-                  class="font-semibold text-gray-90 hover:underline"
+                  class="table-link"
                   :to="{
                     name: 'ExerciseOverview',
                     params: { ...route.params, exerciseId: data.iid },
@@ -218,7 +220,7 @@
                   }"
                 >
                   {{ displayText(data.title, t("Untitled")) }}
-                </router-link>
+                </BaseAppLink>
                 <span
                   v-else
                   class="font-semibold text-gray-90"
@@ -425,7 +427,7 @@
                 :disabled="true"
                 only-icon
                 size="small"
-                type="black"
+                type="tertiary-alternative"
               />
               <BaseButton
                 v-if="data.canToggleVisibility"
@@ -443,7 +445,7 @@
                 :disabled="true"
                 only-icon
                 size="small"
-                type="black"
+                type="tertiary-alternative"
               />
               <BaseButton
                 v-if="data.canExport"
@@ -474,7 +476,7 @@
                 icon="delete"
                 only-icon
                 size="small"
-                type="black"
+                type="tertiary-alternative"
               />
             </div>
           </template>
@@ -498,7 +500,7 @@
             :label="t('Deselect all')"
             icon="close"
             size="small"
-            type="black"
+            type="tertiary-alternative"
             @click="deselectAllExercises"
           />
           <BaseSelect

@@ -236,15 +236,86 @@
       </div>
     </div>
 
+    <section
+      v-if="requiresApproval"
+      class="flex flex-col gap-4 rounded-xl border border-gray-25 bg-white p-4"
+    >
+      <p class="font-semibold text-gray-90">{{ t("Course request details") }}</p>
+      <label
+        class="flex flex-col gap-1 text-sm text-gray-90"
+        for="course-request-description"
+      >
+        {{ t("Description") }}
+        <textarea
+          id="course-request-description"
+          v-model="requestDescription"
+          class="w-full rounded-lg border border-gray-35 p-3"
+          name="description"
+          rows="3"
+          required
+        />
+      </label>
+      <label
+        class="flex flex-col gap-1 text-sm text-gray-90"
+        for="course-request-objectives"
+      >
+        {{ t("Objectives") }}
+        <textarea
+          id="course-request-objectives"
+          v-model="requestObjectives"
+          class="w-full rounded-lg border border-gray-35 p-3"
+          name="objectives"
+          rows="3"
+          required
+        />
+      </label>
+      <label
+        class="flex flex-col gap-1 text-sm text-gray-90"
+        for="course-request-audience"
+      >
+        {{ t("Target audience") }}
+        <textarea
+          id="course-request-audience"
+          v-model="requestAudience"
+          class="w-full rounded-lg border border-gray-35 p-3"
+          name="targetAudience"
+          rows="3"
+          required
+        />
+      </label>
+      <label
+        v-if="termsAndConditionsUrl"
+        class="flex items-start gap-2 text-sm text-gray-90"
+      >
+        <input
+          v-model="acceptedTerms"
+          type="checkbox"
+          name="acceptedTerms"
+          required
+        />
+        <span>
+          {{ t("I have read and I accept the Terms and Conditions") }}
+          <a
+            :href="termsAndConditionsUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary underline"
+          >
+            {{ t("Read the Terms and Conditions") }}
+          </a>
+        </span>
+      </label>
+    </section>
+
     <div class="mt-3 flex flex-col-reverse items-stretch gap-3 md:flex-row md:justify-end md:items-center">
       <BaseButton
         :label="t('Back')"
         icon="back"
-        type="black"
+        type="tertiary-alternative"
         @click="goBack"
       />
       <BaseButton
-        :label="t('Create this course')"
+        :label="t(requiresApproval ? 'Create this course request' : 'Create this course')"
         icon="plus"
         type="success"
         :disabled="shouldBlockSubmitByCourseOption"
@@ -271,6 +342,8 @@ import { usePlatformConfig } from "../../store/platformConfig"
 import { sanitizeHtml } from "../../utils/sanitizeHtml"
 
 const props = defineProps({
+  requiresApproval: { type: Boolean, default: false },
+  termsAndConditionsUrl: { type: String, default: "" },
   values: {
     type: Object,
     default: () => ({}),
@@ -312,6 +385,10 @@ const isCourseNameInvalid = ref(false)
 const isCourseCategoryInvalid = ref(false)
 
 const formSubmitted = ref(false)
+const requestDescription = ref("")
+const requestObjectives = ref("")
+const requestAudience = ref("")
+const acceptedTerms = ref(false)
 
 const hideCourseCode = computed(() => {
   return platformConfigStore.getSetting("course.course_creation_form_hide_course_code") === "true"
@@ -330,7 +407,7 @@ const hasSelectedCourseCategory = computed(() => {
 })
 
 const shouldShowCourseCreationOptions = computed(() => {
-  return !!props.buyCoursesOptions?.enabled && !!props.buyCoursesOptions?.hasServiceOptions
+  return !props.requiresApproval && !!props.buyCoursesOptions?.enabled && !!props.buyCoursesOptions?.hasServiceOptions
 })
 
 const standardCourseOption = computed(() => {
@@ -362,6 +439,7 @@ const selectedCourseOptionIsAvailable = computed(() => {
 })
 
 const shouldBlockSubmitByCourseOption = computed(() => {
+  if (props.requiresApproval) return false
   if (standardCourseOption.value && !shouldShowCourseCreationOptions.value) {
     return !standardCourseOption.value.available
   }
@@ -573,7 +651,7 @@ const validateCourseCategory = () => {
 const submitForm = () => {
   formSubmitted.value = true
 
-  if (shouldBlockSubmitByCourseOption.value) {
+  if (shouldBlockSubmitByCourseOption.value && !props.requiresApproval) {
     return
   }
 
@@ -587,6 +665,16 @@ const submitForm = () => {
   courseNameError.value = ""
 
   if (!validateCourseCategory()) {
+    return
+  }
+
+  if (
+    props.requiresApproval &&
+    (!requestDescription.value.trim() ||
+      !requestObjectives.value.trim() ||
+      !requestAudience.value.trim() ||
+      (props.termsAndConditionsUrl && !acceptedTerms.value))
+  ) {
     return
   }
 
@@ -608,7 +696,15 @@ const submitForm = () => {
     template: courseTemplate.value ? courseTemplate.value.value : null,
     roomId: courseRoom.value || null,
     fillDemoContent: false,
-    buyCoursesServiceSaleId: selectedCourseOptionType.value === "service" ? selectedBuyCoursesServiceSaleId.value : null,
+    buyCoursesServiceSaleId: props.requiresApproval
+      ? null
+      : selectedCourseOptionType.value === "service"
+        ? selectedBuyCoursesServiceSaleId.value
+        : null,
+    description: props.requiresApproval ? requestDescription.value : undefined,
+    objectives: props.requiresApproval ? requestObjectives.value : undefined,
+    targetAudience: props.requiresApproval ? requestAudience.value : undefined,
+    acceptedTerms: props.requiresApproval ? acceptedTerms.value : undefined,
   })
 }
 

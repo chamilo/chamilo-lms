@@ -850,15 +850,15 @@
         />
         <Column :header="t('Setting')">
           <template #body="{ data }">
-            <a
+            <BaseAppLink
               v-if="data.url"
-              :href="data.url"
+              :url="data.url"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-primary hover:underline"
+              class="table-link"
             >
               {{ data.title }}
-            </a>
+            </BaseAppLink>
             <span v-else>{{ data.title }}</span>
           </template>
         </Column>

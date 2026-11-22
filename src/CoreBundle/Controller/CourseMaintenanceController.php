@@ -7,7 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CourseBundle\Component\CourseCopy\BackupArchive;
@@ -367,16 +369,16 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/copy/options', name: 'copy_options', methods: ['GET'])]
-    public function copyOptions(int $node, Request $req): JsonResponse
+    public function copyOptions(int $node, Request $req, CidReqHelper $cidReqHelper, UserHelper $userHelper): JsonResponse
     {
         $this->setDebugFromRequest($req);
 
-        $current = api_get_course_info();
-        $courseList = CourseManager::getCoursesFollowedByUser(api_get_user_id());
+        $currentCourseId = (int) $cidReqHelper->getCourseEntity()?->getId();
+        $courseList = CourseManager::getCoursesFollowedByUser((int) $userHelper->getCurrent()?->getId());
 
         $courses = [];
         foreach ($courseList as $c) {
-            if ((int) $c['real_id'] === (int) ($current['real_id'] ?? 0)) {
+            if ((int) $c['real_id'] === $currentCourseId) {
                 continue;
             }
             $courses[] = [
@@ -422,7 +424,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/copy/execute', name: 'copy_execute', methods: ['POST'])]
-    public function copyExecute(int $node, Request $req, EntityManagerInterface $em): JsonResponse
+    public function copyExecute(int $node, Request $req, EntityManagerInterface $em, CidReqHelper $cidReqHelper): JsonResponse
     {
         $this->setDebugFromRequest($req);
 
@@ -464,8 +466,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
 
             $restorer->restore();
 
-            $dest = api_get_course_info();
-            $redirectUrl = \sprintf('/course/%d/home', (int) ($dest['real_id'] ?? 0));
+            $redirectUrl = \sprintf('/course/%d/home', (int) $cidReqHelper->getCourseEntity()?->getId());
 
             return $this->json([
                 'ok' => true,
@@ -531,14 +532,14 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/recycle/resources', name: 'recycle_resources', methods: ['GET'])]
-    public function recycleResources(int $node, Request $req): JsonResponse
+    public function recycleResources(int $node, Request $req, CidReqHelper $cidReqHelper): JsonResponse
     {
         $this->setDebugFromRequest($req);
 
         $cb = new CourseBuilder();
         $cb->set_tools_to_build(self::LEGACY_SNAPSHOT_TOOLS);
 
-        $course = $cb->build(0, api_get_course_id());
+        $course = $cb->build(0, (string) $cidReqHelper->getCourseEntity()?->getCode());
         $tree = $this->buildResourceTreeForVue($course);
 
         return $this->json([
@@ -548,7 +549,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/recycle/execute', name: 'recycle_execute', methods: ['POST'])]
-    public function recycleExecute(Request $req, EntityManagerInterface $em): JsonResponse
+    public function recycleExecute(Request $req, EntityManagerInterface $em, CidReqHelper $cidReqHelper): JsonResponse
     {
         $this->setDebugFromRequest($req);
 
@@ -562,7 +563,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             $type = ('full_recycle' === $recycleOption) ? 'full_backup' : 'select_items';
 
             if ('full_backup' === $type) {
-                if ($confirmCode !== api_get_course_id()) {
+                if ($confirmCode !== (string) $cidReqHelper->getCourseEntity()?->getCode()) {
                     return $this->jsonError('Course code confirmation mismatch', 400);
                 }
             } else {
@@ -571,9 +572,9 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 }
             }
 
-            $courseCode = api_get_course_id();
-            $courseInfo = api_get_course_info($courseCode);
-            $courseId = (int) ($courseInfo['real_id'] ?? 0);
+            $currentCourse = $cidReqHelper->getCourseEntity();
+            $courseCode = (string) $currentCourse?->getCode();
+            $courseId = (int) $currentCourse?->getId();
             if ($courseId <= 0) {
                 return $this->jsonError('Invalid course id', 400);
             }
@@ -593,7 +594,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/delete', name: 'delete', methods: ['POST'])]
-    public function deleteCourse(int $node, Request $req, EntityManagerInterface $em, CourseHelper $courseHelper): JsonResponse
+    public function deleteCourse(int $node, Request $req, EntityManagerInterface $em, CourseHelper $courseHelper, CidReqHelper $cidReqHelper): JsonResponse
     {
         // Basic permission gate (adjust roles to your policy if needed)
         if (
@@ -618,25 +619,24 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             $deleteDocsRaw = $payload['delete_docs'] ?? 0;
             $deleteDocs = (bool) filter_var($deleteDocsRaw, FILTER_VALIDATE_BOOL);
 
-            $courseInfo = api_get_course_info();
-            if (empty($courseInfo)) {
+            $currentCourse = $cidReqHelper->getCourseEntity();
+            if (null === $currentCourse) {
                 return $this->jsonError('Unable to resolve current course', 400);
             }
 
-            $officialCode = (string) ($courseInfo['official_code'] ?? '');
-            $runtimeCode = (string) api_get_course_id();
-            $sysCode = (string) ($courseInfo['sysCode'] ?? '');
+            $officialCode = (string) $currentCourse->getVisualCode();
+            $sysCode = $currentCourse->getCode();
 
             if ('' === $sysCode) {
                 return $this->jsonError('Invalid course system code', 400);
             }
 
-            $matches = hash_equals($officialCode, $confirm) || hash_equals($runtimeCode, $confirm);
+            $matches = hash_equals($officialCode, $confirm) || hash_equals($sysCode, $confirm);
             if (!$matches) {
                 return $this->jsonError('Course code confirmation mismatch', 400);
             }
 
-            $courseId = (int) ($courseInfo['real_id'] ?? 0);
+            $courseId = (int) $currentCourse->getId();
             $course = $courseId > 0 ? $em->getRepository(CourseEntity::class)->find($courseId) : null;
             if (!$course instanceof CourseEntity) {
                 return $this->jsonError('Course not found', 404);
@@ -713,7 +713,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/moodle/export/resources', name: 'moodle_export_resources', methods: ['GET'])]
-    public function moodleExportResources(int $node, Request $req): JsonResponse
+    public function moodleExportResources(int $node, Request $req, CidReqHelper $cidReqHelper): JsonResponse
     {
         $this->setDebugFromRequest($req);
         $this->logDebug('[moodleExportResources] start', ['node' => $node]);
@@ -734,7 +734,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
 
             $cb = new CourseBuilder();
             $cb->set_tools_to_build($toolsToBuild);
-            $course = $cb->build(0, api_get_course_id());
+            $course = $cb->build(0, (string) $cidReqHelper->getCourseEntity()?->getCode());
 
             $tree = $this->buildResourceTreeForVue($course);
 
@@ -771,7 +771,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/moodle/export/execute', name: 'moodle_export_execute', methods: ['POST'])]
-    public function moodleExportExecute(int $node, Request $req, UserRepository $users): BinaryFileResponse|JsonResponse
+    public function moodleExportExecute(int $node, Request $req, UserRepository $users, CidReqHelper $cidReqHelper): BinaryFileResponse|JsonResponse
     {
         $this->setDebugFromRequest($req);
 
@@ -823,7 +823,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             $adminEmail = '' !== $adminEmail ? $adminEmail : (string) ($adm['email'] ?? 'admin@example.com');
         }
 
-        $courseId = api_get_course_id();
+        $courseId = (string) $cidReqHelper->getCourseEntity()?->getCode();
         if (empty($courseId)) {
             return $this->jsonError('No active course context', 400);
         }
@@ -904,13 +904,13 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/cc13/export/resources', name: 'cc13_export_resources', methods: ['GET'])]
-    public function cc13ExportResources(int $node, Request $req): JsonResponse
+    public function cc13ExportResources(int $node, Request $req, CidReqHelper $cidReqHelper): JsonResponse
     {
         $this->setDebugFromRequest($req);
 
         $cb = new CourseBuilder();
         $cb->set_tools_to_build(['documents', 'links', 'forums']);
-        $course = $cb->build(0, api_get_course_id());
+        $course = $cb->build(0, (string) $cidReqHelper->getCourseEntity()?->getCode());
 
         $treeAll = $this->buildResourceTreeForVue($course);
         $tree = Cc13Capabilities::filterTree($treeAll);
@@ -945,7 +945,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/cc13/export/execute', name: 'cc13_export_execute', methods: ['POST'])]
-    public function cc13ExportExecute(int $node, Request $req): JsonResponse
+    public function cc13ExportExecute(int $node, Request $req, CidReqHelper $cidReqHelper): JsonResponse
     {
         $this->setDebugFromRequest($req);
 
@@ -958,6 +958,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
 
         $tools = ['documents', 'links', 'forums'];
         $cb = new CourseBuilder();
+        $courseCode = (string) $cidReqHelper->getCourseEntity()?->getCode();
 
         $selectionMode = false;
 
@@ -968,7 +969,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             if ('selected' === $scope) {
                 $cbFull = new CourseBuilder();
                 $cbFull->set_tools_to_build($tools);
-                $courseFull = $cbFull->build(0, api_get_course_id());
+                $courseFull = $cbFull->build(0, $courseCode);
 
                 $expanded = $this->expandCc13SelectionFromCategories($courseFull, $normSel);
 
@@ -994,7 +995,7 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
                 $cb->set_tools_to_build($tools);
             }
 
-            $course = $cb->build(0, api_get_course_id());
+            $course = $cb->build(0, $courseCode);
 
             if ($selectionMode) {
                 $safeSelected = [
@@ -1023,14 +1024,19 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
             }
 
             $exporter = new Cc13Export($course, $selectionMode, /* debug */ false);
-            $imsccPath = $exporter->export(api_get_course_id());
+            $imsccPath = $exporter->export($courseCode);
 
             $fileName = basename($imsccPath);
             $downloadUrl = $this->generateUrl(
                 'cm_cc13_export_download',
-                ['node' => $node],
+                [
+                    'node' => $node,
+                    'file' => $fileName,
+                    'cid' => $cidReqHelper->getCourseId(),
+                    'sid' => $cidReqHelper->getSessionId(),
+                ],
                 UrlGeneratorInterface::ABSOLUTE_URL
-            ).'?file='.rawurlencode($fileName);
+            );
 
             return $this->json([
                 'ok' => true,
@@ -1048,13 +1054,19 @@ class CourseMaintenanceController extends AbstractCourseMaintenanceController
     }
 
     #[Route('/cc13/export/download', name: 'cc13_export_download', methods: ['GET'])]
-    public function cc13ExportDownload(int $node, Request $req): BinaryFileResponse|JsonResponse
+    public function cc13ExportDownload(int $node, Request $req, CidReqHelper $cidReqHelper): BinaryFileResponse|JsonResponse
     {
         $file = basename((string) $req->query->get('file', ''));
 
         // Example pattern: ABC123_cc13_20251017_195455.imscc
         if ('' === $file || !preg_match('/^[A-Za-z0-9_-]+_cc13_\d{8}_\d{6}\.imscc$/', $file)) {
             return $this->jsonError('Invalid file', 400);
+        }
+
+        // Exports of every course share the temp directory: only serve the current course's ones.
+        $courseCode = (string) $cidReqHelper->getCourseEntity()?->getCode();
+        if ('' === $courseCode || !preg_match('/^'.preg_quote($courseCode, '/').'_cc13_\d{8}_\d{6}\.imscc$/', $file)) {
+            return $this->jsonError('File not found', 404);
         }
 
         $abs = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.$file;

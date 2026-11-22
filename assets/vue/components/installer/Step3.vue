@@ -150,7 +150,7 @@
           :is-loading="sendingContactInformation"
           :label="t('Send information')"
           icon="send"
-          type="black"
+          type="tertiary-alternative"
           @click="sendContactInformation"
         />
       </div>
@@ -165,7 +165,7 @@
           icon="back"
           is-submit
           name="step1"
-          type="black"
+          type="tertiary-alternative"
         />
       </div>
       <BaseButton

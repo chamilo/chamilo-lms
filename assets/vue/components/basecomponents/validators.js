@@ -27,7 +27,6 @@ export const buttonTypeValidator = (value) => {
     "primary",
     "primary-alternative",
     "secondary",
-    "black",
     "success",
     "info",
     "warning",

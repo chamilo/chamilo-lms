@@ -9,7 +9,7 @@
         icon="back"
         only-icon
         size="small"
-        type="black"
+        type="tertiary-alternative"
       />
       <BaseButton
         v-if="canCreateThread"
@@ -34,7 +34,7 @@
         icon="back"
         only-icon
         size="small"
-        type="black"
+        type="tertiary-alternative"
         @click="goBackToLearningPath"
       />
     </BaseToolbar>
@@ -609,7 +609,7 @@
           v-if="lpId"
           :label="t('Cancel')"
           icon="close"
-          type="black"
+          type="tertiary-alternative"
           @click="goBackToLearningPath"
         />
         <BaseButton

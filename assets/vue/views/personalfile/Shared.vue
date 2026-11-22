@@ -26,14 +26,10 @@
           <ResourceFileLink :resource="slotProps.data" />
         </div>
         <div v-else>
-          <a
-            v-if="slotProps.data"
-            class="cursor-pointer"
-            @click="handleClick(slotProps.data)"
-          >
+          <BaseAppLink v-if="slotProps.data">
             <v-icon icon="mdi-folder" />
             {{ slotProps.data.resourceNode.title }}
-          </a>
+          </BaseAppLink>
         </div>
       </template>
     </Column>

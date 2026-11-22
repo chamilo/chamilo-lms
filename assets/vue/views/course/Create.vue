@@ -1,6 +1,8 @@
 <template>
   <div class="create-course-page m-10">
-    <h1 class="page-title text-xl text-gray-90">{{ t("Add a new course") }}</h1>
+    <h1 class="page-title text-xl text-gray-90">
+      {{ t(requiresApproval ? "Create a course request" : "Add a new course") }}
+    </h1>
     <hr class="mb-6" />
 
     <Message
@@ -26,7 +28,13 @@
     </Message>
 
     <section
-      v-if="!isLoading && !isCreationRestrictedByPolicy && !hasBuyCoursesCourseTypeOptions && showStandardCourseSummary"
+      v-if="
+        !isLoading &&
+        !requiresApproval &&
+        !isCreationRestrictedByPolicy &&
+        !hasBuyCoursesCourseTypeOptions &&
+        showStandardCourseSummary
+      "
       class="mb-5 rounded-2xl border border-gray-25 bg-white p-4 shadow-sm"
       :aria-label="t('Standard course')"
     >
@@ -93,6 +101,8 @@
       v-if="showCourseForm"
       ref="createForm"
       :buy-courses-options="buyCoursesOptions"
+      :requires-approval="requiresApproval"
+      :terms-and-conditions-url="termsAndConditionsUrl"
       :errors="violations"
       :values="item"
       @submit="submitCourse"
@@ -133,6 +143,11 @@ const createCapabilityMessage = ref("")
 const buyCoursesOptions = ref(null)
 const buyCoursesOptionsError = ref(false)
 const createCapabilityDetails = ref(null)
+const requiresApproval = computed(() => createCapabilityDetails.value?.requiresApproval === true)
+const termsAndConditionsUrl = computed(() => {
+  const url = String(createCapabilityDetails.value?.termsAndConditionsUrl || "")
+  return /^https?:\/\//i.test(url) || url === "/main/auth/tc.php" ? url : ""
+})
 
 // Keep the standard allowance visible even when BuyCourses options are unavailable.
 // The fallback only uses platform-based capability data; service limits are never
@@ -333,6 +348,12 @@ async function submitCourse(formData) {
   try {
     const payload = sanitizeCoursePayload(formData)
     const response = await courseService.createCourse(payload)
+
+    if (response.requiresApproval === true && response.requestId) {
+      showSuccessNotification(t("Your course request has been submitted for approval."))
+      await router.push("/courses")
+      return
+    }
 
     const courseId = response.courseId
     const sessionId = 0

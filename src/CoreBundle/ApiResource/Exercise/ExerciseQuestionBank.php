@@ -32,6 +32,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'sourceExerciseId', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'difficulty', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'questionType', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'sortField', in: 'query', required: false, schema: ['type' => 'string']),
+                    new Parameter(name: 'sortDirection', in: 'query', required: false, schema: ['type' => 'string']),
                 ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
@@ -63,6 +65,8 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     new Parameter(name: 'sourceExerciseId', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'difficulty', in: 'query', required: false, schema: ['type' => 'integer']),
                     new Parameter(name: 'questionType', in: 'query', required: false, schema: ['type' => 'integer']),
+                    new Parameter(name: 'sortField', in: 'query', required: false, schema: ['type' => 'string']),
+                    new Parameter(name: 'sortDirection', in: 'query', required: false, schema: ['type' => 'string']),
                 ],
             ),
             security: "is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER')",
@@ -145,6 +149,30 @@ final class ExerciseQuestionBank
      */
     #[Groups(['exercise_question_bank:read', 'exercise_question_bank:write'])]
     public array $questionIds = [];
+
+    #[Groups(['exercise_question_bank:write'])]
+    public ?float $correctScore = null;
+
+    #[Groups(['exercise_question_bank:write'])]
+    public ?float $incorrectScore = null;
+
+    /**
+     * @var array<int, string>
+     */
+    #[Groups(['exercise_question_bank:write'])]
+    public array $fieldValues = [];
+
+    /**
+     * @var array<int, array<string, mixed>>
+     */
+    #[Groups(['exercise_question_bank:read'])]
+    public array $questionFields = [];
+
+    #[Groups(['exercise_question_bank:read'])]
+    public int $exerciseQuestionCount = 0;
+
+    #[Groups(['exercise_question_bank:read'])]
+    public int $updatedCount = 0;
 
     #[Groups(['exercise_question_bank:read'])]
     public string $title = '';

@@ -10,33 +10,67 @@
         @click="showCreateGroupDialog = true"
       />
     </div>
-    <div class="tabs mb-4">
+    <div
+      class="tabs mb-4"
+      role="tablist"
+      :aria-label="t('Social groups')"
+    >
       <button
+        id="social-groups-tab-newest"
+        role="tab"
+        aria-controls="social-groups-panel-newest"
+        :aria-selected="activeTab === 'Newest'"
+        :tabindex="activeTab === 'Newest' ? 0 : -1"
         :class="['tab', { 'tab-active': activeTab === 'Newest' }]"
         @click="activeTab = 'Newest'"
+        @keydown="onGroupTabKeydown"
       >
         {{ t("Newest") }}
       </button>
       <button
+        id="social-groups-tab-popular"
+        role="tab"
+        aria-controls="social-groups-panel-popular"
+        :aria-selected="activeTab === 'Popular'"
+        :tabindex="activeTab === 'Popular' ? 0 : -1"
         :class="['tab', { 'tab-active': activeTab === 'Popular' }]"
         @click="activeTab = 'Popular'"
+        @keydown="onGroupTabKeydown"
       >
         {{ t("Popular") }}
       </button>
       <button
+        id="social-groups-tab-mine"
+        role="tab"
+        aria-controls="social-groups-panel-mine"
+        :aria-selected="activeTab === 'My groups'"
+        :tabindex="activeTab === 'My groups' ? 0 : -1"
         :class="['tab', { 'tab-active': activeTab === 'My groups' }]"
         @click="activeTab = 'My groups'"
+        @keydown="onGroupTabKeydown"
       >
         {{ t("My groups") }}
       </button>
       <button
+        id="social-groups-tab-search"
+        role="tab"
+        aria-controls="social-groups-panel-search"
+        :aria-selected="activeTab === 'Search Groups'"
+        :tabindex="activeTab === 'Search Groups' ? 0 : -1"
         :class="['tab', { 'tab-active': activeTab === 'Search Groups' }]"
         @click="activeTab = 'Search Groups'"
+        @keydown="onGroupTabKeydown"
       >
         {{ t("Search groups") }}
       </button>
     </div>
-    <div v-show="activeTab === 'Newest'">
+    <div
+      v-show="activeTab === 'Newest'"
+      id="social-groups-panel-newest"
+      role="tabpanel"
+      aria-labelledby="social-groups-tab-newest"
+      tabindex="0"
+    >
       <div class="group-list">
         <div
           v-for="group in newestGroups"
@@ -54,11 +88,12 @@
             class="mdi mdi-account-group-outline text-4xl text-gray-500 me-4"
           ></i>
           <div class="group-details">
-            <a
-              :href="`/resources/usergroups/show/${extractGroupId(group)}`"
-              class="text-lg font-semibold text-blue-600 hover:underline"
-              >{{ group.title }}</a
+            <BaseAppLink
+              :url="`/resources/usergroups/show/${extractGroupId(group)}`"
+              class="text-lg font-semibold text-primary hover:underline"
             >
+              {{ group.title }}
+            </BaseAppLink>
             <div class="group-info text-gray-500">
               <span class="group-member-count">{{ group.memberCount }} {{ t("Members") }}</span>
               <span class="group-description">{{ group.description }}</span>
@@ -67,7 +102,13 @@
         </div>
       </div>
     </div>
-    <div v-show="activeTab === 'Popular'">
+    <div
+      v-show="activeTab === 'Popular'"
+      id="social-groups-panel-popular"
+      role="tabpanel"
+      aria-labelledby="social-groups-tab-popular"
+      tabindex="0"
+    >
       <div class="group-list">
         <div
           v-for="group in popularGroups"
@@ -85,11 +126,12 @@
             class="mdi mdi-account-group-outline text-4xl text-gray-500 me-4"
           ></i>
           <div class="group-details">
-            <a
-              :href="`/resources/usergroups/show/${extractGroupId(group)}`"
-              class="text-lg font-semibold text-blue-600 hover:underline"
-              >{{ group.title }}</a
+            <BaseAppLink
+              :url="`/resources/usergroups/show/${extractGroupId(group)}`"
+              class="text-lg font-semibold text-primary hover:underline"
             >
+              {{ group.title }}
+            </BaseAppLink>
             <div class="group-info text-gray-500">
               <span class="group-member-count">{{ group.memberCount }} {{ t("Members") }}</span>
               <span class="group-description">{{ group.description }}</span>
@@ -98,7 +140,13 @@
         </div>
       </div>
     </div>
-    <div v-show="activeTab === 'My groups'">
+    <div
+      v-show="activeTab === 'My groups'"
+      id="social-groups-panel-mine"
+      role="tabpanel"
+      aria-labelledby="social-groups-tab-mine"
+      tabindex="0"
+    >
       <div class="group-list">
         <div
           v-for="group in myGroups"
@@ -116,11 +164,12 @@
             class="mdi mdi-account-group-outline text-4xl text-gray-500 me-4"
           ></i>
           <div class="group-details">
-            <a
-              :href="`/resources/usergroups/show/${extractGroupId(group)}`"
-              class="text-lg font-semibold text-blue-600 hover:underline"
-              >{{ group.title }}</a
+            <BaseAppLink
+              :url="`/resources/usergroups/show/${extractGroupId(group)}`"
+              class="text-lg font-semibold text-primary hover:underline"
             >
+              {{ group.title }}
+            </BaseAppLink>
             <div class="group-info text-gray-500">
               <span class="group-member-count">{{ group.memberCount }} {{ t("Members") }}</span>
               <span class="group-description">{{ group.description }}</span>
@@ -129,7 +178,13 @@
         </div>
       </div>
     </div>
-    <div v-show="activeTab === 'Search Groups'">
+    <div
+      v-show="activeTab === 'Search Groups'"
+      id="social-groups-panel-search"
+      role="tabpanel"
+      aria-labelledby="social-groups-tab-search"
+      tabindex="0"
+    >
       <GroupSearch />
     </div>
   </div>
@@ -146,6 +201,7 @@
           v-model="groupForm.name"
           :vuelidate-property="v$.groupForm.name"
           :label="t('Name')"
+          aria-required="true"
         />
 
         <BaseInputTextWithVuelidate
@@ -168,7 +224,10 @@
           @file-selected="selectedFile = $event"
         />
         <div class="p-field mt-2">
-          <label for="groupPermissions">
+          <label
+            id="groupPermissions-label"
+            for="groupPermissions"
+          >
             {{ t("Group permissions") }}
             <span
               aria-hidden="true"
@@ -182,8 +241,13 @@
             input-id="groupPermissions"
             name="permissions"
             :invalid="v$.groupForm.permissions.$error"
-            :aria-invalid="v$.groupForm.permissions.$error ? 'true' : 'false'"
-            :aria-describedby="v$.groupForm.permissions.$error ? 'groupPermissions-error' : undefined"
+            aria-labelledby="groupPermissions-label"
+            :pt="{
+              label: {
+                'aria-describedby': v$.groupForm.permissions.$error ? 'groupPermissions-error' : undefined,
+                'aria-required': 'true',
+              },
+            }"
             :options="permissionsOptions"
             option-label="label"
             :placeholder="t('Select permission')"
@@ -243,6 +307,33 @@ const newestGroups = ref([])
 const popularGroups = ref([])
 const myGroups = ref([])
 const activeTab = ref("Newest")
+
+const onGroupTabKeydown = (event) => {
+  const { key } = event
+  if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(key)) {
+    return
+  }
+
+  const tabs = Array.from(event.currentTarget.parentElement.querySelectorAll('[role="tab"]'))
+  const currentIndex = tabs.indexOf(event.currentTarget)
+  if (currentIndex === -1) {
+    return
+  }
+
+  event.preventDefault()
+  let nextIndex
+  if (key === "Home") {
+    nextIndex = 0
+  } else if (key === "End") {
+    nextIndex = tabs.length - 1
+  } else {
+    const direction = key === "ArrowRight" ? 1 : -1
+    nextIndex = (currentIndex + direction + tabs.length) % tabs.length
+  }
+
+  tabs[nextIndex].focus()
+}
+
 const showCreateGroupDialog = ref(false)
 const selectedFile = ref(null)
 

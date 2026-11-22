@@ -12,7 +12,7 @@
       <BaseButton
         :label="innerCancelLabel"
         icon="close"
-        type="black"
+        type="tertiary-alternative"
         @click="$emit('cancelClicked')"
       />
       <BaseButton

@@ -216,7 +216,7 @@
           :label="t('Clear selection')"
           icon="close"
           size="small"
-          type="black"
+          type="tertiary-alternative"
           @click="selectedUserIds = []"
         />
       </div>
@@ -349,6 +349,17 @@
       </Column>
 
       <Column
+        v-if="permissions.canChangeCourseAccess"
+        :header="t('Course access')"
+      >
+        <template #body="{ data }">
+          <span :class="data.courseAccessEnabled ? 'text-success' : 'text-danger'">
+            {{ data.courseAccessEnabled ? t("Enabled") : t("Disabled") }}
+          </span>
+        </template>
+      </Column>
+
+      <Column
         v-for="field in extraFields"
         :key="field.id"
         :header="field.label"
@@ -396,6 +407,16 @@
               size="small"
               type="secondary-text"
               @click="confirmTutorChange(data)"
+            />
+            <BaseButton
+              v-if="permissions.canChangeCourseAccess && data.canChangeCourseAccess"
+              :label="courseAccessActionLabel(data)"
+              :tooltip="courseAccessActionLabel(data)"
+              :icon="data.courseAccessEnabled ? 'eye-off' : 'eye-on'"
+              only-icon
+              size="small"
+              :type="data.courseAccessEnabled ? 'danger-text' : 'secondary-text'"
+              @click="confirmCourseAccessChange(data)"
             />
             <BaseButton
               v-if="data.canUnsubscribe"
@@ -465,6 +486,7 @@ const permissions = ref({
   canUnsubscribe: false,
   canImport: false,
   canSetTutor: false,
+  canChangeCourseAccess: false,
   canInviteByEmail: false,
   showEmail: false,
   westernNameOrder: true,
@@ -529,6 +551,7 @@ async function loadUsers() {
       canUnsubscribe: Boolean(response.canUnsubscribe),
       canImport: Boolean(response.canImport),
       canSetTutor: Boolean(response.canSetTutor),
+      canChangeCourseAccess: Boolean(response.canChangeCourseAccess),
       canInviteByEmail: Boolean(response.canInviteByEmail),
       showEmail: Boolean(response.showEmail),
       westernNameOrder: response.westernNameOrder !== false,
@@ -671,6 +694,35 @@ async function setTutor(user) {
     await loadUsers()
   } catch (error) {
     console.error("[CourseUser] Failed to update tutor role", error)
+    errorMessage.value = error?.response?.data?.detail || error?.message || t("An error occurred")
+  } finally {
+    loading.value = false
+  }
+}
+
+function courseAccessActionLabel(user) {
+  return `${user.courseAccessEnabled ? t("Disable") : t("Enable")} ${t("Course access")}`
+}
+
+function confirmCourseAccessChange(user) {
+  requireConfirmation({
+    title: courseAccessActionLabel(user),
+    message: t("Please confirm your choice"),
+    accept: () => setCourseAccess(user),
+  })
+}
+
+async function setCourseAccess(user) {
+  loading.value = true
+  errorMessage.value = ""
+  successMessage.value = ""
+
+  try {
+    const response = await courseUserService.setCourseAccess(user.id, !user.courseAccessEnabled, requestParams())
+    successMessage.value = response.message || t("Update successful")
+    await loadUsers()
+  } catch (error) {
+    console.error("[CourseUser] Failed to change course access", error)
     errorMessage.value = error?.response?.data?.detail || error?.message || t("An error occurred")
   } finally {
     loading.value = false

@@ -15,7 +15,7 @@
           :label="t('Manage categories')"
           icon="file-tree-outline"
           only-icon
-          type="black"
+          type="tertiary-alternative"
           @click="manageCategories"
         />
         <BaseButton
@@ -23,35 +23,35 @@
           :label="t('Generate glossary terms')"
           icon="robot"
           only-icon
-          type="black"
+          type="tertiary-alternative"
           @click="generateGlossaryTerms"
         />
         <BaseButton
           :label="t('Import glossary')"
           icon="import"
           only-icon
-          type="black"
+          type="tertiary-alternative"
           @click="importGlossary"
         />
         <BaseButton
           :label="t('Export glossary')"
           icon="file-export"
           only-icon
-          type="black"
+          type="tertiary-alternative"
           @click="exportGlossary"
         />
         <BaseButton
           :icon="view === 'table' ? 'list' : 'table'"
           :label="view === 'table' ? t('List view') : t('Table view')"
           only-icon
-          type="black"
+          type="tertiary-alternative"
           @click="changeView(view)"
         />
         <BaseButton
           :label="t('Export to documents')"
           icon="export"
           only-icon
-          type="black"
+          type="tertiary-alternative"
           @click="exportToDocuments"
         />
       </template>

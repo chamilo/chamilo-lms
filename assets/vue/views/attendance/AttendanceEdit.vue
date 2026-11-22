@@ -1,20 +1,35 @@
 <template>
-  <LayoutFormGeneric>
-    <template #header>
-      <BaseIcon icon="edit" />
-      {{ t("Edit attendance") }}
-    </template>
-    <div v-if="loading"></div>
-    <div v-else-if="attendanceData">
-      <AttendanceForm
-        :initial-data="{ ...attendanceData }"
-        @back-pressed="goBack"
+  <section>
+    <SectionHeader
+      :show-student-view-button="false"
+      :title="t('Edit attendance')"
+      icon="edit"
+    />
+
+    <div
+      v-if="loading"
+      aria-busy="true"
+      class="mt-6 flex flex-col"
+    >
+      <Skeleton
+        v-for="(field, index) in FORM_SKELETON"
+        :key="index"
+        :height="`${field.height}px`"
+        :style="{ marginTop: `${field.marginTop}px` }"
       />
     </div>
-    <div v-else>
-      <p>{{ t("No data available") }}</p>
-    </div>
-  </LayoutFormGeneric>
+    <AttendanceForm
+      v-else-if="attendanceData"
+      :initial-data="{ ...attendanceData }"
+      @back-pressed="goBack"
+    />
+    <p
+      v-else
+      class="text-body-2 text-gray-50"
+    >
+      {{ t("No data available") }}
+    </p>
+  </section>
 </template>
 
 <script setup>
@@ -23,13 +38,25 @@ import AttendanceForm from "../../components/attendance/AttendanceForm.vue"
 import attendanceService from "../../services/attendanceService"
 import { useRouter, useRoute } from "vue-router"
 import { useI18n } from "vue-i18n"
-import LayoutFormGeneric from "../../components/layout/LayoutFormGeneric.vue"
-import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
+import SectionHeader from "../../components/layout/SectionHeader.vue"
+import Skeleton from "primevue/skeleton"
 import DOMPurify from "dompurify"
+import { useNotification } from "../../composables/notification"
+
+// AttendanceForm fields measured at 1440 px: title, description editor, default room, advanced
+// settings and buttons, each with its distance from the previous one (labels and margins).
+const FORM_SKELETON = [
+  { height: 42, marginTop: 0 },
+  { height: 320, marginTop: 44 },
+  { height: 42, marginTop: 44 },
+  { height: 24, marginTop: 56 },
+  { height: 40, marginTop: 44 },
+]
 
 const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
+const { showErrorNotification } = useNotification()
 
 const attendanceData = ref(null)
 const loading = ref(true)
@@ -70,7 +97,7 @@ const fetchAttendance = async () => {
       room: typeof fetchedData.room === "string" ? fetchedData.room : fetchedData.room?.["@id"] || null,
     }
   } catch (error) {
-    console.error("Error fetching attendance:", error)
+    showErrorNotification(error)
     attendanceData.value = null
   } finally {
     loading.value = false

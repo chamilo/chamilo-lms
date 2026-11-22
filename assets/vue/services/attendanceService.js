@@ -212,8 +212,8 @@ export default {
     return response.data
   },
 
-  saveStudentOwnAttendance: async ({ courseId, entries }) => {
-    return await baseService.post(`/attendance/validate-self`, { courseId, entries })
+  saveStudentOwnAttendance: async ({ courseId, entries }, { cid, sid, gid } = {}) => {
+    return await baseService.post(`/attendance/validate-self`, { courseId, entries }, {}, { params: { cid, sid, gid } })
   },
 
   saveStudentSignature: async ({ calendarId, signature }) => {

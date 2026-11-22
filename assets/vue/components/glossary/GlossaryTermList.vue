@@ -43,7 +43,7 @@
                 icon="edit"
                 only-icon
                 size="small"
-                type="black"
+                type="tertiary-alternative"
                 @click="emit('edit', term)"
               />
               <BaseButton

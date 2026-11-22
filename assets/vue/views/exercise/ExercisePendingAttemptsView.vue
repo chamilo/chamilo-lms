@@ -11,7 +11,7 @@
         :route="{ name: 'MyCourses' }"
         icon="back"
         only-icon
-        type="black"
+        type="tertiary-alternative-text"
       />
       <BaseButton
         v-if="actionUrls.exportCsv"
@@ -100,7 +100,7 @@
           <BaseButton
             :label="t('Reset')"
             icon="close"
-            type="black"
+            type="tertiary-alternative"
             @click="resetFilters"
           />
           <BaseButton
@@ -147,12 +147,12 @@
         field="exerciseTitle"
       >
         <template #body="{ data }">
-          <router-link
-            class="text-body-2 font-semibold text-primary hover:underline"
+          <BaseAppLink
+            class="table-link"
             :to="reportRoute(data)"
           >
             {{ data.exerciseTitle || "-" }}
-          </router-link>
+          </BaseAppLink>
         </template>
       </Column>
 

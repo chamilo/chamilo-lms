@@ -207,12 +207,12 @@
         sortable
       >
         <template #body="{ data }">
-          <router-link
+          <BaseAppLink
             :to="{ name: 'CourseHome', params: { id: data.id } }"
-            class="text-blue-600 hover:underline"
+            class="table-link"
           >
             {{ data.title }}
-          </router-link>
+          </BaseAppLink>
         </template>
       </Column>
       <Column

@@ -5,7 +5,7 @@
     :icon="onIcon"
     :label="onLabel"
     :size="size"
-    type="black"
+    type="tertiary-alternative"
     @click="$emit('update:modelValue', false)"
   />
   <BaseButton
@@ -14,7 +14,7 @@
     :icon="offIcon"
     :label="offLabel"
     :size="size"
-    type="black"
+    type="tertiary-alternative"
     @click="$emit('update:modelValue', true)"
   />
 </template>

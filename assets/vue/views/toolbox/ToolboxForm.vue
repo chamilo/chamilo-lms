@@ -8,7 +8,7 @@
         :label="t('Back')"
         icon="back"
         only-icon
-        type="black"
+        type="tertiary-alternative-text"
         @click="cancel"
       />
     </SectionHeader>
@@ -161,7 +161,7 @@
               :disabled="generating"
               :label="t('Back')"
               icon="back"
-              type="black"
+              type="tertiary-alternative"
               @click="cancel"
             />
             <BaseButton

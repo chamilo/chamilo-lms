@@ -10,7 +10,7 @@
         icon="dots-vertical"
         only-icon
         popup-identifier="lp-list-tmenu"
-        type="black"
+        type="tertiary-alternative"
         @click="mLpList.toggle($event)"
       />
       <BaseMenu

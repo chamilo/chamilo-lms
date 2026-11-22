@@ -35,7 +35,7 @@
         icon="back"
         only-icon
         size="small"
-        type="black"
+        type="tertiary-alternative"
         @click="goBackToLearningPath"
       />
     </BaseToolbar>
@@ -103,7 +103,7 @@
             v-if="categoryLanguageFilter"
             :label="t('Reset')"
             size="small"
-            type="black"
+            type="tertiary-alternative"
             @click="resetCategoryLanguageFilter"
           />
         </div>
@@ -179,7 +179,7 @@
                 :icon="isCategoryFolded(category) ? 'unfold' : 'fold'"
                 only-icon
                 size="small"
-                type="black"
+                type="tertiary-alternative"
                 @click="toggleCategoryFold(category)"
               />
             </div>
@@ -526,7 +526,7 @@
           :disabled="isSavingForum"
           :label="t('Cancel')"
           icon="close"
-          type="black"
+          type="tertiary-alternative"
           @click="goBackToLearningPath"
         />
         <BaseButton

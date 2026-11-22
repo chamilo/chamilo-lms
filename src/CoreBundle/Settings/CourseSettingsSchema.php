@@ -158,7 +158,15 @@ class CourseSettingsSchema extends AbstractSettingsSchema
 
     public function getHiddenSettings(): array
     {
-        return [CourseSettingPolicy::SETTING];
+        return [
+            CourseSettingPolicy::SETTING,
+            'show_navigation_menu',
+            'breadcrumbs_course_homepage',
+            'course_creation_splash_screen',
+            'view_grid_courses',
+            'hide_course_sidebar',
+            'course_creation_donate_link',
+        ];
     }
 
     public function buildForm(FormBuilderInterface $builder): void

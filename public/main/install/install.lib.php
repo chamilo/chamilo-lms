@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\UserAuthSource;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Installer\InstallerGate;
 use Chamilo\CoreBundle\Installer\InstallerState;
+use Chamilo\CoreBundle\Migrations\MigrationIssueReporter;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
 use Chamilo\CoreBundle\Tool\ToolChain;
 use Doctrine\DBAL\Connection;
@@ -2144,6 +2145,12 @@ function executeMigration(): array
         $output = new BufferedOutput();
         $migrationExitCode = $application->run($input, $output);
         $migrationOutput = trim($output->fetch());
+
+        // Only expose the summary in the authorized upgrade response. The full
+        // report stays outside the web root and contains diagnostic identifiers.
+        $issueReporter = $kernel->getContainer()->get(MigrationIssueReporter::class);
+        $resultStatus['migration_issue_summary'] = $issueReporter->getLastSummary();
+        $resultStatus['migration_issue_summary_failed'] = $issueReporter->hasSummaryFailed();
 
         createExtraConfigFile();
 

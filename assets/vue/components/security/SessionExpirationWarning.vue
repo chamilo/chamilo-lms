@@ -22,7 +22,7 @@
         v-if="isAuthenticated"
         :disabled="isRenewing"
         :label="t('Sign out')"
-        type="black"
+        type="tertiary-alternative"
         @click="signOut"
       />
       <BaseButton

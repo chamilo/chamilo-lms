@@ -129,6 +129,10 @@ class CourseRelUser implements Stringable
     #[ORM\Column(name: 'status', type: 'integer')]
     protected int $status;
 
+    #[Groups(['course_rel_user:read'])]
+    #[ORM\Column(name: 'visibility', type: 'integer', options: ['default' => 1])]
+    protected int $visibility = 1;
+
     #[ORM\Column(name: 'is_tutor', type: 'boolean', nullable: true, unique: false)]
     protected ?bool $tutor;
 
@@ -194,6 +198,7 @@ class CourseRelUser implements Stringable
         $this->sort = 0;
         $this->tutor = false;
         $this->status = self::STUDENT;
+        $this->visibility = 1;
         $this->relationType = 0;
     }
 
@@ -251,6 +256,18 @@ class CourseRelUser implements Stringable
     public function setStatus(int $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getVisibility(): int
+    {
+        return $this->visibility;
+    }
+
+    public function setVisibility(int $visibility): self
+    {
+        $this->visibility = $visibility;
 
         return $this;
     }

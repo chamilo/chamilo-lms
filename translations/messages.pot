@@ -43793,3 +43793,132 @@ msgstr ""
 
 msgid "The JSON of the access conditions must be a JSON object."
 msgstr ""
+
+msgid "Enable the CAS sign-in button when the server and portal URL are correctly configured."
+msgstr ""
+
+msgid "Use false to disable automatic creation, platform to use CAS attributes, or extldap to use the configured LDAP directory."
+msgstr ""
+
+msgid "Select CAS1, CAS2 (default), or CAS3. TLS is always required. The legacy SAML 1.1 protocol is not supported."
+msgstr ""
+
+msgid "Update the first name, last name and email from the configured LDAP directory over verified LDAPS. Roles and passwords are never synchronized by CAS."
+msgstr ""
+
+msgid "User authentication method not allowed"
+msgstr ""
+
+msgid "Two-factor authentication is required for this account."
+msgstr ""
+
+msgid "Migration completed with warnings"
+msgstr ""
+
+msgid "Recoverable data issues recorded:"
+msgstr ""
+
+msgid "Review affected content before use. The full report is available on the server at:"
+msgstr ""
+
+msgid "Unable to summarize migration data issues. Ask the server administrator to check var/log/migration-data-issues."
+msgstr ""
+
+msgid "Download the migration report (global administrator login required)"
+msgstr ""
+
+msgid "Assign scores"
+msgstr ""
+
+msgid "Assign these scores to the selected questions?"
+msgstr ""
+
+msgid "Below-full-score attempts"
+msgstr ""
+
+msgid "Edit classification"
+msgstr ""
+
+msgid "Full-score attempts"
+msgstr ""
+
+msgid "Occurrences"
+msgstr ""
+
+msgid "Only unused single-answer questions owned by this context can receive bulk scores."
+msgstr ""
+
+msgid "Question classification updated"
+msgstr ""
+
+msgid "Question scores updated"
+msgstr ""
+
+msgid "Questions in test"
+msgstr ""
+
+msgid "Statistics count completed, graded attempts in this course and session, using the current maximum question score. Partial scores count as below full score."
+msgstr ""
+
+msgid "Antivirus scan report"
+msgstr ""
+
+msgid "Enable antivirus upload scanning"
+msgstr ""
+
+msgid "Require a successful ClamAV scan for protected upload paths. Configure the daemon before enabling this setting. This setting is global for all access URLs."
+msgstr ""
+
+msgid "Infected"
+msgstr ""
+
+msgid "Scan error"
+msgstr ""
+
+msgid "Threat"
+msgstr ""
+
+msgid "Size (bytes)"
+msgstr ""
+
+msgid "Export includes up to 10000 matching scans. Dates are in UTC."
+msgstr ""
+
+msgid "File upload rejected by antivirus."
+msgstr ""
+
+msgid "File upload rejected: antivirus scan could not be completed."
+msgstr ""
+
+msgid "File upload rejected: antivirus audit is unavailable."
+msgstr ""
+
+msgid "Session ID"
+msgstr ""
+
+msgid "Each row represents a scan, not necessarily a separate upload."
+msgstr ""
+
+msgid "Total scans"
+msgstr ""
+
+msgid "No threat detected"
+msgstr ""
+
+msgid "HTTP upload"
+msgstr ""
+
+msgid "Resource storage"
+msgstr ""
+
+msgid "Asset storage"
+msgstr ""
+
+msgid "ZIP entry"
+msgstr ""
+
+msgid "SCORM package"
+msgstr ""
+
+msgid "SCORM entry"
+msgstr ""

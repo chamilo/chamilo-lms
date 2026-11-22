@@ -143,7 +143,7 @@
       <BaseButton
         :label="t('Clear search')"
         icon="close"
-        type="black"
+        type="tertiary-alternative"
         @click="clearSearch"
       />
     </form>
@@ -290,13 +290,13 @@
           :header="t('Group name')"
         >
           <template #body="{ data }">
-            <router-link
+            <BaseAppLink
               v-if="data.canBrowse"
-              class="font-medium text-primary hover:underline"
+              class="table-link"
               :to="groupRoute(data.id)"
             >
               {{ data.title }}
-            </router-link>
+            </BaseAppLink>
             <span
               v-else
               class="font-medium text-gray-90"
@@ -332,14 +332,14 @@
                 v-for="(tutor, index) in data.tutors"
                 :key="`${data.id}-${tutor.username || index}`"
               >
-                <a
+                <BaseAppLink
                   v-if="tutor.email"
-                  class="text-primary hover:underline"
-                  :href="`mailto:${tutor.email}`"
+                  class="table-link"
+                  :url="`mailto:${tutor.email}`"
                   :title="t('Login: {0}', [tutor.username])"
                 >
                   {{ tutor.name }}
-                </a>
+                </BaseAppLink>
                 <span
                   v-else
                   :title="tutor.username ? t('Login: {0}', [tutor.username]) : ''"

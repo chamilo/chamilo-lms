@@ -1609,14 +1609,14 @@
           v-if="canConvertAnswerType && isUniqueAnswer"
           :label="t('Convert to multiple answer')"
           icon="arrows-left-right"
-          type="black"
+          type="tertiary-alternative"
           @click="convertToMultipleAnswer"
         />
         <BaseButton
           v-if="canConvertAnswerType && !isUniqueAnswer"
           :label="t('Convert to unique answer')"
           icon="arrows-left-right"
-          type="black"
+          type="tertiary-alternative"
           @click="convertToUniqueAnswer"
         />
       </div>

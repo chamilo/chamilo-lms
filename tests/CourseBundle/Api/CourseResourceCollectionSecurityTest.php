@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CourseBundle\Api;
 use ApiPlatform\Symfony\Bundle\Test\Client;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Illustration;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
@@ -151,6 +152,31 @@ final class CourseResourceCollectionSecurityTest extends AbstractApiTest
         // The course-scoped collection above is the only attendance list.
         $client->request('GET', '/attendance/list_with_done_count?cid='.$ctx['courseA']->getId());
         $this->assertResponseStatusCodeSame(404);
+    }
+
+    public function testHiddenAttendancesAreOnlyListedForTeachers(): void
+    {
+        $ctx = $this->bootstrapScenario('hidden_attendances');
+        $published = $this->createAttendanceCalendar($ctx['courseA'], $ctx['teacherA'], 'Published attendance')->getAttendance();
+        $hidden = $this->createAttendanceCalendar(
+            $ctx['courseA'],
+            $ctx['teacherA'],
+            'Hidden attendance',
+            ResourceLink::VISIBILITY_DRAFT
+        )->getAttendance();
+        $url = '/api/attendances?cid='.$ctx['courseA']->getId();
+
+        // A student must not receive what the teacher hid, not even to hide it in the browser.
+        $studentClient = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['studentA']));
+        $studentIds = $this->getIds($studentClient, $url);
+        $this->assertContains('/api/attendances/'.$published->getIid(), $studentIds);
+        $this->assertNotContains('/api/attendances/'.$hidden->getIid(), $studentIds);
+
+        // The teacher still lists it, to show it again.
+        $teacherClient = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacherA']));
+        $teacherIds = $this->getIds($teacherClient, $url);
+        $this->assertContains('/api/attendances/'.$published->getIid(), $teacherIds);
+        $this->assertContains('/api/attendances/'.$hidden->getIid(), $teacherIds);
     }
 
     public function testSessionCourseListIsReservedToAdmins(): void
@@ -400,8 +426,12 @@ final class CourseResourceCollectionSecurityTest extends AbstractApiTest
         return $category;
     }
 
-    private function createAttendanceCalendar(Course $course, User $teacher, string $title): CAttendanceCalendar
-    {
+    private function createAttendanceCalendar(
+        Course $course,
+        User $teacher,
+        string $title,
+        int $visibility = ResourceLink::VISIBILITY_PUBLISHED
+    ): CAttendanceCalendar {
         $em = $this->getEntityManager();
 
         $attendance = (new CAttendance())
@@ -409,7 +439,7 @@ final class CourseResourceCollectionSecurityTest extends AbstractApiTest
             ->setLocked(0)
             ->setParent($course)
             ->setCreator($teacher)
-            ->addCourseLink($course)
+            ->addCourseLink($course, visibility: $visibility)
         ;
         $em->persist($attendance);
         $em->flush();

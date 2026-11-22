@@ -33,7 +33,7 @@
 
     <div class="flex gap-2 justify-end">
       <BaseButton
-        type="black"
+        type="tertiary-alternative"
         :label="t('Cancel')"
         @click="$emit('cancel')"
       />

@@ -132,13 +132,13 @@
         sortable
       >
         <template #body="{ data }">
-          <a
+          <BaseAppLink
             v-if="data.usersUrl"
-            class="text-primary hover:underline"
-            :href="data.usersUrl"
+            class="table-link"
+            :url="data.usersUrl"
           >
             {{ data.users }}
-          </a>
+          </BaseAppLink>
           <span v-else>{{ data.users }}</span>
         </template>
       </Column>

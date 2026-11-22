@@ -17,7 +17,7 @@
           :route="{ name: 'SurveyTemplateList' }"
           icon="back"
           only-icon
-          type="black"
+          type="tertiary-alternative"
         />
         <BaseButton
           :label="t('Configure')"
@@ -92,7 +92,7 @@
         <BaseButton
           :label="t('Cancel')"
           icon="close"
-          type="black"
+          type="tertiary-alternative"
           @click="cancelForm"
         />
       </div>
@@ -256,7 +256,7 @@
         <BaseButton
           :label="t('Cancel')"
           icon="close"
-          type="black"
+          type="tertiary-alternative"
           @click="cancelForm"
         />
         <BaseButton

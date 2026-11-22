@@ -210,7 +210,7 @@
             v-if="report.meta.supportsReset !== false"
             :label="t('Reset')"
             icon="refresh"
-            type="black"
+            type="tertiary-alternative"
             @click="resetFilters"
           />
           <BaseButton
@@ -709,13 +709,13 @@
                 type="primary-alternative"
                 :route="learnerDetailRoute(data)"
               />
-              <a
+              <BaseAppLink
                 v-else-if="column.type === 'link' && data[column.urlKey]"
-                :href="data[column.urlKey]"
-                class="text-primary hover:underline"
+                :url="data[column.urlKey]"
+                class="table-link"
               >
                 {{ formatValue(data[column.key], column.type) }}
-              </a>
+              </BaseAppLink>
               <span
                 v-else-if="column.type === 'date-status'"
                 :class="dateStatusClass(data[column.key])"

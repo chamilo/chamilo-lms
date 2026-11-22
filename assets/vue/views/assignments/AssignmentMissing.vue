@@ -6,7 +6,7 @@
         icon="back"
         only-icon
         size="small"
-        type="black"
+        type="tertiary-alternative"
         @click="goBack"
       />
       <BaseButton
@@ -14,7 +14,7 @@
         icon="email-unread"
         only-icon
         size="small"
-        type="black"
+        type="tertiary-alternative"
         :disabled="loading || sending || !users.length"
         :is-loading="sending"
         @click="sendEmailToAll"
@@ -70,12 +70,12 @@
 
       <Column :header="t('E-mail')">
         <template #body="slotProps">
-          <a
-            class="text-blue-600 hover:underline"
-            :href="`mailto:${slotProps.data.email}`"
+          <BaseAppLink
+            class="table-link"
+            :url="`mailto:${slotProps.data.email}`"
           >
             {{ slotProps.data.email }}
-          </a>
+          </BaseAppLink>
         </template>
       </Column>
     </BaseTable>

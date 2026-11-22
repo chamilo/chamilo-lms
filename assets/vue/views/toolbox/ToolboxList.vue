@@ -146,7 +146,7 @@
                 :label="t('Reporting')"
                 icon="tracking"
                 only-icon
-                type="black"
+                type="tertiary-alternative"
                 @click="openUrl(item.reportingUrl)"
               />
               <BaseButton
@@ -155,7 +155,7 @@
                 :route="detailRoute(item.id)"
                 icon="settings"
                 only-icon
-                type="black"
+                type="tertiary-alternative"
               />
               <BaseButton
                 v-if="!collection.canManage && item.canRestart"
@@ -163,7 +163,7 @@
                 :label="t('Try again')"
                 icon="restart"
                 only-icon
-                type="black"
+                type="tertiary-alternative"
                 @click="restartAttempt(item)"
               />
               <BaseButton

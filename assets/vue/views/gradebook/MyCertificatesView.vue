@@ -81,14 +81,14 @@
                   :data-testid="`certificate-consent-${data.id}`"
                   @click="confirmPublicationConsent(data)"
                 />
-                <a
+                <BaseAppLink
                   v-if="data.certificate.credentialVerificationUrl"
-                  :href="data.certificate.credentialVerificationUrl"
-                  class="text-xs underline text-primary"
+                  :url="data.certificate.credentialVerificationUrl"
+                  class="table-link"
                   :data-testid="`certificate-credential-${data.id}`"
                   target="_blank"
                   rel="noopener noreferrer"
-                >{{ t("Verify") }}</a>
+                >{{ t("Verify") }}</BaseAppLink>
               </div>
             </template>
           </Column>
@@ -161,14 +161,14 @@
                   :data-testid="`certificate-consent-${data.id}`"
                   @click="confirmPublicationConsent(data)"
                 />
-                <a
+                <BaseAppLink
                   v-if="data.certificate.credentialVerificationUrl"
-                  :href="data.certificate.credentialVerificationUrl"
-                  class="text-xs underline text-primary"
+                  :url="data.certificate.credentialVerificationUrl"
+                  class="table-link"
                   :data-testid="`certificate-credential-${data.id}`"
                   target="_blank"
                   rel="noopener noreferrer"
-                >{{ t("Verify") }}</a>
+                >{{ t("Verify") }}</BaseAppLink>
               </div>
             </template>
           </Column>

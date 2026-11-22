@@ -157,7 +157,7 @@ listAccessUrl().then((items) => (accessUrlList.value = items))
         :title="t('Back to user assignment page')"
         icon="back"
         only-icon
-        type="black"
+        type="tertiary-alternative"
         @click="router.back()"
       />
     </template>

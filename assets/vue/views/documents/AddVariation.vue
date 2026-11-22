@@ -105,14 +105,14 @@
             >
               <source :src="slotProps.data.path" />
             </video>
-            <a
+            <BaseAppLink
               v-else
-              :href="slotProps.data.path"
+              :url="slotProps.data.path"
               target="_blank"
-              class="text-blue-500 hover:underline"
+              class="table-link"
             >
               {{ t("View") }}
-            </a>
+            </BaseAppLink>
           </template>
         </Column>
         <Column

@@ -85,6 +85,40 @@
         />
       </div>
 
+      <div
+        v-if="filterableFields.length"
+        class="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+      >
+        <template
+          v-for="field in filterableFields"
+          :key="field.id"
+        >
+          <BaseSelect
+            v-if="isChoiceField(field)"
+            :id="`question-bank-filter-${field.id}`"
+            v-model="fieldFilters[field.id]"
+            :label="field.label"
+            :name="`questionField_${field.id}`"
+            :options="choiceOptions(field, t('All'))"
+          />
+          <BaseTextArea
+            v-else-if="field.type === 2"
+            :id="`question-bank-filter-${field.id}`"
+            v-model="fieldFilters[field.id]"
+            :label="field.label"
+            :name="`questionField_${field.id}`"
+            rows="2"
+          />
+          <BaseInputText
+            v-else
+            :id="`question-bank-filter-${field.id}`"
+            v-model="fieldFilters[field.id]"
+            :label="field.label"
+            :name="`questionField_${field.id}`"
+          />
+        </template>
+      </div>
+
       <div class="mt-4 flex flex-wrap gap-2">
         <BaseButton
           :is-loading="isLoading"
@@ -96,22 +130,25 @@
         <BaseButton
           :label="t('Clear search')"
           icon="close"
-          type="black"
+          type="tertiary-alternative"
           @click="clearFilters"
         />
       </div>
     </form>
 
     <div class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-20 bg-white px-4 py-3 shadow-sm">
-      <div class="text-sm text-gray-700">
-        {{ t("Questions") }}: {{ totalItems }}
+      <div class="space-y-1 text-sm text-gray-700">
+        <div>{{ t("Questions") }}: {{ totalItems }}</div>
+        <div v-if="!isGlobalMode" id="question-bank-exercise-count">
+          {{ t("Questions in test") }}: {{ exerciseQuestionCount }}
+        </div>
       </div>
       <div
         v-if="!isGlobalMode"
         class="flex flex-wrap gap-2"
       >
         <BaseButton
-          :disabled="0 === selectedQuestionIds.length || isSaving"
+          :disabled="0 === selectedQuestionIds.length || isSaving || isLoading"
           :is-loading="isSaving"
           :label="t('Add selected questions to the test')"
           icon="plus"
@@ -119,11 +156,122 @@
           @click="addSelectedQuestions"
         />
       </div>
+      <div v-else class="flex flex-wrap items-center gap-2">
+        <span class="text-sm text-gray-600">{{ t("Selected") }}: {{ selectedQuestionIds.length }}</span>
+        <BaseButton
+          :disabled="0 === selectedQuestionIds.length || isSaving || isLoading"
+          :label="t('Assign scores')"
+          icon="edit"
+          type="secondary"
+          @click="openScoreEditor"
+        />
+      </div>
     </div>
+
+    <p class="text-sm text-gray-600">
+      {{ t("Statistics count completed, graded attempts in this course and session, using the current maximum question score. Partial scores count as below full score.") }}
+    </p>
+    <p v-if="isGlobalMode" class="text-sm text-gray-600">
+      {{ t("Only unused single-answer questions owned by this context can receive bulk scores.") }}
+    </p>
+
+    <form
+      v-if="scoreEditorOpen"
+      class="space-y-3 rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
+      @submit.prevent="confirmScores"
+    >
+      <h2 class="font-semibold">{{ t("Assign scores") }} ({{ selectedQuestionIds.length }})</h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <BaseInputText
+          id="question-bank-correct-score"
+          v-model="scoreDraft.correct"
+          :label="t('Correct score')"
+          name="correctScore"
+          type="number"
+          min="0.01"
+          max="9999.99"
+          step="0.01"
+          required
+        />
+        <BaseInputText
+          id="question-bank-incorrect-score"
+          v-model="scoreDraft.incorrect"
+          :label="t('Incorrect score')"
+          name="incorrectScore"
+          type="number"
+          min="-9999.99"
+          max="0"
+          step="0.01"
+          required
+        />
+      </div>
+      <div class="flex flex-wrap justify-end gap-2">
+        <BaseButton :label="t('Cancel')" icon="close" type="secondary" @click="scoreEditorOpen = false" />
+        <BaseButton
+          :disabled="!validScores || isSaving || isLoading || selectedQuestionIds.length === 0"
+          :label="t('Save')"
+          :is-loading="isSaving"
+          :is-submit="true"
+          icon="save"
+          type="primary"
+        />
+      </div>
+    </form>
+
+    <form
+      v-if="classificationQuestion"
+      class="space-y-3 rounded-xl border border-gray-20 bg-white p-4 shadow-sm"
+      @submit.prevent="saveClassification"
+    >
+      <h2 class="font-semibold">
+        {{ t("Edit classification") }}: {{ displayText(classificationQuestion.title, t("Untitled")) }}
+      </h2>
+      <div class="grid gap-4 md:grid-cols-2">
+        <template v-for="field in editableFields" :key="field.id">
+          <BaseSelect
+            v-if="isChoiceField(field)"
+            :id="`question-bank-classification-${field.id}`"
+            v-model="classificationDraft[field.id]"
+            :label="field.label"
+            :name="`classification_${field.id}`"
+            :options="choiceOptions(field, '--')"
+          />
+          <BaseTextArea
+            v-else-if="field.type === 2"
+            :id="`question-bank-classification-${field.id}`"
+            v-model="classificationDraft[field.id]"
+            :label="field.label"
+            :name="`classification_${field.id}`"
+            rows="4"
+          />
+          <BaseInputText
+            v-else
+            :id="`question-bank-classification-${field.id}`"
+            v-model="classificationDraft[field.id]"
+            :label="field.label"
+            :name="`classification_${field.id}`"
+            maxlength="4000"
+          />
+        </template>
+      </div>
+      <div class="flex flex-wrap justify-end gap-2">
+        <BaseButton :label="t('Cancel')" icon="close" type="secondary" @click="classificationQuestion = null" />
+        <BaseButton
+          :disabled="!classificationChanged || isSaving || isLoading"
+          :label="t('Save')"
+          :is-loading="isSaving"
+          :is-submit="true"
+          icon="save"
+          type="primary"
+        />
+      </div>
+    </form>
 
     <BaseTable
       :key="tableKey"
       v-model:rows="filters.itemsPerPage"
+      v-model:sort-field="filters.sortField"
+      v-model:sort-order="sortOrder"
       :is-loading="isLoading"
       lazy
       :text-for-empty="t('No questions found')"
@@ -131,14 +279,14 @@
       :values="questions"
       data-key="id"
       @page="handleTablePage"
+      @sort="handleTableSort"
     >
-      <Column
-        v-if="!isGlobalMode"
-        class="w-12"
-      >
+      <Column class="w-12">
         <template #header>
           <input
-            :checked="areAllReusableQuestionsSelected"
+            :checked="areAllEligibleQuestionsSelected"
+            :aria-label="t('Select all')"
+            :disabled="isLoading || isSaving || eligibleQuestionIds.length === 0"
             class="h-4 w-4 rounded border-gray-25"
             name="selectAllQuestions"
             type="checkbox"
@@ -147,8 +295,11 @@
         </template>
         <template #body="{ data }">
           <input
-            v-if="data.canReuse"
+            v-if="isEligible(data)"
+            :id="`question-bank-select-${data.id}`"
             v-model="selectedQuestionIds"
+            :aria-label="displayText(data.title, t('Untitled'))"
+            :disabled="isLoading || isSaving"
             class="h-4 w-4 rounded border-gray-25"
             name="questionIds[]"
             type="checkbox"
@@ -157,7 +308,7 @@
         </template>
       </Column>
 
-      <Column :header="t('Question')">
+      <Column :header="t('Question')" field="title" sortable>
         <template #body="{ data }">
           <div class="space-y-1">
             <div class="font-semibold text-gray-90">
@@ -169,6 +320,12 @@
             >
               {{ displayText(data.description) }}
             </div>
+            <p v-if="data.alreadyInExercise" class="text-xs font-semibold text-gray-600">{{ t("Already in test") }}</p>
+            <template v-for="field in questionFields" :key="field.id">
+              <p v-if="data.fieldValues?.[field.id]" class="break-words text-xs text-gray-600">
+                <span class="font-semibold">{{ field.label }}:</span> {{ formatFieldValue(field, data.fieldValues[field.id]) }}
+              </p>
+            </template>
           </div>
         </template>
       </Column>
@@ -193,7 +350,7 @@
         </template>
       </Column>
 
-      <Column :header="t('Questions category')">
+      <Column :header="t('Questions category')" field="category" sortable>
         <template #body="{ data }">
           {{ displayText(data.categoryLabel, '-') }}
         </template>
@@ -202,6 +359,8 @@
       <Column
         :header="t('Difficulty')"
         class="w-24"
+        field="difficulty"
+        sortable
       >
         <template #body="{ data }">
           <span class="font-semibold text-gray-800">{{ data.difficulty }}</span>
@@ -211,10 +370,22 @@
       <Column
         :header="t('Score')"
         class="w-24"
+        field="score"
+        sortable
       >
         <template #body="{ data }">
           {{ formatScore(data.score) }}
         </template>
+      </Column>
+
+      <Column :header="t('Occurrences')" field="occurrences" sortable>
+        <template #body="{ data }">{{ data.occurrences }}</template>
+      </Column>
+      <Column :header="t('Full-score attempts')" field="correctAttempts" sortable>
+        <template #body="{ data }">{{ data.correctAttempts }}</template>
+      </Column>
+      <Column :header="t('Below-full-score attempts')" field="incorrectAttempts" sortable>
+        <template #body="{ data }">{{ data.incorrectAttempts }}</template>
       </Column>
 
       <Column
@@ -224,6 +395,16 @@
         <template #body="{ data }">
           <div class="flex justify-end gap-1">
             <template v-if="isGlobalMode">
+              <BaseButton
+                v-if="data.canClassify"
+                :disabled="isSaving || isLoading"
+                :label="t('Edit classification')"
+                icon="tag-outline"
+                only-icon
+                size="small"
+                type="secondary-text"
+                @click="openClassification(data)"
+              />
               <BaseButton
                 v-if="data.canEdit"
                 :label="t('Edit')"
@@ -244,7 +425,7 @@
               />
               <BaseButton
                 v-if="data.canDelete"
-                :disabled="isSaving"
+                :disabled="isSaving || isLoading"
                 :label="t('Delete')"
                 icon="delete"
                 only-icon
@@ -265,7 +446,7 @@
             <template v-else>
               <BaseButton
                 v-if="data.canReuse"
-                :disabled="isSaving"
+                :disabled="isSaving || isLoading"
                 :label="t('Use this question in the test as a link (not a copy)')"
                 icon="plus"
                 only-icon
@@ -299,7 +480,9 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import BaseSelect from "../../components/basecomponents/BaseSelect.vue"
 import BaseTable from "../../components/basecomponents/BaseTable.vue"
+import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import { useConfirmation } from "../../composables/useConfirmation"
+import { useStudentViewRefresh } from "../../composables/useStudentViewRefresh"
 import exerciseService from "../../services/exerciseService"
 
 const { t } = useI18n()
@@ -316,6 +499,15 @@ const difficultyOptions = ref([])
 const questionTypeOptions = ref([])
 const selectedQuestionIds = ref([])
 const totalItems = ref(0)
+const exerciseQuestionCount = ref(0)
+const questionFields = ref([])
+const fieldFilters = ref({})
+const classificationQuestion = ref(null)
+const classificationDraft = ref({})
+const scoreEditorOpen = ref(false)
+const scoreDraft = reactive({ correct: "1", incorrect: "0" })
+const sortFields = ["title", "category", "difficulty", "score", "occurrences", "correctAttempts", "incorrectAttempts"]
+let loadVersion = 0
 const isLoading = ref(false)
 const isSaving = ref(false)
 const errorMessage = ref("")
@@ -328,6 +520,12 @@ const filters = reactive({
   sourceExerciseId: Number(getQueryValue(route.query.sourceExerciseId) || 0),
   difficulty: Number(getQueryValue(route.query.difficulty) || -1),
   questionType: Number(getQueryValue(route.query.questionType) || -1),
+  sortField: sortFields.includes(getQueryValue(route.query.sortField)) ? getQueryValue(route.query.sortField) : "title",
+  sortDirection: getQueryValue(route.query.sortDirection) === "DESC" ? "DESC" : "ASC",
+})
+const sortOrder = computed({
+  get: () => (filters.sortDirection === "DESC" ? -1 : 1),
+  set: (value) => { filters.sortDirection = value === -1 ? "DESC" : "ASC" },
 })
 
 const isGlobalMode = computed(() => responseGlobalMode.value)
@@ -338,10 +536,76 @@ const backRoute = computed(() => {
 
   return { name: "ExerciseQuestions", params: { ...route.params, exerciseId }, query: getContextParams() }
 })
-const reusableQuestionIds = computed(() => questions.value.filter((question) => question.canReuse).map((question) => Number(question.id)))
-const areAllReusableQuestionsSelected = computed(
-  () => reusableQuestionIds.value.length > 0 && reusableQuestionIds.value.every((id) => selectedQuestionIds.value.includes(id)),
+const filterableFields = computed(() => questionFields.value.filter((field) => field.filter))
+const editableFields = computed(() => questionFields.value.filter((field) => field.changeable))
+const eligibleQuestionIds = computed(() => questions.value.filter(isEligible).map((question) => Number(question.id)))
+const areAllEligibleQuestionsSelected = computed(
+  () => eligibleQuestionIds.value.length > 0 && eligibleQuestionIds.value.every((id) => selectedQuestionIds.value.includes(id)),
 )
+const validScores = computed(() => {
+  const correct = Number(scoreDraft.correct)
+  const incorrect = Number(scoreDraft.incorrect)
+  return String(scoreDraft.correct ?? "").trim() !== "" && String(scoreDraft.incorrect ?? "").trim() !== "" &&
+    Number.isFinite(correct) && correct >= 0.01 && correct <= 9999.99 &&
+    Number.isFinite(incorrect) && incorrect >= -9999.99 && incorrect <= 0 &&
+    Math.abs(correct * 100 - Math.round(correct * 100)) < 0.000001 &&
+    Math.abs(incorrect * 100 - Math.round(incorrect * 100)) < 0.000001
+})
+const classificationChanged = computed(() => editableFields.value.some((field) =>
+  String(classificationDraft.value[field.id] ?? "") !== String(classificationQuestion.value?.fieldValues?.[field.id] ?? ""),
+))
+
+function isEligible(question) {
+  return isGlobalMode.value ? question.canAssignScores : question.canReuse
+}
+
+function isChoiceField(field) {
+  return [3, 4].includes(field.type)
+}
+
+function choiceOptions(field, emptyLabel) {
+  return [{ label: emptyLabel, value: "" }, ...field.options]
+}
+
+function formatFieldValue(field, value) {
+  return field.options.find((option) => option.value === value)?.label ?? value
+}
+
+function clearEditors() {
+  selectedQuestionIds.value = []
+  scoreEditorOpen.value = false
+  classificationQuestion.value = null
+}
+
+function openScoreEditor() {
+  classificationQuestion.value = null
+  scoreEditorOpen.value = true
+}
+
+function openClassification(question) {
+  scoreEditorOpen.value = false
+  classificationQuestion.value = question
+  classificationDraft.value = Object.fromEntries(editableFields.value.map((field) => [field.id, String(question.fieldValues?.[field.id] ?? "")]))
+}
+
+function confirmScores() {
+  if (!validScores.value || isSaving.value || isLoading.value) return
+  const ids = [...selectedQuestionIds.value]
+  const scores = { correctScore: Number(scoreDraft.correct), incorrectScore: Number(scoreDraft.incorrect) }
+  requireConfirmation({
+    message: t("Assign these scores to the selected questions?"),
+    accept: () => runBankAction("assign_scores", ids, scores),
+  })
+}
+
+async function saveClassification() {
+  if (!classificationQuestion.value || !classificationChanged.value || isSaving.value || isLoading.value) return
+  const question = classificationQuestion.value
+  const fieldValues = Object.fromEntries(editableFields.value
+    .filter((field) => String(classificationDraft.value[field.id] ?? "") !== String(question.fieldValues?.[field.id] ?? ""))
+    .map((field) => [field.id, String(classificationDraft.value[field.id] ?? "")]))
+  await runBankAction("classify", [Number(question.id)], { fieldValues })
+}
 
 function getQueryValue(value) {
   return Array.isArray(value) ? value[0] : value
@@ -386,6 +650,9 @@ function getBankParams() {
     sourceExerciseId: filters.sourceExerciseId,
     difficulty: filters.difficulty,
     questionType: filters.questionType,
+    sortField: filters.sortField,
+    sortDirection: filters.sortDirection,
+    ...Object.fromEntries(filterableFields.value.map((field) => [`questionField_${field.id}`, fieldFilters.value[field.id] ?? ""])),
   }
 }
 
@@ -428,6 +695,7 @@ function resetTablePagination() {
 }
 
 function applyFilters() {
+  clearEditors()
   filters.page = 1
   resetTablePagination()
   loadQuestionBank()
@@ -440,13 +708,27 @@ function clearFilters() {
   filters.sourceExerciseId = 0
   filters.difficulty = -1
   filters.questionType = -1
+  filters.sortField = "title"
+  filters.sortDirection = "ASC"
+  fieldFilters.value = Object.fromEntries(filterableFields.value.map((field) => [field.id, ""]))
+  clearEditors()
   resetTablePagination()
   loadQuestionBank()
 }
 
 function handleTablePage(event) {
+  clearEditors()
   filters.page = Number(event.page || 0) + 1
   filters.itemsPerPage = Number(event.rows || filters.itemsPerPage || 20)
+  loadQuestionBank()
+}
+
+function handleTableSort(event) {
+  if (!sortFields.includes(event.sortField)) return
+  clearEditors()
+  filters.sortField = event.sortField
+  filters.sortDirection = event.sortOrder === -1 ? "DESC" : "ASC"
+  filters.page = 1
   loadQuestionBank()
 }
 
@@ -475,7 +757,8 @@ function getReuseBlockedLabel(question) {
 }
 
 function toggleAllQuestions(event) {
-  selectedQuestionIds.value = event.target.checked ? [...reusableQuestionIds.value] : []
+  selectedQuestionIds.value = event.target.checked ? [...eligibleQuestionIds.value] : []
+  if (selectedQuestionIds.value.length === 0) scoreEditorOpen.value = false
 }
 
 function confirmDeleteQuestion(question) {
@@ -501,8 +784,8 @@ async function runReuseAction(questionIds) {
   await runBankAction("reuse", questionIds)
 }
 
-async function runBankAction(action, questionIds) {
-  if (isSaving.value) {
+async function runBankAction(action, questionIds, extra = {}) {
+  if (isSaving.value || isLoading.value) {
     return
   }
 
@@ -522,12 +805,17 @@ async function runBankAction(action, questionIds) {
         exerciseId,
         action,
         questionIds: safeQuestionIds,
+        ...extra,
       },
       getContextParams(),
       isGlobalMode.value ? null : exerciseId,
     )
     infoMessage.value = response?.message ? t(response.message) : t("Question bank updated")
-    selectedQuestionIds.value = []
+    clearEditors()
+    if (action === "assign_scores" || action === "classify") {
+      filters.page = 1
+      resetTablePagination()
+    }
     await loadQuestionBank()
   } catch (error) {
     console.error("Error processing exercise question bank action", error)
@@ -538,11 +826,13 @@ async function runBankAction(action, questionIds) {
 }
 
 async function loadQuestionBank() {
+  const version = ++loadVersion
   isLoading.value = true
   errorMessage.value = ""
 
   try {
     const response = await exerciseService.getExerciseQuestionBank(getBankParams(), isGlobalMode.value ? null : exerciseId)
+    if (version !== loadVersion) return
     responseGlobalMode.value = true === response.globalMode || 0 >= exerciseId
     questions.value = Array.isArray(response.items) ? response.items : []
     categoryOptions.value = Array.isArray(response.categoryOptions) ? response.categoryOptions : []
@@ -550,16 +840,27 @@ async function loadQuestionBank() {
     difficultyOptions.value = Array.isArray(response.difficultyOptions) ? response.difficultyOptions : []
     questionTypeOptions.value = Array.isArray(response.questionTypeOptions) ? response.questionTypeOptions : []
     totalItems.value = Number(response.totalItems || 0)
+    exerciseQuestionCount.value = Number(response.exerciseQuestionCount || 0)
+    questionFields.value = Array.isArray(response.questionFields) ? response.questionFields : []
+    fieldFilters.value = Object.fromEntries(filterableFields.value.map((field) => [field.id, fieldFilters.value[field.id] ?? ""]))
     filters.page = Number(response.page || filters.page || 1)
     filters.itemsPerPage = Number(response.itemsPerPage || filters.itemsPerPage || 20)
-    selectedQuestionIds.value = selectedQuestionIds.value.filter((id) => reusableQuestionIds.value.includes(Number(id)))
+    selectedQuestionIds.value = selectedQuestionIds.value.filter((id) => eligibleQuestionIds.value.includes(Number(id)))
   } catch (error) {
+    if (version !== loadVersion) return
+    clearEditors()
+    questions.value = []
+    totalItems.value = 0
+    exerciseQuestionCount.value = 0
+    questionFields.value = []
+    fieldFilters.value = {}
     console.error("Error loading exercise question bank", error)
     errorMessage.value = error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("Could not load the question bank")
   } finally {
-    isLoading.value = false
+    if (version === loadVersion) isLoading.value = false
   }
 }
 
 onMounted(loadQuestionBank)
+useStudentViewRefresh(loadQuestionBank, { before: clearEditors })
 </script>

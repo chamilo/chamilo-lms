@@ -122,7 +122,7 @@
             v-if="report.meta.supportsReset !== false"
             :label="t('Reset')"
             icon="refresh"
-            type="black"
+            type="tertiary-alternative"
             @click="resetFilters"
           />
           <BaseButton
@@ -181,13 +181,13 @@
           />
           <Column :header="t('Diagram')">
             <template #body="{ data }">
-              <a
+              <BaseAppLink
                 v-if="data.diagramUrl"
-                :href="data.diagramUrl"
-                class="text-primary hover:underline"
+                :url="data.diagramUrl"
+                class="table-link"
               >
                 {{ t("Diagram") }}
-              </a>
+              </BaseAppLink>
               <span v-else>{{ t("No data available") }}</span>
             </template>
           </Column>
@@ -276,13 +276,13 @@
               </span>
             </template>
             <template #body="{ data }">
-              <router-link
+              <BaseAppLink
                 v-if="column.type === 'session-title'"
                 :to="sessionCoursesRoute(data)"
-                class="text-primary hover:underline"
+                class="table-link"
               >
                 {{ data[column.key] }}
-              </router-link>
+              </BaseAppLink>
               <span v-else-if="column.type === 'session-date-range'">
                 {{ formatSessionDateRange(data.startDate, data.endDate) }}
               </span>
@@ -315,7 +315,7 @@
                   :route="sessionCoursesRoute(data)"
                 />
               </div>
-              <router-link
+              <BaseAppLink
                 v-else-if="column.type === 'course-home'"
                 :to="{
                   name: 'CourseHome',
@@ -325,15 +325,15 @@
                 class="text-primary hover:underline"
               >
                 {{ data[column.key] }}
-              </router-link>
-              <a
+              </BaseAppLink>
+              <BaseAppLink
                 v-else-if="column.type === 'thematic-progress' && data.thematicUrl"
-                :href="data.thematicUrl"
+                :url="data.thematicUrl"
                 :title="t('Go to thematic advance')"
-                class="text-primary hover:underline"
+                class="table-link"
               >
                 {{ formatValue(data[column.key], "percent") }}
-              </a>
+              </BaseAppLink>
               <span v-else-if="column.type === 'thematic-progress'">-</span>
               <BaseButton
                 v-else-if="column.type === 'attendance-link' && data.attendanceUrl"
@@ -407,9 +407,9 @@
                 v-else-if="column.type === 'last-access-status'"
                 class="inline-flex items-center gap-2"
               >
-                <a
+                <BaseAppLink
                   v-if="data.lastAccessIsStale && data.inactiveReminderUrl"
-                  :href="data.inactiveReminderUrl"
+                  :url="data.inactiveReminderUrl"
                   :title="t('Remind inactive user')"
                   class="inline-flex items-center"
                 >
@@ -417,7 +417,7 @@
                     icon="alert"
                     class="text-yellow-600"
                   />
-                </a>
+                </BaseAppLink>
                 <BaseIcon
                   v-else-if="data.lastAccessIsStale"
                   icon="alert"
@@ -473,20 +473,20 @@
             :header="t(column.label)"
           >
             <template #body="{ data }">
-              <a
+              <BaseAppLink
                 v-if="column.type === 'link' && data[column.urlKey]"
-                :href="data[column.urlKey]"
-                class="text-primary hover:underline"
+                :url="data[column.urlKey]"
+                class="table-link"
               >
                 {{ data[column.key] }}
-              </a>
-              <a
+              </BaseAppLink>
+              <BaseAppLink
                 v-else-if="column.key === 'bestAttempt' && data.bestAttemptUrl"
-                :href="data.bestAttemptUrl"
-                class="text-primary hover:underline"
+                :url="data.bestAttemptUrl"
+                class="table-link"
               >
                 {{ formatValue(data[column.key], column.type) }}
-              </a>
+              </BaseAppLink>
               <span v-else>
                 {{ formatValue(data[column.key], column.type) }}
               </span>

@@ -10,7 +10,7 @@ const platformConfig = usePlatformConfig()
 
 <template>
   <div
-    v-if="platformConfig.oauth2Providers.length > 0"
+    v-if="platformConfig.oauth2Providers.length > 0 || platformConfig.casAuth"
     class="external-logins"
   >
     <BaseDivider
@@ -31,6 +31,14 @@ const platformConfig = usePlatformConfig()
         >
           {{ t("Continue with {0}", [extAuth.title]) }}
         </BaseAppLink>
+      </li>
+      <li v-if="platformConfig.casAuth">
+        <a
+          :href="platformConfig.casAuth.url"
+          class="external-logins__button"
+        >
+          {{ t("Continue with {0}", [platformConfig.casAuth.title]) }}
+        </a>
       </li>
     </ul>
   </div>

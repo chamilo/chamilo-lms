@@ -125,7 +125,7 @@ onMounted(loadConfiguration)
         :route="{ name: 'SurveyTemplateList' }"
         icon="back"
         only-icon
-        type="black"
+        type="tertiary-alternative-text"
       />
       <BaseButton
         v-if="isEditMode"
@@ -253,7 +253,7 @@ onMounted(loadConfiguration)
           :label="t('Cancel')"
           :route="{ name: 'SurveyTemplateList' }"
           icon="back"
-          type="black"
+          type="tertiary-alternative"
         />
         <BaseButton
           :is-loading="isSaving"

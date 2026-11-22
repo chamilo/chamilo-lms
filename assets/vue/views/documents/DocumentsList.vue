@@ -9,7 +9,7 @@
       :route="gradebookReturnRoute"
       icon="back"
       only-icon
-      type="primary-text"
+      type="tertiary-alternative-text"
     />
     <BaseButton
       v-if="showNewCertificateButton"
@@ -24,7 +24,7 @@
       :label="t('Upload')"
       icon="file-upload"
       only-icon
-      type="black"
+      type="tertiary-alternative"
       @click="goToUploadFile"
     />
     <BaseButton
@@ -42,7 +42,7 @@
       :label="t('Back')"
       icon="back"
       only-icon
-      type="gray"
+      type="tertiary-alternative-text"
       @click="back"
     />
     <BaseButton
@@ -72,7 +72,8 @@
     <BaseButton
       v-if="showNewFolderButton"
       :label="t('New folder')"
-      icon="folder-plus"
+      icon="folder-generic"
+      badge-icon="star"
       only-icon
       type="success"
       @click="openNew"
@@ -81,6 +82,7 @@
       v-if="showNewDrawingButton"
       :label="t('New drawing')"
       icon="shape"
+      badge-icon="star"
       only-icon
       type="success"
       @click="goToNewDrawing"
@@ -106,7 +108,7 @@
       :label="t('Slideshow')"
       icon="view-gallery"
       only-icon
-      type="black"
+      type="tertiary-alternative"
       @click="showSlideShowWithFirstImage"
     />
     <BaseButton
@@ -114,14 +116,15 @@
       :label="t('Usage')"
       icon="usage"
       only-icon
-      type="black"
+      type="tertiary-alternative"
       @click="showUsageDialog"
     />
     <BaseButton
       v-if="showDownloadAllButton && !hideDownloadIcon"
       :disabled="isDownloadingAll"
       :label="t('Download all')"
-      icon="download"
+      icon="folder-generic"
+      badge-icon="arrow-down"
       only-icon
       type="primary"
       @click="downloadAllItems"
@@ -131,7 +134,7 @@
       :label="t('Generate media')"
       icon="robot"
       only-icon
-      type="black"
+      type="tertiary-alternative"
       @click="goToGenerateMedia"
     />
   </SectionHeader>
@@ -337,7 +340,7 @@
               slotProps.data.iid === defaultCertificateId ? t('Default certificate') : t('Set as default certificate')
             "
             size="small"
-            type="slotProps.data.iid === defaultCertificateId ? 'success' : 'black'"
+            :type="slotProps.data.iid === defaultCertificateId ? 'success' : 'tertiary-alternative'"
             @click="selectAsDefaultCertificate(slotProps.data)"
           />
           <BaseButton

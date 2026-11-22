@@ -28,6 +28,7 @@ final class CourseAccessResolver
 {
     public function __construct(
         private readonly SettingsManager $settingsManager,
+        private readonly CourseStudentAccessChecker $studentAccessChecker,
     ) {}
 
     /**
@@ -36,6 +37,10 @@ final class CourseAccessResolver
     public function resolveCourseRoles(User $user, Course $course, ?Session $session = null): array
     {
         if ($course->isHidden()) {
+            return [];
+        }
+
+        if ($this->studentAccessChecker->isDisabled($user, $course, $session)) {
             return [];
         }
 
@@ -118,9 +123,9 @@ final class CourseAccessResolver
     /**
      * @return array<int, string> ROLE_CURRENT_COURSE_GROUP_* role names the user holds in the given group
      */
-    public function resolveGroupRoles(User $user, Course $course, CGroup $group): array
+    public function resolveGroupRoles(User $user, Course $course, CGroup $group, ?Session $session = null): array
     {
-        if ($course->isHidden()) {
+        if ($course->isHidden() || $this->studentAccessChecker->isDisabled($user, $course, $session)) {
             return [];
         }
 

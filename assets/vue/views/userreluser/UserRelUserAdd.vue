@@ -7,7 +7,7 @@
   <BaseToolbar>
     <BaseButton
       icon="back"
-      type="black"
+      type="tertiary-alternative"
       @click="goToBack"
     />
   </BaseToolbar>

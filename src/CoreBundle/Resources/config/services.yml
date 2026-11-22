@@ -21,10 +21,14 @@ services:
       exclude: '../../{Repository,Component,DependencyInjection,EventListener,Form/DataTransformer/ResourceToIdentifierTransformer.php,Framework,Migrations,Settings,ChamiloCoreBundle.php,Entity,ApiResource,Security/Badge,Security/ExerciseAttemptScope.php,Tool/LegacyPluginCourseTool.php}'
       public: true
 
+    Chamilo\CoreBundle\Migrations\MigrationIssueReporter:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+
     Doctrine\Migrations\Version\DbalMigrationFactory: ~
     Chamilo\CoreBundle\Migrations\MigrationFactory:
         decorates: Doctrine\Migrations\Version\DbalMigrationFactory
-        arguments: ['@Chamilo\CoreBundle\Migrations\MigrationFactory.inner', '@service_container', '@doctrine.orm.entity_manager']
+        arguments: ['@Chamilo\CoreBundle\Migrations\MigrationFactory.inner', '@service_container', '@doctrine.orm.entity_manager', '@Chamilo\CoreBundle\Migrations\MigrationIssueReporter']
 
     Chamilo\CoreBundle\Controller\:
         resource: '../../Controller'

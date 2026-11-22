@@ -19,7 +19,7 @@
       <BaseButton
         :label="t('Back')"
         icon="back"
-        type="black"
+        type="tertiary-alternative"
         @click="emit('backPressed')"
       />
       <BaseButton

@@ -119,7 +119,7 @@
             v-for="item in reportTypes"
             :key="item.key"
             :label="t(item.label)"
-            :type="activeReport === item.key ? 'primary' : 'black'"
+            :type="activeReport === item.key ? 'primary' : 'tertiary-alternative'"
             @click="activeReport = item.key"
           />
         </div>
@@ -325,6 +325,13 @@ const QuestionReportList = defineComponent({
                   { class: "text-xs text-gray-500" },
                   `${question.typeLabel} · ${question.totalAnswers} ${t("answers")}`,
                 ),
+                question.type === "score" && question.scoreAverage != null
+                  ? h(
+                      "p",
+                      { class: "mt-1 text-sm font-semibold text-primary" },
+                      `${t("Average score")}: ${Number(question.scoreAverage).toFixed(2)} / ${question.scoreMax}`,
+                    )
+                  : null,
               ]),
             ]),
             renderQuestionBody(question),
@@ -341,7 +348,17 @@ function renderQuestionBody(question) {
       { class: "space-y-3" },
       question.scoreRows.map((row) =>
         h("div", { class: "rounded-lg border border-gray-20 p-3" }, [
-          h("div", { class: "mb-2 font-semibold" }, displayText(row.optionLabel)),
+          h("div", { class: "mb-2 flex flex-wrap items-center justify-between gap-2" }, [
+            h("span", { class: "font-semibold" }, displayText(row.optionLabel)),
+            row.averageScore != null
+              ? h(
+                  "span",
+                  { class: "text-sm font-semibold text-primary" },
+                  `${t("Average score")}: ${Number(row.averageScore).toFixed(2)} / ${question.scoreMax}` +
+                    ` (${row.responseCount} ${t("answers")})`,
+                )
+              : null,
+          ]),
           h(
             "div",
             { class: "grid gap-2 md:grid-cols-5" },

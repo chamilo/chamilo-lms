@@ -121,7 +121,7 @@ onBeforeUnmount(() => {
                 v-if="index < breadcrumbs.length - 1"
                 :label="crumb.label"
                 size="small"
-                type="black"
+                type="tertiary-alternative"
                 class="max-w-44 shrink min-w-0"
                 @click="showNode(crumb.id)"
               />

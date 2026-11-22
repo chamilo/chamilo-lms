@@ -16,7 +16,7 @@
         :label="t('Back')"
         icon="back"
         only-icon
-        type="black"
+        type="tertiary-alternative-text"
         @click="goBackToList"
       />
 
@@ -25,7 +25,7 @@
         :label="t('Reply to this message')"
         icon="reply"
         only-icon
-        type="black"
+        type="tertiary-alternative"
         @click="reply"
       />
 
@@ -34,7 +34,7 @@
         :label="t('Reply to all')"
         icon="reply-all"
         only-icon
-        type="black"
+        type="tertiary-alternative"
         @click="replyAll"
       />
 
@@ -42,7 +42,7 @@
         :label="t('Add to calendar')"
         icon="calendar-plus"
         only-icon
-        type="black"
+        type="tertiary-alternative"
         @click="createEvent"
       />
 
@@ -50,7 +50,7 @@
         :label="t('Delete')"
         icon="delete"
         only-icon
-        type="black"
+        type="tertiary-alternative"
         @click="confirmDelete"
       />
     </SectionHeader>
@@ -143,7 +143,7 @@
               :label="attachment.resourceNode.firstResourceFile.originalName"
               :to-url="attachment.downloadUrl"
               icon="attachment"
-              type="black"
+              type="tertiary-alternative"
             />
           </li>
         </ul>

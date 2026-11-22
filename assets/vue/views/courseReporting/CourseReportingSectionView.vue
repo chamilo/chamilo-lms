@@ -47,7 +47,7 @@
           :key="preset.key"
           :label="t(preset.label)"
           size="small"
-          type="black"
+          type="tertiary-alternative"
           @click="applyActivityDatePreset(preset.days)"
         />
       </div>

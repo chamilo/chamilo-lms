@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /* For licensing terms, see /license.txt */
 
 /**
@@ -7,22 +9,26 @@
  *
  * @author Ivan Tcholakov <ivantcholakov@gmail.com>, 2010
  */
-
-use Chamilo\CoreBundle\Enums\ToolIcon;
-
 $cidReset = true;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
+
+require_once __DIR__.'/../inc/lib/course_request_admin.inc.php';
 $tool_name = get_lang('Edit a course request');
 
-api_protect_admin_script();
+if (!api_protect_admin_script()) {
+    exit;
+}
 
 // A check whether the course validation feature is enabled.
-$course_validation_feature = 'true' === api_get_setting('course_validation');
+$course_validation_feature = 'true' === api_get_setting('course.course_validation');
 
 // Filtering passed to this page parameters.
-$id = (int) ($_GET['id']);
-$caller = (int) ($_GET['caller']);
+$id = is_scalar($_GET['id'] ?? null) ? max(0, (int) $_GET['id']) : 0;
+$caller = is_scalar($_GET['caller'] ?? null) ? (int) $_GET['caller'] : COURSE_REQUEST_PENDING;
+$caller = in_array($caller, [COURSE_REQUEST_PENDING, COURSE_REQUEST_ACCEPTED, COURSE_REQUEST_REJECTED], true) ? $caller : COURSE_REQUEST_PENDING;
+$course_request_info = false;
 
 if ($course_validation_feature) {
     // Retrieve request's data from the corresponding database record.
@@ -37,7 +43,8 @@ if ($course_validation_feature) {
             )
         );
     } else {
-        // Ensure the database prefix + database name do not get over 40 characters.
+        $caller = (int) $course_request_info['status'];
+        // Keep the same course code length limit.
         $maxlength = 40;
 
         // Build the form.
@@ -48,8 +55,8 @@ if ($course_validation_feature) {
         );
         $form->protect();
 
-        // Form title.
-        $form->addElement('header', $tool_name);
+        $form->protect();
+        $form->addElement('header', get_lang('Course request details'));
 
         // Title.
         $form->addElement('text', 'title', get_lang('Course name'), ['size' => '60', 'id' => 'title']);
@@ -68,7 +75,9 @@ if ($course_validation_feature) {
 
         if (!empty($course_request_info['category_code'])) {
             $data = CourseCategory::getCategory($course_request_info['category_code']);
-            $courseSelect->addOption($data['name'], $data['code'], ['selected' => 'selected']);
+            if (is_array($data) && isset($data['name'], $data['code'])) {
+                $courseSelect->addOption($data['name'], $data['code'], ['selected' => 'selected']);
+            }
         }
 
         // Course code.
@@ -76,7 +85,7 @@ if ($course_validation_feature) {
             'wanted_code',
             get_lang('Course code'),
             false,
-            ['size' => '$maxlength', 'maxlength' => $maxlength]
+            ['maxlength' => $maxlength]
         );
         $form->applyFilter('wanted_code', 'html_filter');
         $form->addRule('wanted_code', get_lang('max. 20 characters, e.g. <i>INNOV21</i>'), 'maxlength', $maxlength);
@@ -91,15 +100,15 @@ if ($course_validation_feature) {
         );
 
         // Description of the requested course.
-        $form->addElement('textarea', 'description', get_lang('Description'));
+        $form->addElement('textarea', 'description', get_lang('Description'), ['rows' => 4]);
         $form->addRule('description', get_lang('Required field'), 'required');
 
         // Objectives of the requested course.
-        $form->addElement('textarea', 'objetives', get_lang('Objectives'));
+        $form->addElement('textarea', 'objetives', get_lang('Objectives'), ['rows' => 4]);
         $form->addRule('objetives', get_lang('Required field'), 'required');
 
         // Target audience of the requested course.
-        $form->addElement('textarea', 'target_audience', get_lang('Target audience'));
+        $form->addElement('textarea', 'target_audience', get_lang('Target audience'), ['rows' => 4]);
         $form->addRule('target_audience', get_lang('Required field'), 'required');
 
         // Course language.
@@ -113,42 +122,35 @@ if ($course_validation_feature) {
         if (COURSE_REQUEST_ACCEPTED != $course_request_info['status']) {
             $submit_buttons[] = $form->addButtonSave(get_lang('Accept'), 'accept_button', true);
         }
-        if (COURSE_REQUEST_ACCEPTED != $course_request_info['status'] &&
-            COURSE_REQUEST_REJECTED != $course_request_info['status']
+        if (COURSE_REQUEST_ACCEPTED != $course_request_info['status']
+            && COURSE_REQUEST_REJECTED != $course_request_info['status']
         ) {
             $submit_buttons[] = $form->addButtonCancel(get_lang('Reject'), 'reject_button', true);
         }
-        if (COURSE_REQUEST_ACCEPTED != $course_request_info['status'] && (int) ($course_request_info['info']) <= 0) {
+        if (COURSE_REQUEST_ACCEPTED != $course_request_info['status'] && (int) $course_request_info['info'] <= 0) {
             $submit_buttons[] = $form->addButtonPreview(get_lang('Ask for additional information'), 'ask_info_button', true);
         }
         $form->addGroup($submit_buttons);
 
-        // Hidden form fields.
-        $form->addElement('hidden', 'user_id');
-        $form->addElement('hidden', 'visual_code');
-        $form->addElement('hidden', 'request_date');
-        $form->addElement('hidden', 'status');
-        $form->addElement('hidden', 'info');
-
         // Set the default values based on the corresponding database record.
         $values['wanted_code'] = $course_request_info['code'];
-        $values['user_id'] = $course_request_info['user_id'];
         $values['course_language'] = $course_request_info['course_language'];
         $values['title'] = $course_request_info['title'];
         $values['description'] = $course_request_info['description'];
-        //$values['category_code'] = $course_request_info['category_code'];
+        $values['category_code'] = $course_request_info['category_code'] ?? '';
         $values['tutor_name'] = $course_request_info['tutor_name'];
-        $values['visual_code'] = $course_request_info['visual_code'];
-        $values['request_date'] = $course_request_info['request_date'];
         $values['objetives'] = $course_request_info['objetives'];
         $values['target_audience'] = $course_request_info['target_audience'];
-        $values['status'] = $course_request_info['status'];
-        $values['info'] = $course_request_info['info'];
         $values['exemplary_content'] = $course_request_info['exemplary_content'];
         $form->setDefaults($values);
 
         // Validate the form and perform the ordered actions.
-        if ($form->validate()) {
+        if ('POST' === ($_SERVER['REQUEST_METHOD'] ?? '') && $form->validate()) {
+            if (!Security::check_token('form', $form)) {
+                api_not_allowed(true);
+
+                exit;
+            }
             $course_request_values = $form->getSubmitValues();
 
             // Detection which submit button has been pressed.
@@ -157,6 +159,20 @@ if ($course_validation_feature) {
                     : (isset($_POST['reject_button']) ? 'reject_button'
                         : (isset($_POST['ask_info_button']) ? 'ask_info_button'
                             : 'submit_button')));
+
+            // Validate requested actions against the persisted request state.
+            $allowedAction = match ($submit_button) {
+                'save_button', 'submit_button' => true,
+                'accept_button' => COURSE_REQUEST_ACCEPTED !== (int) $course_request_info['status'],
+                'reject_button' => COURSE_REQUEST_PENDING === (int) $course_request_info['status'],
+                'ask_info_button' => COURSE_REQUEST_ACCEPTED !== (int) $course_request_info['status'] && 0 === (int) $course_request_info['info'],
+                default => false,
+            };
+            if (!$allowedAction) {
+                api_not_allowed(true);
+
+                exit;
+            }
 
             // Check the course code for avoiding duplication.
             $course_code_ok = $course_request_values['wanted_code'] == $course_request_info['code']
@@ -176,8 +192,8 @@ if ($course_validation_feature) {
                     $course_request_values['course_language'],
                     $course_request_values['objetives'],
                     $course_request_values['target_audience'],
-                    $course_request_values['user_id'],
-                    $course_request_values['exemplary_content'] ?? 0
+                    (int) $course_request_info['user_id'],
+                    (int) !empty($course_request_values['exemplary_content'])
                 );
 
                 if ($update_ok) {
@@ -185,7 +201,7 @@ if ($course_validation_feature) {
                         Display::return_message(
                             sprintf(
                                 get_lang('The course request %s has been updated.'),
-                                $course_request_values['wanted_code']
+                                course_request_admin_escape($course_request_values['wanted_code'])
                             ),
                             'normal',
                             false
@@ -194,13 +210,14 @@ if ($course_validation_feature) {
 
                     switch ($submit_button) {
                         case 'accept_button':
-                            if (CourseRequestManager::accept_course_request($id)) {
+                            $createdCode = CourseRequestManager::accept_course_request($id);
+                            if ($createdCode) {
                                 Display::addFlash(
                                     Display::return_message(
                                         sprintf(
                                             get_lang('The course request %s has been accepted. A new course %s has been created.'),
-                                            $course_request_values['wanted_code'],
-                                            $course_request_values['wanted_code']
+                                            course_request_admin_escape($course_request_values['wanted_code']),
+                                            course_request_admin_escape($createdCode)
                                         ),
                                         'normal',
                                         false
@@ -211,7 +228,7 @@ if ($course_validation_feature) {
                                     Display::return_message(
                                         sprintf(
                                             get_lang('The course request %s has not been accepted due to internal error.'),
-                                            $course_request_values['wanted_code']
+                                            course_request_admin_escape($course_request_values['wanted_code'])
                                         )
                                     ),
                                     'error',
@@ -220,13 +237,14 @@ if ($course_validation_feature) {
                             }
 
                             break;
+
                         case 'reject_button':
                             if (CourseRequestManager::reject_course_request($id)) {
                                 Display::addFlash(
                                     Display::return_message(
                                         sprintf(
                                             get_lang('The course request %s has been rejected.'),
-                                            $course_request_values['wanted_code']
+                                            course_request_admin_escape($course_request_values['wanted_code'])
                                         )
                                     ),
                                     'normal',
@@ -237,7 +255,7 @@ if ($course_validation_feature) {
                                     Display::return_message(
                                         sprintf(
                                             get_lang('The course request %s has not been rejected due to internal error.'),
-                                            $course_request_values['wanted_code']
+                                            course_request_admin_escape($course_request_values['wanted_code'])
                                         )
                                     ),
                                     'error',
@@ -246,13 +264,14 @@ if ($course_validation_feature) {
                             }
 
                             break;
+
                         case 'ask_info_button':
                             if (CourseRequestManager::ask_for_additional_info($id)) {
                                 Display::addFlash(
                                     Display::return_message(
                                         sprintf(
                                             get_lang('Additional information about the course request %s has been asked.'),
-                                            $course_request_values['wanted_code']
+                                            course_request_admin_escape($course_request_values['wanted_code'])
                                         )
                                     ),
                                     'normal',
@@ -263,7 +282,7 @@ if ($course_validation_feature) {
                                     Display::return_message(
                                         sprintf(
                                             get_lang('Additional information about the course request %s has not been asked due to internal error.'),
-                                            $course_request_values['wanted_code']
+                                            course_request_admin_escape($course_request_values['wanted_code'])
                                         )
                                     ),
                                     'error',
@@ -278,7 +297,7 @@ if ($course_validation_feature) {
                         Display::return_message(
                             sprintf(
                                 get_lang('The course request %s has not been updated due to internal error.'),
-                                $course_request_values['wanted_code']
+                                course_request_admin_escape($course_request_values['wanted_code'])
                             )
                         ),
                         'error',
@@ -288,21 +307,21 @@ if ($course_validation_feature) {
 
                 $back_url = get_caller_name($caller);
                 header('location:'.$back_url);
+
                 exit;
-            } else {
-                Display::addFlash(
-                    Display::return_message(
-                        $course_request_values['wanted_code'].' - '.get_lang('Sorry, but that course code already exists. Please choose another one.')
-                    ),
-                    'error',
-                    false
-                );
             }
+            Display::addFlash(
+                Display::return_message(
+                    course_request_admin_escape($course_request_values['wanted_code']).' - '.get_lang('Sorry, but that course code already exists. Please choose another one.')
+                ),
+                'error',
+                false
+            );
         }
     }
 } else {
     // Prepare an error message notifying that the course validation feature has not been enabled.
-    $link_to_setting = api_get_path(WEB_CODE_PATH).'admin/settings.php?search_field=course_validation&submit_button=&category=search_setting';
+    $link_to_setting = '/admin/settings/search_settings?keyword=course_validation';
     $message = sprintf(
         get_lang('The "Course validation" feature is not enabled at the moment. In order to use this feature, please, enable it by using the  %s setting.'),
         sprintf(
@@ -326,6 +345,7 @@ function get_caller_name($caller_id)
     switch ($caller_id) {
         case 1:
             return 'course_request_accepted.php';
+
         case 2:
             return 'course_request_rejected.php';
     }
@@ -337,61 +357,31 @@ function get_caller_name($caller_id)
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => '/admin/course-list', 'name' => get_lang('Course list')];
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 if (!$course_validation_feature) {
     // Disabled course validation feature - show nothing after the error message.
     Display::display_footer();
+
     exit;
 }
 
-// The action bar.
-echo '<div class="actions">';
-echo '<a href="/admin/course-list">'.
-    Display::getMdiIcon(
-        ToolIcon::COURSE,
-        'ch-tool-icon',
-        null,
-        ICON_SIZE_SMALL,
-        get_lang('Course list')
-    ).get_lang('Course list').'</a>';
-echo '<a href="course_request_review.php">'.
-    Display::getMdiIcon(
-        'notebook-heart-outline',
-        'ch-tool-icon',
-        null,
-        ICON_SIZE_SMALL,
-        get_lang('Review incoming course requests')
-    ).get_lang('Review incoming course requests').
-    '</a>';
-echo '<a href="course_request_accepted.php">'.
-    Display::getMdiIcon(
-        'notebook-check-outline',
-        'ch-tool-icon',
-        null,
-        ICON_SIZE_SMALL,
-        get_lang('Accepted course requests')
-    ).get_lang('Accepted course requests').
-    '</a>';
-echo '<a href="course_request_rejected.php">'.
-    Display::getMdiIcon(
-        'notebook-remove-outline',
-        'ch-tool-icon',
-        null,
-        ICON_SIZE_SMALL,
-        get_lang('Rejected course requests')
-    ).get_lang('Rejected course requests').
-    '</a>';
-echo '</div>';
+// Keep the same navigation as the list pages.
+course_request_admin_navigation($caller);
+echo '<div class="mb-4"><a class="btn btn--plain" href="'.course_request_admin_escape(get_caller_name($caller)).'"><span class="mdi mdi-arrow-left" aria-hidden="true"></span> '.course_request_admin_escape(get_lang('Back')).'</a></div>';
 
 if (!is_array($course_request_info)) {
     // Not accessible database record - show the error message and the action bar.
     Display::display_footer();
+
     exit;
 }
 
-// Display the form.
+// Display the request details in the same admin card style.
+echo '<section class="rounded-2xl border border-gray-25 bg-white p-4 shadow-sm">';
+echo '<h2 class="mb-4 text-xl font-semibold text-gray-90">'.course_request_admin_escape($course_request_info['title']).' <span class="text-body-2 text-gray-50">('.course_request_admin_escape($course_request_info['code']).')</span></h2>';
 $form->display();
+echo '</section>';
 
 // The footer.
 Display::display_footer();

@@ -11,7 +11,7 @@
       <div class="calendar-toolbar__group">
         <BaseButton
           :label="t('Today')"
-          type="black"
+          type="tertiary-alternative"
           @click="goToday"
         />
         <div class="calendar-toolbar__nav">

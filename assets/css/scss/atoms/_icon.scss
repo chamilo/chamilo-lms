@@ -56,6 +56,81 @@
     }
   }
 
+  // Compact icon compositions reserve space for both glyphs inside buttons.
+  // Badge positions are physical corners, as in the existing BaseIcon API.
+  &--compact-badge {
+    align-items: flex-start;
+    box-sizing: content-box;
+    width: 1.65em;
+    height: 1.2em;
+    direction: ltr;
+    cursor: inherit;
+    vertical-align: middle;
+
+    &.base-icon--big {
+      font-size: 1.875rem;
+    }
+
+    &.base-icon--normal {
+      font-size: 1.25rem;
+    }
+
+    &.base-icon--small {
+      font-size: 1rem;
+    }
+
+    > i {
+      font-size: 1em;
+      line-height: 1;
+    }
+
+    > .base-icon__badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1em;
+      width: 0.65em;
+      height: 0.65em;
+      color: inherit;
+      pointer-events: none;
+
+      > i {
+        font-size: 0.65em;
+        line-height: 1;
+      }
+    }
+
+    > .base-icon__badge--top-left {
+      top: 0;
+      left: 0;
+    }
+
+    > .base-icon__badge--top-right {
+      top: 0;
+      right: 0;
+    }
+
+    > .base-icon__badge--bottom-left {
+      bottom: 0;
+      left: 0;
+    }
+
+    > .base-icon__badge--bottom-right {
+      bottom: 0;
+      right: 0;
+    }
+
+    &.base-icon--compact-badge-top-left,
+    &.base-icon--compact-badge-bottom-left {
+      justify-content: flex-end;
+    }
+
+    &.base-icon--compact-badge-top-left,
+    &.base-icon--compact-badge-top-right {
+      align-items: flex-end;
+    }
+  }
+
   // ---------------------------------------------------------------------------
   // Tooltip
   // ---------------------------------------------------------------------------

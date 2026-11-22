@@ -21,7 +21,7 @@
     >
       <template #body="slotProps">
         <BaseAppLink
-          class="text-blue-600 hover:underline"
+          class="table-link"
           :to="getAssignmentDetailLink(slotProps.data)"
         >
           {{ slotProps.data.title }}

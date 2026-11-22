@@ -18,7 +18,7 @@
       <div class="flex justify-end gap-2">
         <BaseButton
           :label="t('Cancel')"
-          type="black"
+          type="tertiary-alternative"
           @click="cancel"
         />
         <BaseButton

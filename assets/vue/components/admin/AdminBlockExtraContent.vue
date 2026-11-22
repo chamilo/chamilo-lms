@@ -98,7 +98,7 @@ async function saveExtraContent() {
         :label="t('Save')"
         icon="save"
         size="small"
-        type="black"
+        type="tertiary-alternative"
         @click="closeCallback"
       />
     </template>

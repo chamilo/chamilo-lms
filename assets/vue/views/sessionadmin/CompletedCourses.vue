@@ -31,15 +31,15 @@
             <td class="p-2">{{ cert.session?.title || "-" }}</td>
             <td class="p-2">{{ cert.issuedAt }}</td>
             <td class="p-2 text-end">
-              <a
+              <BaseAppLink
                 v-if="cert.isDownloadAllowed"
-                :href="cert.downloadUrl"
+                :url="cert.downloadUrl"
                 target="_blank"
                 rel="noopener"
-                class="text-blue-600 hover:underline"
+                class="text-primary hover:underline"
               >
                 <i class="mdi mdi-download" />
-              </a>
+              </BaseAppLink>
               <span
                 v-else
                 class="text-gray-400 cursor-not-allowed"

@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Helpers;
 
+use Chamilo\CoreBundle\Security\Authenticator\Cas\CasConfiguration;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
@@ -40,6 +41,7 @@ readonly class ForcedLoginRedirectHelper
         private AuthenticationConfigHelper $authenticationConfigHelper,
         private UrlGeneratorInterface $urlGenerator,
         private LoggerInterface $logger,
+        private ?CasConfiguration $casConfiguration = null,
     ) {}
 
     public function resolveRedirectUrl(Request $request): ?string
@@ -90,7 +92,11 @@ readonly class ForcedLoginRedirectHelper
             }
         }
 
-        $route = \sprintf('chamilo.oauth2_%s_start', $provider['name']);
+        if ('cas' === $provider['name'] && null === $this->casConfiguration?->resolvePortal($request)) {
+            return null;
+        }
+
+        $route = 'cas' === $provider['name'] ? 'chamilo.cas_start' : \sprintf('chamilo.oauth2_%s_start', $provider['name']);
 
         try {
             return $this->urlGenerator->generate($route);

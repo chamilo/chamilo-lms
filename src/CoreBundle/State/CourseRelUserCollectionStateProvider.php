@@ -23,6 +23,7 @@ use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\CourseRelUserRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
+use Chamilo\CoreBundle\Security\CourseStudentAccessChecker;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -42,6 +43,7 @@ final class CourseRelUserCollectionStateProvider implements ProviderInterface
         private readonly CourseRepository $courseRepo,
         private readonly AccessUrlHelper $accessUrlHelper,
         private readonly AccessUrlScopeHelper $accessUrlScope,
+        private readonly CourseStudentAccessChecker $studentAccessChecker,
         FilterExtension $filterExtension,
         OrderExtension $orderExtension,
         PaginationExtension $paginationExtension,
@@ -102,17 +104,22 @@ final class CourseRelUserCollectionStateProvider implements ProviderInterface
             }
         }
 
-        $qb = $this->courseRelUserRepository->createQueryBuilder('cru');
-        $qb
-            ->andWhere(
-                $qb->expr()->exists(
-                    'SELECT 1 FROM '.CourseRelUser::class.' my_cru
+        $checkStudentVisibility = $this->studentAccessChecker->isEnabled();
+        $subquery = 'SELECT 1 FROM '.CourseRelUser::class.' my_cru
                      WHERE my_cru.course = cru.course
-                       AND my_cru.user = :currentUser'
-                )
-            )
+                       AND my_cru.user = :currentUser';
+        if ($checkStudentVisibility) {
+            $subquery .= ' AND (my_cru.status <> :studentStatus OR my_cru.visibility = 1)';
+        }
+
+        $qb = $this->courseRelUserRepository->createQueryBuilder('cru');
+        $qb->andWhere($qb->expr()->exists($subquery))
             ->setParameter('currentUser', $currentUser->getId())
         ;
+
+        if ($checkStudentVisibility) {
+            $qb->setParameter('studentStatus', CourseRelUser::STUDENT);
+        }
 
         return $this->applyExtensionsAndGetResult($qb, $operation, $context);
     }

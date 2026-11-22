@@ -259,12 +259,12 @@ onMounted(() => {
       />
       <Column :header="t('Users')">
         <template #body="{ data }">
-          <router-link
+          <BaseAppLink
             :to="{ name: 'AdminUsergroupUsers', params: { id: data.id } }"
-            class="text-blue-600 hover:underline"
+            class="table-link"
           >
             {{ data.userCount }}
-          </router-link>
+          </BaseAppLink>
         </template>
       </Column>
       <Column
@@ -471,7 +471,7 @@ onMounted(() => {
         <div class="flex justify-end gap-3 border-t px-6 py-4">
           <BaseButton
             :label="t('Cancel')"
-            type="black"
+            type="tertiary-alternative"
             @click="showDialog = false"
           />
           <BaseButton

@@ -11,7 +11,7 @@
       <template #end>
         <BaseAppLink :to="returnRoute">
           <BaseButton
-            type="black"
+            type="tertiary-alternative"
             icon="arrow-left"
             :label="t('Back')"
           />
@@ -147,7 +147,7 @@
             <div class="flex justify-end gap-2 mt-2">
               <BaseAppLink :to="returnRoute">
                 <BaseButton
-                  type="black"
+                  type="tertiary-alternative"
                   icon="xmark"
                   :label="t('Cancel')"
                 />

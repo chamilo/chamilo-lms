@@ -422,7 +422,7 @@
         <BaseButton
           icon="back"
           :label="t('Cancel')"
-          type="black"
+          type="tertiary-alternative"
           @click="cancelForm"
         />
         <BaseButton

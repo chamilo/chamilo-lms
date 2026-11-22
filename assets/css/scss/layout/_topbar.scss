@@ -194,6 +194,36 @@
 }
 
 @media (max-width: 639px) {
+  .app-topbar {
+    &__start {
+      @apply ms-2 me-2 shrink-0;
+
+      .platform-logo {
+        // Reserve enough room for keyboard-accessible actions on narrow screens.
+        width: clamp(2rem, calc(100vw - 18rem), 11.875rem);
+        overflow: hidden;
+
+        a {
+          width: 100%;
+        }
+
+        img,
+        picture {
+          max-width: 100%;
+          max-height: 2rem;
+        }
+      }
+    }
+
+    &__items {
+      @apply min-w-0 gap-1;
+    }
+
+    &__end {
+      @apply ms-1 me-2 shrink-0 gap-1;
+    }
+  }
+
   .app-topbars .p-menubar {
     &.p-menubar-mobile-active {
       + .app-main {

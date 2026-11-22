@@ -76,7 +76,7 @@
       <BaseButton
         :label="t('Back')"
         icon="arrow-left"
-        type="black"
+        type="tertiary-alternative"
         @click="$emit('back-pressed')"
       />
       <BaseButton

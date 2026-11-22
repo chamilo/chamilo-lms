@@ -30,19 +30,19 @@
             v-if="hasVisibleFeedback(data)"
             class="flex flex-col items-start gap-1 py-1"
           >
-            <a
+            <BaseAppLink
               v-if="data.correctionTitle && data.correctionDownloadUrl"
-              :href="data.correctionDownloadUrl"
+              :url="data.correctionDownloadUrl"
               target="_blank"
               download
-              class="inline-flex items-center gap-2 text-green-700 text-sm hover:underline max-w-[260px]"
+              class="table-link inline-flex items-center gap-2 max-w-[260px]"
               :title="data.correctionTitle"
             >
               <i class="mdi mdi-check-circle shrink-0" />
               <span class="truncate">
                 {{ data.correctionTitle }}
               </span>
-            </a>
+            </BaseAppLink>
 
             <span
               v-else-if="data.correctionTitle"

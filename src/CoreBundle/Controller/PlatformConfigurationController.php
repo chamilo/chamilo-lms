@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Helpers\ThemeHelper;
 use Chamilo\CoreBundle\Helpers\TicketProjectHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Security\Authenticator\Cas\CasConfiguration;
 use Chamilo\CoreBundle\Service\Mcp\McpAccessPolicy;
 use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -58,6 +59,7 @@ class PlatformConfigurationController extends AbstractController
         PluginHelper $pluginHelper,
         ForcedLoginRedirectHelper $forcedLoginRedirectHelper,
         TicketProjectHelper $ticketProjectHelper,
+        CasConfiguration $casConfiguration,
         Request $request,
     ): Response {
         $requestSession = $request->getSession();
@@ -69,6 +71,12 @@ class PlatformConfigurationController extends AbstractController
         $forcedLoginMethod = $forcedLoginRedirectHelper->isEscapeActive($request)
             ? null
             : $authenticationConfigHelper->getForcedLoginMethod();
+
+        $casPortal = $casConfiguration->resolvePortal($request);
+        $casEnabled = null !== $casPortal && null !== $casConfiguration->get($casPortal);
+        if ('cas' === $forcedLoginMethod && !$casEnabled) {
+            $forcedLoginMethod = null;
+        }
 
         if ($forcedLoginMethod) {
             if (\array_key_exists($forcedLoginMethod, $enabledOAuthProviders)) {
@@ -97,6 +105,9 @@ class PlatformConfigurationController extends AbstractController
             'visual_theme' => $this->themeHelper->getVisualTheme(),
             'page_backgrounds' => $this->themeHelper->getPageBackgroundUrls(),
             'oauth2_providers' => $oauth2Providers,
+            'cas_auth' => $casEnabled && \in_array($forcedLoginMethod, [null, 'cas'], true)
+                ? ['title' => 'CAS', 'url' => $urlGenerator->generate('chamilo.cas_start')]
+                : null,
             'ldap_auth' => null,
             'forced_login_method' => $forcedLoginMethod,
         ];
@@ -134,6 +145,9 @@ class PlatformConfigurationController extends AbstractController
         $configuration['settings']['profile.login_is_email'] = $settingsManager->getSetting('profile.login_is_email', true);
         $configuration['settings']['platform.timepicker_increment'] = (int) $settingsManager->getSetting('platform.timepicker_increment', true);
         $configuration['settings']['course.course_student_info'] = $this->decodeSetting($settingsManager->getSetting('course.course_student_info', true));
+        $configuration['settings']['course.display_coursecode_in_courselist'] = $settingsManager->getSetting('course.display_coursecode_in_courselist', true);
+        $configuration['settings']['course.course_images_in_courses_list'] = $settingsManager->getSetting('course.course_images_in_courses_list', true);
+        $configuration['settings']['course.enable_unsubscribe_button_on_my_course_page'] = $settingsManager->getSetting('course.enable_unsubscribe_button_on_my_course_page', true);
         $configuration['settings']['platform.institution_address'] = $settingsManager->getSetting('platform.institution_address', true);
         $configuration['settings']['platform.platform_logo_url'] = $settingsManager->getSetting('platform.platform_logo_url', true);
         $configuration['settings']['platform.disable_copy_paste'] = $settingsManager->getSetting('platform.disable_copy_paste', true);

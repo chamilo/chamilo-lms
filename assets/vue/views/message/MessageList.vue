@@ -14,7 +14,7 @@
         :disabled="isLoading"
         icon="refresh"
         only-icon
-        type="black"
+        type="tertiary-alternative"
         :title="t('Refresh')"
         :aria-label="t('Refresh')"
         @click="refreshMessages"
@@ -35,7 +35,7 @@
         icon="multiple-marked"
         only-icon
         popup-identifier="course-messages-list-tmenu"
-        type="black"
+        type="tertiary-alternative"
         :title="t('Mark as')"
         :aria-label="t('Mark as')"
         @click="mToggleMessagesList"
@@ -105,7 +105,7 @@
                 :key="tag.id"
                 :label="tag.tag"
                 icon="tag-outline"
-                type="black"
+                type="tertiary-alternative"
                 :title="tag.tag"
                 :aria-label="tag.tag"
                 @click="showInboxByTag(tag)"

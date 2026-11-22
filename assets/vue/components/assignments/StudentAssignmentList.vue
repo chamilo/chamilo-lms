@@ -16,12 +16,12 @@
 
     <Column :header="t('Title')">
       <template #body="slotProps">
-        <a
-          class="text-blue-600 hover:underline cursor-pointer flex items-center gap-1"
-          @click="goToAssignmentDetail(slotProps.data)"
+        <BaseAppLink
+          :to="getAssignmentDetailLink(slotProps.data)"
+          class="table-link flex items-center gap-1"
         >
           {{ slotProps.data.title }}
-        </a>
+        </BaseAppLink>
       </template>
     </Column>
 
@@ -79,7 +79,7 @@ import Column from "primevue/column"
 import { ref, onMounted, nextTick, computed } from "vue"
 import { useI18n } from "vue-i18n"
 import { useFormatDate } from "../../composables/formatDate"
-import { useRoute, useRouter } from "vue-router"
+import { useRoute } from "vue-router"
 import { getCourseContext } from "../../utils/courseContext"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import BaseIcon from "../basecomponents/BaseIcon.vue"
@@ -89,7 +89,6 @@ import CorrectAndRateModal from "./CorrectAndRateModal.vue"
 
 const { t, locale } = useI18n()
 const { abbreviatedDatetime } = useFormatDate()
-const router = useRouter()
 const route = useRoute()
 const { cid, sid, gid } = getCourseContext()
 
@@ -156,15 +155,20 @@ function getNodeIdFromAssignment(item) {
   return 0
 }
 
-function goToAssignmentDetail(assignment) {
-  if (!assignment?.id) return
-  const nodeId = getNodeIdFromAssignment(assignment)
+/**
+ * Route of the assignment detail, or null (plain text) when the assignment has no id.
+ *
+ * @param {Object} assignment
+ * @returns {Object|null}
+ */
+function getAssignmentDetailLink(assignment) {
+  if (!assignment?.id) return null
 
-  router.push({
+  return {
     name: "AssignmentDetail",
-    params: { id: assignment.id, node: nodeId },
+    params: { id: assignment.id, node: getNodeIdFromAssignment(assignment) },
     query: { cid, ...(sid && { sid }), ...(gid && { gid }) },
-  })
+  }
 }
 
 function pad2(n) {

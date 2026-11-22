@@ -781,6 +781,7 @@
     justify-content: center;
     @apply items-center;
     background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
   }
 
   .invitation-modal {

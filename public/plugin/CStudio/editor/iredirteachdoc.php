@@ -81,19 +81,53 @@
                 if (isset($_GET['quit'])) {
                     $quitExept = (int) $_GET['quit'];
                 }
-                $idPageTop = $_GET['i'];
+                $idPageTop = (int) $_GET['i'];
                 if (isset($_GET['redir'])) {
-                    $RedirLP = $_GET['redir'];
+                    $RedirLP = (string) $_GET['redir'];
                     $RedirLP = str_replace('t@d', '/', $RedirLP);
                     $RedirLP = str_replace('t@@d', '?', $RedirLP);
                     $RedirLP = str_replace('t@@@d', '&', $RedirLP);
+
+                    // Only ever redirect within this same origin: keep an
+                    // http(s) URL of this host, reduce anything else to a
+                    // local path+query, and fall back to the root when the
+                    // result could still leave the origin or run script.
+                    $requestUrlParts = parse_url($RedirLP);
+                    if (!is_array($requestUrlParts) || preg_match('/[\x00-\x20\x7F\\\\]/', $RedirLP)) {
+                        $RedirLP = '/';
+                    } else {
+                        $currentHost = (string) ($_SERVER['HTTP_HOST'] ?? '');
+                        $requestHost = (string) ($requestUrlParts['host'] ?? '');
+                        if (isset($requestUrlParts['port'])) {
+                            $requestHost .= ':'.$requestUrlParts['port'];
+                        }
+                        $isSameHostUrl = '' !== $currentHost
+                            && in_array(strtolower((string) ($requestUrlParts['scheme'] ?? '')), ['http', 'https'], true)
+                            && !isset($requestUrlParts['user'])
+                            && !isset($requestUrlParts['pass'])
+                            && 0 === strcasecmp($requestHost, $currentHost);
+
+                        if (!$isSameHostUrl) {
+                            $RedirLP = (string) ($requestUrlParts['path'] ?? '/');
+                            if (isset($requestUrlParts['query'])) {
+                                $RedirLP .= '?'.$requestUrlParts['query'];
+                            }
+                            if (!str_starts_with($RedirLP, '/') || str_starts_with($RedirLP, '//')) {
+                                $RedirLP = '/';
+                            }
+                        }
+                    }
+
                     if (1 == $quitExept) {
                         $RedirLP = str_replace('action=view', 'action=list', $RedirLP);
                         $RedirLP = str_replace('isStudentView=true', 'isStudentView=false', $RedirLP);
                         $RedirLP .= '&isStudentView=false';
                     }
-                    echo "var idPageTop = $idPageTop;";
-                    echo "var RedirLP = '$RedirLP';";
+                    echo 'var idPageTop = '.json_encode($idPageTop).';';
+                    echo 'var RedirLP = '.json_encode(
+                        $RedirLP,
+                        JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+                    ).';';
                 }
             }
         ?>

@@ -1104,7 +1104,7 @@ class Tracking
                                     <td>'.$interaction['order_id'].'</td>
                                     <td>'.$interaction['id'].'</td>
                                     <td colspan="2">'.$interaction['type'].'</td>
-                                    <td>'.htmlspecialchars(urldecode($interaction['student_response']), ENT_QUOTES).'</td>
+                                    <td>'.(0 === $id ? $interaction['student_response'] : htmlspecialchars(urldecode($interaction['student_response']), ENT_QUOTES)).'</td>
                                     <td>'.$interaction['result'].'</td>
                                     <td>'.$interaction['latency'].'</td>
                                     '.$timeRow.'

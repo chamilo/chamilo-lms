@@ -69,6 +69,9 @@ final class LearnpathInteractionsEscapingTest extends KernelTestCase
         $this->assertSame('&lt;img src=x onerror=alert(1)&gt;', $interaction['student_response_formatted']);
         $this->assertSame('&lt;s&gt;wrong&lt;/s&gt;', $interaction['result']);
         $this->assertSame('&lt;q&gt;PT1S', $interaction['latency']);
+        // Kept raw on purpose: the single attempt view escapes it after urldecode(), so escaping it here too
+        // would show entities to the teacher.
+        $this->assertSame('%3Cimg src=x onerror=alert(1)%3E', $interaction['student_response']);
     }
 
     public function testPlainInteractionResponseIsKept(): void

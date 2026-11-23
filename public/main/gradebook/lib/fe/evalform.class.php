@@ -211,6 +211,10 @@ class EvalForm extends FormValidator
 
         foreach ($results_and_users as $result_and_user) {
             $user = $result_and_user['user'];
+            // Profile fields are stored raw and are concatenated into the row template.
+            foreach (['firstname', 'lastname', 'official_code', 'username'] as $field) {
+                $user[$field] = htmlspecialchars((string) $user[$field], ENT_QUOTES, 'UTF-8');
+            }
             $result = $result_and_user['result'];
             $renderer = &$this->defaultRenderer();
 
@@ -358,6 +362,10 @@ class EvalForm extends FormValidator
 
         $firstUser = true;
         foreach ($users as $user) {
+            // username, lastname, firstname and official code are stored raw and go into the row template.
+            foreach ([1, 2, 3, 4] as $field) {
+                $user[$field] = htmlspecialchars((string) $user[$field], ENT_QUOTES, 'UTF-8');
+            }
             $element_name = 'score['.$user[0].']';
             $scoreColumnProperties = [
                 'maxlength' => 5,
@@ -424,7 +432,7 @@ class EvalForm extends FormValidator
     protected function build_result_edit_form()
     {
         $userInfo = api_get_user_info($this->result_object->get_user_id());
-        $this->addHeader(get_lang('User').': '.$userInfo['complete_name']);
+        $this->addHeader(get_lang('User').': '.htmlspecialchars((string) $userInfo['complete_name'], ENT_QUOTES, 'UTF-8'));
 
         $renderer = &$this->defaultRenderer();
         $model = ExerciseLib::getCourseScoreModel();

@@ -116,7 +116,8 @@ foreach ($stateDocument as $attemptId => $attempt) {
             'default',
             [
                 'class' => 'btn_xapi_attempt_detail',
-                'data-attempt' => (string) $attemptId,
+                // The attempt key comes from the learner's state document.
+                'data-attempt' => htmlspecialchars((string) $attemptId, ENT_QUOTES),
                 'data-tool' => $toolLaunch->getId(),
                 'style' => 'margin-bottom: 20px; margin-left: 180px;',
                 'role' => 'button',

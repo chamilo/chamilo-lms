@@ -15,6 +15,8 @@ use ChamiloSession as Session;
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+
 /**
  * Get one item's details.
  *
@@ -171,7 +173,7 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
 
 echo switch_item_toc(
     $_POST['lid'],
-    $_POST['uid'],
+    api_get_user_id(),
     $_POST['vid'],
     $_POST['iid'],
     $_POST['next']

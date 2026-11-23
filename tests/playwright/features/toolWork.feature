@@ -279,6 +279,48 @@ Feature: Work tool
     And I press "View"
     Then the selected student's submissions should retain title descending
 
+  # "List by documents" shows every submission of the assignment at once, latest first, as 1.11 did, next to the
+  # default list with one row per learner. The choice is kept in sessionStorage for the browser session, which is
+  # what the reload below checks: the page comes back on the documents list, offering "List by users".
+  Scenario: Admin lists every submission of Work 1 by document
+    Given I am a platform administrator
+    And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    And I follow "Assignments"
+    And wait for the page to be loaded when ready
+    And I follow "Work 1 Test Edited"
+    And wait for the page to be loaded when ready
+    When I press "List by documents"
+    Then I should see "favicon"
+    And I should see "Costea"
+    And I should see "10.0 / 20.0"
+    When I reload the current page
+    And wait for the page to be loaded when ready
+    Then I should see "List by users"
+    And I should see "favicon"
+    When I press "List by users"
+    Then the assignment list should contain 1 distinct submitters
+
+  # Only the documents list has row checkboxes. Selecting a submission enables "Delete selected", which asks for a
+  # PrimeVue confirmation ("Yes"/"No") before deleting each selected submission. This removes the only submission of
+  # Work 1, just before the assignment itself is deleted below.
+  Scenario: Admin deletes the selected submissions of Work 1 from the documents list
+    Given I am a platform administrator
+    And I am on course "TEMP" homepage
+    And I wait for the page to be loaded
+    And I follow "Assignments"
+    And wait for the page to be loaded when ready
+    And I follow "Work 1 Test Edited"
+    And wait for the page to be loaded when ready
+    When I press "List by documents"
+    And I should see "favicon"
+    And I click the "input.p-checkbox-input" icon in the row for "favicon"
+    And I press "Delete selected"
+    And I press "Yes"
+    And wait for the page to be loaded when ready
+    Then I should not see "favicon"
+    And I should not see an error
+
   Scenario: Admin deletes Work 1 from assignments list
     Given I am a platform administrator
     And I am on course "TEMP" homepage

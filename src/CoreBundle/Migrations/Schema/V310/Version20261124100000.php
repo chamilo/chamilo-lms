@@ -40,14 +40,15 @@ final class Version20261124100000 extends AbstractMigrationChamilo
         /** @var CForumPostRepository $postRepository */
         $postRepository = $this->container->get(CForumPostRepository::class);
         $repaired = 0;
-        $skipped = [];
+        $withoutThreadNode = [];
+        $inDeletedThread = [];
 
         foreach (array_chunk($postIds, self::POST_BATCH_SIZE) as $batch) {
             foreach ($batch as $postId) {
                 $post = $this->entityManager->find(CForumPost::class, $postId);
                 $thread = $post?->getThread();
                 if (!$post instanceof CForumPost || !$thread instanceof CForumThread || !$thread->hasResourceNode()) {
-                    $skipped[] = $postId;
+                    $withoutThreadNode[] = $postId;
 
                     continue;
                 }
@@ -57,7 +58,7 @@ final class Version20261124100000 extends AbstractMigrationChamilo
                     static fn (ResourceLink $link): bool => !$link->isDeleted() && null !== $link->getCourse(),
                 );
                 if ([] === $threadLinks) {
-                    $skipped[] = $postId;
+                    $inDeletedThread[] = $postId;
 
                     continue;
                 }
@@ -86,11 +87,18 @@ final class Version20261124100000 extends AbstractMigrationChamilo
         }
 
         $this->write(\sprintf('Forum posts given a resource node: %d.', $repaired));
-        if ([] !== $skipped) {
+        if ([] !== $withoutThreadNode) {
             // Their thread has no resource node either: it must be repaired first.
             $this->write(\sprintf(
                 'Forum posts left without a resource node because their thread has none: %s.',
-                implode(', ', $skipped)
+                implode(', ', $withoutThreadNode)
+            ));
+        }
+        if ([] !== $inDeletedThread) {
+            // Nobody can open their thread any more: there is nothing to repair.
+            $this->write(\sprintf(
+                'Forum posts left without a resource node because their thread is deleted: %s.',
+                implode(', ', $inDeletedThread)
             ));
         }
     }

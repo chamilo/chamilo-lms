@@ -86,17 +86,32 @@
                     $redirectUrl = str_replace('t@@d', '?', $redirectUrl);
                     $redirectUrl = str_replace('t@@@d', '&', $redirectUrl);
 
-                    // Only ever redirect within this same origin: strip any
-                    // attacker-supplied scheme/host down to a relative
-                    // path+query before either branch below builds on it, so
-                    // this can't become an open redirect to another domain.
+                    // Only ever redirect within this same origin: keep an
+                    // http(s) URL of this host, reduce anything else to a
+                    // local path+query, and fall back to the root when the
+                    // result could still leave the origin or run script.
                     $requestUrlParts = parse_url($redirectUrl);
-                    if (!empty($requestUrlParts['host'])) {
+                    if (!is_array($requestUrlParts) || preg_match('/[\x00-\x20\x7F\\\\]/', $redirectUrl)) {
+                        $redirectUrl = '/';
+                    } else {
                         $currentHost = (string) ($_SERVER['HTTP_HOST'] ?? '');
-                        if ('' === $currentHost || 0 !== strcasecmp($requestUrlParts['host'], $currentHost)) {
+                        $requestHost = (string) ($requestUrlParts['host'] ?? '');
+                        if (isset($requestUrlParts['port'])) {
+                            $requestHost .= ':'.$requestUrlParts['port'];
+                        }
+                        $isSameHostUrl = '' !== $currentHost
+                            && in_array(strtolower((string) ($requestUrlParts['scheme'] ?? '')), ['http', 'https'], true)
+                            && !isset($requestUrlParts['user'])
+                            && !isset($requestUrlParts['pass'])
+                            && 0 === strcasecmp($requestHost, $currentHost);
+
+                        if (!$isSameHostUrl) {
                             $redirectUrl = (string) ($requestUrlParts['path'] ?? '/');
                             if (isset($requestUrlParts['query'])) {
                                 $redirectUrl .= '?'.$requestUrlParts['query'];
+                            }
+                            if (!str_starts_with($redirectUrl, '/') || str_starts_with($redirectUrl, '//')) {
+                                $redirectUrl = '/';
                             }
                         }
                     }

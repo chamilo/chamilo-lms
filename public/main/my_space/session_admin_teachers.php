@@ -149,6 +149,11 @@ function get_users($from, $limit, $column, $direction)
             $urlDetails = $url."?student=$student_id&id_coach=$coach_id&id_session=$sessionId";
         }
 
+        // Profile fields are user-controlled: escape them for HTML output.
+        $student_data['firstname'] = htmlspecialchars((string) $student_data['firstname'], ENT_QUOTES, 'UTF-8');
+        $student_data['lastname'] = htmlspecialchars((string) $student_data['lastname'], ENT_QUOTES, 'UTF-8');
+        $student_data['username'] = htmlspecialchars((string) $student_data['username'], ENT_QUOTES, 'UTF-8');
+
         $row = [];
         if ($is_western_name_order) {
             $row[] = Display::url($student_data['firstname'], $urlDetails);

@@ -45330,3 +45330,9 @@ msgstr "((user_first_name)),<br /><br />Vous avez obtenu le certificat du cours 
 
 msgid "Learners who reached the minimum certification score ({0}%) are highlighted in green."
 msgstr "Les apprenants qui ont atteint la note minimale de certification ({0} %) sont surlignés en vert."
+
+msgid "List by documents"
+msgstr "Liste par documents"
+
+msgid "List by users"
+msgstr "Liste par utilisateurs"

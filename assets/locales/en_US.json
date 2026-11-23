@@ -4876,5 +4876,7 @@
     "ZIP entry": "ZIP entry",
     "SCORM package": "SCORM package",
     "SCORM entry": "SCORM entry",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "List by documents": "List by documents",
+    "List by users": "List by users"
 }

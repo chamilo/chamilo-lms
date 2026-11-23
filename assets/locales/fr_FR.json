@@ -4710,5 +4710,7 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "Le JSON enregistr\u00e9 n'est pas valide. Modifiez-le, ou enregistrez les champs ci-dessus pour le remplacer.",
     "Edit the JSON": "\u00c9diter le JSON",
     "The JSON of the access conditions must be a JSON object.": "Le JSON des conditions d'acc\u00e8s doit \u00eatre un objet JSON.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Les apprenants qui ont atteint la note minimale de certification ({0} %) sont surlign\u00e9s en vert."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Les apprenants qui ont atteint la note minimale de certification ({0} %) sont surlign\u00e9s en vert.",
+    "List by documents": "Liste par documents",
+    "List by users": "Liste par utilisateurs"
 }

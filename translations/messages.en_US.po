@@ -43999,3 +43999,9 @@ msgstr "((user_first_name)),<br /><br />You have obtained the certificate of the
 
 msgid "Learners who reached the minimum certification score ({0}%) are highlighted in green."
 msgstr "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+
+msgid "List by documents"
+msgstr "List by documents"
+
+msgid "List by users"
+msgstr "List by users"

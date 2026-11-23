@@ -43928,3 +43928,9 @@ msgstr ""
 
 msgid "Learners who reached the minimum certification score ({0}%) are highlighted in green."
 msgstr ""
+
+msgid "List by documents"
+msgstr ""
+
+msgid "List by users"
+msgstr ""

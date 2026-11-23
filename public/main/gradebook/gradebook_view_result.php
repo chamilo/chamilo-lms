@@ -484,12 +484,15 @@ if (isset($_GET['export'])) {
             foreach ($data_array as $data) {
                 $result = [];
                 $user_info = api_get_user_info($data['id']);
-                $result[] = $user_info['username'];
+                // The PDF is rendered from HTML, so the raw profile fields must be escaped.
+                $firstname = htmlspecialchars((string) $user_info['firstname'], ENT_QUOTES, 'UTF-8');
+                $lastname = htmlspecialchars((string) $user_info['lastname'], ENT_QUOTES, 'UTF-8');
+                $result[] = htmlspecialchars((string) $user_info['username'], ENT_QUOTES, 'UTF-8');
 
                 if (api_is_western_name_order()) {
-                    $result[] = $user_info['firstname'].', '.$user_info['lastname'];
+                    $result[] = $firstname.', '.$lastname;
                 } else {
-                    $result[] = $user_info['lastname'].', '.$user_info['firstname'];
+                    $result[] = $lastname.', '.$firstname;
                 }
                 if (null == $number_decimals) {
                     if (empty($data['scoreletter']) && !is_numeric($data['score'])) {
@@ -635,6 +638,9 @@ if (isset($_GET['print'])) {
     }
     $newarray = [];
     foreach ($data_array as $data) {
+        // print_table() concatenates the cells into HTML.
+        $data['firstname'] = htmlspecialchars((string) $data['firstname'], ENT_QUOTES, 'UTF-8');
+        $data['lastname'] = htmlspecialchars((string) $data['lastname'], ENT_QUOTES, 'UTF-8');
         $newarray[] = array_slice($data, 3);
     }
 

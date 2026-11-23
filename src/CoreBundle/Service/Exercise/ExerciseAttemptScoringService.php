@@ -418,6 +418,7 @@ final readonly class ExerciseAttemptScoringService
     private function scoreMultipleCombination(CQuizQuestion $question, array $answers, array $rows): float
     {
         $selectedAnswerIds = array_flip($this->getSavedAnswerIds($rows));
+        $hasCorrectAnswer = false;
         foreach ($answers as $answer) {
             $answerId = (int) $answer->getIid();
             $isCorrect = 1 === (int) $answer->getCorrect();
@@ -425,6 +426,12 @@ final readonly class ExerciseAttemptScoringService
             if ($isCorrect !== $isSelected) {
                 return 0.0;
             }
+            $hasCorrectAnswer = $hasCorrectAnswer || $isCorrect;
+        }
+
+        // Ticking nothing on an Exact combination question without any correct answer is not a right answer.
+        if (!$hasCorrectAnswer && self::MULTIPLE_ANSWER_COMBINATION === (int) $question->getType()) {
+            return 0.0;
         }
 
         $firstAnswer = reset($answers);

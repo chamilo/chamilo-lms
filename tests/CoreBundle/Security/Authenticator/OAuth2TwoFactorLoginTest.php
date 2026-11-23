@@ -117,6 +117,22 @@ final class OAuth2TwoFactorLoginTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
+    public function testDisabledUserCannotCompleteAPendingLogin(): void
+    {
+        $client = self::createClient();
+        $this->setPlatform2fa(true);
+        $user = $this->createMfaUser('oauth2_mfa_disabled');
+        $this->startPendingLogin($client, $user);
+
+        // An administrator can disable the account after the OAuth provider callback.
+        $user->setActive(0);
+        self::getContainer()->get(UserRepository::class)->updateUser($user);
+
+        $client->request('GET', '/login/2fa');
+        $this->assertResponseRedirects('/login');
+        $this->assertNotLoggedIn($client);
+    }
+
     public function testTooManyWrongCodesCancelTheLogin(): void
     {
         $client = self::createClient();

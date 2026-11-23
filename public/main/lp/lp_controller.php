@@ -428,7 +428,7 @@ $isAdvancedAccessAllowed = static function (
         $sessionEntity = $entityManager->getReference(Chamilo\CoreBundle\Entity\Session::class, $sessionId);
     }
 
-    $advancedAccessHelper = new LpAdvancedAccessHelper($entityManager);
+    $advancedAccessHelper = Container::$container->get(LpAdvancedAccessHelper::class);
 
     return $advancedAccessHelper->isAllowed($courseEntity, $lp, $sessionEntity, $userEntity);
 };

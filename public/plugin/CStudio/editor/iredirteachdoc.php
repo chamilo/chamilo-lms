@@ -121,7 +121,7 @@
                     if (1 == $quitExept) {
                         $RedirLP = str_replace('action=view', 'action=list', $RedirLP);
                         $RedirLP = str_replace('isStudentView=true', 'isStudentView=false', $RedirLP);
-                        $RedirLP .= '&isStudentView=false';
+                        $RedirLP .= (str_contains($RedirLP, '?') ? '&' : '?').'isStudentView=false';
                     }
                     echo 'var idPageTop = '.json_encode($idPageTop).';';
                     echo 'var RedirLP = '.json_encode(

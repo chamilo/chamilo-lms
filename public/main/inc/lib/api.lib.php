@@ -6594,7 +6594,7 @@ function api_get_bytes_memory_limit($mem)
 
     switch ($size) {
         case 't':
-            $mem = (int) substr($mem, -1) * 1024 * 1024 * 1024 * 1024;
+            $mem = (int) substr($mem, 0, -1) * 1024 * 1024 * 1024 * 1024;
             break;
         case 'g':
             $mem = (int) substr($mem, 0, -1) * 1024 * 1024 * 1024;

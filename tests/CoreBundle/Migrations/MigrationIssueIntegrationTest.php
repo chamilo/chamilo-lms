@@ -85,7 +85,7 @@ final class MigrationIssueIntegrationTest extends TestCase
         }
         $lines = explode("\n", trim($csv));
         self::assertCount(2, $lines);
-        $header = str_getcsv($lines[0], ',', '"', '');
+        $header = array_map('strval', str_getcsv($lines[0], ',', '"', ''));
         $row = array_combine($header, str_getcsv($lines[1], ',', '"', ''));
         self::assertStringNotContainsString('=', substr($row['course_code'], 0, 1));
         self::assertStringContainsString('=1+1', $row['course_code']);

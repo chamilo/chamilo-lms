@@ -45324,3 +45324,6 @@ msgstr "Éditer le JSON"
 
 msgid "The JSON of the access conditions must be a JSON object."
 msgstr "Le JSON des conditions d'accès doit être un objet JSON."
+
+msgid "((user_first_name)),<br /><br />You have obtained the certificate of the course ((course_title)).<br />You can view it here: ((certificate_link))"
+msgstr "((user_first_name)),<br /><br />Vous avez obtenu le certificat du cours ((course_title)).<br />Vous pouvez le consulter ici : ((certificate_link))"

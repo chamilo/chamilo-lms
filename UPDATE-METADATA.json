@@ -9,6 +9,7 @@
         "public/main/lp/lp_edit_item.php",
         "public/main/lp/lp_edit_item_prereq.php",
         "public/main/lp/lp_list.php",
-        "public/main/lp/lp_move_item.php"
+        "public/main/lp/lp_move_item.php",
+        "public/main/session/add_edit_users_to_session.php"
     ]
 }

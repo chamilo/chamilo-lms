@@ -39,8 +39,8 @@ $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 // setting the name of the tool
 $tool_name = get_lang('SubscribeUsersToSession');
 $add_type = 'unique';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
-    $add_type = Security::remove_XSS($_REQUEST['add_type']);
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] === 'multiple') {
+    $add_type = 'multiple';
 }
 
 $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;

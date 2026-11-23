@@ -134,6 +134,10 @@ foreach ($statements as $statement) {
             ? $objectData['id']
             : '';
 
+        // Statement fields come from the learner's activity: escape them for HTML output.
+        $activityName = htmlspecialchars($activityName, ENT_QUOTES);
+        $activityId = htmlspecialchars($activityId, ENT_QUOTES);
+
         if ('' !== $activityName && '' !== $activityId) {
             $activity = $activityName.'<br>'.Display::tag(
                     'small',
@@ -151,9 +155,9 @@ foreach ($statements as $statement) {
         }
     }
 
-    $table->setCellContents($row, 0, $timestampStored);
-    $table->setCellContents($row, 1, $actor);
-    $table->setCellContents($row, 2, $verb ?: '-');
+    $table->setCellContents($row, 0, htmlspecialchars((string) $timestampStored, ENT_QUOTES));
+    $table->setCellContents($row, 1, htmlspecialchars($actor, ENT_QUOTES));
+    $table->setCellContents($row, 2, htmlspecialchars($verb ?: '-', ENT_QUOTES));
     $table->setCellContents($row, 3, $activity);
 
     $row++;

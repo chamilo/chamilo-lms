@@ -13,6 +13,7 @@ use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Repository\CForumPostRepository;
 use Chamilo\CourseBundle\Repository\CForumRepository;
+use Closure;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Schema\Schema;
@@ -225,6 +226,8 @@ SELECT
     e.c_id,
     e.title,
     e.iid AS display_order,
+    e.poster_id,
+    e.visible AS post_visible,
     thread.resource_node_id AS parent_node_id,
     parent.path AS parent_path,
     parent.level AS parent_level
@@ -251,8 +254,47 @@ SQL;
             slugPrefix: 'forum-post',
             batchSize: self::POST_BATCH_SIZE,
             fallbackAdminId: $fallbackAdminId,
-            uuidIsBinary: $uuidIsBinary
+            uuidIsBinary: $uuidIsBinary,
+            missingItemPropertyFallback: fn (array $row): array => $this->getThreadContextsForPost($row),
         );
+    }
+
+    /**
+     * 1.11 did not record every forum post in c_item_property (the first post of some threads,
+     * among others): such a post takes the course, session and group of its thread, and stays
+     * visible as long as the post itself and the thread are. Without it, the post got no
+     * resource node at all, and nobody could reply to it.
+     *
+     * @param array<string, mixed> $row
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function getThreadContextsForPost(array $row): array
+    {
+        $threadLinks = $this->connection->fetchAllAssociative(
+            'SELECT session_id, group_id, visibility
+             FROM resource_link
+             WHERE resource_node_id = :threadNodeId
+               AND deleted_at IS NULL
+             ORDER BY id',
+            ['threadNodeId' => (int) $row['parent_node_id']]
+        );
+
+        $items = [];
+        foreach ($threadLinks as $threadLink) {
+            $visible = 1 === (int) $row['post_visible']
+                && ResourceLink::VISIBILITY_PUBLISHED === (int) $threadLink['visibility'];
+
+            $items[] = [
+                'visibility' => $visible ? 1 : 0,
+                'valid_user_id' => (int) ($row['poster_id'] ?? 0),
+                'valid_session_id' => $threadLink['session_id'],
+                'valid_group_id' => $threadLink['group_id'],
+                'lastedit_date' => null,
+            ];
+        }
+
+        return $items;
     }
 
     private function migrateResourceRows(
@@ -265,7 +307,8 @@ SQL;
         string $slugPrefix,
         int $batchSize,
         int $fallbackAdminId,
-        bool $uuidIsBinary
+        bool $uuidIsBinary,
+        ?Closure $missingItemPropertyFallback = null,
     ): void {
         $totalPending = (int) $this->connection->fetchOne(
             "SELECT COUNT(*) FROM {$table} WHERE resource_node_id IS NULL"
@@ -309,6 +352,9 @@ SQL;
                 $courseId = (int) $row['c_id'];
                 $key = $this->itemPropertyKey($courseId, $iid);
                 $items = $itemProperties[$key] ?? [];
+                if ([] === $items && null !== $missingItemPropertyFallback) {
+                    $items = $missingItemPropertyFallback($row);
+                }
 
                 if ([] === $items) {
                     ++$skippedMissingItemProperty;

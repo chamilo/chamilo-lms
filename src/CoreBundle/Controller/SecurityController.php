@@ -524,7 +524,7 @@ class SecurityController extends AbstractController
             $user = $userRepository->find((int) ($pending['user_id'] ?? 0));
         }
 
-        if (!$user instanceof User || !$user->getMfaEnabled()) {
+        if (!$user instanceof User || !$user->isActive() || !$user->getMfaEnabled()) {
             $session->remove(OAuth2Authenticator::PENDING_2FA_SESSION_KEY);
 
             return new RedirectResponse($this->router->generate('login'));

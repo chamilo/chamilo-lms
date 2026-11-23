@@ -987,15 +987,18 @@ class TrackingCourseLog
                 $userRow['course_name'] = $courseInfo['name'];
             }
 
-            $userRow['official_code'] = $user['official_code'];
+            // Profile values are user-supplied: escape them for the HTML table, keep them raw for the CSV.
+            $escape = static fn ($value) => $exportCsv ? $value : htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+
+            $userRow['official_code'] = $escape($user['official_code']);
             if ($sortByFirstName) {
-                $userRow['firstname'] = $user['col2'];
-                $userRow['lastname'] = $user['col1'];
+                $userRow['firstname'] = $escape($user['col2']);
+                $userRow['lastname'] = $escape($user['col1']);
             } else {
-                $userRow['lastname'] = $user['col1'];
-                $userRow['firstname'] = $user['col2'];
+                $userRow['lastname'] = $escape($user['col1']);
+                $userRow['firstname'] = $escape($user['col2']);
             }
-            $userRow['username'] = $user['username'];
+            $userRow['username'] = $escape($user['username']);
             $userRow['time'] = $user['time'];
             $userRow['average_progress'] = $user['average_progress'];
             $userRow['exercise_progress'] = $user['exercise_progress'];
@@ -1081,7 +1084,7 @@ class TrackingCourseLog
             }
 
             if ('true' === api_get_setting('show_email_addresses')) {
-                $userRow['email'] = $user['col4'];
+                $userRow['email'] = $escape($user['col4']);
             }
 
             $userRow['link'] = $user['link'];

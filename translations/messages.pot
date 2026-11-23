@@ -41670,3 +41670,6 @@ msgstr ""
 
 msgid "Default visibility for new tests"
 msgstr ""
+
+msgid "((user_first_name)),<br /><br />You have obtained the certificate of the course ((course_title)).<br />You can view it here: ((certificate_link))"
+msgstr ""

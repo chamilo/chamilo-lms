@@ -477,11 +477,23 @@ class Certificate extends Model
                     $subject = trim((string) ($notification['subject'] ?? ''));
                     $message = trim((string) ($notification['message'] ?? ''));
 
+                    // A cron run has no request in the learner's language: translate the default
+                    // texts in the recipient's own language (a sublanguage falls back to its parent)
+                    $recipientInfo = api_get_user_info($this->user_id);
+                    $recipientLocale = (string) ($recipientInfo['locale'] ?? '') ?: null;
+
                     if ('' === $subject) {
-                        $subject = get_lang('Certificate notification');
+                        $subject = get_lang('Certificate notification', $recipientLocale);
                     }
                     if ('' === $message) {
-                        $message = nl2br(get_lang('((user_first_name)),'));
+                        // GradingElectronic courses keep the legacy salutation, completed by the course
+                        // notification extra fields; elsewhere it was the whole message
+                        $message = Container::getPluginHelper()->isPluginEnabled('GradingElectronic')
+                            ? nl2br(get_lang('((user_first_name)),', $recipientLocale))
+                            : get_lang(
+                                '((user_first_name)),<br /><br />You have obtained the certificate of the course ((course_title)).<br />You can view it here: ((certificate_link))',
+                                $recipientLocale
+                            );
                     }
 
                     $htmlUrl = '';
@@ -494,7 +506,7 @@ class Certificate extends Model
                     $notificationSent = self::sendNotification(
                         $subject,
                         $message,
-                        api_get_user_info($this->user_id),
+                        $recipientInfo,
                         $courseInfo,
                         [
                             'score_certificate' => round($score),

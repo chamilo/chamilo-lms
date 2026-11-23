@@ -1051,12 +1051,12 @@ class TrackingCourseLog
                 foreach ($_GET['additional_profile_field'] as $fieldId) {
                     if (isset($data[$fieldId], $data[$fieldId][$user['user_id']])) {
                         if (is_array($data[$fieldId][$user['user_id']])) {
-                            $userRow[$extraFieldInfo[$fieldId]['variable']] = implode(
+                            $userRow[$extraFieldInfo[$fieldId]['variable']] = $escape(implode(
                                 ', ',
                                 $data[$fieldId][$user['user_id']]
-                            );
+                            ));
                         } else {
-                            $userRow[$extraFieldInfo[$fieldId]['variable']] = $data[$fieldId][$user['user_id']];
+                            $userRow[$extraFieldInfo[$fieldId]['variable']] = $escape($data[$fieldId][$user['user_id']]);
                         }
                     } else {
                         $userRow[$extraFieldInfo[$fieldId]['variable']] = '';
@@ -1070,12 +1070,12 @@ class TrackingCourseLog
                 foreach ($data as $key => $val) {
                     if (isset($val[$user['user_id']])) {
                         if (is_array($val[$user['user_id']])) {
-                            $userRow[$defaultExtraFieldInfo[$key]['variable']] = implode(
+                            $userRow[$defaultExtraFieldInfo[$key]['variable']] = $escape(implode(
                                 ', ',
                                 $val[$user['user_id']]
-                            );
+                            ));
                         } else {
-                            $userRow[$defaultExtraFieldInfo[$key]['variable']] = $val[$user['user_id']];
+                            $userRow[$defaultExtraFieldInfo[$key]['variable']] = $escape($val[$user['user_id']]);
                         }
                     } else {
                         $userRow[$defaultExtraFieldInfo[$key]['variable']] = '';

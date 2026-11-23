@@ -233,7 +233,8 @@ switch ($action) {
             'start_time' => api_get_local_time($itemView->getStartTime()),
             'start_date' => api_get_local_time($itemView->getStartTime(), null, null, null, false),
             'end_time' => api_get_local_time($endTime),
-            'candidate' => $studentName,
+            // Already HTML-escaped by the getter, and Twig escapes it again.
+            'candidate' => html_entity_decode($studentName, ENT_QUOTES),
         ];
 
         $tpl->assign('data', $dataLpInfo);

@@ -973,15 +973,18 @@ class TrackingCourseLog
                 $userRow['course_name'] = $courseInfo['name'];
             }
 
-            $userRow['official_code'] = $user['official_code'];
+            // Profile values are user-supplied: escape them for the HTML table, keep them raw for the CSV.
+            $escape = static fn ($value) => $exportCsv ? $value : htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+
+            $userRow['official_code'] = $escape($user['official_code']);
             if ($sortByFirstName) {
-                $userRow['firstname'] = $user['col2'];
-                $userRow['lastname'] = $user['col1'];
+                $userRow['firstname'] = $escape($user['col2']);
+                $userRow['lastname'] = $escape($user['col1']);
             } else {
-                $userRow['lastname'] = $user['col1'];
-                $userRow['firstname'] = $user['col2'];
+                $userRow['lastname'] = $escape($user['col1']);
+                $userRow['firstname'] = $escape($user['col2']);
             }
-            $userRow['username'] = $user['username'];
+            $userRow['username'] = $escape($user['username']);
             $userRow['time'] = $user['time'];
             $userRow['average_progress'] = $user['average_progress'];
             $userRow['exercise_progress'] = $user['exercise_progress'];
@@ -1034,12 +1037,12 @@ class TrackingCourseLog
                 foreach ($_GET['additional_profile_field'] as $fieldId) {
                     if (isset($data[$fieldId], $data[$fieldId][$user['user_id']])) {
                         if (is_array($data[$fieldId][$user['user_id']])) {
-                            $userRow[$extraFieldInfo[$fieldId]['variable']] = implode(
+                            $userRow[$extraFieldInfo[$fieldId]['variable']] = $escape(implode(
                                 ', ',
                                 $data[$fieldId][$user['user_id']]
-                            );
+                            ));
                         } else {
-                            $userRow[$extraFieldInfo[$fieldId]['variable']] = $data[$fieldId][$user['user_id']];
+                            $userRow[$extraFieldInfo[$fieldId]['variable']] = $escape($data[$fieldId][$user['user_id']]);
                         }
                     } else {
                         $userRow[$extraFieldInfo[$fieldId]['variable']] = '';
@@ -1053,12 +1056,12 @@ class TrackingCourseLog
                 foreach ($data as $key => $val) {
                     if (isset($val[$user['user_id']])) {
                         if (is_array($val[$user['user_id']])) {
-                            $userRow[$defaultExtraFieldInfo[$key]['variable']] = implode(
+                            $userRow[$defaultExtraFieldInfo[$key]['variable']] = $escape(implode(
                                 ', ',
                                 $val[$user['user_id']]
-                            );
+                            ));
                         } else {
-                            $userRow[$defaultExtraFieldInfo[$key]['variable']] = $val[$user['user_id']];
+                            $userRow[$defaultExtraFieldInfo[$key]['variable']] = $escape($val[$user['user_id']]);
                         }
                     } else {
                         $userRow[$defaultExtraFieldInfo[$key]['variable']] = '';
@@ -1067,7 +1070,7 @@ class TrackingCourseLog
             }
 
             if ('true' === api_get_setting('show_email_addresses')) {
-                $userRow['email'] = $user['col4'];
+                $userRow['email'] = $escape($user['col4']);
             }
 
             $userRow['link'] = $user['link'];

@@ -199,6 +199,16 @@ defineExpose({
     </template>
 
     <template
+      #expansion="slotProps"
+      v-if="slots.expansion"
+    >
+      <slot
+        name="expansion"
+        v-bind="slotProps"
+      />
+    </template>
+
+    <template
       #empty
       v-if="textForEmpty"
     >

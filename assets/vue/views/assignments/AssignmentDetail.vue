@@ -57,6 +57,24 @@
         </template>
         <template v-else-if="isTeacherUI && !forceStudentView">
           <BaseButton
+            v-if="'users' === submissionView"
+            :label="t('List by documents')"
+            icon="file-text"
+            size="small"
+            type="primary"
+            data-testid="assignment-view-documents"
+            @click="switchSubmissionView('documents')"
+          />
+          <BaseButton
+            v-else
+            :label="t('List by users')"
+            icon="account-group"
+            size="small"
+            type="primary"
+            data-testid="assignment-view-users"
+            @click="switchSubmissionView('users')"
+          />
+          <BaseButton
             v-if="following !== null"
             :label="following ? t('Following') : t('Follow')"
             :title="t('Get an e-mail when a learner comments on a submission of this assignment')"
@@ -173,16 +191,23 @@
           @update:submission-count="studentSubmissionCount = $event"
         />
         <TeacherSubmissionGroupList
-          v-else
+          v-else-if="'users' === submissionView"
           :key="submissionListKey"
           :assignment-id="assignmentId"
+        />
+        <!-- Every submission, latest first, as the 1.11 list did -->
+        <TeacherSubmissionList
+          v-else
+          :key="`documents-${submissionListKey}`"
+          :assignment-id="assignmentId"
+          selectable
         />
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import { ref, computed, onMounted } from "vue"
+import { ref, computed, onMounted, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { useI18n } from "vue-i18n"
 import { getCourseContext } from "../../utils/courseContext"
@@ -194,6 +219,12 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import SectionHeader from "../../components/layout/SectionHeader.vue"
 import StudentSubmissionList from "../../components/assignments/StudentSubmissionList.vue"
 import TeacherSubmissionGroupList from "../../components/assignments/TeacherSubmissionGroupList.vue"
+import TeacherSubmissionList from "../../components/assignments/TeacherSubmissionList.vue"
+import {
+  getAssignmentSortStorageKey,
+  loadAssignmentView,
+  saveAssignmentView,
+} from "../../utils/assignmentSubmissionSort"
 const { t } = useI18n()
 const { cid, sid, gid } = getCourseContext()
 const route = useRoute()
@@ -216,6 +247,33 @@ const forceStudentView = computed(
 const assignment = ref(null)
 const addedDocuments = ref([])
 const submissionListKey = ref(0)
+// "users": one row per learner, their submissions on demand; "documents": every submission at once.
+// Kept for the session like the sort; the key waits for the user, who loads asynchronously.
+const submissionViews = ["users", "documents"]
+const submissionView = ref("users")
+const submissionViewStorageKey = computed(() =>
+  getAssignmentSortStorageKey("view", securityStore.user?.id, getCourseContext()),
+)
+let userChoseSubmissionView = false
+watch(
+  submissionViewStorageKey,
+  (key) => {
+    if (!key) return
+    if (userChoseSubmissionView) {
+      // The key arrived after the user already switched: keep that choice and store it under the key.
+      saveAssignmentView(key, submissionView.value)
+      return
+    }
+    submissionView.value = loadAssignmentView(key, submissionViews, "users")
+  },
+  { immediate: true },
+)
+
+function switchSubmissionView(view) {
+  userChoseSubmissionView = true
+  submissionView.value = view
+  saveAssignmentView(submissionViewStorageKey.value, view)
+}
 const studentSubmissionCount = ref(0)
 // null until loaded: the toggle stays hidden rather than showing a wrong state.
 const following = ref(null)

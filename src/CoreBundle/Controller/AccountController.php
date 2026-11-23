@@ -23,6 +23,7 @@ use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 use Endroid\QrCode\Writer\PngWriter;
 use OTPHP\TOTP;
+use Psr\Clock\ClockInterface;
 use Security;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -53,7 +54,8 @@ class AccountController extends BaseController
 
     public function __construct(
         private readonly UserHelper $userHelper,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
+        private readonly ClockInterface $clock
     ) {}
 
     #[IsGranted('ROLE_USER')]
@@ -139,6 +141,8 @@ class AccountController extends BaseController
         $isPasswordRenewalRequested = $passwordRenewalRequest instanceof ExtraFieldValues;
         $isForcedPasswordChange = $isRotation || $isFirstLogin || $isPasswordRenewalRequested;
 
+        $session = $request->getSession();
+
         $form = $this->createForm(ChangePasswordType::class, [
             'enable2FA' => $user->getMfaEnabled(),
         ], [
@@ -147,10 +151,11 @@ class AccountController extends BaseController
             'password_hasher' => $passwordHasher,
             'enable_2fa_field' => $twoFaEnabledGlobally && !$isForcedPasswordChange,
             'global_2fa_enabled' => $twoFaEnabledGlobally,
+            // The code typed to enable 2FA must match the secret shown in the QR code.
+            'pending_mfa_secret' => $session->get('temporary_mfa_secret'),
         ]);
         $form->handleRequest($request);
 
-        $session = $request->getSession();
         $qrCodeBase64 = null;
         $showQRCode = false;
 
@@ -162,12 +167,12 @@ class AccountController extends BaseController
             && !$user->getMfaSecret()
         ) {
             if (!$session->has('temporary_mfa_secret')) {
-                $totp = TOTP::create();
+                $totp = TOTP::create(clock: $this->clock);
                 $session->set('temporary_mfa_secret', $totp->getSecret());
             }
 
             $secret = (string) $session->get('temporary_mfa_secret');
-            $totp = TOTP::create($secret);
+            $totp = TOTP::create($secret, clock: $this->clock);
             $portalName = $settingsManager->getSetting('platform.institution');
             $totp->setLabel($portalName.' - '.$user->getEmail());
 

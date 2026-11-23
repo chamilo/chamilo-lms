@@ -355,7 +355,7 @@ class MessageHelper
     /**
      * Builds the FROM address used in outgoing emails.
      * Priority (name): mail.mailer_from_name → platform.site_name → "Chamilo"
-     * Priority (email): mail.mailer_from_email → platform.administrator_email → noreply@{host}
+     * Priority (email): mail.mailer_from_email → admin.administrator_email → noreply@{host}
      * Host resolution: AccessUrl → RequestStack → 'example.org'.
      */
     private function buildFromAddress(): Address
@@ -368,7 +368,7 @@ class MessageHelper
         // Resolve email candidates (only existing/valid settings)
         $candidates = [
             $this->settingsManager->getSetting('mail.mailer_from_email'),
-            $this->settingsManager->getSetting('platform.administrator_email'),
+            $this->settingsManager->getSetting('admin.administrator_email'),
         ];
         foreach ($candidates as $cand) {
             if ($cand && filter_var($cand, FILTER_VALIDATE_EMAIL)) {

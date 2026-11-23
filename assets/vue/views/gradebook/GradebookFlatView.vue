@@ -109,9 +109,26 @@
       </div>
     </div>
 
+    <p
+      v-if="certificateMinScore > 0"
+      id="gradebook-flat-certified-legend"
+      class="flex items-center gap-2 text-sm text-gray-90"
+    >
+      <span
+        aria-hidden="true"
+        class="gradebook-flat-certified-swatch"
+      />
+      {{
+        t("Learners who reached the minimum certification score ({0}%) are highlighted in green.", [
+          formatNumber(certificateMinScore),
+        ])
+      }}
+    </p>
+
     <BaseTable
       v-model:rows="itemsPerPage"
       class="gradebook-flat-table"
+      :row-class="getRowClass"
       scrollable
       :is-loading="isLoading"
       :lazy="true"
@@ -289,6 +306,12 @@ const tableRows = computed(() =>
     username: row.user?.username || "",
   })),
 )
+
+const certificateMinScore = computed(() => Number(report.value?.category?.certificateMinScore || 0))
+
+function getRowClass(row) {
+  return true === row?.reachedCertificateMinScore ? "gradebook-flat-row--certified" : ""
+}
 
 const reportQuery = computed(() => {
   const query = { ...route.query }
@@ -525,5 +548,26 @@ watch(
 
 :deep(.gradebook-flat-table .p-datatable-tbody > tr:nth-child(even) > .p-datatable-frozen-column) {
   background-color: var(--p-datatable-row-striped-background, #fafafa);
+}
+
+/* Learners who reached the minimum certification score of the category, frozen cells included. */
+:deep(.gradebook-flat-table .p-datatable-tbody > tr.gradebook-flat-row--certified > td),
+:deep(.gradebook-flat-table .p-datatable-tbody > tr.gradebook-flat-row--certified > .p-datatable-frozen-column) {
+  background-color: rgb(var(--color-success-base) / 0.2);
+}
+
+:deep(.gradebook-flat-table .p-datatable-tbody > tr.gradebook-flat-row--certified > .p-datatable-frozen-column) {
+  /* Opaque, so that the scrolled cells do not show through the frozen ones */
+  background-image: linear-gradient(rgb(var(--color-success-base) / 0.2), rgb(var(--color-success-base) / 0.2));
+  background-color: var(--p-datatable-row-background, #fff);
+}
+
+.gradebook-flat-certified-swatch {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+  background-color: rgb(var(--color-success-base) / 0.2);
+  border: 1px solid rgb(var(--color-success-base));
 }
 </style>

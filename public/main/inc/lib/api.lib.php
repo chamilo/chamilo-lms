@@ -5832,7 +5832,14 @@ function api_global_admin_can_edit_admin(
 
     if ($allow_session_admin && !$is_platform_admin) {
         $user = api_get_user_entity($userId);
-        $is_platform_admin = $user !== null && $user->isSessionAdmin();
+
+        if (null === $user || !$user->isSessionAdmin()) {
+            return false;
+        }
+
+        // Session admins may manage regular users, but administrator accounts are reserved
+        // to administrators.
+        return !api_is_platform_admin_by_id($admin_id_to_check);
     }
 
     if ($is_platform_admin) {
@@ -6699,7 +6706,7 @@ function api_get_bytes_memory_limit($mem)
 
     switch ($size) {
         case 't':
-            $mem = (int) substr($mem, -1) * 1024 * 1024 * 1024 * 1024;
+            $mem = (int) substr($mem, 0, -1) * 1024 * 1024 * 1024 * 1024;
             break;
         case 'g':
             $mem = (int) substr($mem, 0, -1) * 1024 * 1024 * 1024;

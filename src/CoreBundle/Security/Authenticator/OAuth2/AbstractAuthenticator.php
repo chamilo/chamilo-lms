@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
@@ -17,12 +18,14 @@ use KnpU\OAuth2ClientBundle\Client\OAuth2ClientInterface;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use KnpU\OAuth2ClientBundle\Security\Exception\InvalidStateAuthenticationException;
 use League\OAuth2\Client\Token\AccessToken;
+use LogicException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
@@ -30,14 +33,31 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 abstract class AbstractAuthenticator extends OAuth2Authenticator implements AuthenticationEntryPointInterface
 {
+    /**
+     * Session key holding a login that still has to pass the TOTP step.
+     *
+     * @see \Chamilo\CoreBundle\Controller\SecurityController::loginTwoFactor()
+     */
+    public const string PENDING_2FA_SESSION_KEY = '_chamilo_oauth2_pending_2fa';
+
+    /**
+     * Seconds the user has to enter the TOTP code after the provider sent them back.
+     */
+    public const int PENDING_2FA_LIFETIME = 300;
+
     private const int STATE_RETRY_COOKIE_LIFETIME = 300;
 
     protected string $providerName = '';
 
     protected OAuth2ClientInterface $client;
+
+    private ?SettingsManager $settingsManager = null;
+
+    private ?TokenStorageInterface $tokenStorage = null;
 
     public function __construct(
         protected readonly ClientRegistry $clientRegistry,
@@ -49,6 +69,13 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
         protected readonly LoggerInterface $logger,
     ) {
         $this->client = $this->clientRegistry->getClient($this->providerName);
+    }
+
+    #[Required]
+    public function setTwoFactorServices(SettingsManager $settingsManager, TokenStorageInterface $tokenStorage): void
+    {
+        $this->settingsManager = $settingsManager;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function start(Request $request, ?AuthenticationException $authException = null): Response
@@ -81,7 +108,31 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        $response = new RedirectResponse($this->router->generate('index'));
+        $targetUrl = $this->router->generate('index');
+
+        $user = $token->getUser();
+        if ($user instanceof User && $this->requiresTotpStep($user)) {
+            // The provider vouches for the identity only: users who turned on 2FA must
+            // still enter their TOTP code. Until then the session stays anonymous.
+            if (null === $this->tokenStorage) {
+                throw new LogicException('The token storage is required to hold the login until the TOTP step.');
+            }
+
+            $this->tokenStorage->setToken(null);
+
+            if ($request->hasSession()) {
+                $request->getSession()->set(self::PENDING_2FA_SESSION_KEY, [
+                    'user_id' => $user->getId(),
+                    'expires_at' => time() + self::PENDING_2FA_LIFETIME,
+                    'attempts' => 0,
+                ]);
+                $targetUrl = $this->router->generate('login_2fa');
+            } else {
+                $targetUrl = $this->router->generate('login');
+            }
+        }
+
+        $response = new RedirectResponse($targetUrl);
 
         if ($request->cookies->has($this->getStateRetryCookieName())) {
             $response->headers->clearCookie($this->getStateRetryCookieName());
@@ -165,6 +216,17 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
         );
 
         return $response;
+    }
+
+    private function requiresTotpStep(User $user): bool
+    {
+        if (!$user->getMfaEnabled()) {
+            return false;
+        }
+
+        // Without the settings, fail closed.
+        return null === $this->settingsManager
+            || 'true' === $this->settingsManager->getSetting('security.2fa_enable', true);
     }
 
     private function getStateRetryCookieName(): string

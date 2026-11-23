@@ -1,17 +1,23 @@
 <template>
   <div>
     <BaseTable
+      v-model:selected-items="selected"
       :is-loading="loading"
       :sort-field="sortField"
       :sort-order="sortOrder"
       v-model:rows="loadParams.itemsPerPage"
       :total-items="totalRecords"
       :values="submissions"
-      data-key="@id"
+      data-key="iid"
       lazy
       @page="onPage"
       @sort="onSort"
     >
+      <Column
+        v-if="selectable"
+        :exportable="false"
+        selection-mode="multiple"
+      />
       <Column
         field="user.fullName"
         :header="t('Full name')"
@@ -219,6 +225,21 @@
           </div>
         </template>
       </Column>
+
+      <template
+        v-if="selectable"
+        #footer
+      >
+        <BaseButton
+          :disabled="0 === selected.length || loading"
+          :label="t('Delete selected')"
+          icon="delete"
+          size="small"
+          type="danger-text"
+          data-testid="assignment-submissions-delete-selected"
+          @click="deleteSelectedSubmissions"
+        />
+      </template>
     </BaseTable>
 
     <UppyModalUploader
@@ -258,6 +279,7 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseTable from "../basecomponents/BaseTable.vue"
 import { useFormatDate } from "../../composables/formatDate"
 import { useNotification } from "../../composables/notification"
+import { useConfirmation } from "../../composables/useConfirmation"
 import cStudentPublicationService from "../../services/cstudentpublication"
 import UppyModalUploader from "./UppyModalUploader.vue"
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
@@ -285,6 +307,11 @@ const props = defineProps({
     type: Number,
     default: null,
   },
+  // Checkboxes and batch actions, for the list of every submission of the assignment
+  selectable: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits(["submissions-changed"])
@@ -294,6 +321,8 @@ const { abbreviatedDatetime } = useFormatDate()
 const notification = useNotification()
 
 const loading = ref(false)
+const selected = ref([])
+const { requireConfirmation } = useConfirmation()
 const submissions = ref([])
 const totalRecords = ref(0)
 const sortField = ref("sentDate")
@@ -318,9 +347,7 @@ const platform = usePlatformConfig()
 const courseSettingsStore = useCourseSettings()
 const securityStore = useSecurityStore()
 const sortableFields = ["user.fullName", "title", "sentDate"]
-const sortStorageKey = computed(() =>
-  getAssignmentSortStorageKey("files", securityStore.user?.id, getCourseContext()),
-)
+const sortStorageKey = computed(() => getAssignmentSortStorageKey("files", securityStore.user?.id, getCourseContext()))
 
 watch(
   sortStorageKey,
@@ -378,6 +405,8 @@ async function loadData() {
 
     submissions.value = response["hydra:member"]
     totalRecords.value = response["hydra:totalItems"]
+    // A selection only applies to the rows on screen: another page, sort or reload starts afresh
+    selected.value = []
   } catch (error) {
     notification.showErrorNotification(error)
   } finally {
@@ -560,6 +589,26 @@ function saveCorrection(item) {
 function editSubmission(item) {
   editingItem.value = item
   showEditDialog.value = true
+}
+
+function deleteSelectedSubmissions() {
+  requireConfirmation({
+    message: t("Are you sure you want to delete the selected items?"),
+    accept: async () => {
+      loading.value = true
+      try {
+        for (const item of selected.value) {
+          await cStudentPublicationService.deleteAssignmentSubmission(item.iid)
+        }
+        notification.showSuccessNotification(t("Deleted"))
+      } catch (error) {
+        notification.showErrorNotification(error)
+      } finally {
+        selected.value = []
+        await onSubmissionsChanged()
+      }
+    },
+  })
 }
 
 async function deleteSubmission(item) {

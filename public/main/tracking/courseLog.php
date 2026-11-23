@@ -943,7 +943,9 @@ if ($nbStudents > 0 || isset($parameters['user_active'])) {
         );
         $userRepo = Container::getUserRepository();
         foreach ($usersTracking as $userTracking) {
-            $user = $userRepo->findOneBy(['username' => $userTracking[3]]);
+            // getUserData() returns the username escaped for HTML unless exporting.
+            $username = $export_csv ? $userTracking[3] : htmlspecialchars_decode((string) $userTracking[3], ENT_QUOTES);
+            $user = $userRepo->findOneBy(['username' => $username]);
             if (empty($user)) {
                 continue;
             }

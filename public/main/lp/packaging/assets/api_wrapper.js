@@ -607,7 +607,14 @@ function checkAnswers(interrupted)
                         }
                     }
 
-                    var final_answer = true;
+                    // Ticking nothing on a question without any correct answer is not a right answer.
+                    var has_correct_answer = false;
+                    for (var c = 0; c < questions_answers[idQuestion].length; c++) {
+                        if (questions_answers_correct[idQuestion][questions_answers[idQuestion][c]] != 0) {
+                            has_correct_answer = true;
+                        }
+                    }
+                    var final_answer = has_correct_answer;
                     for (var z = 0; z < real_answers.length; z++) {
                         if (real_answers[z] == false) {
                             final_answer = false;

@@ -125,8 +125,6 @@ final class ForumPostProcessor implements ProcessorInterface
             throw new AccessDeniedHttpException('You are not allowed to access this thread.');
         }
 
-        $parentPost = $this->findParentPost($data, $forum, $thread);
-
         $uploadedFiles = $this->getUploadedFiles($request);
         $this->assertAttachmentsAllowed($forum, $uploadedFiles);
 
@@ -154,6 +152,9 @@ final class ForumPostProcessor implements ProcessorInterface
         }
 
         $this->assertReplyWordMinimum($text, $forum, $thread, $user);
+
+        // After the word count, so that a learner gets told what their reply misses first
+        $parentPost = $this->findParentPost($data, $forum, $thread);
 
         $now = new DateTime('now', new DateTimeZone('UTC'));
         $visible = !$this->requiresModeration($forum, $isTeacher);

@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Masterminds\HTML5;
 use Mpdf\HTMLParserMode;
 use Mpdf\Mpdf;
@@ -970,7 +971,8 @@ class PDF
         $sysCoursePath = api_get_path(SYS_PATH).'../app/courses/';
         $sysUploadPath = api_get_path(SYS_PATH).'../app/upload/';
 
-        $documentPath = $courseInfo ? $sysCoursePath.$courseInfo['path'].'/document/' : '';
+        // Chamilo 2 courses have no 'path' (no app/courses/<path>/document/ directory).
+        $documentPath = !empty($courseInfo['path']) ? $sysCoursePath.$courseInfo['path'].'/document/' : '';
 
         $notFoundImagePath = Display::return_icon(
             'closed-circle.png',
@@ -988,6 +990,13 @@ class PDF
 
             if (api_filename_has_blacklisted_stream_wrapper($src)) {
                 $element->setAttribute('src', $notFoundImagePath);
+                continue;
+            }
+
+            $resourceImage = self::getResourceImageDataUri($src);
+            if (null !== $resourceImage) {
+                $element->setAttribute('src', $resourceImage);
+
                 continue;
             }
 
@@ -1024,7 +1033,7 @@ class PDF
                 continue;
             }
 
-            if (empty($courseInfo)) {
+            if (empty($courseInfo['path'])) {
                 continue;
             }
 
@@ -1061,6 +1070,49 @@ class PDF
         }
 
         return $doc->saveHTML();
+    }
+
+    /**
+     * Inline an image served by a Chamilo 2 resource URL (/r/{tool}/{type}/{uuid}/view) as a data URI.
+     *
+     * mPDF fetches remote images anonymously, so these URLs, which need the user's session, never render.
+     * Returns null when the source is not such a URL, or when the resource is missing, not an image or
+     * not viewable by the current user, so the caller keeps its other handling.
+     */
+    private static function getResourceImageDataUri(string $src): ?string
+    {
+        $host = parse_url($src, \PHP_URL_HOST);
+        if (null !== $host && false !== $host && $host !== parse_url(api_get_path(WEB_PATH), \PHP_URL_HOST)) {
+            return null;
+        }
+
+        $path = (string) parse_url($src, \PHP_URL_PATH);
+        if (!preg_match('#/r/[^/]+/[^/]+/([0-9a-fA-F-]{32,36})/view/?$#', $path, $matches)) {
+            return null;
+        }
+
+        try {
+            $resourceNodeRepo = Container::getResourceNodeRepository();
+            $resourceNode = $resourceNodeRepo->findOneBy(['uuid' => $matches[1]]);
+
+            if (null === $resourceNode
+                || !Container::getAuthorizationChecker()->isGranted(ResourceNodeVoter::VIEW, $resourceNode)
+            ) {
+                return null;
+            }
+
+            $resourceFile = $resourceNode->getResourceFiles()->first();
+            $mimeType = $resourceFile ? (string) $resourceFile->getMimeType() : '';
+            if (!str_starts_with($mimeType, 'image/')) {
+                return null;
+            }
+
+            $content = $resourceNodeRepo->getResourceNodeFileContent($resourceNode, $resourceFile);
+        } catch (Throwable) {
+            return null;
+        }
+
+        return '' === $content ? null : 'data:'.$mimeType.';base64,'.base64_encode($content);
     }
 
     /**

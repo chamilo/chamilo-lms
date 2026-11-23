@@ -116,7 +116,9 @@ export function useLogin() {
     isLoginLdap = false,
   }) {
     isLoading.value = true
-    requires2FA.value = false
+    if (!totp) {
+      requires2FA.value = false
+    }
 
     try {
       // Prepare payload as expected by securityService

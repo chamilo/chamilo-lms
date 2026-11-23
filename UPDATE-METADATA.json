@@ -65,6 +65,7 @@
         "public/main/portfolio/edit_category.php",
         "public/main/portfolio/edit_item.php",
         "public/main/portfolio/list.php",
+        "public/main/session/add_edit_users_to_session.php",
         "public/main/session/session_list.php",
         "public/main/social/skills_ranking.php",
         "public/main/template/default/agenda/event_list.html.twig",

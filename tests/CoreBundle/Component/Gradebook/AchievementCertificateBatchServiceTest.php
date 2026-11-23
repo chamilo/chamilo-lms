@@ -9,6 +9,7 @@ namespace Chamilo\Tests\CoreBundle\Component\Gradebook;
 use Chamilo\CoreBundle\Component\Gradebook\AchievementCertificateBatchService;
 use Chamilo\CoreBundle\Component\Gradebook\CourseCompletionRuleEvaluator;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Helpers\LearnerPortalUrlHelper;
 use Chamilo\Tests\ChamiloTestTrait;
 use Chamilo\Tests\CoreBundle\Service\RawReportingFixturesTrait;
 use RuntimeException;
@@ -49,6 +50,7 @@ final class AchievementCertificateBatchServiceTest extends KernelTestCase
             new CourseCompletionRuleEvaluator($this->conn()),
             $this->createMock(TokenStorageInterface::class),
             $this->createMock(Environment::class),
+            self::getContainer()->get(LearnerPortalUrlHelper::class),
         );
         $this->conn()->executeStatement('SET FOREIGN_KEY_CHECKS = 0');
         $this->nodes = array_map('intval', $this->conn()->fetchFirstColumn('SELECT id FROM resource_node ORDER BY id LIMIT 12 OFFSET 5'));

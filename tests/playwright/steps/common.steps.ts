@@ -4216,6 +4216,19 @@ Then("the response status code should be {int}", async ({}, statusCode: number) 
   expect(lastNavigationResponse.status()).toBe(statusCode)
 })
 
+// Not ported — new, for admin/antivirusScans.feature. In production the ExceptionListener turns a denied BROWSER
+// navigation (Accept: text/html) into a redirect to the home page, so "I am on ..." followed by "the response status
+// code should be 403" reads the 200 of that page. A data endpoint is called by the SPA with a JSON Accept header, and
+// that is the request that must be refused with the real 403: this step sends exactly that, with the session cookies of
+// the logged-in user.
+Then(
+  "a JSON request to {string} should be answered with status {int}",
+  async ({ page }, url: string, statusCode: number) => {
+    const response = await page.request.get(url, { headers: { Accept: "application/json" }, maxRedirects: 0 })
+    expect(response.status(), `GET ${url}`).toBe(statusCode)
+  },
+)
+
 // Ported from FeatureContext::focus() (Mink's findField() id -> name -> label
 // cascade, then .focus()). toolAgenda.feature needs this before filling
 // "date_range": DateRangePicker.php binds a jQuery daterangepicker widget to

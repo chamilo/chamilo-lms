@@ -2910,6 +2910,8 @@ class Rest extends WebService
      */
     public function getSessionFromExtraField(string $fieldName, string $fieldValue): int
     {
+        self::protectAdminEndpoint();
+
         // find sessions that have that value in the given field
         $valueModel = new ExtraFieldValue('session');
         $sessionIdList = $valueModel->get_item_id_from_field_variable_and_field_value(
@@ -2970,6 +2972,8 @@ class Rest extends WebService
      */
     public function getSessionInfoFromExtraField(string $fieldName, string $fieldValue): array
     {
+        self::protectAdminEndpoint();
+
         $session = [];
         // find sessions that have that value in the given field
         $valueModel = new ExtraFieldValue('session');

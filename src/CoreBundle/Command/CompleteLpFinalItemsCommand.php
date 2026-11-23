@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Command;
 use Chamilo\CoreBundle\Command\Concerns\BoundedConsoleOptionsTrait;
 use Chamilo\CoreBundle\Component\LegacyCliBootstrapper;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\LearnerPortalUrlHelper;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathFinalItemManager;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathRuntimeProgressManager;
 use Chamilo\CourseBundle\Entity\CLp;
@@ -63,6 +64,7 @@ final class CompleteLpFinalItemsCommand extends Command
         private readonly LoggerInterface $logger,
         private readonly KernelInterface $kernel,
         private readonly TokenStorageInterface $tokenStorage,
+        private readonly LearnerPortalUrlHelper $learnerPortalUrlHelper,
     ) {
         parent::__construct();
     }
@@ -425,6 +427,17 @@ final class CompleteLpFinalItemsCommand extends Command
         $this->entityManager->flush();
 
         $this->progressManager->synchronize($lp, $view);
+
+        // Completing the final item may send the learner a certificate notification: its links
+        // must use the portal where the learner followed the course, not http://localhost
+        $portalUrl = $this->learnerPortalUrlHelper->resolve(
+            (int) $view->getCourse()->getId(),
+            (int) $view->getSession()?->getId(),
+            (int) $view->getUser()->getId()
+        );
+        if (null !== $portalUrl) {
+            LegacyCliBootstrapper::useUrl($this->kernel->getContainer(), $portalUrl);
+        }
 
         $this->finalItemManager->completeForLearner(
             $finalItem,

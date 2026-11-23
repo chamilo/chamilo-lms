@@ -11,6 +11,8 @@ use Chamilo\CoreBundle\Component\LegacyCliBootstrapper;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Framework\Container as LegacyContainer;
+use Chamilo\CoreBundle\Helpers\LearnerPortalUrlHelper;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -43,6 +45,7 @@ final class AchievementCertificateBatchService
         private readonly CourseCompletionRuleEvaluator $evaluator,
         private readonly TokenStorageInterface $tokenStorage,
         private readonly Environment $twig,
+        private readonly LearnerPortalUrlHelper $learnerPortalUrlHelper,
     ) {}
 
     public function bootstrapLegacy(KernelInterface $kernel): void
@@ -308,6 +311,18 @@ final class AchievementCertificateBatchService
         array $notification,
         bool $regenerateEmpty = false
     ): bool {
+        // The certificate link of the notification is built from the request: in a multi-URL
+        // platform, it must be the portal where the learner followed the course, not Symfony's
+        // http://localhost default
+        $portalUrl = $this->learnerPortalUrlHelper->resolve(
+            (int) $category->getCourse()->getId(),
+            (int) $category->getSession()?->getId(),
+            $userId
+        );
+        if (null !== $portalUrl) {
+            LegacyCliBootstrapper::useUrl(LegacyContainer::$container, $portalUrl);
+        }
+
         Category::generateUserCertificate(
             $category,
             $userId,

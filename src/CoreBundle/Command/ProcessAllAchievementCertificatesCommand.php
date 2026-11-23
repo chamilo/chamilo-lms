@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Command\Concerns\BoundedConsoleOptionsTrait;
 use Chamilo\CoreBundle\Component\Gradebook\AchievementCertificateBatchService;
 use Chamilo\CoreBundle\Component\Gradebook\CourseCompletionRuleEvaluator;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Helpers\LearnerPortalUrlHelper;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -74,7 +75,8 @@ final class ProcessAllAchievementCertificatesCommand extends Command
             $entityManager,
             new CourseCompletionRuleEvaluator($connection),
             $tokenStorage,
-            $twig
+            $twig,
+            new LearnerPortalUrlHelper($connection)
         );
 
         parent::__construct();

@@ -83,22 +83,39 @@ final class LegacyCliBootstrapper
      */
     public static function prepareCliRequest(ContainerInterface $container): void
     {
-        $session = LegacyContainer::getLegacyHelper()->getSession();
         // --url gives the portal's public address, which a CLI run has no request to read from:
         // build the request from it so absolute URLs (router and request alike) use that host,
         // instead of Symfony's http://localhost default.
         $cliOptions = getopt('', ['url:']);
-        $cliUrl = !empty($cliOptions['url']) ? rtrim($cliOptions['url'], '/').'/' : '/';
-        $request = Request::create($cliUrl);
-        $request->setSession($session);
-        $container->get('request_stack')->push($request);
+        self::useUrl($container, !empty($cliOptions['url']) ? $cliOptions['url'] : '/');
         LegacyContainer::setLegacyServices($container);
+    }
+
+    /**
+     * Points the request and router context of a CLI run at the public address of a portal, so
+     * the links of what follows (a notification, a certificate) use it. A run that works for
+     * several access URLs calls it again before each one: it replaces the request it pushed.
+     */
+    public static function useUrl(ContainerInterface $container, string $url): void
+    {
+        $url = '/' === $url ? '/' : rtrim($url, '/').'/';
+        $requestStack = $container->get('request_stack');
+        $previousRequest = $requestStack->pop();
+
+        $request = Request::create($url);
+        $request->setSession(
+            null !== $previousRequest && $previousRequest->hasSession()
+                ? $previousRequest->getSession()
+                : LegacyContainer::getLegacyHelper()->getSession()
+        );
+        $requestStack->push($request);
+
         $router = $container->get('router');
         $context = $router->getContext();
         $context->fromRequest($request);
         // The base URL is only the sub-folder prefix of an installation like https://host/chamilo,
         // never the whole address, or the router prepends its default host to it.
-        $context->setBaseUrl(rtrim((string) parse_url($cliUrl, PHP_URL_PATH), '/'));
+        $context->setBaseUrl(rtrim((string) parse_url($url, PHP_URL_PATH), '/'));
         $router->setContext($context);
     }
 

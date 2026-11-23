@@ -70,6 +70,8 @@ function get_count_users()
 
 function get_users($from, $limit, $column, $direction)
 {
+    global $export_csv;
+
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
     $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 
@@ -149,19 +151,24 @@ function get_users($from, $limit, $column, $direction)
             $urlDetails = $url."?student=$student_id&id_coach=$coach_id&id_session=$sessionId";
         }
 
-        // Profile fields are user-controlled: escape them for HTML output.
-        $student_data['firstname'] = htmlspecialchars((string) $student_data['firstname'], ENT_QUOTES, 'UTF-8');
-        $student_data['lastname'] = htmlspecialchars((string) $student_data['lastname'], ENT_QUOTES, 'UTF-8');
-        $student_data['username'] = htmlspecialchars((string) $student_data['username'], ENT_QUOTES, 'UTF-8');
-
         $row = [];
-        if ($is_western_name_order) {
-            $row[] = Display::url($student_data['firstname'], $urlDetails);
-            $row[] = Display::url($student_data['lastname'], $urlDetails);
+        if ($export_csv) {
+            // The CSV export gets the plain names.
+            $row[] = $is_western_name_order ? $student_data['firstname'] : $student_data['lastname'];
+            $row[] = $is_western_name_order ? $student_data['lastname'] : $student_data['firstname'];
         } else {
-            $row[] = $student_data['lastname'];
-            $row[] = $student_data['firstname'];
+            // Profile fields are user-controlled: escape them for HTML output.
+            $firstname = htmlspecialchars((string) $student_data['firstname'], ENT_QUOTES, 'UTF-8');
+            $lastname = htmlspecialchars((string) $student_data['lastname'], ENT_QUOTES, 'UTF-8');
+            if ($is_western_name_order) {
+                $row[] = Display::url($firstname, $urlDetails);
+                $row[] = Display::url($lastname, $urlDetails);
+            } else {
+                $row[] = $lastname;
+                $row[] = $firstname;
+            }
         }
+        $student_data['username'] = htmlspecialchars((string) $student_data['username'], ENT_QUOTES, 'UTF-8');
         $string_date = Tracking::get_last_connection_date($student_id, true);
         $first_date = Tracking::get_first_connection_date($student_id);
         $row[] = $first_date;

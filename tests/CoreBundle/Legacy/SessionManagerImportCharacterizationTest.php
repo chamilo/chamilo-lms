@@ -376,7 +376,11 @@ final class SessionManagerImportCharacterizationTest extends AbstractApiTest
         $out = ['teachers' => [], 'groups' => []];
         foreach ($teacherBackup as $uid => $perCourse) {
             foreach ($perCourse as $code => $row) {
-                $out['teachers'][$this->userLabel[(int) $uid].'@'.$this->codeLabel($code)] = $norm($row);
+                // Sorted by column name: the column order of course_rel_user depends on how the schema was built (a database
+                // upgraded by migrations has the newer columns last, a fresh one in the order of the entity).
+                $normalized = $norm($row);
+                ksort($normalized);
+                $out['teachers'][$this->userLabel[(int) $uid].'@'.$this->codeLabel($code)] = $normalized;
             }
         }
         foreach (['user', 'tutor'] as $kind) {
@@ -1445,16 +1449,17 @@ final class SessionManagerImportCharacterizationTest extends AbstractApiTest
                 'backups' => [
                     'teachers' => [
                         'other@c1' => [
-                            'user_id' => 'other',
                             'c_id' => 'c1',
-                            'relation_type' => 0,
-                            'status' => 1,
                             'is_tutor' => 0,
-                            'sort' => 5,
-                            'user_course_cat' => null,
                             'legal_agreement' => 0,
                             'progress' => 0,
+                            'relation_type' => 0,
+                            'sort' => 5,
+                            'status' => 1,
                             'subscription_date' => 'NOW',
+                            'user_course_cat' => null,
+                            'user_id' => 'other',
+                            'visibility' => 1,
                         ],
                     ],
                     'groups' => [
@@ -1588,28 +1593,30 @@ final class SessionManagerImportCharacterizationTest extends AbstractApiTest
                 'backups' => [
                     'teachers' => [
                         'other@c1' => [
-                            'user_id' => 'other',
                             'c_id' => 'c1',
-                            'relation_type' => 0,
-                            'status' => 1,
                             'is_tutor' => 0,
-                            'sort' => 5,
-                            'user_course_cat' => 0,
                             'legal_agreement' => 0,
                             'progress' => 0,
+                            'relation_type' => 0,
+                            'sort' => 5,
+                            'status' => 1,
                             'subscription_date' => 'NOW',
+                            'user_course_cat' => 0,
+                            'user_id' => 'other',
+                            'visibility' => 1,
                         ],
                         'other@c2' => [
-                            'user_id' => 'other',
                             'c_id' => 'c2',
-                            'relation_type' => 0,
-                            'status' => 1,
                             'is_tutor' => 0,
-                            'sort' => 5,
-                            'user_course_cat' => 0,
                             'legal_agreement' => 0,
                             'progress' => 0,
+                            'relation_type' => 0,
+                            'sort' => 5,
+                            'status' => 1,
                             'subscription_date' => 'NOW',
+                            'user_course_cat' => 0,
+                            'user_id' => 'other',
+                            'visibility' => 1,
                         ],
                     ],
                     'groups' => [

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
-use PDO;
 use StudentFollowUpPlugin;
 
 /**
@@ -30,12 +29,7 @@ final class StudentFollowUpPluginTier3CharacterizationTest extends PluginCharact
      */
     public static function tearDownAfterClass(): void
     {
-        $pdo = new PDO(
-            \sprintf('mysql:host=%s;port=%s;dbname=%s', getenv('DATABASE_HOST') ?: '127.0.0.1', getenv('DATABASE_PORT') ?: '3306', getenv('DATABASE_NAME') ?: 'chamilotest'),
-            getenv('DATABASE_USER') ?: 'chamilotest',
-            getenv('DATABASE_PASSWORD') ?: 'chamilotest'
-        );
-        $pdo->exec('DROP TABLE IF EXISTS sfu_post');
+        PluginTestDatabase::pdo()->exec('DROP TABLE IF EXISTS sfu_post');
         parent::tearDownAfterClass();
     }
 

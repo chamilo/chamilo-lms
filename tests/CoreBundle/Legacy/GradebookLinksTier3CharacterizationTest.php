@@ -257,15 +257,11 @@ final class GradebookLinksTier3CharacterizationTest extends KernelTestCase
      */
     private function qualify(int $iid, int $userId, float $qualify, string $time, ?int $threadId = null): void
     {
-        $this->conn->insert('c_forum_thread_qualify', [
-            'iid' => $iid,
-            'user_id' => $userId,
-            'thread_id' => $threadId,
-            'qualify_user_id' => 1,
-            'c_id' => 1,
-            'qualify' => $qualify,
-            'qualify_time' => $time,
-        ]);
+        // The columns are quoted: "qualify" is a reserved word on recent MySQL servers, which Connection::insert() does not escape.
+        $this->conn->executeStatement(
+            'INSERT INTO c_forum_thread_qualify (iid, user_id, thread_id, qualify_user_id, c_id, `qualify`, qualify_time) VALUES (?, ?, ?, 1, 1, ?, ?)',
+            [$iid, $userId, $threadId, $qualify, $time]
+        );
     }
 
     private function nextQualifyIid(): int

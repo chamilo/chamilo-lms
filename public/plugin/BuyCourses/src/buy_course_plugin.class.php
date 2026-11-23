@@ -39,6 +39,11 @@ use Symfony\Component\Intl\Currencies;
  */
 class BuyCoursesPlugin extends Plugin
 {
+    /**
+     * @var array<string, bool> Plugin tables found (or not) by hasPluginTable(), per process. Kept as a property rather than
+     *                          a static variable of the method so the tests can empty it once they have installed the schema.
+     */
+    private static array $tableExists = [];
     private string $lastServiceSaleError = '';
     private bool $lastServiceSaleWasReused = false;
     private bool $stripeInvoiceReadPermissionDenied = false;
@@ -505,19 +510,17 @@ class BuyCoursesPlugin extends Plugin
 
     private function hasPluginTable(string $table): bool
     {
-        static $tableExists = [];
-
         $tableName = Database::get_main_table($table);
-        if (isset($tableExists[$tableName])) {
-            return $tableExists[$tableName];
+        if (isset(self::$tableExists[$tableName])) {
+            return self::$tableExists[$tableName];
         }
 
         $tableLike = Database::escape_string(addcslashes($tableName, '\_%'));
         $result = Database::query("SHOW TABLES LIKE '$tableLike'");
 
-        $tableExists[$tableName] = false !== $result && Database::num_rows($result) > 0;
+        self::$tableExists[$tableName] = false !== $result && Database::num_rows($result) > 0;
 
-        return $tableExists[$tableName];
+        return self::$tableExists[$tableName];
     }
 
     // Public because BuyCoursesCourseDeletedEventSubscriber checks it too
@@ -1970,7 +1973,8 @@ class BuyCoursesPlugin extends Plugin
         $qb->delete($frozenTable)
             ->where('course_id IN (:courseIds)')
             ->setParameter('courseIds', $courseIds, ArrayParameterType::INTEGER)
-            ->executeStatement();
+            ->executeStatement()
+        ;
     }
 
     private function buildBenefitPayload(string $variable, int $grantedValue, string $expiry): ?array
@@ -2056,7 +2060,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('fieldId', (int) $field['id'])
             ->setParameter('userId', (int) $userId)
             ->setParameter('status', (int) self::SERVICE_STATUS_COMPLETED)
-            ->setParameter('now', api_get_utc_datetime());
+            ->setParameter('now', api_get_utc_datetime())
+        ;
 
         $row = $qb->executeQuery()->fetchAssociative();
         if (empty($row)) {
@@ -5896,7 +5901,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('serviceId', $id)
             ->setParameter('status', self::SERVICE_STATUS_COMPLETED)
             ->executeQuery()
-            ->fetchOne();
+            ->fetchOne()
+        ;
         if ($completedSales > 0) {
             return false;
         }
@@ -7825,7 +7831,8 @@ class BuyCoursesPlugin extends Plugin
         $qb->from($servicesTable, 's')
             ->innerJoin('s', $userTable, 'u', 's.owner_id = u.id')
             ->where('s.active = 1')
-            ->andWhere('s.visibility <> 0');
+            ->andWhere('s.visibility <> 0')
+        ;
 
         if (!empty($name)) {
             $qb->andWhere('s.name LIKE :name')->setParameter('name', '%'.$name.'%');
@@ -7862,7 +7869,8 @@ class BuyCoursesPlugin extends Plugin
             ->setFirstResult($start)
             ->setMaxResults($end)
             ->executeQuery()
-            ->fetchAllAssociative();
+            ->fetchAllAssociative()
+        ;
 
         $services = [];
         foreach ($rows as $service) {
@@ -9576,7 +9584,8 @@ class BuyCoursesPlugin extends Plugin
             ->set('delivered', 'delivered + 1')
             ->where('id = :couponId')
             ->setParameter('couponId', $couponId)
-            ->executeStatement();
+            ->executeStatement()
+        ;
     }
 
     /**
@@ -9944,9 +9953,10 @@ class BuyCoursesPlugin extends Plugin
         );
 
         // UTC like the sale date (api_get_utc_datetime): never depends on the PHP/server timezone.
-        $subscriptionEnd = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))
+        $subscriptionEnd = (new DateTimeImmutable('now', new DateTimeZone('UTC')))
             ->modify('+'.$duration.' days')
-            ->format('Y-m-d H:i:s');
+            ->format('Y-m-d H:i:s')
+        ;
 
         $values = array_merge([
             'reference' => $this->generateReference(
@@ -10733,12 +10743,12 @@ class BuyCoursesPlugin extends Plugin
                 $item['status'] = get_plugin_lang('SaleStatusPending', 'BuyCoursesPlugin');
                 $option = "<div class='btn-group btn-group-xs' role='group'>".
                     "<a title='".get_plugin_lang('SubscribeUser', 'BuyCoursesPlugin')."'".
-                    " href='".api_get_self().'?order='.$item['id']."&action=confirm&buycourses_admin_sec_token=".Security::get_existing_token('buycourses_admin')."'".
+                    " href='".api_get_self().'?order='.$item['id'].'&action=confirm&buycourses_admin_sec_token='.Security::get_existing_token('buycourses_admin')."'".
                     " class='btn btn-default'>".
                     Display::return_icon('user_subscribe_session.png', get_plugin_lang('SubscribeUser', 'BuyCoursesPlugin'), [], ICON_SIZE_SMALL)
                     .'</a>'.
                     "<a title='".get_plugin_lang('DeleteOrder', 'BuyCoursesPlugin')."'".
-                    " href='".api_get_self().'?order='.$item['id']."&action=cancel&buycourses_admin_sec_token=".Security::get_existing_token('buycourses_admin')."'".
+                    " href='".api_get_self().'?order='.$item['id'].'&action=cancel&buycourses_admin_sec_token='.Security::get_existing_token('buycourses_admin')."'".
                     " class='btn btn-default'>".
                     Display::return_icon('delete.png', get_plugin_lang('DeleteOrder', 'BuyCoursesPlugin'), [], ICON_SIZE_SMALL)
                     .'</a>'.
@@ -10985,7 +10995,8 @@ class BuyCoursesPlugin extends Plugin
         $qb->from($sessionTable, 's')
             ->innerJoin('s', $itemTable, 'i', 's.id = i.product_id')
             ->where('i.product_type = :productType')
-            ->setParameter('productType', self::PRODUCT_TYPE_SESSION);
+            ->setParameter('productType', self::PRODUCT_TYPE_SESSION)
+        ;
 
         if (!empty($name)) {
             $qb->andWhere('s.title LIKE :name')->setParameter('name', '%'.$name.'%');
@@ -11014,7 +11025,8 @@ class BuyCoursesPlugin extends Plugin
             ->setFirstResult((int) $start)
             ->setMaxResults((int) $end)
             ->executeQuery()
-            ->fetchAllAssociative();
+            ->fetchAllAssociative()
+        ;
 
         $entityManager = Database::getManager();
         $sessions = [];
@@ -11412,7 +11424,7 @@ class BuyCoursesPlugin extends Plugin
         ";
 
         if ($checkUsageLimit) {
-            $couponFrom .= " AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)";
+            $couponFrom .= ' AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)';
         }
 
         return Database::select(
@@ -11466,7 +11478,7 @@ class BuyCoursesPlugin extends Plugin
                 on ci.coupon_id = c.id
         ";
 
-        $couponFrom .= " AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)";
+        $couponFrom .= ' AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)';
 
         return Database::select(
             ['c.*'],
@@ -11506,7 +11518,7 @@ class BuyCoursesPlugin extends Plugin
         ";
 
         if ($checkUsageLimit) {
-            $couponFrom .= " AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)";
+            $couponFrom .= ' AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)';
         }
 
         return Database::select(
@@ -11545,7 +11557,7 @@ class BuyCoursesPlugin extends Plugin
                 on cs.coupon_id = c.id
         ";
 
-        $couponFrom .= " AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)";
+        $couponFrom .= ' AND (c.times_applied = 0 OR CAST(c.delivered AS UNSIGNED) < c.times_applied)';
 
         return Database::select(
             ['c.*'],
@@ -11936,7 +11948,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('fieldId', $extraFieldId)
             ->setParameter('userId', $userId)
             ->executeQuery()
-            ->fetchOne();
+            ->fetchOne()
+        ;
 
         return false !== $id;
     }
@@ -12116,7 +12129,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('variable', $variable)
             ->setParameter('userId', $userId)
             ->executeQuery()
-            ->fetchAssociative();
+            ->fetchAssociative()
+        ;
 
         if (false === $row) {
             return null;
@@ -12210,7 +12224,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('status', COURSEMANAGER)
             ->setParameter('hrm', COURSE_RELATION_TYPE_HRM)
             ->executeQuery()
-            ->fetchAssociative();
+            ->fetchAssociative()
+        ;
 
         return (int) ($row['total'] ?? 0);
     }
@@ -12244,7 +12259,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('status', COURSEMANAGER)
             ->setParameter('hrm', COURSE_RELATION_TYPE_HRM)
             ->executeQuery()
-            ->fetchAssociative();
+            ->fetchAssociative()
+        ;
 
         return (int) ($row['total'] ?? 0);
     }
@@ -12295,7 +12311,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('hrm', COURSE_RELATION_TYPE_HRM)
             ->setParameter('courseIds', $courseIds, ArrayParameterType::INTEGER)
             ->executeQuery()
-            ->fetchAllAssociative();
+            ->fetchAllAssociative()
+        ;
 
         $labels = [];
         foreach ($rows as $row) {
@@ -12609,7 +12626,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('extraFieldId', $extraFieldId)
             ->setParameter('greaterThan', $greaterThan)
             ->executeQuery()
-            ->fetchOne();
+            ->fetchOne()
+        ;
 
         return false !== $found;
     }
@@ -12637,7 +12655,8 @@ class BuyCoursesPlugin extends Plugin
             ->orderBy('id', 'ASC')
             ->setParameter('appliesTo', self::SERVICE_TYPE_USER)
             ->executeQuery()
-            ->fetchAllAssociative();
+            ->fetchAllAssociative()
+        ;
 
         $feature = $features[0];
         foreach ($rows as $row) {
@@ -12765,7 +12784,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('now', $now)
             ->setParameter('appliesTo', self::SERVICE_TYPE_USER)
             ->executeQuery()
-            ->fetchAssociative();
+            ->fetchAssociative()
+        ;
         if (!is_array($sale)) {
             return [
                 'valid' => false,
@@ -12836,7 +12856,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('status', self::SERVICE_STATUS_COMPLETED)
             ->setParameter('now', api_get_utc_datetime())
             ->executeQuery()
-            ->fetchAllAssociative();
+            ->fetchAllAssociative()
+        ;
 
         $bestSale = null;
         $bestRemaining = -1;
@@ -12874,7 +12895,8 @@ class BuyCoursesPlugin extends Plugin
             ->andWhere('sc.deleted_at IS NULL')
             ->setParameter('serviceSaleId', $serviceSaleId)
             ->executeQuery()
-            ->fetchAssociative();
+            ->fetchAssociative()
+        ;
 
         return (int) ($row['total'] ?? 0);
     }
@@ -12955,7 +12977,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('expiredServiceSaleId', $expiredServiceSaleId)
             ->setParameter('now', $now)
             ->executeQuery()
-            ->fetchAllAssociative();
+            ->fetchAllAssociative()
+        ;
 
         foreach ($replacementRows as $row) {
             $replacementSaleId = (int) ($row['id'] ?? 0);
@@ -12987,7 +13010,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('variable', self::EXTRA_FIELD_MAX_COURSES)
             ->setParameter('itemType', ExtraField::USER_FIELD_TYPE)
             ->executeQuery()
-            ->fetchAssociative();
+            ->fetchAssociative()
+        ;
         if (false !== $benefitRow) {
             $maxCourses = max(0, (int) ($benefitRow['granted_value'] ?? 0));
         }
@@ -13107,7 +13131,8 @@ class BuyCoursesPlugin extends Plugin
                 ->setParameter('courseId', $courseId)
                 ->setParameter('variable', $feature)
                 ->getQuery()
-                ->getArrayResult();
+                ->getArrayResult()
+            ;
 
             if (!empty($existing)) {
                 Database::update(
@@ -13138,7 +13163,8 @@ class BuyCoursesPlugin extends Plugin
                 ->setParameter('variable', $feature)
                 ->setParameter('value', $value)
                 ->setParameter('category', 'ai_helpers')
-                ->executeStatement();
+                ->executeStatement()
+            ;
         }
     }
 
@@ -13164,7 +13190,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('status', COURSEMANAGER)
             ->setParameter('hrm', COURSE_RELATION_TYPE_HRM)
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
 
         $ids = [];
         foreach ($rows as $row) {
@@ -13207,7 +13234,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('status', self::SERVICE_STATUS_COMPLETED)
             ->setParameter('now', api_get_utc_datetime())
             ->executeQuery()
-            ->fetchOne();
+            ->fetchOne()
+        ;
 
         return false !== $found;
     }
@@ -13244,7 +13272,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('status', self::SERVICE_STATUS_COMPLETED)
             ->setParameter('now', api_get_utc_datetime())
             ->executeQuery()
-            ->fetchAllAssociative();
+            ->fetchAllAssociative()
+        ;
 
         foreach ($rows as $row) {
             $context = json_decode((string) ($row['context_json'] ?? ''), true);
@@ -13291,7 +13320,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('status', self::SERVICE_STATUS_COMPLETED)
             ->setParameter('now', api_get_utc_datetime())
             ->executeQuery()
-            ->fetchAssociative();
+            ->fetchAssociative()
+        ;
         if (false === $row) {
             return null;
         }
@@ -13332,7 +13362,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('status', STUDENT)
             ->setParameter('hrm', COURSE_RELATION_TYPE_HRM)
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
         $inSessions = $em->createQueryBuilder()
             ->select('DISTINCT IDENTITY(srcru.user) AS userId')
             ->from(SessionRelCourseRelUser::class, 'srcru')
@@ -13341,7 +13372,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('courseId', $courseId)
             ->setParameter('status', STUDENT)
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
 
         return count(array_unique(array_map('intval', array_merge(
             array_column($direct, 'userId'),
@@ -13393,7 +13425,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('hrm', COURSE_RELATION_TYPE_HRM)
             ->setParameter('userIds', $userIds)
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
         $inSessions = $em->createQueryBuilder()
             ->select('DISTINCT IDENTITY(srcru.user) AS userId')
             ->from(SessionRelCourseRelUser::class, 'srcru')
@@ -13402,7 +13435,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('courseId', $courseId)
             ->setParameter('userIds', $userIds)
             ->getQuery()
-            ->getArrayResult();
+            ->getArrayResult()
+        ;
         $already = count(array_unique(array_map('intval', array_merge(
             array_column($direct, 'userId'),
             array_column($inSessions, 'userId')
@@ -13496,7 +13530,8 @@ class BuyCoursesPlugin extends Plugin
             ->setParameter('courseId', $courseId)
             ->setParameter('userId', $userId)
             ->executeQuery()
-            ->fetchOne();
+            ->fetchOne()
+        ;
 
         return false !== $id;
     }

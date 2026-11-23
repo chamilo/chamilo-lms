@@ -179,7 +179,7 @@ final class LegalTier3CharacterizationTest extends KernelTestCase
         $this->assertSame(5, (int) $mine[2][4]);
         $this->assertSame(get_lang('Page Link'), $mine[3][4]);
         $this->assertSame(
-            $conn->fetchOne('SELECT FROM_UNIXTIME(?)', [1700000200]),
+            $conn->fetchOne('SELECT FROM_UNIXTIME(CAST(? AS UNSIGNED))', [1700000200]),
             $mine[1][5]
         );
         $this->assertSame(

@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
-use PDO;
 use RuntimeException;
 
 use const PHP_BINARY;
@@ -19,11 +18,7 @@ trait PluginTier3SchemaTrait
 {
     protected static function ensurePluginTable(string $plugin, string $table): void
     {
-        $pdo = new PDO(
-            \sprintf('mysql:host=%s;port=%s;dbname=%s', getenv('DATABASE_HOST') ?: '127.0.0.1', getenv('DATABASE_PORT') ?: '3306', getenv('DATABASE_NAME') ?: 'chamilotest'),
-            getenv('DATABASE_USER') ?: 'chamilotest',
-            getenv('DATABASE_PASSWORD') ?: 'chamilotest'
-        );
+        $pdo = PluginTestDatabase::pdo();
         $statement = $pdo->prepare('SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?');
         $statement->execute([$table]);
         if ((int) $statement->fetchColumn() > 0) {

@@ -20,8 +20,15 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  */
 final class H5pImportTier3CharacterizationTest extends KernelTestCase
 {
+    use PluginTier3SchemaTrait;
     private const USER = 987021;
     private const OTHER = 987022;
+
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+        self::ensurePluginTable('H5pImport', 'plugin_h5p_import_results');
+    }
 
     protected function setUp(): void
     {

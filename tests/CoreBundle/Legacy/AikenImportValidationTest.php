@@ -6,8 +6,12 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
-use PhpZip\ZipFile;
 use PHPUnit\Framework\TestCase;
+use PhpZip\ZipFile;
+
+use const AIKEN_MAX_TEXT_BYTES;
+use const AIKEN_MAX_ZIP_ENTRIES;
+use const AIKEN_MAX_ZIP_TEXT_FILES;
 
 require_once \dirname(__DIR__, 3).'/public/main/exercise/export/aiken/aiken_import.inc.php';
 
@@ -36,10 +40,10 @@ final class AikenImportValidationTest extends TestCase
     {
         $text = "What is one plus one?\nA. One\nB. Two\nANSWER: B\nSCORE: 15.5\n";
 
-        self::assertTrue(\aiken_validate_score_directives($text));
+        self::assertTrue(aiken_validate_score_directives($text));
 
         $exercise = ['question' => [], 'total_weight' => 20];
-        \setExerciseInfoFromAikenText($text, $exercise);
+        setExerciseInfoFromAikenText($text, $exercise);
 
         self::assertCount(1, $exercise['question']);
         self::assertSame([1], $exercise['question'][0]['correct_answers']);
@@ -50,10 +54,10 @@ final class AikenImportValidationTest extends TestCase
     {
         $text = "What is one plus one?\nA. One\nB. Two\nANSWER: B\nscore: 3\n";
 
-        self::assertTrue(\aiken_validate_score_directives($text));
+        self::assertTrue(aiken_validate_score_directives($text));
 
         $exercise = ['question' => [], 'total_weight' => 20];
-        \setExerciseInfoFromAikenText($text, $exercise);
+        setExerciseInfoFromAikenText($text, $exercise);
 
         self::assertCount(1, $exercise['question']);
         self::assertSame(3.0, $exercise['question'][0]['score']);
@@ -62,7 +66,7 @@ final class AikenImportValidationTest extends TestCase
     public function testNegativeZeroAndMalformedScoresAreRejected(): void
     {
         foreach (['SCORE: -5', 'SCORE: 0', 'SCORE: banana', 'SCORE:', 'SCORE: 1e6', 'SCORE: 5 points'] as $score) {
-            self::assertFalse(\aiken_validate_score_directives(
+            self::assertFalse(aiken_validate_score_directives(
                 "A question?\nA. Yes\nB. No\nANSWER: A\n".$score."\n"
             ), $score);
         }
@@ -70,7 +74,7 @@ final class AikenImportValidationTest extends TestCase
 
     public function testMissingScoreKeepsOriginalAikenValid(): void
     {
-        self::assertTrue(\aiken_validate_score_directives("A question?\nA. Yes\nB. No\nANSWER: A\n"));
+        self::assertTrue(aiken_validate_score_directives("A question?\nA. Yes\nB. No\nANSWER: A\n"));
     }
 
     public function testPlainTextCanBeRead(): void
@@ -79,15 +83,15 @@ final class AikenImportValidationTest extends TestCase
         $text = "A question?\nA. Yes\nB. No\nANSWER: A\n";
         file_put_contents($path, $text);
 
-        self::assertSame($text, \aiken_read_file_text($path));
+        self::assertSame($text, aiken_read_file_text($path));
     }
 
     public function testOversizedPlainTextIsRejected(): void
     {
         $path = $this->temporaryDirectory.'/large.txt';
-        file_put_contents($path, str_repeat('A', \AIKEN_MAX_TEXT_BYTES + 1));
+        file_put_contents($path, str_repeat('A', AIKEN_MAX_TEXT_BYTES + 1));
 
-        self::assertNull(\aiken_read_file_text($path));
+        self::assertNull(aiken_read_file_text($path));
     }
 
     public function testZipReadsMultipleTextEntries(): void
@@ -97,7 +101,7 @@ final class AikenImportValidationTest extends TestCase
             'nested/question-two.txt' => "Question two?\nA. No\nB. Yes\nANSWER: B",
         ]);
 
-        $text = \aiken_read_file_text($path);
+        $text = aiken_read_file_text($path);
         self::assertNotNull($text);
         self::assertStringContainsString('Question one?', $text);
         self::assertStringContainsString('Question two?', $text);
@@ -107,34 +111,34 @@ final class AikenImportValidationTest extends TestCase
     {
         $path = $this->zipFile(['picture.png' => 'not a text question']);
 
-        self::assertNull(\aiken_read_file_text($path));
+        self::assertNull(aiken_read_file_text($path));
     }
 
     public function testZipWithTooManyTextFilesIsRejected(): void
     {
         $entries = [];
-        for ($i = 0; $i <= \AIKEN_MAX_ZIP_TEXT_FILES; ++$i) {
+        for ($i = 0; $i <= AIKEN_MAX_ZIP_TEXT_FILES; ++$i) {
             $entries['question-'.$i.'.txt'] = 'Question?';
         }
 
-        self::assertNull(\aiken_read_file_text($this->zipFile($entries)));
+        self::assertNull(aiken_read_file_text($this->zipFile($entries)));
     }
 
     public function testZipWithTooManyEntriesIsRejected(): void
     {
         $entries = [];
-        for ($i = 0; $i <= \AIKEN_MAX_ZIP_ENTRIES; ++$i) {
+        for ($i = 0; $i <= AIKEN_MAX_ZIP_ENTRIES; ++$i) {
             $entries['item-'.$i.'.png'] = 'data';
         }
 
-        self::assertNull(\aiken_read_file_text($this->zipFile($entries)));
+        self::assertNull(aiken_read_file_text($this->zipFile($entries)));
     }
 
     public function testZipWithOversizedDecompressedTextIsRejected(): void
     {
-        $path = $this->zipFile(['questions.txt' => str_repeat('A', \AIKEN_MAX_TEXT_BYTES + 1)]);
+        $path = $this->zipFile(['questions.txt' => str_repeat('A', AIKEN_MAX_TEXT_BYTES + 1)]);
 
-        self::assertNull(\aiken_read_file_text($path));
+        self::assertNull(aiken_read_file_text($path));
     }
 
     /**

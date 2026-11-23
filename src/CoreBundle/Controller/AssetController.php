@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Helpers\GlideAssetHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
@@ -46,6 +47,14 @@ class AssetController
                 return $server->getImageResponse($filePath, $params);
             }
 
+            // Only SCORM packages are meant to render markup here. Any other asset may come from a
+            // user upload (e.g. a profile file field), so it is delivered as a neutral download.
+            $forceDownload = Asset::SCORM !== $category
+                && (str_contains($mimeType, 'html') || str_contains($mimeType, 'xml'));
+            if ($forceDownload) {
+                $mimeType = 'application/octet-stream';
+            }
+
             $response = new StreamedResponse(
                 function () use ($assetRepository, $filePath): void {
                     $outputStream = fopen('php://output', 'wb');
@@ -58,11 +67,15 @@ class AssetController
                 }
             );
             $disposition = $response->headers->makeDisposition(
-                ResponseHeaderBag::DISPOSITION_INLINE,
+                $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
                 $fileName
             );
             $response->headers->set('Content-Disposition', $disposition);
             $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+
+            if ($forceDownload) {
+                $response->headers->set('X-Content-Type-Options', 'nosniff');
+            }
 
             return $response;
         }

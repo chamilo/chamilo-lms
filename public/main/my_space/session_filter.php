@@ -335,7 +335,11 @@ if (0 == count($certificateList)) {
         echo '<tr>';
         echo '<td width="50%" class="actions">';
         echo get_lang('Learner').' : ';
-        echo api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')';
+        echo htmlspecialchars(
+            api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')',
+            ENT_QUOTES,
+            'UTF-8'
+        );
         echo '</td>';
         echo '<td width="50%" class="actions">'.$courseInfo['title'].'</td>';
         echo '</tr>';

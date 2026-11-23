@@ -2314,16 +2314,17 @@ class learnpath
                     $studentResponseFormatted = implode(',', $content_student_response);
                 }
 
+                // Every value comes from the SCORM runtime (learner-controlled): escape it for HTML output.
                 $list[] = [
                     'order_id' => $row['order_id'] + 1,
-                    'id' => urldecode($row['interaction_id']), //urldecode because they often have %2F or stuff like that
-                    'type' => $row['interaction_type'],
-                    'time' => $row['completion_time'],
+                    'id' => htmlspecialchars(urldecode($row['interaction_id']), ENT_QUOTES), //urldecode because they often have %2F or stuff like that
+                    'type' => htmlspecialchars($row['interaction_type'], ENT_QUOTES),
+                    'time' => htmlspecialchars($row['completion_time'], ENT_QUOTES),
                     'correct_responses' => '', // Hide correct responses from students.
                     'student_response' => $row['student_response'],
-                    'result' => $row['result'],
-                    'latency' => $row['latency'],
-                    'student_response_formatted' => $studentResponseFormatted,
+                    'result' => htmlspecialchars($row['result'], ENT_QUOTES),
+                    'latency' => htmlspecialchars($row['latency'], ENT_QUOTES),
+                    'student_response_formatted' => htmlspecialchars($studentResponseFormatted, ENT_QUOTES),
                 ];
             }
         }
@@ -2397,11 +2398,11 @@ class learnpath
             while ($row = Database::fetch_array($res)) {
                 $list[] = [
                     'order_id' => $row['order_id'] + 1,
-                    'objective_id' => urldecode($row['objective_id']), // urldecode() because they often have %2F
+                    'objective_id' => htmlspecialchars(urldecode($row['objective_id']), ENT_QUOTES), // urldecode() because they often have %2F
                     'score_raw' => $row['score_raw'],
                     'score_max' => $row['score_max'],
                     'score_min' => $row['score_min'],
-                    'status' => $row['status'],
+                    'status' => htmlspecialchars($row['status'], ENT_QUOTES),
                 ];
             }
         }

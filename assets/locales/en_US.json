@@ -4875,5 +4875,6 @@
     "Asset storage": "Asset storage",
     "ZIP entry": "ZIP entry",
     "SCORM package": "SCORM package",
-    "SCORM entry": "SCORM entry"
+    "SCORM entry": "SCORM entry",
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
 }

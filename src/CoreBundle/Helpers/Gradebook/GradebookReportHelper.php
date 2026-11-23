@@ -70,6 +70,7 @@ final readonly class GradebookReportHelper
         $includeScores = $criteria->includeScores;
         $report->context = $this->buildContext($criteria, $course, $session, $groupId);
         $report->category = $this->normalizeCategory($category);
+        $certificateMinScore = $this->getCertificateMinScore($category);
         $report->columns = $includeScores ? $this->buildColumns($category, $course, $session, $groupId) : [];
         $report->extraFieldColumns = $includeScores ? $this->getExtraFieldDefinitions() : [];
         $report->settings = $this->buildSettings($category);
@@ -150,6 +151,7 @@ final readonly class GradebookReportHelper
             $total = $includeScores
                 ? $this->scoreCalculator->calculateCategory($category, $student, $course, $session, true)
                 : null;
+            $reachedCertificateMinScore = $this->reachesCertificateMinScore($total, $certificateMinScore);
             if (\is_array($total)) {
                 if (true === ($report->settings['useExerciseScoreSettingsInTotal'] ?? false)) {
                     $total = $this->convertScoreToExercisePlatformScale($total, $report->settings);
@@ -188,6 +190,7 @@ final readonly class GradebookReportHelper
                 'scores' => $scores,
                 'total' => $total,
                 'customScore' => $customScore,
+                'reachedCertificateMinScore' => $reachedCertificateMinScore,
             ];
         }
 
@@ -457,7 +460,32 @@ final readonly class GradebookReportHelper
             'calculationMode' => $category->getCalculationMode()->value,
             'parentId' => null !== $category->getParent() ? (int) $category->getParent()->getId() : 0,
             'locked' => (bool) $category->getLocked(),
+            'certificateMinScore' => $this->getCertificateMinScore($category),
         ];
+    }
+
+    /**
+     * The minimum certification score of the category, as a percentage. 0 means no minimum.
+     */
+    private function getCertificateMinScore(GradebookCategory $category): float
+    {
+        return max(0.0, (float) ($category->getCertifMinScore() ?? 0));
+    }
+
+    /**
+     * Whether the total of a learner reaches the minimum certification score of the category,
+     * rounded as the certificate generator rounds it. Always false when the category has no
+     * minimum, since every learner would reach it.
+     *
+     * @param array<string, mixed>|null $total the total as calculated, before any display conversion
+     */
+    private function reachesCertificateMinScore(?array $total, float $certificateMinScore): bool
+    {
+        if ($certificateMinScore <= 0.0 || true !== ($total['hasResult'] ?? false) || !is_numeric($total['percentage'] ?? null)) {
+            return false;
+        }
+
+        return round((float) $total['percentage'], 2) >= $certificateMinScore;
     }
 
     /**

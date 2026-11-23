@@ -54,7 +54,8 @@ class AccountController extends BaseController
 
     public function __construct(
         private readonly UserHelper $userHelper,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
+        private readonly ClockInterface $clock
     ) {}
 
     #[IsGranted('ROLE_USER')]
@@ -123,7 +124,6 @@ class AccountController extends BaseController
         SettingsManager $settingsManager,
         UserPasswordHasherInterface $passwordHasher,
         EntityManagerInterface $entityManager,
-        ClockInterface $clock,
     ): Response {
         $user = $this->getUser();
 
@@ -167,12 +167,12 @@ class AccountController extends BaseController
             && !$user->getMfaSecret()
         ) {
             if (!$session->has('temporary_mfa_secret')) {
-                $totp = TOTP::create(clock: $clock);
+                $totp = TOTP::create(clock: $this->clock);
                 $session->set('temporary_mfa_secret', $totp->getSecret());
             }
 
             $secret = (string) $session->get('temporary_mfa_secret');
-            $totp = TOTP::create($secret, clock: $clock);
+            $totp = TOTP::create($secret, clock: $this->clock);
             $portalName = $settingsManager->getSetting('platform.institution');
             $totp->setLabel($portalName.' - '.$user->getEmail());
 

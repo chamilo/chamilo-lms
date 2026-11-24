@@ -81,7 +81,7 @@ You should have:
 
 - A web server with a virtualhost in a domain or subdomain (not in a subfolder inside a domain with another application).
 - A working PHP configuration with PHP 8.3, 8.4 or 8.5
-- MariaDB 10 or higer (alternatively, MySQL 5.7 or higher can also be used)
+- MariaDB 10 or higher (alternatively, MySQL 5.7 or higher can also be used)
 
 ### Software stack installation (Ubuntu)
 

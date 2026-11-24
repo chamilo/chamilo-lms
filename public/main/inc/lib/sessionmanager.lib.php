@@ -8698,8 +8698,6 @@ class SessionManager
             }
         }
 
-        $form->addHtml('<div id="ajax_list_coachs"></div>');
-
         $form->addButtonAdvancedSettings('advanced_params');
         $form->addElement('html', '<div id="advanced_params_options" style="'.(isset($fromSessionId) ? 'display:block' : 'display:none').'">');
 

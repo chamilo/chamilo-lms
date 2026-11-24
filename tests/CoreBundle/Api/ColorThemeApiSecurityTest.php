@@ -143,21 +143,61 @@ class ColorThemeApiSecurityTest extends AbstractApiTest
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
-    public function testPutIsNotExposed(): void
+    public function testPutUpdatesTheThemeOfTheCurrentPortal(): void
     {
-        // PUT replaced the theme with an unmanaged object that the portal check
-        // never found (#9591). Updates go through PATCH only.
+        // Standard PUT sends a new ColorTheme. The portal check has to use the
+        // stored row (previous_data), then the same row is updated (#9591).
         $theme = $this->createBoundTheme('theme_sec_put', $this->getAccessUrl());
+        $themeId = $theme->getId();
+        $admin = $this->createUser('theme_admin', '', '', 'ROLE_ADMIN');
+        $palette = $this->validPalette();
+        $palette['--color-primary-base'] = '10 20 30';
+        $before = $this->getEntityManager()->getRepository(ColorTheme::class)->count([]);
+
+        $this
+            ->createClientWithCredentials($this->getUserTokenFromUser($admin))
+            ->request('PUT', '/api/color_themes/'.$themeId, [
+                'json' => ['title' => 'theme_sec_put_2', 'variables' => $palette],
+            ])
+        ;
+
+        $this->assertResponseIsSuccessful();
+
+        $em = $this->getEntityManager();
+        $em->clear();
+        $updated = $em->getRepository(ColorTheme::class)->find($themeId);
+        self::assertInstanceOf(ColorTheme::class, $updated);
+        self::assertSame('theme_sec_put_2', $updated->getTitle());
+        self::assertSame('10 20 30', $updated->getVariables()['--color-primary-base'] ?? null);
+        self::assertSame($before, $em->getRepository(ColorTheme::class)->count([]));
+
+        $slug = (string) $updated->getSlug();
+        $this->writtenSlugs[] = $slug;
+        $css = $this->themesFilesystem()->read($slug.'/colors.css');
+        self::assertStringContainsString('--color-primary-base: 10 20 30;', $css);
+    }
+
+    public function testPutOnThemeBoundToAnotherPortalIsNotFound(): void
+    {
+        $otherUrl = $this->createAccessUrl('https://other-portal-put.example.org/');
+        $foreignTheme = $this->createBoundTheme('theme_sec_put_foreign', $otherUrl);
+        $themeId = $foreignTheme->getId();
         $admin = $this->createUser('theme_admin', '', '', 'ROLE_ADMIN');
 
         $this
             ->createClientWithCredentials($this->getUserTokenFromUser($admin))
-            ->request('PUT', '/api/color_themes/'.$theme->getId(), [
-                'json' => ['title' => 'theme_sec_put_2', 'variables' => $this->validPalette()],
+            ->request('PUT', '/api/color_themes/'.$themeId, [
+                'json' => ['title' => 'theme_sec_put_hijack', 'variables' => $this->validPalette()],
             ])
         ;
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_METHOD_NOT_ALLOWED);
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+
+        $em = $this->getEntityManager();
+        $em->clear();
+        $reloaded = $em->getRepository(ColorTheme::class)->find($themeId);
+        self::assertInstanceOf(ColorTheme::class, $reloaded);
+        self::assertSame('theme_sec_put_foreign', $reloaded->getTitle());
     }
 
     /**

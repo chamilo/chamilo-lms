@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Helpers\GlideAssetHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
+use League\Flysystem\PathTraversalDetected;
+use League\Flysystem\WhitespacePathNormalizer;
 use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -31,7 +33,13 @@ class AssetController
         GlideAssetHelper $glide,
         RequestStack $requestStack
     ): Response {
-        $filePath = $category.'/'.$path;
+        try {
+            // Flysystem resolves ".." and "\" itself: decide on the path it will really read.
+            $filePath = (new WhitespacePathNormalizer())->normalizePath($category.'/'.$path);
+        } catch (PathTraversalDetected) {
+            throw new FileNotFoundException(\sprintf('File not found: %s', $path));
+        }
+        $category = explode('/', $filePath, 2)[0];
         $exists = $assetRepository->getFileSystem()->fileExists($filePath);
 
         if ($exists) {

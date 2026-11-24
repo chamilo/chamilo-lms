@@ -34,6 +34,19 @@ export const useCourseSettings = defineStore("courseSettings", () => {
     settingsByCategory.value = {}
   }
 
+  function setSetting(variable, value, category = null) {
+    if (!variable) {
+      return
+    }
+
+    settings.value = { ...settings.value, [variable]: value }
+
+    if (category) {
+      const categorySettings = { ...(settingsByCategory.value[category] || {}), [variable]: value }
+      settingsByCategory.value = { ...settingsByCategory.value, [category]: categorySettings }
+    }
+  }
+
   function hasOwn(object, key) {
     return Object.prototype.hasOwnProperty.call(object || {}, key)
   }
@@ -76,6 +89,7 @@ export const useCourseSettings = defineStore("courseSettings", () => {
     settingsByCategory,
     loadCourseSettings,
     resetCourseSettings,
+    setSetting,
     getSetting,
     isSettingEnabled,
   }

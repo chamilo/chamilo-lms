@@ -128,6 +128,7 @@ final class UserEditController extends AbstractController
             'westernNameOrder' => api_is_western_name_order(),
             'loginIsEmail' => $loginIsEmail,
             'emailRequired' => 'true' === api_get_setting('registration', 'email'),
+            'firstnameRequired' => 'false' !== api_get_setting('registration.firstname_required'),
             'hideNeverExpireOption' => $hideNeverExpireOption,
             'adminsCanSetUsersPass' => $adminsCanSetUsersPass,
             'hideFields' => $hideFields,
@@ -189,7 +190,7 @@ final class UserEditController extends AbstractController
 
         $firstname = self::sanitizePlainText((string) $payload->get('firstname', ''));
         $lastname = self::sanitizePlainText((string) $payload->get('lastname', ''));
-        if ('' === $firstname || '' === $lastname) {
+        if ('' === $lastname || ('' === $firstname && 'false' !== api_get_setting('registration.firstname_required'))) {
             return $this->json(['error' => $this->translator->trans('Required field')], Response::HTTP_BAD_REQUEST);
         }
 
@@ -221,7 +222,7 @@ final class UserEditController extends AbstractController
 
         $roles = array_values(array_unique(array_map(
             'api_normalize_role_code',
-            array_filter((array) $payload->all('roles'), 'strlen')
+            array_filter((array) $payload->all('roles'), static fn (mixed $role): bool => \is_scalar($role) && '' !== (string) $role)
         )));
         if ([] === $roles || !UserManager::areRolesAllowedInUserForm($roles)) {
             return $this->json(['error' => $this->translator->trans('Error')], Response::HTTP_FORBIDDEN);

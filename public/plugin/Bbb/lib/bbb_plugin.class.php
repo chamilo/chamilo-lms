@@ -235,11 +235,10 @@ class BbbPlugin extends Plugin
         $pluginRepo = Container::getPluginRepository();
         $plugin     = $pluginRepo->findOneByTitle($this->get_name());
 
+        // An existing row comes from the repository, so it is already managed (EntityManager::merge() no longer exists).
         if (!$plugin) {
             $plugin = new \Chamilo\CoreBundle\Entity\Plugin();
             $plugin->setTitle($this->get_name());
-        } else {
-            $plugin = $em->merge($plugin);
         }
 
         $plugin->setInstalled(true);

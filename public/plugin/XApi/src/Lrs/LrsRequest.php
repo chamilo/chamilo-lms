@@ -104,7 +104,10 @@ class LrsRequest
             return true;
         }
 
-        if ($this->isValidCmi5Token($basicValue)) {
+        $cmi5Scope = $this->getCmi5TokenScope($basicValue);
+        if (null !== $cmi5Scope) {
+            $this->request->attributes->set(BaseController::LAUNCH_SCOPE, $cmi5Scope);
+
             return true;
         }
 
@@ -140,7 +143,12 @@ class LrsRequest
         return null !== $auth;
     }
 
-    private function isValidCmi5Token(string $token): bool
+    /**
+     * The launch a cmi5 token is limited to, or null when the token is not valid.
+     *
+     * @return array{agent: array<string, mixed>, activity: string, registration: string}|null
+     */
+    private function getCmi5TokenScope(string $token): ?array
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             @session_start();
@@ -150,7 +158,7 @@ class LrsRequest
         $now = time();
 
         if (!\is_array($storedTokens)) {
-            return false;
+            return null;
         }
 
         foreach ($storedTokens as $launchSessionId => $tokenData) {
@@ -168,11 +176,22 @@ class LrsRequest
             $storedToken = (string) ($tokenData['token'] ?? '');
 
             if ('' !== $storedToken && hash_equals($storedToken, $token)) {
-                return true;
+                // A token without the launch it belongs to could act for anyone.
+                if (!\is_array($tokenData['agent'] ?? null)
+                    || [] === XApiPlugin::getAgentIdentifier($tokenData['agent'])
+                ) {
+                    return null;
+                }
+
+                return [
+                    'agent' => $tokenData['agent'],
+                    'activity' => (string) ($tokenData['activity'] ?? ''),
+                    'registration' => (string) ($tokenData['registration'] ?? ''),
+                ];
             }
         }
 
-        return false;
+        return null;
     }
 
     private function validateVersion(): void

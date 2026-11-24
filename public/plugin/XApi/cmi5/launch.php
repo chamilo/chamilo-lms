@@ -113,6 +113,18 @@ try {
     exit;
 }
 
+// The AU fetches its LRS token for this launch session only (cmi5/token.php), limited to this learner and AU.
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    @session_start();
+}
+$_SESSION['xapi_cmi5_launches'][$viewSessionId] = [
+    'user_id' => (int) $user->getId(),
+    'agent' => XApiPlugin::getLaunchAgent($actor),
+    'activity' => $customActivityId,
+    'registration' => $registration,
+    'expires_at' => time() + 86400,
+];
+
 $launchUrl = $plugin->generateLaunchUrl(
     'cmi5',
     $itemUrl,

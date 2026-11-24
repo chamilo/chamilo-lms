@@ -256,8 +256,7 @@ class XApiPlugin extends Plugin
     {
         $payload = self::base64UrlEncode((string) json_encode(
             [
-                // Kept as sent to the content: the LRS filters statements on these exact values.
-                'agent' => array_intersect_key($actor, array_flip(['mbox', 'mbox_sha1sum', 'openid', 'account'])),
+                'agent' => self::getLaunchAgent($actor),
                 'activity' => $activityId,
                 'registration' => $registration,
                 'expires' => time() + self::LAUNCH_AUTH_TTL,
@@ -304,6 +303,19 @@ class XApiPlugin extends Plugin
             'activity' => (string) ($data['activity'] ?? ''),
             'registration' => (string) ($data['registration'] ?? ''),
         ];
+    }
+
+    /**
+     * The identifying fields of the actor a launch is limited to, kept as sent to the content: the LRS filters
+     * statements on these exact values.
+     *
+     * @param array<string, mixed> $actor
+     *
+     * @return array<string, mixed>
+     */
+    public static function getLaunchAgent(array $actor): array
+    {
+        return array_intersect_key($actor, array_flip(['mbox', 'mbox_sha1sum', 'openid', 'account']));
     }
 
     /**

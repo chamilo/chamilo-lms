@@ -65,6 +65,17 @@ if (isset($_REQUEST['c']) && '' !== trim((string) $_REQUEST['c'])) {
 
         exit;
     }
+
+    if (!empty($coupon['restricted_sale_id'])) {
+        header(
+            'Location: '.api_get_path(WEB_PLUGIN_PATH).'BuyCourses/src/purchase_reminder_link.php?'.http_build_query([
+                'k' => (string) ($coupon['restricted_sale_kind'] ?? 'service_sale'),
+                's' => (int) $coupon['restricted_sale_id'],
+                'c' => (int) $coupon['id'],
+            ])
+        );
+        exit;
+    }
 }
 
 $serviceInfo = $plugin->getService($serviceId, $coupon);

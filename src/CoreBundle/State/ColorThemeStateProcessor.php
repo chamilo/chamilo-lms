@@ -8,7 +8,6 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Patch;
-use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\ColorTheme;
@@ -48,9 +47,7 @@ final readonly class ColorThemeStateProcessor implements ProcessorInterface
             $accessUrl = $this->accessUrlHelper->getCurrent();
 
             // An update may only touch a theme already bound to the current portal.
-            if (($operation instanceof Put || $operation instanceof Patch)
-                && !$accessUrl->getColorThemeByTheme($data)
-            ) {
+            if ($operation instanceof Patch && !$accessUrl->getColorThemeByTheme($data)) {
                 throw new NotFoundHttpException('Color theme not found.');
             }
 

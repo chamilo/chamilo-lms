@@ -761,8 +761,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // Such files are always delivered as a neutral download, so the browser can never
         // execute them in the Chamilo origin, whatever the requested mode is.
+        // XML counts too (an XHTML document runs script), except SVG, which is sanitized below.
         $forceSocialHtmlDownload = ($isSocialAttachment || $isAttemptFile || $isAssignmentFile)
-            && str_contains($mimeType, 'html');
+            && (str_contains($mimeType, 'html')
+                || (str_contains($mimeType, 'xml') && !str_contains($mimeType, 'svg')));
         if ($forceSocialHtmlDownload) {
             $mimeType = 'application/octet-stream';
         }

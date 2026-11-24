@@ -24,6 +24,6 @@ Not to say that the other channels are not professional, but...
 
 If you have urgent needs that impact your efficiency or sales as a business, you have the incredible opportunity of getting things done by official providers of the Chamilo Association. These incredible companies are expert in all fields related to Chamilo, know each other so they can recommend you to other providers if they feel these will better serve you, and contribute back to the Chamilo project each year (and continually for some).
 
-Get in touch with them preferrably *before* getting into an urgent problem. Just have a support contract proposal ready so that, when you hit an issue, the process of fixing the issue is not slowed down by administrative issues.
+Get in touch with them preferably *before* getting into an urgent problem. Just have a support contract proposal ready so that, when you hit an issue, the process of fixing the issue is not slowed down by administrative issues.
 
 You can write to all Chamilo providers at once by writing to providers _at_ chamilo.org.

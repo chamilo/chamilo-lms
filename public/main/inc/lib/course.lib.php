@@ -5500,6 +5500,7 @@ class CourseManager
             'course_theme',
             //Get allow show user list
             'display_info_advance_inside_homecourse',
+            'introduction_position',
             'document_default_visibility_on_creation',
             'exercise_default_visibility_on_creation',
             'lp_default_visibility_on_creation',

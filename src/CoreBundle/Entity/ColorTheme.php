@@ -9,7 +9,6 @@ namespace Chamilo\CoreBundle\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
-use ApiPlatform\Metadata\Put;
 use Chamilo\CoreBundle\State\ColorThemeStateProcessor;
 use Chamilo\CoreBundle\Traits\TimestampableTypedEntity;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,7 +21,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     operations: [
         new Post(),
-        new Put(),
         new Patch(),
     ],
     denormalizationContext: [

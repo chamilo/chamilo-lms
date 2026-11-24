@@ -522,6 +522,7 @@ class CourseHelper
             ],
             'show_course_in_user_language' => ['default' => 2, 'category' => null],
             'email_to_teachers_on_new_work_feedback' => ['default' => 1, 'category' => null],
+            'introduction_position' => ['default' => 'above', 'category' => 'course_homepage'],
         ];
 
         foreach ($settings as $variable => $setting) {

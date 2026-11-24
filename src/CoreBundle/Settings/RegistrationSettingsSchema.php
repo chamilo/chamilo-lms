@@ -40,6 +40,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
                 'extldap_config' => '',
                 'user_hide_never_expire_option' => 'false',
                 'allow_invitation_registration' => 'false',
+                'firstname_required' => 'true',
             ])
             ->setTransformer('required_profile_fields', new ArrayToIdentifierTransformer())
             ->setTransformer('extendedprofile_registration', new ArrayToIdentifierTransformer())
@@ -111,6 +112,7 @@ class RegistrationSettingsSchema extends AbstractSettingsSchema
             ->add('extldap_config', TextareaType::class)
             ->add('user_hide_never_expire_option', YesNoType::class)
             ->add('allow_invitation_registration', YesNoType::class)
+            ->add('firstname_required', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

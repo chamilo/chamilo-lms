@@ -1484,7 +1484,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     // Send message link
     $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;
     $result['complete_name_with_message_link'] = Display::url(
-        $result['complete_name_with_username'],
+        htmlspecialchars((string) $result['complete_name_with_username'], ENT_QUOTES, 'UTF-8'),
         $sendMessage,
         ['class' => 'ajax']
     );
@@ -1763,7 +1763,7 @@ function api_get_user_info_from_entity(
     // Send message link
     $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;
     $result['complete_name_with_message_link'] = Display::url(
-        $result['complete_name_with_username'],
+        htmlspecialchars((string) $result['complete_name_with_username'], ENT_QUOTES, 'UTF-8'),
         $sendMessage,
         ['class' => 'ajax']
     );

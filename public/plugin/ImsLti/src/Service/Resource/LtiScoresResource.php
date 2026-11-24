@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
  */
 class LtiScoresResource extends LtiAdvantageServiceResource
 {
-    const URL_TEMPLATE = '/context_id/lineitems/line_item_id/results';
+    const URL_TEMPLATE = '/context_id/lineitems/line_item_id/scores';
 
     const ACTIVITY_INITIALIZED = 'Initialized';
     const ACTIVITY_STARTED = 'Started';
@@ -61,9 +61,7 @@ class LtiScoresResource extends LtiAdvantageServiceResource
      */
     public function validate()
     {
-        if (!$this->course) {
-            throw new NotFoundHttpException('Course not found.');
-        }
+        $this->validateToolInCourse();
 
         if (!$this->lineItem) {
             throw new NotFoundHttpException('Line item not found');
@@ -73,27 +71,17 @@ class LtiScoresResource extends LtiAdvantageServiceResource
             throw new AccessDeniedHttpException('Line item not found for the tool.');
         }
 
-        if (!$this->tool) {
-            throw new BadRequestHttpException('Tool not found.');
-        }
+        $this->validateLineItemInCourse($this->lineItem);
 
-        if ($this->tool->getCourse()->getId() !== $this->course->getId()) {
-            throw new AccessDeniedHttpException('Tool not found in course.');
-        }
+        $contentType = (string) $this->request->headers->get('Content-Type', '');
 
-        if ($this->request->server->get('HTTP_ACCEPT') !== LtiAssignmentGradesService::TYPE_SCORE) {
+        if (!str_starts_with($contentType, LtiAssignmentGradesService::TYPE_SCORE)
+            && $this->request->server->get('HTTP_ACCEPT') !== LtiAssignmentGradesService::TYPE_SCORE
+        ) {
             throw new UnsupportedMediaTypeHttpException('Unsupported media type.');
         }
 
-        $parentTool = $this->tool->getParent();
-
-        if ($parentTool) {
-            $advServices = $parentTool->getAdvantageServices();
-
-            if (LtiAssignmentGradesService::AGS_NONE === $advServices['ags']) {
-                throw new AccessDeniedHttpException('Assigment and grade service is not enabled for this tool.');
-            }
-        }
+        $this->validateAssignmentGradesServiceEnabled();
     }
 
     public function process()
@@ -130,22 +118,28 @@ class LtiScoresResource extends LtiAdvantageServiceResource
             throw new BadRequestHttpException('Missing data to create score.');
         }
 
-        $student = api_get_user_entity($data['userId']);
+        $student = api_get_user_entity((int) $data['userId']);
 
         if (!$student) {
             throw new BadRequestHttpException("User (id: {$data['userId']}) not found.");
         }
 
-        $data['scoreMaximum'] = isset($data['scoreMaximum']) ? $data['scoreMaximum'] : 1;
+        // The LTI tool may grade only users enrolled in this course.
+        if (!CourseManager::is_user_subscribed_in_course($student->getId(), $this->course->getCode())) {
+            throw new AccessDeniedHttpException('User is not enrolled in the course.');
+        }
+
+        $data['scoreMaximum'] = isset($data['scoreMaximum']) ? (float) $data['scoreMaximum'] : 1.0;
 
         $evaluation = $this->lineItem->getEvaluation();
 
+        /** @var GradebookResult|null $result */
         $result = Database::getManager()
-            ->getRepository('Chamilo\CoreBundle\Entity\GradebookResult')
+            ->getRepository(GradebookResult::class)
             ->findOneBy(
                 [
-                    'userId' => $data['userId'],
-                    'evaluationId' => $evaluation->getId(),
+                    'user' => $student,
+                    'evaluation' => $evaluation,
                 ]
             );
 
@@ -153,15 +147,13 @@ class LtiScoresResource extends LtiAdvantageServiceResource
             throw new ConflictHttpException('The timestamp on record is later than the incoming score.');
         }
 
-        if (isset($data['scoreGiven'])) {
+        $data['scoreGiven'] = isset($data['scoreGiven']) ? (float) $data['scoreGiven'] : null;
+
+        if (null !== $data['scoreGiven']) {
             if (self::GRADING_FULLY_GRADED !== $data['gradingProgress']) {
                 $data['scoreGiven'] = null;
-            } else {
-                $data['scoreGiven'] = (float) $data['scoreGiven'];
-
-                if ($data['scoreMaximum'] > 0 && $data['scoreMaximum'] != $evaluation->getMax()) {
-                    $data['scoreGiven'] = $data['scoreGiven'] * $evaluation->getMax() / $data['scoreMaximum'];
-                }
+            } elseif ($data['scoreMaximum'] > 0 && $data['scoreMaximum'] != $evaluation->getMax()) {
+                $data['scoreGiven'] = $data['scoreGiven'] * $evaluation->getMax() / $data['scoreMaximum'];
             }
         }
 
@@ -173,11 +165,9 @@ class LtiScoresResource extends LtiAdvantageServiceResource
     }
 
     /**
-     * @param GradebookResult $result
-     *
      * @throws OptimisticLockException
      */
-    private function saveScore(array $data, User $student, GradebookResult $result = null)
+    private function saveScore(array $data, User $student, ?GradebookResult $result = null)
     {
         $em = Database::getManager();
 
@@ -187,17 +177,17 @@ class LtiScoresResource extends LtiAdvantageServiceResource
             $resultLog = new GradebookResultLog();
             $resultLog
                 ->setCreatedAt(api_get_utc_datetime(null, false, true))
-                ->setUserId($student->getId())
-                ->setEvaluationId($evaluation->getId())
-                ->setIdResult($result->getId())
+                ->setUser($student)
+                ->setEvaluation($evaluation)
+                ->setResult($result)
                 ->setScore($result->getScore());
 
             $em->persist($resultLog);
         } else {
             $result = new GradebookResult();
             $result
-                ->setUserId($student->getId())
-                ->setEvaluationId($evaluation->getId());
+                ->setUser($student)
+                ->setEvaluation($evaluation);
         }
 
         $result

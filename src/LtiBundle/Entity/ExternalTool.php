@@ -449,23 +449,37 @@ class ExternalTool extends AbstractResource implements ResourceInterface, Resour
 
     public function getLineItems(
         int $resourceLinkId = 0,
-        int $resourceId = 0,
+        string $resourceId = '',
         string $tag = '',
         int $limit = 0,
-        int $page = 1
+        int $page = 0,
+        int $courseId = 0
     ): Collection {
         $criteria = Criteria::create();
 
-        if ($resourceLinkId) {
-            $criteria->andWhere(Criteria::expr()->eq('tool', $resourceId));
+        // The resource link ID sent to the tool on launch is the ID of this tool.
+        if ($resourceLinkId && $resourceLinkId !== $this->getId()) {
+            return new ArrayCollection();
         }
 
-        if ($resourceId) {
-            $criteria->andWhere(Criteria::expr()->eq('tool', $resourceId));
+        if ('' !== $resourceId) {
+            $criteria->andWhere(Criteria::expr()->eq('resourceId', $resourceId));
         }
 
         if (!empty($tag)) {
             $criteria->andWhere(Criteria::expr()->eq('tag', $tag));
+        }
+
+        if ($courseId > 0) {
+            $items = $this->lineItems->matching($criteria)->filter(
+                static fn (LineItem $item): bool => $item->getEvaluation()->getCourse()->getId() === $courseId
+            );
+
+            if ($limit > 0) {
+                return new ArrayCollection(\array_slice(array_values($items->toArray()), max(0, $page) * $limit, $limit));
+            }
+
+            return $items;
         }
 
         if ($limit > 0) {

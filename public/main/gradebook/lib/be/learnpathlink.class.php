@@ -4,6 +4,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpView;
 
 /**
  * Defines a gradebook LearnpathLink object.
@@ -13,7 +14,6 @@ use Chamilo\CourseBundle\Entity\CLp;
  */
 class LearnpathLink extends AbstractLink
 {
-    private $learnpath_table;
     private $learnpath_data;
 
     /**
@@ -65,20 +65,24 @@ class LearnpathLink extends AbstractLink
      */
     public function has_results()
     {
-        $tbl_stats = Database::get_course_table(TABLE_LP_VIEW);
         $sessionId = $this->get_session_id();
         if (empty($sessionId)) {
             $sessionId = api_get_session_id();
         }
 
-        $sql = "SELECT COUNT(iid) AS number FROM $tbl_stats
-                WHERE c_id = ".$this->getCourseId()."
-                  AND lp_id = ".$this->get_ref_id()."
-                  AND session_id = ".(int) $sessionId;
-        $result = Database::query($sql);
-        $number = Database::fetch_array($result, 'NUM');
+        $number = (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(v.iid)')
+            ->from(CLpView::class, 'v')
+            ->where('IDENTITY(v.course) = :courseId')
+            ->andWhere('IDENTITY(v.lp) = :lpId')
+            ->andWhere('IDENTITY(v.session) = :sessionId')
+            ->setParameter('courseId', $this->getCourseId())
+            ->setParameter('lpId', $this->get_ref_id())
+            ->setParameter('sessionId', (int) $sessionId)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        return 0 != $number[0];
+        return 0 != $number;
     }
 
     /**
@@ -99,6 +103,7 @@ class LearnpathLink extends AbstractLink
             $sessionId = api_get_session_id();
         }
 
+        // TODO(db-neutral): SQL fragment built by api_get_session_condition()
         $sql = "SELECT * FROM $tbl_stats
                 WHERE c_id = ".$this->getCourseId()."
                   AND lp_id = ".$this->get_ref_id();
@@ -221,12 +226,15 @@ class LearnpathLink extends AbstractLink
      */
     public function is_valid_link()
     {
-        $sql = 'SELECT count(iid) FROM '.$this->get_learnpath_table().'
-                WHERE iid = '.$this->get_ref_id().' ';
-        $result = Database::query($sql);
-        $number = Database::fetch_row($result, 'NUM');
+        $number = (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(lp.iid)')
+            ->from(CLp::class, 'lp')
+            ->where('lp.iid = :lpId')
+            ->setParameter('lpId', $this->get_ref_id())
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        return 0 != $number[0];
+        return 0 != $number;
     }
 
     public function get_type_name()
@@ -274,25 +282,20 @@ class LearnpathLink extends AbstractLink
     }
 
     /**
-     * Lazy load function to get the database table of the learnpath.
-     */
-    private function get_learnpath_table()
-    {
-        $this->learnpath_table = Database::get_course_table(TABLE_LP_MAIN);
-
-        return $this->learnpath_table;
-    }
-
-    /**
      * Lazy load function to get the database contents of this learnpath.
      */
     private function get_learnpath_data()
     {
         if (!isset($this->learnpath_data)) {
-            $sql = 'SELECT * FROM '.$this->get_learnpath_table().'
-                    WHERE iid = '.$this->get_ref_id().' ';
-            $result = Database::query($sql);
-            $this->learnpath_data = Database::fetch_array($result);
+            // Only the columns read through this data (get_name() and get_description()).
+            $row = Container::getEntityManager()->createQueryBuilder()
+                ->select('lp.iid AS iid', 'lp.title AS title', 'lp.description AS description')
+                ->from(CLp::class, 'lp')
+                ->where('lp.iid = :lpId')
+                ->setParameter('lpId', $this->get_ref_id())
+                ->getQuery()
+                ->getOneOrNullResult();
+            $this->learnpath_data = $row ?? false;
         }
 
         return $this->learnpath_data;

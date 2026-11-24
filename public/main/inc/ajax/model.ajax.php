@@ -2248,13 +2248,20 @@ switch ($action) {
             'session',
         ];
         $sessionId = 0;
+        $courseId = 0;
+        $studentId = 0;
+        $profile = 0;
+        $date_from = '';
+        $date_to = '';
         if (!empty($_GET['course_id']) && !empty($_GET['session_id'])) {
             $sessionId = intval($_GET['session_id']);
             $courseId = intval($_GET['course_id']);
-            $studentId = intval($_GET['student_id']);
-            $profile = intval($_GET['profile']);
-            $date_from = intval($_GET['date_from']);
-            $date_to = intval($_GET['date_to']);
+            $studentId = intval($_GET['student_id'] ?? 0);
+            $profile = intval($_GET['profile'] ?? 0);
+            // The overview filters on whole days given as YYYY-MM-DD strings; anything else means no date filter.
+            $dateFormat = '/^\d{4}-\d{2}-\d{2}$/';
+            $date_from = preg_match($dateFormat, (string) ($_GET['date_from'] ?? '')) ? $_GET['date_from'] : '';
+            $date_to = preg_match($dateFormat, (string) ($_GET['date_to'] ?? '')) ? $_GET['date_to'] : '';
         }
         $sidx = in_array($sidx, $columns) ? $sidx : 'logindate';
 
@@ -2263,8 +2270,8 @@ switch ($action) {
             $courseId,
             $studentId,
             $profile,
-            $date_to,
             $date_from,
+            $date_to,
             [
                 'where' => $whereCondition,
                 'order' => "$sidx $sord",

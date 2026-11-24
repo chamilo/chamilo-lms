@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CAnnouncementAttachment;
+use Doctrine\ORM\Query;
 
 /**
  * Include file with functions for the announcements module.
@@ -1196,16 +1197,19 @@ class AnnouncementManager
      */
     public static function get_attachment($announcementId)
     {
-        $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $announcementId = (int) $announcementId;
-        $row = [];
-        $sql = 'SELECT iid, path, filename, comment
-                FROM '.$table.'
-				WHERE announcement_id = '.$announcementId;
-        $result = Database::query($sql);
-        $repo = Container::getAnnouncementAttachmentRepository();
-        if (0 != Database::num_rows($result)) {
-            $row = Database::fetch_assoc($result);
+        $row = Database::getManager()
+            ->createQueryBuilder()
+            ->select('a.iid AS iid', 'a.path AS path', 'a.filename AS filename', 'a.comment AS comment')
+            ->from(CAnnouncementAttachment::class, 'a')
+            ->where('IDENTITY(a.announcement) = :announcementId')
+            ->setParameter('announcementId', $announcementId)
+            ->orderBy('a.iid', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult(Query::HYDRATE_ARRAY);
+        if (null === $row) {
+            $row = [];
         }
 
         return $row;

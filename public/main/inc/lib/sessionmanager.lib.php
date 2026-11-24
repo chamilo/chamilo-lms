@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelSession;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
@@ -23,8 +24,10 @@ use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\SessionDeletedEvent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
+use Doctrine\DBAL\ArrayParameterType;
 use ExtraField as ExtraFieldModel;
 use Monolog\Logger;
 
@@ -124,29 +127,31 @@ class SessionManager
      */
     public static function getSessionsForCertificateReport(): array
     {
-        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
-        $joins = '';
-        $where = 'WHERE 1 = 1';
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('s.id', 's.title')
+            ->distinct()
+            ->from('session', 's')
+            ->orderBy('s.title');
 
         if (api_is_hrm()) {
-            $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-            $joins .= " INNER JOIN $tblSessionRelUser session_rel_user ON (s.id = session_rel_user.session_id)";
-            $where .= ' AND session_rel_user.user_id = '.api_get_user_id();
+            $qb
+                ->innerJoin('s', 'session_rel_user', 'session_rel_user', 's.id = session_rel_user.session_id')
+                ->andWhere('session_rel_user.user_id = :userId')
+                ->setParameter('userId', (int) api_get_user_id());
         }
 
         if (api_is_multiple_url_enabled()) {
             $accessUrlId = api_get_current_access_url_id();
             if (-1 != $accessUrlId) {
-                $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-                $joins .= " INNER JOIN $tblSessionRelAccessUrl session_rel_url ON (s.id = session_rel_url.session_id)";
-                $where .= ' AND session_rel_url.access_url_id = '.(int) $accessUrlId;
+                $qb
+                    ->innerJoin('s', 'access_url_rel_session', 'session_rel_url', 's.id = session_rel_url.session_id')
+                    ->andWhere('session_rel_url.access_url_id = :accessUrlId')
+                    ->setParameter('accessUrlId', (int) $accessUrlId);
             }
         }
 
-        $result = Database::query("SELECT DISTINCT s.id, s.title FROM $tblSession s $joins $where ORDER BY s.title");
-
         $sessions = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
             $sessions[(int) $row['id']] = $row['title'];
         }
 
@@ -358,12 +363,15 @@ class SessionManager
      */
     public static function sessionNameExists($name)
     {
-        $name = Database::escape_string($name);
-        $sql = "SELECT COUNT(*) as count FROM ".Database::get_main_table(TABLE_MAIN_SESSION)."
-                WHERE title = '$name'";
-        $result = Database::fetch_array(Database::query($sql));
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(s.id)')
+            ->from(Session::class, 's')
+            ->where('s.title = :title')
+            ->setParameter('title', (string) $name)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        return $result['count'] > 0;
+        return $count > 0;
     }
 
     /**
@@ -480,6 +488,7 @@ class SessionManager
             }
         }
 
+        // TODO(db-neutral): IF(), GROUP BY ... HAVING and a free-form where condition built by the jqGrid code
         $result_rows = Database::query($sql);
         $row = Database::fetch_array($result_rows);
         $num = $row['total_rows'];
@@ -603,6 +612,7 @@ class SessionManager
                 $tblExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
                 $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
                 $sql = "SELECT id FROM $tblExtraField WHERE item_type = $extraFieldType AND variable = 'multiple_language'";
+                // TODO(db-neutral): free-form jqGrid where/order/limit fragments, string-built conditions; the main queries and the language/user-count helpers are not pinned (all queries of this function)
                 $rs = Database::query($sql);
                 if (Database::num_rows($rs) > 0) {
                     $fieldId = Database::result($rs, 0, 0);
@@ -879,32 +889,26 @@ class SessionManager
         $sid = (int) $sid;
         $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
 
-        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
-        $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tableAccessUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $tableLanguage = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-
-        $sql = "SELECT l.isocode, count(u.id) as cLang
-                FROM $tblSessionUser su
-                INNER JOIN $tblUser u ON (u.id = su.user_id)
-                INNER JOIN $tableLanguage l ON (l.isocode = u.locale)
-                LEFT OUTER JOIN $tableAccessUrlUser au ON (au.user_id = u.id)
-                ";
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('l.isocode', 'count(u.id) AS cLang')
+            ->from('session_rel_user', 'su')
+            ->innerJoin('su', 'user', 'u', 'u.id = su.user_id')
+            ->innerJoin('u', 'language', 'l', 'l.isocode = u.locale')
+            ->leftJoin('u', 'access_url_rel_user', 'au', 'au.user_id = u.id')
+            ->where('(au.access_url_id = :urlId OR au.access_url_id IS NULL)')
+            ->andWhere('su.session_id = :sessionId')
+            ->groupBy('l.isocode')
+            ->setParameter('urlId', $urlId)
+            ->setParameter('sessionId', $sid);
 
         if (is_numeric($status)) {
-            $status = (int) $status;
-            $sql .= " WHERE su.relation_type = $status AND (au.access_url_id = $urlId OR au.access_url_id is null)";
-        } else {
-            $sql .= " WHERE (au.access_url_id = $urlId OR au.access_url_id is null )";
+            $qb->andWhere('su.relation_type = :relationType')
+                ->setParameter('relationType', (int) $status);
         }
-        $sql .= " AND su.session_id = $sid GROUP BY l.isocode";
 
-        $rs = Database::query($sql);
         $usersLang = [];
-        if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_assoc($rs)) {
-                $usersLang[] = strtoupper($row['isocode'])." ".$row['cLang'];
-            }
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
+            $usersLang[] = strtoupper($row['isocode'])." ".$row['cLang'];
         }
 
         return $usersLang;
@@ -1118,6 +1122,7 @@ class SessionManager
 
         $sql_query = sprintf($sql, Database::escape_string($course['real_id']), $sessionId);
 
+        // TODO(db-neutral): free-form jqGrid where/order/limit fragments, sprintf-built SQL and numeric result keys; not pinned by a test (all queries of this function)
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs)) {
             $users[$user['user_id']] = $user;
@@ -1236,6 +1241,7 @@ class SessionManager
                 $where $order $limit";
 
         $sql_query = sprintf($sql, intval($course['real_id']), $sessionId);
+        // TODO(db-neutral): free-form jqGrid where/order/limit fragments, sprintf-built SQL; not pinned by a test (all queries of this function)
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs)) {
             $users[$user['user_id']] = $user;
@@ -1319,25 +1325,26 @@ class SessionManager
         //tables
         $session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $user = Database::get_main_table(TABLE_MAIN_USER);
-        $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
-        $tbl_course_lp = Database::get_course_table(TABLE_LP_MAIN);
         $wiki = Database::get_course_table(TABLE_WIKI);
         $table_stats_default = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+        $connection = Database::getManager()->getConnection();
 
         $course = api_get_course_info_by_id($courseId);
         $courseEntity = api_get_course_entity((int) $course['real_id']);
+        $courseRealId = (int) $course['real_id'];
         $wikiNodeId = (int) ($courseEntity?->getResourceNode()?->getId() ?? 0);
-        $where = " WHERE c_id = '%s' AND s.status = ".Session::STUDENT;
+        $where = ' WHERE s.c_id = '.$courseRealId.' AND s.status = '.(int) Session::STUDENT;
 
         $limit = null;
         if (!empty($options['limit'])) {
             $limit = " LIMIT ".$options['limit'];
         }
 
-        if (!empty($options['where'])) {
-            $where .= ' '.$options['where'];
+        // The grid filter fragment is built by model.ajax.php: either bare ("1 = 1 AND (...)") or starting with AND.
+        $gridWhere = trim((string) ($options['where'] ?? ''));
+        if ('' !== $gridWhere) {
+            $where .= preg_match('/^(AND|OR)\b/i', $gridWhere) ? ' '.$gridWhere : ' AND ('.$gridWhere.')';
         }
 
         $order = null;
@@ -1346,122 +1353,69 @@ class SessionManager
         }
 
         //TODO, fix create report without session
-        $queryVariables = [$course['real_id']];
         if (!empty($sessionId)) {
-            $where .= ' AND session_id = %s';
-            $queryVariables[] = $sessionId;
-            $sql = "SELECT
-                        u.id as user_id, u.lastname, u.firstname, u.username,
-                        u.email, s.c_id, s.session_id
-                    FROM $session_course_user s
-                    INNER JOIN $user u
-                    ON u.id = s.user_id
-                    $where $order $limit";
-        } else {
-            $sql = "SELECT
-                        u.id as user_id, u.lastname, u.firstname, u.username,
-                        u.email, s.c_id, s.session_id
-                    FROM $session_course_user s
-                    INNER JOIN $user u ON u.id = s.user_id
-                    $where $order $limit";
+            $where .= ' AND s.session_id = '.$sessionId;
         }
+        $sql = "SELECT
+                    u.id as user_id, u.lastname, u.firstname, u.username,
+                    u.email, s.c_id, s.session_id
+                FROM $session_course_user s
+                INNER JOIN $user u ON u.id = s.user_id
+                $where $order $limit";
 
-        $sql_query = vsprintf($sql, $queryVariables);
-        $rs = Database::query($sql_query);
+        // TODO(db-neutral): free-form jqGrid where/order/limit fragments built by model.ajax.php
+        $rs = Database::query($sql);
+        $users = [];
+        $table = [];
         while ($user = Database::fetch_array($rs)) {
             $users[$user['user_id']] = $user;
         }
 
-        /**
-         *  Lessons.
-         */
-        $sql = "SELECT * FROM $tbl_course_lp WHERE c_id = %s "; //AND session_id = %s
-        $sql_query = sprintf($sql, $course['real_id']);
-        $result = Database::query($sql_query);
-        $arrLesson = [[]];
-        while ($row = Database::fetch_array($result)) {
-            if (empty($arrLesson[$row['session_id']]['lessons_total'])) {
-                $arrLesson[$row['session_id']]['lessons_total'] = 1;
-            } else {
-                $arrLesson[$row['session_id']]['lessons_total']++;
-            }
+        // Lessons: the learning paths linked to the course, counted per session (see countCourseResources()).
+        $session = $sessionId > 0 ? api_get_session_entity($sessionId) : null;
+        $exercises = [];
+        if (null !== $courseEntity) {
+            $exercises = Container::getQuizRepository()->findAllByCourse($courseEntity, $session)->getQuery()->getResult();
         }
-        $session = api_get_session_entity($sessionId);
-        $qb = Container::getQuizRepository()->findAllByCourse($course, $session, null, 2);
-        $exercises = $qb->getQuery()->getResult();
         $exercises_total = count($exercises);
 
-        /*$exercises = ExerciseLib::get_all_exercises(
-            $course,
+        // Assignments: the root publications of the course (or of the session), not the deleted ones.
+        $assignments_total = self::countCourseResources(
+            CStudentPublication::class,
+            $courseRealId,
             $sessionId,
-            false,
-            '',
-            $getAllSessions
+            $getAllSessions,
+            ['r.publicationParent IS NULL', 'r.active IN (0, 1)']
         );
-        $exercises_total = count($exercises);*/
 
-        /**
-         *  Assignments.
-         */
-        //total
-        $params = [$course['real_id']];
-        if ($getAllSessions) {
-            $sql = "SELECT count(w.id) as count
-                    FROM $workTable w
-                    LEFT JOIN $workTableAssignment a
-                    ON (a.publication_id = w.id AND a.c_id = w.c_id)
-                    WHERE
-                        w.c_id = %s AND
-                        parent_id = 0 AND
-                        active IN (1, 0)";
-        } else {
-            $sql = "SELECT count(w.id) as count
-                    FROM $workTable w
-                    LEFT JOIN $workTableAssignment a
-                    ON (a.publication_id = w.id AND a.c_id = w.c_id)
-                    WHERE
-                        w.c_id = %s AND
-                        parent_id = 0 AND
-                        active IN (1, 0)";
-
-            if (empty($sessionId)) {
-                $sql .= ' AND w.session_id = NULL ';
-            } else {
-                $sql .= ' AND w.session_id = %s ';
-                $params[] = $sessionId;
-            }
+        // Wiki: distinct pages.
+        $wikiTotalQuery = $connection->createQueryBuilder()
+            ->select('COUNT(DISTINCT page_id)')
+            ->from($wiki)
+            ->where('c_id = :courseId')
+            ->setParameter('courseId', $courseRealId);
+        if (!$getAllSessions) {
+            $wikiTotalQuery->andWhere('session_id = :sessionId')->setParameter('sessionId', $sessionId);
         }
-
-        $sql_query = vsprintf($sql, $params);
-        $result = Database::query($sql_query);
-        $row = Database::fetch_array($result);
-        $assignments_total = $row['count'];
-
-        /**
-         * Wiki.
-         */
-        if ($getAllSessions) {
-            $sql = "SELECT count(distinct page_id)  as count FROM $wiki
-                    WHERE c_id = %s";
-        } else {
-            $sql = "SELECT count(distinct page_id)  as count FROM $wiki
-                    WHERE c_id = %s and session_id = %s";
-        }
-        $sql_query = sprintf($sql, $course['real_id'], $sessionId);
-        $result = Database::query($sql_query);
-        $row = Database::fetch_array($result);
-        $wiki_total = $row['count'];
+        $wiki_total = (int) $wikiTotalQuery->executeQuery()->fetchOne();
 
         /**
          * Surveys.
          */
         $survey_user_list = [];
-        $survey_list = SurveyManager::get_surveys($course['code'], $sessionId);
+        // Not SurveyManager::get_surveys(): it lists the surveys of the current course context, not of this course.
+        $survey_list = [];
+        if (null !== $courseEntity) {
+            $survey_list = Container::getSurveyRepository()
+                ->getResourcesByCourse($courseEntity, $session, null, null, true, true)
+                ->getQuery()
+                ->getResult();
+        }
 
         $surveys_total = count($survey_list);
         foreach ($survey_list as $survey) {
             $user_list = SurveyManager::get_people_who_filled_survey(
-                $survey['survey_id'],
+                $survey->getIid(),
                 false,
                 $course['real_id']
             );
@@ -1494,34 +1448,43 @@ class SessionManager
 
         //process table info
         foreach ($users as $user) {
+            // The session the learner is subscribed in: the requested one, or each own one in the all-sessions report.
+            $userId = (int) $user['user_id'];
+            $userSessionId = (int) $user['session_id'];
+            $userSession = $userSessionId > 0 ? api_get_session_entity($userSessionId) : null;
+            $userEntity = Database::getManager()->getRepository(User::class)->find($userId);
+
             //Course description
-            $sql = "SELECT count(*) as count
-                    FROM $table_stats_access
-                    WHERE access_tool = 'course_description'
-                    AND c_id = '%s'
-                    AND session_id = %s
-                    AND access_user_id = %s ";
-            $sql_query = sprintf($sql, $course['real_id'], $user['id_session'], $user['user_id']);
+            $courseDescriptionVisits = (int) $connection->createQueryBuilder()
+                ->select('COUNT(*)')
+                ->from($table_stats_access)
+                ->where("access_tool = 'course_description'")
+                ->andWhere('c_id = :courseId')
+                ->andWhere('session_id = :sessionId')
+                ->andWhere('access_user_id = :userId')
+                ->setParameter('courseId', $courseRealId)
+                ->setParameter('sessionId', $userSessionId)
+                ->setParameter('userId', $userId)
+                ->executeQuery()
+                ->fetchOne();
+            $course_description_progress = ($courseDescriptionVisits > 0) ? 100 : 0;
 
-            $result = Database::query($sql_query);
-            $row = Database::fetch_array($result);
-            $course_description_progress = ($row['count'] > 0) ? 100 : 0;
-
-            if (!empty($arrLesson[$user['id_session']]['lessons_total'])) {
-                $lessons_total = $arrLesson[$user['id_session']]['lessons_total'];
-            } else {
-                $lessons_total = !empty($arrLesson[0]['lessons_total']) ? $arrLesson[0]['lessons_total'] : 0;
+            // The learning paths of the session of the learner, or the ones of the base course when it has none.
+            $lessons_total = self::countCourseResources(CLp::class, $courseRealId, $userSessionId, false);
+            if (0 === $lessons_total && $userSessionId > 0) {
+                $lessons_total = self::countCourseResources(CLp::class, $courseRealId, 0, false);
             }
 
             //Lessons
             //TODO: Lessons done and left is calculated by progress per item in lesson,
             // maybe we should calculate it only per completed lesson?
-            $lessons_progress = Tracking::get_avg_student_progress(
-                $user['user_id'],
-                $course['code'],
-                [],
-                $user['id_session']
-            );
+            $lessons_progress = null !== $courseEntity
+                ? Tracking::get_avg_student_progress($userId, $courseEntity, [], $userSession)
+                : false;
+            // No learning path to follow: no progress.
+            if (false === $lessons_progress) {
+                $lessons_progress = 0;
+            }
             $lessons_done = ($lessons_progress * $lessons_total) / 100;
             $lessons_left = $lessons_total - $lessons_done;
 
@@ -1531,20 +1494,22 @@ class SessionManager
                 '',
                 Tracking::get_exercise_student_progress(
                     $exercises,
-                    $user['user_id'],
-                    $course['real_id'],
-                    $user['id_session']
+                    $userId,
+                    $courseRealId,
+                    $userSessionId
                 )
             );
             $exercises_done = round(($exercises_progress * $exercises_total) / 100);
             $exercises_left = $exercises_total - $exercises_done;
 
             //Assignments
-            $assignments_done = Container::getStudentPublicationRepository()->countUserPublications(
-                $user['user_id'],
-                $course['code'],
-                $user['id_session']
-            );
+            $assignments_done = (null !== $userEntity && null !== $courseEntity)
+                ? Container::getStudentPublicationRepository()->countUserPublications(
+                    $userEntity,
+                    $courseEntity,
+                    $userSession
+                )
+                : 0;
             $assignments_left = $assignments_total - $assignments_done;
             if (!empty($assignments_total)) {
                 $assignments_progress = round((($assignments_done * 100) / $assignments_total), 2);
@@ -1554,27 +1519,29 @@ class SessionManager
 
             // Wiki
             // total revisions per user
-            $sql = "SELECT count(*) as count
-                    FROM $wiki
-                    WHERE c_id = %s and session_id = %s and user_id = %s";
-            $sql_query = sprintf($sql, $course['real_id'], $user['id_session'], $user['user_id']);
-            $result = Database::query($sql_query);
-            $row = Database::fetch_array($result);
-            $wiki_revisions = $row['count'];
+            $wiki_revisions = (int) $connection->createQueryBuilder()
+                ->select('COUNT(*)')
+                ->from($wiki)
+                ->where('c_id = :courseId')
+                ->andWhere('session_id = :sessionId')
+                ->andWhere('user_id = :userId')
+                ->setParameter('courseId', $courseRealId)
+                ->setParameter('sessionId', $userSessionId)
+                ->setParameter('userId', $userId)
+                ->executeQuery()
+                ->fetchOne();
             //count visited wiki pages
-            $sql = "SELECT count(distinct default_value) as count
-                    FROM $table_stats_default
-                    WHERE
-                        default_user_id = %s AND
-                        default_event_type = 'wiki_page_view' AND
-                        default_value_type = 'wiki_page_id' AND
-                        c_id = %s
-                    ";
-            $sql_query = sprintf($sql, $user['user_id'], $course['real_id']);
-            $result = Database::query($sql_query);
-            $row = Database::fetch_array($result);
-
-            $wiki_read = $row['count'];
+            $wiki_read = (int) $connection->createQueryBuilder()
+                ->select('COUNT(DISTINCT default_value)')
+                ->from($table_stats_default)
+                ->where('default_user_id = :userId')
+                ->andWhere("default_event_type = 'wiki_page_view'")
+                ->andWhere("default_value_type = 'wiki_page_id'")
+                ->andWhere('c_id = :courseId')
+                ->setParameter('userId', $userId)
+                ->setParameter('courseId', $courseRealId)
+                ->executeQuery()
+                ->fetchOne();
             $wiki_unread = $wiki_total - $wiki_read;
             if (!empty($wiki_total)) {
                 $wiki_progress = round((($wiki_read * 100) / $wiki_total), 2);
@@ -1583,7 +1550,7 @@ class SessionManager
             }
 
             // Surveys
-            $surveys_done = isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0;
+            $surveys_done = $survey_user_list[$userId] ?? 0;
             $surveys_left = $surveys_total - $surveys_done;
             if (!empty($surveys_total)) {
                 $surveys_progress = round((($surveys_done * 100) / $surveys_total), 2);
@@ -1593,9 +1560,9 @@ class SessionManager
 
             //Forums
             $forums_done = CourseManager::getCountForumPerUser(
-                $user['user_id'],
-                $course['real_id'],
-                $user['id_session']
+                $userId,
+                $courseRealId,
+                $userSessionId
             );
             $forums_left = $forums_total - $forums_done;
             if (!empty($forums_total)) {
@@ -1607,7 +1574,7 @@ class SessionManager
             // Overall Total
             $overall_total = ($course_description_progress + $exercises_progress + $forums_progress + $assignments_progress + $wiki_progress + $surveys_progress) / 6;
 
-            $link = '<a href="/reporting/learners/'.(int) $user[0].'/courses/'.(int) $course['real_id'].'?'.http_build_query([
+            $link = '<a href="/reporting/learners/'.$userId.'/courses/'.(int) $course['real_id'].'?'.http_build_query([
                 'sid' => (int) $sessionId,
             ]).'"> %s </a>';
             $linkForum = '<a href="'.getForumToolUrl((int) $course['real_id'], (int) $sessionId).'"> %s </a>';
@@ -1623,9 +1590,9 @@ class SessionManager
                 : ' %s ';
 
             $table[] = [
-                'lastname' => $user[1],
-                'firstname' => $user[2],
-                'username' => $user[3],
+                'lastname' => $user['lastname'],
+                'firstname' => $user['firstname'],
+                'username' => $user['username'],
                 //'profile'   => '',
                 'total' => round($overall_total, 2).'%',
                 'courses' => sprintf($link, $course_description_progress.'%'),
@@ -1675,6 +1642,42 @@ class SessionManager
     }
 
     /**
+     * Counts the course resources (learning paths, assignments...) that the resource links attach to a course:
+     * to its base content (session 0), to one session, or to any of them.
+     *
+     * @param class-string $entityClass
+     * @param string[]     $conditions  extra DQL conditions on the resource, whose alias is "r"
+     */
+    private static function countCourseResources(
+        string $entityClass,
+        int $courseId,
+        int $sessionId,
+        bool $getAllSessions,
+        array $conditions = []
+    ): int {
+        $queryBuilder = Database::getManager()->createQueryBuilder()
+            ->select('COUNT(DISTINCT r.iid)')
+            ->from($entityClass, 'r')
+            ->innerJoin('r.resourceNode', 'node')
+            ->innerJoin('node.resourceLinks', 'links')
+            ->where('IDENTITY(links.course) = :courseId')
+            ->andWhere('links.deletedAt IS NULL')
+            ->setParameter('courseId', $courseId);
+        foreach ($conditions as $condition) {
+            $queryBuilder->andWhere($condition);
+        }
+        if (!$getAllSessions) {
+            if ($sessionId > 0) {
+                $queryBuilder->andWhere('IDENTITY(links.session) = :sessionId')->setParameter('sessionId', $sessionId);
+            } else {
+                $queryBuilder->andWhere('links.session IS NULL');
+            }
+        }
+
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
      * Get the ip, total of clicks, login date and time logged in for all user, in one session.
      *
      * @todo track_e_course_access table should have ip so we dont have to look for it in track_e_login
@@ -1692,12 +1695,10 @@ class SessionManager
         $date_to = '',
         $options = []
     ) {
-        $sessionId = intval($sessionId);
-        $courseId = intval($courseId);
-        $studentId = intval($studentId);
-        $profile = intval($profile);
-        $date_from = Database::escape_string($date_from);
-        $date_to = Database::escape_string($date_to);
+        $sessionId = (int) $sessionId;
+        $courseId = (int) $courseId;
+        $studentId = (int) $studentId;
+        $profile = (int) $profile;
 
         // database table definition
         $user = Database::get_main_table(TABLE_MAIN_USER);
@@ -1705,6 +1706,7 @@ class SessionManager
         $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
+        $connection = Database::getManager()->getConnection();
 
         global $export_csv;
         if ($export_csv) {
@@ -1713,40 +1715,50 @@ class SessionManager
             $is_western_name_order = api_is_western_name_order();
         }
 
-        $where = null;
-        if (isset($sessionId) && !empty($sessionId)) {
-            $where = sprintf(" WHERE a.session_id = %d", $sessionId);
+        $conditions = [];
+        if (!empty($sessionId)) {
+            $conditions[] = 'a.session_id = '.$sessionId;
         }
-        if (isset($courseId) && !empty($courseId)) {
-            $where .= sprintf(" AND c.id = %d", $courseId);
+        if (!empty($courseId)) {
+            $conditions[] = 'c.id = '.$courseId;
         }
-        if (isset($studentId) && !empty($studentId)) {
-            $where .= sprintf(" AND u.id = %d", $studentId);
+        if (!empty($studentId)) {
+            $conditions[] = 'u.id = '.$studentId;
         }
-        if (isset($profile) && !empty($profile)) {
-            $where .= sprintf(" AND u.status = %d", $profile);
+        if (!empty($profile)) {
+            $conditions[] = 'u.status = '.$profile;
         }
-        if (!empty($date_to) && !empty($date_from)) {
-            $where .= sprintf(
-                " AND a.login_course_date >= '%s 00:00:00'
-                 AND a.login_course_date <= '%s 23:59:59'",
-                $date_from,
-                $date_to
-            );
+        $dateFormat = '/^\d{4}-\d{2}-\d{2}$/';
+        if (preg_match($dateFormat, (string) $date_from) && preg_match($dateFormat, (string) $date_to)) {
+            $conditions[] = "a.login_course_date >= '$date_from 00:00:00' AND a.login_course_date <= '$date_to 23:59:59'";
         }
 
-        $limit = null;
-        if (!empty($options['limit'])) {
-            $limit = " LIMIT ".$options['limit'];
+        // The grid filter fragment is built by model.ajax.php: either bare ("1 = 1 AND (...)") or starting with AND.
+        $gridWhere = trim((string) ($options['where'] ?? ''));
+        if ('' !== $gridWhere) {
+            $conditions[] = preg_match('/^(AND|OR)\b/i', $gridWhere) ? '1 = 1 '.$gridWhere : '('.$gridWhere.')';
+        }
+        $where = empty($conditions) ? '' : ' WHERE '.implode(' AND ', $conditions);
+
+        $limit = '';
+        if (!empty($options['limit']) && preg_match('/^\s*(\d+)\s*,\s*(\d+)\s*$/', (string) $options['limit'], $limitMatches)) {
+            $limit = ' LIMIT '.(int) $limitMatches[1].', '.(int) $limitMatches[2];
         }
 
-        if (!empty($options['where'])) {
-            $where .= ' '.$options['where'];
-        }
-
-        $order = null;
+        // The grid sorts by the names of its columns, which are not all columns of the query.
+        $orderColumns = [
+            'logindate' => 'a.login_course_date',
+            'username' => 'u.username',
+            'lastname' => 'u.lastname',
+            'firstname' => 'u.firstname',
+            'clicks' => 'a.counter',
+        ];
+        $order = '';
         if (!empty($options['order'])) {
-            $order = " ORDER BY ".$options['order'];
+            $orderParts = preg_split('/\s+/', trim((string) $options['order']));
+            $orderColumn = $orderColumns[$orderParts[0]] ?? $orderColumns['logindate'];
+            $orderDirection = 'DESC' === strtoupper($orderParts[1] ?? '') ? 'DESC' : 'ASC';
+            $order = ' ORDER BY '.$orderColumn.' '.$orderDirection;
         }
 
         //TODO add course name
@@ -1770,21 +1782,23 @@ class SessionManager
             INNER JOIN $user u ON a.user_id = u.id
             INNER JOIN $course c ON a.c_id = c.id
             $where $order $limit";
-        $result = Database::query(sprintf($sql, $sessionId, $courseId));
+        // TODO(db-neutral): the grid filter fragment is SQL built by model.ajax.php
+        $result = Database::query($sql);
 
         $data = [];
         while ($user = Database::fetch_assoc($result)) {
             $data[] = $user;
         }
 
-        foreach ($data as $key => $info) {
-            $sql = "SELECT
-                    title
-                    FROM $sessionTable
-                    WHERE
-                    id = {$info['session_id']}";
-            $result = Database::query($sql);
-            $session = Database::fetch_assoc($result);
+        $return = [];
+        foreach ($data as $info) {
+            $sessionTitle = $connection->createQueryBuilder()
+                ->select('title')
+                ->from($sessionTable)
+                ->where('id = :sessionId')
+                ->setParameter('sessionId', (int) $info['session_id'])
+                ->executeQuery()
+                ->fetchOne();
 
             // building array to display
             $return[] = [
@@ -1796,34 +1810,43 @@ class SessionManager
                 'clicks' => $info['counter'], //+ $clicks[$info['user_id']],
                 'ip' => '',
                 'timeLoggedIn' => gmdate("H:i:s", strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])),
-                'session' => $session['title'],
+                'session' => false === $sessionTitle ? '' : $sessionTitle,
             ];
         }
 
+        if ('true' === api_get_setting('tracking.hide_ip_address')) {
+            return $return;
+        }
+
         foreach ($return as $key => $info) {
-            if ('true' === api_get_setting('tracking.hide_ip_address')) {
-                continue;
-            }
             //Search for ip, we do less querys if we iterate the final array
-            $sql = sprintf(
-                "SELECT user_ip FROM $track_e_login WHERE login_user_id = %d AND login_date < '%s' ORDER BY login_date DESC LIMIT 1",
-                $info['user_id'],
-                $info['logindate']
-            ); //TODO add select by user too
-            $result = Database::query($sql);
-            $ip = Database::fetch_assoc($result);
+            $ip = $connection->createQueryBuilder()
+                ->select('user_ip')
+                ->from($track_e_login)
+                ->where('login_user_id = :userId')
+                ->andWhere('login_date < :loginDate')
+                ->orderBy('login_date', 'DESC')
+                ->setMaxResults(1)
+                ->setParameter('userId', (int) $info['user_id'])
+                ->setParameter('loginDate', $info['logindate'])
+                ->executeQuery()
+                ->fetchOne();
             //if no ip founded, we search the closest higher ip
-            if (empty($ip['user_ip'])) {
-                $sql = sprintf(
-                    "SELECT user_ip FROM $track_e_login WHERE login_user_id = %d AND login_date > '%s'  ORDER BY login_date ASC LIMIT 1",
-                    $info['user_id'],
-                    $info['logindate']
-                ); //TODO add select by user too
-                $result = Database::query($sql);
-                $ip = Database::fetch_assoc($result);
+            if (empty($ip)) {
+                $ip = $connection->createQueryBuilder()
+                    ->select('user_ip')
+                    ->from($track_e_login)
+                    ->where('login_user_id = :userId')
+                    ->andWhere('login_date > :loginDate')
+                    ->orderBy('login_date', 'ASC')
+                    ->setMaxResults(1)
+                    ->setParameter('userId', (int) $info['user_id'])
+                    ->setParameter('loginDate', $info['logindate'])
+                    ->executeQuery()
+                    ->fetchOne();
             }
             //add ip to final array
-            $return[$key]['ip'] = $ip['user_ip'];
+            $return[$key]['ip'] = false === $ip ? '' : $ip;
         }
 
         return $return;
@@ -1844,19 +1867,19 @@ class SessionManager
     {
         $session_name_ok = !self::sessionNameExists($session_name);
         if (!$session_name_ok) {
-            $table = Database::get_main_table(TABLE_MAIN_SESSION);
-            $session_name = Database::escape_string($session_name);
-            $sql = "SELECT count(*) as count FROM $table
-                    WHERE title LIKE '$session_name%'";
-            $result = Database::query($sql);
-            if (Database::num_rows($result) > 0) {
-                $row = Database::fetch_array($result);
-                $count = $row['count'] + 1;
-                $session_name = $session_name.'_'.$count;
-                $result = self::sessionNameExists($session_name);
-                if (!$result) {
-                    return $session_name;
-                }
+            $session_name = (string) $session_name;
+            $count = (int) Container::getEntityManager()->createQueryBuilder()
+                ->select('COUNT(s.id)')
+                ->from(Session::class, 's')
+                ->where('s.title LIKE :prefix')
+                ->setParameter('prefix', $session_name.'%')
+                ->getQuery()
+                ->getSingleScalarResult();
+            $count++;
+            $session_name = $session_name.'_'.$count;
+            $result = self::sessionNameExists($session_name);
+            if (!$result) {
+                return $session_name;
             }
 
             return false;
@@ -2269,10 +2292,7 @@ class SessionManager
             }
         }
 
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
         $session = api_get_session_entity($sessionId);
 
@@ -2288,21 +2308,18 @@ class SessionManager
             $session_visibility = SESSION_VISIBLE_READ_ONLY;
         }
 
-        $sql = "SELECT user_id FROM $tbl_session_rel_course_rel_user
-                WHERE session_id = $sessionId AND status = ".Session::STUDENT;
-        $result = Database::query($sql);
-        $existingUsers = [];
-        while ($row = Database::fetch_array($result)) {
-            $existingUsers[] = $row['user_id'];
-        }
+        $connection = Container::getEntityManager()->getConnection();
 
-        $sql = "SELECT c_id FROM $tbl_session_rel_course
-                WHERE session_id = $sessionId";
-        $result = Database::query($sql);
-        $course_list = [];
-        while ($row = Database::fetch_array($result)) {
-            $course_list[] = $row['c_id'];
-        }
+        $course_list = array_column(
+            $connection->createQueryBuilder()
+                ->select('c_id')
+                ->from('session_rel_course')
+                ->where('session_id = :sessionId')
+                ->setParameter('sessionId', $sessionId)
+                ->executeQuery()
+                ->fetchAllAssociative(),
+            'c_id'
+        );
 
         if ($session->getSendSubscriptionNotification() && is_array($userList)) {
             $showUsername = 'true' === api_get_setting(
@@ -2427,17 +2444,20 @@ class SessionManager
                 $nbr_users = 0;
                 $courseId = (int) $courseId;
 
-                $sql = "SELECT DISTINCT user_id
-                        FROM $tbl_session_rel_course_rel_user
-                        WHERE
-                            session_id = $sessionId AND
-                            c_id = $courseId AND
-                            status = ".Session::STUDENT;
-                $result = Database::query($sql);
-                $existingUsers = [];
-                while ($row = Database::fetch_array($result)) {
-                    $existingUsers[] = $row['user_id'];
-                }
+                $existingUsers = array_column(
+                    $connection->createQueryBuilder()
+                        ->select('DISTINCT user_id')
+                        ->from('session_rel_course_rel_user')
+                        ->where('session_id = :sessionId')
+                        ->andWhere('c_id = :courseId')
+                        ->andWhere('status = :status')
+                        ->setParameter('sessionId', $sessionId)
+                        ->setParameter('courseId', $courseId)
+                        ->setParameter('status', Session::STUDENT)
+                        ->executeQuery()
+                        ->fetchAllAssociative(),
+                    'user_id'
+                );
 
                 // Delete existing users
                 if ($empty_users) {
@@ -2467,14 +2487,16 @@ class SessionManager
 
         // Delete users from the session
         if (true === $empty_users) {
-            $sql = "DELETE FROM $tbl_session_rel_user
-                    WHERE
-                      session_id = $sessionId AND
-                      relation_type = ".Session::STUDENT;
+            $deleteQb = $connection->createQueryBuilder()
+                ->delete('session_rel_user')
+                ->where('session_id = :sessionId')
+                ->andWhere('relation_type = :relationType')
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('relationType', Session::STUDENT);
             // Don't reset session_rel_user.registered_at of users that will be registered later anyways.
             if (!empty($userList)) {
-                $avoidDeleteThisUsers = " AND user_id NOT IN ('".implode("','", $userList)."')";
-                $sql .= $avoidDeleteThisUsers;
+                $deleteQb->andWhere('user_id NOT IN (:avoidDeleteThisUsers)')
+                    ->setParameter('avoidDeleteThisUsers', array_map('intval', $userList), ArrayParameterType::INTEGER);
             }
             Event::addEvent(
                 LOG_SESSION_DELETE_USER,
@@ -2485,7 +2507,7 @@ class SessionManager
                 null,
                 $sessionId
             );
-            Database::query($sql);
+            $deleteQb->executeStatement();
         }
 
         // Insert missing users into session
@@ -2493,6 +2515,7 @@ class SessionManager
             $isUserSubscribed = self::isUserSubscribedAsStudent($sessionId, $enreg_user);
             if (false === $isUserSubscribed) {
                 $enreg_user = (int) $enreg_user;
+                // TODO(db-neutral): INSERT IGNORE (both statements below)
                 if ($session->getDuration() > 0) {
                     $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, duration, registered_at)
                         VALUES (".Session::STUDENT.", $sessionId, $enreg_user, 0, '".api_get_utc_datetime()."')";
@@ -2524,10 +2547,12 @@ class SessionManager
         }
 
         // update number of users in the session
-        $sql = "UPDATE $tbl_session
-                SET nbr_users = (SELECT count(user_id) FROM $tbl_session_rel_user WHERE session_id = $sessionId)
-                WHERE id = $sessionId";
-        Database::query($sql);
+        $connection->createQueryBuilder()
+            ->update('session')
+            ->set('nbr_users', '(SELECT COUNT(user_id) FROM session_rel_user WHERE session_id = :sessionId)')
+            ->where('id = :sessionId')
+            ->setParameter('sessionId', $sessionId)
+            ->executeStatement();
 
         return true;
     }
@@ -2599,35 +2624,26 @@ class SessionManager
         $status = null
     ) {
         $sessionId = (int) $sessionId;
-        $courseId = $courseInfo['real_id'];
+        $courseId = (int) $courseInfo['real_id'];
 
         if (empty($sessionId) || empty($courseId)) {
             return [];
         }
 
-        $statusCondition = null;
-        if (isset($status) && !is_null($status)) {
-            $status = (int) $status;
-            $statusCondition = " AND status = $status";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT IDENTITY(scru.user) AS user_id')
+            ->from(SessionRelCourseRelUser::class, 'scru')
+            ->where('IDENTITY(scru.session) = :sessionId')
+            ->andWhere('IDENTITY(scru.course) = :courseId')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('courseId', $courseId);
+
+        if (isset($status)) {
+            $qb->andWhere('scru.status = :status')
+                ->setParameter('status', (int) $status);
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-        $sql = "SELECT DISTINCT user_id
-                FROM $table
-                WHERE
-                    session_id = $sessionId AND
-                    c_id = $courseId
-                    $statusCondition
-                ";
-
-        $result = Database::query($sql);
-        $existingUsers = [];
-        while ($row = Database::fetch_array($result)) {
-            $existingUsers[] = $row['user_id'];
-        }
-
-        return $existingUsers;
+        return array_column($qb->getQuery()->getArrayResult(), 'user_id');
     }
 
     /**
@@ -2651,36 +2667,27 @@ class SessionManager
         if (empty($sessionList) || empty($courseList)) {
             return [];
         }
-        $sessionListToString = implode("','", $sessionList);
-        $courseListToString = implode("','", $courseList);
 
-        $statusCondition = null;
-        if (isset($status) && !is_null($status)) {
-            $status = (int) $status;
-            $statusCondition = " AND status = $status";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT IDENTITY(scru.user) AS user_id')
+            ->from(SessionRelCourseRelUser::class, 'scru')
+            ->where('IDENTITY(scru.session) IN (:sessionList)')
+            ->andWhere('IDENTITY(scru.course) IN (:courseList)')
+            ->setParameter('sessionList', array_map('intval', array_values($sessionList)))
+            ->setParameter('courseList', array_map('intval', array_values($courseList)));
+
+        if (isset($status)) {
+            $qb->andWhere('scru.status = :status')
+                ->setParameter('status', (int) $status);
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-        $sql = "SELECT DISTINCT user_id
-                FROM $table
-                WHERE
-                    session_id IN ('$sessionListToString') AND
-                    c_id IN ('$courseListToString')
-                    $statusCondition
-                ";
+        $query = $qb->getQuery();
         if (!is_null($start) && !is_null($limit)) {
-            $start = (int) $start;
-            $limit = (int) $limit;
-            $sql .= "LIMIT $start, $limit";
-        }
-        $result = Database::query($sql);
-        $existingUsers = [];
-        while ($row = Database::fetch_array($result)) {
-            $existingUsers[] = $row['user_id'];
+            $query->setFirstResult((int) $start)
+                ->setMaxResults((int) $limit);
         }
 
-        return $existingUsers;
+        return array_column($query->getArrayResult(), 'user_id');
     }
 
     /**
@@ -2701,32 +2708,30 @@ class SessionManager
         $status = null,
         $updateTotal = true
     ) {
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tableSessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $connection = Container::getEntityManager()->getConnection();
         $sessionId = (int) $sessionId;
 
         if (empty($sessionId) || empty($userList) || empty($courseInfo)) {
             return false;
         }
 
-        $courseId = is_array($courseInfo) ? $courseInfo['real_id'] : $courseInfo;
-
-        $statusCondition = null;
-        if (isset($status) && !is_null($status)) {
-            $status = (int) $status;
-            $statusCondition = " AND status = $status";
-        }
+        $courseId = (int) (is_array($courseInfo) ? $courseInfo['real_id'] : $courseInfo);
 
         foreach ($userList as $userId) {
             $userId = (int) $userId;
-            $sql = "DELETE FROM $table
-                    WHERE
-                        session_id = $sessionId AND
-                        c_id = $courseId AND
-                        user_id = $userId
-                        $statusCondition
-                    ";
-            Database::query($sql);
+            $deleteQb = $connection->createQueryBuilder()
+                ->delete('session_rel_course_rel_user')
+                ->where('session_id = :sessionId')
+                ->andWhere('c_id = :courseId')
+                ->andWhere('user_id = :userId')
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('courseId', $courseId)
+                ->setParameter('userId', $userId);
+            if (isset($status)) {
+                $deleteQb->andWhere('status = :status')
+                    ->setParameter('status', (int) $status);
+            }
+            $deleteQb->executeStatement();
 
             Event::addEvent(
                 LOG_SESSION_DELETE_USER_COURSE,
@@ -2741,22 +2746,28 @@ class SessionManager
 
         if ($updateTotal) {
             // Count users in this session-course relation
-            $sql = "SELECT COUNT(user_id) as nbUsers
-                    FROM $table
-                    WHERE
-                        session_id = $sessionId AND
-                        c_id = $courseId AND
-                        status = ".Session::STUDENT;
-            $result = Database::query($sql);
-            [$userCount] = Database::fetch_array($result);
+            $userCount = (int) $connection->createQueryBuilder()
+                ->select('COUNT(user_id) AS nbUsers')
+                ->from('session_rel_course_rel_user')
+                ->where('session_id = :sessionId')
+                ->andWhere('c_id = :courseId')
+                ->andWhere('status = :status')
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('courseId', $courseId)
+                ->setParameter('status', Session::STUDENT)
+                ->executeQuery()
+                ->fetchOne();
 
             // update the session-course relation to add the users total
-            $sql = "UPDATE $tableSessionCourse
-                    SET nbr_users = $userCount
-                    WHERE
-                        session_id = $sessionId AND
-                        c_id = $courseId";
-            Database::query($sql);
+            $connection->createQueryBuilder()
+                ->update('session_rel_course')
+                ->set('nbr_users', ':userCount')
+                ->where('session_id = :sessionId')
+                ->andWhere('c_id = :courseId')
+                ->setParameter('userCount', $userCount)
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('courseId', $courseId)
+                ->executeStatement();
         }
     }
 
@@ -2986,22 +2997,25 @@ class SessionManager
         $session_id = (int) $session_id;
         $user_id = (int) $user_id;
 
-        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $connection = Container::getEntityManager()->getConnection();
 
-        $sql = "DELETE FROM $tbl_session_rel_user
-                WHERE
-                    session_id = $session_id AND
-                    user_id = $user_id ";
-        $result = Database::query($sql);
+        $removed = $connection->createQueryBuilder()
+            ->delete('session_rel_user')
+            ->where('session_id = :sessionId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('sessionId', $session_id)
+            ->setParameter('userId', $user_id)
+            ->executeStatement();
 
         // Update number of users, only when a subscription was actually removed: the counter went negative when
         // this was called for a user who was not subscribed (for example when removing a class member from a class).
-        if (Database::affected_rows($result) > 0) {
-            $sql = "UPDATE $tbl_session
-                    SET nbr_users = nbr_users - 1
-                    WHERE id = $session_id ";
-            Database::query($sql);
+        if ($removed > 0) {
+            $connection->createQueryBuilder()
+                ->update('session')
+                ->set('nbr_users', 'nbr_users - 1')
+                ->where('id = :sessionId')
+                ->setParameter('sessionId', $session_id)
+                ->executeStatement();
         }
 
         Event::addEvent(
@@ -3036,20 +3050,29 @@ class SessionManager
         $courseId = (int) $courseId;
         $session_id = (int) $session_id;
 
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $connection = Container::getEntityManager()->getConnection();
 
         // Delete user from course
-        $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                WHERE session_id = $session_id AND c_id = $courseId AND user_id = $user_id";
-        $result = Database::query($sql);
+        $removed = $connection->createQueryBuilder()
+            ->delete('session_rel_course_rel_user')
+            ->where('session_id = :sessionId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('sessionId', $session_id)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $user_id)
+            ->executeStatement();
 
-        if (Database::affected_rows($result)) {
+        if ($removed) {
             // Update number of users in this relation
-            $sql = "UPDATE $tbl_session_rel_course SET
-                    nbr_users = nbr_users - 1
-                    WHERE session_id = $session_id AND c_id = $courseId";
-            Database::query($sql);
+            $connection->createQueryBuilder()
+                ->update('session_rel_course')
+                ->set('nbr_users', 'nbr_users - 1')
+                ->where('session_id = :sessionId')
+                ->andWhere('c_id = :courseId')
+                ->setParameter('sessionId', $session_id)
+                ->setParameter('courseId', $courseId)
+                ->executeStatement();
         }
 
         Event::addEvent(
@@ -3102,43 +3125,42 @@ class SessionManager
         }
         $sessionVisibility = $session->getVisibility();
 
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $connection = Container::getEntityManager()->getConnection();
 
         // Get list of courses subscribed to this session
-        $sql = "SELECT c_id
-                FROM $tbl_session_rel_course
-                WHERE session_id = $sessionId";
-        $rs = Database::query($sql);
-        $existingCourses = Database::store_result($rs);
+        $existingCourses = $connection->createQueryBuilder()
+            ->select('c_id')
+            ->from('session_rel_course')
+            ->where('session_id = :sessionId')
+            ->setParameter('sessionId', $sessionId)
+            ->executeQuery()
+            ->fetchAllAssociative();
         $nbr_courses = count($existingCourses);
 
         // Get list of users subscribed to this session
-        $sql = "SELECT user_id
-                FROM $tbl_session_rel_user
-                WHERE
-                    session_id = $sessionId AND
-                    relation_type = ".Session::STUDENT;
-        $result = Database::query($sql);
-        $user_list = Database::store_result($result);
+        $user_list = $connection->createQueryBuilder()
+            ->select('user_id')
+            ->from('session_rel_user')
+            ->where('session_id = :sessionId')
+            ->andWhere('relation_type = :relationType')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('relationType', Session::STUDENT)
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         // Remove existing courses from the session.
         if (true === $removeExistingCoursesWithUsers && !empty($existingCourses)) {
             foreach ($existingCourses as $existingCourse) {
                 if (!in_array($existingCourse['c_id'], $courseList)) {
-                    $sql = "DELETE FROM $tbl_session_rel_course
-                            WHERE
-                                c_id = ".$existingCourse['c_id']." AND
-                                session_id = $sessionId";
-                    Database::query($sql);
-
-                    $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                            WHERE
-                                c_id = ".$existingCourse['c_id']." AND
-                                session_id = $sessionId";
-                    Database::query($sql);
+                    foreach (['session_rel_course', 'session_rel_course_rel_user'] as $relationTable) {
+                        $connection->createQueryBuilder()
+                            ->delete($relationTable)
+                            ->where('c_id = :courseId')
+                            ->andWhere('session_id = :sessionId')
+                            ->setParameter('courseId', (int) $existingCourse['c_id'])
+                            ->setParameter('sessionId', $sessionId)
+                            ->executeStatement();
+                    }
 
                     Event::addEvent(
                         LOG_SESSION_DELETE_COURSE,
@@ -3315,9 +3337,17 @@ class SessionManager
                     }
                 }
                 // If the course isn't subscribed yet
-                $sql = "INSERT INTO $tbl_session_rel_course (session_id, c_id, nbr_users, position)
-                        VALUES ($sessionId, $courseId, 0, 0)";
-                Database::query($sql);
+                $connection->createQueryBuilder()
+                    ->insert('session_rel_course')
+                    ->values([
+                        'session_id' => ':sessionId',
+                        'c_id' => ':courseId',
+                        'nbr_users' => '0',
+                        'position' => '0',
+                    ])
+                    ->setParameter('sessionId', $sessionId)
+                    ->setParameter('courseId', (int) $courseId)
+                    ->executeStatement();
 
                 Event::addEvent(
                     LOG_SESSION_ADD_COURSE,
@@ -3359,8 +3389,13 @@ class SessionManager
             }
         }
 
-        $sql = "UPDATE $tbl_session SET nbr_courses = $nbr_courses WHERE id = $sessionId";
-        Database::query($sql);
+        $connection->createQueryBuilder()
+            ->update('session')
+            ->set('nbr_courses', ':nbrCourses')
+            ->where('id = :sessionId')
+            ->setParameter('nbrCourses', $nbr_courses)
+            ->setParameter('sessionId', $sessionId)
+            ->executeStatement();
 
         return true;
     }
@@ -3382,19 +3417,24 @@ class SessionManager
             return false;
         }
 
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $connection = Container::getEntityManager()->getConnection();
 
         // Unsubscribe course.
-        $sql = "DELETE FROM $tbl_session_rel_course
-                WHERE c_id = $course_id AND session_id = $session_id";
-        $result = Database::query($sql);
-        $nb_affected = Database::affected_rows($result);
+        $nb_affected = $connection->createQueryBuilder()
+            ->delete('session_rel_course')
+            ->where('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('sessionId', $session_id)
+            ->executeStatement();
 
-        $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                WHERE c_id = $course_id AND session_id = $session_id";
-        Database::query($sql);
+        $connection->createQueryBuilder()
+            ->delete('session_rel_course_rel_user')
+            ->where('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('sessionId', $session_id)
+            ->executeStatement();
 
         Event::addEvent(
             LOG_SESSION_DELETE_COURSE,
@@ -3408,9 +3448,13 @@ class SessionManager
 
         if ($nb_affected > 0) {
             // Update number of courses in the session
-            $sql = "UPDATE $tbl_session SET nbr_courses= nbr_courses - $nb_affected
-                    WHERE id = $session_id";
-            Database::query($sql);
+            $connection->createQueryBuilder()
+                ->update('session')
+                ->set('nbr_courses', 'nbr_courses - :removed')
+                ->where('id = :sessionId')
+                ->setParameter('removed', (int) $nb_affected)
+                ->setParameter('sessionId', $session_id)
+                ->executeStatement();
 
             return true;
         }
@@ -3476,19 +3520,17 @@ class SessionManager
      * */
     public static function relation_session_course_exist($session_id, $courseId)
     {
-        $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $return_value = false;
-        $sql = "SELECT c_id FROM $tbl_session_course
-                WHERE
-                  session_id = ".intval($session_id)." AND
-                  c_id = ".intval($courseId);
-        $result = Database::query($sql);
-        $num = Database::num_rows($result);
-        if ($num > 0) {
-            $return_value = true;
-        }
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(src.id)')
+            ->from(SessionRelCourse::class, 'src')
+            ->where('IDENTITY(src.session) = :sessionId')
+            ->andWhere('IDENTITY(src.course) = :courseId')
+            ->setParameter('sessionId', (int) $session_id)
+            ->setParameter('courseId', (int) $courseId)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        return $return_value;
+        return $count > 0;
     }
 
     /**
@@ -3500,22 +3542,22 @@ class SessionManager
      */
     public static function get_session_by_name($name)
     {
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $name = Database::escape_string(trim($name));
+        $name = trim((string) $name);
         if (empty($name)) {
             return false;
         }
 
-        $sql = 'SELECT *
-		        FROM '.$tbl_session.'
-		        WHERE title = "'.$name.'"';
-        $result = Database::query($sql);
-        $num = Database::num_rows($result);
-        if ($num > 0) {
-            return Database::fetch_array($result);
-        } else {
-            return false;
-        }
+        // Wide table read as is (legacy row shape): DBAL QueryBuilder; callers only read named keys.
+        $row = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from('session')
+            ->where('title = :name')
+            ->setParameter('name', $name)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAssociative();
+
+        return false === $row ? false : $row;
     }
 
     /**
@@ -3526,24 +3568,24 @@ class SessionManager
      */
     public static function sessionNameExistBesidesMySession($sessionId, $name)
     {
-        $table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $name = Database::escape_string(trim($name));
+        $name = trim((string) $name);
         $sessionId = (int) $sessionId;
 
         if (empty($name)) {
             return false;
         }
 
-        $sql = "SELECT *
-		        FROM $table
-		        WHERE title = '$name' AND id <> $sessionId ";
-        $result = Database::query($sql);
-        $num = Database::num_rows($result);
-        if ($num > 0) {
-            return true;
-        }
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(s.id)')
+            ->from(Session::class, 's')
+            ->where('s.title = :title')
+            ->andWhere('s.id <> :id')
+            ->setParameter('title', $name)
+            ->setParameter('id', $sessionId)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        return false;
+        return $count > 0;
     }
 
     /**
@@ -3655,7 +3697,6 @@ class SessionManager
         $smonth_end,
         $sday_end
     ) {
-        $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $name = trim((string) $sname);
         $year_start = intval($syear_start);
         $month_start = intval($smonth_start);
@@ -3686,23 +3727,19 @@ class SessionManager
 
             return $msg;
         }
-        if (null != $date_end) {
-            $sql = "UPDATE $tbl_session_category
-                    SET
-                        title = '".Database::escape_string($name)."',
-                        date_start = '$date_start' ,
-                        date_end = '$date_end'
-                    WHERE id= $id";
-        } else {
-            $sql = "UPDATE $tbl_session_category SET
-                        title = '".Database::escape_string($name)."',
-                        date_start = '$date_start',
-                        date_end = NULL
-                    WHERE id= $id";
-        }
-        $result = Database::query($sql);
+        Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->update('session_category')
+            ->set('title', ':title')
+            ->set('date_start', ':dateStart')
+            ->set('date_end', ':dateEnd')
+            ->where('id = :id')
+            ->setParameter('title', $name)
+            ->setParameter('dateStart', $date_start)
+            ->setParameter('dateEnd', $date_end)
+            ->setParameter('id', $id)
+            ->executeStatement();
 
-        return $result ? true : false;
+        return true;
     }
 
     /**
@@ -3719,31 +3756,41 @@ class SessionManager
      */
     public static function delete_session_category($categoryId, $deleteSessions = false, $fromWs = false)
     {
-        $tblSessionCategory = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
+        $connection = Container::getEntityManager()->getConnection();
 
         if (is_array($categoryId)) {
-            $categoryId = array_map('intval', $categoryId);
+            $categoryIds = array_map('intval', $categoryId);
         } else {
-            $categoryId = [(int) $categoryId];
+            $categoryIds = [(int) $categoryId];
         }
 
-        $categoryId = implode(', ', $categoryId);
+        $categoryId = implode(', ', $categoryIds);
 
         if ($deleteSessions) {
-            $sql = "SELECT id FROM $tblSession WHERE session_category_id IN ($categoryId)";
-            $result = Database::query($sql);
-            while ($rows = Database::fetch_array($result)) {
-                $sessionId = $rows['id'];
+            $sessionIds = $connection->createQueryBuilder()
+                ->select('id')
+                ->from('session')
+                ->where('session_category_id IN (:categoryIds)')
+                ->setParameter('categoryIds', $categoryIds, ArrayParameterType::INTEGER)
+                ->executeQuery()
+                ->fetchFirstColumn();
+            foreach ($sessionIds as $sessionId) {
                 self::delete($sessionId, $fromWs);
             }
         } else {
-            $sql = "UPDATE $tblSession SET session_category_id = NULL WHERE session_category_id IN ($categoryId)";
-            Database::query($sql);
+            $connection->createQueryBuilder()
+                ->update('session')
+                ->set('session_category_id', 'NULL')
+                ->where('session_category_id IN (:categoryIds)')
+                ->setParameter('categoryIds', $categoryIds, ArrayParameterType::INTEGER)
+                ->executeStatement();
         }
 
-        $sql = "DELETE FROM $tblSessionCategory WHERE id IN ($categoryId)";
-        Database::query($sql);
+        $connection->createQueryBuilder()
+            ->delete('session_category')
+            ->where('id IN (:categoryIds)')
+            ->setParameter('categoryIds', $categoryIds, ArrayParameterType::INTEGER)
+            ->executeStatement();
 
         // Add event to system log
         Event::addEvent(
@@ -3779,29 +3826,26 @@ class SessionManager
         $urlId = 0,
         $onlyThisSessionList = []
     ) {
-        $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $session_course_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
         $return_array = [];
 
-        $sql_query = " SELECT
-                    DISTINCT(s.id),
-                    s.title,
-                    s.nbr_courses,
-                    s.access_start_date,
-                    s.access_end_date,
-                    sc.title as category_name,
-                    s.promotion_id
-				FROM $session_table s
-				INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
-				LEFT JOIN  $session_category_table sc ON s.session_category_id = sc.id
-				LEFT JOIN $session_course_table sco ON (sco.session_id = s.id)
-				LEFT JOIN $course_table c ON sco.c_id = c.id
-				WHERE ar.access_url_id = $urlId ";
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select(
+                'DISTINCT s.id',
+                's.title',
+                's.nbr_courses',
+                's.access_start_date',
+                's.access_end_date',
+                'sc.title AS category_name',
+                's.promotion_id'
+            )
+            ->from('session', 's')
+            ->innerJoin('s', 'access_url_rel_session', 'ar', 'ar.session_id = s.id')
+            ->leftJoin('s', 'session_category', 'sc', 's.session_category_id = sc.id')
+            ->leftJoin('s', 'session_rel_course', 'sco', 'sco.session_id = s.id')
+            ->leftJoin('sco', 'course', 'c', 'sco.c_id = c.id')
+            ->where('ar.access_url_id = :urlId')
+            ->setParameter('urlId', $urlId);
 
         $availableFields = [
             's.id',
@@ -3817,48 +3861,45 @@ class SessionManager
         ];
 
         if (count($conditions) > 0) {
+            $index = 0;
             foreach ($conditions as $field => $options) {
                 $operator = strtolower($options['operator']);
-                $value = Database::escape_string($options['value']);
                 if (in_array($field, $availableFields) && in_array($operator, $availableOperator)) {
-                    $sql_query .= ' AND '.$field." $operator '".$value."'";
+                    $qb->andWhere($field.' '.$operator.' :condition'.$index)
+                        ->setParameter('condition'.$index, (string) $options['value']);
+                    $index++;
                 }
             }
         }
 
         if (!empty($onlyThisSessionList)) {
-            $onlyThisSessionList = array_map('intval', $onlyThisSessionList);
-            $onlyThisSessionList = implode("','", $onlyThisSessionList);
-            $sql_query .= " AND s.id IN ('$onlyThisSessionList') ";
+            $qb->andWhere('s.id IN (:onlyThisSessionList)')
+                ->setParameter('onlyThisSessionList', array_map('intval', $onlyThisSessionList), ArrayParameterType::INTEGER);
         }
 
         $orderAvailableList = ['title'];
         if (count($order_by) > 0) {
             $order = null;
-            $direction = null;
+            $direction = 'ASC';
             if (isset($order_by[0]) && in_array($order_by[0], $orderAvailableList)) {
                 $order = $order_by[0];
             }
             if (isset($order_by[1]) && in_array(strtolower($order_by[1]), ['desc', 'asc'])) {
-                $direction = $order_by[1];
+                $direction = strtoupper($order_by[1]);
             }
 
             if (!empty($order)) {
-                $sql_query .= " ORDER BY $order $direction ";
+                $qb->orderBy('s.'.$order, $direction);
             }
         }
 
         if (!is_null($from) && !is_null($to)) {
-            $to = (int) $to;
-            $from = (int) $from;
-            $sql_query .= "LIMIT $from, $to";
+            $qb->setFirstResult((int) $from)
+                ->setMaxResults((int) $to);
         }
 
-        $sql_result = Database::query($sql_query);
-        if (Database::num_rows($sql_result) > 0) {
-            while ($result = Database::fetch_array($sql_result)) {
-                $return_array[$result['id']] = $result;
-            }
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $result) {
+            $return_array[$result['id']] = $result;
         }
 
         return $return_array;
@@ -3873,18 +3914,41 @@ class SessionManager
      */
     public static function get_session_category($id)
     {
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $id = (int) $id;
-        $sql = "SELECT id, title, date_start, date_end
-                FROM $table
-                WHERE id= $id";
-        $result = Database::query($sql);
-        $num = Database::num_rows($result);
-        if ($num > 0) {
-            return Database::fetch_array($result);
-        } else {
-            return false;
+        $row = self::sessionCategoryRowsQueryBuilder(false)
+            ->where('sc.id = :id')
+            ->setParameter('id', (int) $id)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
+
+        // Only the named keys are returned: no caller reads the numeric indexes fetch_array() used to add.
+        return null === $row ? false : self::toLegacySessionCategoryRow($row);
+    }
+
+    /**
+     * The session_category columns, aliased to the snake_case keys the legacy callers read.
+     */
+    private static function sessionCategoryRowsQueryBuilder(bool $withAccessUrl = true): \Doctrine\ORM\QueryBuilder
+    {
+        $qb = Container::getEntityManager()->createQueryBuilder()->select('sc.id AS id');
+        if ($withAccessUrl) {
+            $qb->addSelect('IDENTITY(sc.url) AS access_url_id');
         }
+
+        return $qb
+            ->addSelect('sc.title AS title', 'sc.dateStart AS date_start', 'sc.dateEnd AS date_end')
+            ->from(SessionCategory::class, 'sc');
+    }
+
+    /**
+     * The raw table row used to carry the two date columns as Y-m-d strings (or NULL).
+     */
+    private static function toLegacySessionCategoryRow(array $row): array
+    {
+        foreach (['date_start', 'date_end'] as $key) {
+            $row[$key] = $row[$key] instanceof \DateTimeInterface ? $row[$key]->format('Y-m-d') : null;
+        }
+
+        return $row;
     }
 
     /**
@@ -3894,19 +3958,18 @@ class SessionManager
      */
     public static function get_all_session_category()
     {
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $id = api_get_current_access_url_id();
-        $sql = 'SELECT * FROM '.$table.'
-                WHERE access_url_id = '.$id.'
-                ORDER BY title ASC';
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            $data = Database::store_result($result, 'ASSOC');
+        $rows = self::sessionCategoryRowsQueryBuilder()
+            ->where('IDENTITY(sc.url) = :urlId')
+            ->setParameter('urlId', (int) api_get_current_access_url_id())
+            ->orderBy('sc.title', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
 
-            return $data;
+        if ([] === $rows) {
+            return false;
         }
 
-        return false;
+        return array_map([self::class, 'toLegacySessionCategoryRow'], $rows);
     }
 
     /**
@@ -3935,8 +3998,7 @@ class SessionManager
             return false;
         }
 
-        $tblSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $connection = Container::getEntityManager()->getConnection();
 
         $user = api_get_user_entity($userId);
 
@@ -3946,56 +4008,76 @@ class SessionManager
 
         if ($noCoach) {
             // Delete the course-specific coach record
-            $sql = "DELETE FROM $tblSessionRelCourseRelUser
-                WHERE
-                    session_id = $sessionId AND
-                    c_id = $courseId AND
-                    user_id = $userId AND
-                    status = ".Session::COURSE_COACH;
-            $result = Database::query($sql);
+            $removed = $connection->createQueryBuilder()
+                ->delete('session_rel_course_rel_user')
+                ->where('session_id = :sessionId')
+                ->andWhere('c_id = :courseId')
+                ->andWhere('user_id = :userId')
+                ->andWhere('status = :status')
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('courseId', $courseId)
+                ->setParameter('userId', $userId)
+                ->setParameter('status', Session::COURSE_COACH)
+                ->executeStatement();
 
             // Check if the user is still a coach for any course in this session
-            $sql = "SELECT COUNT(*) AS count FROM $tblSessionRelCourseRelUser
-                WHERE
-                    session_id = $sessionId AND
-                    user_id = $userId AND
-                    status = ".Session::COURSE_COACH;
-            $res = Database::query($sql);
-            $resultRow = Database::fetch_assoc($res);
+            $remaining = (int) $connection->createQueryBuilder()
+                ->select('COUNT(*) AS count')
+                ->from('session_rel_course_rel_user')
+                ->where('session_id = :sessionId')
+                ->andWhere('user_id = :userId')
+                ->andWhere('status = :status')
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('userId', $userId)
+                ->setParameter('status', Session::COURSE_COACH)
+                ->executeQuery()
+                ->fetchOne();
 
             // If the user is no longer a coach for any course in this session, remove the session relationship
-            if (0 === (int) $resultRow['count']) {
-                $sql = "DELETE FROM $tblSessionRelUser
-                    WHERE
-                        session_id = $sessionId AND
-                        user_id = $userId AND
-                        relation_type = ".Session::COURSE_COACH;
-                Database::query($sql);
+            if (0 === $remaining) {
+                $connection->createQueryBuilder()
+                    ->delete('session_rel_user')
+                    ->where('session_id = :sessionId')
+                    ->andWhere('user_id = :userId')
+                    ->andWhere('relation_type = :relationType')
+                    ->setParameter('sessionId', $sessionId)
+                    ->setParameter('userId', $userId)
+                    ->setParameter('relationType', Session::COURSE_COACH)
+                    ->executeStatement();
             }
 
-            return Database::affected_rows($result) > 0;
+            return $removed > 0;
         }
 
         // Assign user as a coach to course
         // First check if the user is registered to the course
-        $sql = "SELECT user_id FROM $tblSessionRelCourseRelUser
-                WHERE
-                    session_id = $sessionId AND
-                    c_id = $courseId AND
-                    user_id = $userId";
-        $rs_check = Database::query($sql);
+        $registered = $connection->createQueryBuilder()
+            ->select('user_id')
+            ->from('session_rel_course_rel_user')
+            ->where('session_id = :sessionId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $userId)
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         // Then update or insert.
-        if (Database::num_rows($rs_check) > 0) {
-            $sql = "UPDATE $tblSessionRelCourseRelUser
-                    SET status = ".Session::COURSE_COACH."
-                    WHERE
-                        session_id = $sessionId AND
-                        c_id = $courseId AND
-                        user_id = $userId ";
-            $result = Database::query($sql);
+        if (count($registered) > 0) {
+            $updated = $connection->createQueryBuilder()
+                ->update('session_rel_course_rel_user')
+                ->set('status', ':status')
+                ->where('session_id = :sessionId')
+                ->andWhere('c_id = :courseId')
+                ->andWhere('user_id = :userId')
+                ->setParameter('status', Session::COURSE_COACH)
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('courseId', $courseId)
+                ->setParameter('userId', $userId)
+                ->executeStatement();
 
-            return Database::affected_rows($result) > 0;
+            return $updated > 0;
         }
 
         $em = Container::getEntityManager();
@@ -4034,10 +4116,6 @@ class SessionManager
         $sendEmail = false,
         $removeSessionsFromUser = true
     ) {
-        // Database Table Definitions
-        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-
         if (empty($userInfo)) {
             return 0;
         }
@@ -4066,32 +4144,32 @@ class SessionManager
         $touchedSessionIds = [];
         // Deleting assigned sessions to hrm_id.
         if ($removeSessionsFromUser) {
+            $connection = Container::getEntityManager()->getConnection();
+            $drhSessionsQb = $connection->createQueryBuilder()
+                ->select('s.session_id')
+                ->from('session_rel_user', 's')
+                ->where('s.user_id = :userId')
+                ->andWhere('s.relation_type = :relationType')
+                ->setParameter('userId', $userId)
+                ->setParameter('relationType', Session::DRH);
             if (api_is_multiple_url_enabled()) {
-                $sql = "SELECT s.session_id
-                        FROM $tbl_session_rel_user s
-                        INNER JOIN $tbl_session_rel_access_url a
-                        ON (a.session_id = s.session_id)
-                        WHERE
-                            s.user_id = $userId AND
-                            relation_type = ".Session::DRH." AND
-                            access_url_id = ".api_get_current_access_url_id();
-            } else {
-                $sql = "SELECT s.session_id
-                        FROM $tbl_session_rel_user s
-                        WHERE user_id = $userId AND relation_type=".Session::DRH;
+                $drhSessionsQb
+                    ->innerJoin('s', 'access_url_rel_session', 'a', 'a.session_id = s.session_id')
+                    ->andWhere('a.access_url_id = :accessUrlId')
+                    ->setParameter('accessUrlId', (int) api_get_current_access_url_id());
             }
-            $result = Database::query($sql);
 
-            if (Database::num_rows($result) > 0) {
-                while ($row = Database::fetch_array($result)) {
-                    $sql = "DELETE FROM $tbl_session_rel_user
-                            WHERE
-                                session_id = {$row['session_id']} AND
-                                user_id = $userId AND
-                                relation_type =".Session::DRH;
-                    Database::query($sql);
-                    $touchedSessionIds[] = (int) $row['session_id'];
-                }
+            foreach ($drhSessionsQb->executeQuery()->fetchFirstColumn() as $drhSessionId) {
+                $connection->createQueryBuilder()
+                    ->delete('session_rel_user')
+                    ->where('session_id = :sessionId')
+                    ->andWhere('user_id = :userId')
+                    ->andWhere('relation_type = :relationType')
+                    ->setParameter('sessionId', (int) $drhSessionId)
+                    ->setParameter('userId', $userId)
+                    ->setParameter('relationType', Session::DRH)
+                    ->executeStatement();
+                $touchedSessionIds[] = (int) $drhSessionId;
             }
         }
 
@@ -4115,10 +4193,12 @@ class SessionManager
             Database::getManager()->flush();
         }
         foreach (array_unique($touchedSessionIds) as $touchedSessionId) {
-            $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)."
-                    SET nbr_users = (SELECT COUNT(user_id) FROM $tbl_session_rel_user WHERE session_id = $touchedSessionId)
-                    WHERE id = $touchedSessionId";
-            Database::query($sql);
+            Container::getEntityManager()->getConnection()->createQueryBuilder()
+                ->update('session')
+                ->set('nbr_users', '(SELECT COUNT(user_id) FROM session_rel_user WHERE session_id = :sessionId)')
+                ->where('id = :sessionId')
+                ->setParameter('sessionId', $touchedSessionId)
+                ->executeStatement();
         }
 
         return $affected_rows;
@@ -4151,40 +4231,30 @@ class SessionManager
      */
     public static function getSessionFollowedByDrh($userId, $sessionId)
     {
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
 
         // Explicit columns: SELECT * over session + session_rel_user made "id" the relation id, not the session id.
-        $select = " SELECT s.*, sru.session_id, sru.user_id, sru.relation_type ";
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('s.*', 'sru.session_id', 'sru.user_id', 'sru.relation_type')
+            ->from('session', 's')
+            ->innerJoin('s', 'session_rel_user', 'sru', 'sru.session_id = s.id')
+            ->where('sru.user_id = :userId')
+            ->andWhere('sru.session_id = :sessionId')
+            ->andWhere('sru.relation_type = :relationType')
+            ->setParameter('userId', $userId)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('relationType', Session::DRH);
+
         if (api_is_multiple_url_enabled()) {
-            $select .= ", a.access_url_id ";
-            $sql = " $select FROM $tbl_session s
-                    INNER JOIN $tbl_session_rel_user sru ON (sru.session_id = s.id)
-                    LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
-                    WHERE
-                        sru.user_id = '$userId' AND
-                        sru.session_id = '$sessionId' AND
-                        sru.relation_type = '".Session::DRH."' AND
-                        access_url_id = ".api_get_current_access_url_id()."
-                    ";
-        } else {
-            $sql = "$select FROM $tbl_session s
-                     INNER JOIN $tbl_session_rel_user sru
-                     ON
-                        sru.session_id = s.id AND
-                        sru.user_id = '$userId' AND
-                        sru.session_id = '$sessionId' AND
-                        sru.relation_type = '".Session::DRH."'
-                    ";
+            $qb->addSelect('a.access_url_id')
+                ->leftJoin('s', 'access_url_rel_session', 'a', 's.id = a.session_id')
+                ->andWhere('a.access_url_id = :accessUrlId')
+                ->setParameter('accessUrlId', (int) api_get_current_access_url_id());
         }
 
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_assoc($result);
+        $row = $qb->executeQuery()->fetchAssociative();
+        if (false !== $row) {
             $row['course_list'] = self::get_course_list_by_session_id($sessionId);
 
             return $row;
@@ -4399,6 +4469,7 @@ class SessionManager
         if ($getSql) {
             return $sql;
         }
+        // TODO(db-neutral): SQL fragments injected by ExtraField::parseConditions(), free-form ORDER BY and getSql mode
         $result = Database::query($sql);
 
         if ($getCount) {
@@ -4485,52 +4556,50 @@ class SessionManager
         $orderBy = null,
         $getCount = false
     ) {
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $session_id = (int) $session_id;
-        $sqlSelect = '*, c.id, c.id as real_id, c.code as course_code';
+
+        // Joined wide rows (course + session_rel_course columns, legacy shape): DBAL QueryBuilder.
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->from('course', 'c')
+            ->innerJoin('c', 'session_rel_course', 'src', 'c.id = src.c_id')
+            ->where('src.session_id = :sessionId')
+            ->setParameter('sessionId', $session_id);
 
         if ($getCount) {
-            $sqlSelect = 'COUNT(1) as count';
+            $qb->select('COUNT(1) AS count');
+        } else {
+            $qb->select('*', 'c.id', 'c.id AS real_id', 'c.code AS course_code');
         }
-
-        // select the courses
-        $sql = "SELECT $sqlSelect
-                FROM $tbl_course c
-                INNER JOIN $tbl_session_rel_course src
-                ON (c.id = src.c_id)
-		        WHERE src.session_id = '$session_id' ";
 
         if (!empty($course_name)) {
-            $course_name = Database::escape_string($course_name);
-            $sql .= " AND c.title LIKE '%$course_name%' ";
+            $qb->andWhere('c.title LIKE :courseName')
+                ->setParameter('courseName', '%'.$course_name.'%');
         }
 
-        if (!empty($orderBy)) {
-            $orderBy = Database::escape_string($orderBy);
-            $orderBy = " ORDER BY $orderBy";
-        } else {
-            if (self::orderCourseIsEnabled()) {
-                $orderBy .= ' ORDER BY position ';
-            } else {
-                $orderBy .= ' ORDER BY title ';
-            }
+        // Allowlist for the sort: "<title|position|code|id> [ASC|DESC]"; anything else uses the default order.
+        $orderColumns = ['title' => 'c.title', 'position' => 'src.position', 'code' => 'c.code', 'id' => 'c.id'];
+        $orderColumn = null;
+        $orderDirection = 'ASC';
+        if (!empty($orderBy) && preg_match('/^\s*(\w+)(?:\s+(ASC|DESC))?\s*$/i', (string) $orderBy, $matches)
+            && isset($orderColumns[strtolower($matches[1])])
+        ) {
+            $orderColumn = $orderColumns[strtolower($matches[1])];
+            $orderDirection = isset($matches[2]) ? strtoupper($matches[2]) : 'ASC';
+        }
+        if (null === $orderColumn) {
+            $orderColumn = self::orderCourseIsEnabled() ? 'src.position' : 'c.title';
+        }
+        if ($getCount) {
+            $count = $qb->executeQuery()->fetchAssociative();
+
+            return false === $count ? [] : (int) $count['count'];
         }
 
-        $sql .= Database::escape_string($orderBy);
-        $result = Database::query($sql);
-        $num_rows = Database::num_rows($result);
+        $qb->orderBy($orderColumn, $orderDirection);
+
         $courses = [];
-        if ($num_rows > 0) {
-            if ($getCount) {
-                $count = Database::fetch_assoc($result);
-
-                return (int) $count['count'];
-            }
-
-            while ($row = Database::fetch_assoc($result)) {
-                $courses[$row['real_id']] = $row;
-            }
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
+            $courses[$row['real_id']] = $row;
         }
 
         return $courses;
@@ -4599,6 +4668,7 @@ class SessionManager
 		            src.session_id IN ($sessionsSQL)
 		            $keywordCondition
 		        ";
+        // TODO(db-neutral): the session filter is an SQL sub-select string built by get_sessions_followed_by_drh()
         if ($getCount) {
             $result = Database::query($sql);
             $row = Database::fetch_assoc($result);
@@ -4635,34 +4705,27 @@ class SessionManager
      */
     public static function get_course_list_by_session_id_like($session_id, $course_name = '')
     {
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-
         $session_id = (int) $session_id;
-        $course_name = Database::escape_string($course_name);
 
-        // select the courses
-        $sql = "SELECT c.id, c.title FROM $tbl_course c
-                INNER JOIN $tbl_session_rel_course src
-                ON c.id = src.c_id
-		        WHERE ";
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('c.id', 'c.title')
+            ->from('course', 'c')
+            ->innerJoin('c', 'session_rel_course', 'src', 'c.id = src.c_id')
+            ->orderBy('c.title', 'ASC');
 
         if (!empty($session_id)) {
-            $sql .= "src.session_id LIKE '$session_id' AND ";
+            $qb->andWhere('src.session_id = :sessionId')
+                ->setParameter('sessionId', $session_id);
         }
 
         if (!empty($course_name)) {
-            $sql .= "UPPER(c.title) LIKE UPPER('%$course_name%') ";
+            $qb->andWhere('UPPER(c.title) LIKE UPPER(:courseName)')
+                ->setParameter('courseName', '%'.$course_name.'%');
         }
 
-        $sql .= "ORDER BY title;";
-        $result = Database::query($sql);
-        $num_rows = Database::num_rows($result);
         $courses = [];
-        if ($num_rows > 0) {
-            while ($row = Database::fetch_assoc($result)) {
-                $courses[$row['id']] = $row;
-            }
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
+            $courses[$row['id']] = $row;
         }
 
         return $courses;
@@ -4678,33 +4741,22 @@ class SessionManager
      */
     public static function getCourseCountBySessionId($session_id, $keyword = '')
     {
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $session_id = (int) $session_id;
 
         // select the courses
-        $sql = "SELECT COUNT(c.code) count
-                FROM $tbl_course c
-                INNER JOIN $tbl_session_rel_course src
-                ON c.id = src.c_id
-		        WHERE src.session_id = '$session_id' ";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(c.code)')
+            ->from(SessionRelCourse::class, 'src')
+            ->innerJoin('src.course', 'c')
+            ->where('IDENTITY(src.session) = :sessionId')
+            ->setParameter('sessionId', $session_id);
 
-        $keywordCondition = null;
         if (!empty($keyword)) {
-            $keyword = Database::escape_string($keyword);
-            $keywordCondition = " AND (c.code LIKE '%$keyword%' OR c.title LIKE '%$keyword%' ) ";
-        }
-        $sql .= $keywordCondition;
-
-        $result = Database::query($sql);
-        $num_rows = Database::num_rows($result);
-        if ($num_rows > 0) {
-            $row = Database::fetch_assoc($result);
-
-            return $row['count'];
+            $qb->andWhere('(c.code LIKE :keyword OR c.title LIKE :keyword)')
+                ->setParameter('keyword', '%'.$keyword.'%');
         }
 
-        return null;
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -4753,54 +4805,53 @@ class SessionManager
         $id = (int) $id;
         $urlId = empty($urlId) ? api_get_current_access_url_id() : (int) $urlId;
 
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $table_access_url_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-
-        $selectedField = '
-            u.id as user_id, u.lastname, u.firstname, u.username, su.relation_type, au.access_url_id,
-            su.moved_to, su.moved_status, su.moved_at, su.registered_at
-        ';
-
-        if ($getCount) {
-            $selectedField = 'count(1) AS count';
-        }
-
-        $sql = "SELECT $selectedField
-                FROM $tbl_user u
-                INNER JOIN $tbl_session_rel_user su
-                ON u.id = su.user_id AND
-                su.session_id = $id
-                LEFT OUTER JOIN $table_access_url_user au
-                ON (au.user_id = u.id)
-                ";
+        // Joins on user/relation tables, legacy row shape: DBAL QueryBuilder.
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->from('user', 'u')
+            ->innerJoin('u', 'session_rel_user', 'su', 'u.id = su.user_id AND su.session_id = :sessionId')
+            ->leftJoin('u', 'access_url_rel_user', 'au', 'au.user_id = u.id')
+            ->where('(au.access_url_id = :urlId OR au.access_url_id IS NULL)')
+            ->andWhere('u.active <> :softDeleted')
+            ->setParameter('sessionId', $id)
+            ->setParameter('urlId', $urlId)
+            ->setParameter('softDeleted', USER_SOFT_DELETED);
 
         if (is_numeric($status)) {
-            $status = (int) $status;
-            $sql .= " WHERE su.relation_type = $status AND (au.access_url_id = $urlId OR au.access_url_id is null)";
-        } else {
-            $sql .= " WHERE (au.access_url_id = $urlId OR au.access_url_id is null )";
+            $qb->andWhere('su.relation_type = :relationType')
+                ->setParameter('relationType', (int) $status);
         }
 
-        $sql .= ' AND u.active <> '.USER_SOFT_DELETED.' ORDER BY su.relation_type, ';
-        $sql .= api_sort_by_first_name() ? ' u.firstname, u.lastname' : '  u.lastname, u.firstname';
-
-        $result = Database::query($sql);
         if ($getCount) {
-            $count = Database::fetch_assoc($result);
-            if ($count) {
-                return (int) $count['count'];
-            }
-
-            return 0;
+            $qb->select('count(1) AS count');
+        } else {
+            $qb->select(
+                'u.id AS user_id',
+                'u.lastname',
+                'u.firstname',
+                'u.username',
+                'su.relation_type',
+                'au.access_url_id',
+                'su.moved_to',
+                'su.moved_status',
+                'su.moved_at',
+                'su.registered_at'
+            );
         }
 
-        $return = [];
-        while ($row = Database::fetch_assoc($result)) {
-            $return[] = $row;
+        $qb->orderBy('su.relation_type');
+        if (api_sort_by_first_name()) {
+            $qb->addOrderBy('u.firstname')->addOrderBy('u.lastname');
+        } else {
+            $qb->addOrderBy('u.lastname')->addOrderBy('u.firstname');
         }
 
-        return $return;
+        if ($getCount) {
+            $count = $qb->executeQuery()->fetchAssociative();
+
+            return $count ? (int) $count['count'] : 0;
+        }
+
+        return $qb->executeQuery()->fetchAllAssociative();
     }
 
     /**
@@ -4813,38 +4864,32 @@ class SessionManager
      */
     public static function get_sessions_by_general_coach($user_id, $asPlatformAdmin = false)
     {
-        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
         $user_id = (int) $user_id;
 
-        $innerJoin = '';
-        $whereConditions = '';
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('s.*')
+            ->from('session', 's')
+            ->orderBy('s.title', 'ASC');
 
         if (!$asPlatformAdmin) {
-            $innerJoin = " INNER JOIN session_rel_user AS sru ON (s.id = sru.session_id) ";
-            $whereConditions = "sru.user_id = $user_id AND sru.relation_type = ".Session::GENERAL_COACH;
+            $qb->innerJoin('s', 'session_rel_user', 'sru', 's.id = sru.session_id')
+                ->andWhere('sru.user_id = :userId')
+                ->andWhere('sru.relation_type = :relationType')
+                ->setParameter('userId', $user_id)
+                ->setParameter('relationType', Session::GENERAL_COACH);
         }
 
         if (api_is_multiple_url_enabled()) {
-            $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
 
             if (-1 != $access_url_id) {
-                $innerJoin .= " INNER JOIN $tblSessionRelAccessUrl AS access_url_rel_session
-                    ON (s.id = access_url_rel_session.session_id)";
-                $urlCondition = "access_url_rel_session.access_url_id = $access_url_id";
-                $whereConditions = empty($whereConditions)
-                    ? $urlCondition
-                    : $whereConditions.' AND '.$urlCondition;
+                $qb->innerJoin('s', 'access_url_rel_session', 'access_url_rel_session', 's.id = access_url_rel_session.session_id')
+                    ->andWhere('access_url_rel_session.access_url_id = :accessUrlId')
+                    ->setParameter('accessUrlId', (int) $access_url_id);
             }
         }
-        $sql = "SELECT s.* FROM $sessionTable AS s $innerJoin ";
-        if (!empty($whereConditions)) {
-            $sql .= "WHERE $whereConditions ";
-        }
-        $sql .= "ORDER BY s.title";
-        $result = Database::query($sql);
 
-        return Database::store_result($result, 'ASSOC');
+        return $qb->executeQuery()->fetchAllAssociative();
     }
 
     /**
@@ -4856,25 +4901,20 @@ class SessionManager
      */
     public static function get_user_status_in_course_session($user_id, $courseId, $session_id)
     {
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT session_rcru.status
-                FROM $table session_rcru
-                INNER JOIN $tbl_user user
-                ON (session_rcru.user_id = user.id)
-                WHERE
-                    session_rcru.session_id = '".intval($session_id)."' AND
-                    session_rcru.c_id ='".intval($courseId)."' AND
-                    user.id = ".intval($user_id);
+        $status = Container::getEntityManager()->createQueryBuilder()
+            ->select('scru.status')
+            ->from(SessionRelCourseRelUser::class, 'scru')
+            ->where('IDENTITY(scru.session) = :sessionId')
+            ->andWhere('IDENTITY(scru.course) = :courseId')
+            ->andWhere('IDENTITY(scru.user) = :userId')
+            ->setParameter('sessionId', (int) $session_id)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('userId', (int) $user_id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
 
-        $result = Database::query($sql);
-        $status = false;
-        if (Database::num_rows($result)) {
-            $status = Database::fetch_row($result);
-            $status = $status['0'];
-        }
-
-        return $status;
+        return null === $status ? false : $status['status'];
     }
 
     /**
@@ -5243,18 +5283,18 @@ class SessionManager
      */
     public static function count_sessions($access_url_id = 0)
     {
-        $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
-        $access_url_rel_session_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $access_url_id = (int) $access_url_id;
-        $sql = "SELECT count(s.id) FROM $session_table s";
+        $qb = Container::getEntityManager()->createQueryBuilder()->select('COUNT(s.id)');
         if (!empty($access_url_id)) {
-            $sql .= ", $access_url_rel_session_table u ".
-                " WHERE s.id = u.session_id AND u.access_url_id = $access_url_id";
+            $qb->from(AccessUrlRelSession::class, 'u')
+                ->innerJoin('u.session', 's')
+                ->where('IDENTITY(u.url) = :urlId')
+                ->setParameter('urlId', $access_url_id);
+        } else {
+            $qb->from(Session::class, 's');
         }
-        $res = Database::query($sql);
-        $row = Database::fetch_row($res);
 
-        return $row[0];
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
     public static function cantEditSession(?Session $session = null, bool $checkSession = true): bool
@@ -5314,13 +5354,18 @@ class SessionManager
             return false;
         }
 
-        $row = Database::fetch_row(Database::query(
-            'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION).'
-             WHERE session_id = '.(int) $session->getId().' AND access_url_id IN ('.implode(',', array_map('intval', $urlIds)).')
-             LIMIT 1'
-        ));
+        $found = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('1')
+            ->from('access_url_rel_session')
+            ->where('session_id = :sessionId')
+            ->andWhere('access_url_id IN (:urlIds)')
+            ->setParameter('sessionId', (int) $session->getId())
+            ->setParameter('urlIds', array_map('intval', $urlIds), ArrayParameterType::INTEGER)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
 
-        return !empty($row);
+        return false !== $found;
     }
 
     /**
@@ -5352,12 +5397,17 @@ class SessionManager
         }
 
         if (api_get_multiple_access_url()) {
-            $inUrl = Database::fetch_row(Database::query(
-                'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION).'
-                 WHERE session_id = '.$sessionId.' AND access_url_id = '.(int) api_get_current_access_url_id().'
-                 LIMIT 1'
-            ));
-            if (empty($inUrl)) {
+            $inUrl = Container::getEntityManager()->getConnection()->createQueryBuilder()
+                ->select('1')
+                ->from('access_url_rel_session')
+                ->where('session_id = :sessionId')
+                ->andWhere('access_url_id = :accessUrlId')
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('accessUrlId', (int) api_get_current_access_url_id())
+                ->setMaxResults(1)
+                ->executeQuery()
+                ->fetchOne();
+            if (false === $inUrl) {
                 return false;
             }
         }
@@ -5413,19 +5463,29 @@ class SessionManager
             return false;
         }
 
-        $tblCategory = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
-        $inUrl = Database::fetch_row(Database::query(
-            "SELECT id FROM $tblCategory
-             WHERE id = $categoryId AND access_url_id = ".(int) api_get_current_access_url_id()
-        ));
-        if (empty($inUrl)) {
+        $connection = Container::getEntityManager()->getConnection();
+        $inUrl = $connection->createQueryBuilder()
+            ->select('id')
+            ->from('session_category')
+            ->where('id = :categoryId')
+            ->andWhere('access_url_id = :accessUrlId')
+            ->setParameter('categoryId', $categoryId)
+            ->setParameter('accessUrlId', (int) api_get_current_access_url_id())
+            ->executeQuery()
+            ->fetchOne();
+        if (false === $inUrl) {
             return false;
         }
 
-        $result = Database::query("SELECT id FROM $tblSession WHERE session_category_id = $categoryId");
-        while ($row = Database::fetch_assoc($result)) {
-            $session = api_get_session_entity((int) $row['id']);
+        $sessionIds = $connection->createQueryBuilder()
+            ->select('id')
+            ->from('session')
+            ->where('session_category_id = :categoryId')
+            ->setParameter('categoryId', $categoryId)
+            ->executeQuery()
+            ->fetchFirstColumn();
+        foreach ($sessionIds as $sessionId) {
+            $session = api_get_session_entity((int) $sessionId);
             if (null === $session || !self::cantEditSession($session)) {
                 return false;
             }
@@ -5495,9 +5555,6 @@ class SessionManager
      */
     public static function get_session_by_course($courseId)
     {
-        $table_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $table_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $courseId = (int) $courseId;
         $urlId = api_get_current_access_url_id();
 
@@ -5505,18 +5562,17 @@ class SessionManager
             return [];
         }
 
-        $sql = "SELECT title, s.id
-                FROM $table_session_course sc
-                INNER JOIN $table_session s
-                ON (sc.session_id = s.id)
-                INNER JOIN $url u
-                ON (u.session_id = s.id)
-                WHERE
-                    u.access_url_id = $urlId AND
-                    sc.c_id = '$courseId' ";
-        $result = Database::query($sql);
-
-        return Database::store_result($result);
+        return Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('s.title', 's.id')
+            ->from('session_rel_course', 'sc')
+            ->innerJoin('sc', 'session', 's', 'sc.session_id = s.id')
+            ->innerJoin('s', 'access_url_rel_session', 'u', 'u.session_id = s.id')
+            ->where('u.access_url_id = :urlId')
+            ->andWhere('sc.c_id = :courseId')
+            ->setParameter('urlId', (int) $urlId)
+            ->setParameter('courseId', $courseId)
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 
     /**
@@ -5550,6 +5606,106 @@ class SessionManager
         }
 
         return $sessionArray;
+    }
+
+    /**
+     * Keeps, in the by-reference backup lists of importCSV(), the base-course subscription and the group
+     * memberships (as user and as tutor) of a teacher the import is about to unsubscribe from the course.
+     */
+    private static function importBackupTeacherRows(
+        int $teacherId,
+        string $courseCode,
+        int $courseId,
+        array &$teacherBackupList,
+        array &$groupBackup
+    ): void {
+        $connection = Container::getEntityManager()->getConnection();
+
+        $userCourseData = $connection->createQueryBuilder()
+            ->select('*')
+            ->from('course_rel_user')
+            ->where('user_id = :userId')
+            ->andWhere('c_id = :courseId')
+            ->setParameter('userId', $teacherId)
+            ->setParameter('courseId', $courseId)
+            ->executeQuery()
+            ->fetchAssociative();
+        if (!empty($userCourseData)) {
+            $teacherBackupList[$teacherId][$courseCode] = $userCourseData;
+        }
+
+        $groupUsers = $connection->createQueryBuilder()
+            ->select('*')
+            ->from('c_group_rel_user')
+            ->where('user_id = :userId')
+            ->andWhere('c_id = :courseId')
+            ->setParameter('userId', $teacherId)
+            ->setParameter('courseId', $courseId)
+            ->executeQuery()
+            ->fetchAllAssociative();
+        foreach ($groupUsers as $groupData) {
+            $groupBackup['user'][$teacherId][$courseCode][$groupData['group_id']] = $groupData;
+        }
+
+        $groupTutors = $connection->createQueryBuilder()
+            ->select('*')
+            ->from('c_group_rel_tutor')
+            ->where('user_id = :userId')
+            ->andWhere('c_id = :courseId')
+            ->setParameter('userId', $teacherId)
+            ->setParameter('courseId', $courseId)
+            ->executeQuery()
+            ->fetchAllAssociative();
+        foreach ($groupTutors as $groupData) {
+            $groupBackup['tutor'][$teacherId][$courseCode][$groupData['group_id']] = $groupData;
+        }
+    }
+
+    /**
+     * Clears what an "update existing session" CSV import rewrites: the students of the session, its courses
+     * and the course students, plus the course coaches when asked to (or when the file lists a single course).
+     */
+    private static function importClearSessionRelations(
+        int $sessionId,
+        bool $updateCourseCoaches,
+        bool $deleteOnlyCourseCoaches
+    ): void {
+        $connection = Container::getEntityManager()->getConnection();
+
+        // Delete session-user relation only for students
+        $connection->createQueryBuilder()
+            ->delete('session_rel_user')
+            ->where('session_id = :sessionId')
+            ->andWhere('relation_type = :relationType')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('relationType', Session::STUDENT)
+            ->executeStatement();
+
+        $connection->createQueryBuilder()
+            ->delete('session_rel_course')
+            ->where('session_id = :sessionId')
+            ->setParameter('sessionId', $sessionId)
+            ->executeStatement();
+
+        // Delete session-course-user relationships students and coaches, or *only* students.
+        $statuses = $updateCourseCoaches ? [Session::STUDENT, Session::COURSE_COACH] : [Session::STUDENT];
+        $connection->createQueryBuilder()
+            ->delete('session_rel_course_rel_user')
+            ->where('session_id = :sessionId')
+            ->andWhere('status IN (:statuses)')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('statuses', $statuses, ArrayParameterType::INTEGER)
+            ->executeStatement();
+
+        if ($deleteOnlyCourseCoaches) {
+            $connection->createQueryBuilder()
+                ->delete('session_rel_course_rel_user')
+                ->where('session_id = :sessionId')
+                ->andWhere('status = :status')
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('status', Session::COURSE_COACH)
+                ->executeStatement();
+        }
     }
 
     /**
@@ -5598,7 +5754,6 @@ class SessionManager
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $rows = Import::csvToArray($file);
         if (empty($rows) || !is_array($rows)) {
@@ -5765,10 +5920,14 @@ class SessionManager
                     if ($i > 1) {
                         $suffix = ' - '.$i;
                     }
-                    $sql = 'SELECT id FROM '.$tbl_session.'
-                                WHERE title = "'.Database::escape_string($session_name).$suffix.'"';
-                    $rs = Database::query($sql);
-                    if (Database::result($rs, 0, 0)) {
+                    $existingId = Container::getEntityManager()->getConnection()->createQueryBuilder()
+                        ->select('id')
+                        ->from('session')
+                        ->where('title = :title')
+                        ->setParameter('title', $session_name.$suffix)
+                        ->executeQuery()
+                        ->fetchOne();
+                    if ($existingId) {
                         $i++;
                     } else {
                         $unique_name = true;
@@ -5801,8 +5960,9 @@ class SessionManager
                 if ($session_id) {
 
                     $em = Database::getManager();
-                    $coach = $em->contains($coach) ? $coach : $em->merge($coach);
-                    $defaultUser = $em->contains($defaultUser) ? $defaultUser : $em->merge($defaultUser);
+                    // Processing a previous row can detach these entities (ORM 3 has no merge()): reload them.
+                    $coach = $em->contains($coach) ? $coach : $em->find(User::class, (int) $coach->getId());
+                    $defaultUser = $em->contains($defaultUser) ? $defaultUser : $em->find(User::class, (int) $defaultUser->getId());
 
                     $session->addUserInSession(Session::GENERAL_COACH, $coach);
                     $session->addUserInSession(Session::GENERAL_COACH, $defaultUser);
@@ -5888,30 +6048,7 @@ class SessionManager
                             $logger->debug("Sessions - #$session_id created: $session_name");
                         }
 
-                        // Delete session-user relation only for students
-                        $sql = "DELETE FROM $tbl_session_user
-                                    WHERE session_id = '$session_id' AND relation_type = ".Session::STUDENT;
-                        Database::query($sql);
-
-                        $sql = "DELETE FROM $tbl_session_course WHERE session_id = '$session_id'";
-                        Database::query($sql);
-
-                        // Delete session-course-user relationships students and coaches.
-                        if ($updateCourseCoaches) {
-                            $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status in (".Session::STUDENT.", ".Session::COURSE_COACH.")";
-                            Database::query($sql);
-                        } else {
-                            // Delete session-course-user relation ships *only* for students.
-                            $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status =".Session::STUDENT;
-                            Database::query($sql);
-                        }
-                        if ($deleteOnlyCourseCoaches) {
-                            $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status = ".Session::COURSE_COACH;
-                            Database::query($sql);
-                        }
+                        self::importClearSessionRelations((int) $session_id, $updateCourseCoaches, $deleteOnlyCourseCoaches);
                     }
                 } else {
                     // Updating the session.
@@ -5945,9 +6082,13 @@ class SessionManager
                         if (!empty($enreg['SessionName'])) {
                             $sessionExistsWithName = self::get_session_by_name($session_name);
                             if (false === $sessionExistsWithName) {
-                                $sessionName = Database::escape_string($enreg['SessionName']);
-                                $sql = "UPDATE $tbl_session SET title = '$sessionName' WHERE id = $session_id";
-                                Database::query($sql);
+                                Container::getEntityManager()->getConnection()->createQueryBuilder()
+                                    ->update('session')
+                                    ->set('title', ':title')
+                                    ->where('id = :id')
+                                    ->setParameter('title', $enreg['SessionName'])
+                                    ->setParameter('id', (int) $session_id)
+                                    ->executeStatement();
                                 $logger->debug(
                                     "Session #$session_id name IS updated with: '$session_name' External id: ".$enreg['extra_'.$extraFieldId]
                                 );
@@ -6012,7 +6153,7 @@ class SessionManager
                         );
 
                         $em = Database::getManager();
-                        $coach = $em->contains($coach) ? $coach : $em->merge($coach);
+                        $coach = $em->contains($coach) ? $coach : $em->find(User::class, (int) $coach->getId());
                         api_get_session_entity($session_id)->addUserInSession(Session::GENERAL_COACH, $coach);
                         $em->flush();
 
@@ -6026,31 +6167,7 @@ class SessionManager
                             $logger->debug("Session updated #$session_id");
                         }
 
-                        // Delete session-user relation only for students
-                        $sql = "DELETE FROM $tbl_session_user
-                                    WHERE session_id = '$session_id' AND relation_type = ".Session::STUDENT;
-                        Database::query($sql);
-
-                        $sql = "DELETE FROM $tbl_session_course WHERE session_id = '$session_id'";
-                        Database::query($sql);
-
-                        // Delete session-course-user relationships students and coaches.
-                        if ($updateCourseCoaches) {
-                            $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status in (".Session::STUDENT.", ".Session::COURSE_COACH.")";
-                            Database::query($sql);
-                        } else {
-                            // Delete session-course-user relation ships *only* for students.
-                            $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status = ".Session::STUDENT;
-                            Database::query($sql);
-                        }
-
-                        if ($deleteOnlyCourseCoaches) {
-                            $sql = "DELETE FROM $tbl_session_course_user
-                                        WHERE session_id = '$session_id' AND status = ".Session::COURSE_COACH;
-                            Database::query($sql);
-                        }
+                        self::importClearSessionRelations((int) $session_id, $updateCourseCoaches, $deleteOnlyCourseCoaches);
                     } else {
                         if ($debug) {
                             $logger->debug(
@@ -6143,6 +6260,7 @@ class SessionManager
                     $courseId = $courseInfo['real_id'];
 
                     // Adding the course to a session.
+                    // TODO(db-neutral): INSERT IGNORE ... SET (a repeated course in the file is a no-op)
                     $sql = "INSERT IGNORE INTO $tbl_session_course
                                 SET c_id = '$courseId', session_id='$session_id'";
                     Database::query($sql);
@@ -6255,42 +6373,13 @@ class SessionManager
                             if (!empty($teacherList)) {
                                 foreach ($teacherList as $teacher) {
                                     if ($teacherToAdd != $teacher['user_id']) {
-                                        $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                                                    WHERE
-                                                        user_id = ".$teacher['user_id']." AND
-                                                        c_id = '".$courseId."'
-                                                    ";
-
-                                        $result = Database::query($sql);
-                                        $rows = Database::num_rows($result);
-                                        if ($rows > 0) {
-                                            $userCourseData = Database::fetch_assoc($result);
-                                            if (!empty($userCourseData)) {
-                                                $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
-                                            }
-                                        }
-
-                                        $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
-                                                    WHERE
-                                                        user_id = ".$teacher['user_id']." AND
-                                                        c_id = '".$courseInfo['real_id']."'
-                                                    ";
-
-                                        $result = Database::query($sql);
-                                        while ($groupData = Database::fetch_assoc($result)) {
-                                            $groupBackup['user'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
-                                        }
-
-                                        $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)."
-                                                    WHERE
-                                                        user_id = ".$teacher['user_id']." AND
-                                                        c_id = '".$courseInfo['real_id']."'
-                                                    ";
-
-                                        $result = Database::query($sql);
-                                        while ($groupData = Database::fetch_assoc($result)) {
-                                            $groupBackup['tutor'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
-                                        }
+                                        self::importBackupTeacherRows(
+                                            (int) $teacher['user_id'],
+                                            $course_code,
+                                            (int) $courseId,
+                                            $teacherBackupList,
+                                            $groupBackup
+                                        );
 
                                         CourseManager::unsubscribe_user(
                                             $teacher['user_id'],
@@ -6387,42 +6476,13 @@ class SessionManager
                                 if (!empty($teacherList)) {
                                     foreach ($teacherList as $teacher) {
                                         if (!in_array($teacher['user_id'], $teacherToAdd)) {
-                                            $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                                                        WHERE
-                                                            user_id = ".$teacher['user_id']." AND
-                                                            c_id = '".$courseId."'
-                                                        ";
-
-                                            $result = Database::query($sql);
-                                            $rows = Database::num_rows($result);
-                                            if ($rows > 0) {
-                                                $userCourseData = Database::fetch_assoc($result);
-                                                if (!empty($userCourseData)) {
-                                                    $teacherBackupList[$teacher['user_id']][$course_code] = $userCourseData;
-                                                }
-                                            }
-
-                                            $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_USER)."
-                                                        WHERE
-                                                            user_id = ".$teacher['user_id']." AND
-                                                            c_id = '".$courseInfo['real_id']."'
-                                                        ";
-
-                                            $result = Database::query($sql);
-                                            while ($groupData = Database::fetch_assoc($result)) {
-                                                $groupBackup['user'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
-                                            }
-
-                                            $sql = "SELECT * FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)."
-                                                        WHERE
-                                                            user_id = ".$teacher['user_id']." AND
-                                                            c_id = '".$courseInfo['real_id']."'
-                                                        ";
-
-                                            $result = Database::query($sql);
-                                            while ($groupData = Database::fetch_assoc($result)) {
-                                                $groupBackup['tutor'][$teacher['user_id']][$course_code][$groupData['group_id']] = $groupData;
-                                            }
+                                            self::importBackupTeacherRows(
+                                                (int) $teacher['user_id'],
+                                                $course_code,
+                                                (int) $courseId,
+                                                $teacherBackupList,
+                                                $groupBackup
+                                            );
 
                                             CourseManager::unsubscribe_user(
                                                 $teacher['user_id'],
@@ -6543,9 +6603,15 @@ class SessionManager
             }
             $access_url_id = api_get_current_access_url_id();
             UrlManager::add_session_to_url($session_id, $access_url_id);
-            $sql = "UPDATE $tbl_session SET nbr_users = '$user_counter', nbr_courses = '$course_counter'
-                        WHERE id = '$session_id'";
-            Database::query($sql);
+            Container::getEntityManager()->getConnection()->createQueryBuilder()
+                ->update('session')
+                ->set('nbr_users', ':users')
+                ->set('nbr_courses', ':courses')
+                ->where('id = :id')
+                ->setParameter('users', $user_counter)
+                ->setParameter('courses', $course_counter)
+                ->setParameter('id', (int) $session_id)
+                ->executeStatement();
 
             self::addClassesByName($session_id, $classes, false);
 
@@ -6734,9 +6800,14 @@ class SessionManager
                         'session_category_id' => $sessionCategoryId,
                     ], ['id = ?' => $sessionId]);
 
-                    Database::query("DELETE FROM $tblSessionUser WHERE session_id = $sessionId");
-                    Database::query("DELETE FROM $tblSessionCourse WHERE session_id = $sessionId");
-                    Database::query("DELETE FROM $tblSessionCourseUser WHERE session_id = $sessionId");
+                    $connection = Container::getEntityManager()->getConnection();
+                    foreach (['session_rel_user', 'session_rel_course', 'session_rel_course_rel_user'] as $relationTable) {
+                        $connection->createQueryBuilder()
+                            ->delete($relationTable)
+                            ->where('session_id = :sessionId')
+                            ->setParameter('sessionId', (int) $sessionId)
+                            ->executeStatement();
+                    }
                 } else {
                     $sessionId = Database::insert($tblSession, [
                         'title' => $sessionName,
@@ -6885,25 +6956,22 @@ class SessionManager
      */
     public static function getCoachesByCourseSession($sessionId, $courseId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $sessionId = (int) $sessionId;
         $courseId = (int) $courseId;
 
-        $sql = "SELECT user_id FROM $table
-                WHERE
-                    session_id = '$sessionId' AND
-                    c_id = '$courseId' AND
-                    status = ".Session::COURSE_COACH;
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(scru.user) AS user_id')
+            ->from(SessionRelCourseRelUser::class, 'scru')
+            ->where('IDENTITY(scru.session) = :sessionId')
+            ->andWhere('IDENTITY(scru.course) = :courseId')
+            ->andWhere('scru.status = :status')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('status', Session::COURSE_COACH)
+            ->getQuery()
+            ->getArrayResult();
 
-        $coaches = [];
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result)) {
-                $coaches[] = $row['user_id'];
-            }
-        }
-
-        return $coaches;
+        return array_column($rows, 'user_id');
     }
 
     /**
@@ -6943,22 +7011,19 @@ class SessionManager
      */
     public static function getCoachesBySession($sessionId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
 
-        $sql = "SELECT DISTINCT user_id
-                FROM $table
-                WHERE session_id = '$sessionId' AND status = ".Session::COURSE_COACH;
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT IDENTITY(scru.user) AS user_id')
+            ->from(SessionRelCourseRelUser::class, 'scru')
+            ->where('IDENTITY(scru.session) = :sessionId')
+            ->andWhere('scru.status = :status')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('status', Session::COURSE_COACH)
+            ->getQuery()
+            ->getArrayResult();
 
-        $coaches = [];
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result)) {
-                $coaches[] = $row['user_id'];
-            }
-        }
-
-        return $coaches;
+        return array_column($rows, 'user_id');
     }
 
     /**
@@ -7216,6 +7281,7 @@ class SessionManager
                 ";
 
         if ($getCount) {
+            // TODO(db-neutral): UNION and SQL fragments built by the caller; not pinned by a test
             $result = Database::query($sql);
 
             $count = 0;
@@ -7520,22 +7586,22 @@ class SessionManager
                 }
 
                 $sessionIdList = array_map('intval', $sessionIdList);
-                $sessionToString = implode("', '", $sessionIdList);
 
-                $course = Database::get_main_table(TABLE_MAIN_COURSE);
-                $sessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-                $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
-                // Select the teachers.
-                $sql = "SELECT DISTINCT(cu.user_id)
-                        FROM $course c
-                        INNER JOIN $sessionCourse src
-                        ON c.id = src.c_id
-                        INNER JOIN $courseUser cu
-                        ON (cu.c_id = c.id)
-		                WHERE src.session_id IN ('$sessionToString') AND cu.status = 1";
-                $result = Database::query($sql);
-                while ($row = Database::fetch_assoc($result)) {
+                // Select the teachers (an empty session list matches no row).
+                $teacherRows = [];
+                if (!empty($sessionIdList)) {
+                    $teacherRows = Container::getEntityManager()->getConnection()->createQueryBuilder()
+                        ->select('DISTINCT cu.user_id')
+                        ->from('course', 'c')
+                        ->innerJoin('c', 'session_rel_course', 'src', 'c.id = src.c_id')
+                        ->innerJoin('c', 'course_rel_user', 'cu', 'cu.c_id = c.id')
+                        ->where('src.session_id IN (:sessionIdList)')
+                        ->andWhere('cu.status = 1')
+                        ->setParameter('sessionIdList', $sessionIdList, ArrayParameterType::INTEGER)
+                        ->executeQuery()
+                        ->fetchAllAssociative();
+                }
+                foreach ($teacherRows as $row) {
                     $teacherListId[$row['user_id']] = $row['user_id'];
                 }
             } else {
@@ -7547,38 +7613,22 @@ class SessionManager
         }
 
         if (!empty($teacherListId)) {
-            $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+            // Wide user rows (legacy shape): DBAL QueryBuilder.
+            $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+                ->select($getCount ? 'count(DISTINCT(u.id)) AS count' : 'DISTINCT u.*')
+                ->from('user', 'u')
+                ->where('u.active = :active')
+                ->andWhere('u.id IN (:teacherListId)')
+                ->setParameter('active', (int) $active)
+                ->setParameter('teacherListId', array_map('intval', array_values($teacherListId)), ArrayParameterType::INTEGER);
 
-            $select = "SELECT DISTINCT u.* ";
-            if ($getCount) {
-                $select = "SELECT count(DISTINCT(u.id)) as count";
-            }
-
-            $sql = "$select FROM $tableUser u";
-
-            if (!empty($lastConnectionDate)) {
-                $tableLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-                //$sql .= " INNER JOIN $tableLogin l ON (l.login_user_id = u.user_id) ";
-            }
-            $active = intval($active);
-            $teacherListId = implode("','", $teacherListId);
-            $where = " WHERE u.active = $active AND u.id IN ('$teacherListId') ";
-
-            if (!empty($lastConnectionDate)) {
-                $lastConnectionDate = Database::escape_string($lastConnectionDate);
-                //$where .= " AND l.login_date <= '$lastConnectionDate' ";
-            }
-
-            $sql .= $where;
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
+            $rows = $qb->executeQuery()->fetchAllAssociative();
+            if (count($rows) > 0) {
                 if ($getCount) {
-                    $row = Database::fetch_array($result);
-
-                    return $row['count'];
-                } else {
-                    return Database::store_result($result, 'ASSOC');
+                    return $rows[0]['count'];
                 }
+
+                return $rows;
             }
         }
 
@@ -7802,7 +7852,7 @@ class SessionManager
         $sessionId = intval($sessionId);
         $courseId = intval($courseId);
 
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $connection = Container::getEntityManager()->getConnection();
         $courseList = self::get_course_list_by_session_id($sessionId, null, 'position');
 
         $position = [];
@@ -7813,9 +7863,15 @@ class SessionManager
             }
             $position[$course['code']] = $course['position'];
             // Saving current order.
-            $sql = "UPDATE $table SET position = $count
-                    WHERE session_id = $sessionId AND c_id = '".$course['real_id']."'";
-            Database::query($sql);
+            $connection->createQueryBuilder()
+                ->update('session_rel_course')
+                ->set('position', ':position')
+                ->where('session_id = :sessionId')
+                ->andWhere('c_id = :courseId')
+                ->setParameter('position', $count)
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('courseId', (int) $course['real_id'])
+                ->executeStatement();
             $count++;
         }
 
@@ -7851,13 +7907,17 @@ class SessionManager
             return false;
         }
 
-        $sql1 = "UPDATE $table SET position = '".intval($nextOrder)."'
-                 WHERE session_id = $sessionId AND c_id =  $thisCourseCode";
-        Database::query($sql1);
-
-        $sql2 = "UPDATE $table SET position = '".intval($thisOrder)."'
-                 WHERE session_id = $sessionId AND c_id = $nextId";
-        Database::query($sql2);
+        foreach ([[$thisCourseCode, $nextOrder], [$nextId, $thisOrder]] as [$swapCourseId, $swapPosition]) {
+            $connection->createQueryBuilder()
+                ->update('session_rel_course')
+                ->set('position', ':position')
+                ->where('session_id = :sessionId')
+                ->andWhere('c_id = :courseId')
+                ->setParameter('position', (int) $swapPosition)
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('courseId', (int) $swapCourseId)
+                ->executeStatement();
+        }
 
         return true;
     }
@@ -7974,16 +8034,17 @@ class SessionManager
             return false;
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $sql = "SELECT * FROM $table
-                WHERE session_id = $sessionId AND user_id = $userId";
-        $result = Database::query($sql);
-        $values = [];
-        if (Database::num_rows($result)) {
-            $values = Database::fetch_assoc($result);
-        }
+        $values = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from('session_rel_user')
+            ->where('session_id = :sessionId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('userId', $userId)
+            ->executeQuery()
+            ->fetchAssociative();
 
-        return $values;
+        return false === $values ? [] : $values;
     }
 
     /**
@@ -7996,25 +8057,22 @@ class SessionManager
      */
     public static function isUserSubscribedAsStudent($sessionId, $userId)
     {
-        $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $sessionId = (int) $sessionId;
         $userId = (int) $userId;
 
-        // COUNT(1) actually returns the number of rows from the table (as if
-        // counting the results from the first column)
-        $sql = "SELECT COUNT(1) AS qty FROM $sessionRelUserTable
-                WHERE
-                    session_id = $sessionId AND
-                    user_id = $userId AND
-                    relation_type = ".Session::STUDENT;
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(sru.id)')
+            ->from(SessionRelUser::class, 'sru')
+            ->where('IDENTITY(sru.session) = :sessionId')
+            ->andWhere('IDENTITY(sru.user) = :userId')
+            ->andWhere('sru.relationType = :relationType')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('userId', $userId)
+            ->setParameter('relationType', Session::STUDENT)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $result = Database::fetch_assoc(Database::query($sql));
-
-        if (!empty($result) && $result['qty'] > 0) {
-            return true;
-        }
-
-        return false;
+        return $count > 0;
     }
 
     /**
@@ -8027,26 +8085,22 @@ class SessionManager
      */
     public static function isUserSubscribedAsHRM($sessionId, $userId)
     {
-        $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-
         $sessionId = (int) $sessionId;
         $userId = (int) $userId;
 
-        // COUNT(1) actually returns the number of rows from the table (as if
-        // counting the results from the first column)
-        $sql = "SELECT COUNT(1) AS qty FROM $sessionRelUserTable
-                WHERE
-                    session_id = $sessionId AND
-                    user_id = $userId AND
-                    relation_type = ".Session::DRH;
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(sru.id)')
+            ->from(SessionRelUser::class, 'sru')
+            ->where('IDENTITY(sru.session) = :sessionId')
+            ->andWhere('IDENTITY(sru.user) = :userId')
+            ->andWhere('sru.relationType = :relationType')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('userId', $userId)
+            ->setParameter('relationType', Session::DRH)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $result = Database::fetch_assoc(Database::query($sql));
-
-        if (!empty($result) && $result['qty'] > 0) {
-            return true;
-        }
-
-        return false;
+        return $count > 0;
     }
 
     /**
@@ -8117,29 +8171,18 @@ class SessionManager
      */
     public static function sessionHasCourse($sessionId, $courseCode)
     {
-        $sessionId = (int) $sessionId;
-        $courseCode = Database::escape_string($courseCode);
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sessionRelCourseTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(src.id)')
+            ->from(SessionRelCourse::class, 'src')
+            ->innerJoin('src.course', 'c')
+            ->where('IDENTITY(src.session) = :sessionId')
+            ->andWhere('c.code = :code')
+            ->setParameter('sessionId', (int) $sessionId)
+            ->setParameter('code', (string) $courseCode)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $sql = "SELECT COUNT(1) AS qty
-                FROM $courseTable c
-                INNER JOIN $sessionRelCourseTable src
-                ON c.id = src.c_id
-                WHERE src.session_id = $sessionId
-                AND c.code = '$courseCode'  ";
-
-        $result = Database::query($sql);
-
-        if (false !== $result) {
-            $data = Database::fetch_assoc($result);
-
-            if ($data['qty'] > 0) {
-                return true;
-            }
-        }
-
-        return false;
+        return $count > 0;
     }
 
     /**
@@ -8210,42 +8253,26 @@ class SessionManager
      */
     public static function getTotalUserCoursesInSession($sessionId, $courseId = 0)
     {
-        $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
         $sessionId = (int) $sessionId;
 
         if (empty($sessionId)) {
             return [];
         }
 
-        $courseCondition = '';
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('COUNT(u.id) AS count', 'u.id', 'scu.status AS status_in_session', 'u.status AS user_status')
+            ->from('session_rel_course_rel_user', 'scu')
+            ->innerJoin('scu', 'user', 'u', 'scu.user_id = u.id')
+            ->where('scu.session_id = :sessionId')
+            ->groupBy('u.id')
+            ->setParameter('sessionId', $sessionId);
+
         if (!empty($courseId)) {
-            $courseId = (int) $courseId;
-            $courseCondition = "  c_id = $courseId AND ";
+            $qb->andWhere('scu.c_id = :courseId')
+                ->setParameter('courseId', (int) $courseId);
         }
 
-        $sql = "SELECT
-                    COUNT(u.id) as count,
-                    u.id,
-                    scu.status status_in_session,
-                    u.status user_status
-                FROM $table scu
-                INNER JOIN $tableUser u
-                ON scu.user_id = u.id
-                WHERE
-                  $courseCondition
-                  scu.session_id = ".$sessionId."
-                GROUP BY u.id";
-
-        $result = Database::query($sql);
-
-        $list = [];
-        while ($data = Database::fetch_assoc($result)) {
-            $list[] = $data;
-        }
-
-        return $list;
+        return $qb->executeQuery()->fetchAllAssociative();
     }
 
     /**
@@ -8474,9 +8501,6 @@ class SessionManager
      */
     public static function getSessionsFollowedForGroupAdmin($userId)
     {
-        $sessionList = [];
-        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
-        $sessionUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $userGroup = new UserGroupModel();
         $userIdList = $userGroup->getGroupUsersByUser($userId);
 
@@ -8484,39 +8508,26 @@ class SessionManager
             return [];
         }
 
-        $sql = "SELECT DISTINCT s.*
-                FROM $sessionTable s
-                INNER JOIN $sessionUserTable sru
-                ON s.id = sru.session_id
-                WHERE
-                    (sru.user_id IN (".implode(', ', array_map('intval', $userIdList)).")
-                    AND sru.relation_type = ".Session::STUDENT."
-                )";
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('DISTINCT s.*')
+            ->from('session', 's')
+            ->innerJoin('s', 'session_rel_user', 'sru', 's.id = sru.session_id')
+            ->where('sru.user_id IN (:userIdList)')
+            ->andWhere('sru.relation_type = :relationType')
+            ->setParameter('userIdList', array_map('intval', $userIdList), ArrayParameterType::INTEGER)
+            ->setParameter('relationType', Session::STUDENT);
 
         if (api_is_multiple_url_enabled()) {
-            $sessionAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $accessUrlId = api_get_current_access_url_id();
 
             if (-1 != $accessUrlId) {
-                $sql = "SELECT DISTINCT s.*
-                        FROM $sessionTable s
-                        INNER JOIN $sessionUserTable sru ON s.id = sru.session_id
-                        INNER JOIN $sessionAccessUrlTable srau ON s.id = srau.session_id
-                        WHERE
-                            srau.access_url_id = $accessUrlId
-                            AND (
-                                sru.user_id IN (".implode(', ', array_map('intval', $userIdList)).")
-                                AND sru.relation_type = ".Session::STUDENT."
-                            )";
+                $qb->innerJoin('s', 'access_url_rel_session', 'srau', 's.id = srau.session_id')
+                    ->andWhere('srau.access_url_id = :accessUrlId')
+                    ->setParameter('accessUrlId', (int) $accessUrlId);
             }
         }
 
-        $result = Database::query($sql);
-        while ($row = Database::fetch_assoc($result)) {
-            $sessionList[] = $row;
-        }
-
-        return $sessionList;
+        return $qb->executeQuery()->fetchAllAssociative();
     }
 
     public static function getSessionVisibility(Session $session) : string
@@ -8585,7 +8596,6 @@ class SessionManager
         }
 
         // Database Table Definitions
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
         $form->addText(
             'title',
@@ -8609,37 +8619,40 @@ class SessionManager
                 'getFullname'
             );
         } else {
-            $sql = "SELECT COUNT(1) FROM $tbl_user WHERE active <> ".USER_SOFT_DELETED." AND status = 1";
-            $rs = Database::query($sql);
-            $countUsers = (int) Database::result($rs, 0, '0');
+            $connection = Container::getEntityManager()->getConnection();
+            $countUsers = (int) $connection->createQueryBuilder()
+                ->select('COUNT(1)')
+                ->from('user')
+                ->where('active <> :softDeleted')
+                ->andWhere('status = 1')
+                ->setParameter('softDeleted', USER_SOFT_DELETED)
+                ->executeQuery()
+                ->fetchOne();
 
             if ($countUsers < 1) {
-                $orderClause = 'ORDER BY ';
-                $orderClause .= api_sort_by_first_name() ? 'firstname, lastname, username' : 'lastname, firstname, username';
-
-                $sql = "SELECT id as user_id, lastname, firstname, username
-                        FROM $tbl_user
-                        WHERE active <> -1 AND status = '1' ".
-                        $orderClause;
+                $coachesQb = $connection->createQueryBuilder()
+                    ->select('u.id AS user_id', 'u.lastname', 'u.firstname', 'u.username')
+                    ->from('user', 'u')
+                    ->where('u.active <> -1')
+                    ->andWhere('u.status = 1');
 
                 if (api_is_multiple_url_enabled()) {
-                    $userRelAccessUrlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
                     $accessUrlId = api_get_current_access_url_id();
                     if (-1 != $accessUrlId) {
-                        $sql = "SELECT user.id as user_id, username, lastname, firstname
-                        FROM $tbl_user user
-                        INNER JOIN $userRelAccessUrlTable url_user
-                        ON (url_user.user_id = user.id)
-                        WHERE
-                            user.active <> -1 AND
-                            access_url_id = $accessUrlId AND
-                            status = 1 "
-                            .$orderClause;
+                        $coachesQb
+                            ->innerJoin('u', 'access_url_rel_user', 'url_user', 'url_user.user_id = u.id')
+                            ->andWhere('url_user.access_url_id = :accessUrlId')
+                            ->setParameter('accessUrlId', (int) $accessUrlId);
                     }
                 }
 
-                $result = Database::query($sql);
-                $coachesList = Database::store_result($result);
+                if (api_sort_by_first_name()) {
+                    $coachesQb->orderBy('u.firstname')->addOrderBy('u.lastname')->addOrderBy('u.username');
+                } else {
+                    $coachesQb->orderBy('u.lastname')->addOrderBy('u.firstname')->addOrderBy('u.username');
+                }
+
+                $coachesList = $coachesQb->executeQuery()->fetchAllAssociative();
                 $coachesOptions = [];
                 foreach ($coachesList as $coachItem) {
                     $coachesOptions[$coachItem['user_id']] =
@@ -9150,6 +9163,7 @@ class SessionManager
             }
         }
 
+        // TODO(db-neutral): IF(), CAST AS CHAR, GROUP BY ... HAVING and a free-form where condition built by the jqGrid code
         $result = Database::query($query_rows);
         $num = 0;
         if (Database::num_rows($result)) {
@@ -9848,6 +9862,7 @@ class SessionManager
             $query .= ' ORDER BY '.$options['order'];
         }
 
+        // TODO(db-neutral): IF(), CAST AS CHAR, free-form where/order conditions built by the jqGrid code
         $result = Database::query($query);
 
         $acceptIcon = Display::getMdiIcon(StateIcon::ACTIVE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Active'));
@@ -10005,20 +10020,19 @@ class SessionManager
     {
         $userId = (int) $userId;
         $listResCourseSession = [];
-        $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tblSessionRelCourseRelUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $sql = "SELECT session_id, c_id, c.id
-                FROM $tblSessionRelCourseRelUser srcru
-                LEFT JOIN $tblCourse c
-                ON c.id = srcru.c_id
-                WHERE
-                    srcru.user_id = $userId AND
-                    srcru.status = ".Session::COURSE_COACH;
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(srcru.session) AS session_id', 'c.id')
+            ->from(SessionRelCourseRelUser::class, 'srcru')
+            ->leftJoin('srcru.course', 'c')
+            ->where('IDENTITY(srcru.user) = :userId')
+            ->andWhere('srcru.status = :status')
+            ->setParameter('userId', $userId)
+            ->setParameter('status', Session::COURSE_COACH)
+            ->getQuery()
+            ->getArrayResult();
 
-        $res = Database::query($sql);
-
-        while ($data = Database::fetch_assoc($res)) {
+        foreach ($rows as $data) {
             if (api_get_session_visibility($data['session_id'])) {
                 if (!isset($listResCourseSession[$data['id']])) {
                     $listResCourseSession[$data['id']] = [];
@@ -10075,23 +10089,17 @@ class SessionManager
             return [];
         }
 
-        $tblSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tblCourse = Database::get_main_table(TABLE_MAIN_COURSE);
-
         // list of course in this session
-        $sql = "SELECT session_id, c.id
-                FROM $tblSessionRelCourse src
-                LEFT JOIN $tblCourse c
-                ON c.id = src.c_id
-                WHERE session_id = ".intval($sessionId);
-        $res = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('c.id')
+            ->from(SessionRelCourse::class, 'src')
+            ->leftJoin('src.course', 'c')
+            ->where('IDENTITY(src.session) = :sessionId')
+            ->setParameter('sessionId', (int) $sessionId)
+            ->getQuery()
+            ->getArrayResult();
 
-        $listResultsCourseId = [];
-        while ($data = Database::fetch_assoc($res)) {
-            $listResultsCourseId[] = $data['id'];
-        }
-
-        return $listResultsCourseId;
+        return array_column($rows, 'id');
     }
 
     /**
@@ -10102,18 +10110,22 @@ class SessionManager
      */
     public static function searchCourseInSessionsFromUser($userId, $courseId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $userId = (int) $userId;
         $courseId = (int) $courseId;
         if (empty($userId) || empty($courseId)) {
             return [];
         }
 
-        $sql = "SELECT * FROM $table
-                WHERE c_id = $courseId AND user_id = $userId";
-        $result = Database::query($sql);
-
-        return Database::store_result($result, 'ASSOC');
+        // Wide table read as is (legacy row shape): DBAL QueryBuilder.
+        return Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from('session_rel_course_rel_user')
+            ->where('c_id = :courseId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $userId)
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 
     /**
@@ -10409,32 +10421,24 @@ class SessionManager
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
 
-        $tblSession = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('s.id')
+            ->from('session', 's')
+            ->innerJoin('s', 'session_rel_user', 'sru', 'sru.session_id = s.id')
+            ->where('sru.user_id = :userId')
+            ->andWhere('sru.session_id = :sessionId')
+            ->andWhere('sru.relation_type = :relationType')
+            ->setParameter('userId', $userId)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('relationType', Session::DRH);
 
         if (api_is_multiple_url_enabled()) {
-            $tblSessionRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-
-            $sql = "SELECT s.id FROM $tblSession s
-                INNER JOIN $tblSessionRelUser sru ON (sru.session_id = s.id)
-                LEFT JOIN $tblSessionRelAccessUrl a ON (s.id = a.session_id)
-                WHERE
-                    sru.user_id = '$userId' AND
-                    sru.session_id = '$sessionId' AND
-                    sru.relation_type = '".Session::DRH."' AND
-                    access_url_id = ".api_get_current_access_url_id();
-        } else {
-            $sql = "SELECT s.id FROM $tblSession s
-                INNER JOIN $tblSessionRelUser sru ON sru.session_id = s.id
-                WHERE
-                    sru.user_id = '$userId' AND
-                    sru.session_id = '$sessionId' AND
-                    sru.relation_type = '".Session::DRH."'";
+            $qb->leftJoin('s', 'access_url_rel_session', 'a', 's.id = a.session_id')
+                ->andWhere('a.access_url_id = :accessUrlId')
+                ->setParameter('accessUrlId', (int) api_get_current_access_url_id());
         }
 
-        $result = Database::query($sql);
-
-        return Database::num_rows($result) > 0;
+        return count($qb->executeQuery()->fetchAllAssociative()) > 0;
     }
 
     /**
@@ -10801,11 +10805,14 @@ class SessionManager
     public static function getListOfParentSessions(): array
     {
         $sessions = [];
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $sql = "SELECT id, title FROM $tbl_session ORDER BY title";
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('s.id AS id', 's.title AS title')
+            ->from(Session::class, 's')
+            ->orderBy('s.title', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
 
-        while ($row = Database::fetch_array($result)) {
+        foreach ($rows as $row) {
             $sessions[$row['id']] = $row['title'];
         }
 
@@ -11039,17 +11046,18 @@ class SessionManager
             return [];
         }
 
-        $tableSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-
-        $sql = "SELECT user_id
-            FROM $tableSessionRelUser
-            WHERE session_id = $sessionId
-              AND relation_type = ".Session::STUDENT;
-
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(sru.user) AS user_id')
+            ->from(SessionRelUser::class, 'sru')
+            ->where('IDENTITY(sru.session) = :sessionId')
+            ->andWhere('sru.relationType = :relationType')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('relationType', Session::STUDENT)
+            ->getQuery()
+            ->getArrayResult();
         $userIds = [];
 
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             $userId = (int) $row['user_id'];
             $userIds[$userId] = $userId;
         }

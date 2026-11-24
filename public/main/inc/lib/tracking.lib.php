@@ -16,6 +16,8 @@ use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Query\QueryBuilder as DbalQueryBuilder;
 use Doctrine\ORM\QueryBuilder;
 use ExtraField as ExtraFieldModel;
 
@@ -26,6 +28,84 @@ use ExtraField as ExtraFieldModel;
  */
 class Tracking
 {
+    /**
+     * DBAL query builder for the tracking tables read as raw rows (strings for dates, same types as before).
+     */
+    /**
+     * The row as Database::fetch_array() returned it: the columns by name and then by position.
+     */
+    private static function withNumericKeys(array $row): array
+    {
+        foreach ($row as $value) {
+            $row[] = $value;
+        }
+
+        return $row;
+    }
+
+    private static function dbalQueryBuilder(): DbalQueryBuilder
+    {
+        return Container::getEntityManager()->getConnection()->createQueryBuilder();
+    }
+
+    /**
+     * The non incomplete exercise attempts of a user on one learning path item (the session is added by the caller).
+     */
+    private static function lpExerciseAttemptsQueryBuilder(
+        string $statsExercisesTable,
+        $quizId,
+        int $userId,
+        int $lpId,
+        $lpItemId,
+        $courseId
+    ): DbalQueryBuilder {
+        return self::dbalQueryBuilder()
+            ->from($statsExercisesTable)
+            ->where('exe_exo_id = :quizId')
+            ->andWhere('exe_user_id = :userId')
+            ->andWhere('orig_lp_id = :lpId')
+            ->andWhere('orig_lp_item_id = :lpItemId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere("status <> 'incomplete'")
+            ->setParameter('quizId', (string) $quizId)
+            ->setParameter('userId', $userId)
+            ->setParameter('lpId', $lpId)
+            ->setParameter('lpItemId', (string) $lpItemId)
+            ->setParameter('courseId', (int) $courseId);
+    }
+
+    /**
+     * The results_disabled setting of the quiz a learning path item points to (the path is compared as a string).
+     */
+    private static function quizResultsDisabled(string $quizTable, string $quizId): int
+    {
+        return (int) self::dbalQueryBuilder()
+            ->select('results_disabled')
+            ->from($quizTable)
+            ->where('iid = :quizId')
+            ->setParameter('quizId', $quizId)
+            ->executeQuery()
+            ->fetchOne();
+    }
+
+    /**
+     * Bound equivalent of api_get_session_condition($sessionId): the base context (0) also matches NULL.
+     */
+    private static function andSessionCondition(
+        DbalQueryBuilder $qb,
+        int $sessionId,
+        string $sessionField = 'session_id'
+    ): void {
+        if (empty($sessionId)) {
+            $qb->andWhere("($sessionField = 0 OR $sessionField IS NULL)");
+
+            return;
+        }
+
+        $qb->andWhere("$sessionField = :sessionConditionId")
+            ->setParameter('sessionConditionId', $sessionId);
+    }
+
     /**
      * Get group reporting.
      *
@@ -170,8 +250,6 @@ class Tracking
         $list = learnpath::get_flat_ordered_items_list($lp);
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
         $courseId = $course->getId();
-        $session_condition = api_get_session_condition($sessionId);
-
         // Extend all button
         $output = '';
         $extra = '<script>
@@ -292,19 +370,17 @@ class Tracking
         $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tbl_stats_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $sql = "SELECT max(view_count)
-                FROM $TBL_LP_VIEW
-                WHERE
-                    c_id = $courseId AND
-                    lp_id = $lp_id AND
-                    user_id = $user_id
-                    $session_condition";
-        $res = Database::query($sql);
-        $view = 0;
-        if (Database::num_rows($res) > 0) {
-            $myrow = Database::fetch_array($res);
-            $view = (int) $myrow[0];
-        }
+        $viewQb = self::dbalQueryBuilder()
+            ->select('max(view_count)')
+            ->from($TBL_LP_VIEW)
+            ->where('c_id = :courseId')
+            ->andWhere('lp_id = :lpId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('lpId', $lp_id)
+            ->setParameter('userId', $user_id);
+        self::andSessionCondition($viewQb, $sessionId);
+        $view = (int) $viewQb->executeQuery()->fetchOne();
 
         $counter = 0;
         $total_time = 0;
@@ -345,41 +421,40 @@ class Tracking
                 }
 
                 // Prepare statement to go through each attempt.
-                $viewCondition = null;
+                $itemViewQb = self::dbalQueryBuilder()
+                    ->select(
+                        'iv.status as mystatus',
+                        'v.view_count as mycount',
+                        'iv.score as myscore',
+                        'iv.total_time as mytime',
+                        'i.iid as myid',
+                        'i.lp_id as mylpid',
+                        'iv.lp_view_id as mylpviewid',
+                        'i.title as mytitle',
+                        'i.max_score as mymaxscore',
+                        'iv.max_score as myviewmaxscore',
+                        'i.item_type as item_type',
+                        'iv.view_count as iv_view_count',
+                        'iv.iid as iv_id',
+                        'path'
+                    )
+                    ->from($TBL_LP_ITEM, 'i')
+                    ->innerJoin('i', $TBL_LP_ITEM_VIEW, 'iv', 'i.iid = iv.lp_item_id')
+                    ->innerJoin('iv', $TBL_LP_VIEW, 'v', 'iv.lp_view_id = v.iid')
+                    ->where('i.iid = :itemId')
+                    ->andWhere('i.lp_id = :lpId')
+                    ->andWhere('v.user_id = :userId')
+                    ->setParameter('itemId', (int) $my_item_id)
+                    ->setParameter('lpId', $lp_id)
+                    ->setParameter('userId', $user_id)
+                    ->orderBy('iv.view_count', $order);
+                self::andSessionCondition($itemViewQb, $sessionId, 'v.session_id');
                 if (!empty($view)) {
-                    $viewCondition = " AND v.view_count = $view  ";
+                    $itemViewQb->andWhere('v.view_count = :view')->setParameter('view', $view);
                 }
 
-                $sql = "SELECT
-                    iv.status as mystatus,
-                    v.view_count as mycount,
-                    iv.score as myscore,
-                    iv.total_time as mytime,
-                    i.iid as myid,
-                    i.lp_id as mylpid,
-                    iv.lp_view_id as mylpviewid,
-                    i.title as mytitle,
-                    i.max_score as mymaxscore,
-                    iv.max_score as myviewmaxscore,
-                    i.item_type as item_type,
-                    iv.view_count as iv_view_count,
-                    iv.iid as iv_id,
-                    path
-                FROM $TBL_LP_ITEM as i
-                INNER JOIN $TBL_LP_ITEM_VIEW as iv
-                ON (i.iid = iv.lp_item_id)
-                INNER JOIN $TBL_LP_VIEW as v
-                ON (iv.lp_view_id = v.iid)
-                WHERE
-                    i.iid = $my_item_id AND
-                    i.lp_id = $lp_id  AND
-                    v.user_id = $user_id
-                    $session_condition
-                    $viewCondition
-                ORDER BY iv.view_count $order ";
-
-                $result = Database::query($sql);
-                $num = Database::num_rows($result);
+                $itemViewRows = $itemViewQb->executeQuery()->fetchAllAssociative();
+                $num = count($itemViewRows);
                 $time_for_total = 0;
                 $attemptResult = 0;
 
@@ -394,21 +469,11 @@ class Tracking
 
                 // Extend all
                 if (($extend_this || $extend_all) && $num > 0) {
-                    $row = Database::fetch_array($result);
+                    $row = array_shift($itemViewRows);
                     $result_disabled_ext_all = false;
                     if ('quiz' === $row['item_type']) {
                         // Check results_disabled in quiz table.
-                        $my_path = Database::escape_string($row['path']);
-                        $sql = "SELECT results_disabled
-                                FROM $TBL_QUIZ
-                                WHERE
-                                    iid ='".$my_path."'";
-                        $res_result_disabled = Database::query($sql);
-                        $row_result_disabled = Database::fetch_row($res_result_disabled);
-
-                        if (Database::num_rows($res_result_disabled) > 0 &&
-                            1 === (int) $row_result_disabled[0]
-                        ) {
+                        if (1 === self::quizResultsDisabled($TBL_QUIZ, (string) $row['path'])) {
                             $result_disabled_ext_all = true;
                         }
                     }
@@ -727,10 +792,10 @@ class Tracking
                                 $counter++;
                             }
                         }
-                    } while ($row = Database::fetch_array($result));
+                    } while ($row = array_shift($itemViewRows));
                 } elseif ($num > 0) {
                     // Not extended.
-                    $row = Database::fetch_assoc($result);
+                    $row = array_shift($itemViewRows);
                     $my_id = $row['myid'];
                     $my_lp_id = $row['mylpid'];
                     $my_lp_view_id = $row['mylpviewid'];
@@ -738,16 +803,7 @@ class Tracking
                     $result_disabled_ext_all = false;
                     if ('quiz' === $row['item_type']) {
                         // Check results_disabled in quiz table.
-                        $my_path = Database::escape_string($my_path);
-                        $sql = "SELECT results_disabled
-                                FROM $TBL_QUIZ
-                                WHERE iid = '$my_path' ";
-                        $res_result_disabled = Database::query($sql);
-                        $row_result_disabled = Database::fetch_row($res_result_disabled);
-
-                        if (Database::num_rows($res_result_disabled) > 0 &&
-                            1 === (int) $row_result_disabled[0]
-                        ) {
+                        if (1 === self::quizResultsDisabled($TBL_QUIZ, (string) $my_path)) {
                             $result_disabled_ext_all = true;
                         }
                     }
@@ -809,32 +865,27 @@ class Tracking
                     $lesson_status = $row['mystatus'];
                     $score = $row['myscore'];
                     $subtotal_time = $row['mytime'];
-                    while ($tmp_row = Database::fetch_array($result)) {
+                    foreach ($itemViewRows as $tmp_row) {
                         $subtotal_time += $tmp_row['mytime'];
                     }
 
                     $title = $row['mytitle'];
-                    $sessionCondition = api_get_session_condition($sessionId);
                     // Selecting the exe_id from stats attempts tables in order to look the max score value.
-                    $sql = 'SELECT * FROM '.$tbl_stats_exercices.'
-                            WHERE
-                                exe_exo_id="'.$row['path'].'" AND
-                                exe_user_id="'.$user_id.'" AND
-                                orig_lp_id = "'.$lp_id.'" AND
-                                orig_lp_item_id = "'.$row['myid'].'" AND
-                                c_id = '.$courseId.' AND
-                                status <> "incomplete"
-                                '.$sessionCondition.'
-                             ORDER BY exe_date DESC
-                             LIMIT 1';
-
-                    $resultLastAttempt = Database::query($sql);
-                    $num = Database::num_rows($resultLastAttempt);
-                    $id_last_attempt = null;
-                    if ($num > 0) {
-                        while ($rowLA = Database::fetch_array($resultLastAttempt)) {
-                            $id_last_attempt = $rowLA['exe_id'];
-                        }
+                    $lastAttemptQb = self::lpExerciseAttemptsQueryBuilder(
+                        $tbl_stats_exercices,
+                        $row['path'],
+                        $user_id,
+                        $lp_id,
+                        $row['myid'],
+                        $courseId
+                    )
+                        ->select('exe_id')
+                        ->orderBy('exe_date', 'DESC')
+                        ->setMaxResults(1);
+                    self::andSessionCondition($lastAttemptQb, $sessionId);
+                    $id_last_attempt = $lastAttemptQb->executeQuery()->fetchOne();
+                    if (false === $id_last_attempt) {
+                        $id_last_attempt = null;
                     }
 
                     switch ($row['item_type']) {
@@ -849,61 +900,63 @@ class Tracking
                             break;
                         case 'quiz':
                             // Get score and total time from last attempt of a exercise en lp.
-                            $sql = "SELECT iid, score
-                                    FROM $TBL_LP_ITEM_VIEW
-                                    WHERE
-                                        lp_item_id = '".(int) $my_id."' AND
-                                        lp_view_id = '".(int) $my_lp_view_id."'
-                                    ORDER BY view_count DESC
-                                    LIMIT 1";
-                            $res_score = Database::query($sql);
-                            $row_score = Database::fetch_array($res_score);
+                            $row_score = self::dbalQueryBuilder()
+                                ->select('iid', 'score')
+                                ->from($TBL_LP_ITEM_VIEW)
+                                ->where('lp_item_id = :itemId')
+                                ->andWhere('lp_view_id = :viewId')
+                                ->setParameter('itemId', (int) $my_id)
+                                ->setParameter('viewId', (int) $my_lp_view_id)
+                                ->orderBy('view_count', 'DESC')
+                                ->setMaxResults(1)
+                                ->executeQuery()
+                                ->fetchAssociative();
 
-                            $sql = "SELECT SUM(total_time) as total_time
-                                    FROM $TBL_LP_ITEM_VIEW
-                                    WHERE
-                                        lp_item_id = '".(int) $my_id."' AND
-                                        lp_view_id = '".(int) $my_lp_view_id."'";
-                            $res_time = Database::query($sql);
-                            $row_time = Database::fetch_array($res_time);
+                            $totalTime = self::dbalQueryBuilder()
+                                ->select('SUM(total_time) as total_time')
+                                ->from($TBL_LP_ITEM_VIEW)
+                                ->where('lp_item_id = :itemId')
+                                ->andWhere('lp_view_id = :viewId')
+                                ->setParameter('itemId', (int) $my_id)
+                                ->setParameter('viewId', (int) $my_lp_view_id)
+                                ->executeQuery()
+                                ->fetchOne();
 
                             $score = 0;
                             $subtotal_time = 0;
-                            if (Database::num_rows($res_score) > 0 &&
-                                Database::num_rows($res_time) > 0
-                            ) {
+                            if (false !== $row_score) {
                                 $score = (float) $row_score['score'];
-                                $subtotal_time = (int) $row_time['total_time'];
+                                $subtotal_time = (int) $totalTime;
                             }
                             // Selecting the max score from an attempt.
-                            $sql = "SELECT SUM(t.ponderation) as maxscore
-                                    FROM (
-                                        SELECT DISTINCT
-                                            question_id, marks, ponderation
-                                        FROM $tbl_stats_attempts as at
-                                        INNER JOIN $tbl_quiz_questions as q
-                                        ON (q.iid = at.question_id)
-                                        WHERE exe_id ='$id_last_attempt'
-                                    ) as t";
-
-                            $result = Database::query($sql);
-                            $row_max_score = Database::fetch_array($result);
-                            $maxscore = $row_max_score['maxscore'];
+                            $distinctQuestionsSql = self::dbalQueryBuilder()
+                                ->select('DISTINCT question_id', 'marks', 'ponderation')
+                                ->from($tbl_stats_attempts, 'at')
+                                ->innerJoin('at', $tbl_quiz_questions, 'q', 'q.iid = at.question_id')
+                                ->where('exe_id = :lastAttemptId')
+                                ->getSQL();
+                            $maxscore = self::dbalQueryBuilder()
+                                ->select('SUM(t.ponderation) as maxscore')
+                                ->from('('.$distinctQuestionsSql.')', 't')
+                                ->setParameter('lastAttemptId', $id_last_attempt)
+                                ->executeQuery()
+                                ->fetchOne();
 
                             // Get duration time from track_e_exercises.exe_duration instead of lp_view_item.total_time
-                            $sql = 'SELECT SUM(exe_duration) exe_duration
-                                    FROM '.$tbl_stats_exercices.'
-                                    WHERE
-                                        exe_exo_id="'.$row['path'].'" AND
-                                        exe_user_id="'.$user_id.'" AND
-                                        orig_lp_id = "'.$lp_id.'" AND
-                                        orig_lp_item_id = "'.$row['myid'].'" AND
-                                        c_id = '.$courseId.' AND
-                                        status <> "incomplete" AND
-                                        session_id = '.$sessionId.'
-                                     ORDER BY exe_date DESC ';
-                            $sumScoreResult = Database::query($sql);
-                            $durationRow = Database::fetch_assoc($sumScoreResult);
+                            $durationQb = self::lpExerciseAttemptsQueryBuilder(
+                                $tbl_stats_exercices,
+                                $row['path'],
+                                $user_id,
+                                $lp_id,
+                                $row['myid'],
+                                $courseId
+                            )
+                                ->select('SUM(exe_duration) exe_duration');
+                            // The base context is stored as NULL in track_e_exercises.session_id.
+                            self::andSessionCondition($durationQb, (int) $sessionId);
+                            $durationRow = $durationQb
+                                ->executeQuery()
+                                ->fetchAssociative();
                             if (!empty($durationRow['exe_duration'])) {
                                 $exeDuration = $durationRow['exe_duration'];
                                 if ($exeDuration != $subtotal_time &&
@@ -912,9 +965,13 @@ class Tracking
                                 ) {
                                     $subtotal_time = $exeDuration;
                                     // Update c_lp_item_view.total_time
-                                    $sqlUpdate = "UPDATE $TBL_LP_ITEM_VIEW SET total_time = '$exeDuration'
-                                                  WHERE iid = ".$row_score['iid'];
-                                    Database::query($sqlUpdate);
+                                    self::dbalQueryBuilder()
+                                        ->update($TBL_LP_ITEM_VIEW)
+                                        ->set('total_time', ':totalTime')
+                                        ->where('iid = :iid')
+                                        ->setParameter('totalTime', $exeDuration)
+                                        ->setParameter('iid', (int) $row_score['iid'])
+                                        ->executeStatement();
                                 }
                             }
                             break;
@@ -952,19 +1009,19 @@ class Tracking
                         $showRowspan = false;
                         if ('quiz' === $row['item_type']) {
                             $my_url_suffix = '&cid='.$courseId.'&student_id='.$user_id.'&lp_id='.intval($row['mylpid']).'&origin='.$origin;
-                            $sql = 'SELECT * FROM '.$tbl_stats_exercices.'
-                                     WHERE
-                                        exe_exo_id="'.$row['path'].'" AND
-                                        exe_user_id="'.$user_id.'" AND
-                                        orig_lp_id = "'.$lp_id.'" AND
-                                        orig_lp_item_id = "'.$row['myid'].'" AND
-                                        c_id = '.$courseId.' AND
-                                        status <> "incomplete" AND
-                                        session_id = '.$sessionId.'
-                                     ORDER BY exe_date DESC ';
-
-                            $resultLastAttempt = Database::query($sql);
-                            $num = Database::num_rows($resultLastAttempt);
+                            $numQb = self::lpExerciseAttemptsQueryBuilder(
+                                $tbl_stats_exercices,
+                                $row['path'],
+                                $user_id,
+                                $lp_id,
+                                $row['myid'],
+                                $courseId
+                            )
+                                ->select('COUNT(*)');
+                            self::andSessionCondition($numQb, (int) $sessionId);
+                            $num = (int) $numQb
+                                ->executeQuery()
+                                ->fetchOne();
                             $showRowspan = false;
                             if ($num > 0) {
                                 $linkId = 'link_'.$my_id;
@@ -1142,29 +1199,35 @@ class Tracking
                             !empty($lp_item_id) &&
                             'quiz' === $row['item_type']
                         ) {
-                            $sql = "SELECT path FROM $TBL_LP_ITEM
-                                    WHERE
-                                        iid = '$lp_item_id' AND
-                                        lp_id = '$lp_id'";
-                            $res_path = Database::query($sql);
-                            $row_path = Database::fetch_array($res_path);
+                            $row_path = self::dbalQueryBuilder()
+                                ->select('path')
+                                ->from($TBL_LP_ITEM)
+                                ->where('iid = :itemId')
+                                ->andWhere('lp_id = :lpId')
+                                ->setParameter('itemId', (string) $lp_item_id)
+                                ->setParameter('lpId', (string) $lp_id)
+                                ->executeQuery()
+                                ->fetchAssociative();
 
-                            if (Database::num_rows($res_path) > 0) {
-                                $sql = 'SELECT * FROM '.$tbl_stats_exercices.'
-                                        WHERE
-                                            exe_exo_id="'.(int) $row_path['path'].'" AND
-                                            status <> "incomplete" AND
-                                            exe_user_id="'.$user_id.'" AND
-                                            orig_lp_id = "'.(int) $lp_id.'" AND
-                                            orig_lp_item_id = "'.(int) $lp_item_id.'" AND
-                                            c_id = '.$courseId.'  AND
-                                            session_id = '.$sessionId.'
-                                        ORDER BY exe_date';
-                                $res_attempts = Database::query($sql);
-                                $num_attempts = Database::num_rows($res_attempts);
+                            if (false !== $row_path) {
+                                $attemptsQb = self::lpExerciseAttemptsQueryBuilder(
+                                    $tbl_stats_exercices,
+                                    (int) $row_path['path'],
+                                    $user_id,
+                                    $lp_id,
+                                    $lp_item_id,
+                                    $courseId
+                                )
+                                    ->select('*');
+                                self::andSessionCondition($attemptsQb, (int) $sessionId);
+                                $attemptRows = $attemptsQb
+                                    ->orderBy('exe_date')
+                                    ->executeQuery()
+                                    ->fetchAllAssociative();
+                                $num_attempts = count($attemptRows);
                                 if ($num_attempts > 0) {
                                     $n = 1;
-                                    while ($row_attempts = Database::fetch_array($res_attempts)) {
+                                    foreach ($attemptRows as $row_attempts) {
                                         $my_score = $row_attempts['score'];
                                         $my_maxscore = $row_attempts['max_score'];
                                         $my_exe_id = $row_attempts['exe_id'];
@@ -1796,6 +1859,7 @@ class Tracking
                     FROM $tbl_track_login u $url_table
                     WHERE $userCondition $condition_time $url_condition
                     ORDER BY login_date";
+            // TODO(db-neutral): SessionTimeLimit::sqlForSeconds() SQL fragment (LEAST/GREATEST/TIMESTAMPDIFF) spliced into the query
             $rs = Database::query($sql);
 
             return Database::store_result($rs, 'ASSOC');
@@ -1804,6 +1868,7 @@ class Tracking
         $sql = "SELECT SUM($durationSql) diff
     	        FROM $tbl_track_login u $url_table
                 WHERE $userCondition $condition_time $url_condition";
+        // TODO(db-neutral): SessionTimeLimit::sqlForSeconds() SQL fragment (LEAST/GREATEST/TIMESTAMPDIFF) spliced into the query
         $rs = Database::query($sql);
         $row = Database::fetch_assoc($rs);
         $diff = $row['diff'];
@@ -1853,6 +1918,7 @@ class Tracking
         $sql = "SELECT SUM($durationSql) diff
     	        FROM $tbl_track_login u $url_table
                 WHERE $condition_time $url_condition";
+        // TODO(db-neutral): SessionTimeLimit::sqlForSeconds() SQL fragment (LEAST/GREATEST/TIMESTAMPDIFF) spliced into the query
         $rs = Database::query($sql);
         $row = Database::fetch_assoc($rs);
         $diff = $row['diff'];
@@ -1957,6 +2023,8 @@ class Tracking
 
         $sql .= $conditionUser;
 
+        // TODO(db-neutral): SessionTimeLimit::sqlForSeconds() SQL fragment (LEAST/GREATEST/TIMESTAMPDIFF) spliced into the query
+
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
 
@@ -1973,20 +2041,20 @@ class Tracking
     public static function get_first_connection_date($student_id)
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $sql = 'SELECT login_date
-                FROM '.$table.'
-                WHERE login_user_id = '.intval($student_id).'
-                ORDER BY login_date ASC
-                LIMIT 0,1';
-
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($first_login_date = Database::result($rs, 0, 0)) {
-                return api_convert_and_format_date(
-                    $first_login_date,
-                    DATE_FORMAT_SHORT
-                );
-            }
+        $first_login_date = self::dbalQueryBuilder()
+            ->select('login_date')
+            ->from($table)
+            ->where('login_user_id = :userId')
+            ->setParameter('userId', (int) $student_id)
+            ->orderBy('login_date', 'ASC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if ($first_login_date) {
+            return api_convert_and_format_date(
+                $first_login_date,
+                DATE_FORMAT_SHORT
+            );
         }
 
         return false;
@@ -2008,32 +2076,32 @@ class Tracking
         $return_timestamp = false
     ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $sql = 'SELECT login_date
-                FROM '.$table.'
-                WHERE login_user_id = '.intval($student_id).'
-                ORDER BY login_date
-                DESC LIMIT 0,1';
-
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($last_login_date = Database::result($rs, 0, 0)) {
-                $last_login_date = api_get_local_time($last_login_date);
-                if ($return_timestamp) {
-                    return api_strtotime($last_login_date, 'UTC');
+        $last_login_date = self::dbalQueryBuilder()
+            ->select('login_date')
+            ->from($table)
+            ->where('login_user_id = :userId')
+            ->setParameter('userId', (int) $student_id)
+            ->orderBy('login_date', 'DESC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if ($last_login_date) {
+            $last_login_date = api_get_local_time($last_login_date);
+            if ($return_timestamp) {
+                return api_strtotime($last_login_date, 'UTC');
+            } else {
+                if (!$warning_message) {
+                    return api_format_date($last_login_date, DATE_FORMAT_SHORT);
                 } else {
-                    if (!$warning_message) {
-                        return api_format_date($last_login_date, DATE_FORMAT_SHORT);
-                    } else {
-                        $timestamp = api_strtotime($last_login_date, 'UTC');
-                        $currentTimestamp = time();
+                    $timestamp = api_strtotime($last_login_date, 'UTC');
+                    $currentTimestamp = time();
 
-                        //If the last connection is > than 7 days, the text is red
-                        //345600 = 7 days in seconds
-                        if ($currentTimestamp - $timestamp > 604800) {
-                            return '<em style="color: #F00;">'.api_format_date($last_login_date, DATE_FORMAT_SHORT).'</em>';
-                        } else {
-                            return api_format_date($last_login_date, DATE_FORMAT_SHORT);
-                        }
+                    //If the last connection is > than 7 days, the text is red
+                    //345600 = 7 days in seconds
+                    if ($currentTimestamp - $timestamp > 604800) {
+                        return '<em style="color: #F00;">'.api_format_date($last_login_date, DATE_FORMAT_SHORT).'</em>';
+                    } else {
+                        return api_format_date($last_login_date, DATE_FORMAT_SHORT);
                     }
                 }
             }
@@ -2063,30 +2131,28 @@ class Tracking
         $sessionId = (int) $sessionId;
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = 'SELECT login_course_date
-                FROM '.$table.'
-                WHERE
-                    user_id = '.$student_id.' AND
-                    c_id = '.$courseId.' AND
-                    session_id = '.$sessionId.'
-                ORDER BY login_course_date ASC
-                LIMIT 0,1';
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($first_login_date = Database::result($rs, 0, 0)) {
-                if (empty($first_login_date)) {
-                    return false;
-                }
-
-                if ($convert_date) {
-                    return api_convert_and_format_date(
-                        $first_login_date,
-                        DATE_FORMAT_SHORT
-                    );
-                }
-
-                return $first_login_date;
+        $first_login_date = self::dbalQueryBuilder()
+            ->select('login_course_date')
+            ->from($table)
+            ->where('user_id = :userId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->setParameter('userId', $student_id)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->orderBy('login_course_date', 'ASC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if ($first_login_date) {
+            if ($convert_date) {
+                return api_convert_and_format_date(
+                    $first_login_date,
+                    DATE_FORMAT_SHORT
+                );
             }
+
+            return $first_login_date;
         }
 
         return false;
@@ -2126,95 +2192,97 @@ class Tracking
 
         if (self::minimumTimeAvailable($sessionId, $courseId)) {
             // Show the last date on which the user acceed the session when it was active
-            $where_condition = '';
+            $last_access = null;
             $userInfo = api_get_user_info($student_id);
             if (STUDENT == $userInfo['status'] && !empty($sessionId)) {
                 // fin de acceso a la sesión
                 $sessionInfo = SessionManager::fetch($sessionId);
                 $last_access = $sessionInfo['access_end_date'];
-                if (!empty($last_access)) {
-                    $where_condition = ' AND logout_course_date < "'.$last_access.'" ';
+                if (empty($last_access)) {
+                    $last_access = null;
                 }
             }
-            $sql = "SELECT logout_course_date
-                    FROM $table
-                    WHERE   user_id = $student_id AND
-                            c_id = $courseId AND
-                            session_id = $sessionId $where_condition
-                    ORDER BY logout_course_date DESC
-                    LIMIT 0,1";
+            $qb = self::dbalQueryBuilder()
+                ->select('logout_course_date')
+                ->from($table)
+                ->where('user_id = :userId')
+                ->andWhere('c_id = :courseId')
+                ->andWhere('session_id = :sessionId')
+                ->setParameter('userId', $student_id)
+                ->setParameter('courseId', $courseId)
+                ->setParameter('sessionId', $sessionId)
+                ->orderBy('logout_course_date', 'DESC')
+                ->setMaxResults(1);
+            if (null !== $last_access) {
+                $qb->andWhere('logout_course_date < :lastAccess')
+                    ->setParameter('lastAccess', $last_access);
+            }
 
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                if ($last_login_date = Database::result($rs, 0, 0)) {
-                    if (empty($last_login_date)) {
-                        return false;
+            $last_login_date = $qb->executeQuery()->fetchOne();
+            if ($last_login_date) {
+                if ($convert_date) {
+                    return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                }
+
+                return $last_login_date;
+            }
+        } else {
+            $last_login_date = self::dbalQueryBuilder()
+                ->select('logout_course_date')
+                ->from($table)
+                ->where('user_id = :userId')
+                ->andWhere('c_id = :courseId')
+                ->andWhere('session_id = :sessionId')
+                ->setParameter('userId', $student_id)
+                ->setParameter('courseId', $courseId)
+                ->setParameter('sessionId', $sessionId)
+                ->orderBy('logout_course_date', 'DESC')
+                ->setMaxResults(1)
+                ->executeQuery()
+                ->fetchOne();
+            if ($last_login_date) {
+                //see #5736
+                $last_login_date_timestamp = api_strtotime($last_login_date);
+                $now = time();
+                //If the last connection is > than 7 days, the text is red
+                //345600 = 7 days in seconds
+                if ($now - $last_login_date_timestamp > 604800) {
+                    if ($convert_date) {
+                        $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                        $icon = null;
+                        if (api_is_allowed_to_edit()) {
+                            $courseEntity = api_get_course_entity((int) $courseInfo['real_id']);
+                            $courseResourceNodeId = (int) ($courseEntity?->getResourceNode()?->getId() ?? 0);
+                            if ($courseResourceNodeId > 0) {
+                                $url = api_get_path(WEB_PATH).'resources/announcement/'.$courseResourceNodeId.'/add?'.http_build_query([
+                                    'cid' => (int) $courseInfo['real_id'],
+                                    'sid' => (int) $sessionId,
+                                    'remind_inactive' => (int) $student_id,
+                                ]);
+                            } else {
+                                $url = api_get_path(WEB_CODE_PATH).
+                                    'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cid='.$courseInfo['real_id'];
+                            }
+                            $icon = '<a href="'.$url.'" title="'.get_lang('Remind inactive user').'">
+                              '.Display::getMdiIcon(
+                                    StateIcon::WARNING,
+                                    'ch-tool-icon',
+                                    null,
+                                    ICON_SIZE_SMALL
+                                ).'
+                             </a>';
+                        }
+
+                        return $icon.Display::label($last_login_date, 'warning');
                     }
+
+                    return $last_login_date;
+                } else {
                     if ($convert_date) {
                         return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
                     }
 
                     return $last_login_date;
-                }
-            }
-        } else {
-            $sql = "SELECT logout_course_date
-                    FROM $table
-                    WHERE   user_id = $student_id AND
-                            c_id = $courseId AND
-                            session_id = $sessionId
-                    ORDER BY logout_course_date DESC
-                    LIMIT 0,1";
-
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                if ($last_login_date = Database::result($rs, 0, 0)) {
-                    if (empty($last_login_date)) {
-                        return false;
-                    }
-                    //see #5736
-                    $last_login_date_timestamp = api_strtotime($last_login_date);
-                    $now = time();
-                    //If the last connection is > than 7 days, the text is red
-                    //345600 = 7 days in seconds
-                    if ($now - $last_login_date_timestamp > 604800) {
-                        if ($convert_date) {
-                            $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                            $icon = null;
-                            if (api_is_allowed_to_edit()) {
-                                $courseEntity = api_get_course_entity((int) $courseInfo['real_id']);
-                                $courseResourceNodeId = (int) ($courseEntity?->getResourceNode()?->getId() ?? 0);
-                                if ($courseResourceNodeId > 0) {
-                                    $url = api_get_path(WEB_PATH).'resources/announcement/'.$courseResourceNodeId.'/add?'.http_build_query([
-                                        'cid' => (int) $courseInfo['real_id'],
-                                        'sid' => (int) $sessionId,
-                                        'remind_inactive' => (int) $student_id,
-                                    ]);
-                                } else {
-                                    $url = api_get_path(WEB_CODE_PATH).
-                                        'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cid='.$courseInfo['real_id'];
-                                }
-                                $icon = '<a href="'.$url.'" title="'.get_lang('Remind inactive user').'">
-                                  '.Display::getMdiIcon(
-                                        StateIcon::WARNING,
-                                        'ch-tool-icon',
-                                        null,
-                                        ICON_SIZE_SMALL
-                                    ).'
-                                 </a>';
-                            }
-
-                            return $icon.Display::label($last_login_date, 'warning');
-                        }
-
-                        return $last_login_date;
-                    } else {
-                        if ($convert_date) {
-                            return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                        }
-
-                        return $last_login_date;
-                    }
                 }
             }
         }
@@ -2231,15 +2299,16 @@ class Tracking
         }
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = "SELECT logout_course_date
-                FROM $table
-                WHERE user_id = $studentId
-                ORDER BY logout_course_date DESC
-                LIMIT 1";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result);
-
+        $row = self::dbalQueryBuilder()
+            ->select('logout_course_date')
+            ->from($table)
+            ->where('user_id = :userId')
+            ->setParameter('userId', $studentId)
+            ->orderBy('logout_course_date', 'DESC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAssociative();
+        if (false !== $row) {
             return $row['logout_course_date'];
         }
 
@@ -2257,20 +2326,19 @@ class Tracking
         $sessionId = (int) $sessionId;
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
-        $sql = "SELECT logout_course_date
-                FROM $table
-                WHERE
-                        c_id = $courseId AND
-                        session_id = $sessionId
-                ORDER BY logout_course_date DESC
-                LIMIT 0,1";
-
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result);
-            if ($row) {
-                return $row['logout_course_date'];
-            }
+        $row = self::dbalQueryBuilder()
+            ->select('logout_course_date')
+            ->from($table)
+            ->where('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->orderBy('logout_course_date', 'DESC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAssociative();
+        if (false !== $row) {
+            return $row['logout_course_date'];
         }
 
         return false;
@@ -2303,19 +2371,23 @@ class Tracking
         // to the lower minute
         $roundedStart = substr($start, 0, -2).'00';
         $roundedStop = substr($stop, 0, -2).'00';
-        $roundedStart = Database::escape_string($roundedStart);
-        $roundedStop = Database::escape_string($roundedStop);
-        $month_filter = " AND login_course_date > '$roundedStart' AND login_course_date < '$roundedStop' ";
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
         $count = 0;
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = "SELECT count(*) as count_connections
-                FROM $table
-                WHERE
-                    c_id = $courseId AND
-                    session_id = $sessionId
-                    $month_filter";
+        $countConnections = static fn () => self::dbalQueryBuilder()
+            ->select('COUNT(*) AS count_connections')
+            ->from($table)
+            ->where('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('login_course_date > :roundedStart')
+            ->andWhere('login_course_date < :roundedStop')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('roundedStart', $roundedStart)
+            ->setParameter('roundedStop', $roundedStop)
+            ->executeQuery()
+            ->fetchOne();
 
         //This query can be very slow (several seconds on an indexed table
         // with 14M rows). As such, we'll try to use APCu if it is
@@ -2330,20 +2402,12 @@ class Tracking
             ) {
                 $count = apcu_fetch($apc_var);
             } else {
-                $rs = Database::query($sql);
-                if (Database::num_rows($rs) > 0) {
-                    $row = Database::fetch_object($rs);
-                    $count = $row->count_connections;
-                }
+                $count = $countConnections();
                 apcu_clear_cache();
                 apcu_store($apc_var, $count, 60);
             }
         } else {
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                $row = Database::fetch_object($rs);
-                $count = $row->count_connections;
-            }
+            $count = $countConnections();
         }
 
         return $count;
@@ -2363,18 +2427,24 @@ class Tracking
         $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-        $sql = 'SELECT DISTINCT c_id
-                FROM '.$tbl_course_rel_user.'
-                WHERE user_id = '.$user_id.' AND relation_type<>'.COURSE_RELATION_TYPE_RRHH;
-        $rs = Database::query($sql);
-        $nb_courses = Database::num_rows($rs);
+        $nb_courses = (int) self::dbalQueryBuilder()
+            ->select('COUNT(DISTINCT c_id)')
+            ->from($tbl_course_rel_user)
+            ->where('user_id = :userId')
+            ->andWhere('relation_type <> :rrhh')
+            ->setParameter('userId', $user_id)
+            ->setParameter('rrhh', COURSE_RELATION_TYPE_RRHH)
+            ->executeQuery()
+            ->fetchOne();
 
         if ($include_sessions) {
-            $sql = 'SELECT DISTINCT c_id
-                    FROM '.$tbl_session_course_rel_user.'
-                    WHERE user_id = '.$user_id;
-            $rs = Database::query($sql);
-            $nb_courses += Database::num_rows($rs);
+            $nb_courses += (int) self::dbalQueryBuilder()
+                ->select('COUNT(DISTINCT c_id)')
+                ->from($tbl_session_course_rel_user)
+                ->where('user_id = :userId')
+                ->setParameter('userId', $user_id)
+                ->executeQuery()
+                ->fetchOne();
         }
 
         return $nb_courses;
@@ -2424,11 +2494,9 @@ class Tracking
             }
 
             // Compose a filter based on optional session id given
-            $sessionCondition = '';
             $session = null;
             if ($sessionId !== null) {
                 $session = api_get_session_entity($sessionId);
-                $sessionCondition = api_get_session_condition($sessionId);
             }
 
             $condition_active = '';
@@ -2436,13 +2504,6 @@ class Tracking
                 $condition_active = 'AND active <> -1';
             } elseif (0 == $active_filter) {
                 $condition_active = 'AND active <> 0';
-            }
-            $condition_into_lp = '';
-            $select_lp_id = '';
-            if (0 == $into_lp) {
-                $condition_into_lp = 'AND orig_lp_id = 0 AND orig_lp_item_id = 0';
-            } else {
-                $select_lp_id = ', orig_lp_id as lp_id ';
             }
 
             $quizRepo = Container::getQuizRepository();
@@ -2464,10 +2525,8 @@ class Tracking
             if (!empty($count_quiz) && !empty($student_id)) {
                 if (is_array($student_id)) {
                     $student_id = array_map('intval', $student_id);
-                    $condition_user = " AND exe_user_id IN (".implode(',', $student_id).") ";
                 } else {
                     $student_id = (int) $student_id;
-                    $condition_user = " AND exe_user_id = '$student_id' ";
                 }
 
                 if (empty($exercise_id)) {
@@ -2477,26 +2536,41 @@ class Tracking
                     $exercise_list = array_unique(array_map('intval', array_column($qbIds->getQuery()->getScalarResult(), 'iid')));
                     $exercise_id = null;
                     if (!empty($exercise_list)) {
-                        $exercise_id = implode("','", $exercise_list);
+                        $exercise_id = $exercise_list;
                     }
                 }
 
-                $sql = "SELECT
-                        SUM(score/max_score*100) as avg_score,
-                        COUNT(*) as num_attempts
-                        $select_lp_id
-                        FROM $tbl_stats_exercise
-                        WHERE
-                            exe_exo_id IN ('".$exercise_id."')
-                            $condition_user AND
-                            status = '' AND
-                            c_id = {$course_info['real_id']}
-                            $sessionCondition
-                            $condition_into_lp
-                        ORDER BY exe_date DESC";
+                $qbScore = self::dbalQueryBuilder()
+                    ->select('SUM(score/max_score*100) AS avg_score', 'COUNT(*) AS num_attempts')
+                    ->from($tbl_stats_exercise)
+                    // No quiz at all used to be IN ('') which matches the exercise id 0.
+                    ->where('exe_exo_id IN (:exerciseIds)')
+                    ->setParameter(
+                        'exerciseIds',
+                        null === $exercise_id ? [0] : array_map('intval', (array) $exercise_id),
+                        ArrayParameterType::INTEGER
+                    )
+                    ->andWhere("status = ''")
+                    ->andWhere('c_id = :courseId')
+                    ->setParameter('courseId', (int) $course_info['real_id'])
+                    ->orderBy('exe_date', 'DESC');
+                if (is_array($student_id)) {
+                    $qbScore->andWhere('exe_user_id IN (:studentIds)')
+                        ->setParameter('studentIds', $student_id, ArrayParameterType::INTEGER);
+                } else {
+                    $qbScore->andWhere('exe_user_id = :studentId')
+                        ->setParameter('studentId', $student_id);
+                }
+                if (null !== $sessionId) {
+                    self::andSessionCondition($qbScore, (int) $sessionId);
+                }
+                if (0 == $into_lp) {
+                    $qbScore->andWhere('orig_lp_id = 0')->andWhere('orig_lp_item_id = 0');
+                } else {
+                    $qbScore->addSelect('orig_lp_id AS lp_id');
+                }
 
-                $res = Database::query($sql);
-                $row = Database::fetch_array($res);
+                $row = $qbScore->executeQuery()->fetchAssociative();
                 $quiz_avg_score = null;
 
                 if (!empty($row['avg_score'])) {
@@ -2514,12 +2588,15 @@ class Tracking
                 } else {
                     if (!empty($row['lp_id'])) {
                         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-                        $sql = "SELECT title FROM $tbl_lp WHERE iid = ".(int) $row['lp_id'];
-                        $result = Database::query($sql);
-                        $row_lp = Database::fetch_row($result);
-                        $lp_name = null;
-                        if ($row_lp && isset($row_lp[0])) {
-                            $lp_name = $row_lp[0];
+                        $lp_name = self::dbalQueryBuilder()
+                            ->select('title')
+                            ->from($tbl_lp)
+                            ->where('iid = :lpId')
+                            ->setParameter('lpId', (int) $row['lp_id'])
+                            ->executeQuery()
+                            ->fetchOne();
+                        if (false === $lp_name) {
+                            $lp_name = null;
                         }
 
                         return [$quiz_avg_score, $lp_name];
@@ -2573,28 +2650,31 @@ class Tracking
         $lp_id = intval($lp_id);
         $lp_item_id = intval($lp_item_id);
         $tbl_stats_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $sessionCondition = api_get_session_condition($sessionId);
-        $sql = "SELECT COUNT(exe_id) as essais
-                FROM $tbl_stats_exercises
-                WHERE
-                    c_id = $courseId AND
-                    exe_exo_id = $exercise_id AND
-                    status = '' AND
-                    exe_user_id= $student_id
-                    $sessionCondition
-                    ";
+        $qb = self::dbalQueryBuilder()
+            ->select('COUNT(exe_id) AS essais')
+            ->from($tbl_stats_exercises)
+            ->where('c_id = :courseId')
+            ->andWhere('exe_exo_id = :exerciseId')
+            ->andWhere("status = ''")
+            ->andWhere('exe_user_id = :studentId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('exerciseId', $exercise_id)
+            ->setParameter('studentId', $student_id);
+        self::andSessionCondition($qb, $sessionId);
 
         if (1 == $find_all_lp) {
-            $sql .= "AND (orig_lp_id = $lp_id OR orig_lp_id = 0)
-                AND (orig_lp_item_id = $lp_item_id OR orig_lp_item_id = 0)";
+            $qb->andWhere('(orig_lp_id = :lpId OR orig_lp_id = 0)')
+                ->andWhere('(orig_lp_item_id = :lpItemId OR orig_lp_item_id = 0)')
+                ->setParameter('lpId', $lp_id)
+                ->setParameter('lpItemId', $lp_item_id);
         } elseif (0 == $find_all_lp) {
-            $sql .= "AND orig_lp_id = $lp_id
-                AND orig_lp_item_id = $lp_item_id";
+            $qb->andWhere('orig_lp_id = :lpId')
+                ->andWhere('orig_lp_item_id = :lpItemId')
+                ->setParameter('lpId', $lp_id)
+                ->setParameter('lpItemId', $lp_item_id);
         }
 
-        $rs = Database::query($sql);
-        $row = Database::fetch_row($rs);
-        $count_attempts = $row[0];
+        $count_attempts = $qb->executeQuery()->fetchOne();
 
         return $count_attempts;
     }
@@ -2625,26 +2705,21 @@ class Tracking
         $tbl_stats_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $exerciseIdList = [];
         foreach ($exerciseList as $exercise) {
-            $exerciseIdList[] = $exercise->getIid();
+            $exerciseIdList[] = (int) $exercise->getIid();
         }
-        $exercise_list_imploded = implode("' ,'", $exerciseIdList);
-        $sessionCondition = api_get_session_condition($sessionId);
-        $sql = "SELECT COUNT(DISTINCT exe_exo_id)
-                FROM $tbl_stats_exercises
-                WHERE
-                    c_id = $courseId AND
-                    exe_user_id = $user_id AND
-                    status = '' AND
-                    exe_exo_id IN ('$exercise_list_imploded')
-                    $sessionCondition
-                    ";
+        $qb = self::dbalQueryBuilder()
+            ->select('COUNT(DISTINCT exe_exo_id)')
+            ->from($tbl_stats_exercises)
+            ->where('c_id = :courseId')
+            ->andWhere('exe_user_id = :userId')
+            ->andWhere("status = ''")
+            ->andWhere('exe_exo_id IN (:exerciseIds)')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $user_id)
+            ->setParameter('exerciseIds', $exerciseIdList, ArrayParameterType::INTEGER);
+        self::andSessionCondition($qb, $sessionId);
 
-        $rs = Database::query($sql);
-        $count = 0;
-        if ($rs) {
-            $row = Database::fetch_row($rs);
-            $count = (int) $row[0];
-        }
+        $count = (int) $qb->executeQuery()->fetchOne();
         $count = (0 != $count) ? 100 * round($count / count($exerciseList), 2).'%' : '0%';
 
         return $count;
@@ -2740,17 +2815,20 @@ class Tracking
 
         $lpViewTable = Database::get_course_table(TABLE_LP_VIEW);
 
-        $conditions = [
-            //" c_id = {$courseInfo['real_id']} ",
-            " lp_view.lp_id IN (".implode(', ', $filteredLP).") ",
-        ];
+        $qbProgress = self::dbalQueryBuilder()
+            ->select('lp_id', 'user_id', 'view_count', 'progress')
+            ->from($lpViewTable, 'lp_view')
+            ->where('lp_view.lp_id IN (:lpIds)')
+            ->setParameter('lpIds', array_map('intval', $filteredLP), ArrayParameterType::INTEGER);
 
         if (is_array($studentId)) {
             $studentId = array_map('intval', $studentId);
-            $conditions[] = " lp_view.user_id IN (".implode(',', $studentId).")  ";
+            $qbProgress->andWhere('lp_view.user_id IN (:studentIds)')
+                ->setParameter('studentIds', $studentId, ArrayParameterType::INTEGER);
         } else {
             $studentId = (int) $studentId;
-            $conditions[] = " lp_view.user_id = '$studentId' ";
+            $qbProgress->andWhere('lp_view.user_id = :studentId')
+                ->setParameter('studentId', $studentId);
 
             if (empty($lpIdList)) {
                 $includeNotSubscribed =
@@ -2783,25 +2861,13 @@ class Tracking
             }
         }
 
-        if (!empty($sessionId)) {
-            $conditions[] = " session_id = $sessionId ";
-        } else {
-            $conditions[] = ' (session_id = 0 OR session_id IS NULL) ';
-        }
-
-        $conditionToString = implode('AND', $conditions);
-        $sql = "SELECT lp_id, user_id, view_count, progress
-                FROM $lpViewTable lp_view
-                WHERE
-                    $conditionToString
-                ORDER BY view_count DESC, iid ASC";
-
-        $result = Database::query($sql);
+        self::andSessionCondition($qbProgress, (int) $sessionId);
+        $qbProgress->orderBy('view_count', 'DESC')->addOrderBy('iid', 'ASC');
 
         // Latest view of each (learning path, student): the first row of the ordered list.
         $progress = [];
         $seen = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($qbProgress->executeQuery()->fetchAllAssociative() as $row) {
             $key = $row['lp_id'].'_'.$row['user_id'];
             if (!isset($seen[$key])) {
                 $seen[$key] = true;
@@ -2896,7 +2962,7 @@ class Tracking
         // Compose a filter based on optional learning paths list given
         $condition_lp = '';
         if (count($lp_ids) > 0) {
-            $condition_lp = " iid IN(".implode(',', $lp_ids).") ";
+            $condition_lp = true;
         }
 
         // Compose a filter based on optional session id
@@ -2904,7 +2970,6 @@ class Tracking
         if (null !== $session) {
             $sessionId = $session->getId();
         }
-        $sessionCondition = api_get_session_condition($sessionId);
 
         $lp_list = $use_max_score = [];
         if (empty($condition_lp)) {
@@ -2918,11 +2983,12 @@ class Tracking
                 $use_max_score[$lpId] = $lp->getUseMaxScore();
             }
         } else {
-            $sql = "SELECT DISTINCT(iid), use_max_score
-                    FROM $lp_table
-                    WHERE $condition_lp ";
-            $res_row_lp = Database::query($sql);
-            while ($row_lp = Database::fetch_array($res_row_lp)) {
+            $qbLp = self::dbalQueryBuilder()
+                ->select('DISTINCT(iid) AS iid', 'use_max_score')
+                ->from($lp_table)
+                ->where('iid IN (:lpIds)')
+                ->setParameter('lpIds', array_map('intval', $lp_ids), ArrayParameterType::INTEGER);
+            foreach ($qbLp->executeQuery()->fetchAllAssociative() as $row_lp) {
                 $lp_list[] = $row_lp['iid'];
                 $use_max_score[$row_lp['iid']] = $row_lp['use_max_score'];
             }
@@ -2933,29 +2999,29 @@ class Tracking
         }
 
         // prepare filter on users
-        if (is_array($student_id)) {
-            $student_id = array_map('intval', $student_id);
-            $condition_user1 = " AND user_id IN (".implode(',', $student_id).") ";
-        } else {
-            $condition_user1 = " AND user_id = $student_id ";
-        }
-
         // Getting latest LP result for a student
         //@todo problem when a  course have more than 1500 users
-        $sql = "SELECT MAX(view_count) as vc, iid, progress, lp_id, user_id
-                FROM $lp_view_table
-                WHERE
-                    lp_id IN (".implode(',', $lp_list).")
-                    $condition_user1
-                    $sessionCondition
-                GROUP BY lp_id, user_id";
-        //AND        session_id = $sessionId
+        $qbLastView = self::dbalQueryBuilder()
+            ->select('MAX(view_count) AS vc', 'iid', 'progress', 'lp_id', 'user_id')
+            ->from($lp_view_table)
+            ->where('lp_id IN (:lpList)')
+            ->setParameter('lpList', array_map('intval', $lp_list), ArrayParameterType::INTEGER);
+        if (is_array($student_id)) {
+            $student_id = array_map('intval', $student_id);
+            $qbLastView->andWhere('user_id IN (:studentIds)')
+                ->setParameter('studentIds', $student_id, ArrayParameterType::INTEGER);
+        } else {
+            $qbLastView->andWhere('user_id = :studentId')
+                ->setParameter('studentId', (int) $student_id);
+        }
+        self::andSessionCondition($qbLastView, (int) $sessionId);
+        $qbLastView->groupBy('lp_id', 'user_id');
 
-        $rs_last_lp_view_id = Database::query($sql);
+        $rowsLastLpView = $qbLastView->executeQuery()->fetchAllAssociative();
         $global_result = 0;
-        if (Database::num_rows($rs_last_lp_view_id) > 0) {
+        if (count($rowsLastLpView) > 0) {
             // Cycle through each line of the results (grouped by lp_id, user_id)
-            while ($row_lp_view = Database::fetch_array($rs_last_lp_view_id)) {
+            foreach ($rowsLastLpView as $row_lp_view) {
                 $count_items = 0;
                 $lpPartialTotal = 0;
                 $list = [];
@@ -2974,40 +3040,44 @@ class Tracking
                 $getOnlyBestAttempt = !$get_only_latest_attempt_results;
 
                 // Getting lp_items done by the user
-                $sql = "SELECT DISTINCT lp_item_id
-                        FROM $lp_item_view_table
-                        WHERE
-                            lp_view_id = $lp_view_id
-                        ORDER BY lp_item_id";
-                $res_lp_item = Database::query($sql);
+                $rowsLpItem = self::dbalQueryBuilder()
+                    ->select('DISTINCT lp_item_id')
+                    ->from($lp_item_view_table)
+                    ->where('lp_view_id = :lpViewId')
+                    ->setParameter('lpViewId', (int) $lp_view_id)
+                    ->orderBy('lp_item_id')
+                    ->executeQuery()
+                    ->fetchAllAssociative();
 
-                while ($row_lp_item = Database::fetch_assoc($res_lp_item)) {
+                foreach ($rowsLpItem as $row_lp_item) {
                     $my_lp_item_id = (int) $row_lp_item['lp_item_id'];
 
                     // All the attempts of the item, the most recent first
-                    $sql = "SELECT
-                                lp_iv.iid as lp_item_view_id,
-                                lp_iv.score as score,
-                                lp_i.max_score,
-                                lp_iv.max_score as max_score_item_view,
-                                lp_i.path,
-                                lp_i.item_type,
-                                lp_i.iid
-                            FROM $lp_item_view_table as lp_iv
-                            INNER JOIN $lp_item_table as lp_i
-                            ON (
-                                lp_i.iid = lp_iv.lp_item_id
-                            )
-                            WHERE
-                                lp_item_id = $my_lp_item_id AND
-                                lp_view_id = $lp_view_id AND
-                                (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."')
-                            ORDER BY lp_iv.view_count DESC, lp_iv.iid DESC";
-
-                    $res_lp_item_result = Database::query($sql);
+                    $rowsAttempt = self::dbalQueryBuilder()
+                        ->select(
+                            'lp_iv.iid AS lp_item_view_id',
+                            'lp_iv.score AS score',
+                            'lp_i.max_score',
+                            'lp_iv.max_score AS max_score_item_view',
+                            'lp_i.path',
+                            'lp_i.item_type',
+                            'lp_i.iid'
+                        )
+                        ->from($lp_item_view_table, 'lp_iv')
+                        ->innerJoin('lp_iv', $lp_item_table, 'lp_i', 'lp_i.iid = lp_iv.lp_item_id')
+                        ->where('lp_item_id = :lpItemId')
+                        ->andWhere('lp_view_id = :lpViewId')
+                        ->andWhere("(lp_i.item_type = 'sco' OR lp_i.item_type = :quizType)")
+                        ->setParameter('lpItemId', $my_lp_item_id)
+                        ->setParameter('lpViewId', (int) $lp_view_id)
+                        ->setParameter('quizType', TOOL_QUIZ)
+                        ->orderBy('lp_iv.view_count', 'DESC')
+                        ->addOrderBy('lp_iv.iid', 'DESC')
+                        ->executeQuery()
+                        ->fetchAllAssociative();
                     $bestRow = null;
                     $bestRatio = null;
-                    while ($row_attempt = Database::fetch_assoc($res_lp_item_result)) {
+                    foreach ($rowsAttempt as $row_attempt) {
                         if (!$getOnlyBestAttempt) {
                             $bestRow = $row_attempt;
                             break;
@@ -3071,59 +3141,61 @@ class Tracking
                         $item_path = $row_max_score['path'];
                         $lp_item_view_id = (int) $row_max_score['lp_item_view_id'];
 
-                        if (empty($lp_item_view_id)) {
-                            $lpItemCondition = ' (orig_lp_item_view_id = 0 OR orig_lp_item_view_id IS NULL) ';
-                        } else {
-                            $lpItemCondition = " orig_lp_item_view_id = $lp_item_view_id ";
-                        }
-
                         // Get last attempt to this exercise through
                         // the current lp for the current user
-                        $order = 'exe_date DESC';
+                        $qbLastAttempt = self::dbalQueryBuilder()
+                            ->select('exe_id', 'score')
+                            ->from($tbl_stats_exercices)
+                            ->where('exe_exo_id = :exerciseId')
+                            ->andWhere('exe_user_id = :userId')
+                            ->andWhere('orig_lp_item_id = :itemId')
+                            ->andWhere('c_id = :courseId')
+                            ->andWhere("status = ''")
+                            ->setParameter('exerciseId', (string) $item_path)
+                            ->setParameter('userId', (int) $user_id)
+                            ->setParameter('itemId', (int) $item_id)
+                            ->setParameter('courseId', (int) $courseId)
+                            ->orderBy('exe_date', 'DESC');
+                        if (empty($lp_item_view_id)) {
+                            $qbLastAttempt->andWhere('(orig_lp_item_view_id = 0 OR orig_lp_item_view_id IS NULL)');
+                        } else {
+                            $qbLastAttempt->andWhere('orig_lp_item_view_id = :lpItemViewId')
+                                ->setParameter('lpItemViewId', $lp_item_view_id);
+                        }
+                        self::andSessionCondition($qbLastAttempt, (int) $sessionId);
                         if ($getOnlyBestAttempt) {
                             // The best attempt is chosen below, by ratio: the latest ones come first for the ties.
-                            $order = 'exe_date DESC, exe_id DESC';
+                            $qbLastAttempt->addOrderBy('exe_id', 'DESC');
+                        } else {
+                            $qbLastAttempt->setMaxResults(1);
                         }
-                        $sql = "SELECT exe_id, score
-                                FROM $tbl_stats_exercices
-                                WHERE
-                                    exe_exo_id = '$item_path' AND
-                                    exe_user_id = $user_id AND
-                                    orig_lp_item_id = $item_id AND
-                                    $lpItemCondition AND
-                                    c_id = $courseId AND
-                                    status = ''
-                                    $sessionCondition
-                                ORDER BY $order
-                                ".($getOnlyBestAttempt ? '' : 'LIMIT 1');
 
-                        $result_last_attempt = Database::query($sql);
-                        $num = Database::num_rows($result_last_attempt);
+                        $rowsLastAttempt = $qbLastAttempt->executeQuery()->fetchAllAssociative();
+                        $num = count($rowsLastAttempt);
                         if ($num > 0) {
                             // Within an attempt, the sum of the max_scores of all questions that it was made of
                             // (this has to be dynamic because of random questions selection)
                             $attemptMaxScore = static function ($exeId) use ($tbl_stats_attempts, $tbl_quiz_questions) {
-                                $sql = "SELECT SUM(t.ponderation) as maxscore FROM
-                                            (
-                                                SELECT DISTINCT
-                                                    question_id,
-                                                    marks,
-                                                    ponderation
-                                                FROM $tbl_stats_attempts AS at
-                                                INNER JOIN $tbl_quiz_questions AS q
-                                                ON (q.iid = at.question_id)
-                                                WHERE
-                                                    exe_id ='$exeId'
-                                            )
-                                            AS t";
-                                $row = Database::fetch_array(Database::query($sql));
+                                // The derived table is the DISTINCT (question, marks, ponderation) of the attempt.
+                                $inner = self::dbalQueryBuilder()
+                                    ->select('DISTINCT question_id', 'marks', 'ponderation')
+                                    ->from($tbl_stats_attempts, 'at')
+                                    ->innerJoin('at', $tbl_quiz_questions, 'q', 'q.iid = at.question_id')
+                                    ->where('exe_id = :exeId')
+                                    ->getSQL();
+                                $row = self::dbalQueryBuilder()
+                                    ->select('SUM(t.ponderation) AS maxscore')
+                                    ->from('('.$inner.')', 't')
+                                    ->setParameter('exeId', (string) $exeId)
+                                    ->executeQuery()
+                                    ->fetchAssociative();
 
                                 return $row['maxscore'] ?? null;
                             };
 
                             $attemptResult = null;
                             $bestAttemptRatio = null;
-                            while ($candidate = Database::fetch_assoc($result_last_attempt)) {
+                            foreach ($rowsLastAttempt as $candidate) {
                                 if (!$getOnlyBestAttempt) {
                                     $attemptResult = $candidate;
                                     break;
@@ -3198,17 +3270,16 @@ class Tracking
         $lp_with_quiz = 0;
         foreach ($lp_list as $lp_id) {
             // Check if LP have a score we assume that all SCO have an score
-            $sql = "SELECT count(iid) as count
-                    FROM $lp_item_table
-                    WHERE
-                        (item_type = 'quiz' OR item_type = 'sco') AND
-                        lp_id = ".$lp_id;
-            $result_have_quiz = Database::query($sql);
-            if (Database::num_rows($result_have_quiz) > 0) {
-                $row = Database::fetch_assoc($result_have_quiz);
-                if (is_numeric($row['count']) && 0 != $row['count']) {
-                    $lp_with_quiz++;
-                }
+            $row = self::dbalQueryBuilder()
+                ->select('COUNT(iid) AS count')
+                ->from($lp_item_table)
+                ->where("(item_type = 'quiz' OR item_type = 'sco')")
+                ->andWhere('lp_id = :lpId')
+                ->setParameter('lpId', (int) $lp_id)
+                ->executeQuery()
+                ->fetchAssociative();
+            if (is_numeric($row['count']) && 0 != $row['count']) {
+                $lp_with_quiz++;
             }
         }
 
@@ -3300,6 +3371,7 @@ class Tracking
         }
 
         $conditionsToString = implode(' AND ', $conditions);
+        // TODO(db-neutral): null-safe equality (<=>) and LIMIT inside the correlated subquery
         $sql = "SELECT
                     SUM(lp_iv.score) sum_score,
                     SUM(lp_i.max_score) sum_max_score
@@ -3353,23 +3425,24 @@ class Tracking
         }
 
         $lpViewTable = Database::get_course_table(TABLE_LP_VIEW);
-        $studentIdListToString = implode(',', $studentIdList);
 
-        $sql = "SELECT user_progress.user_id, AVG(user_progress.progress) average_progress
-                FROM (
-                    SELECT user_id, c_id, session_id, lp_id, MAX(progress) progress
-                    FROM $lpViewTable
-                    WHERE
-                        user_id IN ($studentIdListToString) AND
-                        progress IS NOT NULL
-                    GROUP BY user_id, c_id, session_id, lp_id
-                ) user_progress
-                GROUP BY user_progress.user_id";
-
-        $result = Database::query($sql);
+        $inner = self::dbalQueryBuilder()
+            ->select('user_id', 'c_id', 'session_id', 'lp_id', 'MAX(progress) AS progress')
+            ->from($lpViewTable)
+            ->where('user_id IN (:studentIds)')
+            ->andWhere('progress IS NOT NULL')
+            ->groupBy('user_id', 'c_id', 'session_id', 'lp_id')
+            ->getSQL();
+        $rows = self::dbalQueryBuilder()
+            ->select('user_progress.user_id', 'AVG(user_progress.progress) AS average_progress')
+            ->from('('.$inner.')', 'user_progress')
+            ->groupBy('user_progress.user_id')
+            ->setParameter('studentIds', array_map('intval', $studentIdList), ArrayParameterType::INTEGER)
+            ->executeQuery()
+            ->fetchAllAssociative();
         $progressSum = 0.0;
 
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             $progressSum += (float) $row['average_progress'];
         }
 
@@ -3388,16 +3461,15 @@ class Tracking
         }
 
         $forumPostTable = Database::get_course_table(TABLE_FORUM_POST);
-        $studentIdListToString = implode(',', $studentIdList);
 
-        $sql = "SELECT COUNT(iid) total
-                FROM $forumPostTable
-                WHERE
-                    poster_id IN ($studentIdListToString) AND
-                    visible = 1";
-
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $row = self::dbalQueryBuilder()
+            ->select('COUNT(iid) AS total')
+            ->from($forumPostTable)
+            ->where('poster_id IN (:studentIds)')
+            ->andWhere('visible = 1')
+            ->setParameter('studentIds', array_map('intval', $studentIdList), ArrayParameterType::INTEGER)
+            ->executeQuery()
+            ->fetchAssociative();
 
         return (int) ($row['total'] ?? 0);
     }
@@ -3414,17 +3486,16 @@ class Tracking
         }
 
         $publicationTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-        $studentIdListToString = implode(',', $studentIdList);
 
-        $sql = "SELECT COUNT(iid) total
-                FROM $publicationTable
-                WHERE
-                    user_id IN ($studentIdListToString) AND
-                    parent_id IS NOT NULL AND
-                    active IN (0, 1)";
-
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $row = self::dbalQueryBuilder()
+            ->select('COUNT(iid) AS total')
+            ->from($publicationTable)
+            ->where('user_id IN (:studentIds)')
+            ->andWhere('parent_id IS NOT NULL')
+            ->andWhere('active IN (0, 1)')
+            ->setParameter('studentIds', array_map('intval', $studentIdList), ArrayParameterType::INTEGER)
+            ->executeQuery()
+            ->fetchAssociative();
 
         return (int) ($row['total'] ?? 0);
     }
@@ -3476,22 +3547,20 @@ class Tracking
             }
 
             // Compose a filter based on optional learning paths list given
-            $condition_lp = '';
-            if (!empty($lp_ids)) {
-                $condition_lp = " AND iid IN(".implode(',', $lp_ids).") ";
-            }
-
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
-            $sql = "SELECT DISTINCT(iid) FROM $lpTable
-                WHERE 1=1 $condition_lp";
-            $result = Database::query($sql);
-            $sessionCondition = api_get_session_condition($sessionId);
-            $vSessionCondition = api_get_session_condition($sessionId, true, false, 'v.session_id');
+            $qbLpIds = self::dbalQueryBuilder()
+                ->select('DISTINCT(iid) AS iid')
+                ->from($lpTable);
+            if (!empty($lp_ids)) {
+                $qbLpIds->where('iid IN (:lpIds)')
+                    ->setParameter('lpIds', array_map('intval', $lp_ids), ArrayParameterType::INTEGER);
+            }
+            $lpRows = $qbLpIds->executeQuery()->fetchAllAssociative();
 
             // calculates time
-            if (Database::num_rows($result) > 0) {
-                while ($row = Database::fetch_array($result)) {
+            if (count($lpRows) > 0) {
+                foreach ($lpRows as $row) {
                     $lp_id = (int) $row['iid'];
                     $lp = Container::getLpRepository()->find($lp_id);
                     // Start Exercise in LP total_time
@@ -3503,64 +3572,68 @@ class Tracking
                             continue;
                         }
 
-                        $sql = "SELECT max(view_count)
-                            FROM $lpViewTable
-                            WHERE
-                                c_id = $courseId AND
-                                lp_id = $lp_id AND
-                                user_id = $student_id
-                                $sessionCondition";
-                        $res = Database::query($sql);
-                        $view = '';
-                        if (Database::num_rows($res) > 0) {
-                            $myrow = Database::fetch_array($res);
-                            $view = $myrow[0];
+                        $qbView = self::dbalQueryBuilder()
+                            ->select('MAX(view_count)')
+                            ->from($lpViewTable)
+                            ->where('c_id = :courseId')
+                            ->andWhere('lp_id = :lpId')
+                            ->andWhere('user_id = :studentId')
+                            ->setParameter('courseId', (int) $courseId)
+                            ->setParameter('lpId', $lp_id)
+                            ->setParameter('studentId', $student_id);
+                        self::andSessionCondition($qbView, $sessionId);
+                        $view = $qbView->executeQuery()->fetchOne();
+                        if (false === $view) {
+                            $view = '';
                         }
-                        $viewCondition = '';
+                        $qbQuizView = self::dbalQueryBuilder()
+                            ->select(
+                                'iv.iid',
+                                'iv.total_time AS mytime',
+                                'i.iid AS myid',
+                                'iv.view_count AS iv_view_count',
+                                'path'
+                            )
+                            ->from($lpItemTable, 'i')
+                            ->innerJoin('i', $lpItemViewTable, 'iv', 'i.iid = iv.lp_item_id')
+                            ->innerJoin('iv', $lpViewTable, 'v', 'iv.lp_view_id = v.iid')
+                            ->where('v.c_id = :courseId')
+                            ->andWhere('i.iid = :itemId')
+                            ->andWhere('i.lp_id = :lpId')
+                            ->andWhere('v.user_id = :studentId')
+                            ->andWhere("item_type = 'quiz'")
+                            ->andWhere("path <> ''")
+                            ->setParameter('courseId', (int) $courseId)
+                            ->setParameter('itemId', $itemId)
+                            ->setParameter('lpId', $lp_id)
+                            ->setParameter('studentId', $student_id);
+                        self::andSessionCondition($qbQuizView, $sessionId, 'v.session_id');
                         if (!empty($view)) {
-                            $viewCondition = " AND v.view_count = $view  ";
+                            $qbQuizView->andWhere('v.view_count = :viewCount')
+                                ->setParameter('viewCount', (int) $view);
                         }
-                        $sql = "SELECT
-                                iv.iid,
-                                iv.total_time as mytime,
-                                i.iid as myid,
-                                iv.view_count as iv_view_count,
-                                path
-                            FROM $lpItemTable as i
-                            INNER JOIN $lpItemViewTable as iv
-                                ON (i.iid = iv.lp_item_id)
-                            INNER JOIN $lpViewTable as v
-                                ON (iv.lp_view_id = v.iid)
-                            WHERE
-                                v.c_id = $courseId AND
-                                i.iid = $itemId AND
-                                i.lp_id = $lp_id  AND
-                                v.user_id = $student_id AND
-                                item_type = 'quiz' AND
-                                path <> ''
-                                $vSessionCondition
-                                $viewCondition
-                            ORDER BY iv.view_count DESC ";
+                        $qbQuizView->orderBy('iv.view_count', 'DESC');
 
-                        $resultRow = Database::query($sql);
-                        if (Database::num_rows($resultRow)) {
-                            $row = Database::fetch_array($resultRow);
+                        $row = $qbQuizView->executeQuery()->fetchAssociative();
+                        if (false !== $row) {
                             $totalTimeInLpItemView = $row['mytime'];
                             $lpItemViewId = $row['iid'];
-                            $sql = 'SELECT SUM(exe_duration) exe_duration
-                                FROM '.$trackExercises.'
-                                WHERE
-                                    exe_exo_id="'.Database::escape_string($row['path']).'" AND
-                                    exe_user_id="'.$student_id.'" AND
-                                    orig_lp_id = "'.$lp_id.'" AND
-                                    orig_lp_item_id = "'.$row['myid'].'" AND
-                                    c_id = '.$courseId.' AND
-                                    status <> "incomplete"
-                                    '.$sessionCondition.'
-                                 ORDER BY exe_date DESC ';
-
-                            $sumScoreResult = Database::query($sql);
-                            $durationRow = Database::fetch_assoc($sumScoreResult);
+                            $qbDuration = self::dbalQueryBuilder()
+                                ->select('SUM(exe_duration) AS exe_duration')
+                                ->from($trackExercises)
+                                ->where('exe_exo_id = :quizId')
+                                ->andWhere('exe_user_id = :studentId')
+                                ->andWhere('orig_lp_id = :lpId')
+                                ->andWhere('orig_lp_item_id = :itemId')
+                                ->andWhere('c_id = :courseId')
+                                ->andWhere("status <> 'incomplete'")
+                                ->setParameter('quizId', (string) $row['path'])
+                                ->setParameter('studentId', $student_id)
+                                ->setParameter('lpId', $lp_id)
+                                ->setParameter('itemId', (int) $row['myid'])
+                                ->setParameter('courseId', (int) $courseId);
+                            self::andSessionCondition($qbDuration, $sessionId);
+                            $durationRow = $qbDuration->executeQuery()->fetchAssociative();
                             if (!empty($durationRow['exe_duration'])) {
                                 $exeDuration = $durationRow['exe_duration'];
                                 if (
@@ -3569,10 +3642,13 @@ class Tracking
                                     !empty($exeDuration)
                                 ) {
                                     // Update c_lp_item_view.total_time
-                                    $sqlUpdate = "UPDATE $lpItemViewTable
-                                              SET total_time = '".Database::escape_string($exeDuration)."'
-                                              WHERE iid = ".$lpItemViewId;
-                                    Database::query($sqlUpdate);
+                                    self::dbalQueryBuilder()
+                                        ->update($lpItemViewTable)
+                                        ->set('total_time', ':exeDuration')
+                                        ->where('iid = :lpItemViewId')
+                                        ->setParameter('exeDuration', (string) $exeDuration)
+                                        ->setParameter('lpItemViewId', (int) $lpItemViewId)
+                                        ->executeStatement();
                                 }
                             }
                         }
@@ -3581,20 +3657,20 @@ class Tracking
                     // End total_time fix
 
                     // Calculate total time
-                    $sql = "SELECT SUM(total_time)
-                        FROM $lpItemViewTable AS item_view
-                        INNER JOIN $lpViewTable AS view
-                            ON (item_view.lp_view_id = view.iid)
-                        WHERE
-                            view.c_id = $courseId AND
-                            view.lp_id = $lp_id AND
-                            view.user_id = $student_id
-                            $sessionCondition";
-
-                    $rs = Database::query($sql);
-                    if (Database::num_rows($rs) > 0) {
-                        $total_time += (int) Database::result($rs, 0, 0);
-                    }
+                    // The session condition is unqualified: it applies to the view table (session_id of the item
+                    // view table does not exist).
+                    $qbTotal = self::dbalQueryBuilder()
+                        ->select('SUM(total_time)')
+                        ->from($lpItemViewTable, 'item_view')
+                        ->innerJoin('item_view', $lpViewTable, 'view', 'item_view.lp_view_id = view.iid')
+                        ->where('view.c_id = :courseId')
+                        ->andWhere('view.lp_id = :lpId')
+                        ->andWhere('view.user_id = :studentId')
+                        ->setParameter('courseId', (int) $courseId)
+                        ->setParameter('lpId', $lp_id)
+                        ->setParameter('studentId', $student_id);
+                    self::andSessionCondition($qbTotal, $sessionId);
+                    $total_time += (int) $qbTotal->executeQuery()->fetchOne();
                 }
             }
         }
@@ -3630,23 +3706,25 @@ class Tracking
         $lastTime = 0;
 
         if (self::minimumTimeAvailable($sessionId, $courseId)) {
-            $sql = "SELECT MAX(date_reg) max
-                    FROM track_e_access_complete
-                    WHERE
-                        user_id = $student_id AND
-                        c_id = $courseId AND
-                        session_id = $sessionId AND
-                        tool = 'learnpath' AND
-                        tool_id = $lp_id AND
-                        action = 'view' AND
-                        login_as = 0
-                    ORDER BY date_reg ASC
-                    LIMIT 1";
-            $rs = Database::query($sql);
+            $value = self::dbalQueryBuilder()
+                ->select('MAX(date_reg) AS max')
+                ->from('track_e_access_complete')
+                ->where('user_id = :studentId')
+                ->andWhere('c_id = :courseId')
+                ->andWhere('session_id = :sessionId')
+                ->andWhere("tool = 'learnpath'")
+                ->andWhere('tool_id = :lpId')
+                ->andWhere("action = 'view'")
+                ->andWhere('login_as = 0')
+                ->setParameter('studentId', $student_id)
+                ->setParameter('courseId', (int) $courseId)
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('lpId', $lp_id)
+                ->executeQuery()
+                ->fetchAssociative();
 
             $lastConnection = 0;
-            if (Database::num_rows($rs) > 0) {
-                $value = Database::fetch_array($rs);
+            if (false !== $value) {
                 if (isset($value['max']) && !empty($value['max'])) {
                     $lastConnection = api_strtotime($value['max'], 'UTC');
                 }
@@ -3663,27 +3741,29 @@ class Tracking
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
-            $sql = "SELECT iid FROM $lp_table
-                    WHERE iid = $lp_id ";
-            $row = Database::query($sql);
-            $count = Database::num_rows($row);
+            $lpExists = self::dbalQueryBuilder()
+                ->select('iid')
+                ->from($lp_table)
+                ->where('iid = :lpId')
+                ->setParameter('lpId', $lp_id)
+                ->executeQuery()
+                ->fetchOne();
 
             // calculates last connection time
-            if ($count > 0) {
-                $sql = 'SELECT MAX(start_time)
-                        FROM '.$t_lpiv.' AS item_view
-                        INNER JOIN '.$t_lpv.' AS view
-                        ON (item_view.lp_view_id = view.iid)
-                        WHERE
-                            status != "not attempted" AND
-                            view.c_id = '.$courseId.' AND
-                            view.lp_id = '.$lp_id.' AND
-                            view.user_id = '.$student_id.
-                            api_get_session_condition($sessionId, true, false, 'view.session_id');
-                $rs = Database::query($sql);
-                if (Database::num_rows($rs) > 0) {
-                    $lastTime = Database::result($rs, 0, 0);
-                }
+            if (false !== $lpExists) {
+                $qbTime = self::dbalQueryBuilder()
+                    ->select('MAX(start_time)')
+                    ->from($t_lpiv, 'item_view')
+                    ->innerJoin('item_view', $t_lpv, 'view', 'item_view.lp_view_id = view.iid')
+                    ->where("status != 'not attempted'")
+                    ->andWhere('view.c_id = :courseId')
+                    ->andWhere('view.lp_id = :lpId')
+                    ->andWhere('view.user_id = :studentId')
+                    ->setParameter('courseId', (int) $courseId)
+                    ->setParameter('lpId', $lp_id)
+                    ->setParameter('studentId', $student_id);
+                self::andSessionCondition($qbTime, $sessionId, 'view.session_id');
+                $lastTime = $qbTime->executeQuery()->fetchOne();
             }
         }
 
@@ -3710,27 +3790,29 @@ class Tracking
 
             // Check the real number of LPs corresponding to the filter in the
             // database (and if no list was given, get them all)
-            $sql = "SELECT iid FROM $lp_table
-                    WHERE iid = $lp_id ";
-            $row = Database::query($sql);
-            $count = Database::num_rows($row);
+            $lpExists = self::dbalQueryBuilder()
+                ->select('iid')
+                ->from($lp_table)
+                ->where('iid = :lpId')
+                ->setParameter('lpId', $lp_id)
+                ->executeQuery()
+                ->fetchOne();
 
             // calculates first connection time
-            if ($count > 0) {
-                $sql = 'SELECT MIN(start_time)
-                        FROM '.$t_lpiv.' AS item_view
-                        INNER JOIN '.$t_lpv.' AS view
-                        ON (item_view.lp_view_id = view.iid)
-                        WHERE
-                            status != "not attempted" AND
-                            view.c_id = '.$courseId.' AND
-                            view.lp_id = '.$lp_id.' AND
-                            view.user_id = '.$student_id.
-                            api_get_session_condition($sessionId, true, false, 'view.session_id');
-                $rs = Database::query($sql);
-                if (Database::num_rows($rs) > 0) {
-                    $time = Database::result($rs, 0, 0);
-                }
+            if (false !== $lpExists) {
+                $qbTime = self::dbalQueryBuilder()
+                    ->select('MIN(start_time)')
+                    ->from($t_lpiv, 'item_view')
+                    ->innerJoin('item_view', $t_lpv, 'view', 'item_view.lp_view_id = view.iid')
+                    ->where("status != 'not attempted'")
+                    ->andWhere('view.c_id = :courseId')
+                    ->andWhere('view.lp_id = :lpId')
+                    ->andWhere('view.user_id = :studentId')
+                    ->setParameter('courseId', (int) $courseId)
+                    ->setParameter('lpId', $lp_id)
+                    ->setParameter('studentId', $student_id);
+                self::andSessionCondition($qbTime, $sessionId, 'view.session_id');
+                $time = $qbTime->executeQuery()->fetchOne();
             }
         }
 
@@ -3760,75 +3842,74 @@ class Tracking
         }
         $students = [];
         // At first, courses where $coach_id is coach of the course //
-        $sql = 'SELECT session_id, c_id
-                FROM '.$tbl_session_course_user.'
-                WHERE user_id='.$coach_id.' AND status = '.SessionEntity::COURSE_COACH;
+        $qbCoachCourses = self::dbalQueryBuilder()
+            ->select('scu.session_id', 'scu.c_id')
+            ->from($tbl_session_course_user, 'scu')
+            ->where('scu.user_id = :coachId')
+            ->andWhere('scu.status = :courseCoach')
+            ->setParameter('coachId', $coach_id)
+            ->setParameter('courseCoach', SessionEntity::COURSE_COACH);
 
         if (-1 != $access_url_id) {
-            $sql = 'SELECT scu.session_id, scu.c_id
-                    FROM '.$tbl_session_course_user.' scu
-                    INNER JOIN '.$tbl_session_rel_access_url.'  sru
-                    ON (scu.session_id=sru.session_id)
-                    WHERE
-                        scu.user_id='.$coach_id.' AND
-                        scu.status = '.SessionEntity::COURSE_COACH.' AND
-                        sru.access_url_id = '.$access_url_id;
+            $qbCoachCourses
+                ->innerJoin('scu', $tbl_session_rel_access_url, 'sru', 'scu.session_id = sru.session_id')
+                ->andWhere('sru.access_url_id = :accessUrlId')
+                ->setParameter('accessUrlId', (int) $access_url_id);
         }
 
-        $result = Database::query($sql);
-
-        while ($a_courses = Database::fetch_array($result)) {
+        foreach ($qbCoachCourses->executeQuery()->fetchAllAssociative() as $a_courses) {
             $courseId = $a_courses['c_id'];
             $sessionId = $a_courses['session_id'];
 
-            $sql = "SELECT DISTINCT srcru.user_id
-                    FROM $tbl_session_course_user AS srcru
-                    INNER JOIN $tbl_session_user sru
-                    ON (srcru.user_id = sru.user_id AND srcru.session_id = sru.session_id)
-                    WHERE
-                        sru.relation_type = ".SessionEntity::STUDENT." AND
-                        srcru.c_id = '$courseId' AND
-                        srcru.session_id = '$sessionId'";
-
-            $rs = Database::query($sql);
-            while ($row = Database::fetch_array($rs)) {
+            $rows = self::dbalQueryBuilder()
+                ->select('DISTINCT srcru.user_id')
+                ->from($tbl_session_course_user, 'srcru')
+                ->innerJoin(
+                    'srcru',
+                    $tbl_session_user,
+                    'sru',
+                    'srcru.user_id = sru.user_id AND srcru.session_id = sru.session_id'
+                )
+                ->where('sru.relation_type = :student')
+                ->andWhere('srcru.c_id = :courseId')
+                ->andWhere('srcru.session_id = :sessionId')
+                ->setParameter('student', SessionEntity::STUDENT)
+                ->setParameter('courseId', (int) $courseId)
+                ->setParameter('sessionId', (int) $sessionId)
+                ->executeQuery()
+                ->fetchAllAssociative();
+            foreach ($rows as $row) {
                 $students[$row['user_id']] = $row['user_id'];
             }
         }
 
         // Then, courses where $coach_id is coach of the session
-        $sql = "SELECT srcru.user_id
-            FROM $tbl_session_course_user srcru
-            INNER JOIN $tbl_session_course src
-            ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
-            INNER JOIN $tbl_session s
-            ON srcru.session_id = s.id AND src.session_id = s.id
-            INNER JOIN $tbl_session_user sru on s.id = sru.session_id
-            WHERE
-               srcru.status = ".SessionEntity::STUDENT." AND
-               sru.relation_type = ".SessionEntity::GENERAL_COACH." AND
-               sru.user_id = $coach_id";
+        $qbCoachSessions = self::dbalQueryBuilder()
+            ->select('srcru.user_id')
+            ->from($tbl_session_course_user, 'srcru')
+            ->innerJoin(
+                'srcru',
+                $tbl_session_course,
+                'src',
+                'srcru.c_id = src.c_id AND srcru.session_id = src.session_id'
+            )
+            ->innerJoin('srcru', $tbl_session, 's', 'srcru.session_id = s.id AND src.session_id = s.id')
+            ->innerJoin('s', $tbl_session_user, 'sru', 's.id = sru.session_id')
+            ->where('srcru.status = :student')
+            ->andWhere('sru.relation_type = :generalCoach')
+            ->andWhere('sru.user_id = :coachId')
+            ->setParameter('student', SessionEntity::STUDENT)
+            ->setParameter('generalCoach', SessionEntity::GENERAL_COACH)
+            ->setParameter('coachId', $coach_id);
 
         if (-1 != $access_url_id) {
-            $sql = "SELECT srcru.user_id
-                    FROM $tbl_session_course_user srcru
-                    INNER JOIN $tbl_session_course src
-                    ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
-                    INNER JOIN $tbl_session s
-                    ON srcru.session_id = s.id AND src.session_id = s.id
-                    INNER JOIN $tbl_session_user sru
-                    ON s.id = sru.session_id
-                    INNER JOIN $tbl_session_rel_access_url aurs
-                    ON s.id = aurs.session_id
-                    WHERE
-                        srcru.status = ".SessionEntity::STUDENT." AND
-                        sru.relation_type = ".SessionEntity::GENERAL_COACH." AND
-                        sru.user_id = $coach_id AND
-                        aurs.access_url_id = $access_url_id";
+            $qbCoachSessions
+                ->innerJoin('s', $tbl_session_rel_access_url, 'aurs', 's.id = aurs.session_id')
+                ->andWhere('aurs.access_url_id = :accessUrlId')
+                ->setParameter('accessUrlId', (int) $access_url_id);
         }
 
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        foreach ($qbCoachSessions->executeQuery()->fetchAllAssociative() as $row) {
             $students[$row['user_id']] = $row['user_id'];
         }
 
@@ -3855,37 +3936,59 @@ class Tracking
 
         // At first, courses where $coach_id is coach of the course: the student must be a student of the
         // same course in the same session (the same rule as get_student_followed_by_coach()).
-        $sql = 'SELECT 1
-                FROM '.$tbl_session_course_user.' coach
-                INNER JOIN '.$tbl_session_course_user.' student
-                ON (student.session_id = coach.session_id AND student.c_id = coach.c_id)
-                INNER JOIN '.$tblSessionRelUser.' sru
-                ON (sru.session_id = student.session_id AND sru.user_id = student.user_id)
-                WHERE
-                    coach.user_id = '.$coach_id.' AND
-                    coach.status = '.SessionEntity::COURSE_COACH.' AND
-                    student.user_id = '.$student_id.' AND
-                    sru.relation_type = '.SessionEntity::STUDENT.'
-                LIMIT 1';
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
+        $isCourseCoach = self::dbalQueryBuilder()
+            ->select('1')
+            ->from($tbl_session_course_user, 'coach')
+            ->innerJoin(
+                'coach',
+                $tbl_session_course_user,
+                'student',
+                'student.session_id = coach.session_id AND student.c_id = coach.c_id'
+            )
+            ->innerJoin(
+                'student',
+                $tblSessionRelUser,
+                'sru',
+                'sru.session_id = student.session_id AND sru.user_id = student.user_id'
+            )
+            ->where('coach.user_id = :coachId')
+            ->andWhere('coach.status = :courseCoach')
+            ->andWhere('student.user_id = :studentId')
+            ->andWhere('sru.relation_type = :student')
+            ->setParameter('coachId', $coach_id)
+            ->setParameter('courseCoach', SessionEntity::COURSE_COACH)
+            ->setParameter('studentId', $student_id)
+            ->setParameter('student', SessionEntity::STUDENT)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if (false !== $isCourseCoach) {
             return true;
         }
 
         // Then, courses where $coach_id is coach of the session
-        $sql = "SELECT srcru.user_id
-            FROM $tbl_session_course_user srcru
-            INNER JOIN $tbl_session_course src
-            ON (srcru.c_id = src.c_id AND srcru.session_id = src.session_id)
-            INNER JOIN $tbl_session s
-            ON srcru.session_id = s.id AND src.session_id = s.id
-            INNER JOIN $tblSessionRelUser sru
-            ON s.id = sru.session_id
-            WHERE
-                (srcru.status = ".SessionEntity::STUDENT." AND srcru.user_id = $student_id) AND
-                (sru.relation_type = ".SessionEntity::GENERAL_COACH." AND sru.user_id = $coach_id)";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
+        $isSessionCoach = self::dbalQueryBuilder()
+            ->select('srcru.user_id')
+            ->from($tbl_session_course_user, 'srcru')
+            ->innerJoin(
+                'srcru',
+                $tbl_session_course,
+                'src',
+                'srcru.c_id = src.c_id AND srcru.session_id = src.session_id'
+            )
+            ->innerJoin('srcru', $tbl_session, 's', 'srcru.session_id = s.id AND src.session_id = s.id')
+            ->innerJoin('s', $tblSessionRelUser, 'sru', 's.id = sru.session_id')
+            ->where('srcru.status = :student')
+            ->andWhere('srcru.user_id = :studentId')
+            ->andWhere('sru.relation_type = :generalCoach')
+            ->andWhere('sru.user_id = :coachId')
+            ->setParameter('student', SessionEntity::STUDENT)
+            ->setParameter('studentId', $student_id)
+            ->setParameter('generalCoach', SessionEntity::GENERAL_COACH)
+            ->setParameter('coachId', $coach_id)
+            ->executeQuery()
+            ->fetchOne();
+        if (false !== $isSessionCoach) {
             return true;
         }
 
@@ -3915,85 +4018,80 @@ class Tracking
         $tblSessionRelUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         // At first, courses where $coach_id is coach of the course.
-        $sql = 'SELECT DISTINCT c.code
-                FROM '.$tbl_session_course_user.' sc
-                INNER JOIN '.$tbl_course.' c
-                ON (c.id = sc.c_id)
-                WHERE sc.user_id = '.$coach_id.' AND sc.status = '.SessionEntity::COURSE_COACH;
+        $qbCoachCourses = self::dbalQueryBuilder()
+            ->select('DISTINCT c.code')
+            ->from($tbl_session_course_user, 'sc')
+            ->innerJoin('sc', $tbl_course, 'c', 'c.id = sc.c_id')
+            ->where('sc.user_id = :coachId')
+            ->andWhere('sc.status = :courseCoach')
+            ->setParameter('coachId', $coach_id)
+            ->setParameter('courseCoach', SessionEntity::COURSE_COACH);
 
         $accessUrlUtil = Container::getAccessUrlUtil();
         if ($accessUrlUtil->isMultiple()) {
             $access_url_id = $accessUrlUtil->getCurrent()->getId();
             if (-1 != $access_url_id) {
-                $sql = 'SELECT DISTINCT c.code
-                        FROM '.$tbl_session_course_user.' scu
-                        INNER JOIN '.$tbl_course.' c
-                        ON (c.id = scu.c_id)
-                        INNER JOIN '.$tbl_course_rel_access_url.' cru
-                        ON (c.id = cru.c_id)
-                        WHERE
-                            scu.user_id='.$coach_id.' AND
-                            scu.status = '.SessionEntity::COURSE_COACH.' AND
-                            cru.access_url_id = '.$access_url_id;
+                $qbCoachCourses
+                    ->innerJoin('c', $tbl_course_rel_access_url, 'cru', 'c.id = cru.c_id')
+                    ->andWhere('cru.access_url_id = :accessUrlId')
+                    ->setParameter('accessUrlId', (int) $access_url_id);
             }
         }
 
         if (!empty($sessionId)) {
-            $sql .= ' AND session_id='.$sessionId;
+            $qbCoachCourses->andWhere('session_id = :sessionId')
+                ->setParameter('sessionId', (int) $sessionId);
         }
 
         $courseList = [];
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        foreach ($qbCoachCourses->executeQuery()->fetchAllAssociative() as $row) {
             $courseList[$row['code']] = $row['code'];
         }
 
         // Then, courses where $coach_id is coach of the session
-        $sql = "SELECT DISTINCT course.code
-                FROM $tbl_session_course as session_course
-                INNER JOIN $tbl_session as session
-                    ON (session.id = session_course.session_id)
-                INNER JOIN $tblSessionRelUser session_user
-                    ON (session.id = session_user.session_id
-                    AND session_user.user_id = $coach_id
-                    AND session_user.relation_type = ".SessionEntity::GENERAL_COACH.")
-                INNER JOIN $tbl_course as course
-                    ON course.id = session_course.c_id";
+        $qbSessionCourses = self::dbalQueryBuilder()
+            ->select('DISTINCT course.code')
+            ->from($tbl_session_course, 'session_course')
+            ->innerJoin('session_course', $tbl_session, 'session', 'session.id = session_course.session_id')
+            ->innerJoin(
+                'session',
+                $tblSessionRelUser,
+                'session_user',
+                'session.id = session_user.session_id'
+                .' AND session_user.user_id = :coachId'
+                .' AND session_user.relation_type = :generalCoach'
+            )
+            ->innerJoin('session_course', $tbl_course, 'course', 'course.id = session_course.c_id')
+            ->setParameter('coachId', $coach_id)
+            ->setParameter('generalCoach', SessionEntity::GENERAL_COACH);
 
         if ($accessUrlUtil->isMultiple()) {
             $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $access_url_id = $accessUrlUtil->getCurrent()->getId();
             if (-1 != $access_url_id) {
-                $sql = "SELECT DISTINCT c.code
-                    FROM $tbl_session_course as session_course
-                    INNER JOIN $tbl_course c
-                    ON (c.id = session_course.c_id)
-                    INNER JOIN $tbl_session as session
-                    ON session.id = session_course.session_id
-                    INNER JOIN $tblSessionRelUser session_user
-                        ON (session.id = session_user.session_id
-                        AND session_user.user_id = $coach_id
-                        AND session_user.relation_type = ".SessionEntity::GENERAL_COACH.")
-                    INNER JOIN $tbl_course as course
-                        ON course.id = session_course.c_id
-                     INNER JOIN $tbl_course_rel_access_url course_rel_url
-                    ON (course_rel_url.c_id = c.id)";
+                // The original query joined the course table twice (c and course) and selected c.code.
+                $qbSessionCourses
+                    ->select('DISTINCT c.code')
+                    ->innerJoin('session_course', $tbl_course, 'c', 'c.id = session_course.c_id')
+                    ->innerJoin('c', $tbl_course_rel_access_url, 'course_rel_url', 'course_rel_url.c_id = c.id');
             }
         }
 
         if (!empty($sessionId)) {
-            $sql .= ' WHERE session_course.session_id='.$sessionId;
+            $qbSessionCourses->where('session_course.session_id = :sessionId')
+                ->setParameter('sessionId', (int) $sessionId);
             if ($accessUrlUtil->isMultiple()) {
-                $sql .= ' AND access_url_id = '.$access_url_id;
+                $qbSessionCourses->andWhere('access_url_id = :accessUrlId')
+                    ->setParameter('accessUrlId', (int) $access_url_id);
             }
         } else {
             if ($accessUrlUtil->isMultiple()) {
-                $sql .= ' WHERE access_url_id = '.$access_url_id;
+                $qbSessionCourses->where('access_url_id = :accessUrlId')
+                    ->setParameter('accessUrlId', (int) $access_url_id);
             }
         }
 
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        foreach ($qbSessionCourses->executeQuery()->fetchAllAssociative() as $row) {
             $courseList[$row['code']] = $row['code'];
         }
 
@@ -4073,6 +4171,7 @@ class Tracking
             }
         }
 
+        // TODO(db-neutral): UNION in a derived table and SQL fragments built by ExtraField::parseConditions()
         $sql = "
             $select
             (
@@ -4173,16 +4272,17 @@ class Tracking
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
 
-        $sql = "SELECT DISTINCT code, c_id
-                FROM $tbl_session_course sc
-                INNER JOIN $courseTable c
-                ON sc.c_id = c.id
-                WHERE session_id= $sessionId";
-
-        $result = Database::query($sql);
+        $rows = self::dbalQueryBuilder()
+            ->select('DISTINCT code', 'c_id')
+            ->from($tbl_session_course, 'sc')
+            ->innerJoin('sc', $courseTable, 'c', 'sc.c_id = c.id')
+            ->where('session_id = :sessionId')
+            ->setParameter('sessionId', $sessionId)
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $courses = [];
-        while ($row = Database::fetch_array($result)) {
+        foreach ($rows as $row) {
             $courses[$row['code']] = $row;
         }
 
@@ -4328,21 +4428,24 @@ class Tracking
         $tbl_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
         $now = api_get_utc_datetime();
 
-        $sql = "SELECT count(*) FROM $tbl_stats_access
-                WHERE
-                    DATE_SUB('$now',INTERVAL $last_days DAY) <= access_date AND
-                    c_id = '$courseId' AND
-                    access_tool='".TOOL_CHAT."' AND
-                    session_id = '$session_id' ";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_row($result);
-            $count = $row[0];
+        // DATE_SUB($now, INTERVAL $last_days DAY) computed on the UTC date, bound as a parameter.
+        $since = (new DateTimeImmutable($now, new DateTimeZone('UTC')))
+            ->modify('-'.$last_days.' days')
+            ->format('Y-m-d H:i:s');
 
-            return $count;
-        }
-
-        return 0;
+        return self::dbalQueryBuilder()
+            ->select('COUNT(*)')
+            ->from($tbl_stats_access)
+            ->where('access_date >= :since')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('access_tool = :chatTool')
+            ->andWhere('session_id = :sessionId')
+            ->setParameter('since', $since)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('chatTool', TOOL_CHAT)
+            ->setParameter('sessionId', $session_id)
+            ->executeQuery()
+            ->fetchOne();
     }
 
     /**
@@ -4366,19 +4469,24 @@ class Tracking
 
         // table definition
         $tbl_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        $sql = "SELECT access_date
-                FROM $tbl_stats_access
-                WHERE
-                     access_tool='".TOOL_CHAT."' AND
-                     access_user_id='$student_id' AND
-                     c_id = $courseId AND
-                     session_id = '$session_id'
-                ORDER BY access_date DESC limit 1";
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            $row = Database::fetch_array($rs);
+        $accessDate = self::dbalQueryBuilder()
+            ->select('access_date')
+            ->from($tbl_stats_access)
+            ->where('access_tool = :chatTool')
+            ->andWhere('access_user_id = :studentId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->setParameter('chatTool', TOOL_CHAT)
+            ->setParameter('studentId', $student_id)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $session_id)
+            ->orderBy('access_date', 'DESC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if (false !== $accessDate) {
             // access_date is stored in UTC, the default source timezone.
-            $date_time = api_convert_and_format_date($row['access_date']);
+            $date_time = api_convert_and_format_date($accessDate);
         }
 
         return $date_time;
@@ -4402,16 +4510,17 @@ class Tracking
         // table definition
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
 
-        $sql = 'SELECT 1
-                FROM '.$table.'
-                WHERE
-                    links_user_id= '.$student_id.' AND
-                    c_id = "'.$courseId.'" AND
-                    session_id = '.$session_id.' ';
-
-        $rs = Database::query($sql);
-
-        return Database::num_rows($rs);
+        return (int) self::dbalQueryBuilder()
+            ->select('COUNT(*)')
+            ->from($table)
+            ->where('links_user_id = :studentId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->setParameter('studentId', $student_id)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $session_id)
+            ->executeQuery()
+            ->fetchOne();
     }
 
     public static function countStudentDownloadedDocuments(int $studentId, int $courseId, int $sessionId = 0): int
@@ -4493,67 +4602,84 @@ class Tracking
             return false;
         }
 
+        $qb = self::dbalQueryBuilder();
         if ('never' === $since) {
             if (empty($session_id)) {
-                $sql = 'SELECT course_user.user_id
-                        FROM '.$table_course_rel_user.' course_user
-                        LEFT JOIN '.$tbl_track_login.' stats_login
-                        ON course_user.user_id = stats_login.user_id AND
-                        stats_login.c_id = course_user.c_id AND
-                        relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
-                        INNER JOIN '.$tableCourse.' c
-                        ON (c.id = course_user.c_id)
-                        WHERE
-                            course_user.c_id = '.$courseId.' AND
-                            stats_login.login_course_date IS NULL
-                        GROUP BY course_user.user_id';
+                $qb->select('course_user.user_id')
+                    ->from($table_course_rel_user, 'course_user')
+                    ->leftJoin(
+                        'course_user',
+                        $tbl_track_login,
+                        'stats_login',
+                        'course_user.user_id = stats_login.user_id AND'
+                        .' stats_login.c_id = course_user.c_id AND'
+                        .' relation_type <> :rrhh'
+                    )
+                    ->innerJoin('course_user', $tableCourse, 'c', 'c.id = course_user.c_id')
+                    ->where('course_user.c_id = :courseId')
+                    ->andWhere('stats_login.login_course_date IS NULL')
+                    ->groupBy('course_user.user_id')
+                    ->setParameter('rrhh', COURSE_RELATION_TYPE_RRHH)
+                    ->setParameter('courseId', $courseId);
             } else {
-                $sql = 'SELECT session_course_user.user_id
-                        FROM '.$tbl_session_course_user.' session_course_user
-                        LEFT JOIN '.$tbl_track_login.' stats_login
-                        ON session_course_user.user_id = stats_login.user_id AND
-                        stats_login.c_id = session_course_user.c_id
-                        INNER JOIN '.$tableCourse.' c
-                        ON (c.id = session_course_user.c_id)
-                        WHERE
-                            session_course_user.c_id = '.$courseId.' AND
-                            session_course_user.session_id = '.$session_id.' AND
-                            stats_login.login_course_date IS NULL
-                        GROUP BY session_course_user.user_id';
+                $qb->select('session_course_user.user_id')
+                    ->from($tbl_session_course_user, 'session_course_user')
+                    ->leftJoin(
+                        'session_course_user',
+                        $tbl_track_login,
+                        'stats_login',
+                        'session_course_user.user_id = stats_login.user_id AND'
+                        .' stats_login.c_id = session_course_user.c_id'
+                    )
+                    ->innerJoin('session_course_user', $tableCourse, 'c', 'c.id = session_course_user.c_id')
+                    ->where('session_course_user.c_id = :courseId')
+                    ->andWhere('session_course_user.session_id = :sessionId')
+                    ->andWhere('stats_login.login_course_date IS NULL')
+                    ->groupBy('session_course_user.user_id')
+                    ->setParameter('courseId', $courseId)
+                    ->setParameter('sessionId', $session_id);
             }
         } else {
             $since = (int) $since;
+            $qb->select('stats_login.user_id', 'MAX(login_course_date) AS max_date')
+                ->from($tbl_track_login, 'stats_login')
+                ->innerJoin('stats_login', $tableCourse, 'c', 'c.id = stats_login.c_id');
             if (empty($session_id)) {
-                $inner = 'INNER JOIN '.$table_course_rel_user.' course_user
-                          ON course_user.user_id = stats_login.user_id AND course_user.c_id = c.id ';
+                $qb->innerJoin(
+                    'stats_login',
+                    $table_course_rel_user,
+                    'course_user',
+                    'course_user.user_id = stats_login.user_id AND course_user.c_id = c.id'
+                );
             } else {
-                $inner = 'INNER JOIN '.$tbl_session_course_user.' session_course_user
-                          ON
-                            c.id = session_course_user.c_id AND
-                            session_course_user.session_id = '.$session_id.' AND
-                            session_course_user.user_id = stats_login.user_id ';
+                $qb->innerJoin(
+                    'stats_login',
+                    $tbl_session_course_user,
+                    'session_course_user',
+                    'c.id = session_course_user.c_id AND'
+                    .' session_course_user.session_id = :sessionId AND'
+                    .' session_course_user.user_id = stats_login.user_id'
+                )->setParameter('sessionId', $session_id);
             }
-
-            $sql = 'SELECT
-                    stats_login.user_id,
-                    MAX(login_course_date) max_date
-                FROM '.$tbl_track_login.' stats_login
-                INNER JOIN '.$tableCourse.' c
-                ON (c.id = stats_login.c_id)
-                '.$inner.'
-                WHERE c.id = '.$courseId.'
-                GROUP BY stats_login.user_id
-                HAVING DATE_SUB("'.$now.'", INTERVAL '.$since.' DAY) > max_date ';
+            // DATE_SUB($now, INTERVAL $since DAY) computed on the UTC date.
+            $limitDate = (new DateTimeImmutable($now, new DateTimeZone('UTC')))
+                ->modify('-'.$since.' days')
+                ->format('Y-m-d H:i:s');
+            $qb->where('c.id = :courseId')
+                ->groupBy('stats_login.user_id')
+                ->having(':limitDate > max_date')
+                ->setParameter('courseId', $courseId)
+                ->setParameter('limitDate', $limitDate);
         }
 
-        $rs = Database::query($sql);
+        $rows = $qb->executeQuery()->fetchAllAssociative();
 
         $allow = PauseTraining::create()->isEnabled();
         $allowPauseFormation = 'true' === api_get_plugin_setting('PauseTraining', 'allow_users_to_edit_pause_formation');
 
         $extraFieldValue = new ExtraFieldValue('user');
         $users = [];
-        while ($user = Database::fetch_array($rs)) {
+        foreach ($rows as $user) {
             $userId = $user['user_id'];
 
             if ($allow && $allowPauseFormation) {
@@ -4585,29 +4711,22 @@ class Tracking
         $courseId = (int) $courseId;
         $data = [];
         $TABLETRACK_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        $condition_session = '';
+        $qb = self::dbalQueryBuilder()
+            ->select('access_tool', 'COUNT(DISTINCT access_user_id)', 'COUNT(access_tool) AS count_access_tool')
+            ->from($TABLETRACK_ACCESS)
+            ->where('access_tool IS NOT NULL')
+            ->andWhere("access_tool != ''")
+            ->andWhere('c_id = :courseId')
+            ->setParameter('courseId', $courseId);
         if (isset($session_id)) {
-            $session_id = (int) $session_id;
-            $condition_session = ' AND session_id = '.$session_id;
+            $qb->andWhere('session_id = :sessionId')
+                ->setParameter('sessionId', (int) $session_id);
         }
-        $sql = "SELECT
-                    access_tool,
-                    COUNT(DISTINCT access_user_id),
-                    count(access_tool) as count_access_tool
-                FROM $TABLETRACK_ACCESS
-                WHERE
-                    access_tool IS NOT NULL AND
-                    access_tool != '' AND
-                    c_id = '$courseId'
-                    $condition_session
-                GROUP BY access_tool
-                ORDER BY count_access_tool DESC
-                LIMIT 0, 3";
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_array($rs)) {
-                $data[] = $row;
-            }
+        $qb->groupBy('access_tool')
+            ->orderBy('count_access_tool', 'DESC')
+            ->setMaxResults(3);
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
+            $data[] = self::withNumericKeys($row);
         }
 
         return $data;
@@ -4635,35 +4754,32 @@ class Tracking
         $TABLETRACK_DOWNLOADS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
         $tableResourceLink = Database::get_main_table('resource_link');
         $tableResourceNode = Database::get_main_table('resource_node');
-        $condition_session = '';
         $session_id = intval($session_id);
+        $qb = self::dbalQueryBuilder()
+            ->select(
+                't.resource_link_id AS lid',
+                'n.path AS npath',
+                'n.title AS ntitle',
+                'n.uuid AS uuid',
+                'n.id AS nid',
+                'COUNT(t.down_id) AS count_down'
+            )
+            ->from($TABLETRACK_DOWNLOADS, 't')
+            ->innerJoin('t', $tableResourceLink, 'l', 't.resource_link_id = l.id')
+            ->innerJoin('l', $tableResourceNode, 'n', 'l.resource_node_id = n.id')
+            ->where('l.c_id = :courseId')
+            ->setParameter('courseId', (int) $courseId);
         if (!empty($session_id)) {
-            $condition_session = ' AND l.session_id = '.$session_id;
+            $qb->andWhere('l.session_id = :sessionId')
+                ->setParameter('sessionId', $session_id);
         }
+        $qb->groupBy('nid')->orderBy('count_down', 'DESC');
         // A limit of 0 (the default) means "without limit".
-        $limitCondition = (int) $limit > 0 ? ' LIMIT 0, '.(int) $limit : '';
-        $sql = "SELECT t.resource_link_id as lid,
-                       n.path as npath,
-                       n.title as ntitle,
-                       n.uuid as uuid,
-                       n.id as nid,
-                    COUNT(t.down_id) as count_down
-                FROM $TABLETRACK_DOWNLOADS t
-                    INNER JOIN $tableResourceLink l
-                    ON t.resource_link_id = l.id
-                    INNER JOIN $tableResourceNode n
-                    ON l.resource_node_id = n.id
-                WHERE l.c_id = $courseId
-                    $condition_session
-                GROUP BY nid
-                ORDER BY count_down DESC
-                $limitCondition";
-        $rs = Database::query($sql);
-
-        if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_array($rs)) {
-                $data[] = $row;
-            }
+        if ((int) $limit > 0) {
+            $qb->setMaxResults((int) $limit);
+        }
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
+            $data[] = self::withNumericKeys($row);
         }
 
         return $data;
@@ -4694,26 +4810,26 @@ class Tracking
         $TABLETRACK_LINKS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
         $TABLECOURSE_LINKS = Database::get_course_table(TABLE_LINK);
 
-        $condition_session = '';
+        $qb = self::dbalQueryBuilder()
+            ->select(
+                'cl.title',
+                'cl.url',
+                'COUNT(DISTINCT sl.links_user_id)',
+                'COUNT(cl.title) AS count_visits'
+            )
+            ->from($TABLETRACK_LINKS, 'sl')
+            ->innerJoin('sl', $TABLECOURSE_LINKS, 'cl', 'sl.links_link_id = cl.iid')
+            ->where('sl.c_id = :courseId')
+            ->setParameter('courseId', $courseId);
         if (isset($session_id)) {
-            $session_id = intval($session_id);
-            $condition_session = ' AND sl.session_id = '.$session_id;
+            $qb->andWhere('sl.session_id = :sessionId')
+                ->setParameter('sessionId', (int) $session_id);
         }
-
-        $sql = "SELECT cl.title, cl.url,count(DISTINCT sl.links_user_id), count(cl.title) as count_visits
-                FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
-                WHERE
-                    sl.links_link_id = cl.iid AND
-                    sl.c_id = $courseId
-                    $condition_session
-                GROUP BY cl.title, cl.url
-                ORDER BY count_visits DESC
-                LIMIT 0, 3";
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_array($rs)) {
-                $data[] = $row;
-            }
+        $qb->groupBy('cl.title', 'cl.url')
+            ->orderBy('count_visits', 'DESC')
+            ->setMaxResults(3);
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
+            $data[] = self::withNumericKeys($row);
         }
 
         return $data;
@@ -4784,86 +4900,70 @@ class Tracking
         $urlId = -1;
 
         $accessUrlUtil = Container::getAccessUrlUtil();
-        if ($accessUrlUtil->isMultiple()) {
+        $isMultipleUrl = $accessUrlUtil->isMultiple();
+        if ($isMultipleUrl) {
             $urlId = $accessUrlUtil->getCurrent()->getId();
-            $sql = "SELECT c.id, c.code, title
-                FROM $tbl_course_user cu
-                INNER JOIN $tbl_course c
-                ON (cu.c_id = c.id)
-                INNER JOIN $tbl_access_rel_course a
-                ON (a.c_id = c.id)
-                WHERE
-                    cu.user_id = $user_id AND
-                    relation_type<> ".COURSE_RELATION_TYPE_RRHH." AND
-                    access_url_id = $urlId
-                ORDER BY title";
-        } else {
-            $sql = "SELECT c.id, c.code, title
-                FROM $tbl_course_user cu
-                INNER JOIN $tbl_course c
-                ON (cu.c_id = c.id)
-                WHERE
-                    cu.user_id = $user_id AND
-                    relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-                ORDER BY title";
         }
 
-        $rs = Database::query($sql);
+        $courseQb = self::dbalQueryBuilder()
+            ->select('c.id', 'c.code', 'title')
+            ->from($tbl_course_user, 'cu')
+            ->innerJoin('cu', $tbl_course, 'c', 'cu.c_id = c.id')
+            ->where('cu.user_id = :userId')
+            ->andWhere('relation_type <> :hrRelation')
+            ->setParameter('userId', $user_id)
+            ->setParameter('hrRelation', COURSE_RELATION_TYPE_RRHH)
+            ->orderBy('title');
+        if ($isMultipleUrl) {
+            $courseQb->innerJoin('c', $tbl_access_rel_course, 'a', 'a.c_id = c.id')
+                ->andWhere('access_url_id = :urlId')
+                ->setParameter('urlId', $urlId);
+        }
+
         $courses = $course_in_session = $temp_course_in_session = [];
         $courseIdList = [];
-        while ($row = Database::fetch_assoc($rs)) {
+        foreach ($courseQb->executeQuery()->fetchAllAssociative() as $row) {
             $courses[$row['id']] = $row['title'];
             $courseIdList[] = $row['id'];
         }
 
-        $orderBy = ' ORDER BY title ';
-        $extraInnerJoin = null;
+        // Get the list of sessions where the user is subscribed as student
+        $sessionQb = self::dbalQueryBuilder()
+            ->select('DISTINCT c.code', 's.id as session_id', 's.title')
+            ->from($tbl_session_course_user, 'cu');
+        if ($isMultipleUrl) {
+            $sessionQb->innerJoin('cu', $tbl_access_rel_session, 'a', 'a.session_id = cu.session_id')
+                ->innerJoin('a', $tbl_session, 's', 's.id = a.session_id');
+        } else {
+            $sessionQb->innerJoin('cu', $tbl_session, 's', 's.id = cu.session_id');
+        }
+        $sessionQb->innerJoin('cu', $tbl_course, 'c', 'c.id = cu.c_id');
 
         if (SessionManager::orderCourseIsEnabled() && !empty($session_id)) {
-            $orderBy = ' ORDER BY s.id, src.position ';
             $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-            $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
-                            ON (cu.c_id = src.c_id AND src.session_id = $session_id) ";
-        }
-
-        $sessionCondition = '';
-        if (!empty($session_id)) {
-            $sessionCondition = " AND s.id = $session_id";
-        }
-
-        // Get the list of sessions where the user is subscribed as student
-        if ($accessUrlUtil->isMultiple()) {
-            $sql = "SELECT DISTINCT c.code, s.id as session_id, s.title
-                FROM $tbl_session_course_user cu
-                INNER JOIN $tbl_access_rel_session a
-                ON (a.session_id = cu.session_id)
-                INNER JOIN $tbl_session s
-                ON (s.id = a.session_id)
-                INNER JOIN $tbl_course c
-                ON (c.id = cu.c_id)
-                $extraInnerJoin
-                WHERE
-                    cu.user_id = $user_id AND
-                    access_url_id = $urlId
-                    $sessionCondition
-                $orderBy ";
+            $sessionQb->innerJoin(
+                'cu',
+                $tableSessionRelCourse,
+                'src',
+                'cu.c_id = src.c_id AND src.session_id = :orderSessionId'
+            )
+                ->setParameter('orderSessionId', $session_id)
+                ->orderBy('s.id')
+                ->addOrderBy('src.position');
         } else {
-            $sql = "SELECT DISTINCT c.code, s.id as session_id, s.title
-                FROM $tbl_session_course_user cu
-                INNER JOIN $tbl_session s
-                ON (s.id = cu.session_id)
-                INNER JOIN $tbl_course c
-                ON (c.id = cu.c_id)
-                $extraInnerJoin
-                WHERE
-                    cu.user_id = $user_id
-                    $sessionCondition
-                $orderBy ";
+            $sessionQb->orderBy('title');
         }
 
-        $rs = Database::query($sql);
+        $sessionQb->where('cu.user_id = :userId')->setParameter('userId', $user_id);
+        if ($isMultipleUrl) {
+            $sessionQb->andWhere('access_url_id = :urlId')->setParameter('urlId', $urlId);
+        }
+        if (!empty($session_id)) {
+            $sessionQb->andWhere('s.id = :sessionId')->setParameter('sessionId', $session_id);
+        }
+
         $simple_session_array = [];
-        while ($row = Database::fetch_assoc($rs)) {
+        foreach ($sessionQb->executeQuery()->fetchAllAssociative() as $row) {
             $course_info = api_get_course_info($row['code']);
             $temp_course_in_session[$row['session_id']]['course_list'][$course_info['real_id']] = $course_info;
             $temp_course_in_session[$row['session_id']]['title'] = $row['title'];
@@ -6714,6 +6814,7 @@ class Tracking
                 $where .= sprintf(" AND (te.start_date BETWEEN '%s 00:00:00' AND '%s 23:59:59')", $date_from, $date_to);
             }
 
+            // TODO(db-neutral): CONCAT and the free-form $options['where'|'order'|'limit'] fragments passed by callers
             $sql = "SELECT
                 te.session_id,
                 ta.id as attempt_id,
@@ -6903,36 +7004,42 @@ class Tracking
             return [];
         }
 
-        $sql = "SELECT MIN(date_reg) min, MAX(date_reg) max
-                FROM track_e_access_complete
-                WHERE
-                    user_id = $userId AND
-                    c_id = $courseId AND
-                    session_id = $sessionId AND
-                    login_as = 0
-                ORDER BY date_reg ASC
-                LIMIT 1";
-        $rs = Database::query($sql);
+        $value = self::dbalQueryBuilder()
+            ->select('MIN(date_reg) AS min', 'MAX(date_reg) AS max')
+            ->from('track_e_access_complete')
+            ->where('user_id = :userId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('login_as = 0')
+            ->setParameter('userId', $userId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->executeQuery()
+            ->fetchAssociative();
 
         $firstConnection = '';
         $lastConnection = '';
-        if (Database::num_rows($rs) > 0) {
-            $value = Database::fetch_array($rs);
+        if (false !== $value) {
             // MIN/MAX of no rows is a row of NULLs: keep the empty-string default.
             $firstConnection = $value['min'] ?? '';
             $lastConnection = $value['max'] ?? '';
         }
 
-        $sql = "SELECT * FROM track_e_access_complete
-                WHERE
-                    user_id = $userId AND
-                    c_id = $courseId AND
-                    session_id = $sessionId AND
-                    login_as = 0 AND current_id <> 0";
-
-        $res = Database::query($sql);
+        $rowsAccess = self::dbalQueryBuilder()
+            ->select('*')
+            ->from('track_e_access_complete')
+            ->where('user_id = :userId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('login_as = 0')
+            ->andWhere('current_id <> 0')
+            ->setParameter('userId', $userId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->executeQuery()
+            ->fetchAllAssociative();
         $reg = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($rowsAccess as $row) {
             $reg[$row['id']] = $row;
             $reg[$row['id']]['date_reg'] = strtotime($row['date_reg']);
         }
@@ -7077,16 +7184,20 @@ class Tracking
             return false;
         }
         $user_id = intval($user_id);
-        $event_date = Database::escape_string($event_date);
         $table_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $sql_ip = "SELECT login_date, user_ip
-                   FROM $table_login
-                   WHERE login_user_id = $user_id AND login_date < '$event_date'
-                   ORDER BY login_date DESC LIMIT 1";
         $ip = '';
-        $res_ip = Database::query($sql_ip);
-        if (false !== $res_ip && Database::num_rows($res_ip) > 0) {
-            $row_ip = Database::fetch_row($res_ip);
+        $row_ip = self::dbalQueryBuilder()
+            ->select('login_date', 'user_ip')
+            ->from($table_login)
+            ->where('login_user_id = :userId')
+            ->andWhere('login_date < :eventDate')
+            ->setParameter('userId', $user_id)
+            ->setParameter('eventDate', $event_date)
+            ->orderBy('login_date', 'DESC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchNumeric();
+        if (false !== $row_ip) {
             if ($return_as_link) {
                 $ip = Display::url(
                     (empty($body_replace) ? $row_ip[1] : $body_replace),
@@ -7218,17 +7329,16 @@ class Tracking
     public static function getNumberOfCourseAccessDates($userId, $courseId, $sessionId)
     {
         $tblTrackCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sessionCondition = api_get_session_condition($sessionId);
-        $courseId = (int) $courseId;
-        $userId = (int) $userId;
+        $qb = self::dbalQueryBuilder()
+            ->select('COUNT(DISTINCT (DATE(login_course_date))) AS c')
+            ->from($tblTrackCourseAccess)
+            ->where('c_id = :courseId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('userId', (int) $userId);
+        self::andSessionCondition($qb, (int) $sessionId);
 
-        $sql = "SELECT COUNT(DISTINCT (DATE(login_course_date))) AS c
-            FROM $tblTrackCourseAccess
-            WHERE c_id = $courseId $sessionCondition AND user_id = $userId";
-
-        $result = Database::fetch_assoc(Database::query($sql));
-
-        return (int) $result['c'];
+        return (int) $qb->executeQuery()->fetchOne();
     }
 
     public static function processUserDataMove(
@@ -7241,13 +7351,13 @@ class Tracking
     ) {
         // Begin with the import process
         $origin_course_code = $course_info['code'];
-        $course_id = $course_info['real_id'];
+        $course_id = (int) $course_info['real_id'];
         $user_id = (int) $user_id;
         $origin_session_id = (int) $origin_session_id;
         $new_session_id = (int) $new_session_id;
         // "No session" is NULL in the nullable session columns (they are foreign keys to session.id) and 0 in the
         // NOT NULL ones.
-        $newSessionNullable = empty($new_session_id) ? 'NULL' : (string) $new_session_id;
+        $newSessionNullable = empty($new_session_id) ? null : $new_session_id;
         $courseEntity = api_get_course_entity((int) $course_id);
         $originSessionEntity = empty($origin_session_id) ? null : api_get_session_entity($origin_session_id);
         $newSessionEntity = empty($new_session_id) ? null : api_get_session_entity($new_session_id);
@@ -7270,12 +7380,16 @@ class Tracking
 
         //1. track_e_exercises
         //ORIGINAL COURSE
-        $sessionCondition = api_get_session_condition($origin_session_id);
-        $sql = "SELECT * FROM $TABLETRACK_EXERCICES
-                WHERE c_id = $course_id AND exe_user_id = $user_id  $sessionCondition";
-        $res = Database::query($sql);
+        $qb = self::dbalQueryBuilder()
+            ->select('*')
+            ->from($TABLETRACK_EXERCICES)
+            ->where('c_id = :courseId')
+            ->andWhere('exe_user_id = :userId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('userId', $user_id);
+        self::andSessionCondition($qb, $origin_session_id);
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
             $list[$row['exe_id']] = $row;
         }
 
@@ -7284,16 +7398,12 @@ class Tracking
         if (!empty($list)) {
             foreach ($list as $exe_id => $data) {
                 if ($update_database) {
-                    $sql = "UPDATE $TABLETRACK_EXERCICES SET session_id = $newSessionNullable WHERE exe_id = $exe_id";
-                    Database::query($sql);
+                    self::updateSessionOfRow($TABLETRACK_EXERCICES, 'exe_id', (int) $exe_id, $newSessionNullable);
 
                     //$sql = "UPDATE $TBL_TRACK_ATTEMPT SET session_id = '$new_session_id' WHERE exe_id = $exe_id";
                     //Database::query($sql);
 
-                    $sql = "UPDATE $TBL_TRACK_ATTEMPT_QUALIFY
-                            SET session_id = $new_session_id
-                            WHERE exe_id = $exe_id";
-                    Database::query($sql);
+                    self::updateSessionOfRow($TBL_TRACK_ATTEMPT_QUALIFY, 'exe_id', (int) $exe_id, $new_session_id);
 
                     if (!isset($result_message[$TABLETRACK_EXERCICES])) {
                         $result_message[$TABLETRACK_EXERCICES] = 0;
@@ -7311,23 +7421,23 @@ class Tracking
 
         // DESTINY COURSE
         if (!$update_database) {
-            $sql = "SELECT * FROM $TABLETRACK_EXERCICES
-                    WHERE
-                        c_id = $course_id AND
-                        exe_user_id = $user_id ".api_get_session_condition($new_session_id);
-            $res = Database::query($sql);
+            $qb = self::dbalQueryBuilder()
+                ->select('*')
+                ->from($TABLETRACK_EXERCICES)
+                ->where('c_id = :courseId')
+                ->andWhere('exe_user_id = :userId')
+                ->setParameter('courseId', $course_id)
+                ->setParameter('userId', $user_id);
+            self::andSessionCondition($qb, $new_session_id);
             $list = [];
-            while ($row = Database::fetch_assoc($res)) {
+            foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
                 $list[$row['exe_id']] = $row;
             }
 
             if (!empty($list)) {
                 foreach ($list as $exe_id => $data) {
                     if ($update_database) {
-                        $sql = "UPDATE $TABLETRACK_EXERCICES
-                                SET session_id = $newSessionNullable
-                                WHERE exe_id = $exe_id";
-                        Database::query($sql);
+                        self::updateSessionOfRow($TABLETRACK_EXERCICES, 'exe_id', (int) $exe_id, $newSessionNullable);
                         $result_message[$TABLETRACK_EXERCICES]++;
                     } else {
                         if (!empty($data['orig_lp_id']) && !empty($data['orig_lp_item_id'])) {
@@ -7343,24 +7453,26 @@ class Tracking
         // 2.track_e_attempt, track_e_attempt_recording, track_e_downloads
         // Nothing to do because there are not relationship with a session
         // 3. track_e_course_access
-        $sql = "SELECT * FROM $TBL_TRACK_E_COURSE_ACCESS
-                WHERE c_id = $course_id AND session_id = $origin_session_id  AND user_id = $user_id ";
-        $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        $rows = self::dbalQueryBuilder()
+            ->select('*')
+            ->from($TBL_TRACK_E_COURSE_ACCESS)
+            ->where('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('user_id = :userId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('sessionId', $origin_session_id)
+            ->setParameter('userId', $user_id)
+            ->executeQuery()
+            ->fetchAllAssociative();
+        foreach ($rows as $row) {
             $list[$row['course_access_id']] = $row;
         }
 
         if (!empty($list)) {
             foreach ($list as $id => $data) {
                 if ($update_database) {
-                    $sql = "UPDATE $TBL_TRACK_E_COURSE_ACCESS
-                            SET session_id = $new_session_id
-                            WHERE course_access_id = $id";
-                    if ($debug) {
-                        echo $sql;
-                    }
-                    Database::query($sql);
+                    self::updateSessionOfRow($TBL_TRACK_E_COURSE_ACCESS, 'course_access_id', (int) $id, $new_session_id, null, $debug);
                     if (!isset($result_message[$TBL_TRACK_E_COURSE_ACCESS])) {
                         $result_message[$TBL_TRACK_E_COURSE_ACCESS] = 0;
                     }
@@ -7370,26 +7482,23 @@ class Tracking
         }
 
         // 4. track_e_lastaccess
-        $sql = "SELECT access_id FROM $TBL_TRACK_E_LAST_ACCESS
-                WHERE
-                    c_id = $course_id AND
-                    access_user_id = $user_id ".api_get_session_condition($origin_session_id);
-        $res = Database::query($sql);
+        $qb = self::dbalQueryBuilder()
+            ->select('access_id')
+            ->from($TBL_TRACK_E_LAST_ACCESS)
+            ->where('c_id = :courseId')
+            ->andWhere('access_user_id = :userId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('userId', $user_id);
+        self::andSessionCondition($qb, $origin_session_id);
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
             $list[] = $row['access_id'];
         }
 
         if (!empty($list)) {
             foreach ($list as $id) {
                 if ($update_database) {
-                    $sql = "UPDATE $TBL_TRACK_E_LAST_ACCESS
-                            SET session_id = $newSessionNullable
-                            WHERE access_id = $id";
-                    if ($debug) {
-                        echo $sql;
-                    }
-                    Database::query($sql);
+                    self::updateSessionOfRow($TBL_TRACK_E_LAST_ACCESS, 'access_id', (int) $id, $newSessionNullable, null, $debug);
                     if (!isset($result_message[$TBL_TRACK_E_LAST_ACCESS])) {
                         $result_message[$TBL_TRACK_E_LAST_ACCESS] = 0;
                     }
@@ -7400,15 +7509,21 @@ class Tracking
 
         // 5. lp_item_view
         // CHECK ORIGIN
-        $sql = "SELECT * FROM $TBL_LP_VIEW
-                WHERE user_id = $user_id AND c_id = $course_id ".api_get_session_condition($origin_session_id);
-        $res = Database::query($sql);
+        $qb = self::dbalQueryBuilder()
+            ->select('*')
+            ->from($TBL_LP_VIEW)
+            ->where('user_id = :userId')
+            ->andWhere('c_id = :courseId')
+            ->setParameter('userId', $user_id)
+            ->setParameter('courseId', $course_id);
+        self::andSessionCondition($qb, $origin_session_id);
+        $rows = $qb->executeQuery()->fetchAllAssociative();
 
         // Getting the list of LPs in the new session
         $lp_list = new LearnpathList($user_id, $course_info, $new_session_id);
         $flat_list = $lp_list->get_flat_list();
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($rows as $row) {
             // Checking if the LP exist in the new session
             //if (in_array($row['lp_id'], array_keys($flat_list))) {
             $list[$row['iid']] = $row;
@@ -7418,16 +7533,7 @@ class Tracking
         if (!empty($list)) {
             foreach ($list as $id => $data) {
                 if ($update_database) {
-                    $sql = "UPDATE $TBL_LP_VIEW
-                            SET session_id = $newSessionNullable
-                            WHERE c_id = $course_id AND iid = $id ";
-                    if ($debug) {
-                        var_dump($sql);
-                    }
-                    $res = Database::query($sql);
-                    if ($debug) {
-                        var_dump($res);
-                    }
+                    self::updateSessionOfRow($TBL_LP_VIEW, 'iid', (int) $id, $newSessionNullable, $course_id, $debug);
                     if (!isset($result_message[$TBL_LP_VIEW])) {
                         $result_message[$TBL_LP_VIEW] = 0;
                     }
@@ -7456,16 +7562,22 @@ class Tracking
 
         // Check destination.
         if (!$update_database) {
-            $sql = "SELECT * FROM $TBL_LP_VIEW
-                    WHERE user_id = $user_id AND c_id = $course_id ".api_get_session_condition($new_session_id);
-            $res = Database::query($sql);
+            $qb = self::dbalQueryBuilder()
+                ->select('*')
+                ->from($TBL_LP_VIEW)
+                ->where('user_id = :userId')
+                ->andWhere('c_id = :courseId')
+                ->setParameter('userId', $user_id)
+                ->setParameter('courseId', $course_id);
+            self::andSessionCondition($qb, $new_session_id);
+            $rows = $qb->executeQuery()->fetchAllAssociative();
 
             // Getting the list of LPs in the new session
             $lp_list = new LearnpathList($user_id, $course_info, $new_session_id);
             $flat_list = $lp_list->get_flat_list();
 
             $list = [];
-            while ($row = Database::fetch_assoc($res)) {
+            foreach ($rows as $row) {
                 //Checking if the LP exist in the new session
                 //if (in_array($row['lp_id'], array_keys($flat_list))) {
                 $list[$row['iid']] = $row;
@@ -7587,32 +7699,23 @@ class Tracking
 
         //9. Survey   Pending
         //10. Dropbox - not neccesary to move categories (no presence of session_id)
-        $sql = "SELECT iid FROM $TBL_DROPBOX_FILE
-                WHERE uploader_id = $user_id AND session_id = $origin_session_id AND c_id = $course_id";
+        $qb = self::dbalQueryBuilder()
+            ->select('iid')
+            ->from($TBL_DROPBOX_FILE)
+            ->where('uploader_id = :userId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('c_id = :courseId')
+            ->setParameter('userId', $user_id)
+            ->setParameter('sessionId', $origin_session_id)
+            ->setParameter('courseId', $course_id);
         if ($debug) {
-            var_dump($sql);
+            var_dump($qb->getSQL());
         }
-        $res = Database::query($sql);
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
             $id = (int) $row['iid'];
             if ($update_database) {
-                $sql = "UPDATE $TBL_DROPBOX_FILE SET session_id = $new_session_id WHERE c_id = $course_id AND iid = $id";
-                if ($debug) {
-                    var_dump($sql);
-                }
-                Database::query($sql);
-                if ($debug) {
-                    var_dump($res);
-                }
-
-                $sql = "UPDATE $TBL_DROPBOX_POST SET session_id = $new_session_id WHERE file_id = $id";
-                if ($debug) {
-                    var_dump($sql);
-                }
-                Database::query($sql);
-                if ($debug) {
-                    var_dump($res);
-                }
+                self::updateSessionOfRow($TBL_DROPBOX_FILE, 'iid', $id, $new_session_id, $course_id, $debug);
+                self::updateSessionOfRow($TBL_DROPBOX_POST, 'file_id', $id, $new_session_id, null, $debug);
                 if (!isset($result_message[$TBL_DROPBOX_FILE])) {
                     $result_message[$TBL_DROPBOX_FILE] = 0;
                 }
@@ -7695,26 +7798,20 @@ class Tracking
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
         $ownerField = 'user' === $ownerField ? 'r.user_id' : 'rn.creator_id';
-        $sessionCondition = self::getResourceLinkSessionCondition($sessionId, 'rl');
 
-        $sql = "SELECT
-                    rl.id AS resource_link_id,
-                    r.iid AS item_id,
-                    rn.title AS title
-                FROM $resourceTable r
-                    INNER JOIN $resourceNodeTable rn
-                    ON rn.id = r.resource_node_id
-                    INNER JOIN $resourceLinkTable rl
-                    ON rl.resource_node_id = rn.id
-                WHERE
-                    rl.c_id = $courseId AND
-                    $sessionCondition AND
-                    $ownerField = $userId";
-
-        $result = Database::query($sql);
+        $qb = self::dbalQueryBuilder()
+            ->select('rl.id AS resource_link_id', 'r.iid AS item_id', 'rn.title AS title')
+            ->from($resourceTable, 'r')
+            ->innerJoin('r', $resourceNodeTable, 'rn', 'rn.id = r.resource_node_id')
+            ->innerJoin('rn', $resourceLinkTable, 'rl', 'rl.resource_node_id = rn.id')
+            ->where('rl.c_id = :courseId')
+            ->andWhere("$ownerField = :userId")
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $userId);
+        self::andSessionCondition($qb, $sessionId, 'rl.session_id');
         $rows = [];
 
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
             $rows[(int) $row['resource_link_id']] = [
                 'resource_link_id' => (int) $row['resource_link_id'],
                 'item_id' => (int) $row['item_id'],
@@ -7732,7 +7829,7 @@ class Tracking
         }
 
         $table = Database::get_main_table('resource_link');
-        $sessionValue = empty($newSessionId) ? 'NULL' : (string) (int) $newSessionId;
+        $sessionValue = empty($newSessionId) ? null : (int) $newSessionId;
         $updatedRows = 0;
 
         foreach ($rows as $row) {
@@ -7742,28 +7839,37 @@ class Tracking
                 continue;
             }
 
-            $sql = "UPDATE $table
-                    SET session_id = $sessionValue
-                    WHERE id = $resourceLinkId";
-
-            if ($debug) {
-                var_dump($sql);
-            }
-
-            Database::query($sql);
+            self::updateSessionOfRow($table, 'id', $resourceLinkId, $sessionValue, null, $debug);
             $updatedRows++;
         }
 
         return $updatedRows;
     }
 
-    private static function getResourceLinkSessionCondition(int $sessionId, string $alias = 'rl'): string
-    {
-        if (empty($sessionId)) {
-            return "($alias.session_id IS NULL OR $alias.session_id = 0)";
+    /**
+     * Sets the session of one row of a tracking/resource table (NULL for the base context where the column allows it).
+     */
+    private static function updateSessionOfRow(
+        string $table,
+        string $keyField,
+        int $keyValue,
+        ?int $sessionId,
+        ?int $courseId = null,
+        bool $debug = false
+    ): void {
+        $qb = self::dbalQueryBuilder()
+            ->update($table)
+            ->set('session_id', ':sessionId')
+            ->where("$keyField = :keyValue")
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('keyValue', $keyValue);
+        if (null !== $courseId) {
+            $qb->andWhere('c_id = :courseId')->setParameter('courseId', $courseId);
         }
-
-        return "$alias.session_id = $sessionId";
+        if ($debug) {
+            var_dump($qb->getSQL());
+        }
+        $qb->executeStatement();
     }
 
     public static function compareUserData($result_message)
@@ -8256,6 +8362,7 @@ class Tracking
         // Outside a session the column is NULL (nullable FK), legacy rows may hold 0.
         $sessionCondition = api_get_session_condition($sessionId, true, false, 'lv.session_id');
 
+        // TODO(db-neutral): FROM_UNIXTIME
         $sql = "SELECT FROM_UNIXTIME(liv.start_time) as start_date
                 FROM $tblLpItemView liv
                 INNER JOIN
@@ -8298,19 +8405,18 @@ class Tracking
     ) {
         $tblTrackExercise = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         // Outside a session the column is NULL (nullable FK), legacy rows may hold 0.
-        $sessionCondition = api_get_session_condition($sessionId, true, false, 'ex.session_id');
-
-        $sql = "SELECT ex.exe_date
-                FROM $tblTrackExercise AS ex
-                WHERE
-                    ex.c_id = $courseId AND
-                    ex.exe_user_id = $userId AND
-                    ex.status = ''
-                    $sessionCondition
-                ORDER BY ex.exe_date DESC
-                LIMIT 1";
-        $rs = Database::query($sql);
-        $exeDate = Database::result($rs, 0, 0);
+        $qb = self::dbalQueryBuilder()
+            ->select('ex.exe_date')
+            ->from($tblTrackExercise, 'ex')
+            ->where('ex.c_id = :courseId')
+            ->andWhere('ex.exe_user_id = :userId')
+            ->andWhere("ex.status = ''")
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $userId)
+            ->orderBy('ex.exe_date', 'DESC')
+            ->setMaxResults(1);
+        self::andSessionCondition($qb, $sessionId, 'ex.session_id');
+        $exeDate = $qb->executeQuery()->fetchOne();
 
         if (empty($exeDate)) {
             return false;
@@ -8357,6 +8463,7 @@ class Tracking
             $dateUntil = Database::escape_string($dateUntil);
             $conditionTime = " (login_course_date >= '$dateFrom' AND logout_course_date <= '$dateUntil' ) ";
         }
+        // TODO(db-neutral): SessionTimeLimit::sqlForSeconds() SQL fragment (LEAST/GREATEST/TIMESTAMPDIFF) spliced into the query
         $sql = "SELECT SUM($durationSql) diff
                 FROM $tableTrackLogin u $tableUrl
                 WHERE $conditionTime $urlCondition";
@@ -8370,13 +8477,15 @@ class Tracking
     {
         $tblSessionUser = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-        $sql = 'SELECT DISTINCT id
-            FROM '.$tblSessionUser.'
-            WHERE relation_type = '.SessionEntity::STUDENT.' AND user_id = '.$userId;
-
-        $rs = Database::query($sql);
-
-        return Database::num_rows($rs);
+        return (int) self::dbalQueryBuilder()
+            ->select('COUNT(DISTINCT id)')
+            ->from($tblSessionUser)
+            ->where('relation_type = :student')
+            ->andWhere('user_id = :userId')
+            ->setParameter('student', SessionEntity::STUDENT)
+            ->setParameter('userId', $userId)
+            ->executeQuery()
+            ->fetchOne();
     }
 
     private static function cleanUserIdList(array $userIdList): array

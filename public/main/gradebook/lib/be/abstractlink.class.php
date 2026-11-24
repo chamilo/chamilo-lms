@@ -415,6 +415,7 @@ abstract class AbstractLink implements GradebookItem
             $sql .= ' visible = '.intval($visible);
         }
 
+        // TODO(db-neutral): WHERE built from GradebookUtils::taughtCoursesCondition() (SQL fragment of another class)
         $result = Database::query($sql);
         $links = self::create_objects_from_sql_result($result);
 
@@ -447,18 +448,22 @@ abstract class AbstractLink implements GradebookItem
             }
 
             $resourceNodeId = (int) $resourceNode->getId();
-            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-            $sql = "SELECT count(*) count FROM $table
-                    WHERE
-                        ref_id = ".$resourceNodeId." AND
-                        category_id =  ".$this->category->get_id()." AND
-                        c_id = '".$this->course_id."' AND
-                        type =  ".$this->type." ";
+            $existingLinks = Database::getManager()->createQueryBuilder()
+                ->select('COUNT(l.id)')
+                ->from(GradebookLink::class, 'l')
+                ->where('IDENTITY(l.resourceNode) = :resourceNodeId')
+                ->andWhere('IDENTITY(l.category) = :categoryId')
+                ->andWhere('IDENTITY(l.course) = :courseId')
+                ->andWhere('l.type = :type')
+                ->setParameter('resourceNodeId', $resourceNodeId)
+                ->setParameter('categoryId', (int) $this->category->get_id())
+                ->setParameter('courseId', (int) $this->course_id)
+                ->setParameter('type', (int) $this->type)
+                ->getQuery()
+                ->getSingleScalarResult()
+            ;
 
-            $result = Database::query($sql);
-            $row = Database::fetch_assoc($result);
-
-            if (0 == $row['count']) {
+            if (0 == $existingLinks) {
                 $em = Database::getManager();
                 $category = null;
                 if (!empty($this->get_category_id())) {
@@ -581,10 +586,13 @@ abstract class AbstractLink implements GradebookItem
     public function delete()
     {
         $this->delete_linked_data();
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $sql = 'DELETE FROM '.$table.'
-                WHERE id = '.intval($this->id);
-        Database::query($sql);
+        Database::getManager()->createQueryBuilder()
+            ->delete(GradebookLink::class, 'l')
+            ->where('l.id = :id')
+            ->setParameter('id', (int) $this->id)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -717,10 +725,15 @@ abstract class AbstractLink implements GradebookItem
      * */
     public function lock($locked)
     {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $sql = "UPDATE $table SET locked = '".intval($locked)."'
-                WHERE id='".$this->id."'";
-        Database::query($sql);
+        Database::getManager()->createQueryBuilder()
+            ->update(GradebookLink::class, 'l')
+            ->set('l.locked', ':locked')
+            ->where('l.id = :id')
+            ->setParameter('locked', (int) $locked)
+            ->setParameter('id', (int) $this->id)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -839,6 +852,7 @@ abstract class AbstractLink implements GradebookItem
                     l.c_id = $courseId
                     $sessionCondition ";
 
+        // TODO(db-neutral): $sessionCondition comes from api_get_session_condition() (SQL fragment)
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             return Database::store_result($result);

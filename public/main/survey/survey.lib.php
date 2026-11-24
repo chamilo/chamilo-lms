@@ -3,8 +3,10 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
@@ -33,19 +35,19 @@ class SurveyManager
         if (empty($code)) {
             return false;
         }
-        $table = Database::get_course_table(TABLE_SURVEY);
-        $code = Database::escape_string($code);
         $num = 0;
         $new_code = $code;
         while (true) {
+            $qb = Database::getManager()->createQueryBuilder()
+                ->select('s.iid')
+                ->from(CSurvey::class, 's')
+                ->where('s.code = :code')
+                ->setParameter('code', $new_code);
             if (isset($surveyId)) {
-                $sql = "SELECT 1 FROM $table WHERE code = '$new_code' AND iid = $surveyId";
-            } else {
-                $sql = "SELECT 1 FROM $table WHERE code = '$new_code'";
+                $qb->andWhere('s.iid = :surveyId')->setParameter('surveyId', (int) $surveyId);
             }
 
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
+            if ([] !== $qb->getQuery()->getArrayResult()) {
                 $num++;
                 $new_code = $code.$num;
             } else {
@@ -70,23 +72,31 @@ class SurveyManager
         if (empty($user_id)) {
             return false;
         }
-        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
+        $em = Database::getManager();
 
-        $sql = "SELECT iid, survey_id
-                FROM $table_survey_invitation WHERE user_id = '$user_id' AND c_id <> 0 ";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_assoc($result)) {
-            $survey_invitation_id = $row['iid'];
-            $surveyId = $row['survey_id'];
-            $sql2 = "DELETE FROM $table_survey_invitation
-                     WHERE iid = '$survey_invitation_id' AND c_id <> 0";
-            if (Database::query($sql2)) {
-                $sql3 = "UPDATE $table_survey SET
-                            invited = invited - 1
-                         WHERE  iid = $surveyId";
-                Database::query($sql3);
-            }
+        $rows = $em->createQueryBuilder()
+            ->select('i.iid AS iid', 'IDENTITY(i.survey) AS survey_id')
+            ->from(CSurveyInvitation::class, 'i')
+            ->where('IDENTITY(i.user) = :userId')
+            ->andWhere('IDENTITY(i.course) <> 0')
+            ->setParameter('userId', $user_id)
+            ->getQuery()
+            ->getArrayResult();
+        foreach ($rows as $row) {
+            $em->createQueryBuilder()
+                ->delete(CSurveyInvitation::class, 'i')
+                ->where('i.iid = :iid')
+                ->andWhere('IDENTITY(i.course) <> 0')
+                ->setParameter('iid', (int) $row['iid'])
+                ->getQuery()
+                ->execute();
+            $em->createQueryBuilder()
+                ->update(CSurvey::class, 's')
+                ->set('s.invited', 's.invited - 1')
+                ->where('s.iid = :surveyId')
+                ->setParameter('surveyId', (int) $row['survey_id'])
+                ->getQuery()
+                ->execute();
         }
     }
 
@@ -135,18 +145,67 @@ class SurveyManager
     ) {
         $courseInfo = api_get_course_info();
         $survey_id = (int) $survey_id;
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
 
         if (empty($courseInfo) || empty($survey_id)) {
             return [];
         }
 
-        $sql = "SELECT * FROM $table_survey WHERE iid = $survey_id";
-        $result = Database::query($sql);
+        $rows = Database::getManager()->createQueryBuilder()
+            ->select(
+                's.iid AS iid',
+                'IDENTITY(s.resourceNode) AS resource_node_id',
+                'IDENTITY(s.surveyParent) AS parent_id',
+                's.code AS code',
+                's.title AS title',
+                's.subtitle AS subtitle',
+                's.lang AS lang',
+                's.availFrom AS avail_from',
+                's.availTill AS avail_till',
+                's.isShared AS is_shared',
+                's.template AS template',
+                's.intro AS intro',
+                's.surveyThanks AS surveythanks',
+                's.creationDate AS creation_date',
+                's.invited AS invited',
+                's.answered AS answered',
+                's.inviteMail AS invite_mail',
+                's.reminderMail AS reminder_mail',
+                's.mailSubject AS mail_subject',
+                's.anonymous AS anonymous',
+                's.accessCondition AS access_condition',
+                's.shuffle AS shuffle',
+                's.oneQuestionPerPage AS one_question_per_page',
+                's.surveyVersion AS survey_version',
+                's.lft AS lft',
+                's.rgt AS rgt',
+                's.lvl AS lvl',
+                's.surveyType AS survey_type',
+                's.showFormProfile AS show_form_profile',
+                's.formFields AS form_fields',
+                's.visibleResults AS visible_results',
+                's.resultsHiddenFromTeacher AS results_hidden_from_teacher',
+                's.isMandatory AS is_mandatory',
+                's.displayQuestionNumber AS display_question_number',
+                's.duration AS duration'
+            )
+            ->from(CSurvey::class, 's')
+            ->where('s.iid = :surveyId')
+            ->setParameter('surveyId', $survey_id)
+            ->getQuery()
+            ->getArrayResult();
         $return = [];
 
-        if (Database::num_rows($result) > 0) {
-            $return = Database::fetch_assoc($result);
+        if ([] !== $rows) {
+            $return = $rows[0];
+            // The raw table row used to carry strings for dates and 0/1 for booleans: keep that shape.
+            foreach (['avail_from', 'avail_till', 'creation_date'] as $dateKey) {
+                if ($return[$dateKey] instanceof \DateTimeInterface) {
+                    $return[$dateKey] = $return[$dateKey]->format('Y-m-d H:i:s');
+                }
+            }
+            foreach (['shuffle', 'one_question_per_page', 'results_hidden_from_teacher', 'is_mandatory', 'display_question_number'] as $boolKey) {
+                $return[$boolKey] = (int) $return[$boolKey];
+            }
             if ($simple_return) {
                 return $return;
             }
@@ -192,7 +251,7 @@ class SurveyManager
     {
         $return = ['id' => 0];
         $session_id = api_get_session_id();
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
+        $em = Database::getManager();
         $shared_survey_id = 0;
         $displayQuestionNumber = isset($values['display_question_number']);
         $repo = Container::getSurveyRepository();
@@ -201,11 +260,16 @@ class SurveyManager
             $normalizedCode = self::generateSurveyCode($values['survey_code'] ?? '');
             $lang = $values['survey_language'] ?? api_get_language_isocode();
 
-            $sql = 'SELECT 1 FROM '.$table_survey.'
-                WHERE code = "'.Database::escape_string($normalizedCode).'"
-                  AND lang = "'.Database::escape_string($lang).'"';
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
+            $rs = $em->createQueryBuilder()
+                ->select('s.iid')
+                ->from(CSurvey::class, 's')
+                ->where('s.code = :code')
+                ->andWhere('s.lang = :lang')
+                ->setParameter('code', $normalizedCode)
+                ->setParameter('lang', $lang)
+                ->getQuery()
+                ->getArrayResult();
+            if ([] !== $rs) {
                 Display::addFlash(
                     Display::return_message(get_lang('This survey code soon exists in this language'), 'error')
                 );
@@ -315,12 +379,18 @@ class SurveyManager
             $codeChanged = ($inputCode !== $survey->getCode()) || ($inputLang !== $survey->getLang());
 
             if ($codeChanged) {
-                $sql = 'SELECT 1 FROM '.$table_survey.'
-                    WHERE code = "'.Database::escape_string($inputCode).'"
-                      AND lang = "'.Database::escape_string($inputLang).'"
-                      AND iid <> '.(int) $surveyId;
-                $rs = Database::query($sql);
-                if (Database::num_rows($rs) > 0) {
+                $rs = $em->createQueryBuilder()
+                    ->select('s.iid')
+                    ->from(CSurvey::class, 's')
+                    ->where('s.code = :code')
+                    ->andWhere('s.lang = :lang')
+                    ->andWhere('s.iid <> :surveyId')
+                    ->setParameter('code', $inputCode)
+                    ->setParameter('lang', $inputLang)
+                    ->setParameter('surveyId', (int) $surveyId)
+                    ->getQuery()
+                    ->getArrayResult();
+                if ([] !== $rs) {
                     Display::addFlash(
                         Display::return_message(get_lang('This survey code soon exists in this language'), 'error')
                     );
@@ -495,7 +565,6 @@ class SurveyManager
 
         $repo = Container::getSurveyRepository();
 
-        $surveyTable = Database::get_course_table(TABLE_SURVEY);
         $surveyQuestionTable = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $surveyOptionsTable = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
@@ -555,10 +624,28 @@ class SurveyManager
             return null;
         }
 
-        $sql = "SELECT * FROM $surveyQuestionTable WHERE survey_id = $surveyId";
-        $res = Database::query($sql);
+        $questionRows = Database::getManager()->createQueryBuilder()
+            ->select(
+                'q.iid AS iid',
+                'q.surveyQuestion AS survey_question',
+                'q.surveyQuestionComment AS survey_question_comment',
+                'q.type AS type',
+                'q.display AS display',
+                'q.sort AS sort',
+                'q.sharedQuestionId AS shared_question_id',
+                'q.maxValue AS max_value',
+                'q.surveyGroupPri AS survey_group_pri',
+                'q.surveyGroupSec1 AS survey_group_sec1',
+                'q.surveyGroupSec2 AS survey_group_sec2',
+                'q.isMandatory AS is_required'
+            )
+            ->from(CSurveyQuestion::class, 'q')
+            ->where('q.survey = :surveyId')
+            ->setParameter('surveyId', $surveyId)
+            ->getQuery()
+            ->getArrayResult();
         $question_id = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($questionRows as $row) {
             $params = [
                 'survey_id' => $newSurveyId,
                 'survey_question' => $row['survey_question'],
@@ -574,7 +661,7 @@ class SurveyManager
             ];
 
             if (isset($row['is_required'])) {
-                $params['is_required'] = $row['is_required'];
+                $params['is_required'] = (int) $row['is_required'];
             }
 
             $insertId = Database::insert($surveyQuestionTable, $params);
@@ -583,9 +670,19 @@ class SurveyManager
             }
         }
 
-        $sql = "SELECT * FROM $surveyOptionsTable WHERE survey_id = $surveyId";
-        $res = Database::query($sql);
-        while ($row = Database::fetch_assoc($res)) {
+        $optionRows = Database::getManager()->createQueryBuilder()
+            ->select(
+                'IDENTITY(o.question) AS question_id',
+                'o.optionText AS option_text',
+                'o.sort AS sort',
+                'o.value AS value'
+            )
+            ->from(CSurveyQuestionOption::class, 'o')
+            ->where('o.survey = :surveyId')
+            ->setParameter('surveyId', $surveyId)
+            ->getQuery()
+            ->getArrayResult();
+        foreach ($optionRows as $row) {
             $params = [
                 'question_id' => $question_id[$row['question_id']] ?? 0,
                 'survey_id' => $newSurveyId,
@@ -614,41 +711,45 @@ class SurveyManager
     public static function empty_survey($surveyId, $courseId = 0)
     {
         // Database table definitions
-        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
+        $em = Database::getManager();
 
         $courseId = (int) $courseId;
         $courseId = empty($courseId) ? api_get_course_int_id() : $courseId;
         $surveyId = (int) $surveyId;
 
         $datas = self::get_survey($surveyId);
-        $session_where = '';
-        if (0 != api_get_session_id()) {
-            $session_where = ' AND session_id = "'.api_get_session_id().'" ';
+        $sessionId = (int) api_get_session_id();
+
+        $qb = $em->createQueryBuilder()
+            ->delete(CSurveyInvitation::class, 'i')
+            ->where('i.survey = :surveyId')
+            ->setParameter('surveyId', $surveyId);
+        if (0 != $sessionId) {
+            $qb->andWhere('i.session = :sessionId')->setParameter('sessionId', $sessionId);
         }
+        $qb->getQuery()->execute();
 
-        $sql = 'DELETE FROM '.$table_survey_invitation.'
-		        WHERE
-		            survey_id = "'.$surveyId.'" '.$session_where.' ';
-        Database::query($sql);
+        $qb = $em->createQueryBuilder()
+            ->delete(CSurveyAnswer::class, 'a')
+            ->where('a.survey = :surveyId')
+            ->setParameter('surveyId', $surveyId);
+        if (0 != $sessionId) {
+            $qb->andWhere('a.sessionId = :sessionId')->setParameter('sessionId', $sessionId);
+        }
+        $qb->getQuery()->execute();
 
-        $sql = 'DELETE FROM '.$table_survey_answer.'
-		        WHERE
-		        survey_id = "'.$surveyId.'" '.$session_where.' ';
-        Database::query($sql);
-
-        if (empty($session_where)) {
-            $sql = 'UPDATE '.$table_survey.' SET invited=0, answered=0
-		        WHERE iid ='.$surveyId;
+        $qb = $em->createQueryBuilder()
+            ->update(CSurvey::class, 's')
+            ->where('s.iid = :surveyId')
+            ->setParameter('surveyId', $surveyId);
+        if (0 == $sessionId) {
+            $qb->set('s.invited', '0')->set('s.answered', '0');
         } else {
             // Only the rows of the session were deleted: the counters follow the rows that survive.
-            $sql = 'UPDATE '.$table_survey.' SET
-		            invited = (SELECT COUNT(*) FROM '.$table_survey_invitation.' WHERE survey_id = '.$surveyId.'),
-		            answered = (SELECT COUNT(DISTINCT user) FROM '.$table_survey_answer.' WHERE survey_id = '.$surveyId.')
-		        WHERE iid ='.$surveyId;
+            $qb->set('s.invited', '(SELECT COUNT(i2.iid) FROM '.CSurveyInvitation::class.' i2 WHERE i2.survey = :surveyId)')
+                ->set('s.answered', '(SELECT COUNT(DISTINCT a2.user) FROM '.CSurveyAnswer::class.' a2 WHERE a2.survey = :surveyId)');
         }
-        Database::query($sql);
+        $qb->getQuery()->execute();
 
         Event::addEvent(
             LOG_SURVEY_CLEAN_RESULTS,
@@ -677,25 +778,29 @@ class SurveyManager
         $em->persist($survey);
         $em->flush();
 
-        $lpItemCondition = $lpItemId ? ' AND c_lp_item_id = '.(int) $lpItemId : '';
-
-        $sessionWhere = $sessionId > 0
-            ? 'session_id = '.$sessionId
-            : '(session_id IS NULL OR session_id = 0)';
-
-        $courseWhere = $courseId > 0 ? ' AND c_id = '.$courseId : '';
-
         $userId = is_numeric($user) ? (int) $user : (int) api_get_user_id();
 
-        $table = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $sql = "UPDATE $table
-            SET answered_at = '".api_get_utc_datetime()."', answered = 1
-            WHERE $sessionWhere
-              AND user_id = $userId
-              AND survey_id = $surveyId
-              $courseWhere
-              $lpItemCondition";
-        Database::query($sql);
+        $qb = $em->createQueryBuilder()
+            ->update(CSurveyInvitation::class, 'i')
+            ->set('i.answeredAt', ':answeredAt')
+            ->set('i.answered', '1')
+            ->where('IDENTITY(i.user) = :userId')
+            ->andWhere('IDENTITY(i.survey) = :surveyId')
+            ->setParameter('answeredAt', api_get_utc_datetime())
+            ->setParameter('userId', $userId)
+            ->setParameter('surveyId', $surveyId);
+        if ($sessionId > 0) {
+            $qb->andWhere('IDENTITY(i.session) = :sessionId')->setParameter('sessionId', (int) $sessionId);
+        } else {
+            $qb->andWhere('(i.session IS NULL OR IDENTITY(i.session) = 0)');
+        }
+        if ($courseId > 0) {
+            $qb->andWhere('IDENTITY(i.course) = :courseId')->setParameter('courseId', $courseId);
+        }
+        if ($lpItemId) {
+            $qb->andWhere('i.lpItemId = :lpItemId')->setParameter('lpItemId', (int) $lpItemId);
+        }
+        $qb->getQuery()->execute();
     }
 
     /**
@@ -760,8 +865,7 @@ class SurveyManager
      */
     public static function get_question($question_id)
     {
-        $tbl_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+        $em = Database::getManager();
         $course_id = api_get_course_int_id();
         $question_id = (int) $question_id;
 
@@ -769,16 +873,30 @@ class SurveyManager
             return [];
         }
 
-        $sql = "SELECT * FROM $tbl_survey_question
-                WHERE iid = $question_id
-                ORDER BY `sort` ";
-
-        $sqlOption = "  SELECT * FROM $table_survey_question_option
-                        WHERE question_id='".$question_id."'
-                        ORDER BY `sort` ";
         // Getting the information of the question
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $rows = $em->createQueryBuilder()
+            ->select(
+                'IDENTITY(q.survey) AS survey_id',
+                'IDENTITY(q.parent) AS parent_id',
+                'IDENTITY(q.parentOption) AS parent_option_id',
+                'q.iid AS iid',
+                'q.type AS type',
+                'q.surveyQuestion AS survey_question',
+                'q.display AS display',
+                'q.sharedQuestionId AS shared_question_id',
+                'q.maxValue AS max_value',
+                'q.isMandatory AS is_required',
+                'q.surveyGroupPri AS survey_group_pri',
+                'q.surveyGroupSec1 AS survey_group_sec1',
+                'q.surveyGroupSec2 AS survey_group_sec2'
+            )
+            ->from(CSurveyQuestion::class, 'q')
+            ->where('q.iid = :questionId')
+            ->orderBy('q.sort', 'ASC')
+            ->setParameter('questionId', $question_id)
+            ->getQuery()
+            ->getArrayResult();
+        $row = $rows[0] ?? false;
 
         $return['survey_id'] = $row['survey_id'];
         $return['parent_id'] = isset($row['parent_id']) ? $row['parent_id'] : 0;
@@ -789,7 +907,7 @@ class SurveyManager
         $return['horizontalvertical'] = $row['display'];
         $return['shared_question_id'] = $row['shared_question_id'];
         $return['maximum_score'] = $row['max_value'];
-        $return['is_required'] = $row['is_required'];
+        $return['is_required'] = isset($row['is_required']) ? (int) $row['is_required'] : null;
 
         if (0 != $row['survey_group_pri']) {
             $return['assigned'] = $row['survey_group_pri'];
@@ -801,9 +919,16 @@ class SurveyManager
         }
 
         // Getting the information of the question options
-        $result = Database::query($sqlOption);
+        $optionRows = $em->createQueryBuilder()
+            ->select('o.iid AS iid', 'o.optionText AS option_text', 'o.value AS value')
+            ->from(CSurveyQuestionOption::class, 'o')
+            ->where('o.question = :questionId')
+            ->orderBy('o.sort', 'ASC')
+            ->setParameter('questionId', $question_id)
+            ->getQuery()
+            ->getArrayResult();
         $counter = 0;
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($optionRows as $row) {
             /** @todo this should be renamed to options instead of answers */
             $return['answers'][] = $row['option_text'];
             $return['values'][] = $row['value'];
@@ -833,18 +958,29 @@ class SurveyManager
      */
     public static function get_questions($surveyId, $courseId = 0)
     {
-        $tbl_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+        $em = Database::getManager();
 
         $courseId = (int) $courseId;
         $surveyId = (int) $surveyId;
 
         // Getting the information of the question
-        $sql = "SELECT * FROM $tbl_survey_question
-		        WHERE survey_id= $surveyId ";
-        $result = Database::query($sql);
+        $questionRows = $em->createQueryBuilder()
+            ->select(
+                'q.iid AS iid',
+                'q.type AS type',
+                'q.surveyQuestion AS survey_question',
+                'q.display AS display',
+                'q.maxValue AS max_value',
+                'q.sort AS sort',
+                'q.surveyQuestionComment AS survey_question_comment'
+            )
+            ->from(CSurveyQuestion::class, 'q')
+            ->where('q.survey = :surveyId')
+            ->setParameter('surveyId', $surveyId)
+            ->getQuery()
+            ->getArrayResult();
         $questions = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($questionRows as $row) {
             $questionId = $row['iid'];
             $questions[$questionId]['survey_id'] = $surveyId;
             $questions[$questionId]['question_id'] = $questionId;
@@ -856,10 +992,16 @@ class SurveyManager
             $questions[$questionId]['survey_question_comment'] = $row['survey_question_comment'];
 
             // Getting the information of the question options
-            $sql = "SELECT * FROM $table_survey_question_option
-		             WHERE survey_id= $surveyId  AND question_id = $questionId";
-            $resultOptions = Database::query($sql);
-            while ($rowOption = Database::fetch_assoc($resultOptions)) {
+            $optionRows = $em->createQueryBuilder()
+                ->select('o.optionText AS option_text')
+                ->from(CSurveyQuestionOption::class, 'o')
+                ->where('o.survey = :surveyId')
+                ->andWhere('o.question = :questionId')
+                ->setParameter('surveyId', $surveyId)
+                ->setParameter('questionId', (int) $questionId)
+                ->getQuery()
+                ->getArrayResult();
+            foreach ($optionRows as $rowOption) {
                 $questions[$questionId]['answers'][] = $rowOption['option_text'];
             }
         }
@@ -935,12 +1077,13 @@ class SurveyManager
                 // Storing a new question
                 if (empty($form_content['question_id']) || !is_numeric($form_content['question_id'])) {
                     // Finding the max sort order of the questions in the given survey
-                    $sql = "SELECT max(sort) AS max_sort
-					        FROM $tbl_survey_question
-                            WHERE survey_id = $surveyId ";
-                    $result = Database::query($sql);
-                    $row = Database::fetch_assoc($result);
-                    $max_sort = $row['max_sort'];
+                    $max_sort = $em->createQueryBuilder()
+                        ->select('MAX(q.sort)')
+                        ->from(CSurveyQuestion::class, 'q')
+                        ->where('q.survey = :surveyId')
+                        ->setParameter('surveyId', (int) $surveyId)
+                        ->getQuery()
+                        ->getSingleScalarResult();
 
                     $question = new CSurveyQuestion();
 
@@ -1178,12 +1321,14 @@ class SurveyManager
         if (!empty($optionsToDelete)) {
             foreach ($optionsToDelete as $iid) {
                 $iid = (int) $iid;
-                $sql = "DELETE FROM $table
-			            WHERE
-			                iid = $iid AND
-                            question_id = '".intval($form_content['question_id'])."'
-                            ";
-                Database::query($sql);
+                $em->createQueryBuilder()
+                    ->delete(CSurveyQuestionOption::class, 'o')
+                    ->where('o.iid = :iid')
+                    ->andWhere('o.question = :questionId')
+                    ->setParameter('iid', $iid)
+                    ->setParameter('questionId', (int) $form_content['question_id'])
+                    ->getQuery()
+                    ->execute();
             }
         }
 
@@ -1273,13 +1418,13 @@ class SurveyManager
      */
     public static function delete_all_survey_questions_options($survey_id, $shared = false)
     {
-        // Table definitions
-        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $sql = "DELETE FROM $table_survey_question_option
-                WHERE survey_id = ".(int) $survey_id;
-
         // Deleting the options of the survey questions
-        Database::query($sql);
+        Database::getManager()->createQueryBuilder()
+            ->delete(CSurveyQuestionOption::class, 'o')
+            ->where('o.survey = :surveyId')
+            ->setParameter('surveyId', (int) $survey_id)
+            ->getQuery()
+            ->execute();
 
         return true;
     }
@@ -1304,11 +1449,13 @@ class SurveyManager
      */
     public static function delete_all_survey_answers($survey_id)
     {
-        $table = Database::get_course_table(TABLE_SURVEY_ANSWER);
         $survey_id = (int) $survey_id;
-        $sql = "DELETE FROM $table
-                WHERE survey_id = $survey_id";
-        Database::query($sql);
+        Database::getManager()->createQueryBuilder()
+            ->delete(CSurveyAnswer::class, 'a')
+            ->where('a.survey = :surveyId')
+            ->setParameter('surveyId', $survey_id)
+            ->getQuery()
+            ->execute();
 
         return true;
     }
@@ -1329,9 +1476,7 @@ class SurveyManager
         $all_user_info = false,
         $course_id = null
     ) {
-        // Database table definition
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
+        $em = Database::getManager();
 
         // Variable initialisation
         $return = [];
@@ -1345,37 +1490,38 @@ class SurveyManager
         $survey_id = (int) $survey_id;
 
         if ($all_user_info) {
-            $order_clause = api_sort_by_first_name()
-                ? ' ORDER BY user.firstname, user.lastname'
-                : ' ORDER BY user.lastname, user.firstname';
-            $sql = "SELECT DISTINCT
-			            answered_user.user as invited_user,
-			            user.firstname,
-			            user.lastname,
-			            user.id as user_id
-                    FROM $table_survey_answer answered_user
-                    LEFT JOIN $table_user as user
-                    ON answered_user.user = user.id
-                    WHERE
-                        survey_id= '".$survey_id."' ".
-                $order_clause;
-        } else {
-            $sql = "SELECT DISTINCT user FROM $table_survey_answer
-			        WHERE survey_id= '".$survey_id."'  ";
-
-            if ('true' === api_get_setting('survey.survey_anonymous_show_answered')) {
-                $tblInvitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-                $tblSurvey = Database::get_course_table(TABLE_SURVEY);
-
-                $sql = "SELECT i.user_id AS user FROM $tblInvitation i
-                    INNER JOIN $tblSurvey s
-                    ON i.survey_id = s.iid
-                    WHERE i.answered IS TRUE AND s.iid = $survey_id";
+            $qb = $em->createQueryBuilder()
+                ->select(
+                    'DISTINCT a.user AS invited_user',
+                    'u.firstname AS firstname',
+                    'u.lastname AS lastname',
+                    'u.id AS user_id'
+                )
+                ->from(CSurveyAnswer::class, 'a')
+                ->leftJoin(User::class, 'u', 'WITH', 'a.user = u.id')
+                ->where('a.survey = :surveyId')
+                ->setParameter('surveyId', $survey_id);
+            if (api_sort_by_first_name()) {
+                $qb->orderBy('u.firstname')->addOrderBy('u.lastname');
+            } else {
+                $qb->orderBy('u.lastname')->addOrderBy('u.firstname');
             }
+        } elseif ('true' === api_get_setting('survey.survey_anonymous_show_answered')) {
+            $qb = $em->createQueryBuilder()
+                ->select('IDENTITY(i.user) AS user')
+                ->from(CSurveyInvitation::class, 'i')
+                ->where('i.answered = 1')
+                ->andWhere('i.survey = :surveyId')
+                ->setParameter('surveyId', $survey_id);
+        } else {
+            $qb = $em->createQueryBuilder()
+                ->select('DISTINCT a.user AS user')
+                ->from(CSurveyAnswer::class, 'a')
+                ->where('a.survey = :surveyId')
+                ->setParameter('surveyId', $survey_id);
         }
 
-        $res = Database::query($sql);
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
             if ($all_user_info) {
                 $userInfo = api_get_user_info($row['user_id']);
                 $row['user_info'] = $userInfo;
@@ -1472,27 +1618,35 @@ class SurveyManager
     public static function emptySurveyFromId($surveyId)
     {
         // Database table definitions
-        $surveyInvitationTable = Database:: get_course_table(TABLE_SURVEY_INVITATION);
-        $surveyAnswerTable = Database:: get_course_table(TABLE_SURVEY_ANSWER);
-        $surveyTable = Database:: get_course_table(TABLE_SURVEY);
+        $em = Database::getManager();
         $surveyId = (int) $surveyId;
         $surveyData = self::get_survey($surveyId);
         if (empty($surveyData)) {
             return false;
         }
 
-        $sql = "DELETE FROM $surveyInvitationTable
-                WHERE survey_id = $surveyId";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->delete(CSurveyInvitation::class, 'i')
+            ->where('i.survey = :surveyId')
+            ->setParameter('surveyId', $surveyId)
+            ->getQuery()
+            ->execute();
 
-        $sql = "DELETE FROM $surveyAnswerTable
-                WHERE survey_id = $surveyId";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->delete(CSurveyAnswer::class, 'a')
+            ->where('a.survey = :surveyId')
+            ->setParameter('surveyId', $surveyId)
+            ->getQuery()
+            ->execute();
 
-        $sql = "UPDATE $surveyTable
-                SET invited = 0, answered = 0
-                WHERE iid = $surveyId";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->update(CSurvey::class, 's')
+            ->set('s.invited', '0')
+            ->set('s.answered', '0')
+            ->where('s.iid = :surveyId')
+            ->setParameter('surveyId', $surveyId)
+            ->getQuery()
+            ->execute();
 
         return true;
     }
@@ -1514,14 +1668,33 @@ class SurveyManager
         $questionTable = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $optionsTable = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
+        $em = Database::getManager();
+
         // Get questions
-        $sql = "SELECT * FROM $questionTable WHERE iid = $questionId";
-        $res = Database::query($sql);
-        if (false == $res) {
+        $rows = $em->createQueryBuilder()
+            ->select(
+                'IDENTITY(q.survey) AS survey_id',
+                'q.surveyQuestion AS survey_question',
+                'q.surveyQuestionComment AS survey_question_comment',
+                'q.type AS type',
+                'q.display AS display',
+                'q.sharedQuestionId AS shared_question_id',
+                'q.maxValue AS max_value',
+                'q.surveyGroupPri AS survey_group_pri',
+                'q.surveyGroupSec1 AS survey_group_sec1',
+                'q.surveyGroupSec2 AS survey_group_sec2',
+                'q.isMandatory AS is_required'
+            )
+            ->from(CSurveyQuestion::class, 'q')
+            ->where('q.iid = :questionId')
+            ->setParameter('questionId', $questionId)
+            ->getQuery()
+            ->getArrayResult();
+        if ([] === $rows) {
             // Could not find this question
             return 0;
         }
-        $row = Database::fetch_assoc($res);
+        $row = $rows[0];
         $params = [
             //'c_id' => $row['c_id'],
             'survey_id' => $row['survey_id'],
@@ -1536,14 +1709,17 @@ class SurveyManager
             'survey_group_sec2' => $row['survey_group_sec2'],
         ];
         if (isset($row['is_required'])) {
-            $params['is_required'] = $row['is_required'];
+            $params['is_required'] = (int) $row['is_required'];
         }
         // Get question position
-        $sqlSort = "SELECT max(sort) as sort FROM $questionTable
-                    WHERE survey_id = ".$row['survey_id'];
-        $resSort = Database::query($sqlSort);
-        $rowSort = Database::fetch_assoc($resSort);
-        $params['sort'] = $rowSort['sort'] + 1;
+        $maxSort = $em->createQueryBuilder()
+            ->select('MAX(q.sort)')
+            ->from(CSurveyQuestion::class, 'q')
+            ->where('q.survey = :surveyId')
+            ->setParameter('surveyId', (int) $row['survey_id'])
+            ->getQuery()
+            ->getSingleScalarResult();
+        $params['sort'] = $maxSort + 1;
         // Insert the new question
         $insertId = Database::insert($questionTable, $params);
         if (false == $insertId) {
@@ -1551,9 +1727,19 @@ class SurveyManager
         }
 
         // Get questions options
-        $sql = "SELECT * FROM $optionsTable WHERE question_id = $questionId";
-        $res = Database::query($sql);
-        while ($row = Database::fetch_assoc($res)) {
+        $optionRows = $em->createQueryBuilder()
+            ->select(
+                'IDENTITY(o.survey) AS survey_id',
+                'o.optionText AS option_text',
+                'o.sort AS sort',
+                'o.value AS value'
+            )
+            ->from(CSurveyQuestionOption::class, 'o')
+            ->where('o.question = :questionId')
+            ->setParameter('questionId', $questionId)
+            ->getQuery()
+            ->getArrayResult();
+        foreach ($optionRows as $row) {
             $params = [
                 //'c_id' => $row['c_id'],
                 'question_id' => $insertId,
@@ -1764,21 +1950,16 @@ class SurveyManager
     {
         $surveyId = $survey->getIid();
 
-        $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $sql = "SELECT COUNT(iid) count FROM $table
-                WHERE
-                    survey_id = $surveyId AND
-                    parent_option_id <> 0
-                LIMIT 1
-                ";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
+        $count = Database::getManager()->createQueryBuilder()
+            ->select('COUNT(q.iid)')
+            ->from(CSurveyQuestion::class, 'q')
+            ->where('q.survey = :surveyId')
+            ->andWhere('IDENTITY(q.parentOption) <> 0')
+            ->setParameter('surveyId', (int) $surveyId)
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        if ($row) {
-            return $row['count'] > 0;
-        }
-
-        return false;
+        return $count > 0;
     }
 
     /**
@@ -1788,25 +1969,31 @@ class SurveyManager
     {
         $surveyId = $survey->getIid();
 
-        $table = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $em = Database::getManager();
 
         // pagebreak
-        $sql = "SELECT COUNT(iid) FROM $table
-                WHERE
-                    survey_question NOT LIKE '%{{%' AND
-                    type = 'pagebreak' AND
-                    survey_id = $surveyId";
-        $result = Database::query($sql);
-        $numberPageBreaks = Database::result($result, 0, 0);
+        $numberPageBreaks = $em->createQueryBuilder()
+            ->select('COUNT(q.iid)')
+            ->from(CSurveyQuestion::class, 'q')
+            ->where('q.surveyQuestion NOT LIKE :template')
+            ->andWhere("q.type = 'pagebreak'")
+            ->andWhere('q.survey = :surveyId')
+            ->setParameter('template', '%{{%')
+            ->setParameter('surveyId', (int) $surveyId)
+            ->getQuery()
+            ->getSingleScalarResult();
 
         // No pagebreak
-        $sql = "SELECT COUNT(iid) FROM $table
-                WHERE
-                    survey_question NOT LIKE '%{{%' AND
-                    type != 'pagebreak' AND
-                    survey_id = $surveyId";
-        $result = Database::query($sql);
-        $countOfQuestions = Database::result($result, 0, 0);
+        $countOfQuestions = $em->createQueryBuilder()
+            ->select('COUNT(q.iid)')
+            ->from(CSurveyQuestion::class, 'q')
+            ->where('q.surveyQuestion NOT LIKE :template')
+            ->andWhere("q.type <> 'pagebreak'")
+            ->andWhere('q.survey = :surveyId')
+            ->setParameter('template', '%{{%')
+            ->setParameter('surveyId', (int) $surveyId)
+            ->getQuery()
+            ->getSingleScalarResult();
 
         if (1 == $survey->getOneQuestionPerPage()) {
             if (!empty($countOfQuestions)) {

@@ -2,7 +2,11 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Language;
+use Chamilo\CoreBundle\Entity\SettingsCurrent;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\Exception\NotSupported;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * This is used in some scripts inside tests.
@@ -26,20 +30,46 @@ class SubLanguageManager
      */
     public static function getAllLanguages($onlyActive = false)
     {
-        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = 'SELECT * FROM '.$table;
+        $qb = self::languageRowsQueryBuilder()->orderBy('l.englishName', 'ASC');
         if ($onlyActive) {
-            $sql .= ' WHERE available = 1';
+            $qb->where('l.available = true');
         }
-        $sql .= ' ORDER BY english_name ASC';
 
-        $rs = Database::query($sql);
         $all_languages = [];
-        while ($row = Database::fetch_assoc($rs)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $row = self::toLegacyLanguageRow($row);
             $all_languages[$row['english_name']] = $row;
         }
 
         return $all_languages;
+    }
+
+    /**
+     * Every column of the language table, aliased to the snake_case keys the legacy callers read.
+     */
+    private static function languageRowsQueryBuilder(): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'l.id AS id',
+                'l.originalName AS original_name',
+                'l.englishName AS english_name',
+                'l.isocode AS isocode',
+                'l.available AS available',
+                'IDENTITY(l.parent) AS parent_id'
+            )
+            ->from(Language::class, 'l')
+        ;
+    }
+
+    /**
+     * The raw table row used to come back as strings with a NULL parent: keep that shape.
+     */
+    private static function toLegacyLanguageRow(array $row): array
+    {
+        $row['available'] = (string) (int) $row['available'];
+
+        return $row;
     }
 
     /**
@@ -84,15 +114,13 @@ class SubLanguageManager
      */
     public static function get_all_information_of_language($parent_id)
     {
-        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = 'SELECT * FROM '.$table.' WHERE id = "'.intval($parent_id).'"';
-        $rs = Database::query($sql);
-        $all_information = [];
-        while ($row = Database::fetch_assoc($rs)) {
-            $all_information = $row;
-        }
+        $row = self::languageRowsQueryBuilder()
+            ->where('l.id = :id')
+            ->setParameter('id', (int) $parent_id)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-        return $all_information;
+        return null === $row ? [] : self::toLegacyLanguageRow($row);
     }
 
     /**
@@ -214,17 +242,16 @@ class SubLanguageManager
      */
     public static function get_name_of_language_by_id($language_id)
     {
-        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $language_id = intval($language_id);
-        $sql = "SELECT original_name
-                FROM $table
-                WHERE id = $language_id";
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            return Database::result($rs, 0, 'original_name');
-        } else {
-            return '';
-        }
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('l.originalName AS original_name')
+            ->from(Language::class, 'l')
+            ->where('l.id = :id')
+            ->setParameter('id', (int) $language_id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return [] === $rows ? '' : $rows[0]['original_name'];
     }
 
     /**
@@ -236,16 +263,17 @@ class SubLanguageManager
      */
     public static function check_if_language_is_sub_language($language_id)
     {
-        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = 'SELECT count(*) AS count FROM '.$table.'
-                WHERE id = '.intval($language_id).' AND NOT ISNULL(parent_id)';
-        $rs = Database::query($sql);
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(l.id)')
+            ->from(Language::class, 'l')
+            ->where('l.id = :id')
+            ->andWhere('l.parent IS NOT NULL')
+            ->setParameter('id', (int) $language_id)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-        if (Database::num_rows($rs) > 0 && 1 == Database::result($rs, '0', 'count')) {
-            return true;
-        } else {
-            return false;
-        }
+        return 1 === (int) $count;
     }
 
     /**
@@ -256,15 +284,18 @@ class SubLanguageManager
     public static function check_if_language_is_used(int $language_id): bool
     {
         $language_info = self::get_all_information_of_language($language_id);
-        $table = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = 'SELECT count(*) AS count FROM '.$table.'
-                WHERE locale ="'.Database::escape_string($language_info['isocode'] ?? '').'" AND active <> '.USER_SOFT_DELETED;
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0 && Database::result($rs, '0', 'count') >= 1) {
-            return true;
-        } else {
-            return false;
-        }
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(u.id)')
+            ->from(User::class, 'u')
+            ->where('u.locale = :locale')
+            ->andWhere('u.active <> :softDeleted')
+            ->setParameter('locale', $language_info['isocode'] ?? '')
+            ->setParameter('softDeleted', USER_SOFT_DELETED)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return (int) $count >= 1;
     }
 
     /**
@@ -276,16 +307,16 @@ class SubLanguageManager
      */
     public static function check_if_language_is_father($language_id)
     {
-        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = 'SELECT count(*) AS count FROM '.$table.'
-                WHERE parent_id= '.intval($language_id).' AND NOT ISNULL(parent_id);';
-        $rs = Database::query($sql);
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(l.id)')
+            ->from(Language::class, 'l')
+            ->where('IDENTITY(l.parent) = :id')
+            ->setParameter('id', (int) $language_id)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-        if (Database::num_rows($rs) > 0 && Database::result($rs, '0', 'count') >= 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return (int) $count >= 1;
     }
 
     /**
@@ -297,12 +328,17 @@ class SubLanguageManager
      */
     public static function make_unavailable_language($language_id)
     {
-        $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = "UPDATE $tbl_admin_languages SET available='0'
-                WHERE id = ".intval($language_id)."";
-        $result = Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(Language::class, 'l')
+            ->set('l.available', ':available')
+            ->where('l.id = :id')
+            ->setParameter('available', false)
+            ->setParameter('id', (int) $language_id)
+            ->getQuery()
+            ->execute()
+        ;
 
-        return false !== $result; //only return false on sql error
+        return true;
     }
 
     /**
@@ -314,12 +350,17 @@ class SubLanguageManager
      */
     public static function make_available_language($language_id)
     {
-        $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = "UPDATE $tbl_admin_languages SET available='1'
-                WHERE id = ".intval($language_id)."";
-        $result = Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(Language::class, 'l')
+            ->set('l.available', ':available')
+            ->where('l.id = :id')
+            ->setParameter('available', true)
+            ->setParameter('id', (int) $language_id)
+            ->getQuery()
+            ->execute()
+        ;
 
-        return false !== $result; //only return false on sql error
+        return true;
     }
 
     /**
@@ -335,22 +376,23 @@ class SubLanguageManager
             return false;
         }
         $language_id = intval($language_id);
-        $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS);
-        $sql = "SELECT * FROM $tbl_admin_languages
-                WHERE id = $language_id";
-        $result = Database::query($sql);
-        $lang = Database::fetch_array($result);
-        $sql_update_2 = "UPDATE $tbl_settings_current SET selected_value = '".$lang['isocode']."'
-                         WHERE variable = 'platform_language'";
-        $result_2 = Database::query($sql_update_2);
+        $lang = self::get_all_information_of_language($language_id);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(SettingsCurrent::class, 's')
+            ->set('s.selectedValue', ':isocode')
+            ->where('s.variable = :variable')
+            ->setParameter('isocode', $lang['isocode'])
+            ->setParameter('variable', 'platform_language')
+            ->getQuery()
+            ->execute()
+        ;
         Event::addEvent(
             LOG_PLATFORM_LANGUAGE_CHANGE,
             LOG_PLATFORM_LANGUAGE,
             $lang['english_name']
         );
 
-        return false !== $result_2;
+        return true;
     }
 
     /**
@@ -360,16 +402,16 @@ class SubLanguageManager
      */
     public static function get_platform_language_id()
     {
-        $isocode = Database::escape_string((string) api_get_setting('language.platform_language'));
-        $tbl_admin_languages = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-        $sql = "SELECT id FROM $tbl_admin_languages WHERE isocode ='$isocode'";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) < 1) {
-            return false;
-        }
-        $row = Database::fetch_array($res);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('l.id')
+            ->from(Language::class, 'l')
+            ->where('l.isocode = :isocode')
+            ->setParameter('isocode', (string) api_get_setting('language.platform_language'))
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        return (int) $row['id'];
+        return [] === $rows ? false : (int) $rows[0]['id'];
     }
 
     /**

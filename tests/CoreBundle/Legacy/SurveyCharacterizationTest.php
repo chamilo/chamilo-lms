@@ -761,6 +761,104 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertSame(1, SurveyManager::getCountPages($this->survey($none)));
     }
 
+    public function testSaveQuestionSortsAfterTheHighestExistingSortNotTheLowest(): void
+    {
+        $s = $this->insertSurvey();
+        $this->insertQuestion($s, 'sv high', 'yesno', 9);
+        $this->insertQuestion($s, 'sv low', 'yesno', 2);
+
+        SurveyManager::saveQuestion($this->survey($s), [
+            'question' => 'sv appended',
+            'type' => 'open',
+            'horizontalvertical' => 'vertical',
+            'shared_question_id' => 0,
+            'survey_id' => $s,
+            'question_id' => 0,
+        ], false);
+
+        $this->assertSame(
+            10,
+            (int) $this->conn->fetchOne('SELECT sort FROM c_survey_question WHERE survey_id = ? AND survey_question = ?', [$s, 'sv appended'])
+        );
+    }
+
+    public function testGetCountPagesCountsEveryPlainPageBreak(): void
+    {
+        $s = $this->insertSurvey();
+        $this->insertQuestion($s, 'sv q1', 'yesno', 1);
+        $this->insertQuestion($s, 'sv break one', 'pagebreak', 2);
+        $this->insertQuestion($s, 'sv q2', 'yesno', 3);
+        $this->insertQuestion($s, 'sv break two', 'pagebreak', 4);
+        $this->insertQuestion($s, 'sv q3', 'yesno', 5);
+
+        $this->assertSame(3, SurveyManager::getCountPages($this->survey($s)));
+    }
+
+    public function testEmptySurveyInASessionCountsTheSurvivingAnsweringUsersOnce(): void
+    {
+        $sid = $this->insertSession();
+        $s = $this->insertSurvey(['invited' => 3, 'answered' => 3]);
+        $q1 = $this->insertQuestion($s, 'sv q1');
+        $q2 = $this->insertQuestion($s, 'sv q2', 'yesno', 2);
+        $this->insertAnswer($s, $q1, '2', 'a', 0, ['session_id' => $sid]);
+        $this->insertAnswer($s, $q1, '2', 'a');
+        $this->insertAnswer($s, $q2, '2', 'a');
+        $this->setContext(1, 1, $sid);
+
+        SurveyManager::empty_survey($s);
+
+        $this->assertSame(1, (int) $this->surveyRow($s)['answered'], 'one user answered two questions: counted once');
+    }
+
+    public function testUpdateSurveyAnsweredInASessionOnlyFlagsTheInvitationOfThatSession(): void
+    {
+        $sid = $this->insertSession();
+        $other = $this->insertSession();
+        $s = $this->insertSurvey();
+        $base = $this->insertInvitation($s, 1);
+        $inSession = $this->insertInvitation($s, 1, ['session_id' => $sid]);
+        $inOther = $this->insertInvitation($s, 1, ['session_id' => $other]);
+        $this->setContext(1, 1, $sid);
+
+        SurveyManager::updateSurveyAnswered($this->survey($s), 1);
+
+        $rows = $this->conn->fetchAllKeyValue('SELECT iid, answered FROM c_survey_invitation WHERE survey_id = ?', [$s]);
+        $this->assertSame(0, (int) $rows[$base]);
+        $this->assertSame(1, (int) $rows[$inSession]);
+        $this->assertSame(0, (int) $rows[$inOther]);
+    }
+
+    public function testGetPeopleWhoFilledSurveyWithUserInfoFollowsTheNameConventionOfTheLanguage(): void
+    {
+        $firstNameLocale = null;
+        $lastNameLocale = null;
+        foreach (['en_US', 'fr_FR', 'es_ES', 'de_DE', 'ja_JP', 'ko_KR', 'zh_CN', 'hu_HU', 'vi_VN'] as $iso) {
+            if (api_sort_by_first_name($iso)) {
+                $firstNameLocale ??= $iso;
+            } else {
+                $lastNameLocale ??= $iso;
+            }
+        }
+        if (null === $firstNameLocale || null === $lastNameLocale) {
+            $this->markTestSkipped('The name conventions of the known locales do not cover both sort orders.');
+        }
+
+        $this->conn->executeStatement("UPDATE user SET firstname = 'Zed', lastname = 'Aaa' WHERE id = 1");
+        $this->conn->executeStatement("UPDATE user SET firstname = 'Amy', lastname = 'Zzz' WHERE id = 2");
+        $s = $this->insertSurvey();
+        $q = $this->insertQuestion($s, 'sv q');
+        $this->insertAnswer($s, $q, '1', 'a');
+        $this->insertAnswer($s, $q, '2', 'a');
+
+        Container::getRequest()->setLocale($firstNameLocale);
+        $byFirst = array_map(static fn (array $p): int => (int) $p['user_id'], SurveyManager::get_people_who_filled_survey($s, true));
+        Container::getRequest()->setLocale($lastNameLocale);
+        $byLast = array_map(static fn (array $p): int => (int) $p['user_id'], SurveyManager::get_people_who_filled_survey($s, true));
+
+        $this->assertSame([2, 1], $byFirst);
+        $this->assertSame([1, 2], $byLast);
+    }
+
     // ---------------------------------------------------------------- SurveyManager: copy
 
     public function testCopySurveyIntoAnExistingSurveyCopiesQuestionsAndOptionsWithNewIds(): void
@@ -1450,6 +1548,47 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertCount(3, $invited['users']);
     }
 
+    public function testGetInvitedUsersOrdersCourseUsersByTheNameConventionOfTheLanguage(): void
+    {
+        $firstNameLocale = null;
+        $lastNameLocale = null;
+        foreach (['en_US', 'fr_FR', 'es_ES', 'de_DE', 'ja_JP', 'ko_KR', 'zh_CN', 'hu_HU', 'vi_VN'] as $iso) {
+            if (api_sort_by_first_name($iso)) {
+                $firstNameLocale ??= $iso;
+            } else {
+                $lastNameLocale ??= $iso;
+            }
+        }
+        if (null === $firstNameLocale || null === $lastNameLocale) {
+            $this->markTestSkipped('The name conventions of the known locales do not cover both sort orders.');
+        }
+
+        $this->conn->executeStatement("UPDATE user SET firstname = 'Zed', lastname = 'Aaa' WHERE id = 1");
+        $this->conn->executeStatement("UPDATE user SET firstname = 'Amy', lastname = 'Zzz' WHERE id = 2");
+        $s = $this->insertSurvey();
+        $this->insertInvitation($s, 1);
+        $this->insertInvitation($s, 2);
+
+        Container::getRequest()->setLocale($firstNameLocale);
+        $byFirst = array_map('intval', SurveyUtil::get_invited_users($this->survey($s))['course_users']);
+        Container::getRequest()->setLocale($lastNameLocale);
+        $byLast = array_map('intval', SurveyUtil::get_invited_users($this->survey($s))['course_users']);
+
+        $this->assertSame([2, 1], $byFirst);
+        $this->assertSame([1, 2], $byLast);
+    }
+
+    public function testGetInvitedUsersIsScopedToTheSession(): void
+    {
+        $sid = $this->insertSession();
+        $s = $this->insertSurvey();
+        $this->insertInvitation($s, 1, ['session_id' => null]);
+        $this->insertInvitation($s, 2, ['session_id' => $sid]);
+
+        $this->assertSame([2], array_map('intval', SurveyUtil::get_invited_users($this->survey($s), '', $sid)['course_users']));
+        $this->assertSame([1], array_map('intval', SurveyUtil::get_invited_users($this->survey($s))['course_users']));
+    }
+
     public function testGetInvitedUsersByCourseCodeUsesThatCourse(): void
     {
         $s = $this->insertSurvey();
@@ -1505,6 +1644,8 @@ final class SurveyCharacterizationTest extends KernelTestCase
 
         $this->assertCount(1, $base);
         $this->assertSame(1, (int) $base[0]['user_id']);
+        // survey_invitation.php once read a 'user' key that does not exist: the invited user is only in user_id.
+        $this->assertArrayNotHasKey('user', $base[0]);
         $this->assertSame('admin', strtolower((string) $this->conn->fetchOne('SELECT username FROM user WHERE id = 1')));
         $this->assertSame((string) $this->conn->fetchOne('SELECT firstname FROM user WHERE id = 1'), $base[0]['firstname']);
         $this->assertSame((string) $this->conn->fetchOne('SELECT email FROM user WHERE id = 1'), $base[0]['email']);
@@ -1538,6 +1679,41 @@ final class SurveyCharacterizationTest extends KernelTestCase
         $this->assertStringNotContainsString('sv future survey', $html);
         $this->assertStringNotContainsString('sv not mine', $html);
         $this->assertStringNotContainsString('sv other course', $html);
+    }
+
+    public function testGetSurveyListIsSortedByTitleLinksTheInvitationCodeAndIsScopedToTheSession(): void
+    {
+        $sid = $this->insertSession();
+        $dates = ['avail_from' => '2000-01-01 00:00:00', 'avail_till' => '2999-01-01 00:00:00'];
+        $b = $this->insertSurvey(['title' => 'sv b survey'] + $dates);
+        $a = $this->insertSurvey(['title' => 'sv a survey'] + $dates);
+        $answered = $this->insertSurvey(['title' => 'sv c answered survey'] + $dates);
+        $inSession = $this->insertSurvey(['title' => 'sv d session survey'] + $dates);
+        $this->insertInvitation($b, 2, ['invitation_code' => 'code-b']);
+        $this->insertInvitation($a, 2, ['invitation_code' => 'code-a']);
+        $this->insertInvitation($answered, 2, ['invitation_code' => 'code-answered', 'answered' => 1]);
+        $this->insertInvitation($inSession, 2, ['invitation_code' => 'code-session', 'session_id' => $sid]);
+
+        ob_start();
+        SurveyUtil::getSurveyList(2);
+        $html = (string) ob_get_clean();
+
+        $this->assertLessThan(strpos($html, 'sv b survey'), strpos($html, 'sv a survey'));
+        $this->assertLessThan(strpos($html, 'sv c answered survey'), strpos($html, 'sv b survey'));
+        $this->assertStringContainsString('invitationCode=code-a', $html);
+        $this->assertStringContainsString('invitationCode=code-b', $html);
+        $this->assertStringNotContainsString('code-answered', $html, 'an answered survey links to its report, not to the form');
+        $this->assertStringContainsString('sv c answered survey', $html);
+        $this->assertStringNotContainsString('sv d session survey', $html);
+
+        $this->setContext(2, 1, $sid);
+        ob_start();
+        SurveyUtil::getSurveyList(2);
+        $html = (string) ob_get_clean();
+
+        $this->assertStringContainsString('invitationCode=code-session', $html);
+        $this->assertStringContainsString('sid='.$sid, $html);
+        $this->assertStringNotContainsString('sv a survey', $html);
     }
 
     public function testGenerateFillSurveyLinkDistinguishesAnonymousAndNamedSurveys(): void

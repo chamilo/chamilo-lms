@@ -108,7 +108,11 @@ final readonly class CasTicketValidator
             if (1 !== $success->length || 0 !== $failure->length || 1 !== $users->length || 0 !== $xpath->query('/cas:serviceResponse/cas:authenticationSuccess/cas:user/*', null, false)->length) {
                 throw new CustomUserMessageAuthenticationException('Authentication failed.');
             }
-            $username = $users->item(0)->textContent;
+            $userNode = $users->item(0);
+            if (!$userNode instanceof DOMElement) {
+                throw new CustomUserMessageAuthenticationException('Authentication failed.');
+            }
+            $username = $userNode->textContent;
             foreach ($xpath->query('/cas:serviceResponse/cas:authenticationSuccess/cas:attributes/cas:*', null, false) as $attribute) {
                 if ($attribute instanceof DOMElement && 0 === $attribute->childElementCount) {
                     $attributes[$attribute->localName][] = $attribute->textContent;

@@ -12,9 +12,12 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CForumAttachment;
 use Chamilo\CourseBundle\Entity\CForumCategory;
+use Chamilo\CourseBundle\Entity\CForumMailcue;
 use Chamilo\CourseBundle\Entity\CForumNotification;
 use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
+use Chamilo\CourseBundle\Entity\CForumThreadQualify;
+use Chamilo\CourseBundle\Entity\CForumThreadQualifyLog;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -290,7 +293,6 @@ function store_forum(array $values, array $courseInfo = [], bool $returnId = fal
 
 function deletePost(CForumPost $post): void
 {
-    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $em = Database::getManager();
     $em
         ->createQuery('
@@ -323,30 +325,37 @@ function deletePost(CForumPost $post): void
 
     if (!empty($lastPostOfTheTread)) {
         // Decreasing the number of replies only if > 0
-        $threadReplies = Database::fetch_array(Database::query("SELECT thread_replies FROM $table_threads WHERE iid = $threadId"));
-        $replyCount = (int) $threadReplies['thread_replies'];
+        $threadReplies = $em->createQueryBuilder()
+            ->select('t.threadReplies AS thread_replies')
+            ->from(CForumThread::class, 't')
+            ->where('t.iid = :threadId')
+            ->setParameter('threadId', $threadId)
+            ->getQuery()
+            ->getArrayResult()[0] ?? false;
+        $replyCount = (int) ($threadReplies['thread_replies'] ?? 0);
 
+        $update = $em->createQueryBuilder()
+            ->update(CForumThread::class, 't')
+            ->set('t.threadLastPost', ':lastPost')
+            ->set('t.threadDate', ':threadDate')
+            ->where('t.iid = :threadId')
+            ->setParameter('lastPost', (int) $lastPostOfTheTread['iid'])
+            ->setParameter('threadDate', $lastPostOfTheTread['post_date'])
+            ->setParameter('threadId', $threadId);
         if ($replyCount > 0) {
-            $sql = "UPDATE $table_threads
-                    SET
-                        thread_replies = thread_replies - 1,
-                        thread_last_post = ".$lastPostOfTheTread['iid'].",
-                        thread_date = '".$lastPostOfTheTread['post_date']."'
-                    WHERE iid = $threadId";
-        } else {
-            $sql = "UPDATE $table_threads
-                    SET
-                        thread_last_post = ".$lastPostOfTheTread['iid'].",
-                        thread_date = '".$lastPostOfTheTread['post_date']."'
-                    WHERE iid = $threadId";
+            // Decreasing the number of replies only if > 0
+            $update->set('t.threadReplies', 't.threadReplies - 1');
         }
-
-        Database::query($sql);
+        $update->getQuery()->execute();
         Display::addFlash(Display::return_message(get_lang('Post has been deleted')));
     } else {
         // We deleted the very last post of the thread, so we need to delete the thread as well.
-        $sql = "DELETE FROM $table_threads WHERE iid = $threadId";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->delete(CForumThread::class, 't')
+            ->where('t.iid = :threadId')
+            ->setParameter('threadId', $threadId)
+            ->getQuery()
+            ->execute();
 
         Display::addFlash(Display::return_message(get_lang('Thread deleted')));
     }
@@ -791,168 +800,6 @@ function getPosts(
 }
 
 /**
- * This function retrieves forum thread users details.
- *
- * @return Doctrine\DBAL\Driver\Statement|null array Array of type
- *                                             ([user_id=>w,lastname=>x,firstname=>y,threadId=>z],[])
- *
- * @author Christian Fasanando <christian.fasanando@beeznest.com>,
- *
- * @todo     this function needs to be improved
- *
- * @version October 2008, dokeos 1.8
- */
-function get_thread_users_details(int $threadId)
-{
-    $t_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $t_users = Database::get_main_table(TABLE_MAIN_USER);
-    $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-    $courseId = (int) api_get_course_int_id();
-    $threadId = (int) $threadId;
-    $sessionId = (int) api_get_session_id();
-
-    $isWesternNameOrder = api_is_western_name_order();
-    $orderBy = $isWesternNameOrder
-        ? 'ORDER BY user.firstname, user.lastname'
-        : 'ORDER BY user.lastname, user.firstname';
-
-    if ($sessionId > 0) {
-        // We are inside a session: use session_rel_course_rel_user
-        $session = api_get_session_entity();
-        $coachIds = [];
-
-        if ($session instanceof SessionEntity) {
-            // Collect general coaches and session admins to exclude them
-            $generalCoachesId = $session
-                ->getGeneralCoaches()
-                ->map(fn (User $coach) => $coach->getId())
-                ->getValues();
-
-            $sessionAdminsId = $session
-                ->getSessionAdmins()
-                ->map(fn (User $admin) => $admin->getId())
-                ->getValues();
-
-            $coachIds = array_unique(array_merge($generalCoachesId, $sessionAdminsId));
-        }
-
-        $avoidClause = '';
-        if (!empty($coachIds)) {
-            // Avoid empty NOT IN () clause
-            $ids = implode(',', array_map('intval', $coachIds));
-            $avoidClause = "AND session_rel.user_id NOT IN ($ids)";
-        }
-
-        $sql = "
-            SELECT DISTINCT user.id, user.lastname, user.firstname, p.thread_id
-            FROM $t_posts p
-            INNER JOIN $t_users user
-                ON p.poster_id = user.id
-            INNER JOIN $t_session_rel_user session_rel
-                ON session_rel.user_id = user.id
-            WHERE
-                p.thread_id = $threadId
-                AND (p.status IS NULL OR p.status = ".CForumPost::STATUS_VALIDATED.")
-                AND session_rel.c_id = $courseId
-                AND session_rel.session_id = $sessionId
-                AND session_rel.status = ".SessionEntity::STUDENT."
-                $avoidClause
-            $orderBy
-        ";
-    } else {
-        // No session: use course_rel_user
-        $sql = "
-            SELECT DISTINCT user.id, user.lastname, user.firstname, p.thread_id
-            FROM $t_posts p
-            INNER JOIN $t_users user
-                ON p.poster_id = user.id
-            INNER JOIN $t_course_user course_user
-                ON course_user.user_id = user.id
-            WHERE
-                p.thread_id = $threadId
-                AND (p.status IS NULL OR p.status = ".CForumPost::STATUS_VALIDATED.")
-                AND course_user.c_id = $courseId
-                AND course_user.status = ".CourseRelUser::STUDENT."
-                AND course_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
-            $orderBy
-        ";
-    }
-
-    return Database::query($sql);
-}
-
-/**
- * This function retrieves forum thread users qualify.
- *
- * @return Doctrine\DBAL\Driver\Statement|null Array of type ([user_id=>w,lastname=>x,firstname=>y,threadId=>z],[])
- * @author Jhon Hinojosa
- * @todo     this function needs to be improved
- */
-function get_thread_users_qualify(int $thread_id)
-{
-    $t_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $t_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
-    $t_users = Database::get_main_table(TABLE_MAIN_USER);
-    $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-    $course_id = api_get_course_int_id();
-    $sessionId = api_get_session_id();
-
-    $is_western_name_order = api_is_western_name_order();
-    if ($is_western_name_order) {
-        $orderby = 'ORDER BY user.firstname, user.lastname ';
-    } else {
-        $orderby = 'ORDER BY user.lastname, user.firstname';
-    }
-
-    $session = api_get_session_entity();
-
-    if ($session) {
-        $generalCoachesId = $session->getGeneralCoaches()->map(fn(User $coach) => $coach->getId())->getValues();
-        $sessionAdminsId = $session->getSessionAdmins()->map(fn(User $admin) => $admin->getId())->getValues();
-        $coachesId = array_merge($generalCoachesId, $sessionAdminsId);
-        // An empty NOT IN () is a SQL error: a session may have neither general coach nor session admin.
-        $user_to_avoid = implode(', ', array_map('intval', $coachesId ?: [0]));
-        //not showing coaches
-        $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,forum_qualify.`qualify`
-                FROM $t_posts post , $t_users user, $t_session_rel_user scu, $t_qualify forum_qualify
-                WHERE poster_id = user.id
-                    AND post.poster_id = forum_qualify.user_id
-                    AND user.id = scu.user_id
-                    AND scu.status = ".SessionEntity::STUDENT."
-                    AND scu.user_id NOT IN ($user_to_avoid)
-                    AND forum_qualify.thread_id = $thread_id
-                    AND post.thread_id = $thread_id
-                    AND scu.session_id = $sessionId
-                    AND scu.c_id = $course_id AND
-                    forum_qualify.c_id = $course_id
-                $orderby ";
-    } else {
-        $sql = "SELECT DISTINCT post.poster_id, user.lastname, user.firstname, post.thread_id,user.id,forum_qualify.`qualify`
-                FROM $t_posts post,
-                     $t_qualify forum_qualify,
-                     $t_users user,
-                     $t_course_user course_user
-                WHERE
-                     post.poster_id = user.id
-                     AND post.poster_id = forum_qualify.user_id
-                     AND user.id = course_user.user_id
-                     AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-                     AND forum_qualify.thread_id = $thread_id
-                     AND post.thread_id = $thread_id
-                     AND course_user.status not in('1')
-                     AND course_user.c_id = $course_id
-                     AND forum_qualify.c_id = $course_id
-                 $orderby ";
-    }
-
-    return Database::query($sql);
-}
-
-/**
  * This function update a thread.
  *
  * @param array $values - The form Values
@@ -1072,7 +919,6 @@ function saveThread(
     $course_id = $courseInfo['real_id'];
     $courseCode = $courseInfo['code'];
     $sessionId = $sessionId ?: api_get_session_id();
-    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
 
     $post_date = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
     $visible = true;
@@ -1185,11 +1031,14 @@ function saveThread(
 
     // Now we have to update the thread table to fill the thread_last_post
     // field (so that we know when the thread has been updated for the last time).
-    $sql = "UPDATE $table_threads
-            SET thread_last_post = '".$postId."'
-            WHERE
-                iid = '".$thread->getIid()."'";
-    Database::query($sql);
+    Database::getManager()->createQueryBuilder()
+        ->update(CForumThread::class, 't')
+        ->set('t.threadLastPost', ':postId')
+        ->where('t.iid = :threadId')
+        ->setParameter('postId', (int) $postId)
+        ->setParameter('threadId', (int) $thread->getIid())
+        ->getQuery()
+        ->execute();
 
     $message = '';
     if ($showMessage) {
@@ -1542,31 +1391,33 @@ function render_thread_preview_html(
     int $limit = 20,
     string $heightClass = 'h-72'
 ): string {
-    $tablePosts = Database::get_course_table(TABLE_FORUM_POST); // c_forum_post
-    $tableUsers = Database::get_main_table(TABLE_MAIN_USER);    // user
-
-    $sql = "SELECT
-                p.iid,
-                p.post_date,
-                p.title      AS post_title,
-                p.post_text,
-                u.id         AS user_id,
-                u.username,
-                u.firstname,
-                u.lastname
-            FROM $tablePosts p
-            INNER JOIN $tableUsers u ON u.id = p.poster_id
-            WHERE p.thread_id = ".(int)$threadId."
-              AND p.visible = 1
-              AND (p.status IS NULL OR p.status = ".(int) CForumPost::STATUS_VALIDATED.")
-            ORDER BY p.post_date ASC
-            LIMIT ".(int)$limit;
-
-    $res  = Database::query($sql);
-    $rows = [];
-    while ($r = Database::fetch_array($res)) {
-        $rows[] = $r;
+    $rows = Database::getManager()->createQueryBuilder()
+        ->select(
+            'p.iid AS iid',
+            'p.postDate AS post_date',
+            'p.title AS post_title',
+            'p.postText AS post_text',
+            'u.id AS user_id',
+            'u.username AS username',
+            'u.firstname AS firstname',
+            'u.lastname AS lastname'
+        )
+        ->from(CForumPost::class, 'p')
+        ->innerJoin('p.user', 'u')
+        ->where('IDENTITY(p.thread) = :threadId')
+        ->andWhere('p.visible = true')
+        ->andWhere('(p.status IS NULL OR p.status = :validated)')
+        ->setParameter('threadId', (int) $threadId)
+        ->setParameter('validated', (int) CForumPost::STATUS_VALIDATED)
+        ->orderBy('p.postDate', 'ASC')
+        ->setMaxResults((int) $limit)
+        ->getQuery()
+        ->getArrayResult();
+    foreach ($rows as &$row) {
+        // The raw row used to carry the datetime as a string.
+        $row['post_date'] = $row['post_date']->format('Y-m-d H:i:s');
     }
+    unset($row);
 
     ob_start(); ?>
     <div class="mt-6 w-full">
@@ -1896,6 +1747,7 @@ function saveThreadScore(
     $session_id
 ) {
     $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
+    $em = Database::getManager();
 
     $course_id = api_get_course_int_id();
     $session_id = (int) $session_id;
@@ -1903,30 +1755,40 @@ function saveThreadScore(
     $user_id = (int) $user_id;
     $thread_qualify = (float) $thread_qualify;
     $currentUserId = api_get_user_id();
-    $qualify_time = Database::escape_string($qualify_time);
 
     $max = $threadEntity->getThreadQualifyMax();
     if ($thread_qualify <= $max) {
+        $countQb = $em->createQueryBuilder()
+            ->select('COUNT(q.iid)')
+            ->from(CForumThreadQualify::class, 'q')
+            ->where('IDENTITY(q.user) = :userId')
+            ->andWhere('IDENTITY(q.thread) = :threadId')
+            ->setParameter('userId', $user_id)
+            ->setParameter('threadId', $thread_id);
         if ($threadEntity->isThreadPeerQualify()) {
-            $sql = "SELECT COUNT(*) FROM $table_threads_qualify
-                    WHERE
-                        user_id = $user_id AND
-                        qualify_user_id = $currentUserId AND
-                        thread_id = ".$thread_id;
-        } else {
-            $sql = "SELECT COUNT(*) FROM $table_threads_qualify
-                    WHERE
-                        user_id = $user_id AND
-                        thread_id = ".$thread_id;
+            $countQb->andWhere('IDENTITY(q.qualifyUser) = :qualifyUserId')
+                ->setParameter('qualifyUserId', (int) $currentUserId);
         }
 
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
-        if (0 == $row[0]) {
-            $sql = "INSERT INTO $table_threads_qualify (c_id, user_id, thread_id, `qualify`, qualify_user_id, qualify_time)
-                    VALUES (".$course_id.", '".$user_id."','".$thread_id."',".$thread_qualify.", '".$currentUserId."','".$qualify_time."')";
-            Database::query($sql);
+        if (0 == $countQb->getQuery()->getSingleScalarResult()) {
+            $connection = $em->getConnection();
+            $connection->createQueryBuilder()
+                ->insert($table_threads_qualify)
+                ->values([
+                    'c_id' => ':courseId',
+                    'user_id' => ':userId',
+                    'thread_id' => ':threadId',
+                    $connection->quoteIdentifier('qualify') => ':qualify',
+                    'qualify_user_id' => ':qualifyUserId',
+                    'qualify_time' => ':qualifyTime',
+                ])
+                ->setParameter('courseId', (int) $course_id)
+                ->setParameter('userId', $user_id)
+                ->setParameter('threadId', $thread_id)
+                ->setParameter('qualify', $thread_qualify)
+                ->setParameter('qualifyUserId', (int) $currentUserId)
+                ->setParameter('qualifyTime', (string) $qualify_time)
+                ->executeStatement();
 
             return 'insert';
         } else {
@@ -1938,16 +1800,20 @@ function saveThreadScore(
             );
 
             // Update
-            $sql = "UPDATE $table_threads_qualify
-                    SET
-                        `qualify` = '".$thread_qualify."',
-                        qualify_time = '".$qualify_time."'
-                    WHERE
-                        user_id=".$user_id.' AND
-                        thread_id='.$thread_id." AND
-                        qualify_user_id = $currentUserId
-                    ";
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->update(CForumThreadQualify::class, 'q')
+                ->set('q.qualify', ':qualify')
+                ->set('q.qualifyTime', ':qualifyTime')
+                ->where('IDENTITY(q.user) = :userId')
+                ->andWhere('IDENTITY(q.thread) = :threadId')
+                ->andWhere('IDENTITY(q.qualifyUser) = :qualifyUserId')
+                ->setParameter('qualify', $thread_qualify)
+                ->setParameter('qualifyTime', (string) $qualify_time)
+                ->setParameter('userId', $user_id)
+                ->setParameter('threadId', $thread_id)
+                ->setParameter('qualifyUserId', (int) $currentUserId)
+                ->getQuery()
+                ->execute();
 
             return 'update';
         }
@@ -1972,9 +1838,6 @@ function saveThreadScore(
  */
 function showQualify($option, $user_id, $thread_id)
 {
-    $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
-    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
-
     $course_id = api_get_course_int_id();
     $user_id = (int) $user_id;
     $thread_id = (int) $thread_id;
@@ -1983,28 +1846,34 @@ function showQualify($option, $user_id, $thread_id)
         return 0;
     }
 
-    $sql = '';
+    $qb = null;
     switch ($option) {
         case 1:
-            $sql = "SELECT `qualify` FROM $table_threads_qualify
-                    WHERE
-                        c_id = $course_id AND
-                        user_id=".$user_id.' AND
-                        thread_id='.$thread_id;
+            $qb = Database::getManager()->createQueryBuilder()
+                ->select('q.qualify AS value')
+                ->from(CForumThreadQualify::class, 'q')
+                ->where('q.cId = :courseId')
+                ->andWhere('IDENTITY(q.user) = :userId')
+                ->andWhere('IDENTITY(q.thread) = :threadId')
+                ->setParameter('courseId', (int) $course_id)
+                ->setParameter('userId', $user_id)
+                ->setParameter('threadId', $thread_id);
 
             break;
         case 2:
-            $sql = "SELECT thread_qualify_max FROM $table_threads
-                    WHERE iid=".$thread_id;
+            $qb = Database::getManager()->createQueryBuilder()
+                ->select('t.threadQualifyMax AS value')
+                ->from(CForumThread::class, 't')
+                ->where('t.iid = :threadId')
+                ->setParameter('threadId', $thread_id);
 
             break;
     }
 
-    if (!empty($sql)) {
-        $rs = Database::query($sql);
-        $row = Database::fetch_array($rs);
+    if (null !== $qb) {
+        $row = $qb->setMaxResults(1)->getQuery()->getArrayResult()[0] ?? false;
         if ($row) {
-            return $row[0];
+            return $row['value'];
         }
     }
 
@@ -2030,27 +1899,33 @@ function getThreadScoreHistory($user_id, $thread_id, $opt)
     $user_id = (int) $user_id;
     $thread_id = (int) $thread_id;
 
-    $table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
     $course_id = api_get_course_int_id();
 
-    if ('false' == $opt) {
-        $sql = "SELECT * FROM $table_threads_qualify_log
-                WHERE
-                    c_id = $course_id AND
-                    thread_id='".$thread_id."' AND
-                    user_id='".$user_id."'
-                ORDER BY qualify_time";
-    } else {
-        $sql = "SELECT * FROM $table_threads_qualify_log
-                WHERE
-                    c_id = $course_id AND
-                    thread_id='".$thread_id."' AND
-                    user_id='".$user_id."'
-                ORDER BY qualify_time DESC";
-    }
-    $rs = Database::query($sql);
+    $rows = Database::getManager()->createQueryBuilder()
+        ->select(
+            'l.iid AS iid',
+            'l.cId AS c_id',
+            'l.userId AS user_id',
+            'l.threadId AS thread_id',
+            'l.qualify AS qualify',
+            'l.qualifyUserId AS qualify_user_id',
+            'l.qualifyTime AS qualify_time',
+            'l.sessionId AS session_id'
+        )
+        ->from(CForumThreadQualifyLog::class, 'l')
+        ->where('l.cId = :courseId')
+        ->andWhere('l.threadId = :threadId')
+        ->andWhere('l.userId = :userId')
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('threadId', $thread_id)
+        ->setParameter('userId', $user_id)
+        ->orderBy('l.qualifyTime', 'false' == $opt ? 'ASC' : 'DESC')
+        ->getQuery()
+        ->getArrayResult();
     $log = [];
-    while ($row = Database::fetch_assoc($rs)) {
+    foreach ($rows as $row) {
+        // The raw row used to carry the datetime as a string.
+        $row['qualify_time'] = $row['qualify_time']?->format('Y-m-d H:i:s');
         $log[] = $row;
     }
 
@@ -2081,7 +1956,6 @@ function saveThreadScoreHistory(
     $user_id,
     $thread_id
 ) {
-    $table_threads_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
     $table_threads_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
 
     $thread_id = (int) $thread_id;
@@ -2091,28 +1965,48 @@ function saveThreadScoreHistory(
 
     if (1 == $option) {
         // Extract information of thread_qualify.
-        $sql = "SELECT `qualify`, qualify_time
-                FROM $table_threads_qualify
-                WHERE
-                    c_id = $course_id AND
-                    user_id = ".$user_id.' AND
-                    thread_id = '.$thread_id." AND
-                    qualify_user_id = $qualify_user_id
-                ";
-        $rs = Database::query($sql);
-        $row = Database::fetch_array($rs);
+        $em = Database::getManager();
+        $row = $em->createQueryBuilder()
+            ->select('q.qualify AS qualify', 'q.qualifyTime AS qualify_time')
+            ->from(CForumThreadQualify::class, 'q')
+            ->where('q.cId = :courseId')
+            ->andWhere('IDENTITY(q.user) = :userId')
+            ->andWhere('IDENTITY(q.thread) = :threadId')
+            ->andWhere('IDENTITY(q.qualifyUser) = :qualifyUserId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('userId', $user_id)
+            ->setParameter('threadId', $thread_id)
+            ->setParameter('qualifyUserId', (int) $qualify_user_id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()[0] ?? false;
 
         // Nothing to archive when this grader has not graded the thread before.
         if (empty($row)) {
             return;
         }
 
-        $qualifyTime = empty($row[1]) ? 'NULL' : "'".Database::escape_string($row[1])."'";
+        $qualifyTime = empty($row['qualify_time']) ? null : $row['qualify_time']->format('Y-m-d H:i:s');
 
         // Insert thread_historical.
-        $sql = "INSERT INTO $table_threads_qualify_log (c_id, user_id, thread_id, `qualify`, qualify_user_id, qualify_time)
-                VALUES(".$course_id.", ".$user_id.", ".$thread_id.", ".(float) $row[0].", ".(int) $qualify_user_id.", ".$qualifyTime.")";
-        Database::query($sql);
+        $connection = $em->getConnection();
+        $connection->createQueryBuilder()
+            ->insert($table_threads_qualify_log)
+            ->values([
+                'c_id' => ':courseId',
+                'user_id' => ':userId',
+                'thread_id' => ':threadId',
+                $connection->quoteIdentifier('qualify') => ':qualify',
+                'qualify_user_id' => ':qualifyUserId',
+                'qualify_time' => ':qualifyTime',
+            ])
+            ->setParameter('courseId', $course_id)
+            ->setParameter('userId', $user_id)
+            ->setParameter('threadId', $thread_id)
+            ->setParameter('qualify', (float) $row['qualify'])
+            ->setParameter('qualifyUserId', (int) $qualify_user_id)
+            ->setParameter('qualifyTime', $qualifyTime)
+            ->executeStatement();
     }
 }
 
@@ -2551,17 +2445,20 @@ function displayUserImage(User $user)
  */
 function updateThreadInfo($threadId, $lastPostId, $post_date)
 {
-    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
     $threadId = (int) $threadId;
     $lastPostId = (int) $lastPostId;
 
-    $sql = "UPDATE $table_threads SET
-            thread_replies = thread_replies+1,
-            thread_last_post = '".$lastPostId."',
-            thread_date = '".Database::escape_string($post_date)."'
-            WHERE
-                iid ='".$threadId."'"; // this needs to be cleaned first
-    Database::query($sql);
+    Database::getManager()->createQueryBuilder()
+        ->update(CForumThread::class, 't')
+        ->set('t.threadReplies', 't.threadReplies + 1')
+        ->set('t.threadLastPost', ':lastPostId')
+        ->set('t.threadDate', ':postDate')
+        ->where('t.iid = :threadId')
+        ->setParameter('lastPostId', $lastPostId)
+        ->setParameter('postDate', (string) $post_date)
+        ->setParameter('threadId', $threadId)
+        ->getQuery()
+        ->execute();
 }
 
 function approvePost(CForumPost $post, $action): string
@@ -2599,15 +2496,16 @@ function approvePost(CForumPost $post, $action): string
  */
 function get_unaproved_messages($forum_id)
 {
-    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-
     $return_array = [];
-    $sql = "SELECT DISTINCT thread_id FROM $table_posts
-            WHERE
-                forum_id = ".(int) $forum_id." AND
-                visible = 0";
-    $result = Database::query($sql);
-    while ($row = Database::fetch_array($result)) {
+    $rows = Database::getManager()->createQueryBuilder()
+        ->select('DISTINCT IDENTITY(p.thread) AS thread_id')
+        ->from(CForumPost::class, 'p')
+        ->where('IDENTITY(p.forum) = :forumId')
+        ->andWhere('p.visible = false')
+        ->setParameter('forumId', (int) $forum_id)
+        ->getQuery()
+        ->getArrayResult();
+    foreach ($rows as $row) {
         $return_array[] = $row['thread_id'];
     }
 
@@ -2630,8 +2528,6 @@ function send_notification_mails(CForum $forum, CForumThread $thread, $reply_inf
 
     $sessionId = api_get_session_id();
     $sessionEntity = api_get_session_entity($sessionId);
-
-    $table = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
 
     // First we need to check if
     // 1. the forum category is visible
@@ -2658,21 +2554,28 @@ function send_notification_mails(CForum $forum, CForumThread $thread, $reply_inf
         $postId = isset($reply_info['new_post_id']) ? $reply_info['new_post_id'] : 0;
         send_notifications($forum, $thread, $postId);
     } else {
-        $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
         if ($forum) {
-            $sql = "SELECT * FROM $table_notification
-                    WHERE
-                        c_id = ".$courseId." AND
-                        (
-                            forum_id = '".$forum->getIid()."' OR
-                            thread_id = '".$thread->getIid()."'
-                        ) ";
-            $result = Database::query($sql);
+            $em = Database::getManager();
+            $notificationCount = count($em->createQueryBuilder()
+                ->select('n.iid AS iid')
+                ->from(CForumNotification::class, 'n')
+                ->where('n.cId = :courseId')
+                ->andWhere('(n.forumId = :forumId OR n.threadId = :threadId)')
+                ->setParameter('courseId', (int) $courseId)
+                ->setParameter('forumId', (int) $forum->getIid())
+                ->setParameter('threadId', (int) $thread->getIid())
+                ->getQuery()
+                ->getArrayResult());
             $user_id = api_get_user_id();
-            while ($row = Database::fetch_array($result)) {
-                $sql = "INSERT INTO $table (c_id, thread_id, post_id, user_id)
-                        VALUES (".$courseId.", '".$thread->getIid()."', '".(int) ($reply_info['new_post_id'])."', '$user_id' )";
-                Database::query($sql);
+            for ($i = 0; $i < $notificationCount; $i++) {
+                $em->getConnection()->createQueryBuilder()
+                    ->insert(Database::get_course_table(TABLE_FORUM_MAIL_QUEUE))
+                    ->values(['c_id' => ':courseId', 'thread_id' => ':threadId', 'post_id' => ':postId', 'user_id' => ':userId'])
+                    ->setParameter('courseId', (int) $courseId)
+                    ->setParameter('threadId', (int) $thread->getIid())
+                    ->setParameter('postId', (int) ($reply_info['new_post_id']))
+                    ->setParameter('userId', (int) $user_id)
+                    ->executeStatement();
             }
         }
     }
@@ -2694,11 +2597,7 @@ function send_notification_mails(CForum $forum, CForumThread $thread, $reply_inf
  */
 function handle_mail_cue($content, $id)
 {
-    $table_mailcue = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
-    $table_forums = Database::get_course_table(TABLE_FORUM);
-    $table_threads = Database::get_course_table(TABLE_FORUM_THREAD);
-    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $table_users = Database::get_main_table(TABLE_MAIN_USER);
+    $em = Database::getManager();
 
     $course_id = api_get_course_int_id();
     $id = (int) $id;
@@ -2712,58 +2611,86 @@ function handle_mail_cue($content, $id)
         $thread_id = $post->getThread()->getIid();
 
         // Sending the mail to all the users that wanted to be informed for replies on this thread.
-        $sql = "SELECT users.firstname, users.lastname, users.id as user_id, users.email
-                FROM $table_mailcue mailcue, $table_posts posts, $table_users users
-                WHERE
-                    mailcue.c_id = $course_id AND
-                    posts.thread_id = $thread_id AND
-                    posts.post_notification = '1' AND
-                    mailcue.thread_id = $thread_id AND
-                    users.id = posts.poster_id AND
-                    users.active = 1
-                GROUP BY users.email";
-
-        $result = Database::query($sql);
+        $rows = $em->createQueryBuilder()
+            ->select('users.firstname AS firstname', 'users.lastname AS lastname', 'users.id AS user_id', 'users.email AS email')
+            ->from(CForumMailcue::class, 'mailcue')
+            ->from(CForumPost::class, 'posts')
+            ->from(User::class, 'users')
+            ->where('mailcue.cId = :courseId')
+            ->andWhere('IDENTITY(posts.thread) = :threadId')
+            ->andWhere('posts.postNotification = true')
+            ->andWhere('mailcue.threadId = :threadId')
+            ->andWhere('users.id = IDENTITY(posts.user)')
+            ->andWhere('users.active = 1')
+            ->groupBy('users.email')
+            ->setParameter('courseId', (int) $course_id)
+            ->setParameter('threadId', (int) $thread_id)
+            ->getQuery()
+            ->getArrayResult();
         $forum = Container::getForumRepository()->find($post->getForum()->getIid());
 
-        while ($row = Database::fetch_array($result)) {
+        foreach ($rows as $row) {
             send_mail($row, $forum, $post->getThread(), $post);
         }
     } elseif ('thread' === $content) {
         // Sending the mail to all the users that wanted to be informed for replies on this thread.
-        $sql = "SELECT users.firstname, users.lastname, users.id as user_id, users.email, posts.forum_id
-                FROM $table_mailcue mailcue, $table_posts posts, $table_users users
-                WHERE
-                    mailcue.c_id = $course_id AND
-                    posts.thread_id = $id AND
-                    posts.post_notification = '1' AND
-                    mailcue.thread_id = $id AND
-                    users.id = posts.poster_id AND
-                    users.active = 1
-                GROUP BY users.email";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        $rows = $em->createQueryBuilder()
+            ->select(
+                'users.firstname AS firstname',
+                'users.lastname AS lastname',
+                'users.id AS user_id',
+                'users.email AS email',
+                'IDENTITY(posts.forum) AS forum_id'
+            )
+            ->from(CForumMailcue::class, 'mailcue')
+            ->from(CForumPost::class, 'posts')
+            ->from(User::class, 'users')
+            ->where('mailcue.cId = :courseId')
+            ->andWhere('IDENTITY(posts.thread) = :threadId')
+            ->andWhere('posts.postNotification = true')
+            ->andWhere('mailcue.threadId = :threadId')
+            ->andWhere('users.id = IDENTITY(posts.user)')
+            ->andWhere('users.active = 1')
+            ->groupBy('users.email')
+            ->setParameter('courseId', (int) $course_id)
+            ->setParameter('threadId', $id)
+            ->getQuery()
+            ->getArrayResult();
+        foreach ($rows as $row) {
             $forum = Container::getForumRepository()->find($row['forum_id']);
             $thread = Container::getForumThreadRepository()->find($id);
             send_mail($row, $forum, $thread);
         }
 
         // Deleting the relevant entries from the mailcue.
-        $sql = "DELETE FROM $table_mailcue
-                WHERE c_id = $course_id AND thread_id = $id";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->delete(CForumMailcue::class, 'mailcue')
+            ->where('mailcue.cId = :courseId')
+            ->andWhere('mailcue.threadId = :threadId')
+            ->setParameter('courseId', (int) $course_id)
+            ->setParameter('threadId', $id)
+            ->getQuery()
+            ->execute();
     } elseif ('forum' === $content) {
-        $sql = "SELECT iid FROM $table_threads
-                WHERE forum_id = $id";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        $rows = $em->createQueryBuilder()
+            ->select('t.iid AS iid')
+            ->from(CForumThread::class, 't')
+            ->where('IDENTITY(t.forum) = :forumId')
+            ->setParameter('forumId', $id)
+            ->getQuery()
+            ->getArrayResult();
+        foreach ($rows as $row) {
             handle_mail_cue('thread', $row['iid']);
         }
     } elseif ('forum_category' === $content) {
-        $sql = "SELECT iid FROM $table_forums
-                WHERE forum_category = $id";
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        $rows = $em->createQueryBuilder()
+            ->select('f.iid AS iid')
+            ->from(CForum::class, 'f')
+            ->where('IDENTITY(f.forumCategory) = :categoryId')
+            ->setParameter('categoryId', $id)
+            ->getQuery()
+            ->getArrayResult();
+        foreach ($rows as $row) {
             handle_mail_cue('forum', $row['iid']);
         }
     } else {
@@ -3197,24 +3124,22 @@ function edit_forum_attachment_file($file_comment, $post_id, $id_attach)
  */
 function get_attachment($postId)
 {
-    $table = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
     $course_id = api_get_course_int_id();
-    $row = [];
     $postId = (int) $postId;
 
     if (empty($postId)) {
         return [];
     }
 
-    $sql = "SELECT iid, path, filename, comment
-            FROM $table
-            WHERE c_id = $course_id AND post_id = $postId";
-    $result = Database::query($sql);
-    if (0 != Database::num_rows($result)) {
-        $row = Database::fetch_array($result);
-    }
-
-    return $row;
+    return Database::getManager()->createQueryBuilder()
+        ->select('a.iid AS iid', 'a.path AS path', 'a.filename AS filename', 'a.comment AS comment')
+        ->from(CForumAttachment::class, 'a')
+        ->where('a.cId = :courseId')
+        ->andWhere('IDENTITY(a.post) = :postId')
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('postId', $postId)
+        ->getQuery()
+        ->getArrayResult()[0] ?? [];
 }
 
 /**
@@ -3291,8 +3216,6 @@ function set_notification($content, $id, $addOnly = false, $userInfo = [], $cour
         return false;
     }
 
-    // Database table definition
-    $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
     $course_id = $courseInfo['real_id'];
 
     // Which database field do we have to store the id in?
@@ -3304,13 +3227,19 @@ function set_notification($content, $id, $addOnly = false, $userInfo = [], $cour
     $userId = $userInfo['user_id'];
 
     // First we check if the notification is already set for this.
-    $sql = "SELECT * FROM $table_notification
-            WHERE
-                c_id = $course_id AND
-                $field = $id AND
-                user_id = $userId ";
-    $result = Database::query($sql);
-    $total = Database::num_rows($result);
+    // $field is one of two fixed names, mapped to the entity property.
+    $property = 'forum_id' === $field ? 'forumId' : 'threadId';
+    $total = (int) Database::getManager()->createQueryBuilder()
+        ->select('COUNT(n.iid)')
+        ->from(CForumNotification::class, 'n')
+        ->where('n.cId = :courseId')
+        ->andWhere('n.'.$property.' = :id')
+        ->andWhere('n.userId = :userId')
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('id', $id)
+        ->setParameter('userId', (int) $userId)
+        ->getQuery()
+        ->getSingleScalarResult();
 
     // If the user did not indicate that (s)he wanted to be notified already
     // then we store the notification request (to prevent double notification requests).
@@ -3337,12 +3266,16 @@ function set_notification($content, $id, $addOnly = false, $userInfo = [], $cour
         return get_lang('You will be notified of new posts by e-mail.');
     } else {
         if (!$addOnly) {
-            $sql = "DELETE FROM $table_notification
-                    WHERE
-                        c_id = $course_id AND
-                        $field = $id AND
-                        user_id = $userId ";
-            Database::query($sql);
+            Database::getManager()->createQueryBuilder()
+                ->delete(CForumNotification::class, 'n')
+                ->where('n.cId = :courseId')
+                ->andWhere('n.'.$property.' = :id')
+                ->andWhere('n.userId = :userId')
+                ->setParameter('courseId', (int) $course_id)
+                ->setParameter('id', $id)
+                ->setParameter('userId', (int) $userId)
+                ->getQuery()
+                ->execute();
             Session::erase('forum_notification');
             getNotificationsPerUser(0, true);
 
@@ -3370,27 +3303,26 @@ function set_notification($content, $id, $addOnly = false, $userInfo = [], $cour
 function get_notifications(string $content, int $id): array
 {
     // Database table definition
-    $table_users = Database::get_main_table(TABLE_MAIN_USER);
-    $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
     $course_id = api_get_course_int_id();
 
-    // Which database field contains the notification?
-    $field = 'thread_id';
-    if ('forum' === $content) {
-        $field = 'forum_id';
-    }
+    // Which entity property contains the notification?
+    $property = 'forum' === $content ? 'forumId' : 'threadId';
 
-    $sql = "SELECT user.id as user_id, user.firstname, user.lastname, user.email, user.id user
-            FROM $table_users user, $table_notification notification
-            WHERE
-                notification.c_id = $course_id AND user.active = 1 AND
-                user.id = notification.user_id AND
-                notification.$field = $id ";
-
-    $result = Database::query($sql);
+    $rows = Database::getManager()->createQueryBuilder()
+        ->select('user.id AS user_id', 'user.email AS email')
+        ->from(User::class, 'user')
+        ->from(CForumNotification::class, 'notification')
+        ->where('notification.cId = :courseId')
+        ->andWhere('user.active = 1')
+        ->andWhere('user.id = notification.userId')
+        ->andWhere('notification.'.$property.' = :id')
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('id', $id)
+        ->getQuery()
+        ->getArrayResult();
     $return = [];
 
-    while ($row = Database::fetch_array($result)) {
+    foreach ($rows as $row) {
         $return['user'.$row['user_id']] = ['email' => $row['email'], 'user_id' => $row['user_id']];
     }
 
@@ -3471,7 +3403,6 @@ function send_notifications(CForum $forum, CForumThread $thread, $post_id = 0)
 function getNotificationsPerUser($user_id = 0, $force = false, $course_id = 0)
 {
     // Database table definition
-    $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
     $course_id = empty($course_id) ? api_get_course_int_id() : (int) $course_id;
     if (empty($course_id) || -1 == $course_id) {
         return null;
@@ -3484,11 +3415,16 @@ function getNotificationsPerUser($user_id = 0, $force = false, $course_id = 0)
         true == $force
     ) {
         $_SESSION['forum_notification']['course'] = $course_id;
-        $sql = "SELECT * FROM $table_notification
-                WHERE c_id = $course_id AND user_id='".$user_id."'";
-
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        $rows = Database::getManager()->createQueryBuilder()
+            ->select('n.forumId AS forum_id', 'n.threadId AS thread_id')
+            ->from(CForumNotification::class, 'n')
+            ->where('n.cId = :courseId')
+            ->andWhere('n.userId = :userId')
+            ->setParameter('courseId', (int) $course_id)
+            ->setParameter('userId', (int) $user_id)
+            ->getQuery()
+            ->getArrayResult();
+        foreach ($rows as $row) {
             if (!empty($row['forum_id'])) {
                 $_SESSION['forum_notification']['forum'][] = $row['forum_id'];
             }
@@ -3512,22 +3448,18 @@ function getNotificationsPerUser($user_id = 0, $force = false, $course_id = 0)
  */
 function count_number_of_post_in_thread($thread_id)
 {
-    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
     $course_id = api_get_course_int_id();
     if (empty($course_id)) {
         return 0;
     }
-    $sql = "SELECT count(*) count FROM $table_posts
-            WHERE thread_id='".(int) $thread_id."' ";
-    $result = Database::query($sql);
 
-    $count = 0;
-    if (Database::num_rows($result) > 0) {
-        $row = Database::fetch_array($result);
-        $count = $row['count'];
-    }
-
-    return $count;
+    return (int) Database::getManager()->createQueryBuilder()
+        ->select('COUNT(p.iid)')
+        ->from(CForumPost::class, 'p')
+        ->where('IDENTITY(p.thread) = :threadId')
+        ->setParameter('threadId', (int) $thread_id)
+        ->getQuery()
+        ->getSingleScalarResult();
 }
 
 /**
@@ -3540,21 +3472,16 @@ function count_number_of_post_in_thread($thread_id)
  */
 function count_number_of_post_for_user_thread($thread_id, $user_id)
 {
-    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $sql = "SELECT count(iid) as count
-            FROM $table_posts
-            WHERE
-                  thread_id=".(int) $thread_id.' AND
-                  poster_id = '.(int) $user_id.' AND
-                  visible = 1 ';
-    $result = Database::query($sql);
-    $count = 0;
-    if (Database::num_rows($result) > 0) {
-        $count = Database::fetch_array($result);
-        $count = $count['count'];
-    }
-
-    return $count;
+    return (int) Database::getManager()->createQueryBuilder()
+        ->select('COUNT(p.iid)')
+        ->from(CForumPost::class, 'p')
+        ->where('IDENTITY(p.thread) = :threadId')
+        ->andWhere('IDENTITY(p.user) = :userId')
+        ->andWhere('p.visible = true')
+        ->setParameter('threadId', (int) $thread_id)
+        ->setParameter('userId', (int) $user_id)
+        ->getQuery()
+        ->getSingleScalarResult();
 }
 
 /**
@@ -3593,10 +3520,49 @@ function get_statistical_information($thread_id, $user_id, $course_id)
  *
  * @version oct 2008, dokeos 1.8
  */
+/**
+ * Every column of a forum post plus the main columns of its author (the legacy rows were SELECT * of both tables).
+ */
+function forumPostRowsQueryBuilder(): Doctrine\ORM\QueryBuilder
+{
+    return Database::getManager()->createQueryBuilder()
+        ->select(
+            'posts.iid AS iid',
+            'posts.title AS title',
+            'posts.postText AS post_text',
+            'posts.postDate AS post_date',
+            'posts.postNotification AS post_notification',
+            'posts.visible AS visible',
+            'posts.status AS status',
+            'IDENTITY(posts.thread) AS thread_id',
+            'IDENTITY(posts.forum) AS forum_id',
+            'IDENTITY(posts.user) AS poster_id',
+            'IDENTITY(posts.postParent) AS post_parent_id',
+            'IDENTITY(posts.resourceNode) AS resource_node_id',
+            'users.id AS user_id',
+            'users.username AS username',
+            'users.firstname AS firstname',
+            'users.lastname AS lastname',
+            'users.email AS email'
+        )
+        ->from(CForumPost::class, 'posts')
+        ->leftJoin('posts.user', 'users');
+}
+
+/**
+ * The raw rows carried the datetime as a string and the booleans as 0/1.
+ */
+function toLegacyForumPostRow(array $row): array
+{
+    $row['post_date'] = $row['post_date']->format('Y-m-d H:i:s');
+    $row['visible'] = (int) $row['visible'];
+    $row['post_notification'] = null === $row['post_notification'] ? null : (int) $row['post_notification'];
+
+    return $row;
+}
+
 function get_thread_user_post(Course $course, $thread_id, $user_id)
 {
-    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $table_users = Database::get_main_table(TABLE_MAIN_USER);
     $thread_id = (int) $thread_id;
     $user_id = (int) $user_id;
     $course_id = $course->getId();
@@ -3604,26 +3570,28 @@ function get_thread_user_post(Course $course, $thread_id, $user_id)
     if (empty($course_id)) {
         $course_id = api_get_course_int_id();
     }
-    $sql = "SELECT *, user.id as user_id FROM $table_posts posts
-            LEFT JOIN $table_users user
-            ON posts.poster_id = user.id
-            WHERE posts.thread_id='$thread_id' AND
-                posts.poster_id='$user_id'
-            ORDER BY posts.iid ASC";
-
-    $result = Database::query($sql);
     $post_list = [];
-    while ($row = Database::fetch_array($result)) {
+    foreach (forumPostRowsQueryBuilder()
+        ->where('IDENTITY(posts.thread) = :threadId')
+        ->andWhere('IDENTITY(posts.user) = :userId')
+        ->setParameter('threadId', $thread_id)
+        ->setParameter('userId', $user_id)
+        ->orderBy('posts.iid', 'ASC')
+        ->getQuery()
+        ->getArrayResult() as $row) {
+        $row = toLegacyForumPostRow($row);
         $row['status'] = '1';
         $post_list[] = $row;
-        $sql = "SELECT *, users.id as user_id FROM $table_posts posts
-                LEFT JOIN $table_users users
-                ON (posts.poster_id=users.id)
-                WHERE posts.thread_id='$thread_id'
-                    AND posts.post_parent_id='".$row['iid']."'
-                ORDER BY posts.iid ASC";
-        $result2 = Database::query($sql);
-        while ($row2 = Database::fetch_array($result2)) {
+        $replyRows = forumPostRowsQueryBuilder()
+            ->where('IDENTITY(posts.thread) = :threadId')
+            ->andWhere('IDENTITY(posts.postParent) = :parentId')
+            ->setParameter('threadId', $thread_id)
+            ->setParameter('parentId', (int) $row['iid'])
+            ->orderBy('posts.iid', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+        foreach ($replyRows as $row2) {
+            $row2 = toLegacyForumPostRow($row2);
             $row2['status'] = '0';
             $post_list[] = $row2;
         }
@@ -3644,15 +3612,15 @@ function get_thread_user_post(Course $course, $thread_id, $user_id)
  */
 function get_name_thread_by_id(int $threadId): string
 {
-    $tForumThread = Database::get_course_table(TABLE_FORUM_THREAD);
-    $course_id = api_get_course_int_id();
-    $sql = "SELECT title
-            FROM $tForumThread
-            WHERE iid = $threadId";
-    $result = Database::query($sql);
-    $row = Database::fetch_array($result);
+    $row = Database::getManager()->createQueryBuilder()
+        ->select('t.title AS title')
+        ->from(CForumThread::class, 't')
+        ->where('t.iid = :threadId')
+        ->setParameter('threadId', $threadId)
+        ->getQuery()
+        ->getArrayResult()[0] ?? false;
 
-    return $row[0];
+    return $row['title'];
 }
 
 /**
@@ -3744,21 +3712,21 @@ function get_all_post_from_user(int $user_id, int $courseId): string
  */
 function get_thread_user_post_limit($courseId, $thread_id, $user_id, $limit = 10)
 {
-    $table_posts = Database::get_course_table(TABLE_FORUM_POST);
-    $table_users = Database::get_main_table(TABLE_MAIN_USER);
-
     $courseId = (int) $courseId;
     $limit = (int) $limit;
 
-    $sql = "SELECT * FROM $table_posts posts
-            LEFT JOIN $table_users users
-                ON posts.poster_id=users.id
-            WHERE posts.thread_id='".Database::escape_string($thread_id)."' AND
-                posts.poster_id='".Database::escape_string($user_id)."'
-            ORDER BY posts.iid DESC LIMIT $limit ";
-    $result = Database::query($sql);
+    $rows = forumPostRowsQueryBuilder()
+        ->where('IDENTITY(posts.thread) = :threadId')
+        ->andWhere('IDENTITY(posts.user) = :userId')
+        ->setParameter('threadId', (int) $thread_id)
+        ->setParameter('userId', (int) $user_id)
+        ->orderBy('posts.iid', 'DESC')
+        ->setMaxResults($limit)
+        ->getQuery()
+        ->getArrayResult();
     $post_list = [];
-    while ($row = Database::fetch_array($result)) {
+    foreach ($rows as $row) {
+        $row = toLegacyForumPostRow($row);
         $row['status'] = '1';
         $post_list[] = $row;
     }
@@ -3879,18 +3847,34 @@ function editAttachedFile($array, $id, $courseId = null)
      * and array of field values is not empty
      */
     if ($id > 0 && $courseId > 0 && !empty($array) && is_array($array)) {
-        foreach ($array as $key => &$item) {
-            $item = Database::escape_string($item);
-            $setString .= $key.' = "'.$item.'", ';
+        // Only these columns can be updated (the callers pass 'comment' and 'post_id').
+        $allowed = [
+            'comment' => 'a.comment',
+            'post_id' => 'a.post',
+            'filename' => 'a.filename',
+            'path' => 'a.path',
+            'size' => 'a.size',
+        ];
+        $qb = Database::getManager()->createQueryBuilder()
+            ->update(CForumAttachment::class, 'a')
+            ->where('a.cId = :courseId')
+            ->andWhere('a.iid = :attachmentId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('attachmentId', $id);
+        $i = 0;
+        foreach ($array as $key => $value) {
+            if (!isset($allowed[$key])) {
+                continue;
+            }
+            $qb->set($allowed[$key], ':value'.$i)->setParameter('value'.$i, 'post_id' === $key ? (int) $value : $value);
+            $i++;
         }
-        // Delete last comma
-        $setString = substr($setString, 0, strlen($setString) - 2);
-        $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
-        $sql = "UPDATE $forumAttachmentTable
-                SET $setString WHERE c_id = $courseId AND iid = $id";
-        $result = Database::query($sql);
+        if (0 === $i) {
+            return 0;
+        }
+        $result = $qb->getQuery()->execute();
         if (false !== $result) {
-            $affectedRows = Database::affected_rows($result);
+            $affectedRows = (int) $result;
             if ($affectedRows > 0) {
                 /*
                  * If exist in $_SESSION variable, then delete them from it
@@ -3976,101 +3960,6 @@ function getAttachmentsAjaxTable($postId = 0)
 }
 
 /**
- * Return an array of prepared attachment data to build forum attachment table
- * Also, save this array into $_SESSION to do available the attachment data.
- *
- * @param int $forumId
- * @param int $threadId
- * @param int $postId
- * @param int $attachId
- * @param int $courseId
- *
- * @return array
- */
-function getAttachedFiles(
-    $forumId,
-    $threadId,
-    $postId = 0,
-    $attachId = 0,
-    $courseId = 0
-) {
-    $forumId = (int) $forumId;
-    $courseId = (int) $courseId;
-    $attachId = (int) $attachId;
-    $postId = (int) $postId;
-    $threadId = (int) $threadId;
-
-    if (empty($courseId)) {
-        // $courseId can be null, use api method
-        $courseId = api_get_course_int_id();
-    }
-    if (empty($forumId)) {
-        if (!empty($_REQUEST['forum'])) {
-            $forumId = (int) $_REQUEST['forum'];
-        } else {
-            // if forum ID is empty, cannot generate delete url
-
-            return [];
-        }
-    }
-    // Check if exist at least one of them to filter forum attachment select query
-    if (empty($postId) && empty($attachId)) {
-        return [];
-    }
-
-    if (empty($postId)) {
-        $filter = "AND iid = $attachId";
-    } elseif (empty($attachId)) {
-        $filter = "AND post_id = $postId";
-    } else {
-        $filter = "AND post_id = $postId AND iid = $attachId";
-    }
-    $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
-    $sql = "SELECT iid
-            FROM $forumAttachmentTable
-            WHERE c_id = $courseId $filter";
-    $result = Database::query($sql);
-    $json = [];
-    if (Database::num_rows($result) > 0) {
-        $repo = Container::getForumAttachmentRepository();
-        while ($row = Database::fetch_assoc($result)) {
-            /** @var CForumAttachment $attachment */
-            $attachment = $repo->find($row['iid']);
-            $downloadUrl = $repo->getResourceFileDownloadUrl($attachment);
-
-            // name contains an URL to download attachment file and its filename
-            $json['name'] = Display::url(
-                api_htmlentities($attachment->getFilename()),
-                $downloadUrl,
-                ['target' => '_blank', 'class' => 'attachFilename']
-            );
-            $json['id'] = $row['iid'];
-            $json['comment'] = $attachment->getComment();
-            // Format file size
-            $json['size'] = \Chamilo\CoreBundle\Helpers\FormatHelper::formatFileSize($attachment->getSize());
-            // Check if $row is consistent
-            if ($attachment) {
-                // Set result as success and bring delete URL
-                $json['result'] = Display::getMdiIcon('check-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Uploaded.'));
-                $url = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&action=delete_attach&forum='.$forumId.'&thread='.$threadId.'&id_attach='.$row['iid'];
-                $json['delete'] = Display::url(
-                    Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')),
-                    $url,
-                    ['class' => 'deleteLink']
-                );
-            } else {
-                // If not, set an exclamation result
-                $json['result'] = Display::getMdiIcon('close-circle', 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Error'));
-            }
-            // Store array data into $_SESSION
-            $_SESSION['forum']['upload_file'][$courseId][$json['id']] = $json;
-        }
-    }
-
-    return $json;
-}
-
-/**
  * Clear forum attachment data stored in $_SESSION,
  * If is not defined post, it will clear all forum attachment data from course.
  *
@@ -4140,14 +4029,17 @@ function getAttachmentIdsByPostId($postId, $courseId = 0)
         $courseId = api_get_course_int_id();
     }
     if ($courseId > 0) {
-        $forumAttachmentTable = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
-        $sql = "SELECT iid FROM $forumAttachmentTable
-                WHERE c_id = $courseId AND post_id = $postId";
-        $result = Database::query($sql);
-        if (false !== $result && Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_assoc($result)) {
-                $array[] = $row['iid'];
-            }
+        $rows = Database::getManager()->createQueryBuilder()
+            ->select('a.iid AS iid')
+            ->from(CForumAttachment::class, 'a')
+            ->where('a.cId = :courseId')
+            ->andWhere('IDENTITY(a.post) = :postId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('postId', $postId)
+            ->getQuery()
+            ->getArrayResult();
+        foreach ($rows as $row) {
+            $array[] = $row['iid'];
         }
     }
 

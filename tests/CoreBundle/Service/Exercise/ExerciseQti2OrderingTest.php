@@ -30,6 +30,8 @@ use ZipArchive;
 /**
  * #9285: Sequence ordering (18) uses QTI 2.1 orderInteraction while retaining each item's
  * target position, position-specific weight and orientation across modern and legacy flows.
+ *
+ * @psalm-suppress UndefinedMethod, UndefinedPropertyFetch the XPath results are DOMElement nodes, which Psalm types as DOMNode
  */
 final class ExerciseQti2OrderingTest extends KernelTestCase
 {

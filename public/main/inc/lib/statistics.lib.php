@@ -1,11 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\GradebookCertificate;
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageRelUser;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\TrackEAccess;
+use Chamilo\CoreBundle\Entity\TrackELastaccess;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
@@ -115,47 +120,42 @@ class Statistics
         string $dateUntil = null
     ): int
     {
-        $visibilityString = '';
         if (empty($visibility)) {
             return 0;
-        } else {
-            $auxArrayVisibility = [];
-            if (!is_array($visibility)) {
-                $visibility = [$visibility];
-            }
-            foreach ($visibility as $item) {
-                $auxArrayVisibility[] = (int) $item;
-            }
-            $visibilityString = implode(',', $auxArrayVisibility);
         }
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $accessUrlRelCourseTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        if (!is_array($visibility)) {
+            $visibility = [$visibility];
+        }
+        $visibilityList = [];
+        foreach ($visibility as $item) {
+            $visibilityList[] = (int) $item;
+        }
         $accessUrlUtil = Container::getAccessUrlUtil();
 
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(c.id)')
+            ->from(Course::class, 'c')
+            ->where('c.visibility IN (:visibility)')
+            ->setParameter('visibility', $visibilityList)
+        ;
         if ($accessUrlUtil->isMultiple()) {
             $accessUrl = $accessUrlUtil->getCurrent();
-            $urlId = $accessUrl->getId();
-            $sql = "SELECT COUNT(*) AS number
-                    FROM $courseTable AS c, $accessUrlRelCourseTable AS u
-                    WHERE u.c_id = c.id AND u.access_url_id = $urlId";
-        } else {
-            $sql = "SELECT COUNT(*) AS number
-                    FROM $courseTable AS c
-                    WHERE 1 = 1";
+            $qb
+                ->innerJoin(AccessUrlRelCourse::class, 'u', 'WITH', 'u.course = c')
+                ->andWhere('IDENTITY(u.url) = :urlId')
+                ->setParameter('urlId', (int) $accessUrl->getId())
+            ;
         }
-        $sql .= " AND visibility IN ($visibilityString) ";
         if (!empty($dateFrom)) {
-            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
-            $sql .= " AND c.creation_date >= '$dateFrom' ";
+            $qb->andWhere('c.creationDate >= :dateFrom')
+                ->setParameter('dateFrom', api_get_utc_datetime("$dateFrom 00:00:00"));
         }
         if (!empty($dateUntil)) {
-            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
-            $sql .= " AND c.creation_date <= '$dateUntil' ";
+            $qb->andWhere('c.creationDate <= :dateUntil')
+                ->setParameter('dateUntil', api_get_utc_datetime("$dateUntil 23:59:59"));
         }
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
 
-        return $obj->number;
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -176,67 +176,51 @@ class Statistics
         ?bool $onlyActive = false
     ): int
     {
-        // Database table definitions
-        $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $tblCourseRelCategory = Database::get_main_table(TABLE_MAIN_COURSE_REL_CATEGORY);
-
-        $conditions = [];
-        $conditions[] = "u.active <> " . USER_SOFT_DELETED;
-        if ($onlyActive) {
-            $conditions[] = "u.active = 1";
-        }
-        if (isset($status)) {
-            $conditions[] = "u.status = " . $status;
-        }
-
-        $where = implode(' AND ', $conditions);
-
+        $em = Container::getEntityManager();
         $accessUrlUtil = Container::getAccessUrlUtil();
+        $urlId = $accessUrlUtil->isMultiple() ? (int) $accessUrlUtil->getCurrent()->getId() : null;
 
-        if ($accessUrlUtil->isMultiple()) {
-            $accessUrl = $accessUrlUtil->getCurrent();
-            $urlId = $accessUrl->getId();
-            $sql = "SELECT COUNT(DISTINCT(u.id)) AS number
-                FROM $user_table as u
-                INNER JOIN $access_url_rel_user_table as url ON u.id = url.user_id
-                WHERE $where AND url.access_url_id = $urlId";
-
-            if (isset($categoryCode)) {
-                $categoryCode = Database::escape_string($categoryCode);
-                $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
-                    FROM $course_user_table cu
-                    INNER JOIN $course_table c ON c.id = cu.c_id
-                    INNER JOIN $access_url_rel_user_table as url ON cu.user_id = url.user_id
-                    INNER JOIN $tblCourseRelCategory crc ON crc.course_id = c.id
-                    INNER JOIN $tblCourseCategory cc ON cc.id = crc.course_category_id
-                    INNER JOIN $user_table u ON cu.user_id = u.id
-                    WHERE $where AND url.access_url_id = $urlId AND cc.code = '$categoryCode'";
+        if (isset($categoryCode)) {
+            // Users subscribed to a course of the category.
+            $qb = $em->createQueryBuilder()
+                ->select('COUNT(DISTINCT u.id)')
+                ->from(CourseRelUser::class, 'cu')
+                ->innerJoin('cu.course', 'c')
+                ->innerJoin('c.categories', 'cc')
+                ->innerJoin('cu.user', 'u')
+                ->andWhere('cc.code = :categoryCode')
+                ->setParameter('categoryCode', (string) $categoryCode)
+            ;
+            if (null !== $urlId) {
+                $qb
+                    ->innerJoin(AccessUrlRelUser::class, 'url', 'WITH', 'url.user = cu.user')
+                    ->andWhere('IDENTITY(url.url) = :urlId')
+                    ->setParameter('urlId', $urlId)
+                ;
             }
         } else {
-            $sql = "SELECT COUNT(DISTINCT(id)) AS number
-                FROM $user_table u
-                WHERE $where";
-
-            if (isset($categoryCode)) {
-                $categoryCode = Database::escape_string($categoryCode);
-                $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
-                    FROM $course_user_table cu
-                    INNER JOIN $course_table c ON c.id = cu.c_id
-                    INNER JOIN $tblCourseRelCategory crc ON crc.course_id = c.id
-                    INNER JOIN $tblCourseCategory cc ON cc.id = crc.course_category_id
-                    INNER JOIN $user_table u ON u.id = cu.user_id
-                    WHERE $where AND cc.code = '$categoryCode'";
+            $qb = $em->createQueryBuilder()
+                ->select('COUNT(DISTINCT u.id)')
+                ->from(User::class, 'u')
+            ;
+            if (null !== $urlId) {
+                $qb
+                    ->innerJoin(AccessUrlRelUser::class, 'url', 'WITH', 'url.user = u')
+                    ->andWhere('IDENTITY(url.url) = :urlId')
+                    ->setParameter('urlId', $urlId)
+                ;
             }
         }
 
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
+        $qb->andWhere('u.active <> :softDeleted')->setParameter('softDeleted', USER_SOFT_DELETED);
+        if ($onlyActive) {
+            $qb->andWhere('u.active = 1');
+        }
+        if (isset($status)) {
+            $qb->andWhere('u.status = :status')->setParameter('status', $status);
+        }
 
-        return $obj->number;
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -249,30 +233,25 @@ class Statistics
      */
     public static function getCoursesWithActivity(string $startDate, string $endDate): array
     {
-        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        $startDate = Database::escape_string($startDate);
-        $endDate = Database::escape_string($endDate);
-
         $accessUrlUtil = Container::getAccessUrlUtil();
 
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT t.cId AS c_id')
+            ->from(TrackELastaccess::class, 't')
+            ->where('t.accessDate BETWEEN :startDate AND :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+        ;
         if ($accessUrlUtil->isMultiple()) {
             $accessUrl = $accessUrlUtil->getCurrent();
-            $urlId = $accessUrl->getId();
-            $sql = "SELECT DISTINCT(t.c_id) FROM $table t , $access_url_rel_course_table a
-                    WHERE
-                        t.c_id = a.c_id AND
-                        access_url_id = $urlId AND
-                        access_date BETWEEN '$startDate' AND '$endDate'
-                    ";
-        } else {
-            $sql = "SELECT DISTINCT(t.c_id) FROM $table t
-             WHERE access_date BETWEEN '$startDate' AND '$endDate'";
+            $qb
+                ->innerJoin(AccessUrlRelCourse::class, 'a', 'WITH', 't.cId = IDENTITY(a.course)')
+                ->andWhere('IDENTITY(a.url) = :urlId')
+                ->setParameter('urlId', (int) $accessUrl->getId())
+            ;
         }
 
-        $result = Database::query($sql);
-
-        return Database::store_result($result);
+        return $qb->getQuery()->getArrayResult();
     }
 
     /**
@@ -322,6 +301,7 @@ class Statistics
                         default_value_type LIKE '%".$keyword."%' OR
                         default_value LIKE '%".$keyword."%') ";
         }
+        // TODO(db-neutral): api_get_session_condition() SQL fragment spliced into the query
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
@@ -420,6 +400,7 @@ class Statistics
         }
         $sql .= " LIMIT $from, $numberOfItems ";
 
+        // TODO(db-neutral): api_get_session_condition() SQL fragment spliced into the query, ORDER BY on a SELECT alias
         $res = Database::query($sql);
         $activities = [];
         while ($row = Database::fetch_row($res)) {
@@ -700,6 +681,7 @@ class Statistics
 
         $content = '';
         if ($sql_last_x) {
+            // TODO(db-neutral): DATE_FORMAT, DATE_SUB, GROUP BY on a SELECT alias
             $res_last_x = Database::query($sql_last_x);
             $result_last_x = [];
             while ($obj = Database::fetch_object($res_last_x)) {
@@ -710,6 +692,7 @@ class Statistics
             flush(); //flush web request at this point to see something already while the full data set is loading
             $content .= '<br />';
         }
+        // TODO(db-neutral): DATE_FORMAT, GROUP BY on a SELECT alias
         $res = Database::query($sql);
         $result = [];
         while ($obj = Database::fetch_object($res)) {
@@ -810,6 +793,7 @@ class Statistics
         $sqlList[get_lang('Total')] = $sql;
         $totalLogin = [];
         foreach ($sqlList as $label => $query) {
+            // TODO(db-neutral): UNIX_TIMESTAMP
             $res = Database::query($query);
             $obj = Database::fetch_object($res);
             $totalLogin[$label] = $obj->number;
@@ -882,6 +866,7 @@ class Statistics
         $sql .= " login_date >= '$newDate' $where_url
                 GROUP BY date(login_date)";
 
+        // TODO(db-neutral): date(), UNIX_TIMESTAMP
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $monthAndDay = substr($row['login_date'], 5, 5);
@@ -897,9 +882,6 @@ class Statistics
      */
     public static function getToolsStats(): array
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-
         $tools = [
             'announcement',
             'assignment',
@@ -923,29 +905,26 @@ class Statistics
         }
         $accessUrlUtil = Container::getAccessUrlUtil();
 
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('t.accessTool AS access_tool', 'COUNT(t.accessId) AS number_of_logins')
+            ->from(TrackEAccess::class, 't')
+            ->where('t.accessTool IN (:tools)')
+            ->setParameter('tools', $tools)
+            ->groupBy('t.accessTool')
+            ->orderBy('COUNT(t.accessId)', 'DESC')
+        ;
         if ($accessUrlUtil->isMultiple()) {
             $accessUrl = $accessUrlUtil->getCurrent();
-            $urlId = $accessUrl->getId();
-            $sql = "SELECT access_tool, count(access_id) AS number_of_logins
-                FROM $table t, $access_url_rel_course_table a
-                WHERE
-                    access_tool IN ('".implode("','", $tools)."') AND
-                    t.c_id = a.c_id AND
-                    access_url_id = $urlId
-                GROUP BY access_tool
-                ORDER BY number_of_logins DESC";
-        } else {
-            $sql = "SELECT access_tool, count(access_id) AS number_of_logins
-                FROM $table
-                WHERE access_tool IN ('".implode("','", $tools)."')
-                GROUP BY access_tool
-                ORDER BY number_of_logins DESC";
+            $qb
+                ->innerJoin(AccessUrlRelCourse::class, 'a', 'WITH', 't.cId = IDENTITY(a.course)')
+                ->andWhere('IDENTITY(a.url) = :urlId')
+                ->setParameter('urlId', (int) $accessUrl->getId())
+            ;
         }
 
-        $res = Database::query($sql);
         $result = [];
-        while ($obj = Database::fetch_object($res)) {
-            $result[$tool_names[$obj->access_tool]] = (int) $obj->number_of_logins;
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $result[$tool_names[$row['access_tool']]] = (int) $row['number_of_logins'];
         }
 
         return $result;
@@ -974,33 +953,26 @@ class Statistics
      */
     public static function printCourseByLanguageStats(): array
     {
-        $table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $accessUrlUtil = Container::getAccessUrlUtil();
 
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('l.isocode AS course_language', 'COUNT(c.code) AS number_of_courses')
+            ->from(Course::class, 'c')
+            ->innerJoin('c.courseLanguageEntity', 'l')
+            ->groupBy('l.id', 'l.isocode')
+            ->orderBy('COUNT(c.code)', 'DESC')
+        ;
         if ($accessUrlUtil->isMultiple()) {
             $accessUrl = $accessUrlUtil->getCurrent();
-            $urlId = $accessUrl->getId();
-            $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-            $sql = "SELECT l.isocode AS course_language, count(c.code) AS number_of_courses
-                    FROM $table c
-                    INNER JOIN $languageTable l ON l.id = c.language_id
-                    INNER JOIN $access_url_rel_course_table u ON u.c_id = c.id
-                    WHERE access_url_id = $urlId
-                    GROUP BY l.id, l.isocode
-                    ORDER BY number_of_courses DESC";
-        } else {
-            $languageTable = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-            $sql = "SELECT l.isocode AS course_language, count(c.code) AS number_of_courses
-                   FROM $table c
-                   INNER JOIN $languageTable l ON l.id = c.language_id
-                   GROUP BY l.id, l.isocode
-                   ORDER BY number_of_courses DESC";
+            $qb
+                ->innerJoin(AccessUrlRelCourse::class, 'u', 'WITH', 'u.course = c')
+                ->andWhere('IDENTITY(u.url) = :urlId')
+                ->setParameter('urlId', (int) $accessUrl->getId())
+            ;
         }
-        $res = Database::query($sql);
         $result = [];
-        while ($obj = Database::fetch_object($res)) {
-            $result[$obj->course_language] = $obj->number_of_courses;
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $result[$row['course_language']] = (int) $row['number_of_courses'];
         }
 
         return $result;
@@ -1042,6 +1014,7 @@ class Statistics
 
         // Total users (within current URL if multi-url).
         $sql = "SELECT COUNT(*) AS n FROM $userTable u $joins $where";
+        // TODO(db-neutral): dynamic columns found through the schema manager
         $res = Database::query($sql);
         $totalObj = Database::fetch_object($res);
         $totalUsers = (int) ($totalObj->n ?? 0);
@@ -1071,6 +1044,7 @@ class Statistics
                 $joins
                 $where
                 AND ($pictureWhere)";
+            // TODO(db-neutral): dynamic columns found through the schema manager
             $res = Database::query($sql);
             $obj = Database::fetch_object($res);
             $withPicture = (int) ($obj->n ?? 0);
@@ -1381,6 +1355,7 @@ class Statistics
         $sql .= ' LIMIT '.$from.','.$per_page;
 
         $content .= '<p>'.get_lang('Latest access').' &gt;= '.$date_diff.' '.get_lang('days').'</p>';
+        // TODO(db-neutral): DATEDIFF, GROUP BY with HAVING on a non-aggregate, SELECT *
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $courses = [];
@@ -1426,48 +1401,52 @@ class Statistics
      */
     public static function getMessages(string $messageType): array
     {
-        $messageTable = Database::get_main_table(TABLE_MESSAGE);
-        $messageRelUserTable = Database::get_main_table(TABLE_MESSAGE_REL_USER);
-        $userTable = Database::get_main_table(TABLE_MAIN_USER);
-        $accessUrlRelUserTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'u.lastname AS lastname',
+                'u.firstname AS firstname',
+                'u.username AS username',
+                'COUNT(DISTINCT m.id) AS count_message'
+            )
+            ->from(Message::class, 'm')
+            ->where('u.active <> :softDeleted')
+            ->setParameter('softDeleted', USER_SOFT_DELETED)
+            ->orderBy('COUNT(DISTINCT m.id)', 'DESC')
+        ;
 
         switch ($messageType) {
             case 'sent':
-                $field = 'm.user_sender_id';
-                $joinCondition = "m.id = mru.message_id AND mru.receiver_type = " . MessageRelUser::TYPE_SENDER;
+                $qb
+                    ->innerJoin(MessageRelUser::class, 'mru', 'WITH', 'm.id = IDENTITY(mru.message) AND mru.receiverType = :receiverType')
+                    ->innerJoin(User::class, 'u', 'WITH', 'm.sender = u')
+                    ->groupBy('m.sender')
+                    ->setParameter('receiverType', MessageRelUser::TYPE_SENDER)
+                ;
                 break;
             case 'received':
-                $field = 'mru.user_id';
-                $joinCondition = "m.id = mru.message_id AND mru.receiver_type = " . MessageRelUser::TYPE_TO;
+                $qb
+                    ->innerJoin(MessageRelUser::class, 'mru', 'WITH', 'm.id = IDENTITY(mru.message) AND mru.receiverType = :receiverType')
+                    ->innerJoin(User::class, 'u', 'WITH', 'mru.receiver = u')
+                    ->groupBy('mru.receiver')
+                    ->setParameter('receiverType', MessageRelUser::TYPE_TO)
+                ;
                 break;
+            default:
+                throw new InvalidArgumentException('Unknown message type: '.$messageType);
         }
 
         $accessUrlUtil = Container::getAccessUrlUtil();
 
         if ($accessUrlUtil->isMultiple()) {
             $accessUrl = $accessUrlUtil->getCurrent();
-            $urlId = $accessUrl->getId();
-            $sql = "SELECT u.lastname, u.firstname, u.username, COUNT(DISTINCT m.id) AS count_message
-            FROM $messageTable m
-            INNER JOIN $messageRelUserTable mru ON $joinCondition
-            INNER JOIN $userTable u ON $field = u.id
-            INNER JOIN $accessUrlRelUserTable url ON u.id = url.user_id
-            WHERE url.access_url_id = $urlId
-            AND u.active <> " . USER_SOFT_DELETED . "
-            GROUP BY $field
-            ORDER BY count_message DESC";
-        } else {
-            $sql = "SELECT u.lastname, u.firstname, u.username, COUNT(DISTINCT m.id) AS count_message
-            FROM $messageTable m
-            INNER JOIN $messageRelUserTable mru ON $joinCondition
-            INNER JOIN $userTable u ON $field = u.id
-            WHERE u.active <> " . USER_SOFT_DELETED . "
-            GROUP BY $field
-            ORDER BY count_message DESC";
+            $qb
+                ->innerJoin(AccessUrlRelUser::class, 'url', 'WITH', 'url.user = u')
+                ->andWhere('IDENTITY(url.url) = :urlId')
+                ->setParameter('urlId', (int) $accessUrl->getId())
+            ;
         }
-        $res = Database::query($sql);
         $messages_sent = [];
-        while ($messages = Database::fetch_array($res)) {
+        foreach ($qb->getQuery()->getArrayResult() as $messages) {
             if (empty($messages['username'])) {
                 $messages['username'] = get_lang('Unknown');
             }
@@ -1487,37 +1466,34 @@ class Statistics
      */
     public static function getFriends(): array
     {
-        $user_friend_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $user_table = Database::get_main_table(TABLE_MAIN_USER);
-        $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-
         $accessUrlUtil = Container::getAccessUrlUtil();
 
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'u.lastname AS lastname',
+                'u.firstname AS firstname',
+                'u.username AS username',
+                'COUNT(uf.friend) AS count_friend'
+            )
+            ->from(UserRelUser::class, 'uf')
+            ->innerJoin('uf.user', 'u')
+            ->where('u.active <> :softDeleted')
+            ->andWhere('uf.relationType <> :rrhh')
+            ->setParameter('softDeleted', USER_SOFT_DELETED)
+            ->setParameter('rrhh', UserRelUser::USER_RELATION_TYPE_RRHH)
+            ->groupBy('uf.user')
+            ->orderBy('COUNT(uf.friend)', 'DESC')
+        ;
         if ($accessUrlUtil->isMultiple()) {
             $accessUrl = $accessUrlUtil->getCurrent();
-            $urlId = $accessUrl->getId();
-            $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
-                    FROM $access_url_rel_user_table as url, $user_friend_table uf
-                    INNER JOIN $user_table u
-                    ON (uf.user_id = u.id) AND u.active <> ".USER_SOFT_DELETED."
-                    WHERE
-                        uf.relation_type <> '".UserRelUser::USER_RELATION_TYPE_RRHH."' AND
-                        uf.user_id = url.user_id AND
-                        access_url_id = $urlId
-                    GROUP BY uf.user_id
-                    ORDER BY count_friend DESC ";
-        } else {
-            $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
-                    FROM $user_friend_table uf
-                    INNER JOIN $user_table u
-                    ON (uf.user_id = u.id) AND u.active <> ".USER_SOFT_DELETED."
-                    WHERE uf.relation_type <> '".UserRelUser::USER_RELATION_TYPE_RRHH."'
-                    GROUP BY uf.user_id
-                    ORDER BY count_friend DESC ";
+            $qb
+                ->innerJoin(AccessUrlRelUser::class, 'url', 'WITH', 'url.user = uf.user')
+                ->andWhere('IDENTITY(url.url) = :urlId')
+                ->setParameter('urlId', (int) $accessUrl->getId())
+            ;
         }
-        $res = Database::query($sql);
         $list_friends = [];
-        while ($friends = Database::fetch_array($res)) {
+        foreach ($qb->getQuery()->getArrayResult() as $friends) {
             $users = api_get_person_name($friends['firstname'], $friends['lastname']).'<br />('.$friends['username'].')';
             $list_friends[$users] = $friends['count_friend'];
         }
@@ -1567,6 +1543,7 @@ class Statistics
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url WHERE 1=1 $where_url";
         foreach ($sql as $index => $query) {
+            // TODO(db-neutral): DATE_ADD
             $res = Database::query($query);
             $obj = Database::fetch_object($res);
             $r = $total - $obj->number;
@@ -2120,6 +2097,7 @@ class Statistics
                 $urlWhere
                 GROUP BY u.id";
 
+        // TODO(db-neutral): SessionTimeLimit::sqlForSeconds() SQL fragment spliced into the query
         $stmt = Database::query($sql);
 
         return Database::store_result($stmt, 'ASSOC');
@@ -2138,6 +2116,7 @@ class Statistics
             WHERE created_at BETWEEN '$startDate' AND '$endDate'
             GROUP BY reg_date";
 
+        // TODO(db-neutral): DATE_FORMAT, GROUP BY on a SELECT alias
         $result = Database::query($sql);
         $data = [];
         while ($row = Database::fetch_array($result)) {
@@ -2154,18 +2133,20 @@ class Statistics
      */
     public static function getUserRegistrationsByCreator(string $startDate, string $endDate): array
     {
-        $startDate = Database::escape_string($startDate);
-        $endDate = Database::escape_string($endDate);
-        $sql = "SELECT u.creator_id, COUNT(u.id) as user_count, c.firstname, c.lastname
-                FROM user u
-                LEFT JOIN user c ON u.creator_id = c.id
-                WHERE u.created_at BETWEEN '$startDate' AND '$endDate'
-                AND u.creator_id IS NOT NULL
-                GROUP BY u.creator_id";
-
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('u.creatorId AS creator_id', 'COUNT(u.id) AS user_count', 'c.firstname AS firstname', 'c.lastname AS lastname')
+            ->from(User::class, 'u')
+            ->leftJoin(User::class, 'c', 'WITH', 'u.creatorId = c.id')
+            ->where('u.createdAt BETWEEN :startDate AND :endDate')
+            ->andWhere('u.creatorId IS NOT NULL')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->groupBy('u.creatorId')
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $data = [];
-        while ($row = Database::fetch_array($result)) {
+        foreach ($rows as $row) {
             $userCount = is_numeric($row['user_count']) ? (int) $row['user_count'] : 0;
             $name = trim($row['firstname'] . ' ' . $row['lastname']);
             if (!empty($name)) {
@@ -2275,27 +2256,23 @@ class Statistics
      */
     public static function countCertificatesByQuarter(string $dateFrom = null, string $dateUntil = null): int
     {
-        $tableGradebookCertificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $condition = "";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(c.id)')
+            ->from(GradebookCertificate::class, 'c')
+        ;
         if (!empty($dateFrom) && !empty($dateUntil)) {
-            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
-            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
-            $condition = "WHERE (created_at BETWEEN '$dateFrom' AND '$dateUntil')";
+            $qb->where('c.createdAt BETWEEN :dateFrom AND :dateUntil')
+                ->setParameter('dateFrom', api_get_utc_datetime("$dateFrom 00:00:00"))
+                ->setParameter('dateUntil', api_get_utc_datetime("$dateUntil 23:59:59"));
         } elseif (!empty($dateFrom)) {
-            $dateFrom = api_get_utc_datetime("$dateFrom 00:00:00");
-            $condition = "WHERE created_at >= '$dateFrom'";
+            $qb->where('c.createdAt >= :dateFrom')
+                ->setParameter('dateFrom', api_get_utc_datetime("$dateFrom 00:00:00"));
         } elseif (!empty($dateUntil)) {
-            $dateUntil = api_get_utc_datetime("$dateUntil 23:59:59");
-            $condition = "WHERE created_at <= '$dateUntil'";
+            $qb->where('c.createdAt <= :dateUntil')
+                ->setParameter('dateUntil', api_get_utc_datetime("$dateUntil 23:59:59"));
         }
-        $sql = "
-            SELECT count(*) AS count
-            FROM $tableGradebookCertificate
-            $condition
-        ";
-        $response = Database::query($sql);
-        $obj = Database::fetch_object($response);
-        return $obj->count;
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -2335,6 +2312,7 @@ class Statistics
             AND logout_date <= '$dateUntil'
             $whereUrl
             ";
+            // TODO(db-neutral): TIMESTAMPDIFF
             $res = Database::query($sql);
             while ($session = Database::fetch_array($res)) {
                 if ($session['duration'] > 3600) {
@@ -2678,21 +2656,25 @@ class Statistics
             throw new \InvalidArgumentException('Invalid active value.');
         }
 
-        $userTable = Database::get_main_table(TABLE_MAIN_USER);
         $userId = (int) $userId;
         $active = (int) $active;
 
-        $sql = "SELECT id, active
-        FROM $userTable
-        WHERE id = $userId
-        LIMIT 1";
-        $result = Database::query($sql);
+        $em = Container::getEntityManager();
+        $rows = $em->createQueryBuilder()
+            ->select('u.id AS id', 'u.active AS active')
+            ->from(User::class, 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $userId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        if (false === $result || 0 === Database::num_rows($result)) {
+        if (0 === count($rows)) {
             throw new \RuntimeException("User #{$userId} not found.");
         }
 
-        $row = Database::fetch_assoc($result);
+        $row = $rows[0];
         $currentActive = (int) ($row['active'] ?? 0);
 
         if ($currentActive === (int) USER_SOFT_DELETED) {
@@ -2703,12 +2685,15 @@ class Statistics
             return true;
         }
 
-        $updateSql = "UPDATE $userTable SET active = $active WHERE id = $userId LIMIT 1";
-        $updateResult = Database::query($updateSql);
-
-        if (false === $updateResult) {
-            throw new \RuntimeException("Failed to update active status for user #{$userId}.");
-        }
+        $em->createQueryBuilder()
+            ->update(User::class, 'u')
+            ->set('u.active', ':active')
+            ->where('u.id = :userId')
+            ->setParameter('active', $active)
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->execute()
+        ;
 
         return true;
     }
@@ -2742,6 +2727,7 @@ class Statistics
           $whereUrl
         LIMIT 1";
 
+        // TODO(db-neutral): SQL fragments built by getAccessUrlJoinAndWhere()
         $res = Database::query($sqlTarget);
         $target = $res ? Database::fetch_assoc($res) : null;
         if (empty($target)) {
@@ -2803,6 +2789,7 @@ class Statistics
               AND v.field_id = $extraFieldId
             LIMIT 1";
 
+            // TODO(db-neutral): SQL fragments built by getAccessUrlJoinAndWhere(), TRIM/COALESCE
             $resVal = Database::query($sqlVal);
             $rowVal = $resVal ? Database::fetch_assoc($resVal) : null;
 
@@ -2824,6 +2811,7 @@ class Statistics
             ORDER BY u.id ASC";
         }
 
+        // TODO(db-neutral): SQL fragments built by getAccessUrlJoinAndWhere() and by the duplicate mode
         $r = Database::query($sql);
         while ($r && ($row = Database::fetch_assoc($r))) {
             $ids[] = (int) ($row['id'] ?? 0);
@@ -2860,6 +2848,7 @@ class Statistics
             ORDER BY u.lastname, u.firstname
         ";
 
+        // TODO(db-neutral): HAVING on a SELECT alias, SQL fragments built by getAccessUrlJoinAndWhere()
         $res = Database::query($sql);
         if (!$res || Database::num_rows($res) < 1) {
             return [];
@@ -2882,6 +2871,7 @@ class Statistics
                 AND u.lastname = '$lastname'
                 ORDER BY u.created_at ASC, u.id ASC
             ";
+            // TODO(db-neutral): SQL fragments built by getAccessUrlJoinAndWhere()
             $r2 = Database::query($sub);
             if (!$r2 || Database::num_rows($r2) < 2) {
                 continue;

@@ -2,6 +2,14 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
+
 /**
  * Return the answer letters used in multiple-choice exports.
  */
@@ -56,6 +64,75 @@ function test2pdf_get_resource_link_session_condition(int $sessionId, string $al
 }
 
 /**
+ * Select every column of an entity table as scalars (the shape of a legacy "SELECT alias.*" row).
+ *
+ * @return array{0: string[], 1: array<string, string>} select expressions and the column name of each alias
+ */
+function test2pdf_all_columns(string $entityClass, string $alias): array
+{
+    $meta = Database::getManager()->getClassMetadata($entityClass);
+    $select = [];
+    $columns = [];
+    $i = 0;
+    foreach ($meta->getFieldNames() as $field) {
+        $name = 'c'.$i++;
+        $select[] = "$alias.$field AS $name";
+        $columns[$name] = $meta->getColumnName($field);
+    }
+    foreach ($meta->getAssociationNames() as $association) {
+        if (!$meta->isSingleValuedAssociation($association) || $meta->isAssociationInverseSide($association)) {
+            continue;
+        }
+        $name = 'c'.$i++;
+        $select[] = "IDENTITY($alias.$association) AS $name";
+        $columns[$name] = $meta->getSingleAssociationJoinColumnName($association);
+    }
+
+    return [$select, $columns];
+}
+
+/**
+ * Turn a scalar row of test2pdf_all_columns() into the column-named row the raw query used to return.
+ */
+function test2pdf_legacy_row(array $row, array $columns): array
+{
+    $legacy = [];
+    foreach ($columns as $name => $column) {
+        $value = $row[$name] ?? null;
+        if ($value instanceof DateTimeInterface) {
+            $value = $value->format('Y-m-d H:i:s');
+        } elseif (is_bool($value)) {
+            $value = (int) $value;
+        } elseif (is_array($value)) {
+            // json columns: Doctrine stores json_encode() with the default flags, so this is the stored text.
+            $value = json_encode($value);
+        }
+        $legacy[$column] = $value;
+    }
+
+    return $legacy;
+}
+
+function test2pdf_quiz_query(int $courseId, int $sessionId): QueryBuilder
+{
+    $qb = Database::getManager()->createQueryBuilder()
+        ->from(CQuiz::class, 'q')
+        ->innerJoin(ResourceLink::class, 'rl', Join::WITH, 'rl.resourceNode = q.resourceNode')
+        ->where('IDENTITY(rl.course) = :courseId')
+        ->andWhere('rl.deletedAt IS NULL')
+        ->setParameter('courseId', $courseId);
+
+    if ($sessionId > 0) {
+        $qb->andWhere('IDENTITY(rl.session) = :sessionId OR rl.session IS NULL')
+            ->setParameter('sessionId', $sessionId);
+    } else {
+        $qb->andWhere('rl.session IS NULL');
+    }
+
+    return $qb;
+}
+
+/**
  * List exercises available in the current course/session context.
  *
  * @param int $courseId  Course ID
@@ -68,26 +145,17 @@ function showExerciseCourse($courseId, $sessionId = 0)
     $courseId = (int) $courseId;
     $sessionId = (int) $sessionId;
 
-    $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
-    $tableResourceLink = Database::get_main_table('resource_link');
+    [$select, $columns] = test2pdf_all_columns(CQuiz::class, 'q');
+    $rows = test2pdf_quiz_query($courseId, $sessionId)
+        ->select($select)
+        ->distinct()
+        ->orderBy('q.title', 'ASC')
+        ->getQuery()
+        ->getScalarResult();
 
-    $sessionCondition = test2pdf_get_resource_link_session_condition($sessionId, 'rl');
-
-    $sql = "SELECT DISTINCT q.*
-            FROM $tableQuiz q
-            INNER JOIN $tableResourceLink rl
-                ON rl.resource_node_id = q.resource_node_id
-            WHERE
-                rl.c_id = $courseId
-                AND rl.deleted_at IS NULL
-                $sessionCondition
-            ORDER BY q.title ASC";
-
-    $res = Database::query($sql);
     $items = [];
-
-    while ($row = Database::fetch_assoc($res)) {
-        $items[] = $row;
+    foreach ($rows as $row) {
+        $items[] = test2pdf_legacy_row($row, $columns);
     }
 
     return $items;
@@ -108,25 +176,17 @@ function getInfoQuiz($courseId, $id, $sessionId = 0)
     $id = (int) $id;
     $sessionId = (int) $sessionId;
 
-    $tableQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
-    $tableResourceLink = Database::get_main_table('resource_link');
+    [$select, $columns] = test2pdf_all_columns(CQuiz::class, 'q');
+    $rows = test2pdf_quiz_query($courseId, $sessionId)
+        ->select($select)
+        ->distinct()
+        ->andWhere('q.iid = :id')
+        ->setParameter('id', $id)
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getScalarResult();
 
-    $sessionCondition = test2pdf_get_resource_link_session_condition($sessionId, 'rl');
-
-    $sql = "SELECT DISTINCT q.*
-            FROM $tableQuiz q
-            INNER JOIN $tableResourceLink rl
-                ON rl.resource_node_id = q.resource_node_id
-            WHERE
-                q.iid = $id
-                AND rl.c_id = $courseId
-                AND rl.deleted_at IS NULL
-                $sessionCondition
-            LIMIT 1";
-
-    $res = Database::query($sql);
-
-    return Database::fetch_assoc($res);
+    return [] === $rows ? false : test2pdf_legacy_row($rows[0], $columns);
 }
 
 /**
@@ -142,23 +202,21 @@ function getQuestionsFromCourse($courseId, $quizId, $sessionId = 0)
 {
     $quizId = (int) $quizId;
 
-    $tableQuizQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-    $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+    $rows = Database::getManager()->createQueryBuilder()
+        ->select('IDENTITY(qr.question) AS question_id')
+        ->from(CQuizRelQuestion::class, 'qr')
+        ->innerJoin('qr.question', 'q')
+        ->where('IDENTITY(qr.quiz) = :quizId')
+        ->andWhere('q.type IN (1, 2, 3, 9, 10, 11, 12, 14)')
+        ->orderBy('qr.questionOrder', 'ASC')
+        ->addOrderBy('qr.iid', 'ASC')
+        ->setParameter('quizId', $quizId)
+        ->getQuery()
+        ->getScalarResult();
 
-    $sql = "SELECT qr.question_id AS question_id
-            FROM $tableQuizQuestion qr
-            INNER JOIN $tableQuestion q
-                ON q.iid = qr.question_id
-            WHERE
-                qr.quiz_id = $quizId
-                AND q.type IN (1, 2, 3, 9, 10, 11, 12, 14)
-            ORDER BY qr.question_order ASC, qr.iid ASC";
-
-    $res = Database::query($sql);
     $items = [];
-
-    while ($row = Database::fetch_assoc($res)) {
-        $items[] = $row['question_id'];
+    foreach ($rows as $row) {
+        $items[] = (int) $row['question_id'];
     }
 
     return $items;
@@ -176,18 +234,18 @@ function getInfoQuestion($courseId, $id)
 {
     $id = (int) $id;
 
-    $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+    [$select, $columns] = test2pdf_all_columns(CQuizQuestion::class, 'q');
+    $rows = Database::getManager()->createQueryBuilder()
+        ->select($select)
+        ->from(CQuizQuestion::class, 'q')
+        ->where('q.iid = :id')
+        ->andWhere('q.type IN (1, 2, 3, 9, 10, 11, 12, 14)')
+        ->setParameter('id', $id)
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getScalarResult();
 
-    $sql = "SELECT *
-            FROM $tableQuestion
-            WHERE
-                iid = $id
-                AND type IN (1, 2, 3, 9, 10, 11, 12, 14)
-            LIMIT 1";
-
-    $res = Database::query($sql);
-
-    return Database::fetch_assoc($res);
+    return [] === $rows ? false : test2pdf_legacy_row($rows[0], $columns);
 }
 
 /**
@@ -202,18 +260,20 @@ function getAnswers($courseId, $id)
 {
     $id = (int) $id;
 
-    $tableQuizAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
+    [$select, $columns] = test2pdf_all_columns(CQuizAnswer::class, 'a');
+    $rows = Database::getManager()->createQueryBuilder()
+        ->select($select)
+        ->from(CQuizAnswer::class, 'a')
+        ->where('IDENTITY(a.question) = :id')
+        ->orderBy('a.position', 'ASC')
+        ->addOrderBy('a.iid', 'ASC')
+        ->setParameter('id', $id)
+        ->getQuery()
+        ->getScalarResult();
 
-    $sql = "SELECT *
-            FROM $tableQuizAnswer
-            WHERE question_id = $id
-            ORDER BY position ASC, iid ASC";
-
-    $res = Database::query($sql);
     $items = [];
-
-    while ($row = Database::fetch_assoc($res)) {
-        $items[] = $row;
+    foreach ($rows as $row) {
+        $items[] = test2pdf_legacy_row($row, $columns);
     }
 
     return $items;

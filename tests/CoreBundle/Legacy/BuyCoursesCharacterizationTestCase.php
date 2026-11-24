@@ -103,6 +103,9 @@ abstract class BuyCoursesCharacterizationTestCase extends KernelTestCase
         self::bootKernel();
         self::prepareLegacyContext();
         $this->conn = self::getContainer()->get('doctrine')->getConnection();
+        // hasPluginTable() remembers the answer for the whole process: an earlier test may have asked before the schema of
+        // this class was installed, and would leave every infrastructure check answering "no".
+        (new ReflectionProperty(BuyCoursesPlugin::class, 'tableExists'))->setValue(null, []);
         $this->plugin = new BuyCoursesPlugin();
         $this->loginAs(0);
     }

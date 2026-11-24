@@ -1,7 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\GradebookResult;
+use Chamilo\CoreBundle\Entity\GradebookResultAttempt;
+use Chamilo\CoreBundle\Entity\GradebookResultLog;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
  * Defines a gradebook Result object.
@@ -91,53 +99,65 @@ class Result
      */
     public static function load($id = null, $user_id = null, $evaluation_id = null, $loadEvalUsers = false): array
     {
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $tbl_course_rel_course = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_session_rel_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $em = Container::getEntityManager();
         $sessionId = api_get_session_id();
         $list_user_course_list = [];
 
         if (is_null($id) && is_null($user_id) && !is_null($evaluation_id)) {
             // Verified_if_exist_evaluation
-            $sql = 'SELECT COUNT(*) AS count
-                    FROM '.$tbl_grade_results.'
-                    WHERE evaluation_id="'.Database::escape_string($evaluation_id).'"';
-
-            $result = Database::query($sql);
-            $existEvaluation = Database::result($result, 0, 0);
+            $existEvaluation = $em->createQueryBuilder()
+                ->select('COUNT(r.id)')
+                ->from(GradebookResult::class, 'r')
+                ->where('r.evaluation = :evaluation')
+                ->setParameter('evaluation', (int) $evaluation_id)
+                ->getQuery()
+                ->getSingleScalarResult()
+            ;
 
             if (!empty($existEvaluation) || $loadEvalUsers) {
                 if ($sessionId) {
-                    $sql = 'SELECT c_id, user_id as user_id, status
-                            FROM '.$tbl_session_rel_course_user.'
-							WHERE
-							    status= '.Session::STUDENT.' AND
-							    c_id = "'.api_get_course_int_id().'" AND
-							    session_id = '.$sessionId;
+                    $studentsQuery = $em->createQueryBuilder()
+                        ->select('IDENTITY(rel.user) AS user_id')
+                        ->from(SessionRelCourseRelUser::class, 'rel')
+                        ->where('rel.status = :status')
+                        ->andWhere('rel.course = :course')
+                        ->andWhere('rel.session = :session')
+                        ->setParameter('status', Session::STUDENT)
+                        ->setParameter('course', (int) api_get_course_int_id())
+                        ->setParameter('session', (int) $sessionId)
+                    ;
                 } else {
-                    $sql = 'SELECT c_id, user_id, status
-                            FROM '.$tbl_course_rel_course.'
-                            WHERE status ="'.STUDENT.'" AND c_id = "'.api_get_course_int_id().'" ';
+                    $studentsQuery = $em->createQueryBuilder()
+                        ->select('IDENTITY(rel.user) AS user_id')
+                        ->from(CourseRelUser::class, 'rel')
+                        ->where('rel.status = :status')
+                        ->andWhere('rel.course = :course')
+                        ->setParameter('status', STUDENT)
+                        ->setParameter('course', (int) api_get_course_int_id())
+                    ;
                 }
 
-                $res_course_rel_user = Database::query($sql);
-                while ($row_course_rel_user = Database::fetch_assoc($res_course_rel_user)) {
-                    $list_user_course_list[] = $row_course_rel_user;
-                }
-                $current_date = api_get_utc_datetime();
-                for ($i = 0; $i < count($list_user_course_list); $i++) {
-                    $sql_verified = 'SELECT COUNT(*) AS count
-                                    FROM '.$tbl_grade_results.'
-                                    WHERE
-                                        user_id="'.intval($list_user_course_list[$i]['user_id']).'" AND
-                                        evaluation_id="'.intval($evaluation_id).'";';
-                    $res_verified = Database::query($sql_verified);
-                    $info_verified = Database::result($res_verified, 0, 0);
+                $list_user_course_list = $studentsQuery->getQuery()->getArrayResult();
+                $current_date = new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC'));
+                foreach ($list_user_course_list as $studentRow) {
+                    $studentId = (int) $studentRow['user_id'];
+                    $info_verified = $em->createQueryBuilder()
+                        ->select('COUNT(r.id)')
+                        ->from(GradebookResult::class, 'r')
+                        ->where('r.user = :user')
+                        ->andWhere('r.evaluation = :evaluation')
+                        ->setParameter('user', $studentId)
+                        ->setParameter('evaluation', (int) $evaluation_id)
+                        ->getQuery()
+                        ->getSingleScalarResult()
+                    ;
                     if (0 == $info_verified) {
-                        $sql_insert = 'INSERT INTO '.$tbl_grade_results.'(user_id,evaluation_id,created_at,score)
-									   VALUES ("'.intval($list_user_course_list[$i]['user_id']).'","'.intval($evaluation_id).'","'.$current_date.'", null);';
-                        Database::query($sql_insert);
+                        $newResult = new GradebookResult();
+                        $newResult->setUser($em->getReference(User::class, $studentId));
+                        $newResult->setEvaluation($em->getReference(GradebookEvaluation::class, (int) $evaluation_id));
+                        $newResult->setCreatedAt($current_date);
+                        $em->persist($newResult);
+                        $em->flush();
                     }
                 }
             }
@@ -145,51 +165,44 @@ class Result
 
         $userIdList = [];
         foreach ($list_user_course_list as $data) {
-            $userIdList[] = $data['user_id'];
+            $userIdList[] = (int) $data['user_id'];
         }
-        $userIdListToString = implode("', '", $userIdList);
 
-        $sql = "SELECT lastname, gr.id, gr.user_id, gr.evaluation_id, gr.created_at, gr.score
-                FROM $tbl_grade_results gr
-                INNER JOIN $tbl_user u
-                ON gr.user_id = u.id ";
+        $qb = $em->createQueryBuilder()
+            ->select(
+                'r.id AS id',
+                'IDENTITY(r.user) AS user_id',
+                'IDENTITY(r.evaluation) AS evaluation_id',
+                'r.createdAt AS created_at',
+                'r.score AS score'
+            )
+            ->from(GradebookResult::class, 'r')
+            ->innerJoin('r.user', 'u')
+            ->orderBy('u.lastname')
+            ->addOrderBy('u.firstname')
+        ;
 
         if (!empty($userIdList)) {
-            $sql .= " AND u.id IN ('$userIdListToString')";
+            $qb->andWhere('u.id IN (:userIds)')->setParameter('userIds', $userIdList);
         }
-
-        $paramcount = 0;
         if (!empty($id)) {
-            $sql .= ' WHERE gr.id = '.intval($id);
-            $paramcount++;
+            $qb->andWhere('r.id = :id')->setParameter('id', (int) $id);
         }
         if (!empty($user_id)) {
-            if (0 != $paramcount) {
-                $sql .= ' AND';
-            } else {
-                $sql .= ' WHERE';
-            }
-            $sql .= ' gr.user_id = '.intval($user_id);
-            $paramcount++;
+            $qb->andWhere('r.user = :user')->setParameter('user', (int) $user_id);
         }
         if (!empty($evaluation_id)) {
-            if (0 != $paramcount) {
-                $sql .= ' AND';
-            } else {
-                $sql .= ' WHERE';
-            }
-            $sql .= ' gr.evaluation_id = '.intval($evaluation_id);
+            $qb->andWhere('r.evaluation = :evaluation')->setParameter('evaluation', (int) $evaluation_id);
         }
-        $sql .= ' ORDER BY u.lastname, u.firstname';
 
-        $result = Database::query($sql);
+        $rows = $qb->getQuery()->getArrayResult();
         $allres = [];
-        while ($data = Database::fetch_array($result)) {
+        foreach ($rows as $data) {
             $res = new Result();
             $res->set_id($data['id']);
-            $res->set_user_id($data['user_id']);
-            $res->set_evaluation_id($data['evaluation_id']);
-            $res->set_date(api_get_local_time($data['created_at']));
+            $res->set_user_id((int) $data['user_id']);
+            $res->set_evaluation_id((int) $data['evaluation_id']);
+            $res->set_date(api_get_local_time($data['created_at']->format('Y-m-d H:i:s')));
             $res->set_score($data['score']);
             $allres[] = $res;
         }
@@ -203,21 +216,16 @@ class Result
     public function add()
     {
         if (isset($this->user_id) && isset($this->evaluation)) {
-            $tbl_grade_results = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-            $sql = "INSERT INTO ".$tbl_grade_results
-                ." (user_id, evaluation_id,
-					created_at";
+            $em = Container::getEntityManager();
+            $newResult = new GradebookResult();
+            $newResult->setUser($em->getReference(User::class, (int) $this->get_user_id()));
+            $newResult->setEvaluation($em->getReference(GradebookEvaluation::class, (int) $this->get_evaluation_id()));
+            $newResult->setCreatedAt(new DateTime($this->get_date(), new DateTimeZone('UTC')));
             if (isset($this->score)) {
-                $sql .= ",score";
+                $newResult->setScore((float) $this->get_score());
             }
-            $sql .= ") VALUES
-					(".(int) $this->get_user_id().", ".(int) $this->get_evaluation_id()
-                .", '".$this->get_date()."' ";
-            if (isset($this->score)) {
-                $sql .= ", ".$this->get_score();
-            }
-            $sql .= ")";
-            Database::query($sql);
+            $em->persist($newResult);
+            $em->flush();
         } else {
             exit('Error in Result add: required field empty');
         }
@@ -229,25 +237,22 @@ class Result
     public function addResultLog($userid, $evaluationid)
     {
         if (isset($userid) && isset($evaluationid)) {
-            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_LOG);
             $result = new Result();
 
             $arr_result = $result->load(null, $userid, $evaluationid);
             $arr = get_object_vars($arr_result[0]);
 
-            $sql = 'INSERT INTO '.$table.' (result_id,user_id, evaluation_id,created_at';
+            $em = Container::getEntityManager();
+            $log = new GradebookResultLog();
+            $log->setResult($em->getReference(GradebookResult::class, (int) $arr['id']));
+            $log->setUser($em->getReference(User::class, (int) $arr['user_id']));
+            $log->setEvaluation($em->getReference(GradebookEvaluation::class, (int) $arr['evaluation']));
+            $log->setCreatedAt(new DateTime(api_get_utc_datetime(), new DateTimeZone('UTC')));
             if (isset($arr['score'])) {
-                $sql .= ',score';
+                $log->setScore((float) $arr['score']);
             }
-            $sql .= ') VALUES
-					('.(int) $arr['id'].','.(int) $arr['user_id'].', '.(int) $arr['evaluation']
-                .", '".api_get_utc_datetime()."'";
-            if (isset($arr['score'])) {
-                $sql .= ', '.$arr['score'];
-            }
-            $sql .= ')';
-
-            Database::query($sql);
+            $em->persist($log);
+            $em->flush();
         } else {
             exit('Error in Result add: required field empty');
         }
@@ -258,26 +263,28 @@ class Result
      */
     public function save()
     {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = 'UPDATE '.$table.'
-                SET user_id = '.$this->get_user_id()
-            .', evaluation_id = '.$this->get_evaluation_id()
-            .', score = ';
-        if (isset($this->score)) {
-            $sql .= $this->get_score();
-        } else {
-            $sql .= 'null';
-        }
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->update(GradebookResult::class, 'r')
+            ->set('r.user', ':user')
+            ->set('r.evaluation', ':evaluation')
+            ->set('r.score', ':score')
+            ->setParameter('user', (int) $this->get_user_id())
+            ->setParameter('evaluation', (int) $this->get_evaluation_id())
+            ->setParameter('score', isset($this->score) ? (float) $this->get_score() : null)
+        ;
         if (isset($this->id)) {
-            $sql .= " WHERE id = {$this->id}";
+            $qb->where('r.id = :id')->setParameter('id', (int) $this->id);
         } else {
-            $sql .= " WHERE evaluation_id = {$this->evaluation}
-                AND user_id = {$this->user_id}
-            ";
+            $qb
+                ->where('r.evaluation = :whereEvaluation')
+                ->andWhere('r.user = :whereUser')
+                ->setParameter('whereEvaluation', (int) $this->evaluation)
+                ->setParameter('whereUser', (int) $this->user_id)
+            ;
         }
 
         // no need to update creation date
-        Database::query($sql);
+        $qb->getQuery()->execute();
 
         Evaluation::generateStats($this->get_evaluation_id());
     }
@@ -287,14 +294,23 @@ class Result
      */
     public function delete()
     {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = 'DELETE FROM '.$table.' WHERE id = '.$this->id;
-        Database::query($sql);
+        $em = Container::getEntityManager();
+        $em->createQueryBuilder()
+            ->delete(GradebookResult::class, 'r')
+            ->where('r.id = :id')
+            ->setParameter('id', (int) $this->id)
+            ->getQuery()
+            ->execute()
+        ;
         $allowMultipleAttempts = ('true' === api_get_setting('gradebook.gradebook_multiple_evaluation_attempts'));
         if ($allowMultipleAttempts) {
-            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_ATTEMPT);
-            $sql = "DELETE FROM $table WHERE result_id = ".$this->id;
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->delete(GradebookResultAttempt::class, 'a')
+                ->where('a.result = :result')
+                ->setParameter('result', (int) $this->id)
+                ->getQuery()
+                ->execute()
+            ;
         }
 
         Evaluation::generateStats($this->get_evaluation_id());
@@ -309,15 +325,16 @@ class Result
      */
     public function exists()
     {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = "SELECT COUNT(*) AS count
-                FROM $table gr
-                WHERE gr.evaluation_id = $this->evaluation
-                AND gr.user_id = $this->user_id
-        ";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-        $count = (int) $row['count'];
+        $count = (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(gr.id)')
+            ->from(GradebookResult::class, 'gr')
+            ->where('gr.evaluation = :evaluation')
+            ->andWhere('gr.user = :user')
+            ->setParameter('evaluation', (int) $this->evaluation)
+            ->setParameter('user', (int) $this->user_id)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
         return $count > 0;
     }

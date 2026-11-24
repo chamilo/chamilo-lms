@@ -34,6 +34,8 @@ use const LIBXML_NONET;
 /**
  * #9285: QTI 2.1 preserves the fixed zero-score unknown answer of type 10.
  * An unmarked QTI choiceInteraction must remain an ordinary unique-answer question.
+ *
+ * @psalm-suppress UndefinedMethod, UndefinedPropertyFetch the XPath results are DOMElement nodes, which Psalm types as DOMNode
  */
 final class ExerciseQti2UniqueUnknownTest extends KernelTestCase
 {

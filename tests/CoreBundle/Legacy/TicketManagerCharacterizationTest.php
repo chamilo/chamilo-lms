@@ -559,6 +559,19 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $this->assertSame([], TicketManager::get_ticket_detail_by_id(987654321));
     }
 
+    public function testGetTicketDetailFormatsTheEndDateAndKeepsItRaw(): void
+    {
+        $p = $this->project('tm_proj_det_end');
+        $cat = $this->category($p, 'tm_cat_det_end');
+        $t = $this->ticket($p, $cat, ['end_date' => '2021-03-16 11:00:00']);
+
+        $d = TicketManager::get_ticket_detail_by_id($t);
+
+        $this->assertSame('2021-03-16 11:00:00', $d['ticket']['end_date_from_db']);
+        $this->assertNotSame('2021-03-16 11:00:00', $d['ticket']['end_date'], 'end_date is replaced by a formatted string');
+        $this->assertStringContainsString('2021', $d['ticket']['end_date']);
+    }
+
     public function testGetTicketDetailKeepsATicketWhoseCategoryWasDeleted(): void
     {
         $p = $this->project('tm_proj_det_nocat');
@@ -1117,6 +1130,19 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
 
     // ---------------------------------------------------------------- broken legacy queries
 
+    public function testGetNumberOfMessagesForAdminExcludesOnlyForwardedTickets(): void
+    {
+        $p = $this->project('tm_proj_unread2');
+        $cat = $this->category($p, 'tm_cat_unread2');
+        $before = (int) TicketManager::getNumberOfMessages();
+        foreach ([TicketManager::STATUS_NEW, TicketManager::STATUS_NEW, TicketManager::STATUS_PENDING] as $status) {
+            $this->message($this->ticket($p, $cat, ['sys_insert_user_id' => 2, 'status_id' => $status]), 2);
+        }
+        $this->message($this->ticket($p, $cat, ['sys_insert_user_id' => 2, 'status_id' => TicketManager::STATUS_FORWARDED]), 2);
+
+        $this->assertSame($before + 3, TicketManager::getNumberOfMessages());
+    }
+
     public function testGetNumberOfMessagesCountsTicketsWithUnreadMessagesFromTheOtherSide(): void
     {
         $p = $this->project('tm_proj_unread');
@@ -1172,6 +1198,59 @@ final class TicketManagerCharacterizationTest extends KernelTestCase
         $_GET = ['submit_simple' => '1', 'keyword' => 'tm_exp_gone'];
         $this->assertCount(1, TicketManager::export_tickets_by_user_id(0, 10, 0, 'DESC'), 'tickets of soft-deleted users are not exported');
         $this->assertSame($mine, (int) $this->conn->fetchOne("SELECT id FROM ticket_ticket WHERE code = 'tm_exp_1'"));
+    }
+
+    public function testExportTicketsByUserIdAdvancedFiltersNarrowDownEveryColumn(): void
+    {
+        $p = $this->project('tm_proj_export3');
+        $c1 = $this->category($p, 'tm_cat_ex3a');
+        $c2 = $this->category($p, 'tm_cat_ex3b');
+        // Titles and codes that only one search alternative can match (rolled back with the test).
+        $this->conn->update('course', ['title' => 'tm_title_only_xyz', 'visual_code' => 'tm_vc_only_xyz'], ['id' => 1]);
+        $courseCode = (string) $this->conn->fetchOne('SELECT code FROM course WHERE id = 1');
+        $this->assertStringNotContainsStringIgnoringCase($courseCode, 'tm_title_only_xyz tm_vc_only_xyz');
+        $this->ticket($p, $c1, ['code' => 'tm_exf_1', 'sys_insert_user_id' => 2, 'status_id' => 1, 'priority_id' => 1, 'source' => 'tm_s1', 'assigned_last_user' => 1, 'course_id' => 1]);
+        $this->ticket($p, $c2, ['code' => 'tm_exf_2', 'sys_insert_user_id' => 2, 'status_id' => 2, 'priority_id' => 2, 'source' => 'tm_s2', 'assigned_last_user' => 3]);
+        $this->ticket($p, $c1, ['code' => 'tm_exf_3', 'sys_insert_user_id' => 1]);
+
+        $base = [
+            'submit_advanced' => '1', 'keyword_category' => '', 'keyword_request_user' => '', 'keyword_assigned_to' => '',
+            'keyword_start_date_start' => '', 'keyword_start_date_end' => '', 'keyword_status' => '', 'keyword_source' => '',
+            'keyword_priority' => '', 'keyword_dates' => '', 'keyword_unread' => '', 'keyword_course' => '',
+        ];
+        $codes = function (array $get) use ($base): array {
+            $_GET = $get + $base;
+            $rows = TicketManager::export_tickets_by_user_id(0, 100, 0, 'DESC');
+            $codes = array_filter(array_column(\array_slice($rows, 1), 'code'), static fn ($c) => str_starts_with($c, 'tm_exf_'));
+            sort($codes);
+
+            return $codes;
+        };
+
+        $this->assertSame(['tm_exf_1', 'tm_exf_2', 'tm_exf_3'], $codes([]));
+        $this->assertSame(['tm_exf_1', 'tm_exf_3'], $codes(['keyword_category' => (string) $c1]));
+        $this->assertSame(['tm_exf_2'], $codes(['keyword_category' => (string) $c2]));
+        $this->assertSame(['tm_exf_2'], $codes(['keyword_assigned_to' => '3']));
+        $this->assertSame(['tm_exf_1'], $codes(['keyword_assigned_to' => '1']));
+        $this->assertSame(['tm_exf_2'], $codes(['keyword_status' => '2']));
+        $this->assertSame(['tm_exf_2'], $codes(['keyword_priority' => '2']));
+        $this->assertSame(['tm_exf_2'], $codes(['keyword_source' => 'tm_s2']));
+        $this->assertSame(['tm_exf_1'], $codes(['keyword_course' => 'm_title_only']), 'course title');
+        $this->assertSame(['tm_exf_1'], $codes(['keyword_course' => 'm_vc_only']), 'course visual code');
+        $this->assertSame(['tm_exf_1'], $codes(['keyword_course' => $courseCode]), 'course code');
+        $this->assertSame([], $codes(['keyword_course' => 'zz_no_such_course']));
+        $this->assertSame(['tm_exf_1', 'tm_exf_2'], $codes(['keyword_request_user' => '2']), 'requester id (or name) of the creator');
+
+        // Paging applies to the filtered list; the header row is extra.
+        $_GET = ['keyword_request_user' => '2'] + $base;
+        $all = TicketManager::export_tickets_by_user_id(0, 1000, 0, 'DESC');
+        $this->assertCount(1 + 1, TicketManager::export_tickets_by_user_id(0, 1, 0, 'DESC'));
+        $this->assertCount(\count($all) - 1, TicketManager::export_tickets_by_user_id(1, 1000, 0, 'DESC'));
+
+        // The simple search also reaches part of a username (admin: no other field of that user has "dmi").
+        $_GET = ['submit_simple' => '1', 'keyword' => 'dmi'];
+        $rows = TicketManager::export_tickets_by_user_id(0, 1000, 0, 'DESC');
+        $this->assertContains('tm_exf_3', array_column(\array_slice($rows, 1), 'code'));
     }
 
     public function testExportTicketsByUserIdAdvancedFiltersUnreadAndRealDates(): void

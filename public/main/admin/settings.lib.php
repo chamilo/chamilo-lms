@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Plugin as PluginEntity;
+use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Entity\SystemTemplate;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
@@ -2008,16 +2009,12 @@ function displayTemplates()
  */
 function getNumberOfTemplates()
 {
-    // Database table definition.
-    $table = Database::get_main_table('system_template');
-
-    // The sql statement.
-    $sql = "SELECT COUNT(id) AS total FROM $table";
-    $result = Database::query($sql);
-    $row = Database::fetch_array($result);
-
     // Returning the number of templates.
-    return $row['total'];
+    return (int) Container::getEntityManager()->createQueryBuilder()
+        ->select('COUNT(t.id)')
+        ->from(SystemTemplate::class, 't')
+        ->getQuery()
+        ->getSingleScalarResult();
 }
 
 /**
@@ -2038,20 +2035,25 @@ function getNumberOfTemplates()
  */
 function getTemplateData($from, $number_of_items, $column, $direction)
 {
-    // Database table definition.
-    $table_system_template = Database::get_main_table('system_template');
-
     $from = (int) $from;
     $number_of_items = (int) $number_of_items;
     $column = (int) $column;
-    $direction = !in_array(strtolower(trim($direction)), ['asc', 'desc']) ? 'asc' : $direction;
-    // The sql statement.
-    $sql = "SELECT id as col0, title as col1, id as col2 FROM $table_system_template";
-    $sql .= " ORDER BY col$column $direction ";
-    $sql .= " LIMIT $from,$number_of_items";
-    $result = Database::query($sql);
+    $direction = strtolower(trim($direction));
+    $direction = 'desc' === $direction ? 'DESC' : 'ASC';
+    // col0 and col2 are the id, col1 the title; an unknown column sorts by title (the table default).
+    $orderFields = [0 => 't.id', 1 => 't.title', 2 => 't.id'];
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select('t.id AS col0', 't.title AS col1', 't.id AS col2')
+        ->from(SystemTemplate::class, 't')
+        ->orderBy($orderFields[$column] ?? 't.title', $direction)
+        ->setFirstResult($from)
+        ->setMaxResults($number_of_items)
+        ->getQuery()
+        ->getArrayResult();
     $return = [];
-    while ($row = Database::fetch_array($result)) {
+    foreach ($rows as $row) {
+        // The raw rows came back with the numeric keys as well.
+        $row = array_merge($row, array_values($row));
         $row['1'] = get_lang($row['1']);
         $return[] = $row;
     }
@@ -2323,22 +2325,57 @@ function deleteTemplate($id)
 {
     $id = intval($id);
     // First we remove the image.
-    $table = Database::get_main_table('system_template');
-    $sql = "SELECT * FROM $table WHERE id = $id";
-    $result = Database::query($sql);
-    $row = Database::fetch_array($result);
+    $row = Container::getEntityManager()->createQueryBuilder()
+        ->select('t.id AS id', 't.title AS title', 't.comment AS comment', 't.content AS content', 't.language AS language')
+        ->from(SystemTemplate::class, 't')
+        ->where('t.id = :id')
+        ->setParameter('id', $id)
+        ->getQuery()
+        ->getArrayResult()[0] ?? [];
+    // The table has no 'image' column (it is image_id), so this branch never runs.
     if (!empty($row['image'])) {
         @unlink(api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/'.$row['image']);
     }
 
     // Now we remove it from the database.
-    $sql = "DELETE FROM $table WHERE id = $id";
-    Database::query($sql);
+    Container::getEntityManager()->createQueryBuilder()
+        ->delete(SystemTemplate::class, 't')
+        ->where('t.id = :id')
+        ->setParameter('id', $id)
+        ->getQuery()
+        ->execute();
 
     deleteTemplateImage($id);
 
     // Display a feedback message.
     echo Display::return_message(get_lang('Template deleted'), 'confirm');
+}
+
+/**
+ * Every column of the settings table, aliased to the snake_case keys the legacy callers read.
+ */
+function settingsRowsQueryBuilder(): \Doctrine\ORM\QueryBuilder
+{
+    return Container::getEntityManager()->createQueryBuilder()
+        ->select(
+            's.id AS id',
+            'IDENTITY(s.url) AS access_url',
+            'IDENTITY(s.valueTemplate) AS value_template_id',
+            's.variable AS variable',
+            's.subkey AS subkey',
+            's.type AS type',
+            's.category AS category',
+            's.selectedValue AS selected_value',
+            's.title AS title',
+            's.comment AS comment',
+            's.scope AS scope',
+            's.subkeytext AS subkeytext',
+            's.accessUrlLocked AS access_url_locked',
+            's.accessUrlChangeable AS access_url_changeable',
+            's.confidential AS confidential'
+        )
+        ->from(SettingsCurrent::class, 's')
+    ;
 }
 
 /**
@@ -2355,7 +2392,6 @@ function generateSettingsForm($settings, $settings_by_access_list)
 {
     global $_configuration, $settings_to_avoid, $convert_byte_to_mega_list;
     $em = Database::getManager();
-    $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS);
 
     $form = new FormValidator(
         'settings',
@@ -2572,12 +2608,17 @@ function generateSettingsForm($settings, $settings_by_access_list)
                 break;
             case 'checkbox':
                 // 1. We collect all the options of this variable.
-                $sql = "SELECT * FROM $table_settings_current
-                        WHERE variable='".$row['variable']."' AND access_url =  1";
-
-                $result = Database::query($sql);
+                $rowsOfVariable = settingsRowsQueryBuilder()
+                    ->where('s.variable = :variable')
+                    ->andWhere('IDENTITY(s.url) = 1')
+                    ->orderBy('s.id', 'ASC')
+                    ->setParameter('variable', (string) $row['variable'])
+                    ->getQuery()
+                    ->getArrayResult();
                 $group = [];
-                while ($rowkeys = Database::fetch_array($result)) {
+                foreach ($rowsOfVariable as $rowkeys) {
+                    // The raw rows came back with the numeric keys as well.
+                    $rowkeys = array_merge($rowkeys, array_values($rowkeys));
                     // Profile tab option should be hidden when the social tool is enabled.
                     if ('true' == api_get_setting('allow_social_tool')) {
                         if ('show_tabs' === $rowkeys['variable'] && 'my_profile' === $rowkeys['subkey']) {
@@ -2603,14 +2644,20 @@ function generateSettingsForm($settings, $settings_by_access_list)
                         if (empty($access_url)) {
                             $access_url = 1;
                         }
-                        $sql = "SELECT selected_value FROM $table_settings_current
-                                WHERE
-                                    variable='".$rowkeys['variable']."' AND
-                                    subkey='".$rowkeys['subkey']."' AND
-                                    subkeytext='".$rowkeys['subkeytext']."' AND
-                                    access_url =  $access_url";
-                        $result_access = Database::query($sql);
-                        $row_access = Database::fetch_array($result_access);
+                        $row_access = Container::getEntityManager()->createQueryBuilder()
+                            ->select('s.selectedValue AS selected_value')
+                            ->from(SettingsCurrent::class, 's')
+                            ->where('s.variable = :variable')
+                            ->andWhere('s.subkey = :subkey')
+                            ->andWhere('s.subkeytext = :subkeytext')
+                            ->andWhere('IDENTITY(s.url) = :url')
+                            ->setParameter('variable', (string) $rowkeys['variable'])
+                            ->setParameter('subkey', (string) $rowkeys['subkey'])
+                            ->setParameter('subkeytext', (string) $rowkeys['subkeytext'])
+                            ->setParameter('url', (int) $access_url)
+                            ->setMaxResults(1)
+                            ->getQuery()
+                            ->getArrayResult()[0] ?? [];
                         if ('true' === $row_access['selected_value'] && !$form->isSubmitted()) {
                             $element->setChecked(true);
                         }
@@ -2730,6 +2777,7 @@ function searchSetting($search)
     $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS);
     $sql = "SELECT * FROM $table_settings_current
             WHERE category <> 'Plugins' ORDER BY id ASC ";
+    // TODO(db-neutral): broken today, left raw: get_lang() receives the NULL comment of some rows (TypeError)
     $result = Database::store_result(Database::query($sql), 'ASSOC');
     $settings = [];
 

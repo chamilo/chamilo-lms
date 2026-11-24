@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Language;
 use Chamilo\CoreBundle\Entity\ResourceLink;
+use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\TrackEExerciseConfirmation;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
@@ -16,9 +17,15 @@ use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\CourseBundle\Entity\CQuizRelQuestionCategory;
 use ChamiloSession as Session;
+use Doctrine\ORM\QueryBuilder;
 
 
 /**
@@ -173,19 +180,65 @@ class Exercise
      */
     public function read($id, $parseQuestionList = true)
     {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
-
         $id = (int) $id;
         if (empty($this->course_id) || empty($id)) {
             return false;
         }
 
-        $sql = "SELECT * FROM $table
-                WHERE iid = $id";
-        $result = Database::query($sql);
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'q.iid AS iid',
+                'q.title AS title',
+                'q.description AS description',
+                'q.sound AS sound',
+                'q.type AS type',
+                'q.random AS random',
+                'q.randomAnswers AS random_answers',
+                'q.resultsDisabled AS results_disabled',
+                'q.maxAttempt AS max_attempt',
+                'q.feedbackType AS feedback_type',
+                'q.propagateNeg AS propagate_neg',
+                'q.saveCorrectAnswers AS save_correct_answers',
+                'q.randomByCategory AS random_by_category',
+                'q.textWhenFinished AS text_when_finished',
+                'q.textWhenFinishedFailure AS text_when_finished_failure',
+                'q.displayCategoryName AS display_category_name',
+                'q.passPercentage AS pass_percentage',
+                'q.reviewAnswers AS review_answers',
+                'q.questionSelectionType AS question_selection_type',
+                'q.hideQuestionTitle AS hide_question_title',
+                'q.showQuestionMaxScore AS show_question_max_score',
+                'q.autoLaunch AS autolaunch',
+                'IDENTITY(q.quizCategory) AS quiz_category_id',
+                'q.preventBackwards AS prevent_backwards',
+                'q.notifications AS notifications',
+                'q.pageResultConfiguration AS page_result_configuration',
+                'q.hideQuestionNumber AS hide_question_number',
+                'q.showPreviousButton AS show_previous_button',
+                'q.endTime AS end_time',
+                'q.startTime AS start_time',
+                'q.expiredTime AS expired_time'
+            )
+            ->from(CQuiz::class, 'q')
+            ->where('q.iid = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
         // if the exercise has been found
-        if ($object = Database::fetch_object($result)) {
+        if (null !== $row) {
+            // The raw row used to give integers for flags, strings for dates and the JSON text: keep that shape.
+            foreach (['random_answers', 'hide_question_title', 'show_question_max_score', 'show_previous_button'] as $flag) {
+                $row[$flag] = null === $row[$flag] ? null : (int) $row[$flag];
+            }
+            $row['autolaunch'] = null === $row['autolaunch'] ? null : (int) $row['autolaunch'];
+            foreach (['end_time', 'start_time'] as $date) {
+                $row[$date] = $row[$date] instanceof DateTimeInterface ? $row[$date]->format('Y-m-d H:i:s') : null;
+            }
+            $row['page_result_configuration'] = empty($row['page_result_configuration'])
+                ? null
+                : json_encode($row['page_result_configuration']);
+            $object = (object) $row;
             $this->id = $this->iId = (int) $object->iid;
             $this->exercise = $object->title;
             $this->name = $object->title;
@@ -663,40 +716,24 @@ class Exercise
     ) {
         if (!empty($this->id)) {
             $category_list = TestCategory::getListOfCategoriesNameForTest($this->id);
-            $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-            $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+            $qb = $this->quizQuestionsQueryBuilder((int) $this->id)->select('q.iid AS iid');
 
-            $sql = "SELECT q.iid
-                    FROM $TBL_EXERCICE_QUESTION e
-                    INNER JOIN $TBL_QUESTIONS  q
-                    ON (e.question_id = q.iid)
-					WHERE e.quiz_id	= '".$this->id."' ";
-
-            $orderCondition = ' ORDER BY question_order ';
-
-            if (!empty($sidx) && !empty($sord)) {
-                if ('question' === $sidx) {
-                    if (in_array(strtolower($sord), ['desc', 'asc'])) {
-                        $orderCondition = " ORDER BY q.question $sord";
-                    }
-                }
+            if (!empty($sidx) && !empty($sord) && 'question' === $sidx && in_array(strtolower($sord), ['desc', 'asc'])) {
+                $qb->orderBy('q.question', 'desc' === strtolower($sord) ? 'DESC' : 'ASC');
+            } else {
+                $qb->orderBy('e.questionOrder', 'ASC');
             }
 
-            $sql .= $orderCondition;
-            $limitCondition = null;
             if (isset($start) && isset($limit)) {
-                $start = (int) $start;
-                $limit = (int) $limit;
-                $limitCondition = " LIMIT $start, $limit";
+                $qb->setFirstResult((int) $start)->setMaxResults((int) $limit);
             }
-            $sql .= $limitCondition;
-            $result = Database::query($sql);
+            $rows = $qb->getQuery()->getArrayResult();
             $questions = [];
-            if (Database::num_rows($result)) {
+            if ($rows) {
                 if (!empty($extraFields)) {
                     $extraFieldValue = new ExtraFieldValue('question');
                 }
-                while ($question = Database::fetch_assoc($result)) {
+                foreach ($rows as $question) {
                     /** @var Question $objQuestionTmp */
                     $objQuestionTmp = Question::read($question['iid']);
                     $category_labels = '';
@@ -766,23 +803,23 @@ class Exercise
      */
     public function getQuestionCount()
     {
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT count(q.iid) as count
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
-                WHERE
-                    e.quiz_id = ".$this->getId();
-        $result = Database::query($sql);
+        return (int) $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('COUNT(q.iid)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 
-        $count = 0;
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result);
-            $count = (int) $row['count'];
-        }
-
-        return $count;
+    /**
+     * Questions linked to the given quiz (c_quiz_rel_question e joined to c_quiz_question q), with no select.
+     */
+    private function quizQuestionsQueryBuilder(int $quizId): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->from(CQuizRelQuestion::class, 'e')
+            ->innerJoin('e.question', 'q')
+            ->where('IDENTITY(e.quiz) = :quizId')
+            ->setParameter('quizId', $quizId)
+        ;
     }
 
     /**
@@ -794,24 +831,12 @@ class Exercise
             return [];
         }
 
-        $exerciseQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
-
         // Getting question list from the order (question list drag n drop interface ).
-        $sql = "SELECT e.question_id
-                FROM $exerciseQuestionTable e
-                INNER JOIN $questionTable q
-                ON (e.question_id= q.iid)
-                WHERE
-                    e.quiz_id = '".$this->getId()."'
-                ORDER BY q.question";
-        $result = Database::query($sql);
-        $list = [];
-        if (Database::num_rows($result)) {
-            $list = Database::store_result($result, 'ASSOC');
-        }
-
-        return $list;
+        return $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('IDENTITY(e.question) AS question_id')
+            ->orderBy('q.question', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
@@ -1165,6 +1190,7 @@ class Exercise
             $randomLimit = 'ORDER BY e.question_order';
         }
 
+        // TODO(db-neutral): ORDER BY RAND() has no DQL/DBAL equivalent
         $sql = "SELECT e.question_id
                 FROM $quizRelQuestion e
                 INNER JOIN $question q
@@ -1211,38 +1237,24 @@ class Exercise
     {
         $questionId = (int) $questionId;
 
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT q.iid
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
-                WHERE
-                    q.iid = $questionId AND
-                    e.quiz_id = ".$this->getId();
-
-        $result = Database::query($sql);
-
-        return Database::num_rows($result) > 0;
+        return [] !== $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('q.iid AS iid')
+            ->andWhere('q.iid = :questionId')
+            ->setParameter('questionId', $questionId)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     public function hasQuestionWithType($type)
     {
         $type = (int) $type;
 
-        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT q.iid
-                FROM $table e
-                INNER JOIN $tableQuestion q
-                ON (e.question_id = q.iid)
-                WHERE
-                    q.type = $type AND
-                    e.quiz_id = ".$this->getId();
-
-        $result = Database::query($sql);
-
-        return Database::num_rows($result) > 0;
+        return [] !== $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('q.iid AS iid')
+            ->andWhere('q.type = :type')
+            ->setParameter('type', $type)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     public function hasQuestionWithTypeNotInList(array $questionTypeList)
@@ -1251,22 +1263,12 @@ class Exercise
             return false;
         }
 
-        $questionTypeToString = implode("','", array_map('intval', $questionTypeList));
-
-        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT q.iid
-                FROM $table e
-                INNER JOIN $tableQuestion q
-                ON (e.question_id = q.iid)
-                WHERE
-                    q.type NOT IN ('$questionTypeToString')  AND
-
-                    e.quiz_id = ".$this->getId();
-
-        $result = Database::query($sql);
-
-        return Database::num_rows($result) > 0;
+        return [] !== $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('q.iid AS iid')
+            ->andWhere('q.type NOT IN (:types)')
+            ->setParameter('types', array_map('intval', $questionTypeList))
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
@@ -1675,7 +1677,6 @@ class Exercise
      */
     public function update_question_positions()
     {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         if (empty($this->getId())) {
             return false;
         }
@@ -1688,12 +1689,16 @@ class Exercise
             foreach ($questionList as $position => $questionId) {
                 $position = (int) $position;
                 $questionId = (int) $questionId;
-                $sql = "UPDATE $table SET
-                            question_order = $position
-                        WHERE
-                            question_id = $questionId AND
-                            quiz_id= ".$this->getId();
-                Database::query($sql);
+                Container::getEntityManager()->createQueryBuilder()
+                    ->update(CQuizRelQuestion::class, 'e')
+                    ->set('e.questionOrder', ':position')
+                    ->where('IDENTITY(e.question) = :questionId')
+                    ->andWhere('IDENTITY(e.quiz) = :quizId')
+                    ->setParameter('position', $position)
+                    ->setParameter('questionId', $questionId)
+                    ->setParameter('quizId', (int) $this->getId())
+                    ->getQuery()
+                    ->execute();
             }
         }
 
@@ -1866,21 +1871,16 @@ class Exercise
 
     private function isQuestionUsedInOtherExercises(int $questionId, int $exerciseId): bool
     {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-
-        $questionId = (int) $questionId;
-        $exerciseId = (int) $exerciseId;
-
-        $sql = "SELECT 1
-            FROM $table
-            WHERE
-                question_id = $questionId AND
-                quiz_id <> $exerciseId
-            LIMIT 1";
-
-        $result = Database::query($sql);
-
-        return Database::num_rows($result) > 0;
+        return [] !== Container::getEntityManager()->createQueryBuilder()
+            ->select('e.iid AS iid')
+            ->from(CQuizRelQuestion::class, 'e')
+            ->where('IDENTITY(e.question) = :questionId')
+            ->andWhere('IDENTITY(e.quiz) <> :exerciseId')
+            ->setParameter('questionId', $questionId)
+            ->setParameter('exerciseId', $exerciseId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
@@ -2808,23 +2808,16 @@ class Exercise
 
         // Update title in all LPs that have this quiz added
         if (1 == $form->getSubmitValue('update_title_in_lps')) {
-            $table = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT iid FROM $table
-                    WHERE
-                        item_type = 'quiz' AND
-                        path = '".$this->getId()."'
-                    ";
-            $result = Database::query($sql);
-            $items = Database::store_result($result);
-            if (!empty($items)) {
-                foreach ($items as $item) {
-                    $itemId = $item['iid'];
-                    $sql = "UPDATE $table
-                            SET title = '".$this->title."'
-                            WHERE iid = $itemId ";
-                    Database::query($sql);
-                }
-            }
+            Container::getEntityManager()->createQueryBuilder()
+                ->update(CLpItem::class, 'lpi')
+                ->set('lpi.title', ':title')
+                ->where('lpi.itemType = :itemType')
+                ->andWhere('lpi.path = :path')
+                ->setParameter('title', (string) $this->title)
+                ->setParameter('itemType', 'quiz')
+                ->setParameter('path', (string) $this->getId())
+                ->getQuery()
+                ->execute();
         }
 
         $iId = $this->save();
@@ -2875,7 +2868,6 @@ class Exercise
     {
         $sessionId = api_get_session_id();
         $table_track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $table_track_e_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         $sql_where = '  AND
                         orig_lp_id = 0 AND
@@ -2898,6 +2890,7 @@ class Exercise
         }
 
         $sessionCondition = api_get_session_condition($sessionId);
+        // TODO(db-neutral): the session condition is an SQL fragment built by api_get_session_condition()
         $sql = "SELECT exe_id
                 FROM $table_track_e_exercises
                 WHERE
@@ -2914,14 +2907,18 @@ class Exercise
         $i = 0;
         if (is_array($exe_list) && count($exe_list) > 0) {
             foreach ($exe_list as $item) {
-                $sql = "DELETE FROM $table_track_e_attempt
-                        WHERE exe_id = '".$item['exe_id']."'";
-                Database::query($sql);
+                Container::getEntityManager()->createQueryBuilder()
+                    ->delete(TrackEAttempt::class, 'a')
+                    ->where('IDENTITY(a.trackExercise) = :exeId')
+                    ->setParameter('exeId', (int) $item['exe_id'])
+                    ->getQuery()
+                    ->execute();
                 $i++;
             }
         }
 
         // delete TRACK_E_EXERCISES table
+        // TODO(db-neutral): the session condition is an SQL fragment built by api_get_session_condition()
         $sql = "DELETE FROM $table_track_e_exercises
                 WHERE
                   c_id = ".api_get_course_int_id().' AND
@@ -2960,7 +2957,6 @@ class Exercise
         $courseId = api_get_course_int_id();
         $exerciseObject->save();
         $newId = $exerciseObject->getId();
-        $exerciseRelQuestionTable = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
         $count = 1;
         $batchSize = 20;
@@ -2975,9 +2971,12 @@ class Exercise
                 if ($newQuestionId) {
                     $newQuestionObj = Question::read($newQuestionId, null, false);
                     if (isset($newQuestionObj) && $newQuestionObj) {
-                        $sql = "INSERT INTO $exerciseRelQuestionTable (question_id, quiz_id, question_order)
-                                VALUES (".$newQuestionId.", ".$newId.", '$count')";
-                        Database::query($sql);
+                        $relation = (new CQuizRelQuestion())
+                            ->setQuestion($em->getReference(CQuizQuestion::class, (int) $newQuestionId))
+                            ->setQuiz($em->getReference(CQuiz::class, (int) $newId))
+                            ->setQuestionOrder($count);
+                        $em->persist($relation);
+                        $em->flush();
                         $count++;
                         if (!empty($oldQuestionObj->category)) {
                             $newQuestionObj->saveCategory($oldQuestionObj->category);
@@ -3042,6 +3041,7 @@ class Exercise
                        orig_lp_item_view_id =  $lp_item_view_id
 					   ";
 
+        // TODO(db-neutral): the session condition is an SQL fragment built by api_get_session_condition()
         $sql_track = " SELECT * FROM  $track_exercises $condition $sessionCondition LIMIT 1 ";
 
         $result = Database::query($sql_track);
@@ -3579,7 +3579,6 @@ class Exercise
         $questionId = (int) $questionId;
         $exeId = (int) $exeId;
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $studentChoiceDegree = null;
         $listCorrectAnswers = [];
 
@@ -3646,13 +3645,8 @@ class Exercise
 
         $user_answer = '';
         // Get answer list for matching
-        $sql = "SELECT iid, answer
-                FROM $table_ans
-                WHERE question_id = $questionId";
-        $res_answer = Database::query($sql);
-
         $answerMatching = [];
-        while ($real_answer = Database::fetch_array($res_answer)) {
+        foreach ($this->getQuestionAnswerRows($questionId) as $real_answer) {
             $answerMatching[$real_answer['iid']] = $real_answer['answer'];
         }
 
@@ -3661,14 +3655,18 @@ class Exercise
         if (MULTIPLE_ANSWER_COMBINATION == $answerType ||
             MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE == $answerType
         ) {
-            $sql = "SELECT *
-                    FROM $table_ans
-                    WHERE question_id = $questionId
-                    ORDER BY position
-                    LIMIT 1";
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
-                $firstAnswer = Database::fetch_array($result);
+            $firstAnswerRow = Container::getEntityManager()->createQueryBuilder()
+                ->select(self::legacyRowSelect(CQuizAnswer::class, 'a'))
+                ->from(CQuizAnswer::class, 'a')
+                ->where('IDENTITY(a.question) = :questionId')
+                ->orderBy('a.position')
+                ->addOrderBy('a.iid')
+                ->setMaxResults(1)
+                ->setParameter('questionId', $questionId)
+                ->getQuery()
+                ->getArrayResult()[0] ?? null;
+            if (null !== $firstAnswerRow) {
+                $firstAnswer = self::legacyRowNormalize(CQuizAnswer::class, $firstAnswerRow);
             }
         }
 
@@ -3697,13 +3695,7 @@ class Exercise
             }
             // Load student's selected choices
             if ($from_database) {
-                $studentChoices = Database::store_result(
-                    Database::query(
-                        "SELECT answer FROM $TBL_TRACK_ATTEMPT WHERE exe_id = $exeId AND question_id = $questionId"
-                    ),
-                    'ASSOC'
-                );
-                $studentChoices = array_column($studentChoices, 'answer');
+                $studentChoices = array_column($this->getTrackedAttemptRows($exeId, $questionId), 'answer');
             } else {
                 $studentChoices = array_values((array) $choice);
             }
@@ -3786,12 +3778,7 @@ class Exercise
                 case UNIQUE_ANSWER_NO_OPTION:
                 case READING_COMPREHENSION:
                     if ($from_database) {
-                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                WHERE
-                                    exe_id = $exeId AND
-                                    question_id = $questionId";
-                        $result = Database::query($sql);
-                        $choice = Database::result($result, 0, 'answer');
+                        $choice = $this->getTrackedAttemptRows($exeId, $questionId)[0]['answer'] ?? null;
 
                         if (false === $userAnsweredQuestion) {
                             $userAnsweredQuestion = !empty($choice);
@@ -3815,13 +3802,7 @@ class Exercise
                 case MULTIPLE_ANSWER_TRUE_FALSE:
                     if ($from_database) {
                         $choice = [];
-                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                WHERE
-                                    exe_id = $exeId AND
-                                    question_id = ".$questionId;
-
-                        $result = Database::query($sql);
-                        while ($row = Database::fetch_array($result)) {
+                        foreach ($this->getTrackedAttemptRows($exeId, $questionId) as $row) {
                             $values = explode(':', $row['answer']);
                             $my_answer_id = isset($values[0]) ? $values[0] : '';
                             $option = isset($values[1]) ? $values[1] : '';
@@ -3856,12 +3837,7 @@ class Exercise
                     if ($from_database) {
                         $choice = [];
                         $choiceDegreeCertainty = [];
-                        $sql = "SELECT answer
-                                FROM $TBL_TRACK_ATTEMPT
-                                WHERE exe_id = $exeId AND question_id = $questionId";
-
-                        $result = Database::query($sql);
-                        while ($row = Database::fetch_array($result)) {
+                        foreach ($this->getTrackedAttemptRows($exeId, $questionId) as $row) {
                             $ind = $row['answer'];
                             $values = explode(':', $ind);
                             $myAnswerId = $values[0] ?? null;
@@ -3906,10 +3882,7 @@ class Exercise
                 case MULTIPLE_ANSWER_DROPDOWN:
                     if ($from_database) {
                         $choice = [];
-                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                WHERE exe_id = $exeId AND question_id = $questionId ";
-                        $resultans = Database::query($sql);
-                        while ($row = Database::fetch_array($resultans)) {
+                        foreach ($this->getTrackedAttemptRows($exeId, $questionId) as $row) {
                             $choice[$row['answer']] = 1;
                         }
 
@@ -3936,10 +3909,7 @@ class Exercise
                 case GLOBAL_MULTIPLE_ANSWER:
                     if ($from_database) {
                         $choice = [];
-                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                WHERE exe_id = $exeId AND question_id = $questionId ";
-                        $resultans = Database::query($sql);
-                        while ($row = Database::fetch_array($resultans)) {
+                        foreach ($this->getTrackedAttemptRows($exeId, $questionId) as $row) {
                             $choice[$row['answer']] = 1;
                         }
                         $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
@@ -3963,10 +3933,7 @@ class Exercise
                 case MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE:
                     if ($from_database) {
                         $choice = [];
-                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                WHERE exe_id = $exeId AND question_id = $questionId";
-                        $resultans = Database::query($sql);
-                        while ($row = Database::fetch_array($resultans)) {
+                        foreach ($this->getTrackedAttemptRows($exeId, $questionId) as $row) {
                             $result = explode(':', $row['answer']);
                             if (isset($result[0])) {
                                 $my_answer_id = isset($result[0]) ? $result[0] : '';
@@ -3995,10 +3962,7 @@ class Exercise
                     }
                     if ($from_database) {
                         $choice = [];
-                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                WHERE exe_id = $exeId AND question_id = $questionId";
-                        $resultans = Database::query($sql);
-                        while ($row = Database::fetch_array($resultans)) {
+                        foreach ($this->getTrackedAttemptRows($exeId, $questionId) as $row) {
                             $choice[$row['answer']] = 1;
                         }
 
@@ -4035,13 +3999,7 @@ class Exercise
                     $str = '';
                     $answerFromDatabase = '';
                     if ($from_database) {
-                        $sql = "SELECT answer
-                                FROM $TBL_TRACK_ATTEMPT
-                                WHERE
-                                    exe_id = $exeId AND
-                                    question_id= $questionId ";
-                        $result = Database::query($sql);
-                        $str = $answerFromDatabase = Database::result($result, 0, 'answer');
+                        $str = $answerFromDatabase = $this->getTrackedAttemptRows($exeId, $questionId)[0]['answer'] ?? null;
                     }
 
                     // if ($saved_results == false && strpos($answerFromDatabase, 'font color') !== false) {
@@ -4356,6 +4314,7 @@ class Exercise
                             }
 
                             if ($from_database) {
+                                // TODO(db-neutral): left raw, dead code (unreachable branch), not pinned by any test
                                 $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                         WHERE
                                             exe_id = $exeId AND
@@ -4432,13 +4391,7 @@ class Exercise
                         }
                     } else {
                         if ($from_database) {
-                            $sql = "SELECT *
-                                    FROM $TBL_TRACK_ATTEMPT
-                                    WHERE
-                                        exe_id = $exeId AND
-                                        question_id = $questionId ";
-                            $result = Database::query($sql);
-                            $resultData = Database::fetch_assoc($result);
+                            $resultData = $this->getTrackedAttemptRows($exeId, $questionId)[0] ?? false;
                             $answer = $resultData['answer'];
                             $questionScore = $resultData['marks'];
                         }
@@ -4448,12 +4401,7 @@ class Exercise
                 case UPLOAD_ANSWER:
                 case FREE_ANSWER:
                     if ($from_database) {
-                        $sql = "SELECT answer, marks FROM $TBL_TRACK_ATTEMPT
-                                 WHERE
-                                    exe_id = $exeId AND
-                                    question_id= ".$questionId;
-                        $result = Database::query($sql);
-                        $data = Database::fetch_array($result);
+                        $data = $this->getTrackedAttemptRows($exeId, $questionId)[0] ?? false;
                         $choice = '';
                         $questionScore = 0;
                         if ($data) {
@@ -4486,14 +4434,7 @@ class Exercise
                     break;
                 case ORAL_EXPRESSION:
                     if ($from_database) {
-                        $query = "SELECT answer, marks
-                                  FROM $TBL_TRACK_ATTEMPT
-                                  WHERE
-                                        exe_id = $exeId AND
-                                        question_id = $questionId
-                                 ";
-                        $resq = Database::query($query);
-                        $row = Database::fetch_assoc($resq);
+                        $row = $this->getTrackedAttemptRows($exeId, $questionId)[0] ?? false;
                         $choice = '';
                         $questionScore = 0;
 
@@ -4532,34 +4473,20 @@ class Exercise
                 case MATCHING_DRAGGABLE:
                 case MATCHING:
                     if ($from_database) {
-                        $sql = "SELECT iid, answer
-                                FROM $table_ans
-                                WHERE
-                                    question_id = $questionId AND
-                                    correct = 0
-                                ";
-                        $result = Database::query($sql);
                         // Getting the real answer
                         $real_list = [];
-                        while ($realAnswer = Database::fetch_array($result)) {
+                        foreach ($this->getQuestionAnswerRows($questionId, 'a.correct = 0') as $realAnswer) {
                             $real_list[$realAnswer['iid']] = $realAnswer['answer'];
                         }
 
-                        $orderBy = ' ORDER BY iid ';
-                        if (DRAGGABLE == $answerType) {
-                            $orderBy = ' ORDER BY correct ';
-                        }
-
-                        $sql = "SELECT iid, answer, correct, ponderation
-                                FROM $table_ans
-                                WHERE
-                                    question_id = $questionId AND
-                                    correct <> 0
-                                $orderBy";
-                        $result = Database::query($sql);
                         $options = [];
                         $correctAnswers = [];
-                        while ($row = Database::fetch_assoc($result)) {
+                        $optionRows = $this->getQuestionAnswerRows(
+                            $questionId,
+                            'a.correct <> 0',
+                            DRAGGABLE == $answerType ? 'a.correct' : 'a.iid'
+                        );
+                        foreach ($optionRows as $row) {
                             $options[] = $row;
                             $correctAnswers[$row['correct']] = $row['answer'];
                         }
@@ -4572,16 +4499,11 @@ class Exercise
                             $i_answer_correct_answer = $a_answers['correct']; //1 - 2
                             $i_answer_id_auto = $a_answers['iid']; // 3 - 4
 
-                            $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                    WHERE
-                                        exe_id = '$exeId' AND
-                                        question_id = '$questionId' AND
-                                        position = '$i_answer_id_auto'";
-                            $result = Database::query($sql);
                             $s_user_answer = 0;
-                            if (Database::num_rows($result) > 0) {
+                            $userAnswerRows = $this->getTrackedAttemptRows($exeId, $questionId, (int) $i_answer_id_auto);
+                            if (!empty($userAnswerRows)) {
                                 //  rich - good looking
-                                $s_user_answer = Database::result($result, 0, 0);
+                                $s_user_answer = $userAnswerRows[0]['answer'];
                             }
                             $i_answerWeighting = $a_answers['ponderation'];
                             $user_answer = '';
@@ -4805,47 +4727,19 @@ class Exercise
                 case HOT_SPOT:
                 case HOT_SPOT_COMBINATION:
                     if ($from_database) {
-                        $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                         // Check auto id
                         $foundAnswerId = $answerAutoId;
-                        $sql = "SELECT hotspot_correct
-                                FROM $TBL_TRACK_HOTSPOT
-                                WHERE
-                                    hotspot_exe_id = $exeId AND
-                                    hotspot_question_id= $questionId AND
-                                    hotspot_answer_id = $answerAutoId
-                                ORDER BY hotspot_id ASC";
-                        $result = Database::query($sql);
-                        if (Database::num_rows($result)) {
-                            $studentChoice = Database::result(
-                                $result,
-                                0,
-                                'hotspot_correct'
-                            );
-
+                        $studentChoice = $this->getFirstHotspotCorrect($exeId, $questionId, (int) $answerAutoId);
+                        if (null !== $studentChoice) {
                             if ($studentChoice) {
                                 $questionScore += $answerWeighting;
                                 $totalScore += $answerWeighting;
                             }
                         } else {
                             // If answer.id is different:
-                            $sql = "SELECT hotspot_correct
-                                FROM $TBL_TRACK_HOTSPOT
-                                WHERE
-                                    hotspot_exe_id = $exeId AND
-                                    hotspot_question_id= $questionId AND
-                                    hotspot_answer_id = ".(int) $answerId.'
-                                ORDER BY hotspot_id ASC';
-                            $result = Database::query($sql);
-
                             $foundAnswerId = $answerId;
-                            if (Database::num_rows($result)) {
-                                $studentChoice = Database::result(
-                                    $result,
-                                    0,
-                                    'hotspot_correct'
-                                );
-
+                            $studentChoice = $this->getFirstHotspotCorrect($exeId, $questionId, (int) $answerId);
+                            if (null !== $studentChoice) {
                                 if ($studentChoice) {
                                     $questionScore += $answerWeighting;
                                     $totalScore += $answerWeighting;
@@ -4853,21 +4747,8 @@ class Exercise
                             } else {
                                 // check answer.iid
                                 if (!empty($answerIid)) {
-                                    $sql = "SELECT hotspot_correct
-                                            FROM $TBL_TRACK_HOTSPOT
-                                            WHERE
-                                                hotspot_exe_id = $exeId AND
-                                                hotspot_question_id= $questionId AND
-                                                hotspot_answer_id = $answerIid
-                                            ORDER BY hotspot_id ASC";
-                                    $result = Database::query($sql);
-
                                     $foundAnswerId = $answerIid;
-                                    $studentChoice = Database::result(
-                                        $result,
-                                        0,
-                                        'hotspot_correct'
-                                    );
+                                    $studentChoice = $this->getFirstHotspotCorrect($exeId, $questionId, (int) $answerIid);
 
                                     if ($studentChoice) {
                                         $questionScore += $answerWeighting;
@@ -4940,6 +4821,7 @@ class Exercise
                     if ($from_database) {
                         // getting the user answer
                         $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                        // TODO(db-neutral): left raw, the delineation answer is only shown in the result HTML, not pinned by a test
                         $query = "SELECT hotspot_correct, hotspot_coordinate
                                     FROM $TBL_TRACK_HOTSPOT
                                     WHERE
@@ -4987,6 +4869,7 @@ class Exercise
                 case FILL_IN_BLANKS_COMBINATION:
                         $answerFromDatabase = '';
                         if ($from_database) {
+                            // TODO(db-neutral): left raw, dead code (unreachable branch), not pinned by any test
                             $sql = "SELECT answer
                             FROM $TBL_TRACK_ATTEMPT
                             WHERE exe_id = $exeId AND question_id = $questionId";
@@ -5090,6 +4973,7 @@ class Exercise
                         if ($from_database) {
                             $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
                             // Try by auto id
+                            // TODO(db-neutral): left raw, dead code (unreachable branch), not pinned by any test
                             $sql = "SELECT hotspot_correct
                                 FROM $TBL_TRACK_HOTSPOT
                                 WHERE hotspot_exe_id = $exeId
@@ -5104,6 +4988,7 @@ class Exercise
                                 // Fallback to legacy ids
                                 $studentChoice = 0;
                                 if (!empty($answerIid)) {
+                                    // TODO(db-neutral): left raw, dead code (unreachable branch), not pinned by any test
                                     $sql = "SELECT hotspot_correct
                                         FROM $TBL_TRACK_HOTSPOT
                                         WHERE hotspot_exe_id = $exeId
@@ -5157,13 +5042,7 @@ class Exercise
                     break;
                 case ANNOTATION:
                     if ($from_database) {
-                        $sql = "SELECT answer, marks
-                                FROM $TBL_TRACK_ATTEMPT
-                                WHERE
-                                  exe_id = $exeId AND
-                                  question_id = $questionId ";
-                        $resq = Database::query($sql);
-                        $data = Database::fetch_array($resq);
+                        $data = $this->getTrackedAttemptRows($exeId, $questionId)[0] ?? false;
 
                         $questionScore = empty($data['marks']) ? 0 : $data['marks'];
                         $arrques = $questionName;
@@ -6564,11 +6443,14 @@ class Exercise
         }
 
         if ($save_results) {
-            $statsTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-            $sql = "UPDATE $statsTable SET
-                        score = score + ".(float) $questionScore."
-                    WHERE exe_id = $exeId";
-            Database::query($sql);
+            Container::getEntityManager()->createQueryBuilder()
+                ->update(TrackEExercise::class, 't')
+                ->set('t.score', 't.score + :questionScore')
+                ->where('t.exeId = :exeId')
+                ->setParameter('questionScore', (float) $questionScore)
+                ->setParameter('exeId', $exeId)
+                ->getQuery()
+                ->execute();
         }
 
         return [
@@ -7550,13 +7432,42 @@ class Exercise
      */
     public function get_stat_track_exercise_info_by_exe_id($exe_id)
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $exe_id = (int) $exe_id;
-        $sql_track = "SELECT * FROM $table WHERE exe_id = $exe_id ";
-        $result = Database::query($sql_track);
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                't.exeId AS exe_id',
+                'IDENTITY(t.user) AS exe_user_id',
+                'IDENTITY(t.course) AS c_id',
+                'IDENTITY(t.session) AS session_id',
+                't.exeDate AS exe_date',
+                'IDENTITY(t.quiz) AS exe_exo_id',
+                't.score AS score',
+                't.maxScore AS max_score',
+                't.userIp AS user_ip',
+                't.status AS status',
+                't.dataTracking AS data_tracking',
+                't.startDate AS start_date',
+                't.stepsCounter AS steps_counter',
+                't.origLpId AS orig_lp_id',
+                't.origLpItemId AS orig_lp_item_id',
+                't.exeDuration AS exe_duration',
+                't.expiredTimeControl AS expired_time_control',
+                't.origLpItemViewId AS orig_lp_item_view_id',
+                't.questionsToCheck AS questions_to_check',
+                't.blockedCategories AS blocked_categories'
+            )
+            ->from(TrackEExercise::class, 't')
+            ->where('t.exeId = :exeId')
+            ->setParameter('exeId', $exe_id)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
         $new_array = [];
-        if (Database::num_rows($result) > 0) {
-            $new_array = Database::fetch_assoc($result);
+        if (null !== $row) {
+            // The raw row gave the dates as 'Y-m-d H:i:s' strings: keep that shape.
+            foreach (['exe_date', 'start_date', 'expired_time_control'] as $date) {
+                $row[$date] = $row[$date] instanceof DateTimeInterface ? $row[$date]->format('Y-m-d H:i:s') : null;
+            }
+            $new_array = $row;
             $start_date = api_get_utc_datetime($new_array['start_date'], true);
             $end_date = api_get_utc_datetime($new_array['exe_date'], true);
             $new_array['duration_formatted'] = '';
@@ -7576,15 +7487,11 @@ class Exercise
      */
     public function removeAllQuestionToRemind($exeId)
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $exeId = (int) $exeId;
         if (empty($exeId)) {
             return false;
         }
-        $sql = "UPDATE $table
-                SET questions_to_check = ''
-                WHERE exe_id = $exeId ";
-        Database::query($sql);
+        $this->setQuestionsToCheck($exeId, '');
 
         return true;
     }
@@ -7602,14 +7509,7 @@ class Exercise
             return false;
         }
 
-        $questionListToString = implode(',', $questionList);
-        $questionListToString = Database::escape_string($questionListToString);
-
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $sql = "UPDATE $table
-                SET questions_to_check = '$questionListToString'
-                WHERE exe_id = $exeId";
-        Database::query($sql);
+        $this->setQuestionsToCheck($exeId, implode(',', $questionList));
 
         return true;
     }
@@ -7626,13 +7526,9 @@ class Exercise
         $exeId = (int) $exeId;
 
         if ($exercise_info) {
-            $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
             if (empty($exercise_info['questions_to_check'])) {
                 if ('add' == $action) {
-                    $sql = "UPDATE $track_exercises
-                            SET questions_to_check = '$questionId'
-                            WHERE exe_id = $exeId ";
-                    Database::query($sql);
+                    $this->setQuestionsToCheck($exeId, (string) $questionId);
                 }
             } else {
                 $remind_list = array_map('intval', explode(',', $exercise_info['questions_to_check']));
@@ -7661,13 +7557,21 @@ class Exercise
                         sort($newRemindList);
                     }
                 }
-                $value = Database::escape_string(implode(',', $newRemindList));
-                $sql = "UPDATE $track_exercises
-                        SET questions_to_check = '$value'
-                        WHERE exe_id = $exeId ";
-                Database::query($sql);
+                $this->setQuestionsToCheck($exeId, implode(',', $newRemindList));
             }
         }
+    }
+
+    private function setQuestionsToCheck(int $exeId, string $value): void
+    {
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(TrackEExercise::class, 't')
+            ->set('t.questionsToCheck', ':value')
+            ->where('t.exeId = :exeId')
+            ->setParameter('value', $value)
+            ->setParameter('exeId', $exeId)
+            ->getQuery()
+            ->execute();
     }
 
     /**
@@ -7743,19 +7647,26 @@ class Exercise
      */
     public function getCategoriesInExercise()
     {
-        $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         if (!empty($this->getId())) {
-            $sql = "SELECT * FROM $table
-                    WHERE exercise_id = {$this->getId()} ";
-            $result = Database::query($sql);
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select(
+                    'rc.iid AS iid',
+                    'IDENTITY(rc.category) AS category_id',
+                    'IDENTITY(rc.quiz) AS exercise_id',
+                    'rc.countQuestions AS count_questions',
+                    'rc.destinations AS destinations'
+                )
+                ->from(CQuizRelQuestionCategory::class, 'rc')
+                ->where('IDENTITY(rc.quiz) = :exerciseId')
+                ->setParameter('exerciseId', (int) $this->getId())
+                ->getQuery()
+                ->getArrayResult();
             $list = [];
-            if (Database::num_rows($result)) {
-                while ($row = Database::fetch_assoc($result)) {
-                    $list[$row['category_id']] = $row;
-                }
-
-                return $list;
+            foreach ($rows as $row) {
+                $list[$row['category_id']] = $row;
             }
+
+            return $list;
         }
 
         return [];
@@ -7768,17 +7679,14 @@ class Exercise
      */
     public function getNumberQuestionExerciseCategory()
     {
-        $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
         if (!empty($this->getId())) {
-            $sql = "SELECT SUM(count_questions) count_questions
-                    FROM $table
-                    WHERE exercise_id = {$this->getId()}";
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
-                $row = Database::fetch_array($result);
-
-                return (int) $row['count_questions'];
-            }
+            return (int) Container::getEntityManager()->createQueryBuilder()
+                ->select('SUM(rc.countQuestions)')
+                ->from(CQuizRelQuestionCategory::class, 'rc')
+                ->where('IDENTITY(rc.quiz) = :exerciseId')
+                ->setParameter('exerciseId', (int) $this->getId())
+                ->getQuery()
+                ->getSingleScalarResult();
         }
 
         return 0;
@@ -7795,9 +7703,12 @@ class Exercise
         // An empty array is an explicit "no categories" and clears the existing ones.
         if (is_array($categories) && !empty($this->getId())) {
             $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
-            $sql = "DELETE FROM $table
-                    WHERE exercise_id = {$this->getId()}";
-            Database::query($sql);
+            Container::getEntityManager()->createQueryBuilder()
+                ->delete(CQuizRelQuestionCategory::class, 'rc')
+                ->where('IDENTITY(rc.quiz) = :exerciseId')
+                ->setParameter('exerciseId', (int) $this->getId())
+                ->getQuery()
+                ->execute();
             foreach ($categories as $categoryId => $countQuestions) {
                 if ($categoryId !== 0) {
                     $params = [
@@ -8341,28 +8252,12 @@ class Exercise
      */
     public function getQuestionWithCategories()
     {
-        $categoryTable = Database::get_course_table(TABLE_QUIZ_QUESTION_CATEGORY);
-        $categoryRelTable = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT DISTINCT cat.*
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
-                INNER JOIN $categoryRelTable catRel
-                ON (catRel.question_id = e.question_id)
-                INNER JOIN $categoryTable cat
-                ON (cat.iid = catRel.category_id)
-                WHERE
-                  e.quiz_id	= ".(int) ($this->getId());
-
-        $result = Database::query($sql);
-        $categoriesInExercise = [];
-        if (Database::num_rows($result)) {
-            $categoriesInExercise = Database::store_result($result, 'ASSOC');
-        }
-
-        return $categoriesInExercise;
+        return $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('cat.iid AS iid', 'cat.title AS title', 'cat.description AS description')
+            ->distinct()
+            ->innerJoin('q.categories', 'cat')
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
@@ -8463,25 +8358,136 @@ class Exercise
 
         // Quizzes are resource nodes: they belong to a course/session through resource_link, not through
         // c_quiz columns. Like the legacy filter, base-course quizzes are listed for a session too.
-        $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-        $tblResourceLink = Database::get_main_table('resource_link');
-        $sql = "SELECT DISTINCT cq.*, cq.iid AS id FROM $tbl_quiz cq
-                INNER JOIN $tblResourceLink rl
-                    ON rl.resource_node_id = cq.resource_node_id
-                WHERE
-                    rl.c_id = $courseId AND
-                    rl.deleted_at IS NULL AND
-                    (rl.session_id = $sessionId OR rl.session_id IS NULL)
-                ORDER BY cq.iid";
+        $qb = Container::getEntityManager()->createQueryBuilder();
+        $rows = $qb
+            ->select(self::legacyRowSelect(CQuiz::class, 'cq'))
+            ->addSelect('cq.iid AS id')
+            ->distinct()
+            ->from(CQuiz::class, 'cq')
+            ->innerJoin(ResourceLink::class, 'rl', 'WITH', 'rl.resourceNode = cq.resourceNode')
+            ->where('IDENTITY(rl.course) = :courseId')
+            ->andWhere('rl.deletedAt IS NULL')
+            ->andWhere('(IDENTITY(rl.session) = :sessionId OR rl.session IS NULL)')
+            ->orderBy('cq.iid')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->getQuery()
+            ->getArrayResult();
 
-        $result = Database::query($sql);
+        return array_map(
+            static fn (array $row): array => self::legacyRowNormalize(CQuiz::class, $row),
+            $rows
+        );
+    }
 
-        $rows = [];
-        while ($row = Database::fetch_assoc($result)) {
-            $rows[] = $row;
+    /**
+     * Rows of track_e_attempt of one question of an attempt, oldest first, as the legacy queries gave them.
+     *
+     * @return array<int, array{answer: string, marks: float, position: int|null}>
+     */
+    private function getTrackedAttemptRows(int $exeId, int $questionId, ?int $position = null): array
+    {
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('a.answer AS answer', 'a.marks AS marks', 'a.position AS position')
+            ->from(TrackEAttempt::class, 'a')
+            ->where('IDENTITY(a.trackExercise) = :exeId')
+            ->andWhere('a.questionId = :questionId')
+            ->orderBy('a.id')
+            ->setParameter('exeId', $exeId)
+            ->setParameter('questionId', $questionId);
+        if (null !== $position) {
+            $qb->andWhere('a.position = :position')
+                ->setParameter('position', $position);
         }
 
-        return $rows;
+        return $qb->getQuery()->getArrayResult();
+    }
+
+    /**
+     * Answers of a question: iid, answer, correct and ponderation. $condition is a fixed DQL condition on the
+     * correct column of the "a" alias chosen by the caller (never user input).
+     *
+     * @return array<int, array{iid: int, answer: string, correct: int|null, ponderation: float}>
+     */
+    private function getQuestionAnswerRows(int $questionId, ?string $condition = null, string $orderBy = 'a.iid'): array
+    {
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('a.iid AS iid', 'a.answer AS answer', 'a.correct AS correct', 'a.ponderation AS ponderation')
+            ->from(CQuizAnswer::class, 'a')
+            ->where('IDENTITY(a.question) = :questionId')
+            ->orderBy($orderBy)
+            ->setParameter('questionId', $questionId);
+        if (null !== $condition) {
+            $qb->andWhere($condition);
+        }
+
+        return $qb->getQuery()->getArrayResult();
+    }
+
+    private function getFirstHotspotCorrect(int $exeId, int $questionId, int $answerId): ?int
+    {
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select('h.hotspotCorrect AS hotspot_correct')
+            ->from(TrackEHotspot::class, 'h')
+            ->where('h.hotspotExeId = :exeId')
+            ->andWhere('h.hotspotQuestionId = :questionId')
+            ->andWhere('h.hotspotAnswerId = :answerId')
+            ->orderBy('h.hotspotId', 'ASC')
+            ->setMaxResults(1)
+            ->setParameter('exeId', $exeId)
+            ->setParameter('questionId', $questionId)
+            ->setParameter('answerId', $answerId)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
+
+        return null === $row ? null : (int) $row['hotspot_correct'];
+    }
+
+    /**
+     * Select list (scalar columns aliased with their SQL column name) that gives back, through DQL, the row
+     * shape of a legacy "SELECT *" on the table of $class: one key per column, foreign keys as raw ids.
+     *
+     * @return string[]
+     */
+    private static function legacyRowSelect(string $class, string $alias): array
+    {
+        $metadata = Container::getEntityManager()->getClassMetadata($class);
+        $select = [];
+        foreach ($metadata->fieldNames as $column => $field) {
+            $select[] = $alias.'.'.$field.' AS '.$column;
+        }
+        foreach ($metadata->associationMappings as $field => $mapping) {
+            foreach ($mapping['joinColumns'] ?? [] as $joinColumn) {
+                $select[] = 'IDENTITY('.$alias.'.'.$field.') AS '.$joinColumn['name'];
+            }
+        }
+
+        return $select;
+    }
+
+    /**
+     * Gives back the scalar types a PDO "SELECT *" row had: dates as 'Y-m-d H:i:s' strings, booleans as 0/1,
+     * JSON columns as their encoded text.
+     */
+    private static function legacyRowNormalize(string $class, array $row): array
+    {
+        $metadata = Container::getEntityManager()->getClassMetadata($class);
+        foreach ($metadata->fieldNames as $column => $field) {
+            $value = $row[$column] ?? null;
+            if (null === $value) {
+                continue;
+            }
+            $type = $metadata->getFieldMapping($field)->type;
+            if ($value instanceof DateTimeInterface) {
+                $row[$column] = $value->format('Y-m-d H:i:s');
+            } elseif (is_bool($value)) {
+                $row[$column] = (int) $value;
+            } elseif (is_array($value) && in_array($type, ['json', 'array'], true)) {
+                $row[$column] = json_encode($value);
+            }
+        }
+
+        return $row;
     }
 
     /**
@@ -8502,35 +8508,30 @@ class Exercise
 
         $ids = is_array($quizId) ? $quizId : [$quizId];
         $ids = array_map('intval', $ids);
-        $ids = implode(',', $ids);
-        $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(self::legacyRowSelect(TrackEExercise::class, 'te'))
+            ->addSelect(self::legacyRowSelect(CQuiz::class, 'cq'))
+            ->from(TrackEExercise::class, 'te')
+            ->innerJoin(CQuiz::class, 'cq', 'WITH', 'cq.iid = IDENTITY(te.quiz)')
+            ->where('IDENTITY(te.course) = :courseId')
+            ->andWhere('cq.iid IN (:ids)')
+            ->orderBy('cq.iid')
+            ->addOrderBy('te.exeId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('ids', $ids);
         if (0 != $sessionId) {
-            $sql = "SELECT * FROM $track_exercises te
-              INNER JOIN c_quiz cq
-              ON cq.iid = te.exe_exo_id
-              WHERE
-              te.c_id = %d AND
-              te.session_id = %s AND
-              cq.iid IN (%s)
-              ORDER BY cq.iid";
-
-            $sql = sprintf($sql, $courseId, $sessionId, $ids);
-        } else {
-            $sql = "SELECT * FROM $track_exercises te
-              INNER JOIN c_quiz cq ON cq.iid = te.exe_exo_id
-              WHERE
-              te.c_id = %d AND
-              cq.iid IN (%s)
-              ORDER BY cq.iid";
-            $sql = sprintf($sql, $courseId, $ids);
-        }
-        $result = Database::query($sql);
-        $rows = [];
-        while ($row = Database::fetch_assoc($result)) {
-            $rows[] = $row;
+            $qb->andWhere('IDENTITY(te.session) = :sessionId')
+                ->setParameter('sessionId', $sessionId);
         }
 
-        return $rows;
+        return array_map(
+            static fn (array $row): array => self::legacyRowNormalize(
+                CQuiz::class,
+                self::legacyRowNormalize(TrackEExercise::class, $row)
+            ),
+            $qb->getQuery()->getArrayResult()
+        );
     }
 
     /**
@@ -8961,10 +8962,14 @@ class Exercise
      */
     public function enableAutoLaunch()
     {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "UPDATE $table SET autolaunch = 1
-                WHERE iid = ".$this->iId;
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(CQuiz::class, 'q')
+            ->set('q.autoLaunch', ':autoLaunch')
+            ->where('q.iid = :iid')
+            ->setParameter('autoLaunch', true)
+            ->setParameter('iid', (int) $this->iId)
+            ->getQuery()
+            ->execute();
     }
 
     /**
@@ -9022,22 +9027,17 @@ class Exercise
 
         $length = (int) $length;
 
-        $quizRelQuestion = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $question = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT DISTINCT e.question_id
-                FROM $quizRelQuestion e
-                INNER JOIN $question q
-                ON (e.question_id = q.iid)
-                WHERE
-
-                    e.quiz_id = '".$this->getId()."'
-                ORDER BY question_order
-                LIMIT $start, $length
-            ";
-        $result = Database::query($sql);
+        $rows = $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('IDENTITY(e.question) AS question_id')
+            ->distinct()
+            ->orderBy('e.questionOrder', 'ASC')
+            ->setFirstResult($start)
+            ->setMaxResults($length)
+            ->getQuery()
+            ->getArrayResult();
         $questionList = [];
-        while ($object = Database::fetch_object($result)) {
-            $questionList[] = $object->question_id;
+        foreach ($rows as $object) {
+            $questionList[] = $object['question_id'];
         }
 
         return $questionList;
@@ -9088,16 +9088,17 @@ class Exercise
             exit;
         }
 
-        $tblStats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
         $studentIdList = [];
         if (!empty($studentList)) {
             $studentIdList = array_column($studentList, 'user_id');
         }
 
         $sessionCondition = api_get_session_condition($sessionId);
+        $rows = [];
         if (false == $this->exercise_was_added_in_lp) {
-            $sql = "SELECT * FROM $tblStats
+            $tblStats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            // TODO(db-neutral): the session condition is an SQL fragment built by api_get_session_condition()
+            $sql = "SELECT exe_user_id, score, max_score FROM $tblStats
                         WHERE
                             exe_exo_id = $exerciseId AND
                             orig_lp_id = 0 AND
@@ -9105,7 +9106,11 @@ class Exercise
                             status <> 'incomplete' AND
                             c_id = $courseId
                             $sessionCondition
-                        ";
+                        ORDER BY exe_id DESC";
+            $result = Database::query($sql);
+            while ($data = Database::fetch_assoc($result)) {
+                $rows[] = $data;
+            }
         } else {
             $lpId = null;
             if (!empty($this->lpList)) {
@@ -9114,25 +9119,33 @@ class Exercise
                 $lpId = $lpId['lp_id'];
             }
 
-            $sql = "SELECT *
-                        FROM $tblStats
-                        WHERE
-                            exe_exo_id = $exerciseId AND
-                            orig_lp_id = $lpId AND
-                            status <> 'incomplete' AND
-                            session_id = $sessionId AND
-                            c_id = $courseId ";
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select(
+                    'IDENTITY(t.user) AS exe_user_id',
+                    't.score AS score',
+                    't.maxScore AS max_score'
+                )
+                ->from(TrackEExercise::class, 't')
+                ->where('IDENTITY(t.quiz) = :exerciseId')
+                ->andWhere('t.origLpId = :lpId')
+                ->andWhere("t.status <> 'incomplete'")
+                ->andWhere('IDENTITY(t.session) = :sessionId')
+                ->andWhere('IDENTITY(t.course) = :courseId')
+                ->orderBy('t.exeId', 'DESC')
+                ->setParameter('exerciseId', $exerciseId)
+                ->setParameter('lpId', (int) $lpId)
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('courseId', (int) $courseId)
+                ->getQuery()
+                ->getArrayResult();
         }
-
-        $sql .= ' ORDER BY exe_id DESC';
 
         $studentCount = 0;
         $sum = 0;
         $bestResult = 0;
         $sumResult = 0;
         $students = [];
-        $result = Database::query($sql);
-        while ($data = Database::fetch_assoc($result)) {
+        foreach ($rows as $data) {
             // Only take into account users in the current student list.
             if (!empty($studentIdList)) {
                 if (!in_array($data['exe_user_id'], $studentIdList)) {
@@ -9774,6 +9787,7 @@ class Exercise
                     }
 
                     $sessionCondition = api_get_session_condition(api_get_session_id());
+                    // TODO(db-neutral): the session condition is an SQL fragment built by api_get_session_condition()
                     $sql = "SELECT * FROM $TBL_TRACK_EXERCISES
                         WHERE
                             exe_exo_id = ".$exerciseId." AND
@@ -10274,15 +10288,21 @@ class Exercise
         $userId = (int) api_get_user_id();
         $viewId = (int) $viewId;
 
-        $TBL_TRACK_EXERCICES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
-
-        $sql = "SELECT start_date, exe_date, score, max_score, exe_exo_id, exe_duration
-                FROM $TBL_TRACK_EXERCICES
-                WHERE exe_id = $safe_exe_id AND exe_user_id = $userId";
-        $res = Database::query($sql);
-        $row_dates = Database::fetch_array($res);
+        $em = Container::getEntityManager();
+        $row_dates = $em->createQueryBuilder()
+            ->select(
+                'IDENTITY(t.quiz) AS exe_exo_id',
+                't.score AS score',
+                't.maxScore AS max_score',
+                't.exeDuration AS exe_duration'
+            )
+            ->from(TrackEExercise::class, 't')
+            ->where('t.exeId = :exeId')
+            ->andWhere('IDENTITY(t.user) = :userId')
+            ->setParameter('exeId', $safe_exe_id)
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
         if (empty($row_dates)) {
             return false;
@@ -10292,22 +10312,29 @@ class Exercise
         $score = (float) $row_dates['score'];
         $max_score = (float) $row_dates['max_score'];
 
-        $sql = "UPDATE $TBL_LP_ITEM SET
-                    max_score = '$max_score'
-                WHERE iid = $safe_item_id";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->update(CLpItem::class, 'lpi')
+            ->set('lpi.maxScore', ':maxScore')
+            ->where('lpi.iid = :itemId')
+            ->setParameter('maxScore', $max_score)
+            ->setParameter('itemId', $safe_item_id)
+            ->getQuery()
+            ->execute();
 
-        $sql = "SELECT iid FROM $TBL_LP_ITEM_VIEW
-                WHERE
-                    lp_item_id = $safe_item_id AND
-                    lp_view_id = $viewId
-                ORDER BY iid DESC
-                LIMIT 1";
-        $res_last_attempt = Database::query($sql);
+        $lp_item_view_id = $em->createQueryBuilder()
+            ->select('liv.iid')
+            ->from(CLpItemView::class, 'liv')
+            ->where('IDENTITY(liv.item) = :itemId')
+            ->andWhere('IDENTITY(liv.view) = :viewId')
+            ->orderBy('liv.iid', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('itemId', $safe_item_id)
+            ->setParameter('viewId', $viewId)
+            ->getQuery()
+            ->getOneOrNullResult()['iid'] ?? null;
 
-        if (Database::num_rows($res_last_attempt) && !api_is_invitee()) {
-            $row_last_attempt = Database::fetch_row($res_last_attempt);
-            $lp_item_view_id = $row_last_attempt[0];
+        if (null !== $lp_item_view_id && !api_is_invitee()) {
+            $lp_item_view_id = (int) $lp_item_view_id;
 
             $exercise = new Exercise($course_id);
             $exercise->read($row_dates['exe_exo_id']);
@@ -10328,17 +10355,27 @@ class Exercise
                 }
             }
 
-            $sql = "UPDATE $TBL_LP_ITEM_VIEW SET
-                        status = '$status',
-                        score = '$score',
-                        total_time = '$duration'
-                    WHERE iid = $lp_item_view_id";
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->update(CLpItemView::class, 'liv')
+                ->set('liv.status', ':status')
+                ->set('liv.score', ':score')
+                ->set('liv.totalTime', ':totalTime')
+                ->where('liv.iid = :iid')
+                ->setParameter('status', $status)
+                ->setParameter('score', $score)
+                ->setParameter('totalTime', $duration)
+                ->setParameter('iid', $lp_item_view_id)
+                ->getQuery()
+                ->execute();
 
-            $sql = "UPDATE $TBL_TRACK_EXERCICES SET
-                        orig_lp_item_view_id = '$lp_item_view_id'
-                    WHERE exe_id = ".$safe_exe_id;
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->update(TrackEExercise::class, 't')
+                ->set('t.origLpItemViewId', ':itemViewId')
+                ->where('t.exeId = :exeId')
+                ->setParameter('itemViewId', $lp_item_view_id)
+                ->setParameter('exeId', $safe_exe_id)
+                ->getQuery()
+                ->execute();
         }
     }
 
@@ -10446,35 +10483,29 @@ class Exercise
 
     public static function getLpListFromExercise($exerciseId, $courseId)
     {
-        $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
-        $tblLp = Database::get_course_table(TABLE_LP_MAIN);
-        $tableResourceLink = Database::get_main_table('resource_link');
-
         $exerciseId = (int) $exerciseId;
         $courseId = (int) $courseId;
 
-        $sql = "SELECT DISTINCT
-                    lp.title,
-                    lpi.lp_id,
-                    lpi.iid AS item_id,
-                    lpi.max_score
-                FROM $tableLpItem lpi
-                INNER JOIN $tblLp lp
-                    ON lpi.lp_id = lp.iid
-                INNER JOIN $tableResourceLink resource_link
-                    ON resource_link.resource_node_id = lp.resource_node_id
-                WHERE
-                    resource_link.c_id = $courseId AND
-                    resource_link.deleted_at IS NULL AND
-                    lpi.item_type = '".TOOL_QUIZ."' AND
-                    lpi.path = '$exerciseId'";
-        $result = Database::query($sql);
-        $lpList = [];
-        if (Database::num_rows($result) > 0) {
-            $lpList = Database::store_result($result, 'ASSOC');
-        }
-
-        return $lpList;
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'lp.title AS title',
+                'IDENTITY(lpi.lp) AS lp_id',
+                'lpi.iid AS item_id',
+                'lpi.maxScore AS max_score'
+            )
+            ->distinct()
+            ->from(CLpItem::class, 'lpi')
+            ->innerJoin('lpi.lp', 'lp')
+            ->innerJoin(ResourceLink::class, 'rl', 'WITH', 'rl.resourceNode = lp.resourceNode')
+            ->where('IDENTITY(rl.course) = :courseId')
+            ->andWhere('rl.deletedAt IS NULL')
+            ->andWhere('lpi.itemType = :itemType')
+            ->andWhere('lpi.path = :path')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('itemType', TOOL_QUIZ)
+            ->setParameter('path', (string) $exerciseId)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
@@ -10914,35 +10945,29 @@ class Exercise
      */
     public function getQuestionOrderedList($adminView = false)
     {
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-
         // Getting question list from the order (question list drag n drop interface).
-        $sql = "SELECT DISTINCT e.question_id, e.question_order
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.iid)
-                WHERE
-
-                    e.quiz_id = '".$this->getId()."'
-                ORDER BY question_order";
-        $result = Database::query($sql);
+        $rows = $this->quizQuestionsQueryBuilder((int) $this->getId())
+            ->select('IDENTITY(e.question) AS question_id', 'e.questionOrder AS question_order')
+            ->distinct()
+            ->orderBy('e.questionOrder', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
 
         // Fills the array with the question ID for this exercise
         // the key of the array is the question position
         $temp_question_list = [];
         $counter = 1;
         $questionList = [];
-        while ($new_object = Database::fetch_object($result)) {
+        foreach ($rows as $new_object) {
             if (!$adminView) {
                 // Correct order.
-                $questionList[$new_object->question_order] = $new_object->question_id;
+                $questionList[$new_object['question_order']] = $new_object['question_id'];
             } else {
-                $questionList[$counter] = $new_object->question_id;
+                $questionList[$counter] = $new_object['question_id'];
             }
 
             // Just in case we save the order in other array
-            $temp_question_list[$counter] = $new_object->question_id;
+            $temp_question_list[$counter] = $new_object['question_id'];
             $counter++;
         }
 

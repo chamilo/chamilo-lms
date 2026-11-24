@@ -37,7 +37,7 @@ final readonly class ExerciseQuestionBankClassification
                 ExtraField::FIELD_TYPE_SELECT,
                 ExtraField::FIELD_TYPE_RADIO,
             ], true)) {
-                $result[$field->getId()] = $field;
+                $result[(int) $field->getId()] = $field;
             }
         }
 

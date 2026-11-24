@@ -22,7 +22,6 @@ Feature: Antivirus scan report
     And I wait for the page content to settle
     Then I should not see the "#antivirus-status" element
     And I should not see the "a[href^='/admin/antivirus-scans-export']" element
-    Given I am on "/admin/antivirus-scans-data"
-    Then the response status code should be 403
-    Given I am on "/admin/antivirus-scans-export"
-    Then the response status code should be 403
+    # A JSON request, as the SPA makes it: a plain navigation is redirected to the home page in production.
+    Then a JSON request to "/admin/antivirus-scans-data" should be answered with status 403
+    And a JSON request to "/admin/antivirus-scans-export" should be answered with status 403

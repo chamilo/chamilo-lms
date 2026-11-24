@@ -312,7 +312,6 @@ class Link extends Model
      */
     public static function getLinkInfo($id)
     {
-        $tbl_link = Database::get_course_table(TABLE_LINK);
         $course_id = api_get_course_int_id();
         $id = (int) $id;
 
@@ -320,12 +319,35 @@ class Link extends Model
             return [];
         }
 
-        $sql = "SELECT * FROM $tbl_link
-                WHERE iid= $id ";
-        $result = Database::query($sql);
-        $data = [];
-        if (Database::num_rows($result)) {
-            $data = Database::fetch_array($result);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'l.iid AS iid',
+                'IDENTITY(l.resourceNode) AS resource_node_id',
+                'IDENTITY(l.category) AS category_id',
+                'IDENTITY(l.customImage) AS custom_image_id',
+                'l.url AS url',
+                'l.title AS title',
+                'l.description AS description',
+                'l.target AS target'
+            )
+            ->from(CLink::class, 'l')
+            ->where('l.iid = :iid')
+            ->setParameter('iid', $id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if ([] === $rows) {
+            return [];
+        }
+
+        // Same shape as the former Database::fetch_array(): the named columns (integers stay integers), then the
+        // values again under 0..n.
+        $data = $rows[0];
+        foreach (['resource_node_id', 'category_id'] as $column) {
+            $data[$column] = null === $data[$column] ? null : (int) $data[$column];
+        }
+        foreach ($data as $value) {
+            $data[] = $value;
         }
 
         return $data;
@@ -1452,18 +1474,34 @@ Do you really want to delete this category and its links ?')."')) return false;\
      */
     public static function getCategory($id)
     {
-        $table = Database::get_course_table(TABLE_LINK_CATEGORY);
         $id = (int) $id;
         $courseId = api_get_course_int_id();
 
         if (empty($id) || empty($courseId)) {
             return [];
         }
-        $sql = "SELECT * FROM $table
-                WHERE iid = $id";
-        $result = Database::query($sql);
 
-        return Database::fetch_assoc($result);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'c.iid AS iid',
+                'IDENTITY(c.resourceNode) AS resource_node_id',
+                'c.title AS title',
+                'c.description AS description'
+            )
+            ->from(CLinkCategory::class, 'c')
+            ->where('c.iid = :iid')
+            ->setParameter('iid', $id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if ([] === $rows) {
+            return false;
+        }
+
+        $row = $rows[0];
+        $row['resource_node_id'] = null === $row['resource_node_id'] ? null : (int) $row['resource_node_id'];
+
+        return $row;
     }
 
     /**

@@ -40,7 +40,7 @@ final class Qti2MediaArchive
     private int $totalBytes = 0;
 
     /**
-     * @param callable(string): array{content: string, filename: string}|null $resolveImage
+     * @param callable(string): (array{content: string, filename: string}|null) $resolveImage
      */
     public function exportHtml(string $html, ZipArchive $archive, callable $resolveImage): string
     {

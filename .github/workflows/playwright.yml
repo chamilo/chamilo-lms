@@ -9,6 +9,14 @@ name: Playwright tests 🎭
 # own browser handles both installing the app and testing it — one
 # browser-automation stack for the whole job, not two.
 #
+# THE MAIN BATCH IS CUT INTO THREE PARTITIONS (2026-11-24), each its own job. The batch is serial on purpose
+# (playwright.config.ts: `workers: 1`) and grew to ~840 scenarios, ~5.7h on a runner, so GitHub cancelled the job at
+# its 6h cap before the last scenarios ran. Every job installs its own Chamilo, so jobs share nothing: the batch is
+# cut into groups that stay serial inside. Files that depend on each other (the ones using the shared TEMP course)
+# stay in one group, "temp"; the others are split alphabetically into "rest-1" and "rest-2". The lists and the rule
+# live in tests/playwright/ci-partitions.json and tests/playwright/scripts/run-partition.mjs (a new feature file needs
+# no entry unless it uses TEMP; the script refuses to run if one does and is not listed).
+#
 # TWO PARALLEL JOBS (2026-10-12), not one sequential job running everything:
 # "build" (the main, fully-parallel batch) and "specialcases" (SpecialCase1,
 # then SpecialCase2, then any future SpecialCaseN — sequentially, but in its
@@ -53,7 +61,7 @@ concurrency:
 
 jobs:
     build:
-        name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
+        name: PHP ${{ matrix.php-versions }} Test (${{ matrix.partition }}) on ${{ matrix.operating-system }}
         runs-on: ${{ matrix.operating-system }}
 
         strategy:
@@ -75,6 +83,16 @@ jobs:
                 # failure easier to read as "version-specific" instead of muddying it with
                 # whatever's still being worked out on 8.3 alone. Re-enable by uncommenting.
                 php-versions: [ '8.3' ] # , '8.4', '8.5'
+                # See the header comment. min-tests is a floor (~85% of the scenarios of the partition), there to
+                # catch a truncated run, not to count exactly.
+                partition: [ temp, rest-1, rest-2 ]
+                include:
+                    -   partition: temp
+                        min-tests: 250
+                    -   partition: rest-1
+                        min-tests: 265
+                    -   partition: rest-2
+                        min-tests: 195
 
         # Declared per job, not in the shared composite action: `services:` only
         # exists at job level, so the action cannot carry it (see that file's own
@@ -130,17 +148,17 @@ jobs:
                 env:
                     BASE_URL: http://localhost
                 run: |
-                    yarn test:playwright || echo "::warning::playwright exited non-zero — deferring to the result check below"
+                    yarn test:playwright:partition ${{ matrix.partition }} || echo "::warning::playwright exited non-zero — deferring to the result check below"
                     node tests/playwright/scripts/check-results.mjs \
                       --report var/test-results/playwright/results.json \
-                      --min-tests 439 \
-                      --label "main batch"
+                      --min-tests ${{ matrix.min-tests }} \
+                      --label "main batch (${{ matrix.partition }})"
 
             -   name: Upload Playwright report on failure
                 if: failure()
                 uses: actions/upload-artifact@v7
                 with:
-                    name: playwright-report-php${{ matrix.php-versions }}
+                    name: playwright-report-${{ matrix.partition }}-php${{ matrix.php-versions }}
                     path: |
                         var/test-results/playwright/report
                         var/test-results/playwright/results
@@ -152,7 +170,7 @@ jobs:
                 if: failure()
                 uses: actions/upload-artifact@v7
                 with:
-                    name: provisioning-logs-php${{ matrix.php-versions }}
+                    name: provisioning-logs-${{ matrix.partition }}-php${{ matrix.php-versions }}
                     path: /var/log/apache2/error.log
                     retention-days: 7
                     if-no-files-found: ignore

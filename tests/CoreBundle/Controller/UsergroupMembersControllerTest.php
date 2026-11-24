@@ -210,7 +210,7 @@ final class UsergroupMembersControllerTest extends WebTestCase
     }
 
     /**
-     * @param array<string, int|string> $query
+     * @param array<string, int|string|null> $query
      *
      * @return array<string, mixed>
      */

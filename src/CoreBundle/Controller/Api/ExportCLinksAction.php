@@ -125,7 +125,7 @@ readonly class ExportCLinksAction
         // Categories
         foreach ($categories as $cat) {
             $catId = (int) $cat->getIid();
-            $html .= '<h2>'.$cat->getTitle().'</h2>';
+            $html .= '<h2>'.htmlspecialchars((string) $cat->getTitle(), ENT_QUOTES).'</h2>';
 
             $desc = (string) $cat->getDescription();
             if (!empty($desc)) {

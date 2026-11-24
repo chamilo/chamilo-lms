@@ -11,8 +11,10 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\CourseCopy\CourseCopy;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\CourseHelper;
+use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -66,6 +68,7 @@ final class CourseCopyProcessor implements ProcessorInterface
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly CourseRepository $courseRepository,
+        private readonly CourseCategoryRepository $courseCategoryRepository,
         private readonly LanguageRepository $languageRepository,
         private readonly CourseHelper $courseHelper,
         private readonly AccessUrlHelper $accessUrlHelper,
@@ -103,6 +106,8 @@ final class CourseCopyProcessor implements ProcessorInterface
         $source = $this->resolveExistingCourse($data->sourceId, $sourceCode, $accessUrl, 'Source course');
         $existingTarget = $this->findExistingCourse($data->targetId, $targetCode);
 
+        $targetCategory = null;
+        $created = false;
         if ($existingTarget instanceof Course) {
             if (!$this->belongsToAccessUrl($existingTarget, $accessUrl)) {
                 throw new NotFoundHttpException('Target course not found.');
@@ -111,7 +116,6 @@ final class CourseCopyProcessor implements ProcessorInterface
                 throw new UnprocessableEntityHttpException('The target course must be different from the source course.');
             }
             $target = $existingTarget;
-            $created = false;
         } else {
             if (null !== $data->targetId) {
                 throw new NotFoundHttpException('Target course not found.');
@@ -120,18 +124,36 @@ final class CourseCopyProcessor implements ProcessorInterface
                 throw new UnprocessableEntityHttpException('A title is required to create the target course.');
             }
 
+            $targetCategory = $this->resolveTargetCategory($data->targetCategoryId, $accessUrl);
+        }
+
+        // Build the source snapshot before creating the destination to avoid an empty course
+        // when source preparation fails. Later restore failures can still leave partial data.
+        $sourceInfo = api_get_course_info($source->getCode());
+        if (!\is_array($sourceInfo) || '' === (string) ($sourceInfo['code'] ?? '')) {
+            throw new NotFoundHttpException('Source course not found.');
+        }
+
+        try {
+            $builder = new CourseBuilder('partial', $sourceInfo);
+            $builder->set_tools_to_build($tools);
+            $legacyCourse = $builder->build(0, $source->getCode());
+        } catch (Throwable $exception) {
+            $this->logger->error('Course copy source preparation failed.', [
+                'source_id' => $source->getId(),
+                'exception' => $exception,
+            ]);
+
+            throw new BadRequestHttpException('The course could not be copied.');
+        }
+
+        if (!isset($target)) {
             $params = [
                 'title' => $targetTitle,
                 'exemplary_content' => false,
             ];
             if (null !== $targetCode) {
                 $params['wanted_code'] = $targetCode;
-            }
-            if (null !== $data->targetCategoryId) {
-                if ($data->targetCategoryId <= 0) {
-                    throw new UnprocessableEntityHttpException('The target category must be a positive identifier.');
-                }
-                $params['categories'] = [$data->targetCategoryId];
             }
             $languageIso = $this->resolveLanguageIso($data->targetLanguage, $source);
             $params['courseLanguage'] = $languageIso;
@@ -147,18 +169,14 @@ final class CourseCopyProcessor implements ProcessorInterface
                 throw new BadRequestHttpException('The target course could not be created.');
             }
             $created = true;
-        }
 
-        $sourceInfo = api_get_course_info($source->getCode());
-        if (!\is_array($sourceInfo) || '' === (string) ($sourceInfo['code'] ?? '')) {
-            throw new NotFoundHttpException('Source course not found.');
+            if ($targetCategory instanceof CourseCategory) {
+                $target->addCategory($targetCategory);
+                $this->entityManager->flush();
+            }
         }
 
         try {
-            $builder = new CourseBuilder('partial', $sourceInfo);
-            $builder->set_tools_to_build($tools);
-            $legacyCourse = $builder->build(0, $source->getCode());
-
             $restorer = new CourseRestorer($legacyCourse);
             if (!\defined('FILE_RENAME')) {
                 \define('FILE_RENAME', 2);
@@ -175,14 +193,15 @@ final class CourseCopyProcessor implements ProcessorInterface
             throw new BadRequestHttpException('The course could not be copied.');
         }
 
-        if (false === $restored) {
-            $this->logger->error('Course copy restorer did not resolve the target course.', [
+        if (false === $restored || [] !== $restorer->getFailedTools()) {
+            $this->logger->error('Course copy did not complete all requested tools.', [
                 'source_id' => $source->getId(),
                 'target_id' => $target->getId(),
                 'target_code' => $target->getCode(),
+                'failed_tools' => $restorer->getFailedTools(),
             ]);
 
-            throw new BadRequestHttpException('The course could not be copied.');
+            throw new BadRequestHttpException('The course could not be copied completely. Check server logs and inspect the target course.');
         }
 
         $this->entityManager->clear();
@@ -197,6 +216,29 @@ final class CourseCopyProcessor implements ProcessorInterface
         $data->targetCode = $target->getCode();
 
         return $data;
+    }
+
+    private function resolveTargetCategory(?int $id, AccessUrl $accessUrl): ?CourseCategory
+    {
+        if (null === $id) {
+            return null;
+        }
+        if ($id <= 0) {
+            throw new UnprocessableEntityHttpException('The target category must be a positive identifier.');
+        }
+
+        // Include descendants of categories explicitly assigned to the current portal.
+        $allowedIds = $this->courseCategoryRepository->findIdsInAccessUrlTree([(int) $accessUrl->getId()]);
+        if (!\in_array($id, $allowedIds, true)) {
+            throw new UnprocessableEntityHttpException('The target category is not available on this portal.');
+        }
+
+        $category = $this->courseCategoryRepository->find($id);
+        if (!$category instanceof CourseCategory) {
+            throw new UnprocessableEntityHttpException('The target category was not found.');
+        }
+
+        return $category;
     }
 
     /**

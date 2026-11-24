@@ -1367,6 +1367,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
                 'answer' => $answer->getAnswer(),
                 'selectedOptionId' => $showStudentAnswers ? ($selected[$answerId] ?? null) : null,
                 'selectedOptionAnswer' => $showStudentAnswers && $hasStudentAnswer ? (string) ($options[$selected[$answerId]]['answer'] ?? '') : '',
+                // Sent even when the expected answers are hidden, so the match can be marked right or wrong without revealing it
+                'isCorrect' => $showStudentAnswers && $hasStudentAnswer && $selected[$answerId] === $correct,
             ];
 
             if ($showExpectedAnswers) {

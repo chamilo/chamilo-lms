@@ -65,7 +65,7 @@ class GradebookResult
         return $this->score;
     }
 
-    public function setScore(float $score): self
+    public function setScore(?float $score): self
     {
         $this->score = $score;
 

@@ -29,16 +29,16 @@ class LineItem
     private GradebookEvaluation $evaluation;
 
     #[ORM\Column(name: 'resource_id', type: 'string', nullable: true)]
-    private ?string $resourceId;
+    private ?string $resourceId = null;
 
     #[ORM\Column(name: 'tag', type: 'string', nullable: true)]
-    private ?string $tag;
+    private ?string $tag = null;
 
     #[ORM\Column(name: 'start_date', type: 'datetime', nullable: true)]
-    private ?DateTime $startDate;
+    private ?DateTime $startDate = null;
 
     #[ORM\Column(name: 'end_date', type: 'datetime', nullable: true)]
-    private ?DateTime $endDate;
+    private ?DateTime $endDate = null;
 
     public function getId(): ?int
     {
@@ -69,48 +69,48 @@ class LineItem
         return $this;
     }
 
-    public function getTag(): string
+    public function getTag(): ?string
     {
         return $this->tag;
     }
 
-    public function setTag(string $tag): static
+    public function setTag(?string $tag): static
     {
         $this->tag = $tag;
 
         return $this;
     }
 
-    public function getStartDate(): DateTime
+    public function getStartDate(): ?DateTime
     {
         return $this->startDate;
     }
 
-    public function setStartDate(DateTime $startDate): static
+    public function setStartDate(?DateTime $startDate): static
     {
         $this->startDate = $startDate;
 
         return $this;
     }
 
-    public function getEndDate(): DateTime
+    public function getEndDate(): ?DateTime
     {
         return $this->endDate;
     }
 
-    public function setEndDate(DateTime $endDate): static
+    public function setEndDate(?DateTime $endDate): static
     {
         $this->endDate = $endDate;
 
         return $this;
     }
 
-    public function getResourceId(): string
+    public function getResourceId(): ?string
     {
         return $this->resourceId;
     }
 
-    public function setResourceId(string $resourceId): static
+    public function setResourceId(?string $resourceId): static
     {
         $this->resourceId = $resourceId;
 
@@ -119,13 +119,12 @@ class LineItem
 
     public function toArray(): array
     {
-        $baseTool = $this->tool->getParent() ?: $this->tool;
-
         $data = [
             'scoreMaximum' => $this->evaluation->getMax(),
             'label' => $this->evaluation->getTitle(),
             'tag' => $this->tag,
-            'resourceLinkId' => (string) $baseTool->getId(),
+            // Same ID as the resource link claim of the launch.
+            'resourceLinkId' => (string) $this->tool->getId(),
             'resourceId' => $this->resourceId,
         ];
 

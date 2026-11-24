@@ -49,11 +49,13 @@ class LtiAssignmentGradesService extends LtiAdvantageService
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
      *
+     * @param string|null $servicePath The path after ags2.php, the request path info by default
+     *
      * @return LtiAdvantageServiceResource
      */
-    public static function getResource(Request $request, JsonResponse $response)
+    public static function getResource(Request $request, JsonResponse $response, ?string $servicePath = null)
     {
-        $parts = explode('/', $request->getPathInfo());
+        $parts = explode('/', $servicePath ?? $request->getPathInfo());
         $parts = array_filter($parts);
 
         $resource = null;
@@ -147,9 +149,27 @@ class LtiAssignmentGradesService extends LtiAdvantageService
      */
     public static function getResultsUrl($contextId, $lineItemId, $toolId, array $extraParams = [])
     {
-        $lineItemUrl = self::getLineItemUrl($contextId, $lineItemId, $toolId);
-        $query = http_build_query($extraParams);
+        $base = api_get_path(WEB_PLUGIN_PATH).'ImsLti/ags2.php';
+        $resource = str_replace(
+            ['context_id', 'line_item_id'],
+            [$contextId, $lineItemId],
+            LtiResultsResource::URL_TEMPLATE
+        );
+        $query = http_build_query(array_merge($extraParams, ['t' => $toolId]));
 
-        return "$lineItemUrl/results?$query";
+        return "$base$resource?$query";
+    }
+
+    public static function getResultUrl(int $contextId, int $lineItemId, int $toolId, int $resultId): string
+    {
+        $base = api_get_path(WEB_PLUGIN_PATH).'ImsLti/ags2.php';
+        $resource = str_replace(
+            ['context_id', 'line_item_id'],
+            [$contextId, $lineItemId],
+            LtiResultsResource::URL_TEMPLATE
+        );
+        $query = http_build_query(['t' => $toolId]);
+
+        return "$base$resource/$resultId?$query";
     }
 }

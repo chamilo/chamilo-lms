@@ -806,53 +806,6 @@ class GlossaryManager
     }
 
     /**
-     * Move a glossary term.
-     *
-     * @param string $direction
-     * @param string $glossary_id
-     */
-    public static function move_glossary($direction, $glossary_id)
-    {
-        // Database table definition
-        $table = Database::get_course_table(TABLE_GLOSSARY);
-
-        // sort direction
-        if ('up' === $direction) {
-            $sortorder = 'DESC';
-        } else {
-            $sortorder = 'ASC';
-        }
-        $course_id = api_get_course_int_id();
-
-        $sql = "SELECT * FROM $table
-                WHERE c_id = $course_id
-                ORDER BY display_order $sortorder";
-        $res = Database::query($sql);
-        $found = false;
-        while ($row = Database::fetch_array($res)) {
-            if ($found && empty($next_id)) {
-                $next_id = $row['glossary_id'];
-                $next_display_order = $row['display_order'];
-            }
-
-            if ($row['glossary_id'] == $glossary_id) {
-                $current_id = $glossary_id;
-                $current_display_order = $row['display_order'];
-                $found = true;
-            }
-        }
-
-        $sql1 = "UPDATE $table SET display_order = '".Database::escape_string($next_display_order)."'
-                 WHERE c_id = $course_id  AND glossary_id = '".Database::escape_string($current_id)."'";
-        $sql2 = "UPDATE $table SET display_order = '".Database::escape_string($current_display_order)."'
-                 WHERE c_id = $course_id  AND glossary_id = '".Database::escape_string($next_id)."'";
-        Database::query($sql1);
-        Database::query($sql2);
-
-        Display::addFlash(Display::return_message(get_lang('The term has moved')));
-    }
-
-    /**
      * Export to pdf.
      */
     public static function export_to_pdf()

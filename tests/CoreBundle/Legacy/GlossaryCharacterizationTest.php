@@ -23,12 +23,11 @@ use Symfony\Component\Uid\Uuid;
  *
  * The glossary tool itself is Vue + API Platform now. The legacy page public/main/glossary/index.php, its AJAX
  * helper and the library survive; the library reads and writes through the CGlossary repository (resource nodes
- * and links), only get_glossary_term_by_glossary_name() and move_glossary() still carry raw SQL.
+ * and links), only get_glossary_term_by_glossary_name() still carries raw SQL.
  *
  * LIVE: get_glossary_terms, get_glossary_term_by_glossary_id, get_glossary_term_by_glossary_name, save_glossary,
  * update_glossary, glossary_exists, delete_glossary, display_glossary helpers (get_number_glossary_terms,
  * get_glossary_data), exportToFormat/movePdfToDocuments (output side effects, not covered).
- * DEAD: move_glossary (its only callers are commented out).
  *
  * Fixtures: resource_node + c_glossary + resource_link rows are raw INSERTs on course 1 (no repository creation,
  * which deadlocks under concurrent suites); titles start with "gl_". The user is anonymous (no token), so the

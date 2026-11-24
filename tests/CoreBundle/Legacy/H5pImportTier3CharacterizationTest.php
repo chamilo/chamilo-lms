@@ -30,6 +30,19 @@ final class H5pImportTier3CharacterizationTest extends KernelTestCase
         self::ensurePluginTable('H5pImport', 'plugin_h5p_import_results');
     }
 
+    /**
+     * plugin_h5p_import_results has a foreign key to user: left in the schema, it makes the audit of the foreign keys to
+     * user (UserMergeHelperHardeningTest) fail, so the plugin tables go when the class ends.
+     */
+    public static function tearDownAfterClass(): void
+    {
+        $pdo = PluginTestDatabase::pdo();
+        $pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
+        $pdo->exec('DROP TABLE IF EXISTS plugin_h5p_import_results, plugin_h5p_import_rel_libraries, plugin_h5p_import_library, plugin_h5p_import');
+        $pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
+        parent::tearDownAfterClass();
+    }
+
     protected function setUp(): void
     {
         self::bootKernel();
@@ -106,11 +119,15 @@ final class H5pImportTier3CharacterizationTest extends KernelTestCase
 
     private function result(int $user, int $view, int $time): void
     {
+        // The results table has foreign keys (user, plugin_h5p_import, ...) that the made-up ids of these tests do not
+        // satisfy; they are switched off for this one insert only and always switched back on.
+        $this->conn()->executeStatement('SET FOREIGN_KEY_CHECKS = 0');
         $this->conn()->executeStatement(
             "INSERT INTO plugin_h5p_import_results (c_id, session_id, plugin_h5p_import_id, user_id, c_lp_item_view_id, start_time, total_time, score, max_score, created_at, modified_at)
              VALUES (1, NULL, 1, ?, ?, 0, ?, 0, 0, '2030-01-02 03:04:05', '2030-01-02 03:04:05')",
             [$user, $view, $time]
         );
+        $this->conn()->executeStatement('SET FOREIGN_KEY_CHECKS = 1');
     }
 
     private function viewRow(int $view): array

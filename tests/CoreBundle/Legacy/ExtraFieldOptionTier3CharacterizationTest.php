@@ -22,8 +22,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
  * fields prefixed "xo_".
  *
  * INTENTIONAL (kept as is): getFieldOptionByFieldIdAndOptionDisplayTextAndOptionValue() compares the display text
- * with the FIELD's display_text, not the option's. searchByField() (and its caller getSearchOptionsByField(), which
- * nothing calls) selects a column that does not exist and always fails: not pinned.
+ * with the FIELD's display_text, not the option's.
  */
 class ExtraFieldOptionTier3CharacterizationTest extends AbstractApiTest
 {

@@ -863,61 +863,6 @@ class ExtraFieldOption extends Model
     }
 
     /**
-     * @param string $tag
-     * @param int    $field_id
-     * @param int    $limit
-     *
-     * @return array
-     */
-    public function searchByField($tag, $field_id, $limit = 10)
-    {
-        $field_id = (int) $field_id;
-        $limit = (int) $limit;
-        $tag = Database::escape_string($tag);
-
-        $sql = "SELECT DISTINCT id, option_display_text
-                FROM {$this->table}
-                WHERE
-                    field_id = '".$field_id."' AND
-                    option_value LIKE '%$tag%'
-                ORDER BY option_value
-                LIMIT 0, $limit
-                ";
-        $result = Database::query($sql);
-        $values = [];
-        if (Database::num_rows($result)) {
-            $values = Database::store_result($result, 'ASSOC');
-        }
-
-        return $values;
-    }
-
-    /**
-     * @param string $tag
-     * @param int    $field_id
-     * @param int    $limit
-     *
-     * @return string
-     */
-    public function getSearchOptionsByField($tag, $field_id, $limit = 10)
-    {
-        $result = $this->searchByField($tag, $field_id, $limit = 10);
-        $values = [];
-        $json = null;
-        if (!empty($result)) {
-            foreach ($result as $item) {
-                $values[] = [
-                    'value' => $item['id'],
-                    'caption' => $item['option_display_text'],
-                ];
-            }
-            $json = json_encode($values);
-        }
-
-        return $json;
-    }
-
-    /**
      * Gets an element.
      *
      * @param int  $id

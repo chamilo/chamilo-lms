@@ -340,6 +340,7 @@ class PlatformConfigurationController extends AbstractController
             'enable_forum_auto_launch' => $courseSettingsManager->getCourseSettingValue('enable_forum_auto_launch'),
             'display_info_advance_inside_homecourse' => $courseSettingsManager->getCourseSettingValue('display_info_advance_inside_homecourse'),
             'student_validate_own_attendance' => $courseSettingsManager->getCourseSettingValue('student_validate_own_attendance'),
+            'introduction_position' => $courseSettingsManager->getCourseSettingValue('introduction_position') ?: 'above',
         ];
 
         $aiSettings = [

@@ -204,7 +204,6 @@ class PlatformConfigurationController extends AbstractController
                 'registration.redirect_after_login',
                 'display.show_tabs_per_role',
                 'workflows.session_admin_user_subscription_search_extra_field_to_search',
-                'platform.push_notification_settings',
                 'session.user_session_display_mode',
                 'course.resource_sequence_show_dependency_in_course_intro',
                 'message.allow_message_tool',
@@ -249,6 +248,10 @@ class PlatformConfigurationController extends AbstractController
             foreach ($variables as $variable) {
                 $configuration['settings'][$variable] = $settingsManager->getSetting($variable, true);
             }
+
+            $configuration['settings']['platform.push_notification_settings'] = $this->getPublicPushNotificationSettings(
+                $settingsManager->getSetting('platform.push_notification_settings', true)
+            );
 
             $user = $this->userHelper->getCurrent();
 
@@ -415,6 +418,23 @@ class PlatformConfigurationController extends AbstractController
      * Decodes a setting stored as a JSON string or native array.
      * Returns the string 'false' unchanged (used as a sentinel by the settings system).
      */
+    /**
+     * Only the values the browser needs to subscribe: the Gotify token and the VAPID private key stay on the server.
+     */
+    private function getPublicPushNotificationSettings(mixed $setting): string
+    {
+        $decoded = \is_string($setting) ? json_decode($setting, true) : null;
+
+        if (!\is_array($decoded)) {
+            return '';
+        }
+
+        return (string) json_encode([
+            'enabled' => (bool) ($decoded['enabled'] ?? false),
+            'vapid_public_key' => (string) ($decoded['vapid_public_key'] ?? ''),
+        ]);
+    }
+
     private function decodeSetting(mixed $setting): mixed
     {
         if ('false' === $setting) {

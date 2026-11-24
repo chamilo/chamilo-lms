@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -6,6 +8,8 @@ use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImport;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImportLibrary;
 use Chamilo\PluginBundle\H5pImport\Entity\H5pImportResults;
+use Doctrine\DBAL\Exception;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\ToolsException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -66,7 +70,8 @@ class H5pImportPlugin extends Plugin
             ->setMaxResults(1)
             ->setParameter('iid', $lpItemId)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
 
         if (empty($lpItemView['iid'])) {
             return 0;
@@ -80,7 +85,8 @@ class H5pImportPlugin extends Plugin
             ->setParameter('userId', $userId)
             ->setParameter('viewId', (int) $lpItemView['iid'])
             ->executeQuery()
-            ->fetchOne();
+            ->fetchOne()
+        ;
 
         if (!empty($duration)) {
             $em->createQueryBuilder()
@@ -90,7 +96,8 @@ class H5pImportPlugin extends Plugin
                 ->setParameter('totalTime', (int) $duration)
                 ->setParameter('iid', (int) $lpItemView['iid'])
                 ->getQuery()
-                ->execute();
+                ->execute()
+            ;
 
             return (int) $duration;
         }
@@ -103,7 +110,8 @@ class H5pImportPlugin extends Plugin
             ->setParameter('status', 'not attempted')
             ->setParameter('iid', (int) $lpItemView['iid'])
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
 
         return 0;
     }
@@ -146,9 +154,9 @@ class H5pImportPlugin extends Plugin
      * Course tool propagation is handled by the Chamilo 2 course-plugin flow.
      *
      * @throws ToolsException
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
-    public function install()
+    public function install(): void
     {
         $em = Database::getManager();
 
@@ -161,17 +169,13 @@ class H5pImportPlugin extends Plugin
         }
 
         $schemaTool = new SchemaTool($em);
-        $schemaTool->createSchema([
-            $em->getClassMetadata(H5pImport::class),
-            $em->getClassMetadata(H5pImportLibrary::class),
-            $em->getClassMetadata(H5pImportResults::class),
-        ]);
+        $this->executeSchemaSql($schemaTool->getCreateSchemaSql($this->getPluginMetadata()));
     }
 
     /**
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
-    public function uninstall()
+    public function uninstall(): void
     {
         $em = Database::getManager();
 
@@ -181,15 +185,43 @@ class H5pImportPlugin extends Plugin
             self::TBL_H5P_IMPORT_RESULTS,
         ])) {
             $schemaTool = new SchemaTool($em);
-            $schemaTool->dropSchema([
-                $em->getClassMetadata(H5pImport::class),
-                $em->getClassMetadata(H5pImportLibrary::class),
-                $em->getClassMetadata(H5pImportResults::class),
-            ]);
+            $this->executeSchemaSql($schemaTool->getDropSchemaSQL($this->getPluginMetadata()));
         }
 
         $this->uninstall_course_fields_in_all_courses();
         $this->removeH5pDirectories();
+    }
+
+    /**
+     * @return array<int, ClassMetadata>
+     */
+    private function getPluginMetadata(): array
+    {
+        $em = Database::getManager();
+
+        return [
+            $em->getClassMetadata(H5pImport::class),
+            $em->getClassMetadata(H5pImportLibrary::class),
+            $em->getClassMetadata(H5pImportResults::class),
+        ];
+    }
+
+    /**
+     * SchemaTool generates the SQL of the plugin tables, but the PdoSessionHandlerSchemaListener registered in
+     * config/services.yaml adds the php_session table to every schema it generates: creating it fails when it exists
+     * (always), and dropping it would delete the sessions of every user. That table is not the plugin's: skip it.
+     *
+     * @param string[] $statements
+     */
+    private function executeSchemaSql(array $statements): void
+    {
+        $connection = Database::getManager()->getConnection();
+        foreach ($statements as $statement) {
+            if (str_contains($statement, 'php_session')) {
+                continue;
+            }
+            $connection->executeStatement($statement);
+        }
     }
 
     /**
@@ -227,7 +259,8 @@ class H5pImportPlugin extends Plugin
             ->findBy([
                 'course' => $course,
                 'session' => $session,
-            ]);
+            ])
+        ;
 
         $importIcon = Display::return_icon('plugin_h5p_import_upload.png');
         $moveIcon = Display::url(

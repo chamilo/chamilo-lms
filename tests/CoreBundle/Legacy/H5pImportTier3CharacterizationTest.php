@@ -8,7 +8,9 @@ namespace Chamilo\Tests\CoreBundle\Legacy;
 
 use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\TableNotFoundException;
 use H5pImportPlugin;
+use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
@@ -57,6 +59,23 @@ final class H5pImportTier3CharacterizationTest extends KernelTestCase
         Container::setRequest($request);
 
         require_once api_get_path(SYS_PLUGIN_PATH).'H5pImport/H5pImportPlugin.php';
+    }
+
+    /**
+     * The schema SQL SchemaTool generates includes php_session (PdoSessionHandlerSchemaListener): running it as is fails
+     * on create and would delete every session on drop. The statements naming it must be skipped, the others run.
+     */
+    public function testTheSchemaSqlSkipsThePhpSessionTableOfTheSessionHandler(): void
+    {
+        $method = new ReflectionMethod(H5pImportPlugin::class, 'executeSchemaSql');
+        $plugin = H5pImportPlugin::create();
+
+        // A statement on a table that does not exist fails when it is run, so a skipped one is the proof it was not.
+        $method->invoke($plugin, ['DROP TABLE nonexistent_php_session_probe']);
+        $this->assertTrue(true, 'The statement naming php_session was not executed');
+
+        $this->expectException(TableNotFoundException::class);
+        $method->invoke($plugin, ['DROP TABLE nonexistent_h5p_probe']);
     }
 
     public function testTheViewTakesTheSumOfTheUsersResultTimesAndTheSumIsReturned(): void

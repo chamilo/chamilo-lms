@@ -58,6 +58,15 @@ final readonly class CourseSettingsManager
         'course_hours_duration',
         'max_subscribed_students',
     ];
+    public const string INTRODUCTION_POSITION_SETTING = 'introduction_position';
+    public const string INTRODUCTION_POSITION_CATEGORY = 'course_homepage';
+    public const string INTRODUCTION_POSITION_DEFAULT = 'above';
+    public const array INTRODUCTION_POSITIONS = [
+        'above',
+        'below',
+        'left',
+        'right',
+    ];
     private const array AI_FEATURES = [
         'learning_path_generator' => 'Enable learning path generator',
         'exercise_generator' => 'Enable exercise generator',
@@ -95,6 +104,7 @@ final readonly class CourseSettingsManager
         ForumParticipationSettingsHelper::REPLIES_AFTER_PARTICIPATION => 'forum',
         ForumParticipationSettingsHelper::CATEGORY_DESCRIPTION => 'forum',
         ForumParticipationSettingsHelper::PROGRESS_POSTS => 'forum',
+        self::INTRODUCTION_POSITION_SETTING => self::INTRODUCTION_POSITION_CATEGORY,
         'display_info_advance_inside_homecourse' => 'thematic_advance',
         'allow_public_certificates' => 'certificates',
         'customcertificate_course_enable' => '',
@@ -161,6 +171,7 @@ final readonly class CourseSettingsManager
         'enable_exercise_auto_launch' => 0,
         'enable_forum_auto_launch' => 0,
         'pdf_export_watermark_text' => '',
+        self::INTRODUCTION_POSITION_SETTING => self::INTRODUCTION_POSITION_DEFAULT,
     ];
 
     private const array STRING_VALUE_KEYS = [
@@ -191,6 +202,7 @@ final readonly class CourseSettingsManager
         'customcertificate_signature_text3',
         'customcertificate_signature_text4',
         'auto_launch_option',
+        self::INTRODUCTION_POSITION_SETTING,
     ];
 
     private const array INTEGER_VALUE_KEYS = [
@@ -351,6 +363,7 @@ final readonly class CourseSettingsManager
             }
         }
         $values[CourseTimeSpentClockHelper::SETTING] = ['true', 'false', ''];
+        $values[self::INTRODUCTION_POSITION_SETTING] = self::INTRODUCTION_POSITIONS;
 
         return $values;
     }
@@ -447,6 +460,47 @@ final readonly class CourseSettingsManager
         }
 
         throw new AccessDeniedHttpException('You are not allowed to edit this course.');
+    }
+
+    public function saveIntroductionPosition(string $position): string
+    {
+        [$course, $session] = $this->resolveContext();
+        // Authorize against the Course entity so CourseVoter applies (course
+        // teachers and admins). Do not use EDIT on the course resource node.
+        if (!$this->security->isGranted('ROLE_ADMIN') && !$this->security->isGranted('EDIT', $course)) {
+            throw new AccessDeniedHttpException('You are not allowed to edit this course.');
+        }
+
+        $position = trim($position);
+        if (!\in_array($position, self::INTRODUCTION_POSITIONS, true)) {
+            throw new BadRequestHttpException('Invalid introduction position.');
+        }
+
+        if (!$this->courseSettingPolicyManager->isEditable(
+            self::INTRODUCTION_POSITION_SETTING,
+            self::INTRODUCTION_POSITION_CATEGORY,
+        ) || !$this->canSaveCourseSetting(self::INTRODUCTION_POSITION_SETTING, $course)) {
+            throw new AccessDeniedHttpException('You are not allowed to change the introduction position.');
+        }
+
+        $this->saveCourseSettingValue(
+            $course,
+            self::INTRODUCTION_POSITION_SETTING,
+            $position,
+            self::INTRODUCTION_POSITION_CATEGORY,
+        );
+        $this->entityManager->flush();
+        $this->eventLoggerHelper->addEvent(
+            'course_settings_updated',
+            self::INTRODUCTION_POSITION_SETTING,
+            $position,
+            null,
+            $this->security->getUser() instanceof User ? (int) $this->security->getUser()->getId() : null,
+            (int) $course->getId(),
+            (int) ($session?->getId() ?? 0),
+        );
+
+        return $position;
     }
 
     /**
@@ -686,6 +740,15 @@ final readonly class CourseSettingsManager
         $mainFields[] = $this->field('disk_quota_display', 'Space Available', 'readonly');
         $sections[] = $this->section('course_main', 'Course settings', 'information', $mainFields);
 
+        $sections[] = $this->section('course_homepage', 'Course homepage', 'courses', [
+            $this->field('introduction_position', 'Course introduction position', 'radio', options: [
+                ['label' => 'Above the tools', 'value' => 'above'],
+                ['label' => 'Below the tools', 'value' => 'below'],
+                ['label' => 'Left of the tools', 'value' => 'left'],
+                ['label' => 'Right of the tools', 'value' => 'right'],
+            ], help: 'On smaller screens, left and right are shown above the tools. If the course sequence column is also shown, a right-hand introduction is displayed above the tools so the two columns do not overlap.'),
+        ]);
+
         $visibilityOptions = [
             ['label' => 'Closed', 'value' => Course::CLOSED],
             ['label' => 'Private', 'value' => Course::REGISTERED],
@@ -873,7 +936,7 @@ final readonly class CourseSettingsManager
                     }
                     if ('auto_launch_option' === $field['key']) {
                         foreach (['enable_document_auto_launch', 'enable_lp_auto_launch', 'enable_exercise_auto_launch', 'enable_forum_auto_launch'] as $variable) {
-                            if (!$this->courseSettingPolicyManager->isEditable($variable, self::COURSE_SETTING_CATEGORIES[$variable] ?? null)) {
+                            if (!$this->courseSettingPolicyManager->isEditable($variable, self::COURSE_SETTING_CATEGORIES[$variable])) {
                                 return false;
                             }
                         }
@@ -946,6 +1009,13 @@ final readonly class CourseSettingsManager
             self::ALLOWED_CUSTOM_CERTIFICATE_MODES,
             true,
         ) ? $certificateMode : 'disabled';
+
+        $introductionPosition = (string) ($values[self::INTRODUCTION_POSITION_SETTING] ?? '');
+        $values[self::INTRODUCTION_POSITION_SETTING] = \in_array(
+            $introductionPosition,
+            self::INTRODUCTION_POSITIONS,
+            true,
+        ) ? $introductionPosition : self::INTRODUCTION_POSITION_DEFAULT;
 
         if ('course' === $values['customcertificate_mode']) {
             $customCertificateDefaults = [
@@ -1068,6 +1138,10 @@ final readonly class CourseSettingsManager
         }
         if (!\in_array((string) ($values['customcertificate_mode'] ?? ''), self::ALLOWED_CUSTOM_CERTIFICATE_MODES, true)) {
             throw new BadRequestHttpException('Invalid certificate mode.');
+        }
+        if (\array_key_exists(self::INTRODUCTION_POSITION_SETTING, $values)
+            && !\in_array((string) $values[self::INTRODUCTION_POSITION_SETTING], self::INTRODUCTION_POSITIONS, true)) {
+            throw new BadRequestHttpException('Invalid introduction position.');
         }
         $theme = (string) ($values['course_theme'] ?? '');
         $currentTheme = (string) $this->getCourseSettingValue($course, 'course_theme', '');

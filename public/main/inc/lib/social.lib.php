@@ -1236,7 +1236,7 @@ class SocialManager extends UserManager
                             foreach ($id_options as $id_option) {
                                 $sql = "SELECT display_text
                                     FROM $t_ufo
-                                    WHERE id = '$id_option'";
+                                    WHERE id = ".(int) $id_option;
                                 $res_options = Database::query($sql);
                                 $row_options = Database::fetch_row($res_options);
                                 $value_options[] = $row_options[0];

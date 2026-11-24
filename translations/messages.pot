@@ -43925,3 +43925,12 @@ msgstr ""
 
 msgid "((user_first_name)),<br /><br />You have obtained the certificate of the course ((course_title)).<br />You can view it here: ((certificate_link))"
 msgstr ""
+
+msgid "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+msgstr ""
+
+msgid "List by documents"
+msgstr ""
+
+msgid "List by users"
+msgstr ""

@@ -5,6 +5,12 @@
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
+use PhpZip\ZipFile;
+
+const AIKEN_MAX_ARCHIVE_BYTES = 10 * 1024 * 1024;
+const AIKEN_MAX_TEXT_BYTES = 2 * 1024 * 1024;
+const AIKEN_MAX_ZIP_ENTRIES = 100;
+const AIKEN_MAX_ZIP_TEXT_FILES = 20;
 
 /**
  * Best-effort: fetch AiDisclosureHelper from Symfony container (legacy context).
@@ -163,6 +169,32 @@ SCORE: 20
 }
 
 /**
+ * Reject invalid SCORE directives before creating any exercise or question rows.
+ * Aiken scores are non-zero positive decimal numbers.
+ */
+function aiken_validate_score_directives(string $text): bool
+{
+    foreach (preg_split('/\r\n|\r|\n/', $text) as $line) {
+        $line = trim($line);
+
+        if (!preg_match('/^SCORE\s*:/i', $line)) {
+            continue;
+        }
+
+        if (!preg_match('/^SCORE:\s*(\d+(?:\.\d+)?)$/i', $line, $matches)) {
+            return false;
+        }
+
+        $score = (float) $matches[1];
+        if (!is_finite($score) || $score <= 0) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
  * Set the exercise information from an aiken text formatted.
  */
 function setExerciseInfoFromAikenText($aikenText, &$exerciseInfo): void
@@ -239,6 +271,11 @@ function setExerciseInfoFromAikenText($aikenText, &$exerciseInfo): void
             }
             continue;
         }
+
+        if (preg_match('/^SCORE:\s*(\d+(?:\.\d+)?)$/i', $line, $matches)) {
+            $currentQuestion['score'] = (float) $matches[1];
+            continue;
+        }
     }
 
     $totalQuestions = count($exerciseInfo['question']);
@@ -259,30 +296,29 @@ function setExerciseInfoFromAikenText($aikenText, &$exerciseInfo): void
 function aiken_import_exercise(string $file = null, ?array $request = [])
 {
     $exerciseInfo = [];
-    $fileIsSet = false;
-    $baseWorkDir = api_get_path(SYS_ARCHIVE_PATH) . 'aiken/';
-    $uploadPath = 'aiken_' . api_get_unique_id();
-
     $aiMeta = null;
 
     if ($file) {
-        $fileIsSet = true;
-
-        if (!is_dir($baseWorkDir . $uploadPath)) {
-            mkdir($baseWorkDir . $uploadPath, api_get_permissions_for_new_directories(), true);
-        }
-
         $exerciseInfo['name'] = preg_replace('/\.(zip|txt)$/i', '', basename($file));
+        $exerciseInfo['total_weight'] = !empty($_POST['total_weight']) ? (int) $_POST['total_weight'] : 20;
         $exerciseInfo['question'] = [];
 
         if (!preg_match('/\.(zip|txt)$/i', $file)) {
             return get_lang('You must upload a .txt or .zip file');
         }
 
-        $result = aiken_parse_file($exerciseInfo, $file);
+        $aikenText = aiken_read_file_text($file);
+        if (null === $aikenText) {
+            return get_lang('No .txt file found in zip');
+        }
+        if (!aiken_validate_score_directives($aikenText)) {
+            return get_lang('Invalid Aiken SCORE value. Use a positive number.');
+        }
 
-        if ($result !== true) {
-            return $result;
+        setExerciseInfoFromAikenText($aikenText, $exerciseInfo);
+
+        if (empty($exerciseInfo['question'])) {
+            return get_lang('No questions found');
         }
     } elseif (!empty($request)) {
         $exerciseTitle = trim((string) ($request['exercise_title'] ?? ''));
@@ -300,12 +336,171 @@ function aiken_import_exercise(string $file = null, ?array $request = [])
         $exerciseInfo['question'] = [];
         $exerciseInfo['course_id'] = api_get_course_int_id();
 
-        setExerciseInfoFromAikenText($request['aiken_format'] ?? '', $exerciseInfo);
+        $aikenText = (string) ($request['aiken_format'] ?? '');
+        if (!aiken_validate_score_directives($aikenText)) {
+            return get_lang('Invalid Aiken SCORE value. Use a positive number.');
+        }
+        setExerciseInfoFromAikenText($aikenText, $exerciseInfo);
 
         $aiMeta = aiken_build_ai_meta_from_request($request);
     }
 
-    return create_exercise_from_aiken($exerciseInfo, $fileIsSet ? $baseWorkDir . $uploadPath : null, $aiMeta);
+    return create_exercise_from_aiken($exerciseInfo, null, $aiMeta);
+}
+
+/**
+ * Handles the file sent by the Aiken import form (aiken.php) and creates the exercise.
+ *
+ * @param array<string,mixed> $fileData One entry of $_FILES
+ *
+ * @return int|false The new exercise ID, or false on failure (an error flash message is added)
+ */
+function aiken_import_file(array $fileData): false|int
+{
+    if (!process_uploaded_file($fileData, false)) {
+        Display::addFlash(Display::return_message(get_lang('The file upload has failed.'), 'error'));
+
+        return false;
+    }
+
+    $fileName = basename((string) $fileData['name']);
+    if (!preg_match('/\.(zip|txt)$/i', $fileName)) {
+        Display::addFlash(Display::return_message(get_lang('You must upload a .txt or .zip file'), 'error'));
+
+        return false;
+    }
+
+    // Limit the uploaded archive before it is copied into the server's archive folder.
+    $uploadSize = filesize((string) $fileData['tmp_name']);
+    if (false === $uploadSize || $uploadSize > AIKEN_MAX_ARCHIVE_BYTES) {
+        Display::addFlash(Display::return_message(get_lang('The file upload has failed.'), 'error'));
+
+        return false;
+    }
+
+    // Keep the original file name: it becomes the test title.
+    $uploadDir = api_get_path(SYS_ARCHIVE_PATH).'aiken/upload_'.api_get_unique_id().'/';
+    if (!is_dir($uploadDir) && !mkdir($uploadDir, api_get_permissions_for_new_directories(), true)) {
+        Display::addFlash(Display::return_message(get_lang('The file upload has failed.'), 'error'));
+
+        return false;
+    }
+    $filePath = $uploadDir.$fileName;
+
+    try {
+        if (!move_uploaded_file($fileData['tmp_name'], $filePath)) {
+            Display::addFlash(Display::return_message(get_lang('The file upload has failed.'), 'error'));
+
+            return false;
+        }
+
+        $imported = aiken_import_exercise($filePath);
+    } finally {
+        rmdirr($uploadDir);
+    }
+
+    if (is_numeric($imported) && !empty($imported)) {
+        Display::addFlash(Display::return_message(get_lang('Uploaded.')));
+
+        return (int) $imported;
+    }
+
+    Display::addFlash(Display::return_message(is_string($imported) ? $imported : get_lang('The file upload has failed.'), 'error'));
+
+    return false;
+}
+
+/**
+ * Returns the Aiken text of a .txt file, or of all the .txt files of a .zip file.
+ *
+ * @return string|null Null when the file cannot be read or the zip has no .txt file
+ */
+function aiken_read_file_text(string $file): ?string
+{
+    if (!is_file($file) || !is_readable($file)) {
+        return null;
+    }
+
+    $archiveSize = filesize($file);
+    if (false === $archiveSize || $archiveSize > AIKEN_MAX_ARCHIVE_BYTES) {
+        return null;
+    }
+
+    if (preg_match('/\.txt$/i', $file)) {
+        if ($archiveSize > AIKEN_MAX_TEXT_BYTES) {
+            return null;
+        }
+        $text = file_get_contents($file);
+    } else {
+        $texts = [];
+        $zipFile = new ZipFile();
+        $totalTextBytes = 0;
+        $textFileCount = 0;
+
+        try {
+            $zipFile->openFile($file);
+            $entryNames = $zipFile->getListFiles();
+            if (count($entryNames) > AIKEN_MAX_ZIP_ENTRIES) {
+                return null;
+            }
+
+            foreach ($entryNames as $entryName) {
+                if (!preg_match('/\.txt$/i', $entryName) || str_starts_with(basename($entryName), '.')) {
+                    continue;
+                }
+
+                if (++$textFileCount > AIKEN_MAX_ZIP_TEXT_FILES) {
+                    return null;
+                }
+
+                $remainingBytes = AIKEN_MAX_TEXT_BYTES - $totalTextBytes;
+                $entryBytes = $zipFile->getEntry($entryName)->getUncompressedSize();
+                if ($entryBytes < 0 || $entryBytes > $remainingBytes) {
+                    return null;
+                }
+
+                // Read at most the remaining budget plus one byte, even if ZIP metadata lies.
+                $stream = $zipFile->getEntryStream($entryName);
+                try {
+                    $entryText = stream_get_contents($stream, $remainingBytes + 1);
+                } finally {
+                    if (is_resource($stream)) {
+                        fclose($stream);
+                    }
+                }
+
+                if (false === $entryText || strlen($entryText) > $remainingBytes) {
+                    return null;
+                }
+
+                $totalTextBytes += strlen($entryText);
+                $texts[] = $entryText;
+            }
+        } catch (Throwable $e) {
+            error_log('Aiken import: could not read zip file: '.$e->getMessage());
+
+            return null;
+        } finally {
+            $zipFile->close();
+        }
+
+        if (empty($texts)) {
+            return null;
+        }
+
+        $text = implode("\n\n", $texts);
+    }
+
+    if (false === $text) {
+        return null;
+    }
+
+    // Files saved by older editors are often ISO-8859-1.
+    if (!mb_check_encoding($text, 'UTF-8')) {
+        $text = mb_convert_encoding($text, 'UTF-8', 'ISO-8859-1');
+    }
+
+    return $text;
 }
 
 /**
@@ -451,7 +646,9 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir, ?arra
 
             if (isset($questionData['score'])) {
                 $scoreFromFile = (float) $questionData['score'];
-                $answer->new_weighting[$answerIndex] = $scoreFromFile;
+                if (1 === $answer->new_correct[$answerIndex]) {
+                    $answer->new_weighting[$answerIndex] = $scoreFromFile;
+                }
             }
 
             $params = [
@@ -483,7 +680,7 @@ function create_exercise_from_aiken(array $exerciseInfo, ?string $workDir, ?arra
     }
 
     if ($workDir) {
-        my_delete($workDir);
+        rmdirr($workDir);
     }
 
     return $lastExerciseId;
@@ -1411,5 +1608,6 @@ function aiken_is_question_title_line(string $line): bool
 {
     return !preg_match('/^[A-Z]\.\s/', $line)
         && !preg_match('/^ANSWER:\s?[A-Z]/', $line)
-        && !preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $line);
+        && !preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $line)
+        && !preg_match('/^SCORE:\s?(.*)/i', $line);
 }

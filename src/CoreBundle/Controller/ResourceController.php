@@ -752,9 +752,19 @@ class ResourceController extends AbstractResourceController implements CourseCon
         // The node type is checked, not the type in the URL, because the node is found by its UUID only.
         $isAttemptFile = 'attempt_file' === $resourceNode->getResourceType()?->getTitle();
 
+        // Same for the files learners submit to an assignment, or attach to its comments.
+        $isAssignmentFile = \in_array(
+            $resourceNode->getResourceType()?->getTitle(),
+            ['student_publications', 'student_publications_comments'],
+            true
+        );
+
         // Such files are always delivered as a neutral download, so the browser can never
         // execute them in the Chamilo origin, whatever the requested mode is.
-        $forceSocialHtmlDownload = ($isSocialAttachment || $isAttemptFile) && str_contains($mimeType, 'html');
+        // XML counts too (an XHTML document runs script), except SVG, which is sanitized below.
+        $forceSocialHtmlDownload = ($isSocialAttachment || $isAttemptFile || $isAssignmentFile)
+            && (str_contains($mimeType, 'html')
+                || (str_contains($mimeType, 'xml') && !str_contains($mimeType, 'svg')));
         if ($forceSocialHtmlDownload) {
             $mimeType = 'application/octet-stream';
         }

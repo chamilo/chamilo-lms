@@ -7,6 +7,7 @@
       :is-loading="loading"
       :total-items="totalRecords"
       :values="students"
+      :expanded-rows="expandedRows"
       data-key="userId"
       lazy
       @page="onPage"
@@ -45,33 +46,35 @@
           />
         </template>
       </Column>
-    </BaseTable>
 
-    <section
-      v-if="selectedStudent"
-      class="mt-6 rounded-lg border border-gray-25 p-4"
-      data-testid="assignment-student-submission-details"
-    >
-      <div class="mb-4 flex items-center justify-between gap-3">
-        <h3 class="text-body-1 font-semibold">
-          {{ t("Submissions") }} — {{ selectedStudent.firstname }} {{ selectedStudent.lastname }}
-        </h3>
-        <BaseButton
-          :label="t('Close')"
-          icon="close"
-          only-icon
-          size="small"
-          type="tertiary-alternative"
-          @click="selectedStudent = null"
-        />
-      </div>
-      <TeacherSubmissionList
-        :key="`${assignmentId}-${selectedStudent.userId}`"
-        :assignment-id="assignmentId"
-        :user-id="selectedStudent.userId"
-        @submissions-changed="loadData"
-      />
-    </section>
+      <!-- Right under the learner's row: at the bottom of a long list, it was out of sight -->
+      <template #expansion>
+        <section
+          class="rounded-lg border border-gray-25 p-4"
+          data-testid="assignment-student-submission-details"
+        >
+          <div class="mb-4 flex items-center justify-between gap-3">
+            <h3 class="text-body-1 font-semibold">
+              {{ t("Submissions") }} — {{ selectedStudent.firstname }} {{ selectedStudent.lastname }}
+            </h3>
+            <BaseButton
+              :label="t('Close')"
+              icon="close"
+              only-icon
+              size="small"
+              type="tertiary-alternative"
+              @click="selectedStudent = null"
+            />
+          </div>
+          <TeacherSubmissionList
+            :key="`${assignmentId}-${selectedStudent.userId}`"
+            :assignment-id="assignmentId"
+            :user-id="selectedStudent.userId"
+            @submissions-changed="loadData"
+          />
+        </section>
+      </template>
+    </BaseTable>
   </div>
 </template>
 
@@ -102,6 +105,7 @@ const loading = ref(false)
 const students = ref([])
 const totalRecords = ref(0)
 const selectedStudent = ref(null)
+const expandedRows = computed(() => (selectedStudent.value ? { [selectedStudent.value.userId]: true } : {}))
 const loadParams = reactive({ page: 1, itemsPerPage: null })
 const securityStore = useSecurityStore()
 const sortableFields = ["user.fullName", "submissionCount"]

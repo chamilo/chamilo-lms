@@ -146,12 +146,15 @@ class ResultTable extends SortableTable
             if ('1' == $this->iscourse) {
                 $row[] = $item['result_id'];
             }
+            // Names are stored raw and HTML_Table does not escape cell contents.
+            $firstname = htmlspecialchars((string) $item['firstname'], ENT_QUOTES, 'UTF-8');
+            $lastname = htmlspecialchars((string) $item['lastname'], ENT_QUOTES, 'UTF-8');
             if ($isWesternNameOrder) {
-                $row[] = $item['firstname'];
-                $row[] = $item['lastname'];
+                $row[] = $firstname;
+                $row[] = $lastname;
             } else {
-                $row[] = $item['lastname'];
-                $row[] = $item['firstname'];
+                $row[] = $lastname;
+                $row[] = $firstname;
             }
 
             if (empty($model)) {

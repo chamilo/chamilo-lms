@@ -63,6 +63,12 @@ class LrsRequest
             );
         }
 
+        if ($response->isClientError() || $response->isServerError()) {
+            // Error messages may quote request values: never let a browser render them as markup.
+            $response->headers->set('Content-Type', 'text/plain; charset=UTF-8');
+            $response->headers->set('X-Content-Type-Options', 'nosniff');
+        }
+
         $response->headers->set('X-Experience-API-Version', '1.0.3');
 
         return $response;
@@ -177,7 +183,7 @@ class LrsRequest
             return;
         }
 
-        throw new BadRequestHttpException("The xAPI version \"$version\" is not supported.");
+        throw new BadRequestHttpException('The requested xAPI version is not supported.');
     }
 
     private function getControllerName(): string

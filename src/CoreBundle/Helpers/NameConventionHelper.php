@@ -25,15 +25,30 @@ class NameConventionHelper
     {
         $format = $this->getFormat()['format'];
 
-        $personName = (string) str_replace(
+        $personName = self::cleanPersonName(str_replace(
             ['title ', 'first_name', 'last_name'],
             ['', (string) $user->getFirstname(), (string) $user->getLastname()],
             $format
-        );
+        ));
 
         $user->setFullName($personName);
 
         return $personName;
+    }
+
+    /**
+     * Tidies a name built from a format whose parts can be empty (no title, no first name...): collapses the
+     * spaces, merges the commas left between empty parts and drops the ones left at either end, so
+     * "Doe, " becomes "Doe" and " , John" becomes "John".
+     */
+    public static function cleanPersonName(string $personName): string
+    {
+        // Unicode-aware when the name is valid UTF-8, byte-wise otherwise, so a badly encoded name is never blanked.
+        $u = mb_check_encoding($personName, 'UTF-8') ? 'u' : '';
+        $personName = (string) preg_replace('/\s+/'.$u, ' ', $personName);
+        $personName = (string) preg_replace('/\s*,[\s,]*/'.$u, ', ', $personName);
+
+        return (string) preg_replace('/^[\s,]+|[\s,]+$/'.$u, '', $personName);
     }
 
     public function getFormat(): array

@@ -4,6 +4,9 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAttendance;
+use Chamilo\CourseBundle\Entity\CAttendanceCalendar;
+use Chamilo\CourseBundle\Entity\CAttendanceResult;
+use Chamilo\CourseBundle\Entity\CAttendanceSheet;
 
 /**
  * Gradebook link to attendance item.
@@ -12,8 +15,6 @@ use Chamilo\CourseBundle\Entity\CAttendance;
  */
 class AttendanceLink extends AbstractLink
 {
-    private $attendance_table = null;
-
     /** @var array|null */
     private ?array $attendance_data = null;
 
@@ -74,15 +75,15 @@ class AttendanceLink extends AbstractLink
      */
     public function has_results(): bool
     {
-        $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
-        $sessionId = $this->get_session_id();
+        $number = (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(r.iid)')
+            ->from(CAttendanceResult::class, 'r')
+            ->where('IDENTITY(r.attendance) = :attendanceId')
+            ->setParameter('attendanceId', $this->get_ref_id())
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        $sql = 'SELECT count(*) AS number FROM '.$tbl_attendance_result."
-                WHERE attendance_id = ".$this->get_ref_id();
-        $result = Database::query($sql);
-        $number = Database::fetch_row($result);
-
-        return 0 != $number[0];
+        return 0 != $number;
     }
 
     /**
@@ -95,16 +96,16 @@ class AttendanceLink extends AbstractLink
     {
         $attendanceId = (int) $this->get_ref_id();
 
-        $tbl_attendance_result = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
-        $tbl_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $tbl_sheet = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
+        $em = Container::getEntityManager();
 
         // Load attendance settings (qualify max + require unique mode)
-        $sql = 'SELECT attendance_qualify_max, require_unique
-            FROM '.$this->get_attendance_table().'
-            WHERE iid = '.(int) $attendanceId;
-        $query = Database::query($sql);
-        $attendance = Database::fetch_assoc($query);
+        $attendance = $em->createQueryBuilder()
+            ->select('a.attendanceQualifyMax AS attendance_qualify_max', 'a.requireUnique AS require_unique')
+            ->from(CAttendance::class, 'a')
+            ->where('a.iid = :attendanceId')
+            ->setParameter('attendanceId', $attendanceId)
+            ->getQuery()
+            ->getOneOrNullResult();
 
         $qualifyMax = (float) ($attendance['attendance_qualify_max'] ?? 0);
         $requireUnique = !empty($attendance['require_unique']);
@@ -116,11 +117,13 @@ class AttendanceLink extends AbstractLink
         }
 
         if (!$requireUnique && $qualifyMax <= 0.0) {
-            $sqlTotal = 'SELECT COUNT(*) AS total
-                     FROM '.$tbl_calendar.'
-                     WHERE attendance_id = '.(int) $attendanceId;
-            $rowTotal = Database::fetch_assoc(Database::query($sqlTotal));
-            $totalDates = (int) ($rowTotal['total'] ?? 0);
+            $totalDates = (int) $em->createQueryBuilder()
+                ->select('COUNT(c.iid)')
+                ->from(CAttendanceCalendar::class, 'c')
+                ->where('IDENTITY(c.attendance) = :attendanceId')
+                ->setParameter('attendanceId', $attendanceId)
+                ->getQuery()
+                ->getSingleScalarResult();
 
             if ($totalDates > 0) {
                 $qualifyMax = (float) $totalDates;
@@ -139,15 +142,18 @@ class AttendanceLink extends AbstractLink
             if (null !== $studentId) {
                 $studentId = (int) $studentId;
 
-                $sqlHasPresence = 'SELECT 1
-                FROM '.$tbl_sheet.' s
-                INNER JOIN '.$tbl_calendar.' c ON c.iid = s.attendance_calendar_id
-                WHERE c.attendance_id = '.(int) $attendanceId.'
-                  AND s.user_id = '.(int) $studentId.'
-                  AND s.presence IN (1, 2, 3)
-                LIMIT 1';
-
-                $hasPresence = Database::num_rows(Database::query($sqlHasPresence)) > 0;
+                $hasPresence = [] !== $em->createQueryBuilder()
+                    ->select('s.iid')
+                    ->from(CAttendanceSheet::class, 's')
+                    ->innerJoin('s.attendanceCalendar', 'c')
+                    ->where('IDENTITY(c.attendance) = :attendanceId')
+                    ->andWhere('IDENTITY(s.user) = :studentId')
+                    ->andWhere('s.presence IN (1, 2, 3)')
+                    ->setParameter('attendanceId', $attendanceId)
+                    ->setParameter('studentId', $studentId)
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getArrayResult();
                 if ('default' === $type) {
                     return [$hasPresence ? 1.0 : 0.0, 1];
                 }
@@ -164,16 +170,20 @@ class AttendanceLink extends AbstractLink
             $weight = $qualifyMax;
 
             // Aggregate per user: has_presence = 1 if any presence in (1,2,3)
-            $sqlAll = 'SELECT s.user_id,
-                      MAX(CASE WHEN s.presence IN (1, 2, 3) THEN 1 ELSE 0 END) AS has_presence
-               FROM '.$tbl_sheet.' s
-               INNER JOIN '.$tbl_calendar.' c ON c.iid = s.attendance_calendar_id
-               WHERE c.attendance_id = '.(int) $attendanceId.'
-               GROUP BY s.user_id';
+            $rs = $em->createQueryBuilder()
+                ->select(
+                    'IDENTITY(s.user) AS user_id',
+                    'MAX(CASE WHEN s.presence IN (1, 2, 3) THEN 1 ELSE 0 END) AS has_presence'
+                )
+                ->from(CAttendanceSheet::class, 's')
+                ->innerJoin('s.attendanceCalendar', 'c')
+                ->where('IDENTITY(c.attendance) = :attendanceId')
+                ->groupBy('s.user')
+                ->setParameter('attendanceId', $attendanceId)
+                ->getQuery()
+                ->getArrayResult();
 
-            $rs = Database::query($sqlAll);
-
-            while ($row = Database::fetch_assoc($rs)) {
+            foreach ($rs as $row) {
                 $uid = (int) ($row['user_id'] ?? 0);
                 if ($uid <= 0) {
                     continue;
@@ -216,19 +226,22 @@ class AttendanceLink extends AbstractLink
             }
         }
 
-        $sql = 'SELECT user_id, score
-            FROM '.$tbl_attendance_result.'
-            WHERE attendance_id = '.(int) $attendanceId;
+        $qb = $em->createQueryBuilder()
+            ->select('IDENTITY(r.user) AS user_id', 'r.score AS score')
+            ->from(CAttendanceResult::class, 'r')
+            ->where('IDENTITY(r.attendance) = :attendanceId')
+            ->setParameter('attendanceId', $attendanceId);
 
         if (null !== $studentId) {
-            $sql .= ' AND user_id = '.(int) $studentId;
+            $qb->andWhere('IDENTITY(r.user) = :studentId')
+                ->setParameter('studentId', (int) $studentId);
         }
 
-        $scores = Database::query($sql);
+        $scores = $qb->getQuery()->getArrayResult();
 
         // Single student
         if (null !== $studentId) {
-            if ($row = Database::fetch_assoc($scores)) {
+            if ($row = ($scores[0] ?? false)) {
                 $score = (float) ($row['score'] ?? 0);
                 if ('default' === $type) {
                     return [$qualifyMax > 0.0 ? ($score / $qualifyMax) : 0.0, 1];
@@ -253,7 +266,7 @@ class AttendanceLink extends AbstractLink
         $weight = $qualifyMax;
 
         // Aggregate per user (legacy assumes one score per user)
-        while ($row = Database::fetch_assoc($scores)) {
+        foreach ($scores as $row) {
             $uid = (int) ($row['user_id'] ?? 0);
             $score = (float) ($row['score'] ?? 0);
 
@@ -344,12 +357,15 @@ class AttendanceLink extends AbstractLink
      */
     public function is_valid_link(): bool
     {
-        $sql = 'SELECT count(iid) FROM '.$this->get_attendance_table().'
-                WHERE iid = '.$this->get_ref_id();
-        $result = Database::query($sql);
-        $number = Database::fetch_row($result);
+        $number = (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(a.iid)')
+            ->from(CAttendance::class, 'a')
+            ->where('a.iid = :attendanceId')
+            ->setParameter('attendanceId', $this->get_ref_id())
+            ->getQuery()
+            ->getSingleScalarResult();
 
-        return 0 != $number[0];
+        return 0 != $number;
     }
 
     /**
@@ -359,11 +375,14 @@ class AttendanceLink extends AbstractLink
     {
         // it was extracts the attendance id
         $sessionId = $this->get_session_id();
-        $sql = 'SELECT * FROM '.$this->get_attendance_table().'
-                WHERE iid = '.$this->get_ref_id();
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
-        $id = $row['iid'];
+        $row = Container::getEntityManager()->createQueryBuilder()
+            ->select('a.iid AS iid')
+            ->from(CAttendance::class, 'a')
+            ->where('a.iid = :attendanceId')
+            ->setParameter('attendanceId', $this->get_ref_id())
+            ->getQuery()
+            ->getOneOrNullResult();
+        $id = $row['iid'] ?? null;
 
         return api_get_path(WEB_CODE_PATH).
             'attendance/index.php?action=attendance_sheet_list&gradebook=view&attendance_id='.$id.'&'.
@@ -379,26 +398,20 @@ class AttendanceLink extends AbstractLink
     }
 
     /**
-     * Lazy load function to get the database table of the student publications.
-     */
-    private function get_attendance_table(): string
-    {
-        $this->attendance_table = Database::get_course_table(TABLE_ATTENDANCE);
-
-        return $this->attendance_table;
-    }
-
-    /**
      * @return array
      * @throws \Doctrine\DBAL\Exception
      */
     private function get_attendance_data(): array
     {
         if (null === $this->attendance_data) {
-            $sql = 'SELECT * FROM '.$this->get_attendance_table().' att
-                    WHERE att.iid = '.(int) $this->get_ref_id();
-            $query = Database::query($sql);
-            $row = Database::fetch_assoc($query);
+            // Only the columns read through $this->attendance_data (the table has no "name" column).
+            $row = Container::getEntityManager()->createQueryBuilder()
+                ->select('att.iid AS iid', 'att.attendanceQualifyTitle AS attendance_qualify_title')
+                ->from(CAttendance::class, 'att')
+                ->where('att.iid = :attendanceId')
+                ->setParameter('attendanceId', (int) $this->get_ref_id())
+                ->getQuery()
+                ->getOneOrNullResult();
             $this->attendance_data = is_array($row) ? $row : [];
         }
 

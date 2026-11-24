@@ -3,7 +3,10 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Controller\LegalAgreementController;
+use Chamilo\CoreBundle\Entity\Legal;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 /**
@@ -138,18 +141,25 @@ class LegalManager
      */
     public static function getLastVersion($language)
     {
-        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language = (int) $language;
-        $sql = "SELECT version FROM $table
-                WHERE language_id = $language
-                ORDER BY id DESC LIMIT 1 ";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-        if (Database::num_rows($result) > 0) {
-            return (int) $row['version'];
+        $rows = self::legalQueryBuilder()
+            ->select('l.version AS version')
+            ->where('l.languageId = :language')
+            ->orderBy('l.id', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('language', (int) $language)
+            ->getQuery()
+            ->getArrayResult();
+
+        if (count($rows) > 0) {
+            return (int) $rows[0]['version'];
         }
 
         return 0;
+    }
+
+    private static function legalQueryBuilder(): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()->from(Legal::class, 'l');
     }
 
     /**
@@ -161,14 +171,23 @@ class LegalManager
      */
     public static function get_last_condition($language)
     {
-        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language = (int) $language;
-        $sql = "SELECT * FROM $table
-                WHERE language_id = $language
-                ORDER BY version DESC
-                LIMIT 1 ";
-        $result = Database::query($sql);
-        $result = Database::fetch_assoc($result);
+        $rows = self::legalQueryBuilder()
+            ->select(
+                'l.id AS id',
+                'l.date AS date',
+                'l.content AS content',
+                'l.type AS type',
+                'l.changes AS changes',
+                'l.version AS version',
+                'l.languageId AS language_id'
+            )
+            ->where('l.languageId = :language')
+            ->orderBy('l.version', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('language', (int) $language)
+            ->getQuery()
+            ->getArrayResult();
+        $result = $rows[0] ?? false;
 
         if (isset($result['content'])) {
             $result['content'] = self::replaceTags($result['content']);
@@ -187,7 +206,6 @@ class LegalManager
      */
     public static function hasVersion($language, $version)
     {
-        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
         $language = (int) $language;
         $version = (int) $version;
 
@@ -195,17 +213,17 @@ class LegalManager
             return false;
         }
 
-        $sql = "SELECT version FROM $table
-                WHERE
-                    language_id = $language AND
-                    version = $version
-                LIMIT 1 ";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            return true;
-        }
+        $rows = self::legalQueryBuilder()
+            ->select('l.version AS version')
+            ->where('l.languageId = :language')
+            ->andWhere('l.version = :version')
+            ->setMaxResults(1)
+            ->setParameter('language', $language)
+            ->setParameter('version', $version)
+            ->getQuery()
+            ->getArrayResult();
 
-        return false;
+        return count($rows) > 0;
     }
 
     /**
@@ -240,16 +258,16 @@ class LegalManager
      */
     public static function get_last_version($language)
     {
-        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $language = (int) $language;
-        $sql = "SELECT version FROM $table
-                WHERE language_id = '$language'
-                ORDER BY version DESC
-                LIMIT 1 ";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            $version = Database::fetch_array($result);
-            $version = explode(':', $version[0]);
+        $rows = self::legalQueryBuilder()
+            ->select('l.version AS version')
+            ->where('l.languageId = :language')
+            ->orderBy('l.version', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('language', (int) $language)
+            ->getQuery()
+            ->getArrayResult();
+        if (count($rows) > 0) {
+            $version = explode(':', (string) $rows[0]['version']);
 
             return $version[0];
         }
@@ -320,6 +338,7 @@ class LegalManager
                 ORDER BY language, version ASC
                 LIMIT $from, $number_of_items ";
 
+        // TODO(db-neutral): FROM_UNIXTIME() has no DQL equivalent with the same session-timezone semantics
         $result = Database::query($sql);
         $legals = [];
         while ($legal = Database::fetch_array($result)) {
@@ -346,15 +365,10 @@ class LegalManager
      */
     public static function count()
     {
-        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $sql = "SELECT count(*) as count_result
-                FROM $table
-                ORDER BY id DESC ";
-        $result = Database::query($sql);
-        $url = Database::fetch_assoc($result);
-        $result = $url['count_result'];
-
-        return $result;
+        return (int) self::legalQueryBuilder()
+            ->select('COUNT(l.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
@@ -369,14 +383,16 @@ class LegalManager
      */
     public static function get_type_of_terms_and_conditions($legal_id, $language_id)
     {
-        $table = Database::get_main_table(TABLE_MAIN_LEGAL);
-        $legal_id = (int) $legal_id;
-        $language_id = (int) $language_id;
-        $sql = "SELECT type FROM $table
-                WHERE id = $legal_id AND language_id = $language_id";
-        $rs = Database::query($sql);
+        $rows = self::legalQueryBuilder()
+            ->select('l.type AS type')
+            ->where('l.id = :id')
+            ->andWhere('l.languageId = :language')
+            ->setParameter('id', (int) $legal_id)
+            ->setParameter('language', (int) $language_id)
+            ->getQuery()
+            ->getArrayResult();
 
-        return Database::result($rs, 0, 'type');
+        return count($rows) > 0 ? $rows[0]['type'] : null;
     }
 
     /**
@@ -433,8 +449,14 @@ class LegalManager
                 $profileCompleted = 0;
             }
 
-            $table = Database::get_main_table(TABLE_MAIN_USER);
-            Database::query("UPDATE $table SET profile_completed = ".$profileCompleted." WHERE id = ".$userId);
+            Container::getEntityManager()->createQueryBuilder()
+                ->update(User::class, 'u')
+                ->set('u.profileCompleted', ':completed')
+                ->where('u.id = :id')
+                ->setParameter('completed', (bool) $profileCompleted)
+                ->setParameter('id', $userId)
+                ->getQuery()
+                ->execute();
 
             ChamiloSession::write('profile_completed_result', $justTermResults);
         }

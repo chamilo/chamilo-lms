@@ -5,6 +5,7 @@
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class Answer
@@ -118,19 +119,17 @@ class Answer
      */
     public function read()
     {
-        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $questionId = $this->questionId;
-
-        $sql = "SELECT * FROM $table
-                WHERE
-                    question_id ='".$questionId."'
-                ORDER BY position";
-
-        $result = Database::query($sql);
+        $rows = $this->answerRowsQueryBuilder()
+            ->where('IDENTITY(a.question) = :questionId')
+            ->orderBy('a.position', 'ASC')
+            ->setParameter('questionId', (int) $this->questionId)
+            ->getQuery()
+            ->getArrayResult();
         $i = 1;
 
         // while a record is found
-        while ($object = Database::fetch_object($result)) {
+        foreach ($rows as $row) {
+            $object = (object) $row;
             $this->id[$i] = $object->iid;
             $this->autoId[$i] = $object->iid;
             $this->iid[$i] = $object->iid;
@@ -178,7 +177,6 @@ class Answer
      */
     public function readOrderedBy($field, $order = 'ASC')
     {
-        $field = Database::escape_string($field);
         if (empty($field)) {
             $field = 'position';
         }
@@ -187,14 +185,16 @@ class Answer
             $order = 'ASC';
         }
 
-        $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $TBL_QUIZ = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $questionId = (int) $this->questionId;
 
-        $sql = "SELECT type FROM $TBL_QUIZ
-                WHERE iid = $questionId";
-        $result_question = Database::query($sql);
-        $questionType = Database::fetch_array($result_question);
+        $typeRows = Container::getEntityManager()->createQueryBuilder()
+            ->select('q.type AS type')
+            ->from(CQuizQuestion::class, 'q')
+            ->where('q.iid = :questionId')
+            ->setParameter('questionId', $questionId)
+            ->getQuery()
+            ->getArrayResult();
+        $questionType = $typeRows[0] ?? [];
 
         if (DRAGGABLE == $questionType['type']) {
             // Random is done by submit.js.tpl
@@ -203,25 +203,52 @@ class Answer
             return true;
         }
 
-        $sql = "SELECT
-                    answer,
-                    correct,
-                    comment,
-                    ponderation,
-                    position,
-                    hotspot_coordinates,
-                    hotspot_type,
-                    iid
-                FROM $TBL_ANSWER
-                WHERE
-                    question_id='".$questionId."'
-                ORDER BY $field $order";
-        $result = Database::query($sql);
+        if ('rand()' === strtolower(trim((string) $field))) {
+            // TODO(db-neutral): ORDER BY rand() has no DQL equivalent
+            $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+            $sql = "SELECT
+                        answer,
+                        correct,
+                        comment,
+                        ponderation,
+                        position,
+                        hotspot_coordinates,
+                        hotspot_type,
+                        iid
+                    FROM $TBL_ANSWER
+                    WHERE
+                        question_id='".$questionId."'
+                    ORDER BY rand() ";
+            $result = Database::query($sql);
+            $objects = [];
+            while ($object = Database::fetch_object($result)) {
+                $objects[] = $object;
+            }
+        } else {
+            // Only these columns can be used to order the answers: anything else falls back to the position.
+            $orderFields = [
+                'answer' => 'a.answer',
+                'correct' => 'a.correct',
+                'comment' => 'a.comment',
+                'ponderation' => 'a.ponderation',
+                'position' => 'a.position',
+                'hotspot_coordinates' => 'a.hotspotCoordinates',
+                'hotspot_type' => 'a.hotspotType',
+                'iid' => 'a.iid',
+            ];
+            $rows = $this->answerRowsQueryBuilder()
+                ->where('IDENTITY(a.question) = :questionId')
+                ->orderBy($orderFields[strtolower(trim((string) $field))] ?? 'a.position', $order)
+                ->setParameter('questionId', $questionId)
+                ->getQuery()
+                ->getArrayResult();
+            $objects = array_map(static fn (array $row): stdClass => (object) $row, $rows);
+        }
 
         $i = 1;
         // while a record is found
         $doubt_data = null;
-        while ($object = Database::fetch_object($result)) {
+        foreach ($objects as $object) {
             if (UNIQUE_ANSWER_NO_OPTION == $questionType['type'] && 666 == $object->position) {
                 $doubt_data = $object;
 
@@ -330,17 +357,15 @@ class Answer
      */
     public function selectAnswerByAutoId($auto_id)
     {
-        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $auto_id = (int) $auto_id;
-        $sql = "SELECT iid, answer FROM $table
-                WHERE iid='$auto_id'";
-        $rs = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('a.iid AS iid', 'a.answer AS answer')
+            ->from(CQuizAnswer::class, 'a')
+            ->where('a.iid = :iid')
+            ->setParameter('iid', (int) $auto_id)
+            ->getQuery()
+            ->getArrayResult();
 
-        if (Database::num_rows($rs) > 0) {
-            return Database::fetch_assoc($rs);
-        }
-
-        return false;
+        return $rows[0] ?? false;
     }
 
     /**
@@ -439,16 +464,18 @@ class Answer
      */
     public function getQuestionType()
     {
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "SELECT type FROM $table
-                WHERE iid = '".$this->questionId."'";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) <= 0) {
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('q.type AS type')
+            ->from(CQuizQuestion::class, 'q')
+            ->where('q.iid = :questionId')
+            ->setParameter('questionId', (int) $this->questionId)
+            ->getQuery()
+            ->getArrayResult();
+        if ([] === $rows) {
             return null;
         }
-        $row = Database::fetch_array($res);
 
-        return (int) $row['type'];
+        return (int) $rows[0]['type'];
     }
 
     /**
@@ -629,7 +656,6 @@ class Answer
      */
     public function save()
     {
-        $answerTable = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $em = Database::getManager();
         $questionId = (int) $this->questionId;
 
@@ -712,8 +738,7 @@ class Answer
                     if (!empty($status)) {
                         $correct = $answerList[$status] ?? $status;
                         $myAutoId = $answerList[$value];
-                        $sql = "UPDATE $answerTable SET correct = '$correct' WHERE iid = $myAutoId";
-                        Database::query($sql);
+                        $this->updateAnswerCorrect((int) $myAutoId, $correct);
                     }
                 }
                 break;
@@ -723,8 +748,7 @@ class Answer
                     if (!empty($status)) {
                         $correct = $answerList[$status] ?? $status;
                         $myAutoId = $answerList[$value];
-                        $sql = "UPDATE $answerTable SET correct = '$correct' WHERE iid = $myAutoId";
-                        Database::query($sql);
+                        $this->updateAnswerCorrect((int) $myAutoId, $correct);
                     }
                 }
                 break;
@@ -734,8 +758,7 @@ class Answer
                     if (!empty($status)) {
                         $correct = $answerList[$status];
                         $myAutoId = $answerList[$value];
-                        $sql = "UPDATE $answerTable SET correct = '$correct' WHERE iid = $myAutoId";
-                        Database::query($sql);
+                        $this->updateAnswerCorrect((int) $myAutoId, $correct);
                     }
                 }
                 break;
@@ -746,9 +769,14 @@ class Answer
             $i = $this->new_nbrAnswers + 1;
             while (isset($this->position[$i])) {
                 $toDeletePos = (int) $this->position[$i];
-                $sql = "DELETE FROM $answerTable
-                    WHERE question_id = '".$questionId."' AND position = '$toDeletePos'";
-                Database::query($sql);
+                Container::getEntityManager()->createQueryBuilder()
+                    ->delete(CQuizAnswer::class, 'a')
+                    ->where('IDENTITY(a.question) = :questionId')
+                    ->andWhere('a.position = :position')
+                    ->setParameter('questionId', $questionId)
+                    ->setParameter('position', $toDeletePos)
+                    ->getQuery()
+                    ->execute();
                 $i++;
             }
         }
@@ -994,23 +1022,48 @@ class Answer
      */
     public function getAnswers()
     {
-        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $questionId = $this->questionId;
+        return $this->answerRowsQueryBuilder()
+            ->where('IDENTITY(a.question) = :questionId')
+            ->orderBy('a.position', 'ASC')
+            ->setParameter('questionId', (int) $this->questionId)
+            ->getQuery()
+            ->getArrayResult();
+    }
 
-        $sql = "SELECT * FROM $table
-                WHERE question_id = $questionId
-                ORDER BY position";
+    /**
+     * Every column of the answer table, aliased to the column names the legacy callers read.
+     */
+    private function answerRowsQueryBuilder(): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'a.iid AS iid',
+                'IDENTITY(a.question) AS question_id',
+                'a.answer AS answer',
+                'a.correct AS correct',
+                'a.comment AS comment',
+                'a.ponderation AS ponderation',
+                'a.position AS position',
+                'a.hotspotCoordinates AS hotspot_coordinates',
+                'a.hotspotType AS hotspot_type',
+                'a.answerCode AS answer_code'
+            )
+            ->from(CQuizAnswer::class, 'a');
+    }
 
-        $result = Database::query($sql);
-
-        $answers = [];
-
-        // while a record is found
-        while ($answer = Database::fetch_assoc($result)) {
-            $answers[] = $answer;
-        }
-
-        return $answers;
+    /**
+     * Points the "correct" column of one answer at another answer (draggable and matching types).
+     */
+    private function updateAnswerCorrect(int $iid, $correct): void
+    {
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(CQuizAnswer::class, 'a')
+            ->set('a.correct', ':correct')
+            ->where('a.iid = :iid')
+            ->setParameter('correct', (int) $correct)
+            ->setParameter('iid', $iid)
+            ->getQuery()
+            ->execute();
     }
 
 }

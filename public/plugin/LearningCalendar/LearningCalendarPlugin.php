@@ -2,7 +2,18 @@
 
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
+use Chamilo\CoreBundle\Entity\GradebookResult;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ActionIcon;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CLpView;
+use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Class LearningCalendarPlugin.
@@ -193,6 +204,11 @@ class LearningCalendarPlugin extends Plugin
         return true;
     }
 
+    private function createQueryBuilder(): QueryBuilder
+    {
+        return Container::getEntityManager()->getConnection()->createQueryBuilder();
+    }
+
     /**
      * @param int    $from
      * @param int    $numberOfItems
@@ -216,19 +232,23 @@ class LearningCalendarPlugin extends Plugin
             $direction = 'DESC';
         }
 
-        if (api_is_platform_admin()) {
-            $sql = 'SELECT * FROM learning_calendar';
-        } else {
-            $userId = api_get_user_id();
-            $sql = "SELECT * FROM learning_calendar WHERE author_id = $userId";
+        $qb = $this->createQueryBuilder()
+            ->select('*')
+            ->from('learning_calendar')
+            ->setFirstResult($from)
+            ->setMaxResults($numberOfItems);
+
+        if (!api_is_platform_admin()) {
+            $qb->where('author_id = '.$qb->createNamedParameter(api_get_user_id(), ParameterType::INTEGER));
         }
 
-        $sql .= " LIMIT $from, $numberOfItems ";
-
-        $result = Database::query($sql);
         $list = [];
         $link = api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/start.php';
-        while ($row = Database::fetch_array($result)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
+            // Database::fetch_array() also exposed every value under a numeric key: keep that shape.
+            foreach (array_values($row) as $value) {
+                $row[] = $value;
+            }
             $id = $row['id'];
             $row['title'] = Display::url(
                 $row['title'],
@@ -278,43 +298,31 @@ class LearningCalendarPlugin extends Plugin
         $start = (int) $start;
         $end = (int) $end;
 
-        $startCondition = '';
-        $endCondition = '';
-        $typeCondition = '';
+        $qb = $this->createQueryBuilder()
+            ->select($getCount ? 'count(id) count' : '*')
+            ->from('learning_calendar_events');
+        $qb->where('calendar_id = '.$qb->createNamedParameter($calendarId, ParameterType::INTEGER));
 
         if (0 !== $start) {
-            $start = api_get_utc_datetime($start);
-            $startCondition = "AND start_date >= '".$start."'";
+            $qb->andWhere('start_date >= '.$qb->createNamedParameter(api_get_utc_datetime($start)));
         }
         if (0 !== $end) {
-            $end = api_get_utc_datetime($end);
-            $endCondition = "AND (end_date <= '".$end."' OR end_date IS NULL)";
+            $qb->andWhere('(end_date <= '.$qb->createNamedParameter(api_get_utc_datetime($end)).' OR end_date IS NULL)');
         }
 
         if (!empty($type)) {
-            $type = (int) $type;
-            $typeCondition = " AND type = $type ";
+            $qb->andWhere('type = '.$qb->createNamedParameter((int) $type, ParameterType::INTEGER));
         }
 
-        $select = '*';
-        if ($getCount) {
-            $select = 'count(id) count ';
-        }
-
-        $sql = "SELECT $select FROM learning_calendar_events
-                WHERE calendar_id = $calendarId $startCondition $endCondition $typeCondition";
-        $result = Database::query($sql);
+        $result = $qb->executeQuery();
 
         if ($getCount) {
-            $row = Database::fetch_assoc($result);
+            $row = $result->fetchAssociative();
 
             return $row['count'];
         }
 
-        $list = [];
-        while ($row = Database::fetch_assoc($result)) {
-            $list[] = $row;
-        }
+        $list = $result->fetchAllAssociative();
 
         return ['calendar' => $calendarInfo, 'events' => $list];
     }
@@ -337,10 +345,15 @@ class LearningCalendarPlugin extends Plugin
             $typeCondition = " AND type = $type ";
         }*/
 
-        $sql = "SELECT start_date FROM learning_calendar_events
-                WHERE calendar_id = $calendarId ORDER BY start_date LIMIT 1";
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $qb = $this->createQueryBuilder();
+        $row = $qb
+            ->select('start_date')
+            ->from('learning_calendar_events')
+            ->where('calendar_id = '.$qb->createNamedParameter($calendarId, ParameterType::INTEGER))
+            ->orderBy('start_date')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAssociative();
 
         return $row['start_date'];
     }
@@ -350,14 +363,13 @@ class LearningCalendarPlugin extends Plugin
      */
     public function getCalendarCount()
     {
-        if (api_is_platform_admin()) {
-            $sql = 'select count(*) as count FROM learning_calendar';
-        } else {
-            $userId = api_get_user_id();
-            $sql = "select count(*) as count FROM learning_calendar WHERE author_id = $userId";
+        $qb = $this->createQueryBuilder()
+            ->select('count(*) as count')
+            ->from('learning_calendar');
+        if (!api_is_platform_admin()) {
+            $qb->where('author_id = '.$qb->createNamedParameter(api_get_user_id(), ParameterType::INTEGER));
         }
-        $result = Database::query($sql);
-        $result = Database::fetch_array($result);
+        $result = $qb->executeQuery()->fetchAssociative();
 
         return (int) $result['count'];
     }
@@ -369,16 +381,16 @@ class LearningCalendarPlugin extends Plugin
      */
     public function getCalendarList()
     {
-        if (api_is_platform_admin()) {
-            $sql = 'SELECT * FROM learning_calendar ORDER BY title ASC';
-        } else {
-            $userId = api_get_user_id();
-            $sql = "SELECT * FROM learning_calendar WHERE author_id = $userId ORDER BY title ASC";
+        $qb = $this->createQueryBuilder()
+            ->select('*')
+            ->from('learning_calendar')
+            ->orderBy('title', 'ASC');
+        if (!api_is_platform_admin()) {
+            $qb->where('author_id = '.$qb->createNamedParameter(api_get_user_id(), ParameterType::INTEGER));
         }
 
-        $result = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
             $calendarId = (int) $row['id'];
             $row['event_count'] = $this->getCalendarEventCount($calendarId);
             $row['user_count'] = $this->getUsersPerCalendarCount($calendarId);
@@ -396,9 +408,13 @@ class LearningCalendarPlugin extends Plugin
     public function getCalendarEventCount($calendarId)
     {
         $calendarId = (int) $calendarId;
-        $sql = "SELECT count(id) as count FROM learning_calendar_events WHERE calendar_id = $calendarId";
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $qb = $this->createQueryBuilder();
+        $row = $qb
+            ->select('count(id) as count')
+            ->from('learning_calendar_events')
+            ->where('calendar_id = '.$qb->createNamedParameter($calendarId, ParameterType::INTEGER))
+            ->executeQuery()
+            ->fetchAssociative();
 
         return (int) $row['count'];
     }
@@ -412,12 +428,16 @@ class LearningCalendarPlugin extends Plugin
     public function getUsersPerCalendar($calendarId)
     {
         $calendarId = (int) $calendarId;
-        $sql = "SELECT * FROM learning_calendar_user
-                WHERE calendar_id = $calendarId
-                ORDER BY id ASC";
-        $result = Database::query($sql);
+        $qb = $this->createQueryBuilder();
+        $rows = $qb
+            ->select('*')
+            ->from('learning_calendar_user')
+            ->where('calendar_id = '.$qb->createNamedParameter($calendarId, ParameterType::INTEGER))
+            ->orderBy('id', 'ASC')
+            ->executeQuery()
+            ->fetchAllAssociative();
         $list = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             $userId = (int) $row['user_id'];
             $userInfo = api_get_user_info($userId);
 
@@ -442,10 +462,13 @@ class LearningCalendarPlugin extends Plugin
     public function getUsersPerCalendarCount($calendarId)
     {
         $calendarId = (int) $calendarId;
-        $sql = "SELECT count(id) as count FROM learning_calendar_user
-                WHERE calendar_id = $calendarId";
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $qb = $this->createQueryBuilder();
+        $row = $qb
+            ->select('count(id) as count')
+            ->from('learning_calendar_user')
+            ->where('calendar_id = '.$qb->createNamedParameter($calendarId, ParameterType::INTEGER))
+            ->executeQuery()
+            ->fetchAssociative();
 
         return (int) $row['count'];
     }
@@ -509,9 +532,13 @@ class LearningCalendarPlugin extends Plugin
             return [];
         }
 
-        $sql = "SELECT * FROM learning_calendar WHERE id = $calendarId";
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $qb = $this->createQueryBuilder();
+        $row = $qb
+            ->select('*')
+            ->from('learning_calendar')
+            ->where('id = '.$qb->createNamedParameter($calendarId, ParameterType::INTEGER))
+            ->executeQuery()
+            ->fetchAssociative();
 
         return $row ?: [];
     }
@@ -524,14 +551,16 @@ class LearningCalendarPlugin extends Plugin
     public function getUserCalendar($userId)
     {
         $userId = (int) $userId;
-        $sql = "SELECT *
-                FROM learning_calendar_user
-                WHERE user_id = $userId
-                ORDER BY id ASC
-                LIMIT 1";
-        $result = Database::query($sql);
+        $qb = $this->createQueryBuilder();
 
-        return Database::fetch_assoc($result);
+        return $qb
+            ->select('*')
+            ->from('learning_calendar_user')
+            ->where('user_id = '.$qb->createNamedParameter($userId, ParameterType::INTEGER))
+            ->orderBy('id', 'ASC')
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAssociative();
     }
 
     /**
@@ -630,9 +659,12 @@ class LearningCalendarPlugin extends Plugin
     {
         $calendarId = (int) $calendarId;
         $userId = (int) $userId;
-        $sql = "DELETE FROM learning_calendar_user
-                WHERE user_id = $userId AND calendar_id = $calendarId";
-        Database::query($sql);
+        $qb = $this->createQueryBuilder();
+        $qb
+            ->delete('learning_calendar_user')
+            ->where('user_id = '.$qb->createNamedParameter($userId, ParameterType::INTEGER))
+            ->andWhere('calendar_id = '.$qb->createNamedParameter($calendarId, ParameterType::INTEGER))
+            ->executeStatement();
 
         return true;
     }
@@ -662,24 +694,24 @@ class LearningCalendarPlugin extends Plugin
             return [];
         }
 
-        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'u.id AS id',
+                'u.username AS username',
+                'u.firstname AS firstname',
+                'u.lastname AS lastname'
+            )
+            ->from(User::class, 'u')
+            ->setMaxResults(1)
+        ;
 
         if (ctype_digit($identifier)) {
-            $userId = (int) $identifier;
-            $sql = "SELECT id, username, firstname, lastname
-                    FROM $userTable
-                    WHERE id = $userId
-                    LIMIT 1";
+            $qb->where('u.id = :id')->setParameter('id', (int) $identifier);
         } else {
-            $identifier = Database::escape_string($identifier);
-            $sql = "SELECT id, username, firstname, lastname
-                    FROM $userTable
-                    WHERE username = '$identifier'
-                    LIMIT 1";
+            $qb->where('u.username = :username')->setParameter('username', $identifier);
         }
 
-        $result = Database::query($sql);
-        $user = Database::fetch_assoc($result);
+        $user = $qb->getQuery()->getArrayResult()[0] ?? null;
 
         return $user ?: [];
     }
@@ -713,8 +745,11 @@ class LearningCalendarPlugin extends Plugin
             return 'already';
         }
 
-        $sql = "DELETE FROM learning_calendar_user WHERE user_id = $userId";
-        Database::query($sql);
+        $qb = $this->createQueryBuilder();
+        $qb
+            ->delete('learning_calendar_user')
+            ->where('user_id = '.$qb->createNamedParameter($userId, ParameterType::INTEGER))
+            ->executeStatement();
 
         Database::insert('learning_calendar_user', [
             'calendar_id' => $calendarId,
@@ -817,21 +852,22 @@ class LearningCalendarPlugin extends Plugin
         $endDate = $this->normalizeApiDate($endDate, date('Y-m-d', strtotime('+1 month')));
 
         $calendarId = (int) $calendarInfo['id'];
-        $startDate = Database::escape_string($startDate);
-        $endDate = Database::escape_string($endDate);
-
-        $sql = "SELECT *
-                FROM learning_calendar_events
-                WHERE calendar_id = $calendarId
-                  AND start_date < '$endDate'
-                  AND (end_date >= '$startDate' OR end_date IS NULL)
-                ORDER BY start_date ASC, id ASC";
-        $result = Database::query($sql);
+        $qb = $this->createQueryBuilder();
+        $rows = $qb
+            ->select('*')
+            ->from('learning_calendar_events')
+            ->where('calendar_id = '.$qb->createNamedParameter($calendarId, ParameterType::INTEGER))
+            ->andWhere('start_date < '.$qb->createNamedParameter($endDate))
+            ->andWhere('(end_date >= '.$qb->createNamedParameter($startDate).' OR end_date IS NULL)')
+            ->orderBy('start_date', 'ASC')
+            ->addOrderBy('id', 'ASC')
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $list = [];
         $eventTypeList = $this->getEventTypeList();
 
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             $type = (int) $row['type'];
             $typeInfo = $eventTypeList[$type] ?? $eventTypeList[self::EVENT_TYPE_FREE];
             $start = $this->normalizeApiDate($row['start_date'], $startDate);
@@ -923,25 +959,23 @@ class LearningCalendarPlugin extends Plugin
             return 0;
         }
 
-        $courseIdsToString = implode(',', array_unique($courseIds));
-        $tableEvaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $tableResult = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-        $sql = "SELECT DISTINCT e.title, e.id
-                FROM $tableEvaluation e
-                INNER JOIN $tableResult r
-                ON (r.evaluation_id = e.id)
-                WHERE
-                  e.type = 'evaluation' AND
-                  r.score >= 2 AND
-                  r.user_id = $userId AND
-                  e.c_id IN ($courseIdsToString)
-        ";
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT e.title AS title', 'e.id AS id')
+            ->from(GradebookEvaluation::class, 'e')
+            ->innerJoin(GradebookResult::class, 'r', Join::WITH, 'r.evaluation = e')
+            ->where('e.type = :type')
+            ->andWhere('r.score >= 2')
+            ->andWhere('r.user = :userId')
+            ->andWhere('e.course IN (:courseIds)')
+            ->setParameter('type', 'evaluation')
+            ->setParameter('userId', $userId)
+            ->setParameter('courseIds', array_values(array_unique($courseIds)))
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $list = [];
-        if (Database::num_rows($result)) {
-            while ($row = Database::fetch_assoc($result)) {
-                $list[$row['id']] = $row;
-            }
+        foreach ($rows as $row) {
+            $list[$row['id']] = $row;
         }
 
         return $list;
@@ -961,9 +995,6 @@ class LearningCalendarPlugin extends Plugin
             return 0;
         }
 
-        $tableItem = Database::get_course_table(TABLE_LP_ITEM);
-        $tableLpItemView = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $tableLpView = Database::get_course_table(TABLE_LP_VIEW);
         $extraField = new ExtraField('lp_item');
         $fieldInfo = $extraField->get_handler_field_info_by_field_variable('calendar');
 
@@ -972,6 +1003,23 @@ class LearningCalendarPlugin extends Plugin
         }
 
         // The course and the session of an attempt are the ones of its learning path view.
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(DISTINCT i.iid)')
+            ->from(CLpItem::class, 'i')
+            ->innerJoin(CLpView::class, 'v', Join::WITH, 'v.lp = i.lp')
+            ->innerJoin(CLpItemView::class, 'iv', Join::WITH, 'iv.view = v AND iv.item = i')
+            ->innerJoin(
+                ExtraFieldValues::class,
+                'e',
+                Join::WITH,
+                "e.itemId = i.iid AND e.fieldValue = '1' AND e.field = :fieldId"
+            )
+            ->where('v.user = :userId')
+            ->andWhere("iv.status = 'completed'")
+            ->setParameter('fieldId', (int) $fieldInfo['id'])
+            ->setParameter('userId', $userId)
+        ;
+
         $courseAndSessionCondition = [];
         foreach ($coursesAndSessions as $sessionId => $courseList) {
             if (isset($courseList['course_list'])) {
@@ -981,16 +1029,16 @@ class LearningCalendarPlugin extends Plugin
                 continue;
             }
             $sessionId = (int) $sessionId;
-            $courseListToString = implode(',', array_map('intval', $courseList));
+            $index = count($courseAndSessionCondition);
+            $qb->setParameter('courses'.$index, array_map('intval', $courseList));
             if (empty($sessionId)) {
                 $courseAndSessionCondition[] =
-                    " ((v.session_id = 0 OR v.session_id IS NULL) AND v.c_id IN ($courseListToString))";
+                    '((v.session IS NULL OR IDENTITY(v.session) = 0) AND IDENTITY(v.course) IN (:courses'.$index.'))';
             } else {
-                $courseAndSessionCondition[] = "
-                    (
-                        ((v.session_id = 0 OR v.session_id IS NULL) OR v.session_id = $sessionId) AND
-                        v.c_id IN ($courseListToString)
-                    )";
+                $qb->setParameter('session'.$index, $sessionId);
+                $courseAndSessionCondition[] =
+                    '((v.session IS NULL OR IDENTITY(v.session) = 0 OR IDENTITY(v.session) = :session'.$index.') AND '
+                    .'IDENTITY(v.course) IN (:courses'.$index.'))';
             }
         }
 
@@ -998,30 +1046,9 @@ class LearningCalendarPlugin extends Plugin
             return 0;
         }
 
-        $courseSessionConditionToString = 'AND ('.implode(' OR ', $courseAndSessionCondition).') ';
-        $sql = "SELECT COUNT(DISTINCT i.iid) as count
-                FROM $tableItem i
-                INNER JOIN $tableLpView v
-                ON (v.lp_id = i.lp_id)
-                INNER JOIN $tableLpItemView iv
-                ON (iv.lp_view_id = v.iid AND iv.lp_item_id = i.iid)
-                INNER JOIN extra_field_values e
-                ON (e.item_id = i.iid AND e.field_value = '1' AND e.field_id = ".(int) $fieldInfo['id'].")
-                WHERE
-                    v.user_id = $userId AND
-                    iv.status = 'completed'
-                    $courseSessionConditionToString
-               ";
+        $qb->andWhere('('.implode(' OR ', $courseAndSessionCondition).')');
 
-        $result = Database::query($sql);
-
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_assoc($result);
-
-            return $row['count'];
-        }
-
-        return 0;
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function setJavaScript()
@@ -1157,9 +1184,14 @@ class LearningCalendarPlugin extends Plugin
 
         $newCalendarId = Database::insert('learning_calendar', $item);
         if (!empty($newCalendarId)) {
-            $sql = "SELECT * FROM learning_calendar_events WHERE calendar_id = $calendarId";
-            $result = Database::query($sql);
-            while ($row = Database::fetch_assoc($result)) {
+            $qb = $this->createQueryBuilder();
+            $rows = $qb
+                ->select('*')
+                ->from('learning_calendar_events')
+                ->where('calendar_id = '.$qb->createNamedParameter($calendarId, ParameterType::INTEGER))
+                ->executeQuery()
+                ->fetchAllAssociative();
+            foreach ($rows as $row) {
                 unset($row['id']);
                 $row['calendar_id'] = $newCalendarId;
                 Database::insert('learning_calendar_events', $row);
@@ -1187,16 +1219,25 @@ class LearningCalendarPlugin extends Plugin
 
         $calendarId = (int) $calendarId;
 
-        $sql = "DELETE FROM learning_calendar WHERE id = $calendarId";
-        Database::query($sql);
+        $qb = $this->createQueryBuilder();
+        $qb
+            ->delete('learning_calendar')
+            ->where('id = '.$qb->createNamedParameter($calendarId, ParameterType::INTEGER))
+            ->executeStatement();
 
         // Delete events
-        $sql = "DELETE FROM learning_calendar_events WHERE calendar_id = $calendarId";
-        Database::query($sql);
+        $qb = $this->createQueryBuilder();
+        $qb
+            ->delete('learning_calendar_events')
+            ->where('calendar_id = '.$qb->createNamedParameter($calendarId, ParameterType::INTEGER))
+            ->executeStatement();
 
         // Delete user assignments to avoid orphan rows in the plugin table.
-        $sql = "DELETE FROM learning_calendar_user WHERE calendar_id = $calendarId";
-        Database::query($sql);
+        $qb = $this->createQueryBuilder();
+        $qb
+            ->delete('learning_calendar_user')
+            ->where('calendar_id = '.$qb->createNamedParameter($calendarId, ParameterType::INTEGER))
+            ->executeStatement();
 
         return true;
     }
@@ -1210,12 +1251,16 @@ class LearningCalendarPlugin extends Plugin
         $startDate = Database::escape_string($startDate);
         $calendarId = (int) $calendarId;
 
-        $sql = "SELECT * FROM learning_calendar_events
-                WHERE start_date = '$startDate' AND calendar_id = $calendarId ";
-        $result = Database::query($sql);
+        $qb = $this->createQueryBuilder();
+        $row = $qb
+            ->select('*')
+            ->from('learning_calendar_events')
+            ->where('start_date = '.$qb->createNamedParameter($startDate))
+            ->andWhere('calendar_id = '.$qb->createNamedParameter($calendarId, ParameterType::INTEGER))
+            ->executeQuery()
+            ->fetchAssociative();
 
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_assoc($result);
+        if (false !== $row) {
             $currentType = (int) $row['type'];
 
             if ($currentType >= self::EVENT_TYPE_FREE) {
@@ -1257,12 +1302,16 @@ class LearningCalendarPlugin extends Plugin
         $calendarId = (int) $calendarId;
         $eventTypeList = $this->getEventTypeList();
 
-        $sql = "SELECT * FROM learning_calendar_events
-                WHERE calendar_id = $calendarId ";
-        $result = Database::query($sql);
+        $qb = $this->createQueryBuilder();
+        $rows = $qb
+            ->select('*')
+            ->from('learning_calendar_events')
+            ->where('calendar_id = '.$qb->createNamedParameter($calendarId, ParameterType::INTEGER))
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $list = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             $type = (int) $row['type'];
             $eventType = $eventTypeList[$type] ?? $eventTypeList[self::EVENT_TYPE_FREE];
 
@@ -1306,13 +1355,15 @@ class LearningCalendarPlugin extends Plugin
     public function getControlPoints($userId)
     {
         $userId = (int) $userId;
-        $sql = "SELECT control_date, control_value
-                FROM learning_calendar_control_point
-                WHERE user_id = $userId
-                ORDER BY control_date";
-        $result = Database::query($sql);
+        $qb = $this->createQueryBuilder();
 
-        return Database::store_result($result, 'ASSOC');
+        return $qb
+            ->select('control_date', 'control_value')
+            ->from('learning_calendar_control_point')
+            ->where('user_id = '.$qb->createNamedParameter($userId, ParameterType::INTEGER))
+            ->orderBy('control_date')
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 
     /**
@@ -1342,17 +1393,20 @@ class LearningCalendarPlugin extends Plugin
         $local = api_get_local_time();
         $date = substr($local, 0, 10);
 
-        $sql = "SELECT id
-                FROM learning_calendar_control_point
-                WHERE user_id = $userId AND control_date = '$date'";
-        $result = Database::query($sql);
+        $qb = $this->createQueryBuilder();
+        $data = $qb
+            ->select('id')
+            ->from('learning_calendar_control_point')
+            ->where('user_id = '.$qb->createNamedParameter($userId, ParameterType::INTEGER))
+            ->andWhere('control_date = '.$qb->createNamedParameter($date))
+            ->executeQuery()
+            ->fetchAssociative();
 
-        if (Database::num_rows($result)) {
+        if (false !== $data) {
             $params = [
                 'control_value' => $value,
                 'updated_at' => api_get_utc_datetime(),
             ];
-            $data = Database::fetch_array($result);
             $id = $data['id'];
             Database::update('learning_calendar_control_point', $params, ['id = ?' => $id]);
         } else {

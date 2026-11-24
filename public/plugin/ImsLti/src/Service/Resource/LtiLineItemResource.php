@@ -48,12 +48,15 @@ class LtiLineItemResource extends LtiAdvantageServiceResource
         switch ($this->request->getMethod()) {
             case Request::METHOD_GET:
                 $this->validateToken(
-                    [LtiAssignmentGradesService::SCOPE_LINE_ITEM]
+                    [
+                        LtiAssignmentGradesService::SCOPE_LINE_ITEM,
+                        LtiAssignmentGradesService::SCOPE_LINE_ITEM_READ,
+                    ]
                 );
                 $this->processGet();
                 break;
             case Request::METHOD_PUT:
-                if (LtiAssignmentGradesService::AGS_FULL !== $this->tool->getAdvantageServices()['ags']) {
+                if (LtiAssignmentGradesService::AGS_FULL !== ($this->tool->getToolParent() ?? $this->tool)->getAdvantageServices()['ags']) {
                     throw new MethodNotAllowedHttpException([Request::METHOD_GET]);
                 }
 
@@ -63,7 +66,7 @@ class LtiLineItemResource extends LtiAdvantageServiceResource
                 $this->processPut();
                 break;
             case Request::METHOD_DELETE:
-                if (LtiAssignmentGradesService::AGS_FULL !== $this->tool->getAdvantageServices()['ags']) {
+                if (LtiAssignmentGradesService::AGS_FULL !== ($this->tool->getToolParent() ?? $this->tool)->getAdvantageServices()['ags']) {
                     throw new MethodNotAllowedHttpException([Request::METHOD_GET]);
                 }
 
@@ -82,31 +85,13 @@ class LtiLineItemResource extends LtiAdvantageServiceResource
      */
     public function validate()
     {
-        if (!$this->course) {
-            throw new BadRequestHttpException('Course not found.');
-        }
-
-        if (!$this->tool) {
-            throw new BadRequestHttpException('Tool not found.');
-        }
-
-        if ($this->tool->getCourse()->getId() !== $this->course->getId()) {
-            throw new AccessDeniedHttpException('Tool not found in course.');
-        }
+        $this->validateToolInCourse();
 
         if ($this->request->server->get('HTTP_ACCEPT') !== LtiAssignmentGradesService::TYPE_LINE_ITEM) {
             throw new UnsupportedMediaTypeHttpException('Unsupported media type.');
         }
 
-        $parentTool = $this->tool->getParent();
-
-        if ($parentTool) {
-            $advServices = $parentTool->getAdvantageServices();
-
-            if (LtiAssignmentGradesService::AGS_NONE === $advServices['ags']) {
-                throw new AccessDeniedHttpException('Assigment and grade service is not enabled for this tool.');
-            }
-        }
+        $this->validateAssignmentGradesServiceEnabled();
 
         if (!$this->lineItem) {
             throw new NotFoundHttpException('Line item not found');
@@ -115,6 +100,8 @@ class LtiLineItemResource extends LtiAdvantageServiceResource
         if ($this->lineItem->getTool()->getId() !== $this->tool->getId()) {
             throw new AccessDeniedHttpException('Line item not found for the tool.');
         }
+
+        $this->validateLineItemInCourse($this->lineItem);
     }
 
     private function processGet()
@@ -127,6 +114,7 @@ class LtiLineItemResource extends LtiAdvantageServiceResource
         );
 
         $this->response->headers->set('Content-Type', LtiAssignmentGradesService::TYPE_LINE_ITEM);
+        $this->response->setEncodingOptions(JSON_UNESCAPED_SLASHES);
         $this->response->setData($data);
     }
 
@@ -165,14 +153,14 @@ class LtiLineItemResource extends LtiAdvantageServiceResource
         /** @var Evaluation $evaluation */
         $evaluation = $evaluations[0];
 
-        $lineItemEvaluation->setName($data['label']);
+        $lineItemEvaluation->setTitle((string) $data['label']);
 
         if (isset($data['resourceId'])) {
-            $this->lineItem->setResourceId($data['resourceId']);
+            $this->lineItem->setResourceId((string) $data['resourceId']);
         }
 
         if (isset($data['tag'])) {
-            $this->lineItem->setTag($data['tag']);
+            $this->lineItem->setTag((string) $data['tag']);
         }
 
         if (!empty($data['startDateTime'])) {
@@ -186,7 +174,7 @@ class LtiLineItemResource extends LtiAdvantageServiceResource
         }
 
         if (!$evaluation->has_results()) {
-            $lineItemEvaluation->setMax($data['scoreMaximum']);
+            $lineItemEvaluation->setMax((float) $data['scoreMaximum']);
         }
 
         $em = Database::getManager();

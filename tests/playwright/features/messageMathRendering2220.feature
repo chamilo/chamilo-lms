@@ -4,8 +4,19 @@ Feature: GH2220 - Render stored mathematical formulas directly in messages
   without opening the reply editor. This covers the supported modern
   MathJax format, not unsupported legacy AsciiSVG <embed> content.
 
-  # Precondition: editor.enabled_mathjax is enabled on this installation.
-  # The test uses the seeded acostea student and does not change settings.
+  # editor.enabled_mathjax is switched on here and switched off again by the last scenario, so the feature does not
+  # depend on what an earlier file left in the platform settings. (A settings guard cannot restore it: an empty
+  # value, the installer default, is shown by the form as "Yes", the first option, so a guard would store "true".)
+  Scenario: GH2220 - The administrator enables the MathJax editor plugin
+    Given I am a platform administrator
+    And I am on "/admin/settings/search_settings?keyword=enabled_mathjax"
+    And I wait for the page to be loaded
+    And I select "Yes" from "form_enabled_mathjax"
+    And I press "Save settings"
+    And I wait for the page to be loaded
+    Then I should not see an error
+
+  # The test uses the seeded acostea student.
   Scenario: GH2220 - The sender can read a rendered formula without replying
     Given I am a platform administrator
     And I resolve the user id for "acostea"
@@ -33,3 +44,12 @@ Feature: GH2220 - Render stored mathematical formulas directly in messages
     When I click the "button:has(.mdi-delete)" icon in the row for "PW GH2220 rendered formula"
     And I click the "[role='alertdialog'] [data-pc-name='pcacceptbutton']" element
     Then I should not see "PW GH2220 rendered formula"
+
+  Scenario: GH2220 - The administrator switches the MathJax editor plugin off again
+    Given I am a platform administrator
+    And I am on "/admin/settings/search_settings?keyword=enabled_mathjax"
+    And I wait for the page to be loaded
+    And I select "No" from "form_enabled_mathjax"
+    And I press "Save settings"
+    And I wait for the page to be loaded
+    Then I should not see an error

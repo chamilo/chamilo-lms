@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\CToolIntroHelper;
 use Chamilo\CoreBundle\Mcp\SetCourseIntroductionTool;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
@@ -29,6 +30,8 @@ final class SetCourseIntroductionToolTest extends KernelTestCase
     public function testCreatesTheIntroductionThenReplacesItInPlace(): void
     {
         self::bootKernel();
+        // Security::remove_XSS() reads settings through the static container, which no earlier test is guaranteed to have set.
+        Container::setContainer(self::getContainer());
         $course = $this->createCourse('CI create '.uniqid());
         $this->authenticateAsTeacherOf($course);
         $courseId = (int) $course->getId();
@@ -49,6 +52,8 @@ final class SetCourseIntroductionToolTest extends KernelTestCase
     public function testRepeatingTheSameContentReportsNoChange(): void
     {
         self::bootKernel();
+        // Security::remove_XSS() reads settings through the static container, which no earlier test is guaranteed to have set.
+        Container::setContainer(self::getContainer());
         $course = $this->createCourse('CI repeat '.uniqid());
         $this->authenticateAsTeacherOf($course);
         $courseId = (int) $course->getId();
@@ -61,6 +66,8 @@ final class SetCourseIntroductionToolTest extends KernelTestCase
     public function testAnEmptyStringClearsTheIntroduction(): void
     {
         self::bootKernel();
+        // Security::remove_XSS() reads settings through the static container, which no earlier test is guaranteed to have set.
+        Container::setContainer(self::getContainer());
         $course = $this->createCourse('CI clear '.uniqid());
         $this->authenticateAsTeacherOf($course);
         $courseId = (int) $course->getId();
@@ -74,6 +81,8 @@ final class SetCourseIntroductionToolTest extends KernelTestCase
     public function testTheHtmlIsStoredAsTheCourseDocumentSanitizerReturnsIt(): void
     {
         self::bootKernel();
+        // Security::remove_XSS() reads settings through the static container, which no earlier test is guaranteed to have set.
+        Container::setContainer(self::getContainer());
         $course = $this->createCourse('CI sanitize '.uniqid());
         $this->authenticateAsTeacherOf($course);
         $html = '<h2>Hello</h2><p onclick="x()">Intro</p><script>alert(1)</script>';
@@ -90,6 +99,8 @@ final class SetCourseIntroductionToolTest extends KernelTestCase
     public function testSessionIntroductionSupersedesTheBaseOneWithoutChangingIt(): void
     {
         self::bootKernel();
+        // Security::remove_XSS() reads settings through the static container, which no earlier test is guaranteed to have set.
+        Container::setContainer(self::getContainer());
         $course = $this->createCourse('CI session '.uniqid());
         $session = $this->linkedSession($course);
         $this->authenticateAsTeacherOf($course);
@@ -121,6 +132,8 @@ final class SetCourseIntroductionToolTest extends KernelTestCase
     public function testSessionIntroductionIsUpdatedInPlace(): void
     {
         self::bootKernel();
+        // Security::remove_XSS() reads settings through the static container, which no earlier test is guaranteed to have set.
+        Container::setContainer(self::getContainer());
         $course = $this->createCourse('CI session twice '.uniqid());
         $session = $this->linkedSession($course);
         $this->authenticateAsTeacherOf($course);
@@ -137,6 +150,8 @@ final class SetCourseIntroductionToolTest extends KernelTestCase
     public function testASessionNotLinkedToTheCourseIsRefused(): void
     {
         self::bootKernel();
+        // Security::remove_XSS() reads settings through the static container, which no earlier test is guaranteed to have set.
+        Container::setContainer(self::getContainer());
         $course = $this->createCourse('CI unlinked '.uniqid());
         $unlinked = $this->createSession('CI unlinked session '.uniqid());
         $this->authenticateAsTeacherOf($course);
@@ -148,6 +163,8 @@ final class SetCourseIntroductionToolTest extends KernelTestCase
     public function testASessionOfACourseLockedInsideSessionsIsRefusedWhileTheBaseCourseStaysEditable(): void
     {
         self::bootKernel();
+        // Security::remove_XSS() reads settings through the static container, which no earlier test is guaranteed to have set.
+        Container::setContainer(self::getContainer());
         $course = $this->createCourse('CI locked '.uniqid());
         $session = $this->linkedSession($course);
         $this->authenticateAsTeacherOf($course);
@@ -189,6 +206,8 @@ final class SetCourseIntroductionToolTest extends KernelTestCase
     public function testATeacherOfAnotherCourseIsDenied(): void
     {
         self::bootKernel();
+        // Security::remove_XSS() reads settings through the static container, which no earlier test is guaranteed to have set.
+        Container::setContainer(self::getContainer());
         $course = $this->createCourse('CI owner '.uniqid());
         $otherCourse = $this->createCourse('CI other '.uniqid());
         $this->authenticateAsTeacherOf($otherCourse);

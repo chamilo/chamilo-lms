@@ -6,7 +6,12 @@ use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\TrackEAttempt;
+use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AiHelper;
@@ -15,7 +20,10 @@ use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\CourseBundle\Entity\CQuiz;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
+use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class ExerciseLib
@@ -1092,6 +1100,7 @@ class ExerciseLib
                             global $exe_id;
                             $exe_id = (int) $exe_id;
                             $trackAttempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+                            // TODO(db-neutral): not migrated, this branch only renders HTML and cannot be characterized
                             $sql = "SELECT answer FROM $trackAttempts
                                     WHERE exe_id = $exe_id AND question_id= $questionId";
                             $rsLastAttempt = Database::query($sql);
@@ -1901,22 +1910,23 @@ HOTSPOT;
      */
     public static function get_exercise_track_exercise_info($exeId)
     {
-        $quizTable = Database::get_course_table(TABLE_QUIZ_TEST);
-        $trackExerciseTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $exeId = (int) $exeId;
         $result = [];
         if (!empty($exeId)) {
-            $sql = " SELECT q.*, tee.*
-                FROM $quizTable as q
-                INNER JOIN $trackExerciseTable as tee
-                ON q.iid = tee.exe_exo_id
-                WHERE
-                    tee.exe_id = $exeId";
-
-            $sqlResult = Database::query($sql);
-            if (Database::num_rows($sqlResult)) {
-                $result = Database::fetch_assoc($sqlResult);
+            // Every column of c_quiz and of track_e_exercises, under the column names.
+            [$quizSelects, $quizTypes] = self::entityColumns(CQuiz::class, 'q');
+            [$trackSelects, $trackTypes] = self::entityColumns(TrackEExercise::class, 'tee');
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select(...$quizSelects, ...$trackSelects)
+                ->from(CQuiz::class, 'q')
+                ->innerJoin(TrackEExercise::class, 'tee', 'WITH', 'tee.quiz = q')
+                ->where('tee.exeId = :exeId')
+                ->setParameter('exeId', $exeId)
+                ->getQuery()
+                ->getArrayResult()
+            ;
+            if ([] !== $rows) {
+                $result = self::toLegacyRow($rows[0], $quizTypes + $trackTypes);
                 $result['duration_formatted'] = '';
                 if (!empty($result['exe_duration'])) {
                     $time = api_format_time($result['exe_duration'], 'js');
@@ -2352,6 +2362,7 @@ HOTSPOT;
         }
 
         if ($get_count) {
+            // TODO(db-neutral): raw query assembled from SQL fragments (select list, joins, caller conditions)
             $resx = Database::query($sql);
             $rowx = Database::fetch_row($resx, 'ASSOC');
 
@@ -2390,6 +2401,7 @@ HOTSPOT;
         }
 
         $results = [];
+        // TODO(db-neutral): raw query assembled from SQL fragments (select list, joins, caller conditions, free-form ORDER BY column)
         $resx = Database::query($sql);
         while ($rowx = Database::fetch_assoc($resx)) {
             $results[] = $rowx;
@@ -2944,23 +2956,19 @@ HOTSPOT;
      */
     public static function getReviewedAttemptsInfo(int $exerciseId, int $sessionId): array
     {
-        $courseId = api_get_course_int_id();
-        $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $qualifyTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('t.exeId AS exe_id')
+            ->distinct()
+            ->from(TrackEExercise::class, 't')
+            ->innerJoin(TrackEAttemptQualify::class, 'q', 'WITH', 'q.trackExercise = t AND q.author > 0 AND q.final = true')
+            ->where('t.course = :courseId')
+            ->andWhere('t.quiz = :exerciseId')
+            ->setParameter('courseId', (int) api_get_course_int_id())
+            ->setParameter('exerciseId', $exerciseId)
+        ;
+        self::restrictToSession($qb, $sessionId, 'IDENTITY(t.session)', 't.session');
 
-        $sessionCondition = api_get_session_condition($sessionId, true, false, 't.session_id');
-
-        $sql = "
-            SELECT DISTINCT t.exe_id
-            FROM $trackTable t
-            INNER JOIN $qualifyTable q ON (t.exe_id = q.exe_id AND q.author > 0 AND q.final = 1)
-            WHERE
-                t.c_id = $courseId AND
-                t.exe_exo_id = $exerciseId
-                $sessionCondition
-        ";
-
-        return Database::store_result(Database::query($sql));
+        return $qb->getQuery()->getArrayResult();
     }
 
     /**
@@ -3789,62 +3797,56 @@ EOT;
         bool $onlyStudent = false
     ): array
     {
-        $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $trackAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
         $questionId = (int) $questionId;
         $exerciseId = (int) $exerciseId;
-        $courseCode = Database::escape_string($courseCode);
         $sessionId = (int) $sessionId;
         $courseId = api_get_course_int_id($courseCode);
 
-        $sql = "SELECT MAX(marks) as max, MIN(marks) as min, AVG(marks) as average
-                FROM $trackExercises e ";
-        $sessionCondition = api_get_session_condition($sessionId, true, false, 'e.session_id');
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('MAX(a.marks) AS max', 'MIN(a.marks) AS min', 'AVG(a.marks) AS average')
+            ->from(TrackEExercise::class, 'e')
+        ;
         if ($onlyStudent) {
-            $courseCondition = '';
             if (empty($sessionId)) {
-                $courseCondition = "
-                INNER JOIN $courseUser c
-                ON (
-                    e.exe_user_id = c.user_id AND
-                    e.c_id = c.c_id AND
-                    c.status = ".STUDENT." AND
-                    relation_type <> 2
-                )";
+                $qb
+                    ->innerJoin(
+                        CourseRelUser::class,
+                        'c',
+                        'WITH',
+                        'e.user = c.user AND e.course = c.course AND c.status = :studentStatus AND c.relationType <> 2'
+                    )
+                    ->setParameter('studentStatus', STUDENT)
+                ;
             } else {
-                $sessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-                $courseCondition = "
-            INNER JOIN $sessionRelCourse sc
-            ON (
-                        e.exe_user_id = sc.user_id AND
-                        e.c_id = sc.c_id AND
-                        e.session_id = sc.session_id AND
-                        sc.status = ".SessionEntity::STUDENT."
-                )";
+                $qb
+                    ->innerJoin(
+                        SessionRelCourseRelUser::class,
+                        'sc',
+                        'WITH',
+                        'e.user = sc.user AND e.course = sc.course AND e.session = sc.session AND sc.status = :studentStatus'
+                    )
+                    ->setParameter('studentStatus', SessionEntity::STUDENT)
+                ;
             }
-            $sql .= $courseCondition;
         }
-        $sql .= "
-    		INNER JOIN $trackAttempt a
-    		ON (
-    		    a.exe_id = e.exe_id
-            )
-    		WHERE
-    		    exe_exo_id 	= $exerciseId AND
-                e.c_id = $courseId AND
-                question_id = $questionId AND
-                e.status = ''
-                $sessionCondition
-            LIMIT 1";
-        $result = Database::query($sql);
-        $return = [];
-        if ($result) {
-            $return = Database::fetch_assoc($result);
-        }
+        $qb
+            ->innerJoin(TrackEAttempt::class, 'a', 'WITH', 'a.trackExercise = e')
+            ->where('e.quiz = :exerciseId')
+            ->andWhere('e.course = :courseId')
+            ->andWhere('a.questionId = :questionId')
+            ->andWhere("e.status = ''")
+            ->setMaxResults(1)
+            ->setParameter('exerciseId', $exerciseId)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('questionId', $questionId)
+        ;
+        self::restrictToSession($qb, $sessionId, 'IDENTITY(e.session)', 'e.session');
 
-        return $return;
+        // The aggregates of the raw query came back as floats (NULL without any attempt).
+        return array_map(
+            static fn ($value) => null === $value ? null : (float) $value,
+            $qb->getQuery()->getArrayResult()[0] ?? []
+        );
     }
 
     /**
@@ -3906,55 +3908,52 @@ EOT;
         int $sessionId
     ): int
     {
-        $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $trackHotspot = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-        $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
         $questionId = (int) $questionId;
         $answerId = (int) $answerId;
         $exerciseId = (int) $exerciseId;
         $courseId = api_get_course_int_id($courseCode);
         $sessionId = (int) $sessionId;
 
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(e.user) AS exe_user_id')
+            ->distinct()
+            ->from(TrackEExercise::class, 'e')
+            ->innerJoin(TrackEHotspot::class, 'a', 'WITH', 'a.hotspotExeId = e.exeId')
+            ->innerJoin(CourseEntity::class, 'c', 'WITH', 'a.course = c')
+        ;
         if (empty($sessionId)) {
-            $courseCondition = "
-            INNER JOIN $courseUser cu
-            ON cu.c_id = c.id AND cu.user_id  = exe_user_id";
-            $courseConditionWhere = " AND relation_type <> 2 AND cu.status = ".STUDENT;
+            $qb
+                ->innerJoin(CourseRelUser::class, 'cu', 'WITH', 'cu.course = c AND cu.user = e.user')
+                ->andWhere('cu.relationType <> 2 AND cu.status = :studentStatus')
+                ->setParameter('studentStatus', STUDENT)
+            ;
         } else {
-            $courseCondition = "
-            INNER JOIN $courseUserSession cu
-            ON (cu.c_id = c.id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
-            $courseConditionWhere = ' AND cu.status = '.SessionEntity::STUDENT;
+            $qb
+                ->innerJoin(
+                    SessionRelCourseRelUser::class,
+                    'cu',
+                    'WITH',
+                    'cu.course = c AND cu.user = e.user AND e.session = cu.session'
+                )
+                ->andWhere('cu.status = :studentStatus')
+                ->setParameter('studentStatus', SessionEntity::STUDENT)
+            ;
         }
+        $qb
+            ->andWhere('e.quiz = :exerciseId')
+            ->andWhere('a.course = :courseId')
+            ->andWhere('a.hotspotAnswerId = :answerId')
+            ->andWhere('a.hotspotQuestionId = :questionId')
+            ->andWhere('a.hotspotCorrect = true')
+            ->andWhere("e.status = ''")
+            ->setParameter('exerciseId', $exerciseId)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('answerId', $answerId)
+            ->setParameter('questionId', $questionId)
+        ;
+        self::restrictToSession($qb, $sessionId, 'IDENTITY(e.session)', 'e.session');
 
-        $sessionCondition = api_get_session_condition($sessionId, true, false, 'e.session_id');
-        $sql = "SELECT DISTINCT exe_user_id
-                FROM $trackExercises e
-                INNER JOIN $trackHotspot a
-                ON (a.hotspot_exe_id = e.exe_id)
-                INNER JOIN $courseTable c
-                ON (a.c_id = c.id)
-                $courseCondition
-                WHERE
-                    exe_exo_id              = $exerciseId AND
-                    a.c_id 	= $courseId AND
-                    hotspot_answer_id       = $answerId AND
-                    hotspot_question_id     = $questionId AND
-                    hotspot_correct         =  1 AND
-                    e.status                = ''
-                    $courseConditionWhere
-                    $sessionCondition
-            ";
-        $result = Database::query($sql);
-        $return = 0;
-        if ($result) {
-            $return = Database::num_rows($result);
-        }
-
-        return $return;
+        return count($qb->getQuery()->getArrayResult());
     }
 
     /**
@@ -3969,61 +3968,52 @@ EOT;
         $questionType = null,
     ): int
     {
-        $trackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $trackAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
         $answerId = (int) $answerId;
         $questionId = (int) $questionId;
         $exerciseId = (int) $exerciseId;
         $courseId = api_get_course_int_id($courseCode);
         $sessionId = (int) $sessionId;
-        $return = 0;
 
-        $answerCondition = match ($questionType) {
-            FILL_IN_BLANKS => '',
-            default => " answer = $answerId AND ",
-        };
-
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(a.answer) AS total')
+            ->from(TrackEExercise::class, 'e')
+            ->innerJoin(TrackEAttempt::class, 'a', 'WITH', 'a.trackExercise = e')
+            ->innerJoin(CourseEntity::class, 'c', 'WITH', 'c = e.course')
+        ;
         if (empty($sessionId)) {
-            $courseCondition = "
-            INNER JOIN $courseUser cu
-            ON cu.c_id = c.id AND cu.user_id = exe_user_id";
-            $courseConditionWhere = " AND relation_type <> 2 AND cu.status = ".STUDENT;
+            $qb
+                ->innerJoin(CourseRelUser::class, 'cu', 'WITH', 'cu.course = c AND cu.user = e.user')
+                ->andWhere('cu.relationType <> 2 AND cu.status = :studentStatus')
+                ->setParameter('studentStatus', STUDENT)
+            ;
         } else {
-            $courseCondition = "
-            INNER JOIN $courseUserSession cu
-            ON (cu.c_id = e.c_id AND cu.user_id = e.exe_user_id AND e.session_id = cu.session_id)";
-            $courseConditionWhere = ' AND cu.status = '.SessionEntity::STUDENT;
-        }
-
-        $sessionCondition = api_get_session_condition($sessionId, true, false, 'e.session_id');
-        $sql = "SELECT count(a.answer) as total
-                FROM $trackExercises e
-                INNER JOIN $trackAttempt a
-                ON (
-                    a.exe_id = e.exe_id
+            $qb
+                ->innerJoin(
+                    SessionRelCourseRelUser::class,
+                    'cu',
+                    'WITH',
+                    'cu.course = e.course AND cu.user = e.user AND e.session = cu.session'
                 )
-                INNER JOIN $courseTable c
-                ON c.id = e.c_id
-                $courseCondition
-                WHERE
-                    exe_exo_id = $exerciseId AND
-                    e.c_id = $courseId AND
-                    $answerCondition
-                    question_id = $questionId AND
-                    e.status = ''
-                    $courseConditionWhere
-                    $sessionCondition
-            ";
-        $result = Database::query($sql);
-        if ($result) {
-            $count = Database::fetch_array($result);
-            $return = (int) $count['total'];
+                ->andWhere('cu.status = :studentStatus')
+                ->setParameter('studentStatus', SessionEntity::STUDENT)
+            ;
         }
-        return $return;
+        $qb
+            ->andWhere('e.quiz = :exerciseId')
+            ->andWhere('e.course = :courseId')
+            ->andWhere('a.questionId = :questionId')
+            ->andWhere("e.status = ''")
+            ->setParameter('exerciseId', $exerciseId)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('questionId', $questionId)
+        ;
+        if (FILL_IN_BLANKS !== $questionType) {
+            // The answer is a text column compared with the number, as before.
+            $qb->andWhere('a.answer = :answerId')->setParameter('answerId', $answerId);
+        }
+        self::restrictToSession($qb, $sessionId, 'IDENTITY(e.session)', 'e.session');
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -5798,38 +5788,29 @@ EOT;
         $exerciseId = (int) $exerciseId;
         $questionId = (int) $questionId;
 
-        $attemptTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $courseUserJoin = "";
-        $studentsWhere = "";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(DISTINCT te.exeId) AS total')
+            ->from(TrackEAttempt::class, 't')
+            ->innerJoin(TrackEExercise::class, 'te', 'WITH', 't.trackExercise = te')
+        ;
         if ($onlyStudents) {
-            $courseUserJoin = "
-            INNER JOIN $courseUser cu
-            ON cu.c_id = te.c_id AND cu.user_id = exe_user_id";
-            $studentsWhere = " AND relation_type <> 2 AND cu.status = ".STUDENT;
+            $qb
+                ->innerJoin(CourseRelUser::class, 'cu', 'WITH', 'cu.course = te.course AND cu.user = te.user')
+                ->andWhere('cu.relationType <> 2 AND cu.status = :studentStatus')
+                ->setParameter('studentStatus', STUDENT)
+            ;
         }
+        $qb
+            ->andWhere('te.course = :courseId')
+            ->andWhere('te.quiz = :exerciseId')
+            ->andWhere('t.questionId = :questionId')
+            ->andWhere("te.status <> 'incomplete'")
+            ->setParameter('courseId', $courseId)
+            ->setParameter('exerciseId', $exerciseId)
+            ->setParameter('questionId', $questionId)
+        ;
 
-        $sql = "SELECT count(distinct (te.exe_id)) total
-            FROM $attemptTable t
-            INNER JOIN $trackTable te
-            ON (t.exe_id = te.exe_id)
-            $courseUserJoin
-            WHERE
-                te.c_id = $courseId AND
-                exe_exo_id = $exerciseId AND
-                t.question_id = $questionId AND
-                te.status != 'incomplete'
-                $studentsWhere
-        ";
-        $queryTotal = Database::query($sql);
-        $totalRow = Database::fetch_assoc($queryTotal);
-        $total = 0;
-        if ($totalRow) {
-            $total = (int) $totalRow['total'];
-        }
-
-        return $total;
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     public static function getWrongQuestionResults($courseId, $exerciseId, $sessionId = 0, $limit = 10)
@@ -5838,35 +5819,33 @@ EOT;
         $exerciseId = (int) $exerciseId;
         $limit = (int) $limit;
 
-        $questionTable = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $attemptTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
-        $sessionCondition = '';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('q.question AS question', 't.questionId AS question_id', 'COUNT(q.iid) AS count')
+            ->from(TrackEAttempt::class, 't')
+            ->innerJoin(CQuizQuestion::class, 'q', 'WITH', 'q.iid = t.questionId')
+            ->innerJoin(TrackEExercise::class, 'te', 'WITH', 't.trackExercise = te')
+            ->where('te.course = :courseId')
+            ->andWhere('t.marks <> q.ponderation')
+            ->andWhere('te.quiz = :exerciseId')
+            ->andWhere("te.status <> 'incomplete'")
+            ->groupBy('q.iid')
+            ->orderBy('COUNT(q.iid)', 'DESC')
+            ->setMaxResults($limit)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('exerciseId', $exerciseId)
+        ;
         if (!empty($sessionId)) {
-            $sessionCondition = api_get_session_condition($sessionId, true, false, 'te.session_id');
+            self::restrictToSession($qb, $sessionId, 'IDENTITY(te.session)', 'te.session');
         }
 
-        $sql = "SELECT q.question, question_id, count(q.iid) count
-                FROM $attemptTable t
-                INNER JOIN $questionTable q
-                ON (q.iid = t.question_id)
-                INNER JOIN $trackTable te
-                ON (t.exe_id = te.exe_id)
-                WHERE
-                    te.c_id = $courseId AND
-                    t.marks != q.ponderation AND
-                    exe_exo_id = $exerciseId AND
-                    status != 'incomplete'
-                    $sessionCondition
-                GROUP BY q.iid
-                ORDER BY count DESC
-                LIMIT $limit
-        ";
+        return array_map(
+            static function (array $row): array {
+                $row['count'] = (int) $row['count'];
 
-        $result = Database::query($sql);
-
-        return Database::store_result($result, 'ASSOC');
+                return $row;
+            },
+            $qb->getQuery()->getArrayResult()
+        );
     }
 
     public static function getExerciseResultsCount($type, $courseId, $exerciseId, $sessionId = 0)
@@ -5874,49 +5853,42 @@ EOT;
         $courseId = (int) $courseId;
         $exerciseId = (int) $exerciseId;
 
-        $trackTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
-        $sessionCondition = '';
-        if (!empty($sessionId)) {
-            $sessionCondition = api_get_session_condition($sessionId, true, false, 'te.session_id');
-        }
-
-        $selectCount = 'count(DISTINCT te.exe_id)';
-        $scoreCondition = '';
+        $selectCount = 'COUNT(DISTINCT te.exeId)';
+        $scoreCondition = null;
         switch ($type) {
             case 'correct_student':
-                $selectCount = 'count(DISTINCT te.exe_user_id)';
-                $scoreCondition = ' AND score = max_score ';
+                $selectCount = 'COUNT(DISTINCT te.user)';
+                $scoreCondition = 'te.score = te.maxScore';
                 break;
             case 'wrong_student':
-                $selectCount = 'count(DISTINCT te.exe_user_id)';
-                $scoreCondition = ' AND score != max_score ';
+                $selectCount = 'COUNT(DISTINCT te.user)';
+                $scoreCondition = 'te.score <> te.maxScore';
                 break;
             case 'correct':
-                $scoreCondition = ' AND score = max_score ';
+                $scoreCondition = 'te.score = te.maxScore';
                 break;
             case 'wrong':
-                $scoreCondition = ' AND score != max_score ';
+                $scoreCondition = 'te.score <> te.maxScore';
                 break;
         }
 
-        $sql = "SELECT $selectCount count
-                FROM $trackTable te
-                WHERE
-                    c_id = $courseId AND
-                    exe_exo_id = $exerciseId AND
-                    status != 'incomplete'
-                    $scoreCondition
-                    $sessionCondition
-        ";
-        $result = Database::query($sql);
-        $totalRow = Database::fetch_assoc($result);
-        $total = 0;
-        if ($totalRow) {
-            $total = (int) $totalRow['count'];
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select($selectCount.' AS count')
+            ->from(TrackEExercise::class, 'te')
+            ->where('te.course = :courseId')
+            ->andWhere('te.quiz = :exerciseId')
+            ->andWhere("te.status <> 'incomplete'")
+            ->setParameter('courseId', $courseId)
+            ->setParameter('exerciseId', $exerciseId)
+        ;
+        if (null !== $scoreCondition) {
+            $qb->andWhere($scoreCondition);
+        }
+        if (!empty($sessionId)) {
+            self::restrictToSession($qb, $sessionId, 'IDENTITY(te.session)', 'te.session');
         }
 
-        return $total;
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     public static function parseContent($content, $stats, Exercise $exercise, $trackInfo, $currentUserId = 0)
@@ -6299,14 +6271,28 @@ EOT;
             return;
         }
 
-        $tblTrackExercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $tblTrackAttempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
-        Database::query("DELETE FROM $tblTrackAttempt WHERE exe_id = $exeId");
-        Database::query(
-            'DELETE FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT).' WHERE hotspot_exe_id = '.$exeId
-        );
-        Database::query("DELETE FROM $tblTrackExercises WHERE exe_id = $exeId");
+        $em = Container::getEntityManager();
+        $em->createQueryBuilder()
+            ->delete(TrackEAttempt::class, 'a')
+            ->where('a.trackExercise = :exeId')
+            ->setParameter('exeId', $exeId)
+            ->getQuery()
+            ->execute()
+        ;
+        $em->createQueryBuilder()
+            ->delete(TrackEHotspot::class, 'h')
+            ->where('h.hotspotExeId = :exeId')
+            ->setParameter('exeId', $exeId)
+            ->getQuery()
+            ->execute()
+        ;
+        $em->createQueryBuilder()
+            ->delete(TrackEExercise::class, 'e')
+            ->where('e.exeId = :exeId')
+            ->setParameter('exeId', $exeId)
+            ->getQuery()
+            ->execute()
+        ;
 
         Event::addEvent(
             LOG_EXERCISE_ATTEMPT_DELETE,
@@ -6752,16 +6738,17 @@ EOT;
                         }
                     }
                 } else {
-                    $TBL_TRACK_HOTSPOT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-                    $exeIdEsc = Database::escape_string($exeId);
-                    $qIdEsc   = Database::escape_string($questionId);
-                    $sql = "SELECT COUNT(hotspot_id) AS ct
-                        FROM $TBL_TRACK_HOTSPOT
-                        WHERE hotspot_exe_id = '$exeIdEsc'
-                          AND hotspot_question_id = '$qIdEsc'
-                          AND hotspot_correct = 1";
-                    $result = Database::query($sql);
-                    $nbrCorrect = (int) Database::result($result, 0, 0);
+                    $nbrCorrect = (int) Container::getEntityManager()->createQueryBuilder()
+                        ->select('COUNT(h.hotspotId)')
+                        ->from(TrackEHotspot::class, 'h')
+                        ->where('h.hotspotExeId = :exeId')
+                        ->andWhere('h.hotspotQuestionId = :questionId')
+                        ->andWhere('h.hotspotCorrect = true')
+                        ->setParameter('exeId', (int) $exeId)
+                        ->setParameter('questionId', (int) $questionId)
+                        ->getQuery()
+                        ->getSingleScalarResult()
+                    ;
                 }
                 $nbrOptions = (int) $nbrAnswers;
                 break;
@@ -6930,11 +6917,15 @@ EOT;
             return;
         }
 
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $sql = "UPDATE $table
-            SET data_tracking = '".Database::escape_string($newTracking)."'
-            WHERE exe_id = ".(int) $exeId;
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(TrackEExercise::class, 'e')
+            ->set('e.dataTracking', ':tracking')
+            ->where('e.exeId = :exeId')
+            ->setParameter('tracking', $newTracking)
+            ->setParameter('exeId', (int) $exeId)
+            ->getQuery()
+            ->execute()
+        ;
 
         $exerciseStatInfo['data_tracking'] = $newTracking;
     }
@@ -7037,4 +7028,67 @@ EOT;
         return rtrim(api_get_path(WEB_PATH), '/').'/resources/exercise/'.$nodeId.'/'.$exerciseId.'/overview?'.http_build_query($params);
     }
 
+    /**
+     * Mirrors what api_get_session_condition() used to append as SQL text: a session id of 0 also matches the
+     * results stored without session (NULL).
+     *
+     * @param int|string|null $sessionId
+     */
+    private static function restrictToSession(
+        QueryBuilder $qb,
+        $sessionId,
+        string $field,
+        string $nullField
+    ): void {
+        $sessionId = (int) $sessionId;
+        if (empty($sessionId)) {
+            $qb->andWhere("($field = 0 OR $nullField IS NULL)");
+
+            return;
+        }
+
+        $qb->andWhere($field.' = :sessionId')->setParameter('sessionId', $sessionId);
+    }
+
+    /**
+     * The SELECT expressions of every column of an entity table, aliased to the column names.
+     *
+     * @return array{0: string[], 1: array<string, string>} the expressions and the Doctrine type of each column
+     */
+    private static function entityColumns(string $class, string $alias): array
+    {
+        $metadata = Container::getEntityManager()->getClassMetadata($class);
+        $selects = [];
+        $types = [];
+        foreach ($metadata->getFieldNames() as $field) {
+            $column = $metadata->getColumnName($field);
+            $selects[] = $alias.'.'.$field.' AS '.$column;
+            $types[$column] = $metadata->getTypeOfField($field);
+        }
+        foreach ($metadata->getAssociationNames() as $association) {
+            if ($metadata->isAssociationInverseSide($association) || !$metadata->isSingleValuedAssociation($association)) {
+                continue;
+            }
+            $selects[] = 'IDENTITY('.$alias.'.'.$association.') AS '.$metadata->getSingleAssociationJoinColumnName($association);
+        }
+
+        return [$selects, $types];
+    }
+
+    /**
+     * The raw table row carried the database representation of every value (dates as strings, flags as 0/1).
+     *
+     * @param array<string, string> $types Doctrine type of the columns that are entity fields
+     */
+    private static function toLegacyRow(array $row, array $types): array
+    {
+        $platform = Container::getEntityManager()->getConnection()->getDatabasePlatform();
+        foreach ($types as $column => $type) {
+            if (isset($row[$column])) {
+                $row[$column] = Type::getType($type)->convertToDatabaseValue($row[$column], $platform);
+            }
+        }
+
+        return $row;
+    }
 }

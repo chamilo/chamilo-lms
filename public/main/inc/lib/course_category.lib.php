@@ -2,6 +2,7 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelCourseCategory;
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Entity\CourseCategory as CourseCategoryEntity;
@@ -10,6 +11,7 @@ use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\QueryBuilder;
 
 class CourseCategory
 {
@@ -23,25 +25,15 @@ class CourseCategory
     public static function getCategory(string $categoryCode = null): array
     {
         if (!empty($categoryCode)) {
-            $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-            $categoryCode = Database::escape_string($categoryCode);
-            $sql = "SELECT * FROM $table WHERE code ='$categoryCode'";
-            $result = Database::query($sql);
+            $row = self::categoryRowsQueryBuilder()
+                ->where('c.code = :code')
+                ->setParameter('code', $categoryCode)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getArrayResult()[0] ?? null;
 
-            if (Database::num_rows($result)) {
-                $category = Database::fetch_assoc($result);
-                if ($category) {
-                    // Get access url id
-                    $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-                    $sql = "SELECT * FROM $table WHERE course_category_id = ".$category['id'];
-                    $result = Database::query($sql);
-                    $result = Database::fetch_array($result);
-                    if ($result) {
-                        $category['access_url_id'] = $result['access_url_id'];
-                    }
-
-                    return $category;
-                }
+            if (null !== $row) {
+                return self::withAccessUrlId(self::toLegacyCategoryRow($row));
             }
         }
 
@@ -57,27 +49,70 @@ class CourseCategory
      */
     public static function getCategoryById($categoryId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $categoryId = (int) $categoryId;
-        $sql = "SELECT * FROM $table WHERE id = $categoryId";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $category = Database::fetch_assoc($result);
-            if ($category) {
-                // Get access url id
-                $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-                $sql = "SELECT * FROM $table WHERE course_category_id = ".$category['id'];
-                $result = Database::query($sql);
-                $result = Database::fetch_array($result);
-                if ($result) {
-                    $category['access_url_id'] = $result['access_url_id'];
-                }
+        $row = self::categoryRowsQueryBuilder()
+            ->where('c.id = :id')
+            ->setParameter('id', (int) $categoryId)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-                return $category;
+        return null === $row ? [] : self::withAccessUrlId(self::toLegacyCategoryRow($row));
+    }
+
+    /**
+     * Every column of the course_category table, aliased to the snake_case keys the legacy callers read.
+     */
+    private static function categoryRowsQueryBuilder(): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'c.id AS id',
+                'IDENTITY(c.parent) AS parent_id',
+                'IDENTITY(c.asset) AS asset_id',
+                'c.title AS title',
+                'c.code AS code',
+                'c.treePos AS tree_pos',
+                'c.childrenCount AS children_count',
+                'c.authCourseChild AS auth_course_child',
+                'c.authCatChild AS auth_cat_child',
+                'c.description AS description'
+            )
+            ->from(CourseCategoryEntity::class, 'c')
+        ;
+    }
+
+    /**
+     * Integer columns come back as integers (NULL stays NULL), as they did from the raw table row.
+     */
+    private static function toLegacyCategoryRow(array $row): array
+    {
+        foreach (['id', 'parent_id', 'tree_pos', 'children_count'] as $key) {
+            if (array_key_exists($key, $row) && null !== $row[$key]) {
+                $row[$key] = (int) $row[$key];
             }
         }
 
-        return [];
+        return $row;
+    }
+
+    /**
+     * Adds the access_url_id of the first URL the category is assigned to, if any.
+     */
+    private static function withAccessUrlId(array $category): array
+    {
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(r.url) AS access_url_id')
+            ->from(AccessUrlRelCourseCategory::class, 'r')
+            ->where('IDENTITY(r.courseCategory) = :categoryId')
+            ->setParameter('categoryId', (int) $category['id'])
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if ([] !== $rows) {
+            $category['access_url_id'] = null === $rows[0]['access_url_id'] ? null : (int) $rows[0]['access_url_id'];
+        }
+
+        return $category;
     }
 
     /**
@@ -90,7 +125,6 @@ class CourseCategory
      */
     public static function getAllCategories()
     {
-        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $accessUrlIds = [api_get_current_access_url_id()];
         $allowBaseCategories = ('true' === api_get_setting('course.allow_base_course_category'));
         if ($allowBaseCategories) {
@@ -103,30 +137,25 @@ class CourseCategory
             return [];
         }
 
-        $whereCondition = ' AND t1.id IN ('.implode(',', array_map('intval', $categoryIds)).')';
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'c.id AS id',
+                'c.title AS title',
+                'c.code AS code',
+                'IDENTITY(c.parent) AS parent_id',
+                'c.treePos AS tree_pos',
+                'c.childrenCount AS children_count'
+            )
+            ->from(CourseCategoryEntity::class, 'c')
+            ->where('c.id IN (:ids)')
+            ->setParameter('ids', array_map('intval', $categoryIds))
+            ->orderBy('c.parent')
+            ->addOrderBy('c.treePos')
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        $sql = "SELECT
-                t1.id,
-                t1.title,
-                t1.code,
-                t1.parent_id,
-                t1.tree_pos,
-                t1.children_count
-            FROM $tbl_category t1
-            WHERE 1=1
-                $whereCondition
-            GROUP BY
-                t1.id,
-                t1.title,
-                t1.code,
-                t1.parent_id,
-                t1.tree_pos,
-                t1.children_count
-            ORDER BY t1.parent_id, t1.tree_pos";
-
-        $result = Database::query($sql);
-
-        return Database::store_result($result, 'ASSOC');
+        return array_map([self::class, 'toLegacyCategoryRow'], $rows);
     }
 
     /**
@@ -137,21 +166,30 @@ class CourseCategory
      */
     public static function add($code, $name, $canHaveCourses, $description = '', $parentId = null): ?CourseCategoryEntity
     {
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $code = trim($code);
         $name = trim($name);
         $parentId = (int) $parentId;
 
         $code = CourseManager::generate_course_code($code);
-        $sql = "SELECT 1 FROM $table
-                WHERE code = '".Database::escape_string($code)."'";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
+        $em = Container::getEntityManager();
+        $existing = $em->createQueryBuilder()
+            ->select('COUNT(c.id)')
+            ->from(CourseCategoryEntity::class, 'c')
+            ->where('c.code = :code')
+            ->setParameter('code', $code)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+        if ((int) $existing > 0) {
             return null;
         }
-        $result = Database::query("SELECT MAX(tree_pos) AS maxTreePos FROM $table");
-        $row = Database::fetch_array($result);
-        $tree_pos = $row['maxTreePos'] + 1;
+        $maxTreePos = $em->createQueryBuilder()
+            ->select('MAX(c.treePos)')
+            ->from(CourseCategoryEntity::class, 'c')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+        $tree_pos = (int) $maxTreePos + 1;
         $parentId = empty($parentId) ? null : $parentId;
 
         $repo = Container::getCourseCategoryRepository();
@@ -192,22 +230,32 @@ class CourseCategory
      */
     public static function updateParentCategoryChildrenCount($categoryId, $delta = 1)
     {
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $categoryId = Database::escape_string($categoryId);
+        $categoryId = (int) $categoryId;
         $delta = (int) $delta;
+        $em = Container::getEntityManager();
         // First get to the highest level possible in the tree
-        $result = Database::query("SELECT parent_id FROM $table WHERE id = '$categoryId'");
-        $row = Database::fetch_array($result);
-        if (false !== $row && !empty($row['parent_id'])) {
+        $rows = $em->createQueryBuilder()
+            ->select('IDENTITY(c.parent) AS parent_id')
+            ->from(CourseCategoryEntity::class, 'c')
+            ->where('c.id = :id')
+            ->setParameter('id', $categoryId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if ([] !== $rows && !empty($rows[0]['parent_id'])) {
             // if a parent was found, enter there to see if he's got one more parent
-            self::updateParentCategoryChildrenCount($row['parent_id'], $delta);
+            self::updateParentCategoryChildrenCount($rows[0]['parent_id'], $delta);
         }
         // Now we're at the top, get back down to update each child
-        $sql = "UPDATE $table SET children_count = (children_count - ".abs($delta).") WHERE id = '$categoryId'";
-        if ($delta >= 0) {
-            $sql = "UPDATE $table SET children_count = (children_count + $delta) WHERE id = '$categoryId'";
-        }
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->update(CourseCategoryEntity::class, 'c')
+            ->set('c.childrenCount', 'c.childrenCount + :delta')
+            ->where('c.id = :id')
+            ->setParameter('delta', $delta)
+            ->setParameter('id', $categoryId)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     public static function edit($categoryId, $name, $canHaveCourses, $code, $description, $parentId = null): ?CourseCategoryEntity
@@ -255,107 +303,122 @@ class CourseCategory
      */
     public static function moveNodeUp($categoryId, $treePos, $parentId): bool
     {
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryId = (int) $categoryId;
-        $treePos = (int) $treePos;
-
-        $parentIdCondition = "parent_id IS NULL";
-        if (!empty($parentId)) {
-            $parentIdCondition = "parent_id = '".Database::escape_string($parentId)."'";
-        }
 
         self::reorganizeTreePos($parentId);
 
         // The posted position is stale once the siblings were renumbered: read the real one.
-        $treePos = self::getTreePos($categoryId, $parentIdCondition);
+        $treePos = self::getTreePos($categoryId, $parentId);
         if (null === $treePos) {
             return false;
         }
 
-        $sql = "SELECT id, tree_pos
-            FROM $table
-            WHERE $parentIdCondition AND tree_pos < $treePos
-            ORDER BY tree_pos DESC
-            LIMIT 1";
+        $previousCategory = self::siblingsQueryBuilder($parentId)
+            ->select('c.id AS id', 'c.treePos AS tree_pos')
+            ->andWhere('c.treePos < :treePos')
+            ->setParameter('treePos', $treePos)
+            ->orderBy('c.treePos', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-        $result = Database::query($sql);
-        $previousCategory = Database::fetch_array($result);
-
-        if (!$previousCategory) {
+        if (null === $previousCategory) {
             return false;
         }
 
-        Database::query("UPDATE $table SET tree_pos = {$previousCategory['tree_pos']} WHERE id = $categoryId");
-        Database::query("UPDATE $table SET tree_pos = $treePos WHERE id = {$previousCategory['id']}");
+        self::setTreePos($categoryId, (int) $previousCategory['tree_pos']);
+        self::setTreePos((int) $previousCategory['id'], $treePos);
 
         return true;
     }
 
     public static function moveNodeDown($categoryId, $treePos, $parentId): bool
     {
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryId = (int) $categoryId;
-        $treePos = (int) $treePos;
-
-        $parentIdCondition = "parent_id IS NULL";
-        if (!empty($parentId)) {
-            $parentIdCondition = "parent_id = '".Database::escape_string($parentId)."'";
-        }
 
         self::reorganizeTreePos($parentId);
 
         // The posted position is stale once the siblings were renumbered: read the real one.
-        $treePos = self::getTreePos($categoryId, $parentIdCondition);
+        $treePos = self::getTreePos($categoryId, $parentId);
         if (null === $treePos) {
             return false;
         }
 
-        $sql = "SELECT id, tree_pos
-            FROM $table
-            WHERE $parentIdCondition AND tree_pos > $treePos
-            ORDER BY tree_pos ASC
-            LIMIT 1";
+        $nextCategory = self::siblingsQueryBuilder($parentId)
+            ->select('c.id AS id', 'c.treePos AS tree_pos')
+            ->andWhere('c.treePos > :treePos')
+            ->setParameter('treePos', $treePos)
+            ->orderBy('c.treePos', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-        $result = Database::query($sql);
-        $nextCategory = Database::fetch_array($result);
-
-        if (!$nextCategory) {
+        if (null === $nextCategory) {
             return false;
         }
 
-        Database::query("UPDATE $table SET tree_pos = {$nextCategory['tree_pos']} WHERE id = $categoryId");
-        Database::query("UPDATE $table SET tree_pos = $treePos WHERE id = {$nextCategory['id']}");
+        self::setTreePos($categoryId, (int) $nextCategory['tree_pos']);
+        self::setTreePos((int) $nextCategory['id'], $treePos);
 
         return true;
     }
 
     /**
-     * Position of a category among the siblings selected by $parentIdCondition, null if it is not one of them.
+     * The categories having $parentId as parent (the root categories when it is empty).
      */
-    private static function getTreePos(int $categoryId, string $parentIdCondition): ?int
+    private static function siblingsQueryBuilder($parentId): QueryBuilder
     {
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $result = Database::query("SELECT tree_pos FROM $table WHERE id = $categoryId AND $parentIdCondition");
-        $row = Database::fetch_array($result);
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->from(CourseCategoryEntity::class, 'c')
+        ;
+        if (empty($parentId)) {
+            return $qb->where('c.parent IS NULL');
+        }
 
-        return $row ? (int) $row['tree_pos'] : null;
+        return $qb->where('IDENTITY(c.parent) = :parentId')->setParameter('parentId', (int) $parentId);
+    }
+
+    private static function setTreePos(int $categoryId, int $treePos): void
+    {
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(CourseCategoryEntity::class, 'c')
+            ->set('c.treePos', ':treePos')
+            ->where('c.id = :id')
+            ->setParameter('treePos', $treePos)
+            ->setParameter('id', $categoryId)
+            ->getQuery()
+            ->execute()
+        ;
+    }
+
+    /**
+     * Position of a category among the siblings of $parentId, null if it is not one of them.
+     */
+    private static function getTreePos(int $categoryId, $parentId): ?int
+    {
+        $rows = self::siblingsQueryBuilder($parentId)
+            ->select('c.treePos AS tree_pos')
+            ->andWhere('c.id = :id')
+            ->setParameter('id', $categoryId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return [] === $rows ? null : (int) $rows[0]['tree_pos'];
     }
 
     public static function reorganizeTreePos($parentId): void
     {
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-
-        $parentIdCondition = "parent_id IS NULL";
-        if (!empty($parentId)) {
-            $parentIdCondition = "parent_id = '".Database::escape_string($parentId)."'";
-        }
-
-        $sql = "SELECT id FROM $table WHERE $parentIdCondition ORDER BY tree_pos";
-        $result = Database::query($sql);
+        $rows = self::siblingsQueryBuilder($parentId)
+            ->select('c.id AS id')
+            ->orderBy('c.treePos')
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
         $newTreePos = 1;
-        while ($row = Database::fetch_array($result)) {
-            Database::query("UPDATE $table SET tree_pos = $newTreePos WHERE id = {$row['id']}");
+        foreach ($rows as $row) {
+            self::setTreePos((int) $row['id'], $newTreePos);
             $newTreePos++;
         }
     }
@@ -379,13 +442,19 @@ class CourseCategory
 
     private static function getChildrenByParentId(int $parentId): array
     {
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT code, id FROM $table
-                WHERE parent_id = $parentId
-                ORDER BY tree_pos, id";
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('c.code AS code', 'c.id AS id')
+            ->from(CourseCategoryEntity::class, 'c')
+            ->where('IDENTITY(c.parent) = :parentId')
+            ->setParameter('parentId', $parentId)
+            ->orderBy('c.treePos')
+            ->addOrderBy('c.id')
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $children = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
+            $row['id'] = (int) $row['id'];
             $children[] = $row;
             $children = array_merge($children, self::getChildrenByParentId((int) $row['id']));
         }
@@ -426,15 +495,17 @@ class CourseCategory
             return [];
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $categoryCode = Database::escape_string($categoryCode);
-        $sql = "SELECT code, parent_id
-                FROM $table
-                WHERE code = '$categoryCode'";
-
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('c.code AS code', 'IDENTITY(c.parent) AS parent_id')
+            ->from(CourseCategoryEntity::class, 'c')
+            ->where('c.code = :code')
+            ->setParameter('code', (string) $categoryCode)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $children = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
+            $row = self::toLegacyCategoryRow($row);
             $parent = empty($row['parent_id']) ? [] : self::getCategoryById($row['parent_id']);
             $children[] = $row;
             $subChildren = self::getParents($parent ? $parent['code'] : null);
@@ -611,12 +682,14 @@ class CourseCategory
      */
     public static function getCategoriesToDisplayInHomePage()
     {
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT title FROM $table
-                WHERE parent_id IS NULL
-                ORDER BY tree_pos";
-
-        return Database::store_result(Database::query($sql));
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select('c.title AS title')
+            ->from(CourseCategoryEntity::class, 'c')
+            ->where('c.parent IS NULL')
+            ->orderBy('c.treePos')
+            ->getQuery()
+            ->getArrayResult()
+        ;
     }
 
     /**
@@ -626,25 +699,25 @@ class CourseCategory
      */
     public static function getCategoriesCanBeAddedInCourse($categoryCode)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
-        $whereCondition = ' AND a.access_url_id = '.api_get_current_access_url_id();
-
-        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT c.id, c.code, c.title
-                FROM $tbl_category c
-                $conditions
-                WHERE (auth_course_child = 'TRUE' OR code = '".Database::escape_string($categoryCode)."')
-                $whereCondition
-                ORDER BY tree_pos";
-        $res = Database::query($sql);
+        $res = Container::getEntityManager()->createQueryBuilder()
+            ->select('c.id AS id', 'c.code AS code', 'c.title AS title')
+            ->from(CourseCategoryEntity::class, 'c')
+            ->innerJoin(AccessUrlRelCourseCategory::class, 'a', 'WITH', 'a.courseCategory = c')
+            ->where("c.authCourseChild = 'TRUE' OR c.code = :code")
+            ->andWhere('IDENTITY(a.url) = :urlId')
+            ->setParameter('code', (string) $categoryCode)
+            ->setParameter('urlId', (int) api_get_current_access_url_id())
+            ->orderBy('c.treePos')
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
         $categoryToAvoid = '';
         if (!api_is_platform_admin()) {
             $categoryToAvoid = api_get_setting('course.course_category_code_to_use_as_model');
         }
         $categories[''] = '-';
-        while ($cat = Database::fetch_array($res)) {
+        foreach ($res as $cat) {
             $categoryCode = $cat['code'];
             if (!empty($categoryToAvoid) && $categoryToAvoid == $categoryCode) {
                 continue;
@@ -715,6 +788,7 @@ class CourseCategory
                     ' url_rel_course ON url_rel_course.c_id = course.id';
                 $urlCondition = ' AND url_rel_course.access_url_id = '.(int) api_get_current_access_url_id();
             }
+            // TODO(db-neutral): raw SQL fragments from getAvoidCourseCondition()/getCourseVisibilitySQLCondition()
             $sql = "SELECT DISTINCT course.id FROM $tblCourse course $join
                     WHERE course.id IN (".implode(',', $ids).")
                     $urlCondition
@@ -750,24 +824,15 @@ class CourseCategory
      */
     public static function getCourseCategoryNotInList($list)
     {
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-
-        if (empty($list)) {
-            $sql = "SELECT * FROM $table
-                    WHERE (parent_id IS NULL) ";
-            $result = Database::query($sql);
-
-            return Database::store_result($result, 'ASSOC');
+        $qb = self::categoryRowsQueryBuilder()->where('c.parent IS NULL');
+        if (!empty($list)) {
+            $qb
+                ->andWhere('c.id NOT IN (:ids)')
+                ->setParameter('ids', array_map('intval', $list))
+            ;
         }
 
-        $list = array_map('intval', $list);
-        $listToString = implode("','", $list);
-
-        $sql = "SELECT * FROM $table
-                WHERE id NOT IN ('$listToString') AND (parent_id IS NULL) ";
-        $result = Database::query($sql);
-
-        return Database::store_result($result, 'ASSOC');
+        return array_map([self::class, 'toLegacyCategoryRow'], $qb->getQuery()->getArrayResult());
     }
 
     /**
@@ -781,7 +846,6 @@ class CourseCategory
             return null;
         }
 
-        $tableCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $accessUrlIds = [api_get_current_access_url_id()];
 
         $allowBaseCategories = ('true' === api_get_setting('course.allow_base_course_category'));
@@ -794,20 +858,18 @@ class CourseCategory
         if (empty($categoryIds)) {
             return [];
         }
-        $whereCondition = ' AND c.id IN ('.implode(',', array_map('intval', $categoryIds)).') ';
+        $rows = self::categoryRowsQueryBuilder()
+            ->addSelect('c.title AS text')
+            ->where('c.code LIKE :keyword OR c.title LIKE :keyword')
+            ->andWhere("c.authCourseChild = 'TRUE'")
+            ->andWhere('c.id IN (:ids)')
+            ->setParameter('keyword', '%'.$keyword.'%')
+            ->setParameter('ids', array_map('intval', $categoryIds))
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        $keyword = Database::escape_string($keyword);
-
-        $sql = "SELECT c.*, c.title as text
-                FROM $tableCategory c
-                WHERE
-                (
-                    c.code LIKE '%$keyword%' OR c.title LIKE '%$keyword%'
-                ) AND auth_course_child = 'TRUE'
-                $whereCondition ";
-        $result = Database::query($sql);
-
-        return Database::store_result($result, 'ASSOC');
+        return array_map([self::class, 'toLegacyCategoryRow'], $rows);
     }
 
     /**

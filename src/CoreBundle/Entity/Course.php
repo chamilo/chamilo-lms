@@ -614,7 +614,10 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
             ->orderBy(['id' => Order::Ascending])
         ;
 
-        return new ArrayCollection(array_values($this->users->matching($criteria)->toArray()));
+        /** @var array<int, CourseRelUser> $teachers */
+        $teachers = array_values($this->users->matching($criteria)->toArray());
+
+        return new ArrayCollection($teachers);
     }
 
     public function addUserAsTeacher(User $user): self

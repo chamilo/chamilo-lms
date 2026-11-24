@@ -199,6 +199,31 @@ final class AnswerCharacterizationTest extends KernelTestCase
         $this->assertSame(['an_b', 'an_c', 'an_a'], [$ans->selectAnswer(1), $ans->selectAnswer(2), $ans->selectAnswer(3)]);
     }
 
+    public function testReadOrderedByMapsEachColumnNameToItsOwnColumn(): void
+    {
+        $q = $this->question();
+        $this->answer($q, 'an_p', 1, 2, ['comment' => 'cm_c', 'ponderation' => 1.5, 'hotspot_type' => 'b']);
+        $this->answer($q, 'an_q', 2, 3, ['comment' => 'cm_a', 'ponderation' => 9, 'hotspot_type' => 'c']);
+        $this->answer($q, 'an_r', 3, 1, ['comment' => 'cm_b', 'ponderation' => 4, 'hotspot_type' => 'a']);
+        $ans = new Answer($q, 1, $this->exercise(), false);
+        $order = static function (Answer $a): array {
+            return [$a->selectAnswer(1), $a->selectAnswer(2), $a->selectAnswer(3)];
+        };
+
+        $ans->readOrderedBy('position', 'ASC');
+        $this->assertSame(['an_p', 'an_q', 'an_r'], $order($ans));
+        $ans->readOrderedBy('answer', 'DESC');
+        $this->assertSame(['an_r', 'an_q', 'an_p'], $order($ans));
+        $ans->readOrderedBy('comment', 'ASC');
+        $this->assertSame(['an_q', 'an_r', 'an_p'], $order($ans));
+        $ans->readOrderedBy('ponderation', 'ASC');
+        $this->assertSame(['an_p', 'an_r', 'an_q'], $order($ans));
+        $ans->readOrderedBy('correct', 'ASC');
+        $this->assertSame(['an_r', 'an_p', 'an_q'], $order($ans));
+        $ans->readOrderedBy('hotspot_type', 'ASC');
+        $this->assertSame(['an_r', 'an_p', 'an_q'], $order($ans));
+    }
+
     public function testReadOrderedByKeepsTheDoubtOptionOfAUniqueAnswerNoOptionQuestionLast(): void
     {
         $q = $this->question(UNIQUE_ANSWER_NO_OPTION);

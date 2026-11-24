@@ -1,4 +1,8 @@
 <?php
+
+use Chamilo\CoreBundle\Entity\SearchEngineField;
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * Manage specific tools.
  *
@@ -29,6 +33,7 @@ function add_specific_field($name)
         return false;
     }
     $sql = sprintf($sql, $table_sf, $_safe_code, $_safe_name);
+    // TODO(db-neutral): broken today (Unknown column 'name': the table has 'title'), left raw
     $result = Database::query($sql);
     if ($result) {
         return Database::insert_id();
@@ -44,14 +49,16 @@ function add_specific_field($name)
  */
 function delete_specific_field($id)
 {
-    $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
     $id = (int) $id;
     if (!is_numeric($id)) {
         return false;
     }
-    $sql = 'DELETE FROM %s WHERE id=%s LIMIT 1';
-    $sql = sprintf($sql, $table_sf, $id);
-    Database::query($sql);
+    Container::getEntityManager()->createQueryBuilder()
+        ->delete(SearchEngineField::class, 'sf')
+        ->where('sf.id = :id')
+        ->setParameter('id', $id)
+        ->getQuery()
+        ->execute();
     //TODO also delete the corresponding values
 }
 
@@ -70,6 +77,7 @@ function edit_specific_field($id, $name)
     }
     $sql = 'UPDATE %s SET name = \'%s\' WHERE id = %s LIMIT 1';
     $sql = sprintf($sql, $table_sf, $name, $id);
+    // TODO(db-neutral): broken today (Unknown column 'name': the table has 'title'), left raw
     Database::query($sql);
 }
 
@@ -95,6 +103,7 @@ function get_specific_field_list($conditions = [], $order_by = [])
     if (count($order_by) > 0) {
         $sql .= ' ORDER BY '.implode(',', $order_by);
     }
+    // TODO(db-neutral): the callers pass SQL fragments as conditions (e.g. ['code' => "'S'"]), left raw
     $sql_result = Database::query($sql);
     while ($result = Database::fetch_array($sql_result)) {
         $return_array[] = $result;
@@ -139,6 +148,7 @@ function get_specific_field_values_list(
     if (count($order_by) > 0) {
         $sql .= ' ORDER BY '.implode(',', $order_by);
     }
+    // TODO(db-neutral): broken today (table search_engine_field_values does not exist; it is search_engine_field_value), left raw
     $sql_result = Database::query($sql);
     while ($result = Database::fetch_array($sql_result)) {
         $return_array[] = $result;
@@ -174,6 +184,7 @@ function get_specific_field_values_list_by_prefix(
         $tool_id,
         $ref_id
     );
+    // TODO(db-neutral): broken today (table search_engine_field_values does not exist; it is search_engine_field_value), left raw
     $sql_result = Database::query($sql);
     while ($result = Database::fetch_array($sql_result)) {
         $return_array[] = $result;
@@ -215,6 +226,7 @@ function add_specific_field_value(
         $id_specific_field,
         Database::escape_string($value)
     );
+    // TODO(db-neutral): broken today (table search_engine_field_values does not exist; it is search_engine_field_value), left raw
     $result = Database::query($sql);
     if ($result) {
         return Database::insert_id();
@@ -236,6 +248,7 @@ function delete_all_specific_field_value($course_id, $id_specific_field, $tool_i
     $table_sf_values = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
     $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s AND field_id = %s';
     $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id, $id_specific_field);
+    // TODO(db-neutral): broken today (table search_engine_field_values does not exist; it is search_engine_field_value), left raw
     Database::query($sql);
 }
 
@@ -252,6 +265,7 @@ function delete_all_values_for_item($course_id, $tool_id, $ref_id)
     $table_sf_values = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
     $sql = 'DELETE FROM %s WHERE course_code = \'%s\' AND tool_id = \'%s\' AND ref_id = %s';
     $sql = sprintf($sql, $table_sf_values, $course_id, $tool_id, $ref_id);
+    // TODO(db-neutral): broken today (table search_engine_field_values does not exist; it is search_engine_field_value), left raw
     Database::query($sql);
 }
 
@@ -293,17 +307,20 @@ function get_specific_field_code_from_name($name)
         'X',
         'Y',
     ];
-    $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
-    $sql = "SELECT code FROM $table_sf ORDER BY code";
-    $res = Database::query($sql);
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select('sf.code AS code')
+        ->from(SearchEngineField::class, 'sf')
+        ->orderBy('sf.code', 'ASC')
+        ->getQuery()
+        ->getArrayResult();
     $code = strtoupper(substr($name, 0, 1));
     //if no code exists in DB, return current one
-    if (Database::num_rows($res) < 1) {
+    if (count($rows) < 1) {
         return $code;
     }
 
     $existing_list = [];
-    while ($row = Database::fetch_array($res)) {
+    foreach ($rows as $row) {
         $existing_list[] = $row['code'];
     }
     //if the current code doesn't exist in DB, return current one

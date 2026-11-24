@@ -43,6 +43,7 @@ class Positioning extends Plugin
                 is_initial TINYINT(1) NOT NULL,
                 is_final TINYINT(1) NOT NULL
                 )';
+        // TODO(db-neutral): DDL (CREATE TABLE IF NOT EXISTS), not expressible in DQL nor the DBAL query builder
         Database::query($sql);
 
         // Installing course settings
@@ -52,6 +53,7 @@ class Positioning extends Plugin
     public function uninstall()
     {
         $table = $this->table;
+        // TODO(db-neutral): DDL (DROP TABLE IF EXISTS), not expressible in DQL nor the DBAL query builder
         Database::query("DROP TABLE IF EXISTS $table");
     }
 
@@ -67,23 +69,18 @@ class Positioning extends Plugin
 
     public function getPositionData($exerciseId, $courseId, $sessionId)
     {
-        $table = $this->table;
-        $courseId = (int) $courseId;
-        $sessionId = (int) $sessionId;
-
-        $sql = "SELECT * FROM $table
-                WHERE
-                    exercise_id = $exerciseId AND
-                    c_id = $courseId AND
-                    session_id = $sessionId
-                    ";
-        $result = Database::query($sql);
-
-        if (Database::num_rows($result) > 0) {
-            return Database::fetch_assoc($result);
-        }
-
-        return false;
+        return Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from($this->table)
+            ->where('exercise_id = :exerciseId')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->setParameter('exerciseId', (int) $exerciseId)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('sessionId', (int) $sessionId)
+            ->executeQuery()
+            ->fetchAssociative()
+        ;
     }
 
     public function isFinalExercise($exerciseId, $courseId, $sessionId)
@@ -192,19 +189,22 @@ class Positioning extends Plugin
             return false;
         }
 
+        $connection = Database::getManager()->getConnection();
         $data = $this->getPositionData($exerciseId, $courseId, $sessionId);
         $disableField = 'is_initial' === $field ? 'is_final' : 'is_initial';
         if ($data && isset($data['id'])) {
-            $id = $data['id'];
-            $sql = "UPDATE $this->table SET
-                    $field = 1,
-                    $disableField = 0
-                    WHERE id = $id";
-            Database::query($sql);
+            $id = (int) $data['id'];
+            // $field and $disableField come from the allowlist above.
+            $connection->createQueryBuilder()
+                ->update($this->table)
+                ->set($field, '1')
+                ->set($disableField, '0')
+                ->where('id = :id')
+                ->setParameter('id', $id)
+                ->executeStatement()
+            ;
 
-            $sql = "DELETE FROM $this->table
-                    WHERE $field = 1 AND c_id = $courseId AND session_id = $sessionId AND id <> $id";
-            Database::query($sql);
+            $this->deleteOtherRows($field, (int) $courseId, $sessionId, $id);
         } else {
             $params = [
                 'exercise_id' => $exerciseId,
@@ -215,42 +215,43 @@ class Positioning extends Plugin
             ];
             $id = Database::insert($this->table, $params);
 
-            $sql = "DELETE FROM $this->table
-                    WHERE $field = 1 AND c_id = $courseId AND session_id = $sessionId AND id <> $id";
-            Database::query($sql);
+            $this->deleteOtherRows($field, (int) $courseId, $sessionId, (int) $id);
         }
+    }
+
+    /**
+     * Removes the other rows flagged with $field (allowlisted by setOption()) in the course and session.
+     */
+    private function deleteOtherRows(string $field, int $courseId, $sessionId, int $id): void
+    {
+        Database::getManager()->getConnection()->createQueryBuilder()
+            ->delete($this->table)
+            ->where($field.' = 1')
+            ->andWhere('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('id <> :id')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('id', $id)
+            ->executeStatement()
+        ;
     }
 
     private function getCourseExercise($courseId, $sessionId, $isInitial, $isFinal)
     {
-        $table = $this->table;
-        $courseId = (int) $courseId;
-        $sessionId = (int) $sessionId;
-
-        $sql = "SELECT * FROM $table
-                WHERE
-                    c_id = $courseId AND
-                    session_id = $sessionId
-                    ";
-
-        if ($isInitial) {
-            $sql .= ' AND is_initial = 1 ';
-        } else {
-            $sql .= ' AND is_initial = 0 ';
-        }
-
-        if ($isFinal) {
-            $sql .= ' AND is_final = 1 ';
-        } else {
-            $sql .= ' AND is_final = 0 ';
-        }
-
-        $result = Database::query($sql);
-
-        if (Database::num_rows($result) > 0) {
-            return Database::fetch_assoc($result);
-        }
-
-        return false;
+        return Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from($this->table)
+            ->where('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('is_initial = :isInitial')
+            ->andWhere('is_final = :isFinal')
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('sessionId', (int) $sessionId)
+            ->setParameter('isInitial', $isInitial ? 1 : 0)
+            ->setParameter('isFinal', $isFinal ? 1 : 0)
+            ->executeQuery()
+            ->fetchAssociative()
+        ;
     }
 }

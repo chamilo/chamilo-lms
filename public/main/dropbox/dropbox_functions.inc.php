@@ -2,7 +2,15 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\TrackELastaccess;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CDropboxCategory;
+use Chamilo\CourseBundle\Entity\CDropboxFeedback;
+use Chamilo\CourseBundle\Entity\CDropboxFile;
+use Chamilo\CourseBundle\Entity\CDropboxPerson;
+use Chamilo\CourseBundle\Entity\CDropboxPost;
 use ChamiloSession as Session;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * This file contains additional dropbox functions. Initially there were some
@@ -102,9 +110,54 @@ function handle_multiple_actions()
 
     // STEP 3D: downloading
     if ('download_sent' == $_POST['action'] || 'download_received' == $_POST['action']) {
-        zip_download($checked_file_ids);
+        return zip_download($checked_file_ids);
     }
 }
+
+/**
+ * Every column of the dropbox category table, aliased to the snake_case keys the callers read.
+ */
+function dropboxCategoryRowsQueryBuilder(): QueryBuilder
+{
+    return Container::getEntityManager()->createQueryBuilder()
+        ->select(
+            'c.iid AS iid',
+            'c.cId AS c_id',
+            'c.catId AS cat_id',
+            'c.title AS title',
+            'c.received AS received',
+            'c.sent AS sent',
+            'c.userId AS user_id',
+            'c.sessionId AS session_id'
+        )
+        ->from(CDropboxCategory::class, 'c')
+    ;
+}
+
+/**
+ * The raw table row used to come back with integer flags.
+ */
+function dropboxToLegacyCategoryRow(array $row): array
+{
+    foreach (['iid', 'c_id', 'cat_id', 'received', 'sent', 'user_id', 'session_id'] as $key) {
+        $row[$key] = (int) $row[$key];
+    }
+
+    return $row;
+}
+
+/**
+ * Database::fetch_array() style row: the named keys followed by the same values under numeric keys.
+ */
+function dropboxWithNumericKeys(array $row): array
+{
+    foreach ($row as $value) {
+        $row[] = $value;
+    }
+
+    return $row;
+}
+
 
 /**
  * This function deletes a dropbox category.
@@ -138,12 +191,10 @@ function delete_category($action, $id, $user_id = null)
     // an additional check that might not be necessary
     if ('deletereceivedcategory' == $action) {
         $sentreceived = 'received';
-        $entries_table = Database::get_course_table(TABLE_DROPBOX_POST);
         $id_field = 'file_id';
         $return_message = get_lang('The folder has been deleted');
     } elseif ('deletesentcategory' == $action) {
         $sentreceived = 'sent';
-        $entries_table = Database::get_course_table(TABLE_DROPBOX_FILE);
         $id_field = 'iid';
         $return_message = get_lang('The folder has been deleted');
     } else {
@@ -151,16 +202,39 @@ function delete_category($action, $id, $user_id = null)
     }
 
     // step 1: delete the category
-    $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)."
-            WHERE c_id = $course_id AND cat_id='".intval($id)."' AND $sentreceived='1'";
-    Database::query($sql);
+    // $sentreceived is one of the two literals set above: only those two columns can be filtered on.
+    $kindCondition = 'received' === $sentreceived ? 'c.received = true' : 'c.sent = true';
+    $em = Container::getEntityManager();
+    $em->createQuery(
+        'DELETE FROM '.CDropboxCategory::class.' c WHERE c.cId = :courseId AND c.catId = :catId AND '.$kindCondition
+    )
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('catId', (int) $id)
+        ->execute()
+    ;
 
     // step 2: delete all the documents in this category
-    $sql = "SELECT * FROM ".$entries_table."
-            WHERE c_id = $course_id AND cat_id='".intval($id)."'";
-    $result = Database::query($sql);
+    if ('deletereceivedcategory' == $action) {
+        $entries = $em->createQueryBuilder()
+            ->select('e.fileId AS file_id')
+            ->from(CDropboxPost::class, 'e')
+        ;
+    } else {
+        $entries = $em->createQueryBuilder()
+            ->select('e.iid AS iid')
+            ->from(CDropboxFile::class, 'e')
+        ;
+    }
+    $entries = $entries
+        ->where('e.cId = :courseId')
+        ->andWhere('e.catId = :catId')
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('catId', (int) $id)
+        ->getQuery()
+        ->getArrayResult()
+    ;
 
-    while ($row = Database::fetch_array($result)) {
+    foreach ($entries as $row) {
         $dropboxfile = new Dropbox_Person($user_id, $is_courseAdmin, $is_courseTutor);
         if ('deletereceivedcategory' == $action) {
             $dropboxfile->deleteReceivedWork($row[$id_field]);
@@ -230,21 +304,31 @@ function store_move($id, $target, $part)
         (isset($part) && '' != $part)
     ) {
         if ('received' == $part) {
-            $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_POST)."
-                    SET cat_id = ".intval($target)."
-                    WHERE c_id = $course_id AND dest_user_id = ".intval($_user['user_id'])."
-                    AND file_id = ".intval($id)."";
-            Database::query($sql);
+            Container::getEntityManager()
+                ->createQuery(
+                    'UPDATE '.CDropboxPost::class.' p SET p.catId = :target
+                     WHERE p.cId = :courseId AND p.destUserId = :userId AND p.fileId = :fileId'
+                )
+                ->setParameter('target', (int) $target)
+                ->setParameter('courseId', (int) $course_id)
+                ->setParameter('userId', (int) $_user['user_id'])
+                ->setParameter('fileId', (int) $id)
+                ->execute()
+            ;
             $return_message = get_lang('The received file has been moved.');
         }
         if ('sent' == $part) {
-            $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_FILE)."
-                    SET cat_id = ".intval($target)."
-                    WHERE
-                        c_id = $course_id AND
-                        uploader_id = ".intval($_user['user_id'])." AND
-                        iid = ".intval($id);
-            Database::query($sql);
+            Container::getEntityManager()
+                ->createQuery(
+                    'UPDATE '.CDropboxFile::class.' f SET f.catId = :target
+                     WHERE f.cId = :courseId AND f.uploaderId = :userId AND f.iid = :fileId'
+                )
+                ->setParameter('target', (int) $target)
+                ->setParameter('courseId', (int) $course_id)
+                ->setParameter('userId', (int) $_user['user_id'])
+                ->setParameter('fileId', (int) $id)
+                ->execute()
+            ;
             $return_message = get_lang('The sent file has been moved');
         }
     } else {
@@ -271,14 +355,23 @@ function get_dropbox_categories($filter = '')
     $_user = api_get_user_info();
     $return_array = [];
 
-    $session_id = api_get_session_id();
-    $condition_session = api_get_session_condition($session_id);
+    $session_id = (int) api_get_session_id();
 
-    $sql = "SELECT * FROM ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)."
-            WHERE c_id = $course_id AND user_id='".$_user['user_id']."' $condition_session";
+    $qb = dropboxCategoryRowsQueryBuilder()
+        ->where('c.cId = :courseId')
+        ->andWhere('c.userId = :userId')
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('userId', (int) $_user['user_id'])
+    ;
+    // Same condition as api_get_session_condition(): the base course also matches the rows without a session.
+    if (empty($session_id)) {
+        $qb->andWhere('(c.sessionId = 0 OR c.sessionId IS NULL)');
+    } else {
+        $qb->andWhere('c.sessionId = :sessionId')->setParameter('sessionId', $session_id);
+    }
 
-    $result = Database::query($sql);
-    while ($row = Database::fetch_array($result)) {
+    foreach ($qb->getQuery()->getArrayResult() as $row) {
+        $row = dropboxWithNumericKeys(dropboxToLegacyCategoryRow($row));
         if (('sent' == $filter && 1 == $row['sent']) ||
             ('received' == $filter && 1 == $row['received']) || '' == $filter
         ) {
@@ -305,15 +398,17 @@ function get_dropbox_category($id)
         return [];
     }
 
-    $sql = "SELECT * FROM ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)."
-            WHERE c_id = $course_id AND cat_id='".$id."'";
-    $res = Database::query($sql);
-    if (false === $res) {
-        return [];
-    }
-    $row = Database::fetch_assoc($res);
+    $row = dropboxCategoryRowsQueryBuilder()
+        ->where('c.cId = :courseId')
+        ->andWhere('c.catId = :catId')
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('catId', $id)
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getArrayResult()[0] ?? null;
 
-    return $row;
+    // Database::fetch_assoc() semantics: false when there is no such category.
+    return null === $row ? false : dropboxToLegacyCategoryRow($row);
 }
 
 /**
@@ -356,18 +451,27 @@ function store_addcategory()
     if (!isset($_POST['edit_id'])) {
         $session_id = api_get_session_id();
         // step 3a, we check if the category doesn't already exist
-        $sql = "SELECT * FROM ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)."
-                WHERE
-                    c_id = $course_id AND
-                    user_id='".$_user['user_id']."' AND
-                    title='".Database::escape_string($_POST['category_name'])."' AND
-                    received='".$received."' AND
-                    sent='$sent' AND
-                    session_id='$session_id'";
-        $result = Database::query($sql);
+        $existing = (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(c.iid)')
+            ->from(CDropboxCategory::class, 'c')
+            ->where('c.cId = :courseId')
+            ->andWhere('c.userId = :userId')
+            ->andWhere('c.title = :title')
+            ->andWhere('c.received = :received')
+            ->andWhere('c.sent = :sent')
+            ->andWhere('c.sessionId = :sessionId')
+            ->setParameter('courseId', (int) $course_id)
+            ->setParameter('userId', (int) $_user['user_id'])
+            ->setParameter('title', (string) $_POST['category_name'])
+            ->setParameter('received', (bool) $received)
+            ->setParameter('sent', (bool) $sent)
+            ->setParameter('sessionId', (int) $session_id)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
         // step 3b, we add the category if it does not exist yet.
-        if (0 == Database::num_rows($result)) {
+        if (0 === $existing) {
             $params = [
                 'cat_id' => 0,
                 'c_id' => $course_id,
@@ -379,9 +483,11 @@ function store_addcategory()
             ];
             $id = Database::insert(Database::get_course_table(TABLE_DROPBOX_CATEGORY), $params);
             if ($id) {
-                $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)." SET cat_id = iid
-                        WHERE iid = $id";
-                Database::query($sql);
+                Container::getEntityManager()
+                    ->createQuery('UPDATE '.CDropboxCategory::class.' c SET c.catId = c.iid WHERE c.iid = :iid')
+                    ->setParameter('iid', (int) $id)
+                    ->execute()
+                ;
             }
 
             return ['type' => 'confirmation', 'message' => get_lang('The folder has been created')];
@@ -430,10 +536,16 @@ function display_addcategory_form($category_name = '', $id = 0, $action = '')
 
     if (!empty($id)) {
         // retrieve the category we are editing
-        $sql = "SELECT * FROM ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)."
-                WHERE c_id = $course_id AND cat_id = ".$id;
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
+        $row = dropboxCategoryRowsQueryBuilder()
+            ->where('c.cId = :courseId')
+            ->andWhere('c.catId = :catId')
+            ->setParameter('courseId', (int) $course_id)
+            ->setParameter('catId', $id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
+        // Database::fetch_array() semantics: an empty array when there is no such category.
+        $row = null === $row ? [] : dropboxWithNumericKeys(dropboxToLegacyCategoryRow($row));
 
         if (empty($category_name)) {
             // after an edit with an error we do not want to return to the
@@ -760,24 +872,32 @@ function removeUnusedFiles()
 {
     $_course = api_get_course_info();
     $course_id = $_course['real_id'];
+    $em = Container::getEntityManager();
 
     // select all files that aren't referenced anymore
-    $sql = "SELECT DISTINCT f.iid, f.filename
-            FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)." f
-            LEFT JOIN ".Database::get_course_table(TABLE_DROPBOX_PERSON)." p
-            ON (f.iid = p.file_id)
-            WHERE p.user_id IS NULL AND
-                  f.c_id = $course_id
-            ";
-    $result = Database::query($sql);
-    while ($res = Database::fetch_array($result)) {
+    $unused = $em->createQueryBuilder()
+        ->select('f.iid AS iid', 'f.filename AS filename')
+        ->distinct()
+        ->from(CDropboxFile::class, 'f')
+        ->leftJoin(CDropboxPerson::class, 'p', 'WITH', 'f.iid = p.fileId')
+        ->where('p.userId IS NULL')
+        ->andWhere('f.cId = :courseId')
+        ->setParameter('courseId', (int) $course_id)
+        ->getQuery()
+        ->getArrayResult()
+    ;
+    foreach ($unused as $res) {
         //delete the selected files from the post and file tables
-        $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
-                WHERE c_id = $course_id AND file_id = '".$res['iid']."'";
-        Database::query($sql);
-        $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)."
-                WHERE c_id = $course_id AND iid ='".$res['iid']."'";
-        Database::query($sql);
+        $em->createQuery('DELETE FROM '.CDropboxPost::class.' p WHERE p.cId = :courseId AND p.fileId = :fileId')
+            ->setParameter('courseId', (int) $course_id)
+            ->setParameter('fileId', (int) $res['iid'])
+            ->execute()
+        ;
+        $em->createQuery('DELETE FROM '.CDropboxFile::class.' f WHERE f.cId = :courseId AND f.iid = :fileId')
+            ->setParameter('courseId', (int) $course_id)
+            ->setParameter('fileId', (int) $res['iid'])
+            ->execute()
+        ;
         //delete file from server
         // SYS_COURSE_PATH no longer exists (course files moved to resource nodes): nothing to remove from disk.
         if (defined('SYS_COURSE_PATH')) {
@@ -802,17 +922,19 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     $course_id = api_get_course_int_id();
 
     $mailingPseudoId = (int) $mailingPseudoId;
-    $sql = "SELECT f.uploader_id
-            FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)." f
-            LEFT JOIN ".Database::get_course_table(TABLE_DROPBOX_POST)." p
-            ON (f.iid = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
-            WHERE
-                p.dest_user_id = '".$mailingPseudoId."' AND
-                p.c_id = $course_id
-            ";
-    $result = Database::query($sql);
+    $res = Container::getEntityManager()->createQueryBuilder()
+        ->select('f.uploaderId AS uploader_id')
+        ->from(CDropboxFile::class, 'f')
+        ->leftJoin(CDropboxPost::class, 'p', 'WITH', 'f.iid = p.fileId AND f.cId = :courseId AND p.cId = :courseId')
+        ->where('p.destUserId = :mailingPseudoId')
+        ->andWhere('p.cId = :courseId')
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('mailingPseudoId', $mailingPseudoId)
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getArrayResult()[0] ?? null;
 
-    if (!($res = Database::fetch_array($result))) {
+    if (null === $res) {
         exit(get_lang('An error has occurred. Please contact your system administrator.').' (code 901)');
     }
     if (0 == $owner) {
@@ -838,23 +960,37 @@ function removeMoreIfMailing($file_id)
     // 2. finding the owner (getUserOwningThisMailing) is no longer possible, so
     //    for all content files, replace mailingPseudoId by owner as uploader
     $file_id = (int) $file_id;
-    $sql = "SELECT p.dest_user_id
-            FROM ".Database::get_course_table(TABLE_DROPBOX_POST)." p
-            WHERE c_id = $course_id AND p.file_id = '".$file_id."'";
-    $result = Database::query($sql);
+    $em = Container::getEntityManager();
+    $res = $em->createQueryBuilder()
+        ->select('p.destUserId AS dest_user_id')
+        ->from(CDropboxPost::class, 'p')
+        ->where('p.cId = :courseId')
+        ->andWhere('p.fileId = :fileId')
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('fileId', $file_id)
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getArrayResult()[0] ?? null;
 
-    if ($res = Database::fetch_array($result)) {
+    if (null !== $res) {
         $mailingPseudoId = $res['dest_user_id'];
         $mailId = get_mail_id_base();
         if ($mailingPseudoId > $mailId) {
-            $sql = "DELETE FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
-                    WHERE c_id = $course_id AND user_id='".$mailingPseudoId."'";
-            Database::query($sql);
+            $em->createQuery('DELETE FROM '.CDropboxPerson::class.' p WHERE p.cId = :courseId AND p.userId = :userId')
+                ->setParameter('courseId', (int) $course_id)
+                ->setParameter('userId', (int) $mailingPseudoId)
+                ->execute()
+            ;
 
-            $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_FILE)."
-                    SET uploader_id='".api_get_user_id()."'
-                    WHERE c_id = $course_id AND uploader_id='".$mailingPseudoId."'";
-            Database::query($sql);
+            $em->createQuery(
+                'UPDATE '.CDropboxFile::class.' f SET f.uploaderId = :newUploader
+                 WHERE f.cId = :courseId AND f.uploaderId = :oldUploader'
+            )
+                ->setParameter('newUploader', (int) api_get_user_id())
+                ->setParameter('courseId', (int) $course_id)
+                ->setParameter('oldUploader', (int) $mailingPseudoId)
+                ->execute()
+            ;
         }
     }
 }
@@ -1209,18 +1345,33 @@ function user_can_download_file($id, $user_id)
     $course_id = api_get_course_int_id();
     $id = (int) $id;
     $user_id = (int) $user_id;
+    $em = Container::getEntityManager();
 
-    $sql = "SELECT file_id
-            FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
-            WHERE c_id = $course_id AND user_id = $user_id AND file_id = ".$id;
-    $result = Database::query($sql);
-    $number_users_who_see_file = Database::num_rows($result);
+    $number_users_who_see_file = (int) $em->createQueryBuilder()
+        ->select('COUNT(p.iid)')
+        ->from(CDropboxPerson::class, 'p')
+        ->where('p.cId = :courseId')
+        ->andWhere('p.userId = :userId')
+        ->andWhere('p.fileId = :fileId')
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('userId', $user_id)
+        ->setParameter('fileId', $id)
+        ->getQuery()
+        ->getSingleScalarResult()
+    ;
 
-    $sql = "SELECT file_id
-            FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
-            WHERE c_id = $course_id AND dest_user_id = $user_id AND file_id = ".$id;
-    $result = Database::query($sql);
-    $count = Database::num_rows($result);
+    $count = (int) $em->createQueryBuilder()
+        ->select('COUNT(p.iid)')
+        ->from(CDropboxPost::class, 'p')
+        ->where('p.cId = :courseId')
+        ->andWhere('p.destUserId = :userId')
+        ->andWhere('p.fileId = :fileId')
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('userId', $user_id)
+        ->setParameter('fileId', $id)
+        ->getQuery()
+        ->getSingleScalarResult()
+    ;
 
     return $number_users_who_see_file > 0 || $count > 0;
 }
@@ -1232,17 +1383,29 @@ function check_if_file_exist($id)
 {
     $id = (int) $id;
     $course_id = api_get_course_int_id();
-    $sql = "SELECT file_id
-            FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
-            WHERE c_id = $course_id AND file_id = ".$id;
-    $result = Database::query($sql);
-    $number_users_who_see_file = Database::num_rows($result);
+    $em = Container::getEntityManager();
 
-    $sql = "SELECT file_id
-            FROM ".Database::get_course_table(TABLE_DROPBOX_POST)."
-            WHERE c_id = $course_id AND file_id = ".$id;
-    $result = Database::query($sql);
-    $count = Database::num_rows($result);
+    $number_users_who_see_file = (int) $em->createQueryBuilder()
+        ->select('COUNT(p.iid)')
+        ->from(CDropboxPerson::class, 'p')
+        ->where('p.cId = :courseId')
+        ->andWhere('p.fileId = :fileId')
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('fileId', $id)
+        ->getQuery()
+        ->getSingleScalarResult()
+    ;
+
+    $count = (int) $em->createQueryBuilder()
+        ->select('COUNT(p.iid)')
+        ->from(CDropboxPost::class, 'p')
+        ->where('p.cId = :courseId')
+        ->andWhere('p.fileId = :fileId')
+        ->setParameter('courseId', (int) $course_id)
+        ->setParameter('fileId', $id)
+        ->getQuery()
+        ->getSingleScalarResult()
+    ;
 
     return $number_users_who_see_file > 0 || $count > 0;
 }
@@ -1278,12 +1441,59 @@ function store_feedback()
 
         $id = Database::insert($table, $params);
         if ($id) {
-            $sql = "UPDATE $table SET feedback_id = iid WHERE iid = $id";
-            Database::query($sql);
+            Container::getEntityManager()
+                ->createQuery('UPDATE '.CDropboxFeedback::class.' f SET f.feedbackId = f.iid WHERE f.iid = :iid')
+                ->setParameter('iid', (int) $id)
+                ->execute()
+            ;
         }
 
         return get_lang('The feedback message has been stored');
     }
+}
+
+/**
+ * The files of the current course, among the given ids, that the current user sent or received, keyed by their
+ * stored filename. This is what zip_download() puts into the archive.
+ *
+ * @param array $fileList ids of the c_dropbox_file rows
+ */
+function dropbox_files_to_zip(array $fileList): array
+{
+    $course_id = api_get_course_int_id();
+    $fileList = array_map('intval', $fileList);
+
+    // note: we also have to add the check if the user has received or sent this file.
+    $userId = (int) api_get_user_id();
+    $rows = [];
+    if (!empty($fileList)) {
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT f.filename AS filename', 'f.title AS title', 'f.author AS author', 'f.description AS description')
+            ->from(CDropboxFile::class, 'f')
+            ->innerJoin(CDropboxPerson::class, 'person', 'WITH', 'person.fileId = f.iid AND person.cId = :courseId')
+            ->innerJoin(CDropboxPost::class, 'post', 'WITH', 'post.fileId = f.iid AND post.cId = :courseId')
+            ->where('f.cId = :courseId')
+            ->andWhere('f.iid IN (:fileIds)')
+            ->andWhere('person.userId = :userId OR post.destUserId = :userId')
+            ->setParameter('courseId', (int) $course_id)
+            ->setParameter('fileIds', $fileList)
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+    }
+
+    $files = [];
+    foreach ($rows as $row) {
+        $files[$row['filename']] = [
+            'filename' => $row['filename'],
+            'title' => $row['title'],
+            'author' => $row['author'],
+            'description' => $row['description'],
+        ];
+    }
+
+    return $files;
 }
 
 /**
@@ -1301,51 +1511,75 @@ function store_feedback()
  *
  * @version march 2006
  */
+function dropbox_build_zip(array $fileList): ?string
+{
+    $files = dropbox_files_to_zip($fileList);
+    if (empty($files)) {
+        return null;
+    }
+
+    $em = Container::getEntityManager();
+    $resourceNodeRepository = Container::getResourceNodeRepository();
+    $courseId = (int) api_get_course_int_id();
+
+    $temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
+    $zip = new ZipArchive();
+    if (true !== $zip->open($temp_zip_file, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
+        return null;
+    }
+
+    $usedNames = [];
+    foreach ($files as $value) {
+        // The stored filename is unique, and the selection above already limited it to this course.
+        $file = $em->getRepository(CDropboxFile::class)->findOneBy([
+            'filename' => $value['filename'],
+            'cId' => $courseId,
+        ]);
+        $resourceNode = $file?->getResourceNode();
+        if (null === $resourceNode) {
+            continue;
+        }
+
+        try {
+            $content = $resourceNodeRepository->getResourceNodeFileContent($resourceNode);
+        } catch (Throwable $e) {
+            continue;
+        }
+
+        // The title is user input: keep only its last path segment, without control characters.
+        $entryName = trim(basename(str_replace('\\', '/', (string) preg_replace('/[\x00-\x1F\x7F]/', '', (string) $value['title']))));
+        if ('' === $entryName || '.' === $entryName || '..' === $entryName) {
+            $entryName = basename((string) $value['filename']);
+        }
+        $info = pathinfo($entryName);
+        $base = $info['filename'];
+        $extension = isset($info['extension']) ? '.'.$info['extension'] : '';
+        $candidate = $entryName;
+        for ($i = 2; isset($usedNames[mb_strtolower($candidate)]); $i++) {
+            $candidate = $base.' ('.$i.')'.$extension;
+        }
+        $usedNames[mb_strtolower($candidate)] = true;
+
+        $zip->addFromString($candidate, $content);
+    }
+
+    $added = $zip->numFiles;
+    $zip->close();
+    if (0 === $added) {
+        @unlink($temp_zip_file);
+
+        return null;
+    }
+
+    return $temp_zip_file;
+}
+
 function zip_download($fileList)
 {
-    $_course = api_get_course_info();
-    $course_id = api_get_course_int_id();
-    $fileList = array_map('intval', $fileList);
-
-    // note: we also have to add the check if the user has received or sent this file.
-    $sql = "SELECT DISTINCT file.filename, file.title, file.author, file.description
-            FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)." file
-            INNER JOIN ".Database::get_course_table(TABLE_DROPBOX_PERSON)." person
-            ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
-            INNER JOIN ".Database::get_course_table(TABLE_DROPBOX_POST)." post
-            ON (post.file_id = file.id AND post.c_id = $course_id AND file.c_id = $course_id)
-            WHERE
-                file.id IN (".implode(', ', $fileList).") AND
-                file.id = person.file_id AND
-                (
-                    person.user_id = '".api_get_user_id()."' OR
-                    post.dest_user_id = '".api_get_user_id()."'
-                ) ";
-    $result = Database::query($sql);
-
-    $files = [];
-    while ($row = Database::fetch_array($result)) {
-        $files[$row['filename']] = [
-            'filename' => $row['filename'],
-            'title' => $row['title'],
-            'author' => $row['author'],
-            'description' => $row['description'],
-        ];
+    $temp_zip_file = dropbox_build_zip($fileList);
+    if (null === $temp_zip_file) {
+        return get_lang('Check at least one file.');
     }
-
-    // Step 3: create the zip file and add all the files to it
-    $temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
-    Session::write('dropbox_files_to_download', $files);
-    $zip = new PclZip($temp_zip_file);
-    foreach ($files as $value) {
-        $zip->add(
-            api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$value['filename'],
-            PCLZIP_OPT_REMOVE_ALL_PATH,
-            PCLZIP_CB_PRE_ADD,
-            'my_pre_add_callback'
-        );
-    }
-    Session::erase('dropbox_files_to_download');
     $name = 'dropbox-'.api_get_utc_datetime().'.zip';
     $result = DocumentManager::file_send_for_download($temp_zip_file, true, $name);
     if (false === $result) {
@@ -1353,27 +1587,6 @@ function zip_download($fileList)
     }
     @unlink($temp_zip_file);
     exit;
-}
-
-/**
- * This is a callback function to decrypt the files in the zip file
- * to their normal filename (as stored in the database).
- *
- * @param array $p_event  a variable of PCLZip
- * @param array $p_header a variable of PCLZip
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- *
- * @version march 2006
- *
- * Passed by name as the PclZip pre-add callback of zip_download().
- */
-function my_pre_add_callback($p_event, &$p_header)
-{
-    $files = Session::read('dropbox_files_to_download');
-    $p_header['stored_filename'] = $files[$p_header['stored_filename']]['title'];
-
-    return 1;
 }
 
 /**
@@ -1388,14 +1601,18 @@ function my_pre_add_callback($p_event, &$p_header)
 function get_total_number_feedback()
 {
     $course_id = api_get_course_int_id();
-    $sql = "SELECT COUNT(feedback_id) AS total, file_id
-            FROM ".Database::get_course_table(TABLE_DROPBOX_FEEDBACK)."
-            WHERE c_id = $course_id
-            GROUP BY file_id";
-    $result = Database::query($sql);
+    $rows = Container::getEntityManager()->createQueryBuilder()
+        ->select('COUNT(f.feedbackId) AS total', 'f.fileId AS file_id')
+        ->from(CDropboxFeedback::class, 'f')
+        ->where('f.cId = :courseId')
+        ->groupBy('f.fileId')
+        ->setParameter('courseId', (int) $course_id)
+        ->getQuery()
+        ->getArrayResult()
+    ;
     $return = [];
-    while ($row = Database::fetch_array($result)) {
-        $return[$row['file_id']] = $row['total'];
+    foreach ($rows as $row) {
+        $return[$row['file_id']] = (int) $row['total'];
     }
 
     return $return;
@@ -1447,20 +1664,21 @@ function get_last_tool_access($tool, $courseId = null, $user_id = null)
         $user_id = api_get_user_id();
     }
 
-    // the table where the last tool access is stored (=track_e_lastaccess)
-    $table_last_access = Database::get_main_table('track_e_lastaccess');
+    $row = Container::getEntityManager()->createQueryBuilder()
+        ->select('a.accessDate AS access_date')
+        ->from(TrackELastaccess::class, 'a')
+        ->where('a.accessUserId = :userId')
+        ->andWhere('a.cId = :courseId')
+        ->andWhere('a.accessTool = :tool')
+        ->setParameter('userId', (int) $user_id)
+        ->setParameter('courseId', (int) $courseId)
+        ->setParameter('tool', (string) $tool)
+        ->orderBy('a.accessDate', 'DESC')
+        ->setMaxResults(1)
+        ->getQuery()
+        ->getArrayResult()[0] ?? null;
 
-    $sql = "SELECT access_date FROM $table_last_access
-            WHERE
-                access_user_id = ".intval($user_id)." AND
-                c_id='".intval($courseId)."' AND
-                access_tool='".Database::escape_string($tool)."'
-                ORDER BY access_date DESC
-                LIMIT 1";
-    $result = Database::query($sql);
-    $row = Database::fetch_array($result);
-
-    return $row['access_date'] ?? null;
+    return null === $row ? null : $row['access_date']->format('Y-m-d H:i:s');
 }
 /**
  * Previously $dropbox_cnf['mailingIdBase'], returns a mailing ID to generate a mail ID.

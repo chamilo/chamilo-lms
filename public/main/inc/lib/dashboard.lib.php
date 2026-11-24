@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Block;
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * DashboardManager can be used to manage dashboard
  * author Christian Fasanando <christian1827@gmail.com>.
@@ -328,20 +331,29 @@ class DashboardManager
      */
     public static function get_enabled_dashboard_blocks($path = '')
     {
-        $tbl_block = Database::get_main_table(TABLE_MAIN_BLOCK);
-        $condition_path = '';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'b.id AS id',
+                'IDENTITY(b.user) AS user_id',
+                'b.title AS title',
+                'b.description AS description',
+                'b.path AS path',
+                'b.controller AS controller',
+                'b.active AS active'
+            )
+            ->from(Block::class, 'b')
+            ->where('b.active = true')
+            ->orderBy('b.id', 'ASC')
+        ;
         if (!empty($path)) {
-            $path = Database::escape_string($path);
-            $condition_path = ' AND path = "'.$path.'" ';
+            $qb->andWhere('b.path = :path')->setParameter('path', $path);
         }
 
-        $sql = "SELECT * FROM $tbl_block WHERE active = 1 $condition_path ";
-        $rs = Database::query($sql);
         $block_data = [];
-        if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_array($rs)) {
-                $block_data[$row['path']] = $row;
-            }
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            // The raw rows came back with the numeric keys as well, and the tinyint as an integer.
+            $row['active'] = (int) $row['active'];
+            $block_data[$row['path']] = array_merge($row, array_values($row));
         }
 
         return $block_data;

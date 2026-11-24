@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Service\Message\MessageEmailOpenTrackingService;
 use ChamiloSession as Session;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MessageManager
@@ -79,24 +80,80 @@ class MessageManager
      */
     public static function messageWasAlreadySent($senderId, $receiverId, $subject, $message)
     {
-        $tblMessage = Database::get_main_table(TABLE_MESSAGE);
-        $senderId = (int) $senderId;
-        $receiverId = (int) $receiverId;
-        $subject = Database::escape_string($subject);
-        $message = Database::escape_string($message);
+        $entityManager = Container::getEntityManager();
+        $query = $entityManager->createQueryBuilder()
+            ->select('m.id')
+            ->from(Message::class, 'm')
+            ->innerJoin(MessageRelUser::class, 'mru', 'WITH', 'mru.message = m')
+            ->where('m.sender = :senderId')
+            ->andWhere('mru.receiver = :receiverId')
+            ->andWhere('m.title = :subject')
+            ->andWhere('m.content = :message')
+            ->andWhere('m.msgType = :msgType')
+            ->setParameter('senderId', (int) $senderId)
+            ->setParameter('receiverId', (int) $receiverId)
+            ->setParameter('subject', (string) $subject)
+            ->setParameter('message', (string) $message)
+            ->setParameter('msgType', Message::MESSAGE_TYPE_INBOX)
+            ->getQuery()
+        ;
 
-        $sql = "SELECT m.id FROM $tblMessage m
-                INNER JOIN message_rel_user mru on m.id = mru.message_id
-                WHERE
-                    m.user_sender_id = $senderId AND
-                    mru.user_id = $receiverId AND
-                    m.title = '$subject' AND
-                    m.content = '$message' AND
-                    m.msg_type = ".Message::MESSAGE_TYPE_INBOX."
-                ";
-        $result = Database::query($sql);
+        // The raw query read message_rel_user as is, so a recipient who deleted the message (soft delete) still
+        // counted as "already sent": keep that by switching the soft-delete filter off for this query only.
+        $filters = $entityManager->getFilters();
+        $filterWasEnabled = $filters->isEnabled('softdeleteable');
+        if ($filterWasEnabled) {
+            $filters->disable('softdeleteable');
+        }
 
-        return Database::num_rows($result) > 0;
+        try {
+            $rows = $query->getArrayResult();
+        } finally {
+            if ($filterWasEnabled) {
+                $filters->enable('softdeleteable');
+            }
+        }
+
+        return count($rows) > 0;
+    }
+
+    /**
+     * Every column of the message table, aliased to the snake_case keys the legacy callers read, in the types the raw
+     * row had (integers, NULL parent/group, dates as 'Y-m-d H:i:s' strings, mail_answer as 0/1).
+     */
+    private static function messageRowsQueryBuilder(): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'm.id AS id',
+                'IDENTITY(m.sender) AS user_sender_id',
+                'IDENTITY(m.group) AS group_id',
+                'IDENTITY(m.parent) AS parent_id',
+                'm.msgType AS msg_type',
+                'm.status AS status',
+                'm.sendDate AS send_date',
+                'm.title AS title',
+                'm.content AS content',
+                'm.mailAnswer AS mail_answer',
+                'm.mailInboundId AS mail_inbound_id',
+                'm.updateDate AS update_date',
+                'm.votes AS votes'
+            )
+            ->from(Message::class, 'm')
+        ;
+    }
+
+    private static function toLegacyMessageRow(array $row): array
+    {
+        foreach (['id', 'user_sender_id', 'group_id', 'parent_id'] as $key) {
+            $row[$key] = null === $row[$key] ? null : (int) $row[$key];
+        }
+        foreach (['send_date', 'update_date'] as $key) {
+            $row[$key] = $row[$key] instanceof DateTimeInterface ? $row[$key]->format('Y-m-d H:i:s') : $row[$key];
+        }
+        $row['mail_answer'] = (int) $row['mail_answer'];
+
+        return $row;
     }
 
     /**
@@ -647,18 +704,19 @@ class MessageManager
             return false;
         }
 
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "SELECT * FROM $table
-                WHERE
-                    group_id= $group_id AND
-                    msg_type = ".Message::MESSAGE_TYPE_GROUP."
-                ORDER BY id";
-        $rs = Database::query($sql);
+        $rows = self::messageRowsQueryBuilder()
+            ->where('m.group = :groupId')
+            ->andWhere('m.msgType = :msgType')
+            ->orderBy('m.id', 'ASC')
+            ->setParameter('groupId', $group_id)
+            ->setParameter('msgType', Message::MESSAGE_TYPE_GROUP)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
         $data = [];
-        if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_assoc($rs)) {
-                $data[] = $row;
-            }
+        foreach ($rows as $row) {
+            $data[] = self::toLegacyMessageRow($row);
         }
 
         return $data;
@@ -680,22 +738,23 @@ class MessageManager
             return false;
         }
 
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "SELECT * FROM $table
-                WHERE
-                    group_id = $group_id AND
-                    msg_type = '".Message::MESSAGE_TYPE_GROUP."'
-                ORDER BY id ";
+        $rows = self::messageRowsQueryBuilder()
+            ->where('m.group = :groupId')
+            ->andWhere('m.msgType = :msgType')
+            ->orderBy('m.id', 'ASC')
+            ->setParameter('groupId', $group_id)
+            ->setParameter('msgType', Message::MESSAGE_TYPE_GROUP)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        $rs = Database::query($sql);
         $data = [];
         $parents = [];
-        if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_assoc($rs)) {
-                if ($message_id == $row['parent_id'] || in_array($row['parent_id'], $parents)) {
-                    $parents[] = $row['id'];
-                    $data[] = $row;
-                }
+        foreach ($rows as $row) {
+            $row = self::toLegacyMessageRow($row);
+            if ($message_id == $row['parent_id'] || in_array($row['parent_id'], $parents)) {
+                $parents[] = $row['id'];
+                $data[] = $row;
             }
         }
 
@@ -741,6 +800,7 @@ class MessageManager
                     msg_type = '".Message::MESSAGE_TYPE_GROUP."'
                     $condition_group_id
                 ORDER BY send_date DESC $condition_limit ";
+        // TODO(owner): dead code (getMessagesByParent has no caller); left raw, not migrated.
         $rs = Database::query($sql);
         $data = [];
         if (Database::num_rows($rs) > 0) {
@@ -890,19 +950,18 @@ class MessageManager
      */
     public static function get_message_by_id($messageId)
     {
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $messageId = (int) $messageId;
-        $sql = "SELECT * FROM $table
-                WHERE
-                    id = '$messageId' AND
-                    msg_type <> 3";
+        // The raw version echoed its SQL text here (debug leftover); there is no SQL text to echo any more.
+        $rows = self::messageRowsQueryBuilder()
+            ->where('m.id = :messageId')
+            ->andWhere('m.msgType <> 3')
+            ->setParameter('messageId', (int) $messageId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        echo $sql;
-
-        $res = Database::query($sql);
         $item = [];
-        if (Database::num_rows($res) > 0) {
-            $item = Database::fetch_assoc($res);
+        if (count($rows) > 0) {
+            $item = self::toLegacyMessageRow($rows[0]);
         }
 
         return $item;
@@ -1635,6 +1694,7 @@ class MessageManager
                 FROM $messagesTable
                 WHERE
                     user_receiver_id = ".$userId;
+        // TODO(owner): broken, Unknown column 'user_receiver_id' (recipients live in message_rel_user); left raw. Caller: my_space/myStudents.php.
         $result = Database::query($sql);
         $users = Database::store_result($result);
         $userList = [];
@@ -1675,6 +1735,7 @@ class MessageManager
                     (user_receiver_id = $otherUserId AND user_sender_id = $userId)
                 ORDER BY send_date DESC
             ";
+        // TODO(owner): broken, Unknown column 'user_receiver_id' (recipients live in message_rel_user); left raw. Caller: tracking/messages.php.
         $result = Database::query($sql);
         $messages = Database::store_result($result);
         $list = [];
@@ -1833,6 +1894,7 @@ class MessageManager
         $sql = "SELECT id FROM $table
           WHERE id = $messageId
             AND (user_receiver_id = $userId OR user_sender_id = $userId)";
+        // TODO(owner): broken, Unknown column 'user_receiver_id', and no caller; left raw.
         $res = Database::query($sql);
         if (Database::num_rows($res) === 1) {
             return true;

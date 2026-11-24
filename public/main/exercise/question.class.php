@@ -3,11 +3,13 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Helpers\AiDisclosureHelper;
 use Chamilo\CoreBundle\Search\Xapian\XapianIndexService;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionOption;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 
 /**
  * Class Question.
@@ -209,16 +211,30 @@ abstract class Question
 
         $course_id = (int) $course_info['real_id'];
 
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-
-        $sql = "SELECT *
-        FROM $TBL_QUESTIONS
-        WHERE iid = $id ";
-        $result = Database::query($sql);
+        $questionRows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'q.iid AS iid',
+                'q.question AS question',
+                'q.description AS description',
+                'q.ponderation AS ponderation',
+                'q.position AS position',
+                'q.type AS type',
+                'q.picture AS picture',
+                'q.level AS level',
+                'q.feedback AS feedback',
+                'q.extra AS extra',
+                'q.questionCode AS question_code',
+                'q.parentMediaId AS parent_media_id',
+                'q.mandatory AS mandatory'
+            )
+            ->from(CQuizQuestion::class, 'q')
+            ->where('q.iid = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getArrayResult();
 
 // if the question has been found
-        if ($object = Database::fetch_object($result)) {
+        if ($object = (isset($questionRows[0]) ? (object) $questionRows[0] : false)) {
             $objQuestion = self::getInstance($object->type);
             if (!empty($objQuestion)) {
                 $objQuestion->id = $id;
@@ -253,20 +269,28 @@ abstract class Question
                 }
 
                 if ($getExerciseList && $course_id > 0) {
-                    $tblQuiz = Database::get_course_table(TABLE_QUIZ_TEST);
                     $sessionId = (int) api_get_session_id();
-                    $sessionJoin = $sessionId > 0 ? "rl.session_id = $sessionId" : "rl.session_id IS NULL";
-
-                    $sql = "SELECT DISTINCT q.quiz_id
-                    FROM $TBL_EXERCISE_QUESTION q
-                    INNER JOIN $tblQuiz e ON e.iid = q.quiz_id
-                    INNER JOIN resource_node rn ON rn.id = e.resource_node_id
-                    INNER JOIN resource_link rl ON rl.resource_node_id = rn.id AND $sessionJoin
-                    WHERE q.question_id = $id
-                      AND rl.deleted_at IS NULL";
-                    $result = Database::query($sql);
-                    while ($obj = Database::fetch_object($result)) {
-                        $objQuestion->exerciseList[] = (int) $obj->quiz_id;
+                    $exerciseQb = Container::getEntityManager()->createQueryBuilder()
+                        ->select('DISTINCT IDENTITY(q.quiz) AS quiz_id')
+                        ->from(CQuizRelQuestion::class, 'q')
+                        ->innerJoin('q.quiz', 'e')
+                        ->innerJoin('e.resourceNode', 'rn')
+                        ->innerJoin(
+                            ResourceLink::class,
+                            'rl',
+                            'WITH',
+                            $sessionId > 0
+                                ? 'IDENTITY(rl.resourceNode) = rn.id AND IDENTITY(rl.session) = :sessionId'
+                                : 'IDENTITY(rl.resourceNode) = rn.id AND rl.session IS NULL'
+                        )
+                        ->where('IDENTITY(q.question) = :id')
+                        ->andWhere('rl.deletedAt IS NULL')
+                        ->setParameter('id', $id);
+                    if ($sessionId > 0) {
+                        $exerciseQb->setParameter('sessionId', $sessionId);
+                    }
+                    foreach ($exerciseQb->getQuery()->getArrayResult() as $obj) {
+                        $objQuestion->exerciseList[] = (int) $obj['quiz_id'];
                     }
                 }
 
@@ -453,35 +477,45 @@ abstract class Question
             $this->deleteCategory();
         } else {
             // update or add category for a question
+            // c_quiz_question_rel_category is a pure join table (no entity of its own): DBAL query builder.
             $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+            $connection = Container::getEntityManager()->getConnection();
             $categoryId = (int) $categoryId;
             $questionId = (int) $this->id;
-            $sql = "SELECT count(*) AS nb FROM $table
-                    WHERE
-                        question_id = $questionId
-                    ";
-            $res = Database::query($sql);
-            $row = Database::fetch_array($res);
+            $row = $connection->createQueryBuilder()
+                ->select('COUNT(*) AS nb')
+                ->from($table)
+                ->where('question_id = :questionId')
+                ->setParameter('questionId', $questionId)
+                ->executeQuery()
+                ->fetchAssociative();
             $allowMandatory = ('true' === api_get_setting('exercise.allow_mandatory_question_in_category'));
             if ($row['nb'] > 0) {
-                $sql = "UPDATE $table
-                        SET category_id = $categoryId
-                        WHERE
-                            question_id = $questionId
-                        ";
-                Database::query($sql);
+                $connection->createQueryBuilder()
+                    ->update($table)
+                    ->set('category_id', ':categoryId')
+                    ->where('question_id = :questionId')
+                    ->setParameter('categoryId', $categoryId)
+                    ->setParameter('questionId', $questionId)
+                    ->executeStatement();
             } else {
-                $sql = "INSERT INTO $table (question_id, category_id)
-                        VALUES ($questionId, $categoryId)
-                        ";
-                Database::query($sql);
+                $connection->createQueryBuilder()
+                    ->insert($table)
+                    ->values(['question_id' => ':questionId', 'category_id' => ':categoryId'])
+                    ->setParameter('questionId', $questionId)
+                    ->setParameter('categoryId', $categoryId)
+                    ->executeStatement();
             }
             if ($allowMandatory) {
                 // The flag is a column of the question, not of the category link
-                $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
-                $sql = 'UPDATE '.$tableQuestion.' SET mandatory = '.(int) $this->mandatory.'
-                        WHERE iid = '.$questionId;
-                Database::query($sql);
+                Container::getEntityManager()->createQueryBuilder()
+                    ->update(CQuizQuestion::class, 'q')
+                    ->set('q.mandatory', ':mandatory')
+                    ->where('q.iid = :questionId')
+                    ->setParameter('mandatory', (int) $this->mandatory)
+                    ->setParameter('questionId', $questionId)
+                    ->getQuery()
+                    ->execute();
             }
         }
 
@@ -501,11 +535,11 @@ abstract class Question
         if (empty($questionId)) {
             return false;
         }
-        $sql = "DELETE FROM $table
-                WHERE
-                    question_id = $questionId
-                ";
-        Database::query($sql);
+        Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->delete($table)
+            ->where('question_id = :questionId')
+            ->setParameter('questionId', $questionId)
+            ->executeStatement();
 
         return true;
     }
@@ -564,8 +598,6 @@ abstract class Question
      */
     public function save($exercise)
     {
-        $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $em = Database::getManager();
         $exerciseId = $exercise->iId;
 
@@ -611,14 +643,14 @@ abstract class Question
             }
         } else {
             // Creates a new question
-            $sql = "SELECT max(position)
-                    FROM $TBL_QUESTIONS as question,
-                    $TBL_EXERCISE_QUESTION as test_question
-                    WHERE
-                        question.iid = test_question.question_id AND
-                        test_question.quiz_id = ".$exerciseId;
-            $result = Database::query($sql);
-            $current_position = Database::result($result, 0, 0);
+            $current_position = Container::getEntityManager()->createQueryBuilder()
+                ->select('MAX(q.position)')
+                ->from(CQuizRelQuestion::class, 'r')
+                ->innerJoin('r.question', 'q')
+                ->where('IDENTITY(r.quiz) = :quizId')
+                ->setParameter('quizId', (int) $exerciseId)
+                ->getQuery()
+                ->getSingleScalarResult();
             $this->updatePosition($current_position + 1);
             $position = $this->position;
             //$exerciseEntity = $exerciseRepo->find($exerciseId);
@@ -862,9 +894,13 @@ abstract class Question
             $newExercise->read($exerciseId, false);
             $count = $newExercise->getQuestionCount();
             $count++;
-            $sql = "INSERT INTO $exerciseRelQuestionTable (question_id, quiz_id, question_order)
-                    VALUES (".$id.', '.$exerciseId.", '$count')";
-            Database::query($sql);
+            Container::getEntityManager()->getConnection()->createQueryBuilder()
+                ->insert($exerciseRelQuestionTable)
+                ->values(['question_id' => ':questionId', 'quiz_id' => ':quizId', 'question_order' => ':questionOrder'])
+                ->setParameter('questionId', $id)
+                ->setParameter('quizId', $exerciseId)
+                ->setParameter('questionOrder', $count)
+                ->executeStatement();
 
             // we do not want to reindex if we had just saved adnd indexed the question
             if (!$fromSave) {
@@ -885,8 +921,6 @@ abstract class Question
      */
     public function removeFromList($exerciseId, $courseId = 0)
     {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $id = (int) $this->id;
         $exerciseId = (int) $exerciseId;
 
@@ -901,34 +935,47 @@ abstract class Question
             // deletes the position in the array containing the wanted exercise ID
             unset($this->exerciseList[$pos]);
             //update order of other elements
-            $sql = "SELECT question_order
-                    FROM $table
-                    WHERE
-                        question_id = $id AND
-                        quiz_id = $exerciseId";
-            $res = Database::query($sql);
-            if (Database::num_rows($res) > 0) {
-                $row = Database::fetch_array($res);
+            $em = Container::getEntityManager();
+            $orderRows = $em->createQueryBuilder()
+                ->select('r.questionOrder AS question_order')
+                ->from(CQuizRelQuestion::class, 'r')
+                ->where('IDENTITY(r.question) = :questionId')
+                ->andWhere('IDENTITY(r.quiz) = :quizId')
+                ->setParameter('questionId', $id)
+                ->setParameter('quizId', $exerciseId)
+                ->getQuery()
+                ->getArrayResult();
+            if (count($orderRows) > 0) {
+                $row = $orderRows[0];
                 if (!empty($row['question_order'])) {
-                    $sql = "UPDATE $table
-                            SET question_order = question_order-1
-                            WHERE
-                                quiz_id = $exerciseId AND
-                                question_order > ".$row['question_order'];
-                    Database::query($sql);
+                    $em->createQueryBuilder()
+                        ->update(CQuizRelQuestion::class, 'r')
+                        ->set('r.questionOrder', 'r.questionOrder - 1')
+                        ->where('IDENTITY(r.quiz) = :quizId')
+                        ->andWhere('r.questionOrder > :questionOrder')
+                        ->setParameter('quizId', $exerciseId)
+                        ->setParameter('questionOrder', (int) $row['question_order'])
+                        ->getQuery()
+                        ->execute();
                 }
             }
 
-            $sql = "DELETE FROM $table
-                    WHERE
-                        question_id = $id AND
-                        quiz_id = $exerciseId";
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->delete(CQuizRelQuestion::class, 'r')
+                ->where('IDENTITY(r.question) = :questionId')
+                ->andWhere('IDENTITY(r.quiz) = :quizId')
+                ->setParameter('questionId', $id)
+                ->setParameter('quizId', $exerciseId)
+                ->getQuery()
+                ->execute();
 
-            $reset = "UPDATE $tableQuestion
-                  SET parent_media_id = NULL
-                  WHERE parent_media_id = $id";
-            Database::query($reset);
+            $em->createQueryBuilder()
+                ->update(CQuizQuestion::class, 'q')
+                ->set('q.parentMediaId', 'NULL')
+                ->where('q.parentMediaId = :questionId')
+                ->setParameter('questionId', $id)
+                ->getQuery()
+                ->execute();
 
             return true;
         }
@@ -957,57 +1004,71 @@ abstract class Question
             return false;
         }
 
-        $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $TBL_QUIZ_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+        $em = Container::getEntityManager();
 
         $id = (int) $this->id;
 
         // if the question must be removed from all exercises
         if (!$deleteFromEx) {
             //update the question_order of each question to avoid inconsistencies
-            $sql = "SELECT quiz_id, question_order
-                    FROM $TBL_EXERCISE_QUESTION
-                    WHERE question_id = ".$id;
-
-            $res = Database::query($sql);
-            if (Database::num_rows($res) > 0) {
-                while ($row = Database::fetch_array($res)) {
-                    if (!empty($row['question_order'])) {
-                        $sql = "UPDATE $TBL_EXERCISE_QUESTION
-                                SET question_order = question_order-1
-                                WHERE
-                                    quiz_id = ".(int) ($row['quiz_id']).' AND
-                                    question_order > '.$row['question_order'];
-                        Database::query($sql);
-                    }
+            $orderRows = $em->createQueryBuilder()
+                ->select('IDENTITY(r.quiz) AS quiz_id', 'r.questionOrder AS question_order')
+                ->from(CQuizRelQuestion::class, 'r')
+                ->where('IDENTITY(r.question) = :questionId')
+                ->setParameter('questionId', $id)
+                ->getQuery()
+                ->getArrayResult();
+            foreach ($orderRows as $row) {
+                if (!empty($row['question_order'])) {
+                    $em->createQueryBuilder()
+                        ->update(CQuizRelQuestion::class, 'r')
+                        ->set('r.questionOrder', 'r.questionOrder - 1')
+                        ->where('IDENTITY(r.quiz) = :quizId')
+                        ->andWhere('r.questionOrder > :questionOrder')
+                        ->setParameter('quizId', (int) $row['quiz_id'])
+                        ->setParameter('questionOrder', (int) $row['question_order'])
+                        ->getQuery()
+                        ->execute();
                 }
             }
 
-            $reset = "UPDATE $TBL_QUESTIONS
-                  SET parent_media_id = NULL
-                  WHERE parent_media_id = $id";
-            Database::query($reset);
+            $em->createQueryBuilder()
+                ->update(CQuizQuestion::class, 'q')
+                ->set('q.parentMediaId', 'NULL')
+                ->where('q.parentMediaId = :questionId')
+                ->setParameter('questionId', $id)
+                ->getQuery()
+                ->execute();
 
-            $sql = "DELETE FROM $TBL_EXERCISE_QUESTION
-                    WHERE question_id = ".$id;
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->delete(CQuizRelQuestion::class, 'r')
+                ->where('IDENTITY(r.question) = :questionId')
+                ->setParameter('questionId', $id)
+                ->getQuery()
+                ->execute();
 
             // remove the category of this question in the question_rel_category table (that foreign key
             // is RESTRICT: it has to go before the question itself)
-            $sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY
-                    WHERE
-                        question_id = ".$id;
-            Database::query($sql);
+            $em->getConnection()->createQueryBuilder()
+                ->delete($TBL_QUIZ_QUESTION_REL_CATEGORY)
+                ->where('question_id = :questionId')
+                ->setParameter('questionId', $id)
+                ->executeStatement();
 
-            $sql = "DELETE FROM $TBL_QUESTIONS
-                    WHERE iid = ".$id;
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->delete(CQuizQuestion::class, 'q')
+                ->where('q.iid = :questionId')
+                ->setParameter('questionId', $id)
+                ->getQuery()
+                ->execute();
 
-            $sql = "DELETE FROM $TBL_REPONSES
-                    WHERE question_id = ".$id;
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->delete(CQuizAnswer::class, 'a')
+                ->where('IDENTITY(a.question) = :questionId')
+                ->setParameter('questionId', $id)
+                ->getQuery()
+                ->execute();
 
             // Add extra fields.
             $extraField = new ExtraFieldValue('question');
@@ -1897,6 +1958,7 @@ abstract class Question
     ) {
         $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $tbl_quiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $em = Container::getEntityManager();
 
         $quiz_id = (int) $quiz_id;
         $max_score = (float) $max_score;
@@ -1904,15 +1966,15 @@ abstract class Question
         $level = (int) $level;
 
         // Get the max position
-        $sql = "SELECT max(position) as max_position
-                FROM $tbl_quiz_question q
-                INNER JOIN $tbl_quiz_rel_question r
-                ON
-                    q.iid = r.question_id AND
-                    quiz_id = $quiz_id";
-        $rs_max = Database::query($sql);
-        $row_max = Database::fetch_object($rs_max);
-        $max_position = $row_max->max_position + 1;
+        $maxPosition = $em->createQueryBuilder()
+            ->select('MAX(q.position)')
+            ->from(CQuizRelQuestion::class, 'r')
+            ->innerJoin('r.question', 'q')
+            ->where('IDENTITY(r.quiz) = :quizId')
+            ->setParameter('quizId', $quiz_id)
+            ->getQuery()
+            ->getSingleScalarResult();
+        $max_position = $maxPosition + 1;
 
         $params = [
             'question' => $question_name,
@@ -1927,16 +1989,22 @@ abstract class Question
 
         if ($question_id) {
             // Get the max question_order
-            $sql = "SELECT max(question_order) as max_order
-                    FROM $tbl_quiz_rel_question
-                    WHERE quiz_id = $quiz_id ";
-            $rs_max_order = Database::query($sql);
-            $row_max_order = Database::fetch_object($rs_max_order);
-            $max_order = $row_max_order->max_order + 1;
+            $maxOrder = $em->createQueryBuilder()
+                ->select('MAX(r.questionOrder)')
+                ->from(CQuizRelQuestion::class, 'r')
+                ->where('IDENTITY(r.quiz) = :quizId')
+                ->setParameter('quizId', $quiz_id)
+                ->getQuery()
+                ->getSingleScalarResult();
+            $max_order = $maxOrder + 1;
             // Attach questions to quiz
-            $sql = "INSERT INTO $tbl_quiz_rel_question (question_id, quiz_id, question_order)
-                    VALUES($question_id, $quiz_id, $max_order)";
-            Database::query($sql);
+            $em->getConnection()->createQueryBuilder()
+                ->insert($tbl_quiz_rel_question)
+                ->values(['question_id' => ':questionId', 'quiz_id' => ':quizId', 'question_order' => ':questionOrder'])
+                ->setParameter('questionId', (int) $question_id)
+                ->setParameter('quizId', $quiz_id)
+                ->setParameter('questionOrder', $max_order)
+                ->executeStatement();
         }
 
         return $question_id;

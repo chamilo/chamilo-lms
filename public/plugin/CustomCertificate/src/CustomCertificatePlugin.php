@@ -1,6 +1,10 @@
 <?php
 /* For license terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradebookCertificate;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 
 /**
@@ -88,6 +92,7 @@ class CustomCertificatePlugin extends Plugin
         foreach ($tablesToBeDeleted as $tableToBeDeleted) {
             $table = Database::get_main_table($tableToBeDeleted);
             $sql = "DROP TABLE IF EXISTS $table";
+            // TODO(db-neutral): DDL (DROP TABLE IF EXISTS), not expressible in DQL nor the DBAL query builder
             Database::query($sql);
         }
         $this->manageTab(false);
@@ -100,6 +105,7 @@ class CustomCertificatePlugin extends Plugin
     {
         $oldCertificateTable = 'gradebook_certificate_alternative';
         $legacyBase = self::getLegacyCertificateImageSystemBasePath();
+        // TODO(db-neutral): SHOW TABLES, and the legacy gradebook_certificate_alternative table has no mapping
         if (1 == Database::num_rows(Database::query("SHOW TABLES LIKE '$oldCertificateTable'"))) {
             $sql = "SELECT * FROM $oldCertificateTable";
             $res = Database::query($sql);
@@ -197,6 +203,7 @@ class CustomCertificatePlugin extends Plugin
             }
 
             $sql = "DROP TABLE IF EXISTS $oldCertificateTable";
+            // TODO(db-neutral): DDL (DROP TABLE IF EXISTS)
             Database::query($sql);
 
             echo get_lang('MessageUpdate');
@@ -573,6 +580,8 @@ class CustomCertificatePlugin extends Plugin
                   AND (session_id = $sessionId OR session_id IS NULL)
                 LIMIT 1";
 
+        // TODO(db-neutral): left raw, only reachable when the legacy c_item_property table (no mapping, absent from
+        // current schemas) exists, so no test can pin it
         $result = Database::query($sql);
 
         return false !== $result && Database::num_rows($result) > 0;
@@ -857,19 +866,24 @@ class CustomCertificatePlugin extends Plugin
             return '';
         }
 
-        $table = Database::get_main_table('gradebook_certificate');
-        $sql = "SELECT score_certificate
-                FROM $table
-                WHERE user_id = $studentId AND cat_id = $categoryId
-                ORDER BY id DESC
-                LIMIT 1";
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('c.scoreCertificate AS score_certificate')
+            ->from(GradebookCertificate::class, 'c')
+            ->where('c.user = :userId')
+            ->andWhere('c.category = :categoryId')
+            ->setParameter('userId', $studentId)
+            ->setParameter('categoryId', $categoryId)
+            ->orderBy('c.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        if (false === $result || 0 === Database::num_rows($result)) {
+        if (0 === count($rows)) {
             return '';
         }
 
-        $row = Database::fetch_assoc($result);
+        $row = $rows[0];
 
         return isset($row['score_certificate']) ? (string) $row['score_certificate'] : '';
     }
@@ -1110,34 +1124,35 @@ class CustomCertificatePlugin extends Plugin
             return [];
         }
 
-        $certificateTable = Database::get_main_table('gradebook_certificate');
-        $categoryTable = Database::get_main_table('gradebook_category');
-
-        $sql = "SELECT
-                    cer.user_id AS user_id,
-                    cer.cat_id AS cat_id,
-                    cat.c_id AS course_id,
-                    cat.session_id AS session_id
-                FROM $certificateTable cer
-                INNER JOIN $categoryTable cat
-                    ON cer.cat_id = cat.id
-                WHERE cer.id = $id
-                  AND cer.user_id = $userId
-                LIMIT 1";
-
         try {
-            $rs = Database::query($sql);
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select(
+                    'IDENTITY(cer.user) AS user_id',
+                    'IDENTITY(cer.category) AS cat_id',
+                    'IDENTITY(cat.course) AS course_id',
+                    'IDENTITY(cat.session) AS session_id'
+                )
+                ->from(GradebookCertificate::class, 'cer')
+                ->innerJoin('cer.category', 'cat')
+                ->where('cer.id = :id')
+                ->andWhere('cer.user = :userId')
+                ->setParameter('id', $id)
+                ->setParameter('userId', $userId)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getArrayResult()
+            ;
         } catch (Throwable $exception) {
             error_log('[CustomCertificatePlugin::getCertificateData] '.$exception->getMessage());
 
             return [];
         }
 
-        if (false === $rs || 0 === Database::num_rows($rs)) {
+        if (0 === count($rows)) {
             return [];
         }
 
-        $row = Database::fetch_assoc($rs);
+        $row = $rows[0];
         $courseId = isset($row['course_id']) ? (int) $row['course_id'] : 0;
         $sessionId = isset($row['session_id']) ? (int) $row['session_id'] : 0;
         $categoryId = isset($row['cat_id']) ? (int) $row['cat_id'] : 0;
@@ -1227,19 +1242,20 @@ class CustomCertificatePlugin extends Plugin
         $sessionId = (int) $sessionId;
         $accessUrlId = !empty($accessUrlId) ? (int) $accessUrlId : 1;
 
-        $table = Database::get_main_table(self::TABLE_CUSTOMCERTIFICATE);
-        $sql = "SELECT * FROM $table
-                WHERE 
-                    c_id = $courseId AND 
-                    session_id = $sessionId AND
-                    access_url_id = $accessUrlId";
-        $result = Database::query($sql);
-        $resultArray = [];
-        if (Database::num_rows($result) > 0) {
-            $resultArray = Database::fetch_array($result);
-        }
+        $row = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from(Database::get_main_table(self::TABLE_CUSTOMCERTIFICATE))
+            ->where('c_id = :courseId')
+            ->andWhere('session_id = :sessionId')
+            ->andWhere('access_url_id = :accessUrlId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('accessUrlId', $accessUrlId)
+            ->executeQuery()
+            ->fetchAssociative()
+        ;
 
-        return $resultArray;
+        return false === $row ? [] : self::withNumericKeys($row);
     }
 
     /**
@@ -1253,16 +1269,17 @@ class CustomCertificatePlugin extends Plugin
     {
         $accessUrlId = !empty($accessUrlId) ? (int) $accessUrlId : 1;
 
-        $table = Database::get_main_table(self::TABLE_CUSTOMCERTIFICATE);
-        $sql = "SELECT * FROM $table
-                WHERE certificate_default = 1 AND access_url_id = $accessUrlId";
-        $result = Database::query($sql);
-        $resultArray = [];
-        if (Database::num_rows($result) > 0) {
-            $resultArray = Database::fetch_array($result);
-        }
+        $row = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('*')
+            ->from(Database::get_main_table(self::TABLE_CUSTOMCERTIFICATE))
+            ->where('certificate_default = 1')
+            ->andWhere('access_url_id = :accessUrlId')
+            ->setParameter('accessUrlId', $accessUrlId)
+            ->executeQuery()
+            ->fetchAssociative()
+        ;
 
-        return $resultArray;
+        return false === $row ? [] : self::withNumericKeys($row);
     }
 
     /**
@@ -1280,18 +1297,23 @@ class CustomCertificatePlugin extends Plugin
             return false;
         }
 
-        $sql = 'SELECT 1
-                FROM '.Database::get_main_table('gradebook_certificate').' cer
-                INNER JOIN '.Database::get_main_table('gradebook_category').' cat ON cer.cat_id = cat.id
-                WHERE cer.user_id = '.$userId.'
-                  AND cat.c_id = '.$courseId.'
-                  AND (cat.session_id = '.$sessionId.($sessionId > 0 ? '' : ' OR cat.session_id IS NULL').')';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('cer.id')
+            ->from(GradebookCertificate::class, 'cer')
+            ->innerJoin('cer.category', 'cat')
+            ->where('cer.user = :userId')
+            ->andWhere('cat.course = :courseId')
+            ->andWhere($sessionId > 0 ? 'cat.session = :sessionId' : '(cat.session = :sessionId OR cat.session IS NULL)')
+            ->setParameter('userId', $userId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('sessionId', $sessionId)
+            ->setMaxResults(1)
+        ;
         if ($categoryId > 0) {
-            $sql .= ' AND cer.cat_id = '.$categoryId;
+            $qb->andWhere('cer.category = :categoryId')->setParameter('categoryId', $categoryId);
         }
-        $sql .= ' LIMIT 1';
 
-        return Database::num_rows(Database::query($sql)) > 0;
+        return count($qb->getQuery()->getArrayResult()) > 0;
     }
 
     /**
@@ -1316,14 +1338,39 @@ class CustomCertificatePlugin extends Plugin
             return false;
         }
 
-        $sql = 'SELECT 1 FROM '.Database::get_main_table('session_rel_course_rel_user').'
-                WHERE session_id = '.$sessionId.' AND c_id = '.$courseId.' AND user_id = '.$userId.' AND status = 2
-                UNION
-                SELECT 1 FROM '.Database::get_main_table('session_rel_user').'
-                WHERE session_id = '.$sessionId.' AND user_id = '.$userId.' AND relation_type = 3
-                LIMIT 1';
+        $em = Container::getEntityManager();
+        $isCourseCoach = $em->createQueryBuilder()
+            ->select('scru.id')
+            ->from(SessionRelCourseRelUser::class, 'scru')
+            ->where('scru.session = :sessionId')
+            ->andWhere('scru.course = :courseId')
+            ->andWhere('scru.user = :userId')
+            ->andWhere('scru.status = 2')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $userId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if (count($isCourseCoach) > 0) {
+            return true;
+        }
 
-        return Database::num_rows(Database::query($sql)) > 0;
+        $isGeneralCoach = $em->createQueryBuilder()
+            ->select('sru.id')
+            ->from(SessionRelUser::class, 'sru')
+            ->where('sru.session = :sessionId')
+            ->andWhere('sru.user = :userId')
+            ->andWhere('sru.relationType = 3')
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('userId', $userId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return count($isGeneralCoach) > 0;
     }
 
     /**
@@ -1338,9 +1385,31 @@ class CustomCertificatePlugin extends Plugin
             return false;
         }
 
-        $sql = 'SELECT 1 FROM '.Database::get_main_table('gradebook_category').'
-                WHERE id = '.$categoryId.' AND c_id = '.$courseId.' LIMIT 1';
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('cat.id')
+            ->from(GradebookCategory::class, 'cat')
+            ->where('cat.id = :categoryId')
+            ->andWhere('cat.course = :courseId')
+            ->setParameter('categoryId', $categoryId)
+            ->setParameter('courseId', $courseId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        return Database::num_rows(Database::query($sql)) > 0;
+        return count($rows) > 0;
+    }
+
+    /**
+     * Rows as Database::fetch_array() used to return them: every value under its column name and under its
+     * position.
+     */
+    private static function withNumericKeys(array $row): array
+    {
+        foreach ($row as $value) {
+            $row[] = $value;
+        }
+
+        return $row;
     }
 }

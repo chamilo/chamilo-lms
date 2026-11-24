@@ -315,13 +315,15 @@ Feature: Special admin settings flows (platform searches, extra fields, teardown
     And I press "Save settings"
     And I wait for the page to be loaded
 
-    # As a student, verify mdi-chart-box button is visible on my progress page
+    # As a student, verify the mdi-chart-box icon is visible on the my progress page. The legacy
+    # main/auth/my_progress.php was replaced by the reporting view, whose sidebar entry "Reporting"
+    # carries that icon (the sidebar draws it on a span, the legacy toolbar used an i).
     Given I am not logged
     And I am logged as "acostea"
     And I wait for the page to be loaded
     And I am on "/reporting/my-progress"
     And I wait for the page to be loaded
-    Then I wait for the element "i.mdi-chart-box" to appear
+    Then I wait up to 30 seconds for the element ".mdi-chart-box" to appear
     Given I am not logged
     And I am logged as "admin"
     And I wait for the page to be loaded

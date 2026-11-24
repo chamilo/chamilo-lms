@@ -280,6 +280,16 @@ final class TestCategoryCharacterizationTest extends KernelTestCase
         $this->assertSame(0, TestCategory::get_category_id_for_title('tc_no_course_at_all', 1));
     }
 
+    public function testGetCategoryIdForTitleReturnsTheOldestCategoryWhenTitlesRepeat(): void
+    {
+        $first = $this->category('tc_same_title');
+        $this->linkCategory($first, 0, 1);
+        $second = $this->category('tc_same_title');
+        $this->linkCategory($second, 1, 1);
+
+        $this->assertSame($first, (int) TestCategory::get_category_id_for_title('tc_same_title', 1), 'ORDER BY iid ASC');
+    }
+
     public function testRemoveCategoryReturnsFalseForAnUnknownCategory(): void
     {
         $this->assertFalse((new TestCategory())->removeCategory(2000000000));
@@ -493,6 +503,22 @@ final class TestCategoryCharacterizationTest extends KernelTestCase
         $this->assertSame([$a, $b], $asc);
         $this->assertSame([$b, $a], $desc);
         $this->assertSame([], (new TestCategory())->getCategoryExerciseTree($this->exercise($this->quiz())));
+    }
+
+    public function testCategoryExerciseTreeOrdersByTheCountColumnItself(): void
+    {
+        $quiz = $this->quiz();
+        $a = $this->category('tc_c_a');
+        $b = $this->category('tc_c_b');
+        $this->treeRow($quiz, $a, 2);
+        $this->treeRow($quiz, $b, 1);
+        $exercise = $this->exercise($quiz);
+
+        $asc = array_map('intval', array_keys((new TestCategory())->getCategoryExerciseTree($exercise, 'count_questions ASC')));
+        $desc = array_map('intval', array_keys((new TestCategory())->getCategoryExerciseTree($exercise, 'count_questions DESC')));
+
+        $this->assertSame([$b, $a], $asc, 'fewest questions first, although the titles sort the other way');
+        $this->assertSame([$a, $b], $desc);
     }
 
     // ---------------------------------------------------------------- pure helpers over the above

@@ -123,7 +123,8 @@ $hideSurveyReportingButton = ('true' === api_get_setting('survey.hide_survey_rep
 
 foreach ($sentInvitations as $row) {
     $id = $row['iid'];
-    $user = $row['user'];
+    // The invitation table stores the invited user in user_id (nullable).
+    $user = $row['user_id'];
     if ('invited' === $view ||
         ('answered' === $view && in_array($user, $answered_data) && $answeredCount > 1) ||
         ('unanswered' === $view && !in_array($user, $answered_data) && $answeredCount > 1)
@@ -135,7 +136,7 @@ foreach ($sentInvitations as $row) {
             echo UserManager::getUserProfileLink($userInfo);
             echo '</td>';
         } else {
-            echo '<td>'.$user.'</td>';
+            echo '<td></td>';
         }
         echo '	<td>'.Display::dateToStringAgoAndLongDate($row['invitation_date']).'</td>';
 
@@ -174,13 +175,13 @@ foreach ($sentInvitations as $row) {
         echo '</tr>';
     } elseif ('unanswered' === $view && 0 == $answeredCount) {
         echo '<tr>';
-        if (is_numeric($row['user'])) {
-            $userInfo = api_get_user_info($row['user']);
+        if (is_numeric($row['user_id'])) {
+            $userInfo = api_get_user_info($row['user_id']);
             echo '<td>';
             echo UserManager::getUserProfileLink($userInfo);
             echo '</td>';
         } else {
-            echo '<td>'.$row['user'].'</td>';
+            echo '<td></td>';
         }
         echo '	<td>'.Display::dateToStringAgoAndLongDate($row['invitation_date']).'</td>';
         echo '	<td>';

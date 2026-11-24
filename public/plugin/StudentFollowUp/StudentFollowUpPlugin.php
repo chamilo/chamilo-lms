@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\PluginBundle\StudentFollowUp\Entity\CarePost;
+use Doctrine\DBAL\ArrayParameterType;
 
 /**
  * Class StudentFollowUpPlugin.
@@ -40,6 +41,7 @@ class StudentFollowUpPlugin extends Plugin
             return;
         }
 
+        // TODO(db-neutral): DDL (CREATE TABLE, ALTER TABLE ADD CONSTRAINT), not expressible in DQL nor the DBAL query builder
         Database::query(
             "CREATE TABLE IF NOT EXISTS sfu_post (
                 id INT AUTO_INCREMENT NOT NULL,
@@ -79,6 +81,7 @@ class StudentFollowUpPlugin extends Plugin
 
     public function uninstall(): void
     {
+        // TODO(db-neutral): DDL (DROP TABLE IF EXISTS), not expressible in DQL nor the DBAL query builder
         Database::query('DROP TABLE IF EXISTS '.self::TABLE_POST);
     }
 
@@ -214,14 +217,18 @@ class StudentFollowUpPlugin extends Plugin
 
     public static function normalizeLegacyTags(): void
     {
-        Database::query(
-            "UPDATE sfu_post
-             SET tags = 'a:0:{}'
-             WHERE tags IS NULL
-                OR tags = ''
-                OR tags = '0'
-                OR tags = 'b:0;'"
-        );
+        $qb = Database::getManager()->getConnection()->createQueryBuilder();
+        $qb
+            ->update(self::TABLE_POST)
+            ->set('tags', ':empty')
+            ->where($qb->expr()->or(
+                $qb->expr()->isNull('tags'),
+                $qb->expr()->in('tags', ':legacy')
+            ))
+            ->setParameter('empty', 'a:0:{}')
+            ->setParameter('legacy', ['', '0', 'b:0;'], ArrayParameterType::STRING)
+            ->executeStatement()
+        ;
     }
 
     public static function getPageSize(): int

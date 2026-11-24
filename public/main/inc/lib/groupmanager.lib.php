@@ -3,11 +3,17 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CForum;
 use Chamilo\CourseBundle\Entity\CGroupCategory;
+use Chamilo\CourseBundle\Entity\CGroupRelTutor;
+use Chamilo\CourseBundle\Entity\CGroupRelUser;
+use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Chamilo\CourseBundle\Entity\CGroupRelUsergroup;
@@ -302,6 +308,86 @@ class GroupManager
     }
 
     /**
+     * Every column of an entity's table, aliased to the column names the legacy callers read (SELECT alias.*).
+     * Scalar fields are selected by property, owning to-one associations through IDENTITY().
+     */
+    private static function entityRowsQueryBuilder(string $class, string $alias): QueryBuilder
+    {
+        $metadata = Container::getEntityManager()->getClassMetadata($class);
+        $select = [];
+        foreach ($metadata->getFieldNames() as $field) {
+            $select[] = $alias.'.'.$field.' AS '.$metadata->getColumnName($field);
+        }
+        foreach ($metadata->getAssociationMappings() as $name => $association) {
+            if ($metadata->isAssociationInverseSide($name) || !$metadata->isSingleValuedAssociation($name)) {
+                continue;
+            }
+            $select[] = 'IDENTITY('.$alias.'.'.$name.') AS '.$association->joinColumns[0]->name;
+        }
+
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(...$select)
+            ->from($class, $alias)
+        ;
+    }
+
+    /**
+     * The raw table row used to come back with the database representation of every value (integers as
+     * integers, booleans as 0/1): bring the hydrated values back to that shape.
+     */
+    private static function toLegacyEntityRow(string $class, array $row): array
+    {
+        $em = Container::getEntityManager();
+        $metadata = $em->getClassMetadata($class);
+        $platform = $em->getConnection()->getDatabasePlatform();
+        foreach ($metadata->getFieldNames() as $field) {
+            $column = $metadata->getColumnName($field);
+            if (isset($row[$column])) {
+                $row[$column] = Type::getType($metadata->getTypeOfField($field))
+                    ->convertToDatabaseValue($row[$column], $platform);
+            }
+        }
+        foreach ($metadata->getAssociationMappings() as $name => $association) {
+            if ($metadata->isAssociationInverseSide($name) || !$metadata->isSingleValuedAssociation($name)) {
+                continue;
+            }
+            $column = $association->joinColumns[0]->name;
+            if (isset($row[$column])) {
+                $row[$column] = (int) $row[$column];
+            }
+        }
+
+        return $row;
+    }
+
+    /**
+     * Rows as Database::fetch_array() used to return them: every value under its column name and under its
+     * position.
+     */
+    private static function withNumericKeys(array $row): array
+    {
+        foreach ($row as $value) {
+            $row[] = $value;
+        }
+
+        return $row;
+    }
+
+    /**
+     * Insert one row (DBAL query builder, bound parameters).
+     *
+     * @param array<string, mixed> $values column => value
+     */
+    private static function insertRow(string $table, array $values): void
+    {
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()->insert($table);
+        foreach ($values as $column => $value) {
+            $qb->setValue($column, ':'.$column)->setParameter($column, $value);
+        }
+        $qb->executeStatement();
+    }
+
+    /**
      * Create subgroups.
      * This function creates new groups based on an existing group. It will
      * create the specified number of groups and fill those groups with users
@@ -312,8 +398,12 @@ class GroupManager
      */
     public static function create_subgroups($group_id, $number_of_groups)
     {
-        $courseId = api_get_course_int_id();
-        $table_group = Database::get_course_table(TABLE_GROUP);
+        // The users are distributed modulo the number of groups: nothing to create (and no division) below one.
+        $number_of_groups = (int) $number_of_groups;
+        if ($number_of_groups < 1) {
+            return;
+        }
+
         $category_id = self::create_category(
             get_lang('Subgroups'),
             '',
@@ -343,13 +433,20 @@ class GroupManager
                 $user_id,
                 api_get_group_entity($groupId)
             );
-            $members[$group_ids[$groupId]]++;
+            $members[$groupId] = ($members[$groupId] ?? 0) + 1;
         }
 
-        foreach ($members as $group_id => $places) {
-            $sql = "UPDATE $table_group SET max_student = $places
-                    WHERE c_id = $courseId  AND id = $group_id";
-            Database::query($sql);
+        $em = Container::getEntityManager();
+        foreach ($members as $subgroupId => $places) {
+            $em->createQueryBuilder()
+                ->update(CGroup::class, 'g')
+                ->set('g.maxStudent', ':places')
+                ->where('g.iid = :groupId')
+                ->setParameter('places', (int) $places)
+                ->setParameter('groupId', (int) $subgroupId)
+                ->getQuery()
+                ->execute()
+            ;
         }
     }
 
@@ -657,21 +754,21 @@ class GroupManager
 
     private static function getGroupUserIds(CGroup $group, int $courseId): array
     {
-        $table = Database::get_course_table(TABLE_GROUP_USER);
         $groupId = (int) $group->getIid();
         $courseId = (int) $courseId;
 
-        $sql = "SELECT user_id
-                FROM $table
-                WHERE c_id = $courseId AND group_id = $groupId";
-        $result = Database::query($sql);
+        $userIds = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(gu.user) AS user_id')
+            ->from(CGroupRelUser::class, 'gu')
+            ->where('gu.cId = :courseId')
+            ->andWhere('gu.group = :groupId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('groupId', $groupId)
+            ->getQuery()
+            ->getSingleColumnResult()
+        ;
 
-        $users = [];
-        while ($row = Database::fetch_assoc($result)) {
-            $users[] = (int) $row['user_id'];
-        }
-
-        return array_values(array_unique($users));
+        return array_values(array_unique(array_map('intval', $userIds)));
     }
 
     private static function insertGroupUsers(array $userList, CGroup $group, int $courseId): void
@@ -681,7 +778,6 @@ class GroupManager
             return;
         }
 
-        $table = Database::get_course_table(TABLE_GROUP_USER);
         $groupId = (int) $group->getIid();
         $courseId = (int) $courseId;
 
@@ -690,9 +786,10 @@ class GroupManager
                 continue;
             }
 
-            $sql = "INSERT INTO $table (c_id, user_id, group_id, status, role)
-                    VALUES ($courseId, $userId, $groupId, 0, '')";
-            Database::query($sql);
+            self::insertRow(
+                Database::get_course_table(TABLE_GROUP_USER),
+                ['c_id' => $courseId, 'user_id' => $userId, 'group_id' => $groupId, 'status' => 0, 'role' => '']
+            );
         }
     }
 
@@ -756,13 +853,12 @@ class GroupManager
             return null;
         }
 
-        $table_group = Database::get_course_table(TABLE_GROUP);
-
-        $sql = "SELECT * FROM $table_group
-                WHERE iid = ".$group_id;
-
-        $db_result = Database::query($sql);
-        $db_object = Database::fetch_object($db_result);
+        $db_object = self::entityRowsQueryBuilder(CGroup::class, 'g')
+            ->where('g.iid = :groupId')
+            ->setParameter('groupId', $group_id)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
+        $db_object = null === $db_object ? null : (object) self::toLegacyEntityRow(CGroup::class, $db_object);
 
         $result = [];
         if ($db_object) {
@@ -879,9 +975,6 @@ class GroupManager
         $categoryId = null,
         $documentAccess = 0
     ) {
-        $tableGroup = Database::get_course_table(TABLE_GROUP);
-        $tableForum = Database::get_course_table(TABLE_FORUM);
-
         $group_id = (int) $group_id;
         if (empty($group_id)) {
             return false;
@@ -917,39 +1010,56 @@ class GroupManager
             }
         }
 
-        $categorySql = 'category_id = NULL, ';
+        $em = Container::getEntityManager();
+        $qb = $em->createQueryBuilder()
+            ->update(CGroup::class, 'g')
+            ->set('g.title', ':title')
+            ->set('g.description', ':description')
+            ->set('g.category', null === $resolvedCategoryId ? 'NULL' : ':categoryId')
+            ->set('g.maxStudent', ':maxStudent')
+            ->set('g.docState', ':docState')
+            ->set('g.workState', ':workState')
+            ->set('g.calendarState', ':calendarState')
+            ->set('g.announcementsState', ':announcementsState')
+            ->set('g.forumState', ':forumState')
+            ->set('g.wikiState', ':wikiState')
+            ->set('g.chatState', ':chatState')
+            ->set('g.selfRegistrationAllowed', ':selfRegistrationAllowed')
+            ->set('g.selfUnregistrationAllowed', ':selfUnregistrationAllowed')
+            ->set('g.documentAccess', ':documentAccess')
+            ->where('g.iid = :groupId')
+            ->setParameter('title', (string) $name)
+            ->setParameter('description', (string) $description)
+            ->setParameter('maxStudent', $maxStudent)
+            ->setParameter('docState', $docState)
+            ->setParameter('workState', $workState)
+            ->setParameter('calendarState', $calendarState)
+            ->setParameter('announcementsState', $anonuncementState)
+            ->setParameter('forumState', $forumState)
+            ->setParameter('wikiState', $wikiState)
+            ->setParameter('chatState', $chatState)
+            ->setParameter('selfRegistrationAllowed', $selfRegistrationAllowed)
+            ->setParameter('selfUnregistrationAllowed', $selfUnRegistrationAllowed)
+            ->setParameter('documentAccess', $documentAccess)
+            ->setParameter('groupId', $group_id)
+        ;
         if (null !== $resolvedCategoryId) {
-            $categorySql = 'category_id = '.(int) $resolvedCategoryId.', ';
+            $qb->setParameter('categoryId', $resolvedCategoryId);
         }
+        $qb->getQuery()->execute();
 
-        $sql = "UPDATE $tableGroup SET
-                title = '".Database::escape_string($name)."',
-                description = '".Database::escape_string($description)."',
-                $categorySql
-                max_student = $maxStudent,
-                doc_state = $docState,
-                work_state = $workState,
-                calendar_state = $calendarState,
-                announcements_state = $anonuncementState,
-                forum_state = $forumState,
-                wiki_state = $wikiState,
-                chat_state = $chatState,
-                self_registration_allowed = $selfRegistrationAllowed,
-                self_unregistration_allowed = $selfUnRegistrationAllowed,
-                document_access = $documentAccess
-            WHERE iid = $group_id";
-        Database::query($sql);
-
-        $sql2 = "UPDATE $tableForum SET ";
-        if (1 === $forumState) {
-            $sql2 .= "forum_group_public_private = 'public' ";
-        } elseif (2 === $forumState) {
-            $sql2 .= "forum_group_public_private = 'private' ";
-        } elseif (0 === $forumState) {
-            $sql2 .= "forum_group_public_private = 'unavailable' ";
+        $forumVisibility = [1 => 'public', 2 => 'private', 0 => 'unavailable'][$forumState] ?? null;
+        if (null !== $forumVisibility) {
+            $em->createQueryBuilder()
+                ->update(CForum::class, 'f')
+                ->set('f.forumGroupPublicPrivate', ':visibility')
+                ->where('f.forumOfGroup = :groupId')
+                ->setParameter('visibility', $forumVisibility)
+                ->setParameter('groupId', $group_id)
+                ->getQuery()
+                ->execute()
+            ;
         }
-        $sql2 .= "WHERE forum_of_group = $group_id";
-        Database::query($sql2);
 
         return true;
     }
@@ -1021,13 +1131,14 @@ class GroupManager
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
         $id = (int) $id;
-        $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
-        $sql = "SELECT * FROM $table
-                WHERE  iid = $id
-                LIMIT 1";
-        $res = Database::query($sql);
+        $row = self::entityRowsQueryBuilder(CGroupCategory::class, 'gc')
+            ->where('gc.iid = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
 
-        return Database::fetch_array($res);
+        return null === $row ? [] : self::withNumericKeys(self::toLegacyEntityRow(CGroupCategory::class, $row));
     }
 
     /**
@@ -1076,9 +1187,6 @@ class GroupManager
      */
     public static function get_category_from_group($group_id, $course_code = '')
     {
-        $table_group = Database::get_course_table(TABLE_GROUP);
-        $table_group_cat = Database::get_course_table(TABLE_GROUP_CATEGORY);
-
         $group_id = (int) $group_id;
 
         if (empty($group_id)) {
@@ -1091,16 +1199,16 @@ class GroupManager
             return false;
         }
 
-        $sql = "SELECT gc.* FROM $table_group_cat gc
-                INNER JOIN $table_group g
-                ON (gc.iid = g.category_id)
-                WHERE
-                    g.iid = $group_id
-                LIMIT 1";
-        $res = Database::query($sql);
+        $row = self::entityRowsQueryBuilder(CGroupCategory::class, 'gc')
+            ->innerJoin(CGroup::class, 'g', 'WITH', 'gc.iid = IDENTITY(g.category)')
+            ->where('g.iid = :groupId')
+            ->setParameter('groupId', $group_id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
         $cat = [];
-        if (Database::num_rows($res)) {
-            $cat = Database::fetch_array($res);
+        if (null !== $row) {
+            $cat = self::withNumericKeys(self::toLegacyEntityRow(CGroupCategory::class, $row));
         }
 
         return $cat;
@@ -1122,22 +1230,16 @@ class GroupManager
             return false;
         }
 
-        $table_group = Database::get_course_table(TABLE_GROUP);
         $cat_id = (int) $cat_id;
-        $sql = "SELECT iid FROM $table_group
-                WHERE category_id='".$cat_id."'";
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            while ($group = Database::fetch_object($res)) {
-                // Delete all groups in category
-                /*$groupInfo = self::get_group_properties($group->iid, true);
-                self::deleteGroup($groupInfo, $course_code);
-                */
-                // Set the category to NULL to avoid losing groups in sessions.
-                $sql = "UPDATE $table_group SET category_id = NULL WHERE iid = ".$group->iid;
-                Database::query($sql);
-            }
-        }
+        // Delete all groups in category is disabled: set the category to NULL to avoid losing groups in sessions.
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(CGroup::class, 'g')
+            ->set('g.category', 'NULL')
+            ->where('g.category = :categoryId')
+            ->setParameter('categoryId', $cat_id)
+            ->getQuery()
+            ->execute()
+        ;
 
         $category = Database::getManager()->getRepository(CGroupCategory::class)->find($cat_id);
         if ($category) {
@@ -1248,33 +1350,45 @@ class GroupManager
         $groups_per_user,
         $documentAccess
     ) {
-        $table = Database::get_course_table(TABLE_GROUP_CATEGORY);
         $id = (int) $id;
 
         $allowDocumentAccess = ('true' === api_get_setting('document.group_category_document_access'));
-        $documentCondition = '';
-        if ($allowDocumentAccess) {
-            $documentAccess = (int) $documentAccess;
-            $documentCondition = " document_access = $documentAccess, ";
-        }
 
-        $sql = 'UPDATE '.$table." SET
-                    title='".Database::escape_string($title)."',
-                    description='".Database::escape_string($description)."',
-                    doc_state = '".Database::escape_string($doc_state)."',
-                    work_state = '".Database::escape_string($work_state)."',
-                    calendar_state = '".Database::escape_string($calendar_state)."',
-                    announcements_state = '".Database::escape_string($announcements_state)."',
-                    forum_state = '".Database::escape_string($forum_state)."',
-                    wiki_state = '".Database::escape_string($wiki_state)."',
-                    chat_state = '".Database::escape_string($chat_state)."',
-                    groups_per_user   = '".Database::escape_string($groups_per_user)."',
-                    self_reg_allowed = '".Database::escape_string($selfRegistrationAllowed)."',
-                    self_unreg_allowed = '".Database::escape_string($selfUnRegistrationAllowed)."',
-                    $documentCondition
-                    max_student = ".intval($maximum_number_of_students)."
-                WHERE iid = $id";
-        Database::query($sql);
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->update(CGroupCategory::class, 'gc')
+            ->set('gc.title', ':title')
+            ->set('gc.description', ':description')
+            ->set('gc.docState', ':docState')
+            ->set('gc.workState', ':workState')
+            ->set('gc.calendarState', ':calendarState')
+            ->set('gc.announcementsState', ':announcementsState')
+            ->set('gc.forumState', ':forumState')
+            ->set('gc.wikiState', ':wikiState')
+            ->set('gc.chatState', ':chatState')
+            ->set('gc.groupsPerUser', ':groupsPerUser')
+            ->set('gc.selfRegAllowed', ':selfRegAllowed')
+            ->set('gc.selfUnregAllowed', ':selfUnregAllowed')
+            ->set('gc.maxStudent', ':maxStudent')
+            ->where('gc.iid = :id')
+            ->setParameter('title', (string) $title)
+            ->setParameter('description', (string) $description)
+            ->setParameter('docState', (string) $doc_state)
+            ->setParameter('workState', (string) $work_state)
+            ->setParameter('calendarState', (string) $calendar_state)
+            ->setParameter('announcementsState', (string) $announcements_state)
+            ->setParameter('forumState', (string) $forum_state)
+            ->setParameter('wikiState', (string) $wiki_state)
+            ->setParameter('chatState', (string) $chat_state)
+            ->setParameter('groupsPerUser', (string) $groups_per_user)
+            ->setParameter('selfRegAllowed', (string) $selfRegistrationAllowed)
+            ->setParameter('selfUnregAllowed', (string) $selfUnRegistrationAllowed)
+            ->setParameter('maxStudent', intval($maximum_number_of_students))
+            ->setParameter('id', $id)
+        ;
+        if ($allowDocumentAccess) {
+            $qb->set('gc.documentAccess', ':documentAccess')->setParameter('documentAccess', (int) $documentAccess);
+        }
+        $qb->getQuery()->execute();
 
         // Updating all groups inside this category
         $groups = self::get_group_list($id);
@@ -1309,26 +1423,21 @@ class GroupManager
     public static function get_current_max_groups_per_user($category_id = null, $course_code = null)
     {
         $course_info = api_get_course_info($course_code);
-        $group_table = Database::get_course_table(TABLE_GROUP);
-
-        $group_user_table = Database::get_course_table(TABLE_GROUP_USER);
-        $sql = "SELECT COUNT(gu.group_id) AS current_max
-                FROM $group_user_table gu
-                INNER JOIN $group_table g
-                ON (gu.group_id = g.iid)
-                WHERE 1= 1 ";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(gu.group) AS current_max')
+            ->from(CGroupRelUser::class, 'gu')
+            ->innerJoin('gu.group', 'g')
+            ->groupBy('gu.user')
+            ->orderBy('COUNT(gu.group)', 'DESC')
+            ->setMaxResults(1)
+        ;
         if (null != $category_id) {
-            $category_id = intval($category_id);
-            $sql .= ' AND g.category_id = '.$category_id;
+            $qb->andWhere('g.category = :categoryId')->setParameter('categoryId', intval($category_id));
         }
-        $sql .= ' GROUP BY gu.user_id
-                  ORDER BY current_max DESC LIMIT 1';
 
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
-
-        if ($obj) {
-            return $obj->current_max;
+        $rows = $qb->getQuery()->getArrayResult();
+        if (!empty($rows)) {
+            return (int) $rows[0]['current_max'];
         }
 
         return 0;
@@ -1396,9 +1505,6 @@ class GroupManager
         $column = null,
         $direction = null
     ) {
-        $group_user_table = Database::get_course_table(TABLE_GROUP_USER);
-        $groupTable = Database::get_course_table(TABLE_GROUP);
-        $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $group_id = (int) $group_id;
 
         if (empty($courseId)) {
@@ -1407,41 +1513,44 @@ class GroupManager
             $courseId = (int) $courseId;
         }
 
-        $select = ' SELECT u.id, firstname, lastname ';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->from(CGroupRelUser::class, 'gu')
+            ->innerJoin('gu.group', 'g')
+            ->innerJoin('gu.user', 'u')
+            ->where('u.active <> :softDeleted')
+            ->andWhere('g.iid = :groupId')
+            ->setParameter('softDeleted', USER_SOFT_DELETED)
+            ->setParameter('groupId', $group_id)
+        ;
         if ($getCount) {
-            $select = ' SELECT count(u.id) count';
+            $qb->select('COUNT(u.id) AS count');
+        } else {
+            $qb->select('u.id AS id', 'u.firstname AS firstname', 'u.lastname AS lastname');
         }
-        $sql = "$select
-                FROM $group_user_table gu
-                INNER JOIN $groupTable g
-                ON (gu.group_id = g.iid)
-                INNER JOIN $user_table u
-                ON (u.id = gu.user_id)
-                WHERE u.active <> ".USER_SOFT_DELETED." AND
-                    g.iid = $group_id";
 
         if (!empty($column) && !empty($direction)) {
-            $column = Database::escape_string($column);
-            $direction = ('ASC' === $direction ? 'ASC' : 'DESC');
-            $sql .= " ORDER BY `$column` $direction";
+            // Only user columns can be sorted on; anything else is ignored.
+            $userMetadata = Container::getEntityManager()->getClassMetadata(User::class);
+            foreach ($userMetadata->getFieldNames() as $field) {
+                if ($userMetadata->getColumnName($field) === (string) $column) {
+                    $qb->orderBy('u.'.$field, 'ASC' === $direction ? 'ASC' : 'DESC');
+                    break;
+                }
+            }
         }
 
         if (is_numeric($start) && !empty($limit)) {
-            $start = (int) $start;
-            $limit = (int) $limit;
-            $sql .= " LIMIT $start, $limit";
+            $qb->setFirstResult((int) $start)->setMaxResults((int) $limit);
         }
-        $res = Database::query($sql);
         $users = [];
-        while ($obj = Database::fetch_object($res)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
             if ($getCount) {
-                return $obj->count;
-                break;
+                return $row['count'];
             }
             if ($load_extra_info) {
-                $users[] = api_get_user_info($obj->id);
+                $users[] = api_get_user_info($row['id']);
             } else {
-                $users[] = $obj->id;
+                $users[] = $row['id'];
             }
         }
 
@@ -1455,36 +1564,33 @@ class GroupManager
      */
     public static function getStudentsAndTutors($group_id)
     {
-        $group_user_table = Database::get_course_table(TABLE_GROUP_USER);
-        $tutor_user_table = Database::get_course_table(TABLE_GROUP_TUTOR);
-        $groupTable = Database::get_course_table(TABLE_GROUP);
-
-        $course_id = api_get_course_int_id();
         $group_id = (int) $group_id;
 
-        $sql = "SELECT user_id
-                FROM $group_user_table gu
-                INNER JOIN $groupTable g
-                ON (gu.group_id = g.iid)
-                WHERE g.iid = $group_id";
-        $res = Database::query($sql);
         $users = [];
-
-        while ($obj = Database::fetch_object($res)) {
-            $users[] = api_get_user_info($obj->user_id);
+        foreach (self::groupUserIds(CGroupRelUser::class, $group_id) as $userId) {
+            $users[] = api_get_user_info($userId);
         }
-
-        $sql = "SELECT user_id
-                FROM $tutor_user_table gu
-                INNER JOIN $groupTable g
-                ON (gu.group_id = g.iid)
-                WHERE g.iid = $group_id";
-        $res = Database::query($sql);
-        while ($obj = Database::fetch_object($res)) {
-            $users[] = api_get_user_info($obj->user_id);
+        foreach (self::groupUserIds(CGroupRelTutor::class, $group_id) as $userId) {
+            $users[] = api_get_user_info($userId);
         }
 
         return $users;
+    }
+
+    /**
+     * User ids linked to a group by a membership (CGroupRelUser) or tutorship (CGroupRelTutor) entity.
+     */
+    private static function groupUserIds(string $relationClass, int $groupId): array
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(gu.user) AS user_id')
+            ->from($relationClass, 'gu')
+            ->innerJoin('gu.group', 'g')
+            ->where('g.iid = :groupId')
+            ->setParameter('groupId', $groupId)
+            ->getQuery()
+            ->getSingleColumnResult()
+        ;
     }
 
     /**
@@ -1496,21 +1602,11 @@ class GroupManager
      */
     public static function getTutors($groupInfo)
     {
-        $groupTable = Database::get_course_table(TABLE_GROUP);
-        $tutor_user_table = Database::get_course_table(TABLE_GROUP_TUTOR);
-        $course_id = api_get_course_int_id();
         $group_id = (int) $groupInfo['iid'];
 
-        $sql = "SELECT user_id
-                FROM $tutor_user_table gu
-                INNER JOIN $groupTable g
-                ON (gu.group_id = g.iid)
-                WHERE g.iid = $group_id";
-        $res = Database::query($sql);
-
         $users = [];
-        while ($obj = Database::fetch_object($res)) {
-            $users[] = api_get_user_info($obj->user_id);
+        foreach (self::groupUserIds(CGroupRelTutor::class, $group_id) as $userId) {
+            $users[] = api_get_user_info($userId);
         }
 
         return $users;
@@ -1587,19 +1683,20 @@ class GroupManager
     public static function get_groups_users($groups = [])
     {
         $result = [];
-        $table = Database::get_course_table(TABLE_GROUP_USER);
         $groups = array_map('intval', $groups);
         if (empty($groups)) {
             return $result;
         }
-        // protect individual elements with surrounding quotes
-        $groups = implode(', ', $groups);
-        $sql = "SELECT DISTINCT user_id
-                FROM $table gu
-                WHERE gu.group_id IN ($groups)";
-        $rs = Database::query($sql);
-        while ($row = Database::fetch_array($rs)) {
-            $result[] = $row['user_id'];
+        $userIds = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT IDENTITY(gu.user) AS user_id')
+            ->from(CGroupRelUser::class, 'gu')
+            ->where('gu.group IN (:groups)')
+            ->setParameter('groups', $groups)
+            ->getQuery()
+            ->getSingleColumnResult()
+        ;
+        foreach ($userIds as $userId) {
+            $result[] = (int) $userId;
         }
 
         return $result;
@@ -1692,20 +1789,22 @@ class GroupManager
      */
     public static function number_of_students($group_id, $course_id = null)
     {
-        $table = Database::get_course_table(TABLE_GROUP_USER);
         $group_id = (int) $group_id;
         $course_id = (int) $course_id;
 
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
         }
-        $sql = "SELECT COUNT(*) AS number_of_students
-                FROM $table
-                WHERE c_id = $course_id AND group_id = $group_id";
-        $result = Database::query($sql);
-        $db_object = Database::fetch_object($result);
 
-        return $db_object->number_of_students;
+        return (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(gu.iid)')
+            ->from(CGroupRelUser::class, 'gu')
+            ->where('gu.cId = :courseId')
+            ->andWhere('gu.group = :groupId')
+            ->setParameter('courseId', $course_id)
+            ->setParameter('groupId', $group_id)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
@@ -1717,22 +1816,24 @@ class GroupManager
      */
     public static function maximum_number_of_students($group_id)
     {
-        $table = Database::get_course_table(TABLE_GROUP);
         $group_id = (int) $group_id;
-        $course_id = api_get_course_int_id();
-        $sql = "SELECT max_student FROM $table
-                WHERE iid = $group_id";
-        $db_result = Database::query($sql);
-        $db_object = Database::fetch_object($db_result);
-        if (empty($db_object)) {
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('g.maxStudent AS max_student')
+            ->from(CGroup::class, 'g')
+            ->where('g.iid = :groupId')
+            ->setParameter('groupId', $group_id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if (empty($rows)) {
             // Unknown group: no capacity (callers compare "members < maximum", so nobody can join it).
             return 0;
         }
-        if (0 == $db_object->max_student) {
+        if (0 == $rows[0]['max_student']) {
             return self::INFINITE;
         }
 
-        return $db_object->max_student;
+        return $rows[0]['max_student'];
     }
 
     /**
@@ -1745,29 +1846,21 @@ class GroupManager
      */
     public static function user_in_number_of_groups($user_id, $cat_id = 0)
     {
-        $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
-        $table_group = Database::get_course_table(TABLE_GROUP);
         $user_id = (int) $user_id;
         $cat_id = (int) $cat_id;
 
-        $course_id = api_get_course_int_id();
-        $cat_condition = '';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(gu.iid)')
+            ->from(CGroupRelUser::class, 'gu')
+            ->innerJoin('gu.group', 'g')
+            ->where('gu.user = :userId')
+            ->setParameter('userId', $user_id)
+        ;
         if (!empty($cat_id)) {
-            $cat_condition = " AND g.category_id =  $cat_id ";
+            $qb->andWhere('g.category = :categoryId')->setParameter('categoryId', $cat_id);
         }
 
-        $sql = "SELECT COUNT(*) AS number_of_groups
-                FROM $table_group_user gu
-                INNER JOIN $table_group g
-                ON (g.iid = gu.group_id)
-                WHERE
-                    gu.user_id = $user_id
-                    $cat_condition";
-
-        $result = Database::query($sql);
-        $db_object = Database::fetch_object($result);
-
-        return $db_object->number_of_groups;
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -1827,19 +1920,23 @@ class GroupManager
             return false;
         }
 
-        $table = Database::get_course_table(TABLE_GROUP_USER);
         $group_id = (int) $group->getIid();
         $user_id = (int) $user_id;
 
-        $sql = "SELECT 1 FROM $table
-                WHERE
-                    c_id = $courseId AND
-                    group_id = $group_id AND
-                    user_id = $user_id
-                ";
-        $result = Database::query($sql);
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(gu.iid)')
+            ->from(CGroupRelUser::class, 'gu')
+            ->where('gu.cId = :courseId')
+            ->andWhere('gu.group = :groupId')
+            ->andWhere('gu.user = :userId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('groupId', $group_id)
+            ->setParameter('userId', $user_id)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-        return Database::num_rows($result) > 0;
+        return (int) $count > 0;
     }
 
     /**
@@ -1969,12 +2066,12 @@ class GroupManager
         $group_id = (int) $group->getIid();
 
         if (!empty($userList)) {
-            $table = Database::get_course_table(TABLE_GROUP_USER);
             foreach ($userList as $user_id) {
                 if (self::canUserSubscribe($user_id, $group, true, $course_id)) {
-                    $sql = "INSERT INTO $table (c_id, user_id, group_id, status, role)
-                            VALUES ($course_id, $user_id, $group_id, 0, '')";
-                    Database::query($sql);
+                    self::insertRow(
+                        Database::get_course_table(TABLE_GROUP_USER),
+                        ['c_id' => $course_id, 'user_id' => $user_id, 'group_id' => $group_id, 'status' => 0, 'role' => '']
+                    );
                 }
             }
         }
@@ -1998,15 +2095,15 @@ class GroupManager
         }
         $userList = is_array($userList) ? $userList : [$userList];
         $course_id = !empty($course_id) ? intval($course_id) : api_get_course_int_id();
-        $table_group_tutor = Database::get_course_table(TABLE_GROUP_TUTOR);
         $groupId = (int) $group->getIid();
 
         foreach ($userList as $user_id) {
             $user_id = intval($user_id);
             if (self::canUserSubscribe($user_id, $group, false)) {
-                $sql = 'INSERT INTO '.$table_group_tutor." (c_id, user_id, group_id)
-                        VALUES ('$course_id', '".$user_id."', '".$groupId."')";
-                Database::query($sql);
+                self::insertRow(
+                    Database::get_course_table(TABLE_GROUP_TUTOR),
+                    ['c_id' => $course_id, 'user_id' => $user_id, 'group_id' => $groupId]
+                );
             }
         }
 
@@ -2037,15 +2134,18 @@ class GroupManager
             return false;
         }
 
-        $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
         $group_id = (int) $group->getIid();
-        $sql = 'DELETE FROM '.$table_group_user.'
-                WHERE
-                    c_id = '.$courseId.' AND
-                    group_id = '.$group_id.' AND
-                    user_id IN ('.implode(',', $userList).')
-                ';
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->delete(CGroupRelUser::class, 'gu')
+            ->where('gu.cId = :courseId')
+            ->andWhere('gu.group = :groupId')
+            ->andWhere('gu.user IN (:userIds)')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('groupId', $group_id)
+            ->setParameter('userIds', $userList)
+            ->getQuery()
+            ->execute()
+        ;
 
         return true;
     }
@@ -2064,12 +2164,16 @@ class GroupManager
             return false;
         }
 
-        $table = Database::get_course_table(TABLE_GROUP_USER);
-        $sql = "DELETE FROM $table
-                WHERE
-                    group_id = $groupId ";
+        Container::getEntityManager()->createQueryBuilder()
+            ->delete(CGroupRelUser::class, 'gu')
+            ->where('gu.group = :groupId')
+            ->setParameter('groupId', $groupId)
+            ->getQuery()
+            ->execute()
+        ;
 
-        return Database::query($sql);
+        // The raw query used to hand back its result object, always truthy.
+        return true;
     }
 
     /**
@@ -2093,10 +2197,13 @@ class GroupManager
         }
 
         if (!empty($groupId)) {
-            $table_group_tutor = Database::get_course_table(TABLE_GROUP_TUTOR);
-            $sql = "DELETE FROM $table_group_tutor
-                    WHERE group_id = $groupId ";
-            Database::query($sql);
+            Container::getEntityManager()->createQueryBuilder()
+                ->delete(CGroupRelTutor::class, 'gt')
+                ->where('gt.group = :groupId')
+                ->setParameter('groupId', $groupId)
+                ->getQuery()
+                ->execute()
+            ;
         }
 
         return true;
@@ -2116,15 +2223,18 @@ class GroupManager
         $userId = (int) $userId;
         $group_id = (int) $group->getIid();
 
-        $table = Database::get_course_table(TABLE_GROUP_TUTOR);
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(gt.iid)')
+            ->from(CGroupRelTutor::class, 'gt')
+            ->where('gt.user = :userId')
+            ->andWhere('gt.group = :groupId')
+            ->setParameter('userId', $userId)
+            ->setParameter('groupId', $group_id)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-        $sql = "SELECT * FROM $table
-                WHERE
-                    user_id = $userId AND
-                    group_id = $group_id";
-        $result = Database::query($sql);
-
-        return Database::num_rows($result) > 0;
+        return (int) $count > 0;
     }
 
     /**
@@ -2163,28 +2273,20 @@ class GroupManager
     public static function get_group_ids($course_id, $user_id)
     {
         $groups = [];
-        $tbl_group = Database::get_course_table(TABLE_GROUP_USER);
-        $tbl_group_tutor = Database::get_course_table(TABLE_GROUP_TUTOR);
         $user_id = intval($user_id);
         $course_id = intval($course_id);
 
-        $sql = "SELECT group_id FROM $tbl_group
-                WHERE user_id = '$user_id'";
-        $result = Database::query($sql);
-
-        if ($result) {
-            while ($row = Database::fetch_array($result)) {
-                $groups[] = $row['group_id'];
-            }
-        }
-
-        //Also loading if i'm the tutor
-        $sql = "SELECT group_id FROM $tbl_group_tutor
-                WHERE user_id = '$user_id'";
-        $result = Database::query($sql);
-        if ($result) {
-            while ($row = Database::fetch_array($result)) {
-                $groups[] = $row['group_id'];
+        foreach ([CGroupRelUser::class, CGroupRelTutor::class] as $relationClass) {
+            $groupIds = Container::getEntityManager()->createQueryBuilder()
+                ->select('IDENTITY(gu.group) AS group_id')
+                ->from($relationClass, 'gu')
+                ->where('gu.user = :userId')
+                ->setParameter('userId', $user_id)
+                ->getQuery()
+                ->getSingleColumnResult()
+            ;
+            foreach ($groupIds as $groupId) {
+                $groups[] = (int) $groupId;
             }
         }
         if (!empty($groups)) {
@@ -2345,20 +2447,19 @@ class GroupManager
      */
     public static function get_user_group_name($user_id)
     {
-        $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
-        $table_group = Database::get_course_table(TABLE_GROUP);
         $user_id = intval($user_id);
-        $course_id = api_get_course_int_id();
-        $sql = "SELECT title
-                FROM $table_group g
-                INNER JOIN $table_group_user gu
-                ON (gu.group_id = g.iid)
-                WHERE
-                  gu.user_id = $user_id";
-        $res = Database::query($sql);
+        $titles = Container::getEntityManager()->createQueryBuilder()
+            ->select('g.title AS title')
+            ->from(CGroup::class, 'g')
+            ->innerJoin(CGroupRelUser::class, 'gu', 'WITH', 'gu.group = g')
+            ->where('gu.user = :userId')
+            ->setParameter('userId', $user_id)
+            ->getQuery()
+            ->getSingleColumnResult()
+        ;
         $groups = [];
-        while ($group = Database::fetch_array($res)) {
-            $groups[] .= $group['title'];
+        foreach ($titles as $title) {
+            $groups[] .= $title;
         }
 
         return $groups;
@@ -2375,30 +2476,21 @@ class GroupManager
      */
     public static function getAllGroupPerUserSubscription($user_id, $courseId = 0, $sessionId = null)
     {
-        $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
-        $table_tutor_user = Database::get_course_table(TABLE_GROUP_TUTOR);
-        $table_group = Database::get_course_table(TABLE_GROUP);
         $user_id = (int) $user_id;
         $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
 
-        $sql = "SELECT DISTINCT g.*
-               FROM $table_group g
-               LEFT JOIN $table_group_user gu
-               ON (gu.group_id = g.iid)
-               LEFT JOIN $table_tutor_user tu
-               ON (tu.group_id = g.iid)
-               WHERE
-                  (gu.user_id = $user_id OR tu.user_id = $user_id) ";
-
-        /*if (null !== $sessionId) {
-            $sessionId = (int) $sessionId;
-            $sql .= " AND g.session_id = $sessionId ";
-        }*/
-
-        $res = Database::query($sql);
+        $rows = self::entityRowsQueryBuilder(CGroup::class, 'g')
+            ->leftJoin(CGroupRelUser::class, 'gu', 'WITH', 'gu.group = g')
+            ->leftJoin(CGroupRelTutor::class, 'tu', 'WITH', 'tu.group = g')
+            ->where('(IDENTITY(gu.user) = :userId OR IDENTITY(tu.user) = :userId)')
+            ->setParameter('userId', $user_id)
+            ->distinct()
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $groups = [];
-        while ($group = Database::fetch_assoc($res)) {
-            $groups[] = $group;
+        foreach ($rows as $group) {
+            $groups[] = self::toLegacyEntityRow(CGroup::class, $group);
         }
 
         return $groups;
@@ -2420,34 +2512,22 @@ class GroupManager
             return [];
         }
 
-        $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
-        $table_tutor_user = Database::get_course_table(TABLE_GROUP_TUTOR);
-        $table_group = Database::get_course_table(TABLE_GROUP);
-        $idList = implode(',', $userIds);
-
         $groupsByUser = [];
-        $sql = "SELECT gu.user_id AS assoc_user_id, g.*
-                FROM $table_group g
-                INNER JOIN $table_group_user gu
-                ON (gu.group_id = g.iid)
-                WHERE gu.user_id IN ($idList)";
-        $res = Database::query($sql);
-        while ($row = Database::fetch_assoc($res)) {
-            $userId = (int) $row['assoc_user_id'];
-            unset($row['assoc_user_id']);
-            $groupsByUser[$userId][(int) $row['iid']] = $row;
-        }
-
-        $sql = "SELECT tu.user_id AS assoc_user_id, g.*
-                FROM $table_group g
-                INNER JOIN $table_tutor_user tu
-                ON (tu.group_id = g.iid)
-                WHERE tu.user_id IN ($idList)";
-        $res = Database::query($sql);
-        while ($row = Database::fetch_assoc($res)) {
-            $userId = (int) $row['assoc_user_id'];
-            unset($row['assoc_user_id']);
-            $groupsByUser[$userId][(int) $row['iid']] = $row;
+        foreach ([CGroupRelUser::class, CGroupRelTutor::class] as $relationClass) {
+            $rows = self::entityRowsQueryBuilder(CGroup::class, 'g')
+                ->addSelect('IDENTITY(gu.user) AS assoc_user_id')
+                ->innerJoin($relationClass, 'gu', 'WITH', 'gu.group = g')
+                ->where('gu.user IN (:userIds)')
+                ->setParameter('userIds', $userIds)
+                ->getQuery()
+                ->getArrayResult()
+            ;
+            foreach ($rows as $row) {
+                $userId = (int) $row['assoc_user_id'];
+                unset($row['assoc_user_id']);
+                $row = self::toLegacyEntityRow(CGroup::class, $row);
+                $groupsByUser[$userId][(int) $row['iid']] = $row;
+            }
         }
 
         return array_map('array_values', $groupsByUser);
@@ -3525,18 +3605,19 @@ class GroupManager
         $user_id = (int) $user_id;
         $group_id = (int) $groupInfo['id'];
 
-        $table = Database::get_course_table(TABLE_GROUP_TUTOR);
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(gt.iid)')
+            ->from(CGroupRelTutor::class, 'gt')
+            ->where('gt.cId = :courseId')
+            ->andWhere('gt.user = :userId')
+            ->andWhere('gt.group = :groupId')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('userId', $user_id)
+            ->setParameter('groupId', $group_id)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-        $sql = "SELECT * FROM $table
-                WHERE
-                    c_id = $courseId AND
-                    user_id = $user_id AND
-                    group_id = $group_id";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            return true;
-        }
-
-        return false;
+        return (int) $count > 0;
     }
 }

@@ -357,6 +357,11 @@ class SessionManagerCharacterizationTest extends AbstractApiTest
         $this->assertSame('2030-01-06', $edited['date_start']);
         $this->assertNull($edited['date_end']);
 
+        // Editing with an end date stores it (the previous edit cleared it).
+        $this->assertTrue(SessionManager::edit_category_session($withEnd, 'sm_cat_c', 2030, 1, 6, 2031, 2, 3));
+        $this->assertSame('2031-02-03', SessionManager::get_session_category($withEnd)['date_end']);
+        $this->assertTrue(SessionManager::edit_category_session($withEnd, 'sm_cat_c', 2030, 1, 6, 0, 0, 0));
+
         $this->assertSame(['sm_cat_a'], array_values(array_filter(
             array_column(SessionManager::get_all_session_category(), 'title'),
             static fn ($t) => 'sm_cat_a' === $t

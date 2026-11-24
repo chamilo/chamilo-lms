@@ -85,29 +85,23 @@ class CoursesAndSessionsCatalog
      */
     public static function getCoursesToAvoid()
     {
-        $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-
         // Check special courses
         $courseListToAvoid = CourseManager::get_special_course_list();
 
         // Checks "hide_from_catalog" extra field
-        $extraFieldType = ExtraField::COURSE_FIELD_TYPE;
-
-        $sql = "SELECT item_id FROM $TABLE_COURSE_FIELD_VALUE tcfv
-                INNER JOIN $TABLE_COURSE_FIELD tcf
-                ON tcfv.field_id =  tcf.id
-                WHERE
-                    tcf.item_type = $extraFieldType AND
-                    tcf.variable = 'hide_from_catalog' AND
-                    tcfv.field_value = 1
-                ";
-
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result)) {
-                $courseListToAvoid[] = $row['item_id'];
-            }
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('tcfv.itemId AS item_id')
+            ->from(ExtraFieldValues::class, 'tcfv')
+            ->innerJoin('tcfv.field', 'tcf')
+            ->where('tcf.itemType = :itemType')
+            ->andWhere('tcf.variable = :variable')
+            ->andWhere('tcfv.fieldValue = 1')
+            ->setParameter('itemType', ExtraField::COURSE_FIELD_TYPE)
+            ->setParameter('variable', 'hide_from_catalog')
+            ->getQuery()
+            ->getArrayResult();
+        foreach ($rows as $row) {
+            $courseListToAvoid[] = $row['item_id'];
         }
 
         return $courseListToAvoid;
@@ -162,6 +156,7 @@ class CoursesAndSessionsCatalog
                     $visibilityCondition
                 ";
 
+        // TODO(db-neutral): raw SQL fragments from getAvoidCourseCondition() and CourseManager::getCourseVisibilitySQLCondition()
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
 
@@ -266,6 +261,7 @@ class CoursesAndSessionsCatalog
         if (!empty($randomValue)) {
             $randomValue = (int) $randomValue;
 
+            // TODO(db-neutral): getCoursesInCategory() is left raw as a whole: random picks (RAND()) and SQL fragments built by other classes
             $sql = "SELECT COUNT(*) FROM $tbl_course";
             $result = Database::query($sql);
             list($num_records) = Database::fetch_row($result);
@@ -310,6 +306,7 @@ class CoursesAndSessionsCatalog
                         LIMIT 0, $randomValue";
             }
 
+            // TODO(db-neutral): RAND() and raw SQL fragments built by other methods
             $result = Database::query($sql);
             $id_in = null;
             while (list($id) = Database::fetch_row($result)) {
@@ -389,6 +386,7 @@ class CoursesAndSessionsCatalog
             }
         }
 
+        // TODO(db-neutral): raw SQL fragments built by other methods (conditions, LIMIT)
         $result = Database::query($sql);
         $courses = [];
         while ($row = Database::fetch_array($result)) {
@@ -520,6 +518,7 @@ class CoursesAndSessionsCatalog
             }
         }
 
+        // TODO(db-neutral): raw SQL fragments built by other methods (conditions, LIMIT)
         $result = Database::query($sql);
         $courses = [];
         while ($row = Database::fetch_array($result)) {

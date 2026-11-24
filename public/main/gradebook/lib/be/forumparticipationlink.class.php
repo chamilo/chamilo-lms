@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CForumPost;
 use Chamilo\CourseBundle\Entity\CForumThread;
 
 /**
@@ -203,21 +204,18 @@ class ForumParticipationLink extends AbstractLink
      */
     private function countPosts(?int $studentId): int
     {
-        $table = Database::get_course_table(TABLE_FORUM_POST);
-        $threadId = $this->get_ref_id();
-
-        $sql = "SELECT COUNT(iid) AS number
-                FROM $table
-                WHERE thread_id = $threadId
-                  AND visible = 1";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(p.iid)')
+            ->from(CForumPost::class, 'p')
+            ->where('IDENTITY(p.thread) = :threadId')
+            ->andWhere('p.visible = 1')
+            ->setParameter('threadId', $this->get_ref_id());
         if (null !== $studentId) {
-            $sql .= ' AND poster_id = '.$studentId;
+            $qb->andWhere('IDENTITY(p.user) = :studentId')
+                ->setParameter('studentId', $studentId);
         }
 
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
-        return (int) ($row['number'] ?? 0);
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     private function getThread(): ?CForumThread

@@ -183,6 +183,7 @@ final class LearningCalendarPluginCharacterizationTest extends PluginCharacteriz
         $this->assertSame(array_column($asc, 'id'), array_column($desc, 'id'));
         $this->assertSame([(string) $first, (string) $second], array_map('strval', array_column($asc, 'id')));
         $this->assertCount(1, $this->plugin->getCalendars($before, 1, 0));
+        $this->assertSame([(string) $second], array_map('strval', array_column($this->plugin->getCalendars($before + 1, 10, 0), 'id')));
         $this->assertStringContainsString('calendar.php?id='.$first, $asc[0]['title']);
         $this->assertStringContainsString('action=delete&amp;id='.$first, $asc[0]['actions']);
     }
@@ -345,6 +346,17 @@ final class LearningCalendarPluginCharacterizationTest extends PluginCharacteriz
         $this->assertFalse($this->plugin->getUserCalendar($loner));
         $this->assertSame('lc_add_b', $this->plugin->getUserCalendarToString($user));
         $this->assertSame('', $this->plugin->getUserCalendarToString($loner));
+    }
+
+    public function testUserCalendarIsTheOldestAssignmentWhenAUserHoldsSeveral(): void
+    {
+        $calA = $this->calendar('old_a');
+        $calB = $this->calendar('old_b');
+        $user = $this->rawUser('lc_old');
+        $this->assign($calA, $user);
+        $this->assign($calB, $user);
+
+        $this->assertSame($calA, (int) $this->plugin->getUserCalendar($user)['calendar_id']);
     }
 
     public function testDeleteAllCalendarFromUserOnlyRemovesThatPair(): void

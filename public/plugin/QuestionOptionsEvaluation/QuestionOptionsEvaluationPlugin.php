@@ -1,10 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\AbstractQuery;
 
 /**
  * Class QuestionOptionsEvaluationPlugin.
@@ -352,27 +355,54 @@ class QuestionOptionsEvaluationPlugin extends Plugin
             return;
         }
 
-        $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $formula = Database::escape_string($formula);
-        $now = Database::escape_string(api_get_utc_datetime());
+        $em = Database::getManager();
+        $now = api_get_utc_datetime();
 
-        $sql = "SELECT id FROM $table WHERE field_id = $fieldId AND item_id = $exerciseId ORDER BY id DESC LIMIT 1";
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $id = $em->createQueryBuilder()
+            ->select('v.id')
+            ->from(ExtraFieldValues::class, 'v')
+            ->where('IDENTITY(v.field) = :fieldId')
+            ->andWhere('v.itemId = :itemId')
+            ->orderBy('v.id', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('fieldId', $fieldId)
+            ->setParameter('itemId', $exerciseId)
+            ->getQuery()
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR)
+        ;
 
-        if (!empty($row['id'])) {
-            $id = (int) $row['id'];
-            Database::query(
-                "UPDATE $table SET field_value = '$formula', updated_at = '$now' WHERE id = $id"
-            );
+        if (!empty($id)) {
+            $em->createQueryBuilder()
+                ->update(ExtraFieldValues::class, 'v')
+                ->set('v.fieldValue', ':formula')
+                ->set('v.updatedAt', ':now')
+                ->where('v.id = :id')
+                ->setParameter('formula', $formula)
+                ->setParameter('now', new DateTime($now), Types::DATETIME_MUTABLE)
+                ->setParameter('id', (int) $id)
+                ->getQuery()
+                ->execute()
+            ;
 
             return;
         }
 
-        Database::query(
-            "INSERT INTO $table (field_id, item_id, field_value, created_at, updated_at)
-             VALUES ($fieldId, $exerciseId, '$formula', '$now', '$now')"
-        );
+        // DQL has no INSERT: plain DBAL query builder on the table.
+        $em->getConnection()->createQueryBuilder()
+            ->insert(Database::get_main_table(TABLE_EXTRA_FIELD_VALUES))
+            ->values([
+                'field_id' => ':fieldId',
+                'item_id' => ':itemId',
+                'field_value' => ':formula',
+                'created_at' => ':now',
+                'updated_at' => ':now',
+            ])
+            ->setParameter('fieldId', $fieldId)
+            ->setParameter('itemId', $exerciseId)
+            ->setParameter('formula', $formula)
+            ->setParameter('now', $now)
+            ->executeStatement()
+        ;
     }
 
     private function getStoredFormulaValueDirectly(int $exerciseId): ?string
@@ -382,10 +412,18 @@ class QuestionOptionsEvaluationPlugin extends Plugin
             return null;
         }
 
-        $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $sql = "SELECT field_value FROM $table WHERE field_id = $fieldId AND item_id = $exerciseId ORDER BY id DESC LIMIT 1";
-        $result = Database::query($sql);
-        $row = Database::fetch_assoc($result);
+        $row = Database::getManager()->createQueryBuilder()
+            ->select('v.fieldValue AS field_value')
+            ->from(ExtraFieldValues::class, 'v')
+            ->where('IDENTITY(v.field) = :fieldId')
+            ->andWhere('v.itemId = :itemId')
+            ->orderBy('v.id', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('fieldId', $fieldId)
+            ->setParameter('itemId', $exerciseId)
+            ->getQuery()
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY)
+        ;
 
         if (empty($row) || !array_key_exists('field_value', $row)) {
             return null;

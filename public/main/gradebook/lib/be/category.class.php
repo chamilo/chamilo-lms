@@ -3,12 +3,15 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Component\Gradebook\CourseCompletionRuleEvaluator;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\GradebookCalculationMode;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\GradebookCategoryGradeModelGuard;
 use ChamiloSession as Session;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class Category
@@ -331,10 +334,15 @@ class Category implements GradebookItem
             return true;
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = "SELECT allow_skills_by_subcategory FROM $table WHERE id = ".(int) $categoryId;
-        $result = Database::query($sql);
-        $value = Database::result($result, 0, 0);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('cat.allowSkillsBySubcategory AS allow_skills_by_subcategory')
+            ->from(GradebookCategory::class, 'cat')
+            ->where('cat.id = :id')
+            ->setParameter('id', (int) $categoryId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        $value = $rows[0]['allow_skills_by_subcategory'] ?? null;
 
         if (null === $value || '' === (string) $value) {
             return true;
@@ -437,14 +445,17 @@ class Category implements GradebookItem
         $session_id = (int) $session_id;
 
         if (!empty($session_id)) {
-            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-            $sql = 'SELECT id, c_id
-                    FROM '.$table.'
-                    WHERE session_id = '.$session_id;
-            $result_session = Database::query($sql);
-            if (Database::num_rows($result_session) > 0) {
+            $sessionRows = Container::getEntityManager()->createQueryBuilder()
+                ->select('cat.id AS id', 'IDENTITY(cat.course) AS c_id')
+                ->from(GradebookCategory::class, 'cat')
+                ->where('cat.session = :sessionId')
+                ->setParameter('sessionId', $session_id)
+                ->getQuery()
+                ->getArrayResult()
+            ;
+            if ([] !== $sessionRows) {
                 $categoryList = [];
-                while ($data_session = Database::fetch_array($result_session)) {
+                foreach ($sessionRows as $data_session) {
                     $parent_id = $data_session['id'];
                     if ($data_session['c_id'] == $courseId) {
                         $categories = self::load($parent_id);
@@ -491,25 +502,17 @@ class Category implements GradebookItem
             return $cats;
         }
 
-        $bond = ' WHERE';
-
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'SELECT * FROM '.$table;
+        $qb = self::categoryRowsQueryBuilder();
         if (!empty($id)) {
-            $sql .= ' WHERE id = '.$id;
-            $bond = ' AND';
+            $qb->andWhere('cat.id = :id')->setParameter('id', (int) $id);
         }
 
         if (isset($user_id)) {
-            $sql .= $bond.' user_id = '.$user_id;
-            $bond = ' AND';
+            $qb->andWhere('cat.user = :userId')->setParameter('userId', (int) $user_id);
         }
 
-
-
         if (!empty($courseId)) {
-            $sql .= $bond." c_id = $courseId";
-            $bond = ' AND';
+            $qb->andWhere('cat.course = :courseId')->setParameter('courseId', (int) $courseId);
         }
 
         if (!isset($session_id)) {
@@ -517,33 +520,26 @@ class Category implements GradebookItem
         }
 
         if (!empty($session_id)) {
-            $sql .= $bond.' session_id = '.$session_id;
+            $qb->andWhere('cat.session = :sessionId')->setParameter('sessionId', (int) $session_id);
         } else {
             if (empty($id)) {
-                $sql .= $bond.' (session_id IS NULL OR session_id = 0) ';
+                $qb->andWhere('(cat.session IS NULL OR IDENTITY(cat.session) = 0)');
             }
         }
-        $bond = ' AND';
 
         if (!empty($parent_id)) {
-            $sql .= $bond.' parent_id = '.$parent_id;
+            $qb->andWhere('cat.parent = :parentId')->setParameter('parentId', (int) $parent_id);
         }
 
         if (isset($visible)) {
-            $sql .= $bond.' visible = '.$visible;
+            $qb->andWhere('cat.visible = :visible')->setParameter('visible', (int) $visible);
         }
 
         if (isset($order_by)) {
-            $sql .= ' '.Database::escape_string($order_by);
+            self::applyOrderBy($qb, $order_by);
         }
 
-        $result = Database::query($sql);
-        $categories = [];
-        if (Database::num_rows($result) > 0) {
-            $categories = self::create_category_objects_from_sql_result($result);
-        }
-
-        return $categories;
+        return self::create_category_objects_from_rows($qb->getQuery()->getArrayResult());
     }
 
     /**
@@ -789,9 +785,13 @@ class Category implements GradebookItem
      */
     public function delete(): void
     {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'DELETE FROM '.$table.' WHERE id = '.intval($this->id);
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->delete(GradebookCategory::class, 'cat')
+            ->where('cat.id = :id')
+            ->setParameter('id', (int) $this->id)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -807,15 +807,16 @@ class Category implements GradebookItem
         if (empty($courseId)) {
             return '';
         }
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = "SELECT count(*) AS num
-                FROM $table
-                WHERE
-                    c_id = $courseId AND
-                    visible = 3";
-        $res = Database::query($sql);
-        $option = Database::fetch_array($res);
-        if ($option['num'] >= 1) {
+        $num = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(cat.id)')
+            ->from(GradebookCategory::class, 'cat')
+            ->where('cat.course = :courseId')
+            ->andWhere('cat.visible = 3')
+            ->setParameter('courseId', (int) $courseId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+        if ($num >= 1) {
             return '&nbsp;&nbsp;<span class="resource-deleted">
                 (&nbsp;'.get_lang('The resource has been deleted').'&nbsp;)
                 </span>';
@@ -839,12 +840,23 @@ class Category implements GradebookItem
             return [];
         }
 
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = "SELECT * FROM $table
-                WHERE id = $categoryId";
-        $result = Database::query($sql);
+        $rows = self::categoryRowsQueryBuilder()
+            ->where('cat.id = :id')
+            ->setParameter('id', $categoryId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if ([] === $rows) {
+            return [];
+        }
 
-        return Database::fetch_array($result);
+        // Database::fetch_array() gave every value under its name and under its position.
+        $row = self::toLegacyCategoryRow($rows[0]);
+        foreach ($row as $value) {
+            $row[] = $value;
+        }
+
+        return $row;
     }
 
     /**
@@ -1295,13 +1307,12 @@ class Category implements GradebookItem
         int $courseId = 0,
         int $session_id = 0
     ) {
-        $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-
-        $sql = "SELECT * FROM $table WHERE (parent_id IS NULL OR parent_id = 0)";
+        $qb = self::categoryRowsQueryBuilder()
+            ->where('(cat.parent IS NULL OR IDENTITY(cat.parent) = 0)')
+        ;
 
         if (!api_is_allowed_to_edit()) {
-            $sql .= ' AND visible = 1';
+            $qb->andWhere('cat.visible = 1');
 
             // Proceed with checks on optional parameters course & session
             if (!empty($courseId)) {
@@ -1309,21 +1320,16 @@ class Category implements GradebookItem
                 // if he doesn't have the rights to view this course and this
                 // session, we don't check his registration to these, but this
                 // could be an improvement
-                $sql .= " AND c_id = $courseId";
+                $qb->andWhere('cat.course = :courseId')->setParameter('courseId', (int) $courseId);
 
                 if (!empty($session_id)) {
-                    $sql .= " AND session_id = $session_id";
+                    $qb->andWhere('cat.session = :sessionId')->setParameter('sessionId', (int) $session_id);
                 } else {
-                    $sql .= " AND (session_id IS NULL OR session_id = 0)";
+                    $qb->andWhere('(cat.session IS NULL OR IDENTITY(cat.session) = 0)');
                 }
             } else {
                 // No optional parameter, proceed as usual
-                $sql .= ' AND c_id IN (
-                SELECT cu.c_id
-                FROM '.$main_course_user_table.' cu
-                WHERE cu.user_id = '.$stud_id.'
-                AND cu.status = '.STUDENT.'
-            )';
+                self::restrictToCoursesOfUser($qb, $stud_id, STUDENT);
             }
         } elseif (!api_is_platform_admin()) {
             // Proceed with checks on optional parameters course & session
@@ -1332,30 +1338,24 @@ class Category implements GradebookItem
                 // if he doesn't have the rights to view this course and this
                 // session, we don't check his registration to these, but this
                 // could be an improvement
-                $sql .= " AND c_id = $courseId";
+                $qb->andWhere('cat.course = :courseId')->setParameter('courseId', (int) $courseId);
                 if (!empty($session_id)) {
-                    $sql .= " AND session_id = $session_id";
+                    $qb->andWhere('cat.session = :sessionId')->setParameter('sessionId', (int) $session_id);
                 } else {
-                    $sql .= " AND (session_id IS NULL OR session_id = 0)";
+                    $qb->andWhere('(cat.session IS NULL OR IDENTITY(cat.session) = 0)');
                 }
             } else {
-                $sql .= ' AND c_id IN (
-                SELECT cu.c_id
-                FROM '.$main_course_user_table.' cu
-                WHERE cu.user_id = '.(int) api_get_user_id().'
-                AND cu.status = '.COURSEMANAGER.'
-            )';
+                self::restrictToCoursesOfUser($qb, (int) api_get_user_id(), COURSEMANAGER);
             }
         } else {
             // Platform admin
             if (!empty($session_id)) {
-                $sql .= " AND session_id = $session_id";
+                $qb->andWhere('cat.session = :sessionId')->setParameter('sessionId', (int) $session_id);
             } else {
-                $sql .= ' AND COALESCE(session_id, 0) = 0';
+                $qb->andWhere('(cat.session IS NULL OR IDENTITY(cat.session) = 0)');
             }
         }
-        $result = Database::query($sql);
-        $cats = self::create_category_objects_from_sql_result($result);
+        $cats = self::create_category_objects_from_rows($qb->getQuery()->getArrayResult());
 
         // Course independent categories
         if (empty($courseId)) {
@@ -1388,32 +1388,25 @@ class Category implements GradebookItem
             return self::load(null, null, $courseId, 0, null, $session_id);
         }
 
-        $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-
         $user_id = (int) $user_id;
         $courseId = isset($courseId) ? (int) $courseId : null;
         $session_id = isset($session_id) ? (int) $session_id : null;
 
-        $sql = 'SELECT * FROM '.$tbl_grade_categories.' WHERE (parent_id IS NULL OR parent_id = 0)';
+        $qb = self::categoryRowsQueryBuilder()
+            ->where('(cat.parent IS NULL OR IDENTITY(cat.parent) = 0)')
+        ;
 
         if (!empty($courseId)) {
-            $sql .= " AND c_id = $courseId";
+            $qb->andWhere('cat.course = :courseId')->setParameter('courseId', $courseId);
             if (!empty($session_id)) {
-                $sql .= " AND session_id = $session_id";
+                $qb->andWhere('cat.session = :sessionId')->setParameter('sessionId', $session_id);
             } else {
-                $sql .= ' AND (session_id IS NULL OR session_id = 0)';
+                $qb->andWhere('(cat.session IS NULL OR IDENTITY(cat.session) = 0)');
             }
         } else {
-            $sql .= ' AND c_id IN (
-            SELECT cu.c_id
-            FROM '.$main_course_user_table.' cu
-            WHERE cu.user_id = '.$user_id.'
-            AND cu.status = '.COURSEMANAGER.'
-        )';
+            self::restrictToCoursesOfUser($qb, $user_id, COURSEMANAGER);
         }
-        $result = Database::query($sql);
-        $cats = self::create_category_objects_from_sql_result($result);
+        $cats = self::create_category_objects_from_rows($qb->getQuery()->getArrayResult());
 
         // Course independent categories
         if (!empty($courseId)) {
@@ -1575,32 +1568,29 @@ class Category implements GradebookItem
      */
     public static function get_not_created_course_categories($user_id)
     {
-        $tbl_main_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_main_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-
         $user_id = (int) $user_id;
 
-        $sql = 'SELECT DISTINCT(cc.code), title
-                FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu
-                WHERE
-                    cc.id = cu.c_id AND
-                    cu.status = '.COURSEMANAGER;
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('cc.code AS code', 'cc.title AS title')
+            ->distinct()
+            ->from(Course::class, 'cc')
+            ->innerJoin(CourseRelUser::class, 'cu', 'WITH', 'cu.course = cc')
+            ->where('cu.status = :status')
+            ->setParameter('status', COURSEMANAGER)
+        ;
 
         if (!api_is_platform_admin()) {
-            $sql .= ' AND cu.user_id = '.$user_id;
+            $qb->andWhere('cu.user = :userId')->setParameter('userId', $user_id);
         }
-        $sql .= ' AND cc.id NOT IN
-             (
-                SELECT c_id FROM '.$tbl_grade_categories.'
-                WHERE
-                    (parent_id IS NULL OR parent_id = 0) AND
-                    c_id IS NOT NULL
-                )';
-        $result = Database::query($sql);
+        $qb->andWhere(
+            'cc.id NOT IN (
+                SELECT IDENTITY(root.course) FROM '.GradebookCategory::class.' root
+                WHERE (root.parent IS NULL OR IDENTITY(root.parent) = 0) AND root.course IS NOT NULL
+            )'
+        );
 
         $cats = [];
-        while ($data = Database::fetch_array($result)) {
+        foreach ($qb->getQuery()->getArrayResult() as $data) {
             $cats[] = [$data['code'], $data['title']];
         }
 
@@ -1617,18 +1607,20 @@ class Category implements GradebookItem
      */
     public static function get_all_courses(int $user_id): array
     {
-        $tbl_main_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_main_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $sql = 'SELECT DISTINCT(code), title, cc.id
-                FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu
-                WHERE cc.id = cu.c_id AND cu.status = '.COURSEMANAGER;
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('cc.code AS code', 'cc.title AS title', 'cc.id AS id')
+            ->distinct()
+            ->from(Course::class, 'cc')
+            ->innerJoin(CourseRelUser::class, 'cu', 'WITH', 'cu.course = cc')
+            ->where('cu.status = :status')
+            ->setParameter('status', COURSEMANAGER)
+        ;
         if (!api_is_platform_admin()) {
-            $sql .= ' AND cu.user_id = '.$user_id;
+            $qb->andWhere('cu.user = :userId')->setParameter('userId', $user_id);
         }
 
-        $result = Database::query($sql);
         $cats = [];
-        while ($data = Database::fetch_array($result)) {
+        foreach ($qb->getQuery()->getArrayResult() as $data) {
             $cats[] = [$data['code'], $data['title']];
         }
 
@@ -2041,26 +2033,6 @@ class Category implements GradebookItem
     }
 
     /**
-     * Get all the categories from with the same given direct parent.
-     *
-     * @param int $catId Category parent ID
-     *
-     * @return array Array of Category objects
-     */
-    public function getCategories($catId)
-    {
-        $catId = (int) $catId;
-        $tblGradeCategories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'SELECT * FROM '.$tblGradeCategories.'
-                WHERE parent_id = '.$catId;
-
-        $result = Database::query($sql);
-        $categories = self::create_category_objects_from_sql_result($result);
-
-        return $categories;
-    }
-
-    /**
      * Gets the type for the current object.
      *
      * @return string 'C' to represent "Category" object type
@@ -2122,10 +2094,15 @@ class Category implements GradebookItem
      */
     public function lock(int $locked): void
     {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = "UPDATE $table SET locked = '".intval($locked)."'
-                WHERE id = ".$this->id;
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(GradebookCategory::class, 'cat')
+            ->set('cat.locked', ':locked')
+            ->where('cat.id = :id')
+            ->setParameter('locked', $locked)
+            ->setParameter('id', (int) $this->id)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -2867,6 +2844,120 @@ class Category implements GradebookItem
      */
     private static function create_category_objects_from_sql_result(?Doctrine\DBAL\Result $result)
     {
+        $rows = [];
+        if (!empty($result)) {
+            while ($data = Database::fetch_array($result)) {
+                $rows[] = $data;
+            }
+        }
+
+        return self::create_category_objects_from_rows($rows);
+    }
+
+    /**
+     * Every column of the gradebook_category table, aliased to the snake_case keys the legacy code reads.
+     */
+    private static function categoryRowsQueryBuilder(): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(...array_map(
+                static fn (string $alias, string $expression): string => $expression.' AS '.$alias,
+                array_keys(self::categoryColumnExpressions()),
+                array_values(self::categoryColumnExpressions())
+            ))
+            ->from(GradebookCategory::class, 'cat')
+        ;
+    }
+
+    /**
+     * @return array<string, string> column name => DQL expression
+     */
+    private static function categoryColumnExpressions(): array
+    {
+        return [
+            'id' => 'cat.id',
+            'user_id' => 'IDENTITY(cat.user)',
+            'c_id' => 'IDENTITY(cat.course)',
+            'parent_id' => 'IDENTITY(cat.parent)',
+            'session_id' => 'IDENTITY(cat.session)',
+            'grade_model_id' => 'IDENTITY(cat.gradeModel)',
+            'document_id' => 'IDENTITY(cat.document)',
+            'title' => 'cat.title',
+            'description' => 'cat.description',
+            'weight' => 'cat.weight',
+            'visible' => 'cat.visible',
+            'certif_min_score' => 'cat.certifMinScore',
+            'locked' => 'cat.locked',
+            'default_lowest_eval_exclude' => 'cat.defaultLowestEvalExclude',
+            'generate_certificates' => 'cat.generateCertificates',
+            'certificate_validity_period' => 'cat.certificateValidityPeriod',
+            'is_requirement' => 'cat.isRequirement',
+            'depends' => 'cat.depends',
+            'minimum_to_validate' => 'cat.minimumToValidate',
+            'gradebooks_to_validate_in_dependence' => 'cat.gradeBooksToValidateInDependence',
+            'allow_skills_by_subcategory' => 'cat.allowSkillsBySubcategory',
+            'calculation_mode' => 'cat.calculationMode',
+        ];
+    }
+
+    /**
+     * The raw table row carried the tinyint flags as 0/1 and the calculation mode as its string value.
+     */
+    private static function toLegacyCategoryRow(array $row): array
+    {
+        foreach (['visible', 'default_lowest_eval_exclude', 'generate_certificates', 'is_requirement'] as $flag) {
+            if (null !== $row[$flag]) {
+                $row[$flag] = (int) $row[$flag];
+            }
+        }
+        if ($row['calculation_mode'] instanceof BackedEnum) {
+            $row['calculation_mode'] = $row['calculation_mode']->value;
+        }
+
+        return $row;
+    }
+
+    /**
+     * The "ORDER BY column [ASC|DESC]" tail legacy callers pass to load(): only a column of the table is accepted.
+     */
+    private static function applyOrderBy(QueryBuilder $qb, string $orderBy): void
+    {
+        $expressions = self::categoryColumnExpressions();
+        if (1 !== preg_match('/^\s*ORDER\s+BY\s+([A-Za-z_]+)(?:\s+(ASC|DESC))?\s*$/i', $orderBy, $matches)
+            || !isset($expressions[strtolower($matches[1])])
+        ) {
+            throw new InvalidArgumentException('Invalid order by: '.$orderBy);
+        }
+        $expression = $expressions[strtolower($matches[1])];
+        // An association column (IDENTITY(cat.x)) sorts on the association itself.
+        if (str_starts_with($expression, 'IDENTITY(')) {
+            $expression = substr($expression, 9, -1);
+        }
+        $qb->orderBy($expression, strtoupper($matches[2] ?? 'ASC'));
+    }
+
+    /**
+     * Restricts the categories to the courses where the user has the given status in course_rel_user.
+     */
+    private static function restrictToCoursesOfUser(QueryBuilder $qb, int $userId, int $status): void
+    {
+        $qb
+            ->andWhere(
+                'IDENTITY(cat.course) IN (
+                    SELECT IDENTITY(cu.course) FROM '.CourseRelUser::class.' cu
+                    WHERE cu.user = :cuUserId AND cu.status = :cuStatus
+                )'
+            )
+            ->setParameter('cuUserId', $userId)
+            ->setParameter('cuStatus', $status)
+        ;
+    }
+
+    /**
+     * @param array<int, array> $rows rows with the snake_case keys of the gradebook_category table
+     */
+    private static function create_category_objects_from_rows(array $rows)
+    {
         $categories = [];
         $allow = ('true' === api_get_setting('gradebook.allow_gradebook_stats'));
         if ($allow) {
@@ -2874,8 +2965,9 @@ class Category implements GradebookItem
             $repo = $em->getRepository(GradebookCategory::class);
         }
 
-        if (!empty($result)) {
-            while ($data = Database::fetch_array($result)) {
+        if ([] !== $rows) {
+            foreach ($rows as $data) {
+                $data = self::toLegacyCategoryRow($data);
                 $cat = new Category();
                 $cat->set_id($data['id']);
                 $cat->set_name($data['title']);

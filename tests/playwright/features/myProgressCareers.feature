@@ -26,20 +26,31 @@ Feature: Careers in my progress
     And I wait for the page to be loaded
     When I fill in "career_field_display_text" with "PW external career id"
     And I fill in "career_field_variable" with "external_career_id"
-    # Without these, the career form hides the field or shows it frozen.
-    And I click the "input#visible_to_self_yes" element
-    And I click the "input#changeable_yes" element
+    # The form defaults to "Visible to self" and "Changeable" = No, and a field in that state is shown
+    # frozen (no input) on the career edit form.
+    And I click the "#visible_to_self_yes" element
+    And I click the "#changeable_yes" element
     And I press "career_field_submit"
     And I wait for the page to be loaded
     Then I should not see an error
     And I should see "external_career_id"
 
-  Scenario: Admin creates the career with its external id
+  # The careers form only shows the extra fields when a career is edited, not when it is added.
+  Scenario: Admin creates the career, then gives it its external id
     Given I am a platform administrator
     And I am on "/main/admin/careers.php?action=add"
     And I wait for the page to be loaded
     When I fill in "career_title" with "PW my progress career"
     And I fill in editor field "description" with "Career of the my progress test"
+    And I press "submit"
+    And I wait for the page to be loaded
+    Then I should not see an error
+    And I should see "PW my progress career"
+    When I am on "/main/admin/careers.php"
+    And I wait for the page to be loaded
+    And I click the "a[href*='action=edit']" icon in the row for "PW my progress career"
+    And I wait up to 30 seconds for the element "[name='extra_external_career_id']" to appear
+    And I fill in "extra_external_career_id" with "PWCAREER EXT"
     And I press "submit"
     And I wait for the page to be loaded
     Then I should not see an error

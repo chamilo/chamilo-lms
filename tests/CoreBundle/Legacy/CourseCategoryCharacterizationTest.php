@@ -381,6 +381,7 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
         $parents = CourseCategory::getParents('CCL');
 
         $this->assertSame(['CCL', 'CCM', 'CCR'], array_column($parents, 'code'));
+        $this->assertSame([$m, $r, null], array_column($parents, 'parent_id'));
     }
 
     public function testGetParentsToStringBuildsTheBreadcrumbFromTheRoot(): void
@@ -401,11 +402,12 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
         $a = $this->cat('cc_a', 'CCA', $r, 1);
         $a1 = $this->cat('cc_a1', 'CCA1', $a, 1);
         $b = $this->cat('cc_b', 'CCB', $r, 2);
+        $b2 = $this->cat('cc_b2', 'CCB2', $r, 2);
 
         $children = CourseCategory::getChildren('CCR');
 
-        $this->assertSame(['CCA', 'CCA1', 'CCB'], array_column($children, 'code'));
-        $this->assertSame([$a, $a1, $b], array_map('intval', array_column($children, 'id')));
+        $this->assertSame(['CCA', 'CCA1', 'CCB', 'CCB2'], array_column($children, 'code'), 'Equal tree_pos: by id.');
+        $this->assertSame([$a, $a1, $b, $b2], array_map('intval', array_column($children, 'id')));
         $this->assertSame([], CourseCategory::getChildren('CCB'));
         $this->assertSame([], CourseCategory::getChildren('CC-NOPE'));
     }
@@ -542,8 +544,13 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
         $noKids = $this->cat('cc_dead2', 'CCDEAD2', null, 96, 0, 'FALSE');
         $this->assign($noKids, 1);
 
+        $kid = $this->cat('cc_dead_kid', 'CCDEADKID', $root, 1, 0, 'TRUE');
+        $this->assign($kid, 1);
+
         $titles = array_column(CourseCategory::getCategoriesToDisplayInHomePage(), 'title');
         $this->assertContains('cc_dead', $titles);
+        $this->assertNotContains('cc_dead_kid', $titles, 'Only the root categories.');
+        $this->assertLessThan(array_search('cc_dead2', $titles, true), array_search('cc_dead', $titles, true), 'By tree_pos.');
 
         $listed = CourseCategory::getCategoriesCanBeAddedInCourse('CCDEAD2');
         $this->assertSame('-', $listed['']);
@@ -555,6 +562,8 @@ final class CourseCategoryCharacterizationTest extends KernelTestCase
         $this->assertContains((string) $noKids, array_map('strval', $notIn));
         $all = array_column(CourseCategory::getCourseCategoryNotInList([]), 'id');
         $this->assertContains((string) $root, array_map('strval', $all));
+        $this->assertNotContains((string) $kid, array_map('strval', $all), 'Only the root categories.');
+        $this->assertNotContains((string) $kid, array_map('strval', $notIn));
     }
 
     // ------------------------------------------------------------------ helpers

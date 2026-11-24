@@ -56,6 +56,48 @@
     </BaseCard>
 
     <BaseCard
+      class="bg-white"
+      plain
+    >
+      <template #header>
+        <div class="px-4 py-2 -mb-2 bg-gray-15">
+          <h2 class="text-h5">{{ t("Download or send your personal data") }}</h2>
+        </div>
+      </template>
+      <hr class="-mt-2 mb-4 -mx-4" />
+      <div class="flex flex-col gap-3">
+        <p>
+          {{
+            t(
+              "You can download a JSON-LD or XML copy of the personal data we keep about you, or send it to another service. For your security, you will be asked to type your current password.",
+            )
+          }}
+        </p>
+        <div class="flex flex-wrap gap-2">
+          <BaseButton
+            :label="t('Download as JSON-LD')"
+            icon="file-export"
+            type="black"
+            @click="openExportDialog('download-json')"
+          />
+          <BaseButton
+            :label="t('Download as XML')"
+            icon="file-export"
+            type="black"
+            @click="openExportDialog('download-xml')"
+          />
+          <BaseButton
+            v-if="exportOptions.allowExportToUrl"
+            :label="t('Send to a URL')"
+            icon="send"
+            type="black"
+            @click="openExportDialog('push')"
+          />
+        </div>
+      </div>
+    </BaseCard>
+
+    <BaseCard
       v-if="showTermsAndConditionsCard"
       class="bg-white"
       plain
@@ -253,6 +295,47 @@
       </p>
     </div>
   </BaseDialog>
+
+  <BaseDialog
+    v-model:is-visible="exportDialogVisible"
+    :title="exportDialogTitle"
+    header-icon="lock"
+  >
+    <form
+      class="flex flex-col gap-3"
+      @submit.prevent="submitExport"
+    >
+      <p>
+        {{ t("For your security, please type your current password to continue.") }}
+      </p>
+      <BaseInputText
+        id="personal-data-export-password"
+        v-model="exportPassword"
+        :label="t('Current password')"
+        autocomplete="current-password"
+        type="password"
+        required
+      />
+      <BaseInputText
+        v-if="exportAction === 'push'"
+        id="personal-data-export-url"
+        v-model="exportUrl"
+        :label="t('Destination HTTPS URL')"
+        :help-text="t('The address must use HTTPS. Private and internal addresses are not allowed.')"
+        autocomplete="off"
+        required
+      />
+      <LayoutFormButtons>
+        <BaseButton
+          :disabled="isExporting"
+          :label="isExporting ? t('Please wait...') : exportSubmitLabel"
+          :icon="exportAction === 'push' ? 'send' : 'file-export'"
+          type="primary"
+          @click="submitExport"
+        />
+      </LayoutFormButtons>
+    </form>
+  </BaseDialog>
 </template>
 
 <script setup>
@@ -265,6 +348,7 @@ import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
 import LayoutFormButtons from "../../components/layout/LayoutFormButtons.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
+import BaseInputText from "../../components/basecomponents/BaseInputText.vue"
 import { useNotification } from "../../composables/notification"
 import socialService from "../../services/socialService"
 import { useSecurityStore } from "../../store/securityStore"
@@ -310,6 +394,102 @@ const deleteTermExplanation = ref("")
 const deleteAccountExplanation = ref("")
 const legalWithdrawalRequestPending = ref(false)
 const accountDeletionRequestPending = ref(false)
+
+const exportDialogVisible = ref(false)
+const exportAction = ref("download")
+const exportPassword = ref("")
+const exportUrl = ref("")
+const isExporting = ref(false)
+const exportOptions = reactive({
+  allowExportToUrl: false,
+  csrfToken: "",
+})
+
+const exportDialogTitle = computed(() => {
+  if (exportAction.value === "push") {
+    return t("Send your personal data to a URL")
+  }
+  if (exportAction.value === "download-xml") {
+    return t("Download your personal data as XML")
+  }
+
+  return t("Download your personal data as JSON-LD")
+})
+
+const exportSubmitLabel = computed(() => {
+  if (exportAction.value === "push") {
+    return t("Send")
+  }
+  if (exportAction.value === "download-xml") {
+    return t("Download as XML")
+  }
+
+  return t("Download as JSON-LD")
+})
+
+function resetExportForm() {
+  exportPassword.value = ""
+  exportUrl.value = ""
+  isExporting.value = false
+}
+
+function openExportDialog(action) {
+  exportAction.value = action
+  resetExportForm()
+  exportDialogVisible.value = true
+}
+
+async function fetchExportOptions() {
+  try {
+    const options = await socialService.fetchPersonalDataExportOptions()
+    exportOptions.allowExportToUrl = Boolean(options?.allow_export_to_url)
+    exportOptions.csrfToken = options?.csrf_token || ""
+  } catch {
+    exportOptions.allowExportToUrl = false
+    exportOptions.csrfToken = ""
+  }
+}
+
+async function submitExport() {
+  if (isExporting.value) {
+    return
+  }
+  if (exportPassword.value === "") {
+    showErrorNotification(t("Please type your current password."))
+    return
+  }
+  if (exportAction.value === "push" && exportUrl.value.trim() === "") {
+    showErrorNotification(t("Please enter an HTTPS URL."))
+    return
+  }
+
+  isExporting.value = true
+  try {
+    if (exportAction.value === "push") {
+      const response = await socialService.sendPersonalDataToUrl({
+        password: exportPassword.value,
+        csrfToken: exportOptions.csrfToken,
+        url: exportUrl.value.trim(),
+      })
+      showSuccessNotification(response.message || t("Your personal data was sent to the destination URL."))
+    } else {
+      await socialService.downloadPersonalData({
+        password: exportPassword.value,
+        csrfToken: exportOptions.csrfToken,
+        format: exportAction.value === "download-xml" ? "xml" : "json",
+      })
+      showSuccessNotification(t("Your personal data file has been downloaded."))
+    }
+    exportDialogVisible.value = false
+    resetExportForm()
+    await fetchExportOptions()
+  } catch (error) {
+    showErrorNotification(error.message || t("The export could not be completed."))
+  } finally {
+    isExporting.value = false
+    exportPassword.value = ""
+  }
+}
 
 const showTermsAndConditionsCard = computed(() => {
   return termsAndConditions.value.available && termsAndConditions.value.items.length > 0
@@ -523,7 +703,7 @@ async function fetchLegalStatus() {
 
 async function updateUserData() {
   try {
-    await Promise.all([fetchPersonalData(), fetchTermsAndConditions(), fetchLegalStatus()])
+    await Promise.all([fetchPersonalData(), fetchTermsAndConditions(), fetchLegalStatus(), fetchExportOptions()])
   } catch (error) {
     console.error("Error updating user data:", error)
     showErrorNotification("Error updating user data.")

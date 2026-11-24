@@ -4014,6 +4014,18 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Disable making tool users visible in public courses',
                     'comment' => "Avoid anyone making the 'users' tool visible in a public course.",
                 ],
+                [
+                    'name' => 'allow_personal_data_export_to_url',
+                    'title' => 'Allow users to send their personal data export to a URL',
+                    'comment' => 'When enabled, a user can ask Chamilo to POST their personal data (JSON) to an HTTPS address they provide. The request is signed and private or internal addresses are blocked. Disabled by default.',
+                    'selected_value' => 'false',
+                ],
+                [
+                    'name' => 'personal_data_export_hmac_secret',
+                    'title' => 'HMAC secret for personal data export to a URL',
+                    'comment' => 'Shared secret used to sign POST requests when a user sends their personal data to another service. Share it only with receiving services so they can verify the signature. Leave empty to generate one automatically on first use. Rotate it if it may have been disclosed.',
+                    'selected_value' => '',
+                ],
             ],
             'tracking' => [
                 [

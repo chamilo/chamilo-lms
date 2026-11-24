@@ -89,6 +89,14 @@ services:
         alias: security.csrf.token_manager
         public: true
 
+    Chamilo\CoreBundle\Service\PersonalDataExport\DnsHostResolver:
+        alias: Chamilo\CoreBundle\Service\PersonalDataExport\PhpDnsHostResolver
+        public: true
+
+    chamilo.personal_data_export.http_client:
+        alias: Symfony\Contracts\HttpClient\HttpClientInterface
+        public: true
+
     chamilo.session.handler.database:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
         lazy: true

@@ -47,8 +47,8 @@ if ('true' === $allowTutors) {
     $tool_name = get_lang('Subscribe users to this session');
     $add_type = 'unique';
 
-    if (isset($_REQUEST['add_type']) && '' != $_REQUEST['add_type']) {
-        $add_type = Security::remove_XSS($_REQUEST['add_type']);
+    if (isset($_REQUEST['add_type']) && in_array($_REQUEST['add_type'], ['unique', 'multiple'], true)) {
+        $add_type = $_REQUEST['add_type'];
     }
 
     $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;

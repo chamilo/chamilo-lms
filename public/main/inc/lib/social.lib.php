@@ -200,18 +200,28 @@ class SocialManager extends UserManager
             return [];
         }
 
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = 'SELECT user_sender_id, send_date, title, content
-                FROM '.$table.'
-                WHERE
-                    user_receiver_id = '.$userId.' AND
-                    msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
-        if (null != $limit && $limit > 0) {
-            $sql .= ' LIMIT '.$limit;
+        // The recipients live in message_rel_user and the status column of `message` is `status`: the invitations
+        // still waiting for an answer are the messages of the invitation type received by this user.
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(m.sender) AS user_sender_id', 'm.sendDate AS send_date', 'm.title AS title', 'm.content AS content')
+            ->from(Message::class, 'm')
+            ->innerJoin('m.receivers', 'mr')
+            ->where('IDENTITY(mr.receiver) = :userId')
+            ->andWhere('m.msgType = :type')
+            ->andWhere('m.status = :status')
+            ->orderBy('m.sendDate', 'DESC')
+            ->addOrderBy('m.id', 'DESC')
+            ->setParameter('userId', $userId)
+            ->setParameter('type', Message::MESSAGE_TYPE_INVITATION)
+            ->setParameter('status', Message::MESSAGE_STATUS_INVITATION_PENDING)
+        ;
+        if ($limit > 0) {
+            $qb->setMaxResults($limit);
         }
-        $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            // The old query returned the date as the string of the column.
+            $row['send_date'] = $row['send_date'] instanceof DateTimeInterface ? $row['send_date']->format('Y-m-d H:i:s') : $row['send_date'];
             $list[] = $row;
         }
 

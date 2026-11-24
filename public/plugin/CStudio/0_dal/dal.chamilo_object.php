@@ -2,14 +2,22 @@
 
 declare(strict_types=1);
 
+use Chamilo\CourseBundle\Entity\CLp;
+
 function get_lp_Id($idPageT)
 {
     $idPageT = (int) $idPageT;
     $lpid = 0;
 
-    $sql = "SELECT lp_id FROM plugin_oel_tools_teachdoc WHERE id = $idPageT ";
-    $result = Database::query($sql);
-    while ($Part = Database::fetch_array($result)) {
+    $rows = Database::getManager()->getConnection()->createQueryBuilder()
+        ->select('lp_id')
+        ->from('plugin_oel_tools_teachdoc')
+        ->where('id = :id')
+        ->setParameter('id', $idPageT)
+        ->executeQuery()
+        ->fetchAllAssociative()
+    ;
+    foreach ($rows as $Part) {
         $lpid = $Part['lp_id'];
     }
 
@@ -24,6 +32,7 @@ function get_directory($lpid)
     $tblCLp = Database::get_course_table(TABLE_LP_MAIN);
     $courseDir = '';
     $sqlC = "SELECT directory FROM $course_table INNER JOIN $tblCLp ON $tblCLp.c_id = $course_table.id WHERE $tblCLp.iid = $lpid";
+    // Broken today: c_lp.c_id does not exist anymore (Unknown column), left raw.
     $resultC = Database::query($sqlC);
     while ($PartC = Database::fetch_array($resultC)) {
         $courseDir = $PartC['directory'];
@@ -34,29 +43,40 @@ function get_directory($lpid)
 
 function update_lp_infos($lp_id, $title, $local_folder): void
 {
-    $tblCLp = Database::get_course_table(TABLE_LP_MAIN);
-    $title = oel_escape_string($title);
-    $local_folder = oel_escape_string($local_folder);
     $lp_id = (int) $lp_id;
-    $sqlU = "UPDATE $tblCLp SET $tblCLp.path = '$local_folder/.' , $tblCLp.default_view_mod = 'embedframe' , $tblCLp.title = '$title' ";
-    $sqlU .= " WHERE $tblCLp.iid = $lp_id;";
-    Database::query($sqlU);
+    Database::getManager()->createQueryBuilder()
+        ->update(CLp::class, 'lp')
+        ->set('lp.path', ':path')
+        ->set('lp.defaultViewMod', ':viewMod')
+        ->set('lp.title', ':title')
+        ->where('lp.iid = :iid')
+        ->setParameter('path', (string) $local_folder.'/.')
+        ->setParameter('viewMod', 'embedframe')
+        ->setParameter('title', (string) $title)
+        ->setParameter('iid', $lp_id)
+        ->getQuery()
+        ->execute()
+    ;
 }
 
 function getCollectionPages($idPage): array
 {
     $idPage = (int) $idPage;
     $result = [];
-    $sql = 'SELECT id , title , type_node , behavior , ';
-    $sql .= ' colors , quizztheme , leveldoc ';
-    $sql .= ' FROM plugin_oel_tools_teachdoc ';
-    $sql .= " WHERE id = $idPage;";
+    $connection = Database::getManager()->getConnection();
 
     $ip = 0;
     $ipReal = 0;
-    $resultOne = Database::query($sql);
+    $resultOne = $connection->createQueryBuilder()
+        ->select('id', 'title', 'type_node', 'behavior', 'colors', 'quizztheme', 'leveldoc')
+        ->from('plugin_oel_tools_teachdoc')
+        ->where('id = :id')
+        ->setParameter('id', $idPage)
+        ->executeQuery()
+        ->fetchAllAssociative()
+    ;
 
-    while ($row = Database::fetch_array($resultOne)) {
+    foreach ($resultOne as $row) {
         if ('' == $row['colors']) {
             $row['colors'] = 'white-chami.css';
         }
@@ -87,11 +107,17 @@ function getCollectionPages($idPage): array
     ++$ip;
     ++$ipReal;
 
-    $sqlSubs = 'SELECT id , title , type_node , behavior , leveldoc , colors , quizztheme FROM plugin_oel_tools_teachdoc ';
-    $sqlSubs .= " WHERE type_node <> -1 AND behavior <> 3 AND id_parent = $idPage ORDER BY order_lst;";
-    $resultSubs = Database::query($sqlSubs);
+    $resultSubs = $connection->createQueryBuilder()
+        ->select('id', 'title', 'type_node', 'behavior', 'leveldoc', 'colors', 'quizztheme')
+        ->from('plugin_oel_tools_teachdoc')
+        ->where('type_node <> -1 AND behavior <> 3 AND id_parent = :parent')
+        ->setParameter('parent', $idPage)
+        ->orderBy('order_lst', 'ASC')
+        ->executeQuery()
+        ->fetchAllAssociative()
+    ;
 
-    while ($rowS = Database::fetch_array($resultSubs)) {
+    foreach ($resultSubs as $rowS) {
         if ('' == $rowS['colors']) {
             $rowS['colors'] = 'white-chami.css';
         }
@@ -131,12 +157,16 @@ function getAlonePages($idPage): array
 
     $ip = 0;
 
-    $sqlSubs = 'SELECT id , title , type_node , behavior , leveldoc , colors , quizztheme ';
-    $sqlSubs .= ' FROM plugin_oel_tools_teachdoc ';
-    $sqlSubs .= " WHERE behavior = 3 AND id_parent = $idPage;";
-    $resultSubs = Database::query($sqlSubs);
+    $resultSubs = Database::getManager()->getConnection()->createQueryBuilder()
+        ->select('id', 'title', 'type_node', 'behavior', 'leveldoc', 'colors', 'quizztheme')
+        ->from('plugin_oel_tools_teachdoc')
+        ->where('behavior = 3 AND id_parent = :parent')
+        ->setParameter('parent', $idPage)
+        ->executeQuery()
+        ->fetchAllAssociative()
+    ;
 
-    while ($rowS = Database::fetch_array($resultSubs)) {
+    foreach ($resultSubs as $rowS) {
         if ('' == $rowS['colors']) {
             $rowS['colors'] = 'white-chami.css';
         }

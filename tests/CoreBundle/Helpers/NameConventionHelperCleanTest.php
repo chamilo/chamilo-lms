@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * #1783: with registration.firstname_required off, a user can have a last name only. The formatted name must not
- * keep the space or comma meant to separate the missing first name.
+ * keep the space or the comma meant to separate the missing first name.
  */
 final class NameConventionHelperCleanTest extends TestCase
 {

@@ -13,8 +13,8 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * #1783: registration.firstname_required controls whether the admin user forms accept an empty
- * first name. The last name remains required for both setting values.
+ * #1783: registration.firstname_required (default on) decides whether the admin user forms accept a user without a
+ * first name. The last name stays required either way.
  */
 final class UserFirstnameRequiredSettingTest extends WebTestCase
 {

@@ -82,6 +82,41 @@ final class StudentPublicationHtmlFileViewTest extends AbstractApiTest
     }
 
     /**
+     * Browsers run the script of an XML file that uses the XHTML namespace, so XML is held to the same rule.
+     */
+    public function testXhtmlSubmissionFileIsDownloadedByTheTeacher(): void
+    {
+        $ctx = $this->bootstrap('xml');
+
+        $submission = (new CStudentPublication())
+            ->setTitle('XML submission')
+            ->setDescription('')
+            ->setPublicationParent($ctx['assignment'])
+            ->setParent($ctx['assignment'])
+            ->setFiletype('file')
+            ->setWeight(100)
+            ->setCreator($ctx['student'])
+            ->setUser($ctx['student'])
+            ->setActive(1)
+            ->setAccepted(true)
+            ->addCourseLink($ctx['course'])
+        ;
+
+        /** @var CStudentPublicationRepository $repository */
+        $repository = self::getContainer()->get(CStudentPublicationRepository::class);
+        $repository->create($submission);
+        $repository->addFileFromString(
+            $submission,
+            'submission.xml',
+            'text/xml',
+            '<?xml version="1.0"?><html xmlns="http://www.w3.org/1999/xhtml"><script>window.probe = 1;</script></html>',
+            true
+        );
+
+        $this->assertNotRenderedAsHtml($ctx['teacher'], $submission, $ctx['course']);
+    }
+
+    /**
      * @return array{course: Course, teacher: User, student: User, assignment: CStudentPublication}
      */
     private function bootstrap(string $suffix): array
@@ -136,6 +171,7 @@ final class StudentPublicationHtmlFileViewTest extends AbstractApiTest
 
         $headers = $client->getResponse()->getHeaders(false);
         $this->assertStringNotContainsString('html', $headers['content-type'][0] ?? '');
+        $this->assertStringNotContainsString('xml', $headers['content-type'][0] ?? '');
         $this->assertStringStartsWith('attachment', $headers['content-disposition'][0] ?? '');
     }
 }

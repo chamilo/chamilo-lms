@@ -104,6 +104,31 @@ class AssetControllerTest extends WebTestCase
         }
     }
 
+    /**
+     * The storage resolves ".." and "\" in the path, so a link that names the SCORM category but walks
+     * out of it must not bring back inline rendering for a user upload.
+     */
+    public function testShowFileDoesNotTrustTheCategoryOfATraversingPath(): void
+    {
+        $client = static::createClient();
+        $assetRepo = self::getContainer()->get(AssetRepository::class);
+        $dir = 'test_traversal_'.uniqid();
+        $assetRepo->getFileSystem()->write(Asset::EXTRA_FIELD.'/'.$dir.'/profile.html', '<!doctype html><p>asset</p>');
+
+        try {
+            foreach (['/assets/scorm/..%5Cef/', '/assets/scorm/../ef/', '/assets/scorm/x/..%5C..%5Cef/'] as $prefix) {
+                $client->request('GET', $prefix.$dir.'/profile.html');
+                $this->assertResponseIsSuccessful($prefix);
+
+                $headers = $client->getResponse()->headers;
+                $this->assertSame('application/octet-stream', $headers->get('Content-Type'), $prefix);
+                $this->assertStringStartsWith('attachment', (string) $headers->get('Content-Disposition'), $prefix);
+            }
+        } finally {
+            $assetRepo->getFileSystem()->deleteDirectory(Asset::EXTRA_FIELD.'/'.$dir);
+        }
+    }
+
     private function createMarkupAsset(string $category, string $title): string
     {
         $path = tempnam(sys_get_temp_dir(), 'asset');

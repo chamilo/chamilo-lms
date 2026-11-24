@@ -143,6 +143,23 @@ class ColorThemeApiSecurityTest extends AbstractApiTest
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
+    public function testPutIsNotExposed(): void
+    {
+        // PUT replaced the theme with an unmanaged object that the portal check
+        // never found (#9591). Updates go through PATCH only.
+        $theme = $this->createBoundTheme('theme_sec_put', $this->getAccessUrl());
+        $admin = $this->createUser('theme_admin', '', '', 'ROLE_ADMIN');
+
+        $this
+            ->createClientWithCredentials($this->getUserTokenFromUser($admin))
+            ->request('PUT', '/api/color_themes/'.$theme->getId(), [
+                'json' => ['title' => 'theme_sec_put_2', 'variables' => $this->validPalette()],
+            ])
+        ;
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_METHOD_NOT_ALLOWED);
+    }
+
     /**
      * @return array<string, string>
      */

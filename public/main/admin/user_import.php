@@ -35,7 +35,10 @@ function validate_data($users, $checkUniqueEmail = false)
     $usernames = [];
 
     // 1. Check if mandatory fields are set.
-    $mandatory_fields = ['LastName', 'FirstName'];
+    $mandatory_fields = ['LastName'];
+    if ('false' !== api_get_setting('registration.firstname_required')) {
+        $mandatory_fields[] = 'FirstName';
+    }
     if ('true' === api_get_setting('registration', false, 'email') || $checkUniqueEmail) {
         $mandatory_fields[] = 'Email';
     }
@@ -147,7 +150,7 @@ function complete_missing_data($user)
     // 1. Create a username if necessary.
     if (UserManager::is_username_empty($username)) {
         $user['UserName'] = UserManager::create_unique_username(
-            $user['FirstName'],
+            $user['FirstName'] ?? '',
             $user['LastName']
         );
     } else {
@@ -232,7 +235,7 @@ function save_data($users, $sendMail = false)
             $redirection = isset($user['Redirection']) ? $user['Redirection'] : '';
 
             $user_id = UserManager::create_user(
-                $user['FirstName'],
+                $user['FirstName'] ?? '',
                 $user['LastName'],
                 $user['Status'],
                 $user['Email'],
@@ -413,8 +416,8 @@ function parse_csv_data($users, $fileName, $sendEmail = 0, $checkUniqueEmail = t
             continue;
         }
 
-        // FirstName is needed.
-        if (!isset($user['FirstName']) || (isset($user['FirstName']) && empty($user['FirstName']))) {
+        // FirstName is needed unless the platform permits users without one.
+        if ('false' !== api_get_setting('registration.firstname_required') && empty($user['FirstName'])) {
             unset($users[$index]);
             continue;
         }
@@ -499,7 +502,7 @@ function processUsers(&$users, $sendMail)
             $userData =
                 '<strong>'.$user['UserName'].'</strong> - '.
                 api_get_person_name(
-                    $user['FirstName'],
+                    $user['FirstName'] ?? '',
                     $user['LastName']
                 ).' '.$email;
             $table->setCellContents($row, $column, $userData);
@@ -799,10 +802,16 @@ if ('true' === api_get_setting('workflows.plugin_redirection_enabled')) {
     $list_reponse[] = api_get_path(WEB_PATH);
 }
 
+$firstnameIsRequired = 'false' !== api_get_setting('registration.firstname_required');
+$firstNameCsvHeader = $firstnameIsRequired ? '<b>FirstName</b>' : 'FirstName';
+$firstNameXmlExample = $firstnameIsRequired
+    ? '<b>&lt;FirstName&gt;xxx&lt;/FirstName&gt;</b>'
+    : '&lt;FirstName&gt;xxx&lt;/FirstName&gt;';
+
 $content = '<p>'.get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').') :</p>
 <blockquote class="w-full overflow-auto bg-gray-100 border-s-4 border-gray-400 p-4 rounded-md text-sm font-mono">
 <pre>
-<b>LastName</b>,<b>FirstName</b>,<b>Email</b>,UserName,Password,AuthSource,OfficialCode,language,PhoneNumber,Status,ExpiryDate,<span class="text-red-500">';
+<b>LastName</b>,'.$firstNameCsvHeader.',<b>Email</b>,UserName,Password,AuthSource,OfficialCode,language,PhoneNumber,Status,ExpiryDate,<span class="text-red-500">';
 if (count($list) > 0) {
     $content .= implode(',', $list).',';
 }
@@ -824,7 +833,7 @@ $content .= '</span>xxx1|xxx2|xxx3,sessionId|sessionId|sessionId,1<br />
 &lt;Contacts&gt;
     &lt;Contact&gt;
         <b>&lt;LastName&gt;xxx&lt;/LastName&gt;</b>
-        <b>&lt;FirstName&gt;xxx&lt;/FirstName&gt;</b>
+        '.$firstNameXmlExample.'
         &lt;UserName&gt;xxx&lt;/UserName&gt;
         &lt;Password&gt;xxx&lt;/Password&gt;
         &lt;AuthSource&gt;'.implode(' / ', $defined_auth_sources).'&lt;/AuthSource&gt;

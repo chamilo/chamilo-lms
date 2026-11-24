@@ -19,11 +19,13 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceNode;
+use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Upload\AntivirusGuard;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 
 const ONLYOFFICE_CALLBACK_LOG_ENABLED = false;
@@ -509,6 +511,16 @@ function resolveDocumentSource(int $docId, int $resourceNodeId, string $courseCo
     }
 
     if ($resourceNodeId > 0) {
+        if (!resourceNodeBelongsToSignedContext($resourceNodeId, $courseId, $sessionId)) {
+            onlyofficeLog('WARNING', 'ResourceNode does not belong to the signed course', [
+                'resourceNodeId' => $resourceNodeId,
+                'courseId' => $courseId,
+                'sessionId' => $sessionId,
+            ]);
+
+            return null;
+        }
+
         $resolved = resolveResourceNodeSourceFromC2($resourceNodeId);
         if (null !== $resolved) {
             return $resolved;
@@ -689,6 +701,76 @@ function resolveDocumentSourceFromC2(int $docId, int $courseId = 0): ?array
         'size' => $size,
         'mimeType' => $mimeType,
     ];
+}
+
+/**
+ * The signature proves who issued the hash, not that the node belongs to the signed course.
+ * A node is accepted only as an attempt file of an attempt in that course (and session),
+ * or as the node of a question of a quiz linked to that course.
+ */
+function resourceNodeBelongsToSignedContext(int $resourceNodeId, int $courseId, int $sessionId): bool
+{
+    if ($resourceNodeId <= 0 || $courseId <= 0) {
+        return false;
+    }
+
+    $entityManager = getEntityManager();
+    if (null === $entityManager) {
+        return false;
+    }
+
+    try {
+        $queryBuilder = $entityManager->createQueryBuilder()
+            ->select('saved.id')
+            ->from(TrackEAttempt::class, 'saved')
+            ->innerJoin('saved.trackExercise', 'exerciseAttempt')
+            ->innerJoin('saved.attemptFiles', 'attemptFile')
+            ->andWhere('IDENTITY(attemptFile.resourceNode) = :resourceNodeId')
+            ->andWhere('IDENTITY(exerciseAttempt.course) = :courseId')
+            ->setParameter('resourceNodeId', $resourceNodeId)
+            ->setParameter('courseId', $courseId)
+            ->setMaxResults(1)
+        ;
+
+        if ($sessionId > 0) {
+            $queryBuilder
+                ->andWhere('IDENTITY(exerciseAttempt.session) = :sessionId')
+                ->setParameter('sessionId', $sessionId)
+            ;
+        } else {
+            $queryBuilder->andWhere('exerciseAttempt.session IS NULL');
+        }
+
+        if (null !== $queryBuilder->getQuery()->getOneOrNullResult()) {
+            return true;
+        }
+
+        $question = $entityManager->getRepository(CQuizQuestion::class)->findOneBy(['resourceNode' => $resourceNodeId]);
+        if (!$question instanceof CQuizQuestion) {
+            return false;
+        }
+
+        foreach ($question->getRelQuizzes() as $relation) {
+            $quizNode = $relation->getQuiz()?->getResourceNode();
+            if (!$quizNode instanceof ResourceNode) {
+                continue;
+            }
+
+            foreach ($quizNode->getResourceLinks() as $link) {
+                $linkedCourse = $link->getCourse();
+                if (null !== $linkedCourse && (int) $linkedCourse->getId() === $courseId) {
+                    return true;
+                }
+            }
+        }
+    } catch (\Throwable $exception) {
+        onlyofficeLog('ERROR', 'Failed to validate the resource node course', [
+            'message' => $exception->getMessage(),
+            'resourceNodeId' => $resourceNodeId,
+        ]);
+    }
+
+    return false;
 }
 
 /**

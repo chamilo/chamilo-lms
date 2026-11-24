@@ -27,8 +27,8 @@ $interbreadcrumb[] = ['url' => 'career_dashboard.php', 'name' => get_lang('Caree
 // Setting the name of the tool
 $tool_name = get_lang('Subscribe sessions to promotions');
 $add_type = 'multiple';
-if (isset($_REQUEST['add_type']) && '' != $_REQUEST['add_type']) {
-    $add_type = Security::remove_XSS($_REQUEST['add_type']);
+if (isset($_REQUEST['add_type']) && in_array($_REQUEST['add_type'], ['unique', 'multiple'], true)) {
+    $add_type = $_REQUEST['add_type'];
 }
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');

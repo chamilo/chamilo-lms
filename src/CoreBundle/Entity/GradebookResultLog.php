@@ -105,7 +105,7 @@ class GradebookResultLog
      *
      * @return GradebookResultLog
      */
-    public function setScore(float $score)
+    public function setScore(?float $score)
     {
         $this->score = $score;
 

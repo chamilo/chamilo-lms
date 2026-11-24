@@ -1533,7 +1533,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     // Send message link
     $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;
     $result['complete_name_with_message_link'] = Display::url(
-        $result['complete_name_with_username'],
+        htmlspecialchars((string) $result['complete_name_with_username'], ENT_QUOTES, 'UTF-8'),
         $sendMessage,
         ['class' => 'ajax']
     );
@@ -1811,7 +1811,7 @@ function api_get_user_info_from_entity(
     // Send message link
     $sendMessage = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_popup&user_id='.$user_id;
     $result['complete_name_with_message_link'] = Display::url(
-        $result['complete_name_with_username'],
+        htmlspecialchars((string) $result['complete_name_with_username'], ENT_QUOTES, 'UTF-8'),
         $sendMessage,
         ['class' => 'ajax']
     );
@@ -3978,7 +3978,7 @@ function api_get_languages_with_platform_default(): array
  *
  * @param   string  language name (the corresponding name of the language-folder in the filesystem)
  *
- * @return int id of the language
+ * @return int|null id of the language, null when no language matches
  */
 function api_get_language_id($language)
 {

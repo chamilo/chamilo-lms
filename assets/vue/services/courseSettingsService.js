@@ -28,6 +28,15 @@ export default {
     return await baseService.post("/api/course-settings", { values }, {}, { params: cleanParams(params) })
   },
 
+  async saveIntroductionPosition(position, params = {}) {
+    return await baseService.post(
+      "/api/course-settings/introduction-position",
+      { position },
+      {},
+      { params: cleanParams(params) },
+    )
+  },
+
   async uploadPicture(file, params = {}) {
     return await baseService.post("/api/course-settings/picture", formData(file), {}, { params: cleanParams(params) })
   },

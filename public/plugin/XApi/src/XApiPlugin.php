@@ -37,6 +37,10 @@ class XApiPlugin extends Plugin
     public const STATE_FIRST_LAUNCH = 'first_launch';
     public const STATE_LAST_LAUNCH = 'last_launch';
 
+    // User name of the per-launch credentials given to TinCan content for the platform LRS.
+    public const LAUNCH_AUTH_USER = 'chamilo-launch';
+    private const LAUNCH_AUTH_TTL = 86400;
+
     public $isAdminPlugin = true;
     public $isCoursePlugin = true;
 
@@ -240,6 +244,95 @@ class XApiPlugin extends Plugin
     public function getTinCanStateId(int $toolId): string
     {
         return $this->generateIri('tool-'.$toolId, 'state');
+    }
+
+    /**
+     * Credentials for one TinCan launch against the platform LRS. The launched content gets them in its URL, so
+     * they only let it act as its own learner on its own activity, until they expire.
+     *
+     * @param array<string, mixed> $actor
+     */
+    public static function createLaunchAuthorization(array $actor, string $activityId, string $registration): string
+    {
+        $payload = self::base64UrlEncode((string) json_encode(
+            [
+                // Kept as sent to the content: the LRS filters statements on these exact values.
+                'agent' => array_intersect_key($actor, array_flip(['mbox', 'mbox_sha1sum', 'openid', 'account'])),
+                'activity' => $activityId,
+                'registration' => $registration,
+                'expires' => time() + self::LAUNCH_AUTH_TTL,
+            ],
+            JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+        ));
+
+        return 'Basic '.base64_encode(self::LAUNCH_AUTH_USER.':'.$payload.'.'.self::signLaunchPayload($payload));
+    }
+
+    /**
+     * The launch that per-launch credentials are limited to, or null when they are not valid ones.
+     *
+     * @return array{agent: array<string, mixed>, activity: string, registration: string}|null
+     */
+    public static function readLaunchAuthorization(string $basicValue): ?array
+    {
+        $decoded = base64_decode($basicValue, true);
+        if (false === $decoded || !str_starts_with($decoded, self::LAUNCH_AUTH_USER.':')) {
+            return null;
+        }
+
+        $token = substr($decoded, \strlen(self::LAUNCH_AUTH_USER) + 1);
+        $separator = strrpos($token, '.');
+        if (false === $separator) {
+            return null;
+        }
+
+        $payload = substr($token, 0, $separator);
+        if (!hash_equals(self::signLaunchPayload($payload), substr($token, $separator + 1))) {
+            return null;
+        }
+
+        $data = json_decode((string) base64_decode(strtr($payload, '-_', '+/'), true), true);
+        if (!\is_array($data)
+            || !\is_array($data['agent'] ?? null) || [] === self::getAgentIdentifier($data['agent'])
+            || (int) ($data['expires'] ?? 0) < time()
+        ) {
+            return null;
+        }
+
+        return [
+            'agent' => $data['agent'],
+            'activity' => (string) ($data['activity'] ?? ''),
+            'registration' => (string) ($data['registration'] ?? ''),
+        ];
+    }
+
+    /**
+     * The inverse functional identifier of an xAPI agent (the fields that identify it), normalized for comparison.
+     *
+     * @param array<string, mixed> $agent
+     *
+     * @return array<string, mixed>
+     */
+    public static function getAgentIdentifier(array $agent): array
+    {
+        if (\is_string($agent['mbox'] ?? null) && '' !== trim($agent['mbox'])) {
+            return ['mbox' => strtolower(trim($agent['mbox']))];
+        }
+
+        if (\is_string($agent['mbox_sha1sum'] ?? null) && '' !== trim($agent['mbox_sha1sum'])) {
+            return ['mbox_sha1sum' => strtolower(trim($agent['mbox_sha1sum']))];
+        }
+
+        if (\is_string($agent['openid'] ?? null) && '' !== trim($agent['openid'])) {
+            return ['openid' => trim($agent['openid'])];
+        }
+
+        $account = $agent['account'] ?? null;
+        if (\is_array($account) && \is_string($account['name'] ?? null) && \is_string($account['homePage'] ?? null)) {
+            return ['account' => ['homePage' => trim($account['homePage']), 'name' => trim($account['name'])]];
+        }
+
+        return [];
     }
 
     public function fetchActivityStateDocument(
@@ -671,9 +764,15 @@ class XApiPlugin extends Plugin
         ];
 
         if ('tincan' === $type) {
-            $queryData['auth'] = 'Basic '.base64_encode(
-                    trim((string) $lrsAuthUsername).':'.trim((string) $lrsAuthPassword)
-                );
+            // The content receives these credentials in its URL, so the platform LRS gets ones limited to this
+            // launch. An external LRS is not ours to scope: it keeps the credentials configured for it.
+            $queryData['auth'] = $this->isLocalChamiloUrl($lrsUrl)
+                ? self::createLaunchAuthorization(
+                    (array) json_decode($actorJson, true),
+                    (string) $activityId,
+                    (string) $attemptId
+                )
+                : 'Basic '.base64_encode(trim((string) $lrsAuthUsername).':'.trim((string) $lrsAuthPassword));
             $queryData['activity_id'] = $activityId;
         } elseif ('cmi5' === $type) {
             $fetchUrl = api_get_path(WEB_PLUGIN_PATH).'XApi/cmi5/token.php';
@@ -698,6 +797,16 @@ class XApiPlugin extends Plugin
         }
 
         return $finalUrl;
+    }
+
+    private static function base64UrlEncode(string $value): string
+    {
+        return rtrim(strtr(base64_encode($value), '+/', '-_'), '=');
+    }
+
+    private static function signLaunchPayload(string $payload): string
+    {
+        return hash_hmac('sha256', 'xapi-launch|'.$payload, (string) Container::getParameter('kernel.secret'));
     }
 
     /**

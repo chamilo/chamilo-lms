@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use XApiPlugin;
 
 /**
  * Class LrsRequest.
@@ -90,6 +91,13 @@ class LrsRequest
 
         if ('' === $basicValue) {
             throw new AccessDeniedHttpException('Empty Authorization header.');
+        }
+
+        $launchScope = XApiPlugin::readLaunchAuthorization($basicValue);
+        if (null !== $launchScope) {
+            $this->request->attributes->set(BaseController::LAUNCH_SCOPE, $launchScope);
+
+            return true;
         }
 
         if ($this->isValidLegacyBasicAuth($basicValue)) {

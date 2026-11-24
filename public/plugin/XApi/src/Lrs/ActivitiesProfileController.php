@@ -51,6 +51,12 @@ class ActivitiesProfileController extends BaseController
         $activityId = (string) $this->httpRequest->query->get('activityId', '');
         $documentDataJson = $this->httpRequest->getContent();
 
+        // An activity profile is shared by every learner: launched content may only write the one of its activity.
+        $launchScope = $this->getLaunchScope();
+        if (null !== $launchScope && $activityId !== $launchScope['activity']) {
+            return new Response('', Response::HTTP_FORBIDDEN);
+        }
+
         $em = Database::getManager();
         $profileRepo = $em->getRepository(XApiActivityProfile::class);
 

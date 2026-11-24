@@ -163,6 +163,12 @@
             </a>
             {% endif %}
 
+            {% if nano_enable %}
+            <a href="#nano-config" class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:bg-support-2 hover:text-primary">
+                Nano (XNO)
+            </a>
+            {% endif %}
+
             {% if cecabank_enable %}
             <a href="#cecabank-config" class="inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-90 transition hover:bg-support-2 hover:text-primary">
                 Cecabank
@@ -507,6 +513,27 @@
             });
         });
     </script>
+    {% endif %}
+
+    {% if nano_enable %}
+    <section id="nano-config" class="overflow-hidden rounded-3xl border border-gray-25 bg-white shadow-sm">
+        <div class="border-b border-gray-25 bg-gray-15 px-6 py-4">
+            <div class="space-y-1">
+                <h2 class="text-lg font-semibold text-gray-90">Nano (XNO)</h2>
+                <p class="text-sm text-gray-50">
+                    {{ 'NanoSetupHelp'|get_plugin_lang('BuyCoursesPlugin') }}
+                </p>
+            </div>
+        </div>
+        <div class="p-6">
+            <div class="space-y-4">
+                <p class="text-sm font-semibold {{ nano_configured ? 'text-success' : 'text-danger' }}">
+                    {{ (nano_configured ? 'NanoReady' : 'NanoNotReady')|get_plugin_lang('BuyCoursesPlugin') }}
+                </p>
+                {{ nano_form }}
+            </div>
+        </div>
+    </section>
     {% endif %}
 
     {% if cecabank_enable %}

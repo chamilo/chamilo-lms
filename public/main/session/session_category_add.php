@@ -6,8 +6,6 @@
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
-$xajax = new xajax();
-$xajax->registerFunction('search_coachs');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;

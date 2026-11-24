@@ -75,6 +75,7 @@ final class UserAddController extends AbstractController
             'westernNameOrder' => api_is_western_name_order(),
             'loginIsEmail' => 'true' === api_get_setting('login_is_email'),
             'emailRequired' => 'true' === api_get_setting('registration', 'email'),
+            'firstnameRequired' => 'false' !== api_get_setting('registration.firstname_required'),
             'hideNeverExpireOption' => 'true' === api_get_setting('registration.user_hide_never_expire_option') && !$this->isGranted('ROLE_ADMIN'),
             'adminsCanSetUsersPass' => 'true' === api_get_setting('security.admins_can_set_users_pass'),
             'defaultExpirationDate' => api_get_local_time('+'.$days.' day'),
@@ -103,7 +104,7 @@ final class UserAddController extends AbstractController
         $firstname = self::sanitizePlainText((string) $payload->get('firstname', ''));
         $lastname = self::sanitizePlainText((string) $payload->get('lastname', ''));
 
-        if ('' === $firstname || '' === $lastname) {
+        if ('' === $lastname || ('' === $firstname && 'false' !== api_get_setting('registration.firstname_required'))) {
             return $this->json(['error' => $this->translator->trans('Required field')], Response::HTTP_BAD_REQUEST);
         }
 

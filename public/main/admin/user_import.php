@@ -35,7 +35,10 @@ function validate_data($users, $checkUniqueEmail = false)
     $usernames = [];
 
     // 1. Check if mandatory fields are set.
-    $mandatory_fields = ['LastName', 'FirstName'];
+    $mandatory_fields = ['LastName'];
+    if ('false' !== api_get_setting('registration.firstname_required')) {
+        $mandatory_fields[] = 'FirstName';
+    }
     if ('true' === api_get_setting('registration', false, 'email') || $checkUniqueEmail) {
         $mandatory_fields[] = 'Email';
     }
@@ -147,7 +150,7 @@ function complete_missing_data($user)
     // 1. Create a username if necessary.
     if (UserManager::is_username_empty($username)) {
         $user['UserName'] = UserManager::create_unique_username(
-            $user['FirstName'],
+            $user['FirstName'] ?? '',
             $user['LastName']
         );
     } else {
@@ -232,7 +235,7 @@ function save_data($users, $sendMail = false)
             $redirection = isset($user['Redirection']) ? $user['Redirection'] : '';
 
             $user_id = UserManager::create_user(
-                $user['FirstName'],
+                $user['FirstName'] ?? '',
                 $user['LastName'],
                 $user['Status'],
                 $user['Email'],
@@ -413,8 +416,8 @@ function parse_csv_data($users, $fileName, $sendEmail = 0, $checkUniqueEmail = t
             continue;
         }
 
-        // FirstName is needed.
-        if (!isset($user['FirstName']) || (isset($user['FirstName']) && empty($user['FirstName']))) {
+        // FirstName is needed, unless the platform allows users without one.
+        if ('false' !== api_get_setting('registration.firstname_required') && empty($user['FirstName'])) {
             unset($users[$index]);
             continue;
         }
@@ -499,7 +502,7 @@ function processUsers(&$users, $sendMail)
             $userData =
                 '<strong>'.$user['UserName'].'</strong> - '.
                 api_get_person_name(
-                    $user['FirstName'],
+                    $user['FirstName'] ?? '',
                     $user['LastName']
                 ).' '.$email;
             $table->setCellContents($row, $column, $userData);

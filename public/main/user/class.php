@@ -317,6 +317,130 @@ echo $actions;
 echo Display::return_message(get_lang('Information: The list of classes below contains the list of classes you have already registered in your course. If this list is empty, use the + green above to add classes.'));
 $usergroup->display_teacher_view();
 
+// Members preview: the "Users" count of a class opens this dialog, filled page by page from
+// /usergroup-members-data/{id}, which checks that the viewer may see that class.
+$membersStrings = [
+    'title' => get_lang('Class members'),
+    'name' => get_lang('Name'),
+    'username' => get_lang('Username'),
+    'previous' => get_lang('Previous'),
+    'next' => get_lang('Next'),
+    'empty' => get_lang('No users in this class'),
+    'error' => get_lang('An error occurred'),
+    'loading' => get_lang('Loading'),
+];
+$membersContext = [
+    'cid' => api_get_course_int_id(),
+    'sid' => api_get_session_id(),
+    'url' => api_get_path(WEB_PATH).'usergroup-members-data/',
+];
+?>
+    <dialog id="usergroup-members-dialog" aria-labelledby="usergroup-members-title" style="width: min(640px, 95vw); border: 0; border-radius: 8px; padding: 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #e5e7eb;">
+            <strong id="usergroup-members-title"></strong>
+            <button type="button" class="btn btn--plain" data-members-close aria-label="<?php echo htmlspecialchars(get_lang('Close'), ENT_QUOTES, 'UTF-8'); ?>">&times;</button>
+        </div>
+        <div style="padding: 16px;">
+            <p data-members-status class="text-gray-50" style="margin: 0 0 8px;"></p>
+            <table class="data_table" style="width: 100%;">
+                <thead>
+                    <tr><th data-members-th="name"></th><th data-members-th="username"></th></tr>
+                </thead>
+                <tbody data-members-rows></tbody>
+            </table>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">
+                <button type="button" class="btn btn--plain" data-members-prev></button>
+                <span data-members-range></span>
+                <button type="button" class="btn btn--plain" data-members-next></button>
+            </div>
+        </div>
+    </dialog>
+    <script>
+        (function () {
+            var strings = <?php echo json_encode($membersStrings, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+            var context = <?php echo json_encode($membersContext, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+            var pageSize = 10;
+            var dialog = document.getElementById("usergroup-members-dialog");
+            if (!dialog || typeof dialog.showModal !== "function") {
+                return;
+            }
+            var titleEl = document.getElementById("usergroup-members-title");
+            var statusEl = dialog.querySelector("[data-members-status]");
+            var rowsEl = dialog.querySelector("[data-members-rows]");
+            var rangeEl = dialog.querySelector("[data-members-range]");
+            var prevBtn = dialog.querySelector("[data-members-prev]");
+            var nextBtn = dialog.querySelector("[data-members-next]");
+            var state = { id: 0, page: 1, total: 0 };
+
+            dialog.querySelector('[data-members-th="name"]').textContent = strings.name;
+            dialog.querySelector('[data-members-th="username"]').textContent = strings.username;
+            prevBtn.textContent = strings.previous;
+            nextBtn.textContent = strings.next;
+
+            function render(data) {
+                rowsEl.textContent = "";
+                state.total = data.totalItems || 0;
+                (data.items || []).forEach(function (member) {
+                    var tr = document.createElement("tr");
+                    [member.name, member.username].forEach(function (value) {
+                        var td = document.createElement("td");
+                        td.textContent = value;
+                        tr.appendChild(td);
+                    });
+                    rowsEl.appendChild(tr);
+                });
+                var first = state.total ? (state.page - 1) * pageSize + 1 : 0;
+                var last = Math.min(state.page * pageSize, state.total);
+                rangeEl.textContent = first + " - " + last + " / " + state.total;
+                statusEl.textContent = state.total ? "" : strings.empty;
+                prevBtn.disabled = state.page <= 1;
+                nextBtn.disabled = last >= state.total;
+            }
+
+            function load(page) {
+                state.page = page;
+                statusEl.textContent = strings.loading;
+                prevBtn.disabled = true;
+                nextBtn.disabled = true;
+                var query = new URLSearchParams({ cid: context.cid, sid: context.sid, page: page, limit: pageSize });
+                fetch(context.url + encodeURIComponent(state.id) + "?" + query.toString(), {
+                    credentials: "same-origin",
+                    headers: { Accept: "application/json" }
+                })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error(String(response.status));
+                        }
+                        return response.json();
+                    })
+                    .then(render)
+                    .catch(function () {
+                        rowsEl.textContent = "";
+                        rangeEl.textContent = "";
+                        statusEl.textContent = strings.error;
+                    });
+            }
+
+            document.addEventListener("click", function (event) {
+                var link = event.target.closest ? event.target.closest(".usergroup-members-link") : null;
+                if (!link) {
+                    return;
+                }
+                event.preventDefault();
+                state.id = parseInt(link.getAttribute("data-usergroup-id"), 10) || 0;
+                titleEl.textContent = strings.title + ": " + (link.getAttribute("data-usergroup-title") || "");
+                rowsEl.textContent = "";
+                rangeEl.textContent = "";
+                dialog.showModal();
+                load(1);
+            });
+            prevBtn.addEventListener("click", function () { if (state.page > 1) { load(state.page - 1); } });
+            nextBtn.addEventListener("click", function () { if (state.page * pageSize < state.total) { load(state.page + 1); } });
+            dialog.querySelector("[data-members-close]").addEventListener("click", function () { dialog.close(); });
+        })();
+    </script>
+<?php
+
 echo '</div>';
 
 Display::display_footer();

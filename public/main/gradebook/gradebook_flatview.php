@@ -248,6 +248,14 @@ if (isset($_GET['print'])) {
         $params,
         $mainCourseCategory[0]
     );
+    // The rows hold plain text (learner profile fields and uncoloured scores) and print_table() outputs them raw.
+    foreach ($printable_data[1] as &$printableRow) {
+        $printableRow = array_map(
+            static fn ($cell) => htmlspecialchars((string) $cell, ENT_QUOTES, 'UTF-8'),
+            $printableRow
+        );
+    }
+    unset($printableRow);
     echo print_table(
         $printable_data[1],
         $printable_data[0],

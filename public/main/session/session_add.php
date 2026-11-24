@@ -11,9 +11,6 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$xajax = new xajax();
-$xajax->registerFunction('search_coachs');
-
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -31,56 +28,6 @@ $interbreadcrumb[] = [
     'name' => get_lang('Session list'),
 ];
 
-function search_coachs($needle)
-{
-    $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-    $xajax_response = new xajaxResponse();
-    $return = '';
-
-    if (!empty($needle)) {
-        $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-
-        // search users where username or firstname or lastname begins like $needle
-        $sql = 'SELECT username, lastname, firstname
-                FROM '.$tbl_user.' user
-                WHERE (username LIKE "'.$needle.'%"
-                OR firstname LIKE "'.$needle.'%"
-                OR lastname LIKE "'.$needle.'%")
-                AND status=1'.
-            $order_clause.
-            ' LIMIT 10';
-
-        if (api_is_multiple_url_enabled()) {
-            $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-            $access_url_id = api_get_current_access_url_id();
-            if (-1 != $access_url_id) {
-                $sql = 'SELECT username, lastname, firstname
-                        FROM '.$tbl_user.' user
-                        INNER JOIN '.$tbl_user_rel_access_url.' url_user
-                        ON (url_user.user_id=user.user_id)
-                        WHERE
-                            access_url_id = '.$access_url_id.' AND
-                            (
-                                username LIKE "'.$needle.'%" OR
-                                firstname LIKE "'.$needle.'%" OR
-                                lastname LIKE "'.$needle.'%"
-                            )
-                            AND status=1'.
-                    $order_clause.'
-                        LIMIT 10';
-            }
-        }
-
-        $rs = Database::query($sql);
-        while ($user = Database :: fetch_array($rs)) {
-            $return .= '<a href="javascript: void(0);" onclick="javascript: fill_coach_field(\''.$user['username'].'\')">'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</a><br />';
-        }
-    }
-    $xajax_response->addAssign('ajax_list_coachs', 'innerHTML', api_utf8_encode($return));
-
-    return $xajax_response;
-}
-
 $urlAction = api_get_self();
 $session = null;
 $fromSessionId = null;
@@ -94,8 +41,6 @@ if (isset($_GET['fromSessionId'])) {
     $urlAction .= '?fromSessionId=' . $fromSessionId;
 }
 
-$xajax->processRequests();
-$htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = "
 <script>
 $(function() {
@@ -104,11 +49,6 @@ $(function() {
         accessSwitcher('".$accessSelected."');
     }, 1000);
 });
-
-function fill_coach_field (username) {
-    document.getElementById('coach_username').value = username;
-    document.getElementById('ajax_list_coachs').innerHTML = '';
-}
 
 function accessSwitcher(accessFromReady) {
     var access = $('#access option:selected').val();

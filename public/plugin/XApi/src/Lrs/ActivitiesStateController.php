@@ -37,6 +37,10 @@ class ActivitiesStateController extends BaseController
             );
         }
 
+        if ($this->isAgentOutsideLaunch($requestedAgent)) {
+            return new Response('', Response::HTTP_FORBIDDEN);
+        }
+
         $rows = Database::select(
             '*',
             Database::get_main_table('xapi_activity_state'),
@@ -103,6 +107,10 @@ class ActivitiesStateController extends BaseController
                 ['error' => 'Invalid agent JSON.'],
                 Response::HTTP_BAD_REQUEST
             );
+        }
+
+        if ($this->isAgentOutsideLaunch($decodedAgent)) {
+            return new Response('', Response::HTTP_FORBIDDEN);
         }
 
         $decodedDocumentData = $this->decodeJsonObject($documentDataRaw);

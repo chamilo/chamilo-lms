@@ -52,6 +52,22 @@ try {
         @session_start();
     }
 
+    // Only a launch that cmi5/launch.php started for this user gets a token, limited to that launch.
+    $launch = $_SESSION['xapi_cmi5_launches'][$launchSessionId] ?? null;
+
+    if (!is_array($launch)
+        || (int) ($launch['user_id'] ?? 0) !== (int) $user->getId()
+        || (int) ($launch['expires_at'] ?? 0) < time()
+    ) {
+        $response = new JsonResponse(
+            ['error' => 'Unknown launch session.'],
+            Response::HTTP_FORBIDDEN
+        );
+        $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+        $response->send();
+        exit;
+    }
+
     $token = rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'), '=');
 
     if (!isset($_SESSION['xapi_cmi5_tokens']) || !is_array($_SESSION['xapi_cmi5_tokens'])) {
@@ -64,6 +80,9 @@ try {
         'course_id' => (int) $request->query->getInt('cid', 0),
         'session_id' => (int) $request->query->getInt('sid', 0),
         'group_id' => (int) $request->query->getInt('gid', 0),
+        'agent' => $launch['agent'],
+        'activity' => (string) $launch['activity'],
+        'registration' => (string) $launch['registration'],
         'created_at' => time(),
         'expires_at' => time() + 3600,
     ];

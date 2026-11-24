@@ -69,13 +69,27 @@ class StatementsController extends BaseController
                 return new Response('', Response::HTTP_NOT_FOUND);
             }
 
-            return new JsonResponse($this->mapper->toArray($statement), Response::HTTP_OK);
+            $data = $this->mapper->toArray($statement);
+            if ($this->isAgentOutsideLaunch($data['actor'] ?? null)) {
+                return new Response('', Response::HTTP_NOT_FOUND);
+            }
+
+            return new JsonResponse($data, Response::HTTP_OK);
         }
 
         try {
             $filters = $this->buildFilters();
         } catch (RuntimeException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+
+        $launchScope = $this->getLaunchScope();
+        if (null !== $launchScope) {
+            if (isset($filters['agent']) && $this->isAgentOutsideLaunch($filters['agent'])) {
+                return new Response('', Response::HTTP_FORBIDDEN);
+            }
+
+            $filters['agent'] = $launchScope['agent'];
         }
 
         $statements = $repository->findByFilters($filters);
@@ -114,6 +128,10 @@ class StatementsController extends BaseController
             return new JsonResponse(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
         }
 
+        if ($this->isAgentOutsideLaunch($data['actor'] ?? null)) {
+            return new Response('', Response::HTTP_FORBIDDEN);
+        }
+
         $bodyId = $this->extractStatementId($data);
 
         if ('' !== $bodyId && 0 !== strcasecmp($bodyId, $statementId)) {
@@ -144,6 +162,12 @@ class StatementsController extends BaseController
             $statements = $this->decodeStatementCollection($this->httpRequest->getContent());
         } catch (RuntimeException $exception) {
             return new JsonResponse(['error' => $exception->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+
+        foreach ($statements as $data) {
+            if ($this->isAgentOutsideLaunch($data['actor'] ?? null)) {
+                return new Response('', Response::HTTP_FORBIDDEN);
+            }
         }
 
         $repository = $this->getRepository();

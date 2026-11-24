@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use XApiPlugin;
 
 /**
  * Class LrsRequest.
@@ -63,6 +64,12 @@ class LrsRequest
             );
         }
 
+        if ($response->isClientError() || $response->isServerError()) {
+            // Error messages may quote request values: never let a browser render them as markup.
+            $response->headers->set('Content-Type', 'text/plain; charset=UTF-8');
+            $response->headers->set('X-Content-Type-Options', 'nosniff');
+        }
+
         $response->headers->set('X-Experience-API-Version', '1.0.3');
 
         return $response;
@@ -86,11 +93,21 @@ class LrsRequest
             throw new AccessDeniedHttpException('Empty Authorization header.');
         }
 
+        $launchScope = XApiPlugin::readLaunchAuthorization($basicValue);
+        if (null !== $launchScope) {
+            $this->request->attributes->set(BaseController::LAUNCH_SCOPE, $launchScope);
+
+            return true;
+        }
+
         if ($this->isValidLegacyBasicAuth($basicValue)) {
             return true;
         }
 
-        if ($this->isValidCmi5Token($basicValue)) {
+        $cmi5Scope = $this->getCmi5TokenScope($basicValue);
+        if (null !== $cmi5Scope) {
+            $this->request->attributes->set(BaseController::LAUNCH_SCOPE, $cmi5Scope);
+
             return true;
         }
 
@@ -126,7 +143,12 @@ class LrsRequest
         return null !== $auth;
     }
 
-    private function isValidCmi5Token(string $token): bool
+    /**
+     * The launch a cmi5 token is limited to, or null when the token is not valid.
+     *
+     * @return array{agent: array<string, mixed>, activity: string, registration: string}|null
+     */
+    private function getCmi5TokenScope(string $token): ?array
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             @session_start();
@@ -136,7 +158,7 @@ class LrsRequest
         $now = time();
 
         if (!\is_array($storedTokens)) {
-            return false;
+            return null;
         }
 
         foreach ($storedTokens as $launchSessionId => $tokenData) {
@@ -154,11 +176,22 @@ class LrsRequest
             $storedToken = (string) ($tokenData['token'] ?? '');
 
             if ('' !== $storedToken && hash_equals($storedToken, $token)) {
-                return true;
+                // A token without the launch it belongs to could act for anyone.
+                if (!\is_array($tokenData['agent'] ?? null)
+                    || [] === XApiPlugin::getAgentIdentifier($tokenData['agent'])
+                ) {
+                    return null;
+                }
+
+                return [
+                    'agent' => $tokenData['agent'],
+                    'activity' => (string) ($tokenData['activity'] ?? ''),
+                    'registration' => (string) ($tokenData['registration'] ?? ''),
+                ];
             }
         }
 
-        return false;
+        return null;
     }
 
     private function validateVersion(): void
@@ -177,7 +210,7 @@ class LrsRequest
             return;
         }
 
-        throw new BadRequestHttpException("The xAPI version \"$version\" is not supported.");
+        throw new BadRequestHttpException('The requested xAPI version is not supported.');
     }
 
     private function getControllerName(): string

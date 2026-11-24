@@ -183,10 +183,12 @@ function switch_item_toc($lpId, $userId, $viewId, $currentItem, $nextItem)
     return $return;
 }
 
+header('Content-Type: text/plain; charset=utf-8');
+
 echo switch_item_toc(
-    $_POST['lid'],
+    (int) $_POST['lid'],
     api_get_user_id(),
-    $_POST['vid'],
-    $_POST['iid'],
+    (int) $_POST['vid'],
+    (int) $_POST['iid'],
     $_POST['next']
 );

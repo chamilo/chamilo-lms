@@ -154,8 +154,12 @@ if ($form->validate()) {
 
         if (isset($values[$name]) && !empty($values[$name])) {
             $id = '';
-            if (isset($values[$name.'_question_id'])) {
-                $id = $values[$name.'_question_id'];
+            if (isset($values[$name.'_question_id']) && '' !== $values[$name.'_question_id']) {
+                // Only a question of this survey may be updated or deleted.
+                $id = (int) $values[$name.'_question_id'];
+                if ($id <= 0 || !SurveyManager::surveyQuestionBelongsToSurvey($id, (int) $surveyId)) {
+                    api_not_allowed(true);
+                }
             }
 
             $date = $values[$name];
@@ -198,9 +202,10 @@ if ($form->validate()) {
             $formattedDate = $date['start'].'@@'.$date['end'];
             if (!empty($date['id'])) {
                 $questionId = $date['id'];
-                $sql = "UPDATE $questionTable SET survey_question = '$formattedDate'
-                        WHERE iid = $questionId";
-                Database::query($sql);
+                Database::getManager()->getConnection()->executeStatement(
+                    "UPDATE $questionTable SET survey_question = ? WHERE iid = ?",
+                    [$formattedDate, (int) $questionId]
+                );
             } else {
                 $params = [
                     'survey_id' => $surveyData['iid'],

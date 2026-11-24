@@ -10,7 +10,7 @@ use __PHP_Incomplete_Class;
 use Chamilo\CoreBundle\Helpers\DateTimeHelper;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Asset;
 use Chamilo\CourseBundle\Component\CourseCopy\Resources\Document;
-use PclZip;
+use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
@@ -285,9 +285,9 @@ class CourseArchiver
             }
         }
 
-        // Zip the course-contents
-        $zip = new PclZip($zipFilePath);
-        $zip->create($backup_dir, PCLZIP_OPT_REMOVE_PATH, $backup_dir);
+        // Zip the course-contents. Paths inside the archive stay relative to the
+        // temp dir (course_info.dat at the root) so an import can still find them.
+        self::zipDirectory($backup_dir, $zipFilePath);
 
         // Remove the temp-dir.
         @rmdirr($backup_dir);
@@ -578,6 +578,47 @@ class CourseArchiver
 
         // Keep temp dir; some restore flows need extracted files
         return $course;
+    }
+
+    /**
+     * Store $sourceDir in a zip the same way PclZip did with PCLZIP_OPT_REMOVE_PATH:
+     * every entry is relative to that directory, and empty folders are kept.
+     * Imports read course_info.dat from the archive root and recreate work/ from
+     * those directory entries.
+     */
+    private static function zipDirectory(string $sourceDir, string $zipFilePath): void
+    {
+        $zip = new ZipArchive();
+        if (true !== $zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
+            throw new RuntimeException('Cannot create zip: '.$zipFilePath);
+        }
+
+        $sourceDir = rtrim(str_replace('\\', '/', $sourceDir), '/');
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($sourceDir, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($iterator as $item) {
+            $relative = substr(str_replace('\\', '/', $item->getPathname()), \strlen($sourceDir) + 1);
+            if ('' === $relative || str_contains($relative, '..')) {
+                continue;
+            }
+
+            if ($item->isDir()) {
+                $zip->addEmptyDir($relative);
+
+                continue;
+            }
+
+            if ($item->isFile() && !$item->isLink()) {
+                $zip->addFile($item->getPathname(), $relative);
+            }
+        }
+
+        if (!$zip->close()) {
+            throw new RuntimeException('Cannot close zip: '.$zipFilePath);
+        }
     }
 
     /**

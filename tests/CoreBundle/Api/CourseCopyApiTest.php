@@ -7,12 +7,19 @@ declare(strict_types=1);
 namespace Chamilo\Tests\CoreBundle\Api;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
+use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
+use RuntimeException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class CourseCopyApiTest extends AbstractApiTest
 {
@@ -135,6 +142,124 @@ class CourseCopyApiTest extends AbstractApiTest
         ]);
 
         $this->assertResponseStatusCodeSame(422);
+    }
+
+    public function testNewTargetKeepsRequestedCategory(): void
+    {
+        $suffix = $this->uniqueSuffix();
+        $source = $this->createCourse('Copy category source '.$suffix);
+        $category = (new CourseCategory())
+            ->setTitle('Copy category '.$suffix)
+            ->setCode('CAT'.$suffix)
+            ->addUrl($this->getAccessUrl())
+        ;
+        $this->getEntityManager()->persist($category);
+        $this->getEntityManager()->flush();
+
+        $client = $this->createClientWithCredentials($this->getUserToken());
+        $client->request('POST', '/api/courses/copy', [
+            'json' => [
+                'sourceId' => $source->getId(),
+                'targetCode' => 'CC'.$suffix,
+                'targetTitle' => 'Copied category course '.$suffix,
+                'targetCategoryId' => $category->getId(),
+                'tools' => ['documents'],
+            ],
+        ]);
+
+        $this->assertResponseStatusCodeSame(200);
+        $payload = $client->getResponse()->toArray();
+        $this->assertTrue($payload['created']);
+        $this->getEntityManager()->clear();
+        $created = self::getContainer()->get(CourseRepository::class)->find($payload['targetId']);
+        $this->assertNotNull($created);
+        $this->assertCount(1, $created->getCategories());
+        $this->assertSame($category->getId(), $created->getCategories()->first()->getId());
+    }
+
+    public function testUnknownCategoryDoesNotCreateTargetCourse(): void
+    {
+        $suffix = $this->uniqueSuffix();
+        $source = $this->createCourse('Copy invalid category source '.$suffix);
+        $targetCode = 'IC'.$suffix;
+
+        $client = $this->createClientWithCredentials($this->getUserToken());
+        $client->request('POST', '/api/courses/copy', [
+            'json' => [
+                'sourceId' => $source->getId(),
+                'targetCode' => $targetCode,
+                'targetTitle' => 'Should not exist '.$suffix,
+                'targetCategoryId' => 2_147_483_647,
+            ],
+        ]);
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->assertNull(self::getContainer()->get(CourseRepository::class)->findOneBy(['code' => $targetCode]));
+    }
+
+    public function testCategoryNotAssignedToPortalDoesNotCreateTargetCourse(): void
+    {
+        $suffix = $this->uniqueSuffix();
+        $source = $this->createCourse('Copy foreign category source '.$suffix);
+        $category = (new CourseCategory())
+            ->setTitle('Unassigned category '.$suffix)
+            ->setCode('UN'.$suffix)
+        ;
+        $this->getEntityManager()->persist($category);
+        $this->getEntityManager()->flush();
+        $targetCode = 'FC'.$suffix;
+
+        $client = $this->createClientWithCredentials($this->getUserToken());
+        $client->request('POST', '/api/courses/copy', [
+            'json' => [
+                'sourceId' => $source->getId(),
+                'targetCode' => $targetCode,
+                'targetTitle' => 'Should not exist '.$suffix,
+                'targetCategoryId' => $category->getId(),
+            ],
+        ]);
+
+        $this->assertResponseStatusCodeSame(422);
+        $this->assertNull(self::getContainer()->get(CourseRepository::class)->findOneBy(['code' => $targetCode]));
+    }
+
+    public function testRestorerReportsPerToolFailure(): void
+    {
+        $suffix = $this->uniqueSuffix();
+        $source = $this->createCourse('Copy failure source '.$suffix);
+        $target = $this->createCourse('Copy failure target '.$suffix);
+
+        // The builder uses ChamiloSession, which requires an active Symfony request.
+        $requestStack = self::getContainer()->get('request_stack');
+        $request = new Request();
+        $request->setSession(new Session(new MockArraySessionStorage()));
+        $requestStack->push($request);
+
+        try {
+            $sourceInfo = api_get_course_info($source->getCode());
+            $this->assertIsArray($sourceInfo);
+
+            $builder = new CourseBuilder('partial', $sourceInfo);
+            $builder->set_tools_to_build(['documents']);
+            $snapshot = $builder->build(0, $source->getCode());
+
+            if (!\defined('FILE_RENAME')) {
+                \define('FILE_RENAME', 2);
+            }
+
+            $restorer = new class($snapshot) extends CourseRestorer {
+                public function restore_documents($session_id = 0, $respect_base_content = false, $destination_course_code = ''): void
+                {
+                    throw new RuntimeException('Simulated document restore failure.');
+                }
+            };
+            $restorer->tools_to_restore = ['documents'];
+
+            $this->assertNull($restorer->restore($target->getCode()));
+            $this->assertSame(['documents'], $restorer->getFailedTools());
+        } finally {
+            $requestStack->pop();
+        }
     }
 
     private function addHtmlDocument(Course $course, string $title, string $html): void

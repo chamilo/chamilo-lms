@@ -34,32 +34,6 @@ class SocialManager extends UserManager
     }
 
     /**
-     * Allow to see contacts list.
-     *
-     * @author isaac flores paz
-     *
-     * @return array
-     */
-    public static function show_list_type_friends()
-    {
-        $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
-        $sql = 'SELECT id, title FROM '.$table.'
-                WHERE id<>6
-                ORDER BY id ASC';
-        $result = Database::query($sql);
-        $friend_relation_list = [];
-        while ($row = Database::fetch_assoc($result)) {
-            $friend_relation_list[] = $row;
-        }
-        $count_list = count($friend_relation_list);
-        if (0 == $count_list) {
-            $friend_relation_list[] = get_lang('Unknown');
-        } else {
-            return $friend_relation_list;
-        }
-    }
-
-    /**
      * Get the kind of relation between contacts.
      *
      * @param int  $user_id     user id

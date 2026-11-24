@@ -3398,8 +3398,13 @@ class BuyCoursesPlugin extends Plugin
             );
         }
 
-        $res = Database::query("SELECT id FROM $table LIMIT 1");
-        if (0 === Database::num_rows($res)) {
+        $existingId = $connection->createQueryBuilder()
+            ->select('id')
+            ->from($table)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchOne();
+        if (false === $existingId) {
             Database::insert($table, [
                 'server_url' => '',
                 'store_id' => '',

@@ -336,7 +336,13 @@ class LtiProvider
             $objExercise = new Exercise($courseId);
             $trackInfo = $objExercise->get_stat_track_exercise_info_by_exe_id($resultId);
 
-            if (empty($trackInfo)) {
+            // The attempt must belong to the current user, course and session.
+            if (
+                empty($trackInfo)
+                || (int) ($trackInfo['exe_user_id'] ?? 0) !== $userId
+                || (int) ($trackInfo['c_id'] ?? 0) !== (int) $courseId
+                || (int) ($trackInfo['session_id'] ?? 0) !== $sessionId
+            ) {
                 throw new Exception('Quiz tracking result not found.');
             }
 

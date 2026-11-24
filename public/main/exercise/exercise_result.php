@@ -371,6 +371,7 @@ if ('' !== $ltiLaunchId && $exeId > 0 && !empty($courseCodeForLtiScore)) {
         'lti_tool' => 'quiz',
         'lti_result_id' => $exeId,
         'cidReq' => $courseCodeForLtiScore,
+        'sid' => api_get_session_id(),
     ]);
 
     $pageBottom .= '<script>

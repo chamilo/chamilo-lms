@@ -3,6 +3,8 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Script;
 
+use Chamilo\CourseBundle\Entity\CLpItemView;
+
 /**
  * Class UserScormsProgressScript.
  *
@@ -105,31 +107,30 @@ class UserScormsProgressScript extends BaseScript
      */
     private function countCompletedItems($userId, $lpId, $cId)
     {
-        $tblItemView = \Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $tblLpView = \Database::get_course_table(TABLE_LP_VIEW);
-        $tblLp = \Database::get_course_table(TABLE_LP_MAIN);
-
-        $result = \Database::query("SELECT
-                lpiv.lp_view_id,
-                lpiv.c_id,
-                COUNT(lpiv.lp_item_id) c_lpiv
-            FROM $tblItemView lpiv
-            INNER JOIN $tblLpView lpv ON (lpiv.lp_view_id = lpv.iid AND lpiv.c_id = lpv.c_id)
-            INNER JOIN $tblLp lp ON (lpv.lp_id = lp.iid AND lpv.c_id = lp.c_id)
-            WHERE lpiv.status = 'completed'
-                AND lpv.user_id = $userId
-                AND lp.iid = $lpId
-                AND lp.c_id = $cId
-                AND lp.lp_type = 2
-            GROUP BY lpiv.lp_view_id, lpiv.lp_item_id");
-
-        if (\Database::num_rows($result) == 0) {
-            return 0;
-        }
+        // c_lp_item_view and c_lp have no c_id any more: the course is the one of the learning path view.
+        $result = \Database::getManager()
+            ->createQuery(
+                'SELECT IDENTITY(lpiv.view) AS lp_view_id, COUNT(lpiv.item) AS c_lpiv
+                    FROM '.CLpItemView::class.' lpiv
+                    INNER JOIN lpiv.view lpv
+                    INNER JOIN lpv.lp lp
+                    WHERE lpiv.status = :status
+                        AND lpv.user = :userId
+                        AND lp.iid = :lpId
+                        AND lpv.course = :cId
+                        AND lp.lpType = 2
+                    GROUP BY lpiv.view, lpiv.item'
+            )
+            ->setParameter('status', 'completed')
+            ->setParameter('userId', (int) $userId)
+            ->setParameter('lpId', (int) $lpId)
+            ->setParameter('cId', (int) $cId)
+            ->getArrayResult()
+        ;
 
         $count = 0;
 
-        while ($row = \Database::fetch_assoc($result)) {
+        foreach ($result as $row) {
             $count += (int) $row['c_lpiv'];
         }
 

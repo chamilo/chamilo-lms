@@ -538,7 +538,8 @@ class PageHelper
         foreach (array_unique($themeCandidates) as $theme) {
             $theme = trim($theme);
 
-            if ('' === $theme) {
+            // A theme is a single folder of var/themes; anything else would include PHP from outside it.
+            if ('' === $theme || '.' === $theme || '..' === $theme || false !== strpbrk($theme, "/\\\0")) {
                 continue;
             }
 

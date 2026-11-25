@@ -378,6 +378,15 @@ if ($form->validate()) {
 
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
+
+    // Keep the stored theme unless the value is one of the themes the select offers.
+    if (isset($user_data['theme'])
+        && '' !== $user_data['theme']
+        && !array_key_exists($user_data['theme'], api_get_themes())
+    ) {
+        unset($user_data['theme']);
+    }
+
     $user_data['item_id'] = api_get_user_id();
     $user = api_get_user_entity(api_get_user_id());
 

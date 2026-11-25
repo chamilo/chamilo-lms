@@ -69,6 +69,16 @@ final class CourseSettingsApiSecurityTest extends AbstractApiTest
         $this->assertJsonContains(['courseId' => (int) $ctx['course']->getId()]);
     }
 
+    public function testPlatformAdminCanReadCourseSettingsWithoutCourseSubscription(): void
+    {
+        $ctx = $this->bootstrapScenario('read_admin');
+        $admin = $this->createUser('cset_admin_read_admin', '', '', 'ROLE_ADMIN');
+
+        $this->getSettings($admin, $ctx['course']);
+        $this->assertResponseStatusCodeSame(200);
+        $this->assertJsonContains(['courseId' => (int) $ctx['course']->getId()]);
+    }
+
     /**
      * @return array{course: Course, teacher: User, student: User, outsider: User, foreignTeacher: User}
      */

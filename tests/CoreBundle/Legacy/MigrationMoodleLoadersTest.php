@@ -49,13 +49,18 @@ final class MigrationMoodleLoadersTest extends AbstractApiTest
         Container::setLegacyServices(self::getContainer());
 
         $plugin = api_get_path(SYS_PLUGIN_PATH).'MigrationMoodle/src/';
+
         require_once $plugin.'Interfaces/LoaderInterface.php';
         foreach (glob($plugin.'Loader/*.php') as $file) {
             require_once $file;
         }
+
         require_once $plugin.'Traits/MapTrait.php';
+
         require_once $plugin.'Script/BaseScript.php';
+
         require_once $plugin.'Script/UserLearnPathsProgressScript.php';
+
         require_once $plugin.'Script/UserScormsProgressScript.php';
 
         $this->course = $this->createCourse('moodle-migration');
@@ -69,7 +74,7 @@ final class MigrationMoodleLoadersTest extends AbstractApiTest
 
     private function loader(string $class): object
     {
-        $class = 'Chamilo\\PluginBundle\\MigrationMoodle\\Loader\\'.$class;
+        $class = 'Chamilo\PluginBundle\MigrationMoodle\Loader\\'.$class;
 
         return new $class();
     }
@@ -618,7 +623,7 @@ final class MigrationMoodleLoadersTest extends AbstractApiTest
 
     public static function progressScripts(): array
     {
-        $ns = 'Chamilo\\PluginBundle\\MigrationMoodle\\Script\\';
+        $ns = 'Chamilo\PluginBundle\MigrationMoodle\Script\\';
 
         // Both only count the lp type they migrate: a type 1 learning path for the first, a SCORM for the second.
         return [

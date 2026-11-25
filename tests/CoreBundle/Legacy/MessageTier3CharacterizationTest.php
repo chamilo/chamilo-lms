@@ -277,8 +277,8 @@ final class MessageTier3CharacterizationTest extends KernelTestCase
     private function msg(int $id, int $sender, ?int $group, ?int $parent, int $type, string $title, string $content, string $date = '2030-01-02 03:04:05'): void
     {
         $this->conn()->executeStatement(
-            "INSERT INTO message (id, user_sender_id, group_id, parent_id, msg_type, status, send_date, title, content, mail_answer)
-             VALUES (?, ?, ?, ?, ?, 0, ?, ?, ?, 0)",
+            'INSERT INTO message (id, user_sender_id, group_id, parent_id, msg_type, status, send_date, title, content, mail_answer)
+             VALUES (?, ?, ?, ?, ?, 0, ?, ?, ?, 0)',
             [$id, $sender, $group, $parent, $type, $date, $title, $content]
         );
     }

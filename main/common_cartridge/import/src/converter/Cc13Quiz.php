@@ -214,7 +214,8 @@ class Cc13Quiz extends Cc13Entities
                     $assessmentFile = $this->getExternalXml($instance['resource_identifier']);
 
                     if (!empty($assessmentFile)) {
-                        $assessment = $this->loadXmlResource(Cc1p3Convert::$pathToManifestFolder.DIRECTORY_SEPARATOR.$assessmentFile);
+                        $assessmentPath = self::safeResolveInside(Cc1p3Convert::$pathToManifestFolder, $assessmentFile);
+                        $assessment = null !== $assessmentPath ? $this->loadXmlResource($assessmentPath) : null;
 
                         if (!empty($assessment)) {
                             $replaceValues = ['unlimited' => 0];

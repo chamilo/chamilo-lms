@@ -38,7 +38,10 @@ class Cc13Resource extends Cc13Entities
 
         foreach ($documents as $document) {
             if ($document[2] == 'file') {
-                $filepath = $path.DIRECTORY_SEPARATOR.$document[4];
+                $filepath = self::safeResolveInside($path, $document[4]);
+                if (null === $filepath || !is_file($filepath) || !is_readable($filepath)) {
+                    continue;
+                }
                 $files = [];
                 $files['file']['name'] = $document[1];
                 $files['file']['tmp_name'] = $filepath;
@@ -109,7 +112,8 @@ class Cc13Resource extends Cc13Entities
             $external_resource = $instance['src'];
 
             if ($external_resource) {
-                $resource = $this->loadXmlResource(Cc1p3Convert::$pathToManifestFolder.DIRECTORY_SEPARATOR.$external_resource);
+                $resourcePath = self::safeResolveInside(Cc1p3Convert::$pathToManifestFolder, $external_resource);
+                $resource = null !== $resourcePath ? $this->loadXmlResource($resourcePath) : null;
 
                 if (!empty($resource)) {
                     $xpath = Cc1p3Convert::newxPath($resource, Cc1p3Convert::$resourcens);
@@ -142,9 +146,9 @@ class Cc13Resource extends Cc13Entities
                 $mod_type = 'html';
                 //extract the content of the file and treat it
                 $rootpath = realpath(Cc1p3Convert::$pathToManifestFolder);
-                $htmlpath = realpath($rootpath.DIRECTORY_SEPARATOR.$link);
-                $dirpath = dirname($htmlpath);
-                if (file_exists($htmlpath)) {
+                $htmlpath = self::safeResolveInside(Cc1p3Convert::$pathToManifestFolder, $link);
+                if (null !== $htmlpath && is_file($htmlpath)) {
+                    $dirpath = dirname($htmlpath);
                     $fcontent = file_get_contents($htmlpath);
                     $mod_alltext = $this->prepareContent($fcontent);
                     $mod_reference = '';

@@ -20,6 +20,40 @@ class CcEntities
         return $result;
     }
 
+    /**
+     * Resolves a package-relative reference against the package folder and
+     * returns its real path only if it stays inside that folder.
+     * Manifest hrefs come from the uploaded package, so they cannot be trusted.
+     *
+     * @param string $base
+     * @param string $relative
+     *
+     * @return string|null The canonical absolute path, or null if missing or outside the base
+     */
+    public static function safeResolveInside($base, $relative)
+    {
+        $realBase = realpath((string) $base);
+        if (false === $realBase) {
+            return null;
+        }
+
+        $relative = str_replace("\\", "/", trim((string) $relative));
+        if ("" === $relative) {
+            return null;
+        }
+
+        $real = realpath($realBase.DIRECTORY_SEPARATOR.ltrim($relative, "/"));
+        if (false === $real) {
+            return null;
+        }
+
+        if ($real !== $realBase && 0 !== strpos($real, $realBase.DIRECTORY_SEPARATOR)) {
+            return null;
+        }
+
+        return $real;
+    }
+
     public function loadXmlResource($path_to_file)
     {
         $resource = new DOMDocument();

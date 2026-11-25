@@ -14,8 +14,6 @@ use Exercise;
 use Question;
 use Security;
 
-use const DIRECTORY_SEPARATOR;
-
 /**
  * CC 1.3 Quiz importer (namespace-agnostic / no legacy constants).
  * - Uses string keys ('quiz', 'question_bank') created by Cc1p3Convert::$instances.
@@ -252,9 +250,12 @@ class Cc13Quiz extends Cc13Entities
                     continue;
                 }
 
-                $assessment = $this->loadXmlResource(
-                    Cc1p3Convert::$pathToManifestFolder.DIRECTORY_SEPARATOR.$assessmentFile
-                );
+                $assessmentPath = self::safeResolveInside(Cc1p3Convert::$pathToManifestFolder, (string) $assessmentFile);
+                if (null === $assessmentPath) {
+                    continue;
+                }
+
+                $assessment = $this->loadXmlResource($assessmentPath);
 
                 if (empty($assessment)) {
                     continue;

@@ -178,8 +178,8 @@ class Cc13Forum extends Cc13Entities
         $topic_file = $this->getExternalXml($instance['resource_identifier']);
 
         if (!empty($topic_file)) {
-            $topic_file_path = Cc1p3Convert::$pathToManifestFolder.DIRECTORY_SEPARATOR.$topic_file;
-            $topic = $this->loadXmlResource($topic_file_path);
+            $topic_file_path = self::safeResolveInside(Cc1p3Convert::$pathToManifestFolder, (string) $topic_file);
+            $topic = null !== $topic_file_path ? $this->loadXmlResource($topic_file_path) : null;
 
             if (!empty($topic)) {
                 $xpath = Cc1p3Convert::newxPath($topic, Cc1p3Convert::$forumns);

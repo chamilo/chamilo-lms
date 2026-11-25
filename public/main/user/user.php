@@ -980,20 +980,20 @@ function get_user_data($from, $number_of_items, $column, $direction)
             if (api_is_allowed_to_edit(null, true)) {
                 $temp[] = $user_id;
                 $temp[] = $photo;
-                $temp[] = $userData['official_code'];
+                $temp[] = htmlspecialchars((string) $userData['official_code'], ENT_QUOTES, 'UTF-8');
 
                 if ($is_western_name_order) {
-                    $temp[] = $userData['firstname'];
-                    $temp[] = $userData['lastname'];
+                    $temp[] = htmlspecialchars((string) $userData['firstname'], ENT_QUOTES, 'UTF-8');
+                    $temp[] = htmlspecialchars((string) $userData['lastname'], ENT_QUOTES, 'UTF-8');
                 } else {
-                    $temp[] = $userData['lastname'];
-                    $temp[] = $userData['firstname'];
+                    $temp[] = htmlspecialchars((string) $userData['lastname'], ENT_QUOTES, 'UTF-8');
+                    $temp[] = htmlspecialchars((string) $userData['firstname'], ENT_QUOTES, 'UTF-8');
                 }
 
-                $temp[] = $userData['username'];
+                $temp[] = htmlspecialchars((string) $userData['username'], ENT_QUOTES, 'UTF-8');
 
                 // Groups.
-                $temp[] = implode(', ', $groupsNameListParsed);
+                $temp[] = htmlspecialchars(implode(', ', $groupsNameListParsed), ENT_QUOTES, 'UTF-8');
 
                 // Status
                 $default_status = get_lang('Learner');
@@ -1047,19 +1047,19 @@ function get_user_data($from, $number_of_items, $column, $direction)
             } else {
                 $temp[] = '';
                 $temp[] = $photo;
-                $temp[] = $userData['official_code'];
+                $temp[] = htmlspecialchars((string) $userData['official_code'], ENT_QUOTES, 'UTF-8');
 
                 if ($is_western_name_order) {
-                    $temp[] = $userData['firstname'];
-                    $temp[] = $userData['lastname'];
+                    $temp[] = htmlspecialchars((string) $userData['firstname'], ENT_QUOTES, 'UTF-8');
+                    $temp[] = htmlspecialchars((string) $userData['lastname'], ENT_QUOTES, 'UTF-8');
                 } else {
-                    $temp[] = $userData['lastname'];
-                    $temp[] = $userData['firstname'];
+                    $temp[] = htmlspecialchars((string) $userData['lastname'], ENT_QUOTES, 'UTF-8');
+                    $temp[] = htmlspecialchars((string) $userData['firstname'], ENT_QUOTES, 'UTF-8');
                 }
 
-                $temp[] = $userData['username'];
+                $temp[] = htmlspecialchars((string) $userData['username'], ENT_QUOTES, 'UTF-8');
                 // Group.
-                $temp[] = implode(', ', $groupsNameListParsed);
+                $temp[] = htmlspecialchars(implode(', ', $groupsNameListParsed), ENT_QUOTES, 'UTF-8');
 
                 if (1 == $course_info['unsubscribe']) {
                     //User id for actions

@@ -73,6 +73,53 @@ function copyDirTo($source, $destination, $move = true)
 }
 
 /**
+ * Copy a directory and its subdirectories, but not its files.
+ *
+ * Course backups use this for the work/ tree: the folders must come back in
+ * the same place, and the submitted files must stay out of the archive.
+ *
+ * @param string $source      the path of the directory to copy
+ * @param string $destination the path of the new area
+ *
+ * @return bool false when the source is not a directory
+ */
+function copyDirWithoutFilesTo($source, $destination)
+{
+    $fs = new Filesystem();
+    $source = rtrim($source, DIRECTORY_SEPARATOR);
+
+    if (is_link($source) || !is_dir($source)) {
+        return false;
+    }
+
+    $source = realpath($source);
+    if (false === $source) {
+        return false;
+    }
+
+    $prefix = rtrim($source, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+    $fs->mkdir($destination);
+
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::SELF_FIRST
+    );
+
+    foreach ($iterator as $item) {
+        if ($item->isLink() || !$item->isDir()) {
+            continue;
+        }
+
+        // Iterator paths are native paths. Do not rewrite literal backslashes or
+        // reject directory names containing two dots (e.g. assignment..final).
+        $relative = substr($item->getPathname(), strlen($prefix));
+        $fs->mkdir($destination.DIRECTORY_SEPARATOR.$relative);
+    }
+
+    return true;
+}
+
+/**
  * Get a list of all PHP (.php) files in a given directory. Includes .tpl files.
  */
 function getAllPhpFiles(string $base_path, bool $includeStatic = false): array

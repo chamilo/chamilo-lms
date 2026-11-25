@@ -4856,5 +4856,10 @@
     "Image zones": "Zonas interactivas",
     "Match by dragging": "Coincidencia arrastrable",
     "Multiple answer true/false/don't know": "Respuestas m\u00faltiples v/f/no-se",
-    "Combination true/false/don't-know": "Combinaci\u00f3n v/f/no-se"
+    "Combination true/false/don't-know": "Combinaci\u00f3n v/f/no-se",
+    "Pause recording": "Pausar grabaci\u00f3n",
+    "Resume recording": "Reanudar grabaci\u00f3n",
+    "Recording help": "Ayuda para grabar",
+    "Add text": "A\u00f1adir texto",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Mientras graba, puede pausar cuando quiera. Si no est\u00e1 satisfecho, grabe de nuevo. Esto sobrescribir\u00e1 la versi\u00f3n anterior. \u00bfSatisfecho? Para enviar la grabaci\u00f3n a su tutor, haga clic en \"Detener grabaci\u00f3n\" y luego seleccione \"Finalizar ejercicio\". \u00a1El tutor podr\u00e1 escuchar su grabaci\u00f3n y darle retroalimentaci\u00f3n! Todas sus grabaciones transmitidas se pueden ver en la p\u00e1gina de inicio del ejercicio."
 }

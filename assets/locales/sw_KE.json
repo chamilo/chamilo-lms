@@ -4846,5 +4846,10 @@
     "Image zones": "Zona za picha",
     "Match by dragging": "Linganisha kwa kuvuta",
     "Multiple answer true/false/don't know": "Jibu nyingi za kweli/ubaya/sijui",
-    "Combination true/false/don't-know": "Mchanganyiko wa kweli/ubaya/sijui"
+    "Combination true/false/don't-know": "Mchanganyiko wa kweli/ubaya/sijui",
+    "Pause recording": "Simamisha kurekodi",
+    "Resume recording": "Anza tena kurekodi",
+    "Recording help": "Msaada wa kurekodi",
+    "Add text": "Ongeza maandishi",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Wakati wa kurekodi, unaweza kusimamisha wakati wowote. Kama hujaridhika, sajili tena. Hii itabadilisha toleo la awali. Umeridhika? Ili kutuma rekodi yako kwa mwalimu, bonyeza \u201cSimamisha kurekodi\u201d kisha chagua \u201cMaliza mazoezi\u201d. Mwalimu ataweza kusikiliza rekodi yako na kukupa maoni! Rekodi zote ulizotuma zinaweza kuonekana kwenye ukurasa wa nyumbani wa mazoezi."
 }

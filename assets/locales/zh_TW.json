@@ -4846,5 +4846,10 @@
     "Image zones": "\u71b1\u9ede",
     "Match by dragging": "\u62d6\u66f3\u914d\u5c0d",
     "Multiple answer true/false/don't know": "\u591a\u9078\u7b54\u6848\u771f/\u5047/\u4e0d\u77e5\u9053",
-    "Combination true/false/don't-know": "\u7d44\u5408\u771f/\u5047/\u4e0d\u77e5\u9053"
+    "Combination true/false/don't-know": "\u7d44\u5408\u771f/\u5047/\u4e0d\u77e5\u9053",
+    "Pause recording": "\u66ab\u505c\u9304\u97f3",
+    "Resume recording": "\u7e7c\u7e8c\u9304\u97f3",
+    "Recording help": "\u9304\u97f3\u8aaa\u660e",
+    "Add text": "\u65b0\u589e\u6587\u5b57",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "\u9304\u97f3\u6642\uff0c\u60a8\u53ef\u96a8\u6642\u66ab\u505c\u3002\u82e5\u4e0d\u6eff\u610f\uff0c\u8acb\u91cd\u65b0\u9304\u97f3\u3002\u9019\u5c07\u8986\u5beb\u5148\u524d\u7248\u672c\u3002\u6eff\u610f\u4e86\u55ce\uff1f\u9ede\u64ca\u300c\u505c\u6b62\u9304\u97f3\u300d\uff0c\u7136\u5f8c\u9078\u64c7\u300c\u7d50\u675f\u6e2c\u9a57\u300d\u4ee5\u50b3\u9001\u9304\u97f3\u7d66\u6559\u5e2b\u3002\u6559\u5e2b\u5c07\u80fd\u8046\u807d\u60a8\u7684\u9304\u97f3\u4e26\u63d0\u4f9b\u56de\u994b\uff01\u6240\u6709\u50b3\u9001\u7684\u9304\u97f3\u53ef\u5728\u6e2c\u9a57\u9996\u9801\u67e5\u770b\u3002"
 }

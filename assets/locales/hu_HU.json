@@ -4846,5 +4846,10 @@
     "Image zones": "K\u00e9p z\u00f3n\u00e1k",
     "Match by dragging": "H\u00faz\u00e1ssal p\u00e1ros\u00edt\u00e1s",
     "Multiple answer true/false/don't know": "T\u00f6bbsz\u00f6r\u00f6s v\u00e1lasz igaz/hamis/nem tudom",
-    "Combination true/false/don't-know": "Kombin\u00e1ci\u00f3 igaz/hamis/nem-tudom"
+    "Combination true/false/don't-know": "Kombin\u00e1ci\u00f3 igaz/hamis/nem-tudom",
+    "Pause recording": "Felv\u00e9tel sz\u00fcneteltet\u00e9se",
+    "Resume recording": "Felv\u00e9tel folytat\u00e1sa",
+    "Recording help": "Felv\u00e9tel s\u00fag\u00f3",
+    "Add text": "Sz\u00f6veg hozz\u00e1ad\u00e1sa",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Felv\u00e9tel k\u00f6zben b\u00e1rmikor sz\u00fcneteltetheti. Ha nem el\u00e9gedett, vegyen fel \u00fajra. Ez fel\u00fcl\u00edrja az el\u0151z\u0151 verzi\u00f3t. El\u00e9gedett? A felv\u00e9tel elk\u00fcld\u00e9s\u00e9hez a tan\u00e1rnak kattintson a \u201eFelv\u00e9tel le\u00e1ll\u00edt\u00e1sa\u201d gombra, majd v\u00e1lassza a \u201eFeladat befejez\u00e9se\u201d lehet\u0151s\u00e9get. A tan\u00e1r meghallgathatja a felv\u00e9telt \u00e9s visszajelz\u00e9st adhat! Az elk\u00fcld\u00f6tt felv\u00e9teleket a feladat kezd\u0151lapj\u00e1n megtekintheti."
 }

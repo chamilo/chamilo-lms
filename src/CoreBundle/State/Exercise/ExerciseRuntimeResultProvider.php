@@ -38,6 +38,7 @@ use DateTimeInterface;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Security as LegacySecurity;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -48,6 +49,7 @@ use Throwable;
 
 use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
+use const STUDENT;
 
 /**
  * Read-only provider for migrated exercise runtime result/review data.
@@ -1927,6 +1929,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             return [
                 'kind' => 'oral_expression',
                 'files' => [],
+                'text' => '',
                 'teacherComment' => null,
                 'marks' => 0.0,
             ];
@@ -1937,6 +1940,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         return [
             'kind' => 'oral_expression',
             'files' => $showStudentAnswers ? $this->normalizeAttemptFiles($row, true) : [],
+            // The written text sent with the audio, shown as HTML; the legacy page saved it unfiltered
+            'text' => $showStudentAnswers && '' !== $row->getAnswer() ? (string) LegacySecurity::remove_XSS($row->getAnswer(), STUDENT) : '',
             'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
             'teacherAudioUrl' => $this->getTeacherAudioUrl($row, $visibility),
             'marks' => (float) $row->getMarks(),

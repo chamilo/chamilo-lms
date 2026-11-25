@@ -4897,5 +4897,10 @@
     "Image zones": "Image zones",
     "Match by dragging": "Match by dragging",
     "Multiple answer true/false/don't know": "Multiple answer true/false/don't know",
-    "Combination true/false/don't-know": "Combination true/false/don't-know"
+    "Combination true/false/don't-know": "Combination true/false/don't-know",
+    "Pause recording": "Pause recording",
+    "Resume recording": "Resume recording",
+    "Recording help": "Recording help",
+    "Add text": "Add text",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page."
 }

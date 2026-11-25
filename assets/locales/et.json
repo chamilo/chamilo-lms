@@ -4846,5 +4846,10 @@
     "Image zones": "Pildialad",
     "Match by dragging": "Sobita lohistades",
     "Multiple answer true/false/don't know": "Mitu vastust t\u00f5ene/v\u00e4\u00e4r/ei tea",
-    "Combination true/false/don't-know": "Kombinatsioon t\u00f5ene/v\u00e4\u00e4r/ei tea"
+    "Combination true/false/don't-know": "Kombinatsioon t\u00f5ene/v\u00e4\u00e4r/ei tea",
+    "Pause recording": "Peata salvestamine",
+    "Resume recording": "J\u00e4tka salvestamist",
+    "Recording help": "Salvestamise abi",
+    "Add text": "Lisa tekst",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Salvestamise ajal saate igal ajal pausi teha. Kui te ei ole rahul, salvestage uuesti. See kirjutab eelmise versiooni \u00fcle. Rahul? Salvestuse saatmiseks \u00f5petajale kl\u00f5psake nupul \u201eL\u00f5peta salvestamine\u201d ja seej\u00e4rel valige \u201eL\u00f5peta harjutus\u201d. \u00d5petaja saab teie salvestust kuulata ja anda tagasisidet! K\u00f5iki teie saadetud salvestusi saab vaadata harjutuse avalehel."
 }

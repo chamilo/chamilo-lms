@@ -4846,5 +4846,10 @@
     "Image zones": "Billedeomr\u00e5der",
     "Match by dragging": "Match ved tr\u00e6kning",
     "Multiple answer true/false/don't know": "Flere svar sandt/falsk/vid ikke",
-    "Combination true/false/don't-know": "Kombination sandt/falsk/vid ikke"
+    "Combination true/false/don't-know": "Kombination sandt/falsk/vid ikke",
+    "Pause recording": "Pause optagelse",
+    "Resume recording": "Genoptag optagelse",
+    "Recording help": "Optagelseshj\u00e6lp",
+    "Add text": "Tilf\u00f8j tekst",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Under optagelse kan du s\u00e6tte p\u00e5 pause n\u00e5r du vil. Hvis du ikke er tilfreds, optag igen. Dette vil overskrive den tidligere version. Tilfreds? For at sende optagelsen til din l\u00e6rer, klik p\u00e5 \u201cStop optagelse\u201d og v\u00e6lg derefter \u201cAfslut \u00f8velse\u201d. L\u00e6reren vil kunne lytte til din optagelse og give dig feedback! Alle dine sendte optagelser kan ses p\u00e5 \u00f8velsens startside."
 }

@@ -4846,5 +4846,10 @@
     "Image zones": "Irudi guneak",
     "Match by dragging": "Arrastatuz lotu",
     "Multiple answer true/false/don't know": "Erantzun anitzak egia/gezurra/ez dakit",
-    "Combination true/false/don't-know": "Konbinazioa egia/gezurra/ez dakit"
+    "Combination true/false/don't-know": "Konbinazioa egia/gezurra/ez dakit",
+    "Pause recording": "Pausatu grabaketa",
+    "Resume recording": "Berrekin grabaketa",
+    "Recording help": "Grabaketa-laguntza",
+    "Add text": "Gehitu testua",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Grabatzen ari zaren bitartean, pausatu dezakezu nahi duzun ala ez. Ez badago pozik, berriro grabatu. Horrek aurreko bertsioa gainidatziko du. Pozik zaude? Grabazioa irakasleari bidaltzeko, klik egin \u201cStop recording\u201d botoian eta ondoren \u201cEnd exercise\u201d aukeratu. Irakasleak zure grabazioa entzun eta feedback eman ahal izango du! Guztiak bidalitako grabazioak ikus daitezke ariketa-orri nagusian."
 }

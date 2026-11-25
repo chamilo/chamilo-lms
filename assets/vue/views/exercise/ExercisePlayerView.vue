@@ -988,8 +988,37 @@
                 </div>
                 <AudioRecorder
                   :multiple="false"
+                  :pausable="true"
                   :show-recorded-audios="false"
                   @recorded-audio="onOralRecorded(question, $event)"
+                />
+                <div class="flex flex-wrap gap-2">
+                  <BaseButton
+                    :label="t('Recording help')"
+                    icon="information"
+                    size="small"
+                    type="primary-text"
+                    @click="isRecordingHelpVisible = true"
+                  />
+                  <BaseButton
+                    :label="t('Add text')"
+                    icon="edit"
+                    size="small"
+                    type="success-text"
+                    @click="answers[question.id].oralTextVisible = !answers[question.id].oralTextVisible"
+                  />
+                </div>
+              </div>
+
+              <div
+                v-if="answers[question.id]?.oralTextVisible"
+                class="rounded-lg border border-gray-20 bg-white p-3"
+              >
+                <BaseTinyEditor
+                  v-model="answers[question.id].oralText"
+                  :editor-id="`question_${question.id}_oral_text`"
+                  :full-page="false"
+                  :title="t('Add text')"
                 />
               </div>
 
@@ -1903,6 +1932,29 @@
     </BaseDialog>
 
     <BaseDialog
+      v-model:is-visible="isRecordingHelpVisible"
+      :show-close-button="false"
+      :title="t('Recording help')"
+      header-icon="microphone"
+    >
+      <p class="text-sm text-gray-800">
+        {{
+          t(
+            "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on “Stop recording” then select “End exercise”. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.",
+          )
+        }}
+      </p>
+
+      <template #footer>
+        <BaseButton
+          :label="t('Close')"
+          type="tertiary-alternative"
+          @click="isRecordingHelpVisible = false"
+        />
+      </template>
+    </BaseDialog>
+
+    <BaseDialog
       v-model:is-visible="isZoomDialogVisible"
       :show-close-button="false"
       :title="zoomImageAlt || t('Image')"
@@ -1936,6 +1988,7 @@ import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseDialog from "../../components/basecomponents/BaseDialog.vue"
 import BaseMultiSelect from "../../components/basecomponents/BaseMultiSelect.vue"
 import BaseTextArea from "../../components/basecomponents/BaseTextArea.vue"
+import BaseTinyEditor from "../../components/basecomponents/BaseTinyEditor.vue"
 import AudioRecorder from "../../components/AudioRecorder.vue"
 import ExerciseFillBlanksRuntime from "./components/ExerciseFillBlanksRuntime.vue"
 import exerciseService from "../../services/exerciseService"
@@ -1947,6 +2000,7 @@ const router = useRouter()
 const { displayTranslatedHtml } = useTranslatedHtml()
 
 const isLoading = ref(false)
+const isRecordingHelpVisible = ref(false)
 const errorMessage = ref("")
 const title = ref("")
 const description = ref("")
@@ -3494,7 +3548,10 @@ async function saveQuestionDraftAnswer(question, afterFeedback = "none", options
 
 async function saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFeedback = "none", options = {}) {
   const questionAnswer = answers.value[question.id] || {}
-  if (!questionAnswer.uploadFile && !questionAnswer.oralFile) {
+  // The written text sent with the audio is saved on its own when it is the only change
+  const oralTextChanged =
+    isOralQuestion(question) && (questionAnswer.oralText || "") !== (questionAnswer.oralTextSaved || "")
+  if (!questionAnswer.uploadFile && !questionAnswer.oralFile && !oralTextChanged) {
     return null
   }
 
@@ -3504,7 +3561,12 @@ async function saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFe
   formData.append("reviewLater", isQuestionMarkedForReview(question.id) ? "1" : "0")
   formData.append("navigationAction", afterFeedback)
   formData.append("confirmCategory", true === options.confirmCategory ? "1" : "0")
-  formData.append("file", questionAnswer.uploadFile || questionAnswer.oralFile)
+  if (questionAnswer.uploadFile || questionAnswer.oralFile) {
+    formData.append("file", questionAnswer.uploadFile || questionAnswer.oralFile)
+  }
+  if (isOralQuestion(question)) {
+    formData.append("answerText", questionAnswer.oralText || "")
+  }
 
   const response = await exerciseService.uploadExerciseRuntimeAnswer(
     formData,
@@ -3520,7 +3582,12 @@ async function saveUploadQuestionAnswer(question, exerciseId, attemptId, afterFe
     questionAnswer.oralFile = null
     questionAnswer.oralFileName = ""
     questionAnswer.oralPreviewUrl = ""
-    questionAnswer.uploadedFiles = Array.isArray(response.files) ? response.files : []
+    questionAnswer.oralTextSaved = questionAnswer.oralText || ""
+    if (Array.isArray(response.files) && response.files.length > 0) {
+      questionAnswer.uploadedFiles = response.files
+    } else if (!isOralQuestion(question)) {
+      questionAnswer.uploadedFiles = []
+    }
   }
 
   return response
@@ -4012,7 +4079,11 @@ function applySavedAnswer(question, rows) {
 
   if (isOralQuestion(question)) {
     const files = extractSavedAttemptFiles(rows)
-    questionAnswer.uploadedFiles = files.length > 0 ? files : rows.length > 0 ? [{ name: t("Uploaded audio") }] : []
+    questionAnswer.oralText = rows[0]?.answer || ""
+    questionAnswer.oralTextSaved = questionAnswer.oralText
+    questionAnswer.oralTextVisible = "" !== questionAnswer.oralText
+    questionAnswer.uploadedFiles =
+      files.length > 0 ? files : rows.length > 0 && !questionAnswer.oralText ? [{ name: t("Uploaded audio") }] : []
   }
 }
 
@@ -4105,6 +4176,9 @@ function initializeAnswerState() {
       oralFile: null,
       oralFileName: "",
       oralPreviewUrl: "",
+      oralText: "",
+      oralTextSaved: "",
+      oralTextVisible: false,
       annotationMode: "path",
       annotationPaths: [[]],
       annotationTexts: [],

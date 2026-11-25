@@ -1219,6 +1219,21 @@
                 </div>
 
                 <div
+                  v-if="visibility.showStudentAnswers !== false && question.answer.text"
+                  class="rounded-lg border border-gray-20 bg-gray-10 p-3"
+                >
+                  <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    {{ t("Text") }}
+                  </div>
+                  <!-- Filtered by the server (Security::remove_XSS), as the legacy page did -->
+                  <div
+                    class="exercise-result-html text-sm text-gray-800"
+                    dir="auto"
+                    v-html="question.answer.text"
+                  />
+                </div>
+
+                <div
                   v-if="question.pendingCorrection"
                   class="rounded-lg border border-warning/30 bg-warning/10 p-3 text-sm text-warning"
                 >

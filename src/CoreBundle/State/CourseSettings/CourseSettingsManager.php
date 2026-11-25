@@ -24,6 +24,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\DBAL\Connection;
@@ -340,21 +341,9 @@ final readonly class CourseSettingsManager
 
     public function assertCanEdit(Course $course): void
     {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return;
+        if (!$this->security->isGranted(CourseVoter::EDIT, $course)) {
+            throw new AccessDeniedHttpException('You are not allowed to edit this course.');
         }
-
-        $user = $this->security->getUser();
-        if ($user instanceof User && $course->hasUserAsTeacher($user)) {
-            return;
-        }
-
-        $resourceNode = $course->getResourceNode();
-        if (null !== $resourceNode && $this->security->isGranted('EDIT', $resourceNode)) {
-            return;
-        }
-
-        throw new AccessDeniedHttpException('You are not allowed to edit this course.');
     }
 
     /**

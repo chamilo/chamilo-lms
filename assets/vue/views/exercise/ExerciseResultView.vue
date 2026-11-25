@@ -543,7 +543,7 @@
                     v-if="visibility.showStudentAnswers !== false"
                     class="rounded-full bg-info/10 px-2 py-1 text-info"
                   >
-                    {{ t("Your answer") }}: {{ choice.selectedOptionLabel || t("No answer") }}
+                    {{ t("Your answer") }}: {{ translateOptionTitle(choice.selectedOptionLabel) || t("No answer") }}
                   </span>
                   <span
                     v-if="choice.selectedDegreeLabel"
@@ -556,7 +556,7 @@
                     v-if="choice.correctOptionLabel"
                     class="rounded-full bg-success/10 px-2 py-1 text-success"
                   >
-                    {{ t("Correct answer") }}: {{ choice.correctOptionLabel }}
+                    {{ t("Correct answer") }}: {{ translateOptionTitle(choice.correctOptionLabel) }}
                   </span>
                 </div>
                 <div
@@ -2575,6 +2575,21 @@ function trueFalseIconClass(choice) {
   }
 
   return "mdi-help-circle-outline text-gray-50"
+}
+
+// The default options are stored with their English title, which the legacy page translated
+function translateOptionTitle(title) {
+  switch (title) {
+    case "True":
+      return t("True")
+    case "False":
+      return t("False")
+    case "Don't know":
+    case "DoubtScore":
+      return t("Don't know")
+    default:
+      return title
+  }
 }
 
 function isTrueFalseChoiceCorrect(choice) {

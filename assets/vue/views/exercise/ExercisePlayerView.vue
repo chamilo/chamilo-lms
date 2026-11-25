@@ -5181,12 +5181,27 @@ function isPageBreak(question) {
   return Number(question.type) === 31
 }
 
+// The default options are stored with their English title, which the legacy page translated
+function translateOptionTitle(title) {
+  switch (title) {
+    case "True":
+      return t("True")
+    case "False":
+      return t("False")
+    case "Don't know":
+    case "DoubtScore":
+      return t("Don't know")
+    default:
+      return title
+  }
+}
+
 function trueFalseOptions(question) {
   if (Array.isArray(question.trueFalseOptions) && question.trueFalseOptions.length > 0) {
     return question.trueFalseOptions.map((option) => ({
       value: Number(option.id || option.position),
       position: Number(option.position || 0),
-      label: displayText(option.title),
+      label: translateOptionTitle(displayText(option.title)),
     }))
   }
 

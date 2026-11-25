@@ -43,6 +43,14 @@ function escapeHtml(value) {
     .replace(/'/g, "&#39;")
 }
 
+// An option can keep the formatting tags of the text it was cut from (e.g. "haben <font size="2">"), which
+// the legacy select dropped when the browser parsed them; DOMParser reads the text without running anything
+function optionLabel(option) {
+  const text = new DOMParser().parseFromString(String(option), "text/html").body.textContent || ""
+
+  return text.replace(/\s+/g, " ").trim()
+}
+
 const renderedHtml = computed(() =>
   props.segments
     .map((segment) => {
@@ -54,7 +62,7 @@ const renderedHtml = computed(() =>
 
       if (Array.isArray(segment?.options) && segment.options.length) {
         const optionsHtml = segment.options
-          .map((option) => `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`)
+          .map((option) => `<option value="${escapeHtml(option)}">${escapeHtml(optionLabel(option))}</option>`)
           .join("")
 
         return `<select class="mx-1 inline-block rounded border border-gray-30 px-2 py-1 text-sm" data-fill-blank-position="${position}" name="question_${props.questionId}_blank_${position}"><option value="">-- ${escapeHtml(t("Select an option"))} --</option>${optionsHtml}</select>`

@@ -2299,7 +2299,11 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
     private function trimFillBlankOption(string $value): string
     {
-        return trim(html_entity_decode($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+        // Display only: drops the formatting tags an option can keep from the text it was cut from
+        // (e.g. "haben <font size="2">"), after the entities since the learner's answer is saved escaped
+        $text = strip_tags(html_entity_decode($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+
+        return trim(preg_replace('/[\s\x{00A0}]+/u', ' ', $text) ?? $text);
     }
 
     private function isStructuralContentQuestion(CQuizQuestion $question): bool

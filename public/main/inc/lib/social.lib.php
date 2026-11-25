@@ -72,6 +72,7 @@ class SocialManager extends UserManager
                     LIMIT 1
                 )';
         }
+// TODO(db-neutral): LIMIT inside a subquery (pinned by SocialCharacterizationTest); left raw.
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_assoc($res);
@@ -570,6 +571,7 @@ class SocialManager extends UserManager
             $count = 0;
             foreach ($sql as $oneQuery) {
                 if (!empty($oneQuery)) {
+// TODO(owner): getWallMessages is broken (user_receiver_id / msg_status no longer exist) and assembles SQL fragments; left raw.
                     $res = Database::query($oneQuery);
                     $row = Database::fetch_array($res);
                     $count += (int) $row['count_items'];
@@ -589,6 +591,7 @@ class SocialManager extends UserManager
             } else {
                 $oneQuery .= $sqlOrder.$sqlLimit;
             }
+// TODO(owner): getWallMessages is broken (user_receiver_id / msg_status no longer exist) and assembles SQL fragments; left raw.
             $res = Database::query($oneQuery);
             $em = Database::getManager();
             if (Database::num_rows($res) > 0) {

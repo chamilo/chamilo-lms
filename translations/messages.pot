@@ -43934,3 +43934,15 @@ msgstr ""
 
 msgid "List by users"
 msgstr ""
+
+msgid "%s Completed"
+msgstr ""
+
+msgid "Received invitations"
+msgstr ""
+
+msgid "Quick test: %s"
+msgstr ""
+
+msgid "Quick test: Document"
+msgstr ""

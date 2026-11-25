@@ -4844,5 +4844,8 @@
     "First access to course": "Primer acceso al curso",
     "Last lp's finalization date": "\u00daltima fecha de finalizaci\u00f3n de un itinerario formativo",
     "Last quiz finalization date": "\u00daltima fecha de finalizaci\u00f3n de un ejercicio",
-    "Test": "Ejercicio"
+    "Test": "Ejercicio",
+    "{0} Completed": "{0} completado",
+    "Completed": "Completado",
+    "Received invitations": "Invitaciones recibidas"
 }

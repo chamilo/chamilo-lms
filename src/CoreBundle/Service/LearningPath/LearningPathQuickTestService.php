@@ -20,6 +20,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Throwable;
 
 use const ENT_HTML5;
@@ -39,6 +40,7 @@ final readonly class LearningPathQuickTestService
         private CDocumentRepository $documentRepository,
         private EntityManagerInterface $entityManager,
         private Security $security,
+        private TranslatorInterface $translator,
     ) {}
 
     public function isAvailable(Course $course): bool
@@ -129,7 +131,9 @@ final readonly class LearningPathQuickTestService
         }
 
         $exerciseTitle = mb_substr(
-            'Quick test: '.('' !== $documentTitle ? $documentTitle : 'Document'),
+            '' !== $documentTitle
+                ? $this->translator->trans('Quick test: %s', ['%s' => $documentTitle])
+                : $this->translator->trans('Quick test: Document'),
             0,
             255,
         );

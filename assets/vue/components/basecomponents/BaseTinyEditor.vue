@@ -154,7 +154,10 @@ function getLanguageConfig(locale) {
     }
   }
 
-  return { language: lang, language_url: `${url}${file}` }
+  // Refresh the catalogs updated for the translatehtml UI without disabling browser caching.
+  const revision = ["es", "fr_FR"].includes(lang) ? "?v=translatehtml_i18n_20261125_1" : ""
+
+  return { language: lang, language_url: `${url}${file}${revision}` }
 }
 const languageConfig = getLanguageConfig(appLocale.value)
 const editorDirectionality = document.documentElement.dir === "rtl" ? "rtl" : "ltr"

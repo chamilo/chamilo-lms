@@ -130,7 +130,7 @@
               <div
                 class="h-full rounded-full bg-primary transition-all"
                 :style="{ width: `${ui.progressPercent}%` }"
-                :aria-label="`Progress ${ui.progressPercent}%`"
+                :aria-label="t('Progress')"
                 role="progressbar"
                 :aria-valuenow="ui.progressPercent"
                 aria-valuemin="0"
@@ -142,13 +142,13 @@
                 v-if="!ui.isCompleted"
                 class="text-primary"
               >
-                {{ ui.progressLabel }}% Completed
+                {{ t("{0} Completed", [`${ui.progressLabel}%`]) }}
               </span>
               <span
                 v-else
                 class="font-semibold text-primary"
               >
-                Completed!
+                {{ t("Completed") }}
               </span>
             </div>
           </div>

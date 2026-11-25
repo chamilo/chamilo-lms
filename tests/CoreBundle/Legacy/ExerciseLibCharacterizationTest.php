@@ -680,7 +680,7 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $student = $this->rawUser('stats_student');
         $this->subscribe($student, 1);
         $this->subscribe(1, 1, 1);
-        $a = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $student]);
+        $a = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $student, 'status' => 'completed']);
         $b = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => 1]);
         $c = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $student, 'status' => 'incomplete']);
         $this->attempt($a, $student, $q, 'x', 1.0);
@@ -714,8 +714,8 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $this->subscribe($s1, 1);
         $this->subscribe($s2, 1);
         $this->subscribe($tutor, 1, STUDENT, 2); // relation_type 2 = HRM-like, excluded
-        foreach ([[$s1, '7'], [$s2, '7'], [$s2, '8'], [$tutor, '7']] as [$uid, $ans]) {
-            $exe = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $uid]);
+        foreach ([[$s1, '7', 'completed'], [$s2, '7', ''], [$s2, '8', 'completed'], [$tutor, '7', '']] as [$uid, $ans, $status]) {
+            $exe = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $uid, 'status' => $status]);
             $this->attempt($exe, $uid, $q, $ans);
         }
         $incomplete = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $s1, 'status' => 'incomplete']);
@@ -740,8 +740,8 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $this->subscribeInSession($inSession, 1, $sid);
         $this->subscribeInSession($coach, 1, $sid, SessionEntity::COURSE_COACH);
         $this->subscribe($baseOnly, 1);
-        foreach ([[$inSession, $sid], [$coach, $sid], [$baseOnly, null]] as [$uid, $sess]) {
-            $exe = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $uid, 'session_id' => $sess]);
+        foreach ([[$inSession, $sid, 'completed'], [$coach, $sid, 'completed'], [$baseOnly, null, '']] as [$uid, $sess, $status]) {
+            $exe = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $uid, 'session_id' => $sess, 'status' => $status]);
             $this->attempt($exe, $uid, $q, '7');
         }
         $code = $this->getCourse(1)->getCode();
@@ -762,7 +762,9 @@ final class ExerciseLibCharacterizationTest extends KernelTestCase
         $this->subscribe($s2, 1);
         $e1 = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $s1]);
         $e1b = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $s1]);
-        $e2 = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $s2]);
+        $e2 = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $s2, 'status' => 'completed']);
+        $incomplete = $this->exe(['exe_exo_id' => $quiz, 'exe_user_id' => $s2, 'status' => 'incomplete']);
+        $this->hotspot($incomplete, $s2, $q, 3, 1);
         $this->hotspot($e1, $s1, $q, 1, 1);
         $this->hotspot($e1b, $s1, $q, 1, 1); // same student twice: counted once (DISTINCT)
         $this->hotspot($e2, $s2, $q, 1, 0);  // not correct

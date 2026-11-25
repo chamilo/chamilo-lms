@@ -3,6 +3,14 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
@@ -17,54 +25,76 @@ class UserLearnPathsLoader implements LoaderInterface
      */
     public function load(array $incomingData)
     {
-        $tblLp = \Database::get_course_table(TABLE_LP_MAIN);
-        $tblLpItem = \Database::get_course_table(TABLE_LP_ITEM);
-        $tblLpView = \Database::get_course_table(TABLE_LP_VIEW);
-        $tblLpItemView = \Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $tblSrCrU = \Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $em = \Database::getManager();
 
-        $resSubscriptions = \Database::query(
-            "SELECT c_id, session_id FROM $tblSrCrU WHERE user_id = {$incomingData['user_id']}"
-        );
+        $user = $em->find(User::class, (int) $incomingData['user_id']);
 
-        while ($subscription = \Database::fetch_assoc($resSubscriptions)) {
-            $resLps = \Database::query("SELECT iid FROM $tblLp WHERE c_id = {$subscription['c_id']} AND lp_type = 1");
+        if (!$user) {
+            throw new \Exception("User ({$incomingData['user_id']}) not found.");
+        }
 
-            while ($lp = \Database::fetch_assoc($resLps)) {
-                $lpViewId = \Database::insert(
-                    $tblLpView,
-                    [
-                        'c_id' => $subscription['c_id'],
-                        'lp_id' => $lp['iid'],
-                        'user_id' => $incomingData['user_id'],
-                        'view_count' => 1,
-                        'session_id' => $subscription['session_id'],
-                        'last_item' => 0,
-                    ]
-                );
-                \Database::query("UPDATE $tblLpView SET id = iid WHERE iid = $lpViewId");
+        $subscriptions = $em->createQuery(
+            'SELECT IDENTITY(srcru.course) AS courseId, IDENTITY(srcru.session) AS sessionId
+                FROM '.SessionRelCourseRelUser::class.' srcru
+                WHERE srcru.user = :userId'
+        )
+            ->setParameter('userId', (int) $incomingData['user_id'])
+            ->getArrayResult()
+        ;
 
-                $resItems = \Database::query(
-                    "SELECT iid, max_score FROM $tblLpItem
-                        WHERE lp_id = {$lp['iid']} ORDER BY parent_item_id ASC, display_order ASC"
-                );
-                while ($lpItem = \Database::fetch_assoc($resItems)) {
-                    $lpItemViewId = \Database::insert(
-                        $tblLpItemView,
-                        [
-                            'c_id' => $subscription['c_id'],
-                            'lp_item_id' => $lpItem['iid'],
-                            'lp_view_id' => $lpViewId,
-                            'view_count' => 1,
-                            'status' => 'not attempted',
-                            'start_time' => 0,
-                            'total_time' => 0,
-                            'score' => 0,
-                            'max_score' => $lpItem['max_score'],
-                        ]
-                    );
-                    \Database::query("UPDATE $tblLpItemView SET id = iid WHERE iid = $lpItemViewId");
+        foreach ($subscriptions as $subscription) {
+            // A learning path belongs to a course through the links of its resource node (c_lp has no c_id).
+            $lps = $em->createQuery(
+                'SELECT DISTINCT lp
+                    FROM '.CLp::class.' lp
+                    INNER JOIN lp.resourceNode rn
+                    INNER JOIN rn.resourceLinks rl
+                    WHERE IDENTITY(rl.course) = :courseId AND lp.lpType = 1'
+            )
+                ->setParameter('courseId', (int) $subscription['courseId'])
+                ->getResult()
+            ;
+
+            foreach ($lps as $lp) {
+                $lpView = (new CLpView())
+                    ->setCourse($em->getReference(Course::class, (int) $subscription['courseId']))
+                    ->setLp($lp)
+                    ->setUser($user)
+                    ->setViewCount(1)
+                    ->setSession($em->getReference(Session::class, (int) $subscription['sessionId']))
+                    ->setLastItem(0)
+                ;
+                $em->persist($lpView);
+
+                $lpItems = $em->createQuery(
+                    'SELECT lpi
+                        FROM '.CLpItem::class.' lpi
+                        WHERE lpi.lp = :lpId
+                        ORDER BY lpi.parent ASC, lpi.displayOrder ASC'
+                )
+                    ->setParameter('lpId', (int) $lp->getIid())
+                    ->getResult()
+                ;
+
+                foreach ($lpItems as $lpItem) {
+                    $lpItemView = (new CLpItemView())
+                        ->setItem($lpItem)
+                        ->setView($lpView)
+                        ->setViewCount(1)
+                        ->setStatus('not attempted')
+                        ->setStartTime(0)
+                        ->setTotalTime(0)
+                        ->setScore(0)
+                    ;
+
+                    if (null !== $lpItem->getMaxScore()) {
+                        $lpItemView->setMaxScore((string) $lpItem->getMaxScore());
+                    }
+
+                    $em->persist($lpItemView);
                 }
+
+                $em->flush();
             }
         }
 

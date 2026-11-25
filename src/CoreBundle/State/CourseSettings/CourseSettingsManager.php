@@ -454,11 +454,6 @@ final readonly class CourseSettingsManager
             return;
         }
 
-        $resourceNode = $course->getResourceNode();
-        if (null !== $resourceNode && $this->security->isGranted('EDIT', $resourceNode)) {
-            return;
-        }
-
         throw new AccessDeniedHttpException('You are not allowed to edit this course.');
     }
 

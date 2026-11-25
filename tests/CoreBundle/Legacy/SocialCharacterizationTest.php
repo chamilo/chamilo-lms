@@ -21,7 +21,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Throwable;
 
 /**
  * Characterization tests for SocialManager (social.lib.php).
@@ -32,9 +31,8 @@ use Throwable;
  * get_list_invitation_of_friends_by_user_id() (the notifications poll of message.ajax.php) reads the pending invitations
  * received by a user through message_rel_user and message.status.
  *
- * BROKEN: getWallMessages still reads the `message` table through user_receiver_id/msg_status: those two columns no
- * longer exist (recipients live in message_rel_user, the status column is `status`), so the call throws. It is still
- * reached by an AJAX action (social.ajax.php); the wall itself is the Vue SocialPost feature. Pinned cheaply.
+ * (getWallMessages was removed: it read message.user_receiver_id/msg_status, which no longer exist, and its only caller, the
+ * list_wall_message AJAX action, was unreachable; the wall is the Vue SocialPost feature.)
  *
  * Fixtures: users 1 (admin), 2 (anonymous), 3 (soft deleted fallback_user) and raw user_rel_user rows (sc_).
  */
@@ -204,24 +202,6 @@ final class SocialCharacterizationTest extends KernelTestCase
         $this->assertSame('anon', $friends[0]['username']);
         $this->assertArrayHasKey('image', $friends[0]);
         $this->assertSame('anon', $friends[0]['user_info']['username']);
-    }
-
-    // ------------------------------------------------------------------ message based helpers (broken)
-
-    /**
-     * @dataProvider brokenMessageQueries
-     */
-    public function testMessageTableHelpersThrowBecauseTheirColumnsAreGone(callable $call): void
-    {
-        // BROKEN (the remaining callers are an AJAX action behind the abandoned wall and the notifications poll): user_receiver_id / msg_status do not exist on `message` any more, so the query fails.
-        // Intended (if ever revived): counts and lists computed through message_rel_user and message.status.
-        $this->expectException(Throwable::class);
-        $call();
-    }
-
-    public static function brokenMessageQueries(): iterable
-    {
-        yield 'wall messages' => [static fn () => SocialManager::getWallMessages(1)];
     }
 
     public function testPendingInvitationsReceivedAreListedNewestFirstWithTheirSenderAndLimit(): void

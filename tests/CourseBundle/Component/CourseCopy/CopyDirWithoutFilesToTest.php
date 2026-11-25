@@ -11,6 +11,8 @@ use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
+require_once \dirname(__DIR__, 4).'/public/main/inc/lib/fileManage.lib.php';
+
 /**
  * CourseArchiver copies assignment folders with an unqualified call to
  * copyDirWithoutFilesTo(). That helper used to live in fileManage.lib.php and
@@ -39,7 +41,7 @@ final class CopyDirWithoutFilesToTest extends TestCase
     {
         $source = $this->work.'/work';
         mkdir($source.'/assignment-a/nested', 0775, true);
-        mkdir($source.'/assignment-b', 0775, true);
+        mkdir($source.'/assignment..final/nested', 0775, true);
         file_put_contents($source.'/assignment-a/submission.txt', 'student file');
         file_put_contents($source.'/assignment-a/nested/draft.txt', 'nested file');
 
@@ -50,7 +52,7 @@ final class CopyDirWithoutFilesToTest extends TestCase
 
         self::assertTrue($copied);
         self::assertDirectoryExists($destination.'/assignment-a/nested');
-        self::assertDirectoryExists($destination.'/assignment-b');
+        self::assertDirectoryExists($destination.'/assignment..final/nested');
         self::assertFileDoesNotExist($destination.'/assignment-a/submission.txt');
         self::assertFileDoesNotExist($destination.'/assignment-a/nested/draft.txt');
     }
@@ -61,6 +63,21 @@ final class CopyDirWithoutFilesToTest extends TestCase
         self::assertDirectoryDoesNotExist($this->work.'/backup');
     }
 
+    public function testDirectorySymlinksAreNotCopied(): void
+    {
+        $source = $this->work.'/work';
+        $outside = $this->work.'/outside';
+        mkdir($source, 0775, true);
+        mkdir($outside.'/private', 0775, true);
+        if (!@symlink($outside, $source.'/linked')) {
+            self::markTestSkipped('Symbolic links are not available.');
+        }
+
+        $destination = $this->work.'/backup';
+        self::assertTrue(copyDirWithoutFilesTo($source, $destination));
+        self::assertDirectoryDoesNotExist($destination.'/linked');
+    }
+
     private function removeDir(string $dir): void
     {
         $items = new RecursiveIteratorIterator(
@@ -68,7 +85,7 @@ final class CopyDirWithoutFilesToTest extends TestCase
             RecursiveIteratorIterator::CHILD_FIRST
         );
         foreach ($items as $item) {
-            if ($item->isDir()) {
+            if (!$item->isLink() && $item->isDir()) {
                 rmdir($item->getPathname());
             } else {
                 unlink($item->getPathname());

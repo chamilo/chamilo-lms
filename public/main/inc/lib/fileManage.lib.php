@@ -86,13 +86,18 @@ function copyDirTo($source, $destination, $move = true)
 function copyDirWithoutFilesTo($source, $destination)
 {
     $fs = new Filesystem();
+    $source = rtrim($source, DIRECTORY_SEPARATOR);
 
-    if (!is_dir($source)) {
+    if (is_link($source) || !is_dir($source)) {
         return false;
     }
 
-    $source = rtrim(str_replace('\\', '/', $source), '/');
-    $destination = rtrim(str_replace('\\', '/', $destination), '/');
+    $source = realpath($source);
+    if (false === $source) {
+        return false;
+    }
+
+    $prefix = rtrim($source, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
     $fs->mkdir($destination);
 
     $iterator = new RecursiveIteratorIterator(
@@ -101,16 +106,14 @@ function copyDirWithoutFilesTo($source, $destination)
     );
 
     foreach ($iterator as $item) {
-        if (!$item->isDir()) {
+        if ($item->isLink() || !$item->isDir()) {
             continue;
         }
 
-        $relative = substr(str_replace('\\', '/', $item->getPathname()), strlen($source) + 1);
-        if ('' === $relative || str_contains($relative, '..')) {
-            continue;
-        }
-
-        $fs->mkdir($destination.'/'.$relative);
+        // Iterator paths are native paths. Do not rewrite literal backslashes or
+        // reject directory names containing two dots (e.g. assignment..final).
+        $relative = substr($item->getPathname(), strlen($prefix));
+        $fs->mkdir($destination.DIRECTORY_SEPARATOR.$relative);
     }
 
     return true;

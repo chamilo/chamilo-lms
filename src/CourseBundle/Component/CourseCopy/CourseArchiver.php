@@ -20,6 +20,7 @@ use Throwable;
 use UnserializeApi;
 use ZipArchive;
 
+use const DIRECTORY_SEPARATOR;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
 use const PATHINFO_EXTENSION;
@@ -183,11 +184,13 @@ class CourseArchiver
         $serialized = @serialize($course);
         $b64 = base64_encode($serialized);
         $okWrite = false !== $fp ? @fwrite($fp, $b64) : false;
-        if (false === $okWrite) {
-            error_log(__FILE__.' line '.__LINE__.': '.($php_errormsg ?: 'fwrite failed for course_info.dat'), 0);
-        }
         if (false !== $fp) {
             @fclose($fp);
+        }
+        if ($okWrite !== \strlen($b64)) {
+            @rmdirr($backup_dir);
+
+            throw new RuntimeException('Cannot write course_info.dat.');
         }
 
         self::dlog('createBackup.course_info', [
@@ -287,10 +290,12 @@ class CourseArchiver
 
         // Zip the course-contents. Paths inside the archive stay relative to the
         // temp dir (course_info.dat at the root) so an import can still find them.
-        self::zipDirectory($backup_dir, $zipFilePath);
-
-        // Remove the temp-dir.
-        @rmdirr($backup_dir);
+        try {
+            self::zipDirectory($backup_dir, $zipFilePath);
+        } finally {
+            // Remove the temp-dir even if archive creation fails.
+            @rmdirr($backup_dir);
+        }
 
         self::dlog('createBackup.end', ['zip' => $zipFileName, 'path' => $zipFilePath]);
 
@@ -588,36 +593,84 @@ class CourseArchiver
      */
     private static function zipDirectory(string $sourceDir, string $zipFilePath): void
     {
+        $sourceDir = realpath($sourceDir);
+        if (false === $sourceDir || !is_dir($sourceDir)) {
+            throw new RuntimeException('Cannot read backup directory.');
+        }
+
+        $prefix = rtrim($sourceDir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+        $metadata = $prefix.'course_info.dat';
+        if (is_link($metadata) || !is_file($metadata) || !is_readable($metadata) || !filesize($metadata)) {
+            throw new RuntimeException('Missing or empty course_info.dat.');
+        }
+
+        // Publish only a successfully closed archive. Preserve any existing backup on failure.
+        $temporaryPath = tempnam(\dirname($zipFilePath), 'chamilo_zip_');
+        if (false === $temporaryPath) {
+            throw new RuntimeException('Cannot create temporary backup archive.');
+        }
+
         $zip = new ZipArchive();
-        if (true !== $zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
-            throw new RuntimeException('Cannot create zip: '.$zipFilePath);
-        }
+        $opened = false;
+        try {
+            if (realpath(\dirname($temporaryPath)) !== realpath(\dirname($zipFilePath))) {
+                throw new RuntimeException('Temporary backup archive is outside the backup directory.');
+            }
+            if (true !== $zip->open($temporaryPath, ZipArchive::CREATE | ZipArchive::OVERWRITE)) {
+                throw new RuntimeException('Cannot create zip: '.$zipFilePath);
+            }
+            $opened = true;
 
-        $sourceDir = rtrim(str_replace('\\', '/', $sourceDir), '/');
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($sourceDir, FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST
-        );
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($sourceDir, FilesystemIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::SELF_FIRST
+            );
 
-        foreach ($iterator as $item) {
-            $relative = substr(str_replace('\\', '/', $item->getPathname()), \strlen($sourceDir) + 1);
-            if ('' === $relative || str_contains($relative, '..')) {
-                continue;
+            foreach ($iterator as $item) {
+                if ($item->isLink()) {
+                    continue;
+                }
+
+                $relative = str_replace(DIRECTORY_SEPARATOR, '/', substr($item->getPathname(), \strlen($prefix)));
+                // Reject actual traversal components, not valid names containing two dots.
+                // A literal backslash on Unix must not be reinterpreted as a path separator.
+                if ('' === $relative || str_contains($relative, '\\') || str_starts_with($relative, '/')
+                    || preg_match('/^[A-Za-z]:/', $relative) || \in_array('..', explode('/', $relative), true)
+                ) {
+                    throw new RuntimeException('Invalid backup entry path.');
+                }
+
+                if ($item->isDir()) {
+                    if (!$zip->addEmptyDir($relative)) {
+                        throw new RuntimeException('Cannot add directory to backup: '.$relative);
+                    }
+                } elseif ($item->isFile()) {
+                    if (!$zip->addFile($item->getPathname(), $relative)) {
+                        throw new RuntimeException('Cannot add file to backup: '.$relative);
+                    }
+                } else {
+                    throw new RuntimeException('Unsupported backup entry: '.$relative);
+                }
             }
 
-            if ($item->isDir()) {
-                $zip->addEmptyDir($relative);
-
-                continue;
+            if (!$zip->close()) {
+                throw new RuntimeException('Cannot close zip: '.$zipFilePath);
             }
+            $opened = false;
 
-            if ($item->isFile() && !$item->isLink()) {
-                $zip->addFile($item->getPathname(), $relative);
+            if (!rename($temporaryPath, $zipFilePath)) {
+                throw new RuntimeException('Cannot publish zip: '.$zipFilePath);
             }
-        }
-
-        if (!$zip->close()) {
-            throw new RuntimeException('Cannot close zip: '.$zipFilePath);
+        } finally {
+            try {
+                if ($opened) {
+                    @$zip->close();
+                }
+            } finally {
+                if (is_file($temporaryPath)) {
+                    unlink($temporaryPath);
+                }
+            }
         }
     }
 

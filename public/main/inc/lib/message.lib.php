@@ -762,57 +762,6 @@ class MessageManager
     }
 
     /**
-     * Get messages by parent id optionally with limit.
-     *
-     * @param  int        parent id
-     * @param  int        group id (optional)
-     * @param  int        offset (optional)
-     * @param  int        limit (optional)
-     *
-     * @return array
-     */
-    public static function getMessagesByParent($parentId, $groupId = 0, $offset = 0, $limit = 0)
-    {
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $parentId = (int) $parentId;
-
-        if (empty($parentId)) {
-            return [];
-        }
-
-        $condition_group_id = '';
-        if (!empty($groupId)) {
-            $groupId = (int) $groupId;
-            $condition_group_id = " AND group_id = '$groupId' ";
-        }
-
-        $condition_limit = '';
-        if ($offset && $limit) {
-            $offset = (int) $offset;
-            $limit = (int) $limit;
-            $offset = ($offset - 1) * $limit;
-            $condition_limit = " LIMIT $offset,$limit ";
-        }
-
-        $sql = "SELECT * FROM $table
-                WHERE
-                    parent_id='$parentId' AND
-                    msg_type = '".Message::MESSAGE_TYPE_GROUP."'
-                    $condition_group_id
-                ORDER BY send_date DESC $condition_limit ";
-        // TODO(owner): dead code (getMessagesByParent has no caller); left raw, not migrated.
-        $rs = Database::query($sql);
-        $data = [];
-        if (Database::num_rows($rs) > 0) {
-            while ($row = Database::fetch_array($rs)) {
-                $data[$row['id']] = $row;
-            }
-        }
-
-        return $data;
-    }
-
-    /**
      * Displays messages of a group with nested view.
      *
      * @param int $groupId
@@ -1686,17 +1635,17 @@ class MessageManager
      */
     public static function getUsersThatHadConversationWithUser($userId)
     {
-        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
-        $userId = (int) $userId;
-
-        $sql = "SELECT DISTINCT
-                    user_sender_id
-                FROM $messagesTable
-                WHERE
-                    user_receiver_id = ".$userId;
-        // TODO(owner): broken, Unknown column 'user_receiver_id' (recipients live in message_rel_user); left raw. Caller: my_space/myStudents.php.
-        $result = Database::query($sql);
-        $users = Database::store_result($result);
+        // Everyone who sent a message that reached this user (recipients live in message_rel_user, the old
+        // message.user_receiver_id column is gone).
+        $users = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT IDENTITY(m.sender) AS user_sender_id')
+            ->from(MessageRelUser::class, 'mru')
+            ->innerJoin('mru.message', 'm')
+            ->where('mru.receiver = :userId')
+            ->setParameter('userId', (int) $userId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $userList = [];
         foreach ($users as $userData) {
             $userId = $userData['user_sender_id'];
@@ -1720,7 +1669,6 @@ class MessageManager
      */
     public static function getAllMessagesBetweenStudents($userId, $otherUserId)
     {
-        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
         $userId = (int) $userId;
         $otherUserId = (int) $otherUserId;
 
@@ -1728,19 +1676,23 @@ class MessageManager
             return [];
         }
 
-        $sql = "SELECT DISTINCT *
-                FROM $messagesTable
-                WHERE
-                    (user_receiver_id = $userId AND user_sender_id = $otherUserId) OR
-                    (user_receiver_id = $otherUserId AND user_sender_id = $userId)
-                ORDER BY send_date DESC
-            ";
-        // TODO(owner): broken, Unknown column 'user_receiver_id' (recipients live in message_rel_user); left raw. Caller: tracking/messages.php.
-        $result = Database::query($sql);
-        $messages = Database::store_result($result);
+        // Messages in both directions (recipients live in message_rel_user, the old message.user_receiver_id column is
+        // gone), newest first.
+        $rows = self::messageRowsQueryBuilder()
+            ->innerJoin(MessageRelUser::class, 'mru', 'WITH', 'mru.message = m')
+            ->where('(IDENTITY(m.sender) = :otherUserId AND mru.receiver = :userId) OR (IDENTITY(m.sender) = :userId AND mru.receiver = :otherUserId)')
+            ->distinct()
+            ->orderBy('m.sendDate', 'DESC')
+            ->addOrderBy('m.id', 'DESC')
+            ->setParameter('userId', $userId)
+            ->setParameter('otherUserId', $otherUserId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
         $list = [];
-        foreach ($messages as $message) {
-            $list[] = $message;
+        foreach ($rows as $row) {
+            $list[] = self::toLegacyMessageRow($row);
         }
 
         return $list;
@@ -1885,20 +1837,4 @@ class MessageManager
         return $btnLike.PHP_EOL.$btnDislike;
     }
 
-    /**
-     * Reports whether the given user is sender or receiver of the given message
-     */
-    public static function isUserOwner(int $userId, int $messageId): bool
-    {
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = "SELECT id FROM $table
-          WHERE id = $messageId
-            AND (user_receiver_id = $userId OR user_sender_id = $userId)";
-        // TODO(owner): broken, Unknown column 'user_receiver_id', and no caller; left raw.
-        $res = Database::query($sql);
-        if (Database::num_rows($res) === 1) {
-            return true;
-        }
-        return false;
-    }
 }

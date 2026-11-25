@@ -63,7 +63,7 @@ import { useSecurityStore } from "../../store/securityStore"
 import { usePlatformConfig } from "../../store/platformConfig"
 import SessionCardSimple from "./SessionCardSimple.vue"
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const securityStore = useSecurityStore()
 const platformConfigStore = usePlatformConfig()
 
@@ -94,7 +94,11 @@ const showRemainingDays = computed(
 
 function formatDate(iso) {
   const date = new Date(iso)
-  return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
+  return date.toLocaleDateString(String(locale.value || "en_US").replace("_", "-"), {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
 }
 
 function extractIdFromIri(iri) {

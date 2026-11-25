@@ -56,10 +56,12 @@ switch ($action) {
                 break;
             }
         }
+        $completeName = api_htmlentities((string) $user_info['complete_name'], ENT_QUOTES);
+
         echo '<div class="row">';
         echo '<div class="col-sm-5">';
         echo '<div class="thumbnail">';
-        echo Display::img($user_info['avatar'], $user_info['complete_name']);
+        echo Display::img($user_info['avatar'], $completeName);
         echo '</div>';
         echo '</div>';
 
@@ -69,11 +71,11 @@ switch ($action) {
             $user_info['mail'] = ' ';
         }
 
-        $userData = '<h3>'.$user_info['complete_name'].'</h3>'
+        $userData = '<h3>'.$completeName.'</h3>'
             .PHP_EOL
-            .$user_info['mail']
+            .api_htmlentities((string) $user_info['mail'], ENT_QUOTES)
             .PHP_EOL
-            .$user_info['official_code'];
+            .api_htmlentities((string) $user_info['official_code'], ENT_QUOTES);
 
         if ($isAnonymous) {
             if (COURSEMANAGER === (int) $user_info['status']) {

@@ -434,6 +434,7 @@
                     <span>{{ t(question.typeLabel) }}</span>
                   </div>
                   <h2
+                    v-if="visibility.showQuestionTitle !== false"
                     class="exercise-result-html text-lg font-semibold text-gray-90"
                     dir="auto"
                     v-html="displayTranslatedHtml(question.title)"

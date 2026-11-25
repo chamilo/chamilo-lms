@@ -138,6 +138,11 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             $visibility = $this->getManagerResultVisibility($visibility);
         }
         $visibility['isReviewMode'] = $isReviewMode;
+        // A teacher correcting someone else's attempt needs the title to know which question it is,
+        // but sees it hidden in their own preview, as the learner does
+        if ($isReviewMode) {
+            $visibility['showQuestionTitle'] = true;
+        }
 
         $categoryScores = $this->getCategoryScores($questionIds, $rowsByQuestion, $attempt, $visibility);
 
@@ -590,6 +595,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'showQuestionStatus' => $showQuestionScore,
             'hideQuestionStatusLabel' => $this->isSettingEnabled('exercise.exercise_hide_label'),
             'showQuestionDetails' => $showQuestionDetails,
+            'showQuestionTitle' => !$quiz->isHideQuestionTitle(),
             'showCorrections' => $showExpectedAnswers,
             'showExpectedAnswers' => $showExpectedAnswers,
             'showStudentAnswers' => !$showOnlyCorrectAnswers,

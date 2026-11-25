@@ -98,7 +98,13 @@
                 :class="{ 'is-active': Number(activePeer?.id || 0) === SUPPORT_BOT_PEER_ID }"
                 :title="t('Support bot')"
                 class="chd-ai__btn"
-                @click="openConversation({ id: SUPPORT_BOT_PEER_ID, name: supportBotCtx.title || t('Support bot'), image: '' })"
+                @click="
+                  openConversation({
+                    id: SUPPORT_BOT_PEER_ID,
+                    name: supportBotCtx.title || t('Support bot'),
+                    image: '',
+                  })
+                "
               >
                 <i class="mdi mdi-face-agent" />
                 <span class="chd-truncate">{{ supportBotCtx.title || t("Support bot") }}</span>
@@ -322,14 +328,22 @@
                 <button
                   v-if="isAiThread"
                   :aria-label="t('Save')"
-                  :disabled="conversationSaved || savingConversation || sending || clearing || activeMessages.length === 0"
+                  :disabled="
+                    conversationSaved || savingConversation || sending || clearing || activeMessages.length === 0
+                  "
                   :title="t('Save')"
                   class="chd-btn chd-btn--ghost chd-btn--xs"
                   type="button"
                   @click="saveConversation"
                 >
                   <i
-                    :class="savingConversation ? 'mdi mdi-loading mdi-spin' : conversationSaved ? 'mdi mdi-check' : 'mdi mdi-content-save-outline'"
+                    :class="
+                      savingConversation
+                        ? 'mdi mdi-loading mdi-spin'
+                        : conversationSaved
+                          ? 'mdi mdi-check'
+                          : 'mdi mdi-content-save-outline'
+                    "
                     aria-hidden="true"
                   />
                 </button>
@@ -528,6 +542,7 @@ import { useRoute } from "vue-router"
 import { getCourseContext } from "../../utils/courseContext"
 import { usePlatformConfig } from "../../store/platformConfig"
 import DOMPurify from "dompurify"
+import { escapeForHtml, renderAiMarkdown } from "../../utils/renderAiMarkdown"
 import baseService from "../../services/baseService"
 import supportBotService from "../../services/supportBotService"
 import BaseButton from "../basecomponents/BaseButton.vue"
@@ -743,10 +758,7 @@ const API = {
   preview: RG(["chat_api_preview", "chamilo_core_chat_api_preview"], "/account/chat/api/preview"),
   presence: RG(["chat_api_presence", "chamilo_core_chat_api_presence"], "/account/chat/api/presence"),
   ack: RG(["chat_api_ack", "chamilo_core_chat_api_ack"], "/account/chat/api/ack"),
-  video_signal: RG(
-    ["chat_api_video_signal", "chamilo_core_chat_api_video_signal"],
-    "/account/chat/api/video/signal",
-  ),
+  video_signal: RG(["chat_api_video_signal", "chamilo_core_chat_api_video_signal"], "/account/chat/api/video/signal"),
   video_signals: RG(
     ["chat_api_video_signals", "chamilo_core_chat_api_video_signals"],
     "/account/chat/api/video/signals",
@@ -821,9 +833,7 @@ const VIDEO_SIGNAL_IDLE_MAX_POLL_MS = 10000
 const VIDEO_CALL_TIMEOUT_MS = 30000
 const VIDEO_CONNECTION_TIMEOUT_MS = 20000
 const PRESENCE_OFFLINE_GRACE_MS = 10000
-const VIDEO_ICE_SERVERS = [
-  { urls: "stun:stun.l.google.com:19302" },
-]
+const VIDEO_ICE_SERVERS = [{ urls: "stun:stun.l.google.com:19302" }]
 
 const videoCallState = ref("idle")
 const videoCallPeer = ref(null)
@@ -986,13 +996,6 @@ function handleScroll(e) {
   onScrollUpLoadMore(e)
   onBodyScrollForRead()
 }
-function escapeForHtml(s) {
-  return (s || "").replace(
-    /[&<>"']/g,
-    (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[m],
-  )
-}
-
 /**
  * Convert plain text to safe HTML with clickable links.
  * - Escapes all user content first (prevents HTML injection).
@@ -1057,141 +1060,6 @@ function normalizeStoredChatText(rawMessage) {
   return decoder.value
 }
 
-function safeHttpUrl(rawUrl) {
-  try {
-    const url = new URL(String(rawUrl || ""))
-    if (!/^https?:$/i.test(url.protocol)) return ""
-    return url.toString()
-  } catch {
-    return ""
-  }
-}
-
-/**
- * Render the limited Markdown normally returned by AI providers.
- * Raw HTML is never trusted: content is escaped first and DOMPurify remains
- * the final safety boundary.
- */
-function renderAiInlineMarkdown(rawText) {
-  let text = String(rawText ?? "")
-
-  // Providers occasionally escape Markdown punctuation (\*\*, \[, ...).
-  // Unescape it only for assistant messages so normal user chat stays literal.
-  text = text.replace(/\\([\\`*_[\]{}()#+\-.!>])/g, "$1")
-
-  const tokens = []
-  const token = (html) => {
-    const key = `\uE000${tokens.length}\uE001`
-    tokens.push(html)
-    return key
-  }
-
-  // Markdown links first so the URL is not picked up again by bare-link logic.
-  text = text.replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g, (match, label, rawUrl) => {
-    const href = safeHttpUrl(rawUrl)
-    if (!href) return match
-
-    return token(
-      `<a href="${escapeForHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeForHtml(label)}</a>`,
-    )
-  })
-
-  // Inline code.
-  text = text.replace(/`([^`\n]+)`/g, (match, code) => token(`<code>${escapeForHtml(code)}</code>`))
-
-  // Bare HTTP(S) URLs.
-  text = text.replace(/https?:\/\/[^\s<>"']+/g, (rawUrl) => {
-    const href = safeHttpUrl(rawUrl)
-    if (!href) return rawUrl
-
-    return token(
-      `<a href="${escapeForHtml(href)}" target="_blank" rel="noopener noreferrer">${escapeForHtml(rawUrl)}</a>`,
-    )
-  })
-
-  let html = escapeForHtml(text)
-
-  // Limited emphasis support. Keep this intentionally small and predictable.
-  html = html.replace(/\*\*([^*\n]+)\*\*/g, "<strong>$1</strong>")
-  html = html.replace(/__([^_\n]+)__/g, "<strong>$1</strong>")
-  html = html.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g, "$1<em>$2</em>")
-  html = html.replace(/(^|[^_])_([^_\n]+)_(?!_)/g, "$1<em>$2</em>")
-
-  tokens.forEach((value, index) => {
-    html = html.replaceAll(`\uE000${index}\uE001`, value)
-  })
-
-  return html
-}
-
-function renderAiMarkdown(rawMessage) {
-  const text = normalizeStoredChatText(rawMessage)
-  const lines = text.split(/\n/)
-  const out = []
-  let listType = ""
-
-  const closeList = () => {
-    if (!listType) return
-    out.push(`</${listType}>`)
-    listType = ""
-  }
-
-  const openList = (type) => {
-    if (listType === type) return
-    closeList()
-    listType = type
-    out.push(`<${type}>`)
-  }
-
-  for (const rawLine of lines) {
-    const line = rawLine.trimEnd()
-
-    if (!line.trim()) {
-      closeList()
-      out.push("<br>")
-      continue
-    }
-
-    const heading = line.match(/^#{1,6}\s+(.+)$/)
-    if (heading) {
-      closeList()
-      out.push(`<strong>${renderAiInlineMarkdown(heading[1])}</strong><br>`)
-      continue
-    }
-
-    if (/^\s*---+\s*$/.test(line)) {
-      closeList()
-      out.push("<br>")
-      continue
-    }
-
-    const bullet = line.match(/^\s*[-*]\s+(.+)$/)
-    if (bullet) {
-      openList("ul")
-      out.push(`<li>${renderAiInlineMarkdown(bullet[1])}</li>`)
-      continue
-    }
-
-    const numbered = line.match(/^\s*\d+[.)]\s+(.+)$/)
-    if (numbered) {
-      openList("ol")
-      out.push(`<li>${renderAiInlineMarkdown(numbered[1])}</li>`)
-      continue
-    }
-
-    closeList()
-    out.push(`${renderAiInlineMarkdown(line)}<br>`)
-  }
-
-  closeList()
-
-  return DOMPurify.sanitize(out.join(""), {
-    ALLOWED_TAGS: ["a", "br", "strong", "em", "code", "ul", "ol", "li"],
-    ALLOWED_ATTR: ["href", "target", "rel"],
-    ADD_ATTR: ["target", "rel"],
-  })
-}
-
 /**
  * Render chat messages safely for v-html.
  * - Normal chat stays plain text with safe clickable links.
@@ -1205,7 +1073,7 @@ function renderMessage(message) {
   }
 
   if (fromId === AI_PEER_ID) {
-    return renderAiMarkdown(message?.message)
+    return renderAiMarkdown(normalizeStoredChatText(message?.message))
   }
 
   const html = linkify(normalizeStoredChatText(message?.message))
@@ -1770,10 +1638,7 @@ async function hangUpVideoCall() {
 
   if (peerId > 0 && callId) {
     await sendVideoSignal(peerId, signalType, callId).catch(() => {})
-    addVideoSystemMessage(
-      peerId,
-      signalType === "cancel" ? t("You cancelled the call.") : t("You hung up."),
-    )
+    addVideoSystemMessage(peerId, signalType === "cancel" ? t("You cancelled the call.") : t("You hung up."))
   }
   resetVideoCall()
 }
@@ -2473,19 +2338,13 @@ function buildSupportBotMessage(content, options = [], extra = {}) {
 function appendSupportBotNode(node) {
   if (!node || !String(node.content || "").trim()) return
   const current = messagesByPeer.get(SUPPORT_BOT_PEER_ID) || []
-  messagesByPeer.set(SUPPORT_BOT_PEER_ID, [
-    ...current,
-    buildSupportBotMessage(node.content, node.options || []),
-  ])
+  messagesByPeer.set(SUPPORT_BOT_PEER_ID, [...current, buildSupportBotMessage(node.content, node.options || [])])
 }
 
 function appendSupportBotSystemMessage(content, extra = {}) {
   if (!String(content || "").trim()) return
   const current = messagesByPeer.get(SUPPORT_BOT_PEER_ID) || []
-  messagesByPeer.set(SUPPORT_BOT_PEER_ID, [
-    ...current,
-    buildSupportBotMessage(content, [], extra),
-  ])
+  messagesByPeer.set(SUPPORT_BOT_PEER_ID, [...current, buildSupportBotMessage(content, [], extra)])
 }
 
 async function startSupportBotConversation(force = false) {

@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\State\Exercise;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
+use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\ApiResource\Exercise\ExerciseAiAikenGenerator;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
@@ -34,6 +35,7 @@ final readonly class ExerciseAiAikenGeneratorProvider implements ProviderInterfa
         private EntityManagerInterface $entityManager,
         private SettingsManager $settingsManager,
         private IsAllowedToEditHelper $isAllowedToEditHelper,
+        private AiProviderFactory $aiProviderFactory,
     ) {}
 
     /**
@@ -111,7 +113,10 @@ final readonly class ExerciseAiAikenGeneratorProvider implements ProviderInterfa
      */
     private function getAiProviderConfig(): array
     {
-        $providers = json_decode((string) $this->settingsManager->getSetting('ai_helpers.ai_providers', true), true);
+        $providers = $this->settingsManager->getSetting('ai_helpers.ai_providers', true);
+        if (\is_string($providers)) {
+            $providers = json_decode($providers, true);
+        }
 
         return \is_array($providers) ? $providers : [];
     }
@@ -123,43 +128,20 @@ final readonly class ExerciseAiAikenGeneratorProvider implements ProviderInterfa
     {
         $providerOptions = [];
 
-        foreach ($this->getAiProviderConfig() as $key => $config) {
-            if (!\is_array($config)) {
+        $configured = $this->getAiProviderConfig();
+        foreach ($this->aiProviderFactory->getProvidersForType('text') as $key) {
+            $textConfig = $configured[$key]['text'] ?? null;
+            if (!\is_array($textConfig) || [] === $textConfig) {
                 continue;
             }
 
-            $supportsText = false;
-            if ((!isset($config['document']) || !\is_array($config['document']))
-                && (!isset($config['document_process']) || !\is_array($config['document_process']))
-            ) {
-                continue;
-            }
-
-            $model = '';
-            if (isset($config['document']['model'])) {
-                $model = (string) $config['document']['model'];
-            } elseif (isset($config['document_process']['model'])) {
-                $model = (string) $config['document_process']['model'];
-            }
-
-            if (isset($config['text']) && \is_array($config['text'])) {
-                $supportsText = true;
-                $model = (string) ($config['text']['model'] ?? '');
-            } elseif (isset($config['model']) || isset($config['url'])) {
-                $supportsText = true;
-                $model = (string) ($config['model'] ?? '');
-            }
-
-            if (!$supportsText) {
-                continue;
-            }
-
-            $label = (string) $key;
-            if ('' !== trim($model)) {
+            $model = $textConfig['model'] ?? '';
+            $label = $key;
+            if (\is_string($model) && '' !== trim($model)) {
                 $label .= ' ('.$model.')';
             }
 
-            $providerOptions[(string) $key] = $label;
+            $providerOptions[$key] = $label;
         }
 
         return $providerOptions;

@@ -20,6 +20,10 @@ use ChamiloSession as Session;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+// Replaced by the account edit page. The code below stays as a reference for the features still to port (#9621).
+header('Location: '.api_get_path(WEB_PATH).'account/edit');
+exit;
+
 $this_section = SECTION_MYPROFILE;
 $allowSocialTool = 'true' == api_get_setting('allow_social_tool');
 if ($allowSocialTool) {

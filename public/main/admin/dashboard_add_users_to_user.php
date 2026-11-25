@@ -71,6 +71,7 @@ function search_users($needle, $type = 'multiple')
     $xajax_response = new xajaxResponse();
     $return = '';
     if (!empty($needle) && !empty($type)) {
+        $needle = Database::escape_string($needle);
         $assigned_users_to_hrm = [];
 
         switch ($userStatus) {

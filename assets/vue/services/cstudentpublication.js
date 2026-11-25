@@ -24,6 +24,14 @@ async function updatePublication(idOrIri, payload) {
   return baseService.patch(`/api/c_student_publications/${id}`, payload, { params: buildCidParams() })
 }
 
+async function findBaseCourseAssignments() {
+  return baseService.get(`/assignments/base-course`, buildCidParams())
+}
+
+async function duplicateToSession(assignmentId) {
+  return baseService.post(`/assignments/${assignmentId}/duplicate-to-session`, {}, {}, { params: buildCidParams() })
+}
+
 async function findStudentAssignments() {
   return baseService.get(`/assignments/student`, buildCidParams())
 }
@@ -292,6 +300,8 @@ async function uploadCorrection(formData, { parentResourceNodeId, submissionId }
 export default {
   ...makeService("c_student_publications"),
   findStudentAssignments,
+  findBaseCourseAssignments,
+  duplicateToSession,
   getAssignmentMetadata,
   getAssignmentDetail,
   getAssignmentDetailForTeacher,

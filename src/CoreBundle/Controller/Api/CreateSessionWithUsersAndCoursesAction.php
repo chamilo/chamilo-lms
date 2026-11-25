@@ -10,6 +10,7 @@ use ApiPlatform\Validator\ValidatorInterface;
 use Chamilo\CoreBundle\Dto\CreateSessionWithUsersAndCoursesInput;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
+use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionCategory;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
@@ -18,7 +19,9 @@ use Chamilo\CoreBundle\Entity\SessionRelUser;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Service\Assignment\AssignmentSessionDuplicator;
 use Chamilo\CoreBundle\Service\Gradebook\GradebookCertificateGenerator;
+use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -37,12 +40,39 @@ class CreateSessionWithUsersAndCoursesAction
         private GradebookCertificateGenerator $certificateGenerator,
         private UserHelper $userHelper,
         private LoggerInterface $logger,
+        private AssignmentSessionDuplicator $assignmentDuplicator,
     ) {}
 
     public function __invoke(CreateSessionWithUsersAndCoursesInput $data): Session
     {
         $this->validator->validate($data);
 
+        [$session, $courses, $copiedGradebooks] = $this->em->wrapInTransaction(
+            fn (): array => $this->persistSession($data)
+        );
+
+        foreach ($copiedGradebooks as $courseId => $categories) {
+            // The session is already saved: a failed certificate copy must not turn it into an
+            // error the caller retries, which would create the same session twice.
+            try {
+                $this->copyCertificateFromBaseCourse($courses[$courseId], $session, $categories);
+            } catch (Throwable $exception) {
+                $this->logger->error('Unable to copy the base course certificate into the new session.', [
+                    'sessionId' => $session->getId(),
+                    'courseId' => $courseId,
+                    'exception' => $exception,
+                ]);
+            }
+        }
+
+        return $session;
+    }
+
+    /**
+     * Persist the session and its gradebook copies atomically, before generating certificate files.
+     */
+    private function persistSession(CreateSessionWithUsersAndCoursesInput $data): array
+    {
         // Ensure the session title is unique
         $originalTitle = $data->getTitle();
         $title = $originalTitle;
@@ -91,19 +121,19 @@ class CreateSessionWithUsersAndCoursesAction
                 continue;
             }
 
+            if ($data->getCopyEvaluation()) {
+                $this->assignmentDuplicator->assertAdministrativeCourseScope($course);
+            }
+
             $courses[$courseId] = $course;
 
             $relCourse = new SessionRelCourse();
-            $relCourse->setSession($session);
             $relCourse->setCourse($course);
+            $session->addCourses($relCourse);
             $relCourse->setNbrUsers(0);
             $this->em->persist($relCourse);
 
             $relCourses[$courseId] = $relCourse;
-
-            if ($data->getCopyEvaluation()) {
-                $copiedGradebooks[$courseId] = $this->copyGradebookFromBaseCourse($course, $session);
-            }
         }
 
         foreach ($data->getStudentIds() as $userId) {
@@ -161,21 +191,15 @@ class CreateSessionWithUsersAndCoursesAction
 
         $this->em->flush();
 
-        foreach ($copiedGradebooks as $courseId => $categories) {
-            // The session is already saved: a failed certificate copy must not turn it into an
-            // error the caller retries, which would create the same session twice.
-            try {
-                $this->copyCertificateFromBaseCourse($courses[$courseId], $session, $categories);
-            } catch (Throwable $exception) {
-                $this->logger->error('Unable to copy the base course certificate into the new session.', [
-                    'sessionId' => $session->getId(),
-                    'courseId' => $courseId,
-                    'exception' => $exception,
-                ]);
+        if ($data->getCopyEvaluation()) {
+            foreach ($courses as $courseId => $course) {
+                $copiedGradebooks[$courseId] = $this->copyGradebookFromBaseCourse($course, $session);
             }
         }
 
-        return $session;
+        $this->em->flush();
+
+        return [$session, $courses, $copiedGradebooks];
     }
 
     /**
@@ -212,7 +236,20 @@ class CreateSessionWithUsersAndCoursesAction
             $copies[] = ['base' => $category, 'copy' => $newCategory];
 
             foreach ($category->getLinks() as $link) {
-                $newLink = clone $link;
+                if (GradebookLinkResourceResolver::LINK_STUDENT_PUBLICATION === $link->getType()) {
+                    $assignment = $this->assignmentDuplicator->duplicateGradebookAssignment($link->getResourceNode(), $course, $session);
+                    $newLink = (new GradebookLink())
+                        ->setType($link->getType())
+                        ->setCourse($course)
+                        ->setResourceNode($assignment->getResourceNode())
+                        ->setWeight($link->getWeight())
+                        ->setVisible($link->getVisible())
+                        ->setLocked($link->getLocked())
+                        ->setMinScore($link->getMinScore())
+                    ;
+                } else {
+                    $newLink = clone $link;
+                }
                 $newLink->setCategory($newCategory);
                 $this->em->persist($newLink);
             }

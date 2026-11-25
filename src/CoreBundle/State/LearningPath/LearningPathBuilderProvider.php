@@ -825,7 +825,7 @@ final readonly class LearningPathBuilderProvider implements ProviderInterface
 
         $assignments = [];
         foreach ($this->findContextResources(CStudentPublication::class, $course, $session, $group) as $resource) {
-            if (!$resource instanceof CStudentPublication || null !== $resource->getPublicationParent()) {
+            if (!$resource instanceof CStudentPublication || 'folder' !== $resource->getFiletype()) {
                 continue;
             }
             $assignments[] = $this->resourceRow(

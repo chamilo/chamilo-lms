@@ -24,6 +24,7 @@ use Chamilo\CoreBundle\Event\Events;
 use Chamilo\CoreBundle\Event\SessionDeletedEvent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
+use Chamilo\CoreBundle\Service\Assignment\AssignmentSessionDuplicator;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -1385,7 +1386,7 @@ class SessionManager
             $courseRealId,
             $sessionId,
             $getAllSessions,
-            ['r.publicationParent IS NULL', 'r.active IN (0, 1)']
+            ["r.filetype = 'folder'", 'r.active IN (0, 1)']
         );
 
         // Wiki: distinct pages.
@@ -3198,158 +3199,144 @@ class SessionManager
             }
 
             if (!$exists) {
-                // Copy gradebook categories and links (from base course)
-                // to the new course session
-                if ($copyEvaluation) {
-                    $cats = Category::load(null, null, $courseId);
-                    if (!empty($cats)) {
-                        $sessionCategory = Category:: load(
-                            null,
-                            null,
-                            $courseId,
-                            null,
-                            null,
-                            $sessionId,
-                            null
-                        );
-
-                        // @todo remove commented code
-                        if (empty($sessionCategory)) {
-                            // There is no category for this course+session, so create one
-                            $cat = new Category();
-                            $sessionName = $session->getTitle();
-                            $cat->set_name($courseInfo['code'].' - '.get_lang('Session').' '.$sessionName);
-                            $cat->set_session_id($sessionId);
-                            $cat->setCourseId($courseId);
-                            $cat->set_description(null);
-                            //$cat->set_user_id($stud_id);
-                            $cat->set_parent_id(0);
-                            $cat->set_weight(100);
-                            $cat->set_visible(0);
-                            $cat->set_certificate_min_score(75);
-                            $cat->setGenerateCertificates(1);
-                            $cat->setIsRequirement(1);
-                            $cat->add();
-                            $sessionGradeBookCategoryId = $cat->get_id();
-                        } else {
-                            if (!empty($sessionCategory[0])) {
-                                $sessionGradeBookCategoryId = $sessionCategory[0]->get_id();
-                            }
-                        }
-
-                        $categoryIdList = [];
-                        /** @var Category $cat */
-                        foreach ($cats as $cat) {
-                            $categoryIdList[$cat->get_id()] = $cat->get_id();
-                        }
-
-                        $newCategoryIdList = [];
-                        foreach ($cats as $cat) {
-                            $links = $cat->get_links(
-                                null,
-                                false,
-                                $courseId,
-                                $sessionId
-                            );
-
-                            //$cat->set_session_id($sessionId);
-                            //$oldCategoryId = $cat->get_id();
-                            //$newId = $cat->add();
-                            //$newCategoryIdList[$oldCategoryId] = $newId;
-                            //$parentId = $cat->get_parent_id();
-
-                            /*if (!empty($parentId)) {
-                                $newParentId = $newCategoryIdList[$parentId];
-                                $cat->set_parent_id($newParentId);
-                                $cat->save();
-                            }*/
-
-                            if (!empty($links)) {
-                                /** @var AbstractLink $link */
-                                foreach ($links as $link) {
-                                    //$newCategoryId = $newCategoryIdList[$link->get_category_id()];
-                                    $link->set_category_id($sessionGradeBookCategoryId);
-                                    $link->add();
-                                }
-                            }
-
-                            $evaluationList = $cat->get_evaluations(
-                                null,
-                                false,
-                                $courseId,
-                                $sessionId
-                            );
-
-                            if (!empty($evaluationList)) {
-                                /** @var Evaluation $evaluation */
-                                foreach ($evaluationList as $evaluation) {
-                                    //$evaluationId = $newCategoryIdList[$evaluation->get_category_id()];
-                                    $evaluation->set_category_id($sessionGradeBookCategoryId);
-                                    $evaluation->add();
-                                }
-                            }
-                        }
-
-                        // Create
-                        DocumentManager::generateDefaultCertificate(
-                            $courseInfo,
-                            true,
-                            $sessionId
-                        );
-                    }
-                }
-
-                if ($importAssignments) {
-                    $repo = Container::getStudentPublicationRepository();
+                $generateCertificate = false;
+                if ($copyEvaluation || $importAssignments) {
+                    $em = Container::getEntityManager();
                     $course = api_get_course_entity($courseId);
-                    $session = api_get_session_entity($sessionId);
-                    $user = api_get_user_entity();
+                    $duplicator = Container::$container->get(AssignmentSessionDuplicator::class);
+                    $duplicator->assertAdministrativeCourseScope($course);
 
-                    $qb = $repo->getResourcesByCourse($course, null);
-                    $qb
-                        ->andWhere('resource.active = 1')
-                        ->andWhere('resource.filetype = :filetype')
-                        ->andWhere('resource.publicationParent IS NULL')
-                        ->setParameter('filetype', 'folder');
+                    // Establish the course subscription before copying resources. A failed copy must
+                    // not leave a partially imported course or gradebook in the session.
+                    $em->wrapInTransaction(function () use ($em, $course, $session, $courseId, $sessionId, $courseInfo, $copyEvaluation, $importAssignments, $duplicator, $nbr_courses, &$generateCertificate) {
+                        $relation = (new SessionRelCourse())->setCourse($course);
+                        $session->addCourses($relation);
+                        $em->persist($relation);
+                        $em->flush();
 
-                    $baseAssignments = $qb->getQuery()->getResult();
-
-                    foreach ($baseAssignments as $originalAssignment) {
-                        if (!$originalAssignment instanceof CStudentPublication) {
-                            continue;
+                        if ($importAssignments) {
+                            $duplicator->duplicateCourseAssignments($course, $session);
                         }
 
-                        $newAssignment = new CStudentPublication();
-                        $newAssignment
-                            ->setTitle($originalAssignment->getTitle())
-                            ->setDescription($originalAssignment->getDescription() ?? '')
-                            ->setActive(1)
-                            ->setAccepted(true)
-                            ->setFiletype('folder')
-                            ->setPostGroupId(0)
-                            ->setSentDate(new \DateTime())
-                            ->setQualification($originalAssignment->getQualification())
-                            ->setWeight($originalAssignment->getWeight())
-                            ->setAllowTextAssignment($originalAssignment->getAllowTextAssignment())
-                            ->setUser($user)
-                            ->setParent($course)
-                            ->addCourseLink($course, $session, null);
+                        // Copy gradebook categories and links (from base course)
+                        // to the new course session
+                        if ($copyEvaluation) {
+                            $cats = Category::load(null, null, $courseId, null, null, 0);
+                            if (!empty($cats)) {
+                                $sessionCategory = Category:: load(
+                                    null,
+                                    null,
+                                    $courseId,
+                                    null,
+                                    null,
+                                    $sessionId,
+                                    null
+                                );
 
-                        $repo->create($newAssignment);
-                    }
+                                // @todo remove commented code
+                                if (empty($sessionCategory)) {
+                                    // There is no category for this course+session, so create one
+                                    $cat = new Category();
+                                    $sessionName = $session->getTitle();
+                                    $cat->set_name($courseInfo['code'].' - '.get_lang('Session').' '.$sessionName);
+                                    $cat->set_session_id($sessionId);
+                                    $cat->setCourseId($courseId);
+                                    $cat->set_description(null);
+                                    //$cat->set_user_id($stud_id);
+                                    $cat->set_parent_id(0);
+                                    $cat->set_weight(100);
+                                    $cat->set_visible(0);
+                                    $cat->set_certificate_min_score(75);
+                                    $cat->setGenerateCertificates(1);
+                                    $cat->setIsRequirement(1);
+                                    $cat->add();
+                                    $sessionGradeBookCategoryId = $cat->get_id();
+                                } else {
+                                    if (!empty($sessionCategory[0])) {
+                                        $sessionGradeBookCategoryId = $sessionCategory[0]->get_id();
+                                    }
+                                }
+
+                                $categoryIdList = [];
+                                /** @var Category $cat */
+                                foreach ($cats as $cat) {
+                                    $categoryIdList[$cat->get_id()] = $cat->get_id();
+                                }
+
+                                $newCategoryIdList = [];
+                                foreach ($cats as $cat) {
+                                    $links = $cat->get_links(
+                                        null,
+                                        false,
+                                        $courseId,
+                                        $sessionId
+                                    );
+
+                                    //$cat->set_session_id($sessionId);
+                                    //$oldCategoryId = $cat->get_id();
+                                    //$newId = $cat->add();
+                                    //$newCategoryIdList[$oldCategoryId] = $newId;
+                                    //$parentId = $cat->get_parent_id();
+
+                                    /*if (!empty($parentId)) {
+                                        $newParentId = $newCategoryIdList[$parentId];
+                                        $cat->set_parent_id($newParentId);
+                                        $cat->save();
+                                    }*/
+
+                                    if (!empty($links)) {
+                                        /** @var AbstractLink $link */
+                                        foreach ($links as $link) {
+                                            //$newCategoryId = $newCategoryIdList[$link->get_category_id()];
+                                            if (LINK_STUDENTPUBLICATION === (int) $link->get_type()) {
+                                                $originalAssignment = Container::getStudentPublicationRepository()->find($link->get_ref_id());
+                                                if (!$originalAssignment instanceof CStudentPublication) {
+                                                    throw new InvalidArgumentException('The gradebook assignment could not be found.');
+                                                }
+                                                $copy = $duplicator->getOrCreate($originalAssignment, $course, $session);
+                                                $link->set_ref_id($copy->getIid());
+                                            }
+                                            $link->set_category_id($sessionGradeBookCategoryId);
+                                            $link->add();
+                                        }
+                                    }
+
+                                    $evaluationList = $cat->get_evaluations(
+                                        null,
+                                        false,
+                                        $courseId,
+                                        $sessionId
+                                    );
+
+                                    if (!empty($evaluationList)) {
+                                        /** @var Evaluation $evaluation */
+                                        foreach ($evaluationList as $evaluation) {
+                                            //$evaluationId = $newCategoryIdList[$evaluation->get_category_id()];
+                                            $evaluation->set_category_id($sessionGradeBookCategoryId);
+                                            $evaluation->add();
+                                        }
+                                    }
+                                }
+
+                                $generateCertificate = true;
+                            }
+                        }
+                        $session->setNbrCourses($nbr_courses + 1);
+                    });
+                } else {
+                    // If the course isn't subscribed yet
+                    $connection->createQueryBuilder()
+                        ->insert('session_rel_course')
+                        ->values([
+                            'session_id' => ':sessionId',
+                            'c_id' => ':courseId',
+                            'nbr_users' => '0',
+                            'position' => '0',
+                        ])
+                        ->setParameter('sessionId', $sessionId)
+                        ->setParameter('courseId', (int) $courseId)
+                        ->executeStatement();
                 }
-                // If the course isn't subscribed yet
-                $connection->createQueryBuilder()
-                    ->insert('session_rel_course')
-                    ->values([
-                        'session_id' => ':sessionId',
-                        'c_id' => ':courseId',
-                        'nbr_users' => '0',
-                        'position' => '0',
-                    ])
-                    ->setParameter('sessionId', $sessionId)
-                    ->setParameter('courseId', (int) $courseId)
-                    ->executeStatement();
 
                 Event::addEvent(
                     LOG_SESSION_ADD_COURSE,
@@ -3374,6 +3361,10 @@ class SessionManager
                     ['visibility' => $sessionVisibility],
                     false
                 );
+
+                if ($generateCertificate) {
+                    DocumentManager::generateDefaultCertificate($courseInfo, true, $sessionId);
+                }
             }
 
             if ($copyCourseTeachersAsCoach) {

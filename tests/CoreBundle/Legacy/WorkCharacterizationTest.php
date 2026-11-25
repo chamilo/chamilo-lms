@@ -862,6 +862,21 @@ final class WorkCharacterizationTest extends KernelTestCase
         );
     }
 
+    public function testDeleteDirWorkProtectsOriginalWithSessionCopy(): void
+    {
+        $this->setContext($this->admin(), $this->course(1));
+        $folder = $this->folder();
+        $this->publish($folder, 1);
+        $copy = $this->folder(['parent_id' => $folder]);
+        $this->publish($copy, 1, sessionId: $this->session());
+        $submission = $this->work(['parent_id' => $copy]);
+
+        self::assertFalse(deleteDirWork($folder));
+        self::assertSame(1, (int) $this->field($folder, 'active'));
+        self::assertSame(1, (int) $this->field($copy, 'active'));
+        self::assertSame(1, (int) $this->field($submission, 'active'));
+    }
+
     public function testDeleteDirWorkAlsoRemovesTheCalendarEventOfTheAssignment(): void
     {
         $this->setContext($this->admin(), $this->course(1));

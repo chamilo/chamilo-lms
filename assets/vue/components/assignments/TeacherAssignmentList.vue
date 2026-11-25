@@ -5,14 +5,48 @@
     v-model:multi-sort-meta="sortFields"
     v-model:rows="loadParams.itemsPerPage"
     :total-items="totalRecords"
-    :values="assignments"
+    :values="visibleAssignments"
+    :first="(loadParams.page - 1) * (loadParams.itemsPerPage || 0)"
+    sort-mode="multiple"
     data-key="@id"
     lazy
     removable-sort
     @page="onPage"
     @sort="onSort"
   >
-    <Column selection-mode="multiple" />
+    <Column
+      v-if="showBaseAssignments"
+      header-style="width: 3rem"
+    >
+      <template #header>
+        <BaseCheckbox
+          id="assignment-select-page"
+          name="assignment-select-page"
+          label=""
+          :aria-label="t('Select all')"
+          :model-value="allPageSelected"
+          :indeterminate="somePageSelected && !allPageSelected"
+          :disabled="loading || duplicating || !selectableAssignments.length"
+          @update:model-value="selectPage"
+        />
+      </template>
+      <template #body="{ data }">
+        <BaseCheckbox
+          v-if="canEdit(data)"
+          :id="`assignment-select-${data['@id'].split('/').pop()}`"
+          :name="`assignment-select-${data['@id'].split('/').pop()}`"
+          label=""
+          :aria-label="`${t('Select')}: ${data.title}`"
+          :model-value="isSelected(data)"
+          :disabled="loading || duplicating"
+          @update:model-value="(checked) => selectAssignment(data, checked)"
+        />
+      </template>
+    </Column>
+    <Column
+      v-else
+      selection-mode="multiple"
+    />
 
     <Column
       :header="t('Title')"
@@ -20,7 +54,15 @@
       field="title"
     >
       <template #body="slotProps">
+        <div
+          v-if="slotProps.data.isBaseCourseAssignment"
+          class="text-gray-500"
+        >
+          <div>{{ slotProps.data.title }}</div>
+          <span class="text-xs">{{ t("Original assignment") }}</span>
+        </div>
         <BaseAppLink
+          v-else
           class="table-link"
           :to="getAssignmentDetailLink(slotProps.data)"
         >
@@ -35,7 +77,12 @@
       field="assignment.expiresOn"
     >
       <template #body="slotProps">
-        <span v-if="slotProps.data.assignment?.expiresOn">
+        <span
+          v-if="slotProps.data.isBaseCourseAssignment"
+          class="text-gray-400"
+          >—</span
+        >
+        <span v-else-if="slotProps.data.assignment?.expiresOn">
           {{ formatStored(slotProps.data.assignment.expiresOn) }}
         </span>
         <span
@@ -65,7 +112,13 @@
 
     <Column :header="t('Number submitted')">
       <template #body="slotProps">
+        <span
+          v-if="slotProps.data.isBaseCourseAssignment"
+          class="text-gray-400"
+          >—</span
+        >
         <BaseTag
+          v-else
           :label="`${slotProps.data.uniqueStudentAttemptsTotal || 0} / ${slotProps.data.studentSubscribedToWork || 0}`"
           type="success"
         />
@@ -77,7 +130,20 @@
       body-class="space-x-2"
     >
       <template #body="slotProps">
-        <div v-if="canEdit(slotProps.data)">
+        <template v-if="slotProps.data.isBaseCourseAssignment">
+          <BaseButton
+            v-if="slotProps.data.canDuplicate && isAllowedToEdit"
+            :disabled="duplicating || loading"
+            :label="t('Duplicate')"
+            icon="copy"
+            only-icon
+            size="small"
+            type="tertiary-text"
+            @click="onClickDuplicate(slotProps.data)"
+          />
+          <span v-else>{{ t("Not available") }}</span>
+        </template>
+        <div v-else-if="canEdit(slotProps.data)">
           <BaseButton
             :icon="
               RESOURCE_LINK_PUBLISHED === slotProps.data.firstResourceLink?.visibility
@@ -125,7 +191,7 @@
 
     <template #footer>
       <BaseButton
-        :disabled="0 === selected.length || loading"
+        :disabled="0 === selected.length || loading || duplicating"
         :label="t('Delete selected')"
         icon="delete"
         size="small"
@@ -146,6 +212,8 @@ import { useFormatDate } from "../../composables/formatDate"
 import BaseTag from "../basecomponents/BaseTag.vue"
 import BaseButton from "../basecomponents/BaseButton.vue"
 import BaseTable from "../basecomponents/BaseTable.vue"
+import BaseCheckbox from "../basecomponents/BaseCheckbox.vue"
+import { mergeAssignmentPage } from "../../utils/assignmentListPage"
 import { RESOURCE_LINK_DRAFT, RESOURCE_LINK_PUBLISHED } from "../../constants/entity/resourcelink"
 import { useNotification } from "../../composables/notification"
 import { useConfirmation } from "../../composables/useConfirmation"
@@ -153,6 +221,8 @@ import resourceLinkService from "../../services/resourcelink"
 import { useRoute, useRouter } from "vue-router"
 import { useIsAllowedToEdit } from "../../composables/userPermissions"
 import { useSecurityStore } from "../../store/securityStore"
+
+defineOptions({ inheritAttrs: false })
 
 const { t, locale } = useI18n()
 const route = useRoute()
@@ -162,6 +232,9 @@ const assignments = ref([])
 const selected = ref([])
 const loading = ref(false)
 const totalRecords = ref(0)
+const duplicating = ref(false)
+let requestId = 0
+let knownSessionTotal = null
 
 const { cid, sid, gid } = getCourseContext()
 
@@ -170,6 +243,10 @@ const notification = useNotification()
 const { requireConfirmation } = useConfirmation()
 const securityStore = useSecurityStore()
 const isCurrentTeacher = computed(() => securityStore.isCurrentTeacher)
+const showBaseAssignments = computed(() => sid > 0 && gid === 0 && isCurrentTeacher.value)
+const visibleAssignments = computed(() =>
+  showBaseAssignments.value ? assignments.value : assignments.value.filter((item) => !item.isBaseCourseAssignment),
+)
 
 const { abbreviatedDatetime } = useFormatDate()
 
@@ -182,7 +259,7 @@ const loadParams = reactive({
 const { isAllowedToEdit } = useIsAllowedToEdit({ tutor: true, coach: true, sessionCoach: true })
 
 watch(
-  loadParams,
+  [loadParams, showBaseAssignments],
   () => {
     if (!loadParams.itemsPerPage) return
     loadData()
@@ -190,27 +267,103 @@ watch(
   { deep: true, immediate: true },
 )
 
+function onClickDuplicate(assignment) {
+  if (
+    !showBaseAssignments.value ||
+    !assignment.isBaseCourseAssignment ||
+    !assignment.canDuplicate ||
+    !isAllowedToEdit.value
+  ) {
+    return
+  }
+
+  requireConfirmation({
+    message: t("Are you sure to copy"),
+    accept: async () => {
+      duplicating.value = true
+      try {
+        await cStudentPublicationService.duplicateToSession(assignment.id)
+        notification.showSuccessNotification(t("Copy completed"))
+        selected.value = []
+        await loadData()
+      } catch (error) {
+        notification.showErrorNotification(error)
+      } finally {
+        duplicating.value = false
+      }
+    },
+  })
+}
+
+async function fetchAssignmentPage(params, page) {
+  const response = await cStudentPublicationService.findAll({
+    params: {
+      ...params,
+      page,
+      cid,
+      sid,
+      gid,
+      filetype: "folder",
+    },
+  })
+  return response.json()
+}
+
 async function loadData() {
+  if (!loadParams.itemsPerPage) return
+
+  const currentRequest = ++requestId
+  const params = { ...loadParams }
+  const includeBase = showBaseAssignments.value
+  const offset = (params.page - 1) * params.itemsPerPage
   loading.value = true
 
   try {
-    const response = await cStudentPublicationService.findAll({
-      params: {
-        ...loadParams,
-        cid,
-        sid,
-        gid,
-        "publicationParent.iid": false,
-      },
-    })
-    const json = await response.json()
+    // Do not request a session page beyond its known last page just to display originals.
+    const countOnly = includeBase && params.page > 1 && knownSessionTotal !== null && offset >= knownSessionTotal
+    const [initialPage, baseResult] = await Promise.all([
+      fetchAssignmentPage(params, countOnly ? 1 : params.page),
+      includeBase
+        ? cStudentPublicationService.findBaseCourseAssignments().then(
+            (response) => ({ items: response.items ?? [] }),
+            (error) => ({ items: [], error }),
+          )
+        : Promise.resolve({ items: [] }),
+    ])
 
-    assignments.value = json["hydra:member"]
-    totalRecords.value = json["hydra:totalItems"]
+    let json = initialPage
+    if (countOnly && offset < Number(initialPage["hydra:totalItems"])) {
+      json = await fetchAssignmentPage(params, params.page)
+    }
+    if (currentRequest !== requestId) return
+
+    const sessionTotal = Number(json["hydra:totalItems"])
+    knownSessionTotal = sessionTotal
+    const sessionItems = countOnly && offset >= sessionTotal ? [] : json["hydra:member"]
+    if (baseResult.error) notification.showErrorNotification(baseResult.error)
+
+    const result = mergeAssignmentPage({
+      sessionItems,
+      sessionTotal,
+      baseItems: baseResult.items,
+      page: params.page,
+      pageSize: params.itemsPerPage,
+      titleOrder: params["order[title]"],
+    })
+    const lastPage = Math.max(1, Math.ceil(result.total / params.itemsPerPage))
+    if (params.page > lastPage) {
+      selected.value = []
+      loadParams.page = lastPage
+      return
+    }
+
+    assignments.value = result.items
+    totalRecords.value = result.total
+    if (includeBase) selected.value = []
   } catch (error) {
-    notification.showErrorNotification(error)
+    if (currentRequest === requestId) notification.showErrorNotification(error)
   } finally {
-    loading.value = false
+    if (currentRequest === requestId) loading.value = false
   }
 }
 
@@ -224,9 +377,10 @@ const onSort = (event) => {
     .filter((key) => key.indexOf("order[") >= 0)
     .forEach((key) => delete loadParams[key])
 
-  event.multiSortMeta.forEach((sortItem) => {
+  loadParams.page = 1
+  for (const sortItem of event.multiSortMeta ?? []) {
     loadParams[`order[${sortItem.field}]`] = -1 === sortItem.order ? "desc" : "asc"
-  })
+  }
 }
 
 function onClickMultipleDelete() {
@@ -237,7 +391,9 @@ function onClickMultipleDelete() {
 
       try {
         for (const assignment of selected.value) {
-          await cStudentPublicationService.del(assignment)
+          if (!assignment.isBaseCourseAssignment && (!showBaseAssignments.value || canEdit(assignment))) {
+            await cStudentPublicationService.del(assignment)
+          }
         }
       } catch (e) {
         notification.showErrorNotification(e)
@@ -349,12 +505,35 @@ const getSessionId = (item) => {
 }
 
 const canEdit = (item) => {
+  if (item.isBaseCourseAssignment) return false
+
   const sessionId = getSessionId(item)
 
   const isSessionDocument = sessionId && sessionId === sid
   const isBaseCourse = !sessionId
 
   return (isSessionDocument && isAllowedToEdit.value) || (isBaseCourse && !sid && isCurrentTeacher.value)
+}
+
+const selectableAssignments = computed(() => visibleAssignments.value.filter(canEdit))
+const allPageSelected = computed(
+  () => selectableAssignments.value.length > 0 && selectableAssignments.value.every(isSelected),
+)
+const somePageSelected = computed(() => selectableAssignments.value.some(isSelected))
+
+function isSelected(item) {
+  return selected.value.some((assignment) => assignment["@id"] === item["@id"])
+}
+
+function selectAssignment(item, checked) {
+  if (!canEdit(item)) return
+
+  selected.value = selected.value.filter((assignment) => assignment["@id"] !== item["@id"])
+  if (checked) selected.value.push(item)
+}
+
+function selectPage(checked) {
+  selected.value = checked ? [...selectableAssignments.value] : []
 }
 
 function pad2(n) {

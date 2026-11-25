@@ -910,7 +910,7 @@ final class AiCourseAnalyzerService
             ->innerJoin('assignment.resourceNode', 'resourceNode')
             ->innerJoin('resourceNode.resourceLinks', 'resourceLink')
             ->andWhere('resourceLink.course = :course')
-            ->andWhere('assignment.publicationParent IS NULL')
+            ->andWhere("assignment.filetype = 'folder'")
             ->setParameter('course', (int) $course->getId())
             ->setMaxResults(self::MAX_ASSIGNMENTS)
             ->orderBy('resourceLink.displayOrder', 'ASC')

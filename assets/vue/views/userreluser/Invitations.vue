@@ -9,17 +9,17 @@
   <div>
     <InvitationList
       :invitations="receivedInvitations"
-      title="Invitations Received"
+      :title="t('Received invitations')"
       @accept="acceptInvitation"
       @deny="denyInvitation"
     />
     <InvitationList
       :invitations="sentInvitations"
-      title="Invitations Sent"
+      :title="t('Sent invitations')"
     />
     <InvitationList
       :invitations="pendingInvitations"
-      title="Pending Group Invitations"
+      :title="t('Pending group invitations')"
       @accept="acceptGroupInvitation"
       @deny="denyGroupInvitation"
     />

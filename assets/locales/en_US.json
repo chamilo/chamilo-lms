@@ -4885,5 +4885,8 @@
     "First access to course": "First access to course",
     "Last lp's finalization date": "Last lp's finalization date",
     "Last quiz finalization date": "Last quiz finalization date",
-    "Test": "Test"
+    "Test": "Test",
+    "{0} Completed": "{0} Completed",
+    "Completed": "Completed",
+    "Received invitations": "Received invitations"
 }

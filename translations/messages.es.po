@@ -44401,3 +44401,15 @@ msgstr "Tema de colores (vista previa)"
 
 msgid "The themes storage is not writable. Check its file permissions before saving."
 msgstr "No se puede escribir en el almacenamiento de temas. Comprueba los permisos de sus archivos antes de guardar."
+
+msgid "%s Completed"
+msgstr "%s completado"
+
+msgid "Received invitations"
+msgstr "Invitaciones recibidas"
+
+msgid "Quick test: %s"
+msgstr "Ejercicio rápido: %s"
+
+msgid "Quick test: Document"
+msgstr "Ejercicio rápido: documento"

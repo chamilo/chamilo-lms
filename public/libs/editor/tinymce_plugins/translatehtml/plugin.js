@@ -289,7 +289,10 @@
           .then(function (payload) {
             if (!response.ok) {
               throw new Error(
-                getErrorMessage(payload, "The translation request failed."),
+                getErrorMessage(
+                  payload,
+                  editor.translate("The translation request failed."),
+                ),
               );
             }
 
@@ -347,7 +350,9 @@
 
     function notifyInvalidLanguage() {
       notify(
-        "Please enter a Chamilo language ISO code, for example en_US, fr_FR, es or de.",
+        editor.translate(
+          "Please enter a Chamilo language ISO code, for example en_US, fr_FR, es or de.",
+        ),
         "warning",
         3000,
       );
@@ -392,7 +397,7 @@
       var content = prepareTranslatedContent(sourceHtml, useDiv);
       if (!content) {
         if (entireEditor) {
-          notify("The editor content is empty.", "warning");
+          notify(editor.translate("The editor content is empty."), "warning");
           return;
         }
         content = encodeHtml("Translated content");
@@ -418,25 +423,25 @@
 
     function openCustomLanguageDialog() {
       editor.windowManager.open({
-        title: "Translated HTML block",
+        title: editor.translate("Translated HTML block"),
         body: {
           type: "panel",
           items: [
             {
               type: "input",
               name: "languageCode",
-              label: "Chamilo language ISO code",
+              label: editor.translate("Chamilo language ISO code"),
             },
           ],
         },
         buttons: [
           {
             type: "cancel",
-            text: "Cancel",
+            text: editor.translate("Cancel"),
           },
           {
             type: "submit",
-            text: "Insert",
+            text: editor.translate("Insert"),
             primary: true,
           },
         ],
@@ -495,7 +500,7 @@
 
     function setDialogBusy(api, busy) {
       if (busy && typeof api.block === "function") {
-        api.block("Translating...");
+        api.block(editor.translate("Translating..."));
       } else if (!busy && typeof api.unblock === "function") {
         api.unblock();
       }
@@ -557,10 +562,12 @@
             : [];
           var message =
             added.length > 0
-              ? "Translation added successfully."
-              : "No new translation was added.";
+              ? editor.translate("Translation added successfully.")
+              : editor.translate("No new translation was added.");
           if (skipped.length > 0) {
-            message += " Existing or source-language blocks were preserved.";
+            message +=
+              " " +
+              editor.translate("Existing or source-language blocks were preserved.");
           }
 
           notify(message, added.length > 0 ? "success" : "info", 5000);
@@ -568,7 +575,10 @@
         .catch(function (error) {
           setDialogBusy(api, false);
           notify(
-            getErrorMessage(error, "The translation request failed."),
+            getErrorMessage(
+              error,
+              editor.translate("The translation request failed."),
+            ),
             "error",
             7000,
           );
@@ -577,20 +587,25 @@
 
     function openAiTranslationDialog(configuration) {
       if (!configuration || !configuration.enabled) {
-        notify("AI translation is not available for this editor.", "warning");
+        notify(
+          editor.translate("AI translation is not available for this editor."),
+          "warning",
+        );
         return;
       }
 
       var html = String(editor.getContent({ format: "html" }) || "").trim();
       if (!html) {
-        notify("The editor content is empty.", "warning");
+        notify(editor.translate("The editor content is empty."), "warning");
         return;
       }
 
       var targetLanguages = getTargetLanguages(configuration);
       if (targetLanguages.length === 0) {
         notify(
-          "All active target languages are already present in this content.",
+          editor.translate(
+            "All active target languages are already present in this content.",
+          ),
           "info",
         );
         return;
@@ -605,7 +620,7 @@
 
       if (configuration.allowAllLanguages && targetLanguages.length > 1) {
         languageOptions.unshift({
-          text: "All languages",
+          text: editor.translate("All languages"),
           value: "__all__",
         });
       }
@@ -614,7 +629,10 @@
         ? configuration.providers
         : [];
       if (providers.length === 0) {
-        notify("No AI text provider is configured.", "warning");
+        notify(
+          editor.translate("No AI text provider is configured."),
+          "warning",
+        );
         return;
       }
 
@@ -622,7 +640,7 @@
         {
           type: "selectbox",
           name: "targetLanguage",
-          label: "Add translation to...",
+          label: editor.translate("Add translation to..."),
           items: languageOptions,
         },
       ];
@@ -631,7 +649,7 @@
         items.push({
           type: "selectbox",
           name: "provider",
-          label: "AI provider",
+          label: editor.translate("AI provider"),
           items: providers.map(function (provider) {
             return {
               text: String(provider.label || provider.value || ""),
@@ -643,7 +661,14 @@
 
       items.push({
         type: "htmlpanel",
-        html: "<p>The source-language content will be sent to an AI model for translation. Existing language blocks will be preserved.</p>",
+        html:
+          "<p>" +
+          encodeHtml(
+            editor.translate(
+              "The source-language content will be sent to an AI model for translation. Existing language blocks will be preserved.",
+            ),
+          ) +
+          "</p>",
       });
 
       var initialData = {
@@ -654,7 +679,7 @@
       }
 
       editor.windowManager.open({
-        title: "Add translation to...",
+        title: editor.translate("Add translation to..."),
         body: {
           type: "panel",
           items: items,
@@ -662,11 +687,11 @@
         buttons: [
           {
             type: "cancel",
-            text: "Cancel",
+            text: editor.translate("Cancel"),
           },
           {
             type: "submit",
-            text: "Translate",
+            text: editor.translate("Translate"),
             primary: true,
           },
         ],
@@ -683,9 +708,10 @@
     }
 
     editor.ui.registry.addMenuButton("translatehtml", {
-      text: "Lang ISO",
-      tooltip:
+      text: editor.translate("Lang ISO"),
+      tooltip: editor.translate(
         "Mark selection as translated HTML (span for inline text, div for blocks/documents) with a Chamilo ISO code",
+      ),
       fetch: function (callback) {
         loadConfiguration().then(function (configuration) {
           var items = [];
@@ -693,7 +719,7 @@
           if (configuration && configuration.enabled) {
             items.push({
               type: "menuitem",
-              text: "Add translation to...",
+              text: editor.translate("Add translation to..."),
               onAction: function () {
                 openAiTranslationDialog(configuration);
               },
@@ -714,7 +740,7 @@
           items.push({ type: "separator" });
           items.push({
             type: "menuitem",
-            text: "Custom Chamilo ISO code...",
+            text: editor.translate("Custom Chamilo ISO code..."),
             onAction: openCustomLanguageDialog,
           });
 

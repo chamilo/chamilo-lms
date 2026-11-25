@@ -4839,5 +4839,12 @@
     "The JSON of the access conditions must be a JSON object.": "Le JSON des conditions d'acc\u00e8s doit \u00eatre un objet JSON.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Les apprenants qui ont atteint la note minimale de certification ({0} %) sont surlign\u00e9s en vert.",
     "List by documents": "Liste par documents",
-    "List by users": "Liste par utilisateurs"
+    "List by users": "Liste par utilisateurs",
+    "Exercise progress": "Progression des exercices",
+    "Exercise average": "Moyenne des exercices",
+    "Registered date": "Date d'inscription",
+    "First access to course": "Premier acc\u00e8s au cours",
+    "Last lp's finalization date": "Derni\u00e8re date de fin d'un parcours p\u00e9dagogique",
+    "Last quiz finalization date": "Derni\u00e8re date de fin d'un exercice",
+    "Test": "Exercice"
 }

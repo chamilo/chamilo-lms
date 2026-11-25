@@ -23,6 +23,7 @@ use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\Tests\AbstractApiTest;
 use Chamilo\Tests\ChamiloTestTrait;
 use DateTime;
+use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use ReflectionClass;
 
@@ -444,7 +445,7 @@ final class MigrationMoodleLoadersTest extends AbstractApiTest
             'session_id' => $session->getId(),
             'status' => 'finished',
             'data_tracking' => '1,2',
-            'date' => new DateTime('2021-03-04 10:00:00'),
+            'date' => new DateTime('2021-03-04 10:00:00', new DateTimeZone('UTC')),
             'duration' => 90,
             'weighting' => 10,
             'result' => '7.5',
@@ -478,7 +479,7 @@ final class MigrationMoodleLoadersTest extends AbstractApiTest
             'session_id' => 0,
             'status' => 'inprogress',
             'data_tracking' => '',
-            'date' => new DateTime('2021-03-04 10:00:00'),
+            'date' => new DateTime('2021-03-04 10:00:00', new DateTimeZone('UTC')),
             'duration' => 0,
             'weighting' => 0,
             'result' => 0,

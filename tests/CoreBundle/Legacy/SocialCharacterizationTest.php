@@ -14,6 +14,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
 use DateTime;
+use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use SocialManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -217,7 +218,7 @@ final class SocialCharacterizationTest extends KernelTestCase
                 ->setStatus($status)
                 ->setTitle($title)
                 ->setContent('content of '.$title)
-                ->setSendDate(new DateTime($date))
+                ->setSendDate(new DateTime($date, new DateTimeZone('UTC')))
             ;
             $message->addReceiverTo($to);
             $em->persist($message);

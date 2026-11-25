@@ -56,7 +56,7 @@ switch ($action) {
                 break;
             }
         }
-        $completeName = htmlspecialchars((string) $user_info['complete_name'], ENT_QUOTES, 'UTF-8');
+        $completeName = api_htmlentities((string) $user_info['complete_name'], ENT_QUOTES);
 
         echo '<div class="row">';
         echo '<div class="col-sm-5">';
@@ -73,9 +73,9 @@ switch ($action) {
 
         $userData = '<h3>'.$completeName.'</h3>'
             .PHP_EOL
-            .htmlspecialchars((string) $user_info['mail'], ENT_QUOTES, 'UTF-8')
+            .api_htmlentities((string) $user_info['mail'], ENT_QUOTES)
             .PHP_EOL
-            .htmlspecialchars((string) $user_info['official_code'], ENT_QUOTES, 'UTF-8');
+            .api_htmlentities((string) $user_info['official_code'], ENT_QUOTES);
 
         if ($isAnonymous) {
             if (COURSEMANAGER === (int) $user_info['status']) {

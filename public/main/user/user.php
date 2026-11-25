@@ -977,23 +977,30 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $url = $illustrationRepo->getIllustrationUrl($user, 'user_picture_small', ICON_SIZE_BIG);
             $photo = Display::img($url, '', [], false);
 
+            // User-provided values, escaped once for both table layouts.
+            $safe = [];
+            foreach (['official_code', 'firstname', 'lastname', 'username'] as $field) {
+                $safe[$field] = api_htmlentities((string) $userData[$field], ENT_QUOTES);
+            }
+            $safe['groups'] = api_htmlentities(implode(', ', $groupsNameListParsed), ENT_QUOTES);
+
             if (api_is_allowed_to_edit(null, true)) {
                 $temp[] = $user_id;
                 $temp[] = $photo;
-                $temp[] = htmlspecialchars((string) $userData['official_code'], ENT_QUOTES, 'UTF-8');
+                $temp[] = $safe['official_code'];
 
                 if ($is_western_name_order) {
-                    $temp[] = htmlspecialchars((string) $userData['firstname'], ENT_QUOTES, 'UTF-8');
-                    $temp[] = htmlspecialchars((string) $userData['lastname'], ENT_QUOTES, 'UTF-8');
+                    $temp[] = $safe['firstname'];
+                    $temp[] = $safe['lastname'];
                 } else {
-                    $temp[] = htmlspecialchars((string) $userData['lastname'], ENT_QUOTES, 'UTF-8');
-                    $temp[] = htmlspecialchars((string) $userData['firstname'], ENT_QUOTES, 'UTF-8');
+                    $temp[] = $safe['lastname'];
+                    $temp[] = $safe['firstname'];
                 }
 
-                $temp[] = htmlspecialchars((string) $userData['username'], ENT_QUOTES, 'UTF-8');
+                $temp[] = $safe['username'];
 
                 // Groups.
-                $temp[] = htmlspecialchars(implode(', ', $groupsNameListParsed), ENT_QUOTES, 'UTF-8');
+                $temp[] = $safe['groups'];
 
                 // Status
                 $default_status = get_lang('Learner');
@@ -1047,19 +1054,19 @@ function get_user_data($from, $number_of_items, $column, $direction)
             } else {
                 $temp[] = '';
                 $temp[] = $photo;
-                $temp[] = htmlspecialchars((string) $userData['official_code'], ENT_QUOTES, 'UTF-8');
+                $temp[] = $safe['official_code'];
 
                 if ($is_western_name_order) {
-                    $temp[] = htmlspecialchars((string) $userData['firstname'], ENT_QUOTES, 'UTF-8');
-                    $temp[] = htmlspecialchars((string) $userData['lastname'], ENT_QUOTES, 'UTF-8');
+                    $temp[] = $safe['firstname'];
+                    $temp[] = $safe['lastname'];
                 } else {
-                    $temp[] = htmlspecialchars((string) $userData['lastname'], ENT_QUOTES, 'UTF-8');
-                    $temp[] = htmlspecialchars((string) $userData['firstname'], ENT_QUOTES, 'UTF-8');
+                    $temp[] = $safe['lastname'];
+                    $temp[] = $safe['firstname'];
                 }
 
-                $temp[] = htmlspecialchars((string) $userData['username'], ENT_QUOTES, 'UTF-8');
+                $temp[] = $safe['username'];
                 // Group.
-                $temp[] = htmlspecialchars(implode(', ', $groupsNameListParsed), ENT_QUOTES, 'UTF-8');
+                $temp[] = $safe['groups'];
 
                 if (1 == $course_info['unsubscribe']) {
                     //User id for actions

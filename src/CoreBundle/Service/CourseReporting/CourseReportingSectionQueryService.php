@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service\CourseReporting;
 
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
 use Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit;
 use DateTimeImmutable;
@@ -50,6 +51,7 @@ final class CourseReportingSectionQueryService
         private readonly Connection $connection,
         private readonly ReportIpVisibility $reportIpVisibility,
         private readonly SessionTimeLimit $sessionTimeLimit,
+        private readonly AccessUrlHelper $accessUrlHelper,
     ) {}
 
     /**
@@ -423,7 +425,7 @@ final class CourseReportingSectionQueryService
             ? '(SELECT login.user_ip
                   FROM track_e_login login
                  WHERE login.login_user_id = resource_node.creator_id
-                   AND login.login_date < rl.created_at
+                   AND login.login_date < rl.created_at'.$this->loginAccessUrlCondition().'
               ORDER BY login.login_date DESC
                  LIMIT 1)'
             : 'NULL';
@@ -993,7 +995,7 @@ final class CourseReportingSectionQueryService
             ? '(SELECT login.user_ip
                   FROM track_e_login login
                  WHERE login.login_user_id = audit.default_user_id
-                   AND login.login_date < audit.default_date
+                   AND login.login_date < audit.default_date'.$this->loginAccessUrlCondition().'
               ORDER BY login.login_date DESC
                  LIMIT 1)'
             : 'NULL';
@@ -2470,6 +2472,21 @@ final class CourseReportingSectionQueryService
         }
 
         return $this->tableCache[$table];
+    }
+
+    /**
+     * Keeps the logins of the current access URL on a multi-URL platform. Logins recorded before
+     * access_url_id existed are NULL and still count.
+     */
+    private function loginAccessUrlCondition(): string
+    {
+        if (!$this->accessUrlHelper->isMultiple()) {
+            return '';
+        }
+
+        $urlId = (int) $this->accessUrlHelper->getCurrent()?->getId();
+
+        return " AND (login.access_url_id = $urlId OR login.access_url_id IS NULL)";
     }
 
     private function columnExists(string $table, string $column): bool

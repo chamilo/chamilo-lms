@@ -1825,6 +1825,7 @@ class SessionManager
                 ->from($track_e_login)
                 ->where('login_user_id = :userId')
                 ->andWhere('login_date < :loginDate')
+                ->andWhere(Tracking::getLoginAccessUrlCondition())
                 ->orderBy('login_date', 'DESC')
                 ->setMaxResults(1)
                 ->setParameter('userId', (int) $info['user_id'])
@@ -1838,6 +1839,7 @@ class SessionManager
                     ->from($track_e_login)
                     ->where('login_user_id = :userId')
                     ->andWhere('login_date > :loginDate')
+                    ->andWhere(Tracking::getLoginAccessUrlCondition())
                     ->orderBy('login_date', 'ASC')
                     ->setMaxResults(1)
                     ->setParameter('userId', (int) $info['user_id'])
@@ -8206,6 +8208,7 @@ class SessionManager
             $whereConditions["AND (login_date >= '?' "] = $from;
             $whereConditions["AND logout_date <= DATE_ADD('?', INTERVAL 1 DAY)) "] = $until;
         }
+        $whereConditions['AND '.Tracking::getLoginAccessUrlCondition().' '] = true;
 
         $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
         $durationSql = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::sqlForSeconds('login_date', 'logout_date', $maxSeconds);

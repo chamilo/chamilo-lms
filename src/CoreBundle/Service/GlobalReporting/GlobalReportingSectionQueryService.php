@@ -784,6 +784,7 @@ final readonly class GlobalReportingSectionQueryService
                         SELECT SUM('.$this->sessionTimeLimit->sql('login.login_date', 'COALESCE(login.logout_date, login.login_date)').')
                           FROM track_e_login login
                          WHERE login.login_user_id = usr.id
+                           AND (login.access_url_id = :loginUrlId OR login.access_url_id IS NULL)
                     ), 0) AS timeSeconds
                FROM user usr
               WHERE '.implode(' AND ', $where).'
@@ -791,11 +792,13 @@ final readonly class GlobalReportingSectionQueryService
               LIMIT :limit OFFSET :offset',
             [
                 ...$parameters,
+                'loginUrlId' => $context->accessUrlId,
                 'limit' => $filters['itemsPerPage'],
                 'offset' => $filters['offset'],
             ],
             [
                 ...$types,
+                'loginUrlId' => Types::INTEGER,
                 'limit' => Types::INTEGER,
                 'offset' => Types::INTEGER,
             ],
@@ -1661,9 +1664,10 @@ final readonly class GlobalReportingSectionQueryService
             'SELECT MIN(login_date) AS firstLogin,
                     MAX(COALESCE(logout_date, login_date)) AS lastLogin
                FROM track_e_login
-              WHERE login_user_id = :userId',
-            ['userId' => $userId],
-            ['userId' => Types::INTEGER],
+              WHERE login_user_id = :userId
+                AND (access_url_id = :accessUrlId OR access_url_id IS NULL)',
+            ['userId' => $userId, 'accessUrlId' => $accessUrlId],
+            ['userId' => Types::INTEGER, 'accessUrlId' => Types::INTEGER],
         );
         $online = false;
         if ($this->hasTables(['track_e_online'])) {
@@ -4264,6 +4268,7 @@ final readonly class GlobalReportingSectionQueryService
                                WHERE course_session_url.session_id = course_relation.session_id
                                  AND course_session_url.access_url_id = :accessUrlId)
                LEFT JOIN track_e_login login ON login.login_user_id = usr.id
+                   AND (login.access_url_id = :accessUrlId OR login.access_url_id IS NULL)
               WHERE usr.status = :teacherStatus
            GROUP BY usr.id, usr.official_code, usr.firstname, usr.lastname, usr.username, usr.email
            ORDER BY usr.lastname ASC, usr.firstname ASC

@@ -90,6 +90,13 @@ class TrackELoginRepository extends ServiceEntityRepository
         $params = ['userId' => $userId];
         $types = ['userId' => Types::INTEGER];
 
+        // Connections recorded before access_url_id existed are NULL and still count.
+        if ($this->accessUrlHelper->isMultiple()) {
+            $sql .= ' AND (access_url_id = :urlId OR access_url_id IS NULL)';
+            $params['urlId'] = (int) $this->accessUrlHelper->getCurrent()?->getId();
+            $types['urlId'] = Types::INTEGER;
+        }
+
         if (null !== $from) {
             $sql .= ' AND login_date >= :from';
             $params['from'] = $from;

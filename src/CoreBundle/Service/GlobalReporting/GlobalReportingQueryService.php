@@ -773,7 +773,8 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_user access_user
                    ON access_user.user_id = login.login_user_id
               WHERE login.login_user_id IN (:studentIds)
-                AND access_user.access_url_id = :accessUrlId',
+                AND access_user.access_url_id = :accessUrlId
+                AND (login.access_url_id = :accessUrlId OR login.access_url_id IS NULL)',
             [
                 'studentIds' => $studentIds,
                 'accessUrlId' => $context->accessUrlId,

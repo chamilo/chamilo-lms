@@ -12,6 +12,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\CourseAccessActivityHelper;
 use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Helpers\RequestExpectsJsonHelper;
@@ -179,6 +180,7 @@ class CidReqListener
             $sessionHandler->set('course', $course);
             $sessionHandler->set('_real_cid', $course->getId());
             $sessionHandler->set('cid', $course->getId());
+            $request->attributes->set(CidReqHelper::COURSE_ID_ATTRIBUTE, (int) $course->getId());
             $sessionHandler->set('_cid', $course->getCode());
             $sessionHandler->set('_course', $courseInfo);
             ChamiloSession::write('cid', $course->getId());

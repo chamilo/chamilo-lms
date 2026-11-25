@@ -21,6 +21,16 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
  */
 class CidReqHelper
 {
+    /**
+     * Request attribute holding the id of the course CidReqListener resolved for THIS request.
+     *
+     * The session copy of the course id is not reliable inside the request that set it: the session is not locked, so a
+     * concurrent request that loaded the session earlier can overwrite it after this request saved it, and this request
+     * then reloads that stale copy when it reads the session again (session_write_close() followed by a later access).
+     * Readers of the course of the current request must therefore take it from the request first.
+     */
+    public const COURSE_ID_ATTRIBUTE = '_chamilo_course_id';
+
     public function __construct(
         private readonly RequestStack $requestStack,
         private readonly EntityManagerInterface $em,
@@ -54,6 +64,11 @@ class CidReqHelper
 
     public function getCourseId(): mixed
     {
+        $fromRequest = $this->getRequest()?->attributes->get(self::COURSE_ID_ATTRIBUTE);
+        if (null !== $fromRequest) {
+            return $fromRequest;
+        }
+
         $session = $this->getSessionHandler();
 
         return $session?->get('cid');

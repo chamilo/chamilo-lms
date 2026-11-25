@@ -32,6 +32,40 @@ class CcEntities
         );
     }
 
+    /**
+     * Resolve a package-relative reference against a trusted base directory and
+     * confirm the real resulting path stays inside that base.
+     *
+     * Manifest hrefs are attacker-controlled; without this check a reference
+     * such as "../../../etc/passwd" escapes the extracted cartridge and lets
+     * the importer read arbitrary application-readable files. Returns the
+     * canonical absolute path when it is contained, or null otherwise
+     * (non-existent, escaping, or unreadable base).
+     */
+    public static function safeResolveInside(string $base, string $relative): ?string
+    {
+        $realBase = realpath($base);
+        if (false === $realBase) {
+            return null;
+        }
+
+        $relative = str_replace('\\', '/', trim($relative));
+        if ('' === $relative) {
+            return null;
+        }
+
+        $real = realpath($realBase.DIRECTORY_SEPARATOR.ltrim($relative, '/'));
+        if (false === $real) {
+            return null;
+        }
+
+        if ($real !== $realBase && !str_starts_with($real, $realBase.DIRECTORY_SEPARATOR)) {
+            return null;
+        }
+
+        return $real;
+    }
+
     public function loadXmlResource($path_to_file)
     {
         $resource = new DOMDocument();

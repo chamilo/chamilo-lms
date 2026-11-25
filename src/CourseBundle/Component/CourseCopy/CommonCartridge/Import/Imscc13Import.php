@@ -6,6 +6,7 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Import;
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Import\Base\Validator\ManifestValidator;
+use Chamilo\CourseBundle\Component\CourseCopy\CommonCartridge\Import\Converter\CcEntities;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use DOMDocument;
 use DOMElement;
@@ -390,7 +391,11 @@ class Imscc13Import
                 continue;
             }
 
-            $abs = rtrim($extractDir, '/').'/'.$hrefRaw;
+            // Manifest hrefs are attacker-controlled; keep the resolved file inside the package.
+            $abs = CcEntities::safeResolveInside($extractDir, $hrefRaw);
+            if (null === $abs) {
+                continue;
+            }
 
             if ('weblink' === $kind) {
                 $wl = $this->parseWebLink($abs);

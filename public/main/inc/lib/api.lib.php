@@ -3571,11 +3571,16 @@ function api_is_allowed_to_edit(
     $inCourse = !empty($courseId) && $courseId != -1;
 
     if (!$inCourse) {
-        $userRoles = api_get_user_roles();
+        // Only the roles of the current user count, never every role of the platform.
+        $user = api_get_current_user();
+        if (null === $user) {
+            return false;
+        }
+
         $feature = api_detect_feature_context();
         $permission = $feature.':edit';
 
-        return api_get_permission($permission, $userRoles);
+        return Container::$container->get(PermissionHelper::class)->hasPermissionForUser($permission, $user);
     }
 
     return $isAllowed;

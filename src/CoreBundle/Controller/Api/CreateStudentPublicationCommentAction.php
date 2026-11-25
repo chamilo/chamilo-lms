@@ -106,6 +106,11 @@ class CreateStudentPublicationCommentAction extends BaseResourceFileAction
             throw new AccessDeniedHttpException('You are not allowed to grade this submission.');
         }
 
+        // Learner comments are text-only; only the users who can grade may post HTML.
+        if (!$this->isAllowedToGrade($submission, $securityUser, $security)) {
+            $commentText = strip_tags((string) $commentText);
+        }
+
         if ($hasFile || $hasComment) {
             $commentEntity->setUser($managedUser);
             $commentEntity->setPublication($submission);

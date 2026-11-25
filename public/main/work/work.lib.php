@@ -4341,6 +4341,11 @@ function deleteCommentFile($id, $courseInfo = [])
  */
 function addWorkComment($courseInfo, $userId, $parentWork, CStudentPublication $studentPublication, $data)
 {
+    // Learner comments are text-only; only the course editors may post HTML.
+    if (!(api_is_platform_admin() || api_is_coach() || api_is_allowed_to_edit(false, false, true))) {
+        $data['comment'] = strip_tags((string) ($data['comment'] ?? ''));
+    }
+
     $fileData = isset($data['attachment']) ? $data['attachment'] : null;
     // If no attachment and no comment then don't save comment
     if (empty($fileData['name']) && empty($data['comment'])) {

@@ -266,6 +266,64 @@ final class CStudentPublicationCommentTest extends AbstractApiTest
     }
 
     // -------------------------------------------------------------------------
+    // Comment text — the review page prints comments unescaped, so a learner's
+    // comment must lose its markup while a teacher's feedback keeps it.
+    // -------------------------------------------------------------------------
+
+    public function testStudentCommentIsStoredWithoutMarkup(): void
+    {
+        $ctx = $this->bootstrapSubmissionScenario('student_markup');
+
+        $this->postComment($ctx['student'], $ctx, '<b>hi</b><img src=x onerror=alert(1)>');
+        $this->assertResponseStatusCodeSame(201);
+
+        $this->assertSame('hi', $this->storedComment($ctx['submission']->getIid()));
+    }
+
+    public function testTeacherCommentKeepsMarkup(): void
+    {
+        $ctx = $this->bootstrapSubmissionScenario('teacher_markup');
+
+        $this->postComment($ctx['teacher'], $ctx, '<p>good <strong>work</strong></p>');
+        $this->assertResponseStatusCodeSame(201);
+
+        $this->assertSame('<p>good <strong>work</strong></p>', $this->storedComment($ctx['submission']->getIid()));
+    }
+
+    /**
+     * @param array{course: Course, submission: CStudentPublication} $ctx
+     */
+    private function postComment(User $user, array $ctx, string $comment): void
+    {
+        $this->createClientWithCredentials($this->getUserTokenFromUser($user))->request(
+            'POST',
+            '/api/c_student_publication_comments/upload?cid='.$ctx['course']->getId(),
+            [
+                'headers' => ['Content-Type' => 'multipart/form-data'],
+                'extra' => [
+                    'parameters' => [
+                        'submissionId' => (string) $ctx['submission']->getIid(),
+                        'comment' => $comment,
+                        'parentResourceNodeId' => (string) $ctx['submission']->getResourceNode()?->getId(),
+                        'filetype' => 'folder',
+                    ],
+                ],
+            ]
+        );
+    }
+
+    private function storedComment(int $submissionIid): ?string
+    {
+        $em = $this->getEntityManager();
+        $em->clear();
+
+        return $em->getRepository(CStudentPublicationComment::class)
+            ->findOneBy(['publication' => $submissionIid])
+            ?->getComment()
+        ;
+    }
+
+    // -------------------------------------------------------------------------
     // Admin — bypass through ROLE_ADMIN must still work
     // -------------------------------------------------------------------------
 

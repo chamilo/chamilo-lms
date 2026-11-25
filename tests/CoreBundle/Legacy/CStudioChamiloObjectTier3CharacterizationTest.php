@@ -53,6 +53,7 @@ final class CStudioChamiloObjectTier3CharacterizationTest extends PluginCharacte
         parent::setUp();
 
         require_once api_get_path(SYS_PLUGIN_PATH).'CStudio/ajax/inc/functions.php';
+
         require_once api_get_path(SYS_PLUGIN_PATH).'CStudio/0_dal/dal.chamilo_object.php';
         $this->conn->executeStatement('DELETE FROM plugin_oel_tools_teachdoc');
     }

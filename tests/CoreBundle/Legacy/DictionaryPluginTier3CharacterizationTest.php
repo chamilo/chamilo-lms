@@ -41,15 +41,13 @@ final class DictionaryPluginTier3CharacterizationTest extends PluginCharacteriza
      */
     private function plugin(): DictionaryPlugin
     {
-        return new class() extends DictionaryPlugin {
+        return new class extends DictionaryPlugin {
             public function __construct()
             {
                 parent::__construct();
             }
 
-            public function ensureTableExists(): void
-            {
-            }
+            public function ensureTableExists(): void {}
         };
     }
 

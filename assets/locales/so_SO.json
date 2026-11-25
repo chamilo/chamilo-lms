@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Ma garanayo"
+    "Don't know": "Ma garanayo",
+    "Expected choice": "Doorashada la filayo",
+    "N\u00b0": "N\u00b0",
+    "Multiple choice": "Dooro badan",
+    "Fill blanks or form": "Buuxi meelaha bannaan ama foomka",
+    "Image zones": "Aagagga sawirka",
+    "Match by dragging": "Iswaafajin adigoo jiidaya",
+    "Multiple answer true/false/don't know": "Jawaabo badan run/biyo/ma garanayo",
+    "Combination true/false/don't-know": "Isku-darka run/biyo/ma-garanayo"
 }

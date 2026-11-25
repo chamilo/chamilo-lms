@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Vid ikke"
+    "Don't know": "Vid ikke",
+    "Expected choice": "Rigtige svar",
+    "N\u00b0": "Nr",
+    "Multiple choice": "Flervalgssp\u00f8rgsm\u00e5l",
+    "Fill blanks or form": "Udfyld rubrikker",
+    "Image zones": "Billedeomr\u00e5der",
+    "Match by dragging": "Match ved tr\u00e6kning",
+    "Multiple answer true/false/don't know": "Flere svar sandt/falsk/vid ikke",
+    "Combination true/false/don't-know": "Kombination sandt/falsk/vid ikke"
 }

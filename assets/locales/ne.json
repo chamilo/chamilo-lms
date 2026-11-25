@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "\u092a\u0924\u094d\u0924\u093e \u091b\u0948\u0928"
+    "Don't know": "\u092a\u0924\u094d\u0924\u093e \u091b\u0948\u0928",
+    "Expected choice": "\u0905\u092a\u0947\u0915\u094d\u0937\u093f\u0924 \u091b\u0928\u094b\u091f",
+    "N\u00b0": "\u0928\u0902.",
+    "Multiple choice": "\u092c\u0939\u0941\u0935\u093f\u0915\u0932\u094d\u092a\u0940\u092f",
+    "Fill blanks or form": "\u0930\u093f\u0915\u094d\u0924 \u0938\u094d\u0925\u093e\u0928\u0939\u0930\u0942 \u092d\u0930\u094d\u0928\u0941\u0939\u094b\u0938\u094d \u0935\u093e \u092b\u093e\u0930\u092e",
+    "Image zones": "\u0924\u0938\u094d\u0935\u0940\u0930 \u0915\u094d\u0937\u0947\u0924\u094d\u0930\u0939\u0930\u0942",
+    "Match by dragging": "\u0921\u094d\u0930\u094d\u092f\u093e\u0917 \u0917\u0930\u0947\u0930 \u092e\u093f\u0932\u093e\u0909\u0928\u0941\u0939\u094b\u0938\u094d",
+    "Multiple answer true/false/don't know": "\u092c\u0939\u0941 \u0909\u0924\u094d\u0924\u0930 \u0938\u0924\u094d\u092f/\u0905\u0938\u0924\u094d\u092f/\u092a\u0924\u094d\u0924\u093e \u091b\u0948\u0928",
+    "Combination true/false/don't-know": "\u0938\u0924\u094d\u092f/\u0905\u0938\u0924\u094d\u092f/\u092a\u0924\u094d\u0924\u093e-\u091b\u0948\u0928 \u0938\u0902\u092f\u094b\u091c\u0928"
 }

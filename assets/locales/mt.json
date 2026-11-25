@@ -4824,5 +4824,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Ma nafx"
+    "Don't know": "Ma nafx",
+    "Expected choice": "G\u0127a\u017cla mistennija",
+    "N\u00b0": "N\u00b0",
+    "Multiple choice": "G\u0127a\u017cla multipla",
+    "Fill blanks or form": "Imla l-vojt jew il-formola",
+    "Image zones": "\u017boni tal-imma\u0121ni",
+    "Match by dragging": "Qabbel billi tkaxkar",
+    "Multiple answer true/false/don't know": "Twe\u0121ibiet multipli veri/falz/ma nafx",
+    "Combination true/false/don't-know": "Kombinazzjoni vera/\u017cbaljata/ma nafx"
 }

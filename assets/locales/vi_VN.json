@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Kh\u00f4ng bi\u1ebft"
+    "Don't know": "Kh\u00f4ng bi\u1ebft",
+    "Expected choice": "C\u1ea7n ch\u1ecdn",
+    "N\u00b0": "S\u1ed1",
+    "Multiple choice": "Ch\u1ecdn m\u1ed9t",
+    "Fill blanks or form": "\u0110i\u1ec1n v\u00e0o ch\u1ed7 tr\u1ed1ng",
+    "Image zones": "V\u00f9ng h\u00ecnh \u1ea3nh",
+    "Match by dragging": "Gh\u00e9p \u0111\u00f4i b\u1eb1ng c\u00e1ch k\u00e9o th\u1ea3",
+    "Multiple answer true/false/don't know": "Nhi\u1ec1u c\u00e2u tr\u1ea3 l\u1eddi \u0111\u00fang/sai/kh\u00f4ng bi\u1ebft",
+    "Combination true/false/don't-know": "K\u1ebft h\u1ee3p \u0111\u00fang/sai/kh\u00f4ng bi\u1ebft"
 }

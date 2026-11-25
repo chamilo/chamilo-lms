@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Ne scias"
+    "Don't know": "Ne scias",
+    "Expected choice": "\u011custa respondo",
+    "N\u00b0": "N\u00b0",
+    "Multiple choice": "Unu el multaj",
+    "Fill blanks or form": "Plenigi",
+    "Image zones": "Atentiloj",
+    "Match by dragging": "Alkrochi la\u016d tirado",
+    "Multiple answer true/false/don't know": "Plurresponda ver/fals/ne",
+    "Combination true/false/don't-know": "Kombina\u0135o ver/fals/ne-scias"
 }

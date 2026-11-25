@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Nuk e di"
+    "Don't know": "Nuk e di",
+    "Expected choice": "Zgjedhja e pritshme",
+    "N\u00b0": "Nr",
+    "Multiple choice": "Zgjedhje t\u00eb shum\u00ebfishta",
+    "Fill blanks or form": "Mbush boshll\u00ebqet ose formularin",
+    "Image zones": "Zonat e imazhit",
+    "Match by dragging": "P\u00ebrputh duke t\u00ebrhequr",
+    "Multiple answer true/false/don't know": "P\u00ebrgjigje t\u00eb shum\u00ebfishta t\u00eb v\u00ebrteta/gjall\u00eb/false/nuk e di",
+    "Combination true/false/don't-know": "Kombinim t\u00eb v\u00ebrteta/gjall\u00eb/false/nuk e di"
 }

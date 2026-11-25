@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Manam yachakunichu"
+    "Don't know": "Manam yachakunichu",
+    "Expected choice": "Allin ajllasqa",
+    "N\u00b0": "N\u00ba",
+    "Multiple choice": "Opci\u00f3n m\u00faltiple",
+    "Fill blanks or form": "Hunt'achiy yuraqkunata",
+    "Image zones": "Zonas interactivas",
+    "Match by dragging": "Huknachway hina maskhay",
+    "Multiple answer true/false/don't know": "Qhawarina willakuy chiqaq/chiqapuni/manam yachakunichu",
+    "Combination true/false/don't-know": "Chiqaq/chiqapuni/manam yachakunichu rurakuy"
 }

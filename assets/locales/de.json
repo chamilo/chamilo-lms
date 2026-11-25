@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Weiss nicht"
+    "Don't know": "Weiss nicht",
+    "Expected choice": "Erwartete Antwort",
+    "N\u00b0": "Nr",
+    "Multiple choice": "Multiple-Choice",
+    "Fill blanks or form": "L\u00fccken-Text",
+    "Image zones": "Hotspots",
+    "Match by dragging": "Durch Ziehen anpassen",
+    "Multiple answer true/false/don't know": "Mehrere Antworten richtig / falsch / weiss nicht",
+    "Combination true/false/don't-know": "Kombination richtig / falsch / weiss nicht"
 }

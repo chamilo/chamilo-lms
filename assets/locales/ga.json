@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "N\u00edl a fhios"
+    "Don't know": "N\u00edl a fhios",
+    "Expected choice": "Roghna\u00edocht ionchais",
+    "N\u00b0": "Uimh.",
+    "Multiple choice": "Ilroghnaigh",
+    "Fill blanks or form": "L\u00edon bearna\u00ed n\u00f3 foirm",
+    "Image zones": "Criosanna \u00edomh\u00e1",
+    "Match by dragging": "Meaitse\u00e1il tr\u00ed tharraingt",
+    "Multiple answer true/false/don't know": "Ilfhreagra f\u00edor/br\u00e9agach/n\u00edl a fhios",
+    "Combination true/false/don't-know": "Comhcheangal f\u00edor/br\u00e9agach/n\u00edl-a-fhios"
 }

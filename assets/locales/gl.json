@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Non sei"
+    "Don't know": "Non sei",
+    "Expected choice": "Elecci\u00f3n esperada",
+    "N\u00b0": "N\u00ba",
+    "Multiple choice": "Resposta \u00fanica",
+    "Fill blanks or form": "Cubre os espazos en branco",
+    "Image zones": "Hotspots",
+    "Match by dragging": "Coincidencia arrastrable",
+    "Multiple answer true/false/don't know": "Respostas m\u00faltiples v/f/non-sei",
+    "Combination true/false/don't-know": "Combinaci\u00f3n v/f/non-sei"
 }

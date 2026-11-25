@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Nem tudom"
+    "Don't know": "Nem tudom",
+    "Expected choice": "Helyes v\u00e1lasz",
+    "N\u00b0": "Nr",
+    "Multiple choice": "T\u00f6bbsz\u00f6r\u00f6s v\u00e1laszt\u00e1s",
+    "Fill blanks or form": "\u00dcres mez\u0151k kit\u00f6lt\u00e9se",
+    "Image zones": "K\u00e9p z\u00f3n\u00e1k",
+    "Match by dragging": "H\u00faz\u00e1ssal p\u00e1ros\u00edt\u00e1s",
+    "Multiple answer true/false/don't know": "T\u00f6bbsz\u00f6r\u00f6s v\u00e1lasz igaz/hamis/nem tudom",
+    "Combination true/false/don't-know": "Kombin\u00e1ci\u00f3 igaz/hamis/nem-tudom"
 }

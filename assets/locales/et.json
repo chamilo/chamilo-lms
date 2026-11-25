@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Ei tea"
+    "Don't know": "Ei tea",
+    "Expected choice": "Oodatud valik",
+    "N\u00b0": "Nr",
+    "Multiple choice": "Valikvastustega",
+    "Fill blanks or form": "T\u00e4ida t\u00fchikud v\u00f5i vorm",
+    "Image zones": "Pildialad",
+    "Match by dragging": "Sobita lohistades",
+    "Multiple answer true/false/don't know": "Mitu vastust t\u00f5ene/v\u00e4\u00e4r/ei tea",
+    "Combination true/false/don't-know": "Kombinatsioon t\u00f5ene/v\u00e4\u00e4r/ei tea"
 }

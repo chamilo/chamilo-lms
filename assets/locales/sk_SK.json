@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Neviem"
+    "Don't know": "Neviem",
+    "Expected choice": "O\u010dak\u00e1van\u00e1 vo\u013eba",
+    "N\u00b0": "\u010c\u00edslo",
+    "Multiple choice": "Jedin\u00e1 spr\u00e1vna odpove\u010f",
+    "Fill blanks or form": "Vyplnenie pr\u00e1zdnych miest",
+    "Image zones": "Z\u00f3ny obr\u00e1zkov",
+    "Match by dragging": "Prisp\u00f4sobenie \u0165ahan\u00edm",
+    "Multiple answer true/false/don't know": "Viacero odpoved\u00ed Pravda/Nepravda/Neviem",
+    "Combination true/false/don't-know": "Kombin\u00e1cia odpovede Pravda/Nepravda/Neviem"
 }

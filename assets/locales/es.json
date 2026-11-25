@@ -4848,5 +4848,13 @@
     "{0} Completed": "{0} completado",
     "Completed": "Completado",
     "Received invitations": "Invitaciones recibidas",
-    "Don't know": "No s\u00e9"
+    "Don't know": "No s\u00e9",
+    "Expected choice": "Selecci\u00f3n correcta",
+    "N\u00b0": "N\u00ba",
+    "Multiple choice": "Respuesta \u00fanica",
+    "Fill blanks or form": "Rellenar blancos",
+    "Image zones": "Zonas interactivas",
+    "Match by dragging": "Coincidencia arrastrable",
+    "Multiple answer true/false/don't know": "Respuestas m\u00faltiples v/f/no-se",
+    "Combination true/false/don't-know": "Combinaci\u00f3n v/f/no-se"
 }

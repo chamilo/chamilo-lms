@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "En osaa sanoa"
+    "Don't know": "En osaa sanoa",
+    "Expected choice": "Oikea vastaus",
+    "N\u00b0": "Nr.",
+    "Multiple choice": "Yksi oikea vastaus",
+    "Fill blanks or form": "Aukkoteht\u00e4v\u00e4",
+    "Image zones": "Interaktiiviset alueet",
+    "Match by dragging": "Rakenna vet\u00e4m\u00e4ll\u00e4",
+    "Multiple answer true/false/don't know": "Useita vastauksia tosi/valhe/en tied\u00e4",
+    "Combination true/false/don't-know": "Yhdistelm\u00e4 tosi/valhe/en-tied\u00e4"
 }

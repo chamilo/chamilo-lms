@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Andazi"
+    "Don't know": "Andazi",
+    "Expected choice": "Ukhetho olulindelekileyo",
+    "N\u00b0": "N\u00b0",
+    "Multiple choice": "Ukhetho oluninzi",
+    "Fill blanks or form": "Gcwalisa iindawo ezingenanto okanye ifomu",
+    "Image zones": "Iindawo zomfanekiso",
+    "Match by dragging": "Linganisa ngokurhuqa",
+    "Multiple answer true/false/don't know": "Impendulo ezininzi /iyiyo / akukho / akandiqondi",
+    "Combination true/false/don't-know": "Indibaniselwano /iyiyo /akukho /akandiqondi"
 }

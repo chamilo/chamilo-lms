@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Ne vem"
+    "Don't know": "Ne vem",
+    "Expected choice": "Pri\u010dakovana izbira",
+    "N\u00b0": "\u0160t.",
+    "Multiple choice": "Ve\u010dkratna izbira",
+    "Fill blanks or form": "Zapolni prazna mesta",
+    "Image zones": "Vro\u010de to\u010dke (hotspots)",
+    "Match by dragging": "Ujemanje z razporejanjem",
+    "Multiple answer true/false/don't know": "Ve\u010dkraten odgovor pravilno/nepravilno/ne-vem",
+    "Combination true/false/don't-know": "Kombinacija pravilno/nepravilno/ne-vem"
 }

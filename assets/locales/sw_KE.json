@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Sijui"
+    "Don't know": "Sijui",
+    "Expected choice": "Chaguo linalotarajiwa",
+    "N\u00b0": "Na.",
+    "Multiple choice": "Chaguo nyingi",
+    "Fill blanks or form": "Jaza nafasi au fomu",
+    "Image zones": "Zona za picha",
+    "Match by dragging": "Linganisha kwa kuvuta",
+    "Multiple answer true/false/don't know": "Jibu nyingi za kweli/ubaya/sijui",
+    "Combination true/false/don't-know": "Mchanganyiko wa kweli/ubaya/sijui"
 }

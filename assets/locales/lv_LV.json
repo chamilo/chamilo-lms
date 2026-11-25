@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Es Nezinu"
+    "Don't know": "Es Nezinu",
+    "Expected choice": "Pareiz\u0101 atbilde",
+    "N\u00b0": "Nr.",
+    "Multiple choice": "Vair\u0101kas izv\u0113les",
+    "Fill blanks or form": "Aizpild\u012bt tuk\u0161os lauci\u0146us (prec\u012bza defin\u012bcija)",
+    "Image zones": "Att\u0113la zonas",
+    "Match by dragging": "Sakrit\u012bba ar vilk\u0161anu",
+    "Multiple answer true/false/don't know": "Vair\u0101kas atbildes  pareizi / nepareizi / nezinu",
+    "Combination true/false/don't-know": "Kombin\u0101cija  pareizi / nepareizi / nezinu"
 }

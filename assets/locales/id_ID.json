@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Tidak tahu"
+    "Don't know": "Tidak tahu",
+    "Expected choice": "Pilihan yang diharapkan",
+    "N\u00b0": "N\u00b0",
+    "Multiple choice": "Pilihan ganda",
+    "Fill blanks or form": "Mengisintitik-titik",
+    "Image zones": "Hotspot",
+    "Match by dragging": "Cocokkan dengan menyeret",
+    "Multiple answer true/false/don't know": "Jawaban ganda benar/salah/tidak tahu",
+    "Combination true/false/don't-know": "Kombinasi benar/salah/tidak-tahu"
 }

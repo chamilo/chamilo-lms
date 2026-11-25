@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Bilmir\u0259m"
+    "Don't know": "Bilmir\u0259m",
+    "Expected choice": "G\u00f6zl\u0259nil\u0259n se\u00e7im",
+    "N\u00b0": "\u2116",
+    "Multiple choice": "\u00c7oxse\u00e7imli",
+    "Fill blanks or form": "Bo\u015fluqlar\u0131 v\u0259 ya forman\u0131 doldurma",
+    "Image zones": "\u015e\u0259kil sah\u0259l\u0259ri",
+    "Match by dragging": "S\u00fcr\u00fckl\u0259y\u0259r\u0259k uy\u011funla\u015fd\u0131r",
+    "Multiple answer true/false/don't know": "\u00c7oxsayl\u0131 cavab: do\u011fru/yanl\u0131\u015f/bilmir\u0259m",
+    "Combination true/false/don't-know": "Kombinasiya: do\u011fru/yanl\u0131\u015f/bilmir\u0259m"
 }

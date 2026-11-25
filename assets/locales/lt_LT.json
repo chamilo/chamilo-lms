@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Ne\u017einau"
+    "Don't know": "Ne\u017einau",
+    "Expected choice": "Laukiamas pasirinkimas",
+    "N\u00b0": "N",
+    "Multiple choice": "Keli pasirinkimai",
+    "Fill blanks or form": "Tu\u0161\u010di\u0173 laukeli\u0173 u\u017epildymas",
+    "Image zones": "Paveiksl\u0117li\u0173 zonos",
+    "Match by dragging": "Sud\u0117ti vilkdami",
+    "Multiple answer true/false/don't know": "Keli atsakymai teisingas/ klaidingas/ ne\u017einau",
+    "Combination true/false/don't-know": "Derinys teisingas/klaidingas/ne\u017einau"
 }

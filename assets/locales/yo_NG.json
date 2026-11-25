@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Emi ko m\u1ecd"
+    "Don't know": "Emi ko m\u1ecd",
+    "Expected choice": "A\u1e63ayan ti a nireti",
+    "N\u00b0": "N\u1ecd\u0301.",
+    "Multiple choice": "Y\u00e0n p\u00fap\u1ecd\u0300",
+    "Fill blanks or form": "Kun aw\u1ecdn aaye ofo tabi f\u1ecd\u1ecdmu",
+    "Image zones": "Aw\u1ecdn agbegbe aworan",
+    "Match by dragging": "Baramu nipas\u1eb9 fif\u1ecd",
+    "Multiple answer true/false/don't know": "Idahun pup\u1ecd otit\u1ecd/ewe/ko m\u1ecd",
+    "Combination true/false/don't-know": "Apapo otit\u1ecd/ewe/ko-m\u1ecd"
 }

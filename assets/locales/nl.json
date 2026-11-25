@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Ik weet het niet"
+    "Don't know": "Ik weet het niet",
+    "Expected choice": "Correct antwoord",
+    "N\u00b0": "Nummer",
+    "Multiple choice": "Meervoudige keuze",
+    "Fill blanks or form": "Invullen",
+    "Image zones": "Hotspots",
+    "Match by dragging": "Sleep om te matchen",
+    "Multiple answer true/false/don't know": "Meerkeuze met waar/nietwaar/ik weet het niet",
+    "Combination true/false/don't-know": "Combinatie waar/niet waar/ik weet het niet"
 }

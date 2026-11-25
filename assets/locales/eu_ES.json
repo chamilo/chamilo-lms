@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Ez dakit"
+    "Don't know": "Ez dakit",
+    "Expected choice": "Aukera zuzena",
+    "N\u00b0": "Zk.",
+    "Multiple choice": "Hainbat aukera",
+    "Fill blanks or form": "Bete zuriuneak",
+    "Image zones": "Irudi guneak",
+    "Match by dragging": "Arrastatuz lotu",
+    "Multiple answer true/false/don't know": "Erantzun anitzak egia/gezurra/ez dakit",
+    "Combination true/false/don't-know": "Konbinazioa egia/gezurra/ez dakit"
 }

@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "No se s\u00f4n"
+    "Don't know": "No se s\u00f4n",
+    "Expected choice": "Scealte spetade",
+    "N\u00b0": "N\u00b0",
+    "Multiple choice": "Scelte multiple",
+    "Fill blanks or form": "Jempl\u00ee vuides o formulari",
+    "Image zones": "Zone imatine",
+    "Match by dragging": "Meterlis in pares",
+    "Multiple answer true/false/don't know": "Rispostis multiple vere/falso/no se s\u00f4n",
+    "Combination true/false/don't-know": "Combinazion vere/falso/no-se-s\u00f4n"
 }

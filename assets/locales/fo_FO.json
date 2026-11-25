@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Vit ikki"
+    "Don't know": "Vit ikki",
+    "Expected choice": "R\u00e6tt svar",
+    "N\u00b0": "Nr.",
+    "Multiple choice": "Fj\u00f6lval",
+    "Fill blanks or form": "Uppfyll t\u00f3mst\u00f8\u00f0ur ella ey\u00f0skrift",
+    "Image zones": "Myndasv\u00f8\u00f0i",
+    "Match by dragging": "Par vit drepi",
+    "Multiple answer true/false/don't know": "Fleiri sv\u00f8r satt/\u00f3satt/vit ikki",
+    "Combination true/false/don't-know": "Samanseting satt/\u00f3satt/vit-ikki"
 }

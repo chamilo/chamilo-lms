@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Nu stiu"
+    "Don't know": "Nu stiu",
+    "Expected choice": "Alegerea asteptata",
+    "N\u00b0": "Nr",
+    "Multiple choice": "Alegere multipl\u0103",
+    "Fill blanks or form": "Completeaza campurile",
+    "Image zones": "Puncte de interes",
+    "Match by dragging": "Potrivire prin trasnare",
+    "Multiple answer true/false/don't know": "Raspunsuri multiple a/f/nu-stiu",
+    "Combination true/false/don't-know": "Combinatie a/f/nu-stiu"
 }

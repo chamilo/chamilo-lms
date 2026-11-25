@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "\u067e\u0648\u0647 \u0646\u0647 \u06a9\u06d0\u0696\u0645"
+    "Don't know": "\u067e\u0648\u0647 \u0646\u0647 \u06a9\u06d0\u0696\u0645",
+    "Expected choice": "\u062a\u0645\u0647 \u0634\u0648\u06d0 \u063a\u0648\u0631\u0647 \u0648\u0627\u0644\u06cc",
+    "N\u00b0": "\u0634\u0645.",
+    "Multiple choice": "\u0685\u0648 \u0627\u0646\u062a\u062e\u0627\u0628\u064a",
+    "Fill blanks or form": "\u062a\u0634\u06d0 \u0681\u0627\u06cc\u0648\u0646\u0647 \u06cc\u0627 \u0641\u0648\u0631\u0645\u0647 \u0689\u06a9\u0647 \u06a9\u0693\u0626",
+    "Image zones": "\u0627\u0646\u0681\u0648\u0631 \u0633\u0627\u062d\u06d0",
+    "Match by dragging": "\u062f \u0689\u0631\u06ab \u06a9\u0648\u0644\u0648 \u0644\u0647 \u0644\u0627\u0631\u06d0 \u0648\u0631\u062a\u0647 \u06a9\u0693\u0626",
+    "Multiple answer true/false/don't know": "\u0685\u0648 \u0681\u0648\u0627\u0628 \u0633\u0645\u0647/\u0646\u0627\u0633\u0645\u0647/\u067e\u0648\u0647 \u0646\u0647 \u06a9\u06d0\u0696\u0645",
+    "Combination true/false/don't-know": "\u062f \u062a\u0631\u06a9\u06cc\u0628 \u0633\u0645\u0647/\u0646\u0627\u0633\u0645\u0647/\u067e\u0648\u0647 \u0646\u0647 \u06a9\u06d0\u0696\u0645"
 }

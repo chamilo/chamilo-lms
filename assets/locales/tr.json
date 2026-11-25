@@ -4838,5 +4838,13 @@
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
     "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
-    "Don't know": "Bilmiyorum"
+    "Don't know": "Bilmiyorum",
+    "Expected choice": "Beklenen se\u00e7im",
+    "N\u00b0": "N\u00b0",
+    "Multiple choice": "\u00c7oktan se\u00e7meli",
+    "Fill blanks or form": "Bo\u015fluk doldurma",
+    "Image zones": "Resim b\u00f6lgeleri",
+    "Match by dragging": "S\u00fcr\u00fckleyerek e\u015fle\u015ftir",
+    "Multiple answer true/false/don't know": "\u00c7oklu cevap do\u011fru/yanl\u0131\u015f/bilmiyorum",
+    "Combination true/false/don't-know": "Do\u011fru/yanl\u0131\u015f/bilmiyorum kombinasyonu"
 }

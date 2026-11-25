@@ -4,9 +4,15 @@
 
 use Chamilo\CoreBundle\Entity\Asset;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\CoreBundle\Entity\Skill;
+use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Entity\UserRelTag;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\ORM\QueryBuilder;
 
 class ExtraField extends Model
 {
@@ -633,33 +639,37 @@ class ExtraField extends Model
      */
     public function get_handler_field_info_by_tags($variable)
     {
-        $variable = Database::escape_string($variable);
-        $sql = "SELECT * FROM {$this->table}
-                WHERE
-                    variable = '$variable' AND
-                    item_type = $this->itemType";
-        $result = Database::query($sql);
-        $extraFieldRepo = Container::getExtraFieldRepository();
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_assoc($result);
-            $extraFieldId = $row['id'];
-            /** @var EntityExtraField $extraField */
-            $extraField = $extraFieldRepo->find($extraFieldId);
-            $row['display_text'] = $extraField->getDisplayText();
-
-            // All the tags of the field
-            $sql = "SELECT * FROM $this->table_field_tag
-                    WHERE field_id='".$extraFieldId."'
-                    ORDER BY id ASC";
-            $result = Database::query($sql);
-            while ($option = Database::fetch_assoc($result)) {
-                $row['options'][$option['id']] = $option;
-            }
-
-            return $row;
+        $row = $this->fieldRowByVariable($variable);
+        if (null === $row) {
+            return false;
         }
 
-        return false;
+        $extraFieldId = $row['id'];
+        $extraFieldRepo = Container::getExtraFieldRepository();
+        /** @var EntityExtraField $extraField */
+        $extraField = $extraFieldRepo->find($extraFieldId);
+        $row['display_text'] = $extraField->getDisplayText();
+
+        // All the tags of the field
+        $tags = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                't.id AS id',
+                'IDENTITY(t.field) AS field_id',
+                't.tag AS tag',
+                't.count AS count'
+            )
+            ->from(Tag::class, 't')
+            ->where('IDENTITY(t.field) = :fieldId')
+            ->setParameter('fieldId', (int) $extraFieldId)
+            ->orderBy('t.id', 'ASC')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        foreach ($tags as $tag) {
+            $row['options'][$tag['id']] = $tag;
+        }
+
+        return $row;
     }
 
     /**
@@ -669,27 +679,109 @@ class ExtraField extends Model
      */
     public function getFieldInfoByFieldId($fieldId)
     {
-        $fieldId = (int) $fieldId;
-        $sql = "SELECT * FROM {$this->table}
-                WHERE
-                    id = '$fieldId' AND
-                    item_type = $this->itemType";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_assoc($result);
-
-            // All the options of the field
-            $sql = "SELECT * FROM $this->table_field_options
-                    WHERE field_id='".$fieldId."'
-                    ORDER BY option_order ASC";
-            $result = Database::query($sql);
-            while ($option = Database::fetch_array($result)) {
-                $row['options'][$option['id']] = $option;
-            }
-
-            return $row;
-        } else {
+        $row = $this->fieldRowsQueryBuilder()
+            ->where('f.id = :id')
+            ->andWhere('f.itemType = :itemType')
+            ->setParameter('id', (int) $fieldId)
+            ->setParameter('itemType', (int) $this->itemType)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
+        if (null === $row) {
             return false;
+        }
+
+        $row = $this->toLegacyFieldRow($row);
+        $this->addOptionsToFieldRow($row);
+
+        return $row;
+    }
+
+    /**
+     * Every column of the extra_field table, aliased to the snake_case keys the legacy callers read.
+     */
+    private function fieldRowsQueryBuilder(): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'f.id AS id',
+                'f.itemType AS item_type',
+                'f.valueType AS value_type',
+                'f.variable AS variable',
+                'f.description AS description',
+                'f.displayText AS display_text',
+                'f.helperText AS helper_text',
+                'f.defaultValue AS default_value',
+                'f.fieldOrder AS field_order',
+                'f.visibleToSelf AS visible_to_self',
+                'f.visibleToOthers AS visible_to_others',
+                'f.changeable AS changeable',
+                'f.filter AS filter',
+                'f.createdAt AS created_at',
+                'f.autoRemove AS auto_remove'
+            )
+            ->from(EntityExtraField::class, 'f')
+        ;
+    }
+
+    /**
+     * The raw table row used to come back with 0/1 flags and the creation date as a string: keep that shape.
+     */
+    private function toLegacyFieldRow(array $row): array
+    {
+        foreach (['visible_to_self', 'visible_to_others', 'changeable', 'filter', 'auto_remove'] as $flag) {
+            if (null !== $row[$flag]) {
+                $row[$flag] = (int) $row[$flag];
+            }
+        }
+        if ($row['created_at'] instanceof DateTimeInterface) {
+            $row['created_at'] = $row['created_at']->format('Y-m-d H:i:s');
+        }
+
+        return $row;
+    }
+
+    /**
+     * The legacy row of the field of this item type having that variable, null if there is none.
+     */
+    private function fieldRowByVariable($variable): ?array
+    {
+        $row = $this->fieldRowsQueryBuilder()
+            ->where('f.variable = :variable')
+            ->andWhere('f.itemType = :itemType')
+            ->setParameter('variable', (string) $variable)
+            ->setParameter('itemType', (int) $this->itemType)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()[0] ?? null;
+
+        return null === $row ? null : $this->toLegacyFieldRow($row);
+    }
+
+    /**
+     * Sets $row['options'] to the options of the field, keyed by id and ordered by option_order. Each option is
+     * both associative and numerically indexed, as Database::fetch_array() returned it.
+     */
+    private function addOptionsToFieldRow(array &$row): void
+    {
+        $options = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'o.id AS id',
+                'IDENTITY(o.field) AS field_id',
+                'o.value AS option_value',
+                'o.displayText AS display_text',
+                'o.priority AS priority',
+                'o.priorityMessage AS priority_message',
+                'o.optionOrder AS option_order'
+            )
+            ->from(ExtraFieldOptions::class, 'o')
+            ->where('IDENTITY(o.field) = :fieldId')
+            ->setParameter('fieldId', (int) $row['id'])
+            ->orderBy('o.optionOrder', 'ASC')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        foreach ($options as $option) {
+            $row['options'][$option['id']] = array_merge($option, array_values($option));
         }
     }
 
@@ -935,6 +1027,7 @@ class ExtraField extends Model
                 ORDER BY field_order ASC
         ";
 
+        // TODO(db-neutral): the caller's conditions are SQL fragments built by Database::parse_conditions()
         $result = Database::query($sql);
         $extraFields = Database::store_result($result, 'ASSOC');
 
@@ -2168,35 +2261,20 @@ class ExtraField extends Model
      */
     public function get_handler_field_info_by_field_variable($variable)
     {
-        $variable = Database::escape_string($variable);
-        $sql = "SELECT * FROM {$this->table}
-                WHERE
-                    variable = '$variable' AND
-                    item_type = $this->itemType";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $extraFieldRepo = Container::getExtraFieldRepository();
-            $row = Database::fetch_assoc($result);
-            if ($row) {
-                $extraFieldId = $row['id'];
-                /** @var EntityExtraField $extraField */
-                $field = $extraFieldRepo->find($extraFieldId);
-                $row['display_text'] = $field->getDisplayText();
-
-                // All the options of the field
-                $sql = "SELECT * FROM $this->table_field_options
-                        WHERE field_id='".$extraFieldId."'
-                        ORDER BY option_order ASC";
-                $result = Database::query($sql);
-                while ($option = Database::fetch_array($result)) {
-                    $row['options'][$option['id']] = $option;
-                }
-
-                return $row;
-            }
+        $row = $this->fieldRowByVariable($variable);
+        if (null === $row) {
+            return false;
         }
 
-        return false;
+        $extraFieldRepo = Container::getExtraFieldRepository();
+        /** @var EntityExtraField $field */
+        $field = $extraFieldRepo->find($row['id']);
+        $row['display_text'] = $field->getDisplayText();
+
+        // All the options of the field
+        $this->addOptionsToFieldRow($row);
+
+        return $row;
     }
 
     /**
@@ -2227,19 +2305,16 @@ class ExtraField extends Model
      */
     public function get_max_field_order()
     {
-        $sql = "SELECT MAX(field_order)
-                FROM {$this->table}
-                WHERE
-                    item_type = ".(int) $this->itemType;
-        $res = Database::query($sql);
+        $maxOrder = Container::getEntityManager()->createQueryBuilder()
+            ->select('MAX(f.fieldOrder)')
+            ->from(EntityExtraField::class, 'f')
+            ->where('f.itemType = :itemType')
+            ->setParameter('itemType', (int) $this->itemType)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-        $order = 0;
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_row($res);
-            $order = $row[0] + 1;
-        }
-
-        return $order;
+        return (int) $maxOrder + 1;
     }
 
     /**
@@ -3299,19 +3374,17 @@ class ExtraField extends Model
      */
     public function getAllUserPerTag($fieldId, $tag)
     {
-        $tagRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
-        $tag = Database::escape_string($tag);
-        $fieldId = (int) $fieldId;
-
-        $sql = "SELECT user_id
-                FROM {$this->table_field_tag} f INNER JOIN $tagRelUserTable ft
-                ON tag_id = f.id
-                WHERE tag = '$tag' AND f.field_id = $fieldId;
-        ";
-
-        $result = Database::query($sql);
-
-        return Database::store_result($result, 'ASSOC');
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(ft.user) AS user_id')
+            ->from(UserRelTag::class, 'ft')
+            ->innerJoin('ft.tag', 'f')
+            ->where('f.tag = :tag')
+            ->andWhere('IDENTITY(f.field) = :fieldId')
+            ->setParameter('tag', (string) $tag)
+            ->setParameter('fieldId', (int) $fieldId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
     }
 
     /**
@@ -3322,19 +3395,17 @@ class ExtraField extends Model
      */
     public function getAllSkillPerTag($fieldId, $tagId)
     {
-        $skillTable = Database::get_main_table(TABLE_MAIN_SKILL);
-        $tagRelExtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
-        $fieldId = (int) $fieldId;
-        $tagId = (int) $tagId;
-
-        $sql = "SELECT s.id
-                FROM $skillTable s INNER JOIN $tagRelExtraTable t
-                ON t.item_id = s.id
-                WHERE tag_id = $tagId AND t.field_id = $fieldId;
-        ";
-
-        $result = Database::query($sql);
-        $result = Database::store_result($result, 'ASSOC');
+        $result = Container::getEntityManager()->createQueryBuilder()
+            ->select('s.id AS id')
+            ->from(ExtraFieldRelTag::class, 't')
+            ->innerJoin(Skill::class, 's', 'WITH', 's.id = t.itemId')
+            ->where('IDENTITY(t.tag) = :tagId')
+            ->andWhere('IDENTITY(t.field) = :fieldId')
+            ->setParameter('tagId', (int) $tagId)
+            ->setParameter('fieldId', (int) $fieldId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
         $skillList = [];
         foreach ($result as $index => $value) {
@@ -3362,36 +3433,45 @@ class ExtraField extends Model
         $id = $extraFieldInfo['id'];
         $tagId = $extraFieldInfoTag['id'];
 
-        $table = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $tagRelExtraTable = Database::get_main_table(TABLE_MAIN_EXTRA_FIELD_REL_TAG);
-        $tagTable = Database::get_main_table(TABLE_MAIN_TAG);
-        $optionsTable = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
-        $cleanOptions = [];
-        foreach ($options as $option) {
-            $cleanOptions[] = Database::escape_string($option);
-        }
-        $cleanOptions = array_filter($cleanOptions);
+        $cleanOptions = array_filter(array_map('strval', $options));
 
         if (empty($cleanOptions)) {
             return [];
         }
 
-        $value = implode("','", $cleanOptions);
-
-        $sql = "SELECT DISTINCT t.*, v.field_value as value, o.display_text
-                FROM $tagRelExtraTable te
-                INNER JOIN $tagTable t
-                ON (t.id = te.tag_id AND te.field_id = t.field_id AND te.field_id = $tagId)
-                INNER JOIN $table v
-                ON (te.item_id = v.item_id AND v.field_id = $id)
-                INNER JOIN $optionsTable o
-                ON (o.option_value = v.field_value)
-                WHERE v.field_value IN ('".$value."')
-                ORDER BY o.option_order, t.tag
-               ";
-        $result = Database::query($sql);
-
-        return Database::store_result($result);
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                't.id AS id',
+                'IDENTITY(t.field) AS field_id',
+                't.tag AS tag',
+                't.count AS count',
+                'v.fieldValue AS value',
+                'o.displayText AS display_text'
+            )
+            ->distinct()
+            ->from(ExtraFieldRelTag::class, 'te')
+            ->innerJoin(
+                Tag::class,
+                't',
+                'WITH',
+                't.id = IDENTITY(te.tag) AND IDENTITY(te.field) = IDENTITY(t.field) AND IDENTITY(te.field) = :tagId'
+            )
+            ->innerJoin(
+                ExtraFieldValues::class,
+                'v',
+                'WITH',
+                'te.itemId = v.itemId AND IDENTITY(v.field) = :fieldId'
+            )
+            ->innerJoin(ExtraFieldOptions::class, 'o', 'WITH', 'o.value = v.fieldValue')
+            ->where('v.fieldValue IN (:values)')
+            ->setParameter('tagId', (int) $tagId)
+            ->setParameter('fieldId', (int) $id)
+            ->setParameter('values', array_values($cleanOptions))
+            ->orderBy('o.optionOrder')
+            ->addOrderBy('t.tag')
+            ->getQuery()
+            ->getArrayResult()
+        ;
     }
 
     public static function getExtraFieldTypesWithFiles(): array

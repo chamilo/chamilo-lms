@@ -377,43 +377,41 @@ class SkillModel extends Model
         $id = null,
         $parent_id = null
     ) {
-        $id_condition = '';
-        if (!empty($id)) {
-            $id = (int) $id;
-            $id_condition = " WHERE s.id = $id";
-        }
-
-        if (!empty($parent_id)) {
-            $parent_id = (int) $parent_id;
-            if (empty($id_condition)) {
-                $id_condition = " WHERE ss.parent_id = $parent_id";
-            } else {
-                $id_condition .= " AND ss.parent_id = $parent_id";
-            }
-        }
-
         $skillRepo = Container::getSkillRepository();
         $assetRepo = Container::getAssetRepository();
 
-        $sql = "SELECT
-                    s.id,
-                    s.title,
-                    s.description,
-                    s.acquirable,
-                    ss.parent_id,
-                    ss.relation_type,
-                    s.icon,
-                    s.short_code,
-                    s.status
-                FROM {$this->table} s
-                INNER JOIN {$this->table_skill_rel_skill} ss
-                ON (s.id = ss.skill_id) $id_condition
-                ORDER BY ss.id, ss.parent_id";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                's.id AS id',
+                's.title AS title',
+                's.description AS description',
+                's.acquirable AS acquirable',
+                'IDENTITY(ss.parent) AS parent_id',
+                'ss.relationType AS relation_type',
+                's.icon AS icon',
+                's.shortCode AS short_code',
+                's.status AS status'
+            )
+            ->from(SkillRelSkill::class, 'ss')
+            ->innerJoin('ss.skill', 's')
+            ->orderBy('ss.id', 'ASC')
+            ->addOrderBy('ss.parent', 'ASC')
+        ;
 
-        $result = Database::query($sql);
+        if (!empty($id)) {
+            $qb->where('s.id = :skillId')->setParameter('skillId', (int) $id);
+        }
+
+        if (!empty($parent_id)) {
+            $qb->andWhere('IDENTITY(ss.parent) = :parentId')->setParameter('parentId', (int) $parent_id);
+        }
+
+        $rows = $qb->getQuery()->getArrayResult();
         $skills = [];
-        if (Database::num_rows($result)) {
-            while ($row = Database::fetch_assoc($result)) {
+        if (!empty($rows)) {
+            foreach ($rows as $row) {
+                $row['acquirable'] = (int) $row['acquirable'];
+                $row['parent_id'] = null === $row['parent_id'] ? null : (int) $row['parent_id'];
                 $skillId = (int) $row['id'];
                 $skill = $skillRepo->find($skillId);
 
@@ -459,13 +457,52 @@ class SkillModel extends Model
     public function getGradebooksBySkill($skill_id)
     {
         $skill_id = (int) $skill_id;
-        $sql = "SELECT g.* FROM {$this->table_gradebook} g
-                INNER JOIN {$this->table_skill_rel_gradebook} sg
-                ON g.id = sg.gradebook_id
-                WHERE sg.skill_id = $skill_id";
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'g.id AS id',
+                'IDENTITY(g.user) AS user_id',
+                'IDENTITY(g.course) AS c_id',
+                'IDENTITY(g.parent) AS parent_id',
+                'IDENTITY(g.session) AS session_id',
+                'IDENTITY(g.gradeModel) AS grade_model_id',
+                'IDENTITY(g.document) AS document_id',
+                'g.title AS title',
+                'g.description AS description',
+                'g.weight AS weight',
+                'g.visible AS visible',
+                'g.certifMinScore AS certif_min_score',
+                'g.locked AS locked',
+                'g.defaultLowestEvalExclude AS default_lowest_eval_exclude',
+                'g.generateCertificates AS generate_certificates',
+                'g.certificateValidityPeriod AS certificate_validity_period',
+                'g.isRequirement AS is_requirement',
+                'g.depends AS depends',
+                'g.minimumToValidate AS minimum_to_validate',
+                'g.gradeBooksToValidateInDependence AS gradebooks_to_validate_in_dependence',
+                'g.allowSkillsBySubcategory AS allow_skills_by_subcategory',
+                'g.calculationMode AS calculation_mode'
+            )
+            ->from(SkillRelGradebook::class, 'sg')
+            ->innerJoin('sg.gradeBookCategory', 'g')
+            ->where('IDENTITY(sg.skill) = :skillId')
+            ->setParameter('skillId', $skill_id)
+            ->getQuery()
+            ->getArrayResult();
 
-        return Database::store_result($result, 'ASSOC');
+        // The raw table row held every column as a plain scalar: integers for ids and flags, a string for the mode.
+        $intKeys = [
+            'user_id', 'c_id', 'parent_id', 'session_id', 'grade_model_id', 'document_id', 'visible',
+            'default_lowest_eval_exclude', 'generate_certificates', 'is_requirement',
+        ];
+        foreach ($rows as &$row) {
+            foreach ($intKeys as $key) {
+                $row[$key] = null === $row[$key] ? null : (int) $row[$key];
+            }
+            $row['calculation_mode'] = $row['calculation_mode']->value;
+        }
+        unset($row);
+
+        return $rows;
     }
 
     /**
@@ -761,30 +798,36 @@ class SkillModel extends Model
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
 
-        $courseCondition = '';
-        if (!empty($courseId)) {
-            $courseCondition = " AND course_id = $courseId ";
-        }
+        $qb = $em->createQueryBuilder()
+            ->select(
+                'DISTINCT s.id AS id',
+                'u.id AS issue',
+                'u.acquiredSkillAt AS acquired_skill_at',
+                'IDENTITY(u.course) AS course_id'
+            )
+            ->from(SkillRelUser::class, 'u')
+            ->innerJoin('u.skill', 's')
+            ->where('IDENTITY(u.user) = :userId')
+            ->andWhere('u.status = :status')
+            ->setParameter('userId', $userId)
+            ->setParameter('status', SkillRelUser::STATUS_ACQUIRED)
+        ;
 
-        $sessionCondition = '';
         if (!empty($sessionId)) {
-            $sessionCondition = " AND session_id = $sessionId ";
+            $qb->andWhere('IDENTITY(u.session) = :sessionId')->setParameter('sessionId', $sessionId);
         }
 
-        $sql = 'SELECT DISTINCT
-                    s.id,
-                    u.id as issue,
-                    u.acquired_skill_at,
-                    u.course_id
-                FROM '.$this->table_skill_rel_user.' u
-                INNER JOIN '.$this->table.' s
-                ON u.skill_id = s.id
-                WHERE
-                    user_id = '.$userId.'
-                    AND u.status = '.SkillRelUser::STATUS_ACQUIRED.' '.$sessionCondition.' '.$courseCondition;
+        if (!empty($courseId)) {
+            $qb->andWhere('IDENTITY(u.course) = :courseId')->setParameter('courseId', $courseId);
+        }
 
-        $result = Database::query($sql);
-        $skills = Database::store_result($result, 'ASSOC');
+        $skills = $qb->getQuery()->getArrayResult();
+        foreach ($skills as &$skillRow) {
+            // The raw table row held the date as a string and the course id as an integer.
+            $skillRow['acquired_skill_at'] = $skillRow['acquired_skill_at']->format('Y-m-d H:i:s');
+            $skillRow['course_id'] = null === $skillRow['course_id'] ? null : (int) $skillRow['course_id'];
+        }
+        unset($skillRow);
         $skillList = [];
         if (!empty($skills)) {
             foreach ($skills as $skill) {
@@ -1320,20 +1363,16 @@ class SkillModel extends Model
     public function getUserSkillRanking($user_id)
     {
         $user_id = (int) $user_id;
-        $sql = "SELECT count(skill_id) count
-                FROM {$this->table} s
-                INNER JOIN {$this->table_skill_rel_user} su
-                ON (s.id = su.skill_id)
-                WHERE user_id = $user_id
-                AND su.status = ".SkillRelUser::STATUS_ACQUIRED;
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $result = Database::fetch_row($result);
-
-            return $result[0];
-        }
-
-        return false;
+        return (int) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(su.id)')
+            ->from(SkillRelUser::class, 'su')
+            ->innerJoin('su.skill', 's')
+            ->where('IDENTITY(su.user) = :userId')
+            ->andWhere('su.status = :status')
+            ->setParameter('userId', $user_id)
+            ->setParameter('status', SkillRelUser::STATUS_ACQUIRED)
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
@@ -1344,17 +1383,16 @@ class SkillModel extends Model
     public function getCoursesBySkill($skillId)
     {
         $skillId = (int) $skillId;
-        $sql = "SELECT c.title, c.code
-                FROM {$this->table_gradebook} g
-                INNER JOIN {$this->table_skill_rel_gradebook} sg
-                ON g.id = sg.gradebook_id
-                INNER JOIN {$this->table_course} c
-                ON c.id = g.c_id
-                WHERE sg.skill_id = $skillId
-                AND (g.session_id IS NULL OR g.session_id = 0)";
-        $result = Database::query($sql);
-
-        return Database::store_result($result, 'ASSOC');
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select('c.title AS title', 'c.code AS code')
+            ->from(SkillRelGradebook::class, 'sg')
+            ->innerJoin('sg.gradeBookCategory', 'g')
+            ->innerJoin('g.course', 'c')
+            ->where('IDENTITY(sg.skill) = :skillId')
+            ->andWhere('(g.session IS NULL OR IDENTITY(g.session) = 0)')
+            ->setParameter('skillId', $skillId)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
@@ -1463,29 +1501,32 @@ class SkillModel extends Model
 
         $list = [];
 
-        $sql = "SELECT
-                    course.id c_id,
-                    course.title c_name,
-                    course.directory c_directory,
-                    user.id as user_id,
-                    user.lastname,
-                    user.firstname,
-                    user.username,
-                    skill.id skill_id,
-                    sru.acquired_skill_at
-                FROM {$this->table_skill_rel_user} AS sru
-                INNER JOIN {$this->table_course}
-                ON sru.course_id = course.id
-                INNER JOIN {$this->table_user}
-                ON sru.user_id = user.id
-                INNER JOIN {$this->table}
-                ON sru.skill_id = skill.id
-                WHERE course.id = $courseId
-                AND sru.status = ".SkillRelUser::STATUS_ACQUIRED;
+        $rows = $em->createQueryBuilder()
+            ->select(
+                'c.id AS c_id',
+                'c.title AS c_name',
+                'c.directory AS c_directory',
+                'u.id AS user_id',
+                'u.lastname AS lastname',
+                'u.firstname AS firstname',
+                'u.username AS username',
+                'skill.id AS skill_id',
+                'sru.acquiredSkillAt AS acquired_skill_at'
+            )
+            ->from(SkillRelUser::class, 'sru')
+            ->innerJoin('sru.course', 'c')
+            ->innerJoin('sru.user', 'u')
+            ->innerJoin('sru.skill', 'skill')
+            ->where('c.id = :courseId')
+            ->andWhere('sru.status = :status')
+            ->setParameter('courseId', $courseId)
+            ->setParameter('status', SkillRelUser::STATUS_ACQUIRED)
+            ->getQuery()
+            ->getArrayResult();
 
-        $result = Database::query($sql);
-
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
+            // The raw table row held the date as a string.
+            $row['acquired_skill_at'] = $row['acquired_skill_at']->format('Y-m-d H:i:s');
             $skill = $em->find(Skill::class, $row['skill_id']);
             $row['skill_title'] = $skill->getTitle();
             $list[] = $row;
@@ -1512,28 +1553,32 @@ class SkillModel extends Model
         $em = Database::getManager();
 
         $list = [];
-        $sql = "SELECT
-                    course.id c_id,
-                    course.title c_name,
-                    course.directory c_directory,
-                    user.id as user_id,
-                    user.lastname,
-                    user.firstname,
-                    user.username,
-                    skill.id skill_id,
-                    sru.acquired_skill_at
-                FROM {$this->table_skill_rel_user} AS sru
-                INNER JOIN {$this->table_course}
-                ON sru.course_id = course.id
-                INNER JOIN {$this->table_user}
-                ON sru.user_id = user.id
-                INNER JOIN {$this->table}
-                ON sru.skill_id = skill.id
-                WHERE skill.id = $skillId
-                AND sru.status = ".SkillRelUser::STATUS_ACQUIRED;
+        $rows = $em->createQueryBuilder()
+            ->select(
+                'c.id AS c_id',
+                'c.title AS c_name',
+                'c.directory AS c_directory',
+                'u.id AS user_id',
+                'u.lastname AS lastname',
+                'u.firstname AS firstname',
+                'u.username AS username',
+                'skill.id AS skill_id',
+                'sru.acquiredSkillAt AS acquired_skill_at'
+            )
+            ->from(SkillRelUser::class, 'sru')
+            ->innerJoin('sru.course', 'c')
+            ->innerJoin('sru.user', 'u')
+            ->innerJoin('sru.skill', 'skill')
+            ->where('skill.id = :skillId')
+            ->andWhere('sru.status = :status')
+            ->setParameter('skillId', $skillId)
+            ->setParameter('status', SkillRelUser::STATUS_ACQUIRED)
+            ->getQuery()
+            ->getArrayResult();
 
-        $result = Database::query($sql);
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
+            // The raw table row held the date as a string.
+            $row['acquired_skill_at'] = $row['acquired_skill_at']->format('Y-m-d H:i:s');
             $skill = $em->find(Skill::class, $row['skill_id']);
             $row['skill_title'] = $skill->getTitle();
             $list[] = $row;
@@ -1553,18 +1598,16 @@ class SkillModel extends Model
     {
         $skillId = (int) $skillId;
 
-        $sql = "SELECT s.id, s.title
-                FROM {$this->table_gradebook} g
-                INNER JOIN {$this->table_skill_rel_gradebook} sg
-                ON g.id = sg.gradebook_id
-                INNER JOIN {$this->sessionTable} s
-                ON g.session_id = s.id
-                WHERE sg.skill_id = $skillId
-                AND g.session_id > 0";
-
-        $result = Database::query($sql);
-
-        return Database::store_result($result, 'ASSOC');
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select('s.id AS id', 's.title AS title')
+            ->from(SkillRelGradebook::class, 'sg')
+            ->innerJoin('sg.gradeBookCategory', 'g')
+            ->innerJoin('g.session', 's')
+            ->where('IDENTITY(sg.skill) = :skillId')
+            ->andWhere('s.id > 0')
+            ->setParameter('skillId', $skillId)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**

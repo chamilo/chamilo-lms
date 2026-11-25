@@ -1769,7 +1769,6 @@ class ImportCsv
                     // Update
                     $params = [
                         'title' => $row['title'],
-                        'category_code' => $row['course_category'],
                         'visibility' => $row['visibility'],
                     ];
 
@@ -1777,6 +1776,9 @@ class ImportCsv
                         $courseInfo['real_id'],
                         $params
                     );
+
+                    // The category is the course_rel_category relation, not a column of the course table
+                    CourseManager::setCategoryByCode((int) $courseInfo['real_id'], (string) $row['course_category']);
 
                     $addTeacherToSession = isset($courseInfo['add_teachers_to_sessions_courses']) && !empty($courseInfo['add_teachers_to_sessions_courses']) ? true : false;
 

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
@@ -216,6 +217,7 @@ class MySpace
                     c_id = '.$courseId.'
                     '.$sessionCondition.'
                 ORDER BY login_course_date ASC';
+        // TODO(db-neutral): api_get_session_condition() returns a raw SQL fragment
         $rs = Database::query($sql);
         $connections = [];
 
@@ -270,6 +272,7 @@ class MySpace
                     c_id IN ('.$course_list.') AND
                     session_id = '.$session_id.'
                 ORDER BY login_course_date ASC';
+        // TODO(db-neutral): dead code (no caller), left raw
         $rs = Database::query($sql);
         $connections = [];
 
@@ -324,6 +327,7 @@ class MySpace
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from,$number_of_items";
 
+        // TODO(db-neutral): dead code (no caller; the whole function is left raw)
         $res = Database::query($sql);
         while ($row_course = Database::fetch_row($res)) {
             $course_code = $row_course[0];
@@ -506,23 +510,23 @@ class MySpace
      */
     public static function user_available_in_session($username, $course_list, $id_session)
     {
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $id_session = (int) $id_session;
-        $username = Database::escape_string($username);
         foreach ($course_list as $courseId) {
-            $courseId = (int) $courseId;
-            $sql = " SELECT u.id as user_id FROM $tbl_session_rel_course_rel_user rel
-                     INNER JOIN $table_user u
-                     ON (rel.user_id = u.id)
-                     WHERE
-                        rel.session_id='$id_session' AND
-                        u.status='5' AND
-                        u.username ='$username' AND
-                        rel.c_id='$courseId'";
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                return Database::result($rs, 0, 0);
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select('u.id AS user_id')
+                ->from(SessionRelCourseRelUser::class, 'rel')
+                ->innerJoin('rel.user', 'u')
+                ->where('IDENTITY(rel.session) = :session')
+                ->andWhere('u.status = 5')
+                ->andWhere('u.username = :username')
+                ->andWhere('IDENTITY(rel.course) = :course')
+                ->setParameter('session', $id_session)
+                ->setParameter('username', (string) $username)
+                ->setParameter('course', (int) $courseId)
+                ->getQuery()
+                ->getArrayResult();
+            if (count($rows) > 0) {
+                return $rows[0]['user_id'];
             }
         }
 
@@ -567,6 +571,7 @@ class MySpace
                     if (0 == $is_session_avail) {
                         $user_name = $user['UserName'];
                         $sql_select = "SELECT user_id FROM $table_user WHERE username ='$user_name' ";
+                        // TODO(db-neutral): broken today (Unknown column 'user_id': the user table has 'id'; the username is also unescaped), left raw
                         $rs = Database::query($sql_select);
                         $user['create'] = Database::result($rs, 0, 0);
                     } else {
@@ -598,13 +603,15 @@ class MySpace
     public static function get_user_creator($users)
     {
         $errors = [];
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
         foreach ($users as $index => $user) {
-            $username = Database::escape_string($user['UserName']);
-            $sql = "SELECT creator_id FROM $table_user WHERE username='$username' ";
-
-            $rs = Database::query($sql);
-            $creator_id = Database::result($rs, 0, 0);
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select('u.creatorId AS creator_id')
+                ->from(User::class, 'u')
+                ->where('u.username = :username')
+                ->setParameter('username', (string) $user['UserName'])
+                ->getQuery()
+                ->getArrayResult();
+            $creator_id = $rows[0]['creator_id'] ?? null;
             // check if we are the creators or not
             if ('' != $creator_id) {
                 if ($creator_id != api_get_user_id()) {
@@ -888,6 +895,7 @@ class MySpace
                         logout_course_date BETWEEN '$start_date' AND '$end_date'
                         $sessionCondition
                     ORDER BY login_course_date ASC";
+            // TODO(db-neutral): api_get_session_condition() and SessionTimeLimit::sqlForSeconds() return raw SQL fragments
             $rs = Database::query($sql);
 
             while ($row = Database::fetch_array($rs)) {
@@ -947,6 +955,7 @@ class MySpace
                     $sessionCondition
                 ORDER BY login_course_date ASC";
 
+            // TODO(db-neutral): SEC_TO_TIME(), api_get_session_condition() and SessionTimeLimit::sqlForSeconds() return raw SQL
             $rs = Database::query($sql);
             if ($row = Database::fetch_array($rs)) {
                 $foo_avg = $row['avrg'];

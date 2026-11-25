@@ -8,10 +8,11 @@ namespace Chamilo\CoreBundle\Migrations\Schema\V310;
 
 use Chamilo\CoreBundle\Migrations\AbstractMigrationChamilo;
 use Doctrine\DBAL\Schema\Schema;
+use RuntimeException;
 
 /**
- * Registers registration.firstname_required (#1783) on existing portals, enabled, so the first name stays required
- * until an administrator decides otherwise.
+ * Registers registration.firstname_required (#1783) for existing installations.
+ * Existing values are preserved; the new setting defaults to enabled.
  */
 final class Version20261114100000 extends AbstractMigrationChamilo
 {
@@ -24,27 +25,36 @@ final class Version20261114100000 extends AbstractMigrationChamilo
 
     public function up(Schema $schema): void
     {
+        if (!$schema->hasTable('settings')) {
+            throw new RuntimeException('The settings table does not exist.');
+        }
+
+        $existing = (int) $this->connection->fetchOne(
+            'SELECT COUNT(*) FROM settings WHERE variable = ? AND access_url = 1 AND subkey IS NULL',
+            [self::VARIABLE],
+        );
+        if ($existing > 1) {
+            throw new RuntimeException('Duplicate main URL first-name settings found.');
+        }
+        if (1 === $existing) {
+            return;
+        }
+
         $this->addSql(
-            'INSERT INTO settings (variable, category, title, comment, selected_value, access_url, access_url_changeable, access_url_locked) '
-            .'SELECT ?, ?, ?, ?, ?, 1, 1, 0 FROM (SELECT 1 AS one) AS dummy '
-            .'WHERE NOT EXISTS (SELECT 1 FROM settings WHERE variable = ? AND category = ? AND subkey IS NULL)',
+            'INSERT INTO settings (variable, category, title, comment, selected_value, access_url, access_url_changeable, access_url_locked)'
+            .' VALUES (?, ?, ?, ?, ?, 1, 1, 0)',
             [
                 self::VARIABLE,
                 'registration',
                 'First name required',
                 'When disabled, users can register, edit their profile and be created by administrators without a first name, for people who only have one name. The last name stays required.',
                 'true',
-                self::VARIABLE,
-                'registration',
-            ]
+            ],
         );
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql(
-            'DELETE FROM settings WHERE variable = ? AND category = ?',
-            [self::VARIABLE, 'registration']
-        );
+        // Preserve administrator settings on rollback.
     }
 }

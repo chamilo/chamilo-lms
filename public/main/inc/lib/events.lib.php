@@ -4,15 +4,27 @@
 
 use Chamilo\CoreBundle\Entity\Course as CourseEntity;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
+use Chamilo\CoreBundle\Entity\TrackEAccessComplete;
+use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEAttemptQualify;
+use Chamilo\CoreBundle\Entity\TrackECourseAccess;
 use Chamilo\CoreBundle\Entity\TrackEDefault;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Entity\TrackEHotspot;
+use Chamilo\CoreBundle\Entity\TrackELastaccess;
+use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CLpIvInteraction;
+use Chamilo\CourseBundle\Entity\CLpIvObjective;
+use Chamilo\CourseBundle\Entity\CLpView;
 use ChamiloSession as Session;
 use Doctrine\ORM\Exception\NotSupported;
 use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class Event
@@ -42,15 +54,13 @@ class Event
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $reallyNow = api_get_utc_datetime();
-        $userIp = Database::escape_string(api_get_real_ip());
 
-        $sql = "INSERT INTO $table (login_user_id, user_ip, login_date, logout_date) VALUES
-                    ($userId,
-                    '$userIp',
-                    '$reallyNow',
-                    '$reallyNow'
-                )";
-        Database::query($sql);
+        self::insertRow($table, [
+            'login_user_id' => $userId,
+            'user_ip' => api_get_real_ip(),
+            'login_date' => $reallyNow,
+            'logout_date' => $reallyNow,
+        ]);
 
         $status = 'student';
         if (SESSIONADMIN == $userInfo['status']) {
@@ -129,6 +139,8 @@ class Event
             return false;
         }
 
+        // The unescaped name is what the (bound) lastaccess queries compare against.
+        $rawTool = $tool;
         $tool = Database::escape_string($tool);
 
         if (empty($tool)) {
@@ -184,26 +196,41 @@ class Event
         }
 
         // "what's new" notification
-        $sql = "UPDATE $tableLastAccess
-                SET access_date = '$reallyNow'
-                WHERE
-                    access_user_id = $userId AND
-                    c_id = $courseId AND
-                    access_tool = '$tool' AND
-                    session_id = $sessionId";
-        $result = Database::query($sql);
+        $affectedRows = Container::getEntityManager()->createQueryBuilder()
+            ->update(TrackELastaccess::class, 'l')
+            ->set('l.accessDate', ':now')
+            ->where('l.accessUserId = :userId')
+            ->andWhere('l.cId = :courseId')
+            ->andWhere('l.accessTool = :tool')
+            ->andWhere('l.sessionId = :sessionId')
+            ->setParameter('now', $reallyNow)
+            ->setParameter('userId', (int) $userId)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('tool', $rawTool)
+            ->setParameter('sessionId', (int) $sessionId)
+            ->getQuery()
+            ->execute()
+        ;
 
         // MySQL reports 0 affected rows when the date is unchanged (same second), so check the row exists
         // before inserting, or a duplicate lastaccess row would be created.
-        if (0 == Database::affected_rows($result)) {
-            $sql = "SELECT 1 FROM $tableLastAccess
-                    WHERE
-                        access_user_id = $userId AND
-                        c_id = $courseId AND
-                        access_tool = '$tool' AND
-                        session_id = $sessionId
-                    LIMIT 1";
-            if (0 == Database::num_rows(Database::query($sql))) {
+        if (0 == $affectedRows) {
+            $existing = Container::getEntityManager()->createQueryBuilder()
+                ->select('l.accessId')
+                ->from(TrackELastaccess::class, 'l')
+                ->where('l.accessUserId = :userId')
+                ->andWhere('l.cId = :courseId')
+                ->andWhere('l.accessTool = :tool')
+                ->andWhere('l.sessionId = :sessionId')
+                ->setParameter('userId', (int) $userId)
+                ->setParameter('courseId', (int) $courseId)
+                ->setParameter('tool', $rawTool)
+                ->setParameter('sessionId', (int) $sessionId)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getArrayResult()
+            ;
+            if ([] === $existing) {
                 $params = [
                     'access_user_id' => $userId,
                     'c_id' => $courseId,
@@ -265,21 +292,13 @@ class Event
         $userId = api_get_user_id();
         $sessionId = api_get_session_id();
 
-        $sql = "INSERT INTO $table
-                ( upload_user_id,
-                  c_id,
-                  upload_work_id,
-                  upload_date,
-                  session_id
-                )
-                VALUES (
-                 $userId,
-                 $courseId,
-                 $documentId,
-                 '$reallyNow',
-                 $sessionId
-                )";
-        Database::query($sql);
+        self::insertRow($table, [
+            'upload_user_id' => $userId,
+            'c_id' => $courseId,
+            'upload_work_id' => $documentId,
+            'upload_date' => $reallyNow,
+            'session_id' => $sessionId,
+        ]);
 
         return 1;
     }
@@ -305,20 +324,13 @@ class Event
         $userId = api_get_user_id();
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
-        $sql = "INSERT INTO ".$table."
-                    ( links_user_id,
-                     c_id,
-                     links_link_id,
-                     links_date,
-                     session_id
-                    ) VALUES (
-                     $userId,
-                     $courseId,
-                     $linkId,
-                     '$reallyNow',
-                     $sessionId
-                    )";
-        Database::query($sql);
+        self::insertRow($table, [
+            'links_user_id' => $userId,
+            'c_id' => $courseId,
+            'links_link_id' => $linkId,
+            'links_date' => $reallyNow,
+            'session_id' => $sessionId,
+        ]);
 
         return 1;
     }
@@ -369,11 +381,7 @@ class Event
 
         if (empty($status)) {
             $status = '';
-        } else {
-            $status = Database::escape_string($status);
         }
-
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
         if (!empty($questionsList)) {
             $questionsList = array_map('intval', $questionsList);
@@ -405,26 +413,39 @@ class Event
         if (empty($endDate)) {
             $endDate = api_get_utc_datetime();
         }
-        $score = Database::escape_string($score);
-        $weighting = Database::escape_string($weighting);
         $questions = implode(',', $questionsList);
-        $userIp = Database::escape_string(api_get_real_ip());
 
-        $sql = "UPDATE $table SET
-               exe_exo_id = $exoId,
-               score = '$score',
-               max_score = '$weighting',
-               orig_lp_id = $learnpathId,
-               orig_lp_item_id = $learnpathItemId,
-               orig_lp_item_view_id = $learnpathItemViewId,
-               exe_duration = $duration,
-               exe_date = '$endDate',
-               status = '$status',
-               questions_to_check = '$remindList',
-               data_tracking = '$questions',
-               user_ip = '$userIp'
-             WHERE exe_id = $exeId";
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(TrackEExercise::class, 'e')
+            ->set('e.quiz', ':exoId')
+            ->set('e.score', ':score')
+            ->set('e.maxScore', ':weighting')
+            ->set('e.origLpId', ':learnpathId')
+            ->set('e.origLpItemId', ':learnpathItemId')
+            ->set('e.origLpItemViewId', ':learnpathItemViewId')
+            ->set('e.exeDuration', ':duration')
+            ->set('e.exeDate', ':endDate')
+            ->set('e.status', ':status')
+            ->set('e.questionsToCheck', ':remindList')
+            ->set('e.dataTracking', ':questions')
+            ->set('e.userIp', ':userIp')
+            ->where('e.exeId = :exeId')
+            ->setParameter('exoId', (int) $exoId)
+            ->setParameter('score', $score)
+            ->setParameter('weighting', $weighting)
+            ->setParameter('learnpathId', (int) $learnpathId)
+            ->setParameter('learnpathItemId', (int) $learnpathItemId)
+            ->setParameter('learnpathItemViewId', (int) $learnpathItemViewId)
+            ->setParameter('duration', (int) $duration)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('status', $status)
+            ->setParameter('remindList', $remindList)
+            ->setParameter('questions', $questions)
+            ->setParameter('userIp', api_get_real_ip())
+            ->setParameter('exeId', (int) $exeId)
+            ->getQuery()
+            ->execute()
+        ;
 
         return true;
     }
@@ -538,16 +559,23 @@ class Event
         ];
 
         // Check if attempt exists.
-        $sql = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT
-                WHERE
-                    exe_id = $exe_id AND
-                    user_id = $user_id AND
-                    question_id = $question_id AND
-                    position = $position";
-        $result = Database::query($sql);
+        $existingAttempts = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(a.trackExercise) AS exe_id')
+            ->from(TrackEAttempt::class, 'a')
+            ->where('a.trackExercise = :exeId')
+            ->andWhere('a.user = :userId')
+            ->andWhere('a.questionId = :questionId')
+            ->andWhere('a.position = :position')
+            ->setParameter('exeId', (int) $exe_id)
+            ->setParameter('userId', (int) $user_id)
+            ->setParameter('questionId', (int) $question_id)
+            ->setParameter('position', (int) $position)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $attemptData = [];
-        if (Database::num_rows($result)) {
-            $attemptData = Database::fetch_assoc($result);
+        if ([] !== $existingAttempts) {
+            $attemptData = $existingAttempts[0];
             if (!$updateResults) {
                 //The attempt already exist do not update use  update_event_exercise() instead
                 return false;
@@ -559,7 +587,6 @@ class Event
         if ($debug) {
             error_log("updateResults : $updateResults");
             error_log('Saving question attempt:');
-            error_log($sql);
         }
 
         $em = Database::getManager();
@@ -838,17 +865,14 @@ class Event
      */
     public static function getLastAttemptDateOfExercise(int $exeId): string
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
-        $sql = "SELECT MAX(tms) AS last_attempt_date FROM $table WHERE exe_id = $exeId";
-        $res = Database::query($sql);
-
-        if (!$res) {
-            return '';
-        }
-
-        $row = Database::fetch_array($res) ?: [];
-        $val = $row['last_attempt_date'] ?? null;
+        $val = Container::getEntityManager()->createQueryBuilder()
+            ->select('MAX(a.tms)')
+            ->from(TrackEAttempt::class, 'a')
+            ->where('a.trackExercise = :exeId')
+            ->setParameter('exeId', (int) $exeId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
         return $val !== null ? (string) $val : '';
     }
@@ -864,16 +888,18 @@ class Event
      */
     public static function getLatestQuestionIdFromAttempt(int $exeId): int
     {
-        $track_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $sql = "SELECT question_id FROM $track_attempts
-                WHERE exe_id = $exeId
-                ORDER BY tms DESC
-                LIMIT 1";
-        $result = Database::query($sql);
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result);
-
-            return $row['question_id'];
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('a.questionId AS question_id')
+            ->from(TrackEAttempt::class, 'a')
+            ->where('a.trackExercise = :exeId')
+            ->orderBy('a.tms', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('exeId', (int) $exeId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if ([] !== $rows) {
+            return $rows[0]['question_id'];
         }
 
         return 0;
@@ -900,30 +926,26 @@ class Event
         int $lp_item_view_id
     ): int
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
-        $sessionCondition = api_get_session_condition($sessionId);
-        $sql = "SELECT count(*) as count
-                FROM $table
-                WHERE
-                    exe_exo_id = $exerciseId AND
-                    exe_user_id = $user_id AND
-                    status != 'incomplete' AND
-                    orig_lp_id = $lp_id AND
-                    orig_lp_item_id = $lp_item_id AND
-                    orig_lp_item_view_id = $lp_item_view_id AND
-                    c_id = $courseId
-                    $sessionCondition";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(e.exeId)')
+            ->from(TrackEExercise::class, 'e')
+            ->where('e.quiz = :exerciseId')
+            ->andWhere('e.user = :userId')
+            ->andWhere("e.status <> 'incomplete'")
+            ->andWhere('e.origLpId = :lpId')
+            ->andWhere('e.origLpItemId = :lpItemId')
+            ->andWhere('e.origLpItemViewId = :lpItemViewId')
+            ->andWhere('e.course = :courseId')
+            ->setParameter('exerciseId', (int) $exerciseId)
+            ->setParameter('userId', (int) $user_id)
+            ->setParameter('lpId', (int) $lp_id)
+            ->setParameter('lpItemId', (int) $lp_item_id)
+            ->setParameter('lpItemViewId', (int) $lp_item_view_id)
+            ->setParameter('courseId', (int) api_get_course_int_id())
+        ;
+        self::restrictToSession($qb, api_get_session_id());
 
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            $attempt = Database::fetch_assoc($result);
-
-            return (int) $attempt['count'];
-        }
-
-        return 0;
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -948,36 +970,34 @@ class Event
         int $lp_item_view_id
     ): int
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
-
-        $sessionCondition = api_get_session_condition($sessionId);
         // Select all matching attempts
-        $sql = "SELECT exe_id
-                FROM $table
-                WHERE
-                    exe_exo_id = $exerciseId AND
-                    exe_user_id = $user_id AND
-                    status = '' AND
-                    orig_lp_id = $lp_id AND
-                    orig_lp_item_id = $lp_item_id AND
-                    orig_lp_item_view_id = $lp_item_view_id AND
-                    c_id = $courseId
-                    $sessionCondition
-                ORDER by exe_id
-                ";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('e.exeId AS exe_id')
+            ->from(TrackEExercise::class, 'e')
+            ->where('e.quiz = :exerciseId')
+            ->andWhere('e.user = :userId')
+            ->andWhere("e.status = ''")
+            ->andWhere('e.origLpId = :lpId')
+            ->andWhere('e.origLpItemId = :lpItemId')
+            ->andWhere('e.origLpItemViewId = :lpItemViewId')
+            ->andWhere('e.course = :courseId')
+            ->orderBy('e.exeId', 'ASC')
+            ->setParameter('exerciseId', (int) $exerciseId)
+            ->setParameter('userId', (int) $user_id)
+            ->setParameter('lpId', (int) $lp_id)
+            ->setParameter('lpItemId', (int) $lp_item_id)
+            ->setParameter('lpItemViewId', (int) $lp_item_view_id)
+            ->setParameter('courseId', (int) api_get_course_int_id())
+        ;
+        self::restrictToSession($qb, api_get_session_id());
 
-        $result = Database::query($sql);
         // Scroll through them until we found ours, to locate its order in the queue
-        if (Database::num_rows($result) > 0) {
-            $position = 1;
-            while ($row = Database::fetch_assoc($result)) {
-                if ((int) $row['exe_id'] === $exeId) {
-                    return $position;
-                }
-                $position++;
+        $position = 1;
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            if ((int) $row['exe_id'] === $exeId) {
+                return $position;
             }
+            $position++;
         }
 
         return 0;
@@ -1004,11 +1024,6 @@ class Event
         ?bool $disconnectExerciseResultsFromLp = false
     ): bool
     {
-        $lp_view_table = Database::get_course_table(TABLE_LP_VIEW);
-        $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $lpInteraction = Database::get_course_table(TABLE_LP_IV_INTERACTION);
-        $lpObjective = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
-
         if (empty($course) || empty($user_id)) {
             return false;
         }
@@ -1019,92 +1034,139 @@ class Event
             $course_id = api_get_course_int_id();
         }
 
-        $track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $track_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
-        $sessionCondition = api_get_session_condition($session_id);
+        $em = Container::getEntityManager();
+
         // Make sure we have the exact lp_view_id
-        $sql = "SELECT iid FROM $lp_view_table
-                WHERE
-                    c_id = $course_id AND
-                    user_id = $user_id AND
-                    lp_id = $lp_id
-                    $sessionCondition";
-        $result = Database::query($sql);
+        $viewQb = $em->createQueryBuilder()
+            ->select('v.iid AS iid')
+            ->from(CLpView::class, 'v')
+            ->where('v.course = :courseId')
+            ->andWhere('v.user = :userId')
+            ->andWhere('v.lp = :lpId')
+            ->setParameter('courseId', (int) $course_id)
+            ->setParameter('userId', (int) $user_id)
+            ->setParameter('lpId', (int) $lp_id)
+        ;
+        self::restrictToSession($viewQb, $session_id, 'IDENTITY(v.session)', 'v.session');
+        $views = $viewQb->getQuery()->getArrayResult();
 
-        if (Database::num_rows($result)) {
-            $view = Database::fetch_assoc($result);
-            $lp_view_id = $view['iid'];
+        if ([] !== $views) {
+            $lp_view_id = $views[0]['iid'];
 
-            $sql = "DELETE FROM $lp_item_view_table
-                    WHERE lp_view_id = $lp_view_id";
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->delete(CLpItemView::class, 'iv')
+                ->where('iv.view = :viewId')
+                ->setParameter('viewId', (int) $lp_view_id)
+                ->getQuery()
+                ->execute()
+            ;
 
-            $sql = "DELETE FROM $lpInteraction
-                    WHERE c_id = $course_id AND lp_iv_id = $lp_view_id";
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->delete(CLpIvInteraction::class, 'i')
+                ->where('i.cId = :courseId')
+                ->andWhere('i.lpIvId = :viewId')
+                ->setParameter('courseId', (int) $course_id)
+                ->setParameter('viewId', (int) $lp_view_id)
+                ->getQuery()
+                ->execute()
+            ;
 
-            $sql = "DELETE FROM $lpObjective
-                    WHERE c_id = $course_id AND lp_iv_id = $lp_view_id";
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->delete(CLpIvObjective::class, 'o')
+                ->where('o.cId = :courseId')
+                ->andWhere('o.lpIvId = :viewId')
+                ->setParameter('courseId', (int) $course_id)
+                ->setParameter('viewId', (int) $lp_view_id)
+                ->getQuery()
+                ->execute()
+            ;
         }
 
         if ('true' === api_get_setting('lp.lp_minimum_time')) {
-            $sql = "DELETE FROM track_e_access_complete
-                    WHERE
-                        tool = 'learnpath' AND
-                        c_id = $course_id AND
-                        tool_id = $lp_id AND
-                        user_id = $user_id AND
-                        session_id = $session_id
-                    ";
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->delete(TrackEAccessComplete::class, 't')
+                ->where("t.tool = 'learnpath'")
+                ->andWhere('t.cId = :courseId')
+                ->andWhere('t.toolId = :lpId')
+                ->andWhere('t.user = :userId')
+                ->andWhere('t.sessionId = :sessionId')
+                ->setParameter('courseId', (int) $course_id)
+                ->setParameter('lpId', (int) $lp_id)
+                ->setParameter('userId', (int) $user_id)
+                ->setParameter('sessionId', (int) $session_id)
+                ->getQuery()
+                ->execute()
+            ;
         }
 
-        $sql = "SELECT exe_id FROM $track_e_exercises
-                WHERE
-                    exe_user_id = $user_id AND
-                    c_id = $course_id AND
-                    orig_lp_id = $lp_id
-                    $sessionCondition";
-        $result = Database::query($sql);
-        $exeList = [];
-        while ($row = Database::fetch_assoc($result)) {
-            $exeList[] = $row['exe_id'];
-        }
+        $exeQb = $em->createQueryBuilder()
+            ->select('e.exeId AS exe_id')
+            ->from(TrackEExercise::class, 'e')
+            ->where('e.user = :userId')
+            ->andWhere('e.course = :courseId')
+            ->andWhere('e.origLpId = :lpId')
+            ->setParameter('userId', (int) $user_id)
+            ->setParameter('courseId', (int) $course_id)
+            ->setParameter('lpId', (int) $lp_id)
+        ;
+        self::restrictToSession($exeQb, $session_id);
+        $exeList = array_map(
+            static fn (array $row): int => (int) $row['exe_id'],
+            $exeQb->getQuery()->getArrayResult()
+        );
 
         if (!empty($exeList) && count($exeList) > 0) {
-            $exeListString = implode(',', $exeList);
             if ($disconnectExerciseResultsFromLp) {
-                $sql = "UPDATE $track_e_exercises
-                        SET orig_lp_id = 0,
-                            orig_lp_item_id = 0,
-                            orig_lp_item_view_id = 0
-                        WHERE exe_id IN ($exeListString)";
-                Database::query($sql);
+                $em->createQueryBuilder()
+                    ->update(TrackEExercise::class, 'e')
+                    ->set('e.origLpId', '0')
+                    ->set('e.origLpItemId', '0')
+                    ->set('e.origLpItemViewId', '0')
+                    ->where('e.exeId IN (:exeList)')
+                    ->setParameter('exeList', $exeList)
+                    ->getQuery()
+                    ->execute()
+                ;
             } else {
-                $sql = "DELETE FROM $track_e_exercises
-                    WHERE exe_id IN ($exeListString)";
-                Database::query($sql);
+                $em->createQueryBuilder()
+                    ->delete(TrackEExercise::class, 'e')
+                    ->where('e.exeId IN (:exeList)')
+                    ->setParameter('exeList', $exeList)
+                    ->getQuery()
+                    ->execute()
+                ;
 
-                $sql = "DELETE FROM $track_attempts
-                    WHERE exe_id IN ($exeListString)";
-                Database::query($sql);
+                $em->createQueryBuilder()
+                    ->delete(TrackEAttempt::class, 'a')
+                    ->where('a.trackExercise IN (:exeList)')
+                    ->setParameter('exeList', $exeList)
+                    ->getQuery()
+                    ->execute()
+                ;
 
-                $sql = "DELETE FROM $tblTrackAttemptQualify
-                    WHERE exe_id IN ($exeListString)";
-                Database::query($sql);
+                $em->createQueryBuilder()
+                    ->delete(TrackEAttemptQualify::class, 'q')
+                    ->where('q.trackExercise IN (:exeList)')
+                    ->setParameter('exeList', $exeList)
+                    ->getQuery()
+                    ->execute()
+                ;
             }
         }
 
-        $sql = "DELETE FROM $lp_view_table
-                WHERE
-                    c_id = $course_id AND
-                    user_id = $user_id AND
-                    lp_id= $lp_id AND
-                    session_id = $session_id
-            ";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->delete(CLpView::class, 'v')
+            ->where('v.course = :courseId')
+            ->andWhere('v.user = :userId')
+            ->andWhere('v.lp = :lpId')
+            ->andWhere('v.session = :sessionId')
+            ->setParameter('courseId', (int) $course_id)
+            ->setParameter('userId', (int) $user_id)
+            ->setParameter('lpId', (int) $lp_id)
+            ->setParameter('sessionId', (int) $session_id)
+            ->getQuery()
+            ->execute()
+        ;
 
         self::addEvent(
             LOG_LP_ATTEMPT_DELETE,
@@ -1137,19 +1199,20 @@ class Event
     ): void
     {
         if (!empty($user_id) && !empty($exercise_id) && !empty($course_id)) {
-            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-            $sessionCondition = api_get_session_condition($session_id);
-            $sql = "SELECT exe_id FROM $table
-                    WHERE
-                        exe_user_id = $user_id AND
-                        exe_exo_id = $exercise_id AND
-                        c_id = $course_id AND
-                        status = 'incomplete'
-                        $sessionCondition
-                        ";
-            $result = Database::query($sql);
+            $qb = Container::getEntityManager()->createQueryBuilder()
+                ->select('e.exeId AS exe_id')
+                ->from(TrackEExercise::class, 'e')
+                ->where('e.user = :userId')
+                ->andWhere('e.quiz = :exerciseId')
+                ->andWhere('e.course = :courseId')
+                ->andWhere("e.status = 'incomplete'")
+                ->setParameter('userId', (int) $user_id)
+                ->setParameter('exerciseId', (int) $exercise_id)
+                ->setParameter('courseId', (int) $course_id)
+            ;
+            self::restrictToSession($qb, $session_id);
             $repo = Container::getTrackEExerciseRepository();
-            while ($row = Database::fetch_assoc($result)) {
+            foreach ($qb->getQuery()->getArrayResult() as $row) {
                 $exeId = $row['exe_id'];
                 /** @var TrackEExercise $track */
                 $track = $repo->find($exeId);
@@ -1189,33 +1252,27 @@ class Event
         ?int $user_id = null
     ): array
     {
-        $TABLETRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
-        $user_condition = null;
+        $qb = self::exerciseRowsQueryBuilder()
+            ->where("e.status = ''")
+            ->andWhere('e.course = :courseId')
+            ->andWhere('e.quiz = :exerciseId')
+            ->andWhere('e.origLpId = 0')
+            ->andWhere('e.origLpItemId = 0')
+            ->orderBy('e.exeId', 'ASC')
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('exerciseId', (int) $exercise_id)
+        ;
         if (!empty($user_id)) {
-            $user_condition = "AND exe_user_id = $user_id ";
+            $qb->andWhere('e.user = :userId')->setParameter('userId', (int) $user_id);
         }
-        $sessionCondition = api_get_session_condition($session_id);
-        $sql = "SELECT * FROM $TABLETRACK_EXERCISES
-                WHERE
-                    status = ''  AND
-                    c_id = $courseId AND
-                    exe_exo_id = $exercise_id AND
-                    orig_lp_id = 0 AND
-                    orig_lp_item_id = 0
-                    $user_condition
-                    $sessionCondition
-                ORDER BY exe_id";
-        $res = Database::query($sql);
+        self::restrictToSession($qb, $session_id);
+
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $row = self::toLegacyRow($row);
             $list[$row['exe_id']] = $row;
             if ($load_question_list) {
-                $sql = "SELECT * FROM $TBL_TRACK_ATTEMPT
-                        WHERE exe_id = {$row['exe_id']}";
-                $res_question = Database::query($sql);
-                while ($row_q = Database::fetch_assoc($res_question)) {
+                foreach (self::attemptRows((int) $row['exe_id']) as $row_q) {
                     $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
                 }
             }
@@ -1240,33 +1297,34 @@ class Event
         ?int $session_id = 0,
         ?bool $get_count = true
     ) {
-        $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
-        $select = '*';
         if ($get_count) {
-            $select = 'count(*) as count';
-        }
-        $sessionCondition = api_get_session_condition($session_id);
-        $sql = "SELECT $select FROM $table_track_exercises
-                WHERE   status = ''  AND
-                        c_id = $courseId AND
-                        orig_lp_id = 0 AND
-                        orig_lp_item_id = 0
-                        $sessionCondition
-                ORDER BY exe_id";
-        $res = Database::query($sql);
-        if ($get_count) {
-            $row = Database::fetch_assoc($res);
-
-            return $row['count'];
+            $qb = Container::getEntityManager()->createQueryBuilder()
+                ->select('COUNT(e.exeId)')
+                ->from(TrackEExercise::class, 'e')
+            ;
         } else {
-            $list = [];
-            while ($row = Database::fetch_assoc($res)) {
-                $list[$row['exe_id']] = $row;
-            }
-
-            return $list;
+            $qb = self::exerciseRowsQueryBuilder()->orderBy('e.exeId', 'ASC');
         }
+        $qb
+            ->where("e.status = ''")
+            ->andWhere('e.course = :courseId')
+            ->andWhere('e.origLpId = 0')
+            ->andWhere('e.origLpItemId = 0')
+            ->setParameter('courseId', (int) $courseId)
+        ;
+        self::restrictToSession($qb, $session_id);
+
+        if ($get_count) {
+            return (int) $qb->getQuery()->getSingleScalarResult();
+        }
+
+        $list = [];
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $row = self::toLegacyRow($row);
+            $list[$row['exe_id']] = $row;
+        }
+
+        return $list;
     }
 
     /**
@@ -1286,28 +1344,23 @@ class Event
         ?int $session_id = 0
     ): array
     {
-        $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $qb = self::exerciseRowsQueryBuilder()
+            ->where("e.status = ''")
+            ->andWhere('e.user = :userId')
+            ->andWhere('e.course = :courseId')
+            ->andWhere('e.origLpId = 0')
+            ->andWhere('e.origLpItemId = 0')
+            ->orderBy('e.exeId', 'ASC')
+            ->setParameter('userId', (int) $user_id)
+            ->setParameter('courseId', (int) $courseId)
+        ;
+        self::restrictToSession($qb, $session_id);
 
-        $sessionCondition = api_get_session_condition($session_id);
-        $sql = "SELECT * FROM $table_track_exercises
-                WHERE
-                    status = '' AND
-                    exe_user_id = $user_id AND
-                    c_id = $courseId AND
-                    orig_lp_id = 0 AND
-                    orig_lp_item_id = 0
-                    $sessionCondition
-                ORDER by exe_id";
-
-        $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $row = self::toLegacyRow($row);
             $list[$row['exe_id']] = $row;
-            $sql = "SELECT * FROM $table_track_attempt
-                    WHERE exe_id = {$row['exe_id']}";
-            $res_question = Database::query($sql);
-            while ($row_q = Database::fetch_assoc($res_question)) {
+            foreach (self::attemptRows((int) $row['exe_id']) as $row_q) {
                 $list[$row['exe_id']]['question_list'][$row_q['question_id']] = $row_q;
             }
         }
@@ -1327,35 +1380,22 @@ class Event
      */
     public static function get_exercise_results_by_attempt(int $exe_id, ?string $status = null): array
     {
-        $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
-
-        $status = Database::escape_string($status);
-
-        $sql = "SELECT * FROM $table_track_exercises
-                WHERE status = '$status' AND exe_id = $exe_id";
-
-        $res = Database::query($sql);
+        $rows = self::exerciseRowsQueryBuilder()
+            ->where('e.status = :status')
+            ->andWhere('e.exeId = :exeId')
+            ->setParameter('status', (string) $status)
+            ->setParameter('exeId', (int) $exe_id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $list = [];
-        if (Database::num_rows($res)) {
-            $row = Database::fetch_assoc($res);
+        if ([] !== $rows) {
+            $row = self::toLegacyRow($rows[0]);
 
             //Checking if this attempt was revised by a teacher
-            $sql_revised = "SELECT exe_id FROM $tblTrackAttemptQualify
-                            WHERE author != '' AND final = 1 AND exe_id = $exe_id
-                            LIMIT 1";
-            $res_revised = Database::query($sql_revised);
-            $row['attempt_revised'] = 0;
-            if (Database::num_rows($res_revised) > 0) {
-                $row['attempt_revised'] = 1;
-            }
+            $row['attempt_revised'] = self::isAttemptRevised((int) $exe_id) ? 1 : 0;
             $list[$exe_id] = $row;
-            $sql = "SELECT * FROM $table_track_attempt
-                    WHERE exe_id = $exe_id
-                    ORDER BY tms ASC";
-            $res_question = Database::query($sql);
-            while ($row_q = Database::fetch_assoc($res_question)) {
+            foreach (self::attemptRows((int) $exe_id, 'tms') as $row_q) {
                 $list[$exe_id]['question_list'][$row_q['question_id']] = $row_q;
             }
         }
@@ -1388,9 +1428,6 @@ class Event
         ?string $order = null
     ): array
     {
-        $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $tblTrackAttemptQualify = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_QUALIFY);
         if (!isset($lp_id)) {
             $lp_id = '0';
         }
@@ -1398,41 +1435,34 @@ class Event
             $lp_item_id = '0';
         }
 
-        if (!in_array(strtolower($order), ['asc', 'desc'])) {
-            $order = 'asc';
-        }
+        // Only 'ASC' or 'DESC' ever reach orderBy().
+        $order = 'desc' === strtolower((string) $order) ? 'DESC' : 'ASC';
 
-        $sessionCondition = api_get_session_condition($session_id);
+        $qb = self::exerciseRowsQueryBuilder()
+            ->where("e.status = ''")
+            ->andWhere('e.user = :userId')
+            ->andWhere('e.course = :courseId')
+            ->andWhere('e.quiz = :exerciseId')
+            ->andWhere('e.origLpId = :lpId')
+            ->andWhere('e.origLpItemId = :lpItemId')
+            ->orderBy('e.exeId', $order)
+            ->setParameter('userId', (int) $user_id)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('exerciseId', (int) $exercise_id)
+            ->setParameter('lpId', (int) $lp_id)
+            ->setParameter('lpItemId', (int) $lp_item_id)
+        ;
+        self::restrictToSession($qb, $session_id);
 
-        $sql = "SELECT * FROM $table_track_exercises
-                WHERE
-                    status 			= '' AND
-                    exe_user_id 	= $user_id AND
-                    c_id 	        = $courseId AND
-                    exe_exo_id 		= $exercise_id AND
-                    orig_lp_id 		= $lp_id AND
-                    orig_lp_item_id = $lp_item_id
-                    $sessionCondition
-                ORDER by exe_id $order ";
-        $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $row = self::toLegacyRow($row);
             // Checking if this attempt was revised by a teacher
             $exeId = $row['exe_id'];
-            $sql = "SELECT exe_id FROM $tblTrackAttemptQualify
-                    WHERE author != '' AND final = 1 AND exe_id = $exeId
-                    LIMIT 1";
-            $res_revised = Database::query($sql);
-            $row['attempt_revised'] = 0;
-            if (Database::num_rows($res_revised) > 0) {
-                $row['attempt_revised'] = 1;
-            }
+            $row['attempt_revised'] = self::isAttemptRevised((int) $exeId) ? 1 : 0;
             $row['total_percentage'] = $row['max_score'] > 0 ? ($row['score'] / $row['max_score']) * 100 : 0;
             $list[$row['exe_id']] = $row;
-            $sql = "SELECT * FROM $table_track_attempt
-                    WHERE exe_id = $exeId";
-            $res_question = Database::query($sql);
-            while ($row_q = Database::fetch_assoc($res_question)) {
+            foreach (self::attemptRows((int) $exeId) as $row_q) {
                 $list[$row['exe_id']]['question_list'][$row_q['question_id']][] = $row_q;
             }
         }
@@ -1458,26 +1488,22 @@ class Event
         int $courseId,
         int $session_id = 0
     ): int {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $sessionCondition = api_get_session_condition($session_id);
-        $sql = "SELECT count(*) as count
-                FROM $table
-                WHERE status = ''  AND
-                    exe_user_id = $user_id AND
-                    c_id = $courseId AND
-                    exe_exo_id = $exercise_id AND
-                    orig_lp_id = 0 AND
-                    orig_lp_item_id = 0
-                    $sessionCondition
-                ORDER BY exe_id";
-        $res = Database::query($sql);
-        $result = 0;
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_assoc($res);
-            $result = $row['count'];
-        }
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(e.exeId)')
+            ->from(TrackEExercise::class, 'e')
+            ->where("e.status = ''")
+            ->andWhere('e.user = :userId')
+            ->andWhere('e.course = :courseId')
+            ->andWhere('e.quiz = :exerciseId')
+            ->andWhere('e.origLpId = 0')
+            ->andWhere('e.origLpItemId = 0')
+            ->setParameter('userId', (int) $user_id)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('exerciseId', (int) $exercise_id)
+        ;
+        self::restrictToSession($qb, $session_id);
 
-        return $result;
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -1502,33 +1528,28 @@ class Event
         ?int $userId = 0
     ): array
     {
-        $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $sessionCondition = api_get_session_condition($session_id);
-        $sql = "SELECT * FROM $table_track_exercises
-                WHERE
-                    status = '' AND
-                    c_id = $courseId AND
-                    exe_exo_id = $exercise_id AND
-                    orig_lp_id = 0 AND
-                    orig_lp_item_id = 0
-                    $sessionCondition
-                ";
+        $qb = self::exerciseRowsQueryBuilder()
+            ->where("e.status = ''")
+            ->andWhere('e.course = :courseId')
+            ->andWhere('e.quiz = :exerciseId')
+            ->andWhere('e.origLpId = 0')
+            ->andWhere('e.origLpItemId = 0')
+            ->orderBy('e.exeId', 'ASC')
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('exerciseId', (int) $exercise_id)
+        ;
+        self::restrictToSession($qb, $session_id);
 
         if (!empty($userId)) {
-            $sql .= " AND exe_user_id = $userId ";
+            $qb->andWhere('e.user = :userId')->setParameter('userId', (int) $userId);
         }
-        $sql .= ' ORDER BY exe_id';
 
-        $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $row = self::toLegacyRow($row);
             $list[$row['exe_id']] = $row;
             $exeId = $row['exe_id'];
-            $sql = "SELECT * FROM $table_track_attempt
-                    WHERE exe_id = $exeId";
-            $res_question = Database::query($sql);
-            while ($row_q = Database::fetch_assoc($res_question)) {
+            foreach (self::attemptRows((int) $exeId) as $row_q) {
                 $list[$exeId]['question_list'][$row_q['question_id']] = $row_q;
             }
         }
@@ -1571,29 +1592,25 @@ class Event
         ?bool $skipLpResults = true
     ):array
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-
-        $sessionCondition = api_get_session_condition($session_id);
-        $sql = "SELECT * FROM $table
-                WHERE
-                    status = ''  AND
-                    c_id = $courseId AND
-                    exe_exo_id = $exercise_id AND
-                    exe_user_id = $user_id
-                    $sessionCondition
-                ";
+        $qb = self::exerciseRowsQueryBuilder()
+            ->where("e.status = ''")
+            ->andWhere('e.course = :courseId')
+            ->andWhere('e.quiz = :exerciseId')
+            ->andWhere('e.user = :userId')
+            ->orderBy('e.exeId', 'ASC')
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('exerciseId', (int) $exercise_id)
+            ->setParameter('userId', (int) $user_id)
+        ;
+        self::restrictToSession($qb, $session_id);
 
         if ($skipLpResults) {
-            $sql .= ' AND
-                    orig_lp_id = 0 AND
-                orig_lp_item_id = 0 ';
+            $qb->andWhere('e.origLpId = 0')->andWhere('e.origLpItemId = 0');
         }
 
-        $sql .= ' ORDER BY exe_id ';
-
-        $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $row = self::toLegacyRow($row);
             $list[$row['exe_id']] = $row;
         }
         //Getting the best results of every student
@@ -1630,29 +1647,23 @@ class Event
         ?int $session_id = 0
     ): array
     {
-        $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $table_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $sessionCondition = api_get_session_condition($session_id);
+        $qb = self::exerciseRowsQueryBuilder()
+            ->where("e.status = ''")
+            ->andWhere('e.course = :courseId')
+            ->andWhere('e.quiz = :exerciseId')
+            ->andWhere('e.origLpId <> 0')
+            ->andWhere('e.origLpItemId <> 0')
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('exerciseId', (int) $exercise_id)
+        ;
+        self::restrictToSession($qb, $session_id);
 
-        $sql = "SELECT * FROM $table_track_exercises
-                WHERE
-                    status = '' AND
-                    c_id = $courseId AND
-                    exe_exo_id = $exercise_id AND
-                    orig_lp_id !=0 AND
-                    orig_lp_item_id != 0
-                    $sessionCondition
-                    ";
-
-        $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            $row = self::toLegacyRow($row);
             $exeId = $row['exe_id'];
             $list[$exeId] = $row;
-            $sql = "SELECT * FROM $table_track_attempt
-                    WHERE exe_id = $exeId";
-            $res_question = Database::query($sql);
-            while ($row_q = Database::fetch_assoc($res_question)) {
+            foreach (self::attemptRows((int) $exeId) as $row_q) {
                 $list[$exeId]['question_list'][$row_q['question_id']] = $row_q;
             }
         }
@@ -1671,16 +1682,50 @@ class Event
      */
     public static function get_all_exercises_from_lp(int $lp_id): array
     {
-        $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $lp_item_table
-                WHERE
-                    lp_id = $lp_id AND
-                    item_type = 'quiz'
-                ORDER BY parent_item_id, display_order";
-        $res = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'i.iid AS iid',
+                'IDENTITY(i.lp) AS lp_id',
+                'IDENTITY(i.root) AS item_root',
+                'IDENTITY(i.parent) AS parent_item_id',
+                'i.title AS title',
+                'i.itemType AS item_type',
+                'i.ref AS ref',
+                'i.description AS description',
+                'i.path AS path',
+                'i.minScore AS min_score',
+                'i.maxScore AS max_score',
+                'i.masteryScore AS mastery_score',
+                'i.displayOrder AS display_order',
+                'i.prerequisite AS prerequisite',
+                'i.parameters AS parameters',
+                'i.launchData AS launch_data',
+                'i.maxTimeAllowed AS max_time_allowed',
+                'i.terms AS terms',
+                'i.searchDid AS search_did',
+                'i.audio AS audio',
+                'i.prerequisiteMinScore AS prerequisite_min_score',
+                'i.prerequisiteMaxScore AS prerequisite_max_score',
+                'i.previousItemId AS previous_item_id',
+                'i.nextItemId AS next_item_id',
+                'i.lvl AS lvl',
+                'i.duration AS duration',
+                'i.exportAllowed AS export_allowed'
+            )
+            ->from(CLpItem::class, 'i')
+            ->where('i.lp = :lpId')
+            ->andWhere("i.itemType = 'quiz'")
+            ->orderBy('i.parent')
+            ->addOrderBy('i.displayOrder', 'ASC')
+            ->setParameter('lpId', (int) $lp_id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($rows as $row) {
+            // export_allowed is a tinyint(1) column: the raw row carried it as 0/1.
+            $row['export_allowed'] = (int) $row['export_allowed'];
             $list[] = $row;
         }
 
@@ -1699,15 +1744,19 @@ class Event
      */
     public static function get_comments(int $exe_id, int $question_id): string
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $sql = "SELECT teacher_comment
-                FROM $table
-                WHERE
-                    exe_id = $exe_id AND
-                    question_id = $question_id
-                ORDER by question_id";
-        $sqlResult = Database::query($sql);
-        $comm = strval(Database::result($sqlResult, 0, 'teacher_comment'));
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('a.teacherComment AS teacher_comment')
+            ->from(TrackEAttempt::class, 'a')
+            ->where('a.trackExercise = :exeId')
+            ->andWhere('a.questionId = :questionId')
+            ->orderBy('a.questionId', 'ASC')
+            ->setMaxResults(1)
+            ->setParameter('exeId', (int) $exe_id)
+            ->setParameter('questionId', (int) $question_id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        $comm = strval($rows[0]['teacher_comment'] ?? '');
 
         return trim($comm);
     }
@@ -1724,17 +1773,9 @@ class Event
      */
     public static function getAllExerciseEventByExeId(int $exeId): array
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
-        $sql = "SELECT * FROM $table
-                WHERE exe_id = $exeId
-                ORDER BY position";
-        $res_question = Database::query($sql);
         $list = [];
-        if (Database::num_rows($res_question)) {
-            while ($row = Database::fetch_assoc($res_question)) {
-                $list[$row['question_id']][] = $row;
-            }
+        foreach (self::attemptRows($exeId, 'position') as $row) {
+            $list[$row['question_id']][] = $row;
         }
 
         return $list;
@@ -1750,20 +1791,9 @@ class Event
      */
     public static function getQuestionAttemptByExeIdAndQuestion(int $exeId, int $questionId): array
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $rows = self::attemptRows($exeId, 'position', $questionId, 1);
 
-        $sql = "SELECT * FROM $table
-                WHERE
-                    exe_id = $exeId AND
-                    question_id = $questionId
-                ORDER BY position";
-        $result = Database::query($sql);
-        $attempt = [];
-        if (Database::num_rows($result)) {
-            $attempt = Database::fetch_assoc($result);
-        }
-
-        return $attempt;
+        return $rows[0] ?? [];
     }
 
     /**
@@ -1787,14 +1817,17 @@ class Event
         int $question_id
     ): void
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
-        $sql = "DELETE FROM $table
-                WHERE
-                    exe_id = $exeId AND
-                    user_id = $user_id AND
-                    question_id = $question_id ";
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->delete(TrackEAttempt::class, 'a')
+            ->where('a.trackExercise = :exeId')
+            ->andWhere('a.user = :userId')
+            ->andWhere('a.questionId = :questionId')
+            ->setParameter('exeId', (int) $exeId)
+            ->setParameter('userId', (int) $user_id)
+            ->setParameter('questionId', (int) $question_id)
+            ->getQuery()
+            ->execute()
+        ;
 
         self::addEvent(
             LOG_QUESTION_RESULT_DELETE,
@@ -1827,19 +1860,23 @@ class Event
         ?int $sessionId = null
     ): void
     {
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-
         if (!isset($sessionId)) {
             $sessionId = api_get_session_id();
         }
 
-        $sql = "DELETE FROM $table
-                WHERE
-                    hotspot_exe_id = $exeId AND
-                    hotspot_user_id = $user_id AND
-                    c_id = $courseId AND
-                    hotspot_question_id = $question_id ";
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->delete(TrackEHotspot::class, 'h')
+            ->where('h.hotspotExeId = :exeId')
+            ->andWhere('h.hotspotUserId = :userId')
+            ->andWhere('h.course = :courseId')
+            ->andWhere('h.hotspotQuestionId = :questionId')
+            ->setParameter('exeId', (int) $exeId)
+            ->setParameter('userId', (int) $user_id)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('questionId', (int) $question_id)
+            ->getQuery()
+            ->execute()
+        ;
         self::addEvent(
             LOG_QUESTION_RESULT_DELETE,
             LOG_EXERCISE_ATTEMPT_QUESTION_ID,
@@ -1876,11 +1913,16 @@ class Event
 
         // $counter represents the number of time this record has been refreshed
         $counter = 1;
-        $ip = Database::escape_string(api_get_real_ip());
 
-        $sql = "INSERT INTO $table(c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
-                VALUES($courseId, '$ip', $user_id, '$loginDate', '$logoutDate', $counter, $sessionId)";
-        $courseAccessId = Database::query($sql);
+        $courseAccessId = self::insertRow($table, [
+            'c_id' => $courseId,
+            'user_ip' => api_get_real_ip(),
+            'user_id' => $user_id,
+            'login_course_date' => $loginDate,
+            'logout_course_date' => $logoutDate,
+            'counter' => $counter,
+            'session_id' => $sessionId,
+        ]);
 
         if ($courseAccessId) {
             // Course catalog stats modifications see #4191
@@ -1923,23 +1965,26 @@ class Event
             return false;
         }
 
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = "SELECT course_access_id, logout_course_date
-                FROM $table
-                WHERE
-                    c_id = $courseId AND
-                    session_id = $sessionId AND
-                    user_id = $userId
-                ORDER BY login_course_date DESC
-                LIMIT 1";
-
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('a.courseAccessId AS course_access_id', 'a.logoutCourseDate AS logout_course_date')
+            ->from(TrackECourseAccess::class, 'a')
+            ->where('a.cId = :courseId')
+            ->andWhere('a.sessionId = :sessionId')
+            ->andWhere('a.user = :userId')
+            ->orderBy('a.loginCourseDate', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('courseId', (int) $courseId)
+            ->setParameter('sessionId', (int) $sessionId)
+            ->setParameter('userId', (int) $userId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
         // Save every 5 minutes by default
         $seconds = $minutes * 60;
         $maxSeconds = 3600; // Only update if max diff is one hour
-        if (Database::num_rows($result)) {
-            $row = Database::fetch_array($result);
+        if ([] !== $rows) {
+            $row = self::toLegacyRow($rows[0]);
             $id = $row['course_access_id'];
             $logout = $row['logout_course_date'];
             $now = time();
@@ -1948,11 +1993,7 @@ class Event
                 $now - $logout < $maxSeconds
             ) {
                 $now = api_get_utc_datetime();
-                $sql = "UPDATE $table SET
-                            logout_course_date = '$now',
-                            counter = counter + 1
-                        WHERE course_access_id = $id";
-                Database::query($sql);
+                self::touchCourseAccess((int) $id, $now);
             }
 
             return true;
@@ -2010,34 +2051,39 @@ class Event
             // UTC time
             $diff = time() - $sessionLifetime;
             $time = api_get_utc_datetime($diff);
-            $sql = "SELECT course_access_id, logout_course_date
-                    FROM $tableCourseAccess
-                    WHERE
-                        user_id = $userId AND
-                        c_id = $courseId  AND
-                        session_id = $sessionId AND
-                        login_course_date > '$time'
-                    ORDER BY login_course_date DESC
-                    LIMIT 1";
-            $result = Database::query($sql);
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select('a.courseAccessId AS course_access_id')
+                ->from(TrackECourseAccess::class, 'a')
+                ->where('a.user = :userId')
+                ->andWhere('a.cId = :courseId')
+                ->andWhere('a.sessionId = :sessionId')
+                ->andWhere('a.loginCourseDate > :time')
+                ->orderBy('a.loginCourseDate', 'DESC')
+                ->setMaxResults(1)
+                ->setParameter('userId', $userId)
+                ->setParameter('courseId', $courseId)
+                ->setParameter('sessionId', $sessionId)
+                ->setParameter('time', $time)
+                ->getQuery()
+                ->getArrayResult()
+            ;
             $insert = false;
-            if (Database::num_rows($result) > 0) {
-                $row = Database::fetch_assoc($result);
-                $courseAccessId = $row['course_access_id'];
-                $sql = "UPDATE $tableCourseAccess SET
-                                logout_course_date = '$currentDate',
-                                counter = counter + 1
-                            WHERE course_access_id = $courseAccessId";
-                Database::query($sql);
+            if ([] !== $rows) {
+                self::touchCourseAccess((int) $rows[0]['course_access_id'], $currentDate);
             } else {
                 $insert = true;
             }
 
             if ($insert) {
-                $ip = Database::escape_string(api_get_real_ip());
-                $sql = "INSERT INTO $tableCourseAccess (c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
-                        VALUES ($courseId, '$ip', $userId, '$currentDate', '$currentDate', 1, $sessionId)";
-                Database::query($sql);
+                self::insertRow($tableCourseAccess, [
+                    'c_id' => $courseId,
+                    'user_ip' => api_get_real_ip(),
+                    'user_id' => $userId,
+                    'login_course_date' => $currentDate,
+                    'logout_course_date' => $currentDate,
+                    'counter' => 1,
+                    'session_id' => $sessionId,
+                ]);
             }
 
             return true;
@@ -2175,11 +2221,12 @@ class Event
             return false;
         }
 
-        $originalVirtualTime = Database::escape_string($virtualTime);
+        $originalVirtualTime = $virtualTime;
         $removed = false;
 
         $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $platformTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $em = Container::getEntityManager();
 
         // Change $virtualTime format from hh:mm:ss to hhmmss which is the
         // format returned by SQL for a subtraction of two datetime values
@@ -2194,6 +2241,7 @@ class Event
 
         // Get the current latest course connection register. We need that
         // record to re-use the data and create a new record.
+        // TODO(db-neutral): UNIX_TIMESTAMP() difference of two datetime columns (no DQL equivalent registered)
         $sql = "SELECT course_access_id
                 FROM $courseTrackingTable
                 WHERE
@@ -2211,11 +2259,16 @@ class Event
             // Found the latest connection
             $row = Database::fetch_row($result);
             $courseAccessId = $row[0];
-            $sql = "DELETE FROM $courseTrackingTable
-                    WHERE course_access_id = $courseAccessId";
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->delete(TrackECourseAccess::class, 'a')
+                ->where('a.courseAccessId = :id')
+                ->setParameter('id', (int) $courseAccessId)
+                ->getQuery()
+                ->execute()
+            ;
             $removed = true;
         }
+        // TODO(db-neutral): UNIX_TIMESTAMP() difference of two datetime columns (no DQL equivalent registered)
         $sql = "SELECT login_id
                 FROM $platformTrackingTable
                 WHERE
@@ -2226,42 +2279,47 @@ class Event
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_row($result);
             $loginAccessId = $row[0];
-            $sql = "DELETE FROM $platformTrackingTable
-                    WHERE login_id = $loginAccessId";
-            Database::query($sql);
+            $em->createQueryBuilder()
+                ->delete(TrackELogin::class, 'l')
+                ->where('l.loginId = :id')
+                ->setParameter('id', (int) $loginAccessId)
+                ->getQuery()
+                ->execute()
+            ;
             $removed = true;
         }
 
         if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
-            $sql = "SELECT id FROM track_e_access_complete
-                    WHERE
-                        tool = '".TOOL_STUDENTPUBLICATION."' AND
-                        c_id = $courseId AND
-                        session_id = $sessionId AND
-                        user_id = $userId AND
-                        action_details = '$originalVirtualTime' AND
-                        action = 'add_work_start_$workId' ";
-            $result = Database::query($sql);
-            $result = Database::fetch_array($result);
-            if ($result) {
-                $sql = 'DELETE FROM track_e_access_complete WHERE id = '.$result['id'];
-                Database::query($sql);
-            }
-
-            $sql = "SELECT id FROM track_e_access_complete
-                    WHERE
-                        tool = '".TOOL_STUDENTPUBLICATION."' AND
-                        c_id = $courseId AND
-                        session_id = $sessionId AND
-                        user_id = $userId AND
-                        action_details = '$originalVirtualTime' AND
-                        action = 'add_work_end_$workId' ";
-            $result = Database::query($sql);
-            $result = Database::fetch_array($result);
-            if ($result) {
-                $sql = 'DELETE FROM track_e_access_complete WHERE id = '.$result['id'];
-                Database::query($sql);
-                $removed = true;
+            foreach (['add_work_start_'.$workId => false, 'add_work_end_'.$workId => true] as $action => $flagsRemoval) {
+                $found = $em->createQueryBuilder()
+                    ->select('t.id AS id')
+                    ->from(TrackEAccessComplete::class, 't')
+                    ->where('t.tool = :tool')
+                    ->andWhere('t.cId = :courseId')
+                    ->andWhere('t.sessionId = :sessionId')
+                    ->andWhere('t.user = :userId')
+                    ->andWhere('t.actionDetails = :details')
+                    ->andWhere('t.action = :action')
+                    ->setMaxResults(1)
+                    ->setParameter('tool', TOOL_STUDENTPUBLICATION)
+                    ->setParameter('courseId', (int) $courseId)
+                    ->setParameter('sessionId', (int) $sessionId)
+                    ->setParameter('userId', (int) $userId)
+                    ->setParameter('details', $originalVirtualTime)
+                    ->setParameter('action', $action)
+                    ->getQuery()
+                    ->getArrayResult()
+                ;
+                if ([] !== $found) {
+                    $em->createQueryBuilder()
+                        ->delete(TrackEAccessComplete::class, 't')
+                        ->where('t.id = :id')
+                        ->setParameter('id', (int) $found[0]['id'])
+                        ->getQuery()
+                        ->execute()
+                    ;
+                    $removed = $removed || $flagsRemoval;
+                }
             }
         }
 
@@ -2298,7 +2356,8 @@ class Event
             return false;
         }
 
-        $loginAs = true === (int) Session::read('login_as');
+        // login_as is an integer NOT NULL column: store 1/0, never a boolean false (which PDO sends as '').
+        $loginAs = Session::read('login_as') ? 1 : 0;
 
         $logInfo['user_id'] = isset($logInfo['user_id']) ? $logInfo['user_id'] : api_get_user_id();
         $logInfo['date_reg'] = isset($logInfo['date_reg']) ? $logInfo['date_reg'] : api_get_utc_datetime();
@@ -2436,5 +2495,167 @@ class Event
             $course->getId(),
             $session->getId()
         );
+    }
+
+    /**
+     * Inserts one row in a track_e_* table with bound parameters.
+     *
+     * @return int Number of inserted rows
+     */
+    private static function insertRow(string $table, array $values): int
+    {
+        $qb = Database::getManager()->getConnection()->createQueryBuilder()->insert($table);
+        foreach ($values as $column => $value) {
+            $qb->setValue($column, ':'.$column)->setParameter($column, $value);
+        }
+
+        return (int) $qb->executeStatement();
+    }
+
+    /**
+     * Refreshes the end of a course access row and counts one more refresh.
+     */
+    private static function touchCourseAccess(int $courseAccessId, string $logoutDate): void
+    {
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(TrackECourseAccess::class, 'a')
+            ->set('a.logoutCourseDate', ':logoutDate')
+            ->set('a.counter', 'a.counter + 1')
+            ->where('a.courseAccessId = :id')
+            ->setParameter('logoutDate', $logoutDate)
+            ->setParameter('id', $courseAccessId)
+            ->getQuery()
+            ->execute()
+        ;
+    }
+
+    /**
+     * Mirrors what api_get_session_condition() used to append as SQL text: a session id of 0 also matches the
+     * results stored without session (NULL).
+     *
+     * @param int|string|null $sessionId
+     */
+    private static function restrictToSession(
+        QueryBuilder $qb,
+        $sessionId,
+        string $field = 'IDENTITY(e.session)',
+        string $nullField = 'e.session'
+    ): void {
+        $sessionId = (int) $sessionId;
+        if (empty($sessionId)) {
+            $qb->andWhere("($field = 0 OR $nullField IS NULL)");
+
+            return;
+        }
+
+        $qb->andWhere($field.' = :sessionId')->setParameter('sessionId', $sessionId);
+    }
+
+    /**
+     * Every column of track_e_exercises, aliased to the snake_case keys the legacy callers read.
+     */
+    private static function exerciseRowsQueryBuilder(): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'e.exeId AS exe_id',
+                'IDENTITY(e.user) AS exe_user_id',
+                'IDENTITY(e.course) AS c_id',
+                'IDENTITY(e.session) AS session_id',
+                'IDENTITY(e.quiz) AS exe_exo_id',
+                'e.exeDate AS exe_date',
+                'e.score AS score',
+                'e.maxScore AS max_score',
+                'e.userIp AS user_ip',
+                'e.status AS status',
+                'e.dataTracking AS data_tracking',
+                'e.startDate AS start_date',
+                'e.stepsCounter AS steps_counter',
+                'e.origLpId AS orig_lp_id',
+                'e.origLpItemId AS orig_lp_item_id',
+                'e.exeDuration AS exe_duration',
+                'e.expiredTimeControl AS expired_time_control',
+                'e.origLpItemViewId AS orig_lp_item_view_id',
+                'e.questionsToCheck AS questions_to_check',
+                'e.blockedCategories AS blocked_categories'
+            )
+            ->from(TrackEExercise::class, 'e')
+        ;
+    }
+
+    /**
+     * The track_e_attempt rows of one attempt, with the raw column names.
+     *
+     * @param string|null $order      'position' or 'tms' (ascending), null for the natural order
+     * @param int|null    $questionId only the rows of this question
+     */
+    private static function attemptRows(
+        int $exeId,
+        ?string $order = null,
+        ?int $questionId = null,
+        ?int $limit = null
+    ): array {
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'a.id AS id',
+                'IDENTITY(a.trackExercise) AS exe_id',
+                'IDENTITY(a.user) AS user_id',
+                'a.questionId AS question_id',
+                'a.answer AS answer',
+                'a.teacherComment AS teacher_comment',
+                'a.marks AS marks',
+                'a.position AS position',
+                'a.tms AS tms',
+                'a.filename AS filename',
+                'a.secondsSpent AS seconds_spent'
+            )
+            ->from(TrackEAttempt::class, 'a')
+            ->where('a.trackExercise = :exeId')
+            ->setParameter('exeId', $exeId)
+        ;
+        if (null !== $questionId) {
+            $qb->andWhere('a.questionId = :questionId')->setParameter('questionId', $questionId);
+        }
+        if ('position' === $order) {
+            $qb->orderBy('a.position', 'ASC');
+        } elseif ('tms' === $order) {
+            $qb->orderBy('a.tms', 'ASC');
+        }
+        if (null !== $limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        return array_map([self::class, 'toLegacyRow'], $qb->getQuery()->getArrayResult());
+    }
+
+    /**
+     * Whether a teacher revised (final, authored) the given exercise attempt.
+     */
+    private static function isAttemptRevised(int $exeId): bool
+    {
+        return [] !== Container::getEntityManager()->createQueryBuilder()
+            ->select('q.id')
+            ->from(TrackEAttemptQualify::class, 'q')
+            ->where('q.author <> 0')
+            ->andWhere('q.final = true')
+            ->andWhere('q.trackExercise = :exeId')
+            ->setMaxResults(1)
+            ->setParameter('exeId', $exeId)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    /**
+     * The raw rows carried datetimes as 'Y-m-d H:i:s' strings: keep that shape.
+     */
+    private static function toLegacyRow(array $row): array
+    {
+        foreach ($row as $key => $value) {
+            if ($value instanceof DateTimeInterface) {
+                $row[$key] = $value->format('Y-m-d H:i:s');
+            }
+        }
+
+        return $row;
     }
 }

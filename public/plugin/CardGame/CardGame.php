@@ -46,6 +46,7 @@ class CardGame extends Plugin
             "ALTER TABLE plugin_card_game MODIFY parts TEXT NOT NULL",
         ];
 
+        // TODO(db-neutral): DDL (CREATE TABLE ... ENGINE/CHARSET, ALTER TABLE ... MODIFY) in the installer
         foreach ($queries as $sql) {
             try {
                 Database::query($sql);
@@ -57,6 +58,7 @@ class CardGame extends Plugin
 
     public function uninstall()
     {
+        // TODO(db-neutral): DDL (DROP TABLE) in the uninstaller
         $sql = 'DROP TABLE IF EXISTS plugin_card_game';
         Database::query($sql);
     }
@@ -64,21 +66,24 @@ class CardGame extends Plugin
     public function getOrCreateProgress(int $userId): array
     {
         $userId = (int) $userId;
-        $sql = "SELECT id, user_id, pan, access_date, parts
-                FROM plugin_card_game
-                WHERE user_id = $userId
-                ORDER BY id DESC
-                LIMIT 1";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
+        $connection = Database::getManager()->getConnection();
+        $row = $this->fetchProgressRow($userId);
 
         if (!$row) {
             $yesterday = date('Y-m-d', strtotime('-1 day'));
-            $insertSql = "INSERT INTO plugin_card_game (user_id, pan, access_date, parts)
-                          VALUES ($userId, 1, '$yesterday', '')";
-            Database::query($insertSql);
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result);
+            $connection->createQueryBuilder()
+                ->insert('plugin_card_game')
+                ->values([
+                    'user_id' => ':userId',
+                    'pan' => '1',
+                    'access_date' => ':accessDate',
+                    'parts' => ':parts',
+                ])
+                ->setParameter('userId', $userId)
+                ->setParameter('accessDate', $yesterday)
+                ->setParameter('parts', '')
+                ->executeStatement();
+            $row = $this->fetchProgressRow($userId);
         }
 
         $pan = max(1, (int) ($row['pan'] ?? 1));
@@ -235,17 +240,36 @@ class CardGame extends Plugin
     {
         $userId = (int) $userId;
         $pan = max(1, (int) $pan);
-        $parts = Database::escape_string($parts);
-        $accessDateSql = null === $accessDate
-            ? 'NULL'
-            : "'".Database::escape_string($accessDate)."'";
 
-        $sql = "UPDATE plugin_card_game
-                SET pan = $pan,
-                    access_date = $accessDateSql,
-                    parts = '$parts'
-                WHERE user_id = $userId";
-        Database::query($sql);
+        Database::getManager()->getConnection()->createQueryBuilder()
+            ->update('plugin_card_game')
+            ->set('pan', ':pan')
+            ->set('access_date', ':accessDate')
+            ->set('parts', ':parts')
+            ->where('user_id = :userId')
+            ->setParameter('pan', $pan)
+            ->setParameter('accessDate', $accessDate)
+            ->setParameter('parts', $parts)
+            ->setParameter('userId', $userId)
+            ->executeStatement();
+    }
+
+    /**
+     * @return array<string, mixed>|false
+     */
+    private function fetchProgressRow(int $userId): array|false
+    {
+        $qb = Database::getManager()->getConnection()->createQueryBuilder();
+
+        return $qb
+            ->select('id', 'user_id', 'pan', 'access_date', 'parts')
+            ->from('plugin_card_game')
+            ->where('user_id = :userId')
+            ->orderBy('id', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('userId', $userId)
+            ->executeQuery()
+            ->fetchAssociative();
     }
 
     private function getTodayDate(): string

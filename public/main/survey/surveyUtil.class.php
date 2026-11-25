@@ -12,12 +12,14 @@ use Chamilo\CoreBundle\Enums\StateIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CGroup;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
 use ChamiloSession as Session;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * This class offers a series of general utility functions for survey querying and display.
@@ -35,20 +37,22 @@ class SurveyUtil
      */
     public static function check_first_last_question($survey_id, $continue = true)
     {
-        // Table definitions
-        $tbl_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $course_id = api_get_course_int_id();
         $survey_id = (int) $survey_id;
 
         // Getting the information of the question
-        $sql = "SELECT * FROM $tbl_survey_question
-                WHERE survey_id='".$survey_id."'
-                ORDER BY sort ASC";
-        $result = Database::query($sql);
-        $total = Database::num_rows($result);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('q.type AS type')
+            ->from(CSurveyQuestion::class, 'q')
+            ->where('q.survey = :survey')
+            ->orderBy('q.sort', 'ASC')
+            ->setParameter('survey', $survey_id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        $total = count($rows);
         $counter = 1;
         $error = false;
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             if (1 == $counter && 'pagebreak' === $row['type']) {
                 echo Display::return_message(get_lang('The page break cannot be the first'), 'error', false);
                 $error = true;
@@ -81,26 +85,23 @@ class SurveyUtil
     public static function remove_answer($user, $survey_id, $question_id, $lpItemId = 0): void
     {
         $sessionId = api_get_session_id();
-        // table definition
-        $table = Database::get_course_table(TABLE_SURVEY_ANSWER);
-
-        $lpItemCondition = '';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->delete(CSurveyAnswer::class, 'a')
+            ->where('a.user = :user')
+            ->andWhere('a.survey = :survey')
+            ->andWhere('a.question = :question')
+            ->setParameter('user', (string) $user)
+            ->setParameter('survey', (int) $survey_id)
+            ->setParameter('question', (int) $question_id)
+        ;
         if (!empty($lpItemId)) {
-            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+            $qb->andWhere('a.lpItemId = :lpItem')->setParameter('lpItem', (int) $lpItemId);
         }
-        $sessionCondition = '';
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionCondition = api_get_session_condition($sessionId);
+            self::addSessionCondition($qb, 'a.sessionId', $sessionId);
         }
 
-        $sql = "DELETE FROM $table
-				WHERE
-                    user = '".Database::escape_string($user)."' AND
-                    survey_id = '".intval($survey_id)."' AND
-                    question_id = '".intval($question_id)."'
-                    $sessionCondition
-                    $lpItemCondition";
-        Database::query($sql);
+        $qb->getQuery()->execute();
     }
 
     public static function saveAnswer(
@@ -226,64 +227,6 @@ class SurveyUtil
         return true;
     }
 
-    public static function handleReportingActions(CSurvey $survey, array $people_filled = [])
-    {
-        $action = $_GET['action'] ?? '';
-
-        switch ($action) {
-            case 'questionreport':
-                self::display_question_report($survey);
-                break;
-            case 'userreport':
-                self::displayUserReport($survey, $people_filled);
-                break;
-            case 'comparativereport':
-                self::display_comparative_report();
-                break;
-            case 'completereport':
-                // Render once per unique (survey_id, lp_item_id) pair to avoid duplicates.
-                $answered = SurveyManager::getInvitationsAnswered(
-                    $survey->getCode(),
-                    api_get_course_int_id(),
-                    api_get_session_id()
-                );
-
-                $rendered = [];
-                $showNames = ($survey->getAnonymous() === '0');
-
-                // If no invitations answered, still show a single consolidated report.
-                if (empty($answered)) {
-                    echo self::displayCompleteReport($survey, 0, true, true, $showNames, 0);
-                    break;
-                }
-
-                foreach ($answered as $inv) {
-                    $s = $inv->getSurvey();
-                    if (!$s) {
-                        continue;
-                    }
-                    $key = $s->getIid().':'.(int) $inv->getLpItemId();
-                    if (isset($rendered[$key])) {
-                        continue; // already rendered this bucket
-                    }
-                    $rendered[$key] = true;
-
-                    echo self::displayCompleteReport(
-                        $s,
-                        0,               // all users
-                        true,            // action bar
-                        true,            // filters
-                        $showNames,      // extra user fields only if not anonymous
-                        (int) $inv->getLpItemId()
-                    );
-                }
-                break;
-            case 'deleteuserreport':
-                self::delete_user_report($survey->getIid(), $_GET['user']);
-                break;
-        }
-    }
-
     /**
      * This function deletes the report of an user who wants to retake the survey.
      *
@@ -296,38 +239,43 @@ class SurveyUtil
      */
     public static function delete_user_report($survey_id, $user_id)
     {
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
-
         $course_id = api_get_course_int_id();
         $survey_id = (int) $survey_id;
-        $user_id = Database::escape_string($user_id);
         $result = false;
 
         if (!empty($survey_id) && !empty($user_id)) {
-
-            $sessionCondition = '';
-            if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-                $sessionId = api_get_session_id();
-                $sessionCondition = api_get_session_condition($sessionId);
-            }
+            $em = Container::getEntityManager();
+            $sessionId = api_get_session_id();
+            $baseInSessions = true === api_get_configuration_value('show_surveys_base_in_sessions');
 
             // delete data from survey_answer by user_id and survey_id
-            $sql = "DELETE FROM $table_survey_answer
-			        WHERE survey_id = '".$survey_id."' AND user = '".$user_id."' $sessionCondition";
-            Database::query($sql);
+            $qb = $em->createQueryBuilder()
+                ->delete(CSurveyAnswer::class, 'a')
+                ->where('a.survey = :survey')
+                ->andWhere('a.user = :user')
+                ->setParameter('survey', $survey_id)
+                ->setParameter('user', (string) $user_id)
+            ;
+            if ($baseInSessions) {
+                self::addSessionCondition($qb, 'a.sessionId', $sessionId);
+            }
+            $qb->getQuery()->execute();
+
             // update field answered from survey_invitation by user_id and survey_id
-            $sql = "UPDATE $table_survey_invitation SET answered = '0'
-			        WHERE
-			            c_id = $course_id AND
-			            survey_id = (
-                            SELECT iid FROM $table_survey
-                            WHERE
-                                iid = '".$survey_id."'
-                        ) AND
-			            user_id = '".$user_id."'  $sessionCondition";
-            $result = Database::query($sql);
+            $qb = $em->createQueryBuilder()
+                ->update(CSurveyInvitation::class, 'i')
+                ->set('i.answered', 0)
+                ->where('i.course = :course')
+                ->andWhere('i.survey = :survey')
+                ->andWhere('i.user = :user')
+                ->setParameter('course', $course_id)
+                ->setParameter('survey', $survey_id)
+                ->setParameter('user', (int) $user_id)
+            ;
+            if ($baseInSessions) {
+                self::addSessionCondition($qb, 'i.session', $sessionId);
+            }
+            $result = $qb->getQuery()->execute();
         }
 
         if (false !== $result) {
@@ -335,627 +283,6 @@ class SurveyUtil
 					<a href="'.self::generateSurveyReportingLink($survey_id, null, 'userreport').'">'.get_lang('Go back').'</a>';
             echo Display::return_message($message, 'confirmation', false);
         }
-    }
-
-    /**
-     * @return string
-     */
-    public static function displayUserReportForm(CSurvey $survey, array $people_filled = [])
-    {
-        $surveyId = $survey->getIid();
-        // Step 1: selection of the user
-        echo "<script>
-        function jumpMenu(targ,selObj,restore) {
-            eval(targ+\".location='\"+selObj.options[selObj.selectedIndex].value+\"'\");
-            if (restore) selObj.selectedIndex=0;
-        }
-		</script>";
-        echo get_lang('Select user who filled the survey').'<br />';
-        echo '<select name="user" onchange="jumpMenu(\'parent\',this,0)">';
-        echo '<option value="'.self::generateSurveyReportingLink($surveyId, null, 'userreport').'">'
-            .get_lang('User').'</option>';
-
-        foreach ($people_filled as $key => &$person) {
-            if (0 == $survey->getAnonymous()) {
-                $name = $person['user_info']['complete_name_with_username'];
-                $id = $person['user_id'];
-                if ('' == $id) {
-                    $id = $person['invited_user'];
-                    $name = $person['invited_user'];
-                }
-            } else {
-                $name = get_lang('Anonymous').' '.($key + 1);
-                $id = $person;
-            }
-            echo '<option value="'.self::generateSurveyReportingLink($surveyId, $id).'" ';
-            if (isset($_GET['user']) && $_GET['user'] == $id) {
-                echo 'selected="selected"';
-            }
-            echo '>'.$name.'</option>';
-        }
-        echo '</select>';
-    }
-
-    /**
-     * @param int   $userId
-     * @param array $survey_data
-     * @param bool  $addMessage
-     */
-    public static function displayUserReportAnswers($userId, CSurvey $survey, $addMessage = true)
-    {
-        // Database table definitions
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $course_id = api_get_course_int_id();
-        $surveyId = $survey->getIid();
-        $userId = Database::escape_string($userId);
-
-        $content = '';
-        // Step 2: displaying the survey and the answer of the selected users
-        if (!empty($userId)) {
-            if ($addMessage) {
-                $content .= Display::return_message(
-                    get_lang('This screen displays an exact copy of the form as it was filled by the user'),
-                    'normal',
-                    false
-                );
-            }
-
-            // Getting all the questions and options
-            $sql = "SELECT
-			            survey_question.iid question_id,
-			            survey_question.survey_id,
-			            survey_question.survey_question,
-			            survey_question.display,
-			            survey_question.max_value,
-			            survey_question.sort,
-			            survey_question.type,
-                        survey_question_option.iid question_option_id,
-                        survey_question_option.option_text,
-                        survey_question_option.sort as option_sort
-					FROM $table_survey_question survey_question
-					LEFT JOIN $table_survey_question_option survey_question_option
-					ON
-					    survey_question.iid = survey_question_option.question_id
-					WHERE
-					    survey_question NOT LIKE '%{{%' AND
-					    survey_question.survey_id = '".$surveyId."'
-					ORDER BY survey_question.sort, survey_question_option.sort ASC";
-            $result = Database::query($sql);
-            while ($row = Database::fetch_assoc($result)) {
-                if ('pagebreak' !== $row['type']) {
-                    $questions[$row['sort']]['question_id'] = $row['question_id'];
-                    $questions[$row['sort']]['survey_id'] = $row['survey_id'];
-                    $questions[$row['sort']]['survey_question'] = $row['survey_question'];
-                    $questions[$row['sort']]['display'] = $row['display'];
-                    $questions[$row['sort']]['type'] = $row['type'];
-                    $questions[$row['sort']]['maximum_score'] = $row['max_value'];
-                    $questions[$row['sort']]['options'][$row['question_option_id']] = $row['option_text'];
-                }
-            }
-
-            $sessionCondition = '';
-            if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-                $sessionId = api_get_session_id();
-                $sessionCondition = api_get_session_condition($sessionId);
-            }
-
-            // Getting all the answers of the user
-            $sql = "SELECT * FROM $table_survey_answer
-			        WHERE
-                        survey_id = '".$surveyId."' AND
-                        user = '".$userId."' $sessionCondition";
-            $result = Database::query($sql);
-            while ($row = Database::fetch_assoc($result)) {
-                $answers[$row['question_id']][] = $row['option_id'];
-                $all_answers[$row['question_id']][] = $row;
-            }
-
-            // Displaying all the questions
-            foreach ($questions as &$question) {
-                // If the question type is a scoring then we have to format the answers differently
-                switch ($question['type']) {
-                    case 'score':
-                        $finalAnswer = [];
-                        if (is_array($question) && is_array($all_answers)) {
-                            foreach ($all_answers[$question['question_id']] as $key => &$answer_array) {
-                                $finalAnswer[$answer_array['option_id']] = $answer_array['value'];
-                            }
-                        }
-                        break;
-                    case 'multipleresponse':
-                        $finalAnswer = isset($answers[$question['question_id']]) ? $answers[$question['question_id']] : '';
-                        break;
-                    default:
-                        $finalAnswer = '';
-                        if (isset($all_answers[$question['question_id']])) {
-                            $finalAnswer = $all_answers[$question['question_id']][0]['option_id'];
-                        }
-                        break;
-                }
-
-                $display = survey_question::createQuestion($question['type']);
-                $url = api_get_self();
-                $form = new FormValidator('question', 'post', $url);
-                $form->addHtml('<div class="survey_question_wrapper"><div class="survey_question">');
-                $form->addHtml($question['survey_question']);
-                $display->render($form, $question, $finalAnswer);
-                $form->addHtml('</div></div>');
-                $content .= $form->returnForm();
-            }
-        }
-
-        return $content;
-    }
-
-    /**
-     * This function displays the user report which is basically nothing more
-     * than a one-page display of all the questions
-     * of the survey that is filled with the answers of the person who filled the survey.
-     *
-     * @return string html code of the one-page survey with the answers of the selected user
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version February 2007 - Updated March 2008
-     */
-    public static function displayUserReport(CSurvey $survey, $people_filled, $addActionBar = true)
-    {
-        $surveyId = $survey->getIid();
-        $reportingUrl = self::generateSurveyReportingLink($surveyId);
-
-        // Actions bar
-        if ($addActionBar) {
-            $actions = '<a href="'.$reportingUrl.'">'.
-                Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview'))
-                .'</a>';
-            if (isset($_GET['user'])) {
-                if (api_is_allowed_to_edit()) {
-                    // The delete link
-                    $actions .= '<a
-                        href="'.$reportingUrl.'&action=deleteuserreport&user='.Security::remove_XSS($_GET['user']).'" >'.
-                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Delete')).'</a>';
-                }
-
-                // Export the user report
-                $actions .= '<a href="javascript: void(0);" onclick="document.form1a.submit();">'
-                    .Display::getMdiIcon(ActionIcon::EXPORT_CSV, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('CSV export')).'</a> ';
-                $actions .= '<a href="javascript: void(0);" onclick="document.form1b.submit();">'
-                    .Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Excel export')).'</a> ';
-                $actions .= '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='
-                    .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'&user_id='
-                    .Security::remove_XSS($_GET['user']).'">';
-                $actions .= '<input type="hidden" name="export_report" value="export_report">';
-                $actions .= '<input type="hidden" name="export_format" value="csv">';
-                $actions .= '</form>';
-                $actions .= '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?action='
-                    .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'&user_id='
-                    .Security::remove_XSS($_GET['user']).'">';
-                $actions .= '<input type="hidden" name="export_report" value="export_report">';
-                $actions .= '<input type="hidden" name="export_format" value="xls">';
-                $actions .= '</form>';
-                $actions .= '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='
-                    .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'">';
-            }
-            echo Display::toolbarAction('survey', [$actions]);
-        }
-
-        echo self::displayUserReportForm($survey, $people_filled);
-        if (isset($_GET['user'])) {
-            echo self::displayUserReportAnswers($_GET['user'], $survey);
-        }
-    }
-
-    /**
-     * This function displays the report by question.
-     *
-     * It displays a table with all the options of the question and the number of users who have answered positively on
-     * the option. The number of users who answered positive on a given option is expressed in an absolute number, in a
-     * percentage of the total and graphically using bars By clicking on the absolute number you get a list with the
-     * persons who have answered this. You can then click on the name of the person and you will then go to the report
-     * by user where you see all the answers of that user.
-     *
-     * @return string html code that displays the report by question
-     *
-     * @todo allow switching between horizontal and vertical.
-     * @todo multiple response: percentage are probably not OK
-     * @todo the question and option text have to be shortened and should expand when the user clicks on it.
-     * @todo the pagebreak and comment question types should not be shown => removed from $survey_data before
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version February 2007 - Updated March 2008
-     */
-    public static function display_question_report(CSurvey $survey)
-    {
-        $singlePage = isset($_GET['single_page']) ? (int) $_GET['single_page'] : 0;
-        $offset = !isset($_GET['question']) ? 0 : (int) $_GET['question'];
-        $currentQuestion = isset($_GET['question']) ? (int) $_GET['question'] : 0;
-        $surveyId = $survey->getIid();
-        $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
-        $course_id = api_get_course_int_id();
-
-        $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionId = api_get_session_id();
-            $sessionCondition = api_get_session_condition($sessionId);
-        }
-
-        // DB tables
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-
-        // Toolbar
-        $actions = '<a href="'.self::generateSurveyReportingLink($surveyId).'">'.
-            Display::getMdiIcon(ActionIcon::BACK, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Back to').' '.get_lang('Reporting overview')).
-            '</a>';
-        $actions .= Display::url(
-            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
-            'javascript: void(0);',
-            ['onclick' => 'exportToPdf();']
-        );
-
-        echo Display::toolbarAction('survey', [$actions]);
-        echo '<div class="ch-survey-report">';
-
-        // Survey header table (used for PDF too)
-        $fromUntil = sprintf(
-            get_lang('From %s until %s'),
-            api_get_local_time($survey->getAvailFrom()),
-            api_get_local_time($survey->getAvailTill())
-        );
-        $max = 80;
-        $data = [
-            get_lang('Survey title') => cut(strip_tags($survey->getTitle()), $max),
-            get_lang('Survey subtitle') => cut(strip_tags($survey->getSubtitle()), $max),
-            get_lang('Dates') => $fromUntil,
-            get_lang('Survey introduction') => cut(strip_tags($survey->getIntro()), $max),
-        ];
-
-        $table = new HTML_Table(['id' => 'pdf_table', 'class' => 'table table-bordered table-sm sr-table']);
-
-        $row = 0;
-        foreach ($data as $label => $item) {
-            $table->setCellContents($row, 0, $label);
-            $table->setCellContents($row, 1, $item);
-            $row++;
-        }
-
-        // Question list
-        $questions = $survey->getQuestions();
-        $numberOfQuestions = 0;
-        foreach ($questions as $q) {
-            if ('pagebreak' !== $q->getType()) {
-                $numberOfQuestions++;
-            }
-        }
-
-        $newQuestionList = [];
-        if ($numberOfQuestions > 0) {
-            if (!$singlePage) {
-                // Pagination (question numbers)
-                echo '<div id="question_report_questionnumbers" class="pagination">';
-                if (0 != $currentQuestion) {
-                    echo '<li><a href="'.self::generateSurveyReportingLink($surveyId, null, 'questionreport').'">'
-                        .get_lang('Previous question').'</a></li>';
-                }
-
-                for ($i = 1; $i <= $numberOfQuestions; $i++) {
-                    if ($offset != $i - 1) {
-                        echo '<li><a href="'.self::generateSurveyReportingLink($surveyId, null, 'questionreport').'">'.$i.'</a></li>';
-                    } else {
-                        echo '<li class="disabled"><a href="#">'.$i.'</a></li>';
-                    }
-                }
-                if ($currentQuestion < ($numberOfQuestions - 1)) {
-                    echo '<li><a href="'.self::generateSurveyReportingLink($surveyId, null, 'questionreport').'">'
-                        .get_lang('Next question').'</a></li>';
-                }
-                echo '</div>';
-            }
-
-            // Build list (skip tagged/pagebreak)
-            foreach ($questions as $q) {
-                if (strpos($q->getSurveyQuestion(), '%{{%') && 'pagebreak' !== $q->getType()) {
-                    continue;
-                }
-                $newQuestionList[$q->getIid()] = $q;
-            }
-        }
-
-        // Pretty container
-        echo '<div class="sr-container">';
-
-        // Survey info card
-        // Survey info card (pretty, keeps #pdf_table for PDF export)
-        echo '<div class="sr-card">';
-        echo '  <div class="sr-card__header">'.get_lang('Survey').'</div>';
-        echo '  <div class="sr-card__body">';
-
-        echo '    <table id="pdf_table" class="table table-bordered table-striped table-sm sr-table sr-summary-table">';
-        echo '      <tbody>';
-        echo '        <tr>';
-        echo '          <th scope="row">'.get_lang('Survey title').'</th>';
-        echo '          <td>'.cut(strip_tags($survey->getTitle()), $max).'</td>';
-        echo '        </tr>';
-        echo '        <tr>';
-        echo '          <th scope="row">'.get_lang('Survey subtitle').'</th>';
-        echo '          <td>'.cut(strip_tags($survey->getSubtitle()), $max).'</td>';
-        echo '        </tr>';
-        echo '        <tr>';
-        echo '          <th scope="row">'.get_lang('Dates').'</th>';
-        echo '          <td>'.$fromUntil.'</td>';
-        echo '        </tr>';
-        echo '        <tr>';
-        echo '          <th scope="row">'.get_lang('Survey introduction').'</th>';
-        echo '          <td>'.cut(strip_tags($survey->getIntro()), $max).'</td>';
-        echo '        </tr>';
-        echo '      </tbody>';
-        echo '    </table>';
-
-        echo '  </div>';
-        echo '</div>';
-
-        echo '<div id="question_results">';
-        /** @var CSurveyQuestion $question */
-        foreach ($newQuestionList as $question) {
-            $chartData = [];
-            $options = [];
-            $questionId = $question->getIid();
-            $type = $question->getType();
-
-            // Card wrapper per question
-            echo '<div class="sr-card">';
-            echo '<div class="sr-card__header">'.get_lang('Question').'</div>';
-            echo '<div class="sr-card__body">';
-
-            echo '<div class="title-question">'.strip_tags($question->getSurveyQuestion()).'</div>';
-
-            if ('score' === $type) {
-                // Score-type
-                self::display_question_report_score($survey, $question, $offset);
-            } elseif ('open' === $type || 'comment' === $type) {
-                // Open/comment as list
-                echo '<div class="open-question sr-block"><ul>';
-                $sql = "SELECT * FROM $table_survey_answer
-                    WHERE survey_id= $surveyId AND question_id = $questionId ";
-                $result = Database::query($sql);
-                while ($row = Database::fetch_assoc($result)) {
-                    echo '<li>'.api_htmlentities($row['option_id'], ENT_QUOTES).'</li>';
-                }
-                echo '</ul></div>';
-            } else {
-                // Choice-based questions
-                $sql = "SELECT * FROM $table_survey_question_option
-                    WHERE survey_id = $surveyId AND question_id = $questionId
-                    ORDER BY sort ASC";
-                $result = Database::query($sql);
-                while ($row = Database::fetch_assoc($result)) {
-                    $options[$row['iid']] = $row;
-                }
-
-                $sql = "SELECT *, count(iid) as total
-                    FROM $table_survey_answer
-                    WHERE survey_id = $surveyId AND question_id = $questionId
-                    GROUP BY option_id, value";
-                $result = Database::query($sql);
-                $number_of_answers = [];
-                $data = [];
-                while ($row = Database::fetch_assoc($result)) {
-                    if (!isset($number_of_answers[$row['question_id']])) {
-                        $number_of_answers[$row['question_id']] = 0;
-                    }
-                    $number_of_answers[$row['question_id']] += $row['total'];
-                    if ('multiplechoiceother' === $type) {
-                        $parts = ch_multiplechoiceother::decodeOptionValue($row['option_id']);
-                        $row['option_id'] = $parts[0];
-                    }
-                    $data[$row['option_id']] = $row;
-                }
-
-                foreach ($options as $opt) {
-                    $optionText = strip_tags($opt['option_text']);
-                    $optionText = html_entity_decode($optionText);
-                    $votes = isset($data[$opt['iid']]['total']) ? $data[$opt['iid']]['total'] : 0;
-                    $chartData[] = ['option' => $optionText, 'votes' => $votes];
-                }
-
-                $chartContainerId = 'chartContainer'.$questionId;
-                echo '<div id="'.$chartContainerId.'" class="sr-block" style="text-align:center;">';
-                echo self::drawChart($chartData, false, $chartContainerId, false);
-                echo '</div>';
-
-                // Table (bordered/striped/compact)
-                echo '<table class="display-survey table table-bordered table-striped table-sm sr-table sr-block" id="table_'.$chartContainerId.'">';
-                echo '  <thead><tr>
-                        <th style="width:50%">&nbsp;</th>
-                        <th style="width:10%">'.get_lang('Absolute total').'</th>
-                        <th style="width:10%">'.get_lang('Percentage').'</th>
-                        <th style="width:30%">'.get_lang('Graphic').'</th>
-                    </tr></thead><tbody>';
-
-                if (is_array($options)) {
-                    foreach ($options as $key => $value) {
-                        if ('multiplechoiceother' === $type && 'other' === $value['option_text']) {
-                            $value['option_text'] = get_lang('Please specify:');
-                        }
-                        $absolute_number = isset($data[$value['iid']]) ? $data[$value['iid']]['total'] : 0;
-                        if ('percentage' === $type && empty($absolute_number)) {
-                            continue;
-                        }
-                        $qid = $value['question_id'] ?? null;
-                        $totalAnswers = $qid && isset($number_of_answers[$qid]) ? $number_of_answers[$qid] : 0;
-                        $percentage = $totalAnswers ? ($absolute_number / $totalAnswers * 100) : 0;
-
-                        echo '<tr>';
-                        echo '<td>'.$value['option_text'].'</td>';
-                        echo '<td>';
-                        if (0 != $absolute_number) {
-                            echo '<a href="'.self::generateSurveyReportingLink($surveyId, null, 'questionreport').'">'.$absolute_number.'</a>';
-                        } else {
-                            echo '0';
-                        }
-                        echo '</td>';
-                        echo '<td>'.round($percentage, 2).' %</td>';
-                        echo '<td>';
-                        // Simple progress bar (no external JS/CSS needed)
-                        $w = max(0, min(100, round($percentage, 2)));
-                        echo '<div style="background:#eef2ff;border:1px solid #c7d2fe;height:10px;position:relative;">'
-                            .'<div style="height:10px;width:'.$w.'%;background:#93c5fd;"></div>'
-                            .'</div>';
-                        echo '</td>';
-                        echo '</tr>';
-                    }
-                }
-
-                $optionResult = '0';
-                if (isset($option['question_id']) && isset($number_of_answers[$option['question_id']])) {
-                    $optionResult = $number_of_answers[$option['question_id']] ?: '0';
-                }
-
-                echo '</tbody><tfoot><tr>
-                    <td><b>'.get_lang('Total').'</b></td>
-                    <td><b>'.$optionResult.'</b></td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
-                </tr></tfoot>';
-                echo '</table>';
-            }
-
-            echo '</div>';  // body
-            echo '</div>';  // card
-        }
-        echo '</div>';      // #question_results
-        echo '</div>';      // .sr-container
-
-        // People who chose specific option
-        if (isset($_GET['viewoption'])) {
-            echo '<div class="sr-container">';
-            echo '<div class="sr-card"><div class="sr-card__header">'.get_lang('Details').'</div><div class="sr-card__body">';
-            echo '<div class="answered-people">';
-            echo '<h4>'.get_lang('People who have chosen this answer').': '
-                .strip_tags($options[Security::remove_XSS($_GET['viewoption'])]['option_text']).'</h4>';
-
-            if (is_numeric($_GET['value'])) {
-                $sql_restriction = "AND value='".Database::escape_string($_GET['value'])."'";
-            } else {
-                $sql_restriction = '';
-            }
-
-            $sql = "SELECT user FROM $table_survey_answer
-                WHERE c_id = $course_id
-                  AND option_id = '".Database::escape_string($_GET['viewoption'])."'
-                  $sql_restriction $sessionCondition";
-            $result = Database::query($sql);
-            echo '<ul>';
-            while ($row = Database::fetch_assoc($result)) {
-                $user_info = api_get_user_info($row['user']);
-                echo '<li><a href="'.self::generateSurveyReportingLink($surveyId, $row['user']).'">'
-                    .$user_info['complete_name_with_username'].'</a></li>';
-            }
-            echo '</ul>';
-            echo '</div></div></div></div>';
-        }
-        echo '</div>';
-    }
-
-    /**
-     * Display score data about a survey question.
-     *
-     * @param    int    The offset of results shown
-     */
-    public static function display_question_report_score(CSurvey $survey, CSurveyQuestion $question, $offset)
-    {
-        $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $surveyId = $survey->getIid();
-        $questionId = $question->getIid();
-        $options = $survey->getOptions();
-
-        $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionId = api_get_session_id();
-            $sessionCondition = api_get_session_condition($sessionId);
-        }
-
-        foreach ($options as $opt) {
-            $options[$opt->getIid()] = $opt;
-        }
-
-        // Answers summary
-        $sql = "SELECT *, count(iid) as total
-            FROM $table_survey_answer
-            WHERE survey_id= $surveyId AND question_id = '".$questionId."'
-            $sessionCondition
-            GROUP BY option_id, value";
-        $result = Database::query($sql);
-        $number_of_answers = 0;
-        $data = [];
-        while ($row = Database::fetch_array($result)) {
-            $number_of_answers += $row['total'];
-            $data[$row['option_id']][$row['value']] = $row;
-        }
-
-        // Chart data
-        $chartData = [];
-        /** @var CSurveyQuestionOption $option */
-        foreach ($options as $option) {
-            $optionId = $option->getIid();
-            $optionText = html_entity_decode(strip_tags($option->getOptionText()));
-            for ($i = 1; $i <= $question->getMaxValue(); $i++) {
-                $votes = isset($data[$optionId][$i]) ? $data[$optionId][$i]['total'] : 0;
-                $chartData[] = ['serie' => $optionText, 'option' => $i, 'votes' => $votes];
-            }
-        }
-
-        echo '<div class="sr-container">';
-        echo '<div id="chartContainer" class="col-md-12 sr-block">';
-        echo self::drawChart($chartData, true);
-        echo '</div>';
-
-        // Table (styled)
-        echo '<table class="table table-bordered table-striped table-sm sr-table">';
-        echo '  <thead><tr>
-                <th>&nbsp;</th>
-                <th>'.get_lang('Score').'</th>
-                <th>'.get_lang('Absolute total').'</th>
-                <th>'.get_lang('Percentage').'</th>
-                <th>'.get_lang('Graphic').'</th>
-            </tr></thead><tbody>';
-
-        foreach ($options as $key => $value) {
-            $optionId = $value->getIid();
-            for ($i = 1; $i <= $question->getMaxValue(); $i++) {
-                $absolute_number = isset($data[$optionId][$i]) ? $data[$optionId][$i]['total'] : 0;
-
-                $percentage = 0;
-                $size = 0;
-                if (!empty($number_of_answers)) {
-                    $percentage = round($absolute_number / $number_of_answers * 100, 2);
-                    $size = $percentage; // 0..100
-                }
-
-                echo '<tr>';
-                echo '<td>'.$value->getOptionText().'</td>';
-                echo '<td>'.$i.'</td>';
-                echo '<td><a href="'.self::generateSurveyReportingLink($surveyId, null, 'questionreport').'">'.$absolute_number.'</a></td>';
-                echo '<td>'.$percentage.' %</td>';
-                echo '<td>';
-                echo '<div style="background:#eef2ff;border:1px solid #c7d2fe;height:10px;position:relative;">'
-                    .'<div style="height:10px;width:'.$size.'%;background:#93c5fd;"></div>'
-                    .'</div>';
-                echo '</td>';
-                echo '</tr>';
-            }
-        }
-
-        echo '  </tbody><tfoot><tr>
-                <td colspan="5"><b>'.get_lang('Total').': '.$number_of_answers.'</b></td>
-            </tr></tfoot>';
-        echo '</table>';
-        echo '</div>';
     }
 
     /**
@@ -976,24 +303,11 @@ class SurveyUtil
                 $addExtraFields = true,
                 $lpItemId = 0
     ) {
-        // DB tables
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $em = Container::getEntityManager();
 
         $surveyId = $survey->getIid();
         if (empty($surveyId)) {
             return '';
-        }
-
-        $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionId = api_get_session_id();
-            $sessionCondition = api_get_session_condition($sessionId);
-        }
-        $lpItemCondition = '';
-        if (!empty($lpItemId)) {
-            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
         }
 
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
@@ -1001,15 +315,17 @@ class SurveyUtil
 
         // Optional LP header
         if (!empty($lpItemId)) {
-            $tableLp = Database::get_course_table(TABLE_LP_MAIN);
-            $tableLpItem = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT l.title as lptitle, li.title as lpititle
-                FROM $tableLpItem li
-                INNER JOIN $tableLp l ON l.iid = li.lp_id
-                WHERE li.iid = $lpItemId";
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                $row = Database::fetch_assoc($rs);
+            $rs = $em->createQueryBuilder()
+                ->select('l.title AS lptitle', 'li.title AS lpititle')
+                ->from(CLpItem::class, 'li')
+                ->innerJoin('li.lp', 'l')
+                ->where('li.iid = :lpItem')
+                ->setParameter('lpItem', (int) $lpItemId)
+                ->getQuery()
+                ->getArrayResult()
+            ;
+            if (count($rs) > 0) {
+                $row = $rs[0];
                 $content .= '<div class="sr-container"><div class="sr-card"><div class="sr-card__header">'
                     .get_lang('Learning path')
                     .'</div><div class="sr-card__body"><h3 style="margin:0">'.$row['lptitle'].' : '.$row['lpititle'].'</h3></div></div></div>';
@@ -1085,15 +401,26 @@ class SurveyUtil
         }
 
         // Questions headers
-        $sql = "SELECT
-              q.iid question_id, q.type, q.survey_question, count(o.iid) as number_of_options
-            FROM $table_survey_question q
-            LEFT JOIN $table_survey_question_option o ON q.iid = o.question_id
-            WHERE survey_question NOT LIKE '%{{%' AND q.survey_id = '".$surveyId."'
-            GROUP BY q.iid ORDER BY q.sort ASC";
-        $result = Database::query($sql);
+        $headerRows = $em->createQueryBuilder()
+            ->select(
+                'q.iid AS question_id',
+                'q.type AS type',
+                'q.surveyQuestion AS survey_question',
+                'COUNT(o.iid) AS number_of_options'
+            )
+            ->from(CSurveyQuestion::class, 'q')
+            ->leftJoin(CSurveyQuestionOption::class, 'o', 'WITH', 'o.question = q')
+            ->where('q.surveyQuestion NOT LIKE :tagMarker')
+            ->andWhere('q.survey = :survey')
+            ->groupBy('q.iid')
+            ->orderBy('q.sort', 'ASC')
+            ->setParameter('tagMarker', '%{{%')
+            ->setParameter('survey', (int) $surveyId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $questions = [];
-        while ($row = Database::fetch_array($result)) {
+        foreach ($headerRows as $row) {
             if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
                 (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
             ) {
@@ -1123,18 +450,28 @@ class SurveyUtil
             }
         }
 
-        $sql = "SELECT
-                sq.iid question_id, sq.survey_id, sq.survey_question, sq.display, sq.sort, sq.type,
-                sqo.iid question_option_id, sqo.option_text, sqo.sort as option_sort
-            FROM $table_survey_question sq
-            LEFT JOIN $table_survey_question_option sqo ON sq.iid = sqo.question_id
-            WHERE survey_question NOT LIKE '%{{%' AND sq.survey_id = $surveyId
-            ORDER BY sq.sort ASC, sqo.sort ASC";
-        $result = Database::query($sql);
+        $optionRows = $em->createQueryBuilder()
+            ->select(
+                'sq.iid AS question_id',
+                'sq.type AS type',
+                'sqo.iid AS question_option_id',
+                'sqo.optionText AS option_text'
+            )
+            ->from(CSurveyQuestion::class, 'sq')
+            ->leftJoin(CSurveyQuestionOption::class, 'sqo', 'WITH', 'sqo.question = sq')
+            ->where('sq.surveyQuestion NOT LIKE :tagMarker')
+            ->andWhere('sq.survey = :survey')
+            ->orderBy('sq.sort', 'ASC')
+            ->addOrderBy('sqo.sort', 'ASC')
+            ->setParameter('tagMarker', '%{{%')
+            ->setParameter('survey', (int) $surveyId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
         $display_percentage_header = 1;
         $possible_answers = [];
-        while ($row = Database::fetch_array($result)) {
+        foreach ($optionRows as $row) {
             if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
                 (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
             ) {
@@ -1157,25 +494,34 @@ class SurveyUtil
         }
         $content .= '</tr>';
 
-        // User filter
-        $userCondition = '';
-        if (!empty($userId)) {
-            $userId = (int) $userId;
-            $userCondition = " AND user = $userId ";
-        }
-
         // Collect answers grouped by user
         $old_user = '';
         $answers_of_user = [];
-        $sql = "SELECT * FROM $table_survey_answer
-            WHERE survey_id = $surveyId
-              $userCondition
-              $sessionCondition
-              $lpItemCondition
-            ORDER BY iid, user ASC";
-        $result = Database::query($sql);
+        $answerQb = $em->createQueryBuilder()
+            ->select(
+                'IDENTITY(a.question) AS question_id',
+                'a.optionId AS option_id',
+                'a.value AS value',
+                'a.user AS user'
+            )
+            ->from(CSurveyAnswer::class, 'a')
+            ->where('a.survey = :survey')
+            ->orderBy('a.iid', 'ASC')
+            ->addOrderBy('a.user', 'ASC')
+            ->setParameter('survey', (int) $surveyId)
+        ;
+        // User filter
+        if (!empty($userId)) {
+            $answerQb->andWhere('a.user = :user')->setParameter('user', (int) $userId);
+        }
+        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
+            self::addSessionCondition($answerQb, 'a.sessionId', api_get_session_id());
+        }
+        if (!empty($lpItemId)) {
+            $answerQb->andWhere('a.lpItemId = :lpItem')->setParameter('lpItem', (int) $lpItemId);
+        }
         $i = 1;
-        while ($row = Database::fetch_array($result)) {
+        foreach ($answerQb->getQuery()->getArrayResult() as $row) {
             if ($old_user != $row['user'] && '' != $old_user) {
                 $userParam = (0 != $survey->getAnonymous()) ? $i : $old_user;
                 if (0 != $survey->getAnonymous()) { $i++; }
@@ -1309,362 +655,6 @@ class SurveyUtil
         return $content;
     }
 
-    /**
-     * Quite similar to display_complete_report(), returns an HTML string
-     * that can be used in a csv file.
-     *
-     * @param array $survey_data The basic survey data as initially obtained by SurveyManager::get_survey()
-     * @param int   $user_id     The ID of the user asking for the report
-     * @param bool  $compact     Whether to present the long (v marks with multiple columns per question) or compact
-     *                           (one column per question) answers format
-     *
-     * @todo consider merging this function with display_complete_report
-     *
-     * @throws Exception
-     *
-     * @return string The contents of a csv file
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version February 2007
-     */
-    public static function export_complete_report($survey_data, $user_id = 0, $compact = false)
-    {
-        $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
-
-        if (empty($surveyId)) {
-            return false;
-        }
-
-        $course = api_get_course_info();
-        $course_id = $course['real_id'];
-
-        $sessionCondition = '';
-        if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionId = api_get_session_id();
-            $sessionCondition = api_get_session_condition($sessionId);
-        }
-
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-
-        $translate = false;
-        if ('true' === api_get_setting('editor.translate_html')) {
-            $translate = true;
-        }
-
-        // The first column
-        $return = ';';
-
-        // Show extra fields blank space (enough for extra fields on next line)
-        $extra_user_fields = UserManager::get_extra_fields(
-            0,
-            0,
-            5,
-            'ASC',
-            false,
-            true
-        );
-
-        $num = count($extra_user_fields);
-        $return .= str_repeat(';', $num);
-
-        $sql = "SELECT
-                    questions.iid,
-                    questions.type,
-                    questions.survey_question,
-                    count(options.iid) as number_of_options
-				FROM $table_survey_question questions
-                LEFT JOIN $table_survey_question_option options
-				ON
-				  questions.iid = options.question_id
-				WHERE
-				    survey_question NOT LIKE '%{{%' AND
-				    questions.type <> 'pagebreak' AND
-				    questions.survey_id = $surveyId
-				GROUP BY questions.iid
-				ORDER BY questions.sort ASC";
-
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
-            if ($translate) {
-                $row['survey_question'] = api_get_filtered_multilingual_HTML_string($row['survey_question'], $course['language']);
-            }
-            // We show the questions if
-            // 1. there is no question filter and the export button has not been clicked
-            // 2. there is a quesiton filter but the question is selected for display
-            if (!(isset($_POST['submit_question_filter'])) ||
-                (isset($_POST['submit_question_filter']) &&
-                    is_array($_POST['questions_filter']) &&
-                    in_array($row['iid'], $_POST['questions_filter']))
-            ) {
-                if (0 == $row['number_of_options'] || $compact) {
-                    $return .= str_replace(
-                        "\r\n",
-                        '  ',
-                        api_html_entity_decode(strip_tags($row['survey_question']), ENT_QUOTES)
-                    )
-                    .';';
-                } else {
-                    for ($ii = 0; $ii < $row['number_of_options']; $ii++) {
-                        $return .= str_replace(
-                            "\r\n",
-                            '  ',
-                            api_html_entity_decode(strip_tags($row['survey_question']), ENT_QUOTES)
-                        )
-                        .';';
-                    }
-                }
-            }
-        }
-
-        $return .= "\n";
-        // Getting all the questions and options
-        $return .= ';';
-        // Show the fields names for user fields
-        if (!empty($extra_user_fields)) {
-            foreach ($extra_user_fields as &$field) {
-                if ($translate) {
-                    $field[3] = api_get_filtered_multilingual_HTML_string($field[3], $course['language']);
-                }
-                $return .= '"'
-                    .str_replace(
-                        "\r\n",
-                        '  ',
-                        api_html_entity_decode(strip_tags($field[3]), ENT_QUOTES)
-                    )
-                    .'";';
-            }
-        }
-
-        $sql = "SELECT DISTINCT
-		            survey_question.iid question_id,
-		            survey_question.survey_id,
-		            survey_question.survey_question,
-		            survey_question.display,
-		            survey_question.sort,
-		            survey_question.type,
-                    survey_question_option.iid question_option_id,
-                    survey_question_option.option_text,
-                    survey_question_option.sort as option_sort
-				FROM $table_survey_question survey_question
-				LEFT JOIN $table_survey_question_option survey_question_option
-				ON
-				    survey_question.iid = survey_question_option.question_id
-				WHERE
-				    survey_question NOT LIKE '%{{%' AND
-				    survey_question.type <> 'pagebreak' AND
-				    survey_question.survey_id = $surveyId
-				ORDER BY survey_question.sort ASC, survey_question_option.sort ASC";
-        $result = Database::query($sql);
-        $possible_answers = [];
-        $possible_answers_type = [];
-        while ($row = Database::fetch_array($result)) {
-            // We show the options if
-            // 1. there is no question filter and the export button has not been clicked
-            // 2. there is a question filter but the question is selected for display
-            if ($translate) {
-                $row['option_text'] = api_get_filtered_multilingual_HTML_string($row['option_text'], $course['language']);
-            }
-            if (!(isset($_POST['submit_question_filter'])) || (
-                is_array($_POST['questions_filter']) &&
-                in_array($row['question_id'], $_POST['questions_filter'])
-            )
-            ) {
-                $row['option_text'] = str_replace(["\r", "\n"], ['', ''], $row['option_text']);
-                if (!$compact) {
-                    $return .= api_html_entity_decode(strip_tags($row['option_text']), ENT_QUOTES).';';
-                    $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
-                } else {
-                    $possible_answers[$row['question_id']][$row['question_option_id']] = $row['option_text'];
-                }
-                $possible_answers_type[$row['question_id']] = $row['type'];
-            }
-        }
-
-        $return .= "\n";
-
-        // Getting all the answers of the users
-        $old_user = '';
-        $answers_of_user = [];
-        $sql = "SELECT * FROM $table_survey_answer
-		        WHERE
-		          survey_id = $surveyId
-		          $sessionCondition
-		          ";
-        if (0 != $user_id) {
-            $user_id = (int) $user_id;
-            $sql .= " AND user = $user_id ";
-        }
-        $sql .= ' ORDER BY user ASC ';
-
-        $questionIdList = array_keys($possible_answers_type);
-        $open_question_iterator = 1;
-        $result = Database::query($sql);
-        while ($row = Database::fetch_assoc($result)) {
-            if (!in_array($row['question_id'], $questionIdList)) {
-                continue;
-            }
-            if ($old_user != $row['user'] && '' != $old_user) {
-                $return .= self::export_complete_report_row(
-                    $survey_data,
-                    $possible_answers,
-                    $answers_of_user,
-                    $old_user,
-                    true,
-                    $compact
-                );
-                $answers_of_user = [];
-            }
-
-            if ('open' === $possible_answers_type[$row['question_id']] ||
-                'comment' === $possible_answers_type[$row['question_id']]
-            ) {
-                $temp_id = 'open'.$open_question_iterator;
-                $answers_of_user[$row['question_id']][$temp_id] = $row;
-                $open_question_iterator++;
-            } else {
-                $answers_of_user[$row['question_id']][$row['option_id']] = $row;
-            }
-            $old_user = $row['user'];
-        }
-
-        // This is to display the last user
-        $return .= self::export_complete_report_row(
-            $survey_data,
-            $possible_answers,
-            $answers_of_user,
-            $old_user,
-            true,
-            $compact
-        );
-
-        return \Chamilo\CoreBundle\Helpers\CsvFormulaEscaper::escapeDelimitedContent($return);
-    }
-
-    /**
-     * Add a line to the csv file.
-     *
-     * @param array $survey_data               Basic survey data (we're mostly interested in the 'anonymous' index)
-     * @param array $possible_options          Possible answers
-     * @param array $answers_of_user           User's answers
-     * @param mixed $user                      User ID or user details as string - Used as a string in the result
-     *                                         string
-     * @param bool  $display_extra_user_fields Whether to display user fields or not
-     * @param bool  $compact                   Whether to show answers as different column values (true) or one column
-     *                                         per option (false, default)
-     *
-     * @return string One line of the csv file
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version February 2007
-     */
-    public static function export_complete_report_row(
-        CSurvey $survey,
-        $possible_options,
-        $answers_of_user,
-        $user,
-        $display_extra_user_fields = false,
-        $compact = false
-    ) {
-        $return = '';
-        if (0 == $survey->getAnonymous()) {
-            if (0 !== intval($user)) {
-                $userInfo = api_get_user_info($user);
-                if (!empty($userInfo)) {
-                    $user_displayed = $userInfo['complete_name_with_username'];
-                } else {
-                    $user_displayed = '-';
-                }
-                $return .= $user_displayed.';';
-            } else {
-                $return .= $user.';';
-            }
-        } else {
-            $return .= '-;'; // The user column
-        }
-
-        if ($display_extra_user_fields) {
-            // Show user fields data, if any, for this user
-            $user_fields_values = UserManager::get_extra_user_data(
-                $user,
-                false,
-                false,
-                false,
-                true
-            );
-            foreach ($user_fields_values as &$value) {
-                $return .= '"'.str_replace('"', '""', api_html_entity_decode(strip_tags($value), ENT_QUOTES)).'";';
-            }
-        }
-
-        if (is_array($possible_options)) {
-            foreach ($possible_options as $question_id => $possible_option) {
-                if (is_array($possible_option) && count($possible_option) > 0) {
-                    foreach ($possible_option as $option_id => &$value) {
-                        // For each option of this question, look if it matches the user's answer
-                        $my_answer_of_user = !isset($answers_of_user[$question_id]) || isset($answers_of_user[$question_id]) && null == $answers_of_user[$question_id] ? [] : $answers_of_user[$question_id];
-                        $key = array_keys($my_answer_of_user);
-                        if (isset($key[0]) && 'open' === substr($key[0], 0, 4)) {
-                            // If this is an open type question (type starts by 'open'), take whatever answer is given
-                            $return .= '"'.
-                                str_replace(
-                                    '"',
-                                    '""',
-                                    api_html_entity_decode(
-                                        strip_tags(
-                                            $answers_of_user[$question_id][$key[0]]['option_id']
-                                        ),
-                                        ENT_QUOTES
-                                    )
-                                ).
-                                '";';
-                        } elseif (!empty($answers_of_user[$question_id][$option_id])) {
-                            //$return .= 'v';
-                            if ($compact) {
-                                // If we asked for a compact view, show only one column for the question
-                                // and fill it with the text of the selected option (i.e. "Yes") instead of an ID
-                                if (0 != $answers_of_user[$question_id][$option_id]['value']) {
-                                    $return .= $answers_of_user[$question_id][$option_id]['value'].";";
-                                } else {
-                                    $return .= '"'.
-                                        str_replace(
-                                            '"',
-                                            '""',
-                                            api_html_entity_decode(
-                                                strip_tags(
-                                                    $possible_option[$option_id]
-                                                ),
-                                                ENT_QUOTES
-                                            )
-                                        ).
-                                        '";';
-                                }
-                            } else {
-                                // If we don't want a compact view, show one column per possible option and mark a 'v'
-                                // or the defined value in the corresponding column if the user selected it
-                                if (0 != $answers_of_user[$question_id][$option_id]['value']) {
-                                    $return .= $answers_of_user[$question_id][$option_id]['value'].";";
-                                } else {
-                                    $return .= 'v;';
-                                }
-                            }
-                        } else {
-                            if (!$compact) {
-                                $return .= ';';
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        $return .= "\n";
-
-        return $return;
-    }
-
     public static function export_complete_report_xls(CSurvey $survey, $filename, $user_id = 0, $returnFile = false)
     {
         $course_id = api_get_course_int_id();
@@ -1674,6 +664,28 @@ class SurveyUtil
         if (empty($course_id) || empty($surveyId)) {
             return false;
         }
+
+        $list = self::buildCompleteReportXlsRows($survey, $user_id);
+
+        if (!$returnFile) {
+            Export::arrayToXls($list, $filename);
+
+            return null;
+        }
+
+        // The file is written in the archive folder under the given name: keep the name from leaving it.
+        $safeName = preg_replace('/[^A-Za-z0-9._-]/', '_', basename(preg_replace('/\.xlsx$/', '', (string) $filename)));
+
+        return Export::arrayToXls($list, $safeName, true);
+    }
+
+    /**
+     * Builds the rows of the xls export of the complete report: question line, option line, then one line per
+     * user (or per answer run).
+     */
+    private static function buildCompleteReportXlsRows(CSurvey $survey, int $user_id): array
+    {
+        $surveyId = $survey->getIid();
 
         // Show extra fields blank space (enough for extra fields on next line)
         // Show user fields section with a big th colspan that spans over all fields
@@ -1693,31 +705,31 @@ class SurveyUtil
 
         $display_extra_user_fields = true;
 
-        // Database table definitions
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $em = Container::getEntityManager();
 
         // First line (questions)
-        $sql = "SELECT
-                    questions.iid as question_id,
-                    questions.type,
-                    questions.survey_question,
-                    count(options.iid) as number_of_options
-				FROM $table_survey_question questions
-				LEFT JOIN $table_survey_question_option options
-                ON
-                  questions.iid = options.question_id
-				WHERE
-				    survey_question NOT LIKE '%{{%' AND
-				    questions.type <> 'pagebreak' AND
-				    questions.survey_id = $surveyId
-				GROUP BY questions.iid
-				ORDER BY questions.sort ASC";
-        $result = Database::query($sql);
+        $questionRows = $em->createQueryBuilder()
+            ->select(
+                'questions.iid AS question_id',
+                'questions.type AS type',
+                'questions.surveyQuestion AS survey_question',
+                'COUNT(options.iid) AS number_of_options'
+            )
+            ->from(CSurveyQuestion::class, 'questions')
+            ->leftJoin(CSurveyQuestionOption::class, 'options', 'WITH', 'options.question = questions')
+            ->where('questions.surveyQuestion NOT LIKE :tagMarker')
+            ->andWhere("questions.type <> 'pagebreak'")
+            ->andWhere('questions.survey = :survey')
+            ->groupBy('questions.iid')
+            ->orderBy('questions.sort', 'ASC')
+            ->setParameter('tagMarker', '%{{%')
+            ->setParameter('survey', (int) $surveyId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $line = 1;
         $column = 1;
-        while ($row = Database::fetch_array($result)) {
+        foreach ($questionRows as $row) {
             // We show the questions if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
@@ -1758,29 +770,33 @@ class SurveyUtil
         }
 
         // Getting all the questions and options (second line)
-        $sql = "SELECT
-                    survey_question.iid question_id,
-                    survey_question.survey_id,
-                    survey_question.survey_question,
-                    survey_question.display,
-                    survey_question.sort,
-                    survey_question.type,
-                    survey_question_option.iid question_option_id,
-                    survey_question_option.option_text,
-                    survey_question_option.sort as option_sort
-				FROM $table_survey_question survey_question
-				LEFT JOIN $table_survey_question_option survey_question_option
-				ON
-				    survey_question.iid = survey_question_option.question_id
-				WHERE
-				    survey_question NOT LIKE '%{{%' AND
-				    survey_question.type <> 'pagebreak' AND
-				    survey_question.survey_id = $surveyId
-				ORDER BY survey_question.sort ASC, survey_question_option.sort ASC";
-        $result = Database::query($sql);
+        $optionRows = $em->createQueryBuilder()
+            ->select(
+                'survey_question.iid AS question_id',
+                'survey_question.type AS type',
+                'survey_question_option.iid AS question_option_id',
+                'survey_question_option.optionText AS option_text'
+            )
+            ->from(CSurveyQuestion::class, 'survey_question')
+            ->leftJoin(
+                CSurveyQuestionOption::class,
+                'survey_question_option',
+                'WITH',
+                'survey_question_option.question = survey_question'
+            )
+            ->where('survey_question.surveyQuestion NOT LIKE :tagMarker')
+            ->andWhere("survey_question.type <> 'pagebreak'")
+            ->andWhere('survey_question.survey = :survey')
+            ->orderBy('survey_question.sort', 'ASC')
+            ->addOrderBy('survey_question_option.sort', 'ASC')
+            ->setParameter('tagMarker', '%{{%')
+            ->setParameter('survey', (int) $surveyId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $possible_answers = [];
         $possible_answers_type = [];
-        while ($row = Database::fetch_array($result)) {
+        foreach ($optionRows as $row) {
             // We show the options if
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
@@ -1806,16 +822,28 @@ class SurveyUtil
         $column = 0;
         $old_user = '';
         $answers_of_user = [];
-        $sql = "SELECT * FROM $table_survey_answer
-                WHERE survey_id = $surveyId";
+        $answerQb = $em->createQueryBuilder()
+            ->select(
+                'IDENTITY(a.question) AS question_id',
+                'a.optionId AS option_id',
+                'a.value AS value',
+                'a.user AS user'
+            )
+            ->from(CSurveyAnswer::class, 'a')
+            ->where('a.survey = :survey')
+            ->orderBy('a.user', 'ASC')
+            ->setParameter('survey', (int) $surveyId)
+        ;
         if (0 != $user_id) {
-            $sql .= " AND user='".$user_id."' ";
+            $answerQb->andWhere('a.user = :user')->setParameter('user', (string) $user_id);
         }
-        $sql .= ' ORDER BY user ASC';
 
         $open_question_iterator = 1;
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        foreach ($answerQb->getQuery()->getArrayResult() as $row) {
+            if (!isset($possible_answers_type[$row['question_id']])) {
+                // The question was left out by the question filter: its answers are not exported.
+                continue;
+            }
             if ($old_user != $row['user'] && '' != $old_user) {
                 $return = self::export_complete_report_row_xls(
                     $survey,
@@ -1858,9 +886,7 @@ class SurveyUtil
             }
         }
 
-        Export::arrayToXls($list, $filename);
-
-        return null;
+        return $list;
     }
 
     /**
@@ -2133,29 +1159,23 @@ class SurveyUtil
      */
     public static function get_answers_of_question_by_user($survey_id, $question_id, $lpItemId = 0)
     {
-        $course_id = api_get_course_int_id();
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-
-        $sessionCondition = '';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('a.user AS user', 'a.optionId AS option_id', 'a.value AS value')
+            ->from(CSurveyAnswer::class, 'a')
+            ->where('a.survey = :survey')
+            ->andWhere('a.question = :question')
+            ->orderBy('a.user', 'ASC')
+            ->setParameter('survey', (int) $survey_id)
+            ->setParameter('question', (int) $question_id)
+        ;
         if (true === api_get_configuration_value('show_surveys_base_in_sessions')) {
-            $sessionId = api_get_session_id();
-            $sessionCondition = api_get_session_condition($sessionId);
+            self::addSessionCondition($qb, 'a.sessionId', api_get_session_id());
         }
-        $lpItemCondition = '';
         if (!empty($lpItemId)) {
-            $lpItemCondition = " AND c_lp_item_id = $lpItemId";
+            $qb->andWhere('a.lpItemId = :lpItem')->setParameter('lpItem', (int) $lpItemId);
         }
-
-        $sql = "SELECT * FROM $table_survey_answer
-                WHERE
-                  survey_id='".intval($survey_id)."' AND
-                  question_id='".intval($question_id)."'
-                  $sessionCondition
-                  $lpItemCondition
-                ORDER BY USER ASC";
-        $result = Database::query($sql);
         $return = [];
-        while ($row = Database::fetch_array($result)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
             if (0 == $row['value']) {
                 $return[$row['user']][] = $row['option_id'];
             } else {
@@ -2465,25 +1485,32 @@ class SurveyUtil
      */
     public static function invitationExists($courseId, $sessionId, $groupId, $surveyId)
     {
-        $table = Database::get_course_table(TABLE_SURVEY_INVITATION);
         $courseId = (int) $courseId;
         $sessionId = (int) $sessionId;
         $groupId = (int) $groupId;
         $surveyId = (int) $surveyId;
+
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('i.iid AS iid')
+            ->from(CSurveyInvitation::class, 'i')
+            ->where('i.course = :course')
+            ->andWhere('i.survey = :survey')
+            ->setParameter('course', $courseId)
+            ->setParameter('survey', $surveyId)
+        ;
         // The base course and plain users are stored as NULL, not 0 (foreign keys forbid 0).
-        $sessionCondition = $sessionId > 0 ? "session_id = $sessionId" : '(session_id IS NULL OR session_id = 0)';
-        $groupCondition = $groupId > 0 ? "group_id = $groupId" : '(group_id IS NULL OR group_id = 0)';
+        if ($sessionId > 0) {
+            $qb->andWhere('i.session = :session')->setParameter('session', $sessionId);
+        } else {
+            $qb->andWhere('(i.session IS NULL OR i.session = 0)');
+        }
+        if ($groupId > 0) {
+            $qb->andWhere('i.group = :group')->setParameter('group', $groupId);
+        } else {
+            $qb->andWhere('(i.group IS NULL OR i.group = 0)');
+        }
 
-        $sql = "SELECT iid FROM $table
-                WHERE
-                    c_id = $courseId AND
-                    ".$sessionCondition." AND
-                    ".$groupCondition." AND
-                    survey_id = $surveyId
-                ";
-        $result = Database::query($sql);
-
-        return Database::num_rows($result);
+        return count($qb->getQuery()->getArrayResult());
     }
 
     /**
@@ -2563,32 +1590,30 @@ class SurveyUtil
 
         $courseId = $courseId ?: api_get_course_int_id();
         $sessionId = $sessionId ?: api_get_session_id();
-        $sessionCondition = api_get_session_condition($sessionId);
-
-        // Database table definition
-        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
+        $em = Container::getEntityManager();
 
         // Counting the number of people that are invited
-        $sql = "SELECT count(user_id) as total
-                FROM $table_survey_invitation
-		        WHERE
-		            c_id = $courseId AND
-		            survey_id = '".$surveyId."' AND
-		            user_id <> ''
-		            $sessionCondition
-                ";
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-        $total_invited = $row['total'];
+        $qb = $em->createQueryBuilder()
+            ->select('COUNT(i.user)')
+            ->from(CSurveyInvitation::class, 'i')
+            ->where('i.course = :course')
+            ->andWhere('i.survey = :survey')
+            ->setParameter('course', $courseId)
+            ->setParameter('survey', (int) $surveyId)
+        ;
+        self::addSessionCondition($qb, 'i.session', $sessionId);
+        $total_invited = (int) $qb->getQuery()->getSingleScalarResult();
 
         // Updating the field in the survey table
-        $sql = "UPDATE $table_survey
-		        SET invited = '".Database::escape_string($total_invited)."'
-		        WHERE
-		            iid = '".$surveyId."'
-                ";
-        Database::query($sql);
+        $em->createQueryBuilder()
+            ->update(CSurvey::class, 's')
+            ->set('s.invited', ':invited')
+            ->where('s.iid = :survey')
+            ->setParameter('invited', $total_invited)
+            ->setParameter('survey', (int) $surveyId)
+            ->getQuery()
+            ->execute()
+        ;
 
         return $total_invited;
     }
@@ -2617,27 +1642,25 @@ class SurveyUtil
             $session_id = api_get_session_id();
         }
 
-        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $table_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sessionCondition = api_get_session_condition($session_id);
+        $em = Container::getEntityManager();
 
         // Selecting all the invitations of this survey AND the additional emailaddresses (the left join)
-        $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-        $sql = "SELECT user_id, group_id
-				FROM $table_survey_invitation as table_invitation
-				WHERE
-				    table_invitation.c_id = $course_id AND
-                    survey_id = ".$surveyId."
-                    $sessionCondition
-                ";
+        $qb = $em->createQueryBuilder()
+            ->select('IDENTITY(i.user) AS user_id', 'IDENTITY(i.group) AS group_id')
+            ->from(CSurveyInvitation::class, 'i')
+            ->where('i.course = :course')
+            ->andWhere('i.survey = :survey')
+            ->setParameter('course', (int) $course_id)
+            ->setParameter('survey', (int) $surveyId)
+        ;
+        self::addSessionCondition($qb, 'i.session', (int) $session_id);
 
         $defaults = [];
         $defaults['course_users'] = [];
         $defaults['additional_users'] = ''; // Textarea
         $defaults['users'] = []; // user and groups
 
-        $result = Database::query($sql);
-        while ($row = Database::fetch_array($result)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
             if (is_numeric($row['user_id'])) {
                 $defaults['course_users'][] = $row['user_id'];
                 $defaults['users'][] = 'USER:'.$row['user_id'];
@@ -2653,11 +1676,19 @@ class SurveyUtil
         }
 
         if (!empty($defaults['course_users'])) {
-            $user_ids = implode("','", $defaults['course_users']);
-            $sql = "SELECT id FROM $table_user WHERE id IN ('$user_ids') $order_clause";
-            $result = Database::query($sql);
+            $userQb = $em->createQueryBuilder()
+                ->select('u.id AS id')
+                ->from(User::class, 'u')
+                ->where('u.id IN (:ids)')
+                ->setParameter('ids', array_map('intval', $defaults['course_users']))
+            ;
+            if (api_sort_by_first_name()) {
+                $userQb->orderBy('u.firstname', 'ASC')->addOrderBy('u.lastname', 'ASC');
+            } else {
+                $userQb->orderBy('u.lastname', 'ASC')->addOrderBy('u.firstname', 'ASC');
+            }
             $fixed_users = [];
-            while ($row = Database::fetch_array($result)) {
+            foreach ($userQb->getQuery()->getArrayResult() as $row) {
                 $fixed_users[] = $row['id'];
             }
             $defaults['course_users'] = $fixed_users;
@@ -2685,17 +1716,23 @@ class SurveyUtil
     {
         $course_id = api_get_course_int_id();
         $sessionId = api_get_session_id();
-        // Database table definition
-        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-
-        $sql = "SELECT * FROM $table_survey_invitation
-		        WHERE
-		            c_id = $course_id AND
-                    survey_id = '".(int) $surveyId."'".
-                    api_get_session_condition($sessionId);
-        $result = Database::query($sql);
+        // Raw table rows (the callers read the snake_case columns): DBAL keeps their shape and string dates.
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('survey_invitation.*')
+            ->from(Database::get_course_table(TABLE_SURVEY_INVITATION), 'survey_invitation')
+            ->where('survey_invitation.c_id = :course')
+            ->andWhere('survey_invitation.survey_id = :survey')
+            ->setParameter('course', (int) $course_id)
+            ->setParameter('survey', (int) $surveyId)
+        ;
+        if (empty($sessionId)) {
+            $qb->andWhere('(survey_invitation.session_id = :session OR survey_invitation.session_id IS NULL)');
+        } else {
+            $qb->andWhere('survey_invitation.session_id = :session');
+        }
+        $qb->setParameter('session', (int) $sessionId);
         $return = [];
-        while ($row = Database::fetch_array($result)) {
+        foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
             $return[$row['user_id']] = $row;
         }
 
@@ -3567,42 +2604,40 @@ class SurveyUtil
         $sessionId = api_get_session_id();
         $mandatoryAllowed = ('true' === api_get_setting('survey.allow_mandatory_survey'));
 
-        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-        $table_survey = Database::get_course_table(TABLE_SURVEY);
-
         /** @var \DateTime $now */
         $now = api_get_utc_datetime(null, false, true);
         $filterDate = $now->format('Y-m-d H:i');
-        $sessionCondition = api_get_session_condition($sessionId, true, false, 'survey_invitation.session_id');
 
-        $sql = "SELECT
-                    survey_invitation.answered,
-                    survey_invitation.invitation_code,
-                    survey_invitation.session_id,
-                    survey.title,
-                    survey.visible_results,
-                    survey.iid,
-                    survey.anonymous
-                FROM $table_survey survey
-                INNER JOIN $table_survey_invitation survey_invitation
-                ON (
-                    survey.iid = survey_invitation.survey_id
-                )
-                WHERE
-                    survey_invitation.user_id = $user_id AND
-                    survey.avail_from <= '$filterDate' AND
-                    survey.avail_till >= '$filterDate' AND
-                    survey_invitation.c_id = $course_id
-                    $sessionCondition
-                ORDER BY survey.title ASC";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'i.answered AS answered',
+                'i.invitationCode AS invitation_code',
+                'IDENTITY(i.session) AS session_id',
+                's.title AS title',
+                's.visibleResults AS visible_results',
+                's.iid AS iid',
+                's.anonymous AS anonymous'
+            )
+            ->from(CSurvey::class, 's')
+            ->innerJoin(CSurveyInvitation::class, 'i', 'WITH', 'i.survey = s')
+            ->where('i.user = :user')
+            ->andWhere('s.availFrom <= :filterDate')
+            ->andWhere('s.availTill >= :filterDate')
+            ->andWhere('i.course = :course')
+            ->orderBy('s.title', 'ASC')
+            ->setParameter('user', $user_id)
+            ->setParameter('filterDate', $filterDate)
+            ->setParameter('course', (int) $course_id)
+        ;
+        self::addSessionCondition($qb, 'i.session', (int) $sessionId);
 
-        $result = Database::query($sql);
+        $rows = $qb->getQuery()->getArrayResult();
         $efv = new ExtraFieldValue('survey');
         $surveyIds = [];
         $repo = Container::getSurveyRepository();
         $items = [];
 
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             $surveyId = (int) $row['iid'];
 
             if (in_array($surveyId, $surveyIds, true)) {
@@ -4079,20 +3114,20 @@ class SurveyUtil
      */
     public static function checkIfSurveyHasAnswers(int $surveyId): bool
     {
-        $tableSurveyAnswer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-
         if (empty($surveyId)) {
             return false;
         }
 
-        $sql = "SELECT * FROM $tableSurveyAnswer
-                WHERE
-                    survey_id = '".$surveyId."'
-                ORDER BY iid, user ASC";
-        $result = Database::query($sql);
-        $response = Database::affected_rows($result);
+        $count = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(a.iid)')
+            ->from(CSurveyAnswer::class, 'a')
+            ->where('a.survey = :survey')
+            ->setParameter('survey', $surveyId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-        return $response > 0;
+        return (int) $count > 0;
     }
 
     /**
@@ -4104,25 +3139,32 @@ class SurveyUtil
      */
     public static function getSentInvitations($surveyId, $courseId, $sessionId = 0)
     {
-        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
-        $tblSurveyInvitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
-
-        $sessionCondition = api_get_session_condition($sessionId);
         $surveyId = (int) $surveyId;
         $courseId = (int) $courseId;
 
-        $sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email
-                FROM $tblSurveyInvitation survey_invitation
-                LEFT JOIN $tblUser user
-                ON (survey_invitation.user_id = user.id AND survey_invitation.c_id = $courseId)
-                WHERE
-                    survey_invitation.survey_id = $surveyId AND
-                    survey_invitation.c_id = $courseId
-                    $sessionCondition";
+        // Raw table rows (the callers read the snake_case columns): DBAL keeps their shape and string dates.
+        $qb = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('survey_invitation.*', 'user.firstname', 'user.lastname', 'user.email')
+            ->from(Database::get_course_table(TABLE_SURVEY_INVITATION), 'survey_invitation')
+            ->leftJoin(
+                'survey_invitation',
+                Database::get_main_table(TABLE_MAIN_USER),
+                'user',
+                'survey_invitation.user_id = user.id AND survey_invitation.c_id = :course'
+            )
+            ->where('survey_invitation.survey_id = :survey')
+            ->andWhere('survey_invitation.c_id = :course')
+            ->setParameter('course', $courseId)
+            ->setParameter('survey', $surveyId)
+        ;
+        if (empty($sessionId)) {
+            $qb->andWhere('(survey_invitation.session_id = :session OR survey_invitation.session_id IS NULL)');
+        } else {
+            $qb->andWhere('survey_invitation.session_id = :session');
+        }
+        $qb->setParameter('session', (int) $sessionId);
 
-        $query = Database::query($sql);
-
-        return Database::store_result($query);
+        return $qb->executeQuery()->fetchAllAssociative();
     }
 
     /**
@@ -4216,5 +3258,21 @@ class SurveyUtil
             $route,
             http_build_query($params)
         );
+    }
+
+    /**
+     * Restricts a query to one session the way api_get_session_condition() did: the base course (session 0)
+     * also matches rows stored with a NULL session.
+     *
+     * @param string $field DQL path of the session, e.g. 'a.sessionId' or 'i.session'
+     */
+    private static function addSessionCondition(QueryBuilder $qb, string $field, int $sessionId): void
+    {
+        if (empty($sessionId)) {
+            $qb->andWhere("($field = :surveySessionId OR $field IS NULL)");
+        } else {
+            $qb->andWhere("$field = :surveySessionId");
+        }
+        $qb->setParameter('surveySessionId', $sessionId);
     }
 }

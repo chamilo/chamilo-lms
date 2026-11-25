@@ -1,10 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Chat as ChatEntity;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Helpers\AiFeatureAccessHelper;
 use ChamiloSession as Session;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Class Chat.
@@ -257,27 +259,23 @@ class Chat extends Model
             return [];
         }
 
-        $orderBy = Database::escape_string($orderBy);
-        if (empty($orderBy)) {
-            $orderBy = 'ORDER BY id ASC';
+        // Only the two orders a caller can mean are honoured: the clause used to be spliced into the SQL text.
+        $direction = 'ASC';
+        if (1 === preg_match('/^\s*ORDER\s+BY\s+id\s+DESC\s*$/i', (string) $orderBy)) {
+            $direction = 'DESC';
         }
 
-        $sql = "SELECT * FROM ".$this->table."
-                WHERE
-                    (
-                        to_user = $toUserId AND
-                        from_user = $fromUserId
-                    )
-                    OR
-                    (
-                        from_user = $toUserId AND
-                        to_user =  $fromUserId
-                    )
-                $orderBy
-                LIMIT $start, $end
-                ";
-        $result = Database::query($sql);
-        $rows = Database::store_result($result);
+        $rows = $this->chatRowsQueryBuilder()
+            ->where('(c.toUser = :toUserId AND c.fromUser = :fromUserId) OR (c.fromUser = :toUserId AND c.toUser = :fromUserId)')
+            ->orderBy('c.id', $direction)
+            ->setFirstResult($start)
+            ->setMaxResults($end)
+            ->setParameter('toUserId', $toUserId)
+            ->setParameter('fromUserId', $fromUserId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        $rows = array_map([$this, 'toLegacyChatRow'], $rows);
 
         $fromUserInfo = $this->getUserInfoSafe((int) $fromUserId);
         $toUserInfo   = $this->getUserInfoSafe((int) $toUserId);
@@ -330,14 +328,18 @@ class Chat extends Model
             }
         }
 
-        $sql = "SELECT * FROM ".$this->table."
-                WHERE
-                    to_user = '".$currentUserId."' AND recd = 0
-                ORDER BY id ASC";
-        $result = Database::query($sql);
+        $rows = $this->chatRowsQueryBuilder()
+            ->where('c.toUser = :currentUserId')
+            ->andWhere('c.recd = 0')
+            ->orderBy('c.id', 'ASC')
+            ->setParameter('currentUserId', (int) $currentUserId)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
         $chatList = [];
-        while ($chat = Database::fetch_assoc($result)) {
+        foreach ($rows as $chat) {
+            $chat = $this->toLegacyChatRow($chat);
             $chatList[(int) $chat['from_user']][] = $chat;
         }
 
@@ -362,10 +364,15 @@ class Chat extends Model
 
         Session::write('chatHistory', $chatHistory);
 
-        $sql = "UPDATE ".$this->table."
-                SET recd = 1
-                WHERE to_user = $currentUserId AND recd = 0";
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(ChatEntity::class, 'c')
+            ->set('c.recd', 1)
+            ->where('c.toUser = :currentUserId')
+            ->andWhere('c.recd = 0')
+            ->setParameter('currentUserId', (int) $currentUserId)
+            ->getQuery()
+            ->execute()
+        ;
 
         echo json_encode(['items' => $chatHistory]);
     }
@@ -586,6 +593,8 @@ class Chat extends Model
               AND id       <= {$lastSeenMessageId}
               AND recd < 2";
 
+        // TODO(owner): broken, Database::affected_rows() needs the Result argument (ArgumentCountError after the UPDATE
+        // ran); caller ChatController. Left raw, not migrated.
         $res = Database::query($sql);
         if (!$res) {
             return 0;
@@ -607,20 +616,21 @@ class Chat extends Model
             return [];
         }
 
-        $tbl = Database::get_main_table(TABLE_MAIN_CHAT);
-
         // Index-friendly with (to_user, recd, from_user) or (to_user, recd, id)
-        $sql = "SELECT from_user, COUNT(*) AS c
-            FROM {$tbl}
-            WHERE to_user = {$uid}
-              AND recd < 2
-            GROUP BY from_user";
-        $res = Database::query($sql);
-        $rows = Database::store_result($res);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('c.fromUser AS from_user', 'COUNT(c.id) AS cnt')
+            ->from(ChatEntity::class, 'c')
+            ->where('c.toUser = :uid')
+            ->andWhere('c.recd < 2')
+            ->groupBy('c.fromUser')
+            ->setParameter('uid', $uid)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
         $map = [];
         foreach ($rows as $r) {
-            $map[(int) $r['from_user']] = (int) ($r['c'] ?? 0);
+            $map[(int) $r['from_user']] = (int) ($r['cnt'] ?? 0);
         }
 
         return $map;
@@ -635,24 +645,30 @@ class Chat extends Model
         $uid = (int) $userId;
         $sinceId = max(0, (int) $sinceId);
 
-        $tbl = Database::get_main_table(TABLE_MAIN_CHAT);
+        $entityManager = Container::getEntityManager();
 
         // Latest incoming id after sinceId
-        $sqlLast = "SELECT MAX(id) AS last_id
-            FROM {$tbl}
-            WHERE to_user = {$uid} AND id > {$sinceId}";
-        $resLast = Database::query($sqlLast);
-        $rowLast = Database::fetch_array($resLast) ?: ['last_id' => 0];
-        $lastId = (int) ($rowLast['last_id'] ?? 0);
+        $lastId = (int) $entityManager->createQueryBuilder()
+            ->select('MAX(c.id)')
+            ->from(ChatEntity::class, 'c')
+            ->where('c.toUser = :uid')
+            ->andWhere('c.id > :sinceId')
+            ->setParameter('uid', $uid)
+            ->setParameter('sinceId', $sinceId)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
         // Unread total (independent from sinceId, so badges remain accurate)
-        $sqlUnread = "SELECT COUNT(*) AS unread
-            FROM {$tbl}
-            WHERE to_user = {$uid}
-              AND recd < 2";
-        $resUnread = Database::query($sqlUnread);
-        $rowUnread = Database::fetch_array($resUnread) ?: ['unread' => 0];
-        $unreadTotal = (int) ($rowUnread['unread'] ?? 0);
+        $unreadTotal = (int) $entityManager->createQueryBuilder()
+            ->select('COUNT(c.id)')
+            ->from(ChatEntity::class, 'c')
+            ->where('c.toUser = :uid')
+            ->andWhere('c.recd < 2')
+            ->setParameter('uid', $uid)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
         // Unread per peer (for per-contact dots)
         $unreadByPeer = $this->getUnreadByPeer($uid);
@@ -676,26 +692,34 @@ class Chat extends Model
         $pid = (int) $peerId;
         $sinceId = max(0, (int) $sinceId);
 
-        $tbl = Database::get_main_table(TABLE_MAIN_CHAT);
+        $entityManager = Container::getEntityManager();
 
-        $sql = "SELECT id
-            FROM {$tbl}
-            WHERE to_user = {$uid} AND from_user = {$pid}
-            ORDER BY id DESC
-            LIMIT 1";
-        $res = Database::query($sql);
-        $row = Database::fetch_assoc($res) ?: ['id' => 0];
-        $last = (int) ($row['id'] ?? 0);
+        $lastRows = $entityManager->createQueryBuilder()
+            ->select('c.id AS id')
+            ->from(ChatEntity::class, 'c')
+            ->where('c.toUser = :uid')
+            ->andWhere('c.fromUser = :pid')
+            ->orderBy('c.id', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('uid', $uid)
+            ->setParameter('pid', $pid)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        $last = (int) ($lastRows[0]['id'] ?? 0);
 
         // Optional: unread from this peer only (cheap)
-        $sqlUnread = "SELECT COUNT(*) AS unread
-            FROM {$tbl}
-            WHERE to_user = {$uid}
-              AND from_user = {$pid}
-              AND recd < 2";
-        $resUnread = Database::query($sqlUnread);
-        $rowUnread = Database::fetch_array($resUnread) ?: ['unread' => 0];
-        $unreadPeer = (int) ($rowUnread['unread'] ?? 0);
+        $unreadPeer = (int) $entityManager->createQueryBuilder()
+            ->select('COUNT(c.id)')
+            ->from(ChatEntity::class, 'c')
+            ->where('c.toUser = :uid')
+            ->andWhere('c.fromUser = :pid')
+            ->andWhere('c.recd < 2')
+            ->setParameter('uid', $uid)
+            ->setParameter('pid', $pid)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
         return [
             'has_new'    => $last > $sinceId,
@@ -712,7 +736,6 @@ class Chat extends Model
      */
     public function getIncomingSince(int $peerId, int $meId, int $sinceId = 0): array
     {
-        $tbl = Database::get_main_table(TABLE_MAIN_CHAT);
         $pid = (int) $peerId;
         $uid = (int) $meId;
         $sid = max(0, (int) $sinceId);
@@ -721,15 +744,19 @@ class Chat extends Model
             return [];
         }
 
-        $sql = "SELECT id, from_user, to_user, message, sent, recd
-            FROM {$tbl}
-            WHERE from_user = {$pid}
-              AND to_user   = {$uid}
-              AND id       > {$sid}
-            ORDER BY id ASC
-            LIMIT 200";
-        $res = Database::query($sql);
-        $rows = Database::store_result($res);
+        $rows = $this->chatRowsQueryBuilder()
+            ->where('c.fromUser = :pid')
+            ->andWhere('c.toUser = :uid')
+            ->andWhere('c.id > :sid')
+            ->orderBy('c.id', 'ASC')
+            ->setMaxResults(200)
+            ->setParameter('pid', $pid)
+            ->setParameter('uid', $uid)
+            ->setParameter('sid', $sid)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        $rows = array_map([$this, 'toLegacyChatRow'], $rows);
 
         if (empty($rows)) {
             return [];
@@ -756,11 +783,49 @@ class Chat extends Model
         }
 
         if (!empty($ids)) {
-            $idsCsv = implode(',', array_map('intval', $ids));
-            Database::query("UPDATE {$tbl} SET recd = GREATEST(recd, 1) WHERE id IN ({$idsCsv})");
+            // GREATEST(recd, 1) written as "raise 0 to 1": a message already read (2) stays read.
+            Container::getEntityManager()->createQueryBuilder()
+                ->update(ChatEntity::class, 'c')
+                ->set('c.recd', 1)
+                ->where('c.id IN (:ids)')
+                ->andWhere('c.recd < 1')
+                ->setParameter('ids', $ids)
+                ->getQuery()
+                ->execute()
+            ;
         }
 
         return $items;
+    }
+
+    /**
+     * Every column of the chat table, aliased to the snake_case keys the legacy readers use.
+     */
+    private function chatRowsQueryBuilder(): QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'c.id AS id',
+                'c.fromUser AS from_user',
+                'c.toUser AS to_user',
+                'c.message AS message',
+                'c.sent AS sent',
+                'c.recd AS recd'
+            )
+            ->from(ChatEntity::class, 'c')
+        ;
+    }
+
+    /**
+     * The raw row carried the date as a 'Y-m-d H:i:s' string.
+     */
+    private function toLegacyChatRow(array $row): array
+    {
+        if ($row['sent'] instanceof DateTimeInterface) {
+            $row['sent'] = $row['sent']->format('Y-m-d H:i:s');
+        }
+
+        return $row;
     }
 
     private function getAiUserInfo(): array

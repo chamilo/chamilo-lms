@@ -1,15 +1,16 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use Chamilo\LtiBundle\Entity\LineItem;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\TransactionRequiredException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
@@ -22,17 +23,7 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
 
     public function validate()
     {
-        if (!$this->course) {
-            throw new BadRequestHttpException('Course not found.');
-        }
-
-        if (!$this->tool) {
-            throw new BadRequestHttpException('Tool not found.');
-        }
-
-        if ($this->tool->getCourse()->getId() !== $this->course->getId()) {
-            throw new AccessDeniedHttpException('Tool not found in course.');
-        }
+        $this->validateToolInCourse();
 
         $isMediaTypeAllowed = in_array(
             $this->request->server->get('HTTP_ACCEPT'),
@@ -46,15 +37,7 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
             throw new UnsupportedMediaTypeHttpException('Unsupported media type.');
         }
 
-        $parentTool = $this->tool->getParent();
-
-        if ($parentTool) {
-            $advServices = $parentTool->getAdvantageServices();
-
-            if (LtiAssignmentGradesService::AGS_NONE === $advServices['ags']) {
-                throw new AccessDeniedHttpException('Assigment and grade service is not enabled for this tool.');
-            }
-        }
+        $this->validateAssignmentGradesServiceEnabled();
     }
 
     /**
@@ -67,7 +50,7 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
     {
         switch ($this->request->getMethod()) {
             case Request::METHOD_POST:
-                if (LtiAssignmentGradesService::AGS_FULL !== $this->tool->getAdvantageServices()['ags']) {
+                if (LtiAssignmentGradesService::AGS_FULL !== ($this->tool->getToolParent() ?? $this->tool)->getAdvantageServices()['ags']) {
                     throw new MethodNotAllowedHttpException([Request::METHOD_GET]);
                 }
 
@@ -99,18 +82,21 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
      */
     public function createLineItem(array $data): LineItem
     {
-        $caterories = Category::load(null, null, $this->course->getCode());
+        $categories = Category::load(null, null, $this->course->getId(), null, null, 0);
+
+        if (empty($categories)) {
+            throw new ConflictHttpException('The course has no gradebook.');
+        }
+
         /** @var Category $gradebookCategory */
-        $gradebookCategory = $caterories[0];
+        $gradebookCategory = $categories[0];
 
         $em = Database::getManager();
 
-        $userId = 1;
-
         $eval = new Evaluation();
-        $eval->set_user_id($userId);
+        $eval->set_user_id(api_get_user_id() ?: 1);
         $eval->set_category_id($gradebookCategory->get_id());
-        $eval->set_course_code($this->tool->getCourse()->getCode());
+        $eval->setCourseId($this->course->getId());
         $eval->set_name($data['label']);
         $eval->set_description(null);
         $eval->set_weight(
@@ -120,14 +106,14 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
         $eval->set_visible(1);
         $eval->add();
 
-        $evaluation = $em->find('Chamilo\CoreBundle\Entity\GradebookEvaluation', $eval->get_id());
+        $evaluation = $em->find(GradebookEvaluation::class, $eval->get_id());
 
         $lineItem = new LineItem();
         $lineItem
             ->setTool($this->tool)
             ->setEvaluation($evaluation)
-            ->setResourceId(!empty($data['resourceId']) ? $data['resourceId'] : null)
-            ->setTag(!empty($data['tag']) ? $data['tag'] : null);
+            ->setResourceId(!empty($data['resourceId']) ? (string) $data['resourceId'] : null)
+            ->setTag(!empty($data['tag']) ? (string) $data['tag'] : null);
 
         if (!empty($data['startDateTime'])) {
             $startDate = new DateTime($data['startDateTime']);
@@ -174,46 +160,40 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
 
     private function processGet()
     {
-        $resourceLinkId = $this->request->query->get('resource_link_id');
-        $resourceId = $this->request->query->get('resource_id');
-        $tag = $this->request->query->get('tag');
-        $limit = $this->request->query->get('limit');
-        $page = $this->request->query->get('page');
+        $resourceLinkId = (int) $this->request->query->get('resource_link_id');
+        $resourceId = (string) $this->request->query->get('resource_id');
+        $tag = (string) $this->request->query->get('tag');
+        $limit = (int) $this->request->query->get('limit');
+        $page = (int) $this->request->query->get('page');
 
-        $lineItems = $this->tool->getLineItems($resourceLinkId, $resourceId, $tag, $limit, $page);
+        $courseId = $this->course->getId();
+        $lineItems = $this->tool->getLineItems($resourceLinkId, $resourceId, $tag, $limit, $page, $courseId);
 
-        $this->setLinkHeaderToGet($lineItems, $resourceLinkId, $resourceId, $tag, $limit, $page);
+        if ($limit > 0) {
+            $total = $this->tool->getLineItems($resourceLinkId, $resourceId, $tag, 0, 0, $courseId)->count();
+            $this->setLinkHeaderToGet($total, $resourceLinkId, $resourceId, $tag, $limit, $page);
+        }
 
         $data = $this->getGetData($lineItems);
 
-        $this->response->headers->set('Content-Type', LtiAssignmentGradesService::TYPE_LINE_ITEM);
+        $this->response->headers->set('Content-Type', LtiAssignmentGradesService::TYPE_LINE_ITEM_CONTAINER);
+        $this->response->setEncodingOptions(JSON_UNESCAPED_SLASHES);
         $this->response->setData($data);
     }
 
-    /**
-     * @param int $resourceLinkId
-     * @param int $resourceId
-     * @param int $tag
-     * @param int $limit
-     * @param int $page
-     */
-    private function setLinkHeaderToGet(ArrayCollection $lineItems, $resourceLinkId, $resourceId, $tag, $limit, $page)
+    private function setLinkHeaderToGet(int $total, int $resourceLinkId, string $resourceId, string $tag, int $limit, int $page): void
     {
-        if (!$limit) {
-            return;
-        }
-
         $links = [];
 
         $links['first'] = 0;
-        $links['last'] = ceil($lineItems->count() / $limit);
+        $links['last'] = max(0, (int) ceil($total / $limit) - 1);
         $links['canonical'] = $page;
 
-        if ($page > 1) {
+        if ($page > 0) {
             $links['prev'] = $page - 1;
         }
 
-        if ($page + 1 <= $lineItems->count() / $limit) {
+        if ($page < $links['last']) {
             $links['next'] = $page + 1;
         }
 
@@ -221,13 +201,16 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
             $url = LtiAssignmentGradesService::getLineItemsUrl(
                 $this->course->getId(),
                 $this->tool->getId(),
-                [
-                    'resource_link_id' => $resourceLinkId,
-                    'resource_id' => $resourceId,
-                    'tag' => $tag,
-                    'limit' => $limit,
-                    'page' => $linkPage,
-                ]
+                array_filter(
+                    [
+                        'resource_link_id' => $resourceLinkId ?: null,
+                        'resource_id' => $resourceId ?: null,
+                        'tag' => $tag ?: null,
+                        'limit' => $limit,
+                        'page' => $linkPage,
+                    ],
+                    static fn ($value): bool => null !== $value
+                )
             );
 
             $links[$rel] = '<'.$url.'>; rel="'.$rel.'"';
@@ -242,7 +225,7 @@ class LtiLineItemsResource extends LtiAdvantageServiceResource
     /**
      * @return array
      */
-    private function getGetData(ArrayCollection $lineItems)
+    private function getGetData(Collection $lineItems)
     {
         $data = [];
 

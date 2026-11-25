@@ -3,6 +3,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
@@ -14,6 +15,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  *  Class DocumentManager
@@ -867,16 +869,33 @@ class DocumentManager
         $course_id  = (int) $course_info['real_id'];
         $session_id = empty($session_id) ? api_get_session_id() : $session_id;
 
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $id = (int) $id;
 
-        $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE iid = $id";
-        $result = Database::query($sql);
-        if (!$result || Database::num_rows($result) != 1) {
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'd.iid AS iid',
+                'IDENTITY(d.resourceNode) AS resource_node_id',
+                'd.title AS title',
+                'd.comment AS comment',
+                'd.filetype AS filetype',
+                'd.readonly AS readonly',
+                'd.template AS template'
+            )
+            ->from(CDocument::class, 'd')
+            ->where('d.iid = :iid')
+            ->setParameter('iid', $id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if (1 != \count($rows)) {
             return false;
         }
 
-        $row = Database::fetch_assoc($result);
+        // The raw c_document row used to come back with integer columns (0/1 flags): keep that shape.
+        $row = $rows[0];
+        $row['resource_node_id'] = null === $row['resource_node_id'] ? null : (int) $row['resource_node_id'];
+        $row['readonly'] = (int) $row['readonly'];
+        $row['template'] = (int) $row['template'];
 
         // The document must be linked to the requested course (any session/group/visibility), otherwise the
         // data of a document of another course would be returned.
@@ -1015,23 +1034,35 @@ class DocumentManager
      */
     public static function attach_gradebook_certificate($courseId, $document_id, $sessionId = 0)
     {
-        $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sessionId = intval($sessionId);
         $courseId = (int) $courseId;
         if (empty($sessionId)) {
             $sessionId = api_get_session_id();
         }
 
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->update(GradebookCategory::class, 'c')
+            ->set('c.document', ':document')
+            ->where('IDENTITY(c.course) = :course')
+            ->setParameter('document', (int) $document_id)
+            ->setParameter('course', $courseId)
+        ;
+        self::filterGradebookCategoriesBySession($qb, $sessionId);
+        $qb->getQuery()->execute();
+    }
+
+    /**
+     * Restricts a GradebookCategory (alias "c") query to a session: no session (0) matches the base-course
+     * categories, a positive id that session, a negative id every category.
+     * (The old SQL also tested session_id = 0, which no row can hold: the column is a foreign key to session.)
+     */
+    private static function filterGradebookCategoriesBySession(QueryBuilder $qb, int $sessionId): void
+    {
         if (empty($sessionId)) {
-            $sql_session = 'AND (session_id = 0 OR isnull(session_id)) ';
+            $qb->andWhere('c.session IS NULL');
         } elseif ($sessionId > 0) {
-            $sql_session = 'AND session_id='.$sessionId;
-        } else {
-            $sql_session = '';
+            $qb->andWhere('IDENTITY(c.session) = :session')->setParameter('session', $sessionId);
         }
-        $sql = 'UPDATE '.$tbl_category.' SET document_id="'.intval($document_id).'"
-                WHERE c_id ="'.$courseId.'" '.$sql_session;
-        Database::query($sql);
     }
 
     /**
@@ -1046,32 +1077,29 @@ class DocumentManager
      */
     public static function get_default_certificate_id($courseId, $session_id = 0)
     {
-        $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $session_id = (int) $session_id;
         $courseId = (int) $courseId;
         if (empty($session_id)) {
             $session_id = api_get_session_id();
         }
 
-        if (empty($session_id)) {
-            $sql_session = 'AND (session_id = 0 OR isnull(session_id)) ';
-        } elseif ($session_id > 0) {
-            $sql_session = 'AND session_id='.$session_id;
-        } else {
-            $sql_session = '';
-        }
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(c.document) AS document_id')
+            ->from(GradebookCategory::class, 'c')
+            ->where('IDENTITY(c.course) = :course')
+            ->setParameter('course', $courseId)
+        ;
+        self::filterGradebookCategoriesBySession($qb, (int) $session_id);
 
-        $sql = 'SELECT document_id FROM '.$tbl_category.'
-                WHERE c_id ="'.$courseId.'" '.$sql_session;
-
-        $rs = Database::query($sql);
-        $num = Database::num_rows($rs);
-        if (0 == $num) {
+        // Without ORDER BY the first row was whatever the database returned first: the primary key is the usual
+        // order, keep it explicit.
+        $rows = $qb->orderBy('c.id', 'ASC')->getQuery()->getArrayResult();
+        if ([] === $rows) {
             return null;
         }
-        $row = Database::fetch_array($rs);
+        $documentId = $rows[0]['document_id'];
 
-        return $row['document_id'];
+        return null === $documentId ? null : (int) $documentId;
     }
 
     /**
@@ -1356,21 +1384,18 @@ class DocumentManager
 
         $default_certificate = self::get_default_certificate_id($course_id);
         if ((int) $default_certificate == (int) $default_certificate_id) {
-            $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
             $session_id = api_get_session_id();
-            if (0 == $session_id || is_null($session_id)) {
-                $sql_session = 'AND (session_id='.intval($session_id).' OR isnull(session_id)) ';
-            } elseif ($session_id > 0) {
-                $sql_session = 'AND session_id='.intval($session_id);
-            } else {
-                $sql_session = '';
-            }
 
-            $sql = 'UPDATE '.$tbl_category.' SET document_id = null
-                    WHERE
-                        c_id = "'.Database::escape_string($course_id).'" AND
-                        document_id="'.$default_certificate_id.'" '.$sql_session;
-            Database::query($sql);
+            $qb = Container::getEntityManager()->createQueryBuilder()
+                ->update(GradebookCategory::class, 'c')
+                ->set('c.document', 'NULL')
+                ->where('IDENTITY(c.course) = :course')
+                ->andWhere('IDENTITY(c.document) = :document')
+                ->setParameter('course', (int) $course_id)
+                ->setParameter('document', (int) $default_certificate_id)
+            ;
+            self::filterGradebookCategoriesBySession($qb, (int) $session_id);
+            $qb->getQuery()->execute();
         }
     }
 
@@ -3025,27 +3050,28 @@ jQuery(function ($) {
 
         // Documents are resource nodes: the course and the session live on the resource link, the folder name is
         // the document title (the legacy path was "/title").
-        $folder = Database::escape_string(ltrim($folder, '/'));
-        $folderWithSuffix = Database::escape_string(ltrim($folderWithSuffix, '/'));
+        $folder = ltrim($folder, '/');
+        $folderWithSuffix = ltrim($folderWithSuffix, '/');
 
-        $tbl_document = Database::get_course_table(TABLE_DOCUMENT);
-        $sql = "SELECT d.iid FROM $tbl_document d
-                INNER JOIN resource_link l ON l.resource_node_id = d.resource_node_id
-                WHERE
-                    d.filetype = 'folder' AND
-                    l.c_id = $courseId AND
-                    l.deleted_at IS NULL AND
-                    d.title IN ('$folder', '$folderWithSuffix') AND
-                    (l.session_id IS NULL OR l.session_id = $sessionId)
-                LIMIT 1
-        ";
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('d.iid AS iid')
+            ->from(CDocument::class, 'd')
+            ->innerJoin('d.resourceNode', 'n')
+            ->innerJoin('n.resourceLinks', 'l')
+            ->where("d.filetype = 'folder'")
+            ->andWhere('IDENTITY(l.course) = :course')
+            ->andWhere('l.deletedAt IS NULL')
+            ->andWhere('d.title IN (:titles)')
+            ->andWhere('(l.session IS NULL OR IDENTITY(l.session) = :session)')
+            ->setParameter('course', $courseId)
+            ->setParameter('titles', [$folder, $folderWithSuffix])
+            ->setParameter('session', $sessionId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs)) {
-            return true;
-        }
-
-        return false;
+        return [] !== $rows;
     }
 
     /**
@@ -3069,40 +3095,33 @@ jQuery(function ($) {
         &$form = null,
         $selectName = 'id'
     ) {
-        $doc_table = Database::get_course_table(TABLE_DOCUMENT);
         $course_id = api_get_course_int_id();
         $folder_titles = [];
 
         if (is_array($folders)) {
-            $escaped_folders = [];
-            foreach ($folders as $key => &$val) {
-                $escaped_folders[$key] = Database::escape_string($val);
+            $paths = [];
+            foreach ($folders as $val) {
+                $paths[] = (string) $val;
             }
-            $folder_sql = implode("','", $escaped_folders);
 
-            $sql = "SELECT DISTINCT docs.title, n.path
-                    FROM resource_node AS n
-                    INNER JOIN $doc_table AS docs
-                    ON (docs.resource_node_id = n.id)
-                    INNER JOIN resource_link l
-                    ON (l.resource_node_id = n.id)
-                    WHERE
-                        l.c_id = $course_id AND
-                        docs.filetype = 'folder' AND
-                        n.path IN ('".$folder_sql."') AND
-                        l.deleted_at IS NULL
-                         ";
-
-            /*$sql = "SELECT path, title
-                    FROM $doc_table
-                    WHERE
-                        filetype = 'folder' AND
-                        c_id = $course_id AND
-                        path IN ('".$folder_sql."') ";*/
-            $res = Database::query($sql);
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select('docs.title AS title', 'n.path AS path')
+                ->distinct()
+                ->from(CDocument::class, 'docs')
+                ->innerJoin('docs.resourceNode', 'n')
+                ->innerJoin('n.resourceLinks', 'l')
+                ->where('IDENTITY(l.course) = :course')
+                ->andWhere("docs.filetype = 'folder'")
+                ->andWhere('n.path IN (:paths)')
+                ->andWhere('l.deletedAt IS NULL')
+                ->setParameter('course', (int) $course_id)
+                ->setParameter('paths', $paths)
+                ->getQuery()
+                ->getArrayResult()
+            ;
             $folder_titles = [];
-            while ($obj = Database::fetch_object($res)) {
-                $folder_titles[$obj->path] = $obj->title;
+            foreach ($rows as $row) {
+                $folder_titles[$row['path']] = $row['title'];
             }
         }
 
@@ -3383,7 +3402,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             ->setTitle($title)
             ->setComment($comment)
             ->setReadonly(1 === $readonly)
-            ->setCreator(api_get_user_entity())
+            ->setCreator($userEntity)
             ->setParent($parentResource)
             ->addCourseLink($courseEntity, $session, $group)
         ;

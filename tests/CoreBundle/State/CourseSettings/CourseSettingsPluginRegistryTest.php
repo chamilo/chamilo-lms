@@ -22,7 +22,7 @@ final class CourseSettingsPluginRegistryTest extends TestCase
     public function testThirdPartySectionIsDiscoveredAndSubmittedFieldsAreAllowlisted(): void
     {
         $plugin = $this->plugin();
-        $registry = new CourseSettingsPluginRegistry([$plugin], $this->policy());
+        $registry = $this->registry([$plugin], $this->policy());
         $course = new Course();
 
         $this->assertTrue($registry->getIntegrations($course, null)['example']['enabled']);
@@ -46,7 +46,7 @@ final class CourseSettingsPluginRegistryTest extends TestCase
             ['label' => 'Off', 'value' => 'disabled'],
             ['label' => 'On', 'value' => 'enabled'],
         ]];
-        $registry = new CourseSettingsPluginRegistry([$plugin], $this->policy());
+        $registry = $this->registry([$plugin], $this->policy());
 
         $registry->save(new Course(), null, ['example_note' => 'Updated'], [
             'example_note' => 'Previous',
@@ -62,7 +62,7 @@ final class CourseSettingsPluginRegistryTest extends TestCase
     public function testDisabledPluginsNeitherRenderNorWrite(): void
     {
         $plugin = $this->plugin(false);
-        $registry = new CourseSettingsPluginRegistry([$plugin], $this->policy());
+        $registry = $this->registry([$plugin], $this->policy());
         $course = new Course();
 
         $this->assertSame([], $registry->getSections($course, null, []));
@@ -73,7 +73,7 @@ final class CourseSettingsPluginRegistryTest extends TestCase
     public function testCoursePoliciesFilterFieldsAndBlockWrites(): void
     {
         $plugin = $this->plugin();
-        $registry = new CourseSettingsPluginRegistry([$plugin], $this->policy([
+        $registry = $this->registry([$plugin], $this->policy([
             'example_note' => ['editable' => false, 'default' => 'Locked'],
         ]));
         $course = new Course();
@@ -92,7 +92,7 @@ final class CourseSettingsPluginRegistryTest extends TestCase
                 ['label' => 'Enabled', 'value' => 1],
             ]],
         ];
-        $registry = new CourseSettingsPluginRegistry([$plugin], $this->policy());
+        $registry = $this->registry([$plugin], $this->policy());
 
         $this->expectException(BadRequestHttpException::class);
         $registry->save(new Course(), null, ['example_note' => 'unexpected'], []);
@@ -102,10 +102,24 @@ final class CourseSettingsPluginRegistryTest extends TestCase
     {
         $plugin1 = $this->plugin();
         $plugin2 = $this->plugin();
-        $registry = new CourseSettingsPluginRegistry([$plugin1, $plugin2], $this->policy());
+        $registry = $this->registry([$plugin1, $plugin2], $this->policy());
 
         $this->expectException(InvalidArgumentException::class);
         $registry->getIntegrations(new Course(), null);
+    }
+
+    /**
+     * @param list<object> $plugins
+     */
+    private function registry(array $plugins, CourseSettingPolicyManager $policies): CourseSettingsPluginRegistry
+    {
+        $typed = [];
+        foreach ($plugins as $plugin) {
+            $this->assertInstanceOf(CourseSettingsPluginInterface::class, $plugin);
+            $typed[] = $plugin;
+        }
+
+        return new CourseSettingsPluginRegistry($typed, $policies);
     }
 
     private function policy(array $policies = []): CourseSettingPolicyManager

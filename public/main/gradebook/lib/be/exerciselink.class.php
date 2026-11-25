@@ -3,7 +3,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
 
 /**
@@ -21,7 +23,6 @@ class ExerciseLink extends AbstractLink
     private static array $completionTrackingIdsByCourse = [];
 
     public $checkBaseExercises = false;
-    private $exercise_table;
     private $exercise_data = [];
     private $is_hp;
 
@@ -47,8 +48,6 @@ class ExerciseLink extends AbstractLink
      */
     public function get_all_links($getOnlyHotPotatoes = false)
     {
-        $exerciseTable = $this->get_exercise_table();
-        $lpItemTable = Database::get_course_table(TABLE_LP_ITEM);
         if (empty($this->getCourseId())) {
             return [];
         }
@@ -75,14 +74,14 @@ class ExerciseLink extends AbstractLink
             }
         }
 
-        $sqlLp = "SELECT e.iid, e.title
-                  FROM $exerciseTable e
-                  INNER JOIN $lpItemTable i
-                  ON (e.iid = i.path)
-				  WHERE item_type = 'quiz'
-				  ";
-        $resultLp = Database::query($sqlLp);
-        $exerciseInLP = Database::store_result($resultLp);
+        $exerciseInLP = Container::getEntityManager()->createQueryBuilder()
+            ->select('e.iid AS iid', 'e.title AS title')
+            ->from(CQuiz::class, 'e')
+            ->innerJoin(CLpItem::class, 'i', 'WITH', 'e.iid = i.path')
+            ->where('i.itemType = :itemType')
+            ->setParameter('itemType', 'quiz')
+            ->getQuery()
+            ->getArrayResult();
 
         if (!empty($exerciseInLP)) {
             foreach ($exerciseInLP as $exercise) {
@@ -107,6 +106,7 @@ class ExerciseLink extends AbstractLink
         $course_id = ($this->getCourseId());
         $sessionCondition = api_get_session_condition($sessionId);
 
+        // TODO(db-neutral): SQL fragment built by api_get_session_condition()
         $sql = "SELECT count(exe_id) AS number
                 FROM $tbl_stats
                 WHERE
@@ -301,6 +301,8 @@ class ExerciseLink extends AbstractLink
             }
         }
 
+        // TODO(db-neutral): $sql is assembled from api_get_session_condition() fragments, an IN list of
+        // learning path ids and a hotpotatoes join, then run twice
         $scores = Database::query($sql);
 
         if (isset($studentId) && empty($type)) {
@@ -639,25 +641,25 @@ class ExerciseLink extends AbstractLink
     /** @return array<int, list<int>> */
     private function loadCompletionTrackingIds(int $courseId): array
     {
-        $tableExtraField = Database::get_main_table(TABLE_EXTRA_FIELD);
-        $tableExtraFieldValue = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $variable = Database::escape_string(self::COURSE_COMPLETION_RULE_FIELD_VARIABLE);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('v.fieldValue AS field_value')
+            ->from(ExtraFieldValues::class, 'v')
+            ->innerJoin('v.field', 'f')
+            ->where('f.itemType = :itemType')
+            ->andWhere('f.variable = :variable')
+            ->andWhere('v.itemId = :courseId')
+            ->orderBy('v.id', 'ASC')
+            ->setParameter('itemType', ExtraField::COURSE_FIELD_TYPE)
+            ->setParameter('variable', self::COURSE_COMPLETION_RULE_FIELD_VARIABLE)
+            ->setParameter('courseId', $courseId)
+            ->getQuery()
+            ->getArrayResult();
 
-        $sql = "SELECT value.field_value
-                FROM $tableExtraField field
-                INNER JOIN $tableExtraFieldValue value
-                    ON value.field_id = field.id
-                WHERE field.item_type = ".ExtraField::COURSE_FIELD_TYPE."
-                  AND field.variable = '$variable'
-                  AND value.item_id = $courseId
-                ORDER BY value.id";
-        $result = Database::query($sql);
-
-        if (1 !== Database::num_rows($result)) {
+        if (1 !== count($rows)) {
             return [];
         }
 
-        $row = Database::fetch_assoc($result);
+        $row = $rows[0];
         $rule = json_decode((string) ($row['field_value'] ?? ''), true);
 
         if (!is_array($rule)
@@ -701,12 +703,6 @@ class ExerciseLink extends AbstractLink
      */
     public function get_exercise_data()
     {
-        if (1 == $this->is_hp) {
-            $table = Database::get_course_table(TABLE_DOCUMENT);
-        } else {
-            $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        }
-
         $exerciseId = $this->get_ref_id();
 
         if (empty($this->exercise_data)) {
@@ -725,23 +721,15 @@ class ExerciseLink extends AbstractLink
                 $result = Database::query($sql);
                 $this->exercise_data = Database::fetch_array($result);*/
             } else {
-                // Try with iid
-                $sql = 'SELECT * FROM '.$table.'
-                    WHERE
-                        iid = '.$exerciseId;
-                $result = Database::query($sql);
-                $rows = Database::num_rows($result);
-
-                if (!empty($rows)) {
-                    $this->exercise_data = Database::fetch_array($result);
-                } else {
-                    // Try wit id
-                    $sql = 'SELECT * FROM '.$table.'
-                        WHERE
-                            iid = '.$exerciseId;
-                    $result = Database::query($sql);
-                    $this->exercise_data = Database::fetch_array($result);
-                }
+                // The legacy "try with iid, then with id" fallback ran the same iid query twice.
+                $row = Container::getEntityManager()->createQueryBuilder()
+                    ->select('q.iid AS iid', 'q.title AS title', 'q.description AS description')
+                    ->from(CQuiz::class, 'q')
+                    ->where('q.iid = :exerciseId')
+                    ->setParameter('exerciseId', (int) $exerciseId)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+                $this->exercise_data = $row ?? false;
             }
         }
 
@@ -750,15 +738,5 @@ class ExerciseLink extends AbstractLink
         }
 
         return $this->exercise_data;
-    }
-
-    /**
-     * Lazy load function to get the database table of the exercise.
-     */
-    private function get_exercise_table()
-    {
-        $this->exercise_table = Database::get_course_table(TABLE_QUIZ_TEST);
-
-        return $this->exercise_table;
     }
 }

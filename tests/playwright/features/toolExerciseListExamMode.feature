@@ -110,6 +110,7 @@ Feature: Score of the latest attempt in the exercise list
     When I fill in "question" with "Question of <test>"
     And I fill in the answer 1 text with "Answer true"
     And I fill in the answer 2 text with "Answer false"
+    And I mark answer 1 as correct
     And I fill in "exercise-answer-score-0" with "10"
     And I press "Save the question"
     And I wait for the page content to settle
@@ -122,15 +123,15 @@ Feature: Score of the latest attempt in the exercise list
       | Score shown test |
       | Untried test     |
 
-  # A new test is hidden from learners until it is activated.
-  Scenario Outline: Make "<test>" visible
+  # A new test is visible to learners from the start: "Default visibility of new tests" is "visible"
+  # by default (ResourceDefaultVisibilityHelper). Check it instead of activating it.
+  Scenario Outline: "<test>" is visible
     Given I am a platform administrator
     And I wait for the page to be loaded
     And I am on course "EXAMLIST" homepage
     And I wait for the page to be loaded
     And I follow "Tests"
     And I wait for the page content to settle
-    And I click the "[title='Activate']" icon in the row for "<test>"
     Then I wait for the element "tr:has-text('<test>') [title='Deactivate']" to appear
 
     Examples:
@@ -154,7 +155,9 @@ Feature: Score of the latest attempt in the exercise list
     And I check the "Answer true" radio button
     And I press "Finish test"
     And I wait for the page content to settle
-    Then I should not see an error
+    # The attempt is only completed once the result page is shown: the next scenario reads it from the list.
+    Then I should see "Exercise completed"
+    And I should not see an error
 
     Examples:
       | test             |

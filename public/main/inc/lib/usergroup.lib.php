@@ -2,10 +2,17 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
+use Chamilo\CoreBundle\Entity\AccessUrlRelUserGroup;
+use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Entity\UserGroupRelUserGroup;
 use Chamilo\CoreBundle\Entity\UserRelUser;
+use Chamilo\CoreBundle\Entity\UsergroupRelCourse;
+use Chamilo\CoreBundle\Entity\UsergroupRelSession;
+use Chamilo\CoreBundle\Entity\UsergroupRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
 use Chamilo\CoreBundle\Enums\ToolIcon;
@@ -121,40 +128,37 @@ class UserGroupModel extends Model
         $start = (int) $start;
         $limit = (int) $limit;
 
-        $select = ' u.* ';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->from(UsergroupRelUser::class, 'u')
+            ->where('IDENTITY(u.usergroup) = :id')
+            ->setParameter('id', $id)
+        ;
         if ($getCount) {
-            $select = 'COUNT(u.id) count ';
+            $qb->select('COUNT(u.id) AS count');
+        } else {
+            $qb->select(
+                'u.id AS id',
+                'IDENTITY(u.user) AS user_id',
+                'IDENTITY(u.usergroup) AS usergroup_id',
+                'u.relationType AS relation_type'
+            );
         }
 
         if ($this->getUseMultipleUrl()) {
-            $urlId = api_get_current_access_url_id();
-            $sql = "SELECT $select
-                    FROM $this->usergroup_rel_user_table u
-                    INNER JOIN $this->access_url_rel_user a
-                    ON (u.user_id = a.user_id)
-                    WHERE u.usergroup_id = $id AND access_url_id = $urlId ";
-        } else {
-            $sql = "SELECT $select
-                    FROM $this->usergroup_rel_user_table u
-                    WHERE u.usergroup_id = $id";
+            $qb
+                ->innerJoin(AccessUrlRelUser::class, 'a', 'WITH', 'IDENTITY(a.user) = IDENTITY(u.user)')
+                ->andWhere('IDENTITY(a.url) = :urlId')
+                ->setParameter('urlId', (int) api_get_current_access_url_id())
+            ;
         }
-        $limitCondition = '';
         if (!empty($limit) && !$getCount) {
-            $limitCondition = " LIMIT $start, $limit";
+            $qb->setFirstResult($start)->setMaxResults($limit);
         }
 
-        $sql .= $limitCondition;
-
-        $result = Database::query($sql);
+        $rows = $qb->getQuery()->getArrayResult();
 
         if ($getCount) {
-            if (Database::num_rows($result)) {
-                $row = Database::fetch_array($result);
-
-                return $row['count'];
-            }
-
-            return 0;
+            return $rows[0]['count'] ?? 0;
         } else {
             $list = [];
             $showCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enabled');
@@ -163,7 +167,7 @@ class UserGroupModel extends Model
                 $calendarPlugin = LearningCalendarPlugin::create();
             }
             $url = api_get_path(WEB_PLUGIN_PATH).'LearningCalendar/calendar.php?';
-            while ($data = Database::fetch_array($result)) {
+            foreach ($rows as $data) {
                 $userId = $data['user_id'];
                 $userInfo = api_get_user_info($userId);
                 $userTitle = $userInfo['complete_name_with_username'];
@@ -264,6 +268,7 @@ class UserGroupModel extends Model
                     $extraCondition
             ";
 
+            // TODO(db-neutral): get_count() receives a free-form SQL condition from its callers
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
@@ -277,6 +282,7 @@ class UserGroupModel extends Model
                     $authorCondition
                     $extraCondition
             ";
+            // TODO(db-neutral): get_count() receives a free-form SQL condition from its callers
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
@@ -296,46 +302,28 @@ class UserGroupModel extends Model
      */
     public function getUserGroupByCourseWithDataCount($course_id, $type = -1)
     {
+        $course_id = (int) $course_id;
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(c.id) AS count')
+            ->from(UsergroupRelCourse::class, 'c')
+            ->where('IDENTITY(c.course) = :courseId')
+            ->setParameter('courseId', $course_id)
+        ;
         if ($this->getUseMultipleUrl()) {
-            $course_id = (int) $course_id;
-            $urlId = api_get_current_access_url_id();
-            $sql = "SELECT count(c.usergroup_id) as count
-                    FROM {$this->usergroup_rel_course_table} c
-                    INNER JOIN {$this->access_url_rel_usergroup} a
-                    ON (c.usergroup_id = a.usergroup_id)
-                    WHERE access_url_id = $urlId AND course_id = $course_id
-            ";
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
-                $row = Database::fetch_array($result);
-
-                return $row['count'];
-            }
-
-            return 0;
+            // The group type is not applied in multi-URL mode.
+            $qb
+                ->innerJoin(AccessUrlRelUserGroup::class, 'a', 'WITH', 'IDENTITY(a.userGroup) = IDENTITY(c.usergroup)')
+                ->andWhere('IDENTITY(a.url) = :urlId')
+                ->setParameter('urlId', (int) api_get_current_access_url_id())
+            ;
         } else {
-            $typeCondition = '';
+            $qb->innerJoin(Usergroup::class, 'a', 'WITH', 'a.id = IDENTITY(c.usergroup)');
             if (-1 != $type) {
-                $type = (int) $type;
-                $typeCondition = " AND group_type = $type ";
+                $qb->andWhere('a.groupType = :groupType')->setParameter('groupType', (int) $type);
             }
-            $sql = "SELECT count(c.usergroup_id) as count
-                    FROM {$this->usergroup_rel_course_table} c
-                    INNER JOIN {$this->table} a
-                    ON (c.usergroup_id = a.id)
-                    WHERE
-                        course_id = $course_id
-                        $typeCondition
-            ";
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
-                $row = Database::fetch_array($result);
-
-                return $row['count'];
-            }
-
-            return 0;
         }
+
+        return $qb->getQuery()->getArrayResult()[0]['count'] ?? 0;
     }
 
     /**
@@ -616,10 +604,12 @@ class UserGroupModel extends Model
 
         $conditions = Database::parse_conditions($options);
         if (true == $withClasses) {
+            // TODO(db-neutral): free-form WHERE options parsed by Database::parse_conditions() (callers pass SQL fragments)
             $resultClasess = Database::query($sqlClasses);
         } else {
             $sql .= $conditions;
 
+            // TODO(db-neutral): free-form WHERE options parsed by Database::parse_conditions() (callers pass SQL fragments)
             $result = Database::query($sql);
         }
 
@@ -760,14 +750,17 @@ class UserGroupModel extends Model
         $conditions = Database::parse_conditions($options);
 
         if (true == $withClasses) {
+            // TODO(db-neutral): free-form WHERE options parsed by Database::parse_conditions() (callers pass SQL fragments)
             $resultClasess = Database::query($sqlClasses);
         } else {
             $sql .= $conditions;
+            // TODO(db-neutral): free-form WHERE options parsed by Database::parse_conditions() (callers pass SQL fragments)
             $result = Database::query($sql);
         }
 
         if ($getCount) {
             if (!empty($result)) {
+                // TODO(db-neutral): free-form WHERE options parsed by Database::parse_conditions() (callers pass SQL fragments)
                 $result = Database::query($sql);
                 $array = Database::fetch_assoc($result);
 
@@ -1290,18 +1283,22 @@ class UserGroupModel extends Model
             return false;
         }
 
-        $sql = "SELECT 1
-                FROM {$this->usergroup_rel_user_table} uru
-                INNER JOIN {$this->usergroup_rel_course_table} ugc
-                    ON ugc.usergroup_id = uru.usergroup_id
-                WHERE uru.user_id = ".(int) $userId."
-                    AND ugc.course_id = ".(int) $courseId."
-                    AND uru.usergroup_id <> ".(int) $excludedUsergroupId."
-                LIMIT 1";
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('uru.id')
+            ->from(UsergroupRelUser::class, 'uru')
+            ->innerJoin(UsergroupRelCourse::class, 'ugc', 'WITH', 'ugc.usergroup = uru.usergroup')
+            ->where('IDENTITY(uru.user) = :userId')
+            ->andWhere('IDENTITY(ugc.course) = :courseId')
+            ->andWhere('IDENTITY(uru.usergroup) <> :excludedUsergroupId')
+            ->setParameter('userId', $userId)
+            ->setParameter('courseId', $courseId)
+            ->setParameter('excludedUsergroupId', $excludedUsergroupId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()
+        ;
 
-        $result = Database::query($sql);
-
-        return Database::num_rows($result) > 0;
+        return [] !== $rows;
     }
 
     /**
@@ -1520,20 +1517,22 @@ class UserGroupModel extends Model
      */
     public function usergroup_exists(string $title): bool
     {
-        $title = Database::escape_string($title);
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('u.id')
+            ->from(Usergroup::class, 'u')
+            ->where('u.title = :title')
+            ->setParameter('title', $title)
+            ->setMaxResults(1)
+        ;
         if ($this->getUseMultipleUrl()) {
-            $urlId = api_get_current_access_url_id();
-            $sql = "SELECT * FROM $this->table u
-                    INNER JOIN {$this->access_url_rel_usergroup} a
-                    ON (a.usergroup_id = u.id)
-                    WHERE title = '".$title."' AND access_url_id = $urlId";
-        } else {
-            $sql = "SELECT * FROM $this->table WHERE title = '".$title."'";
+            $qb
+                ->innerJoin(AccessUrlRelUserGroup::class, 'a', 'WITH', 'IDENTITY(a.userGroup) = u.id')
+                ->andWhere('IDENTITY(a.url) = :urlId')
+                ->setParameter('urlId', (int) api_get_current_access_url_id())
+            ;
         }
 
-        $res = Database::query($sql);
-
-        return 0 != Database::num_rows($res);
+        return [] !== $qb->getQuery()->getArrayResult();
     }
 
     private function isWorkflowSettingEnabled(string $variable): bool
@@ -1594,6 +1593,7 @@ class UserGroupModel extends Model
         }
 
         $result = Database::store_result(
+            // TODO(db-neutral): free-form $extraWhereCondition SQL fragment from the jqGrid caller
             Database::query("SELECT DISTINCT u.* FROM $sqlFrom WHERE $sqlWhere ORDER BY title ".('DESC' === strtoupper((string) $sord) ? 'DESC' : 'ASC')." LIMIT $start, $limit")
         );
 
@@ -1691,35 +1691,28 @@ class UserGroupModel extends Model
      */
     public function filterByFirstLetter($firstLetter, $limit = 0)
     {
-        $firstLetter = Database::escape_string($firstLetter);
         $limit = (int) $limit;
 
-        $sql = ' SELECT g.id, title ';
-
-        $urlCondition = '';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('g.id AS id', 'g.title AS title')
+            ->from(Usergroup::class, 'g')
+            ->where('g.title LIKE :letter OR g.title LIKE :lowerLetter')
+            ->orderBy('g.title', 'DESC')
+            ->setParameter('letter', $firstLetter.'%')
+            ->setParameter('lowerLetter', api_strtolower($firstLetter).'%')
+        ;
         if ($this->getUseMultipleUrl()) {
-            $urlId = api_get_current_access_url_id();
-            $sql .= " FROM $this->table g
-                    INNER JOIN $this->access_url_rel_usergroup a
-                    ON (g.id = a.usergroup_id) ";
-            $urlCondition = " AND access_url_id = $urlId ";
-        } else {
-            $sql .= " FROM $this->table g ";
+            $qb
+                ->innerJoin(AccessUrlRelUserGroup::class, 'a', 'WITH', 'IDENTITY(a.userGroup) = g.id')
+                ->andWhere('IDENTITY(a.url) = :urlId')
+                ->setParameter('urlId', (int) api_get_current_access_url_id())
+            ;
         }
-        $sql .= "
-		        WHERE
-		            (title LIKE '".$firstLetter."%' OR
-		            title LIKE '".api_strtolower($firstLetter)."%')
-		            $urlCondition
-		        ORDER BY title DESC ";
-
         if (!empty($limit)) {
-            $sql .= " LIMIT $limit ";
+            $qb->setMaxResults($limit);
         }
 
-        $result = Database::query($sql);
-
-        return Database::store_result($result);
+        return $qb->getQuery()->getArrayResult();
     }
 
     /**
@@ -1907,17 +1900,16 @@ class UserGroupModel extends Model
             $this->unsubscribeToUrl($id, api_get_current_access_url_id());
         }
 
-        $sql = "DELETE FROM $this->usergroup_rel_user_table
-                WHERE usergroup_id = $id";
-        Database::query($sql);
-
-        $sql = "DELETE FROM $this->usergroup_rel_course_table
-                WHERE usergroup_id = $id";
-        Database::query($sql);
-
-        $sql = "DELETE FROM $this->usergroup_rel_session_table
-                WHERE usergroup_id = $id";
-        Database::query($sql);
+        $em = Container::getEntityManager();
+        foreach ([UsergroupRelUser::class, UsergroupRelCourse::class, UsergroupRelSession::class] as $relationClass) {
+            $em->createQueryBuilder()
+                ->delete($relationClass, 'r')
+                ->where('IDENTITY(r.usergroup) = :id')
+                ->setParameter('id', $id)
+                ->getQuery()
+                ->execute()
+            ;
+        }
 
         $repo = Container::getUsergroupRepository();
         $userGroup = $repo->find($id);
@@ -1967,16 +1959,19 @@ class UserGroupModel extends Model
             // xajax send utf8 datas... datas in db can be non-utf8 datas
             $charset = api_get_system_encoding();
             $needle = api_convert_encoding($needle, $charset, 'utf-8');
-            $needle = Database::escape_string($needle);
 
-            $sql = 'SELECT id, title
-                    FROM '.Database::get_main_table(TABLE_USERGROUP).' u
-                    WHERE title LIKE "'.$needle.'%"
-                    ORDER BY title
-                    LIMIT 11';
-            $result = Database::query($sql);
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select('u.id AS id', 'u.title AS title')
+                ->from(Usergroup::class, 'u')
+                ->where('u.title LIKE :needle')
+                ->orderBy('u.title', 'ASC')
+                ->setParameter('needle', $needle.'%')
+                ->setMaxResults(11)
+                ->getQuery()
+                ->getArrayResult()
+            ;
             $i = 0;
-            while ($data = Database::fetch_array($result)) {
+            foreach ($rows as $data) {
                 $i++;
                 if ($i <= 10) {
                     $return .= '<a
@@ -2012,6 +2007,7 @@ class UserGroupModel extends Model
             $orderBy = Database::escape_string($orderBy);
             $sql .= " ORDER BY $orderBy ";
         }
+        // TODO(db-neutral): SELECT u.* of the wide user table with a free-form ORDER BY from the caller
         $result = Database::query($sql);
 
         return Database::store_result($result);
@@ -2260,13 +2256,19 @@ class UserGroupModel extends Model
         if (empty($user_id)) {
             return [];
         }
-        $result = Database::query(
-            'SELECT DISTINCT friend_user_id FROM '.Database::get_main_table(TABLE_MAIN_USER_REL_USER).'
-             WHERE user_id = '.$user_id.' AND friend_user_id <> '.$user_id.'
-             AND relation_type IN ('.UserRelUser::USER_RELATION_TYPE_FRIEND.', '.UserRelUser::USER_RELATION_TYPE_GOODFRIEND.')'
-        );
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('DISTINCT IDENTITY(r.friend) AS friend_user_id')
+            ->from(UserRelUser::class, 'r')
+            ->where('IDENTITY(r.user) = :userId')
+            ->andWhere('IDENTITY(r.friend) <> :userId')
+            ->andWhere('r.relationType IN (:types)')
+            ->setParameter('userId', $user_id)
+            ->setParameter('types', [UserRelUser::USER_RELATION_TYPE_FRIEND, UserRelUser::USER_RELATION_TYPE_GOODFRIEND])
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $ids = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             $ids[] = (int) $row['friend_user_id'];
         }
 
@@ -2299,12 +2301,18 @@ class UserGroupModel extends Model
         }
 
         if ('true' === api_get_setting('group.allow_invite_non_friends_to_social_groups')) {
-            $result = Database::query(
-                'SELECT id FROM '.Database::get_main_table(TABLE_MAIN_USER).'
-                 WHERE id IN ('.implode(',', $user_ids).') AND active <> '.USER_SOFT_DELETED
-            );
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select('u.id AS id')
+                ->from(User::class, 'u')
+                ->where('u.id IN (:ids)')
+                ->andWhere('u.active <> :deleted')
+                ->setParameter('ids', $user_ids)
+                ->setParameter('deleted', USER_SOFT_DELETED)
+                ->getQuery()
+                ->getArrayResult()
+            ;
             $allowed = [];
-            while ($row = Database::fetch_assoc($result)) {
+            foreach ($rows as $row) {
                 $allowed[(int) $row['id']] = true;
             }
         } else {
@@ -2330,13 +2338,27 @@ class UserGroupModel extends Model
         if (empty($user_id) || empty($group_id)) {
             return false;
         }
-        $result = Database::query(
-            "SELECT 1 FROM $this->usergroup_rel_user_table
-             WHERE usergroup_id = $group_id AND user_id = $user_id
-             LIMIT 1"
-        );
+        return $this->usergroupRelUserExists($group_id, $user_id);
+    }
 
-        return Database::num_rows($result) > 0;
+    /**
+     * Whether a usergroup_rel_user row exists for this group and user, whatever its role.
+     */
+    private function usergroupRelUserExists(int $groupId, int $userId): bool
+    {
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('uru.id')
+            ->from(UsergroupRelUser::class, 'uru')
+            ->where('IDENTITY(uru.usergroup) = :groupId')
+            ->andWhere('IDENTITY(uru.user) = :userId')
+            ->setParameter('groupId', $groupId)
+            ->setParameter('userId', $userId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return [] !== $rows;
     }
 
     /**
@@ -2393,13 +2415,8 @@ class UserGroupModel extends Model
             if (empty($user_id) || empty($group_id)) {
                 return false;
             }
-            $result = Database::query(
-                "SELECT 1 FROM $this->usergroup_rel_user_table
-                 WHERE usergroup_id = $group_id AND user_id = $user_id
-                 LIMIT 1"
-            );
 
-            return Database::num_rows($result) > 0;
+            return $this->usergroupRelUserExists($group_id, $user_id);
         }
 
         return true;
@@ -2423,15 +2440,21 @@ class UserGroupModel extends Model
         $group_id = (int) $group_id;
 
         if (!empty($user_id) && !empty($group_id)) {
-            $sql = "SELECT relation_type
-                    FROM $table_group_rel_user
-                    WHERE
-                        usergroup_id = $group_id AND
-                        user_id = $user_id";
-            $result = Database::query($sql);
-            if (Database::num_rows($result) > 0) {
-                $row = Database::fetch_assoc($result);
-                $relationType = (int) $row['relation_type'];
+            // The first row found (ordered by id, as the table scan was) decides the role.
+            $rows = Container::getEntityManager()->createQueryBuilder()
+                ->select('uru.relationType AS relation_type')
+                ->from(UsergroupRelUser::class, 'uru')
+                ->where('IDENTITY(uru.usergroup) = :groupId')
+                ->andWhere('IDENTITY(uru.user) = :userId')
+                ->orderBy('uru.id', 'ASC')
+                ->setParameter('groupId', $group_id)
+                ->setParameter('userId', $user_id)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getArrayResult()
+            ;
+            if ([] !== $rows) {
+                $relationType = (int) $rows[0]['relation_type'];
 
                 // Normalize legacy reader (2) to the canonical reader role
                 if (2 === $relationType) {
@@ -2501,12 +2524,7 @@ class UserGroupModel extends Model
                     $group_id = (int) $group_id;
 
                     // A reader has role 0 like "no relation": look for the row itself.
-                    $exists = Database::query(
-                        "SELECT 1 FROM $table_url_rel_group
-                         WHERE usergroup_id = $group_id AND user_id = $user_id
-                         LIMIT 1"
-                    );
-                    if (0 == Database::num_rows($exists)) {
+                    if (!$this->usergroupRelUserExists($group_id, $user_id)) {
                         $sql = "INSERT INTO $table_url_rel_group
 		               			SET
 		               			    user_id = $user_id ,
@@ -2551,15 +2569,17 @@ class UserGroupModel extends Model
             return false;
         }
 
-        $table = $this->usergroup_rel_user_table;
-        $sql = "DELETE FROM $table
-                WHERE
-                    user_id = $userId AND
-                    usergroup_id = $groupId";
+        Container::getEntityManager()->createQueryBuilder()
+            ->delete(UsergroupRelUser::class, 'uru')
+            ->where('IDENTITY(uru.user) = :userId')
+            ->andWhere('IDENTITY(uru.usergroup) = :groupId')
+            ->setParameter('userId', $userId)
+            ->setParameter('groupId', $groupId)
+            ->getQuery()
+            ->execute()
+        ;
 
-        $result = Database::query($sql);
-
-        return $result;
+        return true;
     }
 
     /**
@@ -2604,12 +2624,11 @@ class UserGroupModel extends Model
                 return true;
             }
             // No relationship yet → insert normalized relation_type
-            $sql = "INSERT INTO $table_rel
-                SET
-                    user_id = $user_id,
-                    usergroup_id = $group_id,
-                    relation_type = $relation_type";
-            Database::query($sql);
+            Container::getEntityManager()->getConnection()->insert($table_rel, [
+                'user_id' => $user_id,
+                'usergroup_id' => $group_id,
+                'relation_type' => $relation_type,
+            ]);
         } elseif (GROUP_USER_PERMISSION_PENDING_INVITATION === $role) {
             // If somebody already invited the user, upgrade to final role
             self::update_user_role(
@@ -2644,10 +2663,17 @@ class UserGroupModel extends Model
         $user_id = (int) $user_id;
         $relation_type = (int) $relation_type;
 
-        $sql = "UPDATE $table_group_rel_user
-   				SET relation_type = $relation_type
-                WHERE user_id = $user_id AND usergroup_id = $group_id";
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(UsergroupRelUser::class, 'uru')
+            ->set('uru.relationType', ':relationType')
+            ->where('IDENTITY(uru.user) = :userId')
+            ->andWhere('IDENTITY(uru.usergroup) = :groupId')
+            ->setParameter('relationType', $relation_type)
+            ->setParameter('userId', $user_id)
+            ->setParameter('groupId', $group_id)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -2659,65 +2685,86 @@ class UserGroupModel extends Model
      * */
     public function get_groups_by_user($user_id, $relationType = GROUP_USER_PERMISSION_READER, $with_image = false)
     {
-        $table_group_rel_user = $this->usergroup_rel_user_table;
-        $tbl_group = $this->table;
         $user_id = (int) $user_id;
 
-        if (0 == $relationType) {
-            $relationCondition = '';
-        } else {
-            if (is_array($relationType)) {
-                $relationType = array_map('intval', $relationType);
-                $relationType = implode("','", $relationType);
-                $relationCondition = " AND ( gu.relation_type IN ('$relationType')) ";
-            } else {
-                $relationType = (int) $relationType;
-                $relationCondition = " AND gu.relation_type = $relationType ";
-            }
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'g.picture AS picture',
+                'g.title AS title',
+                'g.description AS description',
+                'g.id AS id',
+                'gu.relationType AS relation_type'
+            )
+            ->from(Usergroup::class, 'g')
+            ->innerJoin(UsergroupRelUser::class, 'gu', 'WITH', 'IDENTITY(gu.usergroup) = g.id')
+            ->where('g.groupType = :groupType')
+            ->andWhere('IDENTITY(gu.user) = :userId')
+            ->orderBy('g.createdAt', 'DESC')
+            ->setParameter('groupType', Usergroup::SOCIAL_CLASS)
+            ->setParameter('userId', $user_id)
+        ;
+        if (0 != $relationType) {
+            $qb
+                ->andWhere('gu.relationType IN (:relationTypes)')
+                ->setParameter('relationTypes', is_array($relationType) ? array_map('intval', $relationType) : [(int) $relationType])
+            ;
         }
-
-        $sql = 'SELECT
-                    g.picture,
-                    g.title,
-                    g.description,
-                    g.id ,
-                    gu.relation_type';
-
-        $urlCondition = '';
         if ($this->getUseMultipleUrl()) {
-            $sql .= " FROM $tbl_group g
-                    INNER JOIN ".$this->access_url_rel_usergroup." a
-                    ON (g.id = a.usergroup_id)
-                    INNER JOIN $table_group_rel_user gu
-                    ON gu.usergroup_id = g.id";
-            $urlId = api_get_current_access_url_id();
-            $urlCondition = " AND access_url_id = $urlId ";
-        } else {
-            $sql .= " FROM $tbl_group g
-                    INNER JOIN $table_group_rel_user gu
-                    ON gu.usergroup_id = g.id";
+            $qb
+                ->innerJoin(AccessUrlRelUserGroup::class, 'a', 'WITH', 'IDENTITY(a.userGroup) = g.id')
+                ->andWhere('IDENTITY(a.url) = :urlId')
+                ->setParameter('urlId', (int) api_get_current_access_url_id())
+            ;
         }
 
-        $sql .= " WHERE
-				    g.group_type = ".Usergroup::SOCIAL_CLASS." AND
-                    gu.user_id = $user_id
-                    $relationCondition
-                    $urlCondition
-                ORDER BY created_at DESC ";
-        $result = Database::query($sql);
         $array = [];
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_assoc($result)) {
-                if ($with_image) {
-                    $picture = $this->get_picture_group($row['id'], $row['picture'], 80);
-                    $img = '<img src="'.$picture['file'].'" />';
-                    $row['picture'] = $img;
-                }
-                $array[$row['id']] = $row;
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            if ($with_image) {
+                $picture = $this->get_picture_group($row['id'], $row['picture'], 80);
+                $img = '<img src="'.$picture['file'].'" />';
+                $row['picture'] = $img;
             }
+            $array[$row['id']] = $row;
         }
 
         return $array;
+    }
+
+    /**
+     * Social groups with the number of members holding one of the given roles, best ordered first
+     * (the order expression is one of the two fixed ones of the callers, never user input).
+     *
+     * @param int[] $roles
+     */
+    private function socialGroupsWithMemberCount(array $roles, string $orderExpression, int $limit): array
+    {
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'COUNT(IDENTITY(gu.user)) AS count',
+                'g.picture AS picture',
+                'g.title AS title',
+                'g.description AS description',
+                'g.id AS id'
+            )
+            ->from(Usergroup::class, 'g')
+            ->innerJoin(UsergroupRelUser::class, 'gu', 'WITH', 'IDENTITY(gu.usergroup) = g.id')
+            ->where('g.groupType = :groupType')
+            ->andWhere('gu.relationType IN (:roles)')
+            ->groupBy('g.id')
+            ->orderBy($orderExpression, 'DESC')
+            ->setMaxResults($limit)
+            ->setParameter('groupType', Usergroup::SOCIAL_CLASS)
+            ->setParameter('roles', $roles)
+        ;
+        if ($this->getUseMultipleUrl()) {
+            $qb
+                ->innerJoin(AccessUrlRelUserGroup::class, 'a', 'WITH', 'IDENTITY(a.userGroup) = g.id')
+                ->andWhere('IDENTITY(a.url) = :urlId')
+                ->setParameter('urlId', (int) api_get_current_access_url_id())
+            ;
+        }
+
+        return $qb->getQuery()->getArrayResult();
     }
 
     /** Gets the inner join of users and group table.
@@ -2730,46 +2777,19 @@ class UserGroupModel extends Model
      * */
     public function get_groups_by_popularity($num = 6, $with_image = true)
     {
-        $table_group_rel_user = $this->usergroup_rel_user_table;
-        $tbl_group = $this->table;
         if (empty($num)) {
             $num = 6;
         } else {
             $num = (int) $num;
         }
         // only show admins and readers
-        $whereCondition = " WHERE
-                              g.group_type = ".Usergroup::SOCIAL_CLASS." AND
-                              gu.relation_type IN
-                              ('".GROUP_USER_PERMISSION_ADMIN."' , '".GROUP_USER_PERMISSION_READER."', '".GROUP_USER_PERMISSION_HRM."') ";
-
-        $sql = 'SELECT DISTINCT count(user_id) as count, g.picture, g.title, g.description, g.id ';
-
-        $urlCondition = '';
-        if ($this->getUseMultipleUrl()) {
-            $sql .= " FROM $tbl_group g
-                    INNER JOIN ".$this->access_url_rel_usergroup." a
-                    ON (g.id = a.usergroup_id)
-                    INNER JOIN $table_group_rel_user gu
-                    ON gu.usergroup_id = g.id";
-            $urlId = api_get_current_access_url_id();
-            $urlCondition = " AND access_url_id = $urlId ";
-        } else {
-            $sql .= " FROM $tbl_group g
-                    INNER JOIN $table_group_rel_user gu
-                    ON gu.usergroup_id = g.id";
-        }
-
-        $sql .= "
-				$whereCondition
-				$urlCondition
-				GROUP BY g.id
-				ORDER BY count DESC
-				LIMIT $num";
-
-        $result = Database::query($sql);
+        $rows = $this->socialGroupsWithMemberCount(
+            [GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_HRM],
+            'COUNT(IDENTITY(gu.user))',
+            $num
+        );
         $array = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             if ($with_image) {
                 $picture = $this->get_picture_group($row['id'], $row['picture'], 80);
                 $img = '<img src="'.$picture['file'].'" />';
@@ -2794,54 +2814,24 @@ class UserGroupModel extends Model
      * */
     public function get_groups_by_age($num = 6, $withImage = true)
     {
-        $table_group_rel_user = $this->usergroup_rel_user_table;
-        $tbl_group = $this->table;
-
         if (empty($num)) {
             $num = 6;
         } else {
             $num = (int) $num;
         }
 
-        $where = " WHERE
-                        g.group_type = ".Usergroup::SOCIAL_CLASS." AND
-                        gu.relation_type IN
-                        ('".GROUP_USER_PERMISSION_ADMIN."' ,
-                        '".GROUP_USER_PERMISSION_READER."',
-                        '".GROUP_USER_PERMISSION_MODERATOR."',
-                        '".GROUP_USER_PERMISSION_HRM."')
-                    ";
-        $sql = 'SELECT DISTINCT
-                  count(user_id) as count,
-                  g.picture,
-                  g.title,
-                  g.description,
-                  g.id ';
-
-        $urlCondition = '';
-        if ($this->getUseMultipleUrl()) {
-            $sql .= " FROM $tbl_group g
-                    INNER JOIN ".$this->access_url_rel_usergroup." a
-                    ON (g.id = a.usergroup_id)
-                    INNER JOIN $table_group_rel_user gu
-                    ON gu.usergroup_id = g.id";
-            $urlId = api_get_current_access_url_id();
-            $urlCondition = " AND access_url_id = $urlId ";
-        } else {
-            $sql .= " FROM $tbl_group g
-                    INNER JOIN $table_group_rel_user gu
-                    ON gu.usergroup_id = g.id";
-        }
-        $sql .= "
-                $where
-                $urlCondition
-                GROUP BY g.id
-                ORDER BY created_at DESC
-                LIMIT $num ";
-
-        $result = Database::query($sql);
+        $rows = $this->socialGroupsWithMemberCount(
+            [
+                GROUP_USER_PERMISSION_ADMIN,
+                GROUP_USER_PERMISSION_READER,
+                GROUP_USER_PERMISSION_MODERATOR,
+                GROUP_USER_PERMISSION_HRM,
+            ],
+            'g.createdAt',
+            $num
+        );
         $array = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             if ($withImage) {
                 $picture = $this->get_picture_group($row['id'], $row['picture'], 80);
                 $img = '<img src="'.$picture['file'].'" />';
@@ -2876,53 +2866,41 @@ class UserGroupModel extends Model
         $limit = null,
         $image_conf = ['size' => USER_IMAGE_SIZE_MEDIUM, 'height' => 80]
     ) {
-        $table_group_rel_user = $this->usergroup_rel_user_table;
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $group_id = (int) $group_id;
 
         if (empty($group_id)) {
             return [];
         }
 
-        $limit_text = '';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                'u.pictureUri AS image',
+                'u.id AS id',
+                "CONCAT(u.firstname, ' ', u.lastname) AS fullname",
+                'gu.relationType AS relation_type'
+            )
+            ->from(User::class, 'u')
+            ->innerJoin(UsergroupRelUser::class, 'gu', 'WITH', 'IDENTITY(gu.user) = u.id')
+            ->where('u.active <> :deleted')
+            ->andWhere('IDENTITY(gu.usergroup) = :groupId')
+            ->orderBy('gu.relationType', 'ASC')
+            ->addOrderBy('u.firstname', 'ASC')
+            ->setParameter('deleted', USER_SOFT_DELETED)
+            ->setParameter('groupId', $group_id)
+        ;
         if (isset($from) && isset($limit)) {
-            $from = (int) $from;
-            $limit = (int) $limit;
-            $limit_text = "LIMIT $from, $limit";
+            $qb->setFirstResult((int) $from)->setMaxResults((int) $limit);
         }
-
-        if (0 == count($relation_type)) {
-            $where_relation_condition = '';
-        } else {
-            $new_relation_type = [];
-            foreach ($relation_type as $rel) {
-                $rel = (int) $rel;
-                $new_relation_type[] = "'$rel'";
-            }
-            $relation_type = implode(',', $new_relation_type);
-            if (!empty($relation_type)) {
-                $where_relation_condition = "AND gu.relation_type IN ($relation_type) ";
-            }
+        if (0 != count($relation_type)) {
+            $qb
+                ->andWhere('gu.relationType IN (:relationTypes)')
+                ->setParameter('relationTypes', array_map('intval', $relation_type))
+            ;
         }
+        $rows = $qb->getQuery()->getArrayResult();
 
-        $sql = "SELECT
-                    picture_uri as image,
-                    u.id,
-                    CONCAT (u.firstname,' ', u.lastname) as fullname,
-                    relation_type
-    		    FROM $tbl_user u
-    		    INNER JOIN $table_group_rel_user gu
-    			ON (gu.user_id = u.id)
-    			WHERE
-    			    u.active <> ".USER_SOFT_DELETED." AND
-    			    gu.usergroup_id= $group_id
-    			    $where_relation_condition
-    			ORDER BY relation_type, firstname
-    			$limit_text";
-
-        $result = Database::query($sql);
         $array = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             if ($withImage) {
                 $userInfo = api_get_user_info($row['id']);
                 $userPicture = UserManager::getUserPicture($row['id']);
@@ -2947,24 +2925,27 @@ class UserGroupModel extends Model
      */
     public function get_all_users_by_group($group_id)
     {
-        $table_group_rel_user = $this->usergroup_rel_user_table;
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $group_id = (int) $group_id;
 
         if (empty($group_id)) {
             return [];
         }
 
-        $sql = "SELECT u.id, u.firstname, u.lastname, relation_type
-                FROM $tbl_user u
-			    INNER JOIN $table_group_rel_user gu
-			    ON (gu.user_id = u.id)
-			    WHERE u.active <> ".USER_SOFT_DELETED." AND gu.usergroup_id= $group_id
-			    ORDER BY relation_type, firstname";
-
-        $result = Database::query($sql);
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('u.id AS id', 'u.firstname AS firstname', 'u.lastname AS lastname', 'gu.relationType AS relation_type')
+            ->from(User::class, 'u')
+            ->innerJoin(UsergroupRelUser::class, 'gu', 'WITH', 'IDENTITY(gu.user) = u.id')
+            ->where('u.active <> :deleted')
+            ->andWhere('IDENTITY(gu.usergroup) = :groupId')
+            ->orderBy('gu.relationType', 'ASC')
+            ->addOrderBy('u.firstname', 'ASC')
+            ->setParameter('deleted', USER_SOFT_DELETED)
+            ->setParameter('groupId', $group_id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
         $array = [];
-        while ($row = Database::fetch_assoc($result)) {
+        foreach ($rows as $row) {
             $array[$row['id']] = $row;
         }
 
@@ -3076,17 +3057,19 @@ class UserGroupModel extends Model
      */
     public function delete_topic($group_id, $topic_id)
     {
-        $table_message = Database::get_main_table(TABLE_MESSAGE);
         $topic_id = (int) $topic_id;
         $group_id = (int) $group_id;
 
-        $sql = "UPDATE $table_message SET
-                    msg_type = 3
-                WHERE
-                    group_id = $group_id AND
-                    (id = '$topic_id' OR parent_id = $topic_id)
-                ";
-        Database::query($sql);
+        Container::getEntityManager()->createQueryBuilder()
+            ->update(Message::class, 'm')
+            ->set('m.msgType', 3)
+            ->where('IDENTITY(m.group) = :groupId')
+            ->andWhere('m.id = :topicId OR IDENTITY(m.parent) = :topicId')
+            ->setParameter('groupId', $group_id)
+            ->setParameter('topicId', $topic_id)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -3098,48 +3081,29 @@ class UserGroupModel extends Model
      */
     public function get_all_group_tags($tag, $from = 0, $number_of_items = 10, $getCount = false)
     {
-        $group_table = $this->table;
-        $tag = Database::escape_string($tag);
         $from = (int) $from;
         $number_of_items = (int) $number_of_items;
         $return = [];
 
-        $keyword = $tag;
-        $sql = 'SELECT  g.id, g.title, g.description, g.url, g.picture ';
-        $urlCondition = '';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('g.id AS id', 'g.title AS title', 'g.description AS description', 'g.url AS url', 'g.picture AS picture')
+            ->from(Usergroup::class, 'g')
+            ->where('g.title LIKE :keyword OR g.description LIKE :keyword OR g.url LIKE :keyword')
+            ->setParameter('keyword', '%'.$tag.'%')
+            ->setFirstResult($from)
+            ->setMaxResults($number_of_items)
+        ;
         if ($this->getUseMultipleUrl()) {
-            $urlId = api_get_current_access_url_id();
-            $sql .= " FROM $this->table g
-                    INNER JOIN $this->access_url_rel_usergroup a
-                    ON (g.id = a.usergroup_id)";
-            $urlCondition = " AND access_url_id = $urlId ";
-        } else {
-            $sql .= " FROM $group_table g";
-        }
-        if (isset($keyword)) {
-            $sql .= " WHERE (
-                        g.title LIKE '%".$keyword."%' OR
-                        g.description LIKE '%".$keyword."%' OR
-                        g.url LIKE '%".$keyword."%'
-                     ) $urlCondition
-                     ";
-        } else {
-            $sql .= " WHERE 1 = 1 $urlCondition ";
+            $qb
+                ->innerJoin(AccessUrlRelUserGroup::class, 'a', 'WITH', 'IDENTITY(a.userGroup) = g.id')
+                ->andWhere('IDENTITY(a.url) = :urlId')
+                ->setParameter('urlId', (int) api_get_current_access_url_id())
+            ;
         }
 
-        $direction = 'ASC';
-        if (!in_array($direction, ['ASC', 'DESC'])) {
-            $direction = 'ASC';
-        }
-
-        $sql .= " LIMIT $from, $number_of_items";
-
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            while ($row = Database::fetch_assoc($res)) {
-                if (!in_array($row['id'], $return)) {
-                    $return[$row['id']] = $row;
-                }
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            if (!in_array($row['id'], $return)) {
+                $return[$row['id']] = $row;
             }
         }
 
@@ -3153,31 +3117,21 @@ class UserGroupModel extends Model
      */
     public static function get_parent_groups($group_id)
     {
-        $t_rel_group = Database::get_main_table(TABLE_USERGROUP_REL_USERGROUP);
         $group_id = (int) $group_id;
 
         $max_level = 10;
-        $select_part = 'SELECT ';
-        $cond_part = '';
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->from(UserGroupRelUserGroup::class, 'rg0')
+            ->where('rg0.subgroupId = :groupId')
+            ->setParameter('groupId', $group_id)
+            ->setMaxResults(1)
+        ;
         for ($i = 1; $i <= $max_level; $i++) {
             $rg_number = $i - 1;
-            if ($i == $max_level) {
-                $select_part .= "rg$rg_number.group_id as id_$rg_number ";
-            } else {
-                $select_part .= "rg$rg_number.group_id as id_$rg_number, ";
-            }
-            if (1 == $i) {
-                $cond_part .= "FROM $t_rel_group rg0
-                               LEFT JOIN $t_rel_group rg$i
-                               ON rg$rg_number.group_id = rg$i.subgroup_id ";
-            } else {
-                $cond_part .= " LEFT JOIN $t_rel_group rg$i
-                                ON rg$rg_number.group_id = rg$i.subgroup_id ";
-            }
+            $qb->addSelect("rg$rg_number.groupId AS id_$rg_number");
+            $qb->leftJoin(UserGroupRelUserGroup::class, "rg$i", 'WITH', "rg$rg_number.groupId = rg$i.subgroupId");
         }
-        $sql = $select_part.' '.$cond_part."WHERE rg0.subgroup_id='$group_id'";
-        $res = Database::query($sql);
-        $temp_arr = Database::fetch_assoc($res);
+        $temp_arr = $qb->getQuery()->getArrayResult()[0] ?? null;
         $toReturn = [];
         if (is_array($temp_arr)) {
             foreach ($temp_arr as $elt) {
@@ -3257,32 +3211,28 @@ class UserGroupModel extends Model
         $groups = [];
         $groupId = (int) $groupId;
 
-        $groupTable = Database::get_main_table(TABLE_USERGROUP);
-        $groupRelGroupTable = Database::get_main_table(TABLE_USERGROUP_REL_USERGROUP);
-
-        $select = 'SELECT ';
-        $from = "FROM $groupTable g1 ";
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->from(Usergroup::class, 'g1')
+            ->innerJoin(
+                UserGroupRelUserGroup::class,
+                'gg0',
+                'WITH',
+                'g1.id = gg0.subgroupId AND gg0.groupId = :groupId'
+            )
+            ->setParameter('groupId', $groupId)
+        ;
 
         for ($i = 1; $i <= $levels; $i++) {
-            $tableIndexNumber = $i;
-            $tableIndexJoinNumber = $i - 1;
-            $select .= "g$i.id as id_$i ";
-            $select .= $i != $levels ? ', ' : null;
+            $qb->addSelect("g$i.id AS id_$i");
 
-            if (1 == $i) {
-                $from .= " INNER JOIN $groupRelGroupTable gg0
-                           ON g1.id = gg0.subgroup_id and gg0.group_id = $groupId ";
-            } else {
-                $from .= "LEFT JOIN $groupRelGroupTable gg$tableIndexJoinNumber ";
-                $from .= " ON g$tableIndexJoinNumber.id = gg$tableIndexJoinNumber.group_id ";
-                $from .= "LEFT JOIN $groupTable g$tableIndexNumber ";
-                $from .= " ON gg$tableIndexJoinNumber.subgroup_id = g$tableIndexNumber.id ";
+            if ($i > 1) {
+                $joinNumber = $i - 1;
+                $qb->leftJoin(UserGroupRelUserGroup::class, "gg$joinNumber", 'WITH', "g$joinNumber.id = gg$joinNumber.groupId");
+                $qb->leftJoin(Usergroup::class, "g$i", 'WITH', "gg$joinNumber.subgroupId = g$i.id");
             }
         }
 
-        $result = Database::query("$select $from");
-
-        while ($item = Database::fetch_assoc($result)) {
+        foreach ($qb->getQuery()->getArrayResult() as $item) {
             foreach ($item as $myGroupId) {
                 if (!empty($myGroupId)) {
                     $groups[] = $myGroupId;
@@ -3300,33 +3250,56 @@ class UserGroupModel extends Model
      * @param int $parent_group_id if 0, we delete the parent_group association
      * @param int $relation_type
      *
-     * @return \Doctrine\DBAL\Statement
+     * @return bool
      */
     public function setParentGroup($group_id, $parent_group_id, $relation_type = 1)
     {
-        $table = Database::get_main_table(TABLE_USERGROUP_REL_USERGROUP);
         $group_id = (int) $group_id;
         $parent_group_id = (int) $parent_group_id;
+        $em = Container::getEntityManager();
         if (0 == $parent_group_id) {
-            $sql = "DELETE FROM $table WHERE subgroup_id = $group_id";
-        } else {
-            $sql = "SELECT group_id FROM $table WHERE subgroup_id = $group_id";
-            $res = Database::query($sql);
-            if (0 == Database::num_rows($res)) {
-                $sql = "INSERT INTO $table SET
-                        group_id = $parent_group_id,
-                        subgroup_id = $group_id,
-                        relation_type = $relation_type";
-            } else {
-                $sql = "UPDATE $table SET
-                        group_id = $parent_group_id,
-                        relation_type = $relation_type
-                        WHERE subgroup_id = $group_id";
-            }
-        }
-        $res = Database::query($sql);
+            $em->createQueryBuilder()
+                ->delete(UserGroupRelUserGroup::class, 'r')
+                ->where('r.subgroupId = :groupId')
+                ->setParameter('groupId', $group_id)
+                ->getQuery()
+                ->execute()
+            ;
 
-        return $res;
+            return true;
+        }
+
+        $existing = $em->createQueryBuilder()
+            ->select('r.groupId AS group_id')
+            ->from(UserGroupRelUserGroup::class, 'r')
+            ->where('r.subgroupId = :groupId')
+            ->setParameter('groupId', $group_id)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+        if ([] === $existing) {
+            $em->getConnection()->insert(Database::get_main_table(TABLE_USERGROUP_REL_USERGROUP), [
+                'group_id' => $parent_group_id,
+                'subgroup_id' => $group_id,
+                'relation_type' => (int) $relation_type,
+            ]);
+
+            return true;
+        }
+
+        $em->createQueryBuilder()
+            ->update(UserGroupRelUserGroup::class, 'r')
+            ->set('r.groupId', ':parentGroupId')
+            ->set('r.relationType', ':relationType')
+            ->where('r.subgroupId = :groupId')
+            ->setParameter('parentGroupId', $parent_group_id)
+            ->setParameter('relationType', (int) $relation_type)
+            ->setParameter('groupId', $group_id)
+            ->getQuery()
+            ->execute()
+        ;
+
+        return true;
     }
 
     /**
@@ -3428,6 +3401,7 @@ class UserGroupModel extends Model
                     lp_id = $lpId
                     $sessionCondition
                     ";
+        // TODO(db-neutral): SQL fragment built by api_get_session_condition()
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');
@@ -3447,6 +3421,7 @@ class UserGroupModel extends Model
                     lp_category_id = $categoryId
                     $sessionCondition
                 ";
+        // TODO(db-neutral): SQL fragment built by api_get_session_condition()
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

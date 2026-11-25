@@ -80,8 +80,8 @@ Feature: Breadcrumb visibility
     Given I am a platform administrator
     And I am on course "TEMP" homepage
     When I click the "a[href*='/resources/document/'][href*='cid=']" element
-    And I wait up to 45 seconds for the element "button:has(.mdi-folder-plus)" to appear
-    And I click the "button:has(.mdi-folder-plus)" element
+    And I wait up to 45 seconds for the element "button[title='New folder']" to appear
+    And I click the "button[title='New folder']" element
     And I fill in "title" with "BcTmpFolder"
     And I click the ".p-dialog button:has(.mdi-check)" element
     And I wait up to 30 seconds for the element "a:has-text('BcTmpFolder')" to appear

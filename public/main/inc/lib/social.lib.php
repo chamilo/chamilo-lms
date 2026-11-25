@@ -2,8 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
@@ -150,31 +152,41 @@ class SocialManager extends UserManager
     ) {
         $user_id = (int) $user_id;
 
-        $tbl_my_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $tbl_my_user = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = 'SELECT friend_user_id FROM '.$tbl_my_friend.'
-                WHERE
-                    relation_type NOT IN ('.UserRelUser::USER_RELATION_TYPE_DELETED.', '.UserRelUser::USER_RELATION_TYPE_RRHH.') AND
-                    friend_user_id<>'.$user_id.' AND
-                    user_id='.$user_id;
+        $em = Container::getEntityManager();
+        $qb = $em->createQueryBuilder()
+            ->select('IDENTITY(r.friend) AS friend_user_id')
+            ->from(UserRelUser::class, 'r')
+            ->where('r.relationType NOT IN (:excludedTypes)')
+            ->andWhere('IDENTITY(r.friend) <> :userId')
+            ->andWhere('IDENTITY(r.user) = :userId')
+            ->setParameter('excludedTypes', [
+                UserRelUser::USER_RELATION_TYPE_DELETED,
+                UserRelUser::USER_RELATION_TYPE_RRHH,
+            ])
+            ->setParameter('userId', $user_id)
+        ;
         if (isset($id_group) && $id_group > 0) {
-            $sql .= ' AND relation_type='.$id_group;
+            $qb->andWhere('r.relationType = :groupId')->setParameter('groupId', (int) $id_group);
         }
         if (isset($search_name)) {
             $search_name = trim($search_name);
             $search_name = str_replace(' ', '', $search_name);
-            $sql .= ' AND friend_user_id IN (
-                SELECT id FROM '.$tbl_my_user.'
-                WHERE
-                    firstName LIKE "%'.Database::escape_string($search_name).'%" OR
-                    lastName LIKE "%'.Database::escape_string($search_name).'%" OR
-                    '.(api_is_western_name_order() ? 'concat(firstName, lastName)' : 'concat(lastName, firstName)').' LIKE concat("%","'.Database::escape_string($search_name).'","%")
-                ) ';
+            $glued = api_is_western_name_order() ? 'CONCAT(u.firstname, u.lastname)' : 'CONCAT(u.lastname, u.firstname)';
+            $matchingUsers = $em->createQueryBuilder()
+                ->select('u.id')
+                ->from(User::class, 'u')
+                ->where('u.firstname LIKE :search OR u.lastname LIKE :search OR '.$glued.' LIKE :search')
+                ->getDQL()
+            ;
+            $qb->andWhere('IDENTITY(r.friend) IN ('.$matchingUsers.')')
+                ->setParameter('search', '%'.$search_name.'%')
+            ;
         }
 
-        $res = Database::query($sql);
+        $res = $qb->getQuery()->getArrayResult();
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($res as $row) {
+            $row['friend_user_id'] = (int) $row['friend_user_id'];
             if ($load_extra_info) {
                 $userInfo = api_get_user_info($row['friend_user_id']);
                 $list[] = [
@@ -1123,7 +1135,6 @@ class SocialManager extends UserManager
             $fieldVisibilityKeys = array_keys($fieldVisibility);
         }
 
-        $t_ufo = Database::get_main_table(TABLE_EXTRA_FIELD_OPTIONS);
         $extra_user_data = UserManager::get_extra_user_data($user_id);
 
         $extra_information = '';
@@ -1234,12 +1245,16 @@ class SocialManager extends UserManager
                             $value_options = [];
                             // get option display text from user_field_options table
                             foreach ($id_options as $id_option) {
-                                $sql = "SELECT display_text
-                                    FROM $t_ufo
-                                    WHERE id = ".(int) $id_option;
-                                $res_options = Database::query($sql);
-                                $row_options = Database::fetch_row($res_options);
-                                $value_options[] = $row_options[0];
+                                $optionRows = Container::getEntityManager()->createQueryBuilder()
+                                    ->select('o.displayText AS display_text')
+                                    ->from(ExtraFieldOptions::class, 'o')
+                                    ->where('o.id = :optionId')
+                                    ->setParameter('optionId', (int) $id_option)
+                                    ->setMaxResults(1)
+                                    ->getQuery()
+                                    ->getArrayResult()
+                                ;
+                                $value_options[] = $optionRows[0]['display_text'] ?? null;
                             }
                             $extra_information_value .= '<li class="list-group-item">'.ucfirst($extraFieldInfo['display_text']).': '
                                 .' '.implode(' ', $value_options).'</li>';

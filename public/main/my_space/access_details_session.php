@@ -13,11 +13,28 @@ $this_section = SECTION_TRACKING;
 
 $userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
 
-// General coaches of a session the student belongs to may open this report (issue #4981).
-$isAllowedToTrack = api_is_platform_admin(true, true) ||
-    api_is_teacher() ||
-    api_is_course_tutor() ||
-    ($userId > 0 && Tracking::is_allowed_to_coach_student(api_get_user_id(), $userId));
+// Admins, session admins and HR managers may open any learner's report. Teachers,
+// coaches (issue #4981) and course tutors only the report of a learner they follow,
+// as in myStudents.php.
+$isAllowedToTrack = api_is_platform_admin(true, true);
+
+if (!$isAllowedToTrack && $userId > 0) {
+    $currentUserId = api_get_user_id();
+    $isAllowedToTrack = UserManager::isTeacherOfStudent($currentUserId, $userId)
+        || Tracking::is_allowed_to_coach_student($currentUserId, $userId);
+
+    $trackedCourse = api_get_course_entity(isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : 0);
+    if (!$isAllowedToTrack && null !== $trackedCourse) {
+        $trackedSessionId = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : 0;
+        $isAllowedToTrack = 1 === (int) CourseManager::get_tutor_in_course_status($currentUserId, $trackedCourse->getId())
+            && CourseManager::is_user_subscribed_in_course(
+                $userId,
+                $trackedCourse->getCode(),
+                !empty($trackedSessionId),
+                $trackedSessionId
+            );
+    }
+}
 
 if (!$isAllowedToTrack) {
     api_not_allowed(true);

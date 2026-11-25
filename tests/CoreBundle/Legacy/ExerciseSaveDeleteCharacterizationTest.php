@@ -1012,6 +1012,22 @@ final class ExerciseSaveDeleteCharacterizationTest extends KernelTestCase
         $this->assertSame([$ids[1], $ids[3]], $e->categoryWithQuestionList[$catA]['question_list']);
     }
 
+    public function testQuestionWithCategoriesListsEachCategoryOnceWithItsRow(): void
+    {
+        [$e, , $catA, $catB] = $this->categorizedQuiz(EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED);
+
+        $rows = $e->getQuestionWithCategories();
+
+        $ids = array_map('intval', array_column($rows, 'iid'));
+        sort($ids);
+        $expected = [$catA, $catB];
+        sort($expected);
+        $this->assertSame($expected, $ids, 'a category shared by several questions is listed once');
+        $byId = array_column($rows, null, 'iid');
+        $this->assertSame('x2_sel_a', $byId[$catA]['title']);
+        $this->assertSame('x2_sel_b', $byId[$catB]['title']);
+    }
+
     public function testCategorySelectionCountOfMinusOneMeansAllQuestions(): void
     {
         [$e, $ids, $catA, $catB] = $this->categorizedQuiz(EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED);

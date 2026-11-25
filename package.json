@@ -16,6 +16,7 @@
     "test:playwright:specialcase2": "playwright test --config=tests/playwright/playwright.config.ts --grep \"@specialcase2\" --workers=1 --retries=0 --trace=retain-on-failure",
     "test:playwright:specialcases": "playwright test --config=tests/playwright/playwright.config.ts --grep \"@specialcases\" --workers=1 --retries=0 --trace=retain-on-failure",
     "test:playwright": "playwright test --config=tests/playwright/playwright.config.ts --grep-invert \"Installation process|Create tests users successfully|Create a course before testing|Create a private course before testing|Enable group categories before testing|@specialcases\"",
+    "test:playwright:partition": "node tests/playwright/scripts/run-partition.mjs",
     "test:playwright:ui": "playwright test --config=tests/playwright/playwright.config.ts --ui",
     "check:breadcrumb-routes": "node tests/scripts/check-breadcrumb-routes.cjs",
     "check:rtl-classes": "node tests/scripts/check-rtl-classes.cjs"

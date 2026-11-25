@@ -56,15 +56,15 @@ Feature: Tests of a session that is over and read only
     Then I should see "Question of the read only session test"
     And I should not see an error
 
-  # A new test is hidden from learners until it is activated.
-  Scenario: Make the test visible
+  # A new test is visible to learners from the start: "Default visibility of new tests" is "visible"
+  # by default (ResourceDefaultVisibilityHelper). Check it instead of activating it.
+  Scenario: The test is visible
     Given I am a platform administrator
     And I wait for the page to be loaded
     And I am on course "EXROSESSION" homepage
     And I wait for the page to be loaded
     And I follow "Tests"
     And I wait for the page content to settle
-    And I click the "[title='Activate']" icon in the row for "Read only session test"
     Then I wait for the element "tr:has-text('Read only session test') [title='Deactivate']" to appear
 
   Scenario: Create a session that is over and read only, with the course and the learner

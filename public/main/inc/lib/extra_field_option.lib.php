@@ -72,17 +72,17 @@ class ExtraFieldOption extends Model
         $extraFieldType = $this->getExtraField()->getItemType();
         $fieldId = (int) $fieldId;
 
-        $sql = "SELECT count(*) as count
-                FROM $this->table o
-                INNER JOIN $this->tableExtraField e
-                ON o.field_id = e.id
-                WHERE
-                    o.field_id = $fieldId AND
-                    e.item_type = $extraFieldType ";
-        $result = Database::query($sql);
-        $result = Database::fetch_array($result);
-
-        return $result['count'];
+        return (string) Container::getEntityManager()->createQueryBuilder()
+            ->select('COUNT(o.id)')
+            ->from(ExtraFieldOptions::class, 'o')
+            ->innerJoin('o.field', 'e')
+            ->where('o.field = :fieldId')
+            ->andWhere('e.itemType = :itemType')
+            ->setParameter('fieldId', $fieldId)
+            ->setParameter('itemType', (int) $extraFieldType)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     /**
@@ -121,9 +121,14 @@ class ExtraFieldOption extends Model
     public function delete_all_options_by_field_id($field_id)
     {
         $field_id = (int) $field_id;
-        $sql = "DELETE FROM {$this->table} WHERE field_id = $field_id";
 
-        return Database::query($sql);
+        return Container::getEntityManager()->createQueryBuilder()
+            ->delete(ExtraFieldOptions::class, 'o')
+            ->where('IDENTITY(o.field) = :fieldId')
+            ->setParameter('fieldId', $field_id)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**
@@ -427,23 +432,18 @@ class ExtraFieldOption extends Model
     public function get_field_option_by_field_id_and_option_display_text($field_id, $option_display_text)
     {
         $field_id = (int) $field_id;
-        $option_display_text = Database::escape_string($option_display_text);
         $extraFieldType = $this->getExtraField()->getItemType();
 
-        $sql = "SELECT s.* FROM {$this->table} s
-                INNER JOIN {$this->tableExtraField} sf
-                ON (s.field_id = sf.id)
-                WHERE
-                    field_id = $field_id AND
-                    s.display_text = '".$option_display_text."' AND
-                    sf.item_type = $extraFieldType
-                ";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            return Database::fetch_assoc($result);
-        }
+        $qb = $this->optionRowsQueryBuilder()
+            ->where('s.field = :fieldId')
+            ->andWhere('s.displayText = :displayText')
+            ->andWhere('sf.itemType = :itemType')
+            ->setParameter('fieldId', $field_id)
+            ->setParameter('displayText', (string) $option_display_text)
+            ->setParameter('itemType', (int) $extraFieldType)
+        ;
 
-        return false;
+        return $this->firstOptionRow($qb);
     }
 
     /**
@@ -462,25 +462,21 @@ class ExtraFieldOption extends Model
         $option_value
     ) {
         $field_id = (int) $field_id;
-        $option_display_text = Database::escape_string($option_display_text);
-        $option_value = Database::escape_string($option_value);
         $extraFieldType = $this->getExtraField()->getItemType();
 
-        $sql = "SELECT s.* FROM {$this->table} s
-                INNER JOIN {$this->tableExtraField} sf
-                ON (s.field_id = sf.id)
-                WHERE
-                    field_id = $field_id AND
-                    sf.display_text = '".$option_display_text."' AND
-                    option_value = '$option_value' AND
-                    sf.item_type = ".$extraFieldType."
-                ";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            return Database::fetch_assoc($result);
-        }
+        // Kept from the raw query: the text is compared with the FIELD's display text, not the option's.
+        $qb = $this->optionRowsQueryBuilder()
+            ->where('s.field = :fieldId')
+            ->andWhere('sf.displayText = :displayText')
+            ->andWhere('s.value = :optionValue')
+            ->andWhere('sf.itemType = :itemType')
+            ->setParameter('fieldId', $field_id)
+            ->setParameter('displayText', (string) $option_display_text)
+            ->setParameter('optionValue', (string) $option_value)
+            ->setParameter('itemType', (int) $extraFieldType)
+        ;
 
-        return false;
+        return $this->firstOptionRow($qb);
     }
 
     /**
@@ -692,6 +688,40 @@ class ExtraFieldOption extends Model
         return get_lang("No option available");
     }
 
+    private function optionRowsQueryBuilder(): \Doctrine\ORM\QueryBuilder
+    {
+        return Container::getEntityManager()->createQueryBuilder()
+            ->select(
+                's.id AS id',
+                'IDENTITY(s.field) AS field_id',
+                's.value AS option_value',
+                's.displayText AS display_text',
+                's.priority AS priority',
+                's.priorityMessage AS priority_message',
+                's.optionOrder AS option_order'
+            )
+            ->from(ExtraFieldOptions::class, 's')
+            ->innerJoin('s.field', 'sf')
+        ;
+    }
+
+    /**
+     * @return array|false The raw option row (same keys and types as the table), or false when there is none
+     */
+    private function firstOptionRow(\Doctrine\ORM\QueryBuilder $qb)
+    {
+        $rows = $qb->setMaxResults(1)->getQuery()->getArrayResult();
+        if (empty($rows)) {
+            return false;
+        }
+        $row = $rows[0];
+        $row['id'] = (int) $row['id'];
+        $row['field_id'] = (int) $row['field_id'];
+        $row['option_order'] = null === $row['option_order'] ? null : (int) $row['option_order'];
+
+        return $row;
+    }
+
     /**
      * Get the maximum order value for a specific field.
      *
@@ -703,17 +733,16 @@ class ExtraFieldOption extends Model
     public function get_max_order($field_id)
     {
         $field_id = (int) $field_id;
-        $sql = "SELECT MAX(option_order)
-                FROM {$this->table}
-                WHERE field_id = $field_id";
-        $res = Database::query($sql);
-        $max = 1;
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_array($res);
-            $max = $row[0] + 1;
-        }
+        $max = Container::getEntityManager()->createQueryBuilder()
+            ->select('MAX(o.optionOrder)')
+            ->from(ExtraFieldOptions::class, 'o')
+            ->where('IDENTITY(o.field) = :fieldId')
+            ->setParameter('fieldId', $field_id)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
 
-        return $max;
+        return (int) $max + 1;
     }
 
     /**

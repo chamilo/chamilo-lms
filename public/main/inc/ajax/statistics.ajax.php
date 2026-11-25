@@ -728,7 +728,7 @@ switch ($action) {
                     $categoryData = SessionManager::get_session_category($row['session_category_id']);
                     $label = get_lang('Without category');
                     if ($categoryData) {
-                        $label = $categoryData['name'];
+                        $label = $categoryData['title'];
                     }
                     $all[$label] = $row['count'];
                 }

@@ -135,13 +135,15 @@ final class ExerciseQti2ExactCombinationTest extends KernelTestCase
         self::assertSame(['2'], $this->texts($xpath, '//q:responseIf/q:setOutcomeValue/q:baseValue'));
     }
 
-    public function testOnlyExactCombinationIsAddedToTheExportedTypes(): void
+    public function testExactCombinationAndItsTrueFalseVariantAreExportedTypes(): void
     {
         $service = (new ReflectionClass(ExerciseQti2ExportService::class))->newInstanceWithoutConstructor();
         $isExportable = new ReflectionMethod(ExerciseQti2ExportService::class, 'isLegacyExportableQuestion');
 
         self::assertTrue($isExportable->invoke($service, (new CQuizQuestion())->setType(self::MULTIPLE_ANSWER_COMBINATION)));
-        self::assertFalse($isExportable->invoke($service, (new CQuizQuestion())->setType(self::MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE)));
+        // Exported through Qti2TrueFalseItem since "Extend QTI2 question type support" (#9285); this test used
+        // to assert that only the exact combination was exportable.
+        self::assertTrue($isExportable->invoke($service, (new CQuizQuestion())->setType(self::MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE)));
     }
 
     public function testTextsAreEscaped(): void

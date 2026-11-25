@@ -53,6 +53,7 @@ if ($course_validation_feature) {
             'post',
             'course_request_edit.php?id='.$id.'&caller='.$caller
         );
+        $form->protect();
 
         $form->protect();
         $form->addElement('header', get_lang('Course request details'));

@@ -2152,6 +2152,7 @@ class Event
             'login_date' => $loginDate,
             'user_ip' => $ip,
             'logout_date' => $logoutDate,
+            'access_url_id' => api_get_current_access_url_id(),
         ];
         $platformTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         Database::insert($platformTrackingTable, $params);

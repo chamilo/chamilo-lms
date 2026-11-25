@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\TrackELogin;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit;
 use DateTime;
 use DateTimeZone;
@@ -19,7 +20,8 @@ class TrackELoginRepository extends ServiceEntityRepository
 {
     public function __construct(
         ManagerRegistry $registry,
-        private readonly SessionTimeLimit $sessionTimeLimit
+        private readonly SessionTimeLimit $sessionTimeLimit,
+        private readonly AccessUrlHelper $accessUrlHelper,
     ) {
         parent::__construct($registry, TrackELogin::class);
     }
@@ -33,6 +35,7 @@ class TrackELoginRepository extends ServiceEntityRepository
         // touchLastConnection(), so it never stays open-ended (NULL) and uncounted.
         $loginRecord->setLogoutDate(clone $loginDate);
         $loginRecord->setUserIp($userIp);
+        $loginRecord->setAccessUrlId($this->accessUrlHelper->getCurrent()?->getId());
 
         $this->getEntityManager()->persist($loginRecord);
         $this->getEntityManager()->flush();
@@ -44,7 +47,7 @@ class TrackELoginRepository extends ServiceEntityRepository
     {
         // Connections no longer stay with a NULL logout date (see createLoginRecord()),
         // so close the latest one, as the 1.11.x online_logout() did.
-        $lastLoginRecord = $this->findOneBy(['user' => $userId], ['loginDate' => 'DESC']);
+        $lastLoginRecord = $this->findLastOnCurrentUrl($userId);
 
         if (null !== $lastLoginRecord) {
             $lastLoginRecord->setLogoutDate($logoutDate);
@@ -60,7 +63,7 @@ class TrackELoginRepository extends ServiceEntityRepository
     public function touchLastConnection(User $user, string $userIp, int $inactivityLimit): void
     {
         $now = new DateTime('now', new DateTimeZone('UTC'));
-        $lastLoginRecord = $this->findOneBy(['user' => $user->getId()], ['loginDate' => 'DESC']);
+        $lastLoginRecord = $this->findLastOnCurrentUrl((int) $user->getId());
 
         $lastActivity = $lastLoginRecord?->getLogoutDate() ?? $lastLoginRecord?->getLoginDate();
         if (null === $lastActivity || $lastActivity->getTimestamp() < $now->getTimestamp() - $inactivityLimit) {
@@ -100,5 +103,16 @@ class TrackELoginRepository extends ServiceEntityRepository
         }
 
         return (int) $this->getEntityManager()->getConnection()->fetchOne($sql, $params, $types);
+    }
+
+    /**
+     * Activity and logout on one access URL must not extend a connection opened on another one.
+     */
+    private function findLastOnCurrentUrl(int $userId): ?TrackELogin
+    {
+        return $this->findOneBy(
+            ['user' => $userId, 'accessUrlId' => $this->accessUrlHelper->getCurrent()?->getId()],
+            ['loginDate' => 'DESC']
+        );
     }
 }

@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserFriendRelationType;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
@@ -46,38 +47,43 @@ class SocialManager extends UserManager
      */
     public static function get_relation_between_contacts($user_id, $user_friend, $includeRH = false)
     {
-        $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
-        $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        if (false == $includeRH) {
-            $sql = 'SELECT rt.id as id
-                FROM '.$table.' rt
-                WHERE rt.id = (
-                    SELECT uf.relation_type
-                    FROM '.$userRelUserTable.' uf
-                    WHERE
-                        user_id='.((int) $user_id).' AND
-                        friend_user_id='.((int) $user_friend).' AND
-                        uf.relation_type <> '.UserRelUser::USER_RELATION_TYPE_RRHH.'
-                    LIMIT 1
-                )';
-        } else {
-            $sql = 'SELECT rt.id as id
-                FROM '.$table.' rt
-                WHERE rt.id = (
-                    SELECT uf.relation_type
-                    FROM '.$userRelUserTable.' uf
-                    WHERE
-                        user_id='.((int) $user_id).' AND
-                        friend_user_id='.((int) $user_friend).'
-                    LIMIT 1
-                )';
-        }
-// TODO(db-neutral): LIMIT inside a subquery (pinned by SocialCharacterizationTest); left raw.
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_assoc($res);
+        $entityManager = Container::getEntityManager();
 
-            return (int) $row['id'];
+        // The relation type stored for the directed pair. A pair can hold several rows (one per relation type): the
+        // raw query took "the first" one with no ORDER BY, which in practice was the lowest type (unique index order),
+        // so that order is now explicit.
+        $pairQuery = $entityManager->createQueryBuilder()
+            ->select('r.relationType AS relation_type')
+            ->from(UserRelUser::class, 'r')
+            ->where('IDENTITY(r.user) = :userId')
+            ->andWhere('IDENTITY(r.friend) = :friendId')
+            ->orderBy('r.relationType', 'ASC')
+            ->setMaxResults(1)
+            ->setParameter('userId', (int) $user_id)
+            ->setParameter('friendId', (int) $user_friend)
+        ;
+        if (false == $includeRH) {
+            $pairQuery
+                ->andWhere('r.relationType <> :rrhh')
+                ->setParameter('rrhh', UserRelUser::USER_RELATION_TYPE_RRHH)
+            ;
+        }
+        $pairRows = $pairQuery->getQuery()->getArrayResult();
+
+        // Only a type that exists in user_friend_relation_type counts as a relation.
+        $relationRows = [];
+        if (count($pairRows) > 0) {
+            $relationRows = $entityManager->createQueryBuilder()
+                ->select('t.id AS id')
+                ->from(UserFriendRelationType::class, 't')
+                ->where('t.id = :typeId')
+                ->setParameter('typeId', (int) $pairRows[0]['relation_type'])
+                ->getQuery()
+                ->getArrayResult()
+            ;
+        }
+        if (count($relationRows) > 0) {
+            return (int) $relationRows[0]['id'];
         } else {
             if ('true' === api_get_setting('social.social_make_teachers_friend_all')) {
                 $adminsList = UserManager::get_all_administrators();

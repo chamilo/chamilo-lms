@@ -21,6 +21,34 @@ if (!$isAllowedToTrack) {
 $this_section = SECTION_TRACKING;
 
 $userId = isset($_REQUEST['user_id']) ? (int) $_REQUEST['user_id'] : 0;
+
+// Admins, session admins and HR managers may open any learner's report. Teachers and
+// course tutors only the report of a learner they follow, as in myStudents.php.
+if (!api_is_platform_admin(true, true)) {
+    $currentUserId = api_get_user_id();
+    $isFollowedLearner = $userId > 0 && (
+        UserManager::isTeacherOfStudent($currentUserId, $userId)
+        || Tracking::is_allowed_to_coach_student($currentUserId, $userId)
+    );
+
+    $trackedCourse = api_get_course_entity(isset($_REQUEST['cid']) ? (int) $_REQUEST['cid'] : 0);
+    if (!$isFollowedLearner && $userId > 0 && null !== $trackedCourse) {
+        $trackedSessionId = isset($_REQUEST['sid']) ? (int) $_REQUEST['sid'] : 0;
+        $isFollowedLearner = 1 === (int) CourseManager::get_tutor_in_course_status($currentUserId, $trackedCourse->getId())
+            && CourseManager::is_user_subscribed_in_course(
+                $userId,
+                $trackedCourse->getCode(),
+                !empty($trackedSessionId),
+                $trackedSessionId
+            );
+    }
+
+    if (!$isFollowedLearner) {
+        api_not_allowed(true);
+        exit;
+    }
+}
+
 $userInfo = api_get_user_info($userId);
 
 if (empty($userInfo)) {

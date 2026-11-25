@@ -392,7 +392,7 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         $cid = $this->course->getId();
         $uid = $this->alice->getId();
 
-        // Only finished attempts (status '') outside any LP: two of them.
+        // Both legacy and Vue finished attempts outside any LP: two of them.
         $this->assertEquals(2, Tracking::count_student_exercise_attempts($uid, $cid, $e1, 0, 0, 0, 0));
         // Exactly the LP 5 / item 7 attempt.
         $this->assertEquals(1, Tracking::count_student_exercise_attempts($uid, $cid, $e1, 5, 7, 0, 0));
@@ -414,7 +414,7 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         // Alice finished e1 twice and e2 once inside the session.
         $this->insertExercise($uid, $cid, $sid, $e1, '2001-05-01 10:00:00', 5, 10, '', 0, 0);
         $this->insertExercise($uid, $cid, $sid, $e1, '2001-05-02 10:00:00', 6, 10, '', 0, 0);
-        $this->insertExercise($uid, $cid, $sid, $e2, '2001-05-03 10:00:00', 7, 10, '', 0, 0);
+        $this->insertExercise($uid, $cid, $sid, $e2, '2001-05-03 10:00:00', 7, 10, 'completed', 0, 0);
         // An unfinished attempt of e3 does not count.
         $this->insertExercise($uid, $cid, $sid, $e3, '2001-05-04 10:00:00', 0, 10, 'incomplete', 0, 0);
 
@@ -458,10 +458,10 @@ final class TrackingCharacterizationTest extends AbstractApiTest
         $uid = $this->alice->getId();
         $sid = $this->createSession('tk_session_quiz_final')->getId();
         $this->insertExercise($uid, $cid, $sid, $e1, '2001-02-01 10:00:00', 5, 10, '', 0, 0);
-        $this->insertExercise($uid, $cid, $sid, $e1, '2001-02-02 10:00:00', 8, 10, '', 0, 0);
+        $this->insertExercise($uid, $cid, $sid, $e1, '2001-02-02 10:00:00', 8, 10, 'completed', 0, 0);
         $this->insertExercise($uid, $cid, $sid, $e1, '2001-02-04 10:00:00', 0, 10, 'incomplete', 0, 0);
 
-        // The latest FINISHED attempt (status '') wins over the later 'incomplete' one.
+        // The latest finished Vue attempt wins over the later incomplete one.
         $this->assertSame('2001-02-02 10:00:00', Tracking::getCourseQuizLastFinalizationDate($uid, $cid, $sid, false));
         $this->assertFalse(Tracking::getCourseQuizLastFinalizationDate($this->bob->getId(), $cid, $sid, false));
         // Fixed: attempts outside a session have a NULL session_id; session 0 now matches them, and
@@ -1032,8 +1032,8 @@ final class TrackingCharacterizationTest extends AbstractApiTest
 
         // Outside a session the session column is NULL (see the session quirk test).
         $this->insertExercise($uid, $cid, null, $e1, '2001-02-01 10:00:00', 5, 10, '', 0, 0);
-        $this->insertExercise($uid, $cid, null, $e1, '2001-02-02 10:00:00', 8, 10, '', 0, 0);
-        $this->insertExercise($uid, $cid, null, $e1, '2001-02-03 10:00:00', 9, 10, '', 5, 7);
+        $this->insertExercise($uid, $cid, null, $e1, '2001-02-02 10:00:00', 8, 10, 'completed', 0, 0);
+        $this->insertExercise($uid, $cid, null, $e1, '2001-02-03 10:00:00', 9, 10, 'completed', 5, 7);
         $this->insertExercise($uid, $cid, null, $e1, '2001-02-04 10:00:00', 0, 10, 'incomplete', 0, 0);
 
         return [$e1, $e2, $e3];

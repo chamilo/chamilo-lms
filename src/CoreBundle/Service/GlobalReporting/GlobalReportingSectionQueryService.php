@@ -3388,13 +3388,13 @@ final readonly class GlobalReportingSectionQueryService
             'courseIds' => $courseIds,
             'sessionId' => $sessionId,
             'studentStatus' => $studentStatus,
-            'completedStatus' => '',
+            'completedStatuses' => ['', 'completed'],
         ];
         $types = [
             'courseIds' => ArrayParameterType::INTEGER,
             'sessionId' => Types::INTEGER,
             'studentStatus' => Types::INTEGER,
-            'completedStatus' => Types::STRING,
+            'completedStatuses' => ArrayParameterType::STRING,
         ];
         if ($sessionId <= 0) {
             $parameters['managerRelation'] = 1;
@@ -3427,7 +3427,7 @@ final readonly class GlobalReportingSectionQueryService
                             WHERE exercise.c_id IN (:courseIds)
                               AND exercise.orig_lp_id > 0
                               AND exercise.max_score > 0
-                              AND exercise.status = :completedStatus
+                              AND exercise.status IN (:completedStatuses)
                               AND COALESCE(exercise.session_id, 0) = :sessionId
                       ) ranked
                      WHERE ranked.rowNumber = 1

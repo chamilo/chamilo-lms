@@ -78,7 +78,7 @@ final class TrackingTier3ScoreCharacterizationTest extends KernelTestCase
         $quiz = $this->quiz(self::COURSE);
         $code = api_get_course_info_by_id(self::COURSE)['code'];
         $this->exercise($s1, self::COURSE, null, $quiz, '2001-02-01 10:00:00', 5, 10);
-        $this->exercise($s1, self::COURSE, $sessionId, $quiz, '2001-02-02 10:00:00', 10, 10);
+        $this->exercise($s1, self::COURSE, $sessionId, $quiz, '2001-02-02 10:00:00', 10, 10, 'completed');
 
         // Session 0 keeps the NULL/0 attempt only, the session keeps its own, no filter keeps both.
         $this->assertSame(50.0, Tracking::get_avg_student_exercise_score($s1, $code, $quiz, 0));
@@ -92,7 +92,7 @@ final class TrackingTier3ScoreCharacterizationTest extends KernelTestCase
         $quiz = $this->quiz(self::COURSE);
         $code = api_get_course_info_by_id(self::COURSE)['code'];
         $lpId = $this->lp(self::COURSE);
-        $this->exercise($s1, self::COURSE, null, $quiz, '2001-02-01 10:00:00', 5, 10, '', $lpId, 4);
+        $this->exercise($s1, self::COURSE, null, $quiz, '2001-02-01 10:00:00', 5, 10, 'completed', $lpId, 4);
 
         $this->assertSame([50.0, 't3s_lp'], Tracking::get_avg_student_exercise_score($s1, $code, $quiz, null, 1, 1));
 

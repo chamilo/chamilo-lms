@@ -127,10 +127,17 @@ final class CourseReportingMetricsTest extends KernelTestCase
         $q2 = $this->newQuiz('r3_quiz_two');
         $n = $this->quizCount();
         $this->exerciseAttempt($a, $q1, 5, 10);
-        $this->exerciseAttempt($a, $q1, 8, 10, null, 1, '2001-01-05 10:00:00');
+        $vueAttempt = $this->exerciseAttempt($a, $q1, 8, 10, null, 1, '2001-01-05 10:00:00');
         $this->exerciseAttempt($a, $q2, 3, 0);
         $this->exerciseAttempt($a, $q1, 10, 10, null, 2);
-        $this->conn()->executeStatement("UPDATE track_e_exercises SET status = 'incomplete' WHERE exe_user_id = ? AND score = 5", [$a]);
+        $unfinished = $this->exerciseAttempt($a, $q1, 10, 10, null, 1, '2001-01-06 10:00:00');
+        $session = $this->rawSession('r3e1s');
+        $this->sessionCourse($session, 1);
+        $this->sessionCourseUser($session, 1, $a);
+        $sessionAttempt = $this->exerciseAttempt($a, $q1, 10, 10, $session, 1, '2001-01-07 10:00:00');
+        $this->conn()->update('track_e_exercises', ['status' => 'completed'], ['exe_id' => $vueAttempt]);
+        $this->conn()->update('track_e_exercises', ['status' => 'completed'], ['exe_id' => $sessionAttempt]);
+        $this->conn()->update('track_e_exercises', ['status' => 'incomplete'], ['exe_id' => $unfinished]);
 
         $row = $this->row($a);
 
@@ -139,6 +146,54 @@ final class CourseReportingMetricsTest extends KernelTestCase
         $this->assertSame(80.0, $row['configuredExerciseResults'][(string) $q1] ?? null);
         $this->assertSame(0.0, $row['configuredExerciseResults'][(string) $q2] ?? null);
         $this->assertSame('2001-01-05 10:00:00', $row['quizFinalizationDate']);
+        $export = array_column($this->service->getLearnersForExport($this->ctx(), []), null, 'id');
+        $this->assertSame($row['exerciseAverage'], $export[$a]['exerciseAverage']);
+        $this->assertSame(100.0, $this->row($a, $this->ctx(1, $session))['configuredExerciseResults'][(string) $q1]);
+    }
+
+    public function testOverviewCountsVueCompletedExercisesAndLearningPathsInTheSameSession(): void
+    {
+        $learner = $this->learner('r3vue_top');
+        $session = $this->rawSession('r3vue_top');
+        $this->sessionCourse($session, 1);
+        $this->sessionCourseUser($session, 1, $learner);
+        $this->newQuiz('r3vue_top_quiz', 1, $session);
+        $this->newLp('r3vue_top_lp', 1, $session);
+
+        // The installer also provides base-course resources, which the session report includes.
+        $quizIds = $this->conn()->fetchFirstColumn(
+            'SELECT DISTINCT q.iid FROM c_quiz q JOIN resource_link rl ON rl.resource_node_id = q.resource_node_id
+              WHERE rl.c_id = 1 AND rl.deleted_at IS NULL AND COALESCE(rl.group_id, 0) = 0
+                AND (COALESCE(rl.session_id, 0) = 0 OR rl.session_id = ?)',
+            [$session]
+        );
+        $lpIds = $this->conn()->fetchFirstColumn(
+            'SELECT DISTINCT lp.iid FROM c_lp lp JOIN resource_link rl ON rl.resource_node_id = lp.resource_node_id
+              WHERE rl.c_id = 1 AND rl.deleted_at IS NULL AND COALESCE(rl.group_id, 0) = 0
+                AND (COALESCE(rl.session_id, 0) = 0 OR rl.session_id = ?)',
+            [$session]
+        );
+        $this->assertNotEmpty($quizIds);
+        $this->assertNotEmpty($lpIds);
+        foreach ($quizIds as $quizId) {
+            $attempt = $this->exerciseAttempt($learner, (int) $quizId, 10, 10, $session);
+            $this->conn()->update('track_e_exercises', ['status' => 'completed'], ['exe_id' => $attempt]);
+        }
+        foreach ($lpIds as $lpId) {
+            $this->lpView($learner, (int) $lpId, 100, $session);
+        }
+
+        $context = $this->ctx(1, $session);
+        $row = $this->row($learner, $context);
+        $overview = $this->service->getOverview($context);
+
+        $this->assertSame(100.0, $row['exerciseAverage']);
+        $this->assertSame(100.0, $row['exerciseProgress']);
+        $this->assertSame(100.0, $row['learningPathProgress']);
+        $this->assertSame(1, $overview['numberStudents']);
+        $this->assertSame(1, $overview['completedLearningPaths']);
+        $this->assertSame(100.0, $overview['exerciseAverage']);
+        $this->assertSame(100, array_column($overview['topStudents'], 'score', 'id')[$learner]);
     }
 
     public function testLearningPathProgressTakesTheLatestViewOfEachPathOverAllPathsOfTheCourse(): void

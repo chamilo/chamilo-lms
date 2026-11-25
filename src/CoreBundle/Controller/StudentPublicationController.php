@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\AiProvider\AiProviderFactory;
 use Chamilo\CoreBundle\AiProvider\AiTaskGraderService;
 use Chamilo\CoreBundle\Component\Mpdf\SafeMpdfHttpClient;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
@@ -149,7 +150,8 @@ class StudentPublicationController extends AbstractController
 
             if (
                 !$assignment instanceof CStudentPublication
-                || null === $assignment->getFirstResourceLinkFromCourseSession($course, $session)
+                || 'folder' !== $assignment->getFiletype()
+                || !$submissionAccess->hasExactCourseSessionLink($assignment, $course, $session)
             ) {
                 throw new NotFoundHttpException('Assignment not found in the current course context.');
             }
@@ -158,6 +160,8 @@ class StudentPublicationController extends AbstractController
                 throw $exception;
             }
         }
+
+        $this->assertPublicationContext($assignment);
 
         $data = json_decode($serializer->serialize(
             $assignment,
@@ -193,12 +197,13 @@ class StudentPublicationController extends AbstractController
         }
         $assignment = $repo->find($assignmentId);
 
-        if (!$assignment instanceof CStudentPublication) {
+        if (!$assignment instanceof CStudentPublication || 'folder' !== $assignment->getFiletype()) {
             return new JsonResponse(['error' => 'Assignment not found.'], Response::HTTP_NOT_FOUND);
         }
 
+        $this->assertPublicationContext($assignment);
         $resourceNode = $assignment->getResourceNode();
-        $contextLink = $resourceNode?->getResourceLinkByContext($course, $session, $group);
+        $contextLink = $this->findAssignmentContextLink($assignment, $course, $session, $group);
 
         if (
             null === $contextLink
@@ -214,11 +219,7 @@ class StudentPublicationController extends AbstractController
             // Shared group assignments intentionally keep one course/session link.
             // The selected category, together with the validated gid context,
             // grants the group access without duplicating the assignment row.
-            $contextLink = $resourceNode?->getResourceLinkByContext($course, $session);
-        }
-
-        if (null === $contextLink && null !== $session && null === $group) {
-            $contextLink = $resourceNode?->getResourceLinkByContext($course);
+            $contextLink = $this->findAssignmentContextLink($assignment, $course, $session, null);
         }
 
         if (null === $contextLink) {
@@ -303,16 +304,7 @@ class StudentPublicationController extends AbstractController
             return new JsonResponse(['error' => 'Assignment not found.'], Response::HTTP_NOT_FOUND);
         }
 
-        $course = $this->cidReqHelper->getCourseEntity();
-        $session = $this->cidReqHelper->getSessionEntity();
-        $contextLink = $assignment->getFirstResourceLinkFromCourseSession($course, $session);
-        if (null === $contextLink && null !== $session) {
-            $contextLink = $assignment->getResourceNode()?->getResourceLinkByContext($course);
-        }
-        if (null === $contextLink) {
-            return new JsonResponse(['error' => 'Assignment not found.'], Response::HTTP_NOT_FOUND);
-        }
-
+        $this->assertPublicationContext($assignment);
         $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
 
         $page = max(1, $request->query->getInt('page', 1));
@@ -338,6 +330,7 @@ class StudentPublicationController extends AbstractController
             return new JsonResponse(['error' => 'Assignment not found.'], 404);
         }
         // Teacher-only listing: must be allowed to edit the assignment's course resource.
+        $this->assertPublicationContext($assignment);
         $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
 
         $page = (int) $request->query->get('page', '1');
@@ -458,6 +451,7 @@ class StudentPublicationController extends AbstractController
             throw $this->createNotFoundException('Assignment submission not found.');
         }
 
+        $this->assertSubmissionContext($submission);
         $this->denyAccessUnlessGranted('VIEW', $submissionNode);
 
         if (!$this->isGranted('EDIT', $assignmentNode)) {
@@ -486,14 +480,14 @@ class StudentPublicationController extends AbstractController
                 throw $this->createNotFoundException('Assignment submission not found in the current course context.');
             }
 
-            // A base-course assignment is also valid in an authorized session or group.
-            // Scoped assignments must match the requested session/group exactly.
+            // The parent assignment must match the requested session; a shared
+            // group assignment may still use a course/session-wide resource link.
             $assignmentInContext = false;
             foreach ($linkRepository->findBy([
                 'resourceNode' => $assignmentNode,
                 'course' => $course,
             ]) as $link) {
-                if ((null !== $link->getSession() && $link->getSession()->getId() !== $session?->getId())
+                if (($link->getSession()?->getId() !== $session?->getId() || null !== $link->getDeletedAt())
                     || (null !== $link->getGroup() && $link->getGroup()->getIid() !== $group?->getIid())
                 ) {
                     continue;
@@ -549,6 +543,7 @@ class StudentPublicationController extends AbstractController
             throw $this->createNotFoundException('Submission not found.');
         }
 
+        $this->assertSubmissionContext($submission);
         $this->denyAccessUnlessGranted('VIEW', $submission->getResourceNode());
 
         $resourceNode = $submission->getResourceNode();
@@ -605,6 +600,7 @@ class StudentPublicationController extends AbstractController
             return new JsonResponse(['error' => 'Submission not found.'], 404);
         }
 
+        $this->assertSubmissionContext($submission);
         $this->denyAccessUnlessGranted('DELETE', $submission->getResourceNode());
 
         $resourceNode = $submission->getResourceNode();
@@ -632,6 +628,7 @@ class StudentPublicationController extends AbstractController
             return new JsonResponse(['error' => 'Submission not found.'], 404);
         }
 
+        $this->assertSubmissionContext($submission);
         $this->denyAccessUnlessGranted('EDIT', $submission->getResourceNode());
 
         $data = json_decode($request->getContent(), true);
@@ -674,11 +671,12 @@ class StudentPublicationController extends AbstractController
         int $id,
         Request $request,
         EntityManagerInterface $em,
-        CStudentPublicationRepository $repo
+        CStudentPublicationRepository $repo,
+        MobileAssignmentSubmissionAccess $submissionAccess,
     ): JsonResponse {
         $submission = $repo->find($id);
 
-        if (!$submission) {
+        if (!$submission instanceof CStudentPublication || 'file' !== $submission->getFiletype()) {
             return new JsonResponse(['error' => 'Submission not found.'], 404);
         }
 
@@ -693,11 +691,27 @@ class StudentPublicationController extends AbstractController
 
         $newParent = $repo->find($newAssignmentId);
 
-        if (!$newParent) {
+        if (!$newParent instanceof CStudentPublication || 'folder' !== $newParent->getFiletype()) {
             return new JsonResponse(['error' => 'Target assignment not found.'], 404);
         }
 
+        $this->denyAccessUnlessGranted('EDIT', $newParent->getResourceNode());
+
+        $course = $this->cidReqHelper->getCourseEntity();
+        $session = $this->cidReqHelper->getSessionEntity();
+        $oldParent = $submission->getPublicationParent();
+        if (null === $course || !$oldParent instanceof CStudentPublication
+            || !$submissionAccess->hasExactCourseSessionLink($submission, $course, $session)
+            || !$submissionAccess->hasExactCourseSessionLink($oldParent, $course, $session)
+            || !$submissionAccess->hasExactCourseSessionLink($newParent, $course, $session)
+            || $oldParent->getGroupCategoryWorkId() !== $newParent->getGroupCategoryWorkId()
+            || $oldParent->getPostGroupId() !== $newParent->getPostGroupId()
+        ) {
+            throw new AccessDeniedHttpException('The source and target assignments must belong to the same course, session and group context.');
+        }
+
         $submission->setPublicationParent($newParent);
+        $submission->getResourceNode()->setParent($newParent->getResourceNode());
 
         $em->flush();
 
@@ -712,7 +726,7 @@ class StudentPublicationController extends AbstractController
         EntityManagerInterface $em
     ): JsonResponse {
         $assignment = $repo->find($assignmentId);
-        if (!$assignment instanceof CStudentPublication || null !== $assignment->getPublicationParent()) {
+        if (!$assignment instanceof CStudentPublication || 'folder' !== $assignment->getFiletype()) {
             return new JsonResponse(['error' => 'Assignment not found.'], 404);
         }
 
@@ -736,7 +750,7 @@ class StudentPublicationController extends AbstractController
         Security $security
     ): JsonResponse {
         $assignment = $repo->find($assignmentId);
-        if (!$assignment instanceof CStudentPublication || null !== $assignment->getPublicationParent()) {
+        if (!$assignment instanceof CStudentPublication || 'folder' !== $assignment->getFiletype()) {
             return new JsonResponse(['error' => 'Assignment not found.'], 404);
         }
 
@@ -815,7 +829,7 @@ class StudentPublicationController extends AbstractController
             if ((int) ($link->getCourse()?->getId() ?? 0) !== (int) $course->getId()) {
                 continue;
             }
-            if ($link->getSession() && (!$session || $link->getSession()->getId() !== $session->getId())) {
+            if ($link->getSession()?->getId() !== $session?->getId() || null !== $link->getDeletedAt()) {
                 continue;
             }
             if ($link->getGroup() && (!$group || $link->getGroup()->getIid() !== $groupId)) {
@@ -908,6 +922,7 @@ class StudentPublicationController extends AbstractController
         }
 
         // Teacher-only export: must be allowed to edit the assignment's course resource.
+        $this->assertPublicationContext($assignment);
         $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
 
         [$submissions] = $repo->findAllSubmissionsByAssignment(
@@ -950,6 +965,7 @@ class StudentPublicationController extends AbstractController
             return new JsonResponse(['error' => 'Assignment not found.'], 404);
         }
         // Destructive teacher-only op: must be allowed to edit the assignment's course resource.
+        $this->assertPublicationContext($assignment);
         $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
 
         $submissions = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000)[0];
@@ -994,6 +1010,7 @@ class StudentPublicationController extends AbstractController
         $addFullname = 'true' === $settingsManager->getSetting('work.add_fullname_in_file_download');
         // Teacher-only: downloading every student's submission requires edit rights on
         // the assignment's course resource.
+        $this->assertPublicationContext($assignment);
         $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
 
         [$submissions] = $repo->findAllSubmissionsByAssignment($assignmentId, 1, 10000);
@@ -1052,6 +1069,7 @@ class StudentPublicationController extends AbstractController
         }
         // Teacher-only: uploading corrections mutates grading state (qualification,
         // accepted, dateOfQualification) for the whole class. Authorize before any work.
+        $this->assertPublicationContext($assignment);
         $this->denyAccessUnlessGranted('EDIT', $assignment->getResourceNode());
 
         $file = $request->files->get('file');
@@ -1245,6 +1263,7 @@ class StudentPublicationController extends AbstractController
         }
 
         // Only editors should request the prompt (same rule as grading).
+        $this->assertSubmissionContext($submission);
         $this->denyAccessUnlessGranted('EDIT', $submission->getResourceNode());
 
         if (!$aiFeatureAccessHelper->isFeatureEnabledForCourse(
@@ -1273,6 +1292,7 @@ class StudentPublicationController extends AbstractController
             return new JsonResponse(['success' => false, 'message' => 'Submission not found.'], 404);
         }
 
+        $this->assertSubmissionContext($submission);
         $this->denyAccessUnlessGranted('EDIT', $submission->getResourceNode());
 
         if (!$aiFeatureAccessHelper->isFeatureEnabledForCourse(
@@ -1367,6 +1387,7 @@ class StudentPublicationController extends AbstractController
             return new JsonResponse(['success' => false, 'message' => 'Submission not found.'], 404);
         }
 
+        $this->assertSubmissionContext($submission);
         $this->denyAccessUnlessGranted('EDIT', $submission->getResourceNode());
 
         if (!$aiFeatureAccessHelper->isFeatureEnabledForCourse(
@@ -1445,7 +1466,6 @@ class StudentPublicationController extends AbstractController
         $assignment = $this->studentPublicationRepo->find($assignmentId);
         if (!$assignment instanceof CStudentPublication
             || 'folder' !== $assignment->getFiletype()
-            || null !== $assignment->getPublicationParent()
         ) {
             throw $this->createNotFoundException('Assignment not found.');
         }
@@ -1469,6 +1489,56 @@ class StudentPublicationController extends AbstractController
         }
 
         throw $this->createAccessDeniedException();
+    }
+
+    private function findAssignmentContextLink(CStudentPublication $publication, Course $course, ?Session $session, ?CGroup $group): ?ResourceLink
+    {
+        foreach ($publication->getResourceNode()?->getResourceLinks() ?? [] as $link) {
+            if ($link->getCourse()?->getId() === $course->getId()
+                && $link->getSession()?->getId() === $session?->getId()
+                && $link->getGroup()?->getIid() === $group?->getIid()
+                && null === $link->getDeletedAt()
+            ) {
+                return $link;
+            }
+        }
+
+        return null;
+    }
+
+    private function assertPublicationContext(CStudentPublication $publication): void
+    {
+        $course = $this->cidReqHelper->getDoctrineCourseEntity();
+        $session = $this->cidReqHelper->getDoctrineSessionEntity();
+        $group = $this->cidReqHelper->getDoctrineGroupEntity();
+        if (null !== $session && (null === $course || !$session->hasCourse($course))) {
+            throw $this->createNotFoundException('Assignment not found in the current course context.');
+        }
+
+        foreach ($publication->getResourceNode()?->getResourceLinks() ?? [] as $link) {
+            if (null === $link->getCourse() || null !== $link->getDeletedAt()
+                || (null !== $course && $link->getCourse()->getId() !== $course->getId())
+                || $link->getSession()?->getId() !== $session?->getId()
+                || (null !== $group && null !== $link->getGroup() && $link->getGroup()->getIid() !== $group->getIid())
+            ) {
+                continue;
+            }
+            if (null !== $course || null === $publication->getPublicationParent() || 'file' === $publication->getFiletype()) {
+                return;
+            }
+        }
+
+        throw $this->createNotFoundException('Assignment not found in the current course context.');
+    }
+
+    private function assertSubmissionContext(CStudentPublication $submission): void
+    {
+        $parent = $submission->getPublicationParent();
+        if ('file' !== $submission->getFiletype() || !$parent instanceof CStudentPublication || 'folder' !== $parent->getFiletype()) {
+            throw $this->createNotFoundException('Assignment submission not found.');
+        }
+        $this->assertPublicationContext($parent);
+        $this->assertPublicationContext($submission);
     }
 
     /**

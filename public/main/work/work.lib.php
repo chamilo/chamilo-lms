@@ -186,6 +186,7 @@ function get_work_data_by_id($id, $courseId = 0, $sessionId = 0)
         $work['description'] = $studentPublication->getDescription();
         $work['url'] = $repo->getResourceFileDownloadUrl($studentPublication).'?'.api_get_cidreq();
         $work['active'] = $studentPublication->getActive();
+        $work['filetype'] = $studentPublication->getFiletype();
         $work['allow_text_assignment'] = $studentPublication->getAllowTextAssignment();
         //$work['c_id'] = $studentPublication->getCId();
         $work['user_id'] = $studentPublication->getUser()->getId();
@@ -234,6 +235,7 @@ function get_work_count_by_student($user_id, $work_id)
         ->select('COUNT(w.iid)')
         ->from(CStudentPublication::class, 'w')
         ->where('IDENTITY(w.publicationParent) = :workId')
+        ->andWhere("w.filetype = 'file'")
         ->andWhere('IDENTITY(w.user) = :userId')
         ->andWhere('w.active IN (0, 1)')
         ->setParameter('workId', (int) $work_id)
@@ -336,7 +338,7 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null, $course_i
     // Root folders that are not deleted: the same for a teacher and for a learner (a learner only gets the
     // published ones through the repository's visibility rule).
     $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
-    $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
+    $qb->andWhere("resource.filetype = 'folder'");
 
     return $qb->getQuery()->getResult();
 }
@@ -369,6 +371,7 @@ function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId
         ->innerJoin('w.user', 'u')
         ->where('IDENTITY(link.course) = :courseId')
         ->andWhere('IDENTITY(w.publicationParent) = :workId')
+        ->andWhere("w.filetype = 'file'")
         ->andWhere('w.postGroupId = :groupIid')
         ->andWhere('w.active IN (0, 1)')
         ->setParameter('courseId', $course_id)
@@ -771,7 +774,7 @@ function deleteDirWork($id, $courseId = 0)
     $id = (int) $id;
     $work_data = get_work_data_by_id($id);
 
-    if (empty($work_data)) {
+    if (empty($work_data) || 'folder' !== $work_data['filetype'] || !workIsInCourseSession($id, $courseId, api_get_session_id())) {
         return false;
     }
 
@@ -780,9 +783,17 @@ function deleteDirWork($id, $courseId = 0)
     //$check = Security::check_abs_path($work_data_url.'/', $base_work_dir.'/');
     $course_id = api_get_course_int_id();
     $sessionId = api_get_session_id();
-    $check = true;
+    $em = Container::getEntityManager();
+    $connection = $em->getConnection();
+    $connection->beginTransaction();
 
-    if ($check) {
+    try {
+        if (!Container::getStudentPublicationRepository()->lockFolderForDeletion($id)) {
+            $connection->rollBack();
+
+            return false;
+        }
+
         $consideredWorkingTime = api_get_setting('work.considered_working_time');
         if (!empty($consideredWorkingTime)) {
             $fieldValue = new ExtraFieldValue('work');
@@ -831,13 +842,12 @@ function deleteDirWork($id, $courseId = 0)
             }
         }
 
-        // Deleting all contents inside the folder
-        $em = Container::getEntityManager();
+        // Deleting all contents inside the folder while holding the original lock.
         $em->createQuery('UPDATE '.CStudentPublication::class." w SET w.active = 2 WHERE w.filetype = 'folder' AND w.iid = :id")
             ->setParameter('id', $id)
             ->execute()
         ;
-        $em->createQuery('UPDATE '.CStudentPublication::class.' w SET w.active = 2 WHERE w.publicationParent = :id')
+        $em->createQuery('UPDATE '.CStudentPublication::class." w SET w.active = 2 WHERE w.publicationParent = :id AND w.filetype = 'file'")
             ->setParameter('id', $id)
             ->execute()
         ;
@@ -903,7 +913,13 @@ function deleteDirWork($id, $courseId = 0)
             GradebookUtils::remove_resource_from_course_gradebook($link_id);
         }
 
+        $connection->commit();
+
         return true;
+    } catch (Throwable $exception) {
+        $connection->rollBack();
+
+        throw $exception;
     }
 }
 
@@ -1104,6 +1120,7 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
     }
 
     $qb->andWhere('IDENTITY(work.publicationParent) = :workId')->setParameter('workId', $work_id);
+    $qb->andWhere("work.filetype = 'file'");
 
     if (!empty($notMeUserId)) {
         $qb->andWhere('u.id <> :notMeUserId')->setParameter('notMeUserId', (int) $notMeUserId);
@@ -1189,7 +1206,7 @@ function getWorkListStudent(
 
     $qb = $repo->getResourcesByCourse($course, $session, $group);
     $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
-    $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
+    $qb->andWhere("resource.filetype = 'folder'");
 
     if ($getCount) {
         $qb->select('count(resource)');
@@ -1353,7 +1370,7 @@ function getAllWorkListStudent(
 
         $qb = $repo->getResourcesByCourse($course, $session);
         $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
-        $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
+        $qb->andWhere("resource.filetype = 'folder'");
 
         /** @var CStudentPublication $folder */
         foreach ($qb->getQuery()->getResult() as $folder) {
@@ -1542,7 +1559,7 @@ function getWorkListTeacher(
         $qb = $repo->getResourcesByCourse($course, $session, $group);
 
         $qb->andWhere($qb->expr()->in('resource.active', [1, 0]));
-        $qb->andWhere($qb->expr()->isNull('resource.publicationParent'));
+        $qb->andWhere("resource.filetype = 'folder'");
         if ($getCount) {
             $qb->select('count(resource)');
         } else {
@@ -4452,8 +4469,11 @@ function processWorkForm(
     $sessionId = (int) $sessionId;
     $userId = (int) $userId;
 
-    // The assignment comes from the request: a submission can only be added to an assignment of this course.
-    if (!workIsInCourse((int) ($workInfo['iid'] ?? 0), (int) $courseId)) {
+    // Submissions must target an assignment in the exact course/session context.
+    $parentResource = Container::getStudentPublicationRepository()->find((int) ($workInfo['iid'] ?? 0));
+    if (!$parentResource instanceof CStudentPublication || 'folder' !== $parentResource->getFiletype()
+        || !workIsInCourseSession($parentResource->getIid(), (int) $courseId, $sessionId)
+    ) {
         return null;
     }
 
@@ -4539,7 +4559,6 @@ function processWorkForm(
         $session = api_get_session_entity($sessionId);
 
         $repo = Container::getStudentPublicationRepository();
-        $parentResource = $repo->find($workInfo['iid']);
         $user = api_get_user_entity($userId);
 
         $studentPublication = (new CStudentPublication())
@@ -5081,6 +5100,9 @@ function deleteWorkItem($item_id, Course $course)
     $file_deleted = false;
     $is_author = user_is_author($item_id);
     $work_data = get_work_data_by_id($item_id);
+    if (empty($work_data) || 'file' !== $work_data['filetype'] || !workIsInCourseSession($item_id, $course->getId(), api_get_session_id())) {
+        return false;
+    }
     $locked = api_resource_is_locked_by_gradebook($work_data['parent_id'], LINK_STUDENTPUBLICATION);
     $course_id = $course->getId();
     $sessionId = api_get_session_id();
@@ -5485,7 +5507,7 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
         ->innerJoin('node.resourceLinks', 'link')
         ->where('IDENTITY(link.course) = :courseId')
         ->andWhere('w.active IN (0, 1)')
-        ->andWhere('(w.publicationParent IS NULL OR IDENTITY(w.publicationParent) = 0)')
+        ->andWhere("w.filetype = 'folder'")
         ->setParameter('courseId', (int) $courseId)
     ;
     if (0 === (int) $groupIid) {
@@ -6366,6 +6388,28 @@ function workIsInCourse(int $workId, int $courseId): bool
     );
 
     return false !== $found;
+}
+
+/**
+ * Checks the exact course/session link, including the base-course (no session) case.
+ */
+function workIsInCourseSession(int $workId, int $courseId, int $sessionId): bool
+{
+    $qb = Container::getEntityManager()->createQueryBuilder()
+        ->select('w.iid')
+        ->from(CStudentPublication::class, 'w')
+        ->innerJoin('w.resourceNode', 'node')
+        ->innerJoin('node.resourceLinks', 'link')
+        ->where('w.iid = :workId')
+        ->andWhere('IDENTITY(link.course) = :courseId')
+        ->andWhere('link.deletedAt IS NULL')
+        ->setParameter('workId', $workId)
+        ->setParameter('courseId', $courseId)
+        ->setMaxResults(1)
+    ;
+    workAddLinkSessionCondition($qb, $sessionId);
+
+    return null !== $qb->getQuery()->getOneOrNullResult();
 }
 
 /**

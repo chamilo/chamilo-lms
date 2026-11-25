@@ -17,7 +17,7 @@ $repo = Container::getStudentPublicationRepository();
 /** @var CStudentPublication|null $work */
 $work = $repo->find($id);
 
-if (null === $work) {
+if (!$work instanceof CStudentPublication || 'file' !== $work->getFiletype()) {
     api_not_allowed(true);
 }
 

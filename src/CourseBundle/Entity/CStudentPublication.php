@@ -8,6 +8,7 @@ namespace Chamilo\CourseBundle\Entity;
 
 use ApiPlatform\Doctrine\Common\Filter\OrderFilterInterface;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
@@ -38,6 +39,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'c_student_publication')]
@@ -45,18 +47,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource(
     operations: [
         new Put(
-            security: "is_granted('EDIT', object.resourceNode) and (is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER'))",
+            security: "is_granted('EDIT', object.resourceNode) and is_granted('ASSIGNMENT_ITEM_CONTEXT', object) and (is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER'))",
             processor: CStudentPublicationPostStateProcessor::class
         ),
         new Patch(
-            security: "is_granted('EDIT', object.resourceNode) and (is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER'))",
+            security: "is_granted('EDIT', object.resourceNode) and is_granted('ASSIGNMENT_ITEM_CONTEXT', object) and (is_granted('ROLE_CURRENT_COURSE_TEACHER') or is_granted('ROLE_CURRENT_COURSE_SESSION_TEACHER'))",
             processor: CStudentPublicationPostStateProcessor::class
         ),
         new Get(
             normalizationContext: [
                 'groups' => ['student_publication:read', 'student_publication:item:get'],
             ],
-            security: "is_granted('VIEW', object.resourceNode)",
+            security: "is_granted('VIEW', object.resourceNode) and is_granted('ASSIGNMENT_ITEM_CONTEXT', object)",
         ),
         new GetCollection(
             openapi: new Operation(
@@ -80,7 +82,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             ],
         ),
         new Delete(
-            security: "is_granted('DELETE', object.resourceNode)",
+            security: "is_granted('DELETE', object.resourceNode) and is_granted('ASSIGNMENT_ITEM_CONTEXT', object)",
             processor: CStudentPublicationDeleteProcessor::class
         ),
         new Post(
@@ -109,9 +111,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         'title',
         'sentDate' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
         'assignment.expiresOn' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
-        'assingment.endsOn' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
+        'assignment.endsOn' => ['nulls_comparison' => OrderFilterInterface::NULLS_SMALLEST],
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['filetype' => 'exact'])]
 #[ApiFilter(ParentNullFilter::class, properties: ['publicationParent.iid' => null])]
 #[ApiFilter(filterClass: CidFilter::class)]
 #[ApiFilter(filterClass: SidFilter::class)]
@@ -186,7 +189,6 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
     #[Groups(['student_publication:read'])]
     protected Collection $comments;
 
-    #[Groups(['c_student_publication:write', 'student_publication:read', 'student_publication_comment:read'])]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'iid')]
     protected ?CStudentPublication $publicationParent;
@@ -560,6 +562,16 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
         return $this;
     }
 
+    /**
+     * The API exposes the assignment of a submission, not the source of a session copy.
+     */
+    #[Groups(['student_publication:read', 'student_publication_comment:read'])]
+    #[SerializedName('publicationParent')]
+    public function getSubmissionParent(): ?self
+    {
+        return 'file' === $this->getFiletype() ? $this->publicationParent : null;
+    }
+
     public function getPublicationParent(): ?self
     {
         return $this->publicationParent;
@@ -687,7 +699,7 @@ class CStudentPublication extends AbstractResource implements ResourceInterface,
 
         $reduce = $this->children
             ->filter(function (self $child) {
-                return $child->postGroupId === $this->postGroupId;
+                return 'file' === $child->getFiletype() && $child->postGroupId === $this->postGroupId;
             })
             ->reduce(function (int $accumulator, self $child) use (&$userIdList): int {
                 $user = $child->getUser();

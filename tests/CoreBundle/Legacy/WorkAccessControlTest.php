@@ -150,6 +150,12 @@ final class WorkAccessControlTest extends KernelTestCase
         $this->assertTrue(workBelongsToCourse($inSession, 1, $s1));
         $this->assertFalse(workBelongsToCourse($inSession, 1, $s2), 'another session');
         $this->assertFalse(workBelongsToCourse($inSession, 1, 0), 'session content is not base course content');
+
+        $this->assertTrue(workIsInCourseSession($base, 1, 0));
+        $this->assertFalse(workIsInCourseSession($base, 1, $s1));
+        $this->assertTrue(workIsInCourseSession($inSession, 1, $s1));
+        $this->assertFalse(workIsInCourseSession($inSession, 1, $s2));
+        $this->assertFalse(workIsInCourseSession($inSession, 1, 0));
     }
 
     public function testDescendantCheck(): void

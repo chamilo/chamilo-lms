@@ -23,6 +23,7 @@ use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\HotPotatoes\HotPotatoesArchiveService;
 use Chamilo\CoreBundle\Service\HotPotatoes\HotPotatoesEntrypoints;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathAccessChecker;
+use Chamilo\CoreBundle\Service\LearningPath\LearningPathAssignmentResolver;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathFinalItemManager;
 use Chamilo\CoreBundle\Service\LearningPath\ScormRuntimeManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
@@ -104,6 +105,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         private CLpItemRepository $lpItemRepository,
         private CidReqHelper $cidReqHelper,
         private StudentViewHelper $studentViewHelper,
+        private LearningPathAssignmentResolver $assignmentResolver,
     ) {}
 
     /**
@@ -978,13 +980,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
         }
 
         if (\in_array($type, ['student_publication', 'assignments'], true)) {
-            $assignment = $this->findContextResource(
-                CStudentPublication::class,
-                $resourceId,
-                $course,
-                $session,
-                $group,
-            );
+            $assignment = $this->assignmentResolver->resolve($item, $course, $session, $group, $canManage);
             if (!$assignment instanceof CStudentPublication) {
                 return '';
             }
@@ -994,7 +990,7 @@ final readonly class LearningPathRuntimeProvider implements ProviderInterface
                 return '';
             }
 
-            return $this->appendQuery('/resources/assignment/'.$assignmentNodeId.'/submission/'.$resourceId, $params);
+            return $this->appendQuery('/resources/assignment/'.$assignmentNodeId.'/submission/'.$assignment->getIid(), $params);
         }
 
         if ('forum' === $type) {

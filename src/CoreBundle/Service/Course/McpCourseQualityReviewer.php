@@ -223,7 +223,7 @@ final readonly class McpCourseQualityReviewer
         }
 
         if (CStudentPublication::class === $resourceClass) {
-            $queryBuilder->andWhere('resource.publicationParent IS NULL');
+            $queryBuilder->andWhere("resource.filetype = 'folder'");
         }
 
         if (CForumPost::class === $resourceClass) {

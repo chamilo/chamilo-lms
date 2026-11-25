@@ -304,6 +304,7 @@ final readonly class MobileAssignmentSubmissionProcessor implements ProcessorInt
             ->select('COUNT(submission.iid)')
             ->from(CStudentPublication::class, 'submission')
             ->where('IDENTITY(submission.publicationParent) = :assignmentId')
+            ->andWhere("submission.filetype = 'file'")
             ->andWhere('IDENTITY(submission.user) = :userId')
             ->andWhere('submission.active IN (0, 1)')
             ->setParameter('assignmentId', $assignment->getIid())

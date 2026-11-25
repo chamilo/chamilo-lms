@@ -200,6 +200,88 @@ class ColorThemeApiSecurityTest extends AbstractApiTest
         self::assertSame('theme_sec_put_foreign', $reloaded->getTitle());
     }
 
+    public function testPutWithoutTitleIsRejected(): void
+    {
+        $this->assertRejectedPut(['variables' => $this->validPalette()]);
+    }
+
+    public function testPutWithEmptyTitleIsRejected(): void
+    {
+        $this->assertRejectedPut(['title' => '', 'variables' => $this->validPalette()]);
+    }
+
+    public function testPutWithWhitespaceTitleIsRejected(): void
+    {
+        $this->assertRejectedPut(['title' => '   ', 'variables' => $this->validPalette()]);
+    }
+
+    public function testPutWithInvalidPaletteIsRejected(): void
+    {
+        $this->assertRejectedPut([
+            'title' => 'theme_sec_put_invalid_update',
+            'variables' => ['--color-primary-base' => 'red'],
+        ]);
+    }
+
+    public function testPutOnMissingThemeIsNotFound(): void
+    {
+        $em = $this->getEntityManager();
+        $id = 1 + (int) $em->createQuery('SELECT MAX(t.id) FROM '.ColorTheme::class.' t')->getSingleScalarResult();
+        $admin = $this->createUser('theme_admin', '', '', 'ROLE_ADMIN');
+        $before = $em->getRepository(ColorTheme::class)->count([]);
+
+        $this
+            ->createClientWithCredentials($this->getUserTokenFromUser($admin))
+            ->request('PUT', '/api/color_themes/'.$id, [
+                'json' => ['title' => 'theme_sec_put_missing', 'variables' => $this->validPalette()],
+            ])
+        ;
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+        self::assertSame($before, $this->getEntityManager()->getRepository(ColorTheme::class)->count([]));
+    }
+
+    public function testPutByStudentIsForbidden(): void
+    {
+        $this->assertRejectedPut(
+            ['title' => 'theme_sec_put_forbidden', 'variables' => $this->validPalette()],
+            Response::HTTP_FORBIDDEN,
+            'ROLE_STUDENT',
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function assertRejectedPut(array $payload, int $status = Response::HTTP_BAD_REQUEST, string $role = 'ROLE_ADMIN'): void
+    {
+        $title = 'theme_sec_put_reject_'.bin2hex(random_bytes(8));
+        $theme = $this->createBoundTheme($title, $this->getAccessUrl());
+        $id = $theme->getId();
+        $slug = (string) $theme->getSlug();
+        $this->writtenSlugs[] = $slug;
+        $palette = $theme->getVariables();
+        $user = $this->createUser('theme_put_user', '', '', $role);
+        $before = $this->getEntityManager()->getRepository(ColorTheme::class)->count([]);
+
+        $this
+            ->createClientWithCredentials($this->getUserTokenFromUser($user))
+            ->request('PUT', '/api/color_themes/'.$id, ['json' => $payload])
+        ;
+
+        $this->assertResponseStatusCodeSame($status);
+
+        $em = $this->getEntityManager();
+        $em->clear();
+        $reloaded = $em->getRepository(ColorTheme::class)->find($id);
+        self::assertInstanceOf(ColorTheme::class, $reloaded);
+        self::assertSame($title, $reloaded->getTitle());
+        self::assertEquals($palette, $reloaded->getVariables());
+        self::assertSame($slug, $reloaded->getSlug());
+        self::assertSame($before, $em->getRepository(ColorTheme::class)->count([]));
+        self::assertFalse($this->themesFilesystem()->fileExists($slug.'/colors.css'));
+    }
+
     /**
      * @return array<string, string>
      */

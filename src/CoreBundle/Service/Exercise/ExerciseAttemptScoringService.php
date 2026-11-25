@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Service\Exercise;
 
 use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
+use Chamilo\CoreBundle\Helpers\ExerciseDraggableAnswerHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseHotspotGeometryHelper;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CLpItemView;
@@ -890,15 +891,9 @@ final readonly class ExerciseAttemptScoringService
         $positions = $this->getSavedDraggablePositions($rows);
         $score = 0.0;
 
-        foreach ($answers as $answer) {
-            $correctPosition = (int) ($answer->getCorrect() ?? 0);
-            if ($correctPosition <= 0) {
-                continue;
-            }
-
-            $answerId = (int) $answer->getIid();
+        foreach (ExerciseDraggableAnswerHelper::getTargetPositions($answers) as $answerId => $correctPosition) {
             if (($positions[$answerId] ?? 0) === $correctPosition) {
-                $score += $answer->getPonderation();
+                $score += $answers[$answerId]->getPonderation();
             }
         }
 

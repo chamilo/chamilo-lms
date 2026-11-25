@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\ExerciseDraggableAnswerHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
@@ -1412,9 +1413,11 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
         $showFeedback = true === ($visibility['showFeedback'] ?? false);
 
-        foreach ($this->getOrderedAnswers($question) as $answer) {
+        $answers = $this->getOrderedAnswers($question);
+        $targetPositions = ExerciseDraggableAnswerHelper::getTargetPositions($answers);
+        foreach ($answers as $answer) {
             $answerId = (int) $answer->getIid();
-            $targetPosition = (int) ($answer->getCorrect() ?? 0);
+            $targetPosition = $targetPositions[$answerId] ?? 0;
             if ($targetPosition <= 0) {
                 continue;
             }

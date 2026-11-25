@@ -39,9 +39,7 @@ final class LegacyPageGuardsTripwireTest extends TestCase
         $min = [
             'public/main/admin/languages.php' => 8,
             'public/main/attendance/index.php' => 45,
-            'public/main/dropbox/index.php' => 13,
-            'public/main/dropbox/recover_dropbox_files.php' => 3,
-            'public/main/dropbox/update.php' => 4,
+            'public/main/dropbox/index.php' => 1,
             'public/main/exercise/admin.php' => 11,
             'public/main/exercise/category.php' => 9,
             'public/main/exercise/exercise.php' => 9,

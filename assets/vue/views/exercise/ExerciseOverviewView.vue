@@ -63,11 +63,11 @@
               </h1>
             </div>
             <div
-              v-if="displayText(overview.description)"
-              class="max-w-4xl text-sm text-gray-700"
-            >
-              {{ displayText(overview.description) }}
-            </div>
+              v-if="hasHtmlContent(overview.description)"
+              class="exercise-overview-html max-w-4xl text-sm text-gray-700"
+              dir="auto"
+              v-html="displayTranslatedHtml(overview.description)"
+            />
             <div class="flex flex-wrap gap-3 text-xs font-medium text-gray-700">
               <span>{{ t("Questions") }}: {{ overview.questionCount || 0 }}</span>
               <span>{{ t("Total score") }}: {{ formatScore(overview.maxScore) }}</span>
@@ -739,6 +739,11 @@ function displayText(value, fallback = "") {
   return plainValue || fallback
 }
 
+// A description holding only an image or a video has no text, but must still be shown
+function hasHtmlContent(value) {
+  return "" !== displayText(value) || /<(img|video|audio|iframe|object|embed)\b/i.test(displayTranslatedHtml(value))
+}
+
 onMounted(loadOverview)
 
 useStudentViewRefresh(loadOverview)
@@ -752,5 +757,11 @@ watch(
 <style scoped>
 :deep(.exercise-overview-toolbar .p-button-icon) {
   font-size: 1.25rem;
+}
+
+.exercise-overview-html :deep(img),
+.exercise-overview-html :deep(video) {
+  max-width: 100%;
+  height: auto;
 }
 </style>

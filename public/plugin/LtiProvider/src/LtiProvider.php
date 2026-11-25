@@ -324,6 +324,19 @@ class LtiProvider
             throw new Exception('Launch does not have AGS services.');
         }
 
+        // The launch only grades its own user, in the course and tool it was opened for.
+        /** @var Result|null $launchResult */
+        $launchResult = Database::getManager()->getRepository(Result::class)->findOneBy(['ltiLaunchId' => $launchId]);
+
+        if (
+            null === $launchResult
+            || $launchResult->getUserId() !== $userId
+            || (int) api_get_course_int_id($launchResult->getCourseCode()) !== (int) $courseId
+            || $launchResult->getToolName() !== $toolName
+        ) {
+            throw new Exception('The score does not match the LTI launch.');
+        }
+
         $score = 0.0;
         $weight = 100.0;
         $progress = 0;
@@ -336,12 +349,13 @@ class LtiProvider
             $objExercise = new Exercise($courseId);
             $trackInfo = $objExercise->get_stat_track_exercise_info_by_exe_id($resultId);
 
-            // The attempt must belong to the current user, course and session.
+            // The attempt must belong to the current user, course, session and launched test.
             if (
                 empty($trackInfo)
                 || (int) ($trackInfo['exe_user_id'] ?? 0) !== $userId
                 || (int) ($trackInfo['c_id'] ?? 0) !== (int) $courseId
                 || (int) ($trackInfo['session_id'] ?? 0) !== $sessionId
+                || (int) ($trackInfo['exe_exo_id'] ?? 0) !== $launchResult->getToolId()
             ) {
                 throw new Exception('Quiz tracking result not found.');
             }
@@ -363,6 +377,10 @@ class LtiProvider
                 'duration' => $duration,
             ]);
         } else {
+            if ($resultId !== $launchResult->getToolId()) {
+                throw new Exception('The learning path does not match the LTI launch.');
+            }
+
             $lpProgress = learnpath::getProgress(
                 $resultId,
                 $userId,

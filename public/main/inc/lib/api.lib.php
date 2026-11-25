@@ -3567,8 +3567,10 @@ function api_is_allowed_to_edit(
     }
 
     // Final fallback: permission-based system (only if nothing before returned true)
+    // A cid outside the course context (api_get_course_int_id() reads it from the request) still targets a
+    // course, whose rights were checked above: a platform role must not decide them.
     $courseId = api_get_course_id();
-    $inCourse = !empty($courseId) && $courseId != -1;
+    $inCourse = (!empty($courseId) && $courseId != -1) || api_get_course_int_id() > 0;
 
     if (!$inCourse) {
         // Only the roles of the current user count, never every role of the platform.

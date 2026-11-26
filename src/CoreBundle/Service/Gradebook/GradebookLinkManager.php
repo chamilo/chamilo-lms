@@ -10,6 +10,8 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\GradebookCategory;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\GradeBookCategoryRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\Gradebook\GradebookLinkResourceResolver;
@@ -36,6 +38,8 @@ final readonly class GradebookLinkManager
         private SettingsManager $settingsManager,
         private Security $security,
         private GradebookLinkResourceResolver $resourceResolver,
+        private GradebookRootCategoryFactory $rootCategoryFactory,
+        private UserHelper $userHelper,
     ) {}
 
     public function assertSessionBelongsToCourse(Course $course, ?Session $session): void
@@ -55,10 +59,19 @@ final readonly class GradebookLinkManager
         );
 
         if (!$root instanceof GradebookCategory && $createIfMissing) {
-            $root = $this->categoryRepository->createDefaultCategory(
-                (int) $course->getId(),
-                $session?->getId(),
-            );
+            // Same defaults as a first visit to the Gradebook (weight 100, certificate at 75):
+            // the learning path builder and the link forms can create it before that visit
+            $user = $this->userHelper->getCurrent();
+            if ($user instanceof User) {
+                $root = $this->rootCategoryFactory->create($course, $session, $user);
+                $this->entityManager->persist($root);
+                $this->entityManager->flush();
+            } else {
+                $root = $this->categoryRepository->createDefaultCategory(
+                    (int) $course->getId(),
+                    $session?->getId(),
+                );
+            }
         }
 
         return $root instanceof GradebookCategory ? $root : null;

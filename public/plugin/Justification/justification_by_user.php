@@ -22,6 +22,11 @@ switch ($action) {
 
         Security::clear_token();
 
+        $userJustification = $plugin->getUserJustification($id);
+        if (!$userJustification || !$plugin->canManageUserJustifications((int) $userJustification['user_id'])) {
+            api_not_allowed(true);
+        }
+
         if ($plugin->deleteUserJustification($id)) {
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         }
@@ -50,6 +55,10 @@ $tpl->assign('form', $form->returnForm());
 
 if ($form->validate()) {
     $userId = (int) $form->getSubmitValue('user_id');
+}
+
+if ($userId && !$plugin->canManageUserJustifications($userId)) {
+    api_not_allowed(true);
 }
 
 if ($userId) {
@@ -86,7 +95,7 @@ $content = $tpl->fetch('Justification/view/justification_user_list.tpl');
 switch ($action) {
     case 'edit':
         $userJustification = $plugin->getUserJustification($id);
-        if (empty($userJustification)) {
+        if (empty($userJustification) || !$plugin->canManageUserJustifications((int) $userJustification['user_id'])) {
             api_not_allowed(true);
         }
 

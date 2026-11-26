@@ -2097,7 +2097,7 @@ final readonly class GlobalReportingSectionQueryService
      */
     private function learningPathScoreByCourse(int $userId, array $courseIds, int $sessionId): array
     {
-        if ([] === $courseIds || !$this->hasTables(['c_lp_view', 'c_lp_item_view'])) {
+        if ([] === $courseIds || !$this->hasTables(['c_lp_view', 'c_lp_item_view', 'c_lp_item'])) {
             return [];
         }
 
@@ -2121,7 +2121,9 @@ final readonly class GlobalReportingSectionQueryService
                 AND latest_view.lp_id = selected_view.lp_id
                 AND latest_view.latestViewCount = selected_view.view_count
                INNER JOIN c_lp_item_view item_view ON item_view.lp_view_id = selected_view.iid
-              WHERE selected_view.user_id = :userId
+               INNER JOIN c_lp_item item ON item.iid = item_view.lp_item_id AND item.lp_id = selected_view.lp_id
+              WHERE item.item_type IN (\'quiz\', \'sco\', \'toolbox\')
+                AND selected_view.user_id = :userId
                 AND COALESCE(selected_view.session_id, 0) = :sessionId
                 AND selected_view.c_id IN (:courseIds)
            GROUP BY selected_view.c_id',
@@ -2839,7 +2841,7 @@ final readonly class GlobalReportingSectionQueryService
      */
     private function learningPathDetailRows(int $userId, int $courseId, int $sessionId): array
     {
-        if (!$this->hasTables(['c_lp', 'resource_link', 'c_lp_view', 'c_lp_item_view'])) {
+        if (!$this->hasTables(['c_lp', 'resource_link', 'c_lp_view', 'c_lp_item_view', 'c_lp_item'])) {
             return [];
         }
 
@@ -2853,8 +2855,9 @@ final readonly class GlobalReportingSectionQueryService
                     COALESCE(selected_view.progress, 0) AS progress,
                     COALESCE(SUM(item_view.total_time), 0) AS timeSeconds,
                     CASE
-                        WHEN SUM(CAST(item_view.max_score AS DECIMAL(18, 4))) > 0
-                        THEN 100 * SUM(item_view.score) / SUM(CAST(item_view.max_score AS DECIMAL(18, 4)))
+                        WHEN SUM(CASE WHEN item.item_type IN (\'quiz\', \'sco\', \'toolbox\') THEN CAST(item_view.max_score AS DECIMAL(18, 4)) END) > 0
+                        THEN 100 * SUM(CASE WHEN item.item_type IN (\'quiz\', \'sco\', \'toolbox\') THEN item_view.score END)
+                            / SUM(CASE WHEN item.item_type IN (\'quiz\', \'sco\', \'toolbox\') THEN CAST(item_view.max_score AS DECIMAL(18, 4)) END)
                         ELSE NULL
                     END AS score,
                     MAX(
@@ -2878,6 +2881,7 @@ final readonly class GlobalReportingSectionQueryService
                      LIMIT 1
                  )
                LEFT JOIN c_lp_item_view item_view ON item_view.lp_view_id = selected_view.iid
+               LEFT JOIN c_lp_item item ON item.iid = item_view.lp_item_id AND item.lp_id = learning_path.iid
               WHERE resource_link.c_id = :courseId
                 AND resource_link.deleted_at IS NULL
                 AND '.$sessionFilter.'

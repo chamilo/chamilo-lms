@@ -1241,12 +1241,15 @@ final class CourseReportingSectionQueryService
         $scoreExpression = $hasItemViews
             && $this->columnExists('c_lp_item_view', 'score')
             && $this->columnExists('c_lp_item_view', 'max_score')
+            && $this->tableExists('c_lp_item')
             ? '(SELECT COALESCE(
                     100 * SUM(item_view.score) / NULLIF(SUM(item_view.max_score), 0),
                     0
                 )
                   FROM c_lp_item_view item_view
-                 WHERE item_view.lp_view_id = view.iid)'
+                  INNER JOIN c_lp_item item ON item.iid = item_view.lp_item_id AND item.lp_id = view.lp_id
+                 WHERE item_view.lp_view_id = view.iid
+                   AND item.item_type IN (\'quiz\', \'sco\', \'toolbox\'))'
             : '0';
         $firstAccessExpression = $hasItemViews && $this->columnExists('c_lp_item_view', 'start_time')
             ? '(SELECT MIN(FROM_UNIXTIME(item_view.start_time))
@@ -1901,11 +1904,14 @@ final class CourseReportingSectionQueryService
         $firstAccess = null;
         if ($this->tableExists('c_lp_item_view')) {
             $select = [];
+            $itemJoin = '';
             if (
                 $this->columnExists('c_lp_item_view', 'score')
                 && $this->columnExists('c_lp_item_view', 'max_score')
+                && $this->tableExists('c_lp_item')
             ) {
-                $select[] = 'COALESCE(100 * SUM(item_view.score) / NULLIF(SUM(item_view.max_score), 0), 0) AS averageScore';
+                $select[] = "COALESCE(100 * SUM(CASE WHEN item.item_type IN ('quiz', 'sco', 'toolbox') THEN item_view.score END) / NULLIF(SUM(CASE WHEN item.item_type IN ('quiz', 'sco', 'toolbox') THEN item_view.max_score END), 0), 0) AS averageScore";
+                $itemJoin = 'LEFT JOIN c_lp_item item ON item.iid = item_view.lp_item_id AND item.lp_id = view.lp_id';
             } else {
                 $select[] = '0 AS averageScore';
             }
@@ -1920,6 +1926,7 @@ final class CourseReportingSectionQueryService
                 'SELECT '.implode(', ', $select).'
                    FROM c_lp_item_view item_view
                    INNER JOIN c_lp_view view ON view.iid = item_view.lp_view_id
+                   '.$itemJoin.'
                   WHERE view.c_id = :courseId
                     AND COALESCE(view.session_id, 0) = :sessionId
                     AND view.lp_id = :learningPathId
@@ -2010,6 +2017,7 @@ final class CourseReportingSectionQueryService
             || [] === $learningPathIds
             || !$this->tableExists('c_lp_view')
             || !$this->tableExists('c_lp_item_view')
+            || !$this->tableExists('c_lp_item')
         ) {
             return 0.0;
         }
@@ -2027,7 +2035,9 @@ final class CourseReportingSectionQueryService
                     item_view.status
                FROM c_lp_view view
                INNER JOIN c_lp_item_view item_view ON item_view.lp_view_id = view.iid
-              WHERE view.c_id = :courseId
+               INNER JOIN c_lp_item item ON item.iid = item_view.lp_item_id AND item.lp_id = view.lp_id
+              WHERE item.item_type IN (\'quiz\', \'sco\', \'toolbox\')
+                AND view.c_id = :courseId
                 AND COALESCE(view.session_id, 0) = :sessionId
                 AND view.user_id IN (:userIds)
                 AND view.lp_id IN (:learningPathIds)

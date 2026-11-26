@@ -124,7 +124,8 @@ final class CourseReportingSectionsMoreTest extends KernelTestCase
         $n = (int) $this->conn()->fetchOne('SELECT COUNT(DISTINCT lp.iid) FROM c_lp lp INNER JOIN resource_link rl ON rl.resource_node_id = lp.resource_node_id WHERE rl.c_id = 1 AND rl.deleted_at IS NULL AND rl.session_id IS NULL');
         $this->lpView($a, $lp, 40);
         $view = (int) $this->conn()->lastInsertId();
-        $this->lpItemView($view, 1, 3, '4');
+        $this->lpItemView($view, $this->newLpItem($lp), 3, '4');
+        $this->lpItemView($view, $this->newLpItem($lp, 'document'), 0, '100');
         $this->insert('c_student_publication', ['user_id' => $a, 'title' => 'r3_assignment']);
         $assignment = (int) $this->conn()->lastInsertId();
         foreach ([[$assignment, 'r3_work_1'], [$assignment, 'r3_work_2'], [null, 'r3_work_root']] as [$parent, $title]) {
@@ -296,8 +297,8 @@ final class CourseReportingSectionsMoreTest extends KernelTestCase
         $lp = $this->newLp('r3_tl_stats_lp');
         $v1 = $this->lpView($a, $lp, 20);
         $this->lpView($b, $lp, 80);
-        $this->lpItemView($v1, 1, 5, '10', 100, 1000000000);
-        $this->lpItemView($v1, 2, 5, '10', 50, 1000003600);
+        $this->lpItemView($v1, $this->newLpItem($lp), 5, '10', 100, 1000000000);
+        $this->lpItemView($v1, $this->newLpItem($lp, 'document'), 0, '100', 50, 1000003600);
 
         $sections = array_column($this->section('tools')['sections'], null, 'key');
         $testRow = array_column($sections['tests']['items'], null, 'title')['r3_tl_stats_quiz'];
@@ -328,8 +329,9 @@ final class CourseReportingSectionsMoreTest extends KernelTestCase
         $this->exerciseAttempt($gone, $quiz, 10, 10);
         $v = $this->lpView($a, $lp, 20);
         $vg = $this->lpView($gone, $lp, 100);
-        $this->lpItemView($v, 1, 1, '2', 10);
-        $this->lpItemView($vg, 1, 2, '2', 500);
+        $item = $this->newLpItem($lp);
+        $this->lpItemView($v, $item, 1, '2', 10);
+        $this->lpItemView($vg, $item, 2, '2', 500);
 
         $sections = array_column($this->section('tools')['sections'], null, 'key');
         $test = array_column($sections['tests']['items'], null, 'title')['r3_rm_quiz'];
@@ -460,7 +462,7 @@ final class CourseReportingSectionsMoreTest extends KernelTestCase
         $this->newLp('r3_lpm_session', 1, $session);
         $v = $this->lpView($a, $lp, 30);
         $this->lpView($b, $lp, 70);
-        $this->lpItemView($v, 1, 1, '2', 60, 1000000000);
+        $this->lpItemView($v, $this->newLpItem($lp, 'sco'), 1, '2', 60, 1000000000);
 
         $result = $this->section('learning-paths', ['keyword' => 'r3_lpm_']);
 
@@ -488,9 +490,10 @@ final class CourseReportingSectionsMoreTest extends KernelTestCase
         $new = $this->lpView($a, $lp, 90, null, 2);
         $this->lpView($b, $lp, 40);
         $this->lpView($a, $lp, 100, null, 1, 2);
-        $this->lpItemView($new, 1, 3, '4', 120, 1000000000);
-        $this->lpItemView($new, 2, 1, '4', 30, 1000003600);
-        $this->lpItemView($old, 1, 0, '4', 999, 5);
+        $quiz = $this->newLpItem($lp);
+        $this->lpItemView($new, $quiz, 4, '4', 120, 1000000000);
+        $this->lpItemView($new, $this->newLpItem($lp, 'video'), 0, '100', 30, 1000003600);
+        $this->lpItemView($old, $quiz, 0, '4', 999, 5);
         $this->conn()->executeStatement("UPDATE c_lp_view SET completion_date = '2001-09-09' WHERE iid = ?", [$new]);
         $this->conn()->executeStatement('UPDATE user SET lastname = ? WHERE id = ?', ['R3Alpha', $a]);
         $this->conn()->executeStatement('UPDATE user SET lastname = ? WHERE id = ?', ['R3Beta', $b]);
@@ -501,7 +504,7 @@ final class CourseReportingSectionsMoreTest extends KernelTestCase
         $this->assertSame([90.0, 40.0], array_column($result['items'], 'progress'));
         $first = $result['items'][0];
         $this->assertSame(150, $first['totalTime'], 'time of the latest view only');
-        $this->assertSame(50.0, round($first['score'], 2), '(3 + 1) / (4 + 4)');
+        $this->assertSame(100.0, round($first['score'], 2), 'the video counts toward time, not the grade');
         $this->assertSame('2001-09-09', $first['completionDate']);
         $this->assertSame('r3_lpu_a', $first['title']);
         $this->assertSame($this->conn()->fetchOne('SELECT FROM_UNIXTIME(1000000000)'), $first['firstAccess'], 'earliest started item of the latest view');

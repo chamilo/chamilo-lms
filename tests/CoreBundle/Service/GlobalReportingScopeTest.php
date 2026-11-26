@@ -399,6 +399,7 @@ final class GlobalReportingScopeTest extends KernelTestCase
         $boss = $this->rawUser('d1c', self::BOSS);
         $this->courseUser($s1, 1, 5);
         $this->courseUser($s2, 1, 5);
+        $this->courseUser($s2, 2, 5); // Not taught by the viewer.
         $this->courseUser($boss, 1, 5);
         // s1 never logged in (inactive); s2 logged in far in the future (active); only active accounts count.
         $this->conn()->executeStatement('UPDATE user SET last_login = ? WHERE id = ?', ['2099-01-01 00:00:00', $s2]);
@@ -429,13 +430,66 @@ final class GlobalReportingScopeTest extends KernelTestCase
         $this->assertSame(1, $d['followedCourses']);
         $this->assertSame(2, $d['followedSessions']);
         $this->assertTrue($d['canManageFollowedScope']);
-        $this->assertSame(0.5, $d['averageCoursesPerStudent']);
+        $this->assertEquals(1.0, $d['averageCoursesPerStudent']);
         $this->assertSame(1, $d['inactiveStudents']);
         $this->assertSame(300, $d['averageTimeSpentSeconds']);
         $this->assertSame(0.0, $d['averageLearningPathProgress']);
         $this->assertSame(0.0, $d['averageScore']);
         $this->assertSame(0, $d['forumPosts']);
         $this->assertEquals(0.0, $d['averageAssignments']);
+    }
+
+    public function testAverageCoursesPerLearnerIncludesOnlyDistinctVisibleStudentSubscriptions(): void
+    {
+        $teacher = $this->rawUser('avg_teacher', self::TEACHER);
+        $first = $this->rawUser('avg_first');
+        $second = $this->rawUser('avg_second');
+        $this->courseUser($teacher, 1, self::TEACHER);
+        $this->courseUser($first, 1);
+
+        $session = $this->rawSession('avg_session');
+        $this->sessionCourse($session, 1);
+        $this->sessionCourse($session, 2);
+        $this->sessionUser($session, $teacher, self::SESSION_GENERAL_COACH);
+        $this->sessionCourseUser($session, 1, $first);
+        $this->sessionCourseUser($session, 2, $first);
+        $this->sessionCourseUser($session, 2, $second);
+
+        // The first learner takes course 1 twice, but has only two distinct courses.
+        $otherSession = $this->rawSession('avg_other');
+        $this->sessionCourse($otherSession, 1);
+        $this->sessionCourseUser($otherSession, 1, $first);
+        // A course 2 direct subscription is not visible to this teacher.
+        $this->courseUser($second, 2);
+        // Foreign URL sessions and non-student subscriptions must not contribute.
+        $hidden = $this->rawSession('avg_hidden', $this->secondUrl());
+        $this->sessionCourse($hidden, 1);
+        $this->sessionCourseUser($hidden, 1, $second);
+        $coachOnly = $this->rawSession('avg_coach_only');
+        $this->sessionCourse($coachOnly, 1);
+        $this->sessionCourseUser($coachOnly, 1, $second, 2);
+
+        $dashboard = $this->service->getDashboard($this->ctx($teacher));
+        $this->assertSame(2, $dashboard['students']);
+        $this->assertSame(1, $dashboard['assignedCourses']);
+        $this->assertEquals(1.5, $dashboard['averageCoursesPerStudent']);
+    }
+
+    public function testCourseCoachWithoutDirectCoursesHasANonzeroAverage(): void
+    {
+        $coach = $this->rawUser('avg_coach', self::TEACHER);
+        $learner = $this->rawUser('avg_session_learner');
+        $session = $this->rawSession('avg_coach_session');
+        $this->sessionCourse($session, 1);
+        $this->sessionCourse($session, 2);
+        $this->sessionCourseUser($session, 1, $coach, 2);
+        $this->sessionCourseUser($session, 1, $learner);
+        $this->sessionCourseUser($session, 2, $learner);
+
+        $dashboard = $this->service->getDashboard($this->ctx($coach));
+        $this->assertSame(1, $dashboard['students']);
+        $this->assertSame(0, $dashboard['assignedCourses']);
+        $this->assertEquals(1.0, $dashboard['averageCoursesPerStudent']);
     }
 
     public function testDashboardSkipsGenericMetricsWhenAskedAndZeroesThemWithoutStudents(): void
@@ -478,6 +532,6 @@ final class GlobalReportingScopeTest extends KernelTestCase
         $this->assertSame(2, $d['assignedCourses']);
         $this->assertSame(0, $d['followedCourses']);
         $this->assertSame(1, $d['students']);
-        $this->assertEquals(2.0, $d['averageCoursesPerStudent']);
+        $this->assertEquals(1.0, $d['averageCoursesPerStudent'], 'only one of the two session courses is taken by the learner');
     }
 }

@@ -42,6 +42,7 @@ final class OAuth2TwoFactorLoginTest extends WebTestCase
     {
         self::createClient();
         $this->setPlatform2fa(true);
+        $this->setLoginRedirect('{"STUDENT":"sessions"}');
         $user = $this->createMfaUser('oauth2_mfa_held');
 
         [$response, $request] = $this->runOnAuthenticationSuccess($user);
@@ -59,6 +60,7 @@ final class OAuth2TwoFactorLoginTest extends WebTestCase
     {
         self::createClient();
         $this->setPlatform2fa(true);
+        $this->setLoginRedirect('{}');
         $user = $this->createUser('oauth2_no_mfa');
 
         [$response, $request] = $this->runOnAuthenticationSuccess($user);
@@ -72,12 +74,41 @@ final class OAuth2TwoFactorLoginTest extends WebTestCase
     {
         self::createClient();
         $this->setPlatform2fa(false);
+        $this->setLoginRedirect('{"STUDENT":"sessions"}');
         $user = $this->createMfaUser('oauth2_mfa_platform_off');
 
         [$response] = $this->runOnAuthenticationSuccess($user);
 
-        $this->assertSame('/', parse_url($response->getTargetUrl(), PHP_URL_PATH));
+        $this->assertSame('/sessions', parse_url($response->getTargetUrl(), PHP_URL_PATH));
         $this->assertNotNull(self::getContainer()->get(TokenStorageInterface::class)->getToken());
+    }
+
+    public function testOAuth2UsesTheConfiguredProfileRedirectWithoutMfa(): void
+    {
+        self::createClient();
+        $this->setPlatform2fa(true);
+        $this->setLoginRedirect('{"STUDENT":"sessions","COURSEMANAGER":"courses"}');
+        $user = $this->createUser('oauth2_redirect_student');
+        $user->setRoles(['ROLE_STUDENT']);
+        [$response] = $this->runOnAuthenticationSuccess($user);
+        $this->assertSame('/sessions', $response->getTargetUrl());
+
+        $user->setRoles(['ROLE_TEACHER']);
+        [$response] = $this->runOnAuthenticationSuccess($user);
+        $this->assertSame('/courses', $response->getTargetUrl());
+    }
+
+    public function testOAuth2RejectsAnExternalRedirect(): void
+    {
+        self::createClient();
+        $this->setPlatform2fa(true);
+        $this->setLoginRedirect('{"STUDENT":"//example.invalid/"}');
+        $user = $this->createUser('oauth2_redirect_unsafe');
+        $user->setRoles(['ROLE_STUDENT']);
+
+        [$response] = $this->runOnAuthenticationSuccess($user);
+
+        $this->assertSame('/', $response->getTargetUrl());
     }
 
     public function testTotpPageWithoutPendingLoginGoesBackToLogin(): void
@@ -107,12 +138,13 @@ final class OAuth2TwoFactorLoginTest extends WebTestCase
     {
         $client = self::createClient();
         $this->setPlatform2fa(true);
+        $this->setLoginRedirect('{"STUDENT":"sessions"}');
         $user = $this->createMfaUser('oauth2_mfa_ok');
         $this->startPendingLogin($client, $user);
 
         $this->submitCode($client, $this->currentCode());
 
-        $this->assertResponseRedirects('/');
+        $this->assertResponseRedirects('/sessions');
         $client->request('GET', '/account/edit');
         $this->assertResponseIsSuccessful();
     }
@@ -211,10 +243,18 @@ final class OAuth2TwoFactorLoginTest extends WebTestCase
         ;
     }
 
+    private function setLoginRedirect(string $setting): void
+    {
+        self::getContainer()->get(SettingsManager::class)
+            ->updateSetting('registration.redirect_after_login', $setting)
+        ;
+    }
+
     private function createMfaUser(string $username): User
     {
         $user = $this->createUser($username);
         $user
+            ->setRoles(['ROLE_STUDENT'])
             ->setMfaEnabled(true)
             ->setMfaService('TOTP')
             ->setMfaSecret($this->encryptSecret(self::TOTP_SECRET))

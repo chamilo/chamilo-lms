@@ -795,19 +795,20 @@ final class WorkCharacterizationTest extends KernelTestCase
         $this->assertSame([], getDocumentToWorkPerUser($doc, $folder, 1, 0, $me, 0), 'inactive filter');
     }
 
-    public function testGenerateMoveFormListsTheActiveRootFoldersOfThatCourseAndSession(): void
+    public function testGenerateMoveFormListsTheActiveFoldersOfThatCourseAndSession(): void
     {
         $this->setContext($this->admin(), $this->course(1));
         $sessionId = $this->session();
         $moving = $this->work(['title' => 'wk_moving']);
         $target = $this->folder(['title' => 'wk_target_folder']);
-        $nested = $this->folder(['title' => 'wk_nested_folder', 'parent_id' => $target]);
+        // A session copy of an assignment is a folder whose parent is the original.
+        $sessionCopy = $this->folder(['title' => 'wk_session_copy_folder', 'parent_id' => $target]);
         $hidden = $this->folder(['title' => 'wk_deleted_folder', 'active' => 2]);
         $inSession = $this->folder(['title' => 'wk_session_folder']);
         $elsewhere = $this->folder(['title' => 'wk_other_course_folder']);
         $this->publish($moving, 1);
         $this->publish($target, 1);
-        $this->publish($nested, 1);
+        $this->publish($sessionCopy, 1, 2, $sessionId);
         $this->publish($hidden, 1);
         $this->publish($inSession, 1, 2, $sessionId);
         $this->publish($elsewhere, 2);
@@ -817,13 +818,14 @@ final class WorkCharacterizationTest extends KernelTestCase
 
         $this->assertStringContainsString('wk_moving', $html, 'the header names the work being moved');
         $this->assertStringContainsString('wk_target_folder', $html);
-        $this->assertStringNotContainsString('wk_nested_folder', $html, 'only root folders');
+        $this->assertStringNotContainsString('wk_session_copy_folder', $html, 'the copy belongs to the session');
         $this->assertStringNotContainsString('wk_deleted_folder', $html);
         $this->assertStringNotContainsString('wk_session_folder', $html, 'base course session only');
         $this->assertStringNotContainsString('wk_other_course_folder', $html);
 
         $inSessionHtml = generateMoveForm($moving, '/', ['real_id' => 1], 0, $sessionId);
         $this->assertStringContainsString('wk_session_folder', $inSessionHtml);
+        $this->assertStringContainsString('wk_session_copy_folder', $inSessionHtml, 'a work can be moved to a session copy');
         $this->assertStringNotContainsString('wk_target_folder', $inSessionHtml);
     }
 

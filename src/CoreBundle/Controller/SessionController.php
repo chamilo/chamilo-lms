@@ -34,6 +34,7 @@ use Doctrine\ORM\EntityRepository;
 use Essence\Essence;
 use ExtraFieldValue;
 use Graphp\GraphViz\GraphViz;
+use Security as LegacySecurity;
 use SessionManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -46,6 +47,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use UserManager;
+
+use const ANONYMOUS;
+use const STUDENT;
 
 #[Route('/sessions')]
 class SessionController extends AbstractController
@@ -89,6 +93,8 @@ class SessionController extends AbstractController
         $courseValues = new ExtraFieldValue('course');
         $userValues = new ExtraFieldValue('user');
         $sessionValues = new ExtraFieldValue('session');
+
+        $readerHtmlProfile = $this->isGranted('IS_AUTHENTICATED') ? STUDENT : ANONYMOUS;
 
         /** @var SessionRelCourse $sessionRelCourse */
         foreach ($sessionCourses as $sessionRelCourse) {
@@ -134,8 +140,13 @@ class SessionController extends AbstractController
             $courseCustom = [];
 
             if (!empty($descriptionsData)) {
-                foreach ($descriptionsData as $descriptionInfo) {
-                    $type = $descriptionInfo->getDescriptionType();
+                foreach ($descriptionsData as $description) {
+                    $type = $description->getDescriptionType();
+                    // The page is public: filter the teacher's HTML with the reader's profile.
+                    $descriptionInfo = [
+                        'title' => LegacySecurity::remove_XSS((string) $description->getTitle(), $readerHtmlProfile),
+                        'content' => LegacySecurity::remove_XSS((string) $description->getContent(), $readerHtmlProfile),
+                    ];
 
                     switch ($type) {
                         case CCourseDescription::TYPE_DESCRIPTION:

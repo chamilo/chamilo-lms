@@ -79,6 +79,35 @@ final class CourseSettingsApiSecurityTest extends AbstractApiTest
         $this->assertJsonContains(['courseId' => (int) $ctx['course']->getId()]);
     }
 
+    public function testLegacyDepartmentUrlDoesNotBlockSavingOtherSettings(): void
+    {
+        $ctx = $this->bootstrapScenario('department_url');
+        $courseId = (int) $ctx['course']->getId();
+        $this->getEntityManager()->getConnection()->update('course', ['department_url' => 'http://'], ['id' => $courseId]);
+
+        $client = $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacher']));
+        $url = '/api/course-settings?cid='.$courseId;
+        $response = $client->request('GET', $url);
+        $this->assertResponseIsSuccessful();
+        $this->assertSame('', $response->toArray()['values']['department_url']);
+
+        $client->request('POST', $url, ['json' => ['values' => ['department_name' => 'Training']]]);
+        $this->assertResponseIsSuccessful();
+        $this->assertSame('', $this->getEntityManager()->getConnection()->fetchOne('SELECT department_url FROM course WHERE id = ?', [$courseId]));
+
+        $client->request('POST', $url, ['json' => ['values' => ['department_url' => ' HTTPS:// ']]]);
+        $this->assertResponseIsSuccessful();
+        $this->assertSame('', $this->getEntityManager()->getConnection()->fetchOne('SELECT department_url FROM course WHERE id = ?', [$courseId]));
+
+        $client->request('POST', $url, ['json' => ['values' => ['department_url' => 'https://example.org/training']]]);
+        $this->assertResponseIsSuccessful();
+        $this->assertSame('https://example.org/training', $this->getEntityManager()->getConnection()->fetchOne('SELECT department_url FROM course WHERE id = ?', [$courseId]));
+
+        $client->request('POST', $url, ['json' => ['values' => ['department_url' => 'not a url']]]);
+        $this->assertResponseStatusCodeSame(400);
+        $this->assertSame('https://example.org/training', $this->getEntityManager()->getConnection()->fetchOne('SELECT department_url FROM course WHERE id = ?', [$courseId]));
+    }
+
     /**
      * @return array{course: Course, teacher: User, student: User, outsider: User, foreignTeacher: User}
      */

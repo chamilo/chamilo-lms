@@ -1047,9 +1047,11 @@ final readonly class CourseSettingsManager
                 $normalized[$key] = trim((string) $values[$key]);
             }
         }
+
         if (isset($normalized['department_url'])) {
             $normalized['department_url'] = Course::normalizeDepartmentUrl($normalized['department_url']);
         }
+
         foreach (self::INTEGER_VALUE_KEYS as $key) {
             if (\array_key_exists($key, $values)) {
                 $normalized[$key] = (int) $values[$key];

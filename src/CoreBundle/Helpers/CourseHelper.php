@@ -1123,7 +1123,7 @@ class CourseHelper
     private function fixDepartmentUrl(string $url): string
     {
         $url = Course::normalizeDepartmentUrl($url);
-        if ('' !== $url && !str_starts_with($url, 'http://') && !str_starts_with($url, 'https://')) {
+        if ('' !== $url && !preg_match('#^https?://#i', $url)) {
             return 'http://'.$url;
         }
 

@@ -45,4 +45,14 @@ final class CourseDepartmentUrlTest extends TestCase
 
         yield 'url without scheme is kept as is' => ['example.org', 'example.org'];
     }
+
+    public function testSetterNormalizesBareSchemeAndPreservesHttps(): void
+    {
+        $course = new Course();
+        $course->setDepartmentUrl(' HTTPS:// ');
+        self::assertSame('', $course->getDepartmentUrl());
+
+        $course->setDepartmentUrl('HTTPS://example.org/department');
+        self::assertSame('HTTPS://example.org/department', $course->getDepartmentUrl());
+    }
 }

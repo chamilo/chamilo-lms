@@ -801,7 +801,7 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
 
     public function setDepartmentUrl(string $departmentUrl): self
     {
-        $this->departmentUrl = $departmentUrl;
+        $this->departmentUrl = self::normalizeDepartmentUrl($departmentUrl);
 
         return $this;
     }

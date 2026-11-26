@@ -1302,6 +1302,10 @@ class CourseController extends ToolBaseController
     #[Route('/{cid}', name: 'chamilo_core_course_direct', requirements: ['cid' => '\d+'], methods: ['GET'])]
     public function direct(int $cid): RedirectResponse
     {
+        if (null === $this->em->find(Course::class, $cid)) {
+            throw $this->createNotFoundException('Course does not exist');
+        }
+
         return $this->redirectToRoute('chamilo_core_course_home', ['cid' => $cid, 'sid' => 0]);
     }
 

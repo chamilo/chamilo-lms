@@ -1979,6 +1979,26 @@
         </article>
       </div>
 
+      <div
+        v-if="showLearnpathRetry"
+        class="flex flex-col items-start gap-2"
+      >
+        <BaseButton
+          :disabled="isStartingAttempt"
+          :is-loading="isStartingAttempt"
+          :label="t('Try again')"
+          icon="replay"
+          type="success"
+          @click="startAnotherAttempt"
+        />
+      </div>
+      <p
+        v-if="retryError"
+        class="text-sm text-danger"
+        role="alert"
+      >
+        {{ retryError }}
+      </p>
       <section
         v-if="showStandaloneFinalActions"
         class="exercise-result-final-actions rounded-xl border border-gray-20 bg-white p-5 shadow-sm"
@@ -2073,6 +2093,7 @@ const notificationEditorConfig = {
   menubar: false,
 }
 const isStartingAttempt = ref(false)
+const retryError = ref("")
 const correctionForms = ref({})
 const aiCorrectionForms = ref({})
 const correctionSavingQuestionId = ref(null)
@@ -2195,6 +2216,15 @@ function getCourseHomeQuery() {
   return query
 }
 
+const showLearnpathRetry = computed(
+  () =>
+    isLearnpathContext.value &&
+    finalActions.value?.isLearningPathAttempt === true &&
+    finalActions.value?.canTryAgain === true &&
+    visibility.value?.isReviewMode !== true &&
+    !shouldAutoPrint(),
+)
+
 const showStandaloneFinalActions = computed(() => {
   return (
     finalActions.value?.showFinalActions === true &&
@@ -2256,12 +2286,12 @@ function openLegacyRuntime(startResponse = null) {
 
 async function startAnotherAttempt() {
   const exerciseId = getExerciseId()
-  if (exerciseId <= 0 || !finalActions.value?.canTryAgain) {
+  if (exerciseId <= 0 || isStartingAttempt.value || !finalActions.value?.canTryAgain) {
     return
   }
 
   isStartingAttempt.value = true
-  errorMessage.value = ""
+  retryError.value = ""
 
   try {
     const response = await exerciseService.startExerciseAttempt({ exerciseId }, getContextParams(), exerciseId)
@@ -2276,14 +2306,14 @@ async function startAnotherAttempt() {
       return
     }
 
-    if (true === response?.usesLegacyRuntime && openLegacyRuntime(response)) {
+    if (!isLearnpathContext.value && true === response?.usesLegacyRuntime && openLegacyRuntime(response)) {
       return
     }
 
-    errorMessage.value = response?.message ? t(response.message) : t("Could not start the attempt")
+    retryError.value = response?.message ? t(response.message) : t("Could not start the attempt")
   } catch (error) {
     console.error("Error starting another exercise attempt from result", error)
-    errorMessage.value = t("Could not start the attempt")
+    retryError.value = t("Could not start the attempt")
   } finally {
     isStartingAttempt.value = false
   }
@@ -2299,6 +2329,7 @@ async function loadResult() {
 
   isLoading.value = true
   errorMessage.value = ""
+  retryError.value = ""
 
   try {
     const response = await exerciseService.getExerciseRuntimeResult(getContextParams(), exerciseId, attemptId)

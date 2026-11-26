@@ -63,7 +63,7 @@
           v-model="form.title"
           :editor-config="titleEditorConfig"
           :title="t('Learning path name')"
-          required
+          show-required-marker
         />
         <BaseInputText
           v-else
@@ -73,7 +73,6 @@
           :label="isEdit ? t('Title') : t('Learning path name')"
           required
         />
-
       </div>
 
       <BaseAdvancedSettingsButton v-model="showAdvancedSettings">

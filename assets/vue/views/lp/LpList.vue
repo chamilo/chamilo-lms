@@ -239,8 +239,6 @@ function syncCStudioCreateButtonVisibility() {
 
 const mLpList = ref(null)
 const mItems = computed(() => {
-  const ctx = legacyContext.value
-
   if (!canEdit.value) {
     return []
   }
@@ -297,44 +295,6 @@ const legacyContext = computed(() => {
     origin,
   }
 })
-
-function exposeLegacyCidContext() {
-  const query = new URLSearchParams()
-
-  if (legacyContext.value.cid) {
-    query.set("cid", legacyContext.value.cid)
-  }
-
-  if (legacyContext.value.sid) {
-    query.set("sid", legacyContext.value.sid)
-  }
-
-  if (legacyContext.value.gid) {
-    query.set("gid", legacyContext.value.gid)
-  }
-
-  if (legacyContext.value.gradebook) {
-    query.set("gradebook", legacyContext.value.gradebook)
-  }
-
-  const queryParams = query.toString()
-
-  try {
-    const currentCidReq = window.chamiloCidReq
-
-    if (currentCidReq && typeof currentCidReq === "object") {
-      currentCidReq.queryParams = queryParams
-
-      return
-    }
-
-    window.chamiloCidReq = {
-      queryParams,
-    }
-  } catch (error) {
-    console.warn("Unable to expose legacy course context.", error)
-  }
-}
 
 const canCopy = computed(
   () =>
@@ -776,18 +736,12 @@ const load = async (notifyOnError = true) => {
 }
 
 onMounted(async () => {
-  exposeLegacyCidContext()
   await load()
 
   await nextTick()
 
-  exposeLegacyCidContext()
   document.dispatchEvent(new CustomEvent(LP_LIST_LOADED))
   syncCStudioCreateButtonVisibility()
-})
-
-watch(legacyContext, () => {
-  exposeLegacyCidContext()
 })
 
 /**

@@ -68,8 +68,8 @@ final class ExerciseResultMatchingStatusTest extends AbstractApiTest
     }
 
     /**
-     * @param array{course: Course, quiz: CQuiz, question: CQuizQuestion, learner: User} $ctx
-     * @param array<int, int>                                                            $choices option id by prompt id
+     * @param array{course: Course, quiz: CQuiz, question: CQuizQuestion, learner: User, options: array<string, int>, prompts: array<string, int>} $ctx
+     * @param array<int, int>                                                                                                                      $choices option id by prompt id
      */
     private function createAttempt(array $ctx, array $choices): int
     {

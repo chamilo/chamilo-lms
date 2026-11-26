@@ -14,6 +14,7 @@ use OTPHP\TOTP;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Clock\NativeClock;
+use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 
 use const STR_PAD_LEFT;
 
@@ -88,7 +89,9 @@ class AccountTwoFactorActivationTest extends WebTestCase
 
         $form = $crawler->filter('form[name="change_password"]')->form();
         $form['change_password[currentPassword]'] = $password;
-        $form['change_password[enable2FA]']->tick();
+        $enable2FA = $form['change_password[enable2FA]'];
+        $this->assertInstanceOf(ChoiceFormField::class, $enable2FA);
+        $enable2FA->tick();
         $form['change_password[confirm2FACode]'] = $code;
 
         $client->submit($form);

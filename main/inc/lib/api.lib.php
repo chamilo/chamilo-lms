@@ -7425,8 +7425,14 @@ function api_global_admin_can_edit_admin(
         // If i'm a simple admin
         $is_platform_admin = api_is_platform_admin_by_id($my_user_id);
 
-        if ($allow_session_admin) {
-            $is_platform_admin = api_is_platform_admin_by_id($my_user_id) || (api_get_user_status($my_user_id) == SESSIONADMIN);
+        if ($allow_session_admin && !$is_platform_admin) {
+            if (api_get_user_status($my_user_id) != SESSIONADMIN) {
+                return false;
+            }
+
+            // Session admins may manage regular users, but administrator accounts are reserved
+            // to administrators.
+            return !api_is_platform_admin_by_id($admin_id_to_check);
         }
 
         if ($is_platform_admin) {

@@ -7,14 +7,12 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Asset;
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\GlideAssetHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\AssetRepository;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
-use Chamilo\CoreBundle\Security\CourseAccessResolver;
+use Chamilo\CoreBundle\Security\ResourceAccessResolver;
 use Chamilo\CoreBundle\Traits\ControllerTrait;
 use Chamilo\CourseBundle\Repository\CLpRepository;
 use League\Flysystem\PathTraversalDetected;
@@ -44,7 +42,7 @@ class AssetController
         Security $security,
         UserHelper $userHelper,
         CLpRepository $lpRepository,
-        CourseAccessResolver $courseAccessResolver,
+        ResourceAccessResolver $resourceAccessResolver,
     ): Response {
         try {
             // Flysystem resolves ".." and "\" itself: decide on the path it will really read.
@@ -57,7 +55,7 @@ class AssetController
         // A SCORM package is course content: only who can follow one of its learning paths reads it.
         if (Asset::SCORM === $category
             && !$security->isGranted('ROLE_ADMIN')
-            && !$this->canReadScormPackage($filePath, $assetRepository, $lpRepository, $userHelper->getCurrent(), $courseAccessResolver)
+            && !$this->canReadScormPackage($filePath, $assetRepository, $lpRepository, $userHelper->getCurrent(), $resourceAccessResolver)
         ) {
             throw new AccessDeniedHttpException();
         }
@@ -118,7 +116,7 @@ class AssetController
         AssetRepository $assetRepository,
         CLpRepository $lpRepository,
         ?User $user,
-        CourseAccessResolver $courseAccessResolver,
+        ResourceAccessResolver $resourceAccessResolver,
     ): bool {
         // The package folder is named after its asset: scorm/<asset title>/...
         $folder = explode('/', $filePath, 3)[1] ?? '';
@@ -129,57 +127,25 @@ class AssetController
         $assets = $assetRepository->findBy(['category' => Asset::SCORM, 'title' => $folder]);
         foreach ($assets as $asset) {
             foreach ($lpRepository->findBy(['asset' => $asset]) as $lp) {
-                foreach ($lp->getResourceNode()?->getResourceLinks() ?? [] as $link) {
-                    if ($this->canReadThroughLink($link, $user, $courseAccessResolver)) {
+                $node = $lp->getResourceNode();
+                if (null === $node) {
+                    continue;
+                }
+
+                // Teachers and coaches also read the package of a draft learning path.
+                if ($user instanceof User && $resourceAccessResolver->teachesResourceCourse($node, $user)) {
+                    return true;
+                }
+
+                foreach ($node->getResourceLinks() as $link) {
+                    if ($resourceAccessResolver->isOpenToVisitors($link)
+                        || ($user instanceof User
+                            && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
+                            && $resourceAccessResolver->mayReadPublishedLink($link, $node, $user))
+                    ) {
                         return true;
                     }
                 }
-            }
-        }
-
-        return false;
-    }
-
-    private function canReadThroughLink(ResourceLink $link, ?User $user, CourseAccessResolver $courseAccessResolver): bool
-    {
-        $course = $link->getCourse();
-        if (!$course instanceof Course) {
-            return false;
-        }
-
-        $published = ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility();
-
-        if (!$user instanceof User) {
-            return $published
-                && $course->isPublic()
-                && null === $link->getSession()
-                && null === $link->getGroup()
-                && null === $link->getUser();
-        }
-
-        $sessions = [$link->getSession()];
-        if (null === $link->getSession()) {
-            // Base-course content is shared with every session of the course.
-            foreach ($user->getSessionRelCourseRelUsers() as $subscription) {
-                if ($subscription->getCourse()->getId() === $course->getId()) {
-                    $sessions[] = $subscription->getSession();
-                }
-            }
-            foreach ($user->getSessionsAsGeneralCoach() as $session) {
-                if ($session->hasCourse($course)) {
-                    $sessions[] = $session;
-                }
-            }
-        }
-
-        $teacherRoles = [
-            ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER,
-            ResourceNodeVoter::ROLE_CURRENT_COURSE_SESSION_TEACHER,
-        ];
-        foreach ($sessions as $session) {
-            $roles = $courseAccessResolver->resolveCourseRoles($user, $course, $session);
-            if ([] !== array_intersect($roles, $teacherRoles) || ($published && [] !== $roles)) {
-                return true;
             }
         }
 

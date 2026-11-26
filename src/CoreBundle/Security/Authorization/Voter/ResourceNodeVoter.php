@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Helpers\PageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceAclHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Security\CourseStudentAccessChecker;
+use Chamilo\CoreBundle\Security\ResourceAccessResolver;
 use Chamilo\CoreBundle\Service\Assignment\AssignmentGroupCategoryResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -33,7 +34,6 @@ use Chamilo\CourseBundle\Entity\CStudentPublicationRelDocument;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Repository\CLpItemRepository;
 use ChamiloSession;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,6 +73,7 @@ class ResourceNodeVoter extends Voter
         private readonly CLpItemRepository $lpItemRepository,
         private readonly AssignmentGroupCategoryResolver $assignmentGroupCategoryResolver,
         private readonly CourseStudentAccessChecker $studentAccessChecker,
+        private readonly ResourceAccessResolver $resourceAccessResolver,
     ) {}
 
     public static function getReaderMask(): int
@@ -250,12 +251,12 @@ class ResourceNodeVoter extends Voter
             // the submission belongs to. Neither is good enough to hand over somebody
             // else's work, so membership of the submission's own course is required.
             if (self::VIEW === $attribute) {
-                return $this->belongsToResourceCourse($resourceNode, $user);
+                return $this->resourceAccessResolver->belongsToResourceCourse($resourceNode, $user);
             }
 
             // Everything else changes the submission, which its author (cleared above) and
             // the teachers of its course may do — never a fellow student of that course.
-            return $this->teachesResourceCourse($resourceNode, $user);
+            return $this->resourceAccessResolver->teachesResourceCourse($resourceNode, $user);
         }
 
         // A document attached to an assignment is readable by whoever can view that assignment.
@@ -332,17 +333,7 @@ class ResourceNodeVoter extends Voter
             if (0 === $groupId && $firstLink->getGroup() instanceof CGroup) {
                 $groupId = (int) $firstLink->getGroup()->getIid();
             }
-            // A course open to the world opens its published base-course files for
-            // reading only. A draft or pending link, or one scoped to a session,
-            // group or single user, stays private even in a public course.
-            if (self::VIEW === $attribute
-                && $firstLink->getCourse() instanceof Course
-                && $firstLink->getCourse()->isPublic()
-                && ResourceLink::VISIBILITY_PUBLISHED === $firstLink->getVisibility()
-                && !$firstLink->getSession() instanceof Session
-                && !$firstLink->getGroup() instanceof CGroup
-                && null === $firstLink->getUser()
-            ) {
+            if (self::VIEW === $attribute && $this->resourceAccessResolver->isOpenToVisitors($firstLink)) {
                 return true;
             }
         }
@@ -519,7 +510,7 @@ class ResourceNodeVoter extends Voter
 
         if (empty($rights)
             && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
-            && $this->mayUseDefaultReadFallback($link, $resourceNode, $user)
+            && $this->resourceAccessResolver->mayReadPublishedLink($link, $resourceNode, $user instanceof User ? $user : null)
         ) {
             // Give just read access.
             $resourceRight = (new ResourceRight())
@@ -796,40 +787,6 @@ class ResourceNodeVoter extends Voter
     }
 
     /**
-     * VISIBILITY_PUBLISHED means published inside its own course, never portal-wide: the course's
-     * own visibility answers that. The course id reaching this point falls back to the resource's
-     * first link, so the link-matching loop also matches a request carrying no context, and the
-     * context roles describe the course of the request rather than the one the link belongs to.
-     * A course link therefore needs an open course or a real subscription to it.
-     */
-    private function mayUseDefaultReadFallback(
-        ResourceLink $link,
-        ResourceNode $resourceNode,
-        ?UserInterface $user
-    ): bool {
-        $linkCourse = $link->getCourse();
-        if (!$linkCourse instanceof Course) {
-            return true;
-        }
-
-        if ($linkCourse->isPublic()) {
-            return true;
-        }
-
-        // An OPEN_PLATFORM course opens its contents to every registered user, unless the
-        // administrator requires a subscription first. CourseVoter reads the same pair.
-        if (Course::OPEN_PLATFORM === $linkCourse->getVisibility()
-            && !$this->isTruthySettingValue(
-                $this->settingsManager->getSetting('course.block_registered_users_access_to_open_course_contents', true)
-            )
-        ) {
-            return true;
-        }
-
-        return $user instanceof User && $this->belongsToResourceCourse($resourceNode, $user);
-    }
-
-    /**
      * Whether the user takes part in one of the courses the resource is linked to,
      * as a real subscription rather than as a visitor of an open course.
      */
@@ -842,11 +799,11 @@ class ResourceNodeVoter extends Voter
 
         // Course/session teachers keep managing the single shared assignment from
         // the normal Assignment tool (gid=0).
-        if ($this->teachesResourceCourse($resourceNode, $user)) {
+        if ($this->resourceAccessResolver->teachesResourceCourse($resourceNode, $user)) {
             return true;
         }
 
-        if (!$this->belongsToResourceCourse($resourceNode, $user)) {
+        if (!$this->resourceAccessResolver->belongsToResourceCourse($resourceNode, $user)) {
             return false;
         }
 
@@ -896,96 +853,6 @@ class ResourceNodeVoter extends Voter
             }
 
             if (null === $link->getSession()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function belongsToResourceCourse(ResourceNode $resourceNode, User $user): bool
-    {
-        foreach ($resourceNode->getResourceLinks() as $link) {
-            // Corrections and feedback are linked to the student they were sent to.
-            $linkUser = $link->getUser();
-            if ($linkUser instanceof User && $linkUser->getId() === $user->getId()) {
-                return true;
-            }
-
-            $linkCourse = $link->getCourse();
-            if (!$linkCourse instanceof Course) {
-                continue;
-            }
-
-            $linkSession = $link->getSession();
-            if ($linkSession instanceof Session) {
-                if ($linkSession->hasUserAsGeneralCoach($user)
-                    || $linkSession->hasCourseCoachInCourse($user, $linkCourse)
-                    || $linkSession->hasUserInCourse($user, $linkCourse, Session::STUDENT)
-                ) {
-                    return true;
-                }
-
-                continue;
-            }
-
-            if ($linkCourse->hasUserAsTeacher($user)
-                || $linkCourse->hasSubscriptionByUser($user)
-                || $this->isSubscribedToCourseThroughSession($user, $linkCourse)
-            ) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Base-course content is shared with every session of the course, so a user enrolled in the
-     * course only through a session (student or course coach, or general coach of a session
-     * holding it) takes part in it too — the same terms CourseAccessResolver grants the session
-     * context roles on.
-     */
-    private function isSubscribedToCourseThroughSession(User $user, Course $course): bool
-    {
-        $criteria = Criteria::create()->where(Criteria::expr()->eq('course', $course));
-        if ($user->getSessionRelCourseRelUsers()->matching($criteria)->count() > 0) {
-            return true;
-        }
-
-        foreach ($user->getSessionsAsGeneralCoach() as $session) {
-            if ($session->hasCourse($course)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * The teaching half of belongsToResourceCourse(): the course the resource belongs to, not the
-     * one the request carries, and without the student terms that method also accepts.
-     */
-    private function teachesResourceCourse(ResourceNode $resourceNode, User $user): bool
-    {
-        foreach ($resourceNode->getResourceLinks() as $link) {
-            $linkCourse = $link->getCourse();
-            if (!$linkCourse instanceof Course) {
-                continue;
-            }
-
-            $linkSession = $link->getSession();
-            if ($linkSession instanceof Session) {
-                if ($linkSession->hasUserAsGeneralCoach($user)
-                    || $linkSession->hasCourseCoachInCourse($user, $linkCourse)
-                ) {
-                    return true;
-                }
-
-                continue;
-            }
-
-            if ($linkCourse->hasUserAsTeacher($user)) {
                 return true;
             }
         }

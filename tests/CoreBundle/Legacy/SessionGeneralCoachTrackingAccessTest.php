@@ -91,7 +91,7 @@ final class SessionGeneralCoachTrackingAccessTest extends TestCase
             'access_details_session.php allows a coach of that student' => [
                 'public/main/my_space/access_details_session.php',
                 [
-                    'Tracking::is_allowed_to_coach_student(api_get_user_id(), $userId)',
+                    'Tracking::is_allowed_to_coach_student($currentUserId, $userId)',
                 ],
             ],
             'myspace.ajax.php prefers the requested session id' => [

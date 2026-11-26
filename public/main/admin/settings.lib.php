@@ -1820,7 +1820,7 @@ function handleSearch()
 
         $sf_values = [];
         foreach ($specific_fields as $sf) {
-            $sf_values[$sf['code']] = $sf['name'];
+            $sf_values[$sf['code']] = $sf['title'];
         }
         $url = Display::div(
             Display::url(

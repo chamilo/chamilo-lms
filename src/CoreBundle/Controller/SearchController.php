@@ -694,6 +694,8 @@ final class SearchController extends AbstractController
                 ? false
                 : $this->isResultAccessible($data, $resolvedSid);
 
+            $data['document_open_url'] = $this->resolveDocumentOpenUrl($data, $resolvedSid);
+
             $data['thumbnail_url'] = $this->resolveSearchResultThumbnailUrl($data, $ext, $filetype);
             $data['thumbnail_source'] = '' !== (string) $data['thumbnail_url']
                 ? $this->resolveSearchResultThumbnailSource($data, $ext, $filetype)
@@ -1139,6 +1141,67 @@ final class SearchController extends AbstractController
         }
 
         return 'mdi-file-outline';
+    }
+
+    /**
+     * Resolve a document's current UUID instead of linking to the course root.
+     * The resource view route independently checks VIEW access on every request.
+     */
+    private function resolveDocumentOpenUrl(array $data, int $sessionId): ?string
+    {
+        if (true !== ($data['is_accessible'] ?? false) || !empty($data['search_is_stale'])) {
+            return null;
+        }
+
+        $nodeId = (int) ($data['resource_node_id'] ?? 0);
+        $courseId = (int) ($data['course_id'] ?? 0);
+        if ($nodeId <= 0 || $courseId <= 0) {
+            return null;
+        }
+
+        $node = $this->em->find(ResourceNode::class, $nodeId);
+        if (!$node instanceof ResourceNode || !$node->hasResourceFile() || null === $node->getUuid()) {
+            return null;
+        }
+
+        $type = $node->getResourceType();
+        if ('files' !== $type->getTitle() || 'document' !== $type->getTool()->getTitle()) {
+            return null;
+        }
+
+        // Do not build a URL from a stale or unrelated course/session association.
+        $selectedLink = null;
+        foreach ($node->getResourceLinks() as $link) {
+            if (null !== $link->getDeletedAt() || $courseId !== $link->getCourse()?->getId()) {
+                continue;
+            }
+            $linkSessionId = $link->getSession()?->getId() ?? 0;
+            if (0 !== $linkSessionId && $sessionId !== $linkSessionId) {
+                continue;
+            }
+            // Search hits do not contain an authenticated group/user context.
+            // Keep that restriction rather than choosing a group or user link for the caller.
+            if (null !== $link->getGroup() || null !== $link->getUser() || null !== $link->getUserGroup()) {
+                continue;
+            }
+            $selectedLink = $link;
+            if ($sessionId === $linkSessionId) {
+                break;
+            }
+        }
+
+        if ($selectedLink instanceof ResourceLink) {
+            return $this->generateUrl('chamilo_core_resource_view', [
+                'tool' => $type->getTool()->getTitle(),
+                'type' => $type->getTitle(),
+                'id' => (string) $node->getUuid(),
+                'cid' => $courseId,
+                'sid' => $sessionId,
+                'gid' => 0,
+            ]);
+        }
+
+        return null;
     }
 
     private function resolveSearchResultThumbnailUrl(array $data, string $ext, string $filetype): string

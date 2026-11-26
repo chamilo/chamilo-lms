@@ -6,6 +6,7 @@
  * @deprecated This file is very likely completely deprecated
  */
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 /**
@@ -28,6 +29,12 @@ $_SESSION['this_section'] = $this_section;
 
 // Access restrictions.
 api_protect_admin_script();
+
+// Keep existing search-settings bookmarks working through the current settings page.
+if ('GET' === ($_SERVER['REQUEST_METHOD'] ?? '') && 'Search' === ($_GET['category'] ?? '')) {
+    header('Location: '.Container::getRouter()->generate('chamilo_platform_settings', ['namespace' => 'search']));
+    exit;
+}
 
 // Database table definitions.
 $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS);

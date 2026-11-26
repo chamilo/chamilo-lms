@@ -91,12 +91,41 @@ final class SpecificFieldsTier3CharacterizationTest extends KernelTestCase
         $this->assertSame('T', get_specific_field_code_from_name('tools'));
     }
 
-    public function testCodeFromNameWhenTheLetterIsStoredReturnsTheBrokenIndexLookup(): void
+    public function testCodeFromNameSkipsAnOccupiedLetterRegardlessOfCase(): void
     {
-        // Pre-existing bug: the loop returns $idx[$i] (an integer indexed like an array), so the
-        // result is NULL with a warning instead of the next free letter.
-        $this->field('S', 'spf3_a');
+        $this->field('s', 'spf3_a');
 
-        $this->assertNull(@get_specific_field_code_from_name('science'));
+        self::assertSame('A', get_specific_field_code_from_name('science'));
+    }
+
+    public function testCreateAndRenamePreserveTheCodeAndLegacyTableColumns(): void
+    {
+        $this->field('k', 'Existing keywords');
+        $id = add_specific_field('Keywords');
+        self::assertIsInt($id);
+        self::assertGreaterThan(0, $id);
+        $created = get_specific_field_list(['id' => $id])[0];
+        self::assertSame('A', $created['code']);
+        self::assertSame('Keywords', $created['title']);
+        self::assertSame('Keywords', $created[2]);
+        self::assertTrue(edit_specific_field($id, "Learner's keywords"));
+        $updated = get_specific_field_list(['id' => $id])[0];
+        self::assertSame('A', $updated['code']);
+        self::assertSame("Learner's keywords", $updated['title']);
+        self::assertSame($updated['title'], $updated[2]);
+        self::assertSame($created['id'], $updated['id']);
+        self::assertSame('Existing keywords', get_specific_field_list(['code' => "'k'"])[0]['title']);
+    }
+
+    public function testInvalidInputAndExhaustedCodesDoNotCreateFields(): void
+    {
+        self::assertFalse(add_specific_field('   '));
+        self::assertFalse(edit_specific_field(0, 'Invalid'));
+        foreach (str_split('ABDEFGHIJKLMNPQRSTUVWXY') as $code) {
+            $this->field($code, 'Existing field');
+        }
+        self::assertFalse(get_specific_field_code_from_name('Keywords'));
+        self::assertFalse(add_specific_field('Keywords'));
+        self::assertCount(23, $this->codes());
     }
 }

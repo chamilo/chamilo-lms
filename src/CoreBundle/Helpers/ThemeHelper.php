@@ -32,6 +32,14 @@ final class ThemeHelper
     public const string DEFAULT_THEME = 'chamilo';
 
     /**
+     * Where a file the visual theme does not have (favicon, application icons, logo...) is taken
+     * from, in this order. A theme created on the colors page only has its palette and the logos
+     * uploaded there. chamilo3 holds the current Chamilo logo, favicon and icons; DEFAULT_THEME
+     * keeps the previous ones, and stays last for the files only it has.
+     */
+    public const array ASSET_FALLBACK_THEMES = ['chamilo3', self::DEFAULT_THEME];
+
+    /**
      * The decorative images at the bottom of some pages. Each theme ships one per slot, as
      * images/bg-<slot>.png, which the administrator can replace or remove.
      */
@@ -142,18 +150,15 @@ final class ThemeHelper
 
     /**
      * Decide the theme in which the requested asset actually exists.
-     * This prevents 404 when the file is only present in DEFAULT_THEME.
+     * This prevents 404 when the file is only present in a theme of ASSET_FALLBACK_THEMES.
      */
     private function resolveAssetTheme(string $path): ?string
     {
-        $visual = $this->getVisualTheme();
-
         try {
-            if ($this->filesystem->fileExists($visual.DIRECTORY_SEPARATOR.$path)) {
-                return $visual;
-            }
-            if ($this->filesystem->fileExists(self::DEFAULT_THEME.DIRECTORY_SEPARATOR.$path)) {
-                return self::DEFAULT_THEME;
+            foreach (array_unique([$this->getVisualTheme(), ...self::ASSET_FALLBACK_THEMES]) as $theme) {
+                if ($this->filesystem->fileExists($theme.DIRECTORY_SEPARATOR.$path)) {
+                    return $theme;
+                }
             }
         } catch (FilesystemException) {
             return null;
@@ -164,7 +169,7 @@ final class ThemeHelper
 
     /**
      * Resolves a themed file location checking the selected theme first,
-     * then falling back to DEFAULT_THEME as a last resort.
+     * then the themes of ASSET_FALLBACK_THEMES.
      */
     public function getFileLocation(string $path): ?string
     {
@@ -265,7 +270,7 @@ final class ThemeHelper
 
     /**
      * Return the preferred logo URL for current theme (header/email),
-     * falling back to DEFAULT_THEME if needed.
+     * falling back to the themes of ASSET_FALLBACK_THEMES if needed.
      *
      * For emails: try PNG candidates first, then SVG candidates, all within the
      * active theme before falling back to the default Chamilo theme. This prevents
@@ -302,7 +307,7 @@ final class ThemeHelper
                 }
             }
 
-            // 2) Nothing in the active theme — fall back to the default theme (PNG only).
+            // 2) Nothing in the active theme — fall back to the themes of ASSET_FALLBACK_THEMES (PNG only).
             foreach (['images/email-logo.png', 'images/header-logo.png'] as $relPath) {
                 $url = $this->getThemeAssetUrl($relPath, $absoluteUrl);
                 if ('' !== $url) {

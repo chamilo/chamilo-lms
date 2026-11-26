@@ -968,6 +968,26 @@ final class UserGroupCharacterizationTest extends KernelTestCase
         $this->assertSame([], $this->model->get_sessions_by_usergroup($this->group('ug_empty')->getId()));
     }
 
+    public function testRemovingClassMemberKeepsSharedSessionUntilLastClassIsRemoved(): void
+    {
+        $this->assertSharedSessionUnsubscription(false, false);
+    }
+
+    public function testUnlinkingClassKeepsSharedSessionUntilLastClassIsUnlinked(): void
+    {
+        $this->assertSharedSessionUnsubscription(true, false);
+    }
+
+    public function testRemovingClassMemberRespectsKeepSubscriptionSetting(): void
+    {
+        $this->assertSharedSessionUnsubscription(false, true);
+    }
+
+    public function testUnlinkingClassRespectsKeepSubscriptionSetting(): void
+    {
+        $this->assertSharedSessionUnsubscription(true, true);
+    }
+
     // ---------------------------------------------------------------- group hierarchy
 
     public function testParentGroupHierarchy(): void
@@ -1097,6 +1117,68 @@ final class UserGroupCharacterizationTest extends KernelTestCase
     }
 
     // ---------------------------------------------------------------- helpers
+
+    private function assertSharedSessionUnsubscription(bool $unlinkSession, bool $keepSubscription): void
+    {
+        $setting = $unlinkSession
+            ? 'workflows.usergroup_do_not_unsubscribe_users_from_session_on_session_unsubscribe'
+            : 'workflows.usergroup_do_not_unsubscribe_users_from_course_nor_session_on_user_unsubscribe';
+        self::getContainer()->get(SettingsManager::class)->updateSetting($setting, $keepSubscription ? 'true' : 'false');
+
+        $session = $this->createSession('ug_shared_session');
+        $course = $this->createCourse('ug_shared_session_course');
+        $first = $this->group('ug_session_class_a');
+        $second = $this->group('ug_session_class_b');
+        $shared = $this->createUser('ug_session_shared');
+        $solo = $this->createUser('ug_session_solo');
+        $this->addUser($first, $shared);
+        $this->addUser($first, $solo);
+        $this->addUser($second, $shared);
+        $this->addSession($first, $session);
+        $this->addSession($second, $session);
+
+        $session->addCourse($course);
+        foreach ([$shared, $solo] as $user) {
+            $session->addUserInSession(Session::STUDENT, $user);
+            $session->addUserInCourse(Session::STUDENT, $user, $course);
+        }
+        $this->getEntityManager()->flush();
+
+        $sessionId = $session->getId();
+        $courseId = $course->getId();
+        $initialCount = (int) $this->conn()->fetchOne('SELECT nbr_users FROM session WHERE id = ?', [$sessionId]);
+        $assertSubscription = function (User $user, int $expected) use ($sessionId, $courseId): void {
+            self::assertSame($expected, $this->countRows('session_rel_user', [
+                'session_id' => $sessionId, 'user_id' => $user->getId(), 'relation_type' => Session::STUDENT,
+            ]));
+            self::assertSame($expected, $this->countRows('session_rel_course_rel_user', [
+                'session_id' => $sessionId, 'c_id' => $courseId, 'user_id' => $user->getId(), 'status' => Session::STUDENT,
+            ]));
+        };
+        $remove = function (Usergroup $group) use ($unlinkSession): void {
+            if ($unlinkSession) {
+                $this->model->subscribe_sessions_to_usergroup($group->getId(), []);
+            } else {
+                $this->model->subscribe_users_to_usergroup($group->getId(), []);
+            }
+        };
+
+        $assertSubscription($shared, 1);
+        $assertSubscription($solo, 1);
+        $remove($first);
+        $assertSubscription($shared, 1);
+        $assertSubscription($solo, $keepSubscription ? 1 : 0);
+        self::assertSame($initialCount - ($keepSubscription ? 0 : 1), (int) $this->conn()->fetchOne('SELECT nbr_users FROM session WHERE id = ?', [$sessionId]));
+        self::assertSame($keepSubscription ? 2 : 1, (int) $this->conn()->fetchOne('SELECT nbr_users FROM session_rel_course WHERE session_id = ? AND c_id = ?', [$sessionId, $courseId]));
+        self::assertSame(1, $this->countRows('usergroup_rel_user', ['usergroup_id' => $second->getId(), 'user_id' => $shared->getId()]));
+        self::assertSame(1, $this->countRows('usergroup_rel_session', ['usergroup_id' => $second->getId(), 'session_id' => $sessionId]));
+        self::assertSame(0, $this->countRows($unlinkSession ? 'usergroup_rel_session' : 'usergroup_rel_user', ['usergroup_id' => $first->getId()]));
+
+        $remove($second);
+        $assertSubscription($shared, $keepSubscription ? 1 : 0);
+        self::assertSame($initialCount - ($keepSubscription ? 0 : 2), (int) $this->conn()->fetchOne('SELECT nbr_users FROM session WHERE id = ?', [$sessionId]));
+        self::assertSame($keepSubscription ? 2 : 0, (int) $this->conn()->fetchOne('SELECT nbr_users FROM session_rel_course WHERE session_id = ? AND c_id = ?', [$sessionId, $courseId]));
+    }
 
     private function conn(): Connection
     {

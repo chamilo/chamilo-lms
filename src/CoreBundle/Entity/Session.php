@@ -38,6 +38,7 @@ use LogicException;
 use Stringable;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ApiResource(
@@ -249,7 +250,6 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
         'session:read',
         'session_rel_user:read',
         'session_rel_course_rel_user:read',
-        'user_subscriptions:sessions',
     ])]
     #[ORM\OrderBy(['position' => 'ASC'])]
     #[ORM\OneToMany(
@@ -492,6 +492,11 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     #[Groups(['user_subscriptions:sessions'])]
     private ?int $daysLeft = null;
 
+    /**
+     * @var list<SessionRelCourse> non-persisted projection for user subscription responses
+     */
+    private array $subscriptionCourses = [];
+
     public function __construct()
     {
         $this->skills = new ArrayCollection();
@@ -583,6 +588,24 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     public function getCourses(): Collection
     {
         return $this->courses;
+    }
+
+    /**
+     * @param list<SessionRelCourse> $courses
+     */
+    public function setSubscriptionCourses(array $courses): void
+    {
+        $this->subscriptionCourses = $courses;
+    }
+
+    /**
+     * @return list<SessionRelCourse>
+     */
+    #[Groups(['user_subscriptions:sessions'])]
+    #[SerializedName('courses')]
+    public function getSubscriptionCourses(): array
+    {
+        return $this->subscriptionCourses;
     }
 
     public function setCourses(ArrayCollection $courses): void
@@ -1429,10 +1452,27 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     /**
      * @return Collection<int, SessionRelCourseRelUser>
      */
-    #[Groups(['session:basic', 'user_subscriptions:sessions'])]
+    #[Groups(['session:basic'])]
     public function getCourseCoachesSubscriptions(): Collection
     {
         return $this->getAllUsersFromCourse(self::COURSE_COACH);
+    }
+
+    /**
+     * @return list<SessionRelCourseRelUser>
+     */
+    #[Groups(['user_subscriptions:sessions'])]
+    #[SerializedName('courseCoachesSubscriptions')]
+    public function getSubscriptionCourseCoaches(): array
+    {
+        $courseIds = [];
+        foreach ($this->subscriptionCourses as $subscriptionCourse) {
+            $courseIds[$subscriptionCourse->getCourse()->getId()] = true;
+        }
+
+        return array_values($this->getCourseCoachesSubscriptions()->filter(
+            static fn (SessionRelCourseRelUser $subscription): bool => isset($courseIds[$subscription->getCourse()->getId()])
+        )->toArray());
     }
 
     /**

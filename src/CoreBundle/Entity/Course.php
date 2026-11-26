@@ -788,6 +788,17 @@ class Course extends AbstractResource implements ResourceInterface, ResourceWith
         return $this->departmentUrl;
     }
 
+    /**
+     * Returns the department URL as it must be shown and stored: an empty value, or one that only
+     * holds a scheme ("http://" or "https://"), is considered empty.
+     */
+    public static function normalizeDepartmentUrl(?string $url): string
+    {
+        $url = trim((string) $url);
+
+        return \in_array(strtolower($url), ['http://', 'https://'], true) ? '' : $url;
+    }
+
     public function setDepartmentUrl(string $departmentUrl): self
     {
         $this->departmentUrl = $departmentUrl;

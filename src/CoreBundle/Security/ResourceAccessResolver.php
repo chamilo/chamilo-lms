@@ -63,7 +63,8 @@ final class ResourceAccessResolver
 
         // An OPEN_PLATFORM course opens its contents to every registered user, unless the
         // administrator requires a subscription first. CourseVoter reads the same pair.
-        if (Course::OPEN_PLATFORM === $linkCourse->getVisibility()
+        if ($user instanceof User
+            && Course::OPEN_PLATFORM === $linkCourse->getVisibility()
             && !filter_var(
                 $this->settingsManager->getSetting('course.block_registered_users_access_to_open_course_contents', true),
                 FILTER_VALIDATE_BOOLEAN,

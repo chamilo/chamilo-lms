@@ -31,6 +31,10 @@ if ($form->validate()) {
     $userId = $form->getSubmitValue('user_id');
 }
 
+if ($userId && !$plugin->canManageUserJustifications($userId)) {
+    api_not_allowed(true);
+}
+
 if ($userId) {
     $tpl->assign('user_info', api_get_user_info($userId));
     $list = $plugin->getUserJustificationList($userId);
@@ -64,6 +68,9 @@ $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 switch ($action) {
     case 'edit':
         $userJustification = $plugin->getUserJustification($id);
+        if (empty($userJustification) || !$plugin->canManageUserJustifications($userJustification['user_id'])) {
+            api_not_allowed(true);
+        }
         $userInfo = api_get_user_info($userJustification['user_id']);
         $form = new FormValidator('edit', 'post', api_get_self().'?a=edit&id='.$id.'&user_id='.$userId);
         $form->addHeader($userInfo['complete_name']);
@@ -85,6 +92,9 @@ switch ($action) {
         break;
     case 'delete':
         $userJustification = $plugin->getUserJustification($id);
+        if ($userJustification && !$plugin->canManageUserJustifications($userJustification['user_id'])) {
+            api_not_allowed(true);
+        }
         if ($userJustification) {
             api_remove_uploaded_file_by_id('justification', $id, $userJustification['file_path']);
 

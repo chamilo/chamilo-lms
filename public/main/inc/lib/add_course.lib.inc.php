@@ -829,13 +829,9 @@ class AddCourse
             $disk_quota = api_get_setting('default_document_quotum');
         }
 
-        if (false === stripos($department_url, 'http://') && false === stripos($department_url, 'https://')) {
+        $department_url = Course::normalizeDepartmentUrl($department_url);
+        if ('' !== $department_url && !preg_match('#^https?://#i', $department_url)) {
             $department_url = 'http://'.$department_url;
-        }
-
-        // just in case
-        if ('http://' === $department_url) {
-            $department_url = '';
         }
 
         $userId = empty($params['user_id']) ? api_get_user_id() : (int) $params['user_id'];

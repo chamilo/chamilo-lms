@@ -135,7 +135,8 @@ final class XapianIndexService
                 // Must match query parser convention: F + strtoupper(code)
                 $prefix = 'F'.strtoupper($code);
 
-                // This is what makes t: / d: / k: work
+                // Include specific fields in both general and explicitly prefixed searches.
+                $termGen->index_text($val, 1);
                 $termGen->index_text($val, 1, $prefix);
             }
 

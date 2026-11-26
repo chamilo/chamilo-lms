@@ -132,10 +132,8 @@
                             {% set openUrl = app.request.basePath ~ '/main/exercise/overview.php?cid=' ~ courseId ~ '&sid=' ~ (sessionId is not empty ? sessionId : 0) ~ '&gid=0&gradebook=0&origin=&exerciseId=' ~ quizId %}
                         {% endif %}
                     {% endif %}
-                {% else %}
-                    {% if courseRootNodeId is not empty and courseId is not empty %}
-                        {% set openUrl = app.request.basePath ~ '/resources/document/' ~ courseRootNodeId ~ '/?cid=' ~ courseId ~ '&sid=' ~ resolvedSid ~ '&gid=0' %}
-                    {% endif %}
+                {% elseif not isStale %}
+                    {% set openUrl = data.document_open_url|default(null) %}
                 {% endif %}
 
                 <article class="rounded-xl border border-gray-20 bg-white p-4 shadow-sm">

@@ -2,6 +2,7 @@
 
 use Chamilo\CoreBundle\Entity\SearchEngineField;
 use Chamilo\CoreBundle\Framework\Container;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 /**
  * Manage specific tools.
@@ -17,29 +18,30 @@ $table_sf_val = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
  * Add a specific field.
  *
  * @param string $name specific field name
+ *
+ * @return int|false
  */
 function add_specific_field($name)
 {
-    $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
     $name = trim($name);
-    if (empty($name)) {
+    if ('' === $name) {
         return false;
     }
-    $sql = 'INSERT INTO %s(id, code, name) VALUES(NULL, \'%s\', \'%s\')';
-    $_safe_name = Database::escape_string($name);
-    $_safe_code = substr($_safe_name, 0, 1);
-    $_safe_code = get_specific_field_code_from_name($_safe_code);
-    if (false === $_safe_code) {
+
+    $code = get_specific_field_code_from_name($name);
+    if (false === $code) {
         return false;
     }
-    $sql = sprintf($sql, $table_sf, $_safe_code, $_safe_name);
-    // TODO(db-neutral): broken today (Unknown column 'name': the table has 'title'), left raw
-    $result = Database::query($sql);
-    if ($result) {
-        return Database::insert_id();
-    } else {
+
+    // The unique constraint also protects against concurrent code allocation.
+    $connection = Database::getConnection();
+    try {
+        $connection->insert('search_engine_field', ['code' => $code, 'title' => $name]);
+    } catch (UniqueConstraintViolationException) {
         return false;
     }
+
+    return (int) $connection->lastInsertId();
 }
 
 /**
@@ -67,18 +69,26 @@ function delete_specific_field($id)
  *
  * @param int    $id   specific field id
  * @param string $name new field name
+ *
+ * @return bool
  */
 function edit_specific_field($id, $name)
 {
-    $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
-    $id = (int) $id;
-    if (!is_numeric($id)) {
+    $id = filter_var($id, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+    $name = trim($name);
+    if (false === $id || '' === $name) {
         return false;
     }
-    $sql = 'UPDATE %s SET name = \'%s\' WHERE id = %s LIMIT 1';
-    $sql = sprintf($sql, $table_sf, $name, $id);
-    // TODO(db-neutral): broken today (Unknown column 'name': the table has 'title'), left raw
-    Database::query($sql);
+
+    $connection = Database::getConnection();
+    if (false === $connection->fetchOne('SELECT id FROM search_engine_field WHERE id = ?', [$id])) {
+        return false;
+    }
+
+    // Renaming a field must not change its existing search prefix or values.
+    $connection->update('search_engine_field', ['title' => $name], ['id' => $id]);
+
+    return true;
 }
 
 /**
@@ -89,27 +99,40 @@ function edit_specific_field($id, $name)
  */
 function get_specific_field_list($conditions = [], $order_by = [])
 {
-    $table_sf = Database::get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
-    $return_array = [];
-    $sql = "SELECT * FROM $table_sf";
-    if (count($conditions) > 0) {
-        $sql .= ' WHERE ';
-        $conditions_string_array = [];
-        foreach ($conditions as $field => $value) {
-            $conditions_string_array[] = $field.' = '.$value;
+    $qb = Database::getConnection()->createQueryBuilder()
+        ->select('id', 'code', 'title')
+        ->from('search_engine_field');
+    $columns = ['id' => 'id', 'code' => 'code', 'title' => 'title', 'name' => 'title'];
+
+    foreach ($conditions as $field => $value) {
+        if (!isset($columns[$field]) || !is_scalar($value)) {
+            return [];
         }
-        $sql .= implode(' AND ', $conditions_string_array);
-    }
-    if (count($order_by) > 0) {
-        $sql .= ' ORDER BY '.implode(',', $order_by);
-    }
-    // TODO(db-neutral): the callers pass SQL fragments as conditions (e.g. ['code' => "'S'"]), left raw
-    $sql_result = Database::query($sql);
-    while ($result = Database::fetch_array($sql_result)) {
-        $return_array[] = $result;
+
+        // Older callers pass quoted code literals. Treat them as values, not SQL.
+        if (is_string($value) && str_starts_with($value, "'") && str_ends_with($value, "'")) {
+            $value = substr($value, 1, -1);
+        }
+        $qb->andWhere($columns[$field].' = '.$qb->createNamedParameter($value));
     }
 
-    return $return_array;
+    foreach ($order_by as $order) {
+        if (!is_string($order) || !preg_match('/^(id|code|title|name)(?:\s+(ASC|DESC))?$/i', trim($order), $matches)) {
+            continue;
+        }
+        $qb->addOrderBy($columns[strtolower($matches[1])], strtoupper($matches[2] ?? 'ASC'));
+    }
+
+    $rows = [];
+    foreach ($qb->executeQuery()->fetchAllAssociative() as $row) {
+        // Preserve the existing three numeric table columns for legacy callers.
+        $row[] = $row['id'];
+        $row[] = $row['code'];
+        $row[] = $row['title'];
+        $rows[] = $row;
+    }
+
+    return $rows;
 }
 
 /**
@@ -276,66 +299,23 @@ function delete_all_values_for_item($course_id, $tool_id, $ref_id)
  *
  * @param   string  Name
  *
- * @return string One-letter code, upper-case
+ * @return string|false One-letter code, upper-case, or false when no code is available
  */
 function get_specific_field_code_from_name($name)
 {
-    // Z is used internally by Xapian
-    // O & C already used by tool_id and course_id
-    $list = [
-        'A',
-        'B',
-        'D',
-        'E',
-        'F',
-        'G',
-        'H',
-        'I',
-        'J',
-        'K',
-        'L',
-        'M',
-        'N',
-        'P',
-        'Q',
-        'R',
-        'S',
-        'T',
-        'U',
-        'V',
-        'W',
-        'X',
-        'Y',
-    ];
-    $rows = Container::getEntityManager()->createQueryBuilder()
-        ->select('sf.code AS code')
-        ->from(SearchEngineField::class, 'sf')
-        ->orderBy('sf.code', 'ASC')
-        ->getQuery()
-        ->getArrayResult();
-    $code = strtoupper(substr($name, 0, 1));
-    //if no code exists in DB, return current one
-    if (count($rows) < 1) {
-        return $code;
+    // Preserve the legacy reserved letters and compare case-insensitively.
+    $allowed = str_split('ABDEFGHIJKLMNPQRSTUVWXY');
+    $used = array_map('strtoupper', Database::getConnection()->fetchFirstColumn('SELECT code FROM search_engine_field'));
+    $preferred = strtoupper(substr(trim($name), 0, 1));
+    if (in_array($preferred, $allowed, true) && !in_array($preferred, $used, true)) {
+        return $preferred;
     }
 
-    $existing_list = [];
-    foreach ($rows as $row) {
-        $existing_list[] = $row['code'];
-    }
-    //if the current code doesn't exist in DB, return current one
-    if (!in_array($code, $existing_list)) {
-        return $code;
-    }
-
-    $idx = array_search($code, $list);
-    $c = count($list);
-    for ($i = $idx + 1, $j = 0; $j < $c; $i++, $j++) {
-        if (!in_array($list[$i], $existing_list)) {
-            return $idx[$i];
+    foreach ($allowed as $code) {
+        if (!in_array($code, $used, true)) {
+            return $code;
         }
     }
 
-    // all 26 codes are used
     return false;
 }

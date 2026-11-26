@@ -226,6 +226,14 @@ For transparency, future releases may show non-intrusive end-user tags indicatin
                     {{ update() }}
                 </form>
 
+                {% if namespace == 'search' %}
+                    <div class="mt-6">
+                        <a class="btn btn--plain-outline" href="{{ app.request.basePath ~ '/main/admin/specific_fields.php' }}">
+                            {{ 'Specific search fields'|trans }}
+                        </a>
+                    </div>
+                {% endif %}
+
                 {# Extra diagnostics for search namespace (Xapian + converters), displayed AFTER all options #}
                 {% if namespace == 'search'
                     and search_diagnostics is defined

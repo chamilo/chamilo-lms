@@ -497,7 +497,7 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
                 continue;
             }
 
-            if (\in_array($itemView->getItem()->getItemType(), ['quiz', 'sco', 'toolbox'], true)) {
+            if ($this->isScorableItem($itemView->getItem())) {
                 $scorableAttempts[$userId][] = $itemView;
                 if (null !== $itemView->getIid()) {
                     $scorableItemViewIds[] = (int) $itemView->getIid();
@@ -529,6 +529,11 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
         return $metrics;
     }
 
+    private function isScorableItem(CLpItem $item): bool
+    {
+        return \in_array($item->getItemType(), ['quiz', 'sco', 'toolbox'], true);
+    }
+
     /**
      * @param array<int, CLpItemView>    $attempts
      * @param array<int, TrackEExercise> $exerciseAttempts
@@ -539,6 +544,10 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
 
         foreach ($attempts as $attempt) {
             $item = $attempt->getItem();
+            if (!$this->isScorableItem($item)) {
+                continue;
+            }
+
             $score = (float) $attempt->getScore();
             $maxScore = (float) $item->getMaxScore();
 
@@ -591,10 +600,10 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
             ->from(TrackEExercise::class, 'exercise')
             ->andWhere('exercise.origLpItemViewId IN (:itemViewIds)')
             ->andWhere('IDENTITY(exercise.course) = :courseId')
-            ->andWhere('exercise.status = :exerciseStatus')
+            ->andWhere('exercise.status IN (:exerciseStatuses)')
             ->setParameter('itemViewIds', $itemViewIds, ArrayParameterType::INTEGER)
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
-            ->setParameter('exerciseStatus', '', Types::STRING)
+            ->setParameter('exerciseStatuses', ['', 'completed'], ArrayParameterType::STRING)
             ->orderBy('exercise.exeDate', 'DESC')
         ;
         $this->applySessionCondition($qb, 'exercise.session', $session);
@@ -690,12 +699,16 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
             $itemViewId = (int) $itemView->getIid();
             $itemId = (int) $itemView->getItem()->getIid();
             $exercise = $exerciseAttempts[$itemViewId] ?? null;
-            $score = $exercise instanceof TrackEExercise
-                ? $exercise->getScore()
-                : (float) $itemView->getScore();
-            $maxScore = $exercise instanceof TrackEExercise
-                ? $exercise->getMaxScore()
-                : (float) ($itemView->getMaxScore() ?? $itemView->getItem()->getMaxScore() ?? 0);
+            $score = null;
+            $maxScore = null;
+            if ($this->isScorableItem($itemView->getItem())) {
+                $score = $exercise instanceof TrackEExercise
+                    ? $exercise->getScore()
+                    : (float) $itemView->getScore();
+                $maxScore = $exercise instanceof TrackEExercise
+                    ? $exercise->getMaxScore()
+                    : (float) ($itemView->getMaxScore() ?? $itemView->getItem()->getMaxScore() ?? 0);
+            }
             $attemptsByItem[$itemId][] = [
                 'itemViewId' => $itemViewId,
                 'lpAttempt' => (int) $itemView->getView()->getViewCount(),
@@ -838,11 +851,11 @@ final readonly class LearningPathReportingProvider implements ProviderInterface
             ->andWhere('exercise.origLpItemViewId IN (:itemViewIds)')
             ->andWhere('IDENTITY(exercise.course) = :courseId')
             ->andWhere('IDENTITY(exercise.user) = :userId')
-            ->andWhere('exercise.status = :exerciseStatus')
+            ->andWhere('exercise.status IN (:exerciseStatuses)')
             ->setParameter('itemViewIds', $itemViewIds, ArrayParameterType::INTEGER)
             ->setParameter('courseId', (int) $course->getId(), Types::INTEGER)
             ->setParameter('userId', (int) $user->getId(), Types::INTEGER)
-            ->setParameter('exerciseStatus', '', Types::STRING)
+            ->setParameter('exerciseStatuses', ['', 'completed'], ArrayParameterType::STRING)
             ->orderBy('exercise.exeDate', 'DESC')
         ;
         $this->applySessionCondition($qb, 'exercise.session', $session);

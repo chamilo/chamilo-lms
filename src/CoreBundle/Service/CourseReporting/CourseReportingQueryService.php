@@ -1171,7 +1171,9 @@ final class CourseReportingQueryService
             FROM c_lp_view lp_view
             INNER JOIN c_lp_item_view item_view
                 ON item_view.lp_view_id = lp_view.iid
-            WHERE lp_view.c_id = :courseId
+            INNER JOIN c_lp_item item ON item.iid = item_view.lp_item_id AND item.lp_id = lp_view.lp_id
+            WHERE item.item_type IN (\'quiz\', \'sco\', \'toolbox\')
+                AND lp_view.c_id = :courseId
                 AND COALESCE(lp_view.session_id, 0) = :sessionId
                 AND lp_view.user_id IN (:userIds)
                 AND lp_view.lp_id IN (:lpIds)

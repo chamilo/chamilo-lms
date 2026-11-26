@@ -230,7 +230,9 @@ final class CourseReportingMetricsTest extends KernelTestCase
         $lp = $this->newLp('r3_lp_nosession');
         $n = $this->lpCount();
         $view = $this->lpView($a, $lp, 60);
-        $this->lpItemView($view, 21, 3, '4');
+        $this->lpItemView($view, $this->newLpItem($lp), 3, '4');
+        $this->lpItemView($view, $this->newLpItem($lp, 'document'), 0, '100');
+        $this->lpItemView($view, $this->newLpItem($lp, 'video'), 0, '100');
 
         $row = $this->row($a);
 
@@ -249,16 +251,19 @@ final class CourseReportingMetricsTest extends KernelTestCase
         $this->sessionCourseUser($session, 1, $a, 0);
         $old = $this->lpView($a, $lp, 50, $session, 1);
         $new = $this->lpView($a, $lp, 50, $session, 2);
-        $this->lpItemView($old, 11, 9, '10');
-        $this->lpItemView($old, 12, 2, '10');
-        $this->lpItemView($new, 11, 5, '10');
-        $this->lpItemView($new, 13, 4, '4');
-        $this->lpItemView($new, 14, 0, '0');
-        $this->lpItemView($new, 15, 1, '10', 0, 0, 'not attempted');
+        $quiz = $this->newLpItem($lp);
+        $sco = $this->newLpItem($lp, 'sco');
+        $this->lpItemView($old, $quiz, 9, '10');
+        $this->lpItemView($old, $sco, 2, '10');
+        $this->lpItemView($new, $quiz, 5, '10');
+        $this->lpItemView($new, $this->newLpItem($lp, 'toolbox'), 4, '4');
+        $this->lpItemView($new, $this->newLpItem($lp), 0, '0');
+        $this->lpItemView($new, $this->newLpItem($lp), 1, '10', 0, 0, 'not attempted');
+        $this->lpItemView($new, $this->newLpItem($lp, 'survey'), 0, '100');
 
         $row = $this->row($a, $this->ctx(1, $session));
 
-        $this->assertSame(round(100 * (0.5 + 1.0) / 2, 2), $row['score'], 'latest view: items 11 (50%) and 13 (100%); zero maximum and not attempted skipped');
+        $this->assertSame(round(100 * (0.5 + 1.0) / 2, 2), $row['score'], 'latest view: quiz (50%) and toolbox (100%); ungraded, zero maximum and not attempted skipped');
         $this->assertSame(round(100 * (0.9 + 0.2 + 1.0) / 3, 2), $row['bestScore'], 'best ratio of every item over all the views');
     }
 

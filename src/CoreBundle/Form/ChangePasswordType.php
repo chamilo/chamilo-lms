@@ -85,9 +85,9 @@ class ChangePasswordType extends AbstractType
                 return;
             }
 
-            $currentPassword = $form->get('currentPassword')->getData();
-            $newPassword = $form->get('newPassword')->getData();
-            $confirmPassword = $form->get('confirmPassword')->getData();
+            $currentPassword = (string) $form->get('currentPassword')->getData();
+            $newPassword = (string) $form->get('newPassword')->getData();
+            $confirmPassword = (string) $form->get('confirmPassword')->getData();
             $enable2FA = $form->has('enable2FA')
                 ? (bool) $form->get('enable2FA')->getData()
                 : false;
@@ -98,8 +98,8 @@ class ChangePasswordType extends AbstractType
             $checkPasswordRequirements = 'true' === api_get_setting('security.check_password', true);
 
             // Validate current password and confirmation if user wants to update password
-            if (!empty($newPassword)) {
-                if (empty($currentPassword)) {
+            if ('' !== $newPassword || '' !== $confirmPassword) {
+                if ('' === $currentPassword) {
                     $form->get('currentPassword')->addError(new FormError(
                         $this->translator->trans('Current password is required to change your password.')
                     ));
@@ -109,13 +109,17 @@ class ChangePasswordType extends AbstractType
                     ));
                 }
 
-                if ($checkPasswordRequirements) {
+                if ('' === $newPassword) {
+                    $form->get('newPassword')->addError(new FormError(
+                        $this->translator->trans('Enter your new password here.')
+                    ));
+                } elseif ($checkPasswordRequirements) {
                     foreach ($this->passwordPolicyValidator->validate($newPassword) as $error) {
                         $form->get('newPassword')->addError(new FormError($error));
                     }
                 }
 
-                if (!empty($confirmPassword) && $newPassword !== $confirmPassword) {
+                if ($newPassword !== $confirmPassword) {
                     $form->get('confirmPassword')->addError(new FormError(
                         $this->translator->trans('Passwords do not match')
                     ));
@@ -129,7 +133,7 @@ class ChangePasswordType extends AbstractType
                         $form->get('confirm2FACode')->addError(new FormError(
                             $this->translator->trans('The 2FA code is required.')
                         ));
-                    } elseif ($user->getMfaSecret()) {
+                    } elseif ($user->getMfaEnabled()) {
                         // Decrypt the stored MFA secret (supports both v2 and legacy formats).
                         $appSecret = (string) ($_ENV['APP_SECRET'] ?? '');
                         $decryptedSecret = $this->decryptTOTPSecret((string) $user->getMfaSecret(), $appSecret);

@@ -121,6 +121,90 @@ final class ExerciseAttemptLimitApiSecurityTest extends AbstractApiTest
         $this->assertSame($lpItemViewId, (int) $created->getOrigLpItemViewId(), 'The row is sealed with the validated view id.');
     }
 
+    public function testLearnpathResultAllowsRetryInTheSameItemView(): void
+    {
+        $context = $this->createExerciseWithAttemptLimit('lp_retry', 0);
+        [$lpId, $lpItemId, $lpItemViewId] = $this->createLearnpathQuizContext($context, true);
+        $query = \sprintf('&origin=learnpath&learnpath_id=%d&learnpath_item_id=%d&learnpath_item_view_id=%d', $lpId, $lpItemId, $lpItemViewId);
+        $attemptId = $this->consumeAllowedAttempt($context, $query);
+
+        $actions = $this->getResultActions($context, $attemptId, $query);
+        $this->assertTrue($actions['isLearningPathAttempt']);
+        $this->assertFalse($actions['showFinalActions'], 'Do not show the standalone course navigation inside a lesson.');
+        $this->assertTrue($actions['canTryAgain']);
+        $this->assertNull($actions['remainingAttempts']);
+
+        $retry = $this->postAttempt($context, $query);
+        $this->assertTrue($retry['success']);
+        $this->assertNotSame($attemptId, (int) $retry['attemptId']);
+        $created = $this->getEntityManager()->find(TrackEExercise::class, (int) $retry['attemptId']);
+        $this->assertInstanceOf(TrackEExercise::class, $created);
+        $this->assertSame($lpId, (int) $created->getOrigLpId());
+        $this->assertSame($lpItemId, (int) $created->getOrigLpItemId());
+        $this->assertSame($lpItemViewId, (int) $created->getOrigLpItemViewId());
+    }
+
+    public function testLearnpathResultDoesNotOfferRetryAfterTheLimit(): void
+    {
+        $context = $this->createExerciseWithOneAttemptLimit('lp_retry_limit');
+        [$lpId, $lpItemId, $lpItemViewId] = $this->createLearnpathQuizContext($context, true);
+        $query = \sprintf('&origin=learnpath&learnpath_id=%d&learnpath_item_id=%d&learnpath_item_view_id=%d', $lpId, $lpItemId, $lpItemViewId);
+        $attemptId = $this->consumeAllowedAttempt($context, $query);
+
+        $actions = $this->getResultActions($context, $attemptId, $query);
+        $this->assertFalse($actions['canTryAgain']);
+        $this->assertSame(0, $actions['remainingAttempts']);
+        $this->assertFalse($this->postAttempt($context, $query)['success']);
+    }
+
+    public function testLearnpathResultAllowsRetryUntilTheFiniteLimitIsReached(): void
+    {
+        $context = $this->createExerciseWithAttemptLimit('lp_retry_finite', 2);
+        [$lpId, $lpItemId, $lpItemViewId] = $this->createLearnpathQuizContext($context, true);
+        $query = \sprintf('&origin=learnpath&learnpath_id=%d&learnpath_item_id=%d&learnpath_item_view_id=%d', $lpId, $lpItemId, $lpItemViewId);
+        $firstAttemptId = $this->consumeAllowedAttempt($context, $query);
+
+        $actions = $this->getResultActions($context, $firstAttemptId, $query);
+        $this->assertTrue($actions['canTryAgain']);
+        $this->assertSame(1, $actions['remainingAttempts']);
+
+        $secondAttemptId = $this->consumeAllowedAttempt($context, $query);
+        $this->assertNotSame($firstAttemptId, $secondAttemptId);
+        $actions = $this->getResultActions($context, $secondAttemptId, $query);
+        $this->assertFalse($actions['canTryAgain']);
+        $this->assertSame(0, $actions['remainingAttempts']);
+    }
+
+    public function testLearnpathResultDoesNotOfferRetryInSingleAttemptMode(): void
+    {
+        $context = $this->createExerciseWithAttemptLimit('lp_retry_single', 0);
+        [$lpId, $lpItemId, $lpItemViewId] = $this->createLearnpathQuizContext($context);
+        $query = \sprintf('&origin=learnpath&learnpath_id=%d&learnpath_item_id=%d&learnpath_item_view_id=%d', $lpId, $lpItemId, $lpItemViewId);
+        $attemptId = $this->consumeAllowedAttempt($context, $query);
+
+        $this->assertFalse($this->getResultActions($context, $attemptId, $query)['canTryAgain']);
+    }
+
+    public function testLearnpathResultDoesNotOfferRetryWithMissingOrForgedContext(): void
+    {
+        $context = $this->createExerciseWithAttemptLimit('lp_retry_forged', 0);
+        [$lpId, $lpItemId, $lpItemViewId] = $this->createLearnpathQuizContext($context, true);
+        $query = \sprintf('&origin=learnpath&learnpath_id=%d&learnpath_item_id=%d', $lpId, $lpItemId);
+        $attemptId = $this->consumeAllowedAttempt($context, $query.'&learnpath_item_view_id='.$lpItemViewId);
+
+        $this->assertFalse($this->getResultActions($context, $attemptId, '')['canTryAgain']);
+        $this->assertFalse($this->getResultActions($context, $attemptId, $query.'&learnpath_item_view_id=999999')['canTryAgain']);
+    }
+
+    public function testStandaloneResultStillOffersRetry(): void
+    {
+        $context = $this->createExerciseWithAttemptLimit('standalone_retry', 0);
+        $attemptId = $this->consumeAllowedAttempt($context);
+        $actions = $this->getResultActions($context, $attemptId, '');
+        $this->assertTrue($actions['showFinalActions']);
+        $this->assertTrue($actions['canTryAgain']);
+    }
+
     public function testRuntimeShowsStartButtonWhileAttemptsRemain(): void
     {
         $context = $this->createExerciseWithOneAttemptLimit('runtime_open');
@@ -148,6 +232,23 @@ final class ExerciseAttemptLimitApiSecurityTest extends AbstractApiTest
         $payload = $this->getRuntime($context, '&learnpath_item_view_id=7');
 
         $this->assertFalse($payload['canStartAttempt'], 'A forged view id must not bring the Start button back.');
+    }
+
+    /**
+     * @param array{course: Course, quiz: CQuiz, student: User} $context
+     *
+     * @return array<string, mixed>
+     */
+    private function getResultActions(array $context, int $attemptId, string $extraQuery): array
+    {
+        $url = '/api/exercise/runtime/'.$context['quiz']->getIid().'/attempt/'.$attemptId.'/result?cid='.$context['course']->getId().'&sid=0'.$extraQuery;
+        $response = $this
+            ->createClientWithCredentials($this->getUserTokenFromUser($context['student']))
+            ->request('GET', $url)
+        ;
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        return $response->toArray()['finalActions'];
     }
 
     /**
@@ -193,11 +294,11 @@ final class ExerciseAttemptLimitApiSecurityTest extends AbstractApiTest
     /**
      * @param array{course: Course, quiz: CQuiz, student: User} $context
      */
-    private function consumeAllowedAttempt(array $context): void
+    private function consumeAllowedAttempt(array $context, string $extraQuery = ''): int
     {
         $token = $this->getUserTokenFromUser($context['student']);
         $baseUrl = '/api/exercise/runtime/'.$context['quiz']->getIid();
-        $query = '?cid='.$context['course']->getId().'&sid=0';
+        $query = '?cid='.$context['course']->getId().'&sid=0'.$extraQuery;
 
         $start = $this
             ->createClientWithCredentials($token)
@@ -211,6 +312,8 @@ final class ExerciseAttemptLimitApiSecurityTest extends AbstractApiTest
             ->request('POST', $baseUrl.'/attempt/'.$start['attemptId'].'/finish'.$query, ['json' => []])
         ;
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+
+        return (int) $start['attemptId'];
     }
 
     private function countUserAttempts(CQuiz $quiz, User $student): int
@@ -232,6 +335,14 @@ final class ExerciseAttemptLimitApiSecurityTest extends AbstractApiTest
      */
     private function createExerciseWithOneAttemptLimit(string $suffix): array
     {
+        return $this->createExerciseWithAttemptLimit($suffix, 1);
+    }
+
+    /**
+     * @return array{course: Course, quiz: CQuiz, student: User}
+     */
+    private function createExerciseWithAttemptLimit(string $suffix, int $maxAttempt): array
+    {
         $em = $this->getEntityManager();
 
         $course = $this->createCourse('Attempt limit '.$suffix);
@@ -241,7 +352,7 @@ final class ExerciseAttemptLimitApiSecurityTest extends AbstractApiTest
 
         $quiz = (new CQuiz())
             ->setTitle('Attempt limit quiz '.$suffix)
-            ->setMaxAttempt(1)
+            ->setMaxAttempt($maxAttempt)
             ->setCreator($this->getAdmin())
             ->setParent($course)
             ->addCourseLink($course)
@@ -294,7 +405,7 @@ final class ExerciseAttemptLimitApiSecurityTest extends AbstractApiTest
      *
      * @return array{0: int, 1: int, 2: int} the (lpId, lpItemId, lpItemViewId) triple
      */
-    private function createLearnpathQuizContext(array $context): array
+    private function createLearnpathQuizContext(array $context, bool $allowMultipleAttempts = false): array
     {
         $em = $this->getEntityManager();
 
@@ -308,6 +419,7 @@ final class ExerciseAttemptLimitApiSecurityTest extends AbstractApiTest
             ->setParent($course)
             ->setCreator($this->getAdmin())
             ->setLpType(CLp::LP_TYPE)
+            ->setPreventReinit(!$allowMultipleAttempts)
             ->addCourseLink($course, null, null, ResourceLink::VISIBILITY_PUBLISHED)
         ;
         self::getContainer()->get(CLpRepository::class)->createLp($lp);

@@ -671,48 +671,6 @@ const cStudioEditorUrl = computed(() => {
   return `/plugin/CStudio/oel_tools_teachdoc_link.php?${query.toString()}`
 })
 
-function exposeLegacyCidContext() {
-  const query = new URLSearchParams()
-
-  if (contextParams.value.cid) {
-    query.set("cid", contextParams.value.cid)
-  }
-
-  if (contextParams.value.sid) {
-    query.set("sid", contextParams.value.sid)
-  }
-
-  if (contextParams.value.gid) {
-    query.set("gid", contextParams.value.gid)
-  }
-
-  if (contextParams.value.gradebook) {
-    query.set("gradebook", contextParams.value.gradebook)
-  }
-
-  const queryParams = query.toString()
-
-  try {
-    const currentCidReq = window.chamiloCidReq
-
-    if (currentCidReq && typeof currentCidReq === "object") {
-      currentCidReq.queryParams = queryParams
-
-      return
-    }
-
-    Object.defineProperty(window, "chamiloCidReq", {
-      configurable: true,
-      enumerable: true,
-      writable: true,
-      value: {
-        queryParams,
-      },
-    })
-  } catch (error) {
-    console.warn("Unable to expose legacy course context.", error)
-  }
-}
 const currentItem = computed(
   () => runtime.value?.items?.find((item) => Number(item.id) === Number(runtime.value.currentItemId)) || null,
 )
@@ -1977,7 +1935,6 @@ onBeforeRouteLeave(async (to) => {
 })
 
 onMounted(() => {
-  exposeLegacyCidContext()
   document.documentElement.classList.add("lp-runtime-document")
   document.body.classList.add("lp-runtime-document")
   window.addEventListener("message", handleRuntimeMessage)

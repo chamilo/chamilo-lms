@@ -52,7 +52,7 @@ final class AssignmentSessionController extends AbstractController
             ->where("assignment.filetype = 'folder'")
             ->andWhere('assignment.publicationParent IS NULL AND assignment.active IN (0, 1)')
             ->andWhere('link.course = :course AND link.session IS NULL AND link.deletedAt IS NULL')
-            ->setParameter('course', $course)
+            ->setParameter('course', (int) $course->getId())
             ->orderBy('assignment.title', 'ASC')
             ->distinct()
             ->getQuery()

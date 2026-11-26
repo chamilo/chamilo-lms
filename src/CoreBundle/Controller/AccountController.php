@@ -164,7 +164,7 @@ class AccountController extends BaseController
             && $form->isSubmitted()
             && $form->has('enable2FA')
             && $form->get('enable2FA')->getData()
-            && !$user->getMfaSecret()
+            && !$user->getMfaEnabled()
         ) {
             if (!$session->has('temporary_mfa_secret')) {
                 $totp = TOTP::create(clock: $this->clock);
@@ -204,68 +204,72 @@ class AccountController extends BaseController
                         ? (bool) $form->get('enable2FA')->getData()
                         : false;
 
-                    // Optional hardening: require current password to toggle 2FA as well.
+                    // The current password authorizes a change; it does not request a new password.
+                    $passwordChangeRequested = $isForcedPasswordChange || '' !== $newPassword || '' !== $confirmPassword;
                     $twoFaToggleRequested = $twoFaEnabledGlobally && !$isForcedPasswordChange
-                        && (($enable2FA && !$user->getMfaEnabled()) || (!$enable2FA && $user->getMfaEnabled()));
+                        && $enable2FA !== $user->getMfaEnabled();
 
-                    if ($twoFaToggleRequested && !$userRepository->isPasswordValid($user, $currentPassword)) {
+                    // Validate both operations before changing or persisting either one.
+                    if (($passwordChangeRequested || $twoFaToggleRequested) && !$userRepository->isPasswordValid($user, $currentPassword)) {
                         $form->get('currentPassword')->addError(new FormError(
                             $this->translator->trans('The current password is incorrect')
                         ));
-                    } else {
-                        // 2FA activation
-                        if ($twoFaEnabledGlobally && $enable2FA && !$user->getMfaSecret()) {
-                            $secret = (string) $session->get('temporary_mfa_secret', '');
-                            if ('' !== $secret) {
-                                $encryptedSecret = $this->encryptTOTPSecret($secret, $_ENV['APP_SECRET']);
-                                $user->setMfaSecret($encryptedSecret);
-                                $user->setMfaEnabled(true);
-                                $user->setMfaService('TOTP');
-                                $userRepository->updateUser($user);
-                                $session->remove('temporary_mfa_secret');
+                    } elseif ('' === $newPassword && ($passwordChangeRequested || (!$twoFaToggleRequested && '' !== $currentPassword))) {
+                        $form->get('newPassword')->addError(new FormError(
+                            $this->translator->trans('Enter your new password here.')
+                        ));
+                    } elseif ($passwordChangeRequested && $newPassword !== $confirmPassword) {
+                        $form->get('confirmPassword')->addError(new FormError(
+                            $this->translator->trans('Passwords do not match')
+                        ));
+                    }
 
-                                $this->addFlash('success', $this->translator->trans('2FA activated successfully.'));
+                    $encryptedSecret = null;
+                    if ($form->isValid() && $twoFaToggleRequested && $enable2FA) {
+                        $secret = (string) $session->get('temporary_mfa_secret', '');
+                        $encryptedSecret = '' === $secret ? '' : $this->encryptTOTPSecret($secret, (string) ($_ENV['APP_SECRET'] ?? ''));
+                        if ('' === $encryptedSecret) {
+                            $form->get('confirm2FACode')->addError(new FormError(
+                                $this->translator->trans('Invalid 2FA configuration.')
+                            ));
+                        }
+                    }
 
-                                return $this->redirectToRoute('chamilo_core_account_home');
+                    if ($form->isValid() && ($passwordChangeRequested || $twoFaToggleRequested)) {
+                        if ($twoFaToggleRequested) {
+                            $user->setMfaEnabled($enable2FA);
+                            $user->setMfaSecret($enable2FA ? $encryptedSecret : null);
+                            $user->setMfaService($enable2FA ? 'TOTP' : null);
+                            $user->setMfaBackupCodes(null);
+                            $user->setMfaLastUsed(null);
+                        }
+
+                        if ($passwordChangeRequested) {
+                            $user->setPlainPassword($newPassword);
+                            $user->setPasswordUpdatedAt(new DateTimeImmutable());
+
+                            if ($isFirstLogin || $isPasswordRenewalRequested) {
+                                $user->setPasswordRequestedAt(null);
+                            }
+
+                            if ($passwordRenewalRequest instanceof ExtraFieldValues) {
+                                $entityManager->remove($passwordRenewalRequest);
                             }
                         }
 
-                        // 2FA deactivation
-                        if ($twoFaEnabledGlobally && !$isForcedPasswordChange && !$enable2FA && $user->getMfaEnabled()) {
-                            $user->setMfaEnabled(false);
-                            $user->setMfaSecret(null);
-                            $userRepository->updateUser($user);
-                            $this->addFlash('success', $this->translator->trans('2FA disabled successfully.'));
+                        $userRepository->updateUser($user);
+
+                        if ($twoFaToggleRequested) {
+                            $session->remove('temporary_mfa_secret');
+                            $this->addFlash('success', $this->translator->trans(
+                                $enable2FA ? '2FA activated successfully.' : '2FA disabled successfully.'
+                            ));
+                        }
+                        if ($passwordChangeRequested) {
+                            $this->addFlash('success', $this->translator->trans('Password updated successfully'));
                         }
 
-                        // Password change flow
-                        if ('' !== $newPassword || '' !== $confirmPassword || '' !== $currentPassword) {
-                            if (!$userRepository->isPasswordValid($user, $currentPassword)) {
-                                $form->get('currentPassword')->addError(new FormError(
-                                    $this->translator->trans('The current password is incorrect')
-                                ));
-                            } elseif ($newPassword !== $confirmPassword) {
-                                $form->get('confirmPassword')->addError(new FormError(
-                                    $this->translator->trans('Passwords do not match')
-                                ));
-                            } else {
-                                $user->setPlainPassword($newPassword);
-                                $user->setPasswordUpdatedAt(new DateTimeImmutable());
-
-                                if ($isFirstLogin || $isPasswordRenewalRequested) {
-                                    $user->setPasswordRequestedAt(null);
-                                }
-
-                                if ($passwordRenewalRequest instanceof ExtraFieldValues) {
-                                    $entityManager->remove($passwordRenewalRequest);
-                                }
-
-                                $userRepository->updateUser($user);
-                                $this->addFlash('success', $this->translator->trans('Password updated successfully'));
-
-                                return $this->redirectToRoute('chamilo_core_account_home');
-                            }
-                        }
+                        return $this->redirectToRoute('chamilo_core_account_home');
                     }
                 }
             }

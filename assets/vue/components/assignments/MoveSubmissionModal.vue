@@ -95,7 +95,7 @@ async function loadAssignments() {
         cid,
         sid,
         gid,
-        "publicationParent.iid": false,
+        filetype: "folder",
       },
     })
 

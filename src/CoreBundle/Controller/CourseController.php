@@ -1295,6 +1295,20 @@ class CourseController extends ToolBaseController
         return $content;
     }
 
+    /**
+     * Short direct link to a course: /course/{cid} redirects to the course home (no session).
+     * Access control is still enforced by the course home route it redirects to.
+     */
+    #[Route('/{cid}', name: 'chamilo_core_course_direct', requirements: ['cid' => '\d+'], methods: ['GET'])]
+    public function direct(int $cid): RedirectResponse
+    {
+        if (null === $this->em->find(Course::class, $cid)) {
+            throw $this->createNotFoundException('Course does not exist');
+        }
+
+        return $this->redirectToRoute('chamilo_core_course_home', ['cid' => $cid, 'sid' => 0]);
+    }
+
     #[Route('/{id}/welcome', name: 'chamilo_core_course_welcome')]
     public function welcome(Course $course): Response
     {

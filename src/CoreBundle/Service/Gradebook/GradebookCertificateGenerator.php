@@ -34,6 +34,7 @@ use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
 use Endroid\QrCode\Writer\PngWriter;
+use IntlDateFormatter;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -592,8 +593,8 @@ final readonly class GradebookCertificateGenerator
             '((teacher_firstname))' => $this->escape((string) ($teacher?->getFirstname() ?? '')),
             '((teacher_lastname))' => $this->escape((string) ($teacher?->getLastname() ?? '')),
             '((official_code))' => $this->escape((string) ($user->getOfficialCode() ?? '')),
-            '((date_certificate))' => $this->escape($issuedAt->format('Y-m-d H:i')),
-            '((date_certificate_no_time))' => $this->escape($issuedAt->format('Y-m-d')),
+            '((date_certificate))' => $this->escape(self::formatIssueDate($issuedAt, $course->getCourseLanguage(), true)),
+            '((date_certificate_no_time))' => $this->escape(self::formatIssueDate($issuedAt, $course->getCourseLanguage(), false)),
             '((expiry_date))' => null !== $expiryDate
                 ? $this->escape(api_format_date($expiryDate->format('Y-m-d'), DATE_FORMAT_LONG, $course->getCourseLanguage()))
                 : $this->escape($this->translator->trans('Never expires')),
@@ -617,6 +618,19 @@ final readonly class GradebookCertificateGenerator
         ];
 
         return str_replace(array_keys($replacements), array_values($replacements), $template);
+    }
+
+    private static function formatIssueDate(DateTimeInterface $issuedAt, string $locale, bool $withTime): string
+    {
+        $formatter = new IntlDateFormatter(
+            $locale ?: 'en_US',
+            $withTime ? IntlDateFormatter::FULL : IntlDateFormatter::LONG,
+            $withTime ? IntlDateFormatter::SHORT : IntlDateFormatter::NONE,
+            $issuedAt->getTimezone() ?: null,
+        );
+        $formatted = $formatter->format($issuedAt);
+
+        return false !== $formatted ? $formatted : $issuedAt->format($withTime ? 'Y-m-d H:i' : 'Y-m-d');
     }
 
     private function buildCertificateQrCodeHtml(string $certificateUrl): string

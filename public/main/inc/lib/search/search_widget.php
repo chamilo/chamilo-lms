@@ -94,7 +94,7 @@ function format_specific_fields_selects($sf_terms, $op, $prefilter_prefix = '')
         // get specific field name
         $sf_value = get_specific_field_list(['code' => "'$prefix'"]);
         $sf_value = array_shift($sf_value);
-        $multiple_select .= '<td><label class="sf-select-multiple-title" for="sf_'.$prefix.'[]">'.$sf_value['name'].'</label><br />';
+        $multiple_select .= '<td><label class="sf-select-multiple-title" for="sf_'.$prefix.'[]">'.htmlspecialchars((string) ($sf_value['title'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</label><br />';
         $multiple_select .= format_one_specific_field_select($prefix, $sf_term_array, $op, 'multiple="multiple" size="7" class="sf-select-multiple"');
         $multiple_select .= '</td>';
         $multiple_selects .= $multiple_select;
@@ -243,7 +243,7 @@ function search_widget_prefilter_form(
             // get specific field name
             $sf_value = get_specific_field_list(['code' => "'$prefilter_prefix'"]);
             $sf_value = array_shift($sf_value);
-            $form .= '<label class="sf-select-multiple-title" for="sf_'.$prefix.'[]">'.$icons_for_search_terms[$prefix].' '.$sf_value['name'].'</label><br />';
+            $form .= '<label class="sf-select-multiple-title" for="sf_'.$prefix.'[]">'.$icons_for_search_terms[$prefix].' '.htmlspecialchars((string) ($sf_value['title'] ?? ''), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8').'</label><br />';
 
             $form .= format_one_specific_field_select($prefilter_prefix, $sf_term_array, $op, 'id="prefilter"');
             $form .= format_specific_fields_selects($sf_terms, $op, $prefilter_prefix);

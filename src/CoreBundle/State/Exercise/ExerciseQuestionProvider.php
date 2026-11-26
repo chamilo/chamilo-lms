@@ -13,6 +13,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\ExerciseDraggableAnswerHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -387,13 +388,11 @@ final readonly class ExerciseQuestionProvider implements ProviderInterface
             ->getResult()
         ;
 
+        $answers = array_filter($answers, static fn ($answer): bool => $answer instanceof CQuizAnswer);
+        $targetPositions = ExerciseDraggableAnswerHelper::getTargetPositions($answers);
         $items = [];
         foreach ($answers as $answer) {
-            if (!$answer instanceof CQuizAnswer) {
-                continue;
-            }
-
-            $targetPosition = (int) ($answer->getCorrect() ?? 0);
+            $targetPosition = $targetPositions[(int) $answer->getIid()] ?? 0;
             if ($targetPosition <= 0) {
                 continue;
             }

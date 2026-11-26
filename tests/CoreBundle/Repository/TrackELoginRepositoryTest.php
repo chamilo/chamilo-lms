@@ -33,6 +33,32 @@ class TrackELoginRepositoryTest extends AbstractApiTest
         $this->assertEquals($loginDate, $record->getLogoutDate());
     }
 
+    public function testNewConnectionRecordsTheCurrentAccessUrl(): void
+    {
+        $repo = self::getContainer()->get(TrackELoginRepository::class);
+        $user = $this->createUser('tel_url_'.uniqid());
+
+        $record = $repo->createLoginRecord($user, new DateTime('now', new DateTimeZone('UTC')), '127.0.0.1');
+
+        // Without it, the reports of one URL cannot tell its connections from another URL's.
+        $this->assertSame($this->getAccessUrl()->getId(), $record->getAccessUrlId());
+    }
+
+    public function testActivityDoesNotExtendAConnectionOfAnotherAccessUrl(): void
+    {
+        $repo = self::getContainer()->get(TrackELoginRepository::class);
+        $user = $this->createUser('tel_other_url_'.uniqid());
+        $other = $repo->createLoginRecord($user, new DateTime('-10 minutes', new DateTimeZone('UTC')), '127.0.0.1');
+        $other->setAccessUrlId((int) $this->getAccessUrl()->getId() + 1000);
+        $lastActivity = clone $other->getLogoutDate();
+        self::getContainer()->get('doctrine')->getManager()->flush();
+
+        $repo->touchLastConnection($user, '127.0.0.1', 1440);
+
+        $this->assertCount(2, $repo->findBy(['user' => $user->getId()]));
+        $this->assertEquals($lastActivity, $other->getLogoutDate(), 'The other URL keeps its own connection time.');
+    }
+
     public function testActivityExtendsTheCurrentConnection(): void
     {
         $repo = self::getContainer()->get(TrackELoginRepository::class);

@@ -253,9 +253,14 @@ switch ($action) {
 
             /** @var CStudentPublication $studentPublication */
             $studentPublication = $repo->find($moveItemId);
-            if (null === $newParent || null === $studentPublication) {
+            if (!$newParent instanceof CStudentPublication || 'folder' !== $newParent->getFiletype()
+                || !$studentPublication instanceof CStudentPublication || 'file' !== $studentPublication->getFiletype()
+                || !workIsInCourseSession($moveItemId, $moveCourseId, $sessionId)
+                || !workIsInCourseSession($moveToId, $moveCourseId, $sessionId)
+            ) {
                 api_not_allowed(true);
             }
+            $studentPublication->setPublicationParent($newParent);
             $studentPublication->setParent($newParent);
             $studentPublication->getResourceNode()->setParent($newParent->getResourceNode());
             $repo->update($studentPublication);

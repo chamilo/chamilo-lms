@@ -11,6 +11,7 @@ use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\LearningPath\LearningPathRuntimeItemInput;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Service\LearningPath\LearningPathAssignmentResolver;
 use Chamilo\CoreBundle\Service\LearningPath\LearningPathFinalItemManager;
 use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -43,6 +44,7 @@ final readonly class LearningPathRuntimeItemProcessor implements ProcessorInterf
         private CLpRepository $lpRepository,
         private CLpItemRepository $lpItemRepository,
         private CidReqHelper $cidReqHelper,
+        private LearningPathAssignmentResolver $assignmentResolver,
     ) {}
 
     public function process(mixed $data, Operation $operation, array $uriVariables = [], array $context = []): void
@@ -88,6 +90,15 @@ final readonly class LearningPathRuntimeItemProcessor implements ProcessorInterf
         if (!$user instanceof User) {
             throw new AccessDeniedHttpException('Authentication is required.');
         }
+
+        $this->assignmentResolver->prepare(
+            $item,
+            $course,
+            $session,
+            $this->getContextGroup($this->entityManager, $this->cidReqHelper, $course),
+            $user,
+            $runtime->canEdit,
+        );
 
         /** @var CLpView|null $view */
         $view = $this->entityManager->getRepository(CLpView::class)->findOneBy(

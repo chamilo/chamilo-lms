@@ -87,7 +87,7 @@ class Basic extends Toolbar
             // 'ckeditor_wiris' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/ckeditor_wiris/plugin.js',
             // 'ckeditor_vimeo_embed' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/ckeditor_vimeo_embed/plugin.js',
             // 'scayt' => api_get_path(WEB_PUBLIC_PATH) . 'libs/editor/tinymce_plugins/scayt/plugin.js',
-            'translatehtml' => api_get_path(WEB_PUBLIC_PATH).'libs/editor/tinymce_plugins/translatehtml/plugin.js?v=translatehtml_block_div_20260808_1',
+            'translatehtml' => api_get_path(WEB_PUBLIC_PATH).'libs/editor/tinymce_plugins/translatehtml/plugin.js?v=translatehtml_i18n_20261125_1',
         ];
 
         // Filter candidates by availability (core or external). Build external_plugins map as needed.
@@ -150,6 +150,10 @@ class Basic extends Toolbar
         // Language
         $iso = api_get_language_isocode();
         $languageConfig = $this->getLanguageConfig($iso);
+        // Refresh only the catalogs updated for the translatehtml UI.
+        if (\in_array($languageConfig['language'], ['es', 'es_419', 'es_ES', 'es_MX', 'fr_FR'], true)) {
+            $languageConfig['language_url'] .= '?v=translatehtml_i18n_20261125_1';
+        }
         $config = array_merge($config, $languageConfig);
 
         if (\in_array('translatehtml', $this->plugins, true)) {

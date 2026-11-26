@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "Veit ekki",
+    "Expected choice": "V\u00e6ntanlegt val",
+    "N\u00b0": "N\u00b0",
+    "Multiple choice": "Fj\u00f6lvalsspurning",
+    "Fill blanks or form": "Fylla \u00fat ey\u00f0ur e\u00f0a ey\u00f0ubla\u00f0",
+    "Image zones": "Myndsv\u00e6\u00f0i",
+    "Match by dragging": "Para me\u00f0 \u00fev\u00ed a\u00f0 draga",
+    "Multiple answer true/false/don't know": "M\u00f6rg sv\u00f6r r\u00e9tt/rangt/veit ekki",
+    "Combination true/false/don't-know": "Sambland r\u00e9tt/rangt/veit ekki",
+    "Pause recording": "Setja uppt\u00f6ku \u00ed bi\u00f0",
+    "Resume recording": "Halda \u00e1fram me\u00f0 uppt\u00f6ku",
+    "Recording help": "Uppt\u00f6kua\u00f0sto\u00f0",
+    "Add text": "B\u00e6ta texta vi\u00f0",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Vi\u00f0 uppt\u00f6ku getur\u00f0u haldi\u00f0 \u00e1fram hven\u00e6r sem er. Ef \u00fe\u00fa ert ekki \u00e1n\u00e6g\u00f0/ur getur\u00f0u teki\u00f0 upp aftur. \u00dea\u00f0 mun skrifa yfir fyrri \u00fatg\u00e1fu. Ertu \u00e1n\u00e6g\u00f0/ur? Til a\u00f0 senda uppt\u00f6kuna til kennarans \u00fe\u00edns, smelltu \u00e1 \u201eSt\u00f6\u00f0va uppt\u00f6ku\u201c og veldu s\u00ed\u00f0an \u201eLj\u00faka \u00e6fingu\u201c. Kennarinn getur hlusta\u00f0 \u00e1 uppt\u00f6kuna og gefi\u00f0 \u00fe\u00e9r endurgj\u00f6f! Allar sendar uppt\u00f6kur m\u00e1 sko\u00f0a \u00e1 \u00e6fingas\u00ed\u00f0unni."
 }

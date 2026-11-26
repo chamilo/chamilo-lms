@@ -44005,3 +44005,15 @@ msgstr "List by documents"
 
 msgid "List by users"
 msgstr "List by users"
+
+msgid "%s Completed"
+msgstr "%s Completed"
+
+msgid "Received invitations"
+msgstr "Received invitations"
+
+msgid "Quick test: %s"
+msgstr "Quick test: %s"
+
+msgid "Quick test: Document"
+msgstr "Quick test: Document"

@@ -6,8 +6,10 @@ declare(strict_types=1);
 
 namespace Chamilo\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Entity\AbstractResource;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
+use Chamilo\CoreBundle\Entity\ResourceInterface;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
@@ -20,16 +22,92 @@ use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\CourseBundle\Entity\CStudentPublicationComment;
 use Chamilo\CourseBundle\Entity\CStudentPublicationRelUser;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
+use LogicException;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 final class CStudentPublicationRepository extends ResourceRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CStudentPublication::class);
+    }
+
+    /**
+     * Lock the folder before checking its dependent session copies. The caller
+     * must keep the transaction open until the removal or soft deletion finishes.
+     * Locking scalar reads avoid stale entities and transaction snapshots.
+     */
+    public function lockFolderForDeletion(int $publicationId): bool
+    {
+        if (!$this->getEntityManager()->getConnection()->isTransactionActive()) {
+            throw new LogicException('Assignment deletion requires an active transaction.');
+        }
+
+        $folder = $this->createQueryBuilder('folder')
+            ->select('folder.iid')
+            ->where('folder.iid = :id')
+            ->andWhere("folder.filetype = 'folder'")
+            ->setParameter('id', $publicationId)
+            ->getQuery()
+            ->setLockMode(LockMode::PESSIMISTIC_WRITE)
+            ->getOneOrNullResult()
+        ;
+        if (null === $folder) {
+            return false;
+        }
+
+        $copy = $this->createQueryBuilder('copy')
+            ->select('copy.iid')
+            ->where('copy.publicationParent = :id')
+            ->andWhere("copy.filetype = 'folder'")
+            ->setParameter('id', $publicationId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->setLockMode(LockMode::PESSIMISTIC_WRITE)
+            ->getOneOrNullResult()
+        ;
+
+        return null === $copy;
+    }
+
+    public function delete(ResourceInterface $resource): void
+    {
+        if (!$resource instanceof CStudentPublication || 'folder' !== $resource->getFiletype()) {
+            parent::delete($resource);
+
+            return;
+        }
+
+        $this->getEntityManager()->getConnection()->transactional(function () use ($resource): void {
+            $this->assertFolderCanBeDeleted($resource);
+            parent::delete($resource);
+        });
+    }
+
+    public function hardDelete(AbstractResource $resource): void
+    {
+        if (!$resource instanceof CStudentPublication || 'folder' !== $resource->getFiletype()) {
+            parent::hardDelete($resource);
+
+            return;
+        }
+
+        $this->getEntityManager()->getConnection()->transactional(function () use ($resource): void {
+            $this->assertFolderCanBeDeleted($resource);
+            parent::hardDelete($resource);
+        });
+    }
+
+    private function assertFolderCanBeDeleted(CStudentPublication $resource): void
+    {
+        if (!$this->lockFolderForDeletion((int) $resource->getIid())) {
+            throw new ConflictHttpException('This assignment has session copies or no longer exists.');
+        }
     }
 
     public function findAllByCourse(
@@ -61,6 +139,7 @@ final class CStudentPublicationRepository extends ResourceRepository
         $this->addNotDeletedPublicationQueryBuilder($qb);
         $qb
             ->andWhere('resource.publicationParent =:publicationParent')
+            ->andWhere("resource.filetype = 'file'")
             ->setParameter('publicationParent', $publication)
         ;
 
@@ -98,7 +177,9 @@ final class CStudentPublicationRepository extends ResourceRepository
         ?CGroup $group = null
     ): int {
         $qb = $this->getResourcesByCourseCreatedByUser($user, $course, $session);
-        $qb->andWhere('resource.publicationParent IS NOT NULL');
+        $qb->andWhere('resource.publicationParent IS NOT NULL')
+            ->andWhere("resource.filetype = 'file'")
+        ;
 
         return $this->getCount($qb);
     }
@@ -119,7 +200,9 @@ final class CStudentPublicationRepository extends ResourceRepository
     {
         // The works the teacher created (as 1.11 did with work.user_id), not those of the learners linked to the course.
         $qb = $this->getResourcesByCourseCreatedByUser($user, $course, $session);
-        $qb->andWhere('resource.publicationParent IS NOT NULL');
+        $qb->andWhere('resource.publicationParent IS NOT NULL')
+            ->andWhere("resource.filetype = 'file'")
+        ;
 
         return $qb
             ->orderBy('resource.sentDate', Criteria::ASC)
@@ -168,16 +251,16 @@ final class CStudentPublicationRepository extends ResourceRepository
         $qb = $this->createQueryBuilder('resource')
             ->select('resource')
             ->addSelect('(SELECT COUNT(comment.iid) FROM '.CStudentPublicationComment::class.' comment WHERE comment.publication = resource) AS commentsCount')
-            ->addSelect('(SELECT COUNT(c1.iid) FROM '.CStudentPublication::class.' c1 WHERE c1.publicationParent = resource AND c1.extensions IS NOT NULL AND c1.extensions <> \'\') AS correctionsCount')
-            ->addSelect('(SELECT MAX(c2.sentDate) FROM '.CStudentPublication::class.' c2 WHERE c2.publicationParent = resource) AS lastUpload')
+            ->addSelect('(SELECT COUNT(c1.iid) FROM '.CStudentPublication::class.' c1 WHERE c1.publicationParent = resource AND c1.filetype = \'file\' AND c1.extensions IS NOT NULL AND c1.extensions <> \'\') AS correctionsCount')
+            ->addSelect('(SELECT MAX(c2.sentDate) FROM '.CStudentPublication::class.' c2 WHERE c2.publicationParent = resource AND c2.filetype = \'file\') AS lastUpload')
             ->join('resource.resourceNode', 'rn')
             ->join('rn.resourceLinks', 'rl')
             ->leftJoin(CStudentPublicationRelUser::class, 'rel', Join::ON, 'rel.publication = resource AND rel.user = :userId')
-            ->where('resource.publicationParent IS NULL')
+            ->where('resource.filetype = :filetype')
             ->andWhere('resource.active IN (0, 1)')
-            ->andWhere('resource.filetype = :filetype')
             ->setParameter('filetype', 'folder')
             ->andWhere('rl.visibility = 2')
+            ->andWhere('rl.deletedAt IS NULL')
             ->andWhere('rl.course = :course')
             ->setParameter('course', $course)
             ->setParameter('userId', $userId)
@@ -290,7 +373,6 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->andWhere($session ? 'rl.session = :session' : 'rl.session IS NULL')
             ->andWhere('sp.active IN (0, 1)')
             ->andWhere('sp.filetype = :filetype')
-            ->andWhere('sp.publicationParent IS NULL')
             ->setParameter('course', $course)
             ->setParameter('filetype', 'folder')
         ;
@@ -334,6 +416,7 @@ final class CStudentPublicationRepository extends ResourceRepository
                 ->from(CStudentPublication::class, 'sp')
                 ->where('sp.user = :user')
                 ->andWhere('sp.publicationParent IN (:workIds)')
+                ->andWhere("sp.filetype = 'file'")
                 ->andWhere('sp.active IN (0, 1)')
                 ->setParameter('user', $user)
                 ->setParameter('workIds', $workIds)
@@ -549,6 +632,7 @@ final class CStudentPublicationRepository extends ResourceRepository
             ->select('DISTINCT u.id')
             ->join('sp.user', 'u')
             ->where('sp.publicationParent = :assignmentId')
+            ->andWhere("sp.filetype = 'file'")
             ->andWhere('sp.active IN (0,1)')
             ->setParameter('assignmentId', $assignmentId)
         ;

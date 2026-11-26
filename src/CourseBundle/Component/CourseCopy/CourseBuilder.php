@@ -1233,7 +1233,6 @@ class CourseBuilder
         $qb
             ->andWhere('w.filetype = :ft')
             ->setParameter('ft', 'folder')
-            ->andWhere('w.publicationParent IS NULL')
             ->andWhere('w.active IN (0,1)')
             ->distinct()
             ->groupBy('w.iid')

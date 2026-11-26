@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Service\CourseReporting;
 
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Service\Reporting\ReportIpVisibility;
 use Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit;
 use DateTimeImmutable;
@@ -50,6 +51,7 @@ final class CourseReportingSectionQueryService
         private readonly Connection $connection,
         private readonly ReportIpVisibility $reportIpVisibility,
         private readonly SessionTimeLimit $sessionTimeLimit,
+        private readonly AccessUrlHelper $accessUrlHelper,
     ) {}
 
     /**
@@ -423,7 +425,7 @@ final class CourseReportingSectionQueryService
             ? '(SELECT login.user_ip
                   FROM track_e_login login
                  WHERE login.login_user_id = resource_node.creator_id
-                   AND login.login_date < rl.created_at
+                   AND login.login_date < rl.created_at'.$this->loginAccessUrlCondition().'
               ORDER BY login.login_date DESC
                  LIMIT 1)'
             : 'NULL';
@@ -993,7 +995,7 @@ final class CourseReportingSectionQueryService
             ? '(SELECT login.user_ip
                   FROM track_e_login login
                  WHERE login.login_user_id = audit.default_user_id
-                   AND login.login_date < audit.default_date
+                   AND login.login_date < audit.default_date'.$this->loginAccessUrlCondition().'
               ORDER BY login.login_date DESC
                  LIMIT 1)'
             : 'NULL';
@@ -1239,12 +1241,15 @@ final class CourseReportingSectionQueryService
         $scoreExpression = $hasItemViews
             && $this->columnExists('c_lp_item_view', 'score')
             && $this->columnExists('c_lp_item_view', 'max_score')
+            && $this->tableExists('c_lp_item')
             ? '(SELECT COALESCE(
                     100 * SUM(item_view.score) / NULLIF(SUM(item_view.max_score), 0),
                     0
                 )
                   FROM c_lp_item_view item_view
-                 WHERE item_view.lp_view_id = view.iid)'
+                  INNER JOIN c_lp_item item ON item.iid = item_view.lp_item_id AND item.lp_id = view.lp_id
+                 WHERE item_view.lp_view_id = view.iid
+                   AND item.item_type IN (\'quiz\', \'sco\', \'toolbox\'))'
             : '0';
         $firstAccessExpression = $hasItemViews && $this->columnExists('c_lp_item_view', 'start_time')
             ? '(SELECT MIN(FROM_UNIXTIME(item_view.start_time))
@@ -1899,11 +1904,14 @@ final class CourseReportingSectionQueryService
         $firstAccess = null;
         if ($this->tableExists('c_lp_item_view')) {
             $select = [];
+            $itemJoin = '';
             if (
                 $this->columnExists('c_lp_item_view', 'score')
                 && $this->columnExists('c_lp_item_view', 'max_score')
+                && $this->tableExists('c_lp_item')
             ) {
-                $select[] = 'COALESCE(100 * SUM(item_view.score) / NULLIF(SUM(item_view.max_score), 0), 0) AS averageScore';
+                $select[] = "COALESCE(100 * SUM(CASE WHEN item.item_type IN ('quiz', 'sco', 'toolbox') THEN item_view.score END) / NULLIF(SUM(CASE WHEN item.item_type IN ('quiz', 'sco', 'toolbox') THEN item_view.max_score END), 0), 0) AS averageScore";
+                $itemJoin = 'LEFT JOIN c_lp_item item ON item.iid = item_view.lp_item_id AND item.lp_id = view.lp_id';
             } else {
                 $select[] = '0 AS averageScore';
             }
@@ -1918,6 +1926,7 @@ final class CourseReportingSectionQueryService
                 'SELECT '.implode(', ', $select).'
                    FROM c_lp_item_view item_view
                    INNER JOIN c_lp_view view ON view.iid = item_view.lp_view_id
+                   '.$itemJoin.'
                   WHERE view.c_id = :courseId
                     AND COALESCE(view.session_id, 0) = :sessionId
                     AND view.lp_id = :learningPathId
@@ -2008,6 +2017,7 @@ final class CourseReportingSectionQueryService
             || [] === $learningPathIds
             || !$this->tableExists('c_lp_view')
             || !$this->tableExists('c_lp_item_view')
+            || !$this->tableExists('c_lp_item')
         ) {
             return 0.0;
         }
@@ -2025,7 +2035,9 @@ final class CourseReportingSectionQueryService
                     item_view.status
                FROM c_lp_view view
                INNER JOIN c_lp_item_view item_view ON item_view.lp_view_id = view.iid
-              WHERE view.c_id = :courseId
+               INNER JOIN c_lp_item item ON item.iid = item_view.lp_item_id AND item.lp_id = view.lp_id
+              WHERE item.item_type IN (\'quiz\', \'sco\', \'toolbox\')
+                AND view.c_id = :courseId
                 AND COALESCE(view.session_id, 0) = :sessionId
                 AND view.user_id IN (:userIds)
                 AND view.lp_id IN (:learningPathIds)
@@ -2470,6 +2482,21 @@ final class CourseReportingSectionQueryService
         }
 
         return $this->tableCache[$table];
+    }
+
+    /**
+     * Keeps the logins of the current access URL on a multi-URL platform. Logins recorded before
+     * access_url_id existed are NULL and still count.
+     */
+    private function loginAccessUrlCondition(): string
+    {
+        if (!$this->accessUrlHelper->isMultiple()) {
+            return '';
+        }
+
+        $urlId = (int) $this->accessUrlHelper->getCurrent()?->getId();
+
+        return " AND (login.access_url_id = $urlId OR login.access_url_id IS NULL)";
     }
 
     private function columnExists(string $table, string $column): bool

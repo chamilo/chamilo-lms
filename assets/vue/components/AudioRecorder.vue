@@ -6,14 +6,31 @@
         class="flex rounded-md me-2 mb-2 py-2 px-3 border border-error"
       >
         <BaseIcon
-          class="self-center me-2 text-error motion-safe:animate-pulse"
-          icon="microphone"
+          :class="{ 'motion-safe:animate-pulse': !recorderState.isPaused }"
+          :icon="recorderState.isPaused ? 'pause' : 'microphone'"
+          class="self-center me-2 text-error"
         />
         <p class="self-center font-semibold text-error">
           {{ recordedTime }}
         </p>
       </div>
 
+      <BaseButton
+        v-if="showButtons && pausable && recorderState.isRecording && !recorderState.isPaused"
+        :label="t('Pause recording')"
+        class="me-2 mb-2"
+        icon="pause"
+        type="secondary"
+        @click="pause"
+      />
+      <BaseButton
+        v-if="showButtons && pausable && recorderState.isRecording && recorderState.isPaused"
+        :label="t('Resume recording')"
+        class="me-2 mb-2"
+        icon="microphone"
+        type="primary"
+        @click="resume"
+      />
       <BaseButton
         v-if="showButtons && recorderState.isRecording"
         :label="t('Stop recording')"
@@ -86,17 +103,25 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  // Offers to pause and resume the recording, as many times as wanted, before stopping it
+  pausable: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emit = defineEmits(["attach-audio", "recorded-audio"])
 
 defineExpose({
   record,
+  pause,
+  resume,
   stop,
 })
 
 const recorderState = reactive({
   isRecording: false,
+  isPaused: false,
   audioList: [],
   seconds: 0,
   minutes: 0,
@@ -175,7 +200,29 @@ async function stop() {
   emit("recorded-audio", audioBlob)
 
   recorderState.isRecording = false
+  recorderState.isPaused = false
   stopTimer()
+}
+
+async function pause() {
+  if (!recorder || !recorderState.isRecording || recorderState.isPaused) {
+    return
+  }
+
+  await recorder.pauseRecording()
+  clearInterval(timer)
+  timer = null
+  recorderState.isPaused = true
+}
+
+async function resume() {
+  if (!recorder || !recorderState.isPaused) {
+    return
+  }
+
+  await recorder.resumeRecording()
+  runTimer()
+  recorderState.isPaused = false
 }
 
 function attachAudio(audio) {
@@ -195,6 +242,11 @@ function startTimer() {
   recorderState.minutes = 0
   recorderState.hours = 0
 
+  runTimer()
+}
+
+// Counts on from the current time, so that resuming after a pause does not start again from zero
+function runTimer() {
   timer = setInterval(() => {
     recorderState.seconds = recorderState.seconds + 1
     if (recorderState.seconds > 59) {

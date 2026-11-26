@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "Ne\u017einau",
+    "Expected choice": "Laukiamas pasirinkimas",
+    "N\u00b0": "N",
+    "Multiple choice": "Keli pasirinkimai",
+    "Fill blanks or form": "Tu\u0161\u010di\u0173 laukeli\u0173 u\u017epildymas",
+    "Image zones": "Paveiksl\u0117li\u0173 zonos",
+    "Match by dragging": "Sud\u0117ti vilkdami",
+    "Multiple answer true/false/don't know": "Keli atsakymai teisingas/ klaidingas/ ne\u017einau",
+    "Combination true/false/don't-know": "Derinys teisingas/klaidingas/ne\u017einau",
+    "Pause recording": "Pristabdyti \u012fra\u0161ym\u0105",
+    "Resume recording": "T\u0119sti \u012fra\u0161ym\u0105",
+    "Recording help": "\u012era\u0161ymo pagalba",
+    "Add text": "Prid\u0117ti tekst\u0105",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "\u012era\u0161ydami galite bet kada pristabdyti. Jei nesate patenkinti, \u012fra\u0161ykite i\u0161 naujo. Tai perra\u0161ys ankstesn\u0119 versij\u0105. Patenkinti? Nor\u0117dami si\u0173sti \u012fra\u0161\u0105 d\u0117stytojui, spustel\u0117kite \u201eStop recording\u201c, tada pasirinkite \u201eBaigti pratim\u0105\u201c. D\u0117stytojas gal\u0117s i\u0161klausyti j\u016bs\u0173 \u012fra\u0161\u0105 ir pateikti atsiliepim\u0105! Visus j\u016bs\u0173 si\u0173stus \u012fra\u0161us galite per\u017ei\u016br\u0117ti pratimo prad\u017eios puslapyje."
 }

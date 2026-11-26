@@ -45336,3 +45336,15 @@ msgstr "Liste par documents"
 
 msgid "List by users"
 msgstr "Liste par utilisateurs"
+
+msgid "%s Completed"
+msgstr "%s complété"
+
+msgid "Received invitations"
+msgstr "Invitations reçues"
+
+msgid "Quick test: %s"
+msgstr "Test rapide : %s"
+
+msgid "Quick test: Document"
+msgstr "Test rapide : document"

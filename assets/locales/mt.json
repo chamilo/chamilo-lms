@@ -4823,5 +4823,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "Ma nafx",
+    "Expected choice": "G\u0127a\u017cla mistennija",
+    "N\u00b0": "N\u00b0",
+    "Multiple choice": "G\u0127a\u017cla multipla",
+    "Fill blanks or form": "Imla l-vojt jew il-formola",
+    "Image zones": "\u017boni tal-imma\u0121ni",
+    "Match by dragging": "Qabbel billi tkaxkar",
+    "Multiple answer true/false/don't know": "Twe\u0121ibiet multipli veri/falz/ma nafx",
+    "Combination true/false/don't-know": "Kombinazzjoni vera/\u017cbaljata/ma nafx",
+    "Pause recording": "Paw\u017ca r-re\u0121istrazzjoni",
+    "Resume recording": "Kompli r-re\u0121istrazzjoni",
+    "Recording help": "G\u0127ajnuna g\u0127ar-re\u0121istrazzjoni",
+    "Add text": "\u017bid test",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Waqt ir-re\u0121istrazzjoni, tista\u2019 twaqqaf meta trid. Jekk m\u2019intix sodisfatt, irre\u0121istra mill-\u0121did. Dan se jissostitwixxi l-ver\u017cjoni pre\u010bedenti. Sodisfatt? Biex tibg\u0127at ir-re\u0121istrazzjoni lill-g\u0127alliem tieg\u0127ek, ikklikkja fuq \u201cWaqqaf ir-re\u0121istrazzjoni\u201d imbag\u0127ad ag\u0127\u017cel \u201cTemmi l-e\u017cer\u010bizzju\u201d. L-g\u0127alliem ikun jista\u2019 jisma\u2019 r-re\u0121istrazzjoni tieg\u0127ek u jag\u0127tik feedback! Ir-re\u0121istrazzjonijiet kollha mibg\u0127uta jistg\u0127u jidhru fuq il-pa\u0121na ewlenija tal-e\u017cer\u010bizzju."
 }

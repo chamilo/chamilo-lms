@@ -730,6 +730,7 @@ if (isset($courseInfo['duration'])) {
     $courseInfo['duration'] = $courseInfo['duration'] / 60;
 }
 
+$courseInfo['department_url'] = Course::normalizeDepartmentUrl($courseInfo['department_url'] ?? null);
 $form->setDefaults($courseInfo);
 
 // Validate form
@@ -789,9 +790,9 @@ if ($form->validate()) {
     }
 
     $teachers = isset($course['course_teachers']) ? $course['course_teachers'] : '';
-    $department_url = $course['department_url'];
+    $department_url = Course::normalizeDepartmentUrl($course['department_url'] ?? null);
 
-    if (!stristr($department_url, 'http://')) {
+    if ('' !== $department_url && !preg_match('#^https?://#i', $department_url)) {
         $department_url = 'http://'.$department_url;
     }
 

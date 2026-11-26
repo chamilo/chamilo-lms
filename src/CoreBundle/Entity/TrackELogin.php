@@ -37,6 +37,13 @@ class TrackELogin
     #[ORM\Column(name: 'logout_date', type: 'datetime', nullable: true)]
     protected ?DateTime $logoutDate = null;
 
+    /**
+     * Access URL where the connection happened. Null for connections recorded before the column
+     * existed on a platform with several URLs: they cannot be attributed.
+     */
+    #[ORM\Column(name: 'access_url_id', type: 'integer', nullable: true)]
+    protected ?int $accessUrlId = null;
+
     public function getUser(): User
     {
         return $this->user;
@@ -91,6 +98,18 @@ class TrackELogin
     public function setLogoutDate(DateTime $logoutDate): self
     {
         $this->logoutDate = $logoutDate;
+
+        return $this;
+    }
+
+    public function getAccessUrlId(): ?int
+    {
+        return $this->accessUrlId;
+    }
+
+    public function setAccessUrlId(?int $accessUrlId): self
+    {
+        $this->accessUrlId = $accessUrlId;
 
         return $this;
     }

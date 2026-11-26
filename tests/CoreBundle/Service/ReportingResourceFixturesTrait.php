@@ -91,6 +91,20 @@ trait ReportingResourceFixturesTrait
         return (int) $this->conn()->lastInsertId();
     }
 
+    private function newLpItem(int $lpId, string $type = 'quiz'): int
+    {
+        $this->insert('c_lp_item', [
+            'lp_id' => $lpId,
+            'item_type' => $type,
+            'title' => 'r3_'.$type,
+            'ref' => '',
+            'path' => '',
+            'launch_data' => '',
+        ]);
+
+        return (int) $this->conn()->lastInsertId();
+    }
+
     private function lpItemView(int $lpViewId, int $itemId, float $score, string $max, int $totalTime = 0, int $start = 0, string $status = 'completed'): void
     {
         $this->insert('c_lp_item_view', [

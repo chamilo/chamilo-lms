@@ -120,7 +120,7 @@ if (Database::num_rows($result_coachs) > 0) {
 
         $sql_connection_time = "SELECT login_date, logout_date
         FROM $tbl_track_login
-        WHERE login_user_id ='$id_coach' AND logout_date <> 'null'";
+        WHERE login_user_id ='$id_coach' AND logout_date <> 'null' AND ".Tracking::getLoginAccessUrlCondition();
         $result_connection_time = Database::query($sql_connection_time);
 
         $nb_seconds = 0;

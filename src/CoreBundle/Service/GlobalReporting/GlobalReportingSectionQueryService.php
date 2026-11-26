@@ -784,6 +784,7 @@ final readonly class GlobalReportingSectionQueryService
                         SELECT SUM('.$this->sessionTimeLimit->sql('login.login_date', 'COALESCE(login.logout_date, login.login_date)').')
                           FROM track_e_login login
                          WHERE login.login_user_id = usr.id
+                           AND (login.access_url_id = :loginUrlId OR login.access_url_id IS NULL)
                     ), 0) AS timeSeconds
                FROM user usr
               WHERE '.implode(' AND ', $where).'
@@ -791,11 +792,13 @@ final readonly class GlobalReportingSectionQueryService
               LIMIT :limit OFFSET :offset',
             [
                 ...$parameters,
+                'loginUrlId' => $context->accessUrlId,
                 'limit' => $filters['itemsPerPage'],
                 'offset' => $filters['offset'],
             ],
             [
                 ...$types,
+                'loginUrlId' => Types::INTEGER,
                 'limit' => Types::INTEGER,
                 'offset' => Types::INTEGER,
             ],
@@ -1661,9 +1664,10 @@ final readonly class GlobalReportingSectionQueryService
             'SELECT MIN(login_date) AS firstLogin,
                     MAX(COALESCE(logout_date, login_date)) AS lastLogin
                FROM track_e_login
-              WHERE login_user_id = :userId',
-            ['userId' => $userId],
-            ['userId' => Types::INTEGER],
+              WHERE login_user_id = :userId
+                AND (access_url_id = :accessUrlId OR access_url_id IS NULL)',
+            ['userId' => $userId, 'accessUrlId' => $accessUrlId],
+            ['userId' => Types::INTEGER, 'accessUrlId' => Types::INTEGER],
         );
         $online = false;
         if ($this->hasTables(['track_e_online'])) {
@@ -2093,7 +2097,7 @@ final readonly class GlobalReportingSectionQueryService
      */
     private function learningPathScoreByCourse(int $userId, array $courseIds, int $sessionId): array
     {
-        if ([] === $courseIds || !$this->hasTables(['c_lp_view', 'c_lp_item_view'])) {
+        if ([] === $courseIds || !$this->hasTables(['c_lp_view', 'c_lp_item_view', 'c_lp_item'])) {
             return [];
         }
 
@@ -2117,7 +2121,9 @@ final readonly class GlobalReportingSectionQueryService
                 AND latest_view.lp_id = selected_view.lp_id
                 AND latest_view.latestViewCount = selected_view.view_count
                INNER JOIN c_lp_item_view item_view ON item_view.lp_view_id = selected_view.iid
-              WHERE selected_view.user_id = :userId
+               INNER JOIN c_lp_item item ON item.iid = item_view.lp_item_id AND item.lp_id = selected_view.lp_id
+              WHERE item.item_type IN (\'quiz\', \'sco\', \'toolbox\')
+                AND selected_view.user_id = :userId
                 AND COALESCE(selected_view.session_id, 0) = :sessionId
                 AND selected_view.c_id IN (:courseIds)
            GROUP BY selected_view.c_id',
@@ -2835,7 +2841,7 @@ final readonly class GlobalReportingSectionQueryService
      */
     private function learningPathDetailRows(int $userId, int $courseId, int $sessionId): array
     {
-        if (!$this->hasTables(['c_lp', 'resource_link', 'c_lp_view', 'c_lp_item_view'])) {
+        if (!$this->hasTables(['c_lp', 'resource_link', 'c_lp_view', 'c_lp_item_view', 'c_lp_item'])) {
             return [];
         }
 
@@ -2849,8 +2855,9 @@ final readonly class GlobalReportingSectionQueryService
                     COALESCE(selected_view.progress, 0) AS progress,
                     COALESCE(SUM(item_view.total_time), 0) AS timeSeconds,
                     CASE
-                        WHEN SUM(CAST(item_view.max_score AS DECIMAL(18, 4))) > 0
-                        THEN 100 * SUM(item_view.score) / SUM(CAST(item_view.max_score AS DECIMAL(18, 4)))
+                        WHEN SUM(CASE WHEN item.item_type IN (\'quiz\', \'sco\', \'toolbox\') THEN CAST(item_view.max_score AS DECIMAL(18, 4)) END) > 0
+                        THEN 100 * SUM(CASE WHEN item.item_type IN (\'quiz\', \'sco\', \'toolbox\') THEN item_view.score END)
+                            / SUM(CASE WHEN item.item_type IN (\'quiz\', \'sco\', \'toolbox\') THEN CAST(item_view.max_score AS DECIMAL(18, 4)) END)
                         ELSE NULL
                     END AS score,
                     MAX(
@@ -2874,6 +2881,7 @@ final readonly class GlobalReportingSectionQueryService
                      LIMIT 1
                  )
                LEFT JOIN c_lp_item_view item_view ON item_view.lp_view_id = selected_view.iid
+               LEFT JOIN c_lp_item item ON item.iid = item_view.lp_item_id AND item.lp_id = learning_path.iid
               WHERE resource_link.c_id = :courseId
                 AND resource_link.deleted_at IS NULL
                 AND '.$sessionFilter.'
@@ -3384,13 +3392,13 @@ final readonly class GlobalReportingSectionQueryService
             'courseIds' => $courseIds,
             'sessionId' => $sessionId,
             'studentStatus' => $studentStatus,
-            'completedStatus' => '',
+            'completedStatuses' => ['', 'completed'],
         ];
         $types = [
             'courseIds' => ArrayParameterType::INTEGER,
             'sessionId' => Types::INTEGER,
             'studentStatus' => Types::INTEGER,
-            'completedStatus' => Types::STRING,
+            'completedStatuses' => ArrayParameterType::STRING,
         ];
         if ($sessionId <= 0) {
             $parameters['managerRelation'] = 1;
@@ -3423,7 +3431,7 @@ final readonly class GlobalReportingSectionQueryService
                             WHERE exercise.c_id IN (:courseIds)
                               AND exercise.orig_lp_id > 0
                               AND exercise.max_score > 0
-                              AND exercise.status = :completedStatus
+                              AND exercise.status IN (:completedStatuses)
                               AND COALESCE(exercise.session_id, 0) = :sessionId
                       ) ranked
                      WHERE ranked.rowNumber = 1
@@ -4264,6 +4272,7 @@ final readonly class GlobalReportingSectionQueryService
                                WHERE course_session_url.session_id = course_relation.session_id
                                  AND course_session_url.access_url_id = :accessUrlId)
                LEFT JOIN track_e_login login ON login.login_user_id = usr.id
+                   AND (login.access_url_id = :accessUrlId OR login.access_url_id IS NULL)
               WHERE usr.status = :teacherStatus
            GROUP BY usr.id, usr.official_code, usr.firstname, usr.lastname, usr.username, usr.email
            ORDER BY usr.lastname ASC, usr.firstname ASC

@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "Tidak tahu",
+    "Expected choice": "Pilihan yang diharapkan",
+    "N\u00b0": "N\u00b0",
+    "Multiple choice": "Pilihan ganda",
+    "Fill blanks or form": "Mengisintitik-titik",
+    "Image zones": "Hotspot",
+    "Match by dragging": "Cocokkan dengan menyeret",
+    "Multiple answer true/false/don't know": "Jawaban ganda benar/salah/tidak tahu",
+    "Combination true/false/don't-know": "Kombinasi benar/salah/tidak-tahu",
+    "Pause recording": "Jeda rekaman",
+    "Resume recording": "Lanjutkan rekaman",
+    "Recording help": "Bantuan perekaman",
+    "Add text": "Tambah teks",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Saat merekam, Anda dapat jeda kapan saja. Jika tidak puas, rekam ulang. Ini akan menimpa versi sebelumnya. Puas? Untuk mengirim rekaman ke guru, klik \u201cHentikan perekaman\u201d lalu pilih \u201cAkhiri latihan\u201d. Guru akan dapat mendengarkan rekaman Anda dan memberi umpan balik! Semua rekaman yang dikirim dapat dilihat di halaman utama latihan."
 }

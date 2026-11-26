@@ -832,16 +832,17 @@ final class GlobalReportingSectionListsTest extends KernelTestCase
             $learners[$tag] = $this->rawUser('r2t6'.$tag);
             $this->courseUser($learners[$tag], 2, 5);
         }
-        $insert = function (int $user, float $score, string $date) use ($lp): void {
+        $insert = function (int $user, float $score, string $date, string $status = '') use ($lp): void {
             $this->conn()->executeStatement(
                 "INSERT INTO track_e_exercises (exe_user_id, c_id, session_id, exe_exo_id, exe_date, score, max_score, user_ip, status, data_tracking,
                     start_date, steps_counter, orig_lp_id, orig_lp_item_id, exe_duration, orig_lp_item_view_id, questions_to_check)
-                 VALUES (?, 2, NULL, 1, ?, ?, 10, '', '', '', '2001-01-01 09:00:00', 0, ?, 7, 0, 0, '')",
-                [$user, $date, $score, $lp]
+                 VALUES (?, 2, NULL, 1, ?, ?, 10, '', ?, '', '2001-01-01 09:00:00', 0, ?, 7, 0, 0, '')",
+                [$user, $date, $score, $status, $lp]
             );
         };
         $insert($learners['a'], 2, '2001-01-01 10:00:00');
-        $insert($learners['a'], 8, '2001-01-02 10:00:00');
+        $insert($learners['a'], 8, '2001-01-02 10:00:00', 'completed');
+        $insert($learners['a'], 10, '2001-01-03 10:00:00', 'incomplete');
         $insert($learners['b'], 6, '2001-01-01 10:00:00');
 
         $row = $this->section($ctx, 'courses', ['userId' => $teacher])['items'][0];

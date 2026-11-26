@@ -1,4 +1,5 @@
 import baseService from "./baseService"
+import i18n from "../i18n"
 
 const configurationCache = new Map()
 
@@ -54,14 +55,14 @@ export default {
 
   async downloadLearnersCsv(params = {}) {
     return await baseService.getRaw("/api/course-reporting/learners.csv", {
-      params: cleanParams(params),
+      params: cleanParams({ ...params, exportLocale: i18n.global.locale.value }),
       responseType: "blob",
     })
   },
 
   async downloadSection(section, format, params = {}) {
     return await baseService.getRaw(`/api/course-reporting/${section}.${format}`, {
-      params: cleanParams(params),
+      params: cleanParams({ ...params, exportLocale: i18n.global.locale.value }),
       responseType: "blob",
     })
   },

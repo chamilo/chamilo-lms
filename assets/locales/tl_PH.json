@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "Hindi alam",
+    "Expected choice": "Inaasahang pagpipilian",
+    "N\u00b0": "No.",
+    "Multiple choice": "Maramihang pagpipilian",
+    "Fill blanks or form": "Punan ang mga blanko o form",
+    "Image zones": "Mga zone ng larawan",
+    "Match by dragging": "Itugma sa pamamagitan ng pag-drag",
+    "Multiple answer true/false/don't know": "Maramihang sagot totoo/mali/hindi alam",
+    "Combination true/false/don't-know": "Kombinasyon totoo/mali/hindi alam",
+    "Pause recording": "I-pause ang recording",
+    "Resume recording": "I-resume ang recording",
+    "Recording help": "Tulong sa recording",
+    "Add text": "Magdagdag ng teksto",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Habang nagrerecording, maaari kang mag-pause anumang oras. Kung hindi ka nasiyahan, mag-record muli. Ito ay papalitan ang nakaraang bersyon. Nasiyahan ka na? Upang ipadala ang recording sa iyong guro, i-click ang \u201cStop recording\u201d pagkatapos ay piliin ang \u201cEnd exercise\u201d. Maaari ng guro na makinig sa iyong recording at magbigay ng feedback! Lahat ng iyong ipinadagdag na recordings ay maaaring tingnan sa exercise home page."
 }

@@ -977,23 +977,30 @@ function get_user_data($from, $number_of_items, $column, $direction)
             $url = $illustrationRepo->getIllustrationUrl($user, 'user_picture_small', ICON_SIZE_BIG);
             $photo = Display::img($url, '', [], false);
 
+            // User-provided values, escaped once for both table layouts.
+            $safe = [];
+            foreach (['official_code', 'firstname', 'lastname', 'username'] as $field) {
+                $safe[$field] = api_htmlentities((string) $userData[$field], ENT_QUOTES);
+            }
+            $safe['groups'] = api_htmlentities(implode(', ', $groupsNameListParsed), ENT_QUOTES);
+
             if (api_is_allowed_to_edit(null, true)) {
                 $temp[] = $user_id;
                 $temp[] = $photo;
-                $temp[] = $userData['official_code'];
+                $temp[] = $safe['official_code'];
 
                 if ($is_western_name_order) {
-                    $temp[] = $userData['firstname'];
-                    $temp[] = $userData['lastname'];
+                    $temp[] = $safe['firstname'];
+                    $temp[] = $safe['lastname'];
                 } else {
-                    $temp[] = $userData['lastname'];
-                    $temp[] = $userData['firstname'];
+                    $temp[] = $safe['lastname'];
+                    $temp[] = $safe['firstname'];
                 }
 
-                $temp[] = $userData['username'];
+                $temp[] = $safe['username'];
 
                 // Groups.
-                $temp[] = implode(', ', $groupsNameListParsed);
+                $temp[] = $safe['groups'];
 
                 // Status
                 $default_status = get_lang('Learner');
@@ -1047,19 +1054,19 @@ function get_user_data($from, $number_of_items, $column, $direction)
             } else {
                 $temp[] = '';
                 $temp[] = $photo;
-                $temp[] = $userData['official_code'];
+                $temp[] = $safe['official_code'];
 
                 if ($is_western_name_order) {
-                    $temp[] = $userData['firstname'];
-                    $temp[] = $userData['lastname'];
+                    $temp[] = $safe['firstname'];
+                    $temp[] = $safe['lastname'];
                 } else {
-                    $temp[] = $userData['lastname'];
-                    $temp[] = $userData['firstname'];
+                    $temp[] = $safe['lastname'];
+                    $temp[] = $safe['firstname'];
                 }
 
-                $temp[] = $userData['username'];
+                $temp[] = $safe['username'];
                 // Group.
-                $temp[] = implode(', ', $groupsNameListParsed);
+                $temp[] = $safe['groups'];
 
                 if (1 == $course_info['unsubscribe']) {
                     //User id for actions

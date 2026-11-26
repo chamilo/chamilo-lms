@@ -60,6 +60,8 @@ final readonly class AdminStatisticsUserSystemQueryService
     private const USER_STATUS_STUDENT_BOSS = 17;
     private const SESSION_DURATION_OPTIONS = [0, 5, 15, 30, 60];
     private const ONLINE_INTERVALS = [3, 5, 30, 120];
+    // Logins of the current URL; those recorded before access_url_id existed are NULL and still count.
+    private const LOGIN_URL_CONDITION = '(l.access_url_id = :urlId OR l.access_url_id IS NULL)';
     private const QUARTERLY_SECTIONS = [
         'users',
         'courses',
@@ -311,6 +313,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         if ($this->accessUrlHelper->isMultiple() && null !== $urlId) {
             $join = ' INNER JOIN access_url_rel_user aur ON aur.user_id = l.login_user_id ';
             $where[] = 'aur.access_url_id = :urlId';
+            $where[] = self::LOGIN_URL_CONDITION;
             $params['urlId'] = $urlId;
             $types['urlId'] = Types::INTEGER;
         }
@@ -467,7 +470,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         }
         $sql .= 'WHERE u.active <> :softDeleted AND l.login_date BETWEEN :start AND :end ';
         if ($this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId()) {
-            $sql .= 'AND aur.access_url_id = :urlId ';
+            $sql .= 'AND aur.access_url_id = :urlId AND '.self::LOGIN_URL_CONDITION.' ';
             $params['urlId'] = $this->getCurrentAccessUrlId();
             $types['urlId'] = Types::INTEGER;
         }
@@ -1344,7 +1347,7 @@ final readonly class AdminStatisticsUserSystemQueryService
             $sql .= 'AND TIMESTAMPDIFF(SECOND, l.login_date, l.logout_date) > :duration ';
         }
         if ($this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId()) {
-            $sql .= 'AND aur.access_url_id = :urlId ';
+            $sql .= 'AND aur.access_url_id = :urlId AND '.self::LOGIN_URL_CONDITION.' ';
             $params['urlId'] = $this->getCurrentAccessUrlId();
             $types['urlId'] = Types::INTEGER;
         }
@@ -1415,6 +1418,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         }
         if ($this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId()) {
             $where[] = 'aur.access_url_id = :urlId';
+            $where[] = self::LOGIN_URL_CONDITION;
             $params['urlId'] = $this->getCurrentAccessUrlId();
             $types['urlId'] = Types::INTEGER;
         }
@@ -1445,6 +1449,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         }
         if ($this->accessUrlHelper->isMultiple() && null !== $urlId) {
             $where[] = 'aur.access_url_id = :urlId';
+            $where[] = self::LOGIN_URL_CONDITION;
             $params['urlId'] = $urlId;
             $types['urlId'] = Types::INTEGER;
         }
@@ -1489,6 +1494,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         }
         if ($this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId()) {
             $where[] = 'aur.access_url_id = :urlId';
+            $where[] = self::LOGIN_URL_CONDITION;
             $params['urlId'] = $this->getCurrentAccessUrlId();
             $types['urlId'] = Types::INTEGER;
         }
@@ -2117,7 +2123,8 @@ final readonly class AdminStatisticsUserSystemQueryService
         if ($this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId()) {
             $sql = 'SELECT COUNT(DISTINCT u.id) FROM user u INNER JOIN track_e_login l ON u.id = l.login_user_id '
                 .'INNER JOIN access_url_rel_user aur ON u.id = aur.user_id '
-                .'WHERE u.active <> :softDeleted AND l.login_date BETWEEN :start AND :end AND aur.access_url_id = :urlId';
+                .'WHERE u.active <> :softDeleted AND l.login_date BETWEEN :start AND :end AND aur.access_url_id = :urlId AND '
+                .self::LOGIN_URL_CONDITION;
             $params['urlId'] = $this->getCurrentAccessUrlId();
             $types['urlId'] = Types::INTEGER;
         }
@@ -2210,7 +2217,7 @@ final readonly class AdminStatisticsUserSystemQueryService
         }
         $sql .= 'WHERE l.login_date >= :start AND l.logout_date <= :end ';
         if ($this->accessUrlHelper->isMultiple() && null !== $this->getCurrentAccessUrlId()) {
-            $sql .= 'AND aur.access_url_id = :urlId';
+            $sql .= 'AND aur.access_url_id = :urlId AND '.self::LOGIN_URL_CONDITION;
             $params['urlId'] = $this->getCurrentAccessUrlId();
             $types['urlId'] = Types::INTEGER;
         }

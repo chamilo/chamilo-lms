@@ -269,7 +269,9 @@
                     v-for="row in form.categoryMatrix"
                     :key="`category-matrix-${row.categoryId}`"
                   >
-                    <td class="px-3 py-2 font-medium text-gray-90">{{ row.title }}</td>
+                    <td class="px-3 py-2 font-medium text-gray-90">
+                      {{ row.categoryId === 0 ? t("No category") : row.title }}
+                    </td>
                     <td class="px-3 py-2 text-gray-70">{{ row.availableQuestions }}</td>
                     <td class="px-3 py-2">
                       <BaseInputNumber

@@ -35,6 +35,7 @@ use DateTime;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Security as LegacySecurity;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,6 +46,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 use const PATHINFO_EXTENSION;
+use const STUDENT;
 
 /**
  * Uploads a learner file, oral recording or completed Office document answer and attaches it to a track_e_attempt row as AttemptFile.
@@ -135,9 +137,15 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
 
         $this->assertAttemptAcceptsAnswer($attempt, $quiz, $questionId);
 
+        // An oral expression can come with a written text, which the learner can also send on its own
+        $isOralExpression = self::ORAL_EXPRESSION === (int) $question->getType();
+        $answerText = $isOralExpression ? $this->getOralExpressionText($request, $jsonPayload) : '';
+
         $uploadedFiles = $this->getUploadedFiles($request, $jsonPayload);
         if ([] === $uploadedFiles) {
-            $existingAttemptRow = $this->getExistingFileAttemptRow($attemptId, $questionId);
+            $existingAttemptRow = $isOralExpression
+                ? $this->saveOralExpressionText($attempt, $user, $questionId, $answerText, $secondsSpent)
+                : $this->getExistingFileAttemptRow($attemptId, $questionId);
             if (!$existingAttemptRow instanceof TrackEAttempt) {
                 throw new BadRequestHttpException('A file is required for this answer.');
             }
@@ -169,7 +177,7 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
             ->setTrackEExercise($attempt)
             ->setUser($user)
             ->setQuestionId($questionId)
-            ->setAnswer('')
+            ->setAnswer($answerText)
             ->setTeacherComment('')
             ->setMarks(0.0)
             ->setPosition(0)
@@ -211,6 +219,50 @@ final readonly class ExerciseRuntimeUploadAnswerProcessor implements ProcessorIn
         }
 
         return $this->buildResponse($exerciseId, $attemptId, $questionId, $attemptRow, $question);
+    }
+
+    private function getOralExpressionText(Request $request, array $jsonPayload): string
+    {
+        $text = trim($this->getRequestString($request, $jsonPayload, 'answerText'));
+
+        // Shown as HTML to the teacher on the result and correction pages
+        return '' !== $text ? trim((string) LegacySecurity::remove_XSS($text, STUDENT)) : '';
+    }
+
+    /**
+     * Keeps the audio already sent and only updates the text, or saves a text sent without any audio.
+     */
+    private function saveOralExpressionText(TrackEExercise $attempt, User $user, int $questionId, string $answerText, int $secondsSpent): ?TrackEAttempt
+    {
+        $row = $this->entityManager->getRepository(TrackEAttempt::class)->findOneBy(
+            ['trackExercise' => (int) $attempt->getExeId(), 'questionId' => $questionId],
+            ['id' => 'DESC']
+        );
+
+        if ($row instanceof TrackEAttempt) {
+            $row->setAnswer($answerText);
+
+            return $row;
+        }
+
+        if ('' === $answerText) {
+            return null;
+        }
+
+        $row = (new TrackEAttempt())
+            ->setTrackEExercise($attempt)
+            ->setUser($user)
+            ->setQuestionId($questionId)
+            ->setAnswer($answerText)
+            ->setTeacherComment('')
+            ->setMarks(0.0)
+            ->setPosition(0)
+            ->setTms(new DateTime())
+            ->setSecondsSpent($secondsSpent)
+        ;
+        $this->entityManager->persist($row);
+
+        return $row;
     }
 
     private function getExistingFileAttemptRow(int $attemptId, int $questionId): ?TrackEAttempt

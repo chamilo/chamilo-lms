@@ -71,6 +71,12 @@ class AssetRepository extends ServiceEntityRepository
         $list = $zipFile->getEntries();
         foreach ($list as $item) {
             $name = $item->getName();
+
+            // Same rule as the SCORM upload: a package never brings server-side scripts.
+            if (preg_match('~\.(php.*|phtml)$~i', $name)) {
+                continue;
+            }
+
             if ($fs->fileExists($folder.'/'.$name)) {
                 continue;
             }

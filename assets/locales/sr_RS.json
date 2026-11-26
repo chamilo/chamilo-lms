@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "Ne znam",
+    "Expected choice": "O\u010dekivani izbor",
+    "N\u00b0": "Br.",
+    "Multiple choice": "Vi\u0161estruki izbor",
+    "Fill blanks or form": "Popuni praznine",
+    "Image zones": "Aktivna mesta (hotspots)",
+    "Match by dragging": "Podudaranje povla\u010denjem",
+    "Multiple answer true/false/don't know": "Vi\u0161estruki odgovor ta\u010dno/neta\u010dno/ne znam",
+    "Combination true/false/don't-know": "Kombinacija ta\u010dno/neta\u010dno/ne-znam",
+    "Pause recording": "Pauziraj snimanje",
+    "Resume recording": "Nastavi snimanje",
+    "Recording help": "Pomo\u0107 za snimanje",
+    "Add text": "Dodaj tekst",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Tokom snimanja, mo\u017eete pauzirati kad god \u017eelite. Ako niste zadovoljni, snimite ponovo. Ovo \u0107e prebrisati prethodnu verziju. Zadovoljni? Da po\u0161aljete snimat teacheru, kliknite na \u201eZaustavi snimanje\u201c pa izaberite \u201eZavr\u0161i ve\u017ebu\u201c. Nastavnik \u0107e mo\u0107i da preslu\u0161a va\u0161 snimat i da vam da povratnu informaciju! Svi va\u0161i prosle\u0111eni snimci mogu se pregledati na po\u010detnoj stranici ve\u017ebe."
 }

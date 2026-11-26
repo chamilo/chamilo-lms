@@ -1777,6 +1777,25 @@ class Tracking
     }
 
     /**
+     * SQL condition that keeps the track_e_login rows of the current access URL, on a platform
+     * with several URLs. Rows recorded before access_url_id existed are NULL and stay visible.
+     *
+     * @param string $alias alias of track_e_login in the query, empty when it has none
+     */
+    public static function getLoginAccessUrlCondition(string $alias = ''): string
+    {
+        $accessUrlUtil = Container::getAccessUrlUtil();
+        if (!$accessUrlUtil->isMultiple()) {
+            return '1 = 1';
+        }
+
+        $column = ('' === $alias ? '' : $alias.'.').'access_url_id';
+        $urlId = (int) $accessUrlUtil->getCurrent()->getId();
+
+        return "($column = $urlId OR $column IS NULL)";
+    }
+
+    /**
      * Calculates the time spent on the platform by a user.
      *
      * @param int|array $userId
@@ -1814,7 +1833,8 @@ class Tracking
         if ($accessUrlUtil->isMultiple()) {
             $access_url_id = $accessUrlUtil->getCurrent()->getId();
             $url_table = ", $tbl_url_rel_user as url_users";
-            $url_condition = " AND u.login_user_id = url_users.user_id AND access_url_id = $access_url_id";
+            $url_condition = " AND u.login_user_id = url_users.user_id AND url_users.access_url_id = $access_url_id"
+                .' AND '.self::getLoginAccessUrlCondition('u');
         }
 
         if (empty($timeFilter)) {
@@ -1906,7 +1926,8 @@ class Tracking
         if ($accessUrlUtil->isMultiple()) {
             $access_url_id = $accessUrlUtil->getCurrent()->getId();
             $url_table = ", ".$tbl_url_rel_user." as url_users";
-            $url_condition = " AND u.login_user_id = url_users.user_id AND access_url_id='$access_url_id'";
+            $url_condition = " AND u.login_user_id = url_users.user_id AND url_users.access_url_id='$access_url_id'"
+                .' AND '.self::getLoginAccessUrlCondition('u');
         }
 
         $condition_time = ' 1 = 1 ';
@@ -2045,6 +2066,7 @@ class Tracking
             ->select('login_date')
             ->from($table)
             ->where('login_user_id = :userId')
+            ->andWhere(self::getLoginAccessUrlCondition())
             ->setParameter('userId', (int) $student_id)
             ->orderBy('login_date', 'ASC')
             ->setMaxResults(1)
@@ -2080,6 +2102,7 @@ class Tracking
             ->select('login_date')
             ->from($table)
             ->where('login_user_id = :userId')
+            ->andWhere(self::getLoginAccessUrlCondition())
             ->setParameter('userId', (int) $student_id)
             ->orderBy('login_date', 'DESC')
             ->setMaxResults(1)
@@ -2550,7 +2573,7 @@ class Tracking
                         null === $exercise_id ? [0] : array_map('intval', (array) $exercise_id),
                         ArrayParameterType::INTEGER
                     )
-                    ->andWhere("status = ''")
+                    ->andWhere("status IN ('', 'completed')")
                     ->andWhere('c_id = :courseId')
                     ->setParameter('courseId', (int) $course_info['real_id'])
                     ->orderBy('exe_date', 'DESC');
@@ -2655,7 +2678,7 @@ class Tracking
             ->from($tbl_stats_exercises)
             ->where('c_id = :courseId')
             ->andWhere('exe_exo_id = :exerciseId')
-            ->andWhere("status = ''")
+            ->andWhere("status IN ('', 'completed')")
             ->andWhere('exe_user_id = :studentId')
             ->setParameter('courseId', $courseId)
             ->setParameter('exerciseId', $exercise_id)
@@ -2712,7 +2735,7 @@ class Tracking
             ->from($tbl_stats_exercises)
             ->where('c_id = :courseId')
             ->andWhere('exe_user_id = :userId')
-            ->andWhere("status = ''")
+            ->andWhere("status IN ('', 'completed')")
             ->andWhere('exe_exo_id IN (:exerciseIds)')
             ->setParameter('courseId', $courseId)
             ->setParameter('userId', $user_id)
@@ -3150,7 +3173,7 @@ class Tracking
                             ->andWhere('exe_user_id = :userId')
                             ->andWhere('orig_lp_item_id = :itemId')
                             ->andWhere('c_id = :courseId')
-                            ->andWhere("status = ''")
+                            ->andWhere("status IN ('', 'completed')")
                             ->setParameter('exerciseId', (string) $item_path)
                             ->setParameter('userId', (int) $user_id)
                             ->setParameter('itemId', (int) $item_id)
@@ -7191,6 +7214,7 @@ class Tracking
             ->from($table_login)
             ->where('login_user_id = :userId')
             ->andWhere('login_date < :eventDate')
+            ->andWhere(self::getLoginAccessUrlCondition())
             ->setParameter('userId', $user_id)
             ->setParameter('eventDate', $event_date)
             ->orderBy('login_date', 'DESC')
@@ -8410,7 +8434,7 @@ class Tracking
             ->from($tblTrackExercise, 'ex')
             ->where('ex.c_id = :courseId')
             ->andWhere('ex.exe_user_id = :userId')
-            ->andWhere("ex.status = ''")
+            ->andWhere("ex.status IN ('', 'completed')")
             ->setParameter('courseId', $courseId)
             ->setParameter('userId', $userId)
             ->orderBy('ex.exe_date', 'DESC')

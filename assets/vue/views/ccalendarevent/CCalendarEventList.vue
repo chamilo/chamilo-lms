@@ -246,8 +246,10 @@ function buildEventTooltip(eventLike) {
     lines.push(title)
   }
 
-  const start = eventObject?.start ? abbreviatedDatetime(eventObject.start) : ""
-  const end = eventObject?.end ? abbreviatedDatetime(eventObject.end) : ""
+  // FullCalendar coerces named time zones to UTC without a time zone plugin.
+  // Format the original API dates to avoid applying the time zone offset twice.
+  const start = eventObject?.start && extendedProps.startDate ? abbreviatedDatetime(extendedProps.startDate) : ""
+  const end = eventObject?.end && extendedProps.endDate ? abbreviatedDatetime(extendedProps.endDate) : ""
 
   if (start && end) {
     lines.push(`${t("From")} ${start}`)

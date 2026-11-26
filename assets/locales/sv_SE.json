@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "Vet ej",
+    "Expected choice": "F\u00f6rv\u00e4ntat val",
+    "N\u00b0": "Nr",
+    "Multiple choice": "Flerval",
+    "Fill blanks or form": "Fyll i blanka",
+    "Image zones": "Bildomr\u00e5de",
+    "Match by dragging": "Matcha genom att dra",
+    "Multiple answer true/false/don't know": "Flera svar sant/falskt/vet ej",
+    "Combination true/false/don't-know": "Kombination sant/falskt/vet-ej",
+    "Pause recording": "Pausa inspelning",
+    "Resume recording": "\u00c5teruppta inspelning",
+    "Recording help": "Hj\u00e4lp f\u00f6r inspelning",
+    "Add text": "L\u00e4gg till text",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Under inspelning kan du pausa n\u00e4r du vill. Om du inte \u00e4r n\u00f6jd, registrera igen. Detta kommer att skriva \u00f6ver den tidigare versionen. N\u00f6jd? F\u00f6r att skicka inspelningen till din l\u00e4rare, klicka p\u00e5 \u201dStoppa inspelning\u201d och v\u00e4lj sedan \u201dAvsluta \u00f6vning\u201d. L\u00e4raren kommer att kunna lyssna p\u00e5 din inspelning och ge dig feedback! Alla dina skickade inspelningar kan ses p\u00e5 \u00f6vningens startsida."
 }

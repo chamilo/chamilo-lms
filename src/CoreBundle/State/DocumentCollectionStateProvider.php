@@ -21,6 +21,7 @@ use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Repository\ResourceLinkRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -163,6 +164,15 @@ final class DocumentCollectionStateProvider implements ProviderInterface
                     ->setParameter('certificatesPath', '%/certificates-%')
                 ;
             }
+        }
+
+        // The content of a learning path final item is stored as a "certificate" document, as in
+        // 1.11, but it is not a certificate template: keep it out of the certificate lists
+        if ($wantsCertificateList) {
+            $qb
+                ->andWhere('NOT EXISTS (SELECT final_item.iid FROM '.CLpItem::class.' final_item WHERE final_item.itemType = :finalItemType AND final_item.path = d.iid)')
+                ->setParameter('finalItemType', 'final_item')
+            ;
         }
 
         // Hide system folders depending on settings.

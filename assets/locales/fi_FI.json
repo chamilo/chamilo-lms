@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "En osaa sanoa",
+    "Expected choice": "Oikea vastaus",
+    "N\u00b0": "Nr.",
+    "Multiple choice": "Yksi oikea vastaus",
+    "Fill blanks or form": "Aukkoteht\u00e4v\u00e4",
+    "Image zones": "Interaktiiviset alueet",
+    "Match by dragging": "Rakenna vet\u00e4m\u00e4ll\u00e4",
+    "Multiple answer true/false/don't know": "Useita vastauksia tosi/valhe/en tied\u00e4",
+    "Combination true/false/don't-know": "Yhdistelm\u00e4 tosi/valhe/en-tied\u00e4",
+    "Pause recording": "Keskeyt\u00e4 \u00e4\u00e4nitys",
+    "Resume recording": "Jatka \u00e4\u00e4nityst\u00e4",
+    "Recording help": "Tallennuksen ohje",
+    "Add text": "Lis\u00e4\u00e4 teksti",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Tallennuksen aikana voit taukoa milloin tahansa. Jos et ole tyytyv\u00e4inen, tallenna uudelleen. T\u00e4m\u00e4 korvaa edellisen version. Tyytyv\u00e4inen? L\u00e4hett\u00e4\u00e4ksesi tallennuksen opettajallesi napsauta \"Lopeta tallennus\" ja valitse \"Lopeta harjoitus\". Opettaja voi kuunnella tallennuksesi ja antaa palautetta! Kaikki l\u00e4hett\u00e4m\u00e4si tallennukset n\u00e4kyv\u00e4t harjoituksen etusivulla."
 }

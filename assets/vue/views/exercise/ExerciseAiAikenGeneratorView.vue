@@ -426,7 +426,11 @@ const documentForm = reactive({
 
 const textProviderOptions = computed(() => Array.isArray(config.value.textProviders) ? config.value.textProviders : [])
 const documentProviderOptions = computed(() => Array.isArray(config.value.documentProviders) ? config.value.documentProviders : [])
-const questionTypeOptions = computed(() => Array.isArray(config.value.questionTypes) ? config.value.questionTypes : [])
+const questionTypeOptions = computed(() =>
+  Array.isArray(config.value.questionTypes)
+    ? config.value.questionTypes.map((questionType) => ({ ...questionType, label: t(questionType.label) }))
+    : [],
+)
 const documents = computed(() => Array.isArray(config.value.documents) ? config.value.documents : [])
 const hasDocumentTab = computed(() => documentProviderOptions.value.length > 0)
 const filteredDocuments = computed(() => {

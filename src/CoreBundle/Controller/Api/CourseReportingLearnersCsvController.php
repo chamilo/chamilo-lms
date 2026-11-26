@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 
 use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\Service\CourseReporting\CourseReportingContextResolver;
+use Chamilo\CoreBundle\Service\CourseReporting\CourseReportingHeaderTranslator;
 use Chamilo\CoreBundle\Service\CourseReporting\CourseReportingQueryService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -26,6 +27,7 @@ final readonly class CourseReportingLearnersCsvController
     public function __construct(
         private CourseReportingContextResolver $contextResolver,
         private CourseReportingQueryService $queryService,
+        private CourseReportingHeaderTranslator $headerTranslator,
     ) {}
 
     public function __invoke(Request $request): StreamedResponse
@@ -62,12 +64,14 @@ final readonly class CourseReportingLearnersCsvController
             strtolower($context->course->getCode())
         ) ?: 'course';
         $filename .= '-learner-report.csv';
+        $exportLocale = (string) $request->query->get('exportLocale', $request->getLocale());
 
         $response = new StreamedResponse(function () use (
             $rows,
             $context,
             $configuredExercises,
-            $selectedExtraFields
+            $selectedExtraFields,
+            $exportLocale
         ): void {
             $output = fopen('php://output', 'wb');
             if (false === $output) {
@@ -76,37 +80,45 @@ final readonly class CourseReportingLearnersCsvController
 
             fwrite($output, "\xEF\xBB\xBF");
 
-            $headers = [
-                'Code',
-                'Last name',
-                'First name',
-                'Login',
-                'Time',
-                'Progress',
-                'Exercise progress',
-                'Exercise average',
-                'Score',
-                'Score - Only best attempts',
-            ];
+            $headers = array_map(
+                fn (string $label): string => $this->headerTranslator->translate($label, $exportLocale),
+                [
+                    'Code',
+                    'Last name',
+                    'First name',
+                    'Login',
+                    'Time',
+                    'Progress',
+                    'Exercise progress',
+                    'Exercise average',
+                    'Score',
+                ]
+            );
+            $headers[] = $this->headerTranslator->translate('Score', $exportLocale).' - '.$this->headerTranslator->translate('Only best attempts', $exportLocale);
 
             foreach ($configuredExercises as $exercise) {
-                $headers[] = 'Test: '.(string) $exercise['title'];
+                $headers[] = $this->headerTranslator->translate('Test', $exportLocale).': '.(string) $exercise['title'];
             }
 
             array_push(
                 $headers,
-                'Assignments',
-                'Messages',
-                'Classes',
-                0 === $context->sessionId() ? 'Survey' : 'Registered date',
-                'First access to course',
-                'Latest access in course',
-                "Last lp's finalization date",
-                'Last quiz finalization date'
+                ...array_map(
+                    fn (string $label): string => $this->headerTranslator->translate($label, $exportLocale),
+                    [
+                        'Assignments',
+                        'Messages',
+                        'Classes',
+                        0 === $context->sessionId() ? 'Survey' : 'Registered date',
+                        'First access to course',
+                        'Latest access in course',
+                        "Last lp's finalization date",
+                        'Last quiz finalization date',
+                    ]
+                )
             );
 
             if ($context->showEmailAddresses) {
-                $headers[] = 'E-mail';
+                $headers[] = $this->headerTranslator->translate('E-mail', $exportLocale);
             }
 
             foreach ($selectedExtraFields as $field) {

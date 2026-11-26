@@ -416,12 +416,7 @@ class UserRepository extends ResourceRepository implements PasswordUpgraderInter
             ->from(CStudentPublication::class, 'publication')
             ->innerJoin('publication.resourceNode', 'resourceNode')
             ->where('IDENTITY(publication.user) = :userId')
-            ->andWhere(
-                $qb->expr()->orX(
-                    'publication.publicationParent IS NOT NULL',
-                    'publication.filetype = :filetype'
-                )
-            )
+            ->andWhere('publication.filetype = :filetype')
             ->setParameter('userId', $userId, Types::INTEGER)
             ->setParameter('filetype', 'file')
             ->getQuery()

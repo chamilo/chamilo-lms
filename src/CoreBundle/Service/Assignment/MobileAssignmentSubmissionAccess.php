@@ -78,20 +78,6 @@ final readonly class MobileAssignmentSubmissionAccess
             return $assignment;
         }
 
-        if ($session instanceof Session) {
-            $candidate = $this->studentPublicationRepository->find($assignmentId);
-            $sessionLink = $candidate instanceof CStudentPublication
-                ? $candidate->getResourceNode()?->getResourceLinkByContext($course, $session)
-                : null;
-
-            if (null === $sessionLink) {
-                $assignment = $this->findVisibleAssignment($assignmentId, $course, null, $groupId);
-                if ($assignment instanceof CStudentPublication) {
-                    return $assignment;
-                }
-            }
-        }
-
         throw new NotFoundHttpException('Assignment not found in the current course context.');
     }
 
@@ -117,7 +103,7 @@ final readonly class MobileAssignmentSubmissionAccess
             throw new AccessDeniedHttpException('You can only manage your own assignment submissions.');
         }
 
-        if (null === $submission->getFirstResourceLinkFromCourseSession($course, $session)) {
+        if (!$this->hasExactCourseSessionLink($submission, $course, $session)) {
             throw new AccessDeniedHttpException('The assignment submission does not belong to this course context.');
         }
 
@@ -140,7 +126,7 @@ final readonly class MobileAssignmentSubmissionAccess
         ?Session $session,
     ): array {
         $isOwner = $submission->getUser()->getId() === $user->getId();
-        $inContext = null !== $submission->getFirstResourceLinkFromCourseSession($course, $session);
+        $inContext = $this->hasExactCourseSessionLink($submission, $course, $session);
         $reviewed = $submission->getQualificatorId() > 0;
         $courseSettingEnabled = 1 === (int) api_get_course_setting(
             'student_delete_own_publication',
@@ -197,6 +183,20 @@ final readonly class MobileAssignmentSubmissionAccess
         if (!$capabilities['canDelete']) {
             throw new AccessDeniedHttpException('This assignment submission cannot be deleted.');
         }
+    }
+
+    public function hasExactCourseSessionLink(CStudentPublication $publication, Course $course, ?Session $session): bool
+    {
+        foreach ($publication->getResourceNode()?->getResourceLinks() ?? [] as $link) {
+            if ($link->getCourse()?->getId() === $course->getId()
+                && $link->getSession()?->getId() === $session?->getId()
+                && null === $link->getDeletedAt()
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function findVisibleAssignment(

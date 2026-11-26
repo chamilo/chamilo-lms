@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Controller\Api;
 use Chamilo\CoreBundle\Helpers\CsvFormulaEscaper;
 use Chamilo\CoreBundle\Service\CourseReporting\CourseReportingContext;
 use Chamilo\CoreBundle\Service\CourseReporting\CourseReportingContextResolver;
+use Chamilo\CoreBundle\Service\CourseReporting\CourseReportingHeaderTranslator;
 use Chamilo\CoreBundle\Service\CourseReporting\CourseReportingSectionQueryService;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -34,6 +35,7 @@ final readonly class CourseReportingSectionExportController
     public function __construct(
         private CourseReportingContextResolver $contextResolver,
         private CourseReportingSectionQueryService $queryService,
+        private CourseReportingHeaderTranslator $headerTranslator,
     ) {}
 
     public function __invoke(Request $request, string $section, string $format): BinaryFileResponse|StreamedResponse
@@ -46,12 +48,13 @@ final readonly class CourseReportingSectionExportController
         $context = $this->contextResolver->resolve();
         $data = $this->loadExportData($context, $section, $request);
         $filename = $this->buildFilename($context, $section, $format);
+        $exportLocale = (string) $request->query->get('exportLocale', $request->getLocale());
 
         if ('csv' === $format) {
-            return $this->createCsvResponse($data, $filename);
+            return $this->createCsvResponse($data, $filename, $exportLocale);
         }
 
-        return $this->createXlsxResponse($data, $filename);
+        return $this->createXlsxResponse($data, $filename, $exportLocale);
     }
 
     /**
@@ -93,19 +96,17 @@ final readonly class CourseReportingSectionExportController
     /**
      * @param array{columns: array<int, array<string, mixed>>, items: array<int, array<string, mixed>>} $data
      */
-    private function createCsvResponse(array $data, string $filename): StreamedResponse
+    private function createCsvResponse(array $data, string $filename, string $locale): StreamedResponse
     {
-        $response = new StreamedResponse(function () use ($data): void {
+        $headers = $this->getTranslatedHeaders($data['columns'], $locale);
+        $response = new StreamedResponse(function () use ($data, $headers): void {
             $handle = fopen('php://output', 'wb');
             if (!\is_resource($handle)) {
                 return;
             }
 
             fwrite($handle, "\xEF\xBB\xBF");
-            fputcsv($handle, CsvFormulaEscaper::escapeRow(array_map(
-                static fn (array $column): string => (string) ($column['label'] ?? $column['key'] ?? ''),
-                $data['columns']
-            )));
+            fputcsv($handle, CsvFormulaEscaper::escapeRow($headers));
 
             foreach ($data['items'] as $item) {
                 fputcsv($handle, CsvFormulaEscaper::escapeRow($this->formatRow($data['columns'], $item)));
@@ -126,16 +127,13 @@ final readonly class CourseReportingSectionExportController
     /**
      * @param array{columns: array<int, array<string, mixed>>, items: array<int, array<string, mixed>>} $data
      */
-    private function createXlsxResponse(array $data, string $filename): BinaryFileResponse
+    private function createXlsxResponse(array $data, string $filename, string $locale): BinaryFileResponse
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('Course reporting');
-        $headers = array_map(
-            static fn (array $column): string => (string) ($column['label'] ?? $column['key'] ?? ''),
-            $data['columns']
-        );
-        $sheet->fromArray($headers, null, 'A1');
+        $headers = $this->getTranslatedHeaders($data['columns'], $locale);
+        $sheet->fromArray(array_map($this->neutralizeSpreadsheetFormula(...), $headers), null, 'A1');
 
         $rowNumber = 2;
         foreach ($data['items'] as $item) {
@@ -162,6 +160,22 @@ final readonly class CourseReportingSectionExportController
         $response->deleteFileAfterSend(true);
 
         return $response;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $columns
+     *
+     * @return string[]
+     */
+    private function getTranslatedHeaders(array $columns, string $locale): array
+    {
+        return array_map(
+            fn (array $column): string => $this->headerTranslator->translate(
+                (string) ($column['label'] ?? $column['key'] ?? ''),
+                $locale
+            ),
+            $columns
+        );
     }
 
     /**

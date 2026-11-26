@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "Ik weet het niet",
+    "Expected choice": "Correct antwoord",
+    "N\u00b0": "Nummer",
+    "Multiple choice": "Meervoudige keuze",
+    "Fill blanks or form": "Invullen",
+    "Image zones": "Hotspots",
+    "Match by dragging": "Sleep om te matchen",
+    "Multiple answer true/false/don't know": "Meerkeuze met waar/nietwaar/ik weet het niet",
+    "Combination true/false/don't-know": "Combinatie waar/niet waar/ik weet het niet",
+    "Pause recording": "Pauzeer opname",
+    "Resume recording": "Hervat opname",
+    "Recording help": "Opnamehulp",
+    "Add text": "Tekst toevoegen",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Tijdens het opnemen kunt u pauzeren wanneer u wilt. Als u niet tevreden bent, neem dan opnieuw op. Dit zal de vorige versie overschrijven. Tevreden? Om de opname naar uw trainer te sturen, klikt u op \"Opname stoppen\" en selecteert u \"Oefening be\u00ebindigen\". De trainer zal in staat zijn om naar uw opname te luisteren en u feedback te geven! Al uw verzonden opnames kunnen worden bekeken op de startpagina van de oefening."
 }

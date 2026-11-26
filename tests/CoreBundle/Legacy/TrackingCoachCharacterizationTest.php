@@ -1150,7 +1150,7 @@ final class TrackingCoachCharacterizationTest extends KernelTestCase
         // Two attempts in the LP: the best one counts (owner decision: attempts are no longer averaged nor is
         // the latest taken): 9 of 20 first, the later 8 does not replace it.
         $this->exercise($s1, self::COURSE, null, $quiz, '2001-02-01 10:00:00', 9, 20, '', $lp, $item, $itemView);
-        $last = $this->exercise($s1, self::COURSE, null, $quiz, '2001-02-02 10:00:00', 8, 20, '', $lp, $item, $itemView);
+        $last = $this->exercise($s1, self::COURSE, null, $quiz, '2001-02-02 10:00:00', 8, 20, 'completed', $lp, $item, $itemView);
         // An attempt flagged "incomplete" and one outside the LP are ignored.
         $this->exercise($s1, self::COURSE, null, $quiz, '2001-02-03 10:00:00', 20, 20, 'incomplete', $lp, $item, $itemView);
         $this->exercise($s1, self::COURSE, null, $quiz, '2001-02-04 10:00:00', 20, 20, '', 0, 0, 0);

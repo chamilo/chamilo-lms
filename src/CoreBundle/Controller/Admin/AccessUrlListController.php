@@ -893,10 +893,10 @@ class AccessUrlListController extends AbstractController
     }
 
     /**
-     * Daily login counts for the "Multi URLs" dashboard's chart. Login records
-     * (track_e_login) carry no access_url_id column, so a scoped admin's figures are only
-     * an approximation: logins by users *currently* registered in one of their managed
-     * URLs, not necessarily the URL they were registered in at the time of that login.
+     * Daily login counts for the "Multi URLs" dashboard's chart. A scoped admin gets the
+     * logins made on one of their managed URLs by users currently registered in one of them.
+     * Logins recorded before track_e_login had access_url_id are NULL and still count, so for
+     * those the figures are an approximation based on the user's current registration.
      * An unrestricted admin gets the same install-wide, unscoped figures as before. Every
      * row counts as a login regardless of session duration, per this feature's own
      * requirement.
@@ -935,7 +935,10 @@ class AccessUrlListController extends AbstractController
             $qb->andWhere(
                 'IDENTITY(l.user) IN (SELECT IDENTITY(scopeRel.user) FROM '.AccessUrlRelUser::class.' scopeRel '
                 .'WHERE scopeRel.url IN (:managedUrlIds))'
-            )->setParameter('managedUrlIds', $managedUrlIds);
+            )
+                ->andWhere('l.accessUrlId IN (:managedUrlIds) OR l.accessUrlId IS NULL')
+                ->setParameter('managedUrlIds', $managedUrlIds)
+            ;
         }
 
         $rows = $qb->getQuery()->getArrayResult();

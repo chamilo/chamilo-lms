@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'Course settings configuration for the current course context',
             ),
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER')",
             name: 'get_course_settings_configuration',
             provider: CourseSettingsConfigurationProvider::class,
             parameters: [
@@ -45,7 +45,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
             openapi: new Operation(
                 summary: 'Save course settings for the current course context',
             ),
-            security: "is_granted('IS_AUTHENTICATED_FULLY')",
+            security: "is_granted('ROLE_CURRENT_COURSE_TEACHER')",
             name: 'post_course_settings_configuration',
             processor: CourseSettingsConfigurationProcessor::class,
             parameters: [

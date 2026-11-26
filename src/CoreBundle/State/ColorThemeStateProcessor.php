@@ -8,6 +8,7 @@ namespace Chamilo\CoreBundle\State;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Put;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\Entity\AccessUrlRelColorTheme;
 use Chamilo\CoreBundle\Entity\ColorTheme;
@@ -47,8 +48,33 @@ final readonly class ColorThemeStateProcessor implements ProcessorInterface
             $accessUrl = $this->accessUrlHelper->getCurrent();
 
             // An update may only touch a theme already bound to the current portal.
-            if ($operation instanceof Patch && !$accessUrl->getColorThemeByTheme($data)) {
-                throw new NotFoundHttpException('Color theme not found.');
+            // PUT deserializes a new ColorTheme with no id, so $data is not the row
+            // from the database and getColorThemeByTheme($data) never matches (#9591).
+            // previous_data is the clone API Platform stored before deserialization.
+            if ($operation instanceof Put || $operation instanceof Patch) {
+                $storedTheme = $context['previous_data'] ?? null;
+                $storedId = $storedTheme instanceof ColorTheme ? $storedTheme->getId() : null;
+                $managedTheme = null !== $storedId
+                    ? $this->entityManager->find(ColorTheme::class, $storedId)
+                    : null;
+                if (!$managedTheme instanceof ColorTheme || !$accessUrl->getColorThemeByTheme($managedTheme)) {
+                    throw new NotFoundHttpException('Color theme not found.');
+                }
+
+                // Copy only the writable fields onto the stored row. The default PUT
+                // processor reads every property of the new object, and createdAt
+                // is still uninitialized there.
+                if ($operation instanceof Put) {
+                    $title = $data->getTitle();
+                    if (null === $title || '' === trim($title)) {
+                        throw new BadRequestHttpException('The title is required.');
+                    }
+                    $managedTheme
+                        ->setTitle($title)
+                        ->setVariables($data->getVariables())
+                    ;
+                    $data = $managedTheme;
+                }
             }
 
             /** @var ColorTheme|null $colorTheme */

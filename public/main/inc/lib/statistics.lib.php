@@ -632,7 +632,8 @@ class Statistics
             $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $table_url = ", $access_url_rel_user_table";
-            $where_url = " WHERE login_user_id=user_id AND access_url_id = $urlId";
+            $where_url = " WHERE login_user_id=user_id AND $access_url_rel_user_table.access_url_id = $urlId AND "
+                .Tracking::getLoginAccessUrlCondition($table);
             $where_url_last = ' AND login_date > DATE_SUB("'.$now.'",INTERVAL 1 %s)';
         }
 
@@ -737,7 +738,8 @@ class Statistics
             $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $table_url = ", $access_url_rel_user_table";
-            $where_url = " AND login_user_id=user_id AND access_url_id = $urlId";
+            $where_url = " AND login_user_id=user_id AND $access_url_rel_user_table.access_url_id = $urlId AND "
+                .Tracking::getLoginAccessUrlCondition($table);
         }
 
         $now = api_get_utc_datetime();
@@ -842,7 +844,8 @@ class Statistics
             $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $table_url = ", $access_url_rel_user_table";
-            $where_url = " AND login_user_id=user_id AND access_url_id = $urlId";
+            $where_url = " AND login_user_id=user_id AND $access_url_rel_user_table.access_url_id = $urlId AND "
+                .Tracking::getLoginAccessUrlCondition($table);
         }
 
         $now = api_get_utc_datetime();
@@ -1517,7 +1520,8 @@ class Statistics
             $accessUrl = $accessUrlUtil->getCurrent();
             $urlId = $accessUrl->getId();
             $table_url = ", $access_url_rel_user_table";
-            $where_url = " AND login_user_id=user_id AND access_url_id = $urlId";
+            $where_url = " AND login_user_id=user_id AND $access_url_rel_user_table.access_url_id = $urlId AND "
+                .Tracking::getLoginAccessUrlCondition($table);
         } else {
             $table_url = '';
             $where_url = '';
@@ -2079,7 +2083,7 @@ class Statistics
             $tblUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
             $urlJoin = "INNER JOIN $tblUrlUser au ON u.id = au.user_id";
-            $urlWhere = "AND au.access_url_id = $urlId";
+            $urlWhere = "AND au.access_url_id = $urlId AND ".Tracking::getLoginAccessUrlCondition('l');
         }
 
         $maxSeconds = \Chamilo\CoreBundle\Service\Reporting\SessionTimeLimit::secondsForMinutes((int) api_get_setting('tracking.max_time_spent_per_session_threshold'));
@@ -2304,7 +2308,8 @@ class Statistics
                 $accessUrl = $accessUrlUtil->getCurrent();
                 $urlId = $accessUrl->getId();
                 $tableUrl = ", $accessUrlRelUserTable";
-                $whereUrl = " AND login_user_id = user_id AND access_url_id = $urlId";
+                $whereUrl = " AND login_user_id = user_id AND $accessUrlRelUserTable.access_url_id = $urlId AND "
+                    .Tracking::getLoginAccessUrlCondition($table);
             }
             $sql = "SELECT login_id, TIMESTAMPDIFF(SECOND, login_date, logout_date) AS duration
             FROM $table $tableUrl

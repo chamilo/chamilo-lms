@@ -22,6 +22,7 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\ExerciseDraggableAnswerHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseHotspotGeometryHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\SessionVisibilityHelper;
@@ -2243,11 +2244,12 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
     private function scoreDraggableRowsForFeedback(array $answers, array $rows): float
     {
         $score = 0.0;
+        $targetPositions = ExerciseDraggableAnswerHelper::getTargetPositions($answers);
         foreach ($rows as $row) {
             $answerId = (int) $row['position'];
             $selectedPosition = (int) $row['answer'];
             $answer = $answers[$answerId] ?? null;
-            if ($answer instanceof CQuizAnswer && $selectedPosition === (int) $answer->getCorrect()) {
+            if ($answer instanceof CQuizAnswer && $selectedPosition === ($targetPositions[$answerId] ?? 0)) {
                 $score += (float) $answer->getPonderation();
             }
         }

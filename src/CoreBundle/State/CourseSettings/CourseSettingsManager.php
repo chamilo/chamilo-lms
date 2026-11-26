@@ -25,6 +25,7 @@ use Chamilo\CoreBundle\Repository\ExtraFieldRepository;
 use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
 use Chamilo\CoreBundle\Repository\LanguageRepository;
 use Chamilo\CoreBundle\Repository\Node\IllustrationRepository;
+use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
@@ -445,21 +446,9 @@ final readonly class CourseSettingsManager
 
     public function assertCanEdit(Course $course): void
     {
-        if ($this->security->isGranted('ROLE_ADMIN')) {
-            return;
+        if (!$this->security->isGranted(CourseVoter::EDIT, $course)) {
+            throw new AccessDeniedHttpException('You are not allowed to edit this course.');
         }
-
-        $user = $this->security->getUser();
-        if ($user instanceof User && $course->hasUserAsTeacher($user)) {
-            return;
-        }
-
-        $resourceNode = $course->getResourceNode();
-        if (null !== $resourceNode && $this->security->isGranted('EDIT', $resourceNode)) {
-            return;
-        }
-
-        throw new AccessDeniedHttpException('You are not allowed to edit this course.');
     }
 
     public function saveIntroductionPosition(string $position): string
@@ -565,7 +554,7 @@ final readonly class CourseSettingsManager
             'title' => $course->getTitle(),
             'course_language' => $course->getCourseLanguage(),
             'department_name' => $course->getDepartmentName() ?? '',
-            'department_url' => $course->getDepartmentUrl() ?? '',
+            'department_url' => Course::normalizeDepartmentUrl($course->getDepartmentUrl()),
             'room_id' => (int) ($course->getRoom()?->getId() ?? 0),
             'visibility' => $course->getVisibility(),
             'subscribe' => $course->getSubscribe(),
@@ -1058,6 +1047,11 @@ final readonly class CourseSettingsManager
                 $normalized[$key] = trim((string) $values[$key]);
             }
         }
+
+        if (isset($normalized['department_url'])) {
+            $normalized['department_url'] = Course::normalizeDepartmentUrl($normalized['department_url']);
+        }
+
         foreach (self::INTEGER_VALUE_KEYS as $key) {
             if (\array_key_exists($key, $values)) {
                 $normalized[$key] = (int) $values[$key];

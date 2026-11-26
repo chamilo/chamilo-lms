@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Entity\TrackEAttempt;
 use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\ExerciseDraggableAnswerHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
@@ -37,6 +38,7 @@ use DateTimeInterface;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\EntityManagerInterface;
+use Security as LegacySecurity;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -47,6 +49,7 @@ use Throwable;
 
 use const ENT_QUOTES;
 use const ENT_SUBSTITUTE;
+use const STUDENT;
 
 /**
  * Read-only provider for migrated exercise runtime result/review data.
@@ -138,6 +141,11 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             $visibility = $this->getManagerResultVisibility($visibility);
         }
         $visibility['isReviewMode'] = $isReviewMode;
+        // A teacher correcting someone else's attempt needs the title to know which question it is,
+        // but sees it hidden in their own preview, as the learner does
+        if ($isReviewMode) {
+            $visibility['showQuestionTitle'] = true;
+        }
 
         $categoryScores = $this->getCategoryScores($questionIds, $rowsByQuestion, $attempt, $visibility);
 
@@ -590,6 +598,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'showQuestionStatus' => $showQuestionScore,
             'hideQuestionStatusLabel' => $this->isSettingEnabled('exercise.exercise_hide_label'),
             'showQuestionDetails' => $showQuestionDetails,
+            'showQuestionTitle' => !$quiz->isHideQuestionTitle(),
             'showCorrections' => $showExpectedAnswers,
             'showExpectedAnswers' => $showExpectedAnswers,
             'showStudentAnswers' => !$showOnlyCorrectAnswers,
@@ -1367,6 +1376,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
                 'answer' => $answer->getAnswer(),
                 'selectedOptionId' => $showStudentAnswers ? ($selected[$answerId] ?? null) : null,
                 'selectedOptionAnswer' => $showStudentAnswers && $hasStudentAnswer ? (string) ($options[$selected[$answerId]]['answer'] ?? '') : '',
+                // Sent even when the expected answers are hidden, so the match can be marked right or wrong without revealing it
+                'isCorrect' => $showStudentAnswers && $hasStudentAnswer && $selected[$answerId] === $correct,
             ];
 
             if ($showExpectedAnswers) {
@@ -1404,9 +1415,11 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         $showExpectedAnswers = $showQuestionCorrection && true === ($visibility['showExpectedAnswers'] ?? false);
         $showFeedback = true === ($visibility['showFeedback'] ?? false);
 
-        foreach ($this->getOrderedAnswers($question) as $answer) {
+        $answers = $this->getOrderedAnswers($question);
+        $targetPositions = ExerciseDraggableAnswerHelper::getTargetPositions($answers);
+        foreach ($answers as $answer) {
             $answerId = (int) $answer->getIid();
-            $targetPosition = (int) ($answer->getCorrect() ?? 0);
+            $targetPosition = $targetPositions[$answerId] ?? 0;
             if ($targetPosition <= 0) {
                 continue;
             }
@@ -1916,6 +1929,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             return [
                 'kind' => 'oral_expression',
                 'files' => [],
+                'text' => '',
                 'teacherComment' => null,
                 'marks' => 0.0,
             ];
@@ -1926,6 +1940,8 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         return [
             'kind' => 'oral_expression',
             'files' => $showStudentAnswers ? $this->normalizeAttemptFiles($row, true) : [],
+            // The written text sent with the audio, shown as HTML; the legacy page saved it unfiltered
+            'text' => $showStudentAnswers && '' !== $row->getAnswer() ? (string) LegacySecurity::remove_XSS($row->getAnswer(), STUDENT) : '',
             'teacherComment' => true === ($visibility['showFeedback'] ?? false) && '' !== $row->getTeacherComment() ? $row->getTeacherComment() : null,
             'teacherAudioUrl' => $this->getTeacherAudioUrl($row, $visibility),
             'marks' => (float) $row->getMarks(),
@@ -2288,7 +2304,11 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
     private function trimFillBlankOption(string $value): string
     {
-        return trim(html_entity_decode($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+        // Display only: drops the formatting tags an option can keep from the text it was cut from
+        // (e.g. "haben <font size="2">"), after the entities since the learner's answer is saved escaped
+        $text = strip_tags(html_entity_decode($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+
+        return trim(preg_replace('/[\s\x{00A0}]+/u', ' ', $text) ?? $text);
     }
 
     private function isStructuralContentQuestion(CQuizQuestion $question): bool

@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "No s\u00e9",
+    "Expected choice": "Elecci\u00f3 esperada",
+    "N\u00b0": "N\u00ba",
+    "Multiple choice": "Resposta \u00fanica",
+    "Fill blanks or form": "Completar els espais",
+    "Image zones": "Zones interactives",
+    "Match by dragging": "Coincid\u00e8ncia arrossegable",
+    "Multiple answer true/false/don't know": "Respostes m\u00faltiples vertader/fals/no-s\u00e9",
+    "Combination true/false/don't-know": "Combinaci\u00f3 vertader/fals/no-s\u00e9",
+    "Pause recording": "Pausar gravaci\u00f3",
+    "Resume recording": "Reprendre gravaci\u00f3",
+    "Recording help": "Ajuda de gravaci\u00f3",
+    "Add text": "Afegeix text",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Mentre graves, pots pausar quan vulguis. Si no est\u00e0s satisfet, grava de nou. Aix\u00f2 sobreescriur\u00e0 la versi\u00f3 anterior. Satisfet? Per enviar la gravaci\u00f3 al teu professor, clica \u00abAtura la gravaci\u00f3\u00bb i selecciona \u00abFinalitza exercici\u00bb. El professor podr\u00e0 escoltar la teva gravaci\u00f3 i donar-te feedback! Totes les teves gravacions enviades es poden veure a la p\u00e0gina principal de l'exercici."
 }

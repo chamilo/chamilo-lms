@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "Ma garanayo",
+    "Expected choice": "Doorashada la filayo",
+    "N\u00b0": "N\u00b0",
+    "Multiple choice": "Dooro badan",
+    "Fill blanks or form": "Buuxi meelaha bannaan ama foomka",
+    "Image zones": "Aagagga sawirka",
+    "Match by dragging": "Iswaafajin adigoo jiidaya",
+    "Multiple answer true/false/don't know": "Jawaabo badan run/biyo/ma garanayo",
+    "Combination true/false/don't-know": "Isku-darka run/biyo/ma-garanayo",
+    "Pause recording": "Joji duubista",
+    "Resume recording": "Sii duub",
+    "Recording help": "Caawinta duubista",
+    "Add text": "Ku dar qoraal",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Inta aad duubayso, waad jooji kartaa markasta oo aad rabto. Haddii aadan ku qanacsanayn, dib u diiwaangeli. Tani waxay bedeli doontaa nooca hore. Ma qanacsan tahay? Si aad duubista ugu soo dirto macallinkaaga, riix \u201cJoogsi duubista\u201d ka dibna dooro \u201cDhammaad tababarka\u201d. Macallinku wuxuu awoodi doonaa inuu dhageysto duubistaada oo uu ku siiyo jawaab celin! Dhammaan duubisyadaada la soo gudbiyay waxaa lagu arki karaa bogga guriga tababarka."
 }

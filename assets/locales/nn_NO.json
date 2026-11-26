@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "Vet ikkje",
+    "Expected choice": "Forventet valg",
+    "N\u00b0": "Nr",
+    "Multiple choice": "Flervalg",
+    "Fill blanks or form": "Fyll ut tomrom eller skjema",
+    "Image zones": "Bileteomr\u00e5der",
+    "Match by dragging": "Matte ved \u00e5 dra",
+    "Multiple answer true/false/don't know": "Fleirsvar sant/falsk/vet ikkje",
+    "Combination true/false/don't-know": "Kombinasjon sant/falsk/vet-ikkje",
+    "Pause recording": "Pause opptak",
+    "Resume recording": "Fortsett opptak",
+    "Recording help": "Opptaks-hjelp",
+    "Add text": "Legg til tekst",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Medan du opptar, kan du sette p\u00e5 pause n\u00e5r du vil. Om du ikkje er n\u00f8gd, registrer p\u00e5 ny. Dette vil overskrive den tidlegare versjonen. N\u00f8gd? For \u00e5 sende opptaket til l\u00e6raren din, trykk p\u00e5 \u00abStopp opptak\u00bb og vel \u00abAvslutt oppg\u00e5ve\u00bb. L\u00e6raren vil kunne lytte til opptaket ditt og gje deg tilbakemelding! Alle opptaka dine som er sendt, kan sj\u00e5ast p\u00e5 hovudsida for oppg\u00e5va."
 }

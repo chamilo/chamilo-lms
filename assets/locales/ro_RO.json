@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "Nu stiu",
+    "Expected choice": "Alegerea asteptata",
+    "N\u00b0": "Nr",
+    "Multiple choice": "Alegere multipl\u0103",
+    "Fill blanks or form": "Completeaza campurile",
+    "Image zones": "Puncte de interes",
+    "Match by dragging": "Potrivire prin trasnare",
+    "Multiple answer true/false/don't know": "Raspunsuri multiple a/f/nu-stiu",
+    "Combination true/false/don't-know": "Combinatie a/f/nu-stiu",
+    "Pause recording": "Pauz\u0103 \u00eenregistrare",
+    "Resume recording": "Reia \u00eenregistrarea",
+    "Recording help": "Ajutor \u00eenregistrare",
+    "Add text": "Adaug\u0103 text",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "\u00cen timpul \u00eenregistr\u0103rii, po\u021bi pune pauz\u0103 oric\u00e2nd dore\u0219ti. Dac\u0103 nu e\u0219ti mul\u021bumit, \u00eenregistreaz\u0103 din nou. Aceasta va suprascrie versiunea anterioar\u0103. Mul\u021bumit? Pentru a trimite \u00eenregistrarea profesorului, apas\u0103 pe \u201eStop \u00eenregistrare\u201d apoi selecteaz\u0103 \u201eFinalizeaz\u0103 exerci\u021biul\u201d. Profesorul va putea asculta \u00eenregistrarea ta \u0219i \u00ee\u021bi va da feedback! Toate \u00eenregistr\u0103rile tale transmise pot fi vizualizate pe pagina principal\u0103 a exerci\u021biului."
 }

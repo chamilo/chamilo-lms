@@ -20,6 +20,10 @@ use ChamiloSession as Session;
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+// Replaced by the account edit page. The code below stays as a reference for the features still to port (#9621).
+header('Location: '.api_get_path(WEB_PATH).'account/edit');
+exit;
+
 $this_section = SECTION_MYPROFILE;
 $allowSocialTool = 'true' == api_get_setting('allow_social_tool');
 if ($allowSocialTool) {
@@ -380,6 +384,15 @@ if ($form->validate()) {
 
     $wrong_current_password = false;
     $user_data = $form->getSubmitValues(1);
+
+    // Keep the stored theme unless the value is one of the themes the select offers.
+    if (isset($user_data['theme'])
+        && '' !== $user_data['theme']
+        && !array_key_exists($user_data['theme'], api_get_themes())
+    ) {
+        unset($user_data['theme']);
+    }
+
     $user_data['item_id'] = api_get_user_id();
     $user = api_get_user_entity(api_get_user_id());
 

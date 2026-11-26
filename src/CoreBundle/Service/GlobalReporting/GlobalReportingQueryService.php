@@ -25,10 +25,12 @@ final readonly class GlobalReportingQueryService
     private const int USER_RELATION_TYPE_BOSS = 8;
 
     private const int COURSE_STATUS_TEACHER = 1;
+    private const int COURSE_STATUS_STUDENT = 5;
     private const int COURSE_RELATION_TYPE_COURSE_MANAGER = 1;
     private const int COURSE_RELATION_TYPE_HUMAN_RESOURCES = 1;
 
     private const int SESSION_RELATION_TYPE_HUMAN_RESOURCES = 1;
+    private const int SESSION_STATUS_STUDENT = 0;
     private const int SESSION_STATUS_COURSE_COACH = 2;
     private const int SESSION_RELATION_TYPE_GENERAL_COACH = 3;
     private const int SESSION_RELATION_TYPE_SESSION_ADMIN = 4;
@@ -125,7 +127,6 @@ final readonly class GlobalReportingQueryService
             $genericMetrics = $this->getGenericMetrics(
                 $context,
                 $studentIds,
-                $assignedCourses,
             );
         }
 
@@ -733,7 +734,6 @@ final readonly class GlobalReportingQueryService
     private function getGenericMetrics(
         GlobalReportingContext $context,
         array $studentIds,
-        int $courseCount,
     ): array {
         $studentCount = \count($studentIds);
         if (0 === $studentCount) {
@@ -773,7 +773,8 @@ final readonly class GlobalReportingQueryService
                INNER JOIN access_url_rel_user access_user
                    ON access_user.user_id = login.login_user_id
               WHERE login.login_user_id IN (:studentIds)
-                AND access_user.access_url_id = :accessUrlId',
+                AND access_user.access_url_id = :accessUrlId
+                AND (login.access_url_id = :accessUrlId OR login.access_url_id IS NULL)',
             [
                 'studentIds' => $studentIds,
                 'accessUrlId' => $context->accessUrlId,
@@ -843,7 +844,7 @@ final readonly class GlobalReportingQueryService
         );
 
         return [
-            'averageCoursesPerStudent' => $courseCount / $studentCount,
+            'averageCoursesPerStudent' => $this->countLearnerCourses($context, $studentIds) / $studentCount,
             'inactiveStudents' => $inactiveStudents,
             'averageTimeSpentSeconds' => (int) ($totalTimeSpent / $studentCount),
             'averageLearningPathProgress' => $progressSum / $studentCount,
@@ -851,6 +852,81 @@ final readonly class GlobalReportingQueryService
             'forumPosts' => $forumPosts,
             'averageAssignments' => $assignments / $studentCount,
         ];
+    }
+
+    /**
+     * Count distinct learner/course pairs, not courses assigned to the viewer. A course taken
+     * directly and through one or more sessions counts only once for each learner.
+     *
+     * @param int[] $studentIds
+     */
+    private function countLearnerCourses(GlobalReportingContext $context, array $studentIds): int
+    {
+        $parameters = [
+            'studentIds' => $studentIds,
+            'accessUrlId' => $context->accessUrlId,
+            'studentStatus' => self::COURSE_STATUS_STUDENT,
+            'sessionStudentStatus' => self::SESSION_STATUS_STUDENT,
+        ];
+        $directScope = '';
+        $sessionScope = '';
+        // Match the subscription visibility rules of the learner detail report.
+        if (
+            !$context->isAdministrator
+            && !$context->isHumanResourcesManager
+            && !$context->isStudentBoss
+            && !$context->isSessionAdministrator
+        ) {
+            $teacherScope = 'EXISTS (
+                SELECT 1 FROM course_rel_user viewer_course
+                 WHERE viewer_course.c_id = subscription.c_id
+                   AND viewer_course.user_id = :viewerId
+                   AND (viewer_course.status = :teacherStatus OR viewer_course.is_tutor = 1)
+            )';
+            $directScope = ' AND '.$teacherScope;
+            $sessionScope = ' AND ('.$teacherScope.' OR EXISTS (
+                SELECT 1 FROM session_rel_user viewer_session
+                 WHERE viewer_session.session_id = subscription.session_id
+                   AND viewer_session.user_id = :viewerId
+                   AND viewer_session.relation_type = :generalCoach
+            ) OR EXISTS (
+                SELECT 1 FROM session_rel_course_rel_user viewer_course
+                 WHERE viewer_course.session_id = subscription.session_id
+                   AND viewer_course.c_id = subscription.c_id
+                   AND viewer_course.user_id = :viewerId
+                   AND viewer_course.status = :courseCoach
+            ))';
+            $parameters += [
+                'viewerId' => $context->currentUserId(),
+                'teacherStatus' => self::COURSE_STATUS_TEACHER,
+                'generalCoach' => self::SESSION_RELATION_TYPE_GENERAL_COACH,
+                'courseCoach' => self::SESSION_STATUS_COURSE_COACH,
+            ];
+        }
+
+        return (int) $this->connection->fetchOne(
+            'SELECT COUNT(*) FROM (
+                SELECT subscription.user_id, subscription.c_id
+                  FROM course_rel_user subscription
+                  INNER JOIN access_url_rel_course access_course ON access_course.c_id = subscription.c_id
+                 WHERE subscription.user_id IN (:studentIds)
+                   AND subscription.status = :studentStatus
+                   AND access_course.access_url_id = :accessUrlId'.$directScope.'
+                UNION
+                SELECT subscription.user_id, subscription.c_id
+                  FROM session_rel_course_rel_user subscription
+                  INNER JOIN session_rel_course session_course
+                     ON session_course.session_id = subscription.session_id AND session_course.c_id = subscription.c_id
+                  INNER JOIN access_url_rel_course access_course ON access_course.c_id = subscription.c_id
+                  INNER JOIN access_url_rel_session access_session ON access_session.session_id = subscription.session_id
+                 WHERE subscription.user_id IN (:studentIds)
+                   AND subscription.status = :sessionStudentStatus
+                   AND access_course.access_url_id = :accessUrlId
+                   AND access_session.access_url_id = :accessUrlId'.$sessionScope.'
+            ) learner_courses',
+            $parameters,
+            ['studentIds' => ArrayParameterType::INTEGER],
+        );
     }
 
     /**

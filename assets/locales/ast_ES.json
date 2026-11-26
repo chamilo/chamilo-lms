@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "Nun s\u00e9",
+    "Expected choice": "Seleici\u00f3n correuta",
+    "N\u00b0": "N\u00famberu",
+    "Multiple choice": "Rempuesta \u00fanica",
+    "Fill blanks or form": "Enllenar los espacios en blancu",
+    "Image zones": "Zones interautives",
+    "Match by dragging": "Asociar arrastrando",
+    "Multiple answer true/false/don't know": "M\u00faltiples respuestes verd\u00e1u/falsu/nun s\u00e9",
+    "Combination true/false/don't-know": "Combinaci\u00f3n verd\u00e1u/falsu/nun s\u00e9",
+    "Pause recording": "Pausar grabaci\u00f3n",
+    "Resume recording": "Continuar grabaci\u00f3n",
+    "Recording help": "Ayuuda de grabaci\u00f3n",
+    "Add text": "Amestar testu",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Mentres grabes, pues pausar cuando quies. Si nun quies, rexistra de nuevu. Esto sobreescribir\u00e1 la versi\u00f3n anterior. \u00bfContentu? Pa unviar la grabaci\u00f3n al profesor, calca en \u00abParar grabaci\u00f3n\u00bb y despu\u00e9s seleiciona \u00abFin del exerciciu\u00bb. \u00a1El profesor podr\u00e1 escoitar la to grabaci\u00f3n y dart\u00e9 retroalimentaci\u00f3n! Toles grabaciones unvi\u00e1es pues veles na p\u00e1xina d'iniciu del exerciciu."
 }

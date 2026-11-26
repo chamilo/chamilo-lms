@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\ResourceNode;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\ExerciseDraggableAnswerHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
@@ -1544,8 +1545,10 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
     private function buildDraggableItems(CQuizQuestion $question): array
     {
         $items = [];
-        foreach ($this->getExistingAnswers($question) as $answer) {
-            $correct = (int) ($answer->getCorrect() ?? 0);
+        $answers = $this->getExistingAnswers($question);
+        $targetPositions = ExerciseDraggableAnswerHelper::getTargetPositions($answers);
+        foreach ($answers as $answer) {
+            $correct = $targetPositions[(int) $answer->getIid()] ?? 0;
             if ($correct <= 0) {
                 continue;
             }

@@ -220,9 +220,9 @@ class Cc13Resource extends Cc13Entities
             // Persist
             if ('file' === $type) {
                 $ref = trim((string) ($doc[4] ?? ''));
-                $src = $packageRoot.str_replace('\\', '/', $ref);
-                if (!is_file($src) || !is_readable($src)) {
-                    Cc1p3Convert::logAction('CC import: missing/unreadable file', ['src' => $src]);
+                $src = self::safeResolveInside($packageRoot, $ref);
+                if (null === $src || !is_file($src) || !is_readable($src)) {
+                    Cc1p3Convert::logAction('CC import: missing/unreadable or out-of-package file', ['ref' => $ref]);
 
                     continue;
                 }
@@ -324,9 +324,8 @@ class Cc13Resource extends Cc13Entities
         if (Cc1p3Convert::CC_TYPE_WEBLINK == $instance['common_cartridge_type']) {
             $external_resource = $instance['src'];
             if (!empty($external_resource)) {
-                $resourceDoc = $this->loadXmlResource(
-                    Cc1p3Convert::$pathToManifestFolder.DIRECTORY_SEPARATOR.$external_resource
-                );
+                $resourcePath = self::safeResolveInside(Cc1p3Convert::$pathToManifestFolder, (string) $external_resource);
+                $resourceDoc = null !== $resourcePath ? $this->loadXmlResource($resourcePath) : null;
 
                 if (!empty($resourceDoc)) {
                     // Namespace-agnostic: webLink/url with any NS
@@ -364,10 +363,9 @@ class Cc13Resource extends Cc13Entities
             if (\in_array($ext, ['html', 'htm', 'xhtml'], true)) {
                 $type = 'html';
 
-                $root = realpath(Cc1p3Convert::$pathToManifestFolder);
-                $abs = $root ? realpath($root.DIRECTORY_SEPARATOR.$link) : false;
+                $abs = self::safeResolveInside(Cc1p3Convert::$pathToManifestFolder, $link);
 
-                if ($abs && is_file($abs)) {
+                if (null !== $abs && is_file($abs)) {
                     // Read HTML and strip outer wrappers; keep relative URLs as-is.
                     $raw = (string) @file_get_contents($abs);
                     $htmlContent = self::safexml($this->prepareContent($raw));

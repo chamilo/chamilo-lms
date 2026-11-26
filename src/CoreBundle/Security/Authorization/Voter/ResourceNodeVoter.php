@@ -220,7 +220,7 @@ class ResourceNodeVoter extends Voter
 
             if (
                 $publication instanceof CStudentPublication
-                && null === $publication->getPublicationParent()
+                && 'folder' === $publication->getFiletype()
                 && 0 !== $publication->getGroupCategoryWorkId()
             ) {
                 return $this->canViewSharedGroupAssignment($publication, $user);

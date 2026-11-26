@@ -1073,8 +1073,8 @@ final readonly class LearningPathBuilderMutationProcessor implements ProcessorIn
             }
         }
 
-        if ($resource instanceof CStudentPublication && null !== $resource->getPublicationParent()) {
-            throw new BadRequestHttpException('Only assignment roots can be added to a learning path.');
+        if ($resource instanceof CStudentPublication && 'folder' !== $resource->getFiletype()) {
+            throw new BadRequestHttpException('Only assignments can be added to a learning path.');
         }
 
         return $resource;

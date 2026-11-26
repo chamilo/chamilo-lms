@@ -434,6 +434,7 @@
                     <span>{{ t(question.typeLabel) }}</span>
                   </div>
                   <h2
+                    v-if="visibility.showQuestionTitle !== false"
                     class="exercise-result-html text-lg font-semibold text-gray-90"
                     dir="auto"
                     v-html="displayTranslatedHtml(question.title)"
@@ -543,7 +544,7 @@
                     v-if="visibility.showStudentAnswers !== false"
                     class="rounded-full bg-info/10 px-2 py-1 text-info"
                   >
-                    {{ t("Your answer") }}: {{ choice.selectedOptionLabel || t("No answer") }}
+                    {{ t("Your answer") }}: {{ translateOptionTitle(choice.selectedOptionLabel) || t("No answer") }}
                   </span>
                   <span
                     v-if="choice.selectedDegreeLabel"
@@ -556,7 +557,7 @@
                     v-if="choice.correctOptionLabel"
                     class="rounded-full bg-success/10 px-2 py-1 text-success"
                   >
-                    {{ t("Correct answer") }}: {{ choice.correctOptionLabel }}
+                    {{ t("Correct answer") }}: {{ translateOptionTitle(choice.correctOptionLabel) }}
                   </span>
                 </div>
                 <div
@@ -1215,6 +1216,21 @@
                   >
                     {{ t("No uploaded audio") }}
                   </div>
+                </div>
+
+                <div
+                  v-if="visibility.showStudentAnswers !== false && question.answer.text"
+                  class="rounded-lg border border-gray-20 bg-gray-10 p-3"
+                >
+                  <div class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    {{ t("Text") }}
+                  </div>
+                  <!-- Filtered by the server (Security::remove_XSS), as the legacy page did -->
+                  <div
+                    class="exercise-result-html text-sm text-gray-800"
+                    dir="auto"
+                    v-html="question.answer.text"
+                  />
                 </div>
 
                 <div
@@ -2577,6 +2593,21 @@ function trueFalseIconClass(choice) {
   return "mdi-help-circle-outline text-gray-50"
 }
 
+// The default options are stored with their English title, which the legacy page translated
+function translateOptionTitle(title) {
+  switch (title) {
+    case "True":
+      return t("True")
+    case "False":
+      return t("False")
+    case "Don't know":
+    case "DoubtScore":
+      return t("Don't know")
+    default:
+      return title
+  }
+}
+
 function isTrueFalseChoiceCorrect(choice) {
   return Boolean(choice.correctOptionLabel && choice.selectedOptionLabel === choice.correctOptionLabel)
 }
@@ -2638,7 +2669,7 @@ function matchingIconClass(prompt) {
 }
 
 function isMatchingCorrect(prompt) {
-  return Boolean(prompt.correctOptionAnswer && prompt.selectedOptionAnswer === prompt.correctOptionAnswer)
+  return true === prompt.isCorrect
 }
 
 function initializeCorrectionForms() {

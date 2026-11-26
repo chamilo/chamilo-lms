@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "Vit ikki",
+    "Expected choice": "R\u00e6tt svar",
+    "N\u00b0": "Nr.",
+    "Multiple choice": "Fj\u00f6lval",
+    "Fill blanks or form": "Uppfyll t\u00f3mst\u00f8\u00f0ur ella ey\u00f0skrift",
+    "Image zones": "Myndasv\u00f8\u00f0i",
+    "Match by dragging": "Par vit drepi",
+    "Multiple answer true/false/don't know": "Fleiri sv\u00f8r satt/\u00f3satt/vit ikki",
+    "Combination true/false/don't-know": "Samanseting satt/\u00f3satt/vit-ikki",
+    "Pause recording": "Set p\u00e5 talg",
+    "Resume recording": "Tak upp talg aftur",
+    "Recording help": "Hj\u00e1lp til uppt\u00f8ku",
+    "Add text": "Legg afturat tekst",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "T\u00e1 i\u00f0 t\u00fa uppt\u00f8kir, kanst t\u00fa koyra hv\u00f8nn t\u00ed\u00f0 t\u00fa vilt. Um t\u00fa ert \u00f3s\u00e1ttur, skriv teg upp aftur. Hetta skrivar yvir fyrrverandi \u00fatg\u00e1vuna. S\u00e1ttur? Til at senda uppt\u00f8kuna til l\u00e6raran, klikk \u00e1 \u201eStovpa uppt\u00f8ku\u201c og vel so \u201eAvslutta \u00e6fing\u201c. L\u00e6rarin kann so lurta til uppt\u00f8kuna og geva t\u00e6r afturhald! Allar sendingar av uppt\u00f8kum kunnu s\u00edvast \u00e1 heimas\u00ed\u00f0uni fyri \u00e6fingina."
 }

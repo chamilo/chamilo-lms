@@ -516,10 +516,9 @@
                 {{ t("AI response") }}
               </div>
               <div
-                class="max-h-[min(46vh,520px)] overflow-y-auto whitespace-pre-wrap pe-1 text-sm leading-6 text-gray-90"
-              >
-                {{ aiHelperAnswer }}
-              </div>
+                class="lp-ai-helper-answer max-h-[min(46vh,520px)] overflow-y-auto break-words pe-1 text-sm leading-6 text-gray-90"
+                v-html="renderAiMarkdown(aiHelperAnswer)"
+              />
             </div>
           </div>
 
@@ -559,6 +558,7 @@ import lpService from "../../services/lpService"
 import permissionService from "../../services/permissionService"
 import platformConfigService from "../../services/platformConfigService"
 import { createScormRuntimeApi } from "../../services/scormRuntimeApi"
+import { renderAiMarkdown } from "../../utils/renderAiMarkdown"
 
 const { t } = useI18n()
 const route = useRoute()
@@ -2023,6 +2023,24 @@ body.lp-runtime-document {
 </style>
 
 <style scoped>
+.lp-ai-helper-answer :deep(ul) {
+  list-style-type: disc;
+  padding-inline-start: 1.5rem;
+}
+
+.lp-ai-helper-answer :deep(ol) {
+  list-style-type: decimal;
+  padding-inline-start: 1.5rem;
+}
+
+.lp-ai-helper-answer :deep(hr) {
+  margin-block: 0.75rem;
+}
+
+.lp-ai-helper-answer :deep(a) {
+  text-decoration: underline;
+}
+
 .lp-toolbox-preview-notice {
   z-index: 30;
   display: flex;

@@ -4837,5 +4837,19 @@
     "The saved JSON is invalid. Edit it, or save the fields above to replace it.": "The saved JSON is invalid. Edit it, or save the fields above to replace it.",
     "Edit the JSON": "Edit the JSON",
     "The JSON of the access conditions must be a JSON object.": "The JSON of the access conditions must be a JSON object.",
-    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green."
+    "Learners who reached the minimum certification score ({0}%) are highlighted in green.": "Learners who reached the minimum certification score ({0}%) are highlighted in green.",
+    "Don't know": "Vet ikke",
+    "Expected choice": "Forventet valg",
+    "N\u00b0": "Nr.",
+    "Multiple choice": "Flervalgsoppgave",
+    "Fill blanks or form": "Fyll ut blanke eller skjema",
+    "Image zones": "Bildesoner",
+    "Match by dragging": "Match ved \u00e5 dra",
+    "Multiple answer true/false/don't know": "Flere svar sant/usant/vet ikke",
+    "Combination true/false/don't-know": "Kombinasjon sant/usant/vet ikke",
+    "Pause recording": "Pause opptak",
+    "Resume recording": "Fortsett opptak",
+    "Recording help": "Opptakshjelp",
+    "Add text": "Legg til tekst",
+    "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "Mens du tar opp, kan du pause n\u00e5r du vil. Hvis du ikke er forn\u00f8yd, ta opp p\u00e5 nytt. Dette vil overskrive den forrige versjonen. Forn\u00f8yd? For \u00e5 sende opptaket til l\u00e6reren din, klikk p\u00e5 \u00abStopp opptak\u00bb og velg deretter \u00abAvslutt \u00f8velse\u00bb. L\u00e6reren vil kunne h\u00f8re opptaket ditt og gi deg tilbakemelding! Alle dine sendte opptak kan sees p\u00e5 \u00f8velsens hjemmeside."
 }

@@ -57,7 +57,7 @@ final class ExerciseResultQuestionTitleTest extends AbstractApiTest
     }
 
     /**
-     * @param array{course: Course, quiz: CQuiz} $ctx
+     * @param array{course: Course, quiz: CQuiz, question: CQuizQuestion, learner: User, teacher: User} $ctx
      *
      * @return array<string, mixed>
      */
@@ -76,7 +76,7 @@ final class ExerciseResultQuestionTitleTest extends AbstractApiTest
     }
 
     /**
-     * @param array{course: Course, quiz: CQuiz, question: CQuizQuestion} $ctx
+     * @param array{course: Course, quiz: CQuiz, question: CQuizQuestion, learner: User, teacher: User} $ctx
      */
     private function createAttempt(array $ctx, User $user): int
     {

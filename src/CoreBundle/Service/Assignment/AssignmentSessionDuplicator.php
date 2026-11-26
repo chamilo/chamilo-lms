@@ -77,7 +77,7 @@ final readonly class AssignmentSessionDuplicator
             ->andWhere('assignment.publicationParent IS NULL')
             ->andWhere('assignment.active = 1')
             ->andWhere('link.course = :course AND link.session IS NULL AND link.deletedAt IS NULL')
-            ->setParameter('course', $course)
+            ->setParameter('course', (int) $course->getId())
             ->orderBy('assignment.iid', 'ASC')
             ->getQuery()
             ->getResult()

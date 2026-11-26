@@ -15,6 +15,7 @@ use OTPHP\TOTP;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Clock\NativeClock;
+use Symfony\Component\DomCrawler\Field\ChoiceFormField;
 
 use const JSON_THROW_ON_ERROR;
 use const STR_PAD_LEFT;
@@ -385,10 +386,12 @@ class AccountTwoFactorActivationTest extends WebTestCase
         $form['change_password[newPassword]'] = $newPassword;
         $form['change_password[confirmPassword]'] = $confirmation;
         if (null !== $enable2FA) {
+            $enable2FAField = $form['change_password[enable2FA]'];
+            self::assertInstanceOf(ChoiceFormField::class, $enable2FAField);
             if ($enable2FA) {
-                $form['change_password[enable2FA]']->tick();
+                $enable2FAField->tick();
             } else {
-                $form['change_password[enable2FA]']->untick();
+                $enable2FAField->untick();
             }
             $form['change_password[confirm2FACode]'] = $code;
         }

@@ -17,10 +17,9 @@ if (!$userJustification) {
     api_not_allowed(true);
 }
 
-$currentUserId = api_get_user_id();
-$canManageUsers = api_is_platform_admin() || ($plugin->canSessionAdminsManageUsers() && api_is_session_admin());
+$ownerId = (int) $userJustification['user_id'];
 
-if (!$canManageUsers && (int) $userJustification['user_id'] !== (int) $currentUserId) {
+if ($ownerId !== (int) api_get_user_id() && !$plugin->canManageUserJustifications($ownerId)) {
     api_not_allowed(true);
 }
 

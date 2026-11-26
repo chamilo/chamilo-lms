@@ -100,6 +100,35 @@ class Justification extends Plugin
         return 'true' === api_get_plugin_setting('justification', 'access_for_session_admin');
     }
 
+    /**
+     * Whether the current user can manage the justifications of the given user: platform admins and, when the
+     * plugin allows it, session admins, only for the users of the current access URL and, for a session admin
+     * restricted by prevent_session_admins_to_manage_all_users, only for the users they created.
+     */
+    public function canManageUserJustifications(int $userId): bool
+    {
+        $isPlatformAdmin = api_is_platform_admin();
+        $isSessionAdmin = !$isPlatformAdmin && $this->canSessionAdminsManageUsers() && api_is_session_admin();
+
+        if ($userId <= 0 || (!$isPlatformAdmin && !$isSessionAdmin)) {
+            return false;
+        }
+
+        if (api_get_multiple_access_url()
+            && !UrlManager::relation_url_user_exist($userId, api_get_current_access_url_id())
+        ) {
+            return false;
+        }
+
+        if ($isSessionAdmin && 'true' === api_get_setting('prevent_session_admins_to_manage_all_users')) {
+            $user = api_get_user_entity($userId);
+
+            return null !== $user && $user->getCreatorId() === api_get_user_id();
+        }
+
+        return true;
+    }
+
     public function getDefaultCourseId()
     {
         $courseId = $this->get('default_course_id');

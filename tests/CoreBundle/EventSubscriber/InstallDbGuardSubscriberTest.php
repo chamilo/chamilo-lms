@@ -177,7 +177,7 @@ final class InstallDbGuardSubscriberTest extends TestCase
                 'dbname' => 'chamilo',
                 'user' => 'nobody',
                 'password' => '',
-                'serverVersion' => '8.0',
+                'serverVersion' => '8.0.31',
             ],
             $configuration
         );

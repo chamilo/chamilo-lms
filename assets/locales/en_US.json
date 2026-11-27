@@ -4905,5 +4905,10 @@
     "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.": "While recording, you can pause whenever you want. If you are not satisfied, register again. This will overwrite the previous version. Satisfied ? To send the recording to your teacher, click on \u201cStop recording\u201d then select \u201cEnd exercise\u201d. The teacher will be able to listen to your recording and give you feedback! All your transmitted recordings can be viewed on the exercise home page.",
     "Invitation history": "Invitation history",
     "No invitation history found": "No invitation history found",
-    "Invitation history records messages accepted by Chamilo, not confirmed email delivery.": "Invitation history records messages accepted by Chamilo, not confirmed email delivery."
+    "Invitation history records messages accepted by Chamilo, not confirmed email delivery.": "Invitation history records messages accepted by Chamilo, not confirmed email delivery.",
+    "Additional email addresses": "Additional email addresses",
+    "Enter up to 50 external email addresses separated by commas, semicolons or line breaks. Existing invitations are not resent unless requested.": "Enter up to 50 external email addresses separated by commas, semicolons or line breaks. Existing invitations are not resent unless requested.",
+    "Automatically invite newly enrolled learners": "Automatically invite newly enrolled learners",
+    "New enrollments are processed by the scheduled survey invitation command while the survey is open.": "New enrollments are processed by the scheduled survey invitation command while the survey is open.",
+    "Some external invitations could not be sent. Check the mail configuration and retry the failed recipients.": "Some external invitations could not be sent. Check the mail configuration and retry the failed recipients."
 }

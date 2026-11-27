@@ -9,8 +9,10 @@ namespace Chamilo\CoreBundle\State\Survey;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use Chamilo\CoreBundle\ApiResource\Survey\SurveyAnswer;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
-use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Service\Survey\SurveyInvitationDelivery;
 use Chamilo\CoreBundle\Service\Survey\SurveyPersonalityManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CoreBundle\State\LearningPath\LearningPathSurveyCompletionManager;
@@ -36,12 +38,12 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
     use SurveyProfileFieldsTrait;
 
     public function __construct(
-        private CidReqHelper $cidReqHelper,
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private SettingsManager $settingsManager,
         private SurveyAnswerProvider $surveyAnswerProvider,
         private LearningPathSurveyCompletionManager $learningPathSurveyCompletionManager,
+        private SurveyInvitationDelivery $delivery,
     ) {}
 
     /**
@@ -70,13 +72,29 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
         $user = $this->surveyAnswerProvider->getCurrentUserOrNull();
         $survey = $this->surveyAnswerProvider->getSurveyFromCurrentContext($surveyId, $course, $session);
         $this->assertPersonalitySurveySupported($survey);
+        $this->surveyAnswerProvider->assertSurveyIsAvailable($survey);
+        $external = $this->surveyAnswerProvider->isExternalCode((string) ($request->query->get('invitationCode') ?? $request->query->get('invitationcode') ?? ''));
+        if ($external) {
+            return $this->delivery->withContextLock($survey, $course, $session, fn () => $this->entityManager->getConnection()->transactional(
+                fn () => $this->submit($survey, $course, $session, null, $request, $payload, true),
+            ));
+        }
+
+        return $this->submit($survey, $course, $session, $user, $request, $payload, false);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function submit(CSurvey $survey, Course $course, ?Session $session, ?User $user, Request $request, array $payload, bool $external): SurveyAnswer
+    {
         $invitation = $this->surveyAnswerProvider->getInvitation($survey, $course, $session, $user, $request);
 
         if (3 === $survey->getSurveyType()) {
             throw new BadRequestHttpException('Meeting poll answers must be submitted from the meeting view.');
         }
 
-        if (1 === $invitation->getAnswered() && !$this->isAnsweredQuestionEditAllowed()) {
+        if (1 === $invitation->getAnswered() && ($external || !$this->isAnsweredQuestionEditAllowed())) {
             throw new AccessDeniedHttpException('You already filled this survey.');
         }
 
@@ -91,7 +109,9 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             $this->applySurveyProfileValues($survey, $user, $profileValues);
         }
         $answerUserKey = $this->surveyAnswerProvider->getAnswerUserKey($survey, $user, $request);
-        $this->removeExistingAnswers($survey, $answerUserKey, $request);
+        if (!$external) {
+            $this->removeExistingAnswers($survey, $answerUserKey, $request);
+        }
 
         foreach ($questions as $question) {
             if (!$this->isQuestionVisible($question, $answers)) {
@@ -245,7 +265,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             ->setParameter('lpItemId', $request->query->getInt('lpItemId'), Types::INTEGER)
         ;
 
-        $sessionId = (int) $this->cidReqHelper->getSessionId();
+        $sessionId = (int) ($this->surveyAnswerProvider->getSession($request)?->getId() ?? 0);
         if ($sessionId > 0) {
             $queryBuilder
                 ->andWhere('answer.sessionId = :sessionId')
@@ -493,7 +513,7 @@ final readonly class SurveyAnswerProcessor implements ProcessorInterface
             ->setOptionId($optionId)
             ->setValue($value)
             ->setLpItemId($request->query->getInt('lpItemId'))
-            ->setSessionId((int) $this->cidReqHelper->getSessionId() > 0 ? (int) $this->cidReqHelper->getSessionId() : null)
+            ->setSessionId($this->surveyAnswerProvider->getSession($request)?->getId())
         ;
 
         $this->entityManager->persist($answer);

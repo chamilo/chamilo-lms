@@ -43955,3 +43955,18 @@ msgstr ""
 
 msgid "Invitation history records messages accepted by Chamilo, not confirmed email delivery."
 msgstr ""
+
+msgid "Additional email addresses"
+msgstr ""
+
+msgid "Enter up to 50 external email addresses separated by commas, semicolons or line breaks. Existing invitations are not resent unless requested."
+msgstr ""
+
+msgid "Automatically invite newly enrolled learners"
+msgstr ""
+
+msgid "New enrollments are processed by the scheduled survey invitation command while the survey is open."
+msgstr ""
+
+msgid "Some external invitations could not be sent. Check the mail configuration and retry the failed recipients."
+msgstr ""

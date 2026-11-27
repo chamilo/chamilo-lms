@@ -45,6 +45,10 @@ framework:
             policy: 'sliding_window'
             limit: 120
             interval: '1 minute'
+        survey_external_invitations:
+            policy: 'sliding_window'
+            limit: 100
+            interval: '1 hour'
         oauth_registration:
             policy: 'sliding_window'
             limit: 5

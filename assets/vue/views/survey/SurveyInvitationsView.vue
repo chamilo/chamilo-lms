@@ -179,7 +179,36 @@
             </p>
           </div>
 
+          <div
+            v-if="settings.externalEmailsSupported"
+            class="space-y-1"
+          >
+            <label for="survey_external_emails" class="block text-sm font-semibold text-gray-700">{{ t('Additional email addresses') }}</label>
+            <textarea
+              id="survey_external_emails"
+              v-model="externalEmails"
+              name="survey_external_emails"
+              class="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+              rows="3"
+            />
+            <p class="text-xs text-gray-500">{{ t('Enter up to 50 external email addresses separated by commas, semicolons or line breaks. Existing invitations are not resent unless requested.') }}</p>
+          </div>
+
           <div class="space-y-2 rounded border border-gray-25 bg-gray-10 p-3 text-sm">
+            <label
+              v-if="settings.automaticInvitationsSupported || autoInviteNewLearners"
+              class="flex items-start gap-2"
+            >
+              <input
+                v-model="autoInviteNewLearners"
+                name="auto_invite_new_learners"
+                type="checkbox"
+              >
+              <span>
+                {{ t('Automatically invite newly enrolled learners') }}
+                <span class="block text-xs text-gray-500">{{ t('New enrollments are processed by the scheduled survey invitation command while the survey is open.') }}</span>
+              </span>
+            </label>
             <label class="flex items-center gap-2">
               <input
                 v-model="sendMail"
@@ -374,6 +403,7 @@
             >
               {{ t('Answered anonymously') }}
             </span>
+            <span v-else-if="data.external && !canShowAnsweredDetails">—</span>
             <span
               v-else
               class="rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-700"
@@ -386,7 +416,7 @@
         <Column :header="t('Survey invitation link')">
           <template #body="{ data }">
             <div
-              v-if="!data.answered"
+              v-if="!data.external && !data.answered"
               class="flex gap-2"
             >
               <input
@@ -449,6 +479,8 @@ const sendMail = ref(true)
 const resendToAll = ref(false)
 const remindUnanswered = ref(false)
 const hideLink = ref(false)
+const autoInviteNewLearners = ref(false)
+const externalEmails = ref("")
 const isLoading = ref(false)
 const isSaving = ref(false)
 const errorMessage = ref("")
@@ -636,6 +668,8 @@ async function loadInvitationData() {
     invitations.value = Array.isArray(response.invitations) ? response.invitations : []
     applyHistory(response)
     settings.value = response.settings || {}
+    autoInviteNewLearners.value = response.autoInviteNewLearners === true
+    externalEmails.value = ""
     anonymousLink.value = response.anonymousLink || ""
     if (!canShowAnsweredDetails.value && activeTab.value === "answered") {
       activeTab.value = "invited"
@@ -683,7 +717,8 @@ async function publishSurvey() {
         resendToAll: resendToAll.value,
         remindUnanswered: canRemindUnanswered.value && remindUnanswered.value,
         hideLink: hideLink.value,
-        additionalEmails: [],
+        autoInviteNewLearners: autoInviteNewLearners.value,
+        additionalEmails: settings.value.externalEmailsSupported ? externalEmails.value.split(/[,;\n]+/).map((email) => email.trim()).filter(Boolean) : [],
       },
       getContextParams(),
       surveyId.value,
@@ -698,6 +733,15 @@ async function publishSurvey() {
     selectedUserIds.value = Array.isArray(response.selectedUserIds) ? response.selectedUserIds : selectedUserIds.value
     selectedGroupIds.value = Array.isArray(response.selectedGroupIds) ? response.selectedGroupIds : selectedGroupIds.value
     settings.value = response.settings || settings.value
+    autoInviteNewLearners.value = response.autoInviteNewLearners === true
+    if (Number(response.failedExternalInvitations || 0) > 0) {
+      externalEmails.value = (response.failedExternalEmails || []).join("\n")
+      resendToAll.value = false
+      remindUnanswered.value = false
+      errorMessage.value = t('Some external invitations could not be sent. Check the mail configuration and retry the failed recipients.')
+    } else {
+      externalEmails.value = ""
+    }
     if (settings.value?.canShowAnsweredDetails === false && activeTab.value === "answered") {
       activeTab.value = "invited"
     }

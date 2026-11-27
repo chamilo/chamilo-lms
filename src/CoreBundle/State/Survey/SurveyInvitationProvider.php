@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\SurveyHelper;
+use Chamilo\CoreBundle\Service\Survey\SurveyInvitationDelivery;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -49,6 +50,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         private CGroupRepository $groupRepository,
         private SettingsManager $settingsManager,
         private SurveyHelper $surveyHelper,
+        private SurveyInvitationDelivery $delivery,
     ) {}
 
     /**
@@ -98,7 +100,13 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         }
 
         $invitations = $this->getInvitations($survey, $course, $session);
-        $counts = $this->buildCounts($survey, $invitations);
+        $portal = $this->delivery->getPortal();
+        $externalRecipients = null !== $portal && $this->isAnonymous($survey) ? $this->delivery->externalRecipients($survey, $course, $session, $portal) : [];
+        $allInvitations = $invitations;
+        foreach ($externalRecipients as $external) {
+            $allInvitations[] = $external->getInvitation();
+        }
+        $counts = $this->buildCounts($survey, $allInvitations);
 
         $response = new SurveyInvitation();
         $response->surveyId = (int) $survey->getIid();
@@ -107,16 +115,34 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         $response->messageParameters = $messageParameters;
         $response->survey = $this->normalizeSurvey($survey);
         $response->settings = $this->getSettings($survey);
+        $response->settings['externalEmailsSupported'] = $this->delivery->supportsExternal($survey, $course, $session, $portal);
+        $response->settings['automaticInvitationsSupported'] = $this->delivery->supportsAutomatic($survey, $course, $session, $portal);
+        $response->autoInviteNewLearners = null !== $this->delivery->getPolicy($survey, $course, $session, $portal);
         $response->counts = $counts;
         $response->users = $this->getAvailableUsers($course, $session, $invitations);
         $response->groups = $this->getAvailableGroups($course, $session, $invitations);
         $response->invitations = $this->normalizeInvitations($survey, $course, $session, $invitations);
+        foreach ($externalRecipients as $external) {
+            $invitation = $external->getInvitation();
+            $response->invitations[] = [
+                'id' => $invitation->getIid(),
+                'external' => true,
+                'userId' => null,
+                'userName' => $external->getEmail(),
+                'email' => $external->getEmail(),
+                'answered' => $response->settings['canShowAnsweredDetails'] && 1 === (int) $invitation->getAnswered(),
+                'answeredHidden' => false,
+                'invitationDate' => $this->formatDate($invitation->getInvitationDate()),
+                'reminderDate' => $response->settings['canShowAnsweredDetails'] ? $this->formatDate($invitation->getReminderDate()) : null,
+                'answeredAt' => null,
+            ];
+        }
         $response->mailSubject = $survey->getMailSubject();
         $response->mailText = '' !== trim($survey->getReminderMail()) ? $survey->getReminderMail() : $survey->getInviteMail();
         $response->anonymousLink = $this->buildAutoAnswerLink($survey, $course, $session);
         $response->selectedUserIds = $this->getSelectedUserIds($invitations);
         $response->selectedGroupIds = $this->getSelectedGroupIds($invitations);
-        if ($selectDefaultRecipients && [] === $invitations) {
+        if ($selectDefaultRecipients && [] === $allInvitations) {
             $response->selectedUserIds = array_column($response->users, 'id');
         }
 

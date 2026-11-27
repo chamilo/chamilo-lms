@@ -105,8 +105,12 @@ class Version20170904145500 extends AbstractMigrationChamilo
             $this->addSql(
                 'UPDATE c_quiz SET page_result_configuration = "[]" WHERE page_result_configuration IS NULL OR page_result_configuration = "" '
             );
+            // The 1.11 values stay PHP-serialized until V300/Version20260727000000 re-encodes them, so the
+            // column keeps its "array" type until then. Labelled "json", DBAL flags it as a JSON column that
+            // is not one (declarationMismatch) and the schema diff of the next migration changes it to JSON,
+            // which MySQL/MariaDB reject on the serialized values (CONSTRAINT c_quiz.page_result_configuration).
             $this->addSql(
-                "ALTER TABLE c_quiz CHANGE page_result_configuration page_result_configuration LONGTEXT NOT NULL COMMENT '(DC2Type:json)';"
+                "ALTER TABLE c_quiz CHANGE page_result_configuration page_result_configuration LONGTEXT NOT NULL COMMENT '(DC2Type:array)';"
             );
         } else {
             $this->addSql(

@@ -87,7 +87,7 @@ Feature: Works in session report
     Given I am not logged
     Given I am a platform administrator
     When I am on "/reporting/admin/works-in-session"
-    And I wait up to 60 seconds for the element ".p-datatable" to appear
+    And I wait up to 60 seconds for the element ".empty-state" to appear
     Then I should see "Works in session report"
     And I should see "Please select a session"
     And I should not see the "button[aria-label='Export to CSV']" element
@@ -98,11 +98,13 @@ Feature: Works in session report
     Given I am not logged
     Given I am a platform administrator
     And I am on "/reporting/admin/works-in-session"
-    And I wait up to 60 seconds for the element ".p-datatable" to appear
+    And I wait up to 60 seconds for the element ".empty-state" to appear
     When I select the dropdown option "Works in session report test" in "global-reporting-session"
     And I press "Search"
     And I wait for the element "td:has-text('Andrea')" to appear
-    Then I should see "WISREPORT (Best score)"
+    # The three columns of a course share a header with the course code.
+    Then I should see the "th:has-text('WISREPORT')" element
+    And I should see "Best score"
     And I should see "Progress"
     And I should see "Last sent work date"
     And I should see "Costea"
@@ -118,11 +120,11 @@ Feature: Works in session report
     Given I am not logged
     Given I am a teacher
     And I am on "/reporting/admin/works-in-session"
-    And I wait up to 60 seconds for the element ".p-datatable" to appear
+    And I wait up to 60 seconds for the element ".empty-state" to appear
     When I select the dropdown option "Works in session report test" in "global-reporting-session"
     And I press "Search"
     And I wait for the element "td:has-text('Andrea')" to appear
-    Then I should see "WISREPORT (Best score)"
+    Then I should see the "th:has-text('WISREPORT')" element
     And I should see "Costea"
     And I should not see an error
 
@@ -130,7 +132,7 @@ Feature: Works in session report
     Given I am not logged
     Given I am a platform administrator
     When I am on "/main/my_space/works_in_session_report.php"
-    And I wait up to 60 seconds for the element ".p-datatable" to appear
+    And I wait up to 60 seconds for the element ".empty-state" to appear
     Then the URL should contain "/reporting/admin/works-in-session"
     And I should see "Works in session report"
 

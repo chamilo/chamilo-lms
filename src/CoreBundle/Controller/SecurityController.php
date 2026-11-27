@@ -6,20 +6,16 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Legal;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\ValidationToken;
-use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
-use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
@@ -80,8 +76,6 @@ class SecurityController extends AbstractController
         private AuthorizationCheckerInterface $authorizationChecker,
         private readonly UserHelper $userHelper,
         private readonly RouterInterface $router,
-        private readonly AccessUrlHelper $accessUrlHelper,
-        private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
         private readonly AccessUrlRepository $accessUrlRepo,
         private readonly RememberMeLifetime $rememberMeLifetime,
         private readonly ClockInterface $clock,
@@ -240,10 +234,7 @@ class SecurityController extends AbstractController
             ]);
         }
 
-        $redirectUrl = $this->calculateRedirectUrl(
-            $user,
-            $this->entityManager->getRepository(Course::class),
-        );
+        $redirectUrl = $this->loginRedirectResolver->resolveCoursePath($user);
 
         if (null !== $redirectUrl) {
             return $this->withRememberMeCookie(
@@ -698,60 +689,6 @@ class SecurityController extends AbstractController
         $diffDays = (new DateTimeImmutable())->diff($lastUpdate)->days;
 
         return $diffDays > $days;
-    }
-
-    private function calculateRedirectUrl(
-        User $user,
-        CourseRepository $courseRepo,
-    ): ?string {
-        if ('true' !== $this->settingsManager->getSetting('workflows.go_to_course_after_login')) {
-            return null;
-        }
-
-        $personalCourseList = $courseRepo->getPersonalSessionCourses(
-            $user,
-            $this->accessUrlHelper->getCurrent(),
-            $this->isAllowedToEditHelper->canCreateCourse()
-        );
-
-        $mySessionList = [];
-        $countOfCoursesNoSessions = 0;
-
-        foreach ($personalCourseList as $course) {
-            if (!empty($course['sid'])) {
-                $mySessionList[$course['sid']] = true;
-            } else {
-                $countOfCoursesNoSessions++;
-            }
-        }
-
-        $countOfSessions = \count($mySessionList);
-
-        if (1 === $countOfSessions && 0 === $countOfCoursesNoSessions) {
-            $key = array_keys($personalCourseList);
-
-            return $this->router->generate(
-                'chamilo_core_course_home',
-                [
-                    'cid' => $personalCourseList[$key[0]]['cid'],
-                    'sid' => $personalCourseList[$key[0]]['sid'] ?? 0,
-                ]
-            );
-        }
-
-        if (0 === $countOfSessions && 1 === $countOfCoursesNoSessions) {
-            $key = array_keys($personalCourseList);
-
-            return $this->router->generate(
-                'chamilo_core_course_home',
-                [
-                    'cid' => $personalCourseList[$key[0]]['cid'],
-                    'sid' => 0,
-                ]
-            );
-        }
-
-        return null;
     }
 
     private function getSessionLifetime(Request $request): int

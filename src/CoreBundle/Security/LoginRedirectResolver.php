@@ -7,6 +7,9 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Security;
 
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -18,6 +21,9 @@ final class LoginRedirectResolver
     public function __construct(
         private readonly SettingsManager $settingsManager,
         private readonly RouterInterface $router,
+        private readonly CourseRepository $courseRepository,
+        private readonly AccessUrlHelper $accessUrlHelper,
+        private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
     ) {}
 
     /**
@@ -25,7 +31,69 @@ final class LoginRedirectResolver
      */
     public function resolve(User $user): string
     {
-        return $this->resolveProfilePath($user) ?? $this->router->generate('index');
+        return $this->resolveCoursePath($user)
+            ?? $this->resolveProfilePath($user)
+            ?? $this->router->generate('index');
+    }
+
+    /**
+     * Home of the only course of the user, when workflows.go_to_course_after_login is on.
+     */
+    public function resolveCoursePath(User $user): ?string
+    {
+        if ('true' !== $this->settingsManager->getSetting('workflows.go_to_course_after_login')) {
+            return null;
+        }
+
+        $accessUrl = $this->accessUrlHelper->getCurrent();
+        if (null === $accessUrl) {
+            return null;
+        }
+
+        $personalCourseList = $this->courseRepository->getPersonalSessionCourses(
+            $user,
+            $accessUrl,
+            $this->isAllowedToEditHelper->canCreateCourse()
+        );
+
+        $mySessionList = [];
+        $countOfCoursesNoSessions = 0;
+
+        foreach ($personalCourseList as $course) {
+            if (!empty($course['sid'])) {
+                $mySessionList[$course['sid']] = true;
+            } else {
+                $countOfCoursesNoSessions++;
+            }
+        }
+
+        $countOfSessions = \count($mySessionList);
+
+        if (1 === $countOfSessions && 0 === $countOfCoursesNoSessions) {
+            $key = array_keys($personalCourseList);
+
+            return $this->router->generate(
+                'chamilo_core_course_home',
+                [
+                    'cid' => $personalCourseList[$key[0]]['cid'],
+                    'sid' => $personalCourseList[$key[0]]['sid'] ?? 0,
+                ]
+            );
+        }
+
+        if (0 === $countOfSessions && 1 === $countOfCoursesNoSessions) {
+            $key = array_keys($personalCourseList);
+
+            return $this->router->generate(
+                'chamilo_core_course_home',
+                [
+                    'cid' => $personalCourseList[$key[0]]['cid'],
+                    'sid' => 0,
+                ]
+            );
+        }
+
+        return null;
     }
 
     /**

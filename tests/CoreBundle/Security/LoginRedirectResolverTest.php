@@ -6,11 +6,25 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Security;
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
+use Chamilo\CoreBundle\Helpers\CidReqHelper;
+use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\PermissionHelper;
+use Chamilo\CoreBundle\Helpers\SessionVisibilityHelper;
+use Chamilo\CoreBundle\Helpers\StudentViewHelper;
+use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository;
+use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
+use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Repository\TrackECourseAccessRepository;
 use Chamilo\CoreBundle\Security\LoginRedirectResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Generator;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 
 final class LoginRedirectResolverTest extends TestCase
@@ -23,17 +37,9 @@ final class LoginRedirectResolverTest extends TestCase
      */
     public function testOnlyConfiguredLocalProfileDestinationsAreUsed(array $roles, mixed $setting, string $expected): void
     {
-        $settings = $this->createMock(SettingsManager::class);
-        $settings->method('getSetting')->willReturnMap([
-            ['registration.redirect_after_login', true, $setting],
-        ]);
-
-        $router = $this->createMock(RouterInterface::class);
-        $router->method('generate')->with('index')->willReturn('/');
-
         $user = (new User())->setRoles($roles);
 
-        self::assertSame($expected, (new LoginRedirectResolver($settings, $router))->resolve($user));
+        self::assertSame($expected, $this->createResolver($setting, 'false', [])->resolve($user));
     }
 
     public static function redirectProvider(): Generator
@@ -85,5 +91,73 @@ final class LoginRedirectResolverTest extends TestCase
         yield 'header injection' => [['ROLE_STUDENT'], json_encode(['STUDENT' => "/sessions\r\nLocation: //example.invalid"]), '/'];
 
         yield 'encoded control' => [['ROLE_STUDENT'], '{"STUDENT":"/sessions%0d%0a"}', '/'];
+    }
+
+    /**
+     * go_to_course_after_login sends a user with exactly one course straight into it,
+     * before the profile destination, as the password login always did.
+     */
+    public function testTheOnlyCourseTakesPrecedenceOverTheProfileDestination(): void
+    {
+        $user = (new User())->setRoles(['ROLE_STUDENT']);
+        $resolver = $this->createResolver('{"STUDENT":"sessions"}', 'true', [['cid' => 7, 'sid' => 3]]);
+
+        self::assertSame('/course/7/home?sid=3', $resolver->resolve($user));
+    }
+
+    /**
+     * With several courses there is no single course to enter: the profile destination applies.
+     */
+    public function testSeveralCoursesFallBackToTheProfileDestination(): void
+    {
+        $user = (new User())->setRoles(['ROLE_STUDENT']);
+        $resolver = $this->createResolver('{"STUDENT":"sessions"}', 'true', [['cid' => 7, 'sid' => 0], ['cid' => 8, 'sid' => 0]]);
+
+        self::assertSame('/sessions', $resolver->resolve($user));
+    }
+
+    private function createResolver(mixed $redirectSetting, string $goToCourse, array $courses): LoginRedirectResolver
+    {
+        $settings = $this->createMock(SettingsManager::class);
+        $settings->method('getSetting')->willReturnMap([
+            ['registration.redirect_after_login', true, $redirectSetting],
+            ['workflows.go_to_course_after_login', false, $goToCourse],
+        ]);
+
+        $router = $this->createMock(RouterInterface::class);
+        $router->method('generate')->willReturnCallback(
+            static fn (string $name, array $parameters = []): string => 'index' === $name
+                ? '/'
+                : '/course/'.$parameters['cid'].'/home?sid='.$parameters['sid']
+        );
+
+        $courseRepository = $this->createMock(CourseRepository::class);
+        $courseRepository->method('getPersonalSessionCourses')->willReturn($courses);
+
+        // Both helpers are readonly classes PHPUnit 9 cannot double, so they are built for real.
+        // Under the CLI SAPI the current access URL is the first one.
+        $accessUrlRepository = $this->createMock(AccessUrlRepository::class);
+        $accessUrlRepository->method('getFirstId')->willReturn(1);
+        $accessUrlRepository->method('find')->willReturn(new AccessUrl());
+
+        $security = $this->createMock(Security::class);
+
+        return new LoginRedirectResolver(
+            $settings,
+            $router,
+            $courseRepository,
+            new AccessUrlHelper($accessUrlRepository, new RequestStack()),
+            new IsAllowedToEditHelper(
+                $settings,
+                $security,
+                new RequestStack(),
+                $this->createMock(CidReqHelper::class),
+                new SessionVisibilityHelper($this->createMock(TrackECourseAccessRepository::class), $settings),
+                $this->createMock(StudentViewHelper::class),
+                new UserHelper($security),
+                $this->createMock(ExtraFieldValuesRepository::class),
+                $this->createMock(PermissionHelper::class),
+            ),
+        );
     }
 }

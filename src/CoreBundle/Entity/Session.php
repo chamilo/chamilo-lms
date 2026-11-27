@@ -319,9 +319,12 @@ class Session implements ResourceWithAccessUrlInterface, Stringable
     protected Collection $urls;
 
     /**
+     * No ORM cascade: resource_link.session_id is ON DELETE CASCADE. Removing the links through the ORM soft-deletes
+     * them, and that re-persists (and keeps) the session.
+     *
      * @var Collection<int, ResourceLink>
      */
-    #[ORM\OneToMany(mappedBy: 'session', targetEntity: ResourceLink::class, cascade: ['remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'session', targetEntity: ResourceLink::class)]
     protected Collection $resourceLinks;
 
     protected AccessUrl $currentUrl;

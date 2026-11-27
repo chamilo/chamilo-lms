@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\ForcedLoginRedirectHelper;
 use Chamilo\CoreBundle\Security\Badge\CasBadge;
+use Chamilo\CoreBundle\Security\LoginRedirectResolver;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,6 +37,7 @@ final class CasAuthenticator extends AbstractAuthenticator implements Interactiv
         private readonly ForcedLoginRedirectHelper $forcedRedirect,
         private readonly TokenStorageInterface $tokens,
         private readonly UrlGeneratorInterface $router,
+        private readonly LoginRedirectResolver $loginRedirectResolver,
     ) {}
 
     public function supports(Request $request): ?bool
@@ -77,7 +79,11 @@ final class CasAuthenticator extends AbstractAuthenticator implements Interactiv
     {
         $token->setAttribute(CasLoginFlow::LOGOUT_KEY, $request->attributes->get('_chamilo_cas_logout'));
 
-        return $this->redirect($this->router->generate('index'));
+        $user = $token->getUser();
+
+        return $this->redirect(
+            $user instanceof User ? $this->loginRedirectResolver->resolve($user) : $this->router->generate('index')
+        );
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response

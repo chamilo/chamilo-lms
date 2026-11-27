@@ -44062,3 +44062,30 @@ msgstr "Show the expected time to spend in each course next to the time actually
 
 msgid "The original calculated variables are unavailable. Existing variations are preserved if the calculation is unchanged."
 msgstr "The original calculated variables are unavailable. Existing variations are preserved if the calculation is unchanged."
+
+msgid "Theoretical time"
+msgstr "Theoretical time"
+
+msgid "Synthesis"
+msgstr "Synthesis"
+
+msgid "Average progress in sessions"
+msgstr "Average progress in sessions"
+
+msgid "Time spent in courses last week"
+msgstr "Time spent in courses last week"
+
+msgid "Session progress"
+msgstr "Session progress"
+
+msgid "Weekly time spent summary"
+msgstr "Weekly time spent summary"
+
+msgid "Time report"
+msgstr "Time report"
+
+msgid "Starting access date"
+msgstr "Starting access date"
+
+msgid "Ending access date"
+msgstr "Ending access date"

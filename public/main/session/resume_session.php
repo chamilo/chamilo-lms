@@ -176,6 +176,10 @@ $courseListToShow .= '<div class="overflow-x-auto">';
 $courseListToShow .= '<table id="session-list-course" class="min-w-full divide-y divide-gray-20 text-sm">';
 $courseListToShow .= '<thead class="bg-gray-10 text-start text-gray-70"><tr>';
 $courseListToShow .= '<th class="px-4 py-3 font-semibold">'.get_lang('Course title').'</th>';
+$theoreticalTimeEnabled = 'true' === api_get_setting('tracking.display_theoretical_time');
+if ($theoreticalTimeEnabled) {
+    $courseListToShow .= '<th class="px-4 py-3 font-semibold">'.get_lang('Theoretical time').'</th>';
+}
 $courseListToShow .= '<th class="px-4 py-3 font-semibold">'.get_lang('Course tutor').'</th>';
 $courseListToShow .= '<th class="px-4 py-3 font-semibold">'.get_lang('Room').'</th>';
 $courseListToShow .= '<th class="px-4 py-3 font-semibold">'.get_lang('Users number').'</th>';
@@ -183,11 +187,12 @@ $courseListToShow .= '<th class="px-4 py-3 font-semibold text-end">'.get_lang('D
 $courseListToShow .= '</tr></thead><tbody class="divide-y divide-gray-20 bg-white">';
 
 if (0 === $session->getNbrCourses()) {
-    $courseListToShow .= '<tr><td colspan="5" class="px-4 py-10 text-center text-sm text-gray-50">'.get_lang('No course for this session').'</td></tr>';
+    $courseListToShow .= '<tr><td colspan="'.($theoreticalTimeEnabled ? 6 : 5).'" class="px-4 py-10 text-center text-sm text-gray-50">'.get_lang('No course for this session').'</td></tr>';
 } else {
     $count = 0;
     $courses = $session->getCourses();
     $allowSkills = 'true' === api_get_setting('skill.allow_skill_rel_items');
+    $totalTheoreticalTime = 0;
 
     /** @var SessionRelCourse $sessionRelCourse */
     foreach ($courses as $sessionRelCourse) {
@@ -308,12 +313,29 @@ if (0 === $session->getNbrCourses()) {
             $courseUrl,
             ['class' => 'hover:underline']
         ).'</td>';
+        if ($theoreticalTimeEnabled) {
+            // Minutes stored in the course extra field "theoretical_time".
+            $theoreticalTime = CourseManager::get_course_extra_field_value('theoretical_time', $courseCode);
+            $theoreticalMinutes = is_numeric($theoreticalTime) ? (int) $theoreticalTime : 0;
+            $totalTheoreticalTime += $theoreticalMinutes;
+            $courseListToShow .= '<td class="px-4 py-3 align-middle text-gray-70">'
+                .sprintf('%02d:%02d', intdiv($theoreticalMinutes, 60), $theoreticalMinutes % 60).'</td>';
+        }
         $courseListToShow .= '<td class="px-4 py-3 align-middle text-gray-70">'.($namesOfTutors ? implode('<br>', $namesOfTutors) : get_lang('none')).'</td>';
         $courseListToShow .= '<td class="px-4 py-3 align-middle text-gray-70">'.api_htmlentities($roomLabel, ENT_QUOTES).'</td>';
         $courseListToShow .= '<td class="px-4 py-3 align-middle text-gray-70">'.$numberOfUsers.'</td>';
         $courseListToShow .= '<td class="px-4 py-3 align-middle"><div class="flex flex-wrap items-center justify-end gap-2">'.$courseActions.'</div></td>';
         $courseListToShow .= '</tr>';
         $count++;
+    }
+
+    if ($theoreticalTimeEnabled) {
+        $courseListToShow .= '<tr class="font-semibold">';
+        $courseListToShow .= '<td class="px-4 py-3 align-middle text-gray-90">'.get_lang('Total').'</td>';
+        $courseListToShow .= '<td class="px-4 py-3 align-middle text-gray-90">'
+            .sprintf('%02d:%02d', intdiv($totalTheoreticalTime, 60), $totalTheoreticalTime % 60).'</td>';
+        $courseListToShow .= '<td class="px-4 py-3">-</td><td class="px-4 py-3">-</td><td class="px-4 py-3">-</td><td class="px-4 py-3"></td>';
+        $courseListToShow .= '</tr>';
     }
 }
 

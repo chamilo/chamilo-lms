@@ -43991,3 +43991,30 @@ msgstr ""
 
 msgid "The original calculated variables are unavailable. Existing variations are preserved if the calculation is unchanged."
 msgstr ""
+
+msgid "Theoretical time"
+msgstr ""
+
+msgid "Synthesis"
+msgstr ""
+
+msgid "Average progress in sessions"
+msgstr ""
+
+msgid "Time spent in courses last week"
+msgstr ""
+
+msgid "Session progress"
+msgstr ""
+
+msgid "Weekly time spent summary"
+msgstr ""
+
+msgid "Time report"
+msgstr ""
+
+msgid "Starting access date"
+msgstr ""
+
+msgid "Ending access date"
+msgstr ""

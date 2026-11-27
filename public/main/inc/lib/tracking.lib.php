@@ -1991,6 +1991,43 @@ class Tracking
     }
 
     /**
+     * Course connections of a user that start and end between two local dates (both included), oldest first.
+     * Port of the 'time_report' of Tracking::generateReport() in 1.11.x.
+     *
+     * @return array<int, array{session_id: int, c_id: int, login_course_date: string, logout_course_date: string, seconds: int}>
+     */
+    public static function getCourseAccessesBetween(int $userId, string $startDate, string $endDate): array
+    {
+        $start = api_get_utc_datetime($startDate.' 00:00:00');
+        $end = api_get_utc_datetime($endDate.' 23:59:59');
+
+        $rows = Container::getEntityManager()->getConnection()->createQueryBuilder()
+            ->select('session_id', 'c_id', 'login_course_date', 'logout_course_date')
+            ->addSelect('(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) AS seconds')
+            ->from(Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS))
+            ->where('user_id = :userId')
+            ->andWhere('login_course_date >= :start AND login_course_date <= :end')
+            ->andWhere('logout_course_date >= :start AND logout_course_date <= :end')
+            ->setParameter('userId', $userId)
+            ->setParameter('start', $start)
+            ->setParameter('end', $end)
+            ->orderBy('login_course_date')
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        return array_map(
+            static fn (array $row): array => [
+                'session_id' => (int) $row['session_id'],
+                'c_id' => (int) $row['c_id'],
+                'login_course_date' => (string) $row['login_course_date'],
+                'logout_course_date' => (string) $row['logout_course_date'],
+                'seconds' => max(0, (int) $row['seconds']),
+            ],
+            $rows
+        );
+    }
+
+    /**
      * Calculates the time spent on the course.
      *
      * @param array|int $userId

@@ -44017,3 +44017,12 @@ msgstr "Quick test: %s"
 
 msgid "Quick test: Document"
 msgstr "Quick test: Document"
+
+msgid "Invitation history"
+msgstr "Invitation history"
+
+msgid "No invitation history found"
+msgstr "No invitation history found"
+
+msgid "Invitation history records messages accepted by Chamilo, not confirmed email delivery."
+msgstr "Invitation history records messages accepted by Chamilo, not confirmed email delivery."

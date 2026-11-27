@@ -43946,3 +43946,12 @@ msgstr ""
 
 msgid "Quick test: Document"
 msgstr ""
+
+msgid "Invitation history"
+msgstr ""
+
+msgid "No invitation history found"
+msgstr ""
+
+msgid "Invitation history records messages accepted by Chamilo, not confirmed email delivery."
+msgstr ""

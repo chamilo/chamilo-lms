@@ -203,27 +203,25 @@ class DictionaryPlugin extends Plugin
     {
         $this->ensureTableExists();
 
-        $conditions = [];
+        $qb = Database::getManager()->getConnection()->createQueryBuilder();
+        $qb
+            ->select('id', 'term', 'definition')
+            ->from(self::TABLE_DICTIONARY)
+            ->orderBy('term', 'ASC')
+        ;
 
         if ('' !== trim($keyword)) {
-            $keyword = Database::escape_string(trim($keyword));
-            $conditions[] = "(term LIKE '%$keyword%' OR definition LIKE '%$keyword%')";
+            $qb
+                ->where('term LIKE :keyword OR definition LIKE :keyword')
+                ->setParameter('keyword', '%'.trim($keyword).'%')
+            ;
         }
-
-        $where = [] === $conditions ? '' : ' WHERE '.implode(' AND ', $conditions);
-        $sql = 'SELECT id, term, definition FROM '.self::TABLE_DICTIONARY.$where.' ORDER BY term';
 
         if ($limit > 0) {
-            $sql .= ' LIMIT '.(int) $limit;
+            $qb->setMaxResults($limit);
         }
 
-        $result = Database::query($sql);
-
-        if (!$result) {
-            return [];
-        }
-
-        return Database::store_result($result, 'ASSOC');
+        return $qb->executeQuery()->fetchAllAssociative();
     }
 
     public function getTermById(int $id): ?array
@@ -234,9 +232,15 @@ class DictionaryPlugin extends Plugin
 
         $this->ensureTableExists();
 
-        $sql = 'SELECT id, term, definition FROM '.self::TABLE_DICTIONARY.' WHERE id = '.(int) $id.' LIMIT 1';
-        $result = Database::query($sql);
-        $term = Database::fetch_assoc($result);
+        $term = Database::getManager()->getConnection()->createQueryBuilder()
+            ->select('id', 'term', 'definition')
+            ->from(self::TABLE_DICTIONARY)
+            ->where('id = :id')
+            ->setParameter('id', $id)
+            ->setMaxResults(1)
+            ->executeQuery()
+            ->fetchAssociative()
+        ;
 
         return empty($term) ? null : $term;
     }

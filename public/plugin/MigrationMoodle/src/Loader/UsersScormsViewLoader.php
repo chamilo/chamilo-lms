@@ -3,6 +3,14 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CourseBundle\Entity\CLp;
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
+use Chamilo\CourseBundle\Entity\CLpView;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
@@ -17,24 +25,20 @@ class UsersScormsViewLoader implements LoaderInterface
      */
     public function load(array $incomingData)
     {
-        $tblLpView = \Database::get_course_table(TABLE_LP_VIEW);
-        $tblLpItemView = \Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $em = \Database::getManager();
 
         $sessionId = $this->getUserSubscriptionInSession($incomingData['user_id'], $incomingData['c_id']);
 
-        $lpViewId = $this->getLpView(
+        $lpView = $this->getLpView(
             $incomingData['user_id'],
             $incomingData['lp_id'],
             $incomingData['c_id'],
             $sessionId
         );
 
-        $lpItemViewId = $this->getLpItemView($lpViewId, $incomingData['lp_item_id']);
+        $lpItemView = $this->getLpItemView($lpView, $incomingData['lp_item_id']);
 
         $itemView = [
-            'c_id' => $incomingData['c_id'],
-            'lp_item_id' => $incomingData['lp_item_id'],
-            'lp_view_id' => $lpViewId,
             'view_count' => $incomingData['lp_item_view_count'],
             'status' => 'not attempted',
             'start_time' => 0,
@@ -49,21 +53,30 @@ class UsersScormsViewLoader implements LoaderInterface
             }
         }
 
-        if (empty($lpItemViewId)) {
-            $lpItemViewId = \Database::insert($tblLpItemView, $itemView);
-            \Database::query("UPDATE $tblLpItemView SET id = iid WHERE iid = $lpItemViewId");
-        } else {
-            \Database::update($tblLpItemView, $itemView, ['iid = ?' => [$lpItemViewId]]);
+        if (!$lpItemView) {
+            $lpItemView = (new CLpItemView())
+                ->setItem($em->getReference(CLpItem::class, (int) $incomingData['lp_item_id']))
+                ->setView($lpView)
+            ;
         }
 
-        \Database::query(
-            "UPDATE $tblLpView
-            SET last_item = {$incomingData['lp_item_id']},
-                view_count = {$incomingData['lp_item_view_count']}
-            WHERE iid = $lpViewId"
-        );
+        $lpItemView
+            ->setViewCount((int) $itemView['view_count'])
+            ->setStatus((string) $itemView['status'])
+            ->setStartTime((int) $itemView['start_time'])
+            ->setTotalTime((int) $itemView['total_time'])
+            ->setScore((float) $itemView['score'])
+            ->setMaxScore((string) $itemView['max_score'])
+        ;
+        $em->persist($lpItemView);
 
-        return $lpViewId;
+        $lpView
+            ->setLastItem((int) $incomingData['lp_item_id'])
+            ->setViewCount((int) $incomingData['lp_item_view_count'])
+        ;
+        $em->flush();
+
+        return $lpView->getIid();
     }
 
     /**
@@ -76,22 +89,23 @@ class UsersScormsViewLoader implements LoaderInterface
      */
     private function getUserSubscriptionInSession($userId, $courseId)
     {
-        $srcru = \Database::select(
-            'session_id',
-            \Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER),
-            [
-                'where' => [
-                    'user_id = ? AND c_id = ?' => [$userId, $courseId],
-                ],
-            ],
-            'first'
-        );
+        $srcru = \Database::getManager()
+            ->createQuery(
+                'SELECT IDENTITY(srcru.session) AS sessionId
+                    FROM '.SessionRelCourseRelUser::class.' srcru
+                    WHERE srcru.user = :userId AND srcru.course = :courseId'
+            )
+            ->setParameter('userId', (int) $userId)
+            ->setParameter('courseId', (int) $courseId)
+            ->setMaxResults(1)
+            ->getOneOrNullResult()
+        ;
 
         if (empty($srcru)) {
             throw new \Exception("Session not found for user ($userId) with course ($courseId)");
         }
 
-        return $srcru['session_id'];
+        return (int) $srcru['sessionId'];
     }
 
     /**
@@ -100,64 +114,62 @@ class UsersScormsViewLoader implements LoaderInterface
      * @param int $cId
      * @param int $sessionId
      *
-     * @return int
+     * @return CLpView
      */
     private function getLpView($userId, $lpId, $cId, $sessionId)
     {
-        $tblLpView = \Database::get_course_table(TABLE_LP_VIEW);
+        $em = \Database::getManager();
 
-        $lpView = \Database::select(
-            'iid',
-            $tblLpView,
-            [
-                'where' => [
-                    'user_id = ? AND lp_id = ? AND c_id = ? AND session_id = ?' => [
-                        $userId,
-                        $lpId,
-                        $cId,
-                        $sessionId,
-                    ],
-                ],
-                'order' => 'view_count DESC',
-            ],
-            'first'
-        );
+        $lpView = $em
+            ->createQuery(
+                'SELECT lpv
+                    FROM '.CLpView::class.' lpv
+                    WHERE lpv.user = :userId AND lpv.lp = :lpId AND lpv.course = :courseId AND lpv.session = :sessionId
+                    ORDER BY lpv.viewCount DESC'
+            )
+            ->setParameter('userId', (int) $userId)
+            ->setParameter('lpId', (int) $lpId)
+            ->setParameter('courseId', (int) $cId)
+            ->setParameter('sessionId', (int) $sessionId)
+            ->setMaxResults(1)
+            ->getOneOrNullResult()
+        ;
 
-        if (empty($lpView)) {
-            $lpView = [
-                'c_id' => $cId,
-                'lp_id' => $lpId,
-                'user_id' => $userId,
-                'view_count' => 1,
-                'session_id' => $sessionId,
-                'last_item' => 0,
-            ];
-
-            $lpViewId = \Database::insert($tblLpView, $lpView);
-            \Database::query("UPDATE $tblLpView SET id = iid WHERE iid = $lpViewId");
-
-            return $lpViewId;
+        if ($lpView) {
+            return $lpView;
         }
 
-        return $lpView['iid'];
+        $lpView = (new CLpView())
+            ->setCourse($em->getReference(Course::class, (int) $cId))
+            ->setLp($em->getReference(CLp::class, (int) $lpId))
+            ->setUser($em->getReference(User::class, (int) $userId))
+            ->setViewCount(1)
+            ->setSession($em->getReference(Session::class, (int) $sessionId))
+            ->setLastItem(0)
+        ;
+        $em->persist($lpView);
+        $em->flush();
+
+        return $lpView;
     }
 
     /**
-     * @param int $lpViewId
      * @param int $lpItemId
      *
-     * @return int
+     * @return CLpItemView|null
      */
-    private function getLpItemView($lpViewId, $lpItemId)
+    private function getLpItemView(CLpView $lpView, $lpItemId)
     {
-        $lpItemView = \Database::fetch_assoc(
-            \Database::query("SELECT iid FROM c_lp_item_view WHERE lp_view_id = $lpViewId AND lp_item_id = $lpItemId")
-        );
-
-        if (empty($lpItemView)) {
-            return 0;
-        }
-
-        return $lpItemView['iid'];
+        return \Database::getManager()
+            ->createQuery(
+                'SELECT lpiv
+                    FROM '.CLpItemView::class.' lpiv
+                    WHERE lpiv.view = :viewId AND lpiv.item = :itemId'
+            )
+            ->setParameter('viewId', (int) $lpView->getIid())
+            ->setParameter('itemId', (int) $lpItemId)
+            ->setMaxResults(1)
+            ->getOneOrNullResult()
+        ;
     }
 }

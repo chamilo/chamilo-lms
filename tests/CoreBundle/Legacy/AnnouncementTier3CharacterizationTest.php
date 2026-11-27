@@ -15,8 +15,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 /**
  * Characterization tests for AnnouncementManager::get_attachment() (AnnouncementManager.php).
  *
- * The other raw-SQL helpers of the class are dead or broken: update_mail_sent() has no caller, and the remaining
- * Database::query() calls live in commented-out blocks. get_attachment() is read by the announcements listing to
+ * The other raw-SQL helpers of the class are dead or broken: the remaining Database::query() calls live in
+ * commented-out blocks. get_attachment() is read by the announcements listing to
  * show the attachment icon, and by nothing else.
  */
 final class AnnouncementTier3CharacterizationTest extends KernelTestCase

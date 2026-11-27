@@ -3,6 +3,8 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
@@ -17,12 +19,13 @@ class UserLearnPathLessonBranchLoader implements LoaderInterface
      */
     public function load(array $incomingData)
     {
-        $tblLpItem = \Database::get_course_table(TABLE_LP_ITEM);
         $tblLpItemView = \Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
-        $item = \Database::fetch_assoc(
-            \Database::query("SELECT display_order FROM $tblLpItem WHERE iid = {$incomingData['item_id']}")
-        );
+        $item = \Database::getManager()
+            ->createQuery('SELECT lpi.displayOrder AS display_order FROM '.CLpItem::class.' lpi WHERE lpi.iid = :itemId')
+            ->setParameter('itemId', (int) $incomingData['item_id'])
+            ->getOneOrNullResult()
+        ;
 
         if (!$item) {
             throw new \Exception("LP item ({$incomingData['item_id']}) not found.");
@@ -57,15 +60,18 @@ class UserLearnPathLessonBranchLoader implements LoaderInterface
      */
     private function findViewOfItem(array $incomingData)
     {
-        $itemView = \Database::fetch_assoc(
-            \Database::query(
-                "SELECT lpiv.iid, lpiv.start_time
-                FROM c_lp_item_view lpiv
-                INNER JOIN c_lp_view lpv ON (lpv.iid = lpiv.lp_view_id AND lpv.c_id = lpiv.c_id)
-                WHERE lpiv.lp_item_id = {$incomingData['item_id']} AND lpv.user_id = {$incomingData['user_id']}
-                LIMIT 1"
+        $itemView = \Database::getManager()
+            ->createQuery(
+                'SELECT lpiv.iid, lpiv.startTime AS start_time
+                    FROM '.CLpItemView::class.' lpiv
+                    INNER JOIN lpiv.view lpv
+                    WHERE lpiv.item = :itemId AND lpv.user = :userId'
             )
-        );
+            ->setParameter('itemId', (int) $incomingData['item_id'])
+            ->setParameter('userId', (int) $incomingData['user_id'])
+            ->setMaxResults(1)
+            ->getOneOrNullResult()
+        ;
 
         if (!$itemView) {
             throw new \Exception("Item view not found for "."item ({$incomingData['item_id']}) and user ({$incomingData['user_id']}).");
@@ -81,15 +87,20 @@ class UserLearnPathLessonBranchLoader implements LoaderInterface
      */
     private function findViewOfPreviousItem(array $incomingData)
     {
-        $result = \Database::query(
-            "SELECT lpiv.start_time, lpiv.total_time
-                FROM c_lp_item_view lpiv
-                INNER JOIN c_lp_view lpv ON (lpv.iid = lpiv.lp_view_id AND lpv.c_id = lpiv.c_id)
-                INNER JOIN c_lp_item lpi ON (lpi.iid = lpiv.lp_item_id AND lpi.c_id = lpiv.c_id)
-                WHERE lpi.next_item_id = {$incomingData['item_id']} AND lpv.user_id = {$incomingData['user_id']}
-                LIMIT 1"
-        );
-        $previousItemView = \Database::fetch_assoc($result);
+        // The item before this one is the item whose next_item_id points to it.
+        $previousItemView = \Database::getManager()
+            ->createQuery(
+                'SELECT lpiv.startTime AS start_time, lpiv.totalTime AS total_time
+                    FROM '.CLpItemView::class.' lpiv
+                    INNER JOIN lpiv.view lpv
+                    INNER JOIN lpiv.item lpi
+                    WHERE lpi.nextItemId = :itemId AND lpv.user = :userId'
+            )
+            ->setParameter('itemId', (int) $incomingData['item_id'])
+            ->setParameter('userId', (int) $incomingData['user_id'])
+            ->setMaxResults(1)
+            ->getOneOrNullResult()
+        ;
 
         if (!$previousItemView) {
             throw new \Exception("Item view not found for "."previous item ({$incomingData['item_id']}) and user ({$incomingData['user_id']}).");

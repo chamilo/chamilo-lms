@@ -3,6 +3,8 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Script;
 
+use Chamilo\CourseBundle\Entity\CLpItemView;
+
 /**
  * Class UserLearnPathsProgressScript.
  *
@@ -103,25 +105,28 @@ class UserLearnPathsProgressScript extends BaseScript
      */
     private function countCompletedItems($userId, $lpId, $cId)
     {
-        $tblItemView = \Database::get_course_table(TABLE_LP_ITEM_VIEW);
-        $tblLpView = \Database::get_course_table(TABLE_LP_VIEW);
-        $tblLp = \Database::get_course_table(TABLE_LP_MAIN);
+        // c_lp_item_view and c_lp have no c_id any more: the course is the one of the learning path view.
+        $result = \Database::getManager()
+            ->createQuery(
+                'SELECT IDENTITY(lpiv.view) AS lp_view_id, COUNT(lpiv.item) AS c_lpiv
+                    FROM '.CLpItemView::class.' lpiv
+                    INNER JOIN lpiv.view lpv
+                    INNER JOIN lpv.lp lp
+                    WHERE lpiv.status = :status
+                        AND lpv.user = :userId
+                        AND lp.iid = :lpId
+                        AND lpv.course = :cId
+                        AND lp.lpType = 1
+                    GROUP BY lpiv.view'
+            )
+            ->setParameter('status', 'completed')
+            ->setParameter('userId', (int) $userId)
+            ->setParameter('lpId', (int) $lpId)
+            ->setParameter('cId', (int) $cId)
+            ->getArrayResult()
+        ;
 
-        $result = \Database::query("SELECT
-                lpiv.lp_view_id,
-                lpiv.c_id,
-                COUNT(lpiv.lp_item_id) c_lpiv
-            FROM $tblItemView lpiv
-            INNER JOIN $tblLpView lpv ON (lpiv.lp_view_id = lpv.iid AND lpiv.c_id = lpv.c_id)
-            INNER JOIN $tblLp lp ON (lpv.lp_id = lp.iid AND lpv.c_id = lp.c_id)
-            WHERE lpiv.status = 'completed'
-                AND lpv.user_id = $userId
-                AND lp.iid = $lpId
-                AND lp.c_id = $cId
-                AND lp.lp_type = 1
-            GROUP BY lpiv.lp_view_id");
-
-        $row = \Database::fetch_assoc($result);
+        $row = $result[0] ?? null;
 
         if (empty($row) || empty($row['c_lpiv'])) {
             return 0;

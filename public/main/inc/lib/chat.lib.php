@@ -582,26 +582,19 @@ class Chat extends Model
             return 0;
         }
 
-        $fromUserId = (int) $fromUserId;
-        $toUserId = (int) $toUserId;
-        $lastSeenMessageId = (int) $lastSeenMessageId;
-
-        $sql = "UPDATE {$this->table}
-            SET recd = 2
-            WHERE from_user = {$fromUserId}
-              AND to_user   = {$toUserId}
-              AND id       <= {$lastSeenMessageId}
-              AND recd < 2";
-
-        // TODO(owner): broken, Database::affected_rows() needs the Result argument (ArgumentCountError after the UPDATE
-        // ran); caller ChatController. Left raw, not migrated.
-        $res = Database::query($sql);
-        if (!$res) {
-            return 0;
-        }
-
-        // Database::affected_rows() is used across Chamilo; keep it simple.
-        return (int) Database::affected_rows();
+        return (int) Container::getEntityManager()->createQueryBuilder()
+            ->update(ChatEntity::class, 'c')
+            ->set('c.recd', 2)
+            ->where('c.fromUser = :fromUserId')
+            ->andWhere('c.toUser = :toUserId')
+            ->andWhere('c.id <= :lastSeenMessageId')
+            ->andWhere('c.recd < 2')
+            ->setParameter('fromUserId', $fromUserId)
+            ->setParameter('toUserId', $toUserId)
+            ->setParameter('lastSeenMessageId', $lastSeenMessageId)
+            ->getQuery()
+            ->execute()
+        ;
     }
 
     /**

@@ -3,6 +3,8 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
+use Chamilo\CourseBundle\Entity\CLpItem;
+use Chamilo\CourseBundle\Entity\CQuizRelQuestion;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
@@ -17,22 +19,26 @@ class QuizzesScoresLoader implements LoaderInterface
      */
     public function load(array $incomingData)
     {
-        $tblQuizQuestion = \Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $tblQuizRelQuestion = \Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $tblLpItem = \Database::get_course_table(TABLE_LP_ITEM);
+        $em = \Database::getManager();
 
-        $sql = "SELECT SUM(ponderation)
-            FROM $tblQuizQuestion as quiz_question
-            INNER JOIN $tblQuizRelQuestion as quiz_rel_question
-            ON quiz_question.iid = quiz_rel_question.question_id
-            WHERE
-                quiz_rel_question.exercice_id = {$incomingData['quiz_id']}
-                AND quiz_rel_question.c_id = {$incomingData['c_id']}";
+        // c_quiz_rel_question has no c_id (the quiz identifies the course) and exercice_id is now quiz_id.
+        $maxScore = (float) $em
+            ->createQuery(
+                'SELECT SUM(question.ponderation)
+                    FROM '.CQuizRelQuestion::class.' relQuestion
+                    INNER JOIN relQuestion.question question
+                    WHERE relQuestion.quiz = :quizId'
+            )
+            ->setParameter('quizId', (int) $incomingData['quiz_id'])
+            ->getSingleScalarResult()
+        ;
 
-        $rsQuiz = \Database::query($sql);
-        $maxScore = \Database::result($rsQuiz, 0, 0) ?: 0;
-
-        \Database::query("UPDATE $tblLpItem SET max_score = $maxScore WHERE iid = {$incomingData['item_id']}");
+        $em
+            ->createQuery('UPDATE '.CLpItem::class.' lpi SET lpi.maxScore = :maxScore WHERE lpi.iid = :itemId')
+            ->setParameter('maxScore', $maxScore)
+            ->setParameter('itemId', (int) $incomingData['item_id'])
+            ->execute()
+        ;
 
         return $incomingData['item_id'];
     }

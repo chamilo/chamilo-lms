@@ -994,21 +994,6 @@ class AnnouncementManager
     }
 
     /**
-     * @param int $insert_id
-     *
-     * @return bool
-     */
-    public static function update_mail_sent($insert_id)
-    {
-        $table = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $insert_id = intval($insert_id);
-        // store the modifications in the table tbl_annoucement
-        $sql = "UPDATE $table SET email_sent='1'
-                WHERE iid = $insert_id";
-        Database::query($sql);
-    }
-
-    /**
      * @param int $user_id
      *
      * @return CAnnouncement[]

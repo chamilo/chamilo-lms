@@ -3,6 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
@@ -31,11 +32,13 @@ class UserSessionLoader implements LoaderInterface
             }
         }
 
-        $tblSession = \Database::get_main_table(TABLE_MAIN_SESSION);
-
-        $sessionInfo = \Database::fetch_assoc(
-            \Database::query("SELECT id FROM $tblSession WHERE name = '{$incomingData['name']}'")
-        );
+        // The session name column is now called title.
+        $sessionInfo = \Database::getManager()
+            ->createQuery('SELECT s.id FROM '.Session::class.' s WHERE s.title = :name')
+            ->setParameter('name', (string) $incomingData['name'])
+            ->setMaxResults(1)
+            ->getOneOrNullResult()
+        ;
 
         if (!empty($sessionInfo)) {
             if ($this->loadMode == self::LOAD_MODE_REUSE) {

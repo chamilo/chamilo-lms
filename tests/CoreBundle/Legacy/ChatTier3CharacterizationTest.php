@@ -193,11 +193,10 @@ final class ChatTier3CharacterizationTest extends KernelTestCase
 
     // ------------------------------------------------------------------ ackReadUpTo
 
-    public function testAckReadUpToUpdatesTheRowsThenThrowsBecauseAffectedRowsIsCalledWithoutItsArgument(): void
+    public function testAckReadUpToMarksReadOnlyThePeersMessagesToMeUpToTheGivenId(): void
     {
-        // BROKEN (ChatController::ack reaches it): Database::affected_rows() requires the Result and is called with no
-        // argument, so the call throws ArgumentCountError AFTER the UPDATE already ran. Intended: return the number of rows
-        // marked read (the peer's messages to me with id <= lastSeen that were not read yet).
+        // FIXED with the DQL migration: it used to run the UPDATE and then throw ArgumentCountError (Database::affected_rows()
+        // called without its Result), so ChatController answered 500 although the rows were marked. It now returns the count.
         $a = $this->chat($this->peer, $this->me, 'a', 0);
         $b = $this->chat($this->peer, $this->me, 'b', 1);
         $c = $this->chat($this->peer, $this->me, 'c', 1);
@@ -205,13 +204,11 @@ final class ChatTier3CharacterizationTest extends KernelTestCase
         $mine = $this->chat($this->me, $this->peer, 'mine', 0);
         $elsewhere = $this->chat($this->other, $this->me, 'e', 0);
 
-        try {
-            (new Chat())->ackReadUpTo($this->peer, $this->me, $b);
-            $this->fail('Expected ArgumentCountError.');
-        } catch (ArgumentCountError) {
-        }
+        $count = (new Chat())->ackReadUpTo($this->peer, $this->me, $b);
 
+        $this->assertSame(2, $count, 'a and b changed; the already-read one and the later one did not.');
         $this->assertSame([2, 2, 1, 2, 0, 0], $this->recdOf([$a, $b, $c, $alreadyRead, $mine, $elsewhere]));
+        $this->assertSame(0, (new Chat())->ackReadUpTo($this->peer, $this->me, $b), 'Second call changes nothing.');
     }
 
     public function testAckReadUpToRejectsNonPositiveArguments(): void

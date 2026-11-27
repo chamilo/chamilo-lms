@@ -4,6 +4,11 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Helpers\ResourceDefaultVisibilityHelper;
+use Chamilo\CourseBundle\Entity\CLp;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -18,66 +23,59 @@ class CourseModulesScormLoader implements LoaderInterface
      */
     public function load(array $incomingData)
     {
-        $tblLpMain = \Database::get_course_table(TABLE_LP_MAIN);
+        $em = \Database::getManager();
+        $course = $em->find(Course::class, (int) $incomingData['c_id']);
 
-        $resultDisplayOrder = \Database::query(
-            "SELECT
-                CASE WHEN MAX(display_order) > 0 THEN MAX(display_order) + 1 ELSE 1 END AS display_order
-                FROM $tblLpMain WHERE c_id = {$incomingData['c_id']}"
-        );
-        $row = \Database::fetch_assoc($resultDisplayOrder);
-        $displayOrder = $row['display_order'];
-
-        $courseInfo = api_get_course_info_by_id($incomingData['c_id']);
-        $userId = 1;
-
-        $incomingData['path'] = $this->createDirectory($incomingData['name'], $courseInfo['code']);
-        $incomingData['use_max_score'] = $incomingData['use_max_score'] == 100;
-
-        $incomingData['created_on'] = $incomingData['created_on']
-            ? $incomingData['created_on']->format('Y-m-d h:i:s')
-            : null;
-        $incomingData['modified_on'] = $incomingData['modified_on']
-            ? $incomingData['modified_on']->format('Y-m-d h:i:s')
-            : null;
-        $incomingData['publicated_on'] = $incomingData['publicated_on']
-            ? $incomingData['publicated_on']->format('Y-m-d h:i:s')
-            : null;
-
-        $params = array_merge(
-            $incomingData,
-            [
-                'lp_type' => 2,
-                'description' => '',
-                'force_commit' => 0,
-                'default_view_mod' => 'embedded',
-                'default_encoding' => 'UTF-8',
-                'js_lib' => 'scorm_api.php',
-                'display_order' => $displayOrder,
-                'session_id' => 0,
-                'content_maker' => '',
-                'content_license' => '',
-                'debug' => 0,
-                'theme' => '',
-                'preview_image' => '',
-                'author' => '',
-                'prerequisite' => 0,
-                'seriousgame_mode' => 0,
-                'autolaunch' => 0,
-                'category_id' => 0,
-                'max_attempts' => 0,
-                'subscribe_users' => 0,
-            ]
-        );
-
-        $lpId = \Database::insert($tblLpMain, $params);
-
-        if ($lpId) {
-            \Database::query("UPDATE $tblLpMain SET id = iid WHERE iid = $lpId");
-
-            api_item_property_update($courseInfo, TOOL_LEARNPATH, $lpId, 'LearnpathAdded', $userId);
-            api_item_property_update($courseInfo, TOOL_LEARNPATH, $lpId, 'visible', $userId);
+        if (!$course) {
+            throw new \Exception("Course ({$incomingData['c_id']}) not found.");
         }
+
+        // TODO(schema): createDirectory() wrote the package files under SYS_COURSE_PATH/<course>/scorm, a constant and
+        // a storage that no longer exist (SCORM files are now an Asset, see ScormPackageImporter). Only the path
+        // is computed here, the files of the Moodle package are not copied: product decision pending.
+        $path = self::generateDirectoryName($incomingData['name']).'/.';
+
+        // The learning path belongs to the course through its resource node and link (c_lp has no c_id,
+        // display_order, session_id nor item_property any more); the link has no session, like before.
+        $lp = (new CLp())
+            ->setLpType(CLp::SCORM_TYPE)
+            ->setTitle($incomingData['name'])
+            ->setRef((string) ($incomingData['ref'] ?? ''))
+            ->setPath($path)
+            ->setDescription('')
+            ->setForceCommit(false)
+            ->setDefaultViewMod('embedded')
+            ->setDefaultEncoding('UTF-8')
+            ->setJsLib('scorm_api.php')
+            ->setContentMaker('')
+            ->setContentLicense('')
+            ->setDebug(false)
+            ->setTheme('')
+            ->setAuthor('')
+            ->setPrerequisite(0)
+            ->setSeriousgameMode(false)
+            ->setAutolaunch(0)
+            ->setMaxAttempts(0)
+            ->setSubscribeUsers(0)
+            ->setUseMaxScore((int) (100 == $incomingData['use_max_score']))
+            ->setHideTocFrame((bool) ($incomingData['hide_toc_frame'] ?? false))
+            ->setCreatedOn($incomingData['created_on'] ?: new \DateTime())
+            ->setModifiedOn($incomingData['modified_on'] ?: new \DateTime())
+            ->setPublishedOn($incomingData['publicated_on'] ?: null)
+            // The CLI has no logged in user: the admin (id 1) is the creator, like the former item_property rows.
+            ->setCreator($em->getReference(User::class, 1))
+            ->setParent($course)
+            ->addCourseLink(
+                $course,
+                null,
+                visibility: Container::$container->get(ResourceDefaultVisibilityHelper::class)
+                    ->getResourceLinkVisibility(ResourceDefaultVisibilityHelper::LEARNING_PATH, $course)
+            )
+        ;
+
+        Container::getLpRepository()->createLp($lp);
+
+        $lpId = $lp->getIid();
 
         return $lpId;
     }

@@ -335,6 +335,115 @@ class Database
     }
 
     /**
+     * Database-neutral replacement for "INSERT IGNORE": inserts the row only when no row with the same values in
+     * $uniqueColumns exists yet. The existence check is a bound SELECT; the table's unique index (when it has one)
+     * stays the safety net, so a concurrent insert that wins the race is reported as "already present" as well.
+     *
+     * When the connection is inside a transaction the insert runs in a savepoint, because on PostgreSQL a failed
+     * statement would otherwise abort the caller's whole transaction.
+     *
+     * A NULL in one of the $uniqueColumns values never counts as a duplicate (in SQL NULL = NULL is not true and
+     * unique indexes accept several NULLs), so the row is always inserted, like INSERT IGNORE did.
+     *
+     * Any other database error goes through self::handleError(), as Database::query() does.
+     *
+     * @param string               $table         Table name (plain identifier)
+     * @param array<string, mixed> $values        Column => value (int, string, bool, float, null, DateTimeInterface)
+     * @param string[]             $uniqueColumns Columns (keys of $values) identifying an existing row
+     *
+     * @return bool true when a row was inserted, false when it was already present (or on a handled error)
+     */
+    public static function insertIfAbsent(string $table, array $values, array $uniqueColumns): bool
+    {
+        if (empty($values) || empty($uniqueColumns)) {
+            throw new InvalidArgumentException('insertIfAbsent() needs values and unique columns.');
+        }
+        foreach (array_merge([$table], array_keys($values)) as $identifier) {
+            if (!is_string($identifier) || !preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $identifier)) {
+                throw new InvalidArgumentException('Invalid SQL identifier given to insertIfAbsent().');
+            }
+        }
+        foreach ($uniqueColumns as $column) {
+            if (!array_key_exists($column, $values)) {
+                throw new InvalidArgumentException('Unique column "'.$column.'" is not part of the values.');
+            }
+        }
+
+        $connection = self::getManager()->getConnection();
+        $infer = static function ($value): int|string {
+            return match (true) {
+                null === $value => \Doctrine\DBAL\ParameterType::NULL,
+                is_int($value) => \Doctrine\DBAL\ParameterType::INTEGER,
+                is_bool($value) => \Doctrine\DBAL\ParameterType::BOOLEAN,
+                default => \Doctrine\DBAL\ParameterType::STRING,
+            };
+        };
+        $normalize = static function ($value) {
+            return $value instanceof \DateTimeInterface ? $value->format('Y-m-d H:i:s') : $value;
+        };
+
+        $hasNullKey = false;
+        foreach ($uniqueColumns as $column) {
+            if (null === $values[$column]) {
+                $hasNullKey = true;
+            }
+        }
+
+        $savepoint = null;
+        try {
+            if (!$hasNullKey) {
+                $select = $connection->createQueryBuilder()
+                    ->select('1')
+                    ->from($connection->quoteIdentifier($table))
+                    ->setMaxResults(1);
+                foreach ($uniqueColumns as $i => $column) {
+                    $select->andWhere($connection->quoteIdentifier($column).' = :u'.$i)
+                        ->setParameter('u'.$i, $normalize($values[$column]), $infer($values[$column]));
+                }
+                if (false !== $select->executeQuery()->fetchOne()) {
+                    return false;
+                }
+            }
+
+            $insert = $connection->createQueryBuilder()->insert($connection->quoteIdentifier($table));
+            $i = 0;
+            foreach ($values as $column => $value) {
+                $insert->setValue($connection->quoteIdentifier($column), ':v'.$i)
+                    ->setParameter('v'.$i, $normalize($value), $infer($value));
+                $i++;
+            }
+
+            if ($connection->isTransactionActive()) {
+                $savepoint = 'chamilo_insert_if_absent';
+                $connection->createSavepoint($savepoint);
+            }
+            $insert->executeStatement();
+            if (null !== $savepoint) {
+                $connection->releaseSavepoint($savepoint);
+            }
+
+            return true;
+        } catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException) {
+            // A concurrent insert won the race: the row is present.
+            if (null !== $savepoint) {
+                $connection->rollbackSavepoint($savepoint);
+            }
+
+            return false;
+        } catch (Exception $e) {
+            if (null !== $savepoint) {
+                try {
+                    $connection->rollbackSavepoint($savepoint);
+                } catch (Exception) {
+                }
+            }
+            self::handleError($e);
+
+            return false;
+        }
+    }
+
+    /**
      * Wrapper executing an SQL update query based on the given attributes array
      * @param string $tableName       use Database::get_main_table
      * @param array  $attributes      Values to updates

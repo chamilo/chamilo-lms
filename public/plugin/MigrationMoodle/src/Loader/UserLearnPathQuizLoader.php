@@ -3,6 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
+use Chamilo\CourseBundle\Entity\CLpItemView;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
@@ -48,14 +49,26 @@ class UserLearnPathQuizLoader implements LoaderInterface
      */
     private function findViewOfItem($itemId, $userId, $sessionId)
     {
-        $result = \Database::query(
-            "SELECT lpiv.iid
-                FROM c_lp_item_view lpiv
-                INNER JOIN c_lp_view lpv ON (lpv.iid = lpiv.lp_view_id AND lpv.c_id = lpiv.c_id)
-                WHERE lpiv.lp_item_id = $itemId AND lpv.user_id = $userId AND lpv.session_id = $sessionId
-                LIMIT 1"
-        );
-        $itemView = \Database::fetch_assoc($result);
+        $qb = \Database::getManager()
+            ->createQueryBuilder()
+            ->select('lpiv.iid')
+            ->from(CLpItemView::class, 'lpiv')
+            ->innerJoin('lpiv.view', 'lpv')
+            ->where('lpiv.item = :itemId')
+            ->andWhere('lpv.user = :userId')
+            ->setParameter('itemId', (int) $itemId)
+            ->setParameter('userId', (int) $userId)
+            ->setMaxResults(1)
+        ;
+
+        // c_lp_view.session_id is NULL for "no session" (it used to be 0).
+        if (empty($sessionId)) {
+            $qb->andWhere('lpv.session IS NULL');
+        } else {
+            $qb->andWhere('lpv.session = :sessionId')->setParameter('sessionId', (int) $sessionId);
+        }
+
+        $itemView = $qb->getQuery()->getOneOrNullResult();
 
         if (!$itemView) {
             throw new \Exception("Item view not found for item ($itemId) and user ($userId) in session ($sessionId).");

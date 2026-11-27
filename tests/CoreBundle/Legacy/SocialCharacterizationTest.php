@@ -6,11 +6,15 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\Legacy;
 
+use Chamilo\CoreBundle\Entity\Message;
+use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\Tests\ChamiloTestTrait;
 use ChamiloSession;
+use DateTime;
+use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use SocialManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -18,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Throwable;
 
 /**
  * Characterization tests for SocialManager (social.lib.php).
@@ -26,10 +29,11 @@ use Throwable;
  * LIVE and working (user_rel_user based): get_relation_between_contacts() (chat, video signalling, vCard export:
  * it decides who may contact / see whom), get_friends() (social.ajax, profile pages).
  *
- * BROKEN: the two helpers that still read the `message` table through user_receiver_id/msg_status
- * (get_list_invitation_of_friends_by_user_id, getWallMessages): those two columns no longer exist (recipients live in
- * message_rel_user, the status column is `status`), so each call throws. They are still reached by AJAX actions
- * (message.ajax.php, social.ajax.php); the wall itself is the Vue SocialPost feature. Pinned cheaply.
+ * get_list_invitation_of_friends_by_user_id() (the notifications poll of message.ajax.php) reads the pending invitations
+ * received by a user through message_rel_user and message.status.
+ *
+ * (getWallMessages was removed: it read message.user_receiver_id/msg_status, which no longer exist, and its only caller, the
+ * list_wall_message AJAX action, was unreachable; the wall is the Vue SocialPost feature.)
  *
  * Fixtures: users 1 (admin), 2 (anonymous), 3 (soft deleted fallback_user) and raw user_rel_user rows (sc_).
  */
@@ -201,24 +205,42 @@ final class SocialCharacterizationTest extends KernelTestCase
         $this->assertSame('anon', $friends[0]['user_info']['username']);
     }
 
-    // ------------------------------------------------------------------ message based helpers (broken)
-
-    /**
-     * @dataProvider brokenMessageQueries
-     */
-    public function testMessageTableHelpersThrowBecauseTheirColumnsAreGone(callable $call): void
+    public function testPendingInvitationsReceivedAreListedNewestFirstWithTheirSenderAndLimit(): void
     {
-        // BROKEN (the remaining callers are an AJAX action behind the abandoned wall and the notifications poll): user_receiver_id / msg_status do not exist on `message` any more, so the query fails.
-        // Intended (if ever revived): counts and lists computed through message_rel_user and message.status.
-        $this->expectException(Throwable::class);
-        $call();
-    }
+        $sender = $this->createUser('sc_inv_sender');
+        $other = $this->createUser('sc_inv_other');
+        $receiver = $this->createUser('sc_inv_receiver');
+        $em = $this->getEntityManager();
+        $make = function (User $from, User $to, string $title, int $type, int $status, string $date) use ($em): void {
+            $message = (new Message())
+                ->setSender($from)
+                ->setMsgType($type)
+                ->setStatus($status)
+                ->setTitle($title)
+                ->setContent('content of '.$title)
+                ->setSendDate(new DateTime($date, new DateTimeZone('UTC')))
+            ;
+            $message->addReceiverTo($to);
+            $em->persist($message);
+        };
+        $pending = Message::MESSAGE_STATUS_INVITATION_PENDING;
+        $invitation = Message::MESSAGE_TYPE_INVITATION;
+        $make($sender, $receiver, 'inv old', $invitation, $pending, '2030-01-01 10:00:00');
+        $make($other, $receiver, 'inv new', $invitation, $pending, '2030-01-02 10:00:00');
+        $make($sender, $receiver, 'inv answered', $invitation, Message::MESSAGE_STATUS_INVITATION_ACCEPTED, '2030-01-03 10:00:00');
+        $make($sender, $receiver, 'plain inbox', Message::MESSAGE_TYPE_INBOX, $pending, '2030-01-04 10:00:00');
+        $make($sender, $other, 'for someone else', $invitation, $pending, '2030-01-05 10:00:00');
+        $em->flush();
 
-    public static function brokenMessageQueries(): iterable
-    {
-        yield 'invitations received' => [static fn () => SocialManager::get_list_invitation_of_friends_by_user_id(1, 3)];
+        $list = SocialManager::get_list_invitation_of_friends_by_user_id($receiver->getId());
 
-        yield 'wall messages' => [static fn () => SocialManager::getWallMessages(1)];
+        $this->assertSame(['inv new', 'inv old'], array_column($list, 'title'));
+        $this->assertSame((string) $other->getId(), (string) $list[0]['user_sender_id']);
+        $this->assertSame((string) $sender->getId(), (string) $list[1]['user_sender_id']);
+        $this->assertSame('content of inv new', $list[0]['content']);
+        $this->assertSame('2030-01-02 10:00:00', $list[0]['send_date']);
+        $this->assertSame(['inv new'], array_column(SocialManager::get_list_invitation_of_friends_by_user_id($receiver->getId(), 1), 'title'));
+        $this->assertSame([], SocialManager::get_list_invitation_of_friends_by_user_id($sender->getId()));
     }
 
     public function testInvitationHelpersRejectEmptyIdsBeforeTouchingTheDatabase(): void

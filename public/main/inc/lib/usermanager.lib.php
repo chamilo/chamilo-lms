@@ -5479,27 +5479,34 @@ class UserManager
                 }
 
                 $bossLanguage = $bossInfo['locale'];
-                $sql = "INSERT IGNORE INTO $userRelUserTable (user_id, friend_user_id, relation_type)
-                        VALUES ($studentId, $bossId, ".UserRelUser::USER_RELATION_TYPE_BOSS.")";
-                // TODO(db-neutral): INSERT IGNORE
-                $insertId = Database::query($sql);
+                $now = api_get_utc_datetime();
+                Database::insertIfAbsent(
+                    'user_rel_user',
+                    [
+                        'user_id' => (int) $studentId,
+                        'friend_user_id' => $bossId,
+                        'relation_type' => UserRelUser::USER_RELATION_TYPE_BOSS,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ],
+                    ['user_id', 'friend_user_id', 'relation_type']
+                );
 
-                if ($insertId) {
-                    if ($sendNotification) {
-                        $name = $studentInfo['complete_name'];
-                        // Absolute: the message is also sent by e-mail.
-                        $url = api_get_path(WEB_PATH).'reporting/learners/'.$studentId;
-                        $url = Display::url($url, $url);
-                        $subject = sprintf(get_lang('You have been assigned the learner %s', $bossLanguage), $name);
-                        $message = sprintf(get_lang('You have been assigned the learner %s with url %s', $bossLanguage), $name, $url);
-                        MessageManager::send_message_simple(
-                            $bossId,
-                            $subject,
-                            $message
-                        );
-                    }
-                    $inserted++;
+                // INSERT IGNORE returned a truthy result even when it ignored a repeated boss: count and notify it too.
+                if ($sendNotification) {
+                    $name = $studentInfo['complete_name'];
+                    // Absolute: the message is also sent by e-mail.
+                    $url = api_get_path(WEB_PATH).'reporting/learners/'.$studentId;
+                    $url = Display::url($url, $url);
+                    $subject = sprintf(get_lang('You have been assigned the learner %s', $bossLanguage), $name);
+                    $message = sprintf(get_lang('You have been assigned the learner %s with url %s', $bossLanguage), $name, $url);
+                    MessageManager::send_message_simple(
+                        $bossId,
+                        $subject,
+                        $message
+                    );
                 }
+                $inserted++;
             }
         } else {
             self::removeAllBossFromStudent($studentId);

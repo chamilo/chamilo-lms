@@ -268,6 +268,7 @@ class VirtualDatabase
                     $safeLower = Database::escape_string(strtolower(str_replace('-', '_', $courseLang)));
 
                     // english_name lookup (e.g. 'french' → 'fr_FR') or already stored isocode.
+                    // TODO(db-neutral): REPLACE() is not available in DQL (not a registered DQL function)
                     $result = Database::query(
                         "SELECT isocode FROM $langTable ".
                         "WHERE english_name = '$safe' ".

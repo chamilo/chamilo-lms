@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\ExtraFieldOptions;
 use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CoreBundle\Entity\MessageAttachment;
 use Chamilo\CoreBundle\Entity\User;
+use Chamilo\CoreBundle\Entity\UserFriendRelationType;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\Enums\ActionIcon;
 use Chamilo\CoreBundle\Enums\ObjectIcon;
@@ -34,32 +35,6 @@ class SocialManager extends UserManager
     }
 
     /**
-     * Allow to see contacts list.
-     *
-     * @author isaac flores paz
-     *
-     * @return array
-     */
-    public static function show_list_type_friends()
-    {
-        $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
-        $sql = 'SELECT id, title FROM '.$table.'
-                WHERE id<>6
-                ORDER BY id ASC';
-        $result = Database::query($sql);
-        $friend_relation_list = [];
-        while ($row = Database::fetch_assoc($result)) {
-            $friend_relation_list[] = $row;
-        }
-        $count_list = count($friend_relation_list);
-        if (0 == $count_list) {
-            $friend_relation_list[] = get_lang('Unknown');
-        } else {
-            return $friend_relation_list;
-        }
-    }
-
-    /**
      * Get the kind of relation between contacts.
      *
      * @param int  $user_id     user id
@@ -72,37 +47,43 @@ class SocialManager extends UserManager
      */
     public static function get_relation_between_contacts($user_id, $user_friend, $includeRH = false)
     {
-        $table = Database::get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
-        $userRelUserTable = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        if (false == $includeRH) {
-            $sql = 'SELECT rt.id as id
-                FROM '.$table.' rt
-                WHERE rt.id = (
-                    SELECT uf.relation_type
-                    FROM '.$userRelUserTable.' uf
-                    WHERE
-                        user_id='.((int) $user_id).' AND
-                        friend_user_id='.((int) $user_friend).' AND
-                        uf.relation_type <> '.UserRelUser::USER_RELATION_TYPE_RRHH.'
-                    LIMIT 1
-                )';
-        } else {
-            $sql = 'SELECT rt.id as id
-                FROM '.$table.' rt
-                WHERE rt.id = (
-                    SELECT uf.relation_type
-                    FROM '.$userRelUserTable.' uf
-                    WHERE
-                        user_id='.((int) $user_id).' AND
-                        friend_user_id='.((int) $user_friend).'
-                    LIMIT 1
-                )';
-        }
-        $res = Database::query($sql);
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_assoc($res);
+        $entityManager = Container::getEntityManager();
 
-            return (int) $row['id'];
+        // The relation type stored for the directed pair. A pair can hold several rows (one per relation type): the
+        // raw query took "the first" one with no ORDER BY, which in practice was the lowest type (unique index order),
+        // so that order is now explicit.
+        $pairQuery = $entityManager->createQueryBuilder()
+            ->select('r.relationType AS relation_type')
+            ->from(UserRelUser::class, 'r')
+            ->where('IDENTITY(r.user) = :userId')
+            ->andWhere('IDENTITY(r.friend) = :friendId')
+            ->orderBy('r.relationType', 'ASC')
+            ->setMaxResults(1)
+            ->setParameter('userId', (int) $user_id)
+            ->setParameter('friendId', (int) $user_friend)
+        ;
+        if (false == $includeRH) {
+            $pairQuery
+                ->andWhere('r.relationType <> :rrhh')
+                ->setParameter('rrhh', UserRelUser::USER_RELATION_TYPE_RRHH)
+            ;
+        }
+        $pairRows = $pairQuery->getQuery()->getArrayResult();
+
+        // Only a type that exists in user_friend_relation_type counts as a relation.
+        $relationRows = [];
+        if (count($pairRows) > 0) {
+            $relationRows = $entityManager->createQueryBuilder()
+                ->select('t.id AS id')
+                ->from(UserFriendRelationType::class, 't')
+                ->where('t.id = :typeId')
+                ->setParameter('typeId', (int) $pairRows[0]['relation_type'])
+                ->getQuery()
+                ->getArrayResult()
+            ;
+        }
+        if (count($relationRows) > 0) {
+            return (int) $relationRows[0]['id'];
         } else {
             if ('true' === api_get_setting('social.social_make_teachers_friend_all')) {
                 $adminsList = UserManager::get_all_administrators();
@@ -226,18 +207,28 @@ class SocialManager extends UserManager
             return [];
         }
 
-        $table = Database::get_main_table(TABLE_MESSAGE);
-        $sql = 'SELECT user_sender_id, send_date, title, content
-                FROM '.$table.'
-                WHERE
-                    user_receiver_id = '.$userId.' AND
-                    msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
-        if (null != $limit && $limit > 0) {
-            $sql .= ' LIMIT '.$limit;
+        // The recipients live in message_rel_user and the status column of `message` is `status`: the invitations
+        // still waiting for an answer are the messages of the invitation type received by this user.
+        $qb = Container::getEntityManager()->createQueryBuilder()
+            ->select('IDENTITY(m.sender) AS user_sender_id', 'm.sendDate AS send_date', 'm.title AS title', 'm.content AS content')
+            ->from(Message::class, 'm')
+            ->innerJoin('m.receivers', 'mr')
+            ->where('IDENTITY(mr.receiver) = :userId')
+            ->andWhere('m.msgType = :type')
+            ->andWhere('m.status = :status')
+            ->orderBy('m.sendDate', 'DESC')
+            ->addOrderBy('m.id', 'DESC')
+            ->setParameter('userId', $userId)
+            ->setParameter('type', Message::MESSAGE_TYPE_INVITATION)
+            ->setParameter('status', Message::MESSAGE_STATUS_INVITATION_PENDING)
+        ;
+        if ($limit > 0) {
+            $qb->setMaxResults($limit);
         }
-        $res = Database::query($sql);
         $list = [];
-        while ($row = Database::fetch_assoc($res)) {
+        foreach ($qb->getQuery()->getArrayResult() as $row) {
+            // The old query returned the date as the string of the column.
+            $row['send_date'] = $row['send_date'] instanceof DateTimeInterface ? $row['send_date']->format('Y-m-d H:i:s') : $row['send_date'];
             $list[] = $row;
         }
 
@@ -451,219 +442,6 @@ class SocialManager extends UserManager
     }
 
     /**
-     * Gets all messages from someone's wall (within specific limits).
-     *
-     * @param int        $userId     id of wall shown
-     * @param int|string $parentId   id message (Post main)
-     * @param int|array  $groupId
-     * @param int|array  $friendId
-     * @param string     $startDate  Date from which we want to show the messages, in UTC time
-     * @param int        $start      Limit for the number of parent messages we want to show
-     * @param int        $length     Wall message query offset
-     * @param bool       $getCount
-     * @param array      $threadList
-     *
-     * @return array|int
-     *
-     * @author Yannick Warnier
-     *
-     * Queries message.user_receiver_id/msg_status, columns that no longer exist: it always fails. Still called from inc/ajax/social.ajax.php (list_wall_message).
-     */
-    public static function getWallMessages(
-        $userId,
-        $parentId = 0,
-        $groupId = 0,
-        $friendId = 0,
-        $startDate = '',
-        $start = 0,
-        $length = 10,
-        $getCount = false,
-        $threadList = []
-    ) {
-        $tblMessage = Database::get_main_table(TABLE_MESSAGE);
-
-        $parentId = (int) $parentId;
-        $userId = (int) $userId;
-        $start = (int) $start;
-        $length = (int) $length;
-
-        $select = " SELECT
-                    id,
-                    user_sender_id,
-                    user_receiver_id,
-                    send_date,
-                    content,
-                    parent_id,
-                    msg_status,
-                    group_id,
-                    '' as forum_id,
-                    '' as thread_id,
-                    '' as c_id
-                  ";
-
-        if ($getCount) {
-            $select = ' SELECT count(id) as count_items ';
-        }
-
-        $sqlBase = "$select FROM $tblMessage m WHERE ";
-        $sql = [];
-        $sql[1] = $sqlBase."msg_status <> ".MESSAGE_STATUS_WALL_DELETE.' AND ';
-
-        // Get my own posts
-        $userReceiverCondition = ' (
-            user_receiver_id = '.$userId.' AND
-            msg_status IN ('.MESSAGE_STATUS_WALL_POST.', '.MESSAGE_STATUS_WALL.') AND
-            parent_id = '.$parentId.'
-        )';
-
-        $sql[1] .= $userReceiverCondition;
-
-        $sql[2] = $sqlBase.' msg_status = '.MESSAGE_STATUS_PROMOTED.' ';
-
-        // Get my group posts
-        $groupCondition = '';
-        if (!empty($groupId)) {
-            if (is_array($groupId)) {
-                $groupId = array_map('intval', $groupId);
-                $groupId = implode(",", $groupId);
-                $groupCondition = " ( group_id IN ($groupId) ";
-            } else {
-                $groupId = (int) $groupId;
-                $groupCondition = " ( group_id = $groupId ";
-            }
-            $groupCondition .= ' AND (msg_type = '.Message::MESSAGE_TYPE_GROUP.') ';
-        }
-        if (!empty($groupCondition)) {
-            $sql[3] = $sqlBase.$groupCondition;
-        }
-
-        // Get my friend posts
-        $friendCondition = '';
-        if (!empty($friendId)) {
-            if (is_array($friendId)) {
-                $friendId = array_map('intval', $friendId);
-                $friendId = implode(",", $friendId);
-                $friendCondition = " ( user_receiver_id IN ($friendId) ";
-            } else {
-                $friendId = (int) $friendId;
-                $friendCondition = " ( user_receiver_id = $friendId ";
-            }
-            $friendCondition .= ' AND msg_status = '.MESSAGE_STATUS_WALL_POST.' AND parent_id = 0) ';
-        }
-        if (!empty($friendCondition)) {
-            $sql[4] = $sqlBase.$friendCondition;
-        }
-
-        if (!empty($threadList)) {
-            if ($getCount) {
-                $select = ' SELECT count(iid) count_items ';
-            } else {
-                $select = " SELECT
-                                iid as id,
-                                poster_id as user_sender_id,
-                                '' as user_receiver_id,
-                                post_date as send_date,
-                                post_text as content,
-                                '' as parent_id,
-                                ".MESSAGE_STATUS_FORUM." as msg_status,
-                                '' as group_id,
-                                forum_id,
-                                thread_id,
-                                c_id
-                            ";
-            }
-
-            $threadList = array_map('intval', $threadList);
-            $threadList = implode("','", $threadList);
-            $condition = " thread_id IN ('$threadList') ";
-            $sql[5] = "$select
-                    FROM c_forum_post
-                    WHERE $condition
-                ";
-        }
-
-        if ($getCount) {
-            $count = 0;
-            foreach ($sql as $oneQuery) {
-                if (!empty($oneQuery)) {
-                    $res = Database::query($oneQuery);
-                    $row = Database::fetch_array($res);
-                    $count += (int) $row['count_items'];
-                }
-            }
-
-            return $count;
-        }
-
-        $sqlOrder = ' ORDER BY send_date DESC ';
-        $sqlLimit = " LIMIT $start, $length ";
-        $messages = [];
-        foreach ($sql as $index => $oneQuery) {
-            if (5 === $index) {
-                // Exception only for the forum query above (field name change)
-                $oneQuery .= ' ORDER BY post_date DESC '.$sqlLimit;
-            } else {
-                $oneQuery .= $sqlOrder.$sqlLimit;
-            }
-            $res = Database::query($oneQuery);
-            $em = Database::getManager();
-            if (Database::num_rows($res) > 0) {
-                $repo = $em->getRepository(CForumPost::class);
-                $repoThread = $em->getRepository(CForumThread::class);
-                $groups = [];
-                $userGroup = new UserGroupModel();
-                $urlGroup = api_get_path(WEB_CODE_PATH).'social/group_view.php?id=';
-                while ($row = Database::fetch_assoc($res)) {
-                    $row['group_info'] = [];
-                    if (!empty($row['group_id'])) {
-                        if (!in_array($row['group_id'], $groups)) {
-                            $group = $userGroup->get($row['group_id']);
-                            $group['url'] = $urlGroup.$group['id'];
-                            $groups[$row['group_id']] = $group;
-                            $row['group_info'] = $group;
-                        } else {
-                            $row['group_info'] = $groups[$row['group_id']];
-                        }
-                    }
-
-                    // Forums
-                    $row['post_title'] = '';
-                    $row['forum_title'] = '';
-                    $row['thread_url'] = '';
-                    if (MESSAGE_STATUS_FORUM === (int) $row['msg_status']) {
-                        // @todo use repositories to get post and threads.
-                        /** @var CForumPost $post */
-                        $post = $repo->find($row['id']);
-                        /** @var CForumThread $thread */
-                        $thread = $repoThread->find($row['thread_id']);
-                        if ($post && $thread) {
-                            //$courseInfo = api_get_course_info_by_id($post->getCId());
-                            $row['post_title'] = $post->getForum()->getTitle();
-                            $row['forum_title'] = $thread->getTitle();
-                            $postLink = $post->getResourceNode()?->getResourceLinks()->first();
-                            $row['thread_url'] = $postLink ? getForumToolUrl(
-                                (int) $postLink->getCourse()?->getId(),
-                                (int) $postLink->getSession()?->getId(),
-                                0,
-                                $post->getForum()->getIid(),
-                                $post->getThread()->getIid()
-                            ) : '';
-                        }
-                    }
-
-                    $messages[$row['id']] = $row;
-                }
-            }
-        }
-        // Reordering messages by ID (reverse order) is enough to have the
-        // latest first, as there is currently no option to edit messages
-        // afterwards
-        krsort($messages);
-
-        return $messages;
-    }
-
-    /**
      * @return array
      */
     public static function getAttachmentPreviewList(Message $message)
@@ -701,39 +479,6 @@ class SocialManager extends UserManager
         }
 
         return implode('', $previews);
-    }
-
-    /**
-     * @param array $messages
-     *
-     * @return array
-     */
-    public static function formatWallMessages($messages)
-    {
-        $data = [];
-        $users = [];
-        foreach ($messages as $key => $message) {
-            $userIdLoop = $message['user_sender_id'];
-            $userFriendIdLoop = $message['user_receiver_id'];
-            if (!isset($users[$userIdLoop])) {
-                $users[$userIdLoop] = api_get_user_info($userIdLoop);
-            }
-
-            if (!isset($users[$userFriendIdLoop])) {
-                $users[$userFriendIdLoop] = api_get_user_info($userFriendIdLoop);
-            }
-
-            $html = self::headerMessagePost(
-                $users[$userIdLoop],
-                $users[$userFriendIdLoop],
-                $message
-            );
-
-            $data[$key] = $message;
-            $data[$key]['html'] = $html;
-        }
-
-        return $data;
     }
 
     /**
@@ -1066,29 +811,6 @@ class SocialManager extends UserManager
         $html = Display::panel($form->returnForm(), get_lang('Social wall'));
 
         return $html;
-    }
-
-    /**
-     * @param string $message
-     * @param string $content
-     *
-     * @return string
-     */
-    public static function wrapPost($message, $content)
-    {
-        $class = '';
-        if (MESSAGE_STATUS_PROMOTED === (int) $message['msg_status']) {
-            $class = 'promoted_post';
-        }
-
-        return Display::panel($content, '',
-            '',
-            'default',
-            '',
-            'post_'.$message['id'],
-            null,
-            $class
-        );
     }
 
     /**
@@ -1520,31 +1242,6 @@ class SocialManager extends UserManager
                 $(".timeago").timeago();
             }
             </script>';
-    }
-
-    /**
-     * @param int $userId
-     * @param int $countPost
-     *
-     * @return string
-     */
-    public static function getAutoExtendLink($userId, $countPost)
-    {
-        $userId = (int) $userId;
-        $socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
-        $socialAutoExtendLink = '';
-        if ($countPost > self::DEFAULT_WALL_POSTS) {
-            $socialAutoExtendLink = Display::url(
-                get_lang('See more'),
-                $socialAjaxUrl.'?u='.$userId.'&a=list_wall_message&start='.
-                self::DEFAULT_WALL_POSTS.'&length='.self::DEFAULT_SCROLL_NEW_POST,
-                [
-                    'class' => 'nextPage next',
-                ]
-            );
-        }
-
-        return $socialAutoExtendLink;
     }
 
     /**

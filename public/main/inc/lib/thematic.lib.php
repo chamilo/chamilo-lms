@@ -43,28 +43,6 @@ class Thematic
     }
 
     /**
-     * Get the total number of thematic inside current course and current session.
-     *
-     * @see SortableTable#get_total_number_of_items()
-     */
-    public function get_number_of_thematics()
-    {
-        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
-        $condition_session = '';
-        if (!api_get_session_id()) {
-            $condition_session = api_get_session_condition(0);
-        }
-        $course_id = api_get_course_int_id();
-        $sql = "SELECT COUNT(id) AS total_number_of_items
-                FROM $tbl_thematic
-                WHERE c_id = $course_id AND active = 1 $condition_session ";
-        $res = Database::query($sql);
-        $obj = Database::fetch_object($res);
-
-        return $obj->total_number_of_items;
-    }
-
-    /**
      * Moves a thematic item up or down in the list by adjusting its display order in the associated resource node.
      */
     public function moveThematic(string $direction, int $thematicId, Course $course, ?Session $session = null): bool
@@ -271,70 +249,6 @@ class Thematic
         $thematic_id = (int) $params['thematic_id'];
         $repo = Container::getThematicAdvanceRepository();
         return $repo->count(['thematic' => $thematic_id]);
-    }
-
-    /**
-     * Get the thematic advances to display on the current page (fill the sortable-table).
-     *
-     * @param   int     offset of first user to recover
-     * @param   int     Number of users to get
-     * @param   int     Column to sort on
-     * @param   string  Order (ASC,DESC)
-     *
-     * @return array
-     *
-     * @see SortableTable#get_table_data($from)
-     */
-    public static function get_thematic_advance_data($from, $number_of_items, $column, $direction, $params = [])
-    {
-        $table = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
-        $column = (int) $column;
-        $from = (int) $from;
-        $number_of_items = (int) $number_of_items;
-        if (!in_array($direction, ['ASC', 'DESC'])) {
-            $direction = 'ASC';
-        }
-        $data = [];
-        $thematic_id = (int) $params['thematic_id'];
-        if (api_is_allowed_to_edit(null, true)) {
-            $sql = "SELECT iid AS col0, start_date AS col1, duration AS col2, content AS col3
-                    FROM $table
-                    WHERE thematic_id = $thematic_id
-                    ORDER BY col$column $direction
-                    LIMIT $from,$number_of_items ";
-
-            /*$list = api_get_item_property_by_tool(
-                'thematic_advance',
-                api_get_course_id(),
-                api_get_session_id()
-            );*/
-
-            /*$elements = [];
-            foreach ($list as $value) {
-                $elements[] = $value['ref'];
-            }*/
-
-            $res = Database::query($sql);
-            $i = 1;
-            while ($thematic_advance = Database::fetch_row($res)) {
-                //if (in_array($thematic_advance[0], $elements)) {
-                $thematic_advance[1] = api_get_local_time($thematic_advance[1]);
-                $thematic_advance[1] = api_format_date($thematic_advance[1], DATE_TIME_FORMAT_LONG);
-                $actions = '';
-                $actions .= '<a
-                        href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.
-                        Display::getMdiIcon(ActionIcon::EDIT, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Edit')).'</a>';
-                $actions .= '<a
-                    onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;"
-                    href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.
-                        Display::getMdiIcon(ActionIcon::DELETE, 'ch-tool-icon', null, ICON_SIZE_SMALL, get_lang('Delete')).'</a></center>';
-                $data[] = [$i, $thematic_advance[1], $thematic_advance[2], $thematic_advance[3], $actions];
-                $i++;
-                // }
-            }
-        }
-
-        return $data;
     }
 
     public function getThematicAdvance($id): ?CThematicAdvance
@@ -557,41 +471,6 @@ class Thematic
         }*/
 
         return $affected_rows;
-    }
-
-    /**
-     * Get next description type for a new thematic plan description (option 'others').
-     *
-     * @param int $thematic_id Thematic id
-     *
-     * @return int New Description type
-     */
-    public function get_next_description_type($thematic_id)
-    {
-        // definition database table
-        $tbl_thematic_plan = Database::get_course_table(TABLE_THEMATIC_PLAN);
-
-        // protect data
-        $thematic_id = intval($thematic_id);
-        $course_id = api_get_course_int_id();
-
-        $sql = "SELECT MAX(description_type) as max
-                FROM $tbl_thematic_plan
-                WHERE
-                    c_id = $course_id AND
-                    thematic_id = $thematic_id AND
-                    description_type >= ".ADD_THEMATIC_PLAN;
-        $rs = Database::query($sql);
-        $row = Database::fetch_array($rs);
-        $last_description_type = $row['max'];
-
-        if (isset($last_description_type)) {
-            $next_description_type = $last_description_type + 1;
-        } else {
-            $next_description_type = ADD_THEMATIC_PLAN;
-        }
-
-        return $next_description_type;
     }
 
     /**

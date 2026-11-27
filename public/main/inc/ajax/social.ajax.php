@@ -143,67 +143,6 @@ switch ($action) {
                 break;
         }
         break;
-    case 'list_wall_message':
-        if (api_is_anonymous()) {
-            break;
-        }
-        $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
-        $userId = isset($_REQUEST['u']) ? (int) $_REQUEST['u'] : api_get_user_id();
-
-        $html = '';
-        if ($userId == api_get_user_id()) {
-            $threadList = SocialManager::getThreadList($userId);
-            $threadIdList = [];
-            if (!empty($threadList)) {
-                $threadIdList = array_column($threadList, 'id');
-            }
-
-            $html = SocialManager::getMyWallMessages(
-                $userId,
-                $start,
-                SocialManager::DEFAULT_SCROLL_NEW_POST,
-                $threadIdList
-            );
-            $html = $html['posts'];
-        } else {
-            $messages = SocialManager::getWallMessages(
-                $userId,
-                null,
-                0,
-                0,
-                '',
-                $start,
-                SocialManager::DEFAULT_SCROLL_NEW_POST
-            );
-            $messages = SocialManager::formatWallMessages($messages);
-
-            if (!empty($messages)) {
-                ksort($messages);
-                foreach ($messages as $message) {
-                    $post = $message['html'];
-                    $comments = SocialManager::getWallPostComments($userId, $message);
-                    $html .= SocialManager::wrapPost($message, $post.$comments);
-                }
-            }
-        }
-
-        if (!empty($html)) {
-            $html .= Display::div(
-                Display::url(
-                    get_lang('See more'),
-                    api_get_self().'?u='.$userId.'&a=list_wall_message&start='.
-                    ($start + SocialManager::DEFAULT_SCROLL_NEW_POST).'&length='.SocialManager::DEFAULT_SCROLL_NEW_POST,
-                    [
-                        'class' => 'nextPage',
-                    ]
-                ),
-                [
-                    'class' => 'next',
-                ]
-            );
-        }
-        echo $html;
-        break;
     case 'like_message':
         header('Content-Type: application/json');
 

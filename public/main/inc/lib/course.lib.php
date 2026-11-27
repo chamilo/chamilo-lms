@@ -3733,11 +3733,18 @@ class CourseManager
             foreach ($courses_list as $course_code) {
                 $courseInfo = api_get_course_info($course_code);
                 $courseId = $courseInfo['real_id'];
-                // TODO(db-neutral): INSERT IGNORE
-                $sql = "INSERT IGNORE INTO $tbl_course_rel_user(c_id, user_id, status, relation_type)
-                        VALUES($courseId, $hr_manager_id, ".DRH.", ".COURSE_RELATION_TYPE_RRHH.")";
-                $result = Database::query($sql);
-                if (Database::affected_rows($result)) {
+                // course_rel_user has no unique index, so the existence check is what keeps a repeated course out.
+                if (Database::insertIfAbsent(
+                    'course_rel_user',
+                    [
+                        'c_id' => (int) $courseId,
+                        'user_id' => (int) $hr_manager_id,
+                        'status' => DRH,
+                        'relation_type' => COURSE_RELATION_TYPE_RRHH,
+                        'progress' => 0,
+                    ],
+                    ['c_id', 'user_id', 'relation_type']
+                )) {
                     $affected_rows++;
                 }
             }

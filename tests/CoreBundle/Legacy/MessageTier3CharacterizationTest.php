@@ -15,7 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session as HttpSession;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
-use Throwable;
 
 /**
  * Characterization tests for MessageManager (message.lib.php), the helpers that read the `message` table directly.
@@ -23,11 +22,9 @@ use Throwable;
  * LIVE: messageWasAlreadySent() (announcement e-mails), get_messages_by_group() / get_messages_by_group_by_message()
  * (social group forum), get_message_by_id() (group topic page).
  *
- * BROKEN (user_receiver_id no longer exists on `message`, recipients live in message_rel_user): getUsersThatHadConversationWithUser(),
- * getAllMessagesBetweenStudents(), isUserOwner(). The first two still have a caller each (my_space/myStudents.php,
- * tracking/messages.php); isUserOwner() has none. Pinned cheaply as "throws".
- *
- * DEAD: getMessagesByParent() has no caller.
+ * REWRITTEN (they read message.user_receiver_id, which is gone; recipients live in message_rel_user, so they always threw):
+ * getUsersThatHadConversationWithUser() (my_space/myStudents.php) and getAllMessagesBetweenStudents() (tracking/messages.php).
+ * getMessagesByParent() and isUserOwner() (no callers) were removed.
  *
  * Fixtures: ids from 900000 up (mt3_), removed in tearDown.
  */
@@ -199,25 +196,56 @@ final class MessageTier3CharacterizationTest extends KernelTestCase
         $this->assertSame([], $missing);
     }
 
-    // ------------------------------------------------------------------ broken helpers
+    // ------------------------------------------------------------------ conversations (rewritten: the old SQL read the
+    // message.user_receiver_id column, which is gone; recipients live in message_rel_user)
 
-    /**
-     * @dataProvider brokenQueries
-     */
-    public function testHelpersReadingUserReceiverIdThrowBecauseTheColumnIsGone(callable $call): void
+    public function testUsersThatHadConversationWithUserAreTheSendersOfMessagesThatReachedHim(): void
     {
-        // BROKEN: Unknown column 'user_receiver_id' in 'where clause'. Intended: conversations / owner computed through message_rel_user.
-        $this->expectException(Throwable::class);
-        $call();
+        $five = (int) $this->createUser('mt3_five')->getId();
+        $six = (int) $this->createUser('mt3_six')->getId();
+        $this->msg(self::BASE + 41, 1, null, null, 1, 'from admin', 'x');
+        $this->recipient(self::BASE + 41, $five);
+        $this->msg(self::BASE + 42, 1, null, null, 1, 'again from admin', 'x');
+        $this->recipient(self::BASE + 42, $five);
+        $this->msg(self::BASE + 43, 2, null, null, 1, 'from anon', 'x');
+        $this->recipient(self::BASE + 43, $five);
+        $this->msg(self::BASE + 44, 3, null, null, 1, 'to someone else', 'x');
+        $this->recipient(self::BASE + 44, $six);
+        $this->msg(self::BASE + 45, $five, null, null, 1, 'sent by him', 'x');
+        $this->recipient(self::BASE + 45, $six);
+
+        $users = MessageManager::getUsersThatHadConversationWithUser($five);
+
+        $this->assertSame([1, 2], array_keys($users), 'One entry per sender, keyed by sender id; unknown senders skipped.');
+        $this->assertSame(1, (int) $users[1]['user_id']);
+        $this->assertSame([], MessageManager::getUsersThatHadConversationWithUser(99999999));
     }
 
-    public static function brokenQueries(): iterable
+    public function testGetAllMessagesBetweenStudentsListsBothDirectionsNewestFirst(): void
     {
-        yield 'users that had a conversation' => [static fn () => MessageManager::getUsersThatHadConversationWithUser(1)];
+        $this->msg(self::BASE + 51, 1, null, null, 1, 'oldest', 'x', '2030-01-01 10:00:00');
+        $this->recipient(self::BASE + 51, 2);
+        $this->msg(self::BASE + 52, 2, null, null, 1, 'reply', 'x', '2030-01-03 10:00:00');
+        $this->recipient(self::BASE + 52, 1);
+        $this->msg(self::BASE + 53, 1, null, null, 1, 'newer', 'x', '2030-01-02 10:00:00');
+        $this->recipient(self::BASE + 53, 2);
+        $this->msg(self::BASE + 54, 1, null, null, 1, 'to a third user', 'x', '2030-01-04 10:00:00');
+        $this->recipient(self::BASE + 54, 3);
+        $this->msg(self::BASE + 55, 3, null, null, 1, 'from a third user', 'x', '2030-01-05 10:00:00');
+        $this->recipient(self::BASE + 55, 2);
 
-        yield 'messages between students' => [static fn () => MessageManager::getAllMessagesBetweenStudents(1, 2)];
+        $rows = MessageManager::getAllMessagesBetweenStudents(1, 2);
 
-        yield 'is user owner' => [static fn () => MessageManager::isUserOwner(1, 1)];
+        $this->assertSame([self::BASE + 52, self::BASE + 53, self::BASE + 51], array_column($rows, 'id'));
+        $this->assertSame('reply', $rows[0]['title']);
+        $this->assertSame('2030-01-03 10:00:00', $rows[0]['send_date']);
+        $this->assertSame(2, $rows[0]['user_sender_id']);
+        $this->assertSame(
+            [self::BASE + 52, self::BASE + 53, self::BASE + 51],
+            array_column(MessageManager::getAllMessagesBetweenStudents(2, 1), 'id'),
+            'Symmetric.'
+        );
+        $this->assertSame([], MessageManager::getAllMessagesBetweenStudents(1, 99999999));
     }
 
     public function testGetAllMessagesBetweenStudentsRejectsEmptyIdsBeforeTheQuery(): void
@@ -246,12 +274,12 @@ final class MessageTier3CharacterizationTest extends KernelTestCase
         return (int) $this->conn()->lastInsertId();
     }
 
-    private function msg(int $id, int $sender, ?int $group, ?int $parent, int $type, string $title, string $content): void
+    private function msg(int $id, int $sender, ?int $group, ?int $parent, int $type, string $title, string $content, string $date = '2030-01-02 03:04:05'): void
     {
         $this->conn()->executeStatement(
-            "INSERT INTO message (id, user_sender_id, group_id, parent_id, msg_type, status, send_date, title, content, mail_answer)
-             VALUES (?, ?, ?, ?, ?, 0, '2030-01-02 03:04:05', ?, ?, 0)",
-            [$id, $sender, $group, $parent, $type, $title, $content]
+            'INSERT INTO message (id, user_sender_id, group_id, parent_id, msg_type, status, send_date, title, content, mail_answer)
+             VALUES (?, ?, ?, ?, ?, 0, ?, ?, ?, 0)',
+            [$id, $sender, $group, $parent, $type, $date, $title, $content]
         );
     }
 

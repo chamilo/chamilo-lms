@@ -2518,25 +2518,22 @@ class SessionManager
             $isUserSubscribed = self::isUserSubscribedAsStudent($sessionId, $enreg_user);
             if (false === $isUserSubscribed) {
                 $enreg_user = (int) $enreg_user;
-                // TODO(db-neutral): INSERT IGNORE (both statements below)
-                if ($session->getDuration() > 0) {
-                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, duration, registered_at)
-                        VALUES (".Session::STUDENT.", $sessionId, $enreg_user, 0, '".api_get_utc_datetime()."')";
-                } else {
-                    if (null != ($accessStartDate = $session->getAccessStartDate())) {
-                        $accessStartDate = "'".$accessStartDate->format('Y-m-d H:i:s')."'";
-                    } else {
-                        $accessStartDate = "NULL";
-                    }
-                    if (null != ($accessEndDate = $session->getAccessEndDate())) {
-                        $accessEndDate = "'".$accessEndDate->format('Y-m-d H:i:s')."'";
-                    } else {
-                        $accessEndDate = "NULL";
-                    }
-                    $sql = "INSERT IGNORE INTO $tbl_session_rel_user (relation_type, session_id, user_id, duration, registered_at, access_start_date, access_end_date)
-                            VALUES (".Session::STUDENT.", $sessionId, $enreg_user, 0, '".api_get_utc_datetime()."', ".$accessStartDate.", ".$accessEndDate.")";
+                $sessionUserValues = [
+                    'relation_type' => Session::STUDENT,
+                    'session_id' => (int) $sessionId,
+                    'user_id' => $enreg_user,
+                    'duration' => 0,
+                    'registered_at' => api_get_utc_datetime(),
+                ];
+                if (!($session->getDuration() > 0)) {
+                    $sessionUserValues['access_start_date'] = null != ($accessStartDate = $session->getAccessStartDate())
+                        ? $accessStartDate->format('Y-m-d H:i:s')
+                        : null;
+                    $sessionUserValues['access_end_date'] = null != ($accessEndDate = $session->getAccessEndDate())
+                        ? $accessEndDate->format('Y-m-d H:i:s')
+                        : null;
                 }
-                Database::query($sql);
+                Database::insertIfAbsent('session_rel_user', $sessionUserValues, ['session_id', 'user_id', 'relation_type']);
                 Event::addEvent(
                     LOG_SESSION_ADD_USER,
                     LOG_USER_ID,
@@ -6253,10 +6250,12 @@ class SessionManager
                     $courseId = $courseInfo['real_id'];
 
                     // Adding the course to a session.
-                    // TODO(db-neutral): INSERT IGNORE ... SET (a repeated course in the file is a no-op)
-                    $sql = "INSERT IGNORE INTO $tbl_session_course
-                                SET c_id = '$courseId', session_id='$session_id'";
-                    Database::query($sql);
+                    // A repeated course in the file is a no-op.
+                    Database::insertIfAbsent(
+                        'session_rel_course',
+                        ['c_id' => (int) $courseId, 'session_id' => (int) $session_id, 'position' => 0, 'nbr_users' => 0],
+                        ['session_id', 'c_id']
+                    );
 
                     self::installCourse($session_id, $courseInfo['real_id']);
 

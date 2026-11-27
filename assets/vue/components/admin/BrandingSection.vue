@@ -44,36 +44,38 @@
           {{ t("Files in current theme") }}: <code>{{ slug }}</code>
         </div>
 
-        <div
-          v-if="isSvgEnabled"
-          class="flex items-center justify-between gap-3"
-        >
-          <span class="inline-flex items-center rounded-full border border-gray-200 px-2 py-0.5 text-[11px] uppercase"
-            >SVG</span
-          >
-          <img
-            :key="'h-s-' + cacheBust"
-            :src="headerSvgStrict"
-            class="h-6 object-contain"
-            alt="Header SVG"
-            @load="markExists('headerSvg', true)"
-            @error="markExists('headerSvg', false)"
-          />
-          <span
-            v-if="headerSvgExists === false"
-            class="text-xs opacity-60"
-            >{{ t("No SVG uploaded") }}</span
-          >
-          <BaseButton
-            v-if="headerSvgExists === true"
-            :is-loading="isSaving"
-            :label="t('Remove SVG')"
-            class="ms-auto"
-            icon="delete"
-            size="small"
-            type="danger"
-            @click="removeFile('header_svg')"
-          />
+        <!-- Shown whenever an SVG exists, even with SVG uploads disabled: the SVG is served before the PNG,
+             so an SVG shipped with the theme hid an uploaded PNG and could not be removed from here.
+             v-show sits on a wrapper because Tailwind is configured with important: "flex" would win over display: none. -->
+        <div v-show="isSvgEnabled || headerSvgExists === true">
+          <div class="flex items-center justify-between gap-3">
+            <span class="inline-flex items-center rounded-full border border-gray-200 px-2 py-0.5 text-[11px] uppercase"
+              >SVG</span
+            >
+            <img
+              :key="'h-s-' + cacheBust"
+              :src="headerSvgStrict"
+              class="h-6 object-contain"
+              alt="Header SVG"
+              @load="markExists('headerSvg', true)"
+              @error="markExists('headerSvg', false)"
+            />
+            <span
+              v-if="headerSvgExists === false"
+              class="text-xs opacity-60"
+              >{{ t("No SVG uploaded") }}</span
+            >
+            <BaseButton
+              v-if="headerSvgExists === true"
+              :is-loading="isSaving"
+              :label="t('Remove SVG')"
+              class="ms-auto"
+              icon="delete"
+              size="small"
+              type="danger"
+              @click="removeFile('header_svg')"
+            />
+          </div>
         </div>
 
         <div class="flex items-center justify-between gap-3">
@@ -179,36 +181,35 @@
           {{ t("Files in current theme") }}: <code>{{ slug }}</code>
         </div>
 
-        <div
-          v-if="isSvgEnabled"
-          class="flex items-center justify-between gap-3"
-        >
-          <span class="inline-flex items-center rounded-full border border-gray-200 px-2 py-0.5 text-[11px] uppercase"
-            >SVG</span
-          >
-          <img
-            :key="'e-s-' + cacheBust"
-            :src="emailSvgStrict"
-            class="h-6 object-contain"
-            alt="Email SVG"
-            @load="markExists('emailSvg', true)"
-            @error="markExists('emailSvg', false)"
-          />
-          <span
-            v-if="emailSvgExists === false"
-            class="text-xs opacity-60"
-            >{{ t("No SVG uploaded") }}</span
-          >
-          <BaseButton
-            v-if="emailSvgExists === true"
-            :is-loading="isSaving"
-            :label="t('Remove SVG')"
-            class="ms-auto"
-            icon="delete"
-            size="small"
-            type="danger"
-            @click="removeFile('email_svg')"
-          />
+        <div v-show="isSvgEnabled || emailSvgExists === true">
+          <div class="flex items-center justify-between gap-3">
+            <span class="inline-flex items-center rounded-full border border-gray-200 px-2 py-0.5 text-[11px] uppercase"
+              >SVG</span
+            >
+            <img
+              :key="'e-s-' + cacheBust"
+              :src="emailSvgStrict"
+              class="h-6 object-contain"
+              alt="Email SVG"
+              @load="markExists('emailSvg', true)"
+              @error="markExists('emailSvg', false)"
+            />
+            <span
+              v-if="emailSvgExists === false"
+              class="text-xs opacity-60"
+              >{{ t("No SVG uploaded") }}</span
+            >
+            <BaseButton
+              v-if="emailSvgExists === true"
+              :is-loading="isSaving"
+              :label="t('Remove SVG')"
+              class="ms-auto"
+              icon="delete"
+              size="small"
+              type="danger"
+              @click="removeFile('email_svg')"
+            />
+          </div>
         </div>
 
         <div class="flex items-center justify-between gap-3">

@@ -63,13 +63,10 @@
             v-else
             class="overflow-hidden rounded-xl border border-gray-25"
           >
-            <iframe
-              v-if="openStreetMapEmbedUrl"
-              class="h-[520px] w-full border-0"
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-              :src="openStreetMapEmbedUrl"
-              title="OpenStreetMap"
+            <div
+              v-if="hasCoordinateMarkers"
+              ref="openStreetMapRef"
+              class="h-[520px] w-full"
             />
             <div
               v-else
@@ -128,7 +125,10 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref } from "vue"
+import { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue"
+import L from "leaflet"
+import "leaflet/dist/leaflet.css"
+import "../../utils/leafletMarkerIcons"
 import { useI18n } from "vue-i18n"
 import BaseAppLink from "../../components/basecomponents/BaseAppLink.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
@@ -148,6 +148,8 @@ const mapConfig = ref({
 const markers = ref([])
 const missingFields = ref([])
 const googleMapRef = ref(null)
+const openStreetMapRef = ref(null)
+let leafletMap = null
 
 const isGoogleProvider = computed(() => mapConfig.value.provider === "google_maps")
 const providerLabel = computed(() => {
@@ -158,28 +160,14 @@ const providerLabel = computed(() => {
   return t("Provider: Google Maps")
 })
 
-const firstMarkerWithCoordinates = computed(() => {
-  return markers.value.find((marker) => hasCoordinates(marker)) || null
-})
-
-const openStreetMapEmbedUrl = computed(() => {
-  const marker = firstMarkerWithCoordinates.value
-
-  if (!marker) {
-    return ""
-  }
-
-  const lat = Number(marker.lat)
-  const lng = Number(marker.lng)
-  const delta = 0.05
-  const bbox = [lng - delta, lat - delta, lng + delta, lat + delta].join(",")
-
-  return `https://www.openstreetmap.org/export/embed.html?bbox=${encodeURIComponent(bbox)}&layer=mapnik&marker=${encodeURIComponent(`${lat},${lng}`)}`
-})
+const hasCoordinateMarkers = computed(() => markers.value.some(hasCoordinates))
 
 onMounted(() => loadMapData())
+onBeforeUnmount(() => leafletMap?.remove())
 
 async function loadMapData() {
+  leafletMap?.remove()
+  leafletMap = null
   isLoading.value = true
 
   try {
@@ -198,10 +186,21 @@ async function loadMapData() {
     markers.value = Array.isArray(markersResponse?.markers) ? markersResponse.markers : []
     missingFields.value = Array.isArray(markersResponse?.missingFields) ? markersResponse.missingFields : []
 
+    // The map container is mounted only after the loading state is cleared.
+    isLoading.value = false
     await nextTick()
 
-    if (mapConfig.value.enabled && isGoogleProvider.value && markers.value.length) {
-      await renderGoogleMap()
+    if (mapConfig.value.enabled && markers.value.length) {
+      try {
+        if (isGoogleProvider.value) {
+          await renderGoogleMap()
+        } else if (hasCoordinateMarkers.value) {
+          renderOpenStreetMap()
+        }
+      } catch (error) {
+        // Keep the location list accessible even if the external map service fails.
+        console.error("[SocialMap] Failed to render map", error)
+      }
     }
   } catch (error) {
     console.error("[SocialMap] Failed to load map data", error)
@@ -213,7 +212,14 @@ async function loadMapData() {
 }
 
 function hasCoordinates(marker) {
-  return Number.isFinite(Number(marker?.lat)) && Number.isFinite(Number(marker?.lng))
+  return (
+    typeof marker?.lat === "number" &&
+    typeof marker?.lng === "number" &&
+    Number.isFinite(marker.lat) &&
+    Number.isFinite(marker.lng) &&
+    Math.abs(marker.lat) <= 90 &&
+    Math.abs(marker.lng) <= 180
+  )
 }
 
 function getExternalMapUrl(marker) {
@@ -237,6 +243,29 @@ function getExternalMapUrl(marker) {
   return `https://www.openstreetmap.org/search?query=${encodeURIComponent(query)}`
 }
 
+function renderOpenStreetMap() {
+  if (!openStreetMapRef.value) {
+    return
+  }
+
+  const coordinates = markers.value.filter(hasCoordinates)
+  leafletMap = L.map(openStreetMapRef.value)
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 19,
+  }).addTo(leafletMap)
+
+  const bounds = L.latLngBounds([])
+  for (const marker of coordinates) {
+    const position = [marker.lat, marker.lng]
+    L.marker(position).bindPopup(buildInfoWindowContent(marker)).addTo(leafletMap)
+    bounds.extend(position)
+  }
+  if (bounds.isValid()) {
+    leafletMap.fitBounds(bounds, { padding: [20, 20], maxZoom: 15 })
+  }
+}
+
 async function renderGoogleMap() {
   if (!mapConfig.value.apiKey) {
     return
@@ -249,8 +278,8 @@ async function renderGoogleMap() {
   }
 
   const defaultCenter = {
-    lat: Number(mapConfig.value.defaultCenter?.lat || 20),
-    lng: Number(mapConfig.value.defaultCenter?.lng || 0),
+    lat: Number(mapConfig.value.defaultCenter?.lat ?? 20),
+    lng: Number(mapConfig.value.defaultCenter?.lng ?? 0),
   }
   const map = new window.google.maps.Map(googleMapRef.value, {
     center: defaultCenter,
@@ -352,7 +381,10 @@ function loadGoogleMapsApi(apiKey) {
     script.dataset.chamiloGoogleMapsApi = "true"
     script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}`
     script.addEventListener("load", resolve, { once: true })
-    script.addEventListener("error", reject, { once: true })
+    script.addEventListener("error", (error) => {
+      script.remove()
+      reject(error)
+    }, { once: true })
     document.head.appendChild(script)
   })
 }

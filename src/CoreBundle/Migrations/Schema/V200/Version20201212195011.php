@@ -59,6 +59,8 @@ final class Version20201212195011 extends AbstractMigrationChamilo
         CourseRepository $courseRepo,
         AccessUrlRepository $urlRepo
     ): void {
+        $this->attachCoursesWithoutAccessUrl();
+
         $urlIds = array_map(
             'intval',
             $this->connection->fetchFirstColumn('SELECT id FROM access_url ORDER BY id')
@@ -110,6 +112,45 @@ final class Version20201212195011 extends AbstractMigrationChamilo
         $this->getLogger()->info('Course resource-node migration completed.', [
             'migrated' => $processed,
         ]);
+    }
+
+    /**
+     * A 1.11 course attached to no access URL stays reachable through a direct link or a session, but only the
+     * courses of an access URL get a resource node above, and the migrations of the course tools need it as their
+     * parent: the groups migration failed on such a course with a null parent node. Attach them to the main access
+     * URL, where an administrator can then move or delete them.
+     */
+    private function attachCoursesWithoutAccessUrl(): void
+    {
+        $issues = $this->connection->fetchAllAssociative(
+            "SELECT c.id AS course_id,
+                    c.code AS course_code,
+                    'access_url_rel_course' AS table_name,
+                    'course_without_access_url' AS reason,
+                    'attach_to_main_access_url' AS planned_action
+             FROM course c
+             LEFT JOIN access_url_rel_course a ON a.c_id = c.id
+             WHERE a.c_id IS NULL
+             ORDER BY c.id"
+        );
+
+        if ([] === $issues) {
+            return;
+        }
+
+        $mainUrlId = (int) $this->connection->fetchOne('SELECT MIN(id) FROM access_url');
+        if ($mainUrlId <= 0) {
+            throw new RuntimeException('No access URL to attach the courses without access URL to.');
+        }
+
+        $this->reportDataIssues('courses_without_access_url', $issues);
+
+        foreach ($issues as $issue) {
+            $this->connection->insert('access_url_rel_course', [
+                'c_id' => (int) $issue['course_id'],
+                'access_url_id' => $mainUrlId,
+            ]);
+        }
     }
 
     private function markSpecialCourses(): void

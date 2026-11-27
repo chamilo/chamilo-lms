@@ -10,6 +10,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Repository\Node\CourseRepository;
+use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CCalendarEventRepeat;
 use Chamilo\Tests\AbstractApiTest;
@@ -42,6 +43,82 @@ final class CCalendarEventRepeatApiTest extends AbstractApiTest
         // Every event names the same series, which the "Delete all items" button needs.
         $this->assertCount(1, array_unique(array_column($events, 'seriesId')));
         $this->assertNotNull($events[0]['seriesId'] ?? null);
+    }
+
+    public function testWeeklyEventsKeepTheirLocalTimeInANonUtcTimezone(): void
+    {
+        $ctx = $this->bootstrapScenario('fixed_timezone');
+        $settings = self::getContainer()->get(SettingsManager::class);
+        $settings->updateSetting('platform.timezone', 'Asia/Tokyo');
+        $settings->updateSetting('profile.use_users_timezone', 'false');
+
+        $this->createEvent(
+            $ctx,
+            'CrpFixedTimezone',
+            ['repeatType' => 'weekly', 'repeatEndDate' => '2037-06-18'],
+            [],
+            '2037-06-04T08:00:00+09:00',
+            '2037-06-04T09:00:00+09:00'
+        );
+        $this->assertResponseStatusCodeSame(201);
+
+        $this->assertSame([
+            ['2037-06-03 23:00', '2037-06-04 00:00'],
+            ['2037-06-10 23:00', '2037-06-11 00:00'],
+            ['2037-06-17 23:00', '2037-06-18 00:00'],
+        ], $this->dateRanges('CrpFixedTimezone'));
+    }
+
+    public function testWeeklyEventsKeepTheirLocalTimeAcrossDaylightSavingChange(): void
+    {
+        $ctx = $this->bootstrapScenario('dst_weekly');
+        $settings = self::getContainer()->get(SettingsManager::class);
+        $settings->updateSetting('platform.timezone', 'Europe/Paris');
+        $settings->updateSetting('profile.use_users_timezone', 'false');
+
+        $this->createEvent(
+            $ctx,
+            'CrpDstWeekly',
+            ['repeatType' => 'weekly', 'repeatEndDate' => '2037-04-05'],
+            [],
+            '2037-03-22T08:00:00+01:00',
+            '2037-03-22T09:00:00+01:00'
+        );
+        $this->assertResponseStatusCodeSame(201);
+
+        $this->assertSame([
+            ['2037-03-22 07:00', '2037-03-22 08:00'],
+            ['2037-03-29 06:00', '2037-03-29 07:00'],
+            ['2037-04-05 06:00', '2037-04-05 07:00'],
+        ], $this->dateRanges('CrpDstWeekly'));
+    }
+
+    public function testWeeklyEventsReturnToTheirOriginalTimeAfterADaylightSavingGap(): void
+    {
+        $ctx = $this->bootstrapScenario('dst_gap');
+        $ctx['teacher']->setTimezone('Europe/Paris');
+        $this->getEntityManager()->flush();
+        $settings = self::getContainer()->get(SettingsManager::class);
+        $settings->updateSetting('platform.timezone', 'UTC');
+        $settings->updateSetting('profile.use_users_timezone', 'true');
+
+        $this->createEvent(
+            $ctx,
+            'CrpDstGap',
+            ['repeatType' => 'weekly', 'repeatEndDate' => '2037-04-12'],
+            [],
+            '2037-03-22T02:30:00+01:00',
+            '2037-03-22T03:30:00+01:00'
+        );
+        $this->assertResponseStatusCodeSame(201);
+
+        // March 29 has no 02:30 in Paris. Only that occurrence moves to 03:30-04:30.
+        $this->assertSame([
+            ['2037-03-22 01:30', '2037-03-22 02:30'],
+            ['2037-03-29 01:30', '2037-03-29 02:30'],
+            ['2037-04-05 00:30', '2037-04-05 01:30'],
+            ['2037-04-12 00:30', '2037-04-12 01:30'],
+        ], $this->dateRanges('CrpDstGap'));
     }
 
     public function testASeriesCanEndAfterJanuary2038(): void
@@ -148,8 +225,14 @@ final class CCalendarEventRepeatApiTest extends AbstractApiTest
      * @param array<string, string>                     $repeat
      * @param array<string, int>                        $link
      */
-    private function createEvent(array $ctx, string $title, array $repeat, array $link = []): void
-    {
+    private function createEvent(
+        array $ctx,
+        string $title,
+        array $repeat,
+        array $link = [],
+        string $startDate = '2037-06-04T11:00:00+00:00',
+        string $endDate = '2037-06-04T12:00:00+00:00',
+    ): void {
         $this->createClientWithCredentials($this->getUserTokenFromUser($ctx['teacher']))->request(
             'POST',
             '/api/c_calendar_events?cid='.$ctx['course']->getId(),
@@ -157,8 +240,8 @@ final class CCalendarEventRepeatApiTest extends AbstractApiTest
                 'json' => [
                     'title' => $title,
                     'content' => '<p>'.$title.'</p>',
-                    'startDate' => '2037-06-04T11:00:00+00:00',
-                    'endDate' => '2037-06-04T12:00:00+00:00',
+                    'startDate' => $startDate,
+                    'endDate' => $endDate,
                     'allDay' => false,
                     'collective' => false,
                     'parentResourceNode' => (int) $ctx['teacher']->getResourceNode()?->getId(),
@@ -206,6 +289,23 @@ final class CCalendarEventRepeatApiTest extends AbstractApiTest
         sort($dates);
 
         return $dates;
+    }
+
+    /**
+     * @return list<array{string, string}>
+     */
+    private function dateRanges(string $title): array
+    {
+        $em = $this->getEntityManager();
+        $em->clear();
+
+        return array_map(
+            static fn (CCalendarEvent $event): array => [
+                (string) $event->getStartDate()?->format('Y-m-d H:i'),
+                (string) $event->getEndDate()?->format('Y-m-d H:i'),
+            ],
+            $em->getRepository(CCalendarEvent::class)->findBy(['title' => $title], ['startDate' => 'ASC'])
+        );
     }
 
     /**

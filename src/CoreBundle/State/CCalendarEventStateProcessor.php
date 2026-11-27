@@ -142,15 +142,30 @@ final class CCalendarEventStateProcessor implements ProcessorInterface
         $interval = new DateInterval(self::REPEAT_INTERVALS[$type]);
         $utc = new DateTimeZone('UTC');
 
-        // The dates move in the user's timezone, so the events keep their local time across a DST change.
-        $start = DateTimeImmutable::createFromMutable($event->getStartDate())->setTimezone($lastDay->getTimezone());
-        $end = DateTimeImmutable::createFromMutable($event->getEndDate())->setTimezone($lastDay->getTimezone());
+        $timezone = $lastDay->getTimezone();
+        $start = DateTimeImmutable::createFromMutable($event->getStartDate())->setTimezone($timezone);
+        $end = DateTimeImmutable::createFromMutable($event->getEndDate())->setTimezone($timezone);
+        $duration = $end->getTimestamp() - $start->getTimestamp();
+
+        // Advance local calendar dates on a DST-free clock. Resolve each occurrence independently,
+        // so a nonexistent local time adjusted by PHP never shifts the rest of the series.
+        $startCursor = new DateTimeImmutable($start->format('Y-m-d H:i:s'), $utc);
+        $endCursor = new DateTimeImmutable($end->format('Y-m-d H:i:s'), $utc);
 
         for ($i = 0; $i < self::MAX_REPEATED_EVENTS; $i++) {
-            $start = $start->add($interval);
-            $end = $end->add($interval);
+            $startCursor = $startCursor->add($interval);
+            $endCursor = $endCursor->add($interval);
+            $start = new DateTimeImmutable($startCursor->format('Y-m-d H:i:s'), $timezone);
+            $end = new DateTimeImmutable($endCursor->format('Y-m-d H:i:s'), $timezone);
             if ($start > $lastDay) {
                 break;
+            }
+
+            // Keep the original elapsed duration when a local time falls in a DST gap.
+            if ($start->format('Y-m-d H:i:s') !== $startCursor->format('Y-m-d H:i:s')
+                || $end->format('Y-m-d H:i:s') !== $endCursor->format('Y-m-d H:i:s')
+            ) {
+                $end = $start->setTimestamp($start->getTimestamp() + $duration);
             }
 
             $repeatedEvent = (new CCalendarEvent())

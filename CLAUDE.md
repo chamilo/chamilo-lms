@@ -187,7 +187,13 @@ exhaustive list of early migrations.
 | `V200/Version20201212114907` (`subscription_date`) | `V200/Version20201212114912` (users), `V200/Version20230204150030` (sessions) | `V310/Version20261109180000` |
 | `V200/Version20250310215800` (`conference_activity.metrics`) | `V200/Version20250310215900` (BBB/Zoom) | `V200/Version20250925215200` |
 | `V300/Version20260822212650` (makes `course.course_language` optional) | `V300/Version20260822212700` (demo courses) | `V310/Version20261005120000` |
-| `V200/Version20240112103359`, `V210/Version20260419000000`, `V300/Version20260726000000` (`settings.confidential`) | any migration that reads a setting | `V310/Version20261113193000` |
+| `V200/Version20170523105900`, `V210/Version20260419000000`, `V300/Version20260726000000` (`settings.confidential`) | any migration that reads a setting | `V310/Version20261113193000` |
+
+`V200/Version20240112103359` also adds `settings.confidential` early, but too late: it sorts after
+every V200 migration from 2017 to 2023, and a migration from 1.11 failed on `t0.confidential` in
+`V200/Version20201212203625`. `V200/Version20170523105900` now runs right after `Version20`, which
+renames `settings_current` to `settings`. "The start of each directory" is literal: check where the
+new version sorts before choosing its name.
 
 ### Code Quality
 ```bash

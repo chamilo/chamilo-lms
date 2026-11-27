@@ -621,9 +621,7 @@ const inactiveDayOptions = [1, 5, 7, 15, 30, 60, 90, 120].map((value) => ({ labe
 const sessionOptions = computed(() =>
   (report.meta.sessionOptions || []).map((option) => ({ label: option.label, value: Number(option.id) })),
 )
-const emptyTableText = computed(() =>
-  t(report.meta.requiresSession && !filters.sessionId ? "Please select a session" : "No results found"),
-)
+const emptyTableText = computed(() => t(awaitsSession.value ? "Please select a session" : "No results found"))
 const showFilters = computed(
   () =>
     report.meta.supportsKeyword !== false ||
@@ -642,8 +640,10 @@ const isCourseList = computed(() => props.section === "courses")
 const isSessionList = computed(() => props.section === "sessions")
 const isListPage = computed(() => isUserList.value || isCourseList.value || isSessionList.value)
 const showTableSkeleton = computed(() => isSessionList.value && loading.value && !loaded.value)
-const showFilterCsv = computed(() => report.meta.canExportCsv && !isSessionList.value)
-const showFilterXlsx = computed(() => report.meta.canExportXlsx && !isSessionList.value)
+// A report that requires a session has nothing to export until one is selected.
+const awaitsSession = computed(() => Boolean(report.meta.requiresSession) && !filters.sessionId)
+const showFilterCsv = computed(() => report.meta.canExportCsv && !isSessionList.value && !awaitsSession.value)
+const showFilterXlsx = computed(() => report.meta.canExportXlsx && !isSessionList.value && !awaitsSession.value)
 const compactFilters = computed(
   () =>
     (report.meta.supportsKeyword !== false || report.meta.supportsSession) &&

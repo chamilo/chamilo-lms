@@ -73,6 +73,7 @@
         "public/main/template/default/agenda/month.html.twig",
         "public/main/template/default/agenda/planification.html.twig",
         "public/main/template/default/auth/confirm_session_subscription.html.twig",
+        "public/main/template/default/my_space/works_in_session_report.html.twig",
         "public/main/upload/upload.php",
         "public/main/upload/upload.scorm.php",
         "public/main/upload/upload_ppt.php",

@@ -134,8 +134,6 @@ Feature: Works in session report
     Then the URL should contain "/reporting/admin/works-in-session"
     And I should see "Works in session report"
 
-  # The course goes first: the session list reports a session as deleted but keeps it while the session still
-  # holds course resources (the assignment and the work). Deleting the course removes them.
   Scenario: Delete the course of the report
     Given I am not logged
     Given I am a platform administrator

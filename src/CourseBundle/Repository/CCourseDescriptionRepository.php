@@ -34,8 +34,7 @@ final class CCourseDescriptionRepository extends ResourceRepository
 
     public function findAllInCourse(Course $course, ?Session $session = null, ?CGroup $group = null): array
     {
-        $qb = $this->getResourcesByCourse($course, $session, $group)
-            ->addOrderBy('resource.progress', 'ASC')
+        $qb = $this->getResourcesByCourse($course, $session, $group, displayOrder: true)
             ->addOrderBy('resource.iid', 'ASC')
         ;
 
@@ -50,7 +49,7 @@ final class CCourseDescriptionRepository extends ResourceRepository
     public function findAllInCourseForCatalogue(Course $course): array
     {
         $qb = $this->getResourcesByCourseIgnoreVisibility($course)
-            ->addOrderBy('resource.progress', 'ASC')
+            ->orderBy('links.displayOrder', 'ASC')
             ->addOrderBy('resource.iid', 'ASC')
         ;
 

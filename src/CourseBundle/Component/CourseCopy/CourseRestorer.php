@@ -3744,6 +3744,26 @@ class CourseRestorer
             return;
         }
 
+        // The backup's optional order describes relative presentation order.
+        // Create links in that order, allowing the existing Sortable listener to append them.
+        // Keep the original iteration order of legacy backups and existing destination links.
+        $positions = [];
+        foreach ($items as $id => $item) {
+            $position = filter_var(\is_object($item) ? ($item->display_order ?? null) : null, FILTER_VALIDATE_INT, [
+                'options' => ['min_range' => 0],
+            ]);
+            if (false === $position) {
+                $positions = [];
+
+                break;
+            }
+            $positions[$id] = $position;
+        }
+        if ([] !== $positions) {
+            asort($positions, SORT_NUMERIC);
+            $items = array_replace($positions, $items);
+        }
+
         // Preload existing by type in SAME scope (session vs base)
         $existingByType = [];
         $existingCustomByTitle = [];

@@ -1987,7 +1987,13 @@ class CourseBuilder
         }
 
         $repo = Container::getCourseDescriptionRepository();
-        $qb = $this->getResourcesByCourseQbFromRepo($repo, $courseEntity, $sessionEntity, $this->withBaseContent);
+        $qb = $repo->getResourcesByCourse(
+            $courseEntity,
+            $sessionEntity,
+            displayOnlyPublished: false,
+            displayOrder: true,
+            withBaseContentOverride: $this->withBaseContent
+        )->addOrderBy('resource.iid', 'ASC');
 
         if (!empty($ids)) {
             $qb->andWhere('resource.iid IN (:ids)')
@@ -1998,7 +2004,7 @@ class CourseBuilder
         /** @var CCourseDescription[] $rows */
         $rows = $qb->getQuery()->getResult();
 
-        foreach ($rows as $row) {
+        foreach ($rows as $position => $row) {
             $iid = (int) $row->getIid();
             $title = (string) ($row->getTitle() ?? '');
             $html = (string) ($row->getContent() ?? '');
@@ -2008,7 +2014,7 @@ class CourseBuilder
 
             $this->findAndSetDocumentsInText($html);
 
-            $export = new CourseDescription($iid, $title, $html, $type, $progress, $language);
+            $export = new CourseDescription($iid, $title, $html, $type, $progress, $language, $position);
             $this->course->add_resource($export);
         }
     }

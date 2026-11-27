@@ -33,6 +33,8 @@ class CourseDescription extends Resource
      */
     public $progress;
 
+    public $display_order = null;
+
     /**
      * The resource language ISO code.
      */
@@ -47,8 +49,9 @@ class CourseDescription extends Resource
      * @param string $descriptionType
      * @param int    $progress
      * @param string $language
+     * @param int|null $displayOrder
      */
-    public function __construct($id, $title, $content, $descriptionType, $progress = 0, $language = '')
+    public function __construct($id, $title, $content, $descriptionType, $progress = 0, $language = '', $displayOrder = null)
     {
         parent::__construct($id, RESOURCE_COURSEDESCRIPTION);
         $this->title = $title;
@@ -56,6 +59,7 @@ class CourseDescription extends Resource
         $this->description_type = $descriptionType;
         $this->progress = $progress;
         $this->language = $language;
+        $this->display_order = $displayOrder;
     }
 
     /**

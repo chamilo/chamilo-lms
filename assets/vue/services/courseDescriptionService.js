@@ -23,6 +23,10 @@ export default {
     return await baseService.patch(`/api/course-description/${iid}`, payload, { params: cleanParams(params) })
   },
 
+  async reorder(iid, direction, params = {}) {
+    return await baseService.post("/api/course-description/reorder", { iid, direction }, {}, { params: cleanParams(params) })
+  },
+
   async remove(iid, params = {}) {
     return await baseService.delete(`/api/course-description/${iid}`, {
       params: cleanParams(params),

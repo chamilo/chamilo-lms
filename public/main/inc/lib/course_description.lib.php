@@ -76,7 +76,8 @@ class CourseDescription
         $course = api_get_course_entity($course_id);
         $session = api_get_session_entity($this->session_id);
 
-        $qb = $repo->getResourcesByCourse($course, $session);
+        $qb = $repo->getResourcesByCourse($course, $session, displayOrder: true)
+            ->addOrderBy('resource.iid', 'ASC');
 
         return $qb->getQuery()->getResult();
     }

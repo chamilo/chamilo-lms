@@ -409,7 +409,15 @@ class AccountTwoFactorActivationTest extends WebTestCase
 
     private function currentCode(string $secret): string
     {
-        return TOTP::create($secret, clock: new NativeClock())->now();
+        $totp = TOTP::create($secret, clock: new NativeClock());
+
+        // The server verifies without leeway: never hand out a code whose period ends before the POST.
+        $remaining = $totp->getPeriod() - (time() % $totp->getPeriod());
+        if ($remaining < 5) {
+            sleep($remaining);
+        }
+
+        return $totp->now();
     }
 
     private function reloadUser(string $username): User

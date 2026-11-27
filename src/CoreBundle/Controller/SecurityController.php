@@ -16,7 +16,6 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
-use Chamilo\CoreBundle\Helpers\LoginRedirectPathResolver;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
@@ -29,6 +28,7 @@ use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
 use Chamilo\CoreBundle\Security\Authenticator\Ldap\LdapAuthenticator;
 use Chamilo\CoreBundle\Security\Authenticator\LoginTokenAuthenticator;
 use Chamilo\CoreBundle\Security\Authenticator\OAuth2\AbstractAuthenticator as OAuth2Authenticator;
+use Chamilo\CoreBundle\Security\LoginRedirectResolver;
 use Chamilo\CoreBundle\Security\RememberMeLifetime;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
@@ -85,6 +85,7 @@ class SecurityController extends AbstractController
         private readonly AccessUrlRepository $accessUrlRepo,
         private readonly RememberMeLifetime $rememberMeLifetime,
         private readonly ClockInterface $clock,
+        private readonly LoginRedirectResolver $loginRedirectResolver,
     ) {}
 
     #[Route('/login_json', name: 'login_json', methods: ['POST'])]
@@ -197,7 +198,7 @@ class SecurityController extends AbstractController
                     $request->getSession()->start();
                     $request->getSession()->set('term_and_condition', $tempTermAndCondition);
 
-                    $afterLogin = $this->getRedirectAfterLoginPath($user);
+                    $afterLogin = $this->loginRedirectResolver->resolve($user);
 
                     return $this->json([
                         'load_terms' => true,
@@ -544,11 +545,7 @@ class SecurityController extends AbstractController
                 $session->remove(OAuth2Authenticator::PENDING_2FA_SESSION_KEY);
                 $security->login($user, 'json_login', 'main');
 
-                return new RedirectResponse(LoginRedirectPathResolver::resolve(
-                    $user,
-                    $this->settingsManager->getSetting('registration.redirect_after_login', true),
-                    $this->router->generate('index'),
-                ));
+                return new RedirectResponse($this->loginRedirectResolver->resolve($user));
             }
 
             $pending['attempts'] = (int) ($pending['attempts'] ?? 0) + 1;
@@ -755,15 +752,6 @@ class SecurityController extends AbstractController
         }
 
         return null;
-    }
-
-    private function getRedirectAfterLoginPath(User $user): string
-    {
-        return LoginRedirectPathResolver::resolve(
-            $user,
-            $this->settingsManager->getSetting('registration.redirect_after_login'),
-            '/home',
-        );
     }
 
     private function getSessionLifetime(Request $request): int

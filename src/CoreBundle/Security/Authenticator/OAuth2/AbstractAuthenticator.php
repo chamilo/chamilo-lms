@@ -9,8 +9,8 @@ namespace Chamilo\CoreBundle\Security\Authenticator\OAuth2;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
-use Chamilo\CoreBundle\Helpers\LoginRedirectPathResolver;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
+use Chamilo\CoreBundle\Security\LoginRedirectResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
@@ -60,6 +60,8 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
 
     private ?TokenStorageInterface $tokenStorage = null;
 
+    private LoginRedirectResolver $loginRedirectResolver;
+
     public function __construct(
         protected readonly ClientRegistry $clientRegistry,
         protected readonly RouterInterface $router,
@@ -77,6 +79,12 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
     {
         $this->settingsManager = $settingsManager;
         $this->tokenStorage = $tokenStorage;
+    }
+
+    #[Required]
+    public function setLoginRedirectResolver(LoginRedirectResolver $loginRedirectResolver): void
+    {
+        $this->loginRedirectResolver = $loginRedirectResolver;
     }
 
     public function start(Request $request, ?AuthenticationException $authException = null): Response
@@ -132,11 +140,7 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
                 $targetUrl = $this->router->generate('login');
             }
         } elseif ($user instanceof User) {
-            $targetUrl = LoginRedirectPathResolver::resolve(
-                $user,
-                $this->settingsManager?->getSetting('registration.redirect_after_login', true),
-                $targetUrl,
-            );
+            $targetUrl = $this->loginRedirectResolver->resolve($user);
         }
 
         $response = new RedirectResponse($targetUrl);

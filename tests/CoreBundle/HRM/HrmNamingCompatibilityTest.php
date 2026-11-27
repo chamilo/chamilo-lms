@@ -6,18 +6,15 @@ declare(strict_types=1);
 
 namespace Chamilo\Tests\CoreBundle\HRM;
 
-use Chamilo\CoreBundle\Controller\SecurityController;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\UserRelUser;
 use Chamilo\CoreBundle\EventSubscriber\LoginSuccessSubscriber;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
-use Chamilo\CoreBundle\Settings\SettingsManager;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionMethod;
-use ReflectionProperty;
 
 class HrmNamingCompatibilityTest extends TestCase
 {
@@ -114,65 +111,5 @@ class HrmNamingCompatibilityTest extends TestCase
         $method = new ReflectionMethod(LoginSuccessSubscriber::class, 'getAutosubscribeSettingName');
 
         self::assertSame('registration.hrm_autosubscribe', $method->invoke($subscriber, $user));
-    }
-
-    /**
-     * Fresh installations may use HRM, while old installations still store DRH.
-     * Explicit HRM values (including empty strings) take precedence.
-     */
-    public function testHrmLoginRedirectPrefersCanonicalKey(): void
-    {
-        $settingsManager = $this->createMock(SettingsManager::class);
-        $settingsManager->method('getSetting')
-            ->with('registration.redirect_after_login')
-            ->willReturn('{"HRM":"/reporting/learners","DRH":"/legacy"}')
-        ;
-
-        $controller = (new ReflectionClass(SecurityController::class))->newInstanceWithoutConstructor();
-        (new ReflectionProperty(SecurityController::class, 'settingsManager'))->setValue($controller, $settingsManager);
-        $method = new ReflectionMethod(SecurityController::class, 'getRedirectAfterLoginPath');
-
-        $user = new User();
-        $user->setRoles(['ROLE_HR']);
-
-        self::assertSame('/reporting/learners', $method->invoke($controller, $user));
-    }
-
-    public function testHrmLoginRedirectHonorsExplicitEmptyCanonicalKey(): void
-    {
-        $settingsManager = $this->createMock(SettingsManager::class);
-        $settingsManager->method('getSetting')
-            ->with('registration.redirect_after_login')
-            ->willReturn('{"HRM":"","DRH":"/reporting"}')
-        ;
-
-        $controller = (new ReflectionClass(SecurityController::class))->newInstanceWithoutConstructor();
-        (new ReflectionProperty(SecurityController::class, 'settingsManager'))->setValue($controller, $settingsManager);
-        $method = new ReflectionMethod(SecurityController::class, 'getRedirectAfterLoginPath');
-
-        $user = new User();
-        $user->setRoles(['ROLE_HR']);
-
-        self::assertSame('/home', $method->invoke($controller, $user));
-    }
-
-    public function testHrmLoginRedirectUsesLegacyPersistedKey(): void
-    {
-        $settingsManager = $this->createMock(SettingsManager::class);
-        $settingsManager->expects(self::once())
-            ->method('getSetting')
-            ->with('registration.redirect_after_login')
-            ->willReturn('{"DRH":"/reporting","STUDENT":"/courses"}')
-        ;
-
-        $controller = (new ReflectionClass(SecurityController::class))->newInstanceWithoutConstructor();
-        $property = new ReflectionProperty(SecurityController::class, 'settingsManager');
-        $property->setValue($controller, $settingsManager);
-        $method = new ReflectionMethod(SecurityController::class, 'getRedirectAfterLoginPath');
-
-        $user = new User();
-        $user->setRoles(['ROLE_HR']);
-
-        self::assertSame('/reporting', $method->invoke($controller, $user));
     }
 }

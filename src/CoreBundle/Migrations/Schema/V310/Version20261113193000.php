@@ -26,6 +26,7 @@ final class Version20261113193000 extends AbstractMigrationChamilo
                 continue;
             }
 
+            // V200\Version20170523105900 adds it first on a migration from 1.11.
             if (!$schema->getTable($tableName)->hasColumn('confidential')) {
                 $this->addSql('ALTER TABLE '.$tableName.' ADD confidential TINYINT(1) NOT NULL DEFAULT 0');
             }

@@ -34,6 +34,9 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
                     'maximum_inactive_time_to_consider' => '15',
                     'max_time_spent_per_session_threshold' => '360',
                     'recycle_bin_retention_hours' => '720',
+                    'display_session_subscription_column' => 'false',
+                    'improve_tracking_in_mystudent_php' => 'false',
+                    'display_theoretical_time' => 'false',
                 ]
             )
         ;
@@ -60,6 +63,9 @@ class TrackingSettingsSchema extends AbstractSettingsSchema
             ->add('recycle_bin_retention_hours', IntegerType::class, [
                 'constraints' => [new Range(min: 1, max: 87600)],
             ])
+            ->add('display_session_subscription_column', YesNoType::class)
+            ->add('improve_tracking_in_mystudent_php', YesNoType::class)
+            ->add('display_theoretical_time', YesNoType::class)
         ;
 
         $this->updateFormFieldsFromSettingsInfo($builder);

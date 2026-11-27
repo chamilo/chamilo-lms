@@ -44041,3 +44041,21 @@ msgstr "New enrollments are processed by the scheduled survey invitation command
 
 msgid "Some external invitations could not be sent. Check the mail configuration and retry the failed recipients."
 msgstr "Some external invitations could not be sent. Check the mail configuration and retry the failed recipients."
+
+msgid "Subscription column in the learner sessions report"
+msgstr "Subscription column in the learner sessions report"
+
+msgid "In the reporting page of a learner, add a column to the list of session courses to subscribe the learner to a course of the session or unsubscribe them from it, one course at a time or several at once."
+msgstr "In the reporting page of a learner, add a column to the list of session courses to subscribe the learner to a course of the session or unsubscribe them from it, one course at a time or several at once."
+
+msgid "Sessions progress summary in the learner report"
+msgstr "Sessions progress summary in the learner report"
+
+msgid "In the reporting page of a learner, show the average progress in each session, the time spent during the last week with an exportable detail, and a summary of the time spent per week over the last 52 weeks."
+msgstr "In the reporting page of a learner, show the average progress in each session, the time spent during the last week with an exportable detail, and a summary of the time spent per week over the last 52 weeks."
+
+msgid "Show the theoretical time of courses"
+msgstr "Show the theoretical time of courses"
+
+msgid "Show the expected time to spend in each course next to the time actually spent, in the reporting page of a learner and in the session summary page. The expected time is read from the course extra field with the identifier 'theoretical_time', which has to be created first."
+msgstr "Show the expected time to spend in each course next to the time actually spent, in the reporting page of a learner and in the session summary page. The expected time is read from the course extra field with the identifier 'theoretical_time', which has to be created first."

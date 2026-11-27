@@ -4031,6 +4031,21 @@ class SettingsCurrentFixtures extends Fixture implements FixtureGroupInterface
                     'title' => 'Maximum inactive time to consider (minutes)',
                     'comment' => 'A course page left open keeps sending automatic requests. After this number of minutes without a real action from the user (opening a page or an item, answering, etc.), the time spent in the course stops being counted.',
                 ],
+                [
+                    'name' => 'display_session_subscription_column',
+                    'title' => 'Subscription column in the learner sessions report',
+                    'comment' => 'In the reporting page of a learner, add a column to the list of session courses to subscribe the learner to a course of the session or unsubscribe them from it, one course at a time or several at once.',
+                ],
+                [
+                    'name' => 'improve_tracking_in_mystudent_php',
+                    'title' => 'Sessions progress summary in the learner report',
+                    'comment' => 'In the reporting page of a learner, show the average progress in each session, the time spent during the last week with an exportable detail, and a summary of the time spent per week over the last 52 weeks.',
+                ],
+                [
+                    'name' => 'display_theoretical_time',
+                    'title' => 'Show the theoretical time of courses',
+                    'comment' => "Show the expected time to spend in each course next to the time actually spent, in the reporting page of a learner and in the session summary page. The expected time is read from the course extra field with the identifier 'theoretical_time', which has to be created first.",
+                ],
             ],
             'workflows' => [
                 [

@@ -53,6 +53,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const FILTER_VALIDATE_BOOLEAN;
+use const JSON_THROW_ON_ERROR;
 use const OPENSSL_RAW_DATA;
 
 class SecurityController extends AbstractController
@@ -234,25 +235,15 @@ class SecurityController extends AbstractController
             ]);
         }
 
-        $redirectUrl = $this->loginRedirectResolver->resolveCoursePath($user);
+        $data = json_decode(
+            $this->serializer->serialize($user, 'jsonld', ['groups' => ['user_json:read']]),
+            true,
+            flags: JSON_THROW_ON_ERROR,
+        );
+        // The client goes there: only the server reads the redirect settings.
+        $data['afterLogin'] = $this->loginRedirectResolver->resolve($user);
 
-        if (null !== $redirectUrl) {
-            return $this->withRememberMeCookie(
-                $this->json(['redirect' => $redirectUrl]),
-                $request,
-                $user,
-                $rememberRequested
-            );
-        }
-
-        $data = null;
-        if ($user) {
-            $data = $this->serializer->serialize($user, 'jsonld', ['groups' => ['user_json:read']]);
-        }
-
-        $response = new JsonResponse($data, Response::HTTP_OK, [], true);
-
-        return $this->withRememberMeCookie($response, $request, $user, $rememberRequested);
+        return $this->withRememberMeCookie(new JsonResponse($data), $request, $user, $rememberRequested);
     }
 
     /**

@@ -39,7 +39,7 @@ final class LoginRedirectResolver
     /**
      * Home of the only course of the user, when workflows.go_to_course_after_login is on.
      */
-    public function resolveCoursePath(User $user): ?string
+    private function resolveCoursePath(User $user): ?string
     {
         if ('true' !== $this->settingsManager->getSetting('workflows.go_to_course_after_login')) {
             return null;

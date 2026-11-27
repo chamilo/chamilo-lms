@@ -220,7 +220,6 @@ class PlatformConfigurationController extends AbstractController
                 'session.session_automatic_creation_user_id',
                 'session.session_list_view_remaining_days',
                 'profile.use_users_timezone',
-                'registration.redirect_after_login',
                 'display.show_tabs_per_role',
                 'workflows.session_admin_user_subscription_search_extra_field_to_search',
                 'session.user_session_display_mode',

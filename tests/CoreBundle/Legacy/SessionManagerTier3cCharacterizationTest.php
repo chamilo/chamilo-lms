@@ -164,7 +164,7 @@ final class SessionManagerTier3cCharacterizationTest extends KernelTestCase
         // One assignment, handed in by the learner.
         $work = (new CStudentPublication())->setTitle('sm3c_work')->setActive(1);
         $this->linked($work, $course, $session);
-        $submission = (new CStudentPublication())->setTitle('sm3c_submission')->setActive(1)->setUser($student)->setPublicationParent($work);
+        $submission = (new CStudentPublication())->setTitle('sm3c_submission')->setFiletype('file')->setActive(1)->setUser($student)->setPublicationParent($work);
         $submission->setParent($work)->setCreator($student)->addCourseLink($course, $session);
         $this->getEntityManager()->persist($submission);
         $this->getEntityManager()->flush();

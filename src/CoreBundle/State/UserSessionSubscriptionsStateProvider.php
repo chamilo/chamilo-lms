@@ -180,7 +180,7 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
                 }
 
                 if ($totalAccepted >= $wantedOffset && $totalAccepted < $wantedEnd) {
-                    $this->hydrateSessionTracking($session, $user);
+                    $this->hydrateSessionForUser($session, $user);
                     $pageItems[] = $session;
                 }
 
@@ -201,10 +201,15 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
     private function hydrateSessionForUser(Session $session, User $user): void
     {
         $this->ensureDaysLeftHydrated($session, $user);
-        $this->hydrateSessionTracking($session, $user);
+        $courses = $this->getSubscriptionCourses($session, $user);
+        $session->setSubscriptionCourses($courses);
+        $this->hydrateSessionTracking($session, $user, $courses);
     }
 
-    private function hydrateSessionTracking(Session $session, User $user): void
+    /**
+     * @param list<SessionRelCourse> $courses
+     */
+    private function hydrateSessionTracking(Session $session, User $user, array $courses): void
     {
         $userId = (int) $user->getId();
         $sessionId = (int) $session->getId();
@@ -213,11 +218,7 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
         }
 
         $courseIds = [];
-        foreach ($session->getCourses() as $sessionCourse) {
-            if (!$sessionCourse instanceof SessionRelCourse) {
-                continue;
-            }
-
+        foreach ($courses as $sessionCourse) {
             $courseId = (int) $sessionCourse->getCourse()->getId();
             if ($courseId > 0) {
                 $courseIds[] = $courseId;
@@ -235,11 +236,7 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
             $sessionId
         );
 
-        foreach ($session->getCourses() as $sessionCourse) {
-            if (!$sessionCourse instanceof SessionRelCourse) {
-                continue;
-            }
-
+        foreach ($courses as $sessionCourse) {
             $courseId = (int) $sessionCourse->getCourse()->getId();
             $stats = $statsByCourse[(string) $courseId] ?? null;
             if (!\is_array($stats)) {
@@ -267,6 +264,28 @@ class UserSessionSubscriptionsStateProvider implements ProviderInterface
                 \array_key_exists('completed', $stats) ? (bool) $stats['completed'] : null
             );
         }
+    }
+
+    /**
+     * @return list<SessionRelCourse>
+     */
+    private function getSubscriptionCourses(Session $session, User $user): array
+    {
+        if ($user->isAdmin() || $user->isSuperAdmin() || $session->hasUserAsGeneralCoach($user)) {
+            return array_values($session->getCourses()->toArray());
+        }
+
+        $courseIds = [];
+        foreach ($session->getSessionRelCourseByUser($user) as $subscription) {
+            if (\in_array($subscription->getStatus(), [Session::STUDENT, Session::COURSE_COACH], true)) {
+                $courseIds[$subscription->getCourse()->getId()] = true;
+            }
+        }
+
+        // Do not replace or remove items from the managed, orphan-removing collection.
+        return array_values($session->getCourses()->filter(
+            static fn (SessionRelCourse $course): bool => isset($courseIds[$course->getCourse()->getId()])
+        )->toArray());
     }
 
     /**

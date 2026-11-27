@@ -36,6 +36,7 @@
   </listeners>
   <extensions>
     <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension"/>
+    <extension class="Chamilo\Tests\ResetLegacySessionExtension"/>
     <!-- Run `composer require symfony/panther` before enabling this extension -->
     <!--
         <extension class="Symfony\Component\Panther\ServerExtension" />

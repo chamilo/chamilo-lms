@@ -141,6 +141,10 @@ class LdapAuthenticator extends AbstractAuthenticator implements InteractiveAuth
                 throw new BadRequestHttpException('Authentication method not enabled.');
             }
 
+            if (!\extension_loaded('ldap')) {
+                throw new BadRequestHttpException('LDAP authentication is unavailable.');
+            }
+
             $data = json_decode($request->getContent());
 
             if (!$data instanceof stdClass) {

@@ -22,9 +22,11 @@ use Chamilo\CoreBundle\Helpers\ExerciseDraggableAnswerHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
+use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseCertificateManager;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseRuntimeResultEmailService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CLp;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizDestinationResult;
@@ -92,6 +94,7 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         private ExerciseLearnpathVisibilityHelper $exerciseLearnpathVisibilityHelper,
         private ExerciseCertificateManager $exerciseCertificateManager,
         private ExerciseRuntimeResultEmailService $resultEmailService,
+        private TrackEExerciseRepository $trackEExerciseRepository,
     ) {}
 
     /**
@@ -2367,10 +2370,29 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             || (int) $attempt->getOrigLpItemViewId() > 0;
         $isOwnAttempt = $currentUserId > 0 && $currentUserId === $attemptUserId;
         $showFinalActions = !$isReviewMode && !$isLearningPathAttempt && $isOwnAttempt;
-        $attemptCount = $this->getAttemptCountForResultContext($quiz, $attempt, $course, $session);
+        // Use the same counter as the start processor for retries inside a lesson.
+        $attemptCount = $isLearningPathAttempt
+            ? $this->trackEExerciseRepository->countUserAttemptsInContext(
+                (int) $quiz->getIid(),
+                (int) $course->getId(),
+                null !== $session ? (int) $session->getId() : null,
+                $attemptUserId,
+                [
+                    'lpId' => (int) $attempt->getOrigLpId(),
+                    'lpItemId' => (int) $attempt->getOrigLpItemId(),
+                    'lpItemViewId' => (int) $attempt->getOrigLpItemViewId(),
+                ],
+            )
+            : $this->getAttemptCountForResultContext($quiz, $attempt, $course, $session);
         $maxAttempt = (int) $quiz->getMaxAttempt();
         $attemptLimitReached = $maxAttempt > 0 && $attemptCount >= $maxAttempt;
-        $canTryAgain = $showFinalActions
+        $canRetryInLearnpath = $isLearningPathAttempt
+            && !$isReviewMode
+            && $isOwnAttempt
+            && $currentUser instanceof User
+            && !$this->isSettingEnabled('exercise.exercises_disable_new_attempts')
+            && $this->canRetryInLearnpath($quiz, $attempt, $course, $session, $currentUser);
+        $canTryAgain = ($showFinalActions || $canRetryInLearnpath)
             && $this->isExerciseOpenForRetry($quiz)
             && !$attemptLimitReached;
 
@@ -2383,6 +2405,22 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
             'maxAttempt' => $maxAttempt,
             'remainingAttempts' => $maxAttempt > 0 ? max(0, $maxAttempt - $attemptCount) : null,
         ];
+    }
+
+    private function canRetryInLearnpath(CQuiz $quiz, TrackEExercise $attempt, Course $course, ?Session $session, User $user): bool
+    {
+        $lpContext = $this->exerciseLearnpathVisibilityHelper->resolveValidatedAttemptTriple($quiz, $course, $session, $user);
+        if ($lpContext['lpId'] <= 0
+            || $lpContext['lpId'] !== (int) $attempt->getOrigLpId()
+            || $lpContext['lpItemId'] !== (int) $attempt->getOrigLpItemId()
+            || $lpContext['lpItemViewId'] !== (int) $attempt->getOrigLpItemViewId()
+        ) {
+            return false;
+        }
+
+        $lp = $this->entityManager->find(CLp::class, $lpContext['lpId']);
+
+        return $lp instanceof CLp && !$lp->getPreventReinit();
     }
 
     private function getAttemptCountForResultContext(CQuiz $quiz, TrackEExercise $attempt, Course $course, ?Session $session): int

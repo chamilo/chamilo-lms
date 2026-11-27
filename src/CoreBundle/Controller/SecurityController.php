@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Helpers\LoginRedirectPathResolver;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
@@ -543,7 +544,11 @@ class SecurityController extends AbstractController
                 $session->remove(OAuth2Authenticator::PENDING_2FA_SESSION_KEY);
                 $security->login($user, 'json_login', 'main');
 
-                return new RedirectResponse($this->router->generate('index'));
+                return new RedirectResponse(LoginRedirectPathResolver::resolve(
+                    $user,
+                    $this->settingsManager->getSetting('registration.redirect_after_login', true),
+                    $this->router->generate('index'),
+                ));
             }
 
             $pending['attempts'] = (int) ($pending['attempts'] ?? 0) + 1;
@@ -754,55 +759,11 @@ class SecurityController extends AbstractController
 
     private function getRedirectAfterLoginPath(User $user): string
     {
-        $setting = $this->settingsManager->getSetting('registration.redirect_after_login');
-
-        if (!\is_string($setting) || '' === trim($setting)) {
-            return '/home';
-        }
-
-        $map = json_decode($setting, true);
-        if (!\is_array($map)) {
-            return '/home';
-        }
-
-        $roles = $user->getRoles();
-
-        $profile = null;
-        if (\in_array('ROLE_ADMIN', $roles, true)) {
-            $profile = 'ADMIN';
-        } elseif (\in_array('ROLE_SESSION_MANAGER', $roles, true)) {
-            $profile = 'SESSIONADMIN';
-        } elseif (\in_array('ROLE_TEACHER', $roles, true)) {
-            $profile = 'COURSEMANAGER';
-        } elseif (\in_array('ROLE_STUDENT_BOSS', $roles, true)) {
-            $profile = 'STUDENT_BOSS';
-        } elseif (\in_array('ROLE_HR', $roles, true) || \in_array('ROLE_DRH', $roles, true)) {
-            $profile = 'HRM';
-        } elseif (\in_array('ROLE_INVITEE', $roles, true)) {
-            $profile = 'INVITEE';
-        } elseif (\in_array('ROLE_STUDENT', $roles, true)) {
-            $profile = 'STUDENT';
-        }
-
-        $value = 'HRM' === $profile
-            ? (string) ($map['HRM'] ?? $map['DRH'] ?? '')
-            : ($profile && \array_key_exists($profile, $map) ? (string) $map[$profile] : '');
-        if ('' === trim($value)) {
-            return '/home';
-        }
-
-        // Normalize a relative path
-        $value = ltrim($value, '/');
-
-        // Keep backward compatibility with old known values
-        if ('index.php' === $value || 'user_portal.php' === $value) {
-            return '/home';
-        }
-        if ('main/auth/courses.php' === $value) {
-            return '/courses';
-        }
-
-        return '/'.$value;
+        return LoginRedirectPathResolver::resolve(
+            $user,
+            $this->settingsManager->getSetting('registration.redirect_after_login'),
+            '/home',
+        );
     }
 
     private function getSessionLifetime(Request $request): int

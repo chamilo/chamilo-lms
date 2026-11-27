@@ -406,7 +406,6 @@ class ThemeController extends AbstractController
         FilesystemOperator $filesystem
     ): Response {
         $themeDir = basename($slug);
-        $defaultTheme = ThemeHelper::DEFAULT_THEME;
 
         $relCandidates = 'email' === $type
             ? ['images/email-logo.svg', 'images/email-logo.png']
@@ -424,10 +423,14 @@ class ThemeController extends AbstractController
             }
         }
 
-        // Fallback to default theme
-        if (!$filePath) {
+        // Fallback to the themes that hold the Chamilo logo
+        foreach (ThemeHelper::ASSET_FALLBACK_THEMES as $fallbackTheme) {
+            if ($filePath) {
+                break;
+            }
+
             foreach ($relCandidates as $rel) {
-                $candidate = $defaultTheme.'/'.$rel;
+                $candidate = $fallbackTheme.'/'.$rel;
                 if ($filesystem->fileExists($candidate)) {
                     $filePath = $candidate;
 
@@ -446,7 +449,8 @@ class ThemeController extends AbstractController
     /**
      * Serve an asset from the theme.
      * - If ?strict=1: only serves {name}/{path}. If it doesn't exist -> 404 (no fallback).
-     * - If not strict: serves {name}/{path}, then known logo alternates (svg/png), then default theme.
+     * - If not strict: serves {name}/{path}, then known logo alternates (svg/png), then the
+     *   themes of ThemeHelper::ASSET_FALLBACK_THEMES.
      */
     #[Route(
         '/{name}/{path}',
@@ -479,8 +483,8 @@ class ThemeController extends AbstractController
             // Strict: only exact file from requested theme
             $candidates[] = $themeDir.'/'.$path;
         } else {
-            // Non-strict: theme first, then default theme (with logo svg/png alternates)
-            foreach ([$themeDir, ThemeHelper::DEFAULT_THEME] as $slug) {
+            // Non-strict: theme first, then the fallback themes (with logo svg/png alternates)
+            foreach (array_unique([$themeDir, ...ThemeHelper::ASSET_FALLBACK_THEMES]) as $slug) {
                 $candidates[] = $slug.'/'.$path;
 
                 foreach ($this->getLogoAlternates($path) as $alt) {

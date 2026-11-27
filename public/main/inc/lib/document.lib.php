@@ -1218,9 +1218,10 @@ class DocumentManager
 
         // Teacher information
         $info_teacher_id = UserManager::get_user_id_of_course_admin_or_session_admin($course_info);
-        $teacher_info = api_get_user_info($info_teacher_id);
-        $teacher_first_name = $teacher_info['firstname'];
-        $teacher_last_name = $teacher_info['lastname'];
+        // A course without teacher returns 0, and api_get_user_info(0) would return the current user.
+        $teacher_info = $info_teacher_id ? api_get_user_info($info_teacher_id) : false;
+        $teacher_first_name = $teacher_info['firstname'] ?? '';
+        $teacher_last_name = $teacher_info['lastname'] ?? '';
 
         // info gradebook certificate
         $info_grade_certificate = UserManager::get_info_gradebook_certificate($course_info, $sessionId, $user_id);

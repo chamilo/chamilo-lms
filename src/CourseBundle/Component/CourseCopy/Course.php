@@ -24,6 +24,7 @@ class Course
     public string $encoding;
     public string $type;
     public string $backup_path = '';
+    public string $backup_zip_path = '';
 
     /** @var array<string,mixed> Legacy-friendly metadata bag (alias of $meta) */
     public array $info;

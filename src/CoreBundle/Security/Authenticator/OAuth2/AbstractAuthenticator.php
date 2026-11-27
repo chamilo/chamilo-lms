@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Security\Authenticator\OAuth2;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
+use Chamilo\CoreBundle\Helpers\LoginRedirectPathResolver;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -130,6 +131,12 @@ abstract class AbstractAuthenticator extends OAuth2Authenticator implements Auth
             } else {
                 $targetUrl = $this->router->generate('login');
             }
+        } elseif ($user instanceof User) {
+            $targetUrl = LoginRedirectPathResolver::resolve(
+                $user,
+                $this->settingsManager?->getSetting('registration.redirect_after_login', true),
+                $targetUrl,
+            );
         }
 
         $response = new RedirectResponse($targetUrl);

@@ -1069,6 +1069,10 @@ class UserGroupModel extends Model
                 foreach ($delete_items as $session_id) {
                     if (!$keepUsersInSession && !empty($user_list)) {
                         foreach ($user_list as $user_id) {
+                            if ($this->userBelongsToAnotherUsergroupInSession((int) $user_id, (int) $session_id, (int) $usergroup_id)) {
+                                continue;
+                            }
+
                             SessionManager::unsubscribe_user_from_session($session_id, $user_id);
                         }
                     }
@@ -1302,6 +1306,30 @@ class UserGroupModel extends Model
     }
 
     /**
+     * A session subscription must survive removal of one of its granting classes.
+     */
+    private function userBelongsToAnotherUsergroupInSession(int $userId, int $sessionId, int $excludedUsergroupId): bool
+    {
+        $rows = Container::getEntityManager()->createQueryBuilder()
+            ->select('uru.id')
+            ->from(UsergroupRelUser::class, 'uru')
+            ->innerJoin('uru.usergroup', 'ug')
+            ->innerJoin('ug.sessions', 'ugs')
+            ->where('IDENTITY(uru.user) = :userId')
+            ->andWhere('IDENTITY(ugs.session) = :sessionId')
+            ->andWhere('ug.id <> :excludedUsergroupId')
+            ->setParameter('userId', $userId)
+            ->setParameter('sessionId', $sessionId)
+            ->setParameter('excludedUsergroupId', $excludedUsergroupId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        return [] !== $rows;
+    }
+
+    /**
      * Subscribe users to a group.
      *
      * @param int   $usergroup_id                     usergroup id
@@ -1376,6 +1404,10 @@ class UserGroupModel extends Model
                     // Remove session subscriptions
                     if (!empty($session_list)) {
                         foreach ($session_list as $session_id) {
+                            if ($this->userBelongsToAnotherUsergroupInSession((int) $user_id, (int) $session_id, (int) $usergroup_id)) {
+                                continue;
+                            }
+
                             SessionManager::unsubscribe_user_from_session($session_id, $user_id);
                         }
                     }

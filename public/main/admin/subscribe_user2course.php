@@ -84,6 +84,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $users = isset($_POST['UserList']) && is_array($_POST['UserList']) ? $_POST['UserList'] : [];
     $courses = isset($_POST['CourseList']) && is_array($_POST['CourseList']) ? $_POST['CourseList'] : [];
+    $courses = array_values(array_filter($courses, 'is_string'));
     $first_letter_user = Database::escape_string($_POST['firstLetterUser']);
     $first_letter_course = Database::escape_string($_POST['firstLetterCourse']);
 
@@ -286,10 +287,12 @@ $result = Database::query($sql);
 $db_users = Database::store_result($result);
 unset($result);
 
+$courseCodesIn = implode("','", array_map('Database::escape_string', $courses));
+
 $sql = "SELECT code,visual_code,title
         FROM $tbl_course
         WHERE visual_code LIKE '".$first_letter_course."%'
-        ORDER BY ".(count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
+        ORDER BY ".(count($courses) > 0 ? "(code IN('".$courseCodesIn."')) DESC," : "")." visual_code";
 
 if (api_is_multiple_url_enabled()) {
     $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -302,7 +305,7 @@ if (api_is_multiple_url_enabled()) {
                 WHERE
                     access_url_id =  $access_url_id  AND
                     (visual_code LIKE '".$first_letter_course."%' )
-                ORDER BY ".(count($courses) > 0 ? "(code IN('".implode("','", $courses)."')) DESC," : "")." visual_code";
+                ORDER BY ".(count($courses) > 0 ? "(code IN('".$courseCodesIn."')) DESC," : "")." visual_code";
     }
 }
 

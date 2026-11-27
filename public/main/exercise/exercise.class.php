@@ -4277,10 +4277,15 @@ class Exercise
                     if (!empty($calculatedAnswerList)) {
                         $answer = $objAnswerTmp->selectAnswer($calculatedAnswerList[$questionId]);
                         $preArray = explode('@@', $answer);
-                        $last = count($preArray) - 1;
-                        $answer = '';
-                        for ($k = 0; $k < $last; $k++) {
-                            $answer .= $preArray[$k];
+                        // Modern calculated questions store editor metadata between the text and formula.
+                        if (isset($preArray[1]) && str_starts_with($preArray[1], 'calculated-v1:')) {
+                            $answer = $preArray[0];
+                        } else {
+                            $last = count($preArray) - 1;
+                            $answer = '';
+                            for ($k = 0; $k < $last; $k++) {
+                                $answer .= $preArray[$k];
+                            }
                         }
                         $answerWeighting = [$answerWeighting];
                         // we save the answer because it will be modified

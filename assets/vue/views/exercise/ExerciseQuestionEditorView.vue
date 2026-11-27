@@ -884,6 +884,13 @@
           </p>
         </div>
 
+        <div
+          v-if="isEditMode && !form.calculatedRanges.length"
+          class="rounded-lg border border-info/30 bg-support-1 px-4 py-3 text-sm text-support-4"
+        >
+          {{ t("The original calculated variables are unavailable. Existing variations are preserved if the calculation is unchanged.") }}
+        </div>
+
         <BaseTinyEditor
           editor-id="exercise-calculated-text"
           v-model="form.calculatedText"
@@ -3842,12 +3849,12 @@ function validateForm() {
       return false
     }
 
-    if (!extractCalculatedTokens(form.calculatedText).length) {
+    if (!isEditMode.value && !extractCalculatedTokens(form.calculatedText).length) {
       errorMessage.value = t("Please define at least one blank with the selected marker")
       return false
     }
 
-    if (!String(form.calculatedFormula || "").trim()) {
+    if (!isEditMode.value && !String(form.calculatedFormula || "").trim()) {
       errorMessage.value = t("Please, write the formula")
       return false
     }

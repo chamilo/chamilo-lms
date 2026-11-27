@@ -4910,5 +4910,6 @@
     "Enter up to 50 external email addresses separated by commas, semicolons or line breaks. Existing invitations are not resent unless requested.": "Enter up to 50 external email addresses separated by commas, semicolons or line breaks. Existing invitations are not resent unless requested.",
     "Automatically invite newly enrolled learners": "Automatically invite newly enrolled learners",
     "New enrollments are processed by the scheduled survey invitation command while the survey is open.": "New enrollments are processed by the scheduled survey invitation command while the survey is open.",
-    "Some external invitations could not be sent. Check the mail configuration and retry the failed recipients.": "Some external invitations could not be sent. Check the mail configuration and retry the failed recipients."
+    "Some external invitations could not be sent. Check the mail configuration and retry the failed recipients.": "Some external invitations could not be sent. Check the mail configuration and retry the failed recipients.",
+  "The original calculated variables are unavailable. Existing variations are preserved if the calculation is unchanged.": "The original calculated variables are unavailable. Existing variations are preserved if the calculation is unchanged."
 }

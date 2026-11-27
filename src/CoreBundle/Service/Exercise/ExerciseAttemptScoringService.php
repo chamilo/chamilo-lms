@@ -1026,42 +1026,7 @@ final readonly class ExerciseAttemptScoringService
             return 0.0;
         }
 
-        [$answerId, $studentAnswer] = $this->parseCalculatedStudentAnswer((string) $row->getAnswer());
-        $teacherAnswer = $answerId > 0 && isset($answers[$answerId]) ? $answers[$answerId] : reset($answers);
-        if (!$teacherAnswer instanceof CQuizAnswer) {
-            return 0.0;
-        }
-
-        $expectedAnswer = $this->extractCalculatedExpectedAnswer((string) $teacherAnswer->getAnswer());
-        if ('' === $expectedAnswer || '' === $studentAnswer) {
-            return 0.0;
-        }
-
-        return trim($studentAnswer) === trim($expectedAnswer) ? (float) $question->getPonderation() : 0.0;
-    }
-
-    /**
-     * @return array{0: int, 1: string}
-     */
-    private function parseCalculatedStudentAnswer(string $value): array
-    {
-        $parts = explode(':', $value, 2);
-        if (2 === \count($parts)) {
-            return [(int) $parts[0], trim((string) $parts[1])];
-        }
-
-        return [0, trim($value)];
-    }
-
-    private function extractCalculatedExpectedAnswer(string $answer): string
-    {
-        $parts = explode('@@', $answer, 2);
-        $text = (string) ($parts[0] ?? $answer);
-        if (1 === preg_match('/\[([^\[\]]*)\]\s*$/', $text, $matches)) {
-            return trim((string) ($matches[1] ?? ''));
-        }
-
-        return '';
+        return ExerciseCalculatedAnswerHelper::score($question, $answers, (string) $row->getAnswer());
     }
 
     /**

@@ -43988,3 +43988,6 @@ msgstr ""
 
 msgid "Show the expected time to spend in each course next to the time actually spent, in the reporting page of a learner and in the session summary page. The expected time is read from the course extra field with the identifier 'theoretical_time', which has to be created first."
 msgstr ""
+
+msgid "The original calculated variables are unavailable. Existing variations are preserved if the calculation is unchanged."
+msgstr ""

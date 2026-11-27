@@ -13,8 +13,11 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ResourceFile;
 use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Entity\TrackEAttempt;
+use Chamilo\CoreBundle\Entity\TrackEExercise;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseCalculatedAnswerHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -35,7 +38,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
-use Webit\Util\EvalMath\EvalMath;
 
 use const ENT_HTML5;
 use const ENT_QUOTES;
@@ -254,6 +256,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
     private function createQuestion(CQuiz $quiz, ExerciseQuestionEditor $data, Course $course, ?Session $session): CQuizQuestion
     {
+        $calculatedAnswers = self::CALCULATED_ANSWER === (int) $data->type ? ExerciseCalculatedAnswerHelper::generate($data) : null;
         $question = new CQuizQuestion();
         $this->applyQuestionFields($quiz, $question, $data, $this->getNextQuestionOrder($quiz));
         $question
@@ -265,7 +268,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         $this->addAnnotationImageOnCreate($question, $data);
         $this->addHotspotImageOnCreate($question, $data);
         $this->addOnlyofficeTemplateOnSave($quiz, $question, $data, $course);
-        $this->replaceAnswers($question, $data);
+        $this->replaceAnswers($question, $data, $calculatedAnswers);
         $this->updateQuestionCategory($question, $data, $course, $session);
 
         $relation = new CQuizRelQuestion();
@@ -282,6 +285,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
 
     private function createGlobalQuestion(ExerciseQuestionEditor $data, Course $course, ?Session $session): CQuizQuestion
     {
+        $calculatedAnswers = self::CALCULATED_ANSWER === (int) $data->type ? ExerciseCalculatedAnswerHelper::generate($data) : null;
         $question = new CQuizQuestion();
         $this->applyQuestionFields(null, $question, $data, 0);
         $question
@@ -292,7 +296,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         $this->questionRepository->create($question);
         $this->addAnnotationImageOnCreate($question, $data);
         $this->addHotspotImageOnCreate($question, $data);
-        $this->replaceAnswers($question, $data);
+        $this->replaceAnswers($question, $data, $calculatedAnswers);
         $this->updateQuestionCategory($question, $data, $course, $session);
 
         return $question;
@@ -349,9 +353,23 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         ;
     }
 
-    private function replaceAnswers(CQuizQuestion $question, ExerciseQuestionEditor $data): void
+    private function replaceAnswers(CQuizQuestion $question, ExerciseQuestionEditor $data, ?array $calculatedAnswers = null): void
     {
-        foreach ($this->getExistingAnswers($question) as $answer) {
+        $existing = $this->getExistingAnswers($question);
+        if (self::CALCULATED_ANSWER === (int) $data->type) {
+            if (ExerciseCalculatedAnswerHelper::matchesDefinition($data, $existing)) {
+                foreach ($existing as $answer) {
+                    $answer->setComment($data->calculatedComment)->setPonderation((float) $data->score);
+                }
+
+                return;
+            }
+            if ([] !== $existing && $this->hasCalculatedAttempts($question)) {
+                throw new BadRequestHttpException('Duplicate this calculated question to change its variables, formula or variations after learners have started an attempt.');
+            }
+            $calculatedAnswers ??= ExerciseCalculatedAnswerHelper::generate($data);
+        }
+        foreach ($existing as $answer) {
             $this->entityManager->remove($answer);
         }
 
@@ -373,7 +391,7 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
 
         if (self::CALCULATED_ANSWER === $type) {
-            $this->persistCalculatedAnswers($question, $data);
+            $this->persistCalculatedAnswers($question, $data, $calculatedAnswers ?? []);
 
             return;
         }
@@ -1947,14 +1965,6 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             throw new BadRequestHttpException('Please type the text.');
         }
 
-        if (0 === \count($this->extractCalculatedTokens((string) $data->calculatedText))) {
-            throw new BadRequestHttpException('Please define at least one blank with the selected marker.');
-        }
-
-        if ('' === trim((string) $data->calculatedFormula)) {
-            throw new BadRequestHttpException('Please, write the formula.');
-        }
-
         if ((float) $data->score <= 0) {
             throw new BadRequestHttpException('Required field.');
         }
@@ -1964,109 +1974,48 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
         }
     }
 
-    private function persistCalculatedAnswers(CQuizQuestion $question, ExerciseQuestionEditor $data): void
+    private function hasCalculatedAttempts(CQuizQuestion $question): bool
     {
-        $variations = max(1, (int) $data->calculatedVariations);
-        $ranges = $this->normalizeCalculatedRanges($data);
+        if (null !== $this->entityManager->getRepository(TrackEAttempt::class)->findOneBy(['questionId' => $question->getIid()])) {
+            return true;
+        }
+        // A learner may have opened the question without saving an answer yet.
+        $id = (string) $question->getIid();
 
-        for ($position = 1; $position <= $variations; ++$position) {
-            $answerText = (string) $data->calculatedText;
-            $formula = (string) $data->calculatedFormula;
+        return null !== $this->entityManager->createQueryBuilder()
+            ->select('attempt.exeId')
+            ->from(TrackEExercise::class, 'attempt')
+            ->andWhere('attempt.status = :status')
+            ->andWhere('IDENTITY(attempt.quiz) IN (SELECT IDENTITY(relation.quiz) FROM '.CQuizRelQuestion::class.' relation WHERE IDENTITY(relation.question) = :questionId)')
+            ->setParameter('questionId', (int) $question->getIid(), Types::INTEGER)
+            ->andWhere('attempt.dataTracking = :id OR attempt.dataTracking LIKE :start OR attempt.dataTracking LIKE :middle OR attempt.dataTracking LIKE :end')
+            ->setParameter('status', 'incomplete')
+            ->setParameter('id', $id)
+            ->setParameter('start', $id.',%')
+            ->setParameter('middle', '%,'.$id.',%')
+            ->setParameter('end', '%,'.$id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 
-            foreach ($this->extractCalculatedTokens($answerText) as $token) {
-                $range = $ranges[$token] ?? ['low' => '1', 'high' => '20'];
-                $value = $this->generateCalculatedValue((string) $range['low'], (string) $range['high']);
-                $answerText = str_replace($token, (string) $value, $answerText);
-                $formula = str_replace($token, (string) $value, $formula);
-            }
-
-            $result = $this->evaluateCalculatedFormula($formula);
-            $encodedAnswer = $answerText.' ['.$result.']@@'.(string) $data->calculatedFormula;
-
-            $answer = new CQuizAnswer();
-            $answer
+    /**
+     * @param list<string> $encodedAnswers
+     */
+    private function persistCalculatedAnswers(CQuizQuestion $question, ExerciseQuestionEditor $data, array $encodedAnswers): void
+    {
+        foreach ($encodedAnswers as $index => $encodedAnswer) {
+            $answer = (new CQuizAnswer())
                 ->setQuestion($question)
                 ->setAnswer($encodedAnswer)
                 ->setCorrect(1)
-                ->setComment((string) $data->calculatedComment)
+                ->setComment($data->calculatedComment)
                 ->setPonderation((float) $data->score)
-                ->setPosition($position)
+                ->setPosition($index + 1)
             ;
             $this->entityManager->persist($answer);
         }
-    }
-
-    /**
-     * @return array<string, array{low: string, high: string}>
-     */
-    private function normalizeCalculatedRanges(ExerciseQuestionEditor $data): array
-    {
-        $submittedRanges = [];
-        foreach ($data->calculatedRanges as $range) {
-            if (!\is_array($range)) {
-                continue;
-            }
-
-            $token = (string) ($range['token'] ?? '');
-            if ('' === $token) {
-                continue;
-            }
-
-            $submittedRanges[$token] = [
-                'low' => (string) ($range['low'] ?? '1'),
-                'high' => (string) ($range['high'] ?? '20'),
-            ];
-        }
-
-        $ranges = [];
-        foreach ($this->extractCalculatedTokens((string) $data->calculatedText) as $token) {
-            $ranges[$token] = $submittedRanges[$token] ?? ['low' => '1', 'high' => '20'];
-        }
-
-        return $ranges;
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    private function extractCalculatedTokens(string $text): array
-    {
-        preg_match_all('/\[[^\]]+\]/', $text, $matches);
-        $tokens = [];
-        foreach ($matches[0] ?? [] as $token) {
-            $token = trim((string) $token);
-            if ('' !== $token && !\in_array($token, $tokens, true)) {
-                $tokens[] = $token;
-            }
-        }
-
-        return $tokens;
-    }
-
-    private function generateCalculatedValue(string $low, string $high): string
-    {
-        $minimum = (float) $low;
-        $maximum = (float) $high;
-        if ($maximum < $minimum) {
-            [$minimum, $maximum] = [$maximum, $minimum];
-        }
-
-        $hasDecimal = str_contains($low, '.') || str_contains($high, '.');
-        if (!$hasDecimal) {
-            return (string) random_int((int) $minimum, (int) $maximum);
-        }
-
-        $value = random_int((int) round($minimum * 100), (int) round($maximum * 100)) / 100;
-
-        return rtrim(rtrim(number_format($value, 2, '.', ''), '0'), '.');
-    }
-
-    private function evaluateCalculatedFormula(string $formula): string
-    {
-        $math = new EvalMath();
-        $result = (float) $math->evaluate($formula);
-
-        return rtrim(rtrim(number_format($result, 2, '.', ''), '0'), '.');
     }
 
     private function addHotspotData(Operation $operation, ExerciseQuestionEditor $response, CQuiz $quiz, CQuizQuestion $question, Course $course, ?Session $session): void
@@ -2532,49 +2481,17 @@ final readonly class ExerciseQuestionEditorProcessor implements ProcessorInterfa
             return;
         }
 
-        $parsed = $this->parseCalculatedAnswer((string) $firstAnswer->getAnswer());
+        $parsed = ExerciseCalculatedAnswerHelper::definition($firstAnswer->getAnswer());
         $response->calculatedText = $parsed['text'];
         $response->calculatedFormula = $parsed['formula'];
-        $response->calculatedRanges = $this->buildCalculatedRanges($parsed['text']);
+        $response->calculatedRanges = [];
+        foreach ($parsed['ranges'] as $token => $range) {
+            $response->calculatedRanges[] = ['token' => $token, 'low' => $range['low'], 'high' => $range['high'], 'position' => \count($response->calculatedRanges) + 1];
+        }
         $response->calculatedVariations = max(1, \count($answers));
         $response->calculatedComment = (string) $firstAnswer->getComment();
         $response->score = (float) $question->getPonderation();
         $response->answers = [];
-    }
-
-    /**
-     * @return array{text: string, formula: string}
-     */
-    private function parseCalculatedAnswer(string $encodedAnswer): array
-    {
-        $parts = explode('@@', $encodedAnswer);
-        $formula = \count($parts) > 1 ? (string) array_pop($parts) : '';
-        $text = (string) array_shift($parts);
-        $text = preg_replace('/\[[^\]]*\]/', '[]', $text) ?? $text;
-
-        return [
-            'text' => $text,
-            'formula' => $formula,
-        ];
-    }
-
-    /**
-     * @return array<int, array{token: string, low: string, high: string, random: string, position: int}>
-     */
-    private function buildCalculatedRanges(string $text): array
-    {
-        $ranges = [];
-        foreach ($this->extractCalculatedTokens($text) as $index => $token) {
-            $ranges[] = [
-                'token' => $token,
-                'low' => '1',
-                'high' => '20',
-                'random' => $this->generateCalculatedValue('1', '20'),
-                'position' => $index + 1,
-            ];
-        }
-
-        return $ranges;
     }
 
     private function getDefaultCalculatedText(): string

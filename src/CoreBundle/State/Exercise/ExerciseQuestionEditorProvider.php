@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\ExerciseDraggableAnswerHelper;
 use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseCalculatedAnswerHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CLpItem;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -1597,30 +1598,18 @@ final readonly class ExerciseQuestionEditorProvider implements ProviderInterface
             return;
         }
 
-        $parsed = $this->parseCalculatedAnswer((string) $firstAnswer->getAnswer());
+        $parsed = ExerciseCalculatedAnswerHelper::definition($firstAnswer->getAnswer());
         $response->calculatedText = $parsed['text'];
         $response->calculatedFormula = $parsed['formula'];
-        $response->calculatedRanges = $this->buildCalculatedRanges($parsed['text'], []);
+        $ranges = [];
+        foreach ($parsed['ranges'] as $token => $range) {
+            $ranges[] = ['token' => $token, 'low' => $range['low'], 'high' => $range['high']];
+        }
+        $response->calculatedRanges = $this->buildCalculatedRanges($parsed['text'], $ranges);
         $response->calculatedVariations = max(1, \count($answers));
         $response->calculatedComment = (string) $firstAnswer->getComment();
         $response->score = (float) $question->getPonderation();
         $response->answers = [];
-    }
-
-    /**
-     * @return array{text: string, formula: string}
-     */
-    private function parseCalculatedAnswer(string $encodedAnswer): array
-    {
-        $parts = explode('@@', $encodedAnswer);
-        $formula = \count($parts) > 1 ? (string) array_pop($parts) : '';
-        $text = (string) array_shift($parts);
-        $text = preg_replace('/\[[^\]]*\]/', '[]', $text) ?? $text;
-
-        return [
-            'text' => $text,
-            'formula' => $formula,
-        ];
     }
 
     /**

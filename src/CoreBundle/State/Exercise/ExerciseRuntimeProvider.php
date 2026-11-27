@@ -25,6 +25,7 @@ use Chamilo\CoreBundle\Helpers\ExerciseLearnpathVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\StudentViewHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\TrackEExerciseRepository;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseCalculatedAnswerHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGlossary;
 use Chamilo\CourseBundle\Entity\CQuiz;
@@ -1633,81 +1634,21 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             ];
         }
 
-        $selectedVariation = $this->selectCalculatedRuntimeVariation($question, $variations, $attempt);
+        $selectedId = ExerciseCalculatedAnswerHelper::selectVariationId($this->entityManager, $question, array_column($variations, 'id'), $attempt);
+        $selectedVariation = null;
+        foreach ($variations as $variation) {
+            if ($selectedId === $variation['id']) {
+                $selectedVariation = $variation;
+
+                break;
+            }
+        }
 
         return [
             'answerId' => null !== $selectedVariation ? (int) $selectedVariation['id'] : null,
             'text' => (string) ($selectedVariation['text'] ?? ''),
             'variations' => $variations,
         ];
-    }
-
-    /**
-     * The previous runtime stores the random calculated-answer variation in session for the current attempt.
-     * The current runtime must keep the same variation stable for an attempt without relying on session state.
-     *
-     * @param array<int, array{id: int, text: string, position: int}> $variations
-     *
-     * @return array{id: int, text: string, position: int}|null
-     */
-    private function selectCalculatedRuntimeVariation(CQuizQuestion $question, array $variations, ?TrackEExercise $attempt): ?array
-    {
-        if ([] === $variations) {
-            return null;
-        }
-
-        $savedAnswerId = $this->getSavedCalculatedRuntimeAnswerId($question, $attempt);
-        if ($savedAnswerId > 0) {
-            foreach ($variations as $variation) {
-                if ((int) ($variation['id'] ?? 0) === $savedAnswerId) {
-                    return $variation;
-                }
-            }
-        }
-
-        if (!$attempt instanceof TrackEExercise || null === $attempt->getExeId()) {
-            return $variations[0];
-        }
-
-        $index = abs((int) crc32(\sprintf(
-            '%d:%d:%d',
-            (int) $attempt->getExeId(),
-            (int) ($question->getIid() ?? 0),
-            \count($variations)
-        ))) % \count($variations);
-
-        return $variations[$index] ?? $variations[0];
-    }
-
-    private function getSavedCalculatedRuntimeAnswerId(CQuizQuestion $question, ?TrackEExercise $attempt): int
-    {
-        if (!$attempt instanceof TrackEExercise || null === $attempt->getExeId() || null === $question->getIid()) {
-            return 0;
-        }
-
-        $row = $this->entityManager->createQueryBuilder()
-            ->select('attemptRow.answer')
-            ->from(TrackEAttempt::class, 'attemptRow')
-            ->andWhere('IDENTITY(attemptRow.trackExercise) = :attemptId')
-            ->andWhere('attemptRow.questionId = :questionId')
-            ->setParameter('attemptId', (int) $attempt->getExeId(), Types::INTEGER)
-            ->setParameter('questionId', (int) $question->getIid(), Types::INTEGER)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-
-        $answer = \is_array($row) ? (string) ($row['answer'] ?? '') : '';
-        if ('' === trim($answer)) {
-            return 0;
-        }
-
-        $parts = explode(':', $answer, 2);
-        if (2 !== \count($parts)) {
-            return 0;
-        }
-
-        return max(0, (int) $parts[0]);
     }
 
     /**
@@ -2016,6 +1957,7 @@ final readonly class ExerciseRuntimeProvider implements ProviderInterface
             ->andWhere('IDENTITY(answer.question) = :questionId')
             ->setParameter('questionId', (int) $question->getIid(), Types::INTEGER)
             ->orderBy('answer.position', 'ASC')
+            ->addOrderBy('answer.iid', 'ASC')
             ->getQuery()
             ->getResult()
         ;

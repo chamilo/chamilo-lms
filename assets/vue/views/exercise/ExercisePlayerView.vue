@@ -3176,6 +3176,18 @@ async function startAttempt() {
   try {
     const response = await exerciseService.startExerciseAttempt({ exerciseId }, getContextParams(), exerciseId)
     if (response.success) {
+      if (response.attemptId && !response.usesLegacyRuntime && questions.value.some(isCalculatedQuestion)) {
+        const runtime = await exerciseService.getExerciseRuntime(
+          { ...getContextParams(), attemptId: response.attemptId },
+          exerciseId,
+        )
+        const calculatedById = new Map(
+          (runtime.questions || []).filter(isCalculatedQuestion).map((question) => [question.id, question.calculated]),
+        )
+        questions.value = questions.value.map((question) =>
+          calculatedById.has(question.id) ? { ...question, calculated: calculatedById.get(question.id) } : question,
+        )
+      }
       activeAttempt.value = response
       canSubmit.value = true === response.canFinish && true !== response.usesLegacyRuntime
       usesLegacySubmit.value = true === response.usesLegacyRuntime
@@ -4036,9 +4048,9 @@ function applySavedAnswer(question, rows) {
 
   if (isCalculatedQuestion(question)) {
     const [answerId, value] = parseSavedCalculatedAnswer(rows[0]?.answer || "")
-    questionAnswer.calculatedAnswerId =
-      answerId || question.calculated?.answerId || currentCalculatedVariation(question).id || null
-    questionAnswer.calculated = value
+    const assignedId = Number(question.calculated?.answerId || 0)
+    questionAnswer.calculatedAnswerId = assignedId || null
+    questionAnswer.calculated = !answerId || answerId === assignedId ? value : ""
     return
   }
 
@@ -4164,7 +4176,7 @@ function initializeAnswerState() {
       draggableOrder: draggableInitialOrder(question),
       dropdown: [],
       calculated: "",
-      calculatedAnswerId: currentCalculatedVariation(question).id || question.calculated?.answerId || null,
+      calculatedAnswerId: question.calculated?.answerId || null,
       text: "",
       uploadFile: null,
       uploadFileName: "",

@@ -29,6 +29,7 @@ use Chamilo\CoreBundle\Helpers\SessionVisibilityHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Repository\ResourceNodeRepository;
 use Chamilo\CoreBundle\Service\Exercise\ExerciseAttemptLogService;
+use Chamilo\CoreBundle\Service\Exercise\ExerciseCalculatedAnswerHelper;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -245,7 +246,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             return $response;
         }
 
-        $rows = $this->buildDraftRows($question, $data->answer, max(0, (int) $data->secondsSpent));
+        $rows = $this->buildDraftRows($question, $data->answer, max(0, (int) $data->secondsSpent), $attempt);
         $feedback = $this->buildFeedback($quiz, $attempt, $question, $rows);
         $marks = [] !== $feedback ? (float) ($feedback['score'] ?? 0.0) : 0.0;
         $this->deletePreviousDraftRows($attempt, $questionId);
@@ -944,7 +945,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
     /**
      * @return array<int, array{answer: string, position: int, secondsSpent: int}>
      */
-    private function buildDraftRows(CQuizQuestion $question, mixed $answer, int $secondsSpent): array
+    private function buildDraftRows(CQuizQuestion $question, mixed $answer, int $secondsSpent, ?TrackEExercise $attempt = null): array
     {
         $type = (int) $question->getType();
         $payload = $this->normalizePayload($answer);
@@ -982,7 +983,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
         }
 
         if (\in_array($type, self::CALCULATED_TYPES, true)) {
-            return $this->buildCalculatedRows($question, $payload, $secondsSpent);
+            return $this->buildCalculatedRows($question, $payload, $secondsSpent, $attempt);
         }
 
         if (\in_array($type, self::FREE_ANSWER_TYPES, true)) {
@@ -1306,21 +1307,20 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
      *
      * @return array<int, array{answer: string, position: int, secondsSpent: int}>
      */
-    private function buildCalculatedRows(CQuizQuestion $question, array $payload, int $secondsSpent): array
+    private function buildCalculatedRows(CQuizQuestion $question, array $payload, int $secondsSpent, ?TrackEExercise $attempt): array
     {
         $studentAnswer = trim((string) ($payload['calculated'] ?? $payload['value'] ?? ''));
         if ('' === $studentAnswer) {
             return [];
         }
 
-        $answerId = $this->toPositiveInt($payload['answerId'] ?? 0);
-        if ($answerId <= 0) {
-            $firstAnswer = $this->getFirstAnswer($question);
-            $answerId = $firstAnswer instanceof CQuizAnswer ? (int) $firstAnswer->getIid() : 0;
-        }
-
-        if ($answerId <= 0) {
+        $ids = array_map(static fn (CQuizAnswer $answer): int => (int) $answer->getIid(), $this->getOrderedAnswers($question));
+        $answerId = ExerciseCalculatedAnswerHelper::selectVariationId($this->entityManager, $question, $ids, $attempt);
+        if (null === $answerId) {
             return [];
+        }
+        if (isset($payload['answerId']) && $this->toPositiveInt($payload['answerId']) !== $answerId) {
+            throw new BadRequestHttpException('The calculated answer variation does not match this attempt.');
         }
 
         return [[
@@ -1528,6 +1528,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             ->andWhere('IDENTITY(answer.question) = :questionId')
             ->setParameter('questionId', (int) $question->getIid(), Types::INTEGER)
             ->orderBy('answer.position', 'ASC')
+            ->addOrderBy('answer.iid', 'ASC')
             ->getQuery()
             ->getResult()
         ;
@@ -2268,42 +2269,7 @@ final readonly class ExerciseRuntimeAnswerProcessor implements ProcessorInterfac
             return 0.0;
         }
 
-        [$answerId, $studentAnswer] = $this->parseCalculatedStudentAnswer((string) $row['answer']);
-        $teacherAnswer = $answerId > 0 && isset($answers[$answerId]) ? $answers[$answerId] : reset($answers);
-        if (!$teacherAnswer instanceof CQuizAnswer) {
-            return 0.0;
-        }
-
-        $expectedAnswer = $this->extractCalculatedExpectedAnswer((string) $teacherAnswer->getAnswer());
-        if ('' === $expectedAnswer || '' === $studentAnswer) {
-            return 0.0;
-        }
-
-        return trim($studentAnswer) === trim($expectedAnswer) ? (float) $question->getPonderation() : 0.0;
-    }
-
-    /**
-     * @return array{0: int, 1: string}
-     */
-    private function parseCalculatedStudentAnswer(string $value): array
-    {
-        $parts = explode(':', $value, 2);
-        if (2 === \count($parts)) {
-            return [(int) $parts[0], trim((string) $parts[1])];
-        }
-
-        return [0, trim($value)];
-    }
-
-    private function extractCalculatedExpectedAnswer(string $answer): string
-    {
-        $parts = explode('@@', $answer, 2);
-        $text = (string) ($parts[0] ?? $answer);
-        if (1 === preg_match('/\[([^\[\]]*)\]\s*$/', $text, $matches)) {
-            return trim((string) ($matches[1] ?? ''));
-        }
-
-        return '';
+        return ExerciseCalculatedAnswerHelper::score($question, $answers, (string) $row['answer']);
     }
 
     /**

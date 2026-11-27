@@ -30,6 +30,7 @@ final class Version20261120120000 extends AbstractMigrationChamilo
             throw new RuntimeException('Course subscriptions and platform settings tables are required.');
         }
 
+        // V200\Version20201212114907 adds it first on a migration from 1.11.
         if (!$schema->getTable('course_rel_user')->hasColumn('visibility')) {
             $this->addSql('ALTER TABLE course_rel_user ADD visibility INT NOT NULL DEFAULT 1');
         }

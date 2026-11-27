@@ -1366,9 +1366,10 @@ class CourseRestorer
             $resolveItemVisibility,
             &$docResources
         ): void {
-            // Documents created from the learning path editor are stored with the 'html'
-            // filetype, not DOCUMENT ('file'); skipping them left the copied LP items empty.
-            if (!\in_array($item->file_type, [DOCUMENT, 'html'], true)) {
+            // Chamilo ZIP exports use 'document' for regular files, while the
+            // resource model uses DOCUMENT ('file') or 'html'. Accept both formats.
+            $fileType = 'document' === $item->file_type ? DOCUMENT : $item->file_type;
+            if (!\in_array($fileType, [DOCUMENT, 'html'], true)) {
                 return;
             }
 
@@ -1496,7 +1497,7 @@ class CourseRestorer
             $entity = DocumentManager::addDocument(
                 ['real_id' => $courseInfo['real_id'], 'code' => $courseInfo['code']],
                 $rel,
-                $item->file_type,
+                'document' === $item->file_type && $isHtml ? 'html' : $fileType,
                 (int) ($item->size ?? 0),
                 $finalTitle,
                 $item->comment ?? '',

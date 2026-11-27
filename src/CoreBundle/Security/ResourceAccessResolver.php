@@ -50,7 +50,7 @@ final class ResourceAccessResolver
      * own visibility answers that. A course link therefore needs an open course or a real
      * subscription to it.
      */
-    public function mayReadPublishedLink(ResourceLink $link, ResourceNode $resourceNode, ?User $user): bool
+    public function mayReadPublishedLink(ResourceLink $link, ?User $user): bool
     {
         $linkCourse = $link->getCourse();
         if (!$linkCourse instanceof Course) {
@@ -73,7 +73,9 @@ final class ResourceAccessResolver
             return true;
         }
 
-        return $user instanceof User && $this->belongsToResourceCourse($resourceNode, $user);
+        // The subscription must be to this link's course or session: a member of another course
+        // the resource is shared with does not read it through this link.
+        return $user instanceof User && $this->belongsToLink($link, $user);
     }
 
     /**
@@ -83,38 +85,41 @@ final class ResourceAccessResolver
     public function belongsToResourceCourse(ResourceNode $resourceNode, User $user): bool
     {
         foreach ($resourceNode->getResourceLinks() as $link) {
-            // Corrections and feedback are linked to the student they were sent to.
-            $linkUser = $link->getUser();
-            if ($linkUser instanceof User && $linkUser->getId() === $user->getId()) {
-                return true;
-            }
-
-            $linkCourse = $link->getCourse();
-            if (!$linkCourse instanceof Course) {
-                continue;
-            }
-
-            $linkSession = $link->getSession();
-            if ($linkSession instanceof Session) {
-                if ($linkSession->hasUserAsGeneralCoach($user)
-                    || $linkSession->hasCourseCoachInCourse($user, $linkCourse)
-                    || $linkSession->hasUserInCourse($user, $linkCourse, Session::STUDENT)
-                ) {
-                    return true;
-                }
-
-                continue;
-            }
-
-            if ($linkCourse->hasUserAsTeacher($user)
-                || $linkCourse->hasSubscriptionByUser($user)
-                || $this->isSubscribedToCourseThroughSession($user, $linkCourse)
-            ) {
+            if ($this->belongsToLink($link, $user)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * Whether the user takes part in the course, or the session of the course, this one link
+     * points to, or is the user the link was sent to.
+     */
+    public function belongsToLink(ResourceLink $link, User $user): bool
+    {
+        // Corrections and feedback are linked to the student they were sent to.
+        $linkUser = $link->getUser();
+        if ($linkUser instanceof User && $linkUser->getId() === $user->getId()) {
+            return true;
+        }
+
+        $linkCourse = $link->getCourse();
+        if (!$linkCourse instanceof Course) {
+            return false;
+        }
+
+        $linkSession = $link->getSession();
+        if ($linkSession instanceof Session) {
+            return $linkSession->hasUserAsGeneralCoach($user)
+                || $linkSession->hasCourseCoachInCourse($user, $linkCourse)
+                || $linkSession->hasUserInCourse($user, $linkCourse, Session::STUDENT);
+        }
+
+        return $linkCourse->hasUserAsTeacher($user)
+            || $linkCourse->hasSubscriptionByUser($user)
+            || $this->isSubscribedToCourseThroughSession($user, $linkCourse);
     }
 
     /**

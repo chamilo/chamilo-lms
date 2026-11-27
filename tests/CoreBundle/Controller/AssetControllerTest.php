@@ -157,6 +157,36 @@ class AssetControllerTest extends WebTestCase
     }
 
     /**
+     * A package shared with two courses is read through the link of the reader's own course: a
+     * learner of the course where it is still a draft may not read it through the other course,
+     * where it is published.
+     */
+    public function testShowFileDeniesScormPackagePublishedOnlyInAnotherCourse(): void
+    {
+        $client = static::createClient();
+        $publishedIn = $this->createRegisteredCourse();
+        $draftIn = $this->createRegisteredCourse();
+        $student = $this->createUser('scorm_student_'.uniqid());
+        $draftStudent = $this->createUser('scorm_draft_student_'.uniqid());
+        $publishedIn->addUserAsStudent($student);
+        $draftIn->addUserAsStudent($draftStudent);
+        $this->getEntityManager()->flush();
+        $filePath = $this->createScormPackage($publishedIn, ResourceLink::VISIBILITY_PUBLISHED, $draftIn);
+
+        try {
+            $client->loginUser($draftStudent);
+            $client->request('GET', '/assets/'.$filePath);
+            $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+
+            $client->loginUser($student);
+            $client->request('GET', '/assets/'.$filePath);
+            $this->assertResponseIsSuccessful();
+        } finally {
+            $this->deleteScormFolder($filePath);
+        }
+    }
+
+    /**
      * The storage resolves ".." and "\" in the path, so a link that names the SCORM category but walks
      * out of it must not bring back inline rendering for a user upload.
      */
@@ -193,7 +223,7 @@ class AssetControllerTest extends WebTestCase
     /**
      * Creates a SCORM learning path in the course and returns the path of its entry page in the assets.
      */
-    private function createScormPackage(Course $course, int $visibility): string
+    private function createScormPackage(Course $course, int $visibility, ?Course $draftIn = null): string
     {
         $title = 'test_package_'.uniqid().'.zip';
         $asset = (new Asset())
@@ -215,6 +245,9 @@ class AssetControllerTest extends WebTestCase
             ->setAsset($asset)
             ->addCourseLink($course, null, null, $visibility)
         ;
+        if (null !== $draftIn) {
+            $lp->addCourseLink($draftIn, null, null, ResourceLink::VISIBILITY_DRAFT);
+        }
         self::getContainer()->get(CLpRepository::class)->createLp($lp);
 
         $filePath = Asset::SCORM.'/'.$title.'/pkg/index.html';

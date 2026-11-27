@@ -510,7 +510,7 @@ class ResourceNodeVoter extends Voter
 
         if (empty($rights)
             && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
-            && $this->resourceAccessResolver->mayReadPublishedLink($link, $resourceNode, $user instanceof User ? $user : null)
+            && $this->resourceAccessResolver->mayReadPublishedLink($link, $user instanceof User ? $user : null)
         ) {
             // Give just read access.
             $resourceRight = (new ResourceRight())

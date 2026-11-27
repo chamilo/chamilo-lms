@@ -17,6 +17,8 @@ $VDB = new VirtualDatabase();
 
 require_once __DIR__.'/../inc/functions.php';
 
+cstudio_require_post();
+
 require_once __DIR__.'/../../0_dal/dal.save.php';
 
 ini_set('display_errors', 0);

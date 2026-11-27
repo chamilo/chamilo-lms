@@ -42,6 +42,9 @@ $cstudioLegacyCsrfToken = '';
 $chamiloThemeColorCss = '';
 $cstudioMdiCssFiles = [];
 $cstudioChamiloCssVersion = (string) (@filemtime(__DIR__.'/jscss/cstudio-chamilo.css') ?: '1');
+// $version is never set, so the scripts are not versioned: this one changes the HTTP method of
+// the SCORM export calls, which the server now requires, so browsers must not keep an old copy.
+$cstudioEditorJsVersion = (string) (@filemtime(__DIR__.'/jscss/oel-teachdoc.js') ?: '1');
 
 if (isset($_GET['id'])) {
     $idPage = (int) $_GET['id'];
@@ -460,7 +463,7 @@ if ($cstudioLpId > 0) {
           'apiBase' => api_get_path(WEB_PATH).'api',
       ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE); ?>;
     </script>
-    <script src="jscss/oel-teachdoc.js?v=<?php echo $version; ?>"></script>
+    <script src="jscss/oel-teachdoc.js?v=<?php echo $cstudioEditorJsVersion; ?>"></script>
     <script>
       window.cstudioAiConfig = <?php echo json_encode([
           'endpoint' => api_get_path(WEB_PATH).'ai/cstudio',

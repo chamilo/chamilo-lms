@@ -15,6 +15,8 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
 
     require_once '../inc/functions.php';
 
+    cstudio_require_post();
+
     $idPage = get_int_from('id');
     $titleP = get_string_from('title');
     $behavior = get_int_from('behavior');

@@ -25,6 +25,8 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
 
         require_once 'inc/functions.php';
 
+        cstudio_require_post();
+
         if ($VDB->w_api_is_anonymous()) {
             echo 'KO';
 

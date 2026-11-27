@@ -33,7 +33,7 @@
         </td>
         <td style="width:15%" >
 
-			<a href="{{ _p.web_plugin }}CStudio/editor/index.php?action=edit&{{ {'id': term.id}|url_encode() }}"
+			<a href="{{ _p.web_plugin }}CStudio/editor/index.php?action=edit&{{ {'id': term.id, 'cotk': cotk}|url_encode() }}"
 			class="btn btn-success">
             <span class="fa fa-edit fa-fw" aria-hidden="true"></span></a>    
 			<a onclick="return confirm('Are you sure?')"

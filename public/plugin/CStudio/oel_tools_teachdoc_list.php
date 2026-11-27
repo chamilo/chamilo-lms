@@ -8,14 +8,18 @@ require_once __DIR__.'/0_dal/dal.global_lib.php';
 
 require_once __DIR__.'/teachdoc_hub.php';
 
-require_once __DIR__.'0_dal/dal.vdatabase.php';
+require_once __DIR__.'/0_dal/dal.vdatabase.php';
 $VDB = new VirtualDatabase();
 
 require_once __DIR__.'/inc/csrf_token.php';
 
+// Same rule as oel_tools_teachdoc_link.php: the plugin only works on the portals where it is enabled.
+if (!teachdoc_hub::create()->isEnabled()) {
+    api_not_allowed(true);
+}
+
 $language = 'en';
-$platformLanguage = api_get_interface_language();
-$iso = api_get_language_isocode($platformLanguage);
+$iso = api_get_language_isocode();
 
 if (!api_is_anonymous()) {
     $user = api_get_user_info();
@@ -54,9 +58,9 @@ if (isset($_GET['id'])) {
     $sql = "SELECT * FROM $table  WHERE id <> $id AND id_user = $userId LIMIT 2";
 }
 
-$result = $VDB->query_to_array($sql);
+$terms = $VDB->query_to_array($sql);
 
-$countData = count($result);
+$countData = count($terms);
 
 $action = isset($_GET['action']) ? $VDB->remove_XSS($_GET['action']) : 'add';
 

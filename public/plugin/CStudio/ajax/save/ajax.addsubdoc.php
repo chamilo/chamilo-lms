@@ -15,6 +15,8 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
 
     require_once '../inc/functions.php';
 
+    cstudio_require_post();
+
     require_once '../../0_dal/dal.save.php';
 
     $idTopPage = get_int_from('id');

@@ -18,6 +18,8 @@ require_once '../../0_dal/dal.chamidoc_object.php';
 
 require_once '../inc/functions.php';
 
+cstudio_require_post();
+
 use Chamilo\CoreBundle\Framework\Container;
 
 $idPage = get_int_from('id');

@@ -10032,7 +10032,7 @@ function launchExportScorm1(){
 
 	$.ajax({
 		url : '../ajax/export/prepare-sco.php?id=' + idPageHtmlTop+'&step=1&p='+processScoData + '&cfg=' +processScoConfig + '&cotk=' + $('#cotk').val(),
-		type: "get",
+		type: "POST",
 		success: function(data,textStatus,jqXHR){
 
 			if(data.indexOf("KO")==-1){
@@ -10062,7 +10062,7 @@ function launchExportScorm2(){
 	}
 	$.ajax({
 		url : '../ajax/export/prepare-sco.php?id=' + idPageHtmlTop+'&step=2&p='+processScoData + '&cfg=' + processScoConfig + '&cotk=' + $('#cotk').val(),
-		type: "get",
+		type: "POST",
 		success: function(data,textStatus,jqXHR){
 
 			if(data.indexOf("KO")==-1
@@ -10094,7 +10094,7 @@ function launchExportScorm3(){
 
 	$.ajax({
 		url : '../ajax/export/prepare-sco.php?id=' + idPageHtmlTop+'&step=3&p='+processScoData + '&cfg=' + processScoConfig + '&cotk=' + $('#cotk').val(),
-		type: "get",
+		type: "POST",
 		success: function(data,textStatus,jqXHR){
 
 			if(data.indexOf("KO")==-1){
@@ -10131,7 +10131,7 @@ function launchExportScorm4(){
 	
 	$.ajax({
 		url : '../ajax/export/prepare-sco.php?id=' + idPageHtmlTop+'&step=4&p='+processScoData  + '&cfg=' + processScoConfig + '&cotk=' + $('#cotk').val(),
-		type: "get",
+		type: "POST",
 		success: function(data,textStatus,jqXHR){
 
 			if(data.indexOf("KO")==-1){
@@ -10207,7 +10207,7 @@ function deleteExportScorm4(){
 	
 		$.ajax({
 			url : '../ajax/export/prepare-sco.php?id=' + idPageHtmlTop+'&step=10&p='+processScoData  + '&cfg=' + processScoConfig + '&cotk=' + $('#cotk').val(),
-			type: "get",
+			type: "POST",
 			success: function(data,textStatus,jqXHR){
 				deleteExportScorm4(deleteProcess);
 			},

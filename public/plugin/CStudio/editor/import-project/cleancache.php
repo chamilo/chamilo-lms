@@ -74,7 +74,7 @@
       if ('' != $lpId && 0 != $lpId) {
           if ($justone) {
               $numsave = 0;
-              $selectLP = "SELECT COUNT(id) as numsave FROM c_lp WHERE id = $lpId ";
+              $selectLP = "SELECT COUNT(iid) as numsave FROM c_lp WHERE iid = $lpId ";
 
               $numsave = (int) $VDB->get_value_by_query($selectLP, 'numsave');
 

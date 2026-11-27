@@ -30,6 +30,8 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
 
         require_once 'inc/functions.php';
 
+        cstudio_require_post();
+
         $idPage = get_int_from('id');
 
         if (!oel_ctr_rights($idPage)) {

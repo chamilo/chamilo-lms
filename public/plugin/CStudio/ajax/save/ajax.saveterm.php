@@ -33,6 +33,11 @@ if (isset($_GET['id']) || isset($_GET['act'])) {
     $pluginFileSystem = Container::getPluginsFileSystem();
 
     $action = get_int_from('act');
+
+    // Loading the terms (act=2) only reads; every other action writes.
+    if (2 !== $action) {
+        cstudio_require_post();
+    }
     $titleTerm = get_string_from('term');
 
     // Create term glossary file

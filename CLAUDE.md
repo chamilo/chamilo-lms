@@ -454,27 +454,13 @@ Adding a variable to a `*SettingsSchema.php` file (e.g. `SecuritySettingsSchema.
 So a new setting needs both:
 
 1. An entry under the right category key in `SettingsCurrentFixtures::getNewConfigurationSettings()` (`src/CoreBundle/DataFixtures/SettingsCurrentFixtures.php`) — `['name' => ..., 'title' => ..., 'comment' => ...]`.
-2. A fixtures-upsert migration: it reads every setting from `SettingsCurrentFixtures` plus the schema-declared defaults (`SettingsManager::getSchemas()`), `UPDATE`s category/title/comment for settings that already have a row (never touching `selected_value` — an admin's configured value survives being re-synced), and `INSERT`s a row (using the schema default) for ones that don't yet exist. Its `down()` is intentionally a no-op — this is a one-way sync, not meant to be reversed.
+2. A **targeted** migration in the current directory that registers only the new setting(s). Copy `V310/Version20261118100000.php`: it lists its variables in `VARIABLES`, reads their title/comment from `SettingsCurrentFixtures::getNewConfigurationSettings()[CATEGORY]`, `UPDATE`s category/title/comment when the row already exists (never `selected_value`, so an admin's value survives) and `INSERT`s the row with the default otherwise. Its `down()` is a no-op. Put it under the directory's own namespace (`Chamilo\CoreBundle\Migrations\Schema\V310`), not the one of the file you copied.
 
-**Only one such migration is needed per version** — i.e. per `Schema/V<nnn>/` directory. The directories registered in `config/packages/doctrine_migrations.yaml` (keep `public/main/install/migrations.php` in sync) are `V200`, `V210`, `V300` and `V310`; **`V310` is the current one**. Each version carries its own copy under its own namespace, each one derived from the previous generation and slightly grown (294 → 303 → 310 lines), so always start from the newest:
+**Why a migration per setting, even though the directory already has a full sync.** Each directory also has fixtures-upsert migrations that re-sync **every** setting from the fixtures and `SettingsManager::getSchemas()` at run time (`V200/Version20250926174000`, `V210/Version20260721125301`, `V300/Version20260728130000`, and several in `V310` from `Version20261006163000` on). A platform upgrading from an older version runs them and gets the new row anyway. But an installation that follows the current branch has already executed them, and Doctrine never runs an executed migration again: without a new migration, the setting stays invisible there until someone re-runs one by hand. The targeted migration costs nothing on an upgrade (it finds the row and only refreshes the labels) and needs no manual step anywhere. Do not add another copy of the full fixtures-upsert migration for a new setting.
 
-| Directory | Fixtures-upsert migration |
-|-----------|---------------------------|
-| `V200`    | `Version20250926174000.php` (the original) |
-| `V210`    | `Version20260721125301.php` |
-| `V300`    | `Version20260728130000.php` (**copy this one** — most recent) |
-| `V310`    | **none yet** |
+The directories registered in `config/packages/doctrine_migrations.yaml` (keep `public/main/install/migrations.php` in sync) are `V200`, `V210`, `V300` and `V310`; **`V310` is the current one**.
 
-**Check the current directory first**, since the table above goes stale:
-- If one already exists there, **don't create a second one**. Just add the fixture entry from step 1; whoever needs the DB updated re-executes the existing migration manually, since Doctrine won't automatically re-run a migration already marked as executed. Developers/ops are expected to know this and re-run it after pulling changes that add settings. Remove its executed mark first, then run it:
-  ```bash
-  php bin/console doctrine:migrations:version '<FQCN>' --delete --no-interaction
-  php bin/console doctrine:migrations:execute '<FQCN>' --up --no-interaction
-  ```
-  `execute --up` alone on an executed migration runs it, then fails on inserting its row into the `version` table again (`Duplicate entry ... for key 'PRIMARY'`), so the command ends in an error after the migration ran, and whether its changes were kept is not guaranteed.
-- Only create a **new** migration if it doesn't. Copy the newest existing one's body verbatim into a freshly dated `Version<timestamp>` class **in the current directory, under that directory's own namespace** (`Chamilo\CoreBundle\Migrations\Schema\V310`) — not the namespace of the file you copied from.
-
-`AbstractMigrationChamilo::addSettingCurrent()` (`src/CoreBundle/Migrations/AbstractMigrationChamilo.php`) exists as a single-setting-insert helper but has zero callers repo-wide — the fixtures-upsert migration above is the actual convention to copy, not that helper.
+`AbstractMigrationChamilo::addSettingCurrent()` (`src/CoreBundle/Migrations/AbstractMigrationChamilo.php`) is an older single-setting-insert helper with one caller (`V300/Version20260727210000`); copy the targeted migration above instead.
 
 ### Legacy link locations
 

@@ -244,6 +244,12 @@ final class GlobalReportingAuthorsWorksTest extends KernelTestCase
             array_column($result['columns'], 'key'),
         );
         $this->assertSame($this->courseCode(1), $result['columns'][5]['prefix'], 'the course code heads its columns');
+        $this->assertSame(
+            [$this->courseCode(1), $this->courseCode(1), $this->courseCode(1), $this->courseCode(2)],
+            array_column(\array_slice($result['columns'], 5, 4), 'group'),
+            'the page groups the three columns of each course under it',
+        );
+        $this->assertArrayNotHasKey('group', $result['columns'][4], 'the learner columns belong to no course');
         $this->assertSame(2, $result['total'], 'learners only, not the human resources manager of the session');
         $rows = array_column($result['items'], null, 'id');
         $row = $rows[$inCourse];

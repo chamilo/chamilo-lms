@@ -29,7 +29,8 @@
 
     <section
       v-if="showFilters"
-      class="no-print rounded-xl border border-gray-25 bg-white p-4 shadow-sm"
+      class="no-print"
+      :class="{ 'rounded-xl border border-gray-25 bg-white p-4 shadow-sm': isFramed }"
     >
       <div :class="filterLayoutClass">
         <div
@@ -209,10 +210,20 @@
       </div>
     </section>
 
-    <section class="rounded-xl border border-gray-25 bg-white shadow-sm">
+    <EmptyState
+      v-if="awaitsSession"
+      icon="sessions"
+      :summary="t('Please select a session')"
+    />
+
+    <section
+      v-else
+      :class="{ 'rounded-xl border border-gray-25 bg-white shadow-sm': isFramed }"
+    >
       <header
         v-if="!isListPage && !isMyProgress"
-        class="flex flex-wrap items-center gap-3 border-b border-gray-25 p-4"
+        class="flex flex-wrap items-center gap-3"
+        :class="isFramed ? 'border-b border-gray-25 p-4' : 'pb-2'"
       >
         <p
           v-if="report.meta.user"
@@ -223,7 +234,10 @@
         <span class="ms-auto text-sm text-gray-50"> {{ report.total }} {{ t("Results") }} </span>
       </header>
 
-      <div class="overflow-x-auto p-4">
+      <div
+        class="overflow-x-auto"
+        :class="{ 'p-4': isFramed }"
+      >
         <div
           v-if="showTableSkeleton"
           aria-busy="true"
@@ -269,18 +283,55 @@
           data-key="id"
           :row-class="reportRowClass"
           :text-for-empty="emptyTableText"
+          :aria-busy="loading ? 'true' : undefined"
+          :style="tableLoadingStyle"
           @page="onPage"
           @sort="onSort"
         >
+          <!--
+            No v-if here: Vue keys a v-if branch, and the DataTable then registers the body columns a second time.
+            Without groups, the type is not "header", so the table keeps its plain header.
+          -->
+          <ColumnGroup :type="hasColumnGroups ? 'header' : 'none'">
+            <Row>
+              <Column
+                v-for="cell in groupHeaderCells"
+                :key="cell.key"
+                :rowspan="cell.rowspan"
+                :colspan="cell.colspan"
+                :header-class="cell.group ? 'border-l border-gray-25 !text-center' : undefined"
+              >
+                <template #header>
+                  <span
+                    v-if="cell.group"
+                    :title="cell.title"
+                    class="w-full whitespace-nowrap text-center"
+                  >
+                    {{ cell.group }}
+                  </span>
+                  <span v-else>{{ t(cell.column.label) }}</span>
+                </template>
+              </Column>
+            </Row>
+            <Row>
+              <Column
+                v-for="column in groupedColumns"
+                :key="column.key"
+                :header="t(column.label)"
+                :header-class="groupStartKeys.has(column.key) ? 'border-l border-gray-25' : undefined"
+              />
+            </Row>
+          </ColumnGroup>
           <Column
             v-for="column in report.columns"
             :key="column.key"
             :field="column.key"
             :sortable="Boolean(column.sortable)"
+            :body-class="groupStartKeys.has(column.key) ? 'border-l border-gray-25' : undefined"
           >
             <template #header>
               <span class="inline-flex items-center gap-1">
-                <span>{{ column.prefix ? `${column.prefix} (${t(column.label)})` : t(column.label) }}</span>
+                <span>{{ t(column.label) }}</span>
                 <BaseIcon
                   v-if="column.help"
                   icon="information"
@@ -448,7 +499,23 @@
                 </span>
                 <span v-else>-</span>
               </div>
-              <span v-else>
+              <div
+                v-else-if="column.bar && null !== data[column.key] && undefined !== data[column.key]"
+                class="flex min-w-28 items-center gap-2"
+              >
+                <ProgressBar
+                  :value="Number(data[column.key])"
+                  :show-value="false"
+                  class="h-1.5 flex-1"
+                />
+                <span class="whitespace-nowrap text-caption text-gray-90">
+                  {{ formatValue(data[column.key], column.type) }}
+                </span>
+              </div>
+              <span
+                v-else
+                :class="{ 'whitespace-nowrap': hasColumnGroups && 'datetime' !== column.type }"
+              >
                 {{ formatValue(data[column.key], column.type) }}
               </span>
             </template>
@@ -517,7 +584,11 @@ import { computed, nextTick, onMounted, reactive, ref, watch } from "vue"
 import { useI18n } from "vue-i18n"
 import { useRoute, useRouter } from "vue-router"
 import Column from "primevue/column"
+import ColumnGroup from "primevue/columngroup"
+import ProgressBar from "primevue/progressbar"
+import Row from "primevue/row"
 import Skeleton from "primevue/skeleton"
+import EmptyState from "../../components/EmptyState.vue"
 import BaseButton from "../../components/basecomponents/BaseButton.vue"
 import BaseCalendar from "../../components/basecomponents/BaseCalendar.vue"
 import BaseIcon from "../../components/basecomponents/BaseIcon.vue"
@@ -551,6 +622,7 @@ const SECTION_ICONS = {
   users: "account-group",
   courses: "courses",
   sessions: "sessions",
+  "works-in-session": "file-text",
 }
 
 // Meta the server always sends for a section (GlobalReportingSectionQueryService), known before
@@ -621,7 +693,8 @@ const inactiveDayOptions = [1, 5, 7, 15, 30, 60, 90, 120].map((value) => ({ labe
 const sessionOptions = computed(() =>
   (report.meta.sessionOptions || []).map((option) => ({ label: option.label, value: Number(option.id) })),
 )
-const emptyTableText = computed(() => t(awaitsSession.value ? "Please select a session" : "No results found"))
+// While the works in session report loads, the table loader replaces the rows: the empty text would flash under it.
+const emptyTableText = computed(() => (loading.value && report.meta.requiresSession ? "" : t("No results found")))
 const showFilters = computed(
   () =>
     report.meta.supportsKeyword !== false ||
@@ -638,10 +711,43 @@ const isLearnerList = computed(() => props.section === "learners")
 const isUserList = computed(() => props.section === "users")
 const isCourseList = computed(() => props.section === "courses")
 const isSessionList = computed(() => props.section === "sessions")
+// The works in session report shows its filter and table on the page itself, without the framing cards.
+const isFramed = computed(() => props.section !== "works-in-session")
 const isListPage = computed(() => isUserList.value || isCourseList.value || isSessionList.value)
 const showTableSkeleton = computed(() => isSessionList.value && loading.value && !loaded.value)
 // A report that requires a session has nothing to export until one is selected.
 const awaitsSession = computed(() => Boolean(report.meta.requiresSession) && !filters.sessionId)
+// Columns that carry a `group` (the works in session report: three per course) are shown under a shared header.
+const hasColumnGroups = computed(() => report.columns.some((column) => column.group))
+const groupHeaderCells = computed(() =>
+  report.columns.reduce((cells, column) => {
+    const last = cells[cells.length - 1]
+    if (column.group && last?.group === column.group) {
+      last.colspan++
+    } else if (column.group) {
+      cells.push({ key: `group-${column.key}`, group: column.group, title: column.groupTitle, colspan: 1 })
+    } else {
+      cells.push({ key: column.key, column, rowspan: 2 })
+    }
+
+    return cells
+  }, []),
+)
+const groupedColumns = computed(() => report.columns.filter((column) => column.group))
+const groupStartKeys = computed(
+  () =>
+    new Set(
+      report.columns
+        .filter((column, index) => column.group && column.group !== report.columns[index - 1]?.group)
+        .map((column) => column.key),
+    ),
+)
+// Loaded works in session report of the local portal (1440 px, 4 learners, 2 courses): 447 px. The table keeps
+// that height while it loads, so the page does not jump.
+const GROUPED_TABLE_LOADING_HEIGHT = 447
+const tableLoadingStyle = computed(() =>
+  loading.value && report.meta.requiresSession ? { minHeight: `${GROUPED_TABLE_LOADING_HEIGHT}px` } : undefined,
+)
 const showFilterCsv = computed(() => report.meta.canExportCsv && !isSessionList.value && !awaitsSession.value)
 const showFilterXlsx = computed(() => report.meta.canExportXlsx && !isSessionList.value && !awaitsSession.value)
 const compactFilters = computed(

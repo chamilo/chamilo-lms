@@ -6532,14 +6532,16 @@ final readonly class GlobalReportingSectionQueryService
             ['key' => 'lastLogin', 'label' => 'Latest login in platform', 'type' => 'date'],
         ];
         foreach ($courses as $courseId => $course) {
+            // The page groups the three columns under the course (group); the export names it in the first one (prefix).
+            $group = ['group' => $course->getCode(), 'groupTitle' => $course->getTitle()];
             $columns[] = [
                 'key' => 'score'.$courseId,
                 'label' => 'Best score',
                 'prefix' => $course->getCode(),
                 'type' => 'percent',
-            ];
-            $columns[] = ['key' => 'progress'.$courseId, 'label' => 'Progress', 'type' => 'percent'];
-            $columns[] = ['key' => 'lastSentDate'.$courseId, 'label' => 'Last sent work date', 'type' => 'datetime'];
+            ] + $group;
+            $columns[] = ['key' => 'progress'.$courseId, 'label' => 'Progress', 'type' => 'percent', 'bar' => true] + $group;
+            $columns[] = ['key' => 'lastSentDate'.$courseId, 'label' => 'Last sent work date', 'type' => 'datetime'] + $group;
         }
 
         $pageUsers = \array_slice($users, $filters['offset'], $filters['itemsPerPage'], true);

@@ -73,7 +73,7 @@ final class LearningPathChamiloDocumentRestoreTest extends KernelTestCase
             $rootImage = new Document(70002, 'root.png', '', 'root.png', 'document', \strlen($png), ResourceLink::VISIBILITY_PUBLISHED, $rootUuid);
             $nestedImage = new Document(70003, 'QA images/nested.png', '', 'nested.png', 'document', \strlen($png), ResourceLink::VISIBILITY_PUBLISHED, $nestedUuid);
             $page = new Document(70004, 'page.html', '', 'page.html', 'document', \strlen($html));
-            $legacyImage = new Document(70005, 'legacy.png', '', 'legacy.png', DOCUMENT, \strlen($png));
+            $legacyImage = new Document(70005, 'legacy.png', '', 'legacy.png', 'file', \strlen($png));
             $legacyPage = new Document(70006, 'legacy.html', '', 'legacy.html', 'html', 18);
             $lp = (object) [
                 'title' => 'Restored document LP',
@@ -116,7 +116,7 @@ final class LearningPathChamiloDocumentRestoreTest extends KernelTestCase
             }
             self::assertSame($restored[70001]->getResourceNode()->getId(), $restored[70003]->getResourceNode()->getParent()->getId());
             foreach ([70002, 70003, 70005] as $sourceId) {
-                self::assertSame(DOCUMENT, $restored[$sourceId]->getFiletype());
+                self::assertSame('file', $restored[$sourceId]->getFiletype());
                 self::assertSame($png, $nodeRepo->getResourceNodeFileContent($restored[$sourceId]->getResourceNode()));
             }
             self::assertSame('html', $restored[70004]->getFiletype());

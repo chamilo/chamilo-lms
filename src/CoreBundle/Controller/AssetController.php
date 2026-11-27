@@ -141,7 +141,7 @@ class AssetController
                     if ($resourceAccessResolver->isOpenToVisitors($link)
                         || ($user instanceof User
                             && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
-                            && $resourceAccessResolver->mayReadPublishedLink($link, $node, $user))
+                            && $resourceAccessResolver->mayReadPublishedLink($link, $user))
                     ) {
                         return true;
                     }

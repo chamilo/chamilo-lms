@@ -109,6 +109,8 @@ class AssetRepositoryTest extends AbstractApiTest
 
         $url = $assetRepo->getAssetUrl($asset);
 
+        // A SCORM package without a learning path is only readable by an admin.
+        $client->loginUser($this->getAdmin());
         $client->request('GET', $url.'/logo.png');
         $this->assertResponseIsSuccessful();
     }
@@ -134,6 +136,8 @@ class AssetRepositoryTest extends AbstractApiTest
         $assetRepo->unZipFile($asset, $subDir);
         $url = $assetRepo->getAssetUrl($asset);
 
+        // A SCORM package without a learning path is only readable by an admin.
+        $client->loginUser($this->getAdmin());
         $client->request('GET', $url.'/'.$subDir.'/logo.png');
         $this->assertResponseIsSuccessful();
     }

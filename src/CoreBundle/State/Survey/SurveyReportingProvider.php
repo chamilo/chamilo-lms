@@ -18,6 +18,7 @@ use Chamilo\CoreBundle\Service\Survey\SurveyPersonalityManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyAnswer;
+use Chamilo\CourseBundle\Entity\CSurveyExternalInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyQuestion;
 use Chamilo\CourseBundle\Entity\CSurveyQuestionOption;
@@ -367,8 +368,9 @@ final readonly class SurveyReportingProvider implements ProviderInterface
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('invitation', 'user')
             ->from(CSurveyInvitation::class, 'invitation')
-            ->innerJoin('invitation.user', 'user')
+            ->leftJoin('invitation.user', 'user')
             ->andWhere('IDENTITY(invitation.survey) = :surveyId')
+            ->andWhere('user.id IS NOT NULL OR EXISTS (SELECT external.id FROM '.CSurveyExternalInvitation::class.' external WHERE external.invitation = invitation)')
             ->andWhere('IDENTITY(invitation.course) = :courseId')
             ->orderBy('user.lastname', 'ASC')
             ->addOrderBy('user.firstname', 'ASC')
@@ -403,6 +405,10 @@ final readonly class SurveyReportingProvider implements ProviderInterface
 
         foreach ($invitations as $invitation) {
             $user = $invitation->getUser();
+            if (null === $user) {
+                // External responses are represented only by their unrelated anonymous answer key.
+                continue;
+            }
             $userKey = (string) $user->getId();
             $users[$userKey] = [
                 'key' => $userKey,

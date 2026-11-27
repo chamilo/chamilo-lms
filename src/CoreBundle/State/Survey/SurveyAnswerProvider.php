@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\SurveyHelper;
 use Chamilo\CoreBundle\Helpers\UserHelper;
+use Chamilo\CoreBundle\Service\Survey\SurveyInvitationDelivery;
 use Chamilo\CoreBundle\Service\Survey\SurveyPersonalityManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CSurvey;
@@ -76,6 +77,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         private SurveyHelper $surveyHelper,
         private UserHelper $userHelper,
         private SurveyPersonalityManager $personalityManager,
+        private SurveyInvitationDelivery $delivery,
     ) {}
 
     /**
@@ -131,6 +133,11 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             throw new AccessDeniedHttpException('You are not allowed to preview this survey.');
         }
 
+        $external = null !== $invitation && $this->isExternalCode($invitation->getInvitationCode());
+        if ($external) {
+            $user = null;
+        }
+
         $response = new SurveyAnswer();
         $response->surveyId = (int) $survey->getIid();
         $response->preview = $preview;
@@ -145,9 +152,10 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         if (null !== $invitation) {
             $response->invitationCode = $invitation->getInvitationCode();
             $response->isAnswered = 1 === $invitation->getAnswered();
-            $response->canSubmit = !$response->isAnswered || $this->isSettingEnabled('survey.survey_allow_answered_question_edit');
-            $answerUserKey = $this->getAnswerUserKey($survey, $user, $request);
-            $response->answers = $this->getExistingAnswers($survey, $answerUserKey, $request);
+            $response->canSubmit = !$response->isAnswered || (!$external && $this->isSettingEnabled('survey.survey_allow_answered_question_edit'));
+            // An external token authorizes one response, never reading a previous response.
+            $answerUserKey = $external ? '' : $this->getAnswerUserKey($survey, $user, $request);
+            $response->answers = $external ? [] : $this->getExistingAnswers($survey, $answerUserKey, $request);
             if (1 === $survey->getSurveyType() && (1 === $invitation->getAnswered() || $isFinished)) {
                 $response->personalityProfile = $this->personalityManager->profile(
                     $survey,
@@ -179,6 +187,11 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
 
     public function getCourse(Request $request, ?CSurvey $survey = null): Course
     {
+        $publicCid = $request->query->getInt('publicCid');
+        if ($this->isExternalCode($this->getInvitationCode($request)) && $publicCid > 0 && $survey instanceof CSurvey && '1' === $survey->getAnonymous() && !$request->query->has('cid')) {
+            return $this->entityManager->find(Course::class, $publicCid)
+                ?? throw new NotFoundHttpException('The requested course was not found.');
+        }
         $courseId = (int) $this->cidReqHelper->getCourseId();
         if ($courseId <= 0) {
             $courseId = $request->query->getInt('publicCid');
@@ -197,7 +210,9 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
     public function getSession(Request $request): ?Session
     {
         $sessionId = (int) $this->cidReqHelper->getSessionId();
-        if ($sessionId <= 0) {
+        if ($this->isExternalCode($this->getInvitationCode($request)) && !$request->query->has('cid')) {
+            $sessionId = $request->query->getInt('publicSid');
+        } elseif ($sessionId <= 0) {
             $sessionId = $request->query->getInt('publicSid');
         }
 
@@ -247,6 +262,9 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
     public function getInvitation(CSurvey $survey, Course $course, ?Session $session, ?User $user, Request $request): CSurveyInvitation
     {
         $invitationCode = $this->getInvitationCode($request);
+        if ($this->isExternalCode($invitationCode) && ('1' !== $survey->getAnonymous() || 0 !== $survey->getSurveyType() || 0 !== $request->query->getInt('lpItemId'))) {
+            throw new AccessDeniedHttpException('No valid survey invitation was found for this user.');
+        }
         if ('auto' === $invitationCode) {
             if ('1' === $survey->getAnonymous() && !$user instanceof User) {
                 return $this->getOrCreateAnonymousAutoInvitation($survey, $course, $session, $request);
@@ -315,7 +333,22 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             throw new AccessDeniedHttpException('No valid survey invitation was found for this user.');
         }
 
+        if ($this->isExternalCode($invitationCode)) {
+            $external = $this->delivery->externalRecipient($invitation);
+            $portal = $this->delivery->getPortal();
+            if (!hash_equals($invitation->getInvitationCode(), $invitationCode) || null === $external || null === $portal || $external->getPortal()->getId() !== $portal->getId()
+                || null !== $invitation->getUser() || !$this->delivery->supportsExternal($survey, $course, $session, $portal)
+                || !$this->delivery->isOpen($survey, $session)) {
+                throw new AccessDeniedHttpException('No valid survey invitation was found for this user.');
+            }
+        }
+
         return $invitation;
+    }
+
+    public function isExternalCode(string $code): bool
+    {
+        return str_starts_with(strtolower(trim($code)), SurveyInvitationDelivery::EXTERNAL_CODE_PREFIX);
     }
 
     public function getAnswerUserKey(CSurvey $survey, ?User $user, Request $request): string
@@ -326,6 +359,11 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             }
 
             return (string) $user->getId();
+        }
+
+        if ($this->isExternalCode($this->getInvitationCode($request))) {
+            // No persistent or deterministic mapping between an external token and an answer.
+            return 'surveyuser_'.bin2hex(random_bytes(20));
         }
 
         $session = $request->getSession();
@@ -530,7 +568,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
             ->setParameter('lpItemId', $request->query->getInt('lpItemId'), Types::INTEGER)
         ;
 
-        $sessionId = (int) $this->cidReqHelper->getSessionId();
+        $sessionId = (int) ($this->getSession($request)?->getId() ?? 0);
         if ($sessionId > 0) {
             $queryBuilder
                 ->andWhere('answer.sessionId = :sessionId')
@@ -666,7 +704,7 @@ final readonly class SurveyAnswerProvider implements ProviderInterface
         }
     }
 
-    private function assertSurveyIsAvailable(CSurvey $survey): void
+    public function assertSurveyIsAvailable(CSurvey $survey): void
     {
         $now = new DateTime();
         $availableFrom = $survey->getAvailFrom();

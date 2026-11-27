@@ -16,10 +16,12 @@ use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Helpers\CidReqHelper;
 use Chamilo\CoreBundle\Helpers\SurveyHelper;
+use Chamilo\CoreBundle\Service\Survey\SurveyInvitationDelivery;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CourseBundle\Entity\CSurvey;
+use Chamilo\CourseBundle\Entity\CSurveyExternalInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
 use Chamilo\CourseBundle\Entity\CSurveyInvitationHistory;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
@@ -50,6 +52,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         private SettingsManager $settingsManager,
         private SurveyHelper $surveyHelper,
         private TranslatorInterface $translator,
+        private SurveyInvitationDelivery $delivery,
     ) {}
 
     /**
@@ -77,10 +80,21 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         $survey = $this->surveyInvitationProvider->getSurveyFromCurrentContext($surveyId, $course, $session);
         $this->assertPersonalitySurveySupported($survey);
         $payload = $this->getPayload($request, $data);
-        $additionalEmails = $this->normalizeStringList($payload['additionalEmails'] ?? []);
-        if ([] !== $additionalEmails) {
-            throw new BadRequestHttpException('External email invitations are not supported by the current survey invitation entity.');
+
+        return $this->delivery->withContextLock($survey, $course, $session, fn () => $this->publish($survey, $course, $session, $payload));
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function publish(CSurvey $survey, Course $course, ?Session $session, array $payload): SurveyInvitation
+    {
+        $rawEmails = $payload['additionalEmails'] ?? [];
+        if (!\is_array($rawEmails)) {
+            throw new BadRequestHttpException('External email addresses must be a list.');
         }
+        $additionalEmails = SurveyInvitationDelivery::normalizeExternalEmails($rawEmails);
+        $portal = $this->delivery->getPortal();
 
         $sendMail = true === ($payload['sendMail'] ?? false);
         $mailSubject = trim((string) ($payload['mailSubject'] ?? ''));
@@ -96,6 +110,12 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             || $this->isSettingEnabled('survey.survey_anonymous_show_answered');
         $remindUnanswered = $canRemindUnanswered && true === ($payload['remindUnanswered'] ?? false);
         $hideLink = true === ($payload['hideLink'] ?? false);
+        $this->delivery->validateExternal($additionalEmails, $survey, $course, $session, $portal, $sendMail, $hideLink);
+        $autoInvite = $payload['autoInviteNewLearners'] ?? null;
+        if (null !== $autoInvite && !\is_bool($autoInvite)) {
+            throw new BadRequestHttpException('Automatic invitation selection must be a boolean.');
+        }
+        $this->delivery->configurePolicy($survey, $course, $session, $portal, $autoInvite, $sendMail, $hideLink, $resendToAll || $remindUnanswered, $mailSubject, $mailText);
 
         $survey->setMailSubject($mailSubject);
         if ($remindUnanswered && '' !== $mailText) {
@@ -156,18 +176,59 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             }
         }
 
+        $failedExternal = [];
+        if ([] !== $additionalEmails && null !== $portal) {
+            $externalRecipients = [];
+            foreach ($this->delivery->externalRecipients($survey, $course, $session, $portal) as $external) {
+                $externalRecipients[$external->getEmail()] = $external;
+            }
+            foreach ($additionalEmails as $email) {
+                $external = $externalRecipients[$email] ?? null;
+                $isNew = null === $external;
+                if ($isNew) {
+                    $invitation = $this->delivery->createInvitation($survey, $course, $session, null, true);
+                    $external = new CSurveyExternalInvitation($invitation, $portal, $email);
+                    $this->entityManager->persist($external);
+                    $this->entityManager->flush();
+                    ++$created;
+                } else {
+                    $invitation = $external->getInvitation();
+                }
+                if (!$this->shouldSendMail($invitation, $isNew || (null === $invitation->getReminderDate() && 0 === $invitation->getAnswered()), $resendToAll, $remindUnanswered)) {
+                    continue;
+                }
+                if (!$this->delivery->send($invitation, $portal, $email, $mailSubject, $mailText)) {
+                    $failedExternal[] = $email;
+
+                    continue;
+                }
+                ++$sent;
+                $invitation->setReminderDate(new DateTime());
+                if (null === $history) {
+                    $history = new CSurveyInvitationHistory($survey, $course, $session, $mailSubject, $mailText, $remindUnanswered && !$resendToAll, $hideLink);
+                    $this->entityManager->persist($history);
+                }
+                $history->addInvitation($invitation);
+                $this->entityManager->flush();
+            }
+        }
+
         // Counters must include newly persisted invitations even when mail was not sent.
         $this->entityManager->flush();
         $this->updateSurveyCounters($survey, $course, $session);
         $this->entityManager->flush();
 
-        return $this->surveyInvitationProvider->buildResponse(
+        $response = $this->surveyInvitationProvider->buildResponse(
             $survey,
             $course,
             $session,
             'Survey published. Created: {0}. Updated: {1}. Messages sent: {2}.',
             [$created, $updated, $sent],
         );
+        $response->failedExternalInvitations = \count($failedExternal);
+        $response->failedExternalEmails = $failedExternal;
+
+        return $response;
     }
 
     /**
@@ -186,6 +247,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
                 'selectedUserIds' => $data->selectedUserIds,
                 'selectedGroupIds' => $data->selectedGroupIds,
                 'additionalEmails' => $data->additionalEmails,
+                'autoInviteNewLearners' => $data->autoInviteNewLearners,
             ];
         }
 
@@ -394,7 +456,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
 
         foreach ($invitations as $invitation) {
             $user = $invitation->getUser();
-            if ($user instanceof User && null !== $user->getId()) {
+            if ($user instanceof User && null !== $user->getId() && 0 === (int) $invitation->getLpItemId()) {
                 $items[(int) $user->getId()] = $invitation;
             }
         }
@@ -416,7 +478,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             ->setCourse($course)
             ->setSession($session)
             ->setGroup($group)
-            ->setInvitationCode(md5((string) $user->getId().microtime()))
+            ->setInvitationCode(bin2hex(random_bytes(32)))
             ->setReminderDate(new DateTime())
         ;
 
@@ -528,26 +590,6 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             $id = (int) $item;
             if ($id > 0) {
                 $items[] = $id;
-            }
-        }
-
-        return array_values(array_unique($items));
-    }
-
-    /**
-     * @return array<int, string>
-     */
-    private function normalizeStringList(mixed $value): array
-    {
-        if (!\is_array($value)) {
-            return [];
-        }
-
-        $items = [];
-        foreach ($value as $item) {
-            $text = trim((string) $item);
-            if ('' !== $text) {
-                $items[] = $text;
             }
         }
 

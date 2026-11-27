@@ -165,6 +165,18 @@ final class SurveyInvitation
     #[Groups(['survey_invitation:write'])]
     public bool $hideLink = false;
 
+    #[Groups(['survey_invitation:read', 'survey_invitation:write'])]
+    public ?bool $autoInviteNewLearners = null;
+
+    #[Groups(['survey_invitation:read'])]
+    public int $failedExternalInvitations = 0;
+
+    /**
+     * @var list<string>
+     */
+    #[Groups(['survey_invitation:read'])]
+    public array $failedExternalEmails = [];
+
     /**
      * @var array<int, int>
      */

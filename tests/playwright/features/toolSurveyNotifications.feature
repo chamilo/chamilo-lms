@@ -68,6 +68,29 @@ Feature: Confirmations of the Surveys tool
     When I press "Publish survey"
     Then I wait up to 60 seconds for the element ".p-toast-message-success" to appear
 
+  Scenario: Enable and disable automatic survey invitations
+    Given I am a platform administrator
+    And I wait for the page to be loaded
+    And I am on course "SURVTOAST" homepage
+    And I wait for the page to be loaded
+    And I follow the course tool "Surveys"
+    And I wait for the page content to settle
+    And I click the "[title='Publish']" icon in the row for "Toast survey"
+    And I wait up to 60 seconds for the element "input[name='auto_invite_new_learners']" to appear
+    And I check "auto_invite_new_learners"
+    When I press "Publish survey"
+    Then I wait up to 60 seconds for the element ".p-toast-message-success" to appear
+    And I am on course "SURVTOAST" homepage
+    And I wait for the page to be loaded
+    And I follow the course tool "Surveys"
+    And I wait for the page content to settle
+    And I click the "[title='Publish']" icon in the row for "Toast survey"
+    And I wait up to 60 seconds for the element "input[name='auto_invite_new_learners']:checked" to appear
+    And I uncheck "auto_invite_new_learners"
+    And I uncheck "send_mail"
+    When I press "Publish survey"
+    Then I wait up to 60 seconds for the element ".p-toast-message-success" to appear
+
   Scenario: Delete the survey notifications course
     Given I am a platform administrator
     And I wait for the page to be loaded

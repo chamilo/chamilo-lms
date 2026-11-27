@@ -22,7 +22,6 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
 
     $user = $VDB->w_api_get_user_info();
     $userId = $user['id'];
-    $idUrl = api_get_current_access_url_id();
 
     $topPage = get_top_page_id($idPage);
 
@@ -32,5 +31,5 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
         exit;
     }
 
-    range_all_pages($topPage, $idPage, $action, $idUrl);
+    range_all_pages($topPage, $idPage, $action);
 }

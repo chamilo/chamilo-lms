@@ -96,7 +96,8 @@ if (isset($_GET['id'])) {
     // teachers. Use the same fallback as oel_tools_teachdoc_link.php.
     $isAllowedToEdit = false;
 
-    if (!$VDB->w_api_is_anonymous()) {
+    // The plugin only edits on the portals where it is enabled (see oel_tools_teachdoc_link.php).
+    if (teachdoc_hub::create()->isEnabled() && !$VDB->w_api_is_anonymous()) {
         $isAllowedToEdit = (bool) $VDB->w_api_is_allowed_to_edit();
 
         if (!$isAllowedToEdit && function_exists('api_is_allowed_to_edit')) {

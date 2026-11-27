@@ -57,15 +57,9 @@
     
   <?php
 
-    $UrlWhere = '';
-  if ($VDB->w_get_multiple_access_url()) {
-      $idurl = $VDB->w_get_current_access_url_id();
-      $UrlWhere = " AND id_url = $idurl ";
-  }
-
   $table = 'plugin_oel_tools_teachdoc';
   $sqlNS = "SELECT id , lp_id , local_folder FROM $table ";
-  $sqlNS .= "WHERE id_parent = 0 $UrlWhere ";
+  $sqlNS .= 'WHERE id_parent = 0 ';
 
   $justone = true;
 

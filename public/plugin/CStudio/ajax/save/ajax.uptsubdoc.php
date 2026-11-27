@@ -30,15 +30,15 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
 
     $user = $VDB->w_api_get_user_info();
     $userId = $user['id'];
-    $idUrl = $VDB->w_get_current_access_url_id();
 
     $table = 'plugin_oel_tools_teachdoc';
 
+    // Only a page of the project checked above: the project itself, or one of its pages.
     if (666 == $actionP) {
         $params = [
             'type_node' => '-1',
         ];
-        $result = $VDB->update($table, $params, ['id = ? AND id_url = ?' => [$idPage, $idUrl]]);
+        $result = $VDB->update($table, $params, ['id = ? AND (id = ? OR id_parent = ?)' => [$idPage, $idPageHtmlTop, $idPageHtmlTop]]);
 
         echo 'OK';
     } else {
@@ -48,7 +48,7 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
                 'behavior' => $behavior,
                 'leveldoc' => $leveldoc,
             ];
-            $result = $VDB->update($table, $params, ['id = ? AND id_url = ?' => [$idPage, $idUrl]]);
+            $result = $VDB->update($table, $params, ['id = ? AND (id = ? OR id_parent = ?)' => [$idPage, $idPageHtmlTop, $idPageHtmlTop]]);
 
             echo 'OK';
         } else {

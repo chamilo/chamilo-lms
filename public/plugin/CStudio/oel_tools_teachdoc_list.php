@@ -49,14 +49,9 @@ $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $table = 'plugin_oel_tools_teachdoc';
 
 $idurl = api_get_current_access_url_id();
-$UrlWhere = '';
-if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-    $UrlWhere = " AND id_url = $idurl ";
-}
-
-$sql = "SELECT * FROM $table WHERE id_parent = 0 AND id_user = $userId $UrlWhere ORDER BY title";
+$sql = "SELECT * FROM $table WHERE id_parent = 0 AND id_user = $userId ORDER BY title";
 if (isset($_GET['id'])) {
-    $sql = "SELECT * FROM $table  WHERE id <> $id AND id_user = $userId $UrlWhere LIMIT 2";
+    $sql = "SELECT * FROM $table  WHERE id <> $id AND id_user = $userId LIMIT 2";
 }
 
 $result = $VDB->query_to_array($sql);

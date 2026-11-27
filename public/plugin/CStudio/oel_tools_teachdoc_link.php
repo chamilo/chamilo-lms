@@ -19,6 +19,12 @@ require_once __DIR__.'/inc/csrf_token.php';
 
 require_once __DIR__.'/0_dal/dal.insert.php';
 
+// A project is not tied to the access URL it was created on: Chamilo grants the course on each
+// portal, and the plugin only edits on the portals where it is enabled.
+if (!teachdoc_hub::create()->isEnabled()) {
+    api_not_allowed(true);
+}
+
 $language = 'en';
 $iso = api_get_language_isocode();
 
@@ -137,22 +143,14 @@ if (0 == $idLudiLP) {
         $form->addButtonSave('&nbsp;&nbsp;'.get_lang('Add').'&nbsp;&nbsp;');
     }
 } else {
-    $idurl = api_get_current_access_url_id();
-    $UrlWhere = '';
-    if (($VDB->w_is_platform_admin() || $VDB->w_is_session_admin()) && $VDB->w_get_multiple_access_url()) {
-        $UrlWhere = " AND id_url = $idurl ";
-    }
-
     $sql = "SELECT id FROM $table ";
     $sql .= " WHERE lp_id = $idLudiLP AND id_parent = 0 ";
-    $sql .= $UrlWhere;
 
     $idLudiProject = (int) $VDB->get_value_by_query($sql, 'id');
 
     if (0 !== $idLudiProject) {
         $sql = "SELECT id FROM $table ";
         $sql .= " WHERE id_parent = $idLudiProject AND type_node <> -1 ";
-        $sql .= $UrlWhere;
         $sql .= ' ORDER BY order_lst ASC, id ASC LIMIT 1';
 
         $idLudiEditorPage = (int) $VDB->get_value_by_query($sql, 'id');

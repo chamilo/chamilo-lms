@@ -206,12 +206,11 @@ function get_top_page_by_lpid($idLudiLP)
     return $VDB->get_value_by_query($sql, 'id');
 }
 
-function range_all_pages($idTopPage, $idPage, $action, $idUrl): void
+function range_all_pages($idTopPage, $idPage, $action): void
 {
     $idTopPage = (int) $idTopPage;
     $idPage = (int) $idPage;
     $action = (int) $action;
-    $idUrl = (int) $idUrl;
 
     if ($idTopPage <= 0 || $idPage <= 0 || !in_array($action, [0, 1], true)) {
         echo 'KO';
@@ -223,7 +222,7 @@ function range_all_pages($idTopPage, $idPage, $action, $idUrl): void
     $table = 'plugin_oel_tools_teachdoc';
 
     $sqlSubs = 'SELECT id FROM plugin_oel_tools_teachdoc ';
-    $sqlSubs .= " WHERE type_node <> -1 AND id_parent = $idTopPage AND id_url = $idUrl ";
+    $sqlSubs .= " WHERE type_node <> -1 AND id_parent = $idTopPage ";
     $sqlSubs .= ' ORDER BY order_lst, id';
 
     $resultSubs = $VDB->query_to_array($sqlSubs);
@@ -265,7 +264,7 @@ function range_all_pages($idTopPage, $idPage, $action, $idUrl): void
         $orderedPageId = (int) $orderedPageId;
         $sqlUpdate = "UPDATE $table ";
         $sqlUpdate .= "SET order_lst = $indexOrder ";
-        $sqlUpdate .= "WHERE id = $orderedPageId AND id_parent = $idTopPage AND id_url = $idUrl";
+        $sqlUpdate .= "WHERE id = $orderedPageId AND id_parent = $idTopPage";
         $VDB->query($sqlUpdate);
 
         ++$indexOrder;
@@ -310,7 +309,6 @@ function get_oel_tools_infos($idPageTop)
     $VDB = new VirtualDatabase();
 
     $idPageTop = (int) $idPageTop;
-    $UrlWhere = '';
 
     $defaultProjectLang = cstudio_course_project_language_default($VDB->w_api_get_course_locale());
 
@@ -327,13 +325,8 @@ function get_oel_tools_infos($idPageTop)
         'date_create' => '',
     ];
 
-    if (($VDB->w_is_platform_admin() || $VDB->w_is_session_admin()) && $VDB->w_get_multiple_access_url()) {
-        $idurl = $VDB->w_get_current_access_url_id();
-        $UrlWhere = " AND id_url = $idurl ";
-    }
-
     $sql = 'SELECT title, lp_id,local_folder,options,quizztheme,date_create FROM plugin_oel_tools_teachdoc ';
-    $sql .= "WHERE id = $idPageTop $UrlWhere";
+    $sql .= "WHERE id = $idPageTop";
 
     $result = $VDB->query_to_array($sql);
     foreach ($result as $key => $Part) {

@@ -21,13 +21,8 @@ if (!$VDB->w_api_is_anonymous()) {
     $vers = 6;
     $table = 'plugin_oel_tools_teachdoc';
 
-    $UrlWhere = '';
-    if ($VDB->w_get_multiple_access_url()) {
-        $idurl = $VDB->w_get_current_access_url_id();
-        $UrlWhere = " AND id_url = $idurl ";
-    }
     $lpIdLst = ',';
-    $sqlNS = "SELECT lp_id FROM $table WHERE id_parent = 0 $UrlWhere ";
+    $sqlNS = "SELECT lp_id FROM $table WHERE id_parent = 0 ";
 
     $resultPartSub = $VDB->query_to_array($sqlNS);
 

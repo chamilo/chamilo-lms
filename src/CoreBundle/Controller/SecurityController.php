@@ -6,21 +6,16 @@ declare(strict_types=1);
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Legal;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Entity\ValidationToken;
-use Chamilo\CoreBundle\Helpers\AccessUrlHelper;
 use Chamilo\CoreBundle\Helpers\AuthenticationConfigHelper;
 use Chamilo\CoreBundle\Helpers\ChamiloHelper;
-use Chamilo\CoreBundle\Helpers\IsAllowedToEditHelper;
-use Chamilo\CoreBundle\Helpers\LoginRedirectPathResolver;
 use Chamilo\CoreBundle\Helpers\UserHelper;
 use Chamilo\CoreBundle\Helpers\ValidationTokenHelper;
 use Chamilo\CoreBundle\Repository\Node\AccessUrlRepository;
-use Chamilo\CoreBundle\Repository\Node\CourseRepository;
 use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRecordRepository;
 use Chamilo\CoreBundle\Repository\TrackELoginRepository;
@@ -29,6 +24,7 @@ use Chamilo\CoreBundle\Repository\ValidationTokenRepository;
 use Chamilo\CoreBundle\Security\Authenticator\Ldap\LdapAuthenticator;
 use Chamilo\CoreBundle\Security\Authenticator\LoginTokenAuthenticator;
 use Chamilo\CoreBundle\Security\Authenticator\OAuth2\AbstractAuthenticator as OAuth2Authenticator;
+use Chamilo\CoreBundle\Security\LoginRedirectResolver;
 use Chamilo\CoreBundle\Security\RememberMeLifetime;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use DateTime;
@@ -57,6 +53,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 use const FILTER_VALIDATE_BOOLEAN;
+use const JSON_THROW_ON_ERROR;
 use const OPENSSL_RAW_DATA;
 
 class SecurityController extends AbstractController
@@ -80,11 +77,10 @@ class SecurityController extends AbstractController
         private AuthorizationCheckerInterface $authorizationChecker,
         private readonly UserHelper $userHelper,
         private readonly RouterInterface $router,
-        private readonly AccessUrlHelper $accessUrlHelper,
-        private readonly IsAllowedToEditHelper $isAllowedToEditHelper,
         private readonly AccessUrlRepository $accessUrlRepo,
         private readonly RememberMeLifetime $rememberMeLifetime,
         private readonly ClockInterface $clock,
+        private readonly LoginRedirectResolver $loginRedirectResolver,
     ) {}
 
     #[Route('/login_json', name: 'login_json', methods: ['POST'])]
@@ -197,7 +193,7 @@ class SecurityController extends AbstractController
                     $request->getSession()->start();
                     $request->getSession()->set('term_and_condition', $tempTermAndCondition);
 
-                    $afterLogin = $this->getRedirectAfterLoginPath($user);
+                    $afterLogin = $this->loginRedirectResolver->resolve($user);
 
                     return $this->json([
                         'load_terms' => true,
@@ -239,28 +235,15 @@ class SecurityController extends AbstractController
             ]);
         }
 
-        $redirectUrl = $this->calculateRedirectUrl(
-            $user,
-            $this->entityManager->getRepository(Course::class),
+        $data = json_decode(
+            $this->serializer->serialize($user, 'jsonld', ['groups' => ['user_json:read']]),
+            true,
+            flags: JSON_THROW_ON_ERROR,
         );
+        // The client goes there: only the server reads the redirect settings.
+        $data['afterLogin'] = $this->loginRedirectResolver->resolve($user);
 
-        if (null !== $redirectUrl) {
-            return $this->withRememberMeCookie(
-                $this->json(['redirect' => $redirectUrl]),
-                $request,
-                $user,
-                $rememberRequested
-            );
-        }
-
-        $data = null;
-        if ($user) {
-            $data = $this->serializer->serialize($user, 'jsonld', ['groups' => ['user_json:read']]);
-        }
-
-        $response = new JsonResponse($data, Response::HTTP_OK, [], true);
-
-        return $this->withRememberMeCookie($response, $request, $user, $rememberRequested);
+        return $this->withRememberMeCookie(new JsonResponse($data), $request, $user, $rememberRequested);
     }
 
     /**
@@ -544,11 +527,7 @@ class SecurityController extends AbstractController
                 $session->remove(OAuth2Authenticator::PENDING_2FA_SESSION_KEY);
                 $security->login($user, 'json_login', 'main');
 
-                return new RedirectResponse(LoginRedirectPathResolver::resolve(
-                    $user,
-                    $this->settingsManager->getSetting('registration.redirect_after_login', true),
-                    $this->router->generate('index'),
-                ));
+                return new RedirectResponse($this->loginRedirectResolver->resolve($user));
             }
 
             $pending['attempts'] = (int) ($pending['attempts'] ?? 0) + 1;
@@ -701,69 +680,6 @@ class SecurityController extends AbstractController
         $diffDays = (new DateTimeImmutable())->diff($lastUpdate)->days;
 
         return $diffDays > $days;
-    }
-
-    private function calculateRedirectUrl(
-        User $user,
-        CourseRepository $courseRepo,
-    ): ?string {
-        if ('true' !== $this->settingsManager->getSetting('workflows.go_to_course_after_login')) {
-            return null;
-        }
-
-        $personalCourseList = $courseRepo->getPersonalSessionCourses(
-            $user,
-            $this->accessUrlHelper->getCurrent(),
-            $this->isAllowedToEditHelper->canCreateCourse()
-        );
-
-        $mySessionList = [];
-        $countOfCoursesNoSessions = 0;
-
-        foreach ($personalCourseList as $course) {
-            if (!empty($course['sid'])) {
-                $mySessionList[$course['sid']] = true;
-            } else {
-                $countOfCoursesNoSessions++;
-            }
-        }
-
-        $countOfSessions = \count($mySessionList);
-
-        if (1 === $countOfSessions && 0 === $countOfCoursesNoSessions) {
-            $key = array_keys($personalCourseList);
-
-            return $this->router->generate(
-                'chamilo_core_course_home',
-                [
-                    'cid' => $personalCourseList[$key[0]]['cid'],
-                    'sid' => $personalCourseList[$key[0]]['sid'] ?? 0,
-                ]
-            );
-        }
-
-        if (0 === $countOfSessions && 1 === $countOfCoursesNoSessions) {
-            $key = array_keys($personalCourseList);
-
-            return $this->router->generate(
-                'chamilo_core_course_home',
-                [
-                    'cid' => $personalCourseList[$key[0]]['cid'],
-                    'sid' => 0,
-                ]
-            );
-        }
-
-        return null;
-    }
-
-    private function getRedirectAfterLoginPath(User $user): string
-    {
-        return LoginRedirectPathResolver::resolve(
-            $user,
-            $this->settingsManager->getSetting('registration.redirect_after_login'),
-            '/home',
-        );
     }
 
     private function getSessionLifetime(Request $request): int

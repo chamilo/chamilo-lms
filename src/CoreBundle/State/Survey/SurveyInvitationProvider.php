@@ -158,8 +158,8 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
             ->from(CSurveyInvitationHistory::class, 'history')
             ->andWhere('history.survey = :survey')
             ->andWhere('history.course = :course')
-            ->setParameter('survey', $survey)
-            ->setParameter('course', $course)
+            ->setParameter('survey', (int) $survey->getIid())
+            ->setParameter('course', (int) $course->getId())
             ->orderBy('history.iid', 'DESC')
             ->setFirstResult(($page - 1) * self::HISTORY_PAGE_SIZE)
             ->setMaxResults(self::HISTORY_PAGE_SIZE + 1)
@@ -168,7 +168,7 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         if (null === $session) {
             $queryBuilder->andWhere('history.session IS NULL');
         } else {
-            $queryBuilder->andWhere('history.session = :session')->setParameter('session', $session);
+            $queryBuilder->andWhere('history.session = :session')->setParameter('session', (int) $session->getId());
         }
 
         // Do not reveal earlier unanswered-only dispatches after anonymity is tightened.

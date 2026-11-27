@@ -207,11 +207,11 @@ final readonly class SurveyInvitationDelivery
             ->andWhere('invitation.survey = :survey AND invitation.course = :course AND invitation.lpItemId = 0')
             ->andWhere(null === $session ? 'invitation.session IS NULL' : 'invitation.session = :session')
             ->andWhere('external.portal = :portal')
-            ->setParameter('survey', $survey)->setParameter('course', $course)->setParameter('portal', $portal)
+            ->setParameter('survey', (int) $survey->getIid())->setParameter('course', (int) $course->getId())->setParameter('portal', (int) $portal->getId())
             ->orderBy('external.email', 'ASC')
         ;
         if (null !== $session) {
-            $builder->setParameter('session', $session);
+            $builder->setParameter('session', (int) $session->getId());
         }
 
         return $builder->getQuery()->getResult();
@@ -313,10 +313,10 @@ final readonly class SurveyInvitationDelivery
     {
         $builder = $this->entityManager->createQueryBuilder()
             ->from(null === $session ? CourseRelUser::class : SessionRelCourseRelUser::class, 'subscription')
-            ->andWhere('subscription.course = :course')->setParameter('course', $course)
+            ->andWhere('subscription.course = :course')->setParameter('course', (int) $course->getId())
         ;
         if (null !== $session) {
-            $builder->andWhere('subscription.session = :session')->setParameter('session', $session);
+            $builder->andWhere('subscription.session = :session')->setParameter('session', (int) $session->getId());
         }
 
         return $builder;
@@ -424,12 +424,12 @@ final readonly class SurveyInvitationDelivery
             ->select('COUNT(invitation.iid) AS invitedCount, SUM(CASE WHEN invitation.answered = 1 THEN 1 ELSE 0 END) AS answeredCount')
             ->from(CSurveyInvitation::class, 'invitation')
             ->andWhere('invitation.survey = :survey AND invitation.course = :course')
-            ->setParameter('survey', $survey)->setParameter('course', $course)
+            ->setParameter('survey', (int) $survey->getIid())->setParameter('course', (int) $course->getId())
         ;
         if (null === $session) {
             $builder->andWhere('invitation.session IS NULL');
         } else {
-            $builder->andWhere('invitation.session = :session')->setParameter('session', $session);
+            $builder->andWhere('invitation.session = :session')->setParameter('session', (int) $session->getId());
         }
         $counts = $builder->getQuery()->getSingleResult();
         $survey->setInvited((int) $counts['invitedCount']);

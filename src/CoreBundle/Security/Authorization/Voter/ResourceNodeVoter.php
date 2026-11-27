@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Helpers\CourseFromRequestHelper;
 use Chamilo\CoreBundle\Helpers\PageHelper;
 use Chamilo\CoreBundle\Helpers\ResourceAclHelper;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Security\ResourceAccessResolver;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CForum;
@@ -69,6 +70,7 @@ class ResourceNodeVoter extends Voter
         private readonly ResourceAclHelper $resourceAclHelper,
         private readonly CourseFromRequestHelper $courseFromRequest,
         private readonly CLpItemRepository $lpItemRepository,
+        private readonly ResourceAccessResolver $resourceAccessResolver,
     ) {}
 
     public static function getReaderMask(): int
@@ -482,7 +484,7 @@ class ResourceNodeVoter extends Voter
 
         if (empty($rights)
             && ResourceLink::VISIBILITY_PUBLISHED === $link->getVisibility()
-            && $this->mayUseDefaultReadFallback($link, $resourceNode, $user)
+            && $this->mayUseDefaultReadFallback($link, $user)
         ) {
             // Give just read access.
             $resourceRight = (new ResourceRight())
@@ -734,11 +736,8 @@ class ResourceNodeVoter extends Voter
      * context roles describe the course of the request rather than the one the link belongs to.
      * A course link therefore needs an open course or a real subscription to it.
      */
-    private function mayUseDefaultReadFallback(
-        ResourceLink $link,
-        ResourceNode $resourceNode,
-        ?UserInterface $user
-    ): bool {
+    private function mayUseDefaultReadFallback(ResourceLink $link, ?UserInterface $user): bool
+    {
         $linkCourse = $link->getCourse();
         if (!$linkCourse instanceof Course) {
             return true;
@@ -758,7 +757,9 @@ class ResourceNodeVoter extends Voter
             return true;
         }
 
-        return $user instanceof User && $this->belongsToResourceCourse($resourceNode, $user);
+        // The subscription must be to this link's course or session: a member of another course
+        // the resource is shared with does not read it through this link.
+        return $user instanceof User && $this->resourceAccessResolver->belongsToLink($link, $user);
     }
 
     /**

@@ -29,6 +29,7 @@ use Chamilo\CoreBundle\Repository\Node\UserRepository;
 use Chamilo\CoreBundle\Repository\TrackEOnlineRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\UsergroupVoter;
 use Chamilo\CoreBundle\Serializer\UserToJsonNormalizer;
+use Chamilo\CoreBundle\Service\Social\SocialMapService;
 use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Repository\CForumThreadRepository;
 use DateTime;
@@ -78,6 +79,18 @@ class SocialController extends AbstractController
         private readonly UserHelper $userHelper,
         private readonly DateTimeHelper $dateTimeHelper,
     ) {}
+
+    #[Route('/map/config', name: 'chamilo_core_social_map_config', methods: ['GET'])]
+    public function getMapConfig(#[CurrentUser] User $viewer, SocialMapService $mapService): JsonResponse
+    {
+        return $this->json($mapService->getConfiguration($viewer), Response::HTTP_OK, ['Cache-Control' => 'private, no-store']);
+    }
+
+    #[Route('/map/markers', name: 'chamilo_core_social_map_markers', methods: ['GET'])]
+    public function getMapMarkers(#[CurrentUser] User $viewer, SocialMapService $mapService): JsonResponse
+    {
+        return $this->json($mapService->getMarkers($viewer), Response::HTTP_OK, ['Cache-Control' => 'private, no-store']);
+    }
 
     #[Route('/personal-data/{userId}', name: 'chamilo_core_social_personal_data')]
     public function getPersonalData(

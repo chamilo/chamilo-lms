@@ -119,7 +119,6 @@ import BaseButton from "../basecomponents/BaseButton.vue"
 import { useI18n } from "vue-i18n"
 import { computed, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { usePlatformConfig } from "../../store/platformConfig"
 import { useSecurityStore } from "../../store/securityStore"
 import userService from "../../services/userService"
 import userRelUserService from "../../services/userRelUserService"
@@ -128,9 +127,8 @@ import socialService from "../../services/socialService"
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const platformConfigStore = usePlatformConfig()
 const securityStore = useSecurityStore()
-const allowSocialMap = computed(() => platformConfigStore.getSetting("profile.allow_social_map_fields"))
+const allowSocialMap = ref(false)
 
 const wallIdFromRoute = computed(() => {
   const raw = route.query.id
@@ -210,7 +208,7 @@ function search() {
 }
 
 function redirectToGeolocalization() {
-  window.location.href = "/main/social/map.php"
+  router.push({ name: "SocialMap" })
 }
 
 function goToWall(userId) {
@@ -348,6 +346,22 @@ function viewAll() {
     router.push(`/resources/friends?id=${userId}`)
   }
 }
+
+watch(
+  isOwnWall,
+  async (ownWall) => {
+    allowSocialMap.value = false
+    if (ownWall) {
+      try {
+        const data = await socialService.getMapConfig()
+        allowSocialMap.value = Boolean(data?.enabled)
+      } catch (error) {
+        console.error("Error fetching social map configuration:", error)
+      }
+    }
+  },
+  { immediate: true },
+)
 
 watch(
   () => targetUserId.value,

@@ -311,118 +311,6 @@ switch ($action) {
         Security::clear_token();
         api_location($currentUrl);
         break;
-    case 'time_report_last_week':
-        if (!$improveTrackingEnabled) {
-            api_not_allowed(true);
-        }
-        $reportStart = (string) ($_GET['start'] ?? '');
-        $reportEnd = (string) ($_GET['end'] ?? '');
-        $startDateTime = DateTime::createFromFormat('!Y-m-d', $reportStart);
-        $endDateTime = DateTime::createFromFormat('!Y-m-d', $reportEnd);
-        if (false === $startDateTime || false === $endDateTime
-            || $startDateTime->format('Y-m-d') !== $reportStart
-            || $endDateTime->format('Y-m-d') !== $reportEnd
-        ) {
-            $lastMonday = strtotime('-1 week', strtotime('monday this week'));
-            $reportStart = date('Y-m-d', $lastMonday);
-            $reportEnd = date('Y-m-d', strtotime('+6 days', $lastMonday));
-        }
-
-        $reportHeaders = [
-            get_lang('Last name'),
-            get_lang('First name'),
-            get_lang('Session name'),
-            get_lang('Course name'),
-            get_lang('Starting access date'),
-            get_lang('Ending access date'),
-            get_lang('Time spent'),
-        ];
-        $reportRows = [];
-        $reportSeconds = [];
-        $titles = [];
-        foreach (Tracking::getCourseAccessesBetween($studentId, $reportStart, $reportEnd) as $record) {
-            $sessionKey = 's'.$record['session_id'];
-            $courseKey = 'c'.$record['c_id'];
-            if (!isset($titles[$sessionKey])) {
-                $titles[$sessionKey] = (string) api_get_session_entity($record['session_id'])?->getTitle();
-            }
-            if (!isset($titles[$courseKey])) {
-                $titles[$courseKey] = (string) api_get_course_entity($record['c_id'])?->getTitle();
-            }
-            $reportRows[] = [
-                $user->getLastname(),
-                $user->getFirstname(),
-                $titles[$sessionKey],
-                $titles[$courseKey],
-                api_get_local_time($record['login_course_date']),
-                api_get_local_time($record['logout_course_date']),
-                api_time_to_hms($record['seconds']),
-            ];
-            $reportSeconds[] = $record['seconds'];
-        }
-
-        $export = $_GET['export'] ?? '';
-        if ('xls' === $export) {
-            Export::arrayToXls(array_merge([$reportHeaders], $reportRows), 'time_report');
-            exit;
-        }
-        if ('pdf' === $export) {
-            Export::export_table_pdf(array_merge([$reportHeaders], $reportRows), ['filename' => 'time_report']);
-            exit;
-        }
-
-        $reportUrl = api_get_self().'?'.http_build_query([
-            'student' => $studentId,
-            'action' => 'time_report_last_week',
-            'start' => $reportStart,
-            'end' => $reportEnd,
-        ]);
-
-        Display::display_header(get_lang('Time report'));
-        echo Display::toolbarAction('time_report', [
-            Display::url(
-                Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
-                $reportUrl.'&export=pdf'
-            )
-            .Display::url(
-                Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to XLS')),
-                $reportUrl.'&export=xls'
-            ),
-        ]);
-
-        // One block per day, with its total, in alternating colours.
-        $reportTable = '<table class="data_table">';
-        $reportTable .= '<tr>';
-        foreach ($reportHeaders as $reportHeader) {
-            $reportTable .= '<th>'.htmlspecialchars($reportHeader).'</th>';
-        }
-        $reportTable .= '</tr>';
-        $dayRows = [];
-        foreach ($reportRows as $index => $reportRow) {
-            $dayRows[substr($reportRow[4], 0, 10)][] = $index;
-        }
-        $colors = ['#cce5ff', '#ffe5b4'];
-        $colorIndex = 0;
-        foreach ($dayRows as $indexes) {
-            $daySeconds = 0;
-            foreach ($indexes as $index) {
-                $reportTable .= '<tr style="background-color:'.$colors[$colorIndex].'">';
-                foreach ($reportRows[$index] as $cell) {
-                    $reportTable .= '<td>'.htmlspecialchars((string) $cell).'</td>';
-                }
-                $reportTable .= '</tr>';
-                $daySeconds += $reportSeconds[$index];
-            }
-            $reportTable .= '<tr style="background-color:'.$colors[$colorIndex].';font-weight:bold;">'
-                .'<td colspan="'.(count($reportHeaders) - 1).'" style="text-align:right;">'.get_lang('Total').'</td>'
-                .'<td>'.api_time_to_hms($daySeconds).'</td>'
-                .'</tr>';
-            $colorIndex = 1 - $colorIndex;
-        }
-        $reportTable .= '</table>';
-        echo $reportTable;
-        Display::display_footer();
-        exit;
     case 'export_to_pdf':
         $sessionToExport = $sId = isset($_GET['session_to_export']) ? (int) $_GET['session_to_export'] : 0;
         $sessionInfo = api_get_session_info($sessionToExport);
@@ -983,6 +871,134 @@ if (api_is_hrm() && !api_is_platform_admin()) {
     }
 }
 
+// Courses and sessions whose activity the current user may see: everything for the wide scope, otherwise
+// only the ones listed in the course table ($courses_in_session).
+$trackingScope = [];
+foreach ($courses_in_session as $scopeSessionId => $scopeCourseIds) {
+    foreach ($scopeCourseIds as $scopeCourseId) {
+        $trackingScope[(int) $scopeSessionId][(int) $scopeCourseId] = true;
+    }
+}
+$isInTrackingScope = static fn (int $scopeSessionId, int $scopeCourseId): bool => $drh_can_access_all_courses
+    || isset($trackingScope[$scopeSessionId][$scopeCourseId]);
+
+if ('time_report_last_week' === $action) {
+    if (!$improveTrackingEnabled) {
+        api_not_allowed(true);
+    }
+    $reportStart = (string) ($_GET['start'] ?? '');
+    $reportEnd = (string) ($_GET['end'] ?? '');
+    $startDateTime = DateTime::createFromFormat('!Y-m-d', $reportStart);
+    $endDateTime = DateTime::createFromFormat('!Y-m-d', $reportEnd);
+    if (false === $startDateTime || false === $endDateTime
+        || $startDateTime->format('Y-m-d') !== $reportStart
+        || $endDateTime->format('Y-m-d') !== $reportEnd
+    ) {
+        $lastMonday = strtotime('-1 week', strtotime('monday this week'));
+        $reportStart = date('Y-m-d', $lastMonday);
+        $reportEnd = date('Y-m-d', strtotime('+6 days', $lastMonday));
+    }
+
+    $reportHeaders = [
+        get_lang('Last name'),
+        get_lang('First name'),
+        get_lang('Session name'),
+        get_lang('Course name'),
+        get_lang('Starting access date'),
+        get_lang('Ending access date'),
+        get_lang('Time spent'),
+    ];
+    $reportRows = [];
+    $reportSeconds = [];
+    $titles = [];
+    foreach (Tracking::getCourseAccessesBetween($studentId, $reportStart, $reportEnd) as $record) {
+        if (!$isInTrackingScope($record['session_id'], $record['c_id'])) {
+            continue;
+        }
+        $sessionKey = 's'.$record['session_id'];
+        $courseKey = 'c'.$record['c_id'];
+        if (!isset($titles[$sessionKey])) {
+            $titles[$sessionKey] = (string) api_get_session_entity($record['session_id'])?->getTitle();
+        }
+        if (!isset($titles[$courseKey])) {
+            $titles[$courseKey] = (string) api_get_course_entity($record['c_id'])?->getTitle();
+        }
+        $reportRows[] = [
+            $user->getLastname(),
+            $user->getFirstname(),
+            $titles[$sessionKey],
+            $titles[$courseKey],
+            api_get_local_time($record['login_course_date']),
+            api_get_local_time($record['logout_course_date']),
+            api_time_to_hms($record['seconds']),
+        ];
+        $reportSeconds[] = $record['seconds'];
+    }
+
+    $export = $_GET['export'] ?? '';
+    if ('xls' === $export) {
+        Export::arrayToXls(array_merge([$reportHeaders], $reportRows), 'time_report');
+        exit;
+    }
+    if ('pdf' === $export) {
+        Export::export_table_pdf(array_merge([$reportHeaders], $reportRows), ['filename' => 'time_report']);
+        exit;
+    }
+
+    $reportUrl = api_get_self().'?'.http_build_query([
+        'student' => $studentId,
+        'action' => 'time_report_last_week',
+        'start' => $reportStart,
+        'end' => $reportEnd,
+    ]);
+
+    Display::display_header(get_lang('Time report'));
+    echo Display::toolbarAction('time_report', [
+        Display::url(
+            Display::getMdiIcon(ActionIcon::EXPORT_PDF, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to PDF')),
+            $reportUrl.'&export=pdf'
+        )
+        .Display::url(
+            Display::getMdiIcon(ActionIcon::EXPORT_SPREADSHEET, 'ch-tool-icon', null, ICON_SIZE_MEDIUM, get_lang('Export to XLS')),
+            $reportUrl.'&export=xls'
+        ),
+    ]);
+
+    // One block per day, with its total, in alternating colours.
+    $reportTable = '<table class="data_table">';
+    $reportTable .= '<tr>';
+    foreach ($reportHeaders as $reportHeader) {
+        $reportTable .= '<th>'.htmlspecialchars($reportHeader).'</th>';
+    }
+    $reportTable .= '</tr>';
+    $dayRows = [];
+    foreach ($reportRows as $index => $reportRow) {
+        $dayRows[substr($reportRow[4], 0, 10)][] = $index;
+    }
+    $colors = ['#cce5ff', '#ffe5b4'];
+    $colorIndex = 0;
+    foreach ($dayRows as $indexes) {
+        $daySeconds = 0;
+        foreach ($indexes as $index) {
+            $reportTable .= '<tr style="background-color:'.$colors[$colorIndex].'">';
+            foreach ($reportRows[$index] as $cell) {
+                $reportTable .= '<td>'.htmlspecialchars((string) $cell).'</td>';
+            }
+            $reportTable .= '</tr>';
+            $daySeconds += $reportSeconds[$index];
+        }
+        $reportTable .= '<tr style="background-color:'.$colors[$colorIndex].';font-weight:bold;">'
+            .'<td colspan="'.(count($reportHeaders) - 1).'" style="text-align:right;">'.get_lang('Total').'</td>'
+            .'<td>'.api_time_to_hms($daySeconds).'</td>'
+            .'</tr>';
+        $colorIndex = 1 - $colorIndex;
+    }
+    $reportTable .= '</table>';
+    echo $reportTable;
+    Display::display_footer();
+    exit;
+}
+
 $pluginCalendar = 'true' === api_get_plugin_setting('learning_calendar', 'enabled');
 
 if ($pluginCalendar) {
@@ -1478,13 +1494,18 @@ if ($improveTrackingEnabled) {
     $totalSessionsProgress = 0;
     foreach (SessionManager::getSessionsFollowedByUser($studentId) as $followedSession) {
         $followedSessionEntity = api_get_session_entity((int) $followedSession['id']);
-        if (null === $followedSessionEntity) {
+        if (null === $followedSessionEntity
+            || (!$drh_can_access_all_courses && !isset($trackingScope[$followedSessionEntity->getId()]))
+        ) {
             continue;
         }
         $courseProgressSum = 0;
         $courseCount = 0;
         foreach ($followedSessionEntity->getCourses() as $sessionRelCourse) {
             $sessionCourse = $sessionRelCourse->getCourse();
+            if (!$isInTrackingScope($followedSessionEntity->getId(), $sessionCourse->getId())) {
+                continue;
+            }
             if (CourseManager::is_user_subscribed_in_course($studentId, $sessionCourse->getCode(), true, $followedSessionEntity->getId())) {
                 $progressValue = Tracking::get_avg_student_progress($studentId, $sessionCourse, [], $followedSessionEntity);
                 if (is_numeric($progressValue)) {
@@ -1521,6 +1542,9 @@ if ($improveTrackingEnabled) {
         $weekData[0]['end']
     );
     foreach ($courseAccesses as $courseAccess) {
+        if (!$isInTrackingScope($courseAccess['session_id'], $courseAccess['c_id'])) {
+            continue;
+        }
         foreach ($weekData as &$week) {
             if ($courseAccess['login_course_date'] >= $week['start_utc'] && $courseAccess['login_course_date'] <= $week['end_utc']) {
                 if ($courseAccess['logout_course_date'] <= $week['end_utc']) {

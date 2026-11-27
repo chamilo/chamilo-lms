@@ -87,7 +87,7 @@ function sendMessage(
     $logoPortal = return_logo();
     $bodyTemplate->assign('HelloX', sprintf(getUserLang('HelloX', $language), $userFullName));
     $bodyTemplate->assign('YouAreRegCourseXFromDateX', sprintf(getUserLang('YouAreRegCourseXFromDateX', $language), $courseName, $registrationDate));
-    $bodyTemplate->assign('ThisMessageIsAboutX', sprintf(getUserLang('ThisMessageIsAboutX', $language), $lpProgress));
+    $bodyTemplate->assign('ThisMessageIsAboutX', str_replace('%s', $lpProgress, getUserLang('ThisMessageIsAboutX', $language)));
     $bodyTemplate->assign('StepsToRemindX', sprintf(getUserLang('StepsToRemindX', $language), $urlChamilo, $userInfo['username'], $urlLostPw));
     $bodyTemplate->assign('LpRemindFooterX', sprintf(getUserLang('LpRemindFooterX', $language), $logoPortal, $teachersListString));
 

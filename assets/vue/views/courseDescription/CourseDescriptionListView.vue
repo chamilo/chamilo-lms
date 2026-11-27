@@ -87,6 +87,28 @@
               size="small"
             />
             <BaseButton
+              v-if="canManage && description.canReorder"
+              icon="arrow-up"
+              name="course-description-move-up"
+              :label="t('Move up')"
+              :disabled="!canMove(description, -1) || moving || deletingId !== null"
+              only-icon
+              size="small"
+              type="secondary-text"
+              @click="moveDescription(description, 'up')"
+            />
+            <BaseButton
+              v-if="canManage && description.canReorder"
+              icon="arrow-down"
+              name="course-description-move-down"
+              :label="t('Move down')"
+              :disabled="!canMove(description, 1) || moving || deletingId !== null"
+              only-icon
+              size="small"
+              type="secondary-text"
+              @click="moveDescription(description, 'down')"
+            />
+            <BaseButton
               v-if="canManage && description.canEdit"
               icon="pencil"
               :label="t('Edit')"
@@ -100,6 +122,7 @@
               v-if="canManage && description.canDelete"
               icon="delete"
               :is-loading="deletingId === description.iid"
+              :disabled="moving"
               :label="t('Delete')"
               only-icon
               size="small"
@@ -159,6 +182,8 @@ const successMessage = ref("")
 const canManage = ref(false)
 const types = ref([])
 const deletingId = ref(null)
+const moving = ref(false)
+const reorderableDescriptions = computed(() => descriptions.value.filter((item) => item.canReorder))
 const courseId = ref(null)
 
 const descriptionTypeLabels = {
@@ -272,8 +297,34 @@ function confirmDelete(description) {
   })
 }
 
+function canMove(description, offset) {
+  const index = reorderableDescriptions.value.findIndex((item) => item.iid === description.iid)
+  return index >= 0 && index + offset >= 0 && index + offset < reorderableDescriptions.value.length
+}
+
+async function moveDescription(description, direction) {
+  if (moving.value || deletingId.value !== null || !canMove(description, direction === "up" ? -1 : 1)) {
+    return
+  }
+
+  moving.value = true
+  actionErrorMessage.value = ""
+  successMessage.value = ""
+
+  try {
+    await courseDescriptionService.reorder(description.iid, direction, getContextParams())
+    await loadDescriptions()
+  } catch (error) {
+    console.error("Error reordering course descriptions", error)
+    actionErrorMessage.value =
+      error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("An error occurred")
+  } finally {
+    moving.value = false
+  }
+}
+
 async function deleteDescription(description) {
-  if (deletingId.value !== null) {
+  if (moving.value || deletingId.value !== null) {
     return
   }
 

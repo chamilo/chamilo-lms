@@ -77,7 +77,7 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
                 continue;
             }
 
-            $list->items[] = $this->normalizeDescription($description, $course, $session, $readerProfile);
+            $list->items[] = $this->normalizeDescription($description, $course, $session, $readerProfile, $canManage);
         }
 
         $list->totalItems = \count($list->items);
@@ -93,6 +93,7 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
         Course $course,
         ?Session $session,
         int $readerProfile,
+        bool $canManage,
     ): array {
         $resourceNode = $description->getResourceNode();
         $contextLink = $description->getFirstResourceLinkFromCourseSession($course, $session);
@@ -115,6 +116,7 @@ final readonly class CourseDescriptionListProvider implements ProviderInterface
             'language' => null !== $language ? $language->getIsocode() : null,
             'isInheritedFromCourse' => null !== $session && null === $sourceSession,
             'canEdit' => $this->canEditDescription($description, $course, $session),
+            'canReorder' => $canManage && $this->courseDescriptionHelper->getReorderLink($description, $course, $session) instanceof ResourceLink,
             'canDelete' => $this->canDeleteDescription($description, $course, $session),
         ];
     }

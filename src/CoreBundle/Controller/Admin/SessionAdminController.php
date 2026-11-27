@@ -310,8 +310,7 @@ class SessionAdminController extends BaseController
             return $this->json(['error' => 'Course not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $qb = $this->courseDescriptionRepository->getResourcesByCourse($course);
-        $items = $qb->getQuery()->getResult();
+        $items = $this->courseDescriptionRepository->findAllInCourse($course);
 
         $descriptions = array_map(static function ($d) {
             return [

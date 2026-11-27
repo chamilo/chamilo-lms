@@ -7,11 +7,13 @@ declare(strict_types=1);
 namespace Chamilo\CoreBundle\Helpers;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\User;
 use Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter;
 use Chamilo\CoreBundle\Settings\CourseSettingPolicyManager;
 use Chamilo\CoreBundle\Settings\SettingsManager;
+use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\CourseBundle\Entity\CCourseSetting;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -31,6 +33,33 @@ readonly class CourseDescriptionHelper
         private UserHelper $userHelper,
         private SessionManagerApiScope $sessionManagerApiScope,
     ) {}
+
+    /**
+     * Resolve the sortable link in the exact course/session scope, including the
+     * NULL base-session case. Inherited and individually targeted links must not move.
+     */
+    public function getReorderLink(CCourseDescription $description, Course $course, ?Session $session): ?ResourceLink
+    {
+        $node = $description->getResourceNode();
+        if (null === $node || !$this->security->isGranted('EDIT', $node)) {
+            return null;
+        }
+
+        // The list query can hydrate a filtered resourceLinks collection.
+        // Resolve the exact link independently of that collection.
+        $links = $this->entityManager->getRepository(ResourceLink::class)->findBy([
+            'resourceNode' => $node,
+            'course' => $course,
+            'session' => $session,
+            'group' => null,
+            'user' => null,
+            'userGroup' => null,
+            'resourceTypeGroup' => $node->getResourceType()->getId(),
+            'deletedAt' => null,
+        ]);
+
+        return 1 === \count($links) ? $links[0] : null;
+    }
 
     public function assertToolEnabled(Course $course): void
     {

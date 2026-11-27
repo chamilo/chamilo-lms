@@ -322,7 +322,8 @@ class Resource
                         $resourceArr['content'] ?? '',
                         $resourceArr['description_type'] ?? '',
                         $resourceArr['progress'] ?? 0,
-                        $resourceArr['language'] ?? ''
+                        $resourceArr['language'] ?? '',
+                        $resourceArr['display_order'] ?? null
                     );
 
                     // Preserve base Resource fields (if present).

@@ -22,6 +22,8 @@ if (isset($_POST['id']) || isset($_GET['id'])) {
 
         require_once '../inc/functions.php';
 
+        cstudio_require_post();
+
         require_once '../../0_dal/dal.save.php';
 
         require_once '../../0_dal/dal.insert.php';

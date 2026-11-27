@@ -143,6 +143,17 @@ if (0 == $idLudiLP) {
         $form->addButtonSave('&nbsp;&nbsp;'.get_lang('Add').'&nbsp;&nbsp;');
     }
 } else {
+    // The learning path must belong to the course of the request: Chamilo checked the access to
+    // that course (cid), not to the course of an identifier typed in the URL.
+    $courseId = (int) api_get_course_int_id();
+    $sql = 'SELECT COUNT(lp.iid) AS nb FROM c_lp lp ';
+    $sql .= ' INNER JOIN resource_link rl ON rl.resource_node_id = lp.resource_node_id ';
+    $sql .= " WHERE lp.iid = $idLudiLP AND rl.c_id = $courseId AND rl.deleted_at IS NULL ";
+
+    if (0 === $courseId || 0 === (int) $VDB->get_value_by_query($sql, 'nb')) {
+        api_not_allowed(true);
+    }
+
     $sql = "SELECT id FROM $table ";
     $sql .= " WHERE lp_id = $idLudiLP AND id_parent = 0 ";
 
@@ -201,7 +212,11 @@ switch ($action) {
             }
 
             if ($objectId > 0) {
-                $urlM = api_get_self().'?idLudiLP='.$objectId.'&first=1&cotk='.$cotk;
+                // Keep the course context: opening the project checks that it belongs to this course.
+                $urlM = api_get_self().'?'.http_build_query(array_merge(
+                    ['idLudiLP' => $objectId, 'first' => 1, 'cotk' => $cotk],
+                    $editorContextParameters
+                ));
                 Display::addFlash(Display::return_message(get_lang('Added'), 'success'));
                 (new RedirectResponse($urlM))->send();
 

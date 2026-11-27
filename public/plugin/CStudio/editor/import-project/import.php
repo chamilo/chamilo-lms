@@ -422,7 +422,8 @@ if ('create2' == $action) {
 
     echo '<br>';
 
-    $urlM = '../../oel_tools_teachdoc_link.php?idLudiLP='.$objectIdlpid.'&cotk='.$cotk;
+    // Keep the course context: opening the project checks that it belongs to this course.
+    $urlM = '../../oel_tools_teachdoc_link.php?idLudiLP='.(int) $objectIdlpid.'&cid='.(int) $cid.'&cotk='.$cotk;
     echo '<a href="'.$urlM.'" >See new project</a><br>';
     echo '<br>';
 

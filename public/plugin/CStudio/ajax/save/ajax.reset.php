@@ -14,6 +14,10 @@ require_once '../../inc/csrf_token.php';
 require_once '../../0_dal/dal.vdatabase.php';
 $VDB = new VirtualDatabase();
 
+require_once '../inc/functions.php';
+
+cstudio_require_post();
+
 $iduser = (int) $VDB->w_api_get_user_id();
 $cotk = 're'.uuidToken(30);
 

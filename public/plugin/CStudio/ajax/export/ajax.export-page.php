@@ -21,6 +21,8 @@ require_once __DIR__.'/../../0_dal/dal.global_lib.php';
 
 require_once __DIR__.'/../inc/functions.php';
 
+cstudio_require_post();
+
 require_once __DIR__.'/../../0_dal/dal.vdatabase.php';
 $VDB = new VirtualDatabase();
 

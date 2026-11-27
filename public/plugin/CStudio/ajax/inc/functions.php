@@ -5,6 +5,25 @@ declare(strict_types=1);
 use Chamilo\CoreBundle\Framework\Container;
 
 /**
+ * Stops a request that changes data unless it is a POST request.
+ *
+ * CsrfProtectionListener checks the origin of every POST request to these files (run directly by
+ * the web server, they reach Symfony with the path "/", which matches the "index" route), but it
+ * skips GET requests, and the editor endpoints read their parameters from GET as well as POST. The
+ * session cookie is SameSite=Lax, so it is sent on a cross-site GET navigation: a link on another
+ * site could change the pages of a project while its editor was open.
+ */
+function cstudio_require_post(): void
+{
+    if ('POST' !== ($_SERVER['REQUEST_METHOD'] ?? '')) {
+        http_response_code(405);
+        echo 'KO';
+
+        exit;
+    }
+}
+
+/**
  * This file contains the functions used by the OeL plugin.
  *
  * @version 18/05/2024

@@ -21,6 +21,7 @@ use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CGroupRelUser;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
+use Chamilo\CourseBundle\Entity\CSurveyInvitationHistory;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use DateTime;
 use Doctrine\DBAL\Types\Types;
@@ -91,7 +92,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         $selectedUserIds = $this->normalizeIntegerList($payload['selectedUserIds'] ?? []);
         $selectedGroupIds = $this->normalizeIntegerList($payload['selectedGroupIds'] ?? []);
         $resendToAll = true === ($payload['resendToAll'] ?? false);
-        $canRemindUnanswered = '1' !== (string) $survey->getAnonymous()
+        $canRemindUnanswered = !$this->isAnonymous($survey)
             || $this->isSettingEnabled('survey.survey_anonymous_show_answered');
         $remindUnanswered = $canRemindUnanswered && true === ($payload['remindUnanswered'] ?? false);
         $hideLink = true === ($payload['hideLink'] ?? false);
@@ -111,6 +112,7 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
         $created = 0;
         $updated = 0;
         $sent = 0;
+        $history = null;
 
         foreach ($targets as $userId => $target) {
             $invitation = $existingInvitations[$userId] ?? null;
@@ -134,11 +136,28 @@ final readonly class SurveyInvitationProcessor implements ProcessorInterface
             if ($sendMail && $this->shouldSendMail($invitation, $isNewInvitation, $resendToAll, $remindUnanswered)) {
                 if ($this->sendInvitationMessage($invitation, $survey, $course, $session, $mailSubject, $mailText, $hideLink)) {
                     ++$sent;
+                    $invitation->setReminderDate(new DateTime());
+                    if (null === $history) {
+                        $history = new CSurveyInvitationHistory(
+                            $survey,
+                            $course,
+                            $session,
+                            $mailSubject,
+                            $mailText,
+                            $remindUnanswered && !$resendToAll,
+                            $hideLink,
+                        );
+                        $this->entityManager->persist($history);
+                    }
+                    $history->addInvitation($invitation);
+                    // Keep successful recipients even if a later dispatch in the batch fails.
+                    $this->entityManager->flush();
                 }
-                $invitation->setReminderDate(new DateTime());
             }
         }
 
+        // Counters must include newly persisted invitations even when mail was not sent.
+        $this->entityManager->flush();
         $this->updateSurveyCounters($survey, $course, $session);
         $this->entityManager->flush();
 

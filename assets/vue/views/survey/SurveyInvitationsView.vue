@@ -279,10 +279,56 @@
             size="small"
             @click="activeTab = 'pending'"
           />
+          <BaseButton
+            :label="t('Invitation history')"
+            :type="activeTab === 'history' ? 'primary' : 'tertiary-alternative'"
+            size="small"
+            @click="activeTab = 'history'"
+          />
         </div>
       </div>
 
+      <div v-if="activeTab === 'history'">
+        <p class="mb-3 text-sm text-gray-500">{{ t('Invitation history records messages accepted by Chamilo, not confirmed email delivery.') }}</p>
+        <p v-if="isLoading || isHistoryLoading" class="text-sm text-gray-500">{{ t('Loading...') }}</p>
+        <p v-else-if="history.length === 0" class="text-sm text-gray-500">{{ t('No invitation history found') }}</p>
+        <div v-else class="space-y-2">
+          <details
+            v-for="entry in history"
+            :key="entry.id"
+            class="rounded border border-gray-25 p-3"
+          >
+            <summary class="cursor-pointer break-words text-sm font-medium text-gray-90">
+              {{ entry.subject }}
+              <span class="ml-2 text-xs font-normal text-gray-500">{{ formatDate(entry.sentAt) }} · {{ t('Recipients') }}: {{ entry.recipientCount }}</span>
+            </summary>
+            <div class="mt-3 border-t border-gray-25 pt-3">
+              <p class="mb-1 text-xs font-semibold text-gray-500">{{ t('E-mail message') }}</p>
+              <div class="whitespace-pre-wrap break-words text-sm">{{ entry.body }}</div>
+              <div v-if="entry.hideLink" class="mt-2 text-xs text-gray-500">{{ t('Hide survey invitation link') }}</div>
+            </div>
+          </details>
+        </div>
+        <div class="mt-3 flex items-center justify-end gap-2">
+          <BaseButton
+            :disabled="historyPage <= 1 || isLoading || isSaving || isHistoryLoading"
+            :label="t('Previous')"
+            icon="back"
+            size="small"
+            @click="loadHistoryPage(historyPage - 1)"
+          />
+          <span class="text-sm">{{ t('Page') }} {{ historyPage }}</span>
+          <BaseButton
+            :disabled="!historyHasMore || isLoading || isSaving || isHistoryLoading"
+            :label="t('Next')"
+            icon="next"
+            size="small"
+            @click="loadHistoryPage(historyPage + 1)"
+          />
+        </div>
+      </div>
       <BaseTable
+        v-else
         :is-loading="isLoading"
         :text-for-empty="t('No invitations found')"
         :total-items="filteredInvitations.length"
@@ -388,6 +434,11 @@ const counts = ref({ invited: 0, answered: 0, unanswered: 0 })
 const users = ref([])
 const groups = ref([])
 const invitations = ref([])
+const history = ref([])
+const historyPage = ref(1)
+const historyHasMore = ref(false)
+const isHistoryLoading = ref(false)
+let historyRequestId = 0
 const settings = ref({})
 const anonymousLink = ref("")
 const selectedUserIds = ref([])
@@ -538,11 +589,41 @@ function buildAnswerUrl(invitation) {
   return `${window.location.origin}${resolved.href}`
 }
 
+function applyHistory(response) {
+  history.value = Array.isArray(response.history) ? response.history : []
+  historyPage.value = Number(response.historyPage || 1)
+  historyHasMore.value = response.historyHasMore === true
+}
+
+async function loadHistoryPage(page) {
+  const requestId = ++historyRequestId
+  isHistoryLoading.value = true
+  errorMessage.value = ""
+  try {
+    const response = await surveyService.getSurveyInvitations({ ...getContextParams(), historyPage: page }, surveyId.value)
+    if (requestId === historyRequestId) {
+      applyHistory(response)
+    }
+  } catch (error) {
+    if (requestId === historyRequestId) {
+      console.error("Error loading invitation history", error)
+      errorMessage.value = t("Could not load survey invitations")
+    }
+  } finally {
+    if (requestId === historyRequestId) {
+      isHistoryLoading.value = false
+    }
+  }
+}
+
 async function loadInvitationData() {
   if (!surveyId.value) {
     return
   }
 
+  ++historyRequestId
+  isHistoryLoading.value = false
+  applyHistory({})
   isLoading.value = true
   errorMessage.value = ""
 
@@ -553,6 +634,7 @@ async function loadInvitationData() {
     users.value = Array.isArray(response.users) ? response.users : []
     groups.value = Array.isArray(response.groups) ? response.groups : []
     invitations.value = Array.isArray(response.invitations) ? response.invitations : []
+    applyHistory(response)
     settings.value = response.settings || {}
     anonymousLink.value = response.anonymousLink || ""
     if (!canShowAnsweredDetails.value && activeTab.value === "answered") {
@@ -586,6 +668,8 @@ async function publishSurvey() {
     return
   }
 
+  ++historyRequestId
+  isHistoryLoading.value = false
   isSaving.value = true
 
   try {
@@ -610,6 +694,7 @@ async function publishSurvey() {
     users.value = Array.isArray(response.users) ? response.users : users.value
     groups.value = Array.isArray(response.groups) ? response.groups : groups.value
     invitations.value = Array.isArray(response.invitations) ? response.invitations : invitations.value
+    applyHistory(response)
     selectedUserIds.value = Array.isArray(response.selectedUserIds) ? response.selectedUserIds : selectedUserIds.value
     selectedGroupIds.value = Array.isArray(response.selectedGroupIds) ? response.selectedGroupIds : selectedGroupIds.value
     settings.value = response.settings || settings.value

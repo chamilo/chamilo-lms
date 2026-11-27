@@ -42,6 +42,10 @@ use Symfony\Component\Serializer\Attribute\Groups;
                     schema: ['type' => 'integer'],
                     description: 'Session identifier',
                 ),
+                'historyPage' => new QueryParameter(
+                    schema: ['type' => 'integer', 'minimum' => 1, 'maximum' => 100000],
+                    description: 'Invitation history page',
+                ),
             ],
         ),
         new Post(
@@ -130,6 +134,18 @@ final class SurveyInvitation
      */
     #[Groups(['survey_invitation:read'])]
     public array $invitations = [];
+
+    /**
+     * @var list<array<string, mixed>>
+     */
+    #[Groups(['survey_invitation:read'])]
+    public array $history = [];
+
+    #[Groups(['survey_invitation:read'])]
+    public int $historyPage = 1;
+
+    #[Groups(['survey_invitation:read'])]
+    public bool $historyHasMore = false;
 
     #[Groups(['survey_invitation:read', 'survey_invitation:write'])]
     public string $mailSubject = '';

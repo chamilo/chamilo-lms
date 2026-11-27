@@ -20,6 +20,7 @@ use Chamilo\CoreBundle\Settings\SettingsManager;
 use Chamilo\CourseBundle\Entity\CGroup;
 use Chamilo\CourseBundle\Entity\CSurvey;
 use Chamilo\CourseBundle\Entity\CSurveyInvitation;
+use Chamilo\CourseBundle\Entity\CSurveyInvitationHistory;
 use Chamilo\CourseBundle\Repository\CGroupRepository;
 use Chamilo\CourseBundle\Repository\CSurveyRepository;
 use DateTimeInterface;
@@ -37,6 +38,8 @@ use Throwable;
 final readonly class SurveyInvitationProvider implements ProviderInterface
 {
     use SurveyPersonalitySupportTrait;
+
+    private const int HISTORY_PAGE_SIZE = 20;
 
     public function __construct(
         private CidReqHelper $cidReqHelper,
@@ -69,7 +72,13 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         $survey = $this->getSurveyFromCurrentContext($surveyId, $course, $session);
         $this->assertPersonalitySurveySupported($survey);
 
-        return $this->buildResponse($survey, $course, $session);
+        return $this->buildResponse(
+            $survey,
+            $course,
+            $session,
+            historyPage: max(1, min(100000, $request->query->getInt('historyPage', 1))),
+            selectDefaultRecipients: true,
+        );
     }
 
     /**
@@ -81,6 +90,8 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         ?Session $session,
         string $message = '',
         array $messageParameters = [],
+        int $historyPage = 1,
+        bool $selectDefaultRecipients = false,
     ): SurveyInvitation {
         if (!$this->surveyHelper->canManage()) {
             throw new AccessDeniedHttpException('You are not allowed to manage survey invitations in this context.');
@@ -105,8 +116,53 @@ final readonly class SurveyInvitationProvider implements ProviderInterface
         $response->anonymousLink = $this->buildAutoAnswerLink($survey, $course, $session);
         $response->selectedUserIds = $this->getSelectedUserIds($invitations);
         $response->selectedGroupIds = $this->getSelectedGroupIds($invitations);
+        if ($selectDefaultRecipients && [] === $invitations) {
+            $response->selectedUserIds = array_column($response->users, 'id');
+        }
+
+        $this->loadHistory($response, $survey, $course, $session, $historyPage);
 
         return $response;
+    }
+
+    private function loadHistory(SurveyInvitation $response, CSurvey $survey, Course $course, ?Session $session, int $page): void
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder()
+            ->select('history')
+            ->from(CSurveyInvitationHistory::class, 'history')
+            ->andWhere('history.survey = :survey')
+            ->andWhere('history.course = :course')
+            ->setParameter('survey', $survey)
+            ->setParameter('course', $course)
+            ->orderBy('history.iid', 'DESC')
+            ->setFirstResult(($page - 1) * self::HISTORY_PAGE_SIZE)
+            ->setMaxResults(self::HISTORY_PAGE_SIZE + 1)
+        ;
+
+        if (null === $session) {
+            $queryBuilder->andWhere('history.session IS NULL');
+        } else {
+            $queryBuilder->andWhere('history.session = :session')->setParameter('session', $session);
+        }
+
+        // Do not reveal earlier unanswered-only dispatches after anonymity is tightened.
+        if (!$response->settings['canShowAnsweredDetails']) {
+            $queryBuilder->andWhere('history.unansweredOnly = false');
+        }
+
+        $rows = $queryBuilder->getQuery()->getResult();
+        $response->historyPage = $page;
+        $response->historyHasMore = \count($rows) > self::HISTORY_PAGE_SIZE;
+        foreach (\array_slice($rows, 0, self::HISTORY_PAGE_SIZE) as $history) {
+            $response->history[] = [
+                'id' => $history->getIid(),
+                'sentAt' => $history->getSentAt()->format('Y-m-d\TH:i:s').'Z',
+                'subject' => $history->getEmailTitle(),
+                'body' => $history->getEmailBody(),
+                'recipientCount' => $history->getRecipientCount(),
+                'hideLink' => $history->isHideLink(),
+            ];
+        }
     }
 
     public function getSurveyFromCurrentContext(int $surveyId, Course $course, ?Session $session): CSurvey

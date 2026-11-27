@@ -311,7 +311,7 @@ final readonly class GlobalReportingExportController
 
             fwrite($handle, "\xEF\xBB\xBF");
             fputcsv($handle, CsvFormulaEscaper::escapeRow(array_map(
-                static fn (array $column): string => (string) ($column['label'] ?? $column['key'] ?? ''),
+                $this->columnHeader(...),
                 $data['columns'],
             )));
 
@@ -340,7 +340,7 @@ final readonly class GlobalReportingExportController
         $sheet = $spreadsheet->getActiveSheet();
         $columnIndex = 1;
         foreach ($data['columns'] as $column) {
-            $sheet->setCellValue([$columnIndex, 1], (string) ($column['label'] ?? $column['key'] ?? ''));
+            $sheet->setCellValue([$columnIndex, 1], $this->columnHeader($column));
             ++$columnIndex;
         }
 
@@ -424,6 +424,17 @@ final readonly class GlobalReportingExportController
         }
 
         return strip_tags((string) $value);
+    }
+
+    /**
+     * @param array<string, mixed> $column
+     */
+    private function columnHeader(array $column): string
+    {
+        $label = (string) ($column['label'] ?? $column['key'] ?? '');
+        $prefix = (string) ($column['prefix'] ?? '');
+
+        return '' === $prefix ? $label : $prefix.' ('.$label.')';
     }
 
     private function neutralizeSpreadsheetFormula(string $value): string

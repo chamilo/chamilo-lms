@@ -168,90 +168,131 @@ final class GlobalReportingAuthorsWorksTest extends KernelTestCase
 
     // ------------------------------------------------------ works in session
 
-    private function work(string $title, int $courseId, int $sessionId, string $author, string $sentAt, ?int $parent): int
+    /**
+     * A work sent by a learner: a child of the assignment, linked to the course and session.
+     */
+    private function submission(int $userId, int $courseId, int $sessionId, string $sentAt, ?int $parent): void
     {
-        $node = $this->node('student_publications', $title);
-        $this->insert('c_student_publication', ['resource_node_id' => $node, 'parent_id' => $parent, 'title' => $title, 'author' => $author, 'sent_date' => $sentAt, 'qualification' => 12.5, 'weight' => 20, 'accepted' => 1]);
-        $id = (int) $this->conn()->lastInsertId();
+        $node = $this->node('student_publications', 'r3_work_'.$userId.'_'.$sentAt);
+        $this->insert('c_student_publication', ['resource_node_id' => $node, 'parent_id' => $parent, 'user_id' => $userId, 'title' => 'r3_work', 'sent_date' => $sentAt]);
         $this->link($node, $courseId, $sessionId);
-
-        return $id;
     }
 
-    public function testWorksInSessionListTheWorksLinkedToTheSessionsOfTheUrlNewestFirst(): void
+    private function assignment(): int
     {
         $this->insert('c_student_publication', ['title' => 'r3_assignment']);
-        $assignment = (int) $this->conn()->lastInsertId();
-        $s1 = $this->rawSession('r3ws1');
-        $s2 = $this->rawSession('r3ws2');
-        $foreign = $this->rawSession('r3ws3', null);
-        $old = $this->work('r3_work_old', 1, $s1, 'Learner A', '2001-01-01 10:00:00', $assignment);
-        $new = $this->work('r3_work_new', 1, $s1, 'Learner B', '2001-01-02 10:00:00', $assignment);
-        $other = $this->work('r3_work_s2', 2, $s2, 'Learner C', '2001-01-03 10:00:00', $assignment);
-        $this->work('r3_work_assignment_root', 1, $s1, 'Learner D', '2001-01-04 10:00:00', null);
-        $this->work('r3_work_foreign', 1, $foreign, 'Learner E', '2001-01-05 10:00:00', $assignment);
+
+        return (int) $this->conn()->lastInsertId();
+    }
+
+    private function courseCode(int $courseId): string
+    {
+        return (string) $this->conn()->fetchOne('SELECT code FROM course WHERE id = ?', [$courseId]);
+    }
+
+    /**
+     * Without a session the 1.11 page only shows the session selector: nothing is computed until one is chosen,
+     * and only sessions in the user's scope can be chosen.
+     */
+    public function testWorksInSessionAsksForASessionOfTheScope(): void
+    {
+        $inUrl = $this->rawSession('r3ws1');
+        $foreign = $this->rawSession('r3ws2', null);
         $admin = $this->ctx(1, true);
 
-        $result = $this->section($admin, 'works-in-session', ['sessionId' => $s1]);
-        $this->assertSame([$new, $old], array_column($result['items'], 'id'));
-        $this->assertSame(['Learner B', 'Learner A'], array_column($result['items'], 'author'));
-        $this->assertSame(12.5, $result['items'][0]['qualification']);
-        $this->assertSame('Yes', $result['items'][0]['accepted']);
-        $this->assertSame('AI Act', $result['items'][0]['course']);
+        $result = $this->section($admin, 'works-in-session');
 
-        $all = $this->section($admin, 'works-in-session');
-        $ids = array_column($all['items'], 'id');
-        $this->assertContains($other, $ids);
-        $this->assertNotContains($this->conn()->fetchOne('SELECT iid FROM c_student_publication WHERE title = ?', ['r3_work_foreign']), $ids, 'sessions outside the URL');
-        $this->assertLessThan(array_search($other, $ids, true), array_search($new, $ids, true), 'ordered by session title then course');
+        $this->assertSame(0, $result['total']);
+        $this->assertSame([], $result['items']);
+        $this->assertTrue($result['meta']['requiresSession']);
+        $options = array_column($result['meta']['sessionOptions'], 'id');
+        $this->assertContains($inUrl, $options);
+        $this->assertNotContains($foreign, $options, 'sessions outside the URL');
 
         $this->expectException(AccessDeniedHttpException::class);
         $this->section($admin, 'works-in-session', ['sessionId' => $foreign]);
     }
 
-    public function testWorksInSessionOfACoachAreLimitedToTheirOwnSessions(): void
+    /**
+     * 1.11 layout: one row per learner of the session, three columns per course (best score, progress and last
+     * sent work date). A learner of the session who is not subscribed to a course has empty values for it.
+     */
+    public function testWorksInSessionShowsOneRowPerLearnerWithThreeColumnsPerCourse(): void
     {
-        $this->insert('c_student_publication', ['title' => 'r3_assignment2']);
-        $assignment = (int) $this->conn()->lastInsertId();
-        $mine = $this->rawSession('r3ws4');
-        $theirs = $this->rawSession('r3ws5');
-        $coach = $this->rawUser('r3ws6', 1);
-        $this->sessionUser($mine, $coach, 3);
-        $a = $this->work('r3_work_mine', 1, $mine, 'Learner M', '2001-02-01 10:00:00', $assignment);
-        $b = $this->work('r3_work_theirs', 1, $theirs, 'Learner T', '2001-02-02 10:00:00', $assignment);
+        $session = $this->rawSession('r3ws3');
+        $this->sessionCourse($session, 1);
+        $this->sessionCourse($session, 2);
+        $inCourse = $this->rawUser('r3ws4');
+        $onlySession = $this->rawUser('r3ws5');
+        $hr = $this->rawUser('r3ws6', 4);
+        $this->conn()->executeStatement('UPDATE user SET official_code = ? WHERE id = ?', ['R3CODE', $inCourse]);
+        $this->sessionUser($session, $inCourse, 0);
+        $this->sessionUser($session, $onlySession, 0);
+        $this->sessionUser($session, $hr, 1);
+        $this->sessionCourseUser($session, 1, $inCourse);
+        $assignment = $this->assignment();
+        $this->submission($inCourse, 1, $session, '2001-04-01 10:00:00', $assignment);
+        $this->submission($inCourse, 1, $session, '2001-04-02 10:00:00', $assignment);
+        $this->submission($inCourse, 1, $session, '2001-04-03 10:00:00', null);
+        $this->insert('track_e_login', ['login_user_id' => $inCourse, 'login_date' => '2001-01-01 10:00:00', 'logout_date' => '2001-01-01 10:30:00', 'access_url_id' => 1]);
+        $this->insert('track_e_login', ['login_user_id' => $inCourse, 'login_date' => '2001-01-05 10:00:00', 'logout_date' => '2001-01-05 10:10:00', 'access_url_id' => 1]);
 
-        $result = $this->section($this->ctx($coach), 'works-in-session');
+        $result = $this->section($this->ctx(1, true), 'works-in-session', ['sessionId' => $session]);
 
-        $this->assertSame([$a], array_column($result['items'], 'id'));
-        $this->assertNotContains($b, array_column($result['items'], 'id'));
-        $this->expectException(AccessDeniedHttpException::class);
-        $this->section($this->ctx($coach), 'works-in-session', ['sessionId' => $theirs]);
+        $this->assertSame(
+            ['code', 'learner', 'timeSpent', 'firstLogin', 'lastLogin', 'score1', 'progress1', 'lastSentDate1', 'score2', 'progress2', 'lastSentDate2'],
+            array_column($result['columns'], 'key'),
+        );
+        $this->assertSame($this->courseCode(1), $result['columns'][5]['prefix'], 'the course code heads its columns');
+        $this->assertSame(2, $result['total'], 'learners only, not the human resources manager of the session');
+        $rows = array_column($result['items'], null, 'id');
+        $row = $rows[$inCourse];
+        $this->assertSame('R3CODE', $row['code']);
+        $this->assertSame(2400, $row['timeSpent']);
+        $this->assertSame('2001-01-01 10:00:00', $row['firstLogin']);
+        $this->assertSame('2001-01-05 10:00:00', $row['lastLogin']);
+        $this->assertSame('2001-04-02 10:00:00', $row['lastSentDate1'], 'the latest work, the assignment itself excluded');
+        $this->assertIsFloat($row['progress1']);
+        $this->assertNull($row['progress2'], 'not subscribed to course 2');
+        $this->assertNull($row['lastSentDate2']);
+        foreach (['score1', 'progress1', 'lastSentDate1'] as $key) {
+            $this->assertNull($rows[$onlySession][$key], 'a learner of the session only has no course values');
+        }
     }
 
     /**
-     * Owner rule: a course coach is shown the works of the courses he coaches, not of every course of the session.
-     * (The definitions of the other courses' works belong to the agenda only.) A general coach coaches the whole
-     * session, so he still sees every course.
+     * Owner rule: a course coach is shown the courses he coaches and their learners, not every course of the
+     * session. A general coach coaches the whole session, so he still sees every course.
      */
-    public function testWorksInSessionOfACourseCoachAreLimitedToTheCoursesHeCoaches(): void
+    public function testWorksInSessionOfACourseCoachIsLimitedToTheCoursesHeCoaches(): void
     {
-        $this->insert('c_student_publication', ['title' => 'r3_assignment3']);
-        $assignment = (int) $this->conn()->lastInsertId();
         $session = $this->rawSession('r3ws7');
-        $courseCoach = $this->rawUser('r3ws8', 1);
-        $generalCoach = $this->rawUser('r3ws9', 1);
+        $theirs = $this->rawSession('r3ws8');
+        $this->sessionCourse($session, 1);
+        $this->sessionCourse($session, 2);
+        $courseCoach = $this->rawUser('r3ws9', 1);
+        $generalCoach = $this->rawUser('r3ws10', 1);
+        $learner1 = $this->rawUser('r3ws11');
+        $learner2 = $this->rawUser('r3ws12');
         $this->sessionCourseUser($session, 1, $courseCoach, 2);
         $this->sessionUser($session, $generalCoach, 3);
-        $own = $this->work('r3_work_own_course', 1, $session, 'Learner O', '2001-03-01 10:00:00', $assignment);
-        $other = $this->work('r3_work_other_course', 2, $session, 'Learner P', '2001-03-02 10:00:00', $assignment);
+        foreach ([$learner1, $learner2] as $learner) {
+            $this->sessionUser($session, $learner, 0);
+        }
+        $this->sessionCourseUser($session, 1, $learner1);
+        $this->sessionCourseUser($session, 2, $learner2);
 
         $course = $this->section($this->ctx($courseCoach), 'works-in-session', ['sessionId' => $session]);
-        $this->assertSame([$own], array_column($course['items'], 'id'));
-        $this->assertSame([$own], array_column($this->section($this->ctx($courseCoach), 'works-in-session')['items'], 'id'));
+        $this->assertSame(['score1', 'progress1', 'lastSentDate1'], \array_slice(array_column($course['columns'], 'key'), 5));
+        $this->assertSame([$learner1], array_column($course['items'], 'id'));
 
         $general = $this->section($this->ctx($generalCoach), 'works-in-session', ['sessionId' => $session]);
+        $this->assertCount(11, $general['columns']);
         $ids = array_column($general['items'], 'id');
         sort($ids);
-        $this->assertSame([$own, $other], $ids);
+        $this->assertSame([$learner1, $learner2], $ids);
+
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->section($this->ctx($courseCoach), 'works-in-session', ['sessionId' => $theirs]);
     }
 }

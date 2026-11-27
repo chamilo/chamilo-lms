@@ -4911,5 +4911,8 @@
     "Automatically invite newly enrolled learners": "Automatically invite newly enrolled learners",
     "New enrollments are processed by the scheduled survey invitation command while the survey is open.": "New enrollments are processed by the scheduled survey invitation command while the survey is open.",
     "Some external invitations could not be sent. Check the mail configuration and retry the failed recipients.": "Some external invitations could not be sent. Check the mail configuration and retry the failed recipients.",
-  "The original calculated variables are unavailable. Existing variations are preserved if the calculation is unchanged.": "The original calculated variables are unavailable. Existing variations are preserved if the calculation is unchanged."
+  "The original calculated variables are unavailable. Existing variations are preserved if the calculation is unchanged.": "The original calculated variables are unavailable. Existing variations are preserved if the calculation is unchanged.",
+    "Learner name": "Learner name",
+    "Time spent in portal": "Time spent in portal",
+    "Last sent work date": "Last sent work date"
 }

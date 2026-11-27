@@ -46,6 +46,20 @@
         </div>
 
         <div
+          v-if="report.meta.supportsSession"
+          :class="keywordColumnClass"
+        >
+          <BaseSelect
+            id="global-reporting-session"
+            v-model="filters.sessionId"
+            :label="t('Session')"
+            :options="sessionOptions"
+            allow-clear
+            name="sessionId"
+          />
+        </div>
+
+        <div
           v-if="report.meta.supportsUserStatus"
           class="lg:col-span-2"
         >
@@ -254,7 +268,7 @@
           :lazy="true"
           data-key="id"
           :row-class="reportRowClass"
-          :text-for-empty="t('No results found')"
+          :text-for-empty="emptyTableText"
           @page="onPage"
           @sort="onSort"
         >
@@ -266,7 +280,7 @@
           >
             <template #header>
               <span class="inline-flex items-center gap-1">
-                <span>{{ t(column.label) }}</span>
+                <span>{{ column.prefix ? `${column.prefix} (${t(column.label)})` : t(column.label) }}</span>
                 <BaseIcon
                   v-if="column.help"
                   icon="information"
@@ -543,6 +557,7 @@ const SECTION_ICONS = {
 // the first response so the filters do not change once it arrives.
 const INITIAL_META = {
   sessions: { supportsReset: false },
+  "works-in-session": { supportsKeyword: false, supportsReset: false, supportsSession: true, requiresSession: true },
 }
 
 // Loaded /reporting/sessions at 1440 px, local portal with 1 session: header 41 px, columns
@@ -603,9 +618,16 @@ const activeOptions = computed(() => [
   { label: t("Inactive"), value: 0 },
 ])
 const inactiveDayOptions = [1, 5, 7, 15, 30, 60, 90, 120].map((value) => ({ label: String(value), value }))
+const sessionOptions = computed(() =>
+  (report.meta.sessionOptions || []).map((option) => ({ label: option.label, value: Number(option.id) })),
+)
+const emptyTableText = computed(() =>
+  t(report.meta.requiresSession && !filters.sessionId ? "Please select a session" : "No results found"),
+)
 const showFilters = computed(
   () =>
     report.meta.supportsKeyword !== false ||
+    report.meta.supportsSession ||
     report.meta.supportsUserStatus ||
     report.meta.supportsActive ||
     report.meta.supportsInactiveDays ||
@@ -624,7 +646,7 @@ const showFilterCsv = computed(() => report.meta.canExportCsv && !isSessionList.
 const showFilterXlsx = computed(() => report.meta.canExportXlsx && !isSessionList.value)
 const compactFilters = computed(
   () =>
-    report.meta.supportsKeyword !== false &&
+    (report.meta.supportsKeyword !== false || report.meta.supportsSession) &&
     !report.meta.supportsUserStatus &&
     !report.meta.supportsActive &&
     !report.meta.supportsInactiveDays &&

@@ -37,6 +37,8 @@ use Doctrine\DBAL\Types\Types;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
+use Tracking;
+use UserManager;
 
 use const PATHINFO_FILENAME;
 use const PHP_QUERY_RFC3986;
@@ -6446,97 +6448,271 @@ final readonly class GlobalReportingSectionQueryService
     }
 
     /**
+     * Port of main/mySpace/works_in_session_report.php (1.11.x): one row per learner of the session, with the
+     * best score, the progress and the last sent work date of each course.
+     *
      * @param array<string, mixed> $filters
      *
      * @return array<string, mixed>
      */
     private function getWorksInSession(GlobalReportingContext $context, array $filters): array
     {
+        $title = 'Works in session report';
         $sessionIds = $context->isAdministrator
             ? $this->allAccessUrlSessionIds($context)
             : $this->getTrackedSessionIds($context);
-        $requestedSessionId = (int) $filters['sessionId'];
-        if ($requestedSessionId > 0) {
-            if (!\in_array($requestedSessionId, $sessionIds, true)) {
-                throw new AccessDeniedHttpException('The requested session is outside your reporting scope.');
-            }
-            $sessionIds = [$requestedSessionId];
+        $meta = [
+            'supportsKeyword' => false,
+            'supportsReset' => false,
+            'supportsSession' => true,
+            'requiresSession' => true,
+            'sessionOptions' => $this->getSessionOptionsByIds($sessionIds),
+            'canExportCsv' => true,
+            'canExportXlsx' => true,
+        ];
+
+        $sessionId = (int) $filters['sessionId'];
+        if ($sessionId <= 0) {
+            return $this->emptyResult($filters, $title, [], $meta);
+        }
+        if (!\in_array($sessionId, $sessionIds, true)) {
+            throw new AccessDeniedHttpException('The requested session is outside your reporting scope.');
+        }
+        $session = $this->sessionRepository->find($sessionId);
+        if (!$session instanceof Session) {
+            return $this->emptyResult($filters, $title, [], $meta);
         }
 
-        if ([] === $sessionIds || !$this->hasTables(['c_student_publication', 'resource_link'])) {
-            return $this->emptyResult($filters, 'Works in session report', []);
+        // A coach only sees the courses he coaches, and their learners.
+        $isCoach = !$context->isAdministrator
+            && !$context->isHumanResourcesManager
+            && !$context->isSessionAdministratorOnly;
+        $coachedCourseIds = $isCoach
+            ? $this->getCoachedCourseIdsInSession($context->currentUserId(), $sessionId)
+            : null;
+
+        /** @var array<int, User> $users */
+        $users = [];
+        if (!$isCoach) {
+            foreach ($session->getUsers() as $sessionRelUser) {
+                if (Session::STUDENT === $sessionRelUser->getRelationType()) {
+                    $users[(int) $sessionRelUser->getUser()->getId()] = $sessionRelUser->getUser();
+                }
+            }
         }
-        $parameters = ['sessionIds' => $sessionIds];
-        $types = ['sessionIds' => ArrayParameterType::INTEGER];
-        $coachCondition = '';
-        if (!$context->isAdministrator && !$context->isHumanResourcesManager && !$context->isSessionAdministratorOnly) {
-            // A coach: the courses he coaches (every course of a session he is general coach of), not every course
-            // of the session. The works definitions of the other courses are an agenda matter only.
-            $coachCondition = ' AND (
+
+        /** @var array<int, Course> $courses */
+        $courses = [];
+        foreach ($session->getCourses() as $sessionRelCourse) {
+            $course = $sessionRelCourse->getCourse();
+            $courseId = (int) $course->getId();
+            if (null !== $coachedCourseIds && !\in_array($courseId, $coachedCourseIds, true)) {
+                continue;
+            }
+            $courses[$courseId] = $course;
+            foreach ($session->getSessionRelCourseRelUsersByStatus($course, Session::STUDENT) as $subscription) {
+                $student = $subscription->getUser();
+                if ($student instanceof User) {
+                    $users[(int) $student->getId()] = $student;
+                }
+            }
+        }
+
+        uasort(
+            $users,
+            static fn (User $a, User $b): int => [mb_strtolower($a->getLastname()), mb_strtolower($a->getFirstname()), $a->getId()]
+                <=> [mb_strtolower($b->getLastname()), mb_strtolower($b->getFirstname()), $b->getId()],
+        );
+
+        $columns = [
+            ['key' => 'code', 'label' => 'Code', 'type' => 'text'],
+            ['key' => 'learner', 'label' => 'Learner name', 'type' => 'text'],
+            ['key' => 'timeSpent', 'label' => 'Time spent in portal', 'type' => 'duration'],
+            ['key' => 'firstLogin', 'label' => 'First login in platform', 'type' => 'date'],
+            ['key' => 'lastLogin', 'label' => 'Latest login in platform', 'type' => 'date'],
+        ];
+        foreach ($courses as $courseId => $course) {
+            $columns[] = [
+                'key' => 'score'.$courseId,
+                'label' => 'Best score',
+                'prefix' => $course->getCode(),
+                'type' => 'percent',
+            ];
+            $columns[] = ['key' => 'progress'.$courseId, 'label' => 'Progress', 'type' => 'percent'];
+            $columns[] = ['key' => 'lastSentDate'.$courseId, 'label' => 'Last sent work date', 'type' => 'datetime'];
+        }
+
+        $pageUsers = \array_slice($users, $filters['offset'], $filters['itemsPerPage'], true);
+        $connections = $this->getPlatformConnectionsByUser(array_keys($pageUsers), $context->accessUrlId);
+        $lastSentDates = $this->getLastSentWorkDates($sessionId, array_keys($courses), array_keys($pageUsers));
+
+        $rows = [];
+        foreach ($pageUsers as $userId => $user) {
+            $row = [
+                'id' => $userId,
+                'code' => $user->getOfficialCode(),
+                'learner' => UserManager::formatUserFullName($user),
+                'timeSpent' => $connections[$userId]['timeSeconds'] ?? 0,
+                'firstLogin' => $connections[$userId]['firstLogin'] ?? null,
+                'lastLogin' => $connections[$userId]['lastLogin'] ?? null,
+            ];
+            foreach ($courses as $courseId => $course) {
+                $row['score'.$courseId] = null;
+                $row['progress'.$courseId] = null;
+                $row['lastSentDate'.$courseId] = null;
+                if (!$session->hasStudentInCourse($user, $course)) {
+                    continue;
+                }
+
+                $score = Tracking::get_avg_student_score($userId, $course, [], $session, false, false, true);
+                $progress = Tracking::get_avg_student_progress($userId, $course, [], $session);
+                $row['score'.$courseId] = is_numeric($score) ? (float) $score : null;
+                $row['progress'.$courseId] = is_numeric($progress) ? (float) $progress : null;
+                $row['lastSentDate'.$courseId] = $lastSentDates[$userId][$courseId] ?? null;
+            }
+            $rows[] = $row;
+        }
+
+        return $this->result($filters, $title, \count($users), [], $columns, $rows, [], $meta);
+    }
+
+    /**
+     * @param int[] $sessionIds
+     *
+     * @return array<int, array{id: int, label: string}>
+     */
+    private function getSessionOptionsByIds(array $sessionIds): array
+    {
+        if ([] === $sessionIds) {
+            return [];
+        }
+
+        $rows = $this->connection->fetchAllAssociative(
+            'SELECT id, title FROM session WHERE id IN (:sessionIds) ORDER BY title ASC, id ASC',
+            ['sessionIds' => $sessionIds],
+            ['sessionIds' => ArrayParameterType::INTEGER],
+        );
+
+        return array_map(
+            static fn (array $row): array => ['id' => (int) $row['id'], 'label' => (string) $row['title']],
+            $rows,
+        );
+    }
+
+    /**
+     * Port of Tracking::get_courses_followed_by_coach() for one session: every course when the user is a general
+     * coach of the session, otherwise the courses he is course coach of.
+     *
+     * @return int[]
+     */
+    private function getCoachedCourseIdsInSession(int $userId, int $sessionId): array
+    {
+        return $this->fetchIntegerColumn(
+            'SELECT session_course.c_id
+               FROM session_rel_course session_course
+              WHERE session_course.session_id = :sessionId
+                AND (
                     EXISTS (SELECT 1 FROM session_rel_user general_coach
-                             WHERE general_coach.session_id = resource_link.session_id
-                               AND general_coach.user_id = :coachId
+                             WHERE general_coach.session_id = session_course.session_id
+                               AND general_coach.user_id = :userId
                                AND general_coach.relation_type = :generalCoachRelationType)
                  OR EXISTS (SELECT 1 FROM session_rel_course_rel_user course_coach
-                             WHERE course_coach.session_id = resource_link.session_id
-                               AND course_coach.c_id = resource_link.c_id
-                               AND course_coach.user_id = :coachId
-                               AND course_coach.status = :courseCoachStatus))';
-            $parameters += [
-                'coachId' => $context->currentUserId(),
+                             WHERE course_coach.session_id = session_course.session_id
+                               AND course_coach.c_id = session_course.c_id
+                               AND course_coach.user_id = :userId
+                               AND course_coach.status = :courseCoachStatus)
+                )',
+            [
+                'sessionId' => $sessionId,
+                'userId' => $userId,
                 'generalCoachRelationType' => self::SESSION_RELATION_TYPE_GENERAL_COACH,
                 'courseCoachStatus' => self::SESSION_STATUS_COURSE_COACH,
-            ];
-            $types += [
-                'coachId' => Types::INTEGER,
+            ],
+            [
+                'sessionId' => Types::INTEGER,
+                'userId' => Types::INTEGER,
                 'generalCoachRelationType' => Types::INTEGER,
                 'courseCoachStatus' => Types::INTEGER,
-            ];
-        }
-        $rows = $this->connection->fetchAllAssociative(
-            'SELECT publication.iid AS id,
-                    session.title AS session,
-                    course.title AS course,
-                    publication.title,
-                    publication.author,
-                    publication.sent_date AS sentAt,
-                    publication.qualification,
-                    publication.weight,
-                    publication.accepted
-               FROM c_student_publication publication
-               INNER JOIN resource_link ON resource_link.resource_node_id = publication.resource_node_id
-               INNER JOIN course ON course.id = resource_link.c_id
-               INNER JOIN session ON session.id = resource_link.session_id
-              WHERE resource_link.session_id IN (:sessionIds)
-                AND resource_link.deleted_at IS NULL
-                AND publication.parent_id IS NOT NULL'.$coachCondition.'
-           ORDER BY session.title, course.title, publication.sent_date DESC',
-            $parameters,
-            $types,
-        );
-        foreach ($rows as &$row) {
-            $row['id'] = (int) $row['id'];
-            $row['qualification'] = null === $row['qualification'] ? null : (float) $row['qualification'];
-            $row['weight'] = null === $row['weight'] ? null : (float) $row['weight'];
-            $row['accepted'] = 1 === (int) $row['accepted'] ? 'Yes' : 'No';
-        }
-        unset($row);
-
-        return $this->simpleRowsResult(
-            $filters,
-            'Works in session report',
-            $rows,
-            [
-                ['key' => 'session', 'label' => 'Session', 'type' => 'text'],
-                ['key' => 'course', 'label' => 'Course', 'type' => 'text'],
-                ['key' => 'title', 'label' => 'Title', 'type' => 'text'],
-                ['key' => 'author', 'label' => 'Learner name', 'type' => 'text'],
-                ['key' => 'sentAt', 'label' => 'Sent date', 'type' => 'datetime'],
-                ['key' => 'qualification', 'label' => 'Score', 'type' => 'number'],
-                ['key' => 'weight', 'label' => 'Weight', 'type' => 'number'],
-                ['key' => 'accepted', 'label' => 'Accepted', 'type' => 'status'],
             ],
         );
+    }
+
+    /**
+     * @param int[] $userIds
+     *
+     * @return array<int, array{timeSeconds: int, firstLogin: ?string, lastLogin: ?string}>
+     */
+    private function getPlatformConnectionsByUser(array $userIds, int $accessUrlId): array
+    {
+        if ([] === $userIds) {
+            return [];
+        }
+
+        $rows = $this->connection->fetchAllAssociative(
+            'SELECT login.login_user_id AS userId,
+                    MIN(login.login_date) AS firstLogin,
+                    MAX(login.login_date) AS lastLogin,
+                    SUM('.$this->sessionTimeLimit->sql('login.login_date', 'COALESCE(login.logout_date, login.login_date)').') AS timeSeconds
+               FROM track_e_login login
+              WHERE login.login_user_id IN (:userIds)
+                AND (login.access_url_id = :accessUrlId OR login.access_url_id IS NULL)
+           GROUP BY login.login_user_id',
+            ['userIds' => $userIds, 'accessUrlId' => $accessUrlId],
+            ['userIds' => ArrayParameterType::INTEGER, 'accessUrlId' => Types::INTEGER],
+        );
+
+        $connections = [];
+        foreach ($rows as $row) {
+            $connections[(int) $row['userId']] = [
+                'timeSeconds' => (int) ($row['timeSeconds'] ?? 0),
+                'firstLogin' => null === $row['firstLogin'] ? null : (string) $row['firstLogin'],
+                'lastLogin' => null === $row['lastLogin'] ? null : (string) $row['lastLogin'],
+            ];
+        }
+
+        return $connections;
+    }
+
+    /**
+     * @param int[] $courseIds
+     * @param int[] $userIds
+     *
+     * @return array<int, array<int, string>> sent date by user ID and course ID
+     */
+    private function getLastSentWorkDates(int $sessionId, array $courseIds, array $userIds): array
+    {
+        if ([] === $courseIds || [] === $userIds || !$this->hasTables(['c_student_publication', 'resource_link'])) {
+            return [];
+        }
+
+        $rows = $this->connection->fetchAllAssociative(
+            'SELECT publication.user_id AS userId,
+                    resource_link.c_id AS courseId,
+                    MAX(publication.sent_date) AS sentDate
+               FROM c_student_publication publication
+               INNER JOIN resource_link ON resource_link.resource_node_id = publication.resource_node_id
+              WHERE resource_link.session_id = :sessionId
+                AND resource_link.c_id IN (:courseIds)
+                AND resource_link.deleted_at IS NULL
+                AND publication.parent_id IS NOT NULL
+                AND publication.user_id IN (:userIds)
+           GROUP BY publication.user_id, resource_link.c_id',
+            ['sessionId' => $sessionId, 'courseIds' => $courseIds, 'userIds' => $userIds],
+            [
+                'sessionId' => Types::INTEGER,
+                'courseIds' => ArrayParameterType::INTEGER,
+                'userIds' => ArrayParameterType::INTEGER,
+            ],
+        );
+
+        $dates = [];
+        foreach ($rows as $row) {
+            if (null !== $row['sentDate']) {
+                $dates[(int) $row['userId']][(int) $row['courseId']] = (string) $row['sentDate'];
+            }
+        }
+
+        return $dates;
     }
 
     /**

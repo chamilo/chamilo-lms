@@ -27,13 +27,15 @@ final class Version20201216105331 extends AbstractMigrationChamilo
         $thematicRepo = $this->container->get(CThematicRepository::class);
         $courseRepo = $this->container->get(CourseRepository::class);
 
-        $admin = $this->getAdmin();
-
         $q = $this->entityManager->createQuery('SELECT c FROM Chamilo\CoreBundle\Entity\Course c');
 
         /** @var Course $course */
         foreach ($q->toIterable() as $course) {
             $courseId = $course->getId();
+
+            // Taken again for each course: the clear() at the end of the previous one detached it, and
+            // the node creator cascade then persisted it as a new user (loading its skills on the way).
+            $admin = $this->getAdmin();
 
             // c_thematic.
             $sql = "SELECT * FROM c_thematic WHERE c_id = {$courseId} and active = 1

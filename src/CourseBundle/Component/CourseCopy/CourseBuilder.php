@@ -75,6 +75,8 @@ use stdClass;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 
+use const ENT_QUOTES;
+use const ENT_SUBSTITUTE;
 use const PHP_URL_PATH;
 
 /**
@@ -226,6 +228,18 @@ class CourseBuilder
         if ('' === $html) {
             return;
         }
+        // The legacy parser ignores extensionless paths, including modern resource URLs.
+        if (false !== stripos($html, 'document/files/')) {
+            $attributes = DocumentManager::parse_HTML_attributes($html, ['src', 'href', 'url', '@import', 'poster', 'value']);
+            foreach ($attributes as $values) {
+                foreach ($values as $url) {
+                    if (null !== $this->getLocalDocumentUuid($url)) {
+                        $this->addDocumentList([[$url, 'local', 'abs']]);
+                    }
+                }
+            }
+        }
+
         $documentList = DocumentManager::get_resources_from_source_html($html);
         $this->addDocumentList($documentList);
     }
@@ -254,12 +268,31 @@ class CourseBuilder
             }
 
             $course = $resolved;
+            if (null === $session && api_get_session_id() > 0) {
+                $session = $this->em->getRepository(SessionEntity::class)->find(api_get_session_id());
+                if (!$session instanceof SessionEntity) {
+                    return;
+                }
+            }
         }
 
         $need = [];
+        $uuids = [];
 
         foreach ($this->documentsAddedInText as $item) {
             [$url, $scope, $type] = $item; // url, scope(local/remote), type(rel/abs/url)
+
+            $uuid = $this->getLocalDocumentUuid((string) $url);
+            if (null !== $uuid) {
+                $uuids[$uuid] = true;
+
+                continue;
+            }
+
+            // A modern URL must be matched by its UUID, never by a filename from another portal.
+            if (preg_match('~(?:^|/)document/files/[0-9a-f-]{16,64}/(?:view|download|link)(?:[/?#]|$)~i', (string) $url)) {
+                continue;
+            }
 
             // Only process local document-style URLs.
             if ('local' !== $scope || !\in_array($type, ['rel', 'abs'], true)) {
@@ -287,22 +320,57 @@ class CourseBuilder
             }
         }
 
-        if (empty($need)) {
+        if ([] === $need && [] === $uuids) {
             return;
         }
 
         $paths = array_keys($need);
 
-        $iids = $this->resolveDocumentIidsByRelativePaths($course, $session, $paths);
+        $iids = $this->resolveDocumentIidsByRelativePaths($course, $session, $paths, array_keys($uuids));
         if (empty($iids)) {
             $this->trace('COURSE_BUILD: no referenced documents matched in repository (paths_count='.\count($paths).')');
             return;
         }
 
-        $sid = (int) ($session?->getId() ?? api_get_session_id());
-        $cid = (int) $course->getId();
+        $this->build_documents_with_repo($course, $session, $this->withBaseContent, $iids);
+    }
 
-        $this->build_documents($sid, $cid, $this->withBaseContent, $iids);
+    /**
+     * Recognize local modern document URLs without resolving a foreign resource by filename.
+     */
+    private function getLocalDocumentUuid(string $url): ?string
+    {
+        $url = trim(html_entity_decode($url, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'));
+        if (false === stripos($url, 'document/files/') || str_starts_with($url, '//')) {
+            return null;
+        }
+
+        if (preg_match('~^[a-z][a-z0-9+.-]*:~i', $url)) {
+            $base = rtrim(api_get_path(WEB_PATH), '/').'/';
+            if (!str_starts_with($url, $base)) {
+                return null;
+            }
+            $url = substr($url, \strlen($base));
+        }
+
+        $path = parse_url($url, PHP_URL_PATH);
+        if (!\is_string($path)) {
+            return null;
+        }
+
+        // Installations below a URL prefix generate root-relative resource links with that prefix.
+        if (str_starts_with($path, '/') && !str_starts_with($path, '/r/document/') && !str_starts_with($path, '/document/')) {
+            $basePath = rtrim((string) parse_url(api_get_path(WEB_PATH), PHP_URL_PATH), '/');
+            if ('' !== $basePath && str_starts_with($path, $basePath.'/')) {
+                $path = substr($path, \strlen($basePath));
+            }
+        }
+
+        if (preg_match('~^/?(?:r/)?document/files/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/(?:view|download|link)/?$~iD', $path, $matches)) {
+            return strtolower($matches[1]);
+        }
+
+        return null;
     }
 
     /**
@@ -401,15 +469,17 @@ class CourseBuilder
      * Resolve document IIDs by comparing computed "relative display paths" with the given list.
      *
      * @param array<int,string> $relativePaths
+     * @param list<string> $resourceUuids
      *
      * @return array<int>
      */
     private function resolveDocumentIidsByRelativePaths(
         CourseEntity $course,
         ?SessionEntity $session,
-        array $relativePaths
+        array $relativePaths,
+        array $resourceUuids = []
     ): array {
-        if (empty($relativePaths)) {
+        if ([] === $relativePaths && [] === $resourceUuids) {
             return [];
         }
 
@@ -420,7 +490,7 @@ class CourseBuilder
                 $need[$p] = true;
             }
         }
-        if (empty($need)) {
+        if ([] === $need && [] === $resourceUuids) {
             return [];
         }
 
@@ -434,8 +504,31 @@ class CourseBuilder
         $courseRoot = $course->getResourceNode();
 
         $iids = [];
+        $wantedUuids = array_fill_keys($resourceUuids, true);
+        $ancestorIds = [];
 
         foreach ($docs as $doc) {
+            $node = $doc->getResourceNode();
+            if ($node instanceof ResourceNode
+                && isset($wantedUuids[strtolower((string) $node->getUuid())])
+                && $this->hasActiveDocumentExportLink($node, $course, $session)
+            ) {
+                $iids[] = (int) $doc->getIid();
+                // Only ancestors of a document matched in the authorized course/session query.
+                $parent = $node->getParent();
+                while ($parent instanceof ResourceNode && $parent !== $courseRoot && $parent !== $documentsRoot) {
+                    $parentId = (int) $parent->getId();
+                    if (isset($ancestorIds[$parentId])) {
+                        break;
+                    }
+                    $ancestorIds[$parentId] = true;
+                    $parent = $parent->getParent();
+                }
+            }
+
+            if ([] === $need) {
+                continue;
+            }
             $documentBase = $this->resolveDocumentExportBaseNode(
                 $doc,
                 $documentsRoot instanceof ResourceNode ? $documentsRoot : null,
@@ -458,7 +551,41 @@ class CourseBuilder
             }
         }
 
+        foreach ($docs as $doc) {
+            $node = $doc->getResourceNode();
+            if ('folder' === $doc->getFiletype()
+                && $node instanceof ResourceNode
+                && isset($ancestorIds[(int) $node->getId()])
+                && $this->hasActiveDocumentExportLink($node, $course, $session)
+            ) {
+                $iids[] = (int) $doc->getIid();
+            }
+        }
+
         return array_values(array_unique($iids));
+    }
+
+    private function hasActiveDocumentExportLink(ResourceNode $node, CourseEntity $course, ?SessionEntity $session): bool
+    {
+        foreach ($node->getResourceLinks() as $link) {
+            if ($link->getCourse()?->getId() !== $course->getId()
+                || null !== $link->getDeletedAt()
+                || null !== $link->getEndVisibilityAt()
+                || null !== $link->getGroup()
+                || null !== $link->getUser()
+                || null !== $link->getUserGroup()
+            ) {
+                continue;
+            }
+            $linkedSession = $link->getSession();
+            if ($linkedSession?->getId() === $session?->getId()
+                || (null !== $session && $this->withBaseContent && null === $linkedSession)
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

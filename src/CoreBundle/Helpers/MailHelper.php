@@ -256,25 +256,6 @@ final class MailHelper
                 }
             }
 
-            // In the recipient's language when the caller knows it: a CLI run or a message sent
-            // by someone else would otherwise use the current interface language.
-            $automaticEmailText = '<br />'.get_lang(
-                'This is an automatic email message. Please do not reply to it.',
-                $additionalParameters['locale'] ?? null,
-            );
-            $charset = $this->getMailerCharset();
-            $excludeJson = $this->shouldExcludeJsonLd();
-
-            $params = [
-                'mail_header_style' => api_get_setting('mail.mail_header_style'),
-                'mail_content_style' => api_get_setting('mail.mail_content_style'),
-                'link' => $additionalParameters['link'] ?? '',
-                'automatic_email_text' => $automaticEmailText,
-                'content' => $body,
-                'charset' => $charset,
-                'exclude_json' => $excludeJson,
-            ];
-
             if (!empty($recipientEmail)) {
                 $templatedEmail->to(new Address($recipientEmail, $recipientName));
             }
@@ -283,13 +264,7 @@ final class MailHelper
                 $templatedEmail->replyTo(new Address($replyToEmail, $replyToName));
             }
 
-            $templatedEmail
-                ->htmlTemplate('@ChamiloCore/Mailer/Default/default.html.twig')
-                ->context($params)
-            ;
-
-            $this->bodyRenderer->render($templatedEmail);
-            $this->applyMailerCharset($templatedEmail, $charset);
+            $this->renderDefaultTemplate($templatedEmail, $body, $additionalParameters);
             if ($massMailing) {
                 $this->massMailingTransportSelector->routeMassMailing($templatedEmail);
             }
@@ -321,6 +296,47 @@ final class MailHelper
 
             return false;
         }
+    }
+
+    /**
+     * Render the same HTML as send(), without creating a delivery or opening a transport.
+     */
+    public function renderPreview(string $body): string
+    {
+        $email = new TemplatedEmail();
+        $this->renderDefaultTemplate($email, $body);
+
+        return (string) $email->getHtmlBody();
+    }
+
+    private function renderDefaultTemplate(TemplatedEmail $email, string $body, array $additionalParameters = []): void
+    {
+        $charset = $this->getMailerCharset();
+        // In the recipient's language when the caller knows it: a CLI run or a message sent
+        // by someone else would otherwise use the current interface language.
+        $automaticEmailText = '<br />'.get_lang(
+            'This is an automatic email message. Please do not reply to it.',
+            $additionalParameters['locale'] ?? null,
+        );
+        $excludeJson = $this->shouldExcludeJsonLd();
+
+        $params = [
+            'mail_header_style' => api_get_setting('mail.mail_header_style'),
+            'mail_content_style' => api_get_setting('mail.mail_content_style'),
+            'link' => $additionalParameters['link'] ?? '',
+            'automatic_email_text' => $automaticEmailText,
+            'content' => $body,
+            'charset' => $charset,
+            'exclude_json' => $excludeJson,
+        ];
+
+        $email
+            ->htmlTemplate('@ChamiloCore/Mailer/Default/default.html.twig')
+            ->context($params)
+        ;
+
+        $this->bodyRenderer->render($email);
+        $this->applyMailerCharset($email, $charset);
     }
 
     private function getMailerCharset(): string

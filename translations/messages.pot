@@ -44018,3 +44018,12 @@ msgstr ""
 
 msgid "Ending access date"
 msgstr ""
+
+msgid "Email preview"
+msgstr ""
+
+msgid "This preview uses your own recipient details. Remote images and links are disabled."
+msgstr ""
+
+msgid "The email preview is unavailable."
+msgstr ""

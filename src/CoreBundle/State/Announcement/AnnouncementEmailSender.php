@@ -67,7 +67,7 @@ final readonly class AnnouncementEmailSender
         bool $storeInternalMessages = true,
     ): array {
         $attachments = $this->buildAttachments($announcement);
-        $subject = $course->getTitle().' - '.$announcement->getTitle();
+        $subject = $this->buildSubject($announcement, $course);
         $replyTo = $this->buildReplyTo($sender);
         $successfulPrimaryIds = [];
         $intendedPrimaryIds = [];
@@ -414,6 +414,41 @@ final readonly class AnnouncementEmailSender
         ];
     }
 
+    /**
+     * Preview a standard message using the sender as the sample recipient.
+     * A saved announcement may supply existing attachment links, but is never modified.
+     *
+     * @return array{subject: string, recipient: string, html: string}|null
+     */
+    public function preview(
+        CAnnouncement $draft,
+        Course $course,
+        ?Session $session,
+        ?CGroup $group,
+        User $sender,
+        ?CAnnouncement $attachmentSource = null,
+    ): ?array {
+        try {
+            $body = $this->buildMessage($draft, $course, $session, $group, $sender, $sender, $attachmentSource);
+
+            return [
+                'subject' => $this->buildSubject($draft, $course),
+                'recipient' => $this->getRecipientName($sender),
+                'html' => $this->mailHelper->renderPreview($body),
+            ];
+        } catch (Throwable $exception) {
+            // A template failure must not prevent saving an announcement without email delivery.
+            $this->logger->warning('Announcement email preview could not be rendered.', ['exception' => $exception]);
+
+            return null;
+        }
+    }
+
+    private function buildSubject(CAnnouncement $announcement, Course $course): string
+    {
+        return $course->getTitle().' - '.$announcement->getTitle();
+    }
+
     private function buildMessage(
         CAnnouncement $announcement,
         Course $course,
@@ -421,11 +456,12 @@ final readonly class AnnouncementEmailSender
         ?CGroup $group,
         User $sender,
         User $recipient,
+        ?CAnnouncement $attachmentSource = null,
     ): string {
         $content = $this->buildPersonalizedContent($announcement, $course, $session, $group, $recipient);
 
         return '<div>'.$content.'</div>'
-            .$this->buildAttachmentLinks($announcement, $course, $session, $group)
+            .$this->buildAttachmentLinks($attachmentSource ?? $announcement, $course, $session, $group)
             .$this->buildFooter($course, $sender);
     }
 

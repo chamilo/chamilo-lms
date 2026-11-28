@@ -987,6 +987,8 @@
                   {{ t("Record answer") }}
                 </div>
                 <AudioRecorder
+                  :ref="(recorder) => setOralRecorder(question.id, recorder)"
+                  :disabled="isQuestionTimeExpired || isTimeExpired || isAutoAdvancingTimedQuestion"
                   :multiple="false"
                   :pausable="true"
                   :show-recorded-audios="false"
@@ -1029,6 +1031,7 @@
                 <input
                   class="block w-full text-sm text-gray-700"
                   :name="`question_${question.id}_audio`"
+                  :disabled="isQuestionTimeExpired || isTimeExpired || isAutoAdvancingTimedQuestion"
                   type="file"
                   accept=".wav,.ogg,audio/wav,audio/ogg"
                   @change="onOralFileChange(question, $event)"
@@ -2014,6 +2017,7 @@ const canStartAttempt = ref(false)
 const canSubmit = ref(false)
 const usesLegacySubmit = ref(true)
 const answers = ref({})
+const oralRecorders = new Map()
 const activeAttempt = ref(null)
 const currentQuestionIndex = ref(0)
 const isStartingAttempt = ref(false)
@@ -2822,7 +2826,7 @@ function updateQuestionCountdown() {
 }
 
 async function handleQuestionTimeLimit() {
-  if (isAutoAdvancingTimedQuestion.value || isSavingAnswer.value || isFinishingAttempt.value) {
+  if (isTimeExpired.value || isAutoAdvancingTimedQuestion.value || isSavingAnswer.value || isFinishingAttempt.value) {
     return
   }
 
@@ -2830,8 +2834,11 @@ async function handleQuestionTimeLimit() {
   isAutoAdvancingTimedQuestion.value = true
   answerSaveMessage.value = t("Question time reached. Saving your answer.")
 
-  const saved = await saveVisibleAnswers({ afterFeedback: canMoveNext.value ? "next" : "finish" })
-  if (!saved || feedbackShownOnLastSave.value) {
+  const saved = await saveVisibleAnswers({
+    afterFeedback: canMoveNext.value ? "next" : "finish",
+    stopOralRecording: true,
+  })
+  if (!saved || feedbackShownOnLastSave.value || isTimeExpired.value) {
     isAutoAdvancingTimedQuestion.value = false
     return
   }
@@ -3381,6 +3388,10 @@ async function saveVisibleAnswers(options = {}) {
 
   try {
     for (const question of saveTargets) {
+      if (options.stopOralRecording && isOralQuestion(question)) {
+        // The recorded-audio event must populate the draft before the multipart upload.
+        await oralRecorders.get(question.id)?.stop()
+      }
       await saveQuestionDraftAnswer(question, options.afterFeedback || "none")
     }
 
@@ -4284,6 +4295,14 @@ function onUploadAnswerFileChange(question, event) {
 
   questionAnswer.uploadFile = file
   questionAnswer.uploadFileName = file?.name || ""
+}
+
+function setOralRecorder(questionId, recorder) {
+  if (recorder) {
+    oralRecorders.set(questionId, recorder)
+  } else {
+    oralRecorders.delete(questionId)
+  }
 }
 
 function onOralRecorded(question, audioBlob) {

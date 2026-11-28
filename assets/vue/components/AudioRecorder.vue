@@ -17,6 +17,7 @@
 
       <BaseButton
         v-if="showButtons && pausable && recorderState.isRecording && !recorderState.isPaused"
+        :disabled="disabled || isStarting || isStopping"
         :label="t('Pause recording')"
         class="me-2 mb-2"
         icon="pause"
@@ -25,6 +26,7 @@
       />
       <BaseButton
         v-if="showButtons && pausable && recorderState.isRecording && recorderState.isPaused"
+        :disabled="disabled || isStarting || isStopping"
         :label="t('Resume recording')"
         class="me-2 mb-2"
         icon="microphone"
@@ -33,6 +35,7 @@
       />
       <BaseButton
         v-if="showButtons && recorderState.isRecording"
+        :disabled="disabled || isStarting || isStopping"
         :label="t('Stop recording')"
         class="me-2 mb-2"
         icon="stop"
@@ -41,6 +44,7 @@
       />
       <BaseButton
         v-else-if="showButtons"
+        :disabled="disabled || isStarting || isStopping"
         :label="t('Start recording')"
         class="me-2 mb-2"
         icon="microphone"
@@ -82,7 +86,7 @@
 
 <script setup>
 import BaseButton from "./basecomponents/BaseButton.vue"
-import { computed, onMounted, reactive, ref } from "vue"
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import { RecordRTCPromisesHandler, StereoAudioRecorder } from "recordrtc"
 import { useI18n } from "vue-i18n"
 import BaseIcon from "./basecomponents/BaseIcon.vue"
@@ -90,6 +94,10 @@ import BaseIcon from "./basecomponents/BaseIcon.vue"
 const { t } = useI18n()
 
 const props = defineProps({
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
   multiple: {
     type: Boolean,
     required: false,
@@ -129,6 +137,8 @@ const recorderState = reactive({
 })
 
 const microphoneError = ref("")
+const isStarting = ref(false)
+const isStopping = ref(false)
 
 const recordedTime = computed(() => {
   let hours = timeComponentToString(recorderState.hours)
@@ -150,25 +160,64 @@ onMounted(() => {
 })
 
 let recorder = null
+let recordingStream = null
+let startCancelled = false
+let disposed = false
+let stopPromise = null
+let stopError = null
+
+function releaseStream() {
+  recordingStream?.getTracks().forEach((track) => track.stop())
+  recordingStream = null
+}
 
 async function record() {
-  if (microphoneError.value) {
+  if (
+    microphoneError.value ||
+    props.disabled ||
+    disposed ||
+    isStarting.value ||
+    isStopping.value ||
+    recorderState.isRecording
+  ) {
     return
   }
 
+  isStarting.value = true
+  startCancelled = false
+  stopError = null
+
   try {
-    let stream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true })
-    recorder = new RecordRTCPromisesHandler(stream, {
+    recordingStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true })
+    // Permission may be granted after the question has already expired or disappeared.
+    if (startCancelled || disposed || props.disabled) {
+      releaseStream()
+      return
+    }
+
+    recorder = new RecordRTCPromisesHandler(recordingStream, {
       recorderType: StereoAudioRecorder,
       type: "audio",
       mimeType: "audio/wav",
       numberOfAudioChannels: 2,
     })
-    recorder.startRecording()
-    startTimer()
+    await recorder.startRecording()
+    if (startCancelled || disposed || props.disabled) {
+      await recorder.stopRecording()
+      recorder = null
+      releaseStream()
+      return
+    }
 
+    startTimer()
     recorderState.isRecording = true
   } catch (error) {
+    recorder = null
+    releaseStream()
+    if (startCancelled || disposed) {
+      return
+    }
+
     console.warn(
       "Either the user denied permission or microphone is not available, " +
         "check https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia",
@@ -180,47 +229,87 @@ async function record() {
     } else {
       microphoneError.value = t("We are sorry, your browser does not support using a microphone")
     }
+  } finally {
+    isStarting.value = false
   }
 }
 
 async function stop() {
-  if (!recorder) {
+  startCancelled = true
+  if (stopPromise) {
+    return stopPromise
+  }
+  if (stopError) {
+    throw stopError
+  }
+  if (!recorder || !recorderState.isRecording) {
     return
   }
 
-  if (false === props.multiple && recorderState.audioList.length > 0) {
-    recorderState.audioList.shift()
-  }
-
-  await recorder.stopRecording()
-
-  const audioBlob = await recorder.getBlob()
-
-  recorderState.audioList.push(audioBlob)
-  emit("recorded-audio", audioBlob)
-
-  recorderState.isRecording = false
-  recorderState.isPaused = false
+  isStopping.value = true
   stopTimer()
+  // A manual stop and the question timeout must await the same WAV finalization.
+  stopPromise = (async () => {
+    try {
+      await recorder.stopRecording()
+      const audioBlob = await recorder.getBlob()
+      if (!audioBlob?.size) {
+        throw new Error("Could not finalize recorded audio")
+      }
+
+      if (!disposed) {
+        if (false === props.multiple && recorderState.audioList.length > 0) {
+          recorderState.audioList.shift()
+        }
+        recorderState.audioList.push(audioBlob)
+        emit("recorded-audio", audioBlob)
+      }
+    } catch (error) {
+      // Do not silently advance a timed question after losing its recording.
+      stopError = error
+      throw error
+    } finally {
+      recorderState.isRecording = false
+      recorderState.isPaused = false
+      recorder = null
+      releaseStream()
+      isStopping.value = false
+      stopPromise = null
+    }
+  })()
+
+  return stopPromise
 }
 
+onBeforeUnmount(() => {
+  disposed = true
+  stopTimer()
+  void stop().catch((error) => console.warn("Could not stop audio recording", error))
+})
+
 async function pause() {
-  if (!recorder || !recorderState.isRecording || recorderState.isPaused) {
+  if (props.disabled || isStopping.value || !recorder || !recorderState.isRecording || recorderState.isPaused) {
     return
   }
 
   await recorder.pauseRecording()
+  if (isStopping.value || !recorderState.isRecording) {
+    return
+  }
   clearInterval(timer)
   timer = null
   recorderState.isPaused = true
 }
 
 async function resume() {
-  if (!recorder || !recorderState.isPaused) {
+  if (props.disabled || isStopping.value || !recorder || !recorderState.isPaused) {
     return
   }
 
   await recorder.resumeRecording()
+  if (isStopping.value || !recorderState.isRecording) {
+    return
+  }
   runTimer()
   recorderState.isPaused = false
 }

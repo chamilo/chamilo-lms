@@ -22,6 +22,15 @@ class Version20230216122900 extends AbstractMigrationChamilo
      */
     private ?array $schemaDefaults = null;
 
+    /**
+     * Settings whose schema default is a list. SettingsManager::save() stores them as a comma-separated list, which
+     * ArrayToIdentifierTransformer reads back with explode(): stored as JSON, "[]" became a field named "[]", and
+     * UserAtRestEncryptionPolicy refused every user write ("Unsupported user encryption field configured").
+     *
+     * @var array<string, true>
+     */
+    private array $listSettings = [];
+
     public function getDescription(): string
     {
         return 'Migrate configuration values to settings';
@@ -402,16 +411,19 @@ class Version20230216122900 extends AbstractMigrationChamilo
         // An option that configuration.php does not set used to be stored as 'false': right for a boolean, and for a
         // legacy option that the code reads as disabled, but a number or a JSON list then cannot be read back (the
         // settings form fails with "Expected a numeric"). These take the default of their settings schema instead.
+        $defaults = $this->getSchemaDefaults();
         if (!isset($_configuration[$variable])) {
-            $default = $this->getSchemaDefaults()[$variable] ?? null;
-            if (null !== $default && (is_numeric($default) || \in_array(substr($default, 0, 1), ['[', '{'], true))) {
+            $default = $defaults[$variable] ?? null;
+            if (null !== $default && (isset($this->listSettings[$variable]) || is_numeric($default) || \in_array(substr($default, 0, 1), ['[', '{'], true))) {
                 return $default;
             }
         }
 
         $selectedValue = '';
         $settingValue = $this->getConfigurationValue($variable, $_configuration);
-        if (\is_array($settingValue)) {
+        if (\is_array($settingValue) && isset($this->listSettings[$variable]) && array_is_list($settingValue)) {
+            $selectedValue = implode(',', $settingValue);
+        } elseif (\is_array($settingValue)) {
             $selectedValue = json_encode($settingValue, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         } elseif (\is_bool($settingValue)) {
             $selectedValue = var_export($settingValue, true);
@@ -439,6 +451,9 @@ class Version20230216122900 extends AbstractMigrationChamilo
             foreach ($settingsBuilder->resolve([]) as $name => $value) {
                 if (\is_bool($value)) {
                     $value = var_export($value, true);
+                } elseif (\is_array($value) && array_is_list($value)) {
+                    $this->listSettings[$name] = true;
+                    $value = implode(',', $value);
                 } elseif (\is_array($value)) {
                     $value = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
                 }

@@ -583,6 +583,12 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
         // column, the teacher's comments stay visible.
         if (true === $pageResultConfiguration['hideExpectedAnswers']) {
             $showExpectedAnswers = false;
+            // The correct-answers-only mode would disclose the answer key by filtering
+            // the choices even without their correctness flags. Keep the global score,
+            // but omit question details when these two settings conflict.
+            if ($showOnlyCorrectAnswers) {
+                $showQuestionDetails = false;
+            }
         }
 
         $showQuestionScore = $showScore
@@ -1330,7 +1336,9 @@ final readonly class ExerciseRuntimeResultProvider implements ProviderInterface
 
         return [
             'kind' => 'fill_blanks',
-            'text' => (string) ($teacherInfo['text'] ?? ''),
+            // The original template contains the correct words in brackets. The result
+            // UI uses the structured blanks, so do not return that template when hidden.
+            'text' => $showExpectedAnswers ? (string) ($teacherInfo['text'] ?? '') : '',
             'blanks' => $blanks,
             'comment' => $showFeedback && $answer instanceof CQuizAnswer ? (string) $answer->getComment() : '',
             'showStudentAnswers' => $showStudentAnswers,

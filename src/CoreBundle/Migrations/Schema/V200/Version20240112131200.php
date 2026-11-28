@@ -11,6 +11,8 @@ use Doctrine\DBAL\Schema\Schema;
 
 final class Version20240112131200 extends AbstractMigrationChamilo
 {
+    private const int MAX_INT = 2147483647;
+
     public function getDescription(): string
     {
         return 'Changes fields type bigint by integer';
@@ -172,6 +174,7 @@ final class Version20240112131200 extends AbstractMigrationChamilo
 
         if ($schema->hasTable('course')) {
             error_log('Perform the changes in the course table');
+            $this->keepUnlimitedDiskQuotasWithinInt();
             $this->addSql('ALTER TABLE course CHANGE resource_node_id resource_node_id INT DEFAULT NULL, CHANGE disk_quota disk_quota INT DEFAULT NULL;');
         }
 
@@ -378,5 +381,34 @@ final class Version20240112131200 extends AbstractMigrationChamilo
         // Re-enable foreign key and unique checks to ensure database integrity
         $this->addSql('SET UNIQUE_CHECKS=1;');
         $this->addSql('SET FOREIGN_KEY_CHECKS=1;');
+    }
+
+    /**
+     * Version20240112103400 converted the course quotas from bytes to megabytes, but a 1.11 quota set to a huge
+     * number of bytes to mean "unlimited" is still beyond INT afterwards, and the type change failed on it
+     * ("Out of range value for column 'disk_quota'"). Keep those courses unlimited with the largest INT value,
+     * rather than NULL, which would give them the default quota of the platform.
+     */
+    private function keepUnlimitedDiskQuotasWithinInt(): void
+    {
+        $issues = $this->connection->fetchAllAssociative(
+            "SELECT id AS course_id,
+                    code AS course_code,
+                    disk_quota AS original_disk_quota_mb,
+                    'course' AS table_name,
+                    'disk_quota_beyond_int' AS reason,
+                    'set_to_int_maximum' AS planned_action
+             FROM course
+             WHERE disk_quota > :max
+             ORDER BY id",
+            ['max' => self::MAX_INT]
+        );
+
+        if ([] === $issues) {
+            return;
+        }
+
+        $this->reportDataIssues('course_disk_quota_beyond_int', $issues);
+        $this->addSql('UPDATE course SET disk_quota = '.self::MAX_INT.' WHERE disk_quota > '.self::MAX_INT);
     }
 }

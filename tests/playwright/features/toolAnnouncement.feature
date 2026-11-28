@@ -27,6 +27,11 @@ Feature: Announcement tool
     And I press "Preview"
     Then I should see "Announcement will be sent to"
     And I should see "John Doe"
+    And the announcement email preview contains "Announcement description"
+    When I fill in the active tinymce editor with "Updated announcement description"
+    Then the announcement email preview is hidden
+    When I press "Preview"
+    Then the announcement email preview contains "Updated announcement description"
     When I press "Save"
     Then I should see "Announcement test"
     And I should not see an error
@@ -40,6 +45,7 @@ Feature: Announcement tool
     And I fill in the active tinymce editor with "Announcement description"
     And I press "Preview"
     Then I should see "Announcement will be sent to"
+    And the announcement email preview contains "Announcement description"
     When I press "Save"
     Then I should see "Announcement test"
     And I should not see an error

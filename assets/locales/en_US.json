@@ -4914,5 +4914,8 @@
   "The original calculated variables are unavailable. Existing variations are preserved if the calculation is unchanged.": "The original calculated variables are unavailable. Existing variations are preserved if the calculation is unchanged.",
     "Learner name": "Learner name",
     "Time spent in portal": "Time spent in portal",
-    "Last sent work date": "Last sent work date"
+    "Last sent work date": "Last sent work date",
+    "Email preview": "Email preview",
+    "This preview uses your own recipient details. Remote images and links are disabled.": "This preview uses your own recipient details. Remote images and links are disabled.",
+    "The email preview is unavailable.": "The email preview is unavailable."
 }

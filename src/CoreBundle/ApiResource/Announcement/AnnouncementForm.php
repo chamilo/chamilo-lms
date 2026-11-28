@@ -55,7 +55,7 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Post(
             uriTemplate: '/announcement/preview',
             openapi: new Operation(
-                summary: 'Preview announcement recipients',
+                summary: 'Preview announcement recipients and email content',
             ),
             read: false,
             security: "is_granted('IS_AUTHENTICATED_FULLY')",
@@ -197,6 +197,15 @@ final class AnnouncementForm
      */
     #[Groups(['announcement_form:read'])]
     public array $previewRecipients = [];
+
+    #[Groups(['announcement_form:write'])]
+    public ?int $previewAnnouncementId = null;
+
+    /**
+     * @var array{subject: string, recipient: string, html: string}|null
+     */
+    #[Groups(['announcement_form:read'])]
+    public ?array $previewEmail = null;
 
     #[Groups(['announcement_form:read', 'announcement_form:write'])]
     public bool $sendByEmail = false;

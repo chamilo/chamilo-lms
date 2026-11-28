@@ -382,22 +382,105 @@
         </div>
       </BaseCard>
 
-      <div
-        v-if="previewRecipients.length"
-        class="rounded-lg border border-gray-20 bg-gray-10 p-4"
-      >
-        <p class="mb-2 font-semibold text-gray-90">
-          {{ t("Announcement will be sent to") }}
-        </p>
-        <ul class="list-disc space-y-1 ps-6 text-sm text-gray-700">
-          <li
-            v-for="recipient in previewRecipients"
-            :key="recipient"
+      <BaseCard v-if="previewReady">
+        <template #title>
+          <div class="flex items-center gap-2">
+            <BaseIcon
+              icon="email-outline"
+              size="small"
+            />
+            <span>{{ t("Email preview") }}</span>
+          </div>
+        </template>
+
+        <div class="grid gap-4 xl:grid-cols-[minmax(0,1fr)_16rem]">
+          <div class="min-w-0 space-y-3">
+            <template v-if="previewEmail && previewDocument">
+              <div class="flex items-start gap-2 text-sm text-gray-700">
+                <BaseIcon
+                  class="mt-0.5 shrink-0"
+                  icon="information"
+                  size="small"
+                />
+                <p>
+                  {{ t("Preview only") }}.
+                  {{ t("This preview uses your own recipient details. Remote images and links are disabled.") }}
+                </p>
+              </div>
+              <div class="rounded-lg border border-gray-20 bg-gray-10 p-3 sm:p-4">
+                <div class="mx-auto max-w-3xl overflow-hidden rounded-lg border border-gray-20 bg-white shadow-sm">
+                  <dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2 border-b border-gray-20 px-4 py-3 text-sm">
+                    <dt class="text-gray-700">{{ t("Subject") }}</dt>
+                    <dd class="break-words font-semibold text-gray-90">{{ previewEmail.subject }}</dd>
+                    <dt class="text-gray-700">{{ t("To") }}</dt>
+                    <dd class="break-words text-gray-90">{{ previewEmail.recipient }}</dd>
+                  </dl>
+                  <iframe
+                    class="block h-[32rem] w-full bg-white sm:h-[34rem]"
+                    name="announcement_email_preview"
+                    sandbox=""
+                    :srcdoc="previewDocument"
+                    :title="t('Email preview')"
+                  />
+                  <div
+                    v-if="attachmentFiles.length"
+                    class="space-y-2 border-t border-gray-20 px-4 py-3 text-sm"
+                  >
+                    <div class="flex items-center gap-2 font-medium text-gray-90">
+                      <BaseIcon
+                        icon="attachment"
+                        size="small"
+                      />
+                      {{ t("Attachments") }}
+                    </div>
+                    <ul class="list-disc space-y-1 break-words ps-6 text-gray-700">
+                      <li
+                        v-for="(file, index) in attachmentFiles"
+                        :key="index"
+                      >
+                        {{ file.name }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <p
+              v-else
+              class="text-sm text-gray-700"
+              role="status"
+            >
+              {{ t("The email preview is unavailable.") }}
+            </p>
+          </div>
+
+          <div
+            v-if="previewRecipients.length"
+            class="self-start rounded-lg border border-gray-20 bg-white"
           >
-            {{ recipient }}
-          </li>
-        </ul>
-      </div>
+            <div class="flex items-start gap-2 border-b border-gray-20 bg-gray-10 px-4 py-3">
+              <BaseIcon
+                class="mt-0.5 shrink-0"
+                icon="account-group"
+                size="small"
+              />
+              <p class="flex-1 text-sm font-semibold text-gray-90">
+                {{ t("Announcement will be sent to") }}
+              </p>
+              <span class="text-sm font-medium text-gray-700">{{ previewRecipients.length }}</span>
+            </div>
+            <ul class="max-h-64 divide-y divide-gray-20 overflow-y-auto px-4 text-sm text-gray-700">
+              <li
+                v-for="recipient in previewRecipients"
+                :key="recipient"
+                class="break-words py-3"
+              >
+                {{ recipient }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </BaseCard>
 
       <div class="flex flex-wrap justify-end gap-2 border-t border-gray-20 pt-4">
         <BaseButton
@@ -467,6 +550,40 @@ const formWarningMessage = ref("")
 const formErrorRef = ref(null)
 const formWarningRef = ref(null)
 const previewRecipients = ref([])
+const previewEmail = ref(null)
+let previewRevision = 0
+
+// Mail HTML is never inserted into the application DOM. Block scripts, remote
+// resources and navigation through message links in the isolated document.
+const previewDocument = computed(() => {
+  if (!previewEmail.value?.html || !previewEmail.value.html.includes("<head>")) return ""
+
+  const policy = `<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">`
+  // Preview-only typography, responsive width and compact default template spacing.
+  // Configured inline content and header styles remain untouched.
+  const presentation = `<style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #273343;
+      overflow-wrap: anywhere;
+    }
+    body > table > tbody > tr > td > table[width="600"] {
+      width: 100%;
+      max-width: 600px;
+    }
+    body > table > tbody > tr > td > table[width="600"] > tbody > tr:nth-child(2) > td[style="padding: 40px 10px"] {
+      padding: 24px !important;
+    }
+    img {
+      max-width: 100%;
+    }
+  </style>`
+  return previewEmail.value.html
+    .replace("<head>", `<head>${policy}${presentation}`)
+    .replace(/<body(?=[\s>])/i, "<body inert")
+})
 const previewReady = ref(false)
 const previewPayload = ref(null)
 const showAdvancedSettings = ref(false)
@@ -622,10 +739,13 @@ function applyClassRecipients() {
 
 function handleAttachmentFiles(event) {
   attachmentFiles.value = Array.from(event?.target?.files || [])
+  resetPreview()
 }
 
 function resetPreview() {
+  ++previewRevision
   previewReady.value = false
+  previewEmail.value = null
   previewRecipients.value = []
   previewPayload.value = null
 }
@@ -822,6 +942,8 @@ async function showFormWarning(message) {
 }
 
 async function previewAnnouncement() {
+  if (isPreviewing.value || isSaving.value) return
+
   formErrorMessage.value = ""
   formWarningMessage.value = ""
 
@@ -840,11 +962,19 @@ async function previewAnnouncement() {
     return
   }
 
+  resetPreview()
+  const revision = previewRevision
   isPreviewing.value = true
 
   try {
     const payload = buildPayload()
-    const response = await announcementService.preview(payload, getContextParams())
+    const response = await announcementService.preview(
+      { ...payload, previewAnnouncementId: form.value.id || null },
+      getContextParams(),
+    )
+    if (revision !== previewRevision) return
+
+    previewEmail.value = response.previewEmail || null
     previewRecipients.value = Array.isArray(response.previewRecipients) ? response.previewRecipients : []
     previewReady.value = previewRecipients.value.length > 0
 
@@ -852,7 +982,9 @@ async function previewAnnouncement() {
       previewPayload.value = { ...payload }
     }
   } catch (error) {
-    console.error("Error previewing announcement recipients", error)
+    if (revision !== previewRevision) return
+
+    console.error("Error previewing announcement", error)
     resetPreview()
     await showFormError(
       error?.response?.data?.detail || error?.response?.data?.["hydra:description"] || t("An error occurred"),
@@ -1012,6 +1144,7 @@ async function deleteAttachment(attachment) {
   try {
     await announcementService.deleteAttachment(form.value.id, attachment.id, getContextParams())
     form.value.attachments = form.value.attachments.filter((item) => Number(item.id) !== Number(attachment.id))
+    resetPreview()
   } catch (error) {
     console.error("Error deleting announcement attachment", error)
     await showFormError(

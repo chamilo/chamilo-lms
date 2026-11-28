@@ -50,6 +50,7 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
         private AnnouncementRecipientResolver $recipientResolver,
         private AnnouncementOrderManager $orderManager,
         private AnnouncementEmailRecipientResolver $emailRecipientResolver,
+        private AnnouncementEmailSender $emailSender,
         private AnnouncementScheduleManager $scheduleManager,
         private CCalendarEventRepository $calendarEventRepository,
         private Security $security,
@@ -120,6 +121,17 @@ final readonly class AnnouncementFormProcessor implements ProcessorInterface
                 $data->sendCopyToSelf,
                 $sender,
             );
+
+            $attachmentSource = null;
+            if (null !== $data->previewAnnouncementId) {
+                $attachmentSource = $this->getAnnouncementForEdit($data->previewAnnouncementId, $course, $session, $group);
+            }
+
+            $draft = (new CAnnouncement())
+                ->setTitle($this->sanitizeTitle($data->title))
+                ->setContent($this->sanitizeContent($data->content))
+            ;
+            $response->previewEmail = $this->emailSender->preview($draft, $course, $session, $group, $sender, $attachmentSource);
 
             return $response;
         }

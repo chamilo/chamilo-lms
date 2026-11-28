@@ -2602,7 +2602,8 @@ function trueFalseClass(choice) {
   }
 
   if (choice.selectedOptionLabel) {
-    return "border-danger/40 bg-danger/10"
+    // Without the expected answer, a selection is not necessarily wrong.
+    return choice.correctOptionLabel ? "border-danger/40 bg-danger/10" : "border-info/40 bg-support-1"
   }
 
   return "border-gray-20 bg-white"
@@ -2618,7 +2619,7 @@ function trueFalseIconClass(choice) {
   }
 
   if (choice.selectedOptionLabel) {
-    return "mdi-alert-circle text-danger"
+    return choice.correctOptionLabel ? "mdi-alert-circle text-danger" : "mdi-radiobox-marked text-info"
   }
 
   return "mdi-help-circle-outline text-gray-50"
